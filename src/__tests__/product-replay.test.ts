@@ -41,6 +41,18 @@ test('two replay representations share the same prepare and Core calculations wi
     assert.throws(() => replayStructured({ ...candidate, producer: { ...candidate.producer, producer_kind: 'host-ai' } }), { code: 'ADAPTER_KIND' });
     assert.throws(() => replayLabels(prepared, { ...labels, tags: labels.tags.map(() => labels.tags[0]) }), { code: 'ADAPTER_ELEMENTS' });
     assert.throws(() => replayLabels(prepared, { ...labels, execution_authorization: true }), { code: 'ADAPTER_SCHEMA' });
+    const unresolved = structuredClone(labels);
+    unresolved.tags.find(tag => tag.element === 'I').status = 'unresolved';
+    unresolved.tags.find(tag => tag.element === 'I').reason_codes = ['SCOPE_UNRESOLVED'];
+    const preserved = replayLabels(prepared, unresolved);
+    assert.deepEqual(preserved.elements.I.reason_codes, ['SCOPE_UNRESOLVED']);
+    assert.equal(host.invoke('bx_evaluate_admin_candidate', { candidate: preserved }).computed, true);
+    const malformed = structuredClone(unresolved);
+    malformed.tags.find(tag => tag.element === 'I').reason_codes = [];
+    assert.throws(() => replayLabels(prepared, malformed));
+    const unauthorized = structuredClone(unresolved);
+    unauthorized.tags[0].execution_authorization = true;
+    assert.throws(() => replayLabels(prepared, unauthorized), { code: 'ADAPTER_ELEMENTS' });
   } finally { rmSync(root, { recursive: true, force: true }); }
 });
 

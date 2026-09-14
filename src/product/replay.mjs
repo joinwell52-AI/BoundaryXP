@@ -1,5 +1,5 @@
 import { CORE_ELEMENTS } from '../bxp/index.mjs';
-import { IDS, assert, validateProduct, parseProductJson } from './contracts.mjs';
+import { IDS, assert, candidateSchema, validateProduct, parseProductJson } from './contracts.mjs';
 import { locateEvidence } from './evidence.mjs';
 
 export function replayStructured(input) {
@@ -14,10 +14,12 @@ export function replayLabels(prepared, input) {
     && value.schema === 'boundx-label-replay/v1' && Array.isArray(value.tags), 'ADAPTER_SCHEMA', 'Invalid label replay input.');
   assert(value.tags.length === CORE_ELEMENTS.length, 'ADAPTER_ELEMENTS', 'Exactly one tagged bucket per BXP element is required.');
   const elements = {};
+  const bucketKeys = Object.keys(candidateSchema.$defs.bucket.properties);
   for (const tag of value.tags) {
-    assert(tag && Object.keys(tag).every(key => ['element', 'status', 'entries'].includes(key))
+    assert(tag && Object.keys(tag).every(key => key === 'element' || bucketKeys.includes(key))
       && CORE_ELEMENTS.includes(tag.element) && !Object.hasOwn(elements, tag.element), 'ADAPTER_ELEMENTS', 'Unknown or duplicate element tag.');
-    elements[tag.element] = { status: tag.status, entries: tag.entries };
+    const { element, ...bucket } = tag;
+    elements[element] = bucket;
   }
   return validateProduct(IDS.candidate, {
     schema: 'boundx-extraction-candidate/v1', prepare_id: prepared.prepare_id, source_digest: prepared.source_digest,
