@@ -130,3 +130,5 @@ src/product/selection-ui.mjs
 src/__tests__/product-case-audit.test.ts
 src/__tests__/product-industry-selection.test.ts
 ```
+
+395750c进一步扩展L2上下文检索，修改产品候选引用、组装验证与规则快照；新增src/product/lexical.mjs、src/product/retrieval.mjs、src/__tests__/product-retrieval.test.ts。详情见[Producer合同](../PRODUCER-ADAPTER-CONTRACT.md)和执行回执。不是新增协议、金标或真实模型运行。
