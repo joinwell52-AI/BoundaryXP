@@ -1,6 +1,8 @@
 # BoundX BXP 产品统一交付 / Alignment delivery
 
-状态：本地已验证，Draft PR 与远端 CI 待记录。 / Locally verified; remote CI pending.
+状态：COMPLETE，待 ADMIN 审核。 / Implementation complete; awaiting ADMIN review.
+
+[Draft PR #2](https://github.com/joinwell52-AI/BoundX/pull/2) · [实现提交实际 CI](https://github.com/joinwell52-AI/BoundX/actions/runs/34816141070)。三组全部通过，尚未合并或发布。
 
 ## 基线与授权
 
@@ -20,7 +22,7 @@
 | WP4 | ed720fc | MCP 与 Schema 资源 |
 | WP5 | 2e9cf3a | BXP UI、Python/JS码点 |
 | WP6 | 995768b | 产品文档、主出口与版本 |
-| WP7 | 本 PR 后续提交 | 全量验证与审核交付 |
+| WP7 | b1cda5a | 全量验证与审核交付 |
 
 回滚基准为上述 baseline，功能工作包按相反顺序 revert；不 reset main、不改历史或重算冻结 expected。未执行回滚。
 
@@ -31,12 +33,12 @@
 | npm ci | 安装成功，审计0漏洞 |
 | npm test | Core 54/54；Protocol 103/103；CALC 208/208 |
 | npm run test:ui | 147/147 |
-| .venv\\Scripts\\python.exe -m unittest discover -s python -p "test_*.py" | 133/133 |
-| npm run test:docs | 14/14，链接检查通过 |
+| .venv\Scripts\python.exe -m unittest discover -s python -p "test_*.py" | 133/133 |
+| npm run test:docs | 14/14；63份文档、255个本地链接通过 |
 
-合计759个自动测试／冻结向量判定，新增76项，无跳过。其中新增集成相关53项、严格 raw18项、文档5项。另有真实浏览器人工 smoke：混合中文/English/emoji合法输入与重复键非法输入，实际显示三轴、独立B、null授权并清除旧结果；不计入自动测试数量。
+合计451项自动测试加208条冻结向量（659个判定），新增76项，无跳过。其中新增集成相关53项、严格 raw18项、文档5项。另有真实浏览器人工 smoke：混合中文/English/emoji合法输入与重复键非法输入，实际显示三轴、独立B、null授权并清除旧结果；不计入自动测试数量。
 
-CI 配置为 Ubuntu Node22/24 与 Windows Node24；每项运行全部Core/协议/向量/UI/Python/Docs，不仅协议。实际运行结果另行补录。
+CI 配置为 Ubuntu Node22/24 与 Windows Node24；每项运行全部Core/协议/向量/UI/Python/Docs，不仅协议。实现提交 b1cda5a 的 run 34816141070 三组实际全通过。最后的文档记录提交也须经过 PR checks；最终检查链接记录在 PR 中。继承 Actions 的 Node20 弃用提示不影响结果。
 
 ## 当前产品与兼容性
 
@@ -207,4 +209,3 @@ A	docs/tasks/BXP-ALIGNMENT-DELIVERY.md
 ```
 
 逐工作包计数与最终机器回执见 [执行回执](BXP-ALIGNMENT-RECEIPT.md)。
-

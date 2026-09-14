@@ -48,12 +48,42 @@ Python 证据及 JS 规则、引用和展示统一为码点坐标；原业务判
 
 验证：Core 51/51、Protocol 103/103、CALC 208/208、UI 147/147、Docs 14/14（新增当前口径／版本／编码5项）；62份 Markdown、254个本地链接与锚点无失效。许可证未变，仓库未公开、未发布。
 
-## WP7 — LOCAL_VERIFIED / CI_PENDING
+## WP7 — COMPLETE
 
-增加生产主出口同一实现断言，以及中英各六例加 emoji、非 BMP 与组合字符的 Core/CLI/MCP/HTTP 四入口端到端测试。文件导入期间禁用计算，防止旧输入与新文件的异步竞态。CI 扩展为 Linux Node22/24、Windows Node24 全套验证；等待实际远端运行，不以配置存在代替通过。
+增加生产主出口同一实现断言，以及中英各六例加 emoji、非 BMP 与组合字符的 Core/CLI/MCP/HTTP 四入口端到端测试。文件导入期间禁用计算，防止旧输入与新文件的异步竞态。CI 扩展为 Linux Node22/24、Windows Node24 全套验证；实际远端运行已通过，见最终回执；不以配置存在代替通过。
 
-本目录全量命令实跑：npm ci（审计0漏洞）、npm test（Core54/54、Protocol103/103、CALC208/208）、npm run test:ui（147/147）、.venv Python unittest（133/133）、npm run test:docs（14/14，62份 Markdown、254链接）。无跳过。合计759个测试／冻结向量判定，新增76项；结构化向量不是抽取金标。
+本目录全量命令实跑：npm ci（审计0漏洞）、npm test（Core54/54、Protocol103/103、CALC208/208）、npm run test:ui（147/147）、.venv Python unittest（133/133）、npm run test:docs（14/14，62份 Markdown、254链接）。无跳过。合计451项自动测试加208条冻结向量（659个判定），新增76项；结构化向量不是抽取金标。
 
 新增集成／适配器相关53项：生产者12、CLI10、MCP8、UI HTTP/渲染15、JS/Python码点5、全入口与主出口3；另严格raw18、文档5。全入口两项内实际遍历12个双语变体，不重复算作12个 test。
 
 已核对协议正文、三个Schema、208条冻结结果、LICENSE 相对基线无改动。已确认远端 PRIVATE，尚未合并或发布。
+
+## 最终执行回执 / Final receipt
+
+Draft PR：[BoundX #2](https://github.com/joinwell52-AI/BoundX/pull/2)。实现提交 b1cda5a 的 [实际 CI 34816141070](https://github.com/joinwell52-AI/BoundX/actions/runs/34816141070) 三组全通过：Ubuntu Node22、Ubuntu Node24、Windows Node24；每组包含所有测试命令。继承的固定版本 Actions 有 Node20 弃用提示，runner 已强制 Node24 执行，未造成测试失败。最终文档追加提交后的检查状态以 PR checks 为准。
+
+最终文档检查14/14，63份 Markdown、255个本地链接与锚点通过。完整141项文件变更清单、工作包提交与回滚点见 docs/tasks/BXP-ALIGNMENT-DELIVERY.md；逐项与 Git diff 核对，无遗漏。测试日志中的依赖安装／平台分支 skip 是非本平台步骤，不是跳过测试用例。
+
+```text
+BOUNDX_BXP_ALIGNMENT_STATUS: COMPLETE
+BASELINE_COMMIT: ae0bab1ac8a99e806327fc30b2b83c295826e5f0
+IMPLEMENTATION_BRANCH: impl/bxp-product-alignment-v1
+PULL_REQUEST: https://github.com/joinwell52-AI/BoundX/pull/2
+PROTOCOL_CHANGED: false
+PRODUCT_VERSION: 1.3.0-preview.0
+PROTOCOL_VERSION: 0.3.0-draft.2
+CONFORMANCE_SUITE: 1.0.0-draft.3
+WORK_PACKAGES: WP1=COMPLETE, WP2=COMPLETE, WP3=COMPLETE, WP4=COMPLETE, WP5=COMPLETE, WP6=COMPLETE, WP7=COMPLETE
+BXP_CALC: 208/208
+CORE_TESTS: 54/54
+UI_TESTS: 147/147
+PYTHON_TESTS: 133/133
+DOC_TESTS: 14/14
+NEW_INTEGRATION_TESTS: 53/53
+LEGACY_STATUS: namespaced_deprecated
+KNOWN_LIMITS: BXP-EXTRACT reserved; import-only main UI; local preview server; legacy Python not a BXP SDK; object APIs cannot recover upstream precision loss; raw/frame 2MB, depth64, nodes100000, numeric token1024; no independent implementation certification
+BLOCKERS: none
+ADMIN_DECISION_REQUESTED: Review Draft PR #2; no merge or publication performed
+```
+
+Protocol 加固与严格 JSON 单元测试另计103/103，未混入208条冻结向量数。合计451项自动测试加208条向量。BXP-0001、Schema、冻结期望和许可证相对基线未改；当前仍私有，main 未合并。
