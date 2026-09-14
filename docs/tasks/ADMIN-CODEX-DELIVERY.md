@@ -26,6 +26,14 @@ Cursor reported exhausted usage. No credits were purchased and no fallback model
 
 ## 验证 / Validation
 
+随后在原页面完成Codex订阅模型选择、连接测试及同一微服务原文的第三次生成，页面显示三层报告并保持I/R/V/C未明确。C与前一次生成存在差异，记录为模型波动，不宣称精确复现或金标准通过。模型目录加载提示已改为服务目录查询，不再误称本地计算。
+
+A subsequent browser run verified subscription selection, connection and a third generation of the same source text, with a three-layer report and I/R/V/C unresolved. C differed from the previous generation; this is recorded as model variability, not gold accuracy. Catalog progress now identifies a provider catalog request rather than local computation.
+
+提交d118a4ed844f55530091e03758179b0acd561efa的CI在Ubuntu Node22、Ubuntu Node24及Windows Node24均通过。本段后的进度提示修正另行提交，不能借用该CI作为其验证结果。
+
+CI for commit d118a4ed844f55530091e03758179b0acd561efa passed Ubuntu Node22, Ubuntu Node24 and Windows Node24. The subsequent progress-label correction is a separate commit and does not inherit that CI result.
+
 已跟踪Node/Core测试588项、UI154项、协议单测103项、冻结向量208项、Python135项和文档单测20项通过；文档本地链接检查通过。数量分开报告，不相加作为自然语言抽取成功数。并行行业测试未纳入上述Core数量。
 
 Tracked Node/Core588, UI154, protocol103, frozen vectors208, Python135 and document tests20 pass separately. Local documentation links pass. Concurrent untracked industry tests are excluded, and these totals are not natural-language accuracy.
@@ -52,6 +60,8 @@ Tracked Node/Core588, UI154, protocol103, frozen vectors208, Python135 and docum
 - src/product/producer-instructions.mjs
 - ui-server.mjs（仅本轮模型接入改动 / transport changes only）
 - ui/app.js
+- ui/progress.mjs
+- ui/progress.test.mjs
 
 ## 尚未完成 / Outstanding
 

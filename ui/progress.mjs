@@ -1,5 +1,6 @@
 export function canReuseTask(task,mappedText,text){return !!task&&task.text===text&&mappedText===text;}
 export function requestStage(route,data){
+ if(['cursor-models','codex-models'].includes(route))return {zh:'正在读取模型服务目录；不发送任务原文',en:'Reading provider model catalog; task text is not sent',remote:true};
  if(route==='bxp-admin')return {zh:'等待模型抽取7+1；候选通过后进行本地BXP计算',en:'Waiting for model extraction; local BXP calculation follows candidate validation',remote:true};
  if(route==='connection')return {zh:'正在测试模型连接',en:'Testing model connection',remote:true};
  if(route==='pm')return {zh:data.mode==='recheck'?'等待模型回复 PM 提醒':'等待模型生成 PM 分工',en:data.mode==='recheck'?'Waiting for the PM response':'Waiting for the model to generate PM assignments',remote:true};
