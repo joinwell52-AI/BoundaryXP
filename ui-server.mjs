@@ -17,6 +17,7 @@ import { employeeTemplate } from './src/product/employees.mjs';
 import { industrySelection } from './src/product/selection-ui.mjs';
 import { runAdminModel } from './src/product/model-pipeline.mjs';
 import { callCursor, cursorModels } from './src/product/cursor-provider.mjs';
+import { callHttpModel } from './src/product/http-provider.mjs';
 const LIMIT=1_000_000;
 export function validateExtract(value,kind,text,baseline){
   const docs=kind==='task'?[value]:[value?.document,...(Array.isArray(value?.tasks)?value.tasks.map(t=>t.document):[])];
@@ -33,24 +34,7 @@ export async function callModel(config,messages,{signal,fetchImpl=fetch,maxOutpu
   if(!config || typeof config.key!=='string' || !config.key.trim() || typeof config.model!=='string' || !config.model.trim()) throw Error('请先填写模型和 API 密钥。');
   if(config.provider==='cursor')return callCursor(config,messages,{signal});
   if(config.provider && config.provider!=='api')throw Error('Unsupported model provider.');
-  const {url}=resolveEndpoint(config.url,config.protocol);
-  const body=config.protocol==='responses' ? {model:config.model,input:messages,max_output_tokens:maxOutputTokens,stream:false,store:false} : {model:config.model,messages,max_tokens:maxOutputTokens,stream:false};
-  if(config.protocol==='responses'&&config.disableThinking===true)body.thinking={type:'disabled'};
-  const response=await fetchImpl(url,{method:'POST',headers:{'Content-Type':'application/json',Authorization:'Bearer '+config.key},body:JSON.stringify(body),signal,redirect:'error'});
-  if(!response.ok){await response.body?.cancel();const hint={404:'请核对接口路径、模型名称及该账号的模型访问权限。',401:'请核对密钥是否有效。',403:'请核对模型访问权限。',429:'可能是限流或额度不足，请检查服务商控制台。'}[response.status]??'请检查服务商状态。';throw Error('模型服务返回 HTTP '+response.status+'。'+hint+' 未自动重试。');}
-  const reader=response.body.getReader(); let size=0,chunks=[];
-  for(;;){const {value,done}=await reader.read();if(done)break;size+=value.length;if(size>2_000_000){await reader.cancel();throw Error('模型响应过大。');}chunks.push(value);}
-  let raw;try{raw=JSON.parse(Buffer.concat(chunks).toString('utf8'));}catch{throw Error('模型返回了无效响应。');}
-  let text;
-  if(config.protocol==='responses'){
-    if(raw.status!=='completed') throw Error('模型未完整完成输出，请检查输出限制或手动整理。');
-    text=(raw.output??[]).filter(x=>x.type==='message').flatMap(x=>x.content??[]).filter(x=>x.type==='output_text').map(x=>x.text).join('\n');
-  }else{
-    if(raw.choices?.[0]?.finish_reason!=='stop') throw Error('模型输出被截断或未正常结束。');
-    text=raw.choices[0].message?.content;
-  }
-  if(typeof text!=='string'||!text.trim()) throw Error('模型没有返回文本。');
-  return {text,model:raw.model??config.model,usage:raw.usage??null};
+  return callHttpModel(config,messages,{signal,fetchImpl,maxOutputTokens});
 }
 export function createApp({fetchImpl=fetch,productOptions={}}={}){
   let productHost;
