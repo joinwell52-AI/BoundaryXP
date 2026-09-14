@@ -18,7 +18,7 @@ function readJson(path) {
   if (!stat.isFile() || stat.isSymbolicLink() || stat.size > 2_000_000) throw Error('Invalid review file.');
   return parseProductJson(readFileSync(path));
 }
-export function checkReviewWorkspaceCase(workspace, caseId) {
+export function loadReviewWorkspaceCase(workspace, caseId) {
   const plan = loadAcceptancePlan();
   const run = plan.runs.slice(0, 120).find(run => run.case_id === caseId);
   if (!run) throw Error('Unknown review case.');
@@ -39,7 +39,11 @@ export function checkReviewWorkspaceCase(workspace, caseId) {
   ordinaryDirectory(registry);
   ordinaryDirectory(join(registry, 'prepares-' + tenant));
   const host = createProductHost({ root: registry, tenant, initializeDefaults: false });
-  return checkReviewDraft(host, draft, run.seed, '2026-09-14T00:00:00Z');
+  return { host, draft, seed: run.seed, snapshotTime: '2026-09-14T00:00:00Z' };
+}
+export function checkReviewWorkspaceCase(workspace, caseId) {
+  const { host, draft, seed, snapshotTime } = loadReviewWorkspaceCase(workspace, caseId);
+  return checkReviewDraft(host, draft, seed, snapshotTime);
 }
 export function prepareReviewWorkspace({ base = join(repository, '.boundx'), signal } = {}) {
   const plan = loadAcceptancePlan();

@@ -10,6 +10,7 @@ This checkpoint supplements, rather than rewrites, the taskbook and historical r
 - [验收运行器](../ADMIN-ACCEPTANCE-RUNNER.md)支持120条原文加固定30条复测计划、12种隔离场景及真实记录格式；未实际运行模型验收。
 - [新增L2候选链路](../L2-PIPELINE-REGRESSION.md)覆盖15词帧×中英×四类120fixture，修复标签回放的歧义原因丢失/拒绝问题；这不是模型语义准确率证明。
 - [离线金标草稿工作区](../ADMIN-GOLD-DRAFTS.md)已支持120条原文、真实包锁/准备快照、标注备选候选检查；不自动生成答案，不冻结语义匹配器，不认证独立审阅。
+- [草稿比较器](../ADMIN-DRAFT-SCORING.md)已支持多答案分开比较、失败分母、重复预测及关系差异；仍不是最终冻结评分器。
 - API及Cursor接入已有代码，三层报告和唯一Core已接通；不以此宣称Codex登录通道可用。
 
 The fixed safety matrix, setup builder, bounded runner and L2 candidate pipelines are implemented. API/Cursor transports exist. None substitutes for actual Host generation or gold review.

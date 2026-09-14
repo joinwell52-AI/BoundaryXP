@@ -1,0 +1,43 @@
+# 草稿比较器 / Draft comparison
+
+这是用于审阅准备的确定性比较器，不是已冻结的WP1语义判定器，不启用正式98%/95%门槛，也不把未审草稿当作金标。
+
+This deterministic draft comparator is not the frozen WP1 semantic matcher. It does not activate acceptance thresholds or treat unreviewed drafts as gold labels.
+
+```text
+node scripts/score-admin-draft.mjs <workspace-path> T001 <candidate.json>
+node scripts/score-admin-draft.mjs <workspace-path> T001 --missing
+```
+
+工作区由[离线审阅工具](ADMIN-GOLD-DRAFTS.md)生成，allowed_answers需先填写明确候选。命令读取文件并调用现有候选复核与唯一Core，没有模型调用、自动修复、自动补齐或回写金标。CLI退出码0表示生成了比较报告，不表示样本正确；NOT_SCORED或输入文件读取失败返回非零。
+
+Use an offline review workspace with authored answer alternatives. Exit zero means a comparison report was produced, not that a prediction is correct. Missing annotations remain NOT_SCORED. Neither observations nor expectations are rewritten.
+
+## 匹配规则 / Matching rules
+
+- 每个完整答案替代表示分别报告，不把不同答案的正确部分拼成一个虚假全对答案，不挑选较小分母自动给最终成绩。
+- 每个桶按status、条目内容（忽略局部entry id）和原始解释/语义引用精确匹配。原文、Unicode码点证据、normalized数据及引用均不模糊归一化。
+- 使用多重集一对一计数：同一预测重复两次只能匹配一次，额外条目计误报。
+- 关系与scope整体另做精确比较，保留标识符和顺序；条目分数高不能掩盖关系不一致。
+- 三态、原因码和显式B召回单列；不把无B样本当作B召回成功。
+- 临时条目指标列于provisional_alternatives；顶层precision/recall始终null，independent_review_verified与acceptance_passed始终false。
+
+Alternatives are never combined. Entries match exactly as multisets; local entry IDs alone are ignored, while evidence and semantic interpretation remain significant. Relations/scopes and state/reason equality are separate. This conservative matcher does not recognize arbitrary paraphrases or equivalent reordered relations.
+
+## 失败分母 / Failure denominators
+
+显式缺失输出保留每个答案的完整expected数量，所有应有条目计false_negative；不能匹配本来absent的桶来掩盖整次失败。非法JSON、伪造引文、异快照候选同样保留应有条目分母。无法解析的输出其predicted/false_positive为null，不能编造零误报；结构可解析但被拒绝的条目全部为未匹配预测。错误地全标unresolved不匹配期望resolved条目。
+
+Missing or rejected observations retain every expected item as a false negative. Unparseable output has unknown predicted/false-positive counts, not fabricated zero errors. All-unknown output does not match resolved expectations. Unreadable or oversized files fail explicitly rather than silently becoming successful empty samples.
+
+## 仍待完成 / Still required
+
+正式评分仍需独立审阅答案集合、允许诊断、关系/人物/模态/单位/scope断言，冻结匹配版本与摘要，并按全部固定运行逐语言、类别汇总。该比较器逐例保留语言与类别，但不宣称完成这些统计验收。对故意非法注入需冻结独立的诊断预期，不能把本工具的所有REJECTED一概当通过。
+
+Final scoring still requires independently reviewed semantic answers and diagnostic expectations, a frozen matching policy and complete per-language/category aggregation over the required runs. Rejected adversarial cases are not automatically passes. Historical draft comparison does not replace live stale-snapshot or safety acceptance.
+
+## 验证 / Verification
+
+新增7项比较器测试覆盖局部ID变化、缺失输出、全未知、重复预测、非法JSON/UTF-8、异快照、伪造证据、多答案混合、空标注及关系变化；原120草稿集成测试增加文件评分和缺失输出路径。已跟踪Core 554/554、UI 154/154、协议单测103/103、冻结向量208/208、Python 135/135、文档单测20/20通过。没有真实模型生成或独立金标审阅。
+
+Seven new tests and the existing 120-draft integration cover comparison and file entry points. Local tracked Core554, UI154, protocol103, frozen208, Python135 and documentation20 pass. These are deterministic engineering checks, not live-model or reviewed semantic scores.

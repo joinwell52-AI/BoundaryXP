@@ -8,6 +8,7 @@ import { createReviewDraft, checkReviewDraft } from '../product/review-draft.mjs
 import { loadAcceptancePlan, atomicRecord } from '../../scripts/run-admin-acceptance.mjs';
 import { createCaseScenario } from '../../fixtures/admin-text/scenarios.mjs';
 import { prepareReviewWorkspace, checkReviewWorkspaceCase } from '../../scripts/prepare-admin-review.mjs';
+import { scoreDraftFile } from '../../scripts/score-admin-draft.mjs';
 
 const plan = loadAcceptancePlan();
 function answerFor(draft) {
@@ -85,6 +86,10 @@ test('offline review workspace builds all 120 original cases, checks edits and r
     draft.allowed_answers = [answerFor(draft)];
     atomicRecord(path, draft);
     assert.equal(checkReviewWorkspaceCase(result.output, 'T001').all_candidates_structurally_valid, true);
+    const candidatePath = join(result.output, 'T001', 'candidate.json');
+    atomicRecord(candidatePath, draft.allowed_answers[0]);
+    assert.equal(scoreDraftFile(result.output, 'T001', candidatePath).provisional_alternatives[0].exact_match, true);
+    assert.equal(scoreDraftFile(result.output, 'T001', '--missing').provisional_alternatives[0].totals.false_negative, 1);
     assert.throws(() => checkReviewWorkspaceCase(result.output, '../escape'));
     const preparedPath = join(result.output, 'T001', 'prepared.json');
     const prepared = JSON.parse(readFileSync(preparedPath, 'utf8'));
