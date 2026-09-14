@@ -1,0 +1,615 @@
+按照 **用例 138 的三层标准范式**（Layer 1 原文证据 $\to$ Layer 2 标准 7+1 形式化结构映射 $\to$ Layer 3 空间与集合数学边界计算及 Diff 留痕），梳理出软件工程与 AI 协同领域的 20 个完整计算用例：
+
+---
+
+### 一、代码生成与重构控制
+
+#### 用例 139：微服务遗留逻辑重构（参数不变性与非破坏性约束）
+
+* **【Layer 1：原文证据】**
+“根据《基础架构演进规范 v4.2》，由重构专家 Agent 对 `billing-service` 模块内单笔扣费函数进行提取重构。输入为现有 `OrderContext` 结构，输出为纯函数式扣费适配器代码；执行时间限制在 120 秒内；必须包含全量分支单元测试才算完成；严禁修改原有公开方法签名，且严禁变更任何现有异常类的抛出类型。”
+* **【Layer 2：标准 7+1 结构化映射】**
+* **I (输入范围)**：`billing-service` 模块内 `OrderContext` 及关联扣费实现
+* **O (交付结果)**：纯函数式扣费适配器代码 + 分支单元测试代码
+* **A (允许动作)**：$\text{L1.Action.ExtractMethod} \cup \text{L1.Action.GenerateTest}$
+* **P (责任分工)**：重构专家 Agent $\to \text{L1.Role.RefactorAgent}$
+* **R (资源约束)**：$\Delta t \le 120\text{ s}$
+* **V (版本依据)**：《基础架构演进规范 v4.2》
+* **C (完成条件)**：代码生成完成 $\land$ 分支覆盖测试生成完成
+* **+1 / B (禁止边界)**：$\Delta(\text{PublicMethodSignatures}) = \emptyset \land \Delta(\text{ThrownExceptions}) = \emptyset$
+
+
+* **【Layer 3：计算结果与建议】**
+* **引擎求值**：
+* 差集检查：$\mathcal{S}_{\text{Required}} \setminus \mathcal{S}_{\text{Extracted}} = \emptyset$
+* 签名映射检查：外显契约流形映射核 $\ker(\Delta \text{Signature}) = \{0\}$，禁止边界为双射不变式
+
+
+* **结论与 Diff**：
+* **通过**：7 维要素全闭合，不变性超平面明确无二义性。
+
+
+
+
+
+---
+
+#### 用例 140：算法代码 Python 转 Rust（性能紧致度与外部依赖禁令）
+
+* **【Layer 1：原文证据】**
+“依照《高性能计算组件迁移草案》，交付工程师需将 `path_finder.py` 核心回溯算法转写为 Rust 模块。输入为原 Python AST，输出为通过 `cargo test` 的 Rust lib；转换与验证必须在 5 分钟内完成；编译通过且单次寻路压测延迟低于 2ms 视为达标；严禁引入任何非标准库的外部 crate 依赖。”
+* **【Layer 2：标准 7+1 结构化映射】**
+* **I (输入范围)**：`path_finder.py` 的 AST 及测试输入集
+* **O (交付结果)**：Rust lib 源代码及配套集成测试
+* **A (允许动作)**：$\text{L1.Action.Transpile} \cup \text{L1.Action.Compile} \cup \text{L1.Action.Benchmark}$
+* **P (责任分工)**：交付工程师 $\to \text{L1.Role.DeliveryEngineer}$
+* **R (资源约束)**：$\Delta t_{\text{exec}} \le 300\text{ s}$
+* **V (版本依据)**：《高性能计算组件迁移草案》
+* **C (完成条件)**：`cargo test` Exit Code = $0 \land \text{Latency} < 2\text{ ms}$
+* **+1 / B (禁止边界)**：$\text{Dependencies}(O) \setminus \text{Rust.StdLib} = \emptyset$
+
+
+* **【Layer 3：计算结果与建议】**
+* **引擎求值**：
+* 依赖拓扑判定：允许依赖集为闭集 $\text{Deps} \subseteq \text{StdLib}$
+* 差集检查：$\mathcal{S}_{\text{Required}} \setminus \mathcal{S}_{\text{Extracted}} = \emptyset$
+
+
+* **结论与 Diff**：
+* **通过**：闭包边界清晰，验收测度已完全标量化。
+
+
+
+
+
+---
+
+#### 用例 141：遗留黑话标识符重命名（发散性动词缺失）
+
+* **【Layer 1：原文证据】**
+“参考《领域驱动设计名词表 2026》，分析清理 `legacy_repo` 里的变量命名。输入为该仓库所有未命名的 `tmp*` 变量，生成重命名 PR 即算完成；严禁改动任何以 `$` 开头的框架内部变量。”
+* **【Layer 2：标准 7+1 结构化映射】**
+* **I (输入范围)**：`legacy_repo` 下满足匹配式 `tmp.*` 的局部变量
+* **O (交付结果)**：重命名 PR
+* **A (允许动作)**：$\text{L1.Action.Analyze} \cup \text{L1.Action.Clean}$（未收敛动作）
+* **P (责任分工)**：$\emptyset$（未定义责任主体）
+* **R (资源约束)**：$\emptyset$（未定义资源/耗时约束）
+* **V (版本依据)**：《领域驱动设计名词表 2026》
+* **C (完成条件)**：PR 状态为 `CREATED`
+* **+1 / B (禁止边界)**：$\forall x \in \text{Variables}, x \text{ starts with } '\$' \implies \text{NoModify}(x)$
+
+
+* **【Layer 3：计算结果与建议】**
+* **引擎求值**：
+* 差集检查：$\mathcal{S}_{\text{Required}} \setminus \mathcal{S}_{\text{Extracted}} = \{P, R\}$
+* 动词边界：$\text{“清理”}$ 属于非收敛操作符，无法映射至确定性 AST 变换算子
+
+
+* **结论与 Diff**：
+* **未通过 (Defect)**：缺失执行主体 $P$ 与资源约束 $R$；动作 $A$ 包含无界非闭环动词。
+
+
+
+
+
+---
+
+### 二、多 Agent 协作与工单派发
+
+#### 用例 142：前端脚手架搭建（上下文沙盒作用域逃逸）
+
+* **【Layer 1：原文证据】**
+“根据《前端开发规范》，由前端 Agent 初始化 `apps/dashboard` 目录下的 Vite 工程，单次运行消耗 token 不得超过 20k；提交可用 package.json 且跑通 build 为完成；禁止修改根目录下 `pnpm-workspace.yaml` 及公共包 `packages/ui`。”
+* **【Layer 2：标准 7+1 结构化映射】**
+* **I (输入范围)**：`apps/dashboard` 路径空间
+* **O (交付结果)**：可编译运行的前端工程脚手架
+* **A (允许动作)**：$\text{L1.Action.ScaffoldInit} \cup \text{L1.Action.BuildTest}$
+* **P (责任分工)**：前端 Agent $\to \text{L1.Role.FrontendAgent}$
+* **R (资源约束)**：$\text{Tokens} \le 20,000$
+* **V (版本依据)**：《前端开发规范》
+* **C (完成条件)**：`pnpm build` Exit Code = $0$
+* **+1 / B (禁止边界)**：$\text{ModifiedFiles} \cap (\{\text{"pnpm-workspace.yaml"}\} \cup \text{Path}(\text{"packages/ui/"})) = \emptyset$
+
+
+* **【Layer 3：计算结果与建议】**
+* **引擎求值**：
+* 路径空间拓扑划分：可写空间 $\Omega_{\text{write}} = \text{Path}(\text{"apps/dashboard/"})$ 与禁止空间 $\Omega_{\text{forbidden}}$ 互斥无交集
+* 差集检查：$\mathcal{S}_{\text{Required}} \setminus \mathcal{S}_{\text{Extracted}} = \emptyset$
+
+
+* **结论与 Diff**：
+* **通过**：空间上下文呈紧致凸集，沙盒物理边界完全隔离。
+
+
+
+
+
+---
+
+#### 用例 143：自动化代码审查建议派发（修改动作越界）
+
+* **【Layer 1：原文证据】**
+“根据《PR 合并准则》，代码审计 Agent 负责对提交到 `main` 分支的 Diff 进行合规扫描并输出建议。分析耗时控制在 60 秒内；生成评论卡片即完成任务；禁止对被审查文件进行任何自动提交与修改。”
+* **【Layer 2：标准 7+1 结构化映射】**
+* **I (输入范围)**：`git diff origin/main...HEAD`
+* **O (交付结果)**：代码审查 Comment/卡片
+* **A (允许动作)**：$\text{L1.Action.Scan} \cup \text{L1.Action.PostComment}$
+* **P (责任分工)**：代码审计 Agent $\to \text{L1.Role.ReviewAgent}$
+* **R (资源约束)**：$\Delta t \le 60\text{ s}$
+* **V (版本依据)**：《PR 合并准则》
+* **C (完成条件)**：评论卡片生成完毕
+* **+1 / B (禁止边界)**：$\text{L1.Action.FileWrite} \cup \text{L1.Action.GitCommit} = \emptyset$
+
+
+* **【Layer 3：计算结果与建议】**
+* **引擎求值**：
+* 算子正交性检查：允许动作空间 $A$ 属于只读流形 $\mathcal{M}_{\text{read}}$，禁止边界完全覆盖写操作空间 $\mathcal{M}_{\text{write}}$，二者正交无重叠
+* 差集检查：$\mathcal{S}_{\text{Required}} \setminus \mathcal{S}_{\text{Extracted}} = \emptyset$
+
+
+* **结论与 Diff**：
+* **通过**：“只检查不修复/只评论不修改”的职责切面完全闭合。
+
+
+
+
+
+---
+
+#### 用例 144：多 Agent 状态机流转死循环（终止态可达性缺失）
+
+* **【Layer 1：原文证据】**
+“遵循《团队协同总则》，由协调员 Agent 接收需求并派发给编码 Agent。若测试未通过，则打回重写；未消耗完当天 50 次重试额度时反复执行；生成可上线包为目标；严禁跨越任务看板私自沟通。”
+* **【Layer 2：标准 7+1 结构化映射】**
+* **I (输入范围)**：需求文本工单
+* **O (交付结果)**：上线包
+* **A (允许动作)**：$\text{L1.Action.Dispatch} \cup \text{L1.Action.Rewrite}$
+* **P (责任分工)**：协调员 Agent + 编码 Agent
+* **R (资源约束)**：$\text{Attempts} \le 50$
+* **V (版本依据)**：《团队协同总则》
+* **C (完成条件)**：可上线包状态生成（未定义失败终止终态）
+* **+1 / B (禁止边界)**：私下通信信道拦截
+
+
+* **【Layer 3：计算结果与建议】**
+* **引擎求值**：
+* 状态转移矩阵求值：系统未定义当 $\text{Attempts} = 50$ 时的 Fallback 吸收态（Absorbing State），存在死锁在无应答黑洞的风险
+* 差集检查：$\mathcal{S}_{\text{Required}} \setminus \mathcal{S}_{\text{Extracted}} = \{C_{\text{terminal\_fallback}}\}$
+
+
+* **结论与 Diff**：
+* **未通过 (Defect)**：完成条件未构成双射闭环，缺失异常终止态界定。
+
+
+
+
+
+---
+
+### 三、测试用例与数据合成
+
+#### 用例 145：模糊测试（Fuzzing）种子突变（内存与协议边界）
+
+* **【Layer 1：原文证据】**
+“根据《安全模糊测试规范》，由测试执行器针对 `gateway_parser` 生成畸形包种子。执行时间限定在 2 小时；发现 3 个以上崩溃用例或覆盖率达到 85% 即算完成；严禁在协议头部注入破坏以太网链路帧校验的基础破坏载荷。”
+* **【Layer 2：标准 7+1 结构化映射】**
+* **I (输入范围)**：标准 PCAP 样本流
+* **O (交付结果)**：崩溃测试用例集及覆盖率报告
+* **A (允许动作)**：$\text{L1.Action.Mutate} \cup \text{L1.Action.Replay}$
+* **P (责任分工)**：测试执行器 $\to \text{L1.Role.FuzzerRunner}$
+* **R (资源约束)**：$\Delta t \le 7200\text{ s}$
+* **V (版本依据)**：《安全模糊测试规范》
+* **C (完成条件)**：$\vert{}\text{CrashDumps}\vert{} \ge 3 \lor \text{Coverage} \ge 0.85$
+* **+1 / B (禁止边界)**：$\forall p \in \text{Packets}, \text{PayloadMutate}(p) \cap \text{Layer2FrameCheck} = \emptyset$
+
+
+* **【Layer 3：计算结果与建议】**
+* **引擎求值**：
+* 终止条件判别：$C$ 映射为两个正交维度的逻辑析取（OR），有界且可量化
+* 差集检查：$\mathcal{S}_{\text{Required}} \setminus \mathcal{S}_{\text{Extracted}} = \emptyset$
+
+
+* **结论与 Diff**：
+* **通过**：变异算子被约束在指定网络层，度量条件完备。
+
+
+
+
+
+---
+
+#### 用例 146：生产脱敏数据注入开发库（未量化安全边界）
+
+* **【Layer 1：原文证据】**
+“按照《研发环境数据合规指引》，由数据清洗助手将近一月订单数据导入开发环境。耗时 1 小时内完成；生成目标库写入记录即为完成；所有涉及个人隐私的信息都必须做充分的脱敏处理。”
+* **【Layer 2：标准 7+1 结构化映射】**
+* **I (输入范围)**：近 30 天生产订单只读镜像
+* **O (交付结果)**：开发数据库数据集
+* **A (允许动作)**：$\text{L1.Action.Dump} \cup \text{L1.Action.Mask} \cup \text{L1.Action.Insert}$
+* **P (责任分工)**：数据清洗助手 $\to \text{L1.Role.DataSyncAssistant}$
+* **R (资源约束)**：$\Delta t \le 3600\text{ s}$
+* **V (版本依据)**：《研发环境数据合规指引》
+* **C (完成条件)**：写入操作日志记录落盘
+* **+1 / B (禁止边界)**：“充分脱敏”（模糊谓词）
+
+
+* **【Layer 3：计算结果与建议】**
+* **引擎求值**：
+* 算子确定性检查：$\text{Mask}(\text{“个人隐私”})$ 缺乏明确字段谓词映射集合 $S_{\text{fields}} = \emptyset$，超平面无法计算
+* 差集检查：$\mathcal{S}_{\text{Required}} \setminus \mathcal{S}_{\text{Extracted}} = \{B_{\text{formal\_rule}}\}$
+
+
+* **结论与 Diff**：
+* **未通过 (Defect)**：禁止边界 $B$ 使用主观形容词，安全切面未量化。
+
+
+
+
+
+---
+
+### 四、基础设施与 CI/CD 自动化
+
+#### 用例 147：K8s 弹性伸缩策略生成（爆炸半径全局隔离）
+
+* **【Layer 1：原文证据】**
+“根据《生产容器集群运维白皮书》，SRE Agent 为 `order-api` 生成 HPA 弹性伸缩配置。输入为近 7 天 CPU/内存指标时序；要求在 10 分钟内完成输出；输出包含合法 YAML 即为完成；最大副本数严禁超过 100，且严禁触碰命名空间中名为 `infra-core` 的任何系统服务。”
+* **【Layer 2：标准 7+1 结构化映射】**
+* **I (输入范围)**：`order-api` 过去 7 天 Prometheus 监控指标
+* **O (交付结果)**：Kubernetes HPA YAML 配置文件
+* **A (允许动作)**：$\text{L1.Action.AnalyzeMetrics} \cup \text{L1.Action.SynthesizeYAML}$
+* **P (责任分工)**：SRE Agent $\to \text{L1.Role.SreAgent}$
+* **R (资源约束)**：$\Delta t \le 600\text{ s}$
+* **V (版本依据)**：《生产容器集群运维白皮书》
+* **C (完成条件)**：YAML 文件语法验证通过
+* **+1 / B (禁止边界)**：$\text{MaxReplicas} \le 100 \land \text{TargetNamespace} \neq \text{"infra-core"}$
+
+
+* **【Layer 3：计算结果与建议】**
+* **引擎求值**：
+* 约束紧致性分析：副本数空间为紧致区间 $[1, 100]$；命名空间拓扑阻断明确
+* 差集检查：$\mathcal{S}_{\text{Required}} \setminus \mathcal{S}_{\text{Extracted}} = \emptyset$
+
+
+* **结论与 Diff**：
+* **通过**：资源上界与命名空间作用域均具备强界限。
+
+
+
+
+
+---
+
+#### 用例 148：生产环境配置热更新（时序生命周期开集）
+
+* **【Layer 1：原文证据】**
+“依据《线上变更规程》，运维机器人更新支付路由网关的权重配置。输入为各通道商户费率表；输出生效日志；更新后执行链路健康检查通过即完成；临时开启全量调试模式以便观察，严禁中断既有长连接会话。”
+* **【Layer 2：标准 7+1 结构化映射】**
+* **I (输入范围)**：商户费率表
+* **O (交付结果)**：生效日志
+* **A (允许动作)**：$\text{L1.Action.UpdateRoutingWeight}$
+* **P (责任分工)**：运维机器人 $\to \text{L1.Role.OpsBot}$
+* **R (资源约束)**：$\emptyset$
+* **V (版本依据)**：《线上变更规程》
+* **C (完成条件)**：HealthCheck Status = $200$
+* **+1 / B (禁止边界)**：禁止断开长连接；“临时开启调试”（缺失关闭时间界限）
+
+
+* **【Layer 3：计算结果与建议】**
+* **引擎求值**：
+* 时域积分测度分析：调试模式开启时间区间 $[t_{\text{start}}, t_{\text{end}}]$，因 $t_{\text{end}} = \text{undefined}$，时间测度 $\mu \to \infty$
+* 差集检查：$\mathcal{S}_{\text{Required}} \setminus \mathcal{S}_{\text{Extracted}} = \{R, \text{Lifecycle}_{\text{end}}\}$
+
+
+* **结论与 Diff**：
+* **未通过 (Defect)**：生命周期右边界缺失，导致系统长期暴露在生产调试安全漏洞下。
+
+
+
+
+
+---
+
+### 五、模型训练、微调与 RAG
+
+#### 用例 149：领域知识库构建（语义解析无损性与截断深度）
+
+* **【Layer 1：原文证据】**
+“依照《企业知识工程构建标准》，知识抽取 Agent 处理 500 篇 PDF 格式的财报文件。提取出的每个 Chunk 大小限制在 512 token 以内；累计调用外部模型不得消耗超过 100 美元；向向量库完成全量写入视为完成；严禁在抽取过程中跳过任何包含审计结论的附注段落。”
+* **【Layer 2：标准 7+1 结构化映射】**
+* **I (输入范围)**：500 份财报 PDF
+* **O (交付结果)**：已切分向量库记录
+* **A (允许动作)**：$\text{L1.Action.ExtractText} \cup \text{L1.Action.EmbeddingInsert}$
+* **P (责任分工)**：知识抽取 Agent $\to \text{L1.Role.KnowledgeAgent}$
+* **R (资源约束)**：$\text{Cost} \le \$100 \land \text{ChunkSize} \le 512$
+* **V (版本依据)**：《企业知识工程构建标准》
+* **C (完成条件)**：$\text{InsertedChunksCount} = \text{TotalExtracted}$
+* **+1 / B (禁止边界)**：$\forall p \in \text{Sections}, \text{IsAuditAppendix}(p) \implies p \notin \text{DroppedChunks}$
+
+
+* **【Layer 3：计算结果与建议】**
+* **引擎求值**：
+* 空间单射检查：关键业务子集到目标向量空间的投影保持完全覆盖，禁止丢失
+* 差集检查：$\mathcal{S}_{\text{Required}} \setminus \mathcal{S}_{\text{Extracted}} = \emptyset$
+
+
+* **结论与 Diff**：
+* **通过**：资源成本与语义保真度均为有界闭集。
+
+
+
+
+
+---
+
+#### 用例 150：LoRA 轻量微调流水线（基座权重冻结边界）
+
+* **【Layer 1：原文证据】**
+“根据《大模型微调治理规定》，训练调度系统针对特定对话场景挂载 LoRA 训练。输入为清洗后的 QA 数据集；输出为 LoRA 权重文件；训练限定在单机 8 卡 24 小时内完成；训练损失降至 0.8 以下视为收敛完成；严禁解冻或修改 Base Model 任何非 LoRA 层的浮点权重。”
+* **【Layer 2：标准 7+1 结构化映射】**
+* **I (输入范围)**：标准化 QA 对格式数据集
+* **O (交付结果)**：LoRA Adapter 权重参数文件
+* **A (允许动作)**：$\text{L1.Action.BackwardPass} \cup \text{L1.Action.UpdateLoRA}$
+* **P (责任分工)**：训练调度系统 $\to \text{L1.Role.TrainingScheduler}$
+* **R (资源约束)**：$\text{Nodes} = 1 \land \text{GPUs} = 8 \land \Delta t \le 86400\text{ s}$
+* **V (版本依据)**：《大模型微调治理规定》
+* **C (完成条件)**：$\text{TrainLoss} \le 0.8$
+* **+1 / B (禁止边界)**：$\Delta(\text{BaseModelWeights}) \equiv \mathbf{0}$
+
+
+* **【Layer 3：计算结果与建议】**
+* **引擎求值**：
+* 权重梯度掩码分析：参数更新流形完全局限于子空间 $\mathcal{M}_{\text{adapter}}$，基模正交补空间梯度严格为 0
+* 差集检查：$\mathcal{S}_{\text{Required}} \setminus \mathcal{S}_{\text{Extracted}} = \emptyset$
+
+
+* **结论与 Diff**：
+* **通过**：梯度反传空间严格受限，基座保护边界明确。
+
+
+
+
+
+---
+
+### 六、API 与协议集成治理
+
+#### 用例 151：开放平台三方接口封装（字段穿透与信息泄漏）
+
+* **【Layer 1：原文证据】**
+“参考《开放 API 接入规范》，网关开发人员封装内部物流查询服务以供三方调用。开发工作限制在 2 个工作日；输出符合 Swagger 3.0 的接口定义及实现代码；严禁将内部包裹揽收员的身份证号、手机号明文字段暴露在响应 DTO 中。”
+* **【Layer 2：标准 7+1 结构化映射】**
+* **I (输入范围)**：内部物流服务 RPC 契约
+* **O (交付结果)**：对外 API 接口代码及 Swagger 3.0 定义
+* **A (允许动作)**：$\text{L1.Action.WrapRPC} \cup \text{L1.Action.GenerateSwagger}$
+* **P (责任分工)**：网关开发人员 $\to \text{L1.Role.GatewayDev}$
+* **R (资源约束)**：$\Delta t \le 2\text{ Days}$
+* **V (版本依据)**：《开放 API 接入规范》
+* **C (完成条件)**：Swagger 校验通过 $\land$ 代码可编译
+* **+1 / B (禁止边界)**：$\text{Fields}(\text{ResponseDTO}) \cap \{\text{"IDCard"}, \text{"PhoneNumber"}\} = \emptyset$
+
+
+* **【Layer 3：计算结果与建议】**
+* **引擎求值**：
+* 数据流污点拓扑检查：敏感字段集合在映射转换矩阵中被置零断开，禁止穿透至外层
+* 差集检查：$\mathcal{S}_{\text{Required}} \setminus \mathcal{S}_{\text{Extracted}} = \emptyset$
+
+
+* **结论与 Diff**：
+* **通过**：契约投影降维规则清晰，安全差集计算无违规。
+
+
+
+
+
+---
+
+#### 用例 152：跨系统批量数据同步（连接池溢出与流控缺失）
+
+* **【Layer 1：原文证据】**
+“依据《跨库数据同步作业指南》，同步工具从 CRM 导出客户全量履约记录并写入离线分析平台。在夜间 2 点至 4 点完成；生成数据校验通过报告；严禁占用 CRM 生产主库超过 5 个连接数，且必须保持单秒读取速率不超过 1000 QPS。”
+* **【Layer 2：标准 7+1 结构化映射】**
+* **I (输入范围)**：CRM 生产主库履约表
+* **O (交付结果)**：离线数据仓记录及比对校验报告
+* **A (允许动作)**：$\text{L1.Action.ExtractBatch} \cup \text{L1.Action.LoadBatch}$
+* **P (责任分工)**：同步工具 $\to \text{L1.Role.SyncTool}$
+* **R (资源约束)**：运行时间窗 $\mathcal{T} \subset$
+* **V (版本依据)**：《跨库数据同步作业指南》
+* **C (完成条件)**：数据校验一致性比对通过
+* **+1 / B (禁止边界)**：$\text{ActiveConnections} \le 5 \land \text{ReadQPS} \le 1000$
+
+
+* **【Layer 3：计算结果与建议】**
+* **引擎求值**：
+* 物理资源测度检查：时域区间闭合，速率标量与连接数均为紧致上界
+* 差集检查：$\mathcal{S}_{\text{Required}} \setminus \mathcal{S}_{\text{Extracted}} = \emptyset$
+
+
+* **结论与 Diff**：
+* **通过**：系统级影响边界完全受控在非峰值安全椭球内。
+
+
+
+
+
+---
+
+### 七、安全攻防与脆弱性分析
+
+#### 用例 153：自动化渗透测试 Agent（环境穿透与破坏性载荷）
+
+* **【Layer 1：原文证据】**
+“根据《授权渗透测试协议 2026-Q3》，由安全蓝军 Agent 对预发布演练域名发起针对 SQL 注入的自动化探测。测试限时 4 小时；产出漏洞 POC 证据链为完成；严禁向任何接口发送包含 `DROP`、`TRUNCATE` 或 `UPDATE` 的破坏性 SQL 语义片段。”
+* **【Layer 2：标准 7+1 结构化映射】**
+* **I (输入范围)**：预发布环境目标域名
+* **O (交付结果)**：可复现漏洞 POC 报告
+* **A (允许动作)**：$\text{L1.Action.SendProbe} \cup \text{L1.Action.CollectResponse}$
+* **P (责任分工)**：安全蓝军 Agent $\to \text{L1.Role.SecPentestAgent}$
+* **R (资源约束)**：$\Delta t \le 14400\text{ s}$
+* **V (版本依据)**：《授权渗透测试协议 2026-Q3》
+* **C (完成条件)**：POC 验证链生成
+* **+1 / B (禁止边界)**：$\forall q \in \text{Payloads}, \text{SQLKeywords}(q) \cap \{\text{DROP}, \text{TRUNCATE}, \text{UPDATE}\} = \emptyset$
+
+
+* **【Layer 3：计算结果与建议】**
+* **引擎求值**：
+* 动作语义语法树求值：注入语句 AST 判定，禁止节点子树存在破坏性 DDL/DML 语义分支
+* 差集检查：$\mathcal{S}_{\text{Required}} \setminus \mathcal{S}_{\text{Extracted}} = \emptyset$
+
+
+* **结论与 Diff**：
+* **通过**：探索性动作被严格拦截在只读探针半空间内。
+
+
+
+
+
+---
+
+#### 用例 154：依赖组件 SBOM 漏洞排查（动态修复越界）
+
+* **【Layer 1：原文证据】**
+“依据《开源软件供应链安全条例》，由依赖审计员检查仓库所有锁定文件。耗时小于 10 分钟；输出高危 CVE 清单；禁止私自拉取新版本代码替换 `package-lock.json`。”
+* **【Layer 2：标准 7+1 结构化映射】**
+* **I (输入范围)**：全仓 Lockfile（`package-lock.json` 等）
+* **O (交付结果)**：CVE 风险评估报告
+* **A (允许动作)**：$\text{L1.Action.ParseLockfile} \cup \text{L1.Action.QueryVulnerability}$
+* **P (责任分工)**：依赖审计员 $\to \text{L1.Role.DependencyAuditor}$
+* **R (资源约束)**：$\Delta t \le 600\text{ s}$
+* **V (版本依据)**：《开源软件供应链安全条例》
+* **C (完成条件)**：CVE 报告生成
+* **+1 / B (禁止边界)**：$\Delta(\text{LockfileContent}) = \emptyset$
+
+
+* **【Layer 3：计算结果与建议】**
+* **引擎求值**：
+* 写隔离检查：变动矩阵满足恒等不变性，排除代为修复（Auto-fix）越界行为
+* 差集检查：$\mathcal{S}_{\text{Required}} \setminus \mathcal{S}_{\text{Extracted}} = \emptyset$
+
+
+* **结论与 Diff**：
+* **通过**：检查与修复边界分离。
+
+
+
+
+
+---
+
+### 八、数据流治理与 Schema 演进
+
+#### 用例 155：数据库 Schema 迁移脚本生成（不兼容列删除）
+
+* **【Layer 1：原文证据】**
+“根据《数据库设计指导方针》，DBA 助手编写从 V1 到 V2 的迁移 SQL。输入为前后两个版本的 Proto 文件；单次构建限制 3 分钟；输出向后兼容迁移脚本；严禁在脚本中执行物理 `DROP COLUMN`，历史列必须改用废弃注解标记。”
+* **【Layer 2：标准 7+1 结构化映射】**
+* **I (输入范围)**：`schema_v1.proto` 与 `schema_v2.proto`
+* **O (交付结果)**：DDL 迁移脚本文件
+* **A (允许动作)**：$\text{L1.Action.DiffSchema} \cup \text{L1.Action.GenerateDDL}$
+* **P (责任分工)**：DBA 助手 $\to \text{L1.Role.DbaAssistant}$
+* **R (资源约束)**：$\Delta t \le 180\text{ s}$
+* **V (版本依据)**：《数据库设计指导方针》
+* **C (完成条件)**：向后兼容性检查通过
+* **+1 / B (禁止边界)**：$\text{ParsedStatements}(O) \cap \{\text{DROP\_COLUMN}\} = \emptyset$
+
+
+* **【Layer 3：计算结果与建议】**
+* **引擎求值**：
+* DDL 操作算子断言：只允许单调扩张算子（$\text{ADD\_COLUMN}$），收缩算子集合被清空
+* 差集检查：$\mathcal{S}_{\text{Required}} \setminus \mathcal{S}_{\text{Extracted}} = \emptyset$
+
+
+* **结论与 Diff**：
+* **通过**：契约演进满足向后单调性。
+
+
+
+
+
+---
+
+#### 用例 156：特征工程自动化算子提取（前向数据泄漏）
+
+* **【Layer 1：原文证据】**
+“根据《机器学习生产流水线基准》，算法辅助程序负责为交易时序表构造滑窗统计特征。运算耗时不超过半小时；交付特征计算 DAG；严禁在计算 $t$ 时刻特征时引入任何 $t' > t$ 的未来函数或全局聚合统计量。”
+* **【Layer 2：标准 7+1 结构化映射】**
+* **I (输入范围)**：交易时序表及字段元数据
+* **O (交付结果)**：特征变换 DAG 算子定义
+* **A (允许动作)**：$\text{L1.Action.GenerateWindowAgg}$
+* **P (责任分工)**：算法辅助程序 $\to \text{L1.Role.AlgoAssistant}$
+* **R (资源约束)**：$\Delta t \le 1800\text{ s}$
+* **V (版本依据)**：《机器学习生产流水线基准》
+* **C (完成条件)**：DAG 验证无环且语法合规
+* **+1 / B (禁止边界)**：$\forall \tau \in \text{TimeWindow}(t), \tau \le t$（因果时序超平面）
+
+
+* **【Layer 3：计算结果与建议】**
+* **引擎求值**：
+* 因果半平面切割：定义域被严格约束在历史时间区间 $(-\infty, t]$，未来时间轴为禁止闭包
+* 差集检查：$\mathcal{S}_{\text{Required}} \setminus \mathcal{S}_{\text{Extracted}} = \emptyset$
+
+
+* **结论与 Diff**：
+* **通过**：时序流形单向闭合，前向泄漏边界完全隔离。
+
+
+
+
+
+---
+
+### 九、文档生成与知识工程
+
+#### 用例 157：从代码 AST 反向生成架构文档（无依据发散推断）
+
+* **【Layer 1：原文证据】**
+“参照《技术写作规范 2.0》，由文档撰写 Agent 提取 `core-engine` 模块的公开 API 并生成 Markdown 说明书。执行耗时需在 5 分钟内；生成包含所有 public 方法的文档即为完成；严禁自行推测或编造代码中未声明的性能指标与架构设计动机。”
+* **【Layer 2：标准 7+1 结构化映射】**
+* **I (输入范围)**：`core-engine` 源代码文件及其注释
+* **O (交付结果)**：Markdown 格式 API 规范文档
+* **A (允许动作)**：$\text{L1.Action.ExtractAST} \cup \text{L1.Action.RenderDoc}$
+* **P (责任分工)**：文档撰写 Agent $\to \text{L1.Role.DocAgent}$
+* **R (资源约束)**：$\Delta t \le 300\text{ s}$
+* **V (版本依据)**：《技术写作规范 2.0》
+* **C (完成条件)**：公开方法覆盖率 $= 100\%$
+* **+1 / B (禁止边界)**：$\text{Facts}(O) \setminus \text{ASTDeclaredFacts}(I) = \emptyset$（幻觉阻断）
+
+
+* **【Layer 3：计算结果与建议】**
+* **引擎求值**：
+* 语义信息论熵增检查：输出信息的实体断言集必须为输入代码 AST 的严格子集，禁止信息熵扩张
+* 差集检查：$\mathcal{S}_{\text{Required}} \setminus \mathcal{S}_{\text{Extracted}} = \emptyset$
+
+
+* **结论与 Diff**：
+* **通过**：事实投影空间严格保真，发散性边界被拦截。
+
+
+
+
+
+---
+
+#### 用例 158：国际化多语言翻译提取（代码侵入性与硬编码）
+
+* **【Layer 1：原文证据】**
+“根据《多语言国际化管理约定》，本地化工具提取客户端 UI 代码中的全部硬编码中文字符串。在 10 分钟内完成；输出标准 i18n JSON 资源文件；严禁直接修改源源码文件中的逻辑语句，仅允许替换字面量标记。”
+* **【Layer 2：标准 7+1 结构化映射】**
+* **I (输入范围)**：客户端 UI 组件源码
+* **O (交付结果)**：`zh-CN.json` 键值对映射资源包
+* **A (允许动作)**：$\text{L1.Action.ExtractLiterals} \cup \text{L1.Action.BuildDictionary}$
+* **P (责任分工)**：本地化工具 $\to \text{L1.Role.I18nTool}$
+* **R (资源约束)**：$\Delta t \le 600\text{ s}$
+* **V (版本依据)**：《多语言国际化管理约定》
+* **C (完成条件)**：中文字面量抽取率 $= 100\%$
+* **+1 / B (禁止边界)**：$\text{ASTModifiedNodes} \setminus \text{StringLiteralNodes} = \emptyset$
+
+
+* **【Layer 3：计算结果与建议】**
+* **引擎求值**：
+* AST 节点变异范围判定：变异空间仅限于叶子常量节点，语法树控制流与调用流无交集
+* 差集检查：$\mathcal{S}_{\text{Required}} \setminus \mathcal{S}_{\text{Extracted}} = \emptyset$
+
+
+* **结论与 Diff**：
+* **通过**：修改范围被严格圈定在字面量流形内。
