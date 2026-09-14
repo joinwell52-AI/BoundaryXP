@@ -1,0 +1,79 @@
+import { CORE_ELEMENTS, taskSchema, PROTOCOL_VERSION, digest, evaluateBxpTask } from '../bxp/index.mjs';
+import { IDS, assert, validateProduct } from './contracts.mjs';
+import { locateEvidence } from './evidence.mjs';
+import { matchEmployees } from './employees.mjs';
+
+export function evaluateCandidate(service, candidateInput, { historical = false } = {}) {
+  try {
+    const candidate = validateProduct(IDS.candidate, candidateInput);
+    const prepared = service.load(candidate.prepare_id);
+    assert(candidate.source_digest === prepared.source_digest && candidate.context_digest === prepared.context_digest, 'SNAPSHOT_DIGEST', 'Candidate does not echo its original prepared snapshot.');
+    const stale = prepared.packs.some(reference => !service.registry.active().some(active => digest(active) === digest(reference)));
+    assert(!stale || historical, 'STALE_PREPARE', 'Package activation changed; prepare again or explicitly replay history.');
+    const sources = { task: prepared.source.text };
+    for (const source of prepared.sources) {
+      assert(source.id !== 'task' && !Object.hasOwn(sources, source.id), 'SOURCE_REFERENCE', 'Duplicate source identity.');
+      sources[source.id] = source.text;
+    }
+    const provenance = [];
+    for (const field of CORE_ELEMENTS) {
+      const bucket = candidate.elements[field];
+      for (const entry of bucket.entries) {
+        for (const reference of entry.semantic_refs ?? []) {
+          const item = prepared.entries.find(value => digest(value.reference) === digest(reference));
+          assert(item, 'UNKNOWN_REFERENCE', 'Candidate references an entry outside its prepared context.');
+          if (item.kind === 'employee') {
+            const directory = { employees: prepared.entries.filter(value => value.kind === 'employee').map(value => value.entry) };
+            const quotes = entry.evidence.map(locator => locateEvidence(sources, locator).quote).join('\n');
+            const matches = matchEmployees(quotes, directory);
+            assert(matches.some(employee => employee.employee_id === item.entry.employee_id), 'IDENTITY_EVIDENCE', 'Directory identity requires source evidence.');
+            const explicit = matches.filter(employee => quotes.includes(employee.display_name) || (employee.department && quotes.includes(employee.department)));
+            assert(bucket.status !== 'resolved' || matches.length === 1 || (explicit.length === 1 && explicit[0].employee_id === item.entry.employee_id), 'IDENTITY_AMBIGUOUS', 'Shared alias cannot be silently reduced to a single identity.');
+          }
+        }
+        if ((entry.candidate_ids?.length ?? 0) > 1) assert(bucket.status === 'unresolved', 'CANDIDATE_AMBIGUOUS', 'Multiple interpretations must remain unresolved.');
+        provenance.push({ element: field, entry_id: entry.id, semantic_refs: entry.semantic_refs ?? [], candidate_ids: entry.candidate_ids ?? [], interpretation: entry.interpretation ?? null });
+      }
+    }
+    const convert = value => {
+      if (Array.isArray(value)) return value.map(convert);
+      if (!value || typeof value !== 'object') return value;
+      if (Object.hasOwn(value, 'quote')) return locateEvidence(sources, value);
+      return Object.fromEntries(Object.entries(value).filter(([key]) => !['semantic_refs', 'candidate_ids', 'interpretation'].includes(key)).map(([key, child]) => [key, convert(child)]));
+    };
+    const task = { schema: taskSchema.properties.schema.const, protocol_version: PROTOCOL_VERSION,
+      task_id: candidate.prepare_id, source: prepared.source, profile: prepared.profile,
+      elements: convert(candidate.elements), constraints: convert(candidate.constraints),
+      extensions: { 'org.boundx.producer': { producer: candidate.producer, prepare_id: candidate.prepare_id,
+        context_digest: candidate.context_digest, packs: prepared.packs, rules: prepared.rules.version,
+        candidate_digest: digest(candidate), provenance } },
+      ...(prepared.sources.length ? { sources: prepared.sources } : {}), ...(candidate.scopes ? { scopes: convert(candidate.scopes) } : {}) };
+    const result = evaluateBxpTask(task);
+    assert(result.evaluation.validation === 'valid', 'BXP_INVALID', 'Candidate could not be assembled into valid BXP; no valid task result is returned.');
+    return { schema: 'boundx-producer-result/v1', computed: true, historical: stale, diagnostics: prepared.diagnostics,
+      task, result, task_digest: digest(task), result_digest: digest(result), clarifications: candidate.clarifications };
+  } catch (error) {
+    return { schema: 'boundx-producer-result/v1', computed: false,
+      diagnostics: [{ code: error.code ?? 'PRODUCER_ERROR', message: error.message }], task: null, result: null };
+  }
+}
+
+export function renderThreeLayers(sourceText, evaluation) {
+  const lines = ['### 任务边界检查', '', '- **【Layer 1：原文证据】**', '', ...sourceText.split('\n').map(line => '  > ' + line), '',
+    '- **【Layer 2：标准 7+1 结构化映射】**'];
+  const labels = { I: '输入范围', O: '交付结果', A: '允许动作', P: '责任分工', R: '资源约束', V: '版本依据', C: '完成条件', B: '禁止边界' };
+  if (evaluation.computed) for (const field of CORE_ELEMENTS) {
+    const bucket = evaluation.task.elements[field];
+    lines.push(`  - **${field === 'B' ? '+1 / B' : field} (${labels[field]})**：${bucket.status}；${bucket.entries.map(entry => entry.text).join('；') || '未提及'}`);
+  } else lines.push('  - 候选未通过生产者校验；不补造合法7+1结构。');
+  lines.push('- **【Layer 3：计算结果与建议】**', '  - **引擎求值**：');
+  if (evaluation.computed) {
+    const axes = evaluation.result.evaluation;
+    lines.push(`    - validation=${axes.validation}；completeness=${axes.completeness}；consistency=${axes.consistency}`);
+    lines.push('  - **结论与 Diff**：');
+    for (const field of CORE_ELEMENTS) if (evaluation.task.elements[field].status !== 'resolved') lines.push(`    - **Diff [-${field}]**：${evaluation.task.elements[field].status}；请明确该项要求和原文依据。`);
+    for (const finding of evaluation.result.findings) lines.push(`    - **Diff [${finding.code}]**：${finding.message}`);
+  } else lines.push('    - 尚未计算。', '  - **结论与 Diff**：', ...evaluation.diagnostics.map(item => `    - **Diff [${item.code}]**：${item.message}`));
+  lines.push('    - 建议不等于业务裁决或执行授权；未列出问题不证明全文无遗漏。');
+  return lines.join('\n');
+}
