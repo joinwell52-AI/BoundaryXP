@@ -1,6 +1,7 @@
 import { readFileSync, readdirSync, lstatSync, realpathSync } from 'node:fs';
 import { resolve, relative, sep } from 'node:path';
 import { createHash } from 'node:crypto';
+import Ajv2020 from 'ajv/dist/2020.js';
 import { digest } from '../bxp/index.mjs';
 import { assert, IDS, LIMITS, parseProductJson, validateProduct } from './contracts.mjs';
 
@@ -28,12 +29,15 @@ export function validateOntology(value) {
   for (const words of Object.values(value.modalities)) assert(Array.isArray(words) && words.every(word => typeof word === 'string' && word.length > 0), 'PAYLOAD_SCHEMA', 'Invalid modality aliases.');
   return value;
 }
-export function validateDirectory(directory) {
+const actionValidator = new Ajv2020({ strict: true }).compile(JSON.parse(readFileSync(new URL('../../domain-packs/action-frame.schema.json', import.meta.url), 'utf8')));
+export function validateDirectory(directory, dependencies = []) {
   assert(!lstatSync(directory).isSymbolicLink(), 'UNSAFE_PATH', 'Package root cannot be a link.');
   const root = realpathSync(directory);
   const files = new Map();
   let total = 0;
+  let directories = 0;
   function visit(folder, prefix = '') {
+    assert(++directories <= LIMITS.files && prefix.split('/').length <= LIMITS.depth, 'INPUT_LIMIT', 'Directory structure exceeds limits.');
     for (const entry of readdirSync(folder, { withFileTypes: true })) {
       const path = prefix + entry.name;
       safeResourcePath(path);
@@ -84,5 +88,58 @@ export function validateDirectory(directory) {
   }
   if (descriptor.boundx.layer === 'L1') assert(payloads.ontology && descriptor.boundx.dependencies.length === 0, 'DEPENDENCY', 'L1 must be independent.');
   if (descriptor.boundx.layer === 'L3') assert(payloads['employee-directory'], 'PAYLOAD_SCHEMA', 'L3 requires its employee directory.');
-  return { descriptor, digest: digest(descriptor), payloads };
+  const result = { descriptor, digest: digest(descriptor), payloads };
+  for (const reference of descriptor.boundx.dependencies) {
+    assert(dependencies.some(pack => pack.descriptor.boundx.scope === reference.scope && pack.descriptor.name === reference.pack_id
+      && pack.descriptor.version === reference.version && pack.digest === reference.digest && digest(pack.descriptor) === pack.digest), 'DEPENDENCY', 'Missing exact dependency snapshot.');
+  }
+  if (descriptor.boundx.layer === 'L2') validateDomain(result, dependencies);
+  return result;
+}
+
+function validateDomain(pack, dependencies) {
+  const { descriptor, payloads } = pack;
+  const ontology = dependencies.find(item => item.descriptor.boundx.layer === 'L1')?.payloads.ontology;
+  assert(ontology && descriptor.boundx.dependencies.length === 1, 'DEPENDENCY', 'L2 requires exactly one L1.');
+  assert(actionValidator(payloads.actions), 'PAYLOAD_SCHEMA', 'Invalid action frame structure.');
+  const arrays = { actions: payloads.actions.frames, entities: payloads.entities?.entities, roles: payloads.roles?.roles,
+    resources: payloads.resources?.resources, references: payloads.references?.references,
+    completions: payloads.completions?.completions, boundaries: payloads.boundaries?.risks };
+  for (const [kind, values] of Object.entries(arrays)) {
+    assert(Array.isArray(values) && values.every(item => item && typeof item.id === 'string'), 'PAYLOAD_SCHEMA', `Missing ${kind} entries.`);
+    assert(new Set(values.map(item => item.id)).size === values.length, 'DUPLICATE_ID', `Duplicate ${kind} ID.`);
+    assert(descriptor.boundx.coverage?.[kind] === values.length, 'COVERAGE', `Stale ${kind} count.`);
+  }
+  const entityIds = new Set(arrays.entities.map(item => item.id));
+  for (const entity of arrays.entities) assert(ontology.entityMetaTypes.includes(entity.coreType), 'UNKNOWN_REFERENCE', 'Unknown entity meta-type.');
+  for (const frame of arrays.actions) {
+    const operation = ontology.operations[frame.operation];
+    const role = payloads.actions.roleContracts[frame.roleContract];
+    const projection = payloads.actions.projectionContracts[frame.projectionContract];
+    assert(operation && role?.operation === frame.operation && role.primaryRole === operation.role && projection?.operation === frame.operation, 'UNKNOWN_REFERENCE', 'Frame operation/role/projection mismatch.');
+    assert(frame.entityTypes.every(id => entityIds.has(id)), 'UNKNOWN_REFERENCE', 'Unknown frame entity type.');
+  }
+  const frameIds = new Set(arrays.actions.map(item => item.id));
+  for (const risk of arrays.boundaries) assert(risk.decision === null && risk.becomesBOnlyWhen === 'explicit_FORBID_or_effective_policy_binding'
+    && risk.frameIds.every(id => frameIds.has(id)), 'RISK_BOUNDARY', 'Risk cannot grant authority or invent B.');
+  const triggers = new Map();
+  for (const frame of arrays.actions) for (const trigger of [...frame.triggers.zh, ...frame.triggers.en]) {
+    const normalized = trigger.trim().replace(/[A-Z]/g, char => char.toLowerCase());
+    if (!triggers.has(normalized)) triggers.set(normalized, new Set());
+    triggers.get(normalized).add(frame.id);
+  }
+  for (const [trigger, ids] of triggers) if (ids.size > 1) {
+    const allowed = descriptor.boundx.allowed_ambiguous_triggers?.find(item => item.trigger === trigger);
+    assert(allowed && allowed.frame_ids.length === ids.size && allowed.frame_ids.every(id => ids.has(id)), 'AMBIGUOUS_TRIGGER', 'Trigger collision is not explicitly declared.');
+  }
+}
+
+export function matchActionCandidates(text, pack) {
+  const normalized = text.replace(/[A-Z]/g, char => char.toLowerCase());
+  return pack.payloads.actions.frames.filter(frame => [...frame.triggers.zh, ...frame.triggers.en].some(trigger => {
+    const needle = trigger.replace(/[A-Z]/g, char => char.toLowerCase());
+    const offset = normalized.indexOf(needle);
+    return offset >= 0 && (!/^[a-z]/.test(needle) || offset === 0 || !/[a-z]/.test(normalized[offset - 1]))
+      && (!/[a-z]$/.test(needle) || !/[a-z]/.test(normalized[offset + needle.length] ?? ''));
+  })).map(frame => frame.id);
 }

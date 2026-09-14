@@ -31,6 +31,8 @@ export const packSchema = {
     resources: { ...list(resource, LIMITS.files), minItems: 1 },
     boundx: object({ scope: name, layer: { enum: ['L1', 'L2', 'L3'] }, dependencies: list(packReference, 2),
       semantic_contract: { const: 'boundx-semantic-contract/v1' }, tenant_id: name,
+      coverage: object(Object.fromEntries(['actions', 'entities', 'roles', 'resources', 'references', 'completions', 'boundaries'].map(key => [key, { type: 'integer', minimum: 0 }]))),
+      allowed_ambiguous_triggers: list(object({ trigger: text(), frame_ids: { ...list(text(), 32), minItems: 2, uniqueItems: true } }), 128),
       origin: object({ source: text(1024), version: text(), digest: hash, migration: text(2048) }), extensions: extension },
     ['scope', 'layer', 'dependencies', 'semantic_contract', 'origin']) }, ['$schema', 'name', 'version', 'resources', 'boundx']),
   allOf: [{ if: { properties: { boundx: { properties: { layer: { const: 'L3' } } } } },
