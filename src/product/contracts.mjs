@@ -79,7 +79,11 @@ export function parseProductJson(raw, byteLimit = LIMITS.file) {
   const bytes = typeof raw === 'string' ? Buffer.byteLength(raw, 'utf8') : raw.byteLength;
   assert(bytes <= byteLimit, 'INPUT_LIMIT', 'Input exceeds the product limit.');
   let value;
-  try { value = parseStrictJson(raw); } catch { throw new ProductError('STRICT_JSON', 'Invalid UTF-8, JSON, duplicate key, precision or structure.'); }
+  try { value = parseStrictJson(raw); }
+  catch (error) {
+    if (error instanceof RangeError) throw new ProductError('STRUCTURE_LIMIT', 'Product JSON structure exceeds the limit.');
+    throw new ProductError('STRICT_JSON', 'Invalid UTF-8, JSON, duplicate key or precision.');
+  }
   const pending = [[value, 0]];
   let nodes = 0;
   while (pending.length) {
@@ -105,6 +109,7 @@ export function validateProduct(id, input) {
   if (id === IDS.pack) {
     assert(validateUpstream(value), 'DATA_PACKAGE_SCHEMA', 'Descriptor violates the pinned Data Package 2.0 profile.');
     const paths = value.resources.map(item => item.path);
+    assert(!paths.some(path => path.toLowerCase() === 'datapackage.json'), 'SELF_REFERENCE', 'Descriptor cannot list itself as a resource.');
     assert(new Set(paths.map(item => item.toLowerCase())).size === paths.length, 'DUPLICATE_PATH', 'Resource paths must be unique, including case.');
     assert(paths.every((path, index) => !index || paths[index - 1] < path), 'RESOURCE_ORDER', 'Resource paths must be POSIX-sorted.');
     assert(new Set(value.resources.map(item => item.name)).size === paths.length, 'DUPLICATE_ID', 'Resource names must be unique.');
