@@ -2,6 +2,7 @@ import { digest, sourceDigest } from '../bxp/index.mjs';
 import { assert, parseProductJson } from './contracts.mjs';
 import { runAdminModel } from './model-pipeline.mjs';
 import { replayLabels } from './replay.mjs';
+import { repeatSignature } from './repeat-audit.mjs';
 
 export function acceptancePlan(corpus, reviewIndex) {
   assert(corpus.schema === 'boundx-admin-text-test-seeds/v1' && corpus.version === '2.0.0' && corpus.cases?.length === 120, 'ACCEPTANCE_CORPUS', 'Expected the v2 corpus of 120 seeds.');
@@ -69,6 +70,18 @@ export async function recordAcceptanceRun(scenario, run, config, { sendModel, mo
   });
   if (recordingFailure) throw recordingFailure;
   record.evaluation = evaluation;
+  record.deterministic_replay = { status: 'NOT_APPLICABLE', model_calls: 0 };
+  if (evaluation.computed) {
+    const replayCandidate = parseProductJson(record.raw_candidate);
+    replayCandidate.producer = structuredClone(evaluation.task.extensions['org.boundx.producer'].producer);
+    const replayed = scenario.host.invoke('bx_evaluate_admin_candidate', { candidate: replayCandidate });
+    const projection = value => ({ computed: value.computed, task: value.task, result: value.result, diagnostics: value.diagnostics });
+    const originalDigest = digest(projection(evaluation));
+    const replayDigest = digest(projection(replayed));
+    record.deterministic_replay = { status: originalDigest === replayDigest ? 'MATCHED' : 'MISMATCH',
+      original_digest: originalDigest, replay_digest: replayDigest, model_calls: 0 };
+  }
+  record.repeat_signature = repeatSignature(record);
   record.completed_at = new Date().toISOString();
   record.status = evaluation.computed ? 'COMPUTED' : 'REJECTED';
   if (evaluation.computed && ['bad-pack-digest', 'two-adapters'].includes(run.seed.setup)) {

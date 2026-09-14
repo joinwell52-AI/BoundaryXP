@@ -9,6 +9,7 @@ import { callHttpModel } from '../src/product/http-provider.mjs';
 import { callCursor } from '../src/product/cursor-provider.mjs';
 import { resolveEndpoint } from '../ui/connection.mjs';
 import { sourceDigest } from '../src/bxp/index.mjs';
+import { summarizeRepeats } from '../src/product/repeat-audit.mjs';
 
 const repository = fileURLToPath(new URL('../', import.meta.url));
 export function loadAcceptancePlan() {
@@ -81,8 +82,8 @@ export async function executeAcceptanceBatch(plan, options, { base = join(reposi
       const scenario = createCaseScenario(runRoot, run.seed);
       const record = await recordAcceptanceRun(scenario, run, options.config, { sendModel: transport, mode: sendModel ? 'mock' : 'live',
         hostId: options.config.provider, signal, persist: value => atomicRecord(join(runRoot, 'record.json'), value) });
-      const { run_id, case_id, language, category, status, mode, provider_attempts, raw_candidate_recorded } = record;
-      records.push({ run_id, case_id, language, category, status, mode, provider_attempts, raw_candidate_recorded });
+      const { run_id, case_id, language, category, status, mode, provider_attempts, raw_candidate_recorded, repeat_signature, deterministic_replay } = record;
+      records.push({ run_id, case_id, language, category, status, mode, provider_attempts, raw_candidate_recorded, repeat_signature, deterministic_replay });
       activeRun = null;
       atomicRecord(join(output, 'summary.json'), summarizeAcceptanceRuns(records));
     }
@@ -92,6 +93,9 @@ export async function executeAcceptanceBatch(plan, options, { base = join(reposi
       setup: activeRun.seed.setup, mode: sendModel ? 'mock' : 'live', provider_attempts: 0, status: 'INCOMPLETE_RECORD', diagnostic: 'RECORDING_OR_SETUP_FAILED' });
   }
   const summary = { ...summarizeAcceptanceRuns(records), requested_initial_runs: options.maxRuns,
+    repeats: summarizeRepeats(records, plan),
+    deterministic_replay: Object.fromEntries(['MATCHED', 'MISMATCH', 'NOT_APPLICABLE', 'UNAVAILABLE'].map(status =>
+      [status, records.filter(record => (record.deterministic_replay?.status ?? 'UNAVAILABLE') === status).length])),
     incomplete_records: records.filter(record => record.status === 'INCOMPLETE_RECORD').map(record => record.run_id),
     execution_status: failure ? 'RECORDING_OR_SETUP_FAILED' : signal?.aborted ? 'CANCELLED' : 'FINISHED_REQUESTED_BATCH', output };
   atomicRecord(join(output, 'summary.json'), summary);

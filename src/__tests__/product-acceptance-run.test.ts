@@ -74,6 +74,9 @@ for (const setup of ['default', 'changed-after-prepare', 'bad-pack-digest', 'two
     assert.equal(record.provider_attempts, 1);
     assert.equal(record.actual_model, 'actual-mock-model');
     assert.equal(record.actual_model_version, 'unknown');
+    assert.equal(record.deterministic_replay.status, setup === 'changed-after-prepare' ? 'NOT_APPLICABLE' : 'MATCHED');
+    assert.equal(record.deterministic_replay.model_calls, 0);
+    assert.equal(record.repeat_signature.context_digest, record.prepared.context_digest);
     assert.equal(JSON.parse(record.raw_candidate).prepare_id, record.prepared.prepare_id);
     assert.equal(JSON.stringify(saved).includes(config.key), false);
     assert.equal(summarizeAcceptanceRuns([record]).live_provider_attempts_recorded, 0);
@@ -133,6 +136,9 @@ test('bounded batch uses real persistence, reports mock counts, and never overwr
     assert.equal(first.mock_provider_attempts_recorded, 1);
     assert.equal(first.live_outputs_recorded, 0);
     assert.equal(first.missing_or_incomplete_runs, 150);
+    assert.equal(first.repeats.planned_pairs, 30);
+    assert.equal(first.repeats.comparable_pairs, 0);
+    assert.equal(first.deterministic_replay.MATCHED, 1);
     const raw = readFileSync(join(first.output, 'T001-1', 'record.json'), 'utf8');
     assert.equal(raw.includes(config.key), false);
     assert.equal(JSON.parse(raw).evaluation.computed, true);
