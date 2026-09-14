@@ -8,7 +8,7 @@ export const LIMITS = Object.freeze({ archive: 10 * 1024 * 1024, expanded: 10 * 
   file: 2 * 1024 * 1024, descriptor: 256 * 1024, files: 64, employees: 2000,
   name: 128, aliases: 16, depth: 32, nodes: 100000, context: 64 * 1024 });
 export const IDS = Object.freeze({ pack: 'urn:boundx:product:semantic-data-package:v1',
-  employee: 'urn:boundx:product:employee-directory:v1', candidate: 'urn:boundx:product:extraction-candidate:v1' });
+  employee: 'urn:boundx:product:employee-directory:v1', candidate: 'urn:boundx:product:extraction-candidate:v1', prepare: 'urn:boundx:product:prepare-input:v1' });
 const text = (maxLength = 256) => ({ type: 'string', minLength: 1, maxLength });
 const list = (items, maxItems = 128) => ({ type: 'array', maxItems, items });
 const object = (properties, required = Object.keys(properties)) => ({ type: 'object', additionalProperties: false, required, properties });
@@ -53,6 +53,11 @@ definitions.entry.properties.semantic_refs = list(entryReference, 16);
 definitions.entry.properties.candidate_ids = { ...list(text(), 32), uniqueItems: true };
 definitions.entry.properties.interpretation = text(2048);
 const properties = taskSchema.properties;
+export const prepareSchema = { $schema: taskSchema.$schema, $id: IDS.prepare,
+  ...object({ source: structuredClone(properties.source), sources: structuredClone(properties.sources),
+    profile: structuredClone(properties.profile), packs: { ...list(packReference, 3), minItems: 1, uniqueItems: true } }, ['source', 'profile', 'packs']),
+  $defs: structuredClone(taskSchema.$defs),
+};
 export const candidateSchema = { $schema: taskSchema.$schema, $id: IDS.candidate,
   ...object({ schema: { const: 'boundx-extraction-candidate/v1' }, prepare_id: hash,
     source_digest: hash, context_digest: hash,
@@ -89,7 +94,7 @@ const draft2020 = new Ajv2020(options);
 const upstream = JSON.parse(readFileSync(new URL('../../vendor/datapackage-2.0/datapackage.json', import.meta.url), 'utf8'));
 const validateUpstream = draft7.compile(upstream);
 const validators = new Map([[IDS.pack, draft7.compile(packSchema)], [IDS.employee, draft2020.compile(employeeSchema)],
-  [IDS.candidate, draft2020.compile(candidateSchema)]]);
+  [IDS.candidate, draft2020.compile(candidateSchema)], [IDS.prepare, draft2020.compile(prepareSchema)]]);
 export function validateProduct(id, input) {
   assert(boundedJson(input), 'JSON_INPUT', 'Expected bounded plain JSON data without accessors or non-finite values.');
   const value = parseProductJson(JSON.stringify(input), id === IDS.pack ? LIMITS.descriptor : LIMITS.file);
@@ -115,5 +120,5 @@ export function validateProduct(id, input) {
   return value;
 }
 export function contractDigests() {
-  return Object.fromEntries([packSchema, employeeSchema, candidateSchema].map(schema => [schema.$id, digest(schema)]));
+  return Object.fromEntries([packSchema, employeeSchema, candidateSchema, prepareSchema].map(schema => [schema.$id, digest(schema)]));
 }

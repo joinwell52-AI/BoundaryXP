@@ -1,0 +1,52 @@
+const element = id => document.getElementById(id);
+let prepared = null;
+let active = [];
+const call = async (method, args = {}) => {
+  const response = await fetch('/api/admin-product', { method: 'POST', headers: { 'content-type': 'application/json',
+    'x-boundx-token': document.querySelector('meta[name="boundx-token"]').content }, body: JSON.stringify({ method, arguments: args }) });
+  const value = await response.json();
+  if (!response.ok) throw new Error(value.error ?? 'Request failed');
+  return value;
+};
+function stale() { prepared = null; element('status').textContent = '原文或选包已变化；旧结果已过期，请重新准备。 / Stale: prepare again.'; element('report').textContent = ''; }
+for (const id of ['source', 'industry', 'directory']) element(id).addEventListener('input', stale);
+function action(id, handler) {
+  element(id).addEventListener('click', async () => {
+    element(id).disabled = true;
+    try { await handler(); } catch (error) { element('status').textContent = error.message; }
+    finally { element(id).disabled = false; }
+  });
+}
+action('prepare', async () => {
+  const selected = active.filter(reference => reference.pack_id === 'core-ontology' || [element('industry').value, element('directory').value].includes(reference.digest));
+  const info = await fetch('/api/protocol-info').then(response => response.json());
+  prepared = await call('bx_prepare_admin_task', { source: { text: element('source').value, language: 'mixed' },
+    profile: { id: 'org.boundx.admin', required_elements: info.core_elements }, packs: selected });
+  element('raw').textContent = JSON.stringify(prepared, null, 2);
+  element('status').textContent = '已准备；请由兼容Host生成候选。 / Prepared; Host AI must produce the candidate.';
+});
+action('download', () => {
+  if (!prepared) throw new Error('请先准备上下文。 / Prepare first.');
+  const url = URL.createObjectURL(new Blob([JSON.stringify(prepared, null, 2)], { type: 'application/json' }));
+  const link = document.createElement('a'); link.href = url; link.download = 'boundx-prepare.json'; link.click(); URL.revokeObjectURL(url);
+});
+action('evaluate', async () => {
+  if (!prepared) throw new Error('请重新准备上下文。 / Prepare again.');
+  const candidate = JSON.parse(element('candidate').value);
+  if (candidate.prepare_id !== prepared.prepare_id) throw new Error('候选不属于当前上下文。 / Candidate belongs to another prepare.');
+  const result = await call('bx_evaluate_admin_candidate', { raw_candidate: element('candidate').value });
+  element('report').textContent = result.report;
+  element('raw').textContent = JSON.stringify(result, null, 2);
+  element('status').textContent = result.computed ? '已计算，不代表授权。 / Computed, not authorized.' : '尚未计算，请查看诊断。 / Not computed; see diagnostics.';
+});
+try {
+  const info = await call('bx_list_semantic_packs'); active = info.active;
+  for (const reference of active) {
+    if (reference.pack_id === 'core-ontology') { element('l1').textContent = `L1: ${reference.pack_id}@${reference.version}`; continue; }
+    const installed = info.installed.find(item => item.digest === reference.digest);
+    if (installed?.layer !== 'L3' && reference.pack_id !== 'software-ai') continue;
+    const option = document.createElement('option'); option.value = reference.digest;
+    option.textContent = `${reference.pack_id}@${reference.version}`;
+    element(installed?.layer === 'L3' ? 'directory' : 'industry').append(option);
+  }
+} catch (error) { element('status').textContent = error.message; }

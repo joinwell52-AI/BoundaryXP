@@ -1,7 +1,7 @@
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { CORE_ELEMENTS, taskSchema, PROTOCOL_VERSION, sourceDigest, digest } from '../bxp/index.mjs';
-import { IDS, LIMITS, assert, candidateSchema, parseProductJson } from './contracts.mjs';
+import { IDS, LIMITS, assert, candidateSchema, parseProductJson, validateProduct } from './contracts.mjs';
 import { referenceOf } from './registry.mjs';
 import { matchActionCandidates } from './packages.mjs';
 import { matchEmployees } from './employees.mjs';
@@ -19,8 +19,10 @@ export class ProducerService {
     mkdirSync(this.directory, { recursive: true });
   }
   prepare(input) {
-    assert(input && Object.keys(input).every(key => ['source', 'sources', 'profile', 'packs'].includes(key)), 'PREPARE_INPUT', 'Unknown prepare input.');
-    const value = parseProductJson(JSON.stringify(input));
+    const value = validateProduct(IDS.prepare, input);
+    const sourceIds = (value.sources ?? []).map(source => source.id);
+    assert(!sourceIds.includes('task') && new Set(sourceIds).size === sourceIds.length, 'SOURCE_REFERENCE', 'Supplementary sources require distinct identities.');
+    for (const source of value.sources ?? []) assert(source.digest === sourceDigest(source.text), 'SOURCE_DIGEST', 'Supplementary source digest does not match its exact text.');
     assert(value.source && typeof value.source.text === 'string' && value.source.text.length > 0
       && Array.from(value.source.text).length <= taskSchema.properties.source.properties.text.maxLength, 'SOURCE_LIMIT', 'Source is missing or exceeds the BXP limit.');
     assert(typeof value.source.language === 'string', 'SOURCE_LANGUAGE', 'Source language is required.');

@@ -16,7 +16,7 @@ test('product contracts preserve the protocol schema and derive buckets and type
   assert.equal(candidateSchema.properties.elements.required.length, CORE_ELEMENTS.length);
   assert.deepEqual(candidateSchema.properties.constraints, taskSchema.properties.constraints);
   assert.equal(digest(taskSchema), hash);
-  assert.equal(Object.keys(contractDigests()).length, 3);
+  assert.equal(Object.keys(contractDigests()).length, 4);
 });
 test('employee schema permits custom jobs and inactive identity without role mapping', () => {
   assert.deepEqual(validateProduct(IDS.employee, employee()), employee());

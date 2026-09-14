@@ -70,9 +70,13 @@ export function renderThreeLayers(sourceText, evaluation) {
   if (evaluation.computed) {
     const axes = evaluation.result.evaluation;
     lines.push(`    - validation=${axes.validation}；completeness=${axes.completeness}；consistency=${axes.consistency}`);
+    for (const [kind, values] of Object.entries(evaluation.result.calculations)) {
+      lines.push(`    - ${kind}：${values.length ? JSON.stringify(values) : '无适用计算 / No applicable calculation'}`);
+    }
     lines.push('  - **结论与 Diff**：');
-    for (const field of CORE_ELEMENTS) if (evaluation.task.elements[field].status !== 'resolved') lines.push(`    - **Diff [-${field}]**：${evaluation.task.elements[field].status}；请明确该项要求和原文依据。`);
+    for (const field of evaluation.result.deficit) lines.push(`    - **Diff [-${field}]**：${evaluation.task.elements[field].status}；请明确该项要求和原文依据。`);
     for (const finding of evaluation.result.findings) lines.push(`    - **Diff [${finding.code}]**：${finding.message}`);
+    if (!evaluation.result.deficit.length && !evaluation.result.findings.length) lines.push('    - 当前已提交结构未发现缺项或冲突；不等于原文语义完整性证明。');
   } else lines.push('    - 尚未计算。', '  - **结论与 Diff**：', ...evaluation.diagnostics.map(item => `    - **Diff [${item.code}]**：${item.message}`));
   lines.push('    - 建议不等于业务裁决或执行授权；未列出问题不证明全文无遗漏。');
   return lines.join('\n');

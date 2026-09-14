@@ -3,13 +3,15 @@ import { readFile } from 'node:fs/promises';
 import { createReadStream } from 'node:fs';
 import { parseAndEvaluateBxpTask, evaluateBxpTask, protocolInfo, RAW_JSON_BYTE_LIMIT } from './src/bxp/index.mjs';
 import { reviewBoundX, reviewPlanBoundary, boundaryResponseStatus, reviewDecomposition } from './src/legacy/index.ts';
+import { productCommand } from './src/product/cli.mjs';
 
 const argv = process.argv.slice(2);
 const locale = argv.find(value => value.startsWith('--locale='))?.slice('--locale='.length);
 const args = argv.filter(value => !value.startsWith('--locale='));
 try {
   let result;
-  if (args[0] === 'protocol-info' && args.length === 1) result = protocolInfo();
+  if (['pack', 'prepare', 'evaluate-candidate'].includes(args[0])) result = productCommand(args);
+  else if (args[0] === 'protocol-info' && args.length === 1) result = protocolInfo();
   else if (args[0] === 'evaluate' && args.length === 2) {
     const chunks = [];
     let size = 0;

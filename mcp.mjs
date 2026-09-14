@@ -1,6 +1,8 @@
 #!/usr/bin/env node
 import { evaluateBxpTask, parseAndEvaluateBxpTask, parseStrictJson, protocolInfo, taskSchema, resultSchema, suiteSchema, PRODUCT_VERSION, RAW_JSON_BYTE_LIMIT } from './src/bxp/index.mjs';
 import { decompositionToolSchema } from './src/legacy/decomposition-schema.ts';
+import { createProductHost, productTools } from './src/product/host.mjs';
+let productHost;
 const packageVersion = PRODUCT_VERSION;
 import { reviewBoundX, reviewPlanBoundary, boundaryResponseStatus, boundaryDocumentSchema, boundaryPlanSchema, reviewDecomposition } from './src/legacy/index.ts';
 
@@ -12,7 +14,12 @@ const definitions = [
   { name: 'bx_legacy_review_plan', description: 'Deprecated legacy interface; not BXP-IR or BXP-CALC. Compare a plan and child task texts to a host-confirmed baseline. Findings require owner responses; no business decision is made.', inputSchema: { type: 'object', properties: { baseline: boundaryDocumentSchema, plan: boundaryPlanSchema, locale: { type: 'string', enum: ['zh-CN', 'en'] } }, required: ['baseline', 'plan'], additionalProperties: false } },
   { name: 'bx_legacy_check_responses', description: 'Deprecated legacy interface; not BXP-IR or BXP-CALC. Check which findings remain unanswered. Responses must have disposition, reason and references. Responded does not mean resolved.', inputSchema: { type: 'object', properties: { review: { type: 'object' }, replies: { type: 'array', items: { type: 'object' }, maxItems: 2048 } }, required: ['review', 'replies'], additionalProperties: false } },
 ];
+definitions.push(...productTools);
 function invoke(name, args) {
+  if (productTools.some(tool => tool.name === name)) {
+    productHost ??= createProductHost();
+    return productHost.invoke(name, args);
+  }
   if (name === 'bx_evaluate_task') return evaluateBxpTask(args);
   if (name === 'bx_evaluate_task_json') {
     if (!args || typeof args.raw_json !== 'string' || Object.keys(args).some(key => key !== 'raw_json')) throw new Error('Expected only raw_json text.');
@@ -35,7 +42,7 @@ function handle(line) {
   if (!request || typeof request !== 'object' || Array.isArray(request)) { write({ jsonrpc: '2.0', id: null, error: { code: -32600, message: 'Invalid request' } }); return; }
   if (request.id === undefined) return;
   let result;
-  if (request.method === 'initialize') result = { protocolVersion: '2024-11-05', capabilities: { tools: {}, resources: {} }, serverInfo: { name: 'boundx', version: packageVersion, title: '界痕 · BoundX' }, instructions: 'BXP 7+1: producers submit boundx-task/v1, BoundX validates and calculates locally, hosts decide clarification and authority. Read protocol-info and exact schema resources. BXP-EXTRACT is reserved. Legacy tools are explicitly deprecated, not BXP. Stateless: no execution, approval, customer persistence, model or network calls.' };
+  if (request.method === 'initialize') result = { protocolVersion: '2024-11-05', capabilities: { tools: {}, resources: {} }, serverInfo: { name: 'boundx', version: packageVersion, title: '界痕 · BoundX' }, instructions: 'BXP 7+1: producers submit boundx-task/v1, BoundX validates and calculates locally, hosts decide clarification and authority. Read protocol-info and exact schema resources. BXP-EXTRACT is reserved. Legacy tools are explicitly deprecated, not BXP. Canonical BXP evaluation is stateless. Product tools persist local package selections and prepared source snapshots in BOUNDX_DATA_DIR. L3 context disclosure requires explicit Host configuration. No execution, approval, model or network calls.' };
   else if (request.method === 'tools/list') result = { tools: definitions };
   else if (request.method === 'resources/list') result = { resources: resources.map(item => ({ uri: item.uri, name: item.name, mimeType: 'application/json' })) };
   else if (request.method === 'resources/read') {
