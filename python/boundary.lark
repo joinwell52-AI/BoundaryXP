@@ -1,0 +1,19 @@
+?start: set_decl | bound | edge | node | modal
+set_decl: SET_LABEL [":"|"："] "{" [NAME ("," NAME)*] "}"
+bound: METRIC COMPARATOR NUMBER UNIT
+edge: PREDECESSOR EDGE NAME
+node: NODE NAME
+modal: MODAL BODY
+SET_LABEL: "对象范围" | "禁止对象" | "target set" | "forbidden targets"
+METRIC: /[^\s。；;]+?(?=至少|最多|>=|<=|\s+(?:at least|at most))/
+COMPARATOR: "至少" | "最多" | "at least" | "at most" | ">=" | "<="
+UNIT: "分钟" | "小时" | "秒" | "minutes" | "minute" | "hours" | "hour" | "seconds" | "second" | "元" | "yuan" | "次" | "calls"
+PREDECESSOR: /[^\s。；;]+?(?=完成后才能开始|\s+must finish before)/
+EDGE: "完成后才能开始" | "must finish before"
+NODE: "任务节点" | "task node"
+MODAL: /(?i:must not\b|need not\b|do not have to\b|must\b|不得|必须|不必|无需)/
+NAME: /[^\s{},。；;]+/
+BODY: /[^\s。；;\n][^。；;\n]*/
+NUMBER: /(?:0|[1-9][0-9]*)(?:\.[0-9]+)?/
+%import common.WS_INLINE
+%ignore WS_INLINE

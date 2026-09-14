@@ -1,0 +1,195 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://boundx.local/schema/tenant-semantic-overlay-v1.json",
+  "title": "BoundX L3 tenant semantic overlay",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "id",
+    "version",
+    "layer",
+    "tenantId",
+    "basePacks",
+    "aliases",
+    "policyBindings"
+  ],
+  "properties": {
+    "schema": {
+      "const": "boundx-tenant-overlay/v1"
+    },
+    "id": {
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9-]*$"
+    },
+    "version": {
+      "type": "string",
+      "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$"
+    },
+    "layer": {
+      "const": "L3"
+    },
+    "tenantId": {
+      "type": "string",
+      "minLength": 1
+    },
+    "basePacks": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "version"
+        ],
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "version": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "aliases": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "actions",
+        "entities",
+        "roles"
+      ],
+      "properties": {
+        "actions": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/alias"
+          }
+        },
+        "entities": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/alias"
+          }
+        },
+        "roles": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/alias"
+          }
+        }
+      }
+    },
+    "policyBindings": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "targetType",
+          "targetId",
+          "constraint",
+          "source",
+          "status",
+          "decision"
+        ],
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "targetType": {
+            "enum": [
+              "role",
+              "action",
+              "entity"
+            ]
+          },
+          "targetId": {
+            "type": "string"
+          },
+          "constraint": {
+            "type": "object"
+          },
+          "status": {
+            "const": "candidate"
+          },
+          "decision": {
+            "type": "null"
+          },
+          "source": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "documentId",
+              "version",
+              "quote",
+              "start",
+              "end",
+              "effectiveFrom"
+            ],
+            "properties": {
+              "documentId": {
+                "type": "string"
+              },
+              "version": {
+                "type": "string"
+              },
+              "quote": {
+                "type": "string"
+              },
+              "start": {
+                "type": "integer",
+                "minimum": 0
+              },
+              "end": {
+                "type": "integer",
+                "minimum": 0
+              },
+              "effectiveFrom": {
+                "type": "string"
+              },
+              "effectiveTo": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "$defs": {
+    "alias": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "surface",
+        "mapsTo",
+        "locale"
+      ],
+      "properties": {
+        "surface": {
+          "type": "string",
+          "minLength": 1
+        },
+        "mapsTo": {
+          "type": "string",
+          "minLength": 1
+        },
+        "locale": {
+          "enum": [
+            "zh-CN",
+            "en",
+            "mixed"
+          ]
+        }
+      }
+    }
+  }
+}

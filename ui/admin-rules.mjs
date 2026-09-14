@@ -1,0 +1,36 @@
+// Versioned declarative rules. Matches are clarification candidates, not verdicts.
+export const adminRulePack = {
+ version:'1.1.1', languages:['zh-CN','en'],
+ rules:[
+  {id:'coverage',fields:['I'],pattern:'全面检查|全面核查|全面审查|\\bcomprehensive (?:inspection|review|audit)\\b',
+   anchors:['覆盖范围|检查范围|覆盖清单|scope|coverage'],
+   title:['说明“全面”的覆盖范围','Clarify comprehensive coverage'],
+   why:['可能指所有模块，也可能只指主要业务；请明确覆盖清单和排除项。','This may mean every module or only principal workflows. Specify coverage and exclusions.'],
+   suggestion:['“全面检查”覆盖【具体对象或清单】，排除【不在本次范围内的项目，由 ADMIN 明确】。','Comprehensive inspection covers [specific objects or checklist], excluding [items ADMIN identifies as outside scope].']},
+  {id:'depth',fields:['A','V','C'],pattern:'深度检查|深入检查|深入分析|\\b(?:deep|in.depth) (?:inspection|review|analysis)\\b',
+   anchors:['验证方法|检查方法|验证深度|verification method|inspection method'],
+   title:['说明检查深度与证据','Clarify inspection depth and evidence'],
+   why:['阅读材料、实际运行和故障注入需要不同授权与资源；请明确方法及停止条件。','Reading, execution and fault injection require different permissions and resources. Specify methods and stopping conditions.'],
+   suggestion:['验证方法为【方法】，需保留【证据】；达到【完成条件】后停止，其他操作另行确认。','Verification uses [method] and retains [evidence]; stop at [completion condition], with other operations subject to separate confirmation.']},
+  {id:'frequency',fields:['I','V'],pattern:'高频调用|高频接口|\\bhigh.frequency (?:calls?|interfaces?|APIs?)\\b',
+   anchors:['高频|high.frequency'],numeric:true,
+   title:['说明“高频”的判定口径','Define high frequency'],
+   why:['需要明确统计时间窗口、单位和阈值；出现其他数字不代表已经定义高频。','Specify the measurement window, unit and threshold; unrelated numbers do not define frequency.'],
+   suggestion:['高频指【时间窗口】内【指标及单位】达到【ADMIN 确认的阈值】。','High frequency means [metric and unit] reaches [ADMIN-confirmed threshold] within [measurement window].']},
+  {id:'recent',fields:['I','V'],pattern:'近期记录|近期数据|最近三个月|近三个月|\\brecent (?:records|data)\\b|\\b(?:last|past) three months\\b',
+   anchors:['时间范围|起止日期|date range|time range'],numeric:true,
+   title:['明确数据起止日期','Specify the data date range'],
+   why:['可能按自然月或滚动时间计算；请明确起止日期，必要时说明时区。','Calendar months and a rolling window may differ. Specify start/end dates and timezone where relevant.'],
+   suggestion:['数据时间范围为【起始日期】至【结束日期】，按【所需时区或日期口径】计算。','Data spans [start date] to [end date], using [applicable timezone or date convention].']},
+  {id:'data-output',fields:['O'],pattern:'整理(?:一下)?(?:[^。；;\\n]{0,16})?(?:销售)?数据|\\b(?:organize|整理) (?:the )?(?:sales )?data\\b',
+   anchors:['交付物|交付结果|输出|deliverables?|output'],
+   title:['说明数据整理后的产物','Specify the organized data output'],
+   why:['逐笔明细、分类汇总和趋势分析是不同产物；请明确需要哪一种及口径。','Transaction details, grouped summaries and trend analysis are different outputs. Specify which is needed and its conventions.'],
+   suggestion:['交付【逐笔明细／分类汇总／其他，由 ADMIN 选择】，采用【分类口径、字段及格式】。','Deliver [transaction details / grouped summary / other, selected by ADMIN], using [grouping conventions, fields and format].']},
+  {id:'degree',fields:['A','C'],pattern:'稍微修改|适当优化|适度优化|尽快完成|\\b(?:slightly modify|optimize appropriately|complete as soon as possible)\\b',
+   anchors:['改动范围|优化范围|截止时间|change scope|optimization scope|deadline'],
+   title:['明确程度或时限要求','Clarify degree or deadline'],
+   why:['程度或速度没有明确标准，执行者可能扩大修改范围或自行决定投入。','An unspecified degree or speed can lead to expanded changes or assumed resource commitments.'],
+   suggestion:['本项允许的改动范围或时限为【具体要求】，完成依据为【可核对的结果】。','The permitted change scope or deadline is [specific requirement], with completion evidenced by [verifiable result].']}
+ ]
+};

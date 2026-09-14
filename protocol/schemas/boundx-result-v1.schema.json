@@ -1,0 +1,165 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:boundx:schema:result:v1",
+  "title": "BoundX Deterministic Result Envelope v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "protocol_version",
+    "task_id",
+    "source_digest_algorithm",
+    "source_digest",
+    "evaluation",
+    "findings",
+    "calculations",
+    "business_decision",
+    "execution_authorization",
+    "extensions"
+  ],
+  "properties": {
+    "schema": { "const": "boundx-result/v1" },
+    "protocol_version": { "const": "0.2.0-draft.1" },
+    "task_id": { "type": "string", "minLength": 1, "maxLength": 256 },
+    "source_digest_algorithm": { "const": "sha-256:utf8" },
+    "source_digest": { "type": "string", "pattern": "^[a-f0-9]{64}$" },
+    "evaluation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["validation", "completeness", "consistency"],
+      "properties": {
+        "validation": { "enum": ["valid", "invalid"] },
+        "completeness": { "enum": ["complete", "incomplete", "unresolved", "undetermined"] },
+        "consistency": { "enum": ["consistent", "inconsistent", "undetermined"] }
+      }
+    },
+    "findings": {
+      "type": "array",
+      "maxItems": 4096,
+      "items": { "$ref": "#/$defs/finding" }
+    },
+    "calculations": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["intervals", "target_sets", "handoffs", "dependencies", "logic"],
+      "properties": {
+        "intervals": { "type": "array", "maxItems": 256, "items": { "$ref": "#/$defs/intervalResult" } },
+        "target_sets": { "type": "array", "maxItems": 256, "items": { "$ref": "#/$defs/targetSetResult" } },
+        "handoffs": { "type": "array", "maxItems": 256, "items": { "$ref": "#/$defs/handoffResult" } },
+        "dependencies": { "type": "array", "maxItems": 1, "items": { "$ref": "#/$defs/dependencyResult" } },
+        "logic": { "type": "array", "maxItems": 64, "items": { "$ref": "#/$defs/logicResult" } }
+      }
+    },
+    "business_decision": { "type": "null" },
+    "execution_authorization": { "type": "null" },
+    "extensions": {
+      "type": "object",
+      "propertyNames": { "pattern": "^[a-z0-9]+(?:[.-][a-z0-9]+)+(?:/[a-z0-9._-]+)?$" }
+    }
+  },
+  "$defs": {
+    "finding": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["code", "category", "status", "path", "message", "evidence"],
+      "properties": {
+        "code": { "type": "string", "pattern": "^BXP\\.[A-Z0-9_.-]+$" },
+        "category": { "enum": ["validation", "completeness", "interval", "target_set", "handoff", "dependency", "logic", "extension"] },
+        "status": { "enum": ["invalid", "conflict", "unresolved", "information"] },
+        "path": { "type": "string", "minLength": 1, "maxLength": 1000 },
+        "message": { "type": "string", "minLength": 1, "maxLength": 10000 },
+        "evidence": {
+          "type": "array",
+          "maxItems": 32,
+          "items": { "$ref": "urn:boundx:schema:task:v1#/$defs/span" }
+        },
+        "assumptions": {
+          "type": "array",
+          "maxItems": 64,
+          "items": { "type": "string", "minLength": 1, "maxLength": 1000 }
+        }
+      }
+    },
+    "intervalResult": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["subject", "dimension", "unit", "lower", "upper", "empty"],
+      "properties": {
+        "subject": { "type": "string", "minLength": 1, "maxLength": 256 },
+        "dimension": { "type": "string", "minLength": 1, "maxLength": 128 },
+        "unit": { "type": "string", "minLength": 1, "maxLength": 64 },
+        "lower": { "$ref": "urn:boundx:schema:task:v1#/$defs/bound" },
+        "upper": { "$ref": "urn:boundx:schema:task:v1#/$defs/bound" },
+        "empty": { "type": "boolean" }
+      }
+    },
+    "targetSetResult": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "result", "overlap"],
+      "properties": {
+        "id": { "type": "string", "minLength": 1, "maxLength": 256 },
+        "result": { "enum": ["disjoint", "overlap", "undetermined"] },
+        "overlap": {
+          "type": "array",
+          "maxItems": 1024,
+          "uniqueItems": true,
+          "items": { "type": "string", "minLength": 1, "maxLength": 512 }
+        }
+      }
+    },
+    "handoffResult": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "result", "available", "missing"],
+      "properties": {
+        "id": { "type": "string", "minLength": 1, "maxLength": 256 },
+        "result": { "enum": ["satisfied", "deficit", "undetermined"] },
+        "available": {
+          "type": "array",
+          "maxItems": 2048,
+          "uniqueItems": true,
+          "items": { "type": "string", "minLength": 1, "maxLength": 512 }
+        },
+        "missing": {
+          "type": "array",
+          "maxItems": 1024,
+          "uniqueItems": true,
+          "items": { "type": "string", "minLength": 1, "maxLength": 512 }
+        }
+      }
+    },
+    "dependencyResult": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["prerequisite_edges", "cycles"],
+      "properties": {
+        "prerequisite_edges": { "type": "integer", "minimum": 0, "maximum": 512 },
+        "cycles": {
+          "type": "array",
+          "maxItems": 512,
+          "items": {
+            "type": "array",
+            "minItems": 2,
+            "maxItems": 514,
+            "items": { "type": "string", "minLength": 1, "maxLength": 256 }
+          }
+        }
+      }
+    },
+    "logicResult": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "result", "witness"],
+      "properties": {
+        "id": { "type": "string", "minLength": 1, "maxLength": 256 },
+        "result": { "enum": ["satisfiable", "unsatisfiable", "undetermined"] },
+        "witness": {
+          "type": ["object", "null"],
+          "maxProperties": 12,
+          "additionalProperties": { "type": "boolean" }
+        }
+      }
+    }
+  }
+}

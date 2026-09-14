@@ -1,0 +1,143 @@
+{
+  "scope": "upstream Lark grammar parse only; no semantic transformation, no solver, no 7+1 accuracy measurement",
+  "repo": "dodaro/cnl2asp",
+  "commit": "5bbafba249c434d10811a3d0eaa9f7f31b678f72",
+  "grammar_sha256": "de40718261f29ebc020e1f212188d83846ed17a47ee2db45611041bfd731b3be",
+  "results": [
+    {
+      "id": "declared_entity",
+      "origin": "research-authored CNL",
+      "text": "A merchant is identified by an id.",
+      "syntax": "parsed",
+      "tree": "start\n  explicit_definition_proposition\n    standard_definition\n      string\tmerchant\n      cnl_is_identified\n      keys_list\n        parameter_definition\tid\n      None\n  .\n",
+      "node_types": [
+        "cnl_is_identified",
+        "explicit_definition_proposition",
+        "keys_list",
+        "parameter_definition",
+        "standard_definition",
+        "start",
+        "string"
+      ],
+      "root_span": [
+        0,
+        34
+      ],
+      "elapsed_ms": 17.267
+    },
+    {
+      "id": "named_set",
+      "origin": "research-authored CNL",
+      "text": "A node is one of alpha, beta, primary.",
+      "syntax": "parsed",
+      "tree": "start\n  implicit_definition_proposition\n    compounded_match_clause\n      string\tnode\n      cnl_is_one_of\n      string_list\n        string\talpha\n        string\tbeta\n        string\tprimary\n      None\n  .\n",
+      "node_types": [
+        "cnl_is_one_of",
+        "compounded_match_clause",
+        "implicit_definition_proposition",
+        "start",
+        "string",
+        "string_list"
+      ],
+      "root_span": [
+        0,
+        38
+      ],
+      "elapsed_ms": 20.431
+    },
+    {
+      "id": "guard_and_relation",
+      "origin": "upstream test shape with renamed entities",
+      "text": "A merchant is identified by an id. A refund is identified by an id. Whenever there is a merchant M with an id I, then M can have a relation exactly 1 refund.",
+      "syntax": "parsed",
+      "tree": "start\n  explicit_definition_proposition\n    standard_definition\n      string\tmerchant\n      cnl_is_identified\n      keys_list\n        parameter_definition\tid\n      None\n  .\n  explicit_definition_proposition\n    standard_definition\n      string\trefund\n      cnl_is_identified\n      keys_list\n        parameter_definition\tid\n      None\n  .\n  specification\n    standard_proposition\n      whenever_then_clause_proposition\n        whenever_clause\n          cnl_whenever_there_is\n          None\n          simple_entity\n            string\tmerchant\n            string\tM\n            None\n            None\n            parameter_list\n              with\n              parameter\n                id\n                expression\tI\n                None\n                None\n                None\n        then_clause\n          simple_entity\n            string\tM\n            None\n            None\n            None\n            None\n          can\n          predicate_with_objects\n            verb\n              have a \n              None\n              None\n              None\n              string\trelation\n              None\n              None\n              None\n              None\n            single_quantity_cardinality\n              exactly\n              string\t1\n            conjunctive_object_list\n              simple_entity\n                string\trefund\n                None\n                None\n                None\n                None\n            None\n            None\n        None\n    .\n",
+      "node_types": [
+        "cnl_is_identified",
+        "cnl_whenever_there_is",
+        "conjunctive_object_list",
+        "explicit_definition_proposition",
+        "expression",
+        "keys_list",
+        "parameter",
+        "parameter_definition",
+        "parameter_list",
+        "predicate_with_objects",
+        "simple_entity",
+        "single_quantity_cardinality",
+        "specification",
+        "standard_definition",
+        "standard_proposition",
+        "start",
+        "string",
+        "then_clause",
+        "verb",
+        "whenever_clause",
+        "whenever_then_clause_proposition"
+      ],
+      "root_span": [
+        0,
+        157
+      ],
+      "elapsed_ms": 58.724
+    },
+    {
+      "id": "numeric_condition",
+      "origin": "upstream test shape with changed value",
+      "text": "An entity is identified by a field. It is required that X is equal to 200, whenever there is an entity with field X.",
+      "syntax": "parsed",
+      "tree": "start\n  explicit_definition_proposition\n    standard_definition\n      string\tentity\n      cnl_is_identified\n      keys_list\n        parameter_definition\tfield\n      None\n  .\n  specification\n    standard_proposition\n      constraint_proposition\n        cnl_it_is_required_that\n        comparison\n          comparison_operand\n            expression\tX\n          equal to\n          comparison_operand\n            expression\t200\n          None\n        terminal_clauses\n          whenever_clause\n            cnl_whenever_there_is\n            None\n            simple_entity\n              string\tentity\n              None\n              None\n              None\n              parameter_list\n                with\n                parameter\n                  field\n                  expression\tX\n                  None\n                  None\n                  None\n    .\n",
+      "node_types": [
+        "cnl_is_identified",
+        "cnl_it_is_required_that",
+        "cnl_whenever_there_is",
+        "comparison",
+        "comparison_operand",
+        "constraint_proposition",
+        "explicit_definition_proposition",
+        "expression",
+        "keys_list",
+        "parameter",
+        "parameter_definition",
+        "parameter_list",
+        "simple_entity",
+        "specification",
+        "standard_definition",
+        "standard_proposition",
+        "start",
+        "string",
+        "terminal_clauses",
+        "whenever_clause"
+      ],
+      "root_span": [
+        0,
+        116
+      ],
+      "elapsed_ms": 34.965
+    },
+    {
+      "id": "ordinary_english",
+      "origin": "research-authored task",
+      "text": "Without CFO approval, do not call batch_refund. If a risk alert arrives, call batch_refund immediately.",
+      "syntax": "not_in_grammar",
+      "exception": "UnexpectedCharacters",
+      "line": 1,
+      "column": 30,
+      "elapsed_ms": 11.474
+    },
+    {
+      "id": "user_chinese",
+      "origin": "verbatim user task excerpt",
+      "text": "未经财务总监 CFO 电子签名授权，严禁调用该退款接口；但若系统收到来自风控中台的特级欺诈警报，必须立即执行 batch_refund 原路退款。",
+      "syntax": "not_in_grammar",
+      "exception": "UnexpectedCharacters",
+      "line": 1,
+      "column": 1,
+      "elapsed_ms": 4.941
+    }
+  ],
+  "environment": {
+    "python": "3.10.11",
+    "lark": "1.3.1",
+    "system": "Windows"
+  }
+}

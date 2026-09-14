@@ -1,0 +1,35 @@
+// Local role composition over source-aligned lexical tokens, not free text IR.
+start: executor? modality? recipient? subject_input? operation recipient? origin? completion?
+executor: BY ARG DUTY? | ARG
+recipient: TO ARG
+subject_input: ON ARG
+origin: FROM ARG
+modality: REQUIRE | PERMIT | FORBID | NOT_REQUIRED
+completion: COMPLETE
+operation: READ ARG -> read
+         | CREATE ARG -> create
+         | SEND ARG -> send
+         | EMIT ARG -> emit
+         | PROCESS ARG -> process
+         | CHANGE ARG -> change
+         | CALL ARG -> call
+BY: /BY_[0-9]+/
+DUTY: /DUTY_[0-9]+/
+TO: /TO_[0-9]+/
+ON: /ON_[0-9]+/
+FROM: /FROM_[0-9]+/
+ARG: /ARG_[0-9]+/
+READ: /READ_[0-9]+/
+CREATE: /CREATE_[0-9]+/
+SEND: /SEND_[0-9]+/
+EMIT: /EMIT_[0-9]+/
+PROCESS: /PROCESS_[0-9]+/
+CHANGE: /CHANGE_[0-9]+/
+CALL: /CALL_[0-9]+/
+REQUIRE: /REQUIRE_[0-9]+/
+PERMIT: /PERMIT_[0-9]+/
+FORBID: /FORBID_[0-9]+/
+NOT_REQUIRED: /NOT_REQUIRED_[0-9]+/
+COMPLETE: /COMPLETE_[0-9]+/
+%import common.WS
+%ignore WS

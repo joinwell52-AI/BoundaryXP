@@ -1,0 +1,7 @@
+[
+  "在完成 Q3 财报核对后，若系统内 `unbilled_invoices` 金额小于 10,000 USD，则自动将财务状态标记为 `SETTLED` 并同步更新结算清单至 `aws_s3_archive`；否则，必须先取得 CFO 或 Finance_Lead 的 Token 授权；但无论审批结果如何，均严禁擅自修改 `prod_ledger_db` 中的任何历史流水，且全过程执行总时长不得超过 30 分钟。",
+  "Deploy new image `v2.4.1` to both staging_cluster and production_cluster. If the canary health check passes with error rate < 0.1%, continuously scale up replicas until traffic reaches 100%; but if health check fails, ping the oncall channel and continuously retry rolling update until it recovers.",
+  "清理所有租户下除 `tenant_001` 与 `tenant_vip` 之外的无活跃 Session 资源，除非资源创建时间不足 7 天且挂载了白名单标签，但并非所有带有白名单标签的挂起实例都能豁免释放，严禁在未备份元数据的情况下删除任何关联存储卷。",
+  "接收外部 Webhook 触发，自动拉取 PR 代码并执行 unit-test。测试期间必须冻结 main 分支的所有合并操作；测试通过后立即 merge 并触发 CD 流水线，但必须确保在此期间没有任何新的 hotfix 分支被创建，否则中止整个任务并将 main 分支强制重置到上一个 commit。",
+  "根据 PMO 的迭代计划，于本周五 24:00 前将迁移脚本推送至亚太生产节点 `ap-northeast-1`，迁移必须在维护窗口［周六 01:00-03:00］内由 DBA_Lead 亲自发起；若脚本预检查警告数超过 5 个，任何人（包括 DBA_Lead）均无权跳过检查，脚本必须被撤回；完成后输出 audit.log 至审计桶。"
+]

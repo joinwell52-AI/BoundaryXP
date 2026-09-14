@@ -1,0 +1,92 @@
+{
+  "baseline_text": "检查FCoP落地情况，检查MCP工具情况，检查SKILLS分配和使用，检查各角色权限和职责，检查轨机运行情况；请PM分解任务，团队协作完成；最后形成报告向ADMIN汇报！",
+  "plan_text": "### 子任务 T1：综合巡检报告编制\n\n- 编号：T1\n- 派单者：PM\n- 负责人：PM\n- 工作内容：汇总FCoP、MCP工具、SKILLS分配与使用、角色权限职责、轨机运行五项巡检结果及三份已核验证据报告；如实纳入QA的FAIL判定，区分“巡检完成”与“产品通过”。\n- 交付物：《五项巡检综合报告》，含证据索引、问题清单、风险判断和后续建议。\n- 启动依赖：五项巡检结果、三份专项报告及QA结论均可获取。\n- 验收条件：五项内容无遗漏；结论均可追溯至证据；明确当前产品状态为FAIL；不得表述为已通过验收。\n\n### 子任务 T2：技能清单一致性整改立项建议\n\n- 编号：T2\n- 派单者：PM\n- 负责人：SKILLS责任人\n- 工作内容：根据QA意见定位技能清单在定义、分配、实际使用记录之间的不一致，提出修改范围、影响面和回归检查项。本任务属于后续整改，不改变本轮巡检结论。\n- 交付物：《SKILLS一致性整改方案》及待办清单。\n- 启动依赖：ADMIN确认允许进入整改阶段，并明确SKILLS责任人。\n- 验收条件：每项不一致均有修改对象、责任归属、完成标准和回归检查方法。\n\n### 子任务 T3：整改后QA复验\n\n- 编号：T3\n- 派单者：PM\n- 负责人：QA\n- 工作内容：在T2整改实施完成后，复核技能清单一致性及相关影响项，独立给出PASS或FAIL。\n- 交付物：《QA复验结论》及证据索引。\n- 启动依赖：整改实施完成并提交变更证据。\n- 验收条件：覆盖原FAIL原因；结论明确且证据可复核。\n\n### 根任务收口条件\n\n本轮“巡检根任务”可按“巡检完成、产品未通过”收口，条件为：T1通过内部完整性检查并提交ADMIN；ADMIN确认收到并决定整改立项方式；全部证据、QA FAIL结论和遗留问题完成归档。T2、T3属于后续整改闭环，不应阻塞巡检任务收口，但产品不得标记为PASS。\n\nPM不向EVAL派单。若ADMIN需要额外独立评估，应由ADMIN另行授权EVAL，EVAL独立形成结论并直接向ADMIN报告。",
+  "variables": [
+    {
+      "id": "report",
+      "quote": "综合巡检报告"
+    },
+    {
+      "id": "scheme",
+      "quote": "整改方案"
+    },
+    {
+      "id": "implemented",
+      "quote": "整改实施完成"
+    },
+    {
+      "id": "qa",
+      "quote": "QA复验结论"
+    },
+    {
+      "id": "authorization",
+      "quote": "ADMIN确认允许进入整改阶段"
+    }
+  ],
+  "assumptions": {
+    "expr": {
+      "all": []
+    },
+    "quote": "检查FCoP落地情况，检查MCP工具情况，检查SKILLS分配和使用，检查各角色权限和职责，检查轨机运行情况；请PM分解任务，团队协作完成；最后形成报告向ADMIN汇报！"
+  },
+  "requirements": [
+    {
+      "id": "report_to_admin",
+      "claim": {
+        "expr": "report",
+        "quote": "形成报告向ADMIN汇报"
+      }
+    }
+  ],
+  "tasks": [
+    {
+      "id": "T1",
+      "requires": {
+        "expr": {
+          "all": []
+        },
+        "quote": "三份已核验证据报告"
+      },
+      "ensures": {
+        "expr": "report",
+        "quote": "T1通过内部完整性检查并提交ADMIN"
+      },
+      "covers": [
+        "report_to_admin"
+      ],
+      "depends_on": []
+    },
+    {
+      "id": "T2",
+      "requires": {
+        "expr": "authorization",
+        "quote": "ADMIN确认允许进入整改阶段"
+      },
+      "ensures": {
+        "expr": "scheme",
+        "quote": "《SKILLS一致性整改方案》及待办清单"
+      },
+      "covers": [],
+      "depends_on": []
+    },
+    {
+      "id": "T3",
+      "requires": {
+        "expr": "implemented",
+        "quote": "整改实施完成并提交变更证据"
+      },
+      "ensures": {
+        "expr": "qa",
+        "quote": "《QA复验结论》及证据索引"
+      },
+      "covers": [],
+      "depends_on": [
+        "T2"
+      ]
+    }
+  ],
+  "completion": {
+    "expr": "T1",
+    "quote": "T2、T3属于后续整改闭环，不应阻塞巡检任务收口"
+  }
+}
