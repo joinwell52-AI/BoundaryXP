@@ -3,7 +3,7 @@ import { containsLexicalTerm } from './lexical.mjs';
 
 export function retrieveDomainContext(source, pack) {
   const reference = referenceOf(pack), entries = [];
-  const words = entry => [...(entry.aliases ?? []), ...(entry.assertions ?? []),
+  const words = entry => [...(Array.isArray(entry.aliases) ? entry.aliases : Object.values(entry.aliases ?? {}).flat()), ...(entry.assertions ?? []),
     ...(typeof entry.label === 'string' ? [entry.label] : Object.values(entry.label ?? {}))];
   const add = (kind, entry, matched_by) => entries.push({ reference: { ...reference, entry_id: entry.id, kind }, kind,
     entry, retrieval: { matched_by, candidate_only: true } });

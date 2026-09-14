@@ -5,6 +5,7 @@ import Ajv2020 from 'ajv/dist/2020.js';
 import { digest } from '../bxp/index.mjs';
 import { assert, IDS, LIMITS, parseProductJson, validateProduct } from './contracts.mjs';
 import { containsLexicalTerm } from './lexical.mjs';
+import { validateDomainPayload } from './domain-payloads.mjs';
 
 export const sha256 = bytes => createHash('sha256').update(bytes).digest('hex');
 export function safeResourcePath(path) {
@@ -82,6 +83,7 @@ export function validateDirectory(directory, dependencies = []) {
     } else {
       assert(descriptor.boundx.layer === 'L2' && schema === `urn:boundx:product:domain-${kind}:v1`, 'UNKNOWN_SCHEMA', 'Unknown offline payload schema.');
       assert(payload.schema === `boundx-domain-${kind}/v1`, 'PAYLOAD_SCHEMA', 'Payload schema discriminator mismatch.');
+      if (kind !== 'actions') validateDomainPayload(kind, payload);
     }
     if (kind !== 'employee-directory') assert(payload.packId === descriptor.name && payload.version === descriptor.version, 'PAYLOAD_IDENTITY', 'Payload and descriptor identity differ.');
     assert(!Object.hasOwn(payloads, kind), 'DUPLICATE_ID', 'Only one resource per semantic kind is supported.');
@@ -135,6 +137,7 @@ function validateDomain(pack, dependencies) {
     assert(frame.entityTypes.every(id => entityIds.has(id)), 'UNKNOWN_REFERENCE', 'Unknown frame entity type.');
   }
   const frameIds = new Set(arrays.actions.map(item => item.id));
+  for (const completion of arrays.completions) if (completion.actionId) assert(frameIds.has(completion.actionId), 'UNKNOWN_REFERENCE', 'Unknown completion action.');
   for (const risk of arrays.boundaries) assert(risk.decision === null && risk.becomesBOnlyWhen === 'explicit_FORBID_or_effective_policy_binding'
     && risk.frameIds.every(id => frameIds.has(id)), 'RISK_BOUNDARY', 'Risk cannot grant authority or invent B.');
   const triggers = new Map();
