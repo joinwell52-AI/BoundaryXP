@@ -1,10 +1,10 @@
 import { createHash } from 'node:crypto';
 
-import { boundedJson, validateTaskSchema, validateResultSchema } from './validation.mjs';
+import { boundedJson, validateTaskSchema, validateResultSchema, taskSchema } from './validation.mjs';
 import { compareDecimal, normalizeBound } from './decimal.mjs';
 
-export const PROTOCOL_VERSION = '0.3.0-draft.2';
-export const CORE_ELEMENTS = Object.freeze(['I', 'O', 'A', 'P', 'R', 'V', 'C', 'B']);
+export const PROTOCOL_VERSION = taskSchema.properties.protocol_version.const;
+export const CORE_ELEMENTS = Object.freeze([...taskSchema.properties.elements.required]);
 
 function canonical(value) {
   if (Array.isArray(value)) return value.map(canonical);

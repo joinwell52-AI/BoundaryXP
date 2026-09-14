@@ -4,7 +4,7 @@ export * from "./schemas.ts";
 import { localizeBoundaryReview, type BoundaryReviewOptions, type BoundaryLocale } from "./localization.ts";
 export type { BoundaryReviewOptions, BoundaryLocale } from "./localization.ts";
 
-export const BOUNDX_VERSION = "1.0.0";
+export const LEGACY_REVIEW_SCHEMA_VERSION = "1.0.0";
 export const BOUNDARY_PARAMETERS = ["I", "O", "A", "P", "R", "V", "C"] as const;
 export type BoundaryParameter = typeof BOUNDARY_PARAMETERS[number];
 export type BoundaryText = {
@@ -106,7 +106,7 @@ function gaps(review: BoundaryReview, document: BoundaryText, location: string, 
   });
 }
 function review(source: unknown, baseline: BoundaryText | null, pm: boolean): BoundaryReview {
-  return { schema: "task-boundary-review/v1", version: BOUNDX_VERSION, source_sha256: boundaryDigest(source),
+  return { schema: "task-boundary-review/v1", version: LEGACY_REVIEW_SCHEMA_VERSION, source_sha256: boundaryDigest(source),
     baseline_sha256: baseline ? boundaryDigest(baseline) : null, findings: [], business_decision: null,
     semantic_status: "requires_human_review", response_required: pm };
 }
@@ -223,7 +223,7 @@ export function validateBoundaryReply(reply: unknown, review: BoundaryReview): a
 
 export function boundaryResponseStatus(review: BoundaryReview, replies: BoundaryReply[]) {
   record(review);
-  requireValue(review.schema === "task-boundary-review/v1" && review.version === BOUNDX_VERSION
+  requireValue(review.schema === "task-boundary-review/v1" && review.version === LEGACY_REVIEW_SCHEMA_VERSION
     && review.business_decision === null && review.semantic_status === "requires_human_review"
     && typeof review.response_required === "boolean"
     && typeof review.source_sha256 === "string" && /^[a-f0-9]{64}$/.test(review.source_sha256), "Invalid review envelope");

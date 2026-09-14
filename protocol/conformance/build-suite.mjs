@@ -1,11 +1,12 @@
 import { createHash } from 'node:crypto';
 import { readFileSync, writeFileSync } from 'node:fs';
 import { isDeepStrictEqual } from 'node:util';
-import { evaluateTask, PROTOCOL_VERSION } from './evaluate.mjs';
+import { evaluateTask, PROTOCOL_VERSION } from '../../src/bxp/evaluate.mjs';
 import { hardeningCases, verifyHardening } from './hardening-cases.mjs';
-import { validateTaskSchema, validateSuiteSchema } from './validation.mjs';
+import { validateTaskSchema, validateSuiteSchema } from '../../src/bxp/validation.mjs';
 
-export const SUITE_VERSION = '1.0.0-draft.3';
+import { CONFORMANCE_SUITE_VERSION } from '../../src/bxp/index.mjs';
+export const SUITE_VERSION = CONFORMANCE_SUITE_VERSION;
 const here = new URL('./', import.meta.url);
 const index = JSON.parse(readFileSync(new URL('../benchmarks/source-index.json', here), 'utf8'));
 const ELEMENTS = ['I', 'O', 'A', 'P', 'R', 'V', 'C', 'B'];

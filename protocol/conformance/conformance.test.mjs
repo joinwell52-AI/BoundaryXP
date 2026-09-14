@@ -2,8 +2,8 @@ import { createHash } from 'node:crypto';
 import { readFileSync } from 'node:fs';
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { evaluateTask, PROTOCOL_VERSION, sourceDigest } from './evaluate.mjs';
-const SUITE_VERSION = '1.0.0-draft.3';
+import { evaluateTask, PROTOCOL_VERSION, sourceDigest } from '../../src/bxp/evaluate.mjs';
+import { CONFORMANCE_SUITE_VERSION as SUITE_VERSION } from '../../src/bxp/index.mjs';
 
 const here = new URL('./', import.meta.url);
 const suite = JSON.parse(readFileSync(new URL('bxp-calc-v1.0.json', here), 'utf8'));

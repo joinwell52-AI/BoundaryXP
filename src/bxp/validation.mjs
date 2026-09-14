@@ -1,7 +1,7 @@
 import { readFileSync } from 'node:fs';
 import Ajv2020 from 'ajv/dist/2020.js';
 
-const readSchema = name => JSON.parse(readFileSync(new URL(`../schemas/${name}`, import.meta.url), 'utf8'));
+const readSchema = name => JSON.parse(readFileSync(new URL(`../../protocol/schemas/${name}`, import.meta.url), 'utf8'));
 export const taskSchema = readSchema('boundx-task-v1.schema.json');
 export const resultSchema = readSchema('boundx-result-v1.schema.json');
 export const suiteSchema = readSchema('boundx-calc-conformance-suite-v1.schema.json');
