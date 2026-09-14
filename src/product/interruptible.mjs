@@ -1,7 +1,7 @@
 export async function interruptible(operation, signal, onLateResult = () => {}) {
   signal?.throwIfAborted();
   let listener;
-  const pending = Promise.resolve().then(operation);
+  const pending = Promise.resolve().then(() => { signal?.throwIfAborted(); return operation(); });
   const stopped = new Promise((resolve, reject) => {
     if (!signal) return;
     listener = () => reject(signal.reason ?? new DOMException('Cancelled', 'AbortError'));

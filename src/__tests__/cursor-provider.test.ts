@@ -4,6 +4,13 @@ import { existsSync } from 'node:fs';
 import { callCursor, cursorModels } from '../product/cursor-provider.mjs';
 import { interruptible } from '../product/interruptible.mjs';
 
+test('cancellation before the scheduled SDK call prevents starting it', async () => {
+  const controller = new AbortController();
+  const pending = interruptible(() => { assert.fail('Cancelled operation must not start'); }, controller.signal);
+  controller.abort();
+  await assert.rejects(pending, { name: 'AbortError' });
+});
+
 test('cancellation releases a stuck SDK wait and disposes a late result', async () => {
   const controller = new AbortController();
   let release, disposed = false;
