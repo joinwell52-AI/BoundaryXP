@@ -1,6 +1,8 @@
 # BoundX 快速开始 / Quick Start
 
-私有源码 preview `1.3.0-preview.0`；未发布 npm/PyPI 或 Release。 / Private source preview, not a published package.
+已有[私有 GitHub 源码预发布版 `1.3.0-preview.0`](https://github.com/joinwell52-AI/BoundX/releases/tag/v1.3.0-preview.0)；无 npm/PyPI 包、安装包或独立二进制。 / A private GitHub source prerelease is available; no npm/PyPI packages, installers or standalone binaries are published.
+
+现有标签不移动，其源码归档仍保留发布前的文档；以下收尾说明适用于后续源码提交。 / The existing tag is unchanged and its archive retains pre-release documentation; these corrections apply to subsequent source commits.
 
 ## 1. 安装与计算 / Install and evaluate
 

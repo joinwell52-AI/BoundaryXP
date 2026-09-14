@@ -2,9 +2,13 @@
 
 ## 1.3.0-preview.0
 
+已于 2026-09-14 发布[私有 GitHub 源码预发布版](https://github.com/joinwell52-AI/BoundX/releases/tag/v1.3.0-preview.0)，指向 `9acb30f87b57b38223713b8c38614e72874e81cf`。无 npm/PyPI 包、安装包或独立二进制，仓库仍私有。 / Private GitHub source prerelease published; no npm/PyPI packages, installers or standalone binaries.
+
+发布后文档补正：原字节纳入[实施授权任务书](docs/tasks/BoundX-BXP-product-alignment-taskbook-v1.md)，修正发布状态。`v1.3.0-preview.0` 标签不移动，因此这些补正不改变已发布归档；本次未发布 `v1.3.0-preview.1`。 / Post-release documentation corrections do not change the existing tag or archive; no new version is released here.
+
 私有产品主入口统一为 BXP：Agent／其他生产者提交 boundx-task/v1，唯一 src/bxp/ 本地验证计算，输出 boundx-result/v1。双语 UI、CLI、MCP、码点证据、严格 JSON 与机器版本注册表贯通；两个授权字段始终 null。旧 API 迁到 src/legacy/，旧 CLI/MCP/UI 显式弃用，禁止静默转换。
 
-Canonical BXP adapters share one production core. Product version changed; BXP-0001 0.3.0-draft.2, suite 1.0.0-draft.3, schema contracts and 208 frozen expectations did not change. No release, publication, license change or extraction certification.
+Canonical BXP adapters share one production core. Product version changed; BXP-0001 0.3.0-draft.2, suite 1.0.0-draft.3, schema contracts and 208 frozen expectations did not change. The private source prerelease does not make the repository public, change its license or certify extraction.
 
 实际测试与 CI 见 [实施回执](docs/tasks/BXP-ALIGNMENT-RECEIPT.md)。
 

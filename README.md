@@ -6,9 +6,13 @@
 
 ## 独立项目 / Standalone project
 
-BoundX 是独立的任务边界预检引擎。唯一目录 `D:\boundx`，私有仓库 [joinwell52-AI/BoundX](https://github.com/joinwell52-AI/BoundX)。产品 `1.3.0-preview.0`，固定协议 BXP-0001 `0.3.0-draft.2`，计算套件 `1.0.0-draft.3`。无公开 Release、npm/PyPI 分发或正式认证；[LICENSE](LICENSE) 保持不变。
+BoundX 是独立的任务边界预检引擎。唯一目录 `D:\boundx`，私有仓库 [joinwell52-AI/BoundX](https://github.com/joinwell52-AI/BoundX)。产品 `1.3.0-preview.0`，固定协议 BXP-0001 `0.3.0-draft.2`，计算套件 `1.0.0-draft.3`。已有[私有 GitHub 源码预发布版](https://github.com/joinwell52-AI/BoundX/releases/tag/v1.3.0-preview.0)；无 npm/PyPI 分发、安装包或独立二进制，不代表正式认证；[LICENSE](LICENSE) 保持不变。
 
-BoundX is an independent, private preview task-boundary engine. Product, protocol and suite versions are distinct. Nothing here publishes the repository, changes its license or certifies extraction.
+BoundX is an independent, private preview task-boundary engine. A private GitHub source prerelease is available; there are no npm/PyPI packages, installers or standalone binaries. Product, protocol and suite versions are distinct. The repository remains private; its license is unchanged, and extraction is not certified.
+
+发布标签 `v1.3.0-preview.0` 固定在 `9acb30f87b57b38223713b8c38614e72874e81cf`，不会移动。此后的文档补正不进入该标签的源码归档；归档仍保留发布前文档。若要归档也包含补正，需另行发布新版本。
+
+The existing tag and source archive are immutable snapshots. Later documentation corrections apply to subsequent commits, not to that archive; a corrected archive requires a separately authorized new release.
 
 ## 立即运行 / Run now
 
@@ -68,6 +72,7 @@ Invalid BXP inputs return the canonical invalid-result envelope, not a business 
 
 ## 文档 / Documentation
 
+- [实施授权任务书（原字节归档）](docs/tasks/BoundX-BXP-product-alignment-taskbook-v1.md)：来自提交 `a2fb068565605c0ac83ad6d6d4a973941ee270c6`，是实施时的授权快照，不是当前发布状态。 / Original authorization snapshot, not current release status.
 - [Agent 生产者指南（中英）](docs/AGENT-BXP-PRODUCER.md) · [示例索引](examples/README.md)。
 - [产品手册](docs/BOUNDX-PRODUCT-MANUAL.md) · [功能](docs/FUNCTIONS.md) · [UI 指南](docs/UI-GUIDE.md) · [结果建议](docs/UI-ADVICE.md)。
 - [协议入口](protocol/README.md) · [English specification](protocol/BXP-0001.md) · [中文规范](protocol/BXP-0001.zh-CN.md) · [实现与限制](protocol/IMPLEMENTATION.md)。
