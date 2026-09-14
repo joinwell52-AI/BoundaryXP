@@ -3,6 +3,7 @@ import { assert, parseProductJson } from './contracts.mjs';
 import { runAdminModel } from './model-pipeline.mjs';
 import { replayLabels } from './replay.mjs';
 import { repeatSignature } from './repeat-audit.mjs';
+import { PRODUCER_INSTRUCTIONS, PRODUCER_PROMPT_VERSION } from './producer-instructions.mjs';
 
 export function acceptancePlan(corpus, reviewIndex) {
   assert(corpus.schema === 'boundx-admin-text-test-seeds/v1' && corpus.version === '2.0.0' && corpus.cases?.length === 120, 'ACCEPTANCE_CORPUS', 'Expected the v2 corpus of 120 seeds.');
@@ -33,6 +34,7 @@ export async function recordAcceptanceRun(scenario, run, config, { sendModel, mo
   const record = { schema: 'boundx-model-run/v1', run_id: run.run_id, case_id: run.case_id, repetition: run.repetition,
     source_digest: run.source_digest, language: run.seed.language, category: run.seed.category, setup: run.seed.setup,
     mode, host_id: hostId, started_at: new Date().toISOString(), snapshot_time: scenario.snapshot_time,
+    producer_prompt: { version: PRODUCER_PROMPT_VERSION, digest: sourceDigest(PRODUCER_INSTRUCTIONS) },
     status: 'STARTED', provider_attempts: 0, prepared: null, raw_candidate: null, raw_candidate_recorded: false, actual_model: 'unknown', actual_model_version: 'unknown',
     evaluation: null, supplemental_checks: [], retries: [], scoring_status: 'PENDING_GOLD_REVIEW', independent_review_verified: false };
   let recordingFailure;

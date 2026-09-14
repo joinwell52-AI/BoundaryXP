@@ -42,6 +42,32 @@ function candidateFor(task, prepared) {
     producer: { producer_kind: 'host-ai', adapter_version: '0.1.0', model_id: 'unknown' }, clarifications: [] };
 }
 
+for (const language of ['en', 'zh-CN']) test(`subscription candidate reaches the sole Core without an API credential: ${language}`, async () => {
+  const root = mkdtempSync(join(tmpdir(), 'boundx-subscription-core-'));
+  try {
+    const host = createProductHost({ root });
+    const task = JSON.parse(readFileSync(new URL(`../../examples/bxp/${language}-complete.json`, import.meta.url), 'utf8'));
+    const input = { consent: true, config: { provider: 'codex', model: 'subscription-fixture' },
+      prepare: { source: task.source, profile: task.profile, packs: host.registry.active() } };
+    let calls = 0;
+    const sendModel = async (config, messages) => {
+      calls++;
+      assert.equal(config.key, undefined);
+      assert.ok(messages[0].content.includes('source_id "task"'));
+      return { text: JSON.stringify(candidateFor(task, JSON.parse(messages[1].content))), model: 'subscription-fixture' };
+    };
+    const result = await runAdminModel(host, input, { sendModel });
+    assert.equal(result.computed, true);
+    assert.equal(result.model, 'subscription-fixture');
+    assert.equal(result.result.business_decision, null);
+    assert.equal(result.result.execution_authorization, null);
+    const rejected = await runAdminModel(host, { ...input, config: { ...input.config, key: 'do-not-send-this' } }, { sendModel });
+    assert.equal(rejected.computed, false);
+    assert.equal(rejected.diagnostics[0].code, 'MODEL_CONFIG');
+    assert.equal(calls, 1);
+  } finally { rmSync(root, { recursive: true, force: true }); }
+});
+
 for (const protocol of ['chat', 'responses']) test(`configured ${protocol} transport reaches sole Core; malformed candidates fail closed (mock provider)`, async () => {
   const root = mkdtempSync(join(tmpdir(), 'boundx-model-'));
   const options = { root, tenant: 'test-model', allowDirectoryDisclosure: false };

@@ -3,6 +3,7 @@ import { rm } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { interruptible } from './interruptible.mjs';
+import { cursorFailure, ModelTransportError } from './model-errors.mjs';
 
 const loadSdk = () => import('@cursor/sdk');
 export async function cursorModels(key, { sdkLoader = loadSdk, signal } = {}) {
@@ -12,7 +13,7 @@ export async function cursorModels(key, { sdkLoader = loadSdk, signal } = {}) {
     const { Cursor } = await interruptible(sdkLoader, deadline);
     const models = await interruptible(() => Cursor.models.list({ apiKey: key }), deadline);
     return models.map(model => ({ id: model.id, name: model.displayName || model.id }));
-  } catch { throw Error('Cursor模型列表读取失败；请检查密钥、网络及账号权限。 / Cursor model catalog unavailable.'); }
+  } catch (error) { throw cursorFailure(error); }
 }
 
 export async function callCursor(config, messages, { signal: callerSignal, sdkLoader = loadSdk, removeWorkspace = rm } = {}) {
@@ -23,7 +24,7 @@ export async function callCursor(config, messages, { signal: callerSignal, sdkLo
   try {
     signal?.throwIfAborted();
     const models = await cursorModels(config.key, { sdkLoader, signal });
-    if (!models.some(model => model.id === config.model)) throw Error('Unavailable model');
+    if (!models.some(model => model.id === config.model)) throw new ModelTransportError('MODEL_UNAVAILABLE');
     signal?.throwIfAborted();
     const { Agent } = await interruptible(sdkLoader, signal);
     directory = mkdtempSync(join(tmpdir(), 'boundx-cursor-'));
@@ -35,12 +36,13 @@ export async function callCursor(config, messages, { signal: callerSignal, sdkLo
     if (signal?.aborted) { cancel(); signal.throwIfAborted(); }
     const result = await interruptible(() => run.wait(), signal);
     signal?.throwIfAborted();
+    if (result.status === 'error') throw cursorFailure(result.error);
     if (result.status !== 'finished' || typeof result.result !== 'string' || !result.result.trim()
       || Buffer.byteLength(result.result) > 2_000_000) throw Error('Incomplete output');
     output = { text: result.result, model: result.model?.id ?? config.model, usage: result.usage ?? null };
-  } catch {
+  } catch (error) {
     if (signal?.aborted) throw new DOMException('Cancelled', 'AbortError');
-    throw Error('Cursor调用未完成；请检查连接、模型权限或额度。未自动重试。 / Cursor request failed; no automatic retry.');
+    throw cursorFailure(error);
   } finally {
     signal?.removeEventListener('abort', cancel);
     if (agent) { try { await interruptible(() => agent.close(), AbortSignal.timeout(2000)); } catch { warnings.push('CURSOR_CLOSE_INCOMPLETE'); } }

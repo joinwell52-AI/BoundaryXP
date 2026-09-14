@@ -7,6 +7,7 @@ import { parseProductJson } from '../src/product/contracts.mjs';
 import { createCaseScenario } from '../fixtures/admin-text/scenarios.mjs';
 import { callHttpModel } from '../src/product/http-provider.mjs';
 import { callCursor } from '../src/product/cursor-provider.mjs';
+import { callCodex } from '../src/product/codex-provider.mjs';
 import { resolveEndpoint } from '../ui/connection.mjs';
 import { sourceDigest } from '../src/bxp/index.mjs';
 import { summarizeRepeats } from '../src/product/repeat-audit.mjs';
@@ -28,10 +29,10 @@ export function acceptanceOptions(args, env) {
   }
   if (!values['--execute'] || !values['--authorize-synthetic-data'] || !/^(?:[1-9]|[1-9][0-9]|1[0-4][0-9]|150)$/.test(values['--max-runs'] ?? '')) throw Error('Execution requires explicit synthetic-data authorization and --max-runs 1..150.');
   const provider = env.BOUNDX_MODEL_PROVIDER;
-  const model = env.BOUNDX_MODEL_ID;
-  const key = provider === 'cursor' ? env.CURSOR_API_KEY : env.BOUNDX_MODEL_API_KEY;
-  if (!['api', 'cursor'].includes(provider) || typeof model !== 'string' || !model.trim() || model.length > 256
-    || typeof key !== 'string' || key.trim().length < 16 || key.length > 16384) throw Error('Configure provider, model and a valid environment credential before execution.');
+  const model = env.BOUNDX_MODEL_ID ?? (provider === 'cursor' ? env.CURSOR_DEFAULT_MODEL : undefined);
+  const key = provider === 'codex' ? '' : provider === 'cursor' ? env.CURSOR_API_KEY : env.BOUNDX_MODEL_API_KEY;
+  if (!['api', 'cursor', 'codex'].includes(provider) || typeof model !== 'string' || !model.trim() || model.length > 256
+    || (provider !== 'codex' && (typeof key !== 'string' || key.trim().length < 16 || key.length > 16384))) throw Error('Configure provider, model and valid local authentication before execution.');
   const config = { provider, model, key };
   if (provider === 'api') {
     config.protocol = env.BOUNDX_MODEL_PROTOCOL;
@@ -61,7 +62,9 @@ export async function executeAcceptanceBatch(plan, options, { base = join(reposi
       || run.run_id !== `${run.case_id}-${run.repetition}` || run.seed?.id !== run.case_id
       || typeof run.seed.task_text !== 'string' || run.source_digest !== sourceDigest(run.seed.task_text))) throw Error('Invalid acceptance plan.');
   const serializedPlan = JSON.stringify(plan);
-  if (typeof options.config?.key !== 'string' || !options.config.key || serializedPlan.includes(JSON.stringify(options.config.key).slice(1, -1))) throw Error('Unsafe model configuration.');
+  if (options.config?.provider === 'codex') {
+    if (options.config.key !== '') throw Error('Subscription transport does not accept API credentials.');
+  } else if (typeof options.config?.key !== 'string' || !options.config.key || serializedPlan.includes(JSON.stringify(options.config.key).slice(1, -1))) throw Error('Unsafe model configuration.');
   const root = resolve(base);
   ensureDirectory(root);
   ensureDirectory(join(root, 'acceptance-runs'));
@@ -71,7 +74,7 @@ export async function executeAcceptanceBatch(plan, options, { base = join(reposi
   const records = [];
   atomicRecord(join(output, 'summary.json'), { ...summarizeAcceptanceRuns(records), execution_status: 'IN_PROGRESS' });
   let transport = sendModel;
-  if (!transport) transport = options.config.provider === 'cursor' ? callCursor : callHttpModel;
+  if (!transport) transport = options.config.provider === 'cursor' ? callCursor : options.config.provider === 'codex' ? callCodex : callHttpModel;
   let failure = false;
   let activeRun;
   try {

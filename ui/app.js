@@ -38,7 +38,7 @@ function page(name){const pm=name!=='task';$('page-task').hidden=pm;$('page-plan
 for(const k of ['task','plan','results'])$('tab-'+k).onclick=()=>page(k);
 $('settings-toggle').onclick=()=>{$('settings').hidden=!$('settings').hidden;};
 $('clear-key').onclick=()=>{$('key').value='';notice('API 密钥已从页面清除。');};
-function config(){return {provider:$('model-provider').value,protocol:$('protocol').value,url:$('url').value.trim(),model:$('model').value.trim(),key:$('key').value.trim(),disableThinking:$('disable-thinking').checked};}
+function config(){return {provider:$('model-provider').value,protocol:$('protocol').value,url:$('url').value.trim(),model:$('model').value.trim(),key:$('model-provider').value==='codex'?'':$('key').value.trim(),disableThinking:$('disable-thinking').checked};}
 function requireConfig(){const c=config();if((c.provider==='api'&&(!c.url||!c.key))||!c.model){$('settings').hidden=false;throw Error('请先填写模型设置。 / Configure a model first.');}return c;}
 async function api(route,data){
   if(controller)throw Error('已有请求正在进行，请等待或取消。');
@@ -54,20 +54,21 @@ $('cancel').onclick=()=>{controller?.abort();notice(activeLocal?'已取消本机
 const action=fn=>async()=>{try{await fn();}catch(e){notice(e.name==='AbortError'?'请求已取消。':e.message,true);}};
 const connection=createConnectionState();
 const providerSelect=element('select');providerSelect.id='model-provider';
-for(const [value,label] of [['api','自定义API / Custom API'],['cursor','Cursor SDK']]){const option=element('option');option.value=value;option.textContent=label;providerSelect.append(option);}
+for(const [value,label] of [['api','自定义API / Custom API'],['cursor','Cursor SDK'],['codex','Codex订阅登录 / Codex subscription']]){const option=element('option');option.value=value;option.textContent=label;providerSelect.append(option);}
 const providerLabel=localized(element('label'),'接入方式','Connection provider');providerLabel.append(providerSelect);$('settings').prepend(providerLabel);
 const cursorCatalog=element('select');cursorCatalog.id='cursor-model-catalog';cursorCatalog.hidden=true;
 cursorCatalog.onchange=()=>{$('model').value=cursorCatalog.value;invalidateConnection();};
 const loadCursorModels=button(undefined,action(async()=>{
  const key=$('key').value.trim();
- const result=await api('cursor-models',{key});cursorCatalog.replaceChildren();
+ const result=await api(providerSelect.value==='codex'?'codex-models':'cursor-models',providerSelect.value==='codex'?{}:{key});cursorCatalog.replaceChildren();
  for(const model of result.models){const option=element('option');option.value=model.id;option.textContent=model.name+' · '+model.id;cursorCatalog.append(option);}
  $('model').value=cursorCatalog.value;invalidateConnection();
-}));localized(loadCursorModels,'读取Cursor可用模型','Load available Cursor models');loadCursorModels.hidden=true;
+}));localized(loadCursorModels,'读取可用模型','Load available models');loadCursorModels.hidden=true;
 $('settings').append(loadCursorModels,cursorCatalog);
 $('settings').append(localized(element('p'),'Cursor密钥可留空以使用服务器环境变量CURSOR_API_KEY；不会发送密钥到浏览器。模型目录可见不代表生成测试通过。','Leave the Cursor key blank to use the server CURSOR_API_KEY environment variable; server keys are not returned to the browser. Catalog access does not prove generation works.'));
-providerSelect.onchange=()=>{const cursor=providerSelect.value==='cursor';for(const id of ['protocol','url','disable-thinking'])$(id).closest('label').hidden=cursor;loadCursorModels.hidden=!cursor;cursorCatalog.hidden=!cursor;$('model').value='';cursorCatalog.replaceChildren();invalidateConnection();};
-function connectionDisplay(detail){const node=$('connection-status');node.dataset.state=connection.status;setText(node,{untested:'● 未测试 / Not tested',testing:'● 正在测试 / Testing…',connected:'● 连接成功 / Connected',failed:'● 连接失败 / Failed'}[connection.status]);setText($('connection-detail'),detail);for(const id of ['generate-pm','test-current-task','recheck-pm','extract-bxp-task'])if($(id))$(id).disabled=connection.status!=='connected';}
+$('settings').append(localized(element('p'),'Codex使用本机ChatGPT订阅登录，不填写API密钥；调用消耗订阅额度。仅用于标准BXP候选及文本连接测试。','Codex uses local ChatGPT sign-in, without an API key, and consumes subscription usage. Use it for standard BXP candidates and text connection tests.'));
+providerSelect.onchange=()=>{const hosted=providerSelect.value!=='api';for(const id of ['protocol','url','disable-thinking'])$(id).closest('label').hidden=hosted;$('key').closest('label').hidden=providerSelect.value==='codex';loadCursorModels.hidden=!hosted;cursorCatalog.hidden=!hosted;$('model').value='';cursorCatalog.replaceChildren();invalidateConnection();};
+function connectionDisplay(detail){const node=$('connection-status');node.dataset.state=connection.status;setText(node,{untested:'● 未测试 / Not tested',testing:'● 正在测试 / Testing…',connected:'● 连接成功 / Connected',failed:'● 连接失败 / Failed'}[connection.status]);setText($('connection-detail'),detail);for(const id of ['generate-pm','test-current-task','recheck-pm','extract-bxp-task'])if($(id))$(id).disabled=connection.status!=='connected'||(providerSelect.value==='codex'&&id!=='extract-bxp-task');}
 function connectedConfig(){if(connection.status!=='connected')throw Error('请先测试模型连接，绿色成功后才能测试 PM。 / Test the connection first.');return requireConfig();}
 function invalidateConnection(){connection.invalidate();connectionDisplay('配置已变更，请重新测试。绿色状态不会保存或从记录恢复。');}
 for(const id of ['protocol','url','model','key','disable-thinking'])for(const event of ['input','change'])$(id).addEventListener(event,invalidateConnection);
@@ -75,7 +76,7 @@ $('clear-key').addEventListener('click',invalidateConnection);
 $('test-connection').onclick=action(async()=>{
   const ticket=connection.begin();connectionDisplay('正在发送短文本测试，不发送任务正文。');
   try{
-    const c=requireConfig();const endpoint=c.provider==='cursor'?{url:'cursor-sdk',adjusted:false}:resolveEndpoint(c.url,c.protocol);if(c.provider!=='cursor'){c.url=endpoint.url;$('url').value=c.url;}
+    const c=requireConfig();const endpoint=c.provider==='api'?resolveEndpoint(c.url,c.protocol):{url:c.provider==='cursor'?'cursor-sdk':'codex-subscription',adjusted:false};if(c.provider==='api'){c.url=endpoint.url;$('url').value=c.url;}
     const result=await api('connection',{config:c});
     if(connection.finish(ticket,result.connected===true))connectionDisplay(`实际返回模型：${result.model}；耗时 ${result.elapsed_ms} ms。${endpoint.adjusted?'已补全或规范化接口地址。':''}仅表示本次连接可用，不代表任务理解正确。`);
   }catch(e){if(connection.finish(ticket,false))connectionDisplay(e.name==='AbortError'?'测试已取消，未自动重试。':e.message);throw e;}

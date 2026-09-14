@@ -18,6 +18,7 @@ import { industrySelection } from './src/product/selection-ui.mjs';
 import { runAdminModel } from './src/product/model-pipeline.mjs';
 import { callCursor, cursorModels } from './src/product/cursor-provider.mjs';
 import { callHttpModel } from './src/product/http-provider.mjs';
+import { callCodex, codexModels } from './src/product/codex-provider.mjs';
 const LIMIT=1_000_000;
 export function validateExtract(value,kind,text,baseline){
   const docs=kind==='task'?[value]:[value?.document,...(Array.isArray(value?.tasks)?value.tasks.map(t=>t.document):[])];
@@ -31,6 +32,11 @@ export function validateExtract(value,kind,text,baseline){
   return value;
 }
 export async function callModel(config,messages,{signal,fetchImpl=fetch,maxOutputTokens=6000}={}){
+  if(config?.provider==='codex'){
+    if(config.key)throw Error('Codex订阅通道不接收API密钥。 / Codex subscription transport does not accept API keys.');
+    const normalized=messages.length===1?[{role:'system',content:'You are a text-only responder. Do not call tools or execute tasks.'},messages[0]]:messages;
+    return callCodex(config,normalized,{signal});
+  }
   if(!config || typeof config.key!=='string' || !config.key.trim() || typeof config.model!=='string' || !config.model.trim()) throw Error('请先填写模型和 API 密钥。');
   if(config.provider==='cursor')return callCursor(config,messages,{signal});
   if(config.provider && config.provider!=='api')throw Error('Unsupported model provider.');
@@ -86,10 +92,11 @@ export function createApp({fetchImpl=fetch,productOptions={}}={}){
       if(data.config?.provider==='cursor'&&!data.config.key)data.config.key=process.env.CURSOR_API_KEY??'';
       if(req.url==='/api/admin-boundary')return send(200,await calculateWithLibraries(data.text,{signal:controller.signal}));
       if(req.url==='/api/cursor-models')return send(200,{models:await cursorModels(data.key||process.env.CURSOR_API_KEY)});
+      if(req.url==='/api/codex-models')return send(200,{models:await codexModels({signal:controller.signal})});
       if(req.url==='/api/connection'){
         const started=Date.now();
         const output=await callModel(data.config,[{role:'user',content:'这是API连接测试，请只回复 OK。'}],{signal:controller.signal,fetchImpl,maxOutputTokens:256});
-        return send(200,{connected:true,model:output.model,usage:output.usage,elapsed_ms:Date.now()-started,checked_at:new Date().toISOString(),endpoint:data.config.provider==='cursor'?'cursor-sdk':resolveEndpoint(data.config.url,data.config.protocol).url});
+        return send(200,{connected:true,model:output.model,usage:output.usage,elapsed_ms:Date.now()-started,checked_at:new Date().toISOString(),endpoint:data.config.provider==='cursor'?'cursor-sdk':data.config.provider==='codex'?'codex-subscription':resolveEndpoint(data.config.url,data.config.protocol).url});
       }
       if(req.url==='/api/review'){
         const result=data.kind==='task'?reviewBoundX(data.document):reviewPlanBoundary(data.baseline,data.plan);

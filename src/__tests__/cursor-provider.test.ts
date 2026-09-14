@@ -44,7 +44,7 @@ test('Cursor uses exact catalog model, isolated workspace and no execution tools
 test('Cursor rejects unavailable models and masks SDK errors without falling back', async () => {
   let created = false;
   const sdkLoader = async () => ({ Cursor: { models: { list: async () => [] } }, Agent: { create: async () => { created = true; } } });
-  await assert.rejects(callCursor({ key: 'secret', model: 'missing' }, [], { sdkLoader }), /Cursor request failed/);
+  await assert.rejects(callCursor({ key: 'secret', model: 'missing' }, [], { sdkLoader }), { code: 'MODEL_UNAVAILABLE' });
   assert.equal(created, false);
   await assert.rejects(cursorModels('secret', { sdkLoader: async () => { throw Error('secret'); } }), error => !error.message.includes('secret'));
 });
@@ -77,6 +77,6 @@ for (const success of [true, false]) test(`Windows workspace cleanup cannot mask
       assert.equal(result.text, 'OK');
       assert.deepEqual(result.warnings, ['CURSOR_WORKSPACE_CLEANUP_INCOMPLETE']);
       assert.equal(JSON.stringify(result).includes('private-path'), false);
-    } else await assert.rejects(request, error => /Cursor request failed/.test(error.message) && !/private|EPERM/.test(error.message));
+    } else await assert.rejects(request, error => error.code === 'MODEL_FAILED' && !/private|EPERM/.test(error.message));
   } finally { if (directory) rmSync(directory, { recursive: true, force: true }); }
 });

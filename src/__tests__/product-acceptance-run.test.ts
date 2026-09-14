@@ -125,6 +125,22 @@ test('CLI defaults offline and requires explicit data authorization and a bounde
   assert.equal(options.authorizedSyntheticData, true);
 });
 
+test('Cursor default model applies only when an explicit model is absent', () => {
+  const args = ['--execute', '--authorize-synthetic-data', '--max-runs', '1'];
+  const env = { BOUNDX_MODEL_PROVIDER: 'cursor', CURSOR_DEFAULT_MODEL: 'auto-smart', CURSOR_API_KEY: config.key };
+  assert.equal(acceptanceOptions(args, env).config.model, 'auto-smart');
+  assert.equal(acceptanceOptions(args, { ...env, BOUNDX_MODEL_ID: 'explicit-model' }).config.model, 'explicit-model');
+  assert.throws(() => acceptanceOptions(args, { ...env, BOUNDX_MODEL_ID: '' }));
+  assert.throws(() => acceptanceOptions(args, { ...env, CURSOR_DEFAULT_MODEL: ' ' }));
+  assert.throws(() => acceptanceOptions(args, { ...env, BOUNDX_MODEL_PROVIDER: 'api', BOUNDX_MODEL_API_KEY: config.key }));
+});
+
+test('subscription runner uses an explicit model without reading API credentials', () => {
+  const options = acceptanceOptions(['--execute', '--authorize-synthetic-data', '--max-runs', '1'],
+    { BOUNDX_MODEL_PROVIDER: 'codex', BOUNDX_MODEL_ID: 'subscription-fixture', BOUNDX_MODEL_API_KEY: 'not-used', CURSOR_API_KEY: 'not-used' });
+  assert.deepEqual(options.config, { provider: 'codex', model: 'subscription-fixture', key: '' });
+});
+
 test('bounded batch uses real persistence, reports mock counts, and never overwrites a prior batch', async () => {
   const root = mkdtempSync(join(tmpdir(), 'boundx-batch-'));
   try {
