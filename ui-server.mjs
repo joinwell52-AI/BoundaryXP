@@ -14,6 +14,7 @@ import { createProductHost } from './src/product/host.mjs';
 import { parseProductJson } from './src/product/contracts.mjs';
 import { employeeUiAction } from './src/product/employee-ui.mjs';
 import { employeeTemplate } from './src/product/employees.mjs';
+import { industrySelection } from './src/product/selection-ui.mjs';
 const LIMIT=1_000_000;
 export function validateExtract(value,kind,text,baseline){
   const docs=kind==='task'?[value]:[value?.document,...(Array.isArray(value?.tasks)?value.tasks.map(t=>t.document):[])];
@@ -72,12 +73,14 @@ export function createApp({fetchImpl=fetch,productOptions={}}={}){
     try{
       const bxp=req.url==='/api/bxp/evaluate';
       const employee=req.url==='/api/employee-directory';
-      const product=req.url==='/api/admin-product'||employee;
+      const selection=req.url==='/api/industry-selection';
+      const product=req.url==='/api/admin-product'||employee||selection;
       if(!bxp&&!product&&!req.url.startsWith('/api/legacy/'))return send(404,{error:'Legacy endpoints require /api/legacy/.'});
       let size=0,buffers=[];for await(const chunk of req){size+=chunk.length;if(size>(bxp?RAW_JSON_BYTE_LIMIT:LIMIT)){if(bxp)return send(200,evaluateBxpTask(undefined));throw Error('输入超过 1 MB。');}buffers.push(chunk);}
       if(bxp)return send(200,parseAndEvaluateBxpTask(Buffer.concat(buffers)));
       if(product){
         const input=parseProductJson(Buffer.concat(buffers));
+        if(selection){productHost??=createProductHost(productOptions);return send(200,industrySelection(productHost.registry,input));}
         if(employee){productHost??=createProductHost(productOptions);return send(200,employeeUiAction(productHost.registry,input));}
         if(!['bx_list_semantic_packs','bx_prepare_admin_task','bx_evaluate_admin_candidate'].includes(input.method))return send(400,{error:'Unsupported UI product operation.'});
         if(input.method==='bx_evaluate_admin_candidate'&&Object.hasOwn(input.arguments??{},'raw_candidate')){

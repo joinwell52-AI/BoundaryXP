@@ -1,6 +1,7 @@
 const element = id => document.getElementById(id);
 let prepared = null;
 let active = [];
+let installedPacks = [];
 let revision = 0;
 let employeeRevision = 0;
 let employeePackage = null;
@@ -51,7 +52,8 @@ action('employee-build', async () => {
   employeePackage = null; employeeImported = false;
   const l1 = active.find(reference => reference.pack_id === 'core-ontology');
   if (!l1) throw new Error('请先启用L1。 / Activate L1 first.');
-  const l2 = active.find(reference => reference.digest === element('industry').value);
+  const selectedIndustry = installedPacks.find(reference => reference.digest === element('industry').value);
+  const l2 = selectedIndustry && Object.fromEntries(Object.entries(selectedIndustry).filter(([key]) => key !== 'layer'));
   const result = await employeeCall({ operation: 'build', csv: element('employee-csv').value, name: element('employee-name').value,
     version: element('employee-version').value, l1, ...(l2 ? { l2 } : {}), roles_json: element('employee-roles').value });
   if (requestedRevision !== employeeRevision) return;
@@ -78,8 +80,22 @@ action('employee-activate', async () => {
   element('directory').value = reference.digest;
   element('employee-result').textContent = JSON.stringify(result, null, 2);
 });
+action('industry-activate', async () => {
+  const selected = installedPacks.find(reference => reference.layer === 'L2' && reference.digest === element('industry').value);
+  const previous = active.find(reference => installedPacks.some(pack => pack.layer === 'L2' && pack.digest === reference.digest));
+  if (!selected && !previous) return;
+  const reference = selected ? Object.fromEntries(Object.entries(selected).filter(([key]) => key !== 'layer')) : previous;
+  const response = await fetch('/api/industry-selection', { method: 'POST', headers: { 'content-type': 'application/json',
+    'x-boundx-token': document.querySelector('meta[name="boundx-token"]').content },
+    body: JSON.stringify({ operation: selected ? 'activate' : 'deactivate', reference }) });
+  const result = await response.json();
+  if (!response.ok) throw new Error(result.error ?? 'Industry selection failed');
+  active = result.active; stale(); employeeRevision++; employeePackage = null; employeeImported = false;
+});
 action('prepare', async () => {
   const requestedRevision = revision;
+  const selectedIndustry = element('industry').value;
+  if (selectedIndustry && !active.some(reference => reference.digest === selectedIndustry)) throw new Error('请先确认切换行业。 / Confirm industry activation first.');
   const selected = active.filter(reference => reference.pack_id === 'core-ontology' || [element('industry').value, element('directory').value].includes(reference.digest));
   const source = element('source').value;
   const info = await fetch('/api/protocol-info').then(response => response.json());
@@ -109,13 +125,13 @@ action('evaluate', async () => {
   element('status').textContent = result.computed ? '已计算，不代表授权。 / Computed, not authorized.' : '尚未计算，请查看诊断。 / Not computed; see diagnostics.';
 });
 try {
-  const info = await call('bx_list_semantic_packs'); active = info.active;
-  for (const reference of active) {
-    if (reference.pack_id === 'core-ontology') { element('l1').textContent = `L1: ${reference.pack_id}@${reference.version}`; continue; }
-    const installed = info.installed.find(item => item.digest === reference.digest);
-    if (installed?.layer !== 'L3' && reference.pack_id !== 'software-ai') continue;
+  const info = await call('bx_list_semantic_packs'); active = info.active; installedPacks = info.installed;
+  for (const reference of installedPacks) {
+    const enabled = active.some(item => item.digest === reference.digest);
+    if (reference.layer === 'L1') { if (enabled) element('l1').textContent = `L1: ${reference.pack_id}@${reference.version}`; continue; }
+    if (!['L2', 'L3'].includes(reference.layer) || (reference.layer === 'L3' && !enabled)) continue;
     const option = document.createElement('option'); option.value = reference.digest;
-    option.textContent = `${reference.pack_id}@${reference.version}`;
-    element(installed?.layer === 'L3' ? 'directory' : 'industry').append(option);
+    option.textContent = `${reference.pack_id}@${reference.version}${enabled ? ' · 已启用 / active' : ''}`;
+    element(reference.layer === 'L3' ? 'directory' : 'industry').append(option);
   }
 } catch (error) { element('status').textContent = error.message; }
