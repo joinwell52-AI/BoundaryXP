@@ -12,9 +12,13 @@ On first product-host startup, an empty registry receives the bundled active L1.
 
 The key comes from page memory or the server environment. Never commit credentials. Production startup must not depend on another repository. An explicitly authorized development process may receive an ephemeral environment credential.
 
-独立Cursor会话在临时空目录运行，`tools: []`，禁用MCP、子任务与shell；只生产文本候选，再经现有严格候选校验和唯一BXP Core计算。准备快照与SDK运行记录的存储机制不同；不保证SDK不会在其自身存储中保留会话记录。调用可能产生模型费用，不自动回退为规则抽取。
+独立Cursor会话在临时空目录运行，`tools: []`，禁用MCP、子任务与shell；只生产文本候选，再经现有严格候选校验和唯一BXP Core计算。模型目录读取上限20秒，单次生成上限180秒；取消会解除等待，并关闭会话，迟到的句柄执行清理。准备快照与SDK运行记录的存储机制不同；不保证SDK不会在其自身存储中保留会话记录。调用可能产生模型费用，不自动回退为规则抽取。
 
 An isolated Cursor session uses an empty temporary workspace with no built-in tools and MCP/task/shell disabled. Text candidates enter the existing validator and sole Core. SDK session storage is distinct from BoundX prepared snapshots; SDK records may persist in its own storage. Calls may incur model usage charges; no rule-extraction fallback is used.
+
+主面板可显式选择已启用L3；服务器未设置 `BOUNDX_ALLOW_L3_DISCLOSURE=1` 时，整个模型请求在准备阶段拒绝，不静默忽略名册后继续生成。不要为真实员工数据随意开启外发；测试默认名册为虚构数据。仅披露命中身份，共享别名保留所有匹配。名册依赖的L2必须同时选择，依赖不匹配在模型调用前拒绝。
+
+The model panel supports explicit active L3 selection. Without server authorization via `BOUNDX_ALLOW_L3_DISCLOSURE=1`, the request fails before sending to the provider instead of silently ignoring the directory. Only matched identities are disclosed; shared aliases retain all matches. Selected packages must include the directory's exact dependency closure. Authorization for real employee data must be handled explicitly.
 
 依据：[Cursor TypeScript SDK](https://cursor.com/docs/sdk/typescript)。固定SDK版本1.0.30；undici覆盖为6.28.0以修复新增依赖审计告警，当前npm audit为0。
 

@@ -84,15 +84,19 @@ let bxpPacks={installed:[],active:[]};
 const bxpPanel=element('section',undefined,'panel');
 bxpPanel.append(localized(element('h2'),'标准BXP：模型配置 → 抽取7+1 → 计算 → 结果','Standard BXP: configure model → extract 7+1 → calculate → results'));
 bxpPanel.append(localized(element('p'),'使用顶部原有模型设置。点击下方模型按钮将发送任务原文及获准的语义上下文，可能产生费用；不执行任务。','Use the existing model settings above. The model button sends source text and permitted context, may incur charges, and never executes the task.'));
-bxpPanel.append(localized(element('p'),'本入口当前选择L1和可选L2，不发送L3职员目录。语义包导入与职员目录仍在ADMIN工作台管理。准备快照保存在本地。','This entry selects L1 and optional L2, not L3 employee directories. Manage imports and directories in the ADMIN workspace. Prepared snapshots are saved locally.'));
+bxpPanel.append(localized(element('p'),'默认L1，可选L2行业及已启用L3名册；L3外发还需服务器授权。准备快照保存在本地，名册默认不选择。','Default L1 with optional L2 industry and active L3 directory; L3 disclosure also requires server authorization. Prepared snapshots are saved locally. No directory is selected by default.'));
 const packageLink=element('a');packageLink.href='/admin';localized(packageLink,'打开语义包管理','Open semantic package management');bxpPanel.append(packageLink);
 const industrySelect=element('select');industrySelect.id='bxp-industry';
 const industryLabel=localized(element('label'),'行业包（先导入，再确认启用）','Industry package (install, then explicitly activate)');industryLabel.append(industrySelect);bxpPanel.append(industryLabel);
+const directorySelect=element('select');directorySelect.id='bxp-directory';
+const directoryLabel=localized(element('label'),'职员目录（可选，须先在管理页启用）','Employee directory (optional; activate in management first)');directoryLabel.append(directorySelect);bxpPanel.append(directoryLabel);
 const bxpReport=element('pre');bxpReport.id='bxp-model-result';
 const refreshPacks=button(undefined,action(async()=>{
  bxpPacks=await api('product-packs',{method:'bx_list_semantic_packs',arguments:{}});
  industrySelect.replaceChildren();const none=element('option','None / 不使用行业包');none.value='';industrySelect.append(none);
  for(const pack of bxpPacks.installed.filter(pack=>pack.layer==='L2')){const option=element('option');option.textContent=packLabel(pack);option.title=`${pack.pack_id}@${pack.version}`;option.value=pack.digest;industrySelect.append(option);}
+ directorySelect.replaceChildren();const noDirectory=element('option');noDirectory.value='';noDirectory.textContent='不使用职员目录 / No employee directory';directorySelect.append(noDirectory);
+ for(const pack of bxpPacks.installed.filter(pack=>pack.layer==='L3'&&bxpPacks.active.some(reference=>reference.digest===pack.digest))){const option=element('option');option.value=pack.digest;option.textContent=packLabel(pack);directorySelect.append(option);}
  bxpReport.textContent='';
 }));localized(refreshPacks,'加载/刷新本地语义包','Reload local semantic packages');
 const activateIndustry=button(undefined,action(async()=>{
@@ -102,15 +106,16 @@ const activateIndustry=button(undefined,action(async()=>{
 }));localized(activateIndustry,'确认启用行业','Confirm industry activation');
 const extractBxp=button(undefined,action(async()=>{
  if(connection.status!=='connected')throw Error('请先测试模型连接。 / Test the model connection first.');
- const text=textRequired('task-source'),selected=industrySelect.value;
+ const text=textRequired('task-source'),selected=industrySelect.value,directory=directorySelect.value;
  bxpReport.textContent='正在抽取；尚未计算。 / Extracting; not yet calculated.';
  const l1=bxpPacks.active.find(reference=>bxpPacks.installed.some(pack=>pack.layer==='L1'&&pack.digest===reference.digest));
  if(!l1)throw Error('请先在语义包管理页或CLI安装并启用L1，再加载本地语义包。 / Install and activate L1, then reload packages.');
  if(selected&&!bxpPacks.active.some(reference=>reference.digest===selected))throw Error('请先确认启用行业。 / Confirm industry activation first.');
+ if(directory&&!bxpPacks.active.some(reference=>reference.digest===directory))throw Error('名册状态已变化，请重新加载。 / Reload the directory selection.');
  const info=await fetch('/api/protocol-info').then(response=>response.json());
  const result=await api('bxp-admin',{config:requireConfig(),consent:true,prepare:{source:{text,language:locale.language},
-  profile:{id:'org.boundx.admin',required_elements:info.core_elements},packs:[l1,...bxpPacks.active.filter(reference=>reference.digest===selected)]}});
- if($('task-source').value!==text||industrySelect.value!==selected){bxpReport.textContent='输入已变化，请重新计算。 / Input changed; recalculate.';return;}
+  profile:{id:'org.boundx.admin',required_elements:info.core_elements},packs:[l1,...bxpPacks.active.filter(reference=>[selected,directory].includes(reference.digest))]}});
+ if($('task-source').value!==text||industrySelect.value!==selected||directorySelect.value!==directory){bxpReport.textContent='输入已变化，请重新计算。 / Input changed; recalculate.';return;}
  bxpReport.textContent=result.report;
  noticePair(result.computed?'7+1候选已校验并完成BXP计算；结果不代表授权。':'尚未计算，请查看诊断。',result.computed?'Candidate validated and BXP calculated; no authority granted.':'Not computed; see diagnostics.');
 }));extractBxp.id='extract-bxp-task';extractBxp.disabled=true;localized(extractBxp,'用模型抽取7+1并计算','Extract 7+1 with model and calculate');
@@ -122,7 +127,7 @@ for(const node of [$('extract-task').parentElement,$('admin-advice'),$('task-edi
 const legacyHint=$('task-source').nextElementSibling;if(legacyHint?.classList.contains('hint'))legacyResearch.prepend(legacyHint);
 $('page-task').append(legacyResearch);
 refreshPacks.click();
-for(const node of [$('task-source'),industrySelect])node.addEventListener('input',()=>{bxpReport.textContent='输入已变化，请重新计算。 / Input changed; recalculate.';});
+for(const node of [$('task-source'),industrySelect,directorySelect])node.addEventListener('input',()=>{bxpReport.textContent='输入已变化，请重新计算。 / Input changed; recalculate.';});
 function audit(kind,detail){state.history.push({time:new Date().toISOString(),kind,detail});$('history').textContent=state.history.map(x=>`${x.time} · ${x.kind} · ${x.detail}`).join('\n');}
 function markDraft(kind){$(kind==='task'?'confirm-check':'plan-check').checked=false;}
 function emptyDoc(text){return {text,parameters:{},actions:[],completion:[]};}

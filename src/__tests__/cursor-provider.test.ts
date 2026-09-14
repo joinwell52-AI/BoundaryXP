@@ -2,6 +2,17 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { existsSync } from 'node:fs';
 import { callCursor, cursorModels } from '../product/cursor-provider.mjs';
+import { interruptible } from '../product/interruptible.mjs';
+
+test('cancellation releases a stuck SDK wait and disposes a late result', async () => {
+  const controller = new AbortController();
+  let release, disposed = false;
+  const pending = interruptible(() => new Promise(resolve => { release = resolve; }), controller.signal, () => { disposed = true; });
+  await Promise.resolve();controller.abort();
+  await assert.rejects(pending, { name: 'AbortError' });
+  release({});await new Promise(resolve => setImmediate(resolve));
+  assert.equal(disposed, true);
+});
 
 test('Cursor uses exact catalog model, isolated workspace and no execution tools', async () => {
   let directory, closed = false;

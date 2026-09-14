@@ -6,6 +6,28 @@ import { join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { createProductHost } from '../product/host.mjs';
 import { createApp } from '../../ui-server.mjs';
+import { runAdminModel } from '../product/model-pipeline.mjs';
+import { callCursor } from '../product/cursor-provider.mjs';
+
+for (const language of ['en', 'zh-CN']) test(`Cursor candidate reaches Core and three-layer report: ${language} (mock SDK)`, async () => {
+  const root = mkdtempSync(join(tmpdir(), 'boundx-cursor-core-'));
+  try {
+    const host = createProductHost({ root });
+    const task = JSON.parse(readFileSync(new URL(`../../examples/bxp/${language}-complete.json`, import.meta.url), 'utf8'));
+    const sdkLoader = async () => ({ Cursor: { models: { list: async () => [{ id: 'test-model' }] } },
+      Agent: { create: async () => ({ close() {}, send: async prompt => {
+        const prepared = JSON.parse(JSON.parse(prompt).messages[1].content);
+        return { wait: async () => ({ status: 'finished', result: JSON.stringify(candidateFor(task, prepared)), model: { id: 'test-model' } }) };
+      } }) } });
+    const result = await runAdminModel(host, { consent: true, config: { provider: 'cursor', key: 'test-key', model: 'test-model' },
+      prepare: { source: task.source, profile: task.profile, packs: host.registry.active() } },
+    { sendModel: (config, messages, options) => callCursor(config, messages, { ...options, sdkLoader }) });
+    assert.equal(result.computed, true, JSON.stringify(result.diagnostics));
+    assert.equal(result.result.business_decision, null);
+    assert.equal(result.result.execution_authorization, null);
+    for (const layer of [1, 2, 3]) assert.ok(result.report.includes('【Layer ' + layer + '：'));
+  } finally { rmSync(root, { recursive: true, force: true }); }
+});
 
 function candidateFor(task, prepared) {
   const convert = value => {
