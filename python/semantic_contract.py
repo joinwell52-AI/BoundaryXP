@@ -13,7 +13,9 @@ from pathlib import Path
 from lark import Lark, Token
 from lark.exceptions import LarkError
 
-LEX=json.loads(Path(__file__).with_name('semantic_lexicon.json').read_text(encoding='utf-8'))
+from semantic_data import load_legacy_lexicon
+
+LEX=load_legacy_lexicon()
 PARSER=Lark(Path(__file__).with_name('semantic_actions.lark').read_text(encoding='utf-8'),parser='lalr')
 _domain_spec=importlib.util.spec_from_file_location('boundx_domain_action_frames',Path(__file__).with_name('domain_action_frames.py'))
 _domain=importlib.util.module_from_spec(_domain_spec)

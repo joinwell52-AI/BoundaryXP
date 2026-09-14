@@ -6,12 +6,13 @@ contract and cannot override evidence, unknown, authorization or 7+1 semantics.
 import json
 import re
 from pathlib import Path
+from semantic_data import load_legacy_lexicon
 
 DOMAIN_ROOT = Path(__file__).parents[1] / "domain-packs"
 PACK_REGISTRY = {
     "software-ai": DOMAIN_ROOT / "l2" / "software-ai",
 }
-CORE = json.loads(Path(__file__).with_name("semantic_lexicon.json").read_text(encoding="utf-8"))
+CORE = load_legacy_lexicon()
 ROLE_BY_OPERATION = {
     operation: definition["role"] for operation, definition in CORE["operations"].items()
 }
