@@ -4,7 +4,6 @@
 
 [返回本轮测试说明](../USER-CASES-017.md)
 
-[本页原始双次结果](../../../research/evidence/changes/TASK-20260911-SCOPEGAUGE-SEMANTIC-CONTRACT-017/runs/2026-09-11T16-32-29-192Z-100-results.json)
 
 <a id="zh20b_01"></a>
 ## ZH20B_01 · 长租车辆续约催收（良定闭环基准）

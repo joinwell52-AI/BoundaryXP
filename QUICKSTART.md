@@ -1,56 +1,47 @@
-# 界痕 · BoundX：下载包首次使用
+# BoundX 快速开始 / Quick Start
 
-> 独立仓库迁移说明：本页保留旧便携包的使用记录，不表示新的 BoundX 仓库已有 Release。运行当前源码请先看 [README 的独立运行步骤](README.md#独立仓库与源码运行)；ADMIN Python 依赖需单独安装，不包含在旧 Node 便携运行时中。
+当前使用方式为独立仓库源码运行，暂无可下载的正式 Release 或 npm/PyPI 包。
 
-**1.2.0-preview.1 新界面：双击 `start-ui.cmd`，按页面三步操作。** 详见[界面使用指南](docs/UI-GUIDE.md)。以下无图形界面的描述和步骤记录 1.1.0-preview.1；该旧包不会自动获得新入口。
+The supported setup is the standalone source checkout. No public release or package is currently available.
 
-这是 Windows x64 独立便携工具，包含 Node.js 运行时，不需要安装 Node、npm、CodeFlowMu 或提供 API key。它没有图形操作界面，不自动读取你的项目。
+## 1. 安装 / Install
 
-## 另一台电脑怎样使用
-
-1. 登录有权访问私有仓库的 GitHub 账号，从 BoundX 预览 Release 下载 ZIP 和 SHA256SUMS.txt。
-2. 完整解压到一个新目录，例如 `D:\Tools\BoundX`，不要只复制 CMD 或 node.exe。
-3. 双击 `demo.cmd` 查看 D044 任务分解案例；看到 input_gap 是示例的预期发现，不是启动失败。
-4. 自己的任务须先由人工或助手整理为 JSON。打开终端进入解压目录，运行：
+准备 Node.js 22.18+ 与 Python 3.10+，进入 `D:\boundx`：
 
 ```text
-bx.cmd task examples\task.json
-bx.cmd decomposition examples\decomposition-d044.json
-bx.cmd decomposition D:\tasks\my-plan.json
-self-test.cmd
+npm ci
+python -m venv .venv
+.venv\Scripts\python.exe -m pip install -r python/requirements.txt
 ```
 
-计算结果输出到终端，可重定向保存。边界发现属于正常结果，退出码 0 不代表任务通过；输入错误返回非零退出码。原文映射要求、数学原理和完整案例见 `docs/DECOMPOSITION.md`。JSON 字段不因中文展示而改变。
+Linux/macOS 使用 `.venv/bin/python`。需要联网安装依赖；完成后 ADMIN 本地计算不调用模型或远端 API。
 
-## 接入支持 MCP 的 AI 助手
+## 2. 启动 / Start
 
-在助手的 MCP 配置中添加一个 stdio 服务。不同助手的界面或配置文件入口由该助手决定；以下为常见 mcpServers 配置片段，路径改为你的实际解压目录：
-
-```json
-{
-  "mcpServers": {
-    "boundx": {
-      "command": "D:\\Tools\\BoundX\\runtime\\node.exe",
-      "args": ["D:\\Tools\\BoundX\\mcp.mjs"]
-    }
-  }
-}
+```text
+npm run ui
 ```
 
-工具包括原任务检查、规划检查、分解契约检查和回应核对。助手负责准备输入、调用与展示；是否自动调用取决于宿主。命令不需要 API key，但宿主助手本身的模型服务可能需要它自己的订阅或凭据。本包不配置或消费这些服务。
+也可以双击 `start-ui.cmd`。请保持启动进程运行，并使用它输出的本机地址。不要直接双击 `ui/index.html`。
 
-## CodeFlowMu 怎样使用
+详见 [界面指南](docs/UI-GUIDE.md)。ADMIN 可直接检查中文或英文任务；原文、未明确项和计算建议分别保留，不会自动批准或执行任务。
 
-CodeFlowMu 仓库源码已有界痕适配，但这不等于另一台电脑已安装的 CodeFlowMu 包含它。这个独立包不是 CodeFlowMu 安装程序，也不会替换或自动注册到 CodeFlowMu。已有源码适配可供 ADMIN 本地命令行与 PM 工具使用；新增分解接口尚未自动挂载到其专用 PM 工具。
+## 3. CLI 与 MCP / CLI and MCP
 
-独立使用本包无需下载 CodeFlowMu 源码。在现有 CodeFlowMu 内直接使用，则需要一个明确包含界痕及适配的新版 CodeFlowMu 安装包，或由开发人员在源码工作区构建接入；本次下载不提供该安装包，也不要求普通用户自行编译。
+```text
+node cli.mjs task examples/task.json --locale=zh-CN
+node cli.mjs task examples/task.json --locale=en
+node cli.mjs decomposition examples/decomposition-d044.json
+npm run mcp
+```
 
-如只想先使用分解计算，可独立运行本包，把结果交给 PM 核查。若要在任务创建、规划、派单时自动调用，需完成 CodeFlowMu 适配开发，不能靠下载本包自动获得。完整说明见仓库的 `docs/engineering/BOUNDX.md`。
+CLI 接收结构化示例，不是任意自然语言文本。MCP 通过标准输入输出服务，由调用宿主配置启动；不自动注册到其他应用，也不授予宿主权限。产品接口与 BXP 参考计算器的输入合同不同，见 [分解接口](docs/DECOMPOSITION.md) 和 [协议实现说明](protocol/IMPLEMENTATION.md)。
 
-## 更新、校验与范围
+## 4. 核对结果 / Review results
 
-新版本解压到新目录，保留旧目录和自己的任务数据；确认后再调整 MCP 路径。回滚时切回旧目录。本包无常驻服务，不写注册表、不改系统 PATH、不升级已有 CodeFlowMu，不保存会话和业务授权。
+- 明确区分原文证据、已计算冲突与未明确项。
+- 建议不是授权；核对基线不是组织审批。
+- 可选 PM 模型功能需要自行配置服务，不属于 ADMIN 本地计算。
+- 文件变更后重新检查，不把上一次结果套用到新任务。
 
-可以用 Windows 命令 `certutil -hashfile BoundX-1.1.0-preview.1-win-x64.zip SHA256` 与 Release 的 SHA256SUMS.txt 比较。ZIP 内的 FILES.sha256 记录每个有效负载文件的摘要，BUILD.json 记录来源提交和运行时版本。
-
-当前是内部预览版，原文到符号仍由调用方映射。无异常不等于理解正确，建议不是授权，回复不是裁决。尚未实际在第二台物理电脑验证；本轮使用独立解压目录和内置运行时验证。
+[产品首页](README.md) · [产品手册](docs/BOUNDX-PRODUCT-MANUAL.md) · [本地验证](docs/VALIDATION.md)

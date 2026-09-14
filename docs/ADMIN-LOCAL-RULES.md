@@ -72,4 +72,4 @@ This is finite contextual rule evaluation, not general semantic disambiguation. 
 
 成对案例覆盖中英文原句与定义后文本，并检查微服务/质量/常量误报、无关数字、占位符、否定表述、中英混写、原句位置、输入不变和确定性。工程测试不能替代真实用户语料上的精确率与召回率测量。
 
-Evidence: `research/evidence/changes/TASK-20260911-SCOPEGAUGE-RULES-008` in the parent repository.
+Validation commands and scope: [Validation](VALIDATION.md).

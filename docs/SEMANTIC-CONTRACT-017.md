@@ -130,7 +130,7 @@ $$\Delta_{all}=I\setminus(U\cup Q\cup E)$$
 
 后续补充的中文数字、角色精度、长文本作用域、条件保留和伪槽位回归也纳入测试。最终 Python 测试方法为 87 个；完整测试与 100 号用例主集、20 个中文数字变体的实际观察见 [用户用例测试报告](USER-CASES-017.md)。测试方法通过不等于这些自由文本已完整支持。
 
-浏览器中英切换、角色解释折叠、扣款原文均实际核对。扣款页面显示 `[200,+inf) ∩ (-inf,150) = ∅ CNY` 和具体建议。完整运行和初始失败见 [017 证据包](../../research/evidence/changes/TASK-20260911-SCOPEGAUGE-SEMANTIC-CONTRACT-017/)。本轮没有统计准确率或毫秒级性能保证。
+浏览器中英切换、角色解释折叠、扣款原文均实际核对。扣款页面显示 `[200,+inf) ∩ (-inf,150) = ∅ CNY` 和具体建议。本轮没有统计准确率或毫秒级性能保证。
 
 ## 6. 使用与源码
 
@@ -150,7 +150,7 @@ $$\Delta_{all}=I\setminus(U\cup Q\cup E)$$
 仓库根目录复现：
 
 ```sh
-boundx/.venv/Scripts/python.exe -X utf8 -m unittest discover -s boundx/python -p "test_*.py"
+.venv/Scripts/python.exe -X utf8 -m unittest discover -s python -p "test_*.py"
 npm run test:ui --prefix boundx
 npm test --prefix boundx
 ```

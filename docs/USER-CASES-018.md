@@ -2,7 +2,7 @@
 
 本轮修复了单位漏识别、同一指标上下界未合并、角色名称误切和对象截短。新增用例 101—120 已纳入原文回放。**这批复杂文本仍是部分支持，不能说 20 条均已通过语义验收。**
 
-产品源码为 `1.2.1-preview.1`；本轮没有生成新下载包。ADMIN 在本机运行 Python，不调用 AI。工作范围仍是原始任务边界，不是 PM 分工裁决。
+ADMIN 在本机运行 Python，不调用 AI；本页为局部用例说明，当前版本及回归范围见 [验证说明](VALIDATION.md)。
 
 ## 先看算出了什么
 
@@ -58,17 +58,17 @@
 
 最终检查：105 个 Python 测试方法、127 个 UI/实际适配器/服务测试、21 个核心测试通过；修改的 JS 语法检查通过。Python 测试包含改动数值、改变开闭端点、不同对象/单位/WP、SI 大小写、中文数字、长对象和角色名称等反例。测试中发现的失败与中间回放均保留，未只挑选最终成功日志。
 
-完整协议、命令、失败、基线和原始返回值位于 [018 变更证据包](../../research/evidence/changes/TASK-20260912-SCOPEGAUGE-QUANTITY-BINDING-018/manifest.json)。本轮只适用于变更检查，不代表安装包发布或生产门禁验收。
+本轮只适用于变更检查，不代表安装包发布或生产门禁验收。
 
 ## 如何复现
 
 安装与本地启动见 [Python ADMIN 安装说明](ADMIN-PYTHON-011.md)。在仓库根目录，Windows 可运行：
 
 ```text
-boundx\.venv\Scripts\python.exe -X utf8 -m unittest discover -s boundx/python -p test_*.py
-node --test boundx/ui/*.test.mjs
-node --test boundx/src/__tests__/*.test.ts
-node boundx/ui-server.mjs --open
+.venv\Scripts\python.exe -X utf8 -m unittest discover -s python -p test_*.py
+node --test ui/*.test.mjs
+node --test src/__tests__/*.test.ts
+node ui-server.mjs --open
 ```
 
 在 ADMIN 入口粘贴原文并点击本地检查。页面选择中文或 English；不需要配置模型。用例 102 的提示是待确认的关系与计算，输入原文和禁止项不会被自动改写。

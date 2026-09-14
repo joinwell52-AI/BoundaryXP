@@ -12,7 +12,7 @@
 
 模型为 `doubao-seed-2-0-pro-260215`，六份返回均核对了模型名称。使用本机 `.env` 配置直连 Ark Responses API，`thinking=disabled`，每次最多输出 4000 tokens，无失败自动重试。附加角色说明明确：PM 协调并汇报，DEV、QA、OPS 可执行；EVAL 独立，仅 ADMIN 可授权。要求输出派单、依赖、交付物、验收与根收口条件，**没有要求固定拆成三个任务**。
 
-本轮是模型生成的拟议规划。没有向实际团队派单，没有运行 CodeFlowMu 巡检，没有给模型工具权限，没有修改产品。当前配置的豆包执行引擎为 Codex，但本轮走直连 API，未经过 Codex 循环，不能当作在线 PM 的端到端结果。未提供仓库、FCoP 定义、SKILLS 清单或角色文件；因此术语理解偏差可能来自上下文不足。
+本轮是模型生成的拟议规划。没有向实际团队派单，没有执行宿主巡检，没有给模型工具权限，没有修改产品。当前配置的豆包执行引擎为 Codex，但本轮走直连 API，未经过 Codex 循环，不能当作在线 PM 的端到端结果。未提供仓库、FCoP 定义、SKILLS 清单或角色文件；因此术语理解偏差可能来自上下文不足。
 
 每份初始答卷追加同一段提醒，保留其原答卷为历史：
 
@@ -94,11 +94,7 @@ $$
 
 本轮只取 3 组作为有界探索，未做模型可靠率推断，也未执行跨模型同条件对照。没有设置随机种子或 temperature，thinking 关闭，不能外推到其他采样配置。语义标注由本次执行者完成，未经过独立人工复核。
 
-- [全部原始答卷、请求、投影与计算输出](../../research/evidence/changes/TASK-20260910-DOUBAO-PM-008/runs/)
-- [初始协议](../../research/evidence/changes/TASK-20260910-DOUBAO-PM-008/protocol.md) · [提醒协议追加](../../research/evidence/changes/TASK-20260910-DOUBAO-PM-008/protocol-v2.md)
-- [汇总数据及第一组反例](../../research/evidence/changes/TASK-20260910-DOUBAO-PM-008/runs/analysis.json)
-- [离线分析代码](../../research/evidence/changes/TASK-20260910-DOUBAO-PM-008/runs/analyze.mjs)
 
-离线核验不读取密钥、不调用 API。在仓库根运行 `node research/evidence/changes/TASK-20260910-DOUBAO-PM-008/runs/verify.mjs`，会重新计算八份投影、核对输出与源文件哈希，不覆盖历史证据。`runs/run.py` 与 `runs/feedback.py` 是收费采样脚本，不要为检查计算结果重复执行。
+计算结果的核对请使用 [本项目验证入口](VALIDATION.md)，不要为验证数学计算重复付费模型调用。
 
-本文是仓库新增研究报告，不表示已经打包进此前发布的 1.1.0-preview.1 便携 ZIP，也没有更改 CodeFlowMu 在线行为。
+本文的拟议规划示例不代表当前产品的线上执行或模型可靠率。

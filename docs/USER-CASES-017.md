@@ -42,30 +42,9 @@
 
 原理、公式和对应源码见 [017 语义契约实现](SEMANTIC-CONTRACT-017.md)。这些是有覆盖范围的规则与文法，仍不能无损理解任意自然语言。
 
-## 实际验证记录
+## 验证方式
 
-测试日期：2026-09-12（Asia/Shanghai）。基线：`9980a08dc2604b7f7b6b19274c91ba2a753cbb6e`；执行代码另有 SHA-256 清单，最终候选提交见证据包 manifest。
-
-| 检查 | 实际结果 | 能说明什么 |
-| --- | --- | --- |
-| Python 自动化 | 87 个测试方法通过 | 已编写的正反例与回归断言成立 |
-| UI、适配器和服务自动化 | 123 项通过 | 现有接口与呈现回归通过 |
-| 产品核心自动化 | 21 项通过 | 既有核心测试没有回归失败 |
-| 三个受影响 JS 文件语法检查 | 3 项通过 | 语法检查通过；不是浏览器功能测试的替代 |
-| 120 条原文各运行两次 | 120 对结构化结果相等 | 本环境、本实现、本输入的重复结果一致；不是 100% 语义准确率 |
-| 120 条原文的证据切片 | 7,274 次引用，0 次 UTF-16 对齐错误 | 原句位置可复核；重复引用不算独立样本 |
-| 120 条原文数值记录 | 192 条 | 观察计数；未宣称全部指标、单位和守卫绑定正确 |
-| 016 固定十例，另行运行两次 | 10 对相等；979 次引用零偏移错误；关键既有异常代码保留 | 原有已支持的扣款、节点名单、退款守卫、WP 文件缺口等没有丢失 |
-
-早期中文数字版 20 条在本轮初始实现中未取得数值谓词，修复后相同原文取得 30 条。长文本 82 号从一个平铺任务变为两个明确 WP。这些有前后运行记录；不将它们外推成自然语言精确率或召回率。
-
-- [完整变更证据与协议](../../research/evidence/changes/TASK-20260911-SCOPEGAUGE-SEMANTIC-CONTRACT-017/)
-- [前五批原文双次返回值](../../research/evidence/changes/TASK-20260911-SCOPEGAUGE-SEMANTIC-CONTRACT-017/runs/2026-09-11T16-32-29-192Z-100-results.json)
-- [81—100 号双次返回值](../../research/evidence/changes/TASK-20260911-SCOPEGAUGE-SEMANTIC-CONTRACT-017/runs/2026-09-11T16-31-11-717Z-tail20-results.json)
-- [逐例观察表 CSV](../../research/evidence/changes/TASK-20260911-SCOPEGAUGE-SEMANTIC-CONTRACT-017/runs/final-case-observations.csv)
-- [实际执行源码哈希](../../research/evidence/changes/TASK-20260911-SCOPEGAUGE-SEMANTIC-CONTRACT-017/runs/final-v6-execution-source-hashes.json)
-
-CSV 中的 `partial` 表示“没有完成全文语义认证”，不是把每条都标成同一种业务错误。`fields_with_candidates_not_accuracy` 只记录出现了哪些字段，不能算作完备度分数。
+本文的用例表用于说明支持范围，不作为当前完整回归结果。可重复命令见 [验证说明](VALIDATION.md)。
 
 ## 最新长文本与 90—100 号仍有哪些缺口
 
@@ -91,7 +70,7 @@ CSV 中的 `partial` 表示“没有完成全文语义认证”，不是把每�
 | 99 | 1200 秒及部分读操作已识别；自由句式的版本依据仍漏识别。本产品没有调用 UD 模型，不能标成“依存解析通过”。 |
 | 100 | 300 秒、3 次、60 秒，以及“超过一亿元”的过滤值已取得；长审批守卫未进入完整 Z3 相容性证明。 |
 
-最终浏览器另行构造的英文角色样例也保留了负面结果：`Calls per second shall not exceed 5` 的前置指标没有绑定速率单位，`Generating summary.json is the completion condition` 没有提取出 C。已有后置单位和完成句式的测试通过，不代表覆盖这些词序；详见 [浏览器复核](../../research/evidence/changes/TASK-20260911-SCOPEGAUGE-SEMANTIC-CONTRACT-017/browser-review.md)。
+最终浏览器另行构造的英文角色样例也保留了负面结果：`Calls per second shall not exceed 5` 的前置指标没有绑定速率单位，`Generating summary.json is the completion condition` 没有提取出 C。
 
 “未检出”是这版抽取/绑定能力的缺口。它不等于原文没有问题，也不能通过把参考答案中的 IR 作为输入来消除。
 

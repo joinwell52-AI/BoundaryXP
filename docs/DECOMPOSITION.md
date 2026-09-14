@@ -1,6 +1,6 @@
 # 界痕 · BoundX：任务分解计算使用手册
 
-本轮交付：`decomposition/v1` 独立计算接口。它检查 PM 的任务分解契约，供负责人核查，不创建任务、不修改规划、不裁决。函数、CLI 和通用 MCP 已接入；CodeFlowMu 自动触发及其 PM 专用工具适配仍由 CodeFlowMu 单独开发。
+本轮交付：`decomposition/v1` 独立计算接口。它检查 PM 的任务分解契约，供负责人核查，不创建任务、不修改规划、不裁决。函数、CLI 和通用 MCP 已接入；自动触发及专用工具适配由各宿主负责。
 
 ## 一、功能
 
@@ -101,8 +101,8 @@ $$
 从产品根执行：
 
 ```text
-node boundx/cli.mjs decomposition boundx/examples/decomposition-d044.json
-node boundx/mcp.mjs
+node cli.mjs decomposition examples/decomposition-d044.json
+node mcp.mjs
 ```
 
 MCP 工具名为 `bx_review_decomposition`，调用参数为 `{"input":完整输入对象}`。启动 MCP 后由支持标准输入输出 MCP 的宿主调用；不是在终端输入自然语言。该新接口解释建议目前为中文，不接受 locale；已有任务/规划接口的中英文行为保持不变。
@@ -110,7 +110,7 @@ MCP 工具名为 `bx_review_decomposition`，调用参数为 `{"input":完整输
 函数调用：
 
 ```javascript
-import { reviewDecomposition } from './boundx/src/index.ts';
+import { reviewDecomposition } from './src/index.ts';
 const result = reviewDecomposition(input);
 ```
 
@@ -139,6 +139,6 @@ const result = reviewDecomposition(input);
 
 ## 六、验证与限制
 
-本轮测试覆盖反例、可选分支、环境关系、空真、未分配要求、输入错位、循环、非法输入和布尔真值表；另有 D044 人工投影与修正对照、CLI/MCP 进程调用及既有内核回归。实际结果见 [变更证据](../../research/evidence/changes/TASK-20260910-SCOPEGAUGE-DECOMPOSITION-003/conclusion.md)。
+本轮测试覆盖反例、可选分支、环境关系、空真、未分配要求、输入错位、循环、非法输入和布尔真值表；另有 D044 人工投影与修正对照、CLI/MCP 进程调用及既有内核回归。
 
 这些是计算与接口测试，不是新增 PM 模型实验，不证明提醒能改善真实 PM 表现。尚未计算资源调度、预算最优、完整动作权限、时序可达性、全部自然语言歧义或全部研究案例；既有动作检查应与本接口配合使用。

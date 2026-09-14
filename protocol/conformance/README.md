@@ -27,7 +27,7 @@ node --test protocol/conformance/*.test.mjs
 
 ## 维护
 
-`build-suite.mjs` 默认只比较，不改写冻结预期；有差异会失败。只有显式 `--candidate` 才写入独立的 `bxp-calc-v1.0.candidate.json`。候选输出不自动成为规范，必须结合修订说明、人工推导的关键断言和完整 JSON Diff 评审，之后显式纳入版本管理。旧 `0.2`/draft.1 资产保存在 Git 基线 `1f51445`，不得把旧测试结果冒充当前验证。
+`build-suite.mjs` 默认只比较，不改写冻结预期；有差异会失败。只有显式 `--candidate` 才写入独立的 `bxp-calc-v1.0.candidate.json`。候选输出不自动成为规范，必须结合修订说明、人工推导的关键断言和完整 JSON Diff 评审，之后显式纳入版本管理。验证必须针对当前源码与对应版本套件重新运行。
 
 新增 `hardening-cases.mjs` 的结论与关键值是手写断言，不取自 `evaluateTask`；生成器会先核对这些断言再输出候选。`hardening.test.mjs` 还覆盖双语投影、Unicode、签名外的内容摘要、整数取整、极值进位、AST 限额、顺序与维护工具只读行为。旧 176 条和新完整结果仍由参考实现生成，**不是第二个独立实现的互操作证明**；未做双人语义标注，不是抽取金标。
 

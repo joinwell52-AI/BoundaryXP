@@ -1,6 +1,6 @@
 # 界痕：七参数与一个简单任务的计算结果
 
-本页使用现有计算内核实际运行，未修改算法。样例演示不是新的模型实验；现有下载包未覆盖，本页及原始输出是后补的仓库文档。
+本页用结构化样例解释计算内核。示例不是模型实验或发布记录；可按下方命令在独立项目根目录复跑。
 
 ## 1. ADMIN 写下任务
 
@@ -25,14 +25,9 @@
 源码目录中执行：
 
 ```text
-node boundx/cli.mjs task boundx/examples/task.json
+node cli.mjs task examples/task.json
 ```
 
-便携包目录中执行同一输入：
-
-```text
-bx.cmd task examples\task.json
-```
 
 程序实际返回 **3 条 parameter_unmapped**：
 

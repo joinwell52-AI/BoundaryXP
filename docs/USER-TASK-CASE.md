@@ -12,7 +12,6 @@
 
 PM 材料取自之前 `pm-decomposition-45-v1` 的 `original` 条件答卷 D014。原实验要求模型给出拟议派单，明确不执行，且提供了 EVAL 由 ADMIN 独立授权的角色规则。它是模型实际生成的任务拆分文本，不是实际产品运行事故。
 
-[原始 D014 答卷](../../research/evidence/changes/TASK-20260910-SCOPEGAUGE-USER-CASE-006/runs/source.json) · [来源摘要与映射限制](../../research/evidence/changes/TASK-20260910-SCOPEGAUGE-USER-CASE-006/runs/provenance.json) · [原实验协议](../../research/evidence/changes/TASK-20260910-SCOPEGAUGE-USER-CASE-006/runs/study-protocol.json)
 
 ## 二、ADMIN 入口：七参数的真实检查
 
@@ -137,11 +136,11 @@ $$
 从仓库根运行：
 
 ```text
-node boundx/cli.mjs task boundx/docs/examples/user-task/admin-input.json
-node boundx/cli.mjs decomposition boundx/docs/examples/user-task/pm-input.json
-node boundx/cli.mjs decomposition boundx/docs/examples/user-task/control-input.json
+node cli.mjs task docs/examples/user-task/admin-input.json
+node cli.mjs decomposition docs/examples/user-task/pm-input.json
+node cli.mjs decomposition docs/examples/user-task/control-input.json
 ```
 
-独立便携包用户可下载上述三个输入文件，以 `bx.cmd task 文件路径` 或 `bx.cmd decomposition 文件路径` 复跑。此案例为分发后新增文档，原 ZIP 未覆盖，包内尚无这些新文件。
+上述输入文件均在本项目内，使用源码 CLI 复跑；当前不提供公开便携下载包。
 
-实际命令、退出码、原始答卷摘要和断言结果见 [本轮证据包](../../research/evidence/changes/TASK-20260910-SCOPEGAUGE-USER-CASE-006/conclusion.md)。产品功能总览见 [FUNCTIONS.md](FUNCTIONS.md)。
+产品功能总览见 [FUNCTIONS.md](FUNCTIONS.md)。

@@ -4,7 +4,6 @@
 
 [返回本轮测试说明](../USER-CASES-017.md)
 
-[本页原始双次结果](../../../research/evidence/changes/TASK-20260911-SCOPEGAUGE-SEMANTIC-CONTRACT-017/runs/2026-09-11T16-32-29-192Z-100-results.json)
 
 <a id="case_61"></a>
 ## CASE_61 · 跨国车联平台 OTA 任务下发（中英混合良定闭环）

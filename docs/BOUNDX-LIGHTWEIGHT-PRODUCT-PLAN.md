@@ -1,12 +1,12 @@
 # BoundX 轻量产品与发布方案
 
 文档编号：`BX-PRODUCT-PLAN-001`  
-版本：`0.1.0-draft.2`  
+版本：`0.1.0-draft.3`\
 状态：`DRAFT_FOR_REVIEW`  
 决定权：ADMIN  
 公开授权：`false`  
 
-> 本文件只确定 BoundX 作为轻量工具的产品方向与首版交付范围。它记录定稿后建立独立 BoundX 开源仓库并采用 GNU AGPL v3 的决定，但当前提交不改变 `codeflowmu` 许可证、不创建公开仓库、不发布 PyPI/npm 包，也不授权生产环境自动执行。
+> 本文件定义独立 BoundX 产品的交付方向。仓库 `joinwell52-AI/BoundX` 已建立并保持私有；暂无公开 Release 或 npm/PyPI 包。拟议的 AGPL 发布许可尚未生效，当前许可证以根目录 LICENSE 为准。本文不授权生产环境自动执行。
 
 完整产品定义、五种集成入口、语义包和 FDE 落地合同见 [《界痕（BoundX）产品手册》](BOUNDX-PRODUCT-MANUAL.md)。如本方案与产品手册发生产品形态差异，以产品手册的部署中立定义为准。
 
@@ -157,13 +157,11 @@ Demo 用于让用户五分钟理解产品，不包含真实客户规则，也不
 
 ## 6. 最省心的开源方案
 
-### 6.1 首版采用 GNU AGPL v3
+### 6.1 发布许可提案：GNU AGPL v3
 
-CodeFlowMu 根仓库当前采用 MIT License，但 BoundX 产品手册讨论定稿后将拆分为独立开源仓库。独立 BoundX 仓库采用 GNU Affero General Public License v3.0，许可证标识暂定为 SPDX `AGPL-3.0-only`。
+BoundX 已作为独立产品维护，当前根目录 [LICENSE](../LICENSE) 为 MIT。拟议公开版本采用 GNU AGPL v3（候选 SPDX `AGPL-3.0-only`），这仍是未生效提案，而不是当前许可证。
 
-AGPL 仍允许依法使用、修改、分发和商业化代码；修改版本通过网络向用户提供服务时，还要履行相应源码提供义务。实际发布前必须确认迁移文件权属、依赖兼容性、版权声明和完整许可证文本。
-
-本决定不把当前整个 `codeflowmu` 仓库改成 AGPL。独立仓库只迁移权属清晰并进入公开清单的 BoundX 资产；客户 L3、商业语义包、密钥、真实工单和内部证据不得公开。商业 Pack 以声明式数据和稳定 Pack 合同为边界，具体组合与分发方式在首发前另行完成许可证核对。
+公开前须核对资产权属、依赖兼容性、版权声明及完整许可证文本，并取得明确批准。客户 L3、商业语义包、密钥、真实工单和未授权材料不得公开。商业 Pack 的组合与分发方式需另行核对。
 
 ### 6.2 首次公开范围
 
@@ -214,7 +212,7 @@ pip install boundx
 bx serve
 ```
 
-首屏不使用“行业事实标准”“全球协议”“数学证明一切安全”“100% 防事故”等表述。可以如实说明：结构化计算已有 176 条一致性向量，但自然语言抽取能力必须单独评测。
+首屏不使用“行业事实标准”“全球协议”“数学证明一切安全”“100% 防事故”等表述。可以如实说明：结构化计算已有 208 条一致性向量，但自然语言抽取能力必须单独评测。
 
 ## 8. 四个公开前检查
 
@@ -271,7 +269,7 @@ release_created: false
 ```yaml
 decision_record: BX-LIGHTWEIGHT-ADOPTION-<date>
 document: BX-PRODUCT-PLAN-001
-document_version: 0.1.0-draft.2
+document_version: 0.1.0-draft.3
 D01: <decision>
 D02: <decision>
 D03: <decision>
