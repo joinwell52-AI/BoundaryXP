@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { existsSync } from 'node:fs';
+import { existsSync, rmSync } from 'node:fs';
 import { callCursor, cursorModels } from '../product/cursor-provider.mjs';
 import { interruptible } from '../product/interruptible.mjs';
 
@@ -53,4 +53,30 @@ test('Cursor rejects cancelled requests before contacting the SDK', async () => 
   const controller = new AbortController();controller.abort();
   await assert.rejects(callCursor({ key: 'secret', model: 'model' }, [], { signal: controller.signal,
     sdkLoader: async () => { assert.fail('SDK must not be loaded'); } }), { name: 'AbortError' });
+});
+
+for (const success of [true, false]) test(`Windows workspace cleanup cannot mask ${success ? 'completed output' : 'sanitized provider failure'}`, async () => {
+  let directory;
+  const sdkLoader = async () => ({ Cursor: { models: { list: async () => [{ id: 'test-model' }] } },
+    Agent: { create: async options => {
+      directory = options.local.cwd;
+      return { close() {}, send: async () => {
+        if (!success) throw Error('private-sdk-error');
+        return { wait: async () => ({ status: 'finished', result: 'OK', model: { id: 'test-model' } }) };
+      } };
+    } } });
+  const removeWorkspace = async (path, options) => {
+    assert.equal(path, directory);
+    assert.equal(options.maxRetries, 3);
+    throw Object.assign(Error('private-path EPERM'), { code: 'EPERM' });
+  };
+  try {
+    const request = callCursor({ key: 'test-secret', model: 'test-model' }, [], { sdkLoader, removeWorkspace });
+    if (success) {
+      const result = await request;
+      assert.equal(result.text, 'OK');
+      assert.deepEqual(result.warnings, ['CURSOR_WORKSPACE_CLEANUP_INCOMPLETE']);
+      assert.equal(JSON.stringify(result).includes('private-path'), false);
+    } else await assert.rejects(request, error => /Cursor request failed/.test(error.message) && !/private|EPERM/.test(error.message));
+  } finally { if (directory) rmSync(directory, { recursive: true, force: true }); }
 });

@@ -13,6 +13,11 @@ This checkpoint supplements, rather than rewrites, the taskbook and historical r
 - [草稿比较器](../ADMIN-DRAFT-SCORING.md)已支持多答案分开比较、失败分母、重复预测及关系差异；仍不是最终冻结评分器。
 - [批量比较](../ADMIN-BATCH-COMPARISON.md)已支持固定150个运行位置、运行器原始记录输入和逐语言/测试类别统计；不等于逐行业覆盖或正式语义准确率。
 - API及Cursor接入已有代码，三层报告和唯一Core已接通；不以此宣称Codex登录通道可用。
+- [固定复测审计](../ADMIN-REPEAT-AUDIT.md)已加入30组配对和同候选本地回放；缺失、模型/上下文变化与模拟运行分别报告，不替代真实验收。
+
+2026-09-15实际Cursor连接检查：现有64285进程成功返回40个模型；一次Auto连接生成请求返回Windows临时目录EPERM。清理错误掩盖调用结果的问题已增加有界重试和回归修复，但旧进程未加载新代码，不能宣称实际生成已成功。当前开发进程及本仓库.env均无Cursor密钥，不从旧进程内存或其他仓库提取。
+
+The existing preview returned forty Cursor models, but an Auto generation connection check failed with a Windows temporary-directory EPERM. Cleanup now has bounded retries and cannot mask the primary result; the existing process has not loaded this fix. Live generation is not yet verified. No credentials are extracted from another process or repository.
 
 The fixed safety matrix, setup builder, bounded runner and L2 candidate pipelines are implemented. API/Cursor transports exist. None substitutes for actual Host generation or gold review.
 

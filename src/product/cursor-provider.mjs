@@ -1,4 +1,5 @@
-import { mkdtempSync, rmSync } from 'node:fs';
+import { mkdtempSync } from 'node:fs';
+import { rm } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { interruptible } from './interruptible.mjs';
@@ -14,9 +15,10 @@ export async function cursorModels(key, { sdkLoader = loadSdk, signal } = {}) {
   } catch { throw Error('Cursor模型列表读取失败；请检查密钥、网络及账号权限。 / Cursor model catalog unavailable.'); }
 }
 
-export async function callCursor(config, messages, { signal: callerSignal, sdkLoader = loadSdk } = {}) {
+export async function callCursor(config, messages, { signal: callerSignal, sdkLoader = loadSdk, removeWorkspace = rm } = {}) {
   const signal = callerSignal ? AbortSignal.any([callerSignal, AbortSignal.timeout(180000)]) : AbortSignal.timeout(180000);
-  let agent, run, directory;
+  let agent, run, directory, output;
+  const warnings = [];
   const cancel = () => { if (run) void run.cancel().catch(() => {}); };
   try {
     signal?.throwIfAborted();
@@ -35,13 +37,18 @@ export async function callCursor(config, messages, { signal: callerSignal, sdkLo
     signal?.throwIfAborted();
     if (result.status !== 'finished' || typeof result.result !== 'string' || !result.result.trim()
       || Buffer.byteLength(result.result) > 2_000_000) throw Error('Incomplete output');
-    return { text: result.result, model: result.model?.id ?? config.model, usage: result.usage ?? null };
+    output = { text: result.result, model: result.model?.id ?? config.model, usage: result.usage ?? null };
   } catch {
     if (signal?.aborted) throw new DOMException('Cancelled', 'AbortError');
     throw Error('Cursor调用未完成；请检查连接、模型权限或额度。未自动重试。 / Cursor request failed; no automatic retry.');
   } finally {
     signal?.removeEventListener('abort', cancel);
-    if (agent) { try { await interruptible(() => agent.close(), AbortSignal.timeout(2000)); } catch {} }
-    if (directory) rmSync(directory, { recursive: true, force: true });
+    if (agent) { try { await interruptible(() => agent.close(), AbortSignal.timeout(2000)); } catch { warnings.push('CURSOR_CLOSE_INCOMPLETE'); } }
+    if (directory) {
+      try { await interruptible(() => removeWorkspace(directory, { recursive: true, force: true, maxRetries: 3, retryDelay: 100 }), AbortSignal.timeout(2000)); }
+      catch { warnings.push('CURSOR_WORKSPACE_CLEANUP_INCOMPLETE'); }
+    }
   }
+  if (warnings.length) output.warnings = warnings;
+  return output;
 }

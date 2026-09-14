@@ -16,6 +16,10 @@ The key comes from page memory or the server environment. Never commit credentia
 
 An isolated Cursor session uses an empty temporary workspace with no built-in tools and MCP/task/shell disabled. Text candidates enter the existing validator and sole Core. SDK session storage is distinct from BoundX prepared snapshots; SDK records may persist in its own storage. Calls may incur model usage charges; no rule-extraction fallback is used.
 
+Windows目录清理遇到EPERM/占用时，最多重试3次，并设2秒等待上限；清理失败不覆盖原始模型错误，也不把成功生成改写成目录错误。传输返回CURSOR_WORKSPACE_CLEANUP_INCOMPLETE警告；不能据此宣称临时目录已删除。该重试仅用于清理，不重复模型调用。
+
+Windows workspace cleanup uses three bounded retries and a two-second wait limit. Cleanup failure cannot replace a model error or completed generation. The transport reports CURSOR_WORKSPACE_CLEANUP_INCOMPLETE rather than claiming deletion succeeded. Cleanup retries do not repeat model requests.
+
 主面板可显式选择已启用L3；服务器未设置 `BOUNDX_ALLOW_L3_DISCLOSURE=1` 时，整个模型请求在准备阶段拒绝，不静默忽略名册后继续生成。不要为真实员工数据随意开启外发；测试默认名册为虚构数据。仅披露命中身份，共享别名保留所有匹配。名册依赖的L2必须同时选择，依赖不匹配在模型调用前拒绝。
 
 The model panel supports explicit active L3 selection. Without server authorization via `BOUNDX_ALLOW_L3_DISCLOSURE=1`, the request fails before sending to the provider instead of silently ignoring the directory. Only matched identities are disclosed; shared aliases retain all matches. Selected packages must include the directory's exact dependency closure. Authorization for real employee data must be handled explicitly.
