@@ -4,6 +4,7 @@ import { readFileSync } from 'node:fs';
 import { runInNewContext } from 'node:vm';
 import { setImmediate as tick } from 'node:timers/promises';
 import { CORE_ELEMENTS } from '../src/bxp/index.mjs';
+import { packLabel } from './pack-labels.mjs';
 
 async function harness(onRequest, industries = []) {
   const elements = new Map();
@@ -22,7 +23,8 @@ async function harness(onRequest, industries = []) {
     return onRequest(input, response);
   };
   const document = { getElementById: element, querySelector: () => ({ content: 'token' }), createElement: () => ({}) };
-  await runInNewContext('(async()=>{' + readFileSync(new URL('./admin-product.mjs', import.meta.url), 'utf8') + '\n})()', { document, fetch });
+  const script = readFileSync(new URL('./admin-product.mjs', import.meta.url), 'utf8').replace("import { packLabel } from './pack-labels.mjs';", '');
+  await runInNewContext('(async()=>{' + script + '\n})()', { document, fetch, packLabel });
   return { element, click: id => element(id).handlers.click[0](), change: id => element(id).dispatchEvent({ type: 'input' }) };
 }
 

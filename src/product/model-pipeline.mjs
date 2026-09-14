@@ -9,11 +9,12 @@ export async function runAdminModel(host, input, { sendModel, fetchImpl, signal 
     assert(value && Object.keys(value).every(key => ['config', 'prepare', 'consent'].includes(key)) && value.consent === true,
       'MODEL_CONSENT', 'Confirm sending the task and permitted semantic context to the configured provider.');
     const config = value.config;
-    assert(config && Object.keys(config).every(key => ['protocol', 'url', 'model', 'key', 'disableThinking'].includes(key))
+    assert(config && Object.keys(config).every(key => ['provider', 'protocol', 'url', 'model', 'key', 'disableThinking'].includes(key))
+      && [undefined, 'api', 'cursor'].includes(config.provider)
       && typeof config.model === 'string' && config.model.trim() && config.model.length <= 256
       && typeof config.key === 'string' && config.key.trim() && config.key.length <= 16384,
       'MODEL_CONFIG', 'A bounded model ID and API key are required.');
-    resolveEndpoint(config.url, config.protocol);
+    if (config.provider !== 'cursor') resolveEndpoint(config.url, config.protocol);
     assert(!signal?.aborted, 'MODEL_ABORTED', 'Request was cancelled before extraction.');
     const prepared = host.service.prepare(value.prepare);
     stage = 'model';

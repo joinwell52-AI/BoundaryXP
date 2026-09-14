@@ -1,5 +1,15 @@
 # Codex执行回执 / Execution Receipt
 
+## 当前增量 / Current increment — Cursor与默认初始化
+
+Cursor SDK接入、动态模型目录、服务器内存凭据、双语行业名称与首次Host启动默认L1已实现；旧规则入口折叠隔离，主模型入口不静默回退。CLI包管理仍不自动启用。真实Cursor目录及受保护HTTP接口读取39个模型；真实生成验收仍为0/150，独立金标审阅0/120，Codex通道未实现。详见[Cursor接入说明](../CURSOR-CONNECTION.md)。
+
+Cursor transport, dynamic catalog, server-memory credentials, bilingual industry labels and initial default L1 are implemented. Legacy rule controls are isolated. CLI package management does not implicitly activate packages. The live catalog returned 39 models; live generation acceptance and independent gold review remain pending. Codex transport is not implemented.
+
+本次工作区Core289/289（含并行行业测试）、UI154/154、协议103/103、冻结向量208/208；本地链接94份文档278个链接无问题。新增SDK依赖后同步provenance manifest中的package.json/package-lock.json字节数与摘要，仅更新依赖来源记录，不修改协议正文、Schema或冻结向量。npm audit为0。首次默认初始化暴露CLI导入被隐式启用的问题，已将pack管理明确排除默认初始化，回归通过。
+
+Workspace tests: Core289, UI154, protocol103, frozen vectors208 passed. Dependency provenance hashes were refreshed without changing normative protocol, schemas or frozen vectors. npm audit reported zero vulnerabilities. The first bootstrap regression exposed unintended CLI import activation; package management now explicitly opts out and the regression passes.
+
 ## 模型链路增量 / Model pipeline increment — 2026-09-14
 
 原页面 `/legacy` 复用已有模型配置、连接测试及 Chat Completions / Responses 传输；新增标准面板经 `/api/admin-model` 准备上下文、严格解析模型候选、调用唯一 BXP Core 并显示三层报告。旧研究和 PM 控件仍明确为非 BXP。此入口当前使用 L1 与可选 L2，不发送 L3 职员目录；行业下拉从本地已安装包动态加载。模型请求需要明确点击，不自动重试，密钥不进入提示词或准备快照。Case Explorer 仅供查看用例。

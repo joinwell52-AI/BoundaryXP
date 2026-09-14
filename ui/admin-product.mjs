@@ -1,3 +1,4 @@
+import { packLabel } from './pack-labels.mjs';
 const element = id => document.getElementById(id);
 let prepared = null;
 let active = [];
@@ -131,7 +132,8 @@ try {
     if (reference.layer === 'L1') { if (enabled) element('l1').textContent = `L1: ${reference.pack_id}@${reference.version}`; continue; }
     if (!['L2', 'L3'].includes(reference.layer) || (reference.layer === 'L3' && !enabled)) continue;
     const option = document.createElement('option'); option.value = reference.digest;
-    option.textContent = `${reference.pack_id}@${reference.version}${enabled ? ' · 已启用 / active' : ''}`;
+    option.textContent = `${packLabel(reference)}${enabled ? ' · 已启用 / active' : ''}`;
+    option.title = `${reference.pack_id}@${reference.version}`;
     element(reference.layer === 'L3' ? 'directory' : 'industry').append(option);
   }
 } catch (error) { element('status').textContent = error.message; }

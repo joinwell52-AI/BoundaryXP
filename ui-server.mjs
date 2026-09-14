@@ -16,6 +16,7 @@ import { employeeUiAction } from './src/product/employee-ui.mjs';
 import { employeeTemplate } from './src/product/employees.mjs';
 import { industrySelection } from './src/product/selection-ui.mjs';
 import { runAdminModel } from './src/product/model-pipeline.mjs';
+import { callCursor, cursorModels } from './src/product/cursor-provider.mjs';
 const LIMIT=1_000_000;
 export function validateExtract(value,kind,text,baseline){
   const docs=kind==='task'?[value]:[value?.document,...(Array.isArray(value?.tasks)?value.tasks.map(t=>t.document):[])];
@@ -30,6 +31,8 @@ export function validateExtract(value,kind,text,baseline){
 }
 export async function callModel(config,messages,{signal,fetchImpl=fetch,maxOutputTokens=6000}={}){
   if(!config || typeof config.key!=='string' || !config.key.trim() || typeof config.model!=='string' || !config.model.trim()) throw Error('请先填写模型和 API 密钥。');
+  if(config.provider==='cursor')return callCursor(config,messages,{signal});
+  if(config.provider && config.provider!=='api')throw Error('Unsupported model provider.');
   const {url}=resolveEndpoint(config.url,config.protocol);
   const body=config.protocol==='responses' ? {model:config.model,input:messages,max_output_tokens:maxOutputTokens,stream:false,store:false} : {model:config.model,messages,max_tokens:maxOutputTokens,stream:false};
   if(config.protocol==='responses'&&config.disableThinking===true)body.thinking={type:'disabled'};
@@ -57,6 +60,7 @@ export function createApp({fetchImpl=fetch,productOptions={}}={}){
     const send=(status,data,type='application/json')=>{res.writeHead(status,{'Content-Type':type+'; charset=utf-8','Cache-Control':'no-store','X-Content-Type-Options':'nosniff','Content-Security-Policy':"default-src 'self'; script-src 'self'; style-src 'self'; connect-src 'self'; img-src 'self' data:; frame-ancestors 'none'; base-uri 'none'; form-action 'none'"});res.end(type==='application/json'?JSON.stringify(data):data);};
     if(req.headers.host!==new URL(origin).host) return send(403,{error:'仅允许本机地址访问。'});
     if(req.method==='GET'){
+      if(req.url==='/pack-labels.mjs')return send(200,readFileSync(new URL('ui/pack-labels.mjs',import.meta.url),'utf8'),'text/javascript');
       if(req.url==='/api/employee-template')return send(200,employeeTemplate(),'text/csv');
       if(req.url==='/admin'||req.url==='/admin-product.mjs') {
         const script=req.url.endsWith('.mjs');
@@ -82,7 +86,7 @@ export function createApp({fetchImpl=fetch,productOptions={}}={}){
       if(bxp)return send(200,parseAndEvaluateBxpTask(Buffer.concat(buffers)));
       if(product){
         const input=parseProductJson(Buffer.concat(buffers));
-        if(model){productHost??=createProductHost(productOptions);return send(200,await runAdminModel(productHost,input,{sendModel:callModel,fetchImpl,signal:controller.signal}));}
+        if(model){if(input.config?.provider==='cursor'&&!input.config.key)input.config.key=process.env.CURSOR_API_KEY??'';productHost??=createProductHost(productOptions);return send(200,await runAdminModel(productHost,input,{sendModel:callModel,fetchImpl,signal:controller.signal}));}
         if(selection){productHost??=createProductHost(productOptions);return send(200,industrySelection(productHost.registry,input));}
         if(employee){productHost??=createProductHost(productOptions);return send(200,employeeUiAction(productHost.registry,input));}
         if(!['bx_list_semantic_packs','bx_prepare_admin_task','bx_evaluate_admin_candidate'].includes(input.method))return send(400,{error:'Unsupported UI product operation.'});
@@ -95,11 +99,13 @@ export function createApp({fetchImpl=fetch,productOptions={}}={}){
       }
       req.url=req.url.replace('/api/legacy/','/api/');
       let data;try{data=JSON.parse(Buffer.concat(buffers).toString('utf8'));}catch{throw Error('输入不是有效 JSON。');}
+      if(data.config?.provider==='cursor'&&!data.config.key)data.config.key=process.env.CURSOR_API_KEY??'';
       if(req.url==='/api/admin-boundary')return send(200,await calculateWithLibraries(data.text,{signal:controller.signal}));
+      if(req.url==='/api/cursor-models')return send(200,{models:await cursorModels(data.key||process.env.CURSOR_API_KEY)});
       if(req.url==='/api/connection'){
         const started=Date.now();
         const output=await callModel(data.config,[{role:'user',content:'这是API连接测试，请只回复 OK。'}],{signal:controller.signal,fetchImpl,maxOutputTokens:256});
-        return send(200,{connected:true,model:output.model,usage:output.usage,elapsed_ms:Date.now()-started,checked_at:new Date().toISOString(),endpoint:resolveEndpoint(data.config.url,data.config.protocol).url});
+        return send(200,{connected:true,model:output.model,usage:output.usage,elapsed_ms:Date.now()-started,checked_at:new Date().toISOString(),endpoint:data.config.provider==='cursor'?'cursor-sdk':resolveEndpoint(data.config.url,data.config.protocol).url});
       }
       if(req.url==='/api/review'){
         const result=data.kind==='task'?reviewBoundX(data.document):reviewPlanBoundary(data.baseline,data.plan);

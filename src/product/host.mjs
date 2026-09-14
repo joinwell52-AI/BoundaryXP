@@ -4,10 +4,12 @@ import { ProducerService } from './producer.mjs';
 import { evaluateCandidate, renderThreeLayers } from './assembler.mjs';
 import Ajv2020 from 'ajv/dist/2020.js';
 import { assert, parseProductJson, packReference, prepareSchema } from './contracts.mjs';
+import { initializeDefaultL1 } from './defaults.mjs';
 
 export function createProductHost(options = {}) {
   const registry = new PackRegistry(options.root ?? process.env.BOUNDX_DATA_DIR ?? fileURLToPath(new URL('../../.boundx', import.meta.url)),
     options.tenant ?? process.env.BOUNDX_TENANT ?? 'local');
+  if (options.initializeDefaults !== false) initializeDefaultL1(registry);
   const service = new ProducerService(registry, { allowDirectoryDisclosure: options.allowDirectoryDisclosure ?? process.env.BOUNDX_ALLOW_L3_DISCLOSURE === '1' });
   return { registry, service,
     invoke(name, input = {}) {

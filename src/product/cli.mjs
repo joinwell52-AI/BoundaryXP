@@ -10,7 +10,7 @@ import { encodeArchive, withArchive } from './archive.mjs';
 import { buildEmployeeDirectory } from './employee-builder.mjs';
 
 export function productCommand(args) {
-  const host = createProductHost();
+  const host = createProductHost({ initializeDefaults: args[0] !== 'pack' });
   if (args[0] === 'pack') {
     if (args[1] === 'create-employees' && args.length >= 11) {
       const options = {};
