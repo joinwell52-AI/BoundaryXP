@@ -21,7 +21,7 @@ for(const locale of ['zh-CN','en'])test(`all six ${locale} cases plus non-BMP: C
   await new Promise<void>(resolve=>app.listen(0,'127.0.0.1',resolve));
   context.after(()=>new Promise<void>(resolve=>{app.close(resolve);app.closeAllConnections();}));
   const origin='http://127.0.0.1:'+app.address().port;
-  const html=await(await fetch(origin)).text(),token=html.match(/name="session-token" content="([a-f0-9]+)"/)![1];
+  const html=await(await fetch(origin,{headers:{Connection:'close'}})).text(),token=html.match(/name="session-token" content="([a-f0-9]+)"/)![1];
   const directory=mkdtempSync(join(tmpdir(),'boundx-e2e-')),path=join(directory,'双语 input.json');
   context.after(()=>{unlinkSync(path);rmdirSync(directory);});
   for(const variant of ['complete','b-absent','unresolved','multi-source','unresolved-scope','conflict']){
@@ -40,7 +40,7 @@ for(const locale of ['zh-CN','en'])test(`all six ${locale} cases plus non-BMP: C
     assert.equal(cli.status,0,cli.stderr);assert.deepEqual(JSON.parse(cli.stdout),expected,variant);
     const mcp=spawnSync(process.execPath,[root+'mcp.mjs'],{encoding:'utf8',input:JSON.stringify({id:1,method:'tools/call',params:{name:'bx_evaluate_task_json',arguments:{raw_json:raw}}})+'\n'});
     assert.equal(mcp.status,0,mcp.stderr);assert.deepEqual(JSON.parse(JSON.parse(mcp.stdout).result.content[0].text),expected,variant);
-    const response=await fetch(origin+'/api/bxp/evaluate',{method:'POST',headers:{Origin:origin,'Content-Type':'application/json','X-BoundX-Token':token},body:raw});
+    const response=await fetch(origin+'/api/bxp/evaluate',{method:'POST',headers:{Origin:origin,Connection:'close','Content-Type':'application/json','X-BoundX-Token':token},body:raw});
     assert.equal(response.status,200);assert.deepEqual(await response.json(),expected,variant);
   }
 });

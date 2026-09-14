@@ -74,6 +74,7 @@ Invalid BXP inputs return the canonical invalid-result envelope, not a business 
 
 - [实施授权任务书（原字节归档）](docs/tasks/BoundX-BXP-product-alignment-taskbook-v1.md)：来自提交 `a2fb068565605c0ac83ad6d6d4a973941ee270c6`，是实施时的授权快照，不是当前发布状态。 / Original authorization snapshot, not current release status.
 - [Agent 生产者指南（中英）](docs/AGENT-BXP-PRODUCER.md) · [示例索引](examples/README.md)。
+- [ADMIN验收运行器 / Acceptance runner](docs/ADMIN-ACCEPTANCE-RUNNER.md)：离线计划与显式授权运行；模拟结果不替代真实模型验收。
 - [产品手册](docs/BOUNDX-PRODUCT-MANUAL.md) · [功能](docs/FUNCTIONS.md) · [UI 指南](docs/UI-GUIDE.md) · [结果建议](docs/UI-ADVICE.md)。
 - [协议入口](protocol/README.md) · [English specification](protocol/BXP-0001.md) · [中文规范](protocol/BXP-0001.zh-CN.md) · [实现与限制](protocol/IMPLEMENTATION.md)。
 - [语义包](domain-packs/README.md) · [产品与商业规划（非交付声明）](docs/BOUNDX-LIGHTWEIGHT-PRODUCT-PLAN.md)。
