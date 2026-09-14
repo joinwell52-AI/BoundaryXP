@@ -2,7 +2,7 @@
 import { readFile } from 'node:fs/promises';
 import { createReadStream } from 'node:fs';
 import { parseAndEvaluateBxpTask, evaluateBxpTask, protocolInfo, RAW_JSON_BYTE_LIMIT } from './src/bxp/index.mjs';
-import { reviewBoundX, reviewPlanBoundary, boundaryResponseStatus, reviewDecomposition } from './src/index.ts';
+import { reviewBoundX, reviewPlanBoundary, boundaryResponseStatus, reviewDecomposition } from './src/legacy/index.ts';
 
 const argv = process.argv.slice(2);
 const locale = argv.find(value => value.startsWith('--locale='))?.slice('--locale='.length);

@@ -1,14 +1,14 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import {
-  BOUNDARY_PARAMETERS, boundaryDigest, reviewBoundX, reviewPlanBoundary,
+  LEGACY_BOUNDARY_PARAMETERS, boundaryDigest, reviewBoundX, reviewPlanBoundary,
   boundaryResponseStatus, validateBoundaryReply, type BoundaryText,
   compareBoundaryConditions,
-} from "../index.ts";
+} from "../legacy/index.ts";
 
 const text = "检查产品并向 ADMIN 提交报告；PM 负责；版本 abc；预算 1 小时；发现问题提交建议。";
 const base = (): BoundaryText => ({ text,
-  parameters: Object.fromEntries(BOUNDARY_PARAMETERS.map(k => [k, text])),
+  parameters: Object.fromEntries(LEGACY_BOUNDARY_PARAMETERS.map(k => [k, text])),
   actions: [{ actor: "PM", verb: "检查", target: "产品", quote: "检查产品" }],
   completion: [{ id: "report", quote: "向 ADMIN 提交报告" }],
 });

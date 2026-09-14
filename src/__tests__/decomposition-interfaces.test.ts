@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import { spawnSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
-import { reviewDecomposition } from '../index.ts';
+import { reviewDecomposition } from '../legacy/index.ts';
 const root = fileURLToPath(new URL('../../', import.meta.url));
 const sample = JSON.parse(readFileSync(root + 'examples/decomposition-d044.json', 'utf8'));
 test('D044 partial projection identifies scheme versus implementation; corrected guarantee removes that gap', () => {

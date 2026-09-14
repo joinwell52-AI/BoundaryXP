@@ -1,5 +1,7 @@
 # 界痕：七参数与一个简单任务的计算结果
 
+> 历史／非规范研究或产品规划（legacy / non-normative）。本文中的旧接口、原始结果和未来能力不代表当前产品合同或本轮验证；当前入口以根 README 和产品手册为准。No BXP extraction certification or execution authority is implied.
+
 本页用结构化样例解释计算内核。示例不是模型实验或发布记录；可按下方命令在独立项目根目录复跑。
 
 ## 1. ADMIN 写下任务

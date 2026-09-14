@@ -1,85 +1,78 @@
 # 界痕 · BoundX
 
-<p align="center">
-  <img src="assets/branding/v1/BoundX_Logo_EN_white.png" alt="界痕 BoundX Logo" width="320">
-</p>
+<p align="center"><img src="assets/branding/v1/BoundX_Logo_EN_white.png" alt="界痕 BoundX Logo" width="320"></p>
 
-> **执行之前，先把任务边界算清楚。**
-> Clarify task boundaries before execution.
+> 执行之前，先把任务边界算清楚。 / Clarify task boundaries before execution.
 
 ## 独立项目 / Standalone project
 
-BoundX 是独立的任务边界预检产品。唯一工作目录为 `D:\boundx`，仓库为 [joinwell52-AI/BoundX](https://github.com/joinwell52-AI/BoundX)，当前保持私有。
+BoundX 是独立的任务边界预检引擎。唯一目录 `D:\boundx`，私有仓库 [joinwell52-AI/BoundX](https://github.com/joinwell52-AI/BoundX)。产品 `1.3.0-preview.0`，固定协议 BXP-0001 `0.3.0-draft.2`，计算套件 `1.0.0-draft.3`。无公开 Release、npm/PyPI 分发或正式认证；[LICENSE](LICENSE) 保持不变。
 
-源码版本 `1.2.4-preview.1`；BXP-0001 `0.3.0-draft.2` 与 BXP-CALC `1.0.0-draft.3` 均为评审草案。当前没有 GitHub Release、npm/PyPI 分发包或正式认证。许可证以根目录 [LICENSE](LICENSE) 为准；AGPL 只是待确认的发布方案，尚未启用。
+BoundX is an independent, private preview task-boundary engine. Product, protocol and suite versions are distinct. Nothing here publishes the repository, changes its license or certifies extraction.
 
-BoundX is an independent, private task-boundary preflight product. It is not yet publicly released or certified. The repository license is authoritative; a proposed license change is not effective.
+## 立即运行 / Run now
 
-## 产品边界 / Product boundary
+Node.js 22.18+，在项目根目录运行。首个示例是完整 `boundx-task/v1`，不是旧映射对象。
+
+```text
+npm ci
+node cli.mjs evaluate examples/bxp/zh-CN-complete.json
+node cli.mjs evaluate examples/bxp/en-complete.json
+node cli.mjs protocol-info
+npm run ui
+```
+
+The CLI reads strict UTF-8 JSON and emits a full `boundx-result/v1`. Open the local URL printed by the UI server; paste or import these same task files. Python and model keys are not required for the canonical BXP path.
+
+## 产品架构 / Architecture
+
+`Agent / other producer → boundx-task/v1 → local BXP Core → boundx-result/v1 → host decision`
+
+Agent、规则或其他生产者按 7+1 形成候选 IR；BoundX 本地执行 Schema、原文证据、来源摘要、语义不变量验证和确定性计算。Core 不调用模型、不访问网络、不自动加载制度 URL。Python/Lark、词库和提示词属于生产者方法，不定义协议；BXP-EXTRACT 仍为 RESERVED。
 
 | 要素 / Element | 含义 / Meaning |
 |---|---|
 | I | 输入范围 / Input scope |
-| O | 交付结果 / Deliverables |
+| O | 交付 / Deliverables |
 | A | 动作 / Actions |
 | P | 责任主体与角色分工 / Participants |
 | R | 资源 / Resources |
 | V | 版本依据 / Version and provenance |
-| C | 完成停止 / Completion and stop conditions |
+| C | 完成停止 / Completion and stopping |
 | B | 独立禁止边界 / Independent forbidden boundary |
 
-ADMIN 任务文本使用纯本地、确定性约束提取和 Python 计算，支持中文与英文，保留原文证据。未明确项保持未明确，不因模板、置信度或默认值自动补齐。PM 的可选模型辅助功能与 ADMIN 本地计算分开。
+每桶显式 `resolved / unresolved / absent`，不能默认填齐。证据为来源 ID、原文引文及 Unicode 码点 `[start,end)`，不是浏览器字符串代码单元。
 
-计算结果是可复核的建议，不是业务裁决或执行授权。BXP 的 `business_decision` 与 `execution_authorization` 始终为 `null`。宿主系统负责身份、审批、执行、记录和通知。
+Producers supply evidence-linked IR; local validation does not prove extraction correctness. Preserve unknowns and exact source text. The independent B bucket cannot be merged into A or R.
 
-ADMIN processing is local and deterministic, with Chinese/English evidence-preserving extraction and Python calculations. Unknowns remain unknown. Optional model-assisted PM features are separate. Findings never grant execution authority.
+结果独立输出 `validation / completeness / consistency`，以及 Profile、resolved elements、deficit、作用域下的五类计算。**建议不是业务裁决，结果不授予执行权**；`business_decision` 与 `execution_authorization` 始终 `null`。Host systems own clarification, approval and execution.
 
-## 独立仓库与源码运行
+## 唯一 Core 与入口 / Shared core and adapters
 
-前提：Node.js 22.18+、Python 3.10+。在项目根目录运行：
-
-```text
-npm ci
-python -m venv .venv
-.venv\Scripts\python.exe -m pip install -r python/requirements.txt
-npm run ui
-```
-
-Linux/macOS 使用 `.venv/bin/python`。安装依赖后，ADMIN 本地检查不需要 API key，不调用远端模型。不要直接打开 `ui/index.html`。
-
-[快速开始 / Quick start](QUICKSTART.md) · [双语界面指南](docs/UI-GUIDE.md) · [建议与操作流程](docs/UI-ADVICE.md)
-
-## 当前接口 / Available interfaces
-
-| 入口 | 当前能力与边界 |
+| 入口 / Entry | 当前能力 / Current capability |
 |---|---|
-| 本地 Web UI | ADMIN 本地检查、基线与规划比较、建议呈现；仅监听本机 |
-| Python | 局部文法与数学计算；不是已发布的 PyPI SDK |
-| CLI | `task / plan / decomposition / responses` |
-| MCP | `bx_review_task / bx_review_plan / bx_review_decomposition / bx_check_responses` |
-| BXP 参考计算器 | 严格 Schema、精确区间、类型集合、交接、前置图和同作用域布尔计算 |
-
-产品 CLI/MCP/UI 与 BXP 参考对象接口尚未统一；不能把 BXP 任务 JSON 直接当作现有 CLI 输入。通用生产 HTTP Server、统一 Python SDK 和完整插件 SDK 仍是规划能力。
+| Node API | [src/index.ts](src/index.ts) 导出唯一 [src/bxp/index.mjs](src/bxp/index.mjs) |
+| CLI | `bx evaluate <task.json>`、`bx protocol-info` |
+| MCP | `bx_evaluate_task`、`bx_evaluate_task_json`；当前 Schema 和协议信息资源 |
+| 本机 UI | 导入／粘贴 BXP IR；八桶、证据、三轴与计算；仅监听 127.0.0.1 |
+| Legacy | 显式弃用命名空间，不属于 BXP 输入输出合同 |
 
 ```text
-node cli.mjs task examples/task.json --locale=zh-CN
-node cli.mjs task examples/task.json --locale=en
-node cli.mjs decomposition examples/decomposition-d044.json
 npm run mcp
+node cli.mjs legacy task examples/task.json --locale=en
 ```
 
-CLI 示例、字段及限制见 [任务分解计算手册](docs/DECOMPOSITION.md)、[核心数据结构](src/schemas.ts)；接口实现见 [src/index.ts](src/index.ts)。
+Legacy CLI 使用 `legacy task/plan/decomposition/responses`，MCP 工具使用 `bx_legacy_*`，旧研究 UI 为 `/legacy`。旧 API 函数仅从 [src/legacy/index.ts](src/legacy/index.ts) 导入；包主出口不再提供它们。不会静默转换旧对象。旧 Python 研究路径需另装依赖，见 [快速开始](QUICKSTART.md)。生产级多租户 HTTP、Python SDK、Pack 激活和插件产品仍未交付。
+
+Invalid BXP inputs return the canonical invalid-result envelope, not a business failure or approval. CLI usage/I/O errors use stderr and nonzero exit. Legacy endpoints are explicitly deprecated; they are not certified BXP adapters.
 
 ## 文档 / Documentation
 
-- [产品手册](docs/BOUNDX-PRODUCT-MANUAL.md)：产品形态、能力矩阵和授权边界。
-- [产品与发布方案](docs/BOUNDX-LIGHTWEIGHT-PRODUCT-PLAN.md)：免费 Core、Packs、FDE 与未生效的发布计划。
-- [BXP 协议入口](protocol/README.md) · [中文规范译本](protocol/BXP-0001.zh-CN.md) · [English specification](protocol/BXP-0001.md)。
-- [协议实现说明](protocol/IMPLEMENTATION.md)：精确版本、结果合同和未实现边界。
-- [语义包说明](domain-packs/README.md) · [软件与 AI 领域包](docs/SOFTWARE-AI-DOMAIN-PACK.md)。
-- [产品功能](docs/FUNCTIONS.md) · [七参数示例](docs/SEVEN-PARAMETERS-EXAMPLE.md) · [数学与测试依据](docs/原理与测试依据.md)。
-- [抽取技术依据](docs/RESEARCH-7PLUS1-EXTRACTION.md) · [中英文用例说明](docs/USER-CASES-019.md)。
-- [正式 Logo 素材](assets/branding/README.md) · [命名](docs/NAMING.md) · [版本状态](CHANGELOG.md)。
+- [Agent 生产者指南（中英）](docs/AGENT-BXP-PRODUCER.md) · [示例索引](examples/README.md)。
+- [产品手册](docs/BOUNDX-PRODUCT-MANUAL.md) · [功能](docs/FUNCTIONS.md) · [UI 指南](docs/UI-GUIDE.md) · [结果建议](docs/UI-ADVICE.md)。
+- [协议入口](protocol/README.md) · [English specification](protocol/BXP-0001.md) · [中文规范](protocol/BXP-0001.zh-CN.md) · [实现与限制](protocol/IMPLEMENTATION.md)。
+- [语义包](domain-packs/README.md) · [产品与商业规划（非交付声明）](docs/BOUNDX-LIGHTWEIGHT-PRODUCT-PLAN.md)。
+- [正式 Logo](assets/branding/README.md) · [版本](CHANGELOG.md) · [验证](docs/VALIDATION.md)。
 
 ## 验证 / Validation
 
@@ -90,4 +83,4 @@ npm run test:ui
 npm run test:docs
 ```
 
-[验证说明](docs/VALIDATION.md) 区分计算向量、产品回归与文档链接检查。测试通过不等于任意自然语言已被完整理解，不等于产品发布、业务批准或执行许可。
+完整开发验证需安装 Python 研究依赖。208 条冻结结构化向量不是自然语言金标；测试通过不代表抽取准确率、业务许可、产品发布或第二独立实现互操作证明。Actual counts and CI evidence belong in the [execution receipt](docs/tasks/BXP-ALIGNMENT-RECEIPT.md).

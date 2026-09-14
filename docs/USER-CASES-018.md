@@ -1,5 +1,7 @@
 # ADMIN 纯计算更新 018：新增 20 条原文与实际结果
 
+> 历史／非规范研究或产品规划（legacy / non-normative）。本文中的旧接口、原始结果和未来能力不代表当前产品合同或本轮验证；当前入口以根 README 和产品手册为准。No BXP extraction certification or execution authority is implied.
+
 本轮修复了单位漏识别、同一指标上下界未合并、角色名称误切和对象截短。新增用例 101—120 已纳入原文回放。**这批复杂文本仍是部分支持，不能说 20 条均已通过语义验收。**
 
 ADMIN 在本机运行 Python，不调用 AI；本页为局部用例说明，当前版本及回归范围见 [验证说明](VALIDATION.md)。

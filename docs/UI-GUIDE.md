@@ -1,30 +1,29 @@
 # 界痕双语界面指南 / Bilingual UI Guide
 
-适用源码：`1.2.4-preview.1`。BoundX 当前为私有研发产品，请按 [快速开始](../QUICKSTART.md) 安装 Node.js 和 Python 依赖。
+适用 `1.3.0-preview.0`，私有 preview。先按 [快速开始](../QUICKSTART.md) 安装 Node 依赖。
 
-## 启动 / Start
+## 启动与输入 / Start and input
 
-在 `D:\boundx` 运行 `npm run ui`，或双击 `start-ui.cmd`。保持服务进程运行，通过它输出的本机地址使用；不要直接打开 `ui/index.html`。
+运行 `npm run ui`，保持进程运行，通过输出的本机地址打开页面。本页采用中英并列文案；原文不翻译、不归一化。不要直接打开 HTML。
 
-## ADMIN 本地检查 / Local ADMIN checks
+1. 导入 UTF-8 JSON 或粘贴 Agent／其他生产者形成的 BXP IR。
+2. 点击“本地验证与计算”。
+3. 查看三轴与八桶三态，核对每条证据的来源、引文、码点范围。
+4. 对照 Profile、已明确项、deficit、作用域、五类计算和 findings。
+5. 在完整原始结果中核对协议 JSON；修改输入后重新计算。
 
-1. 粘贴中文或英文任务原文。
-2. 点击“本地检查，给 ADMIN 建议”。
-3. 核对原文证据、七要素与独立 B、计算结果和待澄清项。
-4. 编辑建议后自行决定是否使用；任务变化后重新检查。
+The main page imports producer-generated IR and evaluates it locally. It does not call a model, infer missing fields, persist customer text or execute tasks. CLI, MCP and UI share the same core.
 
-此路径调用本机 Python，不需要模型密钥，不自动启动 PM，不作业务批准。未识别不等于原文未声明，未明确项不自动补齐。
+## 无效输入 / Invalid input
 
-## PM 辅助 / Optional PM assistance
+非法 UTF-8 文件不会填入编辑器。重复键、精度损失、超限、Schema 或证据不一致会显示 invalid 结果，而不是旧的成功状态；不会把未校验的任务显示成已明确的八桶。
 
-PM 有独立输入，可使用自行配置的模型生成拟议规划和回应。模型调用可能产生费用，必须与 ADMIN 本地检查区分。规划变化、回复或提醒减少不等于执行授权或问题已解决。
+## Legacy
 
-完整操作见 [任务建议与 PM 流程](UI-ADVICE.md)。
+`/legacy` 是显式弃用的旧研究界面，输出不符合 BXP；旧服务器端点只能通过 `/api/legacy/` 使用。Python/Lark 只提供有限覆盖研究检查。旧 PM 模型功能会向用户显式配置的服务发送任务，不属于主界面的本地计算路径。
 
-## 语言与隐私 / Language and privacy
+## 权限 / Authority
 
-在界面选择中文或 English；显示语言可以改变，原文和证据不能被翻译覆盖。密钥仅用于显式配置的模型功能，不应写进任务原文、导出文件或日志。
+建议不是业务裁决，结果不授予执行权。完整与一致不等于批准；`business_decision` 和 `execution_authorization` 始终 null。
 
-ADMIN runs locally without model calls. PM model assistance is optional. Switching the display language preserves original evidence. Suggestions do not authorize execution.
-
-[产品功能](FUNCTIONS.md) · [分解接口](DECOMPOSITION.md) · [当前验证](VALIDATION.md)
+[如何处理发现](UI-ADVICE.md) · [BXP 示例](../examples/README.md) · [验证](VALIDATION.md)

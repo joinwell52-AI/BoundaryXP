@@ -1,5 +1,7 @@
 # 显式工作包检查（迭代 013）
 
+> 历史／非规范研究或产品规划（legacy / non-normative）。本文中的旧接口、原始结果和未来能力不代表当前产品合同或本轮验证；当前入口以根 README 和产品手册为准。No BXP extraction certification or execution authority is implied.
+
 本文说明显式工作包的计算规则。数学求值不等于任意任务均正确解析，也不代表生产执行授权。
 
 ## 使用与实际结果

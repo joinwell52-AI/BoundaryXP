@@ -1,13 +1,13 @@
 # 界痕（BoundX）产品手册
 
 文档编号：`BX-PRODUCT-MANUAL-001`  
-版本：`0.1.0-draft.4`\
+版本：`0.1.0-draft.5`\
 状态：`DRAFT_FOR_REVIEW`  
 适用产品：界痕（BoundX）  
 决定权：ADMIN  
 公开授权：`false`  
 
-**当前项目状态：** 独立目录 `D:\boundx`，私有仓库 `joinwell52-AI/BoundX`；源码 `1.2.4-preview.1`、BXP-0001 `0.3.0-draft.2`、BXP-CALC `1.0.0-draft.3`（208 条）。当前能力与验证见 [协议实现说明](../protocol/IMPLEMENTATION.md) 和 [验证说明](VALIDATION.md)。
+**当前项目状态：** 独立目录 `D:\boundx`，私有仓库 `joinwell52-AI/BoundX`；源码 `1.3.0-preview.0`、BXP-0001 `0.3.0-draft.2`、BXP-CALC `1.0.0-draft.3`（208 条）。当前能力与验证见 [协议实现说明](../protocol/IMPLEMENTATION.md) 和 [验证说明](VALIDATION.md)。
 
 > 本手册定义 BoundX 的产品定位、集成方式、语义包、FDE 服务和商业边界，区分当前实现与规划能力。仓库保持私有，暂无公开 Release 或 npm/PyPI 包；AGPL 是未生效的发布提案，不授权 BoundX 或宿主执行外部业务动作。
 
@@ -17,7 +17,9 @@
 
 **界痕（BoundX）是一个可嵌入、可服务化的任务边界预检引擎（Task Boundary Preflight Engine）。**
 
-它把准备交给人、脚本、自动化系统或 Agent 执行的自然语言任务，整理为带原文证据的 I/O/A/P/R/V/C+B 结构，检查其中可确定计算的缺项、冲突、越界、交接断裂和依赖异常，再把结果交还给调用者确认或形成工单。
+Agent 或其他生产者把任务整理为带原文证据的 I/O/A/P/R/V/C+B boundx-task/v1；BoundX 唯一本地 Core 负责 Schema、证据、语义验证与确定性计算，输出 boundx-result/v1。宿主或人类另行决定澄清、审批与执行。
+
+Producers form evidence-linked BXP IR; BoundX validates and calculates locally; hosts decide. BXP is a 7+1 data/computation standard, not an extraction algorithm. Python/Lark, prompts and L1/L2/L3 packs are producer methods. BXP-EXTRACT remains RESERVED.
 
 产品口号：
 
@@ -31,7 +33,7 @@
 
 ### 1.2 部署中立
 
-BoundX 不被定义为“只能本地运行”的工具，也不被定义为“必须连接中央服务器”的 SaaS。相同引擎可以通过以下入口使用：
+BoundX 不被定义为“只能本地运行”的工具，也不被定义为“必须连接中央服务器”的 SaaS。部署目标可扩展到以下入口；当前仅 Node API、CLI、MCP、本机 UI 已交付，Python SDK、生产 HTTP 和插件为规划：
 
 - Python 包导入；
 - `bx` 命令行；
@@ -110,9 +112,9 @@ BoundX 在任务进入执行系统之前，把这些问题变成可以看到、�
 
 ### 5.1 收敛输入
 
-1. 用户输入原始任务；
-2. 规则或模型给出 7+1 候选及原文位置；
-3. 明确命中的内容进入已解析状态；
+1. 用户把原始任务交给 Agent 或其他生产者；
+2. 生产者给出完整 boundx-task/v1 与原文码点位置；
+3. 已明确内容显式为 resolved；本地验证不证明抽取正确；
 4. 缺失内容保持 `absent`；
 5. 多种合法解释保持 `unresolved`；
 6. 用户只处理具体缺口，不需要把整段任务改写成程序语言。
@@ -129,7 +131,7 @@ BoundX 在任务进入执行系统之前，把这些问题变成可以看到、�
 | 阶段交接 | 集合差 | 下游输入是否未由上游产出或外部提供？ |
 | 工步依赖 | 有向前置图 | 必须先执行的步骤是否形成闭环？ |
 | 条件逻辑 | 布尔约束/SAT | 强制动作与禁止动作是否在某个状态同时生效？ |
-| 原文证据 | UTF-8 文本与位置 | 映射引用是否真实来自提交原文？ |
+| 原文证据 | UTF-8 来源摘要与 Unicode 码点位置 | 映射引用是否真实来自提交原文？ |
 
 ### 5.3 输出与处置
 
@@ -146,7 +148,7 @@ BoundX 输出三条彼此独立的轴：
 | 结构非法 | 修复输入或接口，不进入计算 |
 | 要素缺失 | 补充、声明不适用或交授权方确认 |
 | 语义未决 | 展示候选和原文，请用户选择或改写 |
-| 确定冲突 | 阻止当前工单进入执行入口，修改后重新计算 |
+| 确定冲突 | 由宿主决定是否阻止工单；核对、修改后重新计算 |
 | 未发现结构问题 | 可以进入宿主后续审批；不代表 BoundX 已批准执行 |
 
 所有标准结果继续保持：
@@ -162,10 +164,10 @@ BoundX 输出三条彼此独立的轴：
 
 ```mermaid
 flowchart TB
-    U["用户 / Agent / 业务系统"] --> A["SDK · CLI · MCP · HTTP · 插件"]
-    A --> E["BoundX Engine\n统一 BXP IR 与计算"]
-    P["L1 / L2 / L3 语义包"] --> E
-    E --> R["结果 · 澄清卡 · 工单"]
+    U["用户原文"] --> P["Agent / 其他生产者 · L1/L2/L3 方法"]
+    P --> A["boundx-task/v1 · CLI/MCP/UI"]
+    A --> E["唯一 BXP Core · 本地验证与计算"]
+    E --> R["boundx-result/v1 · 宿主裁决与授权"]
 ```
 
 ### 6.1 唯一语义主线
@@ -181,7 +183,7 @@ Python、TypeScript、MCP、HTTP 和宿主插件不得创建第二套字段、�
 | BoundX Engine | 入口/宿主 Adapter |
 |---|---|
 | 校验 BXP 结构和证据 | 接收聊天、表单、文件或 API 请求 |
-| 加载并校验语义包 | 选择客户、租户和 Pack |
+| 不自动加载策略或语义包 | 生产者显式选择客户、租户与 Pack |
 | 执行区间、集合、图和逻辑计算 | 验证登录身份和真实权限 |
 | 输出发现、差异和待澄清项 | 决定是否阻断业务提交 |
 | 保持业务决定和执行授权为空 | 保存工单、通知人员、调用执行系统 |
@@ -234,64 +236,21 @@ Python 目录已经包含 Lark 文法、自然语言局部抽取、区间、集�
 
 ### 7.2 CLI
 
-#### 当前入口
+当前 `node cli.mjs evaluate <task.json>` 读取严格原始 UTF-8 JSON，返回完整 BXP Result；`node cli.mjs protocol-info` 返回精确版本。非法协议输入输出 invalid 信封且退出码0，用法或文件 I/O 错误才为非零。旧命令仅 `legacy task/plan/decomposition/responses`，明确弃用且不升级旧对象。
 
-仓库已有 Node CLI，并通过 `package.json` 注册 `bx`。当前命令为：
-
-```text
-bx task <input.json>
-bx plan <input.json>
-bx decomposition <input.json>
-bx responses <input.json>
-```
-
-它主要调用现有 TypeScript 审阅和分解内核，尚未统一暴露 Python 自然语言预检、BXP-CALC 和多语义包加载。
-
-#### 目标入口
-
-```text
-bx check <task.txt|task.json>
-bx validate <task.json>
-bx evaluate <task.json>
-bx export <task.json> --format json|markdown
-bx packs list
-bx packs verify <pack-path>
-bx mcp
-bx serve
-```
-
-CLI 是人、脚本和 CI/CD 的最低成本入口。标准输出用于机器读取时必须保持结构稳定；诊断写入标准错误；非法输入返回非零退出码。
+The canonical CLI evaluates IR, not free text. Pack management, extraction and work-order commands are future proposals, not delivered commands.
 
 ### 7.3 MCP Server
 
-#### 当前入口
+主工具为 `bx_evaluate_task`（完整对象作为 arguments）和 `bx_evaluate_task_json`（raw_json 字符串），返回完整结果。资源列表直接来自唯一 Core，含协议信息和精确 task/result/suite Schema。
 
-仓库已有无状态 Node MCP Server，提供：
-
-- `bx_review_task`；
-- `bx_review_plan`；
-- `bx_review_decomposition`；
-- `bx_check_responses`。
-
-它已经明确不保存授权、不作业务决定，但尚未把 Python 自然语言预检和新的 BXP-CALC 统一为完整 MCP 工具面。
-
-#### 目标工具面
-
-| MCP 工具 | 功能 |
-|---|---|
-| `bx_extract_task` | 从原文产生带证据的 7+1 候选与歧义 |
-| `bx_validate_task` | 校验 `boundx-task/v1` 和证据位置 |
-| `bx_evaluate_boundary` | 执行确定性边界计算 |
-| `bx_render_work_order` | 生成澄清卡或结构化工单 |
-| `bx_list_packs` | 返回当前明确加载的 Pack 和版本 |
-
-MCP 是 Agent 生态的一等入口，不是附属演示。宿主必须显式挂载工具、选择 Pack、保存输入输出并决定后续审批；模型不能因为调用成功就取得业务执行权。
+Old tools are explicitly named `bx_legacy_*` and deprecated. MCP is stateless: no customer-text persistence, model/network calls, approval or execution. The host must register the service and decide what to do with results.
 
 ### 7.4 HTTP/API Server
 
 #### 当前状态
 
-现有 `ui-server.mjs` 为本机预览服务，固定校验 `127.0.0.1` Host、同源请求和会话 Token。它适合本机 Web 表单，不是生产级多用户服务器，也不应简单地把监听地址改成 `0.0.0.0` 后直接部署。
+现有 `ui-server.mjs` 主路由 /api/bxp/evaluate 通过严格字节路径调用唯一 Core；/api/protocol-info 返回注册表信息。它为本机预览服务，固定校验 `127.0.0.1` Host、同源请求和会话 Token。它适合本机 Web 表单，不是生产级多用户服务器，也不应简单地把监听地址改成 `0.0.0.0` 后直接部署。
 
 #### 目标服务
 
@@ -317,7 +276,7 @@ GET  /health
 
 ### 7.5 Web 表单与宿主插件
 
-Web 表单既可以由个人电脑上的 `bx serve` 提供，也可以连接企业内网 BoundX Server。页面负责填写、显示证据、澄清歧义和导出工单，不拥有另一套计算逻辑。
+当前运行 npm run ui；主页面只提供 BXP IR 导入／粘贴，双语显示八桶三态、来源码点、Profile、作用域、五类计算和三轴，不调用模型、不持久化客户原文。旧研究页面为 /legacy，其旧端点为 /api/legacy/，不是 BXP。企业 Server 与工单导出为规划，未交付。
 
 宿主插件有两种合法模式：
 
@@ -330,7 +289,9 @@ IDE、飞书、钉钉和客户工单系统都只实现 Adapter：准备输入、
 
 ## 8. 统一产品 API
 
-不同传输入口最终只保留五类产品能力：
+当前稳定 Node API 为 evaluateBxpTask、parseAndEvaluateBxpTask、validateBxpTask、validateBxpResult，以及 protocolInfo；主出口 src/index.ts，生产实现 src/bxp/。validateBxpTask 内部评价后返回验证发现；validateBxpResult 仅验证结果合同，不证明计算真值。
+
+下表是长期产品能力规划，不表示抽取、渲染工单或 packs API 已交付：
 
 | 能力 | 输入 | 输出 |
 |---|---|---|
@@ -353,7 +314,9 @@ CLI、MCP、HTTP 与 SDK 的名称可以符合各自生态习惯，但语义、�
 | L2 行业包 | 行业动作框架、实体、岗位、指标、依据和风险类别 | 软件工程、车队、仓储、售后 | BoundX 或行业合作方 |
 | L3 企业包 | 单位别名、具体岗位、额度、流程和系统对象 | “王总特批”、内部库名、企业审批限额 | 客户与 FDE |
 
-所有层最终投影到同一 BXP IR，不形成平行语义系统。
+L0 是固定协议与计算不变量，不是第四种语义包。三层包仅为 L1 通用、L2 行业、L3 企业；由生产者显式选择，不能更改 7+1。当前 Python 研究投影不是标准 BXP 生产者，不能直接冒充 IR；正式生产者需按标准 Schema 明确转换、取证并验证。
+
+L1/L2/L3 are producer-side methods, not alternative protocol definitions. Pack acceptance is a host responsibility and never changes the two null authority fields.
 
 ### 9.2 Pack 文件结构
 
@@ -532,10 +495,10 @@ FDE 不得：
 
 | 能力 | 当前状态 | 不能夸大的部分 |
 |---|---|---|
-| TypeScript 结构化审阅内核 | 已实现并有测试 | 不等于自然语言全部理解 |
-| Node CLI `bx` | 已实现四类现有命令 | 尚未统一 `extract/validate/evaluate/render/packs` |
-| Node MCP | 已实现四个无状态工具 | 尚未暴露完整 Python/BXP-CALC 产品面 |
-| 本机 Web UI | 已实现 | 当前只允许 localhost，不是企业 Server |
+| 唯一 BXP Core | src/bxp/，主出口 src/index.ts | 不证明自然语言抽取正确 |
+| Node CLI `bx` | evaluate、protocol-info；旧四命令仅 legacy | 不直接抽取自然语言 |
+| Node MCP | 两个 BXP 主工具与版本／Schema 资源；旧四工具仅 legacy | 不执行、不审批 |
+| 本机 Web UI | BXP 导入／粘贴、八桶三态、码点、三轴与五类计算 | 当前只允许 localhost，不是企业 Server |
 | Python 文法与数学检查 | 已实现局部能力，133 项测试曾通过 | 不是完整自然语言编译器 |
 | 软件/AI L2 Pack | 已实现 `0.1.0` 单包预览 | 多包、L3 和热插拔尚未实现 |
 | BXP-CALC | 208 条结构化计算向量 | 不是 BXP-EXTRACT 准确率 |
@@ -548,10 +511,7 @@ FDE 不得：
 
 ### P0：统一门面
 
-- 冻结 `extract/validate/evaluate/render/packs` 五类能力；
-- 让 TypeScript 与 Python 经同一 BXP IR 交换；
-- CLI、MCP 和 Web 不再各自拼装语义；
-- 对相同输入、版本和 Pack 做跨入口一致性测试。
+本轮已统一 BXP Core、CLI/MCP/UI，严格原始 JSON、码点证据与三轴结果贯通。跨入口测试和全量回执见验证说明；Python 仍是有限研究实现，不声称已成为标准 BXP SDK。extract/render/packs 为未来产品方法，不修改固定协议。
 
 ### P0.5：发布准备
 
@@ -652,7 +612,7 @@ BoundX 的技术产品是一个统一预检引擎，PyPI、CLI、MCP、Server �
 status: DRAFT_FOR_REVIEW
 publication_authorized: false
 license_change_effective: false
-future_repository: independent-boundx
+repository: joinwell52-AI/BoundX
 future_repository_license: AGPL-3.0-only
 pypi_published: false
 npm_published: false

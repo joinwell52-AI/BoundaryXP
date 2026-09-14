@@ -1,8 +1,16 @@
 # BoundX 版本状态 / Version Status
 
-## 1.2.4-preview.1
+## 1.3.0-preview.0
 
-当前独立项目源码版本；仓库保持私有，尚未发布 GitHub Release、npm/PyPI 包或正式认证。正式产品维护不等于协议已采用或产品已公开。
+私有产品主入口统一为 BXP：Agent／其他生产者提交 boundx-task/v1，唯一 src/bxp/ 本地验证计算，输出 boundx-result/v1。双语 UI、CLI、MCP、码点证据、严格 JSON 与机器版本注册表贯通；两个授权字段始终 null。旧 API 迁到 src/legacy/，旧 CLI/MCP/UI 显式弃用，禁止静默转换。
+
+Canonical BXP adapters share one production core. Product version changed; BXP-0001 0.3.0-draft.2, suite 1.0.0-draft.3, schema contracts and 208 frozen expectations did not change. No release, publication, license change or extraction certification.
+
+实际测试与 CI 见 [实施回执](docs/tasks/BXP-ALIGNMENT-RECEIPT.md)。
+
+## 1.2.4-preview.1 — 历史 / Historical (non-normative)
+
+历史非规范记录（不是当前入口声明）：独立项目源码版本；仓库保持私有，尚未发布 GitHub Release、npm/PyPI 包或正式认证。正式产品维护不等于协议已采用或产品已公开。
 
 - 中英文 BXP-0001：`0.3.0-draft.2`。
 - BXP-CALC：`1.0.0-draft.3`，208 条结构化计算向量。
@@ -11,7 +19,7 @@
 - 产品 CLI/MCP/UI 尚未统一为 BXP 对象接口。
 - 发布与许可证变更必须另获明确授权；当前许可证见 [LICENSE](LICENSE)。
 
-Current standalone source version; private, unreleased and uncertified. Protocol drafts do not grant execution authority. Product adapters are not yet unified on the BXP object interface.
+Historical source version; private, unreleased and uncertified. Protocol drafts do not grant execution authority. Product adapters are not yet unified on the BXP object interface.
 
 [快速开始](QUICKSTART.md) · [协议实现说明](protocol/IMPLEMENTATION.md) · [验证说明](docs/VALIDATION.md)
 

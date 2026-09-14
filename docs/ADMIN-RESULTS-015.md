@@ -1,5 +1,7 @@
 # ADMIN 三层结果页：从原文到计算结论
 
+> 历史／非规范研究或产品规划（legacy / non-normative）。本文中的旧接口、原始结果和未来能力不代表当前产品合同或本轮验证；当前入口以根 README 和产品手册为准。No BXP extraction certification or execution authority is implied.
+
 本文说明结果展示、限定句式的条件冲突与工作包文件差集。它是技术说明，不代表全部自然语言均受支持；当前版本与验证见 [验证说明](VALIDATION.md)。
 
 ## 如何使用

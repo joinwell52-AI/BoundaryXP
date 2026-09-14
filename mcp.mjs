@@ -1,8 +1,8 @@
 #!/usr/bin/env node
 import { evaluateBxpTask, parseAndEvaluateBxpTask, parseStrictJson, protocolInfo, taskSchema, resultSchema, suiteSchema, PRODUCT_VERSION, RAW_JSON_BYTE_LIMIT } from './src/bxp/index.mjs';
-import { decompositionToolSchema } from './src/decomposition-schema.ts';
+import { decompositionToolSchema } from './src/legacy/decomposition-schema.ts';
 const packageVersion = PRODUCT_VERSION;
-import { reviewBoundX, reviewPlanBoundary, boundaryResponseStatus, boundaryDocumentSchema, boundaryPlanSchema, reviewDecomposition } from './src/index.ts';
+import { reviewBoundX, reviewPlanBoundary, boundaryResponseStatus, boundaryDocumentSchema, boundaryPlanSchema, reviewDecomposition } from './src/legacy/index.ts';
 
 const definitions = [
   { name: 'bx_evaluate_task', description: 'BXP 7+1 task object. Local validation and calculation; no extraction certification or execution authority.', inputSchema: taskSchema },

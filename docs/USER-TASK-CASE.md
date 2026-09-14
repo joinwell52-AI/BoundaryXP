@@ -1,5 +1,7 @@
 # 用户原题：界痕给 ADMIN 什么结果，给 PM 什么建议
 
+> 历史／非规范研究或产品规划（legacy / non-normative）。本文中的旧接口、原始结果和未来能力不代表当前产品合同或本轮验证；当前入口以根 README 和产品手册为准。No BXP extraction certification or execution authority is implied.
+
 **案例范围更正：** 本页 PM 部分是独立文本试测 D014，不是 TASK-20260908-015 现场的三项实际派单。用户指定的真实现场主案例已改为 [三份实际派单与 PM 根职责](THREE-TASK-CASE.md)。本页原始结果保留，不能作为该现场的拆分证据。ADMIN 部分使用的是同一原题。
 
 2026-09-10 实际运行记录。输入为用户原题和历史 PM 试测答卷 D014；本次没有调用模型，也没有执行巡检。使用现有 1.1.0-preview.1 内核，未修改算法。

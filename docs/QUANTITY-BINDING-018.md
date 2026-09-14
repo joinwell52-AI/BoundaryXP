@@ -1,5 +1,7 @@
 # 从原文数值到同一指标的区间计算
 
+> 历史／非规范研究或产品规划（legacy / non-normative）。本文中的旧接口、原始结果和未来能力不代表当前产品合同或本轮验证；当前入口以根 README 和产品手册为准。No BXP extraction certification or execution authority is implied.
+
 ADMIN 的区间计算需要同时回答三件事：数值是什么、使用什么单位、上下界是否约束同一对象。只取得两个数字，不能直接求交集。本次实现位于 `python/source_constraints.py`、`quantity_units.py`、`metric_binding.py` 与 `structural_checks.py`。
 
 ## 1. 保留证据的数值约束

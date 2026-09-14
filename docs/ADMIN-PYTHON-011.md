@@ -1,5 +1,7 @@
 # ADMIN 原始边界：Python 三类计算
 
+> 历史／非规范研究或产品规划（legacy / non-normative）。本文中的旧接口、原始结果和未来能力不代表当前产品合同或本轮验证；当前入口以根 README 和产品手册为准。No BXP extraction certification or execution authority is implied.
+
 本文说明 ADMIN 本地 Python 计算入口：七要素与独立 B、分层建议、可编辑建议任务和 JSON 导出。只提供候选解释，不批准、阻断或执行任务；当前安装方式见 [快速开始](../QUICKSTART.md)。
 
 ## 安装和使用

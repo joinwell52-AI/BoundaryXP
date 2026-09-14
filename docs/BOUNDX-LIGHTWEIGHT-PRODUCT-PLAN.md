@@ -1,5 +1,7 @@
 # BoundX 轻量产品与发布方案
 
+> 历史／非规范研究或产品规划（legacy / non-normative）。本文中的旧接口、原始结果和未来能力不代表当前产品合同或本轮验证；当前入口以根 README 和产品手册为准。No BXP extraction certification or execution authority is implied.
+
 文档编号：`BX-PRODUCT-PLAN-001`  
 版本：`0.1.0-draft.3`\
 状态：`DRAFT_FOR_REVIEW`  

@@ -5,7 +5,7 @@ import { randomBytes } from 'node:crypto';
 import { readFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { spawn } from 'node:child_process';
-import { reviewBoundX, reviewPlanBoundary, boundaryResponseStatus, validateBoundaryText } from './src/index.ts';
+import { reviewBoundX, reviewPlanBoundary, boundaryResponseStatus, validateBoundaryText } from './src/legacy/index.ts';
 import { sourceCatalog, materializeSelection, selectionInstruction } from './ui/grounding.mjs';
 import { resolveEndpoint } from './ui/connection.mjs';
 import {parseAndEvaluateBxpTask, evaluateBxpTask, protocolInfo, PRODUCT_VERSION, RAW_JSON_BYTE_LIMIT} from './src/bxp/index.mjs';
