@@ -72,22 +72,34 @@ export function renderThreeLayers(sourceText, evaluation) {
   const lines = ['### 任务边界检查', '', '- **【Layer 1：原文证据】**', '', ...sourceText.split('\n').map(line => '  > ' + line), '',
     '- **【Layer 2：标准 7+1 结构化映射】**'];
   const labels = { I: '输入范围', O: '交付结果', A: '允许动作', P: '责任分工', R: '资源约束', V: '版本依据', C: '完成条件', B: '禁止边界' };
+  const englishLabels = { I: 'Input scope', O: 'Deliverables', A: 'Actions', P: 'Participants', R: 'Resources', V: 'Version and provenance', C: 'Completion and stopping', B: 'Forbidden boundary' };
+  const states = { resolved: '已明确 / Resolved', unresolved: '尚未明确 / Unresolved', absent: '原文未提供 / Absent' };
   if (evaluation.computed) for (const field of CORE_ELEMENTS) {
     const bucket = evaluation.task.elements[field];
-    lines.push(`  - **${field === 'B' ? '+1 / B' : field} (${labels[field]})**：${bucket.status}；${bucket.entries.map(entry => entry.text).join('；') || '未提及'}`);
-  } else lines.push('  - 候选未通过生产者校验；不补造合法7+1结构。');
+    lines.push(`  - **${field === 'B' ? '+1 / B' : field} (${labels[field]})**：${states[bucket.status]}；${englishLabels[field]}`);
+    for (const entry of bucket.entries) {
+      lines.push(`    - ${entry.text}`);
+      for (const evidence of entry.evidence) lines.push(`      - 原文证据 / Evidence：${evidence.source_id ?? 'task'} [${evidence.start},${evidence.end}) — ${JSON.stringify(evidence.quote)}`);
+    }
+  } else lines.push('  - 候选未通过生产者校验；不补造合法7+1结构。 / Candidate validation failed; no valid structure is invented.');
   lines.push('- **【Layer 3：计算结果与建议】**', '  - **引擎求值**：');
   if (evaluation.computed) {
     const axes = evaluation.result.evaluation;
     lines.push(`    - validation=${axes.validation}；completeness=${axes.completeness}；consistency=${axes.consistency}`);
+    lines.push(`    - 差集 / Deficit：S_required \\ S_resolved = {${evaluation.result.deficit.map(item => item.element).join(', ')}}`);
+    if (evaluation.historical) lines.push('    - 历史快照回放 / Historical snapshot replay：不代表当前启用包的检查结果。 / Not an evaluation against currently active packages.');
     for (const [kind, values] of Object.entries(evaluation.result.calculations)) {
       lines.push(`    - ${kind}：${values.length ? JSON.stringify(values) : '无适用计算 / No applicable calculation'}`);
     }
     lines.push('  - **结论与 Diff**：');
-    for (const field of evaluation.result.deficit) lines.push(`    - **Diff [-${field}]**：${evaluation.task.elements[field].status}；请明确该项要求和原文依据。`);
-    for (const finding of evaluation.result.findings) lines.push(`    - **Diff [${finding.code}]**：${finding.message}`);
-    if (!evaluation.result.deficit.length && !evaluation.result.findings.length) lines.push('    - 当前已提交结构未发现缺项或冲突；不等于原文语义完整性证明。');
-  } else lines.push('    - 尚未计算。', '  - **结论与 Diff**：', ...evaluation.diagnostics.map(item => `    - **Diff [${item.code}]**：${item.message}`));
-  lines.push('    - 建议不等于业务裁决或执行授权；未列出问题不证明全文无遗漏。');
+    for (const { element, status } of evaluation.result.deficit) lines.push(`    - **Diff [-${element}]**：${states[status]}；请明确该项要求和原文依据。 / Clarify this requirement and its source evidence.`);
+    for (const finding of evaluation.result.findings) {
+      lines.push(`    - **Diff [${finding.code}]**：${finding.message}`);
+      for (const assumption of finding.assumptions ?? []) lines.push(`      - 计算前提 / Assumption：${assumption}`);
+    }
+    for (const clarification of evaluation.clarifications ?? []) lines.push(`    - 待澄清建议 / Clarification proposal：${clarification}`);
+    if (!evaluation.result.deficit.length && !evaluation.result.findings.length) lines.push('    - 当前已提交结构未发现缺项或冲突；不等于原文语义完整性证明。 / No gaps or conflicts found in the submitted structure; extraction completeness is not proven.');
+  } else lines.push('    - 尚未计算 / Not computed。', '  - **结论与 Diff**：', ...evaluation.diagnostics.map(item => `    - **Diff [${item.code}]**：${item.message}`));
+  lines.push('    - 建议不等于业务裁决或执行授权；未列出问题不证明全文无遗漏。 / Advice is not a business decision or execution authorization; omissions may remain.');
   return lines.join('\n');
 }
