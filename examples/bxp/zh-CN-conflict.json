@@ -1,0 +1,210 @@
+{
+  "schema": "boundx-task/v1",
+  "protocol_version": "0.3.0-draft.2",
+  "task_id": "zh-CN-conflict",
+  "source": {
+    "language": "zh-CN",
+    "text": "读取 input.json。\n交付 report.json。\n动作是读取和生成报告。\n执行人是 Alice。\n耗时至少 121 秒且最多 120 秒。\n依据 policy v1。\n交付报告后停止。\n禁止删除 database。"
+  },
+  "profile": {
+    "id": "org.boundx.core-7plus1",
+    "required_elements": [
+      "I",
+      "O",
+      "A",
+      "P",
+      "R",
+      "V",
+      "C",
+      "B"
+    ]
+  },
+  "elements": {
+    "I": {
+      "status": "resolved",
+      "entries": [
+        {
+          "id": "entry-I",
+          "kind": "input",
+          "text": "读取 input.json。",
+          "evidence": [
+            {
+              "quote": "读取 input.json。",
+              "start": 0,
+              "end": 14
+            }
+          ]
+        }
+      ]
+    },
+    "O": {
+      "status": "resolved",
+      "entries": [
+        {
+          "id": "entry-O",
+          "kind": "output",
+          "text": "交付 report.json。",
+          "evidence": [
+            {
+              "quote": "交付 report.json。",
+              "start": 15,
+              "end": 30
+            }
+          ]
+        }
+      ]
+    },
+    "A": {
+      "status": "resolved",
+      "entries": [
+        {
+          "id": "entry-A",
+          "kind": "action",
+          "text": "动作是读取和生成报告。",
+          "evidence": [
+            {
+              "quote": "动作是读取和生成报告。",
+              "start": 31,
+              "end": 42
+            }
+          ]
+        }
+      ]
+    },
+    "P": {
+      "status": "resolved",
+      "entries": [
+        {
+          "id": "entry-P",
+          "kind": "actor",
+          "text": "执行人是 Alice。",
+          "evidence": [
+            {
+              "quote": "执行人是 Alice。",
+              "start": 43,
+              "end": 54
+            }
+          ]
+        }
+      ]
+    },
+    "R": {
+      "status": "resolved",
+      "entries": [
+        {
+          "id": "entry-R",
+          "kind": "resource",
+          "text": "耗时至少 121 秒且最多 120 秒。",
+          "evidence": [
+            {
+              "quote": "耗时至少 121 秒且最多 120 秒。",
+              "start": 55,
+              "end": 75
+            }
+          ]
+        }
+      ]
+    },
+    "V": {
+      "status": "resolved",
+      "entries": [
+        {
+          "id": "entry-V",
+          "kind": "provenance",
+          "text": "依据 policy v1。",
+          "evidence": [
+            {
+              "quote": "依据 policy v1。",
+              "start": 76,
+              "end": 89
+            }
+          ]
+        }
+      ]
+    },
+    "C": {
+      "status": "resolved",
+      "entries": [
+        {
+          "id": "entry-C",
+          "kind": "completion",
+          "text": "交付报告后停止。",
+          "evidence": [
+            {
+              "quote": "交付报告后停止。",
+              "start": 90,
+              "end": 98
+            }
+          ]
+        }
+      ]
+    },
+    "B": {
+      "status": "resolved",
+      "entries": [
+        {
+          "id": "entry-B",
+          "kind": "boundary",
+          "text": "禁止删除 database。",
+          "evidence": [
+            {
+              "quote": "禁止删除 database。",
+              "start": 99,
+              "end": 113
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "constraints": {
+    "intervals": [
+      {
+        "id": "duration",
+        "subject": "task",
+        "dimension": "duration",
+        "unit": "second",
+        "lower": {
+          "value": "121",
+          "inclusive": true
+        },
+        "upper": {
+          "value": "120",
+          "inclusive": true
+        },
+        "evidence": [
+          {
+            "quote": "耗时至少 121 秒且最多 120 秒。",
+            "start": 55,
+            "end": 75
+          }
+        ]
+      }
+    ],
+    "target_sets": [
+      {
+        "id": "forbidden-delete",
+        "universe": "named-data-object",
+        "effect": "delete",
+        "actor_scope": "Alice",
+        "guard_context": "task",
+        "identity_status": "resolved",
+        "requested": [],
+        "forbidden": [
+          "database"
+        ],
+        "evidence": [
+          {
+            "quote": "禁止删除 database。",
+            "start": 99,
+            "end": 113
+          }
+        ]
+      }
+    ],
+    "handoffs": [],
+    "dependencies": [],
+    "logic": []
+  },
+  "extensions": {}
+}
