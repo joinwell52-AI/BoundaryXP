@@ -8,6 +8,20 @@ const files = [
   'GOVERNANCE.md',
   'IPR.md',
   'PROVENANCE.md',
+  'CHANGES-0.3.md',
+  'README.md',
+  'conformance/README.md',
+  'conformance/evaluate.mjs',
+  'conformance/validation.mjs',
+  'conformance/decimal.mjs',
+  'conformance/hardening-cases.mjs',
+  'conformance/hardening.test.mjs',
+  'conformance/build-suite.mjs',
+  'conformance/run.mjs',
+  'conformance/conformance.test.mjs',
+  'benchmarks/README.md',
+  '../package.json',
+  '../package-lock.json',
   '../docs/BOUNDX-LIGHTWEIGHT-PRODUCT-PLAN.md',
   '../docs/BOUNDX-PRODUCT-MANUAL.md',
   'TRADEMARKS.md',
@@ -16,6 +30,7 @@ const files = [
   'schemas/boundx-calc-conformance-suite-v1.schema.json',
   'conformance/bxp-calc-v1.0.json',
   'benchmarks/source-index.json',
+  'benchmarks/corpus-manifest.json',
 ];
 
 function sha256(value) {

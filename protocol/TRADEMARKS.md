@@ -17,7 +17,8 @@
 在正式认证计划建立前，第三方只能作带版本的事实性描述，例如：
 
 ```text
-Implements BXP-IR and BXP-CALC for BXP-0001 0.2.0-draft.1.
+Implements BXP-IR and BXP-CALC for BXP-0001 0.3.0-draft.1,
+with BXP-CALC suite 1.0.0-draft.2.
 ```
 
 不得使用 `BoundX Certified`、`Official BoundX`、`BoundX Approved` 或容易使用户误认为由 BoundX 维护者生产、担保或审核的表述。

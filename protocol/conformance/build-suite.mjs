@@ -1,8 +1,11 @@
 import { createHash } from 'node:crypto';
 import { readFileSync, writeFileSync } from 'node:fs';
+import { isDeepStrictEqual } from 'node:util';
 import { evaluateTask, PROTOCOL_VERSION } from './evaluate.mjs';
+import { hardeningCases, verifyHardening } from './hardening-cases.mjs';
+import { validateTaskSchema, validateSuiteSchema } from './validation.mjs';
 
-export const SUITE_VERSION = '1.0.0-draft.1';
+export const SUITE_VERSION = '1.0.0-draft.2';
 const here = new URL('./', import.meta.url);
 const index = JSON.parse(readFileSync(new URL('../benchmarks/source-index.json', here), 'utf8'));
 const ELEMENTS = ['I', 'O', 'A', 'P', 'R', 'V', 'C', 'B'];
@@ -257,6 +260,14 @@ for (const [offset, origin] of index.origins.entries()) {
   ));
 }
 
+for (const [offset, item] of hardeningCases.entries()) {
+  const currentTask = structuredClone(item.task);
+  verifyHardening(item, evaluateTask(currentTask));
+  cases.push(vector(`BXP-C${2001 + offset}`, item.name, ['foundational', 'hardening'],
+    { kind: 'foundational', source_index_id: null, derivation: null }, currentTask,
+    validateTaskSchema(currentTask) ? 'valid' : 'invalid'));
+}
+
 const suite = {
   suite: 'boundx-calc-conformance/v1',
   suite_version: SUITE_VERSION,
@@ -267,12 +278,17 @@ const suite = {
   certification_authorized: false,
   case_count: cases.length,
   historical_source_count: index.origins.length,
-  foundational_case_count: foundationFamilies.length + 3,
+  foundational_case_count: foundationFamilies.length + 3 + hardeningCases.length,
   cases,
 };
 
-const output = new URL('./bxp-calc-v1.0.json', here);
-writeFileSync(output, `${JSON.stringify(suite, null, 2)}\n`, 'utf8');
+if (!validateSuiteSchema(suite)) throw new Error(JSON.stringify(validateSuiteSchema.errors));
+const candidate = process.argv.includes('--candidate');
+const output = new URL(candidate ? './bxp-calc-v1.0.candidate.json' : './bxp-calc-v1.0.json', here);
+if (candidate) writeFileSync(output, `${JSON.stringify(suite, null, 2)}\n`, 'utf8');
+else if (!isDeepStrictEqual(suite, JSON.parse(readFileSync(output, 'utf8')))) {
+  throw new Error('Frozen suite differs. Generate --candidate and review the diff; the frozen file was not changed.');
+}
 
 const canonical = JSON.stringify(suite);
 const sha256 = createHash('sha256').update(canonical, 'utf8').digest('hex');

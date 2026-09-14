@@ -10,11 +10,12 @@
 
 ## 独立仓库与源码运行
 
-本项目已从 CodeFlowMu 的 `boundx/` 组件迁出，独立仓库为 [joinwell52-AI/BoundX](https://github.com/joinwell52-AI/BoundX)，当前保持私有。本机唯一工作目录为 `D:\boundx`，不需要母仓目录。源码版本保持 `1.2.3-preview.1`；此次迁移不是新版 Release、公开发布或许可证变更。原母仓测试仅是历史记录，迁移来源与独立验证见 [迁移记录](docs/REPOSITORY-MIGRATION.md)。
+本项目已从 CodeFlowMu 的 `boundx/` 组件迁出，独立仓库为 [joinwell52-AI/BoundX](https://github.com/joinwell52-AI/BoundX)，当前保持私有。本机唯一工作目录为 `D:\boundx`，不需要母仓目录。当前源码版本为 `1.2.4-preview.1`；迁移和协议修订不是新版 Release、公开发布或许可证变更。原母仓测试仅是历史记录，迁移来源与独立验证见 [迁移记录](docs/REPOSITORY-MIGRATION.md)。
 
 已安装 Node.js 22.18+ 和 Python 3.10+ 后，在本仓库根目录执行：
 
 ```text
+npm ci
 python -m venv .venv
 .venv\Scripts\python.exe -m pip install -r python/requirements.txt
 npm run ui
@@ -24,11 +25,11 @@ Linux/macOS 使用 `.venv/bin/python`。开发验证使用 `npm test`、`npm run
 
 BoundX 是一个可嵌入、可服务化的任务边界预检引擎（Task Boundary Preflight Engine）。它通过 Python、CLI、MCP、HTTP、Web 表单或宿主插件接收任务，用统一 7+1 和确定性规则检查缺项、数值冲突、禁止对象碰撞、交接缺口和步骤成环，再输出带原文证据的结果或干净工单。它可以独立使用，不是 CodeFlowMu 独占组件。
 
-**源码新功能：1.2.3-preview.1。** BXP-0001 已补齐严格对应的 `boundx-task/v1` 与 `boundx-result/v1` Schema、跨阶段交接差集，以及 BXP-CALC `1.0.0-draft.1` 的 176 条冻结向量；尚未公开发布或启动认证。现有 ADMIN/PM 产品入口保持不变。当前已发布下载包仍为 1.2.0-preview.1。
+**源码新功能：1.2.4-preview.1。** BXP-0001 `0.3.0-draft.1` 同步修订中英文规范，补齐完整 Schema 校验、精确十进制、来源注册与作用域；BXP-CALC `1.0.0-draft.2` 包含 208 条冻结向量。协议参考计算器新增锁定的 Ajv 依赖，使用前执行 `npm ci`。现有 ADMIN/PM 产品入口及旧下载包保持不变；未公开发布或启动认证。详见 [协议修订与迁移](protocol/CHANGES-0.3.md)。
 
 **统一标识：** 中文正式名称“界痕”；英文开源/协议标识 `BoundX`；短命令 `bx`；模块前缀 `@boundx`。界痕以三层语义对齐和 7+1 边界可追溯为统一内核。详见 [命名与协议标识](docs/NAMING.md)。
 
-**[协议入口：BXP-0001 v0.2 Draft →](protocol/)** · [英文规范](protocol/BXP-0001.md) · [中文译本](protocol/BXP-0001.zh-CN.md) · [任务 Schema](protocol/schemas/boundx-task-v1.schema.json) · [结果 Schema](protocol/schemas/boundx-result-v1.schema.json) · [BXP-CALC 1.0 套件](protocol/conformance/bxp-calc-v1.0.json)
+**[协议入口：BXP-0001 v0.3 Draft →](protocol/)** · [英文规范](protocol/BXP-0001.md) · [中文译本](protocol/BXP-0001.zh-CN.md) · [任务 Schema](protocol/schemas/boundx-task-v1.schema.json) · [结果 Schema](protocol/schemas/boundx-result-v1.schema.json) · [BXP-CALC 1.0 套件](protocol/conformance/bxp-calc-v1.0.json)
 
 **[产品手册 →](docs/BOUNDX-PRODUCT-MANUAL.md)** · **[轻量产品与发布方案 →](docs/BOUNDX-LIGHTWEIGHT-PRODUCT-PLAN.md)**：核心与通用入口免费，行业语义包、企业配置和 FDE 落地用于定制交付。当前决定是在手册定稿后建立独立 BoundX 开源仓库并采用 GNU AGPL v3；两份文件仍是评审草案，本次提交不改变 `codeflowmu` 许可证，也不授权立即公开。
 
@@ -66,7 +67,7 @@ BoundX（可嵌入、可服务化的任务边界预检引擎），便携预览�
 
 Windows 便携包的解压、示例、MCP 配置和 CodeFlowMu 使用区别，见 [下载包首次使用](QUICKSTART.md)。便携包内置 Node.js，不必下载整个产品源码。仓库源码更新不代表已安装的 CodeFlowMu 自动获得新工具。
 
-**当前状态：** `1.2.3-preview.1` 源码已加入 BXP-0001 `0.2.0-draft.1` 与 BXP-CALC `1.0.0-draft.1`，尚未创建新版 BoundX Release；协议合入不等于公开发布、标准采用或认证授权。
+**当前状态：** `1.2.4-preview.1` 源码包含 BXP-0001 `0.3.0-draft.1` 与 BXP-CALC `1.0.0-draft.2`，尚未创建新版 BoundX Release；协议修订不等于公开发布、标准采用或认证授权。
 
 **[本版说明：1.2.0-preview.1](docs/releases/1.2.0-preview.1.md)** · **[历次版本记录](CHANGELOG.md)**
 

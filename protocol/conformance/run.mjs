@@ -1,12 +1,17 @@
 import { readFileSync } from 'node:fs';
+import { isDeepStrictEqual } from 'node:util';
 import { evaluateTask } from './evaluate.mjs';
+import { validateSuiteSchema, validateTaskSchema, validateResultSchema } from './validation.mjs';
 
 const suite = JSON.parse(readFileSync(new URL('./bxp-calc-v1.0.json', import.meta.url), 'utf8'));
 const failures = [];
+if (!validateSuiteSchema(suite)) throw new Error(JSON.stringify(validateSuiteSchema.errors));
 
 for (const item of suite.cases) {
   const actual = evaluateTask(item.task);
-  if (JSON.stringify(actual) !== JSON.stringify(item.expected_result)) {
+  if (!validateResultSchema(actual)
+      || Boolean(validateTaskSchema(item.task)) !== (item.schema_expectation === 'valid')
+      || !isDeepStrictEqual(actual, item.expected_result)) {
     failures.push({
       id: item.id,
       expected: item.expected_result,
@@ -34,4 +39,3 @@ if (failures.length) {
     execution_authorization: null,
   }, null, 2)}\n`);
 }
-

@@ -3,7 +3,7 @@ import { readFileSync } from 'node:fs';
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { evaluateTask, PROTOCOL_VERSION, sourceDigest } from './evaluate.mjs';
-const SUITE_VERSION = '1.0.0-draft.1';
+const SUITE_VERSION = '1.0.0-draft.2';
 
 const here = new URL('./', import.meta.url);
 const suite = JSON.parse(readFileSync(new URL('bxp-calc-v1.0.json', here), 'utf8'));
@@ -39,7 +39,7 @@ test('task, result and suite schemas are strict versioned Draft 2020-12 document
   assert.ok(suiteSchema.$defs.case.required.includes('schema_expectation'));
 });
 
-test('official draft suite contains 176 unique BXP-CALC vectors', () => {
+test('official draft suite contains 208 unique BXP-CALC vectors', () => {
   assert.equal(suite.suite, 'boundx-calc-conformance/v1');
   assert.equal(suite.suite_version, SUITE_VERSION);
   assert.equal(suite.protocol_version, PROTOCOL_VERSION);
@@ -47,13 +47,13 @@ test('official draft suite contains 176 unique BXP-CALC vectors', () => {
   assert.equal(suite.normative, true);
   assert.equal(suite.publication_authorized, false);
   assert.equal(suite.certification_authorized, false);
-  assert.equal(suite.case_count, 176);
+  assert.equal(suite.case_count, 208);
   assert.equal(suite.cases.length, suite.case_count);
   assert.equal(suite.historical_source_count, 160);
-  assert.equal(suite.foundational_case_count, 16);
+  assert.equal(suite.foundational_case_count, 48);
   assert.equal(new Set(suite.cases.map(item => item.id)).size, suite.cases.length);
   assert.ok(suite.cases.every(item => item.class === 'BXP-CALC'));
-  assert.equal(suite.cases.filter(item => item.schema_expectation === 'invalid').length, 1);
+  assert.equal(suite.cases.filter(item => item.schema_expectation === 'invalid').length, 7);
   assert.equal(suite.cases.find(item => item.id === 'BXP-C0015').schema_expectation, 'invalid');
 });
 

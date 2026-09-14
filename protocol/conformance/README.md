@@ -1,22 +1,24 @@
 # BXP-CALC Conformance Suite 1.0
 
-`bxp-calc-v1.0.json` 是 BXP-0001 `0.2.0-draft.1` 的结构化计算一致性套件草案。任何实现只有在 176 条向量的完整 `boundx-result/v1` 信封逐项一致时，才能声明通过该草案版本。
+`bxp-calc-v1.0.json` 是 BXP-0001 `0.3.0-draft.1` 的结构化计算一致性套件 `1.0.0-draft.2`。任何实现只有在 208 条向量的完整 `boundx-result/v1` 信封逐项一致时，才能声明通过该草案版本。
 
 ## 构成
 
 | 类型 | 数量 | 含义 |
 |---|---:|---|
-| 基础向量 | 16 | 直接覆盖区间、集合、交接、DAG、布尔逻辑、证据和扩展边界 |
+| 原基础向量 | 16 | 区间、集合、交接、DAG、布尔逻辑、证据和扩展边界 |
+| 新加固基础向量 | 32 | 严格校验、数值精度、来源、作用域、未知与冲突聚合 |
 | 历史场景派生 | 160 | 与 140 个主案例及 20 个早期变体一一对应的计算模式向量 |
-| 合计 | 176 | 全部属于 `BXP-CALC` |
+| 合计 | 208 | 全部属于 `BXP-CALC`；基础共 48 条 |
 
 历史场景派生使用独立、规范化的结构输入，只继承计算模式，`origin.derivation` 固定为 `calculation-pattern-only`。它们不是自然语言原文的 7+1 翻译，不构成 BXP-EXTRACT 金标。
 
 ## 运行
 
 ```text
+npm ci
 node protocol/conformance/run.mjs
-node --test protocol/conformance/conformance.test.mjs
+node --test protocol/conformance/*.test.mjs
 ```
 
 `run.mjs` 比较完整结果信封，包括摘要算法、三个结果轴、发现、类型化计算、空业务决定、空执行授权和扩展对象。
@@ -25,4 +27,10 @@ node --test protocol/conformance/conformance.test.mjs
 
 ## 维护
 
-`build-suite.mjs` 是确定性维护工具。重新生成会重写冻结预期，必须把 JSON Diff 当成规范变更进行独立评审；不能为了让失败实现“通过”而刷新金标。套件当前为 `DRAFT_FOR_REVIEW`，未授权公开发布或认证。
+`build-suite.mjs` 默认只比较，不改写冻结预期；有差异会失败。只有显式 `--candidate` 才写入独立的 `bxp-calc-v1.0.candidate.json`。候选输出不自动成为规范，必须结合修订说明、人工推导的关键断言和完整 JSON Diff 评审，之后显式纳入版本管理。旧 `0.2`/draft.1 资产保存在 Git 基线 `1f51445`，不得把旧测试结果冒充当前验证。
+
+新增 `hardening-cases.mjs` 的结论与关键值是手写断言，不取自 `evaluateTask`；生成器会先核对这些断言再输出候选。`hardening.test.mjs` 还覆盖双语投影、Unicode、签名外的内容摘要、整数取整、极值进位、AST 限额、顺序与维护工具只读行为。旧 176 条和新完整结果仍由参考实现生成，**不是第二个独立实现的互操作证明**；未做双人语义标注，不是抽取金标。
+
+套件对象键顺序不参与比较，数组顺序及全部字段值参与比较。完整套件、每条输入的 `schema_expectation` 和每条实际结果均执行 Schema 校验。参考线上诊断消息固定英文；中文和英文展示可使用稳定错误码翻译，但必须保留原文证据，不能改写冻结结果。
+
+套件保持 `DRAFT_FOR_REVIEW`，未授权公开发布或认证。旧产品 API 不自动变为 BXP 0.3。

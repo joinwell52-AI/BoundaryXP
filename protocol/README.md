@@ -11,7 +11,8 @@
 - [任务 IR Schema](schemas/boundx-task-v1.schema.json)：`boundx-task/v1`。
 - [计算结果 Schema](schemas/boundx-result-v1.schema.json)：`boundx-result/v1`，包含类型化计算结果和空授权字段。
 - [BXP-CALC 套件 Schema](schemas/boundx-calc-conformance-suite-v1.schema.json)：正式向量文件合同。
-- [BXP-CALC Conformance Suite 1.0 Draft](conformance/bxp-calc-v1.0.json)：176 条冻结向量，完整结果逐项比对。
+- [BXP-CALC Conformance Suite 1.0 Draft](conformance/bxp-calc-v1.0.json)：208 条冻结向量，完整结果逐项比对。
+- [0.3 双语修订与迁移](CHANGES-0.3.md)：兼容性变化、32 条加固向量、历史基线和未实现边界。
 - [历史案例来源索引](benchmarks/source-index.json)：140 个主案例、20 个早期变体，共 160 个来源记录。
 - [自然语言抽取基准候选](benchmarks/README.md)：抽取评测与 BXP-CALC 分层治理。
 - [数字来源与取证边界](PROVENANCE.md)：哈希清单、稳定编号与私有挑战集的合规约束。
@@ -23,8 +24,8 @@
 
 ```yaml
 protocol: BXP-0001
-version: 0.2.0-draft.1
-conformance_suite: 1.0.0-draft.1
+version: 0.3.0-draft.1
+conformance_suite: 1.0.0-draft.2
 status: DRAFT_FOR_REVIEW
 publication_authorized: false
 standard_claim_authorized: false
@@ -37,9 +38,9 @@ business_decision: null
 ## 本地验证
 
 ```text
-cd boundx
+npm ci
 npm run test:protocol
 npm test
 ```
 
-一致性通过只表示实现对 176 条冻结结构化向量给出了完全一致的 `boundx-result/v1`。160 个历史来源与计算模式是一一对应的 `calculation-pattern-only` 派生，不是原文语义翻译或抽取金标；通过也不表示任务安全、获得授权或业务目标已经完成。
+在独立仓库根目录 `D:\boundx` 执行；完整 Schema 校验使用锁定的 Ajv，运行计算不联网。一致性通过只表示实现对 208 条冻结结构化向量给出了完全一致的 `boundx-result/v1`。160 个历史来源与计算模式是一一对应的 `calculation-pattern-only` 派生，不是原文语义翻译或抽取金标；通过也不表示任务安全、获得授权或业务目标已经完成。

@@ -1,3 +1,11 @@
+# Working source 1.2.4-preview.1: bilingual BXP 0.3 hardening
+
+- Revised English and Chinese BXP-0001 together to `0.3.0-draft.1`; unchanged 7+1 meanings and null authority boundaries.
+- Added full Draft 2020-12 task/result validation with pinned Ajv, bounded JSON preflight, exact decimal/integer arithmetic, source registry and digest verification, and explicit calculation scopes.
+- Conjoined Boolean constraints within a scope, retained known conflicts alongside unresolved findings, and corrected aggregated evidence limits and error-envelope version handling.
+- Added whole-input digests and deterministic witnesses; BXP-CALC `1.0.0-draft.2` contains 208 frozen vectors (48 foundational, 160 historical-pattern derivatives). Default suite generation now verifies rather than rewriting expectations.
+- See [双语修订、迁移与验证 / revision and migration](protocol/CHANGES-0.3.md). This is an incompatible pre-1.0 draft, not a public release, new product adapter, semantic-pack implementation or license change.
+
 # Repository migration: standalone private BoundX (2026-09-14)
 
 - Imported all 198 BoundX component files from CodeFlowMu commit `181a38f5ba3d1d8d66041352ea28be1c56c084f8` into the standalone repository root; source version remains `1.2.3-preview.1`.

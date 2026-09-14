@@ -16,7 +16,7 @@
 
 [corpus-manifest.json](corpus-manifest.json) 登记 140 个主编号案例（1—140）和 20 个早期 1—20 变体，共 160 条来源记录；[source-index.json](source-index.json) 以 Git Blob SHA 固定其来源。它们目前不是规范性抽取 Gold Corpus，`gold_cases` 仍为 0。
 
-BXP-CALC `1.0.0-draft.1` 为每条历史来源建立一个 `calculation-pattern-only` 派生向量，并另加 16 条基础向量，共 176 条。派生向量只继承“应覆盖哪类数学路径”的灵感，使用独立的规范化结构输入；不宣称是原文的完整 7+1 翻译。
+BXP-CALC `1.0.0-draft.2` 为每条历史来源保留一个 `calculation-pattern-only` 派生向量，基础向量含原16条与本次加固32条，总计208条。派生向量只继承“应覆盖哪类数学路径”的灵感，使用独立的规范化结构输入；不宣称是原文的完整 7+1 翻译。加固与双语计算测试不增加抽取 Gold 数量。
 
 ## 进入 Gold Corpus 的门禁
 

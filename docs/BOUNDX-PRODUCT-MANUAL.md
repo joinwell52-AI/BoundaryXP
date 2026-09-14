@@ -1,11 +1,13 @@
 # 界痕（BoundX）产品手册
 
 文档编号：`BX-PRODUCT-MANUAL-001`  
-版本：`0.1.0-draft.2`  
+版本：`0.1.0-draft.3`\
 状态：`DRAFT_FOR_REVIEW`  
 适用产品：界痕（BoundX）  
 决定权：ADMIN  
 公开授权：`false`  
+
+**2026-09-14 独立项目与协议修订补记：** 本产品已在 `D:\boundx` 和私有 `joinwell52-AI/BoundX` 独立维护，不再等待从母仓拆分。当前源码 `1.2.4-preview.1`、中英文 BXP-0001 `0.3.0-draft.1`、BXP-CALC `1.0.0-draft.2`（208 条向量）。详见 [协议修订记录](../protocol/CHANGES-0.3.md)。正文中的母仓 PR、旧协议及测试数量保留历史语境，不代表本次验证；AGPL 仍未启用。ADMIN 保持本地确定性抽取和 Python 计算，CLI/MCP/HTTP 等既有入口未因此自动接入新 BXP，L1/L2/L3 语义包功能本轮不扩展。
 
 > 本手册定义 BoundX 的产品定位、使用流程、集成方式、语义包、FDE 服务和商业边界，并如实区分当前实现与目标能力。它记录“定稿后拆分独立 BoundX 开源仓库并采用 GNU AGPL v3”的产品决定，但当前提交本身不改变 `codeflowmu` 许可证、不创建公开仓库、不发布 PyPI/npm 包，也不授权 BoundX 或宿主执行外部业务动作。
 
