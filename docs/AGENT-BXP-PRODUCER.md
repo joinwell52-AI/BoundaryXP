@@ -39,9 +39,9 @@ node --input-type=module -e "import {protocolInfo} from './src/bxp/index.mjs'; c
 | 作用域未知 | [未知作用域](../examples/bxp/zh-CN-unresolved-scope.json) | [Unknown scope](../examples/bxp/en-unresolved-scope.json) | complete / undetermined |
 | 确定冲突 | [区间冲突](../examples/bxp/zh-CN-conflict.json) | [Conflict](../examples/bxp/en-conflict.json) | complete / inconsistent |
 
-这些是手写结构化示例，不是自然语言抽取金标，不增加 208 条冻结计算向量。Python/Lark 可作为有限覆盖的可选生产者或研究实现，不提供 EXTRACT 符合性证明。
+这些是手写结构化示例，不是自然语言抽取金标，不增加 208 条冻结计算向量。当前 Python/Lark 只是有限覆盖的研究抽取器，不直接输出标准 BXP IR，不能称为标准 BXP 生产者。若未来接入，必须先显式转换为 `boundx-task/v1`、保留原文码点证据并通过本地验证；这也不提供 EXTRACT 符合性证明。
 
-These are manually authored IR examples, not extraction gold or additional frozen CALC vectors. Optional Python/Lark producers remain limited-coverage implementations.
+These are manually authored IR examples, not extraction gold or additional frozen CALC vectors. Current Python/Lark implementations are research extractors, not standard BXP producers. Future integration requires explicit conversion to `boundx-task/v1`, exact code-point evidence and local validation; it does not establish EXTRACT conformance.
 
 ## 本地调用 / Local Evaluation
 

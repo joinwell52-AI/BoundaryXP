@@ -9,7 +9,9 @@
 
 **当前项目状态：** 独立目录 `D:\boundx`，私有仓库 `joinwell52-AI/BoundX`；源码 `1.3.0-preview.0`、BXP-0001 `0.3.0-draft.2`、BXP-CALC `1.0.0-draft.3`（208 条）。当前能力与验证见 [协议实现说明](../protocol/IMPLEMENTATION.md) 和 [验证说明](VALIDATION.md)。
 
-> 本手册定义 BoundX 的产品定位、集成方式、语义包、FDE 服务和商业边界，区分当前实现与规划能力。仓库保持私有，暂无公开 Release 或 npm/PyPI 包；AGPL 是未生效的发布提案，不授权 BoundX 或宿主执行外部业务动作。
+> 本手册定义 BoundX 的产品定位、集成方式、语义包、FDE 服务和商业边界。第 14 章列出当前已交付能力，第 15 章单列未来规划；其他章节的目标设计不代表已经交付。已有 [v1.3.0-preview.0 私有 GitHub 源码预发布](https://github.com/joinwell52-AI/BoundX/releases/tag/v1.3.0-preview.0)，无 npm/PyPI 分发、安装包或独立二进制。AGPL 是未生效的发布提案，不授权 BoundX 或宿主执行外部业务动作。
+
+A private GitHub source prerelease exists; there are no npm/PyPI packages, installers or standalone binaries. Chapter 14 describes current delivered capabilities; chapter 15 contains future plans. The existing tag is unchanged: later documentation corrections are not included in its source archive.
 
 ## 1. 产品定义
 
@@ -476,7 +478,7 @@ FDE 不得：
 9. 同一任务变化后必须重新提取和计算，旧结果不能继续套用；
 10. 客户 Pack 的导出、复制和训练用途必须在合同中分别约定。
 
-## 14. 当前实现状态
+## 14. 当前已交付能力 / Current Delivered Capabilities
 
 ### 14.1 产品资产
 
@@ -485,7 +487,7 @@ FDE 不得：
 | 产品首页 | [README.md](../README.md) |
 | 产品与发布方案 | [BOUNDX-LIGHTWEIGHT-PRODUCT-PLAN.md](BOUNDX-LIGHTWEIGHT-PRODUCT-PLAN.md) |
 | 双语协议与计算合同 | [protocol/README.md](../protocol/README.md) |
-| 软件与 AI 领域包 | [领域包说明](SOFTWARE-AI-DOMAIN-PACK.md) |
+| 三层语义包当前边界 | [语义包说明](../domain-packs/README.md)（含软件/AI 单包研究状态） |
 
 ### 14.2 验证口径
 
@@ -499,19 +501,27 @@ FDE 不得：
 | Node CLI `bx` | evaluate、protocol-info；旧四命令仅 legacy | 不直接抽取自然语言 |
 | Node MCP | 两个 BXP 主工具与版本／Schema 资源；旧四工具仅 legacy | 不执行、不审批 |
 | 本机 Web UI | BXP 导入／粘贴、八桶三态、码点、三轴与五类计算 | 当前只允许 localhost，不是企业 Server |
-| Python 文法与数学检查 | 已实现局部能力，133 项测试曾通过 | 不是完整自然语言编译器 |
-| 软件/AI L2 Pack | 已实现 `0.1.0` 单包预览 | 多包、L3 和热插拔尚未实现 |
+| Python 文法与数学检查 | 局部研究抽取器，133 项测试曾通过 | 不直接输出标准 BXP IR，不是 Python SDK |
+| 软件/AI L2 Pack | Python 研究适配器中的 `0.1.0` 单包预览 | 不是 BXP Core 包接入；多包、L3 和热插拔尚未实现 |
 | BXP-CALC | 208 条结构化计算向量 | 不是 BXP-EXTRACT 准确率 |
-| PyPI | 未实现 | 没有 `pyproject.toml` 和回装证据 |
-| 生产 HTTP Server | 未实现 | 现有 UI Server 不可直接冒充 |
-| 通用宿主插件 SDK | 未实现 | 每个宿主需要独立实现与验证适配 |
-| FDE 交付流程 | 本手册定义候选 | 尚无三个真实客户验收证据 |
 
-## 15. 产品化顺序
+当前研究代码的证据区间使用 Unicode 码点 `[start,end)`。历史研究文档中的 UTF-16、旧路径和旧命令只保留为历史记录，不是当前接入指南；任务书及实施回执保留原始快照，不替代当前能力说明。
 
-### P0：统一门面
+Current evidence spans use Unicode code points. Historical UTF-16 descriptions and old commands are archival, not current integration guidance. Research extractors are not standard BXP producers.
 
-本轮已统一 BXP Core、CLI/MCP/UI，严格原始 JSON、码点证据与三轴结果贯通。跨入口测试和全量回执见验证说明；Python 仍是有限研究实现，不声称已成为标准 BXP SDK。extract/render/packs 为未来产品方法，不修改固定协议。
+## 15. 未来规划能力 / Future Planned Capabilities
+
+本章是候选路线，不是实施授权或交付声明；需要后续任务书单独确定范围。已经完成的 BXP Core、CLI/MCP/UI 统一见第 14 章。extract/render/packs 与 ADMIN 文本 7+1 生成均不在当前已交付入口内，不修改固定协议。
+
+This roadmap is not implementation authorization. Python SDK, production HTTP, pack activation and ADMIN text-to-7+1 generation remain future work, not delivered BXP entry points.
+
+| 规划能力 | 尚未交付的部分 |
+|---|---|
+| Python SDK / PyPI | 正式包、稳定 API、wheel/sdist 和干净环境回装 |
+| 生产 HTTP Server | 独立认证、租户隔离和部署验证；本机 UI Server 不能冒充 |
+| 通用宿主插件 SDK | 各宿主的独立适配和验证 |
+| 多包与 L3 接入 | 组合、激活、冲突处理和生命周期工具 |
+| FDE 交付流程 | 候选服务定义，尚无三个真实客户验收证据 |
 
 ### P0.5：发布准备
 
@@ -570,16 +580,18 @@ FDE 不得：
 
 ## 17. 产品对外表达
 
-### 17.1 首页主文案
+### 17.1 当前产品主文案 / Current Product Copy
 
 > **BoundX — 执行之前，先把任务边界算清楚。**  
-> 一个可嵌入、可服务化的任务边界预检引擎。通过 7+1 结构、确定性检查和可装载语义包，在任务交给人、脚本或 Agent 之前发现缺项、冲突、越界和交接问题。
+> 一个本地任务边界预检引擎。接收生产者提供的带证据 7+1 结构化任务，验证输入并确定性计算缺项、冲突和边界约束；不自行抽取自然语言，不授予执行权。
 
 ### 17.2 面向开发者
 
-> 免费导入 BoundX Core，通过 Python、CLI、MCP 或 HTTP 在现有系统前增加任务预检。所有入口共享同一 BXP 数据合同和计算结果。
+> 从私有源码使用 Node API、CLI、MCP 或本机 UI，提交 `boundx-task/v1` 并获得 `boundx-result/v1`。这些已交付入口共用唯一 BXP Core；Python SDK、生产 HTTP 和语义包激活仍为规划。
 
-### 17.3 面向客户
+Current entry points are Node API, CLI, MCP and the local UI, sharing one BXP Core. Python SDK, production HTTP and pack activation are not delivered.
+
+### 17.3 未来服务定位（非当前交付承诺） / Future Service Positioning
 
 > 不替换您现有的业务系统，只在任务提交和执行之间增加一道可解释的防呆检查。通用工具免费，行业规则、企业配置和落地集成按项目服务。
 
@@ -594,7 +606,7 @@ FDE 不得：
 
 ## 18. 产品与商业结论
 
-BoundX 的技术产品是一个统一预检引擎，PyPI、CLI、MCP、Server 和插件只是不同入口；免费核心用于降低集成成本，语义包与 FDE 用于解决客户真正困难的规则落地。
+BoundX 当前是通过 Node API、CLI、MCP 和本机 UI 使用的统一预检引擎。未来拟增加 Python SDK/PyPI、生产 Server 和插件；免费核心、语义包与 FDE 是候选商业规划，不代表已有安装包、可激活语义包产品或客户交付。
 
 最终商业结构保持简单：
 
@@ -606,11 +618,17 @@ BoundX 的技术产品是一个统一预检引擎，PyPI、CLI、MCP、Server �
 
 ## 19. 当前状态
 
-本手册进入私有仓库只表示形成了产品候选定义。当前继续保持：
+本手册仍是待审的产品候选定义，但源码已经有 `v1.3.0-preview.0` 私有预发布。文档审核状态、私有源码预发布与公开发行授权是不同事项；下列 `publication_authorized` 仅指公开发行授权，不否认已有私有预发布。现有标签及其源码归档不移动、不重写，本次文档补正不发布新版本。
+
+Document review status is separate from the existing private source prerelease. `publication_authorized` refers only to public distribution; no new release is authorized by these documentation corrections.
 
 ```yaml
 status: DRAFT_FOR_REVIEW
 publication_authorized: false
+github_source_prerelease: v1.3.0-preview.0
+repository_private: true
+installers_available: false
+standalone_binaries_available: false
 license_change_effective: false
 repository: joinwell52-AI/BoundX
 future_repository_license: AGPL-3.0-only

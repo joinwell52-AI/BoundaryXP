@@ -11,7 +11,8 @@ TASKBOOK = ROOT / 'docs/tasks/BoundX-BXP-product-alignment-taskbook-v1.md'
 TASKBOOK_SHA256 = 'a510c045277a1612c43c71b3cbe459ccbac904e88a3f14a5dc68e23046870d1c'
 CURRENT = ['README.md', 'AGENTS.md', 'QUICKSTART.md', 'protocol/IMPLEMENTATION.md',
            'docs/BOUNDX-PRODUCT-MANUAL.md', 'docs/FUNCTIONS.md', 'docs/UI-GUIDE.md',
-           'docs/UI-ADVICE.md', 'docs/VALIDATION.md', 'docs/AGENT-BXP-PRODUCER.md']
+           'docs/UI-ADVICE.md', 'docs/VALIDATION.md', 'docs/AGENT-BXP-PRODUCER.md',
+           'domain-packs/README.md', 'domain-packs/l3/README.md']
 
 
 class ProductAlignmentTests(unittest.TestCase):
@@ -35,7 +36,7 @@ class ProductAlignmentTests(unittest.TestCase):
         self.assertEqual(hashlib.sha256(TASKBOOK.read_bytes()).hexdigest(), TASKBOOK_SHA256)
 
     def test_current_release_status_distinguishes_private_source_from_packages(self):
-        for name in ['README.md', 'QUICKSTART.md', 'CHANGELOG.md']:
+        for name in ['README.md', 'QUICKSTART.md', 'CHANGELOG.md', 'docs/BOUNDX-PRODUCT-MANUAL.md']:
             text = (ROOT / name).read_text(encoding='utf-8')
             current = text.split('## 1.2.4-preview.1')[0]
             self.assertIn('https://github.com/joinwell52-AI/BoundX/releases/tag/v1.3.0-preview.0', current)
@@ -44,6 +45,48 @@ class ProductAlignmentTests(unittest.TestCase):
             self.assertIn('npm/PyPI', current)
             self.assertIn('installers', current)
             self.assertNotRegex(current, r'未发布 npm/PyPI 或 Release|No release, publication|无公开 Release')
+
+    def test_manual_separates_delivered_capabilities_from_future_plans(self):
+        text = (ROOT / 'docs/BOUNDX-PRODUCT-MANUAL.md').read_text(encoding='utf-8')
+        delivered = text.split('## 14. 当前已交付能力 / Current Delivered Capabilities\n')[1].split('## 15.')[0]
+        planned = text.split('## 15. 未来规划能力 / Future Planned Capabilities\n')[1].split('## 16.')[0]
+        for entry in ['Node CLI', 'Node MCP', '本机 Web UI', '唯一 BXP Core']:
+            self.assertIn(entry, delivered)
+        for entry in ['Python SDK / PyPI', '生产 HTTP Server', '多包与 L3 接入']:
+            self.assertIn(entry, planned)
+        self.assertIn('不是实施授权或交付声明', planned)
+        self.assertNotIn('SOFTWARE-AI-DOMAIN-PACK.md', text)
+        copy = text.split('### 17.2')[1].split('### 17.3')[0]
+        self.assertIn('Node API、CLI、MCP 或本机 UI', copy)
+        self.assertIn('not delivered', copy)
+        self.assertNotIn('通过 Python、CLI、MCP 或 HTTP', copy)
+
+    def test_l3_binding_decision_is_distinct_from_bxp_authority(self):
+        text = (ROOT / 'domain-packs/l3/README.md').read_text(encoding='utf-8')
+        self.assertIn('BXP 协议定义 7+1，L1 只提供通用语义原语', text)
+        self.assertIn('BXP defines 7+1', text)
+        self.assertNotIn('L1 operation/7+1 定义', text)
+        for field in ['policyBindings[].decision: null', 'business_decision: null', 'execution_authorization: null']:
+            self.assertIn(field, text)
+        self.assertIn('采用/绑定', text)
+        self.assertIn('不能互相替代、复制或推导', text)
+        self.assertIn('not a BXP result field', text)
+        self.assertIn('does not permit a non-null binding decision', text)
+
+    def test_research_extractors_are_not_advertised_as_standard_producers(self):
+        text = (ROOT / 'docs/AGENT-BXP-PRODUCER.md').read_text(encoding='utf-8')
+        self.assertIn('不直接输出标准 BXP IR', text)
+        self.assertIn('research extractors, not standard BXP producers', text)
+        self.assertIn('explicit conversion to `boundx-task/v1`', text)
+        self.assertNotIn('Optional Python/Lark producers', text)
+
+    def test_current_pack_guidance_uses_code_points_and_labels_history(self):
+        text = (ROOT / 'domain-packs/README.md').read_text(encoding='utf-8')
+        self.assertIn('当前 Python 研究适配器', text)
+        self.assertIn('Unicode 码点 `[start,end)`', text)
+        self.assertIn('not UTF-16 code units', text)
+        self.assertIn('archival, not current integration guidance', text)
+        self.assertIn('../docs/AGENT-BXP-PRODUCER.md', text)
 
     def test_product_and_lock_versions_match_current_docs(self):
         package = json.loads((ROOT / 'package.json').read_text(encoding='utf-8'))
