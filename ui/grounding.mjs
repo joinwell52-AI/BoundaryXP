@@ -1,6 +1,7 @@
+import {pointLength, pointSlice, pointIndex, pointMatches} from './codepoints.mjs';
 // Models choose source ranges; only the program copies evidence text.
 export function sourceCatalog(text){
-  const segments=[...text.matchAll(/[^，,；;\n。！？!?]+[，,；;\n。！？!?]*/gu)].map((m,i)=>({id:'s'+(i+1),start:m.index,end:m.index+m[0].length,text:m[0]}));
+  const segments=[...pointMatches(text, /[^，,；;\n。！？!?]+[，,；;\n。！？!?]*/gu)].map((m,i)=>({id:'s'+(i+1),start:m.index,end:m.index+pointLength(m[0]),text:m[0]}));
   if(!segments.length||segments.length>1024)throw Error('原文分段为空或超过 1024 段，请缩小本次分析范围。');
   return segments;
 }
@@ -11,7 +12,7 @@ export function materializeSelection(value,kind,text,notes=[]){
     if(!ref||typeof ref!=='object'||Object.keys(ref).sort().join()!=='from,to')throw Error('原句引用须为编号或连续范围。');
     const a=map.get(ref.from),b=map.get(ref.to);if(!a||!b||a.start>b.start)throw Error('原句范围无效。');return {start:a.start,end:b.end};
   }
-  function quote(ref,within){const r=range(ref);if(r.start<within.start||r.end>within.end)throw Error('该派单引用超出其原文范围。');return text.slice(r.start,r.end);}
+  function quote(ref,within){const r=range(ref);if(r.start<within.start||r.end>within.end)throw Error('该派单引用超出其原文范围。');return pointSlice(text, r.start,r.end);}
   function parameterQuote(ref,within,key){
     // Common provider form: multiple selected source IDs. Preserve a continuous
     // enclosing excerpt and explicitly disclose the unselected intervening text.
@@ -22,16 +23,16 @@ export function materializeSelection(value,kind,text,notes=[]){
     const a=items[0],b=items.reduce((longest,x)=>x.end>longest.end?x:longest,a);
     if(a.start<within.start||b.end>within.end)throw Error('参数引用超出派单范围。');
     notes.push(`${key} 选择了多段原句（${ids.join(', ')}）；当前引用展示从第一段到最后一段的连续原文，也包含中间未选择的文字，请核对。`);
-    return text.slice(a.start,b.end);
+    return pointSlice(text, a.start,b.end);
   }
   function doc(m,within){
     if(!m||typeof m!=='object'||Object.keys(m).sort().join()!=='actions,completion,parameters'||!m.parameters||typeof m.parameters!=='object'||Array.isArray(m.parameters)||!Array.isArray(m.actions)||!Array.isArray(m.completion))throw Error('模型未返回有效的边界选择结构。');
     if(m.actions.length>128||m.completion.length>128)throw Error('动作或条件过多。');
-    return {text:text.slice(within.start,within.end),parameters:Object.fromEntries(Object.entries(m.parameters).map(([k,v])=>[k,parameterQuote(v,within,k)])),
+    return {text:pointSlice(text, within.start,within.end),parameters:Object.fromEntries(Object.entries(m.parameters).map(([k,v])=>[k,parameterQuote(v,within,k)])),
       actions:m.actions.map(a=>{if(!a||Object.keys(a).sort().join()!=='actor,quote,target,verb')throw Error('动作选择结构无效。');return {...a,quote:quote(a.quote,within)};}),
       completion:m.completion.map(c=>{if(!c||Object.keys(c).sort().join()!=='id,quote')throw Error('条件选择结构无效。');return {...c,quote:quote(c.quote,within)};})};
   }
-  const whole={start:0,end:text.length};
+  const whole={start:0,end:pointLength(text)};
   if(kind==='task')return doc(value,whole);
   if(!value||Object.keys(value).sort().join()!=='document,tasks'||!Array.isArray(value.tasks)||value.tasks.length>64)throw Error('模型未返回有效派单列表。');
   return {document:doc(value.document,whole),tasks:value.tasks.map(t=>{

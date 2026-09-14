@@ -174,12 +174,12 @@ class DomainActionFrameTests(unittest.TestCase):
             else:
                 self.assertFalse(frame["risk_candidates"])
 
-    def test_domain_evidence_uses_utf16_offsets(self):
+    def test_domain_evidence_uses_codepoint_offsets(self):
         text = "😀 由工程师部署 payment-api。"
         frame = actions(text)[0]
         source = frame["source"]
-        actual = text.encode("utf-16-le")[source["start"] * 2:source["end"] * 2]
-        self.assertEqual(actual.decode("utf-16-le"), source["quote"])
+        actual = text[source["start"]:source["end"]]
+        self.assertEqual(actual, source["quote"])
 
 
 if __name__ == "__main__":

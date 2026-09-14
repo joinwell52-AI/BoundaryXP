@@ -1,3 +1,4 @@
+import {pointSlice} from './codepoints.mjs';
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {calculateWithLibraries} from '../admin-python.mjs';
@@ -21,6 +22,6 @@ test('conditional handover and alternatives produce concrete localized advice',a
   const r=await calculateWithLibraries(text),p=sourcePresentation(r,text);
   const f=p.findings.find(x=>x.code===code);assert(f);assert(f.suggestion.en);assert(f.suggestion['zh-CN']);
   assert.equal(f.decision,null);
-  for(const s of f.sources)assert.equal(text.slice(s.start,s.end),s.quote);
+  for(const s of f.sources)assert.equal(pointSlice(text,s.start,s.end),s.quote);
  }
 });

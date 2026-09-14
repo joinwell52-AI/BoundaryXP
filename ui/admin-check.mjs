@@ -1,9 +1,10 @@
+import {pointLength, pointSlice, pointIndex, pointMatches} from './codepoints.mjs';
 import {adminRulePack} from './admin-rules.mjs';
 import {glossaryEntries,explicitReferences,resolveGlossary} from './admin-glossary.mjs';
 import {checkOperatorText} from './admin-operators.mjs';
 import {checkTaskSlots} from './admin-slots.mjs';
 
-const clauses=text=>[...text.matchAll(/[^。！？；;\n.!?]+[。！？；;\n.!?]*/g)].map(m=>({text:m[0],start:m.index,end:m.index+m[0].length}));
+const clauses=text=>[...pointMatches(text, /[^。！？；;\n.!?]+[。！？；;\n.!?]*/g)].map(m=>({text:m[0],start:m.index,end:m.index+pointLength(m[0])}));
 const pending=/【[^】]*】|\[[^\]]*\]|待定|未定|待明确|\b(?:TBD|unknown)\b/i;
 const negativePrefix=/(?:无需|不要求|不做|不进行|不是|并非|禁止|不得|不允许)\s*$|\b(?:no need (?:for|to)|do not|must not|not required to)\s*$/i;
 const negativeSuffix=/^\s*(?:不是要求|不作要求|\bis not required\b)/i;
@@ -19,27 +20,27 @@ function definitionEvidence(rule,segments){
 }
 
 export function checkAdminText(text,pack=adminRulePack){
- if(typeof text!=='string'||text.length>100000)throw Error('Expected task text of at most 100000 characters');
+ if(typeof text!=='string'||pointLength(text)>100000)throw Error('Expected task text of at most 100000 characters');
  const segments=clauses(text),findings=[],checks=[],glossary=glossaryEntries(text);
  for(const rule of pack.rules){
-  const matches=[...text.matchAll(new RegExp(rule.pattern,'giu'))].filter(m=>!glossary.some(e=>e.start<=m.index&&m.index<e.end));
+  const matches=[...pointMatches(text, new RegExp(rule.pattern,'giu'))].filter(m=>!glossary.some(e=>e.start<=m.index&&m.index<e.end));
   for(const [matchIndex,match] of matches.entries()){
-   const start=match.index,end=start+match[0].length;
+   const start=match.index,end=start+pointLength(match[0]);
    const index=segments.findIndex(s=>s.start<=start&&s.end>=end),segment=segments[index];
    if(!segment)continue;
-   const before=text.slice(segment.start,start),after=text.slice(end,segment.end);
+   const before=pointSlice(text, segment.start,start),after=pointSlice(text, end,segment.end);
    if(negativePrefix.test(before)||negativeSuffix.test(after)){
     checks.push({rule:rule.id,status:'not-required',start,end});continue;
    }
    const next=segments[index+1];
    const context=[segment];
    const nextHasOwnWork=next&&pack.rules.some(other=>new RegExp(other.pattern,'iu').test(next.text));
-   if(next&&!nextHasOwnWork&&!/\n\s*\n/.test(text.slice(segment.start,next.start)))context.push(next);
+   if(next&&!nextHasOwnWork&&!/\n\s*\n/.test(pointSlice(text, segment.start,next.start)))context.push(next);
    const nextMatch=matches[matchIndex+1],previousMatch=matches[matchIndex-1];
-   const windowEnd=Math.min(context.at(-1).end,nextMatch?.index??text.length);
+   const windowEnd=Math.min(context.at(-1).end,nextMatch?.index??pointLength(text));
    const windowStart=previousMatch&&previousMatch.index>=segment.start?start:segment.start;
-   const local=context.map(s=>({start:Math.max(s.start,windowStart),end:Math.min(s.end,windowEnd)})).filter(s=>s.end>s.start).map(s=>({...s,text:text.slice(s.start,s.end)}));
-   const refs=explicitReferences(text.slice(windowStart,windowEnd));
+   const local=context.map(s=>({start:Math.max(s.start,windowStart),end:Math.min(s.end,windowEnd)})).filter(s=>s.end>s.start).map(s=>({...s,text:pointSlice(text, s.start,s.end)}));
+   const refs=explicitReferences(pointSlice(text, windowStart,windowEnd));
    let definitions=[],binding='local';
    if(refs.length){
     const uniqueIds=[...new Set(refs.map(r=>r.id))];

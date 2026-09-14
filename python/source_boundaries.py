@@ -95,7 +95,7 @@ def membership_branches(text,spans,source):
             if pattern('otherwise').search(q):otherwise=source(text,x,y);break
             if re.search(r'若|如果|\bif\b',q,re.I):break
             if not actions and pattern('then').search(q):actions.append(source(text,x,y));continue
-            gap=text.encode('utf-16-le')[actions[-1]['end']*2:source(text,x,x)['start']*2].decode('utf-16-le') if actions else ''
+            gap=text[actions[-1]['end']:x] if actions else ''
             if actions and re.match(r'^(?:并|且|and\b)',q,re.I) and not re.search(r'[；;。.!?！？\n]',gap):
                 actions.append(source(text,x,y));continue
             # An else can follow the consequence directly, but a separate

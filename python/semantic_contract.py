@@ -282,7 +282,7 @@ def parse_actions(text,source,spans,prohibitions,guards,memberships,numbers):
                     ra,rb=approval.span(group)
                     while ra<rb and condition.quote[ra].isspace():ra+=1
                     while rb>ra and condition.quote[rb-1].isspace():rb-=1
-                    rs=Evidence(condition.quote[ra:rb],condition.start+len(condition.quote[:ra].encode('utf-16-le'))//2,condition.start+len(condition.quote[:rb].encode('utf-16-le'))//2)
+                    rs=Evidence(condition.quote[ra:rb],condition.start+ra,condition.start+rb)
                     roles.append(Role('approver',rs.quote,rs))
             if actor:actor_carry=next(public(r.source) for r in roles if r.name=='executor')
             id='action_'+str(len(actions)+1)

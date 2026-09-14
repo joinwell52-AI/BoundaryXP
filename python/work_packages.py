@@ -10,8 +10,8 @@ NAMED_BRACKET_HEADER=re.compile(r'^\s*【阶段[^:：】]{1,12}[:：][^】\r\n]*
 INLINE_STAGE_HEADER=re.compile(r'(?:(?<=^)|(?<=[。；;\n]))\s*阶段[一二三四五六七八九十0-9]+\s*[:：]')
 
 def evidence(text,start,end):
-    return {'start':len(text[:start].encode('utf-16-le'))//2,
-            'end':len(text[:end].encode('utf-16-le'))//2,'quote':text[start:end]}
+    return {'start':start,
+            'end':end,'quote':text[start:end]}
 
 def partition(text):
     headers=[];offset=0;fence=None;other=[]
@@ -44,9 +44,9 @@ def partition(text):
     return {'headers':headers,'preamble':preamble,'issues':issues}
 
 def remap(value,original,prefix,body_start,stage_id):
-    """Map every evidence quote from effective scope to original UTF-16 offsets."""
-    prefix_units=len(prefix.encode('utf-16-le'))//2
-    body_units=len(original[:body_start].encode('utf-16-le'))//2
+    """Map every evidence quote from effective scope to original Unicode code-point offsets."""
+    prefix_units=len(prefix)
+    body_units=body_start
     if isinstance(value,list):return [remap(x,original,prefix,body_start,stage_id) for x in value]
     if not isinstance(value,dict):return value
     result={k:remap(v,original,prefix,body_start,stage_id) for k,v in value.items()}
@@ -56,7 +56,7 @@ def remap(value,original,prefix,body_start,stage_id):
         elif a>=prefix_units+1:
             a=body_units+a-prefix_units-1;b=body_units+b-prefix_units-1;scope='local'
         else:raise ValueError('Evidence crosses a scope join')
-        if original.encode('utf-16-le')[a*2:b*2].decode('utf-16-le')!=value['quote']:raise ValueError('Evidence mapping mismatch')
+        if original[a:b]!=value['quote']:raise ValueError('Evidence mapping mismatch')
         result.update(start=a,end=b,scope=scope,stageId=stage_id)
     return result
 

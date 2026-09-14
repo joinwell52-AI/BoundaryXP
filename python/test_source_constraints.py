@@ -63,7 +63,7 @@ class SourceTests(unittest.TestCase):
         for text in CASES+['😀 If balance < 20 usd, write CSV; total duration must not exceed 2 minutes.','整理一下资料。','Use v2.4.1, e.g. alpha.']:
             r=analyze_source(text);self.assertEqual(r,analyze_source(text));self.assertFalse(r['summary']['completeInterpretation'])
             for s in [c['source'] for c in r['clauses']]+[n['expressionSource'] for n in r['numbers']]:
-                self.assertEqual(text.encode('utf-16-le')[s['start']*2:s['end']*2].decode('utf-16-le'),s['quote'])
+                self.assertEqual(text[s['start']:s['end']],s['quote'])
             for f in r['advice']:self.assertIn('en',f['suggestion']);self.assertIsNone(f['decision'])
 
     def test_second_batch_units_and_scope(self):

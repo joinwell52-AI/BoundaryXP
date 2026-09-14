@@ -188,7 +188,7 @@ def project(text,source,numbers=(),guards=None,prohibitions=None,lists=(),member
                     uncovered.append({'source':rs,'reason':'artifact_name_binding_unresolved','relation_id':frame.id})
                     continue
             for m in matches:
-                file_source={'quote':m.group(),'start':rs['start']+len(value[:m.start()].encode('utf-16-le'))//2,'end':rs['start']+len(value[:m.end()].encode('utf-16-le'))//2}
+                file_source={'quote':m.group(),'start':rs['start']+m.start(),'end':rs['start']+m.end()}
                 f={'name':m.group(),'source':file_source,'relationId':frame.id,'guardSources':item['guard_sources']}
                 (inputs if name=='input' else conditional if condition else outputs).append(f)
     # Coordinated forms such as “读取并向量化词表 x.parquet” may leave the

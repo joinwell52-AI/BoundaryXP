@@ -8,7 +8,8 @@ import { spawn } from 'node:child_process';
 import { reviewBoundX, reviewPlanBoundary, boundaryResponseStatus, validateBoundaryText } from './src/index.ts';
 import { sourceCatalog, materializeSelection, selectionInstruction } from './ui/grounding.mjs';
 import { resolveEndpoint } from './ui/connection.mjs';
-const version=JSON.parse(readFileSync(new URL('./package.json',import.meta.url),'utf8')).version;
+import {parseAndEvaluateBxpTask, evaluateBxpTask, protocolInfo, PRODUCT_VERSION, RAW_JSON_BYTE_LIMIT} from './src/bxp/index.mjs';
+const version=PRODUCT_VERSION;
 const LIMIT=1_000_000;
 export function validateExtract(value,kind,text,baseline){
   const docs=kind==='task'?[value]:[value?.document,...(Array.isArray(value?.tasks)?value.tasks.map(t=>t.document):[])];
@@ -49,7 +50,8 @@ export function createApp({fetchImpl=fetch}={}){
     const send=(status,data,type='application/json')=>{res.writeHead(status,{'Content-Type':type+'; charset=utf-8','Cache-Control':'no-store','X-Content-Type-Options':'nosniff','Content-Security-Policy':"default-src 'self'; script-src 'self'; style-src 'self'; connect-src 'self'; img-src 'self' data:; frame-ancestors 'none'; base-uri 'none'; form-action 'none'"});res.end(type==='application/json'?JSON.stringify(data):data);};
     if(req.headers.host!==new URL(origin).host) return send(403,{error:'仅允许本机地址访问。'});
     if(req.method==='GET'){
-      const assets={'/':['ui/index.html','text/html'],'/app.js':['ui/app.js','text/javascript'],'/records.mjs':['ui/records.mjs','text/javascript'],'/connection.mjs':['ui/connection.mjs','text/javascript'],'/advice.mjs':['ui/advice.mjs','text/javascript'],'/i18n.mjs':['ui/i18n.mjs','text/javascript'],'/progress.mjs':['ui/progress.mjs','text/javascript'],'/task-risks.mjs':['ui/task-risks.mjs','text/javascript'],'/local-task.mjs':['ui/local-task.mjs','text/javascript'],'/admin-check.mjs':['ui/admin-check.mjs','text/javascript'],'/admin-boundary.mjs':['ui/admin-boundary.mjs','text/javascript'],'/source-advice.mjs':['ui/source-advice.mjs','text/javascript'],'/source-render.mjs':['ui/source-render.mjs','text/javascript'],'/admin-operators.mjs':['ui/admin-operators.mjs','text/javascript'],'/admin-slots.mjs':['ui/admin-slots.mjs','text/javascript'],'/admin-glossary.mjs':['ui/admin-glossary.mjs','text/javascript'],'/admin-rules.mjs':['ui/admin-rules.mjs','text/javascript'],'/paired-copy.mjs':['ui/paired-copy.mjs','text/javascript'],'/style.css':['ui/style.css','text/css']};
+      if(req.url==='/api/protocol-info')return send(200,protocolInfo());
+      const assets={'/':['ui/bxp.html','text/html'],'/legacy':['ui/index.html','text/html'],'/bxp.mjs':['ui/bxp.mjs','text/javascript'],'/bxp-view.mjs':['ui/bxp-view.mjs','text/javascript'],'/bxp.css':['ui/bxp.css','text/css'],'/codepoints.mjs':['ui/codepoints.mjs','text/javascript'],'/app.js':['ui/app.js','text/javascript'],'/records.mjs':['ui/records.mjs','text/javascript'],'/connection.mjs':['ui/connection.mjs','text/javascript'],'/advice.mjs':['ui/advice.mjs','text/javascript'],'/i18n.mjs':['ui/i18n.mjs','text/javascript'],'/progress.mjs':['ui/progress.mjs','text/javascript'],'/task-risks.mjs':['ui/task-risks.mjs','text/javascript'],'/local-task.mjs':['ui/local-task.mjs','text/javascript'],'/admin-check.mjs':['ui/admin-check.mjs','text/javascript'],'/admin-boundary.mjs':['ui/admin-boundary.mjs','text/javascript'],'/source-advice.mjs':['ui/source-advice.mjs','text/javascript'],'/source-render.mjs':['ui/source-render.mjs','text/javascript'],'/admin-operators.mjs':['ui/admin-operators.mjs','text/javascript'],'/admin-slots.mjs':['ui/admin-slots.mjs','text/javascript'],'/admin-glossary.mjs':['ui/admin-glossary.mjs','text/javascript'],'/admin-rules.mjs':['ui/admin-rules.mjs','text/javascript'],'/paired-copy.mjs':['ui/paired-copy.mjs','text/javascript'],'/style.css':['ui/style.css','text/css']};
       const asset=assets[req.url];if(!asset)return send(404,{error:'Not found'});
       return send(200,readFileSync(new URL(asset[0],import.meta.url),'utf8').replaceAll('__SESSION_TOKEN__',token).replaceAll('__APP_VERSION__',version),asset[1]);
     }
@@ -58,7 +60,11 @@ export function createApp({fetchImpl=fetch}={}){
     res.on('close',()=>controller.abort());
     const timer=setTimeout(()=>controller.abort(),180000);
     try{
-      let size=0,buffers=[];for await(const chunk of req){size+=chunk.length;if(size>LIMIT)throw Error('输入超过 1 MB。');buffers.push(chunk);}
+      const bxp=req.url==='/api/bxp/evaluate';
+      if(!bxp&&!req.url.startsWith('/api/legacy/'))return send(404,{error:'Legacy endpoints require /api/legacy/.'});
+      let size=0,buffers=[];for await(const chunk of req){size+=chunk.length;if(size>(bxp?RAW_JSON_BYTE_LIMIT:LIMIT)){if(bxp)return send(200,evaluateBxpTask(undefined));throw Error('输入超过 1 MB。');}buffers.push(chunk);}
+      if(bxp)return send(200,parseAndEvaluateBxpTask(Buffer.concat(buffers)));
+      req.url=req.url.replace('/api/legacy/','/api/');
       let data;try{data=JSON.parse(Buffer.concat(buffers).toString('utf8'));}catch{throw Error('输入不是有效 JSON。');}
       if(req.url==='/api/admin-boundary')return send(200,await calculateWithLibraries(data.text,{signal:controller.signal}));
       if(req.url==='/api/connection'){

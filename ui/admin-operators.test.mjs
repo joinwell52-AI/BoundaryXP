@@ -1,3 +1,4 @@
+import {pointSlice} from './codepoints.mjs';
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
@@ -15,8 +16,8 @@ for(const [i,c] of cases.entries())test(`operator contract ${i+1}: ${c.text}`,()
  if(c.noRisk)assert(!result.findings.some(f=>f.rule===c.noRisk));
  if(c.uncovered)assert.equal(result.coverage.candidate,0);
  assert.deepEqual(result,checkOperatorText(c.text));
- for(const s of result.statements)assert.equal(c.text.slice(s.start,s.end),s.quote);
- for(const f of result.findings){assert(f.en.title&&f.en.suggestion);assert.equal(c.text.slice(f.start,f.end),f.quote);}
+ for(const s of result.statements)assert.equal(pointSlice(c.text,s.start,s.end),s.quote);
+ for(const f of result.findings){assert(f.en.title&&f.en.suggestion);assert.equal(pointSlice(c.text,f.start,f.end),f.quote);}
 });
 test('operator composition respects parentheses, negation and resource bounds',()=>{
  assert.equal(parseAuthority('A and B and C').length,1);
@@ -48,7 +49,7 @@ test('conditional differences, relational predicates and quoted instructions sta
 test('mixed-language source offsets and authorization mentions never grant authority',()=>{
  const text='🧭任务说明。未经 ADMIN 授权，不得修改生产配置和 test_env。';
  const result=checkOperatorText(text),s=result.statements.find(s=>s.candidates.length);
- assert(s);assert.equal(text.slice(s.start,s.end),s.quote);
+ assert(s);assert.equal(pointSlice(text,s.start,s.end),s.quote);
  assert.equal(s.candidates[0].condition.op,'NOT');
  assert.equal(s.candidates[0].authorizationDecision,null);
  assert.equal(s.candidates[0].action,'修改生产配置和 test_env');

@@ -1,4 +1,6 @@
 const pairs=[
+ ['Legacy · 已弃用的研究界面 / Deprecated research interface. Not BXP-IR or BXP-CALC.','Legacy · Deprecated research interface. Not BXP-IR or BXP-CALC.'],
+ ['返回 BXP / Back to BXP','Back to BXP'],
  ['查看 PM 原始答复与手动输入','View the original PM reply and manual input'],
  ['本地检查，给 ADMIN 建议','Check locally for ADMIN'],['ADMIN 端纯本地规则检查，不调用 AI。无法由规则确认的内容保留为待明确。','ADMIN checks use local rules without AI. Anything not confirmed by rules remains unknown.'],['发送逐任务建议，让 PM 回复并重分配','Send task-specific advice and request a revised PM plan'],
  ['给 ADMIN 的任务建议','Task advice for ADMIN'],['测试 PM 分工与建议','PM planning test and advice'],['结果','Results'],['两个独立入口：给 ADMIN 完善任务的建议，或单独测试 PM 分工。无需按顺序操作。','Two independent tools: improve the ADMIN task or test PM planning. No required sequence.'],['PM 测试任务原文','Task source for the PM test'],['独立输入要交给 PM 的任务，无需先做 ADMIN 分析。','Enter a task for PM independently. ADMIN analysis is not required.'],['复制 ADMIN 任务原文到这里','Copy ADMIN task source here'],['已复制任务原文，尚未启动 PM 测试。','Task source copied. No PM test has started.'],['测试会使用上方 PM 任务原文。','The test uses the PM task source above.'],

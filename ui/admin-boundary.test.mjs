@@ -1,3 +1,4 @@
+import {pointSlice} from './codepoints.mjs';
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {originalBoundary,withEngineAdvice} from './admin-boundary.mjs';
@@ -8,7 +9,7 @@ test('original task has eight source dimensions, never a completeness certificat
  assert.deepEqual(result.fields.map(f=>f.id),['I','O','A','P','R','V','C','B']);
  assert.deepEqual(result.summary.unmapped,['R','V','B']);
  assert.equal(result.confirmation,null);assert.equal(result.businessDecision,null);
- for(const f of result.fields)for(const s of f.evidence)assert.equal(text.slice(s.start,s.end),s.quote);
+ for(const f of result.fields)for(const s of f.evidence)assert.equal(pointSlice(text,s.start,s.end),s.quote);
  assert.deepEqual(result,originalBoundary(text));
 });
 test('explicit source labels and placeholders cannot auto-confirm a baseline',()=>{

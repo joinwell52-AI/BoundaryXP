@@ -22,7 +22,7 @@ class WorkPackageTests(unittest.TestCase):
                 for v in x:verify(v)
             if isinstance(x,dict):
                 if {'quote','start','end'}<=x.keys():
-                    self.assertEqual(text.encode('utf-16-le')[x['start']*2:x['end']*2].decode('utf-16-le'),x['quote'])
+                    self.assertEqual(text[x['start']:x['end']],x['quote'])
                 for v in x.values():verify(v)
         verify(r)
 

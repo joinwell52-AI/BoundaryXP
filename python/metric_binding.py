@@ -19,8 +19,8 @@ def clean_metric(value):
 def local_link(text,previous,current):
     if re.search(GRAMMAR['scope_change'],previous['metric']+' '+current['metric'],re.I):return False
     if previous['source']==current['source']:return True
-    raw=text.encode('utf-16-le')
-    gap=raw[previous['source']['end']*2:current['source']['start']*2].decode('utf-16-le')
+    raw=text
+    gap=raw[previous['source']['end']:current['source']['start']]
     return bool(re.fullmatch(GRAMMAR['gap'],gap,re.I))
 
 def repeated_head(previous,current):
@@ -118,12 +118,12 @@ def comparisons(text,numbers):
     A shared noun head and an explicit contrast justify asking whether these
     metrics are related. They never establish that relationship themselves.
     """
-    candidates=[];raw=text.encode('utf-16-le')
+    candidates=[];raw=text
     for left,right in zip(numbers,numbers[1:]):
         if left['kind']!='bound' or right['kind']!='bound' or not left.get('dimension'):continue
         if left['unit']!=right['unit'] or left['metricKey']==right['metricKey']:continue
         if not local_link(text,left,right):continue
-        gap=raw[left['source']['end']*2:right['source']['start']*2].decode('utf-16-le')
+        gap=raw[left['source']['end']:right['source']['start']]
         if not re.search(r'但|\bbut\b',gap+' '+right['metric'],re.I):continue
         a,b=left['metricDisplay'],right['metricDisplay']
         chinese=bool(re.search('[\u4e00-\u9fff]',a+b))

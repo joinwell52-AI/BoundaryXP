@@ -46,7 +46,7 @@ _unit_spec.loader.exec_module(_units)
 def rx(name):return RULES['markers'][name]
 def found(pattern,text):return re.search(pattern,text,re.I)
 def source(text,a,b):
-    return {'quote':text[a:b],'start':len(text[:a].encode('utf-16-le'))//2,'end':len(text[:b].encode('utf-16-le'))//2}
+    return {'quote':text[a:b],'start':a,'end':b}
 def pair(zh,en):return {'zh-CN':zh,'en':en}
 def note(code,src,zh,en):return {'code':code,'sources':[src],'suggestion':pair(zh,en),'decision':None}
 def interval(op,n):
@@ -144,8 +144,8 @@ def numeric_constraints(text,spans,diagnostics=None):
         metric=re.sub('^(?:'+rx('condition')+r')\s*','',prefix,flags=re.I).strip(' ，,:：`')
         previous=next((v for v in reversed(out) if v['source']==source(text,a,b)),None)
         if previous:
-            start16=previous['expressionSource']['end']
-            gap=text.encode('utf-16-le')[start16*2:len(text[:m.start()].encode('utf-16-le'))].decode('utf-16-le')
+            start_codepoint=previous['expressionSource']['end']
+            gap=text[start_codepoint:m.start()]
             if re.fullmatch(r'\s*(?:且|并且|and)\s*(?:严格|strictly)?\s*',gap,re.I):metric=previous['metric']
         symbol=z3.Int('value') if unit=='count' else z3.Real('value');limit=z3.RealVal(str(n))
         pred={'lt':symbol<limit,'le':symbol<=limit,'gt':symbol>limit,'ge':symbol>=limit,'eq':symbol==limit}[op]
