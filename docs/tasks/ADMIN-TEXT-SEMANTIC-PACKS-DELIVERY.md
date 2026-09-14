@@ -118,3 +118,15 @@ vendor/datapackage-2.0/datapackage.json
 
 No merge, release, package publication, license change or repository visibility change is part of this delivery.
 
+## 六行业后续增量 / Subsequent Industry Increment
+
+ADMIN后续确认六行业，9c50eab据此取消页面仅software-ai过滤，改为已安装L2动态列表及单独确认切换。仍不自动导入、启用或合并并行维护的行业文件。数据盘点详见[六行业接入](INDUSTRY-SIX-PACKS-INTEGRATION.md)。新增文件如下，原有ui-server与ADMIN页面/测试同步更新：
+
+```text
+docs/tasks/INDUSTRY-SIX-PACKS-INTEGRATION.md
+scripts/audit-industry-cases.mjs
+src/product/case-audit.mjs
+src/product/selection-ui.mjs
+src/__tests__/product-case-audit.test.ts
+src/__tests__/product-industry-selection.test.ts
+```

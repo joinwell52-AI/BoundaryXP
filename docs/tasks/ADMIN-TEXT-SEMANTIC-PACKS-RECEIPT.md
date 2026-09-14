@@ -62,3 +62,10 @@
 
 This is a partial engineering delivery. Deterministic replays, package tests and local UI regressions do not replace independently reviewed gold labels or real Host runs. ADMIN review remains required.
 
+## 六行业增量检查点 / Six-industry Increment
+
+代码9c50eab响应ADMIN后续六行业要求，允许已安装L2动态选择并显式切换；仍限制一次一个行业，不自动启用。新增用例盘点工具不修改并行任务的语料，见[六行业核查](INDUSTRY-SIX-PACKS-INTEGRATION.md)。6000记录按行业精确原文去重后合计1284，不能记为6000个独立语义场景；各批次仍待金标审阅。
+
+本轮重跑：已跟踪Core255/255，UI152/152，协议测试103/103，冻结向量208/208，Python135/135，文档20/20。另读测并行维护的五个新行业包，10/10个结构/词法测试通过；该10项及行业资产未被本实施擅自提交。磁盘文档87、本地链接275、问题0，其中包含并行文件，不冒充PR专属文档计数。
+
+先前检查点5617ecc的[CI运行34839953430](https://github.com/joinwell52-AI/BoundX/actions/runs/34839953430)在Ubuntu Node22、Ubuntu Node24、Windows Node24三组均通过。该结果不自动覆盖9c50eab及后续提交；最新CI以Draft PR #6对应head的实际结果为准。本地预览在http://127.0.0.1:64285/admin更新，仍不是完整Host实测验收。
