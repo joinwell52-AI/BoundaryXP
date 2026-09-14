@@ -25,6 +25,10 @@ Packs support producer-side interpretation, not alternative BXP semantics. The p
 
 ## 当前实现状态
 
-首个 `software-ai@0.1.0` 是 L2 预览包。当前适配器在代码中显式启用它，并对单包做完整交叉引用和歧义声明校验。
+首个 `software-ai@0.1.0` 是 L2 预览包。当前 Python 研究适配器在代码中显式启用它，并对单包做完整交叉引用和歧义声明校验；这不是生产 BXP Core 的包加载能力，也不直接输出标准 BXP IR。
+
+当前证据区间统一为 Unicode 码点 `[start,end)`，不是 UTF-16 代码单元。历史研究说明保留旧偏移和旧命令供追溯，不能作为当前接入指南；标准 IR 构造与验证见 [生产者指南](../docs/AGENT-BXP-PRODUCER.md)。
+
+The Python research adapter explicitly enables one preview L2 pack; this is not pack loading in the production BXP Core and does not directly produce standard BXP IR. Current evidence spans use Unicode code points, not UTF-16 code units. Historical research descriptions are archival, not current integration guidance.
 
 L1 目前仍由既有 `semantic_lexicon.json` 承担，尚未迁移为独立目录包。L3 只定义治理边界，尚未实现多包组合、运行时 UI 热插拔、租户上传、签名校验、隔离审计或模型微调。这里的“插件化”指受控数据包与 adapter 边界，不表示任意代码插件可以执行。
