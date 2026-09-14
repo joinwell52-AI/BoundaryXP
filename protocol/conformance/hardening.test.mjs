@@ -4,10 +4,10 @@ import { createHash } from 'node:crypto';
 import { readFileSync } from 'node:fs';
 import { execFileSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
-import { evaluateTask, digest } from './evaluate.mjs';
-import { validateResultSchema } from './validation.mjs';
+import { evaluateTask, digest } from '../../src/bxp/evaluate.mjs';
+import { validateResultSchema } from '../../src/bxp/validation.mjs';
 import { baseline, hardeningCases, verifyHardening } from './hardening-cases.mjs';
-import { compareDecimal, normalizeBound } from './decimal.mjs';
+import { compareDecimal, normalizeBound } from '../../src/bxp/decimal.mjs';
 
 for (const item of hardeningCases) {
   test(item.name, () => {

@@ -1,7 +1,7 @@
 import { readFileSync } from 'node:fs';
 import { isDeepStrictEqual } from 'node:util';
-import { evaluateTask } from './evaluate.mjs';
-import { validateSuiteSchema, validateTaskSchema, validateResultSchema } from './validation.mjs';
+import { evaluateTask } from '../../src/bxp/evaluate.mjs';
+import { validateSuiteSchema, validateTaskSchema, validateResultSchema } from '../../src/bxp/validation.mjs';
 
 const suite = JSON.parse(readFileSync(new URL('./bxp-calc-v1.0.json', import.meta.url), 'utf8'));
 const failures = [];

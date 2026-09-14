@@ -1,3 +1,4 @@
+import {pointSlice} from './codepoints.mjs';
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {calculateWithLibraries} from '../admin-python.mjs';
@@ -15,7 +16,7 @@ test('real result separates actors from inputs and presents computed conflict',a
  const f=p.findings.find(x=>x.code==='guard_modal_conflict');assert(f);
  assert.equal(f.proof.guardOverlap,'sat');assert.equal(f.proof.jointActionConstraints,'unsat');
  assert(f.scenario.en);assert.equal(f.decision,null);
- for(const field of Object.values(p.elements))for(const v of field)for(const s of v.sources)assert.equal(text.slice(s.start,s.end),s.quote);
+ for(const field of Object.values(p.elements))for(const v of field)for(const s of v.sources)assert.equal(pointSlice(text,s.start,s.end),s.quote);
 });
 test('unresolved work-package conditions remain visible in the presentation',async()=>{
  const input='## WP1 Prepare\n等待 WP2 完成后调用接口\n## WP2 Finish\n等待 WP1 完成后调用接口';
@@ -34,7 +35,7 @@ test('ADMIN receives independent B and populated source-backed elements',async()
  assert.equal(p.elements.B.length,2);assert(!p.findings.some(f=>f.code==='guard_binding_unresolved'));
  for(const k of ['I','O','A','R','V','C'])assert(p.elements[k].length,k);
  assert.equal(p.elements.P.length,0);assert(p.elements.B.some(v=>v.text['zh-CN'].includes('未授权押金')));
- for(const values of Object.values(p.elements))for(const v of values)for(const s of v.sources)assert.equal(raw.slice(s.start,s.end),s.quote);
+ for(const values of Object.values(p.elements))for(const v of values)for(const s of v.sources)assert.equal(pointSlice(raw,s.start,s.end),s.quote);
 });
 test('amount and set findings provide concrete main-page results and bilingual advice',async()=>{
  for(const [i,code] of [[0,'interval_empty'],[1,'target_forbidden_overlap']]){

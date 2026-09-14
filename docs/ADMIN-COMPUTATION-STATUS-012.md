@@ -1,5 +1,7 @@
 # ADMIN 任务边界：数学计算、解析限制与验收依据
 
+> 历史／非规范研究或产品规划（legacy / non-normative）。本文中的旧接口、原始结果和未来能力不代表当前产品合同或本轮验证；当前入口以根 README 和产品手册为准。No BXP extraction certification or execution authority is implied.
+
 记录日期：2026-09-11。本文描述本地迭代 012 的开发状态，不是发版说明或生产可用性证明。
 
 后续更新：本文保留 012 时点的记录；七要素 + B 展示、WP 分段和汽车用例的最新实测进展见 [迭代 013](WORK-PACKAGES-013.md)。下文“尚未落地/尚未验证”是当时状态。

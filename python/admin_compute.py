@@ -52,12 +52,11 @@ class IR(Transformer):
         return {'kind':'modal','modality':MODALITIES[op.lower()],'action':body.strip(),'condition':{'op':'unconditional'}}
 
 def evidence(text, start, end):
-    # Python code points converted to the browser's UTF-16 [start,end).
-    return {'quote':text[start:end], 'start':len(text[:start].encode('utf-16-le'))//2,
-            'end':len(text[:end].encode('utf-16-le'))//2}
+    return {'quote':text[start:end], 'start':start,
+            'end':end}
 
 def source_slice(text, start, end):
-    return text.encode('utf-16-le')[start*2:end*2].decode('utf-16-le')
+    return text[start:end]
 
 def extract(text, statements):
     records,unknown=[],[]

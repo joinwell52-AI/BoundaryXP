@@ -52,6 +52,6 @@ class GuardTests(unittest.TestCase):
             if isinstance(value,list):
                 for x in value:verify(x)
             elif isinstance(value,dict):
-                if {'start','end','quote'}<=value.keys():self.assertEqual(text.encode('utf-16-le')[value['start']*2:value['end']*2].decode('utf-16-le'),value['quote'])
+                if {'start','end','quote'}<=value.keys():self.assertEqual(text[value['start']:value['end']],value['quote'])
                 for x in value.values():verify(x)
         verify(r)

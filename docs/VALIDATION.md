@@ -18,24 +18,20 @@ Linux/macOS 将 Python 路径替换为 `.venv/bin/python`。
 
 | 验证 | 内容 |
 |---|---|
-| Core | 结构化任务、规划、分解、回应与授权边界 |
+| Core | BXP 生产者示例、CLI/MCP 同结果、严格输入及显式 legacy 回归 |
 | Protocol | Schema、精确数值、双语原文、作用域、摘要与冻结向量 |
-| UI | 中英文界面、ADMIN 本地 Python 桥接与访问边界 |
+| UI | BXP HTTP 与渲染、中英文／非 BMP、Python 码点桥接、legacy 与访问边界 |
 | Python | 局部自然语言提取和数学检查 |
-| Docs | Markdown 本地目标、标题锚点和检查器回归 |
+| Docs | Markdown 本地目标、标题锚点、当前架构口径与版本检查 |
 
 文档链接检查涵盖 Git 管理和未忽略的新增 Markdown，包括工作区删除状态；不访问项目外的旧目录。外部网站可达性单独核验，403、限流、超时或私有仓库匿名404不能直接判定为链接失效。
 
 Document validation checks local targets and heading anchors. External availability requires separate verification; access restrictions are not proof that a page is missing.
 
-## 当前自测 / Current self-test
+## 实测记录 / Measured results
 
-2026-09-14 在 `D:\boundx` 实际运行：Core 21/21、Protocol 85/85、BXP-CALC 208/208、UI 127/127、Python 133/133；文档检查器回归9/9。59份 Markdown 的225个本地链接与锚点检查通过。
+本轮固定协议 0.3.0-draft.2、套件 1.0.0-draft.3（208条）。每个工作包的实际计数见 [执行回执](tasks/BXP-ALIGNMENT-RECEIPT.md)，最终全量验证与 GitHub CI 状态单独记录，不能沿用其他目录或之前版本的数字。
 
-本轮协议为 `0.3.0-draft.2`，计算套件为 `1.0.0-draft.3`。公共外链可达性和私有仓库权限需单独核验，本节本轮文档结果仅涵盖本地目标与锚点，不保证外部网站永久有效。Git 历史、许可证及规范测试的内容来源标识不因此重写。
+CLI/MCP/UI 共用 src/bxp/，冻结向量逐对象完整比较；不刷新 expected。Python/Lark 测试属于有限覆盖研究回归。文档扫描区分当前产品口径与带标签的历史非规范材料。
 
-已配置 Node.js 22/24 的最小协议 CI；配置存在不等于远端运行通过，实际状态以 GitHub Actions 为准。本地测试和 CI 都不是第二独立实现的互操作验证。
-
-向量是人工结构化输入，不是自然语言抽取金标；只有当前源码与当前测试配套运行的结果可用于本项目声明。
-
-Local checks passed for core, protocol, UI, Python and local documentation links. The CI workflow reruns protocol tests on Node.js 22/24; its actual status is separate from these local results. Neither proves arbitrary extraction quality or authorizes execution.
+Local tests and remote CI reruns are separate evidence, not a second implementation. Structured vectors are not extraction gold labels. BXP-EXTRACT is RESERVED; passing tests does not certify arbitrary language understanding, authorize execution or publish the product.

@@ -128,7 +128,7 @@ class SemanticContractTests(unittest.TestCase):
         self.assertEqual(roles(b['contract']['actions'][0])['executor'],'Op_93')
         self.assertEqual(a,project('由 Op_21 读取 alpha.csv 并生成 beta.json。'))
 
-    def test_utf16_sources_and_json_immutability_boundary(self):
+    def test_codepoint_sources_and_json_immutability_boundary(self):
         text='😀 由数据员读取 `新档案.csv` 并生成 audit.json。'
         r=project(text)
         def walk(x):
@@ -136,7 +136,7 @@ class SemanticContractTests(unittest.TestCase):
                 for y in x:walk(y)
             elif isinstance(x,dict):
                 if {'quote','start','end'}<=x.keys():
-                    self.assertEqual(text.encode('utf-16-le')[x['start']*2:x['end']*2].decode('utf-16-le'),x['quote'])
+                    self.assertEqual(text[x['start']:x['end']],x['quote'])
                 for y in x.values():walk(y)
         walk(r)
 

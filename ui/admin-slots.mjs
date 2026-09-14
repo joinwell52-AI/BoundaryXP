@@ -1,3 +1,4 @@
+import {pointLength, pointSlice, pointIndex, pointMatches} from './codepoints.mjs';
 // Versioned, inspectable slot schemas. Explicit anchors supply candidate
 // evidence; absence of a match means unconfirmed, never proven absence.
 export const taskSlotSchemas=[
@@ -24,9 +25,9 @@ export const taskSlotSchemas=[
 ];
 
 export function checkTaskSlots(text){
- if(typeof text!=='string'||text.length>100000)throw Error('Expected task text of at most 100000 characters');
+ if(typeof text!=='string'||pointLength(text)>100000)throw Error('Expected task text of at most 100000 characters');
  const checks=[],findings=[];
- for(const m of text.matchAll(/[^。！？；;\n.!?]+/gu)){
+ for(const m of pointMatches(text, /[^。！？；;\n.!?]+/gu)){
   const quote=m[0].trim();if(!quote)continue;
   const start=m.index+m[0].indexOf(quote);
   if(/不要|不得|禁止|无需|不必|“|”|「|」|"|\b(?:do not|must not|need not|example|says)\b/iu.test(quote))continue;
@@ -36,12 +37,12 @@ export function checkTaskSlots(text){
     const match=pattern.exec(quote);
     const supported=match&&!/【|\[|待定|\bTBD\b/iu.test(match[0]);
     return {id,field,label,enLabel,suggestion,enSuggestion,status:supported?'candidate-evidence':'unconfirmed',
-     evidence:supported?{quote:match[0],start:start+match.index,end:start+match.index+match[0].length}:null};
+     evidence:supported?{quote:match[0],start:start+pointIndex(quote,match.index),end:start+pointIndex(quote,match.index)+pointLength(match[0])}:null};
    });
-   checks.push({profile:schema.id,quote,start,end:start+quote.length,slots});
+   checks.push({profile:schema.id,quote,start,end:start+pointLength(quote),slots});
    for(const slot of slots.filter(s=>s.status==='unconfirmed'))findings.push({
     key:`slot:${schema.id}:${slot.id}:${start}`,rule:`slot-${schema.id}-${slot.id}`,fields:[slot.field],status:'unconfirmed-slot',
-    quote,source_quote:quote,start,end:start+quote.length,title:`请补充或核对：${slot.label}`,
+    quote,source_quote:quote,start,end:start+pointLength(quote),title:`请补充或核对：${slot.label}`,
     why:'本句未匹配到这一项的明确说明；若已在其他段落或附件定义，请给出对应引用。',suggestion:slot.suggestion,
     en:{title:`Specify or confirm: ${slot.enLabel}`,suggestion:`No explicit value matched in this sentence. If defined elsewhere, supply its reference. ${slot.enSuggestion}`},
     draft:{'zh-CN':slot.suggestion,en:slot.enSuggestion}

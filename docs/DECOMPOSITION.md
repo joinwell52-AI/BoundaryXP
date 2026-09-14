@@ -1,5 +1,7 @@
 # 界痕 · BoundX：任务分解计算使用手册
 
+> 历史／非规范研究或产品规划（legacy / non-normative）。本文中的旧接口、原始结果和未来能力不代表当前产品合同或本轮验证；当前入口以根 README 和产品手册为准。No BXP extraction certification or execution authority is implied.
+
 本轮交付：`decomposition/v1` 独立计算接口。它检查 PM 的任务分解契约，供负责人核查，不创建任务、不修改规划、不裁决。函数、CLI 和通用 MCP 已接入；自动触发及专用工具适配由各宿主负责。
 
 ## 一、功能
@@ -101,16 +103,16 @@ $$
 从产品根执行：
 
 ```text
-node cli.mjs decomposition examples/decomposition-d044.json
+node cli.mjs legacy decomposition examples/decomposition-d044.json
 node mcp.mjs
 ```
 
-MCP 工具名为 `bx_review_decomposition`，调用参数为 `{"input":完整输入对象}`。启动 MCP 后由支持标准输入输出 MCP 的宿主调用；不是在终端输入自然语言。该新接口解释建议目前为中文，不接受 locale；已有任务/规划接口的中英文行为保持不变。
+MCP 工具名为 `bx_legacy_review_decomposition`，调用参数为 `{"input":完整输入对象}`。启动 MCP 后由支持标准输入输出 MCP 的宿主调用；不是在终端输入自然语言。该新接口解释建议目前为中文，不接受 locale；已有任务/规划接口的中英文行为保持不变。
 
 函数调用：
 
 ```javascript
-import { reviewDecomposition } from './src/index.ts';
+import { reviewDecomposition } from './src/legacy/index.ts';
 const result = reviewDecomposition(input);
 ```
 

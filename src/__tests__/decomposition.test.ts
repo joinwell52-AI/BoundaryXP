@@ -1,6 +1,6 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { reviewDecomposition, evaluateLogic, boundaryResponseStatus, type DecompositionInput } from '../index.ts';
+import { reviewDecomposition, evaluateLogic, boundaryResponseStatus, type DecompositionInput } from '../legacy/index.ts';
 const claim = (expr: any) => ({ expr, quote: '报告 修复 汇总 已知 输入' });
 const base = (): DecompositionInput => ({ baseline_text: claim('').quote, plan_text: claim('').quote,
   variables: ['r', 'h', 'f'].map(id => ({ id, quote: '报告' })), assumptions: claim({ all: [] }),

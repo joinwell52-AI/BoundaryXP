@@ -1,5 +1,7 @@
 # 中文修订版 20 条：实际原文计算结果
 
+> 历史／非规范研究或产品规划（legacy / non-normative）。本文中的旧接口、原始结果和未来能力不代表当前产品合同或本轮验证；当前入口以根 README 和产品手册为准。No BXP extraction certification or execution authority is implied.
+
 本页由保留的实际 Node → Python 返回值生成；没有把附件中的参考答案传入引擎。字段有值不等于语义完整，未产生提醒不等于通过。来源、类型和全部中间记录在原始 JSON 中。
 
 [返回本轮测试说明](../USER-CASES-017.md)

@@ -1,5 +1,7 @@
 # 软件工程与 AI 任务领域包 v0.1
 
+> 历史／非规范研究或产品规划（legacy / non-normative）。本文中的旧接口、原始结果和未来能力不代表当前产品合同或本轮验证；当前入口以根 README 和产品手册为准。No BXP extraction certification or execution authority is implied.
+
 首个领域包位于 `domain-packs/l2/software-ai/`，定位为三层语义包架构中的 L2 垂直包。它把软件工程与 AI 任务语言绑定到现有 `action / role / fact`，再投影到 I/O/A/P/R/V/C + B；不建立第二套语义系统。总体结构见 [L0 内核 + 三层语义包治理](../domain-packs/README.md)。
 
 ## 为什么不是普通关键词表

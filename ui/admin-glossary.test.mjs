@@ -1,3 +1,4 @@
+import {pointSlice} from './codepoints.mjs';
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {checkAdminText} from './admin-check.mjs';
@@ -12,7 +13,7 @@ const contexts=[
 for(const [lang,definitions,task,rule] of contexts)test(`explicit glossary ${lang} ${rule}`,()=>{
  const text=definitions+'\n\n'+task;
  const r=checkAdminText(text);assert(!r.findings.some(f=>f.rule===rule));assert(r.checks.some(c=>c.binding==='glossary-unique'));
- for(const e of glossaryEntries(text))assert.equal(text.slice(e.start,e.end),e.text);
+ for(const e of glossaryEntries(text))assert.equal(pointSlice(text,e.start,e.end),e.text);
 });
 test('missing, contested, wrong-type and placeholder definitions stay unresolved',()=>{
  const cases=[

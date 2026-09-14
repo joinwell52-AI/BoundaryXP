@@ -1,5 +1,7 @@
 # 019：软件工程与 AI 用例 121—140 回归
 
+> 历史／非规范研究或产品规划（legacy / non-normative）。本文中的旧接口、原始结果和未来能力不代表当前产品合同或本轮验证；当前入口以根 README 和产品手册为准。No BXP extraction certification or execution authority is implied.
+
 本轮把 20 条中英混合任务原文作为可重复执行的基准，目标是检验从自然语言证据到 7+1 候选、再到区间、集合、图与布尔约束的完整链路。原文保存在 [`python/cases_121_140.json`](../python/cases_121_140.json)，断言保存在 [`python/test_cases_121_140.py`](../python/test_cases_121_140.py)。
 
 ## 工程原则
@@ -69,4 +71,3 @@
 - Python：133 项通过，其中本轮新增 16 个测试方法覆盖 121—140 全部 20 条原文；
 - Node/UI/adapter/server：148 项通过；
 - 全量结果重复计算一致，证明确定性，不证明自然语言语义准确率或生产安全性。
-

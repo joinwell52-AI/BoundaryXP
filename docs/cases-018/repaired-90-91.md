@@ -1,5 +1,7 @@
 # 实际原文计算记录
 
+> 历史／非规范研究或产品规划（legacy / non-normative）。本文中的旧接口、原始结果和未来能力不代表当前产品合同或本轮验证；当前入口以根 README 和产品手册为准。No BXP extraction certification or execution authority is implied.
+
 由原始 API 返回值生成；没有注入参考答案。用例标题来自用户，标题中的“良定”“死锁”等不代表本次计算结论。空白槽位与零提醒均不计为语义通过。
 
 ## CASE_90 · 工业蒸汽锅炉压力超限自动泄压（多区间开闭界良定）

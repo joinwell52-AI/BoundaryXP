@@ -1,3 +1,4 @@
+import {pointSlice} from './codepoints.mjs';
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {checkAdminText} from './admin-check.mjs';
@@ -34,7 +35,7 @@ test('negative mentions do not request work or new definitions',()=>{
 test('mixed language, offsets, immutability, determinism and customizable rule data',()=>{
  const text='请全面检查系统；verification method is static. Inspect recent records.';
  const result=checkAdminText(text);assert(result.findings.some(f=>f.rule==='coverage'));assert(result.findings.some(f=>f.rule==='recent'));
- for(const f of result.findings){assert.equal(text.slice(f.start,f.end),f.quote);assert(text.includes(f.source_quote));assert(f.en.title&&f.en.suggestion);}
+ for(const f of result.findings){assert.equal(pointSlice(text,f.start,f.end),f.quote);assert(text.includes(f.source_quote));assert(f.en.title&&f.en.suggestion);}
  assert.deepEqual(result,checkAdminText(text));
  const snapshot=JSON.stringify(adminRulePack);checkAdminText(text);assert.equal(JSON.stringify(adminRulePack),snapshot);
  assert.equal(checkAdminText(text,{version:'empty-test',languages:['zh-CN','en'],rules:[]}).findings.length,0);

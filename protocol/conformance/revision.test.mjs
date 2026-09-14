@@ -4,8 +4,8 @@ import { readFileSync } from 'node:fs';
 import { createHash } from 'node:crypto';
 import Ajv2020 from 'ajv/dist/2020.js';
 import { baseline } from './hardening-cases.mjs';
-import { evaluateTask, digest, PROTOCOL_VERSION } from './evaluate.mjs';
-import { validateResultSchema, taskSchema, resultSchema, suiteSchema } from './validation.mjs';
+import { evaluateTask, digest, PROTOCOL_VERSION } from '../../src/bxp/evaluate.mjs';
+import { validateResultSchema, taskSchema, resultSchema, suiteSchema } from '../../src/bxp/validation.mjs';
 
 const suite = JSON.parse(readFileSync(new URL('./bxp-calc-v1.0.json', import.meta.url), 'utf8'));
 const resultFor = suffix => evaluateTask(structuredClone(suite.cases.find(item => item.id === `BXP-C${suffix}`).task));

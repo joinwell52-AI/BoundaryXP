@@ -16,7 +16,7 @@ class QuantityBinding(unittest.TestCase):
             for v in value:self.evidence(text,v)
         elif isinstance(value,dict):
             if {'quote','start','end'}<=value.keys():
-                self.assertEqual(text.encode('utf-16-le')[value['start']*2:value['end']*2].decode('utf-16-le'),value['quote'])
+                self.assertEqual(text[value['start']:value['end']],value['quote'])
             for v in value.values():self.evidence(text,v)
 
     def test_user_90_pressure_intersection_and_provenance(self):

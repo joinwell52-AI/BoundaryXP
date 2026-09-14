@@ -1,5 +1,7 @@
 # L3 租户/单位语义包契约（设计预留）
 
+> 生产者方法／研究资产，不重新定义 BXP；当前标准 IR 与本地计算以固定 BXP-0001 为准，EXTRACT 尚未启用。Producer methods only; no extraction conformance claim.
+
 L3 用于私有别名、单位术语和场景增量，最终必须归一到已启用 L2 frame 或 L1 原语。`tenant-overlay.schema.json` 定义增量合同，`example-software-team.json` 给出不含真实单位数据的示例。当前版本尚未实现 L3 加载和运行时热插拔。
 
 ## 允许的增量

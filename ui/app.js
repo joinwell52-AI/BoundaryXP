@@ -45,7 +45,7 @@ async function api(route,data){
   const stage=requestStage(route,data),started=Date.now();
   const update=()=>{const seconds=Math.floor((Date.now()-started)/1000);setText($('busy-label'),pick(stage.zh,stage.en)+pick(` · 已等待 ${seconds} 秒；本步骤最多等待 ${limitMs/1000} 秒。`,` · ${seconds}s elapsed; this step times out after ${limitMs/1000}s.`));};update();const ticker=setInterval(update,1000);
   const frozen=[...document.querySelectorAll('button,input,textarea,select')].filter(n=>n.id!=='cancel').map(n=>[n,n.disabled]);frozen.forEach(([n])=>n.disabled=true);
-  try{return await withDeadline(async signal=>{const r=await fetch('/api/'+route,{method:'POST',headers:{'Content-Type':'application/json','X-BoundX-Token':token},body:JSON.stringify(data),signal});const result=await r.json();if(!r.ok)throw Error(result.error||'请求失败');return result;},{signal:abort.signal,timeoutMs:limitMs});}
+  try{return await withDeadline(async signal=>{const r=await fetch('/api/legacy/'+route,{method:'POST',headers:{'Content-Type':'application/json','X-BoundX-Token':token},body:JSON.stringify(data),signal});const result=await r.json();if(!r.ok)throw Error(result.error||'请求失败');return result;},{signal:abort.signal,timeoutMs:limitMs});}
   finally{clearInterval(ticker);if(controller===abort)controller=null;$('busy').hidden=true;frozen.forEach(([n,disabled])=>n.disabled=disabled);}
 }
 $('cancel').onclick=()=>{controller?.abort();notice(activeLocal?'已取消本机计算，未调用模型。 / Local calculation cancelled; no model call.':'已请求取消。本地不会自动重试；已发送的模型请求是否计费由服务商决定。');};

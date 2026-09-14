@@ -1,3 +1,4 @@
+import {pointSlice} from './codepoints.mjs';
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
@@ -10,8 +11,8 @@ for(const [i,c] of cases.entries())test(`specific ADMIN slot ${i+1}: ${c.text}`,
  assert(check);
  assert.deepEqual(check.slots.filter(s=>s.status==='unconfirmed').map(s=>s.id),c.missing);
  assert.deepEqual(r,checkTaskSlots(c.text));
- for(const f of r.findings){assert.equal(c.text.slice(f.start,f.end),f.quote);assert(f.en.suggestion&&f.suggestion);}
- for(const s of check.slots)if(s.evidence)assert.equal(c.text.slice(s.evidence.start,s.evidence.end),s.evidence.quote);
+ for(const f of r.findings){assert.equal(pointSlice(c.text,f.start,f.end),f.quote);assert(f.en.suggestion&&f.suggestion);}
+ for(const s of check.slots)if(s.evidence)assert.equal(pointSlice(c.text,s.evidence.start,s.evidence.end),s.evidence.quote);
 });
 test('layered recommendations preserve evidence and distinguish priority from adjudication',()=>{
  const advice=adminAdvice(localTaskProjection(cases[0].text));

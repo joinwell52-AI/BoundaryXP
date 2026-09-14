@@ -1,5 +1,7 @@
 # 界痕普通用户入口：产品设计提案
 
+> 历史／非规范研究或产品规划（legacy / non-normative）。本文中的旧接口、原始结果和未来能力不代表当前产品合同或本轮验证；当前入口以根 README 和产品手册为准。No BXP extraction certification or execution authority is implied.
+
 状态：界面设计参考；其中的目标能力须与 [当前界面指南](UI-GUIDE.md) 核对，不作为完整实现或公开发布声明。
 
 后续状态：本提案保留作为设计依据。1.2.0-preview.1 已实现简化本地界面与模型入口；未实现全部提案，例如完整布尔分解可视化编辑与免配置服务。实际使用以 [UI-GUIDE.md](UI-GUIDE.md) 为准。

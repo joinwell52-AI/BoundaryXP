@@ -1,5 +1,7 @@
 # ADMIN 本地检查 / Local ADMIN checks
 
+> 历史／非规范研究或产品规划（legacy / non-normative）。本文中的旧接口、原始结果和未来能力不代表当前产品合同或本轮验证；当前入口以根 README 和产品手册为准。No BXP extraction certification or execution authority is implied.
+
 最新增量：[组合约束、具体槽位与分层建议：原理、案例和测试](ADMIN-CALCULATION-010.md)。下述六类与 glossary 机制保留，新能力另有版本化算子和槽位模块。
 
 ADMIN 检查不调用 AI、API、嵌入或学习模型。中文和英文是本轮支持范围；界面语言与任务原文独立，切换语言不翻译或修改证据。当前规则覆盖有限，未命中不是质量认证。

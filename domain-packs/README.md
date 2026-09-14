@@ -1,10 +1,12 @@
 # L0 内核 + 三层语义包治理
 
-界痕只有一套语义合同：`action / role / fact → I/O/A/P/R/V/C + B`。L0 是执行语义包的内核；真正的语言/语义包分为 L1、L2、L3 三层。
+界痕只有一套语义合同：`action / role / fact → I/O/A/P/R/V/C + B`。L0 是固定 BXP 验证与计算内核；语言/语义包仅分 L1、L2、L3 三层，是生产者方法，不是协议。当前 Python 包加载是有限研究实现，尚未输出标准 BXP IR，BXP-EXTRACT 保持 RESERVED。
+
+Packs support producer-side interpretation, not alternative BXP semantics. The production core consumes explicit IR and never automatically loads policies or packs.
 
 | 层级 | 性质 | 职责 | 当前落点 |
 |---|---|---|---|
-| L0 | 内核，不是语言包 | 原文证据、UTF-16 区间、未知保留、否定/授权/完成边界、统一投影 | Python 语义合同与投影器 |
+| L0 | 内核，不是语言包 | 原文码点证据、三态、7+1 不变量与五类计算 | src/bxp/，唯一 Schema 注册表 |
 | L1 | 基础语义包 | 跨行业 operation、模态、通用角色和基础动作词 | `python/semantic_lexicon.json` 与 Lark 语法 |
 | L2 | 垂直语义包 | 行业动作框架、实体类型、中英文触发词 | `domain-packs/l2/<pack-id>/` |
 | L3 | 业务定制包 | 单位/租户私有术语、受控别名和场景增量 | 预留 `domain-packs/l3/` 契约 |

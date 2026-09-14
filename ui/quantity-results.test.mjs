@@ -1,3 +1,4 @@
+import {pointSlice} from './codepoints.mjs';
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {calculateWithLibraries} from '../admin-python.mjs';
@@ -32,7 +33,7 @@ test('English explicit rate and completion reach the real isolated Python servic
  assert.equal(r.sourceAnalysis.numbers[0].unit,'calls_per_second');
  assert(view.elements.C.some(v=>v.text.en.includes('summary.json')));
  assert(!view.findings.some(f=>f.code==='numeric_unit_unresolved'));
- for(const values of Object.values(view.elements))for(const v of values)for(const s of v.sources)assert.equal(text.slice(s.start,s.end),s.quote);
+ for(const values of Object.values(view.elements))for(const v of values)for(const s of v.sources)assert.equal(pointSlice(text,s.start,s.end),s.quote);
 });
 
 test('unbound flow names produce a conditional calculation, not a proved conflict',async()=>{

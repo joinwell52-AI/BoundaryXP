@@ -26,7 +26,7 @@ class ChineseQuantities(unittest.TestCase):
                          [('1800','seconds','le'),('40','count','le'),('7200','seconds','le'),('5000000','CNY','le'),('0.05','seconds','lt')])
         self.assertEqual(len({x['metricKey'] for x in n if x['unit']=='seconds'}),3)
         for x in n:
-            s=x['expressionSource'];self.assertEqual(text.encode('utf-16-le')[s['start']*2:s['end']*2].decode('utf-16-le'),s['quote'])
+            s=x['expressionSource'];self.assertEqual(text[s['start']:s['end']],s['quote'])
         self.assertEqual(n[0]['originalValue'],'三十')
         self.assertEqual(n[2]['originalUnit'],'小时')
 

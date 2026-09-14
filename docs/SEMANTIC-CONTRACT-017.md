@@ -1,5 +1,7 @@
 # 017：从原文中的动作关系得到 7+1
 
+> 历史／非规范研究或产品规划（legacy / non-normative）。本文中的旧接口、原始结果和未来能力不代表当前产品合同或本轮验证；当前入口以根 README 和产品手册为准。No BXP extraction certification or execution authority is implied.
+
 本轮将**读取、生成、发送、执行者、接收人、审批者和条件**接入共享局部语义结构。中文与英文共用结构及投影函数；ADMIN 不调用模型或网络 API。源码保持 `1.2.1-preview.1`，没有生成新安装包。
 
 这是 [开源与论文调研](RESEARCH-7PLUS1-EXTRACTION.md) 后的实际实现：借鉴 CNL2ASP 的语法/语义分层、Rimay 的动作角色、FRET 的条件与响应分离，使用已有 Lark 自研文法；没有复制上游源码。GF 仍是未接入的后续候选。

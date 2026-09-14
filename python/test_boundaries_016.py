@@ -15,7 +15,7 @@ class BoundaryRegressionTests(unittest.TestCase):
             for x in result:self.evidence(text,x)
         elif isinstance(result,dict):
             if {'quote','start','end'}<=result.keys():
-                self.assertEqual(text.encode('utf-16-le')[result['start']*2:result['end']*2].decode('utf-16-le'),result['quote'])
+                self.assertEqual(text[result['start']:result['end']],result['quote'])
             for v in result.values():self.evidence(text,v)
 
     def test_independent_prohibitions_exact_and_domain_variants(self):
@@ -122,7 +122,7 @@ class BoundaryRegressionTests(unittest.TestCase):
         r=compute(cases[4]);self.assertIn('io_handover_deficit',{f['code'] for f in r['pipeline']['handover']['findings']})
         self.assertNotIn('生成的结构化文件',self.fields(r['pipeline']['stages'][1]['result']['sourceAnalysis'],'O'))
 
-    def test_all_originals_repeat_and_preserve_utf16(self):
+    def test_all_originals_repeat_and_preserve_codepoint(self):
         for text in [CASES['prohibition'],*CASES['additional'],*CASES['userFive']]:
             text='😀 '+text;r=compute(text)
             self.assertEqual(r,compute(text));self.evidence(text,r)

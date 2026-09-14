@@ -1,5 +1,7 @@
 # ADMIN 纯计算：组合约束、具体槽位与分层建议
 
+> 历史／非规范研究或产品规划（legacy / non-normative）。本文中的旧接口、原始结果和未来能力不代表当前产品合同或本轮验证；当前入口以根 README 和产品手册为准。No BXP extraction certification or execution authority is implied.
+
 本文解释本地计算建议的设计。当前 ADMIN 经本机 Node 服务调用 Python，不使用模型；支持范围受词项与文法约束，未明确项保持未明确。
 
 ## 用户会看到什么

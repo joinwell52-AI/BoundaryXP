@@ -21,7 +21,7 @@ class LongScope(unittest.TestCase):
         self.assertEqual(result['pipeline']['globalTopology']['edges'], [])
         for stage in result['pipeline']['stages']:
             s = stage['source']
-            self.assertEqual(text.encode('utf-16-le')[2*s['start']:2*s['end']].decode('utf-16-le'), s['quote'])
+            self.assertEqual(text[s['start']:s['end']], s['quote'])
 
     def test_named_headers_respect_scope_and_fences(self):
         text = '```md\n## WP-DATA-01\n```\n## WP-DATA-02 Build\n必须修改配置。\n## WP-DATA-03 Review\n不得修改配置。'

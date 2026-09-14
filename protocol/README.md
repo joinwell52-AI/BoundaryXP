@@ -12,7 +12,7 @@
 - [计算结果 Schema](schemas/boundx-result-v1.schema.json)：`boundx-result/v1`，包含类型化计算结果和空授权字段。
 - [BXP-CALC 套件 Schema](schemas/boundx-calc-conformance-suite-v1.schema.json)：正式向量文件合同。
 - [BXP-CALC Conformance Suite 1.0 Draft](conformance/bxp-calc-v1.0.json)：208 条冻结向量，完整结果逐项比对。
-- [参考实现说明](IMPLEMENTATION.md)：当前计算合同、验证范围和未实现边界。
+- [生产实现说明](IMPLEMENTATION.md)：当前计算合同、验证范围和未实现边界。
 - [历史案例来源索引](benchmarks/source-index.json)：140 个主案例、20 个早期变体，共 160 个来源记录。
 - [自然语言抽取基准候选](benchmarks/README.md)：抽取评测与 BXP-CALC 分层治理。
 - [数字来源与取证边界](PROVENANCE.md)：哈希清单、稳定编号与私有挑战集的合规约束。

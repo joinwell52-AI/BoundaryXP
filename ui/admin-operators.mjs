@@ -1,3 +1,4 @@
+import {pointLength, pointSlice, pointIndex, pointMatches} from './codepoints.mjs';
 // Controlled grammar: operator data is separate from the composition engine.
 // This is a candidate interpretation, never an authorization decision.
 export const operatorGrammar = Object.freeze({
@@ -75,7 +76,7 @@ function interpret(raw){
   rest=rest.slice(m[0].length);break;
  }
  // Longest matching operator wins ("do not have to" precedes "do not").
- const matches=operatorGrammar.modalities.map(([modality,p])=>({modality,match:p.exec(rest)})).filter(x=>x.match).sort((a,b)=>b.match[0].length-a.match[0].length);
+ const matches=operatorGrammar.modalities.map(([modality,p])=>({modality,match:p.exec(rest)})).filter(x=>x.match).sort((a,b)=>pointLength(b.match[0])-pointLength(a.match[0]));
  if(!matches.length)return null;
  const {modality,match}=matches[0],action=rest.slice(match[0].length).trim();
  // Keep the whole predicate as an opaque atom. Unsupported nested operators,
@@ -91,12 +92,12 @@ function finding(rule,entry,title,why,suggestion,enTitle,enSuggestion){
 }
 
 export function checkOperatorText(text){
- if(typeof text!=='string'||text.length>100000)throw Error('Expected task text of at most 100000 characters');
+ if(typeof text!=='string'||pointLength(text)>100000)throw Error('Expected task text of at most 100000 characters');
  const statements=[],findings=[];
- for(const m of text.matchAll(/[^。！？；;\n.!?]+/gu)){
+ for(const m of pointMatches(text, /[^。！？；;\n.!?]+/gu)){
   const quote=m[0].trim();if(!quote)continue;
   const start=m.index+m[0].indexOf(quote),candidates=interpret(quote);
-  const entry={quote,start,end:start+quote.length,status:candidates?'candidate':'uncovered',candidates:candidates??[]};
+  const entry={quote,start,end:start+pointLength(quote),status:candidates?'candidate':'uncovered',candidates:candidates??[]};
   statements.push(entry);
   if(candidates?.length>1){
    const alternatives=candidates.map(c=>formatAuthority((c.condition.op==='NOT'?c.condition.arg:c.condition).authorities));
