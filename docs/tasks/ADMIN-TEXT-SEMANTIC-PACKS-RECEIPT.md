@@ -1,5 +1,15 @@
 # Codex执行回执 / Execution Receipt
 
+## 模型链路增量 / Model pipeline increment — 2026-09-14
+
+原页面 `/legacy` 复用已有模型配置、连接测试及 Chat Completions / Responses 传输；新增标准面板经 `/api/admin-model` 准备上下文、严格解析模型候选、调用唯一 BXP Core 并显示三层报告。旧研究和 PM 控件仍明确为非 BXP。此入口当前使用 L1 与可选 L2，不发送 L3 职员目录；行业下拉从本地已安装包动态加载。模型请求需要明确点击，不自动重试，密钥不进入提示词或准备快照。Case Explorer 仅供查看用例。
+
+The existing page reuses model settings, connection checks and both provider transports. The new standard panel prepares context, strictly validates candidates, evaluates through the sole Core and displays three layers. Legacy research/PM controls remain non-BXP. This entry currently selects L1 and optional L2, without L3 disclosure. Installed industries are dynamic. Explicit model invocation is required; there are no automatic retries. Keys are excluded from prompts and prepared snapshots. Case Explorer remains a viewer.
+
+本次本地验证：Core 全工作区 284/284（包括另一任务尚未提交的行业测试）；UI 152/152；协议测试 103/103；冻结向量 208/208；Python 135/135；文档测试 20/20，93份文档、278个本地链接无失效。新增两个 HTTP 端到端测试使用模拟提供方，每种接口覆盖成功、伪造证据、错误快照、重复 JSON 键、Markdown 包装、提供方失败、截断和拒绝发送授权。模拟调用不是实际模型运行或抽取准确率证明。
+
+Local validation: workspace Core 284/284 (including concurrent uncommitted industry tests), UI 152/152, protocol 103/103, frozen vectors 208/208, Python 135/135, documentation 20/20; 93 documents and 278 local links checked. Two new HTTP end-to-end tests use mocked providers, covering both transports and fail-closed scenarios. These are not real model runs or evidence of extraction accuracy. Independent gold review and live-model acceptance remain pending; no merge or release is authorized.
+
 状态：PARTIAL_IMPLEMENTATION / PENDING_GOLD_REVIEW / BLOCKED_LIVE_MODEL。  
 日期：2026-09-14；唯一仓库D:\boundx。  
 基线origin/main：50b9882c7b3e5118e85fb6993ba365d8f054fe0b。  

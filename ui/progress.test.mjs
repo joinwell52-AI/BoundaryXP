@@ -2,6 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {withDeadline,requestStage,canReuseTask} from './progress.mjs';
 test('remote model stages never masquerade as local calculations',()=>{
+ assert.equal(requestStage('bxp-admin',{}).remote,true);
  for(const [route,data] of [['extract',{kind:'task'}],['extract',{kind:'plan'}],['pm',{mode:'generate'}],['pm',{mode:'recheck'}]]){const stage=requestStage(route,data);assert(stage.remote);assert(stage.zh.includes('模型'));assert(stage.en.includes('Waiting'));}
  assert.equal(requestStage('review',{}).remote,false);
 });

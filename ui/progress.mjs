@@ -1,5 +1,6 @@
 export function canReuseTask(task,mappedText,text){return !!task&&task.text===text&&mappedText===text;}
 export function requestStage(route,data){
+ if(route==='bxp-admin')return {zh:'等待模型抽取7+1；候选通过后进行本地BXP计算',en:'Waiting for model extraction; local BXP calculation follows candidate validation',remote:true};
  if(route==='connection')return {zh:'正在测试模型连接',en:'Testing model connection',remote:true};
  if(route==='pm')return {zh:data.mode==='recheck'?'等待模型回复 PM 提醒':'等待模型生成 PM 分工',en:data.mode==='recheck'?'Waiting for the PM response':'Waiting for the model to generate PM assignments',remote:true};
  if(route==='extract')return {zh:data.kind==='task'?'等待模型提取任务原文，尚未开始边界计算':'等待模型提取 PM 规划，尚未开始差异计算',en:data.kind==='task'?'Waiting for task extraction; boundary calculation has not started':'Waiting for PM plan extraction; comparison has not started',remote:true};

@@ -45,13 +45,14 @@ async function api(route,data){
   const stage=requestStage(route,data),started=Date.now();
   const update=()=>{const seconds=Math.floor((Date.now()-started)/1000);setText($('busy-label'),pick(stage.zh,stage.en)+pick(` · 已等待 ${seconds} 秒；本步骤最多等待 ${limitMs/1000} 秒。`,` · ${seconds}s elapsed; this step times out after ${limitMs/1000}s.`));};update();const ticker=setInterval(update,1000);
   const frozen=[...document.querySelectorAll('button,input,textarea,select')].filter(n=>n.id!=='cancel').map(n=>[n,n.disabled]);frozen.forEach(([n])=>n.disabled=true);
-  try{return await withDeadline(async signal=>{const r=await fetch('/api/legacy/'+route,{method:'POST',headers:{'Content-Type':'application/json','X-BoundX-Token':token},body:JSON.stringify(data),signal});const result=await r.json();if(!r.ok)throw Error(result.error||'请求失败');return result;},{signal:abort.signal,timeoutMs:limitMs});}
+  const endpoint={'bxp-admin':'/api/admin-model','product-packs':'/api/admin-product','industry-selection':'/api/industry-selection'}[route]??'/api/legacy/'+route;
+  try{return await withDeadline(async signal=>{const r=await fetch(endpoint,{method:'POST',headers:{'Content-Type':'application/json','X-BoundX-Token':token},body:JSON.stringify(data),signal});const result=await r.json();if(!r.ok)throw Error(result.error||'请求失败');return result;},{signal:abort.signal,timeoutMs:limitMs});}
   finally{clearInterval(ticker);if(controller===abort)controller=null;$('busy').hidden=true;frozen.forEach(([n,disabled])=>n.disabled=disabled);}
 }
 $('cancel').onclick=()=>{controller?.abort();notice(activeLocal?'已取消本机计算，未调用模型。 / Local calculation cancelled; no model call.':'已请求取消。本地不会自动重试；已发送的模型请求是否计费由服务商决定。');};
 const action=fn=>async()=>{try{await fn();}catch(e){notice(e.name==='AbortError'?'请求已取消。':e.message,true);}};
 const connection=createConnectionState();
-function connectionDisplay(detail){const node=$('connection-status');node.dataset.state=connection.status;setText(node,{untested:'● 未测试 / Not tested',testing:'● 正在测试 / Testing…',connected:'● 连接成功 / Connected',failed:'● 连接失败 / Failed'}[connection.status]);setText($('connection-detail'),detail);for(const id of ['generate-pm','test-current-task','recheck-pm'])$(id).disabled=connection.status!=='connected';}
+function connectionDisplay(detail){const node=$('connection-status');node.dataset.state=connection.status;setText(node,{untested:'● 未测试 / Not tested',testing:'● 正在测试 / Testing…',connected:'● 连接成功 / Connected',failed:'● 连接失败 / Failed'}[connection.status]);setText($('connection-detail'),detail);for(const id of ['generate-pm','test-current-task','recheck-pm','extract-bxp-task'])if($(id))$(id).disabled=connection.status!=='connected';}
 function connectedConfig(){if(connection.status!=='connected')throw Error('请先测试模型连接，绿色成功后才能测试 PM。 / Test the connection first.');return requireConfig();}
 function invalidateConnection(){connection.invalidate();connectionDisplay('配置已变更，请重新测试。绿色状态不会保存或从记录恢复。');}
 for(const id of ['protocol','url','model','key','disable-thinking'])for(const event of ['input','change'])$(id).addEventListener(event,invalidateConnection);
@@ -64,6 +65,43 @@ $('test-connection').onclick=action(async()=>{
     if(connection.finish(ticket,result.connected===true))connectionDisplay(`实际返回模型：${result.model}；耗时 ${result.elapsed_ms} ms。${endpoint.adjusted?'已补全或规范化接口地址。':''}仅表示本次连接可用，不代表任务理解正确。`);
   }catch(e){if(connection.finish(ticket,false))connectionDisplay(e.name==='AbortError'?'测试已取消，未自动重试。':e.message);throw e;}
 });
+let bxpPacks={installed:[],active:[]};
+const bxpPanel=element('section',undefined,'panel');
+bxpPanel.append(localized(element('h2'),'标准BXP：模型配置 → 抽取7+1 → 计算 → 结果','Standard BXP: configure model → extract 7+1 → calculate → results'));
+bxpPanel.append(localized(element('p'),'使用顶部原有模型设置。点击下方模型按钮将发送任务原文及获准的语义上下文，可能产生费用；不执行任务。','Use the existing model settings above. The model button sends source text and permitted context, may incur charges, and never executes the task.'));
+bxpPanel.append(localized(element('p'),'本入口当前选择L1和可选L2，不发送L3职员目录。语义包导入与职员目录仍在ADMIN工作台管理。准备快照保存在本地。','This entry selects L1 and optional L2, not L3 employee directories. Manage imports and directories in the ADMIN workspace. Prepared snapshots are saved locally.'));
+const packageLink=element('a');packageLink.href='/admin';localized(packageLink,'打开语义包管理','Open semantic package management');bxpPanel.append(packageLink);
+const industrySelect=element('select');industrySelect.id='bxp-industry';
+const industryLabel=localized(element('label'),'行业包（先导入，再确认启用）','Industry package (install, then explicitly activate)');industryLabel.append(industrySelect);bxpPanel.append(industryLabel);
+const bxpReport=element('pre');bxpReport.id='bxp-model-result';
+const refreshPacks=button(undefined,action(async()=>{
+ bxpPacks=await api('product-packs',{method:'bx_list_semantic_packs',arguments:{}});
+ industrySelect.replaceChildren();const none=element('option','None / 不使用行业包');none.value='';industrySelect.append(none);
+ for(const pack of bxpPacks.installed.filter(pack=>pack.layer==='L2')){const option=element('option',`${pack.pack_id}@${pack.version}`);option.value=pack.digest;industrySelect.append(option);}
+ bxpReport.textContent='';
+}));localized(refreshPacks,'加载/刷新本地语义包','Reload local semantic packages');
+const activateIndustry=button(undefined,action(async()=>{
+ const selected=bxpPacks.installed.find(pack=>pack.layer==='L2'&&pack.digest===industrySelect.value);
+ if(!selected)throw Error('请选择已安装的行业包。 / Select an installed industry.');
+ const {layer,...reference}=selected;const result=await api('industry-selection',{operation:'activate',reference});bxpPacks.active=result.active;bxpReport.textContent='';
+}));localized(activateIndustry,'确认启用行业','Confirm industry activation');
+const extractBxp=button(undefined,action(async()=>{
+ if(connection.status!=='connected')throw Error('请先测试模型连接。 / Test the model connection first.');
+ const text=textRequired('task-source'),selected=industrySelect.value;
+ bxpReport.textContent='正在抽取；尚未计算。 / Extracting; not yet calculated.';
+ const l1=bxpPacks.active.find(reference=>bxpPacks.installed.some(pack=>pack.layer==='L1'&&pack.digest===reference.digest));
+ if(!l1)throw Error('请先在语义包管理页或CLI安装并启用L1，再加载本地语义包。 / Install and activate L1, then reload packages.');
+ if(selected&&!bxpPacks.active.some(reference=>reference.digest===selected))throw Error('请先确认启用行业。 / Confirm industry activation first.');
+ const info=await fetch('/api/protocol-info').then(response=>response.json());
+ const result=await api('bxp-admin',{config:requireConfig(),consent:true,prepare:{source:{text,language:locale.language},
+  profile:{id:'org.boundx.admin',required_elements:info.core_elements},packs:[l1,...bxpPacks.active.filter(reference=>reference.digest===selected)]}});
+ if($('task-source').value!==text||industrySelect.value!==selected){bxpReport.textContent='输入已变化，请重新计算。 / Input changed; recalculate.';return;}
+ bxpReport.textContent=result.report;
+ noticePair(result.computed?'7+1候选已校验并完成BXP计算；结果不代表授权。':'尚未计算，请查看诊断。',result.computed?'Candidate validated and BXP calculated; no authority granted.':'Not computed; see diagnostics.');
+}));extractBxp.id='extract-bxp-task';extractBxp.disabled=true;localized(extractBxp,'用模型抽取7+1并计算','Extract 7+1 with model and calculate');
+const bxpButtons=element('div',undefined,'buttons');bxpButtons.append(refreshPacks,activateIndustry,extractBxp);bxpPanel.append(bxpButtons,bxpReport);
+$('page-task').prepend(bxpPanel);
+for(const node of [$('task-source'),industrySelect])node.addEventListener('input',()=>{bxpReport.textContent='输入已变化，请重新计算。 / Input changed; recalculate.';});
 function audit(kind,detail){state.history.push({time:new Date().toISOString(),kind,detail});$('history').textContent=state.history.map(x=>`${x.time} · ${x.kind} · ${x.detail}`).join('\n');}
 function markDraft(kind){$(kind==='task'?'confirm-check':'plan-check').checked=false;}
 function emptyDoc(text){return {text,parameters:{},actions:[],completion:[]};}

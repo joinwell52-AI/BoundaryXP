@@ -1,4 +1,5 @@
 export const pairedCopy = [
+  ["顶部标准BXP面板使用唯一Core；下方原有研究与PM功能仍为已弃用的非BXP路径。", "The top standard BXP panel uses the sole Core; older research and PM controls remain deprecated non-BXP paths."],
   ["查看技术详情", "View technical details"],
   ["建议核对以下规则未确认的项目，再决定是否补充任务。规则匹配不代表理解了全部含义。", "Review items not confirmed by local rules before adding requirements. Rule matches do not establish full understanding."],
   [
