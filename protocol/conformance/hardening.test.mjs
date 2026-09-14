@@ -74,12 +74,13 @@ test('dependency witnesses are stable under edge reordering and only prerequisit
   const task = baseline();
   const evidence = task.elements.I.entries[0].evidence;
   task.constraints.dependencies = [
-    { from: 'b', to: 'a', kind: 'prerequisite', evidence },
-    { from: 'a', to: 'b', kind: 'prerequisite', evidence },
-    { from: 'b', to: 'c', kind: 'reference', evidence },
+    { id: 'ba', from: 'b', to: 'a', kind: 'prerequisite', evidence },
+    { id: 'ab', from: 'a', to: 'b', kind: 'prerequisite', evidence },
+    { id: 'bc', from: 'b', to: 'c', kind: 'reference', evidence },
   ];
   const first = evaluateTask(task);
-  assert.deepEqual(first.calculations.dependencies, [{ scope_id: 'task', prerequisite_edges: 2, cycles: [['a', 'b', 'a']] }]);
+  assert.deepEqual(first.calculations.dependencies, [{ scope_id: 'task', prerequisite_edges: 2,
+    cycles: [{ nodes: ['a', 'b', 'a'], edge_ids: ['ab', 'ba'] }] }]);
   task.constraints.dependencies.reverse();
   assert.deepEqual(evaluateTask(task).calculations, first.calculations);
 });
@@ -108,7 +109,7 @@ test('English and Chinese documents share section numbers and valid envelope exa
   const headings = [];
   for (const filename of ['BXP-0001.md', 'BXP-0001.zh-CN.md']) {
     const document = readFileSync(new URL(`../${filename}`, import.meta.url), 'utf8');
-    assert.match(document, /version: 0\.3\.0-draft\.1/);
+    assert.match(document, /version: 0\.3\.0-draft\.2/);
     headings.push([...document.matchAll(/^#{2,3} (\d+(?:\.\d+)?)\.? /gm)].map(match => match[1]));
     const example = JSON.parse(document.match(/```json\r?\n([\s\S]*?)```/)[1]);
     assert.equal(evaluateTask(example).evaluation.validation, 'valid');

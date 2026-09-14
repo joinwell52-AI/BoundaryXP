@@ -11,7 +11,7 @@ const scope = (id, identity_status = 'resolved') => ({ id, description: id, iden
 
 export function baseline() {
   return structuredClone({
-    schema: 'boundx-task/v1', protocol_version: '0.3.0-draft.1', task_id: 'hardening',
+    schema: 'boundx-task/v1', protocol_version: '0.3.0-draft.2', task_id: 'hardening',
     source: { language: 'zh-CN', text: '界痕x' },
     profile: { id: 'org.boundx.hardening', required_elements: ['I'] },
     elements: Object.fromEntries(['I', 'O', 'A', 'P', 'R', 'V', 'C', 'B'].map(key => [key,
@@ -91,7 +91,7 @@ add('identity_status is mandatory', task => {
 add('unknown source properties are rejected', task => { task.source.extra = true; }, invalid);
 add('empty all operator is rejected', task => { task.constraints.logic = [logic('empty', { all: [] })]; }, invalid);
 add('unsupported protocol version uses valid error envelope', task => { task.protocol_version = '9.9.9'; }, invalid,
-  result => assert.equal(result.protocol_version, '0.3.0-draft.1'));
+  result => assert.equal(result.protocol_version, '0.3.0-draft.2'));
 add('unresolved evidence does not mask a proven conflict', task => {
   task.elements.I.status = 'unresolved'; task.elements.I.reason_codes = ['BXP.IDENTITY.MULTIPLE_CANDIDATES'];
   task.constraints.intervals = [interval('empty', bound('2'), bound('1'))];

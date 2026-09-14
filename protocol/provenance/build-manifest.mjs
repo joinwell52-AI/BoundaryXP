@@ -17,6 +17,8 @@ const files = [
   'conformance/decimal.mjs',
   'conformance/hardening-cases.mjs',
   'conformance/hardening.test.mjs',
+  'conformance/revision.test.mjs',
+  '../.github/workflows/protocol.yml',
   'conformance/build-suite.mjs',
   'conformance/run.mjs',
   'conformance/conformance.test.mjs',

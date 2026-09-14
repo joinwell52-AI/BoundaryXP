@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "urn:boundx:schema:result:v1",
+  "$id": "urn:boundx:schema:result:v1:0.3.0-draft.2",
   "title": "BoundX Deterministic Result Envelope v1",
   "type": "object",
   "additionalProperties": false,
@@ -16,14 +16,18 @@
     "business_decision",
     "execution_authorization",
     "extensions",
-    "input_digest"
+    "input_digest",
+    "input_digest_algorithm",
+    "applied_profile",
+    "resolved_elements",
+    "deficit"
   ],
   "properties": {
     "schema": {
       "const": "boundx-result/v1"
     },
     "protocol_version": {
-      "const": "0.3.0-draft.1"
+      "const": "0.3.0-draft.2"
     },
     "task_id": {
       "type": "string",
@@ -139,6 +143,69 @@
     "input_digest": {
       "type": "string",
       "pattern": "^[a-f0-9]{64}$"
+    },
+    "input_digest_algorithm": {
+      "const": "sha-256:jcs-rfc8785"
+    },
+    "applied_profile": {
+      "oneOf": [
+        {
+          "type": "null"
+        },
+        {
+          "$ref": "urn:boundx:schema:task:v1:0.3.0-draft.2#/properties/profile"
+        }
+      ]
+    },
+    "resolved_elements": {
+      "type": "array",
+      "maxItems": 8,
+      "uniqueItems": true,
+      "items": {
+        "enum": [
+          "I",
+          "O",
+          "A",
+          "P",
+          "R",
+          "V",
+          "C",
+          "B"
+        ]
+      }
+    },
+    "deficit": {
+      "type": "array",
+      "maxItems": 8,
+      "uniqueItems": true,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "element",
+          "status"
+        ],
+        "properties": {
+          "element": {
+            "enum": [
+              "I",
+              "O",
+              "A",
+              "P",
+              "R",
+              "V",
+              "C",
+              "B"
+            ]
+          },
+          "status": {
+            "enum": [
+              "absent",
+              "unresolved"
+            ]
+          }
+        }
+      }
     }
   },
   "$defs": {
@@ -192,7 +259,7 @@
           "type": "array",
           "maxItems": 16384,
           "items": {
-            "$ref": "urn:boundx:schema:task:v1#/$defs/span"
+            "$ref": "urn:boundx:schema:task:v1:0.3.0-draft.2#/$defs/span"
           }
         },
         "assumptions": {
@@ -217,7 +284,8 @@
         "upper",
         "empty",
         "scope_id",
-        "domain"
+        "domain",
+        "constraint_ids"
       ],
       "properties": {
         "subject": {
@@ -254,6 +322,17 @@
             "real",
             "integer"
           ]
+        },
+        "constraint_ids": {
+          "type": "array",
+          "uniqueItems": true,
+          "maxItems": 256,
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 256
+          },
+          "minItems": 1
         }
       }
     },
@@ -294,7 +373,58 @@
           "minLength": 1,
           "maxLength": 256
         }
-      }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "result": {
+                "enum": [
+                  "overlap"
+                ]
+              }
+            },
+            "required": [
+              "result"
+            ],
+            "type": "object"
+          },
+          "then": {
+            "properties": {
+              "overlap": {
+                "minItems": 1,
+                "type": "array"
+              }
+            },
+            "type": "object"
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "result": {
+                "enum": [
+                  "disjoint",
+                  "undetermined"
+                ]
+              }
+            },
+            "required": [
+              "result"
+            ],
+            "type": "object"
+          },
+          "then": {
+            "properties": {
+              "overlap": {
+                "maxItems": 0,
+                "type": "array"
+              }
+            },
+            "type": "object"
+          }
+        }
+      ]
     },
     "handoffResult": {
       "type": "object",
@@ -344,7 +474,82 @@
           "minLength": 1,
           "maxLength": 256
         }
-      }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "result": {
+                "enum": [
+                  "deficit"
+                ]
+              }
+            },
+            "required": [
+              "result"
+            ],
+            "type": "object"
+          },
+          "then": {
+            "properties": {
+              "missing": {
+                "minItems": 1,
+                "type": "array"
+              }
+            },
+            "type": "object"
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "result": {
+                "enum": [
+                  "satisfied",
+                  "undetermined"
+                ]
+              }
+            },
+            "required": [
+              "result"
+            ],
+            "type": "object"
+          },
+          "then": {
+            "properties": {
+              "missing": {
+                "maxItems": 0,
+                "type": "array"
+              }
+            },
+            "type": "object"
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "result": {
+                "enum": [
+                  "undetermined"
+                ]
+              }
+            },
+            "required": [
+              "result"
+            ],
+            "type": "object"
+          },
+          "then": {
+            "properties": {
+              "available": {
+                "maxItems": 0,
+                "type": "array"
+              }
+            },
+            "type": "object"
+          }
+        }
+      ]
     },
     "dependencyResult": {
       "type": "object",
@@ -364,13 +569,34 @@
           "type": "array",
           "maxItems": 512,
           "items": {
-            "type": "array",
-            "minItems": 2,
-            "maxItems": 514,
-            "items": {
-              "type": "string",
-              "minLength": 1,
-              "maxLength": 256
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "nodes",
+              "edge_ids"
+            ],
+            "properties": {
+              "nodes": {
+                "type": "array",
+                "minItems": 2,
+                "maxItems": 514,
+                "items": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 256
+                }
+              },
+              "edge_ids": {
+                "type": "array",
+                "uniqueItems": true,
+                "maxItems": 512,
+                "items": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 256
+                },
+                "minItems": 1
+              }
             }
           }
         },
@@ -430,7 +656,56 @@
             "maxLength": 256
           }
         }
-      }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "result": {
+                "enum": [
+                  "satisfiable"
+                ]
+              }
+            },
+            "required": [
+              "result"
+            ],
+            "type": "object"
+          },
+          "then": {
+            "properties": {
+              "witness": {
+                "type": "object"
+              }
+            },
+            "type": "object"
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "result": {
+                "enum": [
+                  "unsatisfiable",
+                  "undetermined"
+                ]
+              }
+            },
+            "required": [
+              "result"
+            ],
+            "type": "object"
+          },
+          "then": {
+            "properties": {
+              "witness": {
+                "type": "null"
+              }
+            },
+            "type": "object"
+          }
+        }
+      ]
     },
     "calculatedBound": {
       "oneOf": [
@@ -457,5 +732,208 @@
         }
       ]
     }
-  }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "evaluation": {
+            "properties": {
+              "validation": {
+                "const": "invalid"
+              }
+            },
+            "required": [
+              "validation"
+            ],
+            "type": "object"
+          }
+        },
+        "required": [
+          "evaluation"
+        ],
+        "type": "object"
+      },
+      "then": {
+        "properties": {
+          "evaluation": {
+            "properties": {
+              "completeness": {
+                "const": "undetermined"
+              },
+              "consistency": {
+                "const": "undetermined"
+              }
+            },
+            "type": "object"
+          },
+          "calculations": {
+            "properties": {
+              "intervals": {
+                "maxItems": 0,
+                "type": "array"
+              },
+              "target_sets": {
+                "maxItems": 0,
+                "type": "array"
+              },
+              "handoffs": {
+                "maxItems": 0,
+                "type": "array"
+              },
+              "dependencies": {
+                "maxItems": 0,
+                "type": "array"
+              },
+              "logic": {
+                "maxItems": 0,
+                "type": "array"
+              }
+            },
+            "type": "object"
+          },
+          "applied_profile": {
+            "type": "null"
+          },
+          "resolved_elements": {
+            "maxItems": 0,
+            "type": "array"
+          },
+          "deficit": {
+            "maxItems": 0,
+            "type": "array"
+          }
+        },
+        "type": "object"
+      },
+      "else": {
+        "properties": {
+          "applied_profile": {
+            "type": "object"
+          },
+          "evaluation": {
+            "properties": {
+              "completeness": {
+                "enum": [
+                  "complete",
+                  "incomplete",
+                  "unresolved"
+                ]
+              }
+            },
+            "type": "object"
+          }
+        },
+        "type": "object"
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "evaluation": {
+            "properties": {
+              "completeness": {
+                "const": "complete"
+              }
+            },
+            "required": [
+              "completeness"
+            ],
+            "type": "object"
+          }
+        },
+        "required": [
+          "evaluation"
+        ],
+        "type": "object"
+      },
+      "then": {
+        "properties": {
+          "deficit": {
+            "maxItems": 0,
+            "type": "array"
+          }
+        },
+        "type": "object"
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "evaluation": {
+            "properties": {
+              "completeness": {
+                "const": "incomplete"
+              }
+            },
+            "required": [
+              "completeness"
+            ],
+            "type": "object"
+          }
+        },
+        "required": [
+          "evaluation"
+        ],
+        "type": "object"
+      },
+      "then": {
+        "properties": {
+          "deficit": {
+            "minItems": 1,
+            "items": {
+              "properties": {
+                "status": {
+                  "const": "absent"
+                }
+              },
+              "type": "object"
+            },
+            "type": "array"
+          }
+        },
+        "type": "object"
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "evaluation": {
+            "properties": {
+              "completeness": {
+                "const": "unresolved"
+              }
+            },
+            "required": [
+              "completeness"
+            ],
+            "type": "object"
+          }
+        },
+        "required": [
+          "evaluation"
+        ],
+        "type": "object"
+      },
+      "then": {
+        "properties": {
+          "deficit": {
+            "contains": {
+              "type": "object",
+              "properties": {
+                "status": {
+                  "const": "unresolved"
+                }
+              },
+              "required": [
+                "status"
+              ]
+            },
+            "type": "array"
+          }
+        },
+        "type": "object"
+      }
+    }
+  ]
 }

@@ -30,10 +30,12 @@ Document validation checks local targets and heading anchors. External availabil
 
 ## 当前自测 / Current self-test
 
-2026-09-14 在 `D:\boundx` 实际运行：Core 21/21、Protocol 58/58、BXP-CALC 208/208、UI 127/127、Python 133/133；文档检查器回归9/9，7份 CLI 示例可运行。59份 Markdown 的222个本地链接与锚点检查通过。
+2026-09-14 在 `D:\boundx` 实际运行：Core 21/21、Protocol 85/85、BXP-CALC 208/208、UI 127/127、Python 133/133；文档检查器回归9/9。59份 Markdown 的225个本地链接与锚点检查通过。
 
-32个公共外链本次 HTTP 检查均返回200；私有 BoundX 仓库通过已认证 GitHub API 确认存在、保持私有且没有 Release。这个检查结果只表示检查时可达，不保证外部网站永久有效。当前文档没有旧项目地址或项目外证据链接；Git 历史、许可证及规范测试的内容来源标识不因此重写。
+本轮协议为 `0.3.0-draft.2`，计算套件为 `1.0.0-draft.3`。公共外链可达性和私有仓库权限需单独核验，本节本轮文档结果仅涵盖本地目标与锚点，不保证外部网站永久有效。Git 历史、许可证及规范测试的内容来源标识不因此重写。
+
+已配置 Node.js 22/24 的最小协议 CI；配置存在不等于远端运行通过，实际状态以 GitHub Actions 为准。本地测试和 CI 都不是第二独立实现的互操作验证。
 
 向量是人工结构化输入，不是自然语言抽取金标；只有当前源码与当前测试配套运行的结果可用于本项目声明。
 
-Local checks passed for core, protocol, UI, Python, documentation and seven CLI examples. Public external links were reachable at audit time; the private repository was checked using authenticated GitHub access. These results do not certify arbitrary natural-language interpretation or authorize execution.
+Local checks passed for core, protocol, UI, Python and local documentation links. The CI workflow reruns protocol tests on Node.js 22/24; its actual status is separate from these local results. Neither proves arbitrary extraction quality or authorizes execution.

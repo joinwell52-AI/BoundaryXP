@@ -5,7 +5,7 @@ import { evaluateTask, PROTOCOL_VERSION } from './evaluate.mjs';
 import { hardeningCases, verifyHardening } from './hardening-cases.mjs';
 import { validateTaskSchema, validateSuiteSchema } from './validation.mjs';
 
-export const SUITE_VERSION = '1.0.0-draft.2';
+export const SUITE_VERSION = '1.0.0-draft.3';
 const here = new URL('./', import.meta.url);
 const index = JSON.parse(readFileSync(new URL('../benchmarks/source-index.json', here), 'utf8'));
 const ELEMENTS = ['I', 'O', 'A', 'P', 'R', 'V', 'C', 'B'];
@@ -25,7 +25,7 @@ function constraints(value = {}) {
     intervals: value.intervals || [],
     target_sets: value.target_sets || [],
     handoffs: value.handoffs || [],
-    dependencies: value.dependencies || [],
+    dependencies: (value.dependencies || []).map((edge, index) => ({ id: `dep-${index + 1}`, ...edge })),
     logic: value.logic || [],
   };
 }

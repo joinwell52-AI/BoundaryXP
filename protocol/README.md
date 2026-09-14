@@ -24,8 +24,8 @@
 
 ```yaml
 protocol: BXP-0001
-version: 0.3.0-draft.1
-conformance_suite: 1.0.0-draft.2
+version: 0.3.0-draft.2
+conformance_suite: 1.0.0-draft.3
 status: DRAFT_FOR_REVIEW
 publication_authorized: false
 standard_claim_authorized: false

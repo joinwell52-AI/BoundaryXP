@@ -3,7 +3,7 @@ import { readFileSync } from 'node:fs';
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { evaluateTask, PROTOCOL_VERSION, sourceDigest } from './evaluate.mjs';
-const SUITE_VERSION = '1.0.0-draft.2';
+const SUITE_VERSION = '1.0.0-draft.3';
 
 const here = new URL('./', import.meta.url);
 const suite = JSON.parse(readFileSync(new URL('bxp-calc-v1.0.json', here), 'utf8'));
@@ -15,13 +15,13 @@ test('task, result and suite schemas are strict versioned Draft 2020-12 document
   const suiteSchema = JSON.parse(readFileSync(new URL('../schemas/boundx-calc-conformance-suite-v1.schema.json', here), 'utf8'));
 
   assert.equal(taskSchema.$schema, 'https://json-schema.org/draft/2020-12/schema');
-  assert.equal(taskSchema.$id, 'urn:boundx:schema:task:v1');
+  assert.equal(taskSchema.$id, 'urn:boundx:schema:task:v1:0.3.0-draft.2');
   assert.equal(taskSchema.properties.protocol_version.const, PROTOCOL_VERSION);
   assert.ok(taskSchema.properties.constraints.required.includes('handoffs'));
   assert.equal(taskSchema.additionalProperties, false);
 
   assert.equal(resultSchema.$schema, 'https://json-schema.org/draft/2020-12/schema');
-  assert.equal(resultSchema.$id, 'urn:boundx:schema:result:v1');
+  assert.equal(resultSchema.$id, 'urn:boundx:schema:result:v1:0.3.0-draft.2');
   assert.equal(resultSchema.properties.schema.const, 'boundx-result/v1');
   assert.equal(resultSchema.properties.protocol_version.const, PROTOCOL_VERSION);
   assert.equal(resultSchema.properties.source_digest_algorithm.const, 'sha-256:utf8');
@@ -32,7 +32,7 @@ test('task, result and suite schemas are strict versioned Draft 2020-12 document
   }
 
   assert.equal(suiteSchema.$schema, 'https://json-schema.org/draft/2020-12/schema');
-  assert.equal(suiteSchema.$id, 'urn:boundx:schema:calc-conformance-suite:v1');
+  assert.equal(suiteSchema.$id, 'urn:boundx:schema:calc-conformance-suite:v1:1.0.0-draft.3');
   assert.equal(suiteSchema.properties.suite_version.const, SUITE_VERSION);
   assert.equal(suiteSchema.properties.protocol_version.const, PROTOCOL_VERSION);
   assert.equal(suiteSchema.properties.cases.minItems, 140);

@@ -11,7 +11,7 @@
 
 BoundX 是独立的任务边界预检产品。唯一工作目录为 `D:\boundx`，仓库为 [joinwell52-AI/BoundX](https://github.com/joinwell52-AI/BoundX)，当前保持私有。
 
-源码版本 `1.2.4-preview.1`；BXP-0001 `0.3.0-draft.1` 与 BXP-CALC `1.0.0-draft.2` 均为评审草案。当前没有 GitHub Release、npm/PyPI 分发包或正式认证。许可证以根目录 [LICENSE](LICENSE) 为准；AGPL 只是待确认的发布方案，尚未启用。
+源码版本 `1.2.4-preview.1`；BXP-0001 `0.3.0-draft.2` 与 BXP-CALC `1.0.0-draft.3` 均为评审草案。当前没有 GitHub Release、npm/PyPI 分发包或正式认证。许可证以根目录 [LICENSE](LICENSE) 为准；AGPL 只是待确认的发布方案，尚未启用。
 
 BoundX is an independent, private task-boundary preflight product. It is not yet publicly released or certified. The repository license is authoritative; a proposed license change is not effective.
 
@@ -22,7 +22,7 @@ BoundX is an independent, private task-boundary preflight product. It is not yet
 | I | 输入范围 / Input scope |
 | O | 交付结果 / Deliverables |
 | A | 动作 / Actions |
-| P | 责任授权 / Responsibility and approval |
+| P | 责任主体与角色分工 / Participants |
 | R | 资源 / Resources |
 | V | 版本依据 / Version and provenance |
 | C | 完成停止 / Completion and stop conditions |

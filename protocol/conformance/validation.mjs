@@ -28,6 +28,15 @@ export function boundedJson(value) {
       if (!Number.isFinite(item)) return false;
     } else if (item !== null && typeof item === 'object') {
       if (!Array.isArray(item) && ![Object.prototype, null].includes(Object.getPrototypeOf(item))) return false;
+      if (Array.isArray(item)) {
+        if (item.length > 100000 || Reflect.ownKeys(item).length !== item.length + 1) return false;
+        for (let index = 0; index < item.length; index += 1) if (!Object.hasOwn(item, index)) return false;
+      }
+      for (const key of Reflect.ownKeys(item)) {
+        if (Array.isArray(item) && key === 'length') continue;
+        const descriptor = Object.getOwnPropertyDescriptor(item, key);
+        if (typeof key !== 'string' || !descriptor.enumerable || !Object.hasOwn(descriptor, 'value')) return false;
+      }
       for (const [key, child] of Object.entries(item)) {
         if (!key.isWellFormed()) return false;
         textLength += key.length;

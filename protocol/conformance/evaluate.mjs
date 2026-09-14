@@ -3,7 +3,7 @@ import { createHash } from 'node:crypto';
 import { boundedJson, validateTaskSchema, validateResultSchema } from './validation.mjs';
 import { compareDecimal, normalizeBound } from './decimal.mjs';
 
-export const PROTOCOL_VERSION = '0.3.0-draft.1';
+export const PROTOCOL_VERSION = '0.3.0-draft.2';
 export const CORE_ELEMENTS = Object.freeze(['I', 'O', 'A', 'P', 'R', 'V', 'C', 'B']);
 
 function canonical(value) {
@@ -23,6 +23,7 @@ function canonicalJson(value) {
 }
 
 export function digest(value) {
+  if (!boundedJson(value)) throw new TypeError('Input digest requires bounded JSON with valid Unicode and finite numbers.');
   return createHash('sha256').update(canonicalJson(value), 'utf8').digest('hex');
 }
 
@@ -116,7 +117,8 @@ function intervalCalculations(items, findings) {
     const comparison = lower && upper ? compareDecimal(lower.value, upper.value) : null;
     const empty = comparison !== null && (comparison > 0
       || (comparison === 0 && (!lower.inclusive || !upper.inclusive)));
-    calculations.push({ scope_id, subject, dimension, unit, domain, lower, upper, empty });
+    calculations.push({ scope_id, subject, dimension, unit, domain, lower, upper, empty,
+      constraint_ids: group.map(item => item.id).sort() });
     if (empty) findings.push(finding('BXP.INTERVAL.EMPTY', 'interval', 'conflict', 'constraints.intervals',
       'Interval intersection is empty.', group.flatMap(item => item.evidence),
       ['Only identical scope, subject, dimension, unit and domain keys were intersected.']));
@@ -186,7 +188,14 @@ function dependencyCalculations(edges, findings) {
     done.add(node);
   }
   for (const node of [...graph.keys()].sort()) visit(node, []);
-  const unique = [...new Map(cycles.map(cycle => [JSON.stringify(cycle), cycle])).values()];
+  const representatives = new Map();
+  for (const edge of edges.filter(item => item.kind === 'prerequisite')) {
+    const key = JSON.stringify([edge.from, edge.to]);
+    if (!representatives.has(key) || edge.id < representatives.get(key)) representatives.set(key, edge.id);
+  }
+  const unique = [...new Map(cycles.map(cycle => [JSON.stringify(cycle), cycle])).values()].map(nodes => ({
+    nodes, edge_ids: nodes.slice(0, -1).map((node, index) => representatives.get(JSON.stringify([node, nodes[index + 1]]))),
+  }));
   if (unique.length) findings.push(finding('BXP.DEPENDENCY.PREREQUISITE_CYCLE', 'dependency', 'conflict',
     'constraints.dependencies', 'Mandatory prerequisite graph contains a directed cycle.',
     edges.filter(item => item.kind === 'prerequisite').flatMap(item => item.evidence),
@@ -346,6 +355,12 @@ export function evaluateTask(task) {
     schema: 'boundx-result/v1', protocol_version: PROTOCOL_VERSION, task_id: taskId,
     source_digest_algorithm: 'sha-256:utf8', source_digest: sourceDigest(source),
     input_digest: digest(bounded ? task : null),
+    input_digest_algorithm: 'sha-256:jcs-rfc8785',
+    applied_profile: invalid ? null : { id: task.profile.id,
+      required_elements: CORE_ELEMENTS.filter(key => task.profile.required_elements.includes(key)) },
+    resolved_elements: invalid ? [] : CORE_ELEMENTS.filter(key => task.elements[key].status === 'resolved'),
+    deficit: invalid ? [] : CORE_ELEMENTS.filter(key => task.profile.required_elements.includes(key)
+      && task.elements[key].status !== 'resolved').map(element => ({ element, status: task.elements[element].status })),
     evaluation: { validation: invalid ? 'invalid' : 'valid', completeness, consistency },
     findings, calculations, business_decision: null, execution_authorization: null, extensions: {},
   };

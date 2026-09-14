@@ -7,7 +7,7 @@
 决定权：ADMIN  
 公开授权：`false`  
 
-**当前项目状态：** 独立目录 `D:\boundx`，私有仓库 `joinwell52-AI/BoundX`；源码 `1.2.4-preview.1`、BXP-0001 `0.3.0-draft.1`、BXP-CALC `1.0.0-draft.2`（208 条）。当前能力与验证见 [协议实现说明](../protocol/IMPLEMENTATION.md) 和 [验证说明](VALIDATION.md)。
+**当前项目状态：** 独立目录 `D:\boundx`，私有仓库 `joinwell52-AI/BoundX`；源码 `1.2.4-preview.1`、BXP-0001 `0.3.0-draft.2`、BXP-CALC `1.0.0-draft.3`（208 条）。当前能力与验证见 [协议实现说明](../protocol/IMPLEMENTATION.md) 和 [验证说明](VALIDATION.md)。
 
 > 本手册定义 BoundX 的产品定位、集成方式、语义包、FDE 服务和商业边界，区分当前实现与规划能力。仓库保持私有，暂无公开 Release 或 npm/PyPI 包；AGPL 是未生效的发布提案，不授权 BoundX 或宿主执行外部业务动作。
 
@@ -98,7 +98,7 @@ BoundX 在任务进入执行系统之前，把这些问题变成可以看到、�
 | I — Input | 输入、对象与范围 | 处理什么？范围到哪里？ |
 | O — Output | 交付物 | 最后产生并交付什么？ |
 | A — Action | 允许动作 | 可以读取、修改、生成或提交什么？ |
-| P — People/Responsibility | 责任分工 | 谁执行、谁审批、谁接收、谁复核？ |
+| P — Participants | 责任主体与角色分工 | 谁执行、谁审批、谁接收、谁复核？ |
 | R — Resource | 资源限制 | 时间、金额、数量、调用量和容量上限是什么？ |
 | V — Version/Provenance | 版本与依据 | 根据哪个制度、版本、数据或提交？ |
 | C — Completion | 完成与停止 | 什么证据代表完成？失败或超限时怎样停止？ |
