@@ -1,11 +1,12 @@
-import { mkdirSync, writeFileSync } from 'node:fs';
+import { mkdirSync, writeFileSync, lstatSync } from 'node:fs';
 import { join } from 'node:path';
 import { CORE_ELEMENTS } from '../bxp/index.mjs';
 import { parseProductJson, assert } from './contracts.mjs';
-import { validateDirectory } from './packages.mjs';
+import { validateDirectory, sha256 } from './packages.mjs';
 import { employeeTemplate } from './employees.mjs';
 import { createProductHost } from './host.mjs';
 import { readBoundedFile } from './files.mjs';
+import { encodeArchive, withArchive } from './archive.mjs';
 
 export function productCommand(args) {
   const host = createProductHost();
@@ -16,11 +17,28 @@ export function productCommand(args) {
       writeFileSync(join(args[3], 'employees.csv'), employeeTemplate(), { flag: 'wx', encoding: 'utf8' });
       return { created: join(args[3], 'employees.csv') };
     }
-    if (args[1] === 'import' && args.length === 3) return host.registry.importDirectory(args[2]);
-    if (args[1] === 'validate' && args.length === 3) {
+    if (args[1] === 'build' && args.length === 5 && args[3] === '--output') {
       const descriptor = parseProductJson(readBoundedFile(join(args[2], 'datapackage.json')));
       const pack = validateDirectory(args[2], descriptor.boundx.dependencies.map(reference => host.registry.load(reference)));
-      return { valid: true, digest: pack.digest };
+      const files = new Map([['datapackage.json', Buffer.from(JSON.stringify(pack.descriptor), 'utf8')]]);
+      for (const resource of pack.descriptor.resources) {
+        const bytes = readBoundedFile(join(args[2], resource.path));
+        assert(bytes.length === resource.bytes && 'sha256:' + sha256(bytes) === resource.hash, 'RESOURCE_DIGEST', 'Resource changed during build.');
+        files.set(resource.path, bytes);
+      }
+      const archive = encodeArchive(files);
+      writeFileSync(args[4], archive, { flag: 'wx' });
+      return { created: args[4], digest: pack.digest };
+    }
+    if (args[1] === 'import' && args.length === 3) return lstatSync(args[2]).isDirectory()
+      ? host.registry.importDirectory(args[2]) : withArchive(args[2], directory => host.registry.importDirectory(directory));
+    if (args[1] === 'validate' && args.length === 3) {
+      const validate = directory => {
+        const descriptor = parseProductJson(readBoundedFile(join(directory, 'datapackage.json')));
+        const pack = validateDirectory(directory, descriptor.boundx.dependencies.map(reference => host.registry.load(reference)));
+        return { valid: true, digest: pack.digest };
+      };
+      return lstatSync(args[2]).isDirectory() ? validate(args[2]) : withArchive(args[2], validate);
     }
     if (['activate', 'deactivate'].includes(args[1]) && args.length === 3) {
       const reference = host.registry.list().find(item => `${item.scope}/${item.pack_id}@${item.version}` === args[2]);
@@ -48,5 +66,5 @@ export function productCommand(args) {
     if (!output.computed) process.exitCode = 1;
     return output;
   }
-  throw new Error('Product usage: bx pack list|import|validate|activate|deactivate | bx pack template employee-directory <dir> | bx prepare <task.txt> --packs <scope/id@version,...> | bx evaluate-candidate <prepare.json> <candidate.json>. ZIP/build are not yet delivered.');
+  throw new Error('Product usage: bx pack list|import|validate|activate|deactivate | bx pack build <dir> --output <file.zip> | bx pack template employee-directory <dir> | bx prepare <task.txt> --packs <scope/id@version,...> | bx evaluate-candidate <prepare.json> <candidate.json>.');
 }

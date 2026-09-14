@@ -2,8 +2,11 @@ import { cpSync, existsSync, lstatSync, mkdirSync, readFileSync, readdirSync, re
 import { resolve, join } from 'node:path';
 import { randomUUID } from 'node:crypto';
 import { digest } from '../bxp/index.mjs';
-import { assert, parseProductJson } from './contracts.mjs';
+import { assert, parseProductJson, validateProduct, IDS, LIMITS } from './contracts.mjs';
 import { validateDirectory } from './packages.mjs';
+import { readBoundedFile } from './files.mjs';
+
+const readDescriptor = path => validateProduct(IDS.pack, parseProductJson(readBoundedFile(path, LIMITS.descriptor), LIMITS.descriptor));
 
 export const referenceOf = pack => ({ scope: pack.descriptor.boundx.scope, pack_id: pack.descriptor.name, version: pack.descriptor.version, digest: pack.digest });
 const keyOf = reference => digest({ scope: reference.scope, pack_id: reference.pack_id, version: reference.version });
@@ -20,7 +23,7 @@ export class PackRegistry {
     seen = new Set([...seen, key]);
     const directory = join(this.root, key);
     assert(existsSync(directory), 'DEPENDENCY', 'Package is not installed.');
-    const descriptor = parseProductJson(readFileSync(join(directory, 'datapackage.json')));
+    const descriptor = readDescriptor(join(directory, 'datapackage.json'));
     assert(descriptor.boundx.layer !== 'L3' || descriptor.boundx.tenant_id === this.tenant, 'TENANT', 'Other tenant directory is not accessible.');
     const dependencies = descriptor.boundx.dependencies.map(item => this.load(item, seen));
     const pack = validateDirectory(directory, dependencies);
@@ -28,7 +31,7 @@ export class PackRegistry {
     return pack;
   }
   importDirectory(directory) {
-    const descriptor = parseProductJson(readFileSync(join(directory, 'datapackage.json')));
+    const descriptor = readDescriptor(join(directory, 'datapackage.json'));
     assert(descriptor.boundx.layer !== 'L3' || descriptor.boundx.tenant_id === this.tenant, 'TENANT', 'Cannot import another tenant directory.');
     const dependencies = descriptor.boundx.dependencies.map(item => this.load(item));
     const pack = validateDirectory(directory, dependencies);
@@ -47,9 +50,12 @@ export class PackRegistry {
     const references = [];
     for (const entry of readdirSync(this.root, { withFileTypes: true })) {
       if (!/^[a-f0-9]{64}$/.test(entry.name) || !entry.isDirectory()) continue;
-      const descriptor = parseProductJson(readFileSync(join(this.root, entry.name, 'datapackage.json')));
+      const descriptor = readDescriptor(join(this.root, entry.name, 'datapackage.json'));
       if (descriptor.boundx.layer === 'L3' && descriptor.boundx.tenant_id !== this.tenant) continue;
-      references.push({ scope: descriptor.boundx.scope, pack_id: descriptor.name, version: descriptor.version, digest: digest(descriptor), layer: descriptor.boundx.layer });
+      const reference = { scope: descriptor.boundx.scope, pack_id: descriptor.name, version: descriptor.version, digest: digest(descriptor) };
+      assert(keyOf(reference) === entry.name, 'PACKAGE_DIGEST', 'Registry directory identity mismatch.');
+      this.load(reference);
+      references.push({ ...reference, layer: descriptor.boundx.layer });
     }
     return references;
   }
