@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { mkdtempSync, readFileSync, rmSync } from 'node:fs';
+import { mkdtempSync, mkdirSync, readFileSync, rmSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { CORE_ELEMENTS } from '../bxp/index.mjs';
@@ -9,6 +9,7 @@ import { loadAcceptancePlan, atomicRecord } from '../../scripts/run-admin-accept
 import { createCaseScenario } from '../../fixtures/admin-text/scenarios.mjs';
 import { prepareReviewWorkspace, checkReviewWorkspaceCase } from '../../scripts/prepare-admin-review.mjs';
 import { scoreDraftFile } from '../../scripts/score-admin-draft.mjs';
+import { compareDraftBatch } from '../../scripts/score-admin-batch.mjs';
 
 const plan = loadAcceptancePlan();
 function answerFor(draft) {
@@ -90,6 +91,48 @@ test('offline review workspace builds all 120 original cases, checks edits and r
     atomicRecord(candidatePath, draft.allowed_answers[0]);
     assert.equal(scoreDraftFile(result.output, 'T001', candidatePath).provisional_alternatives[0].exact_match, true);
     assert.equal(scoreDraftFile(result.output, 'T001', '--missing').provisional_alternatives[0].totals.false_negative, 1);
+    const observations = join(root, 'observations');
+    mkdirSync(observations);
+    atomicRecord(join(observations, 'T001-1.json'), draft.allowed_answers[0]);
+    const secondPath = join(result.output, 'T002', 'draft.json');
+    const second = JSON.parse(readFileSync(secondPath, 'utf8'));
+    second.allowed_answers = [answerFor(second)];
+    atomicRecord(secondPath, second);
+    atomicRecord(join(observations, 'T002-1.json'), { invalid: true });
+    mkdirSync(join(observations, 'T003-1.json'));
+    const brokenPath = join(result.output, 'T004', 'draft.json');
+    const broken = JSON.parse(readFileSync(brokenPath, 'utf8'));
+    broken.binding.category = 'tampered';
+    atomicRecord(brokenPath, broken);
+    const batch = compareDraftBatch(result.output, observations, { base: root });
+    assert.equal(batch.planned_runs, 150);
+    assert.equal(batch.observation_counts.COMPUTED, 1);
+    assert.equal(batch.observation_counts.REJECTED, 1);
+    assert.equal(batch.observation_counts.MISSING, 2);
+    assert.equal(batch.observation_counts.INPUT_ERROR, 1);
+    assert.equal(batch.observation_counts.REVIEW_UNAVAILABLE, 2);
+    assert.equal(batch.unknown_expected_denominator_runs, 146);
+    assert.equal(batch.whole_alternative_matches, 1);
+    assert.equal(batch.input_counts.PRESENT, 2);
+    assert.equal(batch.input_counts.UNREADABLE, 1);
+    assert.equal(Object.values(batch.input_counts).reduce((sum, count) => sum + count, 0), 150);
+    assert.equal(batch.acceptance_passed, false);
+    const missing = JSON.parse(readFileSync(join(batch.output, 'T001-2.json'), 'utf8'));
+    assert.equal(missing.provisional_alternatives[0].totals.false_negative, 1);
+    const recorded = join(root, 'recorded');
+    mkdirSync(join(recorded, 'T001-1'), { recursive: true });
+    const header = { schema: 'boundx-model-run/v1', run_id: 'T001-1', case_id: 'T001', repetition: 1,
+      source_digest: draft.binding.source_digest, mode: 'mock', raw_candidate_recorded: true, raw_candidate: JSON.stringify(draft.allowed_answers[0]),
+      evaluation: { fabricated: 'ignored rather than treated as a gold result' } };
+    atomicRecord(join(recorded, 'T001-1', 'record.json'), header);
+    mkdirSync(join(recorded, 'T002-1'));
+    atomicRecord(join(recorded, 'T002-1', 'record.json'), header);
+    const replay = compareDraftBatch(result.output, recorded, { base: root, format: 'run-records' });
+    assert.equal(replay.whole_alternative_matches, 1);
+    assert.equal(replay.observation_counts.INPUT_ERROR, 1);
+    assert.deepEqual(replay.recorded_mode_headers, { live: 0, mock: 1 });
+    assert.equal(replay.recorded_modes_are_authenticated, false);
+    assert.equal(replay.model_calls, 0);
     assert.throws(() => checkReviewWorkspaceCase(result.output, '../escape'));
     const preparedPath = join(result.output, 'T001', 'prepared.json');
     const prepared = JSON.parse(readFileSync(preparedPath, 'utf8'));
