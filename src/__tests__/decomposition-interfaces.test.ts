@@ -17,7 +17,7 @@ test('D044 partial projection identifies scheme versus implementation; corrected
 });
 test('CLI and MCP process results match function; malformed input returns tool error', () => {
   const expected=reviewDecomposition(sample);
-  const cli=spawnSync(process.execPath,[root+'cli.mjs','decomposition',root+'examples/decomposition-d044.json'],{encoding:'utf8'});
+  const cli=spawnSync(process.execPath,[root+'cli.mjs','legacy','decomposition',root+'examples/decomposition-d044.json'],{encoding:'utf8'});
   assert.equal(cli.status,0,cli.stderr); assert.deepEqual(JSON.parse(cli.stdout),expected);
   const lines=[{jsonrpc:'2.0',id:1,method:'tools/list'},
     {jsonrpc:'2.0',id:2,method:'tools/call',params:{name:'bx_review_decomposition',arguments:{input:sample}}},

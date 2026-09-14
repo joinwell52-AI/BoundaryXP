@@ -3,7 +3,7 @@
 - 授权任务书：[Draft PR #1](https://github.com/joinwell52-AI/BoundX/pull/1)，固定提交 `a2fb068565605c0ac83ad6d6d4a973941ee270c6`。
 - 基线：`ae0bab1ac8a99e806327fc30b2b83c295826e5f0`。
 - 实施分支：`impl/bxp-product-alignment-v1`。
-- 前一轮未提交草案完整保存在本地 stash `752298ea8c59255bf2d6a9cda3bd97f8d30c981e`，不纳入本轮交付，不自动恢复。
+- 前一轮废弃的生产者协议草案已按 ADMIN 明确指示删除其本地暂存备份，不纳入本轮交付；当前工作包改动保留。
 - BXP-0001、Schema 与冻结向量保持不变；不新增协议编号。
 
 ## WP1 — COMPLETE
@@ -21,3 +21,9 @@
 新增产品生产者指南与中英六类共12份 BXP 示例；Schema 和版本信息直接取唯一注册表，不新增协议。示例覆盖完整、B缺失、主体未知、多来源、作用域未知和确定冲突，并验证改原文一个字符后旧证据失效。
 
 验证：Core 33/33（新增示例12项）、Protocol 103/103、CALC 208/208、Docs 9/9；61份 Markdown、242个本地链接无失效。
+
+## WP3 — COMPLETE
+
+主 CLI 新增 evaluate（严格原始字节路径）和 protocol-info；旧四命令仅在 legacy 命名空间保留并输出弃用提示。协议无效输入输出完整无效信封且进程返回0，命令用法或文件 I/O 失败为进程错误。不静默迁移 legacy 对象。
+
+验证：Core 43/43，新增 CLI 10项，覆盖四种业务状态、Schema、重复键、精度、超限、非法UTF-8、中文带空格路径及 legacy 负向行为。
