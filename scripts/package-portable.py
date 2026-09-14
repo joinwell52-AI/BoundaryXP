@@ -1,22 +1,22 @@
-"""Build from a tracked component at HEAD. No workspace or dependency tree copying."""
+"""Build from the standalone repository at HEAD, without dependency trees."""
 import hashlib,json,subprocess,sys,zipfile,re,posixpath
 from urllib.parse import quote
 from pathlib import Path
-root=Path(__file__).resolve().parents[2]
+root=Path(__file__).resolve().parents[1]
 out=Path(sys.argv[1]).resolve(); exe=Path(sys.argv[2]).resolve(); license_path=Path(sys.argv[3]).resolve()
 if out.exists(): raise SystemExit('Refusing overwrite of package output')
-version=json.loads(subprocess.check_output(['git','show','HEAD:boundx/package.json'],cwd=root,encoding='utf-8'))['version']
-prefix='boundx/'
+version=json.loads(subprocess.check_output(['git','show','HEAD:package.json'],cwd=root,encoding='utf-8'))['version']
+prefix=''
 sha=subprocess.check_output(['git','rev-parse','HEAD'],cwd=root,text=True).strip()
-status=subprocess.check_output(['git','status','--porcelain','--',prefix],cwd=root,text=True)
+status=subprocess.check_output(['git','status','--porcelain'],cwd=root,text=True)
 if status.strip(): raise SystemExit('Commit component changes before packaging')
 runtime=json.loads(subprocess.check_output([str(exe),'-p','JSON.stringify({version:process.version,arch:process.arch,platform:process.platform})'],text=True))
 if runtime!={'version':'v24.16.0','arch':'x64','platform':'win32'}: raise SystemExit('Unexpected pinned runtime')
 files={}
-names=subprocess.check_output(['git','ls-files','--',prefix],cwd=root,text=True).splitlines()
+names=subprocess.check_output(['git','ls-files','-z'],cwd=root).decode('utf-8').rstrip('\0').split('\0')
 for name in names:
     rel=name[len(prefix):]
-    if rel.startswith(('src/','examples/','docs/','ui/')) or rel in ['cli.mjs','mcp.mjs','ui-server.mjs','start-ui.cmd','package.json','README.md','QUICKSTART.md','CHANGELOG.md']:
+    if rel.startswith(('src/','examples/','docs/','ui/','python/','protocol/','domain-packs/')) or rel in ['admin-python.mjs','cli.mjs','mcp.mjs','ui-server.mjs','start-ui.cmd','package.json','README.md','QUICKSTART.md','CHANGELOG.md']:
         files[rel]=subprocess.check_output(['git','show',sha+':'+name],cwd=root)
 files['runtime/node.exe']=exe.read_bytes()
 files['runtime/LICENSE']=license_path.read_bytes()
@@ -30,7 +30,7 @@ for name in list(files):
         local=posixpath.normpath(posixpath.join(posixpath.dirname(name),path))
         if local in files: return match.group(0)
         repo=posixpath.normpath(posixpath.join(prefix,local))
-        return '](https://github.com/joinwell52-AI/codeflowmu/blob/'+sha+'/'+quote(repo)+ ('#'+fragment if sep else '')+')'
+        return '](https://github.com/joinwell52-AI/BoundX/blob/'+sha+'/'+quote(repo)+ ('#'+fragment if sep else '')+')'
     files[name]=re.sub(r'\]\(([^)]+)\)',link,files[name].decode('utf-8')).encode('utf-8')
 files['bx.cmd']=b'@echo off\r\n"%~dp0runtime\\node.exe" "%~dp0cli.mjs" %*\r\nexit /b %errorlevel%\r\n'
 files['demo.cmd']=b'@echo off\r\ncall "%~dp0bx.cmd" decomposition "%~dp0examples\\decomposition-d044.json"\r\nset "boundx_result=%errorlevel%"\r\npause\r\nexit /b %boundx_result%\r\n'

@@ -1,5 +1,7 @@
 # 界痕 · BoundX：下载包首次使用
 
+> 独立仓库迁移说明：本页保留旧便携包的使用记录，不表示新的 BoundX 仓库已有 Release。运行当前源码请先看 [README 的独立运行步骤](README.md#独立仓库与源码运行)；ADMIN Python 依赖需单独安装，不包含在旧 Node 便携运行时中。
+
 **1.2.0-preview.1 新界面：双击 `start-ui.cmd`，按页面三步操作。** 详见[界面使用指南](docs/UI-GUIDE.md)。以下无图形界面的描述和步骤记录 1.1.0-preview.1；该旧包不会自动获得新入口。
 
 这是 Windows x64 独立便携工具，包含 Node.js 运行时，不需要安装 Node、npm、CodeFlowMu 或提供 API key。它没有图形操作界面，不自动读取你的项目。

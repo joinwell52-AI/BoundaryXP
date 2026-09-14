@@ -2,6 +2,20 @@
 
 > **执行之前，先把任务边界算清楚。**
 
+## 独立仓库与源码运行
+
+本项目已从 CodeFlowMu 的 `boundx/` 组件迁出，独立仓库为 [joinwell52-AI/BoundX](https://github.com/joinwell52-AI/BoundX)，当前保持私有。本机唯一工作目录为 `D:\boundx`，不需要母仓目录。源码版本保持 `1.2.3-preview.1`；此次迁移不是新版 Release、公开发布或许可证变更。原母仓测试仅是历史记录，迁移来源与独立验证见 [迁移记录](docs/REPOSITORY-MIGRATION.md)。
+
+已安装 Node.js 22.18+ 和 Python 3.10+ 后，在本仓库根目录执行：
+
+```text
+python -m venv .venv
+.venv\Scripts\python.exe -m pip install -r python/requirements.txt
+npm run ui
+```
+
+Linux/macOS 使用 `.venv/bin/python`。开发验证使用 `npm test`、`npm run test:ui` 和 `.venv\Scripts\python.exe -m unittest discover -s python -p "test_*.py"`。安装依赖后，ADMIN 检查不调用模型或远端 API。下文产品方案、旧预览下载包和母仓评审记录保留历史语境，不代表本仓库已经发布这些产物。
+
 BoundX 是一个可嵌入、可服务化的任务边界预检引擎（Task Boundary Preflight Engine）。它通过 Python、CLI、MCP、HTTP、Web 表单或宿主插件接收任务，用统一 7+1 和确定性规则检查缺项、数值冲突、禁止对象碰撞、交接缺口和步骤成环，再输出带原文证据的结果或干净工单。它可以独立使用，不是 CodeFlowMu 独占组件。
 
 **源码新功能：1.2.3-preview.1。** BXP-0001 已补齐严格对应的 `boundx-task/v1` 与 `boundx-result/v1` Schema、跨阶段交接差集，以及 BXP-CALC `1.0.0-draft.1` 的 176 条冻结向量；尚未公开发布或启动认证。现有 ADMIN/PM 产品入口保持不变。当前已发布下载包仍为 1.2.0-preview.1。
@@ -98,7 +112,7 @@ Windows 便携包的解压、示例、MCP 配置和 CodeFlowMu 使用区别，�
 | 计算尚未完整回应的发现 | 跟踪回应、催办、转交授权申请及恢复接班现场 |
 | 保留“不裁决”的输出语义 | 验证身份与授权，执行已有负面清单及业务流程 |
 
-**自动调用、界面交互和通知是宿主适配的开发任务，不是界痕计算内核的职责。** 宿主可以全自动调用界痕，不要求用户手动运行命令。本文命令行是独立调用入口；CodeFlowMu 当前仍需部分手动操作，属于其适配状态，详见 [CodeFlowMu 使用说明](../docs/engineering/BOUNDX.md)。
+**自动调用、界面交互和通知是宿主适配的开发任务，不是界痕计算内核的职责。** 宿主可以全自动调用界痕，不要求用户手动运行命令。本文命令行是独立调用入口；CodeFlowMu 的历史适配状态见 [CodeFlowMu 使用说明](https://github.com/joinwell52-AI/codeflowmu/blob/181a38f5ba3d1d8d66041352ea28be1c56c084f8/docs/engineering/BOUNDX.md)，不属于本仓库的运行依赖。
 
 界痕通用接口无状态，不自行保存任务现场或发送通知。“必须回应”在内核中体现为可计算的待回应清单，不是内核能保证负责人收到提醒或采取行动。`needs_admin` 表示请求任务授权方澄清，宿主负责实际转交。
 
@@ -159,7 +173,7 @@ npm run mcp
 
 CLI 只向标准输出打印结果，不写任务或授权文件。MCP 通过标准输入输出提供 `bx_review_task`、`bx_review_plan`、`bx_review_decomposition`、`bx_check_responses`；由宿主通过挂载/卸载启停。
 
-通用工具无状态。宿主必须验证基线来源、身份与授权，保存原文/结果/回应并交付提醒。直接提交一个 baseline JSON 不证明它得到授权。CodeFlowMu 的默认关闭开关、不可覆盖存储、PM 专用工具和 ADMIN 确认入口属于其适配层，见 [适配说明](../docs/engineering/BOUNDX.md)。
+通用工具无状态。宿主必须验证基线来源、身份与授权，保存原文/结果/回应并交付提醒。直接提交一个 baseline JSON 不证明它得到授权。CodeFlowMu 的默认关闭开关、不可覆盖存储、PM 专用工具和 ADMIN 确认入口属于其适配层，见 [历史适配说明](https://github.com/joinwell52-AI/codeflowmu/blob/181a38f5ba3d1d8d66041352ea28be1c56c084f8/docs/engineering/BOUNDX.md)。
 
 ## 数据接口
 

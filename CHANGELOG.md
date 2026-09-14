@@ -1,3 +1,10 @@
+# Repository migration: standalone private BoundX (2026-09-14)
+
+- Imported all 198 BoundX component files from CodeFlowMu commit `181a38f5ba3d1d8d66041352ea28be1c56c084f8` into the standalone repository root; source version remains `1.2.3-preview.1`.
+- Removed parent-repository assumptions from portable packaging and added independent development rules, source setup instructions and repository metadata. Preserved the inherited license notice without activating the proposed AGPL change.
+- Rebuilt a corrupted generated protocol suite using its unchanged generator; output matches the existing provenance manifest. Re-ran 21 core, 15 protocol, 127 UI and 133 Python tests, plus 176 calculation vectors, in `D:\boundx`.
+- See [migration scope, first failure and new validation](docs/REPOSITORY-MIGRATION.md). The repository stays private; no release or parent-repository change is made.
+
 # Working source update: BXP-CALC 1.0 draft assets
 
 - Added `BX-PRODUCT-MANUAL-001`: BoundX is an embeddable and service-ready Task Boundary Preflight Engine, with one BXP semantic path across Python, CLI, MCP, HTTP, Web and host plugins. The manual distinguishes every current capability from proposed packaging, server and plugin work, and defines free Core versus paid Packs/FDE delivery.
