@@ -1,5 +1,11 @@
 # 界痕 · BoundX
 
+<p align="center">
+  <img src="assets/branding/v1/BoundX_Logo_EN_white.png" alt="界痕 BoundX Logo" width="320">
+</p>
+
+[正式 Logo 素材与下载](assets/branding/README.md)
+
 > **执行之前，先把任务边界算清楚。**
 
 ## 独立仓库与源码运行
