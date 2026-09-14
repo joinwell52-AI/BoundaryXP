@@ -16,7 +16,8 @@ const hash = { type: 'string', pattern: '^[a-f0-9]{64}$' };
 const name = { type: 'string', pattern: '^[a-z0-9]+(?:[._-][a-z0-9]+)*$', maxLength: 128 };
 const version = { type: 'string', pattern: '^[0-9]+\\.[0-9]+\\.[0-9]+(?:-[a-z0-9.-]+)?$', maxLength: 64 };
 export const packReference = object({ scope: name, pack_id: name, version, digest: hash });
-const entryReference = object({ ...packReference.properties, entry_id: text() });
+export const ENTRY_KINDS = ['operation', 'modality', 'action', 'entity', 'role', 'resource', 'reference', 'completion', 'risk', 'employee'];
+const entryReference = object({ ...packReference.properties, entry_id: text(), kind: { enum: ENTRY_KINDS } }, [...Object.keys(packReference.properties), 'entry_id']);
 export const locatorSchema = object({ source_id: text(), quote: text(10000),
   prefix: { type: 'string', maxLength: 10000 }, suffix: { type: 'string', maxLength: 10000 } }, ['source_id', 'quote']);
 const extension = { type: 'object', maxProperties: 16, propertyNames: { pattern: '^[a-z0-9-]+:[a-z0-9-]+$' },

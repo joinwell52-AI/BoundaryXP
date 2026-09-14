@@ -4,6 +4,7 @@ import { createHash } from 'node:crypto';
 import Ajv2020 from 'ajv/dist/2020.js';
 import { digest } from '../bxp/index.mjs';
 import { assert, IDS, LIMITS, parseProductJson, validateProduct } from './contracts.mjs';
+import { containsLexicalTerm } from './lexical.mjs';
 
 export const sha256 = bytes => createHash('sha256').update(bytes).digest('hex');
 export function safeResourcePath(path) {
@@ -99,6 +100,7 @@ export function validateDirectory(directory, dependencies = []) {
     assert(declared.filter(pack => pack.descriptor.boundx.layer === 'L1').length === 1
       && declared.every(pack => ['L1', 'L2'].includes(pack.descriptor.boundx.layer)), 'DEPENDENCY', 'Employee directory requires one L1 and optional L2.');
     for (const employee of payloads['employee-directory'].employees) if (employee.role_ref) {
+      assert(!employee.role_ref.kind || employee.role_ref.kind === 'role', 'ROLE_REFERENCE', 'Employee role reference must identify a role.');
       const { entry_id, ...reference } = employee.role_ref;
       const industry = declared.find(pack => pack.descriptor.boundx.layer === 'L2'
         && pack.descriptor.boundx.scope === reference.scope && pack.descriptor.name === reference.pack_id
@@ -148,11 +150,6 @@ function validateDomain(pack, dependencies) {
 }
 
 export function matchActionCandidates(text, pack) {
-  const normalized = text.replace(/[A-Z]/g, char => char.toLowerCase());
-  return pack.payloads.actions.frames.filter(frame => [...frame.triggers.zh, ...frame.triggers.en].some(trigger => {
-    const needle = trigger.replace(/[A-Z]/g, char => char.toLowerCase());
-    const offset = normalized.indexOf(needle);
-    return offset >= 0 && (!/^[a-z]/.test(needle) || offset === 0 || !/[a-z]/.test(normalized[offset - 1]))
-      && (!/[a-z]$/.test(needle) || !/[a-z]/.test(normalized[offset + needle.length] ?? ''));
-  })).map(frame => frame.id);
+  return pack.payloads.actions.frames.filter(frame => [...frame.triggers.zh, ...frame.triggers.en]
+    .some(trigger => containsLexicalTerm(text, trigger))).map(frame => frame.id);
 }

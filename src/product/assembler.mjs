@@ -3,6 +3,17 @@ import { IDS, assert, validateProduct } from './contracts.mjs';
 import { locateEvidence } from './evidence.mjs';
 import { matchEmployees } from './employees.mjs';
 
+export function resolveSemanticReference(entries, reference) {
+  const { kind, ...identity } = reference;
+  const matches = entries.filter(value => {
+    const { kind: storedKind, ...storedIdentity } = value.reference;
+    return (!kind || kind === value.kind) && digest(storedIdentity) === digest(identity);
+  });
+  assert(matches.length, 'UNKNOWN_REFERENCE', 'Candidate references an entry outside its prepared context.');
+  assert(matches.length === 1, 'AMBIGUOUS_REFERENCE', 'Entry ID occurs in multiple semantic kinds; specify kind.');
+  return matches[0];
+}
+
 export function evaluateCandidate(service, candidateInput, { historical = false } = {}) {
   try {
     const candidate = validateProduct(IDS.candidate, candidateInput);
@@ -20,8 +31,7 @@ export function evaluateCandidate(service, candidateInput, { historical = false 
       const bucket = candidate.elements[field];
       for (const entry of bucket.entries) {
         for (const reference of entry.semantic_refs ?? []) {
-          const item = prepared.entries.find(value => digest(value.reference) === digest(reference));
-          assert(item, 'UNKNOWN_REFERENCE', 'Candidate references an entry outside its prepared context.');
+          const item = resolveSemanticReference(prepared.entries, reference);
           if (item.kind === 'employee') {
             const directory = { employees: prepared.entries.filter(value => value.kind === 'employee').map(value => value.entry) };
             const quotes = entry.evidence.map(locator => locateEvidence(sources, locator).quote).join('\n');

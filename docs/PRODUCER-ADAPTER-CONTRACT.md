@@ -23,3 +23,13 @@ src/product/replay.mjs提供结构候选回放与标签/关系回放。后者将
 tokenRangeLocator仅接受能够逐字节重组原文的已解码token片段，拒绝归一化、未配对代理项和越界；转换后再次经过精确引文定位。它不是通用tokenizer解码器，不把模型token下标直接当作Unicode码点。
 
 Both adapters are deterministic test replays, not live model runs. Unknown model versions remain unknown. A valid quote and Schema do not prove that an interpretation is entailed by the source or that no prohibition was omitted.
+
+## 行业上下文检索 / Industry Context Retrieval
+
+检索规则literal-ascii-v2从已锁定L2读取动作、实体、岗位、资源、依据、完成词汇及风险。动作按显式触发词召回；实体可由命中动作的实体类型引用带入，风险可由动作风险关联带入，其余条目按包中已有名称/别名/完成表达命中。所有条目标为candidate_only并保留命中原因；岗位不补任务责任、完成表达不代表任务已完成、风险不自动转B。
+
+非ASCII文本不归一化；ASCII只折叠大小写并核对词边界，继续检查后续出现位置，避免前一处嵌入其他词就漏掉后面的合法命中。这里是有限词法召回，不宣称语义检索完整或否定范围已正确解析。无命中不等于不存在，超过64KiB语义上下文预算显式失败，不静默截断。
+
+产品semantic_refs增加可选kind以区分同包中不同资源类别的同名ID；没有kind时只有唯一匹配才接受，跨类别歧义拒绝，不选择第一项。L3角色引用如提供kind则必须是role。BXP Schema及协议版本不变；新prepare固定新的候选Schema摘要和检索规则，旧快照不被改写。
+
+Retrieval candidates retain package provenance and selection reasons, not invented source evidence. Typed semantic references disambiguate identical IDs across resource kinds. This improves bounded context coverage but does not prove source entailment, complete extraction or independent gold-label acceptance.
