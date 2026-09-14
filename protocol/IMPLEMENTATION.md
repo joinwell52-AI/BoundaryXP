@@ -33,7 +33,7 @@ The 208 structured vectors do not measure natural-language extraction accuracy. 
 
 协议修订范围见 [变更记录](../CHANGELOG.md)。新增 [修订测试](conformance/revision.test.mjs) 覆盖反例、JCS、追踪与双语规范断言；双语断言防止已知条款漂移，不证明所有译文语义完全等价。
 
-[协议 CI](../.github/workflows/protocol.yml) 在 Node.js 22/24 上重跑协议测试。配置存在不等于本次远端运行通过；运行状态以 GitHub Actions 为准。CI 是远端重跑，不是第二套独立实现。
+[验证 CI](../.github/workflows/protocol.yml) 在 Linux Node.js 22/24 与 Windows Node.js 24 重跑 Core、Protocol、208条冻结向量、UI、Python 和文档测试。配置存在不等于本次远端运行通过；运行状态以 GitHub Actions 为准。CI 是远端重跑，不是第二套独立实现。
 
 Revision tests guard known bilingual clauses, not full translation equivalence. CI reruns are not independent-implementation interoperability evidence.
 

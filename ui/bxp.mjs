@@ -11,9 +11,11 @@ try {
   button.disabled=false;
 } catch { message.textContent='协议信息加载失败，请重新打开。 / Could not load protocol info; reopen the page.'; }
 file.addEventListener('change',async()=>{
-  host.replaceChildren(); message.textContent='';
+  host.replaceChildren(); message.textContent=''; input.value='';
+  button.disabled=true; input.disabled=true; file.disabled=true;
   try { if(file.files[0])input.value=new TextDecoder('utf-8',{fatal:true,ignoreBOM:true}).decode(await file.files[0].arrayBuffer()); }
   catch { input.value=''; message.textContent='文件必须是有效 UTF-8。 / File must be valid UTF-8.'; }
+  finally { button.disabled=!info; input.disabled=false; file.disabled=false; }
 });
 input.addEventListener('input',()=>host.replaceChildren());
 button.addEventListener('click',async()=>{

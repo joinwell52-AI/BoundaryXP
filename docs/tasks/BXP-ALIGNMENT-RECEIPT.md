@@ -14,7 +14,7 @@
 
 验证：`npm test`，Core 21/21、Protocol 103/103、CALC 208/208。原冻结期望未刷新。
 
-后续工作包待执行，尚未完成最终交付。
+各工作包结果按下文记录；最终交付状态以末尾回执和 GitHub CI 为准。
 
 ## WP2 — COMPLETE
 
@@ -47,3 +47,13 @@ Python 证据及 JS 规则、引用和展示统一为码点坐标；原业务判
 产品升级 1.3.0-preview.0，包主出口仅导出 BXP Core；旧比较、Schema、分解和本地化模块移到 src/legacy/。README 首个运行示例使用标准 IR，必改文档与三层语义包归属统一，历史研究材料加非规范标签而不重写结果。保留产品手册中的商业规划与未来 SDK/Server 边界，不把规划当作交付。更新来源清单，不修改协议正文、Schema 或冻结结果。
 
 验证：Core 51/51、Protocol 103/103、CALC 208/208、UI 147/147、Docs 14/14（新增当前口径／版本／编码5项）；62份 Markdown、254个本地链接与锚点无失效。许可证未变，仓库未公开、未发布。
+
+## WP7 — LOCAL_VERIFIED / CI_PENDING
+
+增加生产主出口同一实现断言，以及中英各六例加 emoji、非 BMP 与组合字符的 Core/CLI/MCP/HTTP 四入口端到端测试。文件导入期间禁用计算，防止旧输入与新文件的异步竞态。CI 扩展为 Linux Node22/24、Windows Node24 全套验证；等待实际远端运行，不以配置存在代替通过。
+
+本目录全量命令实跑：npm ci（审计0漏洞）、npm test（Core54/54、Protocol103/103、CALC208/208）、npm run test:ui（147/147）、.venv Python unittest（133/133）、npm run test:docs（14/14，62份 Markdown、254链接）。无跳过。合计759个测试／冻结向量判定，新增76项；结构化向量不是抽取金标。
+
+新增集成／适配器相关53项：生产者12、CLI10、MCP8、UI HTTP/渲染15、JS/Python码点5、全入口与主出口3；另严格raw18、文档5。全入口两项内实际遍历12个双语变体，不重复算作12个 test。
+
+已核对协议正文、三个Schema、208条冻结结果、LICENSE 相对基线无改动。已确认远端 PRIVATE，尚未合并或发布。
