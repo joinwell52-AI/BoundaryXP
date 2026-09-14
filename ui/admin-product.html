@@ -4,7 +4,19 @@
 <body><main>
 <h1>ADMIN任务边界 / Task boundaries</h1>
 <p>需要兼容Host / Compatible Host required。此页面不自动调用AI，不执行任务，不发送到外部模型。可准备上下文并导入Host候选。</p>
-<p>先通过CLI导入并显式启用包。目录方式已支持；ZIP、职员表构建向导尚未交付。</p>
+<p>先通过CLI导入并显式启用L1及可选行业包；支持目录和受限ZIP。 / Install and activate L1 and optional industry packs through CLI first.</p>
+<details><summary>创建职员表 / Create employee directory</summary>
+<p>UTF-8 CSV；aliases填JSON数组。岗位映射可为空，不代表权限。页面请求上限1MB；大文件请用CLI。 / Optional role mapping grants no authority. Use CLI for requests over 1MB.</p>
+<button id="employee-template">下载CSV模板 / CSV template</button>
+<label>CSV文件 / CSV file<input id="employee-file" type="file" accept=".csv,text/csv"></label>
+<label>CSV文本 / CSV text<textarea id="employee-csv" rows="6"></textarea></label>
+<label>包名 / Package name<input id="employee-name" value="my-team"></label>
+<label>新版本 / New version<input id="employee-version" value="0.1.0"></label>
+<label>可选岗位映射：员工ID→所选行业role ID或null / Optional roles<textarea id="employee-roles" rows="2">{}</textarea></label>
+<button id="employee-preview">预览校验 / Preview</button><button id="employee-build">生成ZIP / Build ZIP</button>
+<button id="employee-download">下载ZIP / Download ZIP</button><button id="employee-import">确认导入 / Import</button>
+<button id="employee-activate">单独启用 / Activate separately</button><pre id="employee-result"></pre>
+</details>
 <p id="l1">L1：未加载 / not loaded</p>
 <label>行业 / Industry <select id="industry"><option value="">不使用行业包 / None</option></select></label>
 <label>L3名册 / Directory <select id="directory"><option value="">不使用名册 / None</option></select></label>

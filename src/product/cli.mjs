@@ -7,10 +7,32 @@ import { employeeTemplate } from './employees.mjs';
 import { createProductHost } from './host.mjs';
 import { readBoundedFile } from './files.mjs';
 import { encodeArchive, withArchive } from './archive.mjs';
+import { buildEmployeeDirectory } from './employee-builder.mjs';
 
 export function productCommand(args) {
   const host = createProductHost();
   if (args[0] === 'pack') {
+    if (args[1] === 'create-employees' && args.length >= 11) {
+      const options = {};
+      for (let index = 3; index < args.length; index += 2) {
+        const key = args[index];
+        assert(['--name', '--version', '--l1', '--l2', '--roles', '--output'].includes(key)
+          && !Object.hasOwn(options, key) && typeof args[index + 1] === 'string', 'CLI_ARGUMENTS', 'Invalid or repeated employee build option.');
+        options[key] = args[index + 1];
+      }
+      assert(['--name', '--version', '--l1', '--output'].every(key => options[key]), 'CLI_ARGUMENTS', 'Name, version, L1 and output are required.');
+      const select = name => {
+        const installed = host.registry.list().find(item => `${item.scope}/${item.pack_id}@${item.version}` === name);
+        assert(installed, 'DEPENDENCY', 'Install the selected dependency first.');
+        const { layer, ...reference } = installed; return reference;
+      };
+      const raw = readBoundedFile(args[2]);
+      const input = args[2].toLowerCase().endsWith('.csv')
+        ? { csv: new TextDecoder('utf-8', { fatal: true, ignoreBOM: true }).decode(raw) } : { directory: parseProductJson(raw) };
+      return buildEmployeeDirectory(host.registry, { ...input, name: options['--name'], version: options['--version'], l1: select(options['--l1']),
+        ...(options['--l2'] ? { l2: select(options['--l2']) } : {}),
+        ...(options['--roles'] ? { roles: parseProductJson(readBoundedFile(options['--roles'])) } : {}) }, options['--output']);
+    }
     if (args[1] === 'list' && args.length === 2) return host.invoke('bx_list_semantic_packs');
     if (args[1] === 'template' && args[2] === 'employee-directory' && args.length === 4) {
       mkdirSync(args[3], { recursive: true });

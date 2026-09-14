@@ -12,6 +12,8 @@ import {parseAndEvaluateBxpTask, evaluateBxpTask, protocolInfo, PRODUCT_VERSION,
 const version=PRODUCT_VERSION;
 import { createProductHost } from './src/product/host.mjs';
 import { parseProductJson } from './src/product/contracts.mjs';
+import { employeeUiAction } from './src/product/employee-ui.mjs';
+import { employeeTemplate } from './src/product/employees.mjs';
 const LIMIT=1_000_000;
 export function validateExtract(value,kind,text,baseline){
   const docs=kind==='task'?[value]:[value?.document,...(Array.isArray(value?.tasks)?value.tasks.map(t=>t.document):[])];
@@ -53,6 +55,7 @@ export function createApp({fetchImpl=fetch,productOptions={}}={}){
     const send=(status,data,type='application/json')=>{res.writeHead(status,{'Content-Type':type+'; charset=utf-8','Cache-Control':'no-store','X-Content-Type-Options':'nosniff','Content-Security-Policy':"default-src 'self'; script-src 'self'; style-src 'self'; connect-src 'self'; img-src 'self' data:; frame-ancestors 'none'; base-uri 'none'; form-action 'none'"});res.end(type==='application/json'?JSON.stringify(data):data);};
     if(req.headers.host!==new URL(origin).host) return send(403,{error:'仅允许本机地址访问。'});
     if(req.method==='GET'){
+      if(req.url==='/api/employee-template')return send(200,employeeTemplate(),'text/csv');
       if(req.url==='/admin'||req.url==='/admin-product.mjs') {
         const script=req.url.endsWith('.mjs');
         return send(200,readFileSync(new URL(script?'ui/admin-product.mjs':'ui/admin-product.html',import.meta.url),'utf8').replaceAll('__SESSION_TOKEN__',token),script?'text/javascript':'text/html');
@@ -68,12 +71,14 @@ export function createApp({fetchImpl=fetch,productOptions={}}={}){
     const timer=setTimeout(()=>controller.abort(),180000);
     try{
       const bxp=req.url==='/api/bxp/evaluate';
-      const product=req.url==='/api/admin-product';
+      const employee=req.url==='/api/employee-directory';
+      const product=req.url==='/api/admin-product'||employee;
       if(!bxp&&!product&&!req.url.startsWith('/api/legacy/'))return send(404,{error:'Legacy endpoints require /api/legacy/.'});
       let size=0,buffers=[];for await(const chunk of req){size+=chunk.length;if(size>(bxp?RAW_JSON_BYTE_LIMIT:LIMIT)){if(bxp)return send(200,evaluateBxpTask(undefined));throw Error('输入超过 1 MB。');}buffers.push(chunk);}
       if(bxp)return send(200,parseAndEvaluateBxpTask(Buffer.concat(buffers)));
       if(product){
         const input=parseProductJson(Buffer.concat(buffers));
+        if(employee){productHost??=createProductHost(productOptions);return send(200,employeeUiAction(productHost.registry,input));}
         if(!['bx_list_semantic_packs','bx_prepare_admin_task','bx_evaluate_admin_candidate'].includes(input.method))return send(400,{error:'Unsupported UI product operation.'});
         if(input.method==='bx_evaluate_admin_candidate'&&Object.hasOwn(input.arguments??{},'raw_candidate')){
           if(Object.keys(input.arguments).some(key=>key!=='raw_candidate'))throw Error('Raw candidate must be supplied alone.');

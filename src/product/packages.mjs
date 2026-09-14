@@ -93,6 +93,19 @@ export function validateDirectory(directory, dependencies = []) {
     assert(dependencies.some(pack => pack.descriptor.boundx.scope === reference.scope && pack.descriptor.name === reference.pack_id
       && pack.descriptor.version === reference.version && pack.digest === reference.digest && digest(pack.descriptor) === pack.digest), 'DEPENDENCY', 'Missing exact dependency snapshot.');
   }
+  if (descriptor.boundx.layer === 'L3') {
+    assert(descriptor.boundx.scope === descriptor.boundx.tenant_id, 'TENANT', 'Customer namespace must match its tenant.');
+    const declared = dependencies.filter(pack => descriptor.boundx.dependencies.some(reference => reference.digest === pack.digest));
+    assert(declared.filter(pack => pack.descriptor.boundx.layer === 'L1').length === 1
+      && declared.every(pack => ['L1', 'L2'].includes(pack.descriptor.boundx.layer)), 'DEPENDENCY', 'Employee directory requires one L1 and optional L2.');
+    for (const employee of payloads['employee-directory'].employees) if (employee.role_ref) {
+      const { entry_id, ...reference } = employee.role_ref;
+      const industry = declared.find(pack => pack.descriptor.boundx.layer === 'L2'
+        && pack.descriptor.boundx.scope === reference.scope && pack.descriptor.name === reference.pack_id
+        && pack.descriptor.version === reference.version && pack.digest === reference.digest);
+      assert(industry?.payloads.roles.roles.some(role => role.id === entry_id), 'ROLE_REFERENCE', 'Employee role must reference a locked declared L2 role.');
+    }
+  }
   if (descriptor.boundx.layer === 'L2') validateDomain(result, dependencies);
   return result;
 }

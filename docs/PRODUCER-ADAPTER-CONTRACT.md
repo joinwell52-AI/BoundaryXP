@@ -14,6 +14,8 @@ The producer contract is model-independent. Schema validity does not establish s
 
 三层报告沿用用户标题与顺序：原文证据→7+1映射→计算结果与建议/Diff。缺证据不补事实，未计算不显示“引擎通过”，风险建议不冒充B违反。
 
+本地MCP提供bx_list_semantic_packs、bx_get_semantic_pack_info、bx_prepare_admin_task和bx_evaluate_admin_candidate。Canonical BXP入口仍无状态；产品prepare会在本地持久化原文及选定上下文，不应描述为“完全无客户数据持久化”。默认数据目录为.boundx，可通过BOUNDX_DATA_DIR指定；不得提交真实客户内容。网页/admin只提供准备、候选导入和计算，不声称已自动接入Host AI。
+
 ## 回放适配器 / Replay Adapters
 
 src/product/replay.mjs提供结构候选回放与标签/关系回放。后者将八个显式tag转换为同一候选合同，不运行自然语言抽取器。两者都调用现有Core；语义投影及计算一致，producer来源不同会导致输入摘要不同，不冒称两个适配器产生逐字节相同的任务。

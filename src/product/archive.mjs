@@ -118,7 +118,11 @@ export function encodeArchive(files, { compress = true } = {}) {
 }
 
 export function withArchive(path, callback) {
-  const files = decodeArchive(readBoundedFile(path, LIMITS.archive));
+  return withArchiveBytes(readBoundedFile(path, LIMITS.archive), callback);
+}
+
+export function withArchiveBytes(bytes, callback) {
+  const files = decodeArchive(bytes);
   const temporary = mkdtempSync(join(tmpdir(), 'boundx-unpack-'));
   try {
     for (const [name, bytes] of files) {
