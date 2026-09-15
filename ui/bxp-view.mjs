@@ -1,18 +1,40 @@
-export function renderThreeLayerReport(host, report) {
+export function renderThreeLayerReport(host, report, copySource, evaluation) {
   const document = host.ownerDocument;
   const node = (tag, text) => { const value = document.createElement(tag); value.textContent = text; return value; };
   host.replaceChildren();
-  let section = host, details = null;
+  let section = host, details = null, layerNumber = '', slot = null, entryCount = 0, technical = null, mappingSection = null;
   for (const line of report.split('\n')) {
     if (!line.trim()) continue;
     const layer = line.match(/^- \*\*【(Layer [123]：.+)】\*\*$/);
     if (layer) {
       section = node('section', ''); section.className = 'report-layer';
-      section.append(node('h3', layer[1])); host.append(section); details = null; continue;
+      layerNumber = layer[1][6];
+      if(layerNumber==='2')mappingSection=section;
+      section.append(node('h3', '【'+layer[1]+'】')); host.append(section); details = null; slot = null;
+      if(layerNumber==='1'&&copySource){const copy=node('button','📋 复制原文 / Copy source');copy.type='button';copy.onclick=async()=>{try{await copySource();copy.textContent='已复制 / Copied';}catch{copy.textContent='复制失败，请手动复制 / Copy failed';}};section.append(copy);}
+      continue;
     }
     if (line.startsWith('### ')) { host.append(node('h2', line.slice(4))); continue; }
     if (line.startsWith('  > ')) { section.append(node('blockquote', line.slice(4))); continue; }
+    const bucket = layerNumber==='2' && line.match(/^  - \*\*(.+?)\*\*：(.+)$/);
+    if(bucket){slot=node('p','');slot.className='report-slot';slot.append(node('strong',bucket[1]+'：'));entryCount=0;details=null;
+      if(bucket[2].startsWith('原文未提供'))slot.append(node('span','原文未提供 / Not provided'));
+      else if(bucket[2].startsWith('尚未明确'))slot.append(node('span','尚未明确 / Unresolved；'));
+      section.append(slot);continue;
+    }
+    if(layerNumber==='2'&&slot&&line.startsWith('    - ')){slot.append(node('span',(entryCount++?'；':'')+line.slice(6)));continue;}
+    if(layerNumber==='3'){
+      const axes=line.match(/validation=([^；]+)；completeness=([^；]+)；consistency=(.+)$/);
+      if(axes){const labels={valid:'结构复核通过',invalid:'结构复核未通过',complete:'信息完整',incomplete:'信息不完整',consistent:'已提交约束未发现冲突',inconsistent:'已提交约束存在冲突',undetermined:'一致性尚无法确定'};
+        const conclusion=node('p',(labels[axes[2]]??axes[2])+'；'+(labels[axes[3]]??axes[3]));conclusion.className='report-conclusion';section.append(conclusion,node('p','系统复核：'+(labels[axes[1]]??axes[1])));continue;}
+      if(/^\s*- (intervals|target_sets|handoffs|dependencies|logic)：/.test(line)||line.includes('**Diff [BXP.')||line.startsWith('      - ')){
+        if(!technical){technical=node('details','');technical.append(node('summary','系统复核与计算详情 / Validation and calculation details'));}
+        technical.append(node('p',line.replace(/^\s*- /,'')));continue;
+      }
+      if(line==='  - **引擎求值**：'||line==='  - **结论与 Diff**：')continue;
+    }
     if (line.startsWith('      - ')) {
+      if(layerNumber==='2'&&evaluation?.computed&&evaluation.task)continue;
       if (!details) { details = node('details', ''); details.append(node('summary', '证据与解释 / Evidence and interpretation')); section.append(details); }
       details.append(node('p', line.slice(8))); continue;
     }
@@ -22,6 +44,29 @@ export function renderThreeLayerReport(host, report) {
     const pieces = text.split(/(\*\*[^*]+\*\*)/g);
     for (const piece of pieces) paragraph.append(node(piece.startsWith('**') && piece.endsWith('**') ? 'strong' : 'span', piece.startsWith('**') && piece.endsWith('**') ? piece.slice(2, -2) : piece));
     section.append(paragraph);
+  }
+  if(technical)section.append(technical);
+  if(mappingSection&&evaluation?.computed&&evaluation.task){
+    const trace=node('details','');trace.className='extraction-trace';
+    trace.append(node('summary','① 7+1是怎么得到的？ / How was 7+1 extracted?'));
+    trace.append(node('p','模型根据原文和已选上下文生成候选；系统核对结构、引文及引用，再组装Core输入。通过复核不证明语义完整。 / Model candidates are checked for structure, evidence and references; validation does not prove semantic completeness.'));
+    const provenance=evaluation.task.extensions?.['org.boundx.producer'];
+    trace.append(node('p','模型 / Model：'+(provenance?.producer?.model_id??evaluation.model??'unknown')));
+    const table=node('table',''),header=node('tr','');
+    for(const title of ['槽位 / Slot','原文证据 / Source evidence','模型提取与解释 / Extraction','语义包引用 / Pack references','系统复核 / Validation'])header.append(node('th',title));
+    table.append(header);
+    for(const [field,bucket] of Object.entries(evaluation.task.elements)){
+      for(const entry of bucket.entries.length?bucket.entries:[null]){
+        const origin=provenance?.provenance?.find(item=>item.element===field&&item.entry_id===entry?.id);
+        const row=node('tr','');
+        const evidence=entry?.evidence.map(item=>`${item.source_id??'task'} [${item.start},${item.end})：${item.quote}`).join('\n')??'无条目证据 / No entry evidence';
+        const interpretation=entry?[entry.text,origin?.interpretation?'模型解释（非原文）/ Interpretation: '+origin.interpretation:null,origin?.candidate_ids?.length?'备选 / Alternatives: '+origin.candidate_ids.join(', '):null].filter(Boolean).join('\n'):'原文未提供（候选状态）/ Absent in candidate';
+        const references=origin?.semantic_refs?.length?origin.semantic_refs.map(reference=>`${reference.scope}/${reference.pack_id}@${reference.version} · ${reference.entry_id}\nSHA-256: ${reference.digest}`).join('\n'):'未引用词条 / No entry reference';
+        for(const value of [field+' · '+bucket.status,evidence,interpretation,references,entry?'已通过结构、引文定位与引用检查；语义仍需核对。 / Structural, locator and reference checks passed; semantics require review.':'候选无条目；不是完整性已获证明。 / No candidate entry; completeness is not proven.'])row.append(node('td',value));
+        table.append(row);
+      }
+    }
+    trace.append(table);mappingSection.append(trace);
   }
 }
 

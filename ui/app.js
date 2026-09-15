@@ -161,7 +161,7 @@ const extractBxp=button(undefined,action(async()=>{
  if(!bxpResultState.accept(ticket,result))return;
  bxpDownloads.hidden=false;
  for(const {kind,control} of bxpDownloadButtons)control.disabled=kind!=='report'&&!result.computed;
- renderThreeLayerReport(bxpReport,result.report);
+ renderThreeLayerReport(bxpReport,result.report,()=>navigator.clipboard.writeText(text),result);
  noticePair(result.computed?'7+1候选已校验并完成BXP计算；结果不代表授权。':'尚未计算，请查看诊断。',result.computed?'Candidate validated and BXP calculated; no authority granted.':'Not computed; see diagnostics.');
  }catch(error){clearBxpResult();bxpResultPanel.hidden=false;bxpReport.textContent='尚未计算 / Not computed\n'+error.message;throw error;}
 }));extractBxp.id='extract-bxp-task';extractBxp.disabled=true;localized(extractBxp,'用模型抽取7+1并计算','Extract 7+1 with model and calculate');

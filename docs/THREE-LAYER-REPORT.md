@@ -16,6 +16,10 @@ Core deficits contain element/status objects. The previous report used each obje
 
 The model page orders configuration, source, semantic context, a separate analysis action and results. Its view renders the same report as three sections with expandable evidence, without exposing Markdown formatting markers or executing source HTML. Markdown downloads remain unchanged.
 
+默认每个7+1槽位一行；原文可复制。第二层的“7+1是怎么得到的”读取本次Core输入及生产者来源记录，逐项展示原文码点位置、提取值/解释、实际引用的语义包版本与摘要、系统可观察检查。未引用词条明确写未引用，不编造正则扫描过程或词库命中。第三层以中文解释三轴状态，将计算对象和内部诊断折叠到详情；不把信息完整或一致解释为业务放行，不添加虚构耗时或审定状态。
+
+Each slot occupies one concise row by default. The expandable extraction trace reads the actual task/provenance envelope: code-point evidence, extracted values and interpretations, referenced package versions/digests, and observable validation checks. No reference means no claimed dictionary hit. Calculation objects and internal diagnostics are expandable. No fabricated runtime, review status or business approval is displayed.
+
 - 八桶显示中英文名称及明确三态；原文未提供与尚未明确分开，不自动补齐。
 - 条目展示来源ID、Unicode码点区间`[start,end)`及精确引文。
 - A标题使用“任务动作”，不把所有被提及的动作统称为“允许动作”；条目类型、生产者解释及备选解释一并展示。生产者解释明确标注“非原文”，不会伪装成证据，也不改变Core结果。

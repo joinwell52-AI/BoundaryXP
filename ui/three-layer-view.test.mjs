@@ -1,6 +1,9 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { renderThreeLayerReport } from './bxp-view.mjs';
+import {readFileSync} from 'node:fs';
+import {evaluateBxpTask} from '../src/bxp/index.mjs';
+import {renderThreeLayers} from '../src/product/assembler.mjs';
 
 class ViewNode {
  constructor(ownerDocument,tag){this.ownerDocument=ownerDocument;this.tag=tag;this.textContent='';this.children=[];}
@@ -22,4 +25,30 @@ test('three-layer view renders sections and folded evidence without executing so
  renderThreeLayerReport(host,'尚未计算 / Not computed');
  assert.equal(host.all().filter(node=>node.tag==='section').length,0);
  assert.match(host.text,/Not computed/);
+});
+
+test('real Core envelope yields eight concise slots and evidence trace without mutating results',()=>{
+ const document={createElement:tag=>new ViewNode(document,tag)},host=new ViewNode(document,'div');
+ const task=JSON.parse(readFileSync(new URL('../examples/bxp/zh-CN-complete.json',import.meta.url),'utf8'));
+ const first=task.elements.I.entries[0];
+ task.extensions={'org.boundx.producer':{producer:{model_id:'test-model'},provenance:[{element:'I',entry_id:first.id,interpretation:'模型解释，不是原文',semantic_refs:[{scope:'boundx',pack_id:'test-pack',version:'1.0.0',digest:'a'.repeat(64),entry_id:'example-entry'}]}]}};
+ const evaluation={computed:true,task,result:evaluateBxpTask(task),clarifications:[]};
+ const before=JSON.stringify(evaluation);
+ renderThreeLayerReport(host,renderThreeLayers(task.source.text,evaluation),undefined,evaluation);
+ assert.equal(host.all().filter(node=>node.className==='report-slot').length,8);
+ assert.equal(host.all().filter(node=>node.tag==='section').length,3);
+ const trace=host.all().find(node=>node.className==='extraction-trace');
+ assert.ok(trace);assert.match(trace.text,/test-model/);assert.match(trace.text,/test-pack@1.0.0/);
+ assert.ok(trace.text.includes(first.evidence[0].quote));assert.match(trace.text,/模型解释，不是原文/);
+ assert.equal(JSON.stringify(evaluation),before);
+ const visible=node=>node.tag==='details'?'':node.textContent+node.children.map(visible).join('\n');
+ assert.doesNotMatch(visible(host),/intervals：|constraint_ids|Entry kind|validation=/);
+ assert.ok(visible(host).includes(first.text));
+});
+
+test('copy action uses the provided source callback and reports completion',async()=>{
+ const document={createElement:tag=>new ViewNode(document,tag)},host=new ViewNode(document,'div');let copied=false;
+ renderThreeLayerReport(host,'- **【Layer 1：原文证据】**\n  > 原文',async()=>{copied=true;});
+ const button=host.all().find(node=>node.tag==='button');await button.onclick();
+ assert.equal(copied,true);assert.match(button.text,/Copied/);
 });
