@@ -7,7 +7,7 @@ This checkpoint supplements, rather than rewrites, the taskbook and historical r
 ## 已补齐的工程项 / Engineering additions
 
 - 64组契约/安全矩阵及固定名册setup已经实现，不再列为尚未编写。
-- [验收运行器](../ADMIN-ACCEPTANCE-RUNNER.md)支持120条原文加固定30条复测计划、12种隔离场景及真实记录格式；Codex固定首条已实测，完整批次正在运行，未完成项不得计为通过。
+- [验收运行器](../ADMIN-ACCEPTANCE-RUNNER.md)支持120条原文加固定30条复测计划、12种隔离场景及真实记录格式；完整初始计划已有150位置记录，其中149条完成、1条中断。中断项另行补跑，详见[真实运行回执](ADMIN-CODEX-LIVE-ACCEPTANCE.md)，不抹掉初始失败。
 - [新增L2候选链路](../L2-PIPELINE-REGRESSION.md)覆盖15词帧×中英×四类120fixture，修复标签回放的歧义原因丢失/拒绝问题；这不是模型语义准确率证明。
 - [离线金标草稿工作区](../ADMIN-GOLD-DRAFTS.md)已支持120条原文、真实包锁/准备快照、标注备选候选检查；不自动生成答案，不冻结语义匹配器，不认证独立审阅。
 - 审阅入口新增`--check-all`，完整核对120条并按语言/类别报告缺口；拒绝不完整或重复清单。本机现有工作区实查为120条未标注、0条损坏，不是120条金标已完成。 / Whole-workspace auditing reports all 120 cases by language/category and rejects incomplete or duplicate manifests. The existing local workspace contains 120 unannotated cases and zero unavailable contexts, not completed gold labels.
@@ -36,7 +36,7 @@ Authored-draft progress: `--create-authored` covers all 120 first candidates wit
 | Codex接入 / Codex transport | 已接通订阅文本候选，需持续维护实验接口兼容性；全局Codex策略仍可能加载，不宣称完全空白上下文 |
 | WP1金标与评分 / Gold and scoring | 120条答案集合、证据/关系判定器和逐语言/类别的分子分母尚未冻结；独立审阅0/120 |
 | WP3语义验收 / L2 semantic acceptance | 已补表示层端到端；真实模型的否定、歧义、缺证据行为尚未经独立答案评测 |
-| WP6/WP9真实Host / Live Host | 用户已指定使用Codex订阅，不使用Cursor；完整批次在40条完成后中断，第41条保留CALL_STARTED。第42至150项已另起进程续跑；结果须按ID汇总并注明实现版本差异。未审金标前的运行是工程观察，不是正式语义验收 |
+| WP6/WP9真实Host / Live Host | Codex初始150位置为141计算、8拒绝、1中断；中断项补跑后120原文及30复测均有返回。T054另有一次单位修复生成，初始结果不覆盖。跨实现/提示版本分开报告；剩余候选错误、独立金标和语义门槛尚未完成 |
 | WP9最终交付 / Final delivery | 剩余门槛满足后，更新完整文件清单、失败与限制、真实模型及包身份，提交ADMIN审核；保持Draft，不合并发布 |
 
 行业库和Case Explorer仍存在另一任务的未提交资产，本实施不覆盖或擅自提交。Codex订阅浏览器单例实查已记录于[交付检查点](ADMIN-CODEX-DELIVERY.md)，不等于固定语料验收。当前运行中的预览进程不自动代表最新提交。
