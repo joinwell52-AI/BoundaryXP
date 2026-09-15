@@ -36,7 +36,7 @@ Authored-draft progress: `--create-authored` covers all 120 first candidates wit
 | Codex接入 / Codex transport | 已接通订阅文本候选，需持续维护实验接口兼容性；全局Codex策略仍可能加载，不宣称完全空白上下文 |
 | WP1金标与评分 / Gold and scoring | 120条答案集合、证据/关系判定器和逐语言/类别的分子分母尚未冻结；独立审阅0/120 |
 | WP3语义验收 / L2 semantic acceptance | 已补表示层端到端；真实模型的否定、歧义、缺证据行为尚未经独立答案评测 |
-| WP6/WP9真实Host / Live Host | Codex初始150位置为141计算、8拒绝、1中断；中断项补跑后120原文及30复测均有返回。T054另有一次单位修复生成，初始结果不覆盖。跨实现/提示版本分开报告；剩余候选错误、独立金标和语义门槛尚未完成 |
+| WP6/WP9真实Host / Live Host | Codex初始150位置为141计算、8拒绝、1中断；中断项已补跑，T054单位修复及另外5条候选修复均各有一次真实返回并通过Core。原始结果不覆盖；跨实现/提示版本分开报告。独立金标、正式语义判定及新提示全语料表现仍未完成 |
 | WP9最终交付 / Final delivery | 剩余门槛满足后，更新完整文件清单、失败与限制、真实模型及包身份，提交ADMIN审核；保持Draft，不合并发布 |
 
 行业库和Case Explorer仍存在另一任务的未提交资产，本实施不覆盖或擅自提交。Codex订阅浏览器单例实查已记录于[交付检查点](ADMIN-CODEX-DELIVERY.md)，不等于固定语料验收。当前运行中的预览进程不自动代表最新提交。

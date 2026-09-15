@@ -4,6 +4,26 @@
 
 This is engineering evidence, not independently reviewed semantic acceptance. All runs use Codex subscription authentication, not Cursor or API keys. No task execution or business authorization is granted.
 
+## 最新增量：五条候选修复 / Five candidate repairs
+
+2026-09-15后续：生产者提示升至0.4.0，摘要 `041e721c6a5384e96069aebc204717050c6970fc66a3f94c48ffd1f693cc38cf`。要求检查所有引文（含scope/约束）的唯一定位；candidate_ids只表达互斥的未决备选，不充当分类标签列表。真正多候选保留，并令包含它的桶为unresolved，不删证据、不放宽校验。
+
+对以下五条原始拒绝，各使用Codex `gpt-5.6-sol`额外生成一次；五条均COMPUTED、离线回放MATCHED，无新增诊断，授权字段保持null。原始150位置及先前比较报告均不覆盖；这些是5次额外修复尝试，不是5条新种子或五条独立审阅金标。
+
+| 原始运行 / Original run | 修复目录 / Repair directory under .boundx/acceptance-runs |
+|---|---|
+| T012-1 | `f5fba013-e683-4fce-9484-ace5a537ea51` |
+| T022-1 | `210f7bd3-2907-49c1-91e8-7f73e70eceba` |
+| T053-1 | `817a15f5-e919-4f07-8b53-6d37c3158ea1` |
+| T112-2 | `3d579d0c-0b47-4feb-b2e1-46c6838d82b0` |
+| T119-2 | `25737c73-63c6-407a-b21d-20b976d71ffb` |
+
+T053保留总次数≤100和每秒次数≤10两个不同维度，没有误合并；T119保留两种review帧候选并将A标为unresolved。四条新增中英文程序回归分别验证错误定位/错误明确状态仍拒绝，修复定位/保留未决备选后才可计算。提示到达模型入口不等于模型永远遵循；本次五条成功也不证明0.4.0覆盖全部150项。
+
+Prompt 0.4.0 clarifies unique evidence location and unresolved-alternative semantics. Five separate real repair generations reached Core and matched deterministic replay. Original rejections remain in the initial denominator. These checks do not certify semantic accuracy, remove the independent-review gate, or establish full-corpus performance for the new prompt.
+
+本增量本地验证：Core741/741、UI154/154、协议103/103、冻结208/208、Python135/135、文档20/20。固定协议、Schema和冻结向量未改。至此本轮已定位的五条结构级候选错误有成功修复样本；剩余门槛是独立金标、允许表示/关系/证据的正式判定，以及按冻结答案完整评测，不是连接故障。
+
 ## 1. 实际运行与中断 / Runs and interruption
 
 | 记录组 / Group | 本地忽略目录 / Local directory suffix | 实现 / Implementation | 结果 / Outcome |

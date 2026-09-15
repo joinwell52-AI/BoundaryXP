@@ -9,11 +9,74 @@ import { createApp } from '../../ui-server.mjs';
 import { runAdminModel } from '../product/model-pipeline.mjs';
 import { callCursor } from '../product/cursor-provider.mjs';
 import { PRODUCER_INSTRUCTIONS, PRODUCER_PROMPT_VERSION } from '../product/producer-instructions.mjs';
+import { CORE_ELEMENTS } from '../bxp/index.mjs';
 
 test('producer guidance states exact unit and precision obligations without changing Core', () => {
-  assert.equal(PRODUCER_PROMPT_VERSION, '0.3.0');
+  assert.equal(PRODUCER_PROMPT_VERSION, '0.4.0');
   for (const requirement of ['Core compares only equal units', 'exact factors 1/60/3600', 'preserving inclusive/exclusive operators and original quotes',
     'affected element unresolved', 'decimal strings', 'Never round source values', 'Do not merge different quantities']) assert.ok(PRODUCER_INSTRUCTIONS.includes(requirement));
+});
+
+for (const [language, source, quote, prefix] of [
+  ['zh-CN', '查看日志，不得修改日志。', '日志', '查看'],
+  ['en', 'Read logs; do not modify logs.', 'logs', 'Read '],
+]) test(`repeated evidence stays rejected until explicitly located: ${language}`, async () => {
+  const root = mkdtempSync(join(tmpdir(), 'boundx-locator-guidance-'));
+  try {
+    const host = createProductHost({ root });
+    let locate = false;
+    const input = { consent: true, config: { provider: 'codex', model: 'mock' },
+      prepare: { source: { text: source, language }, profile: { id: 'org.boundx.admin', required_elements: [...CORE_ELEMENTS] }, packs: host.registry.active() } };
+    const sendModel = async (config, messages) => {
+      assert.ok(messages[0].content.includes('Check EVERY locator'));
+      const prepared = JSON.parse(messages[1].content);
+      const elements = Object.fromEntries(CORE_ELEMENTS.map(field => [field, { status: 'absent', entries: [] }]));
+      elements.I = { status: 'resolved', entries: [{ id: 'logs', kind: 'input', text: quote,
+        evidence: [{ source_id: 'task', quote, ...(locate ? { prefix } : {}) }] }] };
+      return { text: JSON.stringify({ schema: 'boundx-extraction-candidate/v1', prepare_id: prepared.prepare_id,
+        source_digest: prepared.source_digest, context_digest: prepared.context_digest, elements,
+        constraints: { intervals: [], target_sets: [], handoffs: [], dependencies: [], logic: [] },
+        producer: { producer_kind: 'host-ai', adapter_version: '0.1.0', model_id: 'unknown' }, clarifications: [] }), model: 'mock' };
+    };
+    const rejected = await runAdminModel(host, input, { sendModel });
+    assert.equal(rejected.computed, false);
+    assert.equal(rejected.diagnostics[0].code, 'QUOTE_AMBIGUOUS');
+    locate = true;
+    const accepted = await runAdminModel(host, input, { sendModel });
+    assert.equal(accepted.computed, true, JSON.stringify(accepted.diagnostics));
+    assert.equal(accepted.task.elements.I.entries[0].evidence[0].quote, quote);
+    assert.equal(accepted.result.execution_authorization, null);
+  } finally { rmSync(root, { recursive: true, force: true }); }
+});
+
+for (const [language, source] of [['zh-CN', '评审文档。'], ['en', 'Review the document.']]) test(`alternative interpretations require unresolved without deleting evidence: ${language}`, async () => {
+  const root = mkdtempSync(join(tmpdir(), 'boundx-alternative-guidance-'));
+  try {
+    const host = createProductHost({ root });
+    let unresolved = false;
+    const input = { consent: true, config: { provider: 'codex', model: 'mock' },
+      prepare: { source: { text: source, language }, profile: { id: 'org.boundx.admin', required_elements: [...CORE_ELEMENTS] }, packs: host.registry.active() } };
+    const sendModel = async (config, messages) => {
+      assert.ok(messages[0].content.includes('not a list of every related semantic reference'));
+      const prepared = JSON.parse(messages[1].content);
+      const elements = Object.fromEntries(CORE_ELEMENTS.map(field => [field, { status: 'absent', entries: [] }]));
+      elements.A = { status: unresolved ? 'unresolved' : 'resolved', ...(unresolved ? { reason_codes: ['AMBIGUOUS'] } : {}),
+        entries: [{ id: 'review', kind: 'action', text: source, candidate_ids: ['design-review', 'delivery-review'], evidence: [{ source_id: 'task', quote: source }] }] };
+      return { text: JSON.stringify({ schema: 'boundx-extraction-candidate/v1', prepare_id: prepared.prepare_id,
+        source_digest: prepared.source_digest, context_digest: prepared.context_digest, elements,
+        constraints: { intervals: [], target_sets: [], handoffs: [], dependencies: [], logic: [] },
+        producer: { producer_kind: 'host-ai', adapter_version: '0.1.0', model_id: 'unknown' }, clarifications: [] }), model: 'mock' };
+    };
+    const rejected = await runAdminModel(host, input, { sendModel });
+    assert.equal(rejected.computed, false);
+    assert.equal(rejected.diagnostics[0].code, 'CANDIDATE_AMBIGUOUS');
+    unresolved = true;
+    const accepted = await runAdminModel(host, input, { sendModel });
+    assert.equal(accepted.computed, true, JSON.stringify(accepted.diagnostics));
+    assert.equal(accepted.task.elements.A.status, 'unresolved');
+    assert.deepEqual(accepted.task.extensions['org.boundx.producer'].provenance.find(entry => entry.element === 'A').candidate_ids, ['design-review', 'delivery-review']);
+    assert.equal(accepted.result.business_decision, null);
+  } finally { rmSync(root, { recursive: true, force: true }); }
 });
 
 for (const language of ['en', 'zh-CN']) test(`Cursor candidate reaches Core and three-layer report: ${language} (mock SDK)`, async () => {
