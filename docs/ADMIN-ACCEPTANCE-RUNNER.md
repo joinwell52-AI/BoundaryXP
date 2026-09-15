@@ -43,6 +43,10 @@ This acceptance uses Codex subscription authentication, an explicit available mo
 
 After interruption, an explicit `--start-at 42 --max-runs 109` runs schedule positions 42–150 in a new directory. Positions 121–150 are the fixed repeat cases. Previous artifacts remain untouched; interrupted calls are not automatically retried or counted as completed. Segment summaries retain the 150-slot denominator and declared range. Combined reporting must account for duplicates, missing runs, implementation revisions and interruptions, not simply add success totals.
 
+离线汇总使用 `node scripts/collect-admin-runs.mjs <批次目录1> <批次目录2>`，生成新的 `.boundx/acceptance-collections/<随机ID>/`，可作为批量草稿比较器的 `--records` 输入。工具验证固定计划、原文摘要、运行身份和重复编号；复制记录并保存来源索引/摘要，不覆盖源记录。`CALL_STARTED` 等中断状态原样保留并单列，缺失仍纳入150项分母。汇总不调用模型、不认证记录中的live标记，不把不同实现版本的结果声称为同版本复测；版本差异须在回执另列。
+
+Offline collection validates plan and record identities, rejects duplicate slots and writes a fresh collection usable by the batch comparator. Source records remain untouched, with source digests indexed. Interrupted states and missing slots remain explicit. Collection makes zero model calls and does not authenticate recorded live headers or establish same-implementation repeatability across revisions.
+
 ## 场景与记录 / Setups and records
 
 每次运行使用独立Registry；支持全部12种任务书setup，包括关闭L3、仅L1、tenant-b、prepare后切换名册、真实附加POL-1、缺附件及版本错配。恶意包文本位于虚构名册的合法岗位/别名字段，仅作为数据提供；不改变原文或生产者规则。
