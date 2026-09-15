@@ -10,6 +10,7 @@ This tool prepares source-bound annotation drafts without model calls or model-g
 node scripts/prepare-admin-review.mjs --plan
 node scripts/prepare-admin-review.mjs --create
 node scripts/prepare-admin-review.mjs --create-io
+node scripts/prepare-admin-review.mjs --create-authored
 node scripts/prepare-admin-review.mjs --check <workspace-path> T001
 node scripts/prepare-admin-review.mjs --check-all <workspace-path>
 ```
@@ -37,6 +38,24 @@ Checking verifies bindings and candidate structure using the existing Core. Exit
 这些答案由Codex编写，结构验证只检查其能否合法进入Core，不证明正确；不是独立审阅或冻结金标。当前采用原文文字主体，不声称已经补齐语义包身份映射、所有允许答案、typed关系或BXP预期；这些仍须审阅补充。发送不当作创建，接收者不当作执行人，未写出的资源、版本和停止条件不补造。
 
 These Codex-authored candidates are neither independently reviewed nor frozen gold. Core validation checks structure, not correctness. Textual participants do not complete pack identity mappings, all acceptable alternatives, typed relations or expected BXP results. Transfer is distinct from creation; recipients are not senders, and absent resource/version/stopping requirements are not invented.
+
+### 全量初稿 / Complete first drafts
+
+`--create-authored`创建新的120条工作区，给全部固定原文装入逐条编写的初版答案；`--create`仍创建空标注，`--create-io`仍只填10条。草稿通过同一候选检查才保存；创建失败标记BUILD_FAILED，绝不标成审阅完成。新工作区不会覆盖之前的10条或120条空工作区。
+
+`--create-authored` creates a fresh workspace with individually authored first candidates for all 120 fixed texts. The blank and IO-only modes retain their behavior. Candidates must pass structural checks before saving; failed builds remain BUILD_FAILED, never reviewed. Previous workspaces are untouched.
+
+作者数据入口：[初稿索引](../fixtures/admin-text/authored-initial-drafts.mjs)；[模态与禁止](../fixtures/admin-text/authored-modality-drafts.mjs)、[行业/身份/职责](../fixtures/admin-text/authored-domain-drafts.mjs)、[数量/条件/依据/完成](../fixtures/admin-text/authored-boundary-drafts.mjs)、[Unicode/快照/对抗](../fixtures/admin-text/authored-safety-drafts.mjs)。所有条目保留双语解释，未通过生产模型输出倒推答案。
+
+Authored data are linked by category above, with bilingual rationale. These were written from the source texts and checkpoints, not copied from production-model outputs.
+
+14条指定身份用例增加显式作者ID映射并从原prepare获取完整包引用；共享“小王”保留e101/e102，不选第一个；客户B绑定b101，停用L3的用例不引用员工。映射缺失或快照不匹配会拒绝生成，不自动修补为别的身份。它们仍是作者提出的身份答案，不是独立身份审阅证明。
+
+Fourteen designated identity cases use explicitly authored employee IDs with full references from the original prepare. Shared aliases retain e101/e102, tenant B uses b101, and disabled-L3 cases omit employee references. Missing identity or mismatched context fails instead of selecting another person. These remain proposed answers, not independent identity-review certification.
+
+数量组已经包含精确十进制和整数区间、确定性分钟换秒；两个明确循环用例有依赖边；重复引文有前后文定位，POL-1用例引用实际附加原文。测试验证这些结构进入Core后的区间空集、依赖环和码点证据，不自动认证全文解释正确。其余复杂scope、交接、名册引用、允许替代表示、独立诊断与完整BXP预期仍未全部冻结。120条初稿不等于120条金标完成，独立审阅仍为0/120。
+
+Quantity drafts include exact decimal/integer intervals and explicit minute-to-second conversion; two cycle cases include dependency edges. Repeated quotes use context locators, and POL-1 uses actual attachment text. Tests check these computations and codepoint evidence, not complete semantic correctness. Complex scopes, handoffs, directory references, alternative answers, diagnostic expectations and complete BXP expectations are not all frozen. All 120 first drafts remain pending independent review: 0/120 reviewed.
 
 ### 整批审计 / Whole-workspace audit
 

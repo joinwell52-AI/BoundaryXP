@@ -88,25 +88,31 @@ const annotations = {
 export const IO_DRAFT_CASE_IDS = Object.freeze(Object.keys(annotations));
 
 export function authorIoReviewDraft(input) {
+  return buildAuthoredDraft(input, annotations[input.binding?.case_id], IO_DRAFT_VERSION, 'IO');
+}
+
+export function buildAuthoredDraft(input, annotation, version, category) {
   const draft = structuredClone(input);
-  const annotation = annotations[draft.binding?.case_id];
-  assert(annotation && annotation.source === draft.binding.source.text && draft.binding.category === 'IO',
-    'AUTHOR_SOURCE', 'Authored IO draft requires the exact original case and source.');
+  assert(annotation && annotation.source === draft.binding.source.text && draft.binding.category === category,
+    'AUTHOR_SOURCE', 'Authored draft requires the exact original case and source.');
   assert(draft.allowed_answers === null && draft.author_notes === '' && draft.review_status === 'PENDING'
     && draft.independent_review_verified === false, 'AUTHOR_EXISTING', 'Existing annotation or review state must not be overwritten.');
-  const kinds = { I: 'input', O: 'output', A: 'action', P: 'actor', B: 'prohibition' };
+  const kinds = { I: 'input', O: 'output', A: 'action', P: 'actor', R: 'resource', V: 'reference', C: 'completion', B: 'prohibition' };
   const elements = Object.fromEntries(CORE_ELEMENTS.map(field => {
     const rows = annotation.fields[field] ?? [];
     const unresolved = annotation.unresolved?.includes(field);
     return [field, { status: !rows.length ? 'absent' : unresolved ? 'unresolved' : 'resolved',
       ...(unresolved ? { reason_codes: ['UNSPECIFIED'] } : {}),
-      entries: rows.map(([text, quote, interpretation], index) => ({ id: `${field}-${index + 1}`, kind: kinds[field],
-        text, evidence: [{ source_id: 'task', quote }], interpretation })) }];
+      entries: rows.map((row, index) => {
+        if (row && typeof row === 'object' && !Array.isArray(row)) return { id: `${field}-${index + 1}`, kind: kinds[field], ...structuredClone(row) };
+        const [text, quote, interpretation] = typeof row === 'string' ? [row, row, annotation.note] : row;
+        return { id: `${field}-${index + 1}`, kind: kinds[field], text, evidence: [{ source_id: 'task', quote }], interpretation };
+      }) }];
   }));
   draft.allowed_answers = [{ schema: 'boundx-extraction-candidate/v1', prepare_id: draft.binding.prepare_id,
     source_digest: draft.binding.source_digest, context_digest: draft.binding.context_digest, elements,
-    constraints: { intervals: [], target_sets: [], handoffs: [], dependencies: [], logic: [] },
-    producer: { producer_kind: 'structured-replay', adapter_version: IO_DRAFT_VERSION, model_id: 'unknown' }, clarifications: [] }];
-  draft.author_notes = `AUTHOR_DRAFT ${IO_DRAFT_VERSION}; Codex-authored, not independently reviewed. ${annotation.note} 原文主体采用文字表示，未认证语义包身份映射；typed关系和BXP预期仍待审阅。 Textual participants only; pack identity mappings, typed relations and expected BXP results still require review.`;
+    constraints: { intervals: [], target_sets: [], handoffs: [], dependencies: [], logic: [], ...structuredClone(annotation.constraints ?? {}) },
+    producer: { producer_kind: 'structured-replay', adapter_version: version, model_id: 'unknown' }, clarifications: [] }];
+  draft.author_notes = `AUTHOR_DRAFT ${version}; Codex-authored, not independently reviewed. ${annotation.note} 主体按原文保留，包引用仅依显式作者配置；身份、typed关系和BXP预期仍待独立审阅。 Preserve source participants; pack references require explicit author configuration. Identity, typed relations and expected BXP results still need independent review.`;
   return draft;
 }
