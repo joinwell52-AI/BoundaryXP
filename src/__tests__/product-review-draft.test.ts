@@ -3,11 +3,12 @@ import assert from 'node:assert/strict';
 import { mkdtempSync, mkdirSync, readFileSync, rmSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
+import { spawnSync } from 'node:child_process';
 import { CORE_ELEMENTS } from '../bxp/index.mjs';
 import { createReviewDraft, checkReviewDraft } from '../product/review-draft.mjs';
 import { loadAcceptancePlan, atomicRecord } from '../../scripts/run-admin-acceptance.mjs';
 import { createCaseScenario } from '../../fixtures/admin-text/scenarios.mjs';
-import { prepareReviewWorkspace, checkReviewWorkspaceCase } from '../../scripts/prepare-admin-review.mjs';
+import { prepareReviewWorkspace, checkReviewWorkspaceCase, auditReviewWorkspace } from '../../scripts/prepare-admin-review.mjs';
 import { scoreDraftFile } from '../../scripts/score-admin-draft.mjs';
 import { compareDraftBatch } from '../../scripts/score-admin-batch.mjs';
 
@@ -133,6 +134,30 @@ test('offline review workspace builds all 120 original cases, checks edits and r
     assert.deepEqual(replay.recorded_mode_headers, { live: 0, mock: 1 });
     assert.equal(replay.recorded_modes_are_authenticated, false);
     assert.equal(replay.model_calls, 0);
+    const audit = auditReviewWorkspace(result.output);
+    assert.equal(audit.expected_cases, 120);
+    assert.deepEqual(audit.counts, { STRUCTURALLY_VALID: 2, UNANNOTATED: 117, INVALID_ANSWERS: 0, UNAVAILABLE: 1 });
+    assert.equal(audit.cases.find(item => item.case_id === 'T004').status, 'UNAVAILABLE');
+    for (const groups of [audit.by_language, audit.by_category]) {
+      assert.equal(Object.values(groups).reduce((sum, group) => sum + group.expected_cases, 0), 120);
+      for (const status of Object.keys(audit.counts)) assert.equal(Object.values(groups).reduce((sum, group) => sum + group.counts[status], 0), audit.counts[status]);
+    }
+    assert.equal(audit.independent_review_verified, false);
+    assert.equal(audit.acceptance_passed, false);
+    assert.equal(audit.model_calls, 0);
+    second.allowed_answers[0].elements.I.entries[0].evidence[0].quote = 'fabricated evidence';
+    atomicRecord(secondPath, second);
+    const invalidAudit = auditReviewWorkspace(result.output);
+    assert.equal(invalidAudit.counts.INVALID_ANSWERS, 1);
+    assert.equal(invalidAudit.cases.find(item => item.case_id === 'T002').diagnostics[0].code, 'QUOTE_NOT_FOUND');
+    const manifestPath = join(result.output, 'manifest.json');
+    const manifest = JSON.parse(readFileSync(manifestPath, 'utf8'));
+    for (const changed of [{ ...manifest, status: 'BUILDING' }, { ...manifest, cases: manifest.cases.slice(0, 119) },
+      { ...manifest, cases: [...manifest.cases.slice(0, 119), manifest.cases[0]] }, { ...manifest, independent_review_verified: true }]) {
+      atomicRecord(manifestPath, changed);
+      assert.throws(() => checkReviewWorkspaceCase(result.output, 'T001'), /identity differs/);
+    }
+    atomicRecord(manifestPath, manifest);
     assert.throws(() => checkReviewWorkspaceCase(result.output, '../escape'));
     const preparedPath = join(result.output, 'T001', 'prepared.json');
     const prepared = JSON.parse(readFileSync(preparedPath, 'utf8'));
@@ -150,5 +175,24 @@ test('pre-cancelled workspace is incomplete, never a set of reviewed cases', () 
     assert.equal(result.status, 'CANCELLED');
     assert.deepEqual(result.cases, []);
     assert.equal(result.independent_review_verified, false);
+    const audit = auditReviewWorkspace(result.output);
+    assert.equal(audit.counts.UNAVAILABLE, 120);
+    assert.equal(audit.all_candidates_structurally_valid, false);
+    assert.equal(audit.acceptance_passed, false);
+  } finally { rmSync(root, { recursive: true, force: true }); }
+});
+
+test('batch review CLI accounts for unavailable cases and exits unsuccessfully without leaking paths', () => {
+  const root = mkdtempSync(join(tmpdir(), 'boundx-review-cli-'));
+  try {
+    const result = spawnSync(process.execPath, ['scripts/prepare-admin-review.mjs', '--check-all', root], { encoding: 'utf8' });
+    assert.equal(result.status, 1);
+    const audit = JSON.parse(result.stdout);
+    assert.equal(audit.cases.length, 120);
+    assert.equal(audit.counts.UNAVAILABLE, 120);
+    assert.equal(audit.model_calls, 0);
+    assert.equal(audit.independent_review_verified, false);
+    assert.equal(result.stdout.includes(root), false);
+    assert.equal(result.stderr, '');
   } finally { rmSync(root, { recursive: true, force: true }); }
 });

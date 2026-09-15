@@ -10,6 +10,7 @@ This tool prepares source-bound annotation drafts without model calls or model-g
 node scripts/prepare-admin-review.mjs --plan
 node scripts/prepare-admin-review.mjs --create
 node scripts/prepare-admin-review.mjs --check <workspace-path> T001
+node scripts/prepare-admin-review.mjs --check-all <workspace-path>
 ```
 
 默认仅离线检查计划。`--create`在本项目忽略提交的`.boundx/gold-review/<随机ID>/`创建120个独立场景；每条包含Registry、prepared.json和draft.json。重复运行使用新目录，不覆盖已有标注。manifest逐条原子更新；进程中断后的BUILDING不代表创建完成，可保留用于故障检查。
@@ -25,6 +26,16 @@ The binding freezes source, setup, checkpoints, package/profile/rule identities 
 Checking verifies bindings and candidate structure using the existing Core. Exit zero means structural checks passed, never semantic correctness. Missing answers, fabricated quotes or invalid candidates cannot count as reviewed cases. Precision and recall remain null.
 
 ## 证据与限制 / Evidence and limitations
+
+### 整批审计 / Whole-workspace audit
+
+`--check-all`逐项核对固定120条，不读取模型答案、不修改标注。输出逐例状态及按语言、测试类别汇总的数量：`STRUCTURALLY_VALID`结构合法、`UNANNOTATED`未标注、`INVALID_ANSWERS`答案无效、`UNAVAILABLE`文件缺失或身份/快照损坏。每条始终占一个位置；未知答案数量为null，不把缺失项从分母删除。测试类别不是行业覆盖。
+
+`--check-all` audits all 120 fixed cases without reading model outputs or editing annotations. It reports structural validity, unannotated cases, invalid answers and unavailable contexts, with language/category counts. Every case retains its slot. Unavailable answer counts are null; categories do not represent industry coverage.
+
+工作区清单必须创建完成、包含120个唯一且与固定语料对应的ID/原文摘要，并保持未认证状态。不完整、重复或自称认证的清单不能通过单例或整批检查。整批结果始终`PENDING_GOLD_REVIEW`；只有全部结构合法时退出码为0，仍不代表独立审阅通过或正式验收完成。审计不输出原文、绝对路径或原始异常信息；文件摘要只证明一致性，不认证审阅者身份。
+
+The manifest must be complete, contain exactly 120 unique corpus-bound IDs/source digests, and remain unverified. Incomplete, duplicate or self-certified manifests fail. Exit zero requires all candidates to be structurally valid, but never certifies independent review or acceptance. Reports omit source text, absolute paths and raw exceptions; hashes are consistency checks, not reviewer authentication.
 
 - 不展示当前模型答案，避免直接按实现输出倒推金标；但语料本身是可见工程集，不能称为隐藏测试集。
 - changed-after-prepare保留审阅的原始快照；候选检查显式使用历史回放，不模拟正式运行的stale验收。运行器仍负责该场景的激活切换测试。

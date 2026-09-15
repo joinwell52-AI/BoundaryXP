@@ -26,7 +26,12 @@ export function loadReviewWorkspaceCase(workspace, caseId) {
   ordinaryDirectory(output);
   const manifest = readJson(join(output, 'manifest.json'));
   if (manifest.schema !== 'boundx-gold-workspace/v1' || manifest.corpus_digest !== plan.corpus_digest
-    || manifest.review_index_digest !== plan.review_index_digest || !Array.isArray(manifest.cases)) throw Error('Review workspace identity differs.');
+    || manifest.review_index_digest !== plan.review_index_digest || manifest.status !== 'DRAFTS_CREATED'
+    || manifest.expected_cases !== 120 || manifest.independent_review_verified !== false
+    || !Array.isArray(manifest.cases) || manifest.cases.length !== 120
+    || new Set(manifest.cases.map(item => item?.case_id)).size !== 120
+    || !plan.runs.slice(0, 120).every(expected => manifest.cases.some(item => item?.case_id === expected.case_id
+      && item.source_digest === expected.source_digest))) throw Error('Review workspace identity differs.');
   const items = manifest.cases.filter(item => item.case_id === caseId);
   if (items.length !== 1 || items[0].source_digest !== run.source_digest) throw Error('Review case identity differs.');
   const root = join(output, caseId);
@@ -44,6 +49,30 @@ export function loadReviewWorkspaceCase(workspace, caseId) {
 export function checkReviewWorkspaceCase(workspace, caseId) {
   const { host, draft, seed, snapshotTime } = loadReviewWorkspaceCase(workspace, caseId);
   return checkReviewDraft(host, draft, seed, snapshotTime);
+}
+
+export function auditReviewWorkspace(workspace) {
+  const plan = loadAcceptancePlan();
+  const cases = plan.runs.slice(0, 120).map(run => {
+    const identity = { case_id: run.case_id, language: run.seed.language, category: run.seed.category };
+    try {
+      const checked = checkReviewWorkspaceCase(workspace, run.case_id);
+      return { ...identity, status: checked.all_candidates_structurally_valid ? 'STRUCTURALLY_VALID'
+        : checked.candidate_count === 0 ? 'UNANNOTATED' : 'INVALID_ANSWERS',
+      candidate_count: checked.candidate_count, draft_digest: checked.draft_digest,
+      diagnostics: checked.candidate_checks.flatMap(check => check.diagnostics.map(item => ({ answer_index: check.index, code: item.code }))) };
+    } catch {
+      return { ...identity, status: 'UNAVAILABLE', candidate_count: null, draft_digest: null,
+        diagnostics: [{ code: 'REVIEW_UNAVAILABLE' }] };
+    }
+  });
+  const summarize = rows => ({ expected_cases: rows.length, counts: Object.fromEntries(
+    ['STRUCTURALLY_VALID', 'UNANNOTATED', 'INVALID_ANSWERS', 'UNAVAILABLE'].map(status => [status, rows.filter(row => row.status === status).length])) });
+  const group = key => Object.fromEntries([...new Set(cases.map(item => item[key]))].map(value => [value, summarize(cases.filter(item => item[key] === value))]));
+  return { schema: 'boundx-review-audit/v1', corpus_digest: plan.corpus_digest, review_index_digest: plan.review_index_digest,
+    ...summarize(cases), by_language: group('language'), by_category: group('category'), cases,
+    all_candidates_structurally_valid: cases.every(item => item.status === 'STRUCTURALLY_VALID'),
+    status: 'PENDING_GOLD_REVIEW', independent_review_verified: false, acceptance_passed: false, model_calls: 0 };
 }
 export function prepareReviewWorkspace({ base = join(repository, '.boundx'), signal } = {}) {
   const plan = loadAcceptancePlan();
@@ -88,13 +117,17 @@ if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.ur
       const result = prepareReviewWorkspace();
       process.stdout.write(JSON.stringify({ ...result, cases: result.cases.length }, null, 2) + '\n');
       process.exitCode = result.status === 'DRAFTS_CREATED' ? 0 : 1;
+    } else if (args.length === 2 && args[0] === '--check-all') {
+      const result = auditReviewWorkspace(args[1]);
+      process.stdout.write(JSON.stringify(result, null, 2) + '\n');
+      process.exitCode = result.all_candidates_structurally_valid ? 0 : 1;
     } else if (args.length === 3 && args[0] === '--check') {
       const result = checkReviewWorkspaceCase(args[1], args[2]);
       process.stdout.write(JSON.stringify(result, null, 2) + '\n');
       process.exitCode = result.all_candidates_structurally_valid ? 0 : 1;
     } else throw Error('Unsupported option');
   } catch {
-    process.stderr.write('Review workspace failed. Use --plan, --create or --check <workspace> <case-id>; no model connection is required.\n');
+    process.stderr.write('Review workspace failed. Use --plan, --create, --check <workspace> <case-id> or --check-all <workspace>; no model connection is required.\n');
     process.exitCode = 1;
   }
 }
