@@ -1,3 +1,30 @@
+export function renderThreeLayerReport(host, report) {
+  const document = host.ownerDocument;
+  const node = (tag, text) => { const value = document.createElement(tag); value.textContent = text; return value; };
+  host.replaceChildren();
+  let section = host, details = null;
+  for (const line of report.split('\n')) {
+    if (!line.trim()) continue;
+    const layer = line.match(/^- \*\*【(Layer [123]：.+)】\*\*$/);
+    if (layer) {
+      section = node('section', ''); section.className = 'report-layer';
+      section.append(node('h3', layer[1])); host.append(section); details = null; continue;
+    }
+    if (line.startsWith('### ')) { host.append(node('h2', line.slice(4))); continue; }
+    if (line.startsWith('  > ')) { section.append(node('blockquote', line.slice(4))); continue; }
+    if (line.startsWith('      - ')) {
+      if (!details) { details = node('details', ''); details.append(node('summary', '证据与解释 / Evidence and interpretation')); section.append(details); }
+      details.append(node('p', line.slice(8))); continue;
+    }
+    details = null;
+    const text = line.replace(/^\s*- /, '');
+    const paragraph = node('p', '');
+    const pieces = text.split(/(\*\*[^*]+\*\*)/g);
+    for (const piece of pieces) paragraph.append(node(piece.startsWith('**') && piece.endsWith('**') ? 'strong' : 'span', piece.startsWith('**') && piece.endsWith('**') ? piece.slice(2, -2) : piece));
+    section.append(paragraph);
+  }
+}
+
 const states = {
   resolved: '已明确 / Resolved',
   unresolved: '存在歧义：请明确解释、主体或范围。 / Unresolved: clarify interpretation, actor or scope.',

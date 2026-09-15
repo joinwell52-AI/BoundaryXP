@@ -12,6 +12,10 @@ Core deficits contain element/status objects. The previous report used each obje
 
 ## 当前展示 / Presentation
 
+模型页面按模型设置、任务原文、语义上下文、独立开始分析按钮、结果区排列。浏览器将同一报告投影为三层区块，证据与解释可展开，不直接显示Markdown格式标记；下载的Markdown保持原始报告内容。展示只用文本DOM节点，不执行原文中的HTML。
+
+The model page orders configuration, source, semantic context, a separate analysis action and results. Its view renders the same report as three sections with expandable evidence, without exposing Markdown formatting markers or executing source HTML. Markdown downloads remain unchanged.
+
 - 八桶显示中英文名称及明确三态；原文未提供与尚未明确分开，不自动补齐。
 - 条目展示来源ID、Unicode码点区间`[start,end)`及精确引文。
 - A标题使用“任务动作”，不把所有被提及的动作统称为“允许动作”；条目类型、生产者解释及备选解释一并展示。生产者解释明确标注“非原文”，不会伪装成证据，也不改变Core结果。
