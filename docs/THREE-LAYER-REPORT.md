@@ -26,6 +26,10 @@ Action headings do not imply permission. Entry kinds, producer interpretations a
 
 ## 回归 / Regression
 
+模型页面的标准BXP面板可分别下载三层Markdown报告、Core输入任务JSON与Core结果JSON；不使用旧研究记录格式，也不附模型连接配置或密钥。未计算时仅允许导出诊断报告。编辑原文、切换选包、刷新包或开始新请求会清除可导出结果，过期请求不得恢复旧结果。
+
+The standard model panel exports the three-layer Markdown report, Core task JSON and Core result JSON separately, without connection configuration or credentials. Uncomputed responses only export the diagnostic report. Source/package changes, package reloads and new requests invalidate exports; late responses cannot restore stale results.
+
 新增14项定向测试：12个中英文模型候选到Core及报告场景，覆盖完整、B未提供、冲突、多来源、作用域未明确、主体未明确；另测历史/建议及未计算状态。模型传输使用模拟返回，不计入真实模型运行或金标准确率。
 
 Fourteen focused tests cover bilingual complete, absent-B, conflicting, multi-source, unresolved-scope and unresolved-participant candidates, plus history/clarification and uncomputed reports. Mock model responses are not live acceptance evidence.

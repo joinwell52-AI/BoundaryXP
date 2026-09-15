@@ -9,3 +9,22 @@ export function draftPlan(value){
   if(!value||!Array.isArray(value.tasks)||value.tasks.length>64)throw Error('规划草案结构无效。');
   return {document:draftDocument(value.document),tasks:value.tasks.map(t=>{if(typeof t.id!=='string'||t.id.length>512||!Array.isArray(t.depends_on)||t.depends_on.length>64||t.depends_on.some(x=>typeof x!=='string'||x.length>512))throw Error('派单草案结构无效。');return {id:t.id,depends_on:t.depends_on,document:draftDocument(t.document)};})};
 }
+
+export function createBxpResultState(){
+  let revision=0,current=null;
+  return {
+    clear(){current=null;return ++revision;},
+    accept(ticket,value){
+      if(ticket!==revision)return false;
+      if(value?.schema!=='boundx-producer-result/v1'||typeof value.report!=='string')throw Error('无有效BXP报告 / No valid BXP report');
+      current=structuredClone(value);return true;
+    },
+    export(kind){
+      if(!current)throw Error('请先重新计算 / Recalculate first');
+      if(kind==='report')return {name:'BoundX-BXP-report.md',type:'text/markdown;charset=utf-8',text:current.report};
+      if(!['task','result'].includes(kind))throw Error('未知导出类型 / Unknown export type');
+      if(!current.computed||!current[kind])throw Error('尚未计算 / Not computed');
+      return {name:`BoundX-BXP-${kind}.json`,type:'application/json',text:JSON.stringify(current[kind],null,2)};
+    }
+  };
+}

@@ -4,6 +4,16 @@
 
 This checkpoint supplements, rather than rewrites, the taskbook and historical receipts. Overall acceptance is incomplete.
 
+## 程序收尾检查点 / Application checkpoint
+
+2026-09-15：继续完成现有程序，不再将金标审阅作为接口和UI开发的阻塞。首页已突出模型入口；标准BXP面板提供独立Markdown报告、任务JSON和结果JSON下载，失败不伪造结果，原文/选包变化会禁用旧导出。已弃用研究记录不冒充标准BXP文件。
+
+真实浏览器使用Codex订阅`gpt-5.6-sol`连接成功，并对一条虚构日志报告任务完成抽取与计算（仅默认L1，不启用L2/L3）。实际下载三种文件后，重新将任务送入唯一Core，与下载的结果深度比较一致，两个授权字段均为null，报告保留完整原文。编辑原文后，三种下载按钮均禁用。此单例是交互回归，不加入固定150位置，不证明全文语义准确率。
+
+本检查点重新运行：已跟踪Core 743/743、UI 158/158、协议单测103/103、冻结向量208/208、Python 135/135、文档单测20/20；109篇文档、306个本地链接零问题。首页文字调整最初触发一个旧断言，保留兼容Host说明后全量UI重新通过。`git diff e4156a4 -- protocol LICENSE`为空。并行行业库、Case Explorer文件不提交。此前`c4c27a1`三平台CI通过；本增量CI另在PR中记录，不继承此前结果。
+
+Application work proceeds independently of gold review. The homepage exposes the model workflow and the standard panel exports report/task/result separately, invalidating stale exports. A real Codex browser smoke test with L1 only downloaded all three artifacts; Core replay exactly matched the exported result and both authority fields remained null. Source editing disabled all downloads. Fresh test counts are listed separately above, not added together as model accuracy. Semantic acceptance remains unclaimed; no merge or release is authorized.
+
 ## 已补齐的工程项 / Engineering additions
 
 - 64组契约/安全矩阵及固定名册setup已经实现，不再列为尚未编写。

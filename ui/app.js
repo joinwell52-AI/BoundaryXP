@@ -3,7 +3,7 @@ import { packLabel } from './pack-labels.mjs';
 import {originalBoundary,withEngineAdvice} from './admin-boundary.mjs';
 import {adminAdviceLayers} from './advice.mjs';
 import { checkAdminText } from './admin-check.mjs';
-import { draftDocument, draftPlan } from './records.mjs';
+import { draftDocument, draftPlan, createBxpResultState } from './records.mjs';
 import { createConnectionState, resolveEndpoint } from './connection.mjs';
 import { adminAdvice, planAdvice, planAssignments, conclusion, completeTask } from './advice.mjs';
 import { createLocale, registerPair, selectCopy } from './i18n.mjs';
@@ -92,7 +92,16 @@ const industryLabel=localized(element('label'),'行业包（先导入，再确�
 const directorySelect=element('select');directorySelect.id='bxp-directory';
 const directoryLabel=localized(element('label'),'职员目录（可选，须先在管理页启用）','Employee directory (optional; activate in management first)');directoryLabel.append(directorySelect);bxpPanel.append(directoryLabel);
 const bxpReport=element('pre');bxpReport.id='bxp-model-result';
+const bxpResultState=createBxpResultState();
+const bxpDownloads=element('div',undefined,'buttons');
+const bxpDownloadButtons=[];
+for(const [kind,zh,en] of [['report','下载三层报告','Download three-layer report'],['task','下载BXP任务JSON','Download BXP task JSON'],['result','下载BXP结果JSON','Download BXP result JSON']]){
+ const control=button(undefined,action(async()=>{const file=bxpResultState.export(kind);download(file.name,file.text,file.type);}));
+ localized(control,zh,en);control.disabled=true;bxpDownloadButtons.push({kind,control});bxpDownloads.append(control);
+}
+function clearBxpResult(){const ticket=bxpResultState.clear();for(const {control} of bxpDownloadButtons)control.disabled=true;bxpReport.textContent='';return ticket;}
 const refreshPacks=button(undefined,action(async()=>{
+ clearBxpResult();
  bxpPacks=await api('product-packs',{method:'bx_list_semantic_packs',arguments:{}});
  industrySelect.replaceChildren();const none=element('option','None / 不使用行业包');none.value='';industrySelect.append(none);
  for(const pack of bxpPacks.installed.filter(pack=>pack.layer==='L2')){const option=element('option');option.textContent=packLabel(pack);option.title=`${pack.pack_id}@${pack.version}`;option.value=pack.digest;industrySelect.append(option);}
@@ -101,11 +110,14 @@ const refreshPacks=button(undefined,action(async()=>{
  bxpReport.textContent='';
 }));localized(refreshPacks,'加载/刷新本地语义包','Reload local semantic packages');
 const activateIndustry=button(undefined,action(async()=>{
+ clearBxpResult();
  const selected=bxpPacks.installed.find(pack=>pack.layer==='L2'&&pack.digest===industrySelect.value);
  if(!selected)throw Error('请选择已安装的行业包。 / Select an installed industry.');
  const {layer,...reference}=selected;const result=await api('industry-selection',{operation:'activate',reference});bxpPacks.active=result.active;bxpReport.textContent='';
 }));localized(activateIndustry,'确认启用行业','Confirm industry activation');
 const extractBxp=button(undefined,action(async()=>{
+ const ticket=clearBxpResult();
+ try{
  if(connection.status!=='connected')throw Error('请先测试模型连接。 / Test the model connection first.');
  const text=textRequired('task-source'),selected=industrySelect.value,directory=directorySelect.value;
  bxpReport.textContent='正在抽取；尚未计算。 / Extracting; not yet calculated.';
@@ -116,11 +128,14 @@ const extractBxp=button(undefined,action(async()=>{
  const info=await fetch('/api/protocol-info').then(response=>response.json());
  const result=await api('bxp-admin',{config:requireConfig(),consent:true,prepare:{source:{text,language:locale.language},
   profile:{id:'org.boundx.admin',required_elements:info.core_elements},packs:[l1,...bxpPacks.active.filter(reference=>[selected,directory].includes(reference.digest))]}});
- if($('task-source').value!==text||industrySelect.value!==selected||directorySelect.value!==directory){bxpReport.textContent='输入已变化，请重新计算。 / Input changed; recalculate.';return;}
+ if($('task-source').value!==text||industrySelect.value!==selected||directorySelect.value!==directory){clearBxpResult();bxpReport.textContent='输入已变化，请重新计算。 / Input changed; recalculate.';return;}
+ if(!bxpResultState.accept(ticket,result))return;
+ for(const {kind,control} of bxpDownloadButtons)control.disabled=kind!=='report'&&!result.computed;
  bxpReport.textContent=result.report;
  noticePair(result.computed?'7+1候选已校验并完成BXP计算；结果不代表授权。':'尚未计算，请查看诊断。',result.computed?'Candidate validated and BXP calculated; no authority granted.':'Not computed; see diagnostics.');
+ }catch(error){clearBxpResult();bxpReport.textContent='尚未计算 / Not computed';throw error;}
 }));extractBxp.id='extract-bxp-task';extractBxp.disabled=true;localized(extractBxp,'用模型抽取7+1并计算','Extract 7+1 with model and calculate');
-const bxpButtons=element('div',undefined,'buttons');bxpButtons.append(refreshPacks,activateIndustry,extractBxp);bxpPanel.append(bxpButtons,bxpReport);
+const bxpButtons=element('div',undefined,'buttons');bxpButtons.append(refreshPacks,activateIndustry,extractBxp);bxpPanel.append(bxpButtons,bxpReport,bxpDownloads);
 $('page-task').prepend(bxpPanel);
 const legacyResearch=element('details');legacyResearch.id='legacy-research';
 legacyResearch.append(localized(element('summary'),'旧规则研究工具（已弃用，非模型抽取）','Legacy rule research tools (deprecated, not model extraction)'));
@@ -128,7 +143,7 @@ for(const node of [$('extract-task').parentElement,$('admin-advice'),$('task-edi
 const legacyHint=$('task-source').nextElementSibling;if(legacyHint?.classList.contains('hint'))legacyResearch.prepend(legacyHint);
 $('page-task').append(legacyResearch);
 refreshPacks.click();
-for(const node of [$('task-source'),industrySelect,directorySelect])node.addEventListener('input',()=>{bxpReport.textContent='输入已变化，请重新计算。 / Input changed; recalculate.';});
+for(const node of [$('task-source'),industrySelect,directorySelect])node.addEventListener('input',()=>{clearBxpResult();bxpReport.textContent='输入已变化，请重新计算。 / Input changed; recalculate.';});
 function audit(kind,detail){state.history.push({time:new Date().toISOString(),kind,detail});$('history').textContent=state.history.map(x=>`${x.time} · ${x.kind} · ${x.detail}`).join('\n');}
 function markDraft(kind){$(kind==='task'?'confirm-check':'plan-check').checked=false;}
 function emptyDoc(text){return {text,parameters:{},actions:[],completion:[]};}
@@ -153,7 +168,7 @@ function renderDocument(target,doc,kind){
     conditions.append(button('＋ 添加完成条件',()=>{doc.completion.push({id:'condition-'+(doc.completion.length+1),quote:''});markDraft(kind);renderRows();}));
   };renderRows();details.append(actions,conditions);target.append(details);
 }
-function renderTask(){if(!state.task)return;$('task-source').value=state.task.text;renderDocument($('task-editor'),state.task,'task');for(const note of state.taskNotes??[])$('task-editor').prepend(element('p',note,'mapping-note'));$('task-bottom').hidden=false;markDraft('task');renderAdmin();}
+function renderTask(){if(!state.task)return;clearBxpResult();$('task-source').value=state.task.text;renderDocument($('task-editor'),state.task,'task');for(const note of state.taskNotes??[])$('task-editor').prepend(element('p',note,'mapping-note'));$('task-bottom').hidden=false;markDraft('task');renderAdmin();}
 function bilingualCard(host,title,enTitle,text,enText){const card=element('article',undefined,'finding');card.append(localized(element('h3'),title,enTitle),localized(element('p'),text,enText));host.append(card);}
 function renderOriginalBoundary(host,text){
  const result=originalBoundary(text);
@@ -335,7 +350,7 @@ $('import').onchange=action(async()=>{
   for(const entry of value.reviews){const r=await api('review',entry.kind==='task'?{kind:'task',document:entry.input}:{kind:'plan',baseline:entry.baseline.document,plan:entry.input});entry.review=r.result;entry.english=r.english;entry.previous=null;if(entry.followUp){if(typeof entry.followUp.reminder!=='string'||typeof entry.followUp.reply!=='string')throw Error('Invalid follow-up record');const old=await api('review',{kind:'plan',baseline:entry.baseline.document,plan:entry.followUp.before});entry.followUp.beforeReview=old.result;entry.followUp.imported=true;}await api('replies',{review:entry.review,replies:entry.replies});}
   state={schema:value.schema,task:value.task,baseline:value.baseline,plan:value.plan,taskNotes:value.taskNotes??[],planNotes:value.planNotes??[],history:value.history,calls:value.calls,reviews:value.reviews};
   $('task-editor').replaceChildren();$('plan-editor').replaceChildren();$('task-bottom').hidden=true;$('plan-bottom').hidden=true;
-  renderTask();renderPlan();baselineDisplay();renderReview(state.reviews.at(-1));$('task-source').value=value.draftTexts?.task??state.task?.text??'';$('plan-source').value=value.draftTexts?.plan??state.plan?.document.text??'';
+  clearBxpResult();renderTask();renderPlan();baselineDisplay();renderReview(state.reviews.at(-1));$('task-source').value=value.draftTexts?.task??state.task?.text??'';$('plan-source').value=value.draftTexts?.plan??state.plan?.document.text??'';
   if(state.task)state.task.text=$('task-source').value;if(state.plan)state.plan.document.text=$('plan-source').value;
   $('pm-task-source').value=value.draftTexts?.pmTask??value.baseline?.document.text??'';
   if(typeof value.draftTexts?.suggestion==='string'&&$('suggested-task'))$('suggested-task').value=value.draftTexts.suggestion;
