@@ -8,6 +8,13 @@ import { createProductHost } from '../product/host.mjs';
 import { createApp } from '../../ui-server.mjs';
 import { runAdminModel } from '../product/model-pipeline.mjs';
 import { callCursor } from '../product/cursor-provider.mjs';
+import { PRODUCER_INSTRUCTIONS, PRODUCER_PROMPT_VERSION } from '../product/producer-instructions.mjs';
+
+test('producer guidance states exact unit and precision obligations without changing Core', () => {
+  assert.equal(PRODUCER_PROMPT_VERSION, '0.3.0');
+  for (const requirement of ['Core compares only equal units', 'exact factors 1/60/3600', 'preserving inclusive/exclusive operators and original quotes',
+    'affected element unresolved', 'decimal strings', 'Never round source values', 'Do not merge different quantities']) assert.ok(PRODUCER_INSTRUCTIONS.includes(requirement));
+});
 
 for (const language of ['en', 'zh-CN']) test(`Cursor candidate reaches Core and three-layer report: ${language} (mock SDK)`, async () => {
   const root = mkdtempSync(join(tmpdir(), 'boundx-cursor-core-'));
@@ -54,6 +61,7 @@ for (const language of ['en', 'zh-CN']) test(`subscription candidate reaches the
       calls++;
       assert.equal(config.key, undefined);
       assert.ok(messages[0].content.includes('source_id "task"'));
+      assert.equal(messages[0].content, PRODUCER_INSTRUCTIONS);
       return { text: JSON.stringify(candidateFor(task, JSON.parse(messages[1].content))), model: 'subscription-fixture' };
     };
     const result = await runAdminModel(host, input, { sendModel });

@@ -74,6 +74,10 @@ On 2026-09-15, one real Codex subscription call using `gpt-5.6-sol` completed fi
 
 ## 运行器初次实现记录 / Initial runner implementation record
 
+后续工程修复：原批次T054把分钟与秒分开提交，Core按合同分组而未报告空区间；不能把结构通过当作抽取正确。生产者提示0.3.0明确同一数量的精确时间单位统一和大数/小数字符串要求。仅对T054执行一次有诊断依据的额外生成，Codex返回秒区间[120,90]，Core正确判空。修复运行保存在 `.boundx/acceptance-runs/e4ea23ff-d05b-4a2c-9924-040ce2bcdd38/`，提示摘要 `3641e829f872f795b7394764c0a1519bee5eb2b9cd75588e53a1ad8c741e761d`。它是额外修复尝试，不替换原始T054，也不增加150项初始分母；完整运行中的进程仍使用其启动时的提示0.2.0。
+
+T054 exposed a producer unit-normalization omission, not a Core arithmetic error. Prompt 0.3.0 adds exact common-time-unit and decimal-string guidance. One separate diagnostic repair call returned [120,90] seconds, correctly computed as empty. This extra attempt neither overwrites the original observation nor increases the 150 initial slots. The already-running batch retains prompt 0.2.0; this single repair is not corpus-wide semantic acceptance.
+
 在独立目录重新运行：已跟踪Core 419/419、UI 154/154、协议单测103/103、冻结向量208/208、Python 135/135、文档单测20/20。新增24项运行器测试覆盖12种setup、固定120+30计划、原子落盘、失败/取消、凭据回显拦截、包摘要注入及跨适配器回放；模型传输全部模拟，真实模型生成仍为0次，独立金标审阅仍未完成。
 
 Tracked Core419, UI154, protocol103, frozen vectors208, Python135 and documentation20 pass locally. The 24 new runner tests use mock transports, not live generation or independently reviewed gold labels.
