@@ -32,9 +32,19 @@ Alternatives are never combined. Entries match exactly as multisets; local entry
 
 Matcher 0.2.0 adds per-field evidence counts for each answer alternative. Source identity, exact quote and Core-located Unicode codepoint spans must match as multisets. Different occurrences, buckets and duplicate predictions remain distinct. Existing producer rules, not model-supplied offsets, locate evidence.
 
-这些计数仅诊断条目证据，不覆盖约束证据的独立评分，也不证明引用蕴含该解释。即使引文全匹配，错误解释仍导致条目不匹配；原有关系检查和整体匹配条件不变。缺失输出保留预期证据分母，非法输出的预测数未知时为null。版本与摘要变化后，批量工具拒绝混合旧版报告。
+这些逐桶计数仅诊断条目证据，不证明引用蕴含该解释。即使引文全匹配，错误解释仍导致条目不匹配；原有关系检查和整体匹配条件不变。缺失输出保留预期证据分母，非法输出的预测数未知时为null。版本与摘要变化后，批量工具拒绝混合旧版报告。
 
-These diagnostics cover entry evidence, not separate constraint-evidence scoring or semantic entailment. Correct citations cannot excuse incorrect interpretations. Relation and whole-answer checks remain unchanged. Missing output retains expected evidence; unparseable predictions have null counts. Matcher identity changes, so mixed-version batches are rejected.
+These per-field diagnostics cover entry evidence, not semantic entailment. Correct citations cannot excuse incorrect interpretations. Relation and whole-answer checks remain unchanged. Missing output retains expected evidence; unparseable predictions have null counts. Matcher identity changes, so mixed-version batches are rejected.
+
+### 约束诊断 / Constraint diagnostics
+
+比较器0.3.0为每个完整答案增加`constraints`，分别统计五类已注册约束及其证据，不复制协议枚举。完整约束按含ID的精确内容进行多重集匹配；证据必须同时匹配父约束ID及原文定位，不能借另一约束的引文抵消误报。`scopes_exact`单列scope差异。非法或缺失输出保留分母。
+
+Matcher 0.3.0 adds per-alternative `constraints` counts for each registered family without redefining protocol enums. Full constraints match exactly, including IDs, as multisets. Evidence matches require the parent constraint ID and exact source span. `scopes_exact` reports scope differences separately. Missing or rejected output retains denominators.
+
+这些是保守草稿诊断，不是冻结语义评分：约束重排可能逐项匹配，但原有`relations_exact`仍保留顺序检查，整体不会因此通过。依赖方向、数值、单位或身份变化不能靠引用正确获得关系匹配。测试中的人工约束仅验证比较器机制，不是原文语义金标。
+
+These remain conservative draft diagnostics, not frozen semantic scoring. Reordered constraints may match individually while the existing order-sensitive `relations_exact` and whole-answer check still fail. Correct citations do not excuse changed direction, values, units or identities. Synthetic constraint fixtures test comparison mechanics, not source-text gold semantics.
 
 显式缺失输出保留每个答案的完整expected数量，所有应有条目计false_negative；不能匹配本来absent的桶来掩盖整次失败。非法JSON、伪造引文、异快照候选同样保留应有条目分母。无法解析的输出其predicted/false_positive为null，不能编造零误报；结构可解析但被拒绝的条目全部为未匹配预测。错误地全标unresolved不匹配期望resolved条目。
 

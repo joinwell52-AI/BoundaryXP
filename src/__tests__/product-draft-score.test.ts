@@ -30,6 +30,110 @@ function score(observation, answers = [candidate()]) {
   return scoreReviewDraft(host, draft, seed, snapshot, observation);
 }
 
+function constrainedCandidate() {
+  const result = candidate();
+  const evidence = [{ source_id: 'task', quote: '读取 alpha.txt。' }];
+  result.constraints = {
+    intervals: [{ id: 'interval', subject: 'task', dimension: 'fixture', unit: 'unit', lower: { value: '1', inclusive: true }, upper: null, evidence }],
+    target_sets: [{ id: 'target', universe: 'files', effect: 'read', actor_scope: 'task', guard_context: 'fixture', identity_status: 'resolved', requested: ['alpha.txt'], forbidden: [], evidence }],
+    handoffs: [{ id: 'handoff', producer_stage: 'first', consumer_stage: 'second', artifact_type: 'file', identity_status: 'resolved', declared_outputs: ['alpha.txt'], required_inputs: ['alpha.txt'], external_inputs: [], evidence }],
+    dependencies: [{ id: 'dependency', from: 'first', to: 'second', kind: 'prerequisite', evidence }],
+    logic: [{ id: 'logic', variables: ['ready'], formula: { var: 'ready' }, evidence }]
+  };
+  return result;
+}
+
+test('all registered constraint families retain separate counts and parent-bound evidence', () => {
+  const expected = constrainedCandidate();
+  const report = score(expected, [expected]);
+  assert.equal(report.observation_status, 'COMPUTED', JSON.stringify(report.diagnostics));
+  const result = report.provisional_alternatives[0];
+  assert.equal(result.exact_match, true);
+  assert.equal(result.scopes_exact, true);
+  assert.deepEqual(Object.keys(result.constraints), Object.keys(expected.constraints));
+  for (const row of Object.values(result.constraints)) {
+    assert.equal(row.matched, 1);
+    assert.equal(row.expected, 1);
+    assert.equal(row.evidence.matched, 1);
+  }
+});
+
+test('changed constraint IDs cannot reuse evidence matches from another parent', () => {
+  const expected = constrainedCandidate();
+  const observation = structuredClone(expected);
+  for (const items of Object.values(observation.constraints)) items[0].id += '-changed';
+  const result = score(observation, [expected]).provisional_alternatives[0];
+  assert.equal(result.totals.matched, 2);
+  assert.equal(result.relations_exact, false);
+  for (const row of Object.values(result.constraints)) {
+    assert.equal(row.matched, 0);
+    assert.equal(row.false_negative, 1);
+    assert.equal(row.false_positive, 1);
+    assert.equal(row.evidence.matched, 0);
+  }
+});
+
+test('changed dependency direction keeps citation diagnostics but fails relation matching', () => {
+  const expected = constrainedCandidate();
+  const observation = structuredClone(expected);
+  Object.assign(observation.constraints.dependencies[0], { from: 'second', to: 'first' });
+  const result = score(observation, [expected]).provisional_alternatives[0];
+  assert.equal(result.constraints.dependencies.evidence.matched, 1);
+  assert.equal(result.constraints.dependencies.matched, 0);
+  assert.equal(result.exact_match, false);
+});
+
+test('missing and malformed constraint predictions preserve all expected denominators', () => {
+  const expected = constrainedCandidate();
+  for (const input of [null, '{']) {
+    const result = score(input, [expected]).provisional_alternatives[0];
+    for (const row of Object.values(result.constraints)) {
+      assert.equal(row.false_negative, 1);
+      assert.equal(row.evidence.false_negative, 1);
+      assert.equal(row.predicted, input === null ? 0 : null);
+      assert.equal(row.evidence.predicted, input === null ? 0 : null);
+    }
+  }
+});
+
+test('constraint multiset diagnostics do not relax the exact relation ordering contract', () => {
+  const expected = constrainedCandidate();
+  expected.constraints.intervals.push({ ...structuredClone(expected.constraints.intervals[0]), id: 'second-interval' });
+  const observation = structuredClone(expected);
+  observation.constraints.intervals.reverse();
+  const result = score(observation, [expected]).provisional_alternatives[0];
+  assert.equal(result.constraints.intervals.matched, 2);
+  assert.equal(result.constraints.intervals.evidence.matched, 2);
+  assert.equal(result.relations_exact, false);
+  assert.equal(result.exact_match, false);
+});
+
+test('extra constraints remain false positives even when they cite the same text', () => {
+  const expected = constrainedCandidate();
+  const observation = structuredClone(expected);
+  observation.constraints.intervals.push({ ...structuredClone(observation.constraints.intervals[0]), id: 'extra-interval' });
+  const result = score(observation, [expected]).provisional_alternatives[0];
+  assert.equal(result.constraints.intervals.matched, 1);
+  assert.equal(result.constraints.intervals.false_positive, 1);
+  assert.equal(result.constraints.intervals.evidence.false_positive, 1);
+  assert.equal(result.exact_match, false);
+});
+
+test('forged constraint evidence is rejected without losing readable prediction counts', () => {
+  const expected = constrainedCandidate();
+  const observation = structuredClone(expected);
+  observation.constraints.intervals[0].evidence = [{ source_id: 'task', quote: 'invented evidence' }];
+  const report = score(observation, [expected]);
+  assert.equal(report.observation_status, 'REJECTED');
+  for (const row of Object.values(report.provisional_alternatives[0].constraints)) {
+    assert.equal(row.matched, 0);
+    assert.equal(row.predicted, 1);
+    assert.equal(row.false_negative, 1);
+    assert.equal(row.evidence.predicted, 1);
+    assert.equal(row.evidence.false_positive, 1);
+  }
+});
+
 test('exact draft entry matching ignores local entry IDs but never grants reviewed status', () => {
   const observation = candidate();
   observation.elements.A.entries[0].id = 'renamed';

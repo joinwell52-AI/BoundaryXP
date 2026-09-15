@@ -2,11 +2,29 @@ import { CORE_ELEMENTS, digest } from '../bxp/index.mjs';
 import { IDS, assert, parseProductJson, validateProduct } from './contracts.mjs';
 import { checkReviewDraft } from './review-draft.mjs';
 
-export const DRAFT_MATCHER = Object.freeze({ id: 'boundx-draft-exact-entry', version: '0.2.0', status: 'NOT_FROZEN_FOR_ACCEPTANCE',
+export const DRAFT_MATCHER = Object.freeze({ id: 'boundx-draft-exact-entry', version: '0.3.0', status: 'NOT_FROZEN_FOR_ACCEPTANCE',
   entry_identity: 'bucket-status + entry-without-id + interpretation-and-references',
   alternative_policy: 'report-every-complete-alternative-separately-never-combine',
   relation_policy: 'exact-constraints-and-scopes-including-identifiers',
-  evidence_policy: 'per-bucket-multiset-of-source-quote-codepoint-spans-diagnostic-only' });
+  evidence_policy: 'per-bucket-multiset-of-source-quote-codepoint-spans-diagnostic-only',
+  constraint_policy: 'per-type-exact-multiset-including-ids-evidence-bound-to-parent-id-diagnostic-only' });
+
+function constraintEvidenceKeys(items) {
+  return items.flatMap(item => item.evidence.map(evidence => digest({ id: item.id, evidence })));
+}
+
+function constraintCounts(expected, observed, candidate, observation) {
+  return Object.fromEntries(Object.entries(expected.constraints).map(([kind, items]) => {
+    const actual = observed?.constraints[kind] ?? [];
+    const predicted = observed ? actual : candidate?.constraints[kind];
+    return [kind, {
+      ...counts(items.map(item => digest(item)), actual.map(item => digest(item)),
+        observation === null ? 0 : predicted?.length ?? null),
+      evidence: counts(constraintEvidenceKeys(items), constraintEvidenceKeys(actual),
+        observation === null ? 0 : predicted ? constraintEvidenceKeys(predicted).length : null)
+    }];
+  }));
+}
 
 function evidenceKeys(task, field) {
   return task.elements[field].entries.flatMap(entry => entry.evidence.map(evidence => digest(evidence)));
@@ -76,7 +94,10 @@ export function scoreReviewDraft(host, draft, seed, snapshotTime, observation) {
       false_positive: rows.some(row => row.false_positive === null) ? null : rows.reduce((sum, row) => sum + row.false_positive, 0) };
     const relationsExact = observed !== null && digest({ constraints: expected.constraints, scopes: expected.scopes ?? [] })
       === digest({ constraints: observed.constraints, scopes: observed.scopes ?? [] });
-    return { index, answer_digest: digest(answer), fields, totals, relations_exact: relationsExact,
+    return { index, answer_digest: digest(answer), fields, totals,
+      constraints: constraintCounts(expected, observed, candidate, observation),
+      scopes_exact: observed !== null && digest(expected.scopes ?? []) === digest(observed.scopes ?? []),
+      relations_exact: relationsExact,
       exact_match: observed !== null && rows.every(row => row.false_negative === 0 && row.false_positive === 0 && row.state_correct && row.reasons_exact) && relationsExact,
       explicit_B_recalled: fields.B.expected ? fields.B.false_negative === 0 : null };
   });
