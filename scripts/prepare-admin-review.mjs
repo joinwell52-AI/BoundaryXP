@@ -8,6 +8,7 @@ import { createReviewDraft, checkReviewDraft } from '../src/product/review-draft
 import { digest } from '../src/bxp/index.mjs';
 import { parseProductJson } from '../src/product/contracts.mjs';
 import { createProductHost } from '../src/product/host.mjs';
+import { authorIoReviewDraft, IO_DRAFT_CASE_IDS } from '../fixtures/admin-text/authored-io-drafts.mjs';
 
 const repository = fileURLToPath(new URL('../', import.meta.url));
 function ordinaryDirectory(path) {
@@ -74,7 +75,7 @@ export function auditReviewWorkspace(workspace) {
     all_candidates_structurally_valid: cases.every(item => item.status === 'STRUCTURALLY_VALID'),
     status: 'PENDING_GOLD_REVIEW', independent_review_verified: false, acceptance_passed: false, model_calls: 0 };
 }
-export function prepareReviewWorkspace({ base = join(repository, '.boundx'), signal } = {}) {
+export function prepareReviewWorkspace({ base = join(repository, '.boundx'), signal, authorIo = false } = {}) {
   const plan = loadAcceptancePlan();
   const parent = resolve(base);
   for (const path of [parent, join(parent, 'gold-review')]) {
@@ -92,7 +93,9 @@ export function prepareReviewWorkspace({ base = join(repository, '.boundx'), sig
       const root = join(output, run.case_id);
       const scenario = createCaseScenario(root, run.seed);
       const prepared = scenario.host.service.prepare(scenario.input);
-      const draft = createReviewDraft(prepared, run.seed, scenario.snapshot_time);
+      const blank = createReviewDraft(prepared, run.seed, scenario.snapshot_time);
+      const draft = authorIo && IO_DRAFT_CASE_IDS.includes(run.case_id) ? authorIoReviewDraft(blank) : blank;
+      if (draft.allowed_answers !== null && !checkReviewDraft(scenario.host, draft, run.seed, scenario.snapshot_time).all_candidates_structurally_valid) throw Error('Authored draft failed structural validation.');
       atomicRecord(join(root, 'prepared.json'), prepared);
       atomicRecord(join(root, 'draft.json'), draft);
       manifest.cases.push({ case_id: run.case_id, source_digest: run.source_digest, binding_digest: draft.binding_digest,
@@ -113,8 +116,8 @@ if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.ur
     if (!args.length || (args.length === 1 && args[0] === '--plan')) {
       const plan = loadAcceptancePlan();
       process.stdout.write(JSON.stringify({ cases: plan.distinct_sources, model_calls: 0, status: 'PENDING_GOLD_REVIEW' }) + '\n');
-    } else if (args.length === 1 && args[0] === '--create') {
-      const result = prepareReviewWorkspace();
+    } else if (args.length === 1 && ['--create', '--create-io'].includes(args[0])) {
+      const result = prepareReviewWorkspace({ authorIo: args[0] === '--create-io' });
       process.stdout.write(JSON.stringify({ ...result, cases: result.cases.length }, null, 2) + '\n');
       process.exitCode = result.status === 'DRAFTS_CREATED' ? 0 : 1;
     } else if (args.length === 2 && args[0] === '--check-all') {
@@ -127,7 +130,7 @@ if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.ur
       process.exitCode = result.all_candidates_structurally_valid ? 0 : 1;
     } else throw Error('Unsupported option');
   } catch {
-    process.stderr.write('Review workspace failed. Use --plan, --create, --check <workspace> <case-id> or --check-all <workspace>; no model connection is required.\n');
+    process.stderr.write('Review workspace failed. Use --plan, --create, --create-io, --check <workspace> <case-id> or --check-all <workspace>; no model connection is required.\n');
     process.exitCode = 1;
   }
 }

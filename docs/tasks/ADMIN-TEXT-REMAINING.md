@@ -25,6 +25,10 @@ The fixed safety matrix, setup builder, bounded runner and L2 candidate pipeline
 
 ## 必须完成的剩余项 / Remaining gates
 
+最新作者草稿进展：新增`--create-io`，T001–T010已有Codex逐条编写的输入/输出候选与双语理由。新建工作区实查10条结构合法、110条未标注；原工作区不覆盖。10条仍待补全关系/身份映射/BXP预期及独立审阅，不能计为10条完成金标。
+
+Authored-draft progress: `--create-io` prepares ten individually authored IO candidates with bilingual rationale. A new workspace audits as ten structurally valid and 110 unannotated; the original workspace remains unchanged. Relations, identity mappings, expected BXP results and independent review remain outstanding even for these ten drafts.
+
 | 项目 / Item | 当前缺口 / Outstanding work |
 |---|---|
 | Codex接入 / Codex transport | 已接通订阅文本候选，需持续维护实验接口兼容性；全局Codex策略仍可能加载，不宣称完全空白上下文 |

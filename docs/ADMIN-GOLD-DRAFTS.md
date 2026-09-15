@@ -9,6 +9,7 @@ This tool prepares source-bound annotation drafts without model calls or model-g
 ```text
 node scripts/prepare-admin-review.mjs --plan
 node scripts/prepare-admin-review.mjs --create
+node scripts/prepare-admin-review.mjs --create-io
 node scripts/prepare-admin-review.mjs --check <workspace-path> T001
 node scripts/prepare-admin-review.mjs --check-all <workspace-path>
 ```
@@ -26,6 +27,16 @@ The binding freezes source, setup, checkpoints, package/profile/rule identities 
 Checking verifies bindings and candidate structure using the existing Core. Exit zero means structural checks passed, never semantic correctness. Missing answers, fabricated quotes or invalid candidates cannot count as reviewed cases. Precision and recall remain null.
 
 ## 证据与限制 / Evidence and limitations
+
+### 首批答案草稿 / Initial authored answers
+
+`--create-io`仍创建全新的120条工作区，但为T001–T010装入逐条编写的输入/输出候选；其余110条为空。原有工作区和审阅笔记不被覆盖。草稿见[IO答案源文件](../fixtures/admin-text/authored-io-drafts.mjs)，保留原文、引文、动作与参与角色解释、备选不确定性及双语理由。
+
+`--create-io` creates a fresh 120-case workspace with authored IO candidates for T001–T010; the other 110 remain blank. Existing annotations are untouched. The linked source records exact text, quotes, actions, participant roles, unresolved alternatives and bilingual rationale.
+
+这些答案由Codex编写，结构验证只检查其能否合法进入Core，不证明正确；不是独立审阅或冻结金标。当前采用原文文字主体，不声称已经补齐语义包身份映射、所有允许答案、typed关系或BXP预期；这些仍须审阅补充。发送不当作创建，接收者不当作执行人，未写出的资源、版本和停止条件不补造。
+
+These Codex-authored candidates are neither independently reviewed nor frozen gold. Core validation checks structure, not correctness. Textual participants do not complete pack identity mappings, all acceptable alternatives, typed relations or expected BXP results. Transfer is distinct from creation; recipients are not senders, and absent resource/version/stopping requirements are not invented.
 
 ### 整批审计 / Whole-workspace audit
 
