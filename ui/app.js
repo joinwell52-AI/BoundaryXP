@@ -57,17 +57,28 @@ const providerSelect=element('select');providerSelect.id='model-provider';
 for(const [value,label] of [['api','自定义API / Custom API'],['cursor','Cursor SDK'],['codex','Codex订阅登录 / Codex subscription']]){const option=element('option');option.value=value;option.textContent=label;providerSelect.append(option);}
 const providerLabel=localized(element('label'),'接入方式','Connection provider');providerLabel.append(providerSelect);$('settings').prepend(providerLabel);
 const cursorCatalog=element('select');cursorCatalog.id='cursor-model-catalog';cursorCatalog.hidden=true;
+cursorCatalog.setAttribute('aria-label','可用模型 / Available models');
+const catalogStatus=element('span');catalogStatus.setAttribute('role','status');catalogStatus.hidden=true;
+let catalogRevision=0;
 cursorCatalog.onchange=()=>{$('model').value=cursorCatalog.value;invalidateConnection();};
 const loadCursorModels=button(undefined,action(async()=>{
+ const revision=++catalogRevision,provider=providerSelect.value;
  const key=$('key').value.trim();
- const result=await api(providerSelect.value==='codex'?'codex-models':'cursor-models',providerSelect.value==='codex'?{}:{key});cursorCatalog.replaceChildren();
+ $('model').value='';cursorCatalog.replaceChildren();cursorCatalog.disabled=true;invalidateConnection();
+ setText(catalogStatus,'正在读取模型列表 / Loading models…');
+ try{
+ const result=await api(provider==='codex'?'codex-models':'cursor-models',provider==='codex'?{}:{key});
+ if(revision!==catalogRevision||providerSelect.value!==provider)return;
+ if(!Array.isArray(result.models)||!result.models.length)throw Error('没有可用模型，请检查登录后刷新。 / No models available; check sign-in and refresh.');
  for(const model of result.models){const option=element('option');option.value=model.id;option.textContent=model.name+' · '+model.id;cursorCatalog.append(option);}
- $('model').value=cursorCatalog.value;invalidateConnection();
-}));localized(loadCursorModels,'读取可用模型','Load available models');loadCursorModels.hidden=true;
-$('settings').append(loadCursorModels,cursorCatalog);
+ cursorCatalog.disabled=false;$('model').value=cursorCatalog.value;invalidateConnection();
+ setText(catalogStatus,'请选择模型，然后测试连接。 / Select a model, then test the connection.');
+ }catch(error){if(revision===catalogRevision){cursorCatalog.disabled=true;setText(catalogStatus,error.message);}throw error;}
+}));localized(loadCursorModels,'刷新模型列表','Refresh models');loadCursorModels.hidden=true;
+$('model').closest('label').append(cursorCatalog,loadCursorModels,catalogStatus);
 $('settings').append(localized(element('p'),'Cursor密钥可留空以使用服务器环境变量CURSOR_API_KEY；不会发送密钥到浏览器。模型目录可见不代表生成测试通过。','Leave the Cursor key blank to use the server CURSOR_API_KEY environment variable; server keys are not returned to the browser. Catalog access does not prove generation works.'));
 $('settings').append(localized(element('p'),'Codex使用本机ChatGPT订阅登录，不填写API密钥；调用消耗订阅额度。仅用于标准BXP候选及文本连接测试。','Codex uses local ChatGPT sign-in, without an API key, and consumes subscription usage. Use it for standard BXP candidates and text connection tests.'));
-providerSelect.onchange=()=>{const hosted=providerSelect.value!=='api';for(const id of ['protocol','url','disable-thinking'])$(id).closest('label').hidden=hosted;$('key').closest('label').hidden=providerSelect.value==='codex';loadCursorModels.hidden=!hosted;cursorCatalog.hidden=!hosted;$('model').value='';cursorCatalog.replaceChildren();invalidateConnection();};
+providerSelect.onchange=()=>{catalogRevision++;const hosted=providerSelect.value!=='api';for(const id of ['protocol','url','disable-thinking'])$(id).closest('label').hidden=hosted;$('key').closest('label').hidden=providerSelect.value==='codex';loadCursorModels.hidden=!hosted;cursorCatalog.hidden=!hosted;catalogStatus.hidden=!hosted;$('model').hidden=hosted;$('model').value='';cursorCatalog.replaceChildren();cursorCatalog.disabled=true;setText(catalogStatus,'点击刷新读取可用模型。 / Refresh to load available models.');invalidateConnection();if(providerSelect.value==='codex')loadCursorModels.click();};
 function connectionDisplay(detail){const node=$('connection-status');node.dataset.state=connection.status;setText(node,{untested:'● 未测试 / Not tested',testing:'● 正在测试 / Testing…',connected:'● 连接成功 / Connected',failed:'● 连接失败 / Failed'}[connection.status]);setText($('connection-detail'),detail);for(const id of ['generate-pm','test-current-task','recheck-pm','extract-bxp-task'])if($(id))$(id).disabled=connection.status!=='connected'||(providerSelect.value==='codex'&&id!=='extract-bxp-task');}
 function connectedConfig(){if(connection.status!=='connected')throw Error('请先测试模型连接，绿色成功后才能测试 PM。 / Test the connection first.');return requireConfig();}
 function invalidateConnection(){connection.invalidate();connectionDisplay('配置已变更，请重新测试。绿色状态不会保存或从记录恢复。');}
