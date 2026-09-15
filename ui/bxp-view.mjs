@@ -1,6 +1,8 @@
-export function renderThreeLayerReport(host, report, copySource, evaluation) {
+import { translate } from './i18n.mjs';
+
+export function renderThreeLayerReport(host, report, copySource, evaluation, locale) {
   const document = host.ownerDocument;
-  const node = (tag, text) => { const value = document.createElement(tag); value.textContent = text; return value; };
+  const node = (tag, text, source = false) => { const value = document.createElement(tag); if(locale && text && !source)locale.bind(value,language=>translate(text,language));else value.textContent = text; return value; };
   host.replaceChildren();
   let section = host, details = null, layerNumber = '', slot = null, entryCount = 0, technical = null, mappingSection = null;
   for (const line of report.split('\n')) {
@@ -11,22 +13,22 @@ export function renderThreeLayerReport(host, report, copySource, evaluation) {
       layerNumber = layer[1][6];
       if(layerNumber==='2')mappingSection=section;
       section.append(node('h3', '【'+layer[1]+'】')); host.append(section); details = null; slot = null;
-      if(layerNumber==='1'&&copySource){const copy=node('button','📋 复制原文 / Copy source');copy.type='button';copy.onclick=async()=>{try{await copySource();copy.textContent='已复制 / Copied';}catch{copy.textContent='复制失败，请手动复制 / Copy failed';}};section.append(copy);}
+      if(layerNumber==='1'&&copySource){const copy=node('button','📋 复制原文 / Copy source');copy.type='button';copy.onclick=async()=>{let message;try{await copySource();message='已复制 / Copied';}catch{message='复制失败，请手动复制 / Copy failed';}if(locale)locale.bind(copy,language=>translate(message,language));else copy.textContent=message;};section.append(copy);}
       continue;
     }
     if (line.startsWith('### ')) { host.append(node('h2', line.slice(4))); continue; }
-    if (line.startsWith('  > ')) { section.append(node('blockquote', line.slice(4))); continue; }
+    if (line.startsWith('  > ')) { section.append(node('blockquote', line.slice(4), true)); continue; }
     const bucket = layerNumber==='2' && line.match(/^  - \*\*(.+?)\*\*：(.+)$/);
     if(bucket){slot=node('p','');slot.className='report-slot';slot.append(node('strong',bucket[1]+'：'));entryCount=0;details=null;
       if(bucket[2].startsWith('原文未提供'))slot.append(node('span','原文未提供 / Not provided'));
       else if(bucket[2].startsWith('尚未明确'))slot.append(node('span','尚未明确 / Unresolved；'));
       section.append(slot);continue;
     }
-    if(layerNumber==='2'&&slot&&line.startsWith('    - ')){slot.append(node('span',(entryCount++?'；':'')+line.slice(6)));continue;}
+    if(layerNumber==='2'&&slot&&line.startsWith('    - ')){slot.append(node('span',(entryCount++?'；':'')+line.slice(6),true));continue;}
     if(layerNumber==='3'){
       const axes=line.match(/validation=([^；]+)；completeness=([^；]+)；consistency=(.+)$/);
       if(axes){const labels={valid:'结构复核通过',invalid:'结构复核未通过',complete:'信息完整',incomplete:'信息不完整',consistent:'已提交约束未发现冲突',inconsistent:'已提交约束存在冲突',undetermined:'一致性尚无法确定'};
-        const conclusion=node('p',(labels[axes[2]]??axes[2])+'；'+(labels[axes[3]]??axes[3]));conclusion.className='report-conclusion';section.append(conclusion,node('p','系统复核：'+(labels[axes[1]]??axes[1])));continue;}
+        const conclusion=node('p','');conclusion.append(node('span',labels[axes[2]]??axes[2]),node('span','；'),node('span',labels[axes[3]]??axes[3]));conclusion.className='report-conclusion';const validation=node('p','');validation.append(node('span',labels[axes[1]]??axes[1]));section.append(conclusion,validation);continue;}
       if(/^\s*- (intervals|target_sets|handoffs|dependencies|logic)：/.test(line)||line.includes('**Diff [BXP.')||line.startsWith('      - ')){
         if(!technical){technical=node('details','');technical.append(node('summary','系统复核与计算详情 / Validation and calculation details'));}
         technical.append(node('p',line.replace(/^\s*- /,'')));continue;

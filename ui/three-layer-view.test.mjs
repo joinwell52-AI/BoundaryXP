@@ -4,6 +4,7 @@ import { renderThreeLayerReport } from './bxp-view.mjs';
 import {readFileSync} from 'node:fs';
 import {evaluateBxpTask} from '../src/bxp/index.mjs';
 import {renderThreeLayers} from '../src/product/assembler.mjs';
+import {createLocale} from './i18n.mjs';
 
 class ViewNode {
  constructor(ownerDocument,tag){this.ownerDocument=ownerDocument;this.tag=tag;this.textContent='';this.children=[];}
@@ -12,6 +13,16 @@ class ViewNode {
  all(){return [this,...this.children.flatMap(child=>child.all())];}
  get text(){return this.textContent+this.children.map(child=>child.text).join('\n');}
 }
+
+test('report headings switch language without translating source evidence',()=>{
+ const document={createElement:tag=>new ViewNode(document,tag)},host=new ViewNode(document,'div');
+ const locale=createLocale('en');
+ renderThreeLayerReport(host,'### 任务边界检查\n- **【Layer 1：原文证据】**\n  > 任务边界检查',undefined,undefined,locale);
+ assert.equal(host.all().find(node=>node.tag==='h2').text,'Task boundary check');
+ assert.equal(host.all().find(node=>node.tag==='blockquote').text,'任务边界检查');
+ locale.set('zh-CN');
+ assert.equal(host.all().find(node=>node.tag==='h2').text,'任务边界检查');
+});
 test('three-layer view renders sections and folded evidence without executing source HTML',()=>{
  const document={createElement:tag=>new ViewNode(document,tag)},host=new ViewNode(document,'div');
  const report='### 任务边界检查\n- **【Layer 1：原文证据】**\n  > <img src=x onerror=alert(1)> **原文**\n- **【Layer 2：标准 7+1 结构化映射】**\n  - **I (输入范围)**：已明确\n    - 输入.txt\n      - 原文证据 / Evidence：task [0,2) — "原文"\n- **【Layer 3：计算结果与建议】**\n    - **Diff [-O]**：未提供';

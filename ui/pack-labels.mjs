@@ -13,7 +13,8 @@ const industryNames = new Map([
   ['ops-sys', '系统运维 / System Operations'],
 ]);
 
-export function packLabel(reference) {
-  const name = industryNames.get(reference.pack_id);
+export function packLabel(reference, language) {
+  const pairedName = industryNames.get(reference.pack_id);
+  const name = pairedName && language ? pairedName.split(' / ')[language === 'en' ? 1 : 0] : pairedName;
   return name ? `${name} · ${reference.version}` : `${reference.pack_id}@${reference.version}`;
 }

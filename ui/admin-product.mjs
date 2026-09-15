@@ -1,4 +1,11 @@
 import { packLabel } from './pack-labels.mjs';
+if (location.hash !== '#advanced') location.replace('/legacy#settings');
+const heading = document.querySelector('h1');
+heading.textContent = localStorage.getItem('boundx-language') === 'en' ? 'Advanced settings' : '高级设置';
+const back = document.createElement('a');
+back.href = '/legacy#settings';
+back.textContent = localStorage.getItem('boundx-language') === 'en' ? 'Back to settings' : '返回设置';
+heading.before(back);
 const element = id => document.getElementById(id);
 let prepared = null;
 let active = [];

@@ -112,7 +112,8 @@ bxpPanel.id='bxp-context';
 bxpPanel.append(localized(element('h2'),'语义包设置','Semantic package settings'));
 bxpPanel.append(localized(element('p'),'点击开始分析后，将原文和所选语义上下文发送给模型；随后在本地验证、计算，不执行任务。','Start analysis sends source text and selected context to the model, followed by local validation and calculation. No task execution.'));
 bxpPanel.append(localized(element('p'),'默认L1，可选L2行业及已启用L3名册；L3外发还需服务器授权。准备快照保存在本地，名册默认不选择。','Default L1 with optional L2 industry and active L3 directory; L3 disclosure also requires server authorization. Prepared snapshots are saved locally. No directory is selected by default.'));
-const packageLink=element('a');packageLink.href='/admin';localized(packageLink,'打开语义包管理','Open semantic package management');bxpPanel.append(packageLink);
+const advancedSettings=element('details');advancedSettings.append(localized(element('summary'),'高级设置','Advanced settings'));
+const packageLink=element('a');packageLink.href='/admin#advanced';localized(packageLink,'维护职员目录与行业包','Maintain directories and industry packages');advancedSettings.append(packageLink);bxpPanel.append(advancedSettings);
 const industrySelect=element('select');industrySelect.id='bxp-industry';
 const industryLabel=localized(element('label'),'行业包（先导入，再确认启用）','Industry package (install, then explicitly activate)');industryLabel.append(industrySelect);bxpPanel.append(industryLabel);
 const directorySelect=element('select');directorySelect.id='bxp-directory';
@@ -128,7 +129,7 @@ const saveContext=button(undefined,action(async()=>{
 const forgetContext=button(undefined,action(async()=>{localStorage.removeItem(contextPreferenceKey);contextPreferencesInvalid=false;setText(contextPreferenceStatus,'已忘记保存的选择，当前选择保留。 / Saved selections removed; current selection retained.');}));localized(forgetContext,'忘记语义包设置','Forget package settings');
 const bxpReport=element('div');bxpReport.id='bxp-model-result';
 const bxpResultPanel=element('section',undefined,'panel');bxpResultPanel.id='bxp-result-panel';bxpResultPanel.hidden=true;
-bxpResultPanel.append(localized(element('h2'),'04 · 分析结果','04 · Analysis results'));
+bxpResultPanel.append(localized(element('h2'),'分析结果','Analysis results'));
 const bxpResultState=createBxpResultState();
 const bxpDownloads=element('div',undefined,'buttons');bxpDownloads.hidden=true;
 const bxpDownloadButtons=[];
@@ -140,10 +141,10 @@ function clearBxpResult(){const ticket=bxpResultState.clear();for(const {control
 const refreshPacks=button(undefined,action(async()=>{
  clearBxpResult();
  bxpPacks=await api('product-packs',{method:'bx_list_semantic_packs',arguments:{}});
- industrySelect.replaceChildren();const none=element('option','None / 不使用行业包');none.value='';industrySelect.append(none);
- for(const pack of bxpPacks.installed.filter(pack=>pack.layer==='L2')){const option=element('option');option.textContent=packLabel(pack);option.title=`${pack.pack_id}@${pack.version}`;option.value=pack.digest;industrySelect.append(option);}
- directorySelect.replaceChildren();const noDirectory=element('option');noDirectory.value='';noDirectory.textContent='不使用职员目录 / No employee directory';directorySelect.append(noDirectory);
- for(const pack of bxpPacks.installed.filter(pack=>pack.layer==='L3'&&bxpPacks.active.some(reference=>reference.digest===pack.digest))){const option=element('option');option.value=pack.digest;option.textContent=packLabel(pack);directorySelect.append(option);}
+ industrySelect.replaceChildren();const none=localized(element('option'),'不使用行业包','None');none.value='';industrySelect.append(none);
+ for(const pack of bxpPacks.installed.filter(pack=>pack.layer==='L2')){const option=localized(element('option'),packLabel(pack,'zh-CN'),packLabel(pack,'en'));option.title=`${pack.pack_id}@${pack.version}`;option.value=pack.digest;industrySelect.append(option);}
+ directorySelect.replaceChildren();const noDirectory=localized(element('option'),'不使用职员目录','No employee directory');noDirectory.value='';directorySelect.append(noDirectory);
+ for(const pack of bxpPacks.installed.filter(pack=>pack.layer==='L3'&&bxpPacks.active.some(reference=>reference.digest===pack.digest))){const option=localized(element('option'),packLabel(pack,'zh-CN'),packLabel(pack,'en'));option.value=pack.digest;directorySelect.append(option);}
  try{const raw=localStorage.getItem(contextPreferenceKey);if(raw){const restored=restoreContextPreferences(JSON.parse(raw),bxpPacks.installed,bxpPacks.active);industrySelect.value=restored.industry;directorySelect.value=restored.directory;contextPreferencesInvalid=!restored.valid;setText(contextPreferenceStatus,restored.valid?'已恢复语义包选择；启用状态及外发授权仍由服务器检查。 / Selections restored; activation and disclosure remain server-checked.':'保存的包已缺失或名册未启用，请重新选择并保存；分析已暂停。 / Saved package unavailable; reselect and save before analysis.');}}
  catch{contextPreferencesInvalid=true;setText(contextPreferenceStatus,'无法恢复语义设置，请重新选择并保存。 / Cannot restore settings; reselect and save.');}
  bxpReport.textContent='';
@@ -161,7 +162,7 @@ const extractBxp=button(undefined,action(async()=>{
  if(contextPreferencesInvalid){$('settings').hidden=false;throw Error('请核对并重新保存语义包设置 / Review and save package settings first');}
  const text=textRequired('task-source'),selected=industrySelect.value,directory=directorySelect.value;
  bxpResultPanel.hidden=false;
- bxpReport.textContent='正在抽取；尚未计算。 / Extracting; not yet calculated.';
+ setText(bxpReport,'正在抽取；尚未计算。 / Extracting; not yet calculated.');
  const l1=bxpPacks.active.find(reference=>bxpPacks.installed.some(pack=>pack.layer==='L1'&&pack.digest===reference.digest));
  if(!l1)throw Error('请先在语义包管理页或CLI安装并启用L1，再加载本地语义包。 / Install and activate L1, then reload packages.');
  if(selected&&!bxpPacks.active.some(reference=>reference.digest===selected))throw Error('请先确认启用行业。 / Confirm industry activation first.');
@@ -169,13 +170,13 @@ const extractBxp=button(undefined,action(async()=>{
  const info=await fetch('/api/protocol-info').then(response=>response.json());
  const result=await api('bxp-admin',{config:requireConfig(),consent:true,prepare:{source:{text,language:locale.language},
   profile:{id:'org.boundx.admin',required_elements:info.core_elements},packs:[l1,...bxpPacks.active.filter(reference=>[selected,directory].includes(reference.digest))]}});
- if($('task-source').value!==text||industrySelect.value!==selected||directorySelect.value!==directory){clearBxpResult();bxpReport.textContent='输入已变化，请重新计算。 / Input changed; recalculate.';return;}
+ if($('task-source').value!==text||industrySelect.value!==selected||directorySelect.value!==directory){clearBxpResult();setText(bxpReport,'输入已变化，请重新计算。 / Input changed; recalculate.');return;}
  if(!bxpResultState.accept(ticket,result))return;
  bxpDownloads.hidden=false;
  for(const {kind,control} of bxpDownloadButtons)control.disabled=kind!=='report'&&!result.computed;
- renderThreeLayerReport(bxpReport,result.report,()=>navigator.clipboard.writeText(text),result);
+ renderThreeLayerReport(bxpReport,result.report,()=>navigator.clipboard.writeText(text),result,locale);
  noticePair(result.computed?'7+1候选已校验并完成BXP计算；结果不代表授权。':'尚未计算，请查看诊断。',result.computed?'Candidate validated and BXP calculated; no authority granted.':'Not computed; see diagnostics.');
- }catch(error){clearBxpResult();bxpResultPanel.hidden=false;bxpReport.textContent='尚未计算 / Not computed\n'+error.message;throw error;}
+ }catch(error){clearBxpResult();bxpResultPanel.hidden=false;localized(bxpReport,'尚未计算','Not computed');bxpReport.append(element('p',error.message));throw error;}
 }));extractBxp.id='extract-bxp-task';extractBxp.disabled=true;localized(extractBxp,'用模型抽取7+1并计算','Extract 7+1 with model and calculate');
 extractBxp.classList.add('primary');setText(extractBxp,'开始分析：抽取7+1并计算 / Start analysis');
 const bxpButtons=element('div',undefined,'buttons');bxpButtons.append(refreshPacks,activateIndustry);bxpPanel.append(bxpButtons);
@@ -190,10 +191,11 @@ const legacyHint=$('task-source').nextElementSibling;if(legacyHint?.classList.co
 $('page-task').append(legacyResearch);
 $('settings').append(bxpPanel);
 $('task-source').after(bxpRun,bxpResultPanel);
-$('settings').hidden=true;
+$('settings').hidden=location.hash!=='#settings';
 setText($('settings-toggle'),'设置 / Settings');
-setText($('settings').querySelector('h2'),'01 · 模型设置 / Model settings');
+setText($('settings').querySelector('h2'),'模型设置');
 setText($('page-task').querySelector('h2'),'输入任务原文 / Enter task text');
+attribute($('task-source'),'placeholder','在这里输入需要检查边界的任务原文… / Enter the task text to check…');
 const main=document.querySelector('main'),intro=main.querySelector('.intro');
 setText(intro.querySelector('h1'),'任务边界分析 / Task boundary analysis');
 setText(intro.querySelector('p'),'首次使用请打开设置，配置模型和语义包。之后输入原文，开始分析。 / Configure model and packages in Settings, then enter text and analyze.');
@@ -202,7 +204,10 @@ const legacyWorkspace=element('details');legacyWorkspace.id='legacy-workspace';
 legacyWorkspace.append(localized(element('summary'),'旧版研究与PM工具（已弃用）','Legacy research and PM tools (deprecated)'));
 const historyDetails=$('history').closest('details');
 legacyWorkspace.append(legacyResearch,main.querySelector('nav'),$('page-plan'),$('page-results'),main.querySelector('.storage'),historyDetails);
-main.append(legacyWorkspace);
+legacyWorkspace.hidden=true;legacyWorkspace.inert=true;main.append(legacyWorkspace);
+document.querySelector('body > aside')?.remove();
+setText(document.querySelector('footer'),'BoundX · 建议不构成业务裁决或执行授权 / BoundX · Advice grants neither business decisions nor execution authority');
+setText($('clear-key').nextElementSibling,'模型只负责抽取候选，系统在本地复核与计算。 / Models extract candidates; validation and calculation run locally.');
 async function initializeModelPreferences(){
  await refreshPacks.onclick();
  let saved;
@@ -213,7 +218,7 @@ async function initializeModelPreferences(){
  setText(preferenceStatus,'已恢复模型设置；请测试连接。不会自动发送任务。 / Settings restored; test the connection. No task is sent automatically.');
 }
 initializeModelPreferences();
-for(const node of [$('task-source'),industrySelect,directorySelect])node.addEventListener('input',()=>{clearBxpResult();bxpReport.textContent='输入已变化，请重新计算。 / Input changed; recalculate.';});
+for(const node of [$('task-source'),industrySelect,directorySelect])node.addEventListener('input',()=>{clearBxpResult();setText(bxpReport,'输入已变化，请重新计算。 / Input changed; recalculate.');});
 function audit(kind,detail){state.history.push({time:new Date().toISOString(),kind,detail});$('history').textContent=state.history.map(x=>`${x.time} · ${x.kind} · ${x.detail}`).join('\n');}
 function markDraft(kind){$(kind==='task'?'confirm-check':'plan-check').checked=false;}
 function emptyDoc(text){return {text,parameters:{},actions:[],completion:[]};}
@@ -427,19 +432,13 @@ $('import').onchange=action(async()=>{
   if(typeof value.draftTexts?.reminder==='string')$('reminder').value=value.draftTexts.reminder;
   audit('打开记录','重新验证计算；引用与回应保留');notice('记录已打开并重新验证。编辑中的草案需再次核对；密钥需重新填写。');
 });
-const exampleText='检查FCoP落地情况，检查MCP工具情况，检查SKILLS分配和使用，检查各角色权限和职责，检查轨机运行情况；请PM分解任务，团队协作完成；最后形成报告向ADMIN汇报！';
-$('example').onclick=action(async()=>{
-  if((state.baseline||$('task-source').value)&&!window.confirm(t('载入固定示例会替换当前记录。需要保留请先取消并保存记录。')))return;
-  state={schema:'boundx-ui/v1',task:emptyDoc(exampleText),baseline:null,plan:null,history:[],reviews:[],calls:[]};
-  state.task.parameters={I:'检查FCoP落地情况，检查MCP工具情况，检查SKILLS分配和使用，检查各角色权限和职责，检查轨机运行情况',O:'最后形成报告向ADMIN汇报',A:'检查',P:'请PM分解任务，团队协作完成',C:'最后形成报告向ADMIN汇报'};
-  state.task.actions=[{actor:'PM',verb:'检查',target:'五项检查',quote:state.task.parameters.I},{actor:'PM',verb:'汇报',target:'ADMIN',quote:state.task.parameters.O}];state.task.completion=[{id:'report',quote:state.task.parameters.C}];
-  renderTask();$('plan-editor').replaceChildren();$('plan-source').value='';$('pm-task-source').value='';$('plan-bottom').hidden=true;renderReview(null);baselineDisplay();audit('固定示例','人工预设映射，不是模型现场分析');notice('已载入固定巡检示例，映射仅供体验。先核对，再保存为基线。');page('task');
-});
+setText($('example'),'查看行业案例 / View industry cases');
+$('example').onclick=()=>window.open('/cases','_blank','noopener');
 
 function bindStatic(){
  const walker=document.createTreeWalker(document.body,NodeFilter.SHOW_TEXT);const nodes=[];
  while(walker.nextNode()){const node=walker.currentNode;if(node.parentElement.closest('script,textarea,#language'))continue;if(node.data.trim())nodes.push(node);}
- for(const node of nodes){const source=node.data;locale.bind(node,()=>t(source));}
+ for(const node of nodes){if(locale.hasBinding(node))continue;const source=node.data;locale.bind(node,()=>t(source));}
  for(const node of document.querySelectorAll('[placeholder],[aria-label]')){if(node.id==='language')continue;for(const key of ['placeholder','aria-label'])if(node.hasAttribute(key))attribute(node,key,node.getAttribute(key));}
 }
 bindStatic();

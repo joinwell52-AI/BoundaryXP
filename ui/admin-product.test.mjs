@@ -22,9 +22,9 @@ async function harness(onRequest, industries = []) {
     if (input.method === 'bx_list_semantic_packs') return response({ installed: [{ ...l1, layer: 'L1' }, ...industries], active: [l1] });
     return onRequest(input, response);
   };
-  const document = { getElementById: element, querySelector: () => ({ content: 'token' }), createElement: () => ({}) };
+  const document = { getElementById: element, querySelector: () => ({ content: 'token', before() {} }), createElement: () => ({}) };
   const script = readFileSync(new URL('./admin-product.mjs', import.meta.url), 'utf8').replace("import { packLabel } from './pack-labels.mjs';", '');
-  await runInNewContext('(async()=>{' + script + '\n})()', { document, fetch, packLabel });
+  await runInNewContext('(async()=>{' + script + '\n})()', { document, fetch, packLabel, location: { hash: '#advanced' }, localStorage: { getItem: () => 'zh-CN' } });
   return { element, click: id => element(id).handlers.click[0](), change: id => element(id).dispatchEvent({ type: 'input' }) };
 }
 
