@@ -69,3 +69,22 @@ test('uncomputed report never fills eight buckets or presents a model failure as
   assert.equal(report.includes('S_required'), false);
   assert.ok(report.includes('🧪待核验\r\n'));
 });
+
+test('report exposes modality and producer interpretation without claiming permission', () => {
+  const task = JSON.parse(readFileSync(new URL('../../examples/bxp/en-complete.json', import.meta.url), 'utf8'));
+  const entry = task.elements.A.entries[0];
+  entry.kind = 'prohibited_action';
+  task.extensions = { ...task.extensions, 'org.boundx.producer': { provenance: [{ element: 'A', entry_id: entry.id,
+    interpretation: '被提及但禁止执行 / Mentioned but prohibited', candidate_ids: ['interpretation-one', 'interpretation-two'] }] } };
+  const result = evaluateBxpTask(task);
+  const before = JSON.stringify({ task, result });
+  const report = renderThreeLayers(task.source.text, { task, result, computed: true });
+  assert.ok(report.includes('A (任务动作)'));
+  assert.equal(report.includes('A (允许动作)'), false);
+  assert.ok(report.includes('prohibited_action'));
+  assert.ok(report.includes('Producer interpretation (not source text)'));
+  assert.ok(report.includes('Mentioned but prohibited'));
+  assert.ok(report.includes('interpretation-one'));
+  assert.ok(report.includes('interpretation-two'));
+  assert.equal(JSON.stringify({ task, result }), before);
+});

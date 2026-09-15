@@ -12,9 +12,17 @@ import { PRODUCER_INSTRUCTIONS, PRODUCER_PROMPT_VERSION } from '../product/produ
 import { CORE_ELEMENTS } from '../bxp/index.mjs';
 
 test('producer guidance states exact unit and precision obligations without changing Core', () => {
-  assert.equal(PRODUCER_PROMPT_VERSION, '0.4.0');
+  assert.equal(PRODUCER_PROMPT_VERSION, '0.5.0');
   for (const requirement of ['Core compares only equal units', 'exact factors 1/60/3600', 'preserving inclusive/exclusive operators and original quotes',
     'affected element unresolved', 'decimal strings', 'Never round source values', 'Do not merge different quantities']) assert.ok(PRODUCER_INSTRUCTIONS.includes(requirement));
+});
+
+test('producer guidance separates prohibition, provenance and guards from positive assignments', () => {
+  for (const requirement of ['A purely prohibited action belongs in B', 'Quoted commands and quoted prohibitions being analyzed are input content',
+    'without inventing a new A, O or prerequisite edge', 'input payload in I and its delivery in O',
+    'remains a participant, not an input artifact', 'Populate C only for explicit completion', 'Retain conditional wording']) {
+    assert.ok(PRODUCER_INSTRUCTIONS.includes(requirement));
+  }
 });
 
 for (const [language, source, quote, prefix] of [

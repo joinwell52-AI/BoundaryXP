@@ -72,7 +72,7 @@ export function evaluateCandidate(service, candidateInput, { historical = false 
 export function renderThreeLayers(sourceText, evaluation) {
   const lines = ['### 任务边界检查', '', '- **【Layer 1：原文证据】**', '', ...sourceText.split('\n').map(line => '  > ' + line), '',
     '- **【Layer 2：标准 7+1 结构化映射】**'];
-  const labels = { I: '输入范围', O: '交付结果', A: '允许动作', P: '责任分工', R: '资源约束', V: '版本依据', C: '完成条件', B: '禁止边界' };
+  const labels = { I: '输入范围', O: '交付结果', A: '任务动作', P: '责任分工', R: '资源约束', V: '版本依据', C: '完成条件', B: '禁止边界' };
   const englishLabels = { I: 'Input scope', O: 'Deliverables', A: 'Actions', P: 'Participants', R: 'Resources', V: 'Version and provenance', C: 'Completion and stopping', B: 'Forbidden boundary' };
   const states = { resolved: '已明确 / Resolved', unresolved: '尚未明确 / Unresolved', absent: '原文未提供 / Absent' };
   if (evaluation.computed) for (const field of CORE_ELEMENTS) {
@@ -80,6 +80,10 @@ export function renderThreeLayers(sourceText, evaluation) {
     lines.push(`  - **${field === 'B' ? '+1 / B' : field} (${labels[field]})**：${states[bucket.status]}；${englishLabels[field]}`);
     for (const entry of bucket.entries) {
       lines.push(`    - ${entry.text}`);
+      lines.push(`      - 条目类型 / Entry kind：${JSON.stringify(entry.kind)}`);
+      const origin = evaluation.task.extensions?.['org.boundx.producer']?.provenance?.find(item => item.element === field && item.entry_id === entry.id);
+      if (origin?.interpretation) lines.push(`      - 生产者解释（非原文）/ Producer interpretation (not source text)：${JSON.stringify(origin.interpretation)}`);
+      if (origin?.candidate_ids?.length) lines.push(`      - 备选解释 / Alternative interpretations：${JSON.stringify(origin.candidate_ids)}`);
       for (const evidence of entry.evidence) lines.push(`      - 原文证据 / Evidence：${evidence.source_id ?? 'task'} [${evidence.start},${evidence.end}) — ${JSON.stringify(evidence.quote)}`);
     }
   } else lines.push('  - 候选未通过生产者校验；不补造合法7+1结构。 / Candidate validation failed; no valid structure is invented.');

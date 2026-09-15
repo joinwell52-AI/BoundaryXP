@@ -14,12 +14,15 @@ Core deficits contain element/status objects. The previous report used each obje
 
 - 八桶显示中英文名称及明确三态；原文未提供与尚未明确分开，不自动补齐。
 - 条目展示来源ID、Unicode码点区间`[start,end)`及精确引文。
+- A标题使用“任务动作”，不把所有被提及的动作统称为“允许动作”；条目类型、生产者解释及备选解释一并展示。生产者解释明确标注“非原文”，不会伪装成证据，也不改变Core结果。
 - 展示应用要求与已明确项的差集；不根据自然语言自行生成无限集合或未注册数学关系。
 - 保留Core三条独立结果轴及计算，不用单一PASS代替它们。
 - 历史快照回放明确标注；计算前提和待澄清建议单列。
 - 两个授权字段继续由Core保持null，报告不提供业务裁决或执行权。
 
 Reports distinguish absent from unresolved, expose exact code-point evidence and the required/resolved deficit, retain independent Core axes, and label historical replays, assumptions and clarification proposals. They do not invent mathematical relations or execution authority.
+
+Action headings do not imply permission. Entry kinds, producer interpretations and alternative IDs remain visible; interpretations are explicitly distinguished from source evidence. This also preserves prohibition metadata in older candidates whose action text alone omitted the negative modality. Rendering never rewrites the underlying task or result.
 
 ## 回归 / Regression
 
