@@ -11,6 +11,7 @@ This checkpoint supplements, rather than rewrites, the taskbook and historical r
 - [新增L2候选链路](../L2-PIPELINE-REGRESSION.md)覆盖15词帧×中英×四类120fixture，修复标签回放的歧义原因丢失/拒绝问题；这不是模型语义准确率证明。
 - [离线金标草稿工作区](../ADMIN-GOLD-DRAFTS.md)已支持120条原文、真实包锁/准备快照、标注备选候选检查；不自动生成答案，不冻结语义匹配器，不认证独立审阅。
 - [草稿比较器](../ADMIN-DRAFT-SCORING.md)已支持多答案分开比较、失败分母、重复预测及关系差异；仍不是最终冻结评分器。
+- 草稿比较器0.2.0增加逐桶证据计数，区分引文定位与解释匹配；中英重复引文、非BMP、CRLF和组合字符测试不替代独立语义审阅。 / Matcher 0.2.0 separately counts entry evidence; Unicode and bilingual regression tests do not replace independent semantic review.
 - [批量比较](../ADMIN-BATCH-COMPARISON.md)已支持固定150个运行位置、运行器原始记录输入和逐语言/测试类别统计；不等于逐行业覆盖或正式语义准确率。
 - API、Cursor和[Codex订阅通道](../CODEX-CONNECTION.md)已有代码，三层报告和唯一Core已接通；连接成功不等于语义验收完成。
 - [固定复测审计](../ADMIN-REPEAT-AUDIT.md)已加入30组配对和同候选本地回放；缺失、模型/上下文变化与模拟运行分别报告，不替代真实验收。
@@ -31,6 +32,6 @@ The fixed safety matrix, setup builder, bounded runner and L2 candidate pipeline
 | WP6/WP9真实Host / Live Host | 固定语料0/150；Codex已通过独立连接和微服务单例，完整150次运行及对应额度授权尚未落实，不能以目录、mock或单例替代 |
 | WP9最终交付 / Final delivery | 剩余门槛满足后，更新完整文件清单、失败与限制、真实模型及包身份，提交ADMIN审核；保持Draft，不合并发布 |
 
-行业库和Case Explorer仍存在另一任务的未提交资产，本实施不覆盖或擅自提交。当前运行中的预览进程不自动代表最新提交；尚未把新提交的浏览器实查作为验收证据。
+行业库和Case Explorer仍存在另一任务的未提交资产，本实施不覆盖或擅自提交。Codex订阅浏览器单例实查已记录于[交付检查点](ADMIN-CODEX-DELIVERY.md)，不等于固定语料验收。当前运行中的预览进程不自动代表最新提交。
 
-Concurrent industry and Case Explorer assets remain untouched. An already running preview is not automatically evidence of the latest commit. Independent review, live runs and final ADMIN approval remain separate gates.
+Concurrent industry and Case Explorer assets remain untouched. The recorded browser smoke test does not replace fixed-corpus acceptance. An already running preview is not automatically evidence of the latest commit. Independent review, live runs and final ADMIN approval remain separate gates.

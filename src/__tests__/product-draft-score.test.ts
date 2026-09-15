@@ -110,3 +110,77 @@ test('relation changes are reported separately from matching entry counts', () =
   assert.equal(result.relations_exact, false);
   assert.equal(result.exact_match, false);
 });
+
+test('exact evidence is diagnostic only and does not excuse a changed interpretation', () => {
+  const observation = candidate();
+  observation.elements.A.entries[0].text = 'Delete alpha.txt';
+  const result = score(observation).provisional_alternatives[0];
+  assert.equal(result.fields.A.evidence.matched, 1);
+  assert.equal(result.fields.A.matched, 0);
+  assert.equal(result.exact_match, false);
+});
+
+test('evidence multiplicity and bucket assignment cannot inflate evidence matches', () => {
+  const observation = candidate();
+  observation.elements.A.entries.push({ ...structuredClone(observation.elements.A.entries[0]), id: 'duplicate' });
+  const duplicate = score(observation).provisional_alternatives[0].fields.A.evidence;
+  assert.equal(duplicate.matched, 1);
+  assert.equal(duplicate.false_positive, 1);
+  const misplaced = candidate();
+  misplaced.elements.A.entries[0].evidence = structuredClone(misplaced.elements.B.entries[0].evidence);
+  const result = score(misplaced).provisional_alternatives[0];
+  assert.equal(result.fields.A.evidence.matched, 0);
+  assert.equal(result.fields.B.evidence.matched, 1);
+});
+
+test('missing and rejected evidence retain the expected denominator', () => {
+  const missing = score(null).provisional_alternatives[0].fields.A.evidence;
+  assert.equal(missing.expected, 1);
+  assert.equal(missing.false_negative, 1);
+  assert.equal(missing.predicted, 0);
+  const invalid = score(Buffer.from([0xff])).provisional_alternatives[0].fields.A.evidence;
+  assert.equal(invalid.false_negative, 1);
+  assert.equal(invalid.predicted, null);
+  assert.equal(invalid.false_positive, null);
+});
+
+test('evidence uses codepoint offsets after a non-BMP prefix, not UTF-16 positions', () => {
+  const located = candidate();
+  const quote = located.elements.A.entries[0].evidence[0].quote;
+  located.elements.A.entries[0].evidence[0] = { source_id: 'task', quote, prefix: '🧪' };
+  const evaluated = host.invoke('bx_evaluate_admin_candidate', { candidate: located, historical: true });
+  assert.equal(evaluated.computed, true);
+  assert.equal(evaluated.task.elements.A.entries[0].evidence[0].start, 1);
+  assert.equal(score(located).provisional_alternatives[0].fields.A.evidence.matched, 1);
+  const wrong = structuredClone(located);
+  wrong.elements.A.entries[0].evidence[0].start = 2;
+  wrong.elements.A.entries[0].evidence[0].end = 2 + [...quote].length;
+  const rejected = score(wrong);
+  assert.equal(rejected.observation_status, 'REJECTED');
+  assert.equal(rejected.provisional_alternatives[0].fields.A.evidence.matched, 0);
+});
+
+for (const [language, quote] of [['zh-CN', '读取文件'], ['en', 'Read file']]) {
+  test(`repeated ${language} quotes at different source positions are not interchangeable`, () => {
+    const localSeed = { ...seed, language, task_text: `🧪${quote}\r\ne\u0301${quote}` };
+    const localPrepared = host.service.prepare({ source: { text: localSeed.task_text, language },
+      profile: { id: 'org.boundx.admin', required_elements: [...CORE_ELEMENTS] }, packs: host.registry.active() });
+    const expected = candidate();
+    Object.assign(expected, { prepare_id: localPrepared.prepare_id, source_digest: localPrepared.source_digest,
+      context_digest: localPrepared.context_digest });
+    expected.elements.B = { status: 'absent', entries: [] };
+    expected.elements.A.entries = [{ id: 'read', kind: 'action', text: quote,
+      evidence: [{ source_id: 'task', quote, prefix: '🧪' }] }];
+    const draft = createReviewDraft(localPrepared, localSeed, snapshot);
+    draft.allowed_answers = [expected];
+    const observed = structuredClone(expected);
+    observed.elements.A.entries[0].evidence[0].prefix = 'e\u0301';
+    const result = scoreReviewDraft(host, draft, localSeed, snapshot, observed);
+    assert.equal(result.observation_status, 'COMPUTED');
+    const evidence = result.provisional_alternatives[0].fields.A.evidence;
+    assert.equal(evidence.matched, 0);
+    assert.equal(evidence.false_positive, 1);
+    assert.equal(evidence.false_negative, 1);
+    assert.equal(result.provisional_alternatives[0].exact_match, false);
+  });
+}

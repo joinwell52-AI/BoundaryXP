@@ -26,6 +26,16 @@ Alternatives are never combined. Entries match exactly as multisets; local entry
 
 ## 失败分母 / Failure denominators
 
+### 证据诊断 / Evidence diagnostics
+
+比较器0.2.0在每个答案的八桶字段下增加`evidence`计数：按来源ID、原始引文及Core定位后的Unicode码点区间进行多重集匹配。重复引文不同位置不等同；跨桶引用不互相抵消；重复预测保留误报。候选不能提交UTF-16位置冒充定位，仍由原有生产者定位规则核验。
+
+Matcher 0.2.0 adds per-field evidence counts for each answer alternative. Source identity, exact quote and Core-located Unicode codepoint spans must match as multisets. Different occurrences, buckets and duplicate predictions remain distinct. Existing producer rules, not model-supplied offsets, locate evidence.
+
+这些计数仅诊断条目证据，不覆盖约束证据的独立评分，也不证明引用蕴含该解释。即使引文全匹配，错误解释仍导致条目不匹配；原有关系检查和整体匹配条件不变。缺失输出保留预期证据分母，非法输出的预测数未知时为null。版本与摘要变化后，批量工具拒绝混合旧版报告。
+
+These diagnostics cover entry evidence, not separate constraint-evidence scoring or semantic entailment. Correct citations cannot excuse incorrect interpretations. Relation and whole-answer checks remain unchanged. Missing output retains expected evidence; unparseable predictions have null counts. Matcher identity changes, so mixed-version batches are rejected.
+
 显式缺失输出保留每个答案的完整expected数量，所有应有条目计false_negative；不能匹配本来absent的桶来掩盖整次失败。非法JSON、伪造引文、异快照候选同样保留应有条目分母。无法解析的输出其predicted/false_positive为null，不能编造零误报；结构可解析但被拒绝的条目全部为未匹配预测。错误地全标unresolved不匹配期望resolved条目。
 
 Missing or rejected observations retain every expected item as a false negative. Unparseable output has unknown predicted/false-positive counts, not fabricated zero errors. All-unknown output does not match resolved expectations. Unreadable or oversized files fail explicitly rather than silently becoming successful empty samples.

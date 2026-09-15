@@ -2,10 +2,15 @@ import { CORE_ELEMENTS, digest } from '../bxp/index.mjs';
 import { IDS, assert, parseProductJson, validateProduct } from './contracts.mjs';
 import { checkReviewDraft } from './review-draft.mjs';
 
-export const DRAFT_MATCHER = Object.freeze({ id: 'boundx-draft-exact-entry', version: '0.1.0', status: 'NOT_FROZEN_FOR_ACCEPTANCE',
+export const DRAFT_MATCHER = Object.freeze({ id: 'boundx-draft-exact-entry', version: '0.2.0', status: 'NOT_FROZEN_FOR_ACCEPTANCE',
   entry_identity: 'bucket-status + entry-without-id + interpretation-and-references',
   alternative_policy: 'report-every-complete-alternative-separately-never-combine',
-  relation_policy: 'exact-constraints-and-scopes-including-identifiers' });
+  relation_policy: 'exact-constraints-and-scopes-including-identifiers',
+  evidence_policy: 'per-bucket-multiset-of-source-quote-codepoint-spans-diagnostic-only' });
+
+function evidenceKeys(task, field) {
+  return task.elements[field].entries.flatMap(entry => entry.evidence.map(evidence => digest(evidence)));
+}
 
 function entryKeys(task, field) {
   const provenance = task.extensions['org.boundx.producer'].provenance;
@@ -58,6 +63,9 @@ export function scoreReviewDraft(host, draft, seed, snapshotTime, observation) {
     const fields = Object.fromEntries(CORE_ELEMENTS.map(field => {
       const predicted = observed ? observed.elements[field].entries.length : observation === null ? 0 : candidate ? candidate.elements[field].entries.length : null;
       return [field, { ...counts(entryKeys(expected, field), observed ? entryKeys(observed, field) : [], predicted),
+        evidence: counts(evidenceKeys(expected, field), observed ? evidenceKeys(observed, field) : [],
+          observed ? evidenceKeys(observed, field).length : observation === null ? 0
+            : candidate ? candidate.elements[field].entries.reduce((sum, entry) => sum + entry.evidence.length, 0) : null),
         state_correct: observed !== null && expected.elements[field].status === observed.elements[field].status,
         reasons_exact: observed !== null && digest(expected.elements[field].reason_codes ?? []) === digest(observed.elements[field].reason_codes ?? []) }];
     }));
