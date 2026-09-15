@@ -45,6 +45,32 @@ for (const caseId of INITIAL_DRAFT_CASE_IDS) test(`${caseId} authored draft is s
       assert.throws(() => authorInitialReviewDraft(blank), { code: 'AUTHOR_CONTEXT' });
       assert.throws(() => authorInitialReviewDraft(blank, { ...prepared, entries: [] }), { code: 'AUTHOR_IDENTITY' });
     }
+    if (caseId === 'T062') {
+      assert.equal(evaluated.result.calculations.handoffs.length, 0);
+      assert.ok(evaluated.result.findings.some(item => item.code === 'BXP.SCOPE.UNRESOLVED'));
+    }
+    if (['T063', 'T112'].includes(caseId)) {
+      assert.equal(evaluated.result.calculations.handoffs[0].result, 'satisfied');
+      assert.equal(evaluated.task.constraints.dependencies.length, 0);
+    }
+    if (caseId === 'T065') {
+      assert.equal(evaluated.result.calculations.target_sets.length, 2);
+      assert.ok(evaluated.result.calculations.target_sets.every(item => item.result === 'disjoint'));
+      assert.ok(!evaluated.result.findings.some(item => item.code === 'BXP.TARGET.FORBIDDEN_OVERLAP'));
+    }
+    if (['T018', 'T043', 'T050', 'T061', 'T066', 'T068', 'T069', 'T086', 'T089', 'T112', 'T119'].includes(caseId)) {
+      assert.equal(evaluated.result.calculations.logic[0].result, 'satisfiable');
+      assert.ok(authored.allowed_answers[0].constraints.logic.every(item => item.assumptions === undefined));
+    }
+    if (caseId === 'T043') {
+      for (const [approved, publish, expected] of [[true, false, 'satisfiable'], [false, true, 'unsatisfiable']]) {
+        const counterfactual = structuredClone(authored.allowed_answers[0]);
+        counterfactual.constraints.logic[0].assumptions = { all: [approved ? { var: 'approved' } : { not: { var: 'approved' } }, publish ? { var: 'publish' } : { not: { var: 'publish' } }] };
+        const tested = scenario.host.invoke('bx_evaluate_admin_candidate', { candidate: counterfactual, historical: true });
+        assert.equal(tested.result.calculations.logic[0].result, expected);
+        assert.equal(tested.result.execution_authorization, null);
+      }
+    }
     if (Number(caseId.slice(1)) <= 50) for (const field of ['R', 'V', 'C']) assert.equal(authored.allowed_answers[0].elements[field].status, 'absent');
     if (['T013', 'T017'].includes(caseId)) assert.equal(authored.allowed_answers[0].elements.B.status, 'absent');
     if (['T014', 'T016'].includes(caseId)) assert.equal(authored.allowed_answers[0].elements.B.entries.length, 2);

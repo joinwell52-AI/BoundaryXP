@@ -29,6 +29,8 @@ The fixed safety matrix, setup builder, bounded runner and L2 candidate pipeline
 
 Authored-draft progress: `--create-authored` covers all 120 first candidates with bilingual rationale, while IO-only mode remains available. Structural tests cover exact quantity intervals, two explicit dependency cycles and repeated quote location. Complex relations, identity mappings, complete BXP expectations, alternatives and independent review remain incomplete; first drafts are not reviewed gold.
 
+关系增量：4条交接/环境scope用例、11条布尔条件用例已增加作者结构与反事实检查（T112重叠，共14条），不是完成了所有scope或冻结了最终语义评分。 / Relation increment: four handoff/environment-scope cases and eleven Boolean-condition cases now have authored structures and counterfactual checks (14 distinct cases, with T112 overlapping), not complete scope coverage or frozen semantic scoring.
+
 | 项目 / Item | 当前缺口 / Outstanding work |
 |---|---|
 | Codex接入 / Codex transport | 已接通订阅文本候选，需持续维护实验接口兼容性；全局Codex策略仍可能加载，不宣称完全空白上下文 |

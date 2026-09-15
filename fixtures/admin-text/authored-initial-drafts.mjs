@@ -4,6 +4,7 @@ import { authorDomainReviewDraft, DOMAIN_DRAFT_CASE_IDS } from './authored-domai
 import { authorBoundaryReviewDraft, BOUNDARY_DRAFT_CASE_IDS } from './authored-boundary-drafts.mjs';
 import { authorSafetyReviewDraft, SAFETY_DRAFT_CASE_IDS } from './authored-safety-drafts.mjs';
 import { assert } from '../../src/product/contracts.mjs';
+import { addAuthoredRelations } from './authored-relations.mjs';
 
 const identityAnswers = {
   T025: [['e104']], T031: [['dev-01']], T032: [['e101', 'e102']], T033: [['e101']],
@@ -39,5 +40,5 @@ export function authorInitialReviewDraft(input, prepared) {
     }
     draft.author_notes += ' 本例职员引用来自指定快照；共享别名保留全部已标候选。 This case binds employee references from the supplied snapshot and retains all authored alias alternatives.';
   }
-  return draft;
+  return addAuthoredRelations(draft);
 }

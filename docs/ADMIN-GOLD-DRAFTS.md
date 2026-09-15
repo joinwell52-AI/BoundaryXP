@@ -53,6 +53,20 @@ Authored data are linked by category above, with bilingual rationale. These were
 
 Fourteen designated identity cases use explicitly authored employee IDs with full references from the original prepare. Shared aliases retain e101/e102, tenant B uses b101, and disabled-L3 cases omit employee references. Missing identity or mismatched context fails instead of selecting another person. These remain proposed answers, not independent identity-review certification.
 
+### 关系与条件初稿 / Relation and condition drafts
+
+[关系初稿](../fixtures/admin-text/authored-relations.mjs)补充T062/T063/T065/T112的交接或环境scope：条件供给不当作无条件可用，阶段编号不推执行顺序，不同环境禁令不拼成冲突。这里的“交接满足”仅指声明集合匹配，不证明文件已实际产生。
+
+The linked relation drafts cover conditional supply, explicit handoffs and separate environment scopes. Stage numbers do not imply execution order; different environments do not create a flat conflict. A satisfied handoff means declared-set coverage only, not actual file production.
+
+11条条件用例补充有界布尔公式：unless、if/else、only when与例外保留方向，不固定未知条件真值。“批准才能发布”为publish蕴含approved，不误写成approved蕴含publish。反事实测试验证已批准但未发布可满足、未批准却发布不可满足；这些假设只存在于测试副本，不写回作者答案。
+
+Eleven condition cases add bounded Boolean formulas preserving unless, if/else, only-when and exception direction without assuming unknown facts. Publishing requires approval, not vice versa. Counterfactual tests allow approved/nonpublishing and reject unapproved/publishing; test assumptions never modify authored answers.
+
+这些关系仍是待独立审阅的作者表示。SAT见证不是现实状态；尚未覆盖或冻结所有允许替代表示、条件作用域等价规则与诊断期望。两个授权字段始终null。
+
+These remain proposed representations pending independent review. SAT witnesses are not observed states. Alternative answers, conditional-scope equivalence and diagnostic expectations are not all covered or frozen. Both authority fields remain null.
+
 数量组已经包含精确十进制和整数区间、确定性分钟换秒；两个明确循环用例有依赖边；重复引文有前后文定位，POL-1用例引用实际附加原文。测试验证这些结构进入Core后的区间空集、依赖环和码点证据，不自动认证全文解释正确。其余复杂scope、交接、名册引用、允许替代表示、独立诊断与完整BXP预期仍未全部冻结。120条初稿不等于120条金标完成，独立审阅仍为0/120。
 
 Quantity drafts include exact decimal/integer intervals and explicit minute-to-second conversion; two cycle cases include dependency edges. Repeated quotes use context locators, and POL-1 uses actual attachment text. Tests check these computations and codepoint evidence, not complete semantic correctness. Complex scopes, handoffs, directory references, alternative answers, diagnostic expectations and complete BXP expectations are not all frozen. All 120 first drafts remain pending independent review: 0/120 reviewed.
