@@ -10,6 +10,10 @@ examples/semantic-packs含tenant-a 0.1.0/0.2.0与tenant-b 0.1.0虚构目录，�
 
 Customer data stays local. Matching uses edge whitespace trimming and ASCII case folding only; no fuzzy matching, transliteration, Unicode normalization, job-based authorization or cross-tenant identity merging.
 
+同一句证据可以出现多个不同员工。引用中存在某员工独有的姓名或别名时，不因同时出现另一员工而一律判为同名歧义；真正的共享别名仍需消歧或保持未明确。这只核对名册身份依据，不证明谁负责哪个动作，也不产生授权。
+
+A quote may mention several distinct employees. A uniquely identifying name or alias is not rejected merely because another employee appears in the same quote. Shared aliases still require disambiguation or an unresolved state. Identity evidence does not prove action-role assignments or grant authority.
+
 ## CLI创建 / CLI Creation
 
 默认本地数据目录为项目下忽略的.boundx。可由宿主配置BOUNDX_DATA_DIR和BOUNDX_TENANT；不同客户使用独立tenant。示例不使用真实客户数据。

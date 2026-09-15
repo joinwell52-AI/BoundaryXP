@@ -1,7 +1,7 @@
 import { CORE_ELEMENTS, taskSchema, PROTOCOL_VERSION, digest, evaluateBxpTask } from '../bxp/index.mjs';
 import { IDS, assert, validateProduct } from './contracts.mjs';
 import { locateEvidence } from './evidence.mjs';
-import { matchEmployees } from './employees.mjs';
+import { hasUniqueEmployeeMention, matchEmployees } from './employees.mjs';
 
 export function resolveSemanticReference(entries, reference) {
   const { kind, ...identity } = reference;
@@ -38,7 +38,8 @@ export function evaluateCandidate(service, candidateInput, { historical = false 
             const matches = matchEmployees(quotes, directory);
             assert(matches.some(employee => employee.employee_id === item.entry.employee_id), 'IDENTITY_EVIDENCE', 'Directory identity requires source evidence.');
             const explicit = matches.filter(employee => quotes.includes(employee.display_name) || (employee.department && quotes.includes(employee.department)));
-            assert(bucket.status !== 'resolved' || matches.length === 1 || (explicit.length === 1 && explicit[0].employee_id === item.entry.employee_id), 'IDENTITY_AMBIGUOUS', 'Shared alias cannot be silently reduced to a single identity.');
+            assert(bucket.status !== 'resolved' || matches.length === 1 || hasUniqueEmployeeMention(quotes, item.entry, directory)
+              || (explicit.length === 1 && explicit[0].employee_id === item.entry.employee_id), 'IDENTITY_AMBIGUOUS', 'Shared alias cannot be silently reduced to a single identity.');
           }
         }
         if ((entry.candidate_ids?.length ?? 0) > 1) assert(bucket.status === 'unresolved', 'CANDIDATE_AMBIGUOUS', 'Multiple interpretations must remain unresolved.');

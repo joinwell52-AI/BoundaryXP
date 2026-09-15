@@ -47,17 +47,26 @@ export function exportEmployeeCsv(directory) {
   return employeeTemplate() + directory.employees.map(employee => CSV_COLUMNS.map(column => encode(column === 'aliases' ? JSON.stringify(employee.aliases) : employee[column] ?? '')).join(',')).join('\r\n') + '\r\n';
 }
 export const normalizeAlias = value => value.trim().replace(/[A-Z]/g, char => char.toLowerCase());
+function containsAlias(source, alias) {
+  const normalized = normalizeAlias(alias);
+  let start = source.indexOf(normalized);
+  while (start >= 0) {
+    const before = source[start - 1] ?? '';
+    const after = source[start + normalized.length] ?? '';
+    if ((!/^[a-z0-9]/.test(normalized) || !/[a-z0-9-]/.test(before)) && (!/[a-z0-9]$/.test(normalized) || !/[a-z0-9-]/.test(after))) return true;
+    start = source.indexOf(normalized, start + 1);
+  }
+  return false;
+}
 export function matchEmployees(text, directory) {
   const source = normalizeAlias(text);
-  return directory.employees.filter(employee => [employee.display_name, ...employee.aliases].some(alias => {
-    const normalized = normalizeAlias(alias);
-    let start = source.indexOf(normalized);
-    while (start >= 0) {
-      const before = source[start - 1] ?? '';
-      const after = source[start + normalized.length] ?? '';
-      if ((!/^[a-z0-9]/.test(normalized) || !/[a-z0-9-]/.test(before)) && (!/[a-z0-9]$/.test(normalized) || !/[a-z0-9-]/.test(after))) return true;
-      start = source.indexOf(normalized, start + 1);
-    }
-    return false;
-  }));
+  return directory.employees.filter(employee => [employee.display_name, ...employee.aliases].some(alias => containsAlias(source, alias)));
+}
+export function hasUniqueEmployeeMention(text, employee, directory) {
+  const source = normalizeAlias(text);
+  return [employee.display_name, ...employee.aliases].some(alias => {
+    if (!containsAlias(source, alias)) return false;
+    const matches = matchEmployees(alias, directory);
+    return matches.length === 1 && matches[0].employee_id === employee.employee_id;
+  });
 }
