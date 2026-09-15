@@ -7,6 +7,7 @@ import { CORE_ELEMENTS, sourceDigest } from '../bxp/index.mjs';
 import { acceptancePlan, recordAcceptanceRun, summarizeAcceptanceRuns } from '../product/acceptance-run.mjs';
 import { createCaseScenario, SETUPS } from '../../fixtures/admin-text/scenarios.mjs';
 import { acceptanceOptions, executeAcceptanceBatch, loadAcceptancePlan } from '../../scripts/run-admin-acceptance.mjs';
+import { ModelTransportError } from '../product/model-errors.mjs';
 
 const plan = loadAcceptancePlan();
 const config = { provider: 'cursor', model: 'mock-model', key: 'synthetic-test-secret-not-a-credential' };
@@ -18,6 +19,46 @@ function candidate(prepared) {
     producer: { producer_kind: 'host-ai', adapter_version: '0.1.0', model_id: 'unknown' }, clarifications: [] };
 }
 const respond = async (config, messages) => ({ text: JSON.stringify(candidate(JSON.parse(messages[1].content))), model: 'actual-mock-model' });
+
+for (const code of ['MODEL_QUOTA', 'MODEL_AUTH', 'MODEL_UNAVAILABLE']) test(`batch stops after ${code} without dropping the failed record`, async () => {
+  const root = mkdtempSync(join(tmpdir(), 'boundx-provider-stop-'));
+  try {
+    let calls = 0;
+    const summary = await executeAcceptanceBatch(plan, { execute: true, authorizedSyntheticData: true, maxRuns: 2,
+      config: { provider: 'codex', model: 'subscription-fixture', key: '' } }, { base: root, sendModel: async () => {
+      calls++;
+      throw new ModelTransportError(code);
+    } });
+    assert.equal(calls, 1);
+    assert.equal(summary.execution_status, 'PROVIDER_BLOCKED');
+    assert.deepEqual(summary.provider_stop, { run_id: 'T001-1', code });
+    assert.equal(summary.requested_initial_runs, 2);
+    assert.equal(summary.records, 1);
+    assert.equal(summary.missing_or_incomplete_runs, 150);
+    assert.equal(summary.live_outputs_recorded, 0);
+    assert.equal(existsSync(join(summary.output, 'T002-1')), false);
+    const record = JSON.parse(readFileSync(join(summary.output, 'T001-1', 'record.json'), 'utf8'));
+    assert.equal(record.status, 'REJECTED');
+    assert.equal(record.evaluation.diagnostics[0].code, code);
+    assert.equal(record.raw_candidate, null);
+    assert.deepEqual(JSON.parse(readFileSync(join(summary.output, 'summary.json'), 'utf8')), summary);
+  } finally { rmSync(root, { recursive: true, force: true }); }
+});
+
+test('invalid model JSON does not block the following scheduled case', async () => {
+  const root = mkdtempSync(join(tmpdir(), 'boundx-candidate-rejection-'));
+  try {
+    let calls = 0;
+    const summary = await executeAcceptanceBatch(plan, { execute: true, authorizedSyntheticData: true, maxRuns: 2, config },
+      { base: root, sendModel: async (...args) => ++calls === 1 ? { text: 'not JSON', model: 'mock-model' } : respond(...args) });
+    assert.equal(calls, 2);
+    assert.equal(summary.execution_status, 'FINISHED_REQUESTED_BATCH');
+    assert.equal(summary.provider_stop, null);
+    assert.equal(summary.records, 2);
+    assert.equal(JSON.parse(readFileSync(join(summary.output, 'T001-1', 'record.json'), 'utf8')).status, 'REJECTED');
+    assert.equal(JSON.parse(readFileSync(join(summary.output, 'T002-1', 'record.json'), 'utf8')).status, 'COMPUTED');
+  } finally { rmSync(root, { recursive: true, force: true }); }
+});
 
 test('v2 plan has 120 originals and the exact 30 repeat IDs without manufacturing gold', () => {
   assert.equal(plan.runs.length, 150);

@@ -76,6 +76,7 @@ export async function executeAcceptanceBatch(plan, options, { base = join(reposi
   let transport = sendModel;
   if (!transport) transport = options.config.provider === 'cursor' ? callCursor : options.config.provider === 'codex' ? callCodex : callHttpModel;
   let failure = false;
+  let providerStop = null;
   let activeRun;
   try {
     for (const run of plan.runs.slice(0, options.maxRuns)) {
@@ -89,6 +90,11 @@ export async function executeAcceptanceBatch(plan, options, { base = join(reposi
       records.push({ run_id, case_id, language, category, status, mode, provider_attempts, raw_candidate_recorded, repeat_signature, deterministic_replay });
       activeRun = null;
       atomicRecord(join(output, 'summary.json'), summarizeAcceptanceRuns(records));
+      const blocked = record.evaluation?.diagnostics?.find(diagnostic => ['MODEL_QUOTA', 'MODEL_AUTH', 'MODEL_UNAVAILABLE'].includes(diagnostic.code));
+      if (blocked) {
+        providerStop = { run_id, code: blocked.code };
+        break;
+      }
     }
   } catch {
     failure = true;
@@ -100,7 +106,8 @@ export async function executeAcceptanceBatch(plan, options, { base = join(reposi
     deterministic_replay: Object.fromEntries(['MATCHED', 'MISMATCH', 'NOT_APPLICABLE', 'UNAVAILABLE'].map(status =>
       [status, records.filter(record => (record.deterministic_replay?.status ?? 'UNAVAILABLE') === status).length])),
     incomplete_records: records.filter(record => record.status === 'INCOMPLETE_RECORD').map(record => record.run_id),
-    execution_status: failure ? 'RECORDING_OR_SETUP_FAILED' : signal?.aborted ? 'CANCELLED' : 'FINISHED_REQUESTED_BATCH', output };
+    provider_stop: providerStop,
+    execution_status: failure ? 'RECORDING_OR_SETUP_FAILED' : providerStop ? 'PROVIDER_BLOCKED' : signal?.aborted ? 'CANCELLED' : 'FINISHED_REQUESTED_BATCH', output };
   atomicRecord(join(output, 'summary.json'), summary);
   return summary;
 }
