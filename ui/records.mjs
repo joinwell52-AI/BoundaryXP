@@ -10,6 +10,13 @@ export function draftPlan(value){
   return {document:draftDocument(value.document),tasks:value.tasks.map(t=>{if(typeof t.id!=='string'||t.id.length>512||!Array.isArray(t.depends_on)||t.depends_on.length>64||t.depends_on.some(x=>typeof x!=='string'||x.length>512))throw Error('派单草案结构无效。');return {id:t.id,depends_on:t.depends_on,document:draftDocument(t.document)};})};
 }
 
+export function restoreContextPreferences(value,installed,active){
+  if(!value||Object.keys(value).some(key=>!['industry','directory'].includes(key))||[value.industry,value.directory].some(digest=>typeof digest!=='string'||(digest!==''&&!/^[a-f0-9]{64}$/.test(digest))))throw Error('语义配置无效 / Invalid context preferences');
+  const available=(digest,layer)=>!digest||installed.some(pack=>pack.layer===layer&&pack.digest===digest&&(layer!=='L3'||active.some(reference=>reference.digest===digest)));
+  const valid=available(value.industry,'L2')&&available(value.directory,'L3');
+  return {industry:available(value.industry,'L2')?value.industry:'',directory:available(value.directory,'L3')?value.directory:'',valid};
+}
+
 export function createBxpResultState(){
   let revision=0,current=null;
   return {

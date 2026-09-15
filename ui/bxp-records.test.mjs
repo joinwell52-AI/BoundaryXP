@@ -1,8 +1,24 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { createBxpResultState } from './records.mjs';
+import { createBxpResultState, restoreContextPreferences } from './records.mjs';
 
 const result=()=>({schema:'boundx-producer-result/v1',computed:true,report:'原文😀\r\nEnglish',task:{source:{text:'原文😀\r\nEnglish'}},result:{business_decision:null,execution_authorization:null},config:{key:'never-export'}});
+
+test('context preferences restore exact installed versions without activating them',()=>{
+ const installed=[{layer:'L2',digest:'a'.repeat(64)},{layer:'L3',digest:'b'.repeat(64)}],active=[{digest:'b'.repeat(64)}];
+ const before=JSON.stringify({installed,active});
+ assert.deepEqual(restoreContextPreferences({industry:'a'.repeat(64),directory:'b'.repeat(64)},installed,active),{industry:'a'.repeat(64),directory:'b'.repeat(64),valid:true});
+ assert.equal(JSON.stringify({installed,active}),before);
+});
+test('missing or inactive directory blocks restore instead of silently choosing another version',()=>{
+ const selection={industry:'a'.repeat(64),directory:'b'.repeat(64)};
+ assert.equal(restoreContextPreferences(selection,[{layer:'L2',digest:'c'.repeat(64)}],[]).valid,false);
+ assert.equal(restoreContextPreferences(selection,[{layer:'L2',digest:selection.industry},{layer:'L3',digest:selection.directory}],[]).valid,false);
+ assert.deepEqual(restoreContextPreferences({industry:'',directory:''},[],[]),{industry:'',directory:'',valid:true});
+});
+test('context preferences reject arbitrary payloads and malformed identities',()=>{
+ for(const value of [{industry:'invalid',directory:''},{industry:'',directory:'',employees:[]},null])assert.throws(()=>restoreContextPreferences(value,[],[]));
+});
 
 test('BXP exports exact report and independent task/result, not configuration',()=>{
  const state=createBxpResultState(),value=result();

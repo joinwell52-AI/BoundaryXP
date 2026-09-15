@@ -4,7 +4,7 @@ import { packLabel } from './pack-labels.mjs';
 import {originalBoundary,withEngineAdvice} from './admin-boundary.mjs';
 import {adminAdviceLayers} from './advice.mjs';
 import { checkAdminText } from './admin-check.mjs';
-import { draftDocument, draftPlan, createBxpResultState } from './records.mjs';
+import { draftDocument, draftPlan, createBxpResultState, restoreContextPreferences } from './records.mjs';
 import { createConnectionState, resolveEndpoint, modelPreferences } from './connection.mjs';
 import { adminAdvice, planAdvice, planAssignments, conclusion, completeTask } from './advice.mjs';
 import { createLocale, registerPair, selectCopy } from './i18n.mjs';
@@ -109,7 +109,7 @@ $('test-connection').onclick=action(async()=>{
 let bxpPacks={installed:[],active:[]};
 const bxpPanel=element('section',undefined,'panel');
 bxpPanel.id='bxp-context';
-bxpPanel.append(localized(element('h2'),'03 · 选择语义上下文','03 · Select semantic context'));
+bxpPanel.append(localized(element('h2'),'语义包设置','Semantic package settings'));
 bxpPanel.append(localized(element('p'),'点击开始分析后，将原文和所选语义上下文发送给模型；随后在本地验证、计算，不执行任务。','Start analysis sends source text and selected context to the model, followed by local validation and calculation. No task execution.'));
 bxpPanel.append(localized(element('p'),'默认L1，可选L2行业及已启用L3名册；L3外发还需服务器授权。准备快照保存在本地，名册默认不选择。','Default L1 with optional L2 industry and active L3 directory; L3 disclosure also requires server authorization. Prepared snapshots are saved locally. No directory is selected by default.'));
 const packageLink=element('a');packageLink.href='/admin';localized(packageLink,'打开语义包管理','Open semantic package management');bxpPanel.append(packageLink);
@@ -117,6 +117,15 @@ const industrySelect=element('select');industrySelect.id='bxp-industry';
 const industryLabel=localized(element('label'),'行业包（先导入，再确认启用）','Industry package (install, then explicitly activate)');industryLabel.append(industrySelect);bxpPanel.append(industryLabel);
 const directorySelect=element('select');directorySelect.id='bxp-directory';
 const directoryLabel=localized(element('label'),'职员目录（可选，须先在管理页启用）','Employee directory (optional; activate in management first)');directoryLabel.append(directorySelect);bxpPanel.append(directoryLabel);
+const contextPreferenceKey='boundx-context-preferences-v1';let contextPreferencesInvalid=false;
+const contextPreferenceStatus=element('p');contextPreferenceStatus.setAttribute('role','status');
+const saveContext=button(undefined,action(async()=>{
+ const value={industry:industrySelect.value,directory:directorySelect.value};
+ if(!restoreContextPreferences(value,bxpPacks.installed,bxpPacks.active).valid)throw Error('请重新选择有效的语义包 / Select valid packages');
+ localStorage.setItem(contextPreferenceKey,JSON.stringify(value));contextPreferencesInvalid=false;
+ setText(contextPreferenceStatus,'已保存行业和名册选择；不保存名册内容，不新增外发授权。 / Selections saved, without directory content or new disclosure consent.');
+}));localized(saveContext,'保存语义包设置','Save package settings');
+const forgetContext=button(undefined,action(async()=>{localStorage.removeItem(contextPreferenceKey);contextPreferencesInvalid=false;setText(contextPreferenceStatus,'已忘记保存的选择，当前选择保留。 / Saved selections removed; current selection retained.');}));localized(forgetContext,'忘记语义包设置','Forget package settings');
 const bxpReport=element('div');bxpReport.id='bxp-model-result';
 const bxpResultPanel=element('section',undefined,'panel');bxpResultPanel.id='bxp-result-panel';bxpResultPanel.hidden=true;
 bxpResultPanel.append(localized(element('h2'),'04 · 分析结果','04 · Analysis results'));
@@ -135,6 +144,8 @@ const refreshPacks=button(undefined,action(async()=>{
  for(const pack of bxpPacks.installed.filter(pack=>pack.layer==='L2')){const option=element('option');option.textContent=packLabel(pack);option.title=`${pack.pack_id}@${pack.version}`;option.value=pack.digest;industrySelect.append(option);}
  directorySelect.replaceChildren();const noDirectory=element('option');noDirectory.value='';noDirectory.textContent='不使用职员目录 / No employee directory';directorySelect.append(noDirectory);
  for(const pack of bxpPacks.installed.filter(pack=>pack.layer==='L3'&&bxpPacks.active.some(reference=>reference.digest===pack.digest))){const option=element('option');option.value=pack.digest;option.textContent=packLabel(pack);directorySelect.append(option);}
+ try{const raw=localStorage.getItem(contextPreferenceKey);if(raw){const restored=restoreContextPreferences(JSON.parse(raw),bxpPacks.installed,bxpPacks.active);industrySelect.value=restored.industry;directorySelect.value=restored.directory;contextPreferencesInvalid=!restored.valid;setText(contextPreferenceStatus,restored.valid?'已恢复语义包选择；启用状态及外发授权仍由服务器检查。 / Selections restored; activation and disclosure remain server-checked.':'保存的包已缺失或名册未启用，请重新选择并保存；分析已暂停。 / Saved package unavailable; reselect and save before analysis.');}}
+ catch{contextPreferencesInvalid=true;setText(contextPreferenceStatus,'无法恢复语义设置，请重新选择并保存。 / Cannot restore settings; reselect and save.');}
  bxpReport.textContent='';
 }));localized(refreshPacks,'加载/刷新本地语义包','Reload local semantic packages');
 const activateIndustry=button(undefined,action(async()=>{
@@ -147,6 +158,7 @@ const extractBxp=button(undefined,action(async()=>{
  const ticket=clearBxpResult();
  try{
  if(connection.status!=='connected')throw Error('请先测试模型连接。 / Test the model connection first.');
+ if(contextPreferencesInvalid){$('settings').hidden=false;throw Error('请核对并重新保存语义包设置 / Review and save package settings first');}
  const text=textRequired('task-source'),selected=industrySelect.value,directory=directorySelect.value;
  bxpResultPanel.hidden=false;
  bxpReport.textContent='正在抽取；尚未计算。 / Extracting; not yet calculated.';
@@ -167,6 +179,7 @@ const extractBxp=button(undefined,action(async()=>{
 }));extractBxp.id='extract-bxp-task';extractBxp.disabled=true;localized(extractBxp,'用模型抽取7+1并计算','Extract 7+1 with model and calculate');
 extractBxp.classList.add('primary');setText(extractBxp,'开始分析：抽取7+1并计算 / Start analysis');
 const bxpButtons=element('div',undefined,'buttons');bxpButtons.append(refreshPacks,activateIndustry);bxpPanel.append(bxpButtons);
+const contextSaveButtons=element('div',undefined,'buttons');contextSaveButtons.append(saveContext,forgetContext);bxpPanel.append(contextSaveButtons,contextPreferenceStatus);
 const bxpRun=element('section');bxpRun.id='bxp-run';
 bxpRun.append(extractBxp,localized(element('p'),'使用上方原文、模型和语义上下文进行分析，不执行任务。','Analyze the source using the selected model and context; never execute the task.'));
 bxpResultPanel.append(bxpReport,bxpDownloads);
@@ -175,13 +188,15 @@ legacyResearch.append(localized(element('summary'),'旧规则研究工具（已�
 for(const node of [$('extract-task').parentElement,$('admin-advice'),$('task-editor').closest('details')])legacyResearch.append(node);
 const legacyHint=$('task-source').nextElementSibling;if(legacyHint?.classList.contains('hint'))legacyResearch.prepend(legacyHint);
 $('page-task').append(legacyResearch);
-$('task-source').after(bxpPanel,bxpRun,bxpResultPanel);
-$('settings').hidden=false;
+$('settings').append(bxpPanel);
+$('task-source').after(bxpRun,bxpResultPanel);
+$('settings').hidden=true;
+setText($('settings-toggle'),'设置 / Settings');
 setText($('settings').querySelector('h2'),'01 · 模型设置 / Model settings');
-setText($('page-task').querySelector('h2'),'02 · 输入任务原文 / Enter task text');
+setText($('page-task').querySelector('h2'),'输入任务原文 / Enter task text');
 const main=document.querySelector('main'),intro=main.querySelector('.intro');
 setText(intro.querySelector('h1'),'任务边界分析 / Task boundary analysis');
-setText(intro.querySelector('p'),'设置模型 → 输入原文 → 选择语义包 → 开始分析 → 查看结果 / Configure → Write → Select context → Analyze → Results');
+setText(intro.querySelector('p'),'首次使用请打开设置，配置模型和语义包。之后输入原文，开始分析。 / Configure model and packages in Settings, then enter text and analyze.');
 main.prepend(intro);
 const legacyWorkspace=element('details');legacyWorkspace.id='legacy-workspace';
 legacyWorkspace.append(localized(element('summary'),'旧版研究与PM工具（已弃用）','Legacy research and PM tools (deprecated)'));
