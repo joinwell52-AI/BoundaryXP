@@ -5,7 +5,7 @@ import {originalBoundary,withEngineAdvice} from './admin-boundary.mjs';
 import {adminAdviceLayers} from './advice.mjs';
 import { checkAdminText } from './admin-check.mjs';
 import { draftDocument, draftPlan, createBxpResultState } from './records.mjs';
-import { createConnectionState, resolveEndpoint } from './connection.mjs';
+import { createConnectionState, resolveEndpoint, modelPreferences } from './connection.mjs';
 import { adminAdvice, planAdvice, planAssignments, conclusion, completeTask } from './advice.mjs';
 import { createLocale, registerPair, selectCopy } from './i18n.mjs';
 import { localTaskProjection, prohibitedActions } from './local-task.mjs';
@@ -61,6 +61,7 @@ const cursorCatalog=element('select');cursorCatalog.id='cursor-model-catalog';cu
 cursorCatalog.setAttribute('aria-label','可用模型 / Available models');
 const catalogStatus=element('span');catalogStatus.setAttribute('role','status');catalogStatus.hidden=true;
 let catalogRevision=0;
+let restoredModel='';
 cursorCatalog.onchange=()=>{$('model').value=cursorCatalog.value;invalidateConnection();};
 const loadCursorModels=button(undefined,action(async()=>{
  const revision=++catalogRevision,provider=providerSelect.value;
@@ -72,7 +73,10 @@ const loadCursorModels=button(undefined,action(async()=>{
  if(revision!==catalogRevision||providerSelect.value!==provider)return;
  if(!Array.isArray(result.models)||!result.models.length)throw Error('没有可用模型，请检查登录后刷新。 / No models available; check sign-in and refresh.');
  for(const model of result.models){const option=element('option');option.value=model.id;option.textContent=model.name+' · '+model.id;cursorCatalog.append(option);}
+ const preferred=restoredModel;restoredModel='';
+ if(preferred){cursorCatalog.value=result.models.some(model=>model.id===preferred)?preferred:'';}
  cursorCatalog.disabled=false;$('model').value=cursorCatalog.value;invalidateConnection();
+ if(preferred&&!cursorCatalog.value){setText(catalogStatus,'已保存的模型不在当前列表，请重新选择。 / Saved model unavailable; select another.');return;}
  setText(catalogStatus,'请选择模型，然后测试连接。 / Select a model, then test the connection.');
  }catch(error){if(revision===catalogRevision){cursorCatalog.disabled=true;setText(catalogStatus,error.message);}throw error;}
 }));localized(loadCursorModels,'刷新模型列表','Refresh models');loadCursorModels.hidden=true;
@@ -85,6 +89,15 @@ function connectedConfig(){if(connection.status!=='connected')throw Error('请�
 function invalidateConnection(){connection.invalidate();connectionDisplay('配置已变更，请重新测试。绿色状态不会保存或从记录恢复。');}
 for(const id of ['protocol','url','model','key','disable-thinking'])for(const event of ['input','change'])$(id).addEventListener(event,invalidateConnection);
 $('clear-key').addEventListener('click',invalidateConnection);
+const preferenceKey='boundx-model-preferences-v1';
+const preferenceStatus=element('p');preferenceStatus.setAttribute('role','status');
+const savePreferences=button(undefined,action(async()=>{
+ const value=modelPreferences(config());
+ try{localStorage.setItem(preferenceKey,JSON.stringify(value));}catch{throw Error('浏览器无法保存设置 / Browser storage unavailable');}
+ setText(preferenceStatus,'模型设置已保存在当前浏览器和地址；不含密钥、任务原文和连接状态。 / Saved for this browser and address; excludes keys, task text and connection status.');
+}));localized(savePreferences,'保存模型设置','Save model settings');
+const forgetPreferences=button(undefined,action(async()=>{localStorage.removeItem(preferenceKey);restoredModel='';setText(preferenceStatus,'已删除保存的设置；当前页面配置保留。 / Saved settings removed; current configuration retained.');}));localized(forgetPreferences,'忘记保存的设置','Forget saved settings');
+const preferenceButtons=element('div',undefined,'buttons');preferenceButtons.append(savePreferences,forgetPreferences);$('settings').append(preferenceButtons,preferenceStatus);
 $('test-connection').onclick=action(async()=>{
   const ticket=connection.begin();connectionDisplay('正在发送短文本测试，不发送任务正文。');
   try{
@@ -175,7 +188,16 @@ legacyWorkspace.append(localized(element('summary'),'旧版研究与PM工具（�
 const historyDetails=$('history').closest('details');
 legacyWorkspace.append(legacyResearch,main.querySelector('nav'),$('page-plan'),$('page-results'),main.querySelector('.storage'),historyDetails);
 main.append(legacyWorkspace);
-refreshPacks.click();
+async function initializeModelPreferences(){
+ await refreshPacks.onclick();
+ let saved;
+ try{const raw=localStorage.getItem(preferenceKey);if(!raw)return;saved=modelPreferences(JSON.parse(raw));}catch{setText(preferenceStatus,'保存的配置不可用，请重新设置。 / Saved settings unavailable; configure again.');return;}
+ providerSelect.value=saved.provider;restoredModel=saved.model;providerSelect.onchange();
+ if(saved.provider==='api'){for(const id of ['protocol','url','model'])$(id).value=saved[id];$('disable-thinking').checked=saved.disableThinking;restoredModel='';}
+ else if(saved.provider==='cursor')await loadCursorModels.onclick();
+ setText(preferenceStatus,'已恢复模型设置；请测试连接。不会自动发送任务。 / Settings restored; test the connection. No task is sent automatically.');
+}
+initializeModelPreferences();
 for(const node of [$('task-source'),industrySelect,directorySelect])node.addEventListener('input',()=>{clearBxpResult();bxpReport.textContent='输入已变化，请重新计算。 / Input changed; recalculate.';});
 function audit(kind,detail){state.history.push({time:new Date().toISOString(),kind,detail});$('history').textContent=state.history.map(x=>`${x.time} · ${x.kind} · ${x.detail}`).join('\n');}
 function markDraft(kind){$(kind==='task'?'confirm-check':'plan-check').checked=false;}
