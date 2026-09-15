@@ -39,6 +39,10 @@ An explicit 1–150 bound and data authorization are mandatory. Execution may in
 
 This acceptance uses Codex subscription authentication, an explicit available model ID and no API key or Cursor fallback. Authentication, quota and unavailable-model errors stop subsequent dispatch with `PROVIDER_BLOCKED`; `provider_stop` contains only the run ID and safe code. Failed records and the fixed 150-run denominator remain. Invalid candidate JSON does not stop the next scheduled case or trigger retries.
 
+中断后可以显式使用 `--start-at 42 --max-runs 109` 运行固定计划的第42至150项；编号121至150对应原定30条复测，不是新原文。分段始终创建新目录，保留旧记录，不自动重试中断项、覆盖或合并旧结果。每段仍报告150项分母及本段起点/数量；完成一个分段不代表完整验收。汇总必须逐运行ID核对重复、缺失、实现版本及中断记录，不能简单相加成功数。
+
+After interruption, an explicit `--start-at 42 --max-runs 109` runs schedule positions 42–150 in a new directory. Positions 121–150 are the fixed repeat cases. Previous artifacts remain untouched; interrupted calls are not automatically retried or counted as completed. Segment summaries retain the 150-slot denominator and declared range. Combined reporting must account for duplicates, missing runs, implementation revisions and interruptions, not simply add success totals.
+
 ## 场景与记录 / Setups and records
 
 每次运行使用独立Registry；支持全部12种任务书setup，包括关闭L3、仅L1、tenant-b、prepare后切换名册、真实附加POL-1、缺附件及版本错配。恶意包文本位于虚构名册的合法岗位/别名字段，仅作为数据提供；不改变原文或生产者规则。

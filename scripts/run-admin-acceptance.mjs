@@ -24,10 +24,12 @@ export function acceptanceOptions(args, env) {
   const values = {};
   for (let index = 0; index < args.length; index++) {
     const key = args[index];
-    if (!['--execute', '--authorize-synthetic-data', '--max-runs'].includes(key) || Object.hasOwn(values, key)) throw Error('Invalid or duplicate option.');
-    values[key] = key === '--max-runs' ? args[++index] : true;
+    if (!['--execute', '--authorize-synthetic-data', '--max-runs', '--start-at'].includes(key) || Object.hasOwn(values, key)) throw Error('Invalid or duplicate option.');
+    values[key] = ['--max-runs', '--start-at'].includes(key) ? args[++index] : true;
   }
   if (!values['--execute'] || !values['--authorize-synthetic-data'] || !/^(?:[1-9]|[1-9][0-9]|1[0-4][0-9]|150)$/.test(values['--max-runs'] ?? '')) throw Error('Execution requires explicit synthetic-data authorization and --max-runs 1..150.');
+  const startAt = values['--start-at'] ?? '1';
+  if (!/^(?:[1-9]|[1-9][0-9]|1[0-4][0-9]|150)$/.test(startAt) || Number(startAt) + Number(values['--max-runs']) > 151) throw Error('Requested segment exceeds the fixed schedule.');
   const provider = env.BOUNDX_MODEL_PROVIDER;
   const model = env.BOUNDX_MODEL_ID ?? (provider === 'cursor' ? env.CURSOR_DEFAULT_MODEL : undefined);
   const key = provider === 'codex' ? '' : provider === 'cursor' ? env.CURSOR_API_KEY : env.BOUNDX_MODEL_API_KEY;
@@ -38,7 +40,7 @@ export function acceptanceOptions(args, env) {
     config.protocol = env.BOUNDX_MODEL_PROTOCOL;
     config.url = resolveEndpoint(env.BOUNDX_MODEL_URL, config.protocol).url;
   }
-  return { execute: true, authorizedSyntheticData: true, maxRuns: Number(values['--max-runs']), config };
+  return { execute: true, authorizedSyntheticData: true, maxRuns: Number(values['--max-runs']), startAt: Number(startAt), config };
 }
 
 function ensureDirectory(path) {
@@ -55,6 +57,8 @@ export function atomicRecord(path, value) {
 
 export async function executeAcceptanceBatch(plan, options, { base = join(repository, '.boundx'), sendModel, signal } = {}) {
   if (options.execute !== true || options.authorizedSyntheticData !== true || !Number.isInteger(options.maxRuns) || options.maxRuns < 1 || options.maxRuns > 150) throw Error('Explicit bounded execution and data authorization are required.');
+  const startAt = options.startAt ?? 1;
+  if (!Number.isInteger(startAt) || startAt < 1 || startAt + options.maxRuns > 151) throw Error('Requested segment exceeds the fixed schedule.');
   const schedule = [...Array.from({ length: 120 }, (_, index) => `T${String(index + 1).padStart(3, '0')}-1`),
     ...[1, 31, 111].flatMap(start => Array.from({ length: 10 }, (_, index) => `T${String(start + index).padStart(3, '0')}-2`))];
   if (plan.schema !== 'boundx-acceptance-plan/v1' || !Array.isArray(plan.runs) || plan.runs.length !== 150
@@ -72,14 +76,14 @@ export async function executeAcceptanceBatch(plan, options, { base = join(reposi
   mkdirSync(output);
   atomicRecord(join(output, 'plan.json'), plan);
   const records = [];
-  atomicRecord(join(output, 'summary.json'), { ...summarizeAcceptanceRuns(records), execution_status: 'IN_PROGRESS' });
+  atomicRecord(join(output, 'summary.json'), { ...summarizeAcceptanceRuns(records), requested_start_at: startAt, requested_initial_runs: options.maxRuns, execution_status: 'IN_PROGRESS' });
   let transport = sendModel;
   if (!transport) transport = options.config.provider === 'cursor' ? callCursor : options.config.provider === 'codex' ? callCodex : callHttpModel;
   let failure = false;
   let providerStop = null;
   let activeRun;
   try {
-    for (const run of plan.runs.slice(0, options.maxRuns)) {
+    for (const run of plan.runs.slice(startAt - 1, startAt - 1 + options.maxRuns)) {
       if (signal?.aborted) break;
       activeRun = run;
       const runRoot = join(output, run.run_id);
@@ -89,7 +93,7 @@ export async function executeAcceptanceBatch(plan, options, { base = join(reposi
       const { run_id, case_id, language, category, status, mode, provider_attempts, raw_candidate_recorded, repeat_signature, deterministic_replay } = record;
       records.push({ run_id, case_id, language, category, status, mode, provider_attempts, raw_candidate_recorded, repeat_signature, deterministic_replay });
       activeRun = null;
-      atomicRecord(join(output, 'summary.json'), summarizeAcceptanceRuns(records));
+      atomicRecord(join(output, 'summary.json'), { ...summarizeAcceptanceRuns(records), requested_start_at: startAt, requested_initial_runs: options.maxRuns, execution_status: 'IN_PROGRESS' });
       const blocked = record.evaluation?.diagnostics?.find(diagnostic => ['MODEL_QUOTA', 'MODEL_AUTH', 'MODEL_UNAVAILABLE'].includes(diagnostic.code));
       if (blocked) {
         providerStop = { run_id, code: blocked.code };
@@ -101,7 +105,7 @@ export async function executeAcceptanceBatch(plan, options, { base = join(reposi
     if (activeRun) records.push({ run_id: activeRun.run_id, case_id: activeRun.case_id, language: activeRun.seed.language, category: activeRun.seed.category,
       setup: activeRun.seed.setup, mode: sendModel ? 'mock' : 'live', provider_attempts: 0, status: 'INCOMPLETE_RECORD', diagnostic: 'RECORDING_OR_SETUP_FAILED' });
   }
-  const summary = { ...summarizeAcceptanceRuns(records), requested_initial_runs: options.maxRuns,
+  const summary = { ...summarizeAcceptanceRuns(records), requested_start_at: startAt, requested_initial_runs: options.maxRuns,
     repeats: summarizeRepeats(records, plan),
     deterministic_replay: Object.fromEntries(['MATCHED', 'MISMATCH', 'NOT_APPLICABLE', 'UNAVAILABLE'].map(status =>
       [status, records.filter(record => (record.deterministic_replay?.status ?? 'UNAVAILABLE') === status).length])),

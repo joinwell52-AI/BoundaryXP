@@ -166,6 +166,26 @@ test('CLI defaults offline and requires explicit data authorization and a bounde
   assert.equal(options.authorizedSyntheticData, true);
 });
 
+test('explicit segment keeps original run identity and never fills skipped slots', async () => {
+  const root = mkdtempSync(join(tmpdir(), 'boundx-segment-'));
+  try {
+    const options = acceptanceOptions(['--execute', '--authorize-synthetic-data', '--max-runs', '1', '--start-at', '42'],
+      { BOUNDX_MODEL_PROVIDER: 'codex', BOUNDX_MODEL_ID: 'subscription-fixture' });
+    const summary = await executeAcceptanceBatch(plan, options, { base: root, sendModel: respond });
+    assert.equal(summary.requested_start_at, 42);
+    assert.equal(summary.requested_initial_runs, 1);
+    assert.equal(summary.records, 1);
+    assert.equal(summary.missing_or_incomplete_runs, 150);
+    assert.equal(summary.execution_status, 'FINISHED_REQUESTED_BATCH');
+    assert.equal(existsSync(join(summary.output, 'T001-1')), false);
+    assert.equal(existsSync(join(summary.output, 'T041-1')), false);
+    assert.equal(JSON.parse(readFileSync(join(summary.output, 'T042-1', 'record.json'), 'utf8')).run_id, 'T042-1');
+    for (const startAt of [0, -1, 1.5, 151]) await assert.rejects(executeAcceptanceBatch(plan, { ...options, startAt }, { base: root, sendModel: respond }));
+    for (const start of ['0', '01', '151', '1.5']) assert.throws(() => acceptanceOptions(['--execute', '--authorize-synthetic-data', '--max-runs', '1', '--start-at', start], {}));
+    assert.throws(() => acceptanceOptions(['--execute', '--authorize-synthetic-data', '--max-runs', '2', '--start-at', '150'], {}));
+  } finally { rmSync(root, { recursive: true, force: true }); }
+});
+
 test('Cursor default model applies only when an explicit model is absent', () => {
   const args = ['--execute', '--authorize-synthetic-data', '--max-runs', '1'];
   const env = { BOUNDX_MODEL_PROVIDER: 'cursor', CURSOR_DEFAULT_MODEL: 'auto-smart', CURSOR_API_KEY: config.key };
