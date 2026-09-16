@@ -1,7 +1,15 @@
 <p align="center">
-  <img src="assets/branding/v1/BoundX_Logo_EN_transparent.png" alt="BoundX" width="440">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="assets/branding/v1/BoundX_Logo_EN_white.png">
+    <source media="(prefers-color-scheme: light)" srcset="assets/branding/v1/BoundX_Logo_EN_transparent.png">
+    <img src="assets/branding/v1/BoundX_Logo_EN_transparent.png" alt="BoundX" width="440">
+  </picture>
   <br>
-  <img src="assets/branding/v1/BoundX_Logo_CN_JieHen_transparent.png" alt="界痕" width="320">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="assets/branding/v1/BoundX_Logo_CN_JieHen_white.png">
+    <source media="(prefers-color-scheme: light)" srcset="assets/branding/v1/BoundX_Logo_CN_JieHen_transparent.png">
+    <img src="assets/branding/v1/BoundX_Logo_CN_JieHen_transparent.png" alt="界痕" width="320">
+  </picture>
 </p>
 
 # 界痕 · BoundX
@@ -246,9 +254,11 @@ CLI / MCP 基础能力
 完整产品 Logo 已保存在 [`assets/branding/v1/`](assets/branding/v1/)：
 
 - `BoundX_Logo_EN_transparent.png` — 图标 + BoundX
+- `BoundX_Logo_EN_white.png` — 深色模式版本
 - `BoundX_Logo_CN_JieHen_transparent.png` — 图标 + 界痕
+- `BoundX_Logo_CN_JieHen_white.png` — 深色模式版本
 - `BoundX_Icon_transparent.png` — 仅图标
-- 白底/深色背景版本与 Logo Pack 也保留在品牌目录中
+- 完整 Logo Pack 保留在品牌目录中
 
 ---
 
