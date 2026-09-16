@@ -37,16 +37,12 @@ BoundX 真正要解决的问题是：
 
 > **Agent 的路径可以涌现，任务边界必须确定。**
 
-BoundX 把任务边界表示为满足父任务全部约束的合法解空间：
+BoundX 把任务边界表示为满足父任务全部约束的合法解空间。
+
+设 `X_Σ` 为父任务作用域内的候选方案空间，`χ_B(x)` 为边界判定函数，则：
 
 ```math
-\Omega_B
-=
-\left\{
-x \in X_{\Sigma}
-\;\middle|\;
-\chi_{\mathcal{M}}(x)=\mathrm{true}
-\right\}
+\Omega_B = \{x \in X_\Sigma : \chi_B(x)=1\}
 ```
 
 Agent 可以自由选择任意合法方案：
@@ -69,18 +65,23 @@ BoundX 因此限制的是边界，而不是智能体的能力。
 
 轨道机、状态机、工作流引擎可以记录事实、物化状态、推进生命周期、保存证据和触发检查。
 
-但它们不能因为状态发生了变化，就自动推出任务正确、计划正确、业务决定成立或边界已经确定。
+但它们不能因为状态发生变化，就自动推出任务正确、计划正确、业务决定成立或边界已经确定。
+
+设：
+
+- `S_m`：状态机状态；
+- `D_s`：语义裁决；
+- `W_s`：工作流状态；
+- `B_v`：边界有效性。
+
+则：
 
 ```math
-\text{StateMachine}
-\not\Rightarrow
-\text{SemanticDecision}
+S_m \not\Rightarrow D_s
 ```
 
 ```math
-\text{WorkflowState}
-\not\Rightarrow
-\text{BoundaryValidity}
+W_s \not\Rightarrow B_v
 ```
 
 状态只能描述发生了什么，不能替代任务边界的计算。
@@ -122,9 +123,7 @@ Downstream Conformance
 BXP 使用标准语义中间表示：
 
 ```math
-IR_{7+1}
-=
-(I,O,A,P,R,V,C,B)
+IR_{7+1}=(I,O,A,P,R,V,C,B)
 ```
 
 | 字段 | 含义 |
@@ -147,9 +146,7 @@ IR_{7+1}
 标准 7+1 进入形式化后形成：
 
 ```math
-\mathcal{M}(IR)
-=
-(E,\Sigma,Q,F,K,R_{cal},D,\Phi)
+M=(E,\Sigma,Q,F,K,R,D,\Phi)
 ```
 
 | 符号 | 含义 |
@@ -159,7 +156,7 @@ IR_{7+1}
 | `Q` | 必须完成的结果与义务 |
 | `F` | 禁止动作、效果与状态 |
 | `K` | 完成与停止条件 |
-| `Rcal` | 身份、角色、责任与关系约束 |
+| `R` | 身份、角色、责任与关系约束 |
 | `D` | 依赖、来源、交接与版本 |
 | `Φ` | 数值、集合、逻辑、时序、排序、基数等形式约束 |
 
@@ -170,31 +167,19 @@ IR_{7+1}
 设主任务形式模型为：
 
 ```math
-\mathcal{M}
-=
-(\Sigma,Q,F,K,R,D,\Phi)
+M=(\Sigma,Q,F,K,R,D,\Phi)
 ```
 
-则主任务的合法解空间定义为：
+边界判定函数：
 
 ```math
-\Omega_B
-=
-\left\{
-x \in X_{\Sigma}
-\;\middle|\;
-Q(x)
-\land
-\neg F(x)
-\land
-K(x)
-\land
-R(x)
-\land
-D(x)
-\land
-\Phi(x)
-\right\}
+\chi_B(x)=Q(x)\land\neg F(x)\land K(x)\land R(x)\land D(x)\land\Phi(x)
+```
+
+主任务的合法解空间：
+
+```math
+\Omega_B=\{x\in X_\Sigma:\chi_B(x)=1\}
 ```
 
 因此，Boundary 不是一条写死的执行流程，而是满足父任务全部约束的合法解空间。
@@ -206,9 +191,7 @@ D(x)
 当 PM 将主任务拆分为：
 
 ```math
-P
-=
-\{T_1,T_2,\ldots,T_n\}
+P=\{T_1,T_2,\ldots,T_n\}
 ```
 
 BoundX 不判断 PM 是否采用了“最佳方案”，也不规定 PM 必须如何拆分。
@@ -219,28 +202,28 @@ BoundX 只计算这些计划和子任务是否仍然符合父任务 Boundary。
 
 # 8. 子任务不越界
 
-对子任务 `T_i`，其符合性至少由以下条件共同决定：
+对子任务 `T_i`，定义五个布尔条件：
+
+| 符号 | 含义 |
+|---|---|
+| `C_s` | Scope 合法 |
+| `C_f` | 未触碰禁止边界 |
+| `C_c` | 满足形式约束 |
+| `C_r` | 责任与关系合法 |
+| `C_d` | 依赖关系合法 |
+
+子任务符合父边界，当且仅当：
 
 ```math
-\operatorname{Conform}(T_i,B_p)
-=
-\operatorname{ScopeOK}
-\land
-\operatorname{ForbiddenOK}
-\land
-\operatorname{ConstraintOK}
-\land
-\operatorname{RelationOK}
-\land
-\operatorname{DependencyOK}
+C(T_i,B_p)=C_s\land C_f\land C_c\land C_r\land C_d
 ```
 
 ## 8.1 Scope 不得扩大
 
+设 `S(x)` 表示对象 `x` 的作用域，则：
+
 ```math
-\operatorname{Scope}(T_i)
-\subseteq
-\operatorname{Scope}(B_p)
+S(T_i)\subseteq S(B_p)
 ```
 
 若不成立：
@@ -251,12 +234,10 @@ SCOPE_EXPANSION
 
 ## 8.2 不得触碰禁止边界
 
+设 `E(T_i)` 表示子任务可能产生的效果集合，`F_p` 表示父任务禁止集合，则：
+
 ```math
-\operatorname{Effects}(T_i)
-\cap
-\operatorname{Forbidden}(B_p)
-=
-\varnothing
+E(T_i)\cap F_p=\varnothing
 ```
 
 若不成立：
@@ -267,10 +248,10 @@ FORBIDDEN_BOUNDARY_VIOLATION
 
 ## 8.3 必须满足父任务形式约束
 
+设 `C_\Phi(T_i,B_p)` 表示子任务是否满足父任务形式约束，则：
+
 ```math
-T_i
-\models
-\Phi_{B_p}
+C_\Phi(T_i,B_p)=1
 ```
 
 若不成立：
@@ -281,20 +262,16 @@ CONSTRAINT_VIOLATION
 
 ## 8.4 责任与关系约束必须成立
 
-例如独立验证要求：
+设 `e_x` 为执行者，`e_v` 为独立验证者，则独立验证要求可以写为：
 
 ```math
-\operatorname{Executor}
-\neq
-\operatorname{IndependentVerifier}
+e_x\neq e_v
 ```
 
-或者某项动作要求明确 authority：
+设 `A(e,a,s,t)` 表示实体 `e` 在时间 `t` 对作用域 `s` 的动作 `a` 是否具有明确 authority，则需要 authority 时：
 
 ```math
-\operatorname{Authority}(e,a,s,t)
-=
-\mathrm{true}
+A(e,a,s,t)=1
 ```
 
 若不满足：
@@ -309,28 +286,22 @@ RELATION_VIOLATION
 
 一个 PM 计划可能所有子任务都没有越界，但仍然遗漏父任务要求。
 
-因此必须满足：
+设 `G(T_i)` 表示子任务 `T_i` 覆盖的父任务要求集合，则必须满足：
 
 ```math
-Q_{parent}
-\subseteq
-\bigcup_{i=1}^{n}
-\operatorname{Coverage}(T_i)
+Q_p\subseteq\bigcup_{i=1}^{n}G(T_i)
 ```
 
-如果存在父任务要求：
+如果存在父任务要求 `q`：
 
 ```math
-q \in Q_{parent}
+q\in Q_p
 ```
 
 但：
 
 ```math
-q
-\notin
-\bigcup_{i=1}^{n}
-\operatorname{Coverage}(T_i)
+q\notin\bigcup_{i=1}^{n}G(T_i)
 ```
 
 则产生：
@@ -347,33 +318,27 @@ MISSING_REQUIRED_OUTCOME
 
 一个合法的任务拆分必须同时满足不扩张、完整覆盖、约束保持、关系有效和依赖有效。
 
-```math
-\operatorname{ValidDecomposition}
-=
-\operatorname{NoExpansion}
-\land
-\operatorname{RequiredCoverage}
-\land
-\operatorname{ConstraintPreservation}
-\land
-\operatorname{RelationValidity}
-\land
-\operatorname{DependencyValidity}
-```
+定义：
 
-对整个 PM 计划，可以定义：
+- `N`：无边界扩张；
+- `G`：父任务要求完整覆盖；
+- `C`：父任务约束保持；
+- `R`：责任与关系有效；
+- `D`：依赖关系有效。
+
+则合法拆分条件为：
 
 ```math
-\operatorname{ValidPlan}(P,B_p)
-=
-\operatorname{NoBoundaryViolation}(P,B_p)
-\land
-\operatorname{RequiredCoverage}(P,B_p)
-\land
-\operatorname{ConstraintPreservation}(P,B_p)
-\land
-\operatorname{RelationValidity}(P,B_p)
+V_d=N\land G\land C\land R\land D
 ```
+
+对整个 PM 计划 `P`，定义计划有效性：
+
+```math
+V_p(P,B_p)=N_p\land G_p\land C_p\land R_p\land D_p
+```
+
+其中每一项都由确定性检查计算，不由模型主观裁决。
 
 这就是 BoundX 对 PM 规划、拆分和任务分配进行数学验证的核心计算。
 
@@ -386,24 +351,15 @@ MISSING_REQUIRED_OUTCOME
 任务空间可以表示为：
 
 ```math
-X
-=
-X_{constrained}
-\times
-X_{free}
+X=X_c\times X_f
 ```
 
-BoundX 约束的是：
+其中：
 
-```math
-X_{constrained}
-```
+- `X_c`：被父任务边界约束的维度；
+- `X_f`：父任务没有约束的自由维度。
 
-而不是消灭：
-
-```math
-X_{free}
-```
+BoundX 约束 `X_c`，但保留 `X_f`。
 
 因此 Agent 仍然可以在自由维度上选择实现语言、工具、算法和执行路径。
 
@@ -415,20 +371,21 @@ X_{free}
 
 主任务 Boundary Result 一旦 `determined`，就可以成为后续规划的正式数学基准。
 
-对整个 PM 计划：
+设 `C_p(P,B_p)` 为整个 PM 计划的边界符合性，则：
 
 ```math
-\operatorname{Conform}(P,B_{parent})
+C_p(P,B_p)=1
 ```
 
-其结果可以是：
+表示计划符合父边界；
 
-```text
-conformant
-nonconformant
+```math
+C_p(P,B_p)=0
 ```
 
-并给出明确诊断：
+表示计划不符合父边界。
+
+诊断至少包括：
 
 ```text
 scope_expansion
@@ -485,9 +442,7 @@ PM 可以自由规划和拆分
 如果：
 
 ```math
-P
-\in
-\Omega_{B_{parent}}
+P\in\Omega_{B_p}
 ```
 
 则计划符合父边界。
@@ -495,9 +450,7 @@ P
 如果：
 
 ```math
-P
-\notin
-\Omega_{B_{parent}}
+P\notin\Omega_{B_p}
 ```
 
 则计划越界。
