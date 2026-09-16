@@ -6,6 +6,10 @@
 
 ## 独立项目 / Standalone project
 
+**协议名称：BXP — Boundary Xplain Protocol（边界分析协议）。** 界痕（BoundX）是产品实现，BXP 是协议；LLM、HanLP、spaCy 等生产者方式不改变协议的 7+1 语义。
+
+**Protocol name: BXP — Boundary Xplain Protocol.** BoundX is the product implementation; BXP is the protocol. Producer methods do not redefine its 7+1 semantics.
+
 BoundX 是独立的任务边界预检引擎。唯一目录 `D:\boundx`，私有仓库 [joinwell52-AI/BoundX](https://github.com/joinwell52-AI/BoundX)。产品 `1.3.0-preview.0`，固定协议 BXP-0001 `0.3.0-draft.2`，计算套件 `1.0.0-draft.3`。已有[私有 GitHub 源码预发布版](https://github.com/joinwell52-AI/BoundX/releases/tag/v1.3.0-preview.0)；无 npm/PyPI 分发、安装包或独立二进制，不代表正式认证；[LICENSE](LICENSE) 保持不变。
 
 BoundX is an independent, private preview task-boundary engine. A private GitHub source prerelease is available; there are no npm/PyPI packages, installers or standalone binaries. Product, protocol and suite versions are distinct. The repository remains private; its license is unchanged, and extraction is not certified.

@@ -1,8 +1,10 @@
-# BoundX Protocol
+# BXP — Boundary Xplain Protocol（边界分析协议）
 
-本目录承载界痕（BoundX）的协议草案、机器可读合同和一致性测试，不是第二套语义系统。
+本目录承载 BXP（边界分析协议）的协议草案、机器可读合同和一致性测试。界痕（BoundX）是产品实现，不是协议名称，不建立第二套语义系统。
 
-当前协议标识为 **BoundX Task Boundary Protocol（BXP）**，第一份草案为 `BXP-0001`。协议核心固定为 I/O/A/P/R/V/C 与独立禁止边界 B；自然语言抽取、L1/L2/L3 语义包和商业引擎都是这一核心表示的生产者或消费者。
+当前协议名称为 **Boundary Xplain Protocol（BXP，边界分析协议）**，第一份草案为 `BXP-0001`。协议核心固定为 I/O/A/P/R/V/C 与独立禁止边界 B；自然语言抽取、L1/L2/L3 语义包和商业引擎都是这一核心表示的生产者或消费者。
+
+BXP stands for **Boundary Xplain Protocol**. BoundX is a product implementation. This naming update does not change BXP-0001, protocol version `0.3.0-draft.2`, `boundx-task/v1`, `boundx-result/v1`, Schema identifiers or the frozen conformance vectors.
 
 ## 当前文件
 

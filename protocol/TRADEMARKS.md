@@ -5,10 +5,12 @@
 ## 1. 统一命名
 
 - 中文正式名称：界痕
-- 英文品牌与协议前缀：BoundX
+- 英文产品品牌：BoundX
 - 短命令：`bx`
 - 模块前缀：`@boundx`
-- 协议：BoundX Task Boundary Protocol（BXP）
+- 协议：Boundary Xplain Protocol（BXP，边界分析协议）
+
+协议名称与产品品牌分开；现有 `BXP-0001`、`boundx-task/v1`、`boundx-result/v1` 等技术标识保持兼容，不因名称调整而改写。
 
 不得把“界衡”“Boundx”“DTBP”作为平行产品或平行协议标识。
 
