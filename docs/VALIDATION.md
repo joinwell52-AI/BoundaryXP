@@ -1,37 +1,33 @@
-# BoundX 验证说明 / Validation
+# 本地验证与研究指标
 
-工作目录：`D:\boundx`。当前是独立项目私有研发阶段，不以测试通过代替公开发布、语义认证或执行授权。
+开发与验收在D:\boundx进行，不依赖GitHub Actions、Artifacts或Codespaces。命令以当前package.json及实际交付为准，不凭云端绿灯宣布完成。
 
-## 可重复命令 / Commands
+## 冻结门禁
 
-```text
-npm ci
-npm test
-npm run test:ui
-.venv\Scripts\python.exe -m unittest discover -s python -p "test_*.py"
-npm run test:docs
-```
+正式实验前需要ADMIN_GOLD_FROZEN、BXP_0_4_WIRE_CONTRACT_FROZEN、FORMALIZER_FROZEN、OPERATOR_PROFILE_FROZEN、L3_PROFILE_FROZEN、ADMISSION_GATE_PASS、SCORER_FROZEN。
 
-Linux/macOS 将 Python 路径替换为 `.venv/bin/python`。
+冻结前结果标记PRE_GOLD_FREEZE或PRE_IMPLEMENTATION，不发布正式准确率。
 
-## 验证范围 / Scope
+## 基线与实验
 
-| 验证 | 内容 |
-|---|---|
-| Core | BXP 生产者示例、CLI/MCP 同结果、严格输入及显式 legacy 回归 |
-| Protocol | Schema、精确数值、双语原文、作用域、摘要与冻结向量 |
-| UI | BXP HTTP 与渲染、中英文／非 BMP、Python 码点桥接、legacy 与访问边界 |
-| Python | 局部自然语言提取和数学检查 |
-| Docs | Markdown 本地目标、标题锚点、当前架构口径与版本检查 |
+Core 100和L3 100分别包含四组各25例。Producer适用性逐例审定；非适用项报告N/A及原因，不能计为Producer失败或静默删除。
 
-文档链接检查涵盖 Git 管理和未忽略的新增 Markdown，包括工作区删除状态；不访问项目外的旧目录。外部网站可达性单独核验，403、限流、超时或私有仓库匿名404不能直接判定为链接失效。
+Primary计划200×3=600；Stability计划200×3×3=1800，独立保存。200例属于开发/符合性基线；论文泛化需独立封存Holdout。
 
-Document validation checks local targets and heading anchors. External availability requires separate verification; access restrictions are not proof that a page is missing.
+## 指标
 
-## 实测记录 / Measured results
+- 语义：事实Precision/Recall/F1、槽位状态、证据区间。
+- 形式化：identity、scope、modality、negation、数值/时间/逻辑、权限与委派。
+- 边界：四状态准确率、混淆矩阵、规范边界差异。
+- FDR：预测determined且Gold非determined数量 / Gold非determined数量；分三种非确定状态报告。
+- 准入：admitted/blocked、stale、binding mismatch、错误拒绝。
+- FAR：预测admitted且Gold blocked数量 / Gold blocked数量。
+- 性能：冷启动、热运行、加载、推理、映射、形式化、计算、总耗时、中位数与P95。
 
-本轮固定协议 0.3.0-draft.2、套件 1.0.0-draft.3（208条）。每个工作包的实际计数见 [执行回执](tasks/BXP-ALIGNMENT-RECEIPT.md)，最终全量验证与 GitHub CI 状态单独记录，不能沿用其他目录或之前版本的数字。
+按套件、路线、分组报告分子/分母、适用性、失败及覆盖率；零分母为不适用，不能报告0%误导。FDR/FAR非零逐例分析。
 
-CLI/MCP/UI 共用 src/bxp/，冻结向量逐对象完整比较；不刷新 expected。Python/Lark 测试属于有限覆盖研究回归。文档扫描区分当前产品口径与带标签的历史非规范材料。
+## 证据
 
-Local tests and remote CI reruns are separate evidence, not a second implementation. Structured vectors are not extraction gold labels. BXP-EXTRACT is RESERVED; passing tests does not certify arbitrary language understanding, authorize execution or publish the product.
+运行目录不得覆盖，失败和重试均保留。记录协议/Gold/模型/mapper/formalizer/operator版本、源码commit和未提交差异摘要、环境、命令、输入输出摘要及MANIFEST。真实凭据不得保存。
+
+完整任务及交付清单见[v1.2 LOCAL任务书](tasks/BXP-PRODUCER-BENCHMARK-DEVELOPMENT-TASKBOOK-v1.2-LOCAL.md)。当前无已审定完整三路线准确率结论。
