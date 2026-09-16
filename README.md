@@ -411,6 +411,7 @@ The repository currently uses the **MIT License**. Engine, model, dictionary, da
 ## Documentation
 
 - [Product Manual](docs/BOUNDX-PRODUCT-MANUAL.md)
+- [Boundary Calculation Method](docs/BOUNDARY-CALCULATION-METHOD.md)
 - [BXP 0.4 English Specification](protocol/BXP-0001.md)
 - [BXP 0.4 Chinese Specification](protocol/BXP-0001.zh-CN.md)
 - [Protocol index](protocol/README.md)
