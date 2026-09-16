@@ -2,15 +2,27 @@
 
 <p align="center"><img src="assets/branding/v1/BoundX_Logo_EN_white.png" alt="界痕 BoundX Logo" width="320"></p>
 
-> 执行之前，先把任务边界算清楚。 / Clarify task boundaries before execution.
+> **执行之前，先把任务边界算清楚。**  
+> **Clarify task boundaries before execution.**
 
-## 独立项目 / Standalone project
+## BoundX 是什么 / What is BoundX?
 
-**协议名称：BXP — Boundary Xplain Protocol（边界分析协议）。** 界痕（BoundX）是产品实现，BXP 是协议；LLM、HanLP、spaCy 等只是语义 Producer 的不同实现方式，不改变 BXP 的协议语义。
+**BoundX（界痕）是 BXP — Boundary Xplain Protocol（边界分析协议）的产品实现。**  
+它把自然语言任务转换为可计算的形式边界，并在正式任务进入 Agent 规划或执行之前，产生可验证、可重放的 **Boundary Result** 与 **Admission**。
 
-**Protocol name: BXP — Boundary Xplain Protocol.** BoundX is the product implementation; BXP is the protocol. LLMs, HanLP, spaCy and other producer methods do not redefine the protocol semantics.
+**BoundX is the product implementation of BXP — Boundary Xplain Protocol.**  
+It turns natural-language tasks into computable formal boundaries and produces a verifiable, replayable **Boundary Result** and **Admission** before a task enters formal Agent planning or execution.
 
-当前 BXP 协议规范草案为 **BXP-0001 `0.4.0-draft.1`**。其协议主轴是：
+BoundX 不是黑箱任务评分器，也不替 Agent、PM、审批系统或业务责任主体作决定。  
+BoundX is not a black-box task scorer and does not replace Agents, PMs, approval systems, or accountable business owners.
+
+---
+
+## BXP 0.4 / Current protocol baseline
+
+当前协议规范从 **BXP-0001 `0.4.0-draft.1`** 开始。
+
+The current protocol baseline starts from **BXP-0001 `0.4.0-draft.1`**.
 
 ```math
 \text{Task Semantics}
@@ -22,129 +34,424 @@ Formal\ Boundary\ Model
 Boundary\ Result
 \rightarrow
 Admission
+\rightarrow
+Downstream\ Conformance
 ```
 
-7+1 只是标准语义中间表示；Formal Boundary Model 才进入确定性计算；Boundary Result 是最终可参照、可交换、可冻结、可重放的边界对象；对正式任务，Admission 是强制准入契约。
+- `IR_{7+1}` 是标准语义中间表示，不是最终边界。  
+  `IR_{7+1}` is a semantic intermediate representation, not the final boundary.
+- Formal Boundary Model 把语义事实编译为可计算约束。  
+  The Formal Boundary Model compiles semantic facts into computable constraints.
+- Boundary Result 给出正式边界状态与规范边界对象。  
+  The Boundary Result provides the formal boundary state and canonical boundary object.
+- Admission 决定正式任务是否可以进入后续正式生命周期。  
+  Admission determines whether a formal task may enter the downstream lifecycle.
+- PM / Agent 后续计划和子任务仍必须符合已经冻结的父边界。  
+  Downstream PM / Agent plans and subtasks must remain conformant with the frozen parent boundary.
 
-BoundX 是独立的任务边界预检引擎。唯一目录 `D:\boundx`，私有仓库 [joinwell52-AI/BoundX](https://github.com/joinwell52-AI/BoundX)。产品版本为 `1.3.0-preview.0`。
+---
 
-**版本必须分层理解：**
-
-- 当前协议规范草案：**BXP-0001 `0.4.0-draft.1`**；
-- 当前产品 `1.3.0-preview.0` 已实现的线上协议合同：**BXP-0001 `0.3.0-draft.2`**；
-- 当前已实现计算套件：**`1.0.0-draft.3`**；
-- `0.4.0-draft.1` 当前标记为 **`NOT_IMPLEMENTED`**：对应 Schema、Boundary Result、Admission binding、conformance suite 与 Host fail-closed gate 尚未完成迁移，不得把现有 0.3 实现重新贴标签声称符合 0.4。
-
-已有[私有 GitHub 源码预发布版](https://github.com/joinwell52-AI/BoundX/releases/tag/v1.3.0-preview.0)；无 npm/PyPI 分发、安装包或独立二进制，不代表正式认证；[LICENSE](LICENSE) 保持不变。
-
-The current protocol specification draft is **BXP-0001 `0.4.0-draft.1`**. The existing product prerelease `1.3.0-preview.0` still implements the `0.3.0-draft.2` wire contract with calculation suite `1.0.0-draft.3`. The 0.4 protocol draft is **not yet implemented** in the schemas, Core, conformance suite or host admission gate. Product, protocol and suite versions are distinct. The repository remains private; its license is unchanged, and extraction is not certified.
-
-发布标签 `v1.3.0-preview.0` 固定在 `9acb30f87b57b38223713b8c38614e72874e81cf`，不会移动。此后的协议和文档修订不进入该标签的源码归档；若要归档包含 0.4 实现，需另行完成迁移并发布新版本。
-
-The existing tag and source archive are immutable snapshots. Later protocol and documentation changes apply to subsequent commits, not to that archive; an archive containing the 0.4 implementation requires a separately authorized new release.
-
-## 立即运行 / Run now
-
-Node.js 22.18+，在项目根目录运行。以下命令运行的是当前已实现的 `0.3.0-draft.2` 线上合同；不能据此声明 `0.4.0-draft.1` 已实现。
-
-```text
-npm ci
-node cli.mjs evaluate examples/bxp/zh-CN-complete.json
-node cli.mjs evaluate examples/bxp/en-complete.json
-node cli.mjs protocol-info
-npm run ui
-```
-
-The CLI reads strict UTF-8 JSON and emits the current implemented `boundx-result/v1`. Open the local URL printed by the UI server; paste or import these same task files. Python and model keys are not required for the canonical local BXP calculation path.
-
-## 产品架构 / Architecture
-
-### BXP 0.4 协议模型 / Protocol model
+## 7+1 语义 IR / 7+1 semantic IR
 
 ```math
-\text{Task Semantics}
-\rightarrow
-IR_{7+1}
-\rightarrow
-\mathcal{M}(IR)
-\rightarrow
-\mathcal{B}
-\rightarrow
-Admission
+IR_{7+1}=(I,O,A,P,R,V,C,B)
 ```
 
-其中：
+| Element | 中文 | English |
+|---|---|---|
+| I | 输入、对象、范围 | Input, target and scope |
+| O | 输出、交付 | Output and deliverables |
+| A | 动作 | Actions |
+| P | 参与者、责任主体 | Participants and responsible subjects |
+| R | 时间、数量、金额、容量等资源约束 | Resource constraints |
+| V | 版本、依据、来源 | Version and provenance |
+| C | 完成与停止条件 | Completion and stopping conditions |
+| B | 明确禁止边界 | Explicit forbidden boundary |
 
-- `IR_{7+1}`：语义承载层；
-- `\mathcal{M}(IR)`：Formal Boundary Model；
-- `\mathcal{B}`：Boundary Result；
-- `Admission`：正式任务强制准入。
+每个元素显式保持：`resolved / unresolved / absent`。未知不能默认补齐。
 
-对正式任务，BXP 不是可选检查：未满足准入条件不得进入正式规划或执行生命周期。草稿可以继续分析、澄清和修订；ADMIN 或其他权威来源修改任务后，旧准入必须失效并重新核验。模型或其他 Producer 提出候选，BXP 负责验证、形式化和计算，Host 负责 fail-closed 强制拦截。
+Each element preserves one of `resolved / unresolved / absent`. Unknowns must not be silently completed.
 
-### 当前 1.3.0-preview.0 已实现路径 / Current implemented path
+```math
+AllBucketsNonEmpty
+\not\Rightarrow
+BoundaryDetermined
+```
 
-`Agent / other producer → boundx-task/v1 (BXP 0.3.0-draft.2) → local BXP Core → boundx-result/v1 → host decision`
+---
 
-Agent、规则或其他生产者按 7+1 形成候选 IR；BoundX 本地执行 Schema、原文证据、来源摘要、语义不变量验证和确定性计算。Core 不调用模型、不访问网络、不自动加载制度 URL。Python/Lark、词库和提示词属于生产者方法，不定义协议；BXP-EXTRACT 仍为 RESERVED。
+## Formal Boundary Model
 
-| 要素 / Element | 含义 / Meaning |
-|---|---|
-| I | 输入范围 / Input scope |
-| O | 交付 / Deliverables |
-| A | 动作 / Actions |
-| P | 责任主体与角色分工 / Participants |
-| R | 资源 / Resources |
-| V | 版本依据 / Version and provenance |
-| C | 完成停止 / Completion and stopping |
-| B | 独立禁止边界 / Independent forbidden boundary |
+BXP 0.4 将 7+1 编译为形式边界模型：
 
-每桶显式 `resolved / unresolved / absent`，不能默认填齐。证据为来源 ID、原文引文及 Unicode 码点 `[start,end)`，不是浏览器字符串代码单元。
+BXP 0.4 compiles 7+1 into a formal boundary model:
 
-Producers supply evidence-linked IR; local validation does not prove extraction correctness. Preserve unknowns and exact source text. The independent B bucket cannot be merged into A or R.
+```math
+\mathcal{M}(IR)
+=
+(E,\Sigma,Q,F,K,R_{cal},D,\Phi)
+```
 
-当前 0.3 实现独立输出 `validation / completeness / consistency`，以及 Profile、resolved elements、deficit、作用域下的既有计算结果。**这些现有结果不能冒充 0.4 的最终 Boundary Result 或 Admission。** `business_decision` 与 `execution_authorization` 始终 `null`。Host systems own clarification, approval and execution; 0.4 所要求的 Host Admission Gate 尚待实施。
+它可以包含实体、作用域、必需结果、禁止动作与状态、完成条件、身份与关系、依赖与来源，以及数值、集合、逻辑、时序、排序和基数约束。
 
-## 唯一 Core 与入口 / Shared core and adapters
+It may contain entities, scopes, required outcomes, forbidden actions and states, completion conditions, identities and relations, dependencies and provenance, plus numeric, set, logical, temporal, ordering, and cardinality constraints.
 
-| 入口 / Entry | 当前能力 / Current capability |
-|---|---|
-| Node API | [src/index.ts](src/index.ts) 导出唯一 [src/bxp/index.mjs](src/bxp/index.mjs) |
-| CLI | `bx evaluate <task.json>`、`bx protocol-info` |
-| MCP | `bx_evaluate_task`、`bx_evaluate_task_json`；当前 Schema 和协议信息资源 |
-| 本机 UI | 导入／粘贴当前 BXP IR；八桶、证据、三轴与计算；仅监听 127.0.0.1 |
-| Legacy | 显式弃用命名空间，不属于 BXP 输入输出合同 |
+Formalizer 必须版本化、可重放，并且不得补造任务和已选语义上下文中不存在的事实。
+
+The Formalizer must be versioned and replayable, and it must not invent facts absent from the task and selected semantic context.
+
+---
+
+## Boundary Result
+
+Boundary Result 至少具有四种标准状态：
+
+The Boundary Result has at least four normative states:
+
+| State | 中文 | English |
+|---|---|---|
+| `determined` | 边界已确定 | A unique usable canonical boundary exists |
+| `underdetermined` | 信息不足以确定唯一边界 | Multiple materially different boundaries remain possible |
+| `inconsistent` | 已解析要求互相矛盾 | Resolved constraints are mutually inconsistent |
+| `invalid` | 协议对象或证据无效 | The protocol object or evidence is invalid |
+
+BoundX 的原则不是“猜一个最可能答案”：
+
+BoundX does not guess the most likely interpretation when the boundary is still ambiguous:
+
+```math
+BoundaryRelevantAmbiguity
+\Rightarrow
+underdetermined
+```
+
+---
+
+## Boundary 是解空间 / Boundary as a solution space
+
+```math
+\chi_M(x)
+=
+Q(x)\land\neg F(x)\land K(x)\land\Phi(x)
+```
+
+```math
+\Omega_B
+=
+\{x\in X_\Sigma\mid\chi_M(x)=true\}
+```
+
+BoundX 不要求唯一执行方案；它要求正式任务具有确定的允许解空间。不同实现只要都位于 `\Omega_B` 中，就可以同时符合边界。
+
+BoundX does not require a unique implementation plan. It requires a determined allowed solution space. Multiple implementations may all conform if they remain inside `\Omega_B`.
+
+---
+
+## Admission / Mandatory admission for formal tasks
+
+```math
+Admit(T_v)
+=
+ProtocolValid(T_v)
+\land
+BoundaryDetermined(T_v)
+\land
+ReleaseConditions(T_v)
+\land
+VersionBound(T_v)
+```
+
+只有 `Admission = admitted` 的正式任务，才允许进入后续正式规划生命周期；否则必须 fail-closed。
+
+Only a formal task with `Admission = admitted` may enter the downstream formal planning lifecycle; otherwise the host must fail closed.
+
+```math
+Admission=false
+\Rightarrow
+Release=blocked
+```
+
+Admission 不是业务决定，也不是执行授权：
+
+Admission is neither a business decision nor execution authorization:
 
 ```text
-npm run mcp
-node cli.mjs legacy task examples/task.json --locale=en
+business_decision = null
+execution_authorization = null
 ```
 
-Legacy CLI 使用 `legacy task/plan/decomposition/responses`，MCP 工具使用 `bx_legacy_*`，旧研究 UI 为 `/legacy`。旧 API 函数仅从 [src/legacy/index.ts](src/legacy/index.ts) 导入；包主出口不再提供它们。不会静默转换旧对象。旧 Python 研究路径需另装依赖，见 [快速开始](QUICKSTART.md)。生产级多租户 HTTP、Python SDK、Pack 激活和插件产品仍未交付。
+---
 
-Invalid BXP inputs return the canonical invalid-result envelope, not a business failure or approval. CLI usage/I/O errors use stderr and nonzero exit. Legacy endpoints are explicitly deprecated; they are not certified BXP adapters.
+## BoundX 与 PM / BoundX and PM
+
+```text
+ADMIN 原始任务 / raw task
+        ↓
+      BoundX
+        ↓
+确定并冻结父边界 / determine and freeze parent boundary
+        ↓
+        PM
+        ↓
+规划、拆分 / plan and decompose
+        ↓
+      BoundX
+        ↓
+下游符合性检查 / downstream conformance
+```
+
+**BoundX 确定解空间；PM 在解空间内规划。**  
+**BoundX determines the solution space; PM plans inside that space.**
+
+---
+
+## Producer 架构 / Producer architecture
+
+自然语言语义识别与 BXP 协议是两层不同职责：
+
+Natural-language semantic recognition and the BXP protocol are separate responsibilities:
+
+```text
+Natural Language
+      ↓
+Producer
+      ↓
+7+1 candidate + evidence
+      ↓
+BXP validation
+      ↓
+Formalizer
+      ↓
+Deterministic Boundary Core
+      ↓
+Boundary Result + Admission
+```
+
+当前研究路线：
+
+Current research routes:
+
+| Producer | 定位 / Role |
+|---|---|
+| LLM | 高能力参考路线；重点观察语义理解与擅自补全 / high-capability reference route |
+| spaCy Local NLP | 本地 NLP 商用候选主路线 / local NLP commercial candidate |
+| HanLP Local NLP | 中文研究与对照路线；具体模型许可明确前保持 research-only / Chinese research and comparison route |
+
+**LLM、spaCy、HanLP 都只是可替换 Producer；它们不改变 BXP 的协议语义。**
+
+**LLMs, spaCy, and HanLP are replaceable Producers; none of them redefine BXP semantics.**
+
+---
+
+## L0 / L1 / L2 / L3
+
+### L0 — Protocol & deterministic Core
+
+L0 不是语义包。它包含协议不变量、证据、三态、Formal Model、Operator、Boundary Result、Admission、canonicalization 与 version binding。
+
+L0 is not a semantic pack. It contains protocol invariants, evidence rules, tri-state semantics, the Formal Model, operators, Boundary Result, Admission, canonicalization, and version binding.
+
+### L1 — Core ontology
+
+当前基线：`core-ontology@1.1.0`。
+
+Current baseline: `core-ontology@1.1.0`.
+
+### L2 — Industry semantic pack
+
+当前软件 / AI 基线：`software-ai@0.2.0`。
+
+Current software / AI baseline: `software-ai@0.2.0`.
+
+### L3 — Enterprise semantic layer
+
+L3 是企业自己的事实层，可以包含员工身份、别名、部门、岗位、职级、组织关系、在职状态、企业对象、显式权限、委派、政策、时间有效性和作用域。
+
+L3 is the enterprise-specific fact layer. It may contain employee identity, aliases, departments, job titles, grades, organizational relations, employment status, enterprise objects, explicit authority bindings, delegations, policies, temporal validity, and scope.
+
+最重要的不变量：
+
+The key invariant:
+
+```math
+Identity
+\neq
+JobTitle
+\neq
+Grade
+\neq
+Authority
+```
+
+```math
+Authority(e,a,s,t)
+\iff
+ExplicitAuthorityBinding(e,a,s,t)
+\lor
+ValidDelegation(e,a,s,t)
+```
+
+岗位、职级、经理关系本身不能自动推出权限。
+
+Job title, grade, and manager relations must not imply authority by themselves.
+
+---
+
+## 研究基准 / Research benchmark
+
+从 BXP 0.4 开始，研究评价重新建立基线；旧研究结果只作为历史材料，不进入新的正式统计。
+
+Research evaluation is reset from BXP 0.4 onward. Earlier experimental results remain historical material and are not part of the new formal statistics.
+
+```text
+BXP-0.4-CORE-GOLD-100
++
+BXP-0.4-L3-GOLD-100
+=
+200 development / conformance cases
+```
+
+三条 Producer 使用同一 Gold、同一 BXP Core 与同一 evaluator。
+
+All three Producer routes use the same Gold, the same BXP Core, and the same evaluator.
+
+重点指标包括：
+
+Key metrics include:
+
+```math
+FDR
+=
+\frac{
+\#(Prediction=determined\land Gold\neq determined)
+}{
+\#(Gold\neq determined)
+}
+```
+
+```math
+FAR
+=
+\frac{
+\#(Prediction=admitted\land Gold=blocked)
+}{
+\#(Gold=blocked)
+}
+```
+
+其中 FDR 关注“错误制造确定性”，FAR 关注“错误放行”。
+
+FDR measures false determination; FAR measures false admission.
+
+Core 100 + L3 100 属于 development / conformance benchmark。论文最终泛化实验将使用单独封存的 Paper Holdout。
+
+Core 100 + L3 100 are the development / conformance benchmark. Final paper generalization experiments will use a separately sealed Paper Holdout.
+
+---
+
+## 开源方向 / Open-source direction
+
+BoundX 的产品方向是开源。
+
+BoundX is intended to be open source.
+
+计划公开的核心包括：
+
+The intended public core includes:
+
+- BXP specification
+- deterministic Boundary Core
+- Formal Boundary Model
+- Boundary Result & Admission
+- Schemas
+- L1 and public L2 packs
+- virtual / synthetic L3 examples
+- Gold benchmark and benchmark harness
+- Producer adapter interfaces
+- baseline CLI / MCP capabilities
+- research methodology and metrics
+
+真实客户 L3、员工表、客户制度、客户任务、密钥、私有连接配置以及无再分发权的模型权重不会进入公共仓库。
+
+Real customer L3 data, employee records, customer policies and tasks, secrets, private connection settings, and model weights without redistribution rights will not be included in the public repository.
+
+当前仓库实际许可证为 **MIT**。任何未来许可证变化都必须由 ADMIN 明确决定并同步 `LICENSE`、README、包元数据和发布制品。
+
+The repository currently uses the **MIT License**. Any future license change requires an explicit ADMIN decision and corresponding updates to `LICENSE`, the README, package metadata, and release artifacts.
+
+---
+
+## 当前实现状态 / Current implementation status
+
+BXP 0.4 是当前协议和产品开发起点，但实现迁移仍在进行。
+
+BXP 0.4 is the current protocol and product-development baseline, while implementation migration is still in progress.
+
+```yaml
+protocol_spec:
+  BXP-0001: 0.4.0-draft.1
+
+bxp_0_4_implementation:
+  status: IN_PROGRESS
+
+l1:
+  core-ontology: 1.1.0
+
+l2:
+  software-ai: 0.2.0
+
+repository_license:
+  SPDX: MIT
+
+repository_visibility:
+  current: private
+  direction: open-source
+```
+
+历史 `0.3.0-draft.2` 实现和既有 208 条计算向量继续保留为 backward regression / historical conformance evidence，但不再定义 BXP 0.4 的产品模型，也不是新的 Gold 基准。
+
+The historical `0.3.0-draft.2` implementation and its 208 calculation vectors remain as backward-regression / historical-conformance evidence. They no longer define the BXP 0.4 product model and are not the new Gold benchmark.
+
+---
+
+## 本地优先 / Local-first
+
+BXP 确定性 Core 设计为可本地、离线和可重放：
+
+The deterministic BXP Core is designed to be local, offline-capable, and replayable:
+
+- Core 不要求公网 / no public network required by the Core
+- Core 不自动下载模型 / no automatic model downloads
+- Core 不自动访问制度 URL / no automatic policy URL access
+- Core 不秘密上传客户任务 / no hidden task upload
+- Producer 是否联网由具体 Provider 决定 / Producer connectivity depends on the selected provider
+
+当前 BXP 0.4 开发、Gold、Benchmark 与研究证据均以本地 `D:\boundx` 为主，不依赖 GitHub Actions 或 GitHub Artifacts 完成验收。
+
+Current BXP 0.4 development, Gold evaluation, benchmark runs, and research evidence are local-first under `D:\boundx`; completion does not depend on GitHub Actions or GitHub Artifacts.
+
+---
 
 ## 文档 / Documentation
 
-- [BXP 协议入口](protocol/README.md)：当前协议状态与 0.4/0.3 实现边界。
-- [BXP-0001 English specification](protocol/BXP-0001.md)：当前规范性草案 `0.4.0-draft.1`。
-- [BXP-0001 中文规范](protocol/BXP-0001.zh-CN.md)：中文评审版 `0.4.0-draft.1`。
-- [实现与限制](protocol/IMPLEMENTATION.md)：当前产品实际支持合同；不得与 0.4 草案混同。
-- [实施授权任务书（原字节归档）](docs/tasks/BoundX-BXP-product-alignment-taskbook-v1.md)：来自提交 `a2fb068565605c0ac83ad6d6d4a973941ee270c6`，是实施时的授权快照，不是当前协议状态。 / Original authorization snapshot, not current protocol status.
-- [Agent 生产者指南（中英）](docs/AGENT-BXP-PRODUCER.md) · [示例索引](examples/README.md)。
-- [ADMIN验收运行器 / Acceptance runner](docs/ADMIN-ACCEPTANCE-RUNNER.md)：离线计划与显式授权运行；模拟结果不替代真实模型验收。
-- [金标草稿工作区 / Gold draft workspace](docs/ADMIN-GOLD-DRAFTS.md)：离线准备原文与包快照，检查人工候选；不自动认证金标。
-- [产品手册](docs/BOUNDX-PRODUCT-MANUAL.md) · [功能](docs/FUNCTIONS.md) · [UI 指南](docs/UI-GUIDE.md) · [结果建议](docs/UI-ADVICE.md)。
-- [语义包](domain-packs/README.md) · [产品与商业规划（非交付声明）](docs/BOUNDX-LIGHTWEIGHT-PRODUCT-PLAN.md)。
-- [正式 Logo](assets/branding/README.md) · [版本](CHANGELOG.md) · [验证](docs/VALIDATION.md)。
+- [BXP protocol index](protocol/README.md)
+- [BXP-0001 English](protocol/BXP-0001.md)
+- [BXP-0001 中文](protocol/BXP-0001.zh-CN.md)
+- [Product manual / 产品手册](docs/BOUNDX-PRODUCT-MANUAL.md)
+- [Producer adapter contract](docs/PRODUCER-ADAPTER-CONTRACT.md)
+- [Semantic packs](domain-packs/README.md)
+- [Quick start](QUICKSTART.md)
+- [Validation](docs/VALIDATION.md)
+- [Functions](docs/FUNCTIONS.md)
 
-## 验证 / Validation
+旧任务书、旧研究结果和旧实现说明可以保留为历史证据，但不得作为 BXP 0.4 当前产品定义的上位来源。
 
-```text
-npm test
-npm run test:ui
-.venv\Scripts\python.exe -m unittest discover -s python -p "test_*.py"
-npm run test:docs
-```
+Historical taskbooks, experiment results, and implementation records may remain as evidence, but they are not authoritative for the current BXP 0.4 product definition.
 
-完整开发验证需安装 Python 研究依赖。当前 208 条冻结结构化向量属于既有 `0.3.0-draft.2` / `1.0.0-draft.3` 计算合同证据，**不是 0.4 符合性向量**，也不是自然语言金标；测试通过不代表抽取准确率、业务许可、产品发布或第二独立实现互操作证明。Actual counts and CI evidence belong in the [execution receipt](docs/tasks/BXP-ALIGNMENT-RECEIPT.md).
+---
+
+## 最终原则 / Final principle
+
+> **BoundX 不替 Agent 做决定。BoundX 先把 Agent 可以在哪个边界内做决定，变成可计算的事实。**
+>
+> **BoundX does not make decisions for the Agent. It first turns the boundary within which an Agent may decide into a computable fact.**
