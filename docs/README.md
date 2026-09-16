@@ -3,6 +3,7 @@
 当前产品目标为BXP 0.4；完整实现与正式研究验收仍在进行。以下为当前使用入口：
 
 - [产品手册](BOUNDX-PRODUCT-MANUAL.md)
+- [边界计算方法与产品作用](BOUNDARY-CALCULATION-METHOD.md)
 - [功能与状态](FUNCTIONS.md)
 - [简介](INTRODUCTION.md)
 - [本地快速开始](../QUICKSTART.md)
