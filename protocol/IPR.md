@@ -1,4 +1,4 @@
-# BoundX Protocol IPR Policy Draft
+# Boundary Xplain Protocol IPR Policy Draft
 
 状态：`DRAFT_FOR_REVIEW`。本文件用于在公开前暴露权属和披露问题，不构成法律意见，也不表示已经完成专利、商标或标准组织程序。
 

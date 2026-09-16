@@ -10,6 +10,15 @@ import { sourceCatalog, materializeSelection, selectionInstruction } from './ui/
 import { resolveEndpoint } from './ui/connection.mjs';
 import {parseAndEvaluateBxpTask, evaluateBxpTask, protocolInfo, PRODUCT_VERSION, RAW_JSON_BYTE_LIMIT} from './src/bxp/index.mjs';
 const version=PRODUCT_VERSION;
+import { createProductHost } from './src/product/host.mjs';
+import { parseProductJson } from './src/product/contracts.mjs';
+import { employeeUiAction } from './src/product/employee-ui.mjs';
+import { employeeTemplate } from './src/product/employees.mjs';
+import { industrySelection } from './src/product/selection-ui.mjs';
+import { runAdminModel } from './src/product/model-pipeline.mjs';
+import { callCursor, cursorModels } from './src/product/cursor-provider.mjs';
+import { callHttpModel } from './src/product/http-provider.mjs';
+import { callCodex, codexModels } from './src/product/codex-provider.mjs';
 const LIMIT=1_000_000;
 export function validateExtract(value,kind,text,baseline){
   const docs=kind==='task'?[value]:[value?.document,...(Array.isArray(value?.tasks)?value.tasks.map(t=>t.document):[])];
@@ -23,33 +32,30 @@ export function validateExtract(value,kind,text,baseline){
   return value;
 }
 export async function callModel(config,messages,{signal,fetchImpl=fetch,maxOutputTokens=6000}={}){
-  if(!config || typeof config.key!=='string' || !config.key.trim() || typeof config.model!=='string' || !config.model.trim()) throw Error('请先填写模型和 API 密钥。');
-  const {url}=resolveEndpoint(config.url,config.protocol);
-  const body=config.protocol==='responses' ? {model:config.model,input:messages,max_output_tokens:maxOutputTokens,stream:false,store:false} : {model:config.model,messages,max_tokens:maxOutputTokens,stream:false};
-  if(config.protocol==='responses'&&config.disableThinking===true)body.thinking={type:'disabled'};
-  const response=await fetchImpl(url,{method:'POST',headers:{'Content-Type':'application/json',Authorization:'Bearer '+config.key},body:JSON.stringify(body),signal,redirect:'error'});
-  if(!response.ok){await response.body?.cancel();const hint={404:'请核对接口路径、模型名称及该账号的模型访问权限。',401:'请核对密钥是否有效。',403:'请核对模型访问权限。',429:'可能是限流或额度不足，请检查服务商控制台。'}[response.status]??'请检查服务商状态。';throw Error('模型服务返回 HTTP '+response.status+'。'+hint+' 未自动重试。');}
-  const reader=response.body.getReader(); let size=0,chunks=[];
-  for(;;){const {value,done}=await reader.read();if(done)break;size+=value.length;if(size>2_000_000){await reader.cancel();throw Error('模型响应过大。');}chunks.push(value);}
-  let raw;try{raw=JSON.parse(Buffer.concat(chunks).toString('utf8'));}catch{throw Error('模型返回了无效响应。');}
-  let text;
-  if(config.protocol==='responses'){
-    if(raw.status!=='completed') throw Error('模型未完整完成输出，请检查输出限制或手动整理。');
-    text=(raw.output??[]).filter(x=>x.type==='message').flatMap(x=>x.content??[]).filter(x=>x.type==='output_text').map(x=>x.text).join('\n');
-  }else{
-    if(raw.choices?.[0]?.finish_reason!=='stop') throw Error('模型输出被截断或未正常结束。');
-    text=raw.choices[0].message?.content;
+  if(config?.provider==='codex'){
+    if(config.key)throw Error('Codex订阅通道不接收API密钥。 / Codex subscription transport does not accept API keys.');
+    const normalized=messages.length===1?[{role:'system',content:'You are a text-only responder. Do not call tools or execute tasks.'},messages[0]]:messages;
+    return callCodex(config,normalized,{signal});
   }
-  if(typeof text!=='string'||!text.trim()) throw Error('模型没有返回文本。');
-  return {text,model:raw.model??config.model,usage:raw.usage??null};
+  if(!config || typeof config.key!=='string' || !config.key.trim() || typeof config.model!=='string' || !config.model.trim()) throw Error('请先填写模型和 API 密钥。');
+  if(config.provider==='cursor')return callCursor(config,messages,{signal});
+  if(config.provider && config.provider!=='api')throw Error('Unsupported model provider.');
+  return callHttpModel(config,messages,{signal,fetchImpl,maxOutputTokens});
 }
-export function createApp({fetchImpl=fetch}={}){
+export function createApp({fetchImpl=fetch,productOptions={}}={}){
+  let productHost;
   const token=randomBytes(32).toString('hex');
   const server=http.createServer(async(req,res)=>{
     const origin='http://127.0.0.1:'+server.address().port;
     const send=(status,data,type='application/json')=>{res.writeHead(status,{'Content-Type':type+'; charset=utf-8','Cache-Control':'no-store','X-Content-Type-Options':'nosniff','Content-Security-Policy':"default-src 'self'; script-src 'self'; style-src 'self'; connect-src 'self'; img-src 'self' data:; frame-ancestors 'none'; base-uri 'none'; form-action 'none'"});res.end(type==='application/json'?JSON.stringify(data):data);};
     if(req.headers.host!==new URL(origin).host) return send(403,{error:'仅允许本机地址访问。'});
     if(req.method==='GET'){
+      if(req.url==='/pack-labels.mjs')return send(200,readFileSync(new URL('ui/pack-labels.mjs',import.meta.url),'utf8'),'text/javascript');
+      if(req.url==='/api/employee-template')return send(200,employeeTemplate(),'text/csv');
+      if(req.url==='/admin'||req.url==='/admin-product.mjs') {
+        const script=req.url.endsWith('.mjs');
+        return send(200,readFileSync(new URL(script?'ui/admin-product.mjs':'ui/admin-product.html',import.meta.url),'utf8').replaceAll('__SESSION_TOKEN__',token),script?'text/javascript':'text/html');
+      }
       if(req.url==='/api/protocol-info')return send(200,protocolInfo());
       const assets={'/':['ui/bxp.html','text/html'],'/legacy':['ui/index.html','text/html'],'/bxp.mjs':['ui/bxp.mjs','text/javascript'],'/bxp-view.mjs':['ui/bxp-view.mjs','text/javascript'],'/bxp.css':['ui/bxp.css','text/css'],'/codepoints.mjs':['ui/codepoints.mjs','text/javascript'],'/app.js':['ui/app.js','text/javascript'],'/records.mjs':['ui/records.mjs','text/javascript'],'/connection.mjs':['ui/connection.mjs','text/javascript'],'/advice.mjs':['ui/advice.mjs','text/javascript'],'/i18n.mjs':['ui/i18n.mjs','text/javascript'],'/progress.mjs':['ui/progress.mjs','text/javascript'],'/task-risks.mjs':['ui/task-risks.mjs','text/javascript'],'/local-task.mjs':['ui/local-task.mjs','text/javascript'],'/admin-check.mjs':['ui/admin-check.mjs','text/javascript'],'/admin-boundary.mjs':['ui/admin-boundary.mjs','text/javascript'],'/source-advice.mjs':['ui/source-advice.mjs','text/javascript'],'/source-render.mjs':['ui/source-render.mjs','text/javascript'],'/admin-operators.mjs':['ui/admin-operators.mjs','text/javascript'],'/admin-slots.mjs':['ui/admin-slots.mjs','text/javascript'],'/admin-glossary.mjs':['ui/admin-glossary.mjs','text/javascript'],'/admin-rules.mjs':['ui/admin-rules.mjs','text/javascript'],'/paired-copy.mjs':['ui/paired-copy.mjs','text/javascript'],'/style.css':['ui/style.css','text/css']};
       const asset=assets[req.url];if(!asset)return send(404,{error:'Not found'});
@@ -61,16 +67,36 @@ export function createApp({fetchImpl=fetch}={}){
     const timer=setTimeout(()=>controller.abort(),180000);
     try{
       const bxp=req.url==='/api/bxp/evaluate';
-      if(!bxp&&!req.url.startsWith('/api/legacy/'))return send(404,{error:'Legacy endpoints require /api/legacy/.'});
+      const employee=req.url==='/api/employee-directory';
+      const selection=req.url==='/api/industry-selection';
+      const model=req.url==='/api/admin-model';
+      const product=req.url==='/api/admin-product'||employee||selection||model;
+      if(!bxp&&!product&&!req.url.startsWith('/api/legacy/'))return send(404,{error:'Legacy endpoints require /api/legacy/.'});
       let size=0,buffers=[];for await(const chunk of req){size+=chunk.length;if(size>(bxp?RAW_JSON_BYTE_LIMIT:LIMIT)){if(bxp)return send(200,evaluateBxpTask(undefined));throw Error('输入超过 1 MB。');}buffers.push(chunk);}
       if(bxp)return send(200,parseAndEvaluateBxpTask(Buffer.concat(buffers)));
+      if(product){
+        const input=parseProductJson(Buffer.concat(buffers));
+        if(model){if(input.config?.provider==='cursor'&&!input.config.key)input.config.key=process.env.CURSOR_API_KEY??'';productHost??=createProductHost(productOptions);return send(200,await runAdminModel(productHost,input,{sendModel:callModel,fetchImpl,signal:controller.signal}));}
+        if(selection){productHost??=createProductHost(productOptions);return send(200,industrySelection(productHost.registry,input));}
+        if(employee){productHost??=createProductHost(productOptions);return send(200,employeeUiAction(productHost.registry,input));}
+        if(!['bx_list_semantic_packs','bx_prepare_admin_task','bx_evaluate_admin_candidate'].includes(input.method))return send(400,{error:'Unsupported UI product operation.'});
+        if(input.method==='bx_evaluate_admin_candidate'&&Object.hasOwn(input.arguments??{},'raw_candidate')){
+          if(Object.keys(input.arguments).some(key=>key!=='raw_candidate'))throw Error('Raw candidate must be supplied alone.');
+          input.arguments={candidate:parseProductJson(input.arguments.raw_candidate)};
+        }
+        productHost??=createProductHost(productOptions);
+        return send(200,productHost.invoke(input.method,input.arguments));
+      }
       req.url=req.url.replace('/api/legacy/','/api/');
       let data;try{data=JSON.parse(Buffer.concat(buffers).toString('utf8'));}catch{throw Error('输入不是有效 JSON。');}
+      if(data.config?.provider==='cursor'&&!data.config.key)data.config.key=process.env.CURSOR_API_KEY??'';
       if(req.url==='/api/admin-boundary')return send(200,await calculateWithLibraries(data.text,{signal:controller.signal}));
+      if(req.url==='/api/cursor-models')return send(200,{models:await cursorModels(data.key||process.env.CURSOR_API_KEY)});
+      if(req.url==='/api/codex-models')return send(200,{models:await codexModels({signal:controller.signal})});
       if(req.url==='/api/connection'){
         const started=Date.now();
         const output=await callModel(data.config,[{role:'user',content:'这是API连接测试，请只回复 OK。'}],{signal:controller.signal,fetchImpl,maxOutputTokens:256});
-        return send(200,{connected:true,model:output.model,usage:output.usage,elapsed_ms:Date.now()-started,checked_at:new Date().toISOString(),endpoint:resolveEndpoint(data.config.url,data.config.protocol).url});
+        return send(200,{connected:true,model:output.model,usage:output.usage,elapsed_ms:Date.now()-started,checked_at:new Date().toISOString(),endpoint:data.config.provider==='cursor'?'cursor-sdk':data.config.provider==='codex'?'codex-subscription':resolveEndpoint(data.config.url,data.config.protocol).url});
       }
       if(req.url==='/api/review'){
         const result=data.kind==='task'?reviewBoundX(data.document):reviewPlanBoundary(data.baseline,data.plan);

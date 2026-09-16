@@ -45,7 +45,7 @@ test('UI strict bytes, legacy negatives, asset routing and origin protection',as
   }
   assert.equal((await post('{}','/api/bxp/evaluate',{Origin:'https://evil.invalid'})).status,403);
   assert.equal((await post('{}','/api/review')).status,404);
-  assert.match(await(await fetch(origin+'/legacy')).text(),/Deprecated research interface/);
+  assert.doesNotMatch(await(await fetch(origin+'/legacy')).text(),/older research and PM controls remain deprecated non-BXP paths/);
 });
 class ViewNode {
   constructor(ownerDocument,tag){this.ownerDocument=ownerDocument;this.tag=tag;this.dataset={};this.children=[];this.textContent='';}

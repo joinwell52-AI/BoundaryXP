@@ -1,4 +1,4 @@
-# BoundX Protocol Governance Draft
+# Boundary Xplain Protocol Governance Draft
 
 状态：`DRAFT_FOR_REVIEW`。本文件不授权公开发布、认证或商标许可。
 

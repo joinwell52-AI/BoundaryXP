@@ -6,6 +6,10 @@
 
 ## 独立项目 / Standalone project
 
+**协议名称：BXP — Boundary Xplain Protocol（边界分析协议）。** 界痕（BoundX）是产品实现，BXP 是协议；LLM、HanLP、spaCy 等生产者方式不改变协议的 7+1 语义。
+
+**Protocol name: BXP — Boundary Xplain Protocol.** BoundX is the product implementation; BXP is the protocol. Producer methods do not redefine its 7+1 semantics.
+
 BoundX 是独立的任务边界预检引擎。唯一目录 `D:\boundx`，私有仓库 [joinwell52-AI/BoundX](https://github.com/joinwell52-AI/BoundX)。产品 `1.3.0-preview.0`，固定协议 BXP-0001 `0.3.0-draft.2`，计算套件 `1.0.0-draft.3`。已有[私有 GitHub 源码预发布版](https://github.com/joinwell52-AI/BoundX/releases/tag/v1.3.0-preview.0)；无 npm/PyPI 分发、安装包或独立二进制，不代表正式认证；[LICENSE](LICENSE) 保持不变。
 
 BoundX is an independent, private preview task-boundary engine. A private GitHub source prerelease is available; there are no npm/PyPI packages, installers or standalone binaries. Product, protocol and suite versions are distinct. The repository remains private; its license is unchanged, and extraction is not certified.
@@ -74,6 +78,8 @@ Invalid BXP inputs return the canonical invalid-result envelope, not a business 
 
 - [实施授权任务书（原字节归档）](docs/tasks/BoundX-BXP-product-alignment-taskbook-v1.md)：来自提交 `a2fb068565605c0ac83ad6d6d4a973941ee270c6`，是实施时的授权快照，不是当前发布状态。 / Original authorization snapshot, not current release status.
 - [Agent 生产者指南（中英）](docs/AGENT-BXP-PRODUCER.md) · [示例索引](examples/README.md)。
+- [ADMIN验收运行器 / Acceptance runner](docs/ADMIN-ACCEPTANCE-RUNNER.md)：离线计划与显式授权运行；模拟结果不替代真实模型验收。
+- [金标草稿工作区 / Gold draft workspace](docs/ADMIN-GOLD-DRAFTS.md)：离线准备原文与包快照，检查人工候选；不自动认证金标。
 - [产品手册](docs/BOUNDX-PRODUCT-MANUAL.md) · [功能](docs/FUNCTIONS.md) · [UI 指南](docs/UI-GUIDE.md) · [结果建议](docs/UI-ADVICE.md)。
 - [协议入口](protocol/README.md) · [English specification](protocol/BXP-0001.md) · [中文规范](protocol/BXP-0001.zh-CN.md) · [实现与限制](protocol/IMPLEMENTATION.md)。
 - [语义包](domain-packs/README.md) · [产品与商业规划（非交付声明）](docs/BOUNDX-LIGHTWEIGHT-PRODUCT-PLAN.md)。

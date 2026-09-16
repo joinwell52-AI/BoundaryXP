@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="zh-CN">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="boundx-token" content="__SESSION_TOKEN__"><title>BoundX · ADMIN任务</title><link rel="stylesheet" href="/bxp.css"></head>
+<body><main>
+<h1>ADMIN任务边界 / Task boundaries</h1>
+<p>需要兼容Host / Compatible Host required。此页面不自动调用AI，不执行任务，不发送到外部模型。可准备上下文并导入Host候选。</p>
+<p>先通过CLI导入并显式启用L1及可选行业包；支持目录和受限ZIP。 / Install and activate L1 and optional industry packs through CLI first.</p>
+<details><summary>创建职员表 / Create employee directory</summary>
+<p>UTF-8 CSV；aliases填JSON数组。岗位映射可为空，不代表权限。页面请求上限1MB；大文件请用CLI。 / Optional role mapping grants no authority. Use CLI for requests over 1MB.</p>
+<button id="employee-template">下载CSV模板 / CSV template</button>
+<label>CSV文件 / CSV file<input id="employee-file" type="file" accept=".csv,text/csv"></label>
+<label>CSV文本 / CSV text<textarea id="employee-csv" rows="6"></textarea></label>
+<label>包名 / Package name<input id="employee-name" value="my-team"></label>
+<label>新版本 / New version<input id="employee-version" value="0.1.0"></label>
+<label>可选岗位映射：员工ID→所选行业role ID或null / Optional roles<textarea id="employee-roles" rows="2">{}</textarea></label>
+<button id="employee-preview">预览校验 / Preview</button><button id="employee-build">生成ZIP / Build ZIP</button>
+<button id="employee-download">下载ZIP / Download ZIP</button><button id="employee-import">确认导入 / Import</button>
+<button id="employee-activate">单独启用 / Activate separately</button><pre id="employee-result"></pre>
+</details>
+<p id="l1">L1：未加载 / not loaded</p>
+<label>行业 / Industry <select id="industry"><option value="">不使用行业包 / None</option></select></label>
+<button id="industry-activate">确认切换行业 / Confirm industry switch</button>
+<p>显示本机已安装且校验通过的行业；切换需单独确认。若旧名册依赖原行业，先用CLI停用该名册。 / Installed validated industries only. Confirm activation separately; deactivate dependent directories before switching.</p>
+<label>L3名册 / Directory <select id="directory"><option value="">不使用名册 / None</option></select></label>
+<p>L3披露由宿主配置单独控制；选择包不等于外发授权。</p>
+<label>任务原文 / Exact task text<textarea id="source" rows="8"></textarea></label>
+<button id="prepare">准备上下文 / Prepare</button><button id="download">下载上下文 / Download</button>
+<p id="status" role="status"></p>
+<label>Host候选 / Candidate<textarea id="candidate" rows="8"></textarea></label>
+<button id="evaluate">校验与计算 / Evaluate</button>
+<pre id="report"></pre><details><summary>原始信封 / Raw envelope</summary><pre id="raw"></pre></details>
+<a href="/">返回BXP IR入口 / BXP IR</a>
+</main><script type="module" src="/admin-product.mjs"></script></body></html>

@@ -1,7 +1,8 @@
 """Software/AI domain pack validation and evidence-backed extraction."""
+import json
 import unittest
 
-from domain_action_frames import PACK, load_pack
+from domain_action_frames import PACK, PACK_REGISTRY, load_pack
 from source_constraints import analyze_source
 
 
@@ -14,6 +15,23 @@ def actions(text):
 
 
 class DomainActionFrameTests(unittest.TestCase):
+    def test_fixture_ids_are_nonempty_and_unique(self):
+        for pack_id, root in PACK_REGISTRY.items():
+            with self.subTest(pack_id=pack_id):
+                fixtures = json.loads((root / "fixtures.json").read_text(encoding="utf-8"))
+                identifiers = [case.get("id") for case in fixtures["cases"]]
+                self.assertTrue(identifiers)
+                self.assertTrue(all(isinstance(identifier, str) and identifier.strip() for identifier in identifiers))
+                self.assertEqual(len(identifiers), len(set(identifiers)))
+
+    def test_manifest_evidence_policy_uses_codepoint_ranges(self):
+        for pack_id in PACK_REGISTRY:
+            with self.subTest(pack_id=pack_id):
+                policy = load_pack(pack_id)["manifest"]["policies"]["evidence"]
+                self.assertIn("exact source quote", policy)
+                self.assertIn("Unicode code-point range [start,end)", policy)
+                self.assertNotIn("UTF-16", policy)
+
     def test_pack_identity_categories_and_declared_ambiguity(self):
         pack = load_pack()
         self.assertEqual(pack["manifest"]["id"], "software-ai")

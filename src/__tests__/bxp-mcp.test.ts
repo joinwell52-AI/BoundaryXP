@@ -27,7 +27,10 @@ test('MCP lists canonical tools first, schema resources and explicit legacy',()=
   assert.match(output[0].result.instructions,/7\+1/);
   assert.deepEqual(output[1].result.tools.slice(0,2).map((item:any)=>item.name),['bx_evaluate_task','bx_evaluate_task_json']);
   assert.deepEqual(output[1].result.tools[0].inputSchema,taskSchema);
-  assert.ok(output[1].result.tools.slice(2).every((item:any)=>item.name.startsWith('bx_legacy_')&&item.description.includes('not BXP')));
+  const additional=output[1].result.tools.slice(2);
+  assert.ok(additional.filter((item:any)=>item.name.startsWith('bx_legacy_')).every((item:any)=>item.description.includes('not BXP')));
+  assert.deepEqual(additional.filter((item:any)=>!item.name.startsWith('bx_legacy_')).map((item:any)=>item.name),
+    ['bx_list_semantic_packs','bx_get_semantic_pack_info','bx_prepare_admin_task','bx_evaluate_admin_candidate']);
   assert.ok(output[2].result.resources.some((item:any)=>item.uri===resultSchema.$id));
   assert.deepEqual(JSON.parse(output[3].result.contents[0].text),taskSchema);
   assert.deepEqual(JSON.parse(output[4].result.contents[0].text),protocolInfo());

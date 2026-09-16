@@ -1,4 +1,10 @@
 const pairs=[
+ ['任务边界检查','Task boundary check'],
+ ['【Layer 1：原文证据】','【Layer 1: Source evidence】'],
+ ['【Layer 2：标准 7+1 结构化映射】','【Layer 2: Standard 7+1 mapping】'],
+ ['【Layer 3：计算结果与建议】','【Layer 3: Calculation and advice】'],
+ ['I (输入范围)：','I (Input scope):'],['O (交付结果)：','O (Deliverables):'],['A (任务动作)：','A (Actions):'],['P (责任分工)：','P (Participants):'],['R (资源约束)：','R (Resources):'],['V (版本依据)：','V (Version and provenance):'],['C (完成条件)：','C (Completion):'],['+1 / B (禁止边界)：','+1 / B (Forbidden boundary):'],
+ ['结构复核通过','Structure validated'],['结构复核未通过','Structure invalid'],['信息完整','Information complete'],['信息不完整','Information incomplete'],['已提交约束未发现冲突','No conflict found in submitted constraints'],['已提交约束存在冲突','Conflicting submitted constraints'],['一致性尚无法确定','Consistency undetermined'],
  ['Legacy · 已弃用的研究界面 / Deprecated research interface. Not BXP-IR or BXP-CALC.','Legacy · Deprecated research interface. Not BXP-IR or BXP-CALC.'],
  ['返回 BXP / Back to BXP','Back to BXP'],
  ['查看 PM 原始答复与手动输入','View the original PM reply and manual input'],
@@ -50,7 +56,7 @@ export function translate(text,lang='zh-CN'){
  return text;
 }
 const paired=new Map();
-export function registerPair(zh,en){paired.set(zh+' / '+en,[zh,en]);}
+export function registerPair(zh,en){paired.set(zh+' / '+en,[zh,en]);if(!catalog.has(zh))catalog.set(zh,en);}
 registerPair('复制完整任务文本','Copy complete task');
 export function selectCopy(zh,en,lang){return lang==='en'?en:zh;}
 const patterns=[
@@ -70,6 +76,6 @@ const patterns=[
  [/^界痕 · BoundX (.+) · 本地界面 · 提取由模型辅助，计算不替代业务裁决$/,'BoundX $1 · Local UI · Model-assisted extraction; advisory calculations'],
 ];
 export function createLocale(initial='zh-CN'){
- let language=initial==='en'?'en':'zh-CN';const bindings=new Set();
- return {get language(){return language;},t(text){return translate(text,language);},bind(node,render){const update=()=>{node.textContent=render(language);};bindings.add({node,update});update();},set(next){if(!['zh-CN','en'].includes(next))throw Error('Unsupported language');language=next;for(const b of bindings){if(b.node.isConnected===false){bindings.delete(b);continue;}b.update();}}};
+ let language=initial==='en'?'en':'zh-CN';const bindings=new Map();
+ return {get language(){return language;},t(text){return translate(text,language);},hasBinding(node){return bindings.has(node);},bind(node,render){const update=()=>{node.textContent=render(language);};bindings.set(node,update);update();},set(next){if(!['zh-CN','en'].includes(next))throw Error('Unsupported language');language=next;for(const [node,update] of bindings){if(node.isConnected===false){bindings.delete(node);continue;}update();}}};
 }

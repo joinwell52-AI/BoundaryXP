@@ -4,14 +4,19 @@ Layers extend lexical recognition only.  They reuse the existing action/role/fac
 contract and cannot override evidence, unknown, authorization or 7+1 semantics.
 """
 import json
+import importlib.util
 import re
 from pathlib import Path
+
+_data_spec = importlib.util.spec_from_file_location('boundx_semantic_data', Path(__file__).with_name('semantic_data.py'))
+_data = importlib.util.module_from_spec(_data_spec)
+_data_spec.loader.exec_module(_data)
 
 DOMAIN_ROOT = Path(__file__).parents[1] / "domain-packs"
 PACK_REGISTRY = {
     "software-ai": DOMAIN_ROOT / "l2" / "software-ai",
 }
-CORE = json.loads(Path(__file__).with_name("semantic_lexicon.json").read_text(encoding="utf-8"))
+CORE = _data.load_legacy_lexicon()
 ROLE_BY_OPERATION = {
     operation: definition["role"] for operation, definition in CORE["operations"].items()
 }

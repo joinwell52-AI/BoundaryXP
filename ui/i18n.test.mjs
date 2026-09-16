@@ -4,7 +4,23 @@ import {readFileSync} from 'node:fs';
 import {createLocale,translate,registerPair,selectCopy,catalog} from './i18n.mjs';
 import {pairedCopy} from './paired-copy.mjs';
 import {completeTask} from './advice.mjs';
+import {packLabel} from './pack-labels.mjs';
 for(const pair of pairedCopy)registerPair(...pair);
+test('settings copy and industry names show only the selected language',()=>{
+ for(const [zh,en] of [['设置','Settings'],['输入任务原文','Enter task text'],['自定义API','Custom API']]){
+  assert.equal(translate(zh+' / '+en,'zh-CN'),zh);
+  assert.equal(translate(zh+' / '+en,'en'),en);
+ }
+ assert.equal(packLabel({pack_id:'software-ai',version:'0.2.0'},'en'),'Software & AI · 0.2.0');
+ assert.equal(packLabel({pack_id:'software-ai',version:'0.2.0'},'zh-CN'),'软件与人工智能 · 0.2.0');
+});
+test('a localized node is not rebound to its initial rendered language',()=>{
+ const locale=createLocale('en'),node={isConnected:true,textContent:''};
+ locale.bind(node,language=>selectCopy('语义包设置','Semantic package settings',language));
+ assert.equal(locale.hasBinding(node),true);
+ locale.set('zh-CN');assert.equal(node.textContent,'语义包设置');
+ locale.set('en');assert.equal(node.textContent,'Semantic package settings');
+});
 test('language selection displays one copy and supports switching back',()=>{
  const locale=createLocale(),node={isConnected:true,textContent:''};locale.bind(node,l=>selectCopy('中文建议','English advice',l));assert.equal(node.textContent,'中文建议');locale.set('en');assert.equal(node.textContent,'English advice');locale.set('zh-CN');assert.equal(node.textContent,'中文建议');assert.throws(()=>locale.set('xx'));
  assert.equal(translate('3　结论与建议 / Advice','zh-CN'),'3　结论与建议');assert.equal(translate('3　结论与建议 / Advice','en'),'Advice');

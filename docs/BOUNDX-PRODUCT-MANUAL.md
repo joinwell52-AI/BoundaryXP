@@ -1,5 +1,9 @@
 # 界痕（BoundX）产品手册
 
+协议名称：**Boundary Xplain Protocol（BXP，边界分析协议）**。界痕（BoundX）是用于分析 ADMIN 任务文本、检查边界并提供建议的产品实现；协议与产品分开命名，不授予业务裁决权或执行权。
+
+Protocol: **Boundary Xplain Protocol (BXP)**. BoundX is the product implementation for ADMIN task-text analysis and boundary recommendations, not a grant of decision or execution authority.
+
 文档编号：`BX-PRODUCT-MANUAL-001`  
 版本：`0.1.0-draft.5`\
 状态：`DRAFT_FOR_REVIEW`  

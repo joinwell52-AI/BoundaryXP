@@ -1,9 +1,11 @@
 import {renderAdminResult} from './source-render.mjs';
+import {renderThreeLayerReport} from './bxp-view.mjs';
+import { packLabel } from './pack-labels.mjs';
 import {originalBoundary,withEngineAdvice} from './admin-boundary.mjs';
 import {adminAdviceLayers} from './advice.mjs';
 import { checkAdminText } from './admin-check.mjs';
-import { draftDocument, draftPlan } from './records.mjs';
-import { createConnectionState, resolveEndpoint } from './connection.mjs';
+import { draftDocument, draftPlan, createBxpResultState, restoreContextPreferences } from './records.mjs';
+import { createConnectionState, resolveEndpoint, modelPreferences } from './connection.mjs';
 import { adminAdvice, planAdvice, planAssignments, conclusion, completeTask } from './advice.mjs';
 import { createLocale, registerPair, selectCopy } from './i18n.mjs';
 import { localTaskProjection, prohibitedActions } from './local-task.mjs';
@@ -37,33 +39,186 @@ function page(name){const pm=name!=='task';$('page-task').hidden=pm;$('page-plan
 for(const k of ['task','plan','results'])$('tab-'+k).onclick=()=>page(k);
 $('settings-toggle').onclick=()=>{$('settings').hidden=!$('settings').hidden;};
 $('clear-key').onclick=()=>{$('key').value='';notice('API 密钥已从页面清除。');};
-function config(){return {protocol:$('protocol').value,url:$('url').value.trim(),model:$('model').value.trim(),key:$('key').value.trim(),disableThinking:$('disable-thinking').checked};}
-function requireConfig(){const c=config();if(!c.url||!c.model||!c.key){$('settings').hidden=false;throw Error('请先填写模型设置，或使用手动整理。');}return c;}
+function config(){return {provider:$('model-provider').value,protocol:$('protocol').value,url:$('url').value.trim(),model:$('model').value.trim(),key:$('model-provider').value==='codex'?'':$('key').value.trim(),disableThinking:$('disable-thinking').checked};}
+function requireConfig(){const c=config();if((c.provider==='api'&&(!c.url||!c.key))||!c.model){$('settings').hidden=false;throw Error('请先填写模型设置。 / Configure a model first.');}return c;}
 async function api(route,data){
   if(controller)throw Error('已有请求正在进行，请等待或取消。');
   const abort=new AbortController();controller=abort;activeLocal=route==='admin-boundary';const limitMs=activeLocal?12000:185000;$('busy').hidden=false;
   const stage=requestStage(route,data),started=Date.now();
   const update=()=>{const seconds=Math.floor((Date.now()-started)/1000);setText($('busy-label'),pick(stage.zh,stage.en)+pick(` · 已等待 ${seconds} 秒；本步骤最多等待 ${limitMs/1000} 秒。`,` · ${seconds}s elapsed; this step times out after ${limitMs/1000}s.`));};update();const ticker=setInterval(update,1000);
   const frozen=[...document.querySelectorAll('button,input,textarea,select')].filter(n=>n.id!=='cancel').map(n=>[n,n.disabled]);frozen.forEach(([n])=>n.disabled=true);
-  try{return await withDeadline(async signal=>{const r=await fetch('/api/legacy/'+route,{method:'POST',headers:{'Content-Type':'application/json','X-BoundX-Token':token},body:JSON.stringify(data),signal});const result=await r.json();if(!r.ok)throw Error(result.error||'请求失败');return result;},{signal:abort.signal,timeoutMs:limitMs});}
+  const endpoint={'bxp-admin':'/api/admin-model','product-packs':'/api/admin-product','industry-selection':'/api/industry-selection'}[route]??'/api/legacy/'+route;
+  try{return await withDeadline(async signal=>{const r=await fetch(endpoint,{method:'POST',headers:{'Content-Type':'application/json','X-BoundX-Token':token},body:JSON.stringify(data),signal});const result=await r.json();if(!r.ok)throw Error(result.error||'请求失败');return result;},{signal:abort.signal,timeoutMs:limitMs});}
   finally{clearInterval(ticker);if(controller===abort)controller=null;$('busy').hidden=true;frozen.forEach(([n,disabled])=>n.disabled=disabled);}
 }
 $('cancel').onclick=()=>{controller?.abort();notice(activeLocal?'已取消本机计算，未调用模型。 / Local calculation cancelled; no model call.':'已请求取消。本地不会自动重试；已发送的模型请求是否计费由服务商决定。');};
 const action=fn=>async()=>{try{await fn();}catch(e){notice(e.name==='AbortError'?'请求已取消。':e.message,true);}};
 const connection=createConnectionState();
-function connectionDisplay(detail){const node=$('connection-status');node.dataset.state=connection.status;setText(node,{untested:'● 未测试 / Not tested',testing:'● 正在测试 / Testing…',connected:'● 连接成功 / Connected',failed:'● 连接失败 / Failed'}[connection.status]);setText($('connection-detail'),detail);for(const id of ['generate-pm','test-current-task','recheck-pm'])$(id).disabled=connection.status!=='connected';}
+const providerSelect=element('select');providerSelect.id='model-provider';
+for(const [value,label] of [['api','自定义API / Custom API'],['cursor','Cursor SDK'],['codex','Codex订阅登录 / Codex subscription']]){const option=element('option');option.value=value;option.textContent=label;providerSelect.append(option);}
+const providerLabel=localized(element('label'),'接入方式','Connection provider');providerLabel.append(providerSelect);$('settings').prepend(providerLabel);
+const cursorCatalog=element('select');cursorCatalog.id='cursor-model-catalog';cursorCatalog.hidden=true;
+cursorCatalog.setAttribute('aria-label','可用模型 / Available models');
+const catalogStatus=element('span');catalogStatus.setAttribute('role','status');catalogStatus.hidden=true;
+let catalogRevision=0;
+let restoredModel='';
+cursorCatalog.onchange=()=>{$('model').value=cursorCatalog.value;invalidateConnection();};
+const loadCursorModels=button(undefined,action(async()=>{
+ const revision=++catalogRevision,provider=providerSelect.value;
+ const key=$('key').value.trim();
+ $('model').value='';cursorCatalog.replaceChildren();cursorCatalog.disabled=true;invalidateConnection();
+ setText(catalogStatus,'正在读取模型列表 / Loading models…');
+ try{
+ const result=await api(provider==='codex'?'codex-models':'cursor-models',provider==='codex'?{}:{key});
+ if(revision!==catalogRevision||providerSelect.value!==provider)return;
+ if(!Array.isArray(result.models)||!result.models.length)throw Error('没有可用模型，请检查登录后刷新。 / No models available; check sign-in and refresh.');
+ for(const model of result.models){const option=element('option');option.value=model.id;option.textContent=model.name+' · '+model.id;cursorCatalog.append(option);}
+ const preferred=restoredModel;restoredModel='';
+ if(preferred){cursorCatalog.value=result.models.some(model=>model.id===preferred)?preferred:'';}
+ cursorCatalog.disabled=false;$('model').value=cursorCatalog.value;invalidateConnection();
+ if(preferred&&!cursorCatalog.value){setText(catalogStatus,'已保存的模型不在当前列表，请重新选择。 / Saved model unavailable; select another.');return;}
+ setText(catalogStatus,'请选择模型，然后测试连接。 / Select a model, then test the connection.');
+ }catch(error){if(revision===catalogRevision){cursorCatalog.disabled=true;setText(catalogStatus,error.message);}throw error;}
+}));localized(loadCursorModels,'刷新模型列表','Refresh models');loadCursorModels.hidden=true;
+$('model').closest('label').append(cursorCatalog,loadCursorModels,catalogStatus);
+$('settings').append(localized(element('p'),'Cursor密钥可留空以使用服务器环境变量CURSOR_API_KEY；不会发送密钥到浏览器。模型目录可见不代表生成测试通过。','Leave the Cursor key blank to use the server CURSOR_API_KEY environment variable; server keys are not returned to the browser. Catalog access does not prove generation works.'));
+$('settings').append(localized(element('p'),'Codex使用本机ChatGPT订阅登录，不填写API密钥；调用消耗订阅额度。仅用于标准BXP候选及文本连接测试。','Codex uses local ChatGPT sign-in, without an API key, and consumes subscription usage. Use it for standard BXP candidates and text connection tests.'));
+providerSelect.onchange=()=>{catalogRevision++;const hosted=providerSelect.value!=='api';for(const id of ['protocol','url','disable-thinking'])$(id).closest('label').hidden=hosted;$('key').closest('label').hidden=providerSelect.value==='codex';loadCursorModels.hidden=!hosted;cursorCatalog.hidden=!hosted;catalogStatus.hidden=!hosted;$('model').hidden=hosted;$('model').value='';cursorCatalog.replaceChildren();cursorCatalog.disabled=true;setText(catalogStatus,'点击刷新读取可用模型。 / Refresh to load available models.');invalidateConnection();if(providerSelect.value==='codex')loadCursorModels.click();};
+function connectionDisplay(detail){const node=$('connection-status');node.dataset.state=connection.status;setText(node,{untested:'● 未测试 / Not tested',testing:'● 正在测试 / Testing…',connected:'● 连接成功 / Connected',failed:'● 连接失败 / Failed'}[connection.status]);setText($('connection-detail'),detail);for(const id of ['generate-pm','test-current-task','recheck-pm','extract-bxp-task'])if($(id))$(id).disabled=connection.status!=='connected'||(providerSelect.value==='codex'&&id!=='extract-bxp-task');}
 function connectedConfig(){if(connection.status!=='connected')throw Error('请先测试模型连接，绿色成功后才能测试 PM。 / Test the connection first.');return requireConfig();}
 function invalidateConnection(){connection.invalidate();connectionDisplay('配置已变更，请重新测试。绿色状态不会保存或从记录恢复。');}
 for(const id of ['protocol','url','model','key','disable-thinking'])for(const event of ['input','change'])$(id).addEventListener(event,invalidateConnection);
 $('clear-key').addEventListener('click',invalidateConnection);
+const preferenceKey='boundx-model-preferences-v1';
+const preferenceStatus=element('p');preferenceStatus.setAttribute('role','status');
+const savePreferences=button(undefined,action(async()=>{
+ const value=modelPreferences(config());
+ try{localStorage.setItem(preferenceKey,JSON.stringify(value));}catch{throw Error('浏览器无法保存设置 / Browser storage unavailable');}
+ setText(preferenceStatus,'模型设置已保存在当前浏览器和地址；不含密钥、任务原文和连接状态。 / Saved for this browser and address; excludes keys, task text and connection status.');
+}));localized(savePreferences,'保存模型设置','Save model settings');
+const forgetPreferences=button(undefined,action(async()=>{localStorage.removeItem(preferenceKey);restoredModel='';setText(preferenceStatus,'已删除保存的设置；当前页面配置保留。 / Saved settings removed; current configuration retained.');}));localized(forgetPreferences,'忘记保存的设置','Forget saved settings');
+const preferenceButtons=element('div',undefined,'buttons');preferenceButtons.append(savePreferences,forgetPreferences);$('settings').append(preferenceButtons,preferenceStatus);
 $('test-connection').onclick=action(async()=>{
   const ticket=connection.begin();connectionDisplay('正在发送短文本测试，不发送任务正文。');
   try{
-    const c=requireConfig();const endpoint=resolveEndpoint(c.url,c.protocol);c.url=endpoint.url;$('url').value=c.url;
+    const c=requireConfig();const endpoint=c.provider==='api'?resolveEndpoint(c.url,c.protocol):{url:c.provider==='cursor'?'cursor-sdk':'codex-subscription',adjusted:false};if(c.provider==='api'){c.url=endpoint.url;$('url').value=c.url;}
     const result=await api('connection',{config:c});
     if(connection.finish(ticket,result.connected===true))connectionDisplay(`实际返回模型：${result.model}；耗时 ${result.elapsed_ms} ms。${endpoint.adjusted?'已补全或规范化接口地址。':''}仅表示本次连接可用，不代表任务理解正确。`);
   }catch(e){if(connection.finish(ticket,false))connectionDisplay(e.name==='AbortError'?'测试已取消，未自动重试。':e.message);throw e;}
 });
+let bxpPacks={installed:[],active:[]};
+const bxpPanel=element('section',undefined,'panel');
+bxpPanel.id='bxp-context';
+bxpPanel.append(localized(element('h2'),'语义包设置','Semantic package settings'));
+bxpPanel.append(localized(element('p'),'点击开始分析后，将原文和所选语义上下文发送给模型；随后在本地验证、计算，不执行任务。','Start analysis sends source text and selected context to the model, followed by local validation and calculation. No task execution.'));
+bxpPanel.append(localized(element('p'),'默认L1，可选L2行业及已启用L3名册；L3外发还需服务器授权。准备快照保存在本地，名册默认不选择。','Default L1 with optional L2 industry and active L3 directory; L3 disclosure also requires server authorization. Prepared snapshots are saved locally. No directory is selected by default.'));
+const advancedSettings=element('details');advancedSettings.append(localized(element('summary'),'高级设置','Advanced settings'));
+const packageLink=element('a');packageLink.href='/admin#advanced';localized(packageLink,'维护职员目录与行业包','Maintain directories and industry packages');advancedSettings.append(packageLink);bxpPanel.append(advancedSettings);
+const industrySelect=element('select');industrySelect.id='bxp-industry';
+const industryLabel=localized(element('label'),'行业包（先导入，再确认启用）','Industry package (install, then explicitly activate)');industryLabel.append(industrySelect);bxpPanel.append(industryLabel);
+const directorySelect=element('select');directorySelect.id='bxp-directory';
+const directoryLabel=localized(element('label'),'职员目录（可选，须先在管理页启用）','Employee directory (optional; activate in management first)');directoryLabel.append(directorySelect);bxpPanel.append(directoryLabel);
+const contextPreferenceKey='boundx-context-preferences-v1';let contextPreferencesInvalid=false;
+const contextPreferenceStatus=element('p');contextPreferenceStatus.setAttribute('role','status');
+const saveContext=button(undefined,action(async()=>{
+ const value={industry:industrySelect.value,directory:directorySelect.value};
+ if(!restoreContextPreferences(value,bxpPacks.installed,bxpPacks.active).valid)throw Error('请重新选择有效的语义包 / Select valid packages');
+ localStorage.setItem(contextPreferenceKey,JSON.stringify(value));contextPreferencesInvalid=false;
+ setText(contextPreferenceStatus,'已保存行业和名册选择；不保存名册内容，不新增外发授权。 / Selections saved, without directory content or new disclosure consent.');
+}));localized(saveContext,'保存语义包设置','Save package settings');
+const forgetContext=button(undefined,action(async()=>{localStorage.removeItem(contextPreferenceKey);contextPreferencesInvalid=false;setText(contextPreferenceStatus,'已忘记保存的选择，当前选择保留。 / Saved selections removed; current selection retained.');}));localized(forgetContext,'忘记语义包设置','Forget package settings');
+const bxpReport=element('div');bxpReport.id='bxp-model-result';
+const bxpResultPanel=element('section',undefined,'panel');bxpResultPanel.id='bxp-result-panel';bxpResultPanel.hidden=true;
+bxpResultPanel.append(localized(element('h2'),'分析结果','Analysis results'));
+const bxpResultState=createBxpResultState();
+const bxpDownloads=element('div',undefined,'buttons');bxpDownloads.hidden=true;
+const bxpDownloadButtons=[];
+for(const [kind,zh,en] of [['report','下载三层报告','Download three-layer report'],['task','下载BXP任务JSON','Download BXP task JSON'],['result','下载BXP结果JSON','Download BXP result JSON']]){
+ const control=button(undefined,action(async()=>{const file=bxpResultState.export(kind);download(file.name,file.text,file.type);}));
+ localized(control,zh,en);control.disabled=true;bxpDownloadButtons.push({kind,control});bxpDownloads.append(control);
+}
+function clearBxpResult(){const ticket=bxpResultState.clear();for(const {control} of bxpDownloadButtons)control.disabled=true;bxpDownloads.hidden=true;bxpReport.textContent='';bxpResultPanel.hidden=true;return ticket;}
+const refreshPacks=button(undefined,action(async()=>{
+ clearBxpResult();
+ bxpPacks=await api('product-packs',{method:'bx_list_semantic_packs',arguments:{}});
+ industrySelect.replaceChildren();const none=localized(element('option'),'不使用行业包','None');none.value='';industrySelect.append(none);
+ for(const pack of bxpPacks.installed.filter(pack=>pack.layer==='L2')){const option=localized(element('option'),packLabel(pack,'zh-CN'),packLabel(pack,'en'));option.title=`${pack.pack_id}@${pack.version}`;option.value=pack.digest;industrySelect.append(option);}
+ directorySelect.replaceChildren();const noDirectory=localized(element('option'),'不使用职员目录','No employee directory');noDirectory.value='';directorySelect.append(noDirectory);
+ for(const pack of bxpPacks.installed.filter(pack=>pack.layer==='L3'&&bxpPacks.active.some(reference=>reference.digest===pack.digest))){const option=localized(element('option'),packLabel(pack,'zh-CN'),packLabel(pack,'en'));option.value=pack.digest;directorySelect.append(option);}
+ try{const raw=localStorage.getItem(contextPreferenceKey);if(raw){const restored=restoreContextPreferences(JSON.parse(raw),bxpPacks.installed,bxpPacks.active);industrySelect.value=restored.industry;directorySelect.value=restored.directory;contextPreferencesInvalid=!restored.valid;setText(contextPreferenceStatus,restored.valid?'已恢复语义包选择；启用状态及外发授权仍由服务器检查。 / Selections restored; activation and disclosure remain server-checked.':'保存的包已缺失或名册未启用，请重新选择并保存；分析已暂停。 / Saved package unavailable; reselect and save before analysis.');}}
+ catch{contextPreferencesInvalid=true;setText(contextPreferenceStatus,'无法恢复语义设置，请重新选择并保存。 / Cannot restore settings; reselect and save.');}
+ bxpReport.textContent='';
+}));localized(refreshPacks,'加载/刷新本地语义包','Reload local semantic packages');
+const activateIndustry=button(undefined,action(async()=>{
+ clearBxpResult();
+ const selected=bxpPacks.installed.find(pack=>pack.layer==='L2'&&pack.digest===industrySelect.value);
+ if(!selected)throw Error('请选择已安装的行业包。 / Select an installed industry.');
+ const {layer,...reference}=selected;const result=await api('industry-selection',{operation:'activate',reference});bxpPacks.active=result.active;bxpReport.textContent='';
+}));localized(activateIndustry,'确认启用行业','Confirm industry activation');
+const extractBxp=button(undefined,action(async()=>{
+ const ticket=clearBxpResult();
+ try{
+ if(connection.status!=='connected')throw Error('请先测试模型连接。 / Test the model connection first.');
+ if(contextPreferencesInvalid){$('settings').hidden=false;throw Error('请核对并重新保存语义包设置 / Review and save package settings first');}
+ const text=textRequired('task-source'),selected=industrySelect.value,directory=directorySelect.value;
+ bxpResultPanel.hidden=false;
+ setText(bxpReport,'正在抽取；尚未计算。 / Extracting; not yet calculated.');
+ const l1=bxpPacks.active.find(reference=>bxpPacks.installed.some(pack=>pack.layer==='L1'&&pack.digest===reference.digest));
+ if(!l1)throw Error('请先在语义包管理页或CLI安装并启用L1，再加载本地语义包。 / Install and activate L1, then reload packages.');
+ if(selected&&!bxpPacks.active.some(reference=>reference.digest===selected))throw Error('请先确认启用行业。 / Confirm industry activation first.');
+ if(directory&&!bxpPacks.active.some(reference=>reference.digest===directory))throw Error('名册状态已变化，请重新加载。 / Reload the directory selection.');
+ const info=await fetch('/api/protocol-info').then(response=>response.json());
+ const result=await api('bxp-admin',{config:requireConfig(),consent:true,prepare:{source:{text,language:locale.language},
+  profile:{id:'org.boundx.admin',required_elements:info.core_elements},packs:[l1,...bxpPacks.active.filter(reference=>[selected,directory].includes(reference.digest))]}});
+ if($('task-source').value!==text||industrySelect.value!==selected||directorySelect.value!==directory){clearBxpResult();setText(bxpReport,'输入已变化，请重新计算。 / Input changed; recalculate.');return;}
+ if(!bxpResultState.accept(ticket,result))return;
+ bxpDownloads.hidden=false;
+ for(const {kind,control} of bxpDownloadButtons)control.disabled=kind!=='report'&&!result.computed;
+ renderThreeLayerReport(bxpReport,result.report,()=>navigator.clipboard.writeText(text),result,locale);
+ noticePair(result.computed?'7+1候选已校验并完成BXP计算；结果不代表授权。':'尚未计算，请查看诊断。',result.computed?'Candidate validated and BXP calculated; no authority granted.':'Not computed; see diagnostics.');
+ }catch(error){clearBxpResult();bxpResultPanel.hidden=false;localized(bxpReport,'尚未计算','Not computed');bxpReport.append(element('p',error.message));throw error;}
+}));extractBxp.id='extract-bxp-task';extractBxp.disabled=true;localized(extractBxp,'用模型抽取7+1并计算','Extract 7+1 with model and calculate');
+extractBxp.classList.add('primary');setText(extractBxp,'开始分析：抽取7+1并计算 / Start analysis');
+const bxpButtons=element('div',undefined,'buttons');bxpButtons.append(refreshPacks,activateIndustry);bxpPanel.append(bxpButtons);
+const contextSaveButtons=element('div',undefined,'buttons');contextSaveButtons.append(saveContext,forgetContext);bxpPanel.append(contextSaveButtons,contextPreferenceStatus);
+const bxpRun=element('section');bxpRun.id='bxp-run';
+bxpRun.append(extractBxp,localized(element('p'),'使用上方原文、模型和语义上下文进行分析，不执行任务。','Analyze the source using the selected model and context; never execute the task.'));
+bxpResultPanel.append(bxpReport,bxpDownloads);
+const legacyResearch=element('details');legacyResearch.id='legacy-research';
+legacyResearch.append(localized(element('summary'),'旧规则研究工具（已弃用，非模型抽取）','Legacy rule research tools (deprecated, not model extraction)'));
+for(const node of [$('extract-task').parentElement,$('admin-advice'),$('task-editor').closest('details')])legacyResearch.append(node);
+const legacyHint=$('task-source').nextElementSibling;if(legacyHint?.classList.contains('hint'))legacyResearch.prepend(legacyHint);
+$('page-task').append(legacyResearch);
+$('settings').append(bxpPanel);
+$('task-source').after(bxpRun,bxpResultPanel);
+$('settings').hidden=location.hash!=='#settings';
+setText($('settings-toggle'),'设置 / Settings');
+setText($('settings').querySelector('h2'),'模型设置');
+setText($('page-task').querySelector('h2'),'输入任务原文 / Enter task text');
+attribute($('task-source'),'placeholder','在这里输入需要检查边界的任务原文… / Enter the task text to check…');
+const main=document.querySelector('main'),intro=main.querySelector('.intro');
+setText(intro.querySelector('h1'),'任务边界分析 / Task boundary analysis');
+setText(intro.querySelector('p'),'首次使用请打开设置，配置模型和语义包。之后输入原文，开始分析。 / Configure model and packages in Settings, then enter text and analyze.');
+main.prepend(intro);
+const legacyWorkspace=element('details');legacyWorkspace.id='legacy-workspace';
+legacyWorkspace.append(localized(element('summary'),'旧版研究与PM工具（已弃用）','Legacy research and PM tools (deprecated)'));
+const historyDetails=$('history').closest('details');
+legacyWorkspace.append(legacyResearch,main.querySelector('nav'),$('page-plan'),$('page-results'),main.querySelector('.storage'),historyDetails);
+legacyWorkspace.hidden=true;legacyWorkspace.inert=true;main.append(legacyWorkspace);
+document.querySelector('body > aside')?.remove();
+setText(document.querySelector('footer'),'BoundX · 建议不构成业务裁决或执行授权 / BoundX · Advice grants neither business decisions nor execution authority');
+setText($('clear-key').nextElementSibling,'模型只负责抽取候选，系统在本地复核与计算。 / Models extract candidates; validation and calculation run locally.');
+async function initializeModelPreferences(){
+ await refreshPacks.onclick();
+ let saved;
+ try{const raw=localStorage.getItem(preferenceKey);if(!raw)return;saved=modelPreferences(JSON.parse(raw));}catch{setText(preferenceStatus,'保存的配置不可用，请重新设置。 / Saved settings unavailable; configure again.');return;}
+ providerSelect.value=saved.provider;restoredModel=saved.model;providerSelect.onchange();
+ if(saved.provider==='api'){for(const id of ['protocol','url','model'])$(id).value=saved[id];$('disable-thinking').checked=saved.disableThinking;restoredModel='';}
+ else if(saved.provider==='cursor')await loadCursorModels.onclick();
+ setText(preferenceStatus,'已恢复模型设置；请测试连接。不会自动发送任务。 / Settings restored; test the connection. No task is sent automatically.');
+}
+initializeModelPreferences();
+for(const node of [$('task-source'),industrySelect,directorySelect])node.addEventListener('input',()=>{clearBxpResult();setText(bxpReport,'输入已变化，请重新计算。 / Input changed; recalculate.');});
 function audit(kind,detail){state.history.push({time:new Date().toISOString(),kind,detail});$('history').textContent=state.history.map(x=>`${x.time} · ${x.kind} · ${x.detail}`).join('\n');}
 function markDraft(kind){$(kind==='task'?'confirm-check':'plan-check').checked=false;}
 function emptyDoc(text){return {text,parameters:{},actions:[],completion:[]};}
@@ -88,7 +243,7 @@ function renderDocument(target,doc,kind){
     conditions.append(button('＋ 添加完成条件',()=>{doc.completion.push({id:'condition-'+(doc.completion.length+1),quote:''});markDraft(kind);renderRows();}));
   };renderRows();details.append(actions,conditions);target.append(details);
 }
-function renderTask(){if(!state.task)return;$('task-source').value=state.task.text;renderDocument($('task-editor'),state.task,'task');for(const note of state.taskNotes??[])$('task-editor').prepend(element('p',note,'mapping-note'));$('task-bottom').hidden=false;markDraft('task');renderAdmin();}
+function renderTask(){if(!state.task)return;clearBxpResult();$('task-source').value=state.task.text;renderDocument($('task-editor'),state.task,'task');for(const note of state.taskNotes??[])$('task-editor').prepend(element('p',note,'mapping-note'));$('task-bottom').hidden=false;markDraft('task');renderAdmin();}
 function bilingualCard(host,title,enTitle,text,enText){const card=element('article',undefined,'finding');card.append(localized(element('h3'),title,enTitle),localized(element('p'),text,enText));host.append(card);}
 function renderOriginalBoundary(host,text){
  const result=originalBoundary(text);
@@ -270,26 +425,20 @@ $('import').onchange=action(async()=>{
   for(const entry of value.reviews){const r=await api('review',entry.kind==='task'?{kind:'task',document:entry.input}:{kind:'plan',baseline:entry.baseline.document,plan:entry.input});entry.review=r.result;entry.english=r.english;entry.previous=null;if(entry.followUp){if(typeof entry.followUp.reminder!=='string'||typeof entry.followUp.reply!=='string')throw Error('Invalid follow-up record');const old=await api('review',{kind:'plan',baseline:entry.baseline.document,plan:entry.followUp.before});entry.followUp.beforeReview=old.result;entry.followUp.imported=true;}await api('replies',{review:entry.review,replies:entry.replies});}
   state={schema:value.schema,task:value.task,baseline:value.baseline,plan:value.plan,taskNotes:value.taskNotes??[],planNotes:value.planNotes??[],history:value.history,calls:value.calls,reviews:value.reviews};
   $('task-editor').replaceChildren();$('plan-editor').replaceChildren();$('task-bottom').hidden=true;$('plan-bottom').hidden=true;
-  renderTask();renderPlan();baselineDisplay();renderReview(state.reviews.at(-1));$('task-source').value=value.draftTexts?.task??state.task?.text??'';$('plan-source').value=value.draftTexts?.plan??state.plan?.document.text??'';
+  clearBxpResult();renderTask();renderPlan();baselineDisplay();renderReview(state.reviews.at(-1));$('task-source').value=value.draftTexts?.task??state.task?.text??'';$('plan-source').value=value.draftTexts?.plan??state.plan?.document.text??'';
   if(state.task)state.task.text=$('task-source').value;if(state.plan)state.plan.document.text=$('plan-source').value;
   $('pm-task-source').value=value.draftTexts?.pmTask??value.baseline?.document.text??'';
   if(typeof value.draftTexts?.suggestion==='string'&&$('suggested-task'))$('suggested-task').value=value.draftTexts.suggestion;
   if(typeof value.draftTexts?.reminder==='string')$('reminder').value=value.draftTexts.reminder;
   audit('打开记录','重新验证计算；引用与回应保留');notice('记录已打开并重新验证。编辑中的草案需再次核对；密钥需重新填写。');
 });
-const exampleText='检查FCoP落地情况，检查MCP工具情况，检查SKILLS分配和使用，检查各角色权限和职责，检查轨机运行情况；请PM分解任务，团队协作完成；最后形成报告向ADMIN汇报！';
-$('example').onclick=action(async()=>{
-  if((state.baseline||$('task-source').value)&&!window.confirm(t('载入固定示例会替换当前记录。需要保留请先取消并保存记录。')))return;
-  state={schema:'boundx-ui/v1',task:emptyDoc(exampleText),baseline:null,plan:null,history:[],reviews:[],calls:[]};
-  state.task.parameters={I:'检查FCoP落地情况，检查MCP工具情况，检查SKILLS分配和使用，检查各角色权限和职责，检查轨机运行情况',O:'最后形成报告向ADMIN汇报',A:'检查',P:'请PM分解任务，团队协作完成',C:'最后形成报告向ADMIN汇报'};
-  state.task.actions=[{actor:'PM',verb:'检查',target:'五项检查',quote:state.task.parameters.I},{actor:'PM',verb:'汇报',target:'ADMIN',quote:state.task.parameters.O}];state.task.completion=[{id:'report',quote:state.task.parameters.C}];
-  renderTask();$('plan-editor').replaceChildren();$('plan-source').value='';$('pm-task-source').value='';$('plan-bottom').hidden=true;renderReview(null);baselineDisplay();audit('固定示例','人工预设映射，不是模型现场分析');notice('已载入固定巡检示例，映射仅供体验。先核对，再保存为基线。');page('task');
-});
+setText($('example'),'查看行业案例 / View industry cases');
+$('example').onclick=()=>window.open('/cases','_blank','noopener');
 
 function bindStatic(){
  const walker=document.createTreeWalker(document.body,NodeFilter.SHOW_TEXT);const nodes=[];
  while(walker.nextNode()){const node=walker.currentNode;if(node.parentElement.closest('script,textarea,#language'))continue;if(node.data.trim())nodes.push(node);}
- for(const node of nodes){const source=node.data;locale.bind(node,()=>t(source));}
+ for(const node of nodes){if(locale.hasBinding(node))continue;const source=node.data;locale.bind(node,()=>t(source));}
  for(const node of document.querySelectorAll('[placeholder],[aria-label]')){if(node.id==='language')continue;for(const key of ['placeholder','aria-label'])if(node.hasAttribute(key))attribute(node,key,node.getAttribute(key));}
 }
 bindStatic();

@@ -1,3 +1,10 @@
+export function modelPreferences(value){
+ if(!value||!['api','cursor','codex'].includes(value.provider)||typeof value.model!=='string'||!value.model.trim()||value.model.length>256)throw Error('请先选择模型 / Select a model first');
+ const preference={provider:value.provider,model:value.model.trim()};
+ if(value.provider==='api')Object.assign(preference,{protocol:value.protocol,url:resolveEndpoint(value.url,value.protocol).url,disableThinking:value.disableThinking===true});
+ return preference;
+}
+
 export function resolveEndpoint(address,protocol){
   if(!['responses','chat'].includes(protocol))throw Error('请选择 API 协议。');
   let url;try{url=new URL(address);}catch{throw Error('请填写 HTTPS API 地址。');}
