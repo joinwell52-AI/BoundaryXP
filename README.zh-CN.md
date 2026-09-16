@@ -411,6 +411,7 @@ CLI / MCP 基础能力
 ## 文档
 
 - [完整产品手册](docs/BOUNDX-PRODUCT-MANUAL.md)
+- [边界计算方法与产品作用](docs/BOUNDARY-CALCULATION-METHOD.md)
 - [BXP 0.4 中文规范](protocol/BXP-0001.zh-CN.md)
 - [BXP 0.4 English Specification](protocol/BXP-0001.md)
 - [协议导航](protocol/README.md)
