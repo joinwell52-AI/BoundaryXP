@@ -5,6 +5,7 @@
 - [产品手册](BOUNDX-PRODUCT-MANUAL.md)
 - [边界计算方法与产品作用](BOUNDARY-CALCULATION-METHOD.md)
 - [Real Gold生成与审定标准](GOLD-GENERATION-AND-ADJUDICATION-STANDARD.md)
+- [Real Gold生成执行方法（SOP）](GOLD-GENERATION-SOP.md)
 - [功能与状态](FUNCTIONS.md)
 - [简介](INTRODUCTION.md)
 - [本地快速开始](../QUICKSTART.md)
