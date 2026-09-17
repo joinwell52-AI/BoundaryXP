@@ -3,8 +3,9 @@
 - 文档状态：`DRAFT_FOR_REVIEW`
 - 适用目标：`BXP-0001 0.4.0-draft.1`
 - 适用对象：真实 TASK → Gold Case
-- 版本：`v0.1`
+- 版本：`v0.1.1`
 - 原则：Gold 不是“看起来合理的标准答案”，而是从真实 Source 出发，经可追溯提取、形式化、确定性计算和人工审定后得到的可重放 Oracle。
+- v0.1.1 修订：新增 `Formalization Losslessness` 与 `Boundary Uniqueness != ExecutionPath Uniqueness` 两项硬规则；其余 v0.1 基线不变。
 
 ---
 
@@ -261,6 +262,61 @@ Formalization 只允许：
 
 除非 Profile 明确规定，否则不可以。
 
+### 7.1 Formalization Losslessness（硬规则）
+
+`7+1 -> Formal Boundary Model` 必须是**无损形式化**。所有已经审定、且会影响边界的语义，都必须在 `M` 中保留。
+
+定义：
+
+```text
+FormalCoverageGap =
+  BoundaryRelevant(IR7+1) - RepresentedInFormalModel
+```
+
+必须满足：
+
+```text
+FormalCoverageGap = empty
+```
+
+Formalization 不得：
+
+```text
+丢失已经审定的 Q / F / K / Relations / D / Phi
+弱化条件或禁止项
+新增 Source / Context / Profile 中不存在的约束
+改变模态
+改变未被 Source 明确规定的时序关系
+把 symbolic / unresolved identity 伪装成 resolved identity
+```
+
+例如，若 `C` 已审定包含：
+
+```text
+tests passed
+ADMIN approved
+release published
+TASK archived
+ISSUE closed
+```
+
+则 `K` 不得只保留其中一部分。
+
+若 Source 仅给出：
+
+```text
+CI_green => merge allowed
+ADMIN_approved => release allowed
+```
+
+Formal Model 只能保留这两个条件关系；不得自行增加：
+
+```text
+merge before ADMIN approval
+```
+
+若 `FormalCoverageGap != empty`，该 Case 不得通过 Formal Model 审定。
+
 ---
 
 ## 8. Layer 4：固定计算顺序
@@ -331,19 +387,50 @@ Omega_B = empty
 
 ### 8.6 Boundary Uniqueness
 
-若存在多个均有证据支持但会产生不同规范边界的解释：
+Boundary Uniqueness 判断的是**规范边界是否唯一**，不是执行路径是否唯一。
+
+固定区分：
+
+```text
+BoundaryUnique != ExecutionPathUnique
+```
+
+完全允许：
+
+```text
+canonical_boundary_candidates = 1
+|Omega_B| > 1
+```
+
+这表示边界唯一，但边界内部存在多个合法执行路径；此时仍可：
+
+```text
+BoundaryState = determined
+```
+
+只有当存在多个均有证据支持、且会产生不同规范边界的解释时：
 
 ```text
 CandidateBoundary1 != CandidateBoundary2
 ```
 
-则：
+才：
 
 ```text
 BoundaryState = underdetermined
 ```
 
-不能选择“最可能”的一个。
+禁止把“存在多条合法执行路径”误判为 Boundary 不唯一，也禁止因为 Boundary 已确定就宣称“只有一条执行路径”。
+
+这对应 BoundX 的核心原则：
+
+```text
+目标由合同确定
+路径可以涌现
+边界必须确定
+```
+
+不能选择“最可能”的边界解释。
 
 ---
 
