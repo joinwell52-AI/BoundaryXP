@@ -412,6 +412,9 @@ CLI / MCP 基础能力
 
 - [完整产品手册](docs/BOUNDX-PRODUCT-MANUAL.md)
 - [边界计算方法与产品作用](docs/BOUNDARY-CALCULATION-METHOD.md)
+- [Real Gold 生成与审定标准](docs/GOLD-GENERATION-AND-ADJUDICATION-STANDARD.md)
+- [Real Gold 生成执行方法（SOP）](docs/GOLD-GENERATION-SOP.md)
+- [Real Gold 文件版式与双语展示规范](docs/GOLD-PRESENTATION-AND-BILINGUAL-FORMAT.md)
 - [BXP 0.4 中文规范](protocol/BXP-0001.zh-CN.md)
 - [BXP 0.4 English Specification](protocol/BXP-0001.md)
 - [协议导航](protocol/README.md)
