@@ -1,12 +1,13 @@
 # BoundX Real Gold 生成执行方法（SOP）
 
 - 文档名：`GOLD-GENERATION-SOP.md`
-- 版本：`v0.1`
+- 版本：`v0.1.1`
 - 状态：`DRAFT_FOR_REVIEW`
 - 配套标准：`GOLD-GENERATION-AND-ADJUDICATION-STANDARD.md`
 - 目标协议：`BXP-0001 0.4.0-draft.1`
 - 适用对象：真实 TASK → Real Gold Case
 - 原则：**标准统一答案，SOP 统一过程。**
+- v0.1.1 修订：新增 Formalization 无损覆盖检查，并明确 Boundary 唯一不等于执行路径唯一。
 
 ---
 
@@ -602,13 +603,72 @@ Operator Profile
 
 ---
 
-## 9.5 输出
+## 9.5 Formalization Losslessness Check
 
-`FORMAL-MODEL.json`
+形式化完成后，必须计算：
+
+```text
+FormalCoverageGap =
+  BoundaryRelevant(IR7+1) - RepresentedInFormalModel
+```
+
+必须满足：
+
+```text
+FormalCoverageGap = empty
+```
+
+逐项检查：
+
+```text
+Q 是否完整保留
+F 是否完整保留
+K 是否完整保留
+Relations 是否完整保留
+D 是否完整保留
+Phi 是否完整保留
+条件模态是否被弱化
+是否新增 Source / Context / Profile 中不存在的约束
+是否新增 Source 未明确规定的时序关系
+```
+
+若发现：
+
+```text
+FormalCoverageGap != empty
+```
+
+则状态：
+
+```text
+FORMALIZATION_LOSSY
+```
+
+并停止进入 STEP 5。
+
+如果 Formal Model 新增了无来源约束：
+
+```text
+FORMALIZATION_INVENTED_CONSTRAINT
+```
+
+并停止。
 
 ---
 
-## 9.6 状态
+## 9.6 输出
+
+`FORMAL-MODEL.json` 必须额外保存：
+
+```text
+formal_coverage_gap
+invented_constraints
+preserved_boundary_semantics
+```
+
+---
+
+## 9.7 状态
 
 ```text
 FORMALIZED
@@ -724,7 +784,38 @@ BoundaryState = inconsistent
 
 ## 10.6 Boundary Uniqueness
 
-必须检查所有有证据支持的候选解释。
+必须检查所有有证据支持的**边界解释**。
+
+固定区分：
+
+```text
+BoundaryUnique != ExecutionPathUnique
+```
+
+判断对象是：
+
+```text
+canonical boundary candidates
+```
+
+不是：
+
+```text
+execution paths
+```
+
+允许：
+
+```text
+canonical_boundary_candidates = 1
+legal_execution_paths > 1
+```
+
+此时仍然可以：
+
+```text
+BoundaryState = determined
+```
 
 若：
 
@@ -732,13 +823,21 @@ BoundaryState = inconsistent
 CandidateBoundary1 != CandidateBoundary2
 ```
 
-则：
+且二者都有充分证据支持，则：
 
 ```text
 BoundaryState = underdetermined
 ```
 
 禁止选择“最可能”解释。
+
+也禁止因为 `BoundaryState = determined` 就输出：
+
+```text
+only one legal execution path
+```
+
+除非 Source 本身确实规定唯一执行路径。
 
 ---
 
@@ -766,8 +865,20 @@ Consistency
 CompletionDecidable
 SolutionSpace
 BoundaryUnique
+canonical_boundary_candidates
+legal_execution_paths_cardinality
 BoundaryState
 ```
+
+其中 `legal_execution_paths_cardinality` 可为：
+
+```text
+1
+MANY
+UNKNOWN_NONZERO
+```
+
+它不参与“Boundary 是否唯一”的定义。
 
 ---
 
@@ -1034,7 +1145,14 @@ null
 
 ## G7 — Formal Model independently reviewable
 
-检查 Formal Model 每条内容都有来源。
+检查 Formal Model 每条内容都有来源，并且：
+
+```text
+FormalCoverageGap = empty
+invented_constraints = empty
+```
+
+必须证明 `7+1 -> Formal Model` 没有丢失 boundary-relevant 语义，也没有新增无来源约束。
 
 ---
 
@@ -1043,6 +1161,8 @@ null
 重新执行 STEP 5。
 
 结果必须完全一致。
+
+如果 STEP 4 的 Formal Model 发生变化，G8 必须重新执行，旧结果不得沿用。
 
 ---
 
@@ -1054,6 +1174,7 @@ null
 candidate_interpretations_reviewed
 boundary_changing_ambiguity
 canonical_boundary_candidates
+legal_execution_paths_cardinality
 ```
 
 仅在：
@@ -1063,6 +1184,18 @@ canonical_boundary_candidates = 1
 ```
 
 且无未解决边界歧义时，`determined` 才可通过。
+
+`legal_execution_paths_cardinality` 不要求为 1。
+
+允许：
+
+```text
+canonical_boundary_candidates = 1
+legal_execution_paths_cardinality = MANY
+BoundaryState = determined
+```
+
+G9 不得把“执行路径不唯一”误判为“Boundary 不唯一”。
 
 ---
 
@@ -1326,9 +1459,12 @@ Gold 的目标是：
 6. Policy 是否混进 Task B？
 7. Formal Model 是否只来自已审定语义？
 8. 计算是否固定顺序？
-9. Boundary 是否唯一？
-10. Admission 是否尊重 Profile availability？
-11. G1-G10 是否真实验证而非自报 PASS？
+9. Formalization 是否无损，FormalCoverageGap 是否为空？
+10. 是否新增了 Source 未明确规定的时序/模态约束？
+11. Boundary 是否唯一？
+12. 是否把 Boundary 唯一误写成执行路径唯一？
+13. Admission 是否尊重 Profile availability？
+14. G1-G10 是否真实验证而非自报 PASS？
 ```
 
 任一回答“不确定”：
