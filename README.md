@@ -412,6 +412,9 @@ The repository currently uses the **MIT License**. Engine, model, dictionary, da
 
 - [Product Manual](docs/BOUNDX-PRODUCT-MANUAL.md)
 - [Boundary Calculation Method](docs/BOUNDARY-CALCULATION-METHOD.md)
+- [Real Gold Generation & Adjudication Standard](docs/GOLD-GENERATION-AND-ADJUDICATION-STANDARD.md)
+- [Real Gold Generation SOP](docs/GOLD-GENERATION-SOP.md)
+- [Real Gold Presentation & Bilingual Format](docs/GOLD-PRESENTATION-AND-BILINGUAL-FORMAT.md)
 - [BXP 0.4 English Specification](protocol/BXP-0001.md)
 - [BXP 0.4 Chinese Specification](protocol/BXP-0001.zh-CN.md)
 - [Protocol index](protocol/README.md)
