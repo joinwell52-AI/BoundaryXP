@@ -1,0 +1,52 @@
+{
+  "case_id": "REAL-GOLD-034",
+  "source_sha256": "722932af9e529a1d15f72b915c9fd784d1f63a7349cf0af23a51e58789694122",
+  "E": [
+    "E={Bridgeflow,FCoP_carrier,fcop.json,frontmatter,git,workspace,report}"
+  ],
+  "Sigma": [
+    "Sigma.target=D:\\Bridgeflow",
+    "Sigma.access=read_only",
+    "Sigma.sample=5+5+random5",
+    "Sigma.dormant_task=age_days>=7 AND no_response",
+    "Sigma.archive_window_days=30",
+    "Sigma.report_location=FCoP_carrier"
+  ],
+  "Q": [
+    "Q.audit(A..K)",
+    "Q.sample_frontmatter",
+    "Q.report",
+    "Q.archive(TASK-003,TASK-004)"
+  ],
+  "F": [
+    "F.write(Bridgeflow)",
+    "F.read_body(task|report|issue)",
+    "F.delete_or_rewrite(TASK-003)",
+    "F.side_effect"
+  ],
+  "K": [
+    "K.report_covers={A,B,C,D,E,F,G,H,I,J,K}",
+    "K.report_sections={P0,P1,P2,green}",
+    "K.verified_finding_provenance=path+file_or_field",
+    "K.unsupported_item=unverified_allowed",
+    "K.archive={TASK-003,TASK-004}"
+  ],
+  "Relations": [
+    "TASK-004 -> corrects -> TASK-003",
+    "ME -> assigned_in -> FCoP",
+    "ME -> not_assigned_in -> Bridgeflow"
+  ],
+  "D": [
+    "D.priority=P1",
+    "D.risk=low",
+    "D.rollback=none"
+  ],
+  "Phi": [
+    "Phi.complete_Bridgeflow_snapshot=not_supplied_for_adjudication",
+    "Phi.actual_findings=not_verified_from_available_context"
+  ],
+  "losslessness_zh": "保留目标修正、只读限制、十一章检查、抽样、七天哑火阈值、三十天归档窗口、追加式历史及允许的 unverified；未把错误项目或缺失事实带入结论。",
+  "losslessness_en": "Retains target correction, read-only limit, eleven sections, sampling, seven-day dormancy threshold, 30-day archive window, append-only history and permitted unverified; neither wrong-target nor missing facts enter conclusions.",
+  "formal_coverage_gap": [],
+  "invented_constraints": []
+}

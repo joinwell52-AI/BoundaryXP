@@ -1,0 +1,70 @@
+{
+  "case_id": "REAL-GOLD-012",
+  "source_sha256": "69f642b8026c87b9904941446d9a869163c780ebb919e32a3bcba39aae07aa89",
+  "status": "EVIDENCE_VERIFIED",
+  "evidence": [
+    {
+      "evidence_id": "E001",
+      "source_id": "SOURCE_TASK",
+      "origin": "SOURCE",
+      "start": 0,
+      "end": 168,
+      "quote": "---\r\nprotocol: fcop\r\nversion: 1\r\nsender: ADMIN\r\nrecipient: ME\r\npriority: P0\r\nsubject: FCoP 1.x roadmap — 响应 CodeFlow Issue #2 / 落地 5 类 schema + 5 governance 字段\r\n---\r\n\r\n",
+      "purpose": "source metadata, participants, priority, and roadmap subject"
+    },
+    {
+      "evidence_id": "E002",
+      "source_id": "SOURCE_TASK",
+      "origin": "SOURCE",
+      "start": 168,
+      "end": 1500,
+      "quote": "## 背景\r\n\r\n下游 CodeFlow v2（仓 `D:\\Bridgeflow` / `joinwell52-AI/codeflow-pwa`）在\r\n[`docs/design/codeflow-v2-on-fcop-sdk.md`](../../../../Bridgeflow/docs/design/codeflow-v2-on-fcop-sdk.md)\r\n§3 把整套 Runtime Protocol 设计了出来——5 类 schema（Agent / Task /\r\nReview / Session / Skill），并按 §3.3.1.b + §8.0 硬规则 #4 锁死「协议\r\n演进唯一合法仓库 = `D:\\FCoP`」。\r\n\r\nCodeFlow 把 5 个最迫切的字段拎出来，作为 [Issue #2](https://github.com/joinwell52-AI/FCoP/issues/2)\r\n正式提交给 FCoP 上游，状态 `pending-fcop-review`。\r\n\r\nME 已读完 Issue #2 全文 + CodeFlow 设计文档 §3 / §0.9.1 / §0.9.4 / §1.3\r\n/ §3.3.1.b / §8.0，并探索了 FCoP 仓库现状（详见探索报告：\r\nadr/README + ADR-0001..0006、`spec/fcop-spec-v1.0.3.md`、`src/fcop/`、\r\n`mcp/`、`docs/releases/0.7.2.md`、`CHANGELOG.md`）。\r\n\r\n### 关键发现（ME 的现状对账）\r\n\r\n1. **Issue #2 比字面写的大得多**——CodeFlow §3 想要的是整套 5 类\r\n   schema 升级（POSIX / OCI / CRD 类比），不只是 5 个字段。\r\n2. **FCoP 当前没有 Review schema**——只有 `Report.status: 'done' \\|\r\n   'blocked' \\| 'in_progress'`；Issue 假设的 `Review.decision:\r\n   ['approve', 'reject']` enum 在仓里**不存在**。\r\n3. **FCoP 当前没有 JSON Schema 文件**——`schema.py` 是 dataclass +\r\n   手写 frozenset 校验。CodeFlow §3.1 第 1 条要求改。\r\n4. **FCoP 当前没有 `REVIEW-*.md` 文件类型**——只有 TASK / REPORT /\r\n   ISSUE 的 filename 正则。\r\n5. **当前包版本 `0.7.2`**，Issue 默认目标 `1.1.0` 意味着先要发 `1.0.0`。\r\n6. **CodeFlow §8.0 硬规则 #4 / §3.3.1.b** 锁死：协议任何演进必须\r\n   先在本仓发生，CodeFlow 后镜像。\r\n\r\n详细对账见后续 ADR-0007 (charter) 第 §Context。\r\n\r\n",
+      "purpose": "CodeFlow context, current-state findings, and protocol-authority boundary"
+    },
+    {
+      "evidence_id": "E003",
+      "source_id": "SOURCE_TASK",
+      "origin": "SOURCE",
+      "start": 1500,
+      "end": 3298,
+      "quote": "## ADMIN 决议（2026-05-09 聊天对话锁定）\r\n\r\nADMIN 在 4 个关键岔口拍板，每条都从 `AskQuestion` 5 选项里明确选定：\r\n\r\n| 决策点 | 选定方案 | 含义 |\r\n|---|---|---|\r\n| **升级 scope** | **Plan B · 中庸** | `0.7.2` → `1.0.0`（先 freeze）→ `1.1.0`（加 5 字段）。分两次发版，4-5 周 |\r\n| **REVIEW 怎么落** | **新建 `REVIEW-*.md` 文件类型** | 与 TASK / REPORT / ISSUE 并列，配 `models.Review` + `Project.write_review`；REVIEW 是审 TASK / REPORT / role-switch 的独立事件 |\r\n| **JSON Schema** | **`1.0.0` 就上** | `spec/schemas/{agent,task,review,session,skill}.schema.json` + `jsonschema` 库验证（CodeFlow §3.1 原则 #1） |\r\n| **下一步动作** | **三件事都做** | 1) 先在 Issue #2 留方向 comment 让 CodeFlow 知道；2) 写 ADR-0007 charter；3) 切 Plan 模式细化 8 个 ADR |\r\n\r\n### 8 ADR 大纲（ADMIN 已认可，细节由 Plan 模式后续补完）\r\n\r\n| # | ADR 标题 | 落地版本 | PR scope（粗估）|\r\n|---|---|---|---|\r\n| 0007 | FCoP 1.0 Protocol Freeze Charter | 1.0.0 | 文档（charter + roadmap） |\r\n| 0008 | JSON Schema as Machine-Readable Spec | 1.0.0 | `spec/schemas/*.schema.json` 5 份 + `tests/test_schemas/` + jsonschema 依赖 |\r\n| 0009 | REVIEW-* File Type & Filename Grammar | 1.0.0 | `core/filename.py` 扩 + `models.Review` + `Project.write_review` + REVIEW frontmatter parser |\r\n| 0010 | `Agent.layer` field (`worker` \\| `governance` \\| `admin`) | 1.1.0 | `TeamConfig.roles[i].layer` + 校验 + 默认 worker |\r\n| 0011 | `Task.risk_level` field (`low` \\| `medium` \\| `high` \\| `irreversible`) | 1.1.0 | `TaskFrontmatter._KNOWN_KEYS` 加 + 默认 medium |\r\n| 0012 | `Review.decision = needs_human` enum extension | 1.1.0 | Review schema 加 enum + Reviewer 接口扩展 |\r\n| 0013 | `Review.human_approval` sub-structure | 1.1.0 | Review schema 子对象 + `Project.mark_human_approved()` API + 校验：approver 必须是 `layer: admin` |\r\n| 0014 | `Skill.tools[]` risk metadata | 1.1.0 | `spec/schemas/skill.schema.json` + `_data/skills/` 模板 + Skill loader |\r\n\r\nADR-0007 / 0008 / 0009 是 1.0.0 地基；0010-0014 是 1.1.0 装修。\r\n\r\n",
+      "purpose": "ADMIN decisions and eight-ADR roadmap"
+    },
+    {
+      "evidence_id": "E004",
+      "source_id": "SOURCE_TASK",
+      "origin": "SOURCE",
+      "start": 3298,
+      "end": 4444,
+      "quote": "## 三步执行计划（这份 TASK 的可交付物）\r\n\r\n### 步骤 1：在 Issue #2 留方向回复 comment\r\n\r\n- 内容：现状对账（FCoP 当前现状 vs Issue #2 假设的差异表）+\r\n  ADMIN 拍板的 Plan B 路径 + 8 ADR 大纲表 + 时间预期 + 5 步流程承诺\r\n  （引 CodeFlow §3.3.1.b）。\r\n- 让 CodeFlow 那边知道我们的方向、时间表、Issue 字段会按 1.1.0 落地、\r\n  之前会先有 1.0.0 freeze。\r\n- 工具：`gh issue comment 2 --body-file ...`，body 用 HEREDOC 走文件。\r\n- 不关闭 Issue（5 个字段全部进 1.1.0 之后再关）。\r\n\r\n### 步骤 2：写 `adr/ADR-0007-fcop-1.0-protocol-freeze-charter.md`\r\n\r\n- 严格走 `adr/README.md` 模板：Status / Date / Deciders / Related →\r\n  Context（含本 TASK §背景里的对账表） → Decision（Plan B 路径 + 8\r\n  ADR roadmap） → Design Details（每个 ADR 的边界 + 依赖图） →\r\n  Non-Goals → Alternatives Considered（A/C/D/E 4 个备选 + 否决理由）\r\n  → Consequences（Positive/Negative/Neutral）→ Timeline。\r\n- Status 起手 `Proposed`；本 TASK closed 后改 `Accepted`。\r\n- 同步更新 `adr/README.md` 索引表加这一行。\r\n\r\n### 步骤 3：切 Plan 模式细化 ADR-0008..0014\r\n\r\n- 每个 ADR 各自起一份 `Status: Proposed` 的草稿 outline（不写正文，\r\n  只写 Context / Decision 一句话 / Design Details 关键 bullet / Tests\r\n  清单 / 兼容性说明）。\r\n- 输出格式：`adr/ADR-NNNN-*.md` 的草稿大纲 + 1 份覆盖 1.0/1.1 两次\r\n  发版的 release-notes 大纲（对位 `docs/releases/0.7.2.md` 的风格）。\r\n- 这一步是**可视化 roadmap**，不写实现代码。\r\n- 实现代码留给后续每个 ADR 单独的 TASK + PR。\r\n\r\n",
+      "purpose": "three stated deliverable steps"
+    },
+    {
+      "evidence_id": "E005",
+      "source_id": "SOURCE_TASK",
+      "origin": "SOURCE",
+      "start": 4444,
+      "end": 5157,
+      "quote": "## 验收标准\r\n\r\n- [ ] 步骤 1：Issue #2 上有 ME 的方向 comment（gh CLI 留下，含\r\n      现状对账表 + Plan B + 8 ADR 大纲）\r\n- [ ] 步骤 2：`adr/ADR-0007-fcop-1.0-protocol-freeze-charter.md`\r\n      存在，Status: Accepted（这次决议是 ADMIN 当面拍板的，直接\r\n      Accepted；不走 Proposed→Accepted 两次提交）\r\n- [ ] `adr/README.md` 索引表新增 ADR-0007 一行\r\n- [ ] 步骤 3：`adr/ADR-0008..0014` 各有一份草稿大纲文件，Status:\r\n      Proposed（待后续单独评审）\r\n- [ ] 写 `REPORT-20260509-001-ME-to-ADMIN.md` 完整自查（含本 TASK\r\n      四步全部勾掉的清单 + git commit 链）\r\n- [ ] 把已过期的 `docs/agents/tasks/TASK-20260428-001-ADMIN-to-ME.md`\r\n      （教程改版，2026-04-28 那次，早已完成但未归档）一并归档到\r\n      `docs/agents/log/tasks/`，附一句\"归档原因：内容已落地为\r\n      tetris/snake 教程 + Essay 06，无悬挂工作\"\r\n- [ ] 全部 commit + push 到 main（这是 ADMIN 的 repo，无需 PR）\r\n\r\n",
+      "purpose": "acceptance criteria and closeout requirements"
+    },
+    {
+      "evidence_id": "E006",
+      "source_id": "SOURCE_TASK",
+      "origin": "SOURCE",
+      "start": 5157,
+      "end": 5837,
+      "quote": "## 风险与边界\r\n\r\n1. **scope creep**：8 个 ADR 写下来文字量很大；步骤 3 严格控制为\r\n   \"草稿大纲\"（每份 ≤ 80 行），不展开实现细节，避免一口吃成胖子。\r\n2. **跨语言契约**：1.0 freeze 后 CodeFlow TS 端要 mirror schema；\r\n   ADR-0007 必须明写\"FCoP 是 spec 权威\"+ 5 步流程图（直接引 CodeFlow\r\n   §3.3.1.b 全文，避免双仓自由解释）。\r\n3. **`Report.status` 与 `Review.decision` 的语义切割**：1.0 freeze 后\r\n   两者各管一段——Report.status = \"我做完没\"（worker 自报），\r\n   Review.decision = \"我审过了\" (governance 审 worker)。ADR-0009 必须\r\n   明写边界。\r\n4. **JSON Schema vs dataclass 的双源真相风险**：避免 schema.json 和\r\n   `core/schema.py` 漂移——ADR-0008 必须定一个\"谁是 single source of\r\n   truth\"（建议 schema.json 是真相，dataclass 由 schema 生成或对照\r\n   测试 enforce）。\r\n5. **本 TASK 不动 Python 实现**——只产出文档与 roadmap。任何实现\r\n   代码留给后续 TASK。\r\n\r\n",
+      "purpose": "scope, schema, semantics, and implementation boundaries"
+    },
+    {
+      "evidence_id": "E007",
+      "source_id": "SOURCE_TASK",
+      "origin": "SOURCE",
+      "start": 5837,
+      "end": 6048,
+      "quote": "## 与 CodeFlow §8.0 硬规则的对齐\r\n\r\n- 本 TASK 完全在 `D:\\FCoP` 仓内发生 → ✅ 符合硬规则 #4。\r\n- 不在 CodeFlow 仓动 schema → ✅ 符合硬规则 #5（防内）。\r\n- 5 步流程的\"FCoP 评审通过 → CodeFlow mirror\"会在 ADR-0007 charter\r\n  里以原话引用 CodeFlow §3.3.1.b → 双仓共识锁死。\r\n",
+      "purpose": "CodeFlow hard-rule alignment"
+    }
+  ]
+}

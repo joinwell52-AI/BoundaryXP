@@ -1,0 +1,37 @@
+{
+  "case_id": "REAL-GOLD-058",
+  "source_sha256": "7a498730116bdfbf802f4772e8259101232d9765f3996ef44b83332f64d9a8e8",
+  "E": [
+    "E={env.DEVTO_API_KEY,GET /api/users/me,devto_publish_endpoint,target_article,result_record}"
+  ],
+  "Sigma": [
+    "Sigma.target_article=unresolved",
+    "Sigma.user_agent=explicit_nonempty"
+  ],
+  "Q": [
+    "Q.add_user_agent",
+    "Q.retry_auth",
+    "Q.retry_publish",
+    "Q.record_result"
+  ],
+  "F": [
+    "F.disclose(api_key)"
+  ],
+  "K": [
+    "K.publish_url OR (K.new_failure_record AND K.actionable_assessment)"
+  ],
+  "Relations": [
+    "auth_check -> conditions -> publication"
+  ],
+  "D": [
+    "D.deadline=absent"
+  ],
+  "Phi": [
+    "Phi.OperatorProfile=absent",
+    "Phi.external_authorization=not_evaluated"
+  ],
+  "losslessness_zh": "保留明确 User-Agent、认证与发布重试、密钥保密和成功/失败验收；只将未指明的待发布对象保留为任务缺口，不补造重试次数、报告格式或外部授权。",
+  "losslessness_en": "Retains an explicit User-Agent, authentication/publication retries, secret protection and both acceptance branches. Only the unidentified publication target remains a task gap; no retry count, report format or external authorization is invented.",
+  "formal_coverage_gap": [],
+  "invented_constraints": []
+}

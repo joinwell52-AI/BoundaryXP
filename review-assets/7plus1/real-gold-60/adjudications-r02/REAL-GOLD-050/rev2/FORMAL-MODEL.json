@@ -1,0 +1,56 @@
+{
+  "case_id": "REAL-GOLD-050",
+  "source_sha256": "3b253ea59ea1878e7db5c1f9f5cb79cd3dc902d8957587ad0ba197d6017f56d6",
+  "E": [
+    "E={TASK006,prompts,MCP,Python,lifecycle,README,audits}"
+  ],
+  "Sigma": [
+    "Sigma.sections=6",
+    "Sigma.top_scenario_table=required",
+    "Sigma.languages=2",
+    "Sigma.version_pin=false",
+    "Sigma.antipatterns>=6"
+  ],
+  "Q": [
+    "Q.write",
+    "Q.document_unpinned_upgrade",
+    "Q.document_physical_ls",
+    "Q.document_stop_on_P0",
+    "Q.register_or_document_deferral",
+    "Q.audit"
+  ],
+  "F": [
+    "F.pin_version",
+    "F.change(old_prompt|LETTER|protocol)",
+    "F.release",
+    "F.choose_init_or_remediation",
+    "F.tool_guardrail"
+  ],
+  "K": [
+    "K.MCP_Python_boundary",
+    "K.physical_lifecycle",
+    "K.P0=>stop",
+    "K.resource={resolve_now|document_deferral_to_next_release_if_structural_change}",
+    "K.antipatterns>=6",
+    "K.environment_check=Python>=3.10",
+    "K.REPORT-007_and_archive_TASK-006+TASK-007"
+  ],
+  "Relations": [
+    "TASK007 -> supersedes -> TASK006",
+    "ADMIN_choice -> gates -> init",
+    "P0 -> blocks -> autonomous_remediation"
+  ],
+  "D": [
+    "D.priority=P1",
+    "D.risk=low",
+    "D.deadline=absent"
+  ],
+  "Phi": [
+    "Phi.resource_choice=permitted_execution_alternative",
+    "Phi.OperatorProfile=absent"
+  ],
+  "losslessness_zh": "保留 supersede、顶部场景表加六节、最新版策略、prompt 内物理验证与 P0 停止、明示允许的资源路径分支和禁止边界；起草示例不等于获准执行安装/初始化。",
+  "losslessness_en": "Retains supersession, top table plus six sections, latest-version policy, physical verification and P0 stop documented in the prompt, explicitly permitted resource paths and prohibitions; drafting example commands does not authorize installation or initialization.",
+  "formal_coverage_gap": [],
+  "invented_constraints": []
+}

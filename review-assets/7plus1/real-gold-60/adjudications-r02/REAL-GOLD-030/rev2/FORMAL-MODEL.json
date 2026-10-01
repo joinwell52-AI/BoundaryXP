@@ -1,0 +1,54 @@
+{
+  "case_id": "REAL-GOLD-030",
+  "source_sha256": "25b8743f90170dc204413d0a7364bb3d69cdc9f0fb535490714555bfd6a443c0",
+  "E": [
+    "E={checks,build,smoke,P_E,tag,push,Actions,PyPI,REPORT009}"
+  ],
+  "Sigma": [
+    "Sigma.numbered_steps=13",
+    "Sigma.step8_substeps=2",
+    "Sigma.packages=2",
+    "Sigma.untracked_noise=11"
+  ],
+  "Q": [
+    "Q.check_A_to_D",
+    "Q.build_smoke",
+    "Q.report_checks_and_wait_ADMIN",
+    "Q.redeploy",
+    "Q.tag_push",
+    "Q.Actions",
+    "Q.PyPI_smoke"
+  ],
+  "F": [
+    "F.ME_self_tag_push_publish",
+    "F.advance_without_post_checks_ADMIN_go_ahead",
+    "F.continue_after_failure",
+    "F.hide_drift",
+    "F.include_noise"
+  ],
+  "K": [
+    "K=DoD",
+    "K.PyPI_versions=1.6.0"
+  ],
+  "Relations": [
+    "checks_pass -> permits -> report_to_ADMIN",
+    "ADMIN_post_checks_go_ahead -> permits -> redeploy_tag_push",
+    "ADMIN -> triggers -> irreversible_steps",
+    "Actions -> publishes -> packages",
+    "ME -> verifies -> PyPI"
+  ],
+  "D": [
+    "D.status=IN_PROGRESS_step2",
+    "D.rollback={yank,bump_1.6.1}"
+  ],
+  "Phi": [
+    "Phi.snapshot_nature=to_be_measured",
+    "Phi.actual_checks=not_observed",
+    "Phi.actual_approval_binding=not_available",
+    "Phi.post_checks_ADMIN_go_ahead=not_observed"
+  ],
+  "losslessness_zh": "编号 1–13 与 8a/8b、不可逆风险、Step 7 后等待 ADMIN 续发、分别触发和失败即停均保留；源文本自称已有批准不被视为可核验授权。",
+  "losslessness_en": "Numbered steps 1–13 with 8a/8b, irreversible risk, waiting for ADMIN after step 7, separate triggers, and stop-on-failure are retained; source-claimed prior approval is not treated as verified authorization.",
+  "formal_coverage_gap": [],
+  "invented_constraints": []
+}

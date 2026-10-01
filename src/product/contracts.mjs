@@ -24,13 +24,13 @@ const extension = { type: 'object', maxProperties: 16, propertyNames: { pattern:
   additionalProperties: { type: 'string', maxLength: 1024 } };
 const resource = object({ name, path: text(), format: { enum: ['json', 'md'] }, encoding: { const: 'utf-8' },
   bytes: { type: 'integer', minimum: 0, maximum: LIMITS.file }, hash: { type: 'string', pattern: '^sha256:[a-f0-9]{64}$' },
-  boundx: object({ kind: { enum: ['ontology', 'actions', 'entities', 'roles', 'resources', 'references', 'completions', 'boundaries', 'employee-directory', 'readme'] }, payload_schema: text() }) });
+  boundx: object({ kind: { enum: ['ontology', 'actions', 'entities', 'roles', 'resources', 'references', 'completions', 'boundaries', 'employee-directory', 'enterprise-ontology', 'enterprise-facts', 'readme'] }, payload_schema: text() }) });
 export const packSchema = {
   $schema: 'http://json-schema.org/draft-07/schema#', $id: IDS.pack,
   ...object({ $schema: { const: IDS.pack }, name, version,
     id: { type: 'string', pattern: '^urn:uuid:[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}$' },
     resources: { ...list(resource, LIMITS.files), minItems: 1 },
-    boundx: object({ scope: name, layer: { enum: ['L1', 'L2', 'L3'] }, dependencies: list(packReference, 2),
+    boundx: object({ scope: name, layer: { enum: ['L1', 'L2', 'L3'] }, dependencies: list(packReference, 16),
       semantic_contract: { const: 'boundx-semantic-contract/v1' }, tenant_id: name,
       coverage: object(Object.fromEntries(['actions', 'entities', 'roles', 'resources', 'references', 'completions', 'boundaries'].map(key => [key, { type: 'integer', minimum: 0 }]))),
       allowed_ambiguous_triggers: list(object({ trigger: text(), frame_ids: { ...list(text(), 32), minItems: 2, uniqueItems: true } }), 128),
@@ -56,7 +56,7 @@ definitions.entry.properties.interpretation = text(2048);
 const properties = taskSchema.properties;
 export const prepareSchema = { $schema: taskSchema.$schema, $id: IDS.prepare,
   ...object({ source: structuredClone(properties.source), sources: structuredClone(properties.sources),
-    profile: structuredClone(properties.profile), packs: { ...list(packReference, 3), minItems: 1, uniqueItems: true } }, ['source', 'profile', 'packs']),
+    profile: structuredClone(properties.profile), packs: { ...list(packReference, 16), minItems: 1, uniqueItems: true } }, ['source', 'profile', 'packs']),
   $defs: structuredClone(taskSchema.$defs),
 };
 export const candidateSchema = { $schema: taskSchema.$schema, $id: IDS.candidate,
@@ -64,7 +64,7 @@ export const candidateSchema = { $schema: taskSchema.$schema, $id: IDS.candidate
     source_digest: hash, context_digest: hash,
     elements: structuredClone(properties.elements), constraints: structuredClone(properties.constraints),
     scopes: structuredClone(properties.scopes),
-    producer: object({ producer_kind: { enum: ['host-ai', 'structured-replay', 'labels-replay'] },
+    producer: object({ producer_kind: { enum: ['host-ai', 'structured-replay', 'labels-replay', 'local-nlp'] },
       adapter_version: version, model_id: text() }), clarifications: list(text(2048), 128),
   }, ['schema', 'prepare_id', 'source_digest', 'context_digest', 'elements', 'constraints', 'producer', 'clarifications']),
   $defs: definitions,

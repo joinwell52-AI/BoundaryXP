@@ -1,0 +1,43 @@
+{
+  "case_id": "REAL-GOLD-022",
+  "source_sha256": "adaa153b6d935ee42910c08fd4451f65dfeb57a931797ba20e86a51c9f299bcf",
+  "status": "EVIDENCE_VERIFIED",
+  "evidence": [
+    {
+      "evidence_id": "E001",
+      "source_id": "SOURCE_TASK",
+      "origin": "SOURCE",
+      "start": 0,
+      "end": 926,
+      "quote": "---\r\nprotocol: fcop\r\nversion: 1\r\nfcop_version: \"1.0.0rc1\"\r\nsession_id: \"main-2026-05-09\"\r\ntask_id: \"TASK-20260509-012\"\r\ntype: TASK\r\nsender: \"ADMIN\"\r\nrecipient: \"ME\"\r\nsubject: \"ADR-0022 Phase 2: Project() workspace_dir 改造\"\r\ndate: \"2026-05-09\"\r\nstatus: \"done\"\r\npriority: \"P1\"\r\nreferences:\r\n  - \"adr/ADR-0022-workspace-directory-convention.md\"\r\n  - \"src/fcop/project.py\"\r\n  - \"mcp/src/fcop_mcp/server.py\"\r\n  - \"tests/test_fcop/test_project_workspace_dir.py\"\r\n---\r\n\r\n# TASK-20260509-012 — ADR-0022 Phase 2: `Project()` workspace_dir 改造\r\n\r\n## 背景\r\n\r\n`v1.0.0-rc.1` 已发布（commit `a... → main` + tag pushed）。ADR-0022\r\nPhase 1（`fcop migrate-workspace` CLI）随 RC 落地。ADMIN 命令\"继续推\r\n进\"，进入 RC → final 倒计时窗口。Known gaps 中体量最大的是 ADR-0022\r\nPhase 2：把 `Project` 类的 hard-coded `docs/agents/` 路径全部改造为\r\n可配置 + 自动 detect。\r\n\r\n## 范围\r\n\r\n实施 ADR-0022 §\"Decision §1\" + §\"启动时 detect 行为\" + §\"Tests\r\nChecklist\" 中所有 deferred 项（`MIGRATION-1.0.md` 除外，那是 TASK-013）。\r\n\r",
+      "purpose": "metadata, background, and scope reference"
+    },
+    {
+      "evidence_id": "E002",
+      "source_id": "SOURCE_TASK",
+      "origin": "SOURCE",
+      "start": 927,
+      "end": 1702,
+      "quote": "## 验收标准\r\n\r\n1. `Project.__init__` 接受 `workspace_dir=` kwarg\r\n2. 4 种 detect 场景（仅 fcop/、仅 docs/agents/、双存在、双不存在）\r\n   行为符合 ADR-0022 §\"启动时 detect 行为\"\r\n3. 仅 docs/agents/ 时打 `DeprecationWarning`，不 raise\r\n4. 双存在时 `ConfigError` ABORT\r\n5. 显式 override 永不 warn，relative 与 absolute 路径都接受\r\n6. 8 个公开路径 properties 全部 derive from `self._workspace_root`\r\n7. `LETTER-TO-ADMIN.md` 落盘路径动态化（fcop/ vs docs/agents/）\r\n8. MCP server init reply 中 LETTER 路径与文件实际位置一致\r\n9. 既有测试套全部通过（接受 RC 之前已存在的 1 个 pre-existing fail）\r\n10. 新增 `tests/test_fcop/test_project_workspace_dir.py` 覆盖 4 detect\r\n    + explicit override + path derivation invariant + is_initialized\r\n    scoping + end-to-end init under custom workspace\r\n11. ADR-0022 标记 Phase 2 已完成，含 commit hash + 测试覆盖证据\r\n12. CHANGELOG 在 `[Unreleased]` 段记录本次变更\r\n\r",
+      "purpose": "twelve acceptance criteria"
+    },
+    {
+      "evidence_id": "E003",
+      "source_id": "SOURCE_TASK",
+      "origin": "SOURCE",
+      "start": 1703,
+      "end": 2332,
+      "quote": "## 交付物\r\n\r\nR1+R2+R3 合并 commit：`861713b`\r\n- `src/fcop/project.py` — `__init__` + `_resolve_workspace_root` +\r\n  路径 properties + ledger prefix dynamic\r\n- `mcp/src/fcop_mcp/server.py` — init reply LETTER 路径动态化\r\n- `tests/test_fcop/test_project_workspace_dir.py` — 新建 15 用例\r\n- 9 fcop test 文件 + mcp test_server.py — 53 处期望 swap\r\n- `tests/test_fcop/snapshots/public_surface.json` — 新增字段\r\n\r\nR4：本 TASK 文档 + REPORT + ADR sign-off + CHANGELOG `[Unreleased]`\r\n\r\n## 优先级理由\r\n\r\nADR-0022 Phase 2 是 known gaps 中体量最大的工程项（30+ 处路径 +\r\n600+ 既有测试可能撞红）。Phase 2 完成后，1.0.0 final 仅余文档级工作\r\n（`MIGRATION-1.0.md` + 去 1.0.0.md DRAFT marker + tag），风险下降到\r\n非协议层级。\r\n\r",
+      "purpose": "deliverables and priority rationale"
+    },
+    {
+      "evidence_id": "E004",
+      "source_id": "SOURCE_TASK",
+      "origin": "SOURCE",
+      "start": 2333,
+      "end": 2372,
+      "quote": "## 时间盒\r\n\r\nD0（2026-05-09）单日完成 Phase 2。\r\n",
+      "purpose": "single-day timebox"
+    }
+  ]
+}

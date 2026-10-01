@@ -1,0 +1,43 @@
+{
+  "case_id": "REAL-GOLD-028",
+  "source_sha256": "8a155c8f2103b52a1b898c23848d3cea2649ffb1ad9a68a87ae197af9cc52969",
+  "status": "EVIDENCE_VERIFIED",
+  "evidence": [
+    {
+      "evidence_id": "E001",
+      "source_id": "SOURCE_TASK",
+      "origin": "SOURCE",
+      "start": 0,
+      "end": 1482,
+      "quote": "---\r\nprotocol: fcop\r\nversion: 1\r\nkind: task\r\ntask_id: TASK-20260512-006\r\nsender: ADMIN\r\nrecipient: ME\r\npriority: P1\r\nthread_key: adr-0033-trailing-slug-adoption\r\nrisk_level: low\r\ncreated_at: \"2026-05-12T22:55:00+08:00\"\r\n---\r\n\r\n# ADR-0033 · TASK / REPORT / ISSUE 文件名 trailing-slug 收编\r\n\r\n## 背景 · Why\r\n\r\nP4.9 sprint(codeflow + D:\\FCoP)期间,agent 自发涌现一种长文件名:\r\n\r\n```\r\nTASK-20260512-022-PM-to-OPS-fcop-mcp-1-5-1-housekeeping-commit.md\r\nTASK-20260512-025-PM-to-OPS-phase-a-fix-naming.md\r\nTASK-20260512-009-PM-to-OPS-codeflow-json-rm.md\r\n... 共 22+ 件(codeflow 端)\r\n```\r\n\r\n按现行 `TASK_FILENAME_RE`(`src/fcop/core/filename.py:99-101`)的\r\n`_ROLE = [A-Z][A-Z0-9_]*(?:-[A-Z0-9_]+)*`,这种文件名 lexical 不合规\r\n(`parse_task_filename` 返回 None)。但 `fcop_audit` 6 个 scan 全部\r\n不查这一类,事实放行。Rule 5 又锁死\"改名修复\"路径——已落盘文件不能改名。\r\n\r\nADMIN 决策(2026-05-12 22:51):**A · 协议收编**。理由:agent 之间\r\n看得懂——文件名一眼看出任务主题,信息价值高,是 essay D 谈的\r\n\"类型 1 涌现\"(高复用)的标准收编候选。\r\n\r\n## 范围 · What\r\n\r\n新增**可选 trailing-slug 段**到 TASK / REPORT / ISSUE 三类文件名:\r\n\r\n```\r\nTASK-{date}-{NNN}-{SENDER}-to-{RECIPIENT}[.{SLOT}][-{slug}].md\r\nREPORT-{date}-{NNN}-{REPORTER}-to-{RECIPIENT}[-{slug}].md\r\nISSUE-{date}-{NNN}-{REPORTER}[-{slug}].md\r\n```\r\n\r\n`{slug}` 语法(沿用 REVIEW 的 `subject_short` 现成约定):\r\n\r\n```\r\n[a-z0-9][a-z0-9-]*  (lowercase letters / digits / hyphens, 起手非 hyphen)\r\n长度建议 ≤ 40 字符(soft limit,不强制)\r\n```\r\n\r\n**slug 不参与 routing**——它只是人类可读标签,routing 仍由\r\n`{SENDER}/{RECIPIENT}/{SLOT}` 决定。slug 缺失 / 存在均合规。\r\n\r\nREVIEW 文件名**不**加 slug(它已有 `-on-{subject_short}` 段,\r\n功能等价,无需重复)。\r\n\r",
+      "purpose": "metadata, background, optional slug grammar"
+    },
+    {
+      "evidence_id": "E002",
+      "source_id": "SOURCE_TASK",
+      "origin": "SOURCE",
+      "start": 1483,
+      "end": 3465,
+      "quote": "## 实施步骤 · How\r\n\r\n### Phase 1 · 协议规则补丁(MINOR additive)\r\n\r\n- [ ] `src/fcop/core/filename.py`:\r\n  - 在 `_ROLE` 后增加 `_SLUG = r\"[a-z0-9][a-z0-9-]*\"`\r\n  - 改 `TASK_FILENAME_RE` 在 `(?:\\.(_ROLE))?` 后追加 `(?:-(_SLUG))?`\r\n  - 改 `REPORT_FILENAME_RE` 在 `(_ROLE)\\.md$` 前追加 `(?:-(_SLUG))?`\r\n  - 改 `ISSUE_FILENAME_RE` 在 `(_ROLE)\\.md$` 前追加 `(?:-(_SLUG))?`\r\n- [ ] `TaskFilename` / `ReportFilename` / `IssueFilename` dataclass 加\r\n  `slug: str | None = None` 字段;`render()` 同步\r\n- [ ] `parse_task_filename` / `parse_report_filename` /\r\n  `parse_issue_filename` 返回 slug\r\n- [ ] `build_task_filename` / `build_report_filename` /\r\n  `build_issue_filename` 加 `slug` 关键字参数(可选)\r\n- [ ] `_check_components` 处理 slug 校验(用新增 `_SLUG_RE`)\r\n\r\n### Phase 2 · 单元测试\r\n\r\n- [ ] `tests/core/test_filename.py` 新增:\r\n  - parse 含 slug 的 task / report / issue 文件名\r\n  - parse 不含 slug 的回归测试(向后兼容)\r\n  - build 显式带 slug\r\n  - 非法 slug 拒绝(大写 / 起手 hyphen / 含 underscore)\r\n  - 现场样本回归:\r\n    `TASK-20260512-025-PM-to-OPS-phase-a-fix-naming.md` → 应解析为\r\n    `(date=20260512, seq=25, sender=PM, recipient=OPS, slot=None,\r\n    slug=\"phase-a-fix-naming\")`\r\n\r\n### Phase 3 · 协议文档同步\r\n\r\n- [ ] `src/fcop/rules/fcop-rules.mdc`:Rule 3 `Metadata Integrity` 节\r\n  保持不变(slug 不入 frontmatter);**版本日志**新增 2.3.0 条目\r\n  `(per ADR-0033)`\r\n- [ ] `src/fcop/rules/fcop-protocol.mdc`:`File Naming` 节增加\r\n  \"Optional trailing slug\"小节(中英双语 + 示例 +\"不参与 routing\"\r\n  说明)\r\n- [ ] `fcop_rules_version`:`2.2.0 → 2.3.0`\r\n- [ ] `fcop_protocol_version`:`2.0.0 → 2.1.0`\r\n- [ ] 部署的 host-neutral 4 件套(`.cursor/rules/*.mdc` + `AGENTS.md`\r\n  + `CLAUDE.md`)同步重生成\r\n\r\n### Phase 4 · ADR + Release notes\r\n\r\n- [ ] 写 `adr/ADR-0033-trailing-slug-filename-adoption.md`,含:\r\n  - 背景:codeflow + D:\\FCoP 双现场 22+ 件涌现证据\r\n  - 决策:A · 协议收编\r\n  - 影响范围 + 向后兼容性证明\r\n  - 拒绝的备选 B(禁止)被 Rule 5 锁死的推理\r\n- [ ] 起草 `fcop 1.2.0` release notes(MINOR · additive),含:\r\n  - 协议层 fcop_rules_version 2.3.0 + fcop_protocol_version 2.1.0\r\n  - 行为变化:`parse_*_filename` 多返一字段(向后兼容,旧 caller 不读 slug 即可)\r\n  - codeflow 等下游用户升级后,历史长文件名追溯性合规\r\n\r",
+      "purpose": "four implementation phases"
+    },
+    {
+      "evidence_id": "E003",
+      "source_id": "SOURCE_TASK",
+      "origin": "SOURCE",
+      "start": 3466,
+      "end": 4240,
+      "quote": "## 验收标准 · DoD\r\n\r\n- [ ] 单测全绿(新增 + 回归)\r\n- [ ] `re.fullmatch(TASK_FILENAME_RE,\r\n  'TASK-20260512-025-PM-to-OPS-phase-a-fix-naming.md')` → match,\r\n  groups 含 `slug='phase-a-fix-naming'`\r\n- [ ] 旧文件名 `TASK-20260512-006-ADMIN-to-ME.md` 仍 parse 通过,\r\n  `slug=None`\r\n- [ ] `fcop-rules.mdc` / `fcop-protocol.mdc` / `AGENTS.md` / `CLAUDE.md`\r\n  内容一致(diff 只在版本号 + 新增的\"Optional trailing slug\"节)\r\n- [ ] ADR-0033 落盘,链接 essay D + codeflow emergence-log\r\n\r\n## 节奏 · When\r\n\r\n**等 ADMIN 拍 kickoff 时机**——两个选项:\r\n\r\n| 选项 | 含义 | ETA |\r\n|---|---|---|\r\n| **并行** | 现在就开始 Phase 1-4;codeflow 那边 Phase A/B/C 同时跑 | ~3-4 工时,5/13 中午前完成 |\r\n| **串行** | 等 codeflow Mode 1 ALL GREEN 后再开 | 5/13 下午起,5/14 完成 |\r\n\r\n**ME 推荐**:并行——两条工作线无依赖,总周期短一半。codeflow PM\r\n跑的是当前 wheel 版本,fcop 新版 release 不会自动升级它,不会扰乱\r\nPhase A/B/C。\r\n\r\n",
+      "purpose": "DoD and kickoff alternatives"
+    },
+    {
+      "evidence_id": "E004",
+      "source_id": "SOURCE_TASK",
+      "origin": "SOURCE",
+      "start": 4240,
+      "end": 4995,
+      "quote": "## 风险 · Risks\r\n\r\n| 风险 | 处置 |\r\n|---|---|\r\n| trailing-slug 与 slot 段(`.{ROLE}`)文法歧义 | slug 用 hyphen 前导(`-{slug}`),slot 用 dot 前导(`.{SLOT}`),正则可区分;但若 `_ROLE` 段包含 hyphen + 大写(如 `AUTO-TESTER`),分界仍清楚因为 slug 强制小写起手 |\r\n| 历史 task 文件不带 slug,新代码读 slug=None | 向后兼容,无破坏 |\r\n| 工具(`list_tasks` 等)显示 slug 还是隐藏? | 默认显示完整文件名(已是现状),不改 |\r\n| codeflow 跑 Mode 1 期间升级 fcop 撞 release? | codeflow 用 pinned wheel,不自动升;Mode 1 闭环后由 ADMIN 手动升 |\r\n\r\n## 协议合规守则\r\n\r\n- Rule 0.a.1:四步走(本 task 是第 1 步)\r\n- Rule 5:协议演化通过新文件 + ADR-0033,**不**改任何已落盘文件\r\n- Rule 0.c:emergence-log 引用要带出处(codeflow PM 长文件名清单 +\r\n  D:\\FCoP regex 实测结果)\r\n- Rule 7:无破坏性操作(纯增量,向后兼容)\r\n- 升级语义:**MINOR additive**——`fcop@1.2.0`,既有项目零成本兼容\r\n\r\n---\r\n\r\n**status**:WAITING — 等 ADMIN 拍 kickoff 时机(并行 / 串行)\r\n**next**:ADMIN 拍 → ME 开 Phase 1\r\n",
+      "purpose": "risks, compliance, waiting state"
+    }
+  ]
+}

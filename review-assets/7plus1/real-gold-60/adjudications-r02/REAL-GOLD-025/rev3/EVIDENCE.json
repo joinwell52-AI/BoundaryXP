@@ -1,0 +1,43 @@
+{
+  "case_id": "REAL-GOLD-025",
+  "source_sha256": "f34c2fb2578312a6a97a2d3904dfd967d40089244e71e4ec73725cda47c648c0",
+  "status": "EVIDENCE_VERIFIED",
+  "evidence": [
+    {
+      "evidence_id": "E001",
+      "source_id": "SOURCE_TASK",
+      "origin": "SOURCE",
+      "start": 0,
+      "end": 1307,
+      "quote": "---\r\nprotocol: fcop\r\nversion: 1\r\nkind: task\r\ntask_id: TASK-20260512-001\r\nsender: ADMIN\r\nrecipient: ME\r\npriority: P0\r\nrisk_level: high\r\nstatus: done\r\nthread_key: fcop-mcp-binding-guard-20260512\r\nsession_id: sess-20260512-me-01\r\n---\r\n\r\n# fcop-mcp 1.4 · Write-side 工具 binding 守门 + USER HOME deny-list (P0 fix)\r\n\r\n## 背景 / Motivation\r\n\r\n2026-05-12 15:35:06,Bridgeflow PM 在 `redeploy_rules()` 操作前未调\r\n`set_project_dir()`,触发 fcop-mcp 当前默认行为 ——**用 MCP 进程的\r\ncwd 兜底**。该进程 cwd = `C:\\Users\\Administrator\\`(USER HOME),\r\n导致 4 件协议文件(`.cursor/rules/fcop-rules.mdc` /\r\n`fcop-protocol.mdc` / `AGENTS.md` / `CLAUDE.md`)**全局落到 USER\r\nHOME**,污染该机器上**所有 cursor 项目**。\r\n\r\nPM 自检发现 + 备份 + 删除 + 重绑定 + 重跑,ADMIN 独立验证 USER HOME\r\n0 残留 + 4 件备份 sha256 齐 = 事件**已完整闭环**,污染**已 0 残留**。\r\n\r\n完整时间线 + 证据链见 PM-01 汇报(2026-05-12 15:38 + 15:42 UTC+8),\r\n归档路径 `D:\\Bridgeflow\\.scratch\\pm50-user-home-pollution-20260512-1535\\`。\r\n\r\nPM 提了 9.2 v2.5 v1.6 自约束(MCP-server-cwd-awareness),归类为\r\n\"PM 操作纪律新维度\"。**但归因偏轻** —— 真正的根因是 fcop-mcp 的\r\n**P0 设计缺陷**:write-side 高破坏力工具在没有显式 binding 时**默认\r\n用 cwd 兜底**,等价于让 `rm -rf` 在没指定路径时默认在 `/` 上跑。\r\n\r\n`set_project_dir` 的 schema 里**有警告**:\r\n\r\n> \"typical symptom: unbound_report shows a project path like\r\n> C:\\\\Users\\\\<you>\"\r\n\r\n但只是 schema 注释,**没有硬守门**。协议方默认 agent 会主动读 schema\r\n警告 = 又一次\"协议 = 环境\"失守(schema 在协议定义里有警告,但 PM 操\r\n作前没接触到)。\r\n\r",
+      "purpose": "metadata, PM #50 incident narrative, and root cause"
+    },
+    {
+      "evidence_id": "E002",
+      "source_id": "SOURCE_TASK",
+      "origin": "SOURCE",
+      "start": 1308,
+      "end": 3919,
+      "quote": "## 任务 / Deliverables\r\n\r\n修 fcop-mcp,让以下行为成为**协议层硬约束**:\r\n\r\n### D1 · Write-side 工具 explicit binding 守门\r\n\r\n**所有 write-side MCP 工具**(下面 ≥ 8 个)在未 explicit bind 项目根时\r\n**直接 ConfigError,不允许默认 cwd 兜底**:\r\n\r\n候选清单(待 OPS 在实现时枚举确认):\r\n\r\n- `redeploy_rules()`\r\n- `deploy_role_templates()`\r\n- `init_project()` / `init_solo()` / `create_custom_team()`\r\n- `new_workspace()`\r\n- `write_task()` / `write_report()` / `write_issue()` /\r\n  `write_review()`\r\n- `archive_task()`\r\n- `mark_human_approved()`\r\n- `report_failure()`\r\n- `drop_suggestion()`\r\n\r\nConfigError 错误文案模板:\r\n\r\n```\r\nWriteRefused: <tool_name> requires an explicitly bound project\r\nroot, but no binding is active. Call set_project_dir(path=...)\r\nfirst, or restart the MCP server with cwd set to the project root.\r\nThis guard exists to prevent USER HOME pollution\r\n(see fcop-mcp v1.4 release notes).\r\n```\r\n\r\n### D2 · USER HOME / system root deny-list\r\n\r\n即使绑定了,如果 `project_dir` 解析到以下路径之一,**直接拒绝**:\r\n\r\n- `%USERPROFILE%`(Windows)\r\n- `~`(展开后的 home,跨平台)\r\n- `/`(Unix root)\r\n- 任一 drive letter root(`C:\\` / `D:\\` / …,Windows)\r\n- `%PROGRAMDATA%` / `%APPDATA%` / `%LOCALAPPDATA%`\r\n- `/etc` / `/usr` / `/opt`(Unix system roots)\r\n\r\nConfigError 错误文案模板:\r\n\r\n```\r\nWriteRefused: project_dir resolved to a protected system path\r\n(<path>). FCoP write-side tools refuse to operate at this scope\r\nto prevent global pollution. Bind to a project subdirectory\r\ninstead.\r\n```\r\n\r\n### D3 · `fcop_report()` 顶部 project_path 红字告警\r\n\r\n`fcop_report()` 输出的报告首段加一段:\r\n\r\n```\r\n当前 project_path: <abs_path>\r\n```\r\n\r\n如果 `<abs_path>` 落在 D2 deny-list 内,加红字告警:\r\n\r\n```\r\n⚠️  WARNING: project_path is set to a protected system path.\r\n    Any write operation will be refused. Run set_project_dir(...)\r\n    to bind to a real project root.\r\n```\r\n\r\n### D4 · 现有 schema 警告升级为机器可读 `binding_required: true`\r\n\r\n`set_project_dir` 的 schema 文档警告**保留**,但**所有 write-side 工具\r\n的 schema** 加机器可读字段:\r\n\r\n```yaml\r\nbinding_required: true\r\nallowed_project_dir_class: \"real_project_root\"  # not system root\r\n```\r\n\r\n这给上层 orchestrator(Cursor / Claude Code / Devin)一个机器可读的\r\nhook,知道\"这个工具不能在 unbound 状态下调\"。\r\n\r\n### D5 · 测试用例(必须覆盖)\r\n\r\n- 单测:每个 write-side 工具在 unbound 状态下调用 → ConfigError(D1)\r\n- 单测:绑定到 USER HOME → ConfigError(D2)\r\n- 单测:绑定到 drive root → ConfigError(D2)\r\n- 单测:绑定到合法 project dir → 正常工作\r\n- 集成测:模拟 PM #50 路径(MCP cwd = USER HOME,直接调 `redeploy_rules`)\r\n  → ConfigError 不写盘(D1 兜底 D2 deny-list)\r\n- 回归:已有 fcop-mcp 测试套件全部仍 GREEN\r\n\r\n### D6 · Release notes + 升级提示\r\n\r\n- `docs/releases/1.4.0.md` 加 \"Breaking-ish behavior change\"\r\n  小节,说明 unbound 调用从\"静默成功\"变成\"ConfigError\",老脚本\r\n  可能需要先调 `set_project_dir`\r\n- `fcop_report()` 检测到 fcop-mcp 版本 < 1.4 时,底部加升级提醒\r\n\r",
+      "purpose": "D1-D6 deliverables including binding gate and deny-list"
+    },
+    {
+      "evidence_id": "E003",
+      "source_id": "SOURCE_TASK",
+      "origin": "SOURCE",
+      "start": 3920,
+      "end": 4608,
+      "quote": "## 验收标准 / Acceptance Criteria\r\n\r\n1. **D1 实施**:write-side 工具清单确定 + 全部加 binding 守门 + 错误\r\n   文案落实\r\n2. **D2 实施**:deny-list 跨 Windows / Unix 覆盖 + 测试通过\r\n3. **D3 实施**:`fcop_report()` 顶部告警可视化\r\n4. **D4 实施**:schema `binding_required: true` 字段落实\r\n5. **D5 实施**:测试套件 6 类用例全 GREEN\r\n6. **D6 实施**:release notes 写完 + 升级提醒接通\r\n7. **PM #50 复现测试**:在干净环境模拟 PM 当时的 cwd / 调用序列 →\r\n   工具拒绝写盘,USER HOME 仍然 0 文件\r\n\r\n## 风险 / 回滚\r\n\r\n- **风险 R1**:Breaking-ish 行为变化可能打到老脚本(已有用户脚本可能\r\n  靠 cwd 兜底跑)。**缓解**:release notes 显式标 breaking,提供\r\n  迁移指南\r\n- **风险 R2**:D2 deny-list 在 macOS / Linux 上的 home 路径检测可能\r\n  误伤(用户把项目放在 home 下子目录是合法的)。**缓解**:只拒绝\r\n  **精确等于** home 的情况,子目录放行\r\n- **回滚**:本次 fix 是新增守门,如果发现严重副作用,降级回\r\n  v1.3.x 即可,无数据损失\r\n\r",
+      "purpose": "acceptance criteria and risk/rollback"
+    },
+    {
+      "evidence_id": "E004",
+      "source_id": "SOURCE_TASK",
+      "origin": "SOURCE",
+      "start": 4609,
+      "end": 5282,
+      "quote": "## 与其他协议工作的关系\r\n\r\n- **不阻塞** Bridgeflow §5 A 路径(PM 那边 commit 30 件 + QA verdict\r\n  互不冲突)\r\n- **与 ADR-0033(Rule 2 升级场景操作化)是同源洞察** —— \"操作姿势\r\n  规约\"那一节会引用本次 fix 作为 motivation\r\n- **与 ADR-0034(Task Naming Topic Slug)互不相关**\r\n\r\n## 状态机\r\n\r\n- `proposed`(本文件落盘时)→ 等 ADMIN GREEN\r\n- `accepted` → ME 开工实施\r\n- `done` → 写 REPORT-001-ME-to-ADMIN.md + archive\r\n\r\n---\r\n\r\n**请 ADMIN 决**:\r\n\r\n- (A) **批准推进**,ME 立即开工(预计 2~3 小时完成 D1~D5,D6 同步)\r\n- (B) **调整范围** —— 比如 D2 deny-list 想加 / 减项,或 D6 升级提醒\r\n  想另起 TASK\r\n- (C) **拒绝/延后** —— 等 v1.4 整体节奏一起,或者拆成多个 TASK 逐\r\n  步上(PM #50 已止血,理论上可以慢慢做)\r\n\r\n我推荐 (A) —— 这是 P0 安全 bug,污染过一次说明触发条件不罕见;在\r\nfcop-mcp 1.4 之前每一天 unbound write 都是潜在事故。\r\n\r\n— ME, 2026-05-12 15:46 (UTC+8)\r\n",
+      "purpose": "cross-work references, state machine, and ADMIN decision request"
+    }
+  ]
+}

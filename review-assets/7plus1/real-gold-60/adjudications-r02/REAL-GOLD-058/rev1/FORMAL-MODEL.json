@@ -1,0 +1,40 @@
+{
+  "case_id": "REAL-GOLD-058",
+  "source_sha256": "7a498730116bdfbf802f4772e8259101232d9765f3996ef44b83332f64d9a8e8",
+  "E": [
+    "E={env_secret,devto_auth_endpoint,devto_publish_endpoint,target_article,report}"
+  ],
+  "Sigma": [
+    "Sigma.user_agent_value=absent",
+    "Sigma.target_article=absent",
+    "Sigma.retry_limit=absent"
+  ],
+  "Q": [
+    "Q.add_user_agent",
+    "Q.retry_auth",
+    "Q.retry_publish",
+    "Q.record_result"
+  ],
+  "F": [
+    "F.disclose(api_key)"
+  ],
+  "K": [
+    "K.publish_url OR K.new_failure_record"
+  ],
+  "Relations": [
+    "auth_check -> conditions -> publication"
+  ],
+  "D": [
+    "D.priority=P1",
+    "D.deadline=absent"
+  ],
+  "Phi": [
+    "Phi.external_authorization=absent",
+    "Phi.api_specification=absent",
+    "Phi.target_content=absent"
+  ],
+  "losslessness_zh": "保留 User-Agent、重试、保密和成功/失败分支，同时保留外部授权、目标内容和请求配置缺失。",
+  "losslessness_en": "Retains User-Agent, retries, secrecy and success/failure branches while retaining absent external authorization, target content and request configuration.",
+  "formal_coverage_gap": [],
+  "invented_constraints": []
+}

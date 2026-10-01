@@ -6,6 +6,7 @@ import { digest } from '../bxp/index.mjs';
 import { assert, IDS, LIMITS, parseProductJson, validateProduct } from './contracts.mjs';
 import { containsLexicalTerm } from './lexical.mjs';
 import { validateDomainPayload } from './domain-payloads.mjs';
+import { validateEnterpriseL3Profile } from './enterprise-l3-profile.mjs';
 
 export const sha256 = bytes => createHash('sha256').update(bytes).digest('hex');
 export function safeResourcePath(path) {
@@ -21,7 +22,9 @@ function plainKeys(value, keys) {
 export function validateOntology(value) {
   plainKeys(value, ['schema', 'packId', 'version', 'operations', 'modalities', 'entityMetaTypes', 'roleMetaModel']);
   assert(value.schema === 'boundx-ontology/v1' && value.packId === 'core-ontology', 'PAYLOAD_SCHEMA', 'Invalid ontology identity.');
-  assert(value.operations && value.modalities && Array.isArray(value.entityMetaTypes), 'PAYLOAD_SCHEMA', 'Missing ontology data.');
+  assert(value.operations && value.modalities && Array.isArray(value.entityMetaTypes)
+    && value.roleMetaModel && typeof value.roleMetaModel === 'object' && !Array.isArray(value.roleMetaModel),
+  'PAYLOAD_SCHEMA', 'Missing ontology data.');
   for (const [operation, definition] of Object.entries(value.operations)) {
     assert(/^[A-Z_]+$/.test(operation), 'PAYLOAD_SCHEMA', 'Invalid operation ID.');
     plainKeys(definition, ['role', 'zh', 'en']);
@@ -29,6 +32,14 @@ export function validateOntology(value) {
     for (const language of ['zh', 'en']) assert(Array.isArray(definition[language]) && definition[language].every(word => typeof word === 'string' && word.length > 0), 'PAYLOAD_SCHEMA', 'Invalid lexical aliases.');
   }
   for (const words of Object.values(value.modalities)) assert(Array.isArray(words) && words.every(word => typeof word === 'string' && word.length > 0), 'PAYLOAD_SCHEMA', 'Invalid modality aliases.');
+  plainKeys(value.roleMetaModel, ['roleKinds', 'constraintAttributes', 'authorityBinding', 'note']);
+  for (const values of [value.entityMetaTypes, value.roleMetaModel.roleKinds,
+    value.roleMetaModel.constraintAttributes]) {
+    assert(Array.isArray(values) && values.every(item => typeof item === 'string' && item.length > 0)
+      && new Set(values).size === values.length, 'PAYLOAD_SCHEMA', 'Invalid ontology meta-types.');
+  }
+  assert(value.roleMetaModel.authorityBinding === 'explicit_policy_evidence_required'
+    && typeof value.roleMetaModel.note === 'string', 'PAYLOAD_SCHEMA', 'Invalid ontology authority model.');
   return value;
 }
 const actionValidator = new Ajv2020({ strict: true }).compile(JSON.parse(readFileSync(new URL('../../domain-packs/action-frame.schema.json', import.meta.url), 'utf8')));
@@ -80,6 +91,9 @@ export function validateDirectory(directory, dependencies = []) {
     } else if (kind === 'employee-directory') {
       assert(schema === IDS.employee && descriptor.boundx.layer === 'L3', 'PAYLOAD_SCHEMA', 'Employee directory identity mismatch.');
       validateProduct(IDS.employee, payload);
+    } else if (kind === 'enterprise-ontology' || kind === 'enterprise-facts') {
+      assert(schema === `urn:boundx:product:${kind}:experimental-v1` && descriptor.boundx.layer === 'L3',
+        'PAYLOAD_SCHEMA', 'Enterprise L3 resource identity mismatch.');
     } else {
       assert(descriptor.boundx.layer === 'L2' && schema === `urn:boundx:product:domain-${kind}:v1`, 'UNKNOWN_SCHEMA', 'Unknown offline payload schema.');
       assert(payload.schema === `boundx-domain-${kind}/v1`, 'PAYLOAD_SCHEMA', 'Payload schema discriminator mismatch.');
@@ -90,7 +104,12 @@ export function validateDirectory(directory, dependencies = []) {
     payloads[kind] = payload;
   }
   if (descriptor.boundx.layer === 'L1') assert(payloads.ontology && descriptor.boundx.dependencies.length === 0, 'DEPENDENCY', 'L1 must be independent.');
-  if (descriptor.boundx.layer === 'L3') assert(payloads['employee-directory'], 'PAYLOAD_SCHEMA', 'L3 requires its employee directory.');
+  if (descriptor.boundx.layer === 'L3') {
+    assert(Boolean(payloads['employee-directory']) !== Boolean(payloads['enterprise-ontology'] && payloads['enterprise-facts'])
+      && Boolean(payloads['enterprise-ontology']) === Boolean(payloads['enterprise-facts']),
+    'PAYLOAD_SCHEMA', 'L3 requires either the legacy employee directory or the separate enterprise ontology and facts.');
+    if (payloads['enterprise-ontology']) validateEnterpriseL3Profile(payloads['enterprise-ontology'], payloads['enterprise-facts'], descriptor);
+  }
   const result = { descriptor, digest: digest(descriptor), payloads };
   for (const reference of descriptor.boundx.dependencies) {
     assert(dependencies.some(pack => pack.descriptor.boundx.scope === reference.scope && pack.descriptor.name === reference.pack_id
@@ -101,7 +120,7 @@ export function validateDirectory(directory, dependencies = []) {
     const declared = dependencies.filter(pack => descriptor.boundx.dependencies.some(reference => reference.digest === pack.digest));
     assert(declared.filter(pack => pack.descriptor.boundx.layer === 'L1').length === 1
       && declared.every(pack => ['L1', 'L2'].includes(pack.descriptor.boundx.layer)), 'DEPENDENCY', 'Employee directory requires one L1 and optional L2.');
-    for (const employee of payloads['employee-directory'].employees) if (employee.role_ref) {
+    for (const employee of payloads['employee-directory']?.employees ?? []) if (employee.role_ref) {
       assert(!employee.role_ref.kind || employee.role_ref.kind === 'role', 'ROLE_REFERENCE', 'Employee role reference must identify a role.');
       const { entry_id, ...reference } = employee.role_ref;
       const industry = declared.find(pack => pack.descriptor.boundx.layer === 'L2'

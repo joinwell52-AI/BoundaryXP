@@ -1,0 +1,129 @@
+{
+  "case_id": "REAL-GOLD-058",
+  "source_sha256": "7a498730116bdfbf802f4772e8259101232d9765f3996ef44b83332f64d9a8e8",
+  "protocol_version": "BXP-0001 0.4.0-draft.1",
+  "slots": {
+    "I": {
+      "status": "unresolved",
+      "value_zh": "`.env` 的 `DEVTO_API_KEY` 值、Dev.to `GET /api/users/me` 和发布接口；待发布文章或草稿的身份未指明。",
+      "value_en": "The `DEVTO_API_KEY` value in `.env`, Dev.to `GET /api/users/me` and publication endpoint; the article or draft to publish is unidentified.",
+      "evidence": [
+        "E002",
+        "E003"
+      ],
+      "origin": [
+        "SOURCE"
+      ],
+      "normalization": "bound_api_inputs_unbound_publication_target",
+      "ontology_binding": null,
+      "notes_zh": "不读取 `.env`，不访问网络。",
+      "notes_en": "`.env` is not read and network is not accessed."
+    },
+    "O": {
+      "status": "resolved",
+      "value_zh": "发布成功时返回 URL；仍失败时给出可操作判断并明确记录新的失败状态。",
+      "value_en": "Return a URL on successful publication; if it still fails, provide an actionable assessment and clearly record the new failure state.",
+      "evidence": [
+        "E003",
+        "E004"
+      ],
+      "origin": [
+        "SOURCE"
+      ],
+      "normalization": "explicit_success_or_failure_output",
+      "ontology_binding": null,
+      "notes_zh": "结果分支不授权外部执行。",
+      "notes_en": "Result branches do not authorize external execution."
+    },
+    "A": {
+      "status": "resolved",
+      "value_zh": "不泄露 API key；为 Dev.to API 请求补充明确 User-Agent，并重试认证检查与发布；如仍失败，给出可操作判断。",
+      "value_en": "Do not disclose the API key; add an explicit User-Agent to Dev.to API requests and retry authentication checking and publication; if still failing, provide an actionable determination.",
+      "evidence": [
+        "E003"
+      ],
+      "origin": [
+        "SOURCE"
+      ],
+      "normalization": "external_api_retry_action",
+      "ontology_binding": null,
+      "notes_zh": "本审定不执行请求。",
+      "notes_en": "This adjudication performs no request."
+    },
+    "P": {
+      "status": "resolved",
+      "value_zh": "ADMIN 为要求方；ME 为收件人和被指派主体。",
+      "value_en": "ADMIN is requester; ME is recipient and assigned actor.",
+      "evidence": [
+        "E001",
+        "E002"
+      ],
+      "origin": [
+        "SOURCE"
+      ],
+      "normalization": "message_roles",
+      "ontology_binding": null,
+      "notes_zh": "不推导 Dev.to 权限。",
+      "notes_en": "No Dev.to authority inferred."
+    },
+    "R": {
+      "status": "absent",
+      "value_zh": "原文未提供时限、重试上限或网络预算等资源约束。",
+      "value_en": "No deadline, retry limit, network budget or other resource constraint is supplied.",
+      "evidence": [],
+      "origin": [
+        "SOURCE"
+      ],
+      "normalization": "absent_resource_constraint",
+      "ontology_binding": null,
+      "notes_zh": "P1 仅为优先级元数据；不能据此补造资源上限。",
+      "notes_en": "P1 is only priority metadata; it does not establish a resource limit."
+    },
+    "V": {
+      "status": "absent",
+      "value_zh": "原文未提供版本化制度或 API 规范作为任务依据；既往 403 与 token 描述只是背景。",
+      "value_en": "No versioned policy or API specification is supplied as a task basis; the previous 403s and token description are background.",
+      "evidence": [],
+      "origin": [
+        "SOURCE"
+      ],
+      "normalization": "absent_versioned_basis",
+      "ontology_binding": null,
+      "notes_zh": "外部授权须由 Host 和 OperatorProfile 核验，不从 V 槽推导。",
+      "notes_en": "The Host and OperatorProfile must check external authorization; it is not inferred from the V slot."
+    },
+    "C": {
+      "status": "resolved",
+      "value_zh": "发布成功并返回 URL，或仍失败时明确记录新的失败状态并给出可操作判断。",
+      "value_en": "Publication succeeds and returns a URL, or a new failure state is clearly recorded with an actionable assessment if publication still fails.",
+      "evidence": [
+        "E004"
+      ],
+      "origin": [
+        "SOURCE"
+      ],
+      "normalization": "explicit_branching_acceptance",
+      "ontology_binding": null,
+      "notes_zh": "两个验收分支已定义；未指明报告格式不妨碍逐项核查，也不授权网络操作。",
+      "notes_en": "Both acceptance branches are defined; an unspecified report format does not prevent checking them or authorize network access."
+    },
+    "B": {
+      "status": "resolved",
+      "value_zh": "不得泄露 API key。",
+      "value_en": "The API key must not be disclosed.",
+      "evidence": [
+        "E003"
+      ],
+      "origin": [
+        "SOURCE"
+      ],
+      "normalization": "secret_non_disclosure_boundary",
+      "ontology_binding": null,
+      "notes_zh": "不记录或输出密钥。",
+      "notes_en": "No secret is recorded or output."
+    }
+  },
+  "boundary_state": "underdetermined",
+  "policy_evaluation": "NOT_EVALUATED_NO_OPERATOR_PROFILE",
+  "admission": "BLOCKED_BOUNDARY_UNDERDETERMINED"
+}

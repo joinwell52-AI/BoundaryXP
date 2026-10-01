@@ -1,0 +1,48 @@
+{
+  "case_id": "REAL-GOLD-025",
+  "source_sha256": "f34c2fb2578312a6a97a2d3904dfd967d40089244e71e4ec73725cda47c648c0",
+  "E": [
+    "E={MCP_server,write_tools,project_dir,cwd,protected_paths,schemas,fcop_report}"
+  ],
+  "Sigma": [
+    "Sigma.candidate_write_tools≥8",
+    "Sigma.deny_list={home,root,drive_root,appdata,system_roots}",
+    "Sigma.acceptance=7"
+  ],
+  "Q": [
+    "Q.set_project_dir",
+    "Q.validate_binding",
+    "Q.validate_protected_path",
+    "Q.fcop_report_warning"
+  ],
+  "F": [
+    "F.unbound_cwd_fallback",
+    "F.write_to_protected_path",
+    "F.home_subdirectory_denial",
+    "F.execute_before_ADMIN_GREEN"
+  ],
+  "K": [
+    "K=D1..D6",
+    "K.PM50_reproduction"
+  ],
+  "Relations": [
+    "explicit_binding -> gates -> write_tool",
+    "protected_path -> refuses -> write_operation",
+    "ADMIN_GREEN -> enables -> implementation",
+    "identity_or_authority_binding=unresolved_not_inferred"
+  ],
+  "D": [
+    "D.binding_required=true",
+    "D.allowed_project_dir_class=real_project_root"
+  ],
+  "Phi": [
+    "Phi.write_tool_universe=awaiting_OPS_enumeration",
+    "Phi.ADMIN_GREEN=absent",
+    "Phi.frontmatter_status=done",
+    "Phi.state_machine_initial=proposed"
+  ],
+  "losslessness_zh": "事故背景、守门、拒绝路径、候选工具、审批请求和状态冲突均保留。",
+  "losslessness_en": "Incident background, guards, denied paths, candidate tools, approval request, and status conflict are retained.",
+  "formal_coverage_gap": [],
+  "invented_constraints": []
+}

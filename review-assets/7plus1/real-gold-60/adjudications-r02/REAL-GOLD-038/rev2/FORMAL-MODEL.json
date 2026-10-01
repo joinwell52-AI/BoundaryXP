@@ -1,0 +1,60 @@
+{
+  "case_id": "REAL-GOLD-038",
+  "source_sha256": "4ad8003dd87ca3b808b14ea8422a34ec4b6bc8e4c703bbbc44e0a6aef1d34df1",
+  "E": [
+    "E={fcop,fcop-mcp,Sprint,PyPI,origin/main,GitHubRelease}"
+  ],
+  "Sigma": [
+    "Sigma.target_version=2.0.0",
+    "Sigma.risk=high",
+    "Sigma.C=12",
+    "Sigma.D=4",
+    "Sigma.E=3",
+    "Sigma.deadline=absent"
+  ],
+  "Q": [
+    "Q.C1..C12",
+    "Q.C2.requires_verbatim_second_diagram",
+    "Q.dry_run",
+    "Q.stop_at_D2",
+    "Q.tag_push_publish_after_confirm",
+    "Q.verify_release",
+    "Q.E1..E3"
+  ],
+  "F": [
+    "F.publish_before(second_confirm)",
+    "F.bypass(Rule7)",
+    "F.change(Bridgeflow|codeflow)",
+    "F.change(release_SOP|workspace|Rule7.5)",
+    "F.extra_sprint_change"
+  ],
+  "K": [
+    "K.second_ADMIN_confirm",
+    "K.tests>=1061",
+    "K.jobs=5/5",
+    "K.PyPI_versions=2.0.0",
+    "K.release_assets=4",
+    "K.C2.verbatim_diagram_match=unresolved"
+  ],
+  "Relations": [
+    "D2 -> gates -> D3",
+    "ADMIN.second_confirm -> gates -> high_risk_release",
+    "E1 -> performed_by -> ADMIN"
+  ],
+  "D": [
+    "D.priority=P0",
+    "D.risk=high",
+    "D.rollback=defined"
+  ],
+  "Phi": [
+    "Phi.second_confirmation=absent",
+    "Phi.OperatorProfile=absent",
+    "Phi.publication=not_performed",
+    "Phi.C2.diagram_text=not_supplied",
+    "Phi.Sprint_section_2_table=not_supplied"
+  ],
+  "losslessness_zh": "保留 C/D/E 阶段、二次确认前置、公开发布高风险和回滚边界；C2 逐字图文与外部 Sprint 表未提供，不补造。",
+  "losslessness_en": "Retains C/D/E stages, second-confirmation prerequisite, public-release risk and rollback; does not invent missing C2 verbatim text or the external Sprint table.",
+  "formal_coverage_gap": [],
+  "invented_constraints": []
+}

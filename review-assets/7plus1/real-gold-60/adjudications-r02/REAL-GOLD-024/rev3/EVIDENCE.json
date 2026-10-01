@@ -1,0 +1,43 @@
+{
+  "case_id": "REAL-GOLD-024",
+  "source_sha256": "712a0b11a4589a25a5d4ba770faa8a7a91e7aa70d8e80d51369a60e272b2f18d",
+  "status": "EVIDENCE_VERIFIED",
+  "evidence": [
+    {
+      "evidence_id": "E001",
+      "source_id": "SOURCE_TASK",
+      "origin": "SOURCE",
+      "start": 0,
+      "end": 752,
+      "quote": "---\r\nprotocol: fcop\r\nversion: 1\r\ntype: TASK\r\nsender: ADMIN\r\nrecipient: ME\r\ndate: 2026-05-09\r\npriority: P1\r\nstatus: in_progress\r\nsubject: 双语补齐（核心入口文档）—— v1.0 RC 用户体验\r\nref_charter: adr/ADR-0015-fcop-1.0-ai-os-protocol-charter.md\r\nref_predecessor: docs/agents/log/tasks/TASK-20260509-008-ADMIN-to-ME.md\r\nacceptance_criteria_count: 6\r\n---\r\n\r\n# TASK-20260509-Z01-ADMIN-to-ME\r\n\r\n> Solo 模式任务。范围控制：仅核心**入口**文档双语化（不全译 spec 长文 +\r\n> 长 ADR 内文），目标是让中文用户能看到 v1.0 的 framing 与 RC 状态，\r\n> 不被英文挡在门外。\r\n\r\n---\r\n\r\n## 1 · 为什么需要这个任务\r\n\r\n用户多次反馈：「你现在写的都是英文版本了，我都看不懂了哦」 +\r\n「本来就要双语的，也没关系！」+ 「双语后面补就可以了」。\r\n\r\n矛盾的诉求 → 范围控制：\r\n\r\n1. **核心面向用户的入口必须双语**（README、release notes、CHANGELOG\r\n   首段、spec abstract、ADR 头部 TL;DR）\r\n2. **深度技术文档（spec 全文 + ADR 内文）暂不全译**（工作量太大，\r\n   留 v1.0 final / v1.1）\r\n\r",
+      "purpose": "metadata, bilingual-entry scope, and user motivation"
+    },
+    {
+      "evidence_id": "E002",
+      "source_id": "SOURCE_TASK",
+      "origin": "SOURCE",
+      "start": 753,
+      "end": 1239,
+      "quote": "## 2 · 决议\r\n\r\n| # | 决议 | 理由 |\r\n|---|---|---|\r\n| 1 | README × 2（en + zh）badge 同步 v1.0 + RC | 入口最高优先级 |\r\n| 2 | RC release notes 加双语 TL;DR | 链入口必看 |\r\n| 3 | CHANGELOG `[1.0.0-rc.1]` 段加双语 TL;DR | RC 用户读 changelog 必看 |\r\n| 4 | Spec v1.0 abstract 加中文摘要小节 | spec 是英文权威，中文是导读 |\r\n| 5 | ADR-0015..0022 顶部加双语 TL;DR 段（每份 2 段，~3-5 行）| ADR 不可变，TL;DR 是 meta 段允许追加 |\r\n| 6 | ADR-0016 / 0017 / 0021 status: Proposed → Accepted | TASK-003/004 已实施完毕，状态滞后，顺手刷新 |\r\n| 7 | adr/README.md 索引同步 status | 与 #6 联动 |\r\n\r",
+      "purpose": "seven document and ADR decisions"
+    },
+    {
+      "evidence_id": "E003",
+      "source_id": "SOURCE_TASK",
+      "origin": "SOURCE",
+      "start": 1240,
+      "end": 2002,
+      "quote": "## 3 · 验收标准\r\n\r\n1. ✅ README.md + README.zh.md 顶部 badge 与 nav 链接同步 v1.0 + RC\r\n2. ✅ docs/releases/1.0.0-rc.1.md 顶部含中文 TL;DR + English TL;DR 双段\r\n3. ✅ CHANGELOG.md `[1.0.0-rc.1]` 段顶部含中文 TL;DR + English TL;DR\r\n4. ✅ spec/fcop-runtime-protocol-v1.0.md Abstract 段含 \"摘要（简体中文）\" 小节\r\n5. ✅ ADR-0015 / 0016 / 0017 / 0018 / 0019 / 0020 / 0021 / 0022 顶部各含 \"## TL;DR\" 段（中文 + English 两段）\r\n6. ✅ ADR-0016 / 0017 / 0021 status 升 Accepted；adr/README.md 索引同步\r\n7. ✅ 测试无回归（965 passed，与上一 task 持平 + 唯一 fail 仍是已知 pre-existing）\r\n\r\n## 4 · 执行计划\r\n\r\n| Round | 内容 | commit prefix |\r\n|---|---|---|\r\n| R1 | README × 2 + RC notes + CHANGELOG + spec abstract | `docs(i18n):` |\r\n| R2 | ADR-0015..0022 双语 TL;DR + status 升级 + adr README | `docs(adr):` |\r\n| R3 | TASK-Z01 报告 + 归档 | `docs(workflow):` |\r\n\r",
+      "purpose": "seven listed acceptance criteria and three-round plan"
+    },
+    {
+      "evidence_id": "E004",
+      "source_id": "SOURCE_TASK",
+      "origin": "SOURCE",
+      "start": 2003,
+      "end": 2209,
+      "quote": "## 5 · self-review\r\n\r\n- [x] 范围控制：仅入口文档；spec 全文 + ADR 内文留 v1.0 final\r\n- [x] 不破坏既有英文版（spec 仍为权威 normative）\r\n- [x] ADR 不可变正文；只追加 meta 段（TL;DR + Accepted-on）\r\n- [x] 全回归无新红\r\n- [x] 一次性完成所有验收 → 可考虑 1-2 commit 收口\r\n",
+      "purpose": "scope-control self-review"
+    }
+  ]
+}

@@ -1,0 +1,59 @@
+{
+  "case_id": "REAL-GOLD-047",
+  "source_sha256": "377a1d1c59c04a5cf55c74f8aec053f2146d3063be243d340bed028a577cdc06",
+  "E": [
+    "E={spec,apply_init,lifecycle,audit,tests,docs,MCP,ISSUE-001}"
+  ],
+  "Sigma": [
+    "Sigma.version=3.0.2",
+    "Sigma.lifecycle={inbox,active,review,done,archive}",
+    "Sigma.preserved_dirs={reports,issues,shared}",
+    "Sigma.v2_dirs_forbidden={tasks,log}",
+    "Sigma.init_change_scope=fresh_v3_only",
+    "Sigma.risk=high"
+  ],
+  "Q": [
+    "Q.modify_apply_init",
+    "Q.ensure_lifecycle",
+    "Q.add_tests",
+    "Q.add_audit_scan",
+    "Q.sync_docs",
+    "Q.release_after_approval",
+    "Q.write_REPORT-004",
+    "Q.archive_TASK-004",
+    "Q.close_ISSUE-001",
+    "Q.migrate_this_repository_after_completion"
+  ],
+  "F": [
+    "F.merge_without_CI",
+    "F.release_without_human_approval",
+    "F.create(tasks|log)_fresh_v3",
+    "F.automatic_modify_existing_projects_from_init_fix"
+  ],
+  "K": [
+    "K.tests=pass",
+    "K.init_paths=3",
+    "K.audit={complete:none,missing:P0,legacy:P1,v2:none}",
+    "K.human_approval=mark_human_approved"
+  ],
+  "Relations": [
+    "human_approval -> gates -> release",
+    "apply_init -> creates -> lifecycle_dirs",
+    "audit -> detects -> topology_noncompliance",
+    "release -> precedes -> post_completion_actions"
+  ],
+  "D": [
+    "D.priority=P0",
+    "D.risk=high",
+    "D.branch=fix/init-v3-topology"
+  ],
+  "Phi": [
+    "Phi.human_approval=absent",
+    "Phi.OperatorProfile=absent",
+    "Phi.execution=not_performed"
+  ],
+  "losslessness_zh": "保留 fresh init 默认拓扑、三目录、测试/audit 矩阵、3.0.2 发版、人工批准门及完成后的 REPORT/归档/关 ISSUE/本仓显式迁移；不得将初始化修复不自动影响旧项目扩大为禁止显式迁移。",
+  "losslessness_en": "Retains fresh-init topology, three preserved directories, test/audit matrix, 3.0.2 release, human-approval gate and post-completion REPORT/archive/issue closure/explicit migration of this repository; no automatic change to existing projects does not prohibit that migration.",
+  "formal_coverage_gap": [],
+  "invented_constraints": []
+}

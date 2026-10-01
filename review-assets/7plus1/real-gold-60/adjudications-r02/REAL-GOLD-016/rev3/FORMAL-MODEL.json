@@ -1,0 +1,53 @@
+{
+  "case_id": "REAL-GOLD-016",
+  "source_sha256": "02e806df2fb96ad534073c1175df1e1fbf1b9b4ef76bf9ce8ea74f2752c18c70",
+  "E": [
+    "E={TeamConfig,_role_labels,Capability,BoundaryViolation,Project,write_review}"
+  ],
+  "Sigma": [
+    "Sigma.layers={worker,governance,admin}",
+    "Sigma.rules=4",
+    "Sigma.acceptance=11",
+    "Sigma.commits=4"
+  ],
+  "Q": [
+    "Q.lookup_capability",
+    "Q.validate_action",
+    "Q.project_boundary_query",
+    "Q.write_review_gate"
+  ],
+  "F": [
+    "F.Role_dataclass",
+    "F.change_TeamConfig_roles",
+    "F.enforce_write_task_report_issue",
+    "F.change_ADR_text_except_status",
+    "F.add_boundary_rules",
+    "F.change_BoundaryViolation_fields",
+    "F.red_pytest_commit"
+  ],
+  "K": [
+    "K=A1..A11",
+    "K.unknown_capability_warning",
+    "K.BoundaryViolation_fields_fixed"
+  ],
+  "Relations": [
+    "ADMIN -> assigns -> ME",
+    "lookup_capability -> returns -> Capability",
+    "write_review -> asserts -> boundary",
+    "identity_or_authority_binding=unresolved_not_inferred"
+  ],
+  "D": [
+    "D.default_layer=worker",
+    "D.public_boundary_rules=4",
+    "D.UNKNOWN_CAPABILITY=warning"
+  ],
+  "Phi": [
+    "Phi.UNKNOWN_CAPABILITY requires severity=warning BoundaryViolation",
+    "Phi.BoundaryViolation fields are frozen to {rule_id,actor,action,target,message}",
+    "Phi.target_role source for write_review is not specified"
+  ],
+  "losslessness_zh": "保留四规则、唯一额外 warning、冻结字段、write_review 强制点、全部延后项及两处实现级矛盾；未将矛盾补写为实现细节。",
+  "losslessness_en": "The four rules, sole extra warning, frozen fields, write_review enforcement point, deferrals, and two implementation-level contradictions are retained without inventing implementation detail.",
+  "formal_coverage_gap": [],
+  "invented_constraints": []
+}

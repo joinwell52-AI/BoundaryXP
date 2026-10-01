@@ -1,0 +1,49 @@
+{
+  "case_id": "REAL-GOLD-033",
+  "source_sha256": "b76d7f064f9e3d18a2337922a3a1e50e824b679b6a11924de8b62a0f97c8a797",
+  "E": [
+    "E={codeflow-3,FCoP_carrier,fcop.json,frontmatter,audit_report}"
+  ],
+  "Sigma": [
+    "Sigma.access=read_only",
+    "Sigma.task_report_body=forbidden",
+    "Sigma.report_location=FCoP_carrier"
+  ],
+  "Q": [
+    "Q.inspect_deployment",
+    "Q.inspect_layout",
+    "Q.inspect_team_docs",
+    "Q.inspect_frontmatter",
+    "Q.inspect_reciprocity",
+    "Q.report_findings"
+  ],
+  "F": [
+    "F.write(codeflow-3)",
+    "F.impersonate(codeflow_role)",
+    "F.read_body(TASK|REPORT)",
+    "F.side_effect"
+  ],
+  "K": [
+    "K.report_covers={A,B,C,D,E,F,G,H,I}",
+    "K.finding_provenance=path+file+line_or_field"
+  ],
+  "Relations": [
+    "ME -> assigned_in -> FCoP",
+    "ME -> not_assigned_in -> Codeflow",
+    "audit -> reads -> codeflow-3",
+    "report -> written_in -> FCoP_carrier"
+  ],
+  "D": [
+    "D.priority=P1",
+    "D.risk=low",
+    "D.rollback=none"
+  ],
+  "Phi": [
+    "Phi.codeflow_snapshot=absent",
+    "Phi.audit_findings=not_computable_from_available_context"
+  ],
+  "losslessness_zh": "保留只读、身份分离、正文访问限制、A–I 清单和报告证据要求；未补造 Codeflow 事实。",
+  "losslessness_en": "Retains read-only, identity separation, body-access restriction, A–I checklist and report-evidence requirements; no Codeflow facts are fabricated.",
+  "formal_coverage_gap": [],
+  "invented_constraints": []
+}

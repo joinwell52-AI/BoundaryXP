@@ -1,0 +1,49 @@
+{
+  "case_id": "REAL-GOLD-046",
+  "source_sha256": "620f1984b13af56a3ef7a88dfd19b46da4fd71ded6817b36aaed00c8cd7cafaf",
+  "E": [
+    "E={project.py,CLI,migrate,lifecycle,fcop.json,CHANGELOG,git,spec,LETTER}"
+  ],
+  "Sigma": [
+    "Sigma.questions={Q1,Q2,Q3,Q4}",
+    "Sigma.investigated_sources=read_only",
+    "Sigma.allowed_write={REPORT-003}"
+  ],
+  "Q": [
+    "Q.inspect_init",
+    "Q.inspect_repo_history",
+    "Q.compare_spec_code",
+    "Q.scan_LETTER",
+    "Q.record_evidence",
+    "Q.propose_options"
+  ],
+  "F": [
+    "F.modify(investigated_md_or_py_sources)",
+    "F.write(other_than_REPORT-003)",
+    "F.repair_on_discovery",
+    "F.guess_missing_fact"
+  ],
+  "K": [
+    "K.each_question=evidence_bound",
+    "K.recommendations={code,letter,README}",
+    "K.unknown=unverified"
+  ],
+  "Relations": [
+    "Q1_root_cause -> informs -> Q4_truth_risk",
+    "REPORT -> advises -> ADMIN",
+    "incidental_issue -> reported_to -> ADMIN",
+    "ADMIN -> decides_whether -> new_TASK"
+  ],
+  "D": [
+    "D.priority=P1",
+    "D.deadline=absent"
+  ],
+  "Phi": [
+    "Phi.investigation_evidence=not_observed",
+    "Phi.OperatorProfile=absent"
+  ],
+  "losslessness_zh": "保留四问题、被调查源码只读与唯一 REPORT-003 写入例外、逐条出处、三选建议，以及查不到写未验证、附带发现仅报告并由 ADMIN 决定是否开新 TASK；不把任何可写报告一并禁掉。",
+  "losslessness_en": "Retains four questions, read-only investigated sources with the sole REPORT-003 writing exception, per-conclusion citations, three-option advice, unverified unknowns and ADMIN's decision on any incidental new TASK without accidentally forbidding the required report.",
+  "formal_coverage_gap": [],
+  "invented_constraints": []
+}

@@ -1,0 +1,53 @@
+{
+  "case_id": "REAL-GOLD-018",
+  "source_sha256": "8c389de9eca92721286a1f6d8afea2dad33ad97dd285de7513a8393ab4cc8811",
+  "E": [
+    "E={Event,EventType,WatcherState,Project,filesystem_state}"
+  ],
+  "Sigma": [
+    "Sigma.event_types=12",
+    "Sigma.polling_file_count∈{11,8,7}",
+    "Sigma.sync_callbacks=5",
+    "Sigma.acceptance=12",
+    "Sigma.commits=4"
+  ],
+  "Q": [
+    "Q.compute_diff",
+    "Q.subscribe_events",
+    "Q.poll_once",
+    "Q.emit_event"
+  ],
+  "F": [
+    "F.EVENT_envelope",
+    "F.background_polling",
+    "F.event_persistence",
+    "F.OS_watcher",
+    "F.migration_section",
+    "F.MCP_subscribe_tool"
+  ],
+  "K": [
+    "K=A1..A12",
+    "K.EventType=12",
+    "K.explicit_polling"
+  ],
+  "Relations": [
+    "poll_once -> computes -> state_diff",
+    "subscribe_events -> receives -> Event",
+    "boundary_and_failure_paths -> emit -> Event",
+    "identity_or_authority_binding=unresolved_not_inferred"
+  ],
+  "D": [
+    "D.event_sources={polling,synchronous}",
+    "D.mtime_tolerance=1s"
+  ],
+  "Phi": [
+    "Phi.file_events_claimed_as_11",
+    "Phi.file_events_claimed_as_8",
+    "Phi.file_events_explicitly_named_as_7",
+    "Phi.synchronous_events=5"
+  ],
+  "losslessness_zh": "保留 12 事件、双触发路径、所有禁止边界及文件类事件计数与归属的三重差异，未猜测修正。",
+  "losslessness_en": "All 12 events, both trigger paths, prohibitions, and the three-way discrepancy in file-event count/allocation are retained without guessed correction.",
+  "formal_coverage_gap": [],
+  "invented_constraints": []
+}

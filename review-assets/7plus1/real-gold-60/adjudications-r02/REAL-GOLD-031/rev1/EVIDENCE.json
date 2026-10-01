@@ -1,0 +1,43 @@
+{
+  "case_id": "REAL-GOLD-031",
+  "source_sha256": "f6205883a6f9a684b7be062f57ac841afbe4135c33d601c666229353612a8664",
+  "status": "EVIDENCE_VERIFIED",
+  "evidence": [
+    {
+      "evidence_id": "E001",
+      "source_id": "SOURCE_TASK",
+      "origin": "SOURCE",
+      "start": 0,
+      "end": 1871,
+      "quote": "---\r\nprotocol: fcop\r\nversion: 1\r\nkind: task\r\ntask_id: TASK-20260513-001\r\nsender: ADMIN\r\nrecipient: ME\r\npriority: P1\r\nrisk_level: low\r\nthread_key: release-sop-v2\r\nsession_id: sess-20260513-me-01\r\ncreated_at: \"2026-05-13T00:55:00+08:00\"\r\nrelated:\r\n  - TASK-20260512-009  # v1.6.0 一条龙发版主刀任务(已归档)\r\n  - REPORT-20260512-009\r\n---\r\n\r\n# 沉淀 v1.6.0 一条龙发版经验为标准发版 SOP\r\n\r\n## 背景 / Background\r\n\r\nADMIN 在 v1.6.0 发版闭环后明确指令:\r\n\r\n> 非常好,以后发版按这个来!\r\n\r\n`v1.6.0` 是 FCoP **第一次完整跑通\"一条龙发版\"**——从 ADR-0033 起草、代码实现、\r\n文档同步、P=E 对齐、GitHub Actions 自动发布、到 Rule 0.a.1 闭环全链路落文件可\r\n审计。本次实际执行流程**比 `docs/release-process.md` 现有 SOP 多出 9 处实战经\r\n验**,且现有 SOP 的版本号示例还停留在 `0.6.0rc1` 时代,与 1.x SemVer 阶段不符。\r\n\r\n本任务把这 9 处经验吸收回 `docs/release-process.md`,让下次发版有可复用的 SOP\r\nv2,不再依赖某个人的记忆。\r\n\r\n## 现有 SOP 与实战的 9 处差异 / 9 Gaps\r\n\r\n| # | 项 | 现状 (release-process.md) | 实战 (v1.6.0) |\r\n|---|---|---|---|\r\n| 1 | 版本号示例 | 全文 `0.6.0rc1` | 应升级到 `1.x.y` 形式 |\r\n| 2 | mcp 依赖约束 | `fcop>=A.B,<A.(B+1)` (MINOR 锁) | 实际是 `fcop>=1.0,<2.0` (MAJOR 锁,符合 1.x SemVer) |\r\n| 3 | lint/mypy 范围 | \"全绿\" 一刀切 | 应明确 `src tests mcp/src` 是 release-gate;`scripts/` 历史 lint 不阻塞 |\r\n| 4 | **P=E 同步前置** | 缺 | `redeploy_rules()` 或 `Project.deploy_protocol_rules(force=True)` 必须在 tag 前跑;否则 `.cursor/rules/*.mdc` + `AGENTS.md` + `CLAUDE.md` 会落后 |\r\n| 5 | **文档版本号漂移检查** | 缺 | `README.md` \"Current release\"、`letter-to-admin.{zh,en}.md` 摘要块、`tests/test_fcop/test_rules.py` 硬断言 — 三个点必查 |\r\n| 6 | **Rule 0.a.1 闭环** | 缺 | 发版载体 `TASK-*-release-x-y-z.md` + 配套 `REPORT-*` + archive 是发版的强制 deliverable,不是可选 |\r\n| 7 | **MCP server 跑旧 wheel 时的应对** | 缺 | 若 `fcop_report()` 显示 MCP server 跑的是旧 `fcop@X.Y.Z`、本地源码已是新版,直接调 Python API `Project(...).deploy_protocol_rules()` 绕过 MCP 工具 |\r\n| 8 | **PyPI CDN 传播延迟** | 缺 | `release.yml` 成功后,`pip install` 公网可能要等几分钟;PyPI JSON API 比 `pip` 索引更早可见 |\r\n| 9 | **GitHub Actions Node 20 弃用** | 缺 | 2026-06-02 前升级 `actions/checkout@v4` 等到 Node24 兼容版,否则未来 CI 会红 |\r\n\r",
+      "purpose": "metadata, v1.6 experience, nine gaps"
+    },
+    {
+      "evidence_id": "E002",
+      "source_id": "SOURCE_TASK",
+      "origin": "SOURCE",
+      "start": 1872,
+      "end": 2831,
+      "quote": "## 要做的事 / Deliverables\r\n\r\n1. 改写 `docs/release-process.md`:\r\n   - 版本号示例统一升到 `1.x.y` (用 `v1.6.0` / 假想下次 `v1.7.0` 作示例)\r\n   - \"核心约束\" 段保留,但 ADR-0003 SemVer 子段去掉 0.6.N 残留措辞\r\n   - \"发布前检查清单\" 4 段(A/B/C/D)**重写**:\r\n     - A. 代码层 — 加 MAJOR 锁说明 + `_version.py` 双包对齐\r\n     - B. 测试 & CI — **明确 release-gate 范围**(`src tests mcp/src`),`scripts/` 标为\"非阻塞\"\r\n     - C. 文档层 — **新增三连**:`README.md` Current release / `letter-to-admin.{zh,en}.md` 摘要块 / `tests/test_fcop/test_rules.py` 硬断言\r\n     - D. Git — 不变\r\n   - **新增 段**:`P=E 同步(发 tag 前最后一步)` — 讲 `redeploy_rules()` 和 Python API 两条路径\r\n   - **新增 段**:`Rule 0.a.1 闭环作为发版交付物` — TASK/REPORT/archive 三件套\r\n   - \"发布步骤\" 段重写:阶段 1 本地 build + smoke / 阶段 2 (RC 才走 TestPyPI) / 阶段 3 push tag 触发 `release.yml` / 阶段 4 闭环\r\n   - \"发布后验证\" 段:加 PyPI CDN 传播延迟说明 + PyPI JSON API 比 pip 索引更早可见的事实\r\n   - \"常见故障与回滚\" 段:加\"MCP server 跑旧版怎么办\" + \"release.yml Node 20 弃用\"两条\r\n2. 不动 `CHANGELOG.md` 的语义内容(只在改 SOP 时附一段元信息说本次只是 docs)\r\n3. 不发新版本号(本次只改文档,不改 `_version.py`)\r\n\r",
+      "purpose": "SOP rewrite deliverables and non-version scope"
+    },
+    {
+      "evidence_id": "E003",
+      "source_id": "SOURCE_TASK",
+      "origin": "SOURCE",
+      "start": 2832,
+      "end": 3200,
+      "quote": "## 验收 / Acceptance\r\n\r\n- [ ] `docs/release-process.md` 不再出现 `0.6.0rc1` 或 `0.6.N` 字样作为示例(可在历史段落保留)\r\n- [ ] 9 处差异全部落到文件,每条都有可执行步骤(命令 / 文件路径 / 验证方法)\r\n- [ ] 新文件能在不读本 TASK 的情况下被下次发版独立看懂\r\n- [ ] `git status` 干净后 commit + push origin main\r\n- [ ] 写 `REPORT-20260513-001-ME-to-ADMIN-release-sop-v2-after-1-6-0.md` 总结\r\n- [ ] TASK + REPORT 一起 archive 到 `fcop/log/`,Rule 0.a.1 闭环\r\n\r\n",
+      "purpose": "acceptance including commit and push"
+    },
+    {
+      "evidence_id": "E004",
+      "source_id": "SOURCE_TASK",
+      "origin": "SOURCE",
+      "start": 3200,
+      "end": 3638,
+      "quote": "## 风险与回滚 / Risk & Rollback\r\n\r\n- **风险等级 low**:本任务只改 `docs/release-process.md` 一份维护者文档,不动\r\n  代码、不动协议规则、不发新版本号。如下次发版按新 SOP 走出问题,回滚只需\r\n  `git revert <commit>` 即可恢复旧版 SOP。\r\n- 不触发 `write_task` 的 v1.1 `needs_human` 流程(low risk)。\r\n- 不属于 Rule 7 高危动作(无网络 / 防火墙 / 删除数据 / 推 main / 公网发布)。\r\n\r\n## 备注 / Notes\r\n\r\n本任务文件名本身演示 ADR-0033 trailing-slug 语法:\r\n`TASK-20260513-001-ADMIN-to-ME-release-sop-v2-after-1-6-0.md`\r\n└─ slug 段:`release-sop-v2-after-1-6-0`\r\n",
+      "purpose": "risk statement and trailing-slug note"
+    }
+  ]
+}

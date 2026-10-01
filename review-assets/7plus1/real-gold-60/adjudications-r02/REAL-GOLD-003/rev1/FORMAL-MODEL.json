@@ -1,0 +1,52 @@
+{
+  "case_id": "REAL-GOLD-003",
+  "source_sha256": "c753ba96dea69aa9d92a9f53d84724b77391b5f8f3ca948f045b3c6c490e2869",
+  "E": [
+    "E.generators = {write_task, write_report, write_issue}",
+    "E.active_paths = {tasks_dir, reports_dir, issues_dir}",
+    "E.archive_paths = {log/tasks, log/reports, log/issues}",
+    "E.protected_manual_renames = {TASK-20260427-002, REPORT-20260427-002}"
+  ],
+  "Sigma": [
+    "Sigma.sequence_scan = active_paths UNION archive_paths",
+    "Sigma.write_targets = {src/fcop/project.py, test_project_tasks.py, test_project_reports.py, test_project_issues.py}",
+    "Sigma.next_sequence_semantics = unchanged"
+  ],
+  "Q": [
+    "Q.add_existing_filenames_for_seq_helper",
+    "Q.use_union_scan_in_each_generator",
+    "Q.add_seq_skips_archived_tests",
+    "Q.run_regression_and_protection_checks"
+  ],
+  "F": [
+    "F.introduce_tombstone_placeholder",
+    "F.modify_next_sequence_semantics",
+    "F.modify_O_EXCL_reservation",
+    "F.modify_retry_limit",
+    "F.harm_manual_rename_files"
+  ],
+  "K": [
+    "K = three_new_tests_green AND existing_587_passed_not_regressed AND ruff_clean AND manual_renames_unharmed"
+  ],
+  "Relations": [
+    "ADMIN -> assigns -> ME",
+    "archive_task -> moves -> task_and_report_records",
+    "active_and_archive_paths -> determine -> next_sequence_input",
+    "identity_or_authority_binding = unresolved_not_inferred"
+  ],
+  "D": [
+    "D.issue = ISSUE-20260427-003-ME",
+    "D.upstream_task = TASK-20260427-002-ADMIN-to-ME",
+    "D.code_locations = {project.py:1024, project.py:1468, project.py:1710}",
+    "D.invariants = {next_sequence_unchanged, O_EXCL_unchanged, retry_limit_unchanged}"
+  ],
+  "Phi": [
+    "Phi.archived_basename_must_not_be_reused",
+    "Phi.issue_archive_path_is_future_symmetric_coverage_not_claimed_archive_issue_behavior",
+    "Phi.no_tombstone_design"
+  ],
+  "losslessness_zh": "三个生成器的联合扫描要求、归档同名碰撞机制、辅助函数和测试、质量与保护验收、以及 tombstone、next_sequence、O_EXCL、retry 限的不变边界均已保留；未补造 archive_issue 功能或任何身份权限。",
+  "losslessness_en": "The union-scan requirement for all three generators, archived-basename collision mechanism, helper and tests, quality and protection acceptance, and the tombstone, next_sequence, O_EXCL, and retry-limit invariants are retained; no archive_issue functionality or identity/authority is fabricated.",
+  "formal_coverage_gap": [],
+  "invented_constraints": []
+}

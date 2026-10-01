@@ -1,0 +1,53 @@
+{
+  "case_id": "REAL-GOLD-047",
+  "source_sha256": "377a1d1c59c04a5cf55c74f8aec053f2146d3063be243d340bed028a577cdc06",
+  "E": [
+    "E={spec,apply_init,lifecycle,audit,tests,docs,MCP,ISSUE-001}"
+  ],
+  "Sigma": [
+    "Sigma.version=3.0.2",
+    "Sigma.lifecycle={inbox,active,review,done,archive}",
+    "Sigma.v2_dirs_forbidden={tasks,log}",
+    "Sigma.risk=high"
+  ],
+  "Q": [
+    "Q.modify_apply_init",
+    "Q.ensure_lifecycle",
+    "Q.add_tests",
+    "Q.add_audit_scan",
+    "Q.sync_docs",
+    "Q.release_after_approval",
+    "Q.migrate_existing"
+  ],
+  "F": [
+    "F.merge_without_CI",
+    "F.release_without_human_approval",
+    "F.create(tasks|log)_fresh_v3",
+    "F.affect_existing_project"
+  ],
+  "K": [
+    "K.tests=pass",
+    "K.init_paths=3",
+    "K.audit={missing:P0,legacy:P1,v2:none}",
+    "K.human_approval=mark_human_approved"
+  ],
+  "Relations": [
+    "human_approval -> gates -> release",
+    "apply_init -> creates -> lifecycle_dirs",
+    "audit -> detects -> topology_noncompliance"
+  ],
+  "D": [
+    "D.priority=P0",
+    "D.risk=high",
+    "D.branch=fix/init-v3-topology"
+  ],
+  "Phi": [
+    "Phi.human_approval=absent",
+    "Phi.OperatorProfile=absent",
+    "Phi.execution=not_performed"
+  ],
+  "losslessness_zh": "保留 init 默认拓扑、测试/audit矩阵、3.0.2 发版、人工批准门及既有项目保护。",
+  "losslessness_en": "Retains init default topology, test/audit matrix, 3.0.2 release, human-approval gate and existing-project protection.",
+  "formal_coverage_gap": [],
+  "invented_constraints": []
+}

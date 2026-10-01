@@ -1,0 +1,52 @@
+{
+  "case_id": "REAL-GOLD-002",
+  "source_sha256": "d0d671fff98f9b972034e8426e6bf32b306db86cca0fa17bf83c91e4dbdffc41",
+  "E": [
+    "E.participants = {ADMIN, ME, agent, co-reviewer}",
+    "E.role_ledger_paths = {docs/agents/tasks/, reports/, issues/, log/, fcop.json}",
+    "E.design_targets = {fcop-rules.mdc, fcop-protocol.mdc, letter-to-admin.{zh,en}.md, fcop_report}",
+    "E.related_records = {ISSUE-20260427-002-ME.md, ISSUE-20260427-001-ME.md, TASK-20260427-001-ADMIN-to-ME.md}"
+  ],
+  "Sigma": [
+    "Sigma.current_scope = design_record AND queue_for_0.7.0",
+    "Sigma.future_scope = 0.7.0_implementation_after_ADMIN_launch",
+    "Sigma.current_scope excludes Sigma.future_scope"
+  ],
+  "Q": [
+    "Q.record_rule_1_identity_uniqueness_design",
+    "Q.queue_future_0.7.0_implementation",
+    "Q.keep_REPORT_in_progress_and_TASK_OPEN"
+  ],
+  "F": [
+    "F.implement_0.7.0_in_current_round",
+    "F.introduce_runtime_lock_or_lease_files",
+    "F.change_frontmatter_semantics",
+    "F.modify_init_star",
+    "F.bypass_role_conflict_with_temp_label"
+  ],
+  "K": [
+    "K = design_record_queued AND report_status_in_progress AND task_status_open",
+    "K.future_implementation_acceptance = deferred_until_ADMIN_launch"
+  ],
+  "Relations": [
+    "ME -> analyzes_drafts_validates -> design_record",
+    "ADMIN -> decides_release_window_launch -> future_0.7.0_implementation",
+    "role_code -> at_most_one_agent -> disk_ledger_occupancy",
+    "identity_or_authority_binding = unresolved_not_inferred"
+  ],
+  "D": [
+    "D.protocol = fcop@1",
+    "D.rules = {Rule_1, Rule_4, Rule_7, Rule_8, UNBOUND, Architectural_Principle}",
+    "D.proposed_versions = {fcop:0.7.0, fcop_mcp:0.7.0, protocol:1.5.0, rules:1.7.0}"
+  ],
+  "Phi": [
+    "Phi.new_tools = 0",
+    "Phi.no_runtime_lock_or_lease_state",
+    "Phi.no_current_round_implementation",
+    "Phi.no_implied_identity_or_authority"
+  ],
+  "losslessness_zh": "角色唯一性原则、磁盘账本依据、未来 0.7.0 修订与验收、当前轮仅设计记录和排队、责任分工及全部明确禁止事项均已保留；未把未来实现当作当前动作，也未推导身份或权限。",
+  "losslessness_en": "The role-uniqueness principle, disk-ledger basis, future 0.7.0 revisions and acceptance, current-round design-record-and-queue scope, responsibilities, and all explicit prohibitions are retained; future implementation is not treated as a current action and no identity or authority is inferred.",
+  "formal_coverage_gap": [],
+  "invented_constraints": []
+}

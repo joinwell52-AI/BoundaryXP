@@ -1,0 +1,48 @@
+{
+  "case_id": "REAL-GOLD-060",
+  "source_sha256": "b16f280674743f0bb8d858848628444ac6db1e8b3eea8c76e40c2f9369212799",
+  "E": [
+    "E={task_008,task_009,old_report_008,old_report_009,new_report_008,new_report_009,summary_report,log_tasks,open_tasks}"
+  ],
+  "Sigma": [
+    "Sigma.scope={008,009}",
+    "Sigma.old_report_identity=absent",
+    "Sigma.current_task_state=absent"
+  ],
+  "Q": [
+    "Q.append_superseding_report(008)",
+    "Q.append_superseding_report(009)",
+    "Q.restore_open_blocked_task(008,009)",
+    "Q.create_summary(ME,ADMIN)"
+  ],
+  "F": [
+    "F.modify(old_TASK_or_REPORT_body)",
+    "F.handle(push_007)",
+    "F.handle(010_or_011)",
+    "F.auto_finish",
+    "F.auto_archive"
+  ],
+  "K": [
+    "K.008_009_in_open_area",
+    "K.each_new_report_supersedes_old",
+    "K.summary_report_exists"
+  ],
+  "Relations": [
+    "new_report_i -> supersedes -> old_report_i",
+    "summary_report -> sender -> ME",
+    "summary_report -> recipient -> ADMIN"
+  ],
+  "D": [
+    "D.priority=P1",
+    "D.deadline=absent"
+  ],
+  "Phi": [
+    "Phi.rule_text=absent",
+    "Phi.old_report_identity=absent",
+    "Phi.current_state_and_paths=absent"
+  ],
+  "losslessness_zh": "保留 008/009 修复、append-only、排除项、自动归档禁止和验收，同时保留引用规则、状态、报告身份和路径缺失。",
+  "losslessness_en": "Retains 008/009 remediation, append-only, exclusions, automatic-archive prohibition and acceptance while retaining absent referenced rules, state, report identity and paths.",
+  "formal_coverage_gap": [],
+  "invented_constraints": []
+}

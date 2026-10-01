@@ -1,0 +1,54 @@
+{
+  "case_id": "REAL-GOLD-026",
+  "source_sha256": "f12159b57663d85cb88ee521406ace01278038f01304e26fc2c03ddc16d8066a",
+  "E": [
+    "E={project_dir,fcop_json,HOME,write_tools,init_tools,parent}"
+  ],
+  "Sigma": [
+    "guard_steps=3",
+    "supplemental=3",
+    "HOME_child=allowed_if_project_root"
+  ],
+  "Q": [
+    "Q.binding_check",
+    "Q.fcop_json_exists_check",
+    "Q.deny_list_check",
+    "Q.shared_guard_for_write_tools"
+  ],
+  "F": [
+    "F.system_root_write",
+    "F.exact_HOME_write",
+    "F.HOME_child_false_denial",
+    "F.expand_deny_list_to_Desktop_Documents_in_this_task",
+    "F.implementation_before_ADMIN_GREEN"
+  ],
+  "K": [
+    "K.S1..S3",
+    "K.parent_seven_criteria=unavailable",
+    "K.new_project_bootstrap=unresolved"
+  ],
+  "Relations": [
+    "write_tool->guard->binding_check->fcop_json_exists_check->deny_list_check",
+    "init_tool->creates->fcop_json",
+    "ADMIN_GREEN->enables->implementation",
+    "TASK_002->appends->TASK_001"
+  ],
+  "D": [
+    "D.exact_HOME=deny_after_resolve_casefold",
+    "D.HOME_child=allow_when_project_root",
+    "D.rollback=v1.3.x"
+  ],
+  "Phi": [
+    "Phi.parent_body=unavailable",
+    "Phi.init_tool_write_side_classification=unresolved",
+    "Phi.bootstrap_guard_exception=unresolved",
+    "Phi.ADMIN_GREEN=unverified",
+    "Phi.frontmatter_status=done",
+    "Phi.body_initial_status=proposed",
+    "Phi.status_time_relation=unresolved"
+  ],
+  "losslessness_zh": "保留父任务追加关系、三步守门、初始化创建配置的先后张力、精确 HOME 比较及子目录例外、审批门槛和状态时点未明；不擅判父案工具分类。",
+  "losslessness_en": "Retains parent-append relation, three-step guard, the initialization/configuration ordering tension, exact-HOME comparison and child exception, approval gate, and unresolved status timing; the parent's tool classification is not guessed.",
+  "formal_coverage_gap": [],
+  "invented_constraints": []
+}

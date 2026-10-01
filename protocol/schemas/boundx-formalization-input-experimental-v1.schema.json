@@ -1,0 +1,131 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:boundx:implementation:formalization-input:experimental-v1",
+  "type": "object", "additionalProperties": false,
+  "required": ["schema", "bindings"],
+  "properties": {
+    "schema": {"const": "boundx-formalization-input/experimental-v1"},
+    "bindings": {"type": "array", "maxItems": 256, "items": {"oneOf": [
+      {"$ref": "#/$defs/booleanBinding"}, {"$ref": "#/$defs/intervalBinding"},
+      {"$ref": "#/$defs/entityBinding"}, {"$ref": "#/$defs/relationBinding"}, {"$ref": "#/$defs/targetBinding"},
+      {"$ref": "#/$defs/handoffBinding"}, {"$ref": "#/$defs/artifactStateBinding"}, {"$ref": "#/$defs/allowedBinding"}
+    ]}}
+  },
+  "$defs": {
+    "allowedBinding": {
+      "type": "object", "additionalProperties": false,
+      "required": ["id", "entry_id", "operator", "universe", "effect", "actor_scope", "guard_context", "identity_status", "allowed"],
+      "properties": {
+        "id": {"$ref": "#/$defs/id"}, "entry_id": {"type": "string", "minLength": 1, "maxLength": 256},
+        "operator": {"const": "allowed_set"}, "universe": {"$ref": "#/$defs/id"}, "effect": {"$ref": "#/$defs/id"},
+        "actor_scope": {"$ref": "#/$defs/id"}, "guard_context": {"$ref": "#/$defs/id"},
+        "identity_status": {"enum": ["resolved", "unresolved"]},
+        "allowed": {"type": "array", "maxItems": 256, "uniqueItems": true, "items": {"$ref": "#/$defs/id"}}
+      }
+    },
+    "artifactStateBinding": {
+      "type": "object", "additionalProperties": false,
+      "required": ["id", "entry_id", "operator", "artifact", "presence", "identity_status", "mapping_coverage"],
+      "properties": {
+        "id": {"$ref": "#/$defs/id"}, "entry_id": {"type": "string", "minLength": 1, "maxLength": 256},
+        "operator": {"const": "artifact_state"},
+        "artifact": {"type": "string", "minLength": 1, "maxLength": 1024, "pattern": "\\S"},
+        "presence": {"enum": ["present", "absent"]},
+        "identity_status": {"enum": ["resolved", "unresolved"]},
+        "mapping_coverage": {"enum": ["complete", "partial"]}
+      }
+    },
+    "artifactIds": {"type": "array", "maxItems": 256, "uniqueItems": true, "items": {"$ref": "#/$defs/id"}},
+    "handoffBinding": {
+      "type": "object", "additionalProperties": false,
+      "required": ["id", "entry_id", "operator", "producer_stage", "consumer_stage", "artifact_type", "identity_status", "supply_status", "declared_outputs", "external_inputs", "required_inputs"],
+      "properties": {
+        "id": {"$ref": "#/$defs/id"}, "entry_id": {"type": "string", "minLength": 1, "maxLength": 256},
+        "operator": {"const": "handoff"}, "producer_stage": {"$ref": "#/$defs/id"},
+        "consumer_stage": {"$ref": "#/$defs/id"}, "artifact_type": {"$ref": "#/$defs/id"},
+        "identity_status": {"enum": ["resolved", "unresolved"]}, "supply_status": {"enum": ["complete", "partial"]},
+        "declared_outputs": {"$ref": "#/$defs/artifactIds"}, "external_inputs": {"$ref": "#/$defs/artifactIds"},
+        "required_inputs": {"$ref": "#/$defs/artifactIds"}
+      }
+    },
+    "targetBinding": {
+      "type": "object", "additionalProperties": false,
+      "required": ["id", "entry_id", "operator", "universe", "effect", "actor_scope", "guard_context", "identity_status", "requested", "forbidden"],
+      "properties": {
+        "id": {"$ref": "#/$defs/id"}, "entry_id": {"type": "string", "minLength": 1, "maxLength": 256},
+        "operator": {"const": "target_set"}, "universe": {"$ref": "#/$defs/id"}, "effect": {"$ref": "#/$defs/id"},
+        "actor_scope": {"$ref": "#/$defs/id"}, "guard_context": {"$ref": "#/$defs/id"},
+        "identity_status": {"enum": ["resolved", "unresolved"]},
+        "requested": {"type": "array", "maxItems": 256, "uniqueItems": true, "items": {"$ref": "#/$defs/id"}},
+        "forbidden": {"type": "array", "maxItems": 256, "uniqueItems": true, "items": {"$ref": "#/$defs/id"}}
+      }
+    },
+    "entityBinding": {
+      "type": "object", "additionalProperties": false,
+      "required": ["id", "entry_id", "operator", "entity_id", "entity_type", "identity_status"],
+      "properties": {
+        "id": {"$ref": "#/$defs/id"}, "entry_id": {"type": "string", "minLength": 1, "maxLength": 256},
+        "operator": {"const": "entity"}, "entity_id": {"$ref": "#/$defs/id"},
+        "entity_type": {"enum": ["actor", "artifact", "system", "role", "policy", "grade"]},
+        "identity_status": {"enum": ["resolved", "unresolved"]}
+      }
+    },
+    "relationBinding": {
+      "type": "object", "additionalProperties": false,
+      "required": ["id", "entry_id", "operator", "relation", "from_id", "to_id"],
+      "properties": {
+        "id": {"$ref": "#/$defs/id"}, "entry_id": {"type": "string", "minLength": 1, "maxLength": 256},
+        "operator": {"const": "relation"},
+        "relation": {"enum": ["assigned_role", "has_grade", "reports_to", "depends_on", "prerequisite", "references"]},
+        "from_id": {"$ref": "#/$defs/id"}, "to_id": {"$ref": "#/$defs/id"}
+      }
+    },
+    "id": {"type": "string", "minLength": 1, "maxLength": 128, "pattern": "\\S"},
+    "booleanBinding": {
+      "type": "object", "additionalProperties": false,
+      "required": ["id", "entry_id", "operator", "variables", "formula"],
+      "properties": {
+        "id": {"$ref": "#/$defs/id"}, "entry_id": {"type": "string", "minLength": 1, "maxLength": 256},
+        "operator": {"enum": ["obligation", "prohibition", "completion", "constraint"]},
+        "variables": {"type": "array", "maxItems": 12, "uniqueItems": true, "items": {"$ref": "#/$defs/id"}},
+        "formula": {"$ref": "#/$defs/expression"},
+        "when": {"$ref": "#/$defs/expression"},
+        "unless": {"$ref": "#/$defs/expression"}
+      }
+    },
+    "intervalBinding": {
+      "type": "object", "additionalProperties": false,
+      "required": ["id", "entry_id", "operator", "subject", "dimension", "unit", "domain", "lower", "upper"],
+      "properties": {
+        "id": {"$ref": "#/$defs/id"}, "entry_id": {"type": "string", "minLength": 1, "maxLength": 256},
+        "operator": {"const": "interval"},
+        "subject": {"$ref": "#/$defs/id"}, "dimension": {"$ref": "#/$defs/id"}, "unit": {"$ref": "#/$defs/id"},
+        "domain": {"enum": ["integer", "real"]},
+        "lower": {"$ref": "#/$defs/bound"},
+        "upper": {"$ref": "#/$defs/bound"}
+      },
+      "anyOf": [{"properties": {"lower": {"type": "object"}}}, {"properties": {"upper": {"type": "object"}}}]
+    },
+    "bound": {
+      "type": ["object", "null"], "additionalProperties": false,
+      "required": ["value", "inclusive"],
+      "properties": {"value": {"$ref": "#/$defs/decimal"}, "inclusive": {"type": "boolean"}}
+    },
+    "decimal": {
+      "oneOf": [
+        {"type": "integer", "minimum": -9007199254740991, "maximum": 9007199254740991},
+        {"type": "string", "maxLength": 256, "pattern": "^-?(?:0|[1-9][0-9]*)(?:\\.[0-9]+)?$"}
+      ]
+    },
+    "expression": {
+      "oneOf": [
+        {"type": "boolean"},
+        {"type": "object", "additionalProperties": false, "required": ["var"], "properties": {"var": {"$ref": "#/$defs/id"}}},
+        {"type": "object", "additionalProperties": false, "required": ["not"], "properties": {"not": {"$ref": "#/$defs/expression"}}},
+        {"type": "object", "additionalProperties": false, "required": ["all"], "properties": {"all": {"type": "array", "minItems": 1, "maxItems": 64, "items": {"$ref": "#/$defs/expression"}}}},
+        {"type": "object", "additionalProperties": false, "required": ["any"], "properties": {"any": {"type": "array", "minItems": 1, "maxItems": 64, "items": {"$ref": "#/$defs/expression"}}}},
+        {"type": "object", "additionalProperties": false, "required": ["implies"], "properties": {"implies": {"type": "array", "minItems": 2, "maxItems": 2, "items": {"$ref": "#/$defs/expression"}}}}
+      ]
+    }
+  }
+}

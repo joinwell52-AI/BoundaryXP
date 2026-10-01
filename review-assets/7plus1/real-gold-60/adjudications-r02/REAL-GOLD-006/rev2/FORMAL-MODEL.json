@@ -1,0 +1,50 @@
+{
+  "case_id": "REAL-GOLD-006",
+  "source_sha256": "3cc8d1bb54115c1fa1dba0e11256a3d3d26cea3a21b4d72b492f1f70fdb35956",
+  "E": [
+    "E.packages={fcop,fcop-mcp}",
+    "E.metadata={version_files,pyprojects,rules,protocol,deployed_rules}",
+    "E.records={ISSUE-006,ISSUE-007,REPORT-007,TASK-006}"
+  ],
+  "Sigma": [
+    "Sigma.package_versions={fcop:0.7.2,fcop-mcp:0.7.2}",
+    "Sigma.rules_version=1.8.0",
+    "Sigma.protocol_version=1.6.0",
+    "Sigma.mcp_pin=>=0.7,<0.8"
+  ],
+  "Q": [
+    "Q.scan_and_fix_all_stated_metadata",
+    "Q.add_metadata_and_package_consistency_tests",
+    "Q.run_quality_and_grep_checks",
+    "Q.redeploy_rules_close_ledger_and_release"
+  ],
+  "F": [
+    "F.repeat_substantive_correct_metadata_wrong_mismatch",
+    "F.yank_071",
+    "F.allow_frontmatter_body_or_package_pin_divergence"
+  ],
+  "K": [
+    "K=pytest_and_ruff_green AND consistency_tests_green AND reported_versions_agree AND stale_metadata_grep_empty AND ledger_closed"
+  ],
+  "Relations": [
+    "ADMIN -> assigns -> ME",
+    "metadata_frontmatter -> must_equal -> highest_body_version",
+    "package_version -> must_equal -> pyproject_version",
+    "identity_or_authority_binding=unresolved_not_inferred"
+  ],
+  "D": [
+    "D.release=0.7.2",
+    "D.rule_protocol={1.8.0,1.6.0}",
+    "D.issue=ISSUE-20260427-007",
+    "D.commands={build,twine_check,upload,uvx_smoke,tag,push,release}"
+  ],
+  "Phi": [
+    "Phi.all_surfaces_align_to_correct_target",
+    "Phi.consistency_tests_block_same_class_bug",
+    "Phi.071_not_yanked"
+  ],
+  "losslessness_zh": "版本真值、全表面对齐、自动守门、账本、发版、验收和不再发生元数据错的红线均被表示；未补造发布权限或外部状态。",
+  "losslessness_en": "Version truth, all-surface alignment, automated guardrails, ledger, release, acceptance, and the no-repeat metadata redline are represented; no publication authority or external state is fabricated.",
+  "formal_coverage_gap": [],
+  "invented_constraints": []
+}

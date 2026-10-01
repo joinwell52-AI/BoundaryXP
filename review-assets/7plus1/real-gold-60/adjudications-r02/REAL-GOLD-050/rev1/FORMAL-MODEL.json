@@ -1,0 +1,52 @@
+{
+  "case_id": "REAL-GOLD-050",
+  "source_sha256": "3b253ea59ea1878e7db5c1f9f5cb79cd3dc902d8957587ad0ba197d6017f56d6",
+  "E": [
+    "E={TASK006,prompts,MCP,Python,lifecycle,README,audits}"
+  ],
+  "Sigma": [
+    "Sigma.sections=6",
+    "Sigma.languages=2",
+    "Sigma.version_pin=false",
+    "Sigma.antipatterns>=6"
+  ],
+  "Q": [
+    "Q.write",
+    "Q.upgrade_latest",
+    "Q.physical_ls",
+    "Q.stop_on_P0",
+    "Q.register_or_defer",
+    "Q.audit"
+  ],
+  "F": [
+    "F.pin_version",
+    "F.change(old_prompt|LETTER|protocol)",
+    "F.release",
+    "F.choose_init_or_remediation",
+    "F.tool_guardrail"
+  ],
+  "K": [
+    "K.MCP_Python_boundary",
+    "K.physical_lifecycle",
+    "K.P0=>stop",
+    "K.resource={register|defer}"
+  ],
+  "Relations": [
+    "TASK007 -> supersedes -> TASK006",
+    "ADMIN_choice -> gates -> init",
+    "P0 -> blocks -> autonomous_remediation"
+  ],
+  "D": [
+    "D.priority=P1",
+    "D.risk=low",
+    "D.deadline=absent"
+  ],
+  "Phi": [
+    "Phi.resource_choice=unresolved",
+    "Phi.OperatorProfile=absent"
+  ],
+  "losslessness_zh": "保留 supersede、最新版策略、物理验证/P0停止、资源分支与 anti-scope。",
+  "losslessness_en": "Retains supersession, latest-version policy, physical validation/P0 stop, resource branch and anti-scope.",
+  "formal_coverage_gap": [],
+  "invented_constraints": []
+}

@@ -1,0 +1,43 @@
+{
+  "case_id": "REAL-GOLD-021",
+  "source_sha256": "5364ba6490b8cb046c371a670fe5d076d2509868c461875c3e447bbed6d14356",
+  "status": "EVIDENCE_VERIFIED",
+  "evidence": [
+    {
+      "evidence_id": "E001",
+      "source_id": "SOURCE_TASK",
+      "origin": "SOURCE",
+      "start": 0,
+      "end": 835,
+      "quote": "---\r\nprotocol: fcop\r\nversion: 1\r\ntype: TASK\r\nsender: ADMIN\r\nrecipient: ME\r\ndate: 2026-05-09\r\npriority: P1\r\nstatus: in_progress\r\nsubject: 重 emit fcop-rules.mdc / fcop-protocol.mdc 反映 v1.0\r\nref_charter: adr/ADR-0015-fcop-1.0-ai-os-protocol-charter.md\r\nref_predecessor: docs/agents/log/tasks/TASK-20260509-Z01-ADMIN-to-ME.md\r\nacceptance_criteria_count: 5\r\n---\r\n\r\n# TASK-20260509-010-ADMIN-to-ME\r\n\r\n> Solo 模式任务。RC 阶段必须把宿主级 rule 文件升级以反映 v1.0 reframing 与\r\n> 4 个新抽象。范围控制：rules.mdc 加正式 Rule 9（4 子段）；protocol.mdc\r\n> 仅加 pointer，详细 commentary 留 final。\r\n\r\n---\r\n\r\n## 1 · 为什么需要这个任务\r\n\r\n`fcop-rules.mdc` / `fcop-protocol.mdc` 是 FCoP 部署到用户项目的协议\r\n**操作面**——任何 Cursor / Claude / Codex agent 都会自动读到。v1.0\r\n新增的 REVIEW / Boundary / Failure / Event 4 抽象如果不在这两个文件\r\n里有规则化表达，agent 就无从知道这些能力存在或如何使用。\r\n\r\nper ADR-0015 §execution roadmap：v1.0 ship 必须包含 mdc 重 emit。\r\n\r",
+      "purpose": "metadata, scope, and host-rule motivation"
+    },
+    {
+      "evidence_id": "E002",
+      "source_id": "SOURCE_TASK",
+      "origin": "SOURCE",
+      "start": 836,
+      "end": 1209,
+      "quote": "## 2 · 决议\r\n\r\n| # | 决议 | 理由 |\r\n|---|---|---|\r\n| 1 | rules.mdc 加 Rule 9，4 子段对齐 4 抽象 | 形式必须与既有 Rule 0..8 一致 |\r\n| 2 | rules.mdc 1.8.0 → 1.9.0 | 严格 SemVer additive |\r\n| 3 | protocol.mdc 加 pointer callout，不展开 | 1194 行 mdc 不能再加 commentary 进去；详细留 v1.0 final |\r\n| 4 | protocol.mdc 1.6.0 → 1.7.0 | minor bump 反映新增 callout |\r\n| 5 | 不动 Rule 0..8 主体 | additive expansion；既有规则全部继续生效 |\r\n\r",
+      "purpose": "five versioning and scope decisions"
+    },
+    {
+      "evidence_id": "E003",
+      "source_id": "SOURCE_TASK",
+      "origin": "SOURCE",
+      "start": 1210,
+      "end": 1723,
+      "quote": "## 3 · 验收标准\r\n\r\n1. ✅ rules.mdc 含 Rule 9 完整 4 子段（含双语正文）\r\n2. ✅ rules.mdc frontmatter `fcop_rules_version: 1.9.0` + body changelog 顶部 1.9.0 段\r\n3. ✅ protocol.mdc 顶部含 v1.0 capabilities pointer callout\r\n4. ✅ protocol.mdc frontmatter `fcop_protocol_version: 1.7.0` + Protocol Version Log v1.7 段\r\n5. ✅ `tests/test_fcop/test_rules_metadata_consistency.py` 全绿；全回归无新红\r\n\r\n## 4 · 执行计划\r\n\r\n| Round | 内容 |\r\n|---|---|\r\n| R1 | rules.mdc + protocol.mdc + CHANGELOG | `feat(rules):` |\r\n| R2 | TASK-010 报告 + 归档 | `docs(workflow):` |\r\n\r",
+      "purpose": "five acceptance criteria and two-round plan"
+    },
+    {
+      "evidence_id": "E004",
+      "source_id": "SOURCE_TASK",
+      "origin": "SOURCE",
+      "start": 1724,
+      "end": 1922,
+      "quote": "## 5 · self-review\r\n\r\n- [x] 范围控制：rules 加正式规则，protocol 仅 pointer\r\n- [x] 既有 Rule 0..8 主体不动\r\n- [x] frontmatter ↔ body changelog 同步（既有 ISSUE-20260427-007\r\n  防止 metadata drift 测试守门）\r\n- [x] CHANGELOG 同步\r\n",
+      "purpose": "self-review constraints"
+    }
+  ]
+}
