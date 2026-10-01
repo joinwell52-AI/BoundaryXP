@@ -1,0 +1,20 @@
+import fs from 'node:fs';import assert from 'node:assert/strict';import {createHash} from 'node:crypto';
+import {fingerprint} from '../../../../research/7plus1-parser/v0.3-p3-frozen-evaluation/attempt-20261001-r01/support.mjs';
+const dir='docs/reports/7plus1/7P-REPAIR-001',read=p=>JSON.parse(fs.readFileSync(p)),hash=p=>createHash('sha256').update(fs.readFileSync(p)).digest('hex'),baseline=read(dir+'/BASELINE.json'),checks=[];
+function check(name,fn){fn();checks.push({name,status:'PASS'});}
+check('Protected sources, Gold, BXP, packs, former reports unchanged',()=>{for(const[p,h]of Object.entries(baseline.files))assert.equal(fs.existsSync(p)?hash(p):null,h,p);});
+const gold60=read('docs/reports/7plus1/7P-BOOTSTRAP-001/REAL-GOLD-60-COPY-MANIFEST.json');check('Historical Real Gold 60 unchanged',()=>{for(const f of gold60.copied)assert.equal(hash(gold60.destination+f.path),f.sha256,f.path);});
+const frozen=await fingerprint();check('Former frozen implementations, model/pack dependencies and seals unchanged',()=>assert.equal(frozen.status,'PASS',JSON.stringify(frozen.errors)));
+const current=read(dir+'/IMPLEMENTATION-FROZEN.json');check('Final implementation digest unchanged',()=>{for(const[p,h]of Object.entries(current.files))assert.equal(hash(p),h,p);});
+const active=read('fixtures/7plus1/standard/adjudications/r02/manifest.json'),runs=read(dir+'/RUNS.json'),comparison=read(dir+'/COMPARISON.json'),summary=read(dir+'/SLOT-SUMMARY.json');
+check('Only nine confirmed SWAI plus REF001 actually run',()=>{assert.deepEqual(runs.map(r=>r.sample_id),['REF-001',...active.cases.filter(c=>c.denominator_included).map(c=>c.sample_id)]);assert.ok(runs.every(r=>r.status==='COMPLETE'));assert.ok(runs[0].ref_assertions.every(a=>a.pass));});
+for(const run of runs){const r=read(run.trace_path),c=r.compiler_v03;
+ check(run.sample_id+' actual models, canonical evidence and discourse gates',()=>{
+  assert.equal(hash(run.trace_path),run.trace_sha256);assert.equal(r.contract_gate_results.status,'PASS');assert.ok(['bge-m3','multilingual-e5-large','mdeberta-nli'].every(name=>run.model_signals.some(m=>m.resource===name&&m.actually_loaded)));
+  for(const s of r.source_spans)assert.equal([...c.source.raw_text].slice(s.start,s.end).join(''),s.text);
+  for(const entry of c.canonical_7plus1.P.entries.filter(e=>e.state==='RESOLVED'))for(const f of c.boundary_ir.facts.filter(f=>entry.boundary_fact_ids.includes(f.boundary_fact_id)))assert.ok(f.participant_node_ids.every(i=>c.semantic_nodes.find(n=>n.node_id===i)?.metadata.participant_eligibility?.eligible));
+  for(const f of c.boundary_ir.facts.filter(f=>['ACTION','FORBID','PARTICIPANT'].includes(f.fact_type)))if(!f.participant_node_ids.some(i=>c.semantic_nodes.find(n=>n.node_id===i)?.metadata.current_task_assignment))assert.ok(f.node_ids.every(i=>!['OUTPUT_CONTENT','CODE','QUOTE','BACKGROUND','TABLE'].includes(c.semantic_nodes.find(n=>n.node_id===i)?.metadata.discourse?.kind)));
+ });
+}
+check('All actual and expected entries reviewed; count totals reproducible',()=>{for(const c of comparison.cases){const a=read(c.actual_path),e=read(c.expected_path);for(const k of 'IOAPRVCB'){assert.equal(c.slots[k].actual_reviews.length,a[k].entries.length);assert.deepEqual(c.slots[k].expected_reviews.map(r=>r.entry),e.slots[k].entries);}}for(const k of 'IOAPRVCB')for(const kind of Object.keys(summary.by_slot[k]))assert.equal(summary.by_slot[k][kind],comparison.cases.flatMap(c=>c.slots[k].findings).filter(f=>f.finding===kind).length);assert.equal(summary.denominator,9);assert.equal(summary.STANDARD_PARSED,'0/9');});
+const result={task:'7P-REPAIR-001',status:'PASS',checks,protected_files:Object.keys(baseline.files).length,historical_files:gold60.copied.length,old_frozen_files:frozen.checked_files,source_modified:false,gold_modified:false,bxp_modified:false,projection_modified:false,models_packs_thresholds_modified:false};fs.writeFileSync(dir+'/VERIFY.json',JSON.stringify(result,null,2)+'\n',{flag:'wx'});console.log({status:result.status,checks:checks.length,old_frozen_files:frozen.checked_files});

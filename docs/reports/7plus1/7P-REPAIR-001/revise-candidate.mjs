@@ -1,0 +1,7 @@
+import fs from 'node:fs';import path from 'node:path';
+const dir='docs/reports/7plus1/7P-REPAIR-001',engine='research/7plus1-parser/v0.3-7p-repair-001',freeze=JSON.parse(fs.readFileSync(dir+'/IMPLEMENTATION-FROZEN.json'));
+for(const p of Object.keys(freeze.files)){const out=dir+'/candidate-r01/'+p;fs.mkdirSync(path.dirname(out),{recursive:true});fs.copyFileSync(p,out,fs.constants.COPYFILE_EXCL);}
+fs.renameSync(dir+'/IMPLEMENTATION-FROZEN.json',dir+'/IMPLEMENTATION-FROZEN-r01.json');fs.renameSync(dir+'/replay',dir+'/replay-r01');
+fs.writeFileSync(dir+'/CANDIDATE-R01-REVIEW.json',JSON.stringify({status:'NOT_ACCEPTED',original_snapshot:'candidate-r01/',freeze:'IMPLEMENTATION-FROZEN-r01.json',replay:'replay-r01/',reason:['Exporter/history version dispatch still names previous revision','Negative lexical exclusion must have affirmative predicate span and separate FORBIDDEN modality'],partial_replay_stopped:true,previous_task_seals_unchanged:true},null,2)+'\n',{flag:'wx'});
+function edit(file,from,to){const p=engine+'/'+file,s=fs.readFileSync(p,'utf8');if(!s.includes(from))throw Error(file);fs.writeFileSync(p,s.replaceAll(from,to));}
+for(const file of ['export.mjs','history.mjs']){edit(file,'v0.3-p2.2-meeting-repair','v0.3-p2.2-scope-consistency-repair');edit(file,"'v0.3-p2.2-scope-consistency-repair'","'v0.3-7p-repair-001'");if(file==='history.mjs')edit(file,'boundx-parser-history/v0.3-p2.2-scope-consistency-repair','boundx-parser-history/v0.3-7p-repair-001');}
