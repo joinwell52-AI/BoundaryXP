@@ -1,0 +1,6699 @@
+{
+  "status": "ACTUAL_STRUCTURES_ONLY",
+  "case_namespace": "SWAI-006",
+  "run_id": "c1cb4403-153c-4db7-aec9-ccc8b5d175ad",
+  "source_spans": [
+    {
+      "span_id": "p1:a521ab22200a35919d20aa69",
+      "start": 0,
+      "end": 2190,
+      "text": "---\r\nprotocol: fcop\r\nversion: 1\r\nkind: task\r\ntask_id: TASK-20260513-002\r\nsender: ADMIN\r\nrecipient: ME\r\npriority: P1\r\nrisk_level: low\r\nthread_key: release-sop-v2\r\nsession_id: sess-20260513-me-01\r\ncreated_at: \"2026-05-13T01:12:00+08:00\"\r\nrelated:\r\n  - TASK-20260513-001   # SOP v2 沉淀主刀(已归档)\r\n  - REPORT-20260513-001\r\n---\r\n\r\n# 把\"`git add` 用显式路径,不用 `-A`\"写进 `docs/release-process.md`(带依据)\r\n\r\n## 背景 / Background\r\n\r\n上一轮 `TASK-20260513-001` 沉淀 SOP v2 时,我自己在 `Step 4 闭环 commit` 阶\r\n段用 `git add -A` 一把抓,意外把 19 份 untracked 残留(`.scratch/` 临时\r\nmsg、`fcop_events.jsonl` 运行时日志、`scripts/_*.txt` 历史 commit msg\r\n等)一起塞进了 `commit d2ed13c`。ADMIN 决策 revert + redo,最终通过\r\n`cc60186 (revert) → 979bcd2 (clean SOP) → dfe68e3 (artifacts + .gitignore\r\ntighten)` 三个 commit 修复。\r\n\r\n汇报里我提了一句\"下次应在 SOP 里加这条规则\",ADMIN 当即回:\r\n\r\n> **写到文档中,有依据!!**\r\n\r\n意思是:**口头沉淀不算数,必须落文件**——这正是 FCoP 的根原则(Rule 0.a)\r\n本身。同时,有 `d2ed13c → cc60186 → 979bcd2 → dfe68e3` 这条完整的 main\r\n历史作为依据,新规则不是凭空写的\"教条\",是从实际事故里抽出来的硬约束。\r\n\r\n## 要做的事 / Deliverables\r\n\r\n在 `docs/release-process.md` **两处**加新条款:\r\n\r\n### 处 1 · 阶段 4 \"发布后验证 + Rule 0.a.1 闭环\" 的 `archive + commit` 子段\r\n\r\n把现有 `git add -A && git commit -F ...` 命令**整段重写**,强调:\r\n\r\n- ❌ 不要 `git add -A`(会抓所有 untracked 残留)\r\n- ✅ 用显式路径列出所有要入库的文件\r\n- ✅ 在 `git commit` 前先跑 `git status --short` 二次确认 staging 区只\r\n  包含本意文件\r\n- 引用 `d2ed13c → cc60186 → 979bcd2 → dfe68e3` 这串 commit 作为\"反面\r\n  教材 + 修复案例\"的链接,说明依据\r\n\r\n### 处 2 · \"常见故障与回滚\" 新增 `问题 7`\r\n\r\n```\r\n### 问题 7:commit 意外携带 untracked 残留(`git add -A` 后悔药)\r\n```\r\n\r\n- 现象、根因、立即修复(revert + redo)、长期防范(显式路径 + `.gitignore`\r\n  补 `.scratch/` / `fcop_events.jsonl` / `scripts/_*.txt`)\r\n- 直接引用本次 4-commit 修复链作为现实案例\r\n\r\n## 验收 / Acceptance\r\n\r\n- [ ] `docs/release-process.md` 阶段 4 闭环段命令重写,显式列路径\r\n- [ ] `docs/release-process.md` 常见故障新增 \"问题 7\" 整段\r\n- [ ] 两处都明确指向 `d2ed13c` / `cc60186` / `979bcd2` / `dfe68e3`\r\n      作为依据(commit hash 短)\r\n- [ ] 写 `REPORT-20260513-002-ME-to-ADMIN-add-git-add-explicit-paths-rule.md`\r\n- [ ] **Dogfood**:本任务的 commit 阶段 **必须用显式路径** `git add`,\r\n      不许再用 `-A`;commit 前 `git status --short` 确认 staging 区只\r\n      包含本意 3 个文件(docs + TASK-002 + REPORT-002)\r\n- [ ] push origin main 成功,main 历史保持单 commit 干净\r\n\r\n## 风险 / Risk\r\n\r\nrisk_level: low。只改维护者文档,加约束、不动协议、不发版。\r\n回滚:`git revert` 即可。\r\n"
+    },
+    {
+      "span_id": "p1:c906ff34e8b3452215085401",
+      "start": 0,
+      "end": 5,
+      "text": "---\r\n"
+    },
+    {
+      "span_id": "p1:9c851fba7daecff4370d741a",
+      "start": 5,
+      "end": 21,
+      "text": "protocol: fcop\r\n"
+    },
+    {
+      "span_id": "p1:f2d8393969da80a2bae92081",
+      "start": 21,
+      "end": 33,
+      "text": "version: 1\r\n"
+    },
+    {
+      "span_id": "p1:50fff84fecc7fb7f3b8778e4",
+      "start": 33,
+      "end": 45,
+      "text": "kind: task\r\n"
+    },
+    {
+      "span_id": "p1:8203b81b82e2d235e465c785",
+      "start": 45,
+      "end": 73,
+      "text": "task_id: TASK-20260513-002\r\n"
+    },
+    {
+      "span_id": "p1:fa1e69d3adabe7a03518c063",
+      "start": 73,
+      "end": 88,
+      "text": "sender: ADMIN\r\n"
+    },
+    {
+      "span_id": "p1:08155c4c9db5ebf56f64de89",
+      "start": 88,
+      "end": 103,
+      "text": "recipient: ME\r\n"
+    },
+    {
+      "span_id": "p1:672a538c5c743a540bf33c82",
+      "start": 103,
+      "end": 117,
+      "text": "priority: P1\r\n"
+    },
+    {
+      "span_id": "p1:a1abb026745047b4c5349898",
+      "start": 117,
+      "end": 134,
+      "text": "risk_level: low\r\n"
+    },
+    {
+      "span_id": "p1:659ef7a99f8d981f36e16d23",
+      "start": 134,
+      "end": 162,
+      "text": "thread_key: release-sop-v2\r\n"
+    },
+    {
+      "span_id": "p1:437f950dcab5081a287ddf5c",
+      "start": 162,
+      "end": 195,
+      "text": "session_id: sess-20260513-me-01\r\n"
+    },
+    {
+      "span_id": "p1:0f618eef58ed2f8c0a42403b",
+      "start": 195,
+      "end": 236,
+      "text": "created_at: \"2026-05-13T01:12:00+08:00\"\r\n"
+    },
+    {
+      "span_id": "p1:8a2291a2a9ef54f4ae0e4faa",
+      "start": 236,
+      "end": 246,
+      "text": "related:\r\n"
+    },
+    {
+      "span_id": "p1:6f32a637cbc5220fcd2b8153",
+      "start": 246,
+      "end": 290,
+      "text": "  - TASK-20260513-001   # SOP v2 沉淀主刀(已归档)\r\n"
+    },
+    {
+      "span_id": "p1:05448468eb971924dc9afd4f",
+      "start": 290,
+      "end": 315,
+      "text": "  - REPORT-20260513-001\r\n"
+    },
+    {
+      "span_id": "p1:5e68e10e478bf41e42f0ec6f",
+      "start": 315,
+      "end": 320,
+      "text": "---\r\n"
+    },
+    {
+      "span_id": "p1:61ed38edb243443f90f7c7fd",
+      "start": 320,
+      "end": 322,
+      "text": "\r\n"
+    },
+    {
+      "span_id": "p1:8788838a878da523d048ff7a",
+      "start": 322,
+      "end": 385,
+      "text": "# 把\"`git add` 用显式路径,不用 `-A`\"写进 `docs/release-process.md`(带依据)\r\n"
+    },
+    {
+      "span_id": "p1:84e61979fe87270d343c64a4",
+      "start": 385,
+      "end": 387,
+      "text": "\r\n"
+    },
+    {
+      "span_id": "p1:fc80e15189dc6c2915f70707",
+      "start": 387,
+      "end": 407,
+      "text": "## 背景 / Background\r\n"
+    },
+    {
+      "span_id": "p1:7d7279728eab2629e677099a",
+      "start": 407,
+      "end": 409,
+      "text": "\r\n"
+    },
+    {
+      "span_id": "p1:90dee168d0ea680038cab5d9",
+      "start": 409,
+      "end": 472,
+      "text": "上一轮 `TASK-20260513-001` 沉淀 SOP v2 时,我自己在 `Step 4 闭环 commit` 阶\r\n"
+    },
+    {
+      "span_id": "p1:96ca609185f7ec083bc97fa7",
+      "start": 472,
+      "end": 530,
+      "text": "段用 `git add -A` 一把抓,意外把 19 份 untracked 残留(`.scratch/` 临时\r\n"
+    },
+    {
+      "span_id": "p1:2292b995984712a7c95707f1",
+      "start": 530,
+      "end": 592,
+      "text": "msg、`fcop_events.jsonl` 运行时日志、`scripts/_*.txt` 历史 commit msg\r\n"
+    },
+    {
+      "span_id": "p1:f5ea89095dbdfe45016c0dcc",
+      "start": 592,
+      "end": 646,
+      "text": "等)一起塞进了 `commit d2ed13c`。ADMIN 决策 revert + redo,最终通过\r\n"
+    },
+    {
+      "span_id": "p1:ad493187ff5756f197771f61",
+      "start": 646,
+      "end": 721,
+      "text": "`cc60186 (revert) → 979bcd2 (clean SOP) → dfe68e3 (artifacts + .gitignore\r\n"
+    },
+    {
+      "span_id": "p1:ddff427c50dbb21918967434",
+      "start": 721,
+      "end": 746,
+      "text": "tighten)` 三个 commit 修复。\r\n"
+    },
+    {
+      "span_id": "p1:de8391009702fb2771d5c322",
+      "start": 746,
+      "end": 748,
+      "text": "\r\n"
+    },
+    {
+      "span_id": "p1:ebdb0533b817e9e131d5654b",
+      "start": 748,
+      "end": 786,
+      "text": "汇报里我提了一句\"下次应在 SOP 里加这条规则\",ADMIN 当即回:\r\n"
+    },
+    {
+      "span_id": "p1:c07c7d5f4203b19a873ace26",
+      "start": 786,
+      "end": 788,
+      "text": "\r\n"
+    },
+    {
+      "span_id": "p1:9cf9d51544c38cb411c28ad9",
+      "start": 788,
+      "end": 807,
+      "text": "> **写到文档中,有依据!!**\r\n"
+    },
+    {
+      "span_id": "p1:24f537dea9c64b9cee8db72b",
+      "start": 807,
+      "end": 809,
+      "text": "\r\n"
+    },
+    {
+      "span_id": "p1:f02aac6c31323764a91c71f8",
+      "start": 809,
+      "end": 857,
+      "text": "意思是:**口头沉淀不算数,必须落文件**——这正是 FCoP 的根原则(Rule 0.a)\r\n"
+    },
+    {
+      "span_id": "p1:d5428883a36f762addf73ac2",
+      "start": 857,
+      "end": 917,
+      "text": "本身。同时,有 `d2ed13c → cc60186 → 979bcd2 → dfe68e3` 这条完整的 main\r\n"
+    },
+    {
+      "span_id": "p1:a87a3cbf48ed940bd2a9ef4c",
+      "start": 917,
+      "end": 955,
+      "text": "历史作为依据,新规则不是凭空写的\"教条\",是从实际事故里抽出来的硬约束。\r\n"
+    },
+    {
+      "span_id": "p1:6ae312697e218514c1a34afe",
+      "start": 955,
+      "end": 957,
+      "text": "\r\n"
+    },
+    {
+      "span_id": "p1:888bb1a4f3a377462fbbfb2a",
+      "start": 957,
+      "end": 981,
+      "text": "## 要做的事 / Deliverables\r\n"
+    },
+    {
+      "span_id": "p1:000a482c3d89a7d29e1db146",
+      "start": 981,
+      "end": 983,
+      "text": "\r\n"
+    },
+    {
+      "span_id": "p1:d7b83f3c08afec46e9be875e",
+      "start": 983,
+      "end": 1024,
+      "text": "在 `docs/release-process.md` **两处**加新条款:\r\n"
+    },
+    {
+      "span_id": "p1:ed0f81e3fcdf6add9fef7c12",
+      "start": 1024,
+      "end": 1026,
+      "text": "\r\n"
+    },
+    {
+      "span_id": "p1:d19da00199d9a0680639ff1c",
+      "start": 1026,
+      "end": 1090,
+      "text": "### 处 1 · 阶段 4 \"发布后验证 + Rule 0.a.1 闭环\" 的 `archive + commit` 子段\r\n"
+    },
+    {
+      "span_id": "p1:d5bd289e7789ea0d71214a1b",
+      "start": 1090,
+      "end": 1092,
+      "text": "\r\n"
+    },
+    {
+      "span_id": "p1:126d41734a02a1624b49f1ca",
+      "start": 1092,
+      "end": 1146,
+      "text": "把现有 `git add -A && git commit -F ...` 命令**整段重写**,强调:\r\n"
+    },
+    {
+      "span_id": "p1:ed33d9cffd1ce23c5cfa84f5",
+      "start": 1146,
+      "end": 1148,
+      "text": "\r\n"
+    },
+    {
+      "span_id": "p1:2b9b57a8ee27968d745a5dd2",
+      "start": 1148,
+      "end": 1188,
+      "text": "- ❌ 不要 `git add -A`(会抓所有 untracked 残留)\r\n"
+    },
+    {
+      "span_id": "p1:d3d122c73f16d87ac2d02e9e",
+      "start": 1188,
+      "end": 1209,
+      "text": "- ✅ 用显式路径列出所有要入库的文件\r\n"
+    },
+    {
+      "span_id": "p1:fa5a002823df3131c1013b9e",
+      "start": 1209,
+      "end": 1270,
+      "text": "- ✅ 在 `git commit` 前先跑 `git status --short` 二次确认 staging 区只\r\n"
+    },
+    {
+      "span_id": "p1:3d16bb5e3d70ceff3957ea21",
+      "start": 1270,
+      "end": 1280,
+      "text": "  包含本意文件\r\n"
+    },
+    {
+      "span_id": "p1:28c8c253da2cf019b63e9dc4",
+      "start": 1280,
+      "end": 1342,
+      "text": "- 引用 `d2ed13c → cc60186 → 979bcd2 → dfe68e3` 这串 commit 作为\"反面\r\n"
+    },
+    {
+      "span_id": "p1:03827fafa5e9a3b7319eb847",
+      "start": 1342,
+      "end": 1364,
+      "text": "  教材 + 修复案例\"的链接,说明依据\r\n"
+    },
+    {
+      "span_id": "p1:255d930c18495c66cf31ecde",
+      "start": 1364,
+      "end": 1366,
+      "text": "\r\n"
+    },
+    {
+      "span_id": "p1:6510bf7b405f2ff51a82b782",
+      "start": 1366,
+      "end": 1397,
+      "text": "### 处 2 · \"常见故障与回滚\" 新增 `问题 7`\r\n"
+    },
+    {
+      "span_id": "p1:40328e661438f93293d124c3",
+      "start": 1397,
+      "end": 1399,
+      "text": "\r\n"
+    },
+    {
+      "span_id": "p1:23876de940290cad1e1ccbc2",
+      "start": 1399,
+      "end": 1404,
+      "text": "```\r\n"
+    },
+    {
+      "span_id": "p1:1a85938c1260c6feb7a5786e",
+      "start": 1404,
+      "end": 1457,
+      "text": "### 问题 7:commit 意外携带 untracked 残留(`git add -A` 后悔药)\r\n"
+    },
+    {
+      "span_id": "p1:ea832db35bab79f5ec746ae1",
+      "start": 1457,
+      "end": 1462,
+      "text": "```\r\n"
+    },
+    {
+      "span_id": "p1:d2b5439df77d8f3732a40172",
+      "start": 1462,
+      "end": 1464,
+      "text": "\r\n"
+    },
+    {
+      "span_id": "p1:5a2d9d0c5c79e254e271ecca",
+      "start": 1464,
+      "end": 1518,
+      "text": "- 现象、根因、立即修复(revert + redo)、长期防范(显式路径 + `.gitignore`\r\n"
+    },
+    {
+      "span_id": "p1:0a427d155f1d153e214e9c57",
+      "start": 1518,
+      "end": 1577,
+      "text": "  补 `.scratch/` / `fcop_events.jsonl` / `scripts/_*.txt`)\r\n"
+    },
+    {
+      "span_id": "p1:19662ae38283eb9a15fce2e8",
+      "start": 1577,
+      "end": 1606,
+      "text": "- 直接引用本次 4-commit 修复链作为现实案例\r\n"
+    },
+    {
+      "span_id": "p1:693559373d13e65f8d695c25",
+      "start": 1606,
+      "end": 1608,
+      "text": "\r\n"
+    },
+    {
+      "span_id": "p1:88e9608a4dc09843c63aafcd",
+      "start": 1608,
+      "end": 1628,
+      "text": "## 验收 / Acceptance\r\n"
+    },
+    {
+      "span_id": "p1:2579faf0c98a966e0759692e",
+      "start": 1628,
+      "end": 1630,
+      "text": "\r\n"
+    },
+    {
+      "span_id": "p1:c72b7d93ae749e17af31864f",
+      "start": 1630,
+      "end": 1682,
+      "text": "- [ ] `docs/release-process.md` 阶段 4 闭环段命令重写,显式列路径\r\n"
+    },
+    {
+      "span_id": "p1:7afe109d3ade4b18f9a15e74",
+      "start": 1682,
+      "end": 1732,
+      "text": "- [ ] `docs/release-process.md` 常见故障新增 \"问题 7\" 整段\r\n"
+    },
+    {
+      "span_id": "p1:1d83219aa587df9cc35f4532",
+      "start": 1732,
+      "end": 1793,
+      "text": "- [ ] 两处都明确指向 `d2ed13c` / `cc60186` / `979bcd2` / `dfe68e3`\r\n"
+    },
+    {
+      "span_id": "p1:bc603f750d12a86b8a4ff689",
+      "start": 1793,
+      "end": 1820,
+      "text": "      作为依据(commit hash 短)\r\n"
+    },
+    {
+      "span_id": "p1:b3a188dd4577b4f0201d9c2b",
+      "start": 1820,
+      "end": 1898,
+      "text": "- [ ] 写 `REPORT-20260513-002-ME-to-ADMIN-add-git-add-explicit-paths-rule.md`\r\n"
+    },
+    {
+      "span_id": "p1:fd7214ca0b091d819c7b8a55",
+      "start": 1898,
+      "end": 1955,
+      "text": "- [ ] **Dogfood**:本任务的 commit 阶段 **必须用显式路径** `git add`,\r\n"
+    },
+    {
+      "span_id": "p1:6137d99881acf550c6dd9aa1",
+      "start": 1955,
+      "end": 2016,
+      "text": "      不许再用 `-A`;commit 前 `git status --short` 确认 staging 区只\r\n"
+    },
+    {
+      "span_id": "p1:9dc77614e452dfeb10c5c77e",
+      "start": 2016,
+      "end": 2064,
+      "text": "      包含本意 3 个文件(docs + TASK-002 + REPORT-002)\r\n"
+    },
+    {
+      "span_id": "p1:abd143b95c3de1eba9862109",
+      "start": 2064,
+      "end": 2112,
+      "text": "- [ ] push origin main 成功,main 历史保持单 commit 干净\r\n"
+    },
+    {
+      "span_id": "p1:a8b2a2874eacb34dfc4e4303",
+      "start": 2112,
+      "end": 2114,
+      "text": "\r\n"
+    },
+    {
+      "span_id": "p1:904e2137ddffdc00636ef119",
+      "start": 2114,
+      "end": 2128,
+      "text": "## 风险 / Risk\r\n"
+    },
+    {
+      "span_id": "p1:692f445c43b587f398472399",
+      "start": 2128,
+      "end": 2130,
+      "text": "\r\n"
+    },
+    {
+      "span_id": "p1:f4ca92688dbf2a9d3af24fb3",
+      "start": 2130,
+      "end": 2169,
+      "text": "risk_level: low。只改维护者文档,加约束、不动协议、不发版。\r\n"
+    },
+    {
+      "span_id": "p1:b99ccd6986703017add97e6e",
+      "start": 2169,
+      "end": 2190,
+      "text": "回滚:`git revert` 即可。\r\n"
+    },
+    {
+      "span_id": "p1:41150075fe7a14ca10eb939f",
+      "start": 0,
+      "end": 3,
+      "text": "---"
+    },
+    {
+      "span_id": "p1:1793f83e0bb9e651dee2f446",
+      "start": 5,
+      "end": 19,
+      "text": "protocol: fcop"
+    },
+    {
+      "span_id": "p1:8f3db29d3e0092b51aedddde",
+      "start": 21,
+      "end": 31,
+      "text": "version: 1"
+    },
+    {
+      "span_id": "p1:8a6f71d712f5a99a6f427de0",
+      "start": 30,
+      "end": 31,
+      "text": "1"
+    },
+    {
+      "span_id": "p1:c2366a9811f7f45da2efee0c",
+      "start": 33,
+      "end": 43,
+      "text": "kind: task"
+    },
+    {
+      "span_id": "p1:37a604ee0007e3f3af150fb5",
+      "start": 45,
+      "end": 71,
+      "text": "task_id: TASK-20260513-002"
+    },
+    {
+      "span_id": "p1:a23736cdad55da4430f7fd92",
+      "start": 54,
+      "end": 71,
+      "text": "TASK-20260513-002"
+    },
+    {
+      "span_id": "p1:8b3ae56b23725b762303ccbd",
+      "start": 45,
+      "end": 52,
+      "text": "task_id"
+    },
+    {
+      "span_id": "p1:2829715990ce3e353524116f",
+      "start": 73,
+      "end": 86,
+      "text": "sender: ADMIN"
+    },
+    {
+      "span_id": "p1:1549e7185bdc11395d51b5f9",
+      "start": 88,
+      "end": 101,
+      "text": "recipient: ME"
+    },
+    {
+      "span_id": "p1:dcc5a7ecc3680af05db80d1e",
+      "start": 103,
+      "end": 115,
+      "text": "priority: P1"
+    },
+    {
+      "span_id": "p1:306bdbede636fcce24fb88a2",
+      "start": 117,
+      "end": 132,
+      "text": "risk_level: low"
+    },
+    {
+      "span_id": "p1:66b5db4a7c884b7288ec8746",
+      "start": 117,
+      "end": 127,
+      "text": "risk_level"
+    },
+    {
+      "span_id": "p1:c0d72b9fccad3faa5657c64e",
+      "start": 134,
+      "end": 160,
+      "text": "thread_key: release-sop-v2"
+    },
+    {
+      "span_id": "p1:f3a29650c854c4afa2d65aa0",
+      "start": 134,
+      "end": 144,
+      "text": "thread_key"
+    },
+    {
+      "span_id": "p1:c7e54f197f3fdf1cbeb6a779",
+      "start": 146,
+      "end": 160,
+      "text": "release-sop-v2"
+    },
+    {
+      "span_id": "p1:256fadcd43612d3f208e8e3a",
+      "start": 162,
+      "end": 193,
+      "text": "session_id: sess-20260513-me-01"
+    },
+    {
+      "span_id": "p1:d0ac7792c4b7cfc13bec8ed9",
+      "start": 162,
+      "end": 172,
+      "text": "session_id"
+    },
+    {
+      "span_id": "p1:1bba132797836eb9a2088dda",
+      "start": 174,
+      "end": 193,
+      "text": "sess-20260513-me-01"
+    },
+    {
+      "span_id": "p1:c8a6a29c318a653f9af65a44",
+      "start": 195,
+      "end": 234,
+      "text": "created_at: \"2026-05-13T01:12:00+08:00\""
+    },
+    {
+      "span_id": "p1:d583df57a9a8156dee86995b",
+      "start": 195,
+      "end": 205,
+      "text": "created_at"
+    },
+    {
+      "span_id": "p1:41dec7bde44e4eeca67e8696",
+      "start": 208,
+      "end": 212,
+      "text": "2026"
+    },
+    {
+      "span_id": "p1:76a13450252b4fbcf57b5b23",
+      "start": 213,
+      "end": 215,
+      "text": "05"
+    },
+    {
+      "span_id": "p1:e229acb7bb7688d4e152c25d",
+      "start": 222,
+      "end": 224,
+      "text": "12"
+    },
+    {
+      "span_id": "p1:73057506e74d7abd9bfb1c8d",
+      "start": 225,
+      "end": 227,
+      "text": "00"
+    },
+    {
+      "span_id": "p1:31b632fa46a88c2f8c362e85",
+      "start": 228,
+      "end": 230,
+      "text": "08"
+    },
+    {
+      "span_id": "p1:ab635873a4ccb6344d263ca6",
+      "start": 231,
+      "end": 233,
+      "text": "00"
+    },
+    {
+      "span_id": "p1:f3b01f7427d39e0efa819890",
+      "start": 236,
+      "end": 244,
+      "text": "related:"
+    },
+    {
+      "span_id": "p1:79707de72949020696382d3d",
+      "start": 248,
+      "end": 288,
+      "text": "- TASK-20260513-001   # SOP v2 沉淀主刀(已归档)"
+    },
+    {
+      "span_id": "p1:4dc64bad0f83f6f24b18d98e",
+      "start": 250,
+      "end": 267,
+      "text": "TASK-20260513-001"
+    },
+    {
+      "span_id": "p1:4bc616881c1b5d590cf47b18",
+      "start": 292,
+      "end": 313,
+      "text": "- REPORT-20260513-001"
+    },
+    {
+      "span_id": "p1:5500b3e2a3d9d75e9cc241e5",
+      "start": 294,
+      "end": 313,
+      "text": "REPORT-20260513-001"
+    },
+    {
+      "span_id": "p1:fb6624efce445f793e771876",
+      "start": 315,
+      "end": 318,
+      "text": "---"
+    },
+    {
+      "span_id": "p1:8e8f4898c202dd62d38e7af0",
+      "start": 322,
+      "end": 341,
+      "text": "# 把\"`git add` 用显式路径"
+    },
+    {
+      "span_id": "p1:146ff163b965da76907812ec",
+      "start": 342,
+      "end": 383,
+      "text": "不用 `-A`\"写进 `docs/release-process.md`(带依据)"
+    },
+    {
+      "span_id": "p1:0cd5f0978eac0af628aa97ca",
+      "start": 358,
+      "end": 377,
+      "text": "/release-process.md"
+    },
+    {
+      "span_id": "p1:a90d03735e199563e69365e9",
+      "start": 387,
+      "end": 405,
+      "text": "## 背景 / Background"
+    },
+    {
+      "span_id": "p1:0638fc5b57016a30f6fef438",
+      "start": 409,
+      "end": 444,
+      "text": "上一轮 `TASK-20260513-001` 沉淀 SOP v2 时"
+    },
+    {
+      "span_id": "p1:0d32b249fe2a4cbb733dfddf",
+      "start": 414,
+      "end": 431,
+      "text": "TASK-20260513-001"
+    },
+    {
+      "span_id": "p1:2f44bd7ac6f6172918f94b57",
+      "start": 445,
+      "end": 470,
+      "text": "我自己在 `Step 4 闭环 commit` 阶"
+    },
+    {
+      "span_id": "p1:5111f126a45eb5112ba00382",
+      "start": 456,
+      "end": 457,
+      "text": "4"
+    },
+    {
+      "span_id": "p1:126c57ab3f50a3ad5145283e",
+      "start": 472,
+      "end": 491,
+      "text": "段用 `git add -A` 一把抓"
+    },
+    {
+      "span_id": "p1:e2b80964cb3f0f4fc72d05ff",
+      "start": 492,
+      "end": 515,
+      "text": "意外把 19 份 untracked 残留(`"
+    },
+    {
+      "span_id": "p1:0260f4dec6228b97e0a883ca",
+      "start": 496,
+      "end": 498,
+      "text": "19"
+    },
+    {
+      "span_id": "p1:d45e365655f3d0ea2be612af",
+      "start": 516,
+      "end": 528,
+      "text": "scratch/` 临时"
+    },
+    {
+      "span_id": "p1:8b158d8e7c33036f094b0711",
+      "start": 530,
+      "end": 590,
+      "text": "msg、`fcop_events.jsonl` 运行时日志、`scripts/_*.txt` 历史 commit msg"
+    },
+    {
+      "span_id": "p1:edf6619444dd9b219236a55b",
+      "start": 568,
+      "end": 575,
+      "text": "/_*.txt"
+    },
+    {
+      "span_id": "p1:8d08268efe1274c06c6b2e93",
+      "start": 535,
+      "end": 552,
+      "text": "fcop_events.jsonl"
+    },
+    {
+      "span_id": "p1:74b4ac8c8c17ec3d4de6dd6e",
+      "start": 592,
+      "end": 616,
+      "text": "等)一起塞进了 `commit d2ed13c`"
+    },
+    {
+      "span_id": "p1:fbf779b9c9cca4deab37d4ef",
+      "start": 608,
+      "end": 615,
+      "text": "d2ed13c"
+    },
+    {
+      "span_id": "p1:06b9c6373b69e0a4485cea1e",
+      "start": 617,
+      "end": 639,
+      "text": "ADMIN 决策 revert + redo"
+    },
+    {
+      "span_id": "p1:abbcec071a17207d829c58b8",
+      "start": 640,
+      "end": 644,
+      "text": "最终通过"
+    },
+    {
+      "span_id": "p1:5c94b898ad5184888150753a",
+      "start": 646,
+      "end": 708,
+      "text": "`cc60186 (revert) → 979bcd2 (clean SOP) → dfe68e3 (artifacts +"
+    },
+    {
+      "span_id": "p1:ecd5db56bcf5bd5c63e76288",
+      "start": 647,
+      "end": 654,
+      "text": "cc60186"
+    },
+    {
+      "span_id": "p1:6e1720f18cebdd06430bfd73",
+      "start": 666,
+      "end": 673,
+      "text": "979bcd2"
+    },
+    {
+      "span_id": "p1:9c8d5013ec9dc634d11752bd",
+      "start": 688,
+      "end": 695,
+      "text": "dfe68e3"
+    },
+    {
+      "span_id": "p1:7377aea022f46d6355f7fad9",
+      "start": 710,
+      "end": 719,
+      "text": "gitignore"
+    },
+    {
+      "span_id": "p1:3fb1a010813bb99620e0b6c7",
+      "start": 721,
+      "end": 743,
+      "text": "tighten)` 三个 commit 修复"
+    },
+    {
+      "span_id": "p1:59bdd662a1228eb86f4b6327",
+      "start": 748,
+      "end": 773,
+      "text": "汇报里我提了一句\"下次应在 SOP 里加这条规则\""
+    },
+    {
+      "span_id": "p1:ff414c7d01966e097869f2c4",
+      "start": 774,
+      "end": 784,
+      "text": "ADMIN 当即回:"
+    },
+    {
+      "span_id": "p1:d3c14117bd7c7e893789327d",
+      "start": 788,
+      "end": 797,
+      "text": "> **写到文档中"
+    },
+    {
+      "span_id": "p1:35e237d392e26891489de098",
+      "start": 798,
+      "end": 801,
+      "text": "有依据"
+    },
+    {
+      "span_id": "p1:f7bd67db3a6acefef8738430",
+      "start": 803,
+      "end": 805,
+      "text": "**"
+    },
+    {
+      "span_id": "p1:c6ed774c130d5df8535e752c",
+      "start": 809,
+      "end": 822,
+      "text": "意思是:**口头沉淀不算数"
+    },
+    {
+      "span_id": "p1:4afaa9de6f3264c05015bb2d",
+      "start": 823,
+      "end": 852,
+      "text": "必须落文件**——这正是 FCoP 的根原则(Rule 0"
+    },
+    {
+      "span_id": "p1:6451dad71c521b183575206e",
+      "start": 851,
+      "end": 852,
+      "text": "0"
+    },
+    {
+      "span_id": "p1:c150b6aa931a343140d5848e",
+      "start": 853,
+      "end": 855,
+      "text": "a)"
+    },
+    {
+      "span_id": "p1:5da79806c37a9a502a9ae74b",
+      "start": 857,
+      "end": 859,
+      "text": "本身"
+    },
+    {
+      "span_id": "p1:ea34c2040b24a63906da071c",
+      "start": 860,
+      "end": 862,
+      "text": "同时"
+    },
+    {
+      "span_id": "p1:e72023a72a3b1af4e7d2120e",
+      "start": 863,
+      "end": 915,
+      "text": "有 `d2ed13c → cc60186 → 979bcd2 → dfe68e3` 这条完整的 main"
+    },
+    {
+      "span_id": "p1:2f306d12e2c7c34945169ac2",
+      "start": 866,
+      "end": 873,
+      "text": "d2ed13c"
+    },
+    {
+      "span_id": "p1:b8a2e38b77fa010d77c0381d",
+      "start": 876,
+      "end": 883,
+      "text": "cc60186"
+    },
+    {
+      "span_id": "p1:665d59f1b20dc26fcf911e2a",
+      "start": 886,
+      "end": 893,
+      "text": "979bcd2"
+    },
+    {
+      "span_id": "p1:4c4dfc84f635f55e828f5929",
+      "start": 896,
+      "end": 903,
+      "text": "dfe68e3"
+    },
+    {
+      "span_id": "p1:dcf99e0ab598149a14f2def9",
+      "start": 917,
+      "end": 923,
+      "text": "历史作为依据"
+    },
+    {
+      "span_id": "p1:dca2747be7246b7fbd90c78e",
+      "start": 924,
+      "end": 937,
+      "text": "新规则不是凭空写的\"教条\""
+    },
+    {
+      "span_id": "p1:d5aef035612b8569f6ceb2c6",
+      "start": 938,
+      "end": 952,
+      "text": "是从实际事故里抽出来的硬约束"
+    },
+    {
+      "span_id": "p1:22a3c3b8f2cdc01b7fc7cc33",
+      "start": 957,
+      "end": 979,
+      "text": "## 要做的事 / Deliverables"
+    },
+    {
+      "span_id": "p1:fc1ddc2fd8fbbc5d89053709",
+      "start": 983,
+      "end": 1022,
+      "text": "在 `docs/release-process.md` **两处**加新条款:"
+    },
+    {
+      "span_id": "p1:180294e426873fd2db46ca43",
+      "start": 990,
+      "end": 1009,
+      "text": "/release-process.md"
+    },
+    {
+      "span_id": "p1:b9bfa1d781206b4c69fa3af8",
+      "start": 1026,
+      "end": 1056,
+      "text": "### 处 1 · 阶段 4 \"发布后验证 + Rule 0"
+    },
+    {
+      "span_id": "p1:9e8c6cdaca15297912cfcb5a",
+      "start": 1032,
+      "end": 1033,
+      "text": "1"
+    },
+    {
+      "span_id": "p1:ef0825d4524325bd30ac14c5",
+      "start": 1039,
+      "end": 1040,
+      "text": "4"
+    },
+    {
+      "span_id": "p1:afd0ce37e25b03dfa969a18b",
+      "start": 1055,
+      "end": 1056,
+      "text": "0"
+    },
+    {
+      "span_id": "p1:5102e662cce3e7efa0410891",
+      "start": 1057,
+      "end": 1088,
+      "text": "a.1 闭环\" 的 `archive + commit` 子段"
+    },
+    {
+      "span_id": "p1:1b50aa7d0becb1a267560857",
+      "start": 1057,
+      "end": 1060,
+      "text": "a.1"
+    },
+    {
+      "span_id": "p1:5b076554494461c117065dec",
+      "start": 1092,
+      "end": 1124,
+      "text": "把现有 `git add -A && git commit -F"
+    },
+    {
+      "span_id": "p1:e624598bdff80247c9143465",
+      "start": 1128,
+      "end": 1140,
+      "text": "` 命令**整段重写**"
+    },
+    {
+      "span_id": "p1:d79018d1859246017b911185",
+      "start": 1141,
+      "end": 1144,
+      "text": "强调:"
+    },
+    {
+      "span_id": "p1:f39d7918210acb357db4aacb",
+      "start": 1148,
+      "end": 1186,
+      "text": "- ❌ 不要 `git add -A`(会抓所有 untracked 残留)"
+    },
+    {
+      "span_id": "p1:34c305e0fd63d982aef24ed5",
+      "start": 1188,
+      "end": 1207,
+      "text": "- ✅ 用显式路径列出所有要入库的文件"
+    },
+    {
+      "span_id": "p1:e390aa21151fd2be3b9716af",
+      "start": 1209,
+      "end": 1268,
+      "text": "- ✅ 在 `git commit` 前先跑 `git status --short` 二次确认 staging 区只"
+    },
+    {
+      "span_id": "p1:4e0f07a639757a7eb5996d99",
+      "start": 1272,
+      "end": 1278,
+      "text": "包含本意文件"
+    },
+    {
+      "span_id": "p1:0cc6dd5abe91d91f220517f9",
+      "start": 1280,
+      "end": 1340,
+      "text": "- 引用 `d2ed13c → cc60186 → 979bcd2 → dfe68e3` 这串 commit 作为\"反面"
+    },
+    {
+      "span_id": "p1:2bf39b8f060415c8b8a9dcf7",
+      "start": 1286,
+      "end": 1293,
+      "text": "d2ed13c"
+    },
+    {
+      "span_id": "p1:e1eb77c6ad53078685728a22",
+      "start": 1296,
+      "end": 1303,
+      "text": "cc60186"
+    },
+    {
+      "span_id": "p1:ade23594793b6ec776ff5833",
+      "start": 1306,
+      "end": 1313,
+      "text": "979bcd2"
+    },
+    {
+      "span_id": "p1:c48e1f0cd2ac14743d8e7a09",
+      "start": 1316,
+      "end": 1323,
+      "text": "dfe68e3"
+    },
+    {
+      "span_id": "p1:dc6b824c6d4a2b1404403f04",
+      "start": 1344,
+      "end": 1357,
+      "text": "教材 + 修复案例\"的链接"
+    },
+    {
+      "span_id": "p1:5cf4acad1b52db273ed72ef0",
+      "start": 1358,
+      "end": 1362,
+      "text": "说明依据"
+    },
+    {
+      "span_id": "p1:76341eae17a53572cef548e2",
+      "start": 1366,
+      "end": 1395,
+      "text": "### 处 2 · \"常见故障与回滚\" 新增 `问题 7`"
+    },
+    {
+      "span_id": "p1:019037256a5754023416edb5",
+      "start": 1372,
+      "end": 1373,
+      "text": "2"
+    },
+    {
+      "span_id": "p1:1a00443e6077bd856a46538d",
+      "start": 1393,
+      "end": 1394,
+      "text": "7"
+    },
+    {
+      "span_id": "p1:a26d45c598e3177dd0ead025",
+      "start": 1399,
+      "end": 1402,
+      "text": "```"
+    },
+    {
+      "span_id": "p1:2ceda3f95a6a19b8d6af5b7f",
+      "start": 1404,
+      "end": 1455,
+      "text": "### 问题 7:commit 意外携带 untracked 残留(`git add -A` 后悔药)"
+    },
+    {
+      "span_id": "p1:a0932b87a814ada1730e7d45",
+      "start": 1411,
+      "end": 1412,
+      "text": "7"
+    },
+    {
+      "span_id": "p1:15f776d81195e44db6be3036",
+      "start": 1457,
+      "end": 1460,
+      "text": "```"
+    },
+    {
+      "span_id": "p1:4fd9ba85227f3c92bbc6face",
+      "start": 1464,
+      "end": 1505,
+      "text": "- 现象、根因、立即修复(revert + redo)、长期防范(显式路径 + `"
+    },
+    {
+      "span_id": "p1:b61b9e68267be661de989008",
+      "start": 1506,
+      "end": 1516,
+      "text": "gitignore`"
+    },
+    {
+      "span_id": "p1:e7abf6742bdb6b702c328dfb",
+      "start": 1520,
+      "end": 1523,
+      "text": "补 `"
+    },
+    {
+      "span_id": "p1:ae2e003e2ffa174bdc9800a8",
+      "start": 1524,
+      "end": 1575,
+      "text": "scratch/` / `fcop_events.jsonl` / `scripts/_*.txt`)"
+    },
+    {
+      "span_id": "p1:302a47017ad52384ce184ca0",
+      "start": 1566,
+      "end": 1573,
+      "text": "/_*.txt"
+    },
+    {
+      "span_id": "p1:359b62043f7d50489bc6b2ce",
+      "start": 1537,
+      "end": 1554,
+      "text": "fcop_events.jsonl"
+    },
+    {
+      "span_id": "p1:4517733b00ba202a8f6bdd36",
+      "start": 1577,
+      "end": 1604,
+      "text": "- 直接引用本次 4-commit 修复链作为现实案例"
+    },
+    {
+      "span_id": "p1:34f4e2a8493aeb0a2b1dd4ba",
+      "start": 1586,
+      "end": 1587,
+      "text": "4"
+    },
+    {
+      "span_id": "p1:6c39fe70a9d50c6ef56b62b6",
+      "start": 1608,
+      "end": 1626,
+      "text": "## 验收 / Acceptance"
+    },
+    {
+      "span_id": "p1:3f197612c5dda8f23f1c1fbf",
+      "start": 1630,
+      "end": 1674,
+      "text": "- [ ] `docs/release-process.md` 阶段 4 闭环段命令重写"
+    },
+    {
+      "span_id": "p1:547cb38fe8f4631e0baf1003",
+      "start": 1641,
+      "end": 1660,
+      "text": "/release-process.md"
+    },
+    {
+      "span_id": "p1:d124a6aa84e3695ac7e4bacb",
+      "start": 1665,
+      "end": 1666,
+      "text": "4"
+    },
+    {
+      "span_id": "p1:f850e93ff7575bc301861e85",
+      "start": 1675,
+      "end": 1680,
+      "text": "显式列路径"
+    },
+    {
+      "span_id": "p1:172855f16717f27a0cd13721",
+      "start": 1682,
+      "end": 1730,
+      "text": "- [ ] `docs/release-process.md` 常见故障新增 \"问题 7\" 整段"
+    },
+    {
+      "span_id": "p1:5178c2d4ba572a74aa9d9d8d",
+      "start": 1693,
+      "end": 1712,
+      "text": "/release-process.md"
+    },
+    {
+      "span_id": "p1:0ce630b8e6a239a8172bea17",
+      "start": 1725,
+      "end": 1726,
+      "text": "7"
+    },
+    {
+      "span_id": "p1:7a6148ab6f42bce2f539aa3c",
+      "start": 1732,
+      "end": 1791,
+      "text": "- [ ] 两处都明确指向 `d2ed13c` / `cc60186` / `979bcd2` / `dfe68e3`"
+    },
+    {
+      "span_id": "p1:e5a37b31263a494d6d1da5d0",
+      "start": 1747,
+      "end": 1754,
+      "text": "d2ed13c"
+    },
+    {
+      "span_id": "p1:8cae7f1408a2626d81087c21",
+      "start": 1759,
+      "end": 1766,
+      "text": "cc60186"
+    },
+    {
+      "span_id": "p1:d6b59aba964136aa2f6532ea",
+      "start": 1771,
+      "end": 1778,
+      "text": "979bcd2"
+    },
+    {
+      "span_id": "p1:c063c3e0edf76c8d679257a9",
+      "start": 1783,
+      "end": 1790,
+      "text": "dfe68e3"
+    },
+    {
+      "span_id": "p1:e3deab1969c328e84c894f26",
+      "start": 1799,
+      "end": 1818,
+      "text": "作为依据(commit hash 短)"
+    },
+    {
+      "span_id": "p1:c74f7125935ebec74df06694",
+      "start": 1820,
+      "end": 1896,
+      "text": "- [ ] 写 `REPORT-20260513-002-ME-to-ADMIN-add-git-add-explicit-paths-rule.md`"
+    },
+    {
+      "span_id": "p1:9376881ade3acdab648442e0",
+      "start": 1829,
+      "end": 1895,
+      "text": "REPORT-20260513-002-ME-to-ADMIN-add-git-add-explicit-paths-rule.md"
+    },
+    {
+      "span_id": "p1:1b1b9fa7ab75f025da785fd2",
+      "start": 1898,
+      "end": 1952,
+      "text": "- [ ] **Dogfood**:本任务的 commit 阶段 **必须用显式路径** `git add`"
+    },
+    {
+      "span_id": "p1:715f927361a151ea6aa88337",
+      "start": 1961,
+      "end": 1970,
+      "text": "不许再用 `-A`"
+    },
+    {
+      "span_id": "p1:bf3c30107fb08928feb34b8f",
+      "start": 1971,
+      "end": 2014,
+      "text": "commit 前 `git status --short` 确认 staging 区只"
+    },
+    {
+      "span_id": "p1:f641ae65224cd8b1a1a37559",
+      "start": 2022,
+      "end": 2062,
+      "text": "包含本意 3 个文件(docs + TASK-002 + REPORT-002)"
+    },
+    {
+      "span_id": "p1:b9a437ea07caf93e90d760c7",
+      "start": 2040,
+      "end": 2048,
+      "text": "TASK-002"
+    },
+    {
+      "span_id": "p1:c3e29ffc2fd18af9cfdf1a0a",
+      "start": 2051,
+      "end": 2061,
+      "text": "REPORT-002"
+    },
+    {
+      "span_id": "p1:2f7a9202b4c3bd1a8b1b14b6",
+      "start": 2027,
+      "end": 2028,
+      "text": "3"
+    },
+    {
+      "span_id": "p1:d0fbe698323fc4182a13bd17",
+      "start": 2064,
+      "end": 2089,
+      "text": "- [ ] push origin main 成功"
+    },
+    {
+      "span_id": "p1:cccb3d47bbbf4afb6004d7cc",
+      "start": 2090,
+      "end": 2110,
+      "text": "main 历史保持单 commit 干净"
+    },
+    {
+      "span_id": "p1:81a0f85df337d29a6ed19099",
+      "start": 2114,
+      "end": 2126,
+      "text": "## 风险 / Risk"
+    },
+    {
+      "span_id": "p1:dab0b02301fdfb018a68e7bf",
+      "start": 2130,
+      "end": 2145,
+      "text": "risk_level: low"
+    },
+    {
+      "span_id": "p1:88a79f28360a7742a59be58c",
+      "start": 2130,
+      "end": 2140,
+      "text": "risk_level"
+    },
+    {
+      "span_id": "p1:ef5b162cd4b834c2b4dbb9ba",
+      "start": 2146,
+      "end": 2153,
+      "text": "只改维护者文档"
+    },
+    {
+      "span_id": "p1:efc7b204f22819a573b9b1d7",
+      "start": 2154,
+      "end": 2166,
+      "text": "加约束、不动协议、不发版"
+    },
+    {
+      "span_id": "p1:1093de91305aad694bd4904d",
+      "start": 2169,
+      "end": 2187,
+      "text": "回滚:`git revert` 即可"
+    },
+    {
+      "span_id": "p1:abcb82ae0ba16359c840af80",
+      "start": 236,
+      "end": 243,
+      "text": "related"
+    },
+    {
+      "span_id": "p1:a5e2d63e1a58d57ea62543f6",
+      "start": 336,
+      "end": 337,
+      "text": "用"
+    },
+    {
+      "span_id": "p1:05d34fe3d4919ac10638f94f",
+      "start": 327,
+      "end": 334,
+      "text": "git add"
+    },
+    {
+      "span_id": "p1:cb68270d2d2fb34a6e6db2e0",
+      "start": 337,
+      "end": 341,
+      "text": "显式路径"
+    },
+    {
+      "span_id": "p1:26858ae2dc3761e82a3919a2",
+      "start": 343,
+      "end": 344,
+      "text": "用"
+    },
+    {
+      "span_id": "p1:c094da60ca27a6885af3dfb9",
+      "start": 448,
+      "end": 449,
+      "text": "在"
+    },
+    {
+      "span_id": "p1:c0d6a4972933322eb27ed043",
+      "start": 446,
+      "end": 448,
+      "text": "自己"
+    },
+    {
+      "span_id": "p1:f7aa2daf87b4f0d1028dbbf5",
+      "start": 469,
+      "end": 470,
+      "text": "阶"
+    },
+    {
+      "span_id": "p1:2bda2ab2f3da1c9b4351c9d1",
+      "start": 490,
+      "end": 491,
+      "text": "抓"
+    },
+    {
+      "span_id": "p1:f3ee519928a112ae931dfacb",
+      "start": 472,
+      "end": 473,
+      "text": "段"
+    },
+    {
+      "span_id": "p1:c3cc3e9e710923b1c3c65d00",
+      "start": 511,
+      "end": 513,
+      "text": "残留"
+    },
+    {
+      "span_id": "p1:fd3c36884d96e05f5166e301",
+      "start": 516,
+      "end": 523,
+      "text": "scratch"
+    },
+    {
+      "span_id": "p1:8027b860576ff325fc3255f1",
+      "start": 596,
+      "end": 598,
+      "text": "塞进"
+    },
+    {
+      "span_id": "p1:7253d5077d14e3745f7f60dd",
+      "start": 601,
+      "end": 615,
+      "text": "commit d2ed13c"
+    },
+    {
+      "span_id": "p1:874aa3a7299db50f256f9d19",
+      "start": 642,
+      "end": 644,
+      "text": "通过"
+    },
+    {
+      "span_id": "p1:a61849548f8089fa639d9612",
+      "start": 752,
+      "end": 753,
+      "text": "提"
+    },
+    {
+      "span_id": "p1:5a8c828a3a4c2b46d92bae0e",
+      "start": 751,
+      "end": 752,
+      "text": "我"
+    },
+    {
+      "span_id": "p1:158cf95a8a68f39a1949b102",
+      "start": 782,
+      "end": 783,
+      "text": "回"
+    },
+    {
+      "span_id": "p1:ec412d1c1f954b1b34856e8d",
+      "start": 774,
+      "end": 779,
+      "text": "ADMIN"
+    },
+    {
+      "span_id": "p1:7b14734b5b32782d6b0fdf5f",
+      "start": 792,
+      "end": 794,
+      "text": "写到"
+    },
+    {
+      "span_id": "p1:1d90ef0143f06f8ca77d8f07",
+      "start": 820,
+      "end": 822,
+      "text": "算数"
+    },
+    {
+      "span_id": "p1:ead5a48922e8e95805dace7f",
+      "start": 809,
+      "end": 811,
+      "text": "意思"
+    },
+    {
+      "span_id": "p1:d051cb1193513a784807aa8b",
+      "start": 813,
+      "end": 815,
+      "text": "**"
+    },
+    {
+      "span_id": "p1:113b82da2dc18b70d5e74c0b",
+      "start": 815,
+      "end": 819,
+      "text": "口头沉淀"
+    },
+    {
+      "span_id": "p1:0edadfa20614d7114d3910a9",
+      "start": 825,
+      "end": 826,
+      "text": "落"
+    },
+    {
+      "span_id": "p1:f8886506913234f7d33e1972",
+      "start": 826,
+      "end": 828,
+      "text": "文件"
+    },
+    {
+      "span_id": "p1:d69af7de62baf7318681fd68",
+      "start": 919,
+      "end": 921,
+      "text": "作为"
+    },
+    {
+      "span_id": "p1:4e62abe8ccdcbf698626e1f2",
+      "start": 917,
+      "end": 919,
+      "text": "历史"
+    },
+    {
+      "span_id": "p1:9f01229cf2a682a494bc47c7",
+      "start": 921,
+      "end": 923,
+      "text": "依据"
+    },
+    {
+      "span_id": "p1:e5e30fc99edd458eadcf6b94",
+      "start": 960,
+      "end": 961,
+      "text": "要"
+    },
+    {
+      "span_id": "p1:8c72322a761542cd2dc189fc",
+      "start": 1017,
+      "end": 1018,
+      "text": "加"
+    },
+    {
+      "span_id": "p1:ffd9d9aadc148137e8ec0a88",
+      "start": 1018,
+      "end": 1021,
+      "text": "新条款"
+    },
+    {
+      "span_id": "p1:7db7a936e960b0ae04500ede",
+      "start": 1045,
+      "end": 1047,
+      "text": "验证"
+    },
+    {
+      "span_id": "p1:16da651c22256194c92f118d",
+      "start": 1141,
+      "end": 1143,
+      "text": "强调"
+    },
+    {
+      "span_id": "p1:8f64eb94ded26f69ef8be080",
+      "start": 1153,
+      "end": 1154,
+      "text": "要"
+    },
+    {
+      "span_id": "p1:018bbf63ee3b08410d5c5217",
+      "start": 1197,
+      "end": 1199,
+      "text": "列出"
+    },
+    {
+      "span_id": "p1:075859ef2fe5aa5c361d2fbb",
+      "start": 1205,
+      "end": 1207,
+      "text": "文件"
+    },
+    {
+      "span_id": "p1:43b28f508a1a895a2cc27415",
+      "start": 1230,
+      "end": 1231,
+      "text": "跑"
+    },
+    {
+      "span_id": "p1:989f80d42112762202d202a4",
+      "start": 1237,
+      "end": 1243,
+      "text": "status"
+    },
+    {
+      "span_id": "p1:6235a2ff4fa5027fc227a50f",
+      "start": 1246,
+      "end": 1251,
+      "text": "short"
+    },
+    {
+      "span_id": "p1:02761fa2355e3174d7481c3b",
+      "start": 1272,
+      "end": 1274,
+      "text": "包含"
+    },
+    {
+      "span_id": "p1:db73833bd58f22aa71d5c8f3",
+      "start": 1274,
+      "end": 1278,
+      "text": "本意文件"
+    },
+    {
+      "span_id": "p1:2c531f443f05770a4f6b3876",
+      "start": 1282,
+      "end": 1284,
+      "text": "引用"
+    },
+    {
+      "span_id": "p1:b22742f4c131b2ee4bd95edf",
+      "start": 1325,
+      "end": 1334,
+      "text": "这串 commit"
+    },
+    {
+      "span_id": "p1:d6b25e7de795942c9226a794",
+      "start": 1474,
+      "end": 1476,
+      "text": "修复"
+    },
+    {
+      "span_id": "p1:ad8405cf323dbd6e79a0bd4e",
+      "start": 1520,
+      "end": 1521,
+      "text": "补"
+    },
+    {
+      "span_id": "p1:7815bd9bbc721db43ccbd9dc",
+      "start": 1581,
+      "end": 1583,
+      "text": "引用"
+    },
+    {
+      "span_id": "p1:e492972cd22031e0a7e2e37d",
+      "start": 1587,
+      "end": 1598,
+      "text": "-commit 修复链"
+    },
+    {
+      "span_id": "p1:3a347b41c076dac817dcbdd1",
+      "start": 1611,
+      "end": 1613,
+      "text": "验收"
+    },
+    {
+      "span_id": "p1:fece84afcf391f534a1ddb31",
+      "start": 1616,
+      "end": 1626,
+      "text": "Acceptance"
+    },
+    {
+      "span_id": "p1:bb13c8ed2436654352cc359f",
+      "start": 1670,
+      "end": 1672,
+      "text": "命令"
+    },
+    {
+      "span_id": "p1:a9272288586015df252f026b",
+      "start": 1718,
+      "end": 1720,
+      "text": "新增"
+    },
+    {
+      "span_id": "p1:666029a800ea3a3c60de86c0",
+      "start": 1714,
+      "end": 1718,
+      "text": "常见故障"
+    },
+    {
+      "span_id": "p1:6cebf954c7965d9609ee0380",
+      "start": 1743,
+      "end": 1745,
+      "text": "指向"
+    },
+    {
+      "span_id": "p1:778a66504da2842e4c1c35a3",
+      "start": 1799,
+      "end": 1801,
+      "text": "作为"
+    },
+    {
+      "span_id": "p1:39e4a686dd33d7da0dded314",
+      "start": 1801,
+      "end": 1803,
+      "text": "依据"
+    },
+    {
+      "span_id": "p1:e1687124d77d9c689fdc4d38",
+      "start": 1826,
+      "end": 1827,
+      "text": "写"
+    },
+    {
+      "span_id": "p1:74daf866bfff2e07af33d1e1",
+      "start": 1935,
+      "end": 1936,
+      "text": "用"
+    },
+    {
+      "span_id": "p1:fc2a31618d22c45dc9e97029",
+      "start": 1936,
+      "end": 1940,
+      "text": "显式路径"
+    },
+    {
+      "span_id": "p1:db5d9caf0dabd9e2924bcceb",
+      "start": 1962,
+      "end": 1963,
+      "text": "许"
+    },
+    {
+      "span_id": "p1:20562c6213b57cefba43bab3",
+      "start": 2001,
+      "end": 2003,
+      "text": "确认"
+    },
+    {
+      "span_id": "p1:051f8312a19571fcdcd538ef",
+      "start": 1981,
+      "end": 1999,
+      "text": "git status --short"
+    },
+    {
+      "span_id": "p1:178d831df39ff02566f7ad00",
+      "start": 2004,
+      "end": 2014,
+      "text": "staging 区只"
+    },
+    {
+      "span_id": "p1:df42803e1872c61313eedd49",
+      "start": 2022,
+      "end": 2024,
+      "text": "包含"
+    },
+    {
+      "span_id": "p1:18950504ee23d13b063e315f",
+      "start": 2024,
+      "end": 2032,
+      "text": "本意 3 个文件"
+    },
+    {
+      "span_id": "p1:e5ea449e9e10d46b75f35197",
+      "start": 2087,
+      "end": 2089,
+      "text": "成功"
+    },
+    {
+      "span_id": "p1:f62215908d14f9767af6dfee",
+      "start": 2070,
+      "end": 2086,
+      "text": "push origin main"
+    },
+    {
+      "span_id": "p1:0581e267b11c94aab9a073fe",
+      "start": 2101,
+      "end": 2107,
+      "text": "commit"
+    },
+    {
+      "span_id": "p1:56b572ac19c7c9c02416415d",
+      "start": 2090,
+      "end": 2100,
+      "text": "main 历史保持单"
+    },
+    {
+      "span_id": "p1:373108df5104f61cad767b0a",
+      "start": 2147,
+      "end": 2148,
+      "text": "改"
+    },
+    {
+      "span_id": "p1:86d5b03d646691843adc81e1",
+      "start": 2148,
+      "end": 2153,
+      "text": "维护者文档"
+    },
+    {
+      "span_id": "p1:ad8736d638dc04859b6daf8d",
+      "start": 2154,
+      "end": 2155,
+      "text": "加"
+    },
+    {
+      "span_id": "p1:3bdfeefc7a147f0f7d02e0da",
+      "start": 2155,
+      "end": 2157,
+      "text": "约束"
+    },
+    {
+      "span_id": "p1:bed81e45d55b8343f1ee713b",
+      "start": 2186,
+      "end": 2187,
+      "text": "可"
+    },
+    {
+      "span_id": "p1:2763fe80cbbe08376d499e20",
+      "start": 496,
+      "end": 510,
+      "text": "19 份 untracked"
+    },
+    {
+      "span_id": "p1:51f6863c985a1e97dfeffb2a",
+      "start": 757,
+      "end": 772,
+      "text": "下次应在 SOP 里加这条规则"
+    },
+    {
+      "span_id": "p1:e4135515fdcd1dea4f0e6642",
+      "start": 756,
+      "end": 773,
+      "text": "\"下次应在 SOP 里加这条规则\""
+    },
+    {
+      "span_id": "p1:012a3f405471bd34221ab381",
+      "start": 1722,
+      "end": 1726,
+      "text": "问题 7"
+    },
+    {
+      "span_id": "p1:2ee55676632bb39b3e1259ae",
+      "start": 1721,
+      "end": 1727,
+      "text": "\"问题 7\""
+    }
+  ],
+  "relations": [
+    {
+      "relation_id": "p1:3d625dff8226a212fe8c397a",
+      "clause_id": "clause:16",
+      "relation_type": "PATIENT",
+      "head_node_id": "p1:133551735778ac65fbfdfcba",
+      "tail_node_id": "p1:250bf181c85c6981c82a5b25",
+      "evidence_span_ids": [
+        "p1:a5e2d63e1a58d57ea62543f6",
+        "p1:05d34fe3d4919ac10638f94f",
+        "p1:8e8f4898c202dd62d38e7af0"
+      ],
+      "evidence_tier": "STRONG",
+      "state": "REJECTED",
+      "model_signal_refs": [
+        "clause:16:token:7",
+        "clause:16:token:5"
+      ],
+      "rule_refs": [
+        "NATIVE_PATIENT"
+      ]
+    },
+    {
+      "relation_id": "p1:29960b22fca26958071499ad",
+      "clause_id": "clause:16",
+      "relation_type": "PATIENT",
+      "head_node_id": "p1:133551735778ac65fbfdfcba",
+      "tail_node_id": "p1:71920efd68d343ffaf365b3b",
+      "evidence_span_ids": [
+        "p1:a5e2d63e1a58d57ea62543f6",
+        "p1:cb68270d2d2fb34a6e6db2e0",
+        "p1:8e8f4898c202dd62d38e7af0"
+      ],
+      "evidence_tier": "STRONG",
+      "state": "RESOLVED",
+      "model_signal_refs": [
+        "clause:16:token:7",
+        "clause:16:token:9"
+      ],
+      "rule_refs": [
+        "NATIVE_PATIENT"
+      ]
+    },
+    {
+      "relation_id": "p1:3f0ebfe1ce0212081847edf0",
+      "clause_id": "clause:20",
+      "relation_type": "AGENT",
+      "head_node_id": "p1:475caf988fc0043958cefe6f",
+      "tail_node_id": "p1:a8ef57d4312be1b36c5b74b4",
+      "evidence_span_ids": [
+        "p1:c094da60ca27a6885af3dfb9",
+        "p1:c0d6a4972933322eb27ed043",
+        "p1:2f44bd7ac6f6172918f94b57"
+      ],
+      "evidence_tier": "STRONG",
+      "state": "RESOLVED",
+      "model_signal_refs": [
+        "clause:20:token:2",
+        "clause:20:token:1"
+      ],
+      "rule_refs": [
+        "NATIVE_AGENT"
+      ]
+    },
+    {
+      "relation_id": "p1:2c54d361272140eaaf9503ec",
+      "clause_id": "clause:20",
+      "relation_type": "PATIENT",
+      "head_node_id": "p1:475caf988fc0043958cefe6f",
+      "tail_node_id": "p1:7f82180c291602d6a3054fa4",
+      "evidence_span_ids": [
+        "p1:c094da60ca27a6885af3dfb9",
+        "p1:f7aa2daf87b4f0d1028dbbf5",
+        "p1:2f44bd7ac6f6172918f94b57"
+      ],
+      "evidence_tier": "STRONG",
+      "state": "RESOLVED",
+      "model_signal_refs": [
+        "clause:20:token:2",
+        "clause:20:token:9"
+      ],
+      "rule_refs": [
+        "NATIVE_PATIENT"
+      ]
+    },
+    {
+      "relation_id": "p1:b0cff95e9bfd0a792bdc525b",
+      "clause_id": "clause:21",
+      "relation_type": "AGENT",
+      "head_node_id": "p1:2d1f0c22a0a1c75004a72e68",
+      "tail_node_id": "p1:baa53f6bfb7990c79681073c",
+      "evidence_span_ids": [
+        "p1:2bda2ab2f3da1c9b4351c9d1",
+        "p1:f3ee519928a112ae931dfacb",
+        "p1:126c57ab3f50a3ad5145283e"
+      ],
+      "evidence_tier": "STRONG",
+      "state": "RESOLVED",
+      "model_signal_refs": [
+        "clause:21:token:9",
+        "clause:21:token:0"
+      ],
+      "rule_refs": [
+        "NATIVE_AGENT"
+      ]
+    },
+    {
+      "relation_id": "p1:2c57f3db35629e9f76057469",
+      "clause_id": "clause:25",
+      "relation_type": "PATIENT",
+      "head_node_id": "p1:a234c809e072e28f90723082",
+      "tail_node_id": "p1:e89b855b18e9e9f164b44e02",
+      "evidence_span_ids": [
+        "p1:8027b860576ff325fc3255f1",
+        "p1:7253d5077d14e3745f7f60dd",
+        "p1:74b4ac8c8c17ec3d4de6dd6e"
+      ],
+      "evidence_tier": "STRONG",
+      "state": "RESOLVED",
+      "model_signal_refs": [
+        "clause:25:token:3",
+        "clause:25:token:7"
+      ],
+      "rule_refs": [
+        "NATIVE_PATIENT"
+      ]
+    },
+    {
+      "relation_id": "p1:3c4e1b99a78d7fc652cf351b",
+      "clause_id": "clause:31",
+      "relation_type": "AGENT",
+      "head_node_id": "p1:d6411656376dca781abd0d10",
+      "tail_node_id": "p1:2d66a39a5b33ed21635268be",
+      "evidence_span_ids": [
+        "p1:a61849548f8089fa639d9612",
+        "p1:5a8c828a3a4c2b46d92bae0e",
+        "p1:59bdd662a1228eb86f4b6327"
+      ],
+      "evidence_tier": "STRONG",
+      "state": "RESOLVED",
+      "model_signal_refs": [
+        "clause:31:token:3",
+        "clause:31:token:2"
+      ],
+      "rule_refs": [
+        "NATIVE_AGENT"
+      ]
+    },
+    {
+      "relation_id": "p1:59969b225a512fb1d3788de8",
+      "clause_id": "clause:32",
+      "relation_type": "AGENT",
+      "head_node_id": "p1:5b53aae2053c1bbaceacde41",
+      "tail_node_id": "p1:4262faf735c51f616b3f3c92",
+      "evidence_span_ids": [
+        "p1:158cf95a8a68f39a1949b102",
+        "p1:ec412d1c1f954b1b34856e8d",
+        "p1:ff414c7d01966e097869f2c4"
+      ],
+      "evidence_tier": "STRONG",
+      "state": "RESOLVED",
+      "model_signal_refs": [
+        "clause:32:token:2",
+        "clause:32:token:0"
+      ],
+      "rule_refs": [
+        "NATIVE_AGENT"
+      ]
+    },
+    {
+      "relation_id": "p1:d27a2f71ca329e3d29b040fe",
+      "clause_id": "clause:36",
+      "relation_type": "AGENT",
+      "head_node_id": "p1:fad4827c3f233481620df5b0",
+      "tail_node_id": "p1:85fb1bf540b7d6ef55c8563f",
+      "evidence_span_ids": [
+        "p1:1d90ef0143f06f8ca77d8f07",
+        "p1:ead5a48922e8e95805dace7f",
+        "p1:c6ed774c130d5df8535e752c"
+      ],
+      "evidence_tier": "STRONG",
+      "state": "RESOLVED",
+      "model_signal_refs": [
+        "clause:36:token:7",
+        "clause:36:token:0"
+      ],
+      "rule_refs": [
+        "NATIVE_AGENT"
+      ]
+    },
+    {
+      "relation_id": "p1:62ed3202def68f026b69b644",
+      "clause_id": "clause:36",
+      "relation_type": "AGENT",
+      "head_node_id": "p1:fad4827c3f233481620df5b0",
+      "tail_node_id": "p1:2a9d21d86ccad639ae88ec16",
+      "evidence_span_ids": [
+        "p1:1d90ef0143f06f8ca77d8f07",
+        "p1:d051cb1193513a784807aa8b",
+        "p1:c6ed774c130d5df8535e752c"
+      ],
+      "evidence_tier": "STRONG",
+      "state": "RESOLVED",
+      "model_signal_refs": [
+        "clause:36:token:7",
+        "clause:36:token:3"
+      ],
+      "rule_refs": [
+        "NATIVE_AGENT"
+      ]
+    },
+    {
+      "relation_id": "p1:7f599301f0c6d4300c5d6a9d",
+      "clause_id": "clause:36",
+      "relation_type": "AGENT",
+      "head_node_id": "p1:fad4827c3f233481620df5b0",
+      "tail_node_id": "p1:51d29f54fba3a81a2537ae58",
+      "evidence_span_ids": [
+        "p1:1d90ef0143f06f8ca77d8f07",
+        "p1:113b82da2dc18b70d5e74c0b",
+        "p1:c6ed774c130d5df8535e752c"
+      ],
+      "evidence_tier": "STRONG",
+      "state": "RESOLVED",
+      "model_signal_refs": [
+        "clause:36:token:7",
+        "clause:36:token:5"
+      ],
+      "rule_refs": [
+        "NATIVE_AGENT"
+      ]
+    },
+    {
+      "relation_id": "p1:df127537d7c39291c61552fd",
+      "clause_id": "clause:37",
+      "relation_type": "PATIENT",
+      "head_node_id": "p1:61659953a37ce1d62efaeb4f",
+      "tail_node_id": "p1:3583dda498f1d1d503421d3c",
+      "evidence_span_ids": [
+        "p1:0edadfa20614d7114d3910a9",
+        "p1:f8886506913234f7d33e1972",
+        "p1:4afaa9de6f3264c05015bb2d"
+      ],
+      "evidence_tier": "STRONG",
+      "state": "RESOLVED",
+      "model_signal_refs": [
+        "clause:37:token:1",
+        "clause:37:token:2"
+      ],
+      "rule_refs": [
+        "NATIVE_PATIENT"
+      ]
+    },
+    {
+      "relation_id": "p1:6d4d744e87a9dc3372a1c211",
+      "clause_id": "clause:42",
+      "relation_type": "AGENT",
+      "head_node_id": "p1:f27997e5befdda191ed50f57",
+      "tail_node_id": "p1:9622f5081078b00f61c445d7",
+      "evidence_span_ids": [
+        "p1:d69af7de62baf7318681fd68",
+        "p1:4e62abe8ccdcbf698626e1f2",
+        "p1:dcf99e0ab598149a14f2def9"
+      ],
+      "evidence_tier": "STRONG",
+      "state": "RESOLVED",
+      "model_signal_refs": [
+        "clause:42:token:1",
+        "clause:42:token:0"
+      ],
+      "rule_refs": [
+        "NATIVE_AGENT"
+      ]
+    },
+    {
+      "relation_id": "p1:a596b38994a0403f7b49f755",
+      "clause_id": "clause:42",
+      "relation_type": "PATIENT",
+      "head_node_id": "p1:f27997e5befdda191ed50f57",
+      "tail_node_id": "p1:09380cce63fc7fd00b65f6c0",
+      "evidence_span_ids": [
+        "p1:d69af7de62baf7318681fd68",
+        "p1:9f01229cf2a682a494bc47c7",
+        "p1:dcf99e0ab598149a14f2def9"
+      ],
+      "evidence_tier": "STRONG",
+      "state": "RESOLVED",
+      "model_signal_refs": [
+        "clause:42:token:1",
+        "clause:42:token:2"
+      ],
+      "rule_refs": [
+        "NATIVE_PATIENT"
+      ]
+    },
+    {
+      "relation_id": "p1:2111f29716b0dfc1ed80857a",
+      "clause_id": "clause:46",
+      "relation_type": "PATIENT",
+      "head_node_id": "p1:f4ef0ed84388e1664907efbb",
+      "tail_node_id": "p1:79c613cd93e5c77a7932a5c7",
+      "evidence_span_ids": [
+        "p1:8c72322a761542cd2dc189fc",
+        "p1:ffd9d9aadc148137e8ec0a88",
+        "p1:fc1ddc2fd8fbbc5d89053709"
+      ],
+      "evidence_tier": "STRONG",
+      "state": "RESOLVED",
+      "model_signal_refs": [
+        "clause:46:token:11",
+        "clause:46:token:13"
+      ],
+      "rule_refs": [
+        "NATIVE_PATIENT"
+      ]
+    },
+    {
+      "relation_id": "p1:b4ed3191d246b759bf4157e1",
+      "clause_id": "clause:53",
+      "relation_type": "PATIENT",
+      "head_node_id": "p1:e08ea59c77aee0aac7046e27",
+      "tail_node_id": "p1:19b7660dccee7160a019e69a",
+      "evidence_span_ids": [
+        "p1:018bbf63ee3b08410d5c5217",
+        "p1:075859ef2fe5aa5c361d2fbb",
+        "p1:34c305e0fd63d982aef24ed5"
+      ],
+      "evidence_tier": "STRONG",
+      "state": "RESOLVED",
+      "model_signal_refs": [
+        "clause:53:token:5",
+        "clause:53:token:10"
+      ],
+      "rule_refs": [
+        "NATIVE_PATIENT"
+      ]
+    },
+    {
+      "relation_id": "p1:62bd55d7b2fd35a35ee9228b",
+      "clause_id": "clause:54",
+      "relation_type": "PATIENT",
+      "head_node_id": "p1:3b5075dd579722b6a68b341c",
+      "tail_node_id": "p1:918a813982da96c08e757ae6",
+      "evidence_span_ids": [
+        "p1:43b28f508a1a895a2cc27415",
+        "p1:989f80d42112762202d202a4",
+        "p1:e390aa21151fd2be3b9716af"
+      ],
+      "evidence_tier": "STRONG",
+      "state": "RESOLVED",
+      "model_signal_refs": [
+        "clause:54:token:9",
+        "clause:54:token:12"
+      ],
+      "rule_refs": [
+        "NATIVE_PATIENT"
+      ]
+    },
+    {
+      "relation_id": "p1:4fd12c86c2948eac3424a3fc",
+      "clause_id": "clause:54",
+      "relation_type": "PATIENT",
+      "head_node_id": "p1:3b5075dd579722b6a68b341c",
+      "tail_node_id": "p1:a84397796164ca802e9aef5f",
+      "evidence_span_ids": [
+        "p1:43b28f508a1a895a2cc27415",
+        "p1:6235a2ff4fa5027fc227a50f",
+        "p1:e390aa21151fd2be3b9716af"
+      ],
+      "evidence_tier": "STRONG",
+      "state": "RESOLVED",
+      "model_signal_refs": [
+        "clause:54:token:9",
+        "clause:54:token:14"
+      ],
+      "rule_refs": [
+        "NATIVE_PATIENT"
+      ]
+    },
+    {
+      "relation_id": "p1:a5a440a15270a2f3a3ad72cc",
+      "clause_id": "clause:55",
+      "relation_type": "PATIENT",
+      "head_node_id": "p1:3866125ebe9de07542dac81e",
+      "tail_node_id": "p1:830e87023485d4ae6c3c13ec",
+      "evidence_span_ids": [
+        "p1:02761fa2355e3174d7481c3b",
+        "p1:db73833bd58f22aa71d5c8f3",
+        "p1:4e0f07a639757a7eb5996d99"
+      ],
+      "evidence_tier": "STRONG",
+      "state": "RESOLVED",
+      "model_signal_refs": [
+        "clause:55:token:0",
+        "clause:55:token:2"
+      ],
+      "rule_refs": [
+        "NATIVE_PATIENT"
+      ]
+    },
+    {
+      "relation_id": "p1:5f08b7f20991b74423a7b474",
+      "clause_id": "clause:56",
+      "relation_type": "PATIENT",
+      "head_node_id": "p1:92a79ed6065491073129c6ae",
+      "tail_node_id": "p1:6c89211ea17062c24b3c362b",
+      "evidence_span_ids": [
+        "p1:2c531f443f05770a4f6b3876",
+        "p1:b22742f4c131b2ee4bd95edf",
+        "p1:0cc6dd5abe91d91f220517f9"
+      ],
+      "evidence_tier": "STRONG",
+      "state": "UNRESOLVED",
+      "model_signal_refs": [
+        "clause:56:token:1",
+        "clause:56:token:13"
+      ],
+      "rule_refs": [
+        "NATIVE_PATIENT"
+      ],
+      "unresolved_ref": "p1:c40f6029f65ca6429b0784b7"
+    },
+    {
+      "relation_id": "p1:4b8e94de42251f7bf69cbddb",
+      "clause_id": "clause:67",
+      "relation_type": "PATIENT",
+      "head_node_id": "p1:30ef6ebfb2a26bcceaeb1492",
+      "tail_node_id": "p1:558c7731fc0405dd362f3b3f",
+      "evidence_span_ids": [
+        "p1:7815bd9bbc721db43ccbd9dc",
+        "p1:e492972cd22031e0a7e2e37d",
+        "p1:4517733b00ba202a8f6bdd36"
+      ],
+      "evidence_tier": "STRONG",
+      "state": "RESOLVED",
+      "model_signal_refs": [
+        "clause:67:token:2",
+        "clause:67:token:8"
+      ],
+      "rule_refs": [
+        "NATIVE_PATIENT"
+      ]
+    },
+    {
+      "relation_id": "p1:8c2c699702b006f6ef07889d",
+      "clause_id": "clause:68",
+      "relation_type": "PATIENT",
+      "head_node_id": "p1:9ae7c0ac53d173de887b9a19",
+      "tail_node_id": "p1:55c138e5a1eef742501b17a6",
+      "evidence_span_ids": [
+        "p1:3a347b41c076dac817dcbdd1",
+        "p1:fece84afcf391f534a1ddb31",
+        "p1:6c39fe70a9d50c6ef56b62b6"
+      ],
+      "evidence_tier": "STRONG",
+      "state": "RESOLVED",
+      "model_signal_refs": [
+        "clause:68:token:1",
+        "clause:68:token:3"
+      ],
+      "rule_refs": [
+        "NATIVE_PATIENT"
+      ]
+    },
+    {
+      "relation_id": "p1:895bd01ebc9fce43f02eca3b",
+      "clause_id": "clause:71",
+      "relation_type": "AGENT",
+      "head_node_id": "p1:62c3ffede0ac0798febee96d",
+      "tail_node_id": "p1:d29aaf4ccf61a77e0f0627c9",
+      "evidence_span_ids": [
+        "p1:a9272288586015df252f026b",
+        "p1:666029a800ea3a3c60de86c0",
+        "p1:172855f16717f27a0cd13721"
+      ],
+      "evidence_tier": "STRONG",
+      "state": "RESOLVED",
+      "model_signal_refs": [
+        "clause:71:token:9",
+        "clause:71:token:8"
+      ],
+      "rule_refs": [
+        "NATIVE_AGENT"
+      ]
+    },
+    {
+      "relation_id": "p1:1ca06cb2dac7f2ae1671568c",
+      "clause_id": "clause:72",
+      "relation_type": "PATIENT",
+      "head_node_id": "p1:194bc2c887ae3d2c5cc58861",
+      "tail_node_id": "p1:a862e0747ef222ad6da48e3a",
+      "evidence_span_ids": [
+        "p1:6cebf954c7965d9609ee0380",
+        "p1:e5a37b31263a494d6d1da5d0",
+        "p1:7a6148ab6f42bce2f539aa3c"
+      ],
+      "evidence_tier": "STRONG",
+      "state": "RESOLVED",
+      "model_signal_refs": [
+        "clause:72:token:7",
+        "clause:72:token:9"
+      ],
+      "rule_refs": [
+        "NATIVE_PATIENT"
+      ]
+    },
+    {
+      "relation_id": "p1:c2c1a1993249b40ab6f92d49",
+      "clause_id": "clause:73",
+      "relation_type": "PATIENT",
+      "head_node_id": "p1:f8d640d0b10a1ab51d379688",
+      "tail_node_id": "p1:c4e848bba08a6da473204bb7",
+      "evidence_span_ids": [
+        "p1:778a66504da2842e4c1c35a3",
+        "p1:39e4a686dd33d7da0dded314",
+        "p1:e3deab1969c328e84c894f26"
+      ],
+      "evidence_tier": "STRONG",
+      "state": "RESOLVED",
+      "model_signal_refs": [
+        "clause:73:token:0",
+        "clause:73:token:1"
+      ],
+      "rule_refs": [
+        "NATIVE_PATIENT"
+      ]
+    },
+    {
+      "relation_id": "p1:bcbe32e7928310ee854d35c1",
+      "clause_id": "clause:75",
+      "relation_type": "PATIENT",
+      "head_node_id": "p1:b28024102914545a30509977",
+      "tail_node_id": "p1:9862f27c3920c56ea086f9b4",
+      "evidence_span_ids": [
+        "p1:74daf866bfff2e07af33d1e1",
+        "p1:fc2a31618d22c45dc9e97029",
+        "p1:1b1b9fa7ab75f025da785fd2"
+      ],
+      "evidence_tier": "STRONG",
+      "state": "RESOLVED",
+      "model_signal_refs": [
+        "clause:75:token:17",
+        "clause:75:token:19"
+      ],
+      "rule_refs": [
+        "NATIVE_PATIENT"
+      ]
+    },
+    {
+      "relation_id": "p1:33f57c8326d43518c20b7559",
+      "clause_id": "clause:77",
+      "relation_type": "AGENT",
+      "head_node_id": "p1:cf6b0d925fd75442f28ae54a",
+      "tail_node_id": "p1:afdd073952aba2aae6b7b4fc",
+      "evidence_span_ids": [
+        "p1:20562c6213b57cefba43bab3",
+        "p1:051f8312a19571fcdcd538ef",
+        "p1:bf3c30107fb08928feb34b8f"
+      ],
+      "evidence_tier": "STRONG",
+      "state": "RESOLVED",
+      "model_signal_refs": [
+        "clause:77:token:6",
+        "clause:77:token:4"
+      ],
+      "rule_refs": [
+        "NATIVE_AGENT"
+      ]
+    },
+    {
+      "relation_id": "p1:acb993c196993a98b13585a7",
+      "clause_id": "clause:77",
+      "relation_type": "PATIENT",
+      "head_node_id": "p1:cf6b0d925fd75442f28ae54a",
+      "tail_node_id": "p1:d3f5d84305a9e4ad8b3e0b0d",
+      "evidence_span_ids": [
+        "p1:20562c6213b57cefba43bab3",
+        "p1:178d831df39ff02566f7ad00",
+        "p1:bf3c30107fb08928feb34b8f"
+      ],
+      "evidence_tier": "STRONG",
+      "state": "RESOLVED",
+      "model_signal_refs": [
+        "clause:77:token:6",
+        "clause:77:token:8"
+      ],
+      "rule_refs": [
+        "NATIVE_PATIENT"
+      ]
+    },
+    {
+      "relation_id": "p1:d41b3df6b05812caef320657",
+      "clause_id": "clause:78",
+      "relation_type": "PATIENT",
+      "head_node_id": "p1:d1b0fe5e28cde127811d2bda",
+      "tail_node_id": "p1:2fdab3384040404028f19020",
+      "evidence_span_ids": [
+        "p1:df42803e1872c61313eedd49",
+        "p1:18950504ee23d13b063e315f",
+        "p1:f641ae65224cd8b1a1a37559"
+      ],
+      "evidence_tier": "STRONG",
+      "state": "RESOLVED",
+      "model_signal_refs": [
+        "clause:78:token:0",
+        "clause:78:token:4"
+      ],
+      "rule_refs": [
+        "NATIVE_PATIENT"
+      ]
+    },
+    {
+      "relation_id": "p1:301c46b464d0a1e82845f17c",
+      "clause_id": "clause:79",
+      "relation_type": "AGENT",
+      "head_node_id": "p1:d917479ec7b3b54fc3276fc2",
+      "tail_node_id": "p1:84f42fa2ff58c05122a30301",
+      "evidence_span_ids": [
+        "p1:e5ea449e9e10d46b75f35197",
+        "p1:f62215908d14f9767af6dfee",
+        "p1:d0fbe698323fc4182a13bd17"
+      ],
+      "evidence_tier": "STRONG",
+      "state": "RESOLVED",
+      "model_signal_refs": [
+        "clause:79:token:5",
+        "clause:79:token:4"
+      ],
+      "rule_refs": [
+        "NATIVE_AGENT"
+      ]
+    },
+    {
+      "relation_id": "p1:52f2c9448dfe3691624e5aa1",
+      "clause_id": "clause:80",
+      "relation_type": "AGENT",
+      "head_node_id": "p1:16bb3d4bcbb482f3469567b8",
+      "tail_node_id": "p1:90ce044fb98551eb417808ee",
+      "evidence_span_ids": [
+        "p1:0581e267b11c94aab9a073fe",
+        "p1:56b572ac19c7c9c02416415d",
+        "p1:cccb3d47bbbf4afb6004d7cc"
+      ],
+      "evidence_tier": "STRONG",
+      "state": "RESOLVED",
+      "model_signal_refs": [
+        "clause:80:token:3",
+        "clause:80:token:2"
+      ],
+      "rule_refs": [
+        "NATIVE_AGENT"
+      ]
+    },
+    {
+      "relation_id": "p1:6634224a418ab0b8a51100e9",
+      "clause_id": "clause:83",
+      "relation_type": "PATIENT",
+      "head_node_id": "p1:876ba99df9f7169296e04a9b",
+      "tail_node_id": "p1:f676cdca185fb72d8023d505",
+      "evidence_span_ids": [
+        "p1:373108df5104f61cad767b0a",
+        "p1:86d5b03d646691843adc81e1",
+        "p1:ef5b162cd4b834c2b4dbb9ba"
+      ],
+      "evidence_tier": "STRONG",
+      "state": "RESOLVED",
+      "model_signal_refs": [
+        "clause:83:token:1",
+        "clause:83:token:3"
+      ],
+      "rule_refs": [
+        "NATIVE_PATIENT"
+      ]
+    },
+    {
+      "relation_id": "p1:218ce9128f0f0c4c2813a467",
+      "clause_id": "clause:84",
+      "relation_type": "PATIENT",
+      "head_node_id": "p1:eb43d7a735691aa9525b37bb",
+      "tail_node_id": "p1:70f6b5b93750e58c49ce754d",
+      "evidence_span_ids": [
+        "p1:ad8736d638dc04859b6daf8d",
+        "p1:3bdfeefc7a147f0f7d02e0da",
+        "p1:efc7b204f22819a573b9b1d7"
+      ],
+      "evidence_tier": "STRONG",
+      "state": "RESOLVED",
+      "model_signal_refs": [
+        "clause:84:token:0",
+        "clause:84:token:1"
+      ],
+      "rule_refs": [
+        "NATIVE_PATIENT"
+      ]
+    },
+    {
+      "relation_id": "p1:d1fc1f32a0899e83493a021d",
+      "clause_id": "clause:16",
+      "relation_type": "THEME",
+      "head_node_id": "p1:133551735778ac65fbfdfcba",
+      "tail_node_id": "p1:250bf181c85c6981c82a5b25",
+      "evidence_span_ids": [
+        "p1:a5e2d63e1a58d57ea62543f6",
+        "p1:05d34fe3d4919ac10638f94f",
+        "p1:8e8f4898c202dd62d38e7af0"
+      ],
+      "evidence_tier": "STRONG",
+      "state": "REJECTED",
+      "model_signal_refs": [
+        "clause:16:token:7",
+        "clause:16:token:5"
+      ],
+      "rule_refs": [
+        "NATIVE_THEME"
+      ]
+    },
+    {
+      "relation_id": "p1:4954b0272fb76b884881aac1",
+      "clause_id": "clause:22",
+      "relation_type": "THEME",
+      "head_node_id": "p1:12f1acd6210ce76e73a44be1",
+      "tail_node_id": "p1:27b2e8d459d5544a7d9860ec",
+      "evidence_span_ids": [
+        "p1:c3cc3e9e710923b1c3c65d00",
+        "p1:2763fe80cbbe08376d499e20",
+        "p1:e2b80964cb3f0f4fc72d05ff"
+      ],
+      "evidence_tier": "STRONG",
+      "state": "RESOLVED",
+      "model_signal_refs": [
+        "clause:22:token:5",
+        "clause:22:token:4"
+      ],
+      "rule_refs": [
+        "NATIVE_THEME"
+      ]
+    },
+    {
+      "relation_id": "p1:c51d18f010ecd2454dbf95e8",
+      "clause_id": "clause:31",
+      "relation_type": "PATIENT",
+      "head_node_id": "p1:d6411656376dca781abd0d10",
+      "tail_node_id": "p1:82bb16799a23a407f54eb71f",
+      "evidence_span_ids": [
+        "p1:a61849548f8089fa639d9612",
+        "p1:51f6863c985a1e97dfeffb2a",
+        "p1:59bdd662a1228eb86f4b6327"
+      ],
+      "evidence_tier": "STRONG",
+      "state": "RESOLVED",
+      "model_signal_refs": [
+        "clause:31:token:3"
+      ],
+      "rule_refs": [
+        "NATIVE_PATIENT"
+      ]
+    },
+    {
+      "relation_id": "p1:c26b250a34e3a50910a7fcd5",
+      "clause_id": "clause:71",
+      "relation_type": "PATIENT",
+      "head_node_id": "p1:62c3ffede0ac0798febee96d",
+      "tail_node_id": "p1:acc861029dec821ca1ef36df",
+      "evidence_span_ids": [
+        "p1:a9272288586015df252f026b",
+        "p1:012a3f405471bd34221ab381",
+        "p1:172855f16717f27a0cd13721"
+      ],
+      "evidence_tier": "STRONG",
+      "state": "RESOLVED",
+      "model_signal_refs": [
+        "clause:71:token:9"
+      ],
+      "rule_refs": [
+        "NATIVE_PATIENT"
+      ]
+    }
+  ],
+  "semantic_nodes": [
+    {
+      "node_id": "p1:fd1a3ce8ee92725e8fc6634a",
+      "node_type": "DISCOURSE",
+      "surface": "---\r\nprotocol: fcop\r\nversion: 1\r\nkind: task\r\ntask_id: TASK-20260513-002\r\nsender: ADMIN\r\nrecipient: ME\r\npriority: P1\r\nrisk_level: low\r\nthread_key: release-sop-v2\r\nsession_id: sess-20260513-me-01\r\ncreated_at: \"2026-05-13T01:12:00+08:00\"\r\nrelated:\r\n  - TASK-20260513-001   # SOP v2 沉淀主刀(已归档)\r\n  - REPORT-20260513-001\r\n---\r\n\r\n# 把\"`git add` 用显式路径,不用 `-A`\"写进 `docs/release-process.md`(带依据)\r\n\r\n## 背景 / Background\r\n\r\n上一轮 `TASK-20260513-001` 沉淀 SOP v2 时,我自己在 `Step 4 闭环 commit` 阶\r\n段用 `git add -A` 一把抓,意外把 19 份 untracked 残留(`.scratch/` 临时\r\nmsg、`fcop_events.jsonl` 运行时日志、`scripts/_*.txt` 历史 commit msg\r\n等)一起塞进了 `commit d2ed13c`。ADMIN 决策 revert + redo,最终通过\r\n`cc60186 (revert) → 979bcd2 (clean SOP) → dfe68e3 (artifacts + .gitignore\r\ntighten)` 三个 commit 修复。\r\n\r\n汇报里我提了一句\"下次应在 SOP 里加这条规则\",ADMIN 当即回:\r\n\r\n> **写到文档中,有依据!!**\r\n\r\n意思是:**口头沉淀不算数,必须落文件**——这正是 FCoP 的根原则(Rule 0.a)\r\n本身。同时,有 `d2ed13c → cc60186 → 979bcd2 → dfe68e3` 这条完整的 main\r\n历史作为依据,新规则不是凭空写的\"教条\",是从实际事故里抽出来的硬约束。\r\n\r\n## 要做的事 / Deliverables\r\n\r\n在 `docs/release-process.md` **两处**加新条款:\r\n\r\n### 处 1 · 阶段 4 \"发布后验证 + Rule 0.a.1 闭环\" 的 `archive + commit` 子段\r\n\r\n把现有 `git add -A && git commit -F ...` 命令**整段重写**,强调:\r\n\r\n- ❌ 不要 `git add -A`(会抓所有 untracked 残留)\r\n- ✅ 用显式路径列出所有要入库的文件\r\n- ✅ 在 `git commit` 前先跑 `git status --short` 二次确认 staging 区只\r\n  包含本意文件\r\n- 引用 `d2ed13c → cc60186 → 979bcd2 → dfe68e3` 这串 commit 作为\"反面\r\n  教材 + 修复案例\"的链接,说明依据\r\n\r\n### 处 2 · \"常见故障与回滚\" 新增 `问题 7`\r\n\r\n```\r\n### 问题 7:commit 意外携带 untracked 残留(`git add -A` 后悔药)\r\n```\r\n\r\n- 现象、根因、立即修复(revert + redo)、长期防范(显式路径 + `.gitignore`\r\n  补 `.scratch/` / `fcop_events.jsonl` / `scripts/_*.txt`)\r\n- 直接引用本次 4-commit 修复链作为现实案例\r\n\r\n## 验收 / Acceptance\r\n\r\n- [ ] `docs/release-process.md` 阶段 4 闭环段命令重写,显式列路径\r\n- [ ] `docs/release-process.md` 常见故障新增 \"问题 7\" 整段\r\n- [ ] 两处都明确指向 `d2ed13c` / `cc60186` / `979bcd2` / `dfe68e3`\r\n      作为依据(commit hash 短)\r\n- [ ] 写 `REPORT-20260513-002-ME-to-ADMIN-add-git-add-explicit-paths-rule.md`\r\n- [ ] **Dogfood**:本任务的 commit 阶段 **必须用显式路径** `git add`,\r\n      不许再用 `-A`;commit 前 `git status --short` 确认 staging 区只\r\n      包含本意 3 个文件(docs + TASK-002 + REPORT-002)\r\n- [ ] push origin main 成功,main 历史保持单 commit 干净\r\n\r\n## 风险 / Risk\r\n\r\nrisk_level: low。只改维护者文档,加约束、不动协议、不发版。\r\n回滚:`git revert` 即可。\r\n",
+      "normalized": "TASK",
+      "span_candidate_ids": [
+        "p1:bc89f8fe8a114f41b25ede29"
+      ],
+      "source_span_ids": [
+        "p1:a521ab22200a35919d20aa69"
+      ],
+      "evidence_tier": "STRONG",
+      "state": "RESOLVED",
+      "metadata": {
+        "sense": "TASK",
+        "owner": "p1:67b6852f52b5a1da54385174",
+        "producer": "NATIVE_FRONTEND"
+      }
+    },
+    {
+      "node_id": "p1:fbde64739051ae05a3709ede",
+      "node_type": "VALUE",
+      "surface": "1",
+      "normalized": null,
+      "span_candidate_ids": [
+        "p1:b90f61642632e2b2e5c6815f",
+        "p1:e54096e16b792723a360e80c"
+      ],
+      "source_span_ids": [
+        "p1:8a6f71d712f5a99a6f427de0",
+        "p1:8f3db29d3e0092b51aedddde"
+      ],
+      "evidence_tier": "STRONG",
+      "state": "RESOLVED",
+      "metadata": {
+        "literal_id": "literal:40",
+        "literal_tag": "NUMBER",
+        "clause_id": "clause:2",
+        "producer": "NATIVE_FRONTEND",
+        "attachment_path": [
+          "clause:2",
+          "p1:fbde64739051ae05a3709ede"
+        ]
+      }
+    },
+    {
+      "node_id": "p1:8f052b1752cba33642eac701",
+      "node_type": "REFERENCE",
+      "surface": "TASK-20260513-002",
+      "normalized": null,
+      "span_candidate_ids": [
+        "p1:956dba78a3ce7009d33a66e2",
+        "p1:9d3807fda6650e245fc90123"
+      ],
+      "source_span_ids": [
+        "p1:a23736cdad55da4430f7fd92",
+        "p1:37a604ee0007e3f3af150fb5"
+      ],
+      "evidence_tier": "STRONG",
+      "state": "RESOLVED",
+      "metadata": {
+        "literal_id": "literal:7",
+        "literal_tag": "REFERENCE",
+        "clause_id": "clause:4",
+        "producer": "NATIVE_FRONTEND",
+        "attachment_path": [
+          "clause:4",
+          "p1:8f052b1752cba33642eac701"
+        ]
+      }
+    },
+    {
+      "node_id": "p1:12f2beda96652ec4e27b1244",
+      "node_type": "ENTITY",
+      "surface": "task_id",
+      "normalized": null,
+      "span_candidate_ids": [
+        "p1:30b46e93f40b7956ec9349fd",
+        "p1:8695994254132885c9e59dd6"
+      ],
+      "source_span_ids": [
+        "p1:8b3ae56b23725b762303ccbd",
+        "p1:37a604ee0007e3f3af150fb5"
+      ],
+      "evidence_tier": "STRONG",
+      "state": "RESOLVED",
+      "metadata": {
+        "literal_id": "literal:29",
+        "literal_tag": "SERVICE",
+        "clause_id": "clause:4",
+        "producer": "NATIVE_FRONTEND",
+        "attachment_path": [
+          "clause:4",
+          "p1:12f2beda96652ec4e27b1244"
+        ]
+      }
+    },
+    {
+      "node_id": "p1:7ac4c87bda5523f6a99c5008",
+      "node_type": "ENTITY",
+      "surface": "risk_level",
+      "normalized": null,
+      "span_candidate_ids": [
+        "p1:52bb6bc0c9985373e6bb1b4c",
+        "p1:12657a16e1f9a02155a60299"
+      ],
+      "source_span_ids": [
+        "p1:66b5db4a7c884b7288ec8746",
+        "p1:306bdbede636fcce24fb88a2"
+      ],
+      "evidence_tier": "STRONG",
+      "state": "RESOLVED",
+      "metadata": {
+        "literal_id": "literal:30",
+        "literal_tag": "SERVICE",
+        "clause_id": "clause:8",
+        "producer": "NATIVE_FRONTEND",
+        "attachment_path": [
+          "clause:8",
+          "p1:7ac4c87bda5523f6a99c5008"
+        ]
+      }
+    },
+    {
+      "node_id": "p1:656c8c9b5ba8024e5119e116",
+      "node_type": "ENTITY",
+      "surface": "thread_key",
+      "normalized": null,
+      "span_candidate_ids": [
+        "p1:b39b32af88e2945eab7ea9d8",
+        "p1:a83d0719bfa7b5ae32e42799"
+      ],
+      "source_span_ids": [
+        "p1:f3a29650c854c4afa2d65aa0",
+        "p1:c0d72b9fccad3faa5657c64e"
+      ],
+      "evidence_tier": "STRONG",
+      "state": "RESOLVED",
+      "metadata": {
+        "literal_id": "literal:31",
+        "literal_tag": "SERVICE",
+        "clause_id": "clause:9",
+        "producer": "NATIVE_FRONTEND",
+        "attachment_path": [
+          "clause:9",
+          "p1:656c8c9b5ba8024e5119e116"
+        ]
+      }
+    },
+    {
+      "node_id": "p1:8c167f00a5734f1a12aba255",
+      "node_type": "ENTITY",
+      "surface": "release-sop-v2",
+      "normalized": null,
+      "span_candidate_ids": [
+        "p1:8be7e6902070a4a3aad8ba29",
+        "p1:611571d6b6c349a657af9370"
+      ],
+      "source_span_ids": [
+        "p1:c7e54f197f3fdf1cbeb6a779",
+        "p1:c0d72b9fccad3faa5657c64e"
+      ],
+      "evidence_tier": "STRONG",
+      "state": "RESOLVED",
+      "metadata": {
+        "literal_id": "literal:32",
+        "literal_tag": "SERVICE",
+        "clause_id": "clause:9",
+        "producer": "NATIVE_FRONTEND",
+        "attachment_path": [
+          "clause:9",
+          "p1:8c167f00a5734f1a12aba255"
+        ]
+      }
+    },
+    {
+      "node_id": "p1:f2d1a1e29a2278dbe3328658",
+      "node_type": "ENTITY",
+      "surface": "session_id",
+      "normalized": null,
+      "span_candidate_ids": [
+        "p1:9f343579d18310e64a3020cb",
+        "p1:4cde9f48458ccb768885be71"
+      ],
+      "source_span_ids": [
+        "p1:d0ac7792c4b7cfc13bec8ed9",
+        "p1:256fadcd43612d3f208e8e3a"
+      ],
+      "evidence_tier": "STRONG",
+      "state": "RESOLVED",
+      "metadata": {
+        "literal_id": "literal:33",
+        "literal_tag": "SERVICE",
+        "clause_id": "clause:10",
+        "producer": "NATIVE_FRONTEND",
+        "attachment_path": [
+          "clause:10",
+          "p1:f2d1a1e29a2278dbe3328658"
+        ]
+      }
+    },
+    {
+      "node_id": "p1:2fc326a08112f60156d7c5f9",
+      "node_type": "ENTITY",
+      "surface": "sess-20260513-me-01",
+      "normalized": null,
+      "span_candidate_ids": [
+        "p1:4bbf4e6a05b7cb3e5638effb",
+        "p1:517dae27488708d9f60e8fd6"
+      ],
+      "source_span_ids": [
+        "p1:1bba132797836eb9a2088dda",
+        "p1:256fadcd43612d3f208e8e3a"
+      ],
+      "evidence_tier": "STRONG",
+      "state": "RESOLVED",
+      "metadata": {
+        "literal_id": "literal:34",
+        "literal_tag": "SERVICE",
+        "clause_id": "clause:10",
+        "producer": "NATIVE_FRONTEND",
+        "attachment_path": [
+          "clause:10",
+          "p1:2fc326a08112f60156d7c5f9"
+        ]
+      }
+    },
+    {
+      "node_id": "p1:ab55c0a8d50a76ef18794131",
+      "node_type": "ENTITY",
+      "surface": "created_at",
+      "normalized": null,
+      "span_candidate_ids": [
+        "p1:c74d605f91d8fc28087f66e6",
+        "p1:daae8f0da51b171c96e10b0b"
+      ],
+      "source_span_ids": [
+        "p1:d583df57a9a8156dee86995b",
+        "p1:c8a6a29c318a653f9af65a44"
+      ],
+      "evidence_tier": "STRONG",
+      "state": "RESOLVED",
+      "metadata": {
+        "literal_id": "literal:35",
+        "literal_tag": "SERVICE",
+        "clause_id": "clause:11",
+        "producer": "NATIVE_FRONTEND",
+        "attachment_path": [
+          "clause:11",
+          "p1:ab55c0a8d50a76ef18794131"
+        ]
+      }
+    },
+    {
+      "node_id": "p1:e4ff4e97a2f4d44b6d43d381",
+      "node_type": "VALUE",
+      "surface": "2026",
+      "normalized": null,
+      "span_candidate_ids": [
+        "p1:b0cc86f5ee2b1efdc2143516",
+        "p1:ac0654636c49629311517236"
+      ],
+      "source_span_ids": [
+        "p1:41dec7bde44e4eeca67e8696",
+        "p1:c8a6a29c318a653f9af65a44"
+      ],
+      "evidence_tier": "STRONG",
+      "state": "RESOLVED",
+      "metadata": {
+        "literal_id": "literal:41",
+        "literal_tag": "NUMBER",
+        "clause_id": "clause:11",
+        "producer": "NATIVE_FRONTEND",
+        "attachment_path": [
+          "clause:11",
+          "p1:e4ff4e97a2f4d44b6d43d381"
+        ]
+      }
+    },
+    {
+      "node_id": "p1:67b2a515af3e2150b2730dfc",
+      "node_type": "VALUE",
+      "surface": "05",
+      "normalized": null,
+      "span_candidate_ids": [
+        "p1:afb7b576243c277924ff5de2",
+        "p1:9dafa328ef378aa13ddfb89a"
+      ],
+      "source_span_ids": [
+        "p1:76a13450252b4fbcf57b5b23",
+        "p1:c8a6a29c318a653f9af65a44"
+      ],
+      "evidence_tier": "STRONG",
+      "state": "RESOLVED",
+      "metadata": {
+        "literal_id": "literal:42",
+        "literal_tag": "NUMBER",
+        "clause_id": "clause:11",
+        "producer": "NATIVE_FRONTEND",
+        "attachment_path": [
+          "clause:11",
+          "p1:67b2a515af3e2150b2730dfc"
+        ]
+      }
+    },
+    {
+      "node_id": "p1:8e6ea4648e7f4ca67c7cd697",
+      "node_type": "VALUE",
+      "surface": "12",
+      "normalized": null,
+      "span_candidate_ids": [
+        "p1:0550db53097c5bd0b395b0f4",
+        "p1:2ba74689501c6b2db4127f8c"
+      ],
+      "source_span_ids": [
+        "p1:e229acb7bb7688d4e152c25d",
+        "p1:c8a6a29c318a653f9af65a44"
+      ],
+      "evidence_tier": "STRONG",
+      "state": "RESOLVED",
+      "metadata": {
+        "literal_id": "literal:43",
+        "literal_tag": "NUMBER",
+        "clause_id": "clause:11",
+        "producer": "NATIVE_FRONTEND",
+        "attachment_path": [
+          "clause:11",
+          "p1:8e6ea4648e7f4ca67c7cd697"
+        ]
+      }
+    },
+    {
+      "node_id": "p1:204e39ced7216d536101db28",
+      "node_type": "VALUE",
+      "surface": "00",
+      "normalized": null,
+      "span_candidate_ids": [
+        "p1:7ffbd4a019f77d94af795e57",
+        "p1:87ce208b9801f026348c9eb3"
+      ],
+      "source_span_ids": [
+        "p1:73057506e74d7abd9bfb1c8d",
+        "p1:c8a6a29c318a653f9af65a44"
+      ],
+      "evidence_tier": "STRONG",
+      "state": "RESOLVED",
+      "metadata": {
+        "literal_id": "literal:44",
+        "literal_tag": "NUMBER",
+        "clause_id": "clause:11",
+        "producer": "NATIVE_FRONTEND",
+        "attachment_path": [
+          "clause:11",
+          "p1:204e39ced7216d536101db28"
+        ]
+      }
+    },
+    {
+      "node_id": "p1:e10d35dba038953bce46691c",
+      "node_type": "VALUE",
+      "surface": "08",
+      "normalized": null,
+      "span_candidate_ids": [
+        "p1:40ebf96eb88e628457949364",
+        "p1:9ae27e2b0b4d63d85a8d86e9"
+      ],
+      "source_span_ids": [
+        "p1:31b632fa46a88c2f8c362e85",
+        "p1:c8a6a29c318a653f9af65a44"
+      ],
+      "evidence_tier": "STRONG",
+      "state": "RESOLVED",
+      "metadata": {
+        "literal_id": "literal:45",
+        "literal_tag": "NUMBER",
+        "clause_id": "clause:11",
+        "producer": "NATIVE_FRONTEND",
+        "attachment_path": [
+          "clause:11",
+          "p1:e10d35dba038953bce46691c"
+        ]
+      }
+    },
+    {
+      "node_id": "p1:5fab32e8d56f8ca0c32aa3f8",
+      "node_type": "VALUE",
+      "surface": "00",
+      "normalized": null,
+      "span_candidate_ids": [
+        "p1:3c16346bc2577d76ea534e09",
+        "p1:cabc933461868d474894f6e0"
+      ],
+      "source_span_ids": [
+        "p1:ab635873a4ccb6344d263ca6",
+        "p1:c8a6a29c318a653f9af65a44"
+      ],
+      "evidence_tier": "STRONG",
+      "state": "RESOLVED",
+      "metadata": {
+        "literal_id": "literal:46",
+        "literal_tag": "NUMBER",
+        "clause_id": "clause:11",
+        "producer": "NATIVE_FRONTEND",
+        "attachment_path": [
+          "clause:11",
+          "p1:5fab32e8d56f8ca0c32aa3f8"
+        ]
+      }
+    },
+    {
+      "node_id": "p1:8a5e6f8d2f69f65525bc3e3a",
+      "node_type": "REFERENCE",
+      "surface": "TASK-20260513-001",
+      "normalized": null,
+      "span_candidate_ids": [
+        "p1:349379eb0c2ba42b437d4348",
+        "p1:b5ca4af242dddc50941c59d2"
+      ],
+      "source_span_ids": [
+        "p1:4dc64bad0f83f6f24b18d98e",
+        "p1:79707de72949020696382d3d"
+      ],
+      "evidence_tier": "STRONG",
+      "state": "RESOLVED",
+      "metadata": {
+        "literal_id": "literal:8",
+        "literal_tag": "REFERENCE",
+        "clause_id": "clause:13",
+        "producer": "NATIVE_FRONTEND",
+        "attachment_path": [
+          "clause:13",
+          "p1:8a5e6f8d2f69f65525bc3e3a"
+        ]
+      }
+    },
+    {
+      "node_id": "p1:65e196b0c55e5c948c8db9f5",
+      "node_type": "REFERENCE",
+      "surface": "REPORT-20260513-001",
+      "normalized": null,
+      "span_candidate_ids": [
+        "p1:f66d8c78e18927d5c95057c1",
+        "p1:08bfdd88e835c1339953b79d"
+      ],
+      "source_span_ids": [
+        "p1:5500b3e2a3d9d75e9cc241e5",
+        "p1:4bc616881c1b5d590cf47b18"
+      ],
+      "evidence_tier": "STRONG",
+      "state": "RESOLVED",
+      "metadata": {
+        "literal_id": "literal:9",
+        "literal_tag": "REFERENCE",
+        "clause_id": "clause:14",
+        "producer": "NATIVE_FRONTEND",
+        "attachment_path": [
+          "clause:14",
+          "p1:65e196b0c55e5c948c8db9f5"
+        ]
+      }
+    },
+    {
+      "node_id": "p1:811325cb0c4b8e86c9a3abb8",
+      "node_type": "ENTITY",
+      "surface": "/release-process.md",
+      "normalized": null,
+      "span_candidate_ids": [
+        "p1:ce5e666efd253517b99218ab",
+        "p1:5173172df07f7677a6908a3f"
+      ],
+      "source_span_ids": [
+        "p1:0cd5f0978eac0af628aa97ca",
+        "p1:146ff163b965da76907812ec"
+      ],
+      "evidence_tier": "STRONG",
+      "state": "RESOLVED",
+      "metadata": {
+        "literal_id": "literal:0",
+        "literal_tag": "FILEPATH",
+        "clause_id": "clause:17",
+        "producer": "NATIVE_FRONTEND",
+        "attachment_path": [
+          "clause:17",
+          "p1:811325cb0c4b8e86c9a3abb8"
+        ]
+      }
+    },
+    {
+      "node_id": "p1:70ce5a32c40f27b97ca9546c",
+      "node_type": "REFERENCE",
+      "surface": "TASK-20260513-001",
+      "normalized": null,
+      "span_candidate_ids": [
+        "p1:b29a4853c66510170ead3170",
+        "p1:3cf17ffcaec7391467b2beec"
+      ],
+      "source_span_ids": [
+        "p1:0d32b249fe2a4cbb733dfddf",
+        "p1:0638fc5b57016a30f6fef438"
+      ],
+      "evidence_tier": "STRONG",
+      "state": "RESOLVED",
+      "metadata": {
+        "literal_id": "literal:10",
+        "literal_tag": "REFERENCE",
+        "clause_id": "clause:19",
+        "producer": "NATIVE_FRONTEND",
+        "attachment_path": [
+          "clause:19",
+          "p1:70ce5a32c40f27b97ca9546c"
+        ]
+      }
+    },
+    {
+      "node_id": "p1:9431d06b8d996c4812602636",
+      "node_type": "VALUE",
+      "surface": "4",
+      "normalized": null,
+      "span_candidate_ids": [
+        "p1:ed6f3892607bcb41a91dae0f",
+        "p1:008b9fc56755f09df66321d8"
+      ],
+      "source_span_ids": [
+        "p1:5111f126a45eb5112ba00382",
+        "p1:2f44bd7ac6f6172918f94b57"
+      ],
+      "evidence_tier": "STRONG",
+      "state": "RESOLVED",
+      "metadata": {
+        "literal_id": "literal:47",
+        "literal_tag": "NUMBER",
+        "clause_id": "clause:20",
+        "producer": "NATIVE_FRONTEND",
+        "attachment_path": [
+          "clause:20",
+          "p1:9431d06b8d996c4812602636"
+        ]
+      }
+    },
+    {
+      "node_id": "p1:f678d1f6485646bb622116e7",
+      "node_type": "VALUE",
+      "surface": "19",
+      "normalized": null,
+      "span_candidate_ids": [
+        "p1:640d7f54db17a4e163cec68c",
+        "p1:44ee86ed12d4e69f9128abea"
+      ],
+      "source_span_ids": [
+        "p1:0260f4dec6228b97e0a883ca",
+        "p1:e2b80964cb3f0f4fc72d05ff"
+      ],
+      "evidence_tier": "STRONG",
+      "state": "RESOLVED",
+      "metadata": {
+        "literal_id": "literal:48",
+        "literal_tag": "NUMBER",
+        "clause_id": "clause:22",
+        "producer": "NATIVE_FRONTEND",
+        "attachment_path": [
+          "clause:22",
+          "p1:f678d1f6485646bb622116e7"
+        ]
+      }
+    },
+    {
+      "node_id": "p1:00163543d773f077a6b02b82",
+      "node_type": "ENTITY",
+      "surface": "/_*.txt",
+      "normalized": null,
+      "span_candidate_ids": [
+        "p1:283736d42aa76c0fbf6827c9",
+        "p1:344b179559bc4a84cdb3488d"
+      ],
+      "source_span_ids": [
+        "p1:edf6619444dd9b219236a55b",
+        "p1:8b158d8e7c33036f094b0711"
+      ],
+      "evidence_tier": "STRONG",
+      "state": "RESOLVED",
+      "metadata": {
+        "literal_id": "literal:1",
+        "literal_tag": "FILEPATH",
+        "clause_id": "clause:24",
+        "producer": "NATIVE_FRONTEND",
+        "attachment_path": [
+          "clause:24",
+          "p1:00163543d773f077a6b02b82"
+        ]
+      }
+    },
+    {
+      "node_id": "p1:36019afbcf5e66fa7cf7603e",
+      "node_type": "ENTITY",
+      "surface": "fcop_events.jsonl",
+      "normalized": null,
+      "span_candidate_ids": [
+        "p1:60ed9c376f6f94524ab9216c",
+        "p1:b36038b81f2eb130ed39560e"
+      ],
+      "source_span_ids": [
+        "p1:8d08268efe1274c06c6b2e93",
+        "p1:8b158d8e7c33036f094b0711"
+      ],
+      "evidence_tier": "STRONG",
+      "state": "RESOLVED",
+      "metadata": {
+        "literal_id": "literal:36",
+        "literal_tag": "SERVICE",
+        "clause_id": "clause:24",
+        "producer": "NATIVE_FRONTEND",
+        "attachment_path": [
+          "clause:24",
+          "p1:36019afbcf5e66fa7cf7603e"
+        ]
+      }
+    },
+    {
+      "node_id": "p1:d41cb0df0abe58c73cbb589c",
+      "node_type": "REFERENCE",
+      "surface": "d2ed13c",
+      "normalized": null,
+      "span_candidate_ids": [
+        "p1:f5c79e1789e4828a5f4ac5c3",
+        "p1:0d52b45ed20c122bf0ab392d"
+      ],
+      "source_span_ids": [
+        "p1:fbf779b9c9cca4deab37d4ef",
+        "p1:74b4ac8c8c17ec3d4de6dd6e"
+      ],
+      "evidence_tier": "STRONG",
+      "state": "RESOLVED",
+      "metadata": {
+        "literal_id": "literal:13",
+        "literal_tag": "COMMIT",
+        "clause_id": "clause:25",
+        "producer": "NATIVE_FRONTEND",
+        "attachment_path": [
+          "clause:25",
+          "p1:d41cb0df0abe58c73cbb589c"
+        ]
+      }
+    },
+    {
+      "node_id": "p1:146f3ba77eb68e06c27de9e3",
+      "node_type": "REFERENCE",
+      "surface": "cc60186",
+      "normalized": null,
+      "span_candidate_ids": [
+        "p1:b833774b2a819d1ca44bbaaa",
+        "p1:70b43f11dc2030ee2db0564c"
+      ],
+      "source_span_ids": [
+        "p1:ecd5db56bcf5bd5c63e76288",
+        "p1:5c94b898ad5184888150753a"
+      ],
+      "evidence_tier": "STRONG",
+      "state": "RESOLVED",
+      "metadata": {
+        "literal_id": "literal:14",
+        "literal_tag": "COMMIT",
+        "clause_id": "clause:28",
+        "producer": "NATIVE_FRONTEND",
+        "attachment_path": [
+          "clause:28",
+          "p1:146f3ba77eb68e06c27de9e3"
+        ]
+      }
+    },
+    {
+      "node_id": "p1:23b9a865446f3199198715ba",
+      "node_type": "REFERENCE",
+      "surface": "979bcd2",
+      "normalized": null,
+      "span_candidate_ids": [
+        "p1:f3ccd17c152606ff954ff922",
+        "p1:60de03d9820b3cf4bf089a06"
+      ],
+      "source_span_ids": [
+        "p1:6e1720f18cebdd06430bfd73",
+        "p1:5c94b898ad5184888150753a"
+      ],
+      "evidence_tier": "STRONG",
+      "state": "RESOLVED",
+      "metadata": {
+        "literal_id": "literal:15",
+        "literal_tag": "COMMIT",
+        "clause_id": "clause:28",
+        "producer": "NATIVE_FRONTEND",
+        "attachment_path": [
+          "clause:28",
+          "p1:23b9a865446f3199198715ba"
+        ]
+      }
+    },
+    {
+      "node_id": "p1:448683126526a638908bca59",
+      "node_type": "REFERENCE",
+      "surface": "dfe68e3",
+      "normalized": null,
+      "span_candidate_ids": [
+        "p1:850f8b960dd7d59202405637",
+        "p1:fd4def81ebb648dce6b12504"
+      ],
+      "source_span_ids": [
+        "p1:9c8d5013ec9dc634d11752bd",
+        "p1:5c94b898ad5184888150753a"
+      ],
+      "evidence_tier": "STRONG",
+      "state": "RESOLVED",
+      "metadata": {
+        "literal_id": "literal:16",
+        "literal_tag": "COMMIT",
+        "clause_id": "clause:28",
+        "producer": "NATIVE_FRONTEND",
+        "attachment_path": [
+          "clause:28",
+          "p1:448683126526a638908bca59"
+        ]
+      }
+    },
+    {
+      "node_id": "p1:2f4deac9f8033c2533bfde48",
+      "node_type": "VALUE",
+      "surface": "0",
+      "normalized": null,
+      "span_candidate_ids": [
+        "p1:17e09848c98d17952a322929",
+        "p1:7f87ed7dccefb51c91164ad9"
+      ],
+      "source_span_ids": [
+        "p1:6451dad71c521b183575206e",
+        "p1:4afaa9de6f3264c05015bb2d"
+      ],
+      "evidence_tier": "STRONG",
+      "state": "RESOLVED",
+      "metadata": {
+        "literal_id": "literal:49",
+        "literal_tag": "NUMBER",
+        "clause_id": "clause:37",
+        "producer": "NATIVE_FRONTEND",
+        "attachment_path": [
+          "clause:37",
+          "p1:2f4deac9f8033c2533bfde48"
+        ]
+      }
+    },
+    {
+      "node_id": "p1:5b09120d6de8ef800238c987",
+      "node_type": "REFERENCE",
+      "surface": "d2ed13c",
+      "normalized": null,
+      "span_candidate_ids": [
+        "p1:f96c06b8154107da1e4cf46c",
+        "p1:610e0777773b0f46f2953795"
+      ],
+      "source_span_ids": [
+        "p1:2f306d12e2c7c34945169ac2",
+        "p1:e72023a72a3b1af4e7d2120e"
+      ],
+      "evidence_tier": "STRONG",
+      "state": "RESOLVED",
+      "metadata": {
+        "literal_id": "literal:17",
+        "literal_tag": "COMMIT",
+        "clause_id": "clause:41",
+        "producer": "NATIVE_FRONTEND",
+        "attachment_path": [
+          "clause:41",
+          "p1:5b09120d6de8ef800238c987"
+        ]
+      }
+    },
+    {
+      "node_id": "p1:8ce43f0eb913f6b6dbfb0a55",
+      "node_type": "REFERENCE",
+      "surface": "cc60186",
+      "normalized": null,
+      "span_candidate_ids": [
+        "p1:ff7309ea860e68465b75c782",
+        "p1:7425348a89d0af538f0eb7e2"
+      ],
+      "source_span_ids": [
+        "p1:b8a2e38b77fa010d77c0381d",
+        "p1:e72023a72a3b1af4e7d2120e"
+      ],
+      "evidence_tier": "STRONG",
+      "state": "RESOLVED",
+      "metadata": {
+        "literal_id": "literal:18",
+        "literal_tag": "COMMIT",
+        "clause_id": "clause:41",
+        "producer": "NATIVE_FRONTEND",
+        "attachment_path": [
+          "clause:41",
+          "p1:8ce43f0eb913f6b6dbfb0a55"
+        ]
+      }
+    },
+    {
+      "node_id": "p1:e0c3b0bb8593759eb66af5df",
+      "node_type": "REFERENCE",
+      "surface": "979bcd2",
+      "normalized": null,
+      "span_candidate_ids": [
+        "p1:830796d289ff822df17324f1",
+        "p1:16e49df12a528fef4c550fbe"
+      ],
+      "source_span_ids": [
+        "p1:665d59f1b20dc26fcf911e2a",
+        "p1:e72023a72a3b1af4e7d2120e"
+      ],
+      "evidence_tier": "STRONG",
+      "state": "RESOLVED",
+      "metadata": {
+        "literal_id": "literal:19",
+        "literal_tag": "COMMIT",
+        "clause_id": "clause:41",
+        "producer": "NATIVE_FRONTEND",
+        "attachment_path": [
+          "clause:41",
+          "p1:e0c3b0bb8593759eb66af5df"
+        ]
+      }
+    },
+    {
+      "node_id": "p1:ce31e3fddd71585df3f816b7",
+      "node_type": "REFERENCE",
+      "surface": "dfe68e3",
+      "normalized": null,
+      "span_candidate_ids": [
+        "p1:34c2c706c7749742cb9172d2",
+        "p1:5a064f4471e3fe4b51f753d1"
+      ],
+      "source_span_ids": [
+        "p1:4c4dfc84f635f55e828f5929",
+        "p1:e72023a72a3b1af4e7d2120e"
+      ],
+      "evidence_tier": "STRONG",
+      "state": "RESOLVED",
+      "metadata": {
+        "literal_id": "literal:20",
+        "literal_tag": "COMMIT",
+        "clause_id": "clause:41",
+        "producer": "NATIVE_FRONTEND",
+        "attachment_path": [
+          "clause:41",
+          "p1:ce31e3fddd71585df3f816b7"
+        ]
+      }
+    },
+    {
+      "node_id": "p1:152245c95305cf8eecf9b4b5",
+      "node_type": "ENTITY",
+      "surface": "/release-process.md",
+      "normalized": null,
+      "span_candidate_ids": [
+        "p1:480a9a8b776f6ecef01021c5",
+        "p1:68558ed9f2bce4bc65e645cb"
+      ],
+      "source_span_ids": [
+        "p1:180294e426873fd2db46ca43",
+        "p1:fc1ddc2fd8fbbc5d89053709"
+      ],
+      "evidence_tier": "STRONG",
+      "state": "RESOLVED",
+      "metadata": {
+        "literal_id": "literal:2",
+        "literal_tag": "FILEPATH",
+        "clause_id": "clause:46",
+        "producer": "NATIVE_FRONTEND",
+        "attachment_path": [
+          "clause:46",
+          "p1:152245c95305cf8eecf9b4b5"
+        ]
+      }
+    },
+    {
+      "node_id": "p1:4e637cc8fddda2cb345b35e2",
+      "node_type": "VALUE",
+      "surface": "1",
+      "normalized": null,
+      "span_candidate_ids": [
+        "p1:12bfe1fb438716dae57e8eff",
+        "p1:487b11a11f8434a650cb8638"
+      ],
+      "source_span_ids": [
+        "p1:9e8c6cdaca15297912cfcb5a",
+        "p1:b9bfa1d781206b4c69fa3af8"
+      ],
+      "evidence_tier": "STRONG",
+      "state": "RESOLVED",
+      "metadata": {
+        "literal_id": "literal:50",
+        "literal_tag": "NUMBER",
+        "clause_id": "clause:47",
+        "producer": "NATIVE_FRONTEND",
+        "attachment_path": [
+          "clause:47",
+          "p1:4e637cc8fddda2cb345b35e2"
+        ]
+      }
+    },
+    {
+      "node_id": "p1:f5acef437e61dbcc09abb346",
+      "node_type": "VALUE",
+      "surface": "4",
+      "normalized": null,
+      "span_candidate_ids": [
+        "p1:b4f7294e14c19b030ccb122f",
+        "p1:8c209757358b71f5a571b6bc"
+      ],
+      "source_span_ids": [
+        "p1:ef0825d4524325bd30ac14c5",
+        "p1:b9bfa1d781206b4c69fa3af8"
+      ],
+      "evidence_tier": "STRONG",
+      "state": "RESOLVED",
+      "metadata": {
+        "literal_id": "literal:51",
+        "literal_tag": "NUMBER",
+        "clause_id": "clause:47",
+        "producer": "NATIVE_FRONTEND",
+        "attachment_path": [
+          "clause:47",
+          "p1:f5acef437e61dbcc09abb346"
+        ]
+      }
+    },
+    {
+      "node_id": "p1:6de0ab21a2f9762c9a19a5a7",
+      "node_type": "VALUE",
+      "surface": "0",
+      "normalized": null,
+      "span_candidate_ids": [
+        "p1:8aa32023b5cd2b89e8881dc9",
+        "p1:2dcb3d922b762afe2ed5989b"
+      ],
+      "source_span_ids": [
+        "p1:afd0ce37e25b03dfa969a18b",
+        "p1:b9bfa1d781206b4c69fa3af8"
+      ],
+      "evidence_tier": "STRONG",
+      "state": "RESOLVED",
+      "metadata": {
+        "literal_id": "literal:52",
+        "literal_tag": "NUMBER",
+        "clause_id": "clause:47",
+        "producer": "NATIVE_FRONTEND",
+        "attachment_path": [
+          "clause:47",
+          "p1:6de0ab21a2f9762c9a19a5a7"
+        ]
+      }
+    },
+    {
+      "node_id": "p1:ce0690e907504cc65a0c5c7f",
+      "node_type": "ENTITY",
+      "surface": "a.1",
+      "normalized": null,
+      "span_candidate_ids": [
+        "p1:81b538c089be01e7c82afad2",
+        "p1:9bf287a4adf3d9ac4fe232e7"
+      ],
+      "source_span_ids": [
+        "p1:1b50aa7d0becb1a267560857",
+        "p1:5102e662cce3e7efa0410891"
+      ],
+      "evidence_tier": "STRONG",
+      "state": "RESOLVED",
+      "metadata": {
+        "literal_id": "literal:37",
+        "literal_tag": "SERVICE",
+        "clause_id": "clause:48",
+        "producer": "NATIVE_FRONTEND",
+        "attachment_path": [
+          "clause:48",
+          "p1:ce0690e907504cc65a0c5c7f"
+        ]
+      }
+    },
+    {
+      "node_id": "p1:5fd89fa8276999e66e85e247",
+      "node_type": "REFERENCE",
+      "surface": "d2ed13c",
+      "normalized": null,
+      "span_candidate_ids": [
+        "p1:3410709dd17c35e58d8e0b2d",
+        "p1:ef4d615292f95b5894efde61"
+      ],
+      "source_span_ids": [
+        "p1:2bf39b8f060415c8b8a9dcf7",
+        "p1:0cc6dd5abe91d91f220517f9"
+      ],
+      "evidence_tier": "STRONG",
+      "state": "RESOLVED",
+      "metadata": {
+        "literal_id": "literal:21",
+        "literal_tag": "COMMIT",
+        "clause_id": "clause:56",
+        "producer": "NATIVE_FRONTEND",
+        "attachment_path": [
+          "clause:56",
+          "p1:5fd89fa8276999e66e85e247"
+        ]
+      }
+    },
+    {
+      "node_id": "p1:86ec4b1da6191b5c6d800a61",
+      "node_type": "REFERENCE",
+      "surface": "cc60186",
+      "normalized": null,
+      "span_candidate_ids": [
+        "p1:67f04fb1b4f0ad139552c8bd",
+        "p1:36f5dfb25ec29933a3070ac1"
+      ],
+      "source_span_ids": [
+        "p1:e1eb77c6ad53078685728a22",
+        "p1:0cc6dd5abe91d91f220517f9"
+      ],
+      "evidence_tier": "STRONG",
+      "state": "RESOLVED",
+      "metadata": {
+        "literal_id": "literal:22",
+        "literal_tag": "COMMIT",
+        "clause_id": "clause:56",
+        "producer": "NATIVE_FRONTEND",
+        "attachment_path": [
+          "clause:56",
+          "p1:86ec4b1da6191b5c6d800a61"
+        ]
+      }
+    },
+    {
+      "node_id": "p1:0d6e9a91da5029bec637982e",
+      "node_type": "REFERENCE",
+      "surface": "979bcd2",
+      "normalized": null,
+      "span_candidate_ids": [
+        "p1:029f98d062ddec5611d47603",
+        "p1:6911b4e471d1b9e0a67211cc"
+      ],
+      "source_span_ids": [
+        "p1:ade23594793b6ec776ff5833",
+        "p1:0cc6dd5abe91d91f220517f9"
+      ],
+      "evidence_tier": "STRONG",
+      "state": "RESOLVED",
+      "metadata": {
+        "literal_id": "literal:23",
+        "literal_tag": "COMMIT",
+        "clause_id": "clause:56",
+        "producer": "NATIVE_FRONTEND",
+        "attachment_path": [
+          "clause:56",
+          "p1:0d6e9a91da5029bec637982e"
+        ]
+      }
+    },
+    {
+      "node_id": "p1:3f4a6b1b626ea54809180c90",
+      "node_type": "REFERENCE",
+      "surface": "dfe68e3",
+      "normalized": null,
+      "span_candidate_ids": [
+        "p1:1e20dd954af3ffe469a6f543",
+        "p1:46f34a53248f4fb3671cfe36"
+      ],
+      "source_span_ids": [
+        "p1:c48e1f0cd2ac14743d8e7a09",
+        "p1:0cc6dd5abe91d91f220517f9"
+      ],
+      "evidence_tier": "STRONG",
+      "state": "RESOLVED",
+      "metadata": {
+        "literal_id": "literal:24",
+        "literal_tag": "COMMIT",
+        "clause_id": "clause:56",
+        "producer": "NATIVE_FRONTEND",
+        "attachment_path": [
+          "clause:56",
+          "p1:3f4a6b1b626ea54809180c90"
+        ]
+      }
+    },
+    {
+      "node_id": "p1:36bcd1826692e6e7c81b3bd7",
+      "node_type": "VALUE",
+      "surface": "2",
+      "normalized": null,
+      "span_candidate_ids": [
+        "p1:6bcaeec24b2f5221fd8f08a5",
+        "p1:996d3338b4f42e2f76aede5b"
+      ],
+      "source_span_ids": [
+        "p1:019037256a5754023416edb5",
+        "p1:76341eae17a53572cef548e2"
+      ],
+      "evidence_tier": "STRONG",
+      "state": "RESOLVED",
+      "metadata": {
+        "literal_id": "literal:53",
+        "literal_tag": "NUMBER",
+        "clause_id": "clause:59",
+        "producer": "NATIVE_FRONTEND",
+        "attachment_path": [
+          "clause:59",
+          "p1:36bcd1826692e6e7c81b3bd7"
+        ]
+      }
+    },
+    {
+      "node_id": "p1:51beb0e064e423f364a794ac",
+      "node_type": "VALUE",
+      "surface": "7",
+      "normalized": null,
+      "span_candidate_ids": [
+        "p1:0faa340f9bfef665984ffffe",
+        "p1:815ddff73a0205d534c78959"
+      ],
+      "source_span_ids": [
+        "p1:1a00443e6077bd856a46538d",
+        "p1:76341eae17a53572cef548e2"
+      ],
+      "evidence_tier": "STRONG",
+      "state": "RESOLVED",
+      "metadata": {
+        "literal_id": "literal:54",
+        "literal_tag": "NUMBER",
+        "clause_id": "clause:59",
+        "producer": "NATIVE_FRONTEND",
+        "attachment_path": [
+          "clause:59",
+          "p1:51beb0e064e423f364a794ac"
+        ]
+      }
+    },
+    {
+      "node_id": "p1:ff7add9a0838e935c4551076",
+      "node_type": "VALUE",
+      "surface": "7",
+      "normalized": null,
+      "span_candidate_ids": [
+        "p1:68a11f9399a1da15292ef147",
+        "p1:8d2092b0d92e7413ad36f15a"
+      ],
+      "source_span_ids": [
+        "p1:a0932b87a814ada1730e7d45",
+        "p1:2ceda3f95a6a19b8d6af5b7f"
+      ],
+      "evidence_tier": "STRONG",
+      "state": "RESOLVED",
+      "metadata": {
+        "literal_id": "literal:55",
+        "literal_tag": "NUMBER",
+        "clause_id": "clause:61",
+        "producer": "NATIVE_FRONTEND",
+        "attachment_path": [
+          "clause:61",
+          "p1:ff7add9a0838e935c4551076"
+        ]
+      }
+    },
+    {
+      "node_id": "p1:4b70aca0dd10774c559ccf23",
+      "node_type": "ENTITY",
+      "surface": "/_*.txt",
+      "normalized": null,
+      "span_candidate_ids": [
+        "p1:d422ffd58d19b094ea6954f6",
+        "p1:0f600c1c59aed24b7f0c5b0d"
+      ],
+      "source_span_ids": [
+        "p1:302a47017ad52384ce184ca0",
+        "p1:ae2e003e2ffa174bdc9800a8"
+      ],
+      "evidence_tier": "STRONG",
+      "state": "RESOLVED",
+      "metadata": {
+        "literal_id": "literal:3",
+        "literal_tag": "FILEPATH",
+        "clause_id": "clause:66",
+        "producer": "NATIVE_FRONTEND",
+        "attachment_path": [
+          "clause:66",
+          "p1:4b70aca0dd10774c559ccf23"
+        ]
+      }
+    },
+    {
+      "node_id": "p1:00a9676248e586c000e12b3c",
+      "node_type": "ENTITY",
+      "surface": "fcop_events.jsonl",
+      "normalized": null,
+      "span_candidate_ids": [
+        "p1:a309daaae7d7d18f3201445e",
+        "p1:e90b6f3ce94eda4c8f421a59"
+      ],
+      "source_span_ids": [
+        "p1:359b62043f7d50489bc6b2ce",
+        "p1:ae2e003e2ffa174bdc9800a8"
+      ],
+      "evidence_tier": "STRONG",
+      "state": "RESOLVED",
+      "metadata": {
+        "literal_id": "literal:38",
+        "literal_tag": "SERVICE",
+        "clause_id": "clause:66",
+        "producer": "NATIVE_FRONTEND",
+        "attachment_path": [
+          "clause:66",
+          "p1:00a9676248e586c000e12b3c"
+        ]
+      }
+    },
+    {
+      "node_id": "p1:5b9ed5b4015b679c8ee674d0",
+      "node_type": "VALUE",
+      "surface": "4",
+      "normalized": null,
+      "span_candidate_ids": [
+        "p1:0e4f56e364eb4ebd7c9158a7",
+        "p1:20ea76f89e8d816192c5285d"
+      ],
+      "source_span_ids": [
+        "p1:34f4e2a8493aeb0a2b1dd4ba",
+        "p1:4517733b00ba202a8f6bdd36"
+      ],
+      "evidence_tier": "STRONG",
+      "state": "RESOLVED",
+      "metadata": {
+        "literal_id": "literal:56",
+        "literal_tag": "NUMBER",
+        "clause_id": "clause:67",
+        "producer": "NATIVE_FRONTEND",
+        "attachment_path": [
+          "clause:67",
+          "p1:5b9ed5b4015b679c8ee674d0"
+        ]
+      }
+    },
+    {
+      "node_id": "p1:d1b09f974ff7171b09c13826",
+      "node_type": "ENTITY",
+      "surface": "/release-process.md",
+      "normalized": null,
+      "span_candidate_ids": [
+        "p1:a26aa0ff942356e6958b9fc8",
+        "p1:5fc02ee95cb87cfa970521e1"
+      ],
+      "source_span_ids": [
+        "p1:547cb38fe8f4631e0baf1003",
+        "p1:3f197612c5dda8f23f1c1fbf"
+      ],
+      "evidence_tier": "STRONG",
+      "state": "RESOLVED",
+      "metadata": {
+        "literal_id": "literal:4",
+        "literal_tag": "FILEPATH",
+        "clause_id": "clause:69",
+        "producer": "NATIVE_FRONTEND",
+        "attachment_path": [
+          "clause:69",
+          "p1:d1b09f974ff7171b09c13826"
+        ]
+      }
+    },
+    {
+      "node_id": "p1:1adbe792372c0c1a68072bf1",
+      "node_type": "VALUE",
+      "surface": "4",
+      "normalized": null,
+      "span_candidate_ids": [
+        "p1:23a7ad54d24786215a3f645f",
+        "p1:1eb74e5cad12fc32fe780778"
+      ],
+      "source_span_ids": [
+        "p1:d124a6aa84e3695ac7e4bacb",
+        "p1:3f197612c5dda8f23f1c1fbf"
+      ],
+      "evidence_tier": "STRONG",
+      "state": "RESOLVED",
+      "metadata": {
+        "literal_id": "literal:57",
+        "literal_tag": "NUMBER",
+        "clause_id": "clause:69",
+        "producer": "NATIVE_FRONTEND",
+        "attachment_path": [
+          "clause:69",
+          "p1:1adbe792372c0c1a68072bf1"
+        ]
+      }
+    },
+    {
+      "node_id": "p1:8b2a77dbbbd31981240e5a15",
+      "node_type": "ENTITY",
+      "surface": "/release-process.md",
+      "normalized": null,
+      "span_candidate_ids": [
+        "p1:9d61119c86b3712f2e7ba3da",
+        "p1:06361217cb346ace8e373265"
+      ],
+      "source_span_ids": [
+        "p1:5178c2d4ba572a74aa9d9d8d",
+        "p1:172855f16717f27a0cd13721"
+      ],
+      "evidence_tier": "STRONG",
+      "state": "RESOLVED",
+      "metadata": {
+        "literal_id": "literal:5",
+        "literal_tag": "FILEPATH",
+        "clause_id": "clause:71",
+        "producer": "NATIVE_FRONTEND",
+        "attachment_path": [
+          "clause:71",
+          "p1:8b2a77dbbbd31981240e5a15"
+        ]
+      }
+    },
+    {
+      "node_id": "p1:3bacba72b9e6fe6c482b52b7",
+      "node_type": "VALUE",
+      "surface": "7",
+      "normalized": null,
+      "span_candidate_ids": [
+        "p1:cbd51e722f12dea59cc522f3",
+        "p1:0982c3229695545d969c3b85"
+      ],
+      "source_span_ids": [
+        "p1:0ce630b8e6a239a8172bea17",
+        "p1:172855f16717f27a0cd13721"
+      ],
+      "evidence_tier": "STRONG",
+      "state": "RESOLVED",
+      "metadata": {
+        "literal_id": "literal:58",
+        "literal_tag": "NUMBER",
+        "clause_id": "clause:71",
+        "producer": "NATIVE_FRONTEND",
+        "attachment_path": [
+          "clause:71",
+          "p1:3bacba72b9e6fe6c482b52b7"
+        ]
+      }
+    },
+    {
+      "node_id": "p1:b20c2b22eca99469d8eb3888",
+      "node_type": "REFERENCE",
+      "surface": "d2ed13c",
+      "normalized": null,
+      "span_candidate_ids": [
+        "p1:96fcc8b5f7240b53c9ee9f21",
+        "p1:28edfc71011cacd0fd1af30c"
+      ],
+      "source_span_ids": [
+        "p1:e5a37b31263a494d6d1da5d0",
+        "p1:7a6148ab6f42bce2f539aa3c"
+      ],
+      "evidence_tier": "STRONG",
+      "state": "RESOLVED",
+      "metadata": {
+        "literal_id": "literal:25",
+        "literal_tag": "COMMIT",
+        "clause_id": "clause:72",
+        "producer": "NATIVE_FRONTEND",
+        "attachment_path": [
+          "clause:72",
+          "p1:b20c2b22eca99469d8eb3888"
+        ]
+      }
+    },
+    {
+      "node_id": "p1:f3900a4c7b1956ec79efe8c1",
+      "node_type": "REFERENCE",
+      "surface": "cc60186",
+      "normalized": null,
+      "span_candidate_ids": [
+        "p1:66b7b5dffb2da25cfe5beb94",
+        "p1:52d3e19ccf3af6736b9293d3"
+      ],
+      "source_span_ids": [
+        "p1:8cae7f1408a2626d81087c21",
+        "p1:7a6148ab6f42bce2f539aa3c"
+      ],
+      "evidence_tier": "STRONG",
+      "state": "RESOLVED",
+      "metadata": {
+        "literal_id": "literal:26",
+        "literal_tag": "COMMIT",
+        "clause_id": "clause:72",
+        "producer": "NATIVE_FRONTEND",
+        "attachment_path": [
+          "clause:72",
+          "p1:f3900a4c7b1956ec79efe8c1"
+        ]
+      }
+    },
+    {
+      "node_id": "p1:70517ac3a300a2e552cdd9be",
+      "node_type": "REFERENCE",
+      "surface": "979bcd2",
+      "normalized": null,
+      "span_candidate_ids": [
+        "p1:d9739676816b49bac838d4fd",
+        "p1:d5b275003a62c8e7286b6a70"
+      ],
+      "source_span_ids": [
+        "p1:d6b59aba964136aa2f6532ea",
+        "p1:7a6148ab6f42bce2f539aa3c"
+      ],
+      "evidence_tier": "STRONG",
+      "state": "RESOLVED",
+      "metadata": {
+        "literal_id": "literal:27",
+        "literal_tag": "COMMIT",
+        "clause_id": "clause:72",
+        "producer": "NATIVE_FRONTEND",
+        "attachment_path": [
+          "clause:72",
+          "p1:70517ac3a300a2e552cdd9be"
+        ]
+      }
+    },
+    {
+      "node_id": "p1:e3c1425981f17e460d4c33c8",
+      "node_type": "REFERENCE",
+      "surface": "dfe68e3",
+      "normalized": null,
+      "span_candidate_ids": [
+        "p1:e3e400fc9c1663de60207e45",
+        "p1:c697e5405ef37b0573f309fa"
+      ],
+      "source_span_ids": [
+        "p1:c063c3e0edf76c8d679257a9",
+        "p1:7a6148ab6f42bce2f539aa3c"
+      ],
+      "evidence_tier": "STRONG",
+      "state": "RESOLVED",
+      "metadata": {
+        "literal_id": "literal:28",
+        "literal_tag": "COMMIT",
+        "clause_id": "clause:72",
+        "producer": "NATIVE_FRONTEND",
+        "attachment_path": [
+          "clause:72",
+          "p1:e3c1425981f17e460d4c33c8"
+        ]
+      }
+    },
+    {
+      "node_id": "p1:73adcc8105f03e16048979fb",
+      "node_type": "ENTITY",
+      "surface": "REPORT-20260513-002-ME-to-ADMIN-add-git-add-explicit-paths-rule.md",
+      "normalized": null,
+      "span_candidate_ids": [
+        "p1:5b4ca2a7e254c113db9122e1",
+        "p1:c6fa6c9ac4dba7ba34ad10f6"
+      ],
+      "source_span_ids": [
+        "p1:9376881ade3acdab648442e0",
+        "p1:c74f7125935ebec74df06694"
+      ],
+      "evidence_tier": "STRONG",
+      "state": "RESOLVED",
+      "metadata": {
+        "literal_id": "literal:6",
+        "literal_tag": "FILEPATH",
+        "clause_id": "clause:74",
+        "producer": "NATIVE_FRONTEND",
+        "attachment_path": [
+          "clause:74",
+          "p1:73adcc8105f03e16048979fb"
+        ]
+      }
+    },
+    {
+      "node_id": "p1:8a4a6fa48379ede88498cfff",
+      "node_type": "REFERENCE",
+      "surface": "TASK-002",
+      "normalized": null,
+      "span_candidate_ids": [
+        "p1:48f6b3e762e98722e26db81d",
+        "p1:b1aa320f79cf3da6ba8f7794"
+      ],
+      "source_span_ids": [
+        "p1:b9a437ea07caf93e90d760c7",
+        "p1:f641ae65224cd8b1a1a37559"
+      ],
+      "evidence_tier": "STRONG",
+      "state": "RESOLVED",
+      "metadata": {
+        "literal_id": "literal:11",
+        "literal_tag": "REFERENCE",
+        "clause_id": "clause:78",
+        "producer": "NATIVE_FRONTEND",
+        "attachment_path": [
+          "clause:78",
+          "p1:8a4a6fa48379ede88498cfff"
+        ]
+      }
+    },
+    {
+      "node_id": "p1:a44a08c029a73bdad5fad3fd",
+      "node_type": "REFERENCE",
+      "surface": "REPORT-002",
+      "normalized": null,
+      "span_candidate_ids": [
+        "p1:53a5a7511ac482a9d6ef0202",
+        "p1:7efa65964360c05c94845360"
+      ],
+      "source_span_ids": [
+        "p1:c3e29ffc2fd18af9cfdf1a0a",
+        "p1:f641ae65224cd8b1a1a37559"
+      ],
+      "evidence_tier": "STRONG",
+      "state": "RESOLVED",
+      "metadata": {
+        "literal_id": "literal:12",
+        "literal_tag": "REFERENCE",
+        "clause_id": "clause:78",
+        "producer": "NATIVE_FRONTEND",
+        "attachment_path": [
+          "clause:78",
+          "p1:a44a08c029a73bdad5fad3fd"
+        ]
+      }
+    },
+    {
+      "node_id": "p1:777005aa3dcc8fcd98a38c00",
+      "node_type": "VALUE",
+      "surface": "3",
+      "normalized": null,
+      "span_candidate_ids": [
+        "p1:4d7fc041b46bb682c557cd85",
+        "p1:a5b6b33f2d5772ee9e5e159b"
+      ],
+      "source_span_ids": [
+        "p1:2f7a9202b4c3bd1a8b1b14b6",
+        "p1:f641ae65224cd8b1a1a37559"
+      ],
+      "evidence_tier": "STRONG",
+      "state": "RESOLVED",
+      "metadata": {
+        "literal_id": "literal:59",
+        "literal_tag": "NUMBER",
+        "clause_id": "clause:78",
+        "producer": "NATIVE_FRONTEND",
+        "attachment_path": [
+          "clause:78",
+          "p1:777005aa3dcc8fcd98a38c00"
+        ]
+      }
+    },
+    {
+      "node_id": "p1:b532f94fe68cc7ef868d209d",
+      "node_type": "ENTITY",
+      "surface": "risk_level",
+      "normalized": null,
+      "span_candidate_ids": [
+        "p1:856ae2aaab70f84856d401a2",
+        "p1:0c7485bddb00a6d186ca4d44"
+      ],
+      "source_span_ids": [
+        "p1:88a79f28360a7742a59be58c",
+        "p1:dab0b02301fdfb018a68e7bf"
+      ],
+      "evidence_tier": "STRONG",
+      "state": "RESOLVED",
+      "metadata": {
+        "literal_id": "literal:39",
+        "literal_tag": "SERVICE",
+        "clause_id": "clause:82",
+        "producer": "NATIVE_FRONTEND",
+        "attachment_path": [
+          "clause:82",
+          "p1:b532f94fe68cc7ef868d209d"
+        ]
+      }
+    },
+    {
+      "node_id": "p1:f6e23e5e3384a73aed9b2473",
+      "node_type": "EVENT",
+      "surface": "related",
+      "normalized": "relate",
+      "span_candidate_ids": [
+        "p1:03c5bf6249de6c905e8c7d48",
+        "p1:dc895cfb3e10a8aedfe752d2"
+      ],
+      "source_span_ids": [
+        "p1:abcb82ae0ba16359c840af80",
+        "p1:f3b01f7427d39e0efa819890"
+      ],
+      "evidence_tier": "STRONG",
+      "state": "RESOLVED",
+      "metadata": {
+        "sense": "relate",
+        "owner": "clause:12",
+        "token_id": "clause:12:token:0",
+        "modality": "UNSTATED",
+        "clause_id": "clause:12",
+        "producer": "NATIVE_FRONTEND",
+        "attachment_path": [
+          "clause:12",
+          "p1:f6e23e5e3384a73aed9b2473"
+        ]
+      }
+    },
+    {
+      "node_id": "p1:133551735778ac65fbfdfcba",
+      "node_type": "EVENT",
+      "surface": "用",
+      "normalized": "用",
+      "span_candidate_ids": [
+        "p1:16515a34e2cfa399fc4ee412",
+        "p1:af2a20fed5d1bdb3ade02808"
+      ],
+      "source_span_ids": [
+        "p1:a5e2d63e1a58d57ea62543f6",
+        "p1:8e8f4898c202dd62d38e7af0"
+      ],
+      "evidence_tier": "STRONG",
+      "state": "RESOLVED",
+      "metadata": {
+        "sense": "用",
+        "owner": "clause:16",
+        "token_id": "clause:16:token:7",
+        "modality": "UNSTATED",
+        "clause_id": "clause:16",
+        "producer": "NATIVE_FRONTEND",
+        "attachment_path": [
+          "clause:16",
+          "p1:133551735778ac65fbfdfcba"
+        ]
+      }
+    },
+    {
+      "node_id": "p1:250bf181c85c6981c82a5b25",
+      "node_type": "ENTITY",
+      "surface": "git add",
+      "normalized": null,
+      "span_candidate_ids": [
+        "p1:fa6ce7a124ada117c5b50fac",
+        "p1:4f684d5c2b71108eb511bf03"
+      ],
+      "source_span_ids": [
+        "p1:05d34fe3d4919ac10638f94f",
+        "p1:8e8f4898c202dd62d38e7af0"
+      ],
+      "evidence_tier": "STRONG",
+      "state": "RESOLVED",
+      "metadata": {
+        "token_id": "clause:16:token:5",
+        "clause_id": "clause:16",
+        "producer": "NATIVE_FRONTEND",
+        "attachment_path": [
+          "clause:16",
+          "p1:250bf181c85c6981c82a5b25"
+        ]
+      }
+    },
+    {
+      "node_id": "p1:71920efd68d343ffaf365b3b",
+      "node_type": "ENTITY",
+      "surface": "显式路径",
+      "normalized": null,
+      "span_candidate_ids": [
+        "p1:19484304af5990f3aa2a9eb3",
+        "p1:35e2d7ee38f4bfca56f976c8"
+      ],
+      "source_span_ids": [
+        "p1:cb68270d2d2fb34a6e6db2e0",
+        "p1:8e8f4898c202dd62d38e7af0"
+      ],
+      "evidence_tier": "STRONG",
+      "state": "RESOLVED",
+      "metadata": {
+        "token_id": "clause:16:token:9",
+        "clause_id": "clause:16",
+        "producer": "NATIVE_FRONTEND",
+        "attachment_path": [
+          "clause:16",
+          "p1:71920efd68d343ffaf365b3b"
+        ]
+      }
+    },
+    {
+      "node_id": "p1:e29d9738890ec93fe73db33d",
+      "node_type": "EVENT",
+      "surface": "用",
+      "normalized": "用",
+      "span_candidate_ids": [
+        "p1:b9be9bab0e2cde6418b23924",
+        "p1:ef6d75dd8821d34d6766a1c5"
+      ],
+      "source_span_ids": [
+        "p1:26858ae2dc3761e82a3919a2",
+        "p1:146ff163b965da76907812ec"
+      ],
+      "evidence_tier": "STRONG",
+      "state": "RESOLVED",
+      "metadata": {
+        "sense": "用",
+        "owner": "clause:17",
+        "token_id": "clause:17:token:1",
+        "modality": "FORBIDDEN",
+        "clause_id": "clause:17",
+        "producer": "NATIVE_FRONTEND",
+        "attachment_path": [
+          "clause:17",
+          "p1:e29d9738890ec93fe73db33d"
+        ]
+      }
+    },
+    {
+      "node_id": "p1:475caf988fc0043958cefe6f",
+      "node_type": "EVENT",
+      "surface": "在",
+      "normalized": "在",
+      "span_candidate_ids": [
+        "p1:6b56f6161df0c4d61261de28",
+        "p1:7d2db7135a9ff3187297fa3b"
+      ],
+      "source_span_ids": [
+        "p1:c094da60ca27a6885af3dfb9",
+        "p1:2f44bd7ac6f6172918f94b57"
+      ],
+      "evidence_tier": "STRONG",
+      "state": "RESOLVED",
+      "metadata": {
+        "sense": "在",
+        "owner": "clause:20",
+        "token_id": "clause:20:token:2",
+        "modality": "UNSTATED",
+        "clause_id": "clause:20",
+        "producer": "NATIVE_FRONTEND",
+        "attachment_path": [
+          "clause:20",
+          "p1:475caf988fc0043958cefe6f"
+        ]
+      }
+    },
+    {
+      "node_id": "p1:a8ef57d4312be1b36c5b74b4",
+      "node_type": "ENTITY",
+      "surface": "自己",
+      "normalized": null,
+      "span_candidate_ids": [
+        "p1:4c5cc51a05819b6209349faa",
+        "p1:43cd4e6de99c6546ca047d54"
+      ],
+      "source_span_ids": [
+        "p1:c0d6a4972933322eb27ed043",
+        "p1:2f44bd7ac6f6172918f94b57"
+      ],
+      "evidence_tier": "STRONG",
+      "state": "RESOLVED",
+      "metadata": {
+        "token_id": "clause:20:token:1",
+        "clause_id": "clause:20",
+        "producer": "NATIVE_FRONTEND",
+        "literal_tag": "PERSON",
+        "participant_roles": [
+          "PERFORMER"
+        ],
+        "attachment_path": [
+          "clause:20",
+          "p1:a8ef57d4312be1b36c5b74b4"
+        ]
+      }
+    },
+    {
+      "node_id": "p1:7f82180c291602d6a3054fa4",
+      "node_type": "ENTITY",
+      "surface": "阶",
+      "normalized": null,
+      "span_candidate_ids": [
+        "p1:180ad88980eb598593a6909c",
+        "p1:497b8ceb7aae3c10bc949f24"
+      ],
+      "source_span_ids": [
+        "p1:f7aa2daf87b4f0d1028dbbf5",
+        "p1:2f44bd7ac6f6172918f94b57"
+      ],
+      "evidence_tier": "STRONG",
+      "state": "RESOLVED",
+      "metadata": {
+        "token_id": "clause:20:token:9",
+        "clause_id": "clause:20",
+        "producer": "NATIVE_FRONTEND",
+        "attachment_path": [
+          "clause:20",
+          "p1:7f82180c291602d6a3054fa4"
+        ]
+      }
+    },
+    {
+      "node_id": "p1:2d1f0c22a0a1c75004a72e68",
+      "node_type": "EVENT",
+      "surface": "抓",
+      "normalized": "抓",
+      "span_candidate_ids": [
+        "p1:9d666d49ea01e582957f7648",
+        "p1:929fb1dc27025c669dce96db"
+      ],
+      "source_span_ids": [
+        "p1:2bda2ab2f3da1c9b4351c9d1",
+        "p1:126c57ab3f50a3ad5145283e"
+      ],
+      "evidence_tier": "STRONG",
+      "state": "RESOLVED",
+      "metadata": {
+        "sense": "抓",
+        "owner": "clause:21",
+        "token_id": "clause:21:token:9",
+        "modality": "UNSTATED",
+        "clause_id": "clause:21",
+        "producer": "NATIVE_FRONTEND",
+        "attachment_path": [
+          "clause:21",
+          "p1:2d1f0c22a0a1c75004a72e68"
+        ]
+      }
+    },
+    {
+      "node_id": "p1:baa53f6bfb7990c79681073c",
+      "node_type": "ENTITY",
+      "surface": "段",
+      "normalized": null,
+      "span_candidate_ids": [
+        "p1:d25606a8e8005a0f1ea8ab6d",
+        "p1:df1ceac5e3ac364693e9bdad"
+      ],
+      "source_span_ids": [
+        "p1:f3ee519928a112ae931dfacb",
+        "p1:126c57ab3f50a3ad5145283e"
+      ],
+      "evidence_tier": "STRONG",
+      "state": "RESOLVED",
+      "metadata": {
+        "token_id": "clause:21:token:0",
+        "clause_id": "clause:21",
+        "producer": "NATIVE_FRONTEND",
+        "attachment_path": [
+          "clause:21",
+          "p1:baa53f6bfb7990c79681073c"
+        ]
+      }
+    },
+    {
+      "node_id": "p1:12f1acd6210ce76e73a44be1",
+      "node_type": "EVENT",
+      "surface": "残留",
+      "normalized": "残留",
+      "span_candidate_ids": [
+        "p1:4fd895843d72de1f51c6c120",
+        "p1:34263983b8c3cee783ea486b"
+      ],
+      "source_span_ids": [
+        "p1:c3cc3e9e710923b1c3c65d00",
+        "p1:e2b80964cb3f0f4fc72d05ff"
+      ],
+      "evidence_tier": "STRONG",
+      "state": "RESOLVED",
+      "metadata": {
+        "sense": "残留",
+        "owner": "clause:22",
+        "token_id": "clause:22:token:5",
+        "modality": "UNSTATED",
+        "clause_id": "clause:22",
+        "producer": "NATIVE_FRONTEND",
+        "attachment_path": [
+          "clause:22",
+          "p1:12f1acd6210ce76e73a44be1"
+        ]
+      }
+    },
+    {
+      "node_id": "p1:e64fb9cd3960f937ffc6e7fd",
+      "node_type": "EVENT",
+      "surface": "scratch",
+      "normalized": "scratch",
+      "span_candidate_ids": [
+        "p1:a17eaaf2ed2665283ac35d6c",
+        "p1:29f1e1c8a2c54327aa683b2e"
+      ],
+      "source_span_ids": [
+        "p1:fd3c36884d96e05f5166e301",
+        "p1:d45e365655f3d0ea2be612af"
+      ],
+      "evidence_tier": "STRONG",
+      "state": "RESOLVED",
+      "metadata": {
+        "sense": "scratch",
+        "owner": "clause:23",
+        "token_id": "clause:23:token:0",
+        "modality": "UNSTATED",
+        "clause_id": "clause:23",
+        "producer": "NATIVE_FRONTEND",
+        "attachment_path": [
+          "clause:23",
+          "p1:e64fb9cd3960f937ffc6e7fd"
+        ]
+      }
+    },
+    {
+      "node_id": "p1:a234c809e072e28f90723082",
+      "node_type": "EVENT",
+      "surface": "塞进",
+      "normalized": "塞进",
+      "span_candidate_ids": [
+        "p1:1ed0c908ee0d8d7877aa900c",
+        "p1:8d5f84b184121d55689fac40"
+      ],
+      "source_span_ids": [
+        "p1:8027b860576ff325fc3255f1",
+        "p1:74b4ac8c8c17ec3d4de6dd6e"
+      ],
+      "evidence_tier": "STRONG",
+      "state": "RESOLVED",
+      "metadata": {
+        "sense": "塞进",
+        "owner": "clause:25",
+        "token_id": "clause:25:token:3",
+        "modality": "UNSTATED",
+        "clause_id": "clause:25",
+        "producer": "NATIVE_FRONTEND",
+        "attachment_path": [
+          "clause:25",
+          "p1:a234c809e072e28f90723082"
+        ]
+      }
+    },
+    {
+      "node_id": "p1:e89b855b18e9e9f164b44e02",
+      "node_type": "ENTITY",
+      "surface": "commit d2ed13c",
+      "normalized": null,
+      "span_candidate_ids": [
+        "p1:001c8f84f4237c74cc65130b",
+        "p1:5c232f39359d0c276d5e2bd3"
+      ],
+      "source_span_ids": [
+        "p1:7253d5077d14e3745f7f60dd",
+        "p1:74b4ac8c8c17ec3d4de6dd6e"
+      ],
+      "evidence_tier": "STRONG",
+      "state": "RESOLVED",
+      "metadata": {
+        "token_id": "clause:25:token:7",
+        "clause_id": "clause:25",
+        "producer": "NATIVE_FRONTEND",
+        "attachment_path": [
+          "clause:25",
+          "p1:e89b855b18e9e9f164b44e02"
+        ]
+      }
+    },
+    {
+      "node_id": "p1:49e22076000d84f04e3c0803",
+      "node_type": "EVENT",
+      "surface": "通过",
+      "normalized": "通过",
+      "span_candidate_ids": [
+        "p1:b4839270c292479e53391805",
+        "p1:72fbee57978f3dfb8627d393"
+      ],
+      "source_span_ids": [
+        "p1:874aa3a7299db50f256f9d19",
+        "p1:abbcec071a17207d829c58b8"
+      ],
+      "evidence_tier": "STRONG",
+      "state": "RESOLVED",
+      "metadata": {
+        "sense": "通过",
+        "owner": "clause:27",
+        "token_id": "clause:27:token:1",
+        "modality": "UNSTATED",
+        "clause_id": "clause:27",
+        "producer": "NATIVE_FRONTEND",
+        "attachment_path": [
+          "clause:27",
+          "p1:49e22076000d84f04e3c0803"
+        ]
+      }
+    },
+    {
+      "node_id": "p1:d6411656376dca781abd0d10",
+      "node_type": "EVENT",
+      "surface": "提",
+      "normalized": "提",
+      "span_candidate_ids": [
+        "p1:c27822098af4f03c1a959fea",
+        "p1:01bb4504358334bc212fe398"
+      ],
+      "source_span_ids": [
+        "p1:a61849548f8089fa639d9612",
+        "p1:59bdd662a1228eb86f4b6327"
+      ],
+      "evidence_tier": "STRONG",
+      "state": "RESOLVED",
+      "metadata": {
+        "sense": "提",
+        "owner": "clause:31",
+        "token_id": "clause:31:token:3",
+        "modality": "UNSTATED",
+        "clause_id": "clause:31",
+        "producer": "NATIVE_FRONTEND",
+        "quoted_value_span_ids": [
+          "p1:e4135515fdcd1dea4f0e6642"
+        ],
+        "attachment_path": [
+          "clause:31",
+          "p1:d6411656376dca781abd0d10"
+        ]
+      }
+    },
+    {
+      "node_id": "p1:2d66a39a5b33ed21635268be",
+      "node_type": "ENTITY",
+      "surface": "我",
+      "normalized": null,
+      "span_candidate_ids": [
+        "p1:d87fa998491d1307afd3ad1b",
+        "p1:5a7a24da8028402c9f4c9aec"
+      ],
+      "source_span_ids": [
+        "p1:5a8c828a3a4c2b46d92bae0e",
+        "p1:59bdd662a1228eb86f4b6327"
+      ],
+      "evidence_tier": "STRONG",
+      "state": "RESOLVED",
+      "metadata": {
+        "token_id": "clause:31:token:2",
+        "clause_id": "clause:31",
+        "producer": "NATIVE_FRONTEND",
+        "literal_tag": "PERSON",
+        "participant_roles": [
+          "PERFORMER"
+        ],
+        "attachment_path": [
+          "clause:31",
+          "p1:2d66a39a5b33ed21635268be"
+        ]
+      }
+    },
+    {
+      "node_id": "p1:5b53aae2053c1bbaceacde41",
+      "node_type": "EVENT",
+      "surface": "回",
+      "normalized": "回",
+      "span_candidate_ids": [
+        "p1:b45f78b870ffad13b02ade19",
+        "p1:b6b250732d3bbbd0cc7c93d9"
+      ],
+      "source_span_ids": [
+        "p1:158cf95a8a68f39a1949b102",
+        "p1:ff414c7d01966e097869f2c4"
+      ],
+      "evidence_tier": "STRONG",
+      "state": "RESOLVED",
+      "metadata": {
+        "sense": "回",
+        "owner": "clause:32",
+        "token_id": "clause:32:token:2",
+        "modality": "UNSTATED",
+        "clause_id": "clause:32",
+        "producer": "NATIVE_FRONTEND",
+        "attachment_path": [
+          "clause:32",
+          "p1:5b53aae2053c1bbaceacde41"
+        ]
+      }
+    },
+    {
+      "node_id": "p1:4262faf735c51f616b3f3c92",
+      "node_type": "ENTITY",
+      "surface": "ADMIN",
+      "normalized": null,
+      "span_candidate_ids": [
+        "p1:b309eb7da5a408d0bc638b8d",
+        "p1:aaea9da6b700f806f1d2ed21"
+      ],
+      "source_span_ids": [
+        "p1:ec412d1c1f954b1b34856e8d",
+        "p1:ff414c7d01966e097869f2c4"
+      ],
+      "evidence_tier": "STRONG",
+      "state": "RESOLVED",
+      "metadata": {
+        "token_id": "clause:32:token:0",
+        "clause_id": "clause:32",
+        "producer": "NATIVE_FRONTEND",
+        "attachment_path": [
+          "clause:32",
+          "p1:4262faf735c51f616b3f3c92"
+        ]
+      }
+    },
+    {
+      "node_id": "p1:27df8d87d49677a35f75c292",
+      "node_type": "EVENT",
+      "surface": "写到",
+      "normalized": "写到",
+      "span_candidate_ids": [
+        "p1:987a3c45fa2271e34e32eeab",
+        "p1:d8e693be0f98aaac467e5bcf"
+      ],
+      "source_span_ids": [
+        "p1:7b14734b5b32782d6b0fdf5f",
+        "p1:d3c14117bd7c7e893789327d"
+      ],
+      "evidence_tier": "STRONG",
+      "state": "RESOLVED",
+      "metadata": {
+        "sense": "写到",
+        "owner": "clause:33",
+        "token_id": "clause:33:token:3",
+        "modality": "UNSTATED",
+        "clause_id": "clause:33",
+        "producer": "NATIVE_FRONTEND",
+        "attachment_path": [
+          "clause:33",
+          "p1:27df8d87d49677a35f75c292"
+        ]
+      }
+    },
+    {
+      "node_id": "p1:fad4827c3f233481620df5b0",
+      "node_type": "EVENT",
+      "surface": "算数",
+      "normalized": "算数",
+      "span_candidate_ids": [
+        "p1:93f7b5026253eee130090e96",
+        "p1:ef3702bdf307b6576b3801d2"
+      ],
+      "source_span_ids": [
+        "p1:1d90ef0143f06f8ca77d8f07",
+        "p1:c6ed774c130d5df8535e752c"
+      ],
+      "evidence_tier": "STRONG",
+      "state": "RESOLVED",
+      "metadata": {
+        "sense": "算数",
+        "owner": "clause:36",
+        "token_id": "clause:36:token:7",
+        "modality": "UNSTATED",
+        "clause_id": "clause:36",
+        "producer": "NATIVE_FRONTEND",
+        "attachment_path": [
+          "clause:36",
+          "p1:fad4827c3f233481620df5b0"
+        ]
+      }
+    },
+    {
+      "node_id": "p1:85fb1bf540b7d6ef55c8563f",
+      "node_type": "ENTITY",
+      "surface": "意思",
+      "normalized": null,
+      "span_candidate_ids": [
+        "p1:3ad95b81f1b54c6d824d96ab",
+        "p1:918503a8a310d31a785425bd"
+      ],
+      "source_span_ids": [
+        "p1:ead5a48922e8e95805dace7f",
+        "p1:c6ed774c130d5df8535e752c"
+      ],
+      "evidence_tier": "STRONG",
+      "state": "RESOLVED",
+      "metadata": {
+        "token_id": "clause:36:token:0",
+        "clause_id": "clause:36",
+        "producer": "NATIVE_FRONTEND",
+        "attachment_path": [
+          "clause:36",
+          "p1:85fb1bf540b7d6ef55c8563f"
+        ]
+      }
+    },
+    {
+      "node_id": "p1:2a9d21d86ccad639ae88ec16",
+      "node_type": "ENTITY",
+      "surface": "**",
+      "normalized": null,
+      "span_candidate_ids": [
+        "p1:25f96b0e3e2009c7bb2f43ef",
+        "p1:f753d2774cf4cc1a3408d764"
+      ],
+      "source_span_ids": [
+        "p1:d051cb1193513a784807aa8b",
+        "p1:c6ed774c130d5df8535e752c"
+      ],
+      "evidence_tier": "STRONG",
+      "state": "RESOLVED",
+      "metadata": {
+        "token_id": "clause:36:token:3",
+        "clause_id": "clause:36",
+        "producer": "NATIVE_FRONTEND",
+        "attachment_path": [
+          "clause:36",
+          "p1:2a9d21d86ccad639ae88ec16"
+        ]
+      }
+    },
+    {
+      "node_id": "p1:51d29f54fba3a81a2537ae58",
+      "node_type": "ENTITY",
+      "surface": "口头沉淀",
+      "normalized": null,
+      "span_candidate_ids": [
+        "p1:875872ba98b13fbe02f43151",
+        "p1:2083e3f902dace18f2647b3e"
+      ],
+      "source_span_ids": [
+        "p1:113b82da2dc18b70d5e74c0b",
+        "p1:c6ed774c130d5df8535e752c"
+      ],
+      "evidence_tier": "STRONG",
+      "state": "RESOLVED",
+      "metadata": {
+        "token_id": "clause:36:token:5",
+        "clause_id": "clause:36",
+        "producer": "NATIVE_FRONTEND",
+        "attachment_path": [
+          "clause:36",
+          "p1:51d29f54fba3a81a2537ae58"
+        ]
+      }
+    },
+    {
+      "node_id": "p1:61659953a37ce1d62efaeb4f",
+      "node_type": "EVENT",
+      "surface": "落",
+      "normalized": "落",
+      "span_candidate_ids": [
+        "p1:e3cdb5af05fbadebac0a9430",
+        "p1:9a1f8a015a1bca61c44c582b"
+      ],
+      "source_span_ids": [
+        "p1:0edadfa20614d7114d3910a9",
+        "p1:4afaa9de6f3264c05015bb2d"
+      ],
+      "evidence_tier": "STRONG",
+      "state": "RESOLVED",
+      "metadata": {
+        "sense": "落",
+        "owner": "clause:37",
+        "token_id": "clause:37:token:1",
+        "modality": "REQUIRED",
+        "clause_id": "clause:37",
+        "producer": "NATIVE_FRONTEND",
+        "attachment_path": [
+          "clause:37",
+          "p1:61659953a37ce1d62efaeb4f"
+        ]
+      }
+    },
+    {
+      "node_id": "p1:3583dda498f1d1d503421d3c",
+      "node_type": "ENTITY",
+      "surface": "文件",
+      "normalized": null,
+      "span_candidate_ids": [
+        "p1:cf0f1d5c394c0b9efadcca41",
+        "p1:9539c0e212ba16f88cd3f1cd"
+      ],
+      "source_span_ids": [
+        "p1:f8886506913234f7d33e1972",
+        "p1:4afaa9de6f3264c05015bb2d"
+      ],
+      "evidence_tier": "STRONG",
+      "state": "RESOLVED",
+      "metadata": {
+        "token_id": "clause:37:token:2",
+        "clause_id": "clause:37",
+        "producer": "NATIVE_FRONTEND",
+        "attachment_path": [
+          "clause:37",
+          "p1:3583dda498f1d1d503421d3c"
+        ]
+      }
+    },
+    {
+      "node_id": "p1:f27997e5befdda191ed50f57",
+      "node_type": "EVENT",
+      "surface": "作为",
+      "normalized": "作为",
+      "span_candidate_ids": [
+        "p1:671279b51016749421756745",
+        "p1:6734199611fdd3ed97c9ece4"
+      ],
+      "source_span_ids": [
+        "p1:d69af7de62baf7318681fd68",
+        "p1:dcf99e0ab598149a14f2def9"
+      ],
+      "evidence_tier": "STRONG",
+      "state": "RESOLVED",
+      "metadata": {
+        "sense": "作为",
+        "owner": "clause:42",
+        "token_id": "clause:42:token:1",
+        "modality": "UNSTATED",
+        "clause_id": "clause:42",
+        "producer": "NATIVE_FRONTEND",
+        "attachment_path": [
+          "clause:42",
+          "p1:f27997e5befdda191ed50f57"
+        ]
+      }
+    },
+    {
+      "node_id": "p1:9622f5081078b00f61c445d7",
+      "node_type": "ENTITY",
+      "surface": "历史",
+      "normalized": null,
+      "span_candidate_ids": [
+        "p1:268a584adeaf73a2ca29de50",
+        "p1:c8bb65ab78659297d53f2b8a"
+      ],
+      "source_span_ids": [
+        "p1:4e62abe8ccdcbf698626e1f2",
+        "p1:dcf99e0ab598149a14f2def9"
+      ],
+      "evidence_tier": "STRONG",
+      "state": "RESOLVED",
+      "metadata": {
+        "token_id": "clause:42:token:0",
+        "clause_id": "clause:42",
+        "producer": "NATIVE_FRONTEND",
+        "attachment_path": [
+          "clause:42",
+          "p1:9622f5081078b00f61c445d7"
+        ]
+      }
+    },
+    {
+      "node_id": "p1:09380cce63fc7fd00b65f6c0",
+      "node_type": "ENTITY",
+      "surface": "依据",
+      "normalized": null,
+      "span_candidate_ids": [
+        "p1:d5ff20ce6cc9615535006c71",
+        "p1:a57cef791bfe14e3cd78070f"
+      ],
+      "source_span_ids": [
+        "p1:9f01229cf2a682a494bc47c7",
+        "p1:dcf99e0ab598149a14f2def9"
+      ],
+      "evidence_tier": "STRONG",
+      "state": "RESOLVED",
+      "metadata": {
+        "token_id": "clause:42:token:2",
+        "clause_id": "clause:42",
+        "producer": "NATIVE_FRONTEND",
+        "attachment_path": [
+          "clause:42",
+          "p1:09380cce63fc7fd00b65f6c0"
+        ]
+      }
+    },
+    {
+      "node_id": "p1:b6d61334c47c807d233d3751",
+      "node_type": "EVENT",
+      "surface": "要",
+      "normalized": "要",
+      "span_candidate_ids": [
+        "p1:38da307e0a8bb442df6dac0b",
+        "p1:38f37f24a0ee6f3c433d2eea"
+      ],
+      "source_span_ids": [
+        "p1:e5e30fc99edd458eadcf6b94",
+        "p1:22a3c3b8f2cdc01b7fc7cc33"
+      ],
+      "evidence_tier": "STRONG",
+      "state": "RESOLVED",
+      "metadata": {
+        "sense": "要",
+        "owner": "clause:45",
+        "token_id": "clause:45:token:1",
+        "modality": "UNSTATED",
+        "clause_id": "clause:45",
+        "producer": "NATIVE_FRONTEND",
+        "attachment_path": [
+          "clause:45",
+          "p1:b6d61334c47c807d233d3751"
+        ]
+      }
+    },
+    {
+      "node_id": "p1:f4ef0ed84388e1664907efbb",
+      "node_type": "EVENT",
+      "surface": "加",
+      "normalized": "加",
+      "span_candidate_ids": [
+        "p1:fa34d1f2b0d81acddf2fae29",
+        "p1:40dd926bf4ca9ebce489a6a0"
+      ],
+      "source_span_ids": [
+        "p1:8c72322a761542cd2dc189fc",
+        "p1:fc1ddc2fd8fbbc5d89053709"
+      ],
+      "evidence_tier": "STRONG",
+      "state": "RESOLVED",
+      "metadata": {
+        "sense": "加",
+        "owner": "clause:46",
+        "token_id": "clause:46:token:11",
+        "modality": "UNSTATED",
+        "clause_id": "clause:46",
+        "producer": "NATIVE_FRONTEND",
+        "attachment_path": [
+          "clause:46",
+          "p1:f4ef0ed84388e1664907efbb"
+        ]
+      }
+    },
+    {
+      "node_id": "p1:79c613cd93e5c77a7932a5c7",
+      "node_type": "ENTITY",
+      "surface": "新条款",
+      "normalized": null,
+      "span_candidate_ids": [
+        "p1:c7022e7794ff7a45e65e8e77",
+        "p1:b797a2a1dc09aa2299f7df1f"
+      ],
+      "source_span_ids": [
+        "p1:ffd9d9aadc148137e8ec0a88",
+        "p1:fc1ddc2fd8fbbc5d89053709"
+      ],
+      "evidence_tier": "STRONG",
+      "state": "RESOLVED",
+      "metadata": {
+        "token_id": "clause:46:token:13",
+        "clause_id": "clause:46",
+        "producer": "NATIVE_FRONTEND",
+        "attachment_path": [
+          "clause:46",
+          "p1:79c613cd93e5c77a7932a5c7"
+        ]
+      }
+    },
+    {
+      "node_id": "p1:c79cdffe2696503352eaff0f",
+      "node_type": "EVENT",
+      "surface": "验证",
+      "normalized": "验证",
+      "span_candidate_ids": [
+        "p1:469a35598dd27a303d89098d",
+        "p1:6f2effb0214ceb8d10a85760"
+      ],
+      "source_span_ids": [
+        "p1:7db7a936e960b0ae04500ede",
+        "p1:b9bfa1d781206b4c69fa3af8"
+      ],
+      "evidence_tier": "STRONG",
+      "state": "RESOLVED",
+      "metadata": {
+        "sense": "验证",
+        "owner": "clause:47",
+        "token_id": "clause:47:token:9",
+        "modality": "UNSTATED",
+        "clause_id": "clause:47",
+        "producer": "NATIVE_FRONTEND",
+        "attachment_path": [
+          "clause:47",
+          "p1:c79cdffe2696503352eaff0f"
+        ]
+      }
+    },
+    {
+      "node_id": "p1:1b7b153cd049feae29e12bea",
+      "node_type": "EVENT",
+      "surface": "强调",
+      "normalized": "强调",
+      "span_candidate_ids": [
+        "p1:f56b46fb8461dffe8adedda3",
+        "p1:713cfbca419c0d2dbb4a9719"
+      ],
+      "source_span_ids": [
+        "p1:16da651c22256194c92f118d",
+        "p1:d79018d1859246017b911185"
+      ],
+      "evidence_tier": "STRONG",
+      "state": "RESOLVED",
+      "metadata": {
+        "sense": "强调",
+        "owner": "clause:51",
+        "token_id": "clause:51:token:0",
+        "modality": "UNSTATED",
+        "clause_id": "clause:51",
+        "producer": "NATIVE_FRONTEND",
+        "attachment_path": [
+          "clause:51",
+          "p1:1b7b153cd049feae29e12bea"
+        ]
+      }
+    },
+    {
+      "node_id": "p1:c98335be052dc210fb317d09",
+      "node_type": "EVENT",
+      "surface": "要",
+      "normalized": "要",
+      "span_candidate_ids": [
+        "p1:5a794169131306014e50a040",
+        "p1:8d6a6bfe7c25183facd374fe"
+      ],
+      "source_span_ids": [
+        "p1:8f64eb94ded26f69ef8be080",
+        "p1:f39d7918210acb357db4aacb"
+      ],
+      "evidence_tier": "STRONG",
+      "state": "RESOLVED",
+      "metadata": {
+        "sense": "要",
+        "owner": "clause:52",
+        "token_id": "clause:52:token:3",
+        "modality": "UNSTATED",
+        "clause_id": "clause:52",
+        "producer": "NATIVE_FRONTEND",
+        "attachment_path": [
+          "clause:52",
+          "p1:c98335be052dc210fb317d09"
+        ]
+      }
+    },
+    {
+      "node_id": "p1:e08ea59c77aee0aac7046e27",
+      "node_type": "EVENT",
+      "surface": "列出",
+      "normalized": "列出",
+      "span_candidate_ids": [
+        "p1:26731e87f6ab86a4a5572840",
+        "p1:93cf8335e48ca67cfdb5b53e"
+      ],
+      "source_span_ids": [
+        "p1:018bbf63ee3b08410d5c5217",
+        "p1:34c305e0fd63d982aef24ed5"
+      ],
+      "evidence_tier": "STRONG",
+      "state": "RESOLVED",
+      "metadata": {
+        "sense": "列出",
+        "owner": "clause:53",
+        "token_id": "clause:53:token:5",
+        "modality": "UNSTATED",
+        "clause_id": "clause:53",
+        "producer": "NATIVE_FRONTEND",
+        "attachment_path": [
+          "clause:53",
+          "p1:e08ea59c77aee0aac7046e27"
+        ]
+      }
+    },
+    {
+      "node_id": "p1:19b7660dccee7160a019e69a",
+      "node_type": "ENTITY",
+      "surface": "文件",
+      "normalized": null,
+      "span_candidate_ids": [
+        "p1:687bfacd99755470de3bc99c",
+        "p1:8d67a1ee295e226509f78781"
+      ],
+      "source_span_ids": [
+        "p1:075859ef2fe5aa5c361d2fbb",
+        "p1:34c305e0fd63d982aef24ed5"
+      ],
+      "evidence_tier": "STRONG",
+      "state": "RESOLVED",
+      "metadata": {
+        "token_id": "clause:53:token:10",
+        "clause_id": "clause:53",
+        "producer": "NATIVE_FRONTEND",
+        "attachment_path": [
+          "clause:53",
+          "p1:19b7660dccee7160a019e69a"
+        ]
+      }
+    },
+    {
+      "node_id": "p1:3b5075dd579722b6a68b341c",
+      "node_type": "EVENT",
+      "surface": "跑",
+      "normalized": "跑",
+      "span_candidate_ids": [
+        "p1:d42444c9ac539533074530eb",
+        "p1:f668dec39b0b53999c60ed84"
+      ],
+      "source_span_ids": [
+        "p1:43b28f508a1a895a2cc27415",
+        "p1:e390aa21151fd2be3b9716af"
+      ],
+      "evidence_tier": "STRONG",
+      "state": "RESOLVED",
+      "metadata": {
+        "sense": "跑",
+        "owner": "clause:54",
+        "token_id": "clause:54:token:9",
+        "modality": "UNSTATED",
+        "clause_id": "clause:54",
+        "producer": "NATIVE_FRONTEND",
+        "attachment_path": [
+          "clause:54",
+          "p1:3b5075dd579722b6a68b341c"
+        ]
+      }
+    },
+    {
+      "node_id": "p1:918a813982da96c08e757ae6",
+      "node_type": "ENTITY",
+      "surface": "status",
+      "normalized": null,
+      "span_candidate_ids": [
+        "p1:dfe0d25d6792379548ab76e1",
+        "p1:8b7d5f98d160372ff13179aa"
+      ],
+      "source_span_ids": [
+        "p1:989f80d42112762202d202a4",
+        "p1:e390aa21151fd2be3b9716af"
+      ],
+      "evidence_tier": "STRONG",
+      "state": "RESOLVED",
+      "metadata": {
+        "token_id": "clause:54:token:12",
+        "clause_id": "clause:54",
+        "producer": "NATIVE_FRONTEND",
+        "attachment_path": [
+          "clause:54",
+          "p1:918a813982da96c08e757ae6"
+        ]
+      }
+    },
+    {
+      "node_id": "p1:a84397796164ca802e9aef5f",
+      "node_type": "ENTITY",
+      "surface": "short",
+      "normalized": null,
+      "span_candidate_ids": [
+        "p1:41252d119126366986e004c8",
+        "p1:4be744ac8d074ca9d716d367"
+      ],
+      "source_span_ids": [
+        "p1:6235a2ff4fa5027fc227a50f",
+        "p1:e390aa21151fd2be3b9716af"
+      ],
+      "evidence_tier": "STRONG",
+      "state": "RESOLVED",
+      "metadata": {
+        "token_id": "clause:54:token:14",
+        "clause_id": "clause:54",
+        "producer": "NATIVE_FRONTEND",
+        "attachment_path": [
+          "clause:54",
+          "p1:a84397796164ca802e9aef5f"
+        ]
+      }
+    },
+    {
+      "node_id": "p1:3866125ebe9de07542dac81e",
+      "node_type": "EVENT",
+      "surface": "包含",
+      "normalized": "包含",
+      "span_candidate_ids": [
+        "p1:608b35eabf695ba4dc1b55ca",
+        "p1:0094aa1a9fa8a5cb94762a77"
+      ],
+      "source_span_ids": [
+        "p1:02761fa2355e3174d7481c3b",
+        "p1:4e0f07a639757a7eb5996d99"
+      ],
+      "evidence_tier": "STRONG",
+      "state": "RESOLVED",
+      "metadata": {
+        "sense": "包含",
+        "owner": "clause:55",
+        "token_id": "clause:55:token:0",
+        "modality": "UNSTATED",
+        "clause_id": "clause:55",
+        "producer": "NATIVE_FRONTEND",
+        "attachment_path": [
+          "clause:55",
+          "p1:3866125ebe9de07542dac81e"
+        ]
+      }
+    },
+    {
+      "node_id": "p1:830e87023485d4ae6c3c13ec",
+      "node_type": "ENTITY",
+      "surface": "本意文件",
+      "normalized": null,
+      "span_candidate_ids": [
+        "p1:9af75978dfa698581a974a3b",
+        "p1:5a03cf6594723497dab522a7"
+      ],
+      "source_span_ids": [
+        "p1:db73833bd58f22aa71d5c8f3",
+        "p1:4e0f07a639757a7eb5996d99"
+      ],
+      "evidence_tier": "STRONG",
+      "state": "RESOLVED",
+      "metadata": {
+        "token_id": "clause:55:token:2",
+        "clause_id": "clause:55",
+        "producer": "NATIVE_FRONTEND",
+        "attachment_path": [
+          "clause:55",
+          "p1:830e87023485d4ae6c3c13ec"
+        ]
+      }
+    },
+    {
+      "node_id": "p1:92a79ed6065491073129c6ae",
+      "node_type": "EVENT",
+      "surface": "引用",
+      "normalized": "引用",
+      "span_candidate_ids": [
+        "p1:c9cc569fb49b891a98d91e8e",
+        "p1:9f964c2c25b45241f6789bad"
+      ],
+      "source_span_ids": [
+        "p1:2c531f443f05770a4f6b3876",
+        "p1:0cc6dd5abe91d91f220517f9"
+      ],
+      "evidence_tier": "STRONG",
+      "state": "RESOLVED",
+      "metadata": {
+        "sense": "引用",
+        "owner": "clause:56",
+        "token_id": "clause:56:token:1",
+        "modality": "UNSTATED",
+        "clause_id": "clause:56",
+        "producer": "NATIVE_FRONTEND",
+        "attachment_path": [
+          "clause:56",
+          "p1:92a79ed6065491073129c6ae"
+        ]
+      }
+    },
+    {
+      "node_id": "p1:8371868e63eb3391822d4088",
+      "node_type": "ENTITY",
+      "surface": "这串 commit",
+      "normalized": null,
+      "span_candidate_ids": [
+        "p1:5476188d82746f8a711d5f91",
+        "p1:65b28dbc287006729846edc2"
+      ],
+      "source_span_ids": [
+        "p1:b22742f4c131b2ee4bd95edf",
+        "p1:0cc6dd5abe91d91f220517f9"
+      ],
+      "evidence_tier": "STRONG",
+      "state": "RESOLVED",
+      "metadata": {
+        "token_id": "clause:56:token:13",
+        "clause_id": "clause:56",
+        "producer": "NATIVE_FRONTEND",
+        "attachment_path": [
+          "clause:56",
+          "p1:8371868e63eb3391822d4088"
+        ]
+      }
+    },
+    {
+      "node_id": "p1:6c89211ea17062c24b3c362b",
+      "node_type": "UNKNOWN_REFERENT",
+      "surface": "这串 commit",
+      "normalized": null,
+      "span_candidate_ids": [
+        "p1:c5f53b91ddfba81c1dde82da",
+        "p1:2dd19a09fb882abd09142f66"
+      ],
+      "source_span_ids": [
+        "p1:b22742f4c131b2ee4bd95edf",
+        "p1:0cc6dd5abe91d91f220517f9"
+      ],
+      "evidence_tier": "AMBIGUOUS",
+      "state": "UNRESOLVED",
+      "metadata": {
+        "token_id": "clause:56:token:13",
+        "owner": "p1:92a79ed6065491073129c6ae",
+        "clause_id": "clause:56",
+        "producer": "NATIVE_FRONTEND",
+        "resolution": {
+          "rule": "EXPLICIT_TYPED_DECLARATION_SET",
+          "candidate_node_ids": [],
+          "selected_node_ids": [],
+          "candidate_evidence": [],
+          "evidence_tier": "AMBIGUOUS",
+          "source_span_ids": [
+            "p1:0cc6dd5abe91d91f220517f9",
+            "p1:b22742f4c131b2ee4bd95edf"
+          ]
+        },
+        "attachment_path": [
+          "clause:56",
+          "p1:6c89211ea17062c24b3c362b"
+        ]
+      },
+      "unresolved_ref": "p1:c40f6029f65ca6429b0784b7"
+    },
+    {
+      "node_id": "p1:c2975e4bd05463b3cde60efe",
+      "node_type": "EVENT",
+      "surface": "修复",
+      "normalized": "修复",
+      "span_candidate_ids": [
+        "p1:ae9fae50ba88aee4eae897c9",
+        "p1:26f78a11222d917a3926b4c3"
+      ],
+      "source_span_ids": [
+        "p1:d6b25e7de795942c9226a794",
+        "p1:4fd9ba85227f3c92bbc6face"
+      ],
+      "evidence_tier": "STRONG",
+      "state": "RESOLVED",
+      "metadata": {
+        "sense": "修复",
+        "owner": "clause:63",
+        "token_id": "clause:63:token:6",
+        "modality": "UNSTATED",
+        "clause_id": "clause:63",
+        "producer": "NATIVE_FRONTEND",
+        "attachment_path": [
+          "clause:63",
+          "p1:c2975e4bd05463b3cde60efe"
+        ]
+      }
+    },
+    {
+      "node_id": "p1:a700507b00452ffe98b5fe4c",
+      "node_type": "EVENT",
+      "surface": "补",
+      "normalized": "补",
+      "span_candidate_ids": [
+        "p1:ea1a6ba3721d2a12d499e02c",
+        "p1:a7e9618a067192c641ce30b2"
+      ],
+      "source_span_ids": [
+        "p1:ad8405cf323dbd6e79a0bd4e",
+        "p1:e7abf6742bdb6b702c328dfb"
+      ],
+      "evidence_tier": "STRONG",
+      "state": "RESOLVED",
+      "metadata": {
+        "sense": "补",
+        "owner": "clause:65",
+        "token_id": "clause:65:token:0",
+        "modality": "UNSTATED",
+        "clause_id": "clause:65",
+        "producer": "NATIVE_FRONTEND",
+        "attachment_path": [
+          "clause:65",
+          "p1:a700507b00452ffe98b5fe4c"
+        ]
+      }
+    },
+    {
+      "node_id": "p1:30ef6ebfb2a26bcceaeb1492",
+      "node_type": "EVENT",
+      "surface": "引用",
+      "normalized": "引用",
+      "span_candidate_ids": [
+        "p1:1c6383a6fbc6ed7fc94c690e",
+        "p1:8ca91ee6c9e27ba99eadd453"
+      ],
+      "source_span_ids": [
+        "p1:7815bd9bbc721db43ccbd9dc",
+        "p1:4517733b00ba202a8f6bdd36"
+      ],
+      "evidence_tier": "STRONG",
+      "state": "RESOLVED",
+      "metadata": {
+        "sense": "引用",
+        "owner": "clause:67",
+        "token_id": "clause:67:token:2",
+        "modality": "UNSTATED",
+        "clause_id": "clause:67",
+        "producer": "NATIVE_FRONTEND",
+        "attachment_path": [
+          "clause:67",
+          "p1:30ef6ebfb2a26bcceaeb1492"
+        ]
+      }
+    },
+    {
+      "node_id": "p1:558c7731fc0405dd362f3b3f",
+      "node_type": "ENTITY",
+      "surface": "-commit 修复链",
+      "normalized": null,
+      "span_candidate_ids": [
+        "p1:365febf29b229930bb35f6b5",
+        "p1:9c1bec34dae831c0d7cfd9c0"
+      ],
+      "source_span_ids": [
+        "p1:e492972cd22031e0a7e2e37d",
+        "p1:4517733b00ba202a8f6bdd36"
+      ],
+      "evidence_tier": "STRONG",
+      "state": "RESOLVED",
+      "metadata": {
+        "token_id": "clause:67:token:8",
+        "clause_id": "clause:67",
+        "producer": "NATIVE_FRONTEND",
+        "attachment_path": [
+          "clause:67",
+          "p1:558c7731fc0405dd362f3b3f"
+        ]
+      }
+    },
+    {
+      "node_id": "p1:9ae7c0ac53d173de887b9a19",
+      "node_type": "EVENT",
+      "surface": "验收",
+      "normalized": "验收",
+      "span_candidate_ids": [
+        "p1:86636180da395df7d03efe0c",
+        "p1:506ced66d95d706f771f5bf1"
+      ],
+      "source_span_ids": [
+        "p1:3a347b41c076dac817dcbdd1",
+        "p1:6c39fe70a9d50c6ef56b62b6"
+      ],
+      "evidence_tier": "STRONG",
+      "state": "RESOLVED",
+      "metadata": {
+        "sense": "验收",
+        "owner": "clause:68",
+        "token_id": "clause:68:token:1",
+        "modality": "UNSTATED",
+        "clause_id": "clause:68",
+        "producer": "NATIVE_FRONTEND",
+        "attachment_path": [
+          "clause:68",
+          "p1:9ae7c0ac53d173de887b9a19"
+        ]
+      }
+    },
+    {
+      "node_id": "p1:55c138e5a1eef742501b17a6",
+      "node_type": "ENTITY",
+      "surface": "Acceptance",
+      "normalized": null,
+      "span_candidate_ids": [
+        "p1:d2561d31bceb6ea01de6c6cd",
+        "p1:c441682072045f4d9a9f0950"
+      ],
+      "source_span_ids": [
+        "p1:fece84afcf391f534a1ddb31",
+        "p1:6c39fe70a9d50c6ef56b62b6"
+      ],
+      "evidence_tier": "STRONG",
+      "state": "RESOLVED",
+      "metadata": {
+        "token_id": "clause:68:token:3",
+        "clause_id": "clause:68",
+        "producer": "NATIVE_FRONTEND",
+        "attachment_path": [
+          "clause:68",
+          "p1:55c138e5a1eef742501b17a6"
+        ]
+      }
+    },
+    {
+      "node_id": "p1:0d25f5bac7a0b345cb5a0a3e",
+      "node_type": "EVENT",
+      "surface": "命令",
+      "normalized": "命令",
+      "span_candidate_ids": [
+        "p1:930a0f37a54fd9455230bf42",
+        "p1:9431d96c8c049944aef7ef76"
+      ],
+      "source_span_ids": [
+        "p1:bb13c8ed2436654352cc359f",
+        "p1:3f197612c5dda8f23f1c1fbf"
+      ],
+      "evidence_tier": "STRONG",
+      "state": "RESOLVED",
+      "metadata": {
+        "sense": "命令",
+        "owner": "clause:69",
+        "token_id": "clause:69:token:10",
+        "modality": "UNSTATED",
+        "clause_id": "clause:69",
+        "producer": "NATIVE_FRONTEND",
+        "attachment_path": [
+          "clause:69",
+          "p1:0d25f5bac7a0b345cb5a0a3e"
+        ]
+      }
+    },
+    {
+      "node_id": "p1:62c3ffede0ac0798febee96d",
+      "node_type": "EVENT",
+      "surface": "新增",
+      "normalized": "新增",
+      "span_candidate_ids": [
+        "p1:bdc628d5e75d7495d32abb2e",
+        "p1:7dce4ffa275eedd04edb3695"
+      ],
+      "source_span_ids": [
+        "p1:a9272288586015df252f026b",
+        "p1:172855f16717f27a0cd13721"
+      ],
+      "evidence_tier": "STRONG",
+      "state": "RESOLVED",
+      "metadata": {
+        "sense": "新增",
+        "owner": "clause:71",
+        "token_id": "clause:71:token:9",
+        "modality": "UNSTATED",
+        "clause_id": "clause:71",
+        "producer": "NATIVE_FRONTEND",
+        "quoted_value_span_ids": [
+          "p1:2ee55676632bb39b3e1259ae"
+        ],
+        "attachment_path": [
+          "clause:71",
+          "p1:62c3ffede0ac0798febee96d"
+        ]
+      }
+    },
+    {
+      "node_id": "p1:d29aaf4ccf61a77e0f0627c9",
+      "node_type": "ENTITY",
+      "surface": "常见故障",
+      "normalized": null,
+      "span_candidate_ids": [
+        "p1:bd7da50c17753596e2f7f714",
+        "p1:e8ac59bc2d5351b38fae80ad"
+      ],
+      "source_span_ids": [
+        "p1:666029a800ea3a3c60de86c0",
+        "p1:172855f16717f27a0cd13721"
+      ],
+      "evidence_tier": "STRONG",
+      "state": "RESOLVED",
+      "metadata": {
+        "token_id": "clause:71:token:8",
+        "clause_id": "clause:71",
+        "producer": "NATIVE_FRONTEND",
+        "attachment_path": [
+          "clause:71",
+          "p1:d29aaf4ccf61a77e0f0627c9"
+        ]
+      }
+    },
+    {
+      "node_id": "p1:194bc2c887ae3d2c5cc58861",
+      "node_type": "EVENT",
+      "surface": "指向",
+      "normalized": "指向",
+      "span_candidate_ids": [
+        "p1:2eeb7bf65b540374e3863658",
+        "p1:bdbfe635ce9758ec7878a5b0"
+      ],
+      "source_span_ids": [
+        "p1:6cebf954c7965d9609ee0380",
+        "p1:7a6148ab6f42bce2f539aa3c"
+      ],
+      "evidence_tier": "STRONG",
+      "state": "RESOLVED",
+      "metadata": {
+        "sense": "指向",
+        "owner": "clause:72",
+        "token_id": "clause:72:token:7",
+        "modality": "UNSTATED",
+        "clause_id": "clause:72",
+        "producer": "NATIVE_FRONTEND",
+        "attachment_path": [
+          "clause:72",
+          "p1:194bc2c887ae3d2c5cc58861"
+        ]
+      }
+    },
+    {
+      "node_id": "p1:a862e0747ef222ad6da48e3a",
+      "node_type": "ENTITY",
+      "surface": "d2ed13c",
+      "normalized": null,
+      "span_candidate_ids": [
+        "p1:90757c82344587db0515a09d",
+        "p1:b48b14e59ee4e0f93781a921"
+      ],
+      "source_span_ids": [
+        "p1:e5a37b31263a494d6d1da5d0",
+        "p1:7a6148ab6f42bce2f539aa3c"
+      ],
+      "evidence_tier": "STRONG",
+      "state": "RESOLVED",
+      "metadata": {
+        "token_id": "clause:72:token:9",
+        "clause_id": "clause:72",
+        "producer": "NATIVE_FRONTEND",
+        "attachment_path": [
+          "clause:72",
+          "p1:a862e0747ef222ad6da48e3a"
+        ]
+      }
+    },
+    {
+      "node_id": "p1:f8d640d0b10a1ab51d379688",
+      "node_type": "EVENT",
+      "surface": "作为",
+      "normalized": "作为",
+      "span_candidate_ids": [
+        "p1:b9b9ed4fa33e54294a8d10e9",
+        "p1:e72c4ca69022c9090e8d9b91"
+      ],
+      "source_span_ids": [
+        "p1:778a66504da2842e4c1c35a3",
+        "p1:e3deab1969c328e84c894f26"
+      ],
+      "evidence_tier": "STRONG",
+      "state": "RESOLVED",
+      "metadata": {
+        "sense": "作为",
+        "owner": "clause:73",
+        "token_id": "clause:73:token:0",
+        "modality": "UNSTATED",
+        "clause_id": "clause:73",
+        "producer": "NATIVE_FRONTEND",
+        "attachment_path": [
+          "clause:73",
+          "p1:f8d640d0b10a1ab51d379688"
+        ]
+      }
+    },
+    {
+      "node_id": "p1:c4e848bba08a6da473204bb7",
+      "node_type": "ENTITY",
+      "surface": "依据",
+      "normalized": null,
+      "span_candidate_ids": [
+        "p1:cd8919e8357200e25758c145",
+        "p1:5120a9ff2ec6093418a9d6eb"
+      ],
+      "source_span_ids": [
+        "p1:39e4a686dd33d7da0dded314",
+        "p1:e3deab1969c328e84c894f26"
+      ],
+      "evidence_tier": "STRONG",
+      "state": "RESOLVED",
+      "metadata": {
+        "token_id": "clause:73:token:1",
+        "clause_id": "clause:73",
+        "producer": "NATIVE_FRONTEND",
+        "attachment_path": [
+          "clause:73",
+          "p1:c4e848bba08a6da473204bb7"
+        ]
+      }
+    },
+    {
+      "node_id": "p1:0a5b6c069a2392002c80f326",
+      "node_type": "EVENT",
+      "surface": "写",
+      "normalized": "写",
+      "span_candidate_ids": [
+        "p1:2dcf274774d4755b1daa9a8b",
+        "p1:15b6a15a2c4901a32b0248ca"
+      ],
+      "source_span_ids": [
+        "p1:e1687124d77d9c689fdc4d38",
+        "p1:c74f7125935ebec74df06694"
+      ],
+      "evidence_tier": "STRONG",
+      "state": "RESOLVED",
+      "metadata": {
+        "sense": "写",
+        "owner": "clause:74",
+        "token_id": "clause:74:token:3",
+        "modality": "UNSTATED",
+        "clause_id": "clause:74",
+        "producer": "NATIVE_FRONTEND",
+        "attachment_path": [
+          "clause:74",
+          "p1:0a5b6c069a2392002c80f326"
+        ]
+      }
+    },
+    {
+      "node_id": "p1:b28024102914545a30509977",
+      "node_type": "EVENT",
+      "surface": "用",
+      "normalized": "用",
+      "span_candidate_ids": [
+        "p1:ee4097efd1c684fb6637f9d3",
+        "p1:a4ef718201572785d93598b9"
+      ],
+      "source_span_ids": [
+        "p1:74daf866bfff2e07af33d1e1",
+        "p1:1b1b9fa7ab75f025da785fd2"
+      ],
+      "evidence_tier": "STRONG",
+      "state": "RESOLVED",
+      "metadata": {
+        "sense": "用",
+        "owner": "clause:75",
+        "token_id": "clause:75:token:17",
+        "modality": "REQUIRED",
+        "clause_id": "clause:75",
+        "producer": "NATIVE_FRONTEND",
+        "attachment_path": [
+          "clause:75",
+          "p1:b28024102914545a30509977"
+        ]
+      }
+    },
+    {
+      "node_id": "p1:9862f27c3920c56ea086f9b4",
+      "node_type": "ENTITY",
+      "surface": "显式路径",
+      "normalized": null,
+      "span_candidate_ids": [
+        "p1:53eecc0d2124802c28fbd7e7",
+        "p1:ce1b913a378bd3ca7fa9a9f0"
+      ],
+      "source_span_ids": [
+        "p1:fc2a31618d22c45dc9e97029",
+        "p1:1b1b9fa7ab75f025da785fd2"
+      ],
+      "evidence_tier": "STRONG",
+      "state": "RESOLVED",
+      "metadata": {
+        "token_id": "clause:75:token:19",
+        "clause_id": "clause:75",
+        "producer": "NATIVE_FRONTEND",
+        "attachment_path": [
+          "clause:75",
+          "p1:9862f27c3920c56ea086f9b4"
+        ]
+      }
+    },
+    {
+      "node_id": "p1:f3decd82ad6e7a32257d28d6",
+      "node_type": "EVENT",
+      "surface": "许",
+      "normalized": "许",
+      "span_candidate_ids": [
+        "p1:ca8f3cf71a3e6463edceed16",
+        "p1:a3893742bbb353a9d53cada0"
+      ],
+      "source_span_ids": [
+        "p1:db5d9caf0dabd9e2924bcceb",
+        "p1:715f927361a151ea6aa88337"
+      ],
+      "evidence_tier": "STRONG",
+      "state": "RESOLVED",
+      "metadata": {
+        "sense": "许",
+        "owner": "clause:76",
+        "token_id": "clause:76:token:1",
+        "modality": "UNSTATED",
+        "clause_id": "clause:76",
+        "producer": "NATIVE_FRONTEND",
+        "attachment_path": [
+          "clause:76",
+          "p1:f3decd82ad6e7a32257d28d6"
+        ]
+      }
+    },
+    {
+      "node_id": "p1:cf6b0d925fd75442f28ae54a",
+      "node_type": "EVENT",
+      "surface": "确认",
+      "normalized": "确认",
+      "span_candidate_ids": [
+        "p1:074f95b96ede60c6f615a2e2",
+        "p1:13b396cd7238993a8e8c3dcb"
+      ],
+      "source_span_ids": [
+        "p1:20562c6213b57cefba43bab3",
+        "p1:bf3c30107fb08928feb34b8f"
+      ],
+      "evidence_tier": "STRONG",
+      "state": "RESOLVED",
+      "metadata": {
+        "sense": "确认",
+        "owner": "clause:77",
+        "token_id": "clause:77:token:6",
+        "modality": "UNSTATED",
+        "clause_id": "clause:77",
+        "producer": "NATIVE_FRONTEND",
+        "attachment_path": [
+          "clause:77",
+          "p1:cf6b0d925fd75442f28ae54a"
+        ]
+      }
+    },
+    {
+      "node_id": "p1:afdd073952aba2aae6b7b4fc",
+      "node_type": "ENTITY",
+      "surface": "git status --short",
+      "normalized": null,
+      "span_candidate_ids": [
+        "p1:cd67249a0dca7d6d1a7b2235",
+        "p1:700628750ebfcd0509fd85db"
+      ],
+      "source_span_ids": [
+        "p1:051f8312a19571fcdcd538ef",
+        "p1:bf3c30107fb08928feb34b8f"
+      ],
+      "evidence_tier": "STRONG",
+      "state": "RESOLVED",
+      "metadata": {
+        "token_id": "clause:77:token:4",
+        "clause_id": "clause:77",
+        "producer": "NATIVE_FRONTEND",
+        "attachment_path": [
+          "clause:77",
+          "p1:afdd073952aba2aae6b7b4fc"
+        ]
+      }
+    },
+    {
+      "node_id": "p1:d3f5d84305a9e4ad8b3e0b0d",
+      "node_type": "ENTITY",
+      "surface": "staging 区只",
+      "normalized": null,
+      "span_candidate_ids": [
+        "p1:fbd017f180cf4d66f5d546f7",
+        "p1:a6aeb306cf3ed19f373cc1e2"
+      ],
+      "source_span_ids": [
+        "p1:178d831df39ff02566f7ad00",
+        "p1:bf3c30107fb08928feb34b8f"
+      ],
+      "evidence_tier": "STRONG",
+      "state": "RESOLVED",
+      "metadata": {
+        "token_id": "clause:77:token:8",
+        "clause_id": "clause:77",
+        "producer": "NATIVE_FRONTEND",
+        "attachment_path": [
+          "clause:77",
+          "p1:d3f5d84305a9e4ad8b3e0b0d"
+        ]
+      }
+    },
+    {
+      "node_id": "p1:d1b0fe5e28cde127811d2bda",
+      "node_type": "EVENT",
+      "surface": "包含",
+      "normalized": "包含",
+      "span_candidate_ids": [
+        "p1:6ba4ccec26624f7eb4b407ce",
+        "p1:91153365ffbe85449643447b"
+      ],
+      "source_span_ids": [
+        "p1:df42803e1872c61313eedd49",
+        "p1:f641ae65224cd8b1a1a37559"
+      ],
+      "evidence_tier": "STRONG",
+      "state": "RESOLVED",
+      "metadata": {
+        "sense": "包含",
+        "owner": "clause:78",
+        "token_id": "clause:78:token:0",
+        "modality": "UNSTATED",
+        "clause_id": "clause:78",
+        "producer": "NATIVE_FRONTEND",
+        "attachment_path": [
+          "clause:78",
+          "p1:d1b0fe5e28cde127811d2bda"
+        ]
+      }
+    },
+    {
+      "node_id": "p1:2fdab3384040404028f19020",
+      "node_type": "ENTITY",
+      "surface": "本意 3 个文件",
+      "normalized": null,
+      "span_candidate_ids": [
+        "p1:45f28919a11258243c3d0f23",
+        "p1:f878fe2252c597689c8a3340"
+      ],
+      "source_span_ids": [
+        "p1:18950504ee23d13b063e315f",
+        "p1:f641ae65224cd8b1a1a37559"
+      ],
+      "evidence_tier": "STRONG",
+      "state": "RESOLVED",
+      "metadata": {
+        "token_id": "clause:78:token:4",
+        "clause_id": "clause:78",
+        "producer": "NATIVE_FRONTEND",
+        "attachment_path": [
+          "clause:78",
+          "p1:2fdab3384040404028f19020"
+        ]
+      }
+    },
+    {
+      "node_id": "p1:d917479ec7b3b54fc3276fc2",
+      "node_type": "EVENT",
+      "surface": "成功",
+      "normalized": "成功",
+      "span_candidate_ids": [
+        "p1:045c80c268fb088bf4d1f24c",
+        "p1:12466bb719300a123f5e4ab8"
+      ],
+      "source_span_ids": [
+        "p1:e5ea449e9e10d46b75f35197",
+        "p1:d0fbe698323fc4182a13bd17"
+      ],
+      "evidence_tier": "STRONG",
+      "state": "RESOLVED",
+      "metadata": {
+        "sense": "成功",
+        "owner": "clause:79",
+        "token_id": "clause:79:token:5",
+        "modality": "UNSTATED",
+        "clause_id": "clause:79",
+        "producer": "NATIVE_FRONTEND",
+        "attachment_path": [
+          "clause:79",
+          "p1:d917479ec7b3b54fc3276fc2"
+        ]
+      }
+    },
+    {
+      "node_id": "p1:84f42fa2ff58c05122a30301",
+      "node_type": "ENTITY",
+      "surface": "push origin main",
+      "normalized": null,
+      "span_candidate_ids": [
+        "p1:665e7355b4a6e94df6628923",
+        "p1:86869da5e39fb0ef210189d8"
+      ],
+      "source_span_ids": [
+        "p1:f62215908d14f9767af6dfee",
+        "p1:d0fbe698323fc4182a13bd17"
+      ],
+      "evidence_tier": "STRONG",
+      "state": "RESOLVED",
+      "metadata": {
+        "token_id": "clause:79:token:4",
+        "clause_id": "clause:79",
+        "producer": "NATIVE_FRONTEND",
+        "literal_tag": "PERSON",
+        "participant_roles": [
+          "PERFORMER"
+        ],
+        "attachment_path": [
+          "clause:79",
+          "p1:84f42fa2ff58c05122a30301"
+        ]
+      }
+    },
+    {
+      "node_id": "p1:16bb3d4bcbb482f3469567b8",
+      "node_type": "EVENT",
+      "surface": "commit",
+      "normalized": "commit",
+      "span_candidate_ids": [
+        "p1:858c1517ca7a6d13cc62c27d",
+        "p1:36e0af69e30206be710e9a56"
+      ],
+      "source_span_ids": [
+        "p1:0581e267b11c94aab9a073fe",
+        "p1:cccb3d47bbbf4afb6004d7cc"
+      ],
+      "evidence_tier": "STRONG",
+      "state": "RESOLVED",
+      "metadata": {
+        "sense": "commit",
+        "owner": "clause:80",
+        "token_id": "clause:80:token:3",
+        "modality": "UNSTATED",
+        "clause_id": "clause:80",
+        "producer": "NATIVE_FRONTEND",
+        "attachment_path": [
+          "clause:80",
+          "p1:16bb3d4bcbb482f3469567b8"
+        ]
+      }
+    },
+    {
+      "node_id": "p1:90ce044fb98551eb417808ee",
+      "node_type": "ENTITY",
+      "surface": "main 历史保持单",
+      "normalized": null,
+      "span_candidate_ids": [
+        "p1:bfcd3ebe6f94a0b8b3d012bb",
+        "p1:a1d5503f1b409e2ea3a924a4"
+      ],
+      "source_span_ids": [
+        "p1:56b572ac19c7c9c02416415d",
+        "p1:cccb3d47bbbf4afb6004d7cc"
+      ],
+      "evidence_tier": "STRONG",
+      "state": "RESOLVED",
+      "metadata": {
+        "token_id": "clause:80:token:2",
+        "clause_id": "clause:80",
+        "producer": "NATIVE_FRONTEND",
+        "attachment_path": [
+          "clause:80",
+          "p1:90ce044fb98551eb417808ee"
+        ]
+      }
+    },
+    {
+      "node_id": "p1:876ba99df9f7169296e04a9b",
+      "node_type": "EVENT",
+      "surface": "改",
+      "normalized": "改",
+      "span_candidate_ids": [
+        "p1:0acb77a5fa99b77beb22394c",
+        "p1:98d745060800eca62a033957"
+      ],
+      "source_span_ids": [
+        "p1:373108df5104f61cad767b0a",
+        "p1:ef5b162cd4b834c2b4dbb9ba"
+      ],
+      "evidence_tier": "STRONG",
+      "state": "RESOLVED",
+      "metadata": {
+        "sense": "改",
+        "owner": "clause:83",
+        "token_id": "clause:83:token:1",
+        "modality": "UNSTATED",
+        "clause_id": "clause:83",
+        "producer": "NATIVE_FRONTEND",
+        "attachment_path": [
+          "clause:83",
+          "p1:876ba99df9f7169296e04a9b"
+        ]
+      }
+    },
+    {
+      "node_id": "p1:f676cdca185fb72d8023d505",
+      "node_type": "ENTITY",
+      "surface": "维护者文档",
+      "normalized": null,
+      "span_candidate_ids": [
+        "p1:fcec9bfa66300d855330e154",
+        "p1:a8e753823d76ee7d4f1a2382"
+      ],
+      "source_span_ids": [
+        "p1:86d5b03d646691843adc81e1",
+        "p1:ef5b162cd4b834c2b4dbb9ba"
+      ],
+      "evidence_tier": "STRONG",
+      "state": "RESOLVED",
+      "metadata": {
+        "token_id": "clause:83:token:3",
+        "clause_id": "clause:83",
+        "producer": "NATIVE_FRONTEND",
+        "attachment_path": [
+          "clause:83",
+          "p1:f676cdca185fb72d8023d505"
+        ]
+      }
+    },
+    {
+      "node_id": "p1:eb43d7a735691aa9525b37bb",
+      "node_type": "EVENT",
+      "surface": "加",
+      "normalized": "加",
+      "span_candidate_ids": [
+        "p1:aaa5b3c85a7456f8f7a9fcad",
+        "p1:53f2cae385347353576b5489"
+      ],
+      "source_span_ids": [
+        "p1:ad8736d638dc04859b6daf8d",
+        "p1:efc7b204f22819a573b9b1d7"
+      ],
+      "evidence_tier": "STRONG",
+      "state": "RESOLVED",
+      "metadata": {
+        "sense": "加",
+        "owner": "clause:84",
+        "token_id": "clause:84:token:0",
+        "modality": "UNSTATED",
+        "clause_id": "clause:84",
+        "producer": "NATIVE_FRONTEND",
+        "attachment_path": [
+          "clause:84",
+          "p1:eb43d7a735691aa9525b37bb"
+        ]
+      }
+    },
+    {
+      "node_id": "p1:70f6b5b93750e58c49ce754d",
+      "node_type": "ENTITY",
+      "surface": "约束",
+      "normalized": null,
+      "span_candidate_ids": [
+        "p1:2cf16ab5161736263ad4cc0b",
+        "p1:1d08264fd529889905d1755d"
+      ],
+      "source_span_ids": [
+        "p1:3bdfeefc7a147f0f7d02e0da",
+        "p1:efc7b204f22819a573b9b1d7"
+      ],
+      "evidence_tier": "STRONG",
+      "state": "RESOLVED",
+      "metadata": {
+        "token_id": "clause:84:token:1",
+        "clause_id": "clause:84",
+        "producer": "NATIVE_FRONTEND",
+        "attachment_path": [
+          "clause:84",
+          "p1:70f6b5b93750e58c49ce754d"
+        ]
+      }
+    },
+    {
+      "node_id": "p1:27b2e8d459d5544a7d9860ec",
+      "node_type": "ENTITY",
+      "surface": "19 份 untracked",
+      "normalized": null,
+      "span_candidate_ids": [
+        "p1:05e9a40caf5777529cd2b543",
+        "p1:6c4dcd1657084e95b3a3a159"
+      ],
+      "source_span_ids": [
+        "p1:2763fe80cbbe08376d499e20",
+        "p1:e2b80964cb3f0f4fc72d05ff"
+      ],
+      "evidence_tier": "STRONG",
+      "state": "RESOLVED",
+      "metadata": {
+        "token_id": "clause:22:token:4",
+        "clause_id": "clause:22",
+        "producer": "NATIVE_FRONTEND",
+        "attachment_path": [
+          "clause:22",
+          "p1:27b2e8d459d5544a7d9860ec"
+        ]
+      }
+    },
+    {
+      "node_id": "p1:82bb16799a23a407f54eb71f",
+      "node_type": "ENTITY",
+      "surface": "下次应在 SOP 里加这条规则",
+      "normalized": "QUOTED_VALUE",
+      "span_candidate_ids": [
+        "p1:7259c917a3b287b7e43433ab",
+        "p1:b816073725332f247da1e059"
+      ],
+      "source_span_ids": [
+        "p1:51f6863c985a1e97dfeffb2a",
+        "p1:59bdd662a1228eb86f4b6327"
+      ],
+      "evidence_tier": "STRONG",
+      "state": "RESOLVED",
+      "metadata": {
+        "sense": "QUOTED_VALUE",
+        "quoted": true,
+        "owning_predicate_id": "p1:d6411656376dca781abd0d10",
+        "clause_id": "clause:31",
+        "producer": "NATIVE_FRONTEND",
+        "attachment_path": [
+          "clause:31",
+          "p1:82bb16799a23a407f54eb71f"
+        ]
+      }
+    },
+    {
+      "node_id": "p1:acc861029dec821ca1ef36df",
+      "node_type": "ENTITY",
+      "surface": "问题 7",
+      "normalized": "QUOTED_VALUE",
+      "span_candidate_ids": [
+        "p1:9a73757c3f29323945306b0b",
+        "p1:51e3f3cc49f55414f8d13a7e"
+      ],
+      "source_span_ids": [
+        "p1:012a3f405471bd34221ab381",
+        "p1:172855f16717f27a0cd13721"
+      ],
+      "evidence_tier": "STRONG",
+      "state": "RESOLVED",
+      "metadata": {
+        "sense": "QUOTED_VALUE",
+        "quoted": true,
+        "owning_predicate_id": "p1:62c3ffede0ac0798febee96d",
+        "clause_id": "clause:71",
+        "producer": "NATIVE_FRONTEND",
+        "attachment_path": [
+          "clause:71",
+          "p1:acc861029dec821ca1ef36df"
+        ]
+      }
+    }
+  ],
+  "set_expr_nodes": [
+    {
+      "expr_id": "p1:f49ef1d6924160c76dd440e4",
+      "kind": "ITEM",
+      "entity_node_id": "p1:71920efd68d343ffaf365b3b",
+      "source_span_ids": [
+        "p1:cb68270d2d2fb34a6e6db2e0",
+        "p1:8e8f4898c202dd62d38e7af0"
+      ],
+      "relation_ids": [
+        "p1:29960b22fca26958071499ad"
+      ]
+    },
+    {
+      "expr_id": "p1:d8ddc768ed23d84089ce9744",
+      "kind": "ITEM",
+      "entity_node_id": "p1:7f82180c291602d6a3054fa4",
+      "source_span_ids": [
+        "p1:f7aa2daf87b4f0d1028dbbf5",
+        "p1:2f44bd7ac6f6172918f94b57"
+      ],
+      "relation_ids": [
+        "p1:2c54d361272140eaaf9503ec"
+      ]
+    },
+    {
+      "expr_id": "p1:7477cf497af8b2a85f68610f",
+      "kind": "ITEM",
+      "entity_node_id": "p1:e89b855b18e9e9f164b44e02",
+      "source_span_ids": [
+        "p1:7253d5077d14e3745f7f60dd",
+        "p1:74b4ac8c8c17ec3d4de6dd6e"
+      ],
+      "relation_ids": [
+        "p1:2c57f3db35629e9f76057469"
+      ]
+    },
+    {
+      "expr_id": "p1:5875fba1104182407be1e41b",
+      "kind": "ITEM",
+      "entity_node_id": "p1:82bb16799a23a407f54eb71f",
+      "source_span_ids": [
+        "p1:51f6863c985a1e97dfeffb2a",
+        "p1:59bdd662a1228eb86f4b6327"
+      ],
+      "relation_ids": [
+        "p1:c51d18f010ecd2454dbf95e8"
+      ]
+    },
+    {
+      "expr_id": "p1:d1c7112bc7e844e61fd135c7",
+      "kind": "ITEM",
+      "entity_node_id": "p1:3583dda498f1d1d503421d3c",
+      "source_span_ids": [
+        "p1:f8886506913234f7d33e1972",
+        "p1:4afaa9de6f3264c05015bb2d"
+      ],
+      "relation_ids": [
+        "p1:df127537d7c39291c61552fd"
+      ]
+    },
+    {
+      "expr_id": "p1:72187dbc35d58c503121b4b4",
+      "kind": "ITEM",
+      "entity_node_id": "p1:09380cce63fc7fd00b65f6c0",
+      "source_span_ids": [
+        "p1:9f01229cf2a682a494bc47c7",
+        "p1:dcf99e0ab598149a14f2def9"
+      ],
+      "relation_ids": [
+        "p1:a596b38994a0403f7b49f755"
+      ]
+    },
+    {
+      "expr_id": "p1:9355dcdf47499fc0c29274b9",
+      "kind": "ITEM",
+      "entity_node_id": "p1:79c613cd93e5c77a7932a5c7",
+      "source_span_ids": [
+        "p1:ffd9d9aadc148137e8ec0a88",
+        "p1:fc1ddc2fd8fbbc5d89053709"
+      ],
+      "relation_ids": [
+        "p1:2111f29716b0dfc1ed80857a"
+      ]
+    },
+    {
+      "expr_id": "p1:abd67a380ccf400d4360446e",
+      "kind": "ITEM",
+      "entity_node_id": "p1:19b7660dccee7160a019e69a",
+      "source_span_ids": [
+        "p1:075859ef2fe5aa5c361d2fbb",
+        "p1:34c305e0fd63d982aef24ed5"
+      ],
+      "relation_ids": [
+        "p1:b4ed3191d246b759bf4157e1"
+      ]
+    },
+    {
+      "expr_id": "p1:8bfe4989d0e5406148120e70",
+      "kind": "ALL",
+      "base_entity_node_id": "p1:19b7660dccee7160a019e69a",
+      "source_span_ids": [
+        "p1:34c305e0fd63d982aef24ed5"
+      ],
+      "relation_ids": [
+        "p1:b4ed3191d246b759bf4157e1"
+      ]
+    },
+    {
+      "expr_id": "p1:757b7cb33e85b3f85553ed2e",
+      "kind": "ITEM",
+      "entity_node_id": "p1:918a813982da96c08e757ae6",
+      "source_span_ids": [
+        "p1:989f80d42112762202d202a4",
+        "p1:e390aa21151fd2be3b9716af"
+      ],
+      "relation_ids": [
+        "p1:62bd55d7b2fd35a35ee9228b"
+      ]
+    },
+    {
+      "expr_id": "p1:e693e64fc21ba442f137dba5",
+      "kind": "ITEM",
+      "entity_node_id": "p1:a84397796164ca802e9aef5f",
+      "source_span_ids": [
+        "p1:6235a2ff4fa5027fc227a50f",
+        "p1:e390aa21151fd2be3b9716af"
+      ],
+      "relation_ids": [
+        "p1:4fd12c86c2948eac3424a3fc"
+      ]
+    },
+    {
+      "expr_id": "p1:47693dd2c8652e086593ab3f",
+      "kind": "ITEM",
+      "entity_node_id": "p1:830e87023485d4ae6c3c13ec",
+      "source_span_ids": [
+        "p1:db73833bd58f22aa71d5c8f3",
+        "p1:4e0f07a639757a7eb5996d99"
+      ],
+      "relation_ids": [
+        "p1:a5a440a15270a2f3a3ad72cc"
+      ]
+    },
+    {
+      "expr_id": "p1:3c7cbe393e079cbe870df7b7",
+      "kind": "ITEM",
+      "entity_node_id": "p1:558c7731fc0405dd362f3b3f",
+      "source_span_ids": [
+        "p1:e492972cd22031e0a7e2e37d",
+        "p1:4517733b00ba202a8f6bdd36"
+      ],
+      "relation_ids": [
+        "p1:4b8e94de42251f7bf69cbddb"
+      ]
+    },
+    {
+      "expr_id": "p1:2eb2ec17aeef83334ab21eec",
+      "kind": "ITEM",
+      "entity_node_id": "p1:55c138e5a1eef742501b17a6",
+      "source_span_ids": [
+        "p1:fece84afcf391f534a1ddb31",
+        "p1:6c39fe70a9d50c6ef56b62b6"
+      ],
+      "relation_ids": [
+        "p1:8c2c699702b006f6ef07889d"
+      ]
+    },
+    {
+      "expr_id": "p1:080fe5a7654a95e515e32c81",
+      "kind": "ITEM",
+      "entity_node_id": "p1:acc861029dec821ca1ef36df",
+      "source_span_ids": [
+        "p1:012a3f405471bd34221ab381",
+        "p1:172855f16717f27a0cd13721"
+      ],
+      "relation_ids": [
+        "p1:c26b250a34e3a50910a7fcd5"
+      ]
+    },
+    {
+      "expr_id": "p1:4f173e506745499fc34e2426",
+      "kind": "ITEM",
+      "entity_node_id": "p1:a862e0747ef222ad6da48e3a",
+      "source_span_ids": [
+        "p1:e5a37b31263a494d6d1da5d0",
+        "p1:7a6148ab6f42bce2f539aa3c"
+      ],
+      "relation_ids": [
+        "p1:1ca06cb2dac7f2ae1671568c"
+      ]
+    },
+    {
+      "expr_id": "p1:9e60b0a7c05812037f304b13",
+      "kind": "ITEM",
+      "entity_node_id": "p1:c4e848bba08a6da473204bb7",
+      "source_span_ids": [
+        "p1:39e4a686dd33d7da0dded314",
+        "p1:e3deab1969c328e84c894f26"
+      ],
+      "relation_ids": [
+        "p1:c2c1a1993249b40ab6f92d49"
+      ]
+    },
+    {
+      "expr_id": "p1:1c6d4af758975149cfbb48f8",
+      "kind": "ITEM",
+      "entity_node_id": "p1:9862f27c3920c56ea086f9b4",
+      "source_span_ids": [
+        "p1:fc2a31618d22c45dc9e97029",
+        "p1:1b1b9fa7ab75f025da785fd2"
+      ],
+      "relation_ids": [
+        "p1:bcbe32e7928310ee854d35c1"
+      ]
+    },
+    {
+      "expr_id": "p1:9388ba510dc5226a7f777e2b",
+      "kind": "ITEM",
+      "entity_node_id": "p1:d3f5d84305a9e4ad8b3e0b0d",
+      "source_span_ids": [
+        "p1:178d831df39ff02566f7ad00",
+        "p1:bf3c30107fb08928feb34b8f"
+      ],
+      "relation_ids": [
+        "p1:acb993c196993a98b13585a7"
+      ]
+    },
+    {
+      "expr_id": "p1:03823a1a2aba75d71d8af289",
+      "kind": "ITEM",
+      "entity_node_id": "p1:2fdab3384040404028f19020",
+      "source_span_ids": [
+        "p1:18950504ee23d13b063e315f",
+        "p1:f641ae65224cd8b1a1a37559"
+      ],
+      "relation_ids": [
+        "p1:d41b3df6b05812caef320657"
+      ]
+    },
+    {
+      "expr_id": "p1:035a2adbbc5385e16764b267",
+      "kind": "ITEM",
+      "entity_node_id": "p1:f676cdca185fb72d8023d505",
+      "source_span_ids": [
+        "p1:86d5b03d646691843adc81e1",
+        "p1:ef5b162cd4b834c2b4dbb9ba"
+      ],
+      "relation_ids": [
+        "p1:6634224a418ab0b8a51100e9"
+      ]
+    },
+    {
+      "expr_id": "p1:1c4991644085442f9ac840ec",
+      "kind": "ITEM",
+      "entity_node_id": "p1:70f6b5b93750e58c49ce754d",
+      "source_span_ids": [
+        "p1:3bdfeefc7a147f0f7d02e0da",
+        "p1:efc7b204f22819a573b9b1d7"
+      ],
+      "relation_ids": [
+        "p1:218ce9128f0f0c4c2813a467"
+      ]
+    }
+  ],
+  "condition_expr_nodes": [],
+  "quantity_expr_nodes": [],
+  "boundary_facts": [
+    {
+      "boundary_fact_id": "p1:20c23f7273b470627ee93d08",
+      "fact_type": "PARTICIPANT",
+      "state": "RESOLVED",
+      "subject_node_ids": [],
+      "object_node_ids": [],
+      "participant_node_ids": [
+        "p1:a8ef57d4312be1b36c5b74b4"
+      ],
+      "node_ids": [
+        "p1:a8ef57d4312be1b36c5b74b4",
+        "p1:475caf988fc0043958cefe6f"
+      ],
+      "relation_ids": [
+        "p1:3f0ebfe1ce0212081847edf0"
+      ],
+      "source_span_ids": [
+        "p1:c0d6a4972933322eb27ed043",
+        "p1:2f44bd7ac6f6172918f94b57",
+        "p1:c094da60ca27a6885af3dfb9"
+      ],
+      "eligibility_decision_id": "p1:4072789baca3bffb3e6fe38e"
+    },
+    {
+      "boundary_fact_id": "p1:da0e80d43dc8a9c2bddb5391",
+      "fact_type": "PARTICIPANT",
+      "state": "RESOLVED",
+      "subject_node_ids": [],
+      "object_node_ids": [],
+      "participant_node_ids": [
+        "p1:2d66a39a5b33ed21635268be"
+      ],
+      "node_ids": [
+        "p1:2d66a39a5b33ed21635268be",
+        "p1:d6411656376dca781abd0d10"
+      ],
+      "relation_ids": [
+        "p1:3c4e1b99a78d7fc652cf351b"
+      ],
+      "source_span_ids": [
+        "p1:5a8c828a3a4c2b46d92bae0e",
+        "p1:59bdd662a1228eb86f4b6327",
+        "p1:a61849548f8089fa639d9612"
+      ],
+      "eligibility_decision_id": "p1:3b9570440d7a8076a2d4e81f"
+    },
+    {
+      "boundary_fact_id": "p1:79e38e1f693594fdcc11ed29",
+      "fact_type": "PARTICIPANT",
+      "state": "RESOLVED",
+      "subject_node_ids": [],
+      "object_node_ids": [],
+      "participant_node_ids": [
+        "p1:84f42fa2ff58c05122a30301"
+      ],
+      "node_ids": [
+        "p1:84f42fa2ff58c05122a30301",
+        "p1:d917479ec7b3b54fc3276fc2"
+      ],
+      "relation_ids": [
+        "p1:301c46b464d0a1e82845f17c"
+      ],
+      "source_span_ids": [
+        "p1:f62215908d14f9767af6dfee",
+        "p1:d0fbe698323fc4182a13bd17",
+        "p1:e5ea449e9e10d46b75f35197"
+      ],
+      "eligibility_decision_id": "p1:b717b810d74233eb5d69c166"
+    },
+    {
+      "boundary_fact_id": "p1:0b502c2a91fb5ded2235deac",
+      "fact_type": "FORBID",
+      "state": "UNRESOLVED",
+      "subject_node_ids": [],
+      "object_node_ids": [],
+      "participant_node_ids": [],
+      "node_ids": [
+        "p1:e29d9738890ec93fe73db33d"
+      ],
+      "relation_ids": [],
+      "source_span_ids": [
+        "p1:26858ae2dc3761e82a3919a2",
+        "p1:146ff163b965da76907812ec"
+      ],
+      "eligibility_decision_id": "p1:333dc9a1a31dc64e7d661f39",
+      "predicate_node_id": "p1:e29d9738890ec93fe73db33d",
+      "unresolved_ref": "p1:0123bc5eab82e696bf19163a"
+    },
+    {
+      "boundary_fact_id": "p1:fc53b1df6bef947f8430b8a4",
+      "fact_type": "ACTION",
+      "state": "RESOLVED",
+      "subject_node_ids": [],
+      "object_node_ids": [
+        "p1:3583dda498f1d1d503421d3c"
+      ],
+      "participant_node_ids": [],
+      "node_ids": [
+        "p1:61659953a37ce1d62efaeb4f",
+        "p1:3583dda498f1d1d503421d3c"
+      ],
+      "relation_ids": [
+        "p1:df127537d7c39291c61552fd"
+      ],
+      "source_span_ids": [
+        "p1:0edadfa20614d7114d3910a9",
+        "p1:4afaa9de6f3264c05015bb2d",
+        "p1:f8886506913234f7d33e1972"
+      ],
+      "eligibility_decision_id": "p1:e941e978ba4707ca58a83af6",
+      "predicate_node_id": "p1:61659953a37ce1d62efaeb4f",
+      "scope_expr_id": "p1:d1c7112bc7e844e61fd135c7"
+    },
+    {
+      "boundary_fact_id": "p1:1ca8dd3f97d4440c8fc84755",
+      "fact_type": "ACTION",
+      "state": "RESOLVED",
+      "subject_node_ids": [],
+      "object_node_ids": [
+        "p1:9862f27c3920c56ea086f9b4"
+      ],
+      "participant_node_ids": [],
+      "node_ids": [
+        "p1:b28024102914545a30509977",
+        "p1:9862f27c3920c56ea086f9b4"
+      ],
+      "relation_ids": [
+        "p1:bcbe32e7928310ee854d35c1"
+      ],
+      "source_span_ids": [
+        "p1:74daf866bfff2e07af33d1e1",
+        "p1:1b1b9fa7ab75f025da785fd2",
+        "p1:fc2a31618d22c45dc9e97029"
+      ],
+      "eligibility_decision_id": "p1:f9b6c1f6b802c4afab5d3835",
+      "predicate_node_id": "p1:b28024102914545a30509977",
+      "scope_expr_id": "p1:1c6d4af758975149cfbb48f8"
+    }
+  ]
+}
