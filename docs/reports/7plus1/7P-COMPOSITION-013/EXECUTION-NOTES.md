@@ -1,0 +1,16 @@
+# Execution notes and preserved provisional failures
+
+All files below belong to the independent 013 candidate/report area. Earlier sealed reports were not edited. No intermediate failure is replaced by a corrected receipt.
+
+- Initial dispatch was fetched and the exact remote task/pointer blobs were synchronized without merging. Actual dispatch HEAD and the initial dirty tracked status are recorded in BASELINE.json.
+- Prepare/test helper guards initially retained a 012 path and were corrected before candidate execution; the mistakenly selected old focused suite is preserved and not credited as 013.
+- R1 non-Gold first and second runs contain the actual 38/7 and 44/1 failures. Cardinality, typed artifact/event separation, parenthetical/main-layer filtering and complete condition operator preservation were repaired generically. Subsequent 45/0 receipts retain the same frozen texts and contracts.
+- Initial retained R1 result is 508/10. The corrected retained result is 518/0; the meeting and T07/T09 diagnostic traces remain available.
+- The first full R1 run overlapped a final runtime edit and is intermediate only. The stable full-r1-final receipt was credited to the R1 Gate, and the entire fixed final R4 candidate is independently rerun again.
+- The historical SWAI-004 diagnostic called the fact “dry-run”; exact provenance instead places it under the both-exist temporal qualifier. That label correction is explicit in R1-GATE.json and the source review. The separate Dry-run requirement is not credited as repaired.
+- R2 baseline NG11 had a weaker full-path check. The already frozen PROTECTED_COLLECTION contract was strengthened to require an actual ALL collection rather than a complete-looking string. This is recorded after the weak baseline, before R2 STANDARD replay; no source text or Gold answer was changed.
+- R3 first non-Gold baseline fails 3/3. After explicit role handling, the first STANDARD replay adds nine erroneous report-recipient facts for task-envelope assignees. Those complete first traces and source reviews are preserved. Existing same-source PERFORMER assignment now takes precedence over generic recipient metadata; the corrected nine replays add none of those facts. Final R3 Gate is based on the corrected fixed implementation and independently repeated focused/retained tests.
+- A shell quoting error occurred while wiring R4, before the engine replacement was written. The replacement was performed by the UTF-8 Node helper wire-r4.mjs. No Chinese text was edited by PowerShell.
+- R4 first frozen non-Gold result is 1 PASS / 1 FAIL. NG18's distributive scope/count and imperative evidence are missing; the consumer accurately preserves it as partial. Its expected mechanism is not changed into a fail-closed success. New unit assertions prove no unsupported RESOLVED, and are explicitly distinct from semantic acceptance.
+- All model signals for STANDARD replay and controlled performance are the actual frozen 008 signals; no new NLP/BGE/E5/NLI invocation is claimed for those runs. New R1 input signal acquisition was separately recorded in NON-GOLD-SIGNALS-MANIFEST.json.
+- Runtime changes stop after the R4 failure. Remaining work is repeatability, regression, controlled measurement, integrity review, reporting and sealing only. No new task is automatically authorized.

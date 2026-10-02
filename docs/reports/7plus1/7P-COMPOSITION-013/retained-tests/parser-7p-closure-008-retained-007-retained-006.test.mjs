@@ -1,0 +1,40 @@
+import test from 'node:test';import assert from 'node:assert/strict';import fs from 'node:fs';
+import{compileNative,candidateGraph}from'../../../../../research/7plus1-parser/v0.3-7p-composition-013/engine.mjs';
+import{closeEdges}from'../../../../../research/7plus1-parser/v0.3-7p-composition-013/edge-closure.mjs';
+import{certifyFrames}from'../../../../../research/7plus1-parser/v0.3-7p-composition-013/frame-certification.mjs';
+import{callExpression}from'../../../../../research/7plus1-parser/v0.3-7p-composition-013/technical-instructions.mjs';
+import{sourceDocument}from'../../../../../research/7plus1-parser/p0-semantic-repair-r02/source.mjs';
+import{cases}from'../../../../../docs/reports/7plus1/7P-REPAIR-007/non-gold-inputs.mjs';
+const load=id=>JSON.parse(fs.readFileSync('docs/reports/7plus1/7P-REPAIR-007/non-gold/'+id+'.json'));
+for(const x of cases)test('006 certification '+x.id,()=>{
+ const r=compileNative(sourceDocument(x.text),structuredClone(load(x.id).signals)),c=r.compiler_v03,a=c.nlp_signals.semantic_decoding.frame_certification,nodes=new Map(c.semantic_nodes.map(n=>[n.node_id,n])),records=[...a.controlled,...a.call_sites,...a.code_ownership,...a.test_insertions],res=k=>c.canonical_7plus1[k].entries.filter(e=>e.state==='RESOLVED'),facts=res('A').flatMap(e=>e.boundary_fact_ids).map(id=>c.boundary_ir.facts.find(f=>f.boundary_fact_id===id));
+ assert.equal(r.contract_gate_results.status,'PASS');assert.equal(r.relation_type_audit.status,'PASS');
+ for(const s of r.source_spans)assert.equal([...x.text].slice(s.start,s.end).join(''),s.text);
+ for(const rec of records){assert(rec.source_span_ids.length&&rec.structural_path.length);if(rec.state!=='CERTIFIED'){assert(rec.unresolved_ref);continue;}assert(rec.relation_ids.length);for(const rid of rec.relation_ids){const rel=c.relations.find(q=>q.relation_id===rid);assert(rel?.rule_refs.includes(rec.frame_id));}}
+ for(const n of c.semantic_nodes.filter(n=>n.metadata.frame_certification?.boundary_role==='SUBORDINATE')){assert(c.eligibility_decisions.some(d=>d.disposition==='AUXILIARY'&&d.candidate_node_ids.includes(n.node_id)));assert(!facts.some(f=>f.predicate_node_id===n.node_id));}
+ assert(!res('P').length);
+ if(x.id==='CONTROL'){assert.equal(res('A').length,1);assert(a.controlled[0].primary_behavior_id);assert(nodes.get(a.controlled[0].primary_behavior_id).metadata.certified_behavior.source_operand_sets.length);assert.deepEqual(res('I').map(e=>e.display_value).sort(),['cold','hot']);}
+ if(x.id==='CONTEXT'){assert(a.primary_targets.some(t=>t.relation_type==='THEME'));assert(!res('O').length);}
+ if(['GOVERNED','PARAPHRASE','CONDITION'].includes(x.id)){assert.equal(a.governing.length,1);assert.equal(res('A').length,1);assert.equal(a.governing[0].embedded_event_ids.length,2);assert(nodes.get(a.governing[0].governing_action_id).metadata.certified_behavior.source_operand_sets.length);if(x.id==='CONDITION')assert(facts[0].condition_expr_id);}
+ if(x.id==='INDEPENDENT'){assert.equal(res('A').length,2);assert(a.controlled[1].independent_coordination);assert(!a.governing.length);}
+ if(x.id==='CREATE'){assert(res('O').some(e=>e.display_value==='result.json'));assert(!res('O').some(e=>e.display_value==='build_worker'));}
+ if(['AMBIGUOUS','TWO_GOVERNORS'].includes(x.id)){assert(a.controlled.every(f=>f.state==='UNRESOLVED'));assert(!a.governing.length);}
+ if(['CALL','SIBLINGS','EN_CALL','EN_SHOULD','EN_REPLACE'].includes(x.id)){
+  assert.equal(a.call_sites.length,x.id==='SIBLINGS'?3:1);assert.equal(res('A').length,a.call_sites.length);
+  for(const f of a.call_sites){assert.equal(f.state,'CERTIFIED');const owner=nodes.get(f.owner_node_id);assert(owner.metadata.role_transition.same_artifact);assert(res('I').some(e=>e.display_value===owner.surface));assert(res('O').some(e=>e.display_value===owner.surface));assert(!res('O').some(e=>e.display_value===nodes.get(f.callee_node_id).surface));assert.equal(f.argument_node_ids.length,2);const set=c.boundary_ir.set_expr_nodes.find(e=>e.expr_id===f.argument_scope_expr_id);assert.equal(set.kind,'UNION');assert.equal(set.operand_expr_ids.length,2);assert(nodes.get(f.event_node_id).metadata.certified_behavior.argument_scope_expr_id);for(const n of f.argument_node_ids)assert(c.relations.some(r=>r.state==='RESOLVED'&&r.head_node_id===f.behavior_node_id&&r.tail_node_id===n&&r.relation_type==='PATIENT'));}
+  if(x.id==='SIBLINGS')assert.equal(new Set(a.call_sites.flatMap(f=>f.argument_node_ids)).size,6);
+ }
+ if(['DECLARE','EN_DECLARE'].includes(x.id)){assert.equal(a.code_ownership[0].state,'CERTIFIED');const f=a.code_ownership[0];assert(res('O').some(e=>e.display_value===nodes.get(f.declared_symbol_node_id).surface));assert.equal(nodes.get(f.event_node_id).metadata.owned_content.execution,false);assert(!res('A').some(e=>/remove|upload/u.test(e.display_value)));}
+ if(['TESTS','EN_TESTS'].includes(x.id)){const f=a.test_insertions[0];assert.equal(f.state,'CERTIFIED');assert.equal(f.distribution.operator,'EACH');assert.equal(f.distribution.count_per_member,1);assert.equal(f.file_node_ids.length,x.id==='TESTS'?3:2);assert.equal(res('O').length,f.file_node_ids.length);assert.equal(res('A').length,1);assert(f.example_symbol_spans.length);assert(!res('A').some(e=>/delete_all|publish/u.test(e.display_value)));}
+ if(['UNRELATED','QUOTE_CALL','CONTENT_CALL'].includes(x.id))assert.equal(records.length,0);
+ if(['INTERRUPTED','MULTI_DECLARATION','MALFORMED_CALL'].includes(x.id))assert(records.length&&records.every(f=>f.state==='UNRESOLVED'));
+ if(x.id==='NEG_CALL')assert(!a.call_sites.length&&!res('A').length);
+});
+for(const mutation of ['DOMAIN','MODALITY','OWNER','GOVERNOR'])test('006 rejects injected '+mutation+' conflicts',()=>{const x=load('GOVERNED'),f=closeEdges(candidateGraph(sourceDocument(x.text),x.signals)),frame=f.semantic_decoding.candidate_recall.frames.find(f=>f.frame_kind==='CAUSATIVE_OR_CONTROLLED'),n=f.semantic_nodes.find(n=>n.node_id===frame.embedded_event_ids[0]);if(mutation==='DOMAIN')n.metadata.discourse.domain_id='foreign-domain';if(mutation==='OWNER')n.metadata.discourse.owner_structure_id='foreign-owner';if(mutation==='MODALITY')n.metadata.modality='FORBIDDEN';if(mutation==='GOVERNOR')frame.governing_action_ids.push(frame.controller_event_id);certifyFrames(f);assert.equal(f.semantic_decoding.frame_certification.controlled[0].state,'UNRESOLVED');});
+test('006 call parser rejects unsupported expression semantics and preserves literal syntax',()=>{for(const x of ['join(a + b)','join(a,,b)','join(nested(a))','join(a) execute()'])assert(callExpression(x).error);const x=callExpression('join(root / "back,up", other)');assert.equal(x.arguments[0].text,'root / "back,up"');assert.equal(x.arguments.length,2);assert.equal(callExpression('run()').arguments.length,0);});
+test('006 deterministic certification, IR and canonical',()=>{const x=load('SIBLINGS'),go=()=>compileNative(sourceDocument(x.text),structuredClone(x.signals)).compiler_v03,a=go(),b=go();for(const k of ['boundary_ir','canonical_7plus1','eligibility_decisions'])assert.deepEqual(a[k],b[k]);assert.deepEqual(a.nlp_signals.semantic_decoding.frame_certification,b.nlp_signals.semantic_decoding.frame_certification);});
+test('006 no corpus-specific switches, new normative relations or query changes',()=>{for(const name of ['frame-certification.mjs','technical-instructions.mjs']){const s=fs.readFileSync('research/7plus1-parser/v0.3-7p-composition-013/'+name,'utf8');assert(!/SWAI-|REF-001|next_seq|archived|expected-7plus1|canonical_7plus1|\bfs\.|readFile/u.test(s));}for(const name of ['relations.mjs','graph-queries.mjs','projection.mjs','model-signals.mjs'])assert.deepEqual(fs.readFileSync('research/7plus1-parser/v0.3-7p-composition-013/'+name),fs.readFileSync('research/7plus1-parser/v0.3-7p-repair-005/'+name));
+ // 008 explicitly repairs coverage locality. The historical 006/007 freeze still holds;
+ // candidate coverage behavior is checked separately rather than equated to old bytes.
+ assert.deepEqual(fs.readFileSync('research/7plus1-parser/v0.3-7p-repair-007/coverage-locality.mjs'),fs.readFileSync('research/7plus1-parser/v0.3-7p-repair-005/coverage-locality.mjs'));
+});
