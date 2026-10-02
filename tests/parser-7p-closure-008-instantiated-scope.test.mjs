@@ -1,0 +1,8 @@
+import test from 'node:test';import assert from 'node:assert/strict';import fs from 'node:fs';
+import {compileNative} from '../research/7plus1-parser/v0.3-7p-closure-008/engine.mjs';import {sourceDocument} from '../research/7plus1-parser/p0-semantic-repair-r02/source.mjs';
+for(const id of ['STATIC_VARIADIC','STATIC_RENAMED','STATIC_THREE','STATIC_TWO_OWNERS'])test('008 instantiated input scope preserves context and collection '+id,()=>{
+ const x=JSON.parse(fs.readFileSync('docs/reports/7plus1/7P-CLOSURE-008/phase-b/C03-PREVALIDATION/'+id+'.json')),r=compileNative(sourceDocument(x.compiler_v03.source.raw_text),structuredClone(x.compiler_v03.nlp_signals)),c=r.compiler_v03,a=c.nlp_signals.semantic_decoding,inputs=c.boundary_ir.facts.filter(f=>f.fact_type==='TASK_OBJECT');
+ for(const instance of a.declared_behavior.instantiations){const frame=a.frame_certification.call_sites.find(f=>f.frame_id===instance.call_frame_id);assert(!inputs.some(f=>frame.argument_node_ids.some(i=>f.object_node_ids.includes(i))));for(const id of instance.collection_node_ids){const fact=inputs.find(f=>f.object_node_ids.includes(id));assert(fact);const expr=c.boundary_ir.set_expr_nodes.find(e=>e.expr_id===fact.scope_expr_id);assert.equal(expr.kind,'ALL');assert.equal(expr.base_entity_node_id,id);}}
+ for(const decision of a.instantiated_input_scope.decisions){assert(c.relations.some(r=>r.relation_id===decision.relation_id&&r.state==='REJECTED'));assert(decision.source_span_ids.length);assert(decision.replacement_node_ids.length);assert(decision.structural_paths.length);}
+ assert.equal(r.contract_gate_results.status,'PASS');
+});

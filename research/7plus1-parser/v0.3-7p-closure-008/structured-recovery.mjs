@@ -1,11 +1,12 @@
 import {id,uniq} from './identity.mjs';
+import {criterionSyntax} from './criterion-syntax.mjs';
 import {boundaryDomain} from './discourse.mjs';
 
 // Closed grammatical categories. Names/paths are source operands, never rule keys.
 const artifactPattern=/(?:[\p{L}\p{N}_@.-]+\/)*[\p{L}\p{N}_@.-]+\.(?:md|rst|txt|json|ya?ml|csv|toml|py|mjs|js|ts|tsx|html|css|schema|ini|xml|sql)\b|\bREPORT-[A-Za-z0-9_-]+/gu;
 const referencePattern=/https?:\/\/[^\s`<>|]+|(?:[\w.-]+\/)*[\w.-]+\.(?:md|json|ya?ml|schema|toml|py)\b|\b(?:ADR|TASK|REPORT|ISSUE|SPEC|POLICY)-[A-Za-z0-9_-]+\b|\b[a-f0-9]{7,40}\b|\bv?\d+\.(?:\d+|x)(?:\.(?:\d+|x))?(?:-[\w.]+)?\b/giu;
 const actions={modify:/^(?:修改|修订|更新|改动|modify|update|revise)$/iu,create:/^(?:新建|新增|创建|生成|编写|撰写|写|写入|create|generate|write|add)$/iu,read:/^(?:读取|检查|核查|对比|审计|检查|read|inspect|check|compare|audit)$/iu};
-const referenceMarkers=/(符合|遵循|按(?:照)?|依据|根据|参照|参考|见|对齐|基线|based on|according to|per\b|comply with|conforms? to|references?|baseline|commit)/giu;
+const referenceMarkers=/(符合|遵循|按(?:照)?|依据|根据|参照|参考|针对|见|对齐|基线|based on|according to|per\b|comply with|conforms? to|references?|baseline|commit)/giu;
 const subtype=s=>/符合|遵循|comply|conform/iu.test(s)?'COMPLIES_WITH':/对齐/iu.test(s)?'VALIDATES_AGAINST':/见|参考|reference/iu.test(s)?'REFERENCES':/基线|baseline/iu.test(s)?'CURRENT_BASELINE':/commit/iu.test(s)?'PROVENANCE':'BASED_ON';
 const headerRole=s=>/^(?:#|编号|id)$/iu.test(s)?'CRITERION_ID':/^(?:证据|evidence)$/iu.test(s)?'EVIDENCE':/^(?:项目|对象|接口|模块|文件|风险|item|subject|artifact|risk)$/iu.test(s)?'SUBJECT':/依据|参照|basis|reference/iu.test(s)?'BASIS':/标准|验收|acceptance|criteria/iu.test(s)?'ACCEPTANCE':/副作用|side.effect/iu.test(s)?'SIDE_EFFECT':/缓解|mitigation/iu.test(s)?'MITIGATION':/动作|action/iu.test(s)?'ACTION':/状态|现状|status|state/iu.test(s)?'STATUS':null;
 
@@ -20,14 +21,21 @@ export function structuredRecovery(f){
  const cleanRange=(a,b)=>{while(a<b&&/[\s`*|]/u.test(points[a]))a++;while(b>a&&/[\s`*|。；;]/u.test(points[b-1]))b--;return [a,b];};
  const references=(a,start,end,head,relationType,evidence,proof=null)=>{
   const q=text(start,end),out=[];
-  for(const m of q.matchAll(referencePattern)){const s=at(start,q,m.index),e=s+[...m[0]].length;
+  for(const m of q.matchAll(referencePattern)){const s=at(start,q,m.index);let e=s+[...m[0]].length;
    // A commit provenance predicate requires its own hash argument. A later version or ADR
    // in a parenthesis is not the commit's object, even inside the same table cell.
    if(relationType==='PROVENANCE'&&(!/^[a-f0-9]{7,40}$/iu.test(m[0])||!/^[\s`*:#]*$/u.test(text(start,s)))){
     audit.diagnostics.push({code:'REFERENCE_ARGUMENT_TYPE_OR_ATTACHMENT_MISMATCH',relation_type:relationType,source_span_ids:[span(s,e),...evidence]});continue;
    }
-   const n=node(a.cl,'REFERENCE',s,e,{sense:'STRUCTURED_REFERENCE',reference_kind:/^(ADR|TASK|REPORT|ISSUE|SPEC|POLICY)-/iu.exec(m[0])?.[1]?.toUpperCase()??(/https?:/iu.test(m[0])?'URI_REFERENCE':/^[a-f0-9]{7,40}$/iu.test(m[0])?'COMMIT':/^v?\d/u.test(m[0])?'VERSION':'FILE_REFERENCE'),reference_relation:relationType,discourse:a.discourse});
+   const suffix=/^(?::(\d+)(?:[-–](\d+))?|[ \t]+§\s*([A-Za-z0-9_.-]+))(?=\s|[`，。；,;:)）]|$)/u.exec(text(e,end));
+   const locator=suffix?{kind:suffix[1]?'SOURCE_LINE':'SOURCE_SECTION',...(suffix[1]?{line_start:Number(suffix[1]),...(suffix[2]?{line_end:Number(suffix[2])}:{})}:{section:suffix[3]}),source_span_id:span(e,e+[...suffix[0]].length)}:null;
+   if(suffix)e+=[...suffix[0]].length;
+   const n=node(a.cl,'REFERENCE',s,e,{sense:'STRUCTURED_REFERENCE',reference_kind:/^(ADR|TASK|REPORT|ISSUE|SPEC|POLICY)-/iu.exec(m[0])?.[1]?.toUpperCase()??(/https?:/iu.test(m[0])?'URI_REFERENCE':/^[a-f0-9]{7,40}$/iu.test(m[0])?'COMMIT':/^v?\d/u.test(m[0])?'VERSION':'FILE_REFERENCE'),reference_relation:relationType,discourse:a.discourse,...(locator?{source_locator:locator}:{})});
    const r=relation(a.cl,'BASIS',head,n,evidence);if(proof)mark(r,proof);
+   if(locator)for(const old of f.relations.filter(x=>x!==r&&x.relation_type==='BASIS'&&x.head_node_id===head.node_id&&x.clause_id===a.cl.id&&x.state==='RESOLVED')){
+    const target=f.semantic_nodes.find(n=>n.node_id===old.tail_node_id),first=getSpan(target);
+    if(first.start===s&&first.end===s+[...m[0]].length){old.state='REJECTED';old.rule_refs=uniq([...old.rule_refs,'EXPLICIT_SOURCE_LOCATOR']);audit.diagnostics.push({code:'UNQUALIFIED_REFERENCE_SUPERSEDED',relation_id:old.relation_id,replacement_relation_id:r.relation_id,source_span_ids:uniq([...old.evidence_span_ids,...n.source_span_ids])});}
+   }
    audit.references.push({reference_node_id:n.node_id,head_node_id:head.node_id,relation_id:r.relation_id,relation_type:relationType,source_span_ids:uniq([...evidence,...n.source_span_ids]),...(proof?{structural_proof:proof}:{})});out.push(n);
   }return out;
  };
@@ -135,6 +143,14 @@ export function structuredRecovery(f){
    if(children.some(p=>p!==child&&child.structural_path.includes(p.structure_id)))continue;
    const a=f.analyses.find(a=>a.discourse.structure_id===child.structure_id);if(!a)continue;
    const subtree=anns.filter(x=>x.structural_path.includes(child.structure_id)),end=Math.max(child.source_span.end,...subtree.map(x=>x.source_span.end)),[s,e]=cleanRange(child.source_span.start,end),n=node(a.cl,'STATE',s,e,{sense:'ACCEPTANCE_CRITERION',discourse:a.discourse,owner:header.structure_id,completion_kind:'ATOMIC_COMPLETION',structural_path:child.structural_path,continuation_structure_ids:subtree.map(x=>x.structure_id),continuation_source_span_ids:subtree.map(x=>span(x.source_span.start,x.source_span.end))});
+   const stateSyntax=criterionSyntax(points.slice(s,e).join(''));
+   if(stateSyntax){n.metadata.local_state_syntax=stateSyntax;
+    for(const local of f.analyses.filter(x=>x.cl.span.start>=s&&x.cl.span.end<=e)){
+     local.handled=true;local.state_accountability={state_node_id:n.node_id,source_span_ids:[local.sid,...n.source_span_ids],structural_path:child.structural_path,reason:'EXPLICIT_ACCEPTANCE_STATE'};
+     for(const event of local.events){event.metadata.candidate_disposition='REJECTED';event.metadata.rejection_reason='ACCEPTANCE_STATE_OWNS_PREDICATE_LAYER';for(const r of f.relations.filter(r=>r.head_node_id===event.node_id))r.state='REJECTED';const uid=event.metadata.modality_unresolved;if(uid)f.unresolved=f.unresolved.filter(u=>u.unresolved_id!==uid);}
+     local.events=[];
+    }
+   }
    atoms.push({a,n,expr:expr({op:'STATE_REF',state_node_id:n.node_id,source_span_ids:uniq([...n.source_span_ids,...n.metadata.continuation_source_span_ids]),relation_ids:[]})});
   }
   for(const row of audit.tables.filter(x=>x.status==='ACCEPTANCE_ROW'&&anns.find(y=>y.row_id===x.row_id)?.structural_path.includes(header.structure_id))){
@@ -167,8 +183,9 @@ export function structuredRecovery(f){
  const outputs=f.relations.filter(r=>r.relation_type==='RESULT'&&r.state==='RESOLVED').map(r=>({r,e:f.semantic_nodes.find(n=>n.node_id===r.head_node_id),n:f.semantic_nodes.find(n=>n.node_id===r.tail_node_id)})).filter(x=>boundaryDomain(x.e.metadata.discourse)&&['REQUIRED','PERMITTED'].includes(x.e.metadata.modality));
  const explicit=outputs.filter(x=>x.e.metadata.authored_document),files=explicit.filter(x=>/\.[a-z]{1,8}$/iu.test(x.n.surface)&&!/[\s，]/u.test(x.n.surface)),candidatePool=files.length?files:explicit.length?explicit:outputs;
  const pool=[...new Map(candidatePool.map(x=>[x.n.node_id,x])).values()];
- const bilingual=pool.length===2&&pool[0].e.node_id===pool[1].e.node_id&&pool.every(x=>/\.(?:zh|en)\.md$/iu.test(x.n.surface))&&pool[0].n.surface.replace(/\.(?:zh|en)\.md$/iu,'.md')===pool[1].n.surface.replace(/\.(?:zh|en)\.md$/iu,'.md');
- const ownership=pool.length===1?'UNIQUE_OUTPUT':bilingual?'OUTPUT_SET':'UNRESOLVED_OUTPUT_SET',owners=ownership==='UNRESOLVED_OUTPUT_SET'?[]:pool.map(x=>x.n.node_id);
+ const sharedAuthoringHead=pool.length>1&&pool.every(x=>x.e.node_id===pool[0].e.node_id&&x.e.metadata.authored_document);
+ const localeVariants=pool.length===2&&sharedAuthoringHead&&pool.every(x=>/\.(?:zh|en)\.md$/iu.test(x.n.surface))&&pool[0].n.surface.replace(/\.(?:zh|en)\.md$/iu,'.md')===pool[1].n.surface.replace(/\.(?:zh|en)\.md$/iu,'.md');
+ const ownership=pool.length===1?'UNIQUE_OUTPUT':localeVariants?'OUTPUT_SET':'UNRESOLVED_OUTPUT_SET',owners=ownership==='UNRESOLVED_OUTPUT_SET'?[]:pool.map(x=>x.n.node_id);
  // Authored section labels are content obligations, with a structural subtree as their payload.
  // They are not execution commands and never receive current-task eligibility.
  for(const section of anns.filter(a=>a.kind==='OUTPUT_CONTENT'&&/^\s*(?:#{1,6}\s+|\*\*§\s*\d+|§\s*\d+)/u.test(a.source_span.quote))){
@@ -178,7 +195,16 @@ export function structuredRecovery(f){
   const children=f.semantic_decoding.discourse.output_content_requirements.filter(r=>r.source_span_ids.some(i=>{const s=f.source_spans.find(s=>s.span_id===i);return s.start>=section.source_span.start&&s.start<end;}));
   f.semantic_decoding.discourse.output_content_requirements.push({requirement_id:id(f.source.sha256,'content-section',section.structure_id),scope:'OUTPUT_CONTENT',kind:'SECTION_CONTENT_REQUIREMENT',modality:'REQUIRED',clause_id:a.cl.id,structural_path:section.structural_path,source_span_ids:[...n.source_span_ids,span(section.source_span.start,end)],semantic_node_ids:[n.node_id],relation_ids:[],child_requirement_ids:children.map(x=>x.requirement_id),content_parsing_status:'STRUCTURED_CONTENT_REQUIREMENT'});
  }
- for(const req of f.semantic_decoding.discourse.output_content_requirements){req.ownership_status=ownership;req.owner_output_ids=owners;req.owning_output_candidates=pool.map(x=>x.n.node_id);req.ownership_evidence_relation_ids=owners.length?pool.map(x=>x.r.relation_id):[];req.content_components=req.semantic_node_ids.map(i=>f.semantic_nodes.find(n=>n.node_id===i)).filter(Boolean).map(n=>({node_id:n.node_id,type:n.node_type,scope:'OUTPUT_CONTENT',owner_output_ids:owners,source_span_ids:n.source_span_ids}));audit.output_content.push(req);}
+ for(const req of f.semantic_decoding.discourse.output_content_requirements){
+  const sharedScope=anns.find(a=>req.structural_path.includes(a.structure_id)&&a.kind==='OUTPUT_CONTENT'&&/所有文档|全部文档|每份文档|两份文档|both documents|each document/iu.test(a.source_span.quote));
+  const countMismatch=sharedScope&&/两份文档|both documents/iu.test(sharedScope.source_span.quote)&&pool.length!==2;
+  const countCompatible=sharedScope&&!countMismatch&&pool.length>0&&pool.every(x=>x.e.node_id===pool[0].e.node_id&&x.e.metadata.authored_document);
+  const localOwners=countMismatch?[]:countCompatible?pool.map(x=>x.n.node_id):owners;
+  req.ownership_status=countMismatch?'UNRESOLVED_OUTPUT_SET':countCompatible?'OUTPUT_SET':ownership;req.owner_output_ids=localOwners;req.owning_output_candidates=pool.map(x=>x.n.node_id);req.ownership_evidence_relation_ids=localOwners.length?pool.map(x=>x.r.relation_id):[];req.ownership_rule=countMismatch?'EXPLICIT_CONTENT_SCOPE_CARDINALITY_CONFLICT':countCompatible?'EXPLICIT_STRUCTURAL_SHARED_CONTENT_SCOPE':localeVariants?'EXPLICIT_SHARED_AUTHORING_LOCALE_VARIANTS':pool.length===1?'UNIQUE_TYPED_AUTHORED_OUTPUT':'NO_UNIQUE_AUTHORED_OUTPUT_GROUP';
+  if(countMismatch){const a=f.analyses.find(a=>a.cl.id===req.clause_id);req.unresolved_ref=unknown(a?.cl,'UNRESOLVED_SCOPE','Explicit shared-content cardinality conflicts with authored output group',pool.map(x=>x.n.node_id));}
+  if(countCompatible)req.shared_content_scope={structure_id:sharedScope.structure_id,source_span_ids:[span(sharedScope.source_span.start,sharedScope.source_span.end)],structural_path:sharedScope.structural_path};
+  req.content_components=req.semantic_node_ids.map(i=>f.semantic_nodes.find(n=>n.node_id===i)).filter(Boolean).map(n=>({node_id:n.node_id,type:n.node_type,scope:'OUTPUT_CONTENT',owner_output_ids:localOwners,source_span_ids:n.source_span_ids}));audit.output_content.push(req);
+ }
  for(const r of audit.tables.filter(x=>x.status==='STRUCTURED_TABLE_UNRESOLVED'))audit.diagnostics.push({code:'STRUCTURED_TABLE_UNRESOLVED',row_id:r.row_id,reason:r.reason,source_span_ids:r.source_span_ids});
  return f;
 }

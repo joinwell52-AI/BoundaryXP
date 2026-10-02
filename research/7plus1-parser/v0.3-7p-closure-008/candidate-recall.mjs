@@ -2,7 +2,7 @@ import {id,uniq} from './identity.mjs';
 import {modifierPhrase,modalityFor,isNominal} from './syntax-mechanisms.mjs';
 import {scalar} from './semantic-decoder.mjs';
 import {MODALS,COMPARATORS,SUPPORT_VERBS} from './grammar.mjs';
-import {imperativePrefix} from './instruction-syntax.mjs';
+import {imperativePrefix,negativeImperativePrefix,directiveLayer} from './instruction-syntax.mjs';
 const verbal=t=>/^(VV|VERB)$/u.test(t?.pos??'');
 const controller=t=>/^(使|让|令|make|makes|let|lets|cause|causes)$/iu.test(t?.lemma??t?.text??'');
 const operators=/^(包括|包含|是|有|在|须|需|必须|应|应该|可以|允许|不得|禁止|需要|要求|be|have|must|shall|may|can)$/iu;
@@ -18,7 +18,7 @@ export function materializeCandidates(f){
   if(typed.length||symbol||['SYMBOL','FILE','DIRECTORY','COMPOSITE_ARTIFACT'].includes(n.metadata.technical_type)){n.metadata.technical_type??=typed[0]?.type??'SYMBOL';precedence(n,'PROTECTED_TECHNICAL_TYPE_PRECEDES_NER',[...n.source_span_ids]);}}
  for(const a of f.analyses){
   const ts=a.cl.tokens,domain=a.discourse.kind;
-  if(!['CURRENT_TASK','OUTPUT_CONTENT','DELIVERABLE_SPEC'].includes(domain)||a.structure_only||a.condition||a.basis||a.scope||a.state){audit.excluded.push({clause_id:a.cl.id,domain,reason:'EXISTING_DISCOURSE_OR_STRUCTURAL_GATE',source_span_ids:[a.sid]});continue;}
+  if(!['CURRENT_TASK','OUTPUT_CONTENT','DELIVERABLE_SPEC'].includes(domain)||a.structure_only||a.condition||a.basis||a.scope||a.state||a.discourse.interrogative_not_asserted){audit.excluded.push({clause_id:a.cl.id,domain,reason:'EXISTING_DISCOURSE_OR_STRUCTURAL_GATE',source_span_ids:[a.sid]});continue;}
   const quoted=[...a.cl.span.quote.matchAll(/“[^”]*”|「[^」]*」|"[^"\n]*"|'[^'\n]*'|`[^`\n]*`/gu)].map(m=>({start:a.cl.span.start+[...a.cl.span.quote.slice(0,m.index)].length,end:a.cl.span.start+[...a.cl.span.quote.slice(0,m.index+m[0].length)].length}));
   const grammatical=[...MODALS,...COMPARATORS].flatMap(([word])=>{const out=[];let i=a.cl.span.quote.indexOf(word);while(i>=0){const start=a.cl.span.start+[...a.cl.span.quote.slice(0,i)].length;out.push({start,end:start+[...word].length});i=a.cl.span.quote.indexOf(word,i+word.length);}return out;});
   const srlPred=new Set((a.cl.srl??[]).flatMap(row=>row.filter(x=>x[1]==='PRED').flatMap(x=>ts.slice(x[2],x[3]))));
@@ -29,12 +29,12 @@ export function materializeCandidates(f){
    if(owner){audit.excluded.push({clause_id:a.cl.id,token_id:t.id,reason:'PREDICATE_ALREADY_OWNED_BY_INVARIANCE_FRAME',owner_node_id:owner.node_id,source_span_ids:owner.source_span_ids});continue;}
    let e=a.events.find(e=>e.metadata.token_id===t.id||e.metadata.predicate_owner_token_id===t.id||sp(e).start===t.start&&sp(e).end===t.end);const before=!!e;
    if(!e){const argumentOwner=f.semantic_nodes.find(n=>n.metadata.clause_id===a.cl.id&&n.node_type==='ENTITY'&&sp(n).start<=t.start&&sp(n).end>=t.end),purpose=f.semantic_nodes.find(n=>n.metadata.clause_id===a.cl.id&&n.metadata.purpose_only&&sp(n).start<=t.start&&sp(n).end>=t.end),recipientPurpose=f.relations.some(r=>r.clause_id===a.cl.id&&r.relation_type==='RECIPIENT'&&r.state==='RESOLVED'&&sp(f.semantic_nodes.find(n=>n.node_id===r.tail_node_id)).end<=t.start)&&!ts.some(q=>q.start<t.start&&q.dep==='cc'),auxiliary=!controller(t)&&!controller(ts[t.head])&&(a.quantity_target||a.events.some(e=>e.metadata.completion)||SUPPORT_VERBS.includes(t.text)||argumentOwner||purpose||recipientPurpose||/^(acl|advcl|compound|nmod:prep)/u.test(t.dep??'')||!verbal(t));
-    const prefix=slice(a.cl.span.start,t.start),modal=modalityFor(a.cl,t,t.start),imperative=!auxiliary&&!controller(t)&&verbal(t)&&t.dep==='root'&&imperativePrefix(prefix);
-    e=node(a.cl,'EVENT',t.start,t.end,{sense:t.lemma??t.text,owner:a.cl.id,token_id:t.id,modality:auxiliary?'UNSTATED':modal?.ambiguous?'UNSTATED':modal?.modality??(imperative?'REQUIRED':'UNSTATED'),discourse:a.discourse,candidate_origin:'EMBEDDED_PREDICATE_MATERIALIZATION',candidate_layer:auxiliary?'AUXILIARY_CONTEXT':'ACTION_CANDIDATE',context_owner_id:argumentOwner?.node_id??purpose?.node_id,...(imperative?{modality_source_span_ids:[a.sid],modality_rule:'EXPLICIT_DOCUMENT_IMPERATIVE'}:{})});if(!auxiliary)a.events.push(e);}
-   if(e.metadata.modality==='UNSTATED'&&e.metadata.candidate_layer!=='AUXILIARY_CONTEXT'&&!e.metadata.purpose_only&&!e.metadata.conformance_target_node_ids&&!f.relations.some(r=>r.head_node_id===e.node_id&&r.relation_type==='CONFORMS_TO'&&r.state!=='REJECTED')&&!controller(t)&&verbal(t)&&t.dep==='root'){
-    const modal=modalityFor(a.cl,t,t.start),imperative=imperativePrefix(slice(a.cl.span.start,t.start));
-    if(!modal?.ambiguous&&(modal||imperative)){
-     e.metadata.modality=modal?.modality??'REQUIRED';e.metadata.modality_source_span_ids=modal?.start!==undefined?[span(modal.start,modal.end)]:[a.sid];e.metadata.modality_rule=modal?'EXPLICIT_LOCAL_MODAL':'EXPLICIT_DOCUMENT_IMPERATIVE';
+    const prefix=slice(a.cl.span.start,t.start),modal=modalityFor(a.cl,t,t.start),layer=directiveLayer(a.discourse,t.start),imperative=layer.allowed&&!auxiliary&&!controller(t)&&verbal(t)&&/^root$/iu.test(t.dep??'')&&imperativePrefix(prefix),negative=layer.allowed&&!auxiliary&&!controller(t)&&verbal(t)&&/^root$/iu.test(t.dep??'')&&negativeImperativePrefix(prefix,t.text);
+    e=node(a.cl,'EVENT',t.start,t.end,{sense:t.lemma??t.text,owner:a.cl.id,token_id:t.id,modality:auxiliary?'UNSTATED':modal?.ambiguous?'UNSTATED':modal?.modality??(negative?'FORBIDDEN':imperative?'REQUIRED':'UNSTATED'),discourse:a.discourse,candidate_origin:'EMBEDDED_PREDICATE_MATERIALIZATION',candidate_layer:auxiliary?'AUXILIARY_CONTEXT':'ACTION_CANDIDATE',context_owner_id:argumentOwner?.node_id??purpose?.node_id,...(imperative||negative?{modality_source_span_ids:[a.sid],modality_rule:negative?'EXPLICIT_NEGATIVE_IMPERATIVE':'EXPLICIT_DOCUMENT_IMPERATIVE'}:{})});if(!auxiliary)a.events.push(e);}
+   if(e.metadata.modality==='UNSTATED'&&e.metadata.candidate_layer!=='AUXILIARY_CONTEXT'&&!e.metadata.purpose_only&&!e.metadata.conformance_target_node_ids&&!f.relations.some(r=>r.head_node_id===e.node_id&&r.relation_type==='CONFORMS_TO'&&r.state!=='REJECTED')&&!controller(t)&&verbal(t)&&/^root$/iu.test(t.dep??'')){
+    const modal=modalityFor(a.cl,t,t.start),prefix=slice(a.cl.span.start,t.start),layer=directiveLayer(a.discourse,t.start),imperative=layer.allowed&&imperativePrefix(prefix),negative=layer.allowed&&negativeImperativePrefix(prefix,t.text);
+    if(!modal?.ambiguous&&(modal||imperative||negative)){
+     e.metadata.modality=modal?.modality??(negative?'FORBIDDEN':'REQUIRED');e.metadata.modality_source_span_ids=modal?.start!==undefined?[span(modal.start,modal.end)]:[a.sid];e.metadata.modality_rule=modal?'EXPLICIT_LOCAL_MODAL':negative?'EXPLICIT_NEGATIVE_IMPERATIVE':'EXPLICIT_DOCUMENT_IMPERATIVE';
      const retired=e.metadata.modality_unresolved;if(retired)f.unresolved=f.unresolved.filter(u=>u.unresolved_id!==retired);delete e.metadata.modality_unresolved;
      (audit.modality_closure??=[]).push({event_node_id:e.node_id,retired_unresolved_id:retired,modality:e.metadata.modality,rule:e.metadata.modality_rule,source_span_ids:e.metadata.modality_source_span_ids});
     }

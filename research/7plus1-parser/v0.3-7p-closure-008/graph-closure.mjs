@@ -1,5 +1,6 @@
 import {id,uniq} from './identity.mjs';
 import {boundaryDomain} from './discourse.mjs';
+import {directiveLayer} from './instruction-syntax.mjs';
 
 // Closed predicate classes; technical names and document operands are always source data.
 const predicates={MODIFY:/^(?:修|修改|修订|更新|更改|改动|修复|modify|update|revise|repair)$/iu,READ:/^(?:读|看|读取|检查|核查|对比|比较|扫描|审计|read|inspect|check|compare|scan|audit)$/iu,CREATE:/^(?:新建|创建|生成|编写|撰写|写出|写|产出|输出|交付|提交|create|generate|write|produce|deliver|submit)$/iu};
@@ -45,7 +46,7 @@ export function closeSemanticGraph(f){
    if(!event&&mode!=='CREATE'&&!slice(start,a.discourse.source_span?.end??a.cl.span.end).includes('`')&&!/[：:]\s*$/u.test(q))continue;
    if(!event)event=node(a.cl,'EVENT',ps,pe,{sense:'ARTIFACT_OPERATION',owner:a.cl.id,modality:/不得|禁止|严禁|不能/u.test(m[0])?'FORBIDDEN':'UNSTATED',discourse:a.discourse});
    // Candidate modality cannot become a boundary until its argument construction closes.
-   if(event.metadata.modality==='UNSTATED')event.metadata.pending_graph_imperative='REQUIRED';
+   if(event.metadata.modality==='UNSTATED'&&directiveLayer(a.discourse,ps).allowed)event.metadata.pending_graph_imperative='REQUIRED';
   }else{const eligible=a.events.filter(e=>['REQUIRED','PERMITTED','FORBIDDEN'].includes(e.metadata.modality)&&Object.values(predicates).some(r=>r.test(e.surface)));if(eligible.length!==1)continue;event=eligible[0];mode=Object.entries(predicates).find(([,r])=>r.test(event.surface))?.[0];start=sp(event).end;}
   if(a.condition||!mode||event.metadata.completion||event.metadata.stop)continue;
   // Predicate layers remain local. Do not consume another predicate's complement.
