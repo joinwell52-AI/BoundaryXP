@@ -1,0 +1,6 @@
+import fs from 'node:fs';import path from 'node:path';import {createHash} from 'node:crypto';
+const dir='docs/reports/7plus1/7P-CLOSURE-008',sha=p=>createHash('sha256').update(fs.readFileSync(p)).digest('hex'),rows=[];
+for(const name of ['IMPLEMENTATION-FROZEN.json','RUNS.json','REVIEW-EVIDENCE.json','REVIEW-EVIDENCE.md','ANTI-OVERFIT-AUDIT.json']){const ext=path.extname(name),base=name.slice(0,-ext.length),from=dir+'/'+name,to=dir+'/'+base+'-r02'+ext;if(!fs.existsSync(to))fs.copyFileSync(from,to,fs.constants.COPYFILE_EXCL);if(sha(from)!==sha(to))throw Error('R02_COPY_MISMATCH');rows.push({original:from,preserved:to,sha256:sha(to)});}
+fs.writeFileSync(dir+'/R02-PRESERVATION.json',JSON.stringify({rows,first_replay_directory:'replay',reason:'Main-layer coordinator regression found in semantic review. First frozen outputs remain unchanged; corrected revision will use replay-r03.'},null,2)+'\n',{flag:'wx'});
+fs.renameSync(dir+'/IMPLEMENTATION-FROZEN.json',dir+'/IMPLEMENTATION-FROZEN-first.json');
+const old=fs.readFileSync(dir+'/replay-frozen.mjs','utf8'),next=old.replace("'/replay/'","'/replay-r03/'").replace("put(dir+'/RUNS.json',rows)","put(dir+'/RUNS-r03.json',rows)");if(next===old||next.includes("'/replay/'"))throw Error('RUNNER_OUTPUT_PATH');fs.writeFileSync(dir+'/replay-r03.mjs',next,{flag:'wx'});

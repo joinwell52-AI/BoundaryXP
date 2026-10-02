@@ -18,7 +18,8 @@ export function directiveLayer(scope,at){
  const local=before.slice(Math.max(before.lastIndexOf('。'),before.lastIndexOf(';'),before.lastIndexOf('；'),before.lastIndexOf('!'),before.lastIndexOf('！'))+1);
  const body=local.replace(/^\s*(?:[-*+]\s+|\d+[.)]\s*)/u,'').replace(/[*_]/gu,'').trim();
  const conditional=/^(?:如果|若|当|if\b)[\s\S]*[,，]\s*(?:则|then)\s*$/iu.test(body);
- return {allowed:imperativePrefix(local)||negativeImperativePrefix(local,'')||/^(?:只|仅|only)\s*$/iu.test(body)||conditional,reason:conditional?'EXPLICIT_CONDITIONAL_CONSEQUENT':'SOURCE_MAIN_LAYER_PREFIX',source_prefix:local};
+ const coordinated=/[,，]\s*(?:并|同时|只|仅|and|only|then)\s*$/iu.test(body);
+ return {allowed:imperativePrefix(local)||negativeImperativePrefix(local,'')||/^(?:只|仅|only)\s*$/iu.test(body)||conditional||coordinated,reason:conditional?'EXPLICIT_CONDITIONAL_CONSEQUENT':coordinated?'EXPLICIT_MAIN_LAYER_COORDINATOR':'SOURCE_MAIN_LAYER_PREFIX',source_prefix:local};
 }
 export function negativeImperativePrefix(prefix,predicate){
  const body=prefix.replace(/^\s*(?:[-*+]\s+|\d+[.)]\s*)/u,'').replace(/[*_]/gu,'').trim();
