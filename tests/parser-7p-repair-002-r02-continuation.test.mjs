@@ -1,0 +1,5 @@
+import test from'node:test';import assert from'node:assert/strict';import fs from'node:fs';import{compileNative}from'../research/7plus1-parser/v0.3-7p-repair-002-r02/engine.mjs';import{sourceDocument}from'../research/7plus1-parser/p0-semantic-repair-r02/source.mjs';
+for(const name of ['amber','birch','cobalt','delta','elm'])test('acceptance explicit continuation '+name,()=>{
+ const x=JSON.parse(fs.readFileSync('docs/reports/7plus1/7P-REPAIR-002/non-gold-continuation/'+name+'.json')),r=compileNative(sourceDocument(x.text),x.signals),c=r.compiler_v03,a=c.nlp_signals.semantic_decoding.structured_recovery.completion;
+ assert.equal(r.contract_gate_results.status,'PASS');assert.equal(a[0].criterion_node_ids.length,2);const nodes=a[0].criterion_node_ids.map(i=>c.semantic_nodes.find(n=>n.node_id===i));assert.ok(nodes[0].surface.includes('只能包含预期文件'));assert.ok(nodes[0].metadata.continuation_structure_ids.length>=2);assert.ok(!nodes[1].surface.includes('独立备注'));assert.ok(c.canonical_7plus1.C.entries.some(e=>e.state==='RESOLVED'));
+});

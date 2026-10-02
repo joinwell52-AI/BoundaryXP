@@ -1,0 +1,33 @@
+export const cases=[
+ ...['amber','birch','cobalt','delta','elm'].flatMap((name,i)=>[
+  {id:`CON-${i}`,text:`只有 ${name} 通过或签名有效才算完成。`,check:'SAFE_COMPLETION'},
+  {id:`TAC-${i}`,text:`## 验收标准\n| # | 标准 | 证据 |\n|---|---|---|\n| A1 | ${name} 测试通过 | 测试日志 |\n| A2 | P${i} = 0 | 审计日志 |`,check:'COMPLETION'},
+  {id:`IO-M${i}`,text:`修改 ${name}.json。`,check:'MODIFY',artifact:`${name}.json`},
+  {id:`IO-N${i}`,text:`新建 ${name}.py。`,check:'CREATE',artifact:`${name}.py`},
+  {id:`IO-R${i}`,text:`读取 ${name}.txt。`,check:'READ',artifact:`${name}.txt`},
+  {id:`V-F${i}`,text:`---\nref_adr: ADR-${100+i}\n---\n检查配置。`,check:'BASIS',ref:`ADR-${100+i}`},
+  {id:`V-B${i}`,text:`符合 ADR-${200+i}。`,check:'BASIS',ref:`ADR-${200+i}`},
+  {id:`T-${i}`,text:`| 项目 | 依据 |\n|---|---|\n| ${name} | ADR-${300+i} |`,check:'TABLE',ref:`ADR-${300+i}`},
+  {id:`C-${i}`,text:`## 验收标准\n- ${name} 测试通过\n- P${i} = 0`,check:'COMPLETION'},
+  {id:`OC-${i}`,text:`编写一份文档。\n## 必做\n1. 新建文件：\n   - \`${name}.zh.md\`\n   - \`${name}.en.md\`\n## 内容\nagent 必须报告结果。\nagent 不得删除档案。`,check:'CONTENT_SET'}
+ ]),
+ {id:'T3',text:'| 风险 | 现状 | 缓解 |\n|---|---|---|\n| 接口变动 | 已评估 | 符合 ADR-902 |',check:'TABLE',ref:'ADR-902'},
+ {id:'TU',text:'| 未知列 | 标识 |\n|---|---|\n| 接口 | ADR-999 |',check:'TABLE_UNKNOWN'},
+ {id:'TS',text:'| 项目 | 副作用 | 验收 |\n|---|---|---|\n| 模块 | 写文件 | 测试通过 |',check:'TYPED_TABLE'},
+ {id:'V-P',text:'---\nref_predecessor: TASK-931\nsupersedes: TASK-930\nreferences: [SPEC-11, POLICY-12]\nrelated: ISSUE-14\n---\n检查配置。',check:'REFERENCE_TYPES'},
+ {id:'V-A',text:'---\nreferences:\n  - ADR-31\n  - SPEC-32\n---\n检查配置。',check:'BASIS',ref:'ADR-31'},
+ {id:'V-EN',text:'Implement per ADR-741.',check:'BASIS',ref:'ADR-741'},
+ {id:'V-C',text:'依据 commit abc123f 检查配置。',check:'BASIS',ref:'abc123f'},
+ {id:'V-V',text:'当前基线 protocol 6.2.1。',check:'BASIS',ref:'6.2.1'},
+ {id:'BG',text:'## 背景\n旧版本 protocol 2.1.0 修改 prior.json。',check:'NO_CURRENT'},
+ {id:'IO-REF',text:'依据 policy.json 检查配置。',check:'REF_NOT_I',ref:'policy.json'},
+ {id:'IO-COND',text:'如果检查失败，则生成 fallback.json。',check:'CONDITIONAL',artifact:'fallback.json'},
+ {id:'IO-REPORT',text:'写 REPORT-784。',check:'CREATE',artifact:'REPORT-784'},
+ {id:'IO-TEST',text:'新增 tests/test_widget.py。',check:'CREATE',artifact:'tests/test_widget.py'},
+ {id:'C-OR',text:'只有检查通过或签名有效才算完成。',check:'SAFE_COMPLETION'},
+ {id:'C-AND',text:'只有检查通过且签名有效才算完成。',check:'SAFE_COMPLETION'},
+ {id:'C-COUNT',text:'## 验收标准\n- 检查通过\n- 签名有效\n\n2 条验收全部通过。',check:'COUNT_NOT_R'},
+ {id:'OC-ONE',text:'编写一份文档。\n## 内容\nagent 必须报告并停。',check:'CONTENT_ONE'},
+ {id:'OC-AMB',text:'编写一份文档。\n## 必做\n1. 新建文件：\n   - `alpha.md`\n   - `beta.md`\n## 内容\nagent 必须报告。',check:'CONTENT_AMBIGUOUS'},
+ {id:'OC-CURRENT',text:'编写一份文档。\n## 内容\n如果失败，agent 不得删除日志。\n## 不做\n- 不修改 server.yaml。',check:'CONTENT_CURRENT_B'}
+];

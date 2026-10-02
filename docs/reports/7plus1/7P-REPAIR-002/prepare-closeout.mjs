@@ -1,0 +1,8 @@
+import fs from'node:fs';
+let s=fs.readFileSync('docs/reports/7plus1/7P-REPAIR-001/verify.mjs','utf8').replaceAll('7P-REPAIR-001','7P-REPAIR-002');
+fs.writeFileSync('docs/reports/7plus1/7P-REPAIR-002/verify.mjs',s,{flag:'wx'});
+s=fs.readFileSync('docs/reports/7plus1/7P-REPAIR-001/publish.mjs','utf8').replaceAll('7P-REPAIR-001','7P-REPAIR-002').replaceAll('v0.3-7p-repair-001','v0.3-7p-repair-002').replaceAll('parser-7p-repair-001','parser-7p-repair-002').replaceAll('2bab790eb39ddfd4cfe198abbbd57642be1809b7','13bd28fb25b02ee9358f20f2e1f2baa58df802f4').replace("'src/__tests__/7plus1/regression/repair-001.test.mjs'","'tests/parser-7p-repair-002-prior.test.mjs'");
+s=s.replace("n===dir+'/probe'","n===dir+'/development'").replace("'check-regression.mjs'","'check-regression.mjs','review-inventory-development.txt','inspect.mjs','development-probe.mjs'");
+s=s.replace('REF-001 PASS; STANDARD_PARSED 0/9; OUTPUT_CONTENT 0/20 complete. V MATCH 1 -> 0 is disclosed. No production readiness claim. Failed candidate and export attempts retained. Only review branch publication is authorized.','REF-001 and semantic counts: see RESULTS.json and COMPARISON.json. Contract PASS is not semantic closure. Non-Gold failed development attempts retained; final frozen model replay is independent. No production readiness claim. Only review branch publication is authorized.');
+s=s.replace('gate discourse, participant and quantity eligibility with frozen Gold comparison','recover artifact roles, references, table propositions, completion and output ownership');
+fs.writeFileSync('docs/reports/7plus1/7P-REPAIR-002/publish.mjs',s,{flag:'wx'});

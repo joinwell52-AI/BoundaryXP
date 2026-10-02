@@ -1,0 +1,7 @@
+import fs from'node:fs';import path from'node:path';
+const old='research/7plus1-parser/v0.3-7p-repair-002',next=old+'-r02',report='docs/reports/7plus1/7P-REPAIR-002';
+if(fs.existsSync(next))throw Error('REVISION_EXISTS');fs.cpSync(old,next,{recursive:true,errorOnExist:true,force:false});
+for(const name of ['engine.mjs','history.mjs','export.mjs','web/native-app.js']){let s=fs.readFileSync(next+'/'+name,'utf8').replaceAll('v0.3-7p-repair-002','v0.3-7p-repair-002-r02').replaceAll("'0.3-7p-repair-002'","'0.3-7p-repair-002-r02'");fs.writeFileSync(next+'/'+name,s);}
+for(const name of ['test','prior.test']){let s=fs.readFileSync(`tests/parser-7p-repair-002${name==='test'?'.test':'-prior.test'}.mjs`,'utf8').replaceAll('v0.3-7p-repair-002','v0.3-7p-repair-002-r02').replaceAll('v0\\.3-7p-repair-002','v0\\.3-7p-repair-002-r02');fs.writeFileSync(`tests/parser-7p-repair-002-r02${name==='test'?'.test':'-prior.test'}.mjs`,s,{flag:'wx'});}
+fs.mkdirSync(report+'/final-run',{recursive:true});
+for(const name of ['freeze-implementation','replay','run-tests']){let s=fs.readFileSync(report+'/'+name+'.mjs','utf8').replaceAll('v0.3-7p-repair-002','v0.3-7p-repair-002-r02').replaceAll("dir='docs/reports/7plus1/7P-REPAIR-002'","dir='docs/reports/7plus1/7P-REPAIR-002/final-run'").replaceAll('tests/parser-7p-repair-002','tests/parser-7p-repair-002-r02');fs.writeFileSync(report+'/'+name+'-r02.mjs',s,{flag:'wx'});}
