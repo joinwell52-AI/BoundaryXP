@@ -1,0 +1,311 @@
+{
+  "effective_order": [
+    "SOURCE",
+    "STRUCTURE_DISCOURSE",
+    "SPAN_TYPED_LITERAL",
+    "CANDIDATE_NODES",
+    "CANDIDATE_RELATIONS",
+    "EDGE_CLOSURE",
+    "FRAME_CERTIFICATION",
+    "CROSS_IDENTITY",
+    "DECLARED_OWNED_COMPOSITION",
+    "ELIGIBILITY",
+    "BOUNDARY_IR",
+    "QI_QB",
+    "CANONICAL",
+    "COMPARISON",
+    "POST_CANONICAL_MODEL_SIGNALS"
+  ],
+  "stage_rows": [
+    {
+      "stage": "SOURCE",
+      "code": "research/7plus1-parser/p0-semantic-repair-r02/source.mjs",
+      "inputs": "raw bytes",
+      "outputs": "Unicode source + blocks",
+      "nature": "DETERMINISTIC",
+      "evidence_source": "Frozen source / NLP / per-stage snapshots; model signals are separately labelled",
+      "cluster_dependencies": [],
+      "phase_a_blocker_count_unique": 0,
+      "remaining_required_units_unique": 0,
+      "later_recovery_possible": false,
+      "error_amplification": "Source byte loss would affect all later proof",
+      "false_positive_risk": "See current false/wrong/partial inventory; no per-stage accuracy estimate from counts",
+      "code_files": [
+        "research/7plus1-parser/p0-semantic-repair-r02/source.mjs"
+      ]
+    },
+    {
+      "stage": "STRUCTURE_DISCOURSE",
+      "code": "research/7plus1-parser/v0.3-7p-closure-008/frontend.mjs + discourse.mjs",
+      "inputs": "source blocks + syntax",
+      "outputs": "structure and discourse annotations",
+      "nature": "DETERMINISTIC",
+      "evidence_source": "Frozen source / NLP / per-stage snapshots; model signals are separately labelled",
+      "cluster_dependencies": [
+        "C05"
+      ],
+      "phase_a_blocker_count_unique": 7,
+      "remaining_required_units_unique": 6,
+      "later_recovery_possible": "Only explicitly implemented structural/typed repair; not general downstream recovery",
+      "error_amplification": "Wrong domain/owner licenses narrative or suppresses real child clauses",
+      "false_positive_risk": "Observed: forbidden parenthetical / required narrative false accepts",
+      "code_files": [
+        "research/7plus1-parser/v0.3-7p-closure-008/frontend.mjs",
+        "research/7plus1-parser/v0.3-7p-closure-008/discourse.mjs"
+      ]
+    },
+    {
+      "stage": "SPAN_TYPED_LITERAL",
+      "code": "research/7plus1-parser/v0.3-7p-closure-008/typed-literals.mjs / candidate-recall.mjs",
+      "inputs": "source spans + NLP NER",
+      "outputs": "protected literals + span lattice",
+      "nature": "DETERMINISTIC_WITH_PROBABILISTIC_NLP_EVIDENCE",
+      "evidence_source": "Frozen source / NLP / per-stage snapshots; model signals are separately labelled",
+      "cluster_dependencies": [
+        "C03"
+      ],
+      "phase_a_blocker_count_unique": 37,
+      "remaining_required_units_unique": 15,
+      "later_recovery_possible": "Only explicitly implemented structural/typed repair; not general downstream recovery",
+      "error_amplification": "Split qualified identity changes object/scope before certification",
+      "false_positive_risk": "See current false/wrong/partial inventory; no per-stage accuracy estimate from counts",
+      "code_files": [
+        "research/7plus1-parser/v0.3-7p-closure-008/typed-literals.mjs",
+        "research/7plus1-parser/v0.3-7p-closure-008/candidate-recall.mjs"
+      ]
+    },
+    {
+      "stage": "CANDIDATE_NODES",
+      "code": "research/7plus1-parser/v0.3-7p-closure-008/frontend.mjs + semantic-decoder.mjs",
+      "inputs": "HanLP/spaCy tokens SRL + typed spans",
+      "outputs": "nodes + alternatives",
+      "nature": "DETERMINISTIC_WITH_PROBABILISTIC_NLP_EVIDENCE",
+      "evidence_source": "Frozen source / NLP / per-stage snapshots; model signals are separately labelled",
+      "cluster_dependencies": [
+        "C04"
+      ],
+      "phase_a_blocker_count_unique": 62,
+      "remaining_required_units_unique": 62,
+      "later_recovery_possible": "Only explicitly implemented structural/typed repair; not general downstream recovery",
+      "error_amplification": "Missed event or unowned root cannot be recovered by a type check",
+      "false_positive_risk": "See current false/wrong/partial inventory; no per-stage accuracy estimate from counts",
+      "code_files": [
+        "research/7plus1-parser/v0.3-7p-closure-008/frontend.mjs",
+        "research/7plus1-parser/v0.3-7p-closure-008/semantic-decoder.mjs"
+      ]
+    },
+    {
+      "stage": "CANDIDATE_RELATIONS",
+      "code": "research/7plus1-parser/v0.3-7p-closure-008/structured-recovery.mjs + graph-closure.mjs",
+      "inputs": "nodes + local/structural owners",
+      "outputs": "relations + composition metadata",
+      "nature": "DETERMINISTIC",
+      "evidence_source": "Frozen source / NLP / per-stage snapshots; model signals are separately labelled",
+      "cluster_dependencies": [
+        "C06",
+        "C09",
+        "C10"
+      ],
+      "phase_a_blocker_count_unique": 49,
+      "remaining_required_units_unique": 47,
+      "later_recovery_possible": "Only explicitly implemented structural/typed repair; not general downstream recovery",
+      "error_amplification": "Local sufficient role is mistaken for full requirement; own fields can disagree",
+      "false_positive_risk": "See current false/wrong/partial inventory; no per-stage accuracy estimate from counts",
+      "code_files": [
+        "research/7plus1-parser/v0.3-7p-closure-008/structured-recovery.mjs",
+        "research/7plus1-parser/v0.3-7p-closure-008/graph-closure.mjs"
+      ]
+    },
+    {
+      "stage": "EDGE_CLOSURE",
+      "code": "research/7plus1-parser/v0.3-7p-closure-008/edge-closure.mjs",
+      "inputs": "candidate frames/sets/continuations",
+      "outputs": "certified/rejected/unknown edges",
+      "nature": "DETERMINISTIC",
+      "evidence_source": "Frozen source / NLP / per-stage snapshots; model signals are separately labelled",
+      "cluster_dependencies": [
+        "C07"
+      ],
+      "phase_a_blocker_count_unique": 44,
+      "remaining_required_units_unique": 37,
+      "later_recovery_possible": "Only explicitly implemented structural/typed repair; not general downstream recovery",
+      "error_amplification": "Guarded local edges cannot invent absent scope trees",
+      "false_positive_risk": "See current false/wrong/partial inventory; no per-stage accuracy estimate from counts",
+      "code_files": [
+        "research/7plus1-parser/v0.3-7p-closure-008/edge-closure.mjs"
+      ]
+    },
+    {
+      "stage": "FRAME_CERTIFICATION",
+      "code": "research/7plus1-parser/v0.3-7p-closure-008/frame-certification.mjs + table-instructions.mjs",
+      "inputs": "events + ownership + operand sets",
+      "outputs": "frames, subordinate roles, typed relations",
+      "nature": "DETERMINISTIC",
+      "evidence_source": "Frozen source / NLP / per-stage snapshots; model signals are separately labelled",
+      "cluster_dependencies": [
+        "C04",
+        "C07"
+      ],
+      "phase_a_blocker_count_unique": 106,
+      "remaining_required_units_unique": 99,
+      "later_recovery_possible": "Only explicitly implemented structural/typed repair; not general downstream recovery",
+      "error_amplification": "Correct signature cannot prove contextual authorization",
+      "false_positive_risk": "Observed: forbidden parenthetical / required narrative false accepts",
+      "code_files": [
+        "research/7plus1-parser/v0.3-7p-closure-008/frame-certification.mjs",
+        "research/7plus1-parser/v0.3-7p-closure-008/table-instructions.mjs"
+      ]
+    },
+    {
+      "stage": "CROSS_IDENTITY",
+      "code": "research/7plus1-parser/v0.3-7p-closure-008/cross-instruction-identity.mjs",
+      "inputs": "member/call/declaration frames",
+      "outputs": "unique member and declaration bindings",
+      "nature": "DETERMINISTIC",
+      "evidence_source": "Frozen source / NLP / per-stage snapshots; model signals are separately labelled",
+      "cluster_dependencies": [
+        "C06",
+        "C09"
+      ],
+      "phase_a_blocker_count_unique": 46,
+      "remaining_required_units_unique": 44,
+      "later_recovery_possible": "Only explicitly implemented structural/typed repair; not general downstream recovery",
+      "error_amplification": "Unique identity is not proof of complete behavior",
+      "false_positive_risk": "See current false/wrong/partial inventory; no per-stage accuracy estimate from counts",
+      "code_files": [
+        "research/7plus1-parser/v0.3-7p-closure-008/cross-instruction-identity.mjs"
+      ]
+    },
+    {
+      "stage": "DECLARED_OWNED_COMPOSITION",
+      "code": "research/7plus1-parser/v0.3-7p-closure-008/declared-behavior.mjs + owned-test-contract.mjs + discourse.mjs",
+      "inputs": "owned static declaration/call/test/content",
+      "outputs": "bounded interpretation + partial contracts",
+      "nature": "DETERMINISTIC",
+      "evidence_source": "Frozen source / NLP / per-stage snapshots; model signals are separately labelled",
+      "cluster_dependencies": [
+        "C02",
+        "C08",
+        "C11"
+      ],
+      "phase_a_blocker_count_unique": 46,
+      "remaining_required_units_unique": 41,
+      "later_recovery_possible": "Only explicitly implemented structural/typed repair; not general downstream recovery",
+      "error_amplification": "Owned metadata is not fully converted to typed local behavior/expression graph",
+      "false_positive_risk": "See current false/wrong/partial inventory; no per-stage accuracy estimate from counts",
+      "code_files": [
+        "research/7plus1-parser/v0.3-7p-closure-008/declared-behavior.mjs",
+        "research/7plus1-parser/v0.3-7p-closure-008/owned-test-contract.mjs",
+        "research/7plus1-parser/v0.3-7p-closure-008/discourse.mjs"
+      ]
+    },
+    {
+      "stage": "ELIGIBILITY",
+      "code": "research/7plus1-parser/v0.3-7p-closure-008/eligibility.mjs:produceEligibility",
+      "inputs": "typed roles + domain + event modality",
+      "outputs": "decisions + fact plans",
+      "nature": "DETERMINISTIC",
+      "evidence_source": "Frozen source / NLP / per-stage snapshots; model signals are separately labelled",
+      "cluster_dependencies": [],
+      "phase_a_blocker_count_unique": 0,
+      "remaining_required_units_unique": 0,
+      "later_recovery_possible": false,
+      "error_amplification": "Accepts relation-local positive/forbid assumptions; cannot discover missing semantics",
+      "false_positive_risk": "Observed: forbidden parenthetical / required narrative false accepts",
+      "code_files": [
+        "research/7plus1-parser/v0.3-7p-closure-008/eligibility.mjs"
+      ]
+    },
+    {
+      "stage": "BOUNDARY_IR",
+      "code": "research/7plus1-parser/v0.3-7p-closure-008/eligibility.mjs:produceBoundaryIR",
+      "inputs": "fact plans + typed expression registry",
+      "outputs": "facts + sets/conditions/quantities",
+      "nature": "DETERMINISTIC",
+      "evidence_source": "Frozen source / NLP / per-stage snapshots; model signals are separately labelled",
+      "cluster_dependencies": [],
+      "phase_a_blocker_count_unique": 0,
+      "remaining_required_units_unique": 0,
+      "later_recovery_possible": false,
+      "error_amplification": "Scope identity checks are strong structural checks, not semantic entailment",
+      "false_positive_risk": "See current false/wrong/partial inventory; no per-stage accuracy estimate from counts",
+      "code_files": [
+        "research/7plus1-parser/v0.3-7p-closure-008/eligibility.mjs"
+      ]
+    },
+    {
+      "stage": "QI_QB",
+      "code": "research/7plus1-parser/v0.3-7p-closure-008/graph-queries.mjs",
+      "inputs": "IR + registry",
+      "outputs": "typed fact views",
+      "nature": "DETERMINISTIC",
+      "evidence_source": "Frozen source / NLP / per-stage snapshots; model signals are separately labelled",
+      "cluster_dependencies": [],
+      "phase_a_blocker_count_unique": 0,
+      "remaining_required_units_unique": 0,
+      "later_recovery_possible": false,
+      "error_amplification": "No interpretation or missing-owner recovery",
+      "false_positive_risk": "See current false/wrong/partial inventory; no per-stage accuracy estimate from counts",
+      "code_files": [
+        "research/7plus1-parser/v0.3-7p-closure-008/graph-queries.mjs"
+      ]
+    },
+    {
+      "stage": "CANONICAL",
+      "code": "research/7plus1-parser/v0.3-7p-closure-008/projection.mjs",
+      "inputs": "IR + nodes + localized coverage",
+      "outputs": "entries and slot statuses",
+      "nature": "DETERMINISTIC",
+      "evidence_source": "Frozen source / NLP / per-stage snapshots; model signals are separately labelled",
+      "cluster_dependencies": [
+        "C12"
+      ],
+      "phase_a_blocker_count_unique": 72,
+      "remaining_required_units_unique": 0,
+      "later_recovery_possible": false,
+      "error_amplification": "Coverage cannot be closed by hiding unresolved; entry per fact differs from coarse human aggregation",
+      "false_positive_risk": "See current false/wrong/partial inventory; no per-stage accuracy estimate from counts",
+      "code_files": [
+        "research/7plus1-parser/v0.3-7p-closure-008/projection.mjs"
+      ]
+    },
+    {
+      "stage": "COMPARISON",
+      "code": "docs/reports/7plus1/7P-CLOSURE-008/compare-frozen.mjs",
+      "inputs": "actual + human standard + offline review ledger",
+      "outputs": "MATCH/MISSING/extra/status + full-case bool",
+      "nature": "DETERMINISTIC_REVIEW_LEDGER",
+      "evidence_source": "Frozen source / NLP / per-stage snapshots; model signals are separately labelled",
+      "cluster_dependencies": [],
+      "phase_a_blocker_count_unique": 0,
+      "remaining_required_units_unique": 0,
+      "later_recovery_possible": false,
+      "error_amplification": "PARTIAL and UNLISTED_SOURCE_SUPPORTED both prevent complete equality",
+      "false_positive_risk": "See current false/wrong/partial inventory; no per-stage accuracy estimate from counts",
+      "code_files": [
+        "docs/reports/7plus1/7P-CLOSURE-008/compare-frozen.mjs"
+      ]
+    },
+    {
+      "stage": "POST_CANONICAL_MODEL_SIGNALS",
+      "code": "research/7plus1-parser/v0.3-7p-closure-008/model-signals.mjs called after compileNative",
+      "inputs": "accepted event/relation source spans",
+      "outputs": "BGE/E5 rankings + NLI signals only",
+      "nature": "MODEL_INFERENCE",
+      "evidence_source": "Frozen source / NLP / per-stage snapshots; model signals are separately labelled",
+      "cluster_dependencies": [],
+      "phase_a_blocker_count_unique": 0,
+      "remaining_required_units_unique": 0,
+      "later_recovery_possible": false,
+      "error_amplification": "No feedback into candidate graph/Γ/Q; measured calls do not imply semantic discovery capability",
+      "false_positive_risk": "See current false/wrong/partial inventory; no per-stage accuracy estimate from counts",
+      "code_files": [
+        "research/7plus1-parser/v0.3-7p-closure-008/model-signals.mjs"
+      ]
+    }
+  ],
+  "overlap_note": "C04/C06/C07 span multiple stages. Stage counts overlap and must not be summed. Source stage is imported from p0-semantic-repair-r02/source.mjs, not a new 008 producer.",
+  "mechanism_tests": 518,
+  "semantic_case_closure": "0/9",
+  "model_feedback_into_compilation": false
+}

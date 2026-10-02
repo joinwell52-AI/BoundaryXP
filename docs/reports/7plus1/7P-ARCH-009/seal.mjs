@@ -1,0 +1,18 @@
+import fs from 'node:fs';
+import {read,write,sha,out,walk,git} from './collect.mjs';
+if(fs.existsSync(out+'SEAL.md'))throw Error('Report already sealed; no overwrite permitted');
+if(read(out+'VERIFY.json').status!=='PASS'||read(out+'DIAGNOSTIC-TESTS.json').status!=='PASS')throw Error('Diagnostic integrity failed');
+const envelope=['MANIFEST.json','SHA256SUMS.txt','SEAL.md','SEAL-VERIFICATION.json'].map(x=>out+x);
+const planned=[...new Set([...walk(out),out+'CHANGED-FILES.txt',...envelope])].sort();
+write('CHANGED-FILES.txt',planned.join('\n')+'\n');
+const paths=walk(out).filter(p=>!envelope.includes(p)).sort(),files=Object.fromEntries(paths.map(p=>[p,sha(fs.readFileSync(p))]));
+const manifest={task:'7P-ARCH-009',status:'SEALED_DIAGNOSTIC_ONLY',pre_seal_head:git('rev-parse','HEAD'),branch:'review/7plus1-parser',scope:'Only docs/reports/7plus1/7P-ARCH-009/',files,file_count:paths.length,excluded_self_referential:envelope,coverage:'All report payload, source/trace slices, options, evidence, diagnostic code, verification, inventory and incidents. Envelopes are independently hashed by SEAL-VERIFICATION.',parser_runtime_modified:false,gold_modified:false,v03_modified:false,production_entry_modified:false,semantic_certified:false,PRODUCTION_READY:false,primary_decision:read(out+'DECISION.json').primary_decision,terminal:'WAITING_ADMIN_REVIEW'};
+write('MANIFEST.json',manifest);
+write('SHA256SUMS.txt',Object.entries(files).map(([p,h])=>h+'  '+p).join('\n')+'\n');
+const mh=sha(fs.readFileSync(out+'MANIFEST.json')),sh=sha(fs.readFileSync(out+'SHA256SUMS.txt'));
+write('SEAL.md',`# 7P-ARCH-009 SEAL\n\nSTATUS=WAITING_ADMIN_REVIEW\nDIAGNOSTIC_ONLY=true\nPRODUCTION_READY=false\nPRIMARY_DECISION=${manifest.primary_decision}\n\nPayload files: ${paths.length}\nMANIFEST SHA-256: ${mh}\nSHA256SUMS SHA-256: ${sh}\n\nNo runtime, Gold, Source, BXP, v0.3, model/threshold/Pack, Q/projection or production entry changes. Previous seals preserved. Historical 008 semantic failure remains 0/9; this seal is byte integrity, not semantic certification.\n\nSelf-reference rule: MANIFEST and SHA256SUMS cover all payload except the four explicitly listed envelopes; SEAL anchors their hashes, SEAL-VERIFICATION independently verifies payload/envelope hashes. Git commit/remote verification is returned by publish.mjs and the final task reply, not injected into the sealed payload.\n`);
+const errors=[];for(const [p,h]of Object.entries(files))if(sha(fs.readFileSync(p))!==h)errors.push(p);
+const actual=walk(out).filter(p=>p!==out+'SEAL-VERIFICATION.json').sort(),expected=planned.filter(p=>p!==out+'SEAL-VERIFICATION.json');
+if(JSON.stringify(actual)!==JSON.stringify(expected))errors.push('FILE_COVERAGE_MISMATCH');
+write('SEAL-VERIFICATION.json',{task:'7P-ARCH-009',status:errors.length?'FAIL':'PASS',file_count:paths.length,manifest_sha256:mh,sha256sums_sha256:sh,seal_sha256:sha(fs.readFileSync(out+'SEAL.md')),files_accounted:planned.length,self_reference_exclusions:envelope,errors,semantic_acceptance:'NOT_CLAIMED',STATUS:'WAITING_ADMIN_REVIEW'});
+console.log(JSON.stringify(read(out+'SEAL-VERIFICATION.json')));if(errors.length)process.exitCode=1;
