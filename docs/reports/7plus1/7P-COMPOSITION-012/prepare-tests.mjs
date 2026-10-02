@@ -1,0 +1,5 @@
+import fs from 'node:fs';import {out,runtime,write,digest,read} from './common.mjs';
+for(const file of ['engine.mjs','semantic-ownership.mjs','export.mjs'])write(runtime+file,fs.readFileSync(runtime+file,'utf8').replaceAll('7p-composition-011','7p-composition-012').replaceAll('7P-COMPOSITION-011-R1','7P-COMPOSITION-012-R1'));
+const test='tests/parser-7p-composition-012-owner-role.test.mjs';write(test,fs.readFileSync('tests/parser-7p-composition-011-owner-layer.test.mjs','utf8').replaceAll('v0.3-7p-composition-011','v0.3-7p-composition-012').replaceAll('7P-COMPOSITION-011','7P-COMPOSITION-012').replaceAll('non-gold-checks.mjs','acceptance-checks.mjs').replaceAll('011 frozen','012 frozen'));
+write(out+'R1-TEST-FREEZE.json',{frozen_at:new Date().toISOString(),before_STANDARD_replay:true,inputs_sha256:digest(out+'NON-GOLD-FROZEN-INPUTS.json'),mechanism_assertions_sha256:digest(out+'acceptance-checks.mjs'),test_sha256:digest(test)});
+console.log(JSON.stringify({test,cases:read(out+'NON-GOLD-FROZEN-INPUTS.json').cases.filter(c=>c.stage==='R1').length}));
