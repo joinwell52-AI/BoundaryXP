@@ -1,0 +1,8 @@
+import fs from 'node:fs';import {spawnSync} from 'node:child_process';
+const dir='docs/reports/7plus1/7P-REPAIR-003/r03',all=fs.readdirSync('tests').filter(n=>n.endsWith('.test.mjs')).sort().map(n=>'tests/'+n),rows=[];
+function run(name,exe,args){const log=dir+'/'+name+'.log',fd=fs.openSync(log,'wx'),start=Date.now(),r=spawnSync(exe,args,{stdio:['ignore',fd,fd],env:process.env});fs.closeSync(fd);const text=fs.readFileSync(log,'utf8'),counts=Object.fromEntries([...text.matchAll(/^# (tests|pass|fail|skipped|cancelled) (\d+)$/gm)].map(m=>[m[1],Number(m[2])]));const row={name,command:[exe,...args],exit_code:r.status,duration_ms:Date.now()-start,counts,status:r.status===0?'PASS':'FAIL',log,error:r.error?.message};rows.push(row);console.log(JSON.stringify(row));}
+run('mechanism-final',process.execPath,['--test','--test-reporter=tap','tests/parser-7p-repair-003-r03.test.mjs','tests/parser-7p-repair-003-r03-prior.test.mjs','tests/parser-7p-repair-003-r03-query-coverage.test.mjs']);
+run('original-parser-regression',process.execPath,['--test','--test-reporter=tap','--test-concurrency=1',...all.filter(n=>/parser.*(?:p22|p21|p2-|p1-|p0-|v03)/u.test(n)&&!n.includes('7p-repair'))]);
+run('gold-data-validation','python',['fixtures/real-project/BoundX-REAL-GOLD-P001-v0.1/validate_cases.py']);
+run('full-regression',process.execPath,['--test','--test-reporter=tap','--test-concurrency=1',...all]);
+fs.writeFileSync(dir+'/TESTS.json',JSON.stringify({task:'7P-REPAIR-003',tests:rows,all_passed:rows.every(r=>r.status==='PASS'),semantic_accuracy_not_inferred_from_tests:true},null,2)+'\n',{flag:'wx'});
