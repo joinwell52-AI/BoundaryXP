@@ -1,0 +1,10 @@
+import fs from'node:fs';const d='docs/reports/7plus1/7P-REPAIR-005';let s=fs.readFileSync('docs/reports/7plus1/7P-REPAIR-004/publish.mjs','utf8').replaceAll('7P-REPAIR-004','7P-REPAIR-005').replaceAll('v0.3-7p-repair-004','v0.3-7p-repair-005').replaceAll('parser-7p-repair-004','parser-7p-repair-005').replace("base='9b5ab06b50bb939ba73a54823f9bca6b05a2bc8a'","base='52646c306e227dd6a8057e9ca65ff8e50fd50403'");
+s=s.replace("read('docs/reports/7plus1/7P-REPAIR-003/MANIFEST.json')","read('docs/reports/7plus1/7P-REPAIR-004/MANIFEST.json')");
+s=s.replaceAll("n.includes('/development/draft')","n.includes('/development/')");
+s=s.replace('FIRST_DIVERGENCE_CLOSED=false\\nPRODUCTION_READY=false','FIRST_DIVERGENCE_MOVED=true\\nFIRST_DIVERGENCE_CLOSED=false\\nPRODUCTION_READY=false');
+s=s.replace('for the failed I/O/A progress gates; EXPORT-INCIDENT.json records the frozen exporter failure.','for the failed I/O/A full-match progress gates. Current revision export passed; local partial support is not full equivalence.');
+s=s.replace("semantic_base:'1594ab9a4de1b66a19678c7d2b66eca63afaf66a'","semantic_base:'6db6b53a2c5049bc694fd16a150596fb10a8567e'");
+s=s.replace('freeze guarded edge closure and unmet semantic progress evidence','freeze embedded predicate candidates and partial semantic progress evidence');
+s=s.replace("normal_index_tracks_final_commit:git(['write-tree'])===tree","normal_index_tracks_final_commit:git(['diff','--cached','--name-only','HEAD'])===''");
+s=s.replace("cwd:root,encoding:'utf8',maxBuffer:100e6,...opt","cwd:root,encoding:'utf8',maxBuffer:100e6,env:{...process.env,GIT_OPTIONAL_LOCKS:'0'},...opt");
+fs.writeFileSync(d+'/publish.mjs',s,{flag:'wx'});

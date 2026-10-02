@@ -1,0 +1,12 @@
+import fs from'node:fs';import assert from'node:assert/strict';import{createHash}from'node:crypto';
+const d='docs/reports/7plus1/7P-REPAIR-005',read=n=>JSON.parse(fs.readFileSync(d+'/'+n)),sha=p=>createHash('sha256').update(fs.readFileSync(p)).digest('hex');
+const tests=read('TESTS.json'),full=tests.tests.find(t=>t.name==='full-regression'),log=fs.readFileSync(full.log,'utf8'),skipped=log.split(/\r?\n/u).filter(l=>l.includes('# SKIP'));
+assert.equal(skipped.length,full.counts.skipped);
+fs.writeFileSync(d+'/SKIPPED-TESTS.json',JSON.stringify({count:skipped.length,rows:skipped,status:'NOT_EXECUTED_NOT_PASS',reason:'Host symlink limitations, unavailable missing-presentation scenario and optional batch-model environment gates. Actual current Parser model execution is separately verified in ten RUNS.'},null,2)+'\n',{flag:'wx'});
+const p=d+'/REPORT.md';fs.writeFileSync(p,fs.readFileSync(p,'utf8').replace(`fail=${full.counts.fail}。历史`,`fail=${full.counts.fail}，另有 ${full.counts.skipped} 条 skipped（未执行，不算通过；原因见 SKIPPED-TESTS.json）。历史`)+'\n只读确定性审计首轮因内存 undefined 字段与 JSON 省略字段的形状差异退出；审阅工具改为比较双方完整 JSON 表示后通过。Parser 与首次 replay 未改，首轮失败日志保留，见 AUDIT-INCIDENT.json。\n','utf8');
+for(const[p,h]of Object.entries(read('IMPLEMENTATION-FROZEN.json').files))assert.equal(sha(p),h,p);
+for(const[p,h]of Object.entries(read('BASELINE.json').files))assert.equal(sha(p),h,p);
+const required=['REPORT.md','BASELINE.json','BEFORE-AFTER.json','COMPARISON.json','SLOT-SUMMARY.json','FAILURES.json','FIRST-DIVERGENCE.json','CANDIDATE-RECALL-CONTRACT.json','EMBEDDED-PREDICATE-AUDIT.json','ACTION-FRAME-AUDIT.json','OPERAND-SET-AUDIT.json','TYPED-LITERAL-PRECEDENCE-AUDIT.json','STAGE-DIVERGENCE-AUDIT.json','EDGE-CLOSURE-COMPATIBILITY.json','NON-GOLD-MECHANISM-RESULTS.json','GRAPH-QUERY-RESULTS.json','COVERAGE-LOCALITY.json','TESTS.json','RUNS.json','PERFORMANCE.json','IMPLEMENTATION-FROZEN.json','VERIFY.json'];
+for(const n of required)assert(fs.statSync(d+'/'+n).size>0,n);
+assert.equal(read('RUNS.json').length,10);assert.equal(read('RESULTS.json').hard_acceptance_pass,false);
+console.log({required_reports:required.length,implementation_unchanged:true,prior_files_unchanged:true,tests:full.counts,semantic_acceptance:'FAIL',status:'READY_TO_SEAL_DIAGNOSTIC'});
