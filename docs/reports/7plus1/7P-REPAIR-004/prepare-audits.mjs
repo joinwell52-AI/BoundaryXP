@@ -1,0 +1,5 @@
+import fs from'node:fs';
+const dir='docs/reports/7plus1/7P-REPAIR-004',old='docs/reports/7plus1/7P-REPAIR-003',put=(p,x)=>fs.writeFileSync(p,x,{flag:'wx'});
+let code=fs.readFileSync(old+'/compare.mjs','utf8').replaceAll('7P-REPAIR-003','7P-REPAIR-004').replaceAll('7P-REPAIR-002','7P-REPAIR-003').replaceAll("out=dir+'/r03/replay/'","out=dir+'/replay/'").replaceAll("dir+'/r03/replay/REF-001/RUN.json'","dir+'/replay/REF-001/RUN.json'");put(dir+'/compare.mjs',code);
+const oldLedger=JSON.parse(fs.readFileSync(old+'/SEMANTIC-REVIEW-LEDGER.json'));put(dir+'/SEMANTIC-REVIEW-LEDGER.json',JSON.stringify({actual:{},output_content:oldLedger.output_content,note:'Unchanged entry IDs require unchanged fact and expression comparison before retaining previous adjudication. No new MATCH is inferred from edge-test counts.'},null,2)+'\n');
+let table=fs.readFileSync(old+'/table-audit.mjs','utf8').replaceAll('7P-REPAIR-003','7P-REPAIR-004').replaceAll("dir+'/r03/RUNS.json'","dir+'/RUNS.json'");put(dir+'/table-audit.mjs',table);
