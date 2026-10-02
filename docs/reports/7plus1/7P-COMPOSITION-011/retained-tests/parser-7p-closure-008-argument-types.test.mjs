@@ -1,0 +1,3 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {directoryArgumentCompatibility} from '../../../../../research/7plus1-parser/v0.3-7p-composition-011/declared-behavior.mjs';
+for(const input of ['37','4.5','None','True','False','"folder"','\'folder\'','root / 37','"left" / "right"'])test('008 declared directory enumeration rejects known incompatible operand '+input,()=>assert.equal(directoryArgumentCompatibility(input).compatible,false));
+for(const input of ['domain','self.domain','base / "older"','store / subfolder'])test('008 symbolic directory operand is evidence, not runtime type proof '+input,()=>{const r=directoryArgumentCompatibility(input);assert.equal(r.compatible,true);assert.equal(r.runtime_type_proven,false);});
