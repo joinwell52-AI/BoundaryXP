@@ -1,0 +1,30 @@
+export const cases=[
+ ['CONTROL','让 tally_count 计算同时扫描 hot 和 cold 两路径。'],
+ ['CONTEXT','使 cache_state 更新。'],
+ ['GOVERNED','修改 engine.py，使 tally_count 计算同时扫描 hot 和 cold 两路径。'],
+ ['INDEPENDENT','让 first_worker 检查 alpha.csv，并让 second_worker 修改 beta.csv。'],
+ ['CREATE','让 build_worker 生成 result.json。'],
+ ['AMBIGUOUS','让他检查 alpha.csv。'],
+ ['CALL','1. `load_rows` 中调用为 `read_all(fresh_dir, base / "old")`。'],
+ ['SIBLINGS','1. `load_red` 中调用为 `read_all(red_dir, base / "red")`。\n2. `load_blue` 中调用为 `read_all(blue_dir, base / "blue")`。\n3. `load_green` 中调用为 `read_all(green_dir, base / "green")`。'],
+ ['EN_CALL','In load_items, call combine(new_dir, base / "older").'],
+ ['EN_SHOULD','load_items should call combine(new_dir, old_dir).'],
+ ['EN_REPLACE',"Replace load_items's call with combine(new_dir, old_dir)."],
+ ['DECLARE','在 `src/cache.py` 新增一个辅助函数：\n\n```python\ndef list_candidates(folder):\n    remove(folder)\n```'],
+ ['EN_DECLARE','Add a function in `src/collect.py`:\n\n```python\ndef collect_names(folder):\n    upload(folder)\n```'],
+ ['TESTS','在 `tests/test_red.py`、`tests/test_blue.py`、`tests/test_green.py` 中各加一个测试点：\n\n```python\ndef test_keeps_records():\n    delete_all()\n```'],
+ ['EN_TESTS','Add one test to each of `test_alpha.py`, `test_beta.py`:\n\n```python\ndef test_remains():\n    publish()\n```'],
+ ['UNRELATED','修改 `cache.py`。\n\n```python\ndef invented():\n    delete_all()\n```'],
+ ['INTERRUPTED','在 `cache.py` 新增一个函数：\n\n检查 `audit.csv`。\n\n```python\ndef unrelated():\n    pass\n```'],
+ ['MULTI_DECLARATION','在 `cache.py` 新增一个函数：\n\n```python\ndef first():\n    pass\ndef second():\n    pass\n```'],
+ ['NEG_CALL','不得让 `load_items` 调用 `combine(alpha, beta)`。'],
+ ['QUOTE_CALL','把“load_items should call combine(alpha, beta)”写入 manual.md。'],
+ ['CONTENT_CALL','编写 prompt.md 提示词。\n## 正文内容\nload_items should call combine(alpha, beta).'],
+ ['MALFORMED_CALL','`load_items` 中调用为 `combine(alpha, beta`。'],
+ ['PARAPHRASE','更新 counter.py，使 row_total 计算同时查看 current 和 retained 两目录。'],
+ ['CONDITION','如果失败，修改 engine.py，使 tally_count 计算同时扫描 hot 和 cold 两路径。'],
+ ['TWO_GOVERNORS','修改 first.py 并修改 second.py，使 tally_count 扫描 hot 和 cold 两路径。'],
+].map(([id,text])=>({id,text}));
+
+import{identityCases}from './identity-inputs.mjs';
+cases.push(...identityCases);

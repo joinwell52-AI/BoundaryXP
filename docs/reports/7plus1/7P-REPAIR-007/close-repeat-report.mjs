@@ -1,0 +1,7 @@
+import fs from'node:fs';import assert from'node:assert/strict';
+const d='docs/reports/7plus1/7P-REPAIR-007',get=n=>JSON.parse(fs.readFileSync(d+'/'+n)),set=(n,v)=>fs.writeFileSync(d+'/'+n,JSON.stringify(v,null,2)+'\n');assert.equal(get('REAL-REPEAT-DETERMINISM.json').status,'PASS');
+const report=d+'/REPORT.md';let s=fs.readFileSync(report,'utf8');s=s.replace('开发期首次失败日志保留（对象—scope 关系、未决类型枚举及导出版本标签问题）；修复后冻结，没有覆盖首次记录。','开发期失败回执与后续磁盘日志保留，见 DEVELOPMENT-INCIDENTS.json。首次 scope 断言运行未重定向完整 TAP，仅工具回执与计数/原因摘要保留，不能宣称完整磁盘日志已保存；后续日志未覆盖。修复未决类型与导出标签等问题后冻结。');s=s.replace('这是确定性编译核验，不冒称独立模型复跑。','这是确定性编译核验。此外 SWAI-001 已独立重新执行真实 HanLP/spaCy 与模型解析；两轮 semantic_nodes、relations、Eligibility、BoundaryIR、Canonical、ProofDAG 和身份认证一致，见 REAL-REPEAT-DETERMINISM.json。');fs.writeFileSync(report,s);
+for(const n of ['RESULTS.json','REQUIRED-CHECKS.json']){const r=get(n);(n==='RESULTS.json'?r.hard_acceptance_checks:r.checks).INDEPENDENT_REAL_REPEAT=true;set(n,r);}
+const v=get('VERIFY.json');v.checks.push({name:'SWAI-001 independent real model parse identical semantic graph, IR, canonical and proof',status:'PASS',evidence:'REAL-REPEAT-DETERMINISM.json'});set('VERIFY.json',v);
+const stage=get('STAGE-DIVERGENCE-AUDIT.json');stage.independent_repeat='REAL-REPEAT-DETERMINISM.json';set('STAGE-DIVERGENCE-AUDIT.json',stage);
+const perf=get('PERFORMANCE.json');perf.independent_repeat=get('REAL-REPEAT-DETERMINISM.json').performance;set('PERFORMANCE.json',perf);console.log('REAL_REPEAT_REPORT_INTEGRATED');

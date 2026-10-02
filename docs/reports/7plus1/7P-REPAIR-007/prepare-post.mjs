@@ -1,0 +1,4 @@
+import fs from'node:fs';
+const d='docs/reports/7plus1/7P-REPAIR-007';let s=fs.readFileSync(d+'/audit.mjs','utf8');s=s.replace('mechanism_tests:32,retained_tests:320','mechanism_tests:17,retained_tests:352,additional_retained_frame_cases:16').replace("eligibility_change:'Certified subordinate frame role -> AUXILIARY; all other rules unchanged.'", "eligibility_change:'UNCHANGED_FROM_006'");fs.writeFileSync(d+'/audit.mjs',s);
+fs.writeFileSync(d+'/table-audit.mjs',fs.readFileSync('docs/reports/7plus1/7P-REPAIR-006/table-audit.mjs','utf8').replaceAll('7P-REPAIR-006','7P-REPAIR-007'),{flag:'wx'});
+const ledger=JSON.parse(fs.readFileSync('docs/reports/7plus1/7P-REPAIR-006/SEMANTIC-REVIEW-LEDGER.json'));fs.writeFileSync(d+'/SEMANTIC-REVIEW-LEDGER.json',JSON.stringify({...ledger,task:'7P-REPAIR-007',inherited_from:'Sealed 006 ledger. New or changed facts require fresh review; no expected supplied to Parser.'},null,2)+'\n',{flag:'wx'});
