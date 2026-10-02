@@ -1,0 +1,126 @@
+{
+  "created_before_execution": true,
+  "cases": [
+    {
+      "id": "STATIC_VARIADIC",
+      "text": "修改 `src/letters.py` 中 `alpha` / `beta` 两个方法。\n在 `src/letters.py` 新增一个辅助函数：\n```python\ndef gather_names(*folders):\n    \"\"\"Yield basenames of files under all given directories.\"\"\"\n    for folder in folders:\n        if not folder.is_dir():\n            continue\n        for item in folder.iterdir():\n            if item.is_file():\n                yield item.name\n```\n`alpha` 中调用为 `gather_names(warm_dir, root / \"cold\")`。",
+      "expect": {
+        "bindings": 1,
+        "instantiations": 1,
+        "collections": 2
+      },
+      "source_sha256": "8aa9b8e764a96477f95b1f731c0e368d49ca1f462f98be0f80d4a0e22d62fdc3"
+    },
+    {
+      "id": "STATIC_RENAMED",
+      "text": "修改 `src/letters.py` 中 `alpha` / `beta` 两个方法。\n在 `src/letters.py` 新增一个辅助函数：\n```python\ndef list_labels(*folders):\n    \"\"\"Yield basenames of files under all given directories.\"\"\"\n    for folder in folders:\n        if not folder.is_dir():\n            continue\n        for item in folder.iterdir():\n            if item.is_file():\n                yield item.name\n```\n`alpha` 中调用为 `list_labels(left_dir, depot / \"retired\")`。",
+      "expect": {
+        "bindings": 1,
+        "instantiations": 1,
+        "collections": 2
+      },
+      "source_sha256": "0a374e4d221bccc180552f600faaef0722345b0eb6b3feb88ea20bee70449c5e"
+    },
+    {
+      "id": "STATIC_THREE",
+      "text": "修改 `src/letters.py` 中 `alpha` / `beta` 两个方法。\n在 `src/letters.py` 新增一个辅助函数：\n```python\ndef gather_names(*folders):\n    \"\"\"Yield basenames of files under all given directories.\"\"\"\n    for folder in folders:\n        if not folder.is_dir():\n            continue\n        for item in folder.iterdir():\n            if item.is_file():\n                yield item.name\n```\n`alpha` 中调用为 `gather_names(a_dir, b_dir, c_dir)`。",
+      "expect": {
+        "bindings": 1,
+        "instantiations": 1,
+        "collections": 3
+      },
+      "source_sha256": "55f31c2c20dc541aef8f0d441c429f0b854acbd32d9e6564e20a1e3da30b7516"
+    },
+    {
+      "id": "STATIC_RETURN_ONLY",
+      "text": "修改 `src/letters.py` 中 `alpha` / `beta` 两个方法。\n在 `src/letters.py` 新增一个辅助函数：\n```python\ndef gather_names(folder):\n    return folder\n```\n`alpha` 中调用为 `gather_names(only_dir)`。",
+      "expect": {
+        "bindings": 1,
+        "instantiations": 0,
+        "collections": 0
+      },
+      "source_sha256": "c743ae9bfa2548d9a038297b64665d2af02f028795edd477ceb7f9f5b655a11a"
+    },
+    {
+      "id": "STATIC_ARITY",
+      "text": "修改 `src/letters.py` 中 `alpha` / `beta` 两个方法。\n在 `src/letters.py` 新增一个辅助函数：\n```python\ndef gather_names(folder):\n    return folder\n```\n`alpha` 中调用为 `gather_names(warm_dir, root / \"cold\")`。",
+      "expect": {
+        "bindings": 0,
+        "instantiations": 0,
+        "collections": 0
+      },
+      "source_sha256": "8235b5a3260fd4760e3a9cfc4a085f56559dd88cd0e678c22860cc695177d5ae"
+    },
+    {
+      "id": "STATIC_WRONG_FILTER",
+      "text": "修改 `src/letters.py` 中 `alpha` / `beta` 两个方法。\n在 `src/letters.py` 新增一个辅助函数：\n```python\ndef gather_names(*folders):\n    \"\"\"Yield basenames of files under all given directories.\"\"\"\n    for folder in folders:\n        if not folder.is_dir():\n            continue\n        for item in folder.iterdir():\n            if item.is_dir():\n                yield item.name\n```\n`alpha` 中调用为 `gather_names(warm_dir, root / \"cold\")`。",
+      "expect": {
+        "bindings": 1,
+        "instantiations": 0,
+        "collections": 0
+      },
+      "source_sha256": "e17e89ca593fb7ae1e7df19a76e0ff01795ef17c472a9c471f97fb6af3d27914"
+    },
+    {
+      "id": "STATIC_EARLY_RETURN",
+      "text": "修改 `src/letters.py` 中 `alpha` / `beta` 两个方法。\n在 `src/letters.py` 新增一个辅助函数：\n```python\ndef gather_names(*folders):\n    \"\"\"Yield basenames of files under all given directories.\"\"\"\n    for folder in folders:\n        if not folder.is_dir():\n            continue\n        for item in folder.iterdir():\n            if item.is_file():\n                return item.name\n```\n`alpha` 中调用为 `gather_names(warm_dir, root / \"cold\")`。",
+      "expect": {
+        "bindings": 1,
+        "instantiations": 0,
+        "collections": 0
+      },
+      "source_sha256": "bfbe83eeaeaaee1e96ca84e1937883da404aa1cb47d91ad495f5225b9f09cda2"
+    },
+    {
+      "id": "STATIC_NO_CONTRACT",
+      "text": "修改 `src/letters.py` 中 `alpha` / `beta` 两个方法。\n在 `src/letters.py` 新增一个辅助函数：\n```python\ndef gather_names(*folders):\n    \"\"\"This helper has a suggestive name.\"\"\"\n    for folder in folders:\n        if not folder.is_dir():\n            continue\n        for item in folder.iterdir():\n            if item.is_file():\n                yield item.name\n```\n`alpha` 中调用为 `gather_names(warm_dir, root / \"cold\")`。",
+      "expect": {
+        "bindings": 1,
+        "instantiations": 0,
+        "collections": 0
+      },
+      "source_sha256": "f6a80329ce4abced2f1bc4cf81d51ff9872f2e699796352e61b468b8c2db01ee"
+    },
+    {
+      "id": "STATIC_SIDE_EFFECT",
+      "text": "修改 `src/letters.py` 中 `alpha` / `beta` 两个方法。\n在 `src/letters.py` 新增一个辅助函数：\n```python\ndef gather_names(*folders):\n    \"\"\"Yield basenames of files under all given directories.\"\"\"\n    send_network_request()\n    for folder in folders:\n        if not folder.is_dir():\n            continue\n        for item in folder.iterdir():\n            if item.is_file():\n                yield item.name\n```\n`alpha` 中调用为 `gather_names(warm_dir, root / \"cold\")`。",
+      "expect": {
+        "bindings": 1,
+        "instantiations": 0,
+        "collections": 0
+      },
+      "source_sha256": "b383403a18508d84860946755d23801519f64acdb82eda5283ff995c37e0254e"
+    },
+    {
+      "id": "STATIC_DECORATOR",
+      "text": "修改 `src/letters.py` 中 `alpha` / `beta` 两个方法。\n在 `src/letters.py` 新增一个辅助函数：\n```python\n@runtime_wrapper\ndef gather_names(*folders):\n    \"\"\"Yield basenames of files under all given directories.\"\"\"\n    for folder in folders:\n        if not folder.is_dir():\n            continue\n        for item in folder.iterdir():\n            if item.is_file():\n                yield item.name\n```\n`alpha` 中调用为 `gather_names(warm_dir, root / \"cold\")`。",
+      "expect": {
+        "bindings": 0,
+        "instantiations": 0,
+        "collections": 0
+      },
+      "source_sha256": "a087745cd27b77d244fe1c8cebe624da51331923d60684be93d153478995ff76"
+    },
+    {
+      "id": "STATIC_EMPTY_DOMAIN",
+      "text": "修改 `src/letters.py` 中 `alpha` / `beta` 两个方法。\n在 `src/letters.py` 新增一个辅助函数：\n```python\ndef gather_names(*folders):\n    \"\"\"Yield basenames of files under all given directories.\"\"\"\n    for folder in folders:\n        if not folder.is_dir():\n            continue\n        for item in folder.iterdir():\n            if item.is_file():\n                yield item.name\n```\n`alpha` 中调用为 `gather_names()`。",
+      "expect": {
+        "bindings": 1,
+        "instantiations": 0,
+        "collections": 0
+      },
+      "source_sha256": "7fcc20320cdc56dd4ab016bd2838db181be9de14d373cc05669ee85c78e84a15"
+    },
+    {
+      "id": "STATIC_TWO_OWNERS",
+      "text": "修改 `src/letters.py` 中 `alpha` / `beta` 两个方法。\n在 `src/letters.py` 新增一个辅助函数：\n```python\ndef gather_names(*folders):\n    \"\"\"Yield basenames of files under all given directories.\"\"\"\n    for folder in folders:\n        if not folder.is_dir():\n            continue\n        for item in folder.iterdir():\n            if item.is_file():\n                yield item.name\n```\n`alpha` 中调用为 `gather_names(warm_dir, root / \"cold\")`。\n`beta` 中调用为 `gather_names(other_dir, base / \"older\")`。",
+      "expect": {
+        "bindings": 2,
+        "instantiations": 2,
+        "collections": 4
+      },
+      "source_sha256": "4460ce2e1db1e96e7a942df84144baabaee532caaa40b93d3a72728070b6e6f0"
+    }
+  ],
+  "inputs_module_sha256": "ce1c87c712a852057cfa3dd81b9d6534c1b53bc5956efa51ecb4cbac86a78d56"
+}
