@@ -1,0 +1,3 @@
+import fs from 'node:fs';import assert from 'node:assert/strict';import {out,read,write,walk,digest} from './common.mjs';
+assert.ok(!fs.existsSync(out+'IMPLEMENTATION-FREEZE.json'));assert.ok(read(out+'orchestration-r02/INDEX.json').every(r=>r.pass));
+const files=walk('research/7plus1-parser/v0.3-7p-matrix-017-r1/').map(path=>({path,sha256:digest(path)}));write(out+'IMPLEMENTATION-FREEZE.json',{task:'7P-MATRIX-017-R1',frozen_at:new Date().toISOString(),files,local_engine:'research/7plus1-parser/v0.3-7p-short-direct-016-r2/engine.mjs',local_engine_sha256:digest('research/7plus1-parser/v0.3-7p-short-direct-016-r2/engine.mjs'),semantic_success_not_implied:true});console.log(JSON.stringify(files));

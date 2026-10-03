@@ -1,0 +1,1 @@
+赵一负责检查 audit.log 并生成 checklist.md。完成后，将 checklist.md 提交给复核人孙禾。只有孙禾确认 checklist.md 已包含全部检查结果时，本任务才算完成。不得修改 audit.log。
