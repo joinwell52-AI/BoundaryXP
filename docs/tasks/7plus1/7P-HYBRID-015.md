@@ -42,7 +42,30 @@ The staged roadmap is:
 Only advance if the previous stage demonstrates end-to-end 7+1 case closure. In 015, paragraph/sentence segmentation may be used internally for parsing, but no WP graph/tree is created.
 
 ## Read first
-Read CURRENT-TASK, the 014 task/report/FINAL-OUTCOME/ARCHITECTURE-VERDICT, 009 hybrid option analysis, 010 scope-aware comparison contract, the 014 model-signals/semantic-decoder/semantic-ownership/source-binding/whole-composition code, and active L1/L2 pack + model manifests.
+Read CURRENT-TASK, `docs/tasks/7plus1/7P-008-014-LESSONS-LEARNED.md`, the 014 task/report/FINAL-OUTCOME/ARCHITECTURE-VERDICT, 009 hybrid option analysis, 010 scope-aware comparison contract, the 014 model-signals/semantic-decoder/semantic-ownership/source-binding/whole-composition code, and active L1/L2 pack + model manifests.
+
+
+
+## Mandatory anti-waste gate
+
+Before coding, write and freeze in the 015 report package:
+
+- `HYPOTHESIS.md`
+- `PRIMARY-SEMANTIC-GATE.json`
+
+They must state:
+
+1. the single architecture hypothesis being tested;
+2. the primary short-task semantic metrics;
+3. minimum expected improvement;
+4. falsification condition;
+5. stop/switch rule.
+
+Do not count focused/full regression growth as semantic progress.
+
+If the frozen short-task benchmark shows no material end-to-end improvement after the first complete hybrid implementation, stop for ADMIN review. Do not open a second phrase/rule repair loop inside 015.
+
+If the proposed upstream model lane cannot improve complete short-task 7+1 closure while safety remains intact, report the appropriate insufficient outcome instead of expanding scope.
 
 ## Model boundary
 Use only model resources already installed and already used by BoundX:
