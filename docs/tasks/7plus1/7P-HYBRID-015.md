@@ -15,10 +15,10 @@ This is a shadow experiment **inside the BoundX 7+1 Parser**. The product under 
 
 The current experiment stage is **not** long multi-WP document parsing.
 
-015 must first validate the 7+1 parser on REF-001-like inputs:
+015 must first validate the 7+1 parser on REF-001-like inputs. **Do not decompose these short inputs into WP0–WPn.** WP decomposition is out of scope for 015.
 
 - roughly 700–1800 Chinese characters (or comparable English length);
-- one root work package / one primary workflow;
+- one primary workflow; treat the whole short document as one task boundary;
 - one main goal;
 - no nested multi-WP program plan;
 - at most two participants;
@@ -39,7 +39,7 @@ The staged roadmap is:
 017  long multi-WP document parsing / existing 9 STANDARD
 ```
 
-Only advance if the previous stage demonstrates end-to-end 7+1 case closure.
+Only advance if the previous stage demonstrates end-to-end 7+1 case closure. In 015, paragraph/sentence segmentation may be used internally for parsing, but no WP graph/tree is created.
 
 ## Read first
 Read CURRENT-TASK, the 014 task/report/FINAL-OUTCOME/ARCHITECTURE-VERDICT, 009 hybrid option analysis, 010 scope-aware comparison contract, the 014 model-signals/semantic-decoder/semantic-ownership/source-binding/whole-composition code, and active L1/L2 pack + model manifests.
