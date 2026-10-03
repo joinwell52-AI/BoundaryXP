@@ -1,0 +1,11 @@
+# 7P-MATRIX-017 preflight seal
+
+ADMIN_MATRIX_CASE_REVIEW_REQUIRED
+STATUS=WAITING_ADMIN_REVIEW
+PRODUCTION_READY=false
+
+No matrix implementation; Parser tests NOT_RUN. Source/Gold/runtime/old seals unchanged.
+
+MANIFEST SHA-256: f94a61fb7a1919dc6ff18f146b6dfaabf642e430f1f51a4d3283b3234d5d72b1
+SHA256SUMS SHA-256: e93a82843c1e40971d75d7972cb9494839945e55aab3e1fa85767a7d2e976342
+Payload files: 42

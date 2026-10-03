@@ -1,0 +1,10 @@
+import fs from 'node:fs';import crypto from 'node:crypto';import assert from 'node:assert/strict';
+const out='docs/reports/7plus1/7P-MATRIX-017/',read=p=>JSON.parse(fs.readFileSync(p,'utf8')),digest=p=>crypto.createHash('sha256').update(fs.readFileSync(p)).digest('hex');
+const walk=p=>fs.readdirSync(p,{withFileTypes:true}).flatMap(e=>e.isDirectory()?walk(p+e.name+'/'):[p+e.name]);
+assert.ok(!fs.existsSync(out+'SEAL.md'));assert.equal(read(out+'PROTECTED-ASSET-VERIFICATION.json').status,'PASS');assert.equal(read(out+'FINAL-OUTCOME.json').terminal_outcome,'ADMIN_MATRIX_CASE_REVIEW_REQUIRED');
+const envelopes=['MANIFEST.json','SHA256SUMS.txt','SEAL.md','SEAL-VERIFICATION.json'],records=walk(out).filter(p=>!envelopes.includes(p.slice(out.length))).sort().map(path=>({path,sha256:digest(path),bytes:fs.statSync(path).size}));
+fs.writeFileSync(out+'MANIFEST.json',JSON.stringify({task:'7P-MATRIX-017',terminal:'ADMIN_MATRIX_CASE_REVIEW_REQUIRED',scope:'Pre-implementation read-only contract review, no Parser results',files:records},null,2)+'\n');
+fs.writeFileSync(out+'SHA256SUMS.txt',records.map(r=>r.sha256+'  '+r.path).join('\n')+'\n');
+fs.writeFileSync(out+'SEAL.md','# 7P-MATRIX-017 preflight seal\n\nADMIN_MATRIX_CASE_REVIEW_REQUIRED\nSTATUS=WAITING_ADMIN_REVIEW\nPRODUCTION_READY=false\n\nNo matrix implementation; Parser tests NOT_RUN. Source/Gold/runtime/old seals unchanged.\n\nMANIFEST SHA-256: '+digest(out+'MANIFEST.json')+'\nSHA256SUMS SHA-256: '+digest(out+'SHA256SUMS.txt')+'\nPayload files: '+records.length+'\n');
+for(const r of records)assert.equal(digest(r.path),r.sha256);
+const v={status:'PASS',scope:'Artifact integrity, not semantic validation',payload_files:records.length,manifest_sha256:digest(out+'MANIFEST.json'),sha256sums_sha256:digest(out+'SHA256SUMS.txt'),seal_sha256:digest(out+'SEAL.md'),verified_at:new Date().toISOString()};fs.writeFileSync(out+'SEAL-VERIFICATION.json',JSON.stringify(v,null,2)+'\n');console.log(JSON.stringify(v));

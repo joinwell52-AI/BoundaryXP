@@ -1,0 +1,100 @@
+{
+  "id": "M04-PARALLEL-SOURCE-CONTRACT-GAP",
+  "status": "ADMIN_REVIEW_REQUIRED",
+  "kind": "EXPECTED_EDGE_NOT_CERTIFIABLE_UNDER_FROZEN_RULE",
+  "case_id": "M04",
+  "expected_edge": "PARALLEL(WP1, WP2)",
+  "expected_evidence": {
+    "path": "docs/tasks/7plus1/7P-MATRIX-017-FROZEN-CASES.md",
+    "line": 483,
+    "quote": "PARALLEL(WP1, WP2)"
+  },
+  "source_evidence": [
+    {
+      "source_path": "docs/reports/7plus1/7P-MATRIX-017/frozen-sources/M04.txt",
+      "source_sha256": "2fda4cd312e61e01b41a0a731f92fdb3577f106d4f4fbeb6631ff709c7102041",
+      "start": 279,
+      "end": 297,
+      "quote": "两个检查阶段都完成后，汇总阶段开始。"
+    },
+    {
+      "source_path": "docs/reports/7plus1/7P-MATRIX-017/frozen-sources/M04.txt",
+      "source_sha256": "2fda4cd312e61e01b41a0a731f92fdb3577f106d4f4fbeb6631ff709c7102041",
+      "start": 75,
+      "end": 92,
+      "quote": "方敏读取 accounts.csv"
+    },
+    {
+      "source_path": "docs/reports/7plus1/7P-MATRIX-017/frozen-sources/M04.txt",
+      "source_sha256": "2fda4cd312e61e01b41a0a731f92fdb3577f106d4f4fbeb6631ff709c7102041",
+      "start": 185,
+      "end": 205,
+      "quote": "许晨读取 permissions.csv"
+    }
+  ],
+  "rule": {
+    "path": "docs/tasks/7plus1/7P-MATRIX-017.md",
+    "section": "5.3",
+    "line": 192,
+    "quote": "If two WPs share the same upstream input and source says/permits parallel work:"
+  },
+  "positive_control": {
+    "case_id": "M03",
+    "evidence": {
+      "source_path": "docs/reports/7plus1/7P-MATRIX-017/frozen-sources/M03.txt",
+      "source_sha256": "6714fce1c04e4782a16d41b7f7a214ad932efe169278340870c02ced4fb9189a",
+      "start": 175,
+      "end": 186,
+      "quote": "两个检查阶段可以并行。"
+    },
+    "shared_explicit_input": "spec.md"
+  },
+  "analysis": {
+    "join_is_supported": true,
+    "parallel_is_not_forbidden_by_source": true,
+    "parallel_explicitly_stated_in_M04": false,
+    "input_WP1": "accounts.csv",
+    "input_WP2": "permissions.csv",
+    "same_upstream_input_proof_available": false,
+    "important": "Join requires both predecessors to finish; it does not by itself certify a positive PARALLEL edge. Absence of ordering is not an explicit permission relation under the supplied rule.",
+    "alternative_interpretation": "If PARALLEL is intended to mean derived non-dependence/feasible concurrency rather than source-declared permission, ADMIN must define that proof rule and distinguish it from a directly sourced edge. Current task does not authorize inventing this interpretation."
+  },
+  "countermodels": [
+    {
+      "name": "sequential_execution_consistent_with_join",
+      "WP1": [
+        0,
+        1
+      ],
+      "WP2": [
+        1,
+        2
+      ],
+      "WP3_start": 2
+    },
+    {
+      "name": "overlapping_execution_consistent_with_join",
+      "WP1": [
+        0,
+        1
+      ],
+      "WP2": [
+        0,
+        1
+      ],
+      "WP3_start": 1
+    }
+  ],
+  "countermodel_limit": "Illustrative logical witnesses only; not Parser runs and not a claim that permission means mandatory overlap.",
+  "stop_authority": {
+    "path": "docs/tasks/7plus1/7P-MATRIX-017.md",
+    "section": "7",
+    "quote": "If a frozen contract is objectively inconsistent with source, stop with: ADMIN_MATRIX_CASE_REVIEW_REQUIRED"
+  },
+  "resolution_options_for_ADMIN": [
+    "Revise frozen M04 source to explicitly permit parallel work and clarify §5.3 for distinct upstream inputs, issuing a new revision.",
+    "Remove the unsupported positive PARALLEL expectation while preserving the independently supported join, issuing a new revision.",
+    "Formally define a proof-backed derived concurrency rule and its relation to source permission before implementation."
+  ],
+  "changes_applied": false
+}
