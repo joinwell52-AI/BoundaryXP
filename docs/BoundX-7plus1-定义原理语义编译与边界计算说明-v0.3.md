@@ -1925,3 +1925,92 @@ X* = Solve(M, W, D, Γ_long)
 - `Q_global` 把全局一致语义投影为最终一个 Canonical 7+1。
 
 该扩展不改变 7+1 的基础定义，而是增加长任务的结构化计算方法。
+
+
+---
+
+# 第十四部分：008–014 复盘形成的工程约束
+
+## 51. 机制通过不得替代完整语义闭环
+
+008–014 已证明：大量专项、non-Gold、retained 和全量回归 PASS，并不等价于完整任务被正确解析。
+
+后续任务必须把以下指标作为更高优先级：
+
+- same-case I/O/A closure；
+- full Canonical 7+1 closure；
+- false-defined；
+- wrong-binding；
+- unresolved correctness；
+- source/proof completeness。
+
+局部机制测试只作为必要条件。
+
+## 52. 不得跨复杂度跳级开发
+
+正式顺序固定为：
+
+```text
+Short single-flow
+→ Medium 2–3 WP
+→ Long multi-WP
+→ Formal solver
+```
+
+短任务未稳定前，不得用长 multi-WP STANDARD 持续驱动底层 Parser 修补。
+
+## 53. 每轮实现前必须先提出可证伪假设
+
+任何 Parser 任务开始前必须定义：
+
+```text
+Hypothesis
+Primary Semantic Gate
+Minimum Expected Delta
+Falsification Condition
+Stop / Architecture-Switch Rule
+```
+
+没有新的可检验假设，不启动新一轮实现。
+
+## 54. 同一路线连续两轮主指标无实质改善时必须停线
+
+如果连续两轮 Primary Semantic Gate 没有实质改善：
+
+```text
+STOP CURRENT REPAIR LINE
+→ Architecture Review
+```
+
+不能仅因为测试继续增加或局部 MATCH 增长而继续。
+
+## 55. 模型候选与确定性认证职责固定
+
+```text
+Model / NLP
+→ propose candidates
+
+Deterministic constraints
+→ certify / reject / unresolved
+
+Canonical 7+1
+→ deterministic projection of certified semantics
+```
+
+模型不能直接写 Canonical 7+1；确定性规则也不能在缺少 source evidence 时补造语义。
+
+## 56. 兼容合同应冻结语义，不应无必要冻结内部实现
+
+历史 evidence 可以字节封存，但 active implementation 的兼容性优先验证：
+
+- semantic behavior；
+- typed IR；
+- public contract；
+- projection；
+- proof。
+
+不得用无必要的 source byte equality 阻止正式授权的内部架构演化。
+
+完整复盘见：
+
+`docs/tasks/7plus1/7P-008-014-LESSONS-LEARNED.md`
