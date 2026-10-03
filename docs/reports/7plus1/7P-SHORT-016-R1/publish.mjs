@@ -1,0 +1,22 @@
+import fs from 'node:fs';import crypto from 'node:crypto';import {execFileSync} from 'node:child_process';
+const out='docs/reports/7plus1/7P-SHORT-016-R1/',hash=b=>crypto.createHash('sha256').update(b).digest('hex'),read=p=>JSON.parse(fs.readFileSync(p,'utf8'));
+const git=(args,extra={})=>execFileSync('git',['-c','core.fsmonitor=false',...args],{maxBuffer:100e6,...extra}),branch='review/7plus1-parser';
+const before=git(['rev-parse','HEAD']).toString().trim(),remote=git(['ls-remote','origin','refs/heads/'+branch]).toString().trim().split(/\s/)[0];
+if(before!==remote||git(['branch','--show-current']).toString().trim()!==branch||git(['diff','--cached','--name-only']).length)throw Error('HEAD/remote/branch/index mismatch');
+const status=git(['status','--porcelain=v1','--untracked-files=no']),records=read(out+'MANIFEST.json').files,files=[...records.map(r=>r.path),...['MANIFEST.json','SHA256SUMS.txt','SEAL.md','SEAL-VERIFICATION.json'].map(p=>out+p)];
+for(const r of records)if(hash(fs.readFileSync(r.path))!==r.sha256)throw Error('SEALED_PAYLOAD_CHANGED '+r.path);
+if(files.some(p=>!p.startsWith(out)&&!p.startsWith('research/7plus1-parser/v0.3-7p-short-direct-016-r1/')&&p!=='tests/parser-7p-short-016-r1.test.mjs'))throw Error('Publish scope');
+const indexPath=git(['rev-parse','--git-path','7p-short-016-r1-publish.index']).toString().trim();if(fs.existsSync(indexPath))throw Error('Owned temporary index exists');
+const env={...process.env,GIT_INDEX_FILE:indexPath};git(['read-tree',before],{env});
+// Store already-sealed bytes directly; CRLF normalization must not silently
+// change real test logs or source evidence. No repository attributes change.
+const entries=files.map(p=>{const b=fs.readFileSync(p),oid=git(['hash-object','-w','--stdin','--no-filters'],{input:b}).toString().trim();return '100644 '+oid+'\t'+p;});
+git(['update-index','--index-info'],{env,input:Buffer.from(entries.join('\n')+'\n')});
+const staged=git(['diff','--cached','--name-only',before],{env}).toString().trim().split('\n');if(staged.length!==files.length||staged.some(p=>!files.includes(p)))throw Error('Staging scope mismatch');
+const tree=git(['write-tree'],{env}).toString().trim(),commit=git(['commit-tree',tree,'-p',before],{input:Buffer.from('7P-SHORT-016-R1: close eight short cases and seal failed REF-001 anchor review\n')}).toString().trim();
+for(const p of files)if(hash(git(['show',commit+':'+p]))!==hash(fs.readFileSync(p)))throw Error('Git blob mismatch '+p);
+git(['update-ref','refs/heads/'+branch,commit,before]);git(['read-tree',commit]);
+if(!status.equals(git(['status','--porcelain=v1','--untracked-files=no'])))throw Error('Preexisting dirty tracked state changed');
+git(['push','origin',branch]);const check=git(['ls-remote','origin','refs/heads/'+branch]).toString().trim().split(/\s/)[0];if(check!==commit)throw Error('Remote head mismatch');
+fs.unlinkSync(indexPath);const receipt={task:'7P-SHORT-016-R1',commit,parent:before,remote_verified:check,files:files.length,payload_files:records.length,Git_blobs_exact:true,seal_unchanged:true,preexisting_dirty_tracked_state_preserved:true,no_merge_release_tag_production_switch:true,STATUS:'WAITING_ADMIN_REVIEW'};
+fs.writeFileSync(git(['rev-parse','--git-path','7P-SHORT-016-R1-PUSH-RECEIPT.json']).toString().trim(),JSON.stringify(receipt,null,2)+'\n');console.log(JSON.stringify(receipt));

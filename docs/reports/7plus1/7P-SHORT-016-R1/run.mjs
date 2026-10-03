@@ -1,0 +1,16 @@
+import fs from 'node:fs';import assert from 'node:assert/strict';import {out,read,write,digest,cases} from './common.mjs';
+import {sourceDocument} from '../../../../research/7plus1-parser/p0-semantic-repair-r02/source.mjs';
+import {analyze,closeNlp} from '../../../../research/7plus1-parser/v0.3-7p-composition-014/linguistic.mjs';
+import {compileNative} from '../../../../research/7plus1-parser/v0.3-7p-short-direct-016-r1/engine.mjs';
+import {compare} from './compare.mjs';
+const freeze=fs.existsSync(out+'IMPLEMENTATION-FREEZE.json')?read(out+'IMPLEMENTATION-FREEZE.json'):{files:[]};for(const r of freeze.files)assert.equal(digest(r.path),r.sha256);
+const phase=process.argv[2];if(!/^candidate-\w[\w-]*$|^final-first$|^final-repeat$/.test(phase)||fs.existsSync(out+phase))throw Error('Phase exists or invalid');
+const rows=[];
+try{for(const c of cases()){const dir=out+phase+'/'+c.id+'/';write(dir+'source.md',c.source);write(dir+'expected.yaml',c.expected_yaml);console.log('START '+phase+' '+c.id);
+ const doc=sourceDocument(Buffer.from(c.source),{filename:c.id+'.md'}),signals=await analyze(doc);write(dir+'signals.json',signals);
+ try{const r=compileNative(doc,signals,{run_id:'016:'+phase+':'+c.id,created_at:'2026-10-03T00:00:00.000Z'}),g=r.compiler_v03;write(dir+'trace.json',r);write(dir+'canonical-7plus1.json',g.canonical_7plus1);const cmp=compare(r,c);write(dir+'comparison.json',cmp);
+ write(dir+'canonical-7plus1.md','# '+c.id+' — Canonical 7+1\n\n'+['I','O','A','P','R','V','C','B'].map(k=>'## '+k+' · '+g.canonical_7plus1[k].status+'\n\n'+(g.canonical_7plus1[k].entries.map(e=>'- '+e.display_value+' ['+e.state+']\n  - facts: '+e.boundary_fact_ids.join(', ')+'\n  - scope: '+(e.scope_expr_id??'none')+'; condition: '+(e.condition_expr_id??'none')+'; quantity: '+(e.quantity_expr_id??'none')+'\n  - evidence: '+e.source_span_ids.join(', ')).join('\n')||'原文未显式定义此维。')+'\n').join('\n'));
+ const fields=['semantic_nodes','relations','eligibility_decisions','boundary_ir','canonical_7plus1','proof_dag','unresolved','coverage'];const exact=phase==='final-repeat'?Object.fromEntries(fields.map(k=>[k,JSON.stringify(g[k])===JSON.stringify(read(out+'final-first/'+c.id+'/trace.json').compiler_v03[k])])):null;
+ rows.push({case_id:c.id,status:'EXECUTED',contract:r.contract_gate_results.status,full:cmp.FULL_CASE_CLOSED,joint:cmp.IOA_CLOSED,repeat_fields:exact,repeat:exact?Object.values(exact).every(Boolean):null});
+ }catch(e){write(dir+'failure.json',{status:'ERROR',message:e.message,stack:e.stack});rows.push({case_id:c.id,status:'ERROR',reason:e.message});}write(out+phase+'/INDEX.json',rows);console.log(JSON.stringify(rows.at(-1)));
+}}finally{closeNlp();}for(const r of freeze.files)assert.equal(digest(r.path),r.sha256);

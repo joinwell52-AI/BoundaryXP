@@ -1,0 +1,1 @@
+陈默负责本次核对。依据 API-SPEC-12 的 v1.8.0 版本核对 api.yaml，并生成 api-check.md。不得修改 api.yaml。api-check.md 已生成后，本任务完成。

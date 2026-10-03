@@ -1,0 +1,15 @@
+import fs from 'node:fs';import path from 'node:path';import {spawn} from 'node:child_process';import {pathToFileURL} from 'node:url';import {out,write,digest,read} from './common.mjs';
+const mode=process.argv[2];if(fs.existsSync(out+mode+'-REGRESSION.json'))throw Error('Result already exists');
+let args,exe=process.execPath;
+if(mode==='FOCUSED')args=['--test','tests/parser-7p-short-016-r1.test.mjs'];
+else if(mode==='ORIGINAL')args=['--test','--test-concurrency=1',...fs.readdirSync('tests').filter(p=>/^parser.*\.test\.mjs$/.test(p)&&!p.includes('short-016-r1')).sort().map(p=>'tests/'+p)];
+else if(mode==='FULL'){exe=process.env.ComSpec??'C:/Windows/System32/cmd.exe';args=['/d','/s','/c','npm test'];}
+else if(mode==='RETAINED'){
+ const files=['tests/parser-7p-composition-014-whole.test.mjs','tests/parser-7p-composition-014-recipient.test.mjs','tests/parser-7p-composition-014-qualified.test.mjs'];
+ const converted=files.map(file=>{let text=fs.readFileSync(file,'utf8').replace(/from\s*(['"])(\.[^'"]+)\1/g,(m,q,s)=>{let target=path.resolve(path.dirname(file),s);if(target.endsWith(path.normalize('v0.3-7p-composition-014/engine.mjs')))target=path.resolve('research/7plus1-parser/v0.3-7p-short-direct-016-r1/engine.mjs');return 'from '+q+pathToFileURL(target).href+q;});const dest=out+'retained-tests/'+path.basename(file);write(dest,text);return dest;});
+ write(out+'RETAINED-REDIRECT-AUDIT.json',{originals:files.map(path=>({path,sha256:digest(path)})),redirect:'Only engine import redirected to R1; all original expectations/source/signals unchanged',generated:converted,old_016_test:'Original sealed 016 D07 disagreement assertion is superseded by ADMIN adjudication; frozen original test remains unchanged and runs in original regression. R1 all-eight contract assertions are tested separately.'});args=['--test','--test-concurrency=1',...converted];
+}else throw Error('Unknown mode');
+let log='',timedout=false;const started=new Date().toISOString(),child=spawn(exe,args,{stdio:['ignore','pipe','pipe'],windowsHide:true});
+const timeout=setTimeout(()=>{timedout=true;spawn('taskkill',['/pid',String(child.pid),'/t','/f'],{windowsHide:true});},mode==='FULL'?30*60e3:15*60e3);
+child.stdout.on('data',b=>{log+=b;});child.stderr.on('data',b=>{log+=b;});
+child.on('exit',(exit_code,signal)=>{clearTimeout(timeout);write(out+mode+'-REGRESSION.txt',log);const count=key=>Number([...log.matchAll(new RegExp('(?:#|ℹ) '+key+' (\\d+)','g'))].at(-1)?.[1]??0);const result={mode,started_at:started,ended_at:new Date().toISOString(),command:{exe,args},timeout:timedout,exit_code,signal,status:timedout?'TIMEOUT':exit_code===0?'PASS':'FAIL',tests:count('tests'),pass:count('pass'),fail:count('fail'),skipped:count('skipped'),todo:count('todo'),log_path:out+mode+'-REGRESSION.txt',log_sha256:digest(out+mode+'-REGRESSION.txt'),semantic_validation_not_implied:true};write(out+mode+'-REGRESSION.json',result);console.log(JSON.stringify(result));process.exitCode=exit_code??1;});
