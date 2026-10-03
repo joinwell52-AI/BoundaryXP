@@ -1,0 +1,15 @@
+import fs from 'node:fs';import assert from 'node:assert/strict';import {out,read,write,walk,digest} from './common.mjs';
+if(fs.existsSync(out+'SEAL.md'))throw Error('Already sealed');
+const envelopes=new Set(['MANIFEST.json','SHA256SUMS.txt','SEAL.md','SEAL-VERIFICATION.json']),freeze=read(out+'IMPLEMENTATION-FREEZE.json');
+for(const f of freeze.files)assert.equal(digest(f.path),f.sha256);
+assert.equal(read(out+'PROTECTED-ASSET-VERIFICATION.json').status,'PASS');
+const outcome=read(out+'FINAL-OUTCOME.json'),payload=[...walk(out).filter(p=>!envelopes.has(p.slice(out.length))),...freeze.files.map(r=>r.path),'tests/parser-7p-short-016-r2.test.mjs'].sort();
+assert.equal(new Set(payload).size,payload.length);
+const records=payload.map(path=>({path,sha256:digest(path),bytes:fs.statSync(path).size}));assert.ok(records.every(r=>r.bytes<100e6));
+write(out+'MANIFEST.json',{task:'7P-SHORT-016-R2',status:outcome.terminal_outcome,semantic_success:outcome.semantic_success,files:records});
+write(out+'SHA256SUMS.txt',records.map(r=>r.sha256+'  '+r.path).join('\n')+'\n');
+const manifest=digest(out+'MANIFEST.json'),sums=digest(out+'SHA256SUMS.txt');
+write(out+'SEAL.md','# 7P-SHORT-016-R2 seal\n\nSTATUS=WAITING_ADMIN_REVIEW\nTerminal: '+outcome.terminal_outcome+'\nPRODUCTION_READY=false\n\nREF raw Gold differences A/C retained. Semantic closure uses explicit R2 ADMIN adjudication; no Gold changed.\n\nMANIFEST SHA-256: '+manifest+'\nSHA256SUMS SHA-256: '+sums+'\nPayload files: '+records.length+'\n\nOld seals, source/expected and production entry unchanged. No future report writes. SEAL is integrity evidence, not ADMIN acceptance.\n');
+for(const r of records)assert.equal(digest(r.path),r.sha256);
+const verification={task:'7P-SHORT-016-R2',status:'PASS',checked_payload_files:records.length,manifest_sha256:manifest,sha256sums_sha256:sums,seal_sha256:digest(out+'SEAL.md'),terminal:outcome.terminal_outcome,verified_at:new Date().toISOString()};
+fs.writeFileSync(out+'SEAL-VERIFICATION.json',JSON.stringify(verification,null,2)+'\n');console.log(JSON.stringify(verification));
