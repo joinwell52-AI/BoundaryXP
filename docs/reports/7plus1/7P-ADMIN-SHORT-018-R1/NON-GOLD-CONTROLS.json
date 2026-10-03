@@ -1,0 +1,211 @@
+{
+  "status": "FROZEN_BEFORE_IMPLEMENTATION",
+  "created_at": "2026-10-03T16:53:03.510Z",
+  "official_gold": false,
+  "controls": [
+    {
+      "id": "A1",
+      "gate": "A",
+      "source": "ENG 读取 catalog.tsv，检查其中所有条目的评分。",
+      "expect": {
+        "member": "条目",
+        "property": "评分",
+        "base": "catalog.tsv",
+        "quantifier": "ALL"
+      },
+      "source_sha256": "e72bfb96c4e724a4548bca4919cb603c2ff1cb7cc45fd28d2face4a2d42d985a"
+    },
+    {
+      "id": "A2",
+      "gate": "A",
+      "source": "ENG 读取 north.tsv 和 south.tsv，检查其中所有条目的评分。",
+      "expect": {
+        "ambiguous_domain": true
+      },
+      "source_sha256": "000065b7ac8679408fe9368519cae1cefbb9eccfb1418dae26d7db6e864bcb61"
+    },
+    {
+      "id": "A3",
+      "gate": "A",
+      "source": "请生成 guide.txt，文档必须包含准备章节。",
+      "expect": {
+        "section": "准备",
+        "output": "guide.txt"
+      },
+      "source_sha256": "97fdddb17e6861d9158efde52cca078ce39a5d4349df1a41b3284d902c8038e1"
+    },
+    {
+      "id": "A4",
+      "gate": "A",
+      "source": "ENG 读取 catalog.tsv，检查路由状态。",
+      "expect": {
+        "part_of": 0
+      },
+      "source_sha256": "d4dfa7654816c45d8266d5708e73686def1fa8aaa84f24e7b1355c24e5414e90"
+    },
+    {
+      "id": "A5",
+      "gate": "A",
+      "source": "ENG must read manifest.tsv and check all entries in the manifest.",
+      "expect": {
+        "member": "entries",
+        "base": "manifest.tsv",
+        "quantifier": "ALL"
+      },
+      "source_sha256": "631531e31fef2aa4c6461565122d39ea39a24ee7f3707005509bdccd39e23fc5"
+    },
+    {
+      "id": "B1",
+      "gate": "B",
+      "source": "COORD 安排 ENG 读取 ledger.tsv，检查其中所有样本的评估结果，生成 evidence.txt。AUD 确认报告覆盖清单中的每一项后，COORD 向 DIRECTOR 提交报告。",
+      "expect": {
+        "member": "样本",
+        "property": "评估结果",
+        "base": "ledger.tsv",
+        "quantifier": "ALL",
+        "review_domain": true,
+        "output": "evidence.txt"
+      },
+      "source_sha256": "85e3b1374dd93fd5bf3e09fe9fee649c567674adbe06e2170f03e83f03169d3e"
+    },
+    {
+      "id": "B2",
+      "gate": "B",
+      "source": "ENG 读取 records.tsv，检查其中全部记录的状态，生成 status.txt。AUD 确认报告覆盖清单中的每一项后，COORD 向 DIRECTOR 提交报告。",
+      "expect": {
+        "member": "记录",
+        "property": "状态",
+        "base": "records.tsv",
+        "quantifier": "ALL",
+        "review_domain": true,
+        "output": "status.txt"
+      },
+      "source_sha256": "cb9f362a584fa90216e52309eac9873a5d61734fd9f728244dc66859b07d45f3"
+    },
+    {
+      "id": "C1",
+      "gate": "C",
+      "source": "ENG 读取 definitions.tsv，生成 delta.txt。AUD 确认每个删除或改名的字段都已记录后，COORD 将报告交给 DIRECTOR。",
+      "expect": {
+        "qualifier": "OR",
+        "states": [
+          "DELETED",
+          "RENAMED"
+        ],
+        "member": "字段",
+        "output": "delta.txt"
+      },
+      "source_sha256": "0f2a4004188d8f271a3e8ab5f5bf7198fc3664a0b785facdaf2aff14cd4b778c"
+    },
+    {
+      "id": "C2",
+      "gate": "C",
+      "source": "ENG 读取 manifest.tsv，生成 diff.txt。AUD 确认每个新增或移除的条目都已记录后，COORD 将报告交给 DIRECTOR。",
+      "expect": {
+        "qualifier": "OR",
+        "states": [
+          "ADDED",
+          "REMOVED"
+        ],
+        "member": "条目",
+        "output": "diff.txt"
+      },
+      "source_sha256": "a8fdcd2242a63586a375d40969dfe5cd5f5cbb69b103f732c88851a733c46065"
+    },
+    {
+      "id": "C3",
+      "gate": "C",
+      "source": "ENG 读取 definitions.tsv，生成 state.txt。AUD 确认每个删除且改名的字段都已记录后，COORD 将报告交给 DIRECTOR。",
+      "expect": {
+        "qualifier": "AND",
+        "states": [
+          "DELETED",
+          "RENAMED"
+        ],
+        "member": "字段",
+        "output": "state.txt"
+      },
+      "source_sha256": "5413af7d84142276172e6cf61dc3a075123809dc9d2ca9fa55387741642ca4fc"
+    },
+    {
+      "id": "C4",
+      "gate": "C",
+      "source": "请生成 note.txt，文档须写入“deleted”。",
+      "expect": {
+        "no_qualifier": true,
+        "no_delete_action": true
+      },
+      "source_sha256": "84817c295bfaa87c35154536e641ce846dc26c8ec4a0e3ea2bb25aebff15b4cf"
+    },
+    {
+      "id": "C5",
+      "gate": "C",
+      "source": "ENG 必须删除 scratch.txt。",
+      "expect": {
+        "delete_action": "scratch.txt"
+      },
+      "source_sha256": "6be63ac507fc52b5a110e36bd9a0dea7486e8efaf1ddaf504e8381e5a35f1c96"
+    },
+    {
+      "id": "D1",
+      "gate": "D",
+      "source": "ENG 读取 payments.tsv，生成 quality.txt。不得更改原始数据。",
+      "expect": {
+        "identity": "payments.tsv",
+        "alias": "原始数据"
+      },
+      "source_sha256": "ef6f3573820f430853d304e8c9733863b80cb3a2f44938ecef016a24b7ea85e5"
+    },
+    {
+      "id": "D2",
+      "gate": "D",
+      "source": "ENG 读取 first.tsv 和 second.tsv。不得更改原始数据。",
+      "expect": {
+        "identity_ambiguous": true,
+        "alias": "原始数据"
+      },
+      "source_sha256": "0d0adfe642456577ead958386402308d4f00fef8442346a0a6bff39c7936c447"
+    },
+    {
+      "id": "D3",
+      "gate": "D",
+      "source": "ENG 读取 definition.yaml。不得修改原始文件。",
+      "expect": {
+        "identity": "definition.yaml",
+        "alias": "原始文件"
+      },
+      "source_sha256": "67f3563aaf441e29af4b6f9ff892b348d0b8976c51b14d9e48dd8e128a910ba2"
+    },
+    {
+      "id": "D4",
+      "gate": "D",
+      "source": "Rita must read readings.tsv. Do not modify source data.",
+      "expect": {
+        "identity": "readings.tsv",
+        "alias": "source data"
+      },
+      "source_sha256": "e961ab8e8feab1b02fc0f303d620c88664ad172abd5efab60b44d2fb67f480bb"
+    },
+    {
+      "id": "D5",
+      "gate": "D",
+      "source": "ENG 读取 raw.tsv，生成 derived.txt。不得删除原始数据。",
+      "expect": {
+        "identity": "raw.tsv",
+        "alias": "原始数据",
+        "not_identity": "derived.txt"
+      },
+      "source_sha256": "9d990ada17cc000b9bba8c0d7cd1cba60b6b10f0491a26170e4a374e738cbe75"
+    },
+    {
+      "id": "D6",
+      "gate": "D",
+      "source": "# 背景\n历史原始数据已经归档。\n# 当前任务\nENG 读取 current.tsv，生成 summary.txt。",
+      "expect": {
+        "identity_count": 0
+      },
+      "source_sha256": "bb3f7374d3aa2b4ca0628fdb524237d007f640d6f30d8bfaf3d5c5e12089abec"
+    }
+  ],
+  "sha256": "83113075567d873426d5239be495f1887a03a0a93bac53c0005720b2db0d27b6"
+}

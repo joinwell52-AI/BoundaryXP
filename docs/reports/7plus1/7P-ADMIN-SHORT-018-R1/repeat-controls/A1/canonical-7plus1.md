@@ -1,0 +1,29 @@
+# Actual Canonical 7+1
+
+## I RESOLVED
+
+- RESOLVED catalog.tsv [p1:46a1d155e4c5cf3806d653ce]
+
+## O ABSENT
+
+
+## A RESOLVED
+
+- RESOLVED REQUIRED 读取 catalog.tsv [p1:c7d27c755a9280f14e20222a]
+- RESOLVED REQUIRED 检查 其中所有条目的评分 [p1:12badff82d1a772b1e96ff4c]
+
+## P RESOLVED
+
+- RESOLVED ENG [PERFORMER] [p1:c959eb4c13a1e3a22a54a553,p1:aef3ff1a59e18710427ae893]
+
+## R ABSENT
+
+
+## V ABSENT
+
+
+## C ABSENT
+
+
+## B ABSENT
+

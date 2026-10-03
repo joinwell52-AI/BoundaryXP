@@ -1,0 +1,1 @@
+请生成 note.txt，文档须写入“deleted”。

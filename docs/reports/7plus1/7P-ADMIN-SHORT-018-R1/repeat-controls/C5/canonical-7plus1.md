@@ -1,0 +1,27 @@
+# Actual Canonical 7+1
+
+## I ABSENT
+
+
+## O ABSENT
+
+
+## A RESOLVED
+
+- RESOLVED REQUIRED 删除 scratch.txt [p1:dce6504eee8be59719b0ad97]
+
+## P RESOLVED
+
+- RESOLVED ENG [PERFORMER] [p1:4320943b3afc29306f768e2a]
+
+## R ABSENT
+
+
+## V ABSENT
+
+
+## C ABSENT
+
+
+## B ABSENT
+

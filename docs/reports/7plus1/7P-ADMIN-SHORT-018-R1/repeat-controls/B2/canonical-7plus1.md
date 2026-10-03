@@ -1,0 +1,35 @@
+# Actual Canonical 7+1
+
+## I RESOLVED
+
+- RESOLVED records.tsv [p1:f233ecd59edf44b5ae86ac59]
+
+## O RESOLVED
+
+- RESOLVED status.txt [p1:89ad639b3bfc3931fe4689f2]
+
+## A RESOLVED
+
+- RESOLVED REQUIRED 读取 records.tsv [p1:99a3d9ad424de21b9d25aab5]
+- RESOLVED REQUIRED 检查 其中全部记录的状态 [p1:e64bd0702d0a8d9e9b76ec68]
+- RESOLVED REQUIRED 生成 status.txt [p1:643c2f583ec50c504a0ca207]
+- RESOLVED REQUIRED 提交 status.txt [p1:fc186a00f1e9ab3e79e14caf]
+
+## P RESOLVED
+
+- RESOLVED ENG [PERFORMER] [p1:719bf2d1d6df2ded8f22422d,p1:5cd350c9589f46ad83ac9a80,p1:06b9c4973b77768c4814bdfc]
+- RESOLVED COORD [PERFORMER] [p1:3910d8f1caa8b0ead0282ae9]
+- RESOLVED DIRECTOR [RECIPIENT] [p1:9a580a2da52267a96c3c0af0]
+- RESOLVED AUD [REVIEWER] [p1:de669eb0d92cc305d11ba3e6]
+
+## R ABSENT
+
+
+## V ABSENT
+
+
+## C ABSENT
+
+
+## B ABSENT
+

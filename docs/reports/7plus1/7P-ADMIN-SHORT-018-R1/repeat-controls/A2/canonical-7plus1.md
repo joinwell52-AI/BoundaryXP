@@ -1,0 +1,30 @@
+# Actual Canonical 7+1
+
+## I RESOLVED
+
+- RESOLVED north.tsv [p1:0b6babc00b018aa5e754cdad]
+- RESOLVED south.tsv [p1:6ca1b7cf5c9cf8987e79993e]
+
+## O ABSENT
+
+
+## A UNRESOLVED
+
+- RESOLVED REQUIRED 读取 north.tsv、south.tsv [p1:4de5691c508bd436b6275b49]
+- UNRESOLVED REQUIRED 检查 其中所有条目的评分 [p1:f5de713628d54552871e350c]
+
+## P RESOLVED
+
+- RESOLVED ENG [PERFORMER] [p1:19720b6d3e7980e0f2efe633,p1:8c64ec231b7ab39d5489564e]
+
+## R ABSENT
+
+
+## V ABSENT
+
+
+## C ABSENT
+
+
+## B ABSENT
+

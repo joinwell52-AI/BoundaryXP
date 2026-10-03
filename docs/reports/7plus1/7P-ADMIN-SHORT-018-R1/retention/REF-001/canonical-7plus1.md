@@ -1,0 +1,50 @@
+# Actual Canonical 7+1
+
+## I RESOLVED
+
+- RESOLVED meeting-notes.md [p1:e72784f0d65df1500fb04181]
+- RESOLVED attendees.csv [p1:ac6f49363832abb71bc3b04d]
+
+## O RESOLVED
+
+- RESOLVED pending-owners.csv [p1:e7a5b7418d2f7d0054deb836]
+- RESOLVED minutes-final.docx [p1:ad312aa87b7f178786362b2f]
+
+## A RESOLVED
+
+- RESOLVED REQUIRED 整理 会议纪要 [p1:d8ba44ed23c76305f4eedef7]
+- RESOLVED REQUIRED 符合 最终纪要的格式 [p1:1b903ca922bc3e27f126c399]
+- RESOLVED REQUIRED 核对 姓名 [p1:6938f61c7beceddfbffe9be8]
+- RESOLVED REQUIRED 整理 讨论事项 [p1:b9e1c9fcb63e167f635162bd]
+- RESOLVED REQUIRED 存为 minutes-final.docx [p1:01c05688debd029ce7e81964]
+- RESOLVED REQUIRED 保留 每个讨论事项 [p1:5d34a74598b3cb011c9c1ef9]
+- RESOLVED REQUIRED 标注 负责人待确认、原始记录没有写明负责人的事项 [p1:2e74ba3052eadd69271e7b1e]
+- RESOLVED REQUIRED 生成 pending-owners.csv [p1:0634ae4ab7fadb646974144a]
+- RESOLVED REQUIRED 记录 负责人待确认的事项 [p1:1fa6217c12847385ca50c5f8]
+- RESOLVED REQUIRED 提交 pending-owners.csv、minutes-final.docx [p1:bd79f0e5ec5d057357f84205]
+
+## P RESOLVED
+
+- RESOLVED 复核人唐宁 [RECIPIENT,REVIEWER] [p1:06b1509863de3cdd4ccbc030,p1:ff8f23d8650f59405341c7bc]
+- RESOLVED 编辑沈悦 [PERFORMER] [p1:9c3937a898cceed99e6a7dea,p1:e245e841fb5362fd8f12e5fb,p1:72f637ef2bab79e1a53f4896,p1:994897f3f7cbf0b469facbe9,p1:a9401640b9e3d7c4f4242dea,p1:ca13ea50099209aecb7ea3c8,p1:848cb9d662a37d7dbb5fa2b8,p1:66901eb717de1c30ee097059,p1:5f5bce1baad47c8bfd104468,p1:7623c4e7f53d82ce64a94a1a,p1:d032724e520f3039a429f6ce,p1:b6b71ec5b501f94ca5622862,p1:35fcc2dd6e779aaf4dd179f7,p1:c0e8e1ee1f40c27b62547f64]
+
+## R RESOLVED
+
+- RESOLVED 40 [p1:5478dbd25854397af4e14360]
+
+## V RESOLVED
+
+- RESOLVED MEETING-STYLE-4 [p1:3af3079001237bf9c9643b56]
+
+## C RESOLVED
+
+- RESOLVED 完成 [p1:744420594e50ee0dffaaa9b3]
+
+## B UNRESOLVED
+
+- RESOLVED FORBIDDEN 作 决定、参会人 [p1:f8a275c33672791b7706b3db]
+- RESOLVED FORBIDDEN 修改 meeting-notes.md、attendees.csv [p1:3bfc5d2a1a3f6e1cf9326b3d]
+- RESOLVED FORBIDDEN 删除 每个讨论事项 [p1:184fd7ff73b912aa0e4bc2dd]
+- RESOLVED FORBIDDEN 指定 负责人 [p1:00d3dbfa63d44771c48af6cf]
+- RESOLVED FORBIDDEN 改写 待确认、已批准 [p1:18a55a578b3d716d23041a80]
+- UNRESOLVED FORBIDDEN 上传 上述材料 [p1:b8672ceaa24c2e0fc7b9bf19]

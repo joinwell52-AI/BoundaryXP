@@ -1,0 +1,1 @@
+COORD 安排 ENG 读取 ledger.tsv，检查其中所有样本的评估结果，生成 evidence.txt。AUD 确认报告覆盖清单中的每一项后，COORD 向 DIRECTOR 提交报告。

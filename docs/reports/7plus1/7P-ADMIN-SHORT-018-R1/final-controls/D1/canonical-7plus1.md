@@ -1,0 +1,31 @@
+# Actual Canonical 7+1
+
+## I RESOLVED
+
+- RESOLVED payments.tsv [p1:f10603bec2fe445fba9f3f11]
+
+## O RESOLVED
+
+- RESOLVED quality.txt [p1:a9215ec079b8643f7433a00d]
+
+## A RESOLVED
+
+- RESOLVED REQUIRED 读取 payments.tsv [p1:53ab235847ed99afdee2d917]
+- RESOLVED REQUIRED 生成 quality.txt [p1:a19cf506252f321fc5fc4fb8]
+
+## P RESOLVED
+
+- RESOLVED ENG [PERFORMER] [p1:c158536094f353538586d260,p1:a3d7060a328ab83930fd8ea0]
+
+## R ABSENT
+
+
+## V ABSENT
+
+
+## C ABSENT
+
+
+## B RESOLVED
+
+- RESOLVED FORBIDDEN 更改 payments.tsv [p1:c06fec4d88ed88f775c02945]

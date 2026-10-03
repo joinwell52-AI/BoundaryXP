@@ -1,0 +1,33 @@
+# Actual Canonical 7+1
+
+## I RESOLVED
+
+- RESOLVED users.json [p1:4b16b4085c9f6f64137fe683]
+
+## O RESOLVED
+
+- RESOLVED user-summary.md [p1:0127aeb33a3428dbc56b08a5]
+
+## A RESOLVED
+
+- RESOLVED REQUIRED 读取 users.json [p1:b9e706e9e17289ae646fc415]
+- RESOLVED REQUIRED 生成 user-summary.md [p1:68e084f1196bc2254c0e9d9c]
+
+## P RESOLVED
+
+- RESOLVED 周岚 [PERFORMER] [p1:dd8c911687e14ae724673130,p1:1c4e7192e22e72cea96e3d52,p1:14f90cbf92a0d66b3a533d12]
+
+## R RESOLVED
+
+- RESOLVED 20 [p1:adfb32837b3c186c82ec413a]
+
+## V ABSENT
+
+
+## C RESOLVED
+
+- RESOLVED 完成 [p1:4d3ed7f310274aed688f3973]
+
+## B RESOLVED
+
+- RESOLVED FORBIDDEN 修改 users.json [p1:28a3e7e269e005df2ff902b8]

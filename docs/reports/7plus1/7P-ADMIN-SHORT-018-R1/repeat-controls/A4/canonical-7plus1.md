@@ -1,0 +1,30 @@
+# Actual Canonical 7+1
+
+## I RESOLVED
+
+- RESOLVED catalog.tsv [p1:19e8a5fa035f5f40a9104cac]
+- RESOLVED 路由状态 [p1:79c1abbb8ab4a285294300fd]
+
+## O ABSENT
+
+
+## A RESOLVED
+
+- RESOLVED REQUIRED 读取 catalog.tsv [p1:9f9d13b46d58208647980f78]
+- RESOLVED REQUIRED 检查 路由状态 [p1:9fbc0c7098e30ceceb3bd080]
+
+## P RESOLVED
+
+- RESOLVED ENG [PERFORMER] [p1:973a7974193731dda99fca6f,p1:93f5d8720283172b6e4a9804]
+
+## R ABSENT
+
+
+## V ABSENT
+
+
+## C ABSENT
+
+
+## B ABSENT
+
