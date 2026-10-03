@@ -1,0 +1,31 @@
+# Actual Canonical Root 7+1
+
+## I RESOLVED
+
+- RESOLVED timing.tsv [p1:b3188796d610217fd55b51c5]
+
+## O RESOLVED
+
+- RESOLVED timing-note.txt [p1:e1b0642219f534a0cfe5adec]
+
+## A RESOLVED
+
+- RESOLVED REQUIRED 读取 timing.tsv [p1:109413aaf3718e3d33c35f28]
+- RESOLVED REQUIRED 生成 timing-note.txt [p1:91eb4c7f0b092d217884a936]
+
+## P RESOLVED
+
+- RESOLVED ENG [PERFORMER] [p1:81d90453f31a0263c0e690bc,p1:a79307f6c8c31494929a3372]
+
+## R RESOLVED
+
+- RESOLVED 11 [p1:64c863f0d8eb6d41a58fe6c1]
+
+## V ABSENT
+
+
+## C ABSENT
+
+
+## B ABSENT
+

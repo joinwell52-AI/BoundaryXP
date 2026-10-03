@@ -1,0 +1,301 @@
+{
+  "status": "FROZEN_BEFORE_IMPLEMENTATION",
+  "created_at": "2026-10-03T13:27:42.375Z",
+  "official_gold": false,
+  "controls": [
+    {
+      "id": "A1",
+      "class": "A",
+      "gate": "G0",
+      "source": "ENG 必须读取 hosts.tsv，并生成 host-audit.txt。不得修改 hosts.tsv。",
+      "expect": {
+        "I": [
+          "hosts.tsv"
+        ],
+        "O": [
+          "host-audit.txt"
+        ],
+        "B": [
+          "modify|hosts.tsv"
+        ]
+      },
+      "source_sha256": "3af215954c3115eb70b86f51025ffc309eceffdf567792a9b62092dc423fea70"
+    },
+    {
+      "id": "A2",
+      "class": "A",
+      "gate": "G0",
+      "source": "AUD 读取 east.json 和 west.json，生成 comparison.txt。不得删除 archive.zip。",
+      "expect": {
+        "I": [
+          "east.json",
+          "west.json"
+        ],
+        "O": [
+          "comparison.txt"
+        ],
+        "absent_input": [
+          "archive.zip"
+        ]
+      },
+      "source_sha256": "fd4a1f6d8b6d45f853cec2ab5856590aca3cdaa140784a2cc9a4148470a26ac9"
+    },
+    {
+      "id": "A3",
+      "class": "A",
+      "gate": "G0",
+      "source": "Rita must read registry.tsv and generate registry-note.txt. Send the report to COORD. Do not modify registry.tsv.",
+      "expect": {
+        "I": [
+          "registry.tsv"
+        ],
+        "O": [
+          "registry-note.txt"
+        ],
+        "absent_input": [
+          "COORD"
+        ]
+      },
+      "source_sha256": "32ba51980bf841630a42879869ec13736f551fa2bb9e3b38b004b9966eaf4cee"
+    },
+    {
+      "id": "B1",
+      "class": "B",
+      "gate": "G0",
+      "source": "ENG 读取 manifest.txt，生成 finding.txt，并交给 AUD 复核。",
+      "expect": {
+        "P": {
+          "ENG": [
+            "PERFORMER"
+          ],
+          "AUD": [
+            "REVIEWER"
+          ]
+        },
+        "O": [
+          "finding.txt"
+        ]
+      },
+      "source_sha256": "1bdac8c78c4dd9776bbad276e83fc12e7e6e62975b90303009a7b3339ec2fd15"
+    },
+    {
+      "id": "B2",
+      "class": "B",
+      "gate": "G0",
+      "source": "COORD 安排 ENG 读取 table.tsv，生成 overview.txt。",
+      "expect": {
+        "P": {
+          "COORD": [
+            "COLLABORATOR"
+          ],
+          "ENG": [
+            "PERFORMER"
+          ]
+        },
+        "I": [
+          "table.tsv"
+        ],
+        "O": [
+          "overview.txt"
+        ]
+      },
+      "source_sha256": "0dc81b2adf80e960ecb0f9b0874317358ab21e64cfc94ec20c58dfb0125499a7"
+    },
+    {
+      "id": "B3",
+      "class": "B",
+      "gate": "G0",
+      "source": "ENG 可以检查 dossier.txt，必须生成 optional-note.txt。",
+      "expect": {
+        "A": [
+          "PERMITTED|review|dossier.txt",
+          "REQUIRED|generate|optional-note.txt"
+        ]
+      },
+      "source_sha256": "05ffaadae1accc28698c0668eccdf1b02e37c3973df0c596aeb50fc92425bb84"
+    },
+    {
+      "id": "C1",
+      "class": "C",
+      "gate": "G0",
+      "source": "ENG 读取 limits.tsv，生成 budget-note.txt。整个任务须在 17 分钟内完成。",
+      "expect": {
+        "R": {
+          "metric": "TIME",
+          "value": 17,
+          "unit": "分钟",
+          "target": "TASK"
+        },
+        "absent_completion": true
+      },
+      "source_sha256": "f1d67353d0af2cb524661c15e683a6acdef37e89edcc9bf034b6f22bc8bd2a3b"
+    },
+    {
+      "id": "C2",
+      "class": "C",
+      "gate": "G0",
+      "source": "Please inspect queue.tsv and generate queue-note.txt. The entire task must finish within 23 minutes.",
+      "expect": {
+        "R": {
+          "metric": "TIME",
+          "value": 23,
+          "unit": "minutes",
+          "target": "TASK"
+        },
+        "absent_completion": true
+      },
+      "source_sha256": "ce3e5729e7c9967aa5cdcce9dd325736a21ec94a5cf5f44730a20017f06969a8"
+    },
+    {
+      "id": "C3",
+      "class": "C",
+      "gate": "G0",
+      "source": "ENG 读取 timing.tsv，生成 timing-note.txt。整个检查不得超过 11 分钟。",
+      "expect": {
+        "R": {
+          "metric": "TIME",
+          "value": 11,
+          "unit": "分钟",
+          "target": "TASK"
+        },
+        "absent_completion": true
+      },
+      "source_sha256": "de4376d69579d48e45d691b587a4b3411d2748dcdf31b2dd7d4b03bae9436296"
+    },
+    {
+      "id": "D1",
+      "class": "D",
+      "gate": "G0",
+      "source": "ENG 读取 record.tsv，生成 summary.txt。只有全部记录都检查完且报告已生成，任务才完成。",
+      "expect": {
+        "C": {
+          "op": "AND",
+          "objects": [
+            "record.tsv",
+            "summary.txt"
+          ],
+          "quantifier": "ALL"
+        }
+      },
+      "source_sha256": "9fa9cc274e310b6691c85845184d76dc48e4519e938fe6632dd808edf89de1ae"
+    },
+    {
+      "id": "D2",
+      "class": "D",
+      "gate": "G0",
+      "source": "ENG 读取 sample.tsv，生成 quality.txt。AUD 确认报告覆盖清单中的每一项后，COORD 向 DIRECTOR 提交报告。",
+      "expect": {
+        "conditioned_transfer": true,
+        "reviewer": "AUD",
+        "owner": "quality.txt",
+        "quantifier": "ALL"
+      },
+      "source_sha256": "b54f06d72d3ee530b80038b00448651eda640812dded3f8c5fc937cc01b1ffc9"
+    },
+    {
+      "id": "D3",
+      "class": "D",
+      "gate": "G0",
+      "source": "ENG 读取 interfaces.tsv，生成 compatibility.txt。AUD 确认每个删除或改名的接口都已记录后，COORD 将报告交给 DIRECTOR。",
+      "expect": {
+        "conditioned_transfer": true,
+        "reviewer": "AUD",
+        "owner": "compatibility.txt",
+        "quantifier": "ALL",
+        "not_actions": [
+          "删除",
+          "改名"
+        ]
+      },
+      "source_sha256": "f49a408aa4477433aed6eaee4d179c9deb47be2aaa1161f737bb32e64c7f5e12"
+    },
+    {
+      "id": "E1",
+      "class": "E",
+      "gate": "G3",
+      "source": "请生成 handbook.txt，文档须列出新增和移除的字段。不得移除字段。",
+      "expect": {
+        "owned_content": true,
+        "not_actions": [
+          "移除"
+        ]
+      },
+      "source_sha256": "bdc70d08a2b8c84a5b014dcf8bfc537589f53ac3888039517d5bfbcbf37d3afb"
+    },
+    {
+      "id": "E2",
+      "class": "E",
+      "gate": "G3",
+      "source": "请编写 tutorial.txt，在文档中写入“停止服务”。不得停止服务。",
+      "expect": {
+        "owned_content": true,
+        "not_actions": [
+          "停止"
+        ]
+      },
+      "source_sha256": "c6c0944b6fb63ea13688bcdee07977a2e8d19b83dbcf287a87fbd2537b2e97be"
+    },
+    {
+      "id": "E3",
+      "class": "E",
+      "gate": "G3",
+      "source": "请生成 checklist.txt，文档必须包含准备和验收两个章节。",
+      "expect": {
+        "owned_content": true,
+        "sections": 2
+      },
+      "source_sha256": "4273c9e427e239fdce6750ebeb8ca81408ff0f26412b4e77d590ff50711936d3"
+    },
+    {
+      "id": "F1",
+      "class": "F",
+      "gate": "G0",
+      "source": "ENG 必须读取 catalog.tsv。不得修改 catalog.tsv，也不得连接生产网络。",
+      "expect": {
+        "B": [
+          "modify|catalog.tsv",
+          "connect|生产网络"
+        ],
+        "absent_input": [
+          "生产网络"
+        ]
+      },
+      "source_sha256": "067c86d75e43d9bf85cf696759f1a9ad992758004d31898e0418945777ed03a3"
+    },
+    {
+      "id": "F2",
+      "class": "F",
+      "gate": "G0",
+      "source": "Please read report.tsv. Do not delete report.tsv or change settings.ini.",
+      "expect": {
+        "B": [
+          "delete|report.tsv",
+          "modify|settings.ini"
+        ],
+        "absent_input": [
+          "settings.ini"
+        ]
+      },
+      "source_sha256": "07ad92baf41060f7c0fadfc63be0466dc89562b2def7022f1f7a21af1101678c"
+    },
+    {
+      "id": "F3",
+      "class": "F",
+      "gate": "G0",
+      "source": "ENG 读取 model-index.tsv，生成 check.txt。不得加载模型或发起推理。",
+      "expect": {
+        "B": [
+          "load|模型",
+          "run|推理"
+        ],
+        "absent_input": [
+          "模型",
+          "推理"
+        ]
+      },
+      "source_sha256": "eddeb733243e2421280d4ddd02e69b4a0b12f4cf679b45c5c5ea176e6c29e611"
+    }
+  ],
+  "artifact_sha256": "79e3942e0bfc7b21f3c79104bb4ddcb4a2be79b27ae035f6832e0cfd1f51d177",
+  "coverage": "3 independently authored controls per semantic class; E reserved for G3. They are tests, never parser inputs beyond raw source."
+}

@@ -1,0 +1,30 @@
+# Actual Canonical Root 7+1
+
+## I UNRESOLVED
+
+- RESOLVED limits.tsv [p1:510e3ef1cb6bb521e085082d]
+
+## O RESOLVED
+
+- RESOLVED budget-note.txt [p1:5ef9291faa74d13cfb143df6]
+
+## A UNRESOLVED
+
+- RESOLVED REQUIRED 生成 budget-note.txt [p1:b0ef59eb01a7f2a50817a582]
+
+## P UNRESOLVED
+
+- RESOLVED ENG [PERFORMER] [p1:14f98328f667fc3cb117efb3,p1:7df6653be69d6211b794fc57]
+
+## R RESOLVED
+
+- RESOLVED 17 [p1:367784b03c14293bc47705e3]
+
+## V ABSENT
+
+
+## C ABSENT
+
+
+## B ABSENT
+

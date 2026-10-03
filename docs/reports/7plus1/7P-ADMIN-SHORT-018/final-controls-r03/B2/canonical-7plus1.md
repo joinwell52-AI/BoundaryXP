@@ -1,0 +1,31 @@
+# Actual Canonical Root 7+1
+
+## I RESOLVED
+
+- RESOLVED table.tsv [p1:8c5cc95bd496cb3c8afbdd06]
+
+## O RESOLVED
+
+- RESOLVED overview.txt [p1:b7bfc3b68f928f418ebd308e]
+
+## A RESOLVED
+
+- RESOLVED REQUIRED 读取 table.tsv [p1:8464010658ec9d2a623d122d]
+- RESOLVED REQUIRED 生成 overview.txt [p1:036a2fc870f1861d34970010]
+
+## P RESOLVED
+
+- RESOLVED COORD [COLLABORATOR] [p1:f1b711014b64af89524780f7]
+- RESOLVED ENG [PERFORMER] [p1:1bb84ce5ce02355e67cbbe51,p1:dcd1bcdd983b2f4b5a8cc20d]
+
+## R ABSENT
+
+
+## V ABSENT
+
+
+## C ABSENT
+
+
+## B ABSENT
+

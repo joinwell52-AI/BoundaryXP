@@ -1,0 +1,30 @@
+# Actual Canonical Root 7+1
+
+## I RESOLVED
+
+- RESOLVED catalog.tsv [p1:ea5d87d76f00f5853ea2b72e]
+
+## O ABSENT
+
+
+## A RESOLVED
+
+- RESOLVED REQUIRED 读取 catalog.tsv [p1:42568de46ea61f6a9e5a8a06]
+
+## P RESOLVED
+
+- RESOLVED ENG [PERFORMER] [p1:b88d846913b30466fc586992]
+
+## R ABSENT
+
+
+## V ABSENT
+
+
+## C ABSENT
+
+
+## B RESOLVED
+
+- RESOLVED FORBIDDEN 修改 catalog.tsv [p1:eee4e426a69c888445a3961d]
+- RESOLVED FORBIDDEN 连接 生产网络 [p1:a9c64ce27e875092e0899c6b]

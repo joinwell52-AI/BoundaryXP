@@ -1,0 +1,1 @@
+import fs from 'node:fs';const out='docs/reports/7plus1/7P-ADMIN-SHORT-018/';const p=out+'test-runner-final.mjs';if(fs.existsSync(p))throw Error('Existing final runner');fs.writeFileSync(p,fs.readFileSync(out+'test-runner.mjs','utf8').replaceAll("OUT+mode+'-REGRESSION", "OUT+mode+'-final-REGRESSION"),'utf8');process.argv[2]='FOCUSED';await import('./test-runner-final.mjs');

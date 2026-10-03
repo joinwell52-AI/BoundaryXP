@@ -1,0 +1,34 @@
+# Actual Canonical Root 7+1
+
+## I RESOLVED
+
+- RESOLVED api-old.json [p1:db63d6fb1b73f1881e858e0b]
+- RESOLVED api-new.json [p1:88b245027abaa59078f5218d]
+- RESOLVED 公共接口的兼容性 [p1:ff719ace8b3a1a9a82a557ed]
+
+## O RESOLVED
+
+- RESOLVED compatibility.md [p1:5aaca8c5a86c752ec03db6d4]
+
+## A UNRESOLVED
+
+- RESOLVED REQUIRED 读取 api-old.json、api-new.json [p1:945686f904814956feca6c76]
+- RESOLVED REQUIRED 检查 公共接口的兼容性 [p1:4bef793775f64904a87d8216]
+- RESOLVED REQUIRED 生成 compatibility.md [p1:ab728e92b120454be04279ce]
+
+## P RESOLVED
+
+- RESOLVED DEV [PERFORMER] [p1:8857a98facaead274a052dfc,p1:15b066538c43d257bacb9d24,p1:6530792e769060c325716b77]
+
+## R ABSENT
+
+
+## V ABSENT
+
+
+## C ABSENT
+
+
+## B RESOLVED
+
+- RESOLVED FORBIDDEN 修改 任一接口定义文件 [p1:7f4db4b4ea84c7dc4030af7e]

@@ -1,0 +1,31 @@
+# Actual Canonical Root 7+1
+
+## I RESOLVED
+
+- RESOLVED hosts.tsv [p1:982255f55f8e0de600560483]
+
+## O RESOLVED
+
+- RESOLVED host-audit.txt [p1:a7597c37bde6cc45ab922ab8]
+
+## A RESOLVED
+
+- RESOLVED REQUIRED 读取 hosts.tsv [p1:7039a4b2ffcd7c6c5b1995ea]
+- RESOLVED REQUIRED 生成 host-audit.txt [p1:5c2d139821670653e1ea7ee4]
+
+## P RESOLVED
+
+- RESOLVED ENG [PERFORMER] [p1:418c09081b77948f3c6fe205,p1:55251a1962aa1e1c3d3e0247]
+
+## R ABSENT
+
+
+## V ABSENT
+
+
+## C ABSENT
+
+
+## B RESOLVED
+
+- RESOLVED FORBIDDEN 修改 hosts.tsv [p1:06e49a6c35887cff72e172e9]

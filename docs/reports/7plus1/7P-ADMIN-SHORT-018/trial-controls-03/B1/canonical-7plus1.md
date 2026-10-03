@@ -1,0 +1,33 @@
+# Actual Canonical Root 7+1
+
+## I RESOLVED
+
+- RESOLVED manifest.txt [p1:75100793ad3ea409eb19a16d]
+
+## O RESOLVED
+
+- RESOLVED finding.txt [p1:c84c0b13c15adc28f52c1677]
+
+## A RESOLVED
+
+- RESOLVED REQUIRED 读取 manifest.txt [p1:96d134031880995d421d4812]
+- RESOLVED REQUIRED 生成 finding.txt [p1:f05d4f7c324aa7a7347597fc]
+- RESOLVED REQUIRED 交给 finding.txt [p1:f7d08fb8d550d315a0b9feeb]
+- RESOLVED REQUIRED 复核 finding.txt [p1:678181103e10a906599ef770]
+
+## P RESOLVED
+
+- RESOLVED ENG [PERFORMER] [p1:fc12cb090bcbd18c459cb3a8,p1:cc8df2c018156f976b3ce650,p1:7d1d4b6022b2a981f5e89fe6]
+- RESOLVED AUD [REVIEWER,RECIPIENT] [p1:f42810d9c4adb5c2bed8fa4e,p1:5b92897fe1030ff790f0fc74]
+
+## R ABSENT
+
+
+## V ABSENT
+
+
+## C ABSENT
+
+
+## B ABSENT
+
