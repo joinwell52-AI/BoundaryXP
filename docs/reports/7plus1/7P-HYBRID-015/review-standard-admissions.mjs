@@ -1,0 +1,23 @@
+// Independent read-only source review. Corpus IDs here are audit keys, never runtime rules.
+import assert from 'node:assert/strict';import {out,read,write,digest} from './common.mjs';
+const evidence=read(out+'STANDARD-ADMISSION-SOURCE-EVIDENCE.json');
+const reviews={
+ 'p1:0d097c4d8879f9ab866c3b54':['SUPPORTED_LOCAL_ROLE','不写盘的否定谓词与本地盘对象有明确证据；当前 Project.report_failure 的决议上下文支持此局部禁止，但新 ITEM(盘) 没证明整个方法/模型范围，不满足任何完整聚合 Gold。'],
+ 'p1:971853e322c4c9fa5218f5a3':['WRONG_BINDING','no-op 替换为 watcher pub-sub 中 pub-sub 是替换结果，不是原被替换对象；前一行还明确属于后续 TASK-007 的工作。相同局部 owner 证书没有建立正确 before/after 与当前任务范围。'],
+ 'p1:5363168ef1f3d9f4436ead24':['WRONG_BINDING','私有 no-op 是 _emit_event_stub 的描述性属性，不是执行动作的 PATIENT 帧。源 EVENT 类型和局部依存不足以证明这是动作语义。最终未形成新 Canonical。'],
+ 'p1:98e31e27bcbbf3529de0ee30':['WRONG_BINDING','no-op 在替换为句式中是被替换对象，非执行者。局部模型 PERSON NER 把 no-op 标为人，participant_eligibility=PERSON_NER 后被准入门直接信任，生成错误 RESOLVED AGENT。最终未投影成新 P/A，不能隐去这个上游错误。'],
+ 'p1:b427554030c19be0f689a1b8':['PARTIAL_SUPPORT','引用 ADR 的必须配自动迁移工具确实与本任务目的有关；migrate-workspace 是完整 fcOP command 的局部 token，与已有自动迁移工具是说明/命名关系，不是另一个独立工具。ACTION 同时把二者当独立对象，且引号层的当前义务接纳路径未独立证明。保留来源支持，不能判成完整实现子命令 A0 MATCH，也不因有引号就自动断言全句无效。'],
+ 'p1:f808b3080559230128810551':['WRONG_BINDING','默认 dry-run 表达默认状态/策略；默认被物化为 EVENT 后以 PATIENT 加 dry-run，不足以证明通用动作角色。该属性需正常状态/模态机制，不能由 dependency object alone 判动作。没有新 Canonical。'],
+ 'p1:1c49496c79b3c975ccfd54ab':['SUPPORTED_LOCAL_ROLE','严禁自命 codeflow.PM 明确禁止冒充该身份；当前跨项目身份约束支持本地 FORBIDS。原文还有 codeflow.AUDITOR 等，单 PM 叶子不足以满足全部身份范围的规范要求。'],
+ 'p1:3c74698977ab76579e1b4084':['SUPPORTED_LOCAL_ROLE','按以下清单完整扫一遍 codeflow-3 明确给出扫描对象；本地 PATIENT 支持，未因此构造完整清单/只读范围或 A 槽 MATCH。'],
+ 'p1:35d484764bf4b567285937f4':['WRONG_BINDING','不在本 task 是前行工具层防呆排除的续句。在/本不是禁止动作/对象；虽然 admission 声称通过，后续仍正确给出 UNRESOLVED_SCOPE，但新增 FORBIDS 与已有 PATIENT 重复同一 object，使 related_node_ids 重复，真实 G1–G16 FAIL。'],
+ 'p1:4d74bdb959df9d0b50b5e0b3':['WRONG_BINDING','建议本次会话内完成草稿+验收只是建议的复合论元，和另一个验收 endpoint 重叠。完整复合 span 与局部成员不能同时当独立 PATIENT；门只比较同一 endpoint 的竞争角色，漏掉跨 endpoint 的重叠集合一致性。未生成新 Canonical。'],
+ 'p1:dce95a6deffd3fe22054474f':['WRONG_BINDING','验收是草稿+验收中的成员。另一 proposal 同时把完整复合论元加入同一谓词，未证明 EACH/集合/成员对应即产生重叠 PATIENT，不允许当两份独立完整论元。未生成新 Canonical。'],
+ 'p1:77295549bffbcaf9f1226fea':['WRONG_BINDING','全新装也照用，不区分场景 表达适用范围通用，不是禁止用户做区分动作。FORBIDDEN metadata 把描述性否定当禁止，新增 FORBIDS 放大既有模态误判；OUTPUT_CONTENT 隔离避免当前 B 误投影，但源语义关系仍错误。'],
+ 'p1:cd2d815941e356ce397531a7':['SUPPORTED_LOCAL_ROLE','不要在 Python 里瞎猜这类函数名 有明确禁止及被限制对象；作为安装提示文本 OUTPUT_CONTENT 的局部规则支持，不是当前任务执行者的直接 B。不借此判 owned-content 完整。'],
+ 'p1:db3f15dd985388c0330e356e':['SUPPORTED_LOCAL_ROLE','不要瞎猜 API 是提示文本 OUTPUT_CONTENT 中明确禁止，局部 FORBIDS 支持。只在已有输出 owner 内保留，不升格当前执行，也不以一条代替整套提示义务。'],
+ 'p1:4a1925da2c8d1184b738a258':['WRONG_BINDING','完成草稿+验收 的完整复合论元与单独验收 endpoint 同时成为 PATIENT；没有证明集合/成员对应或消除重叠，两个独立对象的组合不成立。未生成新 Canonical。'],
+ 'p1:92cfe9fb8636b1b9e6a7a14d':['WRONG_BINDING','验收成员与同谓词完整草稿+验收对象重叠，候选间 no_equal_authority_competitor 只看相同 endpoint 的角色竞争，漏掉 overlapping endpoints。未生成新 Canonical。']
+};
+const items=evidence.items.map(x=>{assert(reviews[x.proposal.proposal_id],'UNREVIEWED_ADMISSION');const [finding,reason]=reviews[x.proposal.proposal_id];return {case_id:x.case_id,proposal_id:x.proposal.proposal_id,trace_sha256:x.trace_sha256,source_sha256:x.proposal.source_sha256,source_spans:x.source_excerpt,proposed:x.proposal.proposed,decision:x.decision,finding,reason,head:x.head,tail:x.tail,after_relations:x.after_relations.filter(r=>r.relation_id===x.decision.admitted_relation_id),IR_facts_for_predicate:x.facts.filter(f=>f.predicate_node_id===x.head.node_id),canonical_for_predicate:x.canonical};});
+assert.equal(items.length,Object.keys(reviews).length);write(out+'STANDARD-ADMISSION-INDEPENDENT-REVIEW.json',{task:'7P-HYBRID-015',review_method:'Original task source + exact typed nodes/relations/owner/IR, independent of scores. Audit-only corpus keys. No runtime/Gold change or retrospective validation-case change.',items,counts:Object.fromEntries(['SUPPORTED_LOCAL_ROLE','PARTIAL_SUPPORT','WRONG_BINDING'].map(k=>[k,items.filter(x=>x.finding===k).length])),post_admission_strict_precision:{correct:items.filter(x=>x.finding==='SUPPORTED_LOCAL_ROLE').length,total:items.length,partial_not_counted:true},unsafe:true,wrong_RESOLVED_relation_count:items.filter(x=>x.finding==='WRONG_BINDING'&&x.after_relations.some(r=>r.state==='RESOLVED')).length,new_wrong_RESOLVED_Canonical_not_equated_to_relation_errors:true,evidence_sha256:digest(out+'STANDARD-ADMISSION-SOURCE-EVIDENCE.json')});console.log(JSON.stringify({reviewed:items.length,counts:Object.fromEntries(['SUPPORTED_LOCAL_ROLE','PARTIAL_SUPPORT','WRONG_BINDING'].map(k=>[k,items.filter(x=>x.finding===k).length]))}));

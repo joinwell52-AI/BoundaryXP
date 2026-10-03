@@ -1,0 +1,77 @@
+import fs from 'node:fs';import path from 'node:path';import crypto from 'node:crypto';import {performance} from 'node:perf_hooks';
+import {modelRequest} from '../p0-semantic-repair-r02/linguistic.mjs';import {POLICY} from '../p0-semantic-repair-v0.1/normalization.mjs';
+import {validateDirectory} from '../../../src/product/packages.mjs';import {assembleEffectiveSemanticLibrary} from '../../../src/product/effective-semantic-library.mjs';import {conceptCatalog} from '../../../src/product/trace-semantic-grounding.mjs';
+import {RELATION_CONTRACT} from '../v0.3-7p-composition-014/relations.mjs';import {buildSemanticOwnership} from '../v0.3-7p-composition-014/semantic-ownership.mjs';import {id,uniq} from '../v0.3-7p-composition-014/identity.mjs';
+const roles={AGENT:['执行者','performer'],PATIENT:['作用对象','target'],RESULT:['产生的交付物','generated output'],RECIPIENT:['接收者','recipient'],FORBIDS:['禁止动作的对象','target of the forbidden action'],BASIS:['规范依据','normative basis']};
+export const ROLE_CANDIDATES=Object.entries(roles).map(([id,r])=>({id,text:r.join(' / ')}));
+export const PROPOSAL_SCHEMA={version:'UNTRUSTED-SEMANTIC-PROPOSAL-015-v1',kind:['RELATION'],required:['proposal_id','kind','source_sha256','source_spans','clause_ids','proposed','candidate_endpoints','syntax_evidence','bge','e5','nli','provenance'],truth_source:'DETERMINISTIC_ADMISSION_ONLY',new_normative_relations:false,top_k:POLICY.top_k,nli_entailment_min:POLICY.nli_entailment_min,score_semantics:'RANKING_ONLY'};
+let catalog;
+function packs(){if(catalog)return catalog;const l1=validateDirectory(path.resolve('domain-packs/l1/core-ontology')),l2=validateDirectory(path.resolve('domain-packs/l2/software-ai/0.2.0'),[l1]);catalog={packs:[l1,l2].map(x=>({name:x.descriptor.name,version:x.descriptor.version,digest:x.digest})),concepts:conceptCatalog(assembleEffectiveSemanticLibrary({l1,l2:[l2]}),[l1,l2]).filter(c=>['actions','ontology_operation'].includes(c.entry.kind)).map(c=>({id:c.candidate_id,text:c.entry.retrieval_text||c.aliases.join(' / ')}))};return catalog;}
+const sha=p=>crypto.createHash('sha256').update(fs.readFileSync(p)).digest('hex'),firstSpan=(f,n)=>f.source_spans.find(s=>s.span_id===n?.source_span_ids[0]);
+function typedPool(f){
+ buildSemanticOwnership(f,'UNTRUSTED_PROPOSAL_INPUT');const pairs=[];
+ for(const a of f.analyses){const nodes=f.semantic_nodes.filter(n=>n.metadata.clause_id===a.cl.id),events=nodes.filter(n=>n.node_type==='EVENT'),endpoints=nodes.filter(n=>['ENTITY','REFERENCE','UNKNOWN_REFERENT'].includes(n.node_type));
+  for(const h of events){const ht=a.cl.tokens.find(t=>t.id===h.metadata.token_id||t.id===h.metadata.predicate_owner_token_id);if(!ht)continue;
+   for(const t of endpoints){const s=firstSpan(f,t);if(!s||s.start<a.cl.span.start||s.end>a.cl.span.end||s.start===firstSpan(f,h)?.start&&s.end===firstSpan(f,h)?.end)continue;
+    const ts=a.cl.tokens.filter(q=>q.start>=s.start&&q.end<=s.end),syntax=ts.filter(q=>q.head===a.cl.tokens.indexOf(ht)&&/^(?:dobj|obj|nsubj|nsubj:pass|iobj|obl|nmod:prep)$/u.test(q.dep));
+    const existing=f.relations.filter(r=>r.clause_id===a.cl.id&&r.head_node_id===h.node_id&&r.tail_node_id===t.node_id&&roles[r.relation_type]);
+    // Candidate domain is explicit local syntax or an existing typed candidate;
+    // no global predicate-by-noun product and no nearest-text referent choice.
+    if(!syntax.length&&!existing.length)continue;
+    pairs.push({id:id(f.source.sha256,'proposal-pair',h.node_id,t.node_id),a,h,t,syntax,ht,existing});
+   }
+  }
+ }
+ return pairs;
+}
+function evidence(f,p){const owner=f.semantic_ownership.get(p.h.node_id),scope=f.expression_plans.get(p.h.node_id)??{},ids=uniq([p.a.sid,...p.h.source_span_ids,...p.t.source_span_ids,...(owner?.source_span_ids??[])]);return {owner,scope,source_spans:ids.map(i=>f.source_spans.find(s=>s.span_id===i)).filter(Boolean)};}
+async function retrieve(resource,queries,candidates,receipt){const rows=[];for(let i=0;i<queries.length;i+=64){const request={resource,queries:queries.slice(i,i+64),candidates},response=await modelRequest(request);if(!response.loaded)throw Error('MODEL_NOT_ACTUALLY_LOADED');receipt.push({request,response,manifest_sha256:sha(path.join(response.path,'MANIFEST.json'))});rows.push(...response.retrieval);}return new Map(rows.map(r=>[r.query_id,r.candidates]));}
+export async function generateProposals(f){
+ const started=performance.now(),pairs=typedPool(f),library=packs(),calls=[],timing={bge_ms:0,e5_ms:0,nli_ms:0},query=p=>p.a.cl.span.quote+'\nPredicate: '+p.h.surface+'\nArgument: '+p.t.surface;
+ const q=pairs.map(p=>({id:p.id,text:query(p)})),cq=[...new Map(pairs.map(p=>[p.h.node_id,{id:p.h.node_id,text:p.a.cl.span.quote}])).values()];
+ const t0=performance.now(),bge=await retrieve('bge-m3',q,ROLE_CANDIDATES,calls),bc=await retrieve('bge-m3',cq,library.concepts,calls);timing.bge_ms=performance.now()-t0;
+ const t1=performance.now(),e5=await retrieve('multilingual-e5-large',q,ROLE_CANDIDATES,calls),ec=await retrieve('multilingual-e5-large',cq,library.concepts,calls);timing.e5_ms=performance.now()-t1;
+ const proposals=[];
+ for(const p of pairs){const primary=bge.get(p.id)??[],cross=e5.get(p.id)??[],types=uniq([...primary,...cross].map(r=>r.candidate_id));
+  for(const type of types){const spec=RELATION_CONTRACT[type];if(!spec?.head_node_types.includes(p.h.node_type)||!spec.tail_node_types.includes(p.t.node_type))continue;
+   const ev=evidence(f,p),conditions=f.analyses.filter(a=>a.condition&&a.cl.sentence_id===p.a.cl.sentence_id),context=conditions.map(a=>a.cl.span.quote),hypothesis=[...context.map(s=>'Under the source condition "'+s+'":'), 'The '+roles[type][1]+' of the '+(p.h.metadata.modality??'UNSTATED')+' action "'+p.h.surface+'" is "'+p.t.surface+'".'].join('\n');
+   proposals.push({proposal_id:id(p.id,type),kind:'RELATION',trust:'UNTRUSTED',source_sha256:f.source.sha256,source_spans:ev.source_spans,clause_ids:[p.a.cl.id],proposed:{relation_type:type,head_node_id:p.h.node_id,tail_node_id:p.t.node_id,owner:ev.owner?.semantic_owner_id??null,discourse:ev.owner?.owner_category??null,scope_expr_id:ev.scope.scope_expr_id??null,condition_expr_id:ev.scope.condition_expr_id??null,quantity_expr_id:ev.scope.quantity_expr_id??null},candidate_endpoints:[p.h.node_id,p.t.node_id],syntax_evidence:{predicate_token_id:p.ht.id,argument_token_ids:p.syntax.map(t=>t.id),clause_model:p.a.cl.model,srl:p.a.cl.srl??[],NER:p.a.cl.entities??[],existing_relation_ids:p.existing.map(r=>r.relation_id)},bge:primary,e5:cross,bge_concepts:bc.get(p.h.node_id)??[],e5_concepts:ec.get(p.h.node_id)??[],retrieval_disagreement:primary[0]?.candidate_id!==cross[0]?.candidate_id,nli:{premise:[...context,p.a.cl.span.quote].join('\n'),hypothesis,condition_source_spans:conditions.map(a=>a.cl.span),modality:p.h.metadata.modality,scope_expr_id:ev.scope.scope_expr_id??null},provenance:{packs:library.packs,models:calls.map(c=>({resource:c.response.resource,path:c.response.path,manifest_sha256:c.manifest_sha256})).filter((x,i,a)=>a.findIndex(y=>y.resource===x.resource)===i),POLICY},rank:(primary.find(x=>x.candidate_id===type)?.score??0)+(cross.find(x=>x.candidate_id===type)?.score??0)});
+  }
+ }
+ const tn=performance.now();for(let i=0;i<proposals.length;i+=32){const selected=proposals.slice(i,i+32),request={resource:'mdeberta-nli',claims:selected.map(p=>({id:p.proposal_id,premise:p.nli.premise,hypothesis:p.nli.hypothesis}))},response=await modelRequest(request),manifest_sha256=sha(path.join(response.path,'MANIFEST.json'));calls.push({request,response,manifest_sha256});for(const p of selected){p.nli.result=response.predictions.find(r=>r.claim_id===p.proposal_id)??null;p.nli.provenance={resource:response.resource,path:response.path,manifest_sha256};p.provenance.models.push(p.nli.provenance);}}
+ timing.nli_ms=performance.now()-tn;return {schema:PROPOSAL_SCHEMA,proposals:proposals.sort((a,b)=>b.rank-a.rank||a.proposal_id.localeCompare(b.proposal_id)),calls,typed_pool_pairs:pairs.length,pack_catalog:library,performance:{...timing,total_proposal_ms:performance.now()-started}};
+}
+function directRoleEvidence(f,p){
+ const h=f.semantic_nodes.find(n=>n.node_id===p.proposed.head_node_id),t=f.semantic_nodes.find(n=>n.node_id===p.proposed.tail_node_id),a=f.analyses.find(a=>a.cl.id===p.clause_ids[0]);if(!h||!t||!a)return false;
+ const ht=a.cl.tokens.find(q=>q.id===h.metadata.token_id||q.id===h.metadata.predicate_owner_token_id),s=firstSpan(f,t);if(!ht||!s)return false;
+ const qs=a.cl.tokens.filter(q=>q.start>=s.start&&q.end<=s.end&&q.head===a.cl.tokens.indexOf(ht)),object=qs.some(q=>/^(?:dobj|obj)$/u.test(q.dep)),agent=qs.some(q=>/^nsubj$/u.test(q.dep));
+ const literal=t.metadata.literal_tag,kind=p.proposed.relation_type,rs=f.relations.filter(r=>r.head_node_id===h.node_id&&r.tail_node_id===t.node_id&&r.relation_type===kind&&r.state==='RESOLVED');
+ // Existing resolved candidates can establish exactly their already recorded role,
+ // never a different role proposed by a high embedding/NLI score.
+ if(rs.length)return {kind:'EXISTING_TYPED_ROLE',relation_ids:rs.map(r=>r.relation_id)};
+ if(kind==='AGENT'&&agent&&t.metadata.participant_eligibility?.eligible)return {kind:'DIRECT_SUBJECT_IDENTITY',token_ids:qs.map(q=>q.id)};
+ if(kind==='PATIENT'&&object&&!['FORBIDDEN','NOT_REQUIRED'].includes(h.metadata.modality)&&!['generate','write','send','report'].includes(h.metadata.sense)&&!['ROLE','PERSON','REFERENCE','VERSION','COMMIT'].includes(literal))return {kind:'DIRECT_OBJECT',token_ids:qs.map(q=>q.id)};
+ if(kind==='FORBIDS'&&object&&h.metadata.modality==='FORBIDDEN')return {kind:'NEGATED_DIRECT_OBJECT',token_ids:qs.map(q=>q.id)};
+ if(kind==='RESULT'&&object&&(t.metadata.artifact_roles??[]).some(r=>['GENERATED_OUTPUT','CONDITIONAL_OUTPUT','UPDATED_OUTPUT'].includes(r)))return {kind:'DIRECT_GENERATED_ARTIFACT',token_ids:qs.map(q=>q.id)};
+ return false;
+}
+export function evaluateProposal(f,p,all=[]){
+ const h=f.semantic_nodes.find(n=>n.node_id===p.proposed?.head_node_id),t=f.semantic_nodes.find(n=>n.node_id===p.proposed?.tail_node_id),owner=h&&f.semantic_ownership.get(h.node_id),tailOwner=t&&f.semantic_ownership.get(t.node_id),plan=h&&f.expression_plans.get(h.node_id)||{},spec=RELATION_CONTRACT[p.proposed?.relation_type],witness=directRoleEvidence(f,p),raw=[...f.source.raw_text],kind=p.proposed?.relation_type;
+ const same=(a,b)=>JSON.stringify(a)===JSON.stringify(b),enclosed=owner?.negative_ownership_evidence?.some(n=>n.reason==='ENCLOSED_PREDICATE_HAS_NO_INDEPENDENT_MODAL_LICENSE'),existing=f.relations.filter(r=>r.head_node_id===h?.node_id&&r.tail_node_id===t?.node_id&&r.relation_type===kind);
+ const actualSpans=uniq([...(h?.source_span_ids??[]),...(t?.source_span_ids??[])]),incoming=p.source_spans??[];
+ // Span-lattice alternatives share an argument identity. A nominal alias may
+ // not bypass an unresolved referent occupying the same syntactic argument.
+ const ts=t&&firstSpan(f,t),referentAlternatives=ts?f.semantic_nodes.filter(n=>n!==t&&n.node_type==='UNKNOWN_REFERENT'&&n.metadata.clause_id===t.metadata.clause_id).filter(n=>{const s=firstSpan(f,n);return s&&s.start<=ts.start&&s.end>=ts.end;}):[];
+ const referentCertified=referentAlternatives.every(n=>n.state==='RESOLVED'&&n.metadata.referent_set_certificate?.status==='CERTIFIED_REFERENT_SET');
+ const checks={provenance_integrity:p.kind==='RELATION'&&p.trust==='UNTRUSTED'&&p.source_sha256===f.source.sha256&&incoming.length>0&&actualSpans.every(id=>incoming.some(s=>s.span_id===id))&&incoming.every(s=>{const known=f.source_spans.find(x=>x.span_id===s.span_id);return known&&same(known,s)&&raw.slice(s.start,s.end).join('')===s.text;}),type_compatibility:!!h&&!!t&&h.state==='RESOLVED'&&t.state==='RESOLVED'&&t.node_type!=='UNKNOWN_REFERENT',relation_signature:!!spec&&spec.head_node_types.includes(h?.node_type)&&spec.tail_node_types.includes(t?.node_type),owner_discourse_compatibility:!!owner&&owner.status==='UNIQUE'&&p.proposed.owner===owner.semantic_owner_id&&p.proposed.discourse===owner.owner_category&&owner.semantic_owner_id===tailOwner?.semantic_owner_id&&owner.predicate_layer===tailOwner?.predicate_layer&&!enclosed,
+ scope_ownership:p.proposed.scope_expr_id===(plan.scope_expr_id??null)&&p.proposed.quantity_expr_id===(plan.quantity_expr_id??null),artifact_reference_role:kind==='BASIS'?t?.node_type==='REFERENCE'&&!!witness:kind==='RESULT'?(t?.metadata.artifact_roles??[]).some(r=>['GENERATED_OUTPUT','CONDITIONAL_OUTPUT','UPDATED_OUTPUT'].includes(r)):kind==='AGENT'||kind==='RECIPIENT'?t?.metadata.participant_eligibility?.eligible===true:!['REFERENCE','VERSION','COMMIT'].includes(t?.metadata.literal_tag)&&!['BACKGROUND_REFERENCE','REFERENCE_ONLY'].some(r=>t?.metadata.artifact_roles?.includes(r)),
+ referent_uniqueness:referentCertified&&!t?.unresolved_ref&&!t?.metadata.retain_ambiguity&&(!t?.metadata.resolution||t.metadata.resolution.selected_node_ids?.length===1),condition_ownership:p.proposed.condition_expr_id===(plan.condition_expr_id??null)&&!plan.unresolved_ref,set_cardinality_consistency:!h?.metadata.distribution||h.metadata.distribution.status==='COMPLETE'&&Number.isFinite(h.metadata.distribution.count_per_member),negative_evidence:!!witness&&!['BACKGROUND','RATIONALE','EXAMPLE','CODE','QUOTE','METADATA','TABLE','ACCEPTANCE'].includes(owner?.owner_category)&&!h?.metadata.purpose_only&&!h?.metadata.modality_unresolved&&!h?.metadata.candidate_disposition?.includes('REJECTED'),graph_consistency:!existing.some(r=>r.state==='REJECTED')&&!!witness&&f.relations.filter(r=>r.head_node_id===h?.node_id&&r.tail_node_id===t?.node_id&&r.state==='RESOLVED'&&['PATIENT','RESULT','THEME'].includes(r.relation_type)&&['PATIENT','RESULT','THEME'].includes(kind)&&r.relation_type!==kind).length===0,
+ no_equal_authority_competitor:!all.some(q=>q!==p&&q.proposal_id!==p.proposal_id&&q.proposed?.head_node_id===h?.node_id&&q.proposed?.tail_node_id===t?.node_id&&q.proposed?.relation_type!==kind&&['PATIENT','RESULT','THEME'].includes(q.proposed?.relation_type)&&['PATIENT','RESULT','THEME'].includes(kind)&&directRoleEvidence(f,q))};
+ const failed=Object.entries(checks).filter(([,v])=>!v).map(([k])=>k),status=failed.length?failed.some(k=>['referent_uniqueness','no_equal_authority_competitor','condition_ownership'].includes(k))?'UNRESOLVED':'REJECTED':existing.some(r=>r.state==='RESOLVED')?'ALREADY_PRESENT':'ADMITTED';
+ return {proposal_id:p.proposal_id,status,checks,failed_checks:failed,deterministic_witness:witness||null,typed_unresolved:status==='UNRESOLVED'?'UNRESOLVED_RELATION':null,score_affects_admission:false};
+}
+export function admitProposals(f,proposals){
+ buildSemanticOwnership(f,'DETERMINISTIC_PROPOSAL_ADMISSION');const start=performance.now(),decisions=proposals.map(p=>evaluateProposal(f,p,proposals));
+ for(const p of proposals){const d=decisions.find(d=>d.proposal_id===p.proposal_id);if(d.status!=='ADMITTED')continue;const a=f.analyses.find(a=>a.cl.id===p.clause_ids[0]),h=f.semantic_nodes.find(n=>n.node_id===p.proposed.head_node_id),t=f.semantic_nodes.find(n=>n.node_id===p.proposed.tail_node_id);const r=f.tools.relation(a.cl,p.proposed.relation_type,h,t,p.source_spans.map(s=>s.span_id));r.rule_refs=uniq([...r.rule_refs,'HYBRID_015_DETERMINISTIC_ADMISSION']);r.model_signal_refs=uniq([...r.model_signal_refs,p.proposal_id]);d.admitted_relation_id=r.relation_id;}
+ f.semantic_decoding.hybrid_proposals={version:PROPOSAL_SCHEMA.version,decisions,untrusted_proposals:proposals,admission_ms:performance.now()-start,no_model_to_boundary_edges:true};return decisions;
+}

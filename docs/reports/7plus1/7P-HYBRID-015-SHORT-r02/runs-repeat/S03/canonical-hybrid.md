@@ -1,0 +1,356 @@
+# Actual Canonical 7+1
+
+```json
+{
+  "projection_id": "p1:c4a3e74b65ebd5a16eaf73db",
+  "I": {
+    "slot": "I",
+    "status": "PARSER_COVERAGE_FAILURE",
+    "entries": [
+      {
+        "canonical_entry_id": "p1:e80980b69038151c7c973e2d",
+        "slot": "I",
+        "boundary_fact_ids": [
+          "p1:f9c614198a87618392ddded9"
+        ],
+        "state": "RESOLVED",
+        "display_value": "数据字典",
+        "source_span_ids": [
+          "p1:99d1d885813f3d7062ef6f09",
+          "p1:ed06ede7099f1158ca15fe72",
+          "p1:67314cd265a95166321287f6"
+        ],
+        "scope_expr_id": "p1:da541795acbc9a07a7fea8f1"
+      },
+      {
+        "canonical_entry_id": "p1:b85be527012102d169c2c845",
+        "slot": "I",
+        "boundary_fact_ids": [
+          "p1:7ba7c8841e627475ce4279e5"
+        ],
+        "state": "RESOLVED",
+        "display_value": "dictionary.json",
+        "source_span_ids": [
+          "p1:6a1d53e6f433f53e582d15f3",
+          "p1:5e73af527be2540488733a86",
+          "p1:67314cd265a95166321287f6"
+        ],
+        "scope_expr_id": "p1:568c01aed738e523c468dda3"
+      },
+      {
+        "canonical_entry_id": "p1:9088c5ce5ddfe7494e79e897",
+        "slot": "I",
+        "boundary_fact_ids": [
+          "p1:aeac4fb9974eec3a841b2bed"
+        ],
+        "state": "RESOLVED",
+        "display_value": "column-index.tsv",
+        "source_span_ids": [
+          "p1:07ea8dfdf2751c596d76250b",
+          "p1:5e73af527be2540488733a86",
+          "p1:67314cd265a95166321287f6"
+        ],
+        "scope_expr_id": "p1:17e7d4530ecf18c05cfa59fc"
+      },
+      {
+        "canonical_entry_id": "p1:993aea28859677c7c6abb559",
+        "slot": "I",
+        "boundary_fact_ids": [
+          "p1:ed142d8dfdacaca9b8d96284"
+        ],
+        "state": "RESOLVED",
+        "display_value": "dictionary.json",
+        "source_span_ids": [
+          "p1:7ffdef722bb1f37f62746c2f",
+          "p1:3b9fc85242ee66a39d84f849",
+          "p1:ccc0b220f48c72ba61a6191b"
+        ],
+        "scope_expr_id": "p1:36c2b4239076d76fc68c397c"
+      },
+      {
+        "canonical_entry_id": "p1:8962fd5d11a391d21be4ca4b",
+        "slot": "I",
+        "boundary_fact_ids": [
+          "p1:90b14c8f6744d7e7ea060773"
+        ],
+        "state": "RESOLVED",
+        "display_value": "column-index.tsv",
+        "source_span_ids": [
+          "p1:0ca36489f9208ba58182aeab",
+          "p1:3b9fc85242ee66a39d84f849",
+          "p1:ccc0b220f48c72ba61a6191b"
+        ],
+        "scope_expr_id": "p1:bc30826b4516b5a94d05c94b"
+      }
+    ]
+  },
+  "O": {
+    "slot": "O",
+    "status": "PARSER_COVERAGE_FAILURE",
+    "entries": [
+      {
+        "canonical_entry_id": "p1:26419df081a09fc31b8c62db",
+        "slot": "O",
+        "boundary_fact_ids": [
+          "p1:0362fc5244560a5edaa812e2"
+        ],
+        "state": "RESOLVED",
+        "display_value": "dictionary-review.md",
+        "source_span_ids": [
+          "p1:514f9e8b6904e77279d2f702",
+          "p1:f21f890ae42e7d7a1eb303cf",
+          "p1:853f12ba8313c4c89575a55c"
+        ],
+        "scope_expr_id": "p1:eacc79a36a79c7411729cba8"
+      }
+    ]
+  },
+  "A": {
+    "slot": "A",
+    "status": "UNRESOLVED",
+    "entries": [
+      {
+        "canonical_entry_id": "p1:778041fb277b9c4c2626973d",
+        "slot": "A",
+        "boundary_fact_ids": [
+          "p1:f781dde65198c40d2e443120"
+        ],
+        "state": "RESOLVED",
+        "display_value": "REQUIRED 核对 数据字典",
+        "source_span_ids": [
+          "p1:b95218fae1e2388a8ec6f7a2",
+          "p1:ed06ede7099f1158ca15fe72",
+          "p1:0f29bd4ab45b8a1f4a4fe608",
+          "p1:99d1d885813f3d7062ef6f09"
+        ],
+        "scope_expr_id": "p1:be0759ea0e064a0fea31b8b5"
+      },
+      {
+        "canonical_entry_id": "p1:abfd44e3742aea2ceaea501a",
+        "slot": "A",
+        "boundary_fact_ids": [
+          "p1:287667f8383ca686c3905ce4"
+        ],
+        "state": "RESOLVED",
+        "display_value": "REQUIRED 读取 dictionary.json、column-index.tsv",
+        "source_span_ids": [
+          "p1:ccc0b220f48c72ba61a6191b",
+          "p1:3b9fc85242ee66a39d84f849",
+          "p1:3fff8abb769ea47985800917",
+          "p1:7ffdef722bb1f37f62746c2f",
+          "p1:0ca36489f9208ba58182aeab"
+        ],
+        "scope_expr_id": "p1:8d1faf4da81a3fe1e0169517"
+      },
+      {
+        "canonical_entry_id": "p1:f26d9e7491a80520205883e8",
+        "slot": "A",
+        "boundary_fact_ids": [
+          "p1:948962eba36130e29404c5e4"
+        ],
+        "state": "UNRESOLVED",
+        "display_value": "REQUIRED 核对",
+        "source_span_ids": [
+          "p1:25987092d3f3078007922f56",
+          "p1:712b43db7a689e516d05d65d",
+          "p1:0f29bd4ab45b8a1f4a4fe608",
+          "p1:ed06ede7099f1158ca15fe72"
+        ]
+      },
+      {
+        "canonical_entry_id": "p1:f71630f90ce90af488af55e7",
+        "slot": "A",
+        "boundary_fact_ids": [
+          "p1:898688ea484322f6b19f3b1a"
+        ],
+        "state": "RESOLVED",
+        "display_value": "REQUIRED 生成 dictionary-review.md",
+        "source_span_ids": [
+          "p1:514f9e8b6904e77279d2f702",
+          "p1:f21f890ae42e7d7a1eb303cf",
+          "p1:853f12ba8313c4c89575a55c"
+        ],
+        "scope_expr_id": "p1:824ee860a5ab5556cb893747"
+      },
+      {
+        "canonical_entry_id": "p1:87ca4dd0afd585936a896226",
+        "slot": "A",
+        "boundary_fact_ids": [
+          "p1:afa83c08f7202aa00aa585cd"
+        ],
+        "state": "RESOLVED",
+        "display_value": "REQUIRED 包含 差异证据两项内容",
+        "source_span_ids": [
+          "p1:4f0b2a818fcbfcdb5da90d9b",
+          "p1:daaca44713668131842028ec",
+          "p1:5a035eb90c0b8d4dd8cb8216"
+        ],
+        "scope_expr_id": "p1:3fb592db3d3c2dfeedc3c742"
+      }
+    ]
+  },
+  "P": {
+    "slot": "P",
+    "status": "PARSER_COVERAGE_FAILURE",
+    "entries": [
+      {
+        "canonical_entry_id": "p1:0b9848cd09d047850f67957c",
+        "slot": "P",
+        "boundary_fact_ids": [
+          "p1:27c0160f0cd7d5e29f7de12e",
+          "p1:f484a419602d39092ba6a6f2",
+          "p1:b03d4a855094af345f456ca8",
+          "p1:84227bf286c8c4a1256bbfe9",
+          "p1:0e8cd25a4c57a29a40655229",
+          "p1:0fcc8f2755832ad866c2bea6"
+        ],
+        "state": "RESOLVED",
+        "display_value": "审阅员许澄 [PERFORMER]",
+        "source_span_ids": [
+          "p1:0f29bd4ab45b8a1f4a4fe608",
+          "p1:ed06ede7099f1158ca15fe72",
+          "p1:b95218fae1e2388a8ec6f7a2",
+          "p1:3fff8abb769ea47985800917",
+          "p1:3b9fc85242ee66a39d84f849",
+          "p1:ccc0b220f48c72ba61a6191b",
+          "p1:839768a5966f9d59940f90e6",
+          "p1:6bb96e14d72d475bb1452f1c",
+          "p1:25987092d3f3078007922f56",
+          "p1:712b43db7a689e516d05d65d",
+          "p1:0b95ce95865d1239f788e3a0",
+          "p1:6e33066bf0a7f086d5f41df2",
+          "p1:c7c6b4c93224825ceef90e88"
+        ]
+      }
+    ]
+  },
+  "R": {
+    "slot": "R",
+    "status": "PARSER_COVERAGE_FAILURE",
+    "entries": []
+  },
+  "V": {
+    "slot": "V",
+    "status": "PARSER_COVERAGE_FAILURE",
+    "entries": [
+      {
+        "canonical_entry_id": "p1:7bcc5c259056c37d3cf2a32f",
+        "slot": "V",
+        "boundary_fact_ids": [
+          "p1:ff35c27cd33ba6037f3041fc"
+        ],
+        "state": "RESOLVED",
+        "display_value": "v3.1.0",
+        "source_span_ids": [
+          "p1:3c69c2fc69baa8e27419403f",
+          "p1:712b43db7a689e516d05d65d",
+          "p1:67314cd265a95166321287f6"
+        ]
+      },
+      {
+        "canonical_entry_id": "p1:466b0a7c5ea834e01590c238",
+        "slot": "V",
+        "boundary_fact_ids": [
+          "p1:efe933292e44d5cafba01e24"
+        ],
+        "state": "RESOLVED",
+        "display_value": "DATA-STYLE-6",
+        "source_span_ids": [
+          "p1:60ab92c4e42aaea336669911",
+          "p1:712b43db7a689e516d05d65d",
+          "p1:67314cd265a95166321287f6"
+        ]
+      },
+      {
+        "canonical_entry_id": "p1:4154904d72cc5411fbed92e5",
+        "slot": "V",
+        "boundary_fact_ids": [
+          "p1:c4fd5e2f0a7717aaba1093a8"
+        ],
+        "state": "RESOLVED",
+        "display_value": "v3.1.0",
+        "source_span_ids": [
+          "p1:3c69c2fc69baa8e27419403f",
+          "p1:712b43db7a689e516d05d65d",
+          "p1:67314cd265a95166321287f6"
+        ]
+      }
+    ]
+  },
+  "C": {
+    "slot": "C",
+    "status": "PARSER_COVERAGE_FAILURE",
+    "entries": [
+      {
+        "canonical_entry_id": "p1:3eee82ef451656d64842697a",
+        "slot": "C",
+        "boundary_fact_ids": [
+          "p1:698bbca0a4f6c782f9435bcf"
+        ],
+        "state": "RESOLVED",
+        "display_value": "完成",
+        "source_span_ids": [
+          "p1:82e702a74139072278fc8009",
+          "p1:b5c22500b1265fd1a6c24a9c",
+          "p1:8cae32162792f8c676180d08",
+          "p1:5754044a4ed1c10722b2a2a3",
+          "p1:4aaff282f611cc0288923750"
+        ],
+        "condition_expr_id": "p1:6f6aae53da1ded4d460215d4"
+      }
+    ]
+  },
+  "B": {
+    "slot": "B",
+    "status": "UNRESOLVED",
+    "entries": [
+      {
+        "canonical_entry_id": "p1:c71f9c9165f8dfb4fb785151",
+        "slot": "B",
+        "boundary_fact_ids": [
+          "p1:0aa95c07bceade0b920cdccc"
+        ],
+        "state": "RESOLVED",
+        "display_value": "FORBIDDEN 包括 历史资料",
+        "source_span_ids": [
+          "p1:0b95ce95865d1239f788e3a0",
+          "p1:6e33066bf0a7f086d5f41df2",
+          "p1:29fe0f4cfd64bc3eca0598bb",
+          "p1:0f29bd4ab45b8a1f4a4fe608",
+          "p1:ed06ede7099f1158ca15fe72"
+        ],
+        "scope_expr_id": "p1:322b8f196865dce8432ea3ff"
+      },
+      {
+        "canonical_entry_id": "p1:6990e4fca6ef1ac9f520b533",
+        "slot": "B",
+        "boundary_fact_ids": [
+          "p1:0d7d1eac174f1b3343f19fcc"
+        ],
+        "state": "UNRESOLVED",
+        "display_value": "FORBIDDEN 互换",
+        "source_span_ids": [
+          "p1:2fed9b3bdf9a32c31d95a6c4",
+          "p1:6563030ff867aa4783ba453d"
+        ]
+      },
+      {
+        "canonical_entry_id": "p1:af7be7761b99b2f55bfe4fd9",
+        "slot": "B",
+        "boundary_fact_ids": [
+          "p1:bfda641bedef3cfcc951011e"
+        ],
+        "state": "RESOLVED",
+        "display_value": "FORBIDDEN 修改 dictionary.json、column-index.tsv",
+        "source_span_ids": [
+          "p1:cc0a37a31bd9220ce4ebf5f6",
+          "p1:522e210112b89cad5db58821",
+          "p1:24230541c3d273aa8892380f",
+          "p1:7c9df5add5a61ea0410dc090"
+        ],
+        "scope_expr_id": "p1:4f598b701f21409b45f4f0c4"
+      }
+    ]
+  }
+}
+```

@@ -1,0 +1,521 @@
+# Actual Canonical 7+1
+
+```json
+{
+  "projection_id": "p1:52f80c69c0c880e93a25aa48",
+  "I": {
+    "slot": "I",
+    "status": "PARSER_COVERAGE_FAILURE",
+    "entries": [
+      {
+        "canonical_entry_id": "p1:4a96a364c38a6b5d5f0a8a4f",
+        "slot": "I",
+        "boundary_fact_ids": [
+          "p1:e72784f0d65df1500fb04181"
+        ],
+        "state": "RESOLVED",
+        "display_value": "meeting-notes.md",
+        "source_span_ids": [
+          "p1:c37dec0dd90fe942ec9bdd63",
+          "p1:abe5b822ec7e312743a62939",
+          "p1:e30c9eafe09e2d37c37b5a19"
+        ],
+        "scope_expr_id": "p1:50306fde9bc881486186bb16"
+      },
+      {
+        "canonical_entry_id": "p1:abc9df7bb53d779bb01a6556",
+        "slot": "I",
+        "boundary_fact_ids": [
+          "p1:ac6f49363832abb71bc3b04d"
+        ],
+        "state": "RESOLVED",
+        "display_value": "attendees.csv",
+        "source_span_ids": [
+          "p1:983ac24bdfa21e41c8636cb7",
+          "p1:528e8feba26b270f1da16be1",
+          "p1:e30c9eafe09e2d37c37b5a19"
+        ],
+        "scope_expr_id": "p1:b47630ecddf4a56389614e00"
+      }
+    ]
+  },
+  "O": {
+    "slot": "O",
+    "status": "RESOLVED",
+    "entries": [
+      {
+        "canonical_entry_id": "p1:31b971a9abb52ac80d5193a1",
+        "slot": "O",
+        "boundary_fact_ids": [
+          "p1:e7a5b7418d2f7d0054deb836"
+        ],
+        "state": "RESOLVED",
+        "display_value": "pending-owners.csv",
+        "source_span_ids": [
+          "p1:679f06a0c3db12151151aeac",
+          "p1:008875343433465e1b75a17e",
+          "p1:e1c0558e3783f7db4338f31f",
+          "p1:274c33b7060d001d90283776",
+          "p1:082e7ed6cc8e540741bde785",
+          "p1:99ab97307220714e37238dd8"
+        ],
+        "scope_expr_id": "p1:8c673d71017983a573459f37",
+        "condition_expr_id": "p1:17ef6c9bdf6e3617598c3ef5"
+      },
+      {
+        "canonical_entry_id": "p1:0e448c6fd5031a6e9888e522",
+        "slot": "O",
+        "boundary_fact_ids": [
+          "p1:ad312aa87b7f178786362b2f"
+        ],
+        "state": "RESOLVED",
+        "display_value": "minutes-final.docx",
+        "source_span_ids": [
+          "p1:a64e2f649a06365230b6ab67",
+          "p1:84438ec74bee8fea247152f2",
+          "p1:58fe64bce03404fab1d491a7",
+          "p1:274c33b7060d001d90283776",
+          "p1:082e7ed6cc8e540741bde785"
+        ],
+        "scope_expr_id": "p1:73edc670e812b8edd95a0326"
+      }
+    ]
+  },
+  "A": {
+    "slot": "A",
+    "status": "PARSER_COVERAGE_FAILURE",
+    "entries": [
+      {
+        "canonical_entry_id": "p1:ad53614799170ff31159d7bd",
+        "slot": "A",
+        "boundary_fact_ids": [
+          "p1:d8ba44ed23c76305f4eedef7"
+        ],
+        "state": "RESOLVED",
+        "display_value": "REQUIRED 整理 会议纪要",
+        "source_span_ids": [
+          "p1:258e7c5ae8b7adec26e07c74",
+          "p1:2ad3b21ee911a881400bd94c",
+          "p1:1a9a6d427e7b2e3ba221ab0d"
+        ],
+        "scope_expr_id": "p1:080aa669fca983b4e893e9a0"
+      },
+      {
+        "canonical_entry_id": "p1:2e13f24078df05695b02f2a3",
+        "slot": "A",
+        "boundary_fact_ids": [
+          "p1:1b903ca922bc3e27f126c399"
+        ],
+        "state": "RESOLVED",
+        "display_value": "REQUIRED 符合 最终纪要的格式",
+        "source_span_ids": [
+          "p1:8679aa402621f4ab8f619493",
+          "p1:2d7c4764925893d94a119402",
+          "p1:7d210a4fd34ac09ebda169ec",
+          "p1:26ee4b775ed337df3799a901"
+        ],
+        "scope_expr_id": "p1:9e686fc7b75aa2a82c7ed4df"
+      },
+      {
+        "canonical_entry_id": "p1:da48064fc909a76fd7322fa6",
+        "slot": "A",
+        "boundary_fact_ids": [
+          "p1:6938f61c7beceddfbffe9be8"
+        ],
+        "state": "RESOLVED",
+        "display_value": "REQUIRED 核对 姓名",
+        "source_span_ids": [
+          "p1:74b9f66133487018fd7201a6",
+          "p1:082e7ed6cc8e540741bde785",
+          "p1:bf0f45d7330cf80dd88c200f",
+          "p1:dc7f4d9b57436b316520e952",
+          "p1:e216e012406efa4f861fb46c",
+          "p1:274c33b7060d001d90283776"
+        ],
+        "scope_expr_id": "p1:0023bcc05f76363546f5e5c4"
+      },
+      {
+        "canonical_entry_id": "p1:b222ad482215645264f3c6ef",
+        "slot": "A",
+        "boundary_fact_ids": [
+          "p1:b9e1c9fcb63e167f635162bd"
+        ],
+        "state": "RESOLVED",
+        "display_value": "REQUIRED 整理 讨论事项",
+        "source_span_ids": [
+          "p1:dc7f4d9b57436b316520e952",
+          "p1:e216e012406efa4f861fb46c",
+          "p1:e06a0d93d5f925685934ff32",
+          "p1:274c33b7060d001d90283776",
+          "p1:082e7ed6cc8e540741bde785",
+          "p1:a64e2f649a06365230b6ab67",
+          "p1:84438ec74bee8fea247152f2"
+        ],
+        "scope_expr_id": "p1:8c6f1e106a3d818d3484fc14"
+      },
+      {
+        "canonical_entry_id": "p1:a520b3cc50034315a5bb437b",
+        "slot": "A",
+        "boundary_fact_ids": [
+          "p1:01c05688debd029ce7e81964"
+        ],
+        "state": "RESOLVED",
+        "display_value": "REQUIRED 存为 minutes-final.docx",
+        "source_span_ids": [
+          "p1:a64e2f649a06365230b6ab67",
+          "p1:84438ec74bee8fea247152f2",
+          "p1:58fe64bce03404fab1d491a7",
+          "p1:274c33b7060d001d90283776",
+          "p1:082e7ed6cc8e540741bde785"
+        ]
+      },
+      {
+        "canonical_entry_id": "p1:f304ebcff4c8ab0d28a011f9",
+        "slot": "A",
+        "boundary_fact_ids": [
+          "p1:5d34a74598b3cb011c9c1ef9"
+        ],
+        "state": "RESOLVED",
+        "display_value": "REQUIRED 保留 每个讨论事项",
+        "source_span_ids": [
+          "p1:fee5af5e30f922f45541826e",
+          "p1:ecf4cf440be1912cc9e46e59",
+          "p1:3bed65535927d3759b75ad4a",
+          "p1:274c33b7060d001d90283776",
+          "p1:082e7ed6cc8e540741bde785"
+        ],
+        "scope_expr_id": "p1:6a025e0053c00c350e26cdf7"
+      },
+      {
+        "canonical_entry_id": "p1:8c3ad2c9648d022db82cd5af",
+        "slot": "A",
+        "boundary_fact_ids": [
+          "p1:2e74ba3052eadd69271e7b1e"
+        ],
+        "state": "RESOLVED",
+        "display_value": "REQUIRED 标注 负责人待确认、原始记录没有写明负责人的事项",
+        "source_span_ids": [
+          "p1:eebb9a74391ec59f27fe17e8",
+          "p1:2373b5ea452749eff43016f4",
+          "p1:cf85c6fa1a89874a100083c2",
+          "p1:929c9035f01c461897f1cdc0",
+          "p1:274c33b7060d001d90283776",
+          "p1:082e7ed6cc8e540741bde785"
+        ],
+        "scope_expr_id": "p1:16a039cafe59a98e87861b4a"
+      },
+      {
+        "canonical_entry_id": "p1:393a96b8842f0f8c0f2b48cc",
+        "slot": "A",
+        "boundary_fact_ids": [
+          "p1:0634ae4ab7fadb646974144a"
+        ],
+        "state": "RESOLVED",
+        "display_value": "REQUIRED 生成 pending-owners.csv",
+        "source_span_ids": [
+          "p1:679f06a0c3db12151151aeac",
+          "p1:008875343433465e1b75a17e",
+          "p1:e1c0558e3783f7db4338f31f",
+          "p1:274c33b7060d001d90283776",
+          "p1:082e7ed6cc8e540741bde785",
+          "p1:99ab97307220714e37238dd8"
+        ],
+        "scope_expr_id": "p1:a8709d40aadd274d1ca082ee",
+        "condition_expr_id": "p1:17ef6c9bdf6e3617598c3ef5"
+      },
+      {
+        "canonical_entry_id": "p1:0b6a5e5dbff40785a078c61e",
+        "slot": "A",
+        "boundary_fact_ids": [
+          "p1:1fa6217c12847385ca50c5f8"
+        ],
+        "state": "RESOLVED",
+        "display_value": "REQUIRED 记录 负责人待确认的事项",
+        "source_span_ids": [
+          "p1:43f9579af07b4b98448e99f0",
+          "p1:e01dfb5f389d704b9e19a252",
+          "p1:a296b3202e688fca6f09824b",
+          "p1:99ab97307220714e37238dd8",
+          "p1:274c33b7060d001d90283776",
+          "p1:082e7ed6cc8e540741bde785"
+        ],
+        "scope_expr_id": "p1:953a583be58cb8cfc2b92639",
+        "condition_expr_id": "p1:17ef6c9bdf6e3617598c3ef5"
+      },
+      {
+        "canonical_entry_id": "p1:4aedbc5f5c6f9130ffc4f939",
+        "slot": "A",
+        "boundary_fact_ids": [
+          "p1:bd79f0e5ec5d057357f84205"
+        ],
+        "state": "RESOLVED",
+        "display_value": "REQUIRED 提交 pending-owners.csv、minutes-final.docx",
+        "source_span_ids": [
+          "p1:f9c0c802e0edc0d823a55611",
+          "p1:2ae5cebd833b1a3f5ad10eb6",
+          "p1:e5435641332d09f2d78ee09a",
+          "p1:e1c0558e3783f7db4338f31f",
+          "p1:008875343433465e1b75a17e",
+          "p1:58fe64bce03404fab1d491a7",
+          "p1:84438ec74bee8fea247152f2",
+          "p1:274c33b7060d001d90283776",
+          "p1:082e7ed6cc8e540741bde785",
+          "p1:96642fc50b06da9ac3de0133"
+        ],
+        "condition_expr_id": "p1:180827f0f0014fafd6cb3709"
+      }
+    ]
+  },
+  "P": {
+    "slot": "P",
+    "status": "RESOLVED",
+    "entries": [
+      {
+        "canonical_entry_id": "p1:3e49562d59e2289e75bfab37",
+        "slot": "P",
+        "boundary_fact_ids": [
+          "p1:06b1509863de3cdd4ccbc030",
+          "p1:ff8f23d8650f59405341c7bc"
+        ],
+        "state": "RESOLVED",
+        "display_value": "复核人唐宁 [RECIPIENT,REVIEWER]",
+        "source_span_ids": [
+          "p1:e5435641332d09f2d78ee09a",
+          "p1:2ae5cebd833b1a3f5ad10eb6",
+          "p1:f9c0c802e0edc0d823a55611",
+          "p1:5ef9a82196eb07622140b298"
+        ]
+      },
+      {
+        "canonical_entry_id": "p1:d7d1f39472bea3c26f0332a2",
+        "slot": "P",
+        "boundary_fact_ids": [
+          "p1:9c3937a898cceed99e6a7dea",
+          "p1:e245e841fb5362fd8f12e5fb",
+          "p1:72f637ef2bab79e1a53f4896",
+          "p1:994897f3f7cbf0b469facbe9",
+          "p1:a9401640b9e3d7c4f4242dea",
+          "p1:ca13ea50099209aecb7ea3c8",
+          "p1:848cb9d662a37d7dbb5fa2b8",
+          "p1:66901eb717de1c30ee097059",
+          "p1:5f5bce1baad47c8bfd104468",
+          "p1:7623c4e7f53d82ce64a94a1a",
+          "p1:9f92783acff5b0c30853dbd1",
+          "p1:d032724e520f3039a429f6ce",
+          "p1:b6b71ec5b501f94ca5622862",
+          "p1:35fcc2dd6e779aaf4dd179f7",
+          "p1:8058b047951bd0d8d88a7fd1"
+        ],
+        "state": "RESOLVED",
+        "display_value": "编辑沈悦 [PERFORMER]",
+        "source_span_ids": [
+          "p1:274c33b7060d001d90283776",
+          "p1:082e7ed6cc8e540741bde785",
+          "p1:dc7f4d9b57436b316520e952",
+          "p1:e216e012406efa4f861fb46c",
+          "p1:a64e2f649a06365230b6ab67",
+          "p1:84438ec74bee8fea247152f2",
+          "p1:fee5af5e30f922f45541826e",
+          "p1:ecf4cf440be1912cc9e46e59",
+          "p1:cecf04b2c4d53db59d1d34c0",
+          "p1:5dfbc40266fa519ebf3bd413",
+          "p1:eebb9a74391ec59f27fe17e8",
+          "p1:2373b5ea452749eff43016f4",
+          "p1:9c7aac86da07d0b505a4ac71",
+          "p1:6d08deef79c540bd0d3f94c9",
+          "p1:679f06a0c3db12151151aeac",
+          "p1:008875343433465e1b75a17e",
+          "p1:43f9579af07b4b98448e99f0",
+          "p1:e01dfb5f389d704b9e19a252",
+          "p1:c19dc9f30e1cd89df5b94567",
+          "p1:8122d831a8464dbd9f956baa",
+          "p1:f9c0c802e0edc0d823a55611",
+          "p1:2ae5cebd833b1a3f5ad10eb6",
+          "p1:1361915f388259eb6ad1e86a",
+          "p1:2539ab7bcf54dad65dcae9d2",
+          "p1:2050dc1b71aaf74d47d9efe5",
+          "p1:95991c5a845d6815b3081b1f",
+          "p1:66c174af28a7a8e34a4cbc35",
+          "p1:552938d62755205f202eacde",
+          "p1:74b9f66133487018fd7201a6",
+          "p1:80366654ace127c55ab50030"
+        ]
+      }
+    ]
+  },
+  "R": {
+    "slot": "R",
+    "status": "RESOLVED",
+    "entries": [
+      {
+        "canonical_entry_id": "p1:6f1e31956650b8429c27b896",
+        "slot": "R",
+        "boundary_fact_ids": [
+          "p1:5478dbd25854397af4e14360"
+        ],
+        "state": "RESOLVED",
+        "display_value": "40",
+        "source_span_ids": [
+          "p1:d49d5e540360557d4a0ac300",
+          "p1:a4b6044c3c6b79e71abc05cb",
+          "p1:ed1defa2cbc5816e201d68f5"
+        ],
+        "quantity_expr_id": "p1:2f54af474e5e003a9c32565d"
+      }
+    ]
+  },
+  "V": {
+    "slot": "V",
+    "status": "RESOLVED",
+    "entries": [
+      {
+        "canonical_entry_id": "p1:140d8ea69b723be80c32de89",
+        "slot": "V",
+        "boundary_fact_ids": [
+          "p1:3af3079001237bf9c9643b56"
+        ],
+        "state": "RESOLVED",
+        "display_value": "MEETING-STYLE-4",
+        "source_span_ids": [
+          "p1:7d210a4fd34ac09ebda169ec",
+          "p1:2d7c4764925893d94a119402",
+          "p1:8679aa402621f4ab8f619493"
+        ]
+      }
+    ]
+  },
+  "C": {
+    "slot": "C",
+    "status": "RESOLVED",
+    "entries": [
+      {
+        "canonical_entry_id": "p1:a8de19a95cf7d7f53d42b455",
+        "slot": "C",
+        "boundary_fact_ids": [
+          "p1:ab37bd84394df9d367797b2e"
+        ],
+        "state": "RESOLVED",
+        "display_value": "完成",
+        "source_span_ids": [
+          "p1:1361915f388259eb6ad1e86a",
+          "p1:2539ab7bcf54dad65dcae9d2",
+          "p1:274c33b7060d001d90283776",
+          "p1:082e7ed6cc8e540741bde785",
+          "p1:5ef9a82196eb07622140b298",
+          "p1:1a4942f393eb982cecaebfcb"
+        ],
+        "condition_expr_id": "p1:3a55fd369e2ce1ae9dfd7fe0"
+      }
+    ]
+  },
+  "B": {
+    "slot": "B",
+    "status": "UNRESOLVED",
+    "entries": [
+      {
+        "canonical_entry_id": "p1:59138bb0fc4840f161234d10",
+        "slot": "B",
+        "boundary_fact_ids": [
+          "p1:722b8a383a8e2a15265ce207"
+        ],
+        "state": "RESOLVED",
+        "display_value": "FORBIDDEN 作 决定、参会人",
+        "source_span_ids": [
+          "p1:7f82b9408c638057ab8fd96f",
+          "p1:48dff268084160c342f0b64b",
+          "p1:a0b250e2b4d0b5b47fcc774a",
+          "p1:966b7e8dcb10acc3c3381013"
+        ],
+        "scope_expr_id": "p1:ca54671f9e8f9c4c9f643c25"
+      },
+      {
+        "canonical_entry_id": "p1:df721d18834417cbbdf1501f",
+        "slot": "B",
+        "boundary_fact_ids": [
+          "p1:3bfc5d2a1a3f6e1cf9326b3d"
+        ],
+        "state": "RESOLVED",
+        "display_value": "FORBIDDEN 修改 meeting-notes.md、attendees.csv",
+        "source_span_ids": [
+          "p1:6484bb5d4696805ac98edfe1",
+          "p1:7b82155a9ffd31f27bb1a031",
+          "p1:c37dec0dd90fe942ec9bdd63",
+          "p1:abe5b822ec7e312743a62939",
+          "p1:983ac24bdfa21e41c8636cb7",
+          "p1:528e8feba26b270f1da16be1"
+        ]
+      },
+      {
+        "canonical_entry_id": "p1:81bd8a5228a716897e209cd4",
+        "slot": "B",
+        "boundary_fact_ids": [
+          "p1:184fd7ff73b912aa0e4bc2dd"
+        ],
+        "state": "RESOLVED",
+        "display_value": "FORBIDDEN 删除 每个讨论事项",
+        "source_span_ids": [
+          "p1:cecf04b2c4d53db59d1d34c0",
+          "p1:5dfbc40266fa519ebf3bd413",
+          "p1:3bed65535927d3759b75ad4a",
+          "p1:ecf4cf440be1912cc9e46e59",
+          "p1:274c33b7060d001d90283776",
+          "p1:082e7ed6cc8e540741bde785"
+        ],
+        "scope_expr_id": "p1:44bac85702155aa0f0e7bdc3"
+      },
+      {
+        "canonical_entry_id": "p1:3fe8691b81269df09eebe761",
+        "slot": "B",
+        "boundary_fact_ids": [
+          "p1:00d3dbfa63d44771c48af6cf"
+        ],
+        "state": "RESOLVED",
+        "display_value": "FORBIDDEN 指定 负责人",
+        "source_span_ids": [
+          "p1:9c7aac86da07d0b505a4ac71",
+          "p1:6d08deef79c540bd0d3f94c9",
+          "p1:b2b10de42f9b1d778dea3545",
+          "p1:274c33b7060d001d90283776",
+          "p1:082e7ed6cc8e540741bde785"
+        ],
+        "scope_expr_id": "p1:d2c92e7f502744a7c3d2831a"
+      },
+      {
+        "canonical_entry_id": "p1:656c7863491c15e13b894eec",
+        "slot": "B",
+        "boundary_fact_ids": [
+          "p1:18a55a578b3d716d23041a80"
+        ],
+        "state": "RESOLVED",
+        "display_value": "FORBIDDEN 改写 待确认、已批准",
+        "source_span_ids": [
+          "p1:2050dc1b71aaf74d47d9efe5",
+          "p1:95991c5a845d6815b3081b1f",
+          "p1:25d7bce5c21d835e5095e923",
+          "p1:6b9f96ac4aa8e632f00107b2",
+          "p1:274c33b7060d001d90283776",
+          "p1:082e7ed6cc8e540741bde785"
+        ],
+        "scope_expr_id": "p1:917abe737c7bdaff1bfaad35"
+      },
+      {
+        "canonical_entry_id": "p1:0d84646f8e547c2e1e2414d6",
+        "slot": "B",
+        "boundary_fact_ids": [
+          "p1:b8672ceaa24c2e0fc7b9bf19"
+        ],
+        "state": "UNRESOLVED",
+        "display_value": "FORBIDDEN 上传 上述材料",
+        "source_span_ids": [
+          "p1:66c174af28a7a8e34a4cbc35",
+          "p1:552938d62755205f202eacde",
+          "p1:2d99496a8a63af6aba92714f",
+          "p1:f4977f6cbfc3ac248d0d672f",
+          "p1:274c33b7060d001d90283776",
+          "p1:082e7ed6cc8e540741bde785"
+        ]
+      }
+    ]
+  }
+}
+```

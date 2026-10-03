@@ -1,0 +1,338 @@
+# Actual Canonical 7+1
+
+```json
+{
+  "projection_id": "p1:d8d9c5721392b3ab2a4bd378",
+  "I": {
+    "slot": "I",
+    "status": "PARSER_COVERAGE_FAILURE",
+    "entries": [
+      {
+        "canonical_entry_id": "p1:483d94243026f3247a688206",
+        "slot": "I",
+        "boundary_fact_ids": [
+          "p1:2027a3d963f0f164b3dde543"
+        ],
+        "state": "RESOLVED",
+        "display_value": "安装说明",
+        "source_span_ids": [
+          "p1:4a1efda5ce43ba38a9fcdf82",
+          "p1:f746e5ff710b8495ae988dd5",
+          "p1:63a5495362842fc8cef2e3ff"
+        ],
+        "scope_expr_id": "p1:759bee58d977798fee0633e7"
+      },
+      {
+        "canonical_entry_id": "p1:22201db513fa5d77fe070f07",
+        "slot": "I",
+        "boundary_fact_ids": [
+          "p1:55ef7267b25bd2489ada9b08"
+        ],
+        "state": "RESOLVED",
+        "display_value": "install-guide.txt",
+        "source_span_ids": [
+          "p1:1349170458e8e5f1947631f1",
+          "p1:612afda258d962aa764f74f7",
+          "p1:63a5495362842fc8cef2e3ff"
+        ],
+        "scope_expr_id": "p1:92762e4c69e3a5fb5c0ecc8b"
+      },
+      {
+        "canonical_entry_id": "p1:48188127aa50a7e8a7565922",
+        "slot": "I",
+        "boundary_fact_ids": [
+          "p1:bca5b96ce81c8b0681ea1a79"
+        ],
+        "state": "RESOLVED",
+        "display_value": "dependency-lock.json",
+        "source_span_ids": [
+          "p1:2d04b03e76d0c83b39602287",
+          "p1:612afda258d962aa764f74f7",
+          "p1:63a5495362842fc8cef2e3ff"
+        ],
+        "scope_expr_id": "p1:d2a710700b4cc64c99e307c7"
+      },
+      {
+        "canonical_entry_id": "p1:0133dc62a91728c87628d960",
+        "slot": "I",
+        "boundary_fact_ids": [
+          "p1:f2ff80856f9ee9cc53b48b34"
+        ],
+        "state": "RESOLVED",
+        "display_value": "install-guide.txt",
+        "source_span_ids": [
+          "p1:cd7bdc0fe7376e07bbe1bedb",
+          "p1:2361cebeb60ec2addb841ab9",
+          "p1:c06ef9acf3ce5db47335051e"
+        ],
+        "scope_expr_id": "p1:4ce46dc7cc8641da30d7c5a2"
+      },
+      {
+        "canonical_entry_id": "p1:4acb13fd5a0610e53c29f70b",
+        "slot": "I",
+        "boundary_fact_ids": [
+          "p1:5fb3349181cccba57d9d76ff"
+        ],
+        "state": "RESOLVED",
+        "display_value": "dependency-lock.json",
+        "source_span_ids": [
+          "p1:ce418506840469cd111a0f58",
+          "p1:2361cebeb60ec2addb841ab9",
+          "p1:c06ef9acf3ce5db47335051e"
+        ],
+        "scope_expr_id": "p1:3fb86453fd6b94596c2439ba"
+      }
+    ]
+  },
+  "O": {
+    "slot": "O",
+    "status": "PARSER_COVERAGE_FAILURE",
+    "entries": [
+      {
+        "canonical_entry_id": "p1:503dc0dd7b7267a038c7d472",
+        "slot": "O",
+        "boundary_fact_ids": [
+          "p1:1c99f03d9ceaa652ef77c85b"
+        ],
+        "state": "RESOLVED",
+        "display_value": "install-review.md",
+        "source_span_ids": [
+          "p1:6011589bf3e8471297d3946f",
+          "p1:19e977c16db06351b132a666",
+          "p1:12b0547cac8f6f07cdda939e"
+        ],
+        "scope_expr_id": "p1:1c7b3d27e4b1c40ab5472c06"
+      }
+    ]
+  },
+  "A": {
+    "slot": "A",
+    "status": "PARSER_COVERAGE_FAILURE",
+    "entries": [
+      {
+        "canonical_entry_id": "p1:206601945616f6accc161e85",
+        "slot": "A",
+        "boundary_fact_ids": [
+          "p1:35e7c142c7e9939100d8404b"
+        ],
+        "state": "RESOLVED",
+        "display_value": "REQUIRED 核对 安装说明",
+        "source_span_ids": [
+          "p1:072e95b8d88e38efe1148a20",
+          "p1:f746e5ff710b8495ae988dd5",
+          "p1:9e08df9ff96b068266c45357",
+          "p1:4a1efda5ce43ba38a9fcdf82"
+        ],
+        "scope_expr_id": "p1:8c4d43ade3ca8cadbbc6f655"
+      },
+      {
+        "canonical_entry_id": "p1:d12d0f903374f7b6fd4fcdcb",
+        "slot": "A",
+        "boundary_fact_ids": [
+          "p1:c8e5014a2ed5c3e752d95063"
+        ],
+        "state": "RESOLVED",
+        "display_value": "REQUIRED 读取 dependency-lock.json、install-guide.txt",
+        "source_span_ids": [
+          "p1:c06ef9acf3ce5db47335051e",
+          "p1:2361cebeb60ec2addb841ab9",
+          "p1:ce418506840469cd111a0f58",
+          "p1:cd7bdc0fe7376e07bbe1bedb"
+        ],
+        "scope_expr_id": "p1:f75524eeb34434804687db04"
+      },
+      {
+        "canonical_entry_id": "p1:7f357633ce896082823a742e",
+        "slot": "A",
+        "boundary_fact_ids": [
+          "p1:2e83c7f73169a1b292f88db3"
+        ],
+        "state": "RESOLVED",
+        "display_value": "REQUIRED 生成 install-review.md",
+        "source_span_ids": [
+          "p1:6011589bf3e8471297d3946f",
+          "p1:19e977c16db06351b132a666",
+          "p1:12b0547cac8f6f07cdda939e"
+        ],
+        "scope_expr_id": "p1:7ea86ec2a2335b1dda46f3d6"
+      },
+      {
+        "canonical_entry_id": "p1:0b8f7458401fdcf5b66dc948",
+        "slot": "A",
+        "boundary_fact_ids": [
+          "p1:d75117ee7ea24e73f221ae23"
+        ],
+        "state": "RESOLVED",
+        "display_value": "REQUIRED 包含 差异证据两项内容",
+        "source_span_ids": [
+          "p1:6d0207a85e82b7bf1b399441",
+          "p1:f62589a942baf03260869af2",
+          "p1:252137c9e71eeb127196e256",
+          "p1:1bfcfc17a6a233bae54eceb1"
+        ],
+        "scope_expr_id": "p1:9648a3caf7dfe3d317885c8c"
+      }
+    ]
+  },
+  "P": {
+    "slot": "P",
+    "status": "PARSER_COVERAGE_FAILURE",
+    "entries": [
+      {
+        "canonical_entry_id": "p1:92baae7a3ec9e8c927917cd1",
+        "slot": "P",
+        "boundary_fact_ids": [
+          "p1:3fcc474f46398b68c029c5cd"
+        ],
+        "state": "RESOLVED",
+        "display_value": "审阅员高悦 [PERFORMER]",
+        "source_span_ids": [
+          "p1:9e08df9ff96b068266c45357",
+          "p1:f746e5ff710b8495ae988dd5",
+          "p1:072e95b8d88e38efe1148a20"
+        ]
+      },
+      {
+        "canonical_entry_id": "p1:6230a9f23201bcb327305dda",
+        "slot": "P",
+        "boundary_fact_ids": [
+          "p1:04cd3ba59f16100979795240"
+        ],
+        "state": "RESOLVED",
+        "display_value": "复核人冯霖 [PERFORMER]",
+        "source_span_ids": [
+          "p1:482984675790d8bdd70893a2",
+          "p1:9bbcc04e09077a878fdc0f16",
+          "p1:97ab970520b25c37aeccadb2"
+        ]
+      }
+    ]
+  },
+  "R": {
+    "slot": "R",
+    "status": "PARSER_COVERAGE_FAILURE",
+    "entries": []
+  },
+  "V": {
+    "slot": "V",
+    "status": "PARSER_COVERAGE_FAILURE",
+    "entries": [
+      {
+        "canonical_entry_id": "p1:a6f3845784a0d0fc31c20160",
+        "slot": "V",
+        "boundary_fact_ids": [
+          "p1:2c85d14f2f9720966aab1d68"
+        ],
+        "state": "RESOLVED",
+        "display_value": "v3.3.0",
+        "source_span_ids": [
+          "p1:eb2572cdb5a0ca920fccf497",
+          "p1:2e718bfe4720ed6eb9f3134a",
+          "p1:63a5495362842fc8cef2e3ff"
+        ]
+      },
+      {
+        "canonical_entry_id": "p1:66836b45f24894df5ab49a55",
+        "slot": "V",
+        "boundary_fact_ids": [
+          "p1:dadcee345ebb8e21d036fdcb"
+        ],
+        "state": "RESOLVED",
+        "display_value": "INSTALL-STYLE-9",
+        "source_span_ids": [
+          "p1:af3270807acd0d418471bb09",
+          "p1:2e718bfe4720ed6eb9f3134a",
+          "p1:63a5495362842fc8cef2e3ff"
+        ]
+      },
+      {
+        "canonical_entry_id": "p1:af8b3f60ab19c2ef3260d21a",
+        "slot": "V",
+        "boundary_fact_ids": [
+          "p1:855b152962becb0aed5be670"
+        ],
+        "state": "RESOLVED",
+        "display_value": "v3.3.0",
+        "source_span_ids": [
+          "p1:eb2572cdb5a0ca920fccf497",
+          "p1:2e718bfe4720ed6eb9f3134a",
+          "p1:63a5495362842fc8cef2e3ff"
+        ]
+      }
+    ]
+  },
+  "C": {
+    "slot": "C",
+    "status": "PARSER_COVERAGE_FAILURE",
+    "entries": [
+      {
+        "canonical_entry_id": "p1:a455902918c9f21d35575872",
+        "slot": "C",
+        "boundary_fact_ids": [
+          "p1:521b94c2e6620cad673fb59c"
+        ],
+        "state": "RESOLVED",
+        "display_value": "完成",
+        "source_span_ids": [
+          "p1:d6d2863eee31e5bea8397f4a",
+          "p1:8e6d7eb607e8c0d07248b069",
+          "p1:0b2b4fe8f03ec6fc20c557c0",
+          "p1:9394e2d35e74f23778c9461d",
+          "p1:f032135baf1b9134b6392681"
+        ],
+        "condition_expr_id": "p1:56be167786922729e61373e5"
+      }
+    ]
+  },
+  "B": {
+    "slot": "B",
+    "status": "UNRESOLVED",
+    "entries": [
+      {
+        "canonical_entry_id": "p1:f76025528381939ffa989345",
+        "slot": "B",
+        "boundary_fact_ids": [
+          "p1:de990a62f5eedbaea79e3b91"
+        ],
+        "state": "RESOLVED",
+        "display_value": "FORBIDDEN 包括 历史资料",
+        "source_span_ids": [
+          "p1:abef017e6223a676c0d122f5",
+          "p1:d1521194819a347bf30c3486",
+          "p1:2a7243052d2f0075ac984b8c"
+        ],
+        "scope_expr_id": "p1:fd3a5a57ce97401577749648"
+      },
+      {
+        "canonical_entry_id": "p1:2b6e70b151eb335d9905b527",
+        "slot": "B",
+        "boundary_fact_ids": [
+          "p1:714a435686eb72f4f818a3a5"
+        ],
+        "state": "UNRESOLVED",
+        "display_value": "FORBIDDEN 互换",
+        "source_span_ids": [
+          "p1:b1addc3d2375ead286eaf6d9",
+          "p1:a8863edf952251fada4fac50"
+        ]
+      },
+      {
+        "canonical_entry_id": "p1:843c0d7e538b966777f027f6",
+        "slot": "B",
+        "boundary_fact_ids": [
+          "p1:c2b7ccee50e6c76f682d8eb2"
+        ],
+        "state": "RESOLVED",
+        "display_value": "FORBIDDEN 修改 install-guide.txt、dependency-lock.json",
+        "source_span_ids": [
+          "p1:99ef0e6f101aae2613c39818",
+          "p1:f0f9eb710fd8ad41310fe17a",
+          "p1:67ca76dc0d2f6a4baa603ff5",
+          "p1:97d33544fbae6bcf061e9b3a"
+        ],
+        "scope_expr_id": "p1:0425c8a6f9228f56e3663b75"
+      }
+    ]
+  }
+}
+```

@@ -1,0 +1,1 @@
+The operator must read inventory.json.

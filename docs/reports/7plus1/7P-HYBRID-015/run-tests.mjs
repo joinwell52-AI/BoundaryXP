@@ -1,0 +1,2 @@
+import {spawnSync} from 'node:child_process';import {out,write} from './common.mjs';
+const r=spawnSync(process.execPath,['--test','--test-concurrency=1','--test-reporter=spec','tests/parser-7p-hybrid-015-admission.test.mjs'],{encoding:'utf8',maxBuffer:10e6});write(out+'TESTS-final.json',{exit_code:r.status,stdout:r.stdout,stderr:r.stderr,status:r.status===0?'PASS':'FAIL'});console.log(r.stdout);console.log(r.stderr);process.exitCode=r.status;

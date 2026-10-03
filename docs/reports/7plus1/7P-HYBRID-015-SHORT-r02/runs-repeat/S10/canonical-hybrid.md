@@ -1,0 +1,355 @@
+# Actual Canonical 7+1
+
+```json
+{
+  "projection_id": "p1:194f40f9fc56da20bb0e9a7e",
+  "I": {
+    "slot": "I",
+    "status": "PARSER_COVERAGE_FAILURE",
+    "entries": [
+      {
+        "canonical_entry_id": "p1:02b06b30c8df5f25c4fc54fb",
+        "slot": "I",
+        "boundary_fact_ids": [
+          "p1:fbc1c42bcdde4b081342b56d"
+        ],
+        "state": "RESOLVED",
+        "display_value": "page-snapshot.html",
+        "source_span_ids": [
+          "p1:391551afa8f297cdda82ab47",
+          "p1:ceff617ec6d24b2d9e82e2c2",
+          "p1:e152b45288b413d38373fbbc"
+        ],
+        "scope_expr_id": "p1:b22de2d59cd202bb46df98ec"
+      },
+      {
+        "canonical_entry_id": "p1:e854ae49356b26023e37e5fd",
+        "slot": "I",
+        "boundary_fact_ids": [
+          "p1:900230dee3194abf2f48030a"
+        ],
+        "state": "RESOLVED",
+        "display_value": "page-snapshot.html",
+        "source_span_ids": [
+          "p1:391551afa8f297cdda82ab47",
+          "p1:ceff617ec6d24b2d9e82e2c2",
+          "p1:3cd9641bc11f6293bd62889e"
+        ],
+        "scope_expr_id": "p1:38eddd0baccae84f37a358ec"
+      },
+      {
+        "canonical_entry_id": "p1:70855a4275d1fb27ee54b877",
+        "slot": "I",
+        "boundary_fact_ids": [
+          "p1:1bcf513ea6c6194c4d4fcfef"
+        ],
+        "state": "RESOLVED",
+        "display_value": "accessibility-list.csv",
+        "source_span_ids": [
+          "p1:bde95245219f745769569efe",
+          "p1:ceff617ec6d24b2d9e82e2c2",
+          "p1:3cd9641bc11f6293bd62889e"
+        ],
+        "scope_expr_id": "p1:2e623bb7d6d25150876e9cc5"
+      }
+    ]
+  },
+  "O": {
+    "slot": "O",
+    "status": "PARSER_COVERAGE_FAILURE",
+    "entries": [
+      {
+        "canonical_entry_id": "p1:995bb2383e0c2316873e5e85",
+        "slot": "O",
+        "boundary_fact_ids": [
+          "p1:ebd6ce14592cde020de19697"
+        ],
+        "state": "RESOLVED",
+        "display_value": "accessibility-review.md",
+        "source_span_ids": [
+          "p1:340d4a888a8bc8596a4ece71",
+          "p1:3cdb9c7500df2e148c2b7e3a",
+          "p1:6d896af1e3643877d9440bcc",
+          "p1:67712d22a5ecdfc52439ec25"
+        ],
+        "scope_expr_id": "p1:ca7f2275e51f5fa0823fdbcf"
+      },
+      {
+        "canonical_entry_id": "p1:22eedf2501703a4045a14dd9",
+        "slot": "O",
+        "boundary_fact_ids": [
+          "p1:d2669922921462d681590f3e"
+        ],
+        "state": "RESOLVED",
+        "display_value": "accessibility-review.md",
+        "source_span_ids": [
+          "p1:03bf59e12101a8756b24ea41",
+          "p1:3cdb9c7500df2e148c2b7e3a",
+          "p1:da7c4bf8c1b83088dd3ac477",
+          "p1:66735079c262147f1496089b",
+          "p1:67712d22a5ecdfc52439ec25"
+        ],
+        "scope_expr_id": "p1:2307ae3fb08e80cde4c9d176"
+      }
+    ]
+  },
+  "A": {
+    "slot": "A",
+    "status": "UNRESOLVED",
+    "entries": [
+      {
+        "canonical_entry_id": "p1:485ea0b674758b0fb94bc02d",
+        "slot": "A",
+        "boundary_fact_ids": [
+          "p1:d6107dfab4fdd02336bfbdd7"
+        ],
+        "state": "RESOLVED",
+        "display_value": "REQUIRED read page-snapshot.html、accessibility-list.csv",
+        "source_span_ids": [
+          "p1:3cd9641bc11f6293bd62889e",
+          "p1:ceff617ec6d24b2d9e82e2c2",
+          "p1:c96f4f13099407a4d54cdb29",
+          "p1:391551afa8f297cdda82ab47",
+          "p1:bde95245219f745769569efe"
+        ],
+        "scope_expr_id": "p1:3724565c26d7d0199d87dafb"
+      },
+      {
+        "canonical_entry_id": "p1:ad14703534187816797ddac0",
+        "slot": "A",
+        "boundary_fact_ids": [
+          "p1:50428d8f248976a2b2b18fc6"
+        ],
+        "state": "UNRESOLVED",
+        "display_value": "REQUIRED check the accessibility checklist、ACCESSIBILITY-STYLE-3",
+        "source_span_ids": [
+          "p1:072d6f8dc785fc1fee6cf75d",
+          "p1:2b54e773e9afae0236ba2902",
+          "p1:4eef51d05515da9a76c1807c",
+          "p1:ec1996461ae930d7bb92ca1f",
+          "p1:c96f4f13099407a4d54cdb29",
+          "p1:ceff617ec6d24b2d9e82e2c2"
+        ],
+        "scope_expr_id": "p1:8ebe0b8b674054f444fb4f49"
+      },
+      {
+        "canonical_entry_id": "p1:f52aceb47ece496fb1bf9ebf",
+        "slot": "A",
+        "boundary_fact_ids": [
+          "p1:209063ee41f2df000601c21c"
+        ],
+        "state": "RESOLVED",
+        "display_value": "REQUIRED generate accessibility-review.md",
+        "source_span_ids": [
+          "p1:340d4a888a8bc8596a4ece71",
+          "p1:3cdb9c7500df2e148c2b7e3a",
+          "p1:67712d22a5ecdfc52439ec25",
+          "p1:6d896af1e3643877d9440bcc"
+        ]
+      },
+      {
+        "canonical_entry_id": "p1:bcd73a26bbaf832322b1a723",
+        "slot": "A",
+        "boundary_fact_ids": [
+          "p1:e5b632323e8ac64805e42e45"
+        ],
+        "state": "RESOLVED",
+        "display_value": "REQUIRED write the review findings、accessibility-review.md",
+        "source_span_ids": [
+          "p1:03bf59e12101a8756b24ea41",
+          "p1:3cdb9c7500df2e148c2b7e3a",
+          "p1:66735079c262147f1496089b",
+          "p1:67712d22a5ecdfc52439ec25",
+          "p1:da7c4bf8c1b83088dd3ac477"
+        ],
+        "scope_expr_id": "p1:3e38fecbe85d09a438f7b176"
+      },
+      {
+        "canonical_entry_id": "p1:87e8e90308de7e208a0b8ba5",
+        "slot": "A",
+        "boundary_fact_ids": [
+          "p1:53437bc0e226c67073f941ba"
+        ],
+        "state": "RESOLVED",
+        "display_value": "REQUIRED contain evidence",
+        "source_span_ids": [
+          "p1:2103bd1926437574c1ae1f38",
+          "p1:0e765c1d0ab155b8e24c2a6b",
+          "p1:21e786dfb51d658f0b912429"
+        ],
+        "scope_expr_id": "p1:2ba2a1a9d6e93c1a9bfb7fff"
+      },
+      {
+        "canonical_entry_id": "p1:13f02bbed482304037173025",
+        "slot": "A",
+        "boundary_fact_ids": [
+          "p1:2a99746c7519d224ca4c5c9e"
+        ],
+        "state": "RESOLVED",
+        "display_value": "REQUIRED identifies the source file",
+        "source_span_ids": [
+          "p1:3a824925576b56b0dbe670d0",
+          "p1:0e765c1d0ab155b8e24c2a6b",
+          "p1:c72a48be68cf214f204f2a8f"
+        ],
+        "scope_expr_id": "p1:53255bb8b15dc08c66e6fd2e"
+      }
+    ]
+  },
+  "P": {
+    "slot": "P",
+    "status": "PARSER_COVERAGE_FAILURE",
+    "entries": [
+      {
+        "canonical_entry_id": "p1:ecbc6736c66b2e2180966f94",
+        "slot": "P",
+        "boundary_fact_ids": [
+          "p1:e56161ae58a9b8ddebc82fbb",
+          "p1:c26031ddbcb85036310ca884",
+          "p1:af990ca674f5a70d841d8a72",
+          "p1:bd33c66805e1b9459bb4ac36",
+          "p1:c48ccfd245c430c8279a33cf",
+          "p1:5674f629b0bfb1c640e3a6c5",
+          "p1:fbe085c9e84a6a9121a327ae",
+          "p1:e1f1b7ce3e84c8bfa0da4e72"
+        ],
+        "state": "RESOLVED",
+        "display_value": "Nora [PERFORMER]",
+        "source_span_ids": [
+          "p1:c96f4f13099407a4d54cdb29",
+          "p1:ceff617ec6d24b2d9e82e2c2",
+          "p1:3cd9641bc11f6293bd62889e",
+          "p1:67712d22a5ecdfc52439ec25",
+          "p1:3cdb9c7500df2e148c2b7e3a",
+          "p1:340d4a888a8bc8596a4ece71",
+          "p1:5f190938f06f07ff9f1ac9d3",
+          "p1:98bc1f7b65e2d32974a632ce",
+          "p1:319b7e9d8d42ebb138a36338",
+          "p1:0d7a34ec879f23ea5ea1fd21",
+          "p1:c7907b08ec35d3e97d3c5b10",
+          "p1:3cb5cf2e3adab05c8fc18716",
+          "p1:072d6f8dc785fc1fee6cf75d",
+          "p1:2b54e773e9afae0236ba2902",
+          "p1:eb8196742e84c5e79313f4ce",
+          "p1:5f828eb8faa326c43b9dea90",
+          "p1:03bf59e12101a8756b24ea41",
+          "p1:9d6e1331867e4b1670b3ffd7"
+        ]
+      },
+      {
+        "canonical_entry_id": "p1:dc55b2f545e19d570ad08ea4",
+        "slot": "P",
+        "boundary_fact_ids": [
+          "p1:35eb06a04f5d6172e547c663",
+          "p1:e80cd9e06e744ca10e3c7d72"
+        ],
+        "state": "RESOLVED",
+        "display_value": "Checker Evan [PERFORMER]",
+        "source_span_ids": [
+          "p1:7942db7bfbb31a6171d00f9b",
+          "p1:89e04f5cc973b7323a1d86f7",
+          "p1:fa8f6632ed532c64c2c6b2cd",
+          "p1:5deebed42ca91dfe1c3dc711"
+        ]
+      }
+    ]
+  },
+  "R": {
+    "slot": "R",
+    "status": "PARSER_COVERAGE_FAILURE",
+    "entries": []
+  },
+  "V": {
+    "slot": "V",
+    "status": "PARSER_COVERAGE_FAILURE",
+    "entries": []
+  },
+  "C": {
+    "slot": "C",
+    "status": "PARSER_COVERAGE_FAILURE",
+    "entries": [
+      {
+        "canonical_entry_id": "p1:ef0554712aa2ceaffff459c4",
+        "slot": "C",
+        "boundary_fact_ids": [
+          "p1:2ad994ffaef7680d0154f536"
+        ],
+        "state": "RESOLVED",
+        "display_value": "complete",
+        "source_span_ids": [
+          "p1:9d6e1331867e4b1670b3ffd7",
+          "p1:c7907b08ec35d3e97d3c5b10",
+          "p1:731e6e429e6816a45cd76a91",
+          "p1:0d7a34ec879f23ea5ea1fd21"
+        ],
+        "condition_expr_id": "p1:29f488f7ce974f5f16fab792"
+      }
+    ]
+  },
+  "B": {
+    "slot": "B",
+    "status": "UNRESOLVED",
+    "entries": [
+      {
+        "canonical_entry_id": "p1:4ed1fcb0ad68d5a9c35b8e08",
+        "slot": "B",
+        "boundary_fact_ids": [
+          "p1:e65544da83a014a56ea5fe1a"
+        ],
+        "state": "RESOLVED",
+        "display_value": "FORBIDDEN constitute new files",
+        "source_span_ids": [
+          "p1:0f7c0c90eac17bb385a2fa94",
+          "p1:51fcf9d9f7c1d333b6f1d939",
+          "p1:242a5240e05b650e1e9c204d"
+        ],
+        "scope_expr_id": "p1:7c39b73013555cecfba06531"
+      },
+      {
+        "canonical_entry_id": "p1:a36097aa9475a1679e9f0570",
+        "slot": "B",
+        "boundary_fact_ids": [
+          "p1:07de604870fdbf3b0d3c4901"
+        ],
+        "state": "UNRESOLVED",
+        "display_value": "FORBIDDEN are",
+        "source_span_ids": [
+          "p1:182ff43b068926b9d7b27b50",
+          "p1:51fcf9d9f7c1d333b6f1d939"
+        ]
+      },
+      {
+        "canonical_entry_id": "p1:e0c30fc84cfae5eff8ad098f",
+        "slot": "B",
+        "boundary_fact_ids": [
+          "p1:da836447da781ada6b79d15f"
+        ],
+        "state": "RESOLVED",
+        "display_value": "FORBIDDEN modify accessibility-list.csv、page-snapshot.html",
+        "source_span_ids": [
+          "p1:319b7e9d8d42ebb138a36338",
+          "p1:98bc1f7b65e2d32974a632ce",
+          "p1:5f190938f06f07ff9f1ac9d3",
+          "p1:1eeac108c88282432a46351e",
+          "p1:0f8b71733a7eeadc45d36ded"
+        ]
+      },
+      {
+        "canonical_entry_id": "p1:0c8799f29588fab279bfab59",
+        "slot": "B",
+        "boundary_fact_ids": [
+          "p1:08651149e3e0e46060fff14c"
+        ],
+        "state": "RESOLVED",
+        "display_value": "FORBIDDEN exceed 40 minutes",
+        "source_span_ids": [
+          "p1:de383db8885b08a22955c93f",
+          "p1:98bc1f7b65e2d32974a632ce",
+          "p1:93590723d97ca2f746bfecc6"
+        ],
+        "scope_expr_id": "p1:7fee4bea6234f1126ad3755e"
+      }
+    ]
+  }
+}
+```
