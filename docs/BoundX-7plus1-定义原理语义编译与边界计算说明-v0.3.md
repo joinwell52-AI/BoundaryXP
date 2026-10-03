@@ -998,3 +998,930 @@ multilingual-E5-large
 mDeBERTa-MNLI-XNLI
 → 验证已经构造出的候选关系/命题是否被原文支持
 ```
+
+---
+
+# 第五部分：短任务直编译与长任务分层、矩阵化语义编译
+
+## 20. 两条解析路径，一个 Canonical 7+1
+
+7+1 Parser 对短任务和长任务采用不同的中间计算路径，但最终输出统一为同一种 Canonical 7+1。
+
+### 20.1 短任务：直接编译
+
+类似 REF-001 会议记录这类单流程任务，直接走：
+
+```text
+自然语言任务
+→ Document / Paragraph / Clause Structure
+→ Candidate Semantic Graph
+→ Γ Deterministic Constraints
+→ Boundary-qualified Semantic Graph
+→ Canonical 7+1
+→ canonical-7plus1.json / canonical-7plus1.md
+```
+
+短任务可以按句子、段落、列表、表格做内部结构解析，但**不要求拆分 WP0–WPn**。
+
+### 20.2 长任务：先分层，再求解，再汇总
+
+多阶段、多子任务、多依赖的长任务走：
+
+```text
+Long Task Document
+→ Continuous Blocks B1...Bn
+→ Local Semantic Candidates
+→ WP0...WPn Hierarchy
+→ Block × 7+1 Semantic Matrix
+→ Cross-Block / Cross-WP Relations
+→ Constraint Resolution
+→ Global Consistent Semantic State
+→ One Canonical 7+1
+```
+
+长任务内部可以存在多个 Work Package，但**最终权威结果仍然是一个总 Canonical 7+1**。
+
+---
+
+## 21. Canonical 7+1 是八个语义集合，不是八个单值
+
+7+1 的每个槽位都应理解为带类型和证明链的语义项集合：
+
+```text
+Canonical7Plus1 = {
+  I: Set<SemanticItem>,
+  O: Set<SemanticItem>,
+  A: Set<SemanticItem>,
+  P: Set<SemanticItem>,
+  R: Set<SemanticItem>,
+  V: Set<SemanticItem>,
+  C: Set<SemanticItem>,
+  B: Set<SemanticItem>
+}
+```
+
+因此长任务最终仍然可以表示为：
+
+```text
+I = {I1, I2, I3, ...}
+O = {O1, O2, O3, ...}
+A = {A1, A2, A3, ...}
+P = {P1, P2, ...}
+R = {R1, R2, ...}
+V = {V1, V2, ...}
+C = {C1, C2, ...}
+B = {B1, B2, ...}
+```
+
+但长任务中的 SemanticItem 必须保留它来自哪个阶段、被谁产生、被谁消费、受什么条件控制。
+
+建议内部至少携带：
+
+```text
+semantic_item_id
+slot
+semantic_identity
+value
+wp_id
+parent_wp_id
+source_block_ids
+source_span_ids
+scope
+stage_role
+depends_on
+produced_by
+consumed_by
+condition
+modality
+boundary_fact_ids
+proof_lineage
+state
+```
+
+推荐阶段角色：
+
+```text
+EXTERNAL_INPUT
+INTERMEDIATE_INPUT
+INTERMEDIATE_OUTPUT
+FINAL_OUTPUT
+GLOBAL_CONSTRAINT
+LOCAL_CONSTRAINT
+GLOBAL_COMPLETION
+LOCAL_COMPLETION
+```
+
+显示层可以简化，但机器权威结构不能退化为无来源的字符串并集。
+
+---
+
+## 22. 短任务的适用边界
+
+短任务不按字符数机械判断，而按语义结构判断。
+
+典型特征：
+
+- 一个主要目标；
+- 一个主流程；
+- 一个任务边界；
+- 没有多个明显独立阶段；
+- 没有复杂的中间 O→I 传递；
+- 没有多个相互依赖的子任务；
+- 条件、验收、参与者和禁止项都服务于同一个任务。
+
+REF-001 是当前典型正向锚点。
+
+短任务的正式目标是：
+
+```text
+Natural Language
+→ Complete Canonical 7+1
+→ JSON + Markdown
+```
+
+即：文本不仅要“机制测试通过”，还必须能真正生成完整的 7+1 文档。
+
+---
+
+## 23. 长任务的复杂度变量
+
+长任务的难度不应只用字符数衡量。
+
+更重要的是：
+
+```text
+WP 数量
++ WP 层级深度
++ 跨 WP 依赖数量
++ 中间产物数量
++ 跨段指代数量
++ 条件传播数量
++ OUTPUT_CONTENT / ACCEPTANCE / BACKGROUND 的作用域切换数量
+```
+
+一篇 5000 字但只有一个流程的文本，可能比一篇 1500 字、包含 4 个相互依赖阶段的文本更简单。
+
+因此“长文本解析”本质上不是简单提高最大上下文长度，而是恢复：
+
+> **阶段、所属、依赖、条件和中间语义流。**
+
+---
+
+## 24. WP0–WPn：长任务的阶段结构
+
+### 24.1 WP0 是 Root Work Package
+
+WP0 不是“第一步”。
+
+WP0 表示：
+
+> **根任务合同 / Root Work Package**
+
+它保存：
+
+- 总目标；
+- 全局输入；
+- 最终交付；
+- 全局参与者；
+- 全局版本/依据；
+- 全局资源限制；
+- 全局禁止项；
+- 全局完成条件；
+- 子 WP 的组织关系。
+
+### 24.2 WP1–WPn 是局部阶段或子任务
+
+每个 WP 可以有一个内部 Local 7+1 视图：
+
+```text
+WP_k.local_7plus1 = {
+  I_k, O_k, A_k, P_k, R_k, V_k, C_k, B_k
+}
+```
+
+Local 7+1 是**内部计算视图**，不是要求最终生成多个彼此独立的 7+1 产品文档。
+
+最终仍投影为一个 Global Canonical 7+1。
+
+---
+
+## 25. WP Tree 与 Dependency DAG 必须分开
+
+### 25.1 WP Tree：回答“属于谁”
+
+```text
+WP0
+├── WP1
+├── WP2
+├── WP3
+└── WP4
+```
+
+Tree 表达：
+
+- parent / child；
+- 语义 owner；
+- 局部作用域；
+- 全局约束继承；
+- 子任务包含关系。
+
+### 25.2 Dependency DAG：回答“谁依赖谁”
+
+真实任务可能串行、并行或汇合，因此执行关系不能只靠 Tree。
+
+例如：
+
+```text
+          ┌→ WP2 ─┐
+WP1 ──────┤       ├→ WP4
+          └→ WP3 ─┘
+```
+
+因此：
+
+> **组织结构用 Tree，执行/依赖结构用 DAG。**
+
+---
+
+## 26. Block：长任务的基本计算单位
+
+长任务首先恢复连续文本块：
+
+```text
+Document = B1 + B2 + ... + Bn
+```
+
+Block 可以是：
+
+- Heading；
+- Paragraph；
+- Clause group；
+- List / List Item；
+- Table / Row；
+- Code block；
+- Quote；
+- Acceptance 子段；
+- Out-of-scope 子段。
+
+### 26.1 Block 不等于 WP
+
+一个 WP 可以包含多个 Block。
+
+一个 Block 默认应有一个主要语义 owner；若无法唯一确定，则保持 typed unresolved。
+
+推荐过程：
+
+```text
+Block
+→ local semantic candidates
+→ owner candidates
+→ WP assignment
+```
+
+禁止简单假设：
+
+```text
+Paragraph == WP
+```
+
+---
+
+## 27. 连续解析状态
+
+长文档虽然分块，但不能把每个 Block 完全孤立解析，因为自然语言存在：
+
+- “上述文件”；
+- “这些结果”；
+- “完成后”；
+- “然后提交给 ADMIN”；
+- “前述检查”；
+- “若上一阶段通过”。
+
+因此长任务可采用连续状态：
+
+```text
+State_i = {
+  active_wp,
+  known_entities,
+  previous_outputs,
+  active_conditions,
+  active_global_constraints,
+  unresolved_references
+}
+```
+
+局部解析写为：
+
+```text
+X_i = Parse(B_i | State_i)
+State_i → State_(i+1)
+```
+
+这更接近编译器：
+
+```text
+source block
+→ local IR
+→ symbol/scope state update
+→ next block
+→ final linking
+```
+
+---
+
+# 第六部分：Block × 7+1 语义矩阵
+
+## 28. 基础语义矩阵 M
+
+对于 n 个 Block，建立：
+
+```text
+M ∈ SemanticSet^(n×8)
+```
+
+固定 8 列：
+
+```text
+[I, O, A, P, R, V, C, B]
+```
+
+定义：
+
+```text
+M[i,j] = Block_i 在 slot_j 上产生的局部语义项集合
+```
+
+例如：
+
+| Block | I | O | A | P | R | V | C | B |
+|---|---|---|---|---|---|---|---|---|
+| B1 | 当前代码 | 问题清单 | 检查 | DEV | — | — | 检查完成 | — |
+| B2 | 问题清单 | 修改后代码 | 修改 | DEV | — | — | 修复完成 | — |
+| B3 | 修改后代码 | 测试结果 | 测试 | QA | — | — | 测试通过 | — |
+| B4 | 前述结果 | 最终报告 | 汇总 | DEV | — | — | 报告完成 | 不得提前发布 |
+
+矩阵单元格不是简单的 0/1，而是：
+
+```text
+Set<SemanticItem>
+```
+
+每个 SemanticItem 继续保留 source span、owner、scope、condition、modality 与 proof。
+
+---
+
+## 29. 从矩阵形成 WP
+
+WP 可以由连续 Block 的语义内聚形成：
+
+- 相同或兼容 owner；
+- 相同主目标；
+- 同一局部 completion；
+- 连续动作链；
+- 明确 section；
+- 局部 O→I 内聚；
+- 局部约束一致。
+
+概念上：
+
+```text
+WP_k = Cluster(B_i ... B_j)
+```
+
+但 embedding/model score 只能提出候选，不能直接决定 WP。
+
+最终 WP assignment 必须通过结构、来源、作用域与关系约束认证。
+
+---
+
+# 第七部分：跨 Block / 跨 WP 关系矩阵
+
+## 30. Dependency Matrix D
+
+对于 m 个 WP，建立：
+
+```text
+D ∈ RelationSet^(m×m)
+```
+
+```text
+D[i,j]
+```
+
+表示 WP_i 与 WP_j 之间的关系集合。
+
+WP-level 关系至少可以表达：
+
+```text
+PRODUCES_FOR
+CONSUMES_OUTPUT
+REQUIRES_COMPLETION
+USES_AS_BASIS
+VERIFIES
+SEQUENCE
+PARALLEL
+BLOCKS
+SUPERSEDES
+```
+
+这些 WP-level orchestration relations 不要求污染 7+1 的基础 Relation Space；实现可以用独立的 orchestration graph 保存。
+
+---
+
+## 31. 典型跨 WP 语义流
+
+### 31.1 上一阶段输出成为下一阶段输入
+
+```text
+WP1.O1 = X
+WP2.I1 = X
+```
+
+语义关系：
+
+```text
+PRODUCES_FOR(WP1.O1, WP2.I1)
+```
+
+可以写成守恒式：
+
+```text
+identity(WP1.O1) - identity(WP2.I1) = 0
+```
+
+这里的等式表示**语义身份守恒**，不是简单字符串相等。
+
+### 31.2 上一阶段完成允许下一阶段开始
+
+```text
+WP1.C → ENABLE(WP2)
+```
+
+或者：
+
+```text
+REQUIRES_COMPLETION(WP2, WP1.C)
+```
+
+### 31.3 上一阶段结果成为后续依据
+
+```text
+WP1.O → WP3.V
+```
+
+即：
+
+```text
+USES_AS_BASIS(WP3, WP1.O)
+```
+
+### 31.4 多前驱汇合
+
+```text
+WP1.O + WP2.O + WP3.O → WP4.I
+```
+
+必须保留每个输入的独立 provenance，不能退化为拼接字符串。
+
+---
+
+# 第八部分：矩阵、图与约束方程
+
+## 32. 长任务不是普通线性方程组
+
+矩阵用于表达结构，但长任务的真实求解还需要：
+
+> **矩阵 + 图 + 离散/逻辑约束**
+
+因此不应把整个问题简化成普通实数线性系统 `Ax=b`。
+
+长任务语义状态可以定义为：
+
+```text
+SemanticState = (M, D, Γ)
+```
+
+其中：
+
+- `M`：Block × 7+1 Semantic Matrix；
+- `D`：Cross-Block / Cross-WP Dependency Graph / Matrix；
+- `Γ`：确定性约束集合。
+
+最终目标是求：
+
+```text
+X* = Solve(M, D, Γ)
+```
+
+使得：
+
+```text
+Γ(X*) = true
+```
+
+且所有被 RESOLVED 的语义项具有完整 source evidence 与 proof lineage。
+
+---
+
+## 33. Γ：长任务约束集合
+
+至少包括：
+
+```text
+Node Type Constraint
+Relation Signature Constraint
+WP Ownership Constraint
+Discourse Domain Constraint
+Scope Constraint
+Coreference Constraint
+Artifact Role Constraint
+Condition Ownership Constraint
+Quantity Constraint
+Cardinality Constraint
+Temporal / Sequence Constraint
+Negative / Forbidden Constraint
+Evidence / Provenance Constraint
+Graph Consistency Constraint
+```
+
+---
+
+## 34. 可数学化的典型约束
+
+### 34.1 唯一 owner
+
+设：
+
+```text
+x(i,k) ∈ {0,1}
+```
+
+表示语义项 i 是否属于 WP_k。
+
+若 owner 唯一：
+
+```text
+Σ_k x(i,k) = 1
+```
+
+如果多个 WP 同样成立且无法消歧：
+
+```text
+→ UNRESOLVED_OWNER
+```
+
+不能强选一个。
+
+### 34.2 O→I 语义守恒
+
+```text
+identity(WP1.Oa) = identity(WP2.Ib)
+```
+
+可以写成：
+
+```text
+WP1.Oa - WP2.Ib = 0
+```
+
+但实际实现必须比较 semantic identity、scope 和 provenance，而不是 display string。
+
+### 34.3 条件启用
+
+```text
+WP1.C = true ⇒ enabled(WP2)
+```
+
+### 34.4 禁止
+
+```text
+B_k ⇒ ¬A_m
+```
+
+条件禁止：
+
+```text
+Condition_q ∧ B_k ⇒ ¬A_m
+```
+
+### 34.5 全局完成
+
+```text
+WP0.C = WP1.C ∧ WP2.C ∧ ... ∧ WPn.C
+```
+
+是否所有局部 C 都必须进入 WP0.C，由根任务 source contract 决定；不能机械 AND 全部局部条件。
+
+### 34.6 分配式 EACH
+
+```text
+∀x ∈ S, ACTION(x)
+```
+
+若每成员数量为 1：
+
+```text
+∀x ∈ S, count(ACTION(x)) = 1
+```
+
+---
+
+## 35. 求解器不是预先固定的一种算法
+
+长任务扩展可以分阶段采用：
+
+```text
+Graph Algorithms
+→ Constraint Propagation
+→ Fixed-point Resolution
+→ MILP（必要时）
+→ SMT（必要时）
+```
+
+模型/NLP负责提出候选；矩阵与图负责组织；Γ/Solver 负责确定性认证。
+
+```text
+Model / NLP
+→ Candidate Proposals
+
+Matrix / Graph Builder
+→ Structured Semantic State
+
+Γ / Solver
+→ Globally Consistent Certified State
+
+Q
+→ Canonical 7+1
+```
+
+求解器不能凭空发明 owner、referent、action、output 或 condition。
+
+---
+
+# 第九部分：长任务最终如何汇总成一个 7+1
+
+## 36. Global Projection
+
+对 WP0...WPn 的内部 Local 7+1，可定义：
+
+```text
+Global.I = Normalize( ⋃ I_k )
+Global.O = Normalize( ⋃ O_k )
+Global.A = Normalize( ⋃ A_k )
+Global.P = Normalize( ⋃ P_k )
+Global.R = Normalize( ⋃ R_k )
+Global.V = Normalize( ⋃ V_k )
+Global.C = Normalize( ⋃ C_k )
+Global.B = Normalize( ⋃ B_k )
+```
+
+这里的 `Normalize` 绝不是字符串去重。
+
+必须保留：
+
+- semantic identity；
+- wp_id；
+- stage_role；
+- source；
+- dependency；
+- condition；
+- scope；
+- proof lineage。
+
+### 36.1 中间产物同时具有 O 与 I 角色
+
+例如：
+
+```text
+WP1.O = 问题清单
+WP2.I = 问题清单
+```
+
+总 Canonical 7+1 可以保留：
+
+```text
+O: 问题清单
+   [wp=WP1, stage_role=INTERMEDIATE_OUTPUT]
+
+I: 问题清单
+   [wp=WP2, stage_role=INTERMEDIATE_INPUT, derived_from=WP1.O]
+```
+
+二者共享 semantic identity，但边界角色不同。
+
+### 36.2 最终产物
+
+```text
+O: 最终报告
+   [wp=WP4, stage_role=FINAL_OUTPUT]
+```
+
+因此：
+
+> **多 WP 任务不是一个更大的“扁平 7+1”，而是先形成多阶段结构，再投影成一个保留阶段关系的总 7+1。**
+
+---
+
+# 第十部分：Gold 与 Benchmark 的分层
+
+## 37. 现有 expected-7plus1.json 不推翻
+
+现有 Gold 继续有效。
+
+### 37.1 对短任务
+
+```text
+expected-7plus1.json
+```
+
+就是完整语义 Gold。
+
+### 37.2 对长 multi-WP 任务
+
+现有：
+
+```text
+expected-7plus1.json
+```
+
+定义：
+
+> **最终 Global Canonical 7+1 Gold**
+
+它仍然用于验证最终答案，但不再单独承担“完整中间推理 Gold”的职责。
+
+---
+
+## 38. 长任务新增中间 Gold
+
+未来长任务 Benchmark 建议增加：
+
+```text
+expected-blocks.json
+expected-wp-tree.json
+expected-local-7plus1.json
+expected-dependencies.json
+expected-semantic-matrix.json
+expected-global-7plus1.json
+```
+
+其中：
+
+```text
+expected-global-7plus1.json
+```
+
+必须与已有 `expected-7plus1.json` 在规范语义上等价。
+
+这样可以分别验证：
+
+1. 文本是否正确分块；
+2. Block owner 是否正确；
+3. WP Tree 是否正确；
+4. 每个 WP 的 Local 7+1 是否正确；
+5. O→I / C→Enable / Basis 等跨 WP 关系是否正确；
+6. 矩阵是否完整；
+7. 约束求解是否全局一致；
+8. 最终 Global 7+1 是否正确。
+
+---
+
+# 第十一部分：工程阶段与测试顺序
+
+## 39. Stage 015：短任务直接生成完整 7+1
+
+范围：
+
+```text
+REF-001 级别
+single task
+single flow
+no WP decomposition
+```
+
+目标：
+
+```text
+Natural Language
+→ Complete Canonical 7+1
+→ JSON + Markdown
+```
+
+先证明短任务路径可稳定工作。
+
+---
+
+## 40. Stage 016：中等任务 / 2–3 WP
+
+首次引入：
+
+- Block segmentation；
+- WP0–WPn；
+- WP Tree；
+- Local 7+1；
+- O→I；
+- C→Enable；
+- 小型 Dependency DAG。
+
+此阶段重点不是“更长文本”，而是验证**多阶段结构**。
+
+---
+
+## 41. Stage 017：长 multi-WP
+
+引入：
+
+- Block × 7+1 Matrix；
+- Dependency Matrix；
+- 全局 Constraint Set；
+- Matrix / Graph Resolution；
+- 多 WP 汇合；
+- 现有长 STANDARD。
+
+---
+
+## 42. Stage 018：全局数学求解与认证
+
+研究：
+
+- fixed-point resolution；
+- graph constraint solver；
+- MILP / SMT 的适用边界；
+- unique / multiple solution；
+- UNSAT；
+- unresolved proof；
+- Global 7+1 projection consistency。
+
+---
+
+# 第十二部分：长任务方法的核心不变量
+
+## 43. 最终只有一个 Canonical 7+1
+
+WP 是内部层级，不改变 7+1 Parser 的最终产品定义。
+
+## 44. 每个槽位都是集合
+
+I/O/A/P/R/V/C/B 均为 SemanticItem 集合，不是单值。
+
+## 45. 阶段关系不能在汇总时丢失
+
+必须保存在 SemanticItem 元数据、WP Tree、Dependency DAG 与 Proof 中。
+
+## 46. 不确定性不能被求解器“猜成确定”
+
+约束不足时必须保持 typed unresolved。
+
+## 47. 模型负责提候选，数学/确定性约束负责认证
+
+模型分数可以排序，不直接成为边界真值。
+
+## 48. 先短后长，逐层增加结构复杂度
+
+短任务先直接编译；中等任务验证 WP；长任务再进入矩阵与全局求解。
+
+这避免在基础单流程解析尚未稳定时，用超长 multi-WP 文档反复驱动局部规则修补。
+
+---
+
+# 第十三部分：与 v0.3 基础公式的关系
+
+## 49. 短任务
+
+v0.3 已有公式保持：
+
+```text
+T --P--> Gc --Γ--> (Gb, Gu) --Q--> Canonical 7+1
+```
+
+## 50. 长任务
+
+扩展为：
+
+```text
+T
+→ B = {B1...Bn}
+→ M(Block × 7+1)
+→ W(WP Tree)
+→ D(Dependency DAG)
+→ Γ_long
+→ X*
+→ Q_global
+→ Canonical 7+1
+```
+
+可写成：
+
+```text
+X* = Solve(M, W, D, Γ_long)
+```
+
+其中：
+
+- `M` 提供局部语义；
+- `W` 提供 owner / hierarchy；
+- `D` 提供阶段依赖；
+- `Γ_long` 提供类型、作用域、条件、集合、时序、禁止、证据和一致性约束；
+- `Q_global` 把全局一致语义投影为最终一个 Canonical 7+1。
+
+该扩展不改变 7+1 的基础定义，而是增加长任务的结构化计算方法。
