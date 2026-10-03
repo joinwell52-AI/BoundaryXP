@@ -1,10 +1,10 @@
 # Current 7+1 Parser Task
 
-**Active task:** `7P-COMPOSITION-014`
+**Active task:** `7P-HYBRID-015`
 
 Read and execute:
 
-`docs/tasks/7plus1/7P-COMPOSITION-014.md`
+`docs/tasks/7plus1/7P-HYBRID-015.md`
 
 Normative method:
 
