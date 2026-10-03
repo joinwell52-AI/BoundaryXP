@@ -1,0 +1,5 @@
+import fs from 'node:fs';import {out,read,write,digest} from './common.mjs';
+import {sourceDocument} from '../../../../research/7plus1-parser/p0-semantic-repair-r02/source.mjs';
+import {analyze,closeNlp} from '../../../../research/7plus1-parser/v0.3-7p-composition-014/linguistic.mjs';
+try{for(const x of read(out+'NON-GOLD-FROZEN-INPUTS.json').cases.filter(x=>x.new_in_014)){const p=out+'non-gold-signals/'+x.id+'.json';if(fs.existsSync(p))throw Error('PRESERVE_FIRST_SIGNAL');const signals=await analyze(sourceDocument(x.text));write(p,{input_sha256:x.source_sha256,signals,actual_model_execution:true});console.log(JSON.stringify({id:x.id,clauses:signals.clauses.map(c=>({text:c.span.quote,tokens:c.tokens.map(t=>[t.text,t.pos,t.dep,t.head]),srl:c.srl})),models:signals.models}));}}finally{closeNlp();}
+write(out+'NON-GOLD-SIGNALS-MANIFEST.json',read(out+'NON-GOLD-FROZEN-INPUTS.json').cases.map(x=>({id:x.id,path:out+'non-gold-signals/'+x.id+'.json',sha256:digest(out+'non-gold-signals/'+x.id+'.json')})));
