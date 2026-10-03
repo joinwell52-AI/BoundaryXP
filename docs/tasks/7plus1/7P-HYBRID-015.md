@@ -11,6 +11,36 @@
 
 This is a shadow experiment **inside the BoundX 7+1 Parser**. The product under test remains the parser whose output is Canonical 7+1. The deterministic R1–R4 parser remains the control. Do not add more phrase/rule repair.
 
+## ADMIN stage correction — short single-WP first
+
+The current experiment stage is **not** long multi-WP document parsing.
+
+015 must first validate the 7+1 parser on REF-001-like inputs:
+
+- roughly 700–1800 Chinese characters (or comparable English length);
+- one root work package / one primary workflow;
+- one main goal;
+- no nested multi-WP program plan;
+- at most two participants;
+- at most two primary outputs plus one conditional output;
+- at most two explicit conditions/constraints;
+- background/acceptance/output-content may exist, but all belong to the same work package;
+- no long cross-project audit, multi-commit program, A–I subprogram, or 7+ decision tree.
+
+REF-001 is the positive anchor. The long 9-case STANDARD set remains frozen for later multi-WP evaluation and **must not be the primary gate or tuning target in 015**.
+
+The staged roadmap is:
+
+```text
+015  short single-WP / single-flow parsing
+  ↓
+016  medium 2–3 WP hierarchical parsing
+  ↓
+017  long multi-WP document parsing / existing 9 STANDARD
+```
+
+Only advance if the previous stage demonstrates end-to-end 7+1 case closure.
+
 ## Read first
 Read CURRENT-TASK, the 014 task/report/FINAL-OUTCOME/ARCHITECTURE-VERDICT, 009 hybrid option analysis, 010 scope-aware comparison contract, the 014 model-signals/semantic-decoder/semantic-ownership/source-binding/whole-composition code, and active L1/L2 pack + model manifests.
 
@@ -68,14 +98,25 @@ A. Control: frozen 014 deterministic behavior.
 B. Hybrid: same source/upstream inputs plus admitted model proposals, then the same deterministic **7+1 parser** Eligibility → Boundary IR → Canonical 7+1 pipeline.
 C. Safety controls: independent non-Gold cases with deliberately misleading owner/role/scope/reference candidates; unsupported proposals must be rejected or unresolved.
 
-## Non-Gold first
-Before STANDARD evaluation, freeze at least 30 independent Chinese/English cases spanning:
-- long/nested tasks
+## Short single-WP benchmark first
+
+Before any long-document evaluation, freeze a dedicated short single-WP benchmark.
+
+Use:
+
+1. existing REF-001 as the positive anchor;
+2. at least 12 new independent short single-WP cases;
+3. at least 4 of the 12 in English or bilingual-equivalent form;
+4. at least 4 controlled paraphrase/mutation cases whose 7+1 semantics are intentionally preserved.
+
+Each case must be approximately REF-001 complexity, not SWAI-002/003/007/010 complexity.
+
+The short cases should span:
 - CURRENT_TASK vs BACKGROUND
 - OUTPUT_CONTENT
 - ACCEPTANCE
 - code/table ownership
-- cross-section references
+- short local cross-paragraph reference
 - file/member and wildcard sets
 - basis/version references
 - recipients
@@ -85,38 +126,49 @@ Before STANDARD evaluation, freeze at least 30 independent Chinese/English cases
 - ambiguous/insufficient evidence
 - owner conflicts
 
-Do not copy SWAI literals, paths or functions. Freeze expected mechanism contracts before running STANDARD hybrid results.
+Do not copy SWAI literals, paths or functions. Do not derive the benchmark after seeing hybrid outputs.
 
-Measure proposal recall, post-admission precision, rejection reasons, typed-unresolved correctness, BGE/E5 disagreement, NLI distribution, and wrong admitted proposal count.
+For every short case, freeze a complete expected Canonical 7+1 contract before hybrid execution, including slot states and owned-output-content where applicable.
 
-## STANDARD shadow evaluation
-Only after non-Gold and safety controls pass, run all 9 STANDARD cases in Arm A and Arm B using the frozen 010 contract.
+Measure proposal recall, post-admission precision, rejection reasons, typed-unresolved correctness, BGE/E5 disagreement, NLI distribution, wrong admitted proposal count, and most importantly **full-case 7+1 closure**.
 
-Compare:
-- I/O/A item counts
-- CASE_IOA_JOINT
-- STANDARD_PARSED
-- complete I/O/A slot count
-- full slot completeness
-- owned-content missing
-- false-defined
-- wrong-binding
-- slot-status mismatch
-- newly admitted proposals
-- rejected bad baseline candidates
+## 015 end-to-end evaluation
 
-Every new MATCH must retain complete source/owner/scope/binding proof.
+015 evaluates:
+
+- REF-001;
+- the frozen short single-WP benchmark;
+- adversarial safety controls.
+
+Do **not** use the existing long 9-case STANDARD set as the 015 semantic success gate and do not tune on it.
+
+The long 9-case STANDARD set may be left completely unexecuted in 015. If a read-only diagnostic run is performed, label it `LONG_MULTI_WP_DIAGNOSTIC_ONLY` and it must not change implementation or acceptance decisions.
+
+For each short case compare:
+
+- complete I/O/A;
+- complete I/O/A/P/R/V/C+B;
+- slot states;
+- owned-content completeness;
+- false-defined;
+- wrong-binding;
+- unresolved correctness;
+- newly admitted proposals and their proof.
+
+Every MATCH must retain complete source/owner/scope/binding proof.
 
 ## Verdict rules
 `HYBRID_PROPOSAL_VALIDATED` only if:
-- safety controls pass;
-- CASE_IOA_JOINT >= 1/9;
+- adversarial safety controls pass;
+- REF-001 remains semantically correct;
+- at least 8/12 new short single-WP cases achieve full Canonical 7+1 closure;
+- at least 10/12 achieve complete same-case I/O/A closure;
 - no source-floor regression;
-- false-defined and wrong-binding do not worsen.
+- false-defined and wrong-binding do not worsen versus the deterministic control.
 
-`HYBRID_PROMISING_BUT_INSUFFICIENT` if joint stays 0/9 but at least one previously incomplete I/O/A slot becomes complete, missing requirements materially decrease, and soundness does not worsen.
+`HYBRID_PROMISING_BUT_INSUFFICIENT` if safety passes and hybrid materially improves short single-WP case closure but does not meet the validation threshold.
 
-`HYBRID_PROPOSAL_INSUFFICIENT` if case-level completeness does not materially improve.
+`HYBRID_PROPOSAL_INSUFFICIENT` if the short single-WP benchmark does not materially improve.
 
 `HYBRID_GATE_UNSAFE` if unsupported proposals produce wrong RESOLVED facts or semantic soundness materially worsens.
 
@@ -146,6 +198,8 @@ Create `docs/reports/7plus1/7P-HYBRID-015/` with at least:
 - NON-GOLD-RESULTS.json
 - ARM-A-CONTROL.json
 - ARM-B-HYBRID.json
+- SHORT-SINGLE-WP-BENCHMARK.json
+- REF-001-BEFORE-AFTER.json
 - CASE-IOA-JOINT-BEFORE-AFTER.json
 - FULL-CASE-BEFORE-AFTER.json
 - FALSE-WRONG-STATUS-BEFORE-AFTER.json
@@ -173,4 +227,4 @@ Exactly one:
 Work only on `review/7plus1-parser`. Do not modify sealed 014 evidence, Gold, Source, 010 contract or v0.3. Do not merge/release/tag or switch production. Stop at `WAITING_ADMIN_REVIEW`.
 
 ## Final return
-Return task, commit, outcome, model manifests, non-Gold proposal metrics, safety result, CASE_IOA_JOINT control→hybrid, STANDARD_PARSED control→hybrid, complete I/O/A slot count, false-defined, wrong-binding, owned-content missing, repeatability, performance, architecture verdict, integrity confirmations, report path, and STATUS=WAITING_ADMIN_REVIEW.
+Return task, commit, outcome, model manifests, short single-WP benchmark definition, REF-001 control→hybrid result, short-case full-closure count, short-case same-case I/O/A closure count, proposal metrics, safety result, false-defined, wrong-binding, unresolved correctness, repeatability, performance, architecture verdict, integrity confirmations, report path, and STATUS=WAITING_ADMIN_REVIEW.
