@@ -9,7 +9,7 @@
 - Comparison contract: `fixtures/7plus1/standard-contract/v0.3-admin-20261002/`
 - PRODUCTION_READY=false
 
-This is a shadow experiment. The deterministic R1–R4 parser remains the control. Do not add more phrase/rule repair.
+This is a shadow experiment **inside the BoundX 7+1 Parser**. The product under test remains the parser whose output is Canonical 7+1. The deterministic R1–R4 parser remains the control. Do not add more phrase/rule repair.
 
 ## Read first
 Read CURRENT-TASK, the 014 task/report/FINAL-OUTCOME/ARCHITECTURE-VERDICT, 009 hybrid option analysis, 010 scope-aware comparison contract, the 014 model-signals/semantic-decoder/semantic-ownership/source-binding/whole-composition code, and active L1/L2 pack + model manifests.
@@ -29,7 +29,7 @@ If required local model resources are unavailable, stop with `MODEL_PROPOSER_UNA
 ## Proposal lane
 Create an isolated candidate such as `research/7plus1-parser/v0.3-7p-hybrid-015/`.
 
-Add an upstream **UNTRUSTED semantic proposal** lane. A proposal must carry:
+Add an upstream **UNTRUSTED semantic proposal** lane inside the 7+1 parser frontend. A proposal must carry:
 - proposal id/kind
 - exact source spans + clause ids
 - proposed node/relation/owner/scope/expression
@@ -47,7 +47,7 @@ Do not add new normative v0.3 relation types.
 Use BGE-M3 and multilingual-E5 as independent upstream retrieval signals. Keep top-k candidates and disagreements. Use mDeBERTa NLI only on explicit typed hypotheses. Scores rank proposals; scores never determine truth.
 
 ## Deterministic admission
-Before a proposal can enter the normal candidate graph, require deterministic checks for:
+Before a proposal can enter the normal **7+1 parser candidate graph**, require deterministic parser checks for:
 1. provenance integrity
 2. type compatibility
 3. relation signature
@@ -61,11 +61,11 @@ Before a proposal can enter the normal candidate graph, require deterministic ch
 11. graph consistency
 12. no equal-authority competing proposal
 
-Ambiguity remains unresolved. Model proposals never write Boundary IR or Canonical 7+1 directly.
+Ambiguity remains unresolved. Model proposals never write Boundary IR or Canonical 7+1 directly. Their only purpose is to improve parser candidate recall/ownership/binding before the existing deterministic parser stages.
 
 ## Experimental arms
 A. Control: frozen 014 deterministic behavior.
-B. Hybrid: same source/upstream inputs plus admitted model proposals, then the same deterministic Eligibility → Boundary IR → Canonical pipeline.
+B. Hybrid: same source/upstream inputs plus admitted model proposals, then the same deterministic **7+1 parser** Eligibility → Boundary IR → Canonical 7+1 pipeline.
 C. Safety controls: independent non-Gold cases with deliberately misleading owner/role/scope/reference candidates; unsupported proposals must be rejected or unresolved.
 
 ## Non-Gold first
@@ -120,7 +120,7 @@ Every new MATCH must retain complete source/owner/scope/binding proof.
 
 `HYBRID_GATE_UNSAFE` if unsupported proposals produce wrong RESOLVED facts or semantic soundness materially worsens.
 
-Do not recommend production adoption in this experiment.
+Do not recommend production adoption in this experiment. The experiment is successful only insofar as it improves **natural-language → Canonical 7+1 parsing**.
 
 ## Performance/repeatability
 Run the hybrid proposal process at least twice on the same frozen inputs. Distinguish proposal ranking stability from admitted-semantic stability.
