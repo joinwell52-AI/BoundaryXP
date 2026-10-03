@@ -1,10 +1,10 @@
 # Current 7+1 Parser Task
 
-**Active task:** `7P-SHORT-016`
+**Active task:** `7P-SHORT-016-R1`
 
 Read and execute:
 
-`docs/tasks/7plus1/7P-SHORT-016.md`
+`docs/tasks/7plus1/7P-SHORT-016-R1.md`
 
 Normative method:
 
