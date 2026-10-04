@@ -1,0 +1,248 @@
+# ADM-045 — actual Canonical 7+1
+
+## I
+
+```json
+{
+  "slot": "I",
+  "status": "RESOLVED",
+  "entries": [
+    {
+      "canonical_entry_id": "p1:f3065e368d9cf55edf67db1b",
+      "slot": "I",
+      "boundary_fact_ids": [
+        "p1:fbe46997ba8b9175021b8e99"
+      ],
+      "state": "RESOLVED",
+      "display_value": "测试环境的连通性检查",
+      "source_span_ids": [
+        "p1:58953da23868594fad670894",
+        "p1:22f7372239c651cc02c146e5",
+        "p1:4f8d974a0022fb36db9b92ba"
+      ],
+      "scope_expr_id": "p1:5c0092904ddfafee0c0af135"
+    }
+  ]
+}
+```
+
+## O
+
+```json
+{
+  "slot": "O",
+  "status": "RESOLVED",
+  "entries": [
+    {
+      "canonical_entry_id": "p1:82e949449ecf8679a7767c13",
+      "slot": "O",
+      "boundary_fact_ids": [
+        "p1:01799e1508093f3c47ce2374"
+      ],
+      "state": "RESOLVED",
+      "display_value": "connection-review.md",
+      "source_span_ids": [
+        "p1:e4de19aca89aced7f49c7e2a",
+        "p1:1b309ffcb3fb779b9abd77f0",
+        "p1:5f9faa4b41b0b4da29daf2d3",
+        "p1:34e23e92aa623b493405f73d",
+        "p1:22f7372239c651cc02c146e5"
+      ],
+      "scope_expr_id": "p1:e468276095f48fa35f6502f7"
+    }
+  ]
+}
+```
+
+## A
+
+```json
+{
+  "slot": "A",
+  "status": "RESOLVED",
+  "entries": [
+    {
+      "canonical_entry_id": "p1:92260ed946392e521b53dfa8",
+      "slot": "A",
+      "boundary_fact_ids": [
+        "p1:24a24fe96ad75d40df53e87b"
+      ],
+      "state": "RESOLVED",
+      "display_value": "REQUIRED 执行 测试环境的连通性检查",
+      "source_span_ids": [
+        "p1:2481674eeda4865748a5d287",
+        "p1:22f7372239c651cc02c146e5",
+        "p1:58953da23868594fad670894",
+        "p1:34e23e92aa623b493405f73d"
+      ],
+      "scope_expr_id": "p1:f006883b400084f9923e4958"
+    },
+    {
+      "canonical_entry_id": "p1:34eef9a799bef4e3507a7104",
+      "slot": "A",
+      "boundary_fact_ids": [
+        "p1:996799fc98c8e14d7a482cf7"
+      ],
+      "state": "RESOLVED",
+      "display_value": "REQUIRED 生成 connection-review.md",
+      "source_span_ids": [
+        "p1:e4de19aca89aced7f49c7e2a",
+        "p1:1b309ffcb3fb779b9abd77f0",
+        "p1:5f9faa4b41b0b4da29daf2d3",
+        "p1:34e23e92aa623b493405f73d",
+        "p1:22f7372239c651cc02c146e5"
+      ],
+      "scope_expr_id": "p1:b46f470fdec4d9e3ac94de39"
+    },
+    {
+      "canonical_entry_id": "p1:52965039721622f9b6daea0b",
+      "slot": "A",
+      "boundary_fact_ids": [
+        "p1:39639000cfef64ed001cfc35"
+      ],
+      "state": "RESOLVED",
+      "display_value": "REQUIRED 通知 PM",
+      "source_span_ids": [
+        "p1:8b859e8fc6c6df54231c2776",
+        "p1:7a27f29bc8a2b9f9131b6159",
+        "p1:cfdd506485fbc0a12aca189e",
+        "p1:cd5a491af893560512d1c023"
+      ],
+      "scope_expr_id": "p1:623d9e2d179a5cff91d81af7",
+      "condition_expr_id": "p1:1a1930bd81b2152911c3c94b"
+    }
+  ]
+}
+```
+
+## P
+
+```json
+{
+  "slot": "P",
+  "status": "RESOLVED",
+  "entries": [
+    {
+      "canonical_entry_id": "p1:bdabce9f3c91545652377c58",
+      "slot": "P",
+      "boundary_fact_ids": [
+        "p1:b73324dd87c55a35d410c602",
+        "p1:f47b18aab097ff9bee398aa4"
+      ],
+      "state": "RESOLVED",
+      "display_value": "QA [PERFORMER]",
+      "source_span_ids": [
+        "p1:34e23e92aa623b493405f73d",
+        "p1:22f7372239c651cc02c146e5",
+        "p1:2481674eeda4865748a5d287",
+        "p1:e4de19aca89aced7f49c7e2a",
+        "p1:1b309ffcb3fb779b9abd77f0"
+      ]
+    },
+    {
+      "canonical_entry_id": "p1:9fada963e12b7f0558d57336",
+      "slot": "P",
+      "boundary_fact_ids": [
+        "p1:cecea7d07cf0936640eef053"
+      ],
+      "state": "RESOLVED",
+      "display_value": "PM [RECIPIENT]",
+      "source_span_ids": [
+        "p1:cfdd506485fbc0a12aca189e",
+        "p1:7a27f29bc8a2b9f9131b6159",
+        "p1:8b859e8fc6c6df54231c2776"
+      ]
+    }
+  ]
+}
+```
+
+## R
+
+```json
+{
+  "slot": "R",
+  "status": "ABSENT",
+  "entries": []
+}
+```
+
+## V
+
+```json
+{
+  "slot": "V",
+  "status": "ABSENT",
+  "entries": []
+}
+```
+
+## C
+
+```json
+{
+  "slot": "C",
+  "status": "RESOLVED",
+  "entries": [
+    {
+      "canonical_entry_id": "p1:a53cccd2bd5a88341636251e",
+      "slot": "C",
+      "boundary_fact_ids": [
+        "p1:61635003b5b731dc12cc8e8f"
+      ],
+      "state": "RESOLVED",
+      "display_value": "即可完成",
+      "source_span_ids": [
+        "p1:7e79b334873085ef89594483",
+        "p1:65087876d60eff8271ec904e",
+        "p1:6dff9d23ae8060c9487ae742",
+        "p1:b55cef9ae5ce55c7a6462e5a"
+      ],
+      "condition_expr_id": "p1:be742dc58012b4fb5c8e31d2"
+    },
+    {
+      "canonical_entry_id": "p1:1c285f544b8a3c7e1803bec5",
+      "slot": "C",
+      "boundary_fact_ids": [
+        "p1:b69bb8aaabd5632b96ca6787"
+      ],
+      "state": "RESOLVED",
+      "display_value": "检查",
+      "source_span_ids": [
+        "p1:b990f62505cafaf88c1b9b98",
+        "p1:7a27f29bc8a2b9f9131b6159",
+        "p1:b13293f25b8a29f7822819b3",
+        "p1:cd5a491af893560512d1c023"
+      ],
+      "scope_expr_id": "p1:32a136d9668718c142fccba7",
+      "condition_expr_id": "p1:1a1930bd81b2152911c3c94b"
+    }
+  ]
+}
+```
+
+## B
+
+```json
+{
+  "slot": "B",
+  "status": "RESOLVED",
+  "entries": [
+    {
+      "canonical_entry_id": "p1:7d5fc0a7f6c821ed123f9b56",
+      "slot": "B",
+      "boundary_fact_ids": [
+        "p1:d4a2dd4e8942f32823cffa00"
+      ],
+      "state": "RESOLVED",
+      "display_value": "FORBIDDEN 改变 网络路由",
+      "source_span_ids": [
+        "p1:dc7cf69e5cf4bcbed71219ad",
+        "p1:4094b68662358bd5bc2c2f95",
+        "p1:2159d8d329613e1b07391a86"
+      ],
+      "scope_expr_id": "p1:459f53e16776aaf42bc9bf3c"
+    }
+  ]
+}
+```

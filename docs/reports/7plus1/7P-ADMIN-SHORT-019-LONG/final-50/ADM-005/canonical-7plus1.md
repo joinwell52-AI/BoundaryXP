@@ -1,0 +1,362 @@
+# ADM-005 — actual Canonical 7+1
+
+## I
+
+```json
+{
+  "slot": "I",
+  "status": "RESOLVED",
+  "entries": [
+    {
+      "canonical_entry_id": "p1:fe3af5de6adb8159947933bd",
+      "slot": "I",
+      "boundary_fact_ids": [
+        "p1:56d886df40e0e276a1f6b4dd"
+      ],
+      "state": "RESOLVED",
+      "display_value": "轨道机当前运行状态和最近一小时的告警日志",
+      "source_span_ids": [
+        "p1:42eba1ee0efe9bb6ab1b149b",
+        "p1:aed6b97cb0c9c603dc202179",
+        "p1:65a2e648cf6dffc52c4eaa25",
+        "p1:accef2ee686b45e317b5ea18",
+        "p1:6be53ba8a10f65ccb6a3d263",
+        "p1:b9600ef05c25aa5d598ec6f7",
+        "p1:44adf2ec4755399030854916",
+        "p1:10d2130487e69bc598179149",
+        "p1:92ba5ad5ab8dff677c70ad5e",
+        "p1:9f80aefc29bde2f999f2390c",
+        "p1:55ee1ed57052b64fb605e027",
+        "p1:9c0cdf8504e6ebdf3586e689"
+      ],
+      "scope_expr_id": "p1:41468281d833c24e6c8d0e13"
+    }
+  ]
+}
+```
+
+## O
+
+```json
+{
+  "slot": "O",
+  "status": "RESOLVED",
+  "entries": [
+    {
+      "canonical_entry_id": "p1:a05e72f07ecdc02088bf06fc",
+      "slot": "O",
+      "boundary_fact_ids": [
+        "p1:599873db7955f62fac1530c0"
+      ],
+      "state": "RESOLVED",
+      "display_value": "orbit-review.md",
+      "source_span_ids": [
+        "p1:6f6d2bc143ba1137dcadfb6a",
+        "p1:44adf2ec4755399030854916",
+        "p1:6be53ba8a10f65ccb6a3d263",
+        "p1:2574959c127d493c9377e6d7",
+        "p1:aed6b97cb0c9c603dc202179",
+        "p1:b9600ef05c25aa5d598ec6f7",
+        "p1:e213ebec6a2bd0cd90c52528",
+        "p1:accef2ee686b45e317b5ea18"
+      ],
+      "scope_expr_id": "p1:edc61bb260c3da23bbbf3645"
+    }
+  ]
+}
+```
+
+## A
+
+```json
+{
+  "slot": "A",
+  "status": "RESOLVED",
+  "entries": [
+    {
+      "canonical_entry_id": "p1:2a5f4343b254cff989ce9e2e",
+      "slot": "A",
+      "boundary_fact_ids": [
+        "p1:7981c2a13541e8b9def60d97"
+      ],
+      "state": "RESOLVED",
+      "display_value": "REQUIRED 检查 轨道机当前运行状态和最近一小时的告警日志",
+      "source_span_ids": [
+        "p1:d8595b78f256fc53c20d477f",
+        "p1:aed6b97cb0c9c603dc202179",
+        "p1:42eba1ee0efe9bb6ab1b149b",
+        "p1:2574959c127d493c9377e6d7",
+        "p1:10d2130487e69bc598179149"
+      ],
+      "scope_expr_id": "p1:c6539872996ff81c1043034a"
+    },
+    {
+      "canonical_entry_id": "p1:358fa6eab38e3f96263484d5",
+      "slot": "A",
+      "boundary_fact_ids": [
+        "p1:a63a1390aa08e286bc8e3562"
+      ],
+      "state": "RESOLVED",
+      "display_value": "REQUIRED 生成 orbit-review.md",
+      "source_span_ids": [
+        "p1:6f6d2bc143ba1137dcadfb6a",
+        "p1:44adf2ec4755399030854916",
+        "p1:6be53ba8a10f65ccb6a3d263",
+        "p1:2574959c127d493c9377e6d7",
+        "p1:aed6b97cb0c9c603dc202179",
+        "p1:b9600ef05c25aa5d598ec6f7",
+        "p1:e213ebec6a2bd0cd90c52528",
+        "p1:accef2ee686b45e317b5ea18"
+      ],
+      "scope_expr_id": "p1:0b20fc9075109cd18ad56dc9"
+    },
+    {
+      "canonical_entry_id": "p1:9aa1d19ba607272769a67f45",
+      "slot": "A",
+      "boundary_fact_ids": [
+        "p1:28618a4dc4799d714ab4f38c"
+      ],
+      "state": "RESOLVED",
+      "display_value": "REQUIRED 汇报 orbit-review.md",
+      "source_span_ids": [
+        "p1:b93227d6a2935e2b21422208",
+        "p1:accef2ee686b45e317b5ea18",
+        "p1:6be53ba8a10f65ccb6a3d263",
+        "p1:44adf2ec4755399030854916",
+        "p1:2916cb3738b5b08dbdc66e3d",
+        "p1:b6550812ddc4c7c8c720f241",
+        "p1:92ba5ad5ab8dff677c70ad5e",
+        "p1:9f80aefc29bde2f999f2390c"
+      ],
+      "scope_expr_id": "p1:ba3f3d2f3b7ac85a1f507589",
+      "condition_expr_id": "p1:e83dd99580701d45e917248b"
+    },
+    {
+      "canonical_entry_id": "p1:c9b4454e8194e7f7aa470ff4",
+      "slot": "A",
+      "boundary_fact_ids": [
+        "p1:3da3bc39bdd5739318689839"
+      ],
+      "state": "RESOLVED",
+      "display_value": "REQUIRED 提交 orbit-review.md",
+      "source_span_ids": [
+        "p1:b39169af44f359de3652919f",
+        "p1:b9600ef05c25aa5d598ec6f7",
+        "p1:6be53ba8a10f65ccb6a3d263",
+        "p1:44adf2ec4755399030854916",
+        "p1:5b497f92fa0837ccfe0afcf9",
+        "p1:55ee1ed57052b64fb605e027",
+        "p1:9c0cdf8504e6ebdf3586e689",
+        "p1:e213ebec6a2bd0cd90c52528"
+      ],
+      "scope_expr_id": "p1:4301becd3c14863935ee6ccc",
+      "condition_expr_id": "p1:5e035c031cd628f4c9077b37"
+    }
+  ]
+}
+```
+
+## P
+
+```json
+{
+  "slot": "P",
+  "status": "RESOLVED",
+  "entries": [
+    {
+      "canonical_entry_id": "p1:50c67f4cde029d196d18f1f6",
+      "slot": "P",
+      "boundary_fact_ids": [
+        "p1:cf9693fd6a5a9eeda75a6e4a",
+        "p1:9e2506145d0c9c79aac24584",
+        "p1:376d90ff52251375b5193e7c",
+        "p1:fdff85088d587966d8743ba0"
+      ],
+      "state": "RESOLVED",
+      "display_value": "OPS [PERFORMER]",
+      "source_span_ids": [
+        "p1:2574959c127d493c9377e6d7",
+        "p1:aed6b97cb0c9c603dc202179",
+        "p1:d8595b78f256fc53c20d477f",
+        "p1:accef2ee686b45e317b5ea18",
+        "p1:6be53ba8a10f65ccb6a3d263",
+        "p1:b9600ef05c25aa5d598ec6f7",
+        "p1:44adf2ec4755399030854916",
+        "p1:10d2130487e69bc598179149",
+        "p1:92ba5ad5ab8dff677c70ad5e",
+        "p1:9f80aefc29bde2f999f2390c",
+        "p1:55ee1ed57052b64fb605e027",
+        "p1:9c0cdf8504e6ebdf3586e689",
+        "p1:6f6d2bc143ba1137dcadfb6a",
+        "p1:2916cb3738b5b08dbdc66e3d",
+        "p1:67401946d0e7ec9bd08a83f7",
+        "p1:b93227d6a2935e2b21422208"
+      ]
+    },
+    {
+      "canonical_entry_id": "p1:40430131eed2a890ce4bd1ce",
+      "slot": "P",
+      "boundary_fact_ids": [
+        "p1:635d050f356520c7965011da",
+        "p1:6b523f39986641f06e25a041"
+      ],
+      "state": "RESOLVED",
+      "display_value": "PM [RECIPIENT]",
+      "source_span_ids": [
+        "p1:b6550812ddc4c7c8c720f241",
+        "p1:accef2ee686b45e317b5ea18",
+        "p1:b93227d6a2935e2b21422208",
+        "p1:6be53ba8a10f65ccb6a3d263",
+        "p1:b9600ef05c25aa5d598ec6f7",
+        "p1:44adf2ec4755399030854916",
+        "p1:aed6b97cb0c9c603dc202179",
+        "p1:10d2130487e69bc598179149",
+        "p1:92ba5ad5ab8dff677c70ad5e",
+        "p1:9f80aefc29bde2f999f2390c",
+        "p1:55ee1ed57052b64fb605e027",
+        "p1:9c0cdf8504e6ebdf3586e689",
+        "p1:5b497f92fa0837ccfe0afcf9",
+        "p1:b39169af44f359de3652919f"
+      ]
+    }
+  ]
+}
+```
+
+## R
+
+```json
+{
+  "slot": "R",
+  "status": "ABSENT",
+  "entries": []
+}
+```
+
+## V
+
+```json
+{
+  "slot": "V",
+  "status": "RESOLVED",
+  "entries": [
+    {
+      "canonical_entry_id": "p1:0be545de9248091a1f3dd526",
+      "slot": "V",
+      "boundary_fact_ids": [
+        "p1:c0ef5d914e77f0fdd01ed886"
+      ],
+      "state": "RESOLVED",
+      "display_value": "OPS-RULE-12",
+      "source_span_ids": [
+        "p1:10d2130487e69bc598179149",
+        "p1:aed6b97cb0c9c603dc202179",
+        "p1:65a2e648cf6dffc52c4eaa25",
+        "p1:accef2ee686b45e317b5ea18",
+        "p1:6be53ba8a10f65ccb6a3d263",
+        "p1:b9600ef05c25aa5d598ec6f7",
+        "p1:44adf2ec4755399030854916",
+        "p1:92ba5ad5ab8dff677c70ad5e",
+        "p1:9f80aefc29bde2f999f2390c",
+        "p1:55ee1ed57052b64fb605e027",
+        "p1:9c0cdf8504e6ebdf3586e689"
+      ]
+    },
+    {
+      "canonical_entry_id": "p1:79b4148bc34563bab3fdcf63",
+      "slot": "V",
+      "boundary_fact_ids": [
+        "p1:2eed799892b9b39aa08bff86"
+      ],
+      "state": "RESOLVED",
+      "display_value": "OPS-RULE-12",
+      "source_span_ids": [
+        "p1:10d2130487e69bc598179149",
+        "p1:aed6b97cb0c9c603dc202179",
+        "p1:d8595b78f256fc53c20d477f",
+        "p1:accef2ee686b45e317b5ea18",
+        "p1:6be53ba8a10f65ccb6a3d263",
+        "p1:b9600ef05c25aa5d598ec6f7",
+        "p1:44adf2ec4755399030854916",
+        "p1:92ba5ad5ab8dff677c70ad5e",
+        "p1:9f80aefc29bde2f999f2390c",
+        "p1:55ee1ed57052b64fb605e027",
+        "p1:9c0cdf8504e6ebdf3586e689"
+      ]
+    }
+  ]
+}
+```
+
+## C
+
+```json
+{
+  "slot": "C",
+  "status": "RESOLVED",
+  "entries": [
+    {
+      "canonical_entry_id": "p1:ed5e7fa704066655b35e3daa",
+      "slot": "C",
+      "boundary_fact_ids": [
+        "p1:ad1a2c104244b275d9233bcb"
+      ],
+      "state": "RESOLVED",
+      "display_value": "后续检查",
+      "source_span_ids": [
+        "p1:67401946d0e7ec9bd08a83f7",
+        "p1:accef2ee686b45e317b5ea18",
+        "p1:564129fb140b09ab4bf4f954",
+        "p1:2916cb3738b5b08dbdc66e3d",
+        "p1:92ba5ad5ab8dff677c70ad5e",
+        "p1:9f80aefc29bde2f999f2390c"
+      ],
+      "scope_expr_id": "p1:1dd53381a26ca16c3d6a8a50",
+      "condition_expr_id": "p1:e83dd99580701d45e917248b"
+    },
+    {
+      "canonical_entry_id": "p1:6d6e3b33f379dd9f57154dc8",
+      "slot": "C",
+      "boundary_fact_ids": [
+        "p1:6683b24733c3c9286cb3585b"
+      ],
+      "state": "RESOLVED",
+      "display_value": "即完成",
+      "source_span_ids": [
+        "p1:58d6696323dec9f0b04b3c48",
+        "p1:b9600ef05c25aa5d598ec6f7",
+        "p1:55ee1ed57052b64fb605e027",
+        "p1:ed464d589f0e1992bb449a03",
+        "p1:9c0cdf8504e6ebdf3586e689"
+      ],
+      "condition_expr_id": "p1:04d72e4de7abcf8a8d6dfbe1"
+    }
+  ]
+}
+```
+
+## B
+
+```json
+{
+  "slot": "B",
+  "status": "RESOLVED",
+  "entries": [
+    {
+      "canonical_entry_id": "p1:31ff613d2013def25223fcc6",
+      "slot": "B",
+      "boundary_fact_ids": [
+        "p1:390b551daac1b0093a069eba"
+      ],
+      "state": "RESOLVED",
+      "display_value": "FORBIDDEN 重启 轨道机",
+      "source_span_ids": [
+        "p1:f06c971810d6b86a998e4a71",
+        "p1:ec95e1d3a27df8e0bb130bbe",
+        "p1:80fa6d0176fc3ee6514b7b98"
+      ],
+      "scope_expr_id": "p1:d4ffd85ecbe1b686ae6764b6"
+    }
+  ]
+}
+```

@@ -1,0 +1,533 @@
+{
+  "frozen_before_acceptance": true,
+  "controls": [
+    {
+      "id": "BASIS_REFERENCE-1",
+      "mechanism": "BASIS_REFERENCE",
+      "kind": "POSITIVE",
+      "source": "依据 PLAN-91 v2.7，QA 读取 seed.toml，生成 check.txt。",
+      "source_sha256": "ca860027324e446a622aabb451a48e96eda957e8cc9c2254b03d6c8ad1cadb81",
+      "assertions": {
+        "basis": [
+          "PLAN-91",
+          "v2.7"
+        ]
+      }
+    },
+    {
+      "id": "BASIS_REFERENCE-2",
+      "mechanism": "BASIS_REFERENCE",
+      "kind": "POSITIVE",
+      "source": "DEV 根据 RULE-72 v4.8 检查 traces.tsv，生成 audit.txt。",
+      "source_sha256": "7fddccb0dae6b631d1b7f793e8229b506e087c113d95b671b7621d3e1a13be14",
+      "assertions": {
+        "basis": [
+          "RULE-72",
+          "v4.8"
+        ]
+      }
+    },
+    {
+      "id": "BASIS_REFERENCE-3",
+      "mechanism": "BASIS_REFERENCE",
+      "kind": "POSITIVE",
+      "source": "According to POLICY-88 v1.9, Nina must read input.ini and create proof.txt.",
+      "source_sha256": "461ab60d3e5fd41df49afca5d49d571a2c9792a5491d189fe263fe4fe7c004dc",
+      "assertions": {
+        "basis": [
+          "POLICY-88",
+          "v1.9"
+        ]
+      }
+    },
+    {
+      "id": "BASIS_REFERENCE-4",
+      "mechanism": "BASIS_REFERENCE",
+      "kind": "CONTRASTIVE_NEGATIVE",
+      "source": "QA 读取 version.tsv，检查其中记录的 v8.1，生成 result.txt。",
+      "source_sha256": "26d99c106a8e07714d4c3910b6fea7e6fb9088a9e3dcdd39f53e85049e61a9f3",
+      "assertions": {
+        "no_basis": true
+      }
+    },
+    {
+      "id": "BASIS_REFERENCE-5",
+      "mechanism": "BASIS_REFERENCE",
+      "kind": "CONTRASTIVE_NEGATIVE",
+      "source": "DEV 检查索引版本和校验和，生成 inventory.txt。",
+      "source_sha256": "c7c33e7f93516af47fb67f5d433f95d2e9bf6e6315a4ac007165ec329438f0d6",
+      "assertions": {
+        "no_basis": true
+      }
+    },
+    {
+      "id": "BASIS_REFERENCE-6",
+      "mechanism": "BASIS_REFERENCE",
+      "kind": "AMBIGUITY",
+      "source": "依据 RULE-71 v2.0 或 v3.0，QA 读取 request.toml，生成 analysis.txt。",
+      "source_sha256": "43335951c7ba93406479fca239842a22f3bb5945e8eaaa0f579b30d8d0635562",
+      "assertions": {
+        "unresolved": true
+      }
+    },
+    {
+      "id": "QUANTITY_TARGET-1",
+      "mechanism": "QUANTITY_TARGET",
+      "kind": "POSITIVE",
+      "source": "整个检查任务须在 17 分钟内完成。QA 读取 samples.ini，生成 digest.txt。",
+      "source_sha256": "80b705c1816c6abc9e8969a37c787517d04abab8ec9f874344a5677aff94e083",
+      "assertions": {
+        "resource": [
+          "TIME",
+          17,
+          "TASK"
+        ]
+      }
+    },
+    {
+      "id": "QUANTITY_TARGET-2",
+      "mechanism": "QUANTITY_TARGET",
+      "kind": "POSITIVE",
+      "source": "OPS 检查服务，最多重试 4 次，生成 checks.txt。",
+      "source_sha256": "0e9a12f24ae7f5d6d3dd63f26004e355fa1cfd89d14c8e38d4f37d0539d05d98",
+      "assertions": {
+        "resource": [
+          "COUNT",
+          4,
+          "RETRY"
+        ]
+      }
+    },
+    {
+      "id": "QUANTITY_TARGET-3",
+      "mechanism": "QUANTITY_TARGET",
+      "kind": "POSITIVE",
+      "source": "OPS 检查测试服务，内存不得超过 512 MB，生成 monitor.txt。",
+      "source_sha256": "76dd048587b56d628e7b6ae70de8e996661d46048abf4b43946fe4e4ccd6af92",
+      "assertions": {
+        "resource": [
+          "SIZE",
+          512,
+          "TASK"
+        ]
+      }
+    },
+    {
+      "id": "QUANTITY_TARGET-4",
+      "mechanism": "QUANTITY_TARGET",
+      "kind": "CONTRASTIVE_NEGATIVE",
+      "source": "QA 读取最近 17 分钟的日志，生成 window.txt。",
+      "source_sha256": "cb475a61be97ff7143ad3eacb806e5dc161fc69f75a41879e2cdc82fbbd4cb8f",
+      "assertions": {
+        "no_time_resource": true
+      }
+    },
+    {
+      "id": "QUANTITY_TARGET-5",
+      "mechanism": "QUANTITY_TARGET",
+      "kind": "CONTRASTIVE_NEGATIVE",
+      "source": "报告中列出覆盖率低于 67% 的文件。QA 生成 branches.txt。",
+      "source_sha256": "aba7460195d97ea0ca66dd44fb84e211366c8626573c85ecae80512f005c5e8e",
+      "assertions": {
+        "no_resource": true
+      }
+    },
+    {
+      "id": "QUANTITY_TARGET-6",
+      "mechanism": "QUANTITY_TARGET",
+      "kind": "AMBIGUITY",
+      "source": "检查任务和提交任务各有时限，最多使用 9 分钟。",
+      "source_sha256": "85548f553a0971134f7eb38636ea6530d7debead15f7fc7dfbe5e8259b68f79f",
+      "assertions": {
+        "unresolved": true
+      }
+    },
+    {
+      "id": "PARTICIPANT_FLOW-1",
+      "mechanism": "PARTICIPANT_FLOW",
+      "kind": "POSITIVE",
+      "source": "Nora 读取 source.ini，生成 proof.txt。Iris 复核报告后，由 Owen 提交给 ADMIN。",
+      "source_sha256": "a07a808627e20fd0909b5f2bf866607e440d21451eb9e2846559b8ffc98273a7",
+      "assertions": {
+        "flow": [
+          "Iris",
+          "Owen",
+          "ADMIN"
+        ]
+      }
+    },
+    {
+      "id": "PARTICIPANT_FLOW-2",
+      "mechanism": "PARTICIPANT_FLOW",
+      "kind": "POSITIVE",
+      "source": "DEV 生成 sample.txt。QA 复核通过后，PM 向 ADMIN 汇报。",
+      "source_sha256": "17e9747e539016872de7266350bef2e20f0d0c220f6ee32145277f649c8d6ab2",
+      "assertions": {
+        "flow": [
+          "QA",
+          "PM",
+          "ADMIN"
+        ]
+      }
+    },
+    {
+      "id": "PARTICIPANT_FLOW-3",
+      "mechanism": "PARTICIPANT_FLOW",
+      "kind": "POSITIVE",
+      "source": "Mila must create note.txt. Send the report to Rita after Leon has reviewed it.",
+      "source_sha256": "9be033f94506d3615059c009afb59371debbe92778cd588442526036072d485c",
+      "assertions": {
+        "flow": [
+          "Leon",
+          "Rita"
+        ]
+      }
+    },
+    {
+      "id": "PARTICIPANT_FLOW-4",
+      "mechanism": "PARTICIPANT_FLOW",
+      "kind": "CONTRASTIVE_NEGATIVE",
+      "source": "DEV 生成 memo.txt，交给林昭；林昭只是接收者，不负责审批。",
+      "source_sha256": "77150ac1ff69701f164691f3ebda9ce374504fbfc35d6387d9b5068d5c46cf3d",
+      "assertions": {
+        "recipient": "林昭",
+        "not_approver": "林昭"
+      }
+    },
+    {
+      "id": "PARTICIPANT_FLOW-5",
+      "mechanism": "PARTICIPANT_FLOW",
+      "kind": "CONTRASTIVE_NEGATIVE",
+      "source": "PM 查看角色名单，其中 QA 是历史审批人。PM 生成 roster.txt。",
+      "source_sha256": "389da9e0d7e4cc898c14c8d28a157a654bf1af5fe291c08cc44e3f7affc6707b",
+      "assertions": {
+        "not_approver": "QA"
+      }
+    },
+    {
+      "id": "PARTICIPANT_FLOW-6",
+      "mechanism": "PARTICIPANT_FLOW",
+      "kind": "AMBIGUITY",
+      "source": "DEV 和 OPS 分别生成报告，随后将报告交给 QA。",
+      "source_sha256": "b5bdcc3311130739e126af1467999e6b6e4fd245c3b011ab854d62197f87b732",
+      "assertions": {
+        "unresolved": true
+      }
+    },
+    {
+      "id": "MODALITY_NEGATION-1",
+      "mechanism": "MODALITY_NEGATION",
+      "kind": "POSITIVE",
+      "source": "QA 必须读取 x.toml，可以检查 y.toml，不得修改任何配置。",
+      "source_sha256": "b241a702b0484ceb99d5b8cc0cd77a6ff4cb8fb1879bb3f25e7364474c6a2a18",
+      "assertions": {
+        "modalities": [
+          "REQUIRED",
+          "PERMITTED",
+          "FORBIDDEN"
+        ]
+      }
+    },
+    {
+      "id": "MODALITY_NEGATION-2",
+      "mechanism": "MODALITY_NEGATION",
+      "kind": "POSITIVE",
+      "source": "DEV 检查差异，不要求修复，只生成 changes.txt。",
+      "source_sha256": "1650c8af84a8d446897c31fcfc9d4491709afbbc484f4b7556d2027c46dea216",
+      "assertions": {
+        "not_required": "修复"
+      }
+    },
+    {
+      "id": "MODALITY_NEGATION-3",
+      "mechanism": "MODALITY_NEGATION",
+      "kind": "POSITIVE",
+      "source": "Nina must read x.ini, may inspect y.ini and must not delete either file.",
+      "source_sha256": "25ff9d7c428650805c2c54aed0bb2faaed842ca858c1e8d935350ec331542448",
+      "assertions": {
+        "modalities": [
+          "REQUIRED",
+          "PERMITTED",
+          "FORBIDDEN"
+        ]
+      }
+    },
+    {
+      "id": "MODALITY_NEGATION-4",
+      "mechanism": "MODALITY_NEGATION",
+      "kind": "CONTRASTIVE_NEGATIVE",
+      "source": "QA 无需生成报告，只向 PM 汇报结论。",
+      "source_sha256": "518575542687febbbd0aeeb8927038a92f1cd2df67aee20adc201a47b6b9dd66",
+      "assertions": {
+        "not_required": "生成"
+      }
+    },
+    {
+      "id": "MODALITY_NEGATION-5",
+      "mechanism": "MODALITY_NEGATION",
+      "kind": "CONTRASTIVE_NEGATIVE",
+      "source": "DEV 不负责审批，负责读取请求。",
+      "source_sha256": "216b45fe68da3a423e3000084338aeb11893376eee1a89cf44aeb778af10b3ae",
+      "assertions": {
+        "not_approver": "DEV"
+      }
+    },
+    {
+      "id": "MODALITY_NEGATION-6",
+      "mechanism": "MODALITY_NEGATION",
+      "kind": "AMBIGUITY",
+      "source": "QA 不需要继续，除非另获批准；未说明批准何项操作。",
+      "source_sha256": "c5f61914807b7bc92ddab8d2899a44a1f1706ef6388afcc05181ee331f46b987",
+      "assertions": {
+        "unresolved": true
+      }
+    },
+    {
+      "id": "CONDITION_COMPLETION-1",
+      "mechanism": "CONDITION_COMPLETION",
+      "kind": "POSITIVE",
+      "source": "OPS 检查服务。如果发现告警，则立即停止检查并通知 PM。",
+      "source_sha256": "cef08e3f829f98f6cd423e52827cfaf3760dd43506d6bd26c18d7a04084dea60",
+      "assertions": {
+        "condition": "发现告警",
+        "stop": true
+      }
+    },
+    {
+      "id": "CONDITION_COMPLETION-2",
+      "mechanism": "CONDITION_COMPLETION",
+      "kind": "POSITIVE",
+      "source": "QA 检查主链路和备链路，任一通过即完成；两者均失败则停止。",
+      "source_sha256": "db0b6f4f236d5714f0976e9869566402496b372dc6024bd2d5ce67150013ca67",
+      "assertions": {
+        "completion": "OR",
+        "stop": "AND"
+      }
+    },
+    {
+      "id": "CONDITION_COMPLETION-3",
+      "mechanism": "CONDITION_COMPLETION",
+      "kind": "POSITIVE",
+      "source": "QA 生成 review.txt；只有报告已生成且 PM 已收到，任务才完成。",
+      "source_sha256": "24810278edb11cf026cd915a7641e76baee983d6a587e1f0d17fb454aa594981",
+      "assertions": {
+        "completion": "AND"
+      }
+    },
+    {
+      "id": "CONDITION_COMPLETION-4",
+      "mechanism": "CONDITION_COMPLETION",
+      "kind": "CONTRASTIVE_NEGATIVE",
+      "source": "QA 检查指标。报告中写明“发现告警就停止”。",
+      "source_sha256": "03e336cb5d873e0299e27886b63c2dc8655f9a0dd2bb92b5b019bf99b03d7f6d",
+      "assertions": {
+        "no_stop": true
+      }
+    },
+    {
+      "id": "CONDITION_COMPLETION-5",
+      "mechanism": "CONDITION_COMPLETION",
+      "kind": "CONTRASTIVE_NEGATIVE",
+      "source": "DEV 编写指南，记录“测试通过即完成”的示例，不执行测试。",
+      "source_sha256": "aedd092b70f52a8fad33aafddfc30621da30f21243e15c0de25d4f9b5f359005",
+      "assertions": {
+        "no_completion": true
+      }
+    },
+    {
+      "id": "CONDITION_COMPLETION-6",
+      "mechanism": "CONDITION_COMPLETION",
+      "kind": "AMBIGUITY",
+      "source": "QA 检查两项指标，若它失败则停止。",
+      "source_sha256": "691121269b769320123db9ff54c87941b43aec2beb23d414f429531907281a8f",
+      "assertions": {
+        "unresolved": true
+      }
+    },
+    {
+      "id": "OUTPUT_CONTENT-1",
+      "mechanism": "OUTPUT_CONTENT",
+      "kind": "POSITIVE",
+      "source": "DEV 生成 guide.txt，文档中必须写入“遇到凭据立即停止测试”，但不执行文档中的测试。",
+      "source_sha256": "81f2c007156b37ce3fd556bbeb20c311b9cd4cde2b4d29d1e5bdf07dc5d28fd2",
+      "assertions": {
+        "content": "遇到凭据立即停止测试",
+        "no_stop": true
+      }
+    },
+    {
+      "id": "OUTPUT_CONTENT-2",
+      "mechanism": "OUTPUT_CONTENT",
+      "kind": "POSITIVE",
+      "source": "QA 生成 note.txt，报告须包含风险列表和回滚建议，不执行回滚。",
+      "source_sha256": "1c43927c81406c9623420fd1143602ff2fd261603e2dfc16bd58b33606526f9e",
+      "assertions": {
+        "content": [
+          "风险列表",
+          "回滚建议"
+        ]
+      }
+    },
+    {
+      "id": "OUTPUT_CONTENT-3",
+      "mechanism": "OUTPUT_CONTENT",
+      "kind": "POSITIVE",
+      "source": "DEV 生成 delta.txt。若有差异，报告中列出差异；否则写明无差异。",
+      "source_sha256": "5ecfe208196b44fae72d7df90ce1d01b6db90c68a1cf5f37c66d23eb04ddedc3",
+      "assertions": {
+        "conditional_content": true
+      }
+    },
+    {
+      "id": "OUTPUT_CONTENT-4",
+      "mechanism": "OUTPUT_CONTENT",
+      "kind": "CONTRASTIVE_NEGATIVE",
+      "source": "OPS 生成 audit.txt。若发生故障，立即停止检查。",
+      "source_sha256": "d2aae6fccf5578aa411681bdd4e894ffc950a8bfe9f3f7734399181757faa0aa",
+      "assertions": {
+        "stop": true
+      }
+    },
+    {
+      "id": "OUTPUT_CONTENT-5",
+      "mechanism": "OUTPUT_CONTENT",
+      "kind": "CONTRASTIVE_NEGATIVE",
+      "source": "QA 生成 review.txt。不得实际批准发布。",
+      "source_sha256": "29323195b9e58ad8f8ff191cb0a64e7d3954f36598ded3435eda98d2848628f5",
+      "assertions": {
+        "forbid": "批准"
+      }
+    },
+    {
+      "id": "OUTPUT_CONTENT-6",
+      "mechanism": "OUTPUT_CONTENT",
+      "kind": "AMBIGUITY",
+      "source": "DEV 和 OPS 分别生成文件，随后在它中写入注意事项。",
+      "source_sha256": "731f7a922c460bc726199750e37f9e63cefeaa93eaabb028198348c94d4de723",
+      "assertions": {
+        "unresolved": true
+      }
+    },
+    {
+      "id": "SCOPE_IDENTITY-1",
+      "mechanism": "SCOPE_IDENTITY",
+      "kind": "POSITIVE",
+      "source": "QA 读取 asset.ini，检查其中所有记录，生成 summary.txt。",
+      "source_sha256": "8c8061ce6b6fa988b53b3f0c2422c5f27ee1ba124304c113babaefa50edf31a2",
+      "assertions": {
+        "all": true
+      }
+    },
+    {
+      "id": "SCOPE_IDENTITY-2",
+      "mechanism": "SCOPE_IDENTITY",
+      "kind": "POSITIVE",
+      "source": "DEV 读取 setup.ini，只检查测试环境，不检查生产环境，生成 check.txt。",
+      "source_sha256": "79e66d564e8f99d8d68351f1ad50665b20234e582db4681db4f37be64bcd863b",
+      "assertions": {
+        "exclude": "生产环境"
+      }
+    },
+    {
+      "id": "SCOPE_IDENTITY-3",
+      "mechanism": "SCOPE_IDENTITY",
+      "kind": "POSITIVE",
+      "source": "QA 读取两个文件：one.ini 和 two.ini。必须保持 one.ini 不变。",
+      "source_sha256": "43cbcb458dc9bb3d3ecc09ee19f4bad21182324e5513d5c6d699883ac1621a32",
+      "assertions": {
+        "forbid_object": "one.ini"
+      }
+    },
+    {
+      "id": "SCOPE_IDENTITY-4",
+      "mechanism": "SCOPE_IDENTITY",
+      "kind": "CONTRASTIVE_NEGATIVE",
+      "source": "QA 读取 one.ini，生成 two.ini，随后检查生成的 two.ini。",
+      "source_sha256": "7e5d6dc57c5d06f81b87fd49afe081ff405278a058c814b16a0f3dd6c9ae6d30",
+      "assertions": {
+        "not_input": "two.ini"
+      }
+    },
+    {
+      "id": "SCOPE_IDENTITY-5",
+      "mechanism": "SCOPE_IDENTITY",
+      "kind": "CONTRASTIVE_NEGATIVE",
+      "source": "QA 检查现役设备，不涉及报废设备。",
+      "source_sha256": "c3a60d0a8995716914c290d0576b43aee755c69240fabc209cf0bd7e7397bb53",
+      "assertions": {
+        "exclude": "报废设备"
+      }
+    },
+    {
+      "id": "SCOPE_IDENTITY-6",
+      "mechanism": "SCOPE_IDENTITY",
+      "kind": "AMBIGUITY",
+      "source": "QA 读取 one.ini 和 two.ini，检查上述材料的全部记录。",
+      "source_sha256": "c3d473c943f8b6a9383d1db2fa063939ecf717108bae6fa9564dfe5d69b4311d",
+      "assertions": {
+        "unresolved": true
+      }
+    },
+    {
+      "id": "HEADING_STRUCTURE-1",
+      "mechanism": "HEADING_STRUCTURE",
+      "kind": "POSITIVE",
+      "source": "# 当前任务\nQA 读取 a.ini，生成 b.txt。",
+      "source_sha256": "e808ef9f3e02e84cf865eabf6b15c1859470c022f4d5e7372bd38b813eb7acdd",
+      "assertions": {
+        "no_heading_action": true
+      }
+    },
+    {
+      "id": "HEADING_STRUCTURE-2",
+      "mechanism": "HEADING_STRUCTURE",
+      "kind": "POSITIVE",
+      "source": "## Current Task\nNina must read c.ini and create d.txt.",
+      "source_sha256": "ee9384ae7bc70c3ae2c52ce37847c1df940e5d853d3aeacbf7d1d54bb7eb1644",
+      "assertions": {
+        "no_heading_action": true
+      }
+    },
+    {
+      "id": "HEADING_STRUCTURE-3",
+      "mechanism": "HEADING_STRUCTURE",
+      "kind": "POSITIVE",
+      "source": "# 执行要求\nOPS 检查服务，生成 e.txt。",
+      "source_sha256": "0a036714b165ec82979db57fa28d95793e92204f8b2cc6208eee9af109769ee1",
+      "assertions": {
+        "no_heading_action": true
+      }
+    },
+    {
+      "id": "HEADING_STRUCTURE-4",
+      "mechanism": "HEADING_STRUCTURE",
+      "kind": "CONTRASTIVE_NEGATIVE",
+      "source": "# 背景\n上次 OPS 删除了报告。\n# 当前任务\nQA 读取 f.ini。",
+      "source_sha256": "3a05d49439af8bcafdc3965474758087c8a4ee3f13093a0935e101a5f882c7c4",
+      "assertions": {
+        "no_delete": true
+      }
+    },
+    {
+      "id": "HEADING_STRUCTURE-5",
+      "mechanism": "HEADING_STRUCTURE",
+      "kind": "CONTRASTIVE_NEGATIVE",
+      "source": "# 示例\nQA 修改配置。\n# 当前任务\nQA 读取 g.ini。",
+      "source_sha256": "f00752bcf141a4cebfd98cd9e797caa0a4d919eabbbb807f3b1bdb1663b76370",
+      "assertions": {
+        "no_modify": true
+      }
+    },
+    {
+      "id": "HEADING_STRUCTURE-6",
+      "mechanism": "HEADING_STRUCTURE",
+      "kind": "AMBIGUITY",
+      "source": "# 报告内容\n立即停止。\n未指定所属报告。",
+      "source_sha256": "84853947e07788c9d381c1147b674d5b94ba05d871a8626a4aed35e1e1faa7b5",
+      "assertions": {
+        "unresolved": true
+      }
+    }
+  ],
+  "count": 48
+}

@@ -1,0 +1,322 @@
+# ADM-042 — actual Canonical 7+1
+
+## I
+
+```json
+{
+  "slot": "I",
+  "status": "RESOLVED",
+  "entries": [
+    {
+      "canonical_entry_id": "p1:560c684095d7e4a4266f3a4a",
+      "slot": "I",
+      "boundary_fact_ids": [
+        "p1:7ba95ecc58a6ecf777d9ee66"
+      ],
+      "state": "RESOLVED",
+      "display_value": "package.json",
+      "source_span_ids": [
+        "p1:587e4ed1e963872165edbe91",
+        "p1:4528b4b7b6d0a336b3795780",
+        "p1:0e7fe5293eccc413e92ccb1e",
+        "p1:39355083de0fd75cd18fcb01",
+        "p1:807f6c8abc939b0260d31bb2",
+        "p1:852538548cfc18669b168b09"
+      ],
+      "scope_expr_id": "p1:d116c87d06eaf47bb22a4f68"
+    },
+    {
+      "canonical_entry_id": "p1:73b64134a70a483daa0a5fb3",
+      "slot": "I",
+      "boundary_fact_ids": [
+        "p1:df0b146d8708f5a4521821c6"
+      ],
+      "state": "RESOLVED",
+      "display_value": "README.md",
+      "source_span_ids": [
+        "p1:40ad33a020b0892acecdf850",
+        "p1:2a5b3c135c692e85432d88ea",
+        "p1:0e7fe5293eccc413e92ccb1e",
+        "p1:39355083de0fd75cd18fcb01",
+        "p1:807f6c8abc939b0260d31bb2",
+        "p1:852538548cfc18669b168b09"
+      ],
+      "scope_expr_id": "p1:693887e38f22066543436987"
+    }
+  ]
+}
+```
+
+## O
+
+```json
+{
+  "slot": "O",
+  "status": "RESOLVED",
+  "entries": [
+    {
+      "canonical_entry_id": "p1:d1fd766b3c5c1f28f2715e72",
+      "slot": "O",
+      "boundary_fact_ids": [
+        "p1:e4be5118de30c83c3411d652"
+      ],
+      "state": "RESOLVED",
+      "display_value": "package-review.md",
+      "source_span_ids": [
+        "p1:3aad52f0779d9874b2baf4ad",
+        "p1:916a9882aab8d0ffc1ceaf7b",
+        "p1:807f6c8abc939b0260d31bb2",
+        "p1:ebacff7baf4acdcce251d0d6",
+        "p1:4528b4b7b6d0a336b3795780",
+        "p1:39355083de0fd75cd18fcb01",
+        "p1:c96761238354a8cc5b367db6",
+        "p1:852538548cfc18669b168b09"
+      ],
+      "scope_expr_id": "p1:92179a77058d33e99976da3d"
+    }
+  ]
+}
+```
+
+## A
+
+```json
+{
+  "slot": "A",
+  "status": "RESOLVED",
+  "entries": [
+    {
+      "canonical_entry_id": "p1:f63dd7441b0bead626ace601",
+      "slot": "A",
+      "boundary_fact_ids": [
+        "p1:d2a8706d71d2555e6bd11828"
+      ],
+      "state": "RESOLVED",
+      "display_value": "REQUIRED 读取 package.json",
+      "source_span_ids": [
+        "p1:10ccb991950942551ab30621",
+        "p1:4528b4b7b6d0a336b3795780",
+        "p1:587e4ed1e963872165edbe91",
+        "p1:ebacff7baf4acdcce251d0d6"
+      ],
+      "scope_expr_id": "p1:7e55cf6a1457d1be4cab6e37"
+    },
+    {
+      "canonical_entry_id": "p1:13cc5760322fd99933b1895e",
+      "slot": "A",
+      "boundary_fact_ids": [
+        "p1:25d45326f5e4f11ac85a933a"
+      ],
+      "state": "RESOLVED",
+      "display_value": "PERMITTED 检查 README.md",
+      "source_span_ids": [
+        "p1:280a0ee83f563bb0161d1072",
+        "p1:2a5b3c135c692e85432d88ea",
+        "p1:40ad33a020b0892acecdf850",
+        "p1:ebacff7baf4acdcce251d0d6",
+        "p1:4528b4b7b6d0a336b3795780"
+      ],
+      "scope_expr_id": "p1:b4fbefc6440940a6db46ac4c"
+    },
+    {
+      "canonical_entry_id": "p1:cc6a4fe3779d6d3a590fac4d",
+      "slot": "A",
+      "boundary_fact_ids": [
+        "p1:ffc8406ec342270014008e38"
+      ],
+      "state": "RESOLVED",
+      "display_value": "REQUIRED 生成 package-review.md",
+      "source_span_ids": [
+        "p1:3aad52f0779d9874b2baf4ad",
+        "p1:916a9882aab8d0ffc1ceaf7b",
+        "p1:807f6c8abc939b0260d31bb2",
+        "p1:ebacff7baf4acdcce251d0d6",
+        "p1:4528b4b7b6d0a336b3795780",
+        "p1:39355083de0fd75cd18fcb01",
+        "p1:c96761238354a8cc5b367db6",
+        "p1:852538548cfc18669b168b09"
+      ],
+      "scope_expr_id": "p1:186c248047c9389e6af50e66"
+    },
+    {
+      "canonical_entry_id": "p1:d96b73d47f8e5d5755b94e8e",
+      "slot": "A",
+      "boundary_fact_ids": [
+        "p1:ad2773e6e27bf6ad16814a80"
+      ],
+      "state": "RESOLVED",
+      "display_value": "REQUIRED 复核 package-review.md",
+      "source_span_ids": [
+        "p1:6ff868f70e28618bac9ae230",
+        "p1:39355083de0fd75cd18fcb01",
+        "p1:807f6c8abc939b0260d31bb2",
+        "p1:916a9882aab8d0ffc1ceaf7b",
+        "p1:df48afaa85f1a7b8b532094c",
+        "p1:c96761238354a8cc5b367db6"
+      ],
+      "scope_expr_id": "p1:25bdd11b83b36549e6af2be2"
+    },
+    {
+      "canonical_entry_id": "p1:9bdd527c0d4b46dfb00e0925",
+      "slot": "A",
+      "boundary_fact_ids": [
+        "p1:ddef47110f4b09b1e26791ad"
+      ],
+      "state": "RESOLVED",
+      "display_value": "REQUIRED 提交 package-review.md",
+      "source_span_ids": [
+        "p1:42f8a3121f0d02c396e7c92a",
+        "p1:852538548cfc18669b168b09",
+        "p1:807f6c8abc939b0260d31bb2",
+        "p1:916a9882aab8d0ffc1ceaf7b",
+        "p1:bcb2d315fc9f9666e99b36a2",
+        "p1:f7211c150a4dbaec784b2b8e"
+      ],
+      "scope_expr_id": "p1:33f9cfb416a4b155aec4b210"
+    }
+  ]
+}
+```
+
+## P
+
+```json
+{
+  "slot": "P",
+  "status": "RESOLVED",
+  "entries": [
+    {
+      "canonical_entry_id": "p1:c7f7bf90684b2ee7b3ccb252",
+      "slot": "P",
+      "boundary_fact_ids": [
+        "p1:0c0305791d58e439d4c62934",
+        "p1:efdaa0a4255832801a950d0f",
+        "p1:ec22e1bfc90c530b0c974e64"
+      ],
+      "state": "RESOLVED",
+      "display_value": "DEV [PERFORMER]",
+      "source_span_ids": [
+        "p1:ebacff7baf4acdcce251d0d6",
+        "p1:4528b4b7b6d0a336b3795780",
+        "p1:10ccb991950942551ab30621",
+        "p1:39355083de0fd75cd18fcb01",
+        "p1:807f6c8abc939b0260d31bb2",
+        "p1:852538548cfc18669b168b09",
+        "p1:280a0ee83f563bb0161d1072",
+        "p1:2a5b3c135c692e85432d88ea",
+        "p1:3aad52f0779d9874b2baf4ad",
+        "p1:916a9882aab8d0ffc1ceaf7b"
+      ]
+    },
+    {
+      "canonical_entry_id": "p1:4101b8da1159d333f5568aae",
+      "slot": "P",
+      "boundary_fact_ids": [
+        "p1:274e4c70298c24c14d668b98"
+      ],
+      "state": "RESOLVED",
+      "display_value": "QA [REVIEWER]",
+      "source_span_ids": [
+        "p1:df48afaa85f1a7b8b532094c",
+        "p1:39355083de0fd75cd18fcb01",
+        "p1:6ff868f70e28618bac9ae230",
+        "p1:807f6c8abc939b0260d31bb2",
+        "p1:852538548cfc18669b168b09"
+      ]
+    },
+    {
+      "canonical_entry_id": "p1:ced99dce024bf8d7488348ab",
+      "slot": "P",
+      "boundary_fact_ids": [
+        "p1:a4680564804f2724154c66b3"
+      ],
+      "state": "RESOLVED",
+      "display_value": "PM [PERFORMER]",
+      "source_span_ids": [
+        "p1:bcb2d315fc9f9666e99b36a2",
+        "p1:852538548cfc18669b168b09",
+        "p1:42f8a3121f0d02c396e7c92a",
+        "p1:39355083de0fd75cd18fcb01",
+        "p1:807f6c8abc939b0260d31bb2",
+        "p1:916a9882aab8d0ffc1ceaf7b"
+      ]
+    },
+    {
+      "canonical_entry_id": "p1:c8400928bbdad2da1c842759",
+      "slot": "P",
+      "boundary_fact_ids": [
+        "p1:c85fb6984a1cfabc77c94cec"
+      ],
+      "state": "RESOLVED",
+      "display_value": "ADMIN [RECIPIENT]",
+      "source_span_ids": [
+        "p1:f7211c150a4dbaec784b2b8e",
+        "p1:852538548cfc18669b168b09",
+        "p1:42f8a3121f0d02c396e7c92a",
+        "p1:39355083de0fd75cd18fcb01",
+        "p1:807f6c8abc939b0260d31bb2",
+        "p1:916a9882aab8d0ffc1ceaf7b"
+      ]
+    }
+  ]
+}
+```
+
+## R
+
+```json
+{
+  "slot": "R",
+  "status": "ABSENT",
+  "entries": []
+}
+```
+
+## V
+
+```json
+{
+  "slot": "V",
+  "status": "ABSENT",
+  "entries": []
+}
+```
+
+## C
+
+```json
+{
+  "slot": "C",
+  "status": "ABSENT",
+  "entries": []
+}
+```
+
+## B
+
+```json
+{
+  "slot": "B",
+  "status": "RESOLVED",
+  "entries": [
+    {
+      "canonical_entry_id": "p1:4ff5313c42bd8a8ac13f813e",
+      "slot": "B",
+      "boundary_fact_ids": [
+        "p1:4ad2454b84307768ef7cc814"
+      ],
+      "state": "RESOLVED",
+      "display_value": "FORBIDDEN 修改 package.json、README.md",
+      "source_span_ids": [
+        "p1:e758f9f7d5e31e15208c7ac5",
+        "p1:8bccbd22cd5139604552a600",
+        "p1:587e4ed1e963872165edbe91",
+        "p1:4528b4b7b6d0a336b3795780",
+        "p1:40ad33a020b0892acecdf850",
+        "p1:2a5b3c135c692e85432d88ea"
+      ],
+      "scope_expr_id": "p1:8725306176f8af8f436c3950"
+    }
+  ]
+}
+```

@@ -1,0 +1,299 @@
+# ADM-016 — actual Canonical 7+1
+
+## I
+
+```json
+{
+  "slot": "I",
+  "status": "RESOLVED",
+  "entries": [
+    {
+      "canonical_entry_id": "p1:ecf1f3175efa8b24e8029608",
+      "slot": "I",
+      "boundary_fact_ids": [
+        "p1:9a55d98918646b4ade0fe709"
+      ],
+      "state": "RESOLVED",
+      "display_value": "schema.sql",
+      "source_span_ids": [
+        "p1:249b23de1bc1960a9fe2b1e0",
+        "p1:9e9552654835653dd34156fe",
+        "p1:500d71a989458a4a7beadf70",
+        "p1:f16150053a5cd0dddbf5ba60",
+        "p1:2bb2d57156f3f33ae1ec6b20"
+      ],
+      "scope_expr_id": "p1:5be8cf910f454cbfeddc045d"
+    },
+    {
+      "canonical_entry_id": "p1:5dacfcd7cd6586fe80e26500",
+      "slot": "I",
+      "boundary_fact_ids": [
+        "p1:dedbe890442b85a05adb482a"
+      ],
+      "state": "RESOLVED",
+      "display_value": "索引与约束声明",
+      "source_span_ids": [
+        "p1:2dc22ac581241d3ccee0de39",
+        "p1:f16150053a5cd0dddbf5ba60",
+        "p1:500d71a989458a4a7beadf70",
+        "p1:2bb2d57156f3f33ae1ec6b20"
+      ],
+      "scope_expr_id": "p1:6659fe2418420ba2e2d7dd07"
+    }
+  ]
+}
+```
+
+## O
+
+```json
+{
+  "slot": "O",
+  "status": "RESOLVED",
+  "entries": [
+    {
+      "canonical_entry_id": "p1:8cd38cb19e2a777f2b6cb51c",
+      "slot": "O",
+      "boundary_fact_ids": [
+        "p1:129a9d1e9ce064d933de485f"
+      ],
+      "state": "RESOLVED",
+      "display_value": "schema-review.md",
+      "source_span_ids": [
+        "p1:d1ca2cd0896ea3efb0d8fafc",
+        "p1:a446fd0322ffd02eb30e59ea",
+        "p1:82e80934bc1d03bf3c7682e9",
+        "p1:eac0fec3974fe8f1ff1d8d19",
+        "p1:9e9552654835653dd34156fe"
+      ],
+      "scope_expr_id": "p1:72b93b9d4a6979761c3044cc"
+    }
+  ]
+}
+```
+
+## A
+
+```json
+{
+  "slot": "A",
+  "status": "RESOLVED",
+  "entries": [
+    {
+      "canonical_entry_id": "p1:eba64ab2d3b26be6e5d1885e",
+      "slot": "A",
+      "boundary_fact_ids": [
+        "p1:6372ca7c4cd71d5e05663820"
+      ],
+      "state": "RESOLVED",
+      "display_value": "REQUIRED 读取 schema.sql",
+      "source_span_ids": [
+        "p1:67a71a5e618ef0260d546130",
+        "p1:9e9552654835653dd34156fe",
+        "p1:249b23de1bc1960a9fe2b1e0",
+        "p1:eac0fec3974fe8f1ff1d8d19"
+      ],
+      "scope_expr_id": "p1:405677526867e69266886393"
+    },
+    {
+      "canonical_entry_id": "p1:fe2416f6abfd2cafcf9a2328",
+      "slot": "A",
+      "boundary_fact_ids": [
+        "p1:8f2d0c4859bcaa0e4b0ae2c1"
+      ],
+      "state": "RESOLVED",
+      "display_value": "REQUIRED 检查 索引与约束声明",
+      "source_span_ids": [
+        "p1:1bbd13260f39feb50f2017f5",
+        "p1:f16150053a5cd0dddbf5ba60",
+        "p1:2dc22ac581241d3ccee0de39",
+        "p1:eac0fec3974fe8f1ff1d8d19",
+        "p1:9e9552654835653dd34156fe",
+        "p1:2bb2d57156f3f33ae1ec6b20"
+      ],
+      "scope_expr_id": "p1:68e6337104e7c915bcac982d"
+    },
+    {
+      "canonical_entry_id": "p1:c3a4a2277d81164a0a884802",
+      "slot": "A",
+      "boundary_fact_ids": [
+        "p1:17b5ed069a45734b6956b5e4"
+      ],
+      "state": "RESOLVED",
+      "display_value": "REQUIRED 生成 schema-review.md",
+      "source_span_ids": [
+        "p1:d1ca2cd0896ea3efb0d8fafc",
+        "p1:a446fd0322ffd02eb30e59ea",
+        "p1:82e80934bc1d03bf3c7682e9",
+        "p1:eac0fec3974fe8f1ff1d8d19",
+        "p1:9e9552654835653dd34156fe"
+      ],
+      "scope_expr_id": "p1:2a185c5b8b573958ec6eb07d"
+    },
+    {
+      "canonical_entry_id": "p1:16eec25c71eccdd0b039d1bb",
+      "slot": "A",
+      "boundary_fact_ids": [
+        "p1:88fa1f2afd90d3d49a9b2cf2"
+      ],
+      "state": "RESOLVED",
+      "display_value": "PERMITTED 分析 离线",
+      "source_span_ids": [
+        "p1:6957bbff942405549c7a1d1e",
+        "p1:b820f88530342367dadf0c7f",
+        "p1:367959aed8184e1cf2a4f4d3"
+      ],
+      "scope_expr_id": "p1:814fe1836a79e050db1e320c"
+    }
+  ]
+}
+```
+
+## P
+
+```json
+{
+  "slot": "P",
+  "status": "RESOLVED",
+  "entries": [
+    {
+      "canonical_entry_id": "p1:5ff8157d790fc4c6a342c9fd",
+      "slot": "P",
+      "boundary_fact_ids": [
+        "p1:aa6a965a05c932c75f0c489b",
+        "p1:b9920f898573b9a188a863af",
+        "p1:8da52294bb5365617462d702"
+      ],
+      "state": "RESOLVED",
+      "display_value": "DEV [PERFORMER]",
+      "source_span_ids": [
+        "p1:eac0fec3974fe8f1ff1d8d19",
+        "p1:9e9552654835653dd34156fe",
+        "p1:67a71a5e618ef0260d546130",
+        "p1:f16150053a5cd0dddbf5ba60",
+        "p1:2bb2d57156f3f33ae1ec6b20",
+        "p1:1bbd13260f39feb50f2017f5",
+        "p1:d1ca2cd0896ea3efb0d8fafc",
+        "p1:a446fd0322ffd02eb30e59ea"
+      ]
+    },
+    {
+      "canonical_entry_id": "p1:dde876542b18b0a0b95ce464",
+      "slot": "P",
+      "boundary_fact_ids": [
+        "p1:3a14bb905a603a505f698758",
+        "p1:6cd74c104674bb262dc52a5c",
+        "p1:f4c0e0b96d361b8ce744e07d"
+      ],
+      "state": "RESOLVED",
+      "display_value": "QA [REVIEWER]",
+      "source_span_ids": [
+        "p1:65edccafa209918ef19df409",
+        "p1:60ebc7190cc31b57db09d39a",
+        "p1:f16150053a5cd0dddbf5ba60",
+        "p1:2bb2d57156f3f33ae1ec6b20"
+      ]
+    }
+  ]
+}
+```
+
+## R
+
+```json
+{
+  "slot": "R",
+  "status": "ABSENT",
+  "entries": []
+}
+```
+
+## V
+
+```json
+{
+  "slot": "V",
+  "status": "RESOLVED",
+  "entries": [
+    {
+      "canonical_entry_id": "p1:7eabc0ef0020d82a013c2c87",
+      "slot": "V",
+      "boundary_fact_ids": [
+        "p1:075d4406440f569594cd8be0"
+      ],
+      "state": "RESOLVED",
+      "display_value": "DB-SPEC-9",
+      "source_span_ids": [
+        "p1:2bb2d57156f3f33ae1ec6b20",
+        "p1:f16150053a5cd0dddbf5ba60",
+        "p1:500d71a989458a4a7beadf70"
+      ]
+    },
+    {
+      "canonical_entry_id": "p1:07eae9bfcf0442505bef3fe8",
+      "slot": "V",
+      "boundary_fact_ids": [
+        "p1:29aced0cfabf74bf248a1d1e"
+      ],
+      "state": "RESOLVED",
+      "display_value": "DB-SPEC-9",
+      "source_span_ids": [
+        "p1:2bb2d57156f3f33ae1ec6b20",
+        "p1:f16150053a5cd0dddbf5ba60",
+        "p1:1bbd13260f39feb50f2017f5"
+      ]
+    }
+  ]
+}
+```
+
+## C
+
+```json
+{
+  "slot": "C",
+  "status": "RESOLVED",
+  "entries": [
+    {
+      "canonical_entry_id": "p1:825ec37d1f0b1ea138780d78",
+      "slot": "C",
+      "boundary_fact_ids": [
+        "p1:2a9569ce7ff3eaf27da39e5b"
+      ],
+      "state": "RESOLVED",
+      "display_value": "任务结束",
+      "source_span_ids": [
+        "p1:2b4784af98e320417f500203",
+        "p1:60ebc7190cc31b57db09d39a"
+      ],
+      "condition_expr_id": "p1:12f37ee672d52d694951772e"
+    }
+  ]
+}
+```
+
+## B
+
+```json
+{
+  "slot": "B",
+  "status": "RESOLVED",
+  "entries": [
+    {
+      "canonical_entry_id": "p1:40a59c61e645b907b0eb46cc",
+      "slot": "B",
+      "boundary_fact_ids": [
+        "p1:0d1e6c5f18ea417822d6a69a"
+      ],
+      "state": "RESOLVED",
+      "display_value": "FORBIDDEN 连接 生产数据库",
+      "source_span_ids": [
+        "p1:5a47a9e0ec4dc03b4bb7c844",
+        "p1:915fe3c088341dcfe5ef7610",
+        "p1:96581755a8658b1acc307013"
+      ],
+      "scope_expr_id": "p1:5c1627fed0cff8f084aaba8a"
+    }
+  ]
+}
+```

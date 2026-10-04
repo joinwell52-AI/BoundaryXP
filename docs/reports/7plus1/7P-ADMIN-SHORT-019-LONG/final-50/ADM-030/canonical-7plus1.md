@@ -1,0 +1,269 @@
+# ADM-030 — actual Canonical 7+1
+
+## I
+
+```json
+{
+  "slot": "I",
+  "status": "RESOLVED",
+  "entries": [
+    {
+      "canonical_entry_id": "p1:cc458d084920fb6b0a856465",
+      "slot": "I",
+      "boundary_fact_ids": [
+        "p1:f38aaf0b0119534ca11644dd"
+      ],
+      "state": "RESOLVED",
+      "display_value": "training-index.csv",
+      "source_span_ids": [
+        "p1:65671e1d0e4cf3c561482a68",
+        "p1:f428f754cefb6fcfb286e725",
+        "p1:67846403c6b9133f2c60a3a5"
+      ],
+      "scope_expr_id": "p1:5dd07d4bd65bea178be928dc"
+    },
+    {
+      "canonical_entry_id": "p1:0dc089796fb392a202b7ade3",
+      "slot": "I",
+      "boundary_fact_ids": [
+        "p1:70ad87ab1a3dc828095ff724"
+      ],
+      "state": "RESOLVED",
+      "display_value": "每项数据的来源与许可记录",
+      "source_span_ids": [
+        "p1:0835e5cb3cb931407a69dd81",
+        "p1:2818cc60946b9efafc8e9c94",
+        "p1:67846403c6b9133f2c60a3a5"
+      ],
+      "scope_expr_id": "p1:2791768f2571ef4171a142e3"
+    }
+  ]
+}
+```
+
+## O
+
+```json
+{
+  "slot": "O",
+  "status": "RESOLVED",
+  "entries": [
+    {
+      "canonical_entry_id": "p1:6bf525e06a001f1b5797d8d8",
+      "slot": "O",
+      "boundary_fact_ids": [
+        "p1:669db0137ad90b02c0104c02"
+      ],
+      "state": "RESOLVED",
+      "display_value": "training-audit.md",
+      "source_span_ids": [
+        "p1:0ffbf341ad15438cc7ff6cbf",
+        "p1:dcce9ce140838e207ebe4c04",
+        "p1:5b88122344a786ba198c1a47",
+        "p1:a9d714fdc0df99d2985b6c6e",
+        "p1:f428f754cefb6fcfb286e725",
+        "p1:16601291727f5d74087da47f",
+        "p1:91ffc9e2f19150d8e2dc65ed",
+        "p1:30e31b9437461b039e5c7146"
+      ],
+      "scope_expr_id": "p1:099d4cd7cd1d590cbad7a76b"
+    }
+  ]
+}
+```
+
+## A
+
+```json
+{
+  "slot": "A",
+  "status": "RESOLVED",
+  "entries": [
+    {
+      "canonical_entry_id": "p1:47fa8f13084af3339a463522",
+      "slot": "A",
+      "boundary_fact_ids": [
+        "p1:fec812efbcf79ece35ec90dc"
+      ],
+      "state": "RESOLVED",
+      "display_value": "REQUIRED 读取 training-index.csv",
+      "source_span_ids": [
+        "p1:f4142b0d3cd81a3b7046653c",
+        "p1:f428f754cefb6fcfb286e725",
+        "p1:65671e1d0e4cf3c561482a68",
+        "p1:a9d714fdc0df99d2985b6c6e"
+      ],
+      "scope_expr_id": "p1:db72ad6dff86cde7a0229ab0"
+    },
+    {
+      "canonical_entry_id": "p1:d50fe45faac2edc990fad505",
+      "slot": "A",
+      "boundary_fact_ids": [
+        "p1:289df455595f078165678a60"
+      ],
+      "state": "RESOLVED",
+      "display_value": "REQUIRED 核查 每项数据的来源与许可记录",
+      "source_span_ids": [
+        "p1:3b6eaddb210d6c06bc083142",
+        "p1:2818cc60946b9efafc8e9c94",
+        "p1:0835e5cb3cb931407a69dd81",
+        "p1:a9d714fdc0df99d2985b6c6e",
+        "p1:f428f754cefb6fcfb286e725"
+      ],
+      "scope_expr_id": "p1:5fd994d79d52686fc67ff5c2"
+    },
+    {
+      "canonical_entry_id": "p1:2681fb6ac1eade85906183d3",
+      "slot": "A",
+      "boundary_fact_ids": [
+        "p1:5de877c2d2bbff8e59b7e196"
+      ],
+      "state": "RESOLVED",
+      "display_value": "REQUIRED 生成 training-audit.md",
+      "source_span_ids": [
+        "p1:0ffbf341ad15438cc7ff6cbf",
+        "p1:dcce9ce140838e207ebe4c04",
+        "p1:5b88122344a786ba198c1a47",
+        "p1:a9d714fdc0df99d2985b6c6e",
+        "p1:f428f754cefb6fcfb286e725"
+      ],
+      "scope_expr_id": "p1:a8eece1d75a8e31d88bd96b6"
+    },
+    {
+      "canonical_entry_id": "p1:9bb477ac5a163e48058edb16",
+      "slot": "A",
+      "boundary_fact_ids": [
+        "p1:cfdcf3bbe57289c58190dd5e"
+      ],
+      "state": "RESOLVED",
+      "display_value": "REQUIRED 复核 training-audit.md",
+      "source_span_ids": [
+        "p1:2c10be4383962cebf7d98df7",
+        "p1:6f09480280b3042e46341599",
+        "p1:5b88122344a786ba198c1a47",
+        "p1:dcce9ce140838e207ebe4c04",
+        "p1:1d6e83f0a432ecb767204bdc"
+      ],
+      "scope_expr_id": "p1:e6dd81117706ad071076d1f4"
+    }
+  ]
+}
+```
+
+## P
+
+```json
+{
+  "slot": "P",
+  "status": "RESOLVED",
+  "entries": [
+    {
+      "canonical_entry_id": "p1:0de55c82c3956fb84ee1fece",
+      "slot": "P",
+      "boundary_fact_ids": [
+        "p1:a77f360903789e2dd557f20a",
+        "p1:64cea5a9e537821094cf6fa1",
+        "p1:55010fcdeb420437cf00505f"
+      ],
+      "state": "RESOLVED",
+      "display_value": "数据员苏明 [PERFORMER]",
+      "source_span_ids": [
+        "p1:a9d714fdc0df99d2985b6c6e",
+        "p1:f428f754cefb6fcfb286e725",
+        "p1:f4142b0d3cd81a3b7046653c",
+        "p1:3b6eaddb210d6c06bc083142",
+        "p1:2818cc60946b9efafc8e9c94",
+        "p1:0ffbf341ad15438cc7ff6cbf",
+        "p1:dcce9ce140838e207ebe4c04"
+      ]
+    },
+    {
+      "canonical_entry_id": "p1:afc1b1f5c45f9fb1362b5c8a",
+      "slot": "P",
+      "boundary_fact_ids": [
+        "p1:80b1e619f1800e910a9e1686"
+      ],
+      "state": "RESOLVED",
+      "display_value": "QA [REVIEWER]",
+      "source_span_ids": [
+        "p1:1d6e83f0a432ecb767204bdc",
+        "p1:6f09480280b3042e46341599",
+        "p1:2c10be4383962cebf7d98df7",
+        "p1:5b88122344a786ba198c1a47",
+        "p1:dcce9ce140838e207ebe4c04"
+      ]
+    }
+  ]
+}
+```
+
+## R
+
+```json
+{
+  "slot": "R",
+  "status": "ABSENT",
+  "entries": []
+}
+```
+
+## V
+
+```json
+{
+  "slot": "V",
+  "status": "ABSENT",
+  "entries": []
+}
+```
+
+## C
+
+```json
+{
+  "slot": "C",
+  "status": "ABSENT",
+  "entries": []
+}
+```
+
+## B
+
+```json
+{
+  "slot": "B",
+  "status": "RESOLVED",
+  "entries": [
+    {
+      "canonical_entry_id": "p1:129ab309ede46627893117e3",
+      "slot": "B",
+      "boundary_fact_ids": [
+        "p1:89ec04552a424cb201229aa6"
+      ],
+      "state": "RESOLVED",
+      "display_value": "FORBIDDEN 下载 新数据",
+      "source_span_ids": [
+        "p1:9eca53af6a20a6f8b7633857",
+        "p1:b87a38844df829f1e95ea23c",
+        "p1:4005e30893339490f5ba9805"
+      ],
+      "scope_expr_id": "p1:9599acd991025f06099dd4ef"
+    },
+    {
+      "canonical_entry_id": "p1:b4305947e1df7b888dfb0437",
+      "slot": "B",
+      "boundary_fact_ids": [
+        "p1:9c26030a8c37137ef41de3c8"
+      ],
+      "state": "RESOLVED",
+      "display_value": "FORBIDDEN 启动 训练",
+      "source_span_ids": [
+        "p1:ef528b938cf3cdedf574a30f",
+        "p1:d51728fb0898045985eabdbe",
+        "p1:7a9b5d7dd7d64e29001bdea9"
+      ],
+      "scope_expr_id": "p1:003a9914e8d805350f201986"
+    }
+  ]
+}
+```

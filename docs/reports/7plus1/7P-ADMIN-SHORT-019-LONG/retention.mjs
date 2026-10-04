@@ -1,0 +1,10 @@
+import fs from 'node:fs';import {OUT,read,write,signature} from './common.mjs';
+import {parse7Plus1,compileNative} from '../../../../research/7plus1-parser/v0.3-admin-short-019/engine.mjs';
+import {sourceDocument} from '../../../../research/7plus1-parser/p0-semantic-repair-r02/source.mjs';
+import {closeNlp} from '../../../../research/7plus1-parser/v0.3-7p-composition-014/linguistic.mjs';
+import {cases} from '../7P-SHORT-016-R2/common.mjs';import {compare} from '../7P-SHORT-016-R2/compare.mjs';
+import {meetingAssertions} from '../../../../research/7plus1-parser/v0.3-p2.2-scope-consistency-repair/meeting-assertions.mjs';
+import {controlCheck} from '../7P-ADMIN-SHORT-018-R1/checks.mjs';
+const revision=process.argv[2],cached=process.argv.includes('--cached'),out=OUT+'retention-attempts/'+revision+'/';if(!revision||fs.existsSync(out))throw Error('NEW_ATTEMPT_REQUIRED');
+const controls=read('docs/reports/7plus1/7P-ADMIN-SHORT-018-R1/NON-GOLD-CONTROLS.json').controls,defs=[...cases().map(c=>({...c,kind:'D'})),{id:'REF-001',kind:'REF',source:fs.readFileSync('fixtures/7plus1/golden/REF-001/source.txt','utf8')},...controls.map(c=>({...c,kind:'R1_CONTROL'}))];
+const rows=[];try{for(const c of defs){const prior='docs/reports/7plus1/7P-ADMIN-SHORT-018-R1/'+(c.kind==='R1_CONTROL'?'final-controls/':'retention/')+c.id+'/trace.json';const r=cached?compileNative(sourceDocument(c.source),structuredClone(read(prior).compiler_v03.nlp_signals)):await parse7Plus1(c.source);const result=c.kind==='D'?compare(r,c):c.kind==='REF'?{assertions:meetingAssertions(r)}:controlCheck(r,c);write(out+c.id+'/source.txt',c.source);write(out+c.id+'/trace.json',r);write(out+c.id+'/review.json',result);const passed=c.kind==='D'?result.FULL_CASE_CLOSED:result.assertions.every(a=>a.pass);const row={id:c.id,kind:c.kind,passed,contract:r.contract_gate_results.status,signature:signature(r),...(c.kind==='D'?{failed_slots:result.slots.filter(s=>!s.closed).map(s=>s.slot)}:{failed:result.assertions.filter(a=>!a.pass).map(a=>a.name)})};rows.push(row);write(out+'RESULTS.json',{cached_nlp:cached,rows});console.log(JSON.stringify(row));}}finally{closeNlp();}
