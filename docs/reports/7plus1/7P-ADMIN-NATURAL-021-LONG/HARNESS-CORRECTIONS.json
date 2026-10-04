@@ -1,0 +1,40 @@
+{
+  "runtime_changed": false,
+  "source_changed": false,
+  "oracle_changed": false,
+  "records": [
+    {
+      "stage": "preflight",
+      "path": "PREFLIGHT-HARNESS-CORRECTION.json",
+      "reason": "Case-header regex missing multiline flag; first failed preflight retained, no Parser executed before correct integrity check."
+    },
+    {
+      "stage": "candidate_copy",
+      "path": "development/r01/HARNESS-ERROR.json",
+      "reason": "Used own_runtime rather than the actual own_runtime_files manifest field; empty new directory was resumed only after checking old first seal and all protected runtime digests."
+    },
+    {
+      "stage": "development_review",
+      "path": "development/r02/CONTROL-REVIEW-CORRECTION.json",
+      "reason": "Read canonical semantic_decoding location and output owner ID; raw controls and first results unchanged.",
+      "false_negative_controls": [
+        "OWN-P1",
+        "OWN-P2",
+        "OWN-P3",
+        "ROLE-P1",
+        "ROLE-P3"
+      ]
+    },
+    {
+      "stage": "retention_review",
+      "path": "FINAL-CONTROL-REVIEW.json",
+      "reason": "Restore frozen control kind after grouping changed the label; same saved traces reviewed, not replayed or changed."
+    },
+    {
+      "stage": "metamorphic_aggregation",
+      "first": "anti-overfit/final/",
+      "completed": "anti-overfit/completed/",
+      "reason": "Immutable evidence guard refused repeated aggregate overwrite on second pair. Original partial attempt retained; all90 pairs executed in new directory with one final aggregate."
+    }
+  ]
+}

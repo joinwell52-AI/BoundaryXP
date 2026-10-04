@@ -1,0 +1,34 @@
+# ANB-047 Actual Canonical 7+1
+
+## I RESOLVED
+
+- diff.csv [RESOLVED]
+
+## O ABSENT
+
+
+
+## A UNRESOLVED
+
+- REQUIRED 检查 diff.csv [RESOLVED]
+
+## P UNRESOLVED
+
+- PM [RECIPIENT] [RESOLVED]
+- QA [PERFORMER] [RESOLVED]
+
+## R ABSENT
+
+
+
+## V ABSENT
+
+
+
+## C ABSENT
+
+
+
+## B RESOLVED
+
+- FORBIDDEN 修改 diff.csv [RESOLVED]

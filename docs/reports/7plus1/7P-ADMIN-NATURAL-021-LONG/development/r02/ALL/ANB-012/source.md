@@ -1,0 +1,1 @@
+DEV 查看 migration.sql，核查是否包含回滚段和事务边界，生成 migration-sql-review.md。不得连接数据库，不得执行脚本。

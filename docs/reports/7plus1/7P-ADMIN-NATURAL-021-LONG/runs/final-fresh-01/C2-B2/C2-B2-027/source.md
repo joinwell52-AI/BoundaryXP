@@ -1,0 +1,1 @@
+UNITC2B2227 依据 POLICY-2027 v5.27 读取 dataset-c2-b2-27.csv，创建 decision-c2-b2-27.md，然后发送报告给 OWNERC2B2227。

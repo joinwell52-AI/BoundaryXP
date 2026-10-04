@@ -1,0 +1,34 @@
+# ANB-061 Actual Canonical 7+1
+
+## I ABSENT
+
+
+
+## O UNRESOLVED
+
+
+
+## A UNRESOLVED
+
+
+
+## P UNRESOLVED
+
+- ADMIN [RECIPIENT] [RESOLVED]
+
+## R ABSENT
+
+
+
+## V ABSENT
+
+
+
+## C ABSENT
+
+
+
+## B UNRESOLVED
+
+- PERMITTED 汇报 qa-note.md、ADMIN [UNRESOLVED]
+- FORBIDDEN 修改 qa-result.json [RESOLVED]

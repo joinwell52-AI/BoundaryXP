@@ -1,0 +1,1 @@
+UNITC2B2275 检查cache205和queue205，生成 acceptance-c2-b2-5.txt。两类检查都完成后，任务结束。

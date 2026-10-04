@@ -1,0 +1,1 @@
+TEAM302 按 POLICY-2102 v5.102 读取 basis-c2-a-2.yaml，生成 basis-review-c2-a-2.txt。

@@ -1,0 +1,1 @@
+UNITC2B2278 检查cache208和queue208，生成 acceptance-c2-b2-8.txt。只有cache208与queue208均完成后，任务才完成。

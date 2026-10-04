@@ -1,0 +1,1 @@
+QA 依据 POLICY-73 v4.2 查看 parcel.csv，编写 brief.md。PM 在 QA 发送报告后向 ADMIN 汇报。

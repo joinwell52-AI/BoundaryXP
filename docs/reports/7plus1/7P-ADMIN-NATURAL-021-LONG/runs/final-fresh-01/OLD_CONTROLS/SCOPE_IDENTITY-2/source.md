@@ -1,0 +1,1 @@
+DEV 读取 setup.ini，只检查测试环境，不检查生产环境，生成 check.txt。

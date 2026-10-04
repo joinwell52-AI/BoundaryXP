@@ -1,0 +1,1 @@
+TEAM904 生成 garnet.md 与 opal.md。文档必须记录“操作受限”。

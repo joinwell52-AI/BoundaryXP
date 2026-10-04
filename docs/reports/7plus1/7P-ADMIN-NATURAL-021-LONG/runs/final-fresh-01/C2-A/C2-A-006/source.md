@@ -1,0 +1,1 @@
+TEAM206 依据 POLICY-2006 v5.6 查看 dataset-c2-a-6.csv，编写 decision-c2-a-6.md，随后发送报告给 LEAD206。

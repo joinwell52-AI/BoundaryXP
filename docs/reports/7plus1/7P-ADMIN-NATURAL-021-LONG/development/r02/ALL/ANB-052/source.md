@@ -1,0 +1,1 @@
+QA 查看 changes.csv。有差异时生成 change-report.md；没有差异时不生成文件，只向 PM 说明无差异。不得修改 changes.csv。

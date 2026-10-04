@@ -1,0 +1,1 @@
+整个检查任务须在 17 分钟内完成。QA 读取 samples.ini，生成 digest.txt。

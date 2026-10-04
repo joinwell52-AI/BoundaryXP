@@ -1,0 +1,1 @@
+OPS 按 GUIDE-28 v2.5 读取 batch.json，创建 summary.txt。QA 复核报告后由 PM 发送给 ADMIN。

@@ -1,0 +1,1 @@
+TEAM232 核查 lab-c2-a-2，生成 scope-c2-a-2.txt。范围排除 public-c2-a-2。

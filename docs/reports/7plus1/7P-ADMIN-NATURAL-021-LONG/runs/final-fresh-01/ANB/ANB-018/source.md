@@ -1,0 +1,1 @@
+DEV 比较 api-before.json 与 api-after.json，生成 api-change.md，列出新增、移除和重命名的接口。这里只记录变化，不执行任何接口删除或改名。

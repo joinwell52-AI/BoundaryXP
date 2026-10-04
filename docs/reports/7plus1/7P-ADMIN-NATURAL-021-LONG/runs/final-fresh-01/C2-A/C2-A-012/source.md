@@ -1,0 +1,1 @@
+Using POLICY-2012 version v5.12, TEAM212 read dataset-c2-a-12.csv, create decision-c2-a-12.md and send the report to LEAD212.

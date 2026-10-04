@@ -1,0 +1,1 @@
+QA read cabin.csv and write trail.txt. Send the report to OPS after DEV has reviewed it.

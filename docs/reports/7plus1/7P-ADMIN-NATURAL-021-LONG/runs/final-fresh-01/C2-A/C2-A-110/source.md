@@ -1,0 +1,1 @@
+TEAM310 依据 POLICY-2110 v5.110 和 v9.10 读取 basis-c2-a-10.yaml，生成 basis-review-c2-a-10.txt。

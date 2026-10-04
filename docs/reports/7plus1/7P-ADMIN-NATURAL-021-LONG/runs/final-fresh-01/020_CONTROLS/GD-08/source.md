@@ -1,0 +1,1 @@
+OPS 读取最近 6 次日志，生成 window.txt。

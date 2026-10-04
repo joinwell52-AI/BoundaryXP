@@ -1,0 +1,1 @@
+只有安全负责人刘靖批准后，QA 才能读取 prod-snapshot.json 并生成 prod-snapshot-review.md。刘靖不参与文件检查。

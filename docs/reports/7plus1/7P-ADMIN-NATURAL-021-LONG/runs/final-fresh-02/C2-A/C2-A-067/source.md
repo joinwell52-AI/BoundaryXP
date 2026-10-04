@@ -1,0 +1,1 @@
+TEAM267 check endpoint-c2-a-17 and queue-c2-a-17, retry at least 21 times.

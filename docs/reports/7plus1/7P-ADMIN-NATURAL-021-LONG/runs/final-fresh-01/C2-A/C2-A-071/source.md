@@ -1,0 +1,1 @@
+TEAM271 检查cache201和queue201，生成 acceptance-c2-a-1.txt。两类检查都完成后，任务结束。

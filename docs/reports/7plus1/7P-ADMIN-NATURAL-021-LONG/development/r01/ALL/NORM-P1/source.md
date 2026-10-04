@@ -1,0 +1,1 @@
+请 TEAM811 读取 copper.csv，生成 copper-note.md。

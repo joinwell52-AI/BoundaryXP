@@ -1,0 +1,1 @@
+UNITC2B2206 依据 POLICY-2006 v5.6 读取 dataset-c2-b2-6.csv，创建 decision-c2-b2-6.md，然后发送报告给 OWNERC2B2206。

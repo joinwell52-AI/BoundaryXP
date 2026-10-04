@@ -1,0 +1,1 @@
+QA 读取 coverage.json，低于 82% 的模块写入 coverage-risk.md。82% 是分类阈值，不得修改阈值或补测。

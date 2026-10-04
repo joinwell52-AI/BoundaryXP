@@ -1,0 +1,35 @@
+# ANB-059 Actual Canonical 7+1
+
+## I RESOLVED
+
+- scan.json [RESOLVED]
+
+## O UNRESOLVED
+
+
+
+## A UNRESOLVED
+
+- REQUIRED 检查 scan.json [RESOLVED]
+- REQUIRED 汇报 [UNRESOLVED]
+- REQUIRED 升级 [UNRESOLVED]
+
+## P RESOLVED
+
+- 安全员周启 [PERFORMER] [RESOLVED]
+
+## R ABSENT
+
+
+
+## V ABSENT
+
+
+
+## C ABSENT
+
+
+
+## B ABSENT
+
+

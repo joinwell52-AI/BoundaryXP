@@ -1,0 +1,1 @@
+UNITC2B2226 依据 POLICY-2026 v5.26 读取 dataset-c2-b2-26.csv，创建 decision-c2-b2-26.md，然后发送报告给 OWNERC2B2226。

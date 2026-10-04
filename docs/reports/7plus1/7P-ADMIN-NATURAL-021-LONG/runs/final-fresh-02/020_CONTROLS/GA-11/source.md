@@ -1,0 +1,1 @@
+QA 读取 alpha.csv 和 beta.csv，生成 scope.md。排除其中一个。

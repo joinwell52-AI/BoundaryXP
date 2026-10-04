@@ -1,0 +1,1 @@
+TEAM258 check endpoint-c2-a-8, retry at most 12 times, create quantity-c2-a-8.txt.

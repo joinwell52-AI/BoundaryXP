@@ -1,0 +1,1 @@
+TEAM231 核查 lab-c2-a-1，生成 scope-c2-a-1.txt。public-c2-a-1 不在本次核查范围内。

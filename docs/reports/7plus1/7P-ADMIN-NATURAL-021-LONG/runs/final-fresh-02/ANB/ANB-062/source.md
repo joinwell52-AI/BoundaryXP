@@ -1,0 +1,1 @@
+DEV 读取 before.csv 和 after.csv 并生成 compare.md。QA 确认两份输入都已核对且报告已生成后，PM 提交报告。

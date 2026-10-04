@@ -1,0 +1,1 @@
+QA check routes and ports, create port.txt. When both checks have finished, the task is complete.

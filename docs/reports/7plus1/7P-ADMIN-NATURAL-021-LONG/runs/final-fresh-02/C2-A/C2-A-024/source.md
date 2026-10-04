@@ -1,0 +1,1 @@
+TEAM224 依据 POLICY-2024 v5.24 查看 dataset-c2-a-24.csv，编写 decision-c2-a-24.md，随后发送报告给 LEAD224。

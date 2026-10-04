@@ -1,0 +1,1 @@
+TEAM299 生成 handoff-c2-a-9.md 和 alternative-c2-a-9.md，LEAD299 发送该报告给 COORD。

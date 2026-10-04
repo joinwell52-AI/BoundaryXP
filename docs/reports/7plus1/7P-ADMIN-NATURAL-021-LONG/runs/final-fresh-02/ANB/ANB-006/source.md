@@ -1,0 +1,1 @@
+DEV 检查 dependencies.lock 中的直接依赖版本，结果写入 dependency-review.md。范围不包含 transitive dependencies；不得执行升级或重新安装。

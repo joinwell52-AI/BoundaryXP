@@ -1,0 +1,1 @@
+Read health.log. If a fatal error appears, stop the inspection and notify PM; otherwise create health-summary.md. Do not restart the service.

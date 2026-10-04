@@ -1,0 +1,1 @@
+DEV 检查索引版本和校验和，生成 inventory.txt。

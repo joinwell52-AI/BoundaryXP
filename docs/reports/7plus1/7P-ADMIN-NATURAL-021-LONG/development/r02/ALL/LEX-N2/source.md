@@ -1,0 +1,1 @@
+TEAM820 检查 inspect-label.json，并生成 label-note.md。

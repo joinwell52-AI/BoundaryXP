@@ -1,0 +1,1 @@
+QA 读取 probe-5.ini，不要求修复，只生成 fresh-polarity-005-0.txt。

@@ -1,0 +1,1 @@
+王齐负责整理说明。读取 service.yaml，生成 deployment-guide.md。deployment-guide.md 必须包含“部署步骤”和“回滚说明”两个部分。不得修改 service.yaml。deployment-guide.md 已生成且这两个部分都存在后，本任务完成。

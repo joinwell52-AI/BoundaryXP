@@ -1,0 +1,1 @@
+DEV 生成 license-review.md。QA 确认每个缺少许可证或来源不明的条目都已记录后，PM 才能发送报告。

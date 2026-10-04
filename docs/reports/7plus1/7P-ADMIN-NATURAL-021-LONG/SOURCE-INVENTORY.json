@@ -1,0 +1,1105 @@
+{
+  "source_blob": "15154b2f30453de830f8fd4d78c1a92cf52d9f1e",
+  "cases": [
+    {
+      "id": "ANB-001",
+      "title": "服务状态核查",
+      "source": "请 OPS 查看 test-services.json，核对测试环境中 6 个服务是否都处于预期状态，并生成 service-status.md。QA 复核报告后交给 PM；不得重启或停止任何服务。",
+      "source_sha256": "b5044b1365c1aab3b800575312c1d7446b24d6adf0d0d8327eb456677bbde51e",
+      "source_document_span": {
+        "start": 589,
+        "end": 688
+      },
+      "source_document_sha256": "3e67c5303e6ffec934249bb03ad42d01b5ad736a4c1dc767aaca2768b7bcd029"
+    },
+    {
+      "id": "ANB-002",
+      "title": "配置只读核对",
+      "source": "DEV 读取 app-config.yaml 与 app-config.example.yaml，检查关键配置项是否一致，差异写入 config-review.md。只允许读取和记录，不得覆盖任一配置文件。",
+      "source_sha256": "acace7129e747786a76cd0fd604d01d1d8086e3149c5727bb9740dddd5327882",
+      "source_document_span": {
+        "start": 709,
+        "end": 812
+      },
+      "source_document_sha256": "3e67c5303e6ffec934249bb03ad42d01b5ad736a4c1dc767aaca2768b7bcd029"
+    },
+    {
+      "id": "ANB-003",
+      "title": "证据清单检查",
+      "source": "请审计员林乔检查 evidence-index.csv 中每条记录是否都有文件名、哈希和时间戳，生成 evidence-audit.md。缺少任一字段的条目必须单独列出，但不要补写原始记录。",
+      "source_sha256": "be0b4da624551669e252b84e699904944bb4ea10140f3ef07d44f9fe137755af",
+      "source_document_span": {
+        "start": 833,
+        "end": 928
+      },
+      "source_document_sha256": "3e67c5303e6ffec934249bb03ad42d01b5ad736a4c1dc767aaca2768b7bcd029"
+    },
+    {
+      "id": "ANB-004",
+      "title": "接口清单核查",
+      "source": "DEV 查看 public-api.json，核对公开接口名称和版本标识，生成 api-audit.md。QA 只复核报告内容，不修改接口定义；PM 接收最终报告。",
+      "source_sha256": "2203a694d05e08c876f253e96893e32697ede57e504513b67de6be5ef0a569b0",
+      "source_document_span": {
+        "start": 949,
+        "end": 1031
+      },
+      "source_document_sha256": "3e67c5303e6ffec934249bb03ad42d01b5ad736a4c1dc767aaca2768b7bcd029"
+    },
+    {
+      "id": "ANB-005",
+      "title": "日志只读排查",
+      "source": "OPS 读取 gateway.log 和 gateway-error.log，定位过去 20 分钟内重复出现的 5xx 错误，并生成 gateway-notes.md。不得清理日志，也不得重启网关。",
+      "source_sha256": "fa5d8ca69a7107a0ac66e4b80d3401098f0959de2d97dcf8f8075c7285773a37",
+      "source_document_span": {
+        "start": 1052,
+        "end": 1151
+      },
+      "source_document_sha256": "3e67c5303e6ffec934249bb03ad42d01b5ad736a4c1dc767aaca2768b7bcd029"
+    },
+    {
+      "id": "ANB-006",
+      "title": "依赖版本检查",
+      "source": "DEV 检查 dependencies.lock 中的直接依赖版本，结果写入 dependency-review.md。范围不包含 transitive dependencies；不得执行升级或重新安装。",
+      "source_sha256": "e20aafe10d17f380eb374ed7ed5fdbf4e8c90427958ef23dba0fe642d2eb1ca9",
+      "source_document_span": {
+        "start": 1172,
+        "end": 1274
+      },
+      "source_document_sha256": "3e67c5303e6ffec934249bb03ad42d01b5ad736a4c1dc767aaca2768b7bcd029"
+    },
+    {
+      "id": "ANB-007",
+      "title": "构建结果核验",
+      "source": "QA 读取 build-summary.json，确认主模块和两个插件的构建结果，生成 build-review.md。发现失败项时只记录原因，不得重新触发构建。",
+      "source_sha256": "64594dd81e104af1e7cfeb2a93912147ca497c2c35965de1000c7c2f1bc414e7",
+      "source_document_span": {
+        "start": 1295,
+        "end": 1376
+      },
+      "source_document_sha256": "3e67c5303e6ffec934249bb03ad42d01b5ad736a4c1dc767aaca2768b7bcd029"
+    },
+    {
+      "id": "ANB-008",
+      "title": "文档链接检查",
+      "source": "编辑周岚查看 README.md 与 docs/index.md 中的内部链接，生成 link-check.md。只记录失效链接，不修改任何 Markdown 文件。",
+      "source_sha256": "81eeea50a726368ff274e979a913a880be67c17ab07776b94224b31ce03a7efe",
+      "source_document_span": {
+        "start": 1397,
+        "end": 1480
+      },
+      "source_document_sha256": "3e67c5303e6ffec934249bb03ad42d01b5ad736a4c1dc767aaca2768b7bcd029"
+    },
+    {
+      "id": "ANB-009",
+      "title": "权限映射核查",
+      "source": "安全员韩宁读取 role-map.csv 和 permission-map.csv，检查角色与权限的对应关系，输出 permission-audit.md。不得新增、删除或修改权限记录。",
+      "source_sha256": "bedc9dfc73fdc436caa09c46cd3cd694e6c6844e7b18e77ffbb159d3dd99442b",
+      "source_document_span": {
+        "start": 1501,
+        "end": 1594
+      },
+      "source_document_sha256": "3e67c5303e6ffec934249bb03ad42d01b5ad736a4c1dc767aaca2768b7bcd029"
+    },
+    {
+      "id": "ANB-010",
+      "title": "快照一致性检查",
+      "source": "OPS 比较 node-a.json 和 node-b.json 中的服务版本与启动参数，生成 node-diff.md。仅检查现有快照，不连接实际主机。",
+      "source_sha256": "79be8c14abfc3265c7310c63fecbaf745343333085e2fb9d7da6eebacf658ab3",
+      "source_document_span": {
+        "start": 1616,
+        "end": 1693
+      },
+      "source_document_sha256": "3e67c5303e6ffec934249bb03ad42d01b5ad736a4c1dc767aaca2768b7bcd029"
+    },
+    {
+      "id": "ANB-011",
+      "title": "发布说明审阅",
+      "source": "QA 读取 release-note.md，检查版本号、变更摘要和回滚说明是否齐全，生成 release-note-review.md。不得发布版本，也不得修改 release-note.md。",
+      "source_sha256": "f0f47f57bf6d55ff7d77406d441c773db882d61a4e20550620f515036d0fa5b1",
+      "source_document_span": {
+        "start": 1714,
+        "end": 1811
+      },
+      "source_document_sha256": "3e67c5303e6ffec934249bb03ad42d01b5ad736a4c1dc767aaca2768b7bcd029"
+    },
+    {
+      "id": "ANB-012",
+      "title": "数据库脚本只读检查",
+      "source": "DEV 查看 migration.sql，核查是否包含回滚段和事务边界，生成 migration-sql-review.md。不得连接数据库，不得执行脚本。",
+      "source_sha256": "d84cd23b0d7c248a918504b52f05985df7b76e429f49ec7d6931e5a48d272463",
+      "source_document_span": {
+        "start": 1835,
+        "end": 1913
+      },
+      "source_document_sha256": "3e67c5303e6ffec934249bb03ad42d01b5ad736a4c1dc767aaca2768b7bcd029"
+    },
+    {
+      "id": "ANB-013",
+      "title": "备份清单核验",
+      "source": "OPS 读取 backup-list.csv，检查所有条目的校验状态和生成时间，输出 backup-review.md。校验失败的条目单独列出；不得恢复或删除备份。",
+      "source_sha256": "9850e64f399e725fe1036a37a328b64021ebf1546ee71e9504ec0dceb68bfcbb",
+      "source_document_span": {
+        "start": 1934,
+        "end": 2016
+      },
+      "source_document_sha256": "3e67c5303e6ffec934249bb03ad42d01b5ad736a4c1dc767aaca2768b7bcd029"
+    },
+    {
+      "id": "ANB-014",
+      "title": "测试结果审阅",
+      "source": "QA 读取 unit-test.json 与 integration-test.json，统计失败用例并生成 test-review.md。不得重新运行测试，DEV 只负责对失败原因作文字说明。",
+      "source_sha256": "9d35fb983e0ea4d40de43450873f45bb11d58068c5a4522125d7808318d8e23b",
+      "source_document_span": {
+        "start": 2037,
+        "end": 2134
+      },
+      "source_document_sha256": "3e67c5303e6ffec934249bb03ad42d01b5ad736a4c1dc767aaca2768b7bcd029"
+    },
+    {
+      "id": "ANB-015",
+      "title": "模型文件清单检查",
+      "source": "DEV 查看 model-files.json，核对模型名称、文件路径和 SHA-256，生成 model-file-audit.md。不得加载权重，也不得启动推理。",
+      "source_sha256": "97299989ff7eabf0fd6fa2ec13599ce5b8e3c8b482b6d30568727add0895d6b9",
+      "source_document_span": {
+        "start": 2157,
+        "end": 2240
+      },
+      "source_document_sha256": "3e67c5303e6ffec934249bb03ad42d01b5ad736a4c1dc767aaca2768b7bcd029"
+    },
+    {
+      "id": "ANB-016",
+      "title": "索引元数据核查",
+      "source": "OPS 读取 index-meta.json，检查索引版本、分片数量和校验值，生成 index-meta-review.md。不得重建索引或重新计算向量。",
+      "source_sha256": "5bed14608058808148e17a83fe0b001dff065badc5fed909686f228baa5a3077",
+      "source_document_span": {
+        "start": 2262,
+        "end": 2339
+      },
+      "source_document_sha256": "3e67c5303e6ffec934249bb03ad42d01b5ad736a4c1dc767aaca2768b7bcd029"
+    },
+    {
+      "id": "ANB-017",
+      "title": "数据字段检查",
+      "source": "分析员许宁读取 sample.csv，检查 id、timestamp、status 三列是否存在且非空，生成 sample-audit.md。不得修复或重写样本数据。",
+      "source_sha256": "c14c65fa8d7dd5f494c72973e621882b1ebab6d91dbfade4e2cb87fd32a4cdd8",
+      "source_document_span": {
+        "start": 2360,
+        "end": 2443
+      },
+      "source_document_sha256": "3e67c5303e6ffec934249bb03ad42d01b5ad736a4c1dc767aaca2768b7bcd029"
+    },
+    {
+      "id": "ANB-018",
+      "title": "API 变更记录",
+      "source": "DEV 比较 api-before.json 与 api-after.json，生成 api-change.md，列出新增、移除和重命名的接口。这里只记录变化，不执行任何接口删除或改名。",
+      "source_sha256": "c16e00d9664e05771b618950acc22681840e11447bc4a58108a51ad7852f26b3",
+      "source_document_span": {
+        "start": 2466,
+        "end": 2559
+      },
+      "source_document_sha256": "3e67c5303e6ffec934249bb03ad42d01b5ad736a4c1dc767aaca2768b7bcd029"
+    },
+    {
+      "id": "ANB-019",
+      "title": "任务记录核查",
+      "source": "PM 安排 DEV 检查 task-ledger.json 的状态记录是否完整，DEV 生成 task-ledger-review.md，QA 复核后由 PM 提交给 ADMIN。不得补造缺失历史。",
+      "source_sha256": "70d3a1b812a9fde88c4d67d29a5e9f3d44a44b40d11a23573e517f5c474822a7",
+      "source_document_span": {
+        "start": 2580,
+        "end": 2679
+      },
+      "source_document_sha256": "3e67c5303e6ffec934249bb03ad42d01b5ad736a4c1dc767aaca2768b7bcd029"
+    },
+    {
+      "id": "ANB-020",
+      "title": "证书清单检查",
+      "source": "OPS 读取 certs.csv，检查证书名称、域名和到期日，生成 cert-review.md。30 天内到期的证书要在报告中标注，但不得替换证书。",
+      "source_sha256": "adf7856b830b24b661edcf46ac1378b7f5656f65e1d7a9e24b9f4d66a0be39d3",
+      "source_document_span": {
+        "start": 2700,
+        "end": 2775
+      },
+      "source_document_sha256": "3e67c5303e6ffec934249bb03ad42d01b5ad736a4c1dc767aaca2768b7bcd029"
+    },
+    {
+      "id": "ANB-021",
+      "title": "按规范核验配置",
+      "source": "DEV 依据 CFG-RULE-8 的 v2.3 版本读取 service.yaml，检查参数命名和默认值，生成 cfg-rule-review.md。不得修改 service.yaml。",
+      "source_sha256": "6c5a548ddaf26b64f4dcf4e1dcbc46bbda9868a9f63462a70e4137f9361504d9",
+      "source_document_span": {
+        "start": 2797,
+        "end": 2891
+      },
+      "source_document_sha256": "3e67c5303e6ffec934249bb03ad42d01b5ad736a4c1dc767aaca2768b7bcd029"
+    },
+    {
+      "id": "ANB-022",
+      "title": "依据发布规范审阅",
+      "source": "QA 按 RELEASE-CHECK-4 v1.7 检查 artifact.json 和 checksum.txt，生成 artifact-review.md。不得执行发布，也不得重新生成校验文件。",
+      "source_sha256": "40ffab820e972ffe8be96f19fa81420b910780e00ed651b5b7b9bc77f28c46af",
+      "source_document_span": {
+        "start": 2914,
+        "end": 3013
+      },
+      "source_document_sha256": "3e67c5303e6ffec934249bb03ad42d01b5ad736a4c1dc767aaca2768b7bcd029"
+    },
+    {
+      "id": "ANB-023",
+      "title": "安全规则核查",
+      "source": "安全员方明依据 SEC-POLICY-12 的 v3.1 版本查看 scan-results.json，复核高危项，生成 security-audit.md。不得执行漏洞利用。",
+      "source_sha256": "a931430b1ef48891067d03c864b1021695b5ba15fc63cb42737d3148bca9482d",
+      "source_document_span": {
+        "start": 3034,
+        "end": 3122
+      },
+      "source_document_sha256": "3e67c5303e6ffec934249bb03ad42d01b5ad736a4c1dc767aaca2768b7bcd029"
+    },
+    {
+      "id": "ANB-024",
+      "title": "英文规范核验",
+      "source": "Using OPS-GUIDE-7 version v2.0, inspect host-state.json and create host-state-review.md. Do not change host settings or restart the host.",
+      "source_sha256": "849e28aa5315bfe00ce12845c699cc3eec5b0b1e40cb1c6c6fed272ce2c5da32",
+      "source_document_span": {
+        "start": 3143,
+        "end": 3280
+      },
+      "source_document_sha256": "3e67c5303e6ffec934249bb03ad42d01b5ad736a4c1dc767aaca2768b7bcd029"
+    },
+    {
+      "id": "ANB-025",
+      "title": "规则版本绑定",
+      "source": "请 DEV 依据 DATA-SPEC-5 v4.2 检查 dataset-index.csv 的字段定义，生成 dataset-spec-review.md。不得下载新数据。",
+      "source_sha256": "e2f9ceba2ce404bcfcf88b4a193c7b61fd515a59342ec27d7c67dba770b9bfa3",
+      "source_document_span": {
+        "start": 3301,
+        "end": 3388
+      },
+      "source_document_sha256": "3e67c5303e6ffec934249bb03ad42d01b5ad736a4c1dc767aaca2768b7bcd029"
+    },
+    {
+      "id": "ANB-026",
+      "title": "任务时限",
+      "source": "OPS 检查 cache-status.json 并生成 cache-review.md，整个任务须在 25 分钟内完成。不得清空缓存或重启缓存服务。",
+      "source_sha256": "65e7f9f6b061e8f3eede2f61c5ef6070be534d14d6e74f2091d068ad5b18bb0d",
+      "source_document_span": {
+        "start": 3407,
+        "end": 3482
+      },
+      "source_document_sha256": "3e67c5303e6ffec934249bb03ad42d01b5ad736a4c1dc767aaca2768b7bcd029"
+    },
+    {
+      "id": "ANB-027",
+      "title": "重试上限",
+      "source": "DEV 对测试环境执行连接检查，单次检查失败时最多重试 4 次，并生成 connection-check.md。不得修改网络路由。",
+      "source_sha256": "41ed9ca9672e55c5dd0ce0ca3cee4ddc52dd2d92e9b1e39e6d411edd7e3582b7",
+      "source_document_span": {
+        "start": 3501,
+        "end": 3566
+      },
+      "source_document_sha256": "3e67c5303e6ffec934249bb03ad42d01b5ad736a4c1dc767aaca2768b7bcd029"
+    },
+    {
+      "id": "ANB-028",
+      "title": "内存上限",
+      "source": "OPS 在测试环境运行一次健康检查，内存使用不得超过 1536 MB，输出 health-budget.md。不得切换到生产环境。",
+      "source_sha256": "d97253eae9d8bb45c48983c7f8fe7dc169eb094dfe633a08c7738dd6c087c964",
+      "source_document_span": {
+        "start": 3585,
+        "end": 3650
+      },
+      "source_document_sha256": "3e67c5303e6ffec934249bb03ad42d01b5ad736a4c1dc767aaca2768b7bcd029"
+    },
+    {
+      "id": "ANB-029",
+      "title": "时间窗口不是时限",
+      "source": "OPS 查看最近 90 分钟的 audit.log，统计 error 与 warning 数量并生成 log-window.md。任务本身没有时间预算，不得删除日志。",
+      "source_sha256": "0ead3540c24a5f545a899d06c51fe651ebceb773048f5c36bf6aa3d3a42c9437",
+      "source_document_span": {
+        "start": 3673,
+        "end": 3756
+      },
+      "source_document_sha256": "3e67c5303e6ffec934249bb03ad42d01b5ad736a4c1dc767aaca2768b7bcd029"
+    },
+    {
+      "id": "ANB-030",
+      "title": "成功次数验收",
+      "source": "OPS 最多尝试读取备份 6 次；至少 3 次读取成功且 backup-read.md 已生成时任务完成。不得写入备份。",
+      "source_sha256": "c657d66a27f4be09e1094eef9046243a8c381cb2aa36a4cb2ef0fd42244a1719",
+      "source_document_span": {
+        "start": 3777,
+        "end": 3837
+      },
+      "source_document_sha256": "3e67c5303e6ffec934249bb03ad42d01b5ad736a4c1dc767aaca2768b7bcd029"
+    },
+    {
+      "id": "ANB-031",
+      "title": "至少重试次数",
+      "source": "在测试代理上执行探测，至少重试 2 次后再生成 probe-summary.md。不得修改代理配置。",
+      "source_sha256": "c0701a2c00a87be2ffc52eeb4e7ae4847753ce68cb2d58926ef0d701905968a3",
+      "source_document_span": {
+        "start": 3858,
+        "end": 3908
+      },
+      "source_document_sha256": "3e67c5303e6ffec934249bb03ad42d01b5ad736a4c1dc767aaca2768b7bcd029"
+    },
+    {
+      "id": "ANB-032",
+      "title": "精确尝试次数",
+      "source": "QA 对 sandbox 接口执行恰好 3 次可用性查询，并将结果写入 availability.md。不得调用生产接口。",
+      "source_sha256": "80f85f9ad4be35697b2cac6fab97fe320e37a9a87a6b6811af0ad2e23dae7db3",
+      "source_document_span": {
+        "start": 3929,
+        "end": 3990
+      },
+      "source_document_sha256": "3e67c5303e6ffec934249bb03ad42d01b5ad736a4c1dc767aaca2768b7bcd029"
+    },
+    {
+      "id": "ANB-033",
+      "title": "双数量目标",
+      "source": "OPS 最多重试服务探测 5 次，且至少 2 次返回成功状态后生成 service-probe.md。不得重启服务。",
+      "source_sha256": "31bde2526841e1696822c1323b04e9f707444f8401728d638b2190221eb76a97",
+      "source_document_span": {
+        "start": 4010,
+        "end": 4068
+      },
+      "source_document_sha256": "3e67c5303e6ffec934249bb03ad42d01b5ad736a4c1dc767aaca2768b7bcd029"
+    },
+    {
+      "id": "ANB-034",
+      "title": "容量和时间同时存在",
+      "source": "DEV 在 15 分钟内完成测试环境的模型健康检查，显存占用不得超过 4 GB，并生成 model-health.md。不得加载其他模型。",
+      "source_sha256": "36e9e32e6273ac9160a6aaed67f62ec5e6734d96e294c1f4433b2ec857c1c8e3",
+      "source_document_span": {
+        "start": 4092,
+        "end": 4161
+      },
+      "source_document_sha256": "3e67c5303e6ffec934249bb03ad42d01b5ad736a4c1dc767aaca2768b7bcd029"
+    },
+    {
+      "id": "ANB-035",
+      "title": "分类阈值",
+      "source": "QA 读取 coverage.json，低于 82% 的模块写入 coverage-risk.md。82% 是分类阈值，不得修改阈值或补测。",
+      "source_sha256": "08e076c695daf914c9f38e8d3dd9111807cfe00845654165b7ec3cd594b76a92",
+      "source_document_span": {
+        "start": 4180,
+        "end": 4250
+      },
+      "source_document_sha256": "3e67c5303e6ffec934249bb03ad42d01b5ad736a4c1dc767aaca2768b7bcd029"
+    },
+    {
+      "id": "ANB-036",
+      "title": "条目数量属于内容",
+      "source": "DEV 读取 issue-list.csv，生成 issue-summary.md，报告最多列出 20 个最高优先级问题。这个 20 不限制程序查询次数。",
+      "source_sha256": "581c66f8c18157ae849cec837238d71f3fc0ab31ce2313c7d3d3f2390ca6121f",
+      "source_document_span": {
+        "start": 4273,
+        "end": 4350
+      },
+      "source_document_sha256": "3e67c5303e6ffec934249bb03ad42d01b5ad736a4c1dc767aaca2768b7bcd029"
+    },
+    {
+      "id": "ANB-037",
+      "title": "重试与观察窗口",
+      "source": "OPS 查看最近 10 分钟的 heartbeat.log；若读取失败，最多重试 3 次。生成 heartbeat-review.md，不得重启服务。",
+      "source_sha256": "69eb647e5caa95ae150dce1286a16c6d34acd1371bcb3558ea93abbd7549b221",
+      "source_document_span": {
+        "start": 4372,
+        "end": 4447
+      },
+      "source_document_sha256": "3e67c5303e6ffec934249bb03ad42d01b5ad736a4c1dc767aaca2768b7bcd029"
+    },
+    {
+      "id": "ANB-038",
+      "title": "英文时限",
+      "source": "Inspect route-table.yaml and create route-review.md within 18 minutes. Do not edit the route table. Send the report to QA.",
+      "source_sha256": "4296405554c6bb5024810fab075af3b88b7ef724616c7bc8c97f639ec58f2608",
+      "source_document_span": {
+        "start": 4466,
+        "end": 4588
+      },
+      "source_document_sha256": "3e67c5303e6ffec934249bb03ad42d01b5ad736a4c1dc767aaca2768b7bcd029"
+    },
+    {
+      "id": "ANB-039",
+      "title": "英文重试下界",
+      "source": "OPS must probe the test endpoint and retry at least 3 times before writing endpoint-probe.md. Do not change endpoint configuration.",
+      "source_sha256": "eb7c4c6f7ae3dfbec956ea5c33a0c7f72a58f7383804956fb8a8b5eead3f4ac7",
+      "source_document_span": {
+        "start": 4609,
+        "end": 4740
+      },
+      "source_document_sha256": "3e67c5303e6ffec934249bb03ad42d01b5ad736a4c1dc767aaca2768b7bcd029"
+    },
+    {
+      "id": "ANB-040",
+      "title": "英文内存限制",
+      "source": "Run a read-only model smoke check in staging with memory usage capped at 2 GB, then create smoke-note.md. Do not load a different model.",
+      "source_sha256": "6bf31b97a45c0599fb3dd525af6dadb294f8c4e73914cab0f1dbebc4fe76cff4",
+      "source_document_span": {
+        "start": 4761,
+        "end": 4897
+      },
+      "source_document_sha256": "3e67c5303e6ffec934249bb03ad42d01b5ad736a4c1dc767aaca2768b7bcd029"
+    },
+    {
+      "id": "ANB-041",
+      "title": "协调者与执行者",
+      "source": "PM 安排 DEV 读取 build-info.json 并生成 build-info-review.md；QA 复核报告，PM 最后提交给 ADMIN。PM 不负责具体检查。",
+      "source_sha256": "009750577fcf97d2fccaab507d5b2144f5ba1154fb922cfd2f714006c7e88cca",
+      "source_document_span": {
+        "start": 4919,
+        "end": 5007
+      },
+      "source_document_sha256": "3e67c5303e6ffec934249bb03ad42d01b5ad736a4c1dc767aaca2768b7bcd029"
+    },
+    {
+      "id": "ANB-042",
+      "title": "接收者不是审批者",
+      "source": "DEV 生成 incident-review.md 后发送给平台主管陈洁。陈洁只是接收报告，不负责批准或复核；不得向外部邮箱发送。",
+      "source_sha256": "1062c89ddb1d31e908dd3c5e49cb1bd025efe752d9768c6c58eb822efccf84db",
+      "source_document_span": {
+        "start": 5030,
+        "end": 5095
+      },
+      "source_document_sha256": "3e67c5303e6ffec934249bb03ad42d01b5ad736a4c1dc767aaca2768b7bcd029"
+    },
+    {
+      "id": "ANB-043",
+      "title": "审批者与执行者分离",
+      "source": "只有安全负责人刘靖批准后，QA 才能读取 prod-snapshot.json 并生成 prod-snapshot-review.md。刘靖不参与文件检查。",
+      "source_sha256": "ff0086b04db197621e035504f047fdbc54d5550d79e34bf65967007195cc2fcc",
+      "source_document_span": {
+        "start": 5119,
+        "end": 5197
+      },
+      "source_document_sha256": "3e67c5303e6ffec934249bb03ad42d01b5ad736a4c1dc767aaca2768b7bcd029"
+    },
+    {
+      "id": "ANB-044",
+      "title": "复核后提交",
+      "source": "OPS 生成 host-audit.md，QA 复核无遗漏后由 PM 提交给 ADMIN。OPS 不负责最终提交，ADMIN 仅作为接收者。",
+      "source_sha256": "189043223091ac3b761114a5632cf745d82492adbf5fda7e7a5a6f3002bc39aa",
+      "source_document_span": {
+        "start": 5217,
+        "end": 5287
+      },
+      "source_document_sha256": "3e67c5303e6ffec934249bb03ad42d01b5ad736a4c1dc767aaca2768b7bcd029"
+    },
+    {
+      "id": "ANB-045",
+      "title": "说明者不是执行者",
+      "source": "QA 检查 failure.json 并生成 failure-review.md；DEV 只解释失败原因，不修改实现。PM 汇总 QA 报告和 DEV 说明后提交给 ADMIN。",
+      "source_sha256": "ab9bdee0283950055e422d27715db6b2211e29a279cc474816f476fe1f856b7e",
+      "source_document_span": {
+        "start": 5310,
+        "end": 5399
+      },
+      "source_document_sha256": "3e67c5303e6ffec934249bb03ad42d01b5ad736a4c1dc767aaca2768b7bcd029"
+    },
+    {
+      "id": "ANB-046",
+      "title": "可选动作",
+      "source": "DEV 必须读取 package.json，可以查看 CHANGELOG.md，并生成 package-audit.md。不得修改这两个文件。",
+      "source_sha256": "484358662ba44bd8c6c66da56f4e28b50c308c08c98af74bba407c14746acc1e",
+      "source_document_span": {
+        "start": 5418,
+        "end": 5489
+      },
+      "source_document_sha256": "3e67c5303e6ffec934249bb03ad42d01b5ad736a4c1dc767aaca2768b7bcd029"
+    },
+    {
+      "id": "ANB-047",
+      "title": "无需动作",
+      "source": "QA 检查 diff.csv；若没有差异，无需生成 difference.md，只向 PM 汇报“无差异”。不得修改 diff.csv。",
+      "source_sha256": "9232d3f8cadb08f969edfc4a971bf4b9f880d4b80ad43c1e1e6e0d9c0638afc3",
+      "source_document_span": {
+        "start": 5508,
+        "end": 5576
+      },
+      "source_document_sha256": "3e67c5303e6ffec934249bb03ad42d01b5ad736a4c1dc767aaca2768b7bcd029"
+    },
+    {
+      "id": "ANB-048",
+      "title": "不要求修复",
+      "source": "DEV 检查 parser-errors.json 并生成 parser-error-review.md，本任务不要求修复任何错误，也不得修改 Parser。",
+      "source_sha256": "d70a7f82d38b6ac51f0f90c463560368b75a1e0f15bbb5b58fe4dd6527bd4407",
+      "source_document_span": {
+        "start": 5596,
+        "end": 5675
+      },
+      "source_document_sha256": "3e67c5303e6ffec934249bb03ad42d01b5ad736a4c1dc767aaca2768b7bcd029"
+    },
+    {
+      "id": "ANB-049",
+      "title": "不得审批",
+      "source": "资料员叶澄生成 archive-list.md 并交给 PM。叶澄不负责审批归档，也不得删除任何历史文件。",
+      "source_sha256": "377882184885c2d3275fc30d1212a82dc752f4959dd176588eab33631cf93780",
+      "source_document_span": {
+        "start": 5694,
+        "end": 5747
+      },
+      "source_document_sha256": "3e67c5303e6ffec934249bb03ad42d01b5ad736a4c1dc767aaca2768b7bcd029"
+    },
+    {
+      "id": "ANB-050",
+      "title": "英文角色链",
+      "source": "Nora reads service.csv and creates service-review.md. QA reviews the report, then Leo sends it to ADMIN. Nora is not an approver.",
+      "source_sha256": "dc6bedccbb851b23e3b3c5f4f17f8b4ee986ce3a29d9bf11a2820a0b7f9f3b00",
+      "source_document_span": {
+        "start": 5767,
+        "end": 5896
+      },
+      "source_document_sha256": "3e67c5303e6ffec934249bb03ad42d01b5ad736a4c1dc767aaca2768b7bcd029"
+    },
+    {
+      "id": "ANB-051",
+      "title": "条件停止",
+      "source": "OPS 检查 service.log；若发现 critical 错误，立即停止检查并通知 PM，否则生成 service-summary.md。不得重启服务。",
+      "source_sha256": "f172c061311fdacf5473ff151f3e82e3a899a017125e11b589665938d2aca050",
+      "source_document_span": {
+        "start": 5915,
+        "end": 5994
+      },
+      "source_document_sha256": "3e67c5303e6ffec934249bb03ad42d01b5ad736a4c1dc767aaca2768b7bcd029"
+    },
+    {
+      "id": "ANB-052",
+      "title": "条件输出",
+      "source": "QA 查看 changes.csv。有差异时生成 change-report.md；没有差异时不生成文件，只向 PM 说明无差异。不得修改 changes.csv。",
+      "source_sha256": "3263b414f5eca959536020521b9814b49e02a06279832e7486c1ab3937a41821",
+      "source_document_span": {
+        "start": 6013,
+        "end": 6095
+      },
+      "source_document_sha256": "3e67c5303e6ffec934249bb03ad42d01b5ad736a4c1dc767aaca2768b7bcd029"
+    },
+    {
+      "id": "ANB-053",
+      "title": "恢复条件",
+      "source": "OPS 检查 gateway.log。发现高危告警时停止；只有 PM 明确批准继续后才能恢复检查。最终生成 gateway-review.md。",
+      "source_sha256": "c9c457aa95533befa1d9325416ec149f49e52d7975deea7a496336a7f31ab533",
+      "source_document_span": {
+        "start": 6114,
+        "end": 6186
+      },
+      "source_document_sha256": "3e67c5303e6ffec934249bb03ad42d01b5ad736a4c1dc767aaca2768b7bcd029"
+    },
+    {
+      "id": "ANB-054",
+      "title": "完成 AND",
+      "source": "DEV 读取 items.csv 并生成 item-review.md。只有全部记录都检查完成且报告文件已生成，任务才完成。",
+      "source_sha256": "b597bbc318385c23d8a4243ed33ef69447270f43481cb5da4178ea533cbac8a1",
+      "source_document_span": {
+        "start": 6207,
+        "end": 6269
+      },
+      "source_document_sha256": "3e67c5303e6ffec934249bb03ad42d01b5ad736a4c1dc767aaca2768b7bcd029"
+    },
+    {
+      "id": "ANB-055",
+      "title": "完成 OR",
+      "source": "QA 执行测试环境连通性检查，主链路通过或备用链路通过时即可结束；两者都失败时通知 PM。不得调整路由。",
+      "source_sha256": "aafa6ef402734de7b542337d8a01408314c84ee578084b63ca63834ab09ff4b5",
+      "source_document_span": {
+        "start": 6289,
+        "end": 6341
+      },
+      "source_document_sha256": "3e67c5303e6ffec934249bb03ad42d01b5ad736a4c1dc767aaca2768b7bcd029"
+    },
+    {
+      "id": "ANB-056",
+      "title": "双检查均完成",
+      "source": "QA 检查索引声明和约束声明，两类检查都完成后生成 schema-check.md。不得修改 schema.sql。",
+      "source_sha256": "2e36f960b55a37a452bb5b895c94b7dcfdab17ed16db88c2a14d897910d5982a",
+      "source_document_span": {
+        "start": 6362,
+        "end": 6420
+      },
+      "source_document_sha256": "3e67c5303e6ffec934249bb03ad42d01b5ad736a4c1dc767aaca2768b7bcd029"
+    },
+    {
+      "id": "ANB-057",
+      "title": "复核作为提交前置",
+      "source": "DEV 生成 api-review.md，只有 QA 确认报告包含所有删除和重命名接口后，PM 才能提交给 ADMIN。",
+      "source_sha256": "2ff070adb559375b50d3b47187fcb370bb3b9def1e7a05b54a0c109ff0416a5e",
+      "source_document_span": {
+        "start": 6443,
+        "end": 6503
+      },
+      "source_document_sha256": "3e67c5303e6ffec934249bb03ad42d01b5ad736a4c1dc767aaca2768b7bcd029"
+    },
+    {
+      "id": "ANB-058",
+      "title": "审批作为读取条件",
+      "source": "未经负责人批准，不得读取 finance-snapshot.csv；批准后由 QA 读取并生成 finance-review.md。不得连接财务数据库。",
+      "source_sha256": "a81eb35a9e8e866e26889d45a967f2ef4d277e713f79264a6be515a5cca1c066",
+      "source_document_span": {
+        "start": 6526,
+        "end": 6602
+      },
+      "source_document_sha256": "3e67c5303e6ffec934249bb03ad42d01b5ad736a4c1dc767aaca2768b7bcd029"
+    },
+    {
+      "id": "ANB-059",
+      "title": "条件升级汇报",
+      "source": "安全员周启检查 scan.json；若确认存在可利用漏洞，必须立即升级汇报给 PM。无论是否升级，都要生成 scan-review.md。",
+      "source_sha256": "003c09810b1cfc419a48e4e1db4be02ae49bae4e263269ea80dc4dac2d37e226",
+      "source_document_span": {
+        "start": 6623,
+        "end": 6692
+      },
+      "source_document_sha256": "3e67c5303e6ffec934249bb03ad42d01b5ad736a4c1dc767aaca2768b7bcd029"
+    },
+    {
+      "id": "ANB-060",
+      "title": "英文条件链",
+      "source": "Read health.log. If a fatal error appears, stop the inspection and notify PM; otherwise create health-summary.md. Do not restart the service.",
+      "source_sha256": "ca6102fc296609edf87d72da51557550055eb1820041460bbace229f63423eb1",
+      "source_document_span": {
+        "start": 6712,
+        "end": 6853
+      },
+      "source_document_sha256": "3e67c5303e6ffec934249bb03ad42d01b5ad736a4c1dc767aaca2768b7bcd029"
+    },
+    {
+      "id": "ANB-061",
+      "title": "先后依赖",
+      "source": "QA 先读取 qa-result.json 并生成 qa-note.md；PM 只能在 qa-note.md 生成后向 ADMIN 汇报。不得修改 qa-result.json。",
+      "source_sha256": "a00b0013b228ecfaf3dae9eba7c53b6009a54f3f25893e81b1b29e1f44db43bb",
+      "source_document_span": {
+        "start": 6872,
+        "end": 6961
+      },
+      "source_document_sha256": "3e67c5303e6ffec934249bb03ad42d01b5ad736a4c1dc767aaca2768b7bcd029"
+    },
+    {
+      "id": "ANB-062",
+      "title": "两输入完成后提交",
+      "source": "DEV 读取 before.csv 和 after.csv 并生成 compare.md。QA 确认两份输入都已核对且报告已生成后，PM 提交报告。",
+      "source_sha256": "4ddb283987eb5ff146d7230c2c75f0657c0d5fabc7ed411ff64e3c4616218f53",
+      "source_document_span": {
+        "start": 6984,
+        "end": 7058
+      },
+      "source_document_sha256": "3e67c5303e6ffec934249bb03ad42d01b5ad736a4c1dc767aaca2768b7bcd029"
+    },
+    {
+      "id": "ANB-063",
+      "title": "所有条目完成",
+      "source": "OPS 读取 host-list.csv，逐项检查全部主机记录并生成 host-review.md。只有清单中的每项都有检查结果时才完成。",
+      "source_sha256": "8d44267f63b3e8a9579bed2b804ede0695225cc374ddc6ae1adc270be5065691",
+      "source_document_span": {
+        "start": 7079,
+        "end": 7148
+      },
+      "source_document_sha256": "3e67c5303e6ffec934249bb03ad42d01b5ad736a4c1dc767aaca2768b7bcd029"
+    },
+    {
+      "id": "ANB-064",
+      "title": "至少数量完成",
+      "source": "QA 审阅 10 个测试结果，至少 8 个结果完成复核且 qa-summary.md 已生成时任务完成。不得修改测试结果。",
+      "source_sha256": "ae592e6196e154ca473d81a87dec9ca3972e7e716f153055805a60d79ef7fd37",
+      "source_document_span": {
+        "start": 7169,
+        "end": 7230
+      },
+      "source_document_sha256": "3e67c5303e6ffec934249bb03ad42d01b5ad736a4c1dc767aaca2768b7bcd029"
+    },
+    {
+      "id": "ANB-065",
+      "title": "复核内容条件",
+      "source": "DEV 生成 license-review.md。QA 确认每个缺少许可证或来源不明的条目都已记录后，PM 才能发送报告。",
+      "source_sha256": "388bf4d09d345ae3f8577d9145f948d5c5afb9b880381c20b05e8ebaf38ef70c",
+      "source_document_span": {
+        "start": 7251,
+        "end": 7312
+      },
+      "source_document_sha256": "3e67c5303e6ffec934249bb03ad42d01b5ad736a4c1dc767aaca2768b7bcd029"
+    },
+    {
+      "id": "ANB-066",
+      "title": "输出章节",
+      "source": "请生成 rollback-note.md，文档必须包含“风险清单”“回滚前提”“验证步骤”三个章节。不得执行回滚。",
+      "source_sha256": "ee92b097c5db1cae63dff2b51a745d3a7ee4e326a9a8c9f5249f113bee0752fe",
+      "source_document_span": {
+        "start": 7331,
+        "end": 7388
+      },
+      "source_document_sha256": "3e67c5303e6ffec934249bb03ad42d01b5ad736a4c1dc767aaca2768b7bcd029"
+    },
+    {
+      "id": "ANB-067",
+      "title": "输出中的动作词",
+      "source": "DEV 编写 operations-guide.md，文档中必须写明“重启服务前先确认维护窗口”。本任务不得实际重启服务。",
+      "source_sha256": "0e7ca80fb94d6b6aa3390d3fb050741fb68318dd3f50bf9ab67d13517498321f",
+      "source_document_span": {
+        "start": 7410,
+        "end": 7471
+      },
+      "source_document_sha256": "3e67c5303e6ffec934249bb03ad42d01b5ad736a4c1dc767aaca2768b7bcd029"
+    },
+    {
+      "id": "ANB-068",
+      "title": "引用文字不执行",
+      "source": "请生成 approval-record.md，并原样写入“已批准上线”。本任务不具有上线审批权限，也不得执行上线。",
+      "source_sha256": "0939d2751e0d129b296e7edbcb2577f45943900b81f128558a2bd2166b67e643",
+      "source_document_span": {
+        "start": 7493,
+        "end": 7550
+      },
+      "source_document_sha256": "3e67c5303e6ffec934249bb03ad42d01b5ad736a4c1dc767aaca2768b7bcd029"
+    },
+    {
+      "id": "ANB-069",
+      "title": "报告分类内容",
+      "source": "QA 生成 interface-review.md，报告必须分别列出新增接口、删除接口和重命名接口。不得修改接口定义。",
+      "source_sha256": "8aedf2c60a8e7ce024f408a8374dbc4177c7cff358299a3f985ab5144382b8d1",
+      "source_document_span": {
+        "start": 7571,
+        "end": 7630
+      },
+      "source_document_sha256": "3e67c5303e6ffec934249bb03ad42d01b5ad736a4c1dc767aaca2768b7bcd029"
+    },
+    {
+      "id": "ANB-070",
+      "title": "待确认标记",
+      "source": "DEV 读取 license.csv 并生成 license-note.md。许可证范围不清楚的条目必须标记为“待确认”，不得自动判为可商用。",
+      "source_sha256": "0b0408c3498bd326c148919afd03b1c196341394e643d58fa558f01d690dd2a3",
+      "source_document_span": {
+        "start": 7650,
+        "end": 7721
+      },
+      "source_document_sha256": "3e67c5303e6ffec934249bb03ad42d01b5ad736a4c1dc767aaca2768b7bcd029"
+    },
+    {
+      "id": "ANB-071",
+      "title": "输出中的停止条件",
+      "source": "请编写 runbook.md，其中要说明“发现凭据泄露时停止处理并通知管理员”。编写文档不等于实际执行该停止流程。",
+      "source_sha256": "0f5014423086970b3917e0915c066bff4505b021f9dcc2763b59901a12c250a2",
+      "source_document_span": {
+        "start": 7744,
+        "end": 7801
+      },
+      "source_document_sha256": "3e67c5303e6ffec934249bb03ad42d01b5ad736a4c1dc767aaca2768b7bcd029"
+    },
+    {
+      "id": "ANB-072",
+      "title": "输出中的禁止词",
+      "source": "生成 safety-guide.md，文档中必须包含“不得删除生产数据”这句话。本任务只交付文档，不访问生产数据。",
+      "source_sha256": "ee10e30c84bb3a2625008b31e1422a3dc08179cb13fc72346d33059aef2272c6",
+      "source_document_span": {
+        "start": 7823,
+        "end": 7880
+      },
+      "source_document_sha256": "3e67c5303e6ffec934249bb03ad42d01b5ad736a4c1dc767aaca2768b7bcd029"
+    },
+    {
+      "id": "ANB-073",
+      "title": "输出内数量",
+      "source": "DEV 生成 top-risk.md，文档中只列出风险最高的 10 项。这个 10 是内容限制，不是重试次数。",
+      "source_sha256": "e0f9f005c8c4df95b8e70e90842b8c77c8febc1cc8c069cec5e54323c6d0d4a5",
+      "source_document_span": {
+        "start": 7900,
+        "end": 7955
+      },
+      "source_document_sha256": "3e67c5303e6ffec934249bb03ad42d01b5ad736a4c1dc767aaca2768b7bcd029"
+    },
+    {
+      "id": "ANB-074",
+      "title": "输出内条件分支",
+      "source": "生成 deployment-guide.md，文档中说明：检查通过则继续部署，检查失败则停止。本任务不得实际部署。",
+      "source_sha256": "8212c33571ef84f4b29446f7675cab922c195512bc2c91caf771bed3a456255c",
+      "source_document_span": {
+        "start": 7977,
+        "end": 8034
+      },
+      "source_document_sha256": "3e67c5303e6ffec934249bb03ad42d01b5ad736a4c1dc767aaca2768b7bcd029"
+    },
+    {
+      "id": "ANB-075",
+      "title": "英文输出内容",
+      "source": "Create operator-guide.md. The document must contain sections named “Risks” and “Rollback”. Do not perform a rollback.",
+      "source_sha256": "e69d398453579d98ca2c21a6ec39669ba1c2a84ea5ce2b18e9c8bb525d48b339",
+      "source_document_span": {
+        "start": 8055,
+        "end": 8172
+      },
+      "source_document_sha256": "3e67c5303e6ffec934249bb03ad42d01b5ad736a4c1dc767aaca2768b7bcd029"
+    },
+    {
+      "id": "ANB-076",
+      "title": "范围仅限测试环境",
+      "source": "OPS 只检查测试环境的 service.yaml，生产环境不在本次范围内。生成 scope-review.md，不得修改任何配置。",
+      "source_sha256": "737584c93f4f80c565cfc0b968b6c5bec7f2b30fe1cb1c14d14ad4cf367208de",
+      "source_document_span": {
+        "start": 8195,
+        "end": 8261
+      },
+      "source_document_sha256": "3e67c5303e6ffec934249bb03ad42d01b5ad736a4c1dc767aaca2768b7bcd029"
+    },
+    {
+      "id": "ANB-077",
+      "title": "排除目录",
+      "source": "DEV 检查 src 目录中的配置引用，但排除 src/legacy。结果写入 config-ref-review.md。不得删除 legacy 文件。",
+      "source_sha256": "1e1f39e272f81e53cce1d90de520f8cbd5850ad5de416755fa85a59b3bdedb72",
+      "source_document_span": {
+        "start": 8280,
+        "end": 8356
+      },
+      "source_document_sha256": "3e67c5303e6ffec934249bb03ad42d01b5ad736a4c1dc767aaca2768b7bcd029"
+    },
+    {
+      "id": "ANB-078",
+      "title": "包含与排除",
+      "source": "QA 核对 active.csv 中的在用设备，已报废设备不包含在此次核对范围。生成 active-device-review.md。",
+      "source_sha256": "123557469cf60013cccd0c884aca36a913fee96e8512a47ebed6d805aaf218e9",
+      "source_document_span": {
+        "start": 8376,
+        "end": 8443
+      },
+      "source_document_sha256": "3e67c5303e6ffec934249bb03ad42d01b5ad736a4c1dc767aaca2768b7bcd029"
+    },
+    {
+      "id": "ANB-079",
+      "title": "英文范围限制",
+      "source": "Inspect only staging resources and exclude production resources from this review. Create staging-scope.md and make no configuration changes.",
+      "source_sha256": "e24ad7cf05ab586beb0ef8675b44f1bee02c0a84d53c9bea682d280a35c7d434",
+      "source_document_span": {
+        "start": 8464,
+        "end": 8604
+      },
+      "source_document_sha256": "3e67c5303e6ffec934249bb03ad42d01b5ad736a4c1dc767aaca2768b7bcd029"
+    },
+    {
+      "id": "ANB-080",
+      "title": "只读限制",
+      "source": "审计员查看 audit.db 的只读快照并生成 audit-snapshot.md。只允许离线读取，不得连接在线数据库。",
+      "source_sha256": "dfce1df10f89e49d21d7744a3f3f01d8da42b3fac78aa5624b3d500d4c0396a9",
+      "source_document_span": {
+        "start": 8623,
+        "end": 8683
+      },
+      "source_document_sha256": "3e67c5303e6ffec934249bb03ad42d01b5ad736a4c1dc767aaca2768b7bcd029"
+    },
+    {
+      "id": "ANB-081",
+      "title": "English simple audit",
+      "source": "Read users.csv, verify that every active user has an owner, and create user-audit.md. Do not edit users.csv.",
+      "source_sha256": "368f12a46fc8d02204cfd1b03d778ee45158bec130c1f133f41b5f600c72f9d3",
+      "source_document_span": {
+        "start": 8718,
+        "end": 8826
+      },
+      "source_document_sha256": "3e67c5303e6ffec934249bb03ad42d01b5ad736a4c1dc767aaca2768b7bcd029"
+    },
+    {
+      "id": "ANB-082",
+      "title": "English basis and time",
+      "source": "Using SEC-CHECK-11 version v1.9, inspect findings.json and create findings-review.md within 22 minutes. Do not modify the findings.",
+      "source_sha256": "129cc0dd89078739258206ccdd6ac0465cddc1552dd0dd73cda9e547af181010",
+      "source_document_span": {
+        "start": 8863,
+        "end": 8994
+      },
+      "source_document_sha256": "3e67c5303e6ffec934249bb03ad42d01b5ad736a4c1dc767aaca2768b7bcd029"
+    },
+    {
+      "id": "ANB-083",
+      "title": "English role flow",
+      "source": "Mia reads build.json and creates build-review.md. QA reviews the report before Noah sends it to ADMIN. Mia does not approve the release.",
+      "source_sha256": "0adfa2ca23a9d6277e19ae0bdd5eaaafedb70465b6f5c091aca8c062100d8418",
+      "source_document_span": {
+        "start": 9026,
+        "end": 9162
+      },
+      "source_document_sha256": "3e67c5303e6ffec934249bb03ad42d01b5ad736a4c1dc767aaca2768b7bcd029"
+    },
+    {
+      "id": "ANB-084",
+      "title": "English completion AND",
+      "source": "Read inventory.csv and create inventory-review.md. The task is complete only when every item has been checked and the report exists.",
+      "source_sha256": "336a796a2a597747256c48c330d9d80fd887861bb0283eb8d831d3020f15b23d",
+      "source_document_span": {
+        "start": 9199,
+        "end": 9331
+      },
+      "source_document_sha256": "3e67c5303e6ffec934249bb03ad42d01b5ad736a4c1dc767aaca2768b7bcd029"
+    },
+    {
+      "id": "ANB-085",
+      "title": "English optional read",
+      "source": "You must read config.json, may inspect README.md, and must create config-note.md. Do not modify either file.",
+      "source_sha256": "3ab0a6b5ab5c79f67c0d039253d77783c4ff26753944d8fad9b408fb58e0f9fd",
+      "source_document_span": {
+        "start": 9367,
+        "end": 9475
+      },
+      "source_document_sha256": "3e67c5303e6ffec934249bb03ad42d01b5ad736a4c1dc767aaca2768b7bcd029"
+    },
+    {
+      "id": "ANB-086",
+      "title": "English output content",
+      "source": "Create incident-guide.md containing two sections: “Detection” and “Recovery”. Do not perform any recovery action.",
+      "source_sha256": "ad2eac4ac4ed2e8ddd29029c9731e3c76947a87d95452890ebeb0d6ccc9cab1d",
+      "source_document_span": {
+        "start": 9512,
+        "end": 9625
+      },
+      "source_document_sha256": "3e67c5303e6ffec934249bb03ad42d01b5ad736a4c1dc767aaca2768b7bcd029"
+    },
+    {
+      "id": "ANB-087",
+      "title": "English retry count",
+      "source": "Probe the staging endpoint at most 4 times and create probe-log.md. At least 2 probes must succeed before the task is complete.",
+      "source_sha256": "1247647462f25dc76dfc56a32ceb65b289fd0e853822c97ec6d13f59eb9a3ca3",
+      "source_document_span": {
+        "start": 9659,
+        "end": 9786
+      },
+      "source_document_sha256": "3e67c5303e6ffec934249bb03ad42d01b5ad736a4c1dc767aaca2768b7bcd029"
+    },
+    {
+      "id": "ANB-088",
+      "title": "English exclusion scope",
+      "source": "Review test-cluster.yaml only. Production clusters are outside the scope of this task. Create cluster-review.md.",
+      "source_sha256": "fdc42e1a0663f42cdcf0eef992e7b33c3b1edd4bea737ec351883a44ef119bf4",
+      "source_document_span": {
+        "start": 9824,
+        "end": 9936
+      },
+      "source_document_sha256": "3e67c5303e6ffec934249bb03ad42d01b5ad736a4c1dc767aaca2768b7bcd029"
+    },
+    {
+      "id": "ANB-089",
+      "title": "English conditional output",
+      "source": "Inspect delta.csv. If differences exist, create delta-report.md; otherwise notify PM that there are no differences. Do not edit delta.csv.",
+      "source_sha256": "c364b22d5adbf7d553bae2e478c17a4f5efb7f6c9edf193b1f5feb5f45f5d321",
+      "source_document_span": {
+        "start": 9977,
+        "end": 10115
+      },
+      "source_document_sha256": "3e67c5303e6ffec934249bb03ad42d01b5ad736a4c1dc767aaca2768b7bcd029"
+    },
+    {
+      "id": "ANB-090",
+      "title": "English approval guard",
+      "source": "QA may read finance-export.csv only after Dana approves the request. Create finance-audit.md and do not connect to the production database.",
+      "source_sha256": "41c225d8d508fcc801ded163c0056062768a794ed32fb84aadf187f8c9176b02",
+      "source_document_span": {
+        "start": 10152,
+        "end": 10291
+      },
+      "source_document_sha256": "3e67c5303e6ffec934249bb03ad42d01b5ad736a4c1dc767aaca2768b7bcd029"
+    },
+    {
+      "id": "ANB-091",
+      "title": "中英混合依据",
+      "source": "DEV 按照 API-GUIDE-3 version v2.6 检查 api-map.json，生成 api-map-review.md。Do not modify api-map.json.",
+      "source_sha256": "6f7e167339aee43038f284e6bbfe3a796d70a773fa9bc0a7a7c18e7116296c4b",
+      "source_document_span": {
+        "start": 10312,
+        "end": 10408
+      },
+      "source_document_sha256": "3e67c5303e6ffec934249bb03ad42d01b5ad736a4c1dc767aaca2768b7bcd029"
+    },
+    {
+      "id": "ANB-092",
+      "title": "中英混合流程",
+      "source": "QA reads release.json 并生成 release-review.md；PM 在 QA review 通过后发送报告给 ADMIN。不得执行发布。",
+      "source_sha256": "7f73dbb494f408dcb9963135e488ef5bc72de9022e3ac797731b38a5fb7ebb4a",
+      "source_document_span": {
+        "start": 10429,
+        "end": 10510
+      },
+      "source_document_sha256": "3e67c5303e6ffec934249bb03ad42d01b5ad736a4c1dc767aaca2768b7bcd029"
+    },
+    {
+      "id": "ANB-093",
+      "title": "中英混合数量",
+      "source": "OPS 在 staging 执行 health probe，retry at least 2 times but no more than 5 times，生成 health-probe.md。不得重启服务。",
+      "source_sha256": "058be3c5d2aa04eb1f8585d3ed7acc60aa3f1720e84dbf34ee3d0f714009527e",
+      "source_document_span": {
+        "start": 10531,
+        "end": 10635
+      },
+      "source_document_sha256": "3e67c5303e6ffec934249bb03ad42d01b5ad736a4c1dc767aaca2768b7bcd029"
+    },
+    {
+      "id": "ANB-094",
+      "title": "中英混合内容归属",
+      "source": "请生成 incident-playbook.md，文档中必须写明 “stop processing and notify PM when credentials leak”。本任务只编写文档。",
+      "source_sha256": "063010fbde635db250d2684fbd99af6f27403983dac912318ba8c343fe3e4072",
+      "source_document_span": {
+        "start": 10658,
+        "end": 10754
+      },
+      "source_document_sha256": "3e67c5303e6ffec934249bb03ad42d01b5ad736a4c1dc767aaca2768b7bcd029"
+    },
+    {
+      "id": "ANB-095",
+      "title": "中英混合范围",
+      "source": "Inspect only 测试环境，exclude 生产环境，生成 env-scope-review.md。不得修改任何环境配置。",
+      "source_sha256": "30d53b0f28fd3a686968e39647291f1a2d80b94ddd50b408b9f69f839ec617c6",
+      "source_document_span": {
+        "start": 10775,
+        "end": 10840
+      },
+      "source_document_sha256": "3e67c5303e6ffec934249bb03ad42d01b5ad736a4c1dc767aaca2768b7bcd029"
+    },
+    {
+      "id": "ANB-096",
+      "title": "真实歧义：两个输入后的泛称",
+      "source": "DEV 读取 alpha.csv 和 beta.csv，然后检查“原始数据”并生成 source-review.md。这里“原始数据”未指明具体是哪一份文件；Parser 不应自行猜测。",
+      "source_sha256": "4b4996efc274e9a64f6c76331692eb110e5671affa2f3ed2ad02c545b37909b2",
+      "source_document_span": {
+        "start": 10868,
+        "end": 10961
+      },
+      "source_document_sha256": "3e67c5303e6ffec934249bb03ad42d01b5ad736a4c1dc767aaca2768b7bcd029"
+    },
+    {
+      "id": "ANB-097",
+      "title": "真实歧义：两个报告后的指代",
+      "source": "QA 读取 dev-report.md 和 ops-report.md，随后要求“复核该报告并提交给 PM”。“该报告”没有唯一指向，必须保留未决而不是任选一份。",
+      "source_sha256": "1c297b30a8c9d3bf34c099315b6b13ecbefe999f73c66aa000bbe0b1b3347780",
+      "source_document_span": {
+        "start": 10989,
+        "end": 11070
+      },
+      "source_document_sha256": "3e67c5303e6ffec934249bb03ad42d01b5ad736a4c1dc767aaca2768b7bcd029"
+    },
+    {
+      "id": "ANB-098",
+      "title": "真实歧义：两个版本",
+      "source": "请按照 POLICY-X v1.2 或 v1.3 检查 policy.json 并生成 policy-review.md。未说明最终采用哪个版本，不得擅自选择。",
+      "source_sha256": "7ae8a183d39bd2bf5bc2a3bf8b0f13563da0905471118d5a07e7dcab001eb579",
+      "source_document_span": {
+        "start": 11094,
+        "end": 11174
+      },
+      "source_document_sha256": "3e67c5303e6ffec934249bb03ad42d01b5ad736a4c1dc767aaca2768b7bcd029"
+    },
+    {
+      "id": "ANB-099",
+      "title": "真实歧义：两个审批者",
+      "source": "只有王宁或李澄批准后，QA 才能读取 snapshot.csv 并生成 snapshot-review.md。原文没有说明需要任一人还是两人共同批准，审批条件必须保持歧义。",
+      "source_sha256": "768702b897014e769b3fae527c5b440aa88744638e1fcb569a4c1bc5658fc91b",
+      "source_document_span": {
+        "start": 11199,
+        "end": 11285
+      },
+      "source_document_sha256": "3e67c5303e6ffec934249bb03ad42d01b5ad736a4c1dc767aaca2768b7bcd029"
+    },
+    {
+      "id": "ANB-100",
+      "title": "真实歧义：代词指向",
+      "source": "DEV 检查 service-a.json 和 service-b.json，发现差异后“将它提交给 QA”。“它”可能指差异结果或其中一个服务对象，无法唯一确定时应保留未决。",
+      "source_sha256": "04b45100b6c220e357f47a9c2c0fdc9cb352102ec7bb73b3f164a9cd9a781538",
+      "source_document_span": {
+        "start": 11309,
+        "end": 11397
+      },
+      "source_document_sha256": "3e67c5303e6ffec934249bb03ad42d01b5ad736a4c1dc767aaca2768b7bcd029"
+    }
+  ]
+}

@@ -1,0 +1,1 @@
+TEAM291 查看 inventory-c2-a-1.json，创建 handoff-c2-a-1.md。LEAD291 在 TEAM291 发送报告后向 COORD 汇报。

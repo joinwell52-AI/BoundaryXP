@@ -1,0 +1,1 @@
+UNITC2B2270 check endpoint-c2-b2-20 and queue-c2-b2-20, retry at least 24 times.

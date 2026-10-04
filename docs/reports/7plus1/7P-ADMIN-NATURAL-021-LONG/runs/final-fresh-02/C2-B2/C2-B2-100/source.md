@@ -1,0 +1,1 @@
+UNITC2B2300 生成 handoff-c2-b2-10.md 和 alternative-c2-b2-10.md，OWNERC2B2300 发送该报告给 COORD。

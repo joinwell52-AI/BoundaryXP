@@ -1,0 +1,1 @@
+安全员韩宁读取 role-map.csv 和 permission-map.csv，检查角色与权限的对应关系，输出 permission-audit.md。不得新增、删除或修改权限记录。

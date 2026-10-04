@@ -1,0 +1,1 @@
+UNITC2B2277 检查cache207和queue207，生成 acceptance-c2-b2-7.txt。两类检查都完成后，任务结束。

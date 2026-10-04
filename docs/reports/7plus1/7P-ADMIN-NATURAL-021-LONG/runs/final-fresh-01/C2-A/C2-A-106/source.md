@@ -1,0 +1,1 @@
+Using POLICY-2106 version v5.106, inspect basis-c2-a-6.yaml and write basis-review-c2-a-6.txt.

@@ -1,0 +1,1 @@
+QA 读取 probe-9.ini，不要求修复，只生成 fresh-polarity-009-0.txt。

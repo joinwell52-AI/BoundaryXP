@@ -1,0 +1,1 @@
+Inspect only 测试环境，exclude 生产环境，生成 env-scope-review.md。不得修改任何环境配置。

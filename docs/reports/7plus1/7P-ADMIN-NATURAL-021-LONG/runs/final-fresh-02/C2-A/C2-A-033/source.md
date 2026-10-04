@@ -1,0 +1,1 @@
+TEAM233 核查 lab-c2-a-3，生成 scope-c2-a-3.txt。范围仅限 lab-c2-a-3，不包含 public-c2-a-3。

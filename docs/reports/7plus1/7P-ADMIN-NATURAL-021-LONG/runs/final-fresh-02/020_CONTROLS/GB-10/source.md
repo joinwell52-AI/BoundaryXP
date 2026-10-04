@@ -1,0 +1,1 @@
+QA read fixed.csv, do not write change.txt.

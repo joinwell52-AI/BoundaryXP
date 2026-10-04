@@ -1,0 +1,35 @@
+# ANB-051 Actual Canonical 7+1
+
+## I RESOLVED
+
+- service.log [RESOLVED]
+
+## O UNRESOLVED
+
+
+
+## A UNRESOLVED
+
+- REQUIRED 检查 service.log [RESOLVED]
+- REQUIRED 通知 PM [RESOLVED]
+
+## P RESOLVED
+
+- OPS [PERFORMER] [RESOLVED]
+- PM [RECIPIENT] [RESOLVED]
+
+## R ABSENT
+
+
+
+## V ABSENT
+
+
+
+## C UNRESOLVED
+
+- 检查 [RESOLVED]
+
+## B RESOLVED
+
+- FORBIDDEN 重启 服务 [RESOLVED]

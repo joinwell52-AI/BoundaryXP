@@ -1,0 +1,1 @@
+QA check cache. The output note.txt must quote "both checks are complete".

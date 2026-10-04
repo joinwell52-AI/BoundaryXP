@@ -1,0 +1,1 @@
+DEV 读取 items.csv 并生成 item-review.md。只有全部记录都检查完成且报告文件已生成，任务才完成。

@@ -1,0 +1,1 @@
+QA 检查 sandbox，生成 safety.md。不得修改 sandbox 配置。

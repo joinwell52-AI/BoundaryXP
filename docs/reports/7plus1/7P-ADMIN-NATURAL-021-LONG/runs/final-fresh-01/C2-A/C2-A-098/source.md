@@ -1,0 +1,1 @@
+TEAM298 read inventory-c2-a-8.json and write handoff-c2-a-8.md. Send the report to LEAD298 after REVIEWER has reviewed it.

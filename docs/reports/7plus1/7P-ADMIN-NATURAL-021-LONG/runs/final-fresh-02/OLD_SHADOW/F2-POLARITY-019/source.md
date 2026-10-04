@@ -1,0 +1,1 @@
+QA 不负责审批，负责读取 probe-19.ini，生成 fresh-polarity-019-0.txt。

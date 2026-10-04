@@ -1,0 +1,1 @@
+Inspect delta.csv. If differences exist, create delta-report.md; otherwise notify PM that there are no differences. Do not edit delta.csv.

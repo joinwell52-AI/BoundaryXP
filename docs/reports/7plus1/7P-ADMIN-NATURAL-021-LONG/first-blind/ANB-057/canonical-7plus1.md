@@ -1,0 +1,37 @@
+# ANB-057 Actual Canonical 7+1
+
+## I ABSENT
+
+
+
+## O RESOLVED
+
+- api-review.md [RESOLVED]
+
+## A RESOLVED
+
+- REQUIRED 生成 api-review.md [RESOLVED]
+- PERMITTED 提交 api-review.md [RESOLVED]
+
+## P RESOLVED
+
+- DEV [PERFORMER] [RESOLVED]
+- PM [PERFORMER] [RESOLVED]
+- ADMIN [RECIPIENT] [RESOLVED]
+- QA [REVIEWER] [RESOLVED]
+
+## R ABSENT
+
+
+
+## V ABSENT
+
+
+
+## C ABSENT
+
+
+
+## B ABSENT
+
+

@@ -1,0 +1,1 @@
+请 OPS 查看 test-services.json，核对测试环境中 6 个服务是否都处于预期状态，并生成 service-status.md。QA 复核报告后交给 PM；不得重启或停止任何服务。

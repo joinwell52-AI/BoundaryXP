@@ -1,0 +1,1 @@
+UNITC2B2248 读取 east-c2-b2-18.csv 和 west-c2-b2-18.csv，生成 scope-c2-b2-18.txt。排除其中一个。

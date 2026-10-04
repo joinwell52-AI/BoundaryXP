@@ -1,0 +1,1 @@
+UNITC2B2231 核查 lab-c2-b2-1，生成 scope-c2-b2-1.txt。public-c2-b2-1 不在本次复核范围内。

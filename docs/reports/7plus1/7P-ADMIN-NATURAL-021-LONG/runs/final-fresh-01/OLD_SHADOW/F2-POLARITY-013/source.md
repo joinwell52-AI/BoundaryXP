@@ -1,0 +1,1 @@
+QA 读取 probe-13.ini，不要求修复，只生成 fresh-polarity-013-0.txt。

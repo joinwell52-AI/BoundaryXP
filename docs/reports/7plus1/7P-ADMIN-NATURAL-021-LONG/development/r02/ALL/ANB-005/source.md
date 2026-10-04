@@ -1,0 +1,1 @@
+OPS 读取 gateway.log 和 gateway-error.log，定位过去 20 分钟内重复出现的 5xx 错误，并生成 gateway-notes.md。不得清理日志，也不得重启网关。

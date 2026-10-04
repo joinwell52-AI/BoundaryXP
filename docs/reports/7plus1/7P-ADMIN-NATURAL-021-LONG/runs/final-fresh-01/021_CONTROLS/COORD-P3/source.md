@@ -1,0 +1,1 @@
+Do not restart or stop the worker.

@@ -1,0 +1,1 @@
+QA 读取 probe-1.ini，不要求修复，只生成 fresh-polarity-001-0.txt。

@@ -1,0 +1,1 @@
+Using POLICY-2020 version v5.20, TEAM220 read dataset-c2-a-20.csv, create decision-c2-a-20.md and send the report to LEAD220.

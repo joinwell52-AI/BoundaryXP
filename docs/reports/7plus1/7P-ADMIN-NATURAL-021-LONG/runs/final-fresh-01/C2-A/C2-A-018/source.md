@@ -1,0 +1,1 @@
+Using POLICY-2018 version v5.18, TEAM218 read dataset-c2-a-18.csv, create decision-c2-a-18.md and send the report to LEAD218.

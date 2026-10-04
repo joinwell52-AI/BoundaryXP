@@ -1,0 +1,1 @@
+QA 读取 one.ini，生成 two.ini，随后检查生成的 two.ini。

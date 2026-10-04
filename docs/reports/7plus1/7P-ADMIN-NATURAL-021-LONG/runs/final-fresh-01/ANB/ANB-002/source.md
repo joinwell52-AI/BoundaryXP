@@ -1,0 +1,1 @@
+DEV 读取 app-config.yaml 与 app-config.example.yaml，检查关键配置项是否一致，差异写入 config-review.md。只允许读取和记录，不得覆盖任一配置文件。

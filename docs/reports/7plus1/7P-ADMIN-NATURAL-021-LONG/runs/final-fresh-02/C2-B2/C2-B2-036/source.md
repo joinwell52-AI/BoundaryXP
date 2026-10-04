@@ -1,0 +1,1 @@
+UNITC2B2236 核查 lab-c2-b2-6，生成 scope-c2-b2-6.txt。范围仅限 lab-c2-b2-6，不包含 public-c2-b2-6。

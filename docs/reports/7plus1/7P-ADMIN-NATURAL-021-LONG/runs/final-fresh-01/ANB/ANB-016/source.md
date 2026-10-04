@@ -1,0 +1,1 @@
+OPS 读取 index-meta.json，检查索引版本、分片数量和校验值，生成 index-meta-review.md。不得重建索引或重新计算向量。

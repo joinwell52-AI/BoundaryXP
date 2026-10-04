@@ -1,0 +1,1 @@
+TEAM250 读取 east-c2-a-20.csv 和 west-c2-a-20.csv，生成 scope-c2-a-20.txt。排除其中一个。

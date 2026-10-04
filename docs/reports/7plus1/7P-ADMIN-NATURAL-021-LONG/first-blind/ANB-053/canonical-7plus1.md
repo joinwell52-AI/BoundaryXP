@@ -1,0 +1,35 @@
+# ANB-053 Actual Canonical 7+1
+
+## I RESOLVED
+
+- gateway.log [RESOLVED]
+
+## O UNRESOLVED
+
+
+
+## A UNRESOLVED
+
+- REQUIRED 检查 gateway.log [RESOLVED]
+- PERMITTED 恢复 检查 [RESOLVED]
+
+## P RESOLVED
+
+- OPS [PERFORMER] [RESOLVED]
+- PM [APPROVER] [RESOLVED]
+
+## R ABSENT
+
+
+
+## V ABSENT
+
+
+
+## C UNRESOLVED
+
+- 停止 [UNRESOLVED]
+
+## B ABSENT
+
+

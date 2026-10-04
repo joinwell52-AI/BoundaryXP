@@ -1,0 +1,1 @@
+QA 读取最近 14 分钟的 fresh-quantity_condition-003-0.log，生成 fresh-quantity_condition-003-1.txt。

@@ -1,0 +1,1 @@
+DEV 检查差异，不要求修复，只生成 changes.txt。

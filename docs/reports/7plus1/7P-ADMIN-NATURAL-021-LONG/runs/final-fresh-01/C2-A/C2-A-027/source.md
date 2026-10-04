@@ -1,0 +1,1 @@
+TEAM227 依据 POLICY-2027 v5.27 查看 dataset-c2-a-27.csv，编写 decision-c2-a-27.md，随后发送报告给 LEAD227。

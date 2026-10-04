@@ -1,0 +1,1 @@
+TEAM276 检查cache206和queue206，生成 acceptance-c2-a-6.txt。只有cache206与queue206均完成后，任务才完成。

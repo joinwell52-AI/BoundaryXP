@@ -1,0 +1,1 @@
+OPS 检查 gateway.log。发现高危告警时停止；只有 PM 明确批准继续后才能恢复检查。最终生成 gateway-review.md。
