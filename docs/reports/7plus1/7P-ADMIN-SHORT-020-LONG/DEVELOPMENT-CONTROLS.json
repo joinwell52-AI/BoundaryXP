@@ -1,0 +1,553 @@
+{
+  "status": "FROZEN_BEFORE_020_CODE",
+  "controls": [
+    {
+      "id": "GA-01",
+      "mechanism": "GA",
+      "kind": "POSITIVE",
+      "source": "QA 核查 sandbox 环境，生成 orbit.txt。核查范围仅限 sandbox，production 不在本次核查范围内。",
+      "source_sha256": "3745f765d39543ce53ac2e44d6d375e8c42dcd1c8e3e234ffbbca474d76e6a1c",
+      "expect": {
+        "include": "sandbox",
+        "exclude": "production",
+        "no_scope_action": true
+      }
+    },
+    {
+      "id": "GA-02",
+      "mechanism": "GA",
+      "kind": "POSITIVE",
+      "source": "OPS 检查 rehearsal 环境，生成 atlas.txt。范围排除 customer-live。",
+      "source_sha256": "6c927b478de2ca457619a299929a02cdbaece9aa1ecc8442feb38a4ddf3b67b9",
+      "expect": {
+        "include": "rehearsal",
+        "exclude": "customer-live",
+        "no_scope_action": true
+      }
+    },
+    {
+      "id": "GA-03",
+      "mechanism": "GA",
+      "kind": "POSITIVE",
+      "source": "DEV 查看 target.csv，生成 beacon.txt。范围仅限 devbox，不包含 releasebox。",
+      "source_sha256": "afdea1ff900155cb5fd8ebdc3643a32c58d5e4e8576c9ab57c47f1081edb1b1b",
+      "expect": {
+        "include": "devbox",
+        "exclude": "releasebox",
+        "no_scope_action": true
+      }
+    },
+    {
+      "id": "GA-04",
+      "mechanism": "GA",
+      "kind": "POSITIVE",
+      "source": "QA 检查 local 环境，生成 comet.txt。external 不在本次范围内。",
+      "source_sha256": "45dc54da265f52777fbe0d24441f816cccf162b8da3800b85082cc700d68c122",
+      "expect": {
+        "include": "local",
+        "exclude": "external",
+        "no_scope_action": true
+      }
+    },
+    {
+      "id": "GA-05",
+      "mechanism": "GA",
+      "kind": "POSITIVE",
+      "source": "QA review staging, create delta.txt. Exclude live from this review.",
+      "source_sha256": "95e73861f19e108e0b11733228aa4887271ccfdb75dd1f299cc61e42197ed32d",
+      "expect": {
+        "include": "staging",
+        "exclude": "live",
+        "no_scope_action": true
+      }
+    },
+    {
+      "id": "GA-06",
+      "mechanism": "GA",
+      "kind": "POSITIVE",
+      "source": "OPS inspect rehearsal, write echo.txt. This check is limited to rehearsal, not customer-live.",
+      "source_sha256": "d49021990d7b5c41fca1bdcd78b7d7c6a0e41ae2ae27d70db781571051228318",
+      "expect": {
+        "include": "rehearsal",
+        "exclude": "customer-live",
+        "no_scope_action": true
+      }
+    },
+    {
+      "id": "GA-07",
+      "mechanism": "GA",
+      "kind": "CONTRAST",
+      "source": "QA 查看 zone.csv，生成 filter.md。报告中写明“生产区不在本次范围内”。",
+      "source_sha256": "4bc88f333b4801df542a233c19ef29d8ec3d4cf4a925d66325ba2868deb52e0d",
+      "expect": {
+        "no_restriction": true
+      }
+    },
+    {
+      "id": "GA-08",
+      "mechanism": "GA",
+      "kind": "CONTRAST",
+      "source": "OPS 检查 staging 和 live，生成 zones.md。",
+      "source_sha256": "db239ba25368bf3869754a96d163cd42dcba079d36062660f566fcc84a2f630a",
+      "expect": {
+        "inputs": [
+          "staging",
+          "live"
+        ],
+        "no_restriction": true
+      }
+    },
+    {
+      "id": "GA-09",
+      "mechanism": "GA",
+      "kind": "CONTRAST",
+      "source": "DEV 生成 notice.md，无需排除远端环境。",
+      "source_sha256": "7b84759859afb36255ba2bbfb57c1f86c988eb82ce95200c517337150bd427c6",
+      "expect": {
+        "no_restriction": true
+      }
+    },
+    {
+      "id": "GA-10",
+      "mechanism": "GA",
+      "kind": "CONTRAST",
+      "source": "QA 检查 sandbox，生成 safety.md。不得修改 sandbox 配置。",
+      "source_sha256": "2ac13bb068daad95ffb2a9725e4e28aa46f882202dc74ddc141410d0a0acf5ba",
+      "expect": {
+        "forbid": "修改",
+        "no_scope_action": true
+      }
+    },
+    {
+      "id": "GA-11",
+      "mechanism": "GA",
+      "kind": "AMBIGUITY",
+      "source": "QA 读取 alpha.csv 和 beta.csv，生成 scope.md。排除其中一个。",
+      "source_sha256": "6e0f6252346768e5acee5517117d0c428a29f56f7474ea97367ee5d3308b099a",
+      "expect": {
+        "unresolved": true,
+        "no_guessed_exclusion": true
+      }
+    },
+    {
+      "id": "GA-12",
+      "mechanism": "GA",
+      "kind": "AMBIGUITY",
+      "source": "OPS 检查 east 和 west，生成 scope2.md。限制在前述某一环境。",
+      "source_sha256": "6b08ac6abfff422facd43f9d97fcd1ccd5770df30fbdb13c292eb59fd4683d1f",
+      "expect": {
+        "unresolved": true,
+        "no_guessed_exclusion": true
+      }
+    },
+    {
+      "id": "GB-01",
+      "mechanism": "GB",
+      "kind": "POSITIVE",
+      "source": "QA 依据 POLICY-73 v4.2 查看 parcel.csv，编写 brief.md。PM 在 QA 发送报告后向 ADMIN 汇报。",
+      "source_sha256": "e1f66c579bf2822e84556f6e93f0d58bfd652a8961d88e173679bb3069f5c9e5",
+      "expect": {
+        "input_output_flow": true
+      }
+    },
+    {
+      "id": "GB-02",
+      "mechanism": "GB",
+      "kind": "POSITIVE",
+      "source": "OPS 按 GUIDE-28 v2.5 读取 batch.json，创建 summary.txt。QA 复核报告后由 PM 发送给 ADMIN。",
+      "source_sha256": "cbd500e9e0db58a156b94c70b05297856011b20dc7d74c8d646714f3f9e9ed42",
+      "expect": {
+        "input_output_flow": true
+      }
+    },
+    {
+      "id": "GB-03",
+      "mechanism": "GB",
+      "kind": "POSITIVE",
+      "source": "DEV 查看 stream.yaml，编写 result.md，随后发送报告给 QA。",
+      "source_sha256": "bb804bd7b0d4e6a2e1ec0aef25882e74fe167c6ec673723636c8202d4973bfaf",
+      "expect": {
+        "input_output_flow": true
+      }
+    },
+    {
+      "id": "GB-04",
+      "mechanism": "GB",
+      "kind": "POSITIVE",
+      "source": "QA read cabin.csv and write trail.txt. Send the report to OPS after DEV has reviewed it.",
+      "source_sha256": "5e2f16c1126ed6571c6267206774b448f064880dc8b10d73762d23dee6dae4e4",
+      "expect": {
+        "input_output_flow": true
+      }
+    },
+    {
+      "id": "GB-05",
+      "mechanism": "GB",
+      "kind": "POSITIVE",
+      "source": "PM inspect cargo.json and create notice.txt. QA reviews the report before PM sends it to ADMIN.",
+      "source_sha256": "d0ee9b81d75433547abde467405b480413bdc1d9edd363ad2e4076b22f90a45e",
+      "expect": {
+        "input_output_flow": true
+      }
+    },
+    {
+      "id": "GB-06",
+      "mechanism": "GB",
+      "kind": "POSITIVE",
+      "source": "DEV read cycle.csv, create digest.txt and send the report to QA.",
+      "source_sha256": "7f330a1cb6e144e61cecb6ed062a475dd5daaffdee60fe285ecda0807de7e7a3",
+      "expect": {
+        "input_output_flow": true
+      }
+    },
+    {
+      "id": "GB-07",
+      "mechanism": "GB",
+      "kind": "CONTRAST",
+      "source": "QA 查看 prior.txt，无需编写 release.md。",
+      "source_sha256": "aa6b8b1c14c057e914c2d5a93f47e43788a81022ed92831cd667750e2bcf3155",
+      "expect": {
+        "inputs": [
+          "prior.txt"
+        ],
+        "no_output": "release.md"
+      }
+    },
+    {
+      "id": "GB-08",
+      "mechanism": "GB",
+      "kind": "CONTRAST",
+      "source": "OPS 编写 checklist.md，内容引用“发送报告给管理员”。",
+      "source_sha256": "91ab09e22d26570c2446c629a22148703b831e33027960aa321545f82f0aed89",
+      "expect": {
+        "output": "checklist.md",
+        "opaque": true
+      }
+    },
+    {
+      "id": "GB-09",
+      "mechanism": "GB",
+      "kind": "CONTRAST",
+      "source": "DEV 读取 old.json，不得发送 old.json 给 QA。",
+      "source_sha256": "08c28d8281ba216e56f9f929f986719546ee2181ec23a7749bedf57fef438340",
+      "expect": {
+        "forbid": "发送",
+        "no_positive_send": true
+      }
+    },
+    {
+      "id": "GB-10",
+      "mechanism": "GB",
+      "kind": "CONTRAST",
+      "source": "QA read fixed.csv, do not write change.txt.",
+      "source_sha256": "70b66687b5a073f449613b488f4b7d269096e1dddd092e6c3843a07bfa643a0d",
+      "expect": {
+        "inputs": [
+          "fixed.csv"
+        ],
+        "no_output": "change.txt"
+      }
+    },
+    {
+      "id": "GB-11",
+      "mechanism": "GB",
+      "kind": "AMBIGUITY",
+      "source": "DEV 生成 upper.md 和 lower.md，PM 发送该报告给 QA。",
+      "source_sha256": "7b4453fa8fc29bf047c059d35f15e566f06d51cd7fd3c4d91624ed5a459e32ef",
+      "expect": {
+        "unresolved": true,
+        "outputs": [
+          "upper.md",
+          "lower.md"
+        ]
+      }
+    },
+    {
+      "id": "GB-12",
+      "mechanism": "GB",
+      "kind": "AMBIGUITY",
+      "source": "OPS 编写 left.md，QA 编写 right.md。PM 复核报告。",
+      "source_sha256": "daa6690fe7c18ef03677f2435b3855eed9eda3b4e05dea1199e6aa87d8b705cf",
+      "expect": {
+        "unresolved": true,
+        "outputs": [
+          "left.md",
+          "right.md"
+        ]
+      }
+    },
+    {
+      "id": "GC-01",
+      "mechanism": "GC",
+      "kind": "POSITIVE",
+      "source": "DEV 检查缓存和队列，生成 audit.txt。QA 确认缓存和队列两类核查都完成后，任务结束。",
+      "source_sha256": "0a9e735bdf3f438f1c1a1c0fed0a10a64c13a91cdf39fb985f0054e21c9a1b90",
+      "expect": {
+        "completion": "AND",
+        "members": 2
+      }
+    },
+    {
+      "id": "GC-02",
+      "mechanism": "GC",
+      "kind": "POSITIVE",
+      "source": "OPS 检查镜像和网络，生成 trace.txt。只有镜像与网络均完成后，任务才完成。",
+      "source_sha256": "5fc7aa5631c84166f3a4acea2ebd077f98d459b4d02455747524f4d27bb9a3d6",
+      "expect": {
+        "completion": "AND",
+        "members": 2
+      }
+    },
+    {
+      "id": "GC-03",
+      "mechanism": "GC",
+      "kind": "POSITIVE",
+      "source": "QA 核查权限和日志，生成 journal.txt。两类检查都完成后，任务结束。",
+      "source_sha256": "0ea97c35e508a369ad170a1833d6823ea469c3c07e777ffe221ac2f0aef4a5a3",
+      "expect": {
+        "completion": "AND",
+        "members": 2
+      }
+    },
+    {
+      "id": "GC-04",
+      "mechanism": "GC",
+      "kind": "POSITIVE",
+      "source": "DEV check cache and queue, create probe.txt. Only after both cache and queue checks are complete is the task complete.",
+      "source_sha256": "8da83dfcaa8ff1aa3382ccabe40474d94ddeb44e55057fcc7a05f788d5805c94",
+      "expect": {
+        "completion": "AND",
+        "members": 2
+      }
+    },
+    {
+      "id": "GC-05",
+      "mechanism": "GC",
+      "kind": "POSITIVE",
+      "source": "QA check routes and ports, create port.txt. When both checks have finished, the task is complete.",
+      "source_sha256": "3a2b09f058db255eb83e1380300abbc08bac34b1eedad88ef28a93ee302700bb",
+      "expect": {
+        "completion": "AND",
+        "members": 2
+      }
+    },
+    {
+      "id": "GC-06",
+      "mechanism": "GC",
+      "kind": "POSITIVE",
+      "source": "OPS check storage and network, create state.txt. After QA confirms both categories are complete, the task is complete.",
+      "source_sha256": "940f17018cb056af21dd5c927e6c002e1dc289201221befa3b6d106a708c4f8f",
+      "expect": {
+        "completion": "AND",
+        "members": 2
+      }
+    },
+    {
+      "id": "GC-07",
+      "mechanism": "GC",
+      "kind": "CONTRAST",
+      "source": "QA 检查权限或日志任一通过后，任务完成。",
+      "source_sha256": "f74256d82053327941490306e22d10c7aa87a9fce250dd7e1660c9b37f709846",
+      "expect": {
+        "completion": "OR",
+        "members": 2
+      }
+    },
+    {
+      "id": "GC-08",
+      "mechanism": "GC",
+      "kind": "CONTRAST",
+      "source": "OPS 检查 service，整个任务必须在 12 分钟内完成。",
+      "source_sha256": "76303b75d617a6ddab9a828fabd227af62cd789f26ee8532929708bdd0627216",
+      "expect": {
+        "time": 12,
+        "no_completion": true
+      }
+    },
+    {
+      "id": "GC-09",
+      "mechanism": "GC",
+      "kind": "CONTRAST",
+      "source": "DEV 生成 guide.md，报告中写“缓存和队列都完成”。",
+      "source_sha256": "69eb6523ebea37144757be833c72670d80c87dda38030d73aa50d0ecec83f656",
+      "expect": {
+        "output": "guide.md",
+        "opaque": true,
+        "no_completion": true
+      }
+    },
+    {
+      "id": "GC-10",
+      "mechanism": "GC",
+      "kind": "CONTRAST",
+      "source": "QA check cache. The output note.txt must quote \"both checks are complete\".",
+      "source_sha256": "6345c679b33b792aa16163a1bf3f1cd8e1e6f10d1a94be9fa2d9bee75d084082",
+      "expect": {
+        "opaque": true,
+        "no_completion": true
+      }
+    },
+    {
+      "id": "GC-11",
+      "mechanism": "GC",
+      "kind": "AMBIGUITY",
+      "source": "OPS 检查缓存和队列，DEV 检查端口和路由。两类检查都完成后，任务结束。",
+      "source_sha256": "16af12928c6185e322d42e878e8bd426b58fe948df0154b53dffda4f9f0213e9",
+      "expect": {
+        "unresolved": true
+      }
+    },
+    {
+      "id": "GC-12",
+      "mechanism": "GC",
+      "kind": "AMBIGUITY",
+      "source": "QA 读取 upper.csv 和 lower.csv。此前检查全部完成后，任务结束。",
+      "source_sha256": "5bdcccbd7008cefc36364dab659480f767ba03994b6bae75336dacca21a7abd4",
+      "expect": {
+        "unresolved": true
+      }
+    },
+    {
+      "id": "GD-01",
+      "mechanism": "GD",
+      "kind": "POSITIVE",
+      "source": "OPS 检查服务，至少重试 4 次，生成 retry.txt。",
+      "source_sha256": "70df74ef5d0989330ff67a0ce608832a54d6187d41bda4578b67ff3606352704",
+      "expect": {
+        "retry": {
+          "op": "GTE",
+          "value": 4
+        }
+      }
+    },
+    {
+      "id": "GD-02",
+      "mechanism": "GD",
+      "kind": "POSITIVE",
+      "source": "QA 检查链路，最多重试 7 次，生成 link.txt。",
+      "source_sha256": "49761b7c406c925f7c634da5767d05fc90883d232634be19822ae91200f139ac",
+      "expect": {
+        "retry": {
+          "op": "LTE",
+          "value": 7
+        }
+      }
+    },
+    {
+      "id": "GD-03",
+      "mechanism": "GD",
+      "kind": "POSITIVE",
+      "source": "DEV 检查缓存，恰好重试 2 次，生成 cache.txt。",
+      "source_sha256": "e6a85c6d80e2d4a2f9ff829a3d7d35991d788fb68ad9346b7f5aee08932bf56d",
+      "expect": {
+        "retry": {
+          "op": "EQ",
+          "value": 2
+        }
+      }
+    },
+    {
+      "id": "GD-04",
+      "mechanism": "GD",
+      "kind": "POSITIVE",
+      "source": "OPS check service, retry at least 5 times, create counts.txt.",
+      "source_sha256": "37155022ae271c36ef7fb6c496437135ae836d395f2966a9608b74f740a17ae6",
+      "expect": {
+        "retry": {
+          "op": "GTE",
+          "value": 5
+        }
+      }
+    },
+    {
+      "id": "GD-05",
+      "mechanism": "GD",
+      "kind": "POSITIVE",
+      "source": "QA inspect queue, retry at most 9 times, write retrylog.txt.",
+      "source_sha256": "af69f6e12764623afb9cfdd2b673dc86e65cdae69c8a53eb6167c7af10bddd8e",
+      "expect": {
+        "retry": {
+          "op": "LTE",
+          "value": 9
+        }
+      }
+    },
+    {
+      "id": "GD-06",
+      "mechanism": "GD",
+      "kind": "POSITIVE",
+      "source": "DEV check route, retry exactly 3 times, generate tally.txt.",
+      "source_sha256": "304c29ac3872e2380c103c150570cce7b9e1a3987e4dd59aeee60bdad3b2bce4",
+      "expect": {
+        "retry": {
+          "op": "EQ",
+          "value": 3
+        }
+      }
+    },
+    {
+      "id": "GD-07",
+      "mechanism": "GD",
+      "kind": "CONTRAST",
+      "source": "QA 检查服务，至少 3 次成功才完成。",
+      "source_sha256": "4aa5cccab8fd380f2ed0ac221b05419053a06780aa8dffdedba5d2ba6861a62c",
+      "expect": {
+        "no_retry_resource": true,
+        "completion_count": 3
+      }
+    },
+    {
+      "id": "GD-08",
+      "mechanism": "GD",
+      "kind": "CONTRAST",
+      "source": "OPS 读取最近 6 次日志，生成 window.txt。",
+      "source_sha256": "ceed280267ecb2624d76e3353e35f381a79833723ab867c67c2d39768ae22cd2",
+      "expect": {
+        "no_retry_resource": true
+      }
+    },
+    {
+      "id": "GD-09",
+      "mechanism": "GD",
+      "kind": "CONTRAST",
+      "source": "DEV 检查服务，整个任务最多使用 14 分钟。",
+      "source_sha256": "3ca1aed65b429cd3f8b5e656e27050733502dd4ef536ec0ec8fa5ec8a72e1529",
+      "expect": {
+        "time": 14,
+        "no_retry_resource": true
+      }
+    },
+    {
+      "id": "GD-10",
+      "mechanism": "GD",
+      "kind": "CONTRAST",
+      "source": "QA 生成 2 份报告。",
+      "source_sha256": "fd03129d6291828ce834cd0c499303a859c06ca85a92aabf396823b7b0ee17d8",
+      "expect": {
+        "no_retry_resource": true
+      }
+    },
+    {
+      "id": "GD-11",
+      "mechanism": "GD",
+      "kind": "AMBIGUITY",
+      "source": "OPS 检查服务和缓存，至少重试 4 次。",
+      "source_sha256": "2157aba70a7ffaf5cc6bcb067163dd046f5775ae3223978f77b6544b2dbbb4ee",
+      "expect": {
+        "unresolved": true,
+        "no_retry_resource": true
+      }
+    },
+    {
+      "id": "GD-12",
+      "mechanism": "GD",
+      "kind": "AMBIGUITY",
+      "source": "DEV check service and queue, retry at least 8 times.",
+      "source_sha256": "f0f69e80f065d3594597f7fe3f01bc48c84bd35e1708c6aa3ce787eb4f27d0d2",
+      "expect": {
+        "unresolved": true,
+        "no_retry_resource": true
+      }
+    }
+  ]
+}

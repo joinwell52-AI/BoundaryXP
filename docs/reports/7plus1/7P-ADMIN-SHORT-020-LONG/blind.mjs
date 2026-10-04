@@ -1,0 +1,58 @@
+import fs from 'node:fs';import assert from 'node:assert/strict';import {OUT,OLD,read,write,sha,digest,signature} from './common.mjs';
+import {parse7Plus1,compileNative} from '../../../../research/7plus1-parser/v0.3-admin-short-020/engine.mjs';
+import {sourceDocument} from '../../../../research/7plus1-parser/p0-semantic-repair-r02/source.mjs';
+import {closeNlp} from '../../../../research/7plus1-parser/v0.3-7p-composition-014/linguistic.mjs';import {checkBlind} from './blind-check.mjs';
+const mode=process.argv[2],suite=process.argv[3],cycle=process.argv[4],base=OUT+'blind/'+suite+'/',candidate=OUT+'candidate-freezes/'+cycle+'.json';
+function verify(){const c=read(candidate);for(const p of [...c.files,...c.validation_protocol])assert.equal(digest(p.path),p.sha256,p.path);return c;}
+if(mode==='freeze'){
+ const frozen=verify();assert.ok(!fs.existsSync(base+'SUITE-SOURCE-FREEZE.json'));const defs=[];let serial=0;
+ const add=(category,source,expect,oracle={},extras={})=>{const id=suite+'-'+String(++serial).padStart(3,'0');defs.push({id,category,source,source_sha256:sha(source),expect,oracle,english:/\b(?:read|inspect|check|create|write|review)\b/iu.test(source)||/The |When |After |Exclude /u.test(source),multi_mechanism:!!(oracle.actions?.length>1||oracle.basis?.length||expect.retry&&expect.output||expect.completion&&expect.output),...extras});};
+ const name=(stem,i,ext)=>stem+'-'+suite.toLowerCase()+'-'+i+'.'+ext,who=i=>'TEAM'+(Number.parseInt(cycle,10)*100+i),recipient=i=>'LEAD'+(Number.parseInt(cycle,10)*100+i),key=i=>'POLICY-'+(Number.parseInt(cycle,10)*1000+i),version=i=>'v'+(Number.parseInt(cycle,10)+3)+'.'+i;
+ for(let i=1;i<=30;i++){const actor=who(i),rec=recipient(i),input=name('dataset',i,'csv'),output=name('decision',i,'md'),b=key(i),v=version(i),english=i>10&&i<=20;
+  if(english)add('PARAPHRASE',`Using ${b} version ${v}, ${actor} read ${input}, create ${output} and send the report to ${rec}.`,{inputs:[input],outputs:[output]},{actions:[{sense:'read',object:input,actor},{sense:'generate',object:output,actor},{sense:'send',object:output,actor,recipient:rec}],basis:[{identifier:b,version:v}]});
+  else add('PARAPHRASE',`${actor} 依据 ${b} ${v} 查看 ${input}，编写 ${output}，随后发送报告给 ${rec}。`,{inputs:[input],outputs:[output]},{actions:[{sense:'read',object:input,actor},{sense:'generate',object:output,actor},{sense:'send',object:output,actor,recipient:rec}],basis:[{identifier:b,version:v}]});
+ }
+ for(let i=1;i<=20;i++){const actor=who(i+30),output=name('scope',i,'txt'),inc='lab-'+suite.toLowerCase()+'-'+i,exc='public-'+suite.toLowerCase()+'-'+i;
+  if(i<=8){const tail=i%3===0?`范围仅限 ${inc}，不包含 ${exc}。`:i%3===1?`${exc} 不在本次核查范围内。`:`范围排除 ${exc}。`;add('SCOPE',`${actor} 核查 ${inc}，生成 ${output}。${tail}`,{include:inc,exclude:exc,no_scope_action:true,output},{actions:[{sense:'review',object:inc,actor},{sense:'generate',object:output,actor}]});}
+  else if(i<=16)add('SCOPE',`${actor} inspect ${inc}, write ${output}. ${i%2?`Exclude ${exc} from this review.`:`This check is limited to ${inc}, not ${exc}.`}`,{include:inc,exclude:exc,no_scope_action:true,output},{actions:[{sense:'review',object:inc,actor},{sense:'generate',object:output,actor}]});
+  else add('SCOPE',`${actor} 读取 ${name('east',i,'csv')} 和 ${name('west',i,'csv')}，生成 ${output}。排除其中一个。`,{unresolved:true,no_guessed_exclusion:true,output},{},{ambiguity:true});
+ }
+ for(let i=1;i<=20;i++){const actor=who(i+50),output=name('quantity',i,'txt'),n=i+Number.parseInt(cycle,10)+2,object='endpoint-'+suite.toLowerCase()+'-'+i;
+  if(i<=10){const op=i%3===0?'EQ':i%3===1?'GTE':'LTE',cn=op==='EQ'?'恰好':op==='GTE'?'至少':'最多',en=op==='EQ'?'exactly':op==='GTE'?'at least':'at most';add('QUANTITY',i<=5?`${actor} 检查 ${object}，${cn}重试 ${n} 次，生成 ${output}。`:`${actor} check ${object}, retry ${en} ${n} times, create ${output}.`,{retry:{op,value:n},output},{retry_object:object,actions:[{sense:'review',object,actor},{sense:'generate',object:output,actor}]});}
+  else if(i<=13)add('QUANTITY',`${actor} 检查 ${object}，至少 ${n} 次成功才完成。`,{no_retry_resource:true,completion_count:n},{actions:[{sense:'review',object,actor}]});
+  else if(i<=16)add('QUANTITY',`${actor} read the latest ${n} logs, create ${output}.`,{no_retry_resource:true,output},{actions:[{sense:'generate',object:output,actor}]});
+  else add('QUANTITY',`${actor} check ${object} and queue-${suite.toLowerCase()}-${i}, retry at least ${n} times.`,{unresolved:true,no_retry_resource:true},{},{ambiguity:true});
+ }
+ for(let i=1;i<=20;i++){const actor=who(i+70),output=name('acceptance',i,'txt'),a='cache'+(Number.parseInt(cycle,10)*100+i),b='queue'+(Number.parseInt(cycle,10)*100+i);
+  if(i<=8){const cn=i%2?`两类检查都完成后，任务结束。`:`只有${a}与${b}均完成后，任务才完成。`;add('CONDITION',`${actor} 检查${a}和${b}，生成 ${output}。${cn}`,{completion:'AND',members:2,output},{actions:[{sense:'generate',object:output,actor}]});}
+  else if(i<=14)add('CONDITION',`${actor} check ${a} and ${b}, create ${output}. ${i%2?'When both checks have finished':'After '+recipient(i)+' confirms both categories are complete'}, the task is complete.`,{completion:'AND',members:2,output},{actions:[{sense:'generate',object:output,actor}],...(i%2?{}:{completion_reviewer:recipient(i)})});
+  else if(i<=16)add('CONDITION',`${actor} 检查${a}或${b}任一通过后，任务完成。`,{completion:'OR',members:2},{ });
+  else add('CONDITION',`${actor} 检查${a}和${b}，${recipient(i)} 检查端口${i}和路由${i}。两类检查都完成后，任务结束。`,{unresolved:true},{},{ambiguity:true});
+ }
+ for(let i=1;i<=10;i++){const actor=who(i+90),rec=recipient(i+90),output=name('handoff',i,'md'),input=name('inventory',i,'json');
+  if(i<=4)add('FLOW',`${actor} 查看 ${input}，创建 ${output}。${rec} 在 ${actor} 发送报告后向 COORD 汇报。`,{inputs:[input],output},{actions:[{sense:'send',object:output,actor},{sense:'report',object:output,actor:rec,recipient:'COORD'}]});
+  else if(i<=8)add('FLOW',`${actor} read ${input} and write ${output}. Send the report to ${rec} after REVIEWER has reviewed it.`,{inputs:[input],output},{actions:[{sense:'send',object:output,recipient:rec}],temporal_flow:output});
+  else add('FLOW',`${actor} 生成 ${output} 和 ${name('alternative',i,'md')}，${rec} 发送该报告给 COORD。`,{unresolved:true,outputs:[output,name('alternative',i,'md')]},{no_reference_guess:true},{ambiguity:true});
+ }
+ for(let i=1;i<=10;i++){const actor=who(i+100),input=name('basis',i,'yaml'),output=name('basis-review',i,'txt'),b=key(i+100),v=version(i+100);
+  if(i<=4)add('BASIS',`${actor} 按 ${b} ${v} 读取 ${input}，生成 ${output}。`,{inputs:[input],output},{basis:[{identifier:b,version:v}],actions:[{sense:'read',object:input,actor},{sense:'generate',object:output,actor}]});
+  else if(i<=8)add('BASIS',`Using ${b} version ${v}, inspect ${input} and write ${output}.`,{inputs:[input],output},{basis:[{identifier:b,version:v}],actions:[{sense:'review',object:input},{sense:'generate',object:output}]});
+  else add('BASIS',`${actor} 依据 ${b} ${v} 和 v9.${i} 读取 ${input}，生成 ${output}。`,{unresolved:true,inputs:[input],output},{},{ambiguity:true});
+ }
+ for(let i=1;i<=10;i++){const actor=who(i+110),output=name('instructions',i,'txt'),quote=i%2?'禁止审批任何任务':'both checks are complete';
+  if(i<=4)add('OUTPUT_CONTENT',`${actor} 编写 ${output}，内容引用“${quote}”。`,{output,opaque:true,no_completion:true},{content:{output,text:quote},actions:[{sense:'generate',object:output,actor}]});
+  else if(i<=8)add('OUTPUT_CONTENT',`${actor} check cache-${i}. The output ${output} must quote "${quote}".`,{output,opaque:true,no_completion:true},{content:{output,text:quote}});
+  else add('OUTPUT_CONTENT',`${actor} 生成 ${output} 和 ${name('other-instructions',i,'txt')}，内容引用“${quote}”。`,{unresolved:true,outputs:[output,name('other-instructions',i,'txt')],opaque:true,no_completion:true},{},{ambiguity:true});
+ }
+ // Suite B changes surface syntax as well as identities. This transformation
+ // is predeclared before either candidate-2 suite executes, not selected from
+ // observed successes. Oracle senses and typed ownership remain unchanged.
+ if(suite.endsWith('-B'))for(const c of defs){c.source=c.source.replaceAll('查看','读取').replaceAll('编写','创建').replaceAll('随后','然后').replaceAll('核查范围内','复核范围内').replace(/\bread\b/gu,'reads').replace(/\bcreate\b/gu,'write');c.source_sha256=sha(c.source);c.surface_transformation='PREDECLARED_B_SYNONYMS_AND_TEMPORAL_CONNECTOR';}
+ assert.equal(defs.length,120);const oldTexts=new Set([...read(OLD+'SHADOW-SUITE-r02.json').cases.map(c=>c.source),...read(OUT+'DEVELOPMENT-CONTROLS.json').controls.map(c=>c.source),...read(OLD+'ADMIN-SHORT-050-ORACLE.json').cases.map(c=>fs.readFileSync(c.source_path,'utf8'))]);if(fs.existsSync(OUT+'blind/'))for(const d of fs.readdirSync(OUT+'blind/'))if(fs.existsSync(OUT+'blind/'+d+'/SUITE-SOURCES.json'))for(const c of read(OUT+'blind/'+d+'/SUITE-SOURCES.json').cases)oldTexts.add(c.source);assert.equal(new Set(defs.map(c=>c.source)).size,120);for(const c of defs)assert.ok(!oldTexts.has(c.source));
+ const counts={categories:Object.fromEntries([...new Set(defs.map(c=>c.category))].map(k=>[k,defs.filter(c=>c.category===k).length])),english_or_mixed:defs.filter(c=>c.english).length,multi_mechanism:defs.filter(c=>c.multi_mechanism).length,ambiguity:defs.filter(c=>c.ambiguity).length};assert.ok(counts.english_or_mixed>=30&&counts.multi_mechanism>=20&&counts.ambiguity>=10);
+ write(base+'SUITE-SOURCES.json',{cases:defs.map(({expect,oracle,...c})=>c)});write(base+'SUITE-ORACLE.json',{cases:defs.map(c=>({id:c.id,expect:c.expect,oracle:c.oracle})),authoring:'Source semantics and deterministic generation metadata only; no Parser output consulted',limits:'Synthetic standardized ADMIN controls, not independently ADMIN-adjudicated natural corpus'});
+ write(base+'SUITE-SOURCE-FREEZE.json',{frozen_at:new Date().toISOString(),sha256:digest(base+'SUITE-SOURCES.json'),candidate_hash:frozen.candidate_hash,counts,source_overlap:0});write(base+'SUITE-ORACLE-FREEZE.json',{frozen_at:new Date().toISOString(),sha256:digest(base+'SUITE-ORACLE.json'),candidate_hash:frozen.candidate_hash,protocol_sha256:digest(OUT+'blind-check.mjs'),frozen_before_parser_execution:true});console.log(suite,counts);
+}else if(['run','repeat','development'].includes(mode)){
+ const frozen=verify(),revision=process.argv[5]??'first',dest=base+revision+'/';assert.ok(!fs.existsSync(dest));assert.equal(digest(base+'SUITE-SOURCES.json'),read(base+'SUITE-SOURCE-FREEZE.json').sha256);assert.equal(digest(base+'SUITE-ORACLE.json'),read(base+'SUITE-ORACLE-FREEZE.json').sha256);const oracle=new Map(read(base+'SUITE-ORACLE.json').cases.map(c=>[c.id,c])),rows=[];
+ try{for(const source of read(base+'SUITE-SOURCES.json').cases){const c={...source,...oracle.get(source.id)};let r,v;try{r=mode==='development'?compileNative(sourceDocument(c.source),structuredClone(read(base+'first/'+c.id+'/trace.json').compiler_v03.nlp_signals)):await parse7Plus1(c.source);v=checkBlind(c,r);if(mode==='repeat'&&signature(r)!==signature(read(base+'first/'+c.id+'/trace.json')))v.failures.push('REPEAT_SIGNATURE_DIFFERENT');write(dest+c.id+'/source.txt',c.source);write(dest+c.id+'/trace.json',r);write(dest+c.id+'/canonical-7plus1.json',r.compiler_v03.canonical_7plus1);write(dest+c.id+'/review.json',v);}catch(e){v={failures:[e.stack]};write(dest+c.id+'/error.json',v);}const row={id:c.id,category:c.category,ambiguity:!!c.ambiguity,status:v.failures.length?'FAIL':'PASS',failures:v.failures,signature:r?signature(r):null,first_divergence:r?.first_divergence??null};rows.push(row);write(dest+'RESULTS.json',{suite,mode,candidate_hash:frozen.candidate_hash,revision,total:rows.length,pass:rows.filter(r=>r.status==='PASS').length,fail:rows.filter(r=>r.status==='FAIL').length,rows});console.log(c.id,row.status,JSON.stringify(row.failures));}}finally{closeNlp();}verify();
+}else throw Error('MODE');
