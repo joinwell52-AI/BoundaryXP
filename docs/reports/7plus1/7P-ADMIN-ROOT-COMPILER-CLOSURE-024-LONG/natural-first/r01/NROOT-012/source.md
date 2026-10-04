@@ -1,0 +1,1 @@
+本任务由 PM 组织对 migration.sql 做离线评审，检查回滚段与事务边界，形成 migration-script-review.md。不得连接数据库或执行脚本。

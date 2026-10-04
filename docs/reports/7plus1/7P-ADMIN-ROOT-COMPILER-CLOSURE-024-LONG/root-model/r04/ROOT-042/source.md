@@ -1,0 +1,1 @@
+请 PM 组织任务时必须读取 package.json，可以查看 README.md，并生成 package-review.md。不得修改这两个文件；QA 必须复核报告。

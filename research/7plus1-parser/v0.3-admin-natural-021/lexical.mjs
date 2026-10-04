@@ -1,5 +1,7 @@
 // Shared finite senses. All indices and source surfaces remain original.
 export const PREDICATE_WORDS={read:['读取','查看','read','reads'],review:['检查','核查','核对','核验','复核','审查','审阅','inspect','inspects','check','checks','review','reviews','reviewed','verify'],generate:['生成','编写','创建','输出','generate','create','write','writes','created','written','generated'],send:['提交','交给','发送','send','sends','submit','submits','sent','submitted'],report:['汇报','上报','报告','report','reports'],receive:['收到','接收','receive','received'],complete:['完成','结束','complete','completed','finished'],confirm:['确认','confirm','confirms','confirmed'],compare:['比较','对比','compare'],clear:['清空','清理','clear'],rewrite:['重写','rewrite'],recalculate:['重新计算','重算','recalculate']};
+PREDICATE_WORDS.explain=['说明','解释','explain','explains'];
+PREDICATE_WORDS.generate.push('creates','produced');
 const escape=s=>s.replace(/[.*+?^${}()|[\]\\]/g,'\\$&');
 export function sensePattern(senses){return '(?:'+senses.flatMap(s=>PREDICATE_WORDS[s]??[]).sort((a,b)=>b.length-a.length).map(w=>/^[a-z]/iu.test(w)?'\\b'+escape(w)+'\\b':escape(w)).join('|')+')';}
 export function predicates(text,senses=Object.keys(PREDICATE_WORDS)){const map=new Map(senses.flatMap(s=>(PREDICATE_WORDS[s]??[]).map(w=>[w.toLowerCase(),s])));return [...text.matchAll(new RegExp(sensePattern(senses),'giu'))].map(m=>({sense:map.get(m[0].toLowerCase()),surface:m[0],index:m.index,end:m.index+m[0].length,start_cp:[...text.slice(0,m.index)].length,end_cp:[...text.slice(0,m.index+m[0].length)].length}));}

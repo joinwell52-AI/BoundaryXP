@@ -1,0 +1,1 @@
+本任务由 PM 组织；只有安全负责人刘靖批准后，才允许读取 prod-snapshot.json 并形成 prod-snapshot-review.md。刘靖不参与具体检查。

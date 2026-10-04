@@ -1,0 +1,1 @@
+本次任务要求比较 api-before.json 与 api-after.json，并形成 api-change-review.md，报告中分别列出新增、移除和重命名接口。不得实际执行接口删除或改名。

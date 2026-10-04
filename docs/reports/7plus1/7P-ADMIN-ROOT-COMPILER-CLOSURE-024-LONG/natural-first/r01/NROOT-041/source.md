@@ -1,0 +1,1 @@
+请 PM 负责组织本次 build-info.json 检查并形成 build-info-review.md。团队内部由谁执行具体检查由 PM 决定，QA 必须复核报告，最终由 PM 提交给 ADMIN。

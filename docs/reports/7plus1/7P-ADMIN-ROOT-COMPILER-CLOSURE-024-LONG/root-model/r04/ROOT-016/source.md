@@ -1,0 +1,1 @@
+请 PM 组织依据 DB-SPEC-9 对 schema.sql 中的索引与约束声明进行离线检查，并形成 schema-review.md。不得连接生产数据库；QA 应确认两类检查都完成后任务结束。

@@ -1,0 +1,1 @@
+本次任务要求基于 audit.db 的只读快照进行离线审计并形成 audit-snapshot.md。不得连接在线数据库。

@@ -1,10 +1,14 @@
 import {id,uniq} from '../v0.3-7p-composition-014/identity.mjs';
 import {graphApi,length} from './graph-api.mjs';
 import {buildSemanticOwnership} from '../v0.3-7p-composition-014/semantic-ownership.mjs';
+import {predicateEnclosure} from '../v0.3-7p-composition-014/semantic-ownership.mjs';
+import {boundaryDomain} from '../v0.3-7p-composition-014/discourse.mjs';
 export function closeRoleDeclarations(f){const {nm,edge,retire}=graphApi(f);f.semantic_decoding.participant_role_ir=[];
  for(const a of f.analyses){const raw=a.cl.span.quote;
+  if(!boundaryDomain(a.discourse))continue;
   const receive=/^(.+?)\s*(?:仅|只)?(?:作为|是)(?:报告)?接收(?:人|者)$/u.exec(raw);
-  const negative=/(?:不负责|不具有).*?(?:审批|批准).*?(?:职责)?$/u.test(raw);
+  const negativeMatch=/(?:不负责|不具有).*?(?:审批|批准).*?(?:职责)?$/u.exec(raw);
+  const negative=!!negativeMatch&&!predicateEnclosure({start:a.cl.span.start,quote:raw},a.cl.span.start+length(raw.slice(0,negativeMatch.index))).length;
   if(!receive&&!negative)continue;
   const prior=f.analyses.filter(x=>x.cl.sentence_id===a.cl.sentence_id&&x.cl.span.end<a.cl.span.start);
   const identities=[...new Map(prior.flatMap(x=>f.relations.filter(r=>r.clause_id===x.cl.id&&r.state==='RESOLVED'&&r.relation_type==='AGENT').map(r=>nm(r.tail_node_id))).filter(n=>n.metadata.participant_eligibility?.eligible).map(n=>[n.metadata.identity_name??n.surface,n])).values()];

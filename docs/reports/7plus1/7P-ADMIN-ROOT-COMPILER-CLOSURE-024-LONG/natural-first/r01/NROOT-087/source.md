@@ -1,0 +1,1 @@
+PM must organize a staging probe with at most 4 attempts and deliver probe-log.md. At least 2 probes must succeed before completion.

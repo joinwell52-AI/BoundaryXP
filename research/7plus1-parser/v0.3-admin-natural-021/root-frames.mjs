@@ -30,6 +30,8 @@ export function closeAdminRoot(f){
   if(!text)return null;const start=range.start+cps(range.text.slice(0,range.text.indexOf(text))),end=start+cps(text);
   const ner=a.cl.entities?.some(e=>['PERSON','PER'].includes(e.label)&&e.span.start>=start&&e.span.end<=end);
   const names=a.cl.tokens.filter(t=>t.start>=start&&t.end<=end&&/^(NR|PROPN)$/u.test(t.pos??''));
+  const explicitSubject=/^[A-Z][a-z]+$/u.test(text)&&a.cl.tokens.some(t=>t.start===start&&t.end===end&&/^nsubj$/u.test(t.dep??''));
+  if(explicitSubject)return {start,end};
   if(rolePrefix.test(text)||ner||names.length&&a.cl.tokens.filter(t=>t.start>=start&&t.end<=end).every(t=>/^(NR|NN|PROPN|NOUN)$/u.test(t.pos??'')))return {start,end};
   const coordinated=text.split(/\s*(?:和|与|及|、|\band\b)\s*/iu);if(coordinated.length>1&&coordinated.every(x=>rolePrefix.test(x)))return {start,end,members:coordinated.map(x=>({start:start+cps(text.slice(0,text.indexOf(x))),end:start+cps(text.slice(0,text.indexOf(x)))+cps(x)}))};
   return null;

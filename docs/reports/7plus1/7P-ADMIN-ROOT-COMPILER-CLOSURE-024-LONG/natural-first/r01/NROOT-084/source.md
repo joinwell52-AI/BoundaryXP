@@ -1,0 +1,1 @@
+PM must organize a review of inventory.csv and deliver inventory-review.md. The task is complete only when every item has been checked and the report exists.

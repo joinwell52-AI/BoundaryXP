@@ -1,0 +1,1 @@
+请 PM 组织对 gateway.log 与 gateway-error.log 进行只读排查，关注最近 20 分钟重复 5xx，并形成 gateway-review.md。不得清理日志或重启网关。

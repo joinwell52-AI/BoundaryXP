@@ -1,0 +1,1 @@
+请 PM 组织依据 SEC-POLICY-12 v3.1 复核 scan-results.json 中的高危发现，并形成 security-audit.md。不得执行漏洞利用。

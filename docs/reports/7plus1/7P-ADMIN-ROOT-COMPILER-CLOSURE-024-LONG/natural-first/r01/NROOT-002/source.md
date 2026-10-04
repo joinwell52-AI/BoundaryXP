@@ -1,0 +1,1 @@
+请 PM 负责本次配置一致性检查，核对 app-config.yaml 与模板文件中的关键项，并形成 config-consistency.md。任务仅允许读取和记录差异，不得覆盖配置。

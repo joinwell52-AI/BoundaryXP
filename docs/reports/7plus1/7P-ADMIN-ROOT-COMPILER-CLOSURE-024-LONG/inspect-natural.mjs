@@ -1,0 +1,4 @@
+import {OUT,read} from './audit-tools.mjs';
+const start=Number(process.argv[2]??1),end=Number(process.argv[3]??100),results=read(OUT+'/natural-first/r01/RESULTS.json');
+if(read(OUT+'/NATURAL-FIRST-OUTPUT-SEAL.json').status!=='SEALED_FIRST_OUTPUTS_BEFORE_READ_ONLY_DIAGNOSTICS')throw Error('NOT_SEALED');
+for(const [i,row] of results.rows.entries()){if(i+1<start||i+1>end)continue;const r=row.trace?read(OUT+'/'+row.trace):null,c=r?.compiler_v03;console.log(JSON.stringify({id:row.id,source:c?.source.raw_text,error:row.error,slots:c?Object.fromEntries([...'IOAPRVCB'].map(k=>[k,{status:c.canonical_7plus1[k].status,entries:c.canonical_7plus1[k].entries.map(e=>e.display_value)}])):null,unknown:c?.unresolved.map(u=>({kind:u.kind,reason:u.reason,source:u.related_clause_ids.map(i=>c.structure.clauses.find(cl=>cl.clause_id===i)?.source_span_ids.map(i=>r.source_spans.find(s=>s.span_id===i)?.text))})),structural_diagnostics:c?.diagnostics}));}

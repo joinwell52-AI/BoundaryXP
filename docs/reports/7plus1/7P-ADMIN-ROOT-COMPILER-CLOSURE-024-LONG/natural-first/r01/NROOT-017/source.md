@@ -1,0 +1,1 @@
+请 PM 组织核查 sample.csv 的 id、timestamp、status 三列是否存在且非空，并形成 sample-field-review.md。不得修复或重写样本。
