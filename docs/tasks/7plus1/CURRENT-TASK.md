@@ -1,10 +1,10 @@
 # Current 7+1 Parser Task
 
-**Active task:** `7P-ADMIN-ROOT-RESET-022-REVIEW`
+**Active task:** `7P-CANDIDATE-SEMANTIC-GRAPH-023`
 
 Read and execute:
 
-`docs/tasks/7plus1/7P-ADMIN-ROOT-RESET-022-REVIEW.md`
+`docs/tasks/7plus1/7P-CANDIDATE-SEMANTIC-GRAPH-023.md`
 
 Normative method:
 
