@@ -1,0 +1,1 @@
+DEV 依据 CFG-RULE-8 的 v2.3 版本读取 service.yaml，检查参数命名和默认值，生成 cfg-rule-review.md。不得修改 service.yaml。

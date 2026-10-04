@@ -1,0 +1,1 @@
+Run a read-only model smoke check in staging with memory usage capped at 2 GB, then create smoke-note.md. Do not load a different model.

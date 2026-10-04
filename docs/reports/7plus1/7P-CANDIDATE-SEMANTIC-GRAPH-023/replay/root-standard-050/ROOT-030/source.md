@@ -1,0 +1,1 @@
+请 PM 组织读取 training-index.csv，核查每项数据的来源与许可记录并形成 training-audit.md。来源或许可缺失的条目标为待确认；不得下载新数据或启动训练。

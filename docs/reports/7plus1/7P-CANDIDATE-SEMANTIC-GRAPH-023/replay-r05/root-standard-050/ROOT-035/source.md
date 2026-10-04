@@ -1,0 +1,1 @@
+请 PM 组织读取 before.json 与 after.json，对比失败用例及耗时变化并形成 regression-diff.md。必须分别列出新增失败和已消失失败；不得修改 Parser、模型或阈值。

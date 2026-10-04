@@ -1,0 +1,1 @@
+请 PM 组织读取 inference-trace.json，检查模型名称、输入摘要和输出摘要并形成 model-call-audit.md。没有调用证据的模型必须标记为未证实，不得因模型已下载而标为已调用。

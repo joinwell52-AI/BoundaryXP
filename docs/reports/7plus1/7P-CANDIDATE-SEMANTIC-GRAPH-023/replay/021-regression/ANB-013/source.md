@@ -1,0 +1,1 @@
+OPS 读取 backup-list.csv，检查所有条目的校验状态和生成时间，输出 backup-review.md。校验失败的条目单独列出；不得恢复或删除备份。

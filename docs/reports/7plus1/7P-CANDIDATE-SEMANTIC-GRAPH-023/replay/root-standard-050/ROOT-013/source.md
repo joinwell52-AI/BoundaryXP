@@ -1,0 +1,1 @@
+请 PM 组织按 LICENSE-POLICY-4 核查 dependencies.lock 中直接依赖的许可证，并形成 license-review.csv。范围不含间接依赖；许可证信息缺失时标记为待确认，不得自动判为允许商用。

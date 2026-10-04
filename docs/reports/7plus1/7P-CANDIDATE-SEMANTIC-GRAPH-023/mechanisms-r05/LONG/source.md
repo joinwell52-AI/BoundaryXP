@@ -1,0 +1,1 @@
+由 QA 检查 routes.csv 和 rules.yaml，如果发现异常，则必须生成 report.md，并提交给经理，然后停止检查。

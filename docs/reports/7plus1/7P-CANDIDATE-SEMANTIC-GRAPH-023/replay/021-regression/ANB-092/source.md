@@ -1,0 +1,1 @@
+QA reads release.json 并生成 release-review.md；PM 在 QA review 通过后发送报告给 ADMIN。不得执行发布。

@@ -1,0 +1,1 @@
+请 PM 组织依据 RELEASE-6 v3.0 对 release.yaml 与 build.log 进行发布前只读检查，并形成 release-check.md。此次任务不执行发布，不得修改源码或发布配置。

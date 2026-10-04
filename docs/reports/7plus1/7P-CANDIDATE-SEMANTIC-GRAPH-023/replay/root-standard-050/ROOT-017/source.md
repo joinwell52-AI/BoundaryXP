@@ -1,0 +1,1 @@
+请 PM 组织读取 checksums.txt，核验 dist 目录中的全部压缩包，并形成 package-check.md。任何校验值不匹配时应停止核验并汇报；不得删除或重新生成压缩包。

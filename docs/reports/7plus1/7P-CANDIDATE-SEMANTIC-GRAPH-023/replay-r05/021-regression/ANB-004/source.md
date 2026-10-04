@@ -1,0 +1,1 @@
+DEV 查看 public-api.json，核对公开接口名称和版本标识，生成 api-audit.md。QA 只复核报告内容，不修改接口定义；PM 接收最终报告。

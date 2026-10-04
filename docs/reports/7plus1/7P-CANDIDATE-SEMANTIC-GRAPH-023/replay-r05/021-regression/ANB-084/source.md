@@ -1,0 +1,1 @@
+Read inventory.csv and create inventory-review.md. The task is complete only when every item has been checked and the report exists.

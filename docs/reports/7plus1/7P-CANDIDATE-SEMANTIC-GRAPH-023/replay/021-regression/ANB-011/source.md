@@ -1,0 +1,1 @@
+QA 读取 release-note.md，检查版本号、变更摘要和回滚说明是否齐全，生成 release-note-review.md。不得发布版本，也不得修改 release-note.md。

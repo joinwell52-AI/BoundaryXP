@@ -1,0 +1,1 @@
+Nora reads service.csv and creates service-review.md. QA reviews the report, then Leo sends it to ADMIN. Nora is not an approver.
