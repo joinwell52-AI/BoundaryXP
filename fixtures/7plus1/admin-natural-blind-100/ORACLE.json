@@ -1,0 +1,2888 @@
+{
+  "suite": "ADMIN-NATURAL-BLIND-100",
+  "version": "021-oracle-v1",
+  "author": "ADMIN/ChatGPT",
+  "parser_output_seen_during_authoring": false,
+  "source_path": "fixtures/7plus1/admin-natural-blind-100/CASES.md",
+  "source_blob_sha": "15154b2f30453de830f8fd4d78c1a92cf52d9f1e",
+  "source_case_count": 100,
+  "frozen_020_candidate_sha256": "42b1676906fd50576bee5023520584bf55096e047605330cb50d475bbe4ec9d7",
+  "policy": {
+    "clear_cases": "ANB-001..ANB-095",
+    "ambiguity_cases": "ANB-096..ANB-100",
+    "full_semantic_review_required": true,
+    "contract_pass_is_not_semantic_pass": true,
+    "parser_runtime_must_not_read_oracle": true
+  },
+  "cases": [
+    {
+      "id": "ANB-001",
+      "title": "服务状态核查",
+      "source": "请 OPS 查看 test-services.json，核对测试环境中 6 个服务是否都处于预期状态，并生成 service-status.md。QA 复核报告后交给 PM；不得重启或停止任何服务。",
+      "expected": {
+        "I": [
+          "test-services.json"
+        ],
+        "O": [
+          "service-status.md"
+        ],
+        "A": [
+          "OPS CHECK 6 test services expected state",
+          "OPS GENERATE service-status.md",
+          "QA REVIEW report",
+          "TRANSFER report to PM"
+        ],
+        "P": [
+          "OPS:PERFORMER",
+          "QA:REVIEWER",
+          "PM:RECIPIENT"
+        ],
+        "R": [],
+        "V": [],
+        "C": [],
+        "B": [
+          "FORBID RESTART service",
+          "FORBID STOP service"
+        ]
+      },
+      "ambiguity": null
+    },
+    {
+      "id": "ANB-002",
+      "title": "配置只读核对",
+      "source": "DEV 读取 app-config.yaml 与 app-config.example.yaml，检查关键配置项是否一致，差异写入 config-review.md。只允许读取和记录，不得覆盖任一配置文件。",
+      "expected": {
+        "I": [
+          "app-config.yaml",
+          "app-config.example.yaml"
+        ],
+        "O": [
+          "config-review.md"
+        ],
+        "A": [
+          "DEV READ both configs",
+          "DEV CHECK key config consistency",
+          "DEV RECORD differences"
+        ],
+        "P": [
+          "DEV:PERFORMER"
+        ],
+        "R": [],
+        "V": [],
+        "C": [],
+        "B": [
+          "READ_ONLY",
+          "FORBID OVERWRITE configs"
+        ]
+      },
+      "ambiguity": null
+    },
+    {
+      "id": "ANB-003",
+      "title": "证据清单检查",
+      "source": "请审计员林乔检查 evidence-index.csv 中每条记录是否都有文件名、哈希和时间戳，生成 evidence-audit.md。缺少任一字段的条目必须单独列出，但不要补写原始记录。",
+      "expected": {
+        "I": [
+          "evidence-index.csv"
+        ],
+        "O": [
+          "evidence-audit.md"
+        ],
+        "A": [
+          "林乔 CHECK every record has filename/hash/timestamp",
+          "林乔 GENERATE report"
+        ],
+        "P": [
+          "审计员林乔:PERFORMER"
+        ],
+        "R": [],
+        "V": [],
+        "C": [
+          "missing any field -> list separately"
+        ],
+        "B": [
+          "FORBID FILL/FABRICATE original record"
+        ]
+      },
+      "ambiguity": null
+    },
+    {
+      "id": "ANB-004",
+      "title": "接口清单核查",
+      "source": "DEV 查看 public-api.json，核对公开接口名称和版本标识，生成 api-audit.md。QA 只复核报告内容，不修改接口定义；PM 接收最终报告。",
+      "expected": {
+        "I": [
+          "public-api.json"
+        ],
+        "O": [
+          "api-audit.md"
+        ],
+        "A": [
+          "DEV VIEW file",
+          "DEV CHECK interface names/version labels",
+          "DEV GENERATE report",
+          "QA REVIEW report"
+        ],
+        "P": [
+          "DEV:PERFORMER",
+          "QA:REVIEWER",
+          "PM:RECIPIENT"
+        ],
+        "R": [],
+        "V": [],
+        "C": [],
+        "B": [
+          "FORBID MODIFY interface definitions"
+        ]
+      },
+      "ambiguity": null
+    },
+    {
+      "id": "ANB-005",
+      "title": "日志只读排查",
+      "source": "OPS 读取 gateway.log 和 gateway-error.log，定位过去 20 分钟内重复出现的 5xx 错误，并生成 gateway-notes.md。不得清理日志，也不得重启网关。",
+      "expected": {
+        "I": [
+          "gateway.log",
+          "gateway-error.log"
+        ],
+        "O": [
+          "gateway-notes.md"
+        ],
+        "A": [
+          "OPS READ logs",
+          "OPS LOCATE repeated 5xx in last 20m",
+          "OPS GENERATE report"
+        ],
+        "P": [
+          "OPS:PERFORMER"
+        ],
+        "R": [],
+        "V": [],
+        "C": [
+          "20m = observation window"
+        ],
+        "B": [
+          "FORBID CLEAR logs",
+          "FORBID RESTART gateway"
+        ]
+      },
+      "ambiguity": null
+    },
+    {
+      "id": "ANB-006",
+      "title": "依赖版本检查",
+      "source": "DEV 检查 dependencies.lock 中的直接依赖版本，结果写入 dependency-review.md。范围不包含 transitive dependencies；不得执行升级或重新安装。",
+      "expected": {
+        "I": [
+          "dependencies.lock"
+        ],
+        "O": [
+          "dependency-review.md"
+        ],
+        "A": [
+          "DEV CHECK direct dependency versions",
+          "DEV WRITE report"
+        ],
+        "P": [
+          "DEV:PERFORMER"
+        ],
+        "R": [],
+        "V": [],
+        "C": [],
+        "B": [
+          "EXCLUDE transitive dependencies",
+          "FORBID UPGRADE",
+          "FORBID REINSTALL"
+        ]
+      },
+      "ambiguity": null
+    },
+    {
+      "id": "ANB-007",
+      "title": "构建结果核验",
+      "source": "QA 读取 build-summary.json，确认主模块和两个插件的构建结果，生成 build-review.md。发现失败项时只记录原因，不得重新触发构建。",
+      "expected": {
+        "I": [
+          "build-summary.json"
+        ],
+        "O": [
+          "build-review.md"
+        ],
+        "A": [
+          "QA READ build summary",
+          "QA VERIFY main+2 plugins",
+          "QA GENERATE report"
+        ],
+        "P": [
+          "QA:PERFORMER"
+        ],
+        "R": [],
+        "V": [],
+        "C": [
+          "failed item -> record reason only"
+        ],
+        "B": [
+          "FORBID RERUN build"
+        ]
+      },
+      "ambiguity": null
+    },
+    {
+      "id": "ANB-008",
+      "title": "文档链接检查",
+      "source": "编辑周岚查看 README.md 与 docs/index.md 中的内部链接，生成 link-check.md。只记录失效链接，不修改任何 Markdown 文件。",
+      "expected": {
+        "I": [
+          "README.md",
+          "docs/index.md"
+        ],
+        "O": [
+          "link-check.md"
+        ],
+        "A": [
+          "周岚 VIEW internal links",
+          "周岚 GENERATE report"
+        ],
+        "P": [
+          "编辑周岚:PERFORMER"
+        ],
+        "R": [],
+        "V": [],
+        "C": [],
+        "B": [
+          "FORBID MODIFY markdown"
+        ]
+      },
+      "ambiguity": null
+    },
+    {
+      "id": "ANB-009",
+      "title": "权限映射核查",
+      "source": "安全员韩宁读取 role-map.csv 和 permission-map.csv，检查角色与权限的对应关系，输出 permission-audit.md。不得新增、删除或修改权限记录。",
+      "expected": {
+        "I": [
+          "role-map.csv",
+          "permission-map.csv"
+        ],
+        "O": [
+          "permission-audit.md"
+        ],
+        "A": [
+          "韩宁 READ mappings",
+          "韩宁 CHECK role-permission mapping",
+          "韩宁 OUTPUT report"
+        ],
+        "P": [
+          "安全员韩宁:PERFORMER"
+        ],
+        "R": [],
+        "V": [],
+        "C": [],
+        "B": [
+          "FORBID CREATE/DELETE/MODIFY permission records"
+        ]
+      },
+      "ambiguity": null
+    },
+    {
+      "id": "ANB-010",
+      "title": "快照一致性检查",
+      "source": "OPS 比较 node-a.json 和 node-b.json 中的服务版本与启动参数，生成 node-diff.md。仅检查现有快照，不连接实际主机。",
+      "expected": {
+        "I": [
+          "node-a.json",
+          "node-b.json"
+        ],
+        "O": [
+          "node-diff.md"
+        ],
+        "A": [
+          "OPS COMPARE service versions/start params",
+          "OPS GENERATE report"
+        ],
+        "P": [
+          "OPS:PERFORMER"
+        ],
+        "R": [],
+        "V": [],
+        "C": [],
+        "B": [
+          "SNAPSHOT_ONLY",
+          "FORBID CONNECT actual hosts"
+        ]
+      },
+      "ambiguity": null
+    },
+    {
+      "id": "ANB-011",
+      "title": "发布说明审阅",
+      "source": "QA 读取 release-note.md，检查版本号、变更摘要和回滚说明是否齐全，生成 release-note-review.md。不得发布版本，也不得修改 release-note.md。",
+      "expected": {
+        "I": [
+          "release-note.md"
+        ],
+        "O": [
+          "release-note-review.md"
+        ],
+        "A": [
+          "QA CHECK version/change summary/rollback note completeness",
+          "QA GENERATE review"
+        ],
+        "P": [
+          "QA:PERFORMER"
+        ],
+        "R": [],
+        "V": [],
+        "C": [],
+        "B": [
+          "FORBID RELEASE",
+          "FORBID MODIFY release-note.md"
+        ]
+      },
+      "ambiguity": null
+    },
+    {
+      "id": "ANB-012",
+      "title": "数据库脚本只读检查",
+      "source": "DEV 查看 migration.sql，核查是否包含回滚段和事务边界，生成 migration-sql-review.md。不得连接数据库，不得执行脚本。",
+      "expected": {
+        "I": [
+          "migration.sql"
+        ],
+        "O": [
+          "migration-sql-review.md"
+        ],
+        "A": [
+          "DEV VIEW migration.sql",
+          "DEV CHECK rollback section + transaction boundary",
+          "DEV GENERATE report"
+        ],
+        "P": [
+          "DEV:PERFORMER"
+        ],
+        "R": [],
+        "V": [],
+        "C": [],
+        "B": [
+          "FORBID CONNECT DB",
+          "FORBID EXECUTE script"
+        ]
+      },
+      "ambiguity": null
+    },
+    {
+      "id": "ANB-013",
+      "title": "备份清单核验",
+      "source": "OPS 读取 backup-list.csv，检查所有条目的校验状态和生成时间，输出 backup-review.md。校验失败的条目单独列出；不得恢复或删除备份。",
+      "expected": {
+        "I": [
+          "backup-list.csv"
+        ],
+        "O": [
+          "backup-review.md"
+        ],
+        "A": [
+          "OPS READ list",
+          "OPS CHECK ALL checksum status/generation time",
+          "OPS GENERATE report"
+        ],
+        "P": [
+          "OPS:PERFORMER"
+        ],
+        "R": [],
+        "V": [],
+        "C": [
+          "checksum failure -> list separately"
+        ],
+        "B": [
+          "FORBID RESTORE",
+          "FORBID DELETE backup"
+        ]
+      },
+      "ambiguity": null
+    },
+    {
+      "id": "ANB-014",
+      "title": "测试结果审阅",
+      "source": "QA 读取 unit-test.json 与 integration-test.json，统计失败用例并生成 test-review.md。不得重新运行测试，DEV 只负责对失败原因作文字说明。",
+      "expected": {
+        "I": [
+          "unit-test.json",
+          "integration-test.json"
+        ],
+        "O": [
+          "test-review.md",
+          "DEV explanation"
+        ],
+        "A": [
+          "QA READ results",
+          "QA COUNT failures",
+          "QA GENERATE report",
+          "DEV EXPLAIN causes"
+        ],
+        "P": [
+          "QA:PERFORMER",
+          "DEV:EXPLAINER"
+        ],
+        "R": [],
+        "V": [],
+        "C": [],
+        "B": [
+          "FORBID RERUN tests"
+        ]
+      },
+      "ambiguity": null
+    },
+    {
+      "id": "ANB-015",
+      "title": "模型文件清单检查",
+      "source": "DEV 查看 model-files.json，核对模型名称、文件路径和 SHA-256，生成 model-file-audit.md。不得加载权重，也不得启动推理。",
+      "expected": {
+        "I": [
+          "model-files.json"
+        ],
+        "O": [
+          "model-file-audit.md"
+        ],
+        "A": [
+          "DEV CHECK model name/path/SHA256",
+          "DEV GENERATE report"
+        ],
+        "P": [
+          "DEV:PERFORMER"
+        ],
+        "R": [],
+        "V": [],
+        "C": [],
+        "B": [
+          "FORBID LOAD weights",
+          "FORBID START inference"
+        ]
+      },
+      "ambiguity": null
+    },
+    {
+      "id": "ANB-016",
+      "title": "索引元数据核查",
+      "source": "OPS 读取 index-meta.json，检查索引版本、分片数量和校验值，生成 index-meta-review.md。不得重建索引或重新计算向量。",
+      "expected": {
+        "I": [
+          "index-meta.json"
+        ],
+        "O": [
+          "index-meta-review.md"
+        ],
+        "A": [
+          "OPS CHECK version/shard count/checksum",
+          "OPS GENERATE report"
+        ],
+        "P": [
+          "OPS:PERFORMER"
+        ],
+        "R": [],
+        "V": [],
+        "C": [],
+        "B": [
+          "FORBID REBUILD index",
+          "FORBID RECALCULATE vectors"
+        ]
+      },
+      "ambiguity": null
+    },
+    {
+      "id": "ANB-017",
+      "title": "数据字段检查",
+      "source": "分析员许宁读取 sample.csv，检查 id、timestamp、status 三列是否存在且非空，生成 sample-audit.md。不得修复或重写样本数据。",
+      "expected": {
+        "I": [
+          "sample.csv"
+        ],
+        "O": [
+          "sample-audit.md"
+        ],
+        "A": [
+          "许宁 CHECK id/timestamp/status existence+nonempty",
+          "许宁 GENERATE report"
+        ],
+        "P": [
+          "分析员许宁:PERFORMER"
+        ],
+        "R": [],
+        "V": [],
+        "C": [],
+        "B": [
+          "FORBID REPAIR/REWRITE data"
+        ]
+      },
+      "ambiguity": null
+    },
+    {
+      "id": "ANB-018",
+      "title": "API 变更记录",
+      "source": "DEV 比较 api-before.json 与 api-after.json，生成 api-change.md，列出新增、移除和重命名的接口。这里只记录变化，不执行任何接口删除或改名。",
+      "expected": {
+        "I": [
+          "api-before.json",
+          "api-after.json"
+        ],
+        "O": [
+          "api-change.md"
+        ],
+        "A": [
+          "DEV COMPARE inputs",
+          "DEV GENERATE report"
+        ],
+        "P": [
+          "DEV:PERFORMER"
+        ],
+        "R": [],
+        "V": [],
+        "C": [
+          "OUTPUT_CONTENT lists added/removed/renamed interfaces"
+        ],
+        "B": [
+          "DO_NOT_EXECUTE DELETE/RENAME interfaces"
+        ]
+      },
+      "ambiguity": null
+    },
+    {
+      "id": "ANB-019",
+      "title": "任务记录核查",
+      "source": "PM 安排 DEV 检查 task-ledger.json 的状态记录是否完整，DEV 生成 task-ledger-review.md，QA 复核后由 PM 提交给 ADMIN。不得补造缺失历史。",
+      "expected": {
+        "I": [
+          "task-ledger.json"
+        ],
+        "O": [
+          "task-ledger-review.md"
+        ],
+        "A": [
+          "PM ASSIGN DEV",
+          "DEV CHECK completeness",
+          "DEV GENERATE report",
+          "QA REVIEW",
+          "PM SUBMIT to ADMIN"
+        ],
+        "P": [
+          "PM:COORDINATOR/SUBMITTER",
+          "DEV:PERFORMER",
+          "QA:REVIEWER",
+          "ADMIN:RECIPIENT"
+        ],
+        "R": [],
+        "V": [],
+        "C": [],
+        "B": [
+          "FORBID FABRICATE history"
+        ]
+      },
+      "ambiguity": null
+    },
+    {
+      "id": "ANB-020",
+      "title": "证书清单检查",
+      "source": "OPS 读取 certs.csv，检查证书名称、域名和到期日，生成 cert-review.md。30 天内到期的证书要在报告中标注，但不得替换证书。",
+      "expected": {
+        "I": [
+          "certs.csv"
+        ],
+        "O": [
+          "cert-review.md"
+        ],
+        "A": [
+          "OPS CHECK name/domain/expiry",
+          "OPS GENERATE report"
+        ],
+        "P": [
+          "OPS:PERFORMER"
+        ],
+        "R": [],
+        "V": [],
+        "C": [
+          "expiry <30d -> mark in report"
+        ],
+        "B": [
+          "FORBID REPLACE certificate"
+        ]
+      },
+      "ambiguity": null
+    },
+    {
+      "id": "ANB-021",
+      "title": "按规范核验配置",
+      "source": "DEV 依据 CFG-RULE-8 的 v2.3 版本读取 service.yaml，检查参数命名和默认值，生成 cfg-rule-review.md。不得修改 service.yaml。",
+      "expected": {
+        "I": [
+          "service.yaml"
+        ],
+        "O": [
+          "cfg-rule-review.md"
+        ],
+        "A": [
+          "DEV CHECK parameter names/defaults",
+          "DEV GENERATE report"
+        ],
+        "P": [
+          "DEV:PERFORMER"
+        ],
+        "R": [],
+        "V": [
+          "CFG-RULE-8@v2.3"
+        ],
+        "C": [],
+        "B": [
+          "FORBID MODIFY service.yaml"
+        ]
+      },
+      "ambiguity": null
+    },
+    {
+      "id": "ANB-022",
+      "title": "依据发布规范审阅",
+      "source": "QA 按 RELEASE-CHECK-4 v1.7 检查 artifact.json 和 checksum.txt，生成 artifact-review.md。不得执行发布，也不得重新生成校验文件。",
+      "expected": {
+        "I": [
+          "artifact.json",
+          "checksum.txt"
+        ],
+        "O": [
+          "artifact-review.md"
+        ],
+        "A": [
+          "QA CHECK against release spec",
+          "QA GENERATE report"
+        ],
+        "P": [
+          "QA:PERFORMER"
+        ],
+        "R": [],
+        "V": [
+          "RELEASE-CHECK-4@v1.7"
+        ],
+        "C": [],
+        "B": [
+          "FORBID RELEASE",
+          "FORBID REGENERATE checksum"
+        ]
+      },
+      "ambiguity": null
+    },
+    {
+      "id": "ANB-023",
+      "title": "安全规则核查",
+      "source": "安全员方明依据 SEC-POLICY-12 的 v3.1 版本查看 scan-results.json，复核高危项，生成 security-audit.md。不得执行漏洞利用。",
+      "expected": {
+        "I": [
+          "scan-results.json"
+        ],
+        "O": [
+          "security-audit.md"
+        ],
+        "A": [
+          "方明 REVIEW high-risk findings",
+          "方明 GENERATE report"
+        ],
+        "P": [
+          "安全员方明:PERFORMER"
+        ],
+        "R": [],
+        "V": [
+          "SEC-POLICY-12@v3.1"
+        ],
+        "C": [],
+        "B": [
+          "FORBID EXPLOIT"
+        ]
+      },
+      "ambiguity": null
+    },
+    {
+      "id": "ANB-024",
+      "title": "英文规范核验",
+      "source": "Using OPS-GUIDE-7 version v2.0, inspect host-state.json and create host-state-review.md. Do not change host settings or restart the host.",
+      "expected": {
+        "I": [
+          "host-state.json"
+        ],
+        "O": [
+          "host-state-review.md"
+        ],
+        "A": [
+          "INSPECT host state",
+          "CREATE report"
+        ],
+        "P": [],
+        "R": [],
+        "V": [
+          "OPS-GUIDE-7@v2.0"
+        ],
+        "C": [],
+        "B": [
+          "FORBID CHANGE settings",
+          "FORBID RESTART host"
+        ]
+      },
+      "ambiguity": null
+    },
+    {
+      "id": "ANB-025",
+      "title": "规则版本绑定",
+      "source": "请 DEV 依据 DATA-SPEC-5 v4.2 检查 dataset-index.csv 的字段定义，生成 dataset-spec-review.md。不得下载新数据。",
+      "expected": {
+        "I": [
+          "dataset-index.csv"
+        ],
+        "O": [
+          "dataset-spec-review.md"
+        ],
+        "A": [
+          "DEV CHECK field definitions",
+          "DEV GENERATE report"
+        ],
+        "P": [
+          "DEV:PERFORMER"
+        ],
+        "R": [],
+        "V": [
+          "DATA-SPEC-5@v4.2"
+        ],
+        "C": [],
+        "B": [
+          "FORBID DOWNLOAD new data"
+        ]
+      },
+      "ambiguity": null
+    },
+    {
+      "id": "ANB-026",
+      "title": "任务时限",
+      "source": "OPS 检查 cache-status.json 并生成 cache-review.md，整个任务须在 25 分钟内完成。不得清空缓存或重启缓存服务。",
+      "expected": {
+        "I": [
+          "cache-status.json"
+        ],
+        "O": [
+          "cache-review.md"
+        ],
+        "A": [
+          "OPS CHECK cache status",
+          "OPS GENERATE report"
+        ],
+        "P": [
+          "OPS:PERFORMER"
+        ],
+        "R": [
+          "TIME LTE 25m TARGET=TASK"
+        ],
+        "V": [],
+        "C": [],
+        "B": [
+          "FORBID CLEAR cache",
+          "FORBID RESTART cache service"
+        ]
+      },
+      "ambiguity": null
+    },
+    {
+      "id": "ANB-027",
+      "title": "重试上限",
+      "source": "DEV 对测试环境执行连接检查，单次检查失败时最多重试 4 次，并生成 connection-check.md。不得修改网络路由。",
+      "expected": {
+        "I": [],
+        "O": [
+          "connection-check.md"
+        ],
+        "A": [
+          "DEV CONNECTION_CHECK test env",
+          "DEV GENERATE report"
+        ],
+        "P": [
+          "DEV:PERFORMER"
+        ],
+        "R": [
+          "RETRY_COUNT LTE 4 TARGET=connection check"
+        ],
+        "V": [],
+        "C": [],
+        "B": [
+          "FORBID MODIFY route"
+        ]
+      },
+      "ambiguity": null
+    },
+    {
+      "id": "ANB-028",
+      "title": "内存上限",
+      "source": "OPS 在测试环境运行一次健康检查，内存使用不得超过 1536 MB，输出 health-budget.md。不得切换到生产环境。",
+      "expected": {
+        "I": [],
+        "O": [
+          "health-budget.md"
+        ],
+        "A": [
+          "OPS RUN health check in test",
+          "OPS OUTPUT report"
+        ],
+        "P": [
+          "OPS:PERFORMER"
+        ],
+        "R": [
+          "MEMORY LTE 1536MB TARGET=health check"
+        ],
+        "V": [],
+        "C": [],
+        "B": [
+          "FORBID SWITCH production"
+        ]
+      },
+      "ambiguity": null
+    },
+    {
+      "id": "ANB-029",
+      "title": "时间窗口不是时限",
+      "source": "OPS 查看最近 90 分钟的 audit.log，统计 error 与 warning 数量并生成 log-window.md。任务本身没有时间预算，不得删除日志。",
+      "expected": {
+        "I": [
+          "audit.log"
+        ],
+        "O": [
+          "log-window.md"
+        ],
+        "A": [
+          "OPS VIEW last90m logs",
+          "OPS COUNT error/warning",
+          "OPS GENERATE report"
+        ],
+        "P": [
+          "OPS:PERFORMER"
+        ],
+        "R": [],
+        "V": [],
+        "C": [
+          "90m = observation window, not budget"
+        ],
+        "B": [
+          "FORBID DELETE log"
+        ]
+      },
+      "ambiguity": null
+    },
+    {
+      "id": "ANB-030",
+      "title": "成功次数验收",
+      "source": "OPS 最多尝试读取备份 6 次；至少 3 次读取成功且 backup-read.md 已生成时任务完成。不得写入备份。",
+      "expected": {
+        "I": [],
+        "O": [
+          "backup-read.md"
+        ],
+        "A": [
+          "OPS ATTEMPT backup read",
+          "OPS GENERATE log"
+        ],
+        "P": [
+          "OPS:PERFORMER"
+        ],
+        "R": [
+          "ATTEMPT_COUNT LTE 6"
+        ],
+        "V": [],
+        "C": [
+          "SUCCESS_COUNT GTE 3 AND output exists -> COMPLETE"
+        ],
+        "B": [
+          "FORBID WRITE backup"
+        ]
+      },
+      "ambiguity": null
+    },
+    {
+      "id": "ANB-031",
+      "title": "至少重试次数",
+      "source": "在测试代理上执行探测，至少重试 2 次后再生成 probe-summary.md。不得修改代理配置。",
+      "expected": {
+        "I": [],
+        "O": [
+          "probe-summary.md"
+        ],
+        "A": [
+          "PROBE test agent",
+          "GENERATE report"
+        ],
+        "P": [],
+        "R": [
+          "RETRY_COUNT GTE 2"
+        ],
+        "V": [],
+        "C": [],
+        "B": [
+          "FORBID MODIFY agent config"
+        ]
+      },
+      "ambiguity": null
+    },
+    {
+      "id": "ANB-032",
+      "title": "精确尝试次数",
+      "source": "QA 对 sandbox 接口执行恰好 3 次可用性查询，并将结果写入 availability.md。不得调用生产接口。",
+      "expected": {
+        "I": [],
+        "O": [
+          "availability.md"
+        ],
+        "A": [
+          "QA QUERY sandbox API exactly 3",
+          "QA WRITE report"
+        ],
+        "P": [
+          "QA:PERFORMER"
+        ],
+        "R": [
+          "QUERY_COUNT EQ 3"
+        ],
+        "V": [],
+        "C": [],
+        "B": [
+          "FORBID CALL prod API"
+        ]
+      },
+      "ambiguity": null
+    },
+    {
+      "id": "ANB-033",
+      "title": "双数量目标",
+      "source": "OPS 最多重试服务探测 5 次，且至少 2 次返回成功状态后生成 service-probe.md。不得重启服务。",
+      "expected": {
+        "I": [],
+        "O": [
+          "service-probe.md"
+        ],
+        "A": [
+          "OPS PROBE service",
+          "OPS GENERATE report"
+        ],
+        "P": [
+          "OPS:PERFORMER"
+        ],
+        "R": [
+          "RETRY_COUNT LTE 5"
+        ],
+        "V": [],
+        "C": [
+          "SUCCESS_COUNT GTE 2"
+        ],
+        "B": [
+          "FORBID RESTART service"
+        ]
+      },
+      "ambiguity": null
+    },
+    {
+      "id": "ANB-034",
+      "title": "容量和时间同时存在",
+      "source": "DEV 在 15 分钟内完成测试环境的模型健康检查，显存占用不得超过 4 GB，并生成 model-health.md。不得加载其他模型。",
+      "expected": {
+        "I": [],
+        "O": [
+          "model-health.md"
+        ],
+        "A": [
+          "DEV HEALTH_CHECK test env",
+          "DEV GENERATE report"
+        ],
+        "P": [
+          "DEV:PERFORMER"
+        ],
+        "R": [
+          "TIME LTE 15m",
+          "GPU_MEMORY LTE 4GB"
+        ],
+        "V": [],
+        "C": [],
+        "B": [
+          "FORBID LOAD other model"
+        ]
+      },
+      "ambiguity": null
+    },
+    {
+      "id": "ANB-035",
+      "title": "分类阈值",
+      "source": "QA 读取 coverage.json，低于 82% 的模块写入 coverage-risk.md。82% 是分类阈值，不得修改阈值或补测。",
+      "expected": {
+        "I": [
+          "coverage.json"
+        ],
+        "O": [
+          "coverage-risk.md"
+        ],
+        "A": [
+          "QA CLASSIFY modules below 82% into report"
+        ],
+        "P": [
+          "QA:PERFORMER"
+        ],
+        "R": [],
+        "V": [],
+        "C": [
+          "82%=classification threshold"
+        ],
+        "B": [
+          "FORBID MODIFY threshold",
+          "FORBID ADD tests"
+        ]
+      },
+      "ambiguity": null
+    },
+    {
+      "id": "ANB-036",
+      "title": "条目数量属于内容",
+      "source": "DEV 读取 issue-list.csv，生成 issue-summary.md，报告最多列出 20 个最高优先级问题。这个 20 不限制程序查询次数。",
+      "expected": {
+        "I": [
+          "issue-list.csv"
+        ],
+        "O": [
+          "issue-summary.md"
+        ],
+        "A": [
+          "DEV READ list",
+          "DEV GENERATE summary"
+        ],
+        "P": [
+          "DEV:PERFORMER"
+        ],
+        "R": [],
+        "V": [],
+        "C": [
+          "OUTPUT_CONTENT max20 highest-priority issues"
+        ],
+        "B": []
+      },
+      "ambiguity": null
+    },
+    {
+      "id": "ANB-037",
+      "title": "重试与观察窗口",
+      "source": "OPS 查看最近 10 分钟的 heartbeat.log；若读取失败，最多重试 3 次。生成 heartbeat-review.md，不得重启服务。",
+      "expected": {
+        "I": [
+          "heartbeat.log"
+        ],
+        "O": [
+          "heartbeat-review.md"
+        ],
+        "A": [
+          "OPS VIEW last10m log",
+          "OPS GENERATE report"
+        ],
+        "P": [
+          "OPS:PERFORMER"
+        ],
+        "R": [
+          "RETRY_COUNT LTE 3 TARGET=log read"
+        ],
+        "V": [],
+        "C": [
+          "10m observation window"
+        ],
+        "B": [
+          "FORBID RESTART service"
+        ]
+      },
+      "ambiguity": null
+    },
+    {
+      "id": "ANB-038",
+      "title": "英文时限",
+      "source": "Inspect route-table.yaml and create route-review.md within 18 minutes. Do not edit the route table. Send the report to QA.",
+      "expected": {
+        "I": [
+          "route-table.yaml"
+        ],
+        "O": [
+          "route-review.md"
+        ],
+        "A": [
+          "INSPECT route table",
+          "CREATE report",
+          "SEND report to QA"
+        ],
+        "P": [
+          "QA:RECIPIENT"
+        ],
+        "R": [
+          "TIME LTE 18m"
+        ],
+        "V": [],
+        "C": [],
+        "B": [
+          "FORBID EDIT route table"
+        ]
+      },
+      "ambiguity": null
+    },
+    {
+      "id": "ANB-039",
+      "title": "英文重试下界",
+      "source": "OPS must probe the test endpoint and retry at least 3 times before writing endpoint-probe.md. Do not change endpoint configuration.",
+      "expected": {
+        "I": [],
+        "O": [
+          "endpoint-probe.md"
+        ],
+        "A": [
+          "OPS PROBE staging endpoint",
+          "OPS WRITE report"
+        ],
+        "P": [
+          "OPS:PERFORMER"
+        ],
+        "R": [
+          "RETRY_COUNT GTE 3"
+        ],
+        "V": [],
+        "C": [],
+        "B": [
+          "FORBID CHANGE endpoint config"
+        ]
+      },
+      "ambiguity": null
+    },
+    {
+      "id": "ANB-040",
+      "title": "英文内存限制",
+      "source": "Run a read-only model smoke check in staging with memory usage capped at 2 GB, then create smoke-note.md. Do not load a different model.",
+      "expected": {
+        "I": [],
+        "O": [
+          "smoke-note.md"
+        ],
+        "A": [
+          "RUN read-only model smoke check",
+          "CREATE note"
+        ],
+        "P": [],
+        "R": [
+          "MEMORY LTE 2GB"
+        ],
+        "V": [],
+        "C": [],
+        "B": [
+          "READ_ONLY",
+          "FORBID LOAD different model"
+        ]
+      },
+      "ambiguity": null
+    },
+    {
+      "id": "ANB-041",
+      "title": "协调者与执行者",
+      "source": "PM 安排 DEV 读取 build-info.json 并生成 build-info-review.md；QA 复核报告，PM 最后提交给 ADMIN。PM 不负责具体检查。",
+      "expected": {
+        "I": [
+          "build-info.json"
+        ],
+        "O": [
+          "build-info-review.md"
+        ],
+        "A": [
+          "PM ASSIGN DEV",
+          "DEV READ input",
+          "DEV GENERATE report",
+          "QA REVIEW",
+          "PM SUBMIT to ADMIN"
+        ],
+        "P": [
+          "PM:COORDINATOR/SUBMITTER",
+          "DEV:PERFORMER",
+          "QA:REVIEWER",
+          "ADMIN:RECIPIENT"
+        ],
+        "R": [],
+        "V": [],
+        "C": [],
+        "B": [
+          "PM NOT_PERFORM concrete check"
+        ]
+      },
+      "ambiguity": null
+    },
+    {
+      "id": "ANB-042",
+      "title": "接收者不是审批者",
+      "source": "DEV 生成 incident-review.md 后发送给平台主管陈洁。陈洁只是接收报告，不负责批准或复核；不得向外部邮箱发送。",
+      "expected": {
+        "I": [],
+        "O": [
+          "incident-review.md"
+        ],
+        "A": [
+          "DEV GENERATE report",
+          "DEV SEND to 陈洁"
+        ],
+        "P": [
+          "DEV:PERFORMER/SENDER",
+          "陈洁:RECIPIENT"
+        ],
+        "R": [],
+        "V": [],
+        "C": [],
+        "B": [
+          "陈洁 NOT_APPROVER/NOT_REVIEWER",
+          "FORBID external email"
+        ]
+      },
+      "ambiguity": null
+    },
+    {
+      "id": "ANB-043",
+      "title": "审批者与执行者分离",
+      "source": "只有安全负责人刘靖批准后，QA 才能读取 prod-snapshot.json 并生成 prod-snapshot-review.md。刘靖不参与文件检查。",
+      "expected": {
+        "I": [
+          "prod-snapshot.json"
+        ],
+        "O": [
+          "prod-snapshot-review.md"
+        ],
+        "A": [
+          "QA READ after approval",
+          "QA GENERATE report"
+        ],
+        "P": [
+          "刘靖:APPROVER",
+          "QA:PERFORMER"
+        ],
+        "R": [],
+        "V": [],
+        "C": [
+          "刘靖 approval BEFORE read"
+        ],
+        "B": [
+          "刘靖 NOT_PERFORM file check"
+        ]
+      },
+      "ambiguity": null
+    },
+    {
+      "id": "ANB-044",
+      "title": "复核后提交",
+      "source": "OPS 生成 host-audit.md，QA 复核无遗漏后由 PM 提交给 ADMIN。OPS 不负责最终提交，ADMIN 仅作为接收者。",
+      "expected": {
+        "I": [],
+        "O": [
+          "host-audit.md"
+        ],
+        "A": [
+          "OPS GENERATE",
+          "QA REVIEW no omissions",
+          "PM SUBMIT to ADMIN"
+        ],
+        "P": [
+          "OPS:PERFORMER",
+          "QA:REVIEWER",
+          "PM:SUBMITTER",
+          "ADMIN:RECIPIENT"
+        ],
+        "R": [],
+        "V": [],
+        "C": [
+          "QA confirmation BEFORE PM submit"
+        ],
+        "B": [
+          "OPS NOT_FINAL_SUBMITTER"
+        ]
+      },
+      "ambiguity": null
+    },
+    {
+      "id": "ANB-045",
+      "title": "说明者不是执行者",
+      "source": "QA 检查 failure.json 并生成 failure-review.md；DEV 只解释失败原因，不修改实现。PM 汇总 QA 报告和 DEV 说明后提交给 ADMIN。",
+      "expected": {
+        "I": [
+          "failure.json"
+        ],
+        "O": [
+          "failure-review.md",
+          "DEV explanation"
+        ],
+        "A": [
+          "QA CHECK",
+          "QA GENERATE",
+          "DEV EXPLAIN",
+          "PM AGGREGATE",
+          "PM SUBMIT to ADMIN"
+        ],
+        "P": [
+          "QA:PERFORMER",
+          "DEV:EXPLAINER",
+          "PM:AGGREGATOR/SUBMITTER",
+          "ADMIN:RECIPIENT"
+        ],
+        "R": [],
+        "V": [],
+        "C": [],
+        "B": [
+          "DEV FORBID MODIFY implementation"
+        ]
+      },
+      "ambiguity": null
+    },
+    {
+      "id": "ANB-046",
+      "title": "可选动作",
+      "source": "DEV 必须读取 package.json，可以查看 CHANGELOG.md，并生成 package-audit.md。不得修改这两个文件。",
+      "expected": {
+        "I": [
+          "package.json",
+          "CHANGELOG.md(optional)"
+        ],
+        "O": [
+          "package-audit.md"
+        ],
+        "A": [
+          "DEV READ package REQUIRED",
+          "DEV VIEW changelog PERMITTED",
+          "DEV GENERATE report REQUIRED"
+        ],
+        "P": [
+          "DEV:PERFORMER"
+        ],
+        "R": [],
+        "V": [],
+        "C": [],
+        "B": [
+          "FORBID MODIFY both"
+        ]
+      },
+      "ambiguity": null
+    },
+    {
+      "id": "ANB-047",
+      "title": "无需动作",
+      "source": "QA 检查 diff.csv；若没有差异，无需生成 difference.md，只向 PM 汇报“无差异”。不得修改 diff.csv。",
+      "expected": {
+        "I": [
+          "diff.csv"
+        ],
+        "O": [
+          "difference.md conditional"
+        ],
+        "A": [
+          "QA CHECK diff.csv",
+          "QA REPORT no-difference to PM on else"
+        ],
+        "P": [
+          "QA:PERFORMER",
+          "PM:RECIPIENT"
+        ],
+        "R": [],
+        "V": [],
+        "C": [
+          "IF differences -> generate; ELSE NOT_REQUIRED output + notify PM"
+        ],
+        "B": [
+          "FORBID MODIFY diff.csv"
+        ]
+      },
+      "ambiguity": null
+    },
+    {
+      "id": "ANB-048",
+      "title": "不要求修复",
+      "source": "DEV 检查 parser-errors.json 并生成 parser-error-review.md，本任务不要求修复任何错误，也不得修改 Parser。",
+      "expected": {
+        "I": [
+          "parser-errors.json"
+        ],
+        "O": [
+          "parser-error-review.md"
+        ],
+        "A": [
+          "DEV CHECK errors",
+          "DEV GENERATE report"
+        ],
+        "P": [
+          "DEV:PERFORMER"
+        ],
+        "R": [],
+        "V": [],
+        "C": [],
+        "B": [
+          "NOT_REQUIRED REPAIR",
+          "FORBID MODIFY Parser"
+        ]
+      },
+      "ambiguity": null
+    },
+    {
+      "id": "ANB-049",
+      "title": "不得审批",
+      "source": "资料员叶澄生成 archive-list.md 并交给 PM。叶澄不负责审批归档，也不得删除任何历史文件。",
+      "expected": {
+        "I": [],
+        "O": [
+          "archive-list.md"
+        ],
+        "A": [
+          "叶澄 GENERATE",
+          "叶澄 TRANSFER to PM"
+        ],
+        "P": [
+          "资料员叶澄:PERFORMER/SENDER",
+          "PM:RECIPIENT"
+        ],
+        "R": [],
+        "V": [],
+        "C": [],
+        "B": [
+          "叶澄 NOT_APPROVER",
+          "FORBID DELETE history"
+        ]
+      },
+      "ambiguity": null
+    },
+    {
+      "id": "ANB-050",
+      "title": "英文角色链",
+      "source": "Nora reads service.csv and creates service-review.md. QA reviews the report, then Leo sends it to ADMIN. Nora is not an approver.",
+      "expected": {
+        "I": [
+          "service.csv"
+        ],
+        "O": [
+          "service-review.md"
+        ],
+        "A": [
+          "Nora READ",
+          "Nora CREATE",
+          "QA REVIEW",
+          "Leo SEND to ADMIN"
+        ],
+        "P": [
+          "Nora:PERFORMER",
+          "QA:REVIEWER",
+          "Leo:SENDER",
+          "ADMIN:RECIPIENT"
+        ],
+        "R": [],
+        "V": [],
+        "C": [],
+        "B": [
+          "Nora NOT_APPROVER"
+        ]
+      },
+      "ambiguity": null
+    },
+    {
+      "id": "ANB-051",
+      "title": "条件停止",
+      "source": "OPS 检查 service.log；若发现 critical 错误，立即停止检查并通知 PM，否则生成 service-summary.md。不得重启服务。",
+      "expected": {
+        "I": [
+          "service.log"
+        ],
+        "O": [
+          "service-summary.md conditional"
+        ],
+        "A": [
+          "OPS CHECK service.log"
+        ],
+        "P": [
+          "OPS:PERFORMER",
+          "PM:RECIPIENT"
+        ],
+        "R": [],
+        "V": [],
+        "C": [
+          "IF critical -> STOP + NOTIFY PM; ELSE GENERATE output"
+        ],
+        "B": [
+          "FORBID RESTART service"
+        ]
+      },
+      "ambiguity": null
+    },
+    {
+      "id": "ANB-052",
+      "title": "条件输出",
+      "source": "QA 查看 changes.csv。有差异时生成 change-report.md；没有差异时不生成文件，只向 PM 说明无差异。不得修改 changes.csv。",
+      "expected": {
+        "I": [
+          "changes.csv"
+        ],
+        "O": [
+          "change-report.md conditional"
+        ],
+        "A": [
+          "QA VIEW changes"
+        ],
+        "P": [
+          "QA:PERFORMER",
+          "PM:RECIPIENT"
+        ],
+        "R": [],
+        "V": [],
+        "C": [
+          "IF differences -> generate; ELSE notify no-difference only"
+        ],
+        "B": [
+          "FORBID MODIFY changes.csv"
+        ]
+      },
+      "ambiguity": null
+    },
+    {
+      "id": "ANB-053",
+      "title": "恢复条件",
+      "source": "OPS 检查 gateway.log。发现高危告警时停止；只有 PM 明确批准继续后才能恢复检查。最终生成 gateway-review.md。",
+      "expected": {
+        "I": [
+          "gateway.log"
+        ],
+        "O": [
+          "gateway-review.md"
+        ],
+        "A": [
+          "OPS CHECK",
+          "OPS GENERATE final report"
+        ],
+        "P": [
+          "OPS:PERFORMER",
+          "PM:APPROVER"
+        ],
+        "R": [],
+        "V": [],
+        "C": [
+          "IF high-risk -> STOP; RESUME only after PM approval"
+        ],
+        "B": []
+      },
+      "ambiguity": null
+    },
+    {
+      "id": "ANB-054",
+      "title": "完成 AND",
+      "source": "DEV 读取 items.csv 并生成 item-review.md。只有全部记录都检查完成且报告文件已生成，任务才完成。",
+      "expected": {
+        "I": [
+          "items.csv"
+        ],
+        "O": [
+          "item-review.md"
+        ],
+        "A": [
+          "DEV READ",
+          "DEV GENERATE"
+        ],
+        "P": [
+          "DEV:PERFORMER"
+        ],
+        "R": [],
+        "V": [],
+        "C": [
+          "COMPLETE iff ALL records checked AND output exists"
+        ],
+        "B": []
+      },
+      "ambiguity": null
+    },
+    {
+      "id": "ANB-055",
+      "title": "完成 OR",
+      "source": "QA 执行测试环境连通性检查，主链路通过或备用链路通过时即可结束；两者都失败时通知 PM。不得调整路由。",
+      "expected": {
+        "I": [],
+        "O": [],
+        "A": [
+          "QA CONNECTIVITY_CHECK test env"
+        ],
+        "P": [
+          "QA:PERFORMER",
+          "PM:RECIPIENT"
+        ],
+        "R": [],
+        "V": [],
+        "C": [
+          "COMPLETE if primary OR backup passes; both fail -> notify PM"
+        ],
+        "B": [
+          "FORBID ADJUST route"
+        ]
+      },
+      "ambiguity": null
+    },
+    {
+      "id": "ANB-056",
+      "title": "双检查均完成",
+      "source": "QA 检查索引声明和约束声明，两类检查都完成后生成 schema-check.md。不得修改 schema.sql。",
+      "expected": {
+        "I": [
+          "schema.sql"
+        ],
+        "O": [
+          "schema-check.md"
+        ],
+        "A": [
+          "QA CHECK indexes",
+          "QA CHECK constraints",
+          "QA GENERATE report"
+        ],
+        "P": [
+          "QA:PERFORMER"
+        ],
+        "R": [],
+        "V": [],
+        "C": [
+          "both checks complete -> report/task completion"
+        ],
+        "B": [
+          "FORBID MODIFY schema.sql"
+        ]
+      },
+      "ambiguity": null
+    },
+    {
+      "id": "ANB-057",
+      "title": "复核作为提交前置",
+      "source": "DEV 生成 api-review.md，只有 QA 确认报告包含所有删除和重命名接口后，PM 才能提交给 ADMIN。",
+      "expected": {
+        "I": [],
+        "O": [
+          "api-review.md"
+        ],
+        "A": [
+          "DEV GENERATE",
+          "QA CONFIRM content",
+          "PM SUBMIT"
+        ],
+        "P": [
+          "DEV:PERFORMER",
+          "QA:REVIEWER",
+          "PM:SUBMITTER",
+          "ADMIN:RECIPIENT"
+        ],
+        "R": [],
+        "V": [],
+        "C": [
+          "PM submit only after QA confirms ALL deleted OR renamed interfaces recorded"
+        ],
+        "B": []
+      },
+      "ambiguity": null
+    },
+    {
+      "id": "ANB-058",
+      "title": "审批作为读取条件",
+      "source": "未经负责人批准，不得读取 finance-snapshot.csv；批准后由 QA 读取并生成 finance-review.md。不得连接财务数据库。",
+      "expected": {
+        "I": [
+          "finance-snapshot.csv"
+        ],
+        "O": [
+          "finance-review.md"
+        ],
+        "A": [
+          "QA READ after approval",
+          "QA GENERATE report"
+        ],
+        "P": [
+          "负责人:APPROVER",
+          "QA:PERFORMER"
+        ],
+        "R": [],
+        "V": [],
+        "C": [
+          "approval BEFORE read"
+        ],
+        "B": [
+          "FORBID READ before approval",
+          "FORBID CONNECT finance DB"
+        ]
+      },
+      "ambiguity": null
+    },
+    {
+      "id": "ANB-059",
+      "title": "条件升级汇报",
+      "source": "安全员周启检查 scan.json；若确认存在可利用漏洞，必须立即升级汇报给 PM。无论是否升级，都要生成 scan-review.md。",
+      "expected": {
+        "I": [
+          "scan.json"
+        ],
+        "O": [
+          "scan-review.md"
+        ],
+        "A": [
+          "周启 CHECK",
+          "周启 GENERATE report",
+          "conditional ESCALATE to PM"
+        ],
+        "P": [
+          "安全员周启:PERFORMER",
+          "PM:RECIPIENT"
+        ],
+        "R": [],
+        "V": [],
+        "C": [
+          "IF exploitable -> immediate escalation; output regardless"
+        ],
+        "B": []
+      },
+      "ambiguity": null
+    },
+    {
+      "id": "ANB-060",
+      "title": "英文条件链",
+      "source": "Read health.log. If a fatal error appears, stop the inspection and notify PM; otherwise create health-summary.md. Do not restart the service.",
+      "expected": {
+        "I": [
+          "health.log"
+        ],
+        "O": [
+          "health-summary.md conditional"
+        ],
+        "A": [
+          "READ health.log"
+        ],
+        "P": [
+          "PM:RECIPIENT"
+        ],
+        "R": [],
+        "V": [],
+        "C": [
+          "IF fatal -> STOP + NOTIFY PM; ELSE CREATE output"
+        ],
+        "B": [
+          "FORBID RESTART service"
+        ]
+      },
+      "ambiguity": null
+    },
+    {
+      "id": "ANB-061",
+      "title": "先后依赖",
+      "source": "QA 先读取 qa-result.json 并生成 qa-note.md；PM 只能在 qa-note.md 生成后向 ADMIN 汇报。不得修改 qa-result.json。",
+      "expected": {
+        "I": [
+          "qa-result.json"
+        ],
+        "O": [
+          "qa-note.md"
+        ],
+        "A": [
+          "QA READ",
+          "QA GENERATE note",
+          "PM REPORT to ADMIN"
+        ],
+        "P": [
+          "QA:PERFORMER",
+          "PM:REPORTER",
+          "ADMIN:RECIPIENT"
+        ],
+        "R": [],
+        "V": [],
+        "C": [
+          "qa-note exists BEFORE PM report"
+        ],
+        "B": [
+          "FORBID MODIFY qa-result.json"
+        ]
+      },
+      "ambiguity": null
+    },
+    {
+      "id": "ANB-062",
+      "title": "两输入完成后提交",
+      "source": "DEV 读取 before.csv 和 after.csv 并生成 compare.md。QA 确认两份输入都已核对且报告已生成后，PM 提交报告。",
+      "expected": {
+        "I": [
+          "before.csv",
+          "after.csv"
+        ],
+        "O": [
+          "compare.md"
+        ],
+        "A": [
+          "DEV READ both",
+          "DEV GENERATE",
+          "QA CONFIRM",
+          "PM SUBMIT"
+        ],
+        "P": [
+          "DEV:PERFORMER",
+          "QA:REVIEWER",
+          "PM:SUBMITTER"
+        ],
+        "R": [],
+        "V": [],
+        "C": [
+          "QA confirms both inputs checked AND output exists BEFORE submit"
+        ],
+        "B": []
+      },
+      "ambiguity": null
+    },
+    {
+      "id": "ANB-063",
+      "title": "所有条目完成",
+      "source": "OPS 读取 host-list.csv，逐项检查全部主机记录并生成 host-review.md。只有清单中的每项都有检查结果时才完成。",
+      "expected": {
+        "I": [
+          "host-list.csv"
+        ],
+        "O": [
+          "host-review.md"
+        ],
+        "A": [
+          "OPS CHECK ALL host records",
+          "OPS GENERATE report"
+        ],
+        "P": [
+          "OPS:PERFORMER"
+        ],
+        "R": [],
+        "V": [],
+        "C": [
+          "COMPLETE when every listed item has result"
+        ],
+        "B": []
+      },
+      "ambiguity": null
+    },
+    {
+      "id": "ANB-064",
+      "title": "至少数量完成",
+      "source": "QA 审阅 10 个测试结果，至少 8 个结果完成复核且 qa-summary.md 已生成时任务完成。不得修改测试结果。",
+      "expected": {
+        "I": [
+          "10 test results"
+        ],
+        "O": [
+          "qa-summary.md"
+        ],
+        "A": [
+          "QA REVIEW test results"
+        ],
+        "P": [
+          "QA:PERFORMER"
+        ],
+        "R": [],
+        "V": [],
+        "C": [
+          "REVIEWED_COUNT GTE 8 AND output exists -> COMPLETE"
+        ],
+        "B": [
+          "FORBID MODIFY results"
+        ]
+      },
+      "ambiguity": null
+    },
+    {
+      "id": "ANB-065",
+      "title": "复核内容条件",
+      "source": "DEV 生成 license-review.md。QA 确认每个缺少许可证或来源不明的条目都已记录后，PM 才能发送报告。",
+      "expected": {
+        "I": [],
+        "O": [
+          "license-review.md"
+        ],
+        "A": [
+          "DEV GENERATE",
+          "QA CONFIRM",
+          "PM SEND"
+        ],
+        "P": [
+          "DEV:PERFORMER",
+          "QA:REVIEWER",
+          "PM:SENDER"
+        ],
+        "R": [],
+        "V": [],
+        "C": [
+          "PM send AFTER QA confirms ALL missing-license OR unknown-source items recorded"
+        ],
+        "B": []
+      },
+      "ambiguity": null
+    },
+    {
+      "id": "ANB-066",
+      "title": "输出章节",
+      "source": "请生成 rollback-note.md，文档必须包含“风险清单”“回滚前提”“验证步骤”三个章节。不得执行回滚。",
+      "expected": {
+        "I": [],
+        "O": [
+          "rollback-note.md"
+        ],
+        "A": [
+          "GENERATE rollback-note.md"
+        ],
+        "P": [],
+        "R": [],
+        "V": [],
+        "C": [
+          "OUTPUT_CONTENT sections 风险清单/回滚前提/验证步骤"
+        ],
+        "B": [
+          "FORBID EXECUTE rollback"
+        ]
+      },
+      "ambiguity": null
+    },
+    {
+      "id": "ANB-067",
+      "title": "输出中的动作词",
+      "source": "DEV 编写 operations-guide.md，文档中必须写明“重启服务前先确认维护窗口”。本任务不得实际重启服务。",
+      "expected": {
+        "I": [],
+        "O": [
+          "operations-guide.md"
+        ],
+        "A": [
+          "DEV WRITE guide"
+        ],
+        "P": [
+          "DEV:PERFORMER"
+        ],
+        "R": [],
+        "V": [],
+        "C": [
+          "OUTPUT_CONTENT includes restart-before-maintenance-window sentence"
+        ],
+        "B": [
+          "FORBID ACTUAL RESTART"
+        ]
+      },
+      "ambiguity": null
+    },
+    {
+      "id": "ANB-068",
+      "title": "引用文字不执行",
+      "source": "请生成 approval-record.md，并原样写入“已批准上线”。本任务不具有上线审批权限，也不得执行上线。",
+      "expected": {
+        "I": [],
+        "O": [
+          "approval-record.md"
+        ],
+        "A": [
+          "GENERATE document"
+        ],
+        "P": [],
+        "R": [],
+        "V": [],
+        "C": [
+          "OUTPUT_CONTENT exact text 已批准上线"
+        ],
+        "B": [
+          "NO approval authority",
+          "FORBID APPROVE/EXECUTE go-live"
+        ]
+      },
+      "ambiguity": null
+    },
+    {
+      "id": "ANB-069",
+      "title": "报告分类内容",
+      "source": "QA 生成 interface-review.md，报告必须分别列出新增接口、删除接口和重命名接口。不得修改接口定义。",
+      "expected": {
+        "I": [],
+        "O": [
+          "interface-review.md"
+        ],
+        "A": [
+          "QA GENERATE report"
+        ],
+        "P": [
+          "QA:PERFORMER"
+        ],
+        "R": [],
+        "V": [],
+        "C": [
+          "OUTPUT_CONTENT separate lists added/deleted/renamed"
+        ],
+        "B": [
+          "FORBID MODIFY interface definitions"
+        ]
+      },
+      "ambiguity": null
+    },
+    {
+      "id": "ANB-070",
+      "title": "待确认标记",
+      "source": "DEV 读取 license.csv 并生成 license-note.md。许可证范围不清楚的条目必须标记为“待确认”，不得自动判为可商用。",
+      "expected": {
+        "I": [
+          "license.csv"
+        ],
+        "O": [
+          "license-note.md"
+        ],
+        "A": [
+          "DEV READ",
+          "DEV GENERATE"
+        ],
+        "P": [
+          "DEV:PERFORMER"
+        ],
+        "R": [],
+        "V": [],
+        "C": [
+          "unclear license -> mark 待确认"
+        ],
+        "B": [
+          "FORBID INFER commercial-use"
+        ]
+      },
+      "ambiguity": null
+    },
+    {
+      "id": "ANB-071",
+      "title": "输出中的停止条件",
+      "source": "请编写 runbook.md，其中要说明“发现凭据泄露时停止处理并通知管理员”。编写文档不等于实际执行该停止流程。",
+      "expected": {
+        "I": [],
+        "O": [
+          "runbook.md"
+        ],
+        "A": [
+          "WRITE runbook.md"
+        ],
+        "P": [],
+        "R": [],
+        "V": [],
+        "C": [
+          "OUTPUT_CONTENT credential leak -> stop + notify admin"
+        ],
+        "B": [
+          "OUTPUT_CONTENT_ONLY"
+        ]
+      },
+      "ambiguity": null
+    },
+    {
+      "id": "ANB-072",
+      "title": "输出中的禁止词",
+      "source": "生成 safety-guide.md，文档中必须包含“不得删除生产数据”这句话。本任务只交付文档，不访问生产数据。",
+      "expected": {
+        "I": [],
+        "O": [
+          "safety-guide.md"
+        ],
+        "A": [
+          "GENERATE guide"
+        ],
+        "P": [],
+        "R": [],
+        "V": [],
+        "C": [
+          "OUTPUT_CONTENT includes 不得删除生产数据"
+        ],
+        "B": [
+          "FORBID ACCESS production data"
+        ]
+      },
+      "ambiguity": null
+    },
+    {
+      "id": "ANB-073",
+      "title": "输出内数量",
+      "source": "DEV 生成 top-risk.md，文档中只列出风险最高的 10 项。这个 10 是内容限制，不是重试次数。",
+      "expected": {
+        "I": [],
+        "O": [
+          "top-risk.md"
+        ],
+        "A": [
+          "DEV GENERATE"
+        ],
+        "P": [
+          "DEV:PERFORMER"
+        ],
+        "R": [],
+        "V": [],
+        "C": [
+          "OUTPUT_CONTENT max10 risks"
+        ],
+        "B": []
+      },
+      "ambiguity": null
+    },
+    {
+      "id": "ANB-074",
+      "title": "输出内条件分支",
+      "source": "生成 deployment-guide.md，文档中说明：检查通过则继续部署，检查失败则停止。本任务不得实际部署。",
+      "expected": {
+        "I": [],
+        "O": [
+          "deployment-guide.md"
+        ],
+        "A": [
+          "GENERATE guide"
+        ],
+        "P": [],
+        "R": [],
+        "V": [],
+        "C": [
+          "OUTPUT_CONTENT pass->continue deployment; fail->stop"
+        ],
+        "B": [
+          "FORBID ACTUAL DEPLOY"
+        ]
+      },
+      "ambiguity": null
+    },
+    {
+      "id": "ANB-075",
+      "title": "英文输出内容",
+      "source": "Create operator-guide.md. The document must contain sections named “Risks” and “Rollback”. Do not perform a rollback.",
+      "expected": {
+        "I": [],
+        "O": [
+          "operator-guide.md"
+        ],
+        "A": [
+          "CREATE guide"
+        ],
+        "P": [],
+        "R": [],
+        "V": [],
+        "C": [
+          "OUTPUT_CONTENT sections Risks/Rollback"
+        ],
+        "B": [
+          "FORBID PERFORM rollback"
+        ]
+      },
+      "ambiguity": null
+    },
+    {
+      "id": "ANB-076",
+      "title": "范围仅限测试环境",
+      "source": "OPS 只检查测试环境的 service.yaml，生产环境不在本次范围内。生成 scope-review.md，不得修改任何配置。",
+      "expected": {
+        "I": [
+          "service.yaml"
+        ],
+        "O": [
+          "scope-review.md"
+        ],
+        "A": [
+          "OPS CHECK test env service config",
+          "OPS GENERATE"
+        ],
+        "P": [
+          "OPS:PERFORMER"
+        ],
+        "R": [],
+        "V": [],
+        "C": [],
+        "B": [
+          "SCOPE INCLUDE test",
+          "SCOPE EXCLUDE production",
+          "FORBID MODIFY config"
+        ]
+      },
+      "ambiguity": null
+    },
+    {
+      "id": "ANB-077",
+      "title": "排除目录",
+      "source": "DEV 检查 src 目录中的配置引用，但排除 src/legacy。结果写入 config-ref-review.md。不得删除 legacy 文件。",
+      "expected": {
+        "I": [
+          "src config references"
+        ],
+        "O": [
+          "config-ref-review.md"
+        ],
+        "A": [
+          "DEV CHECK src config refs excluding legacy",
+          "DEV WRITE report"
+        ],
+        "P": [
+          "DEV:PERFORMER"
+        ],
+        "R": [],
+        "V": [],
+        "C": [],
+        "B": [
+          "SCOPE EXCLUDE src/legacy",
+          "FORBID DELETE legacy files"
+        ]
+      },
+      "ambiguity": null
+    },
+    {
+      "id": "ANB-078",
+      "title": "包含与排除",
+      "source": "QA 核对 active.csv 中的在用设备，已报废设备不包含在此次核对范围。生成 active-device-review.md。",
+      "expected": {
+        "I": [
+          "active.csv"
+        ],
+        "O": [
+          "active-device-review.md"
+        ],
+        "A": [
+          "QA CHECK active devices",
+          "QA GENERATE"
+        ],
+        "P": [
+          "QA:PERFORMER"
+        ],
+        "R": [],
+        "V": [],
+        "C": [],
+        "B": [
+          "SCOPE EXCLUDE retired devices"
+        ]
+      },
+      "ambiguity": null
+    },
+    {
+      "id": "ANB-079",
+      "title": "英文范围限制",
+      "source": "Inspect only staging resources and exclude production resources from this review. Create staging-scope.md and make no configuration changes.",
+      "expected": {
+        "I": [],
+        "O": [
+          "staging-scope.md"
+        ],
+        "A": [
+          "INSPECT staging resources",
+          "CREATE report"
+        ],
+        "P": [],
+        "R": [],
+        "V": [],
+        "C": [],
+        "B": [
+          "SCOPE INCLUDE staging",
+          "SCOPE EXCLUDE production",
+          "FORBID config changes"
+        ]
+      },
+      "ambiguity": null
+    },
+    {
+      "id": "ANB-080",
+      "title": "只读限制",
+      "source": "审计员查看 audit.db 的只读快照并生成 audit-snapshot.md。只允许离线读取，不得连接在线数据库。",
+      "expected": {
+        "I": [
+          "audit.db read-only snapshot"
+        ],
+        "O": [
+          "audit-snapshot.md"
+        ],
+        "A": [
+          "auditor VIEW offline snapshot",
+          "auditor GENERATE"
+        ],
+        "P": [
+          "审计员:PERFORMER"
+        ],
+        "R": [],
+        "V": [],
+        "C": [],
+        "B": [
+          "READ_ONLY",
+          "OFFLINE_ONLY",
+          "FORBID CONNECT online DB"
+        ]
+      },
+      "ambiguity": null
+    },
+    {
+      "id": "ANB-081",
+      "title": "English simple audit",
+      "source": "Read users.csv, verify that every active user has an owner, and create user-audit.md. Do not edit users.csv.",
+      "expected": {
+        "I": [
+          "users.csv"
+        ],
+        "O": [
+          "user-audit.md"
+        ],
+        "A": [
+          "READ",
+          "VERIFY every active user has owner",
+          "CREATE report"
+        ],
+        "P": [],
+        "R": [],
+        "V": [],
+        "C": [],
+        "B": [
+          "FORBID EDIT users.csv"
+        ]
+      },
+      "ambiguity": null
+    },
+    {
+      "id": "ANB-082",
+      "title": "English basis and time",
+      "source": "Using SEC-CHECK-11 version v1.9, inspect findings.json and create findings-review.md within 22 minutes. Do not modify the findings.",
+      "expected": {
+        "I": [
+          "findings.json"
+        ],
+        "O": [
+          "findings-review.md"
+        ],
+        "A": [
+          "INSPECT",
+          "CREATE report"
+        ],
+        "P": [],
+        "R": [
+          "TIME LTE 22m"
+        ],
+        "V": [
+          "SEC-CHECK-11@v1.9"
+        ],
+        "C": [],
+        "B": [
+          "FORBID MODIFY findings"
+        ]
+      },
+      "ambiguity": null
+    },
+    {
+      "id": "ANB-083",
+      "title": "English role flow",
+      "source": "Mia reads build.json and creates build-review.md. QA reviews the report before Noah sends it to ADMIN. Mia does not approve the release.",
+      "expected": {
+        "I": [
+          "build.json"
+        ],
+        "O": [
+          "build-review.md"
+        ],
+        "A": [
+          "Mia READ",
+          "Mia CREATE",
+          "QA REVIEW",
+          "Noah SEND"
+        ],
+        "P": [
+          "Mia:PERFORMER",
+          "QA:REVIEWER",
+          "Noah:SENDER",
+          "ADMIN:RECIPIENT"
+        ],
+        "R": [],
+        "V": [],
+        "C": [
+          "QA review BEFORE send"
+        ],
+        "B": [
+          "Mia NOT_APPROVER"
+        ]
+      },
+      "ambiguity": null
+    },
+    {
+      "id": "ANB-084",
+      "title": "English completion AND",
+      "source": "Read inventory.csv and create inventory-review.md. The task is complete only when every item has been checked and the report exists.",
+      "expected": {
+        "I": [
+          "inventory.csv"
+        ],
+        "O": [
+          "inventory-review.md"
+        ],
+        "A": [
+          "READ",
+          "CREATE report"
+        ],
+        "P": [],
+        "R": [],
+        "V": [],
+        "C": [
+          "COMPLETE iff EVERY item checked AND report exists"
+        ],
+        "B": []
+      },
+      "ambiguity": null
+    },
+    {
+      "id": "ANB-085",
+      "title": "English optional read",
+      "source": "You must read config.json, may inspect README.md, and must create config-note.md. Do not modify either file.",
+      "expected": {
+        "I": [
+          "config.json",
+          "README.md(optional)"
+        ],
+        "O": [
+          "config-note.md"
+        ],
+        "A": [
+          "READ config REQUIRED",
+          "INSPECT README PERMITTED",
+          "CREATE note REQUIRED"
+        ],
+        "P": [],
+        "R": [],
+        "V": [],
+        "C": [],
+        "B": [
+          "FORBID MODIFY both"
+        ]
+      },
+      "ambiguity": null
+    },
+    {
+      "id": "ANB-086",
+      "title": "English output content",
+      "source": "Create incident-guide.md containing two sections: “Detection” and “Recovery”. Do not perform any recovery action.",
+      "expected": {
+        "I": [],
+        "O": [
+          "incident-guide.md"
+        ],
+        "A": [
+          "CREATE guide"
+        ],
+        "P": [],
+        "R": [],
+        "V": [],
+        "C": [
+          "OUTPUT_CONTENT sections Detection/Recovery"
+        ],
+        "B": [
+          "FORBID PERFORM recovery"
+        ]
+      },
+      "ambiguity": null
+    },
+    {
+      "id": "ANB-087",
+      "title": "English retry count",
+      "source": "Probe the staging endpoint at most 4 times and create probe-log.md. At least 2 probes must succeed before the task is complete.",
+      "expected": {
+        "I": [],
+        "O": [
+          "probe-log.md"
+        ],
+        "A": [
+          "PROBE staging",
+          "CREATE log"
+        ],
+        "P": [],
+        "R": [
+          "ATTEMPT_COUNT LTE 4"
+        ],
+        "V": [],
+        "C": [
+          "SUCCESS_COUNT GTE 2 BEFORE complete"
+        ],
+        "B": []
+      },
+      "ambiguity": null
+    },
+    {
+      "id": "ANB-088",
+      "title": "English exclusion scope",
+      "source": "Review test-cluster.yaml only. Production clusters are outside the scope of this task. Create cluster-review.md.",
+      "expected": {
+        "I": [
+          "test-cluster.yaml"
+        ],
+        "O": [
+          "cluster-review.md"
+        ],
+        "A": [
+          "REVIEW test cluster",
+          "CREATE report"
+        ],
+        "P": [],
+        "R": [],
+        "V": [],
+        "C": [],
+        "B": [
+          "SCOPE INCLUDE test",
+          "SCOPE EXCLUDE production"
+        ]
+      },
+      "ambiguity": null
+    },
+    {
+      "id": "ANB-089",
+      "title": "English conditional output",
+      "source": "Inspect delta.csv. If differences exist, create delta-report.md; otherwise notify PM that there are no differences. Do not edit delta.csv.",
+      "expected": {
+        "I": [
+          "delta.csv"
+        ],
+        "O": [
+          "delta-report.md conditional"
+        ],
+        "A": [
+          "INSPECT delta"
+        ],
+        "P": [
+          "PM:RECIPIENT"
+        ],
+        "R": [],
+        "V": [],
+        "C": [
+          "IF difference -> create; ELSE notify PM"
+        ],
+        "B": [
+          "FORBID EDIT delta.csv"
+        ]
+      },
+      "ambiguity": null
+    },
+    {
+      "id": "ANB-090",
+      "title": "English approval guard",
+      "source": "QA may read finance-export.csv only after Dana approves the request. Create finance-audit.md and do not connect to the production database.",
+      "expected": {
+        "I": [
+          "finance-export.csv"
+        ],
+        "O": [
+          "finance-audit.md"
+        ],
+        "A": [
+          "QA READ after Dana approval",
+          "QA CREATE report"
+        ],
+        "P": [
+          "QA:PERFORMER",
+          "Dana:APPROVER"
+        ],
+        "R": [],
+        "V": [],
+        "C": [
+          "approval BEFORE read"
+        ],
+        "B": [
+          "FORBID READ before approval",
+          "FORBID CONNECT prod DB"
+        ]
+      },
+      "ambiguity": null
+    },
+    {
+      "id": "ANB-091",
+      "title": "中英混合依据",
+      "source": "DEV 按照 API-GUIDE-3 version v2.6 检查 api-map.json，生成 api-map-review.md。Do not modify api-map.json.",
+      "expected": {
+        "I": [
+          "api-map.json"
+        ],
+        "O": [
+          "api-map-review.md"
+        ],
+        "A": [
+          "DEV CHECK",
+          "DEV GENERATE"
+        ],
+        "P": [
+          "DEV:PERFORMER"
+        ],
+        "R": [],
+        "V": [
+          "API-GUIDE-3@v2.6"
+        ],
+        "C": [],
+        "B": [
+          "FORBID MODIFY api-map.json"
+        ]
+      },
+      "ambiguity": null
+    },
+    {
+      "id": "ANB-092",
+      "title": "中英混合流程",
+      "source": "QA reads release.json 并生成 release-review.md；PM 在 QA review 通过后发送报告给 ADMIN。不得执行发布。",
+      "expected": {
+        "I": [
+          "release.json"
+        ],
+        "O": [
+          "release-review.md"
+        ],
+        "A": [
+          "QA READ",
+          "QA GENERATE",
+          "QA REVIEW",
+          "PM SEND to ADMIN"
+        ],
+        "P": [
+          "QA:PERFORMER/REVIEWER",
+          "PM:SENDER",
+          "ADMIN:RECIPIENT"
+        ],
+        "R": [],
+        "V": [],
+        "C": [
+          "QA review pass BEFORE PM send"
+        ],
+        "B": [
+          "FORBID EXECUTE release"
+        ]
+      },
+      "ambiguity": null
+    },
+    {
+      "id": "ANB-093",
+      "title": "中英混合数量",
+      "source": "OPS 在 staging 执行 health probe，retry at least 2 times but no more than 5 times，生成 health-probe.md。不得重启服务。",
+      "expected": {
+        "I": [],
+        "O": [
+          "health-probe.md"
+        ],
+        "A": [
+          "OPS HEALTH_PROBE staging",
+          "OPS GENERATE"
+        ],
+        "P": [
+          "OPS:PERFORMER"
+        ],
+        "R": [
+          "RETRY_COUNT GTE 2",
+          "RETRY_COUNT LTE 5"
+        ],
+        "V": [],
+        "C": [],
+        "B": [
+          "FORBID RESTART service"
+        ]
+      },
+      "ambiguity": null
+    },
+    {
+      "id": "ANB-094",
+      "title": "中英混合内容归属",
+      "source": "请生成 incident-playbook.md，文档中必须写明 “stop processing and notify PM when credentials leak”。本任务只编写文档。",
+      "expected": {
+        "I": [],
+        "O": [
+          "incident-playbook.md"
+        ],
+        "A": [
+          "GENERATE playbook"
+        ],
+        "P": [],
+        "R": [],
+        "V": [],
+        "C": [
+          "OUTPUT_CONTENT credential leak -> stop + notify PM"
+        ],
+        "B": [
+          "OUTPUT_CONTENT_ONLY"
+        ]
+      },
+      "ambiguity": null
+    },
+    {
+      "id": "ANB-095",
+      "title": "中英混合范围",
+      "source": "Inspect only 测试环境，exclude 生产环境，生成 env-scope-review.md。不得修改任何环境配置。",
+      "expected": {
+        "I": [],
+        "O": [
+          "env-scope-review.md"
+        ],
+        "A": [
+          "INSPECT test env",
+          "GENERATE report"
+        ],
+        "P": [],
+        "R": [],
+        "V": [],
+        "C": [],
+        "B": [
+          "SCOPE INCLUDE test",
+          "SCOPE EXCLUDE production",
+          "FORBID MODIFY env config"
+        ]
+      },
+      "ambiguity": null
+    },
+    {
+      "id": "ANB-096",
+      "title": "真实歧义：两个输入后的泛称",
+      "source": "DEV 读取 alpha.csv 和 beta.csv，然后检查“原始数据”并生成 source-review.md。这里“原始数据”未指明具体是哪一份文件；Parser 不应自行猜测。",
+      "expected": {
+        "I": [
+          "alpha.csv",
+          "beta.csv"
+        ],
+        "O": [
+          "source-review.md"
+        ],
+        "A": [
+          "DEV READ alpha",
+          "DEV READ beta",
+          "DEV CHECK unresolved 原始数据",
+          "DEV GENERATE report"
+        ],
+        "P": [
+          "DEV:PERFORMER"
+        ],
+        "R": [],
+        "V": [],
+        "C": [],
+        "B": []
+      },
+      "ambiguity": {
+        "kind": "UNRESOLVED_COREFERENCE",
+        "target": "原始数据",
+        "candidates": [
+          "alpha.csv",
+          "beta.csv"
+        ],
+        "must_not_guess": true
+      }
+    },
+    {
+      "id": "ANB-097",
+      "title": "真实歧义：两个报告后的指代",
+      "source": "QA 读取 dev-report.md 和 ops-report.md，随后要求“复核该报告并提交给 PM”。“该报告”没有唯一指向，必须保留未决而不是任选一份。",
+      "expected": {
+        "I": [
+          "dev-report.md",
+          "ops-report.md"
+        ],
+        "O": [],
+        "A": [
+          "QA READ both",
+          "QA REVIEW unresolved 该报告",
+          "SUBMIT unresolved 该报告 to PM"
+        ],
+        "P": [
+          "QA:PERFORMER/REVIEWER",
+          "PM:RECIPIENT"
+        ],
+        "R": [],
+        "V": [],
+        "C": [],
+        "B": []
+      },
+      "ambiguity": {
+        "kind": "UNRESOLVED_COREFERENCE",
+        "target": "该报告",
+        "candidates": [
+          "dev-report.md",
+          "ops-report.md"
+        ],
+        "must_not_guess": true
+      }
+    },
+    {
+      "id": "ANB-098",
+      "title": "真实歧义：两个版本",
+      "source": "请按照 POLICY-X v1.2 或 v1.3 检查 policy.json 并生成 policy-review.md。未说明最终采用哪个版本，不得擅自选择。",
+      "expected": {
+        "I": [
+          "policy.json"
+        ],
+        "O": [
+          "policy-review.md"
+        ],
+        "A": [
+          "CHECK policy.json",
+          "GENERATE report"
+        ],
+        "P": [],
+        "R": [],
+        "V": [
+          "POLICY-X with unresolved version {v1.2,v1.3}"
+        ],
+        "C": [],
+        "B": []
+      },
+      "ambiguity": {
+        "kind": "UNRESOLVED_VERSION_SELECTION",
+        "target": "POLICY-X version",
+        "candidates": [
+          "v1.2",
+          "v1.3"
+        ],
+        "must_not_guess": true
+      }
+    },
+    {
+      "id": "ANB-099",
+      "title": "真实歧义：两个审批者",
+      "source": "只有王宁或李澄批准后，QA 才能读取 snapshot.csv 并生成 snapshot-review.md。原文没有说明需要任一人还是两人共同批准，审批条件必须保持歧义。",
+      "expected": {
+        "I": [
+          "snapshot.csv"
+        ],
+        "O": [
+          "snapshot-review.md"
+        ],
+        "A": [
+          "QA READ after ambiguous approval",
+          "QA GENERATE"
+        ],
+        "P": [
+          "QA:PERFORMER",
+          "王宁:APPROVER_CANDIDATE",
+          "李澄:APPROVER_CANDIDATE"
+        ],
+        "R": [],
+        "V": [],
+        "C": [],
+        "B": []
+      },
+      "ambiguity": {
+        "kind": "UNRESOLVED_APPROVAL_LOGIC",
+        "target": "王宁或李澄批准",
+        "candidates": [
+          "ANY_ONE_APPROVES",
+          "BOTH_APPROVE"
+        ],
+        "must_not_guess": true
+      }
+    },
+    {
+      "id": "ANB-100",
+      "title": "真实歧义：代词指向",
+      "source": "DEV 检查 service-a.json 和 service-b.json，发现差异后“将它提交给 QA”。“它”可能指差异结果或其中一个服务对象，无法唯一确定时应保留未决。",
+      "expected": {
+        "I": [
+          "service-a.json",
+          "service-b.json"
+        ],
+        "O": [],
+        "A": [
+          "DEV CHECK both",
+          "DEV SUBMIT unresolved 它 to QA"
+        ],
+        "P": [
+          "DEV:PERFORMER",
+          "QA:RECIPIENT"
+        ],
+        "R": [],
+        "V": [],
+        "C": [],
+        "B": []
+      },
+      "ambiguity": {
+        "kind": "UNRESOLVED_PRONOUN",
+        "target": "它",
+        "candidates": [
+          "difference result",
+          "service-a.json",
+          "service-b.json"
+        ],
+        "must_not_guess": true
+      }
+    }
+  ]
+}
