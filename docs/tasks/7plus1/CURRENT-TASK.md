@@ -1,14 +1,14 @@
 # Current 7+1 Parser Task
 
-**Active task:** `7P-ADMIN-NATURAL-021-LONG`
+**Active task:** `7P-ADMIN-ROOT-RESET-022-REVIEW`
 
 Read and execute:
 
-`docs/tasks/7plus1/7P-ADMIN-NATURAL-021-LONG.md`
+`docs/tasks/7plus1/7P-ADMIN-ROOT-RESET-022-REVIEW.md`
 
 Normative method:
 
-`docs/BoundX-7plus1-定义原理语义编译与边界计算说明-v0.3.md`
+`docs/BoundX-7plus1-定义原理语义编译与边界计算说明-v0.3.1.md`
 
 Repository:
 
