@@ -1,6 +1,14 @@
 # ADMIN Natural Blind 100 · 021 Source Set
 
-**Author:** ADMIN/ChatGPT, not the parser-development Codex.\n\n**Purpose:** independent natural-language evaluation of the frozen 020 candidate.\n\n**Important:** This file contains source tasks only. It is not a parser-derived artifact and must not be edited to accommodate parser output.\n\nCases ANB-001–ANB-095 are intended to be human-readable, mostly unambiguous ADMIN root-scope short tasks. ANB-096–ANB-100 are deliberate ambiguity controls where a correct parser should preserve unresolved semantics instead of guessing.\n\n## ANB-001 服务状态核查
+**Author:** ADMIN/ChatGPT, not the parser-development Codex.
+
+**Purpose:** independent natural-language evaluation of the frozen 020 candidate.
+
+**Important:** This file contains source tasks only. It is not a parser-derived artifact and must not be edited to accommodate parser output.
+
+Cases ANB-001–ANB-095 are intended to be human-readable, mostly unambiguous ADMIN root-scope short tasks. ANB-096–ANB-100 are deliberate ambiguity controls where a correct parser should preserve unresolved semantics instead of guessing.
+
+## ANB-001 服务状态核查
 
 请 OPS 查看 test-services.json，核对测试环境中 6 个服务是否都处于预期状态，并生成 service-status.md。QA 复核报告后交给 PM；不得重启或停止任何服务。
 
