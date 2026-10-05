@@ -1,0 +1,6 @@
+export const SECTIONS=['source','structure','nlp_signals','span_lattice','semantic_nodes','candidate_semantic_graph','candidate_relations','candidate_expressions','candidate_evidence','gamma_certification','relations','unresolved','eligibility_decisions','boundary_ir','canonical_7plus1','proof_dag','candidate_proof','coverage'];
+export function sectionData(r,k){const c=r.compiler_v03;return k==='candidate_relations'?c.candidate_semantic_graph.candidate_relations:k==='candidate_expressions'?c.candidate_semantic_graph.candidate_expressions:k==='candidate_evidence'?c.candidate_semantic_graph.evidence:c[k];}
+const esc=x=>String(x).replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;').replaceAll('"','&quot;');
+export const traceMarkdown=r=>'# Candidate Semantic Graph 024 Trace\n\nStored execution snapshot; no parser rerun.\n\n'+SECTIONS.map(k=>'## '+k+'\n\n``````json\n'+JSON.stringify(sectionData(r,k),null,2)+'\n``````\n').join('\n');
+export const traceHTML=r=>'<!doctype html><meta charset="utf-8"><title>024 Candidate / Gamma Trace</title><h1>024 Candidate / Γ Trace</h1><p>Stored execution snapshot; no parser rerun.</p>'+SECTIONS.map(k=>'<details><summary>'+esc(k)+'</summary><pre>'+esc(JSON.stringify(sectionData(r,k),null,2))+'</pre></details>').join('');
+

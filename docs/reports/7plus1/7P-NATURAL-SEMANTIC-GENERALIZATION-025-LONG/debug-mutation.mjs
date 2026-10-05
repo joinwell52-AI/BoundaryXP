@@ -1,0 +1,2 @@
+import fs from 'node:fs';
+const root='docs/reports/7plus1/7P-NATURAL-SEMANTIC-GENERALIZATION-025-LONG/mutation-raw';for(const p of fs.readdirSync(root)){const r=JSON.parse(fs.readFileSync(root+'/'+p));if(!r.compiler_v03.source.raw_text.includes(process.argv[2]))continue;console.log(p,r.compiler_v03.metadata.created_at,r.compiler_v03.source.raw_text);console.log(JSON.stringify(Object.fromEntries(Object.entries(r.contract_gate_results.gates).filter(([k,v])=>v.status!=='PASS'))));console.log(JSON.stringify(r.compiler_v03.unresolved));}
