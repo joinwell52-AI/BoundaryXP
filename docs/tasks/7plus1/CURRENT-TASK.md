@@ -1,33 +1,27 @@
 # 当前 7+1 编译器任务
 
-**当前任务：** `7P-DOWNSTREAM-SEMANTIC-VALIDATION-026F`
+**当前任务：`7P-NLP-SEMANTIC-PARSING-026G-LONG`**
 
 任务书：
 
-`docs/tasks/7plus1/7P-DOWNSTREAM-SEMANTIC-VALIDATION-026F.md`
+`docs/tasks/7plus1/7P-NLP-SEMANTIC-PARSING-026G-LONG.md`
 
-所属主任务：`7P-CANDIDATE-PARSING-ARCHITECTURE-026-LONG`
+所属研究：`7P-CANDIDATE-PARSING-ARCHITECTURE-026-LONG`。
+仓库：`joinwell52-AI/BoundX`。
+唯一工作及推送分支：`review/7plus1-parser`。
 
-规范手册：
+## 本次目标
 
-`docs/BoundX-7plus1-定义原理语义编译与边界计算说明-v0.3.1.md`
+**实际做出并验证：ADMIN 原文 → 模型原始语义输出 → 固定关系与作用域组合算法 → 带来源的完整候选语义结构。**
 
-前序证据：
+026E、026F保持原封存；026F隔离修改不准入。活动026及生产入口保持不动。停止继续修Γ、Eligibility、Boundary IR或7+1投影，不把人工正确图输入当作自动语义解析。
 
-`docs/reports/7plus1/7P-SEMANTIC-PARSER-FEASIBILITY-026E/REPORT.md`
+## 连续执行授权
 
-026E 证据提交：`4dea24229f4189bb699bd1eef621bf928a0882b7`
+先保护本地已有改动，非破坏性同步，完整读取本指针与026G任务书及其证据。按任务书自行完成真实模型任务头核验、原型实现、两类方法对照、归因与有限迭代、60条复用语料和32条机制对照、冻结后的350条已暴露材料扩展核验及可运行交付。上述均在同一次授权内连续推进，不逐阶段等待新任务。
 
-仓库：`joinwell52-AI/BoundX`
+必须区分模型直接能力、程序推导、模型缺口、组合错误和标注/评测问题。语义结果不足时保留失败，禁止逐案例答案表、候选穷举伪召回和改答案凑通过。不训练，不接运行时聊天大模型，不新建盲测集，不改手册语义。
 
-唯一工作及推送分支：`review/7plus1-parser`
+最终交付可运行代码、实际语义结果、来源证据、固定方法说明、复现命令和真实状态：`SOURCE_SEMANTIC_026G=PASS / PARTIAL / FAIL / ENV_BLOCKED / REVIEW_REQUIRED`。各状态含义及迭代预算以任务书为准。不得将未复核或自动断言通过冒充完整语义通过。
 
-## 执行要求
-
-先保护本地已有改动，非破坏性同步并读取本指针、026F 任务书及所列证据。026E 原封存不变；026 的扩大修复继续暂停。
-
-本次只做来源复核的候选语义图到 Γ、边界资格、边界中间表示、7+1 与证明链的有界验证和隔离修复。十份旧诊断图先复核预期，另配十二条语义对照与五条结构故障检查；不改模型，不扩大候选生成，不新增盲测集，不改变手册语义，不直接改活动 026 或切生产。
-
-诊断入口与自动入口共用实际语义核心；诊断来源必须显式标记，不能伪造生成器收据或关闭生产 G8。原入口 0/10 与旧语义诊断 7/10 分开记录，不以凑满 10/10 为目标修改答案。
-
-按任务书完成固定修复周期及复测后，报告 `DOWNSTREAM_SEMANTIC_026F=PASS / FAIL / REVIEW_REQUIRED / ENV_BLOCKED` 之一，并停止于 `WAITING_ADMIN_REVIEW`。不自动恢复 026 扩大研发，不开始 027；不 merge、release、tag 或切换生产入口。
+仅推送 `review/7plus1-parser`，不得merge、release、tag或切生产。完成后停止于 `WAITING_ADMIN_REVIEW`；不自动恢复026F或026扩大修复，不开始027。
