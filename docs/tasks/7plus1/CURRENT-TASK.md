@@ -1,27 +1,53 @@
 # 当前 7+1 编译器任务
 
-**当前任务：`7P-NLP-SEMANTIC-PARSING-026G-LONG`**
+**当前任务：`7P-LLM-SEMANTIC-COMPILER-027-LONG`**
 
 任务书：
 
-`docs/tasks/7plus1/7P-NLP-SEMANTIC-PARSING-026G-LONG.md`
+`docs/tasks/7plus1/7P-LLM-SEMANTIC-COMPILER-027-LONG.md`
 
-所属研究：`7P-CANDIDATE-PARSING-ARCHITECTURE-026-LONG`。
-仓库：`joinwell52-AI/BoundX`。
-唯一工作及推送分支：`review/7plus1-parser`。
+当前规范手册：
 
-## 本次目标
+`docs/BoundX-7plus1-定义原理语义编译与边界计算说明-v0.4.md`
 
-**实际做出并验证：ADMIN 原文 → 模型原始语义输出 → 固定关系与作用域组合算法 → 带来源的完整候选语义结构。**
+历史规范：
 
-026E、026F保持原封存；026F隔离修改不准入。活动026及生产入口保持不动。停止继续修Γ、Eligibility、Boundary IR或7+1投影，不把人工正确图输入当作自动语义解析。
+`docs/BoundX-7plus1-定义原理语义编译与边界计算说明-v0.3.1.md`
 
-## 连续执行授权
+仓库：
 
-先保护本地已有改动，非破坏性同步，完整读取本指针与026G任务书及其证据。按任务书自行完成真实模型任务头核验、原型实现、两类方法对照、归因与有限迭代、60条复用语料和32条机制对照、冻结后的350条已暴露材料扩展核验及可运行交付。上述均在同一次授权内连续推进，不逐阶段等待新任务。
+`joinwell52-AI/BoundX`
 
-必须区分模型直接能力、程序推导、模型缺口、组合错误和标注/评测问题。语义结果不足时保留失败，禁止逐案例答案表、候选穷举伪召回和改答案凑通过。不训练，不接运行时聊天大模型，不新建盲测集，不改手册语义。
+唯一工作及推送分支：
 
-最终交付可运行代码、实际语义结果、来源证据、固定方法说明、复现命令和真实状态：`SOURCE_SEMANTIC_026G=PASS / PARTIAL / FAIL / ENV_BLOCKED / REVIEW_REQUIRED`。各状态含义及迭代预算以任务书为准。不得将未复核或自动断言通过冒充完整语义通过。
+`review/7plus1-parser`
 
-仅推送 `review/7plus1-parser`，不得merge、release、tag或切生产。完成后停止于 `WAITING_ADMIN_REVIEW`；不自动恢复026F或026扩大修复，不开始027。
+## 方法
+
+新主线：
+
+```text
+ADMIN 原文
+→ Source Preservation + Typed Recognizer
+→ Codex / LLM Semantic Parser
+→ Candidate Semantic Graph
+→ Coverage Auditor
+→ NLP / SRL / SDP / DEP / CON / NLI 辅助证据
+→ Γ
+→ Eligibility
+→ Boundary IR
+→ Canonical 7+1
+→ Proof / Coverage
+```
+
+Codex/LLM 是主语义候选生成器；NLP 不再承担主解析；Γ 是唯一最终认证点；LLM 不得直接写权威 7+1。
+
+## 执行要求
+
+先保护本地已有改动，非破坏性同步并完整读取本指针、v0.4 手册和 027 长任务书。
+
+026、026E、026F、026G 作为历史证据保留，不继续在旧“传统 NLP + 构式规则拼完整语义”的路线追加补丁。
+
+027 是全新主线长任务。在同一次授权内完成 Codex Provider、来源对齐、Candidate Graph、Coverage、NLP 辅助证据、v0.4 Γ、Eligibility、Boundary IR、7+1、Proof，以及现有350份材料的开发/锁定评测和完整交付。
+
+不得逐阶段等待新任务；不得针对锁定105调优；不得 merge/release/tag/切生产。完成后停止于 `WAITING_ADMIN_REVIEW`，不得自动开始028。
