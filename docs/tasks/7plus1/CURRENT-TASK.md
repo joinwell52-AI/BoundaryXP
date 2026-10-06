@@ -1,10 +1,14 @@
 # Current 7+1 Parser Task
 
-**Active task:** `7P-CANDIDATE-PARSING-ARCHITECTURE-026-LONG`
+**Active task:** `7P-SEMANTIC-PARSER-FEASIBILITY-026E`
+
+Parent task:
+
+`7P-CANDIDATE-PARSING-ARCHITECTURE-026-LONG`
 
 Read and execute:
 
-`docs/tasks/7plus1/7P-CANDIDATE-PARSING-ARCHITECTURE-026-LONG.md`
+`docs/tasks/7plus1/7P-SEMANTIC-PARSER-FEASIBILITY-026E.md`
 
 Normative method:
 
@@ -20,4 +24,4 @@ Branch:
 
 Execution rule:
 
-> Read this pointer first, then read the active 026 long taskbook, v0.3.1 method, and the complete 025 implementation/report/evidence. Execute continuously within 026. The purpose is to correct implementation divergence from the existing method, not redesign the method and not create a new blind benchmark. Do not stop at intermediate repairs. Push only to `review/7plus1-parser`, do not merge/release/tag/switch production, and stop only at final `WAITING_ADMIN_REVIEW` after `CANDIDATE_PARSING_ARCHITECTURE_026_LONG=PASS` or a fully evidenced `CANDIDATE_PARSING_ARCHITECTURE_026_LONG=ADMIN_BLOCKED`. Do not start 027.
+> This is a bounded feasibility experiment inside 026. Pause further 026 parser repair. Do not change the admitted 026 baseline, do not tune parser rules, do not create a new blind benchmark, do not train a model, and do not switch production. Run the segmented control, full-sentence NLP arm, pretrained semantic-graph arm, and the oracle downstream isolation test exactly as specified. Stop after the experiment with WAITING_ADMIN_REVIEW=true. Do not automatically resume 026 and do not start 027.
