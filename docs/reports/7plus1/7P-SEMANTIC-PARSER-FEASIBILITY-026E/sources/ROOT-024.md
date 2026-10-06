@@ -1,0 +1,1 @@
+请 PM 组织读取 revenue.csv 与 monthly-report.xlsx，复核报表汇总金额并形成 finance-review.md。复核误差必须精确记录，不允许通过四舍五入隐藏差异。

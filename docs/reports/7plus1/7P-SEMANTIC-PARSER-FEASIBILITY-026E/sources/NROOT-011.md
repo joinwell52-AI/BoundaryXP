@@ -1,0 +1,1 @@
+请 PM 组织审阅 release-note.md，检查版本、变更摘要与回滚说明是否完整，并形成 release-note-check.md。本任务不发布版本，也不修改原说明。

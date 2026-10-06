@@ -1,0 +1,1 @@
+请 PM 组织读取 model-config.json，核查模型路径、精度设置与设备配置并形成 model-config-review.md。不得加载模型权重或发起推理；整个任务最多使用 20 分钟。

@@ -1,0 +1,1 @@
+请 PM 组织读取 role-map.csv 和 permission-map.csv，检查角色与权限映射并形成 role-permission-review.md。不得新增、删除或修改权限记录。

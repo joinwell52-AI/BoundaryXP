@@ -1,0 +1,1 @@
+本次任务要求比较 node-a.json 与 node-b.json 中的服务版本和启动参数，形成 node-snapshot-diff.md。由 PM 组织，仅基于现有快照，不连接实际主机。

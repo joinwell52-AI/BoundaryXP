@@ -1,0 +1,1 @@
+请 PM 组织读取 evaluation.json，分别统计运行失败和语义错误并形成 evaluation-review.md。不得把运行成功等同于语义正确，也不得修改测试原文或标准答案。
