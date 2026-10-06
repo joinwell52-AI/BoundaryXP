@@ -1,0 +1,67 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:boundx:implementation:typed-boundary:experimental-v1",
+  "type": "object", "additionalProperties": false,
+  "required": ["format", "protocol_target", "state", "evaluation_basis", "required", "allowed", "forbidden", "limits", "completion", "relations", "dependencies", "conflicts", "gaps", "provenance", "source_interpretation_correctness", "business_decision", "execution_authorization"],
+  "properties": {
+    "format": {"const": "boundx-typed-boundary/experimental-v1"},
+    "protocol_target": {"const": "0.4.0-draft.1"},
+    "state": {"enum": ["invalid", "underdetermined", "inconsistent", "determined"]},
+    "evaluation_basis": {"const": "submitted_explicit_formalization_only"},
+    "required": {"$ref": "#/$defs/nodes"}, "forbidden": {"$ref": "#/$defs/nodes"}, "allowed": {"$ref": "#/$defs/nodes"},
+    "limits": {"$ref": "#/$defs/nodes"}, "completion": {"$ref": "#/$defs/nodes"},
+    "relations": {"$ref": "#/$defs/nodes"}, "dependencies": {"$ref": "#/$defs/nodes"},
+    "conflicts": {"type": "array", "maxItems": 1024, "items": {"$ref": "#/$defs/conflict"}},
+    "gaps": {"type": "array", "maxItems": 4096, "items": {"type": "object", "required": ["code"], "properties": {"code": {"$ref": "#/$defs/id"}}}},
+    "provenance": {"anyOf": [{"type": "null"}, {"$ref": "#/$defs/provenance"}]},
+    "source_interpretation_correctness": {"const": "not_proven"},
+    "interpretation_resolution": {
+      "type": "object", "additionalProperties": false,
+      "required": ["status", "selection_digest", "canonical_digest", "canonical_boundary", "authority_basis"],
+      "properties": {
+        "status": {"enum": ["selected_canonical_boundary", "not_established"]},
+        "selection_digest": {"anyOf": [{"type": "null"}, {"$ref": "#/$defs/digest"}]},
+        "canonical_digest": {"anyOf": [{"type": "null"}, {"$ref": "#/$defs/digest"}]},
+        "canonical_boundary": {"type": ["object", "null"]},
+        "authority_basis": {"const": "trusted_host_selection_not_client_claim"}
+      }
+    },
+    "business_decision": {"type": "null"}, "execution_authorization": {"type": "null"}
+  },
+  "$defs": {
+    "id": {"type": "string", "minLength": 1, "maxLength": 256},
+    "digest": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+    "nodes": {"type": "array", "maxItems": 256, "items": {
+      "type": "object", "required": ["id", "entry_id", "scope_id", "operator", "evidence"],
+      "properties": {
+        "id": {"$ref": "#/$defs/id"}, "entry_id": {"$ref": "#/$defs/id"}, "scope_id": {"$ref": "#/$defs/id"},
+        "operator": {"enum": ["obligation", "prohibition", "completion", "constraint", "interval", "entity", "relation", "target_set", "allowed_set", "handoff", "artifact_state"]},
+        "evidence": {"$ref": "urn:boundx:implementation:semantic-ir:experimental-v1#/$defs/evidence"}
+      }
+    }},
+    "conflict": {
+      "type": "object", "additionalProperties": false,
+      "required": ["code", "scope_id", "node_ids", "evidence", "calculation"],
+      "properties": {
+        "code": {"enum": ["BOOLEAN_CONJUNCTION_UNSATISFIABLE", "INTERVAL_INTERSECTION_EMPTY", "MANDATORY_PREREQUISITE_CYCLE", "FORBIDDEN_TARGET_OVERLAP", "HANDOFF_INPUT_DEFICIT", "ARTIFACT_PRESENCE_CONFLICT", "REQUEST_OUTSIDE_ALLOWED_SET"]},
+        "scope_id": {"$ref": "#/$defs/id"},
+        "node_ids": {"type": "array", "minItems": 1, "maxItems": 256, "uniqueItems": true, "items": {"$ref": "#/$defs/id"}},
+        "evidence": {"type": "array", "minItems": 1, "maxItems": 8192, "items": {"$ref": "urn:boundx:implementation:semantic-ir:experimental-v1#/$defs/evidence/items"}},
+        "calculation": {"type": "object"}
+      }
+    },
+    "provenance": {
+      "type": "object", "additionalProperties": false,
+      "required": ["task_id", "task_revision", "source_digests", "ir_digest", "model_digest", "formalization_inputs_digest", "boundary_profile", "boundary_profile_digest", "compiler"],
+      "properties": {
+        "task_id": {"$ref": "#/$defs/id"}, "task_revision": {"$ref": "#/$defs/id"},
+        "source_digests": {"type": "array", "minItems": 1, "maxItems": 32, "items": {"type": "object", "additionalProperties": false,
+          "required": ["id", "sha256"], "properties": {"id": {"$ref": "#/$defs/id"}, "sha256": {"$ref": "#/$defs/digest"}}}},
+        "ir_digest": {"$ref": "#/$defs/digest"}, "model_digest": {"$ref": "#/$defs/digest"}, "formalization_inputs_digest": {"$ref": "#/$defs/digest"},
+        "boundary_profile": {"anyOf": [{"type": "null"}, {"$ref": "urn:boundx:implementation:boundary-profile:experimental-v1"}]},
+        "boundary_profile_digest": {"anyOf": [{"type": "null"}, {"$ref": "#/$defs/digest"}]},
+        "compiler": {"const": "boundx.typed-ir-compiler/experimental-v1"}
+      }
+    }
+  }
+}

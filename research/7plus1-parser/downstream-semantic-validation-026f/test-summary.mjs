@@ -1,0 +1,14 @@
+import fs from 'node:fs';
+import {spawnSync} from 'node:child_process';
+import {OUT,read,save,sha} from './util.mjs';
+const file='fixtures/real-project/BoundX-REAL-GOLD-P001-v0.1/validate_cases.py';
+const r=spawnSync('python',[file],{encoding:'utf8',windowsHide:true});
+save(`${OUT}/regression/source-validator/stdout.log`,r.stdout??'');
+save(`${OUT}/regression/source-validator/stderr.log`,r.stderr??'');
+save(`${OUT}/regression/source-validator/RESULT.json`,{file,sha256:sha(fs.readFileSync(file)),exit_code:r.status,error:r.error?String(r.error):null,status:r.status===0?'PASS':'FAIL'});
+const result={full:read(`${OUT}/regression/full-r001/RESULT.json`),historical_018_021:read(`${OUT}/regression/targeted/RESULT.json`),isolated_trial_026:read(`${OUT}/regression/trial-r003/RESULT.json`),source_validator:read(`${OUT}/regression/source-validator/RESULT.json`),semantic_task_status:'FAIL',admission:'DENIED',regression_PASS_does_not_override_semantic_failure:true};
+const logs=fs.readFileSync(`${OUT}/regression/full-r001/stdout.log`,'utf8').split('\n');
+result.full_skip_records=logs.map((line,i)=>line.includes('# SKIP')?{line:i+1,text:line.trim()}:null).filter(Boolean);
+result.initial_npm_test_execution={exit_code:0,PASS:6666,FAIL:0,SKIP:17,tests:6683,duration_ms:991787.4223,receipt:'Initial exec session 93063; output was tool-truncated, so full-r001 is the qualifying complete persisted TAP log.'};
+save(`${OUT}/TESTS.json`,result);
+console.log(JSON.stringify(result.full));

@@ -1,0 +1,29 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:boundx:implementation:semantic-resource-manifest:experimental-v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["format", "resource_id", "resource_kind", "revision", "source_url", "license", "files", "runtime"],
+  "properties": {
+    "format": { "const": "boundx-semantic-resource-manifest/experimental-v1" },
+    "resource_id": { "type": "string", "pattern": "^[a-z0-9][a-z0-9._-]{0,127}$" },
+    "resource_kind": { "enum": ["l1", "l2", "l3-ontology", "l3-facts", "syntax-model", "embedding-model", "nli-model"] },
+    "revision": { "type": "string", "minLength": 1, "maxLength": 256 },
+    "source_url": { "type": "string", "pattern": "^https://[^\\s]+$", "maxLength": 2048 },
+    "license": { "type": "object", "additionalProperties": false, "required": ["spdx", "source_url"], "properties": {
+      "spdx": { "type": "string", "minLength": 1, "maxLength": 128 },
+      "source_url": { "type": "string", "pattern": "^https://[^\\s]+$", "maxLength": 2048 }
+    } },
+    "files": { "type": "array", "minItems": 1, "maxItems": 4096, "items": { "type": "object", "additionalProperties": false, "required": ["path", "sha256", "bytes"], "properties": {
+      "path": { "type": "string", "pattern": "^(?!/)(?!.*(?:^|/)\\.\\.(?:/|$))(?!\\.?$)[A-Za-z0-9.][A-Za-z0-9._/-]{0,511}$" },
+      "sha256": { "type": "string", "pattern": "^[a-f0-9]{64}$" },
+      "bytes": { "type": "integer", "minimum": 0 }
+    } } },
+    "runtime": { "type": "object", "additionalProperties": false, "required": ["framework", "framework_version", "offline_probe"], "properties": {
+      "framework": { "type": "string", "minLength": 1, "maxLength": 128 },
+      "framework_version": { "type": "string", "minLength": 1, "maxLength": 128 },
+      "offline_probe": { "type": "string", "minLength": 1, "maxLength": 512 }
+    } },
+    "installed_at_utc": { "type": "string", "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}(?:\\.[0-9]+)?Z$" }
+  }
+}

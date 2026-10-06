@@ -1,0 +1,48 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:boundx:implementation:formal-model:experimental-v1",
+  "type": "object", "additionalProperties": false,
+  "required": ["format", "ir_digest", "formalization_inputs_digest", "semantic_ir", "nodes", "uncompiled_entries", "coverage", "compilation_trace"],
+  "properties": {
+    "format": {"const": "boundx-typed-ir-model/experimental-v1"},
+    "ir_digest": {"$ref": "#/$defs/digest"},
+    "formalization_inputs_digest": {"$ref": "#/$defs/digest"},
+    "semantic_ir": {"$ref": "urn:boundx:implementation:semantic-ir:experimental-v1"},
+    "nodes": {"type": "array", "maxItems": 256, "items": {"$ref": "urn:boundx:implementation:compiled-node:experimental-v1"}},
+    "compilation_trace": {"type": "array", "maxItems": 1024, "items": {
+      "type": "object", "additionalProperties": false,
+      "required": ["slot", "entry_id", "scope_id", "status", "node_ids", "rule_versions", "evidence"],
+      "properties": {
+        "slot": {"enum": ["I", "O", "A", "P", "R", "V", "C", "B"]},
+        "entry_id": {"type": "string", "minLength": 1, "maxLength": 256},
+        "scope_id": {"type": "string", "minLength": 1, "maxLength": 256},
+        "status": {"enum": ["mapped", "partial", "uncompiled"]},
+        "node_ids": {"type": "array", "maxItems": 256, "uniqueItems": true, "items": {"type": "string", "minLength": 1, "maxLength": 128}},
+        "rule_versions": {"type": "array", "maxItems": 256, "uniqueItems": true, "items": {"type": "string", "pattern": "^boundx\\.(ir-to-[a-z_]+|conditional-activation)/experimental-v1$"}},
+        "evidence": {"$ref": "urn:boundx:implementation:semantic-ir:experimental-v1#/$defs/evidence"}
+      }
+    }},
+    "uncompiled_entries": {"type": "array", "maxItems": 1024, "items": {
+      "type": "object", "additionalProperties": false,
+      "required": ["slot", "entry_id", "scope_id", "reason", "evidence"],
+      "properties": {
+        "slot": {"enum": ["I", "O", "A", "P", "R", "V", "C", "B"]},
+        "entry_id": {"type": "string", "minLength": 1, "maxLength": 256},
+        "scope_id": {"type": "string", "minLength": 1, "maxLength": 256},
+        "reason": {"enum": ["SEMANTICS_UNRESOLVED", "TYPED_MAPPING_NOT_COMPILED"]},
+        "evidence": {"$ref": "urn:boundx:implementation:semantic-ir:experimental-v1#/$defs/evidence"}
+      }
+    }},
+    "coverage": {
+      "type": "object", "additionalProperties": false,
+      "required": ["submitted_entries", "mapped_entries", "source_semantic_completeness", "formalization_equivalence"],
+      "properties": {
+        "submitted_entries": {"type": "integer", "minimum": 0, "maximum": 1024},
+        "mapped_entries": {"type": "integer", "minimum": 0, "maximum": 1024},
+        "source_semantic_completeness": {"const": "not_established"},
+        "formalization_equivalence": {"const": "not_established"}
+      }
+    }
+  },
+  "$defs": {"digest": {"type": "string", "pattern": "^[a-f0-9]{64}$"}}
+}

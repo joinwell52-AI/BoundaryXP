@@ -1,0 +1,11 @@
+import fs from 'node:fs';
+import {execFileSync} from 'node:child_process';
+import {OUT,read,save,sha} from './util.mjs';
+const before=read('.boundx/experiments/026f/pre-sync.json');
+const verify=rows=>rows.map(r=>({...r,actual_sha256:fs.existsSync(r.file)?sha(fs.readFileSync(r.file)):null}));
+const tracked=verify(before.tracked_changes),active=verify(before.protected_026_code);
+const bad=[...tracked,...active].filter(r=>r.sha256!==r.actual_sha256);
+const index=execFileSync('git',['diff','--cached','--name-only'],{encoding:'utf8'});
+save(`${OUT}/WORKSPACE-INTEGRITY.json`,{tracked_user_files:tracked.length,active_runtime_files:active.length,changed:bad,index_before_delivery:index,prior_head:before.head,current_head:execFileSync('git',['rev-parse','HEAD'],{encoding:'utf8'}).trim(),tracked,active});
+if(bad.length||index.trim())throw Error('USER_WORKSPACE_OR_INDEX_CHANGED');
+console.log(JSON.stringify({tracked:tracked.length,active:active.length,changed:bad.length}));

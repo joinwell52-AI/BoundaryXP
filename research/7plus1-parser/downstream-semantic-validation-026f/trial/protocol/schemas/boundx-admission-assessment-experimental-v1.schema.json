@@ -1,0 +1,31 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:boundx:implementation:admission-assessment:experimental-v1",
+  "type": "object", "additionalProperties": false,
+  "required": ["format", "status", "reasons", "boundary_state", "binding", "business_decision", "execution_authorization"],
+  "properties": {
+    "format": {"const": "boundx-admission-assessment/experimental-v1"},
+    "status": {"enum": ["admitted", "blocked"]},
+    "reasons": {"type": "array", "maxItems": 1024, "items": {"type": "string", "minLength": 1, "maxLength": 1024}},
+    "boundary_state": {"enum": [null, "determined", "underdetermined", "inconsistent", "uncertain", "insufficient", "conflict", "invalid"]},
+    "binding": {"oneOf": [{"type": "null"}, {"$ref": "#/$defs/bindingCheck"}]},
+    "business_decision": {"type": "null"}, "execution_authorization": {"type": "null"}
+  },
+  "allOf": [{"if": {"properties": {"status": {"const": "admitted"}}},
+    "then": {"properties": {"reasons": {"type": "array", "maxItems": 0}, "boundary_state": {"const": "determined"},
+      "binding": {"type": "object", "properties": {"status": {"const": "matched"}, "changed_components": {"type": "array", "maxItems": 0}}}}},
+    "else": {"properties": {"reasons": {"type": "array", "minItems": 1}}}}],
+  "$defs": {
+    "bindingCheck": {
+      "type": "object", "additionalProperties": false,
+      "required": ["status", "reason", "changed_components", "admission", "business_decision", "execution_authorization"],
+      "properties": {
+        "status": {"enum": ["missing", "invalid", "matched", "stale"]},
+        "reason": {"type": "string", "minLength": 1, "maxLength": 256},
+        "changed_components": {"type": "array", "maxItems": 32, "uniqueItems": true,
+          "items": {"type": "string", "minLength": 1, "maxLength": 128}},
+        "admission": {"type": "null"}, "business_decision": {"type": "null"}, "execution_authorization": {"type": "null"}
+      }
+    }
+  }
+}
