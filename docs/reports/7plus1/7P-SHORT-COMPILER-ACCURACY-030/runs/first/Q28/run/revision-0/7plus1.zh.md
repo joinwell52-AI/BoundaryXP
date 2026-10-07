@@ -1,0 +1,26 @@
+# BoundX 7+1（有限技术接受，不是业务授权）
+
+## I 输入与作用域 — RESOLVED
+- [ACCEPTED] 检查完整性：输入/受检对象=已归档日志；必须（bf:0f240820eaf16485bd95）
+
+## O 交付与结果 — RESOLVED
+- [ACCEPTED] 生成文件：结果/交付=archive-check.md；必须（bf:5900f92db6a0f7637b7c）
+
+## A 正向动作 — RESOLVED
+- [ACCEPTED] 必须 检查完整性；执行者=PM；输入/受检对象=已归档日志（bf:4af3a886b9d1f27b6a7f）
+- [ACCEPTED] 必须 生成文件；执行者=PM；结果/交付=archive-check.md（bf:ea83141737abe7352de4）
+
+## P 参与关系 — RESOLVED
+- [ACCEPTED] 检查完整性：执行者=PM；必须（bf:a9857de1fe00ae93a300）
+- [ACCEPTED] 生成文件：执行者=PM；必须（bf:711abf1a707d0bb52fc8）
+
+## R 执行量化限制 — ABSENT
+
+## V 版本与依据 — ABSENT
+
+## C 完成与停止 — ABSENT
+
+## B 禁止与限制 — RESOLVED
+- [ACCEPTED] 禁止 归档日志；执行者=PM；对象=新日志（bf:672d58b64c2307373350）
+
+## 未指定 / 歧义 / 未投影语义

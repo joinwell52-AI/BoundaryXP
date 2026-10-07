@@ -1,0 +1,292 @@
+{
+  "contract_version": "028-r02.3",
+  "entities": [
+    {
+      "id": "ent_pm",
+      "label": "PM",
+      "type": "OTHER",
+      "mentions": [
+        {
+          "quote": "PM",
+          "occurrence": 1
+        }
+      ],
+      "alternatives": []
+    },
+    {
+      "id": "ent_ticket",
+      "label": "ticket-516.txt",
+      "type": "FILE",
+      "mentions": [
+        {
+          "quote": "ticket-516.txt",
+          "occurrence": 1
+        },
+        {
+          "quote": "ticket-516.txt",
+          "occurrence": 2
+        }
+      ],
+      "alternatives": []
+    },
+    {
+      "id": "ent_brief",
+      "label": "brief-516.md",
+      "type": "FILE",
+      "mentions": [
+        {
+          "quote": "brief-516.md",
+          "occurrence": 1
+        }
+      ],
+      "alternatives": []
+    }
+  ],
+  "events": [
+    {
+      "id": "evt_read",
+      "predicate": "读取",
+      "kind": "ACTION",
+      "layer": "MAIN",
+      "use": "CURRENT_TASK",
+      "modality": "REQUIRED",
+      "polarity": "POSITIVE",
+      "owner_id": "ROOT",
+      "constraint_ids": [],
+      "requires": [],
+      "sources": [
+        {
+          "quote": "请PM读取ticket-516.txt",
+          "occurrence": 1
+        }
+      ]
+    },
+    {
+      "id": "evt_generate",
+      "predicate": "生成",
+      "kind": "ACTION",
+      "layer": "MAIN",
+      "use": "CURRENT_TASK",
+      "modality": "REQUIRED",
+      "polarity": "POSITIVE",
+      "owner_id": "ROOT",
+      "constraint_ids": [],
+      "requires": [],
+      "sources": [
+        {
+          "quote": "请PM",
+          "occurrence": 1
+        },
+        {
+          "quote": "并生成brief-516.md",
+          "occurrence": 1
+        }
+      ]
+    }
+  ],
+  "claims": [
+    {
+      "id": "cl_read_performer",
+      "kind": "ROLE",
+      "event_id": "evt_read",
+      "entity_id": "ent_pm",
+      "role": "PERFORMER",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "scope_id": "evt_read",
+      "requires": [],
+      "sources": [
+        {
+          "quote": "请PM读取ticket-516.txt",
+          "occurrence": 1
+        }
+      ],
+      "note": "PM为读取动作的明确执行者。"
+    },
+    {
+      "id": "cl_read_input",
+      "kind": "ROLE",
+      "event_id": "evt_read",
+      "entity_id": "ent_ticket",
+      "role": "INPUT_OBJECT",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "scope_id": "evt_read",
+      "requires": [],
+      "sources": [
+        {
+          "quote": "读取ticket-516.txt",
+          "occurrence": 1
+        },
+        {
+          "quote": "ticket-516.txt是待读材料",
+          "occurrence": 1
+        }
+      ],
+      "note": "该文件是明确的待读输入材料。"
+    },
+    {
+      "id": "cl_generate_performer",
+      "kind": "ROLE",
+      "event_id": "evt_generate",
+      "entity_id": "ent_pm",
+      "role": "PERFORMER",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "scope_id": "evt_generate",
+      "requires": [],
+      "sources": [
+        {
+          "quote": "请PM",
+          "occurrence": 1
+        },
+        {
+          "quote": "并生成brief-516.md",
+          "occurrence": 1
+        }
+      ],
+      "note": "并列动作共享明确主体PM。"
+    },
+    {
+      "id": "cl_generate_result",
+      "kind": "ROLE",
+      "event_id": "evt_generate",
+      "entity_id": "ent_brief",
+      "role": "RESULT",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "scope_id": "evt_generate",
+      "requires": [],
+      "sources": [
+        {
+          "quote": "生成brief-516.md",
+          "occurrence": 1
+        }
+      ],
+      "note": "该文件是要求生成的产物；文件名中的516不是数量限制。"
+    },
+    {
+      "id": "cl_basis_exclusion",
+      "kind": "SCOPE",
+      "event_id": null,
+      "entity_id": null,
+      "role": null,
+      "expression_id": "expr_not_basis",
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "scope_id": "ROOT",
+      "requires": [],
+      "sources": [
+        {
+          "quote": "ticket-516.txt是待读材料，不是任务依据",
+          "occurrence": 1
+        }
+      ],
+      "note": "明确排除该文件的任务依据用途，保留其读取输入用途；不据此新增禁止动作。"
+    }
+  ],
+  "expressions": [
+    {
+      "id": "expr_not_basis",
+      "op": "STATE",
+      "operands": [],
+      "state": {
+        "predicate": "作为任务依据",
+        "event_id": null,
+        "args": [
+          "ent_ticket",
+          "ROOT"
+        ],
+        "polarity": "NEGATIVE"
+      },
+      "sources": [
+        {
+          "quote": "ticket-516.txt是待读材料，不是任务依据",
+          "occurrence": 1
+        }
+      ]
+    }
+  ],
+  "issues": [],
+  "coverage": [
+    {
+      "sources": [
+        {
+          "quote": "请PM读取ticket-516.txt",
+          "occurrence": 1
+        }
+      ],
+      "claim_ids": [
+        "cl_read_performer",
+        "cl_read_input"
+      ],
+      "status": "EXPRESSED",
+      "affected_views": [
+        "A",
+        "P",
+        "I"
+      ]
+    },
+    {
+      "sources": [
+        {
+          "quote": "请PM",
+          "occurrence": 1
+        },
+        {
+          "quote": "并生成brief-516.md",
+          "occurrence": 1
+        }
+      ],
+      "claim_ids": [
+        "cl_generate_performer",
+        "cl_generate_result"
+      ],
+      "status": "EXPRESSED",
+      "affected_views": [
+        "A",
+        "P",
+        "O"
+      ]
+    },
+    {
+      "sources": [
+        {
+          "quote": "ticket-516.txt是待读材料",
+          "occurrence": 1
+        }
+      ],
+      "claim_ids": [
+        "cl_read_input"
+      ],
+      "status": "EXPRESSED",
+      "affected_views": [
+        "I"
+      ]
+    },
+    {
+      "sources": [
+        {
+          "quote": "ticket-516.txt是待读材料，不是任务依据",
+          "occurrence": 1
+        }
+      ],
+      "claim_ids": [
+        "cl_basis_exclusion"
+      ],
+      "status": "EXPRESSED",
+      "affected_views": [
+        "V"
+      ]
+    }
+  ]
+}

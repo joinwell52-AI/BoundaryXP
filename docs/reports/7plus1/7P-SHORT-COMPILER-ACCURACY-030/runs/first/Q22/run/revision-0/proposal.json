@@ -1,0 +1,382 @@
+{
+  "contract_version": "028-r02.3",
+  "entities": [
+    {
+      "id": "n1",
+      "label": "PM",
+      "type": "OTHER",
+      "mentions": [
+        {
+          "quote": "PM",
+          "occurrence": 1
+        }
+      ],
+      "alternatives": []
+    },
+    {
+      "id": "n2",
+      "label": "ADMIN",
+      "type": "OTHER",
+      "mentions": [
+        {
+          "quote": "ADMIN",
+          "occurrence": 1
+        }
+      ],
+      "alternatives": []
+    },
+    {
+      "id": "n3",
+      "label": "handover.md",
+      "type": "FILE",
+      "mentions": [
+        {
+          "quote": "handover.md",
+          "occurrence": 1
+        },
+        {
+          "quote": "该文件",
+          "occurrence": 1
+        }
+      ],
+      "alternatives": []
+    }
+  ],
+  "events": [
+    {
+      "id": "e1",
+      "predicate": "提交",
+      "kind": "ACTION",
+      "layer": "MAIN",
+      "use": "CURRENT_TASK",
+      "modality": "REQUIRED",
+      "polarity": "POSITIVE",
+      "owner_id": "ROOT",
+      "constraint_ids": [],
+      "requires": [],
+      "sources": [
+        {
+          "quote": "PM必须提交handover.md",
+          "occurrence": 1
+        }
+      ]
+    },
+    {
+      "id": "e2",
+      "predicate": "确认已收到文件",
+      "kind": "ACTION",
+      "layer": "CONDITION",
+      "use": "MENTION_ONLY",
+      "modality": "UNSTATED",
+      "polarity": "POSITIVE",
+      "owner_id": "ROOT",
+      "constraint_ids": [],
+      "requires": [],
+      "sources": [
+        {
+          "quote": "ADMIN确认已收到该文件",
+          "occurrence": 1
+        },
+        {
+          "quote": "handover.md",
+          "occurrence": 1
+        }
+      ]
+    },
+    {
+      "id": "e3",
+      "predicate": "标记任务完成",
+      "kind": "ACTION",
+      "layer": "MAIN",
+      "use": "CURRENT_TASK",
+      "modality": "PERMITTED",
+      "polarity": "POSITIVE",
+      "owner_id": "ROOT",
+      "constraint_ids": [
+        "c5"
+      ],
+      "requires": [],
+      "sources": [
+        {
+          "quote": "只有ADMIN确认已收到该文件，本任务才可标记为完成",
+          "occurrence": 1
+        }
+      ]
+    }
+  ],
+  "claims": [
+    {
+      "id": "c1",
+      "kind": "ROLE",
+      "event_id": "e1",
+      "entity_id": "n1",
+      "role": "PERFORMER",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "scope_id": "e1",
+      "requires": [],
+      "sources": [
+        {
+          "quote": "PM必须提交handover.md",
+          "occurrence": 1
+        }
+      ],
+      "note": ""
+    },
+    {
+      "id": "c2",
+      "kind": "ROLE",
+      "event_id": "e1",
+      "entity_id": "n3",
+      "role": "OBJECT",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "scope_id": "e1",
+      "requires": [],
+      "sources": [
+        {
+          "quote": "提交handover.md",
+          "occurrence": 1
+        }
+      ],
+      "note": "明确要求提交此文件，未要求生成文件，也未指定提交接收方。"
+    },
+    {
+      "id": "c3",
+      "kind": "ROLE",
+      "event_id": "e2",
+      "entity_id": "n2",
+      "role": "PERFORMER",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "scope_id": "e2",
+      "requires": [],
+      "sources": [
+        {
+          "quote": "ADMIN确认已收到该文件",
+          "occurrence": 1
+        }
+      ],
+      "note": "条件中明确的确认主体，不增加独立确认义务。"
+    },
+    {
+      "id": "c4",
+      "kind": "ROLE",
+      "event_id": "e2",
+      "entity_id": "n3",
+      "role": "OBJECT",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "scope_id": "e2",
+      "requires": [],
+      "sources": [
+        {
+          "quote": "handover.md",
+          "occurrence": 1
+        },
+        {
+          "quote": "ADMIN确认已收到该文件",
+          "occurrence": 1
+        }
+      ],
+      "note": "该文件指向handover.md；确认内容为ADMIN已收到此文件，不宣称实际已收到或已确认。"
+    },
+    {
+      "id": "c5",
+      "kind": "CONDITION",
+      "event_id": "e3",
+      "entity_id": null,
+      "role": null,
+      "expression_id": "x1",
+      "direction": "NECESSARY",
+      "temporal": null,
+      "quantity": null,
+      "scope_id": "e3",
+      "requires": [],
+      "sources": [
+        {
+          "quote": "只有ADMIN确认已收到该文件，本任务才可标记为完成",
+          "occurrence": 1
+        }
+      ],
+      "note": "ADMIN确认收到文件是标记完成的必要前提，未表达充分触发。"
+    },
+    {
+      "id": "c6",
+      "kind": "COMPLETION",
+      "event_id": null,
+      "entity_id": null,
+      "role": null,
+      "expression_id": "x1",
+      "direction": "NECESSARY",
+      "temporal": null,
+      "quantity": null,
+      "scope_id": "ROOT",
+      "requires": [],
+      "sources": [
+        {
+          "quote": "只有ADMIN确认已收到该文件，本任务才可标记为完成",
+          "occurrence": 1
+        }
+      ],
+      "note": "根任务完成标记的必要条件；不能据此认定确认后任务自动完成。"
+    }
+  ],
+  "expressions": [
+    {
+      "id": "x1",
+      "op": "STATE",
+      "operands": [],
+      "state": {
+        "predicate": "已确认收到文件",
+        "event_id": "e2",
+        "args": [
+          "n2",
+          "n3"
+        ],
+        "polarity": "POSITIVE"
+      },
+      "sources": [
+        {
+          "quote": "ADMIN确认已收到该文件",
+          "occurrence": 1
+        },
+        {
+          "quote": "handover.md",
+          "occurrence": 1
+        }
+      ]
+    }
+  ],
+  "issues": [
+    {
+      "id": "i1",
+      "kind": "UNSPECIFIED",
+      "subject_ids": [
+        "e3"
+      ],
+      "field_path": "events[e3]",
+      "alternatives": [],
+      "affected_views": [
+        "P"
+      ],
+      "sources": [
+        {
+          "quote": "本任务才可标记为完成",
+          "occurrence": 1
+        }
+      ],
+      "note": "未指定标记完成的执行者，不默认由PM或ADMIN执行。"
+    },
+    {
+      "id": "i2",
+      "kind": "UNSPECIFIED",
+      "subject_ids": [
+        "e1"
+      ],
+      "field_path": "events[e1]",
+      "alternatives": [],
+      "affected_views": [
+        "P"
+      ],
+      "sources": [
+        {
+          "quote": "PM必须提交handover.md",
+          "occurrence": 1
+        }
+      ],
+      "note": "未明确提交动作的接收方；后文ADMIN确认收到不直接补成该动作的接收角色。"
+    }
+  ],
+  "coverage": [
+    {
+      "sources": [
+        {
+          "quote": "PM必须提交handover.md",
+          "occurrence": 1
+        }
+      ],
+      "claim_ids": [
+        "c1",
+        "c2"
+      ],
+      "status": "EXPRESSED",
+      "affected_views": [
+        "A",
+        "P",
+        "O"
+      ]
+    },
+    {
+      "sources": [
+        {
+          "quote": "handover.md",
+          "occurrence": 1
+        },
+        {
+          "quote": "ADMIN确认已收到该文件",
+          "occurrence": 1
+        }
+      ],
+      "claim_ids": [
+        "c3",
+        "c4"
+      ],
+      "status": "EXPRESSED",
+      "affected_views": [
+        "C"
+      ]
+    },
+    {
+      "sources": [
+        {
+          "quote": "只有ADMIN确认已收到该文件，本任务才可标记为完成",
+          "occurrence": 1
+        }
+      ],
+      "claim_ids": [
+        "c5",
+        "c6"
+      ],
+      "status": "EXPRESSED",
+      "affected_views": [
+        "A",
+        "C"
+      ]
+    },
+    {
+      "sources": [
+        {
+          "quote": "本任务才可标记为完成",
+          "occurrence": 1
+        }
+      ],
+      "claim_ids": [],
+      "status": "UNSPECIFIED",
+      "affected_views": [
+        "P"
+      ]
+    },
+    {
+      "sources": [
+        {
+          "quote": "PM必须提交handover.md",
+          "occurrence": 1
+        }
+      ],
+      "claim_ids": [],
+      "status": "UNSPECIFIED",
+      "affected_views": [
+        "P"
+      ]
+    }
+  ]
+}

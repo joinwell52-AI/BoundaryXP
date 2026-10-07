@@ -1,0 +1,275 @@
+{
+  "contract_version": "028-r02.3",
+  "entities": [
+    {
+      "id": "E1",
+      "label": "PM",
+      "type": "OTHER",
+      "mentions": [
+        {
+          "quote": "PM",
+          "occurrence": 1
+        }
+      ],
+      "alternatives": []
+    },
+    {
+      "id": "E2",
+      "label": "a.ini",
+      "type": "FILE",
+      "mentions": [
+        {
+          "quote": "a.ini",
+          "occurrence": 1
+        }
+      ],
+      "alternatives": []
+    },
+    {
+      "id": "E3",
+      "label": "b.ini",
+      "type": "FILE",
+      "mentions": [
+        {
+          "quote": "b.ini",
+          "occurrence": 1
+        },
+        {
+          "quote": "b.ini",
+          "occurrence": 2
+        }
+      ],
+      "alternatives": []
+    }
+  ],
+  "events": [
+    {
+      "id": "A1",
+      "predicate": "核对",
+      "kind": "ACTION",
+      "layer": "MAIN",
+      "use": "CURRENT_TASK",
+      "modality": "REQUIRED",
+      "polarity": "POSITIVE",
+      "owner_id": "ROOT",
+      "constraint_ids": [],
+      "requires": [],
+      "sources": [
+        {
+          "quote": "请PM对a.ini与b.ini逐一核对",
+          "occurrence": 1
+        }
+      ]
+    },
+    {
+      "id": "A2",
+      "predicate": "修改",
+      "kind": "ACTION",
+      "layer": "MAIN",
+      "use": "CURRENT_TASK",
+      "modality": "FORBIDDEN",
+      "polarity": "POSITIVE",
+      "owner_id": "ROOT",
+      "constraint_ids": [],
+      "requires": [],
+      "sources": [
+        {
+          "quote": "不得修改b.ini",
+          "occurrence": 1
+        }
+      ]
+    }
+  ],
+  "claims": [
+    {
+      "id": "C1",
+      "kind": "ROLE",
+      "event_id": "A1",
+      "entity_id": "E1",
+      "role": "PERFORMER",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "scope_id": "A1",
+      "requires": [],
+      "sources": [
+        {
+          "quote": "请PM对a.ini与b.ini逐一核对",
+          "occurrence": 1
+        }
+      ],
+      "note": ""
+    },
+    {
+      "id": "C2",
+      "kind": "ROLE",
+      "event_id": "A1",
+      "entity_id": "E2",
+      "role": "INPUT_OBJECT",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "scope_id": "A1",
+      "requires": [],
+      "sources": [
+        {
+          "quote": "对a.ini与b.ini逐一核对",
+          "occurrence": 1
+        }
+      ],
+      "note": ""
+    },
+    {
+      "id": "C3",
+      "kind": "ROLE",
+      "event_id": "A1",
+      "entity_id": "E3",
+      "role": "INPUT_OBJECT",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "scope_id": "A1",
+      "requires": [],
+      "sources": [
+        {
+          "quote": "对a.ini与b.ini逐一核对",
+          "occurrence": 1
+        }
+      ],
+      "note": ""
+    },
+    {
+      "id": "C4",
+      "kind": "SCOPE",
+      "event_id": "A1",
+      "entity_id": null,
+      "role": null,
+      "expression_id": "X1",
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "scope_id": "A1",
+      "requires": [],
+      "sources": [
+        {
+          "quote": "对a.ini与b.ini逐一核对",
+          "occurrence": 1
+        }
+      ],
+      "note": "对两个明确文件分别核对；逐一不规定核对次数。"
+    },
+    {
+      "id": "C5",
+      "kind": "ROLE",
+      "event_id": "A2",
+      "entity_id": "E3",
+      "role": "OBJECT",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "scope_id": "A2",
+      "requires": [],
+      "sources": [
+        {
+          "quote": "不得修改b.ini",
+          "occurrence": 1
+        }
+      ],
+      "note": ""
+    },
+    {
+      "id": "C6",
+      "kind": "ROLE",
+      "event_id": "A2",
+      "entity_id": "E1",
+      "role": "PERFORMER",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "scope_id": "A2",
+      "requires": [],
+      "sources": [
+        {
+          "quote": "请PM",
+          "occurrence": 1
+        },
+        {
+          "quote": "不得修改b.ini",
+          "occurrence": 1
+        }
+      ],
+      "note": "禁止分句沿用前文任务主体PM。"
+    }
+  ],
+  "expressions": [
+    {
+      "id": "X1",
+      "op": "STATE",
+      "operands": [],
+      "state": {
+        "predicate": "逐一核对",
+        "event_id": "A1",
+        "args": [
+          "E2",
+          "E3"
+        ],
+        "polarity": "POSITIVE"
+      },
+      "sources": [
+        {
+          "quote": "对a.ini与b.ini逐一核对",
+          "occurrence": 1
+        }
+      ]
+    }
+  ],
+  "issues": [],
+  "coverage": [
+    {
+      "sources": [
+        {
+          "quote": "请PM对a.ini与b.ini逐一核对",
+          "occurrence": 1
+        }
+      ],
+      "claim_ids": [
+        "C1",
+        "C2",
+        "C3",
+        "C4"
+      ],
+      "status": "EXPRESSED",
+      "affected_views": [
+        "I",
+        "A",
+        "P"
+      ]
+    },
+    {
+      "sources": [
+        {
+          "quote": "请PM",
+          "occurrence": 1
+        },
+        {
+          "quote": "不得修改b.ini",
+          "occurrence": 1
+        }
+      ],
+      "claim_ids": [
+        "C5",
+        "C6"
+      ],
+      "status": "EXPRESSED",
+      "affected_views": [
+        "B",
+        "P"
+      ]
+    }
+  ]
+}

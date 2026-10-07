@@ -1,0 +1,30 @@
+# BoundX 7+1（有限技术接受，不是业务授权）
+
+## I 输入与作用域 — RESOLVED
+- [ACCEPTED] 读取：输入/受检对象=east.csv；必须（bf:5dbc05a483256603041c）
+- [ACCEPTED] 读取：输入/受检对象=west.csv；必须（bf:bdca30cb63bd3dc7f967）
+
+## O 交付与结果 — RESOLVED
+- [ACCEPTED] 生成：结果/交付=port.md；必须（bf:51a671522a2a639fd40b）
+
+## A 正向动作 — UNRESOLVED
+- [ACCEPTED] 必须 读取；执行者=PM；输入/受检对象=east.csv；输入/受检对象=west.csv（bf:77a9a07ea9c44847cfff）
+- [UNRESOLVED] 必须 交给；执行者=PM；对象=它；接收者=QA；时间先后 之后 读取完成(east.csv,west.csv) [POSITIVE;运行值UNKNOWN]（bf:b575b582781d341569b3）
+- [ACCEPTED] 必须 生成；执行者=OPS-01；结果/交付=port.md（bf:a09efaacabc4452ede3f）
+
+## P 参与关系 — RESOLVED
+- [ACCEPTED] 读取：执行者=PM；必须（bf:d013466845cd190a9c7a）
+- [ACCEPTED] 交给：执行者=PM；必须；时间先后 之后 读取完成(east.csv,west.csv) [POSITIVE;运行值UNKNOWN]（bf:724c3a770069289e3fa0）
+- [ACCEPTED] 交给：接收者=QA；必须；时间先后 之后 读取完成(east.csv,west.csv) [POSITIVE;运行值UNKNOWN]（bf:0b4c56a88522dfdacfa5）
+- [ACCEPTED] 生成：执行者=OPS-01；必须（bf:2ed11aa946ec7efead53）
+
+## R 执行量化限制 — ABSENT
+
+## V 版本与依据 — ABSENT
+
+## C 完成与停止 — ABSENT
+
+## B 禁止与限制 — ABSENT
+
+## 未指定 / 歧义 / 未投影语义
+- AMBIGUITY “它”可能指east.csv或west.csv，不能仅按距离选择；疑点限于交付对象身份。；影响=ent_it,cl_handover_object

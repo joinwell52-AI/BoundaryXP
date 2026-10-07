@@ -1,0 +1,98 @@
+{
+  "contract_version": "028-r02.3",
+  "reviews": [
+    {
+      "subject_id": "ent_pm",
+      "field_path": "label",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [{"quote": "请PM核对users.csv", "occurrence": 1}],
+      "reason": "原文明示PM身份及其核对职责，无竞争指代。"
+    },
+    {
+      "subject_id": "ent_pm",
+      "field_path": "type",
+      "verdict": "UNCERTAIN",
+      "context_refs": [],
+      "sources": [{"quote": "PM", "occurrence": 1}],
+      "reason": "原文未说明PM是个人、团队还是其他类别；类别未定不影响明确身份与职责。"
+    },
+    {
+      "subject_id": "ent_users",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [{"quote": "users.csv", "occurrence": 1}],
+      "reason": "明确命名的受检文件，身份无歧义。"
+    },
+    {
+      "subject_id": "ent_optional",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [{"quote": "optional.md", "occurrence": 1}],
+      "reason": "明确命名的禁止生成文件，身份无歧义。"
+    },
+    {
+      "subject_id": "evt_check",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [{"quote": "请PM核对users.csv", "occurrence": 1}],
+      "reason": "核对是当前明确要求的正向主动作，无附加条件。"
+    },
+    {
+      "subject_id": "evt_generate",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [{"quote": "不得生成optional.md", "occurrence": 1}],
+      "reason": "生成被明确禁止，FORBIDDEN与正向动作谓词组合准确。"
+    },
+    {
+      "subject_id": "cl_check_performer",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["evt_check", "ent_pm"],
+      "sources": [{"quote": "请PM核对users.csv", "occurrence": 1}],
+      "reason": "PM被明确指定为核对执行者。"
+    },
+    {
+      "subject_id": "cl_check_input",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["evt_check", "ent_users"],
+      "sources": [{"quote": "核对users.csv", "occurrence": 1}],
+      "reason": "users.csv是明确受检范围，INPUT_OBJECT用途成立。"
+    },
+    {
+      "subject_id": "cl_generate_performer",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["evt_generate", "ent_pm"],
+      "sources": [{"quote": "请PM核对users.csv；不得生成optional.md。", "occurrence": 1}],
+      "reason": "相邻并列分句未引入新主体，沿用PM作为禁止动作的主体有原文支持。"
+    },
+    {
+      "subject_id": "cl_generate_result",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["evt_generate", "ent_optional"],
+      "sources": [{"quote": "不得生成optional.md", "occurrence": 1}],
+      "reason": "optional.md是禁止生成动作的产物；关联禁止事件，不构成交付义务或外部输入。"
+    }
+  ],
+  "issues": [
+    {
+      "id": "audit_pm_type",
+      "issue_kind": "IDENTITY",
+      "subject_ids": ["ent_pm"],
+      "field_path": "type",
+      "context_refs": [],
+      "sources": [{"quote": "PM", "occurrence": 1}],
+      "reason": "OTHER类别缺乏明确依据，应局部保留类别未决；无需否定PM身份或其执行者角色。",
+      "suggested_json": null
+    }
+  ],
+  "omissions": []
+}

@@ -1,0 +1,163 @@
+{
+  "contract_version": "028-r02.3",
+  "reviews": [
+    {
+      "subject_id": "ent_pm",
+      "field_path": "label",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [{"quote": "PM", "occurrence": 1}],
+      "reason": "原文明示主体PM，身份名称明确。"
+    },
+    {
+      "subject_id": "ent_pm",
+      "field_path": "mentions",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [{"quote": "PM", "occurrence": 1}],
+      "reason": "引文及出现次数准确。"
+    },
+    {
+      "subject_id": "ent_pm",
+      "field_path": "alternatives",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [{"quote": "请PM统计", "occurrence": 1}],
+      "reason": "原文没有竞争指代，无需补充身份备选。"
+    },
+    {
+      "subject_id": "ent_pm",
+      "field_path": "type",
+      "verdict": "UNCERTAIN",
+      "context_refs": [],
+      "sources": [{"quote": "请PM统计", "occurrence": 1}],
+      "reason": "原文未明确PM属于个人、群组或其他类别；类别不明不影响其明确身份与职责。"
+    },
+    {
+      "subject_id": "ent_log",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [
+        {"quote": "audit.log", "occurrence": 1},
+        {"quote": "audit.log", "occurrence": 2}
+      ],
+      "reason": "统计输入与禁止清空对象均为同一日志文件。"
+    },
+    {
+      "subject_id": "ent_count",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [{"quote": "生成count.md", "occurrence": 1}],
+      "reason": "明确要求生成该文件。"
+    },
+    {
+      "subject_id": "ent_total",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [{"quote": "错误总数", "occurrence": 1}],
+      "reason": "明确的待统计结果，未给定数值。"
+    },
+    {
+      "subject_id": "evt_stat",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [{"quote": "请PM统计audit.log中的错误总数", "occurrence": 1}],
+      "reason": "统计是当前任务明确要求的主动作。"
+    },
+    {
+      "subject_id": "evt_generate",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [{"quote": "并生成count.md", "occurrence": 1}],
+      "reason": "生成是并列的必需主动作，原文未附条件。"
+    },
+    {
+      "subject_id": "evt_clear",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [{"quote": "不得清空audit.log", "occurrence": 1}],
+      "reason": "清空行为被明确禁止，FORBIDDEN与正向行为谓词配合准确。"
+    },
+    {
+      "subject_id": "cl_stat_performer",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["evt_stat", "ent_pm"],
+      "sources": [{"quote": "请PM统计", "occurrence": 1}],
+      "reason": "PM是明确的统计执行者，不只是组织者。"
+    },
+    {
+      "subject_id": "cl_stat_input",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["evt_stat", "ent_log"],
+      "sources": [{"quote": "统计audit.log中的错误总数", "occurrence": 1}],
+      "reason": "日志是明确输入，统计范围限定为其中的错误。"
+    },
+    {
+      "subject_id": "cl_stat_result",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["evt_stat", "ent_total"],
+      "sources": [{"quote": "统计audit.log中的错误总数", "occurrence": 1}],
+      "reason": "错误总数是统计结果，不是执行次数或资源限制。"
+    },
+    {
+      "subject_id": "cl_generate_performer",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["evt_generate", "ent_pm"],
+      "sources": [
+        {"quote": "请PM统计", "occurrence": 1},
+        {"quote": "并生成count.md", "occurrence": 1}
+      ],
+      "reason": "并列生成动作共享主体PM，来源保留了主体与动作两端。"
+    },
+    {
+      "subject_id": "cl_generate_result",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["evt_generate", "ent_count"],
+      "sources": [{"quote": "生成count.md", "occurrence": 1}],
+      "reason": "count.md是生成产物，未被误列为外部输入。"
+    },
+    {
+      "subject_id": "cl_clear_performer",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["evt_clear", "ent_pm"],
+      "sources": [
+        {"quote": "请PM统计", "occurrence": 1},
+        {"quote": "不得清空audit.log", "occurrence": 1}
+      ],
+      "reason": "同一句任务中的禁止沿用主体PM，未引入新的执行者。"
+    },
+    {
+      "subject_id": "cl_clear_object",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["evt_clear", "ent_log"],
+      "sources": [{"quote": "不得清空audit.log", "occurrence": 1}],
+      "reason": "禁止动作的对象绑定准确，未从禁止用途额外推导输入。"
+    }
+  ],
+  "issues": [
+    {
+      "id": "audit_pm_type",
+      "issue_kind": "IDENTITY",
+      "subject_ids": ["ent_pm"],
+      "field_path": "type",
+      "context_refs": [],
+      "sources": [{"quote": "请PM统计", "occurrence": 1}],
+      "reason": "OTHER类别缺乏明确依据；仅类别属性未决，PM身份及明确角色不因此受否定。",
+      "suggested_json": null
+    }
+  ],
+  "omissions": []
+}

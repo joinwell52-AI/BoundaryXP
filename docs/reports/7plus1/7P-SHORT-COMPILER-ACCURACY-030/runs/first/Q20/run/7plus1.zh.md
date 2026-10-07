@@ -1,0 +1,25 @@
+# BoundX 7+1（有限技术接受，不是业务授权）
+
+## I 输入与作用域 — ABSENT
+
+## O 交付与结果 — RESOLVED
+- [ACCEPTED] 生成：结果/交付=health.md；必须（bf:f76f02c9223476068c40）
+
+## A 正向动作 — RESOLVED
+- [ACCEPTED] 必须 通知；执行者=OPS-01；接收者=PM；充分触发  发现服务异常(服务) [POSITIVE;运行值UNKNOWN]（bf:ffa453c97b24d8d929b0）
+- [ACCEPTED] 必须 生成；执行者=OPS-01；结果/交付=health.md（bf:7f7aa81fa35cdd5a9ae1）
+
+## P 参与关系 — RESOLVED
+- [ACCEPTED] 通知：执行者=OPS-01；必须；充分触发  发现服务异常(服务) [POSITIVE;运行值UNKNOWN]（bf:1681bc20aa1a346aa364）
+- [ACCEPTED] 通知：接收者=PM；必须；充分触发  发现服务异常(服务) [POSITIVE;运行值UNKNOWN]（bf:3d8a97006c167574086a）
+- [ACCEPTED] 生成：执行者=OPS-01；必须（bf:7e2ca17caee1ecf1e6d8）
+
+## R 执行量化限制 — ABSENT
+
+## V 版本与依据 — ABSENT
+
+## C 完成与停止 — ABSENT
+
+## B 禁止与限制 — ABSENT
+
+## 未指定 / 歧义 / 未投影语义

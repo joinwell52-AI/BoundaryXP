@@ -1,0 +1,36 @@
+// Evaluation-only source semantics, written before any Q01-Q30 model output.
+const action=(predicate,actor,object,modality='REQUIRED',detail='')=>({kind:'ACTION',predicate,actor,object,modality,detail});
+const fact=(kind,detail)=>({kind,detail});
+export const expectations={
+ Q01:[action('统计','PM','audit.log中的错误总数'),action('生成','PM','count.md'),fact('I','audit.log及其中错误统计范围'),fact('O','count.md'),fact('B','禁止清空audit.log'),fact('NO_INVENTION','未知错误总数，不编造观测值或执行完成')],
+ Q02:[action('核对','PM','accounts.csv的字段名'),action('生成','PM','fields.md'),fact('I_SCOPE','只检查字段名；可用文件身份+局部范围表达'),fact('O','fields.md'),fact('B','禁止读取记录内容；不是禁止文件全部用途'),fact('NO_INVENTION','不增加核对记录内容或独立只检查义务')],
+ Q03:[action('检查','PM','worker服务的运行状态'),action('生成','PM','service-note.md'),fact('I_SCOPE','worker服务状态，状态可读性不是已观测正常'),fact('O','service-note.md'),fact('B','禁止停止worker服务'),fact('NO_INVENTION','不新增重启义务，不宣布worker正常')],
+ Q04:[action('检查','PM','tool-list.json中的MCP工具清单'),action('生成','PM','mcp-check.md'),action('复核','QA','mcp-check.md'),fact('IDENTITY','QA复核同一内部报告，复核用途不是新外部输入'),fact('I','工具清单来自tool-list.json'),fact('O','mcp-check.md'),fact('NO_INVENTION','MCP不是依据或执行授权；不新增安装、调用工具')],
+ Q05:[action('列出','PM','settings.json中的配置项'),action('生成','PM','settings-list.md'),fact('I','settings.json及其中配置项'),fact('O','settings-list.md'),fact('B','不得更改任何配置项，全称范围不可缩单项'),fact('NO_INVENTION','没有更改许可')],
+ Q06:[action('读取','DEV-01','queue.csv'),action('生成','DEV-01','queue-note.md'),action('核对','OPS-01','queue-note.md中的队列数量'),fact('IDENTITY','该报告唯一回指queue-note.md'),fact('I','queue.csv；内部报告内容核对不是另一外部输入'),fact('O','queue-note.md'),fact('NO_INVENTION','队列数量是核对内容，无数值阈值/R；不拆WP')],
+ Q07:[action('组织','PM','磁盘空间检查'),action('汇总','QA','检查结果'),action('生成','QA','capacity.md'),fact('ROLE','PM仅组织；QA只明确汇总/生成，均不默认亲自检查'),fact('UNSPECIFIED','检查执行者由后续计划确定，不是竞争指代歧义'),fact('I_SCOPE','磁盘空间检查的明确受检范围保留，可在被组织检查用途表达'),fact('O','capacity.md'),fact('NO_INVENTION','不新增制定后续计划义务或默认检查人')],
+ Q08:[action('检查','OPS-01','备份目录的可读性'),action('生成','OPS-01','access.md'),action('交给','OPS-01','access.md'),fact('RECIPIENT','交给QA'),fact('I','备份目录可读性范围'),fact('O','access.md'),fact('NOT_REQUIRED','QA复核不要求；不产生复核义务/禁止/额外许可'),fact('IDENTITY','生成与交付access.md保持同一身份')],
+ Q09:[action('核对','DEV-01','index.csv'),action('生成','DEV-01','format-check.md'),fact('BASIS','FORMAT-9约束DEV核对，不是检查对象'),fact('RECIPIENT','QA仅接收format-check.md'),fact('ROLE_NEGATION','QA不负责执行核对，不解释为通用禁止核对'),fact('I','index.csv'),fact('O','format-check.md'),fact('NO_INVENTION','不新增未述发送操作的执行者或QA检查义务')],
+ Q10:[action('生成','PM','report-a.md'),action('复核','QA','report-a.md'),action('更新','QA','report-a.md'),action('提交','PM','更新后的report-a.md'),fact('RECIPIENT','提交给ADMIN'),fact('IDENTITY','单一报告；更新版本若单列必须有明确同一产物关联'),fact('ORDER','生成后复核/更新，再提交更新后的同一报告'),fact('O','report-a.md；内部更新不是新增外部输入'),fact('NO_INVENTION','没有版本依据，内部用途不自动I')],
+ Q11:[action('检查','QA','schema.yaml'),action('生成','QA','conformance.md'),fact('BASIS','RULE-17是检查依据'),fact('I','schema.yaml，不是RULE-17'),fact('O','conformance.md')],
+ Q12:[action('检查','QA','RULE-17的内容和schema.yaml'),action('生成','QA','conformance.md'),fact('I','两者都为检查对象，可以并列实体/集合'),fact('O','conformance.md'),fact('NO_BASIS','RULE-17不是依据，不凭编号进V')],
+ Q13:[action('比较','PM','当前配置'),action('生成','PM','diff.md'),fact('BASIS','commit 7ac921e作为比较基线'),fact('I','当前配置'),fact('O','diff.md'),fact('B','不得切换当前工作区的commit，不仅禁切到7ac921e'),fact('NO_INVENTION','当前commit未知，没有切换或读取业务仓库操作')],
+ Q14:[action('读取','PM','ticket-516.txt'),action('生成','PM','brief-516.md'),fact('I','ticket-516.txt待读材料'),fact('O','brief-516.md'),fact('NO_BASIS','明确不是任务依据'),fact('NO_QUANTITY','516标识符不是资源/次数')],
+ Q15:[action('核对','PM','users.csv'),action('生成','PM','optional.md','PERMITTED'),fact('I','users.csv'),fact('O_OPTIONAL','optional.md可选生成，非必交；如O保留必须PERMITTED'),fact('NOT_REQUIRED','交付optional.md不要求，不是禁止'),fact('NO_INVENTION','不增加生成/交付义务或额外交付许可')],
+ Q16:[action('核对','PM','users.csv'),fact('I','users.csv'),fact('B','禁止生成optional.md'),fact('NO_POSITIVE_OUTPUT','optional.md不进入正向生成义务或必交O')],
+ Q17:[action('核对','PM','users.csv'),fact('I','users.csv'),fact('NOT_REQUIRED','无需生成optional.md，必须在非义务结构/记录保留'),fact('NO_POSITIVE_OUTPUT','不产生O义务'),fact('NO_INVENTION','无需不变FORBIDDEN/PERMITTED/REQUIRED')],
+ Q18:[action('核对','PM','a.ini与b.ini'),fact('I','两个文件逐一核对，可拆事件或集合'),fact('B','只禁止修改b.ini'),fact('NO_INVENTION','不禁止修改a.ini，不授权修改a.ini；逐一不是资源次数')],
+ Q19:[action('提交','PM','check.md','PERMITTED'),fact('RECIPIENT','ADMIN'),fact('CONDITION','本次check.md通过QA复核为提交许可NECESSARY；时序可AFTER，未知观测'),fact('IDENTITY','本次报告与check.md同一对象'),fact('NO_INVENTION','不新增QA复核义务；不因必要前提改充分许可')],
+ Q20:[action('通知','OPS-01','PM'),action('生成','OPS-01','health.md'),fact('RECIPIENT','PM仅是通知接收者'),fact('CONDITION','发现服务异常SUFFICIENT触发通知义务'),fact('UNCONDITIONAL','health.md生成在异常/非异常都要求；无条件或显式恒真等价'),fact('O','health.md'),fact('NO_INVENTION','不新增检查义务，不宣布异常已发生')],
+ Q21:[action('发布','PM','report.md','PERMITTED'),fact('CONDITION','QA与OPS-01都批准为AND NECESSARY且早于发布；状态均未知'),fact('B','任一批准未取得SUFFICIENT触发禁止发布同一report.md'),fact('NO_INVENTION','无独立批准义务；不能OR许可、必要方向用于禁止或无条件发布')],
+ Q22:[action('提交','PM','handover.md'),fact('COMPLETION','ADMIN确认已收到同一handover.md为根任务完成NECESSARY；不擅改充分触发'),fact('ROLE','ADMIN为确认收到主体，参与上下文不新增确认义务'),fact('NO_INVENTION','提交接收角色可由同文件连续语境表达，但不得创造确认动作义务')],
+ Q23:[action('提交','PM','handover.md'),fact('COMPLETION','ADMIN确认已收到同一handover.md SUFFICIENT触发根任务完成；不改唯一/必要条件'),fact('ROLE','ADMIN为确认收到主体，参与上下文不新增确认义务')],
+ Q24:[action('核验','QA','配置'),fact('I','配置核验范围'),fact('QUANTITY','核验耗时<=6分钟，EXECUTION_LIMIT绑定核验而不是停止/ROOT完成'),fact('STOP','权限错误SUFFICIENT触发根任务停止'),fact('NO_INVENTION','没有成功完成条件，不把6分钟当C')],
+ Q25:[action('读取','PM','feed.json'),action('生成','PM','feed-note.md'),fact('I','feed.json'),fact('O','feed-note.md'),fact('QUANTITY','读取重试次数<=4次，EXECUTION_LIMIT，仅读取，不包括最初执行'),fact('CONTENT_QUANTITY','报告恰好2条异常记录，EQ/OUTPUT_CONTENT目标feed-note.md，挂O不进R'),fact('NO_INVENTION','不把2条当观测值、读取限制或重试次数')],
+ Q26:[action('检查','PM','A/C两台测试机的有效范围'),fact('SCOPE','明确原集合A/B/C/D排除B/D；有效A/C；可等价集合'),fact('B','禁止重启任何测试机，不缩为A/C'),fact('NO_QUANTITY','四台是原集合数量，不是执行资源次数')],
+ Q27:[action('生成','PM','howto.md'),action('写入','PM','引文内容'),fact('O','howto.md'),fact('CONTENT','引文可以停用worker服务仅文中内容，范围只在文中'),fact('B','本次禁止停用worker服务'),fact('NO_INVENTION','引文许可不成为当前PERMITTED停用')],
+ Q28:[action('检查','PM','已归档日志的完整性'),action('生成','PM','archive-check.md'),fact('I_SCOPE','已归档限定日志，不新增归档动作'),fact('O','archive-check.md'),fact('B','禁止归档新日志，不能改为禁止检查已归档日志'),fact('NO_INVENTION','归档背景不升为当前REQUIRED动作')],
+ Q29:[action('读取','PM','east.csv和west.csv'),action('交给','PM','它'),action('生成','OPS-01','port.md'),fact('RECIPIENT','交给QA'),fact('I','两个明确读取保留'),fact('O','独立port.md生成保留'),fact('AMBIGUITY','它有east/west竞争，交付用途UNRESOLVED；不按最近选择west'),fact('LOCALITY','不得污染明确读取、PM/QA关系可确定部分和独立OPS生成')],
+ Q30:[action('读取','PM','east.csv和west.csv'),action('交给','PM','east.csv'),action('生成','OPS-01','port.md'),fact('RECIPIENT','交给QA'),fact('I','两个文件读取'),fact('O','port.md'),fact('COREFERENCE','前一个唯一指east，交付用途应闭合；不是交付两文件'),fact('NO_INVENTION','不沿用Q29歧义或选择west')]
+};
+export const verbPatterns={统计:'统计|计数|计算',核对:'核对|检查|校核|核查',检查:'检查|核查|检验',生成:'生成|形成|产出|写入',复核:'复核|审查',列出:'列出|列举|汇总',读取:'读取|读入|阅读',组织:'组织|安排',汇总:'汇总|整理',交给:'交给|交付|发送|提交|传递',更新:'更新|修订|修改',提交:'提交|交付|交给|递交',比较:'比较|对比',通知:'通知|上报|报告|汇报',发布:'发布',核验:'核验|核对|检查|验证',写入:'写入|编写|写|记录'};

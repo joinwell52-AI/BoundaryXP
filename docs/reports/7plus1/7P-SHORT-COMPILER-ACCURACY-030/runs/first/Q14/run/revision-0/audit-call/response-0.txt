@@ -1,0 +1,126 @@
+{
+  "contract_version": "028-r02.3",
+  "reviews": [
+    {
+      "subject_id": "ent_pm",
+      "field_path": "label",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [{"quote": "PM", "occurrence": 1}],
+      "reason": "原文明示执行主体为PM，身份标签有据。"
+    },
+    {
+      "subject_id": "ent_pm",
+      "field_path": "type",
+      "verdict": "UNCERTAIN",
+      "context_refs": [],
+      "sources": [{"quote": "请PM读取ticket-516.txt并生成brief-516.md", "occurrence": 1}],
+      "reason": "原文未说明PM是个人、团队还是其他主体，OTHER类别不能确定；不影响明确身份及执行职责。"
+    },
+    {
+      "subject_id": "ent_ticket",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [
+        {"quote": "ticket-516.txt", "occurrence": 1},
+        {"quote": "ticket-516.txt", "occurrence": 2}
+      ],
+      "reason": "两处名称指向同一待读文件，文件身份及类型明确。"
+    },
+    {
+      "subject_id": "ent_brief",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [{"quote": "brief-516.md", "occurrence": 1}],
+      "reason": "明确命名的生成文件，身份及类型有据。"
+    },
+    {
+      "subject_id": "evt_read",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [{"quote": "请PM读取ticket-516.txt", "occurrence": 1}],
+      "reason": "读取是当前明确要求的主动作，没有附加条件或数量限制。"
+    },
+    {
+      "subject_id": "evt_generate",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [
+        {"quote": "请PM", "occurrence": 1},
+        {"quote": "并生成brief-516.md", "occurrence": 1}
+      ],
+      "reason": "生成是共享主体PM的并列要求，属于当前主动作。"
+    },
+    {
+      "subject_id": "cl_read_performer",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["ent_pm", "evt_read"],
+      "sources": [{"quote": "请PM读取ticket-516.txt", "occurrence": 1}],
+      "reason": "PM明确承担读取动作；该职责不依赖其人或组类别。"
+    },
+    {
+      "subject_id": "cl_read_input",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["ent_ticket", "evt_read"],
+      "sources": [
+        {"quote": "读取ticket-516.txt", "occurrence": 1},
+        {"quote": "ticket-516.txt是待读材料", "occurrence": 1}
+      ],
+      "reason": "文件是明确待读输入，排除依据用途不撤销输入用途。"
+    },
+    {
+      "subject_id": "cl_generate_performer",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["ent_pm", "evt_generate"],
+      "sources": [
+        {"quote": "请PM", "occurrence": 1},
+        {"quote": "并生成brief-516.md", "occurrence": 1}
+      ],
+      "reason": "并列生成动作共享PM主体，执行者绑定正确。"
+    },
+    {
+      "subject_id": "cl_generate_result",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["ent_brief", "evt_generate"],
+      "sources": [{"quote": "生成brief-516.md", "occurrence": 1}],
+      "reason": "brief-516.md是要求生成的结果，文件名中的516不是数量要求。"
+    },
+    {
+      "subject_id": "cl_basis_exclusion",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["ent_ticket", "expr_not_basis"],
+      "sources": [{"quote": "ticket-516.txt是待读材料，不是任务依据", "occurrence": 1}],
+      "reason": "以根任务范围声明排除文件的依据用途，未误增禁止动作。"
+    },
+    {
+      "subject_id": "expr_not_basis",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["ent_ticket"],
+      "sources": [{"quote": "ticket-516.txt是待读材料，不是任务依据", "occurrence": 1}],
+      "reason": "负极性状态准确表达该文件不是当前任务依据，参数与范围正确。"
+    }
+  ],
+  "issues": [
+    {
+      "id": "audit_pm_type",
+      "issue_kind": "IDENTITY",
+      "subject_ids": ["ent_pm"],
+      "field_path": "type",
+      "context_refs": ["cl_read_performer", "cl_generate_performer"],
+      "sources": [{"quote": "请PM读取ticket-516.txt并生成brief-516.md", "occurrence": 1}],
+      "reason": "仅实体类别未明确，OTHER应保留为未决属性；没有竞争身份，不应扩散为执行者或动作疑点。",
+      "suggested_json": null
+    }
+  ],
+  "omissions": []
+}

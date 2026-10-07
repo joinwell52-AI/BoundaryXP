@@ -1,0 +1,230 @@
+{
+  "contract_version": "028-r02.3",
+  "entities": [
+    {
+      "id": "ent_pm",
+      "label": "PM",
+      "type": "OTHER",
+      "mentions": [{"quote": "PM", "occurrence": 1}],
+      "alternatives": []
+    },
+    {
+      "id": "ent_feed",
+      "label": "feed.json",
+      "type": "FILE",
+      "mentions": [{"quote": "feed.json", "occurrence": 1}],
+      "alternatives": []
+    },
+    {
+      "id": "ent_report",
+      "label": "feed-note.md报告",
+      "type": "FILE",
+      "mentions": [
+        {"quote": "feed-note.md", "occurrence": 1},
+        {"quote": "报告", "occurrence": 1}
+      ],
+      "alternatives": []
+    },
+    {
+      "id": "ent_records",
+      "label": "异常记录",
+      "type": "OTHER",
+      "mentions": [{"quote": "异常记录", "occurrence": 1}],
+      "alternatives": []
+    }
+  ],
+  "events": [
+    {
+      "id": "evt_read",
+      "predicate": "读取",
+      "kind": "ACTION",
+      "layer": "MAIN",
+      "use": "CURRENT_TASK",
+      "modality": "REQUIRED",
+      "polarity": "POSITIVE",
+      "owner_id": "ROOT",
+      "constraint_ids": ["cl_retry_limit"],
+      "requires": [],
+      "sources": [{"quote": "请PM读取feed.json", "occurrence": 1}]
+    },
+    {
+      "id": "evt_generate",
+      "predicate": "生成报告",
+      "kind": "ACTION",
+      "layer": "MAIN",
+      "use": "CURRENT_TASK",
+      "modality": "REQUIRED",
+      "polarity": "POSITIVE",
+      "owner_id": "ROOT",
+      "constraint_ids": ["cl_record_count"],
+      "requires": [],
+      "sources": [
+        {"quote": "生成feed-note.md", "occurrence": 1},
+        {"quote": "报告恰好列出2条异常记录", "occurrence": 1}
+      ]
+    }
+  ],
+  "claims": [
+    {
+      "id": "cl_read_performer",
+      "kind": "ROLE",
+      "event_id": "evt_read",
+      "entity_id": "ent_pm",
+      "role": "PERFORMER",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "scope_id": "evt_read",
+      "requires": [],
+      "sources": [{"quote": "请PM读取feed.json", "occurrence": 1}],
+      "note": ""
+    },
+    {
+      "id": "cl_read_input",
+      "kind": "ROLE",
+      "event_id": "evt_read",
+      "entity_id": "ent_feed",
+      "role": "INPUT_OBJECT",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "scope_id": "evt_read",
+      "requires": [],
+      "sources": [{"quote": "读取feed.json", "occurrence": 1}],
+      "note": ""
+    },
+    {
+      "id": "cl_retry_limit",
+      "kind": "QUANTITY",
+      "event_id": "evt_read",
+      "entity_id": null,
+      "role": null,
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": {
+        "metric": "重试次数",
+        "target_id": "evt_read",
+        "comparator": "LTE",
+        "value": 4,
+        "unit": "次",
+        "use": "EXECUTION_LIMIT",
+        "count_scope": "evt_read"
+      },
+      "scope_id": "evt_read",
+      "requires": [],
+      "sources": [
+        {"quote": "读取feed.json", "occurrence": 1},
+        {"quote": "该读取最多重试4次", "occurrence": 1}
+      ],
+      "note": "限制该读取的重试次数，不将首次读取计作重试，也不新增重试义务。"
+    },
+    {
+      "id": "cl_generate_performer",
+      "kind": "ROLE",
+      "event_id": "evt_generate",
+      "entity_id": "ent_pm",
+      "role": "PERFORMER",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "scope_id": "evt_generate",
+      "requires": [],
+      "sources": [
+        {"quote": "请PM读取feed.json", "occurrence": 1},
+        {"quote": "生成feed-note.md", "occurrence": 1}
+      ],
+      "note": "生成命令承接同一任务中的主体PM。"
+    },
+    {
+      "id": "cl_generate_result",
+      "kind": "ROLE",
+      "event_id": "evt_generate",
+      "entity_id": "ent_report",
+      "role": "RESULT",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "scope_id": "evt_generate",
+      "requires": [],
+      "sources": [
+        {"quote": "生成feed-note.md", "occurrence": 1},
+        {"quote": "报告恰好列出2条异常记录", "occurrence": 1}
+      ],
+      "note": "报告指生成的feed-note.md。"
+    },
+    {
+      "id": "cl_report_content",
+      "kind": "ROLE",
+      "event_id": "evt_generate",
+      "entity_id": "ent_records",
+      "role": "CONTENT",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "scope_id": "ent_report",
+      "requires": [],
+      "sources": [{"quote": "报告恰好列出2条异常记录", "occurrence": 1}],
+      "note": "异常记录是报告要求列出的内容。"
+    },
+    {
+      "id": "cl_record_count",
+      "kind": "QUANTITY",
+      "event_id": "evt_generate",
+      "entity_id": null,
+      "role": null,
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": {
+        "metric": "列出的异常记录条数",
+        "target_id": "ent_records",
+        "comparator": "EQ",
+        "value": 2,
+        "unit": "条",
+        "use": "OUTPUT_CONTENT",
+        "count_scope": "ent_report"
+      },
+      "scope_id": "ent_report",
+      "requires": [],
+      "sources": [
+        {"quote": "生成feed-note.md", "occurrence": 1},
+        {"quote": "报告恰好列出2条异常记录", "occurrence": 1}
+      ],
+      "note": "数量约束报告内容，不是执行次数或根任务完成阈值。"
+    }
+  ],
+  "expressions": [],
+  "issues": [],
+  "coverage": [
+    {
+      "sources": [{"quote": "请PM读取feed.json", "occurrence": 1}],
+      "claim_ids": ["cl_read_performer", "cl_read_input"],
+      "status": "EXPRESSED",
+      "affected_views": ["I", "A", "P"]
+    },
+    {
+      "sources": [{"quote": "该读取最多重试4次", "occurrence": 1}],
+      "claim_ids": ["cl_retry_limit"],
+      "status": "EXPRESSED",
+      "affected_views": ["R"]
+    },
+    {
+      "sources": [{"quote": "生成feed-note.md", "occurrence": 1}],
+      "claim_ids": ["cl_generate_performer", "cl_generate_result"],
+      "status": "EXPRESSED",
+      "affected_views": ["A", "O", "P"]
+    },
+    {
+      "sources": [{"quote": "报告恰好列出2条异常记录", "occurrence": 1}],
+      "claim_ids": ["cl_report_content", "cl_record_count"],
+      "status": "EXPRESSED",
+      "affected_views": ["O"]
+    }
+  ]
+}

@@ -1,0 +1,341 @@
+{
+  "contract_version": "028-r02.3",
+  "entities": [
+    {
+      "id": "E_PM",
+      "label": "PM",
+      "type": "OTHER",
+      "mentions": [
+        {"quote": "PM", "occurrence": 1},
+        {"quote": "PM", "occurrence": 2}
+      ],
+      "alternatives": []
+    },
+    {
+      "id": "E_QA",
+      "label": "QA",
+      "type": "OTHER",
+      "mentions": [{"quote": "QA", "occurrence": 1}],
+      "alternatives": []
+    },
+    {
+      "id": "E_ADMIN",
+      "label": "ADMIN",
+      "type": "OTHER",
+      "mentions": [{"quote": "ADMIN", "occurrence": 1}],
+      "alternatives": []
+    },
+    {
+      "id": "E_REPORT",
+      "label": "report-a.md",
+      "type": "FILE",
+      "mentions": [
+        {"quote": "report-a.md", "occurrence": 1},
+        {"quote": "这份报告", "occurrence": 1},
+        {"quote": "更新后的同一报告", "occurrence": 1}
+      ],
+      "alternatives": []
+    }
+  ],
+  "events": [
+    {
+      "id": "EV_GENERATE",
+      "predicate": "生成",
+      "kind": "ACTION",
+      "layer": "MAIN",
+      "use": "CURRENT_TASK",
+      "modality": "REQUIRED",
+      "polarity": "POSITIVE",
+      "owner_id": "ROOT",
+      "constraint_ids": [],
+      "requires": [],
+      "sources": [{"quote": "请PM生成report-a.md", "occurrence": 1}]
+    },
+    {
+      "id": "EV_REVIEW",
+      "predicate": "复核",
+      "kind": "ACTION",
+      "layer": "MAIN",
+      "use": "CURRENT_TASK",
+      "modality": "REQUIRED",
+      "polarity": "POSITIVE",
+      "owner_id": "ROOT",
+      "constraint_ids": [],
+      "requires": [],
+      "sources": [{"quote": "请QA复核并更新这份报告", "occurrence": 1}]
+    },
+    {
+      "id": "EV_UPDATE",
+      "predicate": "更新",
+      "kind": "ACTION",
+      "layer": "MAIN",
+      "use": "CURRENT_TASK",
+      "modality": "REQUIRED",
+      "polarity": "POSITIVE",
+      "owner_id": "ROOT",
+      "constraint_ids": [],
+      "requires": [],
+      "sources": [{"quote": "请QA复核并更新这份报告", "occurrence": 1}]
+    },
+    {
+      "id": "EV_SUBMIT",
+      "predicate": "提交",
+      "kind": "ACTION",
+      "layer": "MAIN",
+      "use": "CURRENT_TASK",
+      "modality": "REQUIRED",
+      "polarity": "POSITIVE",
+      "owner_id": "ROOT",
+      "constraint_ids": ["C_SUBMIT_ORDER"],
+      "requires": [],
+      "sources": [{"quote": "PM再将更新后的同一报告提交给ADMIN", "occurrence": 1}]
+    }
+  ],
+  "claims": [
+    {
+      "id": "C_GENERATE_PM",
+      "kind": "ROLE",
+      "event_id": "EV_GENERATE",
+      "entity_id": "E_PM",
+      "role": "PERFORMER",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "scope_id": "EV_GENERATE",
+      "requires": [],
+      "sources": [{"quote": "请PM生成report-a.md", "occurrence": 1}],
+      "note": ""
+    },
+    {
+      "id": "C_GENERATE_RESULT",
+      "kind": "ROLE",
+      "event_id": "EV_GENERATE",
+      "entity_id": "E_REPORT",
+      "role": "RESULT",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "scope_id": "EV_GENERATE",
+      "requires": [],
+      "sources": [{"quote": "生成report-a.md", "occurrence": 1}],
+      "note": ""
+    },
+    {
+      "id": "C_REVIEW_QA",
+      "kind": "ROLE",
+      "event_id": "EV_REVIEW",
+      "entity_id": "E_QA",
+      "role": "REVIEWER",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "scope_id": "EV_REVIEW",
+      "requires": [],
+      "sources": [{"quote": "请QA复核并更新这份报告", "occurrence": 1}],
+      "note": "QA执行复核。"
+    },
+    {
+      "id": "C_REVIEW_OBJECT",
+      "kind": "ROLE",
+      "event_id": "EV_REVIEW",
+      "entity_id": "E_REPORT",
+      "role": "OBJECT",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "scope_id": "EV_REVIEW",
+      "requires": [],
+      "sources": [
+        {"quote": "生成report-a.md", "occurrence": 1},
+        {"quote": "复核并更新这份报告", "occurrence": 1}
+      ],
+      "note": "这份报告指前述生成的report-a.md，是内部产物。"
+    },
+    {
+      "id": "C_UPDATE_QA",
+      "kind": "ROLE",
+      "event_id": "EV_UPDATE",
+      "entity_id": "E_QA",
+      "role": "PERFORMER",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "scope_id": "EV_UPDATE",
+      "requires": [],
+      "sources": [{"quote": "请QA复核并更新这份报告", "occurrence": 1}],
+      "note": ""
+    },
+    {
+      "id": "C_UPDATE_OBJECT",
+      "kind": "ROLE",
+      "event_id": "EV_UPDATE",
+      "entity_id": "E_REPORT",
+      "role": "OBJECT",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "scope_id": "EV_UPDATE",
+      "requires": [],
+      "sources": [
+        {"quote": "生成report-a.md", "occurrence": 1},
+        {"quote": "更新这份报告", "occurrence": 1}
+      ],
+      "note": "更新对象仍为生成的同一报告。"
+    },
+    {
+      "id": "C_UPDATE_RESULT",
+      "kind": "ROLE",
+      "event_id": "EV_UPDATE",
+      "entity_id": "E_REPORT",
+      "role": "RESULT",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "scope_id": "EV_UPDATE",
+      "requires": [],
+      "sources": [
+        {"quote": "生成report-a.md", "occurrence": 1},
+        {"quote": "更新这份报告", "occurrence": 1},
+        {"quote": "更新后的同一报告", "occurrence": 1}
+      ],
+      "note": "更新产生该报告的新状态，保持实体身份。"
+    },
+    {
+      "id": "C_SUBMIT_PM",
+      "kind": "ROLE",
+      "event_id": "EV_SUBMIT",
+      "entity_id": "E_PM",
+      "role": "PERFORMER",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "scope_id": "EV_SUBMIT",
+      "requires": [],
+      "sources": [{"quote": "PM再将更新后的同一报告提交给ADMIN", "occurrence": 1}],
+      "note": ""
+    },
+    {
+      "id": "C_SUBMIT_OBJECT",
+      "kind": "ROLE",
+      "event_id": "EV_SUBMIT",
+      "entity_id": "E_REPORT",
+      "role": "OBJECT",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "scope_id": "EV_SUBMIT",
+      "requires": [],
+      "sources": [
+        {"quote": "生成report-a.md", "occurrence": 1},
+        {"quote": "更新这份报告", "occurrence": 1},
+        {"quote": "更新后的同一报告提交给ADMIN", "occurrence": 1}
+      ],
+      "note": "提交对象是QA更新后的同一report-a.md。"
+    },
+    {
+      "id": "C_SUBMIT_RECIPIENT",
+      "kind": "ROLE",
+      "event_id": "EV_SUBMIT",
+      "entity_id": "E_ADMIN",
+      "role": "RECIPIENT",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "scope_id": "EV_SUBMIT",
+      "requires": [],
+      "sources": [{"quote": "提交给ADMIN", "occurrence": 1}],
+      "note": ""
+    },
+    {
+      "id": "C_SUBMIT_ORDER",
+      "kind": "TEMPORAL",
+      "event_id": "EV_SUBMIT",
+      "entity_id": null,
+      "role": null,
+      "expression_id": "X_QA_DONE",
+      "direction": "ORDER",
+      "temporal": "AFTER",
+      "quantity": null,
+      "scope_id": "EV_SUBMIT",
+      "requires": [],
+      "sources": [{"quote": "请QA复核并更新这份报告，PM再将更新后的同一报告提交给ADMIN", "occurrence": 1}],
+      "note": "提交在QA复核和更新之后；不声明这些动作已实际完成，也不增设复核通过条件。"
+    }
+  ],
+  "expressions": [
+    {
+      "id": "X_REVIEW_DONE",
+      "op": "STATE",
+      "operands": [],
+      "state": {
+        "predicate": "已完成",
+        "event_id": "EV_REVIEW",
+        "args": ["E_QA", "E_REPORT"],
+        "polarity": "POSITIVE"
+      },
+      "sources": [{"quote": "请QA复核并更新这份报告，PM再", "occurrence": 1}]
+    },
+    {
+      "id": "X_UPDATE_DONE",
+      "op": "STATE",
+      "operands": [],
+      "state": {
+        "predicate": "已完成",
+        "event_id": "EV_UPDATE",
+        "args": ["E_QA", "E_REPORT"],
+        "polarity": "POSITIVE"
+      },
+      "sources": [{"quote": "请QA复核并更新这份报告，PM再将更新后的同一报告", "occurrence": 1}]
+    },
+    {
+      "id": "X_QA_DONE",
+      "op": "AND",
+      "operands": ["X_REVIEW_DONE", "X_UPDATE_DONE"],
+      "state": null,
+      "sources": [{"quote": "请QA复核并更新这份报告，PM再将更新后的同一报告提交给ADMIN", "occurrence": 1}]
+    }
+  ],
+  "issues": [],
+  "coverage": [
+    {
+      "sources": [{"quote": "请PM生成report-a.md", "occurrence": 1}],
+      "claim_ids": ["C_GENERATE_PM", "C_GENERATE_RESULT"],
+      "status": "EXPRESSED",
+      "affected_views": ["A", "P", "O"]
+    },
+    {
+      "sources": [{"quote": "请QA复核并更新这份报告", "occurrence": 1}],
+      "claim_ids": ["C_REVIEW_QA", "C_REVIEW_OBJECT"],
+      "status": "EXPRESSED",
+      "affected_views": ["A", "P"]
+    },
+    {
+      "sources": [{"quote": "请QA复核并更新这份报告", "occurrence": 1}],
+      "claim_ids": ["C_UPDATE_QA", "C_UPDATE_OBJECT", "C_UPDATE_RESULT"],
+      "status": "EXPRESSED",
+      "affected_views": ["A", "P", "O"]
+    },
+    {
+      "sources": [{"quote": "PM再将更新后的同一报告提交给ADMIN", "occurrence": 1}],
+      "claim_ids": ["C_SUBMIT_PM", "C_SUBMIT_OBJECT", "C_SUBMIT_RECIPIENT"],
+      "status": "EXPRESSED",
+      "affected_views": ["A", "P"]
+    },
+    {
+      "sources": [{"quote": "请QA复核并更新这份报告，PM再将更新后的同一报告提交给ADMIN", "occurrence": 1}],
+      "claim_ids": ["C_SUBMIT_ORDER"],
+      "status": "EXPRESSED",
+      "affected_views": ["A"]
+    }
+  ]
+}

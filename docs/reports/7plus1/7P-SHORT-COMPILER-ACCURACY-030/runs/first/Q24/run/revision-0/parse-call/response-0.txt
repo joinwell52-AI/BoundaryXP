@@ -1,0 +1,198 @@
+{
+  "contract_version": "028-r02.3",
+  "entities": [
+    {
+      "id": "ent_qa",
+      "label": "QA",
+      "type": "OTHER",
+      "mentions": [{"quote": "QA", "occurrence": 1}],
+      "alternatives": []
+    },
+    {
+      "id": "ent_config",
+      "label": "配置",
+      "type": "OTHER",
+      "mentions": [{"quote": "配置", "occurrence": 1}],
+      "alternatives": []
+    }
+  ],
+  "events": [
+    {
+      "id": "evt_verify",
+      "predicate": "核验配置",
+      "kind": "ACTION",
+      "layer": "MAIN",
+      "use": "CURRENT_TASK",
+      "modality": "REQUIRED",
+      "polarity": "POSITIVE",
+      "owner_id": "ROOT",
+      "constraint_ids": ["cl_time"],
+      "requires": [],
+      "sources": [{"quote": "请QA完成配置核验", "occurrence": 1}]
+    },
+    {
+      "id": "evt_error",
+      "predicate": "出现权限错误",
+      "kind": "STATE",
+      "layer": "CONDITION",
+      "use": "MENTION_ONLY",
+      "modality": "UNSTATED",
+      "polarity": "POSITIVE",
+      "owner_id": "ROOT",
+      "constraint_ids": [],
+      "requires": [],
+      "sources": [{"quote": "出现权限错误", "occurrence": 1}]
+    },
+    {
+      "id": "evt_stop",
+      "predicate": "停止本任务",
+      "kind": "ACTION",
+      "layer": "MAIN",
+      "use": "CURRENT_TASK",
+      "modality": "REQUIRED",
+      "polarity": "POSITIVE",
+      "owner_id": "ROOT",
+      "constraint_ids": ["cl_stop_condition"],
+      "requires": [],
+      "sources": [{"quote": "若出现权限错误，停止本任务", "occurrence": 1}]
+    }
+  ],
+  "claims": [
+    {
+      "id": "cl_verify_performer",
+      "kind": "ROLE",
+      "event_id": "evt_verify",
+      "entity_id": "ent_qa",
+      "role": "PERFORMER",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "scope_id": "evt_verify",
+      "requires": [],
+      "sources": [{"quote": "请QA完成配置核验", "occurrence": 1}],
+      "note": "QA是核验执行者；岗位简称未明确人或组类别。"
+    },
+    {
+      "id": "cl_verify_input",
+      "kind": "ROLE",
+      "event_id": "evt_verify",
+      "entity_id": "ent_config",
+      "role": "INPUT_OBJECT",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "scope_id": "evt_verify",
+      "requires": [],
+      "sources": [{"quote": "配置核验", "occurrence": 1}],
+      "note": "配置是明确受检对象。"
+    },
+    {
+      "id": "cl_time",
+      "kind": "QUANTITY",
+      "event_id": "evt_verify",
+      "entity_id": null,
+      "role": null,
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": {
+        "metric": "核验用时",
+        "target_id": "evt_verify",
+        "comparator": "LTE",
+        "value": 6,
+        "unit": "分钟",
+        "use": "EXECUTION_LIMIT",
+        "count_scope": "evt_verify"
+      },
+      "scope_id": "evt_verify",
+      "requires": [],
+      "sources": [{"quote": "核验用时不得超过6分钟", "occurrence": 1}],
+      "note": "限制核验执行时长，不作为根任务完成条件。"
+    },
+    {
+      "id": "cl_stop_performer",
+      "kind": "ROLE",
+      "event_id": "evt_stop",
+      "entity_id": "ent_qa",
+      "role": "PERFORMER",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "scope_id": "evt_stop",
+      "requires": [],
+      "sources": [
+        {"quote": "请QA完成配置核验", "occurrence": 1},
+        {"quote": "若出现权限错误，停止本任务", "occurrence": 1}
+      ],
+      "note": "停止命令承接本任务的受令者QA。"
+    },
+    {
+      "id": "cl_stop_condition",
+      "kind": "CONDITION",
+      "event_id": "evt_stop",
+      "entity_id": null,
+      "role": null,
+      "expression_id": "expr_error",
+      "direction": "SUFFICIENT",
+      "temporal": null,
+      "quantity": null,
+      "scope_id": "evt_stop",
+      "requires": [],
+      "sources": [{"quote": "若出现权限错误，停止本任务", "occurrence": 1}],
+      "note": "权限错误出现足以触发停止义务。"
+    },
+    {
+      "id": "cl_root_stop",
+      "kind": "STOP",
+      "event_id": null,
+      "entity_id": null,
+      "role": null,
+      "expression_id": "expr_error",
+      "direction": "SUFFICIENT",
+      "temporal": null,
+      "quantity": null,
+      "scope_id": "ROOT",
+      "requires": [],
+      "sources": [{"quote": "若出现权限错误，停止本任务", "occurrence": 1}],
+      "note": "出现权限错误时停止整个任务，不表示任务完成。"
+    }
+  ],
+  "expressions": [
+    {
+      "id": "expr_error",
+      "op": "STATE",
+      "operands": [],
+      "state": {
+        "predicate": "出现权限错误",
+        "event_id": "evt_error",
+        "args": ["ROOT"],
+        "polarity": "POSITIVE"
+      },
+      "sources": [{"quote": "出现权限错误", "occurrence": 1}]
+    }
+  ],
+  "issues": [],
+  "coverage": [
+    {
+      "sources": [{"quote": "请QA完成配置核验", "occurrence": 1}],
+      "claim_ids": ["cl_verify_performer", "cl_verify_input"],
+      "status": "EXPRESSED",
+      "affected_views": ["I", "A", "P"]
+    },
+    {
+      "sources": [{"quote": "核验用时不得超过6分钟", "occurrence": 1}],
+      "claim_ids": ["cl_time"],
+      "status": "EXPRESSED",
+      "affected_views": ["R"]
+    },
+    {
+      "sources": [{"quote": "若出现权限错误，停止本任务", "occurrence": 1}],
+      "claim_ids": ["cl_stop_performer", "cl_stop_condition", "cl_root_stop"],
+      "status": "EXPRESSED",
+      "affected_views": ["A", "P", "C"]
+    }
+  ]
+}
