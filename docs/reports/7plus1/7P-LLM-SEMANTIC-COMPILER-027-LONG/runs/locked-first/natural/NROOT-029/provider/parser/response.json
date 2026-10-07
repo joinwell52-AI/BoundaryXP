@@ -1,0 +1,360 @@
+{
+  "structure_status": "SINGLE_ROOT",
+  "nodes": [
+    {
+      "id": "e_read",
+      "type": "EVENT",
+      "sources": [{"quote": "要求查看", "clause_id": "c1", "occurrence": 0, "context_anchor": null}],
+      "semantic_identity": "read",
+      "entity_kind": "NONE",
+      "layer": "MAIN",
+      "owner": "TASK",
+      "modality": "REQUIRED",
+      "polarity": "AFFIRMATIVE",
+      "artifact_use": "NONE",
+      "predicate_class": "OPERATION",
+      "alternative_group_id": null
+    },
+    {
+      "id": "f_log",
+      "type": "ENTITY",
+      "sources": [
+        {"quote": "audit.log", "clause_id": "c1", "occurrence": 0, "context_anchor": null},
+        {"quote": "日志", "clause_id": "c1", "occurrence": 0, "context_anchor": "不得删除日志"}
+      ],
+      "semantic_identity": "audit.log",
+      "entity_kind": "FILE",
+      "layer": "MAIN",
+      "owner": "TASK",
+      "modality": "UNSTATED",
+      "polarity": "AFFIRMATIVE",
+      "artifact_use": "READ_ONLY_INPUT",
+      "predicate_class": "NONE",
+      "alternative_group_id": null
+    },
+    {
+      "id": "d_error",
+      "type": "ENTITY",
+      "sources": [{"quote": "error", "clause_id": "c1", "occurrence": 0, "context_anchor": null}],
+      "semantic_identity": "audit.log error 情况",
+      "entity_kind": "DATA",
+      "layer": "MAIN",
+      "owner": "e_read",
+      "modality": "UNSTATED",
+      "polarity": "AFFIRMATIVE",
+      "artifact_use": "READ_ONLY_INPUT",
+      "predicate_class": "NONE",
+      "alternative_group_id": null
+    },
+    {
+      "id": "d_warning",
+      "type": "ENTITY",
+      "sources": [{"quote": "warning", "clause_id": "c1", "occurrence": 0, "context_anchor": null}],
+      "semantic_identity": "audit.log warning 情况",
+      "entity_kind": "DATA",
+      "layer": "MAIN",
+      "owner": "e_read",
+      "modality": "UNSTATED",
+      "polarity": "AFFIRMATIVE",
+      "artifact_use": "READ_ONLY_INPUT",
+      "predicate_class": "NONE",
+      "alternative_group_id": null
+    },
+    {
+      "id": "e_generate",
+      "type": "EVENT",
+      "sources": [{"quote": "并形成", "clause_id": "c1", "occurrence": 0, "context_anchor": null}],
+      "semantic_identity": "generate",
+      "entity_kind": "NONE",
+      "layer": "MAIN",
+      "owner": "TASK",
+      "modality": "REQUIRED",
+      "polarity": "AFFIRMATIVE",
+      "artifact_use": "NONE",
+      "predicate_class": "PRODUCE",
+      "alternative_group_id": null
+    },
+    {
+      "id": "f_output",
+      "type": "ENTITY",
+      "sources": [{"quote": "log-window.md", "clause_id": "c1", "occurrence": 0, "context_anchor": null}],
+      "semantic_identity": "log-window.md",
+      "entity_kind": "FILE",
+      "layer": "MAIN",
+      "owner": "e_generate",
+      "modality": "UNSTATED",
+      "polarity": "AFFIRMATIVE",
+      "artifact_use": "GENERATED_OUTPUT",
+      "predicate_class": "NONE",
+      "alternative_group_id": null
+    },
+    {
+      "id": "v_window",
+      "type": "VALUE",
+      "sources": [
+        {"quote": "最近 90 分钟", "clause_id": "c1", "occurrence": 0, "context_anchor": null},
+        {"quote": "90 分钟", "clause_id": "c1", "occurrence": 1, "context_anchor": "90 分钟是观察窗口，不是任务时限"}
+      ],
+      "semantic_identity": "最近90分钟观察窗口",
+      "entity_kind": "NONE",
+      "layer": "ATTRIBUTE",
+      "owner": "e_read",
+      "modality": "UNSTATED",
+      "polarity": "AFFIRMATIVE",
+      "artifact_use": "NONE",
+      "predicate_class": "NONE",
+      "alternative_group_id": null
+    },
+    {
+      "id": "s_observation",
+      "type": "STATE",
+      "sources": [{"quote": "90 分钟是观察窗口", "clause_id": "c1", "occurrence": 0, "context_anchor": null}],
+      "semantic_identity": "90分钟是观察窗口",
+      "entity_kind": "NONE",
+      "layer": "META_DECLARATION",
+      "owner": "e_read",
+      "modality": "UNSTATED",
+      "polarity": "AFFIRMATIVE",
+      "artifact_use": "NONE",
+      "predicate_class": "STATE",
+      "alternative_group_id": null
+    },
+    {
+      "id": "s_not_deadline",
+      "type": "STATE",
+      "sources": [{"quote": "不是任务时限", "clause_id": "c1", "occurrence": 0, "context_anchor": "90 分钟是观察窗口，不是任务时限"}],
+      "semantic_identity": "90分钟是任务时限",
+      "entity_kind": "NONE",
+      "layer": "META_DECLARATION",
+      "owner": "TASK",
+      "modality": "UNSTATED",
+      "polarity": "NEGATED",
+      "artifact_use": "NONE",
+      "predicate_class": "STATE",
+      "alternative_group_id": null
+    },
+    {
+      "id": "e_delete",
+      "type": "EVENT",
+      "sources": [{"quote": "不得删除", "clause_id": "c1", "occurrence": 0, "context_anchor": null}],
+      "semantic_identity": "delete",
+      "entity_kind": "NONE",
+      "layer": "MAIN",
+      "owner": "TASK",
+      "modality": "FORBIDDEN",
+      "polarity": "AFFIRMATIVE",
+      "artifact_use": "NONE",
+      "predicate_class": "OPERATION",
+      "alternative_group_id": null
+    }
+  ],
+  "relations": [
+    {
+      "id": "r_read_log",
+      "type": "PATIENT",
+      "head": "e_read",
+      "tail": "f_log",
+      "sources": [{"quote": "查看 audit.log", "clause_id": "c1", "occurrence": 0, "context_anchor": null}],
+      "ownership": "LOCAL",
+      "role": "NONE",
+      "alternative_group_id": null
+    },
+    {
+      "id": "r_error_part",
+      "type": "PART_OF",
+      "head": "d_error",
+      "tail": "f_log",
+      "sources": [{"quote": "audit.log 最近 90 分钟的 error 与 warning 情况", "clause_id": "c1", "occurrence": 0, "context_anchor": null}],
+      "ownership": "LOCAL",
+      "role": "NONE",
+      "alternative_group_id": null
+    },
+    {
+      "id": "r_warning_part",
+      "type": "PART_OF",
+      "head": "d_warning",
+      "tail": "f_log",
+      "sources": [{"quote": "audit.log 最近 90 分钟的 error 与 warning 情况", "clause_id": "c1", "occurrence": 0, "context_anchor": null}],
+      "ownership": "LOCAL",
+      "role": "NONE",
+      "alternative_group_id": null
+    },
+    {
+      "id": "r_error_scope",
+      "type": "SCOPE_MEMBER",
+      "head": "e_read",
+      "tail": "d_error",
+      "sources": [{"quote": "error", "clause_id": "c1", "occurrence": 0, "context_anchor": "查看 audit.log 最近 90 分钟的 error 与 warning 情况"}],
+      "ownership": "LOCAL",
+      "role": "NONE",
+      "alternative_group_id": null
+    },
+    {
+      "id": "r_warning_scope",
+      "type": "SCOPE_MEMBER",
+      "head": "e_read",
+      "tail": "d_warning",
+      "sources": [{"quote": "warning", "clause_id": "c1", "occurrence": 0, "context_anchor": "查看 audit.log 最近 90 分钟的 error 与 warning 情况"}],
+      "ownership": "LOCAL",
+      "role": "NONE",
+      "alternative_group_id": null
+    },
+    {
+      "id": "r_result",
+      "type": "RESULT",
+      "head": "e_generate",
+      "tail": "f_output",
+      "sources": [{"quote": "形成 log-window.md", "clause_id": "c1", "occurrence": 0, "context_anchor": null}],
+      "ownership": "LOCAL",
+      "role": "NONE",
+      "alternative_group_id": null
+    },
+    {
+      "id": "r_operations",
+      "type": "CONJUNCTION",
+      "head": "e_read",
+      "tail": "e_generate",
+      "sources": [{"quote": "并", "clause_id": "c1", "occurrence": 0, "context_anchor": "情况并形成"}],
+      "ownership": "STRUCTURAL",
+      "role": "NONE",
+      "alternative_group_id": null
+    },
+    {
+      "id": "r_window_read",
+      "type": "PART_OF",
+      "head": "v_window",
+      "tail": "e_read",
+      "sources": [{"quote": "查看 audit.log 最近 90 分钟的 error 与 warning 情况", "clause_id": "c1", "occurrence": 0, "context_anchor": null}],
+      "ownership": "LOCAL",
+      "role": "NONE",
+      "alternative_group_id": null
+    },
+    {
+      "id": "r_window_observation",
+      "type": "PART_OF",
+      "head": "v_window",
+      "tail": "s_observation",
+      "sources": [{"quote": "90 分钟是观察窗口", "clause_id": "c1", "occurrence": 0, "context_anchor": null}],
+      "ownership": "LOCAL",
+      "role": "NONE",
+      "alternative_group_id": null
+    },
+    {
+      "id": "r_window_not_deadline",
+      "type": "PART_OF",
+      "head": "v_window",
+      "tail": "s_not_deadline",
+      "sources": [{"quote": "90 分钟是观察窗口，不是任务时限", "clause_id": "c1", "occurrence": 0, "context_anchor": null}],
+      "ownership": "COREFERENCE",
+      "role": "NONE",
+      "alternative_group_id": null
+    },
+    {
+      "id": "r_delete_log",
+      "type": "PATIENT",
+      "head": "e_delete",
+      "tail": "f_log",
+      "sources": [{"quote": "删除日志", "clause_id": "c1", "occurrence": 0, "context_anchor": null}],
+      "ownership": "COREFERENCE",
+      "role": "NONE",
+      "alternative_group_id": null
+    },
+    {
+      "id": "r_forbid_delete",
+      "type": "FORBIDS",
+      "head": "TASK",
+      "tail": "e_delete",
+      "sources": [{"quote": "不得删除日志", "clause_id": "c1", "occurrence": 0, "context_anchor": null}],
+      "ownership": "LOCAL",
+      "role": "NONE",
+      "alternative_group_id": null
+    }
+  ],
+  "expressions": [
+    {
+      "id": "x_error",
+      "kind": "SCOPE",
+      "operator": "ITEM",
+      "operands": ["d_error"],
+      "owner": "e_read",
+      "sources": [{"quote": "error", "clause_id": "c1", "occurrence": 0, "context_anchor": null}],
+      "quantity": null,
+      "alternative_group_id": null
+    },
+    {
+      "id": "x_warning",
+      "kind": "SCOPE",
+      "operator": "ITEM",
+      "operands": ["d_warning"],
+      "owner": "e_read",
+      "sources": [{"quote": "warning", "clause_id": "c1", "occurrence": 0, "context_anchor": null}],
+      "quantity": null,
+      "alternative_group_id": null
+    },
+    {
+      "id": "x_scope",
+      "kind": "SCOPE",
+      "operator": "UNION",
+      "operands": ["x_error", "x_warning"],
+      "owner": "e_read",
+      "sources": [{"quote": "error 与 warning", "clause_id": "c1", "occurrence": 0, "context_anchor": null}],
+      "quantity": null,
+      "alternative_group_id": null
+    },
+    {
+      "id": "q_window",
+      "kind": "QUANTITY",
+      "operator": "EQ",
+      "operands": ["v_window"],
+      "owner": "e_read",
+      "sources": [
+        {"quote": "最近 90 分钟", "clause_id": "c1", "occurrence": 0, "context_anchor": null},
+        {"quote": "90 分钟是观察窗口，不是任务时限", "clause_id": "c1", "occurrence": 0, "context_anchor": null}
+      ],
+      "quantity": {
+        "metric": "observation_window_duration",
+        "target": "e_read",
+        "value": 90,
+        "unit": "分钟",
+        "use": "UNKNOWN"
+      },
+      "alternative_group_id": null
+    }
+  ],
+  "unresolved": [],
+  "coverage": [
+    {
+      "region_id": "c1",
+      "disposition": "BOUNDARY_SEMANTIC",
+      "candidate_ids": [
+        "e_read",
+        "f_log",
+        "d_error",
+        "d_warning",
+        "e_generate",
+        "f_output",
+        "v_window",
+        "s_observation",
+        "s_not_deadline",
+        "e_delete",
+        "r_read_log",
+        "r_error_part",
+        "r_warning_part",
+        "r_error_scope",
+        "r_warning_scope",
+        "r_result",
+        "r_operations",
+        "r_window_read",
+        "r_window_observation",
+        "r_window_not_deadline",
+        "r_delete_log",
+        "r_forbid_delete",
+        "x_error",
+        "x_warning",
+        "x_scope",
+        "q_window"
+      ],
+      "reason": "查看日志与形成文件为同一根任务下的明确要求；最近90分钟限定观察范围，明确排除任务时限含义；删除日志被明确禁止。未声明WP或执行者。"
+    }
+  ]
+}

@@ -1,0 +1,1 @@
+本次任务要求审阅 dependencies.lock 中直接依赖的版本状态并形成 dependency-audit.md，间接依赖不在范围内。由 PM 组织完成，不执行升级或重新安装。

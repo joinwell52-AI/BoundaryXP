@@ -1,0 +1,1 @@
+请 PM 组织读取 api-old.json 与 api-new.json，检查公共接口兼容性并形成 compatibility.md。QA 应确认所有删除或改名接口均已记录；不得修改接口定义文件。

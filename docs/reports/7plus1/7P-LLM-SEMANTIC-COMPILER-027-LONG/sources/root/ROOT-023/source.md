@@ -1,0 +1,1 @@
+请 PM 组织读取 assets.csv 与 inventory.csv，核对在用设备编号并形成 asset-diff.md。已报废设备不在范围内；不得创建、删除或修改资产记录。

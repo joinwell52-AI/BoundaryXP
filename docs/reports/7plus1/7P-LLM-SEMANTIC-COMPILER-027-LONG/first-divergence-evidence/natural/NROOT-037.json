@@ -1,0 +1,730 @@
+{
+  "id": "NROOT-037",
+  "corpus": "natural",
+  "source_path": "docs/reports/7plus1/7P-LLM-SEMANTIC-COMPILER-027-LONG/sources/natural/NROOT-037/source.md",
+  "trace": "docs/reports/7plus1/7P-LLM-SEMANTIC-COMPILER-027-LONG/runs/development-policy-v2/natural/NROOT-037/trace.json",
+  "canonical": "docs/reports/7plus1/7P-LLM-SEMANTIC-COMPILER-027-LONG/runs/development-policy-v2/natural/NROOT-037/canonical.json",
+  "first_divergence": "Candidate Expression",
+  "complete_semantic_adjudication": "NOT_ESTABLISHED",
+  "failed_checks": [
+    {
+      "kind": "COVERAGE",
+      "claim": "Source accountability and no parser coverage gap",
+      "status": "FAIL",
+      "evidence": [
+        {
+          "id": "c1",
+          "issues": [
+            "PARSER_AUDITOR_DISPOSITION_CONFLICT",
+            "REJECTED_SOURCE_SEMANTICS_NOT_ACCOUNTED"
+          ]
+        }
+      ],
+      "first_divergence": "Coverage",
+      "exact_candidate_evidence": [],
+      "empty_comparison_evidence_does_not_prove_candidate_absence": false
+    },
+    {
+      "kind": "MISSING_CLEAR_BOUNDARY",
+      "claim": "A expected reference 重试",
+      "status": "FAIL",
+      "evidence": [],
+      "first_divergence": "Γ Certification",
+      "exact_candidate_evidence": [],
+      "empty_comparison_evidence_does_not_prove_candidate_absence": true
+    },
+    {
+      "kind": "QUANTITY",
+      "claim": "Quantity * 3, use EXECUTION_LIMIT",
+      "status": "FAIL",
+      "evidence": [
+        "retry_cap"
+      ],
+      "first_divergence": "Γ Certification",
+      "exact_candidate_evidence": [
+        {
+          "candidate": {
+            "candidate_id": "retry_cap",
+            "family": "expressions",
+            "type": "QUANTITY",
+            "source_span_ids": [
+              "v04:ef2214d02dcc3113f29cf83e"
+            ],
+            "source_spans": [
+              {
+                "span_id": "v04:ef2214d02dcc3113f29cf83e",
+                "start": 63,
+                "end": 71,
+                "quote": "最多重试 3 次",
+                "clause_id": "c1"
+              }
+            ],
+            "canonical_candidate": {
+              "id": "retry_cap",
+              "kind": "QUANTITY",
+              "operator": "LTE",
+              "operands": [
+                "retry"
+              ],
+              "owner": "retry",
+              "sources": [
+                {
+                  "quote": "最多重试 3 次",
+                  "clause_id": "c1",
+                  "occurrence": 0,
+                  "context_anchor": null
+                }
+              ],
+              "quantity": {
+                "metric": "retry count",
+                "target": "retry",
+                "value": 3,
+                "unit": "次",
+                "use": "EXECUTION_LIMIT"
+              },
+              "alternative_group_id": null,
+              "family": "expressions",
+              "origin": "LLM_PRIMARY",
+              "candidate_status": "PROPOSED",
+              "source_span_ids": [
+                "v04:ef2214d02dcc3113f29cf83e"
+              ],
+              "alignment_errors": [],
+              "empty_source": false
+            },
+            "certification": {
+              "decision_id": "v04:5b1e1bda31809775eea80a88",
+              "candidate_id": "retry_cap",
+              "decision": "TYPED_UNRESOLVED",
+              "reason": "UNCERTIFIED_DEPENDENCY;UNCERTIFIED_DEPENDENCY;UNCERTIFIED_DEPENDENCY",
+              "failures": [
+                {
+                  "rule": "UNCERTIFIED_DEPENDENCY",
+                  "kind": "TYPED_UNRESOLVED"
+                },
+                {
+                  "rule": "UNCERTIFIED_DEPENDENCY",
+                  "kind": "TYPED_UNRESOLVED"
+                },
+                {
+                  "rule": "UNCERTIFIED_DEPENDENCY",
+                  "kind": "TYPED_UNRESOLVED"
+                }
+              ],
+              "source_span_ids": [
+                "v04:ef2214d02dcc3113f29cf83e"
+              ],
+              "independent_support_checks": [
+                {
+                  "verdict": "SUPPORT",
+                  "reason": "最多三次对应重试次数小于等于三，是执行上限；不包含最少次数，也不把首次读取计入重试次数。"
+                }
+              ]
+            }
+          },
+          "dependencies": [
+            {
+              "candidate": {
+                "candidate_id": "retry",
+                "family": "nodes",
+                "type": "EVENT",
+                "source_span_ids": [
+                  "v04:ef2214d02dcc3113f29cf83e"
+                ],
+                "source_spans": [
+                  {
+                    "span_id": "v04:ef2214d02dcc3113f29cf83e",
+                    "start": 63,
+                    "end": 71,
+                    "quote": "最多重试 3 次",
+                    "clause_id": "c1"
+                  }
+                ],
+                "canonical_candidate": {
+                  "id": "retry",
+                  "type": "EVENT",
+                  "sources": [
+                    {
+                      "quote": "最多重试 3 次",
+                      "clause_id": "c1",
+                      "occurrence": 0,
+                      "context_anchor": "若读取失败，最多重试 3 次"
+                    }
+                  ],
+                  "semantic_identity": "retry read",
+                  "entity_kind": "NONE",
+                  "layer": "CONDITION_CONSEQUENT",
+                  "owner": "TASK",
+                  "modality": "PERMITTED",
+                  "polarity": "AFFIRMATIVE",
+                  "artifact_use": "NONE",
+                  "predicate_class": "OPERATION",
+                  "alternative_group_id": null,
+                  "family": "nodes",
+                  "origin": "LLM_PRIMARY",
+                  "candidate_status": "PROPOSED",
+                  "source_span_ids": [
+                    "v04:ef2214d02dcc3113f29cf83e"
+                  ],
+                  "alignment_errors": [],
+                  "empty_source": false
+                },
+                "certification": {
+                  "decision_id": "v04:49662eb3438746d3e2fea2e9",
+                  "candidate_id": "retry",
+                  "decision": "TYPED_UNRESOLVED",
+                  "reason": "UNRESOLVED_BOUNDARY_CHANGING_AUDIT_FINDING;NO_INDEPENDENT_SEMANTIC_SUPPORT",
+                  "failures": [
+                    {
+                      "rule": "UNRESOLVED_BOUNDARY_CHANGING_AUDIT_FINDING",
+                      "kind": "TYPED_UNRESOLVED"
+                    },
+                    {
+                      "rule": "NO_INDEPENDENT_SEMANTIC_SUPPORT",
+                      "kind": "TYPED_UNRESOLVED"
+                    }
+                  ],
+                  "source_span_ids": [
+                    "v04:ef2214d02dcc3113f29cf83e"
+                  ],
+                  "independent_support_checks": [
+                    {
+                      "verdict": "NO_EVIDENCE",
+                      "reason": "读取失败条件下的重试及其上限有证据，但最多只明确上限，不能唯一确定为纯许可，也不能唯一确定为必须重试的条件指令。PERMITTED 单一标注消除了这一模态歧义。"
+                    }
+                  ]
+                }
+              },
+              "dependencies": [
+                {
+                  "candidate": {
+                    "candidate_id": "TASK",
+                    "family": "nodes",
+                    "type": "TASK",
+                    "source_span_ids": [],
+                    "source_spans": [],
+                    "canonical_candidate": {
+                      "id": "TASK",
+                      "type": "TASK",
+                      "semantic_identity": "ADMIN_SOURCE_ROOT",
+                      "family": "nodes",
+                      "origin": "DETERMINISTIC_SOURCE_RULE",
+                      "candidate_status": "PROPOSED",
+                      "source_span_ids": [],
+                      "alignment_errors": [],
+                      "empty_source": false,
+                      "layer": "MAIN",
+                      "modality": "UNSTATED"
+                    },
+                    "certification": {
+                      "decision_id": "v04:9db8b6e9c62ec4b73fe78157",
+                      "candidate_id": "TASK",
+                      "decision": "CERTIFIED",
+                      "reason": "FINITE_SOURCE_TYPE_OWNERSHIP_COMPETITION_EVIDENCE_CONTRACT",
+                      "failures": [],
+                      "source_span_ids": [],
+                      "independent_support_checks": []
+                    }
+                  },
+                  "dependencies": []
+                }
+              ]
+            },
+            {
+              "candidate": {
+                "candidate_id": "retry",
+                "family": "nodes",
+                "type": "EVENT",
+                "source_span_ids": [
+                  "v04:ef2214d02dcc3113f29cf83e"
+                ],
+                "source_spans": [
+                  {
+                    "span_id": "v04:ef2214d02dcc3113f29cf83e",
+                    "start": 63,
+                    "end": 71,
+                    "quote": "最多重试 3 次",
+                    "clause_id": "c1"
+                  }
+                ],
+                "canonical_candidate": {
+                  "id": "retry",
+                  "type": "EVENT",
+                  "sources": [
+                    {
+                      "quote": "最多重试 3 次",
+                      "clause_id": "c1",
+                      "occurrence": 0,
+                      "context_anchor": "若读取失败，最多重试 3 次"
+                    }
+                  ],
+                  "semantic_identity": "retry read",
+                  "entity_kind": "NONE",
+                  "layer": "CONDITION_CONSEQUENT",
+                  "owner": "TASK",
+                  "modality": "PERMITTED",
+                  "polarity": "AFFIRMATIVE",
+                  "artifact_use": "NONE",
+                  "predicate_class": "OPERATION",
+                  "alternative_group_id": null,
+                  "family": "nodes",
+                  "origin": "LLM_PRIMARY",
+                  "candidate_status": "PROPOSED",
+                  "source_span_ids": [
+                    "v04:ef2214d02dcc3113f29cf83e"
+                  ],
+                  "alignment_errors": [],
+                  "empty_source": false
+                },
+                "certification": {
+                  "decision_id": "v04:49662eb3438746d3e2fea2e9",
+                  "candidate_id": "retry",
+                  "decision": "TYPED_UNRESOLVED",
+                  "reason": "UNRESOLVED_BOUNDARY_CHANGING_AUDIT_FINDING;NO_INDEPENDENT_SEMANTIC_SUPPORT",
+                  "failures": [
+                    {
+                      "rule": "UNRESOLVED_BOUNDARY_CHANGING_AUDIT_FINDING",
+                      "kind": "TYPED_UNRESOLVED"
+                    },
+                    {
+                      "rule": "NO_INDEPENDENT_SEMANTIC_SUPPORT",
+                      "kind": "TYPED_UNRESOLVED"
+                    }
+                  ],
+                  "source_span_ids": [
+                    "v04:ef2214d02dcc3113f29cf83e"
+                  ],
+                  "independent_support_checks": [
+                    {
+                      "verdict": "NO_EVIDENCE",
+                      "reason": "读取失败条件下的重试及其上限有证据，但最多只明确上限，不能唯一确定为纯许可，也不能唯一确定为必须重试的条件指令。PERMITTED 单一标注消除了这一模态歧义。"
+                    }
+                  ]
+                }
+              },
+              "dependencies": [
+                {
+                  "candidate": {
+                    "candidate_id": "TASK",
+                    "family": "nodes",
+                    "type": "TASK",
+                    "source_span_ids": [],
+                    "source_spans": [],
+                    "canonical_candidate": {
+                      "id": "TASK",
+                      "type": "TASK",
+                      "semantic_identity": "ADMIN_SOURCE_ROOT",
+                      "family": "nodes",
+                      "origin": "DETERMINISTIC_SOURCE_RULE",
+                      "candidate_status": "PROPOSED",
+                      "source_span_ids": [],
+                      "alignment_errors": [],
+                      "empty_source": false,
+                      "layer": "MAIN",
+                      "modality": "UNSTATED"
+                    },
+                    "certification": {
+                      "decision_id": "v04:9db8b6e9c62ec4b73fe78157",
+                      "candidate_id": "TASK",
+                      "decision": "CERTIFIED",
+                      "reason": "FINITE_SOURCE_TYPE_OWNERSHIP_COMPETITION_EVIDENCE_CONTRACT",
+                      "failures": [],
+                      "source_span_ids": [],
+                      "independent_support_checks": []
+                    }
+                  },
+                  "dependencies": []
+                }
+              ]
+            },
+            {
+              "candidate": {
+                "candidate_id": "retry",
+                "family": "nodes",
+                "type": "EVENT",
+                "source_span_ids": [
+                  "v04:ef2214d02dcc3113f29cf83e"
+                ],
+                "source_spans": [
+                  {
+                    "span_id": "v04:ef2214d02dcc3113f29cf83e",
+                    "start": 63,
+                    "end": 71,
+                    "quote": "最多重试 3 次",
+                    "clause_id": "c1"
+                  }
+                ],
+                "canonical_candidate": {
+                  "id": "retry",
+                  "type": "EVENT",
+                  "sources": [
+                    {
+                      "quote": "最多重试 3 次",
+                      "clause_id": "c1",
+                      "occurrence": 0,
+                      "context_anchor": "若读取失败，最多重试 3 次"
+                    }
+                  ],
+                  "semantic_identity": "retry read",
+                  "entity_kind": "NONE",
+                  "layer": "CONDITION_CONSEQUENT",
+                  "owner": "TASK",
+                  "modality": "PERMITTED",
+                  "polarity": "AFFIRMATIVE",
+                  "artifact_use": "NONE",
+                  "predicate_class": "OPERATION",
+                  "alternative_group_id": null,
+                  "family": "nodes",
+                  "origin": "LLM_PRIMARY",
+                  "candidate_status": "PROPOSED",
+                  "source_span_ids": [
+                    "v04:ef2214d02dcc3113f29cf83e"
+                  ],
+                  "alignment_errors": [],
+                  "empty_source": false
+                },
+                "certification": {
+                  "decision_id": "v04:49662eb3438746d3e2fea2e9",
+                  "candidate_id": "retry",
+                  "decision": "TYPED_UNRESOLVED",
+                  "reason": "UNRESOLVED_BOUNDARY_CHANGING_AUDIT_FINDING;NO_INDEPENDENT_SEMANTIC_SUPPORT",
+                  "failures": [
+                    {
+                      "rule": "UNRESOLVED_BOUNDARY_CHANGING_AUDIT_FINDING",
+                      "kind": "TYPED_UNRESOLVED"
+                    },
+                    {
+                      "rule": "NO_INDEPENDENT_SEMANTIC_SUPPORT",
+                      "kind": "TYPED_UNRESOLVED"
+                    }
+                  ],
+                  "source_span_ids": [
+                    "v04:ef2214d02dcc3113f29cf83e"
+                  ],
+                  "independent_support_checks": [
+                    {
+                      "verdict": "NO_EVIDENCE",
+                      "reason": "读取失败条件下的重试及其上限有证据，但最多只明确上限，不能唯一确定为纯许可，也不能唯一确定为必须重试的条件指令。PERMITTED 单一标注消除了这一模态歧义。"
+                    }
+                  ]
+                }
+              },
+              "dependencies": [
+                {
+                  "candidate": {
+                    "candidate_id": "TASK",
+                    "family": "nodes",
+                    "type": "TASK",
+                    "source_span_ids": [],
+                    "source_spans": [],
+                    "canonical_candidate": {
+                      "id": "TASK",
+                      "type": "TASK",
+                      "semantic_identity": "ADMIN_SOURCE_ROOT",
+                      "family": "nodes",
+                      "origin": "DETERMINISTIC_SOURCE_RULE",
+                      "candidate_status": "PROPOSED",
+                      "source_span_ids": [],
+                      "alignment_errors": [],
+                      "empty_source": false,
+                      "layer": "MAIN",
+                      "modality": "UNSTATED"
+                    },
+                    "certification": {
+                      "decision_id": "v04:9db8b6e9c62ec4b73fe78157",
+                      "candidate_id": "TASK",
+                      "decision": "CERTIFIED",
+                      "reason": "FINITE_SOURCE_TYPE_OWNERSHIP_COMPETITION_EVIDENCE_CONTRACT",
+                      "failures": [],
+                      "source_span_ids": [],
+                      "independent_support_checks": []
+                    }
+                  },
+                  "dependencies": []
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "empty_comparison_evidence_does_not_prove_candidate_absence": false
+    },
+    {
+      "kind": "CONDITION",
+      "claim": "guard 重试",
+      "status": "FAIL",
+      "evidence": [],
+      "first_divergence": "Candidate Expression",
+      "exact_candidate_evidence": [],
+      "empty_comparison_evidence_does_not_prove_candidate_absence": true
+    }
+  ],
+  "unverified_checks": [
+    {
+      "kind": "REVIEW_REQUIRED",
+      "claim": "window:10",
+      "status": "NOT_VERIFIED",
+      "first_divergence": null,
+      "evidence": []
+    }
+  ],
+  "coverage_region_issues": [
+    {
+      "region_id": "c1",
+      "source_span": {
+        "start": 0,
+        "end": 79,
+        "quote": "本次任务要求查看 heartbeat.log 最近 10 分钟记录并形成 heartbeat-review.md。若读取失败，最多重试 3 次；不得重启服务。"
+      },
+      "parser": [
+        {
+          "region_id": "c1",
+          "disposition": "BOUNDARY_SEMANTIC",
+          "candidate_ids": [
+            "log",
+            "records",
+            "read",
+            "generate",
+            "review_file",
+            "read_failure",
+            "retry",
+            "restart",
+            "service",
+            "r1",
+            "r2",
+            "r3",
+            "r4",
+            "r5",
+            "r6",
+            "r7",
+            "r8",
+            "r9",
+            "r10",
+            "record_window",
+            "failure_condition",
+            "retry_cap"
+          ],
+          "reason": "包含必需的记录查看与文件生成、最近十分钟的记录范围、读取失败时允许的重试及次数上限，以及重启服务的禁令；未声明 WP。"
+        }
+      ],
+      "auditor": [
+        {
+          "region_id": "c1",
+          "disposition": "AMBIGUOUS",
+          "candidate_ids": [
+            "log",
+            "records",
+            "read",
+            "generate",
+            "review_file",
+            "read_failure",
+            "retry",
+            "restart",
+            "service",
+            "r1",
+            "r2",
+            "r3",
+            "r4",
+            "r5",
+            "r6",
+            "r7",
+            "r8",
+            "r9",
+            "r10",
+            "record_window",
+            "failure_condition",
+            "retry_cap"
+          ],
+          "reason": "整段的查看义务、输入时间范围、文件生成、失败条件、重试上限和重启禁令均有候选覆盖；重试模态仍存在未保留的歧义，失败及重试与原读取的两条关联违反关系签名，因此不能视为全部可靠解析。"
+        }
+      ],
+      "candidate_ids": [
+        "log",
+        "records",
+        "read",
+        "generate",
+        "review_file",
+        "read_failure",
+        "retry",
+        "restart",
+        "service",
+        "r1",
+        "r2",
+        "r3",
+        "r4",
+        "r5",
+        "r6",
+        "r7",
+        "r8",
+        "r9",
+        "r10",
+        "record_window",
+        "failure_condition",
+        "retry_cap"
+      ],
+      "disposition": "PARSER_COVERAGE_FAILURE",
+      "issues": [
+        "PARSER_AUDITOR_DISPOSITION_CONFLICT",
+        "REJECTED_SOURCE_SEMANTICS_NOT_ACCOUNTED"
+      ],
+      "unresolved_ids": [
+        "read_failure",
+        "retry",
+        "r6",
+        "r8",
+        "failure_condition",
+        "retry_cap"
+      ],
+      "findings": [
+        {
+          "id": "f1",
+          "kind": "WRONG_BINDING",
+          "candidate_ids": [
+            "r5",
+            "r7"
+          ],
+          "sources": [
+            {
+              "quote": "查看 heartbeat.log 最近 10 分钟记录",
+              "clause_id": "c1",
+              "occurrence": 0,
+              "context_anchor": null
+            },
+            {
+              "quote": "若读取失败，最多重试 3 次",
+              "clause_id": "c1",
+              "occurrence": 0,
+              "context_anchor": null
+            }
+          ],
+          "reason": "两个 THEME 关系均绑定 EVENT 类型的 read，违反有限合同的尾端类型限制。来源支持失败与重试关联此前读取，但这种关联尚未得到合同内有效的关系表示。不能将失败状态与读取事件直接当作同一指称来修补。",
+          "source_links": [
+            {
+              "status": "ALIGNED",
+              "span": {
+                "span_id": "v04:44c9f85a8d5b5e782423bc31",
+                "start": 6,
+                "end": 33,
+                "quote": "查看 heartbeat.log 最近 10 分钟记录",
+                "clause_id": "c1"
+              }
+            },
+            {
+              "status": "ALIGNED",
+              "span": {
+                "span_id": "v04:0cb1582d16a05b504a1c68ea",
+                "start": 57,
+                "end": 71,
+                "quote": "若读取失败，最多重试 3 次",
+                "clause_id": "c1"
+              }
+            }
+          ]
+        },
+        {
+          "id": "f2",
+          "kind": "AMBIGUITY_COLLAPSED",
+          "candidate_ids": [
+            "retry"
+          ],
+          "sources": [
+            {
+              "quote": "若读取失败，最多重试 3 次",
+              "clause_id": "c1",
+              "occurrence": 0,
+              "context_anchor": null
+            }
+          ],
+          "reason": "原文明确条件和上限，但没有明确区分可选择重试与条件成立后应重试的指令。单一 PERMITTED 标注及空 unresolved 列表没有保留这两种解读。三次上限本身不足以确定最低执行义务。",
+          "source_links": [
+            {
+              "status": "ALIGNED",
+              "span": {
+                "span_id": "v04:0cb1582d16a05b504a1c68ea",
+                "start": 57,
+                "end": 71,
+                "quote": "若读取失败，最多重试 3 次",
+                "clause_id": "c1"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "auditor_suspicions": [
+    {
+      "id": "f1",
+      "kind": "WRONG_BINDING",
+      "candidate_ids": [
+        "r5",
+        "r7"
+      ],
+      "sources": [
+        {
+          "quote": "查看 heartbeat.log 最近 10 分钟记录",
+          "clause_id": "c1",
+          "occurrence": 0,
+          "context_anchor": null
+        },
+        {
+          "quote": "若读取失败，最多重试 3 次",
+          "clause_id": "c1",
+          "occurrence": 0,
+          "context_anchor": null
+        }
+      ],
+      "reason": "两个 THEME 关系均绑定 EVENT 类型的 read，违反有限合同的尾端类型限制。来源支持失败与重试关联此前读取，但这种关联尚未得到合同内有效的关系表示。不能将失败状态与读取事件直接当作同一指称来修补。",
+      "source_links": [
+        {
+          "status": "ALIGNED",
+          "span": {
+            "span_id": "v04:44c9f85a8d5b5e782423bc31",
+            "start": 6,
+            "end": 33,
+            "quote": "查看 heartbeat.log 最近 10 分钟记录",
+            "clause_id": "c1"
+          }
+        },
+        {
+          "status": "ALIGNED",
+          "span": {
+            "span_id": "v04:0cb1582d16a05b504a1c68ea",
+            "start": 57,
+            "end": 71,
+            "quote": "若读取失败，最多重试 3 次",
+            "clause_id": "c1"
+          }
+        }
+      ]
+    },
+    {
+      "id": "f2",
+      "kind": "AMBIGUITY_COLLAPSED",
+      "candidate_ids": [
+        "retry"
+      ],
+      "sources": [
+        {
+          "quote": "若读取失败，最多重试 3 次",
+          "clause_id": "c1",
+          "occurrence": 0,
+          "context_anchor": null
+        }
+      ],
+      "reason": "原文明确条件和上限，但没有明确区分可选择重试与条件成立后应重试的指令。单一 PERMITTED 标注及空 unresolved 列表没有保留这两种解读。三次上限本身不足以确定最低执行义务。",
+      "source_links": [
+        {
+          "status": "ALIGNED",
+          "span": {
+            "span_id": "v04:0cb1582d16a05b504a1c68ea",
+            "start": 57,
+            "end": 71,
+            "quote": "若读取失败，最多重试 3 次",
+            "clause_id": "c1"
+          }
+        }
+      ]
+    }
+  ]
+}

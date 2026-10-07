@@ -1,0 +1,521 @@
+{
+  "structure_status": "SINGLE_ROOT",
+  "nodes": [
+    {
+      "id": "pm",
+      "type": "ENTITY",
+      "sources": [{"quote": "PM", "clause_id": "c1", "occurrence": 0, "context_anchor": null}],
+      "semantic_identity": "PM",
+      "entity_kind": "ROLE",
+      "layer": "MAIN",
+      "owner": "organize",
+      "modality": "UNSTATED",
+      "polarity": "AFFIRMATIVE",
+      "artifact_use": "NONE",
+      "predicate_class": "NONE",
+      "alternative_group_id": null
+    },
+    {
+      "id": "organize",
+      "type": "EVENT",
+      "sources": [{"quote": "请 PM 组织", "clause_id": "c1", "occurrence": 0, "context_anchor": null}],
+      "semantic_identity": "organize",
+      "entity_kind": "NONE",
+      "layer": "MAIN",
+      "owner": "TASK",
+      "modality": "REQUIRED",
+      "polarity": "AFFIRMATIVE",
+      "artifact_use": "NONE",
+      "predicate_class": "ORGANIZE",
+      "alternative_group_id": null
+    },
+    {
+      "id": "read_index",
+      "type": "EVENT",
+      "sources": [{"quote": "读取 training-index.csv", "clause_id": "c1", "occurrence": 0, "context_anchor": null}],
+      "semantic_identity": "read",
+      "entity_kind": "NONE",
+      "layer": "MAIN",
+      "owner": "TASK",
+      "modality": "REQUIRED",
+      "polarity": "AFFIRMATIVE",
+      "artifact_use": "NONE",
+      "predicate_class": "OPERATION",
+      "alternative_group_id": null
+    },
+    {
+      "id": "index",
+      "type": "ENTITY",
+      "sources": [{"quote": "training-index.csv", "clause_id": "c1", "occurrence": 0, "context_anchor": null}],
+      "semantic_identity": "training-index.csv",
+      "entity_kind": "FILE",
+      "layer": "MAIN",
+      "owner": "read_index",
+      "modality": "UNSTATED",
+      "polarity": "AFFIRMATIVE",
+      "artifact_use": "EXISTING_INPUT",
+      "predicate_class": "NONE",
+      "alternative_group_id": null
+    },
+    {
+      "id": "check_records",
+      "type": "EVENT",
+      "sources": [{"quote": "核查每项数据的来源与许可记录", "clause_id": "c1", "occurrence": 0, "context_anchor": null}],
+      "semantic_identity": "check",
+      "entity_kind": "NONE",
+      "layer": "MAIN",
+      "owner": "TASK",
+      "modality": "REQUIRED",
+      "polarity": "AFFIRMATIVE",
+      "artifact_use": "NONE",
+      "predicate_class": "OPERATION",
+      "alternative_group_id": null
+    },
+    {
+      "id": "data_entries",
+      "type": "ENTITY",
+      "sources": [
+        {"quote": "每项数据", "clause_id": "c1", "occurrence": 0, "context_anchor": null},
+        {"quote": "条目", "clause_id": "c1", "occurrence": 0, "context_anchor": "来源或许可缺失的条目"}
+      ],
+      "semantic_identity": "数据条目",
+      "entity_kind": "DATA",
+      "layer": "MAIN",
+      "owner": "TASK",
+      "modality": "UNSTATED",
+      "polarity": "AFFIRMATIVE",
+      "artifact_use": "MODIFICATION_TARGET",
+      "predicate_class": "NONE",
+      "alternative_group_id": null
+    },
+    {
+      "id": "source_record",
+      "type": "ENTITY",
+      "sources": [{"quote": "来源", "clause_id": "c1", "occurrence": 0, "context_anchor": "每项数据的来源与许可记录"}],
+      "semantic_identity": "每项数据的来源",
+      "entity_kind": "DATA",
+      "layer": "MAIN",
+      "owner": "check_records",
+      "modality": "UNSTATED",
+      "polarity": "AFFIRMATIVE",
+      "artifact_use": "EXISTING_INPUT",
+      "predicate_class": "NONE",
+      "alternative_group_id": null
+    },
+    {
+      "id": "license_record",
+      "type": "ENTITY",
+      "sources": [{"quote": "许可记录", "clause_id": "c1", "occurrence": 0, "context_anchor": "每项数据的来源与许可记录"}],
+      "semantic_identity": "每项数据的许可记录",
+      "entity_kind": "DATA",
+      "layer": "MAIN",
+      "owner": "check_records",
+      "modality": "UNSTATED",
+      "polarity": "AFFIRMATIVE",
+      "artifact_use": "EXISTING_INPUT",
+      "predicate_class": "NONE",
+      "alternative_group_id": null
+    },
+    {
+      "id": "generate_audit",
+      "type": "EVENT",
+      "sources": [{"quote": "形成 training-audit.md", "clause_id": "c1", "occurrence": 0, "context_anchor": null}],
+      "semantic_identity": "generate",
+      "entity_kind": "NONE",
+      "layer": "MAIN",
+      "owner": "TASK",
+      "modality": "REQUIRED",
+      "polarity": "AFFIRMATIVE",
+      "artifact_use": "NONE",
+      "predicate_class": "PRODUCE",
+      "alternative_group_id": null
+    },
+    {
+      "id": "audit",
+      "type": "ENTITY",
+      "sources": [{"quote": "training-audit.md", "clause_id": "c1", "occurrence": 0, "context_anchor": null}],
+      "semantic_identity": "training-audit.md",
+      "entity_kind": "FILE",
+      "layer": "MAIN",
+      "owner": "generate_audit",
+      "modality": "UNSTATED",
+      "polarity": "AFFIRMATIVE",
+      "artifact_use": "GENERATED_OUTPUT",
+      "predicate_class": "NONE",
+      "alternative_group_id": null
+    },
+    {
+      "id": "source_missing",
+      "type": "STATE",
+      "sources": [{"quote": "来源或许可缺失", "clause_id": "c1", "occurrence": 0, "context_anchor": null}],
+      "semantic_identity": "来源缺失",
+      "entity_kind": "NONE",
+      "layer": "CONDITION_ANTECEDENT",
+      "owner": "mark_pending",
+      "modality": "UNSTATED",
+      "polarity": "AFFIRMATIVE",
+      "artifact_use": "NONE",
+      "predicate_class": "STATE",
+      "alternative_group_id": null
+    },
+    {
+      "id": "license_missing",
+      "type": "STATE",
+      "sources": [{"quote": "许可缺失", "clause_id": "c1", "occurrence": 0, "context_anchor": "来源或许可缺失"}],
+      "semantic_identity": "许可缺失",
+      "entity_kind": "NONE",
+      "layer": "CONDITION_ANTECEDENT",
+      "owner": "mark_pending",
+      "modality": "UNSTATED",
+      "polarity": "AFFIRMATIVE",
+      "artifact_use": "NONE",
+      "predicate_class": "STATE",
+      "alternative_group_id": null
+    },
+    {
+      "id": "mark_pending",
+      "type": "EVENT",
+      "sources": [{"quote": "条目标为待确认", "clause_id": "c1", "occurrence": 0, "context_anchor": null}],
+      "semantic_identity": "mark",
+      "entity_kind": "NONE",
+      "layer": "CONDITION_CONSEQUENT",
+      "owner": "TASK",
+      "modality": "REQUIRED",
+      "polarity": "AFFIRMATIVE",
+      "artifact_use": "NONE",
+      "predicate_class": "OPERATION",
+      "alternative_group_id": null
+    },
+    {
+      "id": "pending_confirmation",
+      "type": "STATE",
+      "sources": [{"quote": "待确认", "clause_id": "c1", "occurrence": 0, "context_anchor": "条目标为待确认"}],
+      "semantic_identity": "条目标记为待确认",
+      "entity_kind": "NONE",
+      "layer": "COMPLEMENT",
+      "owner": "mark_pending",
+      "modality": "UNSTATED",
+      "polarity": "AFFIRMATIVE",
+      "artifact_use": "NONE",
+      "predicate_class": "STATE",
+      "alternative_group_id": null
+    },
+    {
+      "id": "download_data",
+      "type": "EVENT",
+      "sources": [{"quote": "不得下载新数据", "clause_id": "c1", "occurrence": 0, "context_anchor": null}],
+      "semantic_identity": "download",
+      "entity_kind": "NONE",
+      "layer": "MAIN",
+      "owner": "TASK",
+      "modality": "FORBIDDEN",
+      "polarity": "AFFIRMATIVE",
+      "artifact_use": "NONE",
+      "predicate_class": "OPERATION",
+      "alternative_group_id": null
+    },
+    {
+      "id": "new_data",
+      "type": "ENTITY",
+      "sources": [{"quote": "新数据", "clause_id": "c1", "occurrence": 0, "context_anchor": null}],
+      "semantic_identity": "新数据",
+      "entity_kind": "DATA",
+      "layer": "MAIN",
+      "owner": "download_data",
+      "modality": "UNSTATED",
+      "polarity": "AFFIRMATIVE",
+      "artifact_use": "UNKNOWN",
+      "predicate_class": "NONE",
+      "alternative_group_id": null
+    },
+    {
+      "id": "start_training",
+      "type": "EVENT",
+      "sources": [{"quote": "启动训练", "clause_id": "c1", "occurrence": 0, "context_anchor": "不得下载新数据或启动训练"}],
+      "semantic_identity": "start_training",
+      "entity_kind": "NONE",
+      "layer": "MAIN",
+      "owner": "TASK",
+      "modality": "FORBIDDEN",
+      "polarity": "AFFIRMATIVE",
+      "artifact_use": "NONE",
+      "predicate_class": "OPERATION",
+      "alternative_group_id": null
+    }
+  ],
+  "relations": [
+    {
+      "id": "r_pm_organize",
+      "type": "AGENT",
+      "head": "organize",
+      "tail": "pm",
+      "sources": [{"quote": "PM 组织", "clause_id": "c1", "occurrence": 0, "context_anchor": null}],
+      "ownership": "LOCAL",
+      "role": "PERFORMER",
+      "alternative_group_id": null
+    },
+    {
+      "id": "r_organized_read",
+      "type": "PART_OF",
+      "head": "read_index",
+      "tail": "organize",
+      "sources": [{"quote": "组织读取 training-index.csv", "clause_id": "c1", "occurrence": 0, "context_anchor": null}],
+      "ownership": "STRUCTURAL",
+      "role": "NONE",
+      "alternative_group_id": null
+    },
+    {
+      "id": "r_read_index",
+      "type": "PATIENT",
+      "head": "read_index",
+      "tail": "index",
+      "sources": [{"quote": "读取 training-index.csv", "clause_id": "c1", "occurrence": 0, "context_anchor": null}],
+      "ownership": "LOCAL",
+      "role": "NONE",
+      "alternative_group_id": null
+    },
+    {
+      "id": "r_check_source",
+      "type": "PATIENT",
+      "head": "check_records",
+      "tail": "source_record",
+      "sources": [{"quote": "核查每项数据的来源", "clause_id": "c1", "occurrence": 0, "context_anchor": null}],
+      "ownership": "LOCAL",
+      "role": "NONE",
+      "alternative_group_id": null
+    },
+    {
+      "id": "r_check_license",
+      "type": "PATIENT",
+      "head": "check_records",
+      "tail": "license_record",
+      "sources": [{"quote": "核查每项数据的来源与许可记录", "clause_id": "c1", "occurrence": 0, "context_anchor": null}],
+      "ownership": "LOCAL",
+      "role": "NONE",
+      "alternative_group_id": null
+    },
+    {
+      "id": "r_source_of_data",
+      "type": "PART_OF",
+      "head": "source_record",
+      "tail": "data_entries",
+      "sources": [{"quote": "每项数据的来源", "clause_id": "c1", "occurrence": 0, "context_anchor": null}],
+      "ownership": "LOCAL",
+      "role": "NONE",
+      "alternative_group_id": null
+    },
+    {
+      "id": "r_license_of_data",
+      "type": "PART_OF",
+      "head": "license_record",
+      "tail": "data_entries",
+      "sources": [{"quote": "每项数据的来源与许可记录", "clause_id": "c1", "occurrence": 0, "context_anchor": null}],
+      "ownership": "LOCAL",
+      "role": "NONE",
+      "alternative_group_id": null
+    },
+    {
+      "id": "r_records_conjunction",
+      "type": "CONJUNCTION",
+      "head": "source_record",
+      "tail": "license_record",
+      "sources": [{"quote": "来源与许可记录", "clause_id": "c1", "occurrence": 0, "context_anchor": null}],
+      "ownership": "LOCAL",
+      "role": "NONE",
+      "alternative_group_id": null
+    },
+    {
+      "id": "r_check_generate",
+      "type": "CONJUNCTION",
+      "head": "check_records",
+      "tail": "generate_audit",
+      "sources": [{"quote": "核查每项数据的来源与许可记录并形成 training-audit.md", "clause_id": "c1", "occurrence": 0, "context_anchor": null}],
+      "ownership": "STRUCTURAL",
+      "role": "NONE",
+      "alternative_group_id": null
+    },
+    {
+      "id": "r_audit_result",
+      "type": "RESULT",
+      "head": "generate_audit",
+      "tail": "audit",
+      "sources": [{"quote": "形成 training-audit.md", "clause_id": "c1", "occurrence": 0, "context_anchor": null}],
+      "ownership": "LOCAL",
+      "role": "NONE",
+      "alternative_group_id": null
+    },
+    {
+      "id": "r_missing_source",
+      "type": "PATIENT",
+      "head": "source_missing",
+      "tail": "source_record",
+      "sources": [{"quote": "来源或许可缺失", "clause_id": "c1", "occurrence": 0, "context_anchor": null}],
+      "ownership": "COREFERENCE",
+      "role": "NONE",
+      "alternative_group_id": null
+    },
+    {
+      "id": "r_missing_license",
+      "type": "PATIENT",
+      "head": "license_missing",
+      "tail": "license_record",
+      "sources": [{"quote": "许可缺失", "clause_id": "c1", "occurrence": 0, "context_anchor": "来源或许可缺失的条目"}],
+      "ownership": "COREFERENCE",
+      "role": "NONE",
+      "alternative_group_id": null
+    },
+    {
+      "id": "r_mark_condition",
+      "type": "CONDITION_OF",
+      "head": "missing_either",
+      "tail": "mark_pending",
+      "sources": [{"quote": "来源或许可缺失的条目标为待确认", "clause_id": "c1", "occurrence": 0, "context_anchor": null}],
+      "ownership": "LOCAL",
+      "role": "NONE",
+      "alternative_group_id": null
+    },
+    {
+      "id": "r_mark_entries",
+      "type": "PATIENT",
+      "head": "mark_pending",
+      "tail": "data_entries",
+      "sources": [{"quote": "条目标为待确认", "clause_id": "c1", "occurrence": 0, "context_anchor": null}],
+      "ownership": "COREFERENCE",
+      "role": "NONE",
+      "alternative_group_id": null
+    },
+    {
+      "id": "r_pending_entries",
+      "type": "PATIENT",
+      "head": "pending_confirmation",
+      "tail": "data_entries",
+      "sources": [{"quote": "条目标为待确认", "clause_id": "c1", "occurrence": 0, "context_anchor": null}],
+      "ownership": "LOCAL",
+      "role": "NONE",
+      "alternative_group_id": null
+    },
+    {
+      "id": "r_mark_complement",
+      "type": "PART_OF",
+      "head": "pending_confirmation",
+      "tail": "mark_pending",
+      "sources": [{"quote": "标为待确认", "clause_id": "c1", "occurrence": 0, "context_anchor": null}],
+      "ownership": "LOCAL",
+      "role": "NONE",
+      "alternative_group_id": null
+    },
+    {
+      "id": "r_download_material",
+      "type": "THEME",
+      "head": "download_data",
+      "tail": "new_data",
+      "sources": [{"quote": "下载新数据", "clause_id": "c1", "occurrence": 0, "context_anchor": null}],
+      "ownership": "LOCAL",
+      "role": "NONE",
+      "alternative_group_id": null
+    },
+    {
+      "id": "r_forbid_download",
+      "type": "FORBIDS",
+      "head": "TASK",
+      "tail": "download_data",
+      "sources": [{"quote": "不得下载新数据", "clause_id": "c1", "occurrence": 0, "context_anchor": null}],
+      "ownership": "LOCAL",
+      "role": "NONE",
+      "alternative_group_id": null
+    },
+    {
+      "id": "r_forbid_training",
+      "type": "FORBIDS",
+      "head": "TASK",
+      "tail": "start_training",
+      "sources": [{"quote": "不得下载新数据或启动训练", "clause_id": "c1", "occurrence": 0, "context_anchor": null}],
+      "ownership": "SHARED_EXPLICIT",
+      "role": "NONE",
+      "alternative_group_id": null
+    }
+  ],
+  "expressions": [
+    {
+      "id": "all_data",
+      "kind": "SCOPE",
+      "operator": "ALL",
+      "operands": ["data_entries"],
+      "owner": "check_records",
+      "sources": [{"quote": "每项数据", "clause_id": "c1", "occurrence": 0, "context_anchor": null}],
+      "quantity": null,
+      "alternative_group_id": null
+    },
+    {
+      "id": "source_missing_ref",
+      "kind": "CONDITION",
+      "operator": "STATE_REF",
+      "operands": ["source_missing"],
+      "owner": "mark_pending",
+      "sources": [{"quote": "来源或许可缺失", "clause_id": "c1", "occurrence": 0, "context_anchor": null}],
+      "quantity": null,
+      "alternative_group_id": null
+    },
+    {
+      "id": "license_missing_ref",
+      "kind": "CONDITION",
+      "operator": "STATE_REF",
+      "operands": ["license_missing"],
+      "owner": "mark_pending",
+      "sources": [{"quote": "许可缺失", "clause_id": "c1", "occurrence": 0, "context_anchor": null}],
+      "quantity": null,
+      "alternative_group_id": null
+    },
+    {
+      "id": "missing_either",
+      "kind": "CONDITION",
+      "operator": "OR",
+      "operands": ["source_missing_ref", "license_missing_ref"],
+      "owner": "mark_pending",
+      "sources": [{"quote": "来源或许可缺失", "clause_id": "c1", "occurrence": 0, "context_anchor": null}],
+      "quantity": null,
+      "alternative_group_id": null
+    }
+  ],
+  "unresolved": [
+    {
+      "id": "organization_scope",
+      "kind": "UNRESOLVED_SCOPE",
+      "alternatives": [
+        "组织仅直接支配读取；PM 同时执行核查和形成审计文件。",
+        "组织支配读取、核查和形成审计文件；后两项执行者未指定。"
+      ],
+      "sources": [{"quote": "请 PM 组织读取 training-index.csv，核查每项数据的来源与许可记录并形成 training-audit.md", "clause_id": "c1", "occurrence": 0, "context_anchor": null}],
+      "reason": "组织与后续逗号分隔谓语的支配范围未明示；仅确定 PM 执行组织，不为核查或形成文件猜定执行者。"
+    }
+  ],
+  "coverage": [
+    {
+      "region_id": "c1",
+      "disposition": "AMBIGUOUS",
+      "candidate_ids": [
+        "pm",
+        "organize",
+        "read_index",
+        "index",
+        "check_records",
+        "data_entries",
+        "source_record",
+        "license_record",
+        "generate_audit",
+        "audit",
+        "source_missing",
+        "license_missing",
+        "mark_pending",
+        "pending_confirmation",
+        "download_data",
+        "new_data",
+        "start_training",
+        "all_data",
+        "missing_either",
+        "organization_scope"
+      ],
+      "reason": "已表示全部操作、材料、输出、逐项核查范围、缺失条件、标记要求及禁止事项；组织对后续谓语的支配范围保留 organization_scope 中的两个解释。"
+    }
+  ]
+}

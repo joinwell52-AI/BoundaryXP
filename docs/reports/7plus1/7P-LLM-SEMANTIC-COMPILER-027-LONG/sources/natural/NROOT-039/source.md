@@ -1,0 +1,1 @@
+PM must organize a probe of the test endpoint and deliver endpoint-probe.md. The probe must be retried at least 3 times before the report is written. Endpoint configuration must not be changed.

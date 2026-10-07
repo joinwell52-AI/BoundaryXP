@@ -1,0 +1,1 @@
+Jordan must coordinate the task: verify queue-2384.csv in isolated environment. Deliver audit-597305.md. The document must contain sections “Risks” and “Verification steps”.

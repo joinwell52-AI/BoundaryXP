@@ -1,0 +1,1 @@
+PM must organize creation of incident-guide.md with sections “Detection” and “Recovery”. No recovery action may actually be performed.

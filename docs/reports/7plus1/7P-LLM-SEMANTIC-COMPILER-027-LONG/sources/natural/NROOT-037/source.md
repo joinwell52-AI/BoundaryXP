@@ -1,0 +1,1 @@
+本次任务要求查看 heartbeat.log 最近 10 分钟记录并形成 heartbeat-review.md。若读取失败，最多重试 3 次；不得重启服务。

@@ -1,0 +1,1 @@
+请 PM 组织对 mcp-config.json 中已启用 MCP 工具的访问权限进行只读审计，并形成 mcp-access.md。不得调用被审计工具，也不得改动 mcp-config.json；最终结果由 PM 向 ADMIN 汇报。

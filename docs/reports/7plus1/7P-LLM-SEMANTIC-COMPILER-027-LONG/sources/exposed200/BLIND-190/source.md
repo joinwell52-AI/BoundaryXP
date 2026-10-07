@@ -1,0 +1,1 @@
+Avery 组织读取 validation-6987.csv 和 build-18720.json，随后要求复核“该报告”。原文没有指定该报告指哪份文件。

@@ -1,0 +1,1 @@
+Rowan must coordinate the task: inspect snapshot-8678.csv in isolated environment. Deliver audit-954726.md. The scope is limited to the stated environment; production resources are excluded. The whole task must finish within 28 minutes. Send the final report to Jordan.

@@ -1,0 +1,1 @@
+PM must organize a review of finance-export.csv that may begin only after Dana approves the request. The deliverable is finance-audit.md, and the production database must not be accessed.

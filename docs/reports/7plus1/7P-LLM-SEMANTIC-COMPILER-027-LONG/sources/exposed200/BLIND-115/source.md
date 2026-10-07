@@ -1,0 +1,1 @@
+Reese must coordinate the task: verify event-9639.csv in isolated environment. Attempt the check at most 3 times. Completion requires at least 2 successful checks and existence of the report. Deliver audit-220749.md. The whole task must finish within 38 minutes. Send the final report to Morgan.

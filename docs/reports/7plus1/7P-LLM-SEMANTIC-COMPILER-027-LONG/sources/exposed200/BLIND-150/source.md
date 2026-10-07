@@ -1,0 +1,1 @@
+Avery 组织任务。仅在 Avery 或 Casey 批准后才允许读取 storage-1278.csv，但没有规定任一批准即可还是必须共同批准。

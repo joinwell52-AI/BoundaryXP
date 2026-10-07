@@ -1,0 +1,238 @@
+{
+  "structure_status": "SINGLE_ROOT",
+  "nodes": [
+    {
+      "id": "n_pm",
+      "type": "ENTITY",
+      "sources": [{"quote": "PM", "clause_id": "c1", "occurrence": 0, "context_anchor": null}],
+      "semantic_identity": "PM",
+      "entity_kind": "ROLE",
+      "layer": "MAIN",
+      "owner": "TASK",
+      "modality": "UNSTATED",
+      "polarity": "AFFIRMATIVE",
+      "artifact_use": "NONE",
+      "predicate_class": "NONE",
+      "alternative_group_id": null
+    },
+    {
+      "id": "n_organize",
+      "type": "EVENT",
+      "sources": [{"quote": "must organize", "clause_id": "c1", "occurrence": 0, "context_anchor": null}],
+      "semantic_identity": "organize",
+      "entity_kind": "NONE",
+      "layer": "MAIN",
+      "owner": "TASK",
+      "modality": "REQUIRED",
+      "polarity": "AFFIRMATIVE",
+      "artifact_use": "NONE",
+      "predicate_class": "ORGANIZE",
+      "alternative_group_id": null
+    },
+    {
+      "id": "n_probe",
+      "type": "ENTITY",
+      "sources": [{"quote": "a staging probe", "clause_id": "c1", "occurrence": 0, "context_anchor": null}],
+      "semantic_identity": "staging probe",
+      "entity_kind": "OTHER",
+      "layer": "MAIN",
+      "owner": "n_organize",
+      "modality": "UNSTATED",
+      "polarity": "AFFIRMATIVE",
+      "artifact_use": "NONE",
+      "predicate_class": "NONE",
+      "alternative_group_id": null
+    },
+    {
+      "id": "n_deliver",
+      "type": "EVENT",
+      "sources": [{"quote": "deliver", "clause_id": "c1", "occurrence": 0, "context_anchor": "PM must organize a staging probe with at most 4 attempts and deliver probe-log.md."}],
+      "semantic_identity": "deliver",
+      "entity_kind": "NONE",
+      "layer": "MAIN",
+      "owner": "TASK",
+      "modality": "REQUIRED",
+      "polarity": "AFFIRMATIVE",
+      "artifact_use": "NONE",
+      "predicate_class": "COMMUNICATE",
+      "alternative_group_id": null
+    },
+    {
+      "id": "n_log",
+      "type": "ENTITY",
+      "sources": [{"quote": "probe-log.md", "clause_id": "c1", "occurrence": 0, "context_anchor": null}],
+      "semantic_identity": "probe-log.md",
+      "entity_kind": "FILE",
+      "layer": "MAIN",
+      "owner": "n_deliver",
+      "modality": "UNSTATED",
+      "polarity": "AFFIRMATIVE",
+      "artifact_use": "UNKNOWN",
+      "predicate_class": "NONE",
+      "alternative_group_id": null
+    },
+    {
+      "id": "n_probes",
+      "type": "ENTITY",
+      "sources": [{"quote": "probes", "clause_id": "c1", "occurrence": 0, "context_anchor": "At least 2 probes must succeed before completion."}],
+      "semantic_identity": "probes",
+      "entity_kind": "OTHER",
+      "layer": "ACCEPTANCE",
+      "owner": "TASK",
+      "modality": "UNSTATED",
+      "polarity": "AFFIRMATIVE",
+      "artifact_use": "NONE",
+      "predicate_class": "NONE",
+      "alternative_group_id": null
+    },
+    {
+      "id": "n_success",
+      "type": "STATE",
+      "sources": [{"quote": "At least 2 probes must succeed before completion", "clause_id": "c1", "occurrence": 0, "context_anchor": null}],
+      "semantic_identity": "probe success",
+      "entity_kind": "NONE",
+      "layer": "ACCEPTANCE",
+      "owner": "TASK",
+      "modality": "REQUIRED",
+      "polarity": "AFFIRMATIVE",
+      "artifact_use": "NONE",
+      "predicate_class": "STATE",
+      "alternative_group_id": null
+    }
+  ],
+  "relations": [
+    {
+      "id": "r_organizer",
+      "type": "AGENT",
+      "head": "n_organize",
+      "tail": "n_pm",
+      "sources": [{"quote": "PM must organize", "clause_id": "c1", "occurrence": 0, "context_anchor": null}],
+      "ownership": "LOCAL",
+      "role": "PERFORMER",
+      "alternative_group_id": null
+    },
+    {
+      "id": "r_probe_theme",
+      "type": "THEME",
+      "head": "n_organize",
+      "tail": "n_probe",
+      "sources": [{"quote": "organize a staging probe", "clause_id": "c1", "occurrence": 0, "context_anchor": null}],
+      "ownership": "LOCAL",
+      "role": "NONE",
+      "alternative_group_id": null
+    },
+    {
+      "id": "r_attempt_limit",
+      "type": "LIMIT",
+      "head": "n_organize",
+      "tail": "q_attempts",
+      "sources": [{"quote": "with at most 4 attempts", "clause_id": "c1", "occurrence": 0, "context_anchor": null}],
+      "ownership": "LOCAL",
+      "role": "NONE",
+      "alternative_group_id": null
+    },
+    {
+      "id": "r_deliverer",
+      "type": "AGENT",
+      "head": "n_deliver",
+      "tail": "n_pm",
+      "sources": [{"quote": "PM must organize a staging probe with at most 4 attempts and deliver", "clause_id": "c1", "occurrence": 0, "context_anchor": null}],
+      "ownership": "SHARED_EXPLICIT",
+      "role": "PERFORMER",
+      "alternative_group_id": null
+    },
+    {
+      "id": "r_delivery_theme",
+      "type": "THEME",
+      "head": "n_deliver",
+      "tail": "n_log",
+      "sources": [{"quote": "deliver probe-log.md", "clause_id": "c1", "occurrence": 0, "context_anchor": null}],
+      "ownership": "LOCAL",
+      "role": "NONE",
+      "alternative_group_id": null
+    },
+    {
+      "id": "r_actions",
+      "type": "CONJUNCTION",
+      "head": "n_organize",
+      "tail": "n_deliver",
+      "sources": [{"quote": "and", "clause_id": "c1", "occurrence": 0, "context_anchor": "PM must organize a staging probe with at most 4 attempts and deliver probe-log.md."}],
+      "ownership": "STRUCTURAL",
+      "role": "NONE",
+      "alternative_group_id": null
+    },
+    {
+      "id": "r_success_theme",
+      "type": "THEME",
+      "head": "n_success",
+      "tail": "n_probes",
+      "sources": [{"quote": "probes must succeed", "clause_id": "c1", "occurrence": 0, "context_anchor": null}],
+      "ownership": "LOCAL",
+      "role": "NONE",
+      "alternative_group_id": null
+    },
+    {
+      "id": "r_completion",
+      "type": "COMPLETION_OF",
+      "head": "e_completion",
+      "tail": "TASK",
+      "sources": [{"quote": "At least 2 probes must succeed before completion", "clause_id": "c1", "occurrence": 0, "context_anchor": null}],
+      "ownership": "STRUCTURAL",
+      "role": "NONE",
+      "alternative_group_id": null
+    }
+  ],
+  "expressions": [
+    {
+      "id": "q_attempts",
+      "kind": "QUANTITY",
+      "operator": "LTE",
+      "operands": ["n_probe"],
+      "owner": "n_organize",
+      "sources": [{"quote": "at most 4 attempts", "clause_id": "c1", "occurrence": 0, "context_anchor": null}],
+      "quantity": {
+        "metric": "attempt_count",
+        "target": "n_probe",
+        "value": 4,
+        "unit": "attempts",
+        "use": "EXECUTION_LIMIT"
+      },
+      "alternative_group_id": null
+    },
+    {
+      "id": "q_successes",
+      "kind": "QUANTITY",
+      "operator": "GTE",
+      "operands": ["n_success"],
+      "owner": "TASK",
+      "sources": [{"quote": "At least 2 probes must succeed", "clause_id": "c1", "occurrence": 0, "context_anchor": null}],
+      "quantity": {
+        "metric": "successful_probe_count",
+        "target": "n_success",
+        "value": 2,
+        "unit": "probes",
+        "use": "ACCEPTANCE_THRESHOLD"
+      },
+      "alternative_group_id": null
+    },
+    {
+      "id": "e_completion",
+      "kind": "CONDITION",
+      "operator": "STATE_REF",
+      "operands": ["n_success"],
+      "owner": "TASK",
+      "sources": [{"quote": "At least 2 probes must succeed before completion", "clause_id": "c1", "occurrence": 0, "context_anchor": null}],
+      "quantity": null,
+      "alternative_group_id": null
+    }
+  ],
+  "unresolved": [],
+  "coverage": [
+    {
+      "region_id": "c1",
+      "disposition": "BOUNDARY_SEMANTIC",
+      "candidate_ids": ["n_pm", "n_organize", "n_probe", "n_deliver", "n_log", "n_probes", "n_success", "r_organizer", "r_probe_theme", "r_attempt_limit", "r_deliverer", "r_delivery_theme", "r_actions", "r_success_theme", "r_completion", "q_attempts", "q_successes", "e_completion"],
+      "reason": "Explicit required organization and delivery, an attempt cap, and a successful-probe completion threshold under one document root; no WP headings are declared."
+    }
+  ]
+}

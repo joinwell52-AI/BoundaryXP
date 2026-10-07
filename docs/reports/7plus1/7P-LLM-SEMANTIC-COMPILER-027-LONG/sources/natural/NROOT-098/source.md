@@ -1,0 +1,1 @@
+请 PM 按照 POLICY-X v1.2 或 v1.3 组织检查 policy.json 并形成 policy-review.md。未说明最终采用哪个版本，不得擅自选择。

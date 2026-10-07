@@ -1,0 +1,1 @@
+Using SEC-CHECK-11 version v1.9, PM must organize an inspection of findings.json and deliver findings-review.md within 22 minutes. The findings must not be modified.

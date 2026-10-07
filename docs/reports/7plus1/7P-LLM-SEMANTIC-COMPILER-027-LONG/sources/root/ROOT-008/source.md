@@ -1,0 +1,1 @@
+请 PM 组织读取 certificates.csv，检查证书到期时间并形成 expiry-report.md。距到期不足 15 天的证书应在报告中单独标记；不得更换证书。

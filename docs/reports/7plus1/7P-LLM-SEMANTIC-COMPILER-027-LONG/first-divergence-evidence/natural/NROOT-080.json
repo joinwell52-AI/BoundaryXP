@@ -1,0 +1,205 @@
+{
+  "id": "NROOT-080",
+  "corpus": "natural",
+  "source_path": "docs/reports/7plus1/7P-LLM-SEMANTIC-COMPILER-027-LONG/sources/natural/NROOT-080/source.md",
+  "trace": "docs/reports/7plus1/7P-LLM-SEMANTIC-COMPILER-027-LONG/runs/development-policy-v2/natural/NROOT-080/trace.json",
+  "canonical": "docs/reports/7plus1/7P-LLM-SEMANTIC-COMPILER-027-LONG/runs/development-policy-v2/natural/NROOT-080/canonical.json",
+  "first_divergence": "Eligibility / Projection",
+  "complete_semantic_adjudication": "NOT_ESTABLISHED",
+  "failed_checks": [
+    {
+      "kind": "COVERAGE",
+      "claim": "Source accountability and no parser coverage gap",
+      "status": "FAIL",
+      "evidence": [
+        {
+          "id": "c1",
+          "issues": [
+            "SOURCE_PARSER_COVERAGE_GAP",
+            "PARSER_AUDITOR_DISPOSITION_CONFLICT"
+          ]
+        }
+      ],
+      "first_divergence": "Coverage",
+      "exact_candidate_evidence": [],
+      "empty_comparison_evidence_does_not_prove_candidate_absence": false
+    },
+    {
+      "kind": "MISSING_CLEAR_BOUNDARY",
+      "claim": "I expected reference audit.db",
+      "status": "FAIL",
+      "evidence": [],
+      "first_divergence": "Eligibility / Projection",
+      "exact_candidate_evidence": [],
+      "empty_comparison_evidence_does_not_prove_candidate_absence": true
+    },
+    {
+      "kind": "MISSING_CLEAR_BOUNDARY",
+      "claim": "I expected reference 只读快照",
+      "status": "FAIL",
+      "evidence": [],
+      "first_divergence": "Eligibility / Projection",
+      "exact_candidate_evidence": [],
+      "empty_comparison_evidence_does_not_prove_candidate_absence": true
+    },
+    {
+      "kind": "MISSING_CLEAR_BOUNDARY",
+      "claim": "A expected reference 审计",
+      "status": "FAIL",
+      "evidence": [],
+      "first_divergence": "Eligibility / Projection",
+      "exact_candidate_evidence": [],
+      "empty_comparison_evidence_does_not_prove_candidate_absence": true
+    }
+  ],
+  "unverified_checks": [
+    {
+      "kind": "REVIEW_REQUIRED",
+      "claim": "partOf:audit.db",
+      "status": "NOT_VERIFIED",
+      "first_divergence": null,
+      "evidence": []
+    },
+    {
+      "kind": "REVIEW_REQUIRED",
+      "claim": "scope:只读",
+      "status": "NOT_VERIFIED",
+      "first_divergence": null,
+      "evidence": []
+    }
+  ],
+  "coverage_region_issues": [
+    {
+      "region_id": "c1",
+      "source_span": {
+        "start": 0,
+        "end": 61,
+        "quote": "本次任务要求基于 audit.db 的只读快照进行离线审计并形成 audit-snapshot.md。不得连接在线数据库。"
+      },
+      "parser": [
+        {
+          "region_id": "c1",
+          "disposition": "BOUNDARY_SEMANTIC",
+          "candidate_ids": [
+            "n1",
+            "n2",
+            "n3",
+            "n4",
+            "n5",
+            "n6",
+            "r1",
+            "r2",
+            "r3",
+            "r4",
+            "r5"
+          ],
+          "reason": "Explicitly requires offline auditing using the read-only snapshot of audit.db and generation of audit-snapshot.md, and forbids connecting to the online database."
+        }
+      ],
+      "auditor": [
+        {
+          "region_id": "c1",
+          "disposition": "UNPARSED",
+          "candidate_ids": [
+            "n1",
+            "n2",
+            "n3",
+            "n4",
+            "n5",
+            "n6",
+            "r1",
+            "r2",
+            "r3",
+            "r4",
+            "r5",
+            "r6"
+          ],
+          "reason": "要求离线审计、形成文件及禁止连接在线数据库均有对应候选，但原图将明确的审计依据关系误绑为 THEME，因此该区域仍存在未可靠解析的边界含义。补充 BASIS 候选不消除原图冲突。"
+        }
+      ],
+      "candidate_ids": [
+        "n1",
+        "n2",
+        "n3",
+        "n4",
+        "n5",
+        "n6",
+        "r1",
+        "r2",
+        "r3",
+        "r4",
+        "r5",
+        "r6"
+      ],
+      "disposition": "PARSER_COVERAGE_FAILURE",
+      "issues": [
+        "SOURCE_PARSER_COVERAGE_GAP",
+        "PARSER_AUDITOR_DISPOSITION_CONFLICT"
+      ],
+      "unresolved_ids": [
+        "r1",
+        "r6"
+      ],
+      "findings": [
+        {
+          "id": "f1",
+          "kind": "WRONG_BINDING",
+          "candidate_ids": [
+            "r1"
+          ],
+          "sources": [
+            {
+              "quote": "基于 audit.db 的只读快照进行离线审计",
+              "clause_id": "c1",
+              "occurrence": 0,
+              "context_anchor": null
+            }
+          ],
+          "reason": "r1 使用 THEME 表示快照与审计的关系，但“基于”明确表达 BASIS。快照的 READ_ONLY_INPUT 属性不能替代这一依据关系；补充候选 r6 保留该显式含义，原候选仍保留供审查。",
+          "source_links": [
+            {
+              "status": "ALIGNED",
+              "span": {
+                "span_id": "v04:f11c402e21c49edf8dc5cd84",
+                "start": 6,
+                "end": 29,
+                "quote": "基于 audit.db 的只读快照进行离线审计",
+                "clause_id": "c1"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "auditor_suspicions": [
+    {
+      "id": "f1",
+      "kind": "WRONG_BINDING",
+      "candidate_ids": [
+        "r1"
+      ],
+      "sources": [
+        {
+          "quote": "基于 audit.db 的只读快照进行离线审计",
+          "clause_id": "c1",
+          "occurrence": 0,
+          "context_anchor": null
+        }
+      ],
+      "reason": "r1 使用 THEME 表示快照与审计的关系，但“基于”明确表达 BASIS。快照的 READ_ONLY_INPUT 属性不能替代这一依据关系；补充候选 r6 保留该显式含义，原候选仍保留供审查。",
+      "source_links": [
+        {
+          "status": "ALIGNED",
+          "span": {
+            "span_id": "v04:f11c402e21c49edf8dc5cd84",
+            "start": 6,
+            "end": 29,
+            "quote": "基于 audit.db 的只读快照进行离线审计",
+            "clause_id": "c1"
+          }
+        }
+      ]
+    }
+  ]
+}

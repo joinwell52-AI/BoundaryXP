@@ -1,0 +1,1 @@
+The whole task must finish within 21 minutes. Casey must coordinate the task: review build-4040.csv in staging environment. Deliver audit-556524.md. Rowan must review the report; Casey must send it to Quinn. Quinn is not an approver.

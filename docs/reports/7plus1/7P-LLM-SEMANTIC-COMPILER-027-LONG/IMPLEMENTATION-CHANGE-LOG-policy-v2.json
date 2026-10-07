@@ -1,0 +1,21 @@
+{
+  "stage": "POLICY_V2_BEFORE_FULL_DEVELOPMENT_REPLAY",
+  "classification": "IMPLEMENTATION_BUG_REPAIR",
+  "items": [
+    {
+      "defect": "Base IR borrowed Gc.expressions by reference; appending a derived argument domain could modify Gc and let the Proof builder misidentify a derived scope as a candidate",
+      "repair": "Copy the expression inventory before appending lowering-only domains; keep the original candidate inventory immutable",
+      "validation": "Object/input/output scope consistency regression and full-245 original-versus-replay Gc byte comparison",
+      "source_or_case_specific": false
+    },
+    {
+      "defect": "Task-use eligibility retained the explicit complement owner path but did not carry that owner's CONDITION_OF and SCOPE_MEMBER witnesses",
+      "repair": "Carry the existing owner-path guards/scopes and every relation/expression source dependency; an unresolved inherited guard prevents a resolved child fact",
+      "validation": "Explicit organizer condition, unresolved guard, source/proof closure regression; no actor/object inheritance",
+      "source_or_case_specific": false
+    }
+  ],
+  "semantic_major_versions": {"parser": 1, "auditor": 1, "gamma": 2},
+  "initial_v1_implementation_and_first_outputs_unchanged": true,
+  "locked_first_run_not_started": true
+}

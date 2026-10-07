@@ -1,0 +1,1 @@
+请 PM 组织读取 migration-plan.md，检查回滚步骤与停机窗口说明并形成 migration-review.md。不得执行任何迁移或回滚操作；只有 QA 确认两类说明均完整后才能向 ADMIN 提交评审结论。

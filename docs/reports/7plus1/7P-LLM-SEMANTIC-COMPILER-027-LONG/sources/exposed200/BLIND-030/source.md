@@ -1,0 +1,1 @@
+Taylor 组织任务。仅在 Taylor 或 Jordan 批准后才允许读取 validation-5901.csv，但没有规定任一批准即可还是必须共同批准。

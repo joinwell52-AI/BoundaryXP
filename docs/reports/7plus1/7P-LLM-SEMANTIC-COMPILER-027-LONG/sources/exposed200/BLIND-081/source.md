@@ -1,0 +1,1 @@
+The whole task must finish within 12 minutes. Jordan must coordinate the task: inspect build-5824.csv in test cluster. Compare permission-10935.json as well. Deliver audit-666816.md. Send the final report to Quinn.

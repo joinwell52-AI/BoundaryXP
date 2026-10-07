@@ -1,0 +1,1 @@
+Casey must coordinate the task: inspect snapshot-1324.csv in staging environment. Deliver audit-930908.md. Neither modification of snapshot-1324.csv nor recovery of any permission mapping is allowed. The whole task must finish within 32 minutes. Send the final report to Taylor.

@@ -1,0 +1,13 @@
+import fs from 'node:fs';
+import path from 'node:path';
+import {ROOT,REPORT,sha,save} from './util.mjs';
+import {proposalSchema,auditSchema,signatures} from './contracts.mjs';
+import {promptDigests} from './semantic-parser-port.mjs';
+const runtimeFiles=['util.mjs','source.mjs','source-linker.mjs','contracts.mjs','semantic-parser-port.mjs','providers/codex.mjs','candidate-graph.mjs','nlp-evidence-adapter.mjs','gamma-v04.mjs','eligibility.mjs','boundary-ir.mjs','coverage.mjs','projection.mjs','proof.mjs','engine.mjs','cli.mjs','replay.mjs','batch.mjs','prompts/parser-v1.md','prompts/auditor-v1.md'];
+const files=runtimeFiles.map(p=>({path:ROOT+'/'+p,sha256:sha(fs.readFileSync(ROOT+'/'+p))}));
+const revision=process.argv[2]??'v1';
+save(REPORT+`/IMPLEMENTATION-${revision}.json`,{revision,created_at:new Date().toISOString(),files,implementation_sha256:sha(JSON.stringify(files)),hypothesis:REPORT+'/HYPOTHESIS-v1.json',parser_budget_used:1,auditor_budget_used:1,gamma_budget_used:1,code_before_locked_run:true});
+if(!fs.existsSync(REPORT+'/SCHEMA.json'))save(REPORT+'/SCHEMA.json',{proposal:proposalSchema,audit:auditSchema,signatures});
+if(!fs.existsSync(REPORT+'/PROMPT-MANIFEST.json'))save(REPORT+'/PROMPT-MANIFEST.json',{...promptDigests,parser_version:1,auditor_version:1,no_case_specific_instructions:true,templates:files.filter(f=>f.path.includes('/prompts/'))});
+if(!fs.existsSync(REPORT+'/IMPLEMENTATION-CHANGE-LOG.json'))save(REPORT+'/IMPLEMENTATION-CHANGE-LOG.json',{changes:[{stage:'INITIAL_IMPLEMENTATION_BEFORE_COMPLETE_DEV_V1',classification:'IMPLEMENTATION_BUG_REPAIR',items:['Prevent extra fields overwriting computed eligibility dependency closure','Preserve rejected source candidates as coverage diagnostics, not ABSENT','Unknown omitted semantics conservatively prevent falsely absent slots','Record frozen NLP input for exact replay','Record independent auditor evidence in proof paths'],smoke_original_preserved:true}],semantic_major_versions:{parser:1,auditor:1,gamma:1}});
+console.log(JSON.stringify({revision,files:files.length,sha256:sha(JSON.stringify(files))}));

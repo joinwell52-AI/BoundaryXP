@@ -1,0 +1,1 @@
+请 PM 组织核查 skills-map.yaml 中的 Skills 分配是否符合已批准的角色能力边界，并形成 skills-audit.md。QA 必须复核角色与能力对应关系；禁止修改角色授权或安装新 Skill。

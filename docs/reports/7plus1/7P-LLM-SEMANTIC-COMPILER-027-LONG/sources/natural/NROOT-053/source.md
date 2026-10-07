@@ -1,0 +1,1 @@
+请 PM 组织检查 gateway.log 并形成 gateway-review.md。发现高危告警时必须停止，只有 PM 明确批准后才能恢复。

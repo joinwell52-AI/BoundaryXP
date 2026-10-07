@@ -1,0 +1,1 @@
+本次任务依据 RELEASE-CHECK-4 v1.7 对 artifact.json 与 checksum.txt 进行发布前核验，并形成 artifact-review.md。由 PM 组织，不执行发布，不重新生成校验文件。

@@ -1,0 +1,1 @@
+请 PM 组织形成 api-review.md。只有 QA 确认报告记录了所有删除和重命名接口后，PM 才能向 ADMIN 提交。

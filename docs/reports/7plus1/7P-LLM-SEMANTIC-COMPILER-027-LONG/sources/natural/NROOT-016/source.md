@@ -1,0 +1,1 @@
+本次任务要求检查 index-meta.json 中索引版本、分片数量和校验值，形成 index-meta-check.md。由 PM 组织，不重建索引，不重新计算向量。

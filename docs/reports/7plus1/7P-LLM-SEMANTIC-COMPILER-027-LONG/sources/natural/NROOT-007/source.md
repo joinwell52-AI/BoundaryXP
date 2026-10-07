@@ -1,0 +1,1 @@
+请 PM 组织核查 build-summary.json 中主模块和插件的构建结果，并形成 build-result-review.md。失败项只记录原因，不重新触发构建。

@@ -1,0 +1,1 @@
+本次任务要求基于 unit-test.json 与 integration-test.json 汇总失败情况并形成 test-summary.md。由 PM 组织，不重新运行测试，不修改实现。

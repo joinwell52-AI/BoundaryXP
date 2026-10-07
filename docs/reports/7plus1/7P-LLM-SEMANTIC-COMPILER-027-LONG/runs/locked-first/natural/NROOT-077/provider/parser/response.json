@@ -1,0 +1,263 @@
+{
+  "structure_status": "SINGLE_ROOT",
+  "nodes": [
+    {
+      "id": "e_check",
+      "type": "EVENT",
+      "sources": [{"quote": "要求检查", "clause_id": "c1", "occurrence": 0, "context_anchor": null}],
+      "semantic_identity": "check",
+      "entity_kind": "NONE",
+      "layer": "MAIN",
+      "owner": "TASK",
+      "modality": "REQUIRED",
+      "polarity": "AFFIRMATIVE",
+      "artifact_use": "NONE",
+      "predicate_class": "OPERATION",
+      "alternative_group_id": null
+    },
+    {
+      "id": "n_config_refs",
+      "type": "ENTITY",
+      "sources": [{"quote": "src 目录中的配置引用", "clause_id": "c1", "occurrence": 0, "context_anchor": null}],
+      "semantic_identity": "src 目录中的配置引用",
+      "entity_kind": "DATA",
+      "layer": "MAIN",
+      "owner": "e_check",
+      "modality": "UNSTATED",
+      "polarity": "AFFIRMATIVE",
+      "artifact_use": "READ_ONLY_INPUT",
+      "predicate_class": "NONE",
+      "alternative_group_id": null
+    },
+    {
+      "id": "n_src",
+      "type": "ENTITY",
+      "sources": [{"quote": "src 目录", "clause_id": "c1", "occurrence": 0, "context_anchor": null}],
+      "semantic_identity": "src",
+      "entity_kind": "PATH",
+      "layer": "MAIN",
+      "owner": "TASK",
+      "modality": "UNSTATED",
+      "polarity": "AFFIRMATIVE",
+      "artifact_use": "EXISTING_INPUT",
+      "predicate_class": "NONE",
+      "alternative_group_id": null
+    },
+    {
+      "id": "n_excluded_path",
+      "type": "ENTITY",
+      "sources": [{"quote": "src/legacy", "clause_id": "c1", "occurrence": 0, "context_anchor": null}],
+      "semantic_identity": "src/legacy",
+      "entity_kind": "PATH",
+      "layer": "MAIN",
+      "owner": "TASK",
+      "modality": "UNSTATED",
+      "polarity": "AFFIRMATIVE",
+      "artifact_use": "REFERENCE_ONLY",
+      "predicate_class": "NONE",
+      "alternative_group_id": null
+    },
+    {
+      "id": "e_generate",
+      "type": "EVENT",
+      "sources": [{"quote": "形成", "clause_id": "c1", "occurrence": 0, "context_anchor": "要求检查 src 目录中的配置引用并形成 config-ref-review.md"}],
+      "semantic_identity": "generate",
+      "entity_kind": "NONE",
+      "layer": "MAIN",
+      "owner": "TASK",
+      "modality": "REQUIRED",
+      "polarity": "AFFIRMATIVE",
+      "artifact_use": "NONE",
+      "predicate_class": "PRODUCE",
+      "alternative_group_id": null
+    },
+    {
+      "id": "n_report",
+      "type": "ENTITY",
+      "sources": [{"quote": "config-ref-review.md", "clause_id": "c1", "occurrence": 0, "context_anchor": null}],
+      "semantic_identity": "config-ref-review.md",
+      "entity_kind": "FILE",
+      "layer": "MAIN",
+      "owner": "e_generate",
+      "modality": "UNSTATED",
+      "polarity": "AFFIRMATIVE",
+      "artifact_use": "GENERATED_OUTPUT",
+      "predicate_class": "NONE",
+      "alternative_group_id": null
+    },
+    {
+      "id": "e_delete",
+      "type": "EVENT",
+      "sources": [{"quote": "不得删除", "clause_id": "c1", "occurrence": 0, "context_anchor": null}],
+      "semantic_identity": "delete",
+      "entity_kind": "NONE",
+      "layer": "MAIN",
+      "owner": "TASK",
+      "modality": "FORBIDDEN",
+      "polarity": "AFFIRMATIVE",
+      "artifact_use": "NONE",
+      "predicate_class": "OPERATION",
+      "alternative_group_id": null
+    },
+    {
+      "id": "n_legacy_files",
+      "type": "ENTITY",
+      "sources": [{"quote": "legacy 文件", "clause_id": "c1", "occurrence": 0, "context_anchor": null}],
+      "semantic_identity": "legacy 文件",
+      "entity_kind": "FILE",
+      "layer": "MAIN",
+      "owner": "e_delete",
+      "modality": "UNSTATED",
+      "polarity": "AFFIRMATIVE",
+      "artifact_use": "MODIFICATION_TARGET",
+      "predicate_class": "NONE",
+      "alternative_group_id": null
+    }
+  ],
+  "relations": [
+    {
+      "id": "r_check_material",
+      "type": "THEME",
+      "head": "e_check",
+      "tail": "n_config_refs",
+      "sources": [{"quote": "检查 src 目录中的配置引用", "clause_id": "c1", "occurrence": 0, "context_anchor": null}],
+      "ownership": "LOCAL",
+      "role": "NONE",
+      "alternative_group_id": null
+    },
+    {
+      "id": "r_check_location",
+      "type": "LOCATION",
+      "head": "e_check",
+      "tail": "n_src",
+      "sources": [{"quote": "检查 src 目录中的配置引用", "clause_id": "c1", "occurrence": 0, "context_anchor": null}],
+      "ownership": "LOCAL",
+      "role": "NONE",
+      "alternative_group_id": null
+    },
+    {
+      "id": "r_task_scope",
+      "type": "SCOPE_MEMBER",
+      "head": "TASK",
+      "tail": "s_effective_scope",
+      "sources": [{"quote": "本次任务要求检查 src 目录中的配置引用并形成 config-ref-review.md，但明确排除 src/legacy", "clause_id": "c1", "occurrence": 0, "context_anchor": null}],
+      "ownership": "STRUCTURAL",
+      "role": "NONE",
+      "alternative_group_id": null
+    },
+    {
+      "id": "r_exclusion",
+      "type": "RESTRICTS",
+      "head": "TASK",
+      "tail": "n_excluded_path",
+      "sources": [{"quote": "明确排除 src/legacy", "clause_id": "c1", "occurrence": 0, "context_anchor": null}],
+      "ownership": "STRUCTURAL",
+      "role": "NONE",
+      "alternative_group_id": null
+    },
+    {
+      "id": "r_output",
+      "type": "RESULT",
+      "head": "e_generate",
+      "tail": "n_report",
+      "sources": [{"quote": "形成 config-ref-review.md", "clause_id": "c1", "occurrence": 0, "context_anchor": null}],
+      "ownership": "LOCAL",
+      "role": "NONE",
+      "alternative_group_id": null
+    },
+    {
+      "id": "r_conjunction",
+      "type": "CONJUNCTION",
+      "head": "e_check",
+      "tail": "e_generate",
+      "sources": [{"quote": "并", "clause_id": "c1", "occurrence": 0, "context_anchor": "检查 src 目录中的配置引用并形成 config-ref-review.md"}],
+      "ownership": "STRUCTURAL",
+      "role": "NONE",
+      "alternative_group_id": null
+    },
+    {
+      "id": "r_delete_target",
+      "type": "PATIENT",
+      "head": "e_delete",
+      "tail": "n_legacy_files",
+      "sources": [{"quote": "删除 legacy 文件", "clause_id": "c1", "occurrence": 0, "context_anchor": null}],
+      "ownership": "LOCAL",
+      "role": "NONE",
+      "alternative_group_id": null
+    },
+    {
+      "id": "r_forbid_delete",
+      "type": "FORBIDS",
+      "head": "TASK",
+      "tail": "e_delete",
+      "sources": [{"quote": "不得删除 legacy 文件", "clause_id": "c1", "occurrence": 0, "context_anchor": null}],
+      "ownership": "STRUCTURAL",
+      "role": "NONE",
+      "alternative_group_id": null
+    }
+  ],
+  "expressions": [
+    {
+      "id": "s_src",
+      "kind": "SCOPE",
+      "operator": "ITEM",
+      "operands": ["n_src"],
+      "owner": "TASK",
+      "sources": [{"quote": "src 目录", "clause_id": "c1", "occurrence": 0, "context_anchor": null}],
+      "quantity": null,
+      "alternative_group_id": null
+    },
+    {
+      "id": "s_legacy",
+      "kind": "SCOPE",
+      "operator": "ITEM",
+      "operands": ["n_excluded_path"],
+      "owner": "TASK",
+      "sources": [{"quote": "src/legacy", "clause_id": "c1", "occurrence": 0, "context_anchor": null}],
+      "quantity": null,
+      "alternative_group_id": null
+    },
+    {
+      "id": "s_effective_scope",
+      "kind": "SCOPE",
+      "operator": "EXCEPT",
+      "operands": ["s_src", "s_legacy"],
+      "owner": "TASK",
+      "sources": [
+        {"quote": "src 目录", "clause_id": "c1", "occurrence": 0, "context_anchor": null},
+        {"quote": "但明确排除 src/legacy", "clause_id": "c1", "occurrence": 0, "context_anchor": null}
+      ],
+      "quantity": null,
+      "alternative_group_id": null
+    }
+  ],
+  "unresolved": [],
+  "coverage": [
+    {
+      "region_id": "c1",
+      "disposition": "BOUNDARY_SEMANTIC",
+      "candidate_ids": [
+        "e_check",
+        "n_config_refs",
+        "n_src",
+        "n_excluded_path",
+        "e_generate",
+        "n_report",
+        "e_delete",
+        "n_legacy_files",
+        "r_check_material",
+        "r_check_location",
+        "r_task_scope",
+        "r_exclusion",
+        "r_output",
+        "r_conjunction",
+        "r_delete_target",
+        "r_forbid_delete",
+        "s_src",
+        "s_legacy",
+        "s_effective_scope"
+      ],
+      "reason": "完整表示要求检查配置引用、形成文件、排除 src/legacy 及禁止删除 legacy 文件；无显式 WP 标题，执行者未指定。"
+    }
+  ]
+}

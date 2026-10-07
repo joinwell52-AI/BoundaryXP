@@ -1,0 +1,442 @@
+{
+  "structure_status": "SINGLE_ROOT",
+  "nodes": [
+    {
+      "id": "pm",
+      "type": "ENTITY",
+      "sources": [{"quote": "PM", "clause_id": "c1", "occurrence": 0, "context_anchor": null}],
+      "semantic_identity": "PM",
+      "entity_kind": "ROLE",
+      "layer": "MAIN",
+      "owner": "TASK",
+      "modality": "UNSTATED",
+      "polarity": "AFFIRMATIVE",
+      "artifact_use": "NONE",
+      "predicate_class": "NONE",
+      "alternative_group_id": null
+    },
+    {
+      "id": "list",
+      "type": "ENTITY",
+      "sources": [
+        {"quote": "host-list.csv", "clause_id": "c1", "occurrence": 0, "context_anchor": null},
+        {"quote": "清单", "clause_id": "c1", "occurrence": 0, "context_anchor": "清单中每项主机记录"}
+      ],
+      "semantic_identity": "host-list.csv",
+      "entity_kind": "FILE",
+      "layer": "COMPLEMENT",
+      "owner": "read",
+      "modality": "UNSTATED",
+      "polarity": "AFFIRMATIVE",
+      "artifact_use": "READ_ONLY_INPUT",
+      "predicate_class": "NONE",
+      "alternative_group_id": null
+    },
+    {
+      "id": "records",
+      "type": "ENTITY",
+      "sources": [
+        {"quote": "主机记录", "clause_id": "c1", "occurrence": 0, "context_anchor": "清单中每项主机记录"},
+        {"quote": "全部条目", "clause_id": "c1", "occurrence": 0, "context_anchor": null}
+      ],
+      "semantic_identity": "host-list.csv 中的主机记录",
+      "entity_kind": "DATA",
+      "layer": "COMPLEMENT",
+      "owner": "ensure",
+      "modality": "UNSTATED",
+      "polarity": "AFFIRMATIVE",
+      "artifact_use": "EXISTING_INPUT",
+      "predicate_class": "NONE",
+      "alternative_group_id": null
+    },
+    {
+      "id": "results",
+      "type": "ENTITY",
+      "sources": [
+        {"quote": "检查结果", "clause_id": "c1", "occurrence": 0, "context_anchor": null},
+        {"quote": "结果", "clause_id": "c1", "occurrence": 1, "context_anchor": "全部条目都有结果"}
+      ],
+      "semantic_identity": "主机记录的检查结果",
+      "entity_kind": "DATA",
+      "layer": "COMPLEMENT",
+      "owner": "ensure",
+      "modality": "UNSTATED",
+      "polarity": "AFFIRMATIVE",
+      "artifact_use": "UNKNOWN",
+      "predicate_class": "NONE",
+      "alternative_group_id": null
+    },
+    {
+      "id": "report",
+      "type": "ENTITY",
+      "sources": [{"quote": "host-review.md", "clause_id": "c1", "occurrence": 0, "context_anchor": null}],
+      "semantic_identity": "host-review.md",
+      "entity_kind": "FILE",
+      "layer": "MAIN",
+      "owner": "generate",
+      "modality": "UNSTATED",
+      "polarity": "AFFIRMATIVE",
+      "artifact_use": "GENERATED_OUTPUT",
+      "predicate_class": "NONE",
+      "alternative_group_id": null
+    },
+    {
+      "id": "organize",
+      "type": "EVENT",
+      "sources": [{"quote": "请 PM 组织读取", "clause_id": "c1", "occurrence": 0, "context_anchor": null}],
+      "semantic_identity": "organize reading",
+      "entity_kind": "NONE",
+      "layer": "MAIN",
+      "owner": "TASK",
+      "modality": "REQUIRED",
+      "polarity": "AFFIRMATIVE",
+      "artifact_use": "NONE",
+      "predicate_class": "ORGANIZE",
+      "alternative_group_id": null
+    },
+    {
+      "id": "read",
+      "type": "EVENT",
+      "sources": [{"quote": "读取", "clause_id": "c1", "occurrence": 0, "context_anchor": "请 PM 组织读取 host-list.csv"}],
+      "semantic_identity": "read",
+      "entity_kind": "NONE",
+      "layer": "COMPLEMENT",
+      "owner": "organize",
+      "modality": "REQUIRED",
+      "polarity": "AFFIRMATIVE",
+      "artifact_use": "NONE",
+      "predicate_class": "OPERATION",
+      "alternative_group_id": null
+    },
+    {
+      "id": "ensure",
+      "type": "EVENT",
+      "sources": [{"quote": "确保", "clause_id": "c1", "occurrence": 0, "context_anchor": "确保清单中每项主机记录都有检查结果"}],
+      "semantic_identity": "ensure results for every host record",
+      "entity_kind": "NONE",
+      "layer": "MAIN",
+      "owner": "TASK",
+      "modality": "REQUIRED",
+      "polarity": "AFFIRMATIVE",
+      "artifact_use": "NONE",
+      "predicate_class": "OPERATION",
+      "alternative_group_id": null
+    },
+    {
+      "id": "results_required_state",
+      "type": "STATE",
+      "sources": [{"quote": "清单中每项主机记录都有检查结果", "clause_id": "c1", "occurrence": 0, "context_anchor": null}],
+      "semantic_identity": "every host record has a check result",
+      "entity_kind": "NONE",
+      "layer": "COMPLEMENT",
+      "owner": "ensure",
+      "modality": "UNSTATED",
+      "polarity": "AFFIRMATIVE",
+      "artifact_use": "NONE",
+      "predicate_class": "STATE",
+      "alternative_group_id": null
+    },
+    {
+      "id": "generate",
+      "type": "EVENT",
+      "sources": [{"quote": "形成", "clause_id": "c1", "occurrence": 0, "context_anchor": "并形成 host-review.md"}],
+      "semantic_identity": "generate",
+      "entity_kind": "NONE",
+      "layer": "MAIN",
+      "owner": "TASK",
+      "modality": "REQUIRED",
+      "polarity": "AFFIRMATIVE",
+      "artifact_use": "NONE",
+      "predicate_class": "PRODUCE",
+      "alternative_group_id": null
+    },
+    {
+      "id": "all_results_state",
+      "type": "STATE",
+      "sources": [{"quote": "全部条目都有结果", "clause_id": "c1", "occurrence": 0, "context_anchor": "只有全部条目都有结果时才完成"}],
+      "semantic_identity": "every host record has a check result",
+      "entity_kind": "NONE",
+      "layer": "CONDITION_ANTECEDENT",
+      "owner": "complete",
+      "modality": "UNSTATED",
+      "polarity": "AFFIRMATIVE",
+      "artifact_use": "NONE",
+      "predicate_class": "STATE",
+      "alternative_group_id": null
+    },
+    {
+      "id": "complete",
+      "type": "EVENT",
+      "sources": [{"quote": "完成", "clause_id": "c1", "occurrence": 0, "context_anchor": "只有全部条目都有结果时才完成"}],
+      "semantic_identity": "complete",
+      "entity_kind": "NONE",
+      "layer": "CONDITION_CONSEQUENT",
+      "owner": "TASK",
+      "modality": "REQUIRED",
+      "polarity": "AFFIRMATIVE",
+      "artifact_use": "NONE",
+      "predicate_class": "COMPLETE",
+      "alternative_group_id": null
+    }
+  ],
+  "relations": [
+    {
+      "id": "r1",
+      "type": "AGENT",
+      "head": "organize",
+      "tail": "pm",
+      "sources": [{"quote": "PM 组织", "clause_id": "c1", "occurrence": 0, "context_anchor": null}],
+      "ownership": "LOCAL",
+      "role": "PERFORMER",
+      "alternative_group_id": null
+    },
+    {
+      "id": "r2",
+      "type": "PART_OF",
+      "head": "read",
+      "tail": "organize",
+      "sources": [{"quote": "组织读取", "clause_id": "c1", "occurrence": 0, "context_anchor": null}],
+      "ownership": "LOCAL",
+      "role": "NONE",
+      "alternative_group_id": null
+    },
+    {
+      "id": "r3",
+      "type": "PATIENT",
+      "head": "read",
+      "tail": "list",
+      "sources": [{"quote": "读取 host-list.csv", "clause_id": "c1", "occurrence": 0, "context_anchor": null}],
+      "ownership": "LOCAL",
+      "role": "NONE",
+      "alternative_group_id": null
+    },
+    {
+      "id": "r4",
+      "type": "AGENT",
+      "head": "ensure",
+      "tail": "pm",
+      "sources": [{"quote": "请 PM 组织读取 host-list.csv，确保", "clause_id": "c1", "occurrence": 0, "context_anchor": null}],
+      "ownership": "STRUCTURAL",
+      "role": "PERFORMER",
+      "alternative_group_id": null
+    },
+    {
+      "id": "r5",
+      "type": "PART_OF",
+      "head": "records",
+      "tail": "list",
+      "sources": [{"quote": "清单中每项主机记录", "clause_id": "c1", "occurrence": 0, "context_anchor": null}],
+      "ownership": "LOCAL",
+      "role": "NONE",
+      "alternative_group_id": null
+    },
+    {
+      "id": "r6",
+      "type": "PART_OF",
+      "head": "results_required_state",
+      "tail": "ensure",
+      "sources": [{"quote": "确保清单中每项主机记录都有检查结果", "clause_id": "c1", "occurrence": 0, "context_anchor": null}],
+      "ownership": "LOCAL",
+      "role": "NONE",
+      "alternative_group_id": null
+    },
+    {
+      "id": "r7",
+      "type": "PATIENT",
+      "head": "results_required_state",
+      "tail": "records",
+      "sources": [{"quote": "每项主机记录都有检查结果", "clause_id": "c1", "occurrence": 0, "context_anchor": null}],
+      "ownership": "LOCAL",
+      "role": "NONE",
+      "alternative_group_id": null
+    },
+    {
+      "id": "r8",
+      "type": "THEME",
+      "head": "results_required_state",
+      "tail": "results",
+      "sources": [{"quote": "都有检查结果", "clause_id": "c1", "occurrence": 0, "context_anchor": null}],
+      "ownership": "LOCAL",
+      "role": "NONE",
+      "alternative_group_id": null
+    },
+    {
+      "id": "r9",
+      "type": "SCOPE_MEMBER",
+      "head": "ensure",
+      "tail": "records",
+      "sources": [{"quote": "确保清单中每项主机记录都有检查结果", "clause_id": "c1", "occurrence": 0, "context_anchor": null}],
+      "ownership": "LOCAL",
+      "role": "NONE",
+      "alternative_group_id": null
+    },
+    {
+      "id": "r10",
+      "type": "AGENT",
+      "head": "generate",
+      "tail": "pm",
+      "sources": [{"quote": "请 PM 组织读取 host-list.csv，确保清单中每项主机记录都有检查结果，并形成", "clause_id": "c1", "occurrence": 0, "context_anchor": null}],
+      "ownership": "STRUCTURAL",
+      "role": "PERFORMER",
+      "alternative_group_id": null
+    },
+    {
+      "id": "r11",
+      "type": "RESULT",
+      "head": "generate",
+      "tail": "report",
+      "sources": [{"quote": "形成 host-review.md", "clause_id": "c1", "occurrence": 0, "context_anchor": null}],
+      "ownership": "LOCAL",
+      "role": "NONE",
+      "alternative_group_id": null
+    },
+    {
+      "id": "r12",
+      "type": "CONJUNCTION",
+      "head": "organize",
+      "tail": "ensure",
+      "sources": [{"quote": "组织读取 host-list.csv，确保", "clause_id": "c1", "occurrence": 0, "context_anchor": null}],
+      "ownership": "STRUCTURAL",
+      "role": "NONE",
+      "alternative_group_id": null
+    },
+    {
+      "id": "r13",
+      "type": "CONJUNCTION",
+      "head": "ensure",
+      "tail": "generate",
+      "sources": [{"quote": "确保清单中每项主机记录都有检查结果，并形成", "clause_id": "c1", "occurrence": 0, "context_anchor": null}],
+      "ownership": "STRUCTURAL",
+      "role": "NONE",
+      "alternative_group_id": null
+    },
+    {
+      "id": "r14",
+      "type": "PATIENT",
+      "head": "all_results_state",
+      "tail": "records",
+      "sources": [{"quote": "全部条目都有结果", "clause_id": "c1", "occurrence": 0, "context_anchor": null}],
+      "ownership": "COREFERENCE",
+      "role": "NONE",
+      "alternative_group_id": null
+    },
+    {
+      "id": "r15",
+      "type": "THEME",
+      "head": "all_results_state",
+      "tail": "results",
+      "sources": [{"quote": "都有结果", "clause_id": "c1", "occurrence": 0, "context_anchor": null}],
+      "ownership": "COREFERENCE",
+      "role": "NONE",
+      "alternative_group_id": null
+    },
+    {
+      "id": "r16",
+      "type": "COREFERENCE",
+      "head": "all_results_state",
+      "tail": "results_required_state",
+      "sources": [
+        {"quote": "每项主机记录都有检查结果", "clause_id": "c1", "occurrence": 0, "context_anchor": null},
+        {"quote": "全部条目都有结果", "clause_id": "c1", "occurrence": 0, "context_anchor": null}
+      ],
+      "ownership": "COREFERENCE",
+      "role": "NONE",
+      "alternative_group_id": null
+    },
+    {
+      "id": "r17",
+      "type": "CONDITION_OF",
+      "head": "completion_guard",
+      "tail": "complete",
+      "sources": [{"quote": "只有全部条目都有结果时才完成", "clause_id": "c1", "occurrence": 0, "context_anchor": null}],
+      "ownership": "LOCAL",
+      "role": "NONE",
+      "alternative_group_id": null
+    },
+    {
+      "id": "r18",
+      "type": "COMPLETION_OF",
+      "head": "completion_guard",
+      "tail": "TASK",
+      "sources": [{"quote": "只有全部条目都有结果时才完成", "clause_id": "c1", "occurrence": 0, "context_anchor": null}],
+      "ownership": "STRUCTURAL",
+      "role": "NONE",
+      "alternative_group_id": null
+    }
+  ],
+  "expressions": [
+    {
+      "id": "ensure_scope",
+      "kind": "SCOPE",
+      "operator": "ALL",
+      "operands": ["records"],
+      "owner": "ensure",
+      "sources": [{"quote": "清单中每项主机记录", "clause_id": "c1", "occurrence": 0, "context_anchor": null}],
+      "quantity": null,
+      "alternative_group_id": null
+    },
+    {
+      "id": "completion_scope",
+      "kind": "SCOPE",
+      "operator": "ALL",
+      "operands": ["records"],
+      "owner": "all_results_state",
+      "sources": [{"quote": "全部条目", "clause_id": "c1", "occurrence": 0, "context_anchor": null}],
+      "quantity": null,
+      "alternative_group_id": null
+    },
+    {
+      "id": "completion_guard",
+      "kind": "CONDITION",
+      "operator": "STATE_REF",
+      "operands": ["all_results_state"],
+      "owner": "complete",
+      "sources": [{"quote": "只有全部条目都有结果时才完成", "clause_id": "c1", "occurrence": 0, "context_anchor": null}],
+      "quantity": null,
+      "alternative_group_id": null
+    }
+  ],
+  "unresolved": [],
+  "coverage": [
+    {
+      "region_id": "c1",
+      "disposition": "BOUNDARY_SEMANTIC",
+      "candidate_ids": [
+        "pm",
+        "list",
+        "records",
+        "results",
+        "report",
+        "organize",
+        "read",
+        "ensure",
+        "results_required_state",
+        "generate",
+        "all_results_state",
+        "complete",
+        "r1",
+        "r2",
+        "r3",
+        "r4",
+        "r5",
+        "r6",
+        "r7",
+        "r8",
+        "r9",
+        "r10",
+        "r11",
+        "r12",
+        "r13",
+        "r14",
+        "r15",
+        "r16",
+        "r17",
+        "r18",
+        "ensure_scope",
+        "completion_scope",
+        "completion_guard"
+      ],
+      "reason": "单一 ADMIN 根任务；明确要求 PM 组织读取、确保每项主机记录都有检查结果并形成文件，且以全部条目都有结果作为完成的必要条件。读取的具体执行者未指定；未声明 WP，也未独立要求执行检查动作。"
+    }
+  ]
+}

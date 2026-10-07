@@ -1,0 +1,503 @@
+{
+  "structure_status": "SINGLE_ROOT",
+  "nodes": [
+    {
+      "id": "pm",
+      "type": "ENTITY",
+      "sources": [{"quote": "PM", "clause_id": "c1", "occurrence": 0, "context_anchor": null}],
+      "semantic_identity": "PM",
+      "entity_kind": "ROLE",
+      "layer": "MAIN",
+      "owner": "TASK",
+      "modality": "UNSTATED",
+      "polarity": "AFFIRMATIVE",
+      "artifact_use": "NONE",
+      "predicate_class": "NONE",
+      "alternative_group_id": null
+    },
+    {
+      "id": "organize",
+      "type": "EVENT",
+      "sources": [{"quote": "请 PM 组织读取 scan.json 并复核高危发现", "clause_id": "c1", "occurrence": 0, "context_anchor": null}],
+      "semantic_identity": "organize",
+      "entity_kind": "NONE",
+      "layer": "MAIN",
+      "owner": "TASK",
+      "modality": "REQUIRED",
+      "polarity": "AFFIRMATIVE",
+      "artifact_use": "NONE",
+      "predicate_class": "ORGANIZE",
+      "alternative_group_id": null
+    },
+    {
+      "id": "read",
+      "type": "EVENT",
+      "sources": [{"quote": "读取 scan.json", "clause_id": "c1", "occurrence": 0, "context_anchor": null}],
+      "semantic_identity": "read",
+      "entity_kind": "NONE",
+      "layer": "COMPLEMENT",
+      "owner": "organize",
+      "modality": "REQUIRED",
+      "polarity": "AFFIRMATIVE",
+      "artifact_use": "NONE",
+      "predicate_class": "OPERATION",
+      "alternative_group_id": null
+    },
+    {
+      "id": "scan_file",
+      "type": "ENTITY",
+      "sources": [{"quote": "scan.json", "clause_id": "c1", "occurrence": 0, "context_anchor": null}],
+      "semantic_identity": "scan.json",
+      "entity_kind": "FILE",
+      "layer": "COMPLEMENT",
+      "owner": "read",
+      "modality": "UNSTATED",
+      "polarity": "AFFIRMATIVE",
+      "artifact_use": "READ_ONLY_INPUT",
+      "predicate_class": "NONE",
+      "alternative_group_id": null
+    },
+    {
+      "id": "review",
+      "type": "EVENT",
+      "sources": [{"quote": "复核高危发现", "clause_id": "c1", "occurrence": 0, "context_anchor": null}],
+      "semantic_identity": "review",
+      "entity_kind": "NONE",
+      "layer": "COMPLEMENT",
+      "owner": "organize",
+      "modality": "REQUIRED",
+      "polarity": "AFFIRMATIVE",
+      "artifact_use": "NONE",
+      "predicate_class": "REVIEW",
+      "alternative_group_id": "organization_scope"
+    },
+    {
+      "id": "review_direct",
+      "type": "EVENT",
+      "sources": [{"quote": "请 PM 组织读取 scan.json 并复核高危发现", "clause_id": "c1", "occurrence": 0, "context_anchor": null}],
+      "semantic_identity": "review",
+      "entity_kind": "NONE",
+      "layer": "MAIN",
+      "owner": "TASK",
+      "modality": "REQUIRED",
+      "polarity": "AFFIRMATIVE",
+      "artifact_use": "NONE",
+      "predicate_class": "REVIEW",
+      "alternative_group_id": "organization_scope"
+    },
+    {
+      "id": "findings",
+      "type": "ENTITY",
+      "sources": [{"quote": "高危发现", "clause_id": "c1", "occurrence": 0, "context_anchor": null}],
+      "semantic_identity": "高危发现",
+      "entity_kind": "DATA",
+      "layer": "MAIN",
+      "owner": "TASK",
+      "modality": "UNSTATED",
+      "polarity": "AFFIRMATIVE",
+      "artifact_use": "EXISTING_INPUT",
+      "predicate_class": "NONE",
+      "alternative_group_id": null
+    },
+    {
+      "id": "generate",
+      "type": "EVENT",
+      "sources": [{"quote": "形成 security-review.md", "clause_id": "c1", "occurrence": 0, "context_anchor": null}],
+      "semantic_identity": "generate",
+      "entity_kind": "NONE",
+      "layer": "MAIN",
+      "owner": "TASK",
+      "modality": "REQUIRED",
+      "polarity": "AFFIRMATIVE",
+      "artifact_use": "NONE",
+      "predicate_class": "PRODUCE",
+      "alternative_group_id": null
+    },
+    {
+      "id": "report_file",
+      "type": "ENTITY",
+      "sources": [{"quote": "security-review.md", "clause_id": "c1", "occurrence": 0, "context_anchor": null}],
+      "semantic_identity": "security-review.md",
+      "entity_kind": "FILE",
+      "layer": "MAIN",
+      "owner": "generate",
+      "modality": "UNSTATED",
+      "polarity": "AFFIRMATIVE",
+      "artifact_use": "GENERATED_OUTPUT",
+      "predicate_class": "NONE",
+      "alternative_group_id": null
+    },
+    {
+      "id": "confirmed_vulnerability",
+      "type": "STATE",
+      "sources": [{"quote": "确认存在可利用漏洞", "clause_id": "c1", "occurrence": 0, "context_anchor": null}],
+      "semantic_identity": "confirmed existence of exploitable vulnerability",
+      "entity_kind": "NONE",
+      "layer": "CONDITION_ANTECEDENT",
+      "owner": "escalate_report",
+      "modality": "UNSTATED",
+      "polarity": "AFFIRMATIVE",
+      "artifact_use": "NONE",
+      "predicate_class": "STATE",
+      "alternative_group_id": null
+    },
+    {
+      "id": "vulnerability",
+      "type": "ENTITY",
+      "sources": [{"quote": "可利用漏洞", "clause_id": "c1", "occurrence": 0, "context_anchor": null}],
+      "semantic_identity": "可利用漏洞",
+      "entity_kind": "OTHER",
+      "layer": "CONDITION_ANTECEDENT",
+      "owner": "confirmed_vulnerability",
+      "modality": "UNSTATED",
+      "polarity": "AFFIRMATIVE",
+      "artifact_use": "NONE",
+      "predicate_class": "NONE",
+      "alternative_group_id": null
+    },
+    {
+      "id": "escalate_report",
+      "type": "EVENT",
+      "sources": [{"quote": "应立即升级汇报", "clause_id": "c1", "occurrence": 0, "context_anchor": null}],
+      "semantic_identity": "escalate_report",
+      "entity_kind": "NONE",
+      "layer": "CONDITION_CONSEQUENT",
+      "owner": "TASK",
+      "modality": "REQUIRED",
+      "polarity": "AFFIRMATIVE",
+      "artifact_use": "NONE",
+      "predicate_class": "ESCALATE",
+      "alternative_group_id": null
+    },
+    {
+      "id": "immediately",
+      "type": "VALUE",
+      "sources": [{"quote": "立即", "clause_id": "c1", "occurrence": 0, "context_anchor": null}],
+      "semantic_identity": "immediately",
+      "entity_kind": "NONE",
+      "layer": "ATTRIBUTE",
+      "owner": "escalate_report",
+      "modality": "UNSTATED",
+      "polarity": "AFFIRMATIVE",
+      "artifact_use": "NONE",
+      "predicate_class": "NONE",
+      "alternative_group_id": null
+    },
+    {
+      "id": "execute_exploit",
+      "type": "EVENT",
+      "sources": [{"quote": "不得执行漏洞利用", "clause_id": "c1", "occurrence": 0, "context_anchor": null}],
+      "semantic_identity": "execute_exploit",
+      "entity_kind": "NONE",
+      "layer": "MAIN",
+      "owner": "TASK",
+      "modality": "FORBIDDEN",
+      "polarity": "AFFIRMATIVE",
+      "artifact_use": "NONE",
+      "predicate_class": "OPERATION",
+      "alternative_group_id": null
+    },
+    {
+      "id": "exploitation",
+      "type": "ENTITY",
+      "sources": [{"quote": "漏洞利用", "clause_id": "c1", "occurrence": 0, "context_anchor": null}],
+      "semantic_identity": "漏洞利用",
+      "entity_kind": "METHOD",
+      "layer": "MAIN",
+      "owner": "execute_exploit",
+      "modality": "UNSTATED",
+      "polarity": "AFFIRMATIVE",
+      "artifact_use": "NONE",
+      "predicate_class": "NONE",
+      "alternative_group_id": null
+    },
+    {
+      "id": "delete",
+      "type": "EVENT",
+      "sources": [{"quote": "不得执行漏洞利用或删除扫描结果", "clause_id": "c1", "occurrence": 0, "context_anchor": null}],
+      "semantic_identity": "delete",
+      "entity_kind": "NONE",
+      "layer": "MAIN",
+      "owner": "TASK",
+      "modality": "FORBIDDEN",
+      "polarity": "AFFIRMATIVE",
+      "artifact_use": "NONE",
+      "predicate_class": "OPERATION",
+      "alternative_group_id": null
+    },
+    {
+      "id": "scan_results",
+      "type": "ENTITY",
+      "sources": [{"quote": "扫描结果", "clause_id": "c1", "occurrence": 0, "context_anchor": null}],
+      "semantic_identity": "扫描结果",
+      "entity_kind": "DATA",
+      "layer": "MAIN",
+      "owner": "delete",
+      "modality": "UNSTATED",
+      "polarity": "AFFIRMATIVE",
+      "artifact_use": "MODIFICATION_TARGET",
+      "predicate_class": "NONE",
+      "alternative_group_id": null
+    }
+  ],
+  "relations": [
+    {
+      "id": "r1",
+      "type": "AGENT",
+      "head": "organize",
+      "tail": "pm",
+      "sources": [{"quote": "PM 组织", "clause_id": "c1", "occurrence": 0, "context_anchor": null}],
+      "ownership": "LOCAL",
+      "role": "PERFORMER",
+      "alternative_group_id": null
+    },
+    {
+      "id": "r2",
+      "type": "PART_OF",
+      "head": "read",
+      "tail": "organize",
+      "sources": [{"quote": "组织读取", "clause_id": "c1", "occurrence": 0, "context_anchor": null}],
+      "ownership": "STRUCTURAL",
+      "role": "NONE",
+      "alternative_group_id": null
+    },
+    {
+      "id": "r3",
+      "type": "PATIENT",
+      "head": "read",
+      "tail": "scan_file",
+      "sources": [{"quote": "读取 scan.json", "clause_id": "c1", "occurrence": 0, "context_anchor": null}],
+      "ownership": "LOCAL",
+      "role": "NONE",
+      "alternative_group_id": null
+    },
+    {
+      "id": "r4",
+      "type": "PART_OF",
+      "head": "review",
+      "tail": "organize",
+      "sources": [{"quote": "组织读取 scan.json 并复核高危发现", "clause_id": "c1", "occurrence": 0, "context_anchor": null}],
+      "ownership": "UNRESOLVED",
+      "role": "NONE",
+      "alternative_group_id": "organization_scope"
+    },
+    {
+      "id": "r5",
+      "type": "PATIENT",
+      "head": "review",
+      "tail": "findings",
+      "sources": [{"quote": "复核高危发现", "clause_id": "c1", "occurrence": 0, "context_anchor": null}],
+      "ownership": "LOCAL",
+      "role": "NONE",
+      "alternative_group_id": "organization_scope"
+    },
+    {
+      "id": "r6",
+      "type": "CONJUNCTION",
+      "head": "read",
+      "tail": "review",
+      "sources": [{"quote": "读取 scan.json 并复核高危发现", "clause_id": "c1", "occurrence": 0, "context_anchor": null}],
+      "ownership": "UNRESOLVED",
+      "role": "NONE",
+      "alternative_group_id": "organization_scope"
+    },
+    {
+      "id": "r7",
+      "type": "AGENT",
+      "head": "review_direct",
+      "tail": "pm",
+      "sources": [{"quote": "请 PM 组织读取 scan.json 并复核高危发现", "clause_id": "c1", "occurrence": 0, "context_anchor": null}],
+      "ownership": "UNRESOLVED",
+      "role": "REVIEWER",
+      "alternative_group_id": "organization_scope"
+    },
+    {
+      "id": "r8",
+      "type": "PATIENT",
+      "head": "review_direct",
+      "tail": "findings",
+      "sources": [{"quote": "复核高危发现", "clause_id": "c1", "occurrence": 0, "context_anchor": null}],
+      "ownership": "LOCAL",
+      "role": "NONE",
+      "alternative_group_id": "organization_scope"
+    },
+    {
+      "id": "r9",
+      "type": "CONJUNCTION",
+      "head": "organize",
+      "tail": "review_direct",
+      "sources": [{"quote": "组织读取 scan.json 并复核高危发现", "clause_id": "c1", "occurrence": 0, "context_anchor": null}],
+      "ownership": "UNRESOLVED",
+      "role": "NONE",
+      "alternative_group_id": "organization_scope"
+    },
+    {
+      "id": "r10",
+      "type": "RESULT",
+      "head": "generate",
+      "tail": "report_file",
+      "sources": [{"quote": "形成 security-review.md", "clause_id": "c1", "occurrence": 0, "context_anchor": null}],
+      "ownership": "LOCAL",
+      "role": "NONE",
+      "alternative_group_id": null
+    },
+    {
+      "id": "r11",
+      "type": "THEME",
+      "head": "confirmed_vulnerability",
+      "tail": "vulnerability",
+      "sources": [{"quote": "确认存在可利用漏洞", "clause_id": "c1", "occurrence": 0, "context_anchor": null}],
+      "ownership": "LOCAL",
+      "role": "NONE",
+      "alternative_group_id": null
+    },
+    {
+      "id": "r12",
+      "type": "CONDITION_OF",
+      "head": "condition",
+      "tail": "escalate_report",
+      "sources": [{"quote": "若确认存在可利用漏洞，应立即升级汇报", "clause_id": "c1", "occurrence": 0, "context_anchor": null}],
+      "ownership": "LOCAL",
+      "role": "NONE",
+      "alternative_group_id": null
+    },
+    {
+      "id": "r13",
+      "type": "LIMIT",
+      "head": "escalate_report",
+      "tail": "immediately",
+      "sources": [{"quote": "立即升级汇报", "clause_id": "c1", "occurrence": 0, "context_anchor": null}],
+      "ownership": "LOCAL",
+      "role": "NONE",
+      "alternative_group_id": null
+    },
+    {
+      "id": "r14",
+      "type": "STOP_OF",
+      "head": "escalate_report",
+      "tail": "TASK",
+      "sources": [{"quote": "应立即升级汇报", "clause_id": "c1", "occurrence": 0, "context_anchor": null}],
+      "ownership": "STRUCTURAL",
+      "role": "NONE",
+      "alternative_group_id": null
+    },
+    {
+      "id": "r15",
+      "type": "THEME",
+      "head": "execute_exploit",
+      "tail": "exploitation",
+      "sources": [{"quote": "执行漏洞利用", "clause_id": "c1", "occurrence": 0, "context_anchor": null}],
+      "ownership": "LOCAL",
+      "role": "NONE",
+      "alternative_group_id": null
+    },
+    {
+      "id": "r16",
+      "type": "PATIENT",
+      "head": "delete",
+      "tail": "scan_results",
+      "sources": [{"quote": "删除扫描结果", "clause_id": "c1", "occurrence": 0, "context_anchor": null}],
+      "ownership": "LOCAL",
+      "role": "NONE",
+      "alternative_group_id": null
+    },
+    {
+      "id": "r17",
+      "type": "FORBIDS",
+      "head": "TASK",
+      "tail": "execute_exploit",
+      "sources": [{"quote": "不得执行漏洞利用", "clause_id": "c1", "occurrence": 0, "context_anchor": null}],
+      "ownership": "STRUCTURAL",
+      "role": "NONE",
+      "alternative_group_id": null
+    },
+    {
+      "id": "r18",
+      "type": "FORBIDS",
+      "head": "TASK",
+      "tail": "delete",
+      "sources": [{"quote": "不得执行漏洞利用或删除扫描结果", "clause_id": "c1", "occurrence": 0, "context_anchor": null}],
+      "ownership": "STRUCTURAL",
+      "role": "NONE",
+      "alternative_group_id": null
+    }
+  ],
+  "expressions": [
+    {
+      "id": "condition",
+      "kind": "CONDITION",
+      "operator": "STATE_REF",
+      "operands": ["confirmed_vulnerability"],
+      "owner": "escalate_report",
+      "sources": [{"quote": "若确认存在可利用漏洞", "clause_id": "c1", "occurrence": 0, "context_anchor": null}],
+      "quantity": null,
+      "alternative_group_id": null
+    },
+    {
+      "id": "forbidden_disjunction",
+      "kind": "CONDITION",
+      "operator": "OR",
+      "operands": ["exploit_ref", "delete_ref"],
+      "owner": "TASK",
+      "sources": [{"quote": "执行漏洞利用或删除扫描结果", "clause_id": "c1", "occurrence": 0, "context_anchor": null}],
+      "quantity": null,
+      "alternative_group_id": null
+    },
+    {
+      "id": "exploit_ref",
+      "kind": "CONDITION",
+      "operator": "RELATION_REF",
+      "operands": ["r15"],
+      "owner": "TASK",
+      "sources": [{"quote": "执行漏洞利用", "clause_id": "c1", "occurrence": 0, "context_anchor": null}],
+      "quantity": null,
+      "alternative_group_id": null
+    },
+    {
+      "id": "delete_ref",
+      "kind": "CONDITION",
+      "operator": "RELATION_REF",
+      "operands": ["r16"],
+      "owner": "TASK",
+      "sources": [{"quote": "删除扫描结果", "clause_id": "c1", "occurrence": 0, "context_anchor": null}],
+      "quantity": null,
+      "alternative_group_id": null
+    },
+    {
+      "id": "prohibition",
+      "kind": "CONDITION",
+      "operator": "NOT",
+      "operands": ["forbidden_disjunction"],
+      "owner": "TASK",
+      "sources": [{"quote": "不得执行漏洞利用或删除扫描结果", "clause_id": "c1", "occurrence": 0, "context_anchor": null}],
+      "quantity": null,
+      "alternative_group_id": null
+    }
+  ],
+  "unresolved": [
+    {
+      "id": "organization_scope",
+      "kind": "UNRESOLVED_SCOPE",
+      "alternatives": ["review", "review_direct"],
+      "sources": [{"quote": "请 PM 组织读取 scan.json 并复核高危发现", "clause_id": "c1", "occurrence": 0, "context_anchor": null}],
+      "reason": "“并复核”可与“读取”并列而处于“组织”的补语范围，也可与“组织读取”并列而由 PM 直接复核。两组候选为互斥解析，不是两项复核任务。读取者、报告形成者及升级汇报者未明确指定；不据此添加角色。"
+    }
+  ],
+  "coverage": [
+    {
+      "region_id": "c1",
+      "disposition": "AMBIGUOUS",
+      "candidate_ids": [
+        "pm", "organize", "read", "scan_file", "review", "review_direct",
+        "findings", "generate", "report_file", "confirmed_vulnerability",
+        "vulnerability", "escalate_report", "immediately", "execute_exploit",
+        "exploitation", "delete", "scan_results",
+        "r1", "r2", "r3", "r4", "r5", "r6", "r7", "r8", "r9",
+        "r10", "r11", "r12", "r13", "r14", "r15", "r16", "r17", "r18",
+        "condition", "forbidden_disjunction", "exploit_ref", "delete_ref",
+        "prohibition", "organization_scope"
+      ],
+      "reason": "整段的组织、读取、复核、生成报告、条件升级汇报、立即时限及两项禁止均已表示；“组织”对“复核”的支配范围保留互斥候选。无显式 WP 标题。"
+    }
+  ]
+}

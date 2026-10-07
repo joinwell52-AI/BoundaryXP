@@ -1,0 +1,637 @@
+{
+  "type": "object",
+  "properties": {
+    "structure_status": {
+      "type": "string",
+      "enum": [
+        "SINGLE_ROOT",
+        "EXPLICIT_MULTI_WP",
+        "MULTI_WP_STRUCTURE_REQUIRED",
+        "STRUCTURE_UNRESOLVED"
+      ]
+    },
+    "nodes": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "type": {
+            "type": "string",
+            "enum": [
+              "ENTITY",
+              "EVENT",
+              "STATE",
+              "VALUE",
+              "REFERENCE",
+              "CONDITION",
+              "DISCOURSE",
+              "UNKNOWN_REFERENT"
+            ]
+          },
+          "sources": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "quote": {
+                  "type": "string"
+                },
+                "clause_id": {
+                  "anyOf": [
+                    {
+                      "type": "string"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                },
+                "occurrence": {
+                  "anyOf": [
+                    {
+                      "type": "integer",
+                      "minimum": 0
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                },
+                "context_anchor": {
+                  "anyOf": [
+                    {
+                      "type": "string"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                }
+              },
+              "required": [
+                "quote",
+                "clause_id",
+                "occurrence",
+                "context_anchor"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "semantic_identity": {
+            "type": "string"
+          },
+          "entity_kind": {
+            "type": "string",
+            "enum": [
+              "PERSON",
+              "ROLE",
+              "GROUP",
+              "FILE",
+              "PATH",
+              "DATA",
+              "SYSTEM",
+              "SERVICE",
+              "ENVIRONMENT",
+              "FORMAT",
+              "METHOD",
+              "OTHER",
+              "NONE"
+            ]
+          },
+          "layer": {
+            "type": "string",
+            "enum": [
+              "MAIN",
+              "CONDITION_ANTECEDENT",
+              "CONDITION_CONSEQUENT",
+              "ATTRIBUTE",
+              "COMPLEMENT",
+              "PURPOSE_COMPLEMENT",
+              "OUTPUT_CONTENT",
+              "BACKGROUND",
+              "QUOTE",
+              "CODE",
+              "META_DECLARATION",
+              "ACCEPTANCE"
+            ]
+          },
+          "owner": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "modality": {
+            "type": "string",
+            "enum": [
+              "REQUIRED",
+              "PERMITTED",
+              "NOT_REQUIRED",
+              "FORBIDDEN",
+              "UNSTATED"
+            ]
+          },
+          "polarity": {
+            "type": "string",
+            "enum": [
+              "AFFIRMATIVE",
+              "NEGATED"
+            ]
+          },
+          "artifact_use": {
+            "type": "string",
+            "enum": [
+              "EXISTING_INPUT",
+              "READ_ONLY_INPUT",
+              "MODIFICATION_TARGET",
+              "GENERATED_OUTPUT",
+              "UPDATED_OUTPUT",
+              "CONDITIONAL_OUTPUT",
+              "REFERENCE_ONLY",
+              "UNKNOWN",
+              "NONE"
+            ]
+          },
+          "predicate_class": {
+            "type": "string",
+            "enum": [
+              "OPERATION",
+              "PRODUCE",
+              "COMMUNICATE",
+              "REVIEW",
+              "APPROVE",
+              "ORGANIZE",
+              "STOP",
+              "ESCALATE",
+              "COMPLETE",
+              "DECLARATION",
+              "SUPPORT",
+              "STATE",
+              "NONE"
+            ]
+          },
+          "alternative_group_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "required": [
+          "id",
+          "type",
+          "sources",
+          "semantic_identity",
+          "entity_kind",
+          "layer",
+          "owner",
+          "modality",
+          "polarity",
+          "artifact_use",
+          "predicate_class",
+          "alternative_group_id"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "relations": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "type": {
+            "type": "string",
+            "enum": [
+              "AGENT",
+              "PATIENT",
+              "THEME",
+              "RESULT",
+              "RECIPIENT",
+              "LOCATION",
+              "BASIS",
+              "CONFORMS_TO",
+              "SCOPE_MEMBER",
+              "LIMIT",
+              "CONDITION_OF",
+              "COMPLETION_OF",
+              "STOP_OF",
+              "APPROVAL_OF",
+              "FORBIDS",
+              "RESTRICTS",
+              "COREFERENCE",
+              "CONJUNCTION",
+              "SEQUENCE",
+              "PART_OF"
+            ]
+          },
+          "head": {
+            "type": "string"
+          },
+          "tail": {
+            "type": "string"
+          },
+          "sources": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "quote": {
+                  "type": "string"
+                },
+                "clause_id": {
+                  "anyOf": [
+                    {
+                      "type": "string"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                },
+                "occurrence": {
+                  "anyOf": [
+                    {
+                      "type": "integer",
+                      "minimum": 0
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                },
+                "context_anchor": {
+                  "anyOf": [
+                    {
+                      "type": "string"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                }
+              },
+              "required": [
+                "quote",
+                "clause_id",
+                "occurrence",
+                "context_anchor"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "ownership": {
+            "type": "string",
+            "enum": [
+              "LOCAL",
+              "STRUCTURAL",
+              "SHARED_EXPLICIT",
+              "COREFERENCE",
+              "UNRESOLVED"
+            ]
+          },
+          "role": {
+            "type": "string",
+            "enum": [
+              "PERFORMER",
+              "APPROVER",
+              "REVIEWER",
+              "RECIPIENT",
+              "COLLABORATOR",
+              "NONE"
+            ]
+          },
+          "alternative_group_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "required": [
+          "id",
+          "type",
+          "head",
+          "tail",
+          "sources",
+          "ownership",
+          "role",
+          "alternative_group_id"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "expressions": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "kind": {
+            "type": "string",
+            "enum": [
+              "SCOPE",
+              "CONDITION",
+              "QUANTITY",
+              "COREFERENCE"
+            ]
+          },
+          "operator": {
+            "type": "string",
+            "enum": [
+              "ITEM",
+              "ALL",
+              "ANY",
+              "UNION",
+              "INTERSECTION",
+              "EXCEPT",
+              "STATE_REF",
+              "RELATION_REF",
+              "AND",
+              "OR",
+              "NOT",
+              "EQ",
+              "LT",
+              "LTE",
+              "GT",
+              "GTE",
+              "REFERENCE_SET"
+            ]
+          },
+          "operands": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "owner": {
+            "type": "string"
+          },
+          "sources": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "quote": {
+                  "type": "string"
+                },
+                "clause_id": {
+                  "anyOf": [
+                    {
+                      "type": "string"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                },
+                "occurrence": {
+                  "anyOf": [
+                    {
+                      "type": "integer",
+                      "minimum": 0
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                },
+                "context_anchor": {
+                  "anyOf": [
+                    {
+                      "type": "string"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                }
+              },
+              "required": [
+                "quote",
+                "clause_id",
+                "occurrence",
+                "context_anchor"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "quantity": {
+            "anyOf": [
+              {
+                "type": "object",
+                "properties": {
+                  "metric": {
+                    "type": "string"
+                  },
+                  "target": {
+                    "type": "string"
+                  },
+                  "value": {
+                    "type": "number"
+                  },
+                  "unit": {
+                    "type": "string"
+                  },
+                  "use": {
+                    "type": "string",
+                    "enum": [
+                      "EXECUTION_LIMIT",
+                      "ACCEPTANCE_THRESHOLD",
+                      "OUTPUT_COUNT",
+                      "IDENTIFIER",
+                      "UNKNOWN"
+                    ]
+                  }
+                },
+                "required": [
+                  "metric",
+                  "target",
+                  "value",
+                  "unit",
+                  "use"
+                ],
+                "additionalProperties": false
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "alternative_group_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "required": [
+          "id",
+          "kind",
+          "operator",
+          "operands",
+          "owner",
+          "sources",
+          "quantity",
+          "alternative_group_id"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "unresolved": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "kind": {
+            "type": "string",
+            "enum": [
+              "UNRESOLVED_AMBIGUOUS",
+              "UNRESOLVED_COREFERENCE",
+              "UNRESOLVED_SCOPE",
+              "UNRESOLVED_RELATION",
+              "UNRESOLVED_QUANTIFICATION"
+            ]
+          },
+          "alternatives": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "sources": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "quote": {
+                  "type": "string"
+                },
+                "clause_id": {
+                  "anyOf": [
+                    {
+                      "type": "string"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                },
+                "occurrence": {
+                  "anyOf": [
+                    {
+                      "type": "integer",
+                      "minimum": 0
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                },
+                "context_anchor": {
+                  "anyOf": [
+                    {
+                      "type": "string"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                }
+              },
+              "required": [
+                "quote",
+                "clause_id",
+                "occurrence",
+                "context_anchor"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "reason": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "kind",
+          "alternatives",
+          "sources",
+          "reason"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "coverage": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "region_id": {
+            "type": "string"
+          },
+          "disposition": {
+            "type": "string",
+            "enum": [
+              "BOUNDARY_SEMANTIC",
+              "NON_BOUNDARY_CONTEXT",
+              "AMBIGUOUS",
+              "UNPARSED"
+            ]
+          },
+          "candidate_ids": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "reason": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "region_id",
+          "disposition",
+          "candidate_ids",
+          "reason"
+        ],
+        "additionalProperties": false
+      }
+    }
+  },
+  "required": [
+    "structure_status",
+    "nodes",
+    "relations",
+    "expressions",
+    "unresolved",
+    "coverage"
+  ],
+  "additionalProperties": false
+}

@@ -1,0 +1,384 @@
+{
+  "structure_status": "SINGLE_ROOT",
+  "nodes": [
+    {
+      "id": "pm",
+      "type": "ENTITY",
+      "sources": [
+        {"quote": "PM", "clause_id": "c1", "occurrence": 0, "context_anchor": "请 PM 组织检查 changes.csv"},
+        {"quote": "PM", "clause_id": "c1", "occurrence": 1, "context_anchor": "只需向 PM 说明无差异"}
+      ],
+      "semantic_identity": "PM",
+      "entity_kind": "ROLE",
+      "layer": "MAIN",
+      "owner": "TASK",
+      "modality": "UNSTATED",
+      "polarity": "AFFIRMATIVE",
+      "artifact_use": "NONE",
+      "predicate_class": "NONE",
+      "alternative_group_id": null
+    },
+    {
+      "id": "changes",
+      "type": "ENTITY",
+      "sources": [
+        {"quote": "changes.csv", "clause_id": "c1", "occurrence": 0, "context_anchor": "检查 changes.csv"},
+        {"quote": "changes.csv", "clause_id": "c1", "occurrence": 1, "context_anchor": "不得修改 changes.csv"}
+      ],
+      "semantic_identity": "changes.csv",
+      "entity_kind": "FILE",
+      "layer": "MAIN",
+      "owner": "TASK",
+      "modality": "UNSTATED",
+      "polarity": "AFFIRMATIVE",
+      "artifact_use": "READ_ONLY_INPUT",
+      "predicate_class": "NONE",
+      "alternative_group_id": null
+    },
+    {
+      "id": "report",
+      "type": "ENTITY",
+      "sources": [
+        {"quote": "difference-report.md", "clause_id": "c1", "occurrence": 0, "context_anchor": "必须生成 difference-report.md 并提交"},
+        {"quote": "该报告", "clause_id": "c1", "occurrence": 0, "context_anchor": "无需生成该报告"}
+      ],
+      "semantic_identity": "difference-report.md",
+      "entity_kind": "FILE",
+      "layer": "CONDITION_CONSEQUENT",
+      "owner": "TASK",
+      "modality": "UNSTATED",
+      "polarity": "AFFIRMATIVE",
+      "artifact_use": "CONDITIONAL_OUTPUT",
+      "predicate_class": "NONE",
+      "alternative_group_id": null
+    },
+    {
+      "id": "organize",
+      "type": "EVENT",
+      "sources": [
+        {"quote": "请 PM 组织检查 changes.csv", "clause_id": "c1", "occurrence": 0, "context_anchor": null}
+      ],
+      "semantic_identity": "organize",
+      "entity_kind": "NONE",
+      "layer": "MAIN",
+      "owner": "TASK",
+      "modality": "REQUIRED",
+      "polarity": "AFFIRMATIVE",
+      "artifact_use": "NONE",
+      "predicate_class": "ORGANIZE",
+      "alternative_group_id": null
+    },
+    {
+      "id": "check",
+      "type": "EVENT",
+      "sources": [
+        {"quote": "检查 changes.csv", "clause_id": "c1", "occurrence": 0, "context_anchor": "组织检查 changes.csv"}
+      ],
+      "semantic_identity": "check",
+      "entity_kind": "NONE",
+      "layer": "COMPLEMENT",
+      "owner": "organize",
+      "modality": "UNSTATED",
+      "polarity": "AFFIRMATIVE",
+      "artifact_use": "NONE",
+      "predicate_class": "OPERATION",
+      "alternative_group_id": null
+    },
+    {
+      "id": "differences",
+      "type": "STATE",
+      "sources": [
+        {"quote": "存在差异", "clause_id": "c1", "occurrence": 0, "context_anchor": "存在差异时必须生成 difference-report.md 并提交"}
+      ],
+      "semantic_identity": "differences_exist",
+      "entity_kind": "NONE",
+      "layer": "CONDITION_ANTECEDENT",
+      "owner": "TASK",
+      "modality": "UNSTATED",
+      "polarity": "AFFIRMATIVE",
+      "artifact_use": "NONE",
+      "predicate_class": "STATE",
+      "alternative_group_id": null
+    },
+    {
+      "id": "generate",
+      "type": "EVENT",
+      "sources": [
+        {"quote": "必须生成 difference-report.md", "clause_id": "c1", "occurrence": 0, "context_anchor": "存在差异时必须生成 difference-report.md 并提交"}
+      ],
+      "semantic_identity": "generate",
+      "entity_kind": "NONE",
+      "layer": "CONDITION_CONSEQUENT",
+      "owner": "TASK",
+      "modality": "REQUIRED",
+      "polarity": "AFFIRMATIVE",
+      "artifact_use": "NONE",
+      "predicate_class": "PRODUCE",
+      "alternative_group_id": null
+    },
+    {
+      "id": "submit",
+      "type": "EVENT",
+      "sources": [
+        {"quote": "提交", "clause_id": "c1", "occurrence": 0, "context_anchor": "存在差异时必须生成 difference-report.md 并提交"}
+      ],
+      "semantic_identity": "submit",
+      "entity_kind": "NONE",
+      "layer": "CONDITION_CONSEQUENT",
+      "owner": "TASK",
+      "modality": "REQUIRED",
+      "polarity": "AFFIRMATIVE",
+      "artifact_use": "NONE",
+      "predicate_class": "COMMUNICATE",
+      "alternative_group_id": null
+    },
+    {
+      "id": "no_differences",
+      "type": "STATE",
+      "sources": [
+        {"quote": "没有差异", "clause_id": "c1", "occurrence": 0, "context_anchor": "没有差异时无需生成该报告，只需向 PM 说明无差异"}
+      ],
+      "semantic_identity": "differences_exist",
+      "entity_kind": "NONE",
+      "layer": "CONDITION_ANTECEDENT",
+      "owner": "TASK",
+      "modality": "UNSTATED",
+      "polarity": "NEGATED",
+      "artifact_use": "NONE",
+      "predicate_class": "STATE",
+      "alternative_group_id": null
+    },
+    {
+      "id": "optional_generate",
+      "type": "EVENT",
+      "sources": [
+        {"quote": "无需生成该报告", "clause_id": "c1", "occurrence": 0, "context_anchor": "没有差异时无需生成该报告"}
+      ],
+      "semantic_identity": "generate",
+      "entity_kind": "NONE",
+      "layer": "CONDITION_CONSEQUENT",
+      "owner": "TASK",
+      "modality": "NOT_REQUIRED",
+      "polarity": "AFFIRMATIVE",
+      "artifact_use": "NONE",
+      "predicate_class": "PRODUCE",
+      "alternative_group_id": null
+    },
+    {
+      "id": "explain",
+      "type": "EVENT",
+      "sources": [
+        {"quote": "只需向 PM 说明无差异", "clause_id": "c1", "occurrence": 0, "context_anchor": "没有差异时无需生成该报告，只需向 PM 说明无差异"}
+      ],
+      "semantic_identity": "explain",
+      "entity_kind": "NONE",
+      "layer": "CONDITION_CONSEQUENT",
+      "owner": "TASK",
+      "modality": "REQUIRED",
+      "polarity": "AFFIRMATIVE",
+      "artifact_use": "NONE",
+      "predicate_class": "COMMUNICATE",
+      "alternative_group_id": null
+    },
+    {
+      "id": "message_content",
+      "type": "ENTITY",
+      "sources": [
+        {"quote": "无差异", "clause_id": "c1", "occurrence": 0, "context_anchor": "说明无差异"}
+      ],
+      "semantic_identity": "无差异",
+      "entity_kind": "DATA",
+      "layer": "OUTPUT_CONTENT",
+      "owner": "explain",
+      "modality": "UNSTATED",
+      "polarity": "AFFIRMATIVE",
+      "artifact_use": "NONE",
+      "predicate_class": "NONE",
+      "alternative_group_id": null
+    },
+    {
+      "id": "modify",
+      "type": "EVENT",
+      "sources": [
+        {"quote": "不得修改 changes.csv", "clause_id": "c1", "occurrence": 0, "context_anchor": null}
+      ],
+      "semantic_identity": "modify",
+      "entity_kind": "NONE",
+      "layer": "MAIN",
+      "owner": "TASK",
+      "modality": "FORBIDDEN",
+      "polarity": "AFFIRMATIVE",
+      "artifact_use": "NONE",
+      "predicate_class": "OPERATION",
+      "alternative_group_id": null
+    }
+  ],
+  "relations": [
+    {
+      "id": "r1",
+      "type": "AGENT",
+      "head": "organize",
+      "tail": "pm",
+      "sources": [{"quote": "请 PM 组织", "clause_id": "c1", "occurrence": 0, "context_anchor": null}],
+      "ownership": "LOCAL",
+      "role": "PERFORMER",
+      "alternative_group_id": null
+    },
+    {
+      "id": "r2",
+      "type": "PART_OF",
+      "head": "check",
+      "tail": "organize",
+      "sources": [{"quote": "组织检查", "clause_id": "c1", "occurrence": 0, "context_anchor": null}],
+      "ownership": "STRUCTURAL",
+      "role": "NONE",
+      "alternative_group_id": null
+    },
+    {
+      "id": "r3",
+      "type": "PATIENT",
+      "head": "check",
+      "tail": "changes",
+      "sources": [{"quote": "检查 changes.csv", "clause_id": "c1", "occurrence": 0, "context_anchor": null}],
+      "ownership": "LOCAL",
+      "role": "NONE",
+      "alternative_group_id": null
+    },
+    {
+      "id": "r4",
+      "type": "CONDITION_OF",
+      "head": "differences",
+      "tail": "generate",
+      "sources": [{"quote": "存在差异时必须生成", "clause_id": "c1", "occurrence": 0, "context_anchor": null}],
+      "ownership": "LOCAL",
+      "role": "NONE",
+      "alternative_group_id": null
+    },
+    {
+      "id": "r5",
+      "type": "CONDITION_OF",
+      "head": "differences",
+      "tail": "submit",
+      "sources": [{"quote": "存在差异时必须生成 difference-report.md 并提交", "clause_id": "c1", "occurrence": 0, "context_anchor": null}],
+      "ownership": "SHARED_EXPLICIT",
+      "role": "NONE",
+      "alternative_group_id": null
+    },
+    {
+      "id": "r6",
+      "type": "RESULT",
+      "head": "generate",
+      "tail": "report",
+      "sources": [{"quote": "生成 difference-report.md", "clause_id": "c1", "occurrence": 0, "context_anchor": null}],
+      "ownership": "LOCAL",
+      "role": "NONE",
+      "alternative_group_id": null
+    },
+    {
+      "id": "r7",
+      "type": "THEME",
+      "head": "submit",
+      "tail": "report",
+      "sources": [{"quote": "difference-report.md 并提交", "clause_id": "c1", "occurrence": 0, "context_anchor": null}],
+      "ownership": "SHARED_EXPLICIT",
+      "role": "NONE",
+      "alternative_group_id": null
+    },
+    {
+      "id": "r8",
+      "type": "CONJUNCTION",
+      "head": "generate",
+      "tail": "submit",
+      "sources": [{"quote": "生成 difference-report.md 并提交", "clause_id": "c1", "occurrence": 0, "context_anchor": null}],
+      "ownership": "STRUCTURAL",
+      "role": "NONE",
+      "alternative_group_id": null
+    },
+    {
+      "id": "r9",
+      "type": "CONDITION_OF",
+      "head": "no_differences",
+      "tail": "optional_generate",
+      "sources": [{"quote": "没有差异时无需生成该报告", "clause_id": "c1", "occurrence": 0, "context_anchor": null}],
+      "ownership": "LOCAL",
+      "role": "NONE",
+      "alternative_group_id": null
+    },
+    {
+      "id": "r10",
+      "type": "RESULT",
+      "head": "optional_generate",
+      "tail": "report",
+      "sources": [{"quote": "生成该报告", "clause_id": "c1", "occurrence": 0, "context_anchor": "无需生成该报告"}],
+      "ownership": "COREFERENCE",
+      "role": "NONE",
+      "alternative_group_id": null
+    },
+    {
+      "id": "r11",
+      "type": "CONDITION_OF",
+      "head": "no_differences",
+      "tail": "explain",
+      "sources": [{"quote": "没有差异时无需生成该报告，只需向 PM 说明无差异", "clause_id": "c1", "occurrence": 0, "context_anchor": null}],
+      "ownership": "SHARED_EXPLICIT",
+      "role": "NONE",
+      "alternative_group_id": null
+    },
+    {
+      "id": "r12",
+      "type": "RECIPIENT",
+      "head": "explain",
+      "tail": "pm",
+      "sources": [{"quote": "向 PM 说明", "clause_id": "c1", "occurrence": 0, "context_anchor": null}],
+      "ownership": "LOCAL",
+      "role": "RECIPIENT",
+      "alternative_group_id": null
+    },
+    {
+      "id": "r13",
+      "type": "THEME",
+      "head": "explain",
+      "tail": "message_content",
+      "sources": [{"quote": "说明无差异", "clause_id": "c1", "occurrence": 0, "context_anchor": null}],
+      "ownership": "LOCAL",
+      "role": "NONE",
+      "alternative_group_id": null
+    },
+    {
+      "id": "r14",
+      "type": "PATIENT",
+      "head": "modify",
+      "tail": "changes",
+      "sources": [{"quote": "修改 changes.csv", "clause_id": "c1", "occurrence": 0, "context_anchor": "不得修改 changes.csv"}],
+      "ownership": "LOCAL",
+      "role": "NONE",
+      "alternative_group_id": null
+    },
+    {
+      "id": "r15",
+      "type": "FORBIDS",
+      "head": "TASK",
+      "tail": "modify",
+      "sources": [{"quote": "不得修改 changes.csv", "clause_id": "c1", "occurrence": 0, "context_anchor": null}],
+      "ownership": "STRUCTURAL",
+      "role": "NONE",
+      "alternative_group_id": null
+    }
+  ],
+  "expressions": [],
+  "unresolved": [],
+  "coverage": [
+    {
+      "region_id": "c1",
+      "disposition": "BOUNDARY_SEMANTIC",
+      "candidate_ids": [
+        "pm", "changes", "report", "organize", "check", "differences",
+        "generate", "submit", "no_differences", "optional_generate",
+        "explain", "message_content", "modify",
+        "r1", "r2", "r3", "r4", "r5", "r6", "r7", "r8",
+        "r9", "r10", "r11", "r12", "r13", "r14", "r15"
+      ],
+      "reason": "全文明确要求 PM 组织检查，按有无差异分别生成并提交报告或仅向 PM 说明；无差异时撤销生成报告的义务，并明确禁止修改 changes.csv。未指定检查、生成、提交或说明的执行者，也未指定提交接收者；没有显式 WP 标题。"
+    }
+  ]
+}

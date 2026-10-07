@@ -1,0 +1,1 @@
+Casey must coordinate the task: check validation-6644.csv in staging environment. Compare snapshot-18875.json as well. Deliver audit-621413.md. The whole task must finish within 43 minutes. Send the final report to Quinn.

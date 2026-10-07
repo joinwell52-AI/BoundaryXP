@@ -1,0 +1,1 @@
+Morgan must coordinate the task: review event-8640.csv in isolated environment. If differences exist in event-8640.csv, create audit-601992.md; otherwise audit-601992.md need not be created.

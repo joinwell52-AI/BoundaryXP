@@ -1,0 +1,320 @@
+{
+  "structure_status": "SINGLE_ROOT",
+  "nodes": [
+    {
+      "id": "pm",
+      "type": "ENTITY",
+      "sources": [{"quote": "PM", "clause_id": "c1", "occurrence": 0, "context_anchor": null}],
+      "semantic_identity": "PM",
+      "entity_kind": "ROLE",
+      "layer": "MAIN",
+      "owner": "TASK",
+      "modality": "UNSTATED",
+      "polarity": "AFFIRMATIVE",
+      "artifact_use": "NONE",
+      "predicate_class": "NONE",
+      "alternative_group_id": null
+    },
+    {
+      "id": "service",
+      "type": "ENTITY",
+      "sources": [{"quote": "服务", "clause_id": "c1", "occurrence": 0, "context_anchor": "服务探测"}, {"quote": "服务", "clause_id": "c1", "occurrence": 1, "context_anchor": "不得重启服务"}],
+      "semantic_identity": "服务",
+      "entity_kind": "SERVICE",
+      "layer": "MAIN",
+      "owner": "TASK",
+      "modality": "UNSTATED",
+      "polarity": "AFFIRMATIVE",
+      "artifact_use": "NONE",
+      "predicate_class": "NONE",
+      "alternative_group_id": null
+    },
+    {
+      "id": "report",
+      "type": "ENTITY",
+      "sources": [{"quote": "service-probe.md", "clause_id": "c1", "occurrence": 0, "context_anchor": null}],
+      "semantic_identity": "service-probe.md",
+      "entity_kind": "FILE",
+      "layer": "MAIN",
+      "owner": "generate",
+      "modality": "UNSTATED",
+      "polarity": "AFFIRMATIVE",
+      "artifact_use": "GENERATED_OUTPUT",
+      "predicate_class": "NONE",
+      "alternative_group_id": null
+    },
+    {
+      "id": "organize",
+      "type": "EVENT",
+      "sources": [{"quote": "组织服务探测", "clause_id": "c1", "occurrence": 0, "context_anchor": null}],
+      "semantic_identity": "organize_service_probing",
+      "entity_kind": "NONE",
+      "layer": "MAIN",
+      "owner": "TASK",
+      "modality": "REQUIRED",
+      "polarity": "AFFIRMATIVE",
+      "artifact_use": "NONE",
+      "predicate_class": "ORGANIZE",
+      "alternative_group_id": null
+    },
+    {
+      "id": "probe",
+      "type": "EVENT",
+      "sources": [{"quote": "服务探测", "clause_id": "c1", "occurrence": 0, "context_anchor": null}],
+      "semantic_identity": "probe_service",
+      "entity_kind": "NONE",
+      "layer": "COMPLEMENT",
+      "owner": "organize",
+      "modality": "UNSTATED",
+      "polarity": "AFFIRMATIVE",
+      "artifact_use": "NONE",
+      "predicate_class": "OPERATION",
+      "alternative_group_id": null
+    },
+    {
+      "id": "generate",
+      "type": "EVENT",
+      "sources": [{"quote": "形成 service-probe.md", "clause_id": "c1", "occurrence": 0, "context_anchor": null}],
+      "semantic_identity": "generate",
+      "entity_kind": "NONE",
+      "layer": "MAIN",
+      "owner": "TASK",
+      "modality": "REQUIRED",
+      "polarity": "AFFIRMATIVE",
+      "artifact_use": "NONE",
+      "predicate_class": "PRODUCE",
+      "alternative_group_id": null
+    },
+    {
+      "id": "retry",
+      "type": "EVENT",
+      "sources": [{"quote": "最多重试 5 次", "clause_id": "c1", "occurrence": 0, "context_anchor": null}],
+      "semantic_identity": "retry_service_probe",
+      "entity_kind": "NONE",
+      "layer": "MAIN",
+      "owner": "TASK",
+      "modality": "PERMITTED",
+      "polarity": "AFFIRMATIVE",
+      "artifact_use": "NONE",
+      "predicate_class": "OPERATION",
+      "alternative_group_id": null
+    },
+    {
+      "id": "successful_returns",
+      "type": "STATE",
+      "sources": [{"quote": "至少 2 次返回成功状态", "clause_id": "c1", "occurrence": 0, "context_anchor": null}],
+      "semantic_identity": "at_least_two_successful_probe_returns",
+      "entity_kind": "NONE",
+      "layer": "CONDITION_ANTECEDENT",
+      "owner": "complete",
+      "modality": "UNSTATED",
+      "polarity": "AFFIRMATIVE",
+      "artifact_use": "NONE",
+      "predicate_class": "STATE",
+      "alternative_group_id": null
+    },
+    {
+      "id": "complete",
+      "type": "EVENT",
+      "sources": [{"quote": "后才可完成", "clause_id": "c1", "occurrence": 0, "context_anchor": null}],
+      "semantic_identity": "complete_task",
+      "entity_kind": "NONE",
+      "layer": "CONDITION_CONSEQUENT",
+      "owner": "TASK",
+      "modality": "PERMITTED",
+      "polarity": "AFFIRMATIVE",
+      "artifact_use": "NONE",
+      "predicate_class": "COMPLETE",
+      "alternative_group_id": null
+    },
+    {
+      "id": "restart",
+      "type": "EVENT",
+      "sources": [{"quote": "不得重启服务", "clause_id": "c1", "occurrence": 0, "context_anchor": null}],
+      "semantic_identity": "restart_service",
+      "entity_kind": "NONE",
+      "layer": "MAIN",
+      "owner": "TASK",
+      "modality": "FORBIDDEN",
+      "polarity": "AFFIRMATIVE",
+      "artifact_use": "NONE",
+      "predicate_class": "OPERATION",
+      "alternative_group_id": null
+    }
+  ],
+  "relations": [
+    {
+      "id": "agent_organize",
+      "type": "AGENT",
+      "head": "organize",
+      "tail": "pm",
+      "sources": [{"quote": "由 PM 组织", "clause_id": "c1", "occurrence": 0, "context_anchor": null}],
+      "ownership": "LOCAL",
+      "role": "PERFORMER",
+      "alternative_group_id": null
+    },
+    {
+      "id": "probe_complement",
+      "type": "PART_OF",
+      "head": "probe",
+      "tail": "organize",
+      "sources": [{"quote": "组织服务探测", "clause_id": "c1", "occurrence": 0, "context_anchor": null}],
+      "ownership": "STRUCTURAL",
+      "role": "NONE",
+      "alternative_group_id": null
+    },
+    {
+      "id": "probe_material",
+      "type": "PATIENT",
+      "head": "probe",
+      "tail": "service",
+      "sources": [{"quote": "服务探测", "clause_id": "c1", "occurrence": 0, "context_anchor": null}],
+      "ownership": "LOCAL",
+      "role": "NONE",
+      "alternative_group_id": null
+    },
+    {
+      "id": "agent_generate",
+      "type": "AGENT",
+      "head": "generate",
+      "tail": "pm",
+      "sources": [{"quote": "由 PM 组织服务探测并形成 service-probe.md", "clause_id": "c1", "occurrence": 0, "context_anchor": null}],
+      "ownership": "SHARED_EXPLICIT",
+      "role": "PERFORMER",
+      "alternative_group_id": null
+    },
+    {
+      "id": "organized_and_generated",
+      "type": "CONJUNCTION",
+      "head": "organize",
+      "tail": "generate",
+      "sources": [{"quote": "组织服务探测并形成 service-probe.md", "clause_id": "c1", "occurrence": 0, "context_anchor": null}],
+      "ownership": "STRUCTURAL",
+      "role": "NONE",
+      "alternative_group_id": null
+    },
+    {
+      "id": "generated_report",
+      "type": "RESULT",
+      "head": "generate",
+      "tail": "report",
+      "sources": [{"quote": "形成 service-probe.md", "clause_id": "c1", "occurrence": 0, "context_anchor": null}],
+      "ownership": "LOCAL",
+      "role": "NONE",
+      "alternative_group_id": null
+    },
+    {
+      "id": "retry_probe",
+      "type": "PART_OF",
+      "head": "retry",
+      "tail": "probe",
+      "sources": [{"quote": "服务探测并形成 service-probe.md，最多重试 5 次", "clause_id": "c1", "occurrence": 0, "context_anchor": null}],
+      "ownership": "STRUCTURAL",
+      "role": "NONE",
+      "alternative_group_id": null
+    },
+    {
+      "id": "retry_limit",
+      "type": "LIMIT",
+      "head": "retry",
+      "tail": "retry_cap",
+      "sources": [{"quote": "最多重试 5 次", "clause_id": "c1", "occurrence": 0, "context_anchor": null}],
+      "ownership": "LOCAL",
+      "role": "NONE",
+      "alternative_group_id": null
+    },
+    {
+      "id": "completion_guard",
+      "type": "CONDITION_OF",
+      "head": "success_guard",
+      "tail": "complete",
+      "sources": [{"quote": "至少 2 次返回成功状态后才可完成", "clause_id": "c1", "occurrence": 0, "context_anchor": null}],
+      "ownership": "LOCAL",
+      "role": "NONE",
+      "alternative_group_id": null
+    },
+    {
+      "id": "task_completion_threshold",
+      "type": "COMPLETION_OF",
+      "head": "success_guard",
+      "tail": "TASK",
+      "sources": [{"quote": "本次任务", "clause_id": "c1", "occurrence": 0, "context_anchor": null}, {"quote": "至少 2 次返回成功状态后才可完成", "clause_id": "c1", "occurrence": 0, "context_anchor": null}],
+      "ownership": "STRUCTURAL",
+      "role": "NONE",
+      "alternative_group_id": null
+    },
+    {
+      "id": "restart_material",
+      "type": "PATIENT",
+      "head": "restart",
+      "tail": "service",
+      "sources": [{"quote": "重启服务", "clause_id": "c1", "occurrence": 0, "context_anchor": null}],
+      "ownership": "LOCAL",
+      "role": "NONE",
+      "alternative_group_id": null
+    },
+    {
+      "id": "restart_prohibition",
+      "type": "FORBIDS",
+      "head": "TASK",
+      "tail": "restart",
+      "sources": [{"quote": "不得重启服务", "clause_id": "c1", "occurrence": 0, "context_anchor": null}],
+      "ownership": "STRUCTURAL",
+      "role": "NONE",
+      "alternative_group_id": null
+    }
+  ],
+  "expressions": [
+    {
+      "id": "retry_cap",
+      "kind": "QUANTITY",
+      "operator": "LTE",
+      "operands": ["retry"],
+      "owner": "retry",
+      "sources": [{"quote": "最多重试 5 次", "clause_id": "c1", "occurrence": 0, "context_anchor": null}],
+      "quantity": {
+        "metric": "retry_count",
+        "target": "retry",
+        "value": 5,
+        "unit": "次",
+        "use": "EXECUTION_LIMIT"
+      },
+      "alternative_group_id": null
+    },
+    {
+      "id": "success_count",
+      "kind": "QUANTITY",
+      "operator": "GTE",
+      "operands": ["successful_returns"],
+      "owner": "TASK",
+      "sources": [{"quote": "至少 2 次返回成功状态", "clause_id": "c1", "occurrence": 0, "context_anchor": null}],
+      "quantity": {
+        "metric": "successful_return_count",
+        "target": "successful_returns",
+        "value": 2,
+        "unit": "次",
+        "use": "ACCEPTANCE_THRESHOLD"
+      },
+      "alternative_group_id": null
+    },
+    {
+      "id": "success_guard",
+      "kind": "CONDITION",
+      "operator": "STATE_REF",
+      "operands": ["successful_returns"],
+      "owner": "complete",
+      "sources": [{"quote": "至少 2 次返回成功状态后才可完成", "clause_id": "c1", "occurrence": 0, "context_anchor": null}],
+      "quantity": null,
+      "alternative_group_id": null
+    }
+  ],
+  "unresolved": [],
+  "coverage": [
+    {
+      "region_id": "c1",
+      "disposition": "BOUNDARY_SEMANTIC",
+      "candidate_ids": ["pm", "service", "report", "organize", "probe", "generate", "retry", "successful_returns", "complete", "restart", "agent_organize", "probe_complement", "probe_material", "agent_generate", "organized_and_generated", "generated_report", "retry_probe", "retry_limit", "completion_guard", "task_completion_threshold", "restart_material", "restart_prohibition", "retry_cap", "success_count", "success_guard"],
+      "reason": "单一任务包含 PM 组织服务探测、形成文件、重试上限、完成的成功次数必要条件，以及重启服务禁令；未声明 WP 标题，也未明确指定探测、重试或重启的执行者。"
+    }
+  ]
+}
