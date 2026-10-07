@@ -12,10 +12,10 @@ export const DATA=process.env.BOUNDX_DATA_DIR?path.resolve(process.env.BOUNDX_DA
 const ID=/^[a-f0-9]{8}(?:-[a-f0-9]{4}){3}-[a-f0-9]{12}$/;
 const terminal=new Set(['COMPLETED','COMPLETED_WITH_UNRESOLVED','FAILED','CANCELLED','INTERRUPTED']);
 const save=(file,value)=>{const temp=file+'.'+randomUUID()+'.tmp';writeJSON(temp,value);fs.renameSync(temp,file);};
-const knownErrors=['EMPTY_SOURCE','SOURCE_BYTE_LIMIT','SHORT_TEXT_SCOPE_EXCEEDED','SOURCE_UTF8_ROUNDTRIP_FAILED','CODEX_TIMEOUT','CODEX_LOGIN_REQUIRED','CODEX_QUOTA_OR_RATE_LIMIT','CODEX_NETWORK_FAILURE','CODEX_MODEL_UNAVAILABLE','CODEX_TRANSPORT_OR_SCHEMA_FAILURE','CODEX_ENV_UNAVAILABLE','UNSUPPORTED_CLI_FLAG','SKILL_CONTRACT_VERSION_MISMATCH','UNEXPECTED_TOOL_ACTIVITY','AUDIT_SESSION_NOT_INDEPENDENT','CANCELLED'];
+const knownErrors=['INSTALLED_RESOURCE_CHANGED','EMPTY_SOURCE','SOURCE_BYTE_LIMIT','SHORT_TEXT_SCOPE_EXCEEDED','SOURCE_UTF8_ROUNDTRIP_FAILED','CODEX_TIMEOUT','CODEX_LOGIN_REQUIRED','CODEX_QUOTA_OR_RATE_LIMIT','CODEX_NETWORK_FAILURE','CODEX_MODEL_UNAVAILABLE','CODEX_TRANSPORT_OR_SCHEMA_FAILURE','CODEX_ENV_UNAVAILABLE','UNSUPPORTED_CLI_FLAG','SKILL_CONTRACT_VERSION_MISMATCH','UNEXPECTED_TOOL_ACTIVITY','AUDIT_SESSION_NOT_INDEPENDENT','CANCELLED'];
 export function publicError(e){const code=knownErrors.find(c=>String(e.code??e.message).startsWith(c))??(e instanceof TypeError?'INVALID_UTF8':'COMPILER_ERROR');return {code,message:code,details_available_locally:true};}
 const safeTrace=trace=>{const {model_calls,...rest}=trace;return {...rest,model_calls:Object.fromEntries(Object.entries(model_calls??{}).map(([phase,calls])=>[phase,calls.map(({thread_id,elapsed_ms,exit_code,usage,skill_mode,actual_model,schema_check})=>({thread_id,elapsed_ms,exit_code,usage,skill_mode,actual_model,schema_check}))]))};};
-export function createServer({dataRoot=DATA,parse=parse7Plus1,legacyRoot=process.env.BOUNDX_LEGACY_DIR?path.resolve(process.env.BOUNDX_LEGACY_DIR):path.resolve(ROOT,'../local-lab/history'),timeoutMs=300000}={}){
+export function createServer({dataRoot=DATA,parse=parse7Plus1,legacyRoot=process.env.BOUNDX_LEGACY_DIR?path.resolve(process.env.BOUNDX_LEGACY_DIR):path.resolve(ROOT,'../local-lab/history'),timeoutMs=300000,resourceGuard=()=>{},productSnapshot=null,maxModelRequests=6}={}){
  fs.mkdirSync(path.join(dataRoot,'runs'),{recursive:true});
  const records=new Map(),sessions=new Map(),active=new Map(),clearTokens=new Map();
  const folder=id=>{if(!ID.test(id))throw Error('INVALID_RUN_ID');return path.join(dataRoot,'runs',id);};
@@ -36,8 +36,9 @@ export function createServer({dataRoot=DATA,parse=parse7Plus1,legacyRoot=process
     res.writeHead(200,{'content-type':name.endsWith('.html')?'text/html; charset=utf-8':name.endsWith('.js')?'text/javascript; charset=utf-8':'text/css; charset=utf-8','cache-control':'no-store','content-security-policy':"default-src 'self'; script-src 'self'; style-src 'self'; object-src 'none'; frame-ancestors 'none'; base-uri 'none'"});return res.end(fs.readFileSync(path.join(WEB,name)));
    }
    if(req.method==='GET'&&route==='/api/session'){
+    resourceGuard();
     const session=randomBytes(32).toString('hex');sessions.set(session,true);res.setHeader('set-cookie',`boundx_session=${session}; HttpOnly; SameSite=Strict; Path=/`);
-    return send(200,{token:session,engine:'BoundX short compiler',compiler_revision:compilerRevision,runtime_sha256:sha256(loadedRuntime),contract:buildBundle('parse').schema.properties.contract_version.const,skill_mode:'INLINE_BUNDLE',native_skill_loading:'NOT_VERIFIED',actual_model:null,requested_model:'gpt-6.1-sol',limit_codepoints:300,business_execution_enabled:false});
+    return send(200,{token:session,product_snapshot:productSnapshot,engine:'BoundX short compiler',compiler_revision:compilerRevision,runtime_sha256:sha256(loadedRuntime),contract:buildBundle('parse').schema.properties.contract_version.const,skill_mode:'INLINE_BUNDLE',native_skill_loading:'NOT_VERIFIED',actual_model:null,requested_model:'gpt-6.1-sol',limit_codepoints:300,business_execution_enabled:false});
    }
    if(req.method==='GET'&&route==='/api/runs')return send(200,[...[...records.values()].map(summary),...legacyList()].sort((a,b)=>String(b.created_at).localeCompare(String(a.created_at))));
    const legacy=/^\/api\/legacy\/([a-f0-9-]+)$/u.exec(route);
@@ -71,6 +72,7 @@ export function createServer({dataRoot=DATA,parse=parse7Plus1,legacyRoot=process
     if(!ID.test(input.request_id??''))return send(400,{error:'REQUEST_ID_REQUIRED'});
     if((typeof input.text==='string')===(typeof input.base64==='string'))return send(400,{error:'ONE_SOURCE_REQUIRED'});
     if(input.base64!==undefined&&!/^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=)?$/.test(input.base64))return send(400,{error:'INVALID_BASE64'});
+    resourceGuard();
     if(JSON.stringify(runtimeInventory())!==loadedRuntime)return send(409,{error:'STALE_CODE_RESTART_REQUIRED'});
     const bytes=input.base64!==undefined?Buffer.from(input.base64,'base64'):Buffer.from(input.text,'utf8');const source=prepareSource(bytes);
     const prior=[...records.values()].find(r=>r.request_id===input.request_id);
@@ -78,10 +80,10 @@ export function createServer({dataRoot=DATA,parse=parse7Plus1,legacyRoot=process
     if(active.size)return send(409,{error:'COMPILER_BUSY'});
     const id=randomUUID(),controller=new AbortController(),created_at=new Date().toISOString();fs.mkdirSync(folder(id));
     record={run_id:id,request_id:input.request_id,created_at,status:'QUEUED',stage:'QUEUED',source_text:source.text,source_sha256:source.sha256,codepoints:source.codepoints,filename:typeof input.filename==='string'?path.basename(input.filename).slice(0,100):'pasted-task.txt',engine:'BoundX short compiler',contract:buildBundle('parse').schema.properties.contract_version.const,skill_mode:'INLINE_BUNDLE',native_skill_loading:'NOT_VERIFIED',requested_model:'gpt-6.1-sol',actual_model:null,execution_mode:'LIVE_CODEX',stages:[{stage:'QUEUED',at:created_at}]};
-    record.compiler_revision=compilerRevision;record.runtime_sha256=sha256(loadedRuntime);records.set(id,record);persist(record);active.set(id,controller);send(202,summary(record));
+    record.product_snapshot=productSnapshot;record.compiler_revision=compilerRevision;record.runtime_sha256=sha256(loadedRuntime);records.set(id,record);persist(record);active.set(id,controller);send(202,summary(record));
     setImmediate(async()=>{
      try{
-      const result=await parse(bytes,{output:folder(id),timeoutMs,signal:controller.signal,onProgress:p=>{if(record.status==='CANCELLING')return;record.status='RUNNING';record.stage=p.stage;record.revision=p.revision??0;record.stages.push({...p,at:new Date().toISOString()});persist(record);}});
+      const result=await parse(bytes,{output:folder(id),resourceGuard,productSnapshot,timeoutMs,maxModelRequests,signal:controller.signal,onProgress:p=>{if(record.status==='CANCELLING')return;record.status='RUNNING';record.stage=p.stage;record.revision=p.revision??0;record.stages.push({...p,at:new Date().toISOString()});persist(record);}});
       if(controller.signal.aborted)throw Error('CANCELLED');
       record.status=result.canonical.unresolved.length||result.canonical.gaps.length?'COMPLETED_WITH_UNRESOLVED':'COMPLETED';record.stage=record.status;
       record.slot_status=Object.fromEntries(Object.entries(result.canonical.slots).map(([k,v])=>[k,v.status]));
@@ -103,7 +105,7 @@ export function createServer({dataRoot=DATA,parse=parse7Plus1,legacyRoot=process
    if(req.method==='POST'&&route==='/api/clear-confirmation'){const token=randomUUID();clearTokens.set(token,cookie);return send(200,{token,message:'仅从列表隐藏本轮历史；原始文件与旧历史保持不变。'});}
    if(req.method==='DELETE'&&route==='/api/runs'){if(active.size)return send(409,{error:'COMPILER_BUSY'});if(clearTokens.get(input.token)!==cookie||input.confirmation!=='DELETE_ALL_HISTORY')return send(409,{error:'CONFIRMATION_REQUIRED'});clearTokens.delete(input.token);let count=0;for(const r of records.values()){r.hidden=true;persist(r);count++;}records.clear();return send(200,{hidden:count,files_retained:true});}
    return send(404,{error:'NOT_FOUND'});
-  }catch(e){if(!res.headersSent)send(e.code==='ENOENT'?404:400,{error:publicError(e).code});else res.end();}
+  }catch(e){if(!res.headersSent)send(String(e.message).startsWith('INSTALLED_RESOURCE_CHANGED')?409:e.code==='ENOENT'?404:400,{error:publicError(e).code});else res.end();}
  });
  server.activeJobs=active;server.records=records;server.dataRoot=dataRoot;return server;
 }
@@ -112,3 +114,5 @@ export function startServer(){
  server.on('error',e=>{console.error(e.code==='EADDRINUSE'?'PORT_IN_USE: do not stop unknown services':e.message);process.exitCode=1;});
  server.listen(port,'127.0.0.1',()=>console.log(`BoundX short compiler 031 / INLINE_BUNDLE: http://127.0.0.1:${port}/`));return server;
 }
+
+

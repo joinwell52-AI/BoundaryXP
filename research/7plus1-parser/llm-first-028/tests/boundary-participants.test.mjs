@@ -8,8 +8,8 @@ const source=prepareSource(Buffer.from('执行者交付材料；确认者确认�
 const sources=[{quote:source.text,occurrence:1}];
 function fixture(kind,root){
  const event=(id,layer,use)=>({id,predicate:id,kind:'ACTION',layer,use,modality:use==='CURRENT_TASK'?'REQUIRED':'UNSTATED',polarity:'POSITIVE',owner_id:'ROOT',constraint_ids:[],requires:[],sources});
- const role={id:'participant',kind:'ROLE',event_id:'confirm',entity_id:'actor',role:'PERFORMER',expression_id:null,direction:null,temporal:null,quantity:null,scope_id:'confirm',requires:[],sources,note:''};
- const boundary={id:'boundary',kind,event_id:root?null:'deliver',entity_id:null,role:null,expression_id:'state',direction:kind==='TEMPORAL'?'ORDER':'SUFFICIENT',temporal:kind==='TEMPORAL'?'AFTER':null,quantity:null,scope_id:root?'ROOT':'deliver',requires:[],sources,note:''};
+ const role={id:'participant',kind:'ROLE',event_id:'confirm',entity_id:'actor',role:'PERFORMER',expression_id:null,direction:null,temporal:null,quantity:null,artifact_use:null,scope_id:'confirm',requires:[],sources,note:''};
+ const boundary={id:'boundary',kind,event_id:root?null:'deliver',entity_id:null,role:null,expression_id:'state',direction:kind==='TEMPORAL'?'ORDER':'SUFFICIENT',temporal:kind==='TEMPORAL'?'AFTER':null,quantity:null,artifact_use:null,scope_id:root?'ROOT':'deliver',requires:[],sources,note:''};
  const g={contract_version:contractVersion,entities:[{id:'actor',label:'确认者',type:'PERSON',alternatives:[],mentions:sources}],events:[event('deliver','MAIN','CURRENT_TASK'),event('confirm','CONDITION','MENTION_ONLY')],claims:[role,boundary],expressions:[{id:'state',op:'STATE',operands:[],state:{predicate:'已完成',event_id:'confirm',args:[],polarity:'POSITIVE'},sources}],issues:[],coverage:[]};
  if(!root)g.events[0].constraint_ids=['boundary'];return g;
 }

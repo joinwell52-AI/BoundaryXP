@@ -1,0 +1,9 @@
+import fs from 'node:fs';import path from 'node:path';import {execFileSync} from 'node:child_process';
+import {runtimeInventory} from '../llm-first-028/evidence.mjs';import {sha256} from '../llm-first-028/source.mjs';import {compilerRevision} from '../llm-first-028/engine.mjs';import {contractVersion} from '../llm-first-028/contracts/schema.mjs';
+const destination=path.resolve('.boundx/experiments/031-r1/packages',process.argv[2]??'offline-c1');if(fs.existsSync(destination))throw Error('PACKAGE_EXISTS');
+const core='research/7plus1-parser/llm-first-028/',ui='research/7plus1-parser/v0.3-p2.1-generalization/web/';
+const files=[...runtimeInventory().map(x=>core+x.path),...['index.html','native-app.js','style.css'].map(x=>ui+x),...['cli.mjs','ui.mjs','deploy.mjs','verify.mjs','resources.mjs','使用说明.md','ACCEPTANCE.md'].map(x=>'product/short-compiler/'+x),'docs/BoundX-7plus1-定义原理语义编译与边界计算说明-v0.4.md'];
+fs.mkdirSync(destination,{recursive:true});for(const f of files){const p=path.join(destination,f);fs.mkdirSync(path.dirname(p),{recursive:true});fs.copyFileSync(f,p);}
+for(const f of ['package.json','package-lock.json'])fs.copyFileSync('product/short-compiler/'+f,path.join(destination,f));
+const manifest={format:'boundx-short-local-product/v1',version:JSON.parse(fs.readFileSync(path.join(destination,'package.json'))).version,compiler_revision:compilerRevision,contract:contractVersion,source_commit:execFileSync('git',['rev-parse','HEAD'],{encoding:'utf8'}).trim(),created_at:new Date().toISOString(),files:[...files,'package.json','package-lock.json'].map(p=>({path:p,sha256:sha256(fs.readFileSync(path.join(destination,p)))})),credentials_included:false,history_included:false,weights_included:false};
+fs.writeFileSync(path.join(destination,'PRODUCT-MANIFEST.json'),JSON.stringify(manifest,null,2)+'\n',{flag:'wx'});console.log(destination);

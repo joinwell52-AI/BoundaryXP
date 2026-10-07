@@ -11,6 +11,8 @@
 | 技术有界修订 | technical.rows.errors | technicalRevisionFeedback白名单 | engine与审阅共用一次修订、新会话复核 |
 | 条件方向/目标/时间 | claims.CONDITION.expression_id/direction/temporal，events.constraint_ids | CONDITION_SIGNATURE、CONSTRAINT_BINDING_* | constraints附着每一用途，不无条件化 |
 | 单纯先后 | claims.TEMPORAL | TEMPORAL_DIRECTION | constraints，同IR中文 |
+| 产物实例使用 | claims.ARTIFACT_USE.artifact_use | ARTIFACT_*签名、双端引用/来源、身份竞争、局部审阅 | artifacts.mjs→IR/canonical artifact_dependencies；与TEMPORAL/Proof.requires分开 |
+| 同身份用途索引 | RESULT与同entity_id对象用途 | 已链接两端来源和技术状态 | DERIVED artifact_associations，不推出版本/可用性/强顺序 |
 | 数量及计数范围 | claims.QUANTITY.quantity | QUANTITY_SIGNATURE/OWNERSHIP/TARGET | R/产物content_quantities、evaluateQuantity |
 | 根完成停止 | claims.COMPLETION/STOP.scope_id | ROOT_TRANSITION_SIGNATURE | C、expression |
 | 固定逻辑/集合/状态 | expressions.op/operands/state | EXPRESSION_ARITY/SIGNATURE/REFERENCE | expression、evaluateExpression |

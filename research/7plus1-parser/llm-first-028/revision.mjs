@@ -1,5 +1,11 @@
 // Technical feedback is generated from actual validator rows, never from source keywords.
 const repairable={
+ ARTIFACT_USE_SIGNATURE:['artifact_use','Bind a consumer event/entity to a producer RESULT and consumer ROLE. Inapplicable fields are null; preserve timing separately.'],
+ ARTIFACT_PRODUCER_BINDING:['artifact_use.producer_result_id','Reference the source-supported RESULT of this exact artifact/version; never infer from a path or choose among competing producers.'],
+ ARTIFACT_CONSUMER_BINDING:['artifact_use.consumer_role_id','Reference the same event/entity OBJECT/INPUT_OBJECT/DELIVERABLE use.'],
+ ARTIFACT_SELF_USE:['artifact_use','An event cannot consume its own future result.'],
+ ARTIFACT_USE_SOURCE_ENDPOINTS:['sources','Provide exact source evidence for both RESULT and consumer ROLE endpoints.'],
+ ARTIFACT_USE_FIELD_MISPLACED:['artifact_use','Non-null only on ARTIFACT_USE claims.'],
  CONTENT_QUANTITY_RESULT_TARGET:['quantity.target_id','OUTPUT_CONTENT.target_id must identify a RESULT/DELIVERABLE of the same event. Preserve metric, value, unit, count_scope and all source requirements.'],
  EXECUTION_QUANTITY_TARGET:['quantity.target_id','EXECUTION_LIMIT.target_id must be the owning event_id.'],
  QUANTITY_OWNERSHIP:['quantity.target_id','Quantity target must belong to the stated event and event.constraint_ids must cite this claim. Do not choose among multiple results without source support.'],

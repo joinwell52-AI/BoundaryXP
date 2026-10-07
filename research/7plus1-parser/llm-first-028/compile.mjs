@@ -1,5 +1,6 @@
 import {views,contractVersion} from './contracts/schema.mjs';
 import {sha256} from './source.mjs';
+import {artifactRelations} from './artifacts.mjs';
 export function compileBoundary(source,g,audit,checks){
  const rows=new Map(checks.rows.map(r=>[r.id,r]));
  const linked=x=>({...x,...(x.mentions?{mentions:rows.get(x.id)?.sources??x.mentions}:{sources:rows.get(x.id)?.sources??x.sources})});
@@ -7,6 +8,7 @@ export function compileBoundary(source,g,audit,checks){
  const effective=id=>{const row=rows.get(id);return row?.collection==='entities'?row.identity_status??row.status:row?.status;};
  const status=ids=>ids.some(id=>effective(id)==='REJECTED')?'REJECTED':ids.some(id=>effective(id)!=='ACCEPTED')?'UNRESOLVED':'ACCEPTED';
  const facts=[];
+ const artifacts=artifactRelations(g,checks);
  const make=(kind,ids,data,slots)=>{
   const unique=[...new Set(ids.filter(Boolean))], digest=sha256(JSON.stringify(data));
   const provenanceIds=new Set();
@@ -34,7 +36,7 @@ export function compileBoundary(source,g,audit,checks){
  for(const raw of g.events){
   const e=linked(raw);
   const roles=g.claims.filter(c=>c.kind==='ROLE'&&c.event_id===e.id).map(c=>({...linked(c),entity:index.get(c.entity_id),status:status([c.id,c.entity_id])}));
-  const payload={event:e,roles,constraints:constraints(e)};
+  const payload={event:e,roles,constraints:constraints(e),artifact_dependencies:artifacts.availability.filter(x=>x.consumer_event_id===e.id)};
   make('EVENT',[e.id,...roles.map(c=>c.id),...e.constraint_ids],payload,positive(e)?['A']:current(e)&&e.modality==='FORBIDDEN'?['B']:[]);
  }
  for(const raw of g.claims){
@@ -57,10 +59,13 @@ export function compileBoundary(source,g,audit,checks){
   const contentScopes=c.kind==='ROLE'&&['RESULT','DELIVERABLE'].includes(c.role)?g.claims.filter(q=>q.kind==='SCOPE'&&q.scope_id===c.entity_id&&q.event_id===c.event_id).map(q=>({...linked(q),expression:expression(q.expression_id)})):[];
   make(c.kind,[...ids,...quantities.map(q=>q.id),...contentScopes.map(q=>q.id)],{claim:c,event:e??null,entity:entity??null,expression:expression(c.expression_id),constraints:e?constraints(e):[],content_quantities:quantities,content_scopes:contentScopes},slots);
  }
+ for(const a of artifacts.availability.filter(x=>x.eligible)){
+  const {id,...data}=a;make('ARTIFACT_AVAILABILITY',a.provenance_refs,{...data,relation_id:id,event:null,claim:null,constraints:[]},[]);
+ }
  const unresolved=facts.filter(f=>f.status!=='ACCEPTED'), gaps=[...g.issues.filter(i=>i.kind==='COVERAGE_GAP'),...audit.omissions,...checks.coverage.filter(c=>c.status==='GAP')];
- const ir={format:'boundx-boundary-ir/'+contractVersion,source_sha256:source.sha256,facts,entities:g.entities.map(linked),expressions:g.expressions.map(linked),issues:g.issues.map(i=>({...i,sources:checks.issue_sources?.find(x=>x.id===i.id)?.sources??i.sources})),audit_issues:audit.issues,gaps,technical_diagnostics:checks.diagnostics,business_decision:null,execution_authorization:null};
+ const ir={format:'boundx-boundary-ir/'+contractVersion,source_sha256:source.sha256,facts,artifact_associations:artifacts.associations,artifact_dependencies:artifacts.availability,entities:g.entities.map(linked),expressions:g.expressions.map(linked),issues:g.issues.map(i=>({...i,sources:checks.issue_sources?.find(x=>x.id===i.id)?.sources??i.sources})),audit_issues:audit.issues,gaps,technical_diagnostics:checks.diagnostics,business_decision:null,execution_authorization:null};
  const slots=Object.fromEntries(views.map(slot=>{const entries=facts.filter(f=>f.slots.includes(slot));const coverageGap=gaps.some(g=>g.affected_views?.includes(slot))||!checks.schemas.proposal.ok||!checks.schemas.audit.ok;return [slot,{status:coverageGap?'PARSER_COVERAGE_FAILURE':entries.some(f=>f.status!=='ACCEPTED')?'UNRESOLVED':entries.length?'RESOLVED':'ABSENT',openness:entries.length?'CONSTRAINED':'OPEN',entries}];}));
- const canonical={format:'boundx-canonical-7plus1/'+contractVersion,source_sha256:source.sha256,entities:ir.entities,expressions:ir.expressions,slots,unresolved,retained_nonprojected:facts.filter(f=>f.slots.length===0),issues:g.issues,gaps,business_decision:null,execution_authorization:null};
+ const canonical={format:'boundx-canonical-7plus1/'+contractVersion,source_sha256:source.sha256,artifact_associations:ir.artifact_associations,artifact_dependencies:ir.artifact_dependencies,entities:ir.entities,expressions:ir.expressions,slots,unresolved,retained_nonprojected:facts.filter(f=>f.slots.length===0),issues:g.issues,gaps,business_decision:null,execution_authorization:null};
  return {ir,canonical,chinese:renderChinese(canonical)};
 }
 const modality={REQUIRED:'必须',PERMITTED:'允许',FORBIDDEN:'禁止',NOT_REQUIRED:'无需',UNSTATED:'未陈述模态'};
@@ -91,6 +96,9 @@ export function renderChinese(c){
    lines.push(`- [${f.status}] ${t}${cond?'；'+cond:''}${content?'；产物内容数量='+content:''}（${f.id}）`);
   }
  }
+ lines.push('\n## 产物关联与可用性依赖（不等于事件强顺序）');
+ for(const a of c.artifact_associations??[])lines.push(`- [${a.status}] 同身份产物 ${name(a.artifact_id)}：${eventText(a.producer_event_id)} → ${eventText(a.consumer_event_id)}；仅关联，不推出版本可用或先后（${a.id}）`);
+ for(const a of c.artifact_dependencies??[])lines.push(`- [${a.status}] 产物可用性 ${name(a.artifact_id)}：本次${eventText(a.producer_event_id)}结果 → ${eventText(a.consumer_event_id)}用途；${a.availability==='COMPLETE_RESULT'?'完整结果可用':'所使用部分可用'}；保留生产=${modality[a.producer_modality]} / 使用=${modality[a.consumer_modality]}；实际可用UNKNOWN，不推出整项生产完成或审批（${a.id}）`);
  lines.push('\n## 未指定 / 歧义 / 未投影语义');
  for(const i of c.issues)lines.push(`- ${i.kind} ${i.note}；影响=${i.subject_ids.join(',')}`);
  for(const f of c.retained_nonprojected.filter(f=>f.kind==='EVENT')){
@@ -131,4 +139,7 @@ export function evaluateCondition(claim,expressions,observations={}){
   sufficient_trigger:claim.direction==='SUFFICIENT'||claim.direction==='IFF'?value:null,
   order_only:claim.direction==='ORDER',business_decision:null,execution_authorization:null};
 }
+
+
+
 

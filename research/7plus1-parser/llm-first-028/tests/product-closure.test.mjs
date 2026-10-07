@@ -11,7 +11,7 @@ const source=prepareSource(Buffer.from('负责人交付材料；允许产生附�
 const sources=[{quote:source.text,occurrence:1}];
 const entity=(id,label)=>({id,label,type:'OTHER',alternatives:[],mentions:sources});
 const event=(id,predicate,modality)=>({id,predicate,kind:'ACTION',layer:'MAIN',use:'CURRENT_TASK',modality,polarity:'POSITIVE',owner_id:'ROOT',constraint_ids:[],requires:[],sources});
-const claim=(id,event_id,entity_id,role)=>({id,kind:'ROLE',event_id,entity_id,role,expression_id:null,direction:null,temporal:null,quantity:null,scope_id:event_id,requires:[],sources,note:''});
+const claim=(id,event_id,entity_id,role)=>({id,kind:'ROLE',event_id,entity_id,role,expression_id:null,direction:null,temporal:null,quantity:null,artifact_use:null,scope_id:event_id,requires:[],sources,note:''});
 const fixture=()=>({contract_version:contractVersion,entities:[entity('actor','负责人'),entity('artifact','材料'),entity('appendix','附录'),entity('items','风险项')],events:[event('deliver','交付','REQUIRED'),event('produce','产生','PERMITTED'),event('review','复核','NOT_REQUIRED'),event('update','更新','NOT_REQUIRED')],claims:[claim('d','deliver','artifact','DELIVERABLE'),claim('p','produce','appendix','RESULT'),claim('actor-review','review','actor','REVIEWER'),claim('review-object','review','appendix','OBJECT')],expressions:[],issues:[],coverage:[]});
 const audit=g=>({contract_version:contractVersion,reviews:graphItems(g).map(x=>({subject_id:x.id,field_path:'',verdict:'SUPPORT',context_refs:[],sources,reason:'Synthetic unit evidence only'})),issues:[],omissions:[]});
 const run=g=>{const a=audit(g),t=technicalValidate(source,g,a);return {technical:t,...compileBoundary(source,g,a,t)};};

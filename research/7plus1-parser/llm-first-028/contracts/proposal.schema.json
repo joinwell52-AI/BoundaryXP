@@ -2,7 +2,7 @@
   "type": "object",
   "properties": {
     "contract_version": {
-      "const": "031-r01",
+      "const": "031-r1.1",
       "type": "string"
     },
     "entities": {
@@ -201,7 +201,8 @@
               "QUANTITY",
               "COMPLETION",
               "STOP",
-              "SCOPE"
+              "SCOPE",
+              "ARTIFACT_USE"
             ]
           },
           "event_id": {
@@ -351,6 +352,39 @@
               }
             ]
           },
+          "artifact_use": {
+            "anyOf": [
+              {
+                "type": "object",
+                "properties": {
+                  "producer_result_id": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "consumer_role_id": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "availability": {
+                    "type": "string",
+                    "enum": [
+                      "USED_PORTION",
+                      "COMPLETE_RESULT"
+                    ]
+                  }
+                },
+                "required": [
+                  "producer_result_id",
+                  "consumer_role_id",
+                  "availability"
+                ],
+                "additionalProperties": false
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
           "scope_id": {
             "type": "string",
             "minLength": 1
@@ -398,6 +432,7 @@
           "direction",
           "temporal",
           "quantity",
+          "artifact_use",
           "scope_id",
           "requires",
           "sources",

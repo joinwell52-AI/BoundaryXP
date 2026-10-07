@@ -38,6 +38,7 @@ export function technicalValidate(source,g,audit){
    if(new Set(x.constraint_ids).size!==x.constraint_ids.length)bad('DUPLICATE_CONSTRAINT');
   }
   if(x.collection==='claims'){
+   if(x.kind!=='ARTIFACT_USE'&&x.artifact_use!==null)bad('ARTIFACT_USE_FIELD_MISPLACED');
    if(!ref(x.scope_id))bad('BAD_SCOPE_TARGET');
    if(x.event_id!==null&&!ref(x.event_id,'events'))bad('BAD_EVENT_REFERENCE');
    if(x.entity_id!==null&&!ref(x.entity_id,'entities'))bad('BAD_ENTITY_REFERENCE');
@@ -51,6 +52,16 @@ export function technicalValidate(source,g,audit){
    }
    if(['COMPLETION','STOP'].includes(x.kind)&&(x.scope_id!=='ROOT'||x.event_id!==null||x.expression_id===null||!['NECESSARY','SUFFICIENT','IFF'].includes(x.direction)||x.role!==null||x.quantity!==null))bad('ROOT_TRANSITION_SIGNATURE');
    if(x.kind==='SCOPE'&&(x.expression_id===null||x.role!==null||x.quantity!==null))bad('SCOPE_SIGNATURE');
+   if(x.kind==='ARTIFACT_USE'){
+    const binding=x.artifact_use,producer=index.get(binding?.producer_result_id),consumer=index.get(binding?.consumer_role_id);
+    if(!binding||x.event_id===null||x.entity_id===null||x.scope_id!==x.event_id||x.role!==null||x.expression_id!==null||x.quantity!==null||x.direction!==null||x.temporal!==null)bad('ARTIFACT_USE_SIGNATURE');
+    if(producer?.collection!=='claims'||producer.kind!=='ROLE'||producer.role!=='RESULT'||producer.entity_id!==x.entity_id)bad('ARTIFACT_PRODUCER_BINDING');
+    if(consumer?.collection!=='claims'||consumer.kind!=='ROLE'||!['OBJECT','INPUT_OBJECT','DELIVERABLE'].includes(consumer.role)||consumer.entity_id!==x.entity_id||consumer.event_id!==x.event_id)bad('ARTIFACT_CONSUMER_BINDING');
+    if(producer?.event_id===x.event_id)bad('ARTIFACT_SELF_USE');
+    // Check both declared endpoints; do not interpret their source words.
+    const covers=refs=>(refs??[]).some(r=>{try{return linkSources(source,[r]).some(t=>linked.some(s=>s.span[0]<=t.span[0]&&s.span[1]>=t.span[1]));}catch{return false;}});
+    if(!covers(producer?.sources)||!covers(consumer?.sources))bad('ARTIFACT_USE_SOURCE_ENDPOINTS');
+   }
    if(x.kind==='QUANTITY'){
     const q=x.quantity;
     if(!q||x.event_id===null||x.entity_id!==null||x.role!==null||x.expression_id!==null||x.direction!==null||x.temporal!==null)bad('QUANTITY_SIGNATURE');
@@ -94,14 +105,14 @@ export function technicalValidate(source,g,audit){
   rows.set(x.id,{id:x.id,collection:x.collection,status,...(x.collection==='entities'?{identity_status:typeOnly?'ACCEPTED':status}:{}),errors,uncertain,sources:linked,audit_refs:reviews.map(r=>({subject_id:r.subject_id,field_path:r.field_path,verdict:r.verdict})),required_dependencies:x.requires??[],structural_refs:[],...(typeOnly?{unresolved_properties:['type'],identity_policy:'SOURCE_AND_IDENTITY_SUPPORTED_TYPE_METADATA_ONLY'}:{})});
  }
  // Only real mandatory dependencies and identity/expression inputs propagate. Not owner/context edges.
- const deps=x=>[...(x.requires??[]).map(id=>({id,full:true})),...(x.collection==='claims'&&x.entity_id?[{id:x.entity_id,full:false}]:[]),...(x.collection==='claims'&&x.expression_id?[{id:x.expression_id,full:true}]:[]),...(x.collection==='expressions'?(x.op==='ITEM'?x.operands:x.op==='STATE'?x.state?.args??[]:x.operands).map(id=>({id,full:index.get(id)?.collection!=='entities'})):[])];
+ const deps=x=>[...(x.requires??[]).map(id=>({id,full:true})),...(x.kind==='ARTIFACT_USE'&&x.artifact_use?[x.artifact_use.producer_result_id,x.artifact_use.consumer_role_id].map(id=>({id,full:true})):[]),...(x.collection==='claims'&&x.entity_id?[{id:x.entity_id,full:false}]:[]),...(x.collection==='claims'&&x.expression_id?[{id:x.expression_id,full:true}]:[]),...(x.collection==='expressions'?(x.op==='ITEM'?x.operands:x.op==='STATE'?x.state?.args??[]:x.operands).map(id=>({id,full:index.get(id)?.collection!=='entities'})):[])];
  const visit=(id,path=[])=>{
   if(path.includes(id)){for(const k of path.slice(path.indexOf(id))){const r=rows.get(k);r.status='REJECTED';if(!r.errors.some(e=>e.code==='REQUIRED_DEPENDENCY_CYCLE'))r.errors.push({code:'REQUIRED_DEPENDENCY_CYCLE',detail:path});}return;}
   for(const d of deps(index.get(id)??{}))if(index.has(d.id))visit(d.id,[...path,id]);
  };
  for(const x of items)visit(x.id);
  for(let n=0;n<items.length;n++)for(const x of items){const r=rows.get(x.id);if(r.status==='ACCEPTED')for(const d of deps(x)){const dependency=rows.get(d.id);if(d.id!=='ROOT'&&(d.full?dependency?.status:dependency?.identity_status??dependency?.status)!=='ACCEPTED'){r.status='UNRESOLVED';if(r.identity_status)r.identity_status=r.status;r.uncertain.push('REQUIRED_DEPENDENCY:'+d.id);}}}
- for(const x of items){const r=rows.get(x.id);r.structural_refs=[x.owner_id,x.scope_id,x.event_id,x.entity_id,x.expression_id,x.quantity?.target_id,x.quantity?.count_scope,...(x.constraint_ids??[]),...(x.state?.event_id?[x.state.event_id]:[])].filter(Boolean);}
+ for(const x of items){const r=rows.get(x.id);r.structural_refs=[x.owner_id,x.scope_id,x.event_id,x.entity_id,x.expression_id,x.artifact_use?.producer_result_id,x.artifact_use?.consumer_role_id,x.quantity?.target_id,x.quantity?.count_scope,...(x.constraint_ids??[]),...(x.state?.event_id?[x.state.event_id]:[])].filter(Boolean);}
  const coverage=g.coverage.map((c,i)=>{try{for(const id of c.claim_ids)if(!ref(id))throw Error('COVERAGE_REFERENCE:'+id);return {...c,id:`coverage:${i}`,sources:linkSources(source,c.sources)};}catch(e){diagnostics.push({code:'COVERAGE_INVALID',message:e.message});return {...c,id:`coverage:${i}`,status:'GAP'};}});
  for(const issue of g.issues)for(const id of [...issue.subject_ids,...issue.alternatives])if(!ref(id))diagnostics.push({code:'ISSUE_DANGLING_REFERENCE',id});
  for(const issue of g.issues){
@@ -110,3 +121,5 @@ export function technicalValidate(source,g,audit){
  }
  return {policy:'028-r02-technical-v2',schemas,rows:[...rows.values()],diagnostics,coverage,audit_sources,issue_sources};
 }
+
+

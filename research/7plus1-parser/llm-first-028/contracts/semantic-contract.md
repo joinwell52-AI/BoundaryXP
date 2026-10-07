@@ -1,6 +1,6 @@
-# BoundX 语义合同 031-r01
+# BoundX 语义合同 031-r1.1
 
-依据v0.4/r02方法及031 ADMIN批准的O口径（手册r03）。两个Skill、Schema、Γ和编译器共用本合同。模型提交候选；宿主的ACCEPTED仅代表有限技术检查与审阅支持，不证明自然语言真值。028-r02.3历史输出不静默升级；030不倒改。
+依据v0.4/r04及031/031-R1 ADMIN批准的O口径与产物依赖区分。两个Skill、Schema、Γ和编译器共用本合同。模型提交候选；宿主的ACCEPTED仅代表有限技术检查与审阅支持，不证明自然语言真值。历史合同输出不静默升级；030/031不倒改。
 
 ## 维度及用途
 
@@ -12,7 +12,7 @@ RESULT仅表示产生结果的用途；DELIVERABLE表示交付产物的用途。
 
 ## 数据约定
 
-顶层 contract_version 固定为 031-r01；entities/events/claims/expressions/issues/coverage 六个数组。所有 id 全图唯一，ROOT 是保留根任务标记。每项来源 sources/mentions 均使用真实非空 quote + occurrence（从 1 开始的完全相同字符串出现次数）。不要输出猜测偏移；宿主按 Unicode 码点定位。跨句指代/共享主体要引用两端；抽象状态可用多个片段，不伪造连续引文。
+顶层 contract_version 固定为 031-r1.1；entities/events/claims/expressions/issues/coverage 六个数组。所有 id 全图唯一，ROOT 是保留根任务标记。每项来源 sources/mentions 均使用真实非空 quote + occurrence（从 1 开始的完全相同字符串出现次数）。不要输出猜测偏移；宿主按 Unicode 码点定位。跨句指代/共享主体要引用两端；抽象状态可用多个片段，不伪造连续引文。每个claim的artifact_use不适用时为null；旧合同不静默升级。
 
 events：predicate 是模型解释的规范动作/状态名称（使用简洁中文），kind 为 ACTION/STATE；layer 是 MAIN/CONDITION/QUOTED/MODIFIER/PURPOSE/CONTENT/BACKGROUND；use 是 CURRENT_TASK/MENTION_ONLY；modality 为 REQUIRED/PERMITTED/NOT_REQUIRED/FORBIDDEN/UNSTATED；polarity 是 POSITIVE/NEGATIVE；owner_id 为 ROOT 或结构父事件；constraint_ids 是约束此事件的全部 CONDITION/QUANTITY/TEMPORAL 主张；requires 仅列真正必需的语义依赖。owner 和共现不是证明依赖。
 
@@ -24,6 +24,9 @@ claims 按 kind 区分：
 - QUANTITY：event_id + quantity；quantity 的 metric、target_id、comparator(EQ/LT/LTE/GT/GTE)、value、unit、use(EXECUTION_LIMIT/OUTPUT_CONTENT/COMPLETION_THRESHOLD/CLASSIFICATION_THRESHOLD)、count_scope 全部明确。count_scope 引用 ROOT、事件或实体。R 只收 EXECUTION_LIMIT；输出内容数量挂到 O，不变成资源次数。
 - COMPLETION/STOP：event_id=null，scope_id=ROOT，expression_id + direction 指明根任务触发/前提；只有才=NECESSARY，即=SUFFICIENT。条件状态未知不妨碍表达。STOP 可包含停止/中止/升级语义 note，不能抹成完成。
 - SCOPE：event_id 可空，expression_id 描述明确作用范围，scope_id 指出目标；不能从禁止对象推外部输入。
+- ARTIFACT_USE：LLM明确表达某消费用途使用本次某RESULT实例。event_id=消费事件，entity_id=同一产物身份，scope_id=消费事件；artifact_use={producer_result_id:生产ROLE RESULT主张ID,consumer_role_id:同一事件/实体的OBJECT/INPUT_OBJECT/DELIVERABLE主张ID,availability:USED_PORTION或COMPLETE_RESULT}。role/expression_id/direction/temporal/quantity均null；sources至少引用生产与使用两端。USED_PORTION仅要求被使用部分可用，默认不要求整个生产动作结束；只有原文明示需要完整产物才用COMPLETE_RESULT，完整产物也不等于生产者全部其他工作完成。明确“生成完成后再复核”等事件顺序另用TEMPORAL/STATE，不能由ARTIFACT_USE代替。
+
+共享身份可按RESULT和对象用途形成DERIVED同身份关联索引，不自动证明同版本、可用性或先后。原文明确当前结果供另一用途使用时必须有ARTIFACT_USE并接受独立来源审阅；旧版本先复核再覆盖、两轮同路径、部分/流式结果、多来源竞争不能全局串行化。相同路径但版本不同应保留独立实体/明确版本；不从标签、note、位置或文件名推用途实例。只有当前正向生产/使用、身份及全部关联主张技术闭合后，程序按031-r1-artifact-flow-v1生成可用性依赖，保留各自模态/条件/范围、输入主张、规则版本和来源。该依赖不是Proof.requires、执行调度、完整事件完成或QA已批准。真实竞争只阻断相关依赖，不否定独立动作；明确漏表达经原有一次有界修订，不能记ABSENT。
 
 每个 claim 的不适用字段填 null，requires 只引用必需身份/语义主张；sources 和 note 始终保留。每个事件和角色独立审阅。FORBIDDEN 事件进 B 而不是 A，NOT_REQUIRED 保留撤回义务不进 A/B；UNSTATED 不能冒充允许。layer 本身不代替 use，但 QUOTED/MODIFIER/PURPOSE/CONTENT/BACKGROUND 的 MENTION_ONLY 事件不是任务动作。目的补语不自动增加独立义务。条件中的批准/复核不自动要求其发生。
 
@@ -72,4 +75,5 @@ Q 固定消费用途，不用 predicate 字符串选槽：当前 REQUIRED/PERMIT
 身份检查须覆盖向前及向后的指称。唯一当前产物的指称与明确名称应有同一来源支持的实体id与mentions，不得拆为两个不相连实体并仅在note声称相关。真正有多个来源、不同轮次、不同对象或未陈述审批对象时不强合并。审阅器须检查跨用途引用链；缺失身份连接是可修订的语义遗漏，不是程序从原文猜答案的授权。
 
 明确的随后、再、最后等事件先后需以TEMPORAL/STATE表达，不能仅留在note。后继工作承接整组并列前置工作时，表达式保留整组状态；并列本身不增加组内顺序。不推定状态已发生，不能把ORDER升为SUFFICIENT。程序只消费声明的引用及方向。
+
 

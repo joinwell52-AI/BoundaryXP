@@ -35,6 +35,12 @@ function render(run){
  $('v03-canonical-status').textContent=Object.entries(result.canonical.slots).map(([s,v])=>s+': '+v.status).join(' · ');$('slots').replaceChildren();
  for(const [slot,name] of Object.entries(names)){const v=result.canonical.slots[slot],card=el('div',undefined,slot==='B'?'card b':'card'),h=el('h3');h.append(el('span',slot,'letter'),document.createTextNode(name),el('span',v.status,'badge '+(v.status==='UNRESOLVED'?'unresolved':'')));card.append(h);for(const f of v.entries)card.append(entry(f));if(!v.entries.length)card.append(el('p',v.status==='ABSENT'?'原文未明确此维边界（不等于禁止或授权）':'存在覆盖缺口或未决'));$('slots').append(card);}
  $('compiler-root').replaceChildren();
+ const flow=el('section');flow.append(el('h3','产物关联 / 可用性依赖（不自动推出事件强顺序）'));
+ for(const relation of [...(result.canonical.artifact_associations??[]),...(result.canonical.artifact_dependencies??[])]){
+  const line=result.chinese.split('\n').find(l=>l.endsWith('（'+relation.id+'）'));
+  const b=el('button',line??JSON.stringify(relation),'entry');b.onclick=()=>record(relation);flow.append(b);
+ }
+ if(flow.children.length>1)$('compiler-root').append(flow);
  for(const [key,title] of [['proposal','Codex 原始语义候选'],['audit','独立会话审阅'],['technical','技术校验（不是语义证明）'],['ir','Boundary IR'],['canonical','最终7+1']]){const d=el('details'),s=el('summary',title);d.append(s,el('pre',JSON.stringify(result[key],null,2)));$('compiler-root').append(d);}panel(tab);
 }
 function panel(kind){
@@ -87,3 +93,4 @@ $('save').onclick=async()=>{if(!current)return;try{const x=await jsonPost('/api/
 $('refresh').onclick=()=>history().catch(showError);document.querySelectorAll('[data-tab]').forEach(b=>b.onclick=()=>panel(b.dataset.tab));
 async function boot(){session=await api('/api/session');$('engine-info').textContent=session.engine+' · '+session.contract+' · '+session.skill_mode+' · 实际模型未披露';await history();let id=localStorage.getItem('boundx029-active');if(!id){const pending=JSON.parse(localStorage.getItem('boundx029-pending')??'null');if(pending){id=(await api('/api/runs')).find(r=>r.request_id===pending.request_id)?.run_id;if(!id){$('input').value=pending.text??'';count();}}}if(id)await open(id);}
 boot().catch(showError);
+

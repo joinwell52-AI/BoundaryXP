@@ -15,7 +15,7 @@ const prior=path.resolve('docs/reports/7plus1/7P-LLM-FIRST-SEMANTIC-REBUILD-028-
 // Explicit adapted unit fixture, never counted as real model evidence or compatible replay.
 function fixtureCompile(bytes,{output}){
  const old=JSON.parse(fs.readFileSync(path.join(prior,'trace.json'),'utf8')),source=prepareSource(bytes),g=structuredClone(old.proposal),audit=structuredClone(old.audit);
- g.contract_version=audit.contract_version=contractVersion;const technical=technicalValidate(source,g,audit),compiled=compileBoundary(source,g,audit,technical);
+ g.contract_version=audit.contract_version=contractVersion;g.claims.forEach(c=>c.artifact_use=null);const technical=technicalValidate(source,g,audit),compiled=compileBoundary(source,g,audit,technical);
  const trace={source,proposal:g,audit,technical,...compiled,execution_mode:'ADAPTED_UNIT_FIXTURE',real_calls_in_this_replay:0};
  for(const [name,data] of Object.entries({'trace.json':trace,'7plus1.json':compiled.canonical,'run-summary.json':{real_calls:0,execution_mode:trace.execution_mode}}))writeJSON(path.join(output,name),data);
  fs.writeFileSync(path.join(output,'7plus1.zh.md'),compiled.chinese);return trace;
