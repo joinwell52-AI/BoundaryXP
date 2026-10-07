@@ -1,1438 +1,287 @@
 # BoundX 7+1：定义、原理、语义编译与边界计算说明
 
-**从 ADMIN 自然语言任务到可计算授权边界的规范化方法 · v0.4**
+**规范版本：v0.4；修订号：r02；修订日期：2026-10-07。**
 
-> 文档性质：规范性定义 + 实现原则 + 计算约束。  
-> 本版目标：冻结“ADMIN Task → Candidate Semantic Graph → 可认证授权边界语义 → Root Canonical 7+1”的可实现方法。  
-> 当前工程阶段只验收 **Natural Language → Canonical 7+1**；后续边界公式与执行空间计算属于第二阶段。  
-> 代码实现可以继续演进，但不得破坏本文的规范性语义。
+**本版目标：ADMIN 短任务原文 → Skill 指导的 LLM 语义分析 → 带来源的候选语义结构 → 程序校验与保真编译 → 可计算 7+1。**
 
-> **v0.3.1 修正说明（2026-10-04）**：本版纠正旧 v0.3 后半部分“自动发现/聚类 WP、由 Local WP 汇总 Root 7+1”的实验路线。当前 Parser 只解析 ADMIN 源任务；WP 只能来自 ADMIN 显式声明。历史 v0.3 仍可从 Git 历史审计，不再作为当前规范。
+本文件替换 v0.4 初稿中不一致的工程描述，章节重新整理。7+1 的八个维度、ADMIN 权威来源、禁止擅自拆 WP 和不补造授权等核心含义保持不变。运行时同时记录规范版本、修订号和文件摘要，不能只写“v0.4”而混用不同内容。
 
-> **v0.4 方法修正说明（2026-10-06）**：026/026E/026F 实验表明，“传统 NLP 信号 + 大量手工组合规则”不足以作为开放 ADMIN 自然语言的主语义解析方法。本版保留 7+1、Candidate Semantic Graph、Γ、Eligibility、Boundary IR、Proof/Coverage 的规范核心，但正式修改 Semantic Parsing P：**LLM/强语言模型成为主语义候选生成器；Typed Recognizer 保留精确字面量身份；HanLP/spaCy/SRL/SDP/成分分析降为辅助证据与交叉检查；Γ 仍是唯一最终认证点；LLM 不直接写 7+1、不直接认证授权边界。** v0.3.1 作为历史基线保留，不再是当前自然语言入口实现规范。
-
+本文是实现合同，不是方法已通过实验的声明。LLM 主解析是本项目当前的工程选择，不等于所有传统 NLP 方法已被证明不可能。当前只实现和验证短任务；长文本、多 WP、计划细化验证、完整执行空间求解均不是本次交付。
 
 ---
 
-## 0. 文档定位与规范性层级
+## 0. 本版必须贯彻的职责
 
-BoundX 7+1 的外部目标可以写成一句话：
+**原来缺失的“原文 → 语义结构”由 LLM 承担，不是让 LLM 给旧 NLP 或规则解析器提供评分。**
 
-```text
-自然语言任务 → 结构化 7+1
-```
+| 部件 | 负责 | 不负责 |
+|---|---|---|
+| 任务语义解析 Skill | 向 LLM 固定交付 7+1 定义、识别规程、来源要求、输出合同与禁止事项 | 训练模型、保证所有解释正确 |
+| LLM 解析调用 | 识别整段任务中的事件、对象、参与关系、交付、依据、模态、条件、层级、数量、指代 | 执行任务、补造授权、签发最终认证 |
+| 语义审阅 Skill 与另一次 LLM 调用 | 对照原文检查遗漏、误解、绑定、作用域和竞争解释 | 冒充独立真值裁判、直接覆盖最终边界 |
+| 来源与字面量工具 | 保全原文，定位引文，识别文件名、数值、单位、版本等精确信息 | 决定文件属于哪个动作、数字属于 R 还是 C |
+| Γ 技术校验 | 校验已经表达的来源、类型、引用、约束、竞争和必需依赖 | 重新读原文猜语义、保证发现所有模型错误 |
+| 边界资格、Boundary IR、固定投影 | 按合同保留语义并生成机器 7+1 和中文视图 | 再用词表选择动作、对象或条件 |
+| HanLP、spaCy、BGE、E5、NLI 等 | 将来按需提供有来源的辅助证据 | 首版的强制依赖、最终真值或主语义解析器 |
 
-但 7+1 不是“把词分到 8 个桶”的文本分类器。它是一套**任务边界的规范化表示（Canonical Boundary View）**，用于把自然语言任务中可以被明确计算、约束、验证的部分，转换为有类型、可追溯、可证明的边界结构。
+Skill 是规范化的指令与资源包，不是另一个模型。LLM 技术上可以直接接收提示词；但本项目正式实现必须从已版本化 Skill 和共享合同构建调用，不维护另一套临时提示词。
 
-本文把内容分为两层：
+## 1. 7+1 的规范定义
 
-1. **规范性核心（Normative Core）**：7+1 的定义、状态语义、边界资格、计算规则、证明要求。实现不得违背。
-2. **实现性方法（Implementation Method）**：Structure、Span Lattice、Semantic Graph、Eligibility、Boundary IR、Proof DAG 等。实现可以优化，但输出语义必须等价。
+7+1 是同一边界语义结构的七个正向视图与一个负向约束层，不是八个独立词语桶。
 
-本文不追求“理解所有自然语言”。BoundX 只负责把**可定义的任务边界**编译成可计算结构；对无法可靠定义的部分必须保留不确定性，而不是猜测。
-
-### 0.1 v0.2 相对 v0.1 的关键更新
-
-v0.2 不推翻 7+1 的基本定义，主要把从自然语言到边界的中间语义正式化：
-
-- 明确 `Span Lattice`，避免一次切分即决议；
-- 明确 `Relation Bundle`，允许一个 Clause 同时承载多个语义关系；
-- 正式定义动作模态 `REQUIRED / PERMITTED / NOT_REQUIRED / FORBIDDEN`；
-- 正式定义参与者角色 `PERFORMER / APPROVER / REVIEWER / RECIPIENT / COLLABORATOR`；
-- 将 Scope、Condition、Quantity 提升为一等表达式节点；
-- 正式定义 `EligibilityDecision`：理解到一个事实不等于它有资格进入边界；
-- 将旧称 `BoundaryAST` 统一为 `BoundaryIR`；
-- 正式定义 `Canonical7Plus1`、槽位状态与开放性；
-- 增加 `Coverage Accountability`，保证 ABSENT 不是“漏识别”；
-- 增加 `Proof DAG`，保证最终 7+1 每个 resolved 条目可反向证明；
-- 增加 `first divergence` 调优原则；
-- 明确 Coverage 应按槽位影响传播，而不是局部未知全局污染。
-
-### 0.2 v0.3 相对 v0.2 的关键更新
-
-v0.3 **不改变 7+1 的规范定义**，主要把 7P-REPAIR-001 / 002 已经实证有效的解析方法正式化：
-
-- 明确 **开放语言、有限关系、确定计算**：自然语言表达不可穷举，但边界关系、表达式类型和投影查询必须收敛为有限合同；
-- 将自然语言解析的第一产物明确为 **Candidate Semantic Graph（候选结构化语义图）**，而不是 7+1；
-- 引入 **Discourse Domain**，区分 CURRENT_TASK、BACKGROUND、OUTPUT_CONTENT、ACCEPTANCE、OUT_OF_SCOPE、CODE、QUOTE、TABLE、METADATA 等语义域；
-- 引入 **Artifact Role Resolution**，区分 EXISTING_INPUT、READ_ONLY_INPUT、MODIFICATION_TARGET、GENERATED_OUTPUT、UPDATED_OUTPUT、CONDITIONAL_OUTPUT、REFERENCE_ONLY 等对象角色；
-- 明确 **Structured Table Proposition**：表头 + 行 + 单元格共同构成关系命题，禁止孤立 TABLE_CELL 直接升格边界；
-- 将 **OUTPUT_CONTENT** 提升为一等语义作用域：写 prompt/spec/doc 与“文档中要求未来执行 X”必须分离；
-- 强化 **Participant Eligibility Gate**：SRL AGENT、PERSON-like token、技术名词均不能单独产生 P；
-- 明确 **Quantity Classification**：数字先分类，再判断是否真正限制解空间；数量不自动进入 R；
-- 明确 **Reference/Basis Resolution**：identifier 只有通过 BASIS / CONFORMS_TO / PREDECESSOR / SUPERSEDES / PROVENANCE 等有证据关系才进入 V；
-- 明确 **Completion Composition**：验收项、only-if、AND/OR、ALL_OF/ANY_OF 形成结构化完成表达式，而不是把“验收”当普通动作；
-- 将 Canonical 7+1 明确为对已认证边界语义图的 **八个确定性 Graph Views / Queries**；
-- 明确“不确定”也是确定输出：无法唯一证明时进入 typed unresolved，不允许靠模型或字符串规则强行选边。
-
-
----
-
-# 第一部分：7+1 的规范性定义
-
-## 1. 7+1 是什么
-
-7+1 是任务边界的**规范化视图**。它把自然语言任务中已被证明可定义的边界，投影为七个正向维度与一个负向覆盖层 B：
-
-| 维度 | 名称 | 规范定义 | 不应误收 |
+| 维度 | 名称 | 收入内容 | 不得误收 |
 |---|---|---|---|
-| I | Input / Scope 输入与作用域 | 任务明确作用于、读取、检查、处理或纳入范围的对象、数据、文件、系统、服务、环境、显式输入与范围成员。 | 不是所有名词；参与者、条件、接收者、仅因被禁止而出现的对象，不自动进入 I。 |
-| O | Output / Deliverable 交付与结果 | 任务明确要求或条件性要求产生的文件、报告、产物、输出、可观察结果或交付物。 | `不需要生成 X` 不产生正向 O；但若另一个条件分支要求生成 X，则 O 可以带条件存在。 |
-| A | Actions 正向动作 | 任务明确要求或允许执行的正向操作与主任务事件。 | FORBIDDEN 不进入 A；NOT_REQUIRED 不进入 A；纯条件、顺序词、范围操作符不进入 A。 |
-| P | Participants 参与者 | 与任务动作发生明确参与关系的执行者、审核者、批准者、接收者、协作者等。 | P 不等于 Authority；岗位名称本身不自动赋权。 |
-| R | Resources / Quantitative Constraints 资源与量化约束 | 真正限制解空间的时间、预算、容量、次数、配额、阈值、上限、下限等量化边界。 | 数字本身不等于 R；验收计数、产物数量、完成条件里的数量，不因“有数字”自动进入 R。 |
-| V | Version / Basis 版本与依据 | 对任务具有规范性约束作用的版本、commit、工单、ADR、政策、规程、规范、参考、基线、符合性依据。 | 不是所有 identifier；只有通过 BASIS / CONFORMS_TO / GOVERNS 等关系成为任务依据时才进入 V。 |
-| C | Completion / Stop 完成与停止 | 任务何时完成、停止、中止、升级，及其必要/充分条件组合。 | 普通 IF/WHEN、顺序词、deadline 本身不等于 C。 |
-| B | Forbidden / Restriction 禁止与限制 | 明确不能执行、不能访问、不能修改、在特定条件下受限的动作、对象或组合。 | B 是负向覆盖层，不是普通“第八个正向桶”。 |
-
-### 1.1 Canonical Entry 不是字符串
-
-最终每个 7+1 条目都应是有结构的 Canonical Entry，至少包含：
+| I | 输入与作用域 | 明确读取、检查、处理或纳入范围的对象、资料、系统、环境及范围表达式 | 不是所有名词；纯依据、参与者、仅在禁止中出现的对象不自动成为输入 |
+| O | 交付与结果 | 明确要求或条件性要求产生的文件、报告、结果；明确可选产物必须保留其许可性质 | 允许生成不等于必须交付；无需生成不自动产生正向交付义务 |
+| A | 正向动作 | 当前任务明确要求或允许的动作实例及其角色、对象、模态和条件 | 不收入纯背景事件、禁止动作或已撤回的义务 |
+| P | 参与者 | 明确的执行、组织、复核、批准、接收、协作关系 | 组织者不默认执行全部动作；岗位名称不等于授权 |
+| R | 资源与量化约束 | 对任务执行的时间、预算、容量、次数等限制，包含目标、比较符、值与单位 | 数字本身不是 R；产物内容数量、分类阈值、完成计数不得混收 |
+| V | 版本与依据 | 对任务有约束作用的规范、版本、基线、政策、工单、引用等 | 标识符出现不等于依据；依据不自动成为检查对象 |
+| C | 完成与停止 | 整项任务何时完成、停止、中止或升级，以及条件方向与组合 | 普通动作的前提、时间先后和执行期限不自动成为 C |
+| B | 禁止与限制 | 明确禁止或限制的动作、对象、参与关系与作用范围，保留条件和例外 | 不是普通第八个正向维度；无需、未提及和未知不等于禁止 |
 
-```text
-value / semantic identity
-state
-condition
-scope
-quantity (如适用)
-actor / participant role (如适用)
-source_spans
-boundary_fact_ids
-proof lineage
-```
-
-显示层可以把它渲染成简短文字，但机器权威结构不能退化为字符串列表。
-
----
-
-## 2. “7”与“+1”的关系
-
-I/O/A/P/R/V/C 不是同一全集上的七张白名单。它们是同一任务边界图上的七种**有类型约束轴**。
-
-同一个底层实体可以被不同关系引用。例如 `report.md`：
-
-```text
-O: report.md 是交付物
-A: generate(report.md) 是动作
-C: exists(report.md) 可以参与完成条件
-```
-
-这不表示字符串被重复分类，而表示同一个实体参与了不同语义关系。
-
-B 与前七项不同。B 是负向覆盖层，例如：
-
-```text
-FORBID(modify, config.yaml)
-FORBID(deploy, production, condition = NOT approved_by(manager))
-```
-
-因此 B 可以跨维度约束 A、I、P、Scope、Condition 等组合。
-
-**规范性结论：B 是 +1，不能简化为普通第八个正向维度。**
-
----
-
-## 3. 维度开放性：OPEN / CONSTRAINED / CLOSED
-
-“某槽没有条目”不能自动解释为“禁止”。
-
-每个正向维度 `d ∈ {I,O,A,P,R,V,C}` 在内部应具有开放性状态：
-
-```text
-OPEN         原文未定义该维，不增加约束
-CONSTRAINED  原文对该维给出部分约束
-CLOSED       原文明确定义封闭允许范围
-```
-
-例如：
-
-```text
-“由张工执行”              → P 被约束，但未必 CLOSED
-“只能由张工执行”          → P 可被判为 CLOSED
-“未提参与者”              → P = OPEN，而不是 P = 空集合禁止任何人
-```
-
-UI 可以显示 `ABSENT`，但计算语义必须理解为：**没有显式边界定义，维度保持开放。**
-
----
-
-## 4. 四种槽位状态
-
-最终 Canonical Slot 必须严格区分：
-
-### 4.1 RESOLVED
-
-存在真实边界事实，关键身份、关系、条件、作用域、数量足够确定，并且证明链完整。
-
-### 4.2 UNRESOLVED
-
-存在真实边界候选，但有会改变边界结论的不确定性，例如：
-
-- 多个同等合理指代；
-- 关系类别不能唯一确定；
-- 条件或作用域无法闭合；
-- 数量有“尽快/适量”等约束意味但无法计算。
-
-### 4.3 ABSENT
-
-只有在**该槽相关源文本问责闭合**之后，才能判定 ABSENT：
-
-```text
-该槽没有 Boundary Fact
-AND 没有可能映射到该槽的 unresolved
-AND 没有该槽相关 coverage failure
-AND 源文本已被完整问责
-```
-
-ABSENT 表示“原文没有显式定义这一维”，不是禁止。
-
-### 4.4 PARSER_COVERAGE_FAILURE
-
-原文存在明显可能承载边界的语义区域，但 Parser 当前不能可靠解释。
-
-Coverage failure 不得被伪装为 ABSENT；也不应在可以确定具体受影响槽位时污染无关槽位。
-
----
-
-## 5. Typed UNRESOLVED
-
-UNRESOLVED 不能成为“懒惰出口”。至少应区分：
-
-```text
-UNRESOLVED_AMBIGUOUS
-UNRESOLVED_COREFERENCE
-UNRESOLVED_SCOPE
-UNRESOLVED_RELATION
-UNRESOLVED_QUANTIFICATION
-```
-
-可扩展其他类别，但必须满足：
-
-- 原因可定位；
-- 关联到 source span / node / relation / clause；
-- 下游知道需要人工澄清、模型调优还是关系词汇扩展。
-
----
-
-# 第二部分：什么才有资格成为边界
-
-## 6. Boundary Definition Envelope
-
-BoundX 不要求所有语义事实都进入边界。语义事实必须先落入“可定义边界域”。
-
-### 6.1 DEFINED
-
-典型包括：
-
-- 明确任务对象和范围；
-- 明确交付物；
-- 明确正向动作；
-- 明确参与关系；
-- 明确可计算量化限制；
-- 明确规范/版本/依据；
-- 明确完成/停止条件；
-- 明确禁止/限制。
-
-### 6.2 UNRESOLVED_WITHIN_ENVELOPE
-
-属于边界问题，但信息不足：
-
-```text
-“尽快完成”
-“由合适的人审核”
-“不得操作这些文件”但“这些”指代不清
-```
-
-### 6.3 OUTSIDE_ENVELOPE
-
-对任务可能有意义，但不参与边界计算：
-
-```text
-“这个任务很重要”
-“希望效果更好”
-“最好更专业”
-未陈述的业务动机
-```
-
-**规范性原则：语义理解 ≠ 边界资格。**
-
----
-
-## 7. Boundary Eligibility
-
-任何语义节点或关系在进入 Boundary IR 前，必须有显式 `EligibilityDecision`。
-
-Eligibility 的核心问题是：
-
-> 这个已理解的语义事实，是否真的定义了任务边界？
-
-建议状态：
-
-```text
-BOUNDARY
-AUXILIARY
-OUTSIDE_ENVELOPE
-UNRESOLVED
-COVERAGE_FAILURE
-```
-
-典型例子：
-
-```text
-SCOPE_MEMBER(task, routes.csv)
-→ BOUNDARY / TASK_OBJECT
-
-RESULT(generate, report.md)
-→ BOUNDARY / DELIVERABLE
-
-LIMIT(health_check, retry <= 3)
-→ BOUNDARY / RESOURCE
-
-BASIS(task, SPEC-42)
-→ BOUNDARY / BASELINE
-
-“若发现重复路由”
-→ 通常是 AUXILIARY CONDITION
-
-“这个任务很重要”
-→ OUTSIDE_ENVELOPE
-```
-
-Raw token、POS、dependency、embedding score 不能绕过 Eligibility 直接生成 Boundary Fact。
-
----
-
-# 第三部分：动作、参与者、条件、数量的规范语义
-
-## 8. Action Modality
-
-动作模态是语义编译中的一等属性：
-
-```text
-REQUIRED      必须/应执行
-PERMITTED     可以/允许执行
-NOT_REQUIRED  在给定条件下没有义务执行
-FORBIDDEN     禁止执行
-```
-
-### 8.1 与 7+1 的投影关系
-
-```text
-REQUIRED / PERMITTED  → 正向 A 候选
-FORBIDDEN              → B 候选，不进入 A
-NOT_REQUIRED           → 不进入 A，也不进入 B
-```
-
-`NOT_REQUIRED` 表示义务撤回或不存在，不等于禁止。
-
-例如：
-
-```text
-若发现异常 → 应生成 report.md
-若未发现异常 → 无需生成该报告
-```
-
-正确表示应是：
-
-```text
-O: report.md, condition = 异常存在
-A: generate(report.md), condition = 异常存在, modality=REQUIRED
-Aux: NOT_REQUIRED(generate(report.md)), condition = NOT 异常存在
-```
-
-错误表示包括：
-
-```text
-B: FORBID(generate report.md)       # 错
-A: NOT_REQUIRED generate report.md  # 错
-```
-
----
-
-## 9. Participant Role
-
-P 不是简单的人名列表。参与者应带角色：
-
-```text
-PERFORMER
-APPROVER
-REVIEWER
-RECIPIENT
-COLLABORATOR
-```
-
-同一参与者可以有多个角色。
-
-例如：
-
-```text
-“林工执行检查”             → 林工 [PERFORMER]
-“发送给架构负责人”         → 架构负责人 [RECIPIENT]
-“未经架构负责人批准”       → 架构负责人 [APPROVER]
-```
-
-**岗位名称不等于 Authority。**
-
-“负责人”“管理员”“经理”等词，只有在出现实际 APPROVAL / REVIEW / PERFORM / RECEIVE 等关系时才产生相应 P 角色。
-
----
-
-## 10. Scope / Set Expression
-
-作用域必须是可计算结构，不应保存成模糊字符串。
-
-推荐集合表达式：
-
-```text
-ITEM
-ALL
-ANY
-UNION
-INTERSECTION
-EXCEPT
-```
-
-例如：
-
-```text
-“除 test.csv 外的所有待归档数据”
-```
-
-应表达为：
-
-```text
-EXCEPT(
-  ALL(待归档数据),
-  ITEM(test.csv)
-)
-```
-
-范围声明如：
-
-```text
-“检查范围包括 A、B、C”
-“核验对象为 A、B 以及 C”
-```
-
-属于 `SCOPE_MEMBER` 关系，不是业务 ACTION。
-
----
-
-## 11. Condition Expression
-
-条件必须是一等逻辑结构：
-
-```text
-STATE_REF
-RELATION_REF
-BOUNDARY_FACT_REF
-AND
-OR
-NOT
-```
-
-例如：
-
-```text
-只有当配置复核通过，并且至少一次健康检查成功时才完成
-```
-
-应形成类似：
-
-```text
-AND(
-  STATE_REF(config_review_passed),
-  QUANTIFIED_STATE(health_check_success, GTE 1)
-)
-```
-
-不能把 `只有当`、`并且`、`若` 等词直接当 C；它们是逻辑操作符或条件连接词。
-
----
-
-## 12. Quantity Expression 与 R 的严格区分
-
-数量表达式至少包含：
-
-```text
-metric
-target
-lower_bound / upper_bound
-inclusive
-unit
-source provenance
-```
-
-常见比较符归一化：
-
-```text
-最多 / 至多 / 不超过  → LTE
-至少 / 最少 / 不少于  → GTE
-恰好 / 正好           → EQ
-```
-
-但**数量事实 ≠ R**。
-
-例 1：
-
-```text
-每项检查最多重试 3 次
-```
-
-这是执行解空间限制：
-
-```text
-R: retry_count <= 3
-```
-
-例 2：
-
-```text
-至少两轮检查成功才完成
-```
-
-这是 C 的数量化条件，不自动进入 R。
-
-例 3：
-
-```text
-提交 3 个 commit
-```
-
-只有当它真正限制任务执行资源/解空间时才是 R；若只是计划或产物结构，应保留为其他结构化事实。
-
----
-
-# 第四部分：自然语言到边界的语义编译器
-
-## 13. 总体拓扑
-
-v0.4 的规范实现采用以下编译拓扑：
-
-```text
-Raw ADMIN Task
-    ↓
-Document Structure + Source Preservation
-    ↓
-Typed Recognizers
-(FILE / PATH / URI / VERSION / COMMIT / REFERENCE / NUMBER / DATE / TIME ...)
-    ├──────────────────────────────┐
-    ↓                              ↓
-LLM Semantic Parser P_llm      NLP Evidence E_nlp
-(primary semantic proposals)   (HanLP/spaCy/SRL/SDP/DEP/CON)
-    │                              │
-    └──────────────┬───────────────┘
-                   ↓
-Candidate Semantic Graph Gc
-    ├─ Candidate Nodes
-    ├─ Candidate Relations / Bundles
-    ├─ Candidate Expressions
-    ├─ Competing Interpretations
-    ├─ Source Grounding
-    └─ Evidence / Contradiction
-                   ↓
-LLM Coverage Audit P_cov
-(只提出漏项/冲突/竞争解释，不直接认证)
-                   ↓
-Deterministic Source / Schema Validation
-                   ↓
-Γ Deterministic Certification
-CERTIFIED / REJECTED / TYPED_UNRESOLVED
-                   ↓
-Eligibility Decisions
-                   ↓
-Boundary-qualified Graph Gb + Unresolved Graph Gu
-                   ↓
-Boundary IR
-                   ↓
-Deterministic 7+1 Graph Views / Queries
-                   ↓
-Canonical 7+1
-                   ↓
-Proof DAG + Coverage Accountability
-```
-
-数学骨架更新为：
-
-```text
-T_admin
-  --(Typed, P_llm, E_nlp, P_cov)--> Gc
-  --Γ--> (Gb, Gu)
-  --Q--> Root Canonical 7+1
-```
-
-其中：
-
-- `P_llm`：主语义解析器，只负责提出来源可追溯的语义候选；
-- `Typed`：确定性字面量识别，只证明精确 span / literal identity，不直接决定 I/O/A/P/R/V/C/B；
-- `E_nlp`：辅助语言学证据，不再负责用大量手工规则重建完整语义；
-- `P_cov`：独立覆盖审阅调用，检查候选图可能遗漏、矛盾或误提升的源语义，只产生候选审计结果；
-- `Gc`：开放候选语义图；
-- `Γ`：唯一最终语义认证点；
-- `Gb / Gu`：已认证边界语义与类型化未决；
-- `Q`：固定的 7+1 图查询。
-
-**v0.4 的核心变化：自然语言理解不再主要由 BoundX 自己的构式规则拼接完成。LLM 负责语言理解和候选结构生成；BoundX 负责来源约束、证据融合、确定性认证、边界资格、计算和证明。**
-
----
-
-## 14. Source Preservation / Typed Recognition
-
-进入任何模型前必须冻结原文和精确码点位置。
-
-Typed Recognizer 继续负责：
-
-```text
-FILE / PATH / URI / API / SYMBOL
-VERSION / COMMIT / TICKET / ADR / POLICY / REFERENCE
-NUMBER / PERCENT / DURATION / DATE / TIME / DEADLINE
-```
-
-Typed 识别的权威只限于：
-
-- 原文 span；
-- 字面量类型候选；
-- 可确定规范化值。
-
-例如识别到 `report.md` 只能证明这是文件样式字面量，不能直接证明它是 I 或 O。
-
-LLM 不直接计算字符偏移。推荐输出：
-
-```text
-source_quote
-clause_id / sentence_id
-occurrence / local context
-```
-
-由确定性 Source Linker 映射回原文精确 span。重复字符串不能仅凭第一次出现位置绑定。
-
----
-
-## 15. LLM Semantic Parser：主语义候选生成
-
-LLM 输入至少包括：
+O 中明确可选结果须以 PERMITTED 等性质区分，不得被消费为必交项。这是同一结果用途的模态区别，不允许将所有可能产物加入 O。
 
-- ADMIN 原文；
-- 文档/句段结构；
-- protected typed spans；
-- Candidate Graph 输出 Schema；
-- 当前方法的有限 node/relation/expression 合同。
+## 2. 视图条目必须保留关联
 
-LLM **不得看到 benchmark Gold、期望 7+1、case-specific 修复说明或答案表**。
+每个最终条目至少可追溯到：语义主张 ID、实体身份、动作实例、参与角色、条件、范围、数量、来源与技术校验状态。
 
-LLM 必须输出结构化候选，而不是最终 7+1。至少包括：
+同一文件可以同时成为“生成”的结果、“复核”的对象和“提交”的对象。这是三个关系，不是三个互不关联的同名文件，也不是文件全局类别互斥。
 
-### 15.1 Candidate Nodes
+内部生成的报告被随后复核，不自动因此新增一个外部输入。I 需要保留输入/作用域的具体用途与来源，显式范围声明另按原文处理。不得仅靠一个全局 artifact_use 标签放行或拒绝所有用途。
 
-有限节点类型仍为：
+不能把 P、A、I/O 分别抽成白名单后做笛卡尔积。例如“PM提交报告给ADMIN”不能变成任何参与者都能对任意文件执行任意动作。
 
-```text
-ENTITY
-EVENT
-STATE
-VALUE
-REFERENCE
-CONDITION
-DISCOURSE
-UNKNOWN_REFERENT
-```
-
-每个节点必须有：
-
-```text
-candidate_node_id
-node_type
-surface / source_quote
-source_ref
-semantic_identity / normalized_hint
-discourse_layer
-candidate_status
-evidence_refs
-alternative_group_id (如适用)
-```
-
-### 15.2 Candidate Relations
-
-关系空间仍有限：
-
-```text
-AGENT
-PATIENT
-THEME
-RESULT
-RECIPIENT
-LOCATION
-BASIS
-CONFORMS_TO
-SCOPE_MEMBER
-LIMIT
-CONDITION_OF
-COMPLETION_OF
-STOP_OF
-APPROVAL_OF
-FORBIDS
-RESTRICTS
-COREFERENCE
-CONJUNCTION
-SEQUENCE
-PART_OF
-```
-
-LLM 必须区分：
-
-- 当前任务动作；
-- 条件/时间前提中的事件；
-- 定语/补语/目的结构；
-- OUTPUT_CONTENT / QUOTE / BACKGROUND 中被提及的事件；
-- 组织、复核、接收、批准等参与用途；
-- 必须、允许、无需、禁止的作用目标；
-- 依据与任务对象。
-
-### 15.3 Candidate Expressions
-
-Scope / Condition / Quantity / Set / Coreference 必须保持结构，不得扁平化成字符串。
-
-例如：
-
-```text
-“只有 QA 复核通过后，PM 才可以提交 report.md”
-```
-
-应能够提出：
-
-```text
-EVENT(review)      actor=QA
-STATE(review_passed)
-EVENT(submit)      actor=PM, object=report.md, modality=PERMITTED
-CONDITION_OF(review_passed, submit)
-```
-
-但 **不能仅因时间前提出现 review，就自动补造“QA 必须执行 review”**；是否存在独立 REQUIRED review 必须有原文来源。
-
-### 15.4 竞争解释和未决
-
-LLM 不需要强行唯一理解。若原文存在两个合理指代或作用域，必须输出竞争候选或 UNKNOWN_REFERENT，而不是只给最高概率答案。
-
-LLM 自报 confidence 不具有认证权。
-
----
-
-## 16. Source Grounding：LLM 候选必须可回到原文
-
-所有边界相关候选至少需要一个精确源见证。
-
-确定性 Source Linker 负责：
-
-1. 验证 quote 确实来自原文；
-2. 解析重复出现位置；
-3. 生成精确 source span；
-4. 拒绝伪造、改写或不存在的 quote；
-5. 记录跨句关系两端的来源。
-
-抽象语义（例如“复核通过状态”）可以没有单一连续 span，但必须引用构成它的真实 source spans，并记录组合来源。
-
-**Source grounding 只证明“这条候选有原文依据”，不单独证明候选解释一定正确。**
-
----
-
-## 17. NLP / NLI / Embedding：辅助证据，不再承担主解析
-
-HanLP / spaCy 可提供：
-
-```text
-token / POS / dependency / NER / SRL / SDP / constituency
-```
-
-其职责：
-
-- 为 LLM 候选提供支持或冲突证据；
-- 帮助验证谓词—论元连接、主句/修饰层和局部结构；
-- 暴露 LLM 与传统语言学分析的分歧。
-
-不得：
-
-- 因一个 POS 标签直接否决完整来源结构；
-- 因 SRL ARG0 直接产生 P；
-- 因 dependency 邻近直接产生业务对象；
-- 用大量构式规则重新复制一个平行语义解析器。
-
-BGE-M3 / multilingual-E5 仅用于语义归一化、相似性和检索证据。
-
-NLI/XNLI 仅验证已经形成的候选命题；不能创造缺失事实。
-
----
-
-## 18. 双通道语义审阅：Parser Pass + Coverage Audit
-
-v0.4 推荐对同一原文进行两个职责分离的 LLM 调用：
-
-### Pass A — Semantic Parser
-
-输出完整 Candidate Semantic Graph 候选。
-
-### Pass B — Coverage Auditor
-
-输入原文和 Pass A 候选图，检查：
-
-- 明确语义是否漏掉；
-- 是否存在没有来源的关系；
-- 条件/模态是否绑定错；
-- 主句事件是否被误降级；
-- 修饰/引用/输出内容是否被误升格；
-- 是否有真实歧义被错误唯一化。
-
-Pass B 只能输出 audit findings / additional candidates / contradictions，不能直接改写最终 7+1。
-
-两个 Pass 可以由同一模型执行，但必须使用独立 prompt 与上下文；同模型一致不等于真值，只是 Evidence Tier 的一部分。
-
----
-
-## 19. Γ：唯一最终认证点
-
-Γ 的职责保持：
-
-```text
-CERTIFIED / REJECTED / TYPED_UNRESOLVED
-```
-
-但 v0.4 明确：
-
-> Γ 不再负责“重新理解自然语言”。它只认证已经由候选解析层表达出来的语义。
-
-至少检查：
-
-- Source grounding；
-- Node/Relation Type 与方向；
-- Discourse Domain；
-- Participant Eligibility；
-- Artifact Role；
-- Reference/Basis；
-- Modality / Polarity；
-- Scope / Condition Ownership；
-- Quantity Target；
-- Coreference；
-- Cardinality / Competition；
-- NLP/NLI 辅助证据一致性；
-- Parser/Auditor 冲突；
-- Graph Consistency；
-- Proof provenance。
-
-边界改变型事实若只有单一、无佐证、存在明确冲突的模型解释，不得仅凭 LLM 自信分数认证。
-
-若 Parser 与 Auditor、NLP/NLI 或源结构存在无法确定消解的竞争解释，输出 typed unresolved。
-
-**LLM 不能直接调用 Γ 的认证结果来反向改写原文语义；Γ 也不能通过隐藏字符串模板重新成为第二套自然语言解析器。**
-
-
-
-# 第五部分：ADMIN Root Task 输入合同
-
-## 20. Parser 的权威输入只有 ADMIN Task
-
-BoundX 7+1 Parser 当前阶段解析的是 **ADMIN 发布给 PM 的任务合同**，目标是把 ADMIN 明确授予、限制、要求和保留未决的任务边界转成可计算对象。
-
-权威链固定为：
-
-```text
-ADMIN Task
-→ Candidate Semantic Graph
-→ Deterministic Certification
-→ Boundary IR
-→ Root Canonical 7+1
-```
-
-这里的 `Root Canonical 7+1` 表示 **ADMIN Authority Boundary**。
-
-Parser 当前阶段不负责：
-
-- 替 PM 制定执行方案；
-- 替 PM 决定由 DEV / OPS / QA 如何分工；
-- 从执行层任务反推 ADMIN 的原始授权；
-- 自动生成 WP；
-- 自动拆分 ADMIN 没有声明的 WP；
-- 以 PM 计划、DEV/OPS/QA 执行描述替代 ADMIN 源任务。
-
-### 20.1 “给 PM 的任务”不等于“必须每句都写 PM”
-
-ADMIN Task 可以显式写：
-
-```text
-由 PM 负责组织实施。
-QA 必须进行独立复核。
-最终由 PM 向 ADMIN 汇报。
-```
-
-这些都是 ADMIN 自己定义的参与、验收或交付约束，应进入 Root Boundary。
-
-但以下文本默认属于执行层计划，而不是当前 ADMIN Root Parser 的基准输入：
-
-```text
-DEV 读取 A。
-OPS 修改 B。
-QA 执行 C。
-```
-
-除非这些角色和动作本身就是 ADMIN 明确写入的授权边界，否则不能用 PM 后续计划代替 ADMIN Task。
-
----
-
-## 21. ADMIN Root Task 的允许内容
-
-一个合格 ADMIN Root Task 可以明确：
-
-- 任务目标；
-- 输入/检查/处理范围；
-- 最终交付物；
-- 被授权或要求的动作类别；
-- 必须保留的参与约束；
-- 资源/时间/次数/容量边界；
-- 版本、规范、commit、政策、规则等依据；
-- 完成、停止、中止、升级条件；
-- 禁止动作、禁止对象、排除范围；
-- 必须由 QA 复核、必须由 PM 汇报等组织级约束；
-- 显式声明的 WP 标题和 WP 边界。
-
-ADMIN 未指定的执行细节保持开放，不能由 Parser 补造。
-
-例如：
-
-```text
-检查系统环境、FCoP 落地情况、MCP 工具与 Skills 分配使用及轨道机运行状态。
-由 PM 组织完成，QA 对检查结果进行复核，最终由 PM 向 ADMIN 提交 overall-review.md。
-不得修改任何被检查配置，不得重启相关服务。
-```
-
-这是有效的 ADMIN Root Task。
-
----
-
-## 22. ADMIN Task 的结构状态
-
-Parser 在语义认证前必须先给出任务结构状态：
-
-```text
-SINGLE_ROOT
-EXPLICIT_MULTI_WP
-MULTI_WP_STRUCTURE_REQUIRED
-STRUCTURE_UNRESOLVED
-```
-
-### 22.1 SINGLE_ROOT
-
-一个 ADMIN 根任务边界，没有显式多 WP 结构。
-
-直接编译：
-
-```text
-ADMIN Task
-→ Candidate Semantic Graph
-→ Γ
-→ Boundary IR
-→ Root Canonical 7+1
-```
-
-### 22.2 EXPLICIT_MULTI_WP
-
-ADMIN 已经在源任务中显式声明：
-
-```markdown
-## WP-01 ...
-## WP-02 ...
-```
-
-Parser 可以读取这些 **ADMIN 已声明的结构边界**。
-
-Parser 不创建 WP，也不移动 WP 边界。
-
-### 22.3 MULTI_WP_STRUCTURE_REQUIRED
-
-如果 ADMIN Task 已明显包含多个彼此独立的工作包，但没有显式 WP 标题，Parser 不替 ADMIN 猜，也不自动拆。
-
-返回：
-
-```text
-StructureStatus = MULTI_WP_STRUCTURE_REQUIRED
-BoundaryCertification = BLOCKED
-```
-
-并要求 ADMIN 以显式 WP 标题重写任务书。
-
-### 22.4 STRUCTURE_UNRESOLVED
-
-若现有证据不足以判断是否必须拆成多个 WP，保持结构未决，不强行分段。
-
----
-
-# 第六部分：显式 WP 合同
-
-## 23. WP 只能来自 ADMIN 源文本
-
-WP 是 ADMIN 授权边界的一部分时，必须有显式来源。
-
-推荐格式：
-
-```markdown
-## WP-01 <标题>
-...
-
-## WP-02 <标题>
-...
-```
-
-允许实现支持等价的严格结构标记，但不得仅根据：
-
-- 段落；
-- 人名；
-- 多个动作；
-- 多个输出；
-- embedding 聚类；
-- 句子相似度
-
-自动创造 WP。
-
-**规范性结论：不存在 `WP = Cluster(Block...)` 规则。**
-
----
-
-## 24. 显式 Multi-WP 的 Root Boundary
-
-显式 WP Task 仍然是一个 ADMIN Task Contract。
-
-Root Authority 直接来自 ADMIN 全文，而不是通过“Local WP 7+1 的并集”创造出来。
-
-可以保留：
-
-```text
-RootCanonical7Plus1
-DeclaredWpScopes[]
-DeclaredWpRelations[]
-```
-
-其中：
-
-- `RootCanonical7Plus1`：ADMIN 根授权边界；
-- `DeclaredWpScopes`：ADMIN 已明确声明的 WP 范围；
-- `DeclaredWpRelations`：ADMIN 源文本明确表达并成功认证的 WP 间关系。
-
-实现可以为每个显式 WP 生成局部计算视图，但它只是 Root Contract 的从属视图：
-
-```text
-LocalView(WP-x) ⊆ ADMIN source authority
-```
-
-不得反过来用局部视图扩张 Root Authority。
-
----
-
-## 25. Parser 不负责 PM 的执行计划
-
-PM 后续可以把 Root Boundary 细化为执行计划，例如：
-
-```text
-ADMIN Root Action: CHECK(system environment)
-
-PM Plan:
-- query operating system
-- inspect disk
-- collect service status
-```
-
-后续 BoundX 可以验证这些 PM 动作是否是 Root Action 的合法 refinement。
-
-但这属于 **Root Boundary → Plan Validation**，不是当前 7+1 Parser 的输入解析阶段。
-
-因此当前方法不包含：
-
-- PM Plan 自动生成；
-- PM Plan 自动 WP decomposition；
-- 从 PM Plan 聚合 Root 7+1；
-- 从 DEV/OPS/QA 执行报告反推 ADMIN Authority。
-
----
-
-# 第七部分：ADMIN Root 语义编译方法
+## 3. 开放性、未指定、歧义与解析失败
 
-## 26. 方法公式固定
+正向维度的开放性分为 OPEN、CONSTRAINED、CLOSED。未提及某维只表示没有在该维新增约束，不表示系统获得执行任意操作的权限。
 
-ADMIN Root Task 的正式计算骨架更新为：
+显示及机器状态须区分：
 
-```text
-T_admin
- --(Typed + P_llm + E_nlp + P_cov)-->
- Gc
- --Γ-->
- (Gb, Gu)
- --Q-->
- Root Canonical 7+1
-```
-
-其中：
-
-- `P_llm` 是主语义解析器；
-- `Typed` 与 `E_nlp` 是辅助确定性/语言学证据；
-- `P_cov` 是覆盖审阅候选生成；
-- `Γ` 是唯一最终认证点；
-- `Q` 仍是固定的八个 7+1 Graph Views / Queries。
-
-Canonical 7+1 仍然只从已认证边界语义投影，禁止 LLM 直接填写最终槽位。
-
----
-
-## 27. Candidate Semantic Graph 的来源合同
-
-Gc 必须同时保存：
-
-- LLM Parser 候选；
-- Coverage Auditor 补充/反驳候选；
-- typed literal evidence；
-- NLP/SRL/SDP/CON 辅助证据；
-- NLI/embedding（如启用）；
-- 精确 source grounding；
-- competing interpretation groups；
-- unresolved evidence。
-
-每条候选必须标记来源类型，例如：
-
-```text
-LLM_PRIMARY
-LLM_COVERAGE_AUDIT
-TYPED_LITERAL
-NLP_SRL
-NLP_SDP
-NLP_DEP
-NLP_CONSTITUENCY
-NLI_VALIDATION
-EMBEDDING_NORMALIZATION
-DETERMINISTIC_SOURCE_RULE
-```
-
-不得把“模型直接生成”和“程序推导”混成一个不可审计结果。
-
----
-
-## 28. 确定性认证职责固定
-
-Γ 只认证已有候选，不创造新的自然语言事实。
-
-对相同 Gc、相同 source bytes、相同 evidence policy，Γ 必须稳定输出相同结果。
-
-任何会改变授权边界的事实若存在未消解竞争解释，必须进入 Gu，而不是按 LLM 置信度强选。
-
----
-
-## 29. 7+1 仍不是模型第一层输出
-
-正式顺序：
-
-```text
-Natural Language
-→ LLM/NLP/Typed Candidate Semantic Graph
-→ Γ Certified / Unresolved Semantics
-→ Eligibility
-→ Boundary IR
-→ Canonical 7+1
-```
-
-禁止：
-
-```text
-Natural Language
-→ LLM直接输出最终 I/O/A/P/R/V/C/B
-→ 当作权威边界
-```
-
-LLM 可以生成供调试的人类可读摘要，但摘要不具有机器权威性。
-
+- RESOLVED：在当前证据和校验策略下，主张及其必需结构已闭合；不是形式证明 LLM 永不误解。
+- UNRESOLVED：有改变边界结论的真实竞争、冲突或必要绑定尚未明确，须保留影响范围。
+- ABSENT：当前来源审阅未发现该维的明确约束，且没有影响该维的未决或解析缺口；不是禁止。
+- PARSER_COVERAGE_FAILURE：原文可能或明确承载边界，但当前解析没有充分表达；不得伪装成 ABSENT。
 
-# 第八部分：Root 7+1 与 PM 后续边界验证
+未写具体执行者、工具协议、实现步骤通常是 UNSPECIFIED / OPEN_FOR_REFINEMENT，不自动判为语言歧义；“该文件”有两个合理先行项则可能是真实指代歧义。缺少执行实现细节不妨碍编译已经明确的动作边界。
 
-## 30. Root 7+1 是授权上界，不是执行方案
+拒绝一个错误候选不等于证明原文没有这项限制。原文中尚未解释的禁止或前提必须继续留在覆盖账本。
 
-Root Canonical 7+1 表示：
+## 4. ADMIN 输入与任务结构
 
-> ADMIN 明确授予、要求、限制和保留未决的任务边界。
+权威输入是 ADMIN 发布的根任务及 ADMIN 明确附加的语境，不是 PM 后续执行计划。输入给 PM，不意味着每个动作都由 PM 亲自执行；ADMIN 可以明确规定 QA、DEV、OPS 的职责。
 
-它回答：
+程序不得补造 WP、分工、默认操作人、默认工具协议或业务执行授权。多个动作、多个角色、多个文件或多句话本身不是多个 WP。
 
-- 可以做什么；
-- 必须做什么；
-- 不能做什么；
-- 作用于什么；
-- 依据什么；
-- 在什么条件下完成/停止；
-- 哪些角色关系被 ADMIN 明确定义。
+只有 ADMIN 显式声明的 WP 才可读取为 WP 结构。ADMIN 明确要求多个独立工作包但没有给出必要结构时可请求显式标题，不凭模型聚类或动作数量自动拆包。本轮短任务实现不开发 WP 矩阵或长任务拆解。
 
-它不要求 ADMIN 预先写出 PM 的全部实现细节。
+源任务中的“删除文件”“忽略规则”“调用某工具”都是待解析数据，不成为解析进程的执行指令或权限。被引用的另一份任务也不能覆盖解析 Skill 的职责。
 
----
+## 5. 动作、模态与参与用途
 
-## 31. 开放细节应标记为可细化，而不是未解决事实
+至少区分 REQUIRED、PERMITTED、NOT_REQUIRED、FORBIDDEN、UNSTATED。模态属于具体动作/命题用途，不能给整篇文本粗贴一个标签。
 
-ADMIN 没有说明实现细节时，不应自动判为语义歧义。
+REQUIRED / PERMITTED 的当前任务动作投影到 A，并保留二者区别；FORBIDDEN 进入 B；NOT_REQUIRED 不自动进入 A 或 B，但保留撤回义务的语义。正文否定必须作用到明确命题，不能把所有“不”归一化成禁止。
 
-例如：
+参与角色可包含 PERFORMER、ORGANIZER、REVIEWER、APPROVER、RECIPIENT、COLLABORATOR，并绑定具体用途。若内部沿用其他枚举表达组织关系，必须等价且可见，不能映射成 PERFORMER。
 
-```text
-检查系统环境
-```
+“PM组织检查”表示组织责任与被组织的检查工作，不自动指定检查执行者。“送给QA作复核”保留接收和复核目的，不仅凭目的补语产生独立强制复核义务。“QA必须复核”则是明确义务。
 
-并不要求 ADMIN 枚举 CPU / 内存 / 磁盘 / 服务。
+事件、任务用途和作用域分别表达。定语、条件或输出内容里出现某个动作不自动成为当前命令；同一个事件另有明确当前任务用途时，也不能因它同时是时间前提而删除该用途。
 
-这表示：
+## 6. 条件方向、时间与数量
 
-```text
-CHECK(system environment)
-detail_space = OPEN_FOR_REFINEMENT
-```
+条件须保存表达式、被约束用途、条件方向及来源，不能只保存“复核通过后”字符串。
 
-后续 PM 可以提出更具体的合法 refinement，但不能改变 Root Authority 的动作类别和禁止边界。
+至少能区分：必要前提、充分触发、充要关系和纯时间先后。示例：
 
----
+- “只有批准才允许提交”：批准是许可的必要前提；不能反向推出批准必然发生，也不能凭此补出必须批准的义务。
+- “若发现异常，必须上报”：异常是该上报义务的充分触发条件。
+- “提交成功即任务完成”：提交成功触发完成；不能擅自改成唯一完成条件。
+- “只有两轮检查成功才完成”：成功计数是完成的必要条件；不是执行最多两次。
 
-## 32. 后续 Plan Validation 的目标
+条件定义可在编译时确定，而实际批准/复核是否已发生仍未知。不得要求条件已经为真才能编译，也不得由 LLM 宣告真实状态为真。
 
-未来 PM Plan 验证至少需要判断：
+数量必须包含 metric、target、比较符、value、unit、use、计数范围。use 区分执行限制、输出内容数量、完成阈值、分类阈值与标识符。数值和单位的规范化可由程序执行；“约束哪个动作、属于哪种用途”由 LLM 输出。
 
-```text
-Coverage
-Legal Refinement
-Violation
-Unresolved Refinement
-```
+集合与逻辑至少支持有类型的 ITEM、ALL、ANY、UNION、INTERSECTION、EXCEPT、AND、OR、NOT，以及带参数的状态/关系引用。操作符含义和参数个数在共享合同中固定，不使用自由代码或 eval 执行模型输出。
 
-例如：
+## 7. 统一主链
 
 ```text
-Root: CHECK(config)
-
-PM: READ(config)          → candidate legal refinement
-PM: INSPECT(config)       → candidate legal refinement
-PM: MODIFY(config)        → not authorized by CHECK alone
-PM: DELETE(config)        → violation unless ADMIN separately authorized
+ADMIN 短任务原文
+→ 原文保全、结构编号、精确字面量提示
+→ 任务语义解析 Skill + Codex 真实调用
+→ G0：候选语义结构
+→ 语义审阅 Skill + 新上下文真实调用
+→ 审阅主张、局部疑点、漏项与修正建议
+→ 确定性来源链接、版本/Schema/引用校验
+→ Gc：保留候选、审阅与明确的影响关系
+→ Γ：有限技术校验及局部未决处理
+→ 边界资格与 Boundary IR
+→ 固定投影 Q
+→ Canonical 7+1 JSON + 同源中文视图
 ```
-
-这属于 BoundX 的后续边界认证阶段，不改变 ADMIN Root Parser 的职责。
-
----
-
-# 第九部分：Benchmark 与 Gold 合同
-
-## 33. Root Parser Benchmark 只使用 ADMIN Root Task
-
-正式 Root Parser Benchmark 必须满足：
 
-1. 发令权威是 ADMIN；
-2. 任务接收责任主体是 PM 或未显式命名但语义上仍是 Root Task；
-3. 文本描述授权目标、范围、交付、限制、依据、完成条件；
-4. 可以规定 QA 复核等组织约束；
-5. 不以 DEV/OPS/QA 已分配好的执行计划作为主要正文；
-6. 不把 PM Plan、执行报告、角色任务单冒充 ADMIN Root Task；
-7. 显式 Multi-WP 必须带 WP 标题；
-8. 明显 Multi-WP 但无标题的样本用于结构诊断，不用于单 Root 7+1 正确率。
+数学职责：P_skill(T)=G0；A_skill(T,G0)=R；Link(T,G0,R)=Gc；Γ(Gc)=(可技术接受的主张, 未决/拒绝/缺口)；Q 保真生成 7+1。
 
----
+不存在“没有 HanLP 支持就不能接受 LLM 主张”的首版前置门。不要求旧 Span Lattice、通用候选枚举器或旧运行收据重新出现。源位置工具不是旧语义解析器。
 
-## 34. Benchmark 分类
+## 8. Skill 是本轮正式交付的一部分
 
-每个测试输入必须先分类：
+必须交付并使用两个 Skill：boundx-semantic-parse、boundx-semantic-audit；共用同一版本语义合同和 Schema。
 
-```text
-ROOT_ADMIN_VALID
-EXPLICIT_MULTI_WP
-MULTI_WP_STRUCTURE_REQUIRED
-EXECUTION_LEVEL
-INVALID_OR_AMBIGUOUS_INPUT
-```
-
-只有 `ROOT_ADMIN_VALID` 进入 Single Root 7+1 准确率。
+解析 Skill 必须实际包含/加载：第1—6节的定义，事件实例及论元识别规程，条件/模态/层级判别，来源与歧义要求，以及输出合同。不得只写“识别7+1”或只列八个维度名。
 
-`EXECUTION_LEVEL` 可以保留为执行语义回归集，但不能统计进 ADMIN Root Parser 的主指标。
+解析规程应让 LLM：通读完整短任务；识别事件和命题；逐事件绑定角色、对象、结果、依据；解释模态和嵌套作用域；解析指代与数量用途；逐项对照原文检查遗漏；输出 Schema 内的候选。需要的是结构、来源和简短判据，不要求暴露隐藏思维过程。
 
----
+审阅 Skill 先从原文检查明确要求、限制、例外，再核对候选；每项结果明确指出支持/质疑哪一个主张或属性。不能只检查第一份图是否自洽。
 
-## 35. Root 任务的成功标准
+Skill 核心资源缺失、版本混用、未实际进入请求上下文时，调用必须明确失败或报告加载能力未验证，不能静默退回与 Skill 无关的提示词。
 
-一个 ROOT_ADMIN_VALID 用例只有在以下条件全部满足时才是完整闭合：
+## 9. 调用与隔离合同
 
-- I/O/A/P/R/V/C/B 与原文一致；
-- 无 wrong binding；
-- 无 unsupported RESOLVED；
-- clear source fact 不得 unresolved；
-- 源文本问责完整；
-- Proof lineage 完整；
-- 未声明执行细节不被补造；
-- PM/DEV/OPS/QA 的角色只在 ADMIN 明确规定时进入边界；
-- OPEN_FOR_REFINEMENT 不被误当作授权扩张。
+使用用户现有的本地 Codex 登录和实际支持的非交互能力，不默认申请 API key、训练、购买服务或更换模型。参数、输出约束及 Skill 发现方式以当次本地帮助与官方文档核对，不把旧 Provider 开关照搬成强制要求。
 
----
+显式调用 Skill，不依赖模型碰巧按描述选择。原生 Skill 模式记录真实加载/必要只读读取证据。若宿主不能安全暴露或读取所需资源，可由宿主从同一 SKILL.md、共享合同和 Schema 构建确定性内联包，标记 INLINE_BUNDLE；这仍使用 Skill 的实际内容，但不能称原生加载已经验证。
 
-# 第十部分：工程阶段重新冻结
+解析与审阅分开会话；相同模型两次调用不是独立真值来源。运行进程不得读取评测答案、其他请求、开发根因报告或执行业务操作。需要的只读 Skill 资源必须限定范围；不能为加载 Skill 而解除全部工具权限。
 
-## 36. Stage A — ADMIN Root Single Task
+宿主记录请求、Skill/合同/Schema摘要、实际加载方式、CLI版本、请求模型配置、退出状态、响应、耗时及可获取用量。服务未披露的实际模型身份不得编造。日志不包含认证凭据。
 
-先稳定：
+## 10. 候选结构必须足够表达、足够简单
 
-```text
-ADMIN Root Task
-→ Root Canonical 7+1
-```
+采用以事件/命题实例为中心的紧凑语义图序列化。不必复刻旧代码的字段或让模型填入程序可以生成的内部审计元数据。
 
-不做 WP 自动发现，不做 PM Plan。
+共享合同至少定义以下逻辑内容；实际字段名由版本化 Schema 唯一确定：
 
-这是当前唯一主线。
+| 内容 | 必须承载 |
+|---|---|
+| 实体与 mention | 实体ID、原文各次出现、类型候选、同一性/指代及备选 |
+| 事件/命题 | ID、谓词含义、层级、当前用途、模态、极性、来源 |
+| 角色/论元主张 | 主张ID、具体事件、实体、角色或用途、来源 |
+| 产物用途 | 哪个动作产生哪个结果；与后续复核/提交用途分别记录 |
+| 条件绑定 | 表达式、目标事件/用途、必要/充分方向、时间关系、来源 |
+| 数量/范围 | 操作符、操作数、数值单位、目标与用途 |
+| 完成/停止 | 根任务目标、触发或必要条件及其方向 |
+| 未指定/歧义/缺口 | 类别、精确影响目标、合理备选或未解析来源 |
 
----
+LLM 可以知道7+1定义、提出边界用途解释；不得把“禁止模型直接输出最终槽位”误解为“不告诉模型识别目标”。程序最终状态、事实ID、摘要和证明路径由宿主生成。
 
-## 37. Stage B — Explicit ADMIN Multi-WP
+节点身份不等于每个用途已成立。owner/contains/source_ref/context_ref不自动成为认证必需前提；semantic_dependency必须有明确含义。共享实体和合法回指可以存在，证明依赖的循环则须检查。
 
-只有 ADMIN 已显式提供 WP 标题时才进入。
+## 11. 原文来源与定位
 
-验证：
+保留原始字节、编码和码点坐标。清洗或归一化不得改变权威原文；必要变换须保留映射。短文本不得静默按64 token或其他长度截断。
 
-- WP 标题结构读取；
-- 每个 WP 的源范围；
-- Root Boundary 不被局部 WP 扩张；
-- 源文本明确的 WP 间条件/依赖。
+LLM提供真实引文、段句编号和重复位置线索；程序计算偏移并确认完全匹配。相同字符串多次出现不得一律绑定第一次。找不到或位置不唯一时明确返回定位问题。
 
-不做自动 WP clustering。
+抽象状态可引用多个真实片段；不能伪造一个并不存在的连续短语。跨句绑定须保留两端与连接的来源。
 
----
+引文匹配只证明来源文字存在，不证明角色、条件或权限解释正确。来源、语义审阅和编译校验分别记录。
 
-## 38. Stage C — PM Plan Boundary Validation
+## 12. 审阅意见与局部修正
 
-在 Root 7+1 稳定以后，另行研究：
+审阅输出必须区分：
 
-```text
-Root 7+1 × PM Plan
-→ COVERED / LEGAL_REFINEMENT / UNRESOLVED / VIOLATION
-```
+- subject_claim_ids / field_path：直接受质疑的主张或属性；
+- context_refs：仅用于说明的实体、事件或片段；
+- issue_kind、来源、简短理由和可选修正候选。
 
-这不是 Parser 的任务分解功能。
+真实字段可等价命名，但不能只有一个含糊 candidate_ids 数组供程序整组判未决。
 
----
+例如某个比较事件缺少另一端，疑问限制比较关系，不自动否定该文件的身份或独立读取用途。若文件指代身份本身不确定，依赖该身份的用途才应随之未决。
 
-## 39. Stage D — Formal Boundary Solver
+拒绝/未决只沿明确必需依赖传播；不得沿全部同现、包含、所有权或上下文边扩散。无法确定疑点范围时标记审阅合同不足，不用程序解析自由文本 reason 猜范围。
 
-最后再研究：
+审阅补充不是自动认证。程序只可合并结构合法、来源可定位的候选；被修改的主张须明确重新经过审阅与技术校验。需要返回 LLM 修正时是同一固定协议的有界调用，不是程序补答案，也不能反复调用直到随机获得通过。
 
-- constraint propagation；
-- fixed-point；
-- SMT / MILP（必要时）；
-- UNSAT；
-- multiple solution；
-- formal proof。
+## 13. Γ 的能力及限制
 
----
+Γ 是唯一机器技术接受/拒绝点，不是自然语言真值证明器。保留 CERTIFIED / REJECTED / TYPED_UNRESOLVED 等机器状态时，必须注明其策略版本与有限检查范围。
 
-# 第十一部分：本版修正的退役路线
+必须检查：来源有效、ID/引用完整、类型与关系签名、操作符参数、数量与单位、任务用途及作用域绑定、必要条件未丢失、真正竞争未被强选、必需依赖闭合、审阅疑点影响范围。
 
-## 40. 以下路线从 v0.3.1 Root Parser 方法中退出
+它不得：从原文再猜执行者或对象；按“在”等首字否决名词；因文件全局产物标签拒绝复核；将所有 owner 变为硬依赖；凭一句“审阅无异议”宣布语义已经证明；因可选 NLP 未启用而制造证据失败。
 
-以下内容不再作为 ADMIN Root Parser 的规范方法：
+模型/审阅器有明确未解决的冲突时，相关主张保持未决。对已完整表达、来源有效、审阅支持且有限校验通过的主张，可以在所声明策略下技术接受；残余语义风险仍须由端到端测试和必要人工审阅评估，不虚构另一个“完美验证模型”。
 
-```text
-Paragraph / Block clustering → automatic WP
-WP_k = Cluster(B_i...B_j)
-Global Root 7+1 = Normalize(union(Local WP 7+1))
-用 PM/DEV/OPS/QA 执行任务替代 ADMIN Root Task benchmark
-```
+技术校验失败、原文歧义和模型漏解析必须分开报告。
 
-旧 v0.3 文档中相关段落属于历史探索，不再具有当前规范性。
+## 14. 边界资格、IR与固定投影
 
----
+语义用途由 LLM 表达；边界资格程序按共享合同执行固定转换，不重新理解原文。当前要求/允许、禁止、背景、引文内容等用途之间的区别必须在候选层已经存在。
 
-# 第十二部分：工程约束
+Boundary IR 保存技术接受和未决事实及其完整关联。Q 只生成第1节定义的视图，所有视图条目回指同一事实和约束；中文展示由相同 IR 确定性渲染，不另调模型润色。
 
-## 41. 完整语义闭环优先于局部机制 PASS
+典型映射：明确输入/范围用途→I；结果用途→O；当前 REQUIRED/PERMITTED 动作→A；明确参与用途→P；执行量化限制→R；规范依据→V；根任务完成/停止用途→C；禁止和限制→B。
 
-局部测试通过不能代替：
+不得通过补齐空槽改变原意。无需项、非边界背景、未指定细节和不能解析的区域保留各自记录。
 
-- full Root Canonical 7+1 closure；
-- false-defined；
-- wrong-binding；
-- unresolved correctness；
-- source/proof completeness。
+编译必须保持：对象身份、各用途角色、模态与极性、条件方向、时间关系、数量目标、作用域和例外。出现无法表示的结构时报告合同缺口，不扁平化丢失后声称成功。
 
----
+## 15. 可计算不等于已执行，也不等于一定理解正确
 
-## 42. 每轮实现必须先有可证伪假设
+“可计算”的最低要求是：边界结构中的操作符、参数、作用对象、比较值、关系方向和未知输入均明确；程序能按合同解释，而不是再让模型解释一段条件字符串。
 
-开始实现前必须定义：
+例如 retry_count <= 3 可直接比较；review_passed(report_id, reviewer_id, task_id)可作为有参数状态引用。当前没有运行观测时，该状态值为 UNKNOWN，不由编译器推定为真。
 
-```text
-Hypothesis
-Primary Semantic Gate
-Minimum Expected Delta
-Falsification Condition
-Stop / Architecture Review Rule
-```
+短任务首版可用小型纯函数检查布尔条件、数量和集合组合。不得把这扩成新的执行调度器、SMT平台或业务状态采集项目。语义评测与结构可计算性分开验收。
 
----
+## 16. 证明、覆盖和可靠性口径
 
-## 43. 连续两轮无实质改善必须停线
+Proof记录输入、模型候选、来源、审阅、技术检查及编译派生的实际路径。路径可达不等于原文解释正确。
 
-如果同一实现路线连续两轮主指标无实质改善：
+覆盖应按原文要求/限制/例外及其归属核对，不以“每行都有一个标签”或“所有字符被引用”代替语义完整。单行可以同时含多个动作、禁止和条件。确定性程序可核对覆盖记录完整性；记录所表达的语义是否完整仍须评测。
 
-```text
-STOP CURRENT REPAIR LINE
-→ Architecture Review
-```
+正确性必须同时观察：原文明确语义是否漏掉、是否新增无依据解释、歧义是否正确局部保留、程序是否损坏已经正确的候选。全部未决不算解决目标。
 
-不得继续逐句补丁。
+原文到语义的准确性靠实际原文对照建立；程序转换保真靠有针对性的代码检查和测试建立。不能声称任意 LLM 错误一定被 Γ 或另一次 LLM 调用发现。
 
----
+## 17. 当前实施及短文本测试范围
 
-## 44. LLM / NLP / Γ 的职责冻结
+当前实现任务是 7P-LLM-FIRST-SEMANTIC-REBUILD-028-LONG。它是开发长任务，不是长文本解析任务。
 
-v0.4 的职责固定为：
+先一次写齐共享合同、两个 Skill、显式加载、Codex Provider、候选结构、来源链接、审阅、Γ、IR、固定投影与CLI，并完成必要编程自检；然后只测试短文本。
 
-```text
-LLM Semantic Parser
-→ 理解开放自然语言并提出完整候选语义结构
+本轮测试上限：一条简短贯通用例及十二条短文本正反对照。建议每条1—4句、原文不超过300个Unicode码点；这是本轮选例范围，不是允许模型静默截断的理由。固定原文及预期只放评测端，不放解析模型上下文。
 
-Typed Recognizer
-→ 精确字面量身份与规范化值
+不跑旧245/105/350材料，不做旧失败复盘和迁移，不做长文本、WP矩阵、重新训练或多模型选型。旧目录原地不参与本轮，也不删除用户资料。
 
-NLP / SRL / SDP / CON / NLI / Embedding
-→ 辅助证据、交叉检查、归一化与反驳
+只有实际模型调用可用于声称模型完成解析；缓存/人工图只用于程序自检并单独标明。先单条贯通，再小批对照；不得先花额度跑大批量再猜代码怎么接。
 
-Coverage Auditor
-→ 查漏、查冲突、提出竞争解释
+短文本语义不齐就修本轮明确的合同、Skill或消费错误，不能用门禁计数代替成果。扩大范围必须另获授权。
 
-Γ
-→ certify / reject / typed unresolved
+## 18. 当前验收与后续边界
 
-Eligibility / Boundary IR / Q
-→ 确定性边界资格、序列化与 7+1 投影
-```
+分别报告：Skill资源实际加载；LLM候选语义；审阅命中与误报；程序保真转换；最终7+1；来源和未知项；实际模型调用/回放次数。
 
-LLM 不直接写权威 7+1；NLP 不再被要求单独完成开放任务语义解析；Γ 不重新解析自然语言。
+短文本通过只证明所列短文本和对照的行为，不证明任意自然语言、生产授权安全或长任务泛化。存在未知或未审定项不得写成全部正确。
 
+后续多WP读取、PM计划细化验证、运行时边界核查和复杂求解均为后续阶段，当前不得提前实现。原文未明确的执行细节保持开放，但不能借开放性增加动作类别或越过B。
 
+## 19. 本次修订审查结论
 
-# 45. 兼容性冻结语义，不冻结错误实现
+v0.4初稿的方向是LLM主解析，但工程合同不完整且存在残留冲突。本次已纠正：
 
-历史 evidence 可以封存，但 active implementation 兼容性优先验证：
+1. Skill从后置封装变为与解析/审阅调用同时交付的固定方法来源。
+2. 去掉NLP辅助组件的隐含强制前置要求；首版不启用也不伪造支持证据。
+3. 明确模型必须知道7+1含义与识别目标，但只提交候选，不签发最终机器状态。
+4. 实体身份与逐动作用途分开；生成产物可被复核、提交，依据可有独立检查用途。
+5. 审阅主张与上下文引用分开；不确定性仅沿真实必需依赖传播。
+6. 明确条件方向、时间、量词用途及运行时未知，不让合法JSON代替可计算结构。
+7. 技术接受和证明路径不再被描述为自然语言真值保证；删除“模型错了必能拦住”的暗示。
+8. 取消历史机制、旧成绩和大语料作为新实现前置；当前只做短文本端到端。
+9. 清除文末残留的v0.3.1固定结论及与新主链不一致的章节口径。
 
-- semantic behavior；
-- typed IR；
-- public contract；
-- deterministic projection；
-- proof lineage。
+这是规范一致性修订；尚未用本修订运行模型或宣称实现通过。
 
-不能因为历史内部实现结构而阻止正式架构修正。
+## 20. Codex接口参考
 
----
+实际功能须按安装版本核对。官方Skill文档说明SKILL.md的名称/描述、显式调用及资源加载；非交互文档说明结构化输出和运行方式。本规范不要求复制某个未验证的命令参数。
 
-# 第十三部分：v0.3.1 的固定结论
+- https://developers.openai.com/codex/skills/
+- https://developers.openai.com/codex/noninteractive/
 
-1. Parser 的当前权威输入是 **ADMIN Task**。
-2. 输出是 **ADMIN Root Authority Boundary 的 Canonical 7+1**。
-3. PM Plan 不属于当前 Parser 输入。
-4. Parser 不替 ADMIN 猜 WP、不替 ADMIN 拆 WP。
-5. 显式 Multi-WP 只能读取 ADMIN 已声明的 WP。
-6. 明显 Multi-WP 但无 WP 标题时，要求 ADMIN 修改任务书。
-7. 7+1 不是第一层 NLP 输出，而是 Certified Semantic Graph 的确定性视图。
-8. Candidate Graph 负责覆盖开放自然语言候选，Γ 负责认证。
-9. 未指定执行细节保持 OPEN_FOR_REFINEMENT，不由 Parser 补造。
-10. 后续 PM Plan 只能在 Root Boundary 内细化，不能扩大授权。
+固定职责结论：**LLM读懂短任务；Skill规定读什么、怎样输出；程序核对结构并保真编译为7+1。**
