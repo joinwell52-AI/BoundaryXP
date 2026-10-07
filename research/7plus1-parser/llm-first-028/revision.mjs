@@ -37,3 +37,30 @@ export function technicalRevisionFeedback(checks,g){
   return {code:e.code,subject_id:row.id,field_path:`${row.collection}[${row.id}]${property?'.'+property:''}`,actual:{event_id:x?.event_id??null,entity_id:x?.entity_id??null,scope_id:x?.scope_id??null,quantity:x?.quantity??null,constraint_ids:x?.constraint_ids??null,detail:e.detail},requirement};
  }));
 }
+
+// An audit can identify an unsupported binding without claiming to know the
+// correct replacement. Give that structured finding the same single revision
+// budget as contradictions; never choose a replacement in the compiler.
+export function auditBindingRevisionFeedback(checks,g,audit){
+ const items=[...g.entities,...g.events,...g.claims,...g.expressions];
+ const index=new Map(items.map(x=>[x.id,x]));
+ const rows=new Map(checks.rows.map(x=>[x.id,x]));
+ const references=x=>[...(x.requires??[]),x.event_id,x.entity_id,x.expression_id,x.scope_id,x.owner_id,
+  ...(x.constraint_ids??[]),...(x.operands??[]),...(x.state?.args??[]),x.state?.event_id,
+  x.artifact_use?.producer_result_id,x.artifact_use?.consumer_role_id].filter(id=>id&&id!=='ROOT');
+ const closure=ids=>{const seen=new Set(),pending=[...ids];while(pending.length){const id=pending.pop();if(seen.has(id))continue;seen.add(id);const x=index.get(id);if(x)pending.push(...references(x));}return seen;};
+ return audit.issues.filter(issue=>{
+  if(issue.issue_kind!=='BINDING'||!issue.subject_ids.length)return false;
+  if(!checks.audit_sources?.some(x=>x.subject_id===issue.id))return false;
+  if(!issue.subject_ids.every(id=>index.has(id)&&rows.get(id)?.errors.length===0
+   &&audit.reviews.some(r=>r.subject_id===id&&r.verdict==='UNCERTAIN')))return false;
+  if(checks.diagnostics.some(d=>d.id===issue.id||issue.subject_ids.includes(d.id)))return false;
+  const relevant=closure([...issue.subject_ids,...issue.context_refs]);
+  if(g.entities.some(x=>relevant.has(x.id)&&x.alternatives.length>1))return false;
+  if(g.issues.some(x=>x.kind==='AMBIGUITY'&&x.subject_ids.some(id=>relevant.has(id))))return false;
+  return true;
+ }).map(issue=>({code:'AUDIT_BINDING_UNSUPPORTED',issue_id:issue.id,subject_ids:issue.subject_ids,
+  field_path:issue.field_path,context_refs:issue.context_refs,sources:issue.sources,reason:issue.reason,
+  requirement:'Recheck this unsupported binding against the source. Do not invent a replacement or discard conditions/limits. Preserve genuine ambiguity locally and retain independently supported semantics.',
+  selects_replacement:false}));
+}

@@ -6,9 +6,9 @@ import {probeCodex,callCodex} from './provider.mjs';
 import {technicalValidate} from './validate.mjs';
 import {compileBoundary} from './compile.mjs';
 import {implementationInventory,runtimeInventory} from './evidence.mjs';
-import {technicalRevisionFeedback} from './revision.mjs';
+import {technicalRevisionFeedback,auditBindingRevisionFeedback} from './revision.mjs';
 export const writeJSON=(file,data)=>fs.writeFileSync(file,JSON.stringify(data,null,2)+'\n');
-export const compilerRevision='031-r1-c2';
+export const compilerRevision='031-r1-c3';
 export function replay7Plus1(bytes,{output,replayFrom}){
  const source=prepareSource(bytes),tracePath=path.join(replayFrom,'trace.json');
  const prior=JSON.parse(fs.readFileSync(tracePath,'utf8'));
@@ -59,8 +59,9 @@ export async function parse7Plus1(bytes,{output,probe,model='gpt-6.1-sol',reason
   const trace={product_snapshot:productSnapshot,source,proposal:parsed.value,audit:reviewed.value,technical,...compiled,model_calls:{parse:parsed.attempts,audit:reviewed.attempts},revision,revision_of:revision?0:null};writeJSON(path.join(directory,'trace.json'),trace);passes.push(trace);
   const contradictory=reviewed.value.reviews.filter(r=>r.verdict==='CONTRADICT');
   const technicalIssues=technicalRevisionFeedback(technical,parsed.value);
-  if(!semanticRevision||revision===1||(!contradictory.length&&!reviewed.value.omissions.length&&!technicalIssues.length))break;
-  previous=parsed.value;issues={reviews:contradictory,issues:reviewed.value.issues,omissions:reviewed.value.omissions,technical_errors:technicalIssues,budget:{semantic_revisions_remaining:1,shared_with_audit:true}};writeJSON(path.join(directory,'revision-request.json'),issues);
+  const bindingIssues=auditBindingRevisionFeedback(technical,parsed.value,reviewed.value);
+  if(!semanticRevision||revision===1||(!contradictory.length&&!reviewed.value.omissions.length&&!technicalIssues.length&&!bindingIssues.length))break;
+  previous=parsed.value;issues={reviews:contradictory,issues:reviewed.value.issues,omissions:reviewed.value.omissions,technical_errors:technicalIssues,binding_errors:bindingIssues,budget:{semantic_revisions_remaining:1,shared_with_audit:true}};writeJSON(path.join(directory,'revision-request.json'),issues);
  }
  const final=passes.at(-1);writeJSON(path.join(output,'trace.json'),final);writeJSON(path.join(output,'7plus1.json'),final.canonical);fs.writeFileSync(path.join(output,'7plus1.zh.md'),final.chinese);
  const summary={source_sha256:source.sha256,revision:final.revision,real_calls:passes.reduce((n,p)=>n+p.model_calls.parse.length+p.model_calls.audit.length,0),revision_count:passes.length-1,skill_mode:'INLINE_BUNDLE',native_skill_loading:'NOT_VERIFIED',actual_model:null,requested_model:model,slot_status:Object.fromEntries(Object.entries(final.canonical.slots).map(([k,v])=>[k,v.status])),technical_acceptance_is_semantic_proof:false};writeJSON(path.join(output,'run-summary.json'),summary);

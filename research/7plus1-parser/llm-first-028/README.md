@@ -14,7 +14,7 @@ node --test research/7plus1-parser/llm-first-028/tests/selfcheck.test.mjs
 node research/7plus1-parser/llm-first-028/cli.mjs --input task.txt --output new-run-directory
 ```
 
-CLI 原样接受 UTF-8 输入；本轮 >300码点明确拒绝，不截断。输出目录必须新建，已有 source.txt 不覆盖。每次正常一次解析、一次审阅；传输/格式最多重试2次；实际 CONTRADICT/遗漏可触发最多一轮修订+新会话审阅，保留首次结果。候选、审阅、技术检查、IR、JSON、中文、请求/响应/退出/耗时/用量全部保存。测试期望不进入 Provider。
+CLI 原样接受 UTF-8 输入；本轮 >300码点明确拒绝，不截断。输出目录必须新建，已有 source.txt 不覆盖。每次正常一次解析、一次审阅；传输/格式最多重试2次；实际 CONTRADICT/遗漏、白名单技术错误，以及未被候选声明为真实歧义的结构化 BINDING 疑点，共享最多一轮修订+新会话审阅。程序只反馈真实问题，不选择替代绑定；明确竞争指代保留，不因修订自动接受。候选、审阅、技术检查、IR、JSON、中文、请求/响应/退出/耗时/用量全部保存，首次结果不覆盖。测试期望不进入 Provider。
 
 本轮实际运行的 CLI（S00原文，输出目录首次创建）：
 
