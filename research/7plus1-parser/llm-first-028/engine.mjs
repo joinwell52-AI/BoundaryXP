@@ -6,8 +6,9 @@ import {probeCodex,callCodex} from './provider.mjs';
 import {technicalValidate} from './validate.mjs';
 import {compileBoundary} from './compile.mjs';
 import {implementationInventory,runtimeInventory} from './evidence.mjs';
+import {technicalRevisionFeedback} from './revision.mjs';
 export const writeJSON=(file,data)=>fs.writeFileSync(file,JSON.stringify(data,null,2)+'\n');
-export const compilerRevision='029-c4';
+export const compilerRevision='031-c5';
 export function replay7Plus1(bytes,{output,replayFrom}){
  const source=prepareSource(bytes),tracePath=path.join(replayFrom,'trace.json');
  const prior=JSON.parse(fs.readFileSync(tracePath,'utf8'));
@@ -28,11 +29,13 @@ export function replay7Plus1(bytes,{output,replayFrom}){
  writeJSON(path.join(output,'run-summary.json'),{execution_mode:replay.execution_mode,real_calls:0,replays:1,origin_trace:replay.origin_trace,slot_status:Object.fromEntries(Object.entries(compiled.canonical.slots).map(([k,v])=>[k,v.status]))});
  return replay;
 }
-export async function parse7Plus1(bytes,{output,probe,model='gpt-6.1-sol',reasoning='medium',semanticRevision=true,signal,onProgress=()=>{},timeoutMs=300000}={}){
+export async function parse7Plus1(bytes,{output,probe,model='gpt-6.1-sol',reasoning='medium',semanticRevision=true,signal,onProgress=()=>{},timeoutMs=300000,call=callCodex,maxModelRequests}={}){
  if(!output)throw Error('OUTPUT_DIRECTORY_REQUIRED');
  fs.mkdirSync(output,{recursive:true});
  if(fs.existsSync(path.join(output,'source.txt')))throw Error('OUTPUT_ALREADY_EXISTS: first results are never overwritten');
  const source=prepareSource(bytes);signal?.throwIfAborted();
+ if(maxModelRequests!==undefined&&(!Number.isSafeInteger(maxModelRequests)||maxModelRequests<0))throw Error('INVALID_MODEL_REQUEST_BUDGET');
+ const requestBudget=maxModelRequests===undefined?null:{remaining:maxModelRequests};
  onProgress({stage:'PREPARING'});probe??=probeCodex();
  fs.writeFileSync(path.join(output,'source.txt'),bytes);writeJSON(path.join(output,'source.json'),source);writeJSON(path.join(output,'environment.json'),probe);writeJSON(path.join(output,'implementation.json'),implementationInventory());
  const parse=buildBundle('parse'),auditBundle=buildBundle('audit');
@@ -42,10 +45,10 @@ export async function parse7Plus1(bytes,{output,probe,model='gpt-6.1-sol',reason
  for(let revision=0;revision<(semanticRevision?2:1);revision++){
   const directory=path.join(output,`revision-${revision}`);fs.mkdirSync(directory);
   signal?.throwIfAborted();onProgress({stage:'PARSING',revision});
-  const parsed=await callCodex({bundle:parse,source,candidate:previous,revisionIssues:issues,directory:path.join(directory,'parse-call'),probe,model,reasoning,signal,timeoutMs});
+  const parsed=await call({bundle:parse,source,candidate:previous,revisionIssues:issues,directory:path.join(directory,'parse-call'),probe,model,reasoning,signal,timeoutMs,requestBudget});
   writeJSON(path.join(directory,'proposal.json'),parsed.value);
   signal?.throwIfAborted();onProgress({stage:'AUDITING',revision});
-  const reviewed=await callCodex({bundle:auditBundle,source,candidate:parsed.value,directory:path.join(directory,'audit-call'),probe,model,reasoning,signal,timeoutMs});
+  const reviewed=await call({bundle:auditBundle,source,candidate:parsed.value,directory:path.join(directory,'audit-call'),probe,model,reasoning,signal,timeoutMs,requestBudget});
   if(JSON.stringify(runtimeInventory())!==lockedRuntime)throw Error('METHOD_CHANGED_DURING_RUN');
   if(parsed.receipt.thread_id===reviewed.receipt.thread_id)throw Error('AUDIT_SESSION_NOT_INDEPENDENT');
   writeJSON(path.join(directory,'audit.json'),reviewed.value);
@@ -55,10 +58,12 @@ export async function parse7Plus1(bytes,{output,probe,model='gpt-6.1-sol',reason
   const compiled=compileBoundary(source,parsed.value,reviewed.value,technical);writeJSON(path.join(directory,'boundary-ir.json'),compiled.ir);writeJSON(path.join(directory,'7plus1.json'),compiled.canonical);fs.writeFileSync(path.join(directory,'7plus1.zh.md'),compiled.chinese);
   const trace={source,proposal:parsed.value,audit:reviewed.value,technical,...compiled,model_calls:{parse:parsed.attempts,audit:reviewed.attempts},revision,revision_of:revision?0:null};writeJSON(path.join(directory,'trace.json'),trace);passes.push(trace);
   const contradictory=reviewed.value.reviews.filter(r=>r.verdict==='CONTRADICT');
-  if(!semanticRevision||revision===1||(!contradictory.length&&!reviewed.value.omissions.length))break;
-  previous=parsed.value;issues={reviews:contradictory,issues:reviewed.value.issues,omissions:reviewed.value.omissions};writeJSON(path.join(directory,'revision-request.json'),issues);
+  const technicalIssues=technicalRevisionFeedback(technical,parsed.value);
+  if(!semanticRevision||revision===1||(!contradictory.length&&!reviewed.value.omissions.length&&!technicalIssues.length))break;
+  previous=parsed.value;issues={reviews:contradictory,issues:reviewed.value.issues,omissions:reviewed.value.omissions,technical_errors:technicalIssues,budget:{semantic_revisions_remaining:1,shared_with_audit:true}};writeJSON(path.join(directory,'revision-request.json'),issues);
  }
  const final=passes.at(-1);writeJSON(path.join(output,'trace.json'),final);writeJSON(path.join(output,'7plus1.json'),final.canonical);fs.writeFileSync(path.join(output,'7plus1.zh.md'),final.chinese);
  const summary={source_sha256:source.sha256,revision:final.revision,real_calls:passes.reduce((n,p)=>n+p.model_calls.parse.length+p.model_calls.audit.length,0),revision_count:passes.length-1,skill_mode:'INLINE_BUNDLE',native_skill_loading:'NOT_VERIFIED',actual_model:null,requested_model:model,slot_status:Object.fromEntries(Object.entries(final.canonical.slots).map(([k,v])=>[k,v.status])),technical_acceptance_is_semantic_proof:false};writeJSON(path.join(output,'run-summary.json'),summary);
  return final;
 }
+

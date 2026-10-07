@@ -8,14 +8,14 @@ import {parse7Plus1,writeJSON,compilerRevision} from './engine.mjs';
 import {runtimeInventory} from './evidence.mjs';
 const loadedRuntime=JSON.stringify(runtimeInventory());
 export const WEB=path.resolve(ROOT,'../v0.3-p2.1-generalization/web');
-export const DATA=path.resolve(ROOT,'../../../.boundx/7plus1-short');
+export const DATA=process.env.BOUNDX_DATA_DIR?path.resolve(process.env.BOUNDX_DATA_DIR):path.resolve(ROOT,'../../../.boundx/7plus1-short');
 const ID=/^[a-f0-9]{8}(?:-[a-f0-9]{4}){3}-[a-f0-9]{12}$/;
 const terminal=new Set(['COMPLETED','COMPLETED_WITH_UNRESOLVED','FAILED','CANCELLED','INTERRUPTED']);
 const save=(file,value)=>{const temp=file+'.'+randomUUID()+'.tmp';writeJSON(temp,value);fs.renameSync(temp,file);};
 const knownErrors=['EMPTY_SOURCE','SOURCE_BYTE_LIMIT','SHORT_TEXT_SCOPE_EXCEEDED','SOURCE_UTF8_ROUNDTRIP_FAILED','CODEX_TIMEOUT','CODEX_LOGIN_REQUIRED','CODEX_QUOTA_OR_RATE_LIMIT','CODEX_NETWORK_FAILURE','CODEX_MODEL_UNAVAILABLE','CODEX_TRANSPORT_OR_SCHEMA_FAILURE','CODEX_ENV_UNAVAILABLE','UNSUPPORTED_CLI_FLAG','SKILL_CONTRACT_VERSION_MISMATCH','UNEXPECTED_TOOL_ACTIVITY','AUDIT_SESSION_NOT_INDEPENDENT','CANCELLED'];
 export function publicError(e){const code=knownErrors.find(c=>String(e.code??e.message).startsWith(c))??(e instanceof TypeError?'INVALID_UTF8':'COMPILER_ERROR');return {code,message:code,details_available_locally:true};}
 const safeTrace=trace=>{const {model_calls,...rest}=trace;return {...rest,model_calls:Object.fromEntries(Object.entries(model_calls??{}).map(([phase,calls])=>[phase,calls.map(({thread_id,elapsed_ms,exit_code,usage,skill_mode,actual_model,schema_check})=>({thread_id,elapsed_ms,exit_code,usage,skill_mode,actual_model,schema_check}))]))};};
-export function createServer({dataRoot=DATA,parse=parse7Plus1,legacyRoot=path.resolve(ROOT,'../local-lab/history'),timeoutMs=300000}={}){
+export function createServer({dataRoot=DATA,parse=parse7Plus1,legacyRoot=process.env.BOUNDX_LEGACY_DIR?path.resolve(process.env.BOUNDX_LEGACY_DIR):path.resolve(ROOT,'../local-lab/history'),timeoutMs=300000}={}){
  fs.mkdirSync(path.join(dataRoot,'runs'),{recursive:true});
  const records=new Map(),sessions=new Map(),active=new Map(),clearTokens=new Map();
  const folder=id=>{if(!ID.test(id))throw Error('INVALID_RUN_ID');return path.join(dataRoot,'runs',id);};
@@ -37,7 +37,7 @@ export function createServer({dataRoot=DATA,parse=parse7Plus1,legacyRoot=path.re
    }
    if(req.method==='GET'&&route==='/api/session'){
     const session=randomBytes(32).toString('hex');sessions.set(session,true);res.setHeader('set-cookie',`boundx_session=${session}; HttpOnly; SameSite=Strict; Path=/`);
-    return send(200,{token:session,engine:'llm-first-028 / delivery-029',compiler_revision:compilerRevision,runtime_sha256:sha256(loadedRuntime),contract:buildBundle('parse').schema.properties.contract_version.const,skill_mode:'INLINE_BUNDLE',native_skill_loading:'NOT_VERIFIED',actual_model:null,requested_model:'gpt-6.1-sol',limit_codepoints:300,business_execution_enabled:false});
+    return send(200,{token:session,engine:'BoundX short compiler',compiler_revision:compilerRevision,runtime_sha256:sha256(loadedRuntime),contract:buildBundle('parse').schema.properties.contract_version.const,skill_mode:'INLINE_BUNDLE',native_skill_loading:'NOT_VERIFIED',actual_model:null,requested_model:'gpt-6.1-sol',limit_codepoints:300,business_execution_enabled:false});
    }
    if(req.method==='GET'&&route==='/api/runs')return send(200,[...[...records.values()].map(summary),...legacyList()].sort((a,b)=>String(b.created_at).localeCompare(String(a.created_at))));
    const legacy=/^\/api\/legacy\/([a-f0-9-]+)$/u.exec(route);
@@ -77,7 +77,7 @@ export function createServer({dataRoot=DATA,parse=parse7Plus1,legacyRoot=path.re
     if(prior)return prior.source_sha256===source.sha256?send(200,summary(prior)):send(409,{error:'REQUEST_ID_SOURCE_MISMATCH'});
     if(active.size)return send(409,{error:'COMPILER_BUSY'});
     const id=randomUUID(),controller=new AbortController(),created_at=new Date().toISOString();fs.mkdirSync(folder(id));
-    record={run_id:id,request_id:input.request_id,created_at,status:'QUEUED',stage:'QUEUED',source_text:source.text,source_sha256:source.sha256,codepoints:source.codepoints,filename:typeof input.filename==='string'?path.basename(input.filename).slice(0,100):'pasted-task.txt',engine:'llm-first-028 / delivery-029',contract:buildBundle('parse').schema.properties.contract_version.const,skill_mode:'INLINE_BUNDLE',native_skill_loading:'NOT_VERIFIED',requested_model:'gpt-6.1-sol',actual_model:null,execution_mode:'LIVE_CODEX',stages:[{stage:'QUEUED',at:created_at}]};
+    record={run_id:id,request_id:input.request_id,created_at,status:'QUEUED',stage:'QUEUED',source_text:source.text,source_sha256:source.sha256,codepoints:source.codepoints,filename:typeof input.filename==='string'?path.basename(input.filename).slice(0,100):'pasted-task.txt',engine:'BoundX short compiler',contract:buildBundle('parse').schema.properties.contract_version.const,skill_mode:'INLINE_BUNDLE',native_skill_loading:'NOT_VERIFIED',requested_model:'gpt-6.1-sol',actual_model:null,execution_mode:'LIVE_CODEX',stages:[{stage:'QUEUED',at:created_at}]};
     record.compiler_revision=compilerRevision;record.runtime_sha256=sha256(loadedRuntime);records.set(id,record);persist(record);active.set(id,controller);send(202,summary(record));
     setImmediate(async()=>{
      try{
@@ -110,5 +110,5 @@ export function createServer({dataRoot=DATA,parse=parse7Plus1,legacyRoot=path.re
 export function startServer(){
  const server=createServer();const port=Number(process.env.BOUNDX_PARSER_PORT??58618);
  server.on('error',e=>{console.error(e.code==='EADDRINUSE'?'PORT_IN_USE: do not stop unknown services':e.message);process.exitCode=1;});
- server.listen(port,'127.0.0.1',()=>console.log(`BoundX short compiler 029 / INLINE_BUNDLE: http://127.0.0.1:${port}/`));return server;
+ server.listen(port,'127.0.0.1',()=>console.log(`BoundX short compiler 031 / INLINE_BUNDLE: http://127.0.0.1:${port}/`));return server;
 }

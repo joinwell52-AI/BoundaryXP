@@ -24,10 +24,13 @@ export function compileBoundary(source,g,audit,checks){
  const current=e=>e.use==='CURRENT_TASK';
  const positive=e=>current(e)&&['REQUIRED','PERMITTED'].includes(e.modality);
  // A condition can name a participant without commanding that participant's event.
- // Preserve the explicit role in P, using only graph reachability from a boundary condition.
+ // Preserve explicit roles reachable from typed governing expressions; never infer a duty.
  const governingConditions=new Map();
  const conditionEvents=(id,seen=new Set())=>{if(seen.has(id))return [];seen.add(id);const x=index.get(id);if(!x)return [];return x.op==='STATE'?[x.state?.event_id,...(x.state?.args??[]).filter(k=>index.get(k)?.kind==='ACTION'||index.get(k)?.kind==='STATE')].filter(Boolean):(x.operands??[]).flatMap(k=>conditionEvents(k,seen));};
- for(const c of g.claims.filter(c=>c.kind==='CONDITION'&&current(index.get(c.event_id)??{})))for(const id of conditionEvents(c.expression_id)){governingConditions.set(id,[...(governingConditions.get(id)??[]),c.id]);}
+ for(const c of g.claims.filter(c=>
+  (['CONDITION','TEMPORAL'].includes(c.kind)&&current(index.get(c.event_id)??{}))||
+  (['COMPLETION','STOP'].includes(c.kind)&&(c.scope_id==='ROOT'||current(index.get(c.event_id)??{})))
+ ))for(const id of conditionEvents(c.expression_id)){governingConditions.set(id,[...(governingConditions.get(id)??[]),c.id]);}
  for(const raw of g.events){
   const e=linked(raw);
   const roles=g.claims.filter(c=>c.kind==='ROLE'&&c.event_id===e.id).map(c=>({...linked(c),entity:index.get(c.entity_id),status:status([c.id,c.entity_id])}));
@@ -37,21 +40,21 @@ export function compileBoundary(source,g,audit,checks){
  for(const raw of g.claims){
   const c=linked(raw);
   const e=index.get(c.event_id),entity=index.get(c.entity_id);let slots=[],projectionInputs=[];
-  if(c.kind==='ROLE'&&positive(e??{}))slots=c.role==='INPUT_OBJECT'?['I']:c.role==='RESULT'?['O']:c.role==='BASIS'?['V']:['PERFORMER','ORGANIZER','REVIEWER','APPROVER','RECIPIENT','COLLABORATOR'].includes(c.role)?['P']:[];
+  if(c.kind==='ROLE'&&positive(e??{}))slots=c.role==='INPUT_OBJECT'?['I']:['RESULT','DELIVERABLE'].includes(c.role)?['O']:c.role==='BASIS'?['V']:['PERFORMER','ORGANIZER','REVIEWER','APPROVER','RECIPIENT','COLLABORATOR'].includes(c.role)?['P']:[];
   if(c.kind==='ROLE'&&['PERFORMER','ORGANIZER','REVIEWER','APPROVER','RECIPIENT','COLLABORATOR'].includes(c.role)&&e?.layer==='CONDITION'&&e.use==='MENTION_ONLY'&&governingConditions.has(e.id)){slots=['P'];projectionInputs=governingConditions.get(e.id);}
   if(c.kind==='QUANTITY'&&positive(e??{}))slots=c.quantity.use==='EXECUTION_LIMIT'?['R']:[];
   if(['COMPLETION','STOP'].includes(c.kind))slots=['C'];
   if(c.kind==='SCOPE'){
    // Scope target/use already expressed by LLM through typed relation and mandatory result binding.
    // An output's content restriction is not external input scope. Never inspect action strings.
-   const result=g.claims.filter(r=>r.kind==='ROLE'&&r.role==='RESULT'&&r.entity_id===c.scope_id&&r.event_id===c.event_id);
+   const result=g.claims.filter(r=>r.kind==='ROLE'&&['RESULT','DELIVERABLE'].includes(r.role)&&r.entity_id===c.scope_id&&r.event_id===c.event_id);
    if(result.length){slots=['O'];projectionInputs=result.map(r=>r.id);}
    else if(e?.modality==='FORBIDDEN'&&current(e))slots=['B'];
    else if(c.scope_id==='ROOT'||c.scope_id===c.event_id||g.claims.some(r=>r.kind==='ROLE'&&r.role==='INPUT_OBJECT'&&r.entity_id===c.scope_id&&r.event_id===c.event_id))slots=['I'];
   }
   const ids=[c.id,c.entity_id,c.expression_id,c.event_id,...(e?.constraint_ids??[]),...projectionInputs];
-  const quantities=c.kind==='ROLE'&&c.role==='RESULT'?g.claims.filter(q=>q.kind==='QUANTITY'&&q.quantity?.use==='OUTPUT_CONTENT'&&q.quantity.target_id===c.entity_id&&q.event_id===c.event_id).map(linked):[];
-  const contentScopes=c.kind==='ROLE'&&c.role==='RESULT'?g.claims.filter(q=>q.kind==='SCOPE'&&q.scope_id===c.entity_id&&q.event_id===c.event_id).map(q=>({...linked(q),expression:expression(q.expression_id)})):[];
+  const quantities=c.kind==='ROLE'&&['RESULT','DELIVERABLE'].includes(c.role)?g.claims.filter(q=>q.kind==='QUANTITY'&&q.quantity?.use==='OUTPUT_CONTENT'&&q.quantity.target_id===c.entity_id&&q.event_id===c.event_id).map(linked):[];
+  const contentScopes=c.kind==='ROLE'&&['RESULT','DELIVERABLE'].includes(c.role)?g.claims.filter(q=>q.kind==='SCOPE'&&q.scope_id===c.entity_id&&q.event_id===c.event_id).map(q=>({...linked(q),expression:expression(q.expression_id)})):[];
   make(c.kind,[...ids,...quantities.map(q=>q.id),...contentScopes.map(q=>q.id)],{claim:c,event:e??null,entity:entity??null,expression:expression(c.expression_id),constraints:e?constraints(e):[],content_quantities:quantities,content_scopes:contentScopes},slots);
  }
  const unresolved=facts.filter(f=>f.status!=='ACCEPTED'), gaps=[...g.issues.filter(i=>i.kind==='COVERAGE_GAP'),...audit.omissions,...checks.coverage.filter(c=>c.status==='GAP')];
@@ -61,15 +64,19 @@ export function compileBoundary(source,g,audit,checks){
  return {ir,canonical,chinese:renderChinese(canonical)};
 }
 const modality={REQUIRED:'必须',PERMITTED:'允许',FORBIDDEN:'禁止',NOT_REQUIRED:'无需',UNSTATED:'未陈述模态'};
-function exprText(x,name=id=>id){if(!x)return '';if(x.op==='STATE')return `${x.state?.predicate}(${(x.state?.args??[]).map(name).join(',')}) [${x.state?.polarity};运行值UNKNOWN]`;if(x.op==='ITEM')return `ITEM(${x.operands.map(name).join(',')})`;return `${x.op}(${(x.children??[]).map(child=>exprText(child,name)).join(',')})`;}
+function exprText(x,name=id=>id,eventText=id=>id){if(!x)return '';if(x.op==='STATE')return `${x.state?.predicate}(${(x.state?.args??[]).map(name).join(',')})${x.state?.event_id?`；所指事件=${eventText(x.state.event_id)}`:''} [${x.state?.polarity};运行值UNKNOWN]`;if(x.op==='ITEM')return `ITEM(${x.operands.map(name).join(',')})`;return `${x.op}(${(x.children??[]).map(child=>exprText(child,name,eventText)).join(',')})`;}
 export function renderChinese(c){
  const names={I:'输入与作用域',O:'交付与结果',A:'正向动作',P:'参与关系',R:'执行量化限制',V:'版本与依据',C:'完成与停止',B:'禁止与限制'};
- const roleNames={PERFORMER:'执行者',ORGANIZER:'组织者',REVIEWER:'复核者',APPROVER:'批准者',RECIPIENT:'接收者',COLLABORATOR:'协作者',INPUT_OBJECT:'输入/受检对象',OBJECT:'对象',RESULT:'结果/交付',BASIS:'依据',CONTENT:'内容'};
+ const roleNames={PERFORMER:'执行者',ORGANIZER:'组织者',REVIEWER:'复核者',APPROVER:'批准者',RECIPIENT:'接收者',COLLABORATOR:'协作者',INPUT_OBJECT:'输入/受检对象',OBJECT:'对象',RESULT:'产生结果',DELIVERABLE:'交付产物',BASIS:'依据',CONTENT:'内容'};
  const directionNames={NECESSARY:'必要前提',SUFFICIENT:'充分触发',IFF:'充要条件',ORDER:'时间先后'},opNames={EQ:'=',LT:'<',LTE:'≤',GT:'>',GTE:'≥'};
  const allFacts=[...Object.values(c.slots).flatMap(v=>v.entries),...c.retained_nonprojected],labels=new Map([['ROOT','根任务']]);
  for(const e of c.entities??[])labels.set(e.id,e.label);
  for(const f of allFacts){if(f.event)labels.set(f.event.id,f.event.predicate);if(f.entity)labels.set(f.entity.id,f.entity.label);for(const r of f.roles??[])if(r.entity)labels.set(r.entity.id,r.entity.label);}
  const name=id=>labels.get(id)??id;
+ const events=new Map(allFacts.filter(f=>f.kind==='EVENT').map(f=>[f.event.id,f]));
+ const eventText=id=>{const f=events.get(id);return f?`${f.event.predicate} [${id}]；${f.roles.map(r=>`${roleNames[r.role]??r.role}=${r.entity?.label??r.entity_id}`).join('；')}`:`未提供事件名称 [${id}]`;};
+ const expressionText=x=>exprText(x,name,eventText);
+ const quantityText=q=>`${q.metric} ${opNames[q.comparator]} ${q.value} ${q.unit}；目标=${name(q.target_id)}；计数范围=${name(q.count_scope)}`;
  const lines=['# BoundX 7+1（有限技术接受，不是业务授权）'];
  for(const [slot,v] of Object.entries(c.slots)){
   lines.push(`\n## ${slot} ${names[slot]} — ${v.status}`);
@@ -77,16 +84,20 @@ export function renderChinese(c){
    const e=f.event,cl=f.claim;let t='';
    if(f.kind==='EVENT')t=`${modality[e.modality]} ${e.predicate}；${f.roles.map(r=>`${roleNames[r.role]}=${r.entity?.label}`).join('；')}`;
    else if(f.kind==='ROLE')t=`${e?.predicate}：${roleNames[cl.role]}=${f.entity?.label}；${modality[e?.modality]}${e?.use==='MENTION_ONLY'?'；条件引用，不新增执行义务':''}`;
-   else if(f.kind==='QUANTITY')t=`${e?.predicate}：${cl.quantity.metric} ${opNames[cl.quantity.comparator]} ${cl.quantity.value} ${cl.quantity.unit}；目标=${name(cl.quantity.target_id)}；计数范围=${name(cl.quantity.count_scope)}`;
-   else t=`${({COMPLETION:'任务完成',STOP:'任务停止/升级',SCOPE:'作用域'})[f.kind]??f.kind} ${directionNames[cl?.direction]??''} ${exprText(f.expression,name)}；目标=${name(cl?.scope_id)}`;
-   const cond=f.constraints.filter(x=>x.kind==='CONDITION'||x.kind==='TEMPORAL').map(x=>`${directionNames[x.direction]} ${x.temporal==='AFTER'?'之后':x.temporal==='BEFORE'?'之前':''} ${exprText(x.expression,name)}`).join('；');
+   else if(f.kind==='QUANTITY')t=`${e?.predicate}：${quantityText(cl.quantity)}`;
+   else t=`${({COMPLETION:'任务完成',STOP:'任务停止/升级',SCOPE:'作用域'})[f.kind]??f.kind} ${directionNames[cl?.direction]??''} ${expressionText(f.expression)}；目标=${name(cl?.scope_id)}`;
+   const cond=f.constraints.map(x=>x.kind==='QUANTITY'?quantityText(x.quantity):`${directionNames[x.direction]??x.kind} ${x.temporal==='AFTER'?'之后':x.temporal==='BEFORE'?'之前':''} ${expressionText(x.expression)}`).join('；');
    const content=f.content_quantities?.map(x=>`${x.quantity.metric} ${opNames[x.quantity.comparator]} ${x.quantity.value} ${x.quantity.unit}；目标=${name(x.quantity.target_id)}；计数范围=${name(x.quantity.count_scope)}`).join('；');
    lines.push(`- [${f.status}] ${t}${cond?'；'+cond:''}${content?'；产物内容数量='+content:''}（${f.id}）`);
   }
  }
  lines.push('\n## 未指定 / 歧义 / 未投影语义');
  for(const i of c.issues)lines.push(`- ${i.kind} ${i.note}；影响=${i.subject_ids.join(',')}`);
- for(const f of c.retained_nonprojected.filter(f=>f.kind==='EVENT'&&f.event.modality==='NOT_REQUIRED'))lines.push(`- 无需 ${f.event.predicate}（不等于禁止）`);
+ for(const f of c.retained_nonprojected.filter(f=>f.kind==='EVENT')){
+  const constraints=f.constraints.map(x=>x.kind==='QUANTITY'?quantityText(x.quantity):`${directionNames[x.direction]??x.kind} ${x.temporal??''} ${expressionText(x.expression)}`).join('；');
+  lines.push(`- [${f.status}] ${modality[f.event.modality]} ${eventText(f.event.id)}；层级=${f.event.layer}；用途=${f.event.use}${constraints?'；'+constraints:''}${f.event.modality==='NOT_REQUIRED'?'（不等于禁止，也不新增许可）':''}（${f.id}）`);
+ }
+ for(const f of c.retained_nonprojected.filter(f=>f.kind!=='EVENT'))lines.push(`- [${f.status}] ${f.kind}；事件=${f.event?eventText(f.event.id):'根任务'}${f.claim?.role?'；'+(roleNames[f.claim.role]??f.claim.role)+'='+name(f.claim.entity_id):''}${f.expression?'；'+expressionText(f.expression):''}${f.claim?.quantity?'；'+quantityText(f.claim.quantity):''}（${f.id}）`);
  for(const g of c.gaps)lines.push(`- 覆盖缺口：${g.note??g.reason??g.id}`);
  return lines.join('\n')+'\n';
 }
@@ -120,3 +131,4 @@ export function evaluateCondition(claim,expressions,observations={}){
   sufficient_trigger:claim.direction==='SUFFICIENT'||claim.direction==='IFF'?value:null,
   order_only:claim.direction==='ORDER',business_decision:null,execution_authorization:null};
 }
+

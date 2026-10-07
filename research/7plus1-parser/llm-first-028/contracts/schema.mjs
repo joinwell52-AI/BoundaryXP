@@ -7,9 +7,9 @@ const arr=items=>({type:'array',items});
 const nil=t=>({anyOf:[t,{type:'null'}]});
 const src=obj({quote:{type:'string',minLength:1},occurrence:{type:'integer',minimum:1}});
 const sources={type:'array',items:src,minItems:1};
-export const roles=['PERFORMER','ORGANIZER','REVIEWER','APPROVER','RECIPIENT','COLLABORATOR','INPUT_OBJECT','OBJECT','RESULT','BASIS','CONTENT'];
+export const roles=['PERFORMER','ORGANIZER','REVIEWER','APPROVER','RECIPIENT','COLLABORATOR','INPUT_OBJECT','OBJECT','RESULT','DELIVERABLE','BASIS','CONTENT'];
 export const views=['I','O','A','P','R','V','C','B'];
-export const contractVersion='028-r02.3';
+export const contractVersion='031-r01';
 const affected=arr(en(...views));
 const quantity=obj({metric:id,target_id:id,comparator:en('EQ','LT','LTE','GT','GTE'),value:{type:'number'},unit:id,use:en('EXECUTION_LIMIT','OUTPUT_CONTENT','COMPLETION_THRESHOLD','CLASSIFICATION_THRESHOLD'),count_scope:id});
 export const proposalSchema=obj({

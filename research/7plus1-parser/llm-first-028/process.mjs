@@ -32,9 +32,11 @@ export async function runChild(binary,args,{input='',signal,timeoutMs=300000,onE
  return {...result,stdout,stderr,timed_out:timedOut,cancelled,pid:child.pid??null,kill_receipt:killReceipt,elapsed_ms:Date.now()-started};
 }
 export function classifyProviderFailure(text){
- if(/usage limit|quota|insufficient_quota|rate.?limit|429|limit reached/i.test(text))return 'CODEX_QUOTA_OR_RATE_LIMIT';
- if(/unauthoriz|authentication|not logged|login|401|403|refresh token/i.test(text))return 'CODEX_LOGIN_REQUIRED';
+ // Numeric substrings in timestamps, UUIDs and retry durations are not HTTP status evidence.
+ const status=code=>new RegExp('(?:HTTP(?:/\\d(?:\\.\\d)?)?(?:\\s+status)?|status(?:[_ ]code)?|response(?:[_ ]status)?|error[_ ]code)\\s*[:=]?\\s*'+code+'\\b','i').test(text);
+ if(/usage limit|quota|insufficient_quota|rate.?limit|limit reached|\b429\s+Too Many Requests\b/i.test(text)||status(429))return 'CODEX_QUOTA_OR_RATE_LIMIT';
+ if(/unauthoriz|authentication|not logged|\blogin\b|refresh token|\b(?:401\s+Unauthorized|403\s+Forbidden)\b/i.test(text)||status(401)||status(403))return 'CODEX_LOGIN_REQUIRED';
  if(/model.*(?:not available|not found|unsupported)|unsupported.*model/i.test(text))return 'CODEX_MODEL_UNAVAILABLE';
- if(/connect|network|fetch failed|TLS|socket|DNS|502|503/i.test(text))return 'CODEX_NETWORK_FAILURE';
+ if(/connect|network|fetch failed|TLS|socket|DNS|workspace routing discovery failed/i.test(text)||status(502)||status(503))return 'CODEX_NETWORK_FAILURE';
  return 'CODEX_TRANSPORT_OR_SCHEMA_FAILURE';
 }

@@ -43,11 +43,14 @@ function panel(kind){
  if(kind==='diagnostics')return $('panel').append(el('pre',JSON.stringify({issues:r.ir.issues,audit_issues:r.ir.audit_issues,gaps:r.ir.gaps,technical:r.ir.technical_diagnostics},null,2)));
  if(kind==='frames')return $('panel').append(el('pre',JSON.stringify(r.proposal,null,2)));
  if(kind==='forbid'){for(const f of r.canonical.slots.B.entries)$('panel').append(entry(f));return;}
+ if(kind==='retained'){for(const f of r.canonical.retained_nonprojected)$('panel').append(entry(f));return;}
  $('panel').append(el('h3','未决 / 最小澄清 / 未指定细节'));
  for(const i of r.ir.issues){const b=el('button',i.kind+'：'+i.note,'entry');b.onclick=()=>record(i);$('panel').append(b);}
  for(const i of r.ir.audit_issues){const b=el('button','审阅待确认 '+i.subject_ids.join(',')+(i.field_path?' / '+i.field_path:'')+'：'+i.reason,'entry');b.onclick=()=>record(i);$('panel').append(b);}
  for(const f of r.canonical.unresolved)$('panel').append(entry(f));
  for(const gap of r.canonical.gaps)$('panel').append(el('pre',JSON.stringify(gap,null,2)));
+ const retained=r.canonical.retained_nonprojected.filter(f=>f.kind==='EVENT'&&f.event.modality==='NOT_REQUIRED');
+ if(retained.length){$('panel').append(el('h3','明确无义务（不等于禁止或新增许可）'));for(const f of retained)$('panel').append(entry(f));}
  if(!r.ir.issues.length&&!r.ir.audit_issues.length&&!r.canonical.unresolved.length&&!r.canonical.gaps.length)$('panel').append(el('p','本次没有记录到未决或覆盖缺口；不保证模型永不误解。'));
 }
 async function history(){

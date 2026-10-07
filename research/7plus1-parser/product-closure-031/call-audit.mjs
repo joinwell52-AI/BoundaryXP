@@ -1,0 +1,23 @@
+// Read captured requests only; no provider invocation or account configuration access.
+import fs from 'node:fs';import path from 'node:path';import {sha256} from '../llm-first-028/source.mjs';
+const root=path.resolve('docs/reports/7plus1/7P-SHORT-COMPILER-PRODUCT-CLOSURE-031-LONG'),read=p=>JSON.parse(fs.readFileSync(p,'utf8'));
+const walk=d=>fs.existsSync(d)?fs.readdirSync(d,{withFileTypes:true}).flatMap(e=>e.isDirectory()?walk(path.join(d,e.name)):[path.join(d,e.name)]):[];
+const files=walk(path.join(root,'runs')),rows=[];
+for(const file of files.filter(p=>/request-\d+\.json$/.test(p))){const req=read(file),dir=path.dirname(file),n=path.basename(file).match(/request-(\d+)/)[1],phase=path.basename(dir).startsWith('audit')?'audit':'parse',prompt=fs.readFileSync(path.join(dir,'prompt-'+n+'.txt'),'utf8'),errors=[];
+ if(sha256(prompt)!==req.prompt_sha256)errors.push('PROMPT_DIGEST_MISMATCH');
+ const resources=[...prompt.matchAll(/<RESOURCE path=("[^"\n]+") sha256=([0-9a-f]{64})>\n([\s\S]*?)\n<\/RESOURCE>/g)].map(m=>({path:JSON.parse(m[1]),sha256:m[2],actual_sha256:sha256(Buffer.from(m[3]))}));
+ if(resources.length!==req.resources.length||resources.some((r,i)=>r.actual_sha256!==r.sha256||r.path!==req.resources[i].path||r.sha256!==req.resources[i].sha256))errors.push('INLINE_RESOURCE_DIGEST_MISMATCH');
+ const end=prompt.lastIndexOf('</RESOURCE>')+'</RESOURCE>'.length;if(sha256(prompt.slice(0,end))!==req.bundle_sha256)errors.push('BUNDLE_DIGEST_MISMATCH');
+ if(req.requested_model!=='gpt-6.1-sol'||req.requested_reasoning!=='medium')errors.push('REQUESTED_MODEL_CONFIG_MISMATCH');
+ if(!req.isolation?.new_session||!req.isolation?.user_config_ignored||!req.isolation?.project_instructions_disabled||!req.isolation?.host_skill_discovery_disabled)errors.push('ISOLATION_NOT_PROVEN');
+ let run=dir;while(!fs.existsSync(path.join(run,'source.json'))&&run!==path.dirname(run))run=path.dirname(run);const source=read(path.join(run,'source.json')),payload=prompt.match(/<SOURCE_DATA>\n([\s\S]*?)\n<\/SOURCE_DATA>/)?.[1];
+ try{if(JSON.stringify(JSON.parse(payload))!==JSON.stringify({text:source.text,lines:source.lines,literals:source.literals}))errors.push('SOURCE_PAYLOAD_MISMATCH');}catch{errors.push('SOURCE_PAYLOAD_MISSING');}
+ if(/SOURCE-EXPECTATIONS|EXPECTED-FACTS|NEW-TEXTS-PREREGISTERED|7P-SHORT-COMPILER-PRODUCT-CLOSURE|\bQ(?:0[1-9]|[12]\d|30)\b/.test(prompt.slice(end)))errors.push('EVALUATION_LEAK');
+ const receiptFile=path.join(dir,'receipt-'+n+'.json'),receipt=fs.existsSync(receiptFile)?read(receiptFile):null;
+ if(receipt?.response_sha256&&sha256(fs.readFileSync(path.join(dir,'response-'+n+'.txt')))!==receipt.response_sha256)errors.push('RESPONSE_DIGEST_MISMATCH');
+ if(receipt?.tool_events?.length)errors.push('MODEL_TOOL_ACTIVITY');
+ const stderrFile=path.join(dir,'stderr-'+n+'.txt'),retrySignals=fs.existsSync(stderrFile)?(fs.readFileSync(stderrFile,'utf8').match(/retrying sampling request|stream connection failed; waiting to retry/g)??[]).length:0;
+ rows.push({path:path.relative(root,file).replaceAll('\\','/'),phase,request_started:true,attempt:Number(n),requested_model:req.requested_model,requested_reasoning:req.requested_reasoning,actual_service_model:receipt?.actual_model??'NOT_DISCLOSED',cli_version:req.cli_version,binary_sha256:req.binary_sha256,bundle_sha256:req.bundle_sha256,prompt_sha256:req.prompt_sha256,resources,thread_id:receipt?.thread_id??null,receipt_present:!!receipt,exit_code:receipt?.exit_code??null,elapsed_ms:receipt?.elapsed_ms??null,usage:receipt?.usage??null,internal_network_retry_signals:retrySignals,errors});
+}
+const sessions=rows.filter(r=>r.thread_id).map(r=>r.thread_id),retry=rows.reduce((n,r)=>n+r.internal_network_retry_signals,0),result={as_of:new Date().toISOString(),wrapper_requests_started:rows.length,completed_receipts:rows.filter(r=>r.receipt_present).length,missing_receipts:rows.filter(r=>!r.receipt_present).length,parse_requests:rows.filter(r=>r.phase==='parse').length,audit_requests:rows.filter(r=>r.phase==='audit').length,CLI_internal_network_retry_signals:retry,conservative_budget_usage:rows.length+retry,task_budget:240,server_model_request_count:'NOT_DISCLOSED; retry signals are not proof of server delivery',duplicate_sessions:[...new Set(sessions.filter((x,i)=>sessions.indexOf(x)!==i))],validation_errors:rows.filter(r=>r.errors.length).map(r=>({path:r.path,errors:r.errors})),skill_delivery:'INLINE_BUNDLE from actual same-version resources',native_skill_loading:'NOT_VERIFIED',rows};
+fs.writeFileSync(path.join(root,'CALL-AUDIT.json'),JSON.stringify(result,null,2)+'\n');console.log(JSON.stringify({...result,rows:undefined}));

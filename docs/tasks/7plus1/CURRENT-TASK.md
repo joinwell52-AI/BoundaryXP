@@ -1,6 +1,14 @@
 # 当前 BoundX 7+1 任务
 
-**当前任务：`7P-SHORT-COMPILER-ACCURACY-030`；任务版本：r01。**
+**当前任务：`7P-SHORT-COMPILER-PRODUCT-CLOSURE-031-LONG`；任务版本：r01，ADMIN已激活。**
+
+当前任务书：`docs/tasks/7plus1/7P-SHORT-COMPILER-PRODUCT-CLOSURE-031-LONG.md`。
+当前产品合同：`docs/tasks/7plus1/SHORT-COMPILER-PRODUCT-DELIVERY-CONTRACT.md`。
+ADMIN启动与O口径确认：`docs/reports/7plus1/7P-SHORT-COMPILER-PRODUCT-CLOSURE-031-LONG/AUTHORIZATION.md`。
+
+2026-10-07用户明确激活031并确认第2节O口径，解除准备时NOT_ACTIVE。连续修复同一产品，完成规定真实短文本验证、干净目录安装、升级回滚和交付。不重搭架构、不扩长文本/WP/旧350条。030原始结果不动。质量门、备份和目标空闲检查通过才受控升级58618。仅推送review分支，不merge/release/tag；交付后WAITING_ADMIN_REVIEW。
+
+以下为已结束030的历史授权记录，**不再执行030**；031按上述当前任务执行。
 
 任务书：`docs/tasks/7plus1/7P-SHORT-COMPILER-ACCURACY-030.md`
 任务书创建提交：`643442b40dc284d39a702bec541e7b76204bd18c`。

@@ -60,7 +60,7 @@ export function technicalValidate(source,g,audit){
      const targetOwned=q.target_id===x.event_id||g.claims.some(c=>c.kind==='ROLE'&&c.event_id===x.event_id&&c.entity_id===q.target_id);
      if(!targetOwned||!ownEvent?.constraint_ids?.includes(x.id))bad('QUANTITY_OWNERSHIP');
      if(q.use==='EXECUTION_LIMIT'&&q.target_id!==x.event_id)bad('EXECUTION_QUANTITY_TARGET');
-     if(q.use==='OUTPUT_CONTENT'&&!g.claims.some(c=>c.kind==='ROLE'&&c.role==='RESULT'&&c.event_id===x.event_id&&c.entity_id===q.target_id))bad('CONTENT_QUANTITY_RESULT_TARGET');
+     if(q.use==='OUTPUT_CONTENT'&&!g.claims.some(c=>c.kind==='ROLE'&&['RESULT','DELIVERABLE'].includes(c.role)&&c.event_id===x.event_id&&c.entity_id===q.target_id))bad('CONTENT_QUANTITY_RESULT_TARGET');
     }
    }
   }

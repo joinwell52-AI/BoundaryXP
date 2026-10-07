@@ -1,0 +1,5 @@
+import fs from 'node:fs';import path from 'node:path';import {spawn} from 'node:child_process';
+const report=path.resolve('docs/reports/7plus1/7P-SHORT-COMPILER-PRODUCT-CLOSURE-031-LONG'),phase=process.argv[2]??'engineering';const dir=path.join(report,phase);fs.mkdirSync(dir,{recursive:true});
+const result=[];for(const [name,args] of [['core',['--test',...fs.readdirSync('research/7plus1-parser/llm-first-028/tests').filter(x=>x.endsWith('.test.mjs')).map(x=>'research/7plus1-parser/llm-first-028/tests/'+x)]],['full-regression',['--test','--test-concurrency=1',...fs.readdirSync('tests').filter(x=>x.endsWith('.test.mjs')).map(x=>'tests/'+x)]]]){
+ const start=Date.now(),out=fs.openSync(path.join(dir,name+'.txt'),'wx');const child=spawn(process.execPath,args,{windowsHide:true,stdio:['ignore',out,out]});console.log('START '+name+' pid='+child.pid);const exit_code=await new Promise(r=>child.once('close',r));fs.closeSync(out);result.push({name,args,exit_code,elapsed_ms:Date.now()-start});console.log('END '+name+' code='+exit_code);
+}fs.writeFileSync(path.join(dir,'RESULTS.json'),JSON.stringify(result,null,2)+'\n');

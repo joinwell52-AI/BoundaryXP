@@ -1,22 +1,24 @@
-# BoundX 语义合同 028-r02.3
+# BoundX 语义合同 031-r01
 
-依据 v0.4/r02。两个 Skill、Schema、Γ 和编译器共用本合同。模型提交候选；宿主的 ACCEPTED 仅代表有限技术检查与审阅支持，不证明自然语言真值。
+依据v0.4/r02方法及031 ADMIN批准的O口径（手册r03）。两个Skill、Schema、Γ和编译器共用本合同。模型提交候选；宿主的ACCEPTED仅代表有限技术检查与审阅支持，不证明自然语言真值。028-r02.3历史输出不静默升级；030不倒改。
 
 ## 维度及用途
 
-I 是明确输入/作用域，O 是交付结果，A 是当前要求/允许动作，P 是逐事件参与关系，R 是执行量化限制，V 是规范依据，C 是根任务完成/停止，B 是禁止/限制。八个维度是同一关联结构的视图，不是词语桶。不能由岗位推权限，不能补 WP、默认执行者或业务授权。
+I是明确输入/作用域；O包含明示要求或允许产生的结果及明示要求或允许交付的产物，不要求本任务新建。A是当前要求/允许动作，P是逐事件参与关系，R是执行量化限制，V是规范依据，C是根任务完成/停止，B是禁止/限制。八个维度是同一关联结构的视图，不是词语桶。不能由岗位推权限，不能补WP、默认执行者或业务授权。
+
+RESULT仅表示产生结果的用途；DELIVERABLE表示交付产物的用途。两种用途均绑定各自事件、模态和条件，正向时进入O。明确提交/交付/发送某产物应有DELIVERABLE，不凭它新增生成/修改事件、存在断言或外部输入I。禁止或无需交付不产生正向O，仍保留事件和DELIVERABLE用途；允许生成+无需交付分别为PERMITTED RESULT和NOT_REQUIRED DELIVERABLE，不变成必交。普通接收的OBJECT也不自动变成新结果。引用中的交付不是当前任务。
 
 实体有稳定 id、label、type、mentions 和 alternatives，不具有排他的全局槽位。FILE、PERSON、SYSTEM、DOCUMENT、GROUP、REFERENT、OTHER 是身份类型；角色与用途属于具体事件。生成的结果被复核、提交仍是同一实体，但这些内部用途不是外部输入。
 
 ## 数据约定
 
-顶层 contract_version 固定为 028-r02.3；entities/events/claims/expressions/issues/coverage 六个数组。所有 id 全图唯一，ROOT 是保留根任务标记。每项来源 sources/mentions 均使用真实非空 quote + occurrence（从 1 开始的完全相同字符串出现次数）。不要输出猜测偏移；宿主按 Unicode 码点定位。跨句指代/共享主体要引用两端；抽象状态可用多个片段，不伪造连续引文。
+顶层 contract_version 固定为 031-r01；entities/events/claims/expressions/issues/coverage 六个数组。所有 id 全图唯一，ROOT 是保留根任务标记。每项来源 sources/mentions 均使用真实非空 quote + occurrence（从 1 开始的完全相同字符串出现次数）。不要输出猜测偏移；宿主按 Unicode 码点定位。跨句指代/共享主体要引用两端；抽象状态可用多个片段，不伪造连续引文。
 
 events：predicate 是模型解释的规范动作/状态名称（使用简洁中文），kind 为 ACTION/STATE；layer 是 MAIN/CONDITION/QUOTED/MODIFIER/PURPOSE/CONTENT/BACKGROUND；use 是 CURRENT_TASK/MENTION_ONLY；modality 为 REQUIRED/PERMITTED/NOT_REQUIRED/FORBIDDEN/UNSTATED；polarity 是 POSITIVE/NEGATIVE；owner_id 为 ROOT 或结构父事件；constraint_ids 是约束此事件的全部 CONDITION/QUANTITY/TEMPORAL 主张；requires 仅列真正必需的语义依赖。owner 和共现不是证明依赖。
 
 claims 按 kind 区分：
 
-- ROLE：event_id + entity_id + role。参与角色 PERFORMER/ORGANIZER/REVIEWER/APPROVER/RECIPIENT/COLLABORATOR；对象用途 INPUT_OBJECT/OBJECT/RESULT/BASIS/CONTENT。INPUT_OBJECT 是明确外部输入/受检范围；OBJECT 是内部产物或普通动作对象，不自动进 I；RESULT 是该动作产物；BASIS 是对该用途有约束的依据。组织不等于执行。CURRENT_TASK 的明确参与关系进 P；纯条件/引文参与者不增义务。
+- ROLE：event_id + entity_id + role。参与角色 PERFORMER/ORGANIZER/REVIEWER/APPROVER/RECIPIENT/COLLABORATOR；对象用途 INPUT_OBJECT/OBJECT/RESULT/DELIVERABLE/BASIS/CONTENT。INPUT_OBJECT 是明确外部输入/受检范围；OBJECT 是内部产物或普通动作对象，不自动进 I；RESULT 是该动作产生结果；DELIVERABLE是该动作交付产物，不推定新建或存在；BASIS 是对该用途有约束的依据。组织不等于执行。CURRENT_TASK 的明确参与关系进 P；纯条件/引文参与者不增义务。
 - CONDITION：event_id 为被约束事件；expression_id 为条件表达式；direction 为 NECESSARY/SUFFICIENT/IFF；temporal 可为 AFTER/BEFORE/null。事件的 constraint_ids 必须回指该主张，缺失或不对称会拦截而不是变无条件许可。
 - TEMPORAL：event_id + expression_id + direction=ORDER + temporal=AFTER/BEFORE；保留单纯先后，不假装是充分因果。
 - QUANTITY：event_id + quantity；quantity 的 metric、target_id、comparator(EQ/LT/LTE/GT/GTE)、value、unit、use(EXECUTION_LIMIT/OUTPUT_CONTENT/COMPLETION_THRESHOLD/CLASSIFICATION_THRESHOLD)、count_scope 全部明确。count_scope 引用 ROOT、事件或实体。R 只收 EXECUTION_LIMIT；输出内容数量挂到 O，不变成资源次数。
@@ -55,6 +57,19 @@ field_path 的空字符串及精确 collection[id] 表示整节点；collection[
 
 Γ 逐主张检查来源、Schema、唯一引用、签名、约束双向绑定、表达式参数、量化目标/单位、必需依赖闭合和循环、直接审阅及身份竞争。完整来源+SUPPORT+有限检查通过可 ACCEPTED；疑点局部 UNRESOLVED；技术坏结构 REJECTED。仅沿 requires 和实际角色身份/事件/约束依赖传播，不沿 owner/context 共现扩散。所有结果保存检查路径。
 
-Q 固定消费用途，不用 predicate 字符串选槽：当前 REQUIRED/PERMITTED 事件→A；FORBIDDEN→B；ROLE INPUT_OBJECT→I、RESULT→O、BASIS→V、参与角色→P；EXECUTION_LIMIT→R；OUTPUT_CONTENT挂O；根 COMPLETION/STOP→C；SCOPE→其明确范围用途。I/O/V 正向用途要求关联事件当前正向，内部 OBJECT 不自动 I。约束、对象与参与者留在同一事件事实，不做笛卡尔积。中文从同一 IR 渲染。NOT_REQUIRED、mention-only、未指定和缺口另列而非丢弃。business_decision/execution_authorization 固定 null。
+Q 固定消费用途，不用 predicate 字符串选槽：当前 REQUIRED/PERMITTED 事件→A；FORBIDDEN→B；ROLE INPUT_OBJECT→I、RESULT/DELIVERABLE→O、BASIS→V、参与角色→P；EXECUTION_LIMIT→R；OUTPUT_CONTENT挂O；根 COMPLETION/STOP→C；SCOPE→其明确范围用途。I/O/V 正向用途要求关联事件当前正向，内部 OBJECT 不自动 I。约束、对象与参与者留在同一事件事实，不做笛卡尔积。中文从同一 IR 渲染。NOT_REQUIRED、mention-only、未指定和缺口另列而非丢弃。business_decision/execution_authorization 固定 null。
 
 字段到代码的映射见 FIELD-MAP.md。Schema 由 schema.mjs 唯一生成；模型与宿主使用同一文件摘要。
+
+## 031 角色承接、身份与数量字段闭环
+
+- 主体承接由LLM逐事件解释：连续同一指令的并列/追加动作没有主体切换、执行者另定、组织职责或竞争主体时，可承接明确主语；ROLE.sources须引用主语所在片段和省略主语的动作片段，note说明承接。组织者不自动执行被组织工作；条件/引文角色不传播为主命令执行者。真正未指定保留UNSPECIFIED。
+- 先将mentions关联到实体身份，再绑定各用途。“本次报告”等唯一当前报告和随后文件名可由来源确定为同一实体，mentions包含两端；条件STATE.args与该文件动作用途引用同一id。复核A后提交B、不同轮报告、多报告竞争、未说批准对象等不得强合并。程序不读note猜同一性，也不从原文再推执行者或对象。
+- quantity.metric描述被计数内容；target_id是被数量限制的事件或产物，不是内容项类别。EXECUTION_LIMIT.target_id必须为event_id；OUTPUT_CONTENT.target_id必须是同一event_id的RESULT或DELIVERABLE实体，计数项可另以CONTENT表达。count_scope明确计数范围；它不是target_id的自动替代。报告数量不能改投R。多个结果不能默认挑一个。
+- 审阅逐字段核对上述关系，不仅检查数值或每节点SUPPORT。STATE.event_id若有值，应对应所引用事件；args与原文角色、对象和时序一致。
+- 一次运行共享最多一轮语义修订：审阅CONTRADICT/明确遗漏及宿主白名单技术错误可共同触发。技术反馈只有真实错误码、字段、相关ID、合同要求，不含测试答案。修订后新会话审阅并重验；仍失败保留缺口，禁止删除数量/条件后当作成功。
+
+身份检查须覆盖向前及向后的指称。唯一当前产物的指称与明确名称应有同一来源支持的实体id与mentions，不得拆为两个不相连实体并仅在note声称相关。真正有多个来源、不同轮次、不同对象或未陈述审批对象时不强合并。审阅器须检查跨用途引用链；缺失身份连接是可修订的语义遗漏，不是程序从原文猜答案的授权。
+
+明确的随后、再、最后等事件先后需以TEMPORAL/STATE表达，不能仅留在note。后继工作承接整组并列前置工作时，表达式保留整组状态；并列本身不增加组内顺序。不推定状态已发生，不能把ORDER升为SUFFICIENT。程序只消费声明的引用及方向。
+
