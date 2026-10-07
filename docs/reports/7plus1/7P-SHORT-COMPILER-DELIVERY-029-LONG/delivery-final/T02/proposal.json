@@ -1,0 +1,457 @@
+{
+  "contract_version": "028-r02.3",
+  "entities": [
+    {
+      "id": "ent_qa",
+      "label": "QA",
+      "type": "OTHER",
+      "mentions": [
+        {
+          "quote": "QA",
+          "occurrence": 1
+        }
+      ],
+      "alternatives": []
+    },
+    {
+      "id": "ent_check",
+      "label": "CHECK-2",
+      "type": "DOCUMENT",
+      "mentions": [
+        {
+          "quote": "CHECK-2",
+          "occurrence": 1
+        }
+      ],
+      "alternatives": []
+    },
+    {
+      "id": "ent_input",
+      "label": "input.json",
+      "type": "FILE",
+      "mentions": [
+        {
+          "quote": "input.json",
+          "occurrence": 1
+        },
+        {
+          "quote": "input.json",
+          "occurrence": 2
+        },
+        {
+          "quote": "它",
+          "occurrence": 1
+        }
+      ],
+      "alternatives": []
+    },
+    {
+      "id": "ent_result",
+      "label": "核对结果",
+      "type": "OTHER",
+      "mentions": [
+        {
+          "quote": "核对结果",
+          "occurrence": 1
+        }
+      ],
+      "alternatives": []
+    },
+    {
+      "id": "ent_audit",
+      "label": "audit.md",
+      "type": "FILE",
+      "mentions": [
+        {
+          "quote": "audit.md",
+          "occurrence": 1
+        }
+      ],
+      "alternatives": []
+    }
+  ],
+  "events": [
+    {
+      "id": "ev_verify",
+      "predicate": "核对",
+      "kind": "ACTION",
+      "layer": "MAIN",
+      "use": "CURRENT_TASK",
+      "modality": "REQUIRED",
+      "polarity": "POSITIVE",
+      "owner_id": "ROOT",
+      "constraint_ids": [],
+      "requires": [],
+      "sources": [
+        {
+          "quote": "请QA依据CHECK-2核对input.json",
+          "occurrence": 1
+        }
+      ]
+    },
+    {
+      "id": "ev_write",
+      "predicate": "写入核对结果",
+      "kind": "ACTION",
+      "layer": "MAIN",
+      "use": "CURRENT_TASK",
+      "modality": "REQUIRED",
+      "polarity": "POSITIVE",
+      "owner_id": "ROOT",
+      "constraint_ids": [],
+      "requires": [
+        "cl_verify_result"
+      ],
+      "sources": [
+        {
+          "quote": "请QA",
+          "occurrence": 1
+        },
+        {
+          "quote": "并将核对结果写入audit.md",
+          "occurrence": 1
+        }
+      ]
+    },
+    {
+      "id": "ev_modify",
+      "predicate": "修改",
+      "kind": "ACTION",
+      "layer": "MAIN",
+      "use": "CURRENT_TASK",
+      "modality": "FORBIDDEN",
+      "polarity": "POSITIVE",
+      "owner_id": "ROOT",
+      "constraint_ids": [],
+      "requires": [],
+      "sources": [
+        {
+          "quote": "请QA",
+          "occurrence": 1
+        },
+        {
+          "quote": "只读input.json，不得修改它",
+          "occurrence": 1
+        }
+      ]
+    }
+  ],
+  "claims": [
+    {
+      "id": "cl_verify_actor",
+      "kind": "ROLE",
+      "event_id": "ev_verify",
+      "entity_id": "ent_qa",
+      "role": "PERFORMER",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "scope_id": "ev_verify",
+      "requires": [],
+      "sources": [
+        {
+          "quote": "请QA依据CHECK-2核对input.json",
+          "occurrence": 1
+        }
+      ],
+      "note": ""
+    },
+    {
+      "id": "cl_verify_basis",
+      "kind": "ROLE",
+      "event_id": "ev_verify",
+      "entity_id": "ent_check",
+      "role": "BASIS",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "scope_id": "ev_verify",
+      "requires": [],
+      "sources": [
+        {
+          "quote": "依据CHECK-2核对input.json",
+          "occurrence": 1
+        }
+      ],
+      "note": "CHECK-2是核对依据，其中数字不是数量限制。"
+    },
+    {
+      "id": "cl_verify_input",
+      "kind": "ROLE",
+      "event_id": "ev_verify",
+      "entity_id": "ent_input",
+      "role": "INPUT_OBJECT",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "scope_id": "ev_verify",
+      "requires": [],
+      "sources": [
+        {
+          "quote": "核对input.json",
+          "occurrence": 1
+        }
+      ],
+      "note": ""
+    },
+    {
+      "id": "cl_verify_result",
+      "kind": "ROLE",
+      "event_id": "ev_verify",
+      "entity_id": "ent_result",
+      "role": "RESULT",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "scope_id": "ev_verify",
+      "requires": [],
+      "sources": [
+        {
+          "quote": "核对input.json",
+          "occurrence": 1
+        },
+        {
+          "quote": "核对结果",
+          "occurrence": 1
+        }
+      ],
+      "note": "核对产物也是后续写入的同一对象。"
+    },
+    {
+      "id": "cl_write_actor",
+      "kind": "ROLE",
+      "event_id": "ev_write",
+      "entity_id": "ent_qa",
+      "role": "PERFORMER",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "scope_id": "ev_write",
+      "requires": [],
+      "sources": [
+        {
+          "quote": "请QA",
+          "occurrence": 1
+        },
+        {
+          "quote": "并将核对结果写入audit.md",
+          "occurrence": 1
+        }
+      ],
+      "note": "并列动作沿用明确主体QA。"
+    },
+    {
+      "id": "cl_write_content",
+      "kind": "ROLE",
+      "event_id": "ev_write",
+      "entity_id": "ent_result",
+      "role": "CONTENT",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "scope_id": "ev_write",
+      "requires": [],
+      "sources": [
+        {
+          "quote": "将核对结果写入audit.md",
+          "occurrence": 1
+        }
+      ],
+      "note": ""
+    },
+    {
+      "id": "cl_write_result",
+      "kind": "ROLE",
+      "event_id": "ev_write",
+      "entity_id": "ent_audit",
+      "role": "RESULT",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "scope_id": "ev_write",
+      "requires": [],
+      "sources": [
+        {
+          "quote": "将核对结果写入audit.md",
+          "occurrence": 1
+        }
+      ],
+      "note": "交付为载有核对结果的audit.md；未指定该文件是否预先存在。"
+    },
+    {
+      "id": "cl_readonly",
+      "kind": "SCOPE",
+      "event_id": "ev_verify",
+      "entity_id": null,
+      "role": null,
+      "expression_id": "expr_readonly",
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "scope_id": "ev_verify",
+      "requires": [],
+      "sources": [
+        {
+          "quote": "核对input.json",
+          "occurrence": 1
+        },
+        {
+          "quote": "只读input.json",
+          "occurrence": 1
+        }
+      ],
+      "note": "只读约束核对时对input.json的操作方式，不新增独立读取义务。"
+    },
+    {
+      "id": "cl_modify_actor",
+      "kind": "ROLE",
+      "event_id": "ev_modify",
+      "entity_id": "ent_qa",
+      "role": "PERFORMER",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "scope_id": "ev_modify",
+      "requires": [],
+      "sources": [
+        {
+          "quote": "请QA",
+          "occurrence": 1
+        },
+        {
+          "quote": "不得修改它",
+          "occurrence": 1
+        }
+      ],
+      "note": ""
+    },
+    {
+      "id": "cl_modify_object",
+      "kind": "ROLE",
+      "event_id": "ev_modify",
+      "entity_id": "ent_input",
+      "role": "OBJECT",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "scope_id": "ev_modify",
+      "requires": [],
+      "sources": [
+        {
+          "quote": "只读input.json，不得修改它",
+          "occurrence": 1
+        }
+      ],
+      "note": "它指向input.json。"
+    }
+  ],
+  "expressions": [
+    {
+      "id": "expr_readonly",
+      "op": "STATE",
+      "operands": [],
+      "state": {
+        "predicate": "操作方式为只读",
+        "event_id": "ev_verify",
+        "args": [
+          "ent_input"
+        ],
+        "polarity": "POSITIVE"
+      },
+      "sources": [
+        {
+          "quote": "核对input.json",
+          "occurrence": 1
+        },
+        {
+          "quote": "只读input.json",
+          "occurrence": 1
+        }
+      ]
+    }
+  ],
+  "issues": [],
+  "coverage": [
+    {
+      "sources": [
+        {
+          "quote": "请QA依据CHECK-2核对input.json",
+          "occurrence": 1
+        }
+      ],
+      "claim_ids": [
+        "cl_verify_actor",
+        "cl_verify_basis",
+        "cl_verify_input"
+      ],
+      "status": "EXPRESSED",
+      "affected_views": [
+        "I",
+        "A",
+        "P",
+        "V"
+      ]
+    },
+    {
+      "sources": [
+        {
+          "quote": "并将核对结果写入audit.md",
+          "occurrence": 1
+        }
+      ],
+      "claim_ids": [
+        "cl_verify_result",
+        "cl_write_actor",
+        "cl_write_content",
+        "cl_write_result"
+      ],
+      "status": "EXPRESSED",
+      "affected_views": [
+        "O",
+        "A",
+        "P"
+      ]
+    },
+    {
+      "sources": [
+        {
+          "quote": "只读input.json",
+          "occurrence": 1
+        }
+      ],
+      "claim_ids": [
+        "cl_readonly"
+      ],
+      "status": "EXPRESSED",
+      "affected_views": [
+        "B"
+      ]
+    },
+    {
+      "sources": [
+        {
+          "quote": "只读input.json，不得修改它",
+          "occurrence": 1
+        }
+      ],
+      "claim_ids": [
+        "cl_modify_actor",
+        "cl_modify_object"
+      ],
+      "status": "EXPRESSED",
+      "affected_views": [
+        "B",
+        "P"
+      ]
+    }
+  ]
+}

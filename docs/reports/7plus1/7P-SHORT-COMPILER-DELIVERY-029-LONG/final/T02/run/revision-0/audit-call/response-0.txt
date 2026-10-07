@@ -1,0 +1,218 @@
+{
+  "contract_version": "028-r02.3",
+  "reviews": [
+    {
+      "subject_id": "ent_qa",
+      "field_path": "label",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [{"quote": "QA", "occurrence": 1}],
+      "reason": "原文明示主体为QA。"
+    },
+    {
+      "subject_id": "ent_qa",
+      "field_path": "mentions",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [{"quote": "QA", "occurrence": 1}],
+      "reason": "身份引文真实且定位正确。"
+    },
+    {
+      "subject_id": "ent_qa",
+      "field_path": "alternatives",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [{"quote": "请QA", "occurrence": 1}],
+      "reason": "没有竞争指代；类别未指定不构成身份竞争。"
+    },
+    {
+      "subject_id": "ent_qa",
+      "field_path": "type",
+      "verdict": "UNCERTAIN",
+      "context_refs": [],
+      "sources": [{"quote": "请QA", "occurrence": 1}],
+      "reason": "原文未说明QA是个人还是团队，OTHER类别不能由原文确定；疑点仅限类型。"
+    },
+    {
+      "subject_id": "ent_check",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [{"quote": "依据CHECK-2", "occurrence": 1}],
+      "reason": "CHECK-2作为具名核对依据，建模为规范文档合理。"
+    },
+    {
+      "subject_id": "ent_input",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [
+        {"quote": "input.json", "occurrence": 1},
+        {"quote": "只读input.json，不得修改它", "occurrence": 1}
+      ],
+      "reason": "两处文件名及“它”指向同一受检文件。"
+    },
+    {
+      "subject_id": "ent_result",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [{"quote": "核对结果", "occurrence": 1}],
+      "reason": "原文明示核对产生并随后写入的结果。"
+    },
+    {
+      "subject_id": "ent_audit",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [{"quote": "audit.md", "occurrence": 1}],
+      "reason": "原文明示结果写入的文件。"
+    },
+    {
+      "subject_id": "ev_verify",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [{"quote": "请QA依据CHECK-2核对input.json", "occurrence": 1}],
+      "reason": "核对是当前明确要求的主动作。"
+    },
+    {
+      "subject_id": "ev_write",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["cl_verify_result"],
+      "sources": [
+        {"quote": "请QA", "occurrence": 1},
+        {"quote": "并将核对结果写入audit.md", "occurrence": 1}
+      ],
+      "reason": "写入是并列要求，内容依赖前述核对结果。"
+    },
+    {
+      "subject_id": "ev_modify",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [
+        {"quote": "请QA", "occurrence": 1},
+        {"quote": "只读input.json，不得修改它", "occurrence": 1}
+      ],
+      "reason": "修改该文件被明确禁止，正向动作配FORBIDDEN保留了禁止含义。"
+    },
+    {
+      "subject_id": "cl_verify_actor",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["ent_qa", "ev_verify"],
+      "sources": [{"quote": "请QA依据CHECK-2核对input.json", "occurrence": 1}],
+      "reason": "QA是明确核对执行者，职责不依赖其人或组类别。"
+    },
+    {
+      "subject_id": "cl_verify_basis",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["ev_verify", "ent_check"],
+      "sources": [{"quote": "依据CHECK-2核对input.json", "occurrence": 1}],
+      "reason": "CHECK-2约束核对用途，名称中的数字不是执行数量。"
+    },
+    {
+      "subject_id": "cl_verify_input",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["ev_verify", "ent_input"],
+      "sources": [{"quote": "核对input.json", "occurrence": 1}],
+      "reason": "input.json是明确受检输入。"
+    },
+    {
+      "subject_id": "cl_verify_result",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["ev_verify", "ent_result"],
+      "sources": [
+        {"quote": "核对input.json", "occurrence": 1},
+        {"quote": "核对结果", "occurrence": 1}
+      ],
+      "reason": "后续写入内容明确是该核对动作的产物。"
+    },
+    {
+      "subject_id": "cl_write_actor",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["ent_qa", "ev_write"],
+      "sources": [
+        {"quote": "请QA", "occurrence": 1},
+        {"quote": "并将核对结果写入audit.md", "occurrence": 1}
+      ],
+      "reason": "并列写入动作沿用QA主体。"
+    },
+    {
+      "subject_id": "cl_write_content",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["ev_write", "ent_result"],
+      "sources": [{"quote": "将核对结果写入audit.md", "occurrence": 1}],
+      "reason": "核对结果是写入内容，没有被误作外部输入。"
+    },
+    {
+      "subject_id": "cl_write_result",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["ev_write", "ent_audit"],
+      "sources": [{"quote": "将核对结果写入audit.md", "occurrence": 1}],
+      "reason": "载有核对结果的audit.md是明确输出，未假定文件必须新建。"
+    },
+    {
+      "subject_id": "cl_readonly",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["ev_verify", "expr_readonly"],
+      "sources": [
+        {"quote": "核对input.json", "occurrence": 1},
+        {"quote": "只读input.json", "occurrence": 1}
+      ],
+      "reason": "只读作为受检文件的操作方式限制，未新增独立读取义务。"
+    },
+    {
+      "subject_id": "cl_modify_actor",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["ent_qa", "ev_modify"],
+      "sources": [
+        {"quote": "请QA", "occurrence": 1},
+        {"quote": "不得修改它", "occurrence": 1}
+      ],
+      "reason": "禁止要求承接当前任务主体QA。"
+    },
+    {
+      "subject_id": "cl_modify_object",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["ev_modify", "ent_input"],
+      "sources": [{"quote": "只读input.json，不得修改它", "occurrence": 1}],
+      "reason": "“它”明确回指input.json，禁止对象绑定正确。"
+    },
+    {
+      "subject_id": "expr_readonly",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["ev_verify", "ent_input"],
+      "sources": [
+        {"quote": "核对input.json", "occurrence": 1},
+        {"quote": "只读input.json", "occurrence": 1}
+      ],
+      "reason": "表达式正确限定核对事件对input.json的操作方式，不宣称状态已被观测。"
+    }
+  ],
+  "issues": [
+    {
+      "id": "audit_qa_type",
+      "issue_kind": "IDENTITY",
+      "subject_ids": ["ent_qa"],
+      "field_path": "type",
+      "context_refs": [],
+      "sources": [{"quote": "请QA", "occurrence": 1}],
+      "reason": "QA的实体类别未明确，应保留类型属性未决；不影响明确身份及各事件中的执行者职责。",
+      "suggested_json": null
+    }
+  ],
+  "omissions": []
+}

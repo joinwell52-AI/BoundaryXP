@@ -1,0 +1,143 @@
+{
+  "contract_version": "028-r02.2",
+  "reviews": [
+    {
+      "subject_id": "ent_pm",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [{"quote": "PM", "occurrence": 1}],
+      "reason": "原文明确指定PM，作为检查执行者的实体成立。"
+    },
+    {
+      "subject_id": "ent_dev",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [{"quote": "dev", "occurrence": 1}],
+      "reason": "dev是明确枚举的环境。"
+    },
+    {
+      "subject_id": "ent_stage",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [{"quote": "stage", "occurrence": 1}],
+      "reason": "stage是明确枚举的环境。"
+    },
+    {
+      "subject_id": "ent_prod",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [{"quote": "prod", "occurrence": 1}, {"quote": "prod", "occurrence": 2}],
+      "reason": "枚举与排除中的prod指向同一环境。"
+    },
+    {
+      "subject_id": "ent_any_environment",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [{"quote": "任何环境", "occurrence": 1}],
+      "reason": "原文明确给出禁止修改的全称对象范围。"
+    },
+    {
+      "subject_id": "evt_check",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["cl_check_scope"],
+      "sources": [{"quote": "请PM检查dev、stage和prod三个环境，但本次排除prod。", "occurrence": 1}],
+      "reason": "检查是当前要求的主动作；本次对象范围由排除表达式限定。"
+    },
+    {
+      "subject_id": "evt_modify",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["cl_modify_object"],
+      "sources": [{"quote": "不得修改任何环境。", "occurrence": 1}],
+      "reason": "修改是当前明确禁止的动作，FORBIDDEN与正向动作谓词组合准确。"
+    },
+    {
+      "subject_id": "cl_check_performer",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["evt_check", "ent_pm"],
+      "sources": [{"quote": "请PM检查", "occurrence": 1}],
+      "reason": "PM被明确指定执行检查，非仅组织或协作。"
+    },
+    {
+      "subject_id": "cl_check_dev",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["cl_check_scope"],
+      "sources": [{"quote": "检查dev、stage和prod三个环境", "occurrence": 1}, {"quote": "但本次排除prod", "occurrence": 1}],
+      "reason": "排除prod后，dev仍是明确受检范围，INPUT_OBJECT用途成立。"
+    },
+    {
+      "subject_id": "cl_check_stage",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["cl_check_scope"],
+      "sources": [{"quote": "检查dev、stage和prod三个环境", "occurrence": 1}, {"quote": "但本次排除prod", "occurrence": 1}],
+      "reason": "排除prod后，stage仍是明确受检范围，INPUT_OBJECT用途成立。"
+    },
+    {
+      "subject_id": "cl_check_scope",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["expr_effective_scope"],
+      "sources": [{"quote": "dev、stage和prod三个环境，但本次排除prod", "occurrence": 1}],
+      "reason": "本次范围为初始三个环境减去prod；枚举基数不是执行次数限制，排除也未新增禁止检查义务。"
+    },
+    {
+      "subject_id": "cl_modify_object",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["evt_modify", "ent_any_environment"],
+      "sources": [{"quote": "不得修改任何环境", "occurrence": 1}],
+      "reason": "禁止对象覆盖任何环境，包括prod；检查范围的例外不缩小该禁止范围，也不产生外部输入用途。"
+    },
+    {
+      "subject_id": "expr_dev",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["ent_dev"],
+      "sources": [{"quote": "dev", "occurrence": 1}],
+      "reason": "ITEM准确引用dev环境。"
+    },
+    {
+      "subject_id": "expr_stage",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["ent_stage"],
+      "sources": [{"quote": "stage", "occurrence": 1}],
+      "reason": "ITEM准确引用stage环境。"
+    },
+    {
+      "subject_id": "expr_prod",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["ent_prod"],
+      "sources": [{"quote": "prod", "occurrence": 1}, {"quote": "prod", "occurrence": 2}],
+      "reason": "ITEM保留枚举及排除所指的同一prod环境。"
+    },
+    {
+      "subject_id": "expr_initial_scope",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["expr_dev", "expr_stage", "expr_prod"],
+      "sources": [{"quote": "dev、stage和prod三个环境", "occurrence": 1}],
+      "reason": "UNION准确表达三个环境的初始枚举集合。"
+    },
+    {
+      "subject_id": "expr_effective_scope",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["expr_initial_scope", "expr_prod"],
+      "sources": [{"quote": "dev、stage和prod三个环境，但本次排除prod", "occurrence": 1}],
+      "reason": "EXCEPT的操作数顺序正确，表达本次从初始集合中排除prod。"
+    }
+  ],
+  "issues": [],
+  "omissions": []
+}

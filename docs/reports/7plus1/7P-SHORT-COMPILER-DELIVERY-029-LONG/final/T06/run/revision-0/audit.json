@@ -1,0 +1,198 @@
+{
+  "contract_version": "028-r02.3",
+  "reviews": [
+    {
+      "subject_id": "n_pm",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [
+        {
+          "quote": "PM必须生成report.md",
+          "occurrence": 1
+        }
+      ],
+      "reason": "PM身份明确；OTHER保留岗位简称，不推定其为个人或团队。"
+    },
+    {
+      "subject_id": "n_report",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [
+        {
+          "quote": "生成report.md",
+          "occurrence": 1
+        },
+        {
+          "quote": "报告恰好列出2项风险",
+          "occurrence": 1
+        }
+      ],
+      "reason": "报告承接前文生成的report.md，同一文件身份有明确语境支持。"
+    },
+    {
+      "subject_id": "n_risks",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [
+        {
+          "quote": "风险",
+          "occurrence": 1
+        }
+      ],
+      "reason": "风险是原文明示的报告内容。"
+    },
+    {
+      "subject_id": "e_generate",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [
+        "c_duration",
+        "c_risk_count"
+      ],
+      "sources": [
+        {
+          "quote": "PM必须生成report.md",
+          "occurrence": 1
+        },
+        {
+          "quote": "生成耗时不得超过8分钟",
+          "occurrence": 1
+        },
+        {
+          "quote": "报告恰好列出2项风险",
+          "occurrence": 1
+        }
+      ],
+      "reason": "生成是当前必须执行的主动作；耗时和内容数量约束均双向绑定，未新增独立动作。"
+    },
+    {
+      "subject_id": "c_performer",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [
+        "n_pm",
+        "e_generate"
+      ],
+      "sources": [
+        {
+          "quote": "PM必须生成report.md",
+          "occurrence": 1
+        }
+      ],
+      "reason": "PM是生成动作的明确执行者，无须先确定人员或团队类别。"
+    },
+    {
+      "subject_id": "c_result",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [
+        "n_report",
+        "e_generate"
+      ],
+      "sources": [
+        {
+          "quote": "生成report.md",
+          "occurrence": 1
+        }
+      ],
+      "reason": "report.md是生成结果，RESULT用途正确。"
+    },
+    {
+      "subject_id": "c_duration",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [
+        "e_generate"
+      ],
+      "sources": [
+        {
+          "quote": "生成耗时不得超过8分钟",
+          "occurrence": 1
+        }
+      ],
+      "reason": "生成耗时上限为8分钟，LTE、执行限制用途及事件计量范围正确；未误作根任务完成条件。"
+    },
+    {
+      "subject_id": "c_content",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [
+        "n_report",
+        "n_risks",
+        "e_generate"
+      ],
+      "sources": [
+        {
+          "quote": "生成report.md",
+          "occurrence": 1
+        },
+        {
+          "quote": "报告恰好列出2项风险",
+          "occurrence": 1
+        }
+      ],
+      "reason": "风险作为生成报告的必需内容，CONTENT角色及报告范围正确。"
+    },
+    {
+      "subject_id": "c_risk_count",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [
+        "n_report",
+        "e_generate",
+        "c_content"
+      ],
+      "sources": [
+        {
+          "quote": "生成report.md",
+          "occurrence": 1
+        },
+        {
+          "quote": "报告恰好列出2项风险",
+          "occurrence": 1
+        }
+      ],
+      "reason": "目标报告列出恰好2项风险，EQ、项、OUTPUT_CONTENT及报告计量范围正确，不属于执行次数限制。"
+    },
+    {
+      "subject_id": "c_stop",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [
+        "x_failure"
+      ],
+      "sources": [
+        {
+          "quote": "生成失败时停止本任务",
+          "occurrence": 1
+        }
+      ],
+      "reason": "生成失败充分触发停止根任务；STOP与SUFFICIENT保留原文方向，未混同完成。"
+    },
+    {
+      "subject_id": "x_failure",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [
+        "e_generate",
+        "n_report"
+      ],
+      "sources": [
+        {
+          "quote": "生成report.md",
+          "occurrence": 1
+        },
+        {
+          "quote": "生成失败",
+          "occurrence": 1
+        }
+      ],
+      "reason": "失败状态绑定同一报告生成事件，正极性表示失败条件，不宣称失败已发生。"
+    }
+  ],
+  "issues": [],
+  "omissions": []
+}

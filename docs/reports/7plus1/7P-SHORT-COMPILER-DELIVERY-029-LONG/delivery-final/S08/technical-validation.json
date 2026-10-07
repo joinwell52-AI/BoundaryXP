@@ -1,0 +1,428 @@
+{
+  "policy": "028-r02-technical-v2",
+  "schemas": {
+    "proposal": {
+      "ok": true,
+      "errors": []
+    },
+    "audit": {
+      "ok": true,
+      "errors": []
+    }
+  },
+  "rows": [
+    {
+      "id": "ent_pm",
+      "collection": "entities",
+      "status": "UNRESOLVED",
+      "identity_status": "ACCEPTED",
+      "errors": [],
+      "uncertain": [
+        "AUDIT_ISSUE:IDENTITY",
+        "WHOLE_CLAIM_SUPPORT_MISSING",
+        "AUDIT_NOT_SUPPORTED"
+      ],
+      "sources": [
+        {
+          "quote": "PM",
+          "occurrence": 1,
+          "span": [
+            0,
+            2
+          ],
+          "source_sha256": "1a87c689ccf6b5032eb119260d8cecdd583e33a2d56dcdd976aed1c603467c0a"
+        }
+      ],
+      "audit_refs": [
+        {
+          "subject_id": "ent_pm",
+          "field_path": "label",
+          "verdict": "SUPPORT"
+        },
+        {
+          "subject_id": "ent_pm",
+          "field_path": "type",
+          "verdict": "UNCERTAIN"
+        }
+      ],
+      "required_dependencies": [],
+      "structural_refs": [],
+      "unresolved_properties": [
+        "type"
+      ],
+      "identity_policy": "SOURCE_AND_IDENTITY_SUPPORTED_TYPE_METADATA_ONLY"
+    },
+    {
+      "id": "ent_file",
+      "collection": "entities",
+      "status": "ACCEPTED",
+      "identity_status": "ACCEPTED",
+      "errors": [],
+      "uncertain": [],
+      "sources": [
+        {
+          "quote": "r.md",
+          "occurrence": 1,
+          "span": [
+            6,
+            10
+          ],
+          "source_sha256": "1a87c689ccf6b5032eb119260d8cecdd583e33a2d56dcdd976aed1c603467c0a"
+        }
+      ],
+      "audit_refs": [
+        {
+          "subject_id": "ent_file",
+          "field_path": "",
+          "verdict": "SUPPORT"
+        }
+      ],
+      "required_dependencies": [],
+      "structural_refs": []
+    },
+    {
+      "id": "evt_submit",
+      "collection": "events",
+      "status": "ACCEPTED",
+      "errors": [],
+      "uncertain": [],
+      "sources": [
+        {
+          "quote": "PM必须提交r.md",
+          "occurrence": 1,
+          "span": [
+            0,
+            10
+          ],
+          "source_sha256": "1a87c689ccf6b5032eb119260d8cecdd583e33a2d56dcdd976aed1c603467c0a"
+        }
+      ],
+      "audit_refs": [
+        {
+          "subject_id": "evt_submit",
+          "field_path": "",
+          "verdict": "SUPPORT"
+        }
+      ],
+      "required_dependencies": [],
+      "structural_refs": [
+        "ROOT"
+      ]
+    },
+    {
+      "id": "cl_performer",
+      "collection": "claims",
+      "status": "ACCEPTED",
+      "errors": [],
+      "uncertain": [],
+      "sources": [
+        {
+          "quote": "PM必须提交r.md",
+          "occurrence": 1,
+          "span": [
+            0,
+            10
+          ],
+          "source_sha256": "1a87c689ccf6b5032eb119260d8cecdd583e33a2d56dcdd976aed1c603467c0a"
+        }
+      ],
+      "audit_refs": [
+        {
+          "subject_id": "cl_performer",
+          "field_path": "",
+          "verdict": "SUPPORT"
+        }
+      ],
+      "required_dependencies": [],
+      "structural_refs": [
+        "evt_submit",
+        "evt_submit",
+        "ent_pm"
+      ]
+    },
+    {
+      "id": "cl_object",
+      "collection": "claims",
+      "status": "ACCEPTED",
+      "errors": [],
+      "uncertain": [],
+      "sources": [
+        {
+          "quote": "提交r.md",
+          "occurrence": 1,
+          "span": [
+            4,
+            10
+          ],
+          "source_sha256": "1a87c689ccf6b5032eb119260d8cecdd583e33a2d56dcdd976aed1c603467c0a"
+        }
+      ],
+      "audit_refs": [
+        {
+          "subject_id": "cl_object",
+          "field_path": "",
+          "verdict": "SUPPORT"
+        }
+      ],
+      "required_dependencies": [],
+      "structural_refs": [
+        "evt_submit",
+        "evt_submit",
+        "ent_file"
+      ]
+    },
+    {
+      "id": "cl_completion",
+      "collection": "claims",
+      "status": "ACCEPTED",
+      "errors": [],
+      "uncertain": [],
+      "sources": [
+        {
+          "quote": "提交成功即任务完成",
+          "occurrence": 1,
+          "span": [
+            11,
+            20
+          ],
+          "source_sha256": "1a87c689ccf6b5032eb119260d8cecdd583e33a2d56dcdd976aed1c603467c0a"
+        }
+      ],
+      "audit_refs": [
+        {
+          "subject_id": "cl_completion",
+          "field_path": "",
+          "verdict": "SUPPORT"
+        }
+      ],
+      "required_dependencies": [],
+      "structural_refs": [
+        "ROOT",
+        "expr_success"
+      ]
+    },
+    {
+      "id": "expr_success",
+      "collection": "expressions",
+      "status": "ACCEPTED",
+      "errors": [],
+      "uncertain": [],
+      "sources": [
+        {
+          "quote": "提交r.md",
+          "occurrence": 1,
+          "span": [
+            4,
+            10
+          ],
+          "source_sha256": "1a87c689ccf6b5032eb119260d8cecdd583e33a2d56dcdd976aed1c603467c0a"
+        },
+        {
+          "quote": "提交成功",
+          "occurrence": 1,
+          "span": [
+            11,
+            15
+          ],
+          "source_sha256": "1a87c689ccf6b5032eb119260d8cecdd583e33a2d56dcdd976aed1c603467c0a"
+        }
+      ],
+      "audit_refs": [
+        {
+          "subject_id": "expr_success",
+          "field_path": "",
+          "verdict": "SUPPORT"
+        }
+      ],
+      "required_dependencies": [],
+      "structural_refs": [
+        "evt_submit"
+      ]
+    }
+  ],
+  "diagnostics": [],
+  "coverage": [
+    {
+      "sources": [
+        {
+          "quote": "PM必须提交r.md",
+          "occurrence": 1,
+          "span": [
+            0,
+            10
+          ],
+          "source_sha256": "1a87c689ccf6b5032eb119260d8cecdd583e33a2d56dcdd976aed1c603467c0a"
+        }
+      ],
+      "claim_ids": [
+        "cl_performer",
+        "cl_object"
+      ],
+      "status": "EXPRESSED",
+      "affected_views": [
+        "A",
+        "P"
+      ],
+      "id": "coverage:0"
+    },
+    {
+      "sources": [
+        {
+          "quote": "提交成功即任务完成",
+          "occurrence": 1,
+          "span": [
+            11,
+            20
+          ],
+          "source_sha256": "1a87c689ccf6b5032eb119260d8cecdd583e33a2d56dcdd976aed1c603467c0a"
+        }
+      ],
+      "claim_ids": [
+        "cl_completion"
+      ],
+      "status": "EXPRESSED",
+      "affected_views": [
+        "C"
+      ],
+      "id": "coverage:1"
+    }
+  ],
+  "audit_sources": [
+    {
+      "subject_id": "ent_pm",
+      "sources": [
+        {
+          "quote": "PM必须提交r.md",
+          "occurrence": 1,
+          "span": [
+            0,
+            10
+          ],
+          "source_sha256": "1a87c689ccf6b5032eb119260d8cecdd583e33a2d56dcdd976aed1c603467c0a"
+        }
+      ]
+    },
+    {
+      "subject_id": "ent_pm",
+      "sources": [
+        {
+          "quote": "PM",
+          "occurrence": 1,
+          "span": [
+            0,
+            2
+          ],
+          "source_sha256": "1a87c689ccf6b5032eb119260d8cecdd583e33a2d56dcdd976aed1c603467c0a"
+        }
+      ]
+    },
+    {
+      "subject_id": "ent_file",
+      "sources": [
+        {
+          "quote": "r.md",
+          "occurrence": 1,
+          "span": [
+            6,
+            10
+          ],
+          "source_sha256": "1a87c689ccf6b5032eb119260d8cecdd583e33a2d56dcdd976aed1c603467c0a"
+        }
+      ]
+    },
+    {
+      "subject_id": "evt_submit",
+      "sources": [
+        {
+          "quote": "PM必须提交r.md",
+          "occurrence": 1,
+          "span": [
+            0,
+            10
+          ],
+          "source_sha256": "1a87c689ccf6b5032eb119260d8cecdd583e33a2d56dcdd976aed1c603467c0a"
+        }
+      ]
+    },
+    {
+      "subject_id": "cl_performer",
+      "sources": [
+        {
+          "quote": "PM必须提交r.md",
+          "occurrence": 1,
+          "span": [
+            0,
+            10
+          ],
+          "source_sha256": "1a87c689ccf6b5032eb119260d8cecdd583e33a2d56dcdd976aed1c603467c0a"
+        }
+      ]
+    },
+    {
+      "subject_id": "cl_object",
+      "sources": [
+        {
+          "quote": "提交r.md",
+          "occurrence": 1,
+          "span": [
+            4,
+            10
+          ],
+          "source_sha256": "1a87c689ccf6b5032eb119260d8cecdd583e33a2d56dcdd976aed1c603467c0a"
+        }
+      ]
+    },
+    {
+      "subject_id": "cl_completion",
+      "sources": [
+        {
+          "quote": "提交成功即任务完成",
+          "occurrence": 1,
+          "span": [
+            11,
+            20
+          ],
+          "source_sha256": "1a87c689ccf6b5032eb119260d8cecdd583e33a2d56dcdd976aed1c603467c0a"
+        }
+      ]
+    },
+    {
+      "subject_id": "expr_success",
+      "sources": [
+        {
+          "quote": "PM必须提交r.md",
+          "occurrence": 1,
+          "span": [
+            0,
+            10
+          ],
+          "source_sha256": "1a87c689ccf6b5032eb119260d8cecdd583e33a2d56dcdd976aed1c603467c0a"
+        },
+        {
+          "quote": "提交成功即任务完成",
+          "occurrence": 1,
+          "span": [
+            11,
+            20
+          ],
+          "source_sha256": "1a87c689ccf6b5032eb119260d8cecdd583e33a2d56dcdd976aed1c603467c0a"
+        }
+      ]
+    },
+    {
+      "subject_id": "audit_pm_type",
+      "sources": [
+        {
+          "quote": "PM",
+          "occurrence": 1,
+          "span": [
+            0,
+            2
+          ],
+          "source_sha256": "1a87c689ccf6b5032eb119260d8cecdd583e33a2d56dcdd976aed1c603467c0a"
+        }
+      ]
+    }
+  ],
+  "issue_sources": []
+}

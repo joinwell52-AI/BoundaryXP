@@ -1,0 +1,20 @@
+import fs from 'node:fs';
+import path from 'node:path';
+import os from 'node:os';
+import {randomUUID} from 'node:crypto';
+import {spawnSync} from 'node:child_process';
+import assert from 'node:assert/strict';
+import {createServer} from '../service.mjs';
+import {replay7Plus1,writeJSON} from '../engine.mjs';
+import {ROOT} from '../bundle.mjs';
+import {sha256} from '../source.mjs';
+const report=path.resolve('docs/reports/7plus1/7P-SHORT-COMPILER-DELIVERY-029-LONG'),input=path.join(report,'inputs/S00.txt'),prior=path.join(report,'final/S00/run'),dest=path.join(report,'shared-consumer');fs.mkdirSync(dest);
+const cli=path.join(dest,'cli'),result=spawnSync(process.execPath,[path.join(ROOT,'cli.mjs'),'--input',input,'--output',cli,'--replay-from',prior],{cwd:os.tmpdir(),encoding:'utf8',windowsHide:true,timeout:30000});assert.equal(result.status,0);fs.writeFileSync(path.join(dest,'cli.txt'),result.stdout+result.stderr);
+let calls=0;const server=createServer({dataRoot:path.join(dest,'service'),legacyRoot:path.join(dest,'no-legacy'),parse:async(bytes,options)=>{calls++;return replay7Plus1(bytes,{output:options.output,replayFrom:prior});}});
+await new Promise(r=>server.listen(0,'127.0.0.1',r));const url='http://127.0.0.1:'+server.address().port;
+try{const sessionResponse=await fetch(url+'/api/session'),s=await sessionResponse.json(),cookie=sessionResponse.headers.get('set-cookie').split(';')[0];const response=await fetch(url+'/api/parse',{method:'POST',headers:{'content-type':'application/json','x-boundx-session':s.token,cookie,origin:url},body:JSON.stringify({text:fs.readFileSync(input,'utf8'),request_id:randomUUID()})}),received=await response.json();assert.equal(response.status,202);
+ let final;for(let i=0;i<100;i++){final=await(await fetch(url+'/api/runs/'+received.run_id)).json();if(final.result)break;await new Promise(r=>setTimeout(r,20));}assert.ok(final.result);
+ const canonical=JSON.parse(fs.readFileSync(path.join(cli,'7plus1.json'),'utf8'));assert.deepEqual(final.result.canonical,canonical);assert.equal(final.result.chinese,fs.readFileSync(path.join(cli,'7plus1.zh.md'),'utf8'));
+ for(const suffix of ['json','export','trace.json','trace.md','trace.html'])assert.equal((await fetch(url+'/api/runs/'+received.run_id+'/'+suffix)).status,200);assert.equal(calls,1);
+ writeJSON(path.join(dest,'RESULTS.json'),{mode:'STRICT_FROZEN_RESPONSE_CORE_CONSUMPTION',real_calls:0,transport_parse_invocations:calls,canonical_equal:true,chinese_equal:true,exports:5,canonical_sha256:sha256(JSON.stringify(canonical)),cli_exit:result.status,source_sha256:canonical.source_sha256});console.log('CLI / service frozen response parity PASS');
+}finally{await new Promise(r=>server.close(r));}

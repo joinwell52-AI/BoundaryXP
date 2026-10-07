@@ -1,0 +1,328 @@
+{
+  "contract_version": "028-r02.2",
+  "entities": [
+    {
+      "id": "n_pm",
+      "label": "PM",
+      "type": "PERSON",
+      "mentions": [
+        {"quote": "PM", "occurrence": 1},
+        {"quote": "PM", "occurrence": 2}
+      ],
+      "alternatives": []
+    },
+    {
+      "id": "n_qa",
+      "label": "QA",
+      "type": "PERSON",
+      "mentions": [{"quote": "QA", "occurrence": 1}],
+      "alternatives": []
+    },
+    {
+      "id": "n_admin",
+      "label": "ADMIN",
+      "type": "PERSON",
+      "mentions": [
+        {"quote": "ADMIN", "occurrence": 1},
+        {"quote": "ADMIN", "occurrence": 2}
+      ],
+      "alternatives": []
+    },
+    {
+      "id": "n_file",
+      "label": "summary.md",
+      "type": "FILE",
+      "mentions": [
+        {"quote": "summary.md", "occurrence": 1},
+        {"quote": "该文件", "occurrence": 1},
+        {"quote": "同一文件", "occurrence": 1},
+        {"quote": "summary.md", "occurrence": 2}
+      ],
+      "alternatives": []
+    }
+  ],
+  "events": [
+    {
+      "id": "e_generate",
+      "predicate": "生成",
+      "kind": "ACTION",
+      "layer": "MAIN",
+      "use": "CURRENT_TASK",
+      "modality": "REQUIRED",
+      "polarity": "POSITIVE",
+      "owner_id": "ROOT",
+      "constraint_ids": [],
+      "requires": [],
+      "sources": [{"quote": "PM必须生成summary.md", "occurrence": 1}]
+    },
+    {
+      "id": "e_review",
+      "predicate": "复核",
+      "kind": "ACTION",
+      "layer": "MAIN",
+      "use": "CURRENT_TASK",
+      "modality": "REQUIRED",
+      "polarity": "POSITIVE",
+      "owner_id": "ROOT",
+      "constraint_ids": [],
+      "requires": [],
+      "sources": [{"quote": "QA复核该文件", "occurrence": 1}]
+    },
+    {
+      "id": "e_deliver",
+      "predicate": "交付",
+      "kind": "ACTION",
+      "layer": "MAIN",
+      "use": "CURRENT_TASK",
+      "modality": "REQUIRED",
+      "polarity": "POSITIVE",
+      "owner_id": "ROOT",
+      "constraint_ids": ["c_order"],
+      "requires": [],
+      "sources": [{"quote": "随后PM把同一文件交给ADMIN", "occurrence": 1}]
+    },
+    {
+      "id": "e_receive",
+      "predicate": "接收",
+      "kind": "ACTION",
+      "layer": "CONDITION",
+      "use": "MENTION_ONLY",
+      "modality": "UNSTATED",
+      "polarity": "POSITIVE",
+      "owner_id": "ROOT",
+      "constraint_ids": [],
+      "requires": [],
+      "sources": [{"quote": "summary.md被ADMIN接收", "occurrence": 1}]
+    }
+  ],
+  "claims": [
+    {
+      "id": "c_generate_pm",
+      "kind": "ROLE",
+      "event_id": "e_generate",
+      "entity_id": "n_pm",
+      "role": "PERFORMER",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "scope_id": "e_generate",
+      "requires": [],
+      "sources": [{"quote": "PM必须生成summary.md", "occurrence": 1}],
+      "note": ""
+    },
+    {
+      "id": "c_generate_file",
+      "kind": "ROLE",
+      "event_id": "e_generate",
+      "entity_id": "n_file",
+      "role": "RESULT",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "scope_id": "e_generate",
+      "requires": [],
+      "sources": [{"quote": "生成summary.md", "occurrence": 1}],
+      "note": ""
+    },
+    {
+      "id": "c_review_qa",
+      "kind": "ROLE",
+      "event_id": "e_review",
+      "entity_id": "n_qa",
+      "role": "REVIEWER",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "scope_id": "e_review",
+      "requires": [],
+      "sources": [{"quote": "QA复核该文件", "occurrence": 1}],
+      "note": ""
+    },
+    {
+      "id": "c_review_file",
+      "kind": "ROLE",
+      "event_id": "e_review",
+      "entity_id": "n_file",
+      "role": "OBJECT",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "scope_id": "e_review",
+      "requires": [],
+      "sources": [
+        {"quote": "PM必须生成summary.md", "occurrence": 1},
+        {"quote": "QA复核该文件", "occurrence": 1}
+      ],
+      "note": "该文件指生成的summary.md，是内部产物的复核对象。"
+    },
+    {
+      "id": "c_deliver_pm",
+      "kind": "ROLE",
+      "event_id": "e_deliver",
+      "entity_id": "n_pm",
+      "role": "PERFORMER",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "scope_id": "e_deliver",
+      "requires": [],
+      "sources": [{"quote": "PM把同一文件交给ADMIN", "occurrence": 1}],
+      "note": ""
+    },
+    {
+      "id": "c_deliver_file",
+      "kind": "ROLE",
+      "event_id": "e_deliver",
+      "entity_id": "n_file",
+      "role": "OBJECT",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "scope_id": "e_deliver",
+      "requires": [],
+      "sources": [
+        {"quote": "PM必须生成summary.md", "occurrence": 1},
+        {"quote": "QA复核该文件", "occurrence": 1},
+        {"quote": "PM把同一文件交给ADMIN", "occurrence": 1}
+      ],
+      "note": "交付对象与生成、复核对象为同一文件。"
+    },
+    {
+      "id": "c_deliver_admin",
+      "kind": "ROLE",
+      "event_id": "e_deliver",
+      "entity_id": "n_admin",
+      "role": "RECIPIENT",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "scope_id": "e_deliver",
+      "requires": [],
+      "sources": [{"quote": "交给ADMIN", "occurrence": 1}],
+      "note": ""
+    },
+    {
+      "id": "c_order",
+      "kind": "TEMPORAL",
+      "event_id": "e_deliver",
+      "entity_id": null,
+      "role": null,
+      "expression_id": "x_review_done",
+      "direction": "ORDER",
+      "temporal": "AFTER",
+      "quantity": null,
+      "scope_id": "e_deliver",
+      "requires": [],
+      "sources": [{"quote": "QA复核该文件，随后PM把同一文件交给ADMIN", "occurrence": 1}],
+      "note": "交付在复核之后；未要求复核通过，也未将先后关系解释为充分触发。"
+    },
+    {
+      "id": "c_receive_admin",
+      "kind": "ROLE",
+      "event_id": "e_receive",
+      "entity_id": "n_admin",
+      "role": "RECIPIENT",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "scope_id": "e_receive",
+      "requires": [],
+      "sources": [{"quote": "summary.md被ADMIN接收", "occurrence": 1}],
+      "note": "完成条件中的接收者，不另增接收义务。"
+    },
+    {
+      "id": "c_receive_file",
+      "kind": "ROLE",
+      "event_id": "e_receive",
+      "entity_id": "n_file",
+      "role": "OBJECT",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "scope_id": "e_receive",
+      "requires": [],
+      "sources": [
+        {"quote": "summary.md", "occurrence": 1},
+        {"quote": "summary.md被ADMIN接收", "occurrence": 1}
+      ],
+      "note": "接收条件引用同一产物。"
+    },
+    {
+      "id": "c_completion",
+      "kind": "COMPLETION",
+      "event_id": null,
+      "entity_id": null,
+      "role": null,
+      "expression_id": "x_received",
+      "direction": "SUFFICIENT",
+      "temporal": null,
+      "quantity": null,
+      "scope_id": "ROOT",
+      "requires": [],
+      "sources": [{"quote": "summary.md被ADMIN接收即任务完成", "occurrence": 1}],
+      "note": "ADMIN接收该文件足以触发根任务完成；不宣称接收已经发生，不解释为唯一完成条件。"
+    }
+  ],
+  "expressions": [
+    {
+      "id": "x_review_done",
+      "op": "STATE",
+      "operands": [],
+      "state": {
+        "predicate": "复核已完成",
+        "event_id": "e_review",
+        "args": ["n_qa", "n_file"],
+        "polarity": "POSITIVE"
+      },
+      "sources": [{"quote": "QA复核该文件，随后", "occurrence": 1}]
+    },
+    {
+      "id": "x_received",
+      "op": "STATE",
+      "operands": [],
+      "state": {
+        "predicate": "已接收",
+        "event_id": "e_receive",
+        "args": ["n_admin", "n_file"],
+        "polarity": "POSITIVE"
+      },
+      "sources": [{"quote": "summary.md被ADMIN接收", "occurrence": 1}]
+    }
+  ],
+  "issues": [],
+  "coverage": [
+    {
+      "sources": [{"quote": "PM必须生成summary.md", "occurrence": 1}],
+      "claim_ids": ["c_generate_pm", "c_generate_file"],
+      "status": "EXPRESSED",
+      "affected_views": ["A", "P", "O"]
+    },
+    {
+      "sources": [{"quote": "QA复核该文件", "occurrence": 1}],
+      "claim_ids": ["c_review_qa", "c_review_file"],
+      "status": "EXPRESSED",
+      "affected_views": ["A", "P"]
+    },
+    {
+      "sources": [{"quote": "随后PM把同一文件交给ADMIN", "occurrence": 1}],
+      "claim_ids": ["c_deliver_pm", "c_deliver_file", "c_deliver_admin", "c_order"],
+      "status": "EXPRESSED",
+      "affected_views": ["A", "P"]
+    },
+    {
+      "sources": [{"quote": "summary.md被ADMIN接收即任务完成", "occurrence": 1}],
+      "claim_ids": ["c_receive_admin", "c_receive_file", "c_completion"],
+      "status": "EXPRESSED",
+      "affected_views": ["C"]
+    }
+  ]
+}

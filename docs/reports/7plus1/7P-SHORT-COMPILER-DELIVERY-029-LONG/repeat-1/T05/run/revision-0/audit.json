@@ -1,0 +1,292 @@
+{
+  "contract_version": "028-r02.3",
+  "reviews": [
+    {
+      "subject_id": "ent_qa",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [
+        {
+          "quote": "QA",
+          "occurrence": 1
+        }
+      ],
+      "reason": "身份明确；原文未细分个人或组织，OTHER未强加类别。"
+    },
+    {
+      "subject_id": "ent_pm",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [
+        {
+          "quote": "PM",
+          "occurrence": 1
+        }
+      ],
+      "reason": "身份明确；OTHER保留原文未指定的身份类别。"
+    },
+    {
+      "subject_id": "ent_file",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [
+        {
+          "quote": "r.md",
+          "occurrence": 1
+        }
+      ],
+      "reason": "明确命名的提交文件。"
+    },
+    {
+      "subject_id": "evt_approval",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [
+        {
+          "quote": "QA批准",
+          "occurrence": 1
+        }
+      ],
+      "reason": "批准仅作为条件出现，不产生独立批准义务。"
+    },
+    {
+      "subject_id": "evt_check_pass",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [
+        {
+          "quote": "检查通过",
+          "occurrence": 1
+        }
+      ],
+      "reason": "检查通过是条件状态，未被断言已经成立。"
+    },
+    {
+      "subject_id": "evt_submit_permitted",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [
+        "cl_permission_condition"
+      ],
+      "sources": [
+        {
+          "quote": "只有QA批准并且检查通过后，才允许PM提交r.md",
+          "occurrence": 1
+        }
+      ],
+      "reason": "提交为受必要前提和时间关系限制的许可，约束已回指。"
+    },
+    {
+      "subject_id": "evt_submit_forbidden",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [
+        "cl_prohibition_condition"
+      ],
+      "sources": [
+        {
+          "quote": "任一前提不满足时不得提交",
+          "occurrence": 1
+        }
+      ],
+      "reason": "禁止提交被明确表达，并绑定其触发条件。"
+    },
+    {
+      "subject_id": "cl_approver",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [
+        "evt_approval",
+        "ent_qa"
+      ],
+      "sources": [
+        {
+          "quote": "QA批准",
+          "occurrence": 1
+        }
+      ],
+      "reason": "QA为条件批准事件的批准者，不增加执行义务。"
+    },
+    {
+      "subject_id": "cl_permitted_performer",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [
+        "evt_submit_permitted",
+        "ent_pm"
+      ],
+      "sources": [
+        {
+          "quote": "允许PM提交r.md",
+          "occurrence": 1
+        }
+      ],
+      "reason": "PM是许可提交事件的明确执行者。"
+    },
+    {
+      "subject_id": "cl_permitted_input",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [
+        "evt_submit_permitted",
+        "ent_file"
+      ],
+      "sources": [
+        {
+          "quote": "提交r.md",
+          "occurrence": 1
+        }
+      ],
+      "reason": "r.md是明确提交的输入文件；原文未将其指定为当前任务生成的内部产物。"
+    },
+    {
+      "subject_id": "cl_forbidden_performer",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [
+        "evt_submit_forbidden",
+        "ent_pm"
+      ],
+      "sources": [
+        {
+          "quote": "PM提交r.md",
+          "occurrence": 1
+        },
+        {
+          "quote": "任一前提不满足时不得提交",
+          "occurrence": 1
+        }
+      ],
+      "reason": "后半句禁止沿用同一提交行为及执行者PM。"
+    },
+    {
+      "subject_id": "cl_forbidden_object",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [
+        "evt_submit_forbidden",
+        "ent_file"
+      ],
+      "sources": [
+        {
+          "quote": "提交r.md",
+          "occurrence": 1
+        },
+        {
+          "quote": "不得提交",
+          "occurrence": 1
+        }
+      ],
+      "reason": "禁止对象为前句同一文件，OBJECT未由禁止另推外部输入。"
+    },
+    {
+      "subject_id": "cl_permission_condition",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [
+        "evt_submit_permitted",
+        "expr_both"
+      ],
+      "sources": [
+        {
+          "quote": "只有QA批准并且检查通过后，才允许PM提交r.md",
+          "occurrence": 1
+        }
+      ],
+      "reason": "只有才表达共同必要前提，AFTER保留提交在批准及检查通过之后的关系。"
+    },
+    {
+      "subject_id": "cl_prohibition_condition",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [
+        "evt_submit_forbidden",
+        "expr_not_both"
+      ],
+      "sources": [
+        {
+          "quote": "QA批准并且检查通过",
+          "occurrence": 1
+        },
+        {
+          "quote": "任一前提不满足时不得提交",
+          "occurrence": 1
+        }
+      ],
+      "reason": "任一前提不满足足以触发禁止，SUFFICIENT方向正确且双向绑定完整。"
+    },
+    {
+      "subject_id": "expr_approved",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [
+        "evt_approval",
+        "ent_qa"
+      ],
+      "sources": [
+        {
+          "quote": "QA批准",
+          "occurrence": 1
+        }
+      ],
+      "reason": "表示QA已批准这一前提状态，参数及事件对应正确，不宣称状态为真。"
+    },
+    {
+      "subject_id": "expr_passed",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [
+        "evt_check_pass"
+      ],
+      "sources": [
+        {
+          "quote": "检查通过",
+          "occurrence": 1
+        }
+      ],
+      "reason": "准确表示检查通过状态，未补充未指定的检查对象或执行者。"
+    },
+    {
+      "subject_id": "expr_both",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [
+        "expr_approved",
+        "expr_passed"
+      ],
+      "sources": [
+        {
+          "quote": "QA批准并且检查通过",
+          "occurrence": 1
+        }
+      ],
+      "reason": "并且对应两个前提的合取。"
+    },
+    {
+      "subject_id": "expr_not_both",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [
+        "expr_both"
+      ],
+      "sources": [
+        {
+          "quote": "QA批准并且检查通过",
+          "occurrence": 1
+        },
+        {
+          "quote": "任一前提不满足",
+          "occurrence": 1
+        }
+      ],
+      "reason": "合取的否定等价于至少一个前提不满足，保留原有参数与极性。"
+    }
+  ],
+  "issues": [],
+  "omissions": []
+}

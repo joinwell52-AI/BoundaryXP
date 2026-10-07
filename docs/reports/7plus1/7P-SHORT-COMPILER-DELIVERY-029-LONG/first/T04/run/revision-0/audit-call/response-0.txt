@@ -1,0 +1,183 @@
+{
+  "contract_version": "028-r02.2",
+  "reviews": [
+    {
+      "subject_id": "ent_pm",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [{"quote": "PM", "occurrence": 1}],
+      "reason": "原文明确指定PM为生成动作主体。"
+    },
+    {
+      "subject_id": "ent_issue",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [{"quote": "issue.md", "occurrence": 1}],
+      "reason": "生成文件名称明确，后句省略对象承接同一文件。"
+    },
+    {
+      "subject_id": "ent_input",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [{"quote": "input.csv", "occurrence": 1}],
+      "reason": "明确的禁止删除对象，文件身份成立。"
+    },
+    {
+      "subject_id": "ent_anomaly",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [{"quote": "异常", "occurrence": 1}, {"quote": "异常", "occurrence": 2}, {"quote": "异常", "occurrence": 3}],
+      "reason": "三处异常指向同一条件概念；发现与存在由不同状态谓词区分。"
+    },
+    {
+      "subject_id": "evt_found",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["evt_generate_required"],
+      "sources": [{"quote": "若发现异常", "occurrence": 1}],
+      "reason": "这是条件状态，不是独立发现义务，也不断言已发现异常。"
+    },
+    {
+      "subject_id": "evt_not_found",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["evt_generate_optional"],
+      "sources": [{"quote": "未发现异常时", "occurrence": 1}],
+      "reason": "负极性的发现状态准确表达未发现，未误写为异常不存在。"
+    },
+    {
+      "subject_id": "evt_generate_required",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["cl_found_trigger"],
+      "sources": [{"quote": "若发现异常，PM必须生成issue.md", "occurrence": 1}],
+      "reason": "当前生成义务受发现异常条件约束，约束回指完整。"
+    },
+    {
+      "subject_id": "evt_generate_optional",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["cl_not_found_trigger"],
+      "sources": [{"quote": "PM必须生成issue.md", "occurrence": 1}, {"quote": "未发现异常时无需生成", "occurrence": 1}],
+      "reason": "无需生成表达撤回义务；NOT_REQUIRED未被误写为允许或禁止。"
+    },
+    {
+      "subject_id": "evt_delete",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["cl_delete_trigger"],
+      "sources": [{"quote": "无论是否异常，均不得删除input.csv", "occurrence": 1}],
+      "reason": "删除为当前禁止动作，条件覆盖异常与非异常两种情况。"
+    },
+    {
+      "subject_id": "cl_generate_performer",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["evt_generate_required", "ent_pm"],
+      "sources": [{"quote": "PM必须生成issue.md", "occurrence": 1}],
+      "reason": "PM明确承担生成执行角色。"
+    },
+    {
+      "subject_id": "cl_generate_result",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["evt_generate_required", "ent_issue"],
+      "sources": [{"quote": "生成issue.md", "occurrence": 1}],
+      "reason": "issue.md是生成产物，RESULT用途准确。"
+    },
+    {
+      "subject_id": "cl_optional_performer",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["evt_generate_optional", "ent_pm"],
+      "sources": [{"quote": "PM必须生成issue.md", "occurrence": 1}, {"quote": "未发现异常时无需生成", "occurrence": 1}],
+      "reason": "省略主体承接PM，角色绑定不增加该分支的执行义务。"
+    },
+    {
+      "subject_id": "cl_optional_result",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["evt_generate_optional", "ent_issue"],
+      "sources": [{"quote": "生成issue.md", "occurrence": 1}, {"quote": "未发现异常时无需生成", "occurrence": 1}],
+      "reason": "省略生成对象承接issue.md，未另造文件或交付要求。"
+    },
+    {
+      "subject_id": "cl_delete_object",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["evt_delete", "ent_input"],
+      "sources": [{"quote": "不得删除input.csv", "occurrence": 1}],
+      "reason": "input.csv绑定为删除对象；禁止对象不自动成为外部输入。"
+    },
+    {
+      "subject_id": "cl_found_trigger",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["evt_generate_required", "expr_found"],
+      "sources": [{"quote": "若发现异常，PM必须生成issue.md", "occurrence": 1}],
+      "reason": "发现异常足以触发生成义务，SUFFICIENT方向及双向绑定准确。"
+    },
+    {
+      "subject_id": "cl_not_found_trigger",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["evt_generate_optional", "expr_not_found"],
+      "sources": [{"quote": "未发现异常时无需生成", "occurrence": 1}],
+      "reason": "未发现异常足以触发无需生成分支，未增加禁止或许可。"
+    },
+    {
+      "subject_id": "cl_delete_trigger",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["evt_delete", "expr_either_anomaly"],
+      "sources": [{"quote": "无论是否异常，均不得删除input.csv", "occurrence": 1}],
+      "reason": "异常存在或不存在均触发禁止，未将禁止限制为发现异常之后。"
+    },
+    {
+      "subject_id": "expr_found",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["evt_found", "ent_anomaly"],
+      "sources": [{"quote": "若发现异常", "occurrence": 1}],
+      "reason": "正极性的发现异常状态准确表达条件，不宣称状态已成立。"
+    },
+    {
+      "subject_id": "expr_not_found",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["evt_not_found", "ent_anomaly"],
+      "sources": [{"quote": "未发现异常时", "occurrence": 1}],
+      "reason": "负极性作用于发现异常，符合原文否定目标。"
+    },
+    {
+      "subject_id": "expr_anomaly_present",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["ent_anomaly"],
+      "sources": [{"quote": "无论是否异常", "occurrence": 1}],
+      "reason": "表达是否异常中的肯定分支，未断言实际存在异常。"
+    },
+    {
+      "subject_id": "expr_anomaly_absent",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["ent_anomaly"],
+      "sources": [{"quote": "无论是否异常", "occurrence": 1}],
+      "reason": "表达是否异常中的否定分支，与未发现异常状态保持区分。"
+    },
+    {
+      "subject_id": "expr_either_anomaly",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["expr_anomaly_present", "expr_anomaly_absent"],
+      "sources": [{"quote": "无论是否异常", "occurrence": 1}],
+      "reason": "OR覆盖异常存在及不存在，忠实保留无论是否的完整范围。"
+    }
+  ],
+  "issues": [],
+  "omissions": []
+}

@@ -1,4 +1,8 @@
-# LLM-first 028 / v0.4 r02
+# LLM-first 028 core / delivery 029 / v0.4 r02
+
+029在本目录继续完善唯一语义核心，并接入用户已有58618页面。启动：`npm run 7plus1:ui`；CLI：`npm run 7plus1 -- --input task.txt --output new-run-directory`。输入非空且不超过300 Unicode码点。共享合同现为028-r02.3；同源Skill模式为INLINE_BUNDLE。运行、取消、刷新恢复、本地历史和导出由薄服务层提供；BXP的`npm run ui`入口未改。
+
+当前使用说明及真实验收见 `docs/reports/7plus1/7P-SHORT-COMPILER-DELIVERY-029-LONG/`。下面保留028原实施背景，不表示029仍无UI接线。旧报告和原始失败不覆盖；当前任务结果以029报告为准。
 
 新研究入口，未切换产品入口。原文→真实解析 Skill→Codex→候选→真实审阅 Skill→新会话 Codex→有限技术 Γ→Boundary IR→固定7+1。两个 Skill、合同和 Schema 均从源文件构建，使用 INLINE_BUNDLE；原生加载 NOT_VERIFIED，不伪报。
 

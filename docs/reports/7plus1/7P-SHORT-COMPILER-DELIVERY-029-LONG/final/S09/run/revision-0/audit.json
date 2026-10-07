@@ -1,0 +1,203 @@
+{
+  "contract_version": "028-r02.3",
+  "reviews": [
+    {
+      "subject_id": "ent_pm",
+      "field_path": "label",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [
+        {
+          "quote": "PM",
+          "occurrence": 1
+        }
+      ],
+      "reason": "原文明示执行者名称为PM，身份指称没有竞争候选。"
+    },
+    {
+      "subject_id": "ent_pm",
+      "field_path": "type",
+      "verdict": "UNCERTAIN",
+      "context_refs": [],
+      "sources": [
+        {
+          "quote": "请PM在10分钟内生成top.md",
+          "occurrence": 1
+        }
+      ],
+      "reason": "原文未明确PM是个人、团队还是其他实体；类别未定不影响其明确执行职责。"
+    },
+    {
+      "subject_id": "ent_report",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [
+        {
+          "quote": "生成top.md，报告只列3个问题",
+          "occurrence": 1
+        }
+      ],
+      "reason": "top.md是生成的文件，后续报告指同一产物。"
+    },
+    {
+      "subject_id": "ent_problems",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [
+        {
+          "quote": "问题",
+          "occurrence": 1
+        }
+      ],
+      "reason": "问题是明确的报告内容类别，使用OTHER合理。"
+    },
+    {
+      "subject_id": "evt_generate",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [
+        {
+          "quote": "请PM在10分钟内生成top.md，报告只列3个问题。",
+          "occurrence": 1
+        }
+      ],
+      "reason": "生成报告是当前明确要求的主动作；时限和内容数量约束均已绑定。"
+    },
+    {
+      "subject_id": "cl_performer",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [
+        "ent_pm",
+        "evt_generate"
+      ],
+      "sources": [
+        {
+          "quote": "请PM在10分钟内生成top.md",
+          "occurrence": 1
+        }
+      ],
+      "reason": "PM被明确指定为生成动作的执行者，不需推定其身份类别或权限。"
+    },
+    {
+      "subject_id": "cl_result",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [
+        "ent_report",
+        "evt_generate"
+      ],
+      "sources": [
+        {
+          "quote": "生成top.md，报告只列3个问题",
+          "occurrence": 1
+        }
+      ],
+      "reason": "top.md是生成结果，报告内容要求约束同一文件。"
+    },
+    {
+      "subject_id": "cl_time",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [
+        "evt_generate"
+      ],
+      "sources": [
+        {
+          "quote": "在10分钟内生成top.md",
+          "occurrence": 1
+        }
+      ],
+      "reason": "10分钟以内是生成动作的执行时限，LTE、分钟及执行限制用途正确，未升格为根完成条件。"
+    },
+    {
+      "subject_id": "cl_content",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [
+        "cl_result",
+        "ent_problems"
+      ],
+      "sources": [
+        {
+          "quote": "报告只列3个问题",
+          "occurrence": 1
+        }
+      ],
+      "reason": "问题属于报告内容，关联生成结果合理，不构成外部输入。"
+    },
+    {
+      "subject_id": "cl_count",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [
+        "cl_result",
+        "evt_generate"
+      ],
+      "sources": [
+        {
+          "quote": "报告只列3个问题",
+          "occurrence": 1
+        }
+      ],
+      "reason": "报告所列问题恰为3个；目标、单位和计数范围指向报告，OUTPUT_CONTENT用途正确且双向绑定完整。"
+    },
+    {
+      "subject_id": "cl_scope",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [
+        "cl_result",
+        "expr_content_scope"
+      ],
+      "sources": [
+        {
+          "quote": "报告只列3个问题",
+          "occurrence": 1
+        }
+      ],
+      "reason": "只列限定报告所列内容为问题，范围绑定到产物合理，无需新增独立禁止动作。"
+    },
+    {
+      "subject_id": "expr_content_scope",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [
+        "ent_report",
+        "ent_problems"
+      ],
+      "sources": [
+        {
+          "quote": "报告只列3个问题",
+          "occurrence": 1
+        }
+      ],
+      "reason": "表达式保留报告和问题两个参数及内容限定的正向极性，不宣称该状态已经实现。"
+    }
+  ],
+  "issues": [
+    {
+      "id": "audit_pm_type",
+      "issue_kind": "IDENTITY",
+      "subject_ids": [
+        "ent_pm"
+      ],
+      "field_path": "type",
+      "context_refs": [
+        "cl_performer"
+      ],
+      "sources": [
+        {
+          "quote": "请PM在10分钟内生成top.md",
+          "occurrence": 1
+        }
+      ],
+      "reason": "PM的个人、团队或其他实体类别没有明确依据；疑点仅限type，原文明示的身份名称和执行职责仍获支持。",
+      "suggested_json": null
+    }
+  ],
+  "omissions": []
+}

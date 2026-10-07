@@ -1,0 +1,163 @@
+{
+  "contract_version": "028-r02.2",
+  "reviews": [
+    {
+      "subject_id": "ent_pm",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [{"quote": "请PM生成guide.md", "occurrence": 1}],
+      "reason": "PM是明确指定的任务参与者。"
+    },
+    {
+      "subject_id": "ent_guide",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [{"quote": "请PM生成guide.md，在文中写入", "occurrence": 1}],
+      "reason": "guide.md是生成文件，“文中”承接同一文件。"
+    },
+    {
+      "subject_id": "ent_cache",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [
+        {"quote": "cache.db", "occurrence": 1},
+        {"quote": "cache.db", "occurrence": 2}
+      ],
+      "reason": "引文和当前禁止均指名cache.db，合并身份有依据，具体用途由各事件区分。"
+    },
+    {
+      "subject_id": "ent_service",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [{"quote": "也不得重启服务", "occurrence": 1}],
+      "reason": "服务是明确的重启对象，原文未指定名称或实例。"
+    },
+    {
+      "subject_id": "ent_content",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [{"quote": "写入“允许删除cache.db”", "occurrence": 1}],
+      "reason": "该字符串是明确要求写入的内容。"
+    },
+    {
+      "subject_id": "ev_generate",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [{"quote": "请PM生成guide.md", "occurrence": 1}],
+      "reason": "生成文件是当前要求的主动作。"
+    },
+    {
+      "subject_id": "ev_write",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [{"quote": "在文中写入“允许删除cache.db”", "occurrence": 1}],
+      "reason": "写入指定内容是当前要求的动作。"
+    },
+    {
+      "subject_id": "ev_quoted_delete",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["ev_write"],
+      "sources": [{"quote": "在文中写入“允许删除cache.db”", "occurrence": 1}],
+      "reason": "许可模态属于引文内容；QUOTED与MENTION_ONLY正确保留其层次，不产生当前删除许可。"
+    },
+    {
+      "subject_id": "ev_forbidden_delete",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [{"quote": "本次工作不得删除cache.db", "occurrence": 1}],
+      "reason": "本次根任务明确禁止删除；FORBIDDEN配合正向动作极性正确。"
+    },
+    {
+      "subject_id": "ev_forbidden_restart",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [
+        {"quote": "本次工作", "occurrence": 1},
+        {"quote": "也不得重启服务", "occurrence": 1}
+      ],
+      "reason": "并列禁止承接本次工作范围，正确表示当前重启禁令。"
+    },
+    {
+      "subject_id": "cl_generate_performer",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["ev_generate", "ent_pm"],
+      "sources": [{"quote": "请PM生成guide.md", "occurrence": 1}],
+      "reason": "PM被指定执行生成动作。"
+    },
+    {
+      "subject_id": "cl_generate_result",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["ev_generate", "ent_guide"],
+      "sources": [{"quote": "生成guide.md", "occurrence": 1}],
+      "reason": "guide.md是生成动作的结果。"
+    },
+    {
+      "subject_id": "cl_write_performer",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["ev_write", "ent_pm"],
+      "sources": [
+        {"quote": "请PM生成guide.md", "occurrence": 1},
+        {"quote": "在文中写入", "occurrence": 1}
+      ],
+      "reason": "同句连续要求承接PM为写入执行者。"
+    },
+    {
+      "subject_id": "cl_write_object",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["ev_write", "ent_guide"],
+      "sources": [{"quote": "生成guide.md，在文中写入", "occurrence": 1}],
+      "reason": "写入对象是生成的同一文件，OBJECT正确保留内部产物用途。"
+    },
+    {
+      "subject_id": "cl_write_content",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["ev_write", "ent_content"],
+      "sources": [{"quote": "写入“允许删除cache.db”", "occurrence": 1}],
+      "reason": "引文作为写入内容绑定到写入动作，未升格为当前业务授权。"
+    },
+    {
+      "subject_id": "cl_quoted_delete_object",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["ev_quoted_delete", "ent_cache"],
+      "sources": [{"quote": "允许删除cache.db", "occurrence": 1}],
+      "reason": "cache.db是引文中删除动作的对象，该关系仅属引文层。"
+    },
+    {
+      "subject_id": "cl_forbidden_delete_object",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["ev_forbidden_delete", "ent_cache"],
+      "sources": [{"quote": "本次工作不得删除cache.db", "occurrence": 1}],
+      "reason": "cache.db正确绑定到当前删除禁令，禁止对象不构成外部输入。"
+    },
+    {
+      "subject_id": "cl_forbidden_restart_object",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["ev_forbidden_restart", "ent_service"],
+      "sources": [
+        {"quote": "本次工作", "occurrence": 1},
+        {"quote": "也不得重启服务", "occurrence": 1}
+      ],
+      "reason": "服务正确绑定到本次工作的重启禁令。"
+    }
+  ],
+  "issues": [],
+  "omissions": []
+}

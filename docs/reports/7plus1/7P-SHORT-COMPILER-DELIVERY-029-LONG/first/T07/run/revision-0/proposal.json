@@ -1,0 +1,397 @@
+{
+  "contract_version": "028-r02.2",
+  "entities": [
+    {
+      "id": "ent_pm",
+      "label": "PM",
+      "type": "PERSON",
+      "mentions": [
+        {
+          "quote": "PM",
+          "occurrence": 1
+        }
+      ],
+      "alternatives": []
+    },
+    {
+      "id": "ent_dev",
+      "label": "dev环境",
+      "type": "OTHER",
+      "mentions": [
+        {
+          "quote": "dev",
+          "occurrence": 1
+        }
+      ],
+      "alternatives": []
+    },
+    {
+      "id": "ent_stage",
+      "label": "stage环境",
+      "type": "OTHER",
+      "mentions": [
+        {
+          "quote": "stage",
+          "occurrence": 1
+        }
+      ],
+      "alternatives": []
+    },
+    {
+      "id": "ent_prod",
+      "label": "prod环境",
+      "type": "OTHER",
+      "mentions": [
+        {
+          "quote": "prod",
+          "occurrence": 1
+        },
+        {
+          "quote": "prod",
+          "occurrence": 2
+        }
+      ],
+      "alternatives": []
+    },
+    {
+      "id": "ent_any_environment",
+      "label": "任何环境",
+      "type": "GROUP",
+      "mentions": [
+        {
+          "quote": "任何环境",
+          "occurrence": 1
+        }
+      ],
+      "alternatives": []
+    }
+  ],
+  "events": [
+    {
+      "id": "evt_check",
+      "predicate": "检查",
+      "kind": "ACTION",
+      "layer": "MAIN",
+      "use": "CURRENT_TASK",
+      "modality": "REQUIRED",
+      "polarity": "POSITIVE",
+      "owner_id": "ROOT",
+      "constraint_ids": [],
+      "requires": [],
+      "sources": [
+        {
+          "quote": "请PM检查dev、stage和prod三个环境，但本次排除prod。",
+          "occurrence": 1
+        }
+      ]
+    },
+    {
+      "id": "evt_modify",
+      "predicate": "修改",
+      "kind": "ACTION",
+      "layer": "MAIN",
+      "use": "CURRENT_TASK",
+      "modality": "FORBIDDEN",
+      "polarity": "POSITIVE",
+      "owner_id": "ROOT",
+      "constraint_ids": [],
+      "requires": [],
+      "sources": [
+        {
+          "quote": "不得修改任何环境。",
+          "occurrence": 1
+        }
+      ]
+    }
+  ],
+  "claims": [
+    {
+      "id": "cl_check_performer",
+      "kind": "ROLE",
+      "event_id": "evt_check",
+      "entity_id": "ent_pm",
+      "role": "PERFORMER",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "scope_id": "evt_check",
+      "requires": [],
+      "sources": [
+        {
+          "quote": "请PM检查",
+          "occurrence": 1
+        }
+      ],
+      "note": "PM明确执行检查。"
+    },
+    {
+      "id": "cl_check_dev",
+      "kind": "ROLE",
+      "event_id": "evt_check",
+      "entity_id": "ent_dev",
+      "role": "INPUT_OBJECT",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "scope_id": "evt_check",
+      "requires": [],
+      "sources": [
+        {
+          "quote": "检查dev、stage和prod三个环境",
+          "occurrence": 1
+        },
+        {
+          "quote": "但本次排除prod",
+          "occurrence": 1
+        }
+      ],
+      "note": "dev属于本次实际受检范围。"
+    },
+    {
+      "id": "cl_check_stage",
+      "kind": "ROLE",
+      "event_id": "evt_check",
+      "entity_id": "ent_stage",
+      "role": "INPUT_OBJECT",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "scope_id": "evt_check",
+      "requires": [],
+      "sources": [
+        {
+          "quote": "检查dev、stage和prod三个环境",
+          "occurrence": 1
+        },
+        {
+          "quote": "但本次排除prod",
+          "occurrence": 1
+        }
+      ],
+      "note": "stage属于本次实际受检范围。"
+    },
+    {
+      "id": "cl_check_scope",
+      "kind": "SCOPE",
+      "event_id": "evt_check",
+      "entity_id": null,
+      "role": null,
+      "expression_id": "expr_effective_scope",
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "scope_id": "evt_check",
+      "requires": [],
+      "sources": [
+        {
+          "quote": "dev、stage和prod三个环境，但本次排除prod",
+          "occurrence": 1
+        }
+      ],
+      "note": "三个环境是初始枚举集合；本次从中排除prod，实际检查dev和stage。枚举基数不是执行次数限制；排除检查不等于禁止检查。"
+    },
+    {
+      "id": "cl_modify_object",
+      "kind": "ROLE",
+      "event_id": "evt_modify",
+      "entity_id": "ent_any_environment",
+      "role": "OBJECT",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "scope_id": "evt_modify",
+      "requires": [],
+      "sources": [
+        {
+          "quote": "不得修改任何环境",
+          "occurrence": 1
+        }
+      ],
+      "note": "禁止修改的对象为任何环境，未随检查范围排除prod而缩小；此对象用途不构成外部输入。"
+    }
+  ],
+  "expressions": [
+    {
+      "id": "expr_dev",
+      "op": "ITEM",
+      "operands": [
+        "ent_dev"
+      ],
+      "state": null,
+      "sources": [
+        {
+          "quote": "dev",
+          "occurrence": 1
+        }
+      ]
+    },
+    {
+      "id": "expr_stage",
+      "op": "ITEM",
+      "operands": [
+        "ent_stage"
+      ],
+      "state": null,
+      "sources": [
+        {
+          "quote": "stage",
+          "occurrence": 1
+        }
+      ]
+    },
+    {
+      "id": "expr_prod",
+      "op": "ITEM",
+      "operands": [
+        "ent_prod"
+      ],
+      "state": null,
+      "sources": [
+        {
+          "quote": "prod",
+          "occurrence": 1
+        },
+        {
+          "quote": "prod",
+          "occurrence": 2
+        }
+      ]
+    },
+    {
+      "id": "expr_initial_scope",
+      "op": "UNION",
+      "operands": [
+        "expr_dev",
+        "expr_stage",
+        "expr_prod"
+      ],
+      "state": null,
+      "sources": [
+        {
+          "quote": "dev、stage和prod三个环境",
+          "occurrence": 1
+        }
+      ]
+    },
+    {
+      "id": "expr_effective_scope",
+      "op": "EXCEPT",
+      "operands": [
+        "expr_initial_scope",
+        "expr_prod"
+      ],
+      "state": null,
+      "sources": [
+        {
+          "quote": "dev、stage和prod三个环境，但本次排除prod",
+          "occurrence": 1
+        }
+      ]
+    }
+  ],
+  "issues": [
+    {
+      "id": "issue_modify_performer",
+      "kind": "UNSPECIFIED",
+      "subject_ids": [
+        "evt_modify"
+      ],
+      "field_path": "claims.PERFORMER",
+      "alternatives": [],
+      "affected_views": [
+        "P"
+      ],
+      "sources": [
+        {
+          "quote": "不得修改任何环境。",
+          "occurrence": 1
+        }
+      ],
+      "note": "禁止修改句未显式指定执行者；不自动将前句检查的PM绑定为该事件执行者。禁止及其对象范围仍明确。"
+    }
+  ],
+  "coverage": [
+    {
+      "sources": [
+        {
+          "quote": "请PM检查",
+          "occurrence": 1
+        }
+      ],
+      "claim_ids": [
+        "cl_check_performer"
+      ],
+      "status": "EXPRESSED",
+      "affected_views": [
+        "A",
+        "P"
+      ]
+    },
+    {
+      "sources": [
+        {
+          "quote": "dev、stage和prod三个环境",
+          "occurrence": 1
+        }
+      ],
+      "claim_ids": [
+        "cl_check_dev",
+        "cl_check_stage",
+        "cl_check_scope"
+      ],
+      "status": "EXPRESSED",
+      "affected_views": [
+        "I",
+        "A"
+      ]
+    },
+    {
+      "sources": [
+        {
+          "quote": "但本次排除prod",
+          "occurrence": 1
+        }
+      ],
+      "claim_ids": [
+        "cl_check_scope"
+      ],
+      "status": "EXPRESSED",
+      "affected_views": [
+        "I",
+        "A"
+      ]
+    },
+    {
+      "sources": [
+        {
+          "quote": "不得修改任何环境。",
+          "occurrence": 1
+        }
+      ],
+      "claim_ids": [
+        "cl_modify_object"
+      ],
+      "status": "EXPRESSED",
+      "affected_views": [
+        "B"
+      ]
+    },
+    {
+      "sources": [
+        {
+          "quote": "不得修改任何环境。",
+          "occurrence": 1
+        }
+      ],
+      "claim_ids": [],
+      "status": "UNSPECIFIED",
+      "affected_views": [
+        "P"
+      ]
+    }
+  ]
+}

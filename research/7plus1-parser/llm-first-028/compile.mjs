@@ -1,10 +1,11 @@
-import {views} from './contracts/schema.mjs';
+import {views,contractVersion} from './contracts/schema.mjs';
 import {sha256} from './source.mjs';
 export function compileBoundary(source,g,audit,checks){
  const rows=new Map(checks.rows.map(r=>[r.id,r]));
  const linked=x=>({...x,...(x.mentions?{mentions:rows.get(x.id)?.sources??x.mentions}:{sources:rows.get(x.id)?.sources??x.sources})});
  const index=new Map([...g.entities,...g.events,...g.claims,...g.expressions].map(x=>[x.id,linked(x)]));
- const status=ids=>ids.some(id=>rows.get(id)?.status==='REJECTED')?'REJECTED':ids.some(id=>rows.get(id)?.status!=='ACCEPTED')?'UNRESOLVED':'ACCEPTED';
+ const effective=id=>{const row=rows.get(id);return row?.collection==='entities'?row.identity_status??row.status:row?.status;};
+ const status=ids=>ids.some(id=>effective(id)==='REJECTED')?'REJECTED':ids.some(id=>effective(id)!=='ACCEPTED')?'UNRESOLVED':'ACCEPTED';
  const facts=[];
  const make=(kind,ids,data,slots)=>{
   const unique=[...new Set(ids.filter(Boolean))], digest=sha256(JSON.stringify(data));
@@ -54,9 +55,9 @@ export function compileBoundary(source,g,audit,checks){
   make(c.kind,[...ids,...quantities.map(q=>q.id),...contentScopes.map(q=>q.id)],{claim:c,event:e??null,entity:entity??null,expression:expression(c.expression_id),constraints:e?constraints(e):[],content_quantities:quantities,content_scopes:contentScopes},slots);
  }
  const unresolved=facts.filter(f=>f.status!=='ACCEPTED'), gaps=[...g.issues.filter(i=>i.kind==='COVERAGE_GAP'),...audit.omissions,...checks.coverage.filter(c=>c.status==='GAP')];
- const ir={format:'boundx-boundary-ir/028-r02.2',source_sha256:source.sha256,facts,entities:g.entities.map(linked),expressions:g.expressions.map(linked),issues:g.issues.map(i=>({...i,sources:checks.issue_sources?.find(x=>x.id===i.id)?.sources??i.sources})),audit_issues:audit.issues,gaps,technical_diagnostics:checks.diagnostics,business_decision:null,execution_authorization:null};
+ const ir={format:'boundx-boundary-ir/'+contractVersion,source_sha256:source.sha256,facts,entities:g.entities.map(linked),expressions:g.expressions.map(linked),issues:g.issues.map(i=>({...i,sources:checks.issue_sources?.find(x=>x.id===i.id)?.sources??i.sources})),audit_issues:audit.issues,gaps,technical_diagnostics:checks.diagnostics,business_decision:null,execution_authorization:null};
  const slots=Object.fromEntries(views.map(slot=>{const entries=facts.filter(f=>f.slots.includes(slot));const coverageGap=gaps.some(g=>g.affected_views?.includes(slot))||!checks.schemas.proposal.ok||!checks.schemas.audit.ok;return [slot,{status:coverageGap?'PARSER_COVERAGE_FAILURE':entries.some(f=>f.status!=='ACCEPTED')?'UNRESOLVED':entries.length?'RESOLVED':'ABSENT',openness:entries.length?'CONSTRAINED':'OPEN',entries}];}));
- const canonical={format:'boundx-canonical-7plus1/028-r02.2',source_sha256:source.sha256,slots,unresolved,retained_nonprojected:facts.filter(f=>f.slots.length===0),issues:g.issues,gaps,business_decision:null,execution_authorization:null};
+ const canonical={format:'boundx-canonical-7plus1/'+contractVersion,source_sha256:source.sha256,entities:ir.entities,expressions:ir.expressions,slots,unresolved,retained_nonprojected:facts.filter(f=>f.slots.length===0),issues:g.issues,gaps,business_decision:null,execution_authorization:null};
  return {ir,canonical,chinese:renderChinese(canonical)};
 }
 const modality={REQUIRED:'必须',PERMITTED:'允许',FORBIDDEN:'禁止',NOT_REQUIRED:'无需',UNSTATED:'未陈述模态'};
@@ -66,6 +67,7 @@ export function renderChinese(c){
  const roleNames={PERFORMER:'执行者',ORGANIZER:'组织者',REVIEWER:'复核者',APPROVER:'批准者',RECIPIENT:'接收者',COLLABORATOR:'协作者',INPUT_OBJECT:'输入/受检对象',OBJECT:'对象',RESULT:'结果/交付',BASIS:'依据',CONTENT:'内容'};
  const directionNames={NECESSARY:'必要前提',SUFFICIENT:'充分触发',IFF:'充要条件',ORDER:'时间先后'},opNames={EQ:'=',LT:'<',LTE:'≤',GT:'>',GTE:'≥'};
  const allFacts=[...Object.values(c.slots).flatMap(v=>v.entries),...c.retained_nonprojected],labels=new Map([['ROOT','根任务']]);
+ for(const e of c.entities??[])labels.set(e.id,e.label);
  for(const f of allFacts){if(f.event)labels.set(f.event.id,f.event.predicate);if(f.entity)labels.set(f.entity.id,f.entity.label);for(const r of f.roles??[])if(r.entity)labels.set(r.entity.id,r.entity.label);}
  const name=id=>labels.get(id)??id;
  const lines=['# BoundX 7+1（有限技术接受，不是业务授权）'];
@@ -90,6 +92,31 @@ export function renderChinese(c){
 }
 export function evaluateExpression(expressions,id,observations={}){
  const index=new Map(expressions.map(e=>[e.id,e]));
- const run=(key,path=[])=>{const x=index.get(key);if(!x||path.includes(key))return 'UNKNOWN';if(x.op==='STATE')return observations[key]===true?'TRUE':observations[key]===false?'FALSE':'UNKNOWN';if(x.op==='ITEM')return new Set(x.operands);const values=x.operands.map(k=>run(k,[...path,key]));if(x.op==='NOT')return values[0]==='TRUE'?'FALSE':values[0]==='FALSE'?'TRUE':'UNKNOWN';if(['AND','ALL'].includes(x.op))return values.includes('FALSE')?'FALSE':values.every(v=>v==='TRUE')?'TRUE':'UNKNOWN';if(['OR','ANY'].includes(x.op))return values.includes('TRUE')?'TRUE':values.every(v=>v==='FALSE')?'FALSE':'UNKNOWN';if(!values.every(v=>v instanceof Set))return 'UNKNOWN';if(x.op==='UNION')return new Set(values.flatMap(v=>[...v]));if(x.op==='INTERSECTION')return new Set([...values[0]].filter(v=>values.every(s=>s.has(v))));if(x.op==='EXCEPT')return new Set([...values[0]].filter(v=>!values[1].has(v)));return 'UNKNOWN';};return run(id);
+ const atom=x=>JSON.stringify([x.state.predicate,x.state.event_id,x.state.args]);
+ const known=new Map(),reachable=new Map();let conflict=false;
+ const collect=(key,path=[])=>{const x=index.get(key);if(!x||path.includes(key))return;if(x.op==='STATE'&&x.state)reachable.set(atom(x),x);else for(const child of x.operands??[])collect(child,[...path,key]);};collect(id);
+ for(const x of expressions)if(x.op==='STATE'&&x.state&&reachable.has(atom(x))&&typeof observations[x.id]==='boolean'){const value=x.state.polarity==='NEGATIVE'?!observations[x.id]:observations[x.id],k=atom(x);if(known.has(k)&&known.get(k)!==value)conflict=true;known.set(k,value);}
+ if(conflict)return 'UNKNOWN';
+ const run=(key,assigned=known,path=[])=>{const x=index.get(key);if(!x||path.includes(key))return 'UNKNOWN';if(x.op==='STATE'){if(!x.state||!assigned.has(atom(x)))return 'UNKNOWN';const value=assigned.get(atom(x));return (x.state.polarity==='NEGATIVE'?!value:value)?'TRUE':'FALSE';}if(x.op==='ITEM')return new Set(x.operands);const values=x.operands.map(k=>run(k,assigned,[...path,key]));if(x.op==='NOT')return values[0]==='TRUE'?'FALSE':values[0]==='FALSE'?'TRUE':'UNKNOWN';if(['AND','ALL'].includes(x.op))return values.includes('FALSE')?'FALSE':values.every(v=>v==='TRUE')?'TRUE':'UNKNOWN';if(['OR','ANY'].includes(x.op))return values.includes('TRUE')?'TRUE':values.every(v=>v==='FALSE')?'FALSE':'UNKNOWN';if(!values.every(v=>v instanceof Set))return 'UNKNOWN';if(x.op==='UNION')return new Set(values.flatMap(v=>[...v]));if(x.op==='INTERSECTION')return new Set([...values[0]].filter(v=>values.every(s=>s.has(v))));if(x.op==='EXCEPT')return new Set([...values[0]].filter(v=>!values[1].has(v)));return 'UNKNOWN';};
+ const result=run(id);if(result!=='UNKNOWN')return result;
+ // Finite Boolean fragment only; no inferred business observations or unbounded solver.
+ const unknown=[...reachable.keys()].filter(k=>!known.has(k));if(unknown.length>10)return 'UNKNOWN';let invariant=null;
+ for(let n=0;n<2**unknown.length;n++){const assignment=new Map(known);unknown.forEach((k,i)=>assignment.set(k,!!(n&(1<<i))));const value=run(id,assignment);if(value==='UNKNOWN'||value instanceof Set)return 'UNKNOWN';if(invariant!==null&&invariant!==value)return 'UNKNOWN';invariant=value;}
+ return invariant??'UNKNOWN';
 }
-export function evaluateQuantity(q,observed){if(typeof observed!=='number'||!Number.isFinite(observed))return 'UNKNOWN';return ({EQ:()=>observed===q.value,LT:()=>observed<q.value,LTE:()=>observed<=q.value,GT:()=>observed>q.value,GTE:()=>observed>=q.value}[q.comparator])()?'TRUE':'FALSE';}
+export function evaluateQuantity(q,observed){
+ if(typeof observed==='object'&&observed!==null){
+  if(observed.unit!==q.unit||observed.target_id!==q.target_id||observed.count_scope!==q.count_scope)return 'UNKNOWN';
+  observed=observed.value;
+ }
+ if(typeof observed!=='number'||!Number.isFinite(observed))return 'UNKNOWN';
+ const compare={EQ:()=>observed===q.value,LT:()=>observed<q.value,LTE:()=>observed<=q.value,GT:()=>observed>q.value,GTE:()=>observed>=q.value}[q.comparator];
+ return compare?(compare()?'TRUE':'FALSE'):'UNKNOWN';
+}
+export function evaluateCondition(claim,expressions,observations={}){
+ const value=evaluateExpression(expressions,claim.expression_id,observations);
+ return {target_id:claim.event_id??claim.scope_id,direction:claim.direction,temporal:claim.temporal,condition_value:value,
+  necessary_precondition:claim.direction==='NECESSARY'||claim.direction==='IFF'?value:null,
+  sufficient_trigger:claim.direction==='SUFFICIENT'||claim.direction==='IFF'?value:null,
+  order_only:claim.direction==='ORDER',business_decision:null,execution_authorization:null};
+}

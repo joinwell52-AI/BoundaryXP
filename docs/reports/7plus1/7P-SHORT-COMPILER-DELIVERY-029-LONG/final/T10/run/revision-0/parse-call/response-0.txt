@@ -1,0 +1,265 @@
+{
+  "contract_version": "028-r02.3",
+  "entities": [
+    {
+      "id": "n1",
+      "label": "PM",
+      "type": "OTHER",
+      "mentions": [{"quote": "PM", "occurrence": 1}],
+      "alternatives": []
+    },
+    {
+      "id": "n2",
+      "label": "worker.log",
+      "type": "FILE",
+      "mentions": [{"quote": "worker.log", "occurrence": 1}],
+      "alternatives": []
+    },
+    {
+      "id": "n3",
+      "label": "worker.log中的错误记录",
+      "type": "OTHER",
+      "mentions": [
+        {"quote": "worker.log", "occurrence": 1},
+        {"quote": "其中的错误记录", "occurrence": 1}
+      ],
+      "alternatives": []
+    },
+    {
+      "id": "n4",
+      "label": "QA",
+      "type": "OTHER",
+      "mentions": [{"quote": "QA", "occurrence": 1}],
+      "alternatives": []
+    },
+    {
+      "id": "n5",
+      "label": "检查结果",
+      "type": "OTHER",
+      "mentions": [{"quote": "检查结果", "occurrence": 1}],
+      "alternatives": []
+    }
+  ],
+  "events": [
+    {
+      "id": "e1",
+      "predicate": "读取",
+      "kind": "ACTION",
+      "layer": "MAIN",
+      "use": "CURRENT_TASK",
+      "modality": "REQUIRED",
+      "polarity": "POSITIVE",
+      "owner_id": "ROOT",
+      "constraint_ids": ["c9"],
+      "requires": [],
+      "sources": [{"quote": "请PM读取worker.log", "occurrence": 1}]
+    },
+    {
+      "id": "e2",
+      "predicate": "检查错误记录",
+      "kind": "ACTION",
+      "layer": "MAIN",
+      "use": "CURRENT_TASK",
+      "modality": "REQUIRED",
+      "polarity": "POSITIVE",
+      "owner_id": "ROOT",
+      "constraint_ids": [],
+      "requires": [],
+      "sources": [{"quote": "请PM读取worker.log并检查其中的错误记录", "occurrence": 1}]
+    },
+    {
+      "id": "e3",
+      "predicate": "复核检查结果",
+      "kind": "ACTION",
+      "layer": "MAIN",
+      "use": "CURRENT_TASK",
+      "modality": "REQUIRED",
+      "polarity": "POSITIVE",
+      "owner_id": "ROOT",
+      "constraint_ids": [],
+      "requires": [],
+      "sources": [{"quote": "由QA复核检查结果", "occurrence": 1}]
+    }
+  ],
+  "claims": [
+    {
+      "id": "c1",
+      "kind": "ROLE",
+      "event_id": "e1",
+      "entity_id": "n1",
+      "role": "PERFORMER",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "scope_id": "e1",
+      "requires": [],
+      "sources": [{"quote": "请PM读取worker.log", "occurrence": 1}],
+      "note": ""
+    },
+    {
+      "id": "c2",
+      "kind": "ROLE",
+      "event_id": "e1",
+      "entity_id": "n2",
+      "role": "INPUT_OBJECT",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "scope_id": "e1",
+      "requires": [],
+      "sources": [{"quote": "读取worker.log", "occurrence": 1}],
+      "note": ""
+    },
+    {
+      "id": "c3",
+      "kind": "ROLE",
+      "event_id": "e2",
+      "entity_id": "n1",
+      "role": "PERFORMER",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "scope_id": "e2",
+      "requires": [],
+      "sources": [{"quote": "请PM读取worker.log并检查其中的错误记录", "occurrence": 1}],
+      "note": "PM是并列读取与检查动作的共享执行者。"
+    },
+    {
+      "id": "c4",
+      "kind": "ROLE",
+      "event_id": "e2",
+      "entity_id": "n3",
+      "role": "INPUT_OBJECT",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "scope_id": "e2",
+      "requires": [],
+      "sources": [{"quote": "worker.log并检查其中的错误记录", "occurrence": 1}],
+      "note": "其中指worker.log；受检范围为该文件中的错误记录。"
+    },
+    {
+      "id": "c5",
+      "kind": "ROLE",
+      "event_id": "e2",
+      "entity_id": "n5",
+      "role": "RESULT",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "scope_id": "e2",
+      "requires": [],
+      "sources": [
+        {"quote": "检查其中的错误记录", "occurrence": 1},
+        {"quote": "复核检查结果", "occurrence": 1}
+      ],
+      "note": "后文检查结果指该检查动作的产物，未指定产物格式。"
+    },
+    {
+      "id": "c6",
+      "kind": "ROLE",
+      "event_id": "e3",
+      "entity_id": "n4",
+      "role": "REVIEWER",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "scope_id": "e3",
+      "requires": [],
+      "sources": [{"quote": "由QA复核检查结果", "occurrence": 1}],
+      "note": ""
+    },
+    {
+      "id": "c7",
+      "kind": "ROLE",
+      "event_id": "e3",
+      "entity_id": "n5",
+      "role": "OBJECT",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "scope_id": "e3",
+      "requires": [],
+      "sources": [{"quote": "复核检查结果", "occurrence": 1}],
+      "note": "复核对象是前述检查的内部产物。"
+    },
+    {
+      "id": "c9",
+      "kind": "QUANTITY",
+      "event_id": "e1",
+      "entity_id": null,
+      "role": null,
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": {
+        "metric": "重试次数",
+        "target_id": "e1",
+        "comparator": "LTE",
+        "value": 2,
+        "unit": "次",
+        "use": "EXECUTION_LIMIT",
+        "count_scope": "e1"
+      },
+      "scope_id": "e1",
+      "requires": [],
+      "sources": [
+        {"quote": "读取worker.log", "occurrence": 1},
+        {"quote": "该读取操作最多重试2次", "occurrence": 1}
+      ],
+      "note": "限制读取操作的重试次数，不包含首次读取；不要求实际重试。"
+    }
+  ],
+  "expressions": [],
+  "issues": [
+    {
+      "id": "i1",
+      "kind": "UNSPECIFIED",
+      "subject_ids": ["e2"],
+      "field_path": "events[e2]",
+      "alternatives": [],
+      "affected_views": ["A"],
+      "sources": [{"quote": "具体检查工具未指定", "occurrence": 1}],
+      "note": "检查工具明确未指定，不补充工具选择或选择工具的独立义务。"
+    }
+  ],
+  "coverage": [
+    {
+      "sources": [{"quote": "请PM读取worker.log", "occurrence": 1}],
+      "claim_ids": ["c1", "c2"],
+      "status": "EXPRESSED",
+      "affected_views": ["I", "A", "P"]
+    },
+    {
+      "sources": [{"quote": "请PM读取worker.log并检查其中的错误记录", "occurrence": 1}],
+      "claim_ids": ["c3", "c4"],
+      "status": "EXPRESSED",
+      "affected_views": ["I", "A", "P"]
+    },
+    {
+      "sources": [{"quote": "该读取操作最多重试2次", "occurrence": 1}],
+      "claim_ids": ["c9"],
+      "status": "EXPRESSED",
+      "affected_views": ["R"]
+    },
+    {
+      "sources": [{"quote": "由QA复核检查结果", "occurrence": 1}],
+      "claim_ids": ["c5", "c6", "c7"],
+      "status": "EXPRESSED",
+      "affected_views": ["O", "A", "P"]
+    },
+    {
+      "sources": [{"quote": "具体检查工具未指定", "occurrence": 1}],
+      "claim_ids": [],
+      "status": "UNSPECIFIED",
+      "affected_views": ["A"]
+    }
+  ]
+}

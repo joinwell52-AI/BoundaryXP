@@ -1,5 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
+import {contractVersion} from '../contracts/schema.mjs';
 import {cases} from './short-texts.mjs';
 import {prepareSource,linkQuote} from '../source.mjs';
 import {technicalValidate,graphItems} from '../validate.mjs';
@@ -10,12 +11,28 @@ function fixture(){
  const entity=(id,label,type)=>({id,label,type,mentions:sources,alternatives:[]});
  const ev=(id,predicate,modality)=>({id,predicate,kind:'ACTION',layer:'MAIN',use:'CURRENT_TASK',modality,polarity:'POSITIVE',owner_id:'ROOT',constraint_ids:[],requires:[],sources});
  const role=(id,event_id,entity_id,role)=>({id,kind:'ROLE',event_id,entity_id,role,expression_id:null,direction:null,temporal:null,quantity:null,scope_id:event_id,requires:[],sources,note:''});
- const g={contract_version:'028-r02.2',entities:[entity('pm','PM','PERSON'),entity('qa','QA','PERSON'),entity('report','report.md','FILE')],events:[ev('gen','生成','REQUIRED'),ev('review','复核','REQUIRED'),ev('submit','提交','PERMITTED')],claims:[role('result','gen','report','RESULT'),role('review-object','review','report','OBJECT'),role('submit-object','submit','report','OBJECT')],expressions:[{id:'passed',op:'STATE',operands:[],state:{predicate:'复核通过',event_id:'review',args:['report','qa'],polarity:'POSITIVE'},sources}],issues:[],coverage:[{sources,claim_ids:['gen','review','submit'],status:'EXPRESSED',affected_views:['A','O']}]};
+ const g={contract_version:contractVersion,entities:[entity('pm','PM','PERSON'),entity('qa','QA','PERSON'),entity('report','report.md','FILE')],events:[ev('gen','生成','REQUIRED'),ev('review','复核','REQUIRED'),ev('submit','提交','PERMITTED')],claims:[role('result','gen','report','RESULT'),role('review-object','review','report','OBJECT'),role('submit-object','submit','report','OBJECT')],expressions:[{id:'passed',op:'STATE',operands:[],state:{predicate:'复核通过',event_id:'review',args:['report','qa'],polarity:'POSITIVE'},sources}],issues:[],coverage:[{sources,claim_ids:['gen','review','submit'],status:'EXPRESSED',affected_views:['A','O']}]};
  g.events[2].constraint_ids=['condition'];g.claims.push({id:'condition',kind:'CONDITION',event_id:'submit',entity_id:null,role:null,expression_id:'passed',direction:'NECESSARY',temporal:'AFTER',quantity:null,scope_id:'submit',requires:[],sources,note:''});
  return g;
 }
-const audit=g=>({contract_version:'028-r02.2',reviews:graphItems(g).map(x=>({subject_id:x.id,field_path:'',verdict:'SUPPORT',context_refs:[],sources,reason:'Artificial unit fixture, not model evidence'})),issues:[],omissions:[]});
+const audit=g=>({contract_version:contractVersion,reviews:graphItems(g).map(x=>({subject_id:x.id,field_path:'',verdict:'SUPPORT',context_refs:[],sources,reason:'Artificial unit fixture, not model evidence'})),issues:[],omissions:[]});
 const run=(g,a=audit(g))=>{const t=technicalValidate(source,g,a);return {...compileBoundary(source,g,a,t),technical:t};};
+test('Whole-node path aliases preserve scope; property SUPPORT never becomes whole SUPPORT',()=>{
+ const g=fixture(),a=audit(g);for(const r of a.reviews){const x=graphItems(g).find(x=>x.id===r.subject_id);r.field_path=`${x.collection}[${x.id}]`;}
+ assert.ok(run(g,a).technical.rows.every(r=>r.status==='ACCEPTED'));
+ a.reviews.find(r=>r.subject_id==='gen').field_path='events[gen].modality';assert.equal(run(g,a).technical.rows.find(r=>r.id==='gen').status,'UNRESOLVED');
+});
+test('Metadata-only uncertainty preserves identity use, true ambiguity and explicit requirements block',()=>{
+ const g=fixture(),a=audit(g);a.reviews.find(r=>r.subject_id==='report').verdict='UNCERTAIN';a.issues.push({id:'type',issue_kind:'IDENTITY',subject_ids:['report'],field_path:'entities[report].type',context_refs:[],sources,reason:'Only type unknown',suggested_json:null});
+ const result=run(g,a);assert.equal(result.technical.rows.find(r=>r.id==='report').status,'UNRESOLVED');assert.equal(result.ir.facts.find(f=>f.claim?.id==='result').status,'ACCEPTED');
+ g.claims[0].requires=['report'];assert.equal(run(g,a).ir.facts.find(f=>f.claim?.id==='result').status,'UNRESOLVED');g.claims[0].requires=[];
+ a.issues[0].field_path='';assert.equal(run(g,a).ir.facts.find(f=>f.claim?.id==='result').status,'UNRESOLVED');a.issues[0].field_path='type';a.reviews.find(r=>r.subject_id==='report').verdict='CONTRADICT';assert.equal(run(g,a).ir.facts.find(f=>f.claim?.id==='result').status,'UNRESOLVED');
+});
+test('Complementary states calculate tautology without merging different arguments or guessing observations',()=>{
+ const g=fixture(),p=g.expressions[0],n={...structuredClone(p),id:'negative',state:{...p.state,polarity:'NEGATIVE'}};g.expressions.push(n,{id:'either',op:'OR',operands:[p.id,n.id],state:null,sources},{id:'both',op:'AND',operands:[p.id,n.id],state:null,sources});
+ assert.equal(evaluateExpression(g.expressions,'either'),'TRUE');assert.equal(evaluateExpression(g.expressions,'both'),'FALSE');assert.equal(evaluateExpression(g.expressions,p.id),'UNKNOWN');assert.equal(evaluateExpression(g.expressions,n.id,{[p.id]:true}),'FALSE');assert.equal(evaluateExpression(g.expressions,'either',{[p.id]:true,[n.id]:true}),'UNKNOWN');
+ n.state.args=['different'];assert.equal(evaluateExpression(g.expressions,'either'),'UNKNOWN');
+});
 test('Skill bundles are built from actual files and one contract',()=>{const p=buildBundle('parse'),a=buildBundle('audit');assert.equal(p.mode,'INLINE_BUNDLE');assert.equal(p.resources.find(r=>r.path.includes('semantic-contract')).sha256,a.resources.find(r=>r.path.includes('semantic-contract')).sha256);assert.ok(p.text.includes('$boundx-semantic-parse'));});
 test('Invalid quote/occurrence is rejected, Unicode span exact',()=>{assert.throws(()=>linkQuote(source,{quote:'not in source',occurrence:1}));assert.throws(()=>linkQuote(source,{quote:'PM',occurrence:99}));const q=linkQuote(source,{quote:'PM',occurrence:2});assert.equal(Array.from(source.text).slice(...q.span).join(''),'PM');});
 test('UTF-8 BOM stays in authoritative bytes and codepoint coordinates',()=>{const bytes=Buffer.concat([Buffer.from([239,187,191]),Buffer.from(cases[0].text)]),s=prepareSource(bytes);assert.deepEqual(Buffer.from(s.text),bytes);assert.equal(linkQuote(s,{quote:'PM',occurrence:1}).span[0],linkQuote(source,{quote:'PM',occurrence:1}).span[0]+1);});

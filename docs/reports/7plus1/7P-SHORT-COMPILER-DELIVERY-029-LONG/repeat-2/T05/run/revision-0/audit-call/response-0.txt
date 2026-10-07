@@ -1,0 +1,185 @@
+{
+  "contract_version": "028-r02.3",
+  "reviews": [
+    {
+      "subject_id": "ent_qa",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [{"quote": "QA", "occurrence": 1}],
+      "reason": "QA身份明确；OTHER保留原文未细分的人或组类别。"
+    },
+    {
+      "subject_id": "ent_pm",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [{"quote": "PM", "occurrence": 1}],
+      "reason": "PM身份明确；OTHER未擅自指定其为个人或组织。"
+    },
+    {
+      "subject_id": "ent_file",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [{"quote": "r.md", "occurrence": 1}],
+      "reason": "明确的提交文件，身份与类型有来源支持。"
+    },
+    {
+      "subject_id": "evt_approval",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [{"quote": "只有QA批准并且检查通过后", "occurrence": 1}],
+      "reason": "批准作为条件状态出现，未被提升为当前批准义务。"
+    },
+    {
+      "subject_id": "evt_check",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [{"quote": "只有QA批准并且检查通过后", "occurrence": 1}],
+      "reason": "检查通过作为条件状态出现，未断言已通过或新增检查义务。"
+    },
+    {
+      "subject_id": "evt_submit_permitted",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["cl_permission_condition"],
+      "sources": [{"quote": "只有QA批准并且检查通过后，才允许PM提交r.md", "occurrence": 1}],
+      "reason": "提交为有必要前提及先后限制的许可，约束回指完整。"
+    },
+    {
+      "subject_id": "evt_submit_forbidden",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["cl_prohibition_condition"],
+      "sources": [{"quote": "任一前提不满足时不得提交", "occurrence": 1}],
+      "reason": "保留条件触发的提交禁止，未编译为无条件禁止。"
+    },
+    {
+      "subject_id": "cl_qa_approver",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["evt_approval", "ent_qa"],
+      "sources": [{"quote": "QA批准", "occurrence": 1}],
+      "reason": "QA是条件批准状态的批准者，不因此承担必须批准的义务。"
+    },
+    {
+      "subject_id": "cl_permitted_performer",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["evt_submit_permitted", "ent_pm"],
+      "sources": [{"quote": "允许PM提交r.md", "occurrence": 1}],
+      "reason": "PM明确为许可提交动作的执行者。"
+    },
+    {
+      "subject_id": "cl_permitted_object",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["evt_submit_permitted", "ent_file"],
+      "sources": [{"quote": "PM提交r.md", "occurrence": 1}],
+      "reason": "r.md为提交对象；未推导生成义务或外部输入用途。"
+    },
+    {
+      "subject_id": "cl_forbidden_performer",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["evt_submit_forbidden", "ent_pm"],
+      "sources": [
+        {"quote": "PM提交r.md", "occurrence": 1},
+        {"quote": "不得提交", "occurrence": 1}
+      ],
+      "reason": "后半句禁止承接前半句PM的同一提交行为。"
+    },
+    {
+      "subject_id": "cl_forbidden_object",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["evt_submit_forbidden", "ent_file"],
+      "sources": [
+        {"quote": "PM提交r.md", "occurrence": 1},
+        {"quote": "不得提交", "occurrence": 1}
+      ],
+      "reason": "后半句禁止承接同一文件r.md，无竞争指代。"
+    },
+    {
+      "subject_id": "cl_permission_condition",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["evt_submit_permitted", "expr_both_satisfied"],
+      "sources": [{"quote": "只有QA批准并且检查通过后，才允许PM提交r.md", "occurrence": 1}],
+      "reason": "“只有……才”表达共同必要前提；AFTER保留提交须在两项满足之后，绑定双向一致。"
+    },
+    {
+      "subject_id": "cl_prohibition_condition",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["evt_submit_forbidden", "expr_any_unsatisfied"],
+      "sources": [
+        {"quote": "QA批准并且检查通过", "occurrence": 1},
+        {"quote": "任一前提不满足时不得提交", "occurrence": 1}
+      ],
+      "reason": "任一前提不满足足以触发禁止，SUFFICIENT方向及事件绑定正确。"
+    },
+    {
+      "subject_id": "expr_approved",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["evt_approval", "ent_qa"],
+      "sources": [{"quote": "QA批准", "occurrence": 1}],
+      "reason": "正确表示QA批准的正向条件状态，未宣称其实际成立。"
+    },
+    {
+      "subject_id": "expr_check_passed",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["evt_check"],
+      "sources": [{"quote": "检查通过", "occurrence": 1}],
+      "reason": "正确表示检查通过状态；原文未指定检查者或检查对象。"
+    },
+    {
+      "subject_id": "expr_both_satisfied",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["expr_approved", "expr_check_passed"],
+      "sources": [{"quote": "QA批准并且检查通过", "occurrence": 1}],
+      "reason": "AND准确保留两项前提共同满足。"
+    },
+    {
+      "subject_id": "expr_not_approved",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["expr_approved"],
+      "sources": [
+        {"quote": "QA批准", "occurrence": 1},
+        {"quote": "任一前提不满足", "occurrence": 1}
+      ],
+      "reason": "将批准前提不满足表示为同一批准状态的否定，参数保持一致。"
+    },
+    {
+      "subject_id": "expr_check_not_passed",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["expr_check_passed"],
+      "sources": [
+        {"quote": "检查通过", "occurrence": 1},
+        {"quote": "任一前提不满足", "occurrence": 1}
+      ],
+      "reason": "将检查通过前提不满足表示为同一状态的否定。"
+    },
+    {
+      "subject_id": "expr_any_unsatisfied",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["expr_not_approved", "expr_check_not_passed"],
+      "sources": [
+        {"quote": "QA批准并且检查通过", "occurrence": 1},
+        {"quote": "任一前提不满足", "occurrence": 1}
+      ],
+      "reason": "OR准确表达至少一项前提不满足，未推定任何实际状态。"
+    }
+  ],
+  "issues": [],
+  "omissions": []
+}

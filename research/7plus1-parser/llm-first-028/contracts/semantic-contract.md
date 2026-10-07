@@ -1,4 +1,4 @@
-# BoundX 语义合同 028-r02.2
+# BoundX 语义合同 028-r02.3
 
 依据 v0.4/r02。两个 Skill、Schema、Γ 和编译器共用本合同。模型提交候选；宿主的 ACCEPTED 仅代表有限技术检查与审阅支持，不证明自然语言真值。
 
@@ -10,7 +10,7 @@ I 是明确输入/作用域，O 是交付结果，A 是当前要求/允许动作
 
 ## 数据约定
 
-顶层 contract_version 固定为 028-r02.2；entities/events/claims/expressions/issues/coverage 六个数组。所有 id 全图唯一，ROOT 是保留根任务标记。每项来源 sources/mentions 均使用真实非空 quote + occurrence（从 1 开始的完全相同字符串出现次数）。不要输出猜测偏移；宿主按 Unicode 码点定位。跨句指代/共享主体要引用两端；抽象状态可用多个片段，不伪造连续引文。
+顶层 contract_version 固定为 028-r02.3；entities/events/claims/expressions/issues/coverage 六个数组。所有 id 全图唯一，ROOT 是保留根任务标记。每项来源 sources/mentions 均使用真实非空 quote + occurrence（从 1 开始的完全相同字符串出现次数）。不要输出猜测偏移；宿主按 Unicode 码点定位。跨句指代/共享主体要引用两端；抽象状态可用多个片段，不伪造连续引文。
 
 events：predicate 是模型解释的规范动作/状态名称（使用简洁中文），kind 为 ACTION/STATE；layer 是 MAIN/CONDITION/QUOTED/MODIFIER/PURPOSE/CONTENT/BACKGROUND；use 是 CURRENT_TASK/MENTION_ONLY；modality 为 REQUIRED/PERMITTED/NOT_REQUIRED/FORBIDDEN/UNSTATED；polarity 是 POSITIVE/NEGATIVE；owner_id 为 ROOT 或结构父事件；constraint_ids 是约束此事件的全部 CONDITION/QUANTITY/TEMPORAL 主张；requires 仅列真正必需的语义依赖。owner 和共现不是证明依赖。
 
@@ -24,6 +24,8 @@ claims 按 kind 区分：
 - SCOPE：event_id 可空，expression_id 描述明确作用范围，scope_id 指出目标；不能从禁止对象推外部输入。
 
 每个 claim 的不适用字段填 null，requires 只引用必需身份/语义主张；sources 和 note 始终保留。每个事件和角色独立审阅。FORBIDDEN 事件进 B 而不是 A，NOT_REQUIRED 保留撤回义务不进 A/B；UNSTATED 不能冒充允许。layer 本身不代替 use，但 QUOTED/MODIFIER/PURPOSE/CONTENT/BACKGROUND 的 MENTION_ONLY 事件不是任务动作。目的补语不自动增加独立义务。条件中的批准/复核不自动要求其发生。
+
+操作方式限制只约束原有操作，不凭“只读/不可改写”等限制新增独立 REQUIRED 事件。限定内容用 SCOPE/CONTENT 及来源表达；原文明确要求的动作仍独立保留。
 
 ## 表达式与条件
 
@@ -44,6 +46,10 @@ coverage 从原文每项动作/要求/禁止/条件/数量/例外出发，source
 audit.contract_version 同版本，reviews 为每个 entity/event/claim/expression id 提供独立 verdict；subject_id + field_path 是直接质疑目标，context_refs 只解释背景，不是待拒绝集合。SUPPORT/CONTRADICT/UNCERTAIN，带真实 sources 和短 reason。issues 记录 issue_kind、subject_ids、field_path、context_refs、sources、reason 和 suggested_json（仅建议，不执行）。omissions 是原文明确信息漏项，提供来源与 affected_views。不能把审阅一致当真值证明。对一个比较对象的疑问不影响其他读取；身份本身歧义才影响依赖它的用途。
 
 改变主张只能通过一次显式解析修订 + 新会话审阅，旧候选和意见不覆盖。宿主仅提供真实疑点，不提供评测答案。审阅补充未经重验不会直接成为事实。
+
+field_path 的空字符串及精确 collection[id] 表示整节点；collection[id].property 与相对 property 指同一属性，不能将属性支持扩大为整节点支持。实体的 type 类别不确定与身份不确定分开：仅 type 的局部疑点保留为未决属性，不影响无需该属性的明确身份用途；缺来源、竞争身份、整节点反对或未获支持仍阻断身份依赖。显式 requires 依然要求完整主张接受，不能借属性级处理越过它。
+
+有限计算以 STATE 的 predicate、event_id、args 构成同一状态键，polarity 表示极性。互补的同参数状态遵守排中/矛盾律，但每个单独的未知状态仍 UNKNOWN；不同事件/参数不合并。观察是测试/宿主输入，不宣称真实状态已发生。
 
 ## 技术策略与投影
 

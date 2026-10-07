@@ -16,3 +16,10 @@
 | 覆盖/漏项 | coverage / audit.omissions.affected_views | COVERAGE_INVALID | gaps与PARSER_COVERAGE_FAILURE |
 
 宿主生成最终技术状态、事实ID与摘要，不由模型签发。这里的类型/审阅接受不等于原文真值证明。
+
+## 028-r02.3 的局部闭环
+
+- 整节点路径：`normalizedFieldPath` 仅识别空路径、精确 `collection[id]` 和其属性前缀；属性支持不能代替整节点支持。
+- 类别与身份：`technicalValidate.rows.identity_status` 保留明确身份、`unresolved_properties` 保留 type 疑点；角色/STATE/ITEM 的隐式实体依赖只需要身份，显式 requires 要求完整节点接受。身份竞争、来源失败、整节点反对均继续阻断。
+- `evaluateExpression` 根据明确 STATE 参数与极性计算有限 Boolean 片段，最多枚举10个未知状态；单个状态继续 UNKNOWN，不作业务裁决。不同对象/事件不合并。
+- Skill 操作方式限制不新增必做动作；新合同须真实重跑规定短文本，旧摘要不兼容的响应禁止当作新方法回放。

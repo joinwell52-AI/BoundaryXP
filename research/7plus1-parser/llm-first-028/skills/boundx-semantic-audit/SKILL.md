@@ -16,4 +16,6 @@ description: 在新会话对照 ADMIN 原文审阅 BoundX 候选语义图，逐�
 7. SUPPORT/CONTRADICT/UNCERTAIN 带真实原文 quote+occurrence 与短理由。issues 指明直接受疑主张及属性，context_refs 分开。真实明确漏项写 omissions，不以泛泛疑点污染整图。
 8. suggested_json 仅建议，不能直接签发事实；改变主张必须经宿主显式解析修订与重新审阅。另一遍同模型支持不是真值证明，保留真实风险。
 
+整节点意见的 field_path 使用空字符串；也可使用精确的 collection[id] 根路径。属性意见使用相对属性路径（例如 type）或 collection[id].type，不将属性 SUPPORT 当作整节点 SUPPORT。仅人/组类别不明时只质疑 type，不否定原文明示的同一身份与职责；真正的指代竞争必须质疑身份。操作方式限制不能单独证明新增的必须执行动作。穷尽互补状态的条件和无条件表达可以逻辑等价，审阅时核对参数与极性而非节点数。
+
 仅输出 audit Schema JSON，不自封 CERTIFIED/RESOLVED，不写最终7+1，不输出隐藏思维链。

@@ -1,0 +1,312 @@
+{
+  "contract_version": "028-r02.3",
+  "entities": [
+    {
+      "id": "n1",
+      "label": "PM",
+      "type": "OTHER",
+      "mentions": [{"quote": "PM", "occurrence": 1}],
+      "alternatives": []
+    },
+    {
+      "id": "n2",
+      "label": "guide.md",
+      "type": "FILE",
+      "mentions": [
+        {"quote": "guide.md", "occurrence": 1},
+        {"quote": "文中", "occurrence": 1}
+      ],
+      "alternatives": []
+    },
+    {
+      "id": "n3",
+      "label": "cache.db",
+      "type": "FILE",
+      "mentions": [
+        {"quote": "cache.db", "occurrence": 1},
+        {"quote": "cache.db", "occurrence": 2}
+      ],
+      "alternatives": []
+    },
+    {
+      "id": "n4",
+      "label": "服务",
+      "type": "SYSTEM",
+      "mentions": [{"quote": "服务", "occurrence": 1}],
+      "alternatives": []
+    },
+    {
+      "id": "n5",
+      "label": "允许删除cache.db",
+      "type": "OTHER",
+      "mentions": [{"quote": "允许删除cache.db", "occurrence": 1}],
+      "alternatives": []
+    }
+  ],
+  "events": [
+    {
+      "id": "e1",
+      "predicate": "生成",
+      "kind": "ACTION",
+      "layer": "MAIN",
+      "use": "CURRENT_TASK",
+      "modality": "REQUIRED",
+      "polarity": "POSITIVE",
+      "owner_id": "ROOT",
+      "constraint_ids": [],
+      "requires": [],
+      "sources": [{"quote": "请PM生成guide.md", "occurrence": 1}]
+    },
+    {
+      "id": "e2",
+      "predicate": "写入",
+      "kind": "ACTION",
+      "layer": "MAIN",
+      "use": "CURRENT_TASK",
+      "modality": "REQUIRED",
+      "polarity": "POSITIVE",
+      "owner_id": "ROOT",
+      "constraint_ids": [],
+      "requires": [],
+      "sources": [
+        {"quote": "请PM生成guide.md", "occurrence": 1},
+        {"quote": "在文中写入“允许删除cache.db”", "occurrence": 1}
+      ]
+    },
+    {
+      "id": "e3",
+      "predicate": "删除",
+      "kind": "ACTION",
+      "layer": "QUOTED",
+      "use": "MENTION_ONLY",
+      "modality": "PERMITTED",
+      "polarity": "POSITIVE",
+      "owner_id": "e2",
+      "constraint_ids": [],
+      "requires": [],
+      "sources": [{"quote": "允许删除cache.db", "occurrence": 1}]
+    },
+    {
+      "id": "e4",
+      "predicate": "删除",
+      "kind": "ACTION",
+      "layer": "MAIN",
+      "use": "CURRENT_TASK",
+      "modality": "FORBIDDEN",
+      "polarity": "POSITIVE",
+      "owner_id": "ROOT",
+      "constraint_ids": [],
+      "requires": [],
+      "sources": [{"quote": "本次工作不得删除cache.db", "occurrence": 1}]
+    },
+    {
+      "id": "e5",
+      "predicate": "重启",
+      "kind": "ACTION",
+      "layer": "MAIN",
+      "use": "CURRENT_TASK",
+      "modality": "FORBIDDEN",
+      "polarity": "POSITIVE",
+      "owner_id": "ROOT",
+      "constraint_ids": [],
+      "requires": [],
+      "sources": [
+        {"quote": "本次工作", "occurrence": 1},
+        {"quote": "也不得重启服务", "occurrence": 1}
+      ]
+    }
+  ],
+  "claims": [
+    {
+      "id": "c1",
+      "kind": "ROLE",
+      "event_id": "e1",
+      "entity_id": "n1",
+      "role": "PERFORMER",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "scope_id": "e1",
+      "requires": [],
+      "sources": [{"quote": "请PM生成guide.md", "occurrence": 1}],
+      "note": ""
+    },
+    {
+      "id": "c2",
+      "kind": "ROLE",
+      "event_id": "e1",
+      "entity_id": "n2",
+      "role": "RESULT",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "scope_id": "e1",
+      "requires": [],
+      "sources": [{"quote": "生成guide.md", "occurrence": 1}],
+      "note": ""
+    },
+    {
+      "id": "c3",
+      "kind": "ROLE",
+      "event_id": "e2",
+      "entity_id": "n1",
+      "role": "PERFORMER",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "scope_id": "e2",
+      "requires": [],
+      "sources": [
+        {"quote": "请PM生成guide.md", "occurrence": 1},
+        {"quote": "在文中写入", "occurrence": 1}
+      ],
+      "note": "写入动作承接同句主体PM。"
+    },
+    {
+      "id": "c4",
+      "kind": "ROLE",
+      "event_id": "e2",
+      "entity_id": "n2",
+      "role": "OBJECT",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "scope_id": "e2",
+      "requires": [],
+      "sources": [
+        {"quote": "guide.md", "occurrence": 1},
+        {"quote": "在文中写入", "occurrence": 1}
+      ],
+      "note": "文中指生成的guide.md，属于内部产物用途。"
+    },
+    {
+      "id": "c5",
+      "kind": "ROLE",
+      "event_id": "e2",
+      "entity_id": "n5",
+      "role": "CONTENT",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "scope_id": "e2",
+      "requires": [],
+      "sources": [{"quote": "在文中写入“允许删除cache.db”", "occurrence": 1}],
+      "note": "要求写入的文字内容，不构成本次任务的删除许可。"
+    },
+    {
+      "id": "c6",
+      "kind": "ROLE",
+      "event_id": "e3",
+      "entity_id": "n3",
+      "role": "OBJECT",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "scope_id": "e3",
+      "requires": [],
+      "sources": [{"quote": "允许删除cache.db", "occurrence": 1}],
+      "note": "仅为引文中的删除对象。"
+    },
+    {
+      "id": "c7",
+      "kind": "ROLE",
+      "event_id": "e4",
+      "entity_id": "n3",
+      "role": "OBJECT",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "scope_id": "e4",
+      "requires": [],
+      "sources": [{"quote": "本次工作不得删除cache.db", "occurrence": 1}],
+      "note": "禁止对象不据此成为外部输入。"
+    },
+    {
+      "id": "c8",
+      "kind": "ROLE",
+      "event_id": "e5",
+      "entity_id": "n4",
+      "role": "OBJECT",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "scope_id": "e5",
+      "requires": [],
+      "sources": [{"quote": "也不得重启服务", "occurrence": 1}],
+      "note": ""
+    },
+    {
+      "id": "c9",
+      "kind": "SCOPE",
+      "event_id": null,
+      "entity_id": null,
+      "role": null,
+      "expression_id": "x1",
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "scope_id": "ROOT",
+      "requires": [],
+      "sources": [{"quote": "本次工作不得删除cache.db，也不得重启服务", "occurrence": 1}],
+      "note": "删除与重启禁令均适用于本次工作。"
+    }
+  ],
+  "expressions": [
+    {
+      "id": "x1",
+      "op": "STATE",
+      "operands": [],
+      "state": {
+        "predicate": "本次工作禁止范围",
+        "event_id": null,
+        "args": ["ROOT", "e4", "e5"],
+        "polarity": "POSITIVE"
+      },
+      "sources": [{"quote": "本次工作不得删除cache.db，也不得重启服务", "occurrence": 1}]
+    }
+  ],
+  "issues": [],
+  "coverage": [
+    {
+      "sources": [{"quote": "请PM生成guide.md", "occurrence": 1}],
+      "claim_ids": ["c1", "c2"],
+      "status": "EXPRESSED",
+      "affected_views": ["A", "P", "O"]
+    },
+    {
+      "sources": [{"quote": "在文中写入“允许删除cache.db”", "occurrence": 1}],
+      "claim_ids": ["c3", "c4", "c5"],
+      "status": "EXPRESSED",
+      "affected_views": ["A", "P", "O"]
+    },
+    {
+      "sources": [{"quote": "允许删除cache.db", "occurrence": 1}],
+      "claim_ids": ["c6"],
+      "status": "BACKGROUND",
+      "affected_views": ["O"]
+    },
+    {
+      "sources": [{"quote": "本次工作不得删除cache.db", "occurrence": 1}],
+      "claim_ids": ["c7", "c9"],
+      "status": "EXPRESSED",
+      "affected_views": ["B"]
+    },
+    {
+      "sources": [
+        {"quote": "本次工作", "occurrence": 1},
+        {"quote": "也不得重启服务", "occurrence": 1}
+      ],
+      "claim_ids": ["c8", "c9"],
+      "status": "EXPRESSED",
+      "affected_views": ["B"]
+    }
+  ]
+}

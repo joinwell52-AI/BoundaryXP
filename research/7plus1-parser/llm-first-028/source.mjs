@@ -1,10 +1,11 @@
 import crypto from 'node:crypto';
 export const sha256=x=>crypto.createHash('sha256').update(x).digest('hex');
 export function prepareSource(bytes){
+ if(bytes.length>4096)throw Error('SOURCE_BYTE_LIMIT');
  const text=new TextDecoder('utf-8',{fatal:true,ignoreBOM:true}).decode(bytes);
  if(Buffer.from(text,'utf8').compare(Buffer.from(bytes))!==0)throw Error('SOURCE_UTF8_ROUNDTRIP_FAILED');
  const chars=Array.from(text);
- if(!chars.length)throw Error('EMPTY_SOURCE');
+ if(!text.replaceAll('\uFEFF','').trim())throw Error('EMPTY_SOURCE');
  if(chars.length>300)throw Error('SHORT_TEXT_SCOPE_EXCEEDED: input preserved, not truncated');
  let start=0;
  const lines=text.split('\n').map((t,i)=>{const row={id:`L${i+1}`,text:t,span:[start,start+Array.from(t).length]};start=row.span[1]+1;return row;});
