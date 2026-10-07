@@ -1,0 +1,134 @@
+{
+  "contract_version": "028-r02.2",
+  "reviews": [
+    {
+      "subject_id": "ent_pm",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [{"quote": "请PM读取a.csv和b.csv。", "occurrence": 1}],
+      "reason": "原文明确提及PM，作为人员实体合理。"
+    },
+    {
+      "subject_id": "ent_a",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [{"quote": "a.csv", "occurrence": 1}],
+      "reason": "原文明示该文件。"
+    },
+    {
+      "subject_id": "ent_b",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [{"quote": "b.csv", "occurrence": 1}],
+      "reason": "原文明示该文件。"
+    },
+    {
+      "subject_id": "ent_c",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [{"quote": "c.csv", "occurrence": 1}],
+      "reason": "原文明示该文件。"
+    },
+    {
+      "subject_id": "ent_ref",
+      "field_path": "",
+      "verdict": "UNCERTAIN",
+      "context_refs": ["ent_a", "ent_b"],
+      "sources": [
+        {"quote": "a.csv和b.csv", "occurrence": 1},
+        {"quote": "该文件", "occurrence": 1}
+      ],
+      "reason": "保留两个指代候选合理，但原文不能确定该文件唯一指向哪一个。"
+    },
+    {
+      "subject_id": "ev_read",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [{"quote": "请PM读取a.csv和b.csv。", "occurrence": 1}],
+      "reason": "读取是当前明确要求的主动作，无附加条件或量化限制。"
+    },
+    {
+      "subject_id": "ev_compare",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [{"quote": "将该文件与c.csv比较。", "occurrence": 1}],
+      "reason": "比较是当前明确要求的主动作；对象身份局部未决不否定比较要求本身。"
+    },
+    {
+      "subject_id": "cl_read_pm",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["ev_read", "ent_pm"],
+      "sources": [{"quote": "请PM读取a.csv和b.csv。", "occurrence": 1}],
+      "reason": "PM明确是读取动作的执行者。"
+    },
+    {
+      "subject_id": "cl_read_a",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["ev_read", "ent_a"],
+      "sources": [{"quote": "读取a.csv和b.csv", "occurrence": 1}],
+      "reason": "a.csv是明确的外部读取对象，不依赖后句指代消解。"
+    },
+    {
+      "subject_id": "cl_read_b",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["ev_read", "ent_b"],
+      "sources": [{"quote": "读取a.csv和b.csv", "occurrence": 1}],
+      "reason": "b.csv是明确的外部读取对象，不依赖后句指代消解。"
+    },
+    {
+      "subject_id": "cl_compare_pm",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["ev_compare", "ent_pm"],
+      "sources": [
+        {"quote": "请PM读取a.csv和b.csv。", "occurrence": 1},
+        {"quote": "将该文件与c.csv比较。", "occurrence": 1}
+      ],
+      "reason": "连续命令未切换主体，比较承接前句PM作为执行者合理，且来源包含两端。"
+    },
+    {
+      "subject_id": "cl_compare_ref",
+      "field_path": "entity_id",
+      "verdict": "UNCERTAIN",
+      "context_refs": ["ent_ref", "ev_compare"],
+      "sources": [
+        {"quote": "a.csv和b.csv", "occurrence": 1},
+        {"quote": "将该文件与c.csv比较。", "occurrence": 1}
+      ],
+      "reason": "绑定到未决指代并保留身份依赖是合理表达，但该比较对象的具体文件身份仍不能确定。"
+    },
+    {
+      "subject_id": "cl_compare_c",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["ev_compare", "ent_c"],
+      "sources": [{"quote": "将该文件与c.csv比较。", "occurrence": 1}],
+      "reason": "c.csv明确是比较的另一外部对象，其身份和用途不依赖该文件的指代消解。"
+    }
+  ],
+  "issues": [
+    {
+      "id": "audit_ref_identity",
+      "issue_kind": "IDENTITY",
+      "subject_ids": ["ent_ref"],
+      "field_path": "alternatives",
+      "context_refs": ["ent_a", "ent_b", "cl_compare_ref"],
+      "sources": [
+        {"quote": "a.csv和b.csv", "occurrence": 1},
+        {"quote": "该文件", "occurrence": 1}
+      ],
+      "reason": "原文存在局部指代歧义，候选已正确保留合理备选。应保持身份及依赖该身份的比较用途未决，无须猜选唯一文件；此疑点不影响明确读取用途、PM参与关系或c.csv的比较用途。",
+      "suggested_json": null
+    }
+  ],
+  "omissions": []
+}

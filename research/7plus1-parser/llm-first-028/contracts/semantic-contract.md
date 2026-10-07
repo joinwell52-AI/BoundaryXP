@@ -1,0 +1,54 @@
+# BoundX 语义合同 028-r02.2
+
+依据 v0.4/r02。两个 Skill、Schema、Γ 和编译器共用本合同。模型提交候选；宿主的 ACCEPTED 仅代表有限技术检查与审阅支持，不证明自然语言真值。
+
+## 维度及用途
+
+I 是明确输入/作用域，O 是交付结果，A 是当前要求/允许动作，P 是逐事件参与关系，R 是执行量化限制，V 是规范依据，C 是根任务完成/停止，B 是禁止/限制。八个维度是同一关联结构的视图，不是词语桶。不能由岗位推权限，不能补 WP、默认执行者或业务授权。
+
+实体有稳定 id、label、type、mentions 和 alternatives，不具有排他的全局槽位。FILE、PERSON、SYSTEM、DOCUMENT、GROUP、REFERENT、OTHER 是身份类型；角色与用途属于具体事件。生成的结果被复核、提交仍是同一实体，但这些内部用途不是外部输入。
+
+## 数据约定
+
+顶层 contract_version 固定为 028-r02.2；entities/events/claims/expressions/issues/coverage 六个数组。所有 id 全图唯一，ROOT 是保留根任务标记。每项来源 sources/mentions 均使用真实非空 quote + occurrence（从 1 开始的完全相同字符串出现次数）。不要输出猜测偏移；宿主按 Unicode 码点定位。跨句指代/共享主体要引用两端；抽象状态可用多个片段，不伪造连续引文。
+
+events：predicate 是模型解释的规范动作/状态名称（使用简洁中文），kind 为 ACTION/STATE；layer 是 MAIN/CONDITION/QUOTED/MODIFIER/PURPOSE/CONTENT/BACKGROUND；use 是 CURRENT_TASK/MENTION_ONLY；modality 为 REQUIRED/PERMITTED/NOT_REQUIRED/FORBIDDEN/UNSTATED；polarity 是 POSITIVE/NEGATIVE；owner_id 为 ROOT 或结构父事件；constraint_ids 是约束此事件的全部 CONDITION/QUANTITY/TEMPORAL 主张；requires 仅列真正必需的语义依赖。owner 和共现不是证明依赖。
+
+claims 按 kind 区分：
+
+- ROLE：event_id + entity_id + role。参与角色 PERFORMER/ORGANIZER/REVIEWER/APPROVER/RECIPIENT/COLLABORATOR；对象用途 INPUT_OBJECT/OBJECT/RESULT/BASIS/CONTENT。INPUT_OBJECT 是明确外部输入/受检范围；OBJECT 是内部产物或普通动作对象，不自动进 I；RESULT 是该动作产物；BASIS 是对该用途有约束的依据。组织不等于执行。CURRENT_TASK 的明确参与关系进 P；纯条件/引文参与者不增义务。
+- CONDITION：event_id 为被约束事件；expression_id 为条件表达式；direction 为 NECESSARY/SUFFICIENT/IFF；temporal 可为 AFTER/BEFORE/null。事件的 constraint_ids 必须回指该主张，缺失或不对称会拦截而不是变无条件许可。
+- TEMPORAL：event_id + expression_id + direction=ORDER + temporal=AFTER/BEFORE；保留单纯先后，不假装是充分因果。
+- QUANTITY：event_id + quantity；quantity 的 metric、target_id、comparator(EQ/LT/LTE/GT/GTE)、value、unit、use(EXECUTION_LIMIT/OUTPUT_CONTENT/COMPLETION_THRESHOLD/CLASSIFICATION_THRESHOLD)、count_scope 全部明确。count_scope 引用 ROOT、事件或实体。R 只收 EXECUTION_LIMIT；输出内容数量挂到 O，不变成资源次数。
+- COMPLETION/STOP：event_id=null，scope_id=ROOT，expression_id + direction 指明根任务触发/前提；只有才=NECESSARY，即=SUFFICIENT。条件状态未知不妨碍表达。STOP 可包含停止/中止/升级语义 note，不能抹成完成。
+- SCOPE：event_id 可空，expression_id 描述明确作用范围，scope_id 指出目标；不能从禁止对象推外部输入。
+
+每个 claim 的不适用字段填 null，requires 只引用必需身份/语义主张；sources 和 note 始终保留。每个事件和角色独立审阅。FORBIDDEN 事件进 B 而不是 A，NOT_REQUIRED 保留撤回义务不进 A/B；UNSTATED 不能冒充允许。layer 本身不代替 use，但 QUOTED/MODIFIER/PURPOSE/CONTENT/BACKGROUND 的 MENTION_ONLY 事件不是任务动作。目的补语不自动增加独立义务。条件中的批准/复核不自动要求其发生。
+
+## 表达式与条件
+
+expressions 的 op 为 STATE/ITEM/ALL/ANY/UNION/INTERSECTION/EXCEPT/AND/OR/NOT。STATE 的 state 包含 predicate、event_id（可空）、args（实体/事件/ROOT 引用）、polarity；表示有参数状态，不表示已观测为真。ITEM 的 operands 恰为一个实体引用。其他 operands 是表达式引用：NOT 恰一个；EXCEPT 恰两个；AND/OR/ALL/ANY/UNION/INTERSECTION 至少两个。只解释固定操作符，绝不执行模型代码。
+
+必要前提限制目标动作，充分触发在前提成立时触发目标，IFF 双向，ORDER 仅时序。保持条件方向、目标、极性与时间；不能把有前提的许可编译成无条件许可，也不能把“即完成”改成唯一完成条件。
+
+**方向不可由模态整类套用。** “在某范围内必须/不得做某事”是范围成立足以触发该义务/禁止，通常为 SUFFICIENT；不能将“该范围触发禁止”写成“只有该范围才可能禁止”的 NECESSARY。必要的许可前提与充分的禁止触发分别表达，不能共用方向。未发生状态使用 NOT(已发生状态) 或带 NEGATIVE 极性的状态；纯时间 BEFORE 只描述先后，不能要求未来参照事件已经发生才判断前置范围。不得省掉禁止方向/范围，不推定任何状态的真实运行值。
+
+## 未指定、歧义与覆盖
+
+issues 的 kind 为 AMBIGUITY/UNSPECIFIED/COVERAGE_GAP，subject_ids 和 field_path 指向实际影响主张，alternatives 保留合理备选，affected_views 仅定位影响范围，不签发槽位状态。执行者未指定通常 UNSPECIFIED/OPEN_FOR_REFINEMENT，不阻断已明确动作；REFERENT 的多个 alternatives 是真实身份歧义，依赖该身份的用途保持 UNRESOLVED，不能污染同文件的其他明确用途。
+
+coverage 从原文每项动作/要求/禁止/条件/数量/例外出发，sources + claim_ids + status(EXPRESSED/BACKGROUND/UNSPECIFIED/GAP) + affected_views。一条原文可含多项，字符覆盖不是语义覆盖证明。GAP 不能显示 ABSENT。缺省维度开放不是业务授权。
+
+## 审阅合同
+
+audit.contract_version 同版本，reviews 为每个 entity/event/claim/expression id 提供独立 verdict；subject_id + field_path 是直接质疑目标，context_refs 只解释背景，不是待拒绝集合。SUPPORT/CONTRADICT/UNCERTAIN，带真实 sources 和短 reason。issues 记录 issue_kind、subject_ids、field_path、context_refs、sources、reason 和 suggested_json（仅建议，不执行）。omissions 是原文明确信息漏项，提供来源与 affected_views。不能把审阅一致当真值证明。对一个比较对象的疑问不影响其他读取；身份本身歧义才影响依赖它的用途。
+
+改变主张只能通过一次显式解析修订 + 新会话审阅，旧候选和意见不覆盖。宿主仅提供真实疑点，不提供评测答案。审阅补充未经重验不会直接成为事实。
+
+## 技术策略与投影
+
+Γ 逐主张检查来源、Schema、唯一引用、签名、约束双向绑定、表达式参数、量化目标/单位、必需依赖闭合和循环、直接审阅及身份竞争。完整来源+SUPPORT+有限检查通过可 ACCEPTED；疑点局部 UNRESOLVED；技术坏结构 REJECTED。仅沿 requires 和实际角色身份/事件/约束依赖传播，不沿 owner/context 共现扩散。所有结果保存检查路径。
+
+Q 固定消费用途，不用 predicate 字符串选槽：当前 REQUIRED/PERMITTED 事件→A；FORBIDDEN→B；ROLE INPUT_OBJECT→I、RESULT→O、BASIS→V、参与角色→P；EXECUTION_LIMIT→R；OUTPUT_CONTENT挂O；根 COMPLETION/STOP→C；SCOPE→其明确范围用途。I/O/V 正向用途要求关联事件当前正向，内部 OBJECT 不自动 I。约束、对象与参与者留在同一事件事实，不做笛卡尔积。中文从同一 IR 渲染。NOT_REQUIRED、mention-only、未指定和缺口另列而非丢弃。business_decision/execution_authorization 固定 null。
+
+字段到代码的映射见 FIELD-MAP.md。Schema 由 schema.mjs 唯一生成；模型与宿主使用同一文件摘要。

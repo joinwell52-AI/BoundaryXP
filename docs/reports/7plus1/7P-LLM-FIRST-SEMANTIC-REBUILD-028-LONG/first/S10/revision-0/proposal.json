@@ -1,0 +1,401 @@
+{
+  "contract_version": "028-r02.1",
+  "entities": [
+    {
+      "id": "E1",
+      "label": "PM",
+      "type": "PERSON",
+      "mentions": [
+        {
+          "quote": "PM",
+          "occurrence": 1
+        }
+      ],
+      "alternatives": []
+    },
+    {
+      "id": "E2",
+      "label": "note.md",
+      "type": "FILE",
+      "mentions": [
+        {
+          "quote": "note.md",
+          "occurrence": 1
+        },
+        {
+          "quote": "文中",
+          "occurrence": 1
+        }
+      ],
+      "alternatives": []
+    },
+    {
+      "id": "E3",
+      "label": "删除cache.db（引用内容）",
+      "type": "OTHER",
+      "mentions": [
+        {
+          "quote": "删除cache.db",
+          "occurrence": 1
+        }
+      ],
+      "alternatives": []
+    },
+    {
+      "id": "E4",
+      "label": "cache.db",
+      "type": "FILE",
+      "mentions": [
+        {
+          "quote": "cache.db",
+          "occurrence": 1
+        }
+      ],
+      "alternatives": []
+    },
+    {
+      "id": "E5",
+      "label": "任何文件",
+      "type": "GROUP",
+      "mentions": [
+        {
+          "quote": "任何文件",
+          "occurrence": 1
+        }
+      ],
+      "alternatives": []
+    }
+  ],
+  "events": [
+    {
+      "id": "A1",
+      "predicate": "生成",
+      "kind": "ACTION",
+      "layer": "MAIN",
+      "use": "CURRENT_TASK",
+      "modality": "REQUIRED",
+      "polarity": "POSITIVE",
+      "owner_id": "ROOT",
+      "constraint_ids": [],
+      "requires": [],
+      "sources": [
+        {
+          "quote": "请PM生成note.md",
+          "occurrence": 1
+        }
+      ]
+    },
+    {
+      "id": "A2",
+      "predicate": "引用",
+      "kind": "ACTION",
+      "layer": "MAIN",
+      "use": "CURRENT_TASK",
+      "modality": "REQUIRED",
+      "polarity": "POSITIVE",
+      "owner_id": "ROOT",
+      "constraint_ids": [],
+      "requires": [],
+      "sources": [
+        {
+          "quote": "请PM生成note.md",
+          "occurrence": 1
+        },
+        {
+          "quote": "在文中引用“删除cache.db”",
+          "occurrence": 1
+        }
+      ]
+    },
+    {
+      "id": "A3",
+      "predicate": "删除",
+      "kind": "ACTION",
+      "layer": "QUOTED",
+      "use": "MENTION_ONLY",
+      "modality": "UNSTATED",
+      "polarity": "POSITIVE",
+      "owner_id": "A2",
+      "constraint_ids": [],
+      "requires": [],
+      "sources": [
+        {
+          "quote": "删除cache.db",
+          "occurrence": 1
+        }
+      ]
+    },
+    {
+      "id": "A4",
+      "predicate": "删除",
+      "kind": "ACTION",
+      "layer": "MAIN",
+      "use": "CURRENT_TASK",
+      "modality": "FORBIDDEN",
+      "polarity": "POSITIVE",
+      "owner_id": "ROOT",
+      "constraint_ids": [],
+      "requires": [],
+      "sources": [
+        {
+          "quote": "本任务不得删除任何文件",
+          "occurrence": 1
+        }
+      ]
+    }
+  ],
+  "claims": [
+    {
+      "id": "C1",
+      "kind": "ROLE",
+      "event_id": "A1",
+      "entity_id": "E1",
+      "role": "PERFORMER",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "scope_id": "A1",
+      "requires": [],
+      "sources": [
+        {
+          "quote": "请PM生成note.md",
+          "occurrence": 1
+        }
+      ],
+      "note": ""
+    },
+    {
+      "id": "C2",
+      "kind": "ROLE",
+      "event_id": "A1",
+      "entity_id": "E2",
+      "role": "RESULT",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "scope_id": "A1",
+      "requires": [],
+      "sources": [
+        {
+          "quote": "生成note.md",
+          "occurrence": 1
+        }
+      ],
+      "note": ""
+    },
+    {
+      "id": "C3",
+      "kind": "ROLE",
+      "event_id": "A2",
+      "entity_id": "E1",
+      "role": "PERFORMER",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "scope_id": "A2",
+      "requires": [],
+      "sources": [
+        {
+          "quote": "请PM生成note.md",
+          "occurrence": 1
+        },
+        {
+          "quote": "在文中引用“删除cache.db”",
+          "occurrence": 1
+        }
+      ],
+      "note": "并列命令沿用PM为执行者。"
+    },
+    {
+      "id": "C4",
+      "kind": "ROLE",
+      "event_id": "A2",
+      "entity_id": "E2",
+      "role": "OBJECT",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "scope_id": "A2",
+      "requires": [],
+      "sources": [
+        {
+          "quote": "生成note.md",
+          "occurrence": 1
+        },
+        {
+          "quote": "在文中引用",
+          "occurrence": 1
+        }
+      ],
+      "note": "文中指生成的note.md，属于内部产物用途。"
+    },
+    {
+      "id": "C5",
+      "kind": "ROLE",
+      "event_id": "A2",
+      "entity_id": "E3",
+      "role": "CONTENT",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "scope_id": "A2",
+      "requires": [],
+      "sources": [
+        {
+          "quote": "引用“删除cache.db”",
+          "occurrence": 1
+        }
+      ],
+      "note": "要求引用该文字，不要求执行其中的删除动作。"
+    },
+    {
+      "id": "C6",
+      "kind": "ROLE",
+      "event_id": "A3",
+      "entity_id": "E4",
+      "role": "OBJECT",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "scope_id": "A3",
+      "requires": [],
+      "sources": [
+        {
+          "quote": "删除cache.db",
+          "occurrence": 1
+        }
+      ],
+      "note": "仅为引文中的动作对象。"
+    },
+    {
+      "id": "C7",
+      "kind": "ROLE",
+      "event_id": "A4",
+      "entity_id": "E5",
+      "role": "OBJECT",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "scope_id": "A4",
+      "requires": [],
+      "sources": [
+        {
+          "quote": "本任务不得删除任何文件",
+          "occurrence": 1
+        }
+      ],
+      "note": "任务范围内禁止删除任何文件；禁止对象不构成外部输入。"
+    }
+  ],
+  "expressions": [],
+  "issues": [
+    {
+      "id": "U1",
+      "kind": "UNSPECIFIED",
+      "subject_ids": [
+        "A4"
+      ],
+      "field_path": "claims.role=PERFORMER",
+      "alternatives": [],
+      "affected_views": [
+        "P"
+      ],
+      "sources": [
+        {
+          "quote": "本任务不得删除任何文件",
+          "occurrence": 1
+        }
+      ],
+      "note": "禁止以本任务为范围，未单独指定删除动作的执行者；不影响禁止本身。"
+    }
+  ],
+  "coverage": [
+    {
+      "sources": [
+        {
+          "quote": "请PM生成note.md",
+          "occurrence": 1
+        }
+      ],
+      "claim_ids": [
+        "C1",
+        "C2"
+      ],
+      "status": "EXPRESSED",
+      "affected_views": [
+        "A",
+        "P",
+        "O"
+      ]
+    },
+    {
+      "sources": [
+        {
+          "quote": "在文中引用“删除cache.db”",
+          "occurrence": 1
+        }
+      ],
+      "claim_ids": [
+        "C3",
+        "C4",
+        "C5"
+      ],
+      "status": "EXPRESSED",
+      "affected_views": [
+        "A",
+        "P",
+        "O"
+      ]
+    },
+    {
+      "sources": [
+        {
+          "quote": "删除cache.db",
+          "occurrence": 1
+        }
+      ],
+      "claim_ids": [
+        "C6"
+      ],
+      "status": "BACKGROUND",
+      "affected_views": [
+        "A"
+      ]
+    },
+    {
+      "sources": [
+        {
+          "quote": "本任务不得删除任何文件",
+          "occurrence": 1
+        }
+      ],
+      "claim_ids": [
+        "C7"
+      ],
+      "status": "EXPRESSED",
+      "affected_views": [
+        "B"
+      ]
+    },
+    {
+      "sources": [
+        {
+          "quote": "本任务不得删除任何文件",
+          "occurrence": 1
+        }
+      ],
+      "claim_ids": [],
+      "status": "UNSPECIFIED",
+      "affected_views": [
+        "P"
+      ]
+    }
+  ]
+}

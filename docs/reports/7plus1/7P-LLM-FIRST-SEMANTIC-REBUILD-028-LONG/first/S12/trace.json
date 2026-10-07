@@ -1,0 +1,6570 @@
+{
+  "source": {
+    "text": "请PM组织检查被监测的服务，并形成status.md；具体检查执行者未指定。",
+    "sha256": "37e867dd769f87438f89f665706018f7bf395a62ad61b9daf7677fd8cbbf52ee",
+    "encoding": "UTF-8",
+    "codepoints": 38,
+    "lines": [
+      {
+        "id": "L1",
+        "text": "请PM组织检查被监测的服务，并形成status.md；具体检查执行者未指定。",
+        "span": [
+          0,
+          38
+        ]
+      }
+    ],
+    "literals": [
+      {
+        "text": "status.md",
+        "span": [
+          17,
+          26
+        ]
+      }
+    ]
+  },
+  "proposal": {
+    "contract_version": "028-r02.1",
+    "entities": [
+      {
+        "id": "ent_pm",
+        "label": "PM",
+        "type": "PERSON",
+        "mentions": [
+          {
+            "quote": "PM",
+            "occurrence": 1
+          }
+        ],
+        "alternatives": []
+      },
+      {
+        "id": "ent_service",
+        "label": "被监测的服务",
+        "type": "SYSTEM",
+        "mentions": [
+          {
+            "quote": "被监测的服务",
+            "occurrence": 1
+          }
+        ],
+        "alternatives": []
+      },
+      {
+        "id": "ent_status",
+        "label": "status.md",
+        "type": "FILE",
+        "mentions": [
+          {
+            "quote": "status.md",
+            "occurrence": 1
+          }
+        ],
+        "alternatives": []
+      }
+    ],
+    "events": [
+      {
+        "id": "evt_organize",
+        "predicate": "组织检查",
+        "kind": "ACTION",
+        "layer": "MAIN",
+        "use": "CURRENT_TASK",
+        "modality": "REQUIRED",
+        "polarity": "POSITIVE",
+        "owner_id": "ROOT",
+        "constraint_ids": [],
+        "requires": [],
+        "sources": [
+          {
+            "quote": "请PM组织检查被监测的服务",
+            "occurrence": 1
+          }
+        ]
+      },
+      {
+        "id": "evt_check",
+        "predicate": "检查",
+        "kind": "ACTION",
+        "layer": "MAIN",
+        "use": "CURRENT_TASK",
+        "modality": "REQUIRED",
+        "polarity": "POSITIVE",
+        "owner_id": "evt_organize",
+        "constraint_ids": [],
+        "requires": [],
+        "sources": [
+          {
+            "quote": "检查被监测的服务",
+            "occurrence": 1
+          }
+        ]
+      },
+      {
+        "id": "evt_monitored",
+        "predicate": "被监测",
+        "kind": "STATE",
+        "layer": "MODIFIER",
+        "use": "MENTION_ONLY",
+        "modality": "UNSTATED",
+        "polarity": "POSITIVE",
+        "owner_id": "evt_check",
+        "constraint_ids": [],
+        "requires": [],
+        "sources": [
+          {
+            "quote": "被监测的服务",
+            "occurrence": 1
+          }
+        ]
+      },
+      {
+        "id": "evt_create",
+        "predicate": "形成文件",
+        "kind": "ACTION",
+        "layer": "MAIN",
+        "use": "CURRENT_TASK",
+        "modality": "REQUIRED",
+        "polarity": "POSITIVE",
+        "owner_id": "ROOT",
+        "constraint_ids": [],
+        "requires": [],
+        "sources": [
+          {
+            "quote": "请PM",
+            "occurrence": 1
+          },
+          {
+            "quote": "并形成status.md",
+            "occurrence": 1
+          }
+        ]
+      }
+    ],
+    "claims": [
+      {
+        "id": "cl_organize_performer",
+        "kind": "ROLE",
+        "event_id": "evt_organize",
+        "entity_id": "ent_pm",
+        "role": "PERFORMER",
+        "expression_id": null,
+        "direction": null,
+        "temporal": null,
+        "quantity": null,
+        "scope_id": "evt_organize",
+        "requires": [],
+        "sources": [
+          {
+            "quote": "请PM组织检查",
+            "occurrence": 1
+          }
+        ],
+        "note": "PM执行组织工作。"
+      },
+      {
+        "id": "cl_check_organizer",
+        "kind": "ROLE",
+        "event_id": "evt_check",
+        "entity_id": "ent_pm",
+        "role": "ORGANIZER",
+        "expression_id": null,
+        "direction": null,
+        "temporal": null,
+        "quantity": null,
+        "scope_id": "evt_check",
+        "requires": [],
+        "sources": [
+          {
+            "quote": "请PM组织检查",
+            "occurrence": 1
+          }
+        ],
+        "note": "组织者不自动成为具体检查执行者。"
+      },
+      {
+        "id": "cl_check_input",
+        "kind": "ROLE",
+        "event_id": "evt_check",
+        "entity_id": "ent_service",
+        "role": "INPUT_OBJECT",
+        "expression_id": null,
+        "direction": null,
+        "temporal": null,
+        "quantity": null,
+        "scope_id": "evt_check",
+        "requires": [],
+        "sources": [
+          {
+            "quote": "检查被监测的服务",
+            "occurrence": 1
+          }
+        ],
+        "note": "明确受检范围为被监测的服务。"
+      },
+      {
+        "id": "cl_monitored_object",
+        "kind": "ROLE",
+        "event_id": "evt_monitored",
+        "entity_id": "ent_service",
+        "role": "OBJECT",
+        "expression_id": null,
+        "direction": null,
+        "temporal": null,
+        "quantity": null,
+        "scope_id": "evt_monitored",
+        "requires": [],
+        "sources": [
+          {
+            "quote": "被监测的服务",
+            "occurrence": 1
+          }
+        ],
+        "note": "定语描述服务状态，不增加监测命令。"
+      },
+      {
+        "id": "cl_create_performer",
+        "kind": "ROLE",
+        "event_id": "evt_create",
+        "entity_id": "ent_pm",
+        "role": "PERFORMER",
+        "expression_id": null,
+        "direction": null,
+        "temporal": null,
+        "quantity": null,
+        "scope_id": "evt_create",
+        "requires": [],
+        "sources": [
+          {
+            "quote": "请PM",
+            "occurrence": 1
+          },
+          {
+            "quote": "并形成status.md",
+            "occurrence": 1
+          }
+        ],
+        "note": "并列谓语沿用PM作为主体；后句未指定仅针对具体检查执行者。"
+      },
+      {
+        "id": "cl_create_result",
+        "kind": "ROLE",
+        "event_id": "evt_create",
+        "entity_id": "ent_status",
+        "role": "RESULT",
+        "expression_id": null,
+        "direction": null,
+        "temporal": null,
+        "quantity": null,
+        "scope_id": "evt_create",
+        "requires": [],
+        "sources": [
+          {
+            "quote": "形成status.md",
+            "occurrence": 1
+          }
+        ],
+        "note": "status.md为要求形成的产物。"
+      }
+    ],
+    "expressions": [],
+    "issues": [
+      {
+        "id": "issue_check_performer",
+        "kind": "UNSPECIFIED",
+        "subject_ids": [
+          "evt_check"
+        ],
+        "field_path": "claims[ROLE,event_id=evt_check,role=PERFORMER]",
+        "alternatives": [],
+        "affected_views": [
+          "P"
+        ],
+        "sources": [
+          {
+            "quote": "具体检查执行者未指定",
+            "occurrence": 1
+          }
+        ],
+        "note": "原文明示检查执行者未指定，保留检查义务，不补默认执行者。"
+      }
+    ],
+    "coverage": [
+      {
+        "sources": [
+          {
+            "quote": "请PM组织检查",
+            "occurrence": 1
+          }
+        ],
+        "claim_ids": [
+          "cl_organize_performer",
+          "cl_check_organizer"
+        ],
+        "status": "EXPRESSED",
+        "affected_views": [
+          "A",
+          "P"
+        ]
+      },
+      {
+        "sources": [
+          {
+            "quote": "检查被监测的服务",
+            "occurrence": 1
+          }
+        ],
+        "claim_ids": [
+          "cl_check_input"
+        ],
+        "status": "EXPRESSED",
+        "affected_views": [
+          "I",
+          "A"
+        ]
+      },
+      {
+        "sources": [
+          {
+            "quote": "被监测的服务",
+            "occurrence": 1
+          }
+        ],
+        "claim_ids": [
+          "cl_monitored_object"
+        ],
+        "status": "BACKGROUND",
+        "affected_views": [
+          "I"
+        ]
+      },
+      {
+        "sources": [
+          {
+            "quote": "请PM",
+            "occurrence": 1
+          },
+          {
+            "quote": "并形成status.md",
+            "occurrence": 1
+          }
+        ],
+        "claim_ids": [
+          "cl_create_performer",
+          "cl_create_result"
+        ],
+        "status": "EXPRESSED",
+        "affected_views": [
+          "A",
+          "P",
+          "O"
+        ]
+      },
+      {
+        "sources": [
+          {
+            "quote": "具体检查执行者未指定",
+            "occurrence": 1
+          }
+        ],
+        "claim_ids": [],
+        "status": "UNSPECIFIED",
+        "affected_views": [
+          "P"
+        ]
+      }
+    ]
+  },
+  "audit": {
+    "contract_version": "028-r02.1",
+    "reviews": [
+      {
+        "subject_id": "ent_pm",
+        "field_path": "",
+        "verdict": "SUPPORT",
+        "context_refs": [],
+        "sources": [
+          {
+            "quote": "PM",
+            "occurrence": 1
+          }
+        ],
+        "reason": "原文明示PM为参与者；该实体身份不自行赋予检查执行职责。"
+      },
+      {
+        "subject_id": "ent_service",
+        "field_path": "",
+        "verdict": "SUPPORT",
+        "context_refs": [],
+        "sources": [
+          {
+            "quote": "被监测的服务",
+            "occurrence": 1
+          }
+        ],
+        "reason": "原文明示受检服务，以SYSTEM表示合理。"
+      },
+      {
+        "subject_id": "ent_status",
+        "field_path": "",
+        "verdict": "SUPPORT",
+        "context_refs": [],
+        "sources": [
+          {
+            "quote": "status.md",
+            "occurrence": 1
+          }
+        ],
+        "reason": "原文明示要求形成的文件名称。"
+      },
+      {
+        "subject_id": "evt_organize",
+        "field_path": "",
+        "verdict": "SUPPORT",
+        "context_refs": [],
+        "sources": [
+          {
+            "quote": "请PM组织检查被监测的服务",
+            "occurrence": 1
+          }
+        ],
+        "reason": "组织检查是当前明确要求的主动作，无明示条件或数量限制。"
+      },
+      {
+        "subject_id": "evt_check",
+        "field_path": "",
+        "verdict": "SUPPORT",
+        "context_refs": [
+          "evt_organize"
+        ],
+        "sources": [
+          {
+            "quote": "请PM组织检查被监测的服务",
+            "occurrence": 1
+          },
+          {
+            "quote": "具体检查执行者未指定",
+            "occurrence": 1
+          }
+        ],
+        "reason": "检查是要求组织开展的实际任务；执行者未指定不撤销检查要求。"
+      },
+      {
+        "subject_id": "evt_monitored",
+        "field_path": "",
+        "verdict": "SUPPORT",
+        "context_refs": [
+          "ent_service"
+        ],
+        "sources": [
+          {
+            "quote": "被监测的服务",
+            "occurrence": 1
+          }
+        ],
+        "reason": "被监测是限定服务的状态描述，保留为定语层提及，不增加监测义务。"
+      },
+      {
+        "subject_id": "evt_create",
+        "field_path": "",
+        "verdict": "SUPPORT",
+        "context_refs": [],
+        "sources": [
+          {
+            "quote": "请PM",
+            "occurrence": 1
+          },
+          {
+            "quote": "并形成status.md",
+            "occurrence": 1
+          }
+        ],
+        "reason": "形成文件是并列的当前要求；原文未设前提、期限或根任务完成条件。"
+      },
+      {
+        "subject_id": "cl_organize_performer",
+        "field_path": "",
+        "verdict": "SUPPORT",
+        "context_refs": [
+          "evt_organize",
+          "ent_pm"
+        ],
+        "sources": [
+          {
+            "quote": "请PM组织检查",
+            "occurrence": 1
+          }
+        ],
+        "reason": "PM执行组织工作，PERFORMER绑定组织事件恰当。"
+      },
+      {
+        "subject_id": "cl_check_organizer",
+        "field_path": "",
+        "verdict": "SUPPORT",
+        "context_refs": [
+          "evt_check",
+          "ent_pm"
+        ],
+        "sources": [
+          {
+            "quote": "请PM组织检查",
+            "occurrence": 1
+          },
+          {
+            "quote": "具体检查执行者未指定",
+            "occurrence": 1
+          }
+        ],
+        "reason": "PM是检查的组织者；候选未将其推定为具体检查执行者。"
+      },
+      {
+        "subject_id": "cl_check_input",
+        "field_path": "",
+        "verdict": "SUPPORT",
+        "context_refs": [
+          "evt_check",
+          "ent_service"
+        ],
+        "sources": [
+          {
+            "quote": "检查被监测的服务",
+            "occurrence": 1
+          }
+        ],
+        "reason": "被监测的服务是明确受检范围，符合INPUT_OBJECT用途。"
+      },
+      {
+        "subject_id": "cl_monitored_object",
+        "field_path": "",
+        "verdict": "SUPPORT",
+        "context_refs": [
+          "evt_monitored",
+          "ent_service"
+        ],
+        "sources": [
+          {
+            "quote": "被监测的服务",
+            "occurrence": 1
+          }
+        ],
+        "reason": "服务是被监测状态的对象；该关系处于定语提及事件，不产生当前监测要求。"
+      },
+      {
+        "subject_id": "cl_create_performer",
+        "field_path": "",
+        "verdict": "SUPPORT",
+        "context_refs": [
+          "evt_create",
+          "ent_pm"
+        ],
+        "sources": [
+          {
+            "quote": "请PM",
+            "occurrence": 1
+          },
+          {
+            "quote": "并形成status.md",
+            "occurrence": 1
+          },
+          {
+            "quote": "具体检查执行者未指定",
+            "occurrence": 1
+          }
+        ],
+        "reason": "并列谓语形成文件沿用PM为主体；未指定的范围明确限于具体检查执行者。"
+      },
+      {
+        "subject_id": "cl_create_result",
+        "field_path": "",
+        "verdict": "SUPPORT",
+        "context_refs": [
+          "evt_create",
+          "ent_status"
+        ],
+        "sources": [
+          {
+            "quote": "形成status.md",
+            "occurrence": 1
+          }
+        ],
+        "reason": "status.md是形成动作的产物，RESULT绑定正确，未误作外部输入。"
+      }
+    ],
+    "issues": [],
+    "omissions": []
+  },
+  "technical": {
+    "policy": "028-r02-technical-v1",
+    "schemas": {
+      "proposal": {
+        "ok": true,
+        "errors": []
+      },
+      "audit": {
+        "ok": true,
+        "errors": []
+      }
+    },
+    "rows": [
+      {
+        "id": "ent_pm",
+        "collection": "entities",
+        "status": "ACCEPTED",
+        "errors": [],
+        "uncertain": [],
+        "sources": [
+          {
+            "quote": "PM",
+            "occurrence": 1,
+            "span": [
+              1,
+              3
+            ],
+            "source_sha256": "37e867dd769f87438f89f665706018f7bf395a62ad61b9daf7677fd8cbbf52ee"
+          }
+        ],
+        "audit_refs": [
+          {
+            "subject_id": "ent_pm",
+            "field_path": "",
+            "verdict": "SUPPORT"
+          }
+        ],
+        "required_dependencies": [],
+        "structural_refs": []
+      },
+      {
+        "id": "ent_service",
+        "collection": "entities",
+        "status": "ACCEPTED",
+        "errors": [],
+        "uncertain": [],
+        "sources": [
+          {
+            "quote": "被监测的服务",
+            "occurrence": 1,
+            "span": [
+              7,
+              13
+            ],
+            "source_sha256": "37e867dd769f87438f89f665706018f7bf395a62ad61b9daf7677fd8cbbf52ee"
+          }
+        ],
+        "audit_refs": [
+          {
+            "subject_id": "ent_service",
+            "field_path": "",
+            "verdict": "SUPPORT"
+          }
+        ],
+        "required_dependencies": [],
+        "structural_refs": []
+      },
+      {
+        "id": "ent_status",
+        "collection": "entities",
+        "status": "ACCEPTED",
+        "errors": [],
+        "uncertain": [],
+        "sources": [
+          {
+            "quote": "status.md",
+            "occurrence": 1,
+            "span": [
+              17,
+              26
+            ],
+            "source_sha256": "37e867dd769f87438f89f665706018f7bf395a62ad61b9daf7677fd8cbbf52ee"
+          }
+        ],
+        "audit_refs": [
+          {
+            "subject_id": "ent_status",
+            "field_path": "",
+            "verdict": "SUPPORT"
+          }
+        ],
+        "required_dependencies": [],
+        "structural_refs": []
+      },
+      {
+        "id": "evt_organize",
+        "collection": "events",
+        "status": "ACCEPTED",
+        "errors": [],
+        "uncertain": [],
+        "sources": [
+          {
+            "quote": "请PM组织检查被监测的服务",
+            "occurrence": 1,
+            "span": [
+              0,
+              13
+            ],
+            "source_sha256": "37e867dd769f87438f89f665706018f7bf395a62ad61b9daf7677fd8cbbf52ee"
+          }
+        ],
+        "audit_refs": [
+          {
+            "subject_id": "evt_organize",
+            "field_path": "",
+            "verdict": "SUPPORT"
+          }
+        ],
+        "required_dependencies": [],
+        "structural_refs": [
+          "ROOT"
+        ]
+      },
+      {
+        "id": "evt_check",
+        "collection": "events",
+        "status": "ACCEPTED",
+        "errors": [],
+        "uncertain": [],
+        "sources": [
+          {
+            "quote": "检查被监测的服务",
+            "occurrence": 1,
+            "span": [
+              5,
+              13
+            ],
+            "source_sha256": "37e867dd769f87438f89f665706018f7bf395a62ad61b9daf7677fd8cbbf52ee"
+          }
+        ],
+        "audit_refs": [
+          {
+            "subject_id": "evt_check",
+            "field_path": "",
+            "verdict": "SUPPORT"
+          }
+        ],
+        "required_dependencies": [],
+        "structural_refs": [
+          "evt_organize"
+        ]
+      },
+      {
+        "id": "evt_monitored",
+        "collection": "events",
+        "status": "ACCEPTED",
+        "errors": [],
+        "uncertain": [],
+        "sources": [
+          {
+            "quote": "被监测的服务",
+            "occurrence": 1,
+            "span": [
+              7,
+              13
+            ],
+            "source_sha256": "37e867dd769f87438f89f665706018f7bf395a62ad61b9daf7677fd8cbbf52ee"
+          }
+        ],
+        "audit_refs": [
+          {
+            "subject_id": "evt_monitored",
+            "field_path": "",
+            "verdict": "SUPPORT"
+          }
+        ],
+        "required_dependencies": [],
+        "structural_refs": [
+          "evt_check"
+        ]
+      },
+      {
+        "id": "evt_create",
+        "collection": "events",
+        "status": "ACCEPTED",
+        "errors": [],
+        "uncertain": [],
+        "sources": [
+          {
+            "quote": "请PM",
+            "occurrence": 1,
+            "span": [
+              0,
+              3
+            ],
+            "source_sha256": "37e867dd769f87438f89f665706018f7bf395a62ad61b9daf7677fd8cbbf52ee"
+          },
+          {
+            "quote": "并形成status.md",
+            "occurrence": 1,
+            "span": [
+              14,
+              26
+            ],
+            "source_sha256": "37e867dd769f87438f89f665706018f7bf395a62ad61b9daf7677fd8cbbf52ee"
+          }
+        ],
+        "audit_refs": [
+          {
+            "subject_id": "evt_create",
+            "field_path": "",
+            "verdict": "SUPPORT"
+          }
+        ],
+        "required_dependencies": [],
+        "structural_refs": [
+          "ROOT"
+        ]
+      },
+      {
+        "id": "cl_organize_performer",
+        "collection": "claims",
+        "status": "ACCEPTED",
+        "errors": [],
+        "uncertain": [],
+        "sources": [
+          {
+            "quote": "请PM组织检查",
+            "occurrence": 1,
+            "span": [
+              0,
+              7
+            ],
+            "source_sha256": "37e867dd769f87438f89f665706018f7bf395a62ad61b9daf7677fd8cbbf52ee"
+          }
+        ],
+        "audit_refs": [
+          {
+            "subject_id": "cl_organize_performer",
+            "field_path": "",
+            "verdict": "SUPPORT"
+          }
+        ],
+        "required_dependencies": [],
+        "structural_refs": [
+          "evt_organize",
+          "ent_pm"
+        ]
+      },
+      {
+        "id": "cl_check_organizer",
+        "collection": "claims",
+        "status": "ACCEPTED",
+        "errors": [],
+        "uncertain": [],
+        "sources": [
+          {
+            "quote": "请PM组织检查",
+            "occurrence": 1,
+            "span": [
+              0,
+              7
+            ],
+            "source_sha256": "37e867dd769f87438f89f665706018f7bf395a62ad61b9daf7677fd8cbbf52ee"
+          }
+        ],
+        "audit_refs": [
+          {
+            "subject_id": "cl_check_organizer",
+            "field_path": "",
+            "verdict": "SUPPORT"
+          }
+        ],
+        "required_dependencies": [],
+        "structural_refs": [
+          "evt_check",
+          "ent_pm"
+        ]
+      },
+      {
+        "id": "cl_check_input",
+        "collection": "claims",
+        "status": "ACCEPTED",
+        "errors": [],
+        "uncertain": [],
+        "sources": [
+          {
+            "quote": "检查被监测的服务",
+            "occurrence": 1,
+            "span": [
+              5,
+              13
+            ],
+            "source_sha256": "37e867dd769f87438f89f665706018f7bf395a62ad61b9daf7677fd8cbbf52ee"
+          }
+        ],
+        "audit_refs": [
+          {
+            "subject_id": "cl_check_input",
+            "field_path": "",
+            "verdict": "SUPPORT"
+          }
+        ],
+        "required_dependencies": [],
+        "structural_refs": [
+          "evt_check",
+          "ent_service"
+        ]
+      },
+      {
+        "id": "cl_monitored_object",
+        "collection": "claims",
+        "status": "ACCEPTED",
+        "errors": [],
+        "uncertain": [],
+        "sources": [
+          {
+            "quote": "被监测的服务",
+            "occurrence": 1,
+            "span": [
+              7,
+              13
+            ],
+            "source_sha256": "37e867dd769f87438f89f665706018f7bf395a62ad61b9daf7677fd8cbbf52ee"
+          }
+        ],
+        "audit_refs": [
+          {
+            "subject_id": "cl_monitored_object",
+            "field_path": "",
+            "verdict": "SUPPORT"
+          }
+        ],
+        "required_dependencies": [],
+        "structural_refs": [
+          "evt_monitored",
+          "ent_service"
+        ]
+      },
+      {
+        "id": "cl_create_performer",
+        "collection": "claims",
+        "status": "ACCEPTED",
+        "errors": [],
+        "uncertain": [],
+        "sources": [
+          {
+            "quote": "请PM",
+            "occurrence": 1,
+            "span": [
+              0,
+              3
+            ],
+            "source_sha256": "37e867dd769f87438f89f665706018f7bf395a62ad61b9daf7677fd8cbbf52ee"
+          },
+          {
+            "quote": "并形成status.md",
+            "occurrence": 1,
+            "span": [
+              14,
+              26
+            ],
+            "source_sha256": "37e867dd769f87438f89f665706018f7bf395a62ad61b9daf7677fd8cbbf52ee"
+          }
+        ],
+        "audit_refs": [
+          {
+            "subject_id": "cl_create_performer",
+            "field_path": "",
+            "verdict": "SUPPORT"
+          }
+        ],
+        "required_dependencies": [],
+        "structural_refs": [
+          "evt_create",
+          "ent_pm"
+        ]
+      },
+      {
+        "id": "cl_create_result",
+        "collection": "claims",
+        "status": "ACCEPTED",
+        "errors": [],
+        "uncertain": [],
+        "sources": [
+          {
+            "quote": "形成status.md",
+            "occurrence": 1,
+            "span": [
+              15,
+              26
+            ],
+            "source_sha256": "37e867dd769f87438f89f665706018f7bf395a62ad61b9daf7677fd8cbbf52ee"
+          }
+        ],
+        "audit_refs": [
+          {
+            "subject_id": "cl_create_result",
+            "field_path": "",
+            "verdict": "SUPPORT"
+          }
+        ],
+        "required_dependencies": [],
+        "structural_refs": [
+          "evt_create",
+          "ent_status"
+        ]
+      }
+    ],
+    "diagnostics": [],
+    "coverage": [
+      {
+        "sources": [
+          {
+            "quote": "请PM组织检查",
+            "occurrence": 1,
+            "span": [
+              0,
+              7
+            ],
+            "source_sha256": "37e867dd769f87438f89f665706018f7bf395a62ad61b9daf7677fd8cbbf52ee"
+          }
+        ],
+        "claim_ids": [
+          "cl_organize_performer",
+          "cl_check_organizer"
+        ],
+        "status": "EXPRESSED",
+        "affected_views": [
+          "A",
+          "P"
+        ],
+        "id": "coverage:0"
+      },
+      {
+        "sources": [
+          {
+            "quote": "检查被监测的服务",
+            "occurrence": 1,
+            "span": [
+              5,
+              13
+            ],
+            "source_sha256": "37e867dd769f87438f89f665706018f7bf395a62ad61b9daf7677fd8cbbf52ee"
+          }
+        ],
+        "claim_ids": [
+          "cl_check_input"
+        ],
+        "status": "EXPRESSED",
+        "affected_views": [
+          "I",
+          "A"
+        ],
+        "id": "coverage:1"
+      },
+      {
+        "sources": [
+          {
+            "quote": "被监测的服务",
+            "occurrence": 1,
+            "span": [
+              7,
+              13
+            ],
+            "source_sha256": "37e867dd769f87438f89f665706018f7bf395a62ad61b9daf7677fd8cbbf52ee"
+          }
+        ],
+        "claim_ids": [
+          "cl_monitored_object"
+        ],
+        "status": "BACKGROUND",
+        "affected_views": [
+          "I"
+        ],
+        "id": "coverage:2"
+      },
+      {
+        "sources": [
+          {
+            "quote": "请PM",
+            "occurrence": 1,
+            "span": [
+              0,
+              3
+            ],
+            "source_sha256": "37e867dd769f87438f89f665706018f7bf395a62ad61b9daf7677fd8cbbf52ee"
+          },
+          {
+            "quote": "并形成status.md",
+            "occurrence": 1,
+            "span": [
+              14,
+              26
+            ],
+            "source_sha256": "37e867dd769f87438f89f665706018f7bf395a62ad61b9daf7677fd8cbbf52ee"
+          }
+        ],
+        "claim_ids": [
+          "cl_create_performer",
+          "cl_create_result"
+        ],
+        "status": "EXPRESSED",
+        "affected_views": [
+          "A",
+          "P",
+          "O"
+        ],
+        "id": "coverage:3"
+      },
+      {
+        "sources": [
+          {
+            "quote": "具体检查执行者未指定",
+            "occurrence": 1,
+            "span": [
+              27,
+              37
+            ],
+            "source_sha256": "37e867dd769f87438f89f665706018f7bf395a62ad61b9daf7677fd8cbbf52ee"
+          }
+        ],
+        "claim_ids": [],
+        "status": "UNSPECIFIED",
+        "affected_views": [
+          "P"
+        ],
+        "id": "coverage:4"
+      }
+    ],
+    "audit_sources": [
+      {
+        "subject_id": "ent_pm",
+        "sources": [
+          {
+            "quote": "PM",
+            "occurrence": 1,
+            "span": [
+              1,
+              3
+            ],
+            "source_sha256": "37e867dd769f87438f89f665706018f7bf395a62ad61b9daf7677fd8cbbf52ee"
+          }
+        ]
+      },
+      {
+        "subject_id": "ent_service",
+        "sources": [
+          {
+            "quote": "被监测的服务",
+            "occurrence": 1,
+            "span": [
+              7,
+              13
+            ],
+            "source_sha256": "37e867dd769f87438f89f665706018f7bf395a62ad61b9daf7677fd8cbbf52ee"
+          }
+        ]
+      },
+      {
+        "subject_id": "ent_status",
+        "sources": [
+          {
+            "quote": "status.md",
+            "occurrence": 1,
+            "span": [
+              17,
+              26
+            ],
+            "source_sha256": "37e867dd769f87438f89f665706018f7bf395a62ad61b9daf7677fd8cbbf52ee"
+          }
+        ]
+      },
+      {
+        "subject_id": "evt_organize",
+        "sources": [
+          {
+            "quote": "请PM组织检查被监测的服务",
+            "occurrence": 1,
+            "span": [
+              0,
+              13
+            ],
+            "source_sha256": "37e867dd769f87438f89f665706018f7bf395a62ad61b9daf7677fd8cbbf52ee"
+          }
+        ]
+      },
+      {
+        "subject_id": "evt_check",
+        "sources": [
+          {
+            "quote": "请PM组织检查被监测的服务",
+            "occurrence": 1,
+            "span": [
+              0,
+              13
+            ],
+            "source_sha256": "37e867dd769f87438f89f665706018f7bf395a62ad61b9daf7677fd8cbbf52ee"
+          },
+          {
+            "quote": "具体检查执行者未指定",
+            "occurrence": 1,
+            "span": [
+              27,
+              37
+            ],
+            "source_sha256": "37e867dd769f87438f89f665706018f7bf395a62ad61b9daf7677fd8cbbf52ee"
+          }
+        ]
+      },
+      {
+        "subject_id": "evt_monitored",
+        "sources": [
+          {
+            "quote": "被监测的服务",
+            "occurrence": 1,
+            "span": [
+              7,
+              13
+            ],
+            "source_sha256": "37e867dd769f87438f89f665706018f7bf395a62ad61b9daf7677fd8cbbf52ee"
+          }
+        ]
+      },
+      {
+        "subject_id": "evt_create",
+        "sources": [
+          {
+            "quote": "请PM",
+            "occurrence": 1,
+            "span": [
+              0,
+              3
+            ],
+            "source_sha256": "37e867dd769f87438f89f665706018f7bf395a62ad61b9daf7677fd8cbbf52ee"
+          },
+          {
+            "quote": "并形成status.md",
+            "occurrence": 1,
+            "span": [
+              14,
+              26
+            ],
+            "source_sha256": "37e867dd769f87438f89f665706018f7bf395a62ad61b9daf7677fd8cbbf52ee"
+          }
+        ]
+      },
+      {
+        "subject_id": "cl_organize_performer",
+        "sources": [
+          {
+            "quote": "请PM组织检查",
+            "occurrence": 1,
+            "span": [
+              0,
+              7
+            ],
+            "source_sha256": "37e867dd769f87438f89f665706018f7bf395a62ad61b9daf7677fd8cbbf52ee"
+          }
+        ]
+      },
+      {
+        "subject_id": "cl_check_organizer",
+        "sources": [
+          {
+            "quote": "请PM组织检查",
+            "occurrence": 1,
+            "span": [
+              0,
+              7
+            ],
+            "source_sha256": "37e867dd769f87438f89f665706018f7bf395a62ad61b9daf7677fd8cbbf52ee"
+          },
+          {
+            "quote": "具体检查执行者未指定",
+            "occurrence": 1,
+            "span": [
+              27,
+              37
+            ],
+            "source_sha256": "37e867dd769f87438f89f665706018f7bf395a62ad61b9daf7677fd8cbbf52ee"
+          }
+        ]
+      },
+      {
+        "subject_id": "cl_check_input",
+        "sources": [
+          {
+            "quote": "检查被监测的服务",
+            "occurrence": 1,
+            "span": [
+              5,
+              13
+            ],
+            "source_sha256": "37e867dd769f87438f89f665706018f7bf395a62ad61b9daf7677fd8cbbf52ee"
+          }
+        ]
+      },
+      {
+        "subject_id": "cl_monitored_object",
+        "sources": [
+          {
+            "quote": "被监测的服务",
+            "occurrence": 1,
+            "span": [
+              7,
+              13
+            ],
+            "source_sha256": "37e867dd769f87438f89f665706018f7bf395a62ad61b9daf7677fd8cbbf52ee"
+          }
+        ]
+      },
+      {
+        "subject_id": "cl_create_performer",
+        "sources": [
+          {
+            "quote": "请PM",
+            "occurrence": 1,
+            "span": [
+              0,
+              3
+            ],
+            "source_sha256": "37e867dd769f87438f89f665706018f7bf395a62ad61b9daf7677fd8cbbf52ee"
+          },
+          {
+            "quote": "并形成status.md",
+            "occurrence": 1,
+            "span": [
+              14,
+              26
+            ],
+            "source_sha256": "37e867dd769f87438f89f665706018f7bf395a62ad61b9daf7677fd8cbbf52ee"
+          },
+          {
+            "quote": "具体检查执行者未指定",
+            "occurrence": 1,
+            "span": [
+              27,
+              37
+            ],
+            "source_sha256": "37e867dd769f87438f89f665706018f7bf395a62ad61b9daf7677fd8cbbf52ee"
+          }
+        ]
+      },
+      {
+        "subject_id": "cl_create_result",
+        "sources": [
+          {
+            "quote": "形成status.md",
+            "occurrence": 1,
+            "span": [
+              15,
+              26
+            ],
+            "source_sha256": "37e867dd769f87438f89f665706018f7bf395a62ad61b9daf7677fd8cbbf52ee"
+          }
+        ]
+      }
+    ]
+  },
+  "ir": {
+    "format": "boundx-boundary-ir/028-r02.1",
+    "source_sha256": "37e867dd769f87438f89f665706018f7bf395a62ad61b9daf7677fd8cbbf52ee",
+    "facts": [
+      {
+        "id": "bf:fc91fb8c811b23b90a8d",
+        "kind": "EVENT",
+        "status": "ACCEPTED",
+        "claim_ids": [
+          "evt_organize",
+          "cl_organize_performer"
+        ],
+        "event": {
+          "id": "evt_organize",
+          "predicate": "组织检查",
+          "kind": "ACTION",
+          "layer": "MAIN",
+          "use": "CURRENT_TASK",
+          "modality": "REQUIRED",
+          "polarity": "POSITIVE",
+          "owner_id": "ROOT",
+          "constraint_ids": [],
+          "requires": [],
+          "sources": [
+            {
+              "quote": "请PM组织检查被监测的服务",
+              "occurrence": 1
+            }
+          ]
+        },
+        "roles": [
+          {
+            "id": "cl_organize_performer",
+            "kind": "ROLE",
+            "event_id": "evt_organize",
+            "entity_id": "ent_pm",
+            "role": "PERFORMER",
+            "expression_id": null,
+            "direction": null,
+            "temporal": null,
+            "quantity": null,
+            "scope_id": "evt_organize",
+            "requires": [],
+            "sources": [
+              {
+                "quote": "请PM组织检查",
+                "occurrence": 1
+              }
+            ],
+            "note": "PM执行组织工作。",
+            "entity": {
+              "id": "ent_pm",
+              "label": "PM",
+              "type": "PERSON",
+              "mentions": [
+                {
+                  "quote": "PM",
+                  "occurrence": 1
+                }
+              ],
+              "alternatives": []
+            },
+            "status": "ACCEPTED"
+          }
+        ],
+        "constraints": [],
+        "sources": [
+          {
+            "quote": "请PM组织检查被监测的服务",
+            "occurrence": 1,
+            "span": [
+              0,
+              13
+            ],
+            "source_sha256": "37e867dd769f87438f89f665706018f7bf395a62ad61b9daf7677fd8cbbf52ee"
+          },
+          {
+            "quote": "请PM组织检查",
+            "occurrence": 1,
+            "span": [
+              0,
+              7
+            ],
+            "source_sha256": "37e867dd769f87438f89f665706018f7bf395a62ad61b9daf7677fd8cbbf52ee"
+          }
+        ],
+        "slots": [
+          "A"
+        ],
+        "proof": {
+          "source_sha256": "37e867dd769f87438f89f665706018f7bf395a62ad61b9daf7677fd8cbbf52ee",
+          "claim_ids": [
+            "evt_organize",
+            "cl_organize_performer"
+          ],
+          "technical_policy": "028-r02-technical-v1",
+          "checks": [
+            {
+              "id": "evt_organize",
+              "collection": "events",
+              "status": "ACCEPTED",
+              "errors": [],
+              "uncertain": [],
+              "sources": [
+                {
+                  "quote": "请PM组织检查被监测的服务",
+                  "occurrence": 1,
+                  "span": [
+                    0,
+                    13
+                  ],
+                  "source_sha256": "37e867dd769f87438f89f665706018f7bf395a62ad61b9daf7677fd8cbbf52ee"
+                }
+              ],
+              "audit_refs": [
+                {
+                  "subject_id": "evt_organize",
+                  "field_path": "",
+                  "verdict": "SUPPORT"
+                }
+              ],
+              "required_dependencies": [],
+              "structural_refs": [
+                "ROOT"
+              ]
+            },
+            {
+              "id": "cl_organize_performer",
+              "collection": "claims",
+              "status": "ACCEPTED",
+              "errors": [],
+              "uncertain": [],
+              "sources": [
+                {
+                  "quote": "请PM组织检查",
+                  "occurrence": 1,
+                  "span": [
+                    0,
+                    7
+                  ],
+                  "source_sha256": "37e867dd769f87438f89f665706018f7bf395a62ad61b9daf7677fd8cbbf52ee"
+                }
+              ],
+              "audit_refs": [
+                {
+                  "subject_id": "cl_organize_performer",
+                  "field_path": "",
+                  "verdict": "SUPPORT"
+                }
+              ],
+              "required_dependencies": [],
+              "structural_refs": [
+                "evt_organize",
+                "ent_pm"
+              ]
+            }
+          ],
+          "audit": [
+            {
+              "subject_id": "evt_organize",
+              "field_path": "",
+              "verdict": "SUPPORT",
+              "context_refs": [],
+              "sources": [
+                {
+                  "quote": "请PM组织检查被监测的服务",
+                  "occurrence": 1
+                }
+              ],
+              "reason": "组织检查是当前明确要求的主动作，无明示条件或数量限制。"
+            },
+            {
+              "subject_id": "cl_organize_performer",
+              "field_path": "",
+              "verdict": "SUPPORT",
+              "context_refs": [
+                "evt_organize",
+                "ent_pm"
+              ],
+              "sources": [
+                {
+                  "quote": "请PM组织检查",
+                  "occurrence": 1
+                }
+              ],
+              "reason": "PM执行组织工作，PERFORMER绑定组织事件恰当。"
+            }
+          ]
+        }
+      },
+      {
+        "id": "bf:5f2ff80ae31b38575494",
+        "kind": "EVENT",
+        "status": "ACCEPTED",
+        "claim_ids": [
+          "evt_check",
+          "cl_check_organizer",
+          "cl_check_input"
+        ],
+        "event": {
+          "id": "evt_check",
+          "predicate": "检查",
+          "kind": "ACTION",
+          "layer": "MAIN",
+          "use": "CURRENT_TASK",
+          "modality": "REQUIRED",
+          "polarity": "POSITIVE",
+          "owner_id": "evt_organize",
+          "constraint_ids": [],
+          "requires": [],
+          "sources": [
+            {
+              "quote": "检查被监测的服务",
+              "occurrence": 1
+            }
+          ]
+        },
+        "roles": [
+          {
+            "id": "cl_check_organizer",
+            "kind": "ROLE",
+            "event_id": "evt_check",
+            "entity_id": "ent_pm",
+            "role": "ORGANIZER",
+            "expression_id": null,
+            "direction": null,
+            "temporal": null,
+            "quantity": null,
+            "scope_id": "evt_check",
+            "requires": [],
+            "sources": [
+              {
+                "quote": "请PM组织检查",
+                "occurrence": 1
+              }
+            ],
+            "note": "组织者不自动成为具体检查执行者。",
+            "entity": {
+              "id": "ent_pm",
+              "label": "PM",
+              "type": "PERSON",
+              "mentions": [
+                {
+                  "quote": "PM",
+                  "occurrence": 1
+                }
+              ],
+              "alternatives": []
+            },
+            "status": "ACCEPTED"
+          },
+          {
+            "id": "cl_check_input",
+            "kind": "ROLE",
+            "event_id": "evt_check",
+            "entity_id": "ent_service",
+            "role": "INPUT_OBJECT",
+            "expression_id": null,
+            "direction": null,
+            "temporal": null,
+            "quantity": null,
+            "scope_id": "evt_check",
+            "requires": [],
+            "sources": [
+              {
+                "quote": "检查被监测的服务",
+                "occurrence": 1
+              }
+            ],
+            "note": "明确受检范围为被监测的服务。",
+            "entity": {
+              "id": "ent_service",
+              "label": "被监测的服务",
+              "type": "SYSTEM",
+              "mentions": [
+                {
+                  "quote": "被监测的服务",
+                  "occurrence": 1
+                }
+              ],
+              "alternatives": []
+            },
+            "status": "ACCEPTED"
+          }
+        ],
+        "constraints": [],
+        "sources": [
+          {
+            "quote": "检查被监测的服务",
+            "occurrence": 1,
+            "span": [
+              5,
+              13
+            ],
+            "source_sha256": "37e867dd769f87438f89f665706018f7bf395a62ad61b9daf7677fd8cbbf52ee"
+          },
+          {
+            "quote": "请PM组织检查",
+            "occurrence": 1,
+            "span": [
+              0,
+              7
+            ],
+            "source_sha256": "37e867dd769f87438f89f665706018f7bf395a62ad61b9daf7677fd8cbbf52ee"
+          },
+          {
+            "quote": "检查被监测的服务",
+            "occurrence": 1,
+            "span": [
+              5,
+              13
+            ],
+            "source_sha256": "37e867dd769f87438f89f665706018f7bf395a62ad61b9daf7677fd8cbbf52ee"
+          }
+        ],
+        "slots": [
+          "A"
+        ],
+        "proof": {
+          "source_sha256": "37e867dd769f87438f89f665706018f7bf395a62ad61b9daf7677fd8cbbf52ee",
+          "claim_ids": [
+            "evt_check",
+            "cl_check_organizer",
+            "cl_check_input"
+          ],
+          "technical_policy": "028-r02-technical-v1",
+          "checks": [
+            {
+              "id": "evt_check",
+              "collection": "events",
+              "status": "ACCEPTED",
+              "errors": [],
+              "uncertain": [],
+              "sources": [
+                {
+                  "quote": "检查被监测的服务",
+                  "occurrence": 1,
+                  "span": [
+                    5,
+                    13
+                  ],
+                  "source_sha256": "37e867dd769f87438f89f665706018f7bf395a62ad61b9daf7677fd8cbbf52ee"
+                }
+              ],
+              "audit_refs": [
+                {
+                  "subject_id": "evt_check",
+                  "field_path": "",
+                  "verdict": "SUPPORT"
+                }
+              ],
+              "required_dependencies": [],
+              "structural_refs": [
+                "evt_organize"
+              ]
+            },
+            {
+              "id": "cl_check_organizer",
+              "collection": "claims",
+              "status": "ACCEPTED",
+              "errors": [],
+              "uncertain": [],
+              "sources": [
+                {
+                  "quote": "请PM组织检查",
+                  "occurrence": 1,
+                  "span": [
+                    0,
+                    7
+                  ],
+                  "source_sha256": "37e867dd769f87438f89f665706018f7bf395a62ad61b9daf7677fd8cbbf52ee"
+                }
+              ],
+              "audit_refs": [
+                {
+                  "subject_id": "cl_check_organizer",
+                  "field_path": "",
+                  "verdict": "SUPPORT"
+                }
+              ],
+              "required_dependencies": [],
+              "structural_refs": [
+                "evt_check",
+                "ent_pm"
+              ]
+            },
+            {
+              "id": "cl_check_input",
+              "collection": "claims",
+              "status": "ACCEPTED",
+              "errors": [],
+              "uncertain": [],
+              "sources": [
+                {
+                  "quote": "检查被监测的服务",
+                  "occurrence": 1,
+                  "span": [
+                    5,
+                    13
+                  ],
+                  "source_sha256": "37e867dd769f87438f89f665706018f7bf395a62ad61b9daf7677fd8cbbf52ee"
+                }
+              ],
+              "audit_refs": [
+                {
+                  "subject_id": "cl_check_input",
+                  "field_path": "",
+                  "verdict": "SUPPORT"
+                }
+              ],
+              "required_dependencies": [],
+              "structural_refs": [
+                "evt_check",
+                "ent_service"
+              ]
+            }
+          ],
+          "audit": [
+            {
+              "subject_id": "evt_check",
+              "field_path": "",
+              "verdict": "SUPPORT",
+              "context_refs": [
+                "evt_organize"
+              ],
+              "sources": [
+                {
+                  "quote": "请PM组织检查被监测的服务",
+                  "occurrence": 1
+                },
+                {
+                  "quote": "具体检查执行者未指定",
+                  "occurrence": 1
+                }
+              ],
+              "reason": "检查是要求组织开展的实际任务；执行者未指定不撤销检查要求。"
+            },
+            {
+              "subject_id": "cl_check_organizer",
+              "field_path": "",
+              "verdict": "SUPPORT",
+              "context_refs": [
+                "evt_check",
+                "ent_pm"
+              ],
+              "sources": [
+                {
+                  "quote": "请PM组织检查",
+                  "occurrence": 1
+                },
+                {
+                  "quote": "具体检查执行者未指定",
+                  "occurrence": 1
+                }
+              ],
+              "reason": "PM是检查的组织者；候选未将其推定为具体检查执行者。"
+            },
+            {
+              "subject_id": "cl_check_input",
+              "field_path": "",
+              "verdict": "SUPPORT",
+              "context_refs": [
+                "evt_check",
+                "ent_service"
+              ],
+              "sources": [
+                {
+                  "quote": "检查被监测的服务",
+                  "occurrence": 1
+                }
+              ],
+              "reason": "被监测的服务是明确受检范围，符合INPUT_OBJECT用途。"
+            }
+          ]
+        }
+      },
+      {
+        "id": "bf:8da565eea823c8b3de43",
+        "kind": "EVENT",
+        "status": "ACCEPTED",
+        "claim_ids": [
+          "evt_monitored",
+          "cl_monitored_object"
+        ],
+        "event": {
+          "id": "evt_monitored",
+          "predicate": "被监测",
+          "kind": "STATE",
+          "layer": "MODIFIER",
+          "use": "MENTION_ONLY",
+          "modality": "UNSTATED",
+          "polarity": "POSITIVE",
+          "owner_id": "evt_check",
+          "constraint_ids": [],
+          "requires": [],
+          "sources": [
+            {
+              "quote": "被监测的服务",
+              "occurrence": 1
+            }
+          ]
+        },
+        "roles": [
+          {
+            "id": "cl_monitored_object",
+            "kind": "ROLE",
+            "event_id": "evt_monitored",
+            "entity_id": "ent_service",
+            "role": "OBJECT",
+            "expression_id": null,
+            "direction": null,
+            "temporal": null,
+            "quantity": null,
+            "scope_id": "evt_monitored",
+            "requires": [],
+            "sources": [
+              {
+                "quote": "被监测的服务",
+                "occurrence": 1
+              }
+            ],
+            "note": "定语描述服务状态，不增加监测命令。",
+            "entity": {
+              "id": "ent_service",
+              "label": "被监测的服务",
+              "type": "SYSTEM",
+              "mentions": [
+                {
+                  "quote": "被监测的服务",
+                  "occurrence": 1
+                }
+              ],
+              "alternatives": []
+            },
+            "status": "ACCEPTED"
+          }
+        ],
+        "constraints": [],
+        "sources": [
+          {
+            "quote": "被监测的服务",
+            "occurrence": 1,
+            "span": [
+              7,
+              13
+            ],
+            "source_sha256": "37e867dd769f87438f89f665706018f7bf395a62ad61b9daf7677fd8cbbf52ee"
+          },
+          {
+            "quote": "被监测的服务",
+            "occurrence": 1,
+            "span": [
+              7,
+              13
+            ],
+            "source_sha256": "37e867dd769f87438f89f665706018f7bf395a62ad61b9daf7677fd8cbbf52ee"
+          }
+        ],
+        "slots": [],
+        "proof": {
+          "source_sha256": "37e867dd769f87438f89f665706018f7bf395a62ad61b9daf7677fd8cbbf52ee",
+          "claim_ids": [
+            "evt_monitored",
+            "cl_monitored_object"
+          ],
+          "technical_policy": "028-r02-technical-v1",
+          "checks": [
+            {
+              "id": "evt_monitored",
+              "collection": "events",
+              "status": "ACCEPTED",
+              "errors": [],
+              "uncertain": [],
+              "sources": [
+                {
+                  "quote": "被监测的服务",
+                  "occurrence": 1,
+                  "span": [
+                    7,
+                    13
+                  ],
+                  "source_sha256": "37e867dd769f87438f89f665706018f7bf395a62ad61b9daf7677fd8cbbf52ee"
+                }
+              ],
+              "audit_refs": [
+                {
+                  "subject_id": "evt_monitored",
+                  "field_path": "",
+                  "verdict": "SUPPORT"
+                }
+              ],
+              "required_dependencies": [],
+              "structural_refs": [
+                "evt_check"
+              ]
+            },
+            {
+              "id": "cl_monitored_object",
+              "collection": "claims",
+              "status": "ACCEPTED",
+              "errors": [],
+              "uncertain": [],
+              "sources": [
+                {
+                  "quote": "被监测的服务",
+                  "occurrence": 1,
+                  "span": [
+                    7,
+                    13
+                  ],
+                  "source_sha256": "37e867dd769f87438f89f665706018f7bf395a62ad61b9daf7677fd8cbbf52ee"
+                }
+              ],
+              "audit_refs": [
+                {
+                  "subject_id": "cl_monitored_object",
+                  "field_path": "",
+                  "verdict": "SUPPORT"
+                }
+              ],
+              "required_dependencies": [],
+              "structural_refs": [
+                "evt_monitored",
+                "ent_service"
+              ]
+            }
+          ],
+          "audit": [
+            {
+              "subject_id": "evt_monitored",
+              "field_path": "",
+              "verdict": "SUPPORT",
+              "context_refs": [
+                "ent_service"
+              ],
+              "sources": [
+                {
+                  "quote": "被监测的服务",
+                  "occurrence": 1
+                }
+              ],
+              "reason": "被监测是限定服务的状态描述，保留为定语层提及，不增加监测义务。"
+            },
+            {
+              "subject_id": "cl_monitored_object",
+              "field_path": "",
+              "verdict": "SUPPORT",
+              "context_refs": [
+                "evt_monitored",
+                "ent_service"
+              ],
+              "sources": [
+                {
+                  "quote": "被监测的服务",
+                  "occurrence": 1
+                }
+              ],
+              "reason": "服务是被监测状态的对象；该关系处于定语提及事件，不产生当前监测要求。"
+            }
+          ]
+        }
+      },
+      {
+        "id": "bf:7e0b425f22fead41617d",
+        "kind": "EVENT",
+        "status": "ACCEPTED",
+        "claim_ids": [
+          "evt_create",
+          "cl_create_performer",
+          "cl_create_result"
+        ],
+        "event": {
+          "id": "evt_create",
+          "predicate": "形成文件",
+          "kind": "ACTION",
+          "layer": "MAIN",
+          "use": "CURRENT_TASK",
+          "modality": "REQUIRED",
+          "polarity": "POSITIVE",
+          "owner_id": "ROOT",
+          "constraint_ids": [],
+          "requires": [],
+          "sources": [
+            {
+              "quote": "请PM",
+              "occurrence": 1
+            },
+            {
+              "quote": "并形成status.md",
+              "occurrence": 1
+            }
+          ]
+        },
+        "roles": [
+          {
+            "id": "cl_create_performer",
+            "kind": "ROLE",
+            "event_id": "evt_create",
+            "entity_id": "ent_pm",
+            "role": "PERFORMER",
+            "expression_id": null,
+            "direction": null,
+            "temporal": null,
+            "quantity": null,
+            "scope_id": "evt_create",
+            "requires": [],
+            "sources": [
+              {
+                "quote": "请PM",
+                "occurrence": 1
+              },
+              {
+                "quote": "并形成status.md",
+                "occurrence": 1
+              }
+            ],
+            "note": "并列谓语沿用PM作为主体；后句未指定仅针对具体检查执行者。",
+            "entity": {
+              "id": "ent_pm",
+              "label": "PM",
+              "type": "PERSON",
+              "mentions": [
+                {
+                  "quote": "PM",
+                  "occurrence": 1
+                }
+              ],
+              "alternatives": []
+            },
+            "status": "ACCEPTED"
+          },
+          {
+            "id": "cl_create_result",
+            "kind": "ROLE",
+            "event_id": "evt_create",
+            "entity_id": "ent_status",
+            "role": "RESULT",
+            "expression_id": null,
+            "direction": null,
+            "temporal": null,
+            "quantity": null,
+            "scope_id": "evt_create",
+            "requires": [],
+            "sources": [
+              {
+                "quote": "形成status.md",
+                "occurrence": 1
+              }
+            ],
+            "note": "status.md为要求形成的产物。",
+            "entity": {
+              "id": "ent_status",
+              "label": "status.md",
+              "type": "FILE",
+              "mentions": [
+                {
+                  "quote": "status.md",
+                  "occurrence": 1
+                }
+              ],
+              "alternatives": []
+            },
+            "status": "ACCEPTED"
+          }
+        ],
+        "constraints": [],
+        "sources": [
+          {
+            "quote": "请PM",
+            "occurrence": 1,
+            "span": [
+              0,
+              3
+            ],
+            "source_sha256": "37e867dd769f87438f89f665706018f7bf395a62ad61b9daf7677fd8cbbf52ee"
+          },
+          {
+            "quote": "并形成status.md",
+            "occurrence": 1,
+            "span": [
+              14,
+              26
+            ],
+            "source_sha256": "37e867dd769f87438f89f665706018f7bf395a62ad61b9daf7677fd8cbbf52ee"
+          },
+          {
+            "quote": "请PM",
+            "occurrence": 1,
+            "span": [
+              0,
+              3
+            ],
+            "source_sha256": "37e867dd769f87438f89f665706018f7bf395a62ad61b9daf7677fd8cbbf52ee"
+          },
+          {
+            "quote": "并形成status.md",
+            "occurrence": 1,
+            "span": [
+              14,
+              26
+            ],
+            "source_sha256": "37e867dd769f87438f89f665706018f7bf395a62ad61b9daf7677fd8cbbf52ee"
+          },
+          {
+            "quote": "形成status.md",
+            "occurrence": 1,
+            "span": [
+              15,
+              26
+            ],
+            "source_sha256": "37e867dd769f87438f89f665706018f7bf395a62ad61b9daf7677fd8cbbf52ee"
+          }
+        ],
+        "slots": [
+          "A"
+        ],
+        "proof": {
+          "source_sha256": "37e867dd769f87438f89f665706018f7bf395a62ad61b9daf7677fd8cbbf52ee",
+          "claim_ids": [
+            "evt_create",
+            "cl_create_performer",
+            "cl_create_result"
+          ],
+          "technical_policy": "028-r02-technical-v1",
+          "checks": [
+            {
+              "id": "evt_create",
+              "collection": "events",
+              "status": "ACCEPTED",
+              "errors": [],
+              "uncertain": [],
+              "sources": [
+                {
+                  "quote": "请PM",
+                  "occurrence": 1,
+                  "span": [
+                    0,
+                    3
+                  ],
+                  "source_sha256": "37e867dd769f87438f89f665706018f7bf395a62ad61b9daf7677fd8cbbf52ee"
+                },
+                {
+                  "quote": "并形成status.md",
+                  "occurrence": 1,
+                  "span": [
+                    14,
+                    26
+                  ],
+                  "source_sha256": "37e867dd769f87438f89f665706018f7bf395a62ad61b9daf7677fd8cbbf52ee"
+                }
+              ],
+              "audit_refs": [
+                {
+                  "subject_id": "evt_create",
+                  "field_path": "",
+                  "verdict": "SUPPORT"
+                }
+              ],
+              "required_dependencies": [],
+              "structural_refs": [
+                "ROOT"
+              ]
+            },
+            {
+              "id": "cl_create_performer",
+              "collection": "claims",
+              "status": "ACCEPTED",
+              "errors": [],
+              "uncertain": [],
+              "sources": [
+                {
+                  "quote": "请PM",
+                  "occurrence": 1,
+                  "span": [
+                    0,
+                    3
+                  ],
+                  "source_sha256": "37e867dd769f87438f89f665706018f7bf395a62ad61b9daf7677fd8cbbf52ee"
+                },
+                {
+                  "quote": "并形成status.md",
+                  "occurrence": 1,
+                  "span": [
+                    14,
+                    26
+                  ],
+                  "source_sha256": "37e867dd769f87438f89f665706018f7bf395a62ad61b9daf7677fd8cbbf52ee"
+                }
+              ],
+              "audit_refs": [
+                {
+                  "subject_id": "cl_create_performer",
+                  "field_path": "",
+                  "verdict": "SUPPORT"
+                }
+              ],
+              "required_dependencies": [],
+              "structural_refs": [
+                "evt_create",
+                "ent_pm"
+              ]
+            },
+            {
+              "id": "cl_create_result",
+              "collection": "claims",
+              "status": "ACCEPTED",
+              "errors": [],
+              "uncertain": [],
+              "sources": [
+                {
+                  "quote": "形成status.md",
+                  "occurrence": 1,
+                  "span": [
+                    15,
+                    26
+                  ],
+                  "source_sha256": "37e867dd769f87438f89f665706018f7bf395a62ad61b9daf7677fd8cbbf52ee"
+                }
+              ],
+              "audit_refs": [
+                {
+                  "subject_id": "cl_create_result",
+                  "field_path": "",
+                  "verdict": "SUPPORT"
+                }
+              ],
+              "required_dependencies": [],
+              "structural_refs": [
+                "evt_create",
+                "ent_status"
+              ]
+            }
+          ],
+          "audit": [
+            {
+              "subject_id": "evt_create",
+              "field_path": "",
+              "verdict": "SUPPORT",
+              "context_refs": [],
+              "sources": [
+                {
+                  "quote": "请PM",
+                  "occurrence": 1
+                },
+                {
+                  "quote": "并形成status.md",
+                  "occurrence": 1
+                }
+              ],
+              "reason": "形成文件是并列的当前要求；原文未设前提、期限或根任务完成条件。"
+            },
+            {
+              "subject_id": "cl_create_performer",
+              "field_path": "",
+              "verdict": "SUPPORT",
+              "context_refs": [
+                "evt_create",
+                "ent_pm"
+              ],
+              "sources": [
+                {
+                  "quote": "请PM",
+                  "occurrence": 1
+                },
+                {
+                  "quote": "并形成status.md",
+                  "occurrence": 1
+                },
+                {
+                  "quote": "具体检查执行者未指定",
+                  "occurrence": 1
+                }
+              ],
+              "reason": "并列谓语形成文件沿用PM为主体；未指定的范围明确限于具体检查执行者。"
+            },
+            {
+              "subject_id": "cl_create_result",
+              "field_path": "",
+              "verdict": "SUPPORT",
+              "context_refs": [
+                "evt_create",
+                "ent_status"
+              ],
+              "sources": [
+                {
+                  "quote": "形成status.md",
+                  "occurrence": 1
+                }
+              ],
+              "reason": "status.md是形成动作的产物，RESULT绑定正确，未误作外部输入。"
+            }
+          ]
+        }
+      },
+      {
+        "id": "bf:0467a08dee521b0083b9",
+        "kind": "ROLE",
+        "status": "ACCEPTED",
+        "claim_ids": [
+          "cl_organize_performer",
+          "ent_pm",
+          "evt_organize"
+        ],
+        "claim": {
+          "id": "cl_organize_performer",
+          "kind": "ROLE",
+          "event_id": "evt_organize",
+          "entity_id": "ent_pm",
+          "role": "PERFORMER",
+          "expression_id": null,
+          "direction": null,
+          "temporal": null,
+          "quantity": null,
+          "scope_id": "evt_organize",
+          "requires": [],
+          "sources": [
+            {
+              "quote": "请PM组织检查",
+              "occurrence": 1
+            }
+          ],
+          "note": "PM执行组织工作。"
+        },
+        "event": {
+          "id": "evt_organize",
+          "predicate": "组织检查",
+          "kind": "ACTION",
+          "layer": "MAIN",
+          "use": "CURRENT_TASK",
+          "modality": "REQUIRED",
+          "polarity": "POSITIVE",
+          "owner_id": "ROOT",
+          "constraint_ids": [],
+          "requires": [],
+          "sources": [
+            {
+              "quote": "请PM组织检查被监测的服务",
+              "occurrence": 1
+            }
+          ]
+        },
+        "entity": {
+          "id": "ent_pm",
+          "label": "PM",
+          "type": "PERSON",
+          "mentions": [
+            {
+              "quote": "PM",
+              "occurrence": 1
+            }
+          ],
+          "alternatives": []
+        },
+        "expression": null,
+        "constraints": [],
+        "content_quantities": [],
+        "sources": [
+          {
+            "quote": "请PM组织检查",
+            "occurrence": 1,
+            "span": [
+              0,
+              7
+            ],
+            "source_sha256": "37e867dd769f87438f89f665706018f7bf395a62ad61b9daf7677fd8cbbf52ee"
+          },
+          {
+            "quote": "PM",
+            "occurrence": 1,
+            "span": [
+              1,
+              3
+            ],
+            "source_sha256": "37e867dd769f87438f89f665706018f7bf395a62ad61b9daf7677fd8cbbf52ee"
+          },
+          {
+            "quote": "请PM组织检查被监测的服务",
+            "occurrence": 1,
+            "span": [
+              0,
+              13
+            ],
+            "source_sha256": "37e867dd769f87438f89f665706018f7bf395a62ad61b9daf7677fd8cbbf52ee"
+          }
+        ],
+        "slots": [
+          "P"
+        ],
+        "proof": {
+          "source_sha256": "37e867dd769f87438f89f665706018f7bf395a62ad61b9daf7677fd8cbbf52ee",
+          "claim_ids": [
+            "cl_organize_performer",
+            "ent_pm",
+            "evt_organize"
+          ],
+          "technical_policy": "028-r02-technical-v1",
+          "checks": [
+            {
+              "id": "cl_organize_performer",
+              "collection": "claims",
+              "status": "ACCEPTED",
+              "errors": [],
+              "uncertain": [],
+              "sources": [
+                {
+                  "quote": "请PM组织检查",
+                  "occurrence": 1,
+                  "span": [
+                    0,
+                    7
+                  ],
+                  "source_sha256": "37e867dd769f87438f89f665706018f7bf395a62ad61b9daf7677fd8cbbf52ee"
+                }
+              ],
+              "audit_refs": [
+                {
+                  "subject_id": "cl_organize_performer",
+                  "field_path": "",
+                  "verdict": "SUPPORT"
+                }
+              ],
+              "required_dependencies": [],
+              "structural_refs": [
+                "evt_organize",
+                "ent_pm"
+              ]
+            },
+            {
+              "id": "ent_pm",
+              "collection": "entities",
+              "status": "ACCEPTED",
+              "errors": [],
+              "uncertain": [],
+              "sources": [
+                {
+                  "quote": "PM",
+                  "occurrence": 1,
+                  "span": [
+                    1,
+                    3
+                  ],
+                  "source_sha256": "37e867dd769f87438f89f665706018f7bf395a62ad61b9daf7677fd8cbbf52ee"
+                }
+              ],
+              "audit_refs": [
+                {
+                  "subject_id": "ent_pm",
+                  "field_path": "",
+                  "verdict": "SUPPORT"
+                }
+              ],
+              "required_dependencies": [],
+              "structural_refs": []
+            },
+            {
+              "id": "evt_organize",
+              "collection": "events",
+              "status": "ACCEPTED",
+              "errors": [],
+              "uncertain": [],
+              "sources": [
+                {
+                  "quote": "请PM组织检查被监测的服务",
+                  "occurrence": 1,
+                  "span": [
+                    0,
+                    13
+                  ],
+                  "source_sha256": "37e867dd769f87438f89f665706018f7bf395a62ad61b9daf7677fd8cbbf52ee"
+                }
+              ],
+              "audit_refs": [
+                {
+                  "subject_id": "evt_organize",
+                  "field_path": "",
+                  "verdict": "SUPPORT"
+                }
+              ],
+              "required_dependencies": [],
+              "structural_refs": [
+                "ROOT"
+              ]
+            }
+          ],
+          "audit": [
+            {
+              "subject_id": "cl_organize_performer",
+              "field_path": "",
+              "verdict": "SUPPORT",
+              "context_refs": [
+                "evt_organize",
+                "ent_pm"
+              ],
+              "sources": [
+                {
+                  "quote": "请PM组织检查",
+                  "occurrence": 1
+                }
+              ],
+              "reason": "PM执行组织工作，PERFORMER绑定组织事件恰当。"
+            },
+            {
+              "subject_id": "ent_pm",
+              "field_path": "",
+              "verdict": "SUPPORT",
+              "context_refs": [],
+              "sources": [
+                {
+                  "quote": "PM",
+                  "occurrence": 1
+                }
+              ],
+              "reason": "原文明示PM为参与者；该实体身份不自行赋予检查执行职责。"
+            },
+            {
+              "subject_id": "evt_organize",
+              "field_path": "",
+              "verdict": "SUPPORT",
+              "context_refs": [],
+              "sources": [
+                {
+                  "quote": "请PM组织检查被监测的服务",
+                  "occurrence": 1
+                }
+              ],
+              "reason": "组织检查是当前明确要求的主动作，无明示条件或数量限制。"
+            }
+          ]
+        }
+      },
+      {
+        "id": "bf:67e6f1c3b6c061d3fc6e",
+        "kind": "ROLE",
+        "status": "ACCEPTED",
+        "claim_ids": [
+          "cl_check_organizer",
+          "ent_pm",
+          "evt_check"
+        ],
+        "claim": {
+          "id": "cl_check_organizer",
+          "kind": "ROLE",
+          "event_id": "evt_check",
+          "entity_id": "ent_pm",
+          "role": "ORGANIZER",
+          "expression_id": null,
+          "direction": null,
+          "temporal": null,
+          "quantity": null,
+          "scope_id": "evt_check",
+          "requires": [],
+          "sources": [
+            {
+              "quote": "请PM组织检查",
+              "occurrence": 1
+            }
+          ],
+          "note": "组织者不自动成为具体检查执行者。"
+        },
+        "event": {
+          "id": "evt_check",
+          "predicate": "检查",
+          "kind": "ACTION",
+          "layer": "MAIN",
+          "use": "CURRENT_TASK",
+          "modality": "REQUIRED",
+          "polarity": "POSITIVE",
+          "owner_id": "evt_organize",
+          "constraint_ids": [],
+          "requires": [],
+          "sources": [
+            {
+              "quote": "检查被监测的服务",
+              "occurrence": 1
+            }
+          ]
+        },
+        "entity": {
+          "id": "ent_pm",
+          "label": "PM",
+          "type": "PERSON",
+          "mentions": [
+            {
+              "quote": "PM",
+              "occurrence": 1
+            }
+          ],
+          "alternatives": []
+        },
+        "expression": null,
+        "constraints": [],
+        "content_quantities": [],
+        "sources": [
+          {
+            "quote": "请PM组织检查",
+            "occurrence": 1,
+            "span": [
+              0,
+              7
+            ],
+            "source_sha256": "37e867dd769f87438f89f665706018f7bf395a62ad61b9daf7677fd8cbbf52ee"
+          },
+          {
+            "quote": "PM",
+            "occurrence": 1,
+            "span": [
+              1,
+              3
+            ],
+            "source_sha256": "37e867dd769f87438f89f665706018f7bf395a62ad61b9daf7677fd8cbbf52ee"
+          },
+          {
+            "quote": "检查被监测的服务",
+            "occurrence": 1,
+            "span": [
+              5,
+              13
+            ],
+            "source_sha256": "37e867dd769f87438f89f665706018f7bf395a62ad61b9daf7677fd8cbbf52ee"
+          }
+        ],
+        "slots": [
+          "P"
+        ],
+        "proof": {
+          "source_sha256": "37e867dd769f87438f89f665706018f7bf395a62ad61b9daf7677fd8cbbf52ee",
+          "claim_ids": [
+            "cl_check_organizer",
+            "ent_pm",
+            "evt_check"
+          ],
+          "technical_policy": "028-r02-technical-v1",
+          "checks": [
+            {
+              "id": "cl_check_organizer",
+              "collection": "claims",
+              "status": "ACCEPTED",
+              "errors": [],
+              "uncertain": [],
+              "sources": [
+                {
+                  "quote": "请PM组织检查",
+                  "occurrence": 1,
+                  "span": [
+                    0,
+                    7
+                  ],
+                  "source_sha256": "37e867dd769f87438f89f665706018f7bf395a62ad61b9daf7677fd8cbbf52ee"
+                }
+              ],
+              "audit_refs": [
+                {
+                  "subject_id": "cl_check_organizer",
+                  "field_path": "",
+                  "verdict": "SUPPORT"
+                }
+              ],
+              "required_dependencies": [],
+              "structural_refs": [
+                "evt_check",
+                "ent_pm"
+              ]
+            },
+            {
+              "id": "ent_pm",
+              "collection": "entities",
+              "status": "ACCEPTED",
+              "errors": [],
+              "uncertain": [],
+              "sources": [
+                {
+                  "quote": "PM",
+                  "occurrence": 1,
+                  "span": [
+                    1,
+                    3
+                  ],
+                  "source_sha256": "37e867dd769f87438f89f665706018f7bf395a62ad61b9daf7677fd8cbbf52ee"
+                }
+              ],
+              "audit_refs": [
+                {
+                  "subject_id": "ent_pm",
+                  "field_path": "",
+                  "verdict": "SUPPORT"
+                }
+              ],
+              "required_dependencies": [],
+              "structural_refs": []
+            },
+            {
+              "id": "evt_check",
+              "collection": "events",
+              "status": "ACCEPTED",
+              "errors": [],
+              "uncertain": [],
+              "sources": [
+                {
+                  "quote": "检查被监测的服务",
+                  "occurrence": 1,
+                  "span": [
+                    5,
+                    13
+                  ],
+                  "source_sha256": "37e867dd769f87438f89f665706018f7bf395a62ad61b9daf7677fd8cbbf52ee"
+                }
+              ],
+              "audit_refs": [
+                {
+                  "subject_id": "evt_check",
+                  "field_path": "",
+                  "verdict": "SUPPORT"
+                }
+              ],
+              "required_dependencies": [],
+              "structural_refs": [
+                "evt_organize"
+              ]
+            }
+          ],
+          "audit": [
+            {
+              "subject_id": "cl_check_organizer",
+              "field_path": "",
+              "verdict": "SUPPORT",
+              "context_refs": [
+                "evt_check",
+                "ent_pm"
+              ],
+              "sources": [
+                {
+                  "quote": "请PM组织检查",
+                  "occurrence": 1
+                },
+                {
+                  "quote": "具体检查执行者未指定",
+                  "occurrence": 1
+                }
+              ],
+              "reason": "PM是检查的组织者；候选未将其推定为具体检查执行者。"
+            },
+            {
+              "subject_id": "ent_pm",
+              "field_path": "",
+              "verdict": "SUPPORT",
+              "context_refs": [],
+              "sources": [
+                {
+                  "quote": "PM",
+                  "occurrence": 1
+                }
+              ],
+              "reason": "原文明示PM为参与者；该实体身份不自行赋予检查执行职责。"
+            },
+            {
+              "subject_id": "evt_check",
+              "field_path": "",
+              "verdict": "SUPPORT",
+              "context_refs": [
+                "evt_organize"
+              ],
+              "sources": [
+                {
+                  "quote": "请PM组织检查被监测的服务",
+                  "occurrence": 1
+                },
+                {
+                  "quote": "具体检查执行者未指定",
+                  "occurrence": 1
+                }
+              ],
+              "reason": "检查是要求组织开展的实际任务；执行者未指定不撤销检查要求。"
+            }
+          ]
+        }
+      },
+      {
+        "id": "bf:d0da6e68f485631b17b2",
+        "kind": "ROLE",
+        "status": "ACCEPTED",
+        "claim_ids": [
+          "cl_check_input",
+          "ent_service",
+          "evt_check"
+        ],
+        "claim": {
+          "id": "cl_check_input",
+          "kind": "ROLE",
+          "event_id": "evt_check",
+          "entity_id": "ent_service",
+          "role": "INPUT_OBJECT",
+          "expression_id": null,
+          "direction": null,
+          "temporal": null,
+          "quantity": null,
+          "scope_id": "evt_check",
+          "requires": [],
+          "sources": [
+            {
+              "quote": "检查被监测的服务",
+              "occurrence": 1
+            }
+          ],
+          "note": "明确受检范围为被监测的服务。"
+        },
+        "event": {
+          "id": "evt_check",
+          "predicate": "检查",
+          "kind": "ACTION",
+          "layer": "MAIN",
+          "use": "CURRENT_TASK",
+          "modality": "REQUIRED",
+          "polarity": "POSITIVE",
+          "owner_id": "evt_organize",
+          "constraint_ids": [],
+          "requires": [],
+          "sources": [
+            {
+              "quote": "检查被监测的服务",
+              "occurrence": 1
+            }
+          ]
+        },
+        "entity": {
+          "id": "ent_service",
+          "label": "被监测的服务",
+          "type": "SYSTEM",
+          "mentions": [
+            {
+              "quote": "被监测的服务",
+              "occurrence": 1
+            }
+          ],
+          "alternatives": []
+        },
+        "expression": null,
+        "constraints": [],
+        "content_quantities": [],
+        "sources": [
+          {
+            "quote": "检查被监测的服务",
+            "occurrence": 1,
+            "span": [
+              5,
+              13
+            ],
+            "source_sha256": "37e867dd769f87438f89f665706018f7bf395a62ad61b9daf7677fd8cbbf52ee"
+          },
+          {
+            "quote": "被监测的服务",
+            "occurrence": 1,
+            "span": [
+              7,
+              13
+            ],
+            "source_sha256": "37e867dd769f87438f89f665706018f7bf395a62ad61b9daf7677fd8cbbf52ee"
+          },
+          {
+            "quote": "检查被监测的服务",
+            "occurrence": 1,
+            "span": [
+              5,
+              13
+            ],
+            "source_sha256": "37e867dd769f87438f89f665706018f7bf395a62ad61b9daf7677fd8cbbf52ee"
+          }
+        ],
+        "slots": [
+          "I"
+        ],
+        "proof": {
+          "source_sha256": "37e867dd769f87438f89f665706018f7bf395a62ad61b9daf7677fd8cbbf52ee",
+          "claim_ids": [
+            "cl_check_input",
+            "ent_service",
+            "evt_check"
+          ],
+          "technical_policy": "028-r02-technical-v1",
+          "checks": [
+            {
+              "id": "cl_check_input",
+              "collection": "claims",
+              "status": "ACCEPTED",
+              "errors": [],
+              "uncertain": [],
+              "sources": [
+                {
+                  "quote": "检查被监测的服务",
+                  "occurrence": 1,
+                  "span": [
+                    5,
+                    13
+                  ],
+                  "source_sha256": "37e867dd769f87438f89f665706018f7bf395a62ad61b9daf7677fd8cbbf52ee"
+                }
+              ],
+              "audit_refs": [
+                {
+                  "subject_id": "cl_check_input",
+                  "field_path": "",
+                  "verdict": "SUPPORT"
+                }
+              ],
+              "required_dependencies": [],
+              "structural_refs": [
+                "evt_check",
+                "ent_service"
+              ]
+            },
+            {
+              "id": "ent_service",
+              "collection": "entities",
+              "status": "ACCEPTED",
+              "errors": [],
+              "uncertain": [],
+              "sources": [
+                {
+                  "quote": "被监测的服务",
+                  "occurrence": 1,
+                  "span": [
+                    7,
+                    13
+                  ],
+                  "source_sha256": "37e867dd769f87438f89f665706018f7bf395a62ad61b9daf7677fd8cbbf52ee"
+                }
+              ],
+              "audit_refs": [
+                {
+                  "subject_id": "ent_service",
+                  "field_path": "",
+                  "verdict": "SUPPORT"
+                }
+              ],
+              "required_dependencies": [],
+              "structural_refs": []
+            },
+            {
+              "id": "evt_check",
+              "collection": "events",
+              "status": "ACCEPTED",
+              "errors": [],
+              "uncertain": [],
+              "sources": [
+                {
+                  "quote": "检查被监测的服务",
+                  "occurrence": 1,
+                  "span": [
+                    5,
+                    13
+                  ],
+                  "source_sha256": "37e867dd769f87438f89f665706018f7bf395a62ad61b9daf7677fd8cbbf52ee"
+                }
+              ],
+              "audit_refs": [
+                {
+                  "subject_id": "evt_check",
+                  "field_path": "",
+                  "verdict": "SUPPORT"
+                }
+              ],
+              "required_dependencies": [],
+              "structural_refs": [
+                "evt_organize"
+              ]
+            }
+          ],
+          "audit": [
+            {
+              "subject_id": "cl_check_input",
+              "field_path": "",
+              "verdict": "SUPPORT",
+              "context_refs": [
+                "evt_check",
+                "ent_service"
+              ],
+              "sources": [
+                {
+                  "quote": "检查被监测的服务",
+                  "occurrence": 1
+                }
+              ],
+              "reason": "被监测的服务是明确受检范围，符合INPUT_OBJECT用途。"
+            },
+            {
+              "subject_id": "ent_service",
+              "field_path": "",
+              "verdict": "SUPPORT",
+              "context_refs": [],
+              "sources": [
+                {
+                  "quote": "被监测的服务",
+                  "occurrence": 1
+                }
+              ],
+              "reason": "原文明示受检服务，以SYSTEM表示合理。"
+            },
+            {
+              "subject_id": "evt_check",
+              "field_path": "",
+              "verdict": "SUPPORT",
+              "context_refs": [
+                "evt_organize"
+              ],
+              "sources": [
+                {
+                  "quote": "请PM组织检查被监测的服务",
+                  "occurrence": 1
+                },
+                {
+                  "quote": "具体检查执行者未指定",
+                  "occurrence": 1
+                }
+              ],
+              "reason": "检查是要求组织开展的实际任务；执行者未指定不撤销检查要求。"
+            }
+          ]
+        }
+      },
+      {
+        "id": "bf:ea4e2ffa699ceacda7f4",
+        "kind": "ROLE",
+        "status": "ACCEPTED",
+        "claim_ids": [
+          "cl_monitored_object",
+          "ent_service",
+          "evt_monitored"
+        ],
+        "claim": {
+          "id": "cl_monitored_object",
+          "kind": "ROLE",
+          "event_id": "evt_monitored",
+          "entity_id": "ent_service",
+          "role": "OBJECT",
+          "expression_id": null,
+          "direction": null,
+          "temporal": null,
+          "quantity": null,
+          "scope_id": "evt_monitored",
+          "requires": [],
+          "sources": [
+            {
+              "quote": "被监测的服务",
+              "occurrence": 1
+            }
+          ],
+          "note": "定语描述服务状态，不增加监测命令。"
+        },
+        "event": {
+          "id": "evt_monitored",
+          "predicate": "被监测",
+          "kind": "STATE",
+          "layer": "MODIFIER",
+          "use": "MENTION_ONLY",
+          "modality": "UNSTATED",
+          "polarity": "POSITIVE",
+          "owner_id": "evt_check",
+          "constraint_ids": [],
+          "requires": [],
+          "sources": [
+            {
+              "quote": "被监测的服务",
+              "occurrence": 1
+            }
+          ]
+        },
+        "entity": {
+          "id": "ent_service",
+          "label": "被监测的服务",
+          "type": "SYSTEM",
+          "mentions": [
+            {
+              "quote": "被监测的服务",
+              "occurrence": 1
+            }
+          ],
+          "alternatives": []
+        },
+        "expression": null,
+        "constraints": [],
+        "content_quantities": [],
+        "sources": [
+          {
+            "quote": "被监测的服务",
+            "occurrence": 1,
+            "span": [
+              7,
+              13
+            ],
+            "source_sha256": "37e867dd769f87438f89f665706018f7bf395a62ad61b9daf7677fd8cbbf52ee"
+          },
+          {
+            "quote": "被监测的服务",
+            "occurrence": 1,
+            "span": [
+              7,
+              13
+            ],
+            "source_sha256": "37e867dd769f87438f89f665706018f7bf395a62ad61b9daf7677fd8cbbf52ee"
+          },
+          {
+            "quote": "被监测的服务",
+            "occurrence": 1,
+            "span": [
+              7,
+              13
+            ],
+            "source_sha256": "37e867dd769f87438f89f665706018f7bf395a62ad61b9daf7677fd8cbbf52ee"
+          }
+        ],
+        "slots": [],
+        "proof": {
+          "source_sha256": "37e867dd769f87438f89f665706018f7bf395a62ad61b9daf7677fd8cbbf52ee",
+          "claim_ids": [
+            "cl_monitored_object",
+            "ent_service",
+            "evt_monitored"
+          ],
+          "technical_policy": "028-r02-technical-v1",
+          "checks": [
+            {
+              "id": "cl_monitored_object",
+              "collection": "claims",
+              "status": "ACCEPTED",
+              "errors": [],
+              "uncertain": [],
+              "sources": [
+                {
+                  "quote": "被监测的服务",
+                  "occurrence": 1,
+                  "span": [
+                    7,
+                    13
+                  ],
+                  "source_sha256": "37e867dd769f87438f89f665706018f7bf395a62ad61b9daf7677fd8cbbf52ee"
+                }
+              ],
+              "audit_refs": [
+                {
+                  "subject_id": "cl_monitored_object",
+                  "field_path": "",
+                  "verdict": "SUPPORT"
+                }
+              ],
+              "required_dependencies": [],
+              "structural_refs": [
+                "evt_monitored",
+                "ent_service"
+              ]
+            },
+            {
+              "id": "ent_service",
+              "collection": "entities",
+              "status": "ACCEPTED",
+              "errors": [],
+              "uncertain": [],
+              "sources": [
+                {
+                  "quote": "被监测的服务",
+                  "occurrence": 1,
+                  "span": [
+                    7,
+                    13
+                  ],
+                  "source_sha256": "37e867dd769f87438f89f665706018f7bf395a62ad61b9daf7677fd8cbbf52ee"
+                }
+              ],
+              "audit_refs": [
+                {
+                  "subject_id": "ent_service",
+                  "field_path": "",
+                  "verdict": "SUPPORT"
+                }
+              ],
+              "required_dependencies": [],
+              "structural_refs": []
+            },
+            {
+              "id": "evt_monitored",
+              "collection": "events",
+              "status": "ACCEPTED",
+              "errors": [],
+              "uncertain": [],
+              "sources": [
+                {
+                  "quote": "被监测的服务",
+                  "occurrence": 1,
+                  "span": [
+                    7,
+                    13
+                  ],
+                  "source_sha256": "37e867dd769f87438f89f665706018f7bf395a62ad61b9daf7677fd8cbbf52ee"
+                }
+              ],
+              "audit_refs": [
+                {
+                  "subject_id": "evt_monitored",
+                  "field_path": "",
+                  "verdict": "SUPPORT"
+                }
+              ],
+              "required_dependencies": [],
+              "structural_refs": [
+                "evt_check"
+              ]
+            }
+          ],
+          "audit": [
+            {
+              "subject_id": "cl_monitored_object",
+              "field_path": "",
+              "verdict": "SUPPORT",
+              "context_refs": [
+                "evt_monitored",
+                "ent_service"
+              ],
+              "sources": [
+                {
+                  "quote": "被监测的服务",
+                  "occurrence": 1
+                }
+              ],
+              "reason": "服务是被监测状态的对象；该关系处于定语提及事件，不产生当前监测要求。"
+            },
+            {
+              "subject_id": "ent_service",
+              "field_path": "",
+              "verdict": "SUPPORT",
+              "context_refs": [],
+              "sources": [
+                {
+                  "quote": "被监测的服务",
+                  "occurrence": 1
+                }
+              ],
+              "reason": "原文明示受检服务，以SYSTEM表示合理。"
+            },
+            {
+              "subject_id": "evt_monitored",
+              "field_path": "",
+              "verdict": "SUPPORT",
+              "context_refs": [
+                "ent_service"
+              ],
+              "sources": [
+                {
+                  "quote": "被监测的服务",
+                  "occurrence": 1
+                }
+              ],
+              "reason": "被监测是限定服务的状态描述，保留为定语层提及，不增加监测义务。"
+            }
+          ]
+        }
+      },
+      {
+        "id": "bf:e8e365957fcfdb48e8ad",
+        "kind": "ROLE",
+        "status": "ACCEPTED",
+        "claim_ids": [
+          "cl_create_performer",
+          "ent_pm",
+          "evt_create"
+        ],
+        "claim": {
+          "id": "cl_create_performer",
+          "kind": "ROLE",
+          "event_id": "evt_create",
+          "entity_id": "ent_pm",
+          "role": "PERFORMER",
+          "expression_id": null,
+          "direction": null,
+          "temporal": null,
+          "quantity": null,
+          "scope_id": "evt_create",
+          "requires": [],
+          "sources": [
+            {
+              "quote": "请PM",
+              "occurrence": 1
+            },
+            {
+              "quote": "并形成status.md",
+              "occurrence": 1
+            }
+          ],
+          "note": "并列谓语沿用PM作为主体；后句未指定仅针对具体检查执行者。"
+        },
+        "event": {
+          "id": "evt_create",
+          "predicate": "形成文件",
+          "kind": "ACTION",
+          "layer": "MAIN",
+          "use": "CURRENT_TASK",
+          "modality": "REQUIRED",
+          "polarity": "POSITIVE",
+          "owner_id": "ROOT",
+          "constraint_ids": [],
+          "requires": [],
+          "sources": [
+            {
+              "quote": "请PM",
+              "occurrence": 1
+            },
+            {
+              "quote": "并形成status.md",
+              "occurrence": 1
+            }
+          ]
+        },
+        "entity": {
+          "id": "ent_pm",
+          "label": "PM",
+          "type": "PERSON",
+          "mentions": [
+            {
+              "quote": "PM",
+              "occurrence": 1
+            }
+          ],
+          "alternatives": []
+        },
+        "expression": null,
+        "constraints": [],
+        "content_quantities": [],
+        "sources": [
+          {
+            "quote": "请PM",
+            "occurrence": 1,
+            "span": [
+              0,
+              3
+            ],
+            "source_sha256": "37e867dd769f87438f89f665706018f7bf395a62ad61b9daf7677fd8cbbf52ee"
+          },
+          {
+            "quote": "并形成status.md",
+            "occurrence": 1,
+            "span": [
+              14,
+              26
+            ],
+            "source_sha256": "37e867dd769f87438f89f665706018f7bf395a62ad61b9daf7677fd8cbbf52ee"
+          },
+          {
+            "quote": "PM",
+            "occurrence": 1,
+            "span": [
+              1,
+              3
+            ],
+            "source_sha256": "37e867dd769f87438f89f665706018f7bf395a62ad61b9daf7677fd8cbbf52ee"
+          },
+          {
+            "quote": "请PM",
+            "occurrence": 1,
+            "span": [
+              0,
+              3
+            ],
+            "source_sha256": "37e867dd769f87438f89f665706018f7bf395a62ad61b9daf7677fd8cbbf52ee"
+          },
+          {
+            "quote": "并形成status.md",
+            "occurrence": 1,
+            "span": [
+              14,
+              26
+            ],
+            "source_sha256": "37e867dd769f87438f89f665706018f7bf395a62ad61b9daf7677fd8cbbf52ee"
+          }
+        ],
+        "slots": [
+          "P"
+        ],
+        "proof": {
+          "source_sha256": "37e867dd769f87438f89f665706018f7bf395a62ad61b9daf7677fd8cbbf52ee",
+          "claim_ids": [
+            "cl_create_performer",
+            "ent_pm",
+            "evt_create"
+          ],
+          "technical_policy": "028-r02-technical-v1",
+          "checks": [
+            {
+              "id": "cl_create_performer",
+              "collection": "claims",
+              "status": "ACCEPTED",
+              "errors": [],
+              "uncertain": [],
+              "sources": [
+                {
+                  "quote": "请PM",
+                  "occurrence": 1,
+                  "span": [
+                    0,
+                    3
+                  ],
+                  "source_sha256": "37e867dd769f87438f89f665706018f7bf395a62ad61b9daf7677fd8cbbf52ee"
+                },
+                {
+                  "quote": "并形成status.md",
+                  "occurrence": 1,
+                  "span": [
+                    14,
+                    26
+                  ],
+                  "source_sha256": "37e867dd769f87438f89f665706018f7bf395a62ad61b9daf7677fd8cbbf52ee"
+                }
+              ],
+              "audit_refs": [
+                {
+                  "subject_id": "cl_create_performer",
+                  "field_path": "",
+                  "verdict": "SUPPORT"
+                }
+              ],
+              "required_dependencies": [],
+              "structural_refs": [
+                "evt_create",
+                "ent_pm"
+              ]
+            },
+            {
+              "id": "ent_pm",
+              "collection": "entities",
+              "status": "ACCEPTED",
+              "errors": [],
+              "uncertain": [],
+              "sources": [
+                {
+                  "quote": "PM",
+                  "occurrence": 1,
+                  "span": [
+                    1,
+                    3
+                  ],
+                  "source_sha256": "37e867dd769f87438f89f665706018f7bf395a62ad61b9daf7677fd8cbbf52ee"
+                }
+              ],
+              "audit_refs": [
+                {
+                  "subject_id": "ent_pm",
+                  "field_path": "",
+                  "verdict": "SUPPORT"
+                }
+              ],
+              "required_dependencies": [],
+              "structural_refs": []
+            },
+            {
+              "id": "evt_create",
+              "collection": "events",
+              "status": "ACCEPTED",
+              "errors": [],
+              "uncertain": [],
+              "sources": [
+                {
+                  "quote": "请PM",
+                  "occurrence": 1,
+                  "span": [
+                    0,
+                    3
+                  ],
+                  "source_sha256": "37e867dd769f87438f89f665706018f7bf395a62ad61b9daf7677fd8cbbf52ee"
+                },
+                {
+                  "quote": "并形成status.md",
+                  "occurrence": 1,
+                  "span": [
+                    14,
+                    26
+                  ],
+                  "source_sha256": "37e867dd769f87438f89f665706018f7bf395a62ad61b9daf7677fd8cbbf52ee"
+                }
+              ],
+              "audit_refs": [
+                {
+                  "subject_id": "evt_create",
+                  "field_path": "",
+                  "verdict": "SUPPORT"
+                }
+              ],
+              "required_dependencies": [],
+              "structural_refs": [
+                "ROOT"
+              ]
+            }
+          ],
+          "audit": [
+            {
+              "subject_id": "cl_create_performer",
+              "field_path": "",
+              "verdict": "SUPPORT",
+              "context_refs": [
+                "evt_create",
+                "ent_pm"
+              ],
+              "sources": [
+                {
+                  "quote": "请PM",
+                  "occurrence": 1
+                },
+                {
+                  "quote": "并形成status.md",
+                  "occurrence": 1
+                },
+                {
+                  "quote": "具体检查执行者未指定",
+                  "occurrence": 1
+                }
+              ],
+              "reason": "并列谓语形成文件沿用PM为主体；未指定的范围明确限于具体检查执行者。"
+            },
+            {
+              "subject_id": "ent_pm",
+              "field_path": "",
+              "verdict": "SUPPORT",
+              "context_refs": [],
+              "sources": [
+                {
+                  "quote": "PM",
+                  "occurrence": 1
+                }
+              ],
+              "reason": "原文明示PM为参与者；该实体身份不自行赋予检查执行职责。"
+            },
+            {
+              "subject_id": "evt_create",
+              "field_path": "",
+              "verdict": "SUPPORT",
+              "context_refs": [],
+              "sources": [
+                {
+                  "quote": "请PM",
+                  "occurrence": 1
+                },
+                {
+                  "quote": "并形成status.md",
+                  "occurrence": 1
+                }
+              ],
+              "reason": "形成文件是并列的当前要求；原文未设前提、期限或根任务完成条件。"
+            }
+          ]
+        }
+      },
+      {
+        "id": "bf:e512d9a56de3daab06b7",
+        "kind": "ROLE",
+        "status": "ACCEPTED",
+        "claim_ids": [
+          "cl_create_result",
+          "ent_status",
+          "evt_create"
+        ],
+        "claim": {
+          "id": "cl_create_result",
+          "kind": "ROLE",
+          "event_id": "evt_create",
+          "entity_id": "ent_status",
+          "role": "RESULT",
+          "expression_id": null,
+          "direction": null,
+          "temporal": null,
+          "quantity": null,
+          "scope_id": "evt_create",
+          "requires": [],
+          "sources": [
+            {
+              "quote": "形成status.md",
+              "occurrence": 1
+            }
+          ],
+          "note": "status.md为要求形成的产物。"
+        },
+        "event": {
+          "id": "evt_create",
+          "predicate": "形成文件",
+          "kind": "ACTION",
+          "layer": "MAIN",
+          "use": "CURRENT_TASK",
+          "modality": "REQUIRED",
+          "polarity": "POSITIVE",
+          "owner_id": "ROOT",
+          "constraint_ids": [],
+          "requires": [],
+          "sources": [
+            {
+              "quote": "请PM",
+              "occurrence": 1
+            },
+            {
+              "quote": "并形成status.md",
+              "occurrence": 1
+            }
+          ]
+        },
+        "entity": {
+          "id": "ent_status",
+          "label": "status.md",
+          "type": "FILE",
+          "mentions": [
+            {
+              "quote": "status.md",
+              "occurrence": 1
+            }
+          ],
+          "alternatives": []
+        },
+        "expression": null,
+        "constraints": [],
+        "content_quantities": [],
+        "sources": [
+          {
+            "quote": "形成status.md",
+            "occurrence": 1,
+            "span": [
+              15,
+              26
+            ],
+            "source_sha256": "37e867dd769f87438f89f665706018f7bf395a62ad61b9daf7677fd8cbbf52ee"
+          },
+          {
+            "quote": "status.md",
+            "occurrence": 1,
+            "span": [
+              17,
+              26
+            ],
+            "source_sha256": "37e867dd769f87438f89f665706018f7bf395a62ad61b9daf7677fd8cbbf52ee"
+          },
+          {
+            "quote": "请PM",
+            "occurrence": 1,
+            "span": [
+              0,
+              3
+            ],
+            "source_sha256": "37e867dd769f87438f89f665706018f7bf395a62ad61b9daf7677fd8cbbf52ee"
+          },
+          {
+            "quote": "并形成status.md",
+            "occurrence": 1,
+            "span": [
+              14,
+              26
+            ],
+            "source_sha256": "37e867dd769f87438f89f665706018f7bf395a62ad61b9daf7677fd8cbbf52ee"
+          }
+        ],
+        "slots": [
+          "O"
+        ],
+        "proof": {
+          "source_sha256": "37e867dd769f87438f89f665706018f7bf395a62ad61b9daf7677fd8cbbf52ee",
+          "claim_ids": [
+            "cl_create_result",
+            "ent_status",
+            "evt_create"
+          ],
+          "technical_policy": "028-r02-technical-v1",
+          "checks": [
+            {
+              "id": "cl_create_result",
+              "collection": "claims",
+              "status": "ACCEPTED",
+              "errors": [],
+              "uncertain": [],
+              "sources": [
+                {
+                  "quote": "形成status.md",
+                  "occurrence": 1,
+                  "span": [
+                    15,
+                    26
+                  ],
+                  "source_sha256": "37e867dd769f87438f89f665706018f7bf395a62ad61b9daf7677fd8cbbf52ee"
+                }
+              ],
+              "audit_refs": [
+                {
+                  "subject_id": "cl_create_result",
+                  "field_path": "",
+                  "verdict": "SUPPORT"
+                }
+              ],
+              "required_dependencies": [],
+              "structural_refs": [
+                "evt_create",
+                "ent_status"
+              ]
+            },
+            {
+              "id": "ent_status",
+              "collection": "entities",
+              "status": "ACCEPTED",
+              "errors": [],
+              "uncertain": [],
+              "sources": [
+                {
+                  "quote": "status.md",
+                  "occurrence": 1,
+                  "span": [
+                    17,
+                    26
+                  ],
+                  "source_sha256": "37e867dd769f87438f89f665706018f7bf395a62ad61b9daf7677fd8cbbf52ee"
+                }
+              ],
+              "audit_refs": [
+                {
+                  "subject_id": "ent_status",
+                  "field_path": "",
+                  "verdict": "SUPPORT"
+                }
+              ],
+              "required_dependencies": [],
+              "structural_refs": []
+            },
+            {
+              "id": "evt_create",
+              "collection": "events",
+              "status": "ACCEPTED",
+              "errors": [],
+              "uncertain": [],
+              "sources": [
+                {
+                  "quote": "请PM",
+                  "occurrence": 1,
+                  "span": [
+                    0,
+                    3
+                  ],
+                  "source_sha256": "37e867dd769f87438f89f665706018f7bf395a62ad61b9daf7677fd8cbbf52ee"
+                },
+                {
+                  "quote": "并形成status.md",
+                  "occurrence": 1,
+                  "span": [
+                    14,
+                    26
+                  ],
+                  "source_sha256": "37e867dd769f87438f89f665706018f7bf395a62ad61b9daf7677fd8cbbf52ee"
+                }
+              ],
+              "audit_refs": [
+                {
+                  "subject_id": "evt_create",
+                  "field_path": "",
+                  "verdict": "SUPPORT"
+                }
+              ],
+              "required_dependencies": [],
+              "structural_refs": [
+                "ROOT"
+              ]
+            }
+          ],
+          "audit": [
+            {
+              "subject_id": "cl_create_result",
+              "field_path": "",
+              "verdict": "SUPPORT",
+              "context_refs": [
+                "evt_create",
+                "ent_status"
+              ],
+              "sources": [
+                {
+                  "quote": "形成status.md",
+                  "occurrence": 1
+                }
+              ],
+              "reason": "status.md是形成动作的产物，RESULT绑定正确，未误作外部输入。"
+            },
+            {
+              "subject_id": "ent_status",
+              "field_path": "",
+              "verdict": "SUPPORT",
+              "context_refs": [],
+              "sources": [
+                {
+                  "quote": "status.md",
+                  "occurrence": 1
+                }
+              ],
+              "reason": "原文明示要求形成的文件名称。"
+            },
+            {
+              "subject_id": "evt_create",
+              "field_path": "",
+              "verdict": "SUPPORT",
+              "context_refs": [],
+              "sources": [
+                {
+                  "quote": "请PM",
+                  "occurrence": 1
+                },
+                {
+                  "quote": "并形成status.md",
+                  "occurrence": 1
+                }
+              ],
+              "reason": "形成文件是并列的当前要求；原文未设前提、期限或根任务完成条件。"
+            }
+          ]
+        }
+      }
+    ],
+    "entities": [
+      {
+        "id": "ent_pm",
+        "label": "PM",
+        "type": "PERSON",
+        "mentions": [
+          {
+            "quote": "PM",
+            "occurrence": 1
+          }
+        ],
+        "alternatives": []
+      },
+      {
+        "id": "ent_service",
+        "label": "被监测的服务",
+        "type": "SYSTEM",
+        "mentions": [
+          {
+            "quote": "被监测的服务",
+            "occurrence": 1
+          }
+        ],
+        "alternatives": []
+      },
+      {
+        "id": "ent_status",
+        "label": "status.md",
+        "type": "FILE",
+        "mentions": [
+          {
+            "quote": "status.md",
+            "occurrence": 1
+          }
+        ],
+        "alternatives": []
+      }
+    ],
+    "expressions": [],
+    "issues": [
+      {
+        "id": "issue_check_performer",
+        "kind": "UNSPECIFIED",
+        "subject_ids": [
+          "evt_check"
+        ],
+        "field_path": "claims[ROLE,event_id=evt_check,role=PERFORMER]",
+        "alternatives": [],
+        "affected_views": [
+          "P"
+        ],
+        "sources": [
+          {
+            "quote": "具体检查执行者未指定",
+            "occurrence": 1
+          }
+        ],
+        "note": "原文明示检查执行者未指定，保留检查义务，不补默认执行者。"
+      }
+    ],
+    "audit_issues": [],
+    "gaps": [],
+    "technical_diagnostics": [],
+    "business_decision": null,
+    "execution_authorization": null
+  },
+  "canonical": {
+    "format": "boundx-canonical-7plus1/028-r02.1",
+    "source_sha256": "37e867dd769f87438f89f665706018f7bf395a62ad61b9daf7677fd8cbbf52ee",
+    "slots": {
+      "I": {
+        "status": "RESOLVED",
+        "openness": "CONSTRAINED",
+        "entries": [
+          {
+            "id": "bf:d0da6e68f485631b17b2",
+            "kind": "ROLE",
+            "status": "ACCEPTED",
+            "claim_ids": [
+              "cl_check_input",
+              "ent_service",
+              "evt_check"
+            ],
+            "claim": {
+              "id": "cl_check_input",
+              "kind": "ROLE",
+              "event_id": "evt_check",
+              "entity_id": "ent_service",
+              "role": "INPUT_OBJECT",
+              "expression_id": null,
+              "direction": null,
+              "temporal": null,
+              "quantity": null,
+              "scope_id": "evt_check",
+              "requires": [],
+              "sources": [
+                {
+                  "quote": "检查被监测的服务",
+                  "occurrence": 1
+                }
+              ],
+              "note": "明确受检范围为被监测的服务。"
+            },
+            "event": {
+              "id": "evt_check",
+              "predicate": "检查",
+              "kind": "ACTION",
+              "layer": "MAIN",
+              "use": "CURRENT_TASK",
+              "modality": "REQUIRED",
+              "polarity": "POSITIVE",
+              "owner_id": "evt_organize",
+              "constraint_ids": [],
+              "requires": [],
+              "sources": [
+                {
+                  "quote": "检查被监测的服务",
+                  "occurrence": 1
+                }
+              ]
+            },
+            "entity": {
+              "id": "ent_service",
+              "label": "被监测的服务",
+              "type": "SYSTEM",
+              "mentions": [
+                {
+                  "quote": "被监测的服务",
+                  "occurrence": 1
+                }
+              ],
+              "alternatives": []
+            },
+            "expression": null,
+            "constraints": [],
+            "content_quantities": [],
+            "sources": [
+              {
+                "quote": "检查被监测的服务",
+                "occurrence": 1,
+                "span": [
+                  5,
+                  13
+                ],
+                "source_sha256": "37e867dd769f87438f89f665706018f7bf395a62ad61b9daf7677fd8cbbf52ee"
+              },
+              {
+                "quote": "被监测的服务",
+                "occurrence": 1,
+                "span": [
+                  7,
+                  13
+                ],
+                "source_sha256": "37e867dd769f87438f89f665706018f7bf395a62ad61b9daf7677fd8cbbf52ee"
+              },
+              {
+                "quote": "检查被监测的服务",
+                "occurrence": 1,
+                "span": [
+                  5,
+                  13
+                ],
+                "source_sha256": "37e867dd769f87438f89f665706018f7bf395a62ad61b9daf7677fd8cbbf52ee"
+              }
+            ],
+            "slots": [
+              "I"
+            ],
+            "proof": {
+              "source_sha256": "37e867dd769f87438f89f665706018f7bf395a62ad61b9daf7677fd8cbbf52ee",
+              "claim_ids": [
+                "cl_check_input",
+                "ent_service",
+                "evt_check"
+              ],
+              "technical_policy": "028-r02-technical-v1",
+              "checks": [
+                {
+                  "id": "cl_check_input",
+                  "collection": "claims",
+                  "status": "ACCEPTED",
+                  "errors": [],
+                  "uncertain": [],
+                  "sources": [
+                    {
+                      "quote": "检查被监测的服务",
+                      "occurrence": 1,
+                      "span": [
+                        5,
+                        13
+                      ],
+                      "source_sha256": "37e867dd769f87438f89f665706018f7bf395a62ad61b9daf7677fd8cbbf52ee"
+                    }
+                  ],
+                  "audit_refs": [
+                    {
+                      "subject_id": "cl_check_input",
+                      "field_path": "",
+                      "verdict": "SUPPORT"
+                    }
+                  ],
+                  "required_dependencies": [],
+                  "structural_refs": [
+                    "evt_check",
+                    "ent_service"
+                  ]
+                },
+                {
+                  "id": "ent_service",
+                  "collection": "entities",
+                  "status": "ACCEPTED",
+                  "errors": [],
+                  "uncertain": [],
+                  "sources": [
+                    {
+                      "quote": "被监测的服务",
+                      "occurrence": 1,
+                      "span": [
+                        7,
+                        13
+                      ],
+                      "source_sha256": "37e867dd769f87438f89f665706018f7bf395a62ad61b9daf7677fd8cbbf52ee"
+                    }
+                  ],
+                  "audit_refs": [
+                    {
+                      "subject_id": "ent_service",
+                      "field_path": "",
+                      "verdict": "SUPPORT"
+                    }
+                  ],
+                  "required_dependencies": [],
+                  "structural_refs": []
+                },
+                {
+                  "id": "evt_check",
+                  "collection": "events",
+                  "status": "ACCEPTED",
+                  "errors": [],
+                  "uncertain": [],
+                  "sources": [
+                    {
+                      "quote": "检查被监测的服务",
+                      "occurrence": 1,
+                      "span": [
+                        5,
+                        13
+                      ],
+                      "source_sha256": "37e867dd769f87438f89f665706018f7bf395a62ad61b9daf7677fd8cbbf52ee"
+                    }
+                  ],
+                  "audit_refs": [
+                    {
+                      "subject_id": "evt_check",
+                      "field_path": "",
+                      "verdict": "SUPPORT"
+                    }
+                  ],
+                  "required_dependencies": [],
+                  "structural_refs": [
+                    "evt_organize"
+                  ]
+                }
+              ],
+              "audit": [
+                {
+                  "subject_id": "cl_check_input",
+                  "field_path": "",
+                  "verdict": "SUPPORT",
+                  "context_refs": [
+                    "evt_check",
+                    "ent_service"
+                  ],
+                  "sources": [
+                    {
+                      "quote": "检查被监测的服务",
+                      "occurrence": 1
+                    }
+                  ],
+                  "reason": "被监测的服务是明确受检范围，符合INPUT_OBJECT用途。"
+                },
+                {
+                  "subject_id": "ent_service",
+                  "field_path": "",
+                  "verdict": "SUPPORT",
+                  "context_refs": [],
+                  "sources": [
+                    {
+                      "quote": "被监测的服务",
+                      "occurrence": 1
+                    }
+                  ],
+                  "reason": "原文明示受检服务，以SYSTEM表示合理。"
+                },
+                {
+                  "subject_id": "evt_check",
+                  "field_path": "",
+                  "verdict": "SUPPORT",
+                  "context_refs": [
+                    "evt_organize"
+                  ],
+                  "sources": [
+                    {
+                      "quote": "请PM组织检查被监测的服务",
+                      "occurrence": 1
+                    },
+                    {
+                      "quote": "具体检查执行者未指定",
+                      "occurrence": 1
+                    }
+                  ],
+                  "reason": "检查是要求组织开展的实际任务；执行者未指定不撤销检查要求。"
+                }
+              ]
+            }
+          }
+        ]
+      },
+      "O": {
+        "status": "RESOLVED",
+        "openness": "CONSTRAINED",
+        "entries": [
+          {
+            "id": "bf:e512d9a56de3daab06b7",
+            "kind": "ROLE",
+            "status": "ACCEPTED",
+            "claim_ids": [
+              "cl_create_result",
+              "ent_status",
+              "evt_create"
+            ],
+            "claim": {
+              "id": "cl_create_result",
+              "kind": "ROLE",
+              "event_id": "evt_create",
+              "entity_id": "ent_status",
+              "role": "RESULT",
+              "expression_id": null,
+              "direction": null,
+              "temporal": null,
+              "quantity": null,
+              "scope_id": "evt_create",
+              "requires": [],
+              "sources": [
+                {
+                  "quote": "形成status.md",
+                  "occurrence": 1
+                }
+              ],
+              "note": "status.md为要求形成的产物。"
+            },
+            "event": {
+              "id": "evt_create",
+              "predicate": "形成文件",
+              "kind": "ACTION",
+              "layer": "MAIN",
+              "use": "CURRENT_TASK",
+              "modality": "REQUIRED",
+              "polarity": "POSITIVE",
+              "owner_id": "ROOT",
+              "constraint_ids": [],
+              "requires": [],
+              "sources": [
+                {
+                  "quote": "请PM",
+                  "occurrence": 1
+                },
+                {
+                  "quote": "并形成status.md",
+                  "occurrence": 1
+                }
+              ]
+            },
+            "entity": {
+              "id": "ent_status",
+              "label": "status.md",
+              "type": "FILE",
+              "mentions": [
+                {
+                  "quote": "status.md",
+                  "occurrence": 1
+                }
+              ],
+              "alternatives": []
+            },
+            "expression": null,
+            "constraints": [],
+            "content_quantities": [],
+            "sources": [
+              {
+                "quote": "形成status.md",
+                "occurrence": 1,
+                "span": [
+                  15,
+                  26
+                ],
+                "source_sha256": "37e867dd769f87438f89f665706018f7bf395a62ad61b9daf7677fd8cbbf52ee"
+              },
+              {
+                "quote": "status.md",
+                "occurrence": 1,
+                "span": [
+                  17,
+                  26
+                ],
+                "source_sha256": "37e867dd769f87438f89f665706018f7bf395a62ad61b9daf7677fd8cbbf52ee"
+              },
+              {
+                "quote": "请PM",
+                "occurrence": 1,
+                "span": [
+                  0,
+                  3
+                ],
+                "source_sha256": "37e867dd769f87438f89f665706018f7bf395a62ad61b9daf7677fd8cbbf52ee"
+              },
+              {
+                "quote": "并形成status.md",
+                "occurrence": 1,
+                "span": [
+                  14,
+                  26
+                ],
+                "source_sha256": "37e867dd769f87438f89f665706018f7bf395a62ad61b9daf7677fd8cbbf52ee"
+              }
+            ],
+            "slots": [
+              "O"
+            ],
+            "proof": {
+              "source_sha256": "37e867dd769f87438f89f665706018f7bf395a62ad61b9daf7677fd8cbbf52ee",
+              "claim_ids": [
+                "cl_create_result",
+                "ent_status",
+                "evt_create"
+              ],
+              "technical_policy": "028-r02-technical-v1",
+              "checks": [
+                {
+                  "id": "cl_create_result",
+                  "collection": "claims",
+                  "status": "ACCEPTED",
+                  "errors": [],
+                  "uncertain": [],
+                  "sources": [
+                    {
+                      "quote": "形成status.md",
+                      "occurrence": 1,
+                      "span": [
+                        15,
+                        26
+                      ],
+                      "source_sha256": "37e867dd769f87438f89f665706018f7bf395a62ad61b9daf7677fd8cbbf52ee"
+                    }
+                  ],
+                  "audit_refs": [
+                    {
+                      "subject_id": "cl_create_result",
+                      "field_path": "",
+                      "verdict": "SUPPORT"
+                    }
+                  ],
+                  "required_dependencies": [],
+                  "structural_refs": [
+                    "evt_create",
+                    "ent_status"
+                  ]
+                },
+                {
+                  "id": "ent_status",
+                  "collection": "entities",
+                  "status": "ACCEPTED",
+                  "errors": [],
+                  "uncertain": [],
+                  "sources": [
+                    {
+                      "quote": "status.md",
+                      "occurrence": 1,
+                      "span": [
+                        17,
+                        26
+                      ],
+                      "source_sha256": "37e867dd769f87438f89f665706018f7bf395a62ad61b9daf7677fd8cbbf52ee"
+                    }
+                  ],
+                  "audit_refs": [
+                    {
+                      "subject_id": "ent_status",
+                      "field_path": "",
+                      "verdict": "SUPPORT"
+                    }
+                  ],
+                  "required_dependencies": [],
+                  "structural_refs": []
+                },
+                {
+                  "id": "evt_create",
+                  "collection": "events",
+                  "status": "ACCEPTED",
+                  "errors": [],
+                  "uncertain": [],
+                  "sources": [
+                    {
+                      "quote": "请PM",
+                      "occurrence": 1,
+                      "span": [
+                        0,
+                        3
+                      ],
+                      "source_sha256": "37e867dd769f87438f89f665706018f7bf395a62ad61b9daf7677fd8cbbf52ee"
+                    },
+                    {
+                      "quote": "并形成status.md",
+                      "occurrence": 1,
+                      "span": [
+                        14,
+                        26
+                      ],
+                      "source_sha256": "37e867dd769f87438f89f665706018f7bf395a62ad61b9daf7677fd8cbbf52ee"
+                    }
+                  ],
+                  "audit_refs": [
+                    {
+                      "subject_id": "evt_create",
+                      "field_path": "",
+                      "verdict": "SUPPORT"
+                    }
+                  ],
+                  "required_dependencies": [],
+                  "structural_refs": [
+                    "ROOT"
+                  ]
+                }
+              ],
+              "audit": [
+                {
+                  "subject_id": "cl_create_result",
+                  "field_path": "",
+                  "verdict": "SUPPORT",
+                  "context_refs": [
+                    "evt_create",
+                    "ent_status"
+                  ],
+                  "sources": [
+                    {
+                      "quote": "形成status.md",
+                      "occurrence": 1
+                    }
+                  ],
+                  "reason": "status.md是形成动作的产物，RESULT绑定正确，未误作外部输入。"
+                },
+                {
+                  "subject_id": "ent_status",
+                  "field_path": "",
+                  "verdict": "SUPPORT",
+                  "context_refs": [],
+                  "sources": [
+                    {
+                      "quote": "status.md",
+                      "occurrence": 1
+                    }
+                  ],
+                  "reason": "原文明示要求形成的文件名称。"
+                },
+                {
+                  "subject_id": "evt_create",
+                  "field_path": "",
+                  "verdict": "SUPPORT",
+                  "context_refs": [],
+                  "sources": [
+                    {
+                      "quote": "请PM",
+                      "occurrence": 1
+                    },
+                    {
+                      "quote": "并形成status.md",
+                      "occurrence": 1
+                    }
+                  ],
+                  "reason": "形成文件是并列的当前要求；原文未设前提、期限或根任务完成条件。"
+                }
+              ]
+            }
+          }
+        ]
+      },
+      "A": {
+        "status": "RESOLVED",
+        "openness": "CONSTRAINED",
+        "entries": [
+          {
+            "id": "bf:fc91fb8c811b23b90a8d",
+            "kind": "EVENT",
+            "status": "ACCEPTED",
+            "claim_ids": [
+              "evt_organize",
+              "cl_organize_performer"
+            ],
+            "event": {
+              "id": "evt_organize",
+              "predicate": "组织检查",
+              "kind": "ACTION",
+              "layer": "MAIN",
+              "use": "CURRENT_TASK",
+              "modality": "REQUIRED",
+              "polarity": "POSITIVE",
+              "owner_id": "ROOT",
+              "constraint_ids": [],
+              "requires": [],
+              "sources": [
+                {
+                  "quote": "请PM组织检查被监测的服务",
+                  "occurrence": 1
+                }
+              ]
+            },
+            "roles": [
+              {
+                "id": "cl_organize_performer",
+                "kind": "ROLE",
+                "event_id": "evt_organize",
+                "entity_id": "ent_pm",
+                "role": "PERFORMER",
+                "expression_id": null,
+                "direction": null,
+                "temporal": null,
+                "quantity": null,
+                "scope_id": "evt_organize",
+                "requires": [],
+                "sources": [
+                  {
+                    "quote": "请PM组织检查",
+                    "occurrence": 1
+                  }
+                ],
+                "note": "PM执行组织工作。",
+                "entity": {
+                  "id": "ent_pm",
+                  "label": "PM",
+                  "type": "PERSON",
+                  "mentions": [
+                    {
+                      "quote": "PM",
+                      "occurrence": 1
+                    }
+                  ],
+                  "alternatives": []
+                },
+                "status": "ACCEPTED"
+              }
+            ],
+            "constraints": [],
+            "sources": [
+              {
+                "quote": "请PM组织检查被监测的服务",
+                "occurrence": 1,
+                "span": [
+                  0,
+                  13
+                ],
+                "source_sha256": "37e867dd769f87438f89f665706018f7bf395a62ad61b9daf7677fd8cbbf52ee"
+              },
+              {
+                "quote": "请PM组织检查",
+                "occurrence": 1,
+                "span": [
+                  0,
+                  7
+                ],
+                "source_sha256": "37e867dd769f87438f89f665706018f7bf395a62ad61b9daf7677fd8cbbf52ee"
+              }
+            ],
+            "slots": [
+              "A"
+            ],
+            "proof": {
+              "source_sha256": "37e867dd769f87438f89f665706018f7bf395a62ad61b9daf7677fd8cbbf52ee",
+              "claim_ids": [
+                "evt_organize",
+                "cl_organize_performer"
+              ],
+              "technical_policy": "028-r02-technical-v1",
+              "checks": [
+                {
+                  "id": "evt_organize",
+                  "collection": "events",
+                  "status": "ACCEPTED",
+                  "errors": [],
+                  "uncertain": [],
+                  "sources": [
+                    {
+                      "quote": "请PM组织检查被监测的服务",
+                      "occurrence": 1,
+                      "span": [
+                        0,
+                        13
+                      ],
+                      "source_sha256": "37e867dd769f87438f89f665706018f7bf395a62ad61b9daf7677fd8cbbf52ee"
+                    }
+                  ],
+                  "audit_refs": [
+                    {
+                      "subject_id": "evt_organize",
+                      "field_path": "",
+                      "verdict": "SUPPORT"
+                    }
+                  ],
+                  "required_dependencies": [],
+                  "structural_refs": [
+                    "ROOT"
+                  ]
+                },
+                {
+                  "id": "cl_organize_performer",
+                  "collection": "claims",
+                  "status": "ACCEPTED",
+                  "errors": [],
+                  "uncertain": [],
+                  "sources": [
+                    {
+                      "quote": "请PM组织检查",
+                      "occurrence": 1,
+                      "span": [
+                        0,
+                        7
+                      ],
+                      "source_sha256": "37e867dd769f87438f89f665706018f7bf395a62ad61b9daf7677fd8cbbf52ee"
+                    }
+                  ],
+                  "audit_refs": [
+                    {
+                      "subject_id": "cl_organize_performer",
+                      "field_path": "",
+                      "verdict": "SUPPORT"
+                    }
+                  ],
+                  "required_dependencies": [],
+                  "structural_refs": [
+                    "evt_organize",
+                    "ent_pm"
+                  ]
+                }
+              ],
+              "audit": [
+                {
+                  "subject_id": "evt_organize",
+                  "field_path": "",
+                  "verdict": "SUPPORT",
+                  "context_refs": [],
+                  "sources": [
+                    {
+                      "quote": "请PM组织检查被监测的服务",
+                      "occurrence": 1
+                    }
+                  ],
+                  "reason": "组织检查是当前明确要求的主动作，无明示条件或数量限制。"
+                },
+                {
+                  "subject_id": "cl_organize_performer",
+                  "field_path": "",
+                  "verdict": "SUPPORT",
+                  "context_refs": [
+                    "evt_organize",
+                    "ent_pm"
+                  ],
+                  "sources": [
+                    {
+                      "quote": "请PM组织检查",
+                      "occurrence": 1
+                    }
+                  ],
+                  "reason": "PM执行组织工作，PERFORMER绑定组织事件恰当。"
+                }
+              ]
+            }
+          },
+          {
+            "id": "bf:5f2ff80ae31b38575494",
+            "kind": "EVENT",
+            "status": "ACCEPTED",
+            "claim_ids": [
+              "evt_check",
+              "cl_check_organizer",
+              "cl_check_input"
+            ],
+            "event": {
+              "id": "evt_check",
+              "predicate": "检查",
+              "kind": "ACTION",
+              "layer": "MAIN",
+              "use": "CURRENT_TASK",
+              "modality": "REQUIRED",
+              "polarity": "POSITIVE",
+              "owner_id": "evt_organize",
+              "constraint_ids": [],
+              "requires": [],
+              "sources": [
+                {
+                  "quote": "检查被监测的服务",
+                  "occurrence": 1
+                }
+              ]
+            },
+            "roles": [
+              {
+                "id": "cl_check_organizer",
+                "kind": "ROLE",
+                "event_id": "evt_check",
+                "entity_id": "ent_pm",
+                "role": "ORGANIZER",
+                "expression_id": null,
+                "direction": null,
+                "temporal": null,
+                "quantity": null,
+                "scope_id": "evt_check",
+                "requires": [],
+                "sources": [
+                  {
+                    "quote": "请PM组织检查",
+                    "occurrence": 1
+                  }
+                ],
+                "note": "组织者不自动成为具体检查执行者。",
+                "entity": {
+                  "id": "ent_pm",
+                  "label": "PM",
+                  "type": "PERSON",
+                  "mentions": [
+                    {
+                      "quote": "PM",
+                      "occurrence": 1
+                    }
+                  ],
+                  "alternatives": []
+                },
+                "status": "ACCEPTED"
+              },
+              {
+                "id": "cl_check_input",
+                "kind": "ROLE",
+                "event_id": "evt_check",
+                "entity_id": "ent_service",
+                "role": "INPUT_OBJECT",
+                "expression_id": null,
+                "direction": null,
+                "temporal": null,
+                "quantity": null,
+                "scope_id": "evt_check",
+                "requires": [],
+                "sources": [
+                  {
+                    "quote": "检查被监测的服务",
+                    "occurrence": 1
+                  }
+                ],
+                "note": "明确受检范围为被监测的服务。",
+                "entity": {
+                  "id": "ent_service",
+                  "label": "被监测的服务",
+                  "type": "SYSTEM",
+                  "mentions": [
+                    {
+                      "quote": "被监测的服务",
+                      "occurrence": 1
+                    }
+                  ],
+                  "alternatives": []
+                },
+                "status": "ACCEPTED"
+              }
+            ],
+            "constraints": [],
+            "sources": [
+              {
+                "quote": "检查被监测的服务",
+                "occurrence": 1,
+                "span": [
+                  5,
+                  13
+                ],
+                "source_sha256": "37e867dd769f87438f89f665706018f7bf395a62ad61b9daf7677fd8cbbf52ee"
+              },
+              {
+                "quote": "请PM组织检查",
+                "occurrence": 1,
+                "span": [
+                  0,
+                  7
+                ],
+                "source_sha256": "37e867dd769f87438f89f665706018f7bf395a62ad61b9daf7677fd8cbbf52ee"
+              },
+              {
+                "quote": "检查被监测的服务",
+                "occurrence": 1,
+                "span": [
+                  5,
+                  13
+                ],
+                "source_sha256": "37e867dd769f87438f89f665706018f7bf395a62ad61b9daf7677fd8cbbf52ee"
+              }
+            ],
+            "slots": [
+              "A"
+            ],
+            "proof": {
+              "source_sha256": "37e867dd769f87438f89f665706018f7bf395a62ad61b9daf7677fd8cbbf52ee",
+              "claim_ids": [
+                "evt_check",
+                "cl_check_organizer",
+                "cl_check_input"
+              ],
+              "technical_policy": "028-r02-technical-v1",
+              "checks": [
+                {
+                  "id": "evt_check",
+                  "collection": "events",
+                  "status": "ACCEPTED",
+                  "errors": [],
+                  "uncertain": [],
+                  "sources": [
+                    {
+                      "quote": "检查被监测的服务",
+                      "occurrence": 1,
+                      "span": [
+                        5,
+                        13
+                      ],
+                      "source_sha256": "37e867dd769f87438f89f665706018f7bf395a62ad61b9daf7677fd8cbbf52ee"
+                    }
+                  ],
+                  "audit_refs": [
+                    {
+                      "subject_id": "evt_check",
+                      "field_path": "",
+                      "verdict": "SUPPORT"
+                    }
+                  ],
+                  "required_dependencies": [],
+                  "structural_refs": [
+                    "evt_organize"
+                  ]
+                },
+                {
+                  "id": "cl_check_organizer",
+                  "collection": "claims",
+                  "status": "ACCEPTED",
+                  "errors": [],
+                  "uncertain": [],
+                  "sources": [
+                    {
+                      "quote": "请PM组织检查",
+                      "occurrence": 1,
+                      "span": [
+                        0,
+                        7
+                      ],
+                      "source_sha256": "37e867dd769f87438f89f665706018f7bf395a62ad61b9daf7677fd8cbbf52ee"
+                    }
+                  ],
+                  "audit_refs": [
+                    {
+                      "subject_id": "cl_check_organizer",
+                      "field_path": "",
+                      "verdict": "SUPPORT"
+                    }
+                  ],
+                  "required_dependencies": [],
+                  "structural_refs": [
+                    "evt_check",
+                    "ent_pm"
+                  ]
+                },
+                {
+                  "id": "cl_check_input",
+                  "collection": "claims",
+                  "status": "ACCEPTED",
+                  "errors": [],
+                  "uncertain": [],
+                  "sources": [
+                    {
+                      "quote": "检查被监测的服务",
+                      "occurrence": 1,
+                      "span": [
+                        5,
+                        13
+                      ],
+                      "source_sha256": "37e867dd769f87438f89f665706018f7bf395a62ad61b9daf7677fd8cbbf52ee"
+                    }
+                  ],
+                  "audit_refs": [
+                    {
+                      "subject_id": "cl_check_input",
+                      "field_path": "",
+                      "verdict": "SUPPORT"
+                    }
+                  ],
+                  "required_dependencies": [],
+                  "structural_refs": [
+                    "evt_check",
+                    "ent_service"
+                  ]
+                }
+              ],
+              "audit": [
+                {
+                  "subject_id": "evt_check",
+                  "field_path": "",
+                  "verdict": "SUPPORT",
+                  "context_refs": [
+                    "evt_organize"
+                  ],
+                  "sources": [
+                    {
+                      "quote": "请PM组织检查被监测的服务",
+                      "occurrence": 1
+                    },
+                    {
+                      "quote": "具体检查执行者未指定",
+                      "occurrence": 1
+                    }
+                  ],
+                  "reason": "检查是要求组织开展的实际任务；执行者未指定不撤销检查要求。"
+                },
+                {
+                  "subject_id": "cl_check_organizer",
+                  "field_path": "",
+                  "verdict": "SUPPORT",
+                  "context_refs": [
+                    "evt_check",
+                    "ent_pm"
+                  ],
+                  "sources": [
+                    {
+                      "quote": "请PM组织检查",
+                      "occurrence": 1
+                    },
+                    {
+                      "quote": "具体检查执行者未指定",
+                      "occurrence": 1
+                    }
+                  ],
+                  "reason": "PM是检查的组织者；候选未将其推定为具体检查执行者。"
+                },
+                {
+                  "subject_id": "cl_check_input",
+                  "field_path": "",
+                  "verdict": "SUPPORT",
+                  "context_refs": [
+                    "evt_check",
+                    "ent_service"
+                  ],
+                  "sources": [
+                    {
+                      "quote": "检查被监测的服务",
+                      "occurrence": 1
+                    }
+                  ],
+                  "reason": "被监测的服务是明确受检范围，符合INPUT_OBJECT用途。"
+                }
+              ]
+            }
+          },
+          {
+            "id": "bf:7e0b425f22fead41617d",
+            "kind": "EVENT",
+            "status": "ACCEPTED",
+            "claim_ids": [
+              "evt_create",
+              "cl_create_performer",
+              "cl_create_result"
+            ],
+            "event": {
+              "id": "evt_create",
+              "predicate": "形成文件",
+              "kind": "ACTION",
+              "layer": "MAIN",
+              "use": "CURRENT_TASK",
+              "modality": "REQUIRED",
+              "polarity": "POSITIVE",
+              "owner_id": "ROOT",
+              "constraint_ids": [],
+              "requires": [],
+              "sources": [
+                {
+                  "quote": "请PM",
+                  "occurrence": 1
+                },
+                {
+                  "quote": "并形成status.md",
+                  "occurrence": 1
+                }
+              ]
+            },
+            "roles": [
+              {
+                "id": "cl_create_performer",
+                "kind": "ROLE",
+                "event_id": "evt_create",
+                "entity_id": "ent_pm",
+                "role": "PERFORMER",
+                "expression_id": null,
+                "direction": null,
+                "temporal": null,
+                "quantity": null,
+                "scope_id": "evt_create",
+                "requires": [],
+                "sources": [
+                  {
+                    "quote": "请PM",
+                    "occurrence": 1
+                  },
+                  {
+                    "quote": "并形成status.md",
+                    "occurrence": 1
+                  }
+                ],
+                "note": "并列谓语沿用PM作为主体；后句未指定仅针对具体检查执行者。",
+                "entity": {
+                  "id": "ent_pm",
+                  "label": "PM",
+                  "type": "PERSON",
+                  "mentions": [
+                    {
+                      "quote": "PM",
+                      "occurrence": 1
+                    }
+                  ],
+                  "alternatives": []
+                },
+                "status": "ACCEPTED"
+              },
+              {
+                "id": "cl_create_result",
+                "kind": "ROLE",
+                "event_id": "evt_create",
+                "entity_id": "ent_status",
+                "role": "RESULT",
+                "expression_id": null,
+                "direction": null,
+                "temporal": null,
+                "quantity": null,
+                "scope_id": "evt_create",
+                "requires": [],
+                "sources": [
+                  {
+                    "quote": "形成status.md",
+                    "occurrence": 1
+                  }
+                ],
+                "note": "status.md为要求形成的产物。",
+                "entity": {
+                  "id": "ent_status",
+                  "label": "status.md",
+                  "type": "FILE",
+                  "mentions": [
+                    {
+                      "quote": "status.md",
+                      "occurrence": 1
+                    }
+                  ],
+                  "alternatives": []
+                },
+                "status": "ACCEPTED"
+              }
+            ],
+            "constraints": [],
+            "sources": [
+              {
+                "quote": "请PM",
+                "occurrence": 1,
+                "span": [
+                  0,
+                  3
+                ],
+                "source_sha256": "37e867dd769f87438f89f665706018f7bf395a62ad61b9daf7677fd8cbbf52ee"
+              },
+              {
+                "quote": "并形成status.md",
+                "occurrence": 1,
+                "span": [
+                  14,
+                  26
+                ],
+                "source_sha256": "37e867dd769f87438f89f665706018f7bf395a62ad61b9daf7677fd8cbbf52ee"
+              },
+              {
+                "quote": "请PM",
+                "occurrence": 1,
+                "span": [
+                  0,
+                  3
+                ],
+                "source_sha256": "37e867dd769f87438f89f665706018f7bf395a62ad61b9daf7677fd8cbbf52ee"
+              },
+              {
+                "quote": "并形成status.md",
+                "occurrence": 1,
+                "span": [
+                  14,
+                  26
+                ],
+                "source_sha256": "37e867dd769f87438f89f665706018f7bf395a62ad61b9daf7677fd8cbbf52ee"
+              },
+              {
+                "quote": "形成status.md",
+                "occurrence": 1,
+                "span": [
+                  15,
+                  26
+                ],
+                "source_sha256": "37e867dd769f87438f89f665706018f7bf395a62ad61b9daf7677fd8cbbf52ee"
+              }
+            ],
+            "slots": [
+              "A"
+            ],
+            "proof": {
+              "source_sha256": "37e867dd769f87438f89f665706018f7bf395a62ad61b9daf7677fd8cbbf52ee",
+              "claim_ids": [
+                "evt_create",
+                "cl_create_performer",
+                "cl_create_result"
+              ],
+              "technical_policy": "028-r02-technical-v1",
+              "checks": [
+                {
+                  "id": "evt_create",
+                  "collection": "events",
+                  "status": "ACCEPTED",
+                  "errors": [],
+                  "uncertain": [],
+                  "sources": [
+                    {
+                      "quote": "请PM",
+                      "occurrence": 1,
+                      "span": [
+                        0,
+                        3
+                      ],
+                      "source_sha256": "37e867dd769f87438f89f665706018f7bf395a62ad61b9daf7677fd8cbbf52ee"
+                    },
+                    {
+                      "quote": "并形成status.md",
+                      "occurrence": 1,
+                      "span": [
+                        14,
+                        26
+                      ],
+                      "source_sha256": "37e867dd769f87438f89f665706018f7bf395a62ad61b9daf7677fd8cbbf52ee"
+                    }
+                  ],
+                  "audit_refs": [
+                    {
+                      "subject_id": "evt_create",
+                      "field_path": "",
+                      "verdict": "SUPPORT"
+                    }
+                  ],
+                  "required_dependencies": [],
+                  "structural_refs": [
+                    "ROOT"
+                  ]
+                },
+                {
+                  "id": "cl_create_performer",
+                  "collection": "claims",
+                  "status": "ACCEPTED",
+                  "errors": [],
+                  "uncertain": [],
+                  "sources": [
+                    {
+                      "quote": "请PM",
+                      "occurrence": 1,
+                      "span": [
+                        0,
+                        3
+                      ],
+                      "source_sha256": "37e867dd769f87438f89f665706018f7bf395a62ad61b9daf7677fd8cbbf52ee"
+                    },
+                    {
+                      "quote": "并形成status.md",
+                      "occurrence": 1,
+                      "span": [
+                        14,
+                        26
+                      ],
+                      "source_sha256": "37e867dd769f87438f89f665706018f7bf395a62ad61b9daf7677fd8cbbf52ee"
+                    }
+                  ],
+                  "audit_refs": [
+                    {
+                      "subject_id": "cl_create_performer",
+                      "field_path": "",
+                      "verdict": "SUPPORT"
+                    }
+                  ],
+                  "required_dependencies": [],
+                  "structural_refs": [
+                    "evt_create",
+                    "ent_pm"
+                  ]
+                },
+                {
+                  "id": "cl_create_result",
+                  "collection": "claims",
+                  "status": "ACCEPTED",
+                  "errors": [],
+                  "uncertain": [],
+                  "sources": [
+                    {
+                      "quote": "形成status.md",
+                      "occurrence": 1,
+                      "span": [
+                        15,
+                        26
+                      ],
+                      "source_sha256": "37e867dd769f87438f89f665706018f7bf395a62ad61b9daf7677fd8cbbf52ee"
+                    }
+                  ],
+                  "audit_refs": [
+                    {
+                      "subject_id": "cl_create_result",
+                      "field_path": "",
+                      "verdict": "SUPPORT"
+                    }
+                  ],
+                  "required_dependencies": [],
+                  "structural_refs": [
+                    "evt_create",
+                    "ent_status"
+                  ]
+                }
+              ],
+              "audit": [
+                {
+                  "subject_id": "evt_create",
+                  "field_path": "",
+                  "verdict": "SUPPORT",
+                  "context_refs": [],
+                  "sources": [
+                    {
+                      "quote": "请PM",
+                      "occurrence": 1
+                    },
+                    {
+                      "quote": "并形成status.md",
+                      "occurrence": 1
+                    }
+                  ],
+                  "reason": "形成文件是并列的当前要求；原文未设前提、期限或根任务完成条件。"
+                },
+                {
+                  "subject_id": "cl_create_performer",
+                  "field_path": "",
+                  "verdict": "SUPPORT",
+                  "context_refs": [
+                    "evt_create",
+                    "ent_pm"
+                  ],
+                  "sources": [
+                    {
+                      "quote": "请PM",
+                      "occurrence": 1
+                    },
+                    {
+                      "quote": "并形成status.md",
+                      "occurrence": 1
+                    },
+                    {
+                      "quote": "具体检查执行者未指定",
+                      "occurrence": 1
+                    }
+                  ],
+                  "reason": "并列谓语形成文件沿用PM为主体；未指定的范围明确限于具体检查执行者。"
+                },
+                {
+                  "subject_id": "cl_create_result",
+                  "field_path": "",
+                  "verdict": "SUPPORT",
+                  "context_refs": [
+                    "evt_create",
+                    "ent_status"
+                  ],
+                  "sources": [
+                    {
+                      "quote": "形成status.md",
+                      "occurrence": 1
+                    }
+                  ],
+                  "reason": "status.md是形成动作的产物，RESULT绑定正确，未误作外部输入。"
+                }
+              ]
+            }
+          }
+        ]
+      },
+      "P": {
+        "status": "RESOLVED",
+        "openness": "CONSTRAINED",
+        "entries": [
+          {
+            "id": "bf:0467a08dee521b0083b9",
+            "kind": "ROLE",
+            "status": "ACCEPTED",
+            "claim_ids": [
+              "cl_organize_performer",
+              "ent_pm",
+              "evt_organize"
+            ],
+            "claim": {
+              "id": "cl_organize_performer",
+              "kind": "ROLE",
+              "event_id": "evt_organize",
+              "entity_id": "ent_pm",
+              "role": "PERFORMER",
+              "expression_id": null,
+              "direction": null,
+              "temporal": null,
+              "quantity": null,
+              "scope_id": "evt_organize",
+              "requires": [],
+              "sources": [
+                {
+                  "quote": "请PM组织检查",
+                  "occurrence": 1
+                }
+              ],
+              "note": "PM执行组织工作。"
+            },
+            "event": {
+              "id": "evt_organize",
+              "predicate": "组织检查",
+              "kind": "ACTION",
+              "layer": "MAIN",
+              "use": "CURRENT_TASK",
+              "modality": "REQUIRED",
+              "polarity": "POSITIVE",
+              "owner_id": "ROOT",
+              "constraint_ids": [],
+              "requires": [],
+              "sources": [
+                {
+                  "quote": "请PM组织检查被监测的服务",
+                  "occurrence": 1
+                }
+              ]
+            },
+            "entity": {
+              "id": "ent_pm",
+              "label": "PM",
+              "type": "PERSON",
+              "mentions": [
+                {
+                  "quote": "PM",
+                  "occurrence": 1
+                }
+              ],
+              "alternatives": []
+            },
+            "expression": null,
+            "constraints": [],
+            "content_quantities": [],
+            "sources": [
+              {
+                "quote": "请PM组织检查",
+                "occurrence": 1,
+                "span": [
+                  0,
+                  7
+                ],
+                "source_sha256": "37e867dd769f87438f89f665706018f7bf395a62ad61b9daf7677fd8cbbf52ee"
+              },
+              {
+                "quote": "PM",
+                "occurrence": 1,
+                "span": [
+                  1,
+                  3
+                ],
+                "source_sha256": "37e867dd769f87438f89f665706018f7bf395a62ad61b9daf7677fd8cbbf52ee"
+              },
+              {
+                "quote": "请PM组织检查被监测的服务",
+                "occurrence": 1,
+                "span": [
+                  0,
+                  13
+                ],
+                "source_sha256": "37e867dd769f87438f89f665706018f7bf395a62ad61b9daf7677fd8cbbf52ee"
+              }
+            ],
+            "slots": [
+              "P"
+            ],
+            "proof": {
+              "source_sha256": "37e867dd769f87438f89f665706018f7bf395a62ad61b9daf7677fd8cbbf52ee",
+              "claim_ids": [
+                "cl_organize_performer",
+                "ent_pm",
+                "evt_organize"
+              ],
+              "technical_policy": "028-r02-technical-v1",
+              "checks": [
+                {
+                  "id": "cl_organize_performer",
+                  "collection": "claims",
+                  "status": "ACCEPTED",
+                  "errors": [],
+                  "uncertain": [],
+                  "sources": [
+                    {
+                      "quote": "请PM组织检查",
+                      "occurrence": 1,
+                      "span": [
+                        0,
+                        7
+                      ],
+                      "source_sha256": "37e867dd769f87438f89f665706018f7bf395a62ad61b9daf7677fd8cbbf52ee"
+                    }
+                  ],
+                  "audit_refs": [
+                    {
+                      "subject_id": "cl_organize_performer",
+                      "field_path": "",
+                      "verdict": "SUPPORT"
+                    }
+                  ],
+                  "required_dependencies": [],
+                  "structural_refs": [
+                    "evt_organize",
+                    "ent_pm"
+                  ]
+                },
+                {
+                  "id": "ent_pm",
+                  "collection": "entities",
+                  "status": "ACCEPTED",
+                  "errors": [],
+                  "uncertain": [],
+                  "sources": [
+                    {
+                      "quote": "PM",
+                      "occurrence": 1,
+                      "span": [
+                        1,
+                        3
+                      ],
+                      "source_sha256": "37e867dd769f87438f89f665706018f7bf395a62ad61b9daf7677fd8cbbf52ee"
+                    }
+                  ],
+                  "audit_refs": [
+                    {
+                      "subject_id": "ent_pm",
+                      "field_path": "",
+                      "verdict": "SUPPORT"
+                    }
+                  ],
+                  "required_dependencies": [],
+                  "structural_refs": []
+                },
+                {
+                  "id": "evt_organize",
+                  "collection": "events",
+                  "status": "ACCEPTED",
+                  "errors": [],
+                  "uncertain": [],
+                  "sources": [
+                    {
+                      "quote": "请PM组织检查被监测的服务",
+                      "occurrence": 1,
+                      "span": [
+                        0,
+                        13
+                      ],
+                      "source_sha256": "37e867dd769f87438f89f665706018f7bf395a62ad61b9daf7677fd8cbbf52ee"
+                    }
+                  ],
+                  "audit_refs": [
+                    {
+                      "subject_id": "evt_organize",
+                      "field_path": "",
+                      "verdict": "SUPPORT"
+                    }
+                  ],
+                  "required_dependencies": [],
+                  "structural_refs": [
+                    "ROOT"
+                  ]
+                }
+              ],
+              "audit": [
+                {
+                  "subject_id": "cl_organize_performer",
+                  "field_path": "",
+                  "verdict": "SUPPORT",
+                  "context_refs": [
+                    "evt_organize",
+                    "ent_pm"
+                  ],
+                  "sources": [
+                    {
+                      "quote": "请PM组织检查",
+                      "occurrence": 1
+                    }
+                  ],
+                  "reason": "PM执行组织工作，PERFORMER绑定组织事件恰当。"
+                },
+                {
+                  "subject_id": "ent_pm",
+                  "field_path": "",
+                  "verdict": "SUPPORT",
+                  "context_refs": [],
+                  "sources": [
+                    {
+                      "quote": "PM",
+                      "occurrence": 1
+                    }
+                  ],
+                  "reason": "原文明示PM为参与者；该实体身份不自行赋予检查执行职责。"
+                },
+                {
+                  "subject_id": "evt_organize",
+                  "field_path": "",
+                  "verdict": "SUPPORT",
+                  "context_refs": [],
+                  "sources": [
+                    {
+                      "quote": "请PM组织检查被监测的服务",
+                      "occurrence": 1
+                    }
+                  ],
+                  "reason": "组织检查是当前明确要求的主动作，无明示条件或数量限制。"
+                }
+              ]
+            }
+          },
+          {
+            "id": "bf:67e6f1c3b6c061d3fc6e",
+            "kind": "ROLE",
+            "status": "ACCEPTED",
+            "claim_ids": [
+              "cl_check_organizer",
+              "ent_pm",
+              "evt_check"
+            ],
+            "claim": {
+              "id": "cl_check_organizer",
+              "kind": "ROLE",
+              "event_id": "evt_check",
+              "entity_id": "ent_pm",
+              "role": "ORGANIZER",
+              "expression_id": null,
+              "direction": null,
+              "temporal": null,
+              "quantity": null,
+              "scope_id": "evt_check",
+              "requires": [],
+              "sources": [
+                {
+                  "quote": "请PM组织检查",
+                  "occurrence": 1
+                }
+              ],
+              "note": "组织者不自动成为具体检查执行者。"
+            },
+            "event": {
+              "id": "evt_check",
+              "predicate": "检查",
+              "kind": "ACTION",
+              "layer": "MAIN",
+              "use": "CURRENT_TASK",
+              "modality": "REQUIRED",
+              "polarity": "POSITIVE",
+              "owner_id": "evt_organize",
+              "constraint_ids": [],
+              "requires": [],
+              "sources": [
+                {
+                  "quote": "检查被监测的服务",
+                  "occurrence": 1
+                }
+              ]
+            },
+            "entity": {
+              "id": "ent_pm",
+              "label": "PM",
+              "type": "PERSON",
+              "mentions": [
+                {
+                  "quote": "PM",
+                  "occurrence": 1
+                }
+              ],
+              "alternatives": []
+            },
+            "expression": null,
+            "constraints": [],
+            "content_quantities": [],
+            "sources": [
+              {
+                "quote": "请PM组织检查",
+                "occurrence": 1,
+                "span": [
+                  0,
+                  7
+                ],
+                "source_sha256": "37e867dd769f87438f89f665706018f7bf395a62ad61b9daf7677fd8cbbf52ee"
+              },
+              {
+                "quote": "PM",
+                "occurrence": 1,
+                "span": [
+                  1,
+                  3
+                ],
+                "source_sha256": "37e867dd769f87438f89f665706018f7bf395a62ad61b9daf7677fd8cbbf52ee"
+              },
+              {
+                "quote": "检查被监测的服务",
+                "occurrence": 1,
+                "span": [
+                  5,
+                  13
+                ],
+                "source_sha256": "37e867dd769f87438f89f665706018f7bf395a62ad61b9daf7677fd8cbbf52ee"
+              }
+            ],
+            "slots": [
+              "P"
+            ],
+            "proof": {
+              "source_sha256": "37e867dd769f87438f89f665706018f7bf395a62ad61b9daf7677fd8cbbf52ee",
+              "claim_ids": [
+                "cl_check_organizer",
+                "ent_pm",
+                "evt_check"
+              ],
+              "technical_policy": "028-r02-technical-v1",
+              "checks": [
+                {
+                  "id": "cl_check_organizer",
+                  "collection": "claims",
+                  "status": "ACCEPTED",
+                  "errors": [],
+                  "uncertain": [],
+                  "sources": [
+                    {
+                      "quote": "请PM组织检查",
+                      "occurrence": 1,
+                      "span": [
+                        0,
+                        7
+                      ],
+                      "source_sha256": "37e867dd769f87438f89f665706018f7bf395a62ad61b9daf7677fd8cbbf52ee"
+                    }
+                  ],
+                  "audit_refs": [
+                    {
+                      "subject_id": "cl_check_organizer",
+                      "field_path": "",
+                      "verdict": "SUPPORT"
+                    }
+                  ],
+                  "required_dependencies": [],
+                  "structural_refs": [
+                    "evt_check",
+                    "ent_pm"
+                  ]
+                },
+                {
+                  "id": "ent_pm",
+                  "collection": "entities",
+                  "status": "ACCEPTED",
+                  "errors": [],
+                  "uncertain": [],
+                  "sources": [
+                    {
+                      "quote": "PM",
+                      "occurrence": 1,
+                      "span": [
+                        1,
+                        3
+                      ],
+                      "source_sha256": "37e867dd769f87438f89f665706018f7bf395a62ad61b9daf7677fd8cbbf52ee"
+                    }
+                  ],
+                  "audit_refs": [
+                    {
+                      "subject_id": "ent_pm",
+                      "field_path": "",
+                      "verdict": "SUPPORT"
+                    }
+                  ],
+                  "required_dependencies": [],
+                  "structural_refs": []
+                },
+                {
+                  "id": "evt_check",
+                  "collection": "events",
+                  "status": "ACCEPTED",
+                  "errors": [],
+                  "uncertain": [],
+                  "sources": [
+                    {
+                      "quote": "检查被监测的服务",
+                      "occurrence": 1,
+                      "span": [
+                        5,
+                        13
+                      ],
+                      "source_sha256": "37e867dd769f87438f89f665706018f7bf395a62ad61b9daf7677fd8cbbf52ee"
+                    }
+                  ],
+                  "audit_refs": [
+                    {
+                      "subject_id": "evt_check",
+                      "field_path": "",
+                      "verdict": "SUPPORT"
+                    }
+                  ],
+                  "required_dependencies": [],
+                  "structural_refs": [
+                    "evt_organize"
+                  ]
+                }
+              ],
+              "audit": [
+                {
+                  "subject_id": "cl_check_organizer",
+                  "field_path": "",
+                  "verdict": "SUPPORT",
+                  "context_refs": [
+                    "evt_check",
+                    "ent_pm"
+                  ],
+                  "sources": [
+                    {
+                      "quote": "请PM组织检查",
+                      "occurrence": 1
+                    },
+                    {
+                      "quote": "具体检查执行者未指定",
+                      "occurrence": 1
+                    }
+                  ],
+                  "reason": "PM是检查的组织者；候选未将其推定为具体检查执行者。"
+                },
+                {
+                  "subject_id": "ent_pm",
+                  "field_path": "",
+                  "verdict": "SUPPORT",
+                  "context_refs": [],
+                  "sources": [
+                    {
+                      "quote": "PM",
+                      "occurrence": 1
+                    }
+                  ],
+                  "reason": "原文明示PM为参与者；该实体身份不自行赋予检查执行职责。"
+                },
+                {
+                  "subject_id": "evt_check",
+                  "field_path": "",
+                  "verdict": "SUPPORT",
+                  "context_refs": [
+                    "evt_organize"
+                  ],
+                  "sources": [
+                    {
+                      "quote": "请PM组织检查被监测的服务",
+                      "occurrence": 1
+                    },
+                    {
+                      "quote": "具体检查执行者未指定",
+                      "occurrence": 1
+                    }
+                  ],
+                  "reason": "检查是要求组织开展的实际任务；执行者未指定不撤销检查要求。"
+                }
+              ]
+            }
+          },
+          {
+            "id": "bf:e8e365957fcfdb48e8ad",
+            "kind": "ROLE",
+            "status": "ACCEPTED",
+            "claim_ids": [
+              "cl_create_performer",
+              "ent_pm",
+              "evt_create"
+            ],
+            "claim": {
+              "id": "cl_create_performer",
+              "kind": "ROLE",
+              "event_id": "evt_create",
+              "entity_id": "ent_pm",
+              "role": "PERFORMER",
+              "expression_id": null,
+              "direction": null,
+              "temporal": null,
+              "quantity": null,
+              "scope_id": "evt_create",
+              "requires": [],
+              "sources": [
+                {
+                  "quote": "请PM",
+                  "occurrence": 1
+                },
+                {
+                  "quote": "并形成status.md",
+                  "occurrence": 1
+                }
+              ],
+              "note": "并列谓语沿用PM作为主体；后句未指定仅针对具体检查执行者。"
+            },
+            "event": {
+              "id": "evt_create",
+              "predicate": "形成文件",
+              "kind": "ACTION",
+              "layer": "MAIN",
+              "use": "CURRENT_TASK",
+              "modality": "REQUIRED",
+              "polarity": "POSITIVE",
+              "owner_id": "ROOT",
+              "constraint_ids": [],
+              "requires": [],
+              "sources": [
+                {
+                  "quote": "请PM",
+                  "occurrence": 1
+                },
+                {
+                  "quote": "并形成status.md",
+                  "occurrence": 1
+                }
+              ]
+            },
+            "entity": {
+              "id": "ent_pm",
+              "label": "PM",
+              "type": "PERSON",
+              "mentions": [
+                {
+                  "quote": "PM",
+                  "occurrence": 1
+                }
+              ],
+              "alternatives": []
+            },
+            "expression": null,
+            "constraints": [],
+            "content_quantities": [],
+            "sources": [
+              {
+                "quote": "请PM",
+                "occurrence": 1,
+                "span": [
+                  0,
+                  3
+                ],
+                "source_sha256": "37e867dd769f87438f89f665706018f7bf395a62ad61b9daf7677fd8cbbf52ee"
+              },
+              {
+                "quote": "并形成status.md",
+                "occurrence": 1,
+                "span": [
+                  14,
+                  26
+                ],
+                "source_sha256": "37e867dd769f87438f89f665706018f7bf395a62ad61b9daf7677fd8cbbf52ee"
+              },
+              {
+                "quote": "PM",
+                "occurrence": 1,
+                "span": [
+                  1,
+                  3
+                ],
+                "source_sha256": "37e867dd769f87438f89f665706018f7bf395a62ad61b9daf7677fd8cbbf52ee"
+              },
+              {
+                "quote": "请PM",
+                "occurrence": 1,
+                "span": [
+                  0,
+                  3
+                ],
+                "source_sha256": "37e867dd769f87438f89f665706018f7bf395a62ad61b9daf7677fd8cbbf52ee"
+              },
+              {
+                "quote": "并形成status.md",
+                "occurrence": 1,
+                "span": [
+                  14,
+                  26
+                ],
+                "source_sha256": "37e867dd769f87438f89f665706018f7bf395a62ad61b9daf7677fd8cbbf52ee"
+              }
+            ],
+            "slots": [
+              "P"
+            ],
+            "proof": {
+              "source_sha256": "37e867dd769f87438f89f665706018f7bf395a62ad61b9daf7677fd8cbbf52ee",
+              "claim_ids": [
+                "cl_create_performer",
+                "ent_pm",
+                "evt_create"
+              ],
+              "technical_policy": "028-r02-technical-v1",
+              "checks": [
+                {
+                  "id": "cl_create_performer",
+                  "collection": "claims",
+                  "status": "ACCEPTED",
+                  "errors": [],
+                  "uncertain": [],
+                  "sources": [
+                    {
+                      "quote": "请PM",
+                      "occurrence": 1,
+                      "span": [
+                        0,
+                        3
+                      ],
+                      "source_sha256": "37e867dd769f87438f89f665706018f7bf395a62ad61b9daf7677fd8cbbf52ee"
+                    },
+                    {
+                      "quote": "并形成status.md",
+                      "occurrence": 1,
+                      "span": [
+                        14,
+                        26
+                      ],
+                      "source_sha256": "37e867dd769f87438f89f665706018f7bf395a62ad61b9daf7677fd8cbbf52ee"
+                    }
+                  ],
+                  "audit_refs": [
+                    {
+                      "subject_id": "cl_create_performer",
+                      "field_path": "",
+                      "verdict": "SUPPORT"
+                    }
+                  ],
+                  "required_dependencies": [],
+                  "structural_refs": [
+                    "evt_create",
+                    "ent_pm"
+                  ]
+                },
+                {
+                  "id": "ent_pm",
+                  "collection": "entities",
+                  "status": "ACCEPTED",
+                  "errors": [],
+                  "uncertain": [],
+                  "sources": [
+                    {
+                      "quote": "PM",
+                      "occurrence": 1,
+                      "span": [
+                        1,
+                        3
+                      ],
+                      "source_sha256": "37e867dd769f87438f89f665706018f7bf395a62ad61b9daf7677fd8cbbf52ee"
+                    }
+                  ],
+                  "audit_refs": [
+                    {
+                      "subject_id": "ent_pm",
+                      "field_path": "",
+                      "verdict": "SUPPORT"
+                    }
+                  ],
+                  "required_dependencies": [],
+                  "structural_refs": []
+                },
+                {
+                  "id": "evt_create",
+                  "collection": "events",
+                  "status": "ACCEPTED",
+                  "errors": [],
+                  "uncertain": [],
+                  "sources": [
+                    {
+                      "quote": "请PM",
+                      "occurrence": 1,
+                      "span": [
+                        0,
+                        3
+                      ],
+                      "source_sha256": "37e867dd769f87438f89f665706018f7bf395a62ad61b9daf7677fd8cbbf52ee"
+                    },
+                    {
+                      "quote": "并形成status.md",
+                      "occurrence": 1,
+                      "span": [
+                        14,
+                        26
+                      ],
+                      "source_sha256": "37e867dd769f87438f89f665706018f7bf395a62ad61b9daf7677fd8cbbf52ee"
+                    }
+                  ],
+                  "audit_refs": [
+                    {
+                      "subject_id": "evt_create",
+                      "field_path": "",
+                      "verdict": "SUPPORT"
+                    }
+                  ],
+                  "required_dependencies": [],
+                  "structural_refs": [
+                    "ROOT"
+                  ]
+                }
+              ],
+              "audit": [
+                {
+                  "subject_id": "cl_create_performer",
+                  "field_path": "",
+                  "verdict": "SUPPORT",
+                  "context_refs": [
+                    "evt_create",
+                    "ent_pm"
+                  ],
+                  "sources": [
+                    {
+                      "quote": "请PM",
+                      "occurrence": 1
+                    },
+                    {
+                      "quote": "并形成status.md",
+                      "occurrence": 1
+                    },
+                    {
+                      "quote": "具体检查执行者未指定",
+                      "occurrence": 1
+                    }
+                  ],
+                  "reason": "并列谓语形成文件沿用PM为主体；未指定的范围明确限于具体检查执行者。"
+                },
+                {
+                  "subject_id": "ent_pm",
+                  "field_path": "",
+                  "verdict": "SUPPORT",
+                  "context_refs": [],
+                  "sources": [
+                    {
+                      "quote": "PM",
+                      "occurrence": 1
+                    }
+                  ],
+                  "reason": "原文明示PM为参与者；该实体身份不自行赋予检查执行职责。"
+                },
+                {
+                  "subject_id": "evt_create",
+                  "field_path": "",
+                  "verdict": "SUPPORT",
+                  "context_refs": [],
+                  "sources": [
+                    {
+                      "quote": "请PM",
+                      "occurrence": 1
+                    },
+                    {
+                      "quote": "并形成status.md",
+                      "occurrence": 1
+                    }
+                  ],
+                  "reason": "形成文件是并列的当前要求；原文未设前提、期限或根任务完成条件。"
+                }
+              ]
+            }
+          }
+        ]
+      },
+      "R": {
+        "status": "ABSENT",
+        "openness": "OPEN",
+        "entries": []
+      },
+      "V": {
+        "status": "ABSENT",
+        "openness": "OPEN",
+        "entries": []
+      },
+      "C": {
+        "status": "ABSENT",
+        "openness": "OPEN",
+        "entries": []
+      },
+      "B": {
+        "status": "ABSENT",
+        "openness": "OPEN",
+        "entries": []
+      }
+    },
+    "unresolved": [],
+    "retained_nonprojected": [
+      {
+        "id": "bf:8da565eea823c8b3de43",
+        "kind": "EVENT",
+        "status": "ACCEPTED",
+        "claim_ids": [
+          "evt_monitored",
+          "cl_monitored_object"
+        ],
+        "event": {
+          "id": "evt_monitored",
+          "predicate": "被监测",
+          "kind": "STATE",
+          "layer": "MODIFIER",
+          "use": "MENTION_ONLY",
+          "modality": "UNSTATED",
+          "polarity": "POSITIVE",
+          "owner_id": "evt_check",
+          "constraint_ids": [],
+          "requires": [],
+          "sources": [
+            {
+              "quote": "被监测的服务",
+              "occurrence": 1
+            }
+          ]
+        },
+        "roles": [
+          {
+            "id": "cl_monitored_object",
+            "kind": "ROLE",
+            "event_id": "evt_monitored",
+            "entity_id": "ent_service",
+            "role": "OBJECT",
+            "expression_id": null,
+            "direction": null,
+            "temporal": null,
+            "quantity": null,
+            "scope_id": "evt_monitored",
+            "requires": [],
+            "sources": [
+              {
+                "quote": "被监测的服务",
+                "occurrence": 1
+              }
+            ],
+            "note": "定语描述服务状态，不增加监测命令。",
+            "entity": {
+              "id": "ent_service",
+              "label": "被监测的服务",
+              "type": "SYSTEM",
+              "mentions": [
+                {
+                  "quote": "被监测的服务",
+                  "occurrence": 1
+                }
+              ],
+              "alternatives": []
+            },
+            "status": "ACCEPTED"
+          }
+        ],
+        "constraints": [],
+        "sources": [
+          {
+            "quote": "被监测的服务",
+            "occurrence": 1,
+            "span": [
+              7,
+              13
+            ],
+            "source_sha256": "37e867dd769f87438f89f665706018f7bf395a62ad61b9daf7677fd8cbbf52ee"
+          },
+          {
+            "quote": "被监测的服务",
+            "occurrence": 1,
+            "span": [
+              7,
+              13
+            ],
+            "source_sha256": "37e867dd769f87438f89f665706018f7bf395a62ad61b9daf7677fd8cbbf52ee"
+          }
+        ],
+        "slots": [],
+        "proof": {
+          "source_sha256": "37e867dd769f87438f89f665706018f7bf395a62ad61b9daf7677fd8cbbf52ee",
+          "claim_ids": [
+            "evt_monitored",
+            "cl_monitored_object"
+          ],
+          "technical_policy": "028-r02-technical-v1",
+          "checks": [
+            {
+              "id": "evt_monitored",
+              "collection": "events",
+              "status": "ACCEPTED",
+              "errors": [],
+              "uncertain": [],
+              "sources": [
+                {
+                  "quote": "被监测的服务",
+                  "occurrence": 1,
+                  "span": [
+                    7,
+                    13
+                  ],
+                  "source_sha256": "37e867dd769f87438f89f665706018f7bf395a62ad61b9daf7677fd8cbbf52ee"
+                }
+              ],
+              "audit_refs": [
+                {
+                  "subject_id": "evt_monitored",
+                  "field_path": "",
+                  "verdict": "SUPPORT"
+                }
+              ],
+              "required_dependencies": [],
+              "structural_refs": [
+                "evt_check"
+              ]
+            },
+            {
+              "id": "cl_monitored_object",
+              "collection": "claims",
+              "status": "ACCEPTED",
+              "errors": [],
+              "uncertain": [],
+              "sources": [
+                {
+                  "quote": "被监测的服务",
+                  "occurrence": 1,
+                  "span": [
+                    7,
+                    13
+                  ],
+                  "source_sha256": "37e867dd769f87438f89f665706018f7bf395a62ad61b9daf7677fd8cbbf52ee"
+                }
+              ],
+              "audit_refs": [
+                {
+                  "subject_id": "cl_monitored_object",
+                  "field_path": "",
+                  "verdict": "SUPPORT"
+                }
+              ],
+              "required_dependencies": [],
+              "structural_refs": [
+                "evt_monitored",
+                "ent_service"
+              ]
+            }
+          ],
+          "audit": [
+            {
+              "subject_id": "evt_monitored",
+              "field_path": "",
+              "verdict": "SUPPORT",
+              "context_refs": [
+                "ent_service"
+              ],
+              "sources": [
+                {
+                  "quote": "被监测的服务",
+                  "occurrence": 1
+                }
+              ],
+              "reason": "被监测是限定服务的状态描述，保留为定语层提及，不增加监测义务。"
+            },
+            {
+              "subject_id": "cl_monitored_object",
+              "field_path": "",
+              "verdict": "SUPPORT",
+              "context_refs": [
+                "evt_monitored",
+                "ent_service"
+              ],
+              "sources": [
+                {
+                  "quote": "被监测的服务",
+                  "occurrence": 1
+                }
+              ],
+              "reason": "服务是被监测状态的对象；该关系处于定语提及事件，不产生当前监测要求。"
+            }
+          ]
+        }
+      },
+      {
+        "id": "bf:ea4e2ffa699ceacda7f4",
+        "kind": "ROLE",
+        "status": "ACCEPTED",
+        "claim_ids": [
+          "cl_monitored_object",
+          "ent_service",
+          "evt_monitored"
+        ],
+        "claim": {
+          "id": "cl_monitored_object",
+          "kind": "ROLE",
+          "event_id": "evt_monitored",
+          "entity_id": "ent_service",
+          "role": "OBJECT",
+          "expression_id": null,
+          "direction": null,
+          "temporal": null,
+          "quantity": null,
+          "scope_id": "evt_monitored",
+          "requires": [],
+          "sources": [
+            {
+              "quote": "被监测的服务",
+              "occurrence": 1
+            }
+          ],
+          "note": "定语描述服务状态，不增加监测命令。"
+        },
+        "event": {
+          "id": "evt_monitored",
+          "predicate": "被监测",
+          "kind": "STATE",
+          "layer": "MODIFIER",
+          "use": "MENTION_ONLY",
+          "modality": "UNSTATED",
+          "polarity": "POSITIVE",
+          "owner_id": "evt_check",
+          "constraint_ids": [],
+          "requires": [],
+          "sources": [
+            {
+              "quote": "被监测的服务",
+              "occurrence": 1
+            }
+          ]
+        },
+        "entity": {
+          "id": "ent_service",
+          "label": "被监测的服务",
+          "type": "SYSTEM",
+          "mentions": [
+            {
+              "quote": "被监测的服务",
+              "occurrence": 1
+            }
+          ],
+          "alternatives": []
+        },
+        "expression": null,
+        "constraints": [],
+        "content_quantities": [],
+        "sources": [
+          {
+            "quote": "被监测的服务",
+            "occurrence": 1,
+            "span": [
+              7,
+              13
+            ],
+            "source_sha256": "37e867dd769f87438f89f665706018f7bf395a62ad61b9daf7677fd8cbbf52ee"
+          },
+          {
+            "quote": "被监测的服务",
+            "occurrence": 1,
+            "span": [
+              7,
+              13
+            ],
+            "source_sha256": "37e867dd769f87438f89f665706018f7bf395a62ad61b9daf7677fd8cbbf52ee"
+          },
+          {
+            "quote": "被监测的服务",
+            "occurrence": 1,
+            "span": [
+              7,
+              13
+            ],
+            "source_sha256": "37e867dd769f87438f89f665706018f7bf395a62ad61b9daf7677fd8cbbf52ee"
+          }
+        ],
+        "slots": [],
+        "proof": {
+          "source_sha256": "37e867dd769f87438f89f665706018f7bf395a62ad61b9daf7677fd8cbbf52ee",
+          "claim_ids": [
+            "cl_monitored_object",
+            "ent_service",
+            "evt_monitored"
+          ],
+          "technical_policy": "028-r02-technical-v1",
+          "checks": [
+            {
+              "id": "cl_monitored_object",
+              "collection": "claims",
+              "status": "ACCEPTED",
+              "errors": [],
+              "uncertain": [],
+              "sources": [
+                {
+                  "quote": "被监测的服务",
+                  "occurrence": 1,
+                  "span": [
+                    7,
+                    13
+                  ],
+                  "source_sha256": "37e867dd769f87438f89f665706018f7bf395a62ad61b9daf7677fd8cbbf52ee"
+                }
+              ],
+              "audit_refs": [
+                {
+                  "subject_id": "cl_monitored_object",
+                  "field_path": "",
+                  "verdict": "SUPPORT"
+                }
+              ],
+              "required_dependencies": [],
+              "structural_refs": [
+                "evt_monitored",
+                "ent_service"
+              ]
+            },
+            {
+              "id": "ent_service",
+              "collection": "entities",
+              "status": "ACCEPTED",
+              "errors": [],
+              "uncertain": [],
+              "sources": [
+                {
+                  "quote": "被监测的服务",
+                  "occurrence": 1,
+                  "span": [
+                    7,
+                    13
+                  ],
+                  "source_sha256": "37e867dd769f87438f89f665706018f7bf395a62ad61b9daf7677fd8cbbf52ee"
+                }
+              ],
+              "audit_refs": [
+                {
+                  "subject_id": "ent_service",
+                  "field_path": "",
+                  "verdict": "SUPPORT"
+                }
+              ],
+              "required_dependencies": [],
+              "structural_refs": []
+            },
+            {
+              "id": "evt_monitored",
+              "collection": "events",
+              "status": "ACCEPTED",
+              "errors": [],
+              "uncertain": [],
+              "sources": [
+                {
+                  "quote": "被监测的服务",
+                  "occurrence": 1,
+                  "span": [
+                    7,
+                    13
+                  ],
+                  "source_sha256": "37e867dd769f87438f89f665706018f7bf395a62ad61b9daf7677fd8cbbf52ee"
+                }
+              ],
+              "audit_refs": [
+                {
+                  "subject_id": "evt_monitored",
+                  "field_path": "",
+                  "verdict": "SUPPORT"
+                }
+              ],
+              "required_dependencies": [],
+              "structural_refs": [
+                "evt_check"
+              ]
+            }
+          ],
+          "audit": [
+            {
+              "subject_id": "cl_monitored_object",
+              "field_path": "",
+              "verdict": "SUPPORT",
+              "context_refs": [
+                "evt_monitored",
+                "ent_service"
+              ],
+              "sources": [
+                {
+                  "quote": "被监测的服务",
+                  "occurrence": 1
+                }
+              ],
+              "reason": "服务是被监测状态的对象；该关系处于定语提及事件，不产生当前监测要求。"
+            },
+            {
+              "subject_id": "ent_service",
+              "field_path": "",
+              "verdict": "SUPPORT",
+              "context_refs": [],
+              "sources": [
+                {
+                  "quote": "被监测的服务",
+                  "occurrence": 1
+                }
+              ],
+              "reason": "原文明示受检服务，以SYSTEM表示合理。"
+            },
+            {
+              "subject_id": "evt_monitored",
+              "field_path": "",
+              "verdict": "SUPPORT",
+              "context_refs": [
+                "ent_service"
+              ],
+              "sources": [
+                {
+                  "quote": "被监测的服务",
+                  "occurrence": 1
+                }
+              ],
+              "reason": "被监测是限定服务的状态描述，保留为定语层提及，不增加监测义务。"
+            }
+          ]
+        }
+      }
+    ],
+    "issues": [
+      {
+        "id": "issue_check_performer",
+        "kind": "UNSPECIFIED",
+        "subject_ids": [
+          "evt_check"
+        ],
+        "field_path": "claims[ROLE,event_id=evt_check,role=PERFORMER]",
+        "alternatives": [],
+        "affected_views": [
+          "P"
+        ],
+        "sources": [
+          {
+            "quote": "具体检查执行者未指定",
+            "occurrence": 1
+          }
+        ],
+        "note": "原文明示检查执行者未指定，保留检查义务，不补默认执行者。"
+      }
+    ],
+    "gaps": [],
+    "business_decision": null,
+    "execution_authorization": null
+  },
+  "chinese": "# BoundX 7+1（有限技术接受，不是业务授权）\n\n## I 输入与作用域 — RESOLVED\n- [ACCEPTED] 检查：INPUT_OBJECT=被监测的服务；必须（bf:d0da6e68f485631b17b2）\n\n## O 交付与结果 — RESOLVED\n- [ACCEPTED] 形成文件：RESULT=status.md；必须（bf:e512d9a56de3daab06b7）\n\n## A 正向动作 — RESOLVED\n- [ACCEPTED] 必须 组织检查；PERFORMER=PM（bf:fc91fb8c811b23b90a8d）\n- [ACCEPTED] 必须 检查；ORGANIZER=PM；INPUT_OBJECT=被监测的服务（bf:5f2ff80ae31b38575494）\n- [ACCEPTED] 必须 形成文件；PERFORMER=PM；RESULT=status.md（bf:7e0b425f22fead41617d）\n\n## P 参与关系 — RESOLVED\n- [ACCEPTED] 组织检查：PERFORMER=PM；必须（bf:0467a08dee521b0083b9）\n- [ACCEPTED] 检查：ORGANIZER=PM；必须（bf:67e6f1c3b6c061d3fc6e）\n- [ACCEPTED] 形成文件：PERFORMER=PM；必须（bf:e8e365957fcfdb48e8ad）\n\n## R 执行量化限制 — ABSENT\n\n## V 版本与依据 — ABSENT\n\n## C 完成与停止 — ABSENT\n\n## B 禁止与限制 — ABSENT\n\n## 未指定 / 歧义 / 未投影语义\n- UNSPECIFIED 原文明示检查执行者未指定，保留检查义务，不补默认执行者。；影响=evt_check\n",
+  "model_calls": {
+    "parse": [
+      {
+        "exit_code": 0,
+        "error": null,
+        "elapsed_ms": 51417,
+        "timed_out": false,
+        "thread_id": "01a11531-c3ec-79a0-9bde-d95b05ab2b18",
+        "usage": {
+          "input_tokens": 16633,
+          "cached_input_tokens": 0,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 1985,
+          "reasoning_output_tokens": 139
+        },
+        "tool_events": [],
+        "schema_check": {
+          "ok": true,
+          "errors": []
+        },
+        "response_sha256": "4699cb655bb29be68f242ecd2033b0e2051b325ad1c2c058738e4ccaab0b0a2e",
+        "attempt": 0,
+        "skill_content_delivered": true,
+        "skill_mode": "INLINE_BUNDLE",
+        "actual_model": null
+      }
+    ],
+    "audit": [
+      {
+        "exit_code": 0,
+        "error": null,
+        "elapsed_ms": 38386,
+        "timed_out": false,
+        "thread_id": "01a11532-8ce7-7871-b1b9-f9f425e8f507",
+        "usage": {
+          "input_tokens": 18158,
+          "cached_input_tokens": 7808,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 1294,
+          "reasoning_output_tokens": 46
+        },
+        "tool_events": [],
+        "schema_check": {
+          "ok": true,
+          "errors": []
+        },
+        "response_sha256": "1b0eaa56c55a8050c8c9b328be05bb40ce8739dc3aef810def04a3a87070a525",
+        "attempt": 0,
+        "skill_content_delivered": true,
+        "skill_mode": "INLINE_BUNDLE",
+        "actual_model": null
+      }
+    ]
+  },
+  "revision": 0,
+  "revision_of": null
+}

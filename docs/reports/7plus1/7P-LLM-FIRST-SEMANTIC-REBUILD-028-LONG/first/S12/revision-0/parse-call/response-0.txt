@@ -1,0 +1,226 @@
+{
+  "contract_version": "028-r02.1",
+  "entities": [
+    {
+      "id": "ent_pm",
+      "label": "PM",
+      "type": "PERSON",
+      "mentions": [{"quote": "PM", "occurrence": 1}],
+      "alternatives": []
+    },
+    {
+      "id": "ent_service",
+      "label": "被监测的服务",
+      "type": "SYSTEM",
+      "mentions": [{"quote": "被监测的服务", "occurrence": 1}],
+      "alternatives": []
+    },
+    {
+      "id": "ent_status",
+      "label": "status.md",
+      "type": "FILE",
+      "mentions": [{"quote": "status.md", "occurrence": 1}],
+      "alternatives": []
+    }
+  ],
+  "events": [
+    {
+      "id": "evt_organize",
+      "predicate": "组织检查",
+      "kind": "ACTION",
+      "layer": "MAIN",
+      "use": "CURRENT_TASK",
+      "modality": "REQUIRED",
+      "polarity": "POSITIVE",
+      "owner_id": "ROOT",
+      "constraint_ids": [],
+      "requires": [],
+      "sources": [{"quote": "请PM组织检查被监测的服务", "occurrence": 1}]
+    },
+    {
+      "id": "evt_check",
+      "predicate": "检查",
+      "kind": "ACTION",
+      "layer": "MAIN",
+      "use": "CURRENT_TASK",
+      "modality": "REQUIRED",
+      "polarity": "POSITIVE",
+      "owner_id": "evt_organize",
+      "constraint_ids": [],
+      "requires": [],
+      "sources": [{"quote": "检查被监测的服务", "occurrence": 1}]
+    },
+    {
+      "id": "evt_monitored",
+      "predicate": "被监测",
+      "kind": "STATE",
+      "layer": "MODIFIER",
+      "use": "MENTION_ONLY",
+      "modality": "UNSTATED",
+      "polarity": "POSITIVE",
+      "owner_id": "evt_check",
+      "constraint_ids": [],
+      "requires": [],
+      "sources": [{"quote": "被监测的服务", "occurrence": 1}]
+    },
+    {
+      "id": "evt_create",
+      "predicate": "形成文件",
+      "kind": "ACTION",
+      "layer": "MAIN",
+      "use": "CURRENT_TASK",
+      "modality": "REQUIRED",
+      "polarity": "POSITIVE",
+      "owner_id": "ROOT",
+      "constraint_ids": [],
+      "requires": [],
+      "sources": [
+        {"quote": "请PM", "occurrence": 1},
+        {"quote": "并形成status.md", "occurrence": 1}
+      ]
+    }
+  ],
+  "claims": [
+    {
+      "id": "cl_organize_performer",
+      "kind": "ROLE",
+      "event_id": "evt_organize",
+      "entity_id": "ent_pm",
+      "role": "PERFORMER",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "scope_id": "evt_organize",
+      "requires": [],
+      "sources": [{"quote": "请PM组织检查", "occurrence": 1}],
+      "note": "PM执行组织工作。"
+    },
+    {
+      "id": "cl_check_organizer",
+      "kind": "ROLE",
+      "event_id": "evt_check",
+      "entity_id": "ent_pm",
+      "role": "ORGANIZER",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "scope_id": "evt_check",
+      "requires": [],
+      "sources": [{"quote": "请PM组织检查", "occurrence": 1}],
+      "note": "组织者不自动成为具体检查执行者。"
+    },
+    {
+      "id": "cl_check_input",
+      "kind": "ROLE",
+      "event_id": "evt_check",
+      "entity_id": "ent_service",
+      "role": "INPUT_OBJECT",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "scope_id": "evt_check",
+      "requires": [],
+      "sources": [{"quote": "检查被监测的服务", "occurrence": 1}],
+      "note": "明确受检范围为被监测的服务。"
+    },
+    {
+      "id": "cl_monitored_object",
+      "kind": "ROLE",
+      "event_id": "evt_monitored",
+      "entity_id": "ent_service",
+      "role": "OBJECT",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "scope_id": "evt_monitored",
+      "requires": [],
+      "sources": [{"quote": "被监测的服务", "occurrence": 1}],
+      "note": "定语描述服务状态，不增加监测命令。"
+    },
+    {
+      "id": "cl_create_performer",
+      "kind": "ROLE",
+      "event_id": "evt_create",
+      "entity_id": "ent_pm",
+      "role": "PERFORMER",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "scope_id": "evt_create",
+      "requires": [],
+      "sources": [
+        {"quote": "请PM", "occurrence": 1},
+        {"quote": "并形成status.md", "occurrence": 1}
+      ],
+      "note": "并列谓语沿用PM作为主体；后句未指定仅针对具体检查执行者。"
+    },
+    {
+      "id": "cl_create_result",
+      "kind": "ROLE",
+      "event_id": "evt_create",
+      "entity_id": "ent_status",
+      "role": "RESULT",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "scope_id": "evt_create",
+      "requires": [],
+      "sources": [{"quote": "形成status.md", "occurrence": 1}],
+      "note": "status.md为要求形成的产物。"
+    }
+  ],
+  "expressions": [],
+  "issues": [
+    {
+      "id": "issue_check_performer",
+      "kind": "UNSPECIFIED",
+      "subject_ids": ["evt_check"],
+      "field_path": "claims[ROLE,event_id=evt_check,role=PERFORMER]",
+      "alternatives": [],
+      "affected_views": ["P"],
+      "sources": [{"quote": "具体检查执行者未指定", "occurrence": 1}],
+      "note": "原文明示检查执行者未指定，保留检查义务，不补默认执行者。"
+    }
+  ],
+  "coverage": [
+    {
+      "sources": [{"quote": "请PM组织检查", "occurrence": 1}],
+      "claim_ids": ["cl_organize_performer", "cl_check_organizer"],
+      "status": "EXPRESSED",
+      "affected_views": ["A", "P"]
+    },
+    {
+      "sources": [{"quote": "检查被监测的服务", "occurrence": 1}],
+      "claim_ids": ["cl_check_input"],
+      "status": "EXPRESSED",
+      "affected_views": ["I", "A"]
+    },
+    {
+      "sources": [{"quote": "被监测的服务", "occurrence": 1}],
+      "claim_ids": ["cl_monitored_object"],
+      "status": "BACKGROUND",
+      "affected_views": ["I"]
+    },
+    {
+      "sources": [
+        {"quote": "请PM", "occurrence": 1},
+        {"quote": "并形成status.md", "occurrence": 1}
+      ],
+      "claim_ids": ["cl_create_performer", "cl_create_result"],
+      "status": "EXPRESSED",
+      "affected_views": ["A", "P", "O"]
+    },
+    {
+      "sources": [{"quote": "具体检查执行者未指定", "occurrence": 1}],
+      "claim_ids": [],
+      "status": "UNSPECIFIED",
+      "affected_views": ["P"]
+    }
+  ]
+}

@@ -1,0 +1,134 @@
+{
+  "contract_version": "028-r02.1",
+  "reviews": [
+    {
+      "subject_id": "ent_pm",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [{"quote": "PM", "occurrence": 1}],
+      "reason": "原文明示PM，作为提交主体的实体识别成立。"
+    },
+    {
+      "subject_id": "ent_qa",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [{"quote": "QA", "occurrence": 1}],
+      "reason": "原文明示QA，作为条件中批准者的实体识别成立。"
+    },
+    {
+      "subject_id": "ent_file",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [{"quote": "r.md", "occurrence": 1}],
+      "reason": "原文明确命名提交文件r.md。"
+    },
+    {
+      "subject_id": "evt_submit_after",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["cl_after"],
+      "sources": [{"quote": "允许PM在QA批准后提交r.md", "occurrence": 1}],
+      "reason": "提交是当前任务的有条件许可，未升格为义务；批准后约束已回指。"
+    },
+    {
+      "subject_id": "evt_approval",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["cl_qa"],
+      "sources": [{"quote": "QA批准", "occurrence": 1}],
+      "reason": "批准仅出现在许可条件中，未被要求执行，也未被断言已经发生。"
+    },
+    {
+      "subject_id": "evt_submit_before",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["cl_before"],
+      "sources": [{"quote": "批准前不得提交", "occurrence": 1}],
+      "reason": "原文明示批准前禁止提交；正向提交动作配FORBIDDEN正确表达禁止，且时间范围约束已绑定。"
+    },
+    {
+      "subject_id": "cl_pm_after",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["evt_submit_after", "ent_pm"],
+      "sources": [{"quote": "允许PM在QA批准后提交r.md", "occurrence": 1}],
+      "reason": "PM是获准提交的执行者。"
+    },
+    {
+      "subject_id": "cl_file_after",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["evt_submit_after", "ent_file"],
+      "sources": [{"quote": "提交r.md", "occurrence": 1}],
+      "reason": "r.md是提交对象；原文未声明其为生成结果或外部输入。"
+    },
+    {
+      "subject_id": "cl_qa",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["evt_approval", "ent_qa"],
+      "sources": [{"quote": "QA批准", "occurrence": 1}],
+      "reason": "QA是条件事件的批准者，此角色不产生独立批准义务。"
+    },
+    {
+      "subject_id": "cl_after",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["evt_submit_after", "expr_approved", "cl_before"],
+      "sources": [
+        {"quote": "允许PM在QA批准后提交r.md", "occurrence": 1},
+        {"quote": "批准前不得提交", "occurrence": 1}
+      ],
+      "reason": "许可限于QA批准之后；必要前提与AFTER保留该限制，不表达批准后必须提交，且与事件双向绑定。"
+    },
+    {
+      "subject_id": "cl_pm_before",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["evt_submit_before", "ent_pm"],
+      "sources": [
+        {"quote": "允许PM在QA批准后提交r.md", "occurrence": 1},
+        {"quote": "批准前不得提交", "occurrence": 1}
+      ],
+      "reason": "后半句省略主体，承接前半句PM；两端来源支持该绑定。"
+    },
+    {
+      "subject_id": "cl_file_before",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["evt_submit_before", "ent_file"],
+      "sources": [
+        {"quote": "提交r.md", "occurrence": 1},
+        {"quote": "批准前不得提交", "occurrence": 1}
+      ],
+      "reason": "后半句省略提交对象，承接同一r.md；未引入其他文件。"
+    },
+    {
+      "subject_id": "cl_before",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["evt_submit_before", "expr_approved"],
+      "sources": [
+        {"quote": "QA批准", "occurrence": 1},
+        {"quote": "批准前不得提交", "occurrence": 1}
+      ],
+      "reason": "禁止的适用范围是同一QA批准之前；BEFORE保留时间方向，NECESSARY限制禁止的适用范围，且与事件双向绑定。"
+    },
+    {
+      "subject_id": "expr_approved",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["evt_approval", "ent_qa"],
+      "sources": [
+        {"quote": "QA批准后", "occurrence": 1},
+        {"quote": "批准前", "occurrence": 1}
+      ],
+      "reason": "表达式引用同一QA批准事件，供前后时间约束使用；状态表达不表示批准已被观测为真。"
+    }
+  ],
+  "issues": [],
+  "omissions": []
+}

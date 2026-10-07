@@ -1,0 +1,103 @@
+{
+  "contract_version": "028-r02.2",
+  "reviews": [
+    {
+      "subject_id": "entity_pm",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [{"quote": "PM", "occurrence": 1}],
+      "reason": "PM是原文明示的任务参与者，未据其岗位推定额外权限。"
+    },
+    {
+      "subject_id": "entity_data",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [{"quote": "data.csv", "occurrence": 1}, {"quote": "data.csv", "occurrence": 2}],
+      "reason": "两处同名文件分别作为读取对象和禁止修改对象，支持保持同一实体。"
+    },
+    {
+      "subject_id": "entity_brief",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [{"quote": "brief.md", "occurrence": 1}],
+      "reason": "原文明示生成的文件为brief.md。"
+    },
+    {
+      "subject_id": "event_read",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [{"quote": "请PM读取data.csv", "occurrence": 1}],
+      "reason": "读取是当前任务明确要求的主动作，无额外条件或数量限制。"
+    },
+    {
+      "subject_id": "event_generate",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [{"quote": "请PM读取data.csv并生成brief.md", "occurrence": 1}],
+      "reason": "生成是并列的当前要求动作；原文未明确规定其对读取的必要依赖或严格时序。"
+    },
+    {
+      "subject_id": "event_modify",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [{"quote": "不得修改data.csv", "occurrence": 1}],
+      "reason": "原文明示禁止修改，FORBIDDEN与正向动作谓词组合准确保留禁止含义。"
+    },
+    {
+      "subject_id": "claim_read_performer",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["event_read", "entity_pm"],
+      "sources": [{"quote": "请PM读取data.csv", "occurrence": 1}],
+      "reason": "PM明确执行读取，并非仅组织读取。"
+    },
+    {
+      "subject_id": "claim_read_input",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["event_read", "entity_data"],
+      "sources": [{"quote": "读取data.csv", "occurrence": 1}],
+      "reason": "data.csv是明确指定的读取输入，INPUT_OBJECT用途成立。"
+    },
+    {
+      "subject_id": "claim_generate_performer",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["event_generate", "entity_pm"],
+      "sources": [{"quote": "请PM读取data.csv并生成brief.md", "occurrence": 1}],
+      "reason": "并列谓词读取与生成共享明示主体PM。"
+    },
+    {
+      "subject_id": "claim_generate_result",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["event_generate", "entity_brief"],
+      "sources": [{"quote": "生成brief.md", "occurrence": 1}],
+      "reason": "brief.md是生成动作的产物，RESULT绑定准确。"
+    },
+    {
+      "subject_id": "claim_modify_performer",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["event_modify", "entity_pm"],
+      "sources": [{"quote": "请PM", "occurrence": 1}, {"quote": "不得修改data.csv", "occurrence": 1}],
+      "reason": "后句作为同一任务的限制沿用PM主体，支持将PM绑定为禁止动作的受约束执行者。"
+    },
+    {
+      "subject_id": "claim_modify_object",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["event_modify", "entity_data"],
+      "sources": [{"quote": "不得修改data.csv", "occurrence": 1}],
+      "reason": "禁止修改的对象是data.csv；OBJECT用途不额外推导外部输入。"
+    }
+  ],
+  "issues": [],
+  "omissions": []
+}
