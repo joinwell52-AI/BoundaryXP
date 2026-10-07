@@ -1,0 +1,199 @@
+{
+  "contract_version": "031-r1.1",
+  "entities": [
+    {
+      "id": "ent_ops",
+      "label": "OPS",
+      "type": "OTHER",
+      "mentions": [{"quote": "OPS", "occurrence": 1}],
+      "alternatives": []
+    },
+    {
+      "id": "ent_map",
+      "label": "map.csv",
+      "type": "FILE",
+      "mentions": [{"quote": "map.csv", "occurrence": 1}],
+      "alternatives": []
+    },
+    {
+      "id": "ent_extra",
+      "label": "extra.md",
+      "type": "FILE",
+      "mentions": [
+        {"quote": "extra.md", "occurrence": 1},
+        {"quote": "extra.md", "occurrence": 2}
+      ],
+      "alternatives": []
+    }
+  ],
+  "events": [
+    {
+      "id": "evt_check",
+      "predicate": "核查",
+      "kind": "ACTION",
+      "layer": "MAIN",
+      "use": "CURRENT_TASK",
+      "modality": "REQUIRED",
+      "polarity": "POSITIVE",
+      "owner_id": "ROOT",
+      "constraint_ids": [],
+      "requires": [],
+      "sources": [{"quote": "请OPS核查map.csv", "occurrence": 1}]
+    },
+    {
+      "id": "evt_generate",
+      "predicate": "生成",
+      "kind": "ACTION",
+      "layer": "MAIN",
+      "use": "CURRENT_TASK",
+      "modality": "PERMITTED",
+      "polarity": "POSITIVE",
+      "owner_id": "ROOT",
+      "constraint_ids": [],
+      "requires": [],
+      "sources": [{"quote": "还可以生成extra.md", "occurrence": 1}]
+    },
+    {
+      "id": "evt_deliver",
+      "predicate": "交付",
+      "kind": "ACTION",
+      "layer": "MAIN",
+      "use": "CURRENT_TASK",
+      "modality": "NOT_REQUIRED",
+      "polarity": "POSITIVE",
+      "owner_id": "ROOT",
+      "constraint_ids": [],
+      "requires": [],
+      "sources": [{"quote": "但不要求交付extra.md", "occurrence": 1}]
+    }
+  ],
+  "claims": [
+    {
+      "id": "cl_check_performer",
+      "kind": "ROLE",
+      "event_id": "evt_check",
+      "entity_id": "ent_ops",
+      "role": "PERFORMER",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "artifact_use": null,
+      "scope_id": "evt_check",
+      "requires": [],
+      "sources": [{"quote": "请OPS核查map.csv", "occurrence": 1}],
+      "note": "OPS是明确指定的核查执行者，岗位简称的身份类别未进一步指定。"
+    },
+    {
+      "id": "cl_check_input",
+      "kind": "ROLE",
+      "event_id": "evt_check",
+      "entity_id": "ent_map",
+      "role": "INPUT_OBJECT",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "artifact_use": null,
+      "scope_id": "evt_check",
+      "requires": [],
+      "sources": [{"quote": "核查map.csv", "occurrence": 1}],
+      "note": "map.csv是明确受检范围。"
+    },
+    {
+      "id": "cl_generate_performer",
+      "kind": "ROLE",
+      "event_id": "evt_generate",
+      "entity_id": "ent_ops",
+      "role": "PERFORMER",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "artifact_use": null,
+      "scope_id": "evt_generate",
+      "requires": [],
+      "sources": [
+        {"quote": "请OPS核查map.csv", "occurrence": 1},
+        {"quote": "还可以生成extra.md", "occurrence": 1}
+      ],
+      "note": "连续同一指令的追加动作未切换主体，承接OPS为执行者。"
+    },
+    {
+      "id": "cl_generate_result",
+      "kind": "ROLE",
+      "event_id": "evt_generate",
+      "entity_id": "ent_extra",
+      "role": "RESULT",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "artifact_use": null,
+      "scope_id": "evt_generate",
+      "requires": [],
+      "sources": [{"quote": "还可以生成extra.md", "occurrence": 1}],
+      "note": "extra.md是允许生成的结果。"
+    },
+    {
+      "id": "cl_deliver_performer",
+      "kind": "ROLE",
+      "event_id": "evt_deliver",
+      "entity_id": "ent_ops",
+      "role": "PERFORMER",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "artifact_use": null,
+      "scope_id": "evt_deliver",
+      "requires": [],
+      "sources": [
+        {"quote": "请OPS核查map.csv", "occurrence": 1},
+        {"quote": "但不要求交付extra.md", "occurrence": 1}
+      ],
+      "note": "同一连续指令承接OPS为交付用途的主体，但未要求其交付。"
+    },
+    {
+      "id": "cl_deliver_artifact",
+      "kind": "ROLE",
+      "event_id": "evt_deliver",
+      "entity_id": "ent_extra",
+      "role": "DELIVERABLE",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "artifact_use": null,
+      "scope_id": "evt_deliver",
+      "requires": [],
+      "sources": [
+        {"quote": "还可以生成extra.md", "occurrence": 1},
+        {"quote": "但不要求交付extra.md", "occurrence": 1}
+      ],
+      "note": "两处extra.md指向同一产物；交付用途为NOT_REQUIRED，不构成禁止或正向交付要求。"
+    }
+  ],
+  "expressions": [],
+  "issues": [],
+  "coverage": [
+    {
+      "sources": [{"quote": "请OPS核查map.csv", "occurrence": 1}],
+      "claim_ids": ["cl_check_performer", "cl_check_input"],
+      "status": "EXPRESSED",
+      "affected_views": ["A", "P", "I"]
+    },
+    {
+      "sources": [{"quote": "还可以生成extra.md", "occurrence": 1}],
+      "claim_ids": ["cl_generate_performer", "cl_generate_result"],
+      "status": "EXPRESSED",
+      "affected_views": ["A", "P", "O"]
+    },
+    {
+      "sources": [{"quote": "但不要求交付extra.md", "occurrence": 1}],
+      "claim_ids": ["cl_deliver_performer", "cl_deliver_artifact"],
+      "status": "EXPRESSED",
+      "affected_views": ["A", "P", "O"]
+    }
+  ]
+}

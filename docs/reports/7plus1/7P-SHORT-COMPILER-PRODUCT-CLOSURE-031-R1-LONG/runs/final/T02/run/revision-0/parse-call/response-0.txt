@@ -1,0 +1,335 @@
+{
+  "contract_version": "031-r1.1",
+  "entities": [
+    {
+      "id": "n1",
+      "label": "QA",
+      "type": "OTHER",
+      "mentions": [{"quote": "QA", "occurrence": 1}],
+      "alternatives": []
+    },
+    {
+      "id": "n2",
+      "label": "CHECK-2",
+      "type": "DOCUMENT",
+      "mentions": [{"quote": "CHECK-2", "occurrence": 1}],
+      "alternatives": []
+    },
+    {
+      "id": "n3",
+      "label": "input.json",
+      "type": "FILE",
+      "mentions": [
+        {"quote": "input.json", "occurrence": 1},
+        {"quote": "input.json", "occurrence": 2},
+        {"quote": "它", "occurrence": 1}
+      ],
+      "alternatives": []
+    },
+    {
+      "id": "n4",
+      "label": "核对结果",
+      "type": "OTHER",
+      "mentions": [{"quote": "核对结果", "occurrence": 1}],
+      "alternatives": []
+    },
+    {
+      "id": "n5",
+      "label": "audit.md",
+      "type": "FILE",
+      "mentions": [{"quote": "audit.md", "occurrence": 1}],
+      "alternatives": []
+    }
+  ],
+  "events": [
+    {
+      "id": "e1",
+      "predicate": "核对",
+      "kind": "ACTION",
+      "layer": "MAIN",
+      "use": "CURRENT_TASK",
+      "modality": "REQUIRED",
+      "polarity": "POSITIVE",
+      "owner_id": "ROOT",
+      "constraint_ids": [],
+      "requires": [],
+      "sources": [{"quote": "请QA依据CHECK-2核对input.json", "occurrence": 1}]
+    },
+    {
+      "id": "e2",
+      "predicate": "写入核对结果",
+      "kind": "ACTION",
+      "layer": "MAIN",
+      "use": "CURRENT_TASK",
+      "modality": "REQUIRED",
+      "polarity": "POSITIVE",
+      "owner_id": "ROOT",
+      "constraint_ids": [],
+      "requires": [],
+      "sources": [{"quote": "并将核对结果写入audit.md", "occurrence": 1}]
+    },
+    {
+      "id": "e3",
+      "predicate": "修改输入文件",
+      "kind": "ACTION",
+      "layer": "MAIN",
+      "use": "CURRENT_TASK",
+      "modality": "FORBIDDEN",
+      "polarity": "POSITIVE",
+      "owner_id": "ROOT",
+      "constraint_ids": [],
+      "requires": [],
+      "sources": [
+        {"quote": "只读input.json", "occurrence": 1},
+        {"quote": "不得修改它", "occurrence": 1}
+      ]
+    }
+  ],
+  "claims": [
+    {
+      "id": "c1",
+      "kind": "ROLE",
+      "event_id": "e1",
+      "entity_id": "n1",
+      "role": "PERFORMER",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "artifact_use": null,
+      "scope_id": "e1",
+      "requires": [],
+      "sources": [{"quote": "请QA依据CHECK-2核对input.json", "occurrence": 1}],
+      "note": "QA是明确核对执行者；岗位简称不推定身份类别或权限。"
+    },
+    {
+      "id": "c2",
+      "kind": "ROLE",
+      "event_id": "e1",
+      "entity_id": "n2",
+      "role": "BASIS",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "artifact_use": null,
+      "scope_id": "e1",
+      "requires": [],
+      "sources": [{"quote": "依据CHECK-2核对input.json", "occurrence": 1}],
+      "note": "CHECK-2是核对依据，其中数字不是数量限制。"
+    },
+    {
+      "id": "c3",
+      "kind": "ROLE",
+      "event_id": "e1",
+      "entity_id": "n3",
+      "role": "INPUT_OBJECT",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "artifact_use": null,
+      "scope_id": "e1",
+      "requires": [],
+      "sources": [{"quote": "核对input.json", "occurrence": 1}],
+      "note": "明确受检输入文件。"
+    },
+    {
+      "id": "c4",
+      "kind": "ROLE",
+      "event_id": "e1",
+      "entity_id": "n4",
+      "role": "RESULT",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "artifact_use": null,
+      "scope_id": "e1",
+      "requires": [],
+      "sources": [
+        {"quote": "核对input.json", "occurrence": 1},
+        {"quote": "核对结果", "occurrence": 1}
+      ],
+      "note": "写入的核对结果由本次核对产生。"
+    },
+    {
+      "id": "c5",
+      "kind": "ROLE",
+      "event_id": "e2",
+      "entity_id": "n1",
+      "role": "PERFORMER",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "artifact_use": null,
+      "scope_id": "e2",
+      "requires": [],
+      "sources": [
+        {"quote": "请QA依据CHECK-2核对input.json", "occurrence": 1},
+        {"quote": "并将核对结果写入audit.md", "occurrence": 1}
+      ],
+      "note": "连续并列指令没有主体切换，写入动作承接QA。"
+    },
+    {
+      "id": "c6",
+      "kind": "ROLE",
+      "event_id": "e2",
+      "entity_id": "n4",
+      "role": "OBJECT",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "artifact_use": null,
+      "scope_id": "e2",
+      "requires": [],
+      "sources": [{"quote": "将核对结果写入audit.md", "occurrence": 1}],
+      "note": "本次核对结果是写入内容，属于内部产物用途。"
+    },
+    {
+      "id": "c7",
+      "kind": "ROLE",
+      "event_id": "e2",
+      "entity_id": "n5",
+      "role": "RESULT",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "artifact_use": null,
+      "scope_id": "e2",
+      "requires": [],
+      "sources": [{"quote": "将核对结果写入audit.md", "occurrence": 1}],
+      "note": "audit.md是写入结果的文件产物；未指定新建，也未要求提交或发送。"
+    },
+    {
+      "id": "c8",
+      "kind": "ARTIFACT_USE",
+      "event_id": "e2",
+      "entity_id": "n4",
+      "role": null,
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "artifact_use": {
+        "producer_result_id": "c4",
+        "consumer_role_id": "c6",
+        "availability": "USED_PORTION"
+      },
+      "scope_id": "e2",
+      "requires": ["c4", "c6"],
+      "sources": [
+        {"quote": "核对input.json", "occurrence": 1},
+        {"quote": "并将核对结果写入audit.md", "occurrence": 1}
+      ],
+      "note": "写入使用本次核对产生的结果；没有明确整项核对完成后的时序要求。"
+    },
+    {
+      "id": "c9",
+      "kind": "SCOPE",
+      "event_id": "e1",
+      "entity_id": null,
+      "role": null,
+      "expression_id": "x1",
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "artifact_use": null,
+      "scope_id": "e1",
+      "requires": [],
+      "sources": [
+        {"quote": "核对input.json", "occurrence": 1},
+        {"quote": "只读input.json", "occurrence": 1}
+      ],
+      "note": "只读约束核对时对输入文件的操作方式，不另增读取命令。"
+    },
+    {
+      "id": "c10",
+      "kind": "ROLE",
+      "event_id": "e3",
+      "entity_id": "n3",
+      "role": "OBJECT",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "artifact_use": null,
+      "scope_id": "e3",
+      "requires": [],
+      "sources": [
+        {"quote": "只读input.json", "occurrence": 1},
+        {"quote": "不得修改它", "occurrence": 1}
+      ],
+      "note": "它明确指向input.json，修改禁止不扩展到audit.md。"
+    },
+    {
+      "id": "c11",
+      "kind": "ROLE",
+      "event_id": "e3",
+      "entity_id": "n1",
+      "role": "PERFORMER",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "artifact_use": null,
+      "scope_id": "e3",
+      "requires": [],
+      "sources": [
+        {"quote": "请QA依据CHECK-2核对input.json", "occurrence": 1},
+        {"quote": "只读input.json，不得修改它", "occurrence": 1}
+      ],
+      "note": "追加操作限制承接同一任务执行者QA。"
+    }
+  ],
+  "expressions": [
+    {
+      "id": "x1",
+      "op": "STATE",
+      "operands": [],
+      "state": {
+        "predicate": "以只读方式操作",
+        "event_id": "e1",
+        "args": ["n3"],
+        "polarity": "POSITIVE"
+      },
+      "sources": [
+        {"quote": "核对input.json", "occurrence": 1},
+        {"quote": "只读input.json", "occurrence": 1}
+      ]
+    }
+  ],
+  "issues": [],
+  "coverage": [
+    {
+      "sources": [{"quote": "请QA依据CHECK-2核对input.json", "occurrence": 1}],
+      "claim_ids": ["c1", "c2", "c3"],
+      "status": "EXPRESSED",
+      "affected_views": ["A", "P", "V", "I"]
+    },
+    {
+      "sources": [{"quote": "并将核对结果写入audit.md", "occurrence": 1}],
+      "claim_ids": ["c4", "c5", "c6", "c7", "c8"],
+      "status": "EXPRESSED",
+      "affected_views": ["A", "P", "O"]
+    },
+    {
+      "sources": [{"quote": "只读input.json", "occurrence": 1}],
+      "claim_ids": ["c9"],
+      "status": "EXPRESSED",
+      "affected_views": ["A", "I", "B"]
+    },
+    {
+      "sources": [
+        {"quote": "只读input.json", "occurrence": 1},
+        {"quote": "不得修改它", "occurrence": 1}
+      ],
+      "claim_ids": ["c10", "c11"],
+      "status": "EXPRESSED",
+      "affected_views": ["B", "P"]
+    }
+  ]
+}

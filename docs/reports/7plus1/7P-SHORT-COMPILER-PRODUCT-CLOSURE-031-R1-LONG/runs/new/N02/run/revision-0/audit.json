@@ -1,0 +1,377 @@
+{
+  "contract_version": "031-r1.1",
+  "reviews": [
+    {
+      "subject_id": "dev",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [
+        {
+          "quote": "DEV",
+          "occurrence": 1
+        },
+        {
+          "quote": "DEV",
+          "occurrence": 2
+        }
+      ],
+      "reason": "两处DEV为同一主体；OTHER可占位未指定的人或组类别。"
+    },
+    {
+      "subject_id": "qa",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [
+        {
+          "quote": "QA",
+          "occurrence": 1
+        }
+      ],
+      "reason": "QA身份明确，具体类别未指定，OTHER占位合理。"
+    },
+    {
+      "subject_id": "admin",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [
+        {
+          "quote": "ADMIN",
+          "occurrence": 1
+        }
+      ],
+      "reason": "ADMIN身份明确，具体类别未指定，OTHER占位合理。"
+    },
+    {
+      "subject_id": "settings",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [
+        {
+          "quote": "settings.yaml",
+          "occurrence": 1
+        },
+        {
+          "quote": "settings.yaml",
+          "occurrence": 2
+        }
+      ],
+      "reason": "受检文件和禁止修改的文件为同一settings.yaml。"
+    },
+    {
+      "subject_id": "review",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [
+        {
+          "quote": "生成review.md",
+          "occurrence": 1
+        },
+        {
+          "quote": "并交给ADMIN",
+          "occurrence": 1
+        }
+      ],
+      "reason": "交付对象承接唯一当前生成的review.md，身份连接明确。"
+    },
+    {
+      "subject_id": "check",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [
+        {
+          "quote": "请DEV检查settings.yaml",
+          "occurrence": 1
+        }
+      ],
+      "reason": "明确要求当前执行检查。"
+    },
+    {
+      "subject_id": "generate",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [
+        "generate_order"
+      ],
+      "sources": [
+        {
+          "quote": "随后由QA生成review.md",
+          "occurrence": 1
+        }
+      ],
+      "reason": "生成是明确要求的当前动作，随后时序有约束回指。"
+    },
+    {
+      "subject_id": "deliver",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [
+        "deliver_order"
+      ],
+      "sources": [
+        {
+          "quote": "随后由QA生成review.md，并交给ADMIN",
+          "occurrence": 1
+        }
+      ],
+      "reason": "交付为追加要求，承接QA及当前产物，随后时序已绑定。"
+    },
+    {
+      "subject_id": "modify",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [
+        {
+          "quote": "DEV不得修改settings.yaml",
+          "occurrence": 1
+        }
+      ],
+      "reason": "FORBIDDEN准确表达对修改动作的禁止。"
+    },
+    {
+      "subject_id": "check_performer",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [
+        "check",
+        "dev"
+      ],
+      "sources": [
+        {
+          "quote": "请DEV检查settings.yaml",
+          "occurrence": 1
+        }
+      ],
+      "reason": "检查执行者明确为DEV。"
+    },
+    {
+      "subject_id": "check_input",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [
+        "check",
+        "settings"
+      ],
+      "sources": [
+        {
+          "quote": "请DEV检查settings.yaml",
+          "occurrence": 1
+        }
+      ],
+      "reason": "settings.yaml是明示受检范围，INPUT_OBJECT准确。"
+    },
+    {
+      "subject_id": "generate_performer",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [
+        "generate",
+        "qa"
+      ],
+      "sources": [
+        {
+          "quote": "由QA生成review.md",
+          "occurrence": 1
+        }
+      ],
+      "reason": "生成执行者明确为QA。"
+    },
+    {
+      "subject_id": "generate_result",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [
+        "generate",
+        "review"
+      ],
+      "sources": [
+        {
+          "quote": "生成review.md",
+          "occurrence": 1
+        }
+      ],
+      "reason": "review.md是生成动作的RESULT。"
+    },
+    {
+      "subject_id": "deliver_performer",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [
+        "deliver",
+        "qa"
+      ],
+      "sources": [
+        {
+          "quote": "由QA生成review.md",
+          "occurrence": 1
+        },
+        {
+          "quote": "并交给ADMIN",
+          "occurrence": 1
+        }
+      ],
+      "reason": "连续追加动作无主体切换，交付执行者承接QA，两端来源完整。"
+    },
+    {
+      "subject_id": "deliver_artifact",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [
+        "deliver",
+        "review"
+      ],
+      "sources": [
+        {
+          "quote": "生成review.md",
+          "occurrence": 1
+        },
+        {
+          "quote": "并交给ADMIN",
+          "occurrence": 1
+        }
+      ],
+      "reason": "交付对象为本次生成的review.md，DELIVERABLE用途明确。"
+    },
+    {
+      "subject_id": "deliver_recipient",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [
+        "deliver",
+        "admin"
+      ],
+      "sources": [
+        {
+          "quote": "交给ADMIN",
+          "occurrence": 1
+        }
+      ],
+      "reason": "ADMIN明确为交付接收者。"
+    },
+    {
+      "subject_id": "modify_performer",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [
+        "modify",
+        "dev"
+      ],
+      "sources": [
+        {
+          "quote": "DEV不得修改settings.yaml",
+          "occurrence": 1
+        }
+      ],
+      "reason": "DEV是被禁止修改动作的主体，此角色不产生执行义务。"
+    },
+    {
+      "subject_id": "modify_object",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [
+        "modify",
+        "settings"
+      ],
+      "sources": [
+        {
+          "quote": "DEV不得修改settings.yaml",
+          "occurrence": 1
+        }
+      ],
+      "reason": "禁止修改的对象明确为同一settings.yaml，不新增输入用途。"
+    },
+    {
+      "subject_id": "generate_order",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [
+        "check",
+        "generate",
+        "check_completed"
+      ],
+      "sources": [
+        {
+          "quote": "请DEV检查settings.yaml",
+          "occurrence": 1
+        },
+        {
+          "quote": "随后由QA生成review.md",
+          "occurrence": 1
+        }
+      ],
+      "reason": "随后表达生成在检查之后；ORDER与AFTER保留纯时序，双向绑定完整。"
+    },
+    {
+      "subject_id": "deliver_order",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [
+        "check",
+        "deliver",
+        "check_completed"
+      ],
+      "sources": [
+        {
+          "quote": "请DEV检查settings.yaml",
+          "occurrence": 1
+        },
+        {
+          "quote": "随后由QA生成review.md，并交给ADMIN",
+          "occurrence": 1
+        }
+      ],
+      "reason": "随后统摄生成和交付，交付在检查之后；未增添并列动作间的完整事件顺序。"
+    },
+    {
+      "subject_id": "review_flow",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [
+        "generate_result",
+        "deliver_artifact",
+        "review",
+        "deliver"
+      ],
+      "sources": [
+        {
+          "quote": "生成review.md",
+          "occurrence": 1
+        },
+        {
+          "quote": "并交给ADMIN",
+          "occurrence": 1
+        }
+      ],
+      "reason": "交付使用本次生成的同一产物，生产与消费角色闭合；USED_PORTION未额外要求整个生成事件完成。"
+    },
+    {
+      "subject_id": "check_completed",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [
+        "check",
+        "dev",
+        "settings"
+      ],
+      "sources": [
+        {
+          "quote": "请DEV检查settings.yaml",
+          "occurrence": 1
+        },
+        {
+          "quote": "随后",
+          "occurrence": 1
+        }
+      ],
+      "reason": "时序参照检查完成，事件、执行者和对象一致；STATE不断言该状态已发生。"
+    }
+  ],
+  "issues": [],
+  "omissions": []
+}

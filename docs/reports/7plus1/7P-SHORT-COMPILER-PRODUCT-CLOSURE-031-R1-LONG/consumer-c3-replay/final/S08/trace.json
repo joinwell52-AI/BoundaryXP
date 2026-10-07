@@ -1,0 +1,3517 @@
+{
+  "source": {
+    "text": "PM必须提交r.md；提交成功即任务完成。",
+    "sha256": "1a87c689ccf6b5032eb119260d8cecdd583e33a2d56dcdd976aed1c603467c0a",
+    "encoding": "UTF-8",
+    "codepoints": 21,
+    "lines": [
+      {
+        "id": "L1",
+        "text": "PM必须提交r.md；提交成功即任务完成。",
+        "span": [
+          0,
+          21
+        ]
+      }
+    ],
+    "literals": [
+      {
+        "text": "r.md",
+        "span": [
+          6,
+          10
+        ]
+      }
+    ]
+  },
+  "proposal": {
+    "contract_version": "031-r1.1",
+    "entities": [
+      {
+        "id": "ent_pm",
+        "label": "PM",
+        "type": "OTHER",
+        "mentions": [
+          {
+            "quote": "PM",
+            "occurrence": 1
+          }
+        ],
+        "alternatives": []
+      },
+      {
+        "id": "ent_file",
+        "label": "r.md",
+        "type": "FILE",
+        "mentions": [
+          {
+            "quote": "r.md",
+            "occurrence": 1
+          }
+        ],
+        "alternatives": []
+      }
+    ],
+    "events": [
+      {
+        "id": "evt_submit",
+        "predicate": "提交",
+        "kind": "ACTION",
+        "layer": "MAIN",
+        "use": "CURRENT_TASK",
+        "modality": "REQUIRED",
+        "polarity": "POSITIVE",
+        "owner_id": "ROOT",
+        "constraint_ids": [],
+        "requires": [],
+        "sources": [
+          {
+            "quote": "PM必须提交r.md",
+            "occurrence": 1
+          }
+        ]
+      }
+    ],
+    "claims": [
+      {
+        "id": "cl_performer",
+        "kind": "ROLE",
+        "event_id": "evt_submit",
+        "entity_id": "ent_pm",
+        "role": "PERFORMER",
+        "expression_id": null,
+        "direction": null,
+        "temporal": null,
+        "quantity": null,
+        "artifact_use": null,
+        "scope_id": "evt_submit",
+        "requires": [],
+        "sources": [
+          {
+            "quote": "PM必须提交r.md",
+            "occurrence": 1
+          }
+        ],
+        "note": "PM是提交动作的明确执行者。"
+      },
+      {
+        "id": "cl_deliverable",
+        "kind": "ROLE",
+        "event_id": "evt_submit",
+        "entity_id": "ent_file",
+        "role": "DELIVERABLE",
+        "expression_id": null,
+        "direction": null,
+        "temporal": null,
+        "quantity": null,
+        "artifact_use": null,
+        "scope_id": "evt_submit",
+        "requires": [],
+        "sources": [
+          {
+            "quote": "PM必须提交r.md",
+            "occurrence": 1
+          }
+        ],
+        "note": "r.md是要求提交的产物；原文未要求生成或修改。"
+      },
+      {
+        "id": "cl_completion",
+        "kind": "COMPLETION",
+        "event_id": null,
+        "entity_id": null,
+        "role": null,
+        "expression_id": "expr_submit_success",
+        "direction": "SUFFICIENT",
+        "temporal": null,
+        "quantity": null,
+        "artifact_use": null,
+        "scope_id": "ROOT",
+        "requires": [],
+        "sources": [
+          {
+            "quote": "提交成功即任务完成",
+            "occurrence": 1
+          }
+        ],
+        "note": "提交成功足以触发根任务完成，不声明提交已成功，也不将其解释为唯一完成条件。"
+      }
+    ],
+    "expressions": [
+      {
+        "id": "expr_submit_success",
+        "op": "STATE",
+        "operands": [],
+        "state": {
+          "predicate": "提交成功",
+          "event_id": "evt_submit",
+          "args": [
+            "ent_file"
+          ],
+          "polarity": "POSITIVE"
+        },
+        "sources": [
+          {
+            "quote": "PM必须提交r.md",
+            "occurrence": 1
+          },
+          {
+            "quote": "提交成功即任务完成",
+            "occurrence": 1
+          }
+        ]
+      }
+    ],
+    "issues": [],
+    "coverage": [
+      {
+        "sources": [
+          {
+            "quote": "PM必须提交r.md",
+            "occurrence": 1
+          }
+        ],
+        "claim_ids": [
+          "cl_performer",
+          "cl_deliverable"
+        ],
+        "status": "EXPRESSED",
+        "affected_views": [
+          "A",
+          "P",
+          "O"
+        ]
+      },
+      {
+        "sources": [
+          {
+            "quote": "提交成功即任务完成",
+            "occurrence": 1
+          }
+        ],
+        "claim_ids": [
+          "cl_completion"
+        ],
+        "status": "EXPRESSED",
+        "affected_views": [
+          "C"
+        ]
+      }
+    ]
+  },
+  "audit": {
+    "contract_version": "031-r1.1",
+    "reviews": [
+      {
+        "subject_id": "ent_pm",
+        "field_path": "",
+        "verdict": "SUPPORT",
+        "context_refs": [],
+        "sources": [
+          {
+            "quote": "PM",
+            "occurrence": 1
+          }
+        ],
+        "reason": "PM身份明确；原文未指定人或组类别，OTHER可作占位。"
+      },
+      {
+        "subject_id": "ent_file",
+        "field_path": "",
+        "verdict": "SUPPORT",
+        "context_refs": [],
+        "sources": [
+          {
+            "quote": "r.md",
+            "occurrence": 1
+          }
+        ],
+        "reason": "明确命名的提交文件，身份及FILE类别有来源支持。"
+      },
+      {
+        "subject_id": "evt_submit",
+        "field_path": "",
+        "verdict": "SUPPORT",
+        "context_refs": [],
+        "sources": [
+          {
+            "quote": "PM必须提交r.md",
+            "occurrence": 1
+          }
+        ],
+        "reason": "提交是当前任务的明确必需动作，无额外许可前提或执行数量限制。"
+      },
+      {
+        "subject_id": "cl_performer",
+        "field_path": "",
+        "verdict": "SUPPORT",
+        "context_refs": [
+          "evt_submit",
+          "ent_pm"
+        ],
+        "sources": [
+          {
+            "quote": "PM必须提交r.md",
+            "occurrence": 1
+          }
+        ],
+        "reason": "PM是提交动作的明确执行者。"
+      },
+      {
+        "subject_id": "cl_deliverable",
+        "field_path": "",
+        "verdict": "SUPPORT",
+        "context_refs": [
+          "evt_submit",
+          "ent_file"
+        ],
+        "sources": [
+          {
+            "quote": "PM必须提交r.md",
+            "occurrence": 1
+          }
+        ],
+        "reason": "r.md明确用于提交，DELIVERABLE绑定正确；未额外推定生成或外部输入。"
+      },
+      {
+        "subject_id": "cl_completion",
+        "field_path": "",
+        "verdict": "SUPPORT",
+        "context_refs": [
+          "expr_submit_success"
+        ],
+        "sources": [
+          {
+            "quote": "提交成功即任务完成",
+            "occurrence": 1
+          }
+        ],
+        "reason": "提交成功是根任务完成的充分条件，SUFFICIENT方向正确，不表示唯一完成条件。"
+      },
+      {
+        "subject_id": "expr_submit_success",
+        "field_path": "",
+        "verdict": "SUPPORT",
+        "context_refs": [
+          "evt_submit",
+          "ent_file"
+        ],
+        "sources": [
+          {
+            "quote": "PM必须提交r.md",
+            "occurrence": 1
+          },
+          {
+            "quote": "提交成功即任务完成",
+            "occurrence": 1
+          }
+        ],
+        "reason": "成功状态承接同一提交事件及r.md对象；正极性表达条件状态，不断言已经成功。"
+      }
+    ],
+    "issues": [],
+    "omissions": []
+  },
+  "technical": {
+    "policy": "028-r02-technical-v2",
+    "schemas": {
+      "proposal": {
+        "ok": true,
+        "errors": []
+      },
+      "audit": {
+        "ok": true,
+        "errors": []
+      }
+    },
+    "rows": [
+      {
+        "id": "ent_pm",
+        "collection": "entities",
+        "status": "ACCEPTED",
+        "identity_status": "ACCEPTED",
+        "errors": [],
+        "uncertain": [],
+        "sources": [
+          {
+            "quote": "PM",
+            "occurrence": 1,
+            "span": [
+              0,
+              2
+            ],
+            "source_sha256": "1a87c689ccf6b5032eb119260d8cecdd583e33a2d56dcdd976aed1c603467c0a"
+          }
+        ],
+        "audit_refs": [
+          {
+            "subject_id": "ent_pm",
+            "field_path": "",
+            "verdict": "SUPPORT"
+          }
+        ],
+        "required_dependencies": [],
+        "structural_refs": []
+      },
+      {
+        "id": "ent_file",
+        "collection": "entities",
+        "status": "ACCEPTED",
+        "identity_status": "ACCEPTED",
+        "errors": [],
+        "uncertain": [],
+        "sources": [
+          {
+            "quote": "r.md",
+            "occurrence": 1,
+            "span": [
+              6,
+              10
+            ],
+            "source_sha256": "1a87c689ccf6b5032eb119260d8cecdd583e33a2d56dcdd976aed1c603467c0a"
+          }
+        ],
+        "audit_refs": [
+          {
+            "subject_id": "ent_file",
+            "field_path": "",
+            "verdict": "SUPPORT"
+          }
+        ],
+        "required_dependencies": [],
+        "structural_refs": []
+      },
+      {
+        "id": "evt_submit",
+        "collection": "events",
+        "status": "ACCEPTED",
+        "errors": [],
+        "uncertain": [],
+        "sources": [
+          {
+            "quote": "PM必须提交r.md",
+            "occurrence": 1,
+            "span": [
+              0,
+              10
+            ],
+            "source_sha256": "1a87c689ccf6b5032eb119260d8cecdd583e33a2d56dcdd976aed1c603467c0a"
+          }
+        ],
+        "audit_refs": [
+          {
+            "subject_id": "evt_submit",
+            "field_path": "",
+            "verdict": "SUPPORT"
+          }
+        ],
+        "required_dependencies": [],
+        "structural_refs": [
+          "ROOT"
+        ]
+      },
+      {
+        "id": "cl_performer",
+        "collection": "claims",
+        "status": "ACCEPTED",
+        "errors": [],
+        "uncertain": [],
+        "sources": [
+          {
+            "quote": "PM必须提交r.md",
+            "occurrence": 1,
+            "span": [
+              0,
+              10
+            ],
+            "source_sha256": "1a87c689ccf6b5032eb119260d8cecdd583e33a2d56dcdd976aed1c603467c0a"
+          }
+        ],
+        "audit_refs": [
+          {
+            "subject_id": "cl_performer",
+            "field_path": "",
+            "verdict": "SUPPORT"
+          }
+        ],
+        "required_dependencies": [],
+        "structural_refs": [
+          "evt_submit",
+          "evt_submit",
+          "ent_pm"
+        ]
+      },
+      {
+        "id": "cl_deliverable",
+        "collection": "claims",
+        "status": "ACCEPTED",
+        "errors": [],
+        "uncertain": [],
+        "sources": [
+          {
+            "quote": "PM必须提交r.md",
+            "occurrence": 1,
+            "span": [
+              0,
+              10
+            ],
+            "source_sha256": "1a87c689ccf6b5032eb119260d8cecdd583e33a2d56dcdd976aed1c603467c0a"
+          }
+        ],
+        "audit_refs": [
+          {
+            "subject_id": "cl_deliverable",
+            "field_path": "",
+            "verdict": "SUPPORT"
+          }
+        ],
+        "required_dependencies": [],
+        "structural_refs": [
+          "evt_submit",
+          "evt_submit",
+          "ent_file"
+        ]
+      },
+      {
+        "id": "cl_completion",
+        "collection": "claims",
+        "status": "ACCEPTED",
+        "errors": [],
+        "uncertain": [],
+        "sources": [
+          {
+            "quote": "提交成功即任务完成",
+            "occurrence": 1,
+            "span": [
+              11,
+              20
+            ],
+            "source_sha256": "1a87c689ccf6b5032eb119260d8cecdd583e33a2d56dcdd976aed1c603467c0a"
+          }
+        ],
+        "audit_refs": [
+          {
+            "subject_id": "cl_completion",
+            "field_path": "",
+            "verdict": "SUPPORT"
+          }
+        ],
+        "required_dependencies": [],
+        "structural_refs": [
+          "ROOT",
+          "expr_submit_success"
+        ]
+      },
+      {
+        "id": "expr_submit_success",
+        "collection": "expressions",
+        "status": "ACCEPTED",
+        "errors": [],
+        "uncertain": [],
+        "sources": [
+          {
+            "quote": "PM必须提交r.md",
+            "occurrence": 1,
+            "span": [
+              0,
+              10
+            ],
+            "source_sha256": "1a87c689ccf6b5032eb119260d8cecdd583e33a2d56dcdd976aed1c603467c0a"
+          },
+          {
+            "quote": "提交成功即任务完成",
+            "occurrence": 1,
+            "span": [
+              11,
+              20
+            ],
+            "source_sha256": "1a87c689ccf6b5032eb119260d8cecdd583e33a2d56dcdd976aed1c603467c0a"
+          }
+        ],
+        "audit_refs": [
+          {
+            "subject_id": "expr_submit_success",
+            "field_path": "",
+            "verdict": "SUPPORT"
+          }
+        ],
+        "required_dependencies": [],
+        "structural_refs": [
+          "evt_submit"
+        ]
+      }
+    ],
+    "diagnostics": [],
+    "coverage": [
+      {
+        "sources": [
+          {
+            "quote": "PM必须提交r.md",
+            "occurrence": 1,
+            "span": [
+              0,
+              10
+            ],
+            "source_sha256": "1a87c689ccf6b5032eb119260d8cecdd583e33a2d56dcdd976aed1c603467c0a"
+          }
+        ],
+        "claim_ids": [
+          "cl_performer",
+          "cl_deliverable"
+        ],
+        "status": "EXPRESSED",
+        "affected_views": [
+          "A",
+          "P",
+          "O"
+        ],
+        "id": "coverage:0"
+      },
+      {
+        "sources": [
+          {
+            "quote": "提交成功即任务完成",
+            "occurrence": 1,
+            "span": [
+              11,
+              20
+            ],
+            "source_sha256": "1a87c689ccf6b5032eb119260d8cecdd583e33a2d56dcdd976aed1c603467c0a"
+          }
+        ],
+        "claim_ids": [
+          "cl_completion"
+        ],
+        "status": "EXPRESSED",
+        "affected_views": [
+          "C"
+        ],
+        "id": "coverage:1"
+      }
+    ],
+    "audit_sources": [
+      {
+        "subject_id": "ent_pm",
+        "sources": [
+          {
+            "quote": "PM",
+            "occurrence": 1,
+            "span": [
+              0,
+              2
+            ],
+            "source_sha256": "1a87c689ccf6b5032eb119260d8cecdd583e33a2d56dcdd976aed1c603467c0a"
+          }
+        ]
+      },
+      {
+        "subject_id": "ent_file",
+        "sources": [
+          {
+            "quote": "r.md",
+            "occurrence": 1,
+            "span": [
+              6,
+              10
+            ],
+            "source_sha256": "1a87c689ccf6b5032eb119260d8cecdd583e33a2d56dcdd976aed1c603467c0a"
+          }
+        ]
+      },
+      {
+        "subject_id": "evt_submit",
+        "sources": [
+          {
+            "quote": "PM必须提交r.md",
+            "occurrence": 1,
+            "span": [
+              0,
+              10
+            ],
+            "source_sha256": "1a87c689ccf6b5032eb119260d8cecdd583e33a2d56dcdd976aed1c603467c0a"
+          }
+        ]
+      },
+      {
+        "subject_id": "cl_performer",
+        "sources": [
+          {
+            "quote": "PM必须提交r.md",
+            "occurrence": 1,
+            "span": [
+              0,
+              10
+            ],
+            "source_sha256": "1a87c689ccf6b5032eb119260d8cecdd583e33a2d56dcdd976aed1c603467c0a"
+          }
+        ]
+      },
+      {
+        "subject_id": "cl_deliverable",
+        "sources": [
+          {
+            "quote": "PM必须提交r.md",
+            "occurrence": 1,
+            "span": [
+              0,
+              10
+            ],
+            "source_sha256": "1a87c689ccf6b5032eb119260d8cecdd583e33a2d56dcdd976aed1c603467c0a"
+          }
+        ]
+      },
+      {
+        "subject_id": "cl_completion",
+        "sources": [
+          {
+            "quote": "提交成功即任务完成",
+            "occurrence": 1,
+            "span": [
+              11,
+              20
+            ],
+            "source_sha256": "1a87c689ccf6b5032eb119260d8cecdd583e33a2d56dcdd976aed1c603467c0a"
+          }
+        ]
+      },
+      {
+        "subject_id": "expr_submit_success",
+        "sources": [
+          {
+            "quote": "PM必须提交r.md",
+            "occurrence": 1,
+            "span": [
+              0,
+              10
+            ],
+            "source_sha256": "1a87c689ccf6b5032eb119260d8cecdd583e33a2d56dcdd976aed1c603467c0a"
+          },
+          {
+            "quote": "提交成功即任务完成",
+            "occurrence": 1,
+            "span": [
+              11,
+              20
+            ],
+            "source_sha256": "1a87c689ccf6b5032eb119260d8cecdd583e33a2d56dcdd976aed1c603467c0a"
+          }
+        ]
+      }
+    ],
+    "issue_sources": []
+  },
+  "ir": {
+    "format": "boundx-boundary-ir/031-r1.1",
+    "source_sha256": "1a87c689ccf6b5032eb119260d8cecdd583e33a2d56dcdd976aed1c603467c0a",
+    "facts": [
+      {
+        "id": "bf:3f2b1e37440d73aec2b4",
+        "kind": "EVENT",
+        "status": "ACCEPTED",
+        "claim_ids": [
+          "evt_submit",
+          "cl_performer",
+          "cl_deliverable"
+        ],
+        "event": {
+          "id": "evt_submit",
+          "predicate": "提交",
+          "kind": "ACTION",
+          "layer": "MAIN",
+          "use": "CURRENT_TASK",
+          "modality": "REQUIRED",
+          "polarity": "POSITIVE",
+          "owner_id": "ROOT",
+          "constraint_ids": [],
+          "requires": [],
+          "sources": [
+            {
+              "quote": "PM必须提交r.md",
+              "occurrence": 1,
+              "span": [
+                0,
+                10
+              ],
+              "source_sha256": "1a87c689ccf6b5032eb119260d8cecdd583e33a2d56dcdd976aed1c603467c0a"
+            }
+          ]
+        },
+        "roles": [
+          {
+            "id": "cl_performer",
+            "kind": "ROLE",
+            "event_id": "evt_submit",
+            "entity_id": "ent_pm",
+            "role": "PERFORMER",
+            "expression_id": null,
+            "direction": null,
+            "temporal": null,
+            "quantity": null,
+            "artifact_use": null,
+            "scope_id": "evt_submit",
+            "requires": [],
+            "sources": [
+              {
+                "quote": "PM必须提交r.md",
+                "occurrence": 1,
+                "span": [
+                  0,
+                  10
+                ],
+                "source_sha256": "1a87c689ccf6b5032eb119260d8cecdd583e33a2d56dcdd976aed1c603467c0a"
+              }
+            ],
+            "note": "PM是提交动作的明确执行者。",
+            "entity": {
+              "id": "ent_pm",
+              "label": "PM",
+              "type": "OTHER",
+              "mentions": [
+                {
+                  "quote": "PM",
+                  "occurrence": 1,
+                  "span": [
+                    0,
+                    2
+                  ],
+                  "source_sha256": "1a87c689ccf6b5032eb119260d8cecdd583e33a2d56dcdd976aed1c603467c0a"
+                }
+              ],
+              "alternatives": []
+            },
+            "status": "ACCEPTED"
+          },
+          {
+            "id": "cl_deliverable",
+            "kind": "ROLE",
+            "event_id": "evt_submit",
+            "entity_id": "ent_file",
+            "role": "DELIVERABLE",
+            "expression_id": null,
+            "direction": null,
+            "temporal": null,
+            "quantity": null,
+            "artifact_use": null,
+            "scope_id": "evt_submit",
+            "requires": [],
+            "sources": [
+              {
+                "quote": "PM必须提交r.md",
+                "occurrence": 1,
+                "span": [
+                  0,
+                  10
+                ],
+                "source_sha256": "1a87c689ccf6b5032eb119260d8cecdd583e33a2d56dcdd976aed1c603467c0a"
+              }
+            ],
+            "note": "r.md是要求提交的产物；原文未要求生成或修改。",
+            "entity": {
+              "id": "ent_file",
+              "label": "r.md",
+              "type": "FILE",
+              "mentions": [
+                {
+                  "quote": "r.md",
+                  "occurrence": 1,
+                  "span": [
+                    6,
+                    10
+                  ],
+                  "source_sha256": "1a87c689ccf6b5032eb119260d8cecdd583e33a2d56dcdd976aed1c603467c0a"
+                }
+              ],
+              "alternatives": []
+            },
+            "status": "ACCEPTED"
+          }
+        ],
+        "constraints": [],
+        "artifact_dependencies": [],
+        "sources": [
+          {
+            "quote": "PM必须提交r.md",
+            "occurrence": 1,
+            "span": [
+              0,
+              10
+            ],
+            "source_sha256": "1a87c689ccf6b5032eb119260d8cecdd583e33a2d56dcdd976aed1c603467c0a"
+          },
+          {
+            "quote": "PM必须提交r.md",
+            "occurrence": 1,
+            "span": [
+              0,
+              10
+            ],
+            "source_sha256": "1a87c689ccf6b5032eb119260d8cecdd583e33a2d56dcdd976aed1c603467c0a"
+          },
+          {
+            "quote": "PM",
+            "occurrence": 1,
+            "span": [
+              0,
+              2
+            ],
+            "source_sha256": "1a87c689ccf6b5032eb119260d8cecdd583e33a2d56dcdd976aed1c603467c0a"
+          },
+          {
+            "quote": "PM必须提交r.md",
+            "occurrence": 1,
+            "span": [
+              0,
+              10
+            ],
+            "source_sha256": "1a87c689ccf6b5032eb119260d8cecdd583e33a2d56dcdd976aed1c603467c0a"
+          },
+          {
+            "quote": "r.md",
+            "occurrence": 1,
+            "span": [
+              6,
+              10
+            ],
+            "source_sha256": "1a87c689ccf6b5032eb119260d8cecdd583e33a2d56dcdd976aed1c603467c0a"
+          }
+        ],
+        "slots": [
+          "A"
+        ],
+        "proof": {
+          "source_sha256": "1a87c689ccf6b5032eb119260d8cecdd583e33a2d56dcdd976aed1c603467c0a",
+          "claim_ids": [
+            "evt_submit",
+            "cl_performer",
+            "cl_deliverable"
+          ],
+          "provenance_refs": [
+            "evt_submit",
+            "cl_performer",
+            "ent_pm",
+            "cl_deliverable",
+            "ent_file"
+          ],
+          "technical_policy": "028-r02-technical-v2",
+          "checks": [
+            {
+              "id": "evt_submit",
+              "collection": "events",
+              "status": "ACCEPTED",
+              "errors": [],
+              "uncertain": [],
+              "sources": [
+                {
+                  "quote": "PM必须提交r.md",
+                  "occurrence": 1,
+                  "span": [
+                    0,
+                    10
+                  ],
+                  "source_sha256": "1a87c689ccf6b5032eb119260d8cecdd583e33a2d56dcdd976aed1c603467c0a"
+                }
+              ],
+              "audit_refs": [
+                {
+                  "subject_id": "evt_submit",
+                  "field_path": "",
+                  "verdict": "SUPPORT"
+                }
+              ],
+              "required_dependencies": [],
+              "structural_refs": [
+                "ROOT"
+              ]
+            },
+            {
+              "id": "cl_performer",
+              "collection": "claims",
+              "status": "ACCEPTED",
+              "errors": [],
+              "uncertain": [],
+              "sources": [
+                {
+                  "quote": "PM必须提交r.md",
+                  "occurrence": 1,
+                  "span": [
+                    0,
+                    10
+                  ],
+                  "source_sha256": "1a87c689ccf6b5032eb119260d8cecdd583e33a2d56dcdd976aed1c603467c0a"
+                }
+              ],
+              "audit_refs": [
+                {
+                  "subject_id": "cl_performer",
+                  "field_path": "",
+                  "verdict": "SUPPORT"
+                }
+              ],
+              "required_dependencies": [],
+              "structural_refs": [
+                "evt_submit",
+                "evt_submit",
+                "ent_pm"
+              ]
+            },
+            {
+              "id": "ent_pm",
+              "collection": "entities",
+              "status": "ACCEPTED",
+              "identity_status": "ACCEPTED",
+              "errors": [],
+              "uncertain": [],
+              "sources": [
+                {
+                  "quote": "PM",
+                  "occurrence": 1,
+                  "span": [
+                    0,
+                    2
+                  ],
+                  "source_sha256": "1a87c689ccf6b5032eb119260d8cecdd583e33a2d56dcdd976aed1c603467c0a"
+                }
+              ],
+              "audit_refs": [
+                {
+                  "subject_id": "ent_pm",
+                  "field_path": "",
+                  "verdict": "SUPPORT"
+                }
+              ],
+              "required_dependencies": [],
+              "structural_refs": []
+            },
+            {
+              "id": "cl_deliverable",
+              "collection": "claims",
+              "status": "ACCEPTED",
+              "errors": [],
+              "uncertain": [],
+              "sources": [
+                {
+                  "quote": "PM必须提交r.md",
+                  "occurrence": 1,
+                  "span": [
+                    0,
+                    10
+                  ],
+                  "source_sha256": "1a87c689ccf6b5032eb119260d8cecdd583e33a2d56dcdd976aed1c603467c0a"
+                }
+              ],
+              "audit_refs": [
+                {
+                  "subject_id": "cl_deliverable",
+                  "field_path": "",
+                  "verdict": "SUPPORT"
+                }
+              ],
+              "required_dependencies": [],
+              "structural_refs": [
+                "evt_submit",
+                "evt_submit",
+                "ent_file"
+              ]
+            },
+            {
+              "id": "ent_file",
+              "collection": "entities",
+              "status": "ACCEPTED",
+              "identity_status": "ACCEPTED",
+              "errors": [],
+              "uncertain": [],
+              "sources": [
+                {
+                  "quote": "r.md",
+                  "occurrence": 1,
+                  "span": [
+                    6,
+                    10
+                  ],
+                  "source_sha256": "1a87c689ccf6b5032eb119260d8cecdd583e33a2d56dcdd976aed1c603467c0a"
+                }
+              ],
+              "audit_refs": [
+                {
+                  "subject_id": "ent_file",
+                  "field_path": "",
+                  "verdict": "SUPPORT"
+                }
+              ],
+              "required_dependencies": [],
+              "structural_refs": []
+            }
+          ],
+          "audit": [
+            {
+              "subject_id": "evt_submit",
+              "field_path": "",
+              "verdict": "SUPPORT",
+              "context_refs": [],
+              "sources": [
+                {
+                  "quote": "PM必须提交r.md",
+                  "occurrence": 1
+                }
+              ],
+              "reason": "提交是当前任务的明确必需动作，无额外许可前提或执行数量限制。"
+            },
+            {
+              "subject_id": "cl_performer",
+              "field_path": "",
+              "verdict": "SUPPORT",
+              "context_refs": [
+                "evt_submit",
+                "ent_pm"
+              ],
+              "sources": [
+                {
+                  "quote": "PM必须提交r.md",
+                  "occurrence": 1
+                }
+              ],
+              "reason": "PM是提交动作的明确执行者。"
+            },
+            {
+              "subject_id": "ent_pm",
+              "field_path": "",
+              "verdict": "SUPPORT",
+              "context_refs": [],
+              "sources": [
+                {
+                  "quote": "PM",
+                  "occurrence": 1
+                }
+              ],
+              "reason": "PM身份明确；原文未指定人或组类别，OTHER可作占位。"
+            },
+            {
+              "subject_id": "cl_deliverable",
+              "field_path": "",
+              "verdict": "SUPPORT",
+              "context_refs": [
+                "evt_submit",
+                "ent_file"
+              ],
+              "sources": [
+                {
+                  "quote": "PM必须提交r.md",
+                  "occurrence": 1
+                }
+              ],
+              "reason": "r.md明确用于提交，DELIVERABLE绑定正确；未额外推定生成或外部输入。"
+            },
+            {
+              "subject_id": "ent_file",
+              "field_path": "",
+              "verdict": "SUPPORT",
+              "context_refs": [],
+              "sources": [
+                {
+                  "quote": "r.md",
+                  "occurrence": 1
+                }
+              ],
+              "reason": "明确命名的提交文件，身份及FILE类别有来源支持。"
+            }
+          ],
+          "context_references_are_not_required_dependencies": true
+        }
+      },
+      {
+        "id": "bf:52519ae57667c0f2b6fd",
+        "kind": "ROLE",
+        "status": "ACCEPTED",
+        "claim_ids": [
+          "cl_performer",
+          "ent_pm",
+          "evt_submit"
+        ],
+        "claim": {
+          "id": "cl_performer",
+          "kind": "ROLE",
+          "event_id": "evt_submit",
+          "entity_id": "ent_pm",
+          "role": "PERFORMER",
+          "expression_id": null,
+          "direction": null,
+          "temporal": null,
+          "quantity": null,
+          "artifact_use": null,
+          "scope_id": "evt_submit",
+          "requires": [],
+          "sources": [
+            {
+              "quote": "PM必须提交r.md",
+              "occurrence": 1,
+              "span": [
+                0,
+                10
+              ],
+              "source_sha256": "1a87c689ccf6b5032eb119260d8cecdd583e33a2d56dcdd976aed1c603467c0a"
+            }
+          ],
+          "note": "PM是提交动作的明确执行者。"
+        },
+        "event": {
+          "id": "evt_submit",
+          "predicate": "提交",
+          "kind": "ACTION",
+          "layer": "MAIN",
+          "use": "CURRENT_TASK",
+          "modality": "REQUIRED",
+          "polarity": "POSITIVE",
+          "owner_id": "ROOT",
+          "constraint_ids": [],
+          "requires": [],
+          "sources": [
+            {
+              "quote": "PM必须提交r.md",
+              "occurrence": 1,
+              "span": [
+                0,
+                10
+              ],
+              "source_sha256": "1a87c689ccf6b5032eb119260d8cecdd583e33a2d56dcdd976aed1c603467c0a"
+            }
+          ]
+        },
+        "entity": {
+          "id": "ent_pm",
+          "label": "PM",
+          "type": "OTHER",
+          "mentions": [
+            {
+              "quote": "PM",
+              "occurrence": 1,
+              "span": [
+                0,
+                2
+              ],
+              "source_sha256": "1a87c689ccf6b5032eb119260d8cecdd583e33a2d56dcdd976aed1c603467c0a"
+            }
+          ],
+          "alternatives": []
+        },
+        "expression": null,
+        "constraints": [],
+        "content_quantities": [],
+        "content_scopes": [],
+        "sources": [
+          {
+            "quote": "PM必须提交r.md",
+            "occurrence": 1,
+            "span": [
+              0,
+              10
+            ],
+            "source_sha256": "1a87c689ccf6b5032eb119260d8cecdd583e33a2d56dcdd976aed1c603467c0a"
+          },
+          {
+            "quote": "PM必须提交r.md",
+            "occurrence": 1,
+            "span": [
+              0,
+              10
+            ],
+            "source_sha256": "1a87c689ccf6b5032eb119260d8cecdd583e33a2d56dcdd976aed1c603467c0a"
+          },
+          {
+            "quote": "PM",
+            "occurrence": 1,
+            "span": [
+              0,
+              2
+            ],
+            "source_sha256": "1a87c689ccf6b5032eb119260d8cecdd583e33a2d56dcdd976aed1c603467c0a"
+          }
+        ],
+        "slots": [
+          "P"
+        ],
+        "proof": {
+          "source_sha256": "1a87c689ccf6b5032eb119260d8cecdd583e33a2d56dcdd976aed1c603467c0a",
+          "claim_ids": [
+            "cl_performer",
+            "ent_pm",
+            "evt_submit"
+          ],
+          "provenance_refs": [
+            "cl_performer",
+            "evt_submit",
+            "ent_pm"
+          ],
+          "technical_policy": "028-r02-technical-v2",
+          "checks": [
+            {
+              "id": "cl_performer",
+              "collection": "claims",
+              "status": "ACCEPTED",
+              "errors": [],
+              "uncertain": [],
+              "sources": [
+                {
+                  "quote": "PM必须提交r.md",
+                  "occurrence": 1,
+                  "span": [
+                    0,
+                    10
+                  ],
+                  "source_sha256": "1a87c689ccf6b5032eb119260d8cecdd583e33a2d56dcdd976aed1c603467c0a"
+                }
+              ],
+              "audit_refs": [
+                {
+                  "subject_id": "cl_performer",
+                  "field_path": "",
+                  "verdict": "SUPPORT"
+                }
+              ],
+              "required_dependencies": [],
+              "structural_refs": [
+                "evt_submit",
+                "evt_submit",
+                "ent_pm"
+              ]
+            },
+            {
+              "id": "evt_submit",
+              "collection": "events",
+              "status": "ACCEPTED",
+              "errors": [],
+              "uncertain": [],
+              "sources": [
+                {
+                  "quote": "PM必须提交r.md",
+                  "occurrence": 1,
+                  "span": [
+                    0,
+                    10
+                  ],
+                  "source_sha256": "1a87c689ccf6b5032eb119260d8cecdd583e33a2d56dcdd976aed1c603467c0a"
+                }
+              ],
+              "audit_refs": [
+                {
+                  "subject_id": "evt_submit",
+                  "field_path": "",
+                  "verdict": "SUPPORT"
+                }
+              ],
+              "required_dependencies": [],
+              "structural_refs": [
+                "ROOT"
+              ]
+            },
+            {
+              "id": "ent_pm",
+              "collection": "entities",
+              "status": "ACCEPTED",
+              "identity_status": "ACCEPTED",
+              "errors": [],
+              "uncertain": [],
+              "sources": [
+                {
+                  "quote": "PM",
+                  "occurrence": 1,
+                  "span": [
+                    0,
+                    2
+                  ],
+                  "source_sha256": "1a87c689ccf6b5032eb119260d8cecdd583e33a2d56dcdd976aed1c603467c0a"
+                }
+              ],
+              "audit_refs": [
+                {
+                  "subject_id": "ent_pm",
+                  "field_path": "",
+                  "verdict": "SUPPORT"
+                }
+              ],
+              "required_dependencies": [],
+              "structural_refs": []
+            }
+          ],
+          "audit": [
+            {
+              "subject_id": "cl_performer",
+              "field_path": "",
+              "verdict": "SUPPORT",
+              "context_refs": [
+                "evt_submit",
+                "ent_pm"
+              ],
+              "sources": [
+                {
+                  "quote": "PM必须提交r.md",
+                  "occurrence": 1
+                }
+              ],
+              "reason": "PM是提交动作的明确执行者。"
+            },
+            {
+              "subject_id": "evt_submit",
+              "field_path": "",
+              "verdict": "SUPPORT",
+              "context_refs": [],
+              "sources": [
+                {
+                  "quote": "PM必须提交r.md",
+                  "occurrence": 1
+                }
+              ],
+              "reason": "提交是当前任务的明确必需动作，无额外许可前提或执行数量限制。"
+            },
+            {
+              "subject_id": "ent_pm",
+              "field_path": "",
+              "verdict": "SUPPORT",
+              "context_refs": [],
+              "sources": [
+                {
+                  "quote": "PM",
+                  "occurrence": 1
+                }
+              ],
+              "reason": "PM身份明确；原文未指定人或组类别，OTHER可作占位。"
+            }
+          ],
+          "context_references_are_not_required_dependencies": true
+        }
+      },
+      {
+        "id": "bf:5b4b402e8e6d23ddfa69",
+        "kind": "ROLE",
+        "status": "ACCEPTED",
+        "claim_ids": [
+          "cl_deliverable",
+          "ent_file",
+          "evt_submit"
+        ],
+        "claim": {
+          "id": "cl_deliverable",
+          "kind": "ROLE",
+          "event_id": "evt_submit",
+          "entity_id": "ent_file",
+          "role": "DELIVERABLE",
+          "expression_id": null,
+          "direction": null,
+          "temporal": null,
+          "quantity": null,
+          "artifact_use": null,
+          "scope_id": "evt_submit",
+          "requires": [],
+          "sources": [
+            {
+              "quote": "PM必须提交r.md",
+              "occurrence": 1,
+              "span": [
+                0,
+                10
+              ],
+              "source_sha256": "1a87c689ccf6b5032eb119260d8cecdd583e33a2d56dcdd976aed1c603467c0a"
+            }
+          ],
+          "note": "r.md是要求提交的产物；原文未要求生成或修改。"
+        },
+        "event": {
+          "id": "evt_submit",
+          "predicate": "提交",
+          "kind": "ACTION",
+          "layer": "MAIN",
+          "use": "CURRENT_TASK",
+          "modality": "REQUIRED",
+          "polarity": "POSITIVE",
+          "owner_id": "ROOT",
+          "constraint_ids": [],
+          "requires": [],
+          "sources": [
+            {
+              "quote": "PM必须提交r.md",
+              "occurrence": 1,
+              "span": [
+                0,
+                10
+              ],
+              "source_sha256": "1a87c689ccf6b5032eb119260d8cecdd583e33a2d56dcdd976aed1c603467c0a"
+            }
+          ]
+        },
+        "entity": {
+          "id": "ent_file",
+          "label": "r.md",
+          "type": "FILE",
+          "mentions": [
+            {
+              "quote": "r.md",
+              "occurrence": 1,
+              "span": [
+                6,
+                10
+              ],
+              "source_sha256": "1a87c689ccf6b5032eb119260d8cecdd583e33a2d56dcdd976aed1c603467c0a"
+            }
+          ],
+          "alternatives": []
+        },
+        "expression": null,
+        "constraints": [],
+        "content_quantities": [],
+        "content_scopes": [],
+        "sources": [
+          {
+            "quote": "PM必须提交r.md",
+            "occurrence": 1,
+            "span": [
+              0,
+              10
+            ],
+            "source_sha256": "1a87c689ccf6b5032eb119260d8cecdd583e33a2d56dcdd976aed1c603467c0a"
+          },
+          {
+            "quote": "PM必须提交r.md",
+            "occurrence": 1,
+            "span": [
+              0,
+              10
+            ],
+            "source_sha256": "1a87c689ccf6b5032eb119260d8cecdd583e33a2d56dcdd976aed1c603467c0a"
+          },
+          {
+            "quote": "r.md",
+            "occurrence": 1,
+            "span": [
+              6,
+              10
+            ],
+            "source_sha256": "1a87c689ccf6b5032eb119260d8cecdd583e33a2d56dcdd976aed1c603467c0a"
+          }
+        ],
+        "slots": [
+          "O"
+        ],
+        "proof": {
+          "source_sha256": "1a87c689ccf6b5032eb119260d8cecdd583e33a2d56dcdd976aed1c603467c0a",
+          "claim_ids": [
+            "cl_deliverable",
+            "ent_file",
+            "evt_submit"
+          ],
+          "provenance_refs": [
+            "cl_deliverable",
+            "evt_submit",
+            "ent_file"
+          ],
+          "technical_policy": "028-r02-technical-v2",
+          "checks": [
+            {
+              "id": "cl_deliverable",
+              "collection": "claims",
+              "status": "ACCEPTED",
+              "errors": [],
+              "uncertain": [],
+              "sources": [
+                {
+                  "quote": "PM必须提交r.md",
+                  "occurrence": 1,
+                  "span": [
+                    0,
+                    10
+                  ],
+                  "source_sha256": "1a87c689ccf6b5032eb119260d8cecdd583e33a2d56dcdd976aed1c603467c0a"
+                }
+              ],
+              "audit_refs": [
+                {
+                  "subject_id": "cl_deliverable",
+                  "field_path": "",
+                  "verdict": "SUPPORT"
+                }
+              ],
+              "required_dependencies": [],
+              "structural_refs": [
+                "evt_submit",
+                "evt_submit",
+                "ent_file"
+              ]
+            },
+            {
+              "id": "evt_submit",
+              "collection": "events",
+              "status": "ACCEPTED",
+              "errors": [],
+              "uncertain": [],
+              "sources": [
+                {
+                  "quote": "PM必须提交r.md",
+                  "occurrence": 1,
+                  "span": [
+                    0,
+                    10
+                  ],
+                  "source_sha256": "1a87c689ccf6b5032eb119260d8cecdd583e33a2d56dcdd976aed1c603467c0a"
+                }
+              ],
+              "audit_refs": [
+                {
+                  "subject_id": "evt_submit",
+                  "field_path": "",
+                  "verdict": "SUPPORT"
+                }
+              ],
+              "required_dependencies": [],
+              "structural_refs": [
+                "ROOT"
+              ]
+            },
+            {
+              "id": "ent_file",
+              "collection": "entities",
+              "status": "ACCEPTED",
+              "identity_status": "ACCEPTED",
+              "errors": [],
+              "uncertain": [],
+              "sources": [
+                {
+                  "quote": "r.md",
+                  "occurrence": 1,
+                  "span": [
+                    6,
+                    10
+                  ],
+                  "source_sha256": "1a87c689ccf6b5032eb119260d8cecdd583e33a2d56dcdd976aed1c603467c0a"
+                }
+              ],
+              "audit_refs": [
+                {
+                  "subject_id": "ent_file",
+                  "field_path": "",
+                  "verdict": "SUPPORT"
+                }
+              ],
+              "required_dependencies": [],
+              "structural_refs": []
+            }
+          ],
+          "audit": [
+            {
+              "subject_id": "cl_deliverable",
+              "field_path": "",
+              "verdict": "SUPPORT",
+              "context_refs": [
+                "evt_submit",
+                "ent_file"
+              ],
+              "sources": [
+                {
+                  "quote": "PM必须提交r.md",
+                  "occurrence": 1
+                }
+              ],
+              "reason": "r.md明确用于提交，DELIVERABLE绑定正确；未额外推定生成或外部输入。"
+            },
+            {
+              "subject_id": "evt_submit",
+              "field_path": "",
+              "verdict": "SUPPORT",
+              "context_refs": [],
+              "sources": [
+                {
+                  "quote": "PM必须提交r.md",
+                  "occurrence": 1
+                }
+              ],
+              "reason": "提交是当前任务的明确必需动作，无额外许可前提或执行数量限制。"
+            },
+            {
+              "subject_id": "ent_file",
+              "field_path": "",
+              "verdict": "SUPPORT",
+              "context_refs": [],
+              "sources": [
+                {
+                  "quote": "r.md",
+                  "occurrence": 1
+                }
+              ],
+              "reason": "明确命名的提交文件，身份及FILE类别有来源支持。"
+            }
+          ],
+          "context_references_are_not_required_dependencies": true
+        }
+      },
+      {
+        "id": "bf:d2f969ba6eebcd167fe1",
+        "kind": "COMPLETION",
+        "status": "ACCEPTED",
+        "claim_ids": [
+          "cl_completion",
+          "expr_submit_success"
+        ],
+        "claim": {
+          "id": "cl_completion",
+          "kind": "COMPLETION",
+          "event_id": null,
+          "entity_id": null,
+          "role": null,
+          "expression_id": "expr_submit_success",
+          "direction": "SUFFICIENT",
+          "temporal": null,
+          "quantity": null,
+          "artifact_use": null,
+          "scope_id": "ROOT",
+          "requires": [],
+          "sources": [
+            {
+              "quote": "提交成功即任务完成",
+              "occurrence": 1,
+              "span": [
+                11,
+                20
+              ],
+              "source_sha256": "1a87c689ccf6b5032eb119260d8cecdd583e33a2d56dcdd976aed1c603467c0a"
+            }
+          ],
+          "note": "提交成功足以触发根任务完成，不声明提交已成功，也不将其解释为唯一完成条件。"
+        },
+        "event": null,
+        "entity": null,
+        "expression": {
+          "id": "expr_submit_success",
+          "op": "STATE",
+          "operands": [],
+          "state": {
+            "predicate": "提交成功",
+            "event_id": "evt_submit",
+            "args": [
+              "ent_file"
+            ],
+            "polarity": "POSITIVE"
+          },
+          "sources": [
+            {
+              "quote": "PM必须提交r.md",
+              "occurrence": 1,
+              "span": [
+                0,
+                10
+              ],
+              "source_sha256": "1a87c689ccf6b5032eb119260d8cecdd583e33a2d56dcdd976aed1c603467c0a"
+            },
+            {
+              "quote": "提交成功即任务完成",
+              "occurrence": 1,
+              "span": [
+                11,
+                20
+              ],
+              "source_sha256": "1a87c689ccf6b5032eb119260d8cecdd583e33a2d56dcdd976aed1c603467c0a"
+            }
+          ],
+          "children": []
+        },
+        "constraints": [],
+        "content_quantities": [],
+        "content_scopes": [],
+        "sources": [
+          {
+            "quote": "提交成功即任务完成",
+            "occurrence": 1,
+            "span": [
+              11,
+              20
+            ],
+            "source_sha256": "1a87c689ccf6b5032eb119260d8cecdd583e33a2d56dcdd976aed1c603467c0a"
+          },
+          {
+            "quote": "PM必须提交r.md",
+            "occurrence": 1,
+            "span": [
+              0,
+              10
+            ],
+            "source_sha256": "1a87c689ccf6b5032eb119260d8cecdd583e33a2d56dcdd976aed1c603467c0a"
+          },
+          {
+            "quote": "提交成功即任务完成",
+            "occurrence": 1,
+            "span": [
+              11,
+              20
+            ],
+            "source_sha256": "1a87c689ccf6b5032eb119260d8cecdd583e33a2d56dcdd976aed1c603467c0a"
+          },
+          {
+            "quote": "PM必须提交r.md",
+            "occurrence": 1,
+            "span": [
+              0,
+              10
+            ],
+            "source_sha256": "1a87c689ccf6b5032eb119260d8cecdd583e33a2d56dcdd976aed1c603467c0a"
+          },
+          {
+            "quote": "r.md",
+            "occurrence": 1,
+            "span": [
+              6,
+              10
+            ],
+            "source_sha256": "1a87c689ccf6b5032eb119260d8cecdd583e33a2d56dcdd976aed1c603467c0a"
+          }
+        ],
+        "slots": [
+          "C"
+        ],
+        "proof": {
+          "source_sha256": "1a87c689ccf6b5032eb119260d8cecdd583e33a2d56dcdd976aed1c603467c0a",
+          "claim_ids": [
+            "cl_completion",
+            "expr_submit_success"
+          ],
+          "provenance_refs": [
+            "cl_completion",
+            "expr_submit_success",
+            "evt_submit",
+            "ent_file"
+          ],
+          "technical_policy": "028-r02-technical-v2",
+          "checks": [
+            {
+              "id": "cl_completion",
+              "collection": "claims",
+              "status": "ACCEPTED",
+              "errors": [],
+              "uncertain": [],
+              "sources": [
+                {
+                  "quote": "提交成功即任务完成",
+                  "occurrence": 1,
+                  "span": [
+                    11,
+                    20
+                  ],
+                  "source_sha256": "1a87c689ccf6b5032eb119260d8cecdd583e33a2d56dcdd976aed1c603467c0a"
+                }
+              ],
+              "audit_refs": [
+                {
+                  "subject_id": "cl_completion",
+                  "field_path": "",
+                  "verdict": "SUPPORT"
+                }
+              ],
+              "required_dependencies": [],
+              "structural_refs": [
+                "ROOT",
+                "expr_submit_success"
+              ]
+            },
+            {
+              "id": "expr_submit_success",
+              "collection": "expressions",
+              "status": "ACCEPTED",
+              "errors": [],
+              "uncertain": [],
+              "sources": [
+                {
+                  "quote": "PM必须提交r.md",
+                  "occurrence": 1,
+                  "span": [
+                    0,
+                    10
+                  ],
+                  "source_sha256": "1a87c689ccf6b5032eb119260d8cecdd583e33a2d56dcdd976aed1c603467c0a"
+                },
+                {
+                  "quote": "提交成功即任务完成",
+                  "occurrence": 1,
+                  "span": [
+                    11,
+                    20
+                  ],
+                  "source_sha256": "1a87c689ccf6b5032eb119260d8cecdd583e33a2d56dcdd976aed1c603467c0a"
+                }
+              ],
+              "audit_refs": [
+                {
+                  "subject_id": "expr_submit_success",
+                  "field_path": "",
+                  "verdict": "SUPPORT"
+                }
+              ],
+              "required_dependencies": [],
+              "structural_refs": [
+                "evt_submit"
+              ]
+            },
+            {
+              "id": "evt_submit",
+              "collection": "events",
+              "status": "ACCEPTED",
+              "errors": [],
+              "uncertain": [],
+              "sources": [
+                {
+                  "quote": "PM必须提交r.md",
+                  "occurrence": 1,
+                  "span": [
+                    0,
+                    10
+                  ],
+                  "source_sha256": "1a87c689ccf6b5032eb119260d8cecdd583e33a2d56dcdd976aed1c603467c0a"
+                }
+              ],
+              "audit_refs": [
+                {
+                  "subject_id": "evt_submit",
+                  "field_path": "",
+                  "verdict": "SUPPORT"
+                }
+              ],
+              "required_dependencies": [],
+              "structural_refs": [
+                "ROOT"
+              ]
+            },
+            {
+              "id": "ent_file",
+              "collection": "entities",
+              "status": "ACCEPTED",
+              "identity_status": "ACCEPTED",
+              "errors": [],
+              "uncertain": [],
+              "sources": [
+                {
+                  "quote": "r.md",
+                  "occurrence": 1,
+                  "span": [
+                    6,
+                    10
+                  ],
+                  "source_sha256": "1a87c689ccf6b5032eb119260d8cecdd583e33a2d56dcdd976aed1c603467c0a"
+                }
+              ],
+              "audit_refs": [
+                {
+                  "subject_id": "ent_file",
+                  "field_path": "",
+                  "verdict": "SUPPORT"
+                }
+              ],
+              "required_dependencies": [],
+              "structural_refs": []
+            }
+          ],
+          "audit": [
+            {
+              "subject_id": "cl_completion",
+              "field_path": "",
+              "verdict": "SUPPORT",
+              "context_refs": [
+                "expr_submit_success"
+              ],
+              "sources": [
+                {
+                  "quote": "提交成功即任务完成",
+                  "occurrence": 1
+                }
+              ],
+              "reason": "提交成功是根任务完成的充分条件，SUFFICIENT方向正确，不表示唯一完成条件。"
+            },
+            {
+              "subject_id": "expr_submit_success",
+              "field_path": "",
+              "verdict": "SUPPORT",
+              "context_refs": [
+                "evt_submit",
+                "ent_file"
+              ],
+              "sources": [
+                {
+                  "quote": "PM必须提交r.md",
+                  "occurrence": 1
+                },
+                {
+                  "quote": "提交成功即任务完成",
+                  "occurrence": 1
+                }
+              ],
+              "reason": "成功状态承接同一提交事件及r.md对象；正极性表达条件状态，不断言已经成功。"
+            },
+            {
+              "subject_id": "evt_submit",
+              "field_path": "",
+              "verdict": "SUPPORT",
+              "context_refs": [],
+              "sources": [
+                {
+                  "quote": "PM必须提交r.md",
+                  "occurrence": 1
+                }
+              ],
+              "reason": "提交是当前任务的明确必需动作，无额外许可前提或执行数量限制。"
+            },
+            {
+              "subject_id": "ent_file",
+              "field_path": "",
+              "verdict": "SUPPORT",
+              "context_refs": [],
+              "sources": [
+                {
+                  "quote": "r.md",
+                  "occurrence": 1
+                }
+              ],
+              "reason": "明确命名的提交文件，身份及FILE类别有来源支持。"
+            }
+          ],
+          "context_references_are_not_required_dependencies": true
+        }
+      }
+    ],
+    "artifact_associations": [],
+    "artifact_dependencies": [],
+    "entities": [
+      {
+        "id": "ent_pm",
+        "label": "PM",
+        "type": "OTHER",
+        "mentions": [
+          {
+            "quote": "PM",
+            "occurrence": 1,
+            "span": [
+              0,
+              2
+            ],
+            "source_sha256": "1a87c689ccf6b5032eb119260d8cecdd583e33a2d56dcdd976aed1c603467c0a"
+          }
+        ],
+        "alternatives": []
+      },
+      {
+        "id": "ent_file",
+        "label": "r.md",
+        "type": "FILE",
+        "mentions": [
+          {
+            "quote": "r.md",
+            "occurrence": 1,
+            "span": [
+              6,
+              10
+            ],
+            "source_sha256": "1a87c689ccf6b5032eb119260d8cecdd583e33a2d56dcdd976aed1c603467c0a"
+          }
+        ],
+        "alternatives": []
+      }
+    ],
+    "expressions": [
+      {
+        "id": "expr_submit_success",
+        "op": "STATE",
+        "operands": [],
+        "state": {
+          "predicate": "提交成功",
+          "event_id": "evt_submit",
+          "args": [
+            "ent_file"
+          ],
+          "polarity": "POSITIVE"
+        },
+        "sources": [
+          {
+            "quote": "PM必须提交r.md",
+            "occurrence": 1,
+            "span": [
+              0,
+              10
+            ],
+            "source_sha256": "1a87c689ccf6b5032eb119260d8cecdd583e33a2d56dcdd976aed1c603467c0a"
+          },
+          {
+            "quote": "提交成功即任务完成",
+            "occurrence": 1,
+            "span": [
+              11,
+              20
+            ],
+            "source_sha256": "1a87c689ccf6b5032eb119260d8cecdd583e33a2d56dcdd976aed1c603467c0a"
+          }
+        ]
+      }
+    ],
+    "issues": [],
+    "audit_issues": [],
+    "gaps": [],
+    "technical_diagnostics": [],
+    "business_decision": null,
+    "execution_authorization": null
+  },
+  "canonical": {
+    "format": "boundx-canonical-7plus1/031-r1.1",
+    "source_sha256": "1a87c689ccf6b5032eb119260d8cecdd583e33a2d56dcdd976aed1c603467c0a",
+    "artifact_associations": [],
+    "artifact_dependencies": [],
+    "entities": [
+      {
+        "id": "ent_pm",
+        "label": "PM",
+        "type": "OTHER",
+        "mentions": [
+          {
+            "quote": "PM",
+            "occurrence": 1,
+            "span": [
+              0,
+              2
+            ],
+            "source_sha256": "1a87c689ccf6b5032eb119260d8cecdd583e33a2d56dcdd976aed1c603467c0a"
+          }
+        ],
+        "alternatives": []
+      },
+      {
+        "id": "ent_file",
+        "label": "r.md",
+        "type": "FILE",
+        "mentions": [
+          {
+            "quote": "r.md",
+            "occurrence": 1,
+            "span": [
+              6,
+              10
+            ],
+            "source_sha256": "1a87c689ccf6b5032eb119260d8cecdd583e33a2d56dcdd976aed1c603467c0a"
+          }
+        ],
+        "alternatives": []
+      }
+    ],
+    "expressions": [
+      {
+        "id": "expr_submit_success",
+        "op": "STATE",
+        "operands": [],
+        "state": {
+          "predicate": "提交成功",
+          "event_id": "evt_submit",
+          "args": [
+            "ent_file"
+          ],
+          "polarity": "POSITIVE"
+        },
+        "sources": [
+          {
+            "quote": "PM必须提交r.md",
+            "occurrence": 1,
+            "span": [
+              0,
+              10
+            ],
+            "source_sha256": "1a87c689ccf6b5032eb119260d8cecdd583e33a2d56dcdd976aed1c603467c0a"
+          },
+          {
+            "quote": "提交成功即任务完成",
+            "occurrence": 1,
+            "span": [
+              11,
+              20
+            ],
+            "source_sha256": "1a87c689ccf6b5032eb119260d8cecdd583e33a2d56dcdd976aed1c603467c0a"
+          }
+        ]
+      }
+    ],
+    "slots": {
+      "I": {
+        "status": "ABSENT",
+        "openness": "OPEN",
+        "entries": []
+      },
+      "O": {
+        "status": "RESOLVED",
+        "openness": "CONSTRAINED",
+        "entries": [
+          {
+            "id": "bf:5b4b402e8e6d23ddfa69",
+            "kind": "ROLE",
+            "status": "ACCEPTED",
+            "claim_ids": [
+              "cl_deliverable",
+              "ent_file",
+              "evt_submit"
+            ],
+            "claim": {
+              "id": "cl_deliverable",
+              "kind": "ROLE",
+              "event_id": "evt_submit",
+              "entity_id": "ent_file",
+              "role": "DELIVERABLE",
+              "expression_id": null,
+              "direction": null,
+              "temporal": null,
+              "quantity": null,
+              "artifact_use": null,
+              "scope_id": "evt_submit",
+              "requires": [],
+              "sources": [
+                {
+                  "quote": "PM必须提交r.md",
+                  "occurrence": 1,
+                  "span": [
+                    0,
+                    10
+                  ],
+                  "source_sha256": "1a87c689ccf6b5032eb119260d8cecdd583e33a2d56dcdd976aed1c603467c0a"
+                }
+              ],
+              "note": "r.md是要求提交的产物；原文未要求生成或修改。"
+            },
+            "event": {
+              "id": "evt_submit",
+              "predicate": "提交",
+              "kind": "ACTION",
+              "layer": "MAIN",
+              "use": "CURRENT_TASK",
+              "modality": "REQUIRED",
+              "polarity": "POSITIVE",
+              "owner_id": "ROOT",
+              "constraint_ids": [],
+              "requires": [],
+              "sources": [
+                {
+                  "quote": "PM必须提交r.md",
+                  "occurrence": 1,
+                  "span": [
+                    0,
+                    10
+                  ],
+                  "source_sha256": "1a87c689ccf6b5032eb119260d8cecdd583e33a2d56dcdd976aed1c603467c0a"
+                }
+              ]
+            },
+            "entity": {
+              "id": "ent_file",
+              "label": "r.md",
+              "type": "FILE",
+              "mentions": [
+                {
+                  "quote": "r.md",
+                  "occurrence": 1,
+                  "span": [
+                    6,
+                    10
+                  ],
+                  "source_sha256": "1a87c689ccf6b5032eb119260d8cecdd583e33a2d56dcdd976aed1c603467c0a"
+                }
+              ],
+              "alternatives": []
+            },
+            "expression": null,
+            "constraints": [],
+            "content_quantities": [],
+            "content_scopes": [],
+            "sources": [
+              {
+                "quote": "PM必须提交r.md",
+                "occurrence": 1,
+                "span": [
+                  0,
+                  10
+                ],
+                "source_sha256": "1a87c689ccf6b5032eb119260d8cecdd583e33a2d56dcdd976aed1c603467c0a"
+              },
+              {
+                "quote": "PM必须提交r.md",
+                "occurrence": 1,
+                "span": [
+                  0,
+                  10
+                ],
+                "source_sha256": "1a87c689ccf6b5032eb119260d8cecdd583e33a2d56dcdd976aed1c603467c0a"
+              },
+              {
+                "quote": "r.md",
+                "occurrence": 1,
+                "span": [
+                  6,
+                  10
+                ],
+                "source_sha256": "1a87c689ccf6b5032eb119260d8cecdd583e33a2d56dcdd976aed1c603467c0a"
+              }
+            ],
+            "slots": [
+              "O"
+            ],
+            "proof": {
+              "source_sha256": "1a87c689ccf6b5032eb119260d8cecdd583e33a2d56dcdd976aed1c603467c0a",
+              "claim_ids": [
+                "cl_deliverable",
+                "ent_file",
+                "evt_submit"
+              ],
+              "provenance_refs": [
+                "cl_deliverable",
+                "evt_submit",
+                "ent_file"
+              ],
+              "technical_policy": "028-r02-technical-v2",
+              "checks": [
+                {
+                  "id": "cl_deliverable",
+                  "collection": "claims",
+                  "status": "ACCEPTED",
+                  "errors": [],
+                  "uncertain": [],
+                  "sources": [
+                    {
+                      "quote": "PM必须提交r.md",
+                      "occurrence": 1,
+                      "span": [
+                        0,
+                        10
+                      ],
+                      "source_sha256": "1a87c689ccf6b5032eb119260d8cecdd583e33a2d56dcdd976aed1c603467c0a"
+                    }
+                  ],
+                  "audit_refs": [
+                    {
+                      "subject_id": "cl_deliverable",
+                      "field_path": "",
+                      "verdict": "SUPPORT"
+                    }
+                  ],
+                  "required_dependencies": [],
+                  "structural_refs": [
+                    "evt_submit",
+                    "evt_submit",
+                    "ent_file"
+                  ]
+                },
+                {
+                  "id": "evt_submit",
+                  "collection": "events",
+                  "status": "ACCEPTED",
+                  "errors": [],
+                  "uncertain": [],
+                  "sources": [
+                    {
+                      "quote": "PM必须提交r.md",
+                      "occurrence": 1,
+                      "span": [
+                        0,
+                        10
+                      ],
+                      "source_sha256": "1a87c689ccf6b5032eb119260d8cecdd583e33a2d56dcdd976aed1c603467c0a"
+                    }
+                  ],
+                  "audit_refs": [
+                    {
+                      "subject_id": "evt_submit",
+                      "field_path": "",
+                      "verdict": "SUPPORT"
+                    }
+                  ],
+                  "required_dependencies": [],
+                  "structural_refs": [
+                    "ROOT"
+                  ]
+                },
+                {
+                  "id": "ent_file",
+                  "collection": "entities",
+                  "status": "ACCEPTED",
+                  "identity_status": "ACCEPTED",
+                  "errors": [],
+                  "uncertain": [],
+                  "sources": [
+                    {
+                      "quote": "r.md",
+                      "occurrence": 1,
+                      "span": [
+                        6,
+                        10
+                      ],
+                      "source_sha256": "1a87c689ccf6b5032eb119260d8cecdd583e33a2d56dcdd976aed1c603467c0a"
+                    }
+                  ],
+                  "audit_refs": [
+                    {
+                      "subject_id": "ent_file",
+                      "field_path": "",
+                      "verdict": "SUPPORT"
+                    }
+                  ],
+                  "required_dependencies": [],
+                  "structural_refs": []
+                }
+              ],
+              "audit": [
+                {
+                  "subject_id": "cl_deliverable",
+                  "field_path": "",
+                  "verdict": "SUPPORT",
+                  "context_refs": [
+                    "evt_submit",
+                    "ent_file"
+                  ],
+                  "sources": [
+                    {
+                      "quote": "PM必须提交r.md",
+                      "occurrence": 1
+                    }
+                  ],
+                  "reason": "r.md明确用于提交，DELIVERABLE绑定正确；未额外推定生成或外部输入。"
+                },
+                {
+                  "subject_id": "evt_submit",
+                  "field_path": "",
+                  "verdict": "SUPPORT",
+                  "context_refs": [],
+                  "sources": [
+                    {
+                      "quote": "PM必须提交r.md",
+                      "occurrence": 1
+                    }
+                  ],
+                  "reason": "提交是当前任务的明确必需动作，无额外许可前提或执行数量限制。"
+                },
+                {
+                  "subject_id": "ent_file",
+                  "field_path": "",
+                  "verdict": "SUPPORT",
+                  "context_refs": [],
+                  "sources": [
+                    {
+                      "quote": "r.md",
+                      "occurrence": 1
+                    }
+                  ],
+                  "reason": "明确命名的提交文件，身份及FILE类别有来源支持。"
+                }
+              ],
+              "context_references_are_not_required_dependencies": true
+            }
+          }
+        ]
+      },
+      "A": {
+        "status": "RESOLVED",
+        "openness": "CONSTRAINED",
+        "entries": [
+          {
+            "id": "bf:3f2b1e37440d73aec2b4",
+            "kind": "EVENT",
+            "status": "ACCEPTED",
+            "claim_ids": [
+              "evt_submit",
+              "cl_performer",
+              "cl_deliverable"
+            ],
+            "event": {
+              "id": "evt_submit",
+              "predicate": "提交",
+              "kind": "ACTION",
+              "layer": "MAIN",
+              "use": "CURRENT_TASK",
+              "modality": "REQUIRED",
+              "polarity": "POSITIVE",
+              "owner_id": "ROOT",
+              "constraint_ids": [],
+              "requires": [],
+              "sources": [
+                {
+                  "quote": "PM必须提交r.md",
+                  "occurrence": 1,
+                  "span": [
+                    0,
+                    10
+                  ],
+                  "source_sha256": "1a87c689ccf6b5032eb119260d8cecdd583e33a2d56dcdd976aed1c603467c0a"
+                }
+              ]
+            },
+            "roles": [
+              {
+                "id": "cl_performer",
+                "kind": "ROLE",
+                "event_id": "evt_submit",
+                "entity_id": "ent_pm",
+                "role": "PERFORMER",
+                "expression_id": null,
+                "direction": null,
+                "temporal": null,
+                "quantity": null,
+                "artifact_use": null,
+                "scope_id": "evt_submit",
+                "requires": [],
+                "sources": [
+                  {
+                    "quote": "PM必须提交r.md",
+                    "occurrence": 1,
+                    "span": [
+                      0,
+                      10
+                    ],
+                    "source_sha256": "1a87c689ccf6b5032eb119260d8cecdd583e33a2d56dcdd976aed1c603467c0a"
+                  }
+                ],
+                "note": "PM是提交动作的明确执行者。",
+                "entity": {
+                  "id": "ent_pm",
+                  "label": "PM",
+                  "type": "OTHER",
+                  "mentions": [
+                    {
+                      "quote": "PM",
+                      "occurrence": 1,
+                      "span": [
+                        0,
+                        2
+                      ],
+                      "source_sha256": "1a87c689ccf6b5032eb119260d8cecdd583e33a2d56dcdd976aed1c603467c0a"
+                    }
+                  ],
+                  "alternatives": []
+                },
+                "status": "ACCEPTED"
+              },
+              {
+                "id": "cl_deliverable",
+                "kind": "ROLE",
+                "event_id": "evt_submit",
+                "entity_id": "ent_file",
+                "role": "DELIVERABLE",
+                "expression_id": null,
+                "direction": null,
+                "temporal": null,
+                "quantity": null,
+                "artifact_use": null,
+                "scope_id": "evt_submit",
+                "requires": [],
+                "sources": [
+                  {
+                    "quote": "PM必须提交r.md",
+                    "occurrence": 1,
+                    "span": [
+                      0,
+                      10
+                    ],
+                    "source_sha256": "1a87c689ccf6b5032eb119260d8cecdd583e33a2d56dcdd976aed1c603467c0a"
+                  }
+                ],
+                "note": "r.md是要求提交的产物；原文未要求生成或修改。",
+                "entity": {
+                  "id": "ent_file",
+                  "label": "r.md",
+                  "type": "FILE",
+                  "mentions": [
+                    {
+                      "quote": "r.md",
+                      "occurrence": 1,
+                      "span": [
+                        6,
+                        10
+                      ],
+                      "source_sha256": "1a87c689ccf6b5032eb119260d8cecdd583e33a2d56dcdd976aed1c603467c0a"
+                    }
+                  ],
+                  "alternatives": []
+                },
+                "status": "ACCEPTED"
+              }
+            ],
+            "constraints": [],
+            "artifact_dependencies": [],
+            "sources": [
+              {
+                "quote": "PM必须提交r.md",
+                "occurrence": 1,
+                "span": [
+                  0,
+                  10
+                ],
+                "source_sha256": "1a87c689ccf6b5032eb119260d8cecdd583e33a2d56dcdd976aed1c603467c0a"
+              },
+              {
+                "quote": "PM必须提交r.md",
+                "occurrence": 1,
+                "span": [
+                  0,
+                  10
+                ],
+                "source_sha256": "1a87c689ccf6b5032eb119260d8cecdd583e33a2d56dcdd976aed1c603467c0a"
+              },
+              {
+                "quote": "PM",
+                "occurrence": 1,
+                "span": [
+                  0,
+                  2
+                ],
+                "source_sha256": "1a87c689ccf6b5032eb119260d8cecdd583e33a2d56dcdd976aed1c603467c0a"
+              },
+              {
+                "quote": "PM必须提交r.md",
+                "occurrence": 1,
+                "span": [
+                  0,
+                  10
+                ],
+                "source_sha256": "1a87c689ccf6b5032eb119260d8cecdd583e33a2d56dcdd976aed1c603467c0a"
+              },
+              {
+                "quote": "r.md",
+                "occurrence": 1,
+                "span": [
+                  6,
+                  10
+                ],
+                "source_sha256": "1a87c689ccf6b5032eb119260d8cecdd583e33a2d56dcdd976aed1c603467c0a"
+              }
+            ],
+            "slots": [
+              "A"
+            ],
+            "proof": {
+              "source_sha256": "1a87c689ccf6b5032eb119260d8cecdd583e33a2d56dcdd976aed1c603467c0a",
+              "claim_ids": [
+                "evt_submit",
+                "cl_performer",
+                "cl_deliverable"
+              ],
+              "provenance_refs": [
+                "evt_submit",
+                "cl_performer",
+                "ent_pm",
+                "cl_deliverable",
+                "ent_file"
+              ],
+              "technical_policy": "028-r02-technical-v2",
+              "checks": [
+                {
+                  "id": "evt_submit",
+                  "collection": "events",
+                  "status": "ACCEPTED",
+                  "errors": [],
+                  "uncertain": [],
+                  "sources": [
+                    {
+                      "quote": "PM必须提交r.md",
+                      "occurrence": 1,
+                      "span": [
+                        0,
+                        10
+                      ],
+                      "source_sha256": "1a87c689ccf6b5032eb119260d8cecdd583e33a2d56dcdd976aed1c603467c0a"
+                    }
+                  ],
+                  "audit_refs": [
+                    {
+                      "subject_id": "evt_submit",
+                      "field_path": "",
+                      "verdict": "SUPPORT"
+                    }
+                  ],
+                  "required_dependencies": [],
+                  "structural_refs": [
+                    "ROOT"
+                  ]
+                },
+                {
+                  "id": "cl_performer",
+                  "collection": "claims",
+                  "status": "ACCEPTED",
+                  "errors": [],
+                  "uncertain": [],
+                  "sources": [
+                    {
+                      "quote": "PM必须提交r.md",
+                      "occurrence": 1,
+                      "span": [
+                        0,
+                        10
+                      ],
+                      "source_sha256": "1a87c689ccf6b5032eb119260d8cecdd583e33a2d56dcdd976aed1c603467c0a"
+                    }
+                  ],
+                  "audit_refs": [
+                    {
+                      "subject_id": "cl_performer",
+                      "field_path": "",
+                      "verdict": "SUPPORT"
+                    }
+                  ],
+                  "required_dependencies": [],
+                  "structural_refs": [
+                    "evt_submit",
+                    "evt_submit",
+                    "ent_pm"
+                  ]
+                },
+                {
+                  "id": "ent_pm",
+                  "collection": "entities",
+                  "status": "ACCEPTED",
+                  "identity_status": "ACCEPTED",
+                  "errors": [],
+                  "uncertain": [],
+                  "sources": [
+                    {
+                      "quote": "PM",
+                      "occurrence": 1,
+                      "span": [
+                        0,
+                        2
+                      ],
+                      "source_sha256": "1a87c689ccf6b5032eb119260d8cecdd583e33a2d56dcdd976aed1c603467c0a"
+                    }
+                  ],
+                  "audit_refs": [
+                    {
+                      "subject_id": "ent_pm",
+                      "field_path": "",
+                      "verdict": "SUPPORT"
+                    }
+                  ],
+                  "required_dependencies": [],
+                  "structural_refs": []
+                },
+                {
+                  "id": "cl_deliverable",
+                  "collection": "claims",
+                  "status": "ACCEPTED",
+                  "errors": [],
+                  "uncertain": [],
+                  "sources": [
+                    {
+                      "quote": "PM必须提交r.md",
+                      "occurrence": 1,
+                      "span": [
+                        0,
+                        10
+                      ],
+                      "source_sha256": "1a87c689ccf6b5032eb119260d8cecdd583e33a2d56dcdd976aed1c603467c0a"
+                    }
+                  ],
+                  "audit_refs": [
+                    {
+                      "subject_id": "cl_deliverable",
+                      "field_path": "",
+                      "verdict": "SUPPORT"
+                    }
+                  ],
+                  "required_dependencies": [],
+                  "structural_refs": [
+                    "evt_submit",
+                    "evt_submit",
+                    "ent_file"
+                  ]
+                },
+                {
+                  "id": "ent_file",
+                  "collection": "entities",
+                  "status": "ACCEPTED",
+                  "identity_status": "ACCEPTED",
+                  "errors": [],
+                  "uncertain": [],
+                  "sources": [
+                    {
+                      "quote": "r.md",
+                      "occurrence": 1,
+                      "span": [
+                        6,
+                        10
+                      ],
+                      "source_sha256": "1a87c689ccf6b5032eb119260d8cecdd583e33a2d56dcdd976aed1c603467c0a"
+                    }
+                  ],
+                  "audit_refs": [
+                    {
+                      "subject_id": "ent_file",
+                      "field_path": "",
+                      "verdict": "SUPPORT"
+                    }
+                  ],
+                  "required_dependencies": [],
+                  "structural_refs": []
+                }
+              ],
+              "audit": [
+                {
+                  "subject_id": "evt_submit",
+                  "field_path": "",
+                  "verdict": "SUPPORT",
+                  "context_refs": [],
+                  "sources": [
+                    {
+                      "quote": "PM必须提交r.md",
+                      "occurrence": 1
+                    }
+                  ],
+                  "reason": "提交是当前任务的明确必需动作，无额外许可前提或执行数量限制。"
+                },
+                {
+                  "subject_id": "cl_performer",
+                  "field_path": "",
+                  "verdict": "SUPPORT",
+                  "context_refs": [
+                    "evt_submit",
+                    "ent_pm"
+                  ],
+                  "sources": [
+                    {
+                      "quote": "PM必须提交r.md",
+                      "occurrence": 1
+                    }
+                  ],
+                  "reason": "PM是提交动作的明确执行者。"
+                },
+                {
+                  "subject_id": "ent_pm",
+                  "field_path": "",
+                  "verdict": "SUPPORT",
+                  "context_refs": [],
+                  "sources": [
+                    {
+                      "quote": "PM",
+                      "occurrence": 1
+                    }
+                  ],
+                  "reason": "PM身份明确；原文未指定人或组类别，OTHER可作占位。"
+                },
+                {
+                  "subject_id": "cl_deliverable",
+                  "field_path": "",
+                  "verdict": "SUPPORT",
+                  "context_refs": [
+                    "evt_submit",
+                    "ent_file"
+                  ],
+                  "sources": [
+                    {
+                      "quote": "PM必须提交r.md",
+                      "occurrence": 1
+                    }
+                  ],
+                  "reason": "r.md明确用于提交，DELIVERABLE绑定正确；未额外推定生成或外部输入。"
+                },
+                {
+                  "subject_id": "ent_file",
+                  "field_path": "",
+                  "verdict": "SUPPORT",
+                  "context_refs": [],
+                  "sources": [
+                    {
+                      "quote": "r.md",
+                      "occurrence": 1
+                    }
+                  ],
+                  "reason": "明确命名的提交文件，身份及FILE类别有来源支持。"
+                }
+              ],
+              "context_references_are_not_required_dependencies": true
+            }
+          }
+        ]
+      },
+      "P": {
+        "status": "RESOLVED",
+        "openness": "CONSTRAINED",
+        "entries": [
+          {
+            "id": "bf:52519ae57667c0f2b6fd",
+            "kind": "ROLE",
+            "status": "ACCEPTED",
+            "claim_ids": [
+              "cl_performer",
+              "ent_pm",
+              "evt_submit"
+            ],
+            "claim": {
+              "id": "cl_performer",
+              "kind": "ROLE",
+              "event_id": "evt_submit",
+              "entity_id": "ent_pm",
+              "role": "PERFORMER",
+              "expression_id": null,
+              "direction": null,
+              "temporal": null,
+              "quantity": null,
+              "artifact_use": null,
+              "scope_id": "evt_submit",
+              "requires": [],
+              "sources": [
+                {
+                  "quote": "PM必须提交r.md",
+                  "occurrence": 1,
+                  "span": [
+                    0,
+                    10
+                  ],
+                  "source_sha256": "1a87c689ccf6b5032eb119260d8cecdd583e33a2d56dcdd976aed1c603467c0a"
+                }
+              ],
+              "note": "PM是提交动作的明确执行者。"
+            },
+            "event": {
+              "id": "evt_submit",
+              "predicate": "提交",
+              "kind": "ACTION",
+              "layer": "MAIN",
+              "use": "CURRENT_TASK",
+              "modality": "REQUIRED",
+              "polarity": "POSITIVE",
+              "owner_id": "ROOT",
+              "constraint_ids": [],
+              "requires": [],
+              "sources": [
+                {
+                  "quote": "PM必须提交r.md",
+                  "occurrence": 1,
+                  "span": [
+                    0,
+                    10
+                  ],
+                  "source_sha256": "1a87c689ccf6b5032eb119260d8cecdd583e33a2d56dcdd976aed1c603467c0a"
+                }
+              ]
+            },
+            "entity": {
+              "id": "ent_pm",
+              "label": "PM",
+              "type": "OTHER",
+              "mentions": [
+                {
+                  "quote": "PM",
+                  "occurrence": 1,
+                  "span": [
+                    0,
+                    2
+                  ],
+                  "source_sha256": "1a87c689ccf6b5032eb119260d8cecdd583e33a2d56dcdd976aed1c603467c0a"
+                }
+              ],
+              "alternatives": []
+            },
+            "expression": null,
+            "constraints": [],
+            "content_quantities": [],
+            "content_scopes": [],
+            "sources": [
+              {
+                "quote": "PM必须提交r.md",
+                "occurrence": 1,
+                "span": [
+                  0,
+                  10
+                ],
+                "source_sha256": "1a87c689ccf6b5032eb119260d8cecdd583e33a2d56dcdd976aed1c603467c0a"
+              },
+              {
+                "quote": "PM必须提交r.md",
+                "occurrence": 1,
+                "span": [
+                  0,
+                  10
+                ],
+                "source_sha256": "1a87c689ccf6b5032eb119260d8cecdd583e33a2d56dcdd976aed1c603467c0a"
+              },
+              {
+                "quote": "PM",
+                "occurrence": 1,
+                "span": [
+                  0,
+                  2
+                ],
+                "source_sha256": "1a87c689ccf6b5032eb119260d8cecdd583e33a2d56dcdd976aed1c603467c0a"
+              }
+            ],
+            "slots": [
+              "P"
+            ],
+            "proof": {
+              "source_sha256": "1a87c689ccf6b5032eb119260d8cecdd583e33a2d56dcdd976aed1c603467c0a",
+              "claim_ids": [
+                "cl_performer",
+                "ent_pm",
+                "evt_submit"
+              ],
+              "provenance_refs": [
+                "cl_performer",
+                "evt_submit",
+                "ent_pm"
+              ],
+              "technical_policy": "028-r02-technical-v2",
+              "checks": [
+                {
+                  "id": "cl_performer",
+                  "collection": "claims",
+                  "status": "ACCEPTED",
+                  "errors": [],
+                  "uncertain": [],
+                  "sources": [
+                    {
+                      "quote": "PM必须提交r.md",
+                      "occurrence": 1,
+                      "span": [
+                        0,
+                        10
+                      ],
+                      "source_sha256": "1a87c689ccf6b5032eb119260d8cecdd583e33a2d56dcdd976aed1c603467c0a"
+                    }
+                  ],
+                  "audit_refs": [
+                    {
+                      "subject_id": "cl_performer",
+                      "field_path": "",
+                      "verdict": "SUPPORT"
+                    }
+                  ],
+                  "required_dependencies": [],
+                  "structural_refs": [
+                    "evt_submit",
+                    "evt_submit",
+                    "ent_pm"
+                  ]
+                },
+                {
+                  "id": "evt_submit",
+                  "collection": "events",
+                  "status": "ACCEPTED",
+                  "errors": [],
+                  "uncertain": [],
+                  "sources": [
+                    {
+                      "quote": "PM必须提交r.md",
+                      "occurrence": 1,
+                      "span": [
+                        0,
+                        10
+                      ],
+                      "source_sha256": "1a87c689ccf6b5032eb119260d8cecdd583e33a2d56dcdd976aed1c603467c0a"
+                    }
+                  ],
+                  "audit_refs": [
+                    {
+                      "subject_id": "evt_submit",
+                      "field_path": "",
+                      "verdict": "SUPPORT"
+                    }
+                  ],
+                  "required_dependencies": [],
+                  "structural_refs": [
+                    "ROOT"
+                  ]
+                },
+                {
+                  "id": "ent_pm",
+                  "collection": "entities",
+                  "status": "ACCEPTED",
+                  "identity_status": "ACCEPTED",
+                  "errors": [],
+                  "uncertain": [],
+                  "sources": [
+                    {
+                      "quote": "PM",
+                      "occurrence": 1,
+                      "span": [
+                        0,
+                        2
+                      ],
+                      "source_sha256": "1a87c689ccf6b5032eb119260d8cecdd583e33a2d56dcdd976aed1c603467c0a"
+                    }
+                  ],
+                  "audit_refs": [
+                    {
+                      "subject_id": "ent_pm",
+                      "field_path": "",
+                      "verdict": "SUPPORT"
+                    }
+                  ],
+                  "required_dependencies": [],
+                  "structural_refs": []
+                }
+              ],
+              "audit": [
+                {
+                  "subject_id": "cl_performer",
+                  "field_path": "",
+                  "verdict": "SUPPORT",
+                  "context_refs": [
+                    "evt_submit",
+                    "ent_pm"
+                  ],
+                  "sources": [
+                    {
+                      "quote": "PM必须提交r.md",
+                      "occurrence": 1
+                    }
+                  ],
+                  "reason": "PM是提交动作的明确执行者。"
+                },
+                {
+                  "subject_id": "evt_submit",
+                  "field_path": "",
+                  "verdict": "SUPPORT",
+                  "context_refs": [],
+                  "sources": [
+                    {
+                      "quote": "PM必须提交r.md",
+                      "occurrence": 1
+                    }
+                  ],
+                  "reason": "提交是当前任务的明确必需动作，无额外许可前提或执行数量限制。"
+                },
+                {
+                  "subject_id": "ent_pm",
+                  "field_path": "",
+                  "verdict": "SUPPORT",
+                  "context_refs": [],
+                  "sources": [
+                    {
+                      "quote": "PM",
+                      "occurrence": 1
+                    }
+                  ],
+                  "reason": "PM身份明确；原文未指定人或组类别，OTHER可作占位。"
+                }
+              ],
+              "context_references_are_not_required_dependencies": true
+            }
+          }
+        ]
+      },
+      "R": {
+        "status": "ABSENT",
+        "openness": "OPEN",
+        "entries": []
+      },
+      "V": {
+        "status": "ABSENT",
+        "openness": "OPEN",
+        "entries": []
+      },
+      "C": {
+        "status": "RESOLVED",
+        "openness": "CONSTRAINED",
+        "entries": [
+          {
+            "id": "bf:d2f969ba6eebcd167fe1",
+            "kind": "COMPLETION",
+            "status": "ACCEPTED",
+            "claim_ids": [
+              "cl_completion",
+              "expr_submit_success"
+            ],
+            "claim": {
+              "id": "cl_completion",
+              "kind": "COMPLETION",
+              "event_id": null,
+              "entity_id": null,
+              "role": null,
+              "expression_id": "expr_submit_success",
+              "direction": "SUFFICIENT",
+              "temporal": null,
+              "quantity": null,
+              "artifact_use": null,
+              "scope_id": "ROOT",
+              "requires": [],
+              "sources": [
+                {
+                  "quote": "提交成功即任务完成",
+                  "occurrence": 1,
+                  "span": [
+                    11,
+                    20
+                  ],
+                  "source_sha256": "1a87c689ccf6b5032eb119260d8cecdd583e33a2d56dcdd976aed1c603467c0a"
+                }
+              ],
+              "note": "提交成功足以触发根任务完成，不声明提交已成功，也不将其解释为唯一完成条件。"
+            },
+            "event": null,
+            "entity": null,
+            "expression": {
+              "id": "expr_submit_success",
+              "op": "STATE",
+              "operands": [],
+              "state": {
+                "predicate": "提交成功",
+                "event_id": "evt_submit",
+                "args": [
+                  "ent_file"
+                ],
+                "polarity": "POSITIVE"
+              },
+              "sources": [
+                {
+                  "quote": "PM必须提交r.md",
+                  "occurrence": 1,
+                  "span": [
+                    0,
+                    10
+                  ],
+                  "source_sha256": "1a87c689ccf6b5032eb119260d8cecdd583e33a2d56dcdd976aed1c603467c0a"
+                },
+                {
+                  "quote": "提交成功即任务完成",
+                  "occurrence": 1,
+                  "span": [
+                    11,
+                    20
+                  ],
+                  "source_sha256": "1a87c689ccf6b5032eb119260d8cecdd583e33a2d56dcdd976aed1c603467c0a"
+                }
+              ],
+              "children": []
+            },
+            "constraints": [],
+            "content_quantities": [],
+            "content_scopes": [],
+            "sources": [
+              {
+                "quote": "提交成功即任务完成",
+                "occurrence": 1,
+                "span": [
+                  11,
+                  20
+                ],
+                "source_sha256": "1a87c689ccf6b5032eb119260d8cecdd583e33a2d56dcdd976aed1c603467c0a"
+              },
+              {
+                "quote": "PM必须提交r.md",
+                "occurrence": 1,
+                "span": [
+                  0,
+                  10
+                ],
+                "source_sha256": "1a87c689ccf6b5032eb119260d8cecdd583e33a2d56dcdd976aed1c603467c0a"
+              },
+              {
+                "quote": "提交成功即任务完成",
+                "occurrence": 1,
+                "span": [
+                  11,
+                  20
+                ],
+                "source_sha256": "1a87c689ccf6b5032eb119260d8cecdd583e33a2d56dcdd976aed1c603467c0a"
+              },
+              {
+                "quote": "PM必须提交r.md",
+                "occurrence": 1,
+                "span": [
+                  0,
+                  10
+                ],
+                "source_sha256": "1a87c689ccf6b5032eb119260d8cecdd583e33a2d56dcdd976aed1c603467c0a"
+              },
+              {
+                "quote": "r.md",
+                "occurrence": 1,
+                "span": [
+                  6,
+                  10
+                ],
+                "source_sha256": "1a87c689ccf6b5032eb119260d8cecdd583e33a2d56dcdd976aed1c603467c0a"
+              }
+            ],
+            "slots": [
+              "C"
+            ],
+            "proof": {
+              "source_sha256": "1a87c689ccf6b5032eb119260d8cecdd583e33a2d56dcdd976aed1c603467c0a",
+              "claim_ids": [
+                "cl_completion",
+                "expr_submit_success"
+              ],
+              "provenance_refs": [
+                "cl_completion",
+                "expr_submit_success",
+                "evt_submit",
+                "ent_file"
+              ],
+              "technical_policy": "028-r02-technical-v2",
+              "checks": [
+                {
+                  "id": "cl_completion",
+                  "collection": "claims",
+                  "status": "ACCEPTED",
+                  "errors": [],
+                  "uncertain": [],
+                  "sources": [
+                    {
+                      "quote": "提交成功即任务完成",
+                      "occurrence": 1,
+                      "span": [
+                        11,
+                        20
+                      ],
+                      "source_sha256": "1a87c689ccf6b5032eb119260d8cecdd583e33a2d56dcdd976aed1c603467c0a"
+                    }
+                  ],
+                  "audit_refs": [
+                    {
+                      "subject_id": "cl_completion",
+                      "field_path": "",
+                      "verdict": "SUPPORT"
+                    }
+                  ],
+                  "required_dependencies": [],
+                  "structural_refs": [
+                    "ROOT",
+                    "expr_submit_success"
+                  ]
+                },
+                {
+                  "id": "expr_submit_success",
+                  "collection": "expressions",
+                  "status": "ACCEPTED",
+                  "errors": [],
+                  "uncertain": [],
+                  "sources": [
+                    {
+                      "quote": "PM必须提交r.md",
+                      "occurrence": 1,
+                      "span": [
+                        0,
+                        10
+                      ],
+                      "source_sha256": "1a87c689ccf6b5032eb119260d8cecdd583e33a2d56dcdd976aed1c603467c0a"
+                    },
+                    {
+                      "quote": "提交成功即任务完成",
+                      "occurrence": 1,
+                      "span": [
+                        11,
+                        20
+                      ],
+                      "source_sha256": "1a87c689ccf6b5032eb119260d8cecdd583e33a2d56dcdd976aed1c603467c0a"
+                    }
+                  ],
+                  "audit_refs": [
+                    {
+                      "subject_id": "expr_submit_success",
+                      "field_path": "",
+                      "verdict": "SUPPORT"
+                    }
+                  ],
+                  "required_dependencies": [],
+                  "structural_refs": [
+                    "evt_submit"
+                  ]
+                },
+                {
+                  "id": "evt_submit",
+                  "collection": "events",
+                  "status": "ACCEPTED",
+                  "errors": [],
+                  "uncertain": [],
+                  "sources": [
+                    {
+                      "quote": "PM必须提交r.md",
+                      "occurrence": 1,
+                      "span": [
+                        0,
+                        10
+                      ],
+                      "source_sha256": "1a87c689ccf6b5032eb119260d8cecdd583e33a2d56dcdd976aed1c603467c0a"
+                    }
+                  ],
+                  "audit_refs": [
+                    {
+                      "subject_id": "evt_submit",
+                      "field_path": "",
+                      "verdict": "SUPPORT"
+                    }
+                  ],
+                  "required_dependencies": [],
+                  "structural_refs": [
+                    "ROOT"
+                  ]
+                },
+                {
+                  "id": "ent_file",
+                  "collection": "entities",
+                  "status": "ACCEPTED",
+                  "identity_status": "ACCEPTED",
+                  "errors": [],
+                  "uncertain": [],
+                  "sources": [
+                    {
+                      "quote": "r.md",
+                      "occurrence": 1,
+                      "span": [
+                        6,
+                        10
+                      ],
+                      "source_sha256": "1a87c689ccf6b5032eb119260d8cecdd583e33a2d56dcdd976aed1c603467c0a"
+                    }
+                  ],
+                  "audit_refs": [
+                    {
+                      "subject_id": "ent_file",
+                      "field_path": "",
+                      "verdict": "SUPPORT"
+                    }
+                  ],
+                  "required_dependencies": [],
+                  "structural_refs": []
+                }
+              ],
+              "audit": [
+                {
+                  "subject_id": "cl_completion",
+                  "field_path": "",
+                  "verdict": "SUPPORT",
+                  "context_refs": [
+                    "expr_submit_success"
+                  ],
+                  "sources": [
+                    {
+                      "quote": "提交成功即任务完成",
+                      "occurrence": 1
+                    }
+                  ],
+                  "reason": "提交成功是根任务完成的充分条件，SUFFICIENT方向正确，不表示唯一完成条件。"
+                },
+                {
+                  "subject_id": "expr_submit_success",
+                  "field_path": "",
+                  "verdict": "SUPPORT",
+                  "context_refs": [
+                    "evt_submit",
+                    "ent_file"
+                  ],
+                  "sources": [
+                    {
+                      "quote": "PM必须提交r.md",
+                      "occurrence": 1
+                    },
+                    {
+                      "quote": "提交成功即任务完成",
+                      "occurrence": 1
+                    }
+                  ],
+                  "reason": "成功状态承接同一提交事件及r.md对象；正极性表达条件状态，不断言已经成功。"
+                },
+                {
+                  "subject_id": "evt_submit",
+                  "field_path": "",
+                  "verdict": "SUPPORT",
+                  "context_refs": [],
+                  "sources": [
+                    {
+                      "quote": "PM必须提交r.md",
+                      "occurrence": 1
+                    }
+                  ],
+                  "reason": "提交是当前任务的明确必需动作，无额外许可前提或执行数量限制。"
+                },
+                {
+                  "subject_id": "ent_file",
+                  "field_path": "",
+                  "verdict": "SUPPORT",
+                  "context_refs": [],
+                  "sources": [
+                    {
+                      "quote": "r.md",
+                      "occurrence": 1
+                    }
+                  ],
+                  "reason": "明确命名的提交文件，身份及FILE类别有来源支持。"
+                }
+              ],
+              "context_references_are_not_required_dependencies": true
+            }
+          }
+        ]
+      },
+      "B": {
+        "status": "ABSENT",
+        "openness": "OPEN",
+        "entries": []
+      }
+    },
+    "unresolved": [],
+    "retained_nonprojected": [],
+    "issues": [],
+    "gaps": [],
+    "business_decision": null,
+    "execution_authorization": null
+  },
+  "chinese": "# BoundX 7+1（有限技术接受，不是业务授权）\n\n## I 输入与作用域 — ABSENT\n\n## O 交付与结果 — RESOLVED\n- [ACCEPTED] 提交：交付产物=r.md；必须（bf:5b4b402e8e6d23ddfa69）\n\n## A 正向动作 — RESOLVED\n- [ACCEPTED] 必须 提交；执行者=PM；交付产物=r.md（bf:3f2b1e37440d73aec2b4）\n\n## P 参与关系 — RESOLVED\n- [ACCEPTED] 提交：执行者=PM；必须（bf:52519ae57667c0f2b6fd）\n\n## R 执行量化限制 — ABSENT\n\n## V 版本与依据 — ABSENT\n\n## C 完成与停止 — RESOLVED\n- [ACCEPTED] 任务完成 充分触发 提交成功(r.md)；所指事件=提交 [evt_submit]；执行者=PM；交付产物=r.md [POSITIVE;运行值UNKNOWN]；目标=根任务（bf:d2f969ba6eebcd167fe1）\n\n## B 禁止与限制 — ABSENT\n\n## 产物关联与可用性依赖（不等于事件强顺序）\n\n## 未指定 / 歧义 / 未投影语义\n",
+  "model_calls": {
+    "parse": [
+      {
+        "exit_code": 0,
+        "error": null,
+        "exit_confirmed": true,
+        "cancelled": false,
+        "pid": 28932,
+        "kill_receipt": null,
+        "elapsed_ms": 28097,
+        "timed_out": false,
+        "thread_id": "01a1179e-9a2a-73b1-9987-c2e0ea99a04a",
+        "usage": {
+          "input_tokens": 19483,
+          "cached_input_tokens": 8704,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 978,
+          "reasoning_output_tokens": 76
+        },
+        "tool_events": [],
+        "schema_check": {
+          "ok": true,
+          "errors": []
+        },
+        "response_sha256": "76fe6597505a765b106137cb4ab29b531323d98eed07db784dca872fd7b44aab",
+        "attempt": 0,
+        "skill_content_delivered": true,
+        "skill_mode": "INLINE_BUNDLE",
+        "actual_model": null
+      }
+    ],
+    "audit": [
+      {
+        "exit_code": 0,
+        "error": null,
+        "exit_confirmed": true,
+        "cancelled": false,
+        "pid": 32688,
+        "kill_receipt": null,
+        "elapsed_ms": 20455,
+        "timed_out": false,
+        "thread_id": "01a1179f-07f7-7130-9bba-d9c25a36b37e",
+        "usage": {
+          "input_tokens": 20395,
+          "cached_input_tokens": 0,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 498,
+          "reasoning_output_tokens": 28
+        },
+        "tool_events": [],
+        "schema_check": {
+          "ok": true,
+          "errors": []
+        },
+        "response_sha256": "e4bfb9b3c5f9a23c5685fa2877d2300f7e90e3afcdb45b0d9e0665255714c9db",
+        "attempt": 0,
+        "skill_content_delivered": true,
+        "skill_mode": "INLINE_BUNDLE",
+        "actual_model": null
+      }
+    ]
+  },
+  "revision": 0,
+  "execution_mode": "FROZEN_RESPONSE_REPLAY",
+  "origin_trace": {
+    "path": "D:\\boundx\\docs\\reports\\7plus1\\7P-SHORT-COMPILER-PRODUCT-CLOSURE-031-R1-LONG\\runs\\final\\S08\\run\\trace.json",
+    "sha256": "415c5e7094f1dfd1ae6570246b38da9d155e7277fc5d910ba0917ce13279cc57"
+  },
+  "real_calls_in_this_replay": 0
+}

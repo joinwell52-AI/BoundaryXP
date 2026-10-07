@@ -1,0 +1,92 @@
+{
+  "contract_version": "031-r1.1",
+  "entities": [
+    {"id":"n_pm","label":"PM","type":"OTHER","mentions":[{"quote":"PM","occurrence":1}],"alternatives":[]},
+    {"id":"n_east","label":"east.csv","type":"FILE","mentions":[{"quote":"east.csv","occurrence":1}],"alternatives":[]},
+    {"id":"n_west","label":"west.csv","type":"FILE","mentions":[{"quote":"west.csv","occurrence":1}],"alternatives":[]},
+    {"id":"n_it","label":"它所指的交付对象","type":"REFERENT","mentions":[{"quote":"它","occurrence":1}],"alternatives":["n_east","n_west"]},
+    {"id":"n_qa","label":"QA","type":"OTHER","mentions":[{"quote":"QA","occurrence":1}],"alternatives":[]},
+    {"id":"n_ops","label":"OPS-01","type":"OTHER","mentions":[{"quote":"OPS-01","occurrence":1}],"alternatives":[]},
+    {"id":"n_port","label":"port.md","type":"FILE","mentions":[{"quote":"port.md","occurrence":1}],"alternatives":[]}
+  ],
+  "events": [
+    {
+      "id":"e_read","predicate":"读取","kind":"ACTION","layer":"MAIN","use":"CURRENT_TASK","modality":"REQUIRED","polarity":"POSITIVE","owner_id":"ROOT","constraint_ids":[],"requires":[],
+      "sources":[{"quote":"请PM读取east.csv和west.csv","occurrence":1}]
+    },
+    {
+      "id":"e_deliver","predicate":"交付","kind":"ACTION","layer":"MAIN","use":"CURRENT_TASK","modality":"REQUIRED","polarity":"POSITIVE","owner_id":"ROOT","constraint_ids":["c_order"],"requires":[],
+      "sources":[{"quote":"再把它交给QA","occurrence":1}]
+    },
+    {
+      "id":"e_generate","predicate":"生成","kind":"ACTION","layer":"MAIN","use":"CURRENT_TASK","modality":"REQUIRED","polarity":"POSITIVE","owner_id":"ROOT","constraint_ids":[],"requires":[],
+      "sources":[{"quote":"另请OPS-01生成port.md","occurrence":1}]
+    }
+  ],
+  "claims": [
+    {
+      "id":"c_read_pm","kind":"ROLE","event_id":"e_read","entity_id":"n_pm","role":"PERFORMER","expression_id":null,"direction":null,"temporal":null,"quantity":null,"artifact_use":null,"scope_id":"e_read","requires":[],
+      "sources":[{"quote":"请PM读取east.csv和west.csv","occurrence":1}],"note":"PM是读取动作的明确执行者。"
+    },
+    {
+      "id":"c_read_east","kind":"ROLE","event_id":"e_read","entity_id":"n_east","role":"INPUT_OBJECT","expression_id":null,"direction":null,"temporal":null,"quantity":null,"artifact_use":null,"scope_id":"e_read","requires":[],
+      "sources":[{"quote":"读取east.csv和west.csv","occurrence":1}],"note":"east.csv是明确读取输入。"
+    },
+    {
+      "id":"c_read_west","kind":"ROLE","event_id":"e_read","entity_id":"n_west","role":"INPUT_OBJECT","expression_id":null,"direction":null,"temporal":null,"quantity":null,"artifact_use":null,"scope_id":"e_read","requires":[],
+      "sources":[{"quote":"读取east.csv和west.csv","occurrence":1}],"note":"west.csv是明确读取输入。"
+    },
+    {
+      "id":"c_deliver_pm","kind":"ROLE","event_id":"e_deliver","entity_id":"n_pm","role":"PERFORMER","expression_id":null,"direction":null,"temporal":null,"quantity":null,"artifact_use":null,"scope_id":"e_deliver","requires":[],
+      "sources":[{"quote":"请PM读取east.csv和west.csv","occurrence":1},{"quote":"再把它交给QA","occurrence":1}],"note":"连续指令中的追加交付动作承接PM主体；交付对象歧义不影响执行者身份。"
+    },
+    {
+      "id":"c_deliver_it","kind":"ROLE","event_id":"e_deliver","entity_id":"n_it","role":"DELIVERABLE","expression_id":null,"direction":null,"temporal":null,"quantity":null,"artifact_use":null,"scope_id":"e_deliver","requires":[],
+      "sources":[{"quote":"east.csv和west.csv","occurrence":1},{"quote":"再把它交给QA","occurrence":1}],"note":"交付用途明确，但单数指称“它”在两个文件之间存在真实竞争，未选择先行项。"
+    },
+    {
+      "id":"c_deliver_qa","kind":"ROLE","event_id":"e_deliver","entity_id":"n_qa","role":"RECIPIENT","expression_id":null,"direction":null,"temporal":null,"quantity":null,"artifact_use":null,"scope_id":"e_deliver","requires":[],
+      "sources":[{"quote":"把它交给QA","occurrence":1}],"note":"QA是明确接收者，未要求QA另行执行动作。"
+    },
+    {
+      "id":"c_generate_ops","kind":"ROLE","event_id":"e_generate","entity_id":"n_ops","role":"PERFORMER","expression_id":null,"direction":null,"temporal":null,"quantity":null,"artifact_use":null,"scope_id":"e_generate","requires":[],
+      "sources":[{"quote":"另请OPS-01生成port.md","occurrence":1}],"note":"另起生成指令明确切换执行者为OPS-01。"
+    },
+    {
+      "id":"c_generate_port","kind":"ROLE","event_id":"e_generate","entity_id":"n_port","role":"RESULT","expression_id":null,"direction":null,"temporal":null,"quantity":null,"artifact_use":null,"scope_id":"e_generate","requires":[],
+      "sources":[{"quote":"生成port.md","occurrence":1}],"note":"port.md是生成结果；没有交付要求。"
+    },
+    {
+      "id":"c_order","kind":"TEMPORAL","event_id":"e_deliver","entity_id":null,"role":null,"expression_id":"x_read_done","direction":"ORDER","temporal":"AFTER","quantity":null,"artifact_use":null,"scope_id":"e_deliver","requires":[],
+      "sources":[{"quote":"读取east.csv和west.csv，再把它交给QA","occurrence":1}],"note":"交付在读取两个文件之后；不增加两个文件读取之间的顺序，也不约束另起的生成动作。"
+    }
+  ],
+  "expressions": [
+    {
+      "id":"x_read_done","op":"STATE","operands":[],
+      "state":{"predicate":"读取完成","event_id":"e_read","args":["n_east","n_west"],"polarity":"POSITIVE"},
+      "sources":[{"quote":"读取east.csv和west.csv，再","occurrence":1}]
+    }
+  ],
+  "issues": [
+    {
+      "id":"i_it","kind":"AMBIGUITY","subject_ids":["n_it","c_deliver_it"],"field_path":"entities[n_it].alternatives","alternatives":["n_east","n_west"],"affected_views":["O"],
+      "sources":[{"quote":"east.csv和west.csv","occurrence":1},{"quote":"再把它交给QA","occurrence":1}],
+      "note":"“它”可能指east.csv或west.csv；原文未唯一确定交付文件。两项读取输入、交付参与者和port.md生成用途仍明确。"
+    }
+  ],
+  "coverage": [
+    {
+      "sources":[{"quote":"请PM读取east.csv和west.csv","occurrence":1}],
+      "claim_ids":["c_read_pm","c_read_east","c_read_west"],"status":"EXPRESSED","affected_views":["I","A","P"]
+    },
+    {
+      "sources":[{"quote":"再把它交给QA","occurrence":1}],
+      "claim_ids":["c_deliver_pm","c_deliver_it","c_deliver_qa","c_order"],"status":"EXPRESSED","affected_views":["O","A","P"]
+    },
+    {
+      "sources":[{"quote":"另请OPS-01生成port.md","occurrence":1}],
+      "claim_ids":["c_generate_ops","c_generate_port"],"status":"EXPRESSED","affected_views":["O","A","P"]
+    }
+  ]
+}

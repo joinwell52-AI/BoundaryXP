@@ -1,0 +1,61 @@
+{
+  "id": "Q21",
+  "origin_trace_sha256": "610feacc2716ce3176564ca6d1869e28429d20fd0bfeeac73f097c9ae57eee37",
+  "feedback": [
+    {
+      "code": "AUDIT_BINDING_UNSUPPORTED",
+      "issue_id": "audit_approval_object_binding",
+      "subject_ids": [
+        "c_qa_object",
+        "c_ops_object"
+      ],
+      "field_path": "entity_id",
+      "context_refs": [
+        "n_report",
+        "e_publish_allowed",
+        "e_qa_approval",
+        "e_ops_approval"
+      ],
+      "sources": [
+        {
+          "quote": "允许PM发布本次report.md，但必须等QA和OPS-01都批准后",
+          "occurrence": 1
+        }
+      ],
+      "reason": "批准对象没有明示为文件本身；候选note称批准针对发布事项，结构却绑定文件OBJECT，两者不能自动等同。保留批准主体及发布前提，不凭唯一文件强定批准对象。",
+      "requirement": "Recheck this unsupported binding against the source. Do not invent a replacement or discard conditions/limits. Preserve genuine ambiguity locally and retain independently supported semantics.",
+      "selects_replacement": false
+    },
+    {
+      "code": "AUDIT_BINDING_UNSUPPORTED",
+      "issue_id": "audit_approval_state_arguments",
+      "subject_ids": [
+        "x_qa_approved",
+        "x_ops_approved",
+        "x_qa_unapproved",
+        "x_ops_unapproved"
+      ],
+      "field_path": "state.args",
+      "context_refs": [
+        "c_qa_object",
+        "c_ops_object",
+        "n_report"
+      ],
+      "sources": [
+        {
+          "quote": "允许PM发布本次report.md，但必须等QA和OPS-01都批准后",
+          "occurrence": 1
+        },
+        {
+          "quote": "任何一项批准尚未取得时，不得发布",
+          "occurrence": 1
+        }
+      ],
+      "reason": "四个状态一致使用n_report作为批准对象，但一致性不能证明该对象绑定有来源。疑点仅涉及对象参数，不否定双方批准、互补极性、合取许可前提或析取禁止触发。",
+      "requirement": "Recheck this unsupported binding against the source. Do not invent a replacement or discard conditions/limits. Preserve genuine ambiguity locally and retain independently supported semantics.",
+      "selects_replacement": false
+    }
+  ],
+  "real_calls": 0,
+  "selects_replacement": false
+}

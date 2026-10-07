@@ -1,0 +1,280 @@
+{
+  "contract_version": "031-r1.1",
+  "reviews": [
+    {
+      "subject_id": "ent_pm",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [
+        {
+          "quote": "PM",
+          "occurrence": 1
+        }
+      ],
+      "reason": "身份明确；OTHER可作未指定人员或组织类别的占位。"
+    },
+    {
+      "subject_id": "ent_dev",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [
+        {
+          "quote": "dev、stage和prod三个环境",
+          "occurrence": 1
+        }
+      ],
+      "reason": "dev明确指所列环境之一，OTHER类型可用。"
+    },
+    {
+      "subject_id": "ent_stage",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [
+        {
+          "quote": "dev、stage和prod三个环境",
+          "occurrence": 1
+        }
+      ],
+      "reason": "stage明确指所列环境之一，OTHER类型可用。"
+    },
+    {
+      "subject_id": "ent_prod",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [
+        {
+          "quote": "dev、stage和prod三个环境，但本次排除prod",
+          "occurrence": 1
+        }
+      ],
+      "reason": "列举与排除中的prod指同一环境，两处mentions正确关联。"
+    },
+    {
+      "subject_id": "ent_any_env",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [
+        {
+          "quote": "任何环境",
+          "occurrence": 1
+        }
+      ],
+      "reason": "准确保留禁令的全称对象范围，不等同于本次受检范围。"
+    },
+    {
+      "subject_id": "evt_check",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [
+        "cl_check_scope"
+      ],
+      "sources": [
+        {
+          "quote": "请PM检查dev、stage和prod三个环境，但本次排除prod。",
+          "occurrence": 1
+        }
+      ],
+      "reason": "检查是当前明确要求的动作；排除范围由SCOPE保留，无须改为条件事件。"
+    },
+    {
+      "subject_id": "evt_modify",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [
+        {
+          "quote": "不得修改任何环境。",
+          "occurrence": 1
+        }
+      ],
+      "reason": "明确禁止修改，FORBIDDEN与正向动作谓词相符。"
+    },
+    {
+      "subject_id": "cl_check_pm",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [
+        "ent_pm",
+        "evt_check"
+      ],
+      "sources": [
+        {
+          "quote": "请PM检查",
+          "occurrence": 1
+        }
+      ],
+      "reason": "PM是明示检查执行者。"
+    },
+    {
+      "subject_id": "cl_check_dev",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [
+        "cl_check_scope"
+      ],
+      "sources": [
+        {
+          "quote": "检查dev、stage和prod三个环境，但本次排除prod",
+          "occurrence": 1
+        }
+      ],
+      "reason": "排除prod后，dev仍是明确受检范围，INPUT_OBJECT绑定正确。"
+    },
+    {
+      "subject_id": "cl_check_stage",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [
+        "cl_check_scope"
+      ],
+      "sources": [
+        {
+          "quote": "检查dev、stage和prod三个环境，但本次排除prod",
+          "occurrence": 1
+        }
+      ],
+      "reason": "排除prod后，stage仍是明确受检范围，INPUT_OBJECT绑定正确。"
+    },
+    {
+      "subject_id": "cl_check_scope",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [
+        "evt_check",
+        "ex_check_scope"
+      ],
+      "sources": [
+        {
+          "quote": "dev、stage和prod三个环境，但本次排除prod",
+          "occurrence": 1
+        }
+      ],
+      "reason": "范围绑定检查事件，并准确表达列举集合减去prod；三个是枚举基数，不是执行次数限制。"
+    },
+    {
+      "subject_id": "cl_modify_pm",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [
+        "cl_check_pm",
+        "evt_modify"
+      ],
+      "sources": [
+        {
+          "quote": "请PM检查",
+          "occurrence": 1
+        },
+        {
+          "quote": "不得修改任何环境。",
+          "occurrence": 1
+        }
+      ],
+      "reason": "连续同一指令无主体切换或竞争主体，禁令可承接PM，两端来源齐全。"
+    },
+    {
+      "subject_id": "cl_modify_object",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [
+        "evt_modify",
+        "ent_any_env"
+      ],
+      "sources": [
+        {
+          "quote": "不得修改任何环境",
+          "occurrence": 1
+        }
+      ],
+      "reason": "OBJECT保留任何环境的禁止对象用途，包含prod且不新增外部输入。"
+    },
+    {
+      "subject_id": "ex_dev",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [
+        "ent_dev"
+      ],
+      "sources": [
+        {
+          "quote": "dev",
+          "occurrence": 1
+        }
+      ],
+      "reason": "ITEM正确引用dev环境实体。"
+    },
+    {
+      "subject_id": "ex_stage",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [
+        "ent_stage"
+      ],
+      "sources": [
+        {
+          "quote": "stage",
+          "occurrence": 1
+        }
+      ],
+      "reason": "ITEM正确引用stage环境实体。"
+    },
+    {
+      "subject_id": "ex_prod",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [
+        "ent_prod"
+      ],
+      "sources": [
+        {
+          "quote": "prod",
+          "occurrence": 1
+        },
+        {
+          "quote": "本次排除prod",
+          "occurrence": 1
+        }
+      ],
+      "reason": "ITEM引用列举与排除共同指向的同一prod实体。"
+    },
+    {
+      "subject_id": "ex_listed_envs",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [
+        "ex_dev",
+        "ex_stage",
+        "ex_prod"
+      ],
+      "sources": [
+        {
+          "quote": "dev、stage和prod三个环境",
+          "occurrence": 1
+        }
+      ],
+      "reason": "UNION准确保留三个所列环境，无额外成员。"
+    },
+    {
+      "subject_id": "ex_check_scope",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [
+        "ex_listed_envs",
+        "ex_prod"
+      ],
+      "sources": [
+        {
+          "quote": "dev、stage和prod三个环境，但本次排除prod",
+          "occurrence": 1
+        }
+      ],
+      "reason": "EXCEPT操作数方向正确，本次检查范围为dev与stage。"
+    }
+  ],
+  "issues": [],
+  "omissions": []
+}

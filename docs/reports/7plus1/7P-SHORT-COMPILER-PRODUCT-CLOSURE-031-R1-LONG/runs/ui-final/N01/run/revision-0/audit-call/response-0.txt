@@ -1,0 +1,115 @@
+{
+  "contract_version": "031-r1.1",
+  "reviews": [
+    {
+      "subject_id": "ent_ops",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [{"quote": "OPS", "occurrence": 1}],
+      "reason": "OPS身份明确；原文未细分人或组织，OTHER可作未指定类别占位。"
+    },
+    {
+      "subject_id": "ent_map",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [{"quote": "map.csv", "occurrence": 1}],
+      "reason": "明确命名的受检文件，身份与类型有来源支持。"
+    },
+    {
+      "subject_id": "ent_extra",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [
+        {"quote": "extra.md", "occurrence": 1},
+        {"quote": "extra.md", "occurrence": 2}
+      ],
+      "reason": "生成与无需交付指向同一文件，无版本或对象竞争；两处指称已合并。"
+    },
+    {
+      "subject_id": "evt_check",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [{"quote": "请OPS核查map.csv", "occurrence": 1}],
+      "reason": "核查是当前任务明确要求的动作，无额外条件。"
+    },
+    {
+      "subject_id": "evt_generate",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [{"quote": "还可以生成extra.md", "occurrence": 1}],
+      "reason": "生成是当前任务允许的追加动作，PERMITTED准确，未增添先后约束。"
+    },
+    {
+      "subject_id": "evt_deliver",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [{"quote": "但不要求交付extra.md", "occurrence": 1}],
+      "reason": "原文撤回交付义务；NOT_REQUIRED准确，不表示禁止或许可。"
+    },
+    {
+      "subject_id": "cl_check_performer",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["evt_check", "ent_ops"],
+      "sources": [{"quote": "请OPS核查map.csv", "occurrence": 1}],
+      "reason": "OPS是明确指定的核查执行者。"
+    },
+    {
+      "subject_id": "cl_check_input",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["evt_check", "ent_map"],
+      "sources": [{"quote": "核查map.csv", "occurrence": 1}],
+      "reason": "map.csv是核查的明确受检范围，INPUT_OBJECT绑定正确。"
+    },
+    {
+      "subject_id": "cl_generate_performer",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["evt_generate", "ent_ops"],
+      "sources": [
+        {"quote": "请OPS核查map.csv", "occurrence": 1},
+        {"quote": "还可以生成extra.md", "occurrence": 1}
+      ],
+      "reason": "连续指令的追加动作无主体切换，可承接OPS；来源覆盖承接两端。"
+    },
+    {
+      "subject_id": "cl_generate_result",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["evt_generate", "ent_extra"],
+      "sources": [{"quote": "还可以生成extra.md", "occurrence": 1}],
+      "reason": "extra.md是允许生成的结果，RESULT保留其产生用途。"
+    },
+    {
+      "subject_id": "cl_deliver_performer",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["evt_deliver", "ent_ops"],
+      "sources": [
+        {"quote": "请OPS核查map.csv", "occurrence": 1},
+        {"quote": "但不要求交付extra.md", "occurrence": 1}
+      ],
+      "reason": "同一指令可承接OPS为交付主体；关联事件保留无需交付的模态，不新增义务。"
+    },
+    {
+      "subject_id": "cl_deliver_artifact",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["evt_deliver", "ent_extra", "cl_generate_result"],
+      "sources": [
+        {"quote": "还可以生成extra.md", "occurrence": 1},
+        {"quote": "但不要求交付extra.md", "occurrence": 1}
+      ],
+      "reason": "DELIVERABLE正确绑定同一文件的交付用途；NOT_REQUIRED不产生正向交付O，也无需新增正向ARTIFACT_USE。"
+    }
+  ],
+  "issues": [],
+  "omissions": []
+}

@@ -1,0 +1,185 @@
+{
+  "contract_version": "031-r1.1",
+  "reviews": [
+    {
+      "subject_id": "qa",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [{"quote": "QA批准", "occurrence": 1}],
+      "reason": "QA身份明确；OTHER可保留未指定的人或组类别。"
+    },
+    {
+      "subject_id": "pm",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [{"quote": "PM提交r.md", "occurrence": 1}],
+      "reason": "PM身份明确；OTHER不额外推定人或组类别。"
+    },
+    {
+      "subject_id": "report",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [{"quote": "r.md", "occurrence": 1}],
+      "reason": "提交文件明确为r.md，两个提交用途共享同一身份。"
+    },
+    {
+      "subject_id": "approval",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [{"quote": "只有QA批准并且检查通过后", "occurrence": 1}],
+      "reason": "批准是条件状态，未被提升为当前批准义务或已发生事实。"
+    },
+    {
+      "subject_id": "check_passed",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [{"quote": "只有QA批准并且检查通过后", "occurrence": 1}],
+      "reason": "检查通过是条件状态，原文未独立要求执行检查。"
+    },
+    {
+      "subject_id": "submit_permitted",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["permission_condition"],
+      "sources": [{"quote": "只有QA批准并且检查通过后，才允许PM提交r.md", "occurrence": 1}],
+      "reason": "准确表达受必要前提和先后关系约束的提交许可，约束双向绑定完整。"
+    },
+    {
+      "subject_id": "submit_forbidden",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["prohibition_condition"],
+      "sources": [{"quote": "任一前提不满足时不得提交", "occurrence": 1}],
+      "reason": "准确表达前提不满足时的提交禁止，未混同为无需提交。"
+    },
+    {
+      "subject_id": "approval_role",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["approval", "qa"],
+      "sources": [{"quote": "QA批准", "occurrence": 1}],
+      "reason": "QA是条件批准者；未推定批准对象或增加批准义务。"
+    },
+    {
+      "subject_id": "permitted_performer",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["submit_permitted", "pm"],
+      "sources": [{"quote": "PM提交r.md", "occurrence": 1}],
+      "reason": "提交许可的执行者明确为PM。"
+    },
+    {
+      "subject_id": "permitted_deliverable",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["submit_permitted", "report"],
+      "sources": [{"quote": "才允许PM提交r.md", "occurrence": 1}],
+      "reason": "r.md是有条件允许交付的产物，未增加生成义务或外部输入。"
+    },
+    {
+      "subject_id": "forbidden_performer",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["submit_forbidden", "pm"],
+      "sources": [
+        {"quote": "PM提交r.md", "occurrence": 1},
+        {"quote": "任一前提不满足时不得提交", "occurrence": 1}
+      ],
+      "reason": "后半句承接同一提交指令的PM，未发生主体切换。"
+    },
+    {
+      "subject_id": "forbidden_deliverable",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["submit_forbidden", "report"],
+      "sources": [
+        {"quote": "PM提交r.md", "occurrence": 1},
+        {"quote": "任一前提不满足时不得提交", "occurrence": 1}
+      ],
+      "reason": "禁止提交的对象承接r.md；禁止交付用途不产生正向O。"
+    },
+    {
+      "subject_id": "permission_condition",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["submit_permitted", "both_satisfied"],
+      "sources": [{"quote": "只有QA批准并且检查通过后，才允许PM提交r.md", "occurrence": 1}],
+      "reason": "只有才表达必要条件，并且要求两项共同满足；AFTER保留明确的后置时间关系。"
+    },
+    {
+      "subject_id": "prohibition_condition",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["submit_forbidden", "any_unsatisfied"],
+      "sources": [
+        {"quote": "QA批准并且检查通过", "occurrence": 1},
+        {"quote": "任一前提不满足时不得提交", "occurrence": 1}
+      ],
+      "reason": "任一前提不满足足以触发禁止，SUFFICIENT方向及目标正确，约束回指完整。"
+    },
+    {
+      "subject_id": "approved",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["approval", "qa"],
+      "sources": [{"quote": "QA批准", "occurrence": 1}],
+      "reason": "状态引用批准事件和QA参与者，未补充未陈述的批准对象。"
+    },
+    {
+      "subject_id": "passed",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["check_passed"],
+      "sources": [{"quote": "检查通过", "occurrence": 1}],
+      "reason": "状态准确引用检查通过事件；检查对象和执行者未指定，空参数未强补身份。"
+    },
+    {
+      "subject_id": "both_satisfied",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["approved", "passed"],
+      "sources": [{"quote": "QA批准并且检查通过", "occurrence": 1}],
+      "reason": "AND准确保留两个前提同时满足的要求。"
+    },
+    {
+      "subject_id": "not_approved",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["approved"],
+      "sources": [
+        {"quote": "QA批准", "occurrence": 1},
+        {"quote": "任一前提不满足", "occurrence": 1}
+      ],
+      "reason": "否定前文同一批准状态，未转换为其他对象或事件。"
+    },
+    {
+      "subject_id": "not_passed",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["passed"],
+      "sources": [
+        {"quote": "检查通过", "occurrence": 1},
+        {"quote": "任一前提不满足", "occurrence": 1}
+      ],
+      "reason": "否定前文同一检查通过状态，极性正确。"
+    },
+    {
+      "subject_id": "any_unsatisfied",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["not_approved", "not_passed"],
+      "sources": [
+        {"quote": "QA批准并且检查通过", "occurrence": 1},
+        {"quote": "任一前提不满足", "occurrence": 1}
+      ],
+      "reason": "OR准确表达批准或检查通过任一前提不满足，包括两者均不满足。"
+    }
+  ],
+  "issues": [],
+  "omissions": []
+}

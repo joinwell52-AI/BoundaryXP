@@ -1,0 +1,194 @@
+{
+  "contract_version": "031-r1.1",
+  "reviews": [
+    {
+      "subject_id": "n1",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [{"quote": "QA", "occurrence": 1}],
+      "reason": "QA身份明确；OTHER可保留未指定的人或组类别。"
+    },
+    {
+      "subject_id": "n2",
+      "field_path": "label",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [{"quote": "CHECK-2", "occurrence": 1}],
+      "reason": "依据名称与原文一致。"
+    },
+    {
+      "subject_id": "n2",
+      "field_path": "mentions",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [{"quote": "CHECK-2", "occurrence": 1}],
+      "reason": "指称来源真实，依据身份没有竞争。"
+    },
+    {
+      "subject_id": "n2",
+      "field_path": "type",
+      "verdict": "UNCERTAIN",
+      "context_refs": ["c2"],
+      "sources": [{"quote": "依据CHECK-2", "occurrence": 1}],
+      "reason": "原文明确其依据用途，但未确定它是文档、规则标识还是其他类别。"
+    },
+    {
+      "subject_id": "n3",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [{"quote": "input.json", "occurrence": 1}, {"quote": "只读input.json，不得修改它", "occurrence": 1}],
+      "reason": "两次文件名称及“它”指向同一受检文件。"
+    },
+    {
+      "subject_id": "n4",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [{"quote": "核对input.json，并将核对结果写入audit.md", "occurrence": 1}],
+      "reason": "核对结果明确指向本次核对产物，OTHER占位适当。"
+    },
+    {
+      "subject_id": "n5",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [{"quote": "audit.md", "occurrence": 1}],
+      "reason": "写入目标文件身份明确。"
+    },
+    {
+      "subject_id": "e1",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [{"quote": "请QA依据CHECK-2核对input.json", "occurrence": 1}],
+      "reason": "核对是当前明确要求的动作。"
+    },
+    {
+      "subject_id": "e2",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [{"quote": "并将核对结果写入audit.md", "occurrence": 1}],
+      "reason": "写入结果是并列追加的必需动作；未擅加整项核对完成后的顺序。"
+    },
+    {
+      "subject_id": "e3",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [{"quote": "只读input.json，不得修改它", "occurrence": 1}],
+      "reason": "明确禁止修改输入文件，FORBIDDEN与正向动作谓词配合正确。"
+    },
+    {
+      "subject_id": "c1",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["n1", "e1"],
+      "sources": [{"quote": "请QA依据CHECK-2核对input.json", "occurrence": 1}],
+      "reason": "QA是明确核对执行者。"
+    },
+    {
+      "subject_id": "c2",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["n2", "e1"],
+      "sources": [{"quote": "依据CHECK-2核对input.json", "occurrence": 1}],
+      "reason": "CHECK-2与核对动作的依据用途绑定明确，不依赖其具体实体类别。"
+    },
+    {
+      "subject_id": "c3",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["n3", "e1"],
+      "sources": [{"quote": "核对input.json", "occurrence": 1}],
+      "reason": "input.json是明确受检输入。"
+    },
+    {
+      "subject_id": "c4",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["n4", "e1"],
+      "sources": [{"quote": "核对input.json，并将核对结果写入audit.md", "occurrence": 1}],
+      "reason": "本次核对产生随后用于写入的核对结果。"
+    },
+    {
+      "subject_id": "c5",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["n1", "e2"],
+      "sources": [{"quote": "请QA依据CHECK-2核对input.json", "occurrence": 1}, {"quote": "并将核对结果写入audit.md", "occurrence": 1}],
+      "reason": "连续并列指令没有主体切换，写入执行者承接QA，来源覆盖两端。"
+    },
+    {
+      "subject_id": "c6",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["n4", "e2"],
+      "sources": [{"quote": "将核对结果写入audit.md", "occurrence": 1}],
+      "reason": "核对结果是写入动作消费的内部对象，不是外部输入。"
+    },
+    {
+      "subject_id": "c7",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["n5", "e2"],
+      "sources": [{"quote": "将核对结果写入audit.md", "occurrence": 1}],
+      "reason": "audit.md承载写入形成的文件结果；RESULT不要求新建，原文未要求交付。"
+    },
+    {
+      "subject_id": "c8",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["c4", "c6", "e1", "e2"],
+      "sources": [{"quote": "核对input.json", "occurrence": 1}, {"quote": "并将核对结果写入audit.md", "occurrence": 1}],
+      "reason": "生产与消费绑定同一本次核对结果；USED_PORTION仅要求所用部分可用，没有增设全部核对完成条件。"
+    },
+    {
+      "subject_id": "c9",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["e1", "x1"],
+      "sources": [{"quote": "核对input.json", "occurrence": 1}, {"quote": "只读input.json", "occurrence": 1}],
+      "reason": "只读作为核对输入文件的操作方式限制表达，没有新增独立读取义务。"
+    },
+    {
+      "subject_id": "c10",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["n3", "e3"],
+      "sources": [{"quote": "只读input.json，不得修改它", "occurrence": 1}],
+      "reason": "修改禁止的对象明确是input.json。"
+    },
+    {
+      "subject_id": "c11",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["n1", "e3"],
+      "sources": [{"quote": "请QA依据CHECK-2核对input.json", "occurrence": 1}, {"quote": "只读input.json，不得修改它", "occurrence": 1}],
+      "reason": "追加限制承接同一指令执行者QA，来源覆盖主体与限制两端。"
+    },
+    {
+      "subject_id": "x1",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["e1", "n3"],
+      "sources": [{"quote": "核对input.json", "occurrence": 1}, {"quote": "只读input.json", "occurrence": 1}],
+      "reason": "状态引用核对事件及同一输入文件，正确表达正向只读方式限制。"
+    }
+  ],
+  "issues": [
+    {
+      "id": "a1",
+      "issue_kind": "IDENTITY",
+      "subject_ids": ["n2"],
+      "field_path": "type",
+      "context_refs": ["c2"],
+      "sources": [{"quote": "依据CHECK-2", "occurrence": 1}],
+      "reason": "CHECK-2的身份及依据职责明确，仅DOCUMENT类别缺少确定支持；此疑点不否定依据绑定。",
+      "suggested_json": null
+    }
+  ],
+  "omissions": []
+}

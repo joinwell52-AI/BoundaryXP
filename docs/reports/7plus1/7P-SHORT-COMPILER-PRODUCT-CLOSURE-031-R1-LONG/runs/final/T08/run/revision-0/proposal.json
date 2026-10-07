@@ -1,0 +1,539 @@
+{
+  "contract_version": "031-r1.1",
+  "entities": [
+    {
+      "id": "E_PM",
+      "label": "PM",
+      "type": "OTHER",
+      "mentions": [
+        {
+          "quote": "PM",
+          "occurrence": 1
+        }
+      ],
+      "alternatives": []
+    },
+    {
+      "id": "E_GUIDE",
+      "label": "guide.md",
+      "type": "FILE",
+      "mentions": [
+        {
+          "quote": "guide.md",
+          "occurrence": 1
+        },
+        {
+          "quote": "文中",
+          "occurrence": 1
+        }
+      ],
+      "alternatives": []
+    },
+    {
+      "id": "E_CONTENT",
+      "label": "允许删除cache.db",
+      "type": "OTHER",
+      "mentions": [
+        {
+          "quote": "允许删除cache.db",
+          "occurrence": 1
+        }
+      ],
+      "alternatives": []
+    },
+    {
+      "id": "E_CACHE",
+      "label": "cache.db",
+      "type": "FILE",
+      "mentions": [
+        {
+          "quote": "cache.db",
+          "occurrence": 1
+        },
+        {
+          "quote": "cache.db",
+          "occurrence": 2
+        }
+      ],
+      "alternatives": []
+    },
+    {
+      "id": "E_SERVICE",
+      "label": "服务",
+      "type": "SYSTEM",
+      "mentions": [
+        {
+          "quote": "服务",
+          "occurrence": 1
+        }
+      ],
+      "alternatives": []
+    }
+  ],
+  "events": [
+    {
+      "id": "EV_GENERATE",
+      "predicate": "生成文档",
+      "kind": "ACTION",
+      "layer": "MAIN",
+      "use": "CURRENT_TASK",
+      "modality": "REQUIRED",
+      "polarity": "POSITIVE",
+      "owner_id": "ROOT",
+      "constraint_ids": [],
+      "requires": [],
+      "sources": [
+        {
+          "quote": "请PM生成guide.md",
+          "occurrence": 1
+        }
+      ]
+    },
+    {
+      "id": "EV_WRITE",
+      "predicate": "写入内容",
+      "kind": "ACTION",
+      "layer": "MAIN",
+      "use": "CURRENT_TASK",
+      "modality": "REQUIRED",
+      "polarity": "POSITIVE",
+      "owner_id": "ROOT",
+      "constraint_ids": [],
+      "requires": [],
+      "sources": [
+        {
+          "quote": "在文中写入“允许删除cache.db”",
+          "occurrence": 1
+        }
+      ]
+    },
+    {
+      "id": "EV_QUOTED_DELETE",
+      "predicate": "删除文件",
+      "kind": "ACTION",
+      "layer": "QUOTED",
+      "use": "MENTION_ONLY",
+      "modality": "PERMITTED",
+      "polarity": "POSITIVE",
+      "owner_id": "EV_WRITE",
+      "constraint_ids": [],
+      "requires": [],
+      "sources": [
+        {
+          "quote": "允许删除cache.db",
+          "occurrence": 1
+        }
+      ]
+    },
+    {
+      "id": "EV_DELETE",
+      "predicate": "删除文件",
+      "kind": "ACTION",
+      "layer": "MAIN",
+      "use": "CURRENT_TASK",
+      "modality": "FORBIDDEN",
+      "polarity": "POSITIVE",
+      "owner_id": "ROOT",
+      "constraint_ids": [],
+      "requires": [],
+      "sources": [
+        {
+          "quote": "本次工作不得删除cache.db",
+          "occurrence": 1
+        }
+      ]
+    },
+    {
+      "id": "EV_RESTART",
+      "predicate": "重启服务",
+      "kind": "ACTION",
+      "layer": "MAIN",
+      "use": "CURRENT_TASK",
+      "modality": "FORBIDDEN",
+      "polarity": "POSITIVE",
+      "owner_id": "ROOT",
+      "constraint_ids": [],
+      "requires": [],
+      "sources": [
+        {
+          "quote": "本次工作",
+          "occurrence": 1
+        },
+        {
+          "quote": "也不得重启服务",
+          "occurrence": 1
+        }
+      ]
+    }
+  ],
+  "claims": [
+    {
+      "id": "C_GENERATOR",
+      "kind": "ROLE",
+      "event_id": "EV_GENERATE",
+      "entity_id": "E_PM",
+      "role": "PERFORMER",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "artifact_use": null,
+      "scope_id": "EV_GENERATE",
+      "requires": [],
+      "sources": [
+        {
+          "quote": "请PM生成guide.md",
+          "occurrence": 1
+        }
+      ],
+      "note": "PM是明确生成执行者；岗位简称的身份类别未进一步指定。"
+    },
+    {
+      "id": "C_RESULT",
+      "kind": "ROLE",
+      "event_id": "EV_GENERATE",
+      "entity_id": "E_GUIDE",
+      "role": "RESULT",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "artifact_use": null,
+      "scope_id": "EV_GENERATE",
+      "requires": [],
+      "sources": [
+        {
+          "quote": "生成guide.md",
+          "occurrence": 1
+        }
+      ],
+      "note": "生成结果；原文未要求交付。"
+    },
+    {
+      "id": "C_WRITER",
+      "kind": "ROLE",
+      "event_id": "EV_WRITE",
+      "entity_id": "E_PM",
+      "role": "PERFORMER",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "artifact_use": null,
+      "scope_id": "EV_WRITE",
+      "requires": [],
+      "sources": [
+        {
+          "quote": "请PM生成guide.md",
+          "occurrence": 1
+        },
+        {
+          "quote": "在文中写入“允许删除cache.db”",
+          "occurrence": 1
+        }
+      ],
+      "note": "连续同一指令的追加动作承接明确主语PM，没有主体切换。"
+    },
+    {
+      "id": "C_WRITE_OBJECT",
+      "kind": "ROLE",
+      "event_id": "EV_WRITE",
+      "entity_id": "E_GUIDE",
+      "role": "OBJECT",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "artifact_use": null,
+      "scope_id": "EV_WRITE",
+      "requires": [],
+      "sources": [
+        {
+          "quote": "生成guide.md",
+          "occurrence": 1
+        },
+        {
+          "quote": "在文中写入",
+          "occurrence": 1
+        }
+      ],
+      "note": "文中指唯一当前生成的guide.md，属于内部产物用途。"
+    },
+    {
+      "id": "C_WRITE_CONTENT",
+      "kind": "ROLE",
+      "event_id": "EV_WRITE",
+      "entity_id": "E_CONTENT",
+      "role": "CONTENT",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "artifact_use": null,
+      "scope_id": "EV_WRITE",
+      "requires": [],
+      "sources": [
+        {
+          "quote": "写入“允许删除cache.db”",
+          "occurrence": 1
+        }
+      ],
+      "note": "要求写入这段文字；文字中的许可不成为当前业务许可。"
+    },
+    {
+      "id": "C_QUOTED_OBJECT",
+      "kind": "ROLE",
+      "event_id": "EV_QUOTED_DELETE",
+      "entity_id": "E_CACHE",
+      "role": "OBJECT",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "artifact_use": null,
+      "scope_id": "EV_QUOTED_DELETE",
+      "requires": [],
+      "sources": [
+        {
+          "quote": "允许删除cache.db",
+          "occurrence": 1
+        }
+      ],
+      "note": "仅为引文中删除动作的对象。"
+    },
+    {
+      "id": "C_DELETE_OBJECT",
+      "kind": "ROLE",
+      "event_id": "EV_DELETE",
+      "entity_id": "E_CACHE",
+      "role": "OBJECT",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "artifact_use": null,
+      "scope_id": "EV_DELETE",
+      "requires": [],
+      "sources": [
+        {
+          "quote": "本次工作不得删除cache.db",
+          "occurrence": 1
+        }
+      ],
+      "note": "本次工作禁止删除该文件；不由禁止对象推导外部输入。"
+    },
+    {
+      "id": "C_RESTART_OBJECT",
+      "kind": "ROLE",
+      "event_id": "EV_RESTART",
+      "entity_id": "E_SERVICE",
+      "role": "OBJECT",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "artifact_use": null,
+      "scope_id": "EV_RESTART",
+      "requires": [],
+      "sources": [
+        {
+          "quote": "也不得重启服务",
+          "occurrence": 1
+        }
+      ],
+      "note": "禁止重启的对象是服务。"
+    },
+    {
+      "id": "C_ARTIFACT_USE",
+      "kind": "ARTIFACT_USE",
+      "event_id": "EV_WRITE",
+      "entity_id": "E_GUIDE",
+      "role": null,
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "artifact_use": {
+        "producer_result_id": "C_RESULT",
+        "consumer_role_id": "C_WRITE_OBJECT",
+        "availability": "USED_PORTION"
+      },
+      "scope_id": "EV_WRITE",
+      "requires": [
+        "C_RESULT",
+        "C_WRITE_OBJECT"
+      ],
+      "sources": [
+        {
+          "quote": "生成guide.md",
+          "occurrence": 1
+        },
+        {
+          "quote": "在文中写入“允许删除cache.db”",
+          "occurrence": 1
+        }
+      ],
+      "note": "写入使用本次生成的文档；未要求整项生成完成后才写入。"
+    },
+    {
+      "id": "C_DELETE_SCOPE",
+      "kind": "SCOPE",
+      "event_id": "EV_DELETE",
+      "entity_id": null,
+      "role": null,
+      "expression_id": "X_WORK",
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "artifact_use": null,
+      "scope_id": "EV_DELETE",
+      "requires": [],
+      "sources": [
+        {
+          "quote": "本次工作不得删除cache.db",
+          "occurrence": 1
+        }
+      ],
+      "note": "删除禁令适用于整个本次工作，无额外状态前提。"
+    },
+    {
+      "id": "C_RESTART_SCOPE",
+      "kind": "SCOPE",
+      "event_id": "EV_RESTART",
+      "entity_id": null,
+      "role": null,
+      "expression_id": "X_WORK",
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "artifact_use": null,
+      "scope_id": "EV_RESTART",
+      "requires": [],
+      "sources": [
+        {
+          "quote": "本次工作",
+          "occurrence": 1
+        },
+        {
+          "quote": "也不得重启服务",
+          "occurrence": 1
+        }
+      ],
+      "note": "重启禁令承接本次工作的整体范围。"
+    }
+  ],
+  "expressions": [
+    {
+      "id": "X_WORK",
+      "op": "STATE",
+      "operands": [],
+      "state": {
+        "predicate": "属于本次工作范围",
+        "event_id": null,
+        "args": [
+          "ROOT"
+        ],
+        "polarity": "POSITIVE"
+      },
+      "sources": [
+        {
+          "quote": "本次工作",
+          "occurrence": 1
+        }
+      ]
+    }
+  ],
+  "issues": [],
+  "coverage": [
+    {
+      "sources": [
+        {
+          "quote": "请PM生成guide.md",
+          "occurrence": 1
+        }
+      ],
+      "claim_ids": [
+        "C_GENERATOR",
+        "C_RESULT"
+      ],
+      "status": "EXPRESSED",
+      "affected_views": [
+        "A",
+        "P",
+        "O"
+      ]
+    },
+    {
+      "sources": [
+        {
+          "quote": "在文中写入“允许删除cache.db”",
+          "occurrence": 1
+        }
+      ],
+      "claim_ids": [
+        "C_WRITER",
+        "C_WRITE_OBJECT",
+        "C_WRITE_CONTENT",
+        "C_ARTIFACT_USE"
+      ],
+      "status": "EXPRESSED",
+      "affected_views": [
+        "A",
+        "P",
+        "O"
+      ]
+    },
+    {
+      "sources": [
+        {
+          "quote": "允许删除cache.db",
+          "occurrence": 1
+        }
+      ],
+      "claim_ids": [
+        "C_QUOTED_OBJECT",
+        "C_WRITE_CONTENT"
+      ],
+      "status": "EXPRESSED",
+      "affected_views": [
+        "O"
+      ]
+    },
+    {
+      "sources": [
+        {
+          "quote": "本次工作不得删除cache.db",
+          "occurrence": 1
+        }
+      ],
+      "claim_ids": [
+        "C_DELETE_OBJECT",
+        "C_DELETE_SCOPE"
+      ],
+      "status": "EXPRESSED",
+      "affected_views": [
+        "B"
+      ]
+    },
+    {
+      "sources": [
+        {
+          "quote": "本次工作",
+          "occurrence": 1
+        },
+        {
+          "quote": "也不得重启服务",
+          "occurrence": 1
+        }
+      ],
+      "claim_ids": [
+        "C_RESTART_OBJECT",
+        "C_RESTART_SCOPE"
+      ],
+      "status": "EXPRESSED",
+      "affected_views": [
+        "B"
+      ]
+    }
+  ]
+}

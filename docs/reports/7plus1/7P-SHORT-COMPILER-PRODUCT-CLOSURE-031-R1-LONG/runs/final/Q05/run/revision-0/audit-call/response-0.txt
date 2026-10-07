@@ -1,0 +1,152 @@
+{
+  "contract_version": "031-r1.1",
+  "reviews": [
+    {
+      "subject_id": "ent_pm",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [{"quote": "PM", "occurrence": 1}],
+      "reason": "明确指称PM；OTHER可作为未指定身份类别的占位，不推定岗位权限。"
+    },
+    {
+      "subject_id": "ent_settings",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [{"quote": "settings.json", "occurrence": 1}],
+      "reason": "明确命名的配置文件，身份和FILE类别有来源支持。"
+    },
+    {
+      "subject_id": "ent_config",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [{"quote": "配置项", "occurrence": 1}, {"quote": "任何配置项", "occurrence": 1}],
+      "reason": "两处均指配置项这一对象类别；具体文件范围和全称禁止范围由各用途表达。"
+    },
+    {
+      "subject_id": "ent_output",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [{"quote": "settings-list.md", "occurrence": 1}],
+      "reason": "明确命名的生成文件，没有其他版本或竞争指称。"
+    },
+    {
+      "subject_id": "evt_list",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [{"quote": "请PM列出settings.json中的配置项", "occurrence": 1}],
+      "reason": "列出配置项是当前任务明确要求的动作。"
+    },
+    {
+      "subject_id": "evt_generate",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [{"quote": "并生成settings-list.md", "occurrence": 1}],
+      "reason": "生成文件是并列的明确要求；原文没有完成先后条件。"
+    },
+    {
+      "subject_id": "evt_change",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [{"quote": "不得更改任何配置项", "occurrence": 1}],
+      "reason": "更改动作受到明确禁止，FORBIDDEN与正向动作谓词搭配正确。"
+    },
+    {
+      "subject_id": "cl_list_performer",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["evt_list", "ent_pm"],
+      "sources": [{"quote": "请PM列出settings.json中的配置项", "occurrence": 1}],
+      "reason": "PM是列出动作的明确执行者。"
+    },
+    {
+      "subject_id": "cl_list_input",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["evt_list", "ent_settings"],
+      "sources": [{"quote": "列出settings.json中的配置项", "occurrence": 1}],
+      "reason": "settings.json是列出配置项的明确输入与作用范围。"
+    },
+    {
+      "subject_id": "cl_list_content",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["evt_list", "cl_list_input", "ent_config"],
+      "sources": [{"quote": "settings.json中的配置项", "occurrence": 1}],
+      "reason": "列出内容为该文件中的配置项，与文件范围绑定一致。"
+    },
+    {
+      "subject_id": "cl_generate_performer",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["evt_generate", "ent_pm"],
+      "sources": [
+        {"quote": "请PM列出settings.json中的配置项", "occurrence": 1},
+        {"quote": "并生成settings-list.md", "occurrence": 1}
+      ],
+      "reason": "同一指令的并列生成动作承接PM，原文没有主体切换。"
+    },
+    {
+      "subject_id": "cl_generate_result",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["evt_generate", "ent_output"],
+      "sources": [{"quote": "生成settings-list.md", "occurrence": 1}],
+      "reason": "该文件是生成动作的明确RESULT；原文未要求交付。"
+    },
+    {
+      "subject_id": "cl_generate_content",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["evt_generate", "cl_list_input", "cl_generate_result", "ent_config"],
+      "sources": [{"quote": "列出settings.json中的配置项，并生成settings-list.md", "occurrence": 1}],
+      "reason": "连续指令支持生成的清单承载所列配置项；未增加独立提交义务或强制先后。"
+    },
+    {
+      "subject_id": "cl_change_performer",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["evt_change", "ent_pm"],
+      "sources": [
+        {"quote": "请PM列出settings.json中的配置项", "occurrence": 1},
+        {"quote": "不得更改任何配置项", "occurrence": 1}
+      ],
+      "reason": "追加禁止承接同一指令的主体PM，两端来源完整。"
+    },
+    {
+      "subject_id": "cl_change_object",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["evt_change", "ent_config", "cl_change_scope"],
+      "sources": [
+        {"quote": "settings.json中的配置项", "occurrence": 1},
+        {"quote": "不得更改任何配置项", "occurrence": 1}
+      ],
+      "reason": "禁止动作的对象是配置项；全称范围由配套SCOPE保留，不转成执行数量。"
+    },
+    {
+      "subject_id": "cl_change_scope",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["evt_change", "expr_config_scope"],
+      "sources": [{"quote": "不得更改任何配置项", "occurrence": 1}],
+      "reason": "SCOPE将禁止绑定到配置项全类别，没有缩减为部分配置项。"
+    },
+    {
+      "subject_id": "expr_config_scope",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["ent_config", "cl_change_scope"],
+      "sources": [{"quote": "任何配置项", "occurrence": 1}],
+      "reason": "ITEM引用配置项类别，结合禁止的SCOPE表达任何配置项的范围。"
+    }
+  ],
+  "issues": [],
+  "omissions": []
+}

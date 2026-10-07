@@ -1,0 +1,149 @@
+{
+  "contract_version": "031-r1.1",
+  "reviews": [
+    {
+      "subject_id": "ent_qa",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [{"quote": "QA", "occurrence": 1}],
+      "reason": "QA身份明确；OTHER可作未指定类别的占位。"
+    },
+    {
+      "subject_id": "ent_pm",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [{"quote": "PM", "occurrence": 1}],
+      "reason": "PM身份明确；原文未区分人或组，OTHER占位适当。"
+    },
+    {
+      "subject_id": "ent_admin",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [{"quote": "ADMIN", "occurrence": 1}],
+      "reason": "ADMIN身份明确；OTHER未额外推定其类别。"
+    },
+    {
+      "subject_id": "ent_alpha",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [
+        {"quote": "alpha.md", "occurrence": 1},
+        {"quote": "alpha.md", "occurrence": 2}
+      ],
+      "reason": "复核对象与禁止修改对象均为同一alpha.md，无版本或身份竞争。"
+    },
+    {
+      "subject_id": "ent_beta",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [{"quote": "beta.md", "occurrence": 1}],
+      "reason": "提交文件明确为beta.md，与alpha.md保持不同身份。"
+    },
+    {
+      "subject_id": "ev_review",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [{"quote": "在QA复核alpha.md完成后", "occurrence": 1}],
+      "reason": "复核仅出现于时间前提，未升格为当前独立义务或已发生事实。"
+    },
+    {
+      "subject_id": "ev_submit",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["cl_order"],
+      "sources": [{"quote": "在QA复核alpha.md完成后，PM必须提交beta.md给ADMIN", "occurrence": 1}],
+      "reason": "提交为明确必须执行的动作，复核完成后的时序约束已双向绑定。"
+    },
+    {
+      "subject_id": "ev_modify",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [{"quote": "不得修改alpha.md", "occurrence": 1}],
+      "reason": "正确表达禁止修改，未将前句时序限制传播到本句禁止。"
+    },
+    {
+      "subject_id": "cl_review_qa",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["ev_review", "ent_qa"],
+      "sources": [{"quote": "QA复核alpha.md完成", "occurrence": 1}],
+      "reason": "QA为所引用复核事件的复核者，绑定不新增复核义务。"
+    },
+    {
+      "subject_id": "cl_review_alpha",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["ev_review", "ent_alpha"],
+      "sources": [{"quote": "QA复核alpha.md完成", "occurrence": 1}],
+      "reason": "复核对象明确为alpha.md，OBJECT用途未推定外部输入。"
+    },
+    {
+      "subject_id": "cl_submit_pm",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["ev_submit", "ent_pm"],
+      "sources": [{"quote": "PM必须提交beta.md给ADMIN", "occurrence": 1}],
+      "reason": "PM为明确指定的提交执行者。"
+    },
+    {
+      "subject_id": "cl_submit_beta",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["ev_submit", "ent_beta"],
+      "sources": [{"quote": "提交beta.md给ADMIN", "occurrence": 1}],
+      "reason": "beta.md为提交产物，DELIVERABLE用途正确，未增补生成或修改。"
+    },
+    {
+      "subject_id": "cl_submit_admin",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["ev_submit", "ent_admin"],
+      "sources": [{"quote": "提交beta.md给ADMIN", "occurrence": 1}],
+      "reason": "ADMIN为明确指定的接收者。"
+    },
+    {
+      "subject_id": "cl_order",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["ev_submit", "expr_review_completed"],
+      "sources": [{"quote": "在QA复核alpha.md完成后，PM必须提交beta.md给ADMIN", "occurrence": 1}],
+      "reason": "ORDER及AFTER准确表达提交在指定复核完成之后，未推成充分触发或根完成条件。"
+    },
+    {
+      "subject_id": "cl_modify_pm",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["ev_modify", "ent_pm"],
+      "sources": [
+        {"quote": "PM必须提交beta.md给ADMIN", "occurrence": 1},
+        {"quote": "不得修改alpha.md", "occurrence": 1}
+      ],
+      "reason": "连续追加指令无主体切换，可承接PM作为受禁止动作的主体，来源覆盖两端。"
+    },
+    {
+      "subject_id": "cl_modify_alpha",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["ev_modify", "ent_alpha"],
+      "sources": [{"quote": "不得修改alpha.md", "occurrence": 1}],
+      "reason": "禁止对象为同一alpha.md，未据此增补输入用途。"
+    },
+    {
+      "subject_id": "expr_review_completed",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["ev_review", "ent_qa", "ent_alpha"],
+      "sources": [{"quote": "QA复核alpha.md完成", "occurrence": 1}],
+      "reason": "完成状态正确引用QA复核alpha.md的事件及参数，不断言状态已经成立。"
+    }
+  ],
+  "issues": [],
+  "omissions": []
+}

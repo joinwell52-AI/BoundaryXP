@@ -1,0 +1,209 @@
+{
+  "contract_version": "031-r1.1",
+  "reviews": [
+    {
+      "subject_id": "n_pm",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [{"quote": "PM", "occurrence": 1}],
+      "reason": "PM身份明确；OTHER可保留未指定的人或组类别。"
+    },
+    {
+      "subject_id": "n_east",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [{"quote": "east.csv", "occurrence": 1}],
+      "reason": "文件名称与身份有直接来源。"
+    },
+    {
+      "subject_id": "n_west",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [{"quote": "west.csv", "occurrence": 1}],
+      "reason": "文件名称与身份有直接来源。"
+    },
+    {
+      "subject_id": "n_it",
+      "field_path": "",
+      "verdict": "UNCERTAIN",
+      "context_refs": ["n_east", "n_west"],
+      "sources": [
+        {"quote": "east.csv和west.csv", "occurrence": 1},
+        {"quote": "再把它交给QA", "occurrence": 1}
+      ],
+      "reason": "两个文件构成真实指代竞争；保留REFERENT及备选合理，具体身份仍未决。"
+    },
+    {
+      "subject_id": "n_it",
+      "field_path": "alternatives",
+      "verdict": "SUPPORT",
+      "context_refs": ["n_east", "n_west"],
+      "sources": [
+        {"quote": "east.csv和west.csv", "occurrence": 1},
+        {"quote": "再把它交给QA", "occurrence": 1}
+      ],
+      "reason": "两个已读取文件均是合理先行项，原文不足以唯一选择。"
+    },
+    {
+      "subject_id": "n_qa",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [{"quote": "QA", "occurrence": 1}],
+      "reason": "QA身份明确，类别未指定可用OTHER占位。"
+    },
+    {
+      "subject_id": "n_ops",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [{"quote": "OPS-01", "occurrence": 1}],
+      "reason": "OPS-01身份明确，类别未指定可用OTHER占位。"
+    },
+    {
+      "subject_id": "n_port",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [{"quote": "port.md", "occurrence": 1}],
+      "reason": "明确命名的生成文件，与前句两个读取文件不同。"
+    },
+    {
+      "subject_id": "e_read",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [{"quote": "请PM读取east.csv和west.csv", "occurrence": 1}],
+      "reason": "当前明确要求读取两个文件，动作层级及模态正确。"
+    },
+    {
+      "subject_id": "e_deliver",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["c_order"],
+      "sources": [{"quote": "再把它交给QA", "occurrence": 1}],
+      "reason": "交付动作及要求明确，先后约束已回指；对象未决不否定动作本身。"
+    },
+    {
+      "subject_id": "e_generate",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [{"quote": "另请OPS-01生成port.md", "occurrence": 1}],
+      "reason": "另起指令明确要求生成文件，无来源支持其与前句工作的先后关系。"
+    },
+    {
+      "subject_id": "c_read_pm",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["e_read", "n_pm"],
+      "sources": [{"quote": "请PM读取east.csv和west.csv", "occurrence": 1}],
+      "reason": "PM是读取动作的明确执行者。"
+    },
+    {
+      "subject_id": "c_read_east",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["e_read", "n_east"],
+      "sources": [{"quote": "读取east.csv和west.csv", "occurrence": 1}],
+      "reason": "east.csv是明确读取输入，独立于后续指代歧义。"
+    },
+    {
+      "subject_id": "c_read_west",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["e_read", "n_west"],
+      "sources": [{"quote": "读取east.csv和west.csv", "occurrence": 1}],
+      "reason": "west.csv是明确读取输入，独立于后续指代歧义。"
+    },
+    {
+      "subject_id": "c_deliver_pm",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["e_deliver", "n_pm"],
+      "sources": [
+        {"quote": "请PM读取east.csv和west.csv", "occurrence": 1},
+        {"quote": "再把它交给QA", "occurrence": 1}
+      ],
+      "reason": "连续追加指令承接PM主体，两端来源完整，交付前没有主体切换。"
+    },
+    {
+      "subject_id": "c_deliver_it",
+      "field_path": "",
+      "verdict": "UNCERTAIN",
+      "context_refs": ["n_it", "n_east", "n_west"],
+      "sources": [
+        {"quote": "east.csv和west.csv", "occurrence": 1},
+        {"quote": "再把它交给QA", "occurrence": 1}
+      ],
+      "reason": "DELIVERABLE用途明确，但其依赖的具体文件身份未决；候选保留歧义合理。"
+    },
+    {
+      "subject_id": "c_deliver_it",
+      "field_path": "role",
+      "verdict": "SUPPORT",
+      "context_refs": ["e_deliver"],
+      "sources": [{"quote": "再把它交给QA", "occurrence": 1}],
+      "reason": "交给QA明确构成交付用途，应保留DELIVERABLE。"
+    },
+    {
+      "subject_id": "c_deliver_qa",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["e_deliver", "n_qa"],
+      "sources": [{"quote": "把它交给QA", "occurrence": 1}],
+      "reason": "QA是明确接收者，原文没有另行要求QA执行工作。"
+    },
+    {
+      "subject_id": "c_generate_ops",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["e_generate", "n_ops"],
+      "sources": [{"quote": "另请OPS-01生成port.md", "occurrence": 1}],
+      "reason": "生成动作明确切换执行者为OPS-01。"
+    },
+    {
+      "subject_id": "c_generate_port",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["e_generate", "n_port"],
+      "sources": [{"quote": "生成port.md", "occurrence": 1}],
+      "reason": "port.md是生成结果；原文未将其绑定到前句交付或复核用途。"
+    },
+    {
+      "subject_id": "c_order",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["e_read", "e_deliver", "x_read_done"],
+      "sources": [{"quote": "读取east.csv和west.csv，再把它交给QA", "occurrence": 1}],
+      "reason": "再表达交付晚于两个文件的读取，ORDER与AFTER正确，约束双向绑定完整。"
+    },
+    {
+      "subject_id": "x_read_done",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["e_read", "n_east", "n_west"],
+      "sources": [{"quote": "读取east.csv和west.csv，再", "occurrence": 1}],
+      "reason": "状态引用读取事件及两个对象，覆盖整组前置工作，不断言读取已实际完成。"
+    }
+  ],
+  "issues": [
+    {
+      "id": "a_identity_it",
+      "issue_kind": "IDENTITY",
+      "subject_ids": ["n_it"],
+      "field_path": "",
+      "context_refs": ["n_east", "n_west", "c_deliver_it"],
+      "sources": [
+        {"quote": "east.csv和west.csv", "occurrence": 1},
+        {"quote": "再把它交给QA", "occurrence": 1}
+      ],
+      "reason": "它的具体文件身份存在真实竞争，应保持局部未决；候选已合理保留两个备选，无需猜选，也不影响独立读取和生成用途。",
+      "suggested_json": null
+    }
+  ],
+  "omissions": []
+}

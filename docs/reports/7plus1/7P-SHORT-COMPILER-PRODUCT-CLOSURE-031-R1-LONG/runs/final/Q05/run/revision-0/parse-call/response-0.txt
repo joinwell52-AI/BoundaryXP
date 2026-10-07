@@ -1,0 +1,262 @@
+{
+  "contract_version": "031-r1.1",
+  "entities": [
+    {
+      "id": "ent_pm",
+      "label": "PM",
+      "type": "OTHER",
+      "mentions": [{"quote": "PM", "occurrence": 1}],
+      "alternatives": []
+    },
+    {
+      "id": "ent_settings",
+      "label": "settings.json",
+      "type": "FILE",
+      "mentions": [{"quote": "settings.json", "occurrence": 1}],
+      "alternatives": []
+    },
+    {
+      "id": "ent_config",
+      "label": "配置项",
+      "type": "OTHER",
+      "mentions": [
+        {"quote": "配置项", "occurrence": 1},
+        {"quote": "任何配置项", "occurrence": 1}
+      ],
+      "alternatives": []
+    },
+    {
+      "id": "ent_output",
+      "label": "settings-list.md",
+      "type": "FILE",
+      "mentions": [{"quote": "settings-list.md", "occurrence": 1}],
+      "alternatives": []
+    }
+  ],
+  "events": [
+    {
+      "id": "evt_list",
+      "predicate": "列出配置项",
+      "kind": "ACTION",
+      "layer": "MAIN",
+      "use": "CURRENT_TASK",
+      "modality": "REQUIRED",
+      "polarity": "POSITIVE",
+      "owner_id": "ROOT",
+      "constraint_ids": [],
+      "requires": [],
+      "sources": [{"quote": "请PM列出settings.json中的配置项", "occurrence": 1}]
+    },
+    {
+      "id": "evt_generate",
+      "predicate": "生成配置清单文件",
+      "kind": "ACTION",
+      "layer": "MAIN",
+      "use": "CURRENT_TASK",
+      "modality": "REQUIRED",
+      "polarity": "POSITIVE",
+      "owner_id": "ROOT",
+      "constraint_ids": [],
+      "requires": [],
+      "sources": [{"quote": "并生成settings-list.md", "occurrence": 1}]
+    },
+    {
+      "id": "evt_change",
+      "predicate": "更改配置项",
+      "kind": "ACTION",
+      "layer": "MAIN",
+      "use": "CURRENT_TASK",
+      "modality": "FORBIDDEN",
+      "polarity": "POSITIVE",
+      "owner_id": "ROOT",
+      "constraint_ids": [],
+      "requires": [],
+      "sources": [{"quote": "不得更改任何配置项", "occurrence": 1}]
+    }
+  ],
+  "claims": [
+    {
+      "id": "cl_list_performer",
+      "kind": "ROLE",
+      "event_id": "evt_list",
+      "entity_id": "ent_pm",
+      "role": "PERFORMER",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "artifact_use": null,
+      "scope_id": "evt_list",
+      "requires": [],
+      "sources": [{"quote": "请PM列出settings.json中的配置项", "occurrence": 1}],
+      "note": "PM是明确指定的执行主体；岗位简称不推定身份类别或权限。"
+    },
+    {
+      "id": "cl_list_input",
+      "kind": "ROLE",
+      "event_id": "evt_list",
+      "entity_id": "ent_settings",
+      "role": "INPUT_OBJECT",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "artifact_use": null,
+      "scope_id": "evt_list",
+      "requires": [],
+      "sources": [{"quote": "列出settings.json中的配置项", "occurrence": 1}],
+      "note": "文件是列出配置项的明确输入范围，不新增独立读取命令。"
+    },
+    {
+      "id": "cl_list_content",
+      "kind": "ROLE",
+      "event_id": "evt_list",
+      "entity_id": "ent_config",
+      "role": "CONTENT",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "artifact_use": null,
+      "scope_id": "evt_list",
+      "requires": [],
+      "sources": [{"quote": "settings.json中的配置项", "occurrence": 1}],
+      "note": "列出内容限定为settings.json中的配置项。"
+    },
+    {
+      "id": "cl_generate_performer",
+      "kind": "ROLE",
+      "event_id": "evt_generate",
+      "entity_id": "ent_pm",
+      "role": "PERFORMER",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "artifact_use": null,
+      "scope_id": "evt_generate",
+      "requires": [],
+      "sources": [
+        {"quote": "请PM列出settings.json中的配置项", "occurrence": 1},
+        {"quote": "并生成settings-list.md", "occurrence": 1}
+      ],
+      "note": "同一指令中的并列动作承接明确主语PM，无主体切换。"
+    },
+    {
+      "id": "cl_generate_result",
+      "kind": "ROLE",
+      "event_id": "evt_generate",
+      "entity_id": "ent_output",
+      "role": "RESULT",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "artifact_use": null,
+      "scope_id": "evt_generate",
+      "requires": [],
+      "sources": [{"quote": "生成settings-list.md", "occurrence": 1}],
+      "note": "明确要求生成此文件，未另外要求提交或发送。"
+    },
+    {
+      "id": "cl_generate_content",
+      "kind": "ROLE",
+      "event_id": "evt_generate",
+      "entity_id": "ent_config",
+      "role": "CONTENT",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "artifact_use": null,
+      "scope_id": "evt_generate",
+      "requires": [],
+      "sources": [{"quote": "列出settings.json中的配置项，并生成settings-list.md", "occurrence": 1}],
+      "note": "并列生成的清单文件承载所列配置项；未明示两动作的完成先后。"
+    },
+    {
+      "id": "cl_change_performer",
+      "kind": "ROLE",
+      "event_id": "evt_change",
+      "entity_id": "ent_pm",
+      "role": "PERFORMER",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "artifact_use": null,
+      "scope_id": "evt_change",
+      "requires": [],
+      "sources": [
+        {"quote": "请PM列出settings.json中的配置项", "occurrence": 1},
+        {"quote": "不得更改任何配置项", "occurrence": 1}
+      ],
+      "note": "同一指令的追加禁止承接PM，约束其执行本任务时的行为。"
+    },
+    {
+      "id": "cl_change_object",
+      "kind": "ROLE",
+      "event_id": "evt_change",
+      "entity_id": "ent_config",
+      "role": "OBJECT",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "artifact_use": null,
+      "scope_id": "evt_change",
+      "requires": [],
+      "sources": [
+        {"quote": "settings.json中的配置项", "occurrence": 1},
+        {"quote": "不得更改任何配置项", "occurrence": 1}
+      ],
+      "note": "禁止更改配置项；任何表示全称范围，不是数值执行限制。"
+    },
+    {
+      "id": "cl_change_scope",
+      "kind": "SCOPE",
+      "event_id": "evt_change",
+      "entity_id": null,
+      "role": null,
+      "expression_id": "expr_config_scope",
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "artifact_use": null,
+      "scope_id": "evt_change",
+      "requires": [],
+      "sources": [{"quote": "不得更改任何配置项", "occurrence": 1}],
+      "note": "禁止范围覆盖任何配置项，不允许通过挑选部分配置项规避限制。"
+    }
+  ],
+  "expressions": [
+    {
+      "id": "expr_config_scope",
+      "op": "ITEM",
+      "operands": ["ent_config"],
+      "state": null,
+      "sources": [{"quote": "任何配置项", "occurrence": 1}]
+    }
+  ],
+  "issues": [],
+  "coverage": [
+    {
+      "sources": [{"quote": "请PM列出settings.json中的配置项", "occurrence": 1}],
+      "claim_ids": ["cl_list_performer", "cl_list_input", "cl_list_content"],
+      "status": "EXPRESSED",
+      "affected_views": ["A", "P", "I"]
+    },
+    {
+      "sources": [{"quote": "列出settings.json中的配置项，并生成settings-list.md", "occurrence": 1}],
+      "claim_ids": ["cl_generate_performer", "cl_generate_result", "cl_generate_content"],
+      "status": "EXPRESSED",
+      "affected_views": ["A", "P", "O"]
+    },
+    {
+      "sources": [{"quote": "不得更改任何配置项", "occurrence": 1}],
+      "claim_ids": ["cl_change_performer", "cl_change_object", "cl_change_scope"],
+      "status": "EXPRESSED",
+      "affected_views": ["B", "P"]
+    }
+  ]
+}

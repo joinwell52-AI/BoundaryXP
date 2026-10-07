@@ -1,0 +1,199 @@
+{
+  "contract_version": "031-r1.1",
+  "entities": [
+    {
+      "id": "E_PM",
+      "label": "PM",
+      "type": "OTHER",
+      "mentions": [{"quote": "PM", "occurrence": 1}],
+      "alternatives": []
+    },
+    {
+      "id": "E_USERS",
+      "label": "users.csv",
+      "type": "FILE",
+      "mentions": [{"quote": "users.csv", "occurrence": 1}],
+      "alternatives": []
+    },
+    {
+      "id": "E_OPTIONAL",
+      "label": "optional.md",
+      "type": "FILE",
+      "mentions": [
+        {"quote": "optional.md", "occurrence": 1},
+        {"quote": "optional.md", "occurrence": 2}
+      ],
+      "alternatives": []
+    }
+  ],
+  "events": [
+    {
+      "id": "EV_CHECK",
+      "predicate": "核对",
+      "kind": "ACTION",
+      "layer": "MAIN",
+      "use": "CURRENT_TASK",
+      "modality": "REQUIRED",
+      "polarity": "POSITIVE",
+      "owner_id": "ROOT",
+      "constraint_ids": [],
+      "requires": [],
+      "sources": [{"quote": "请PM核对users.csv", "occurrence": 1}]
+    },
+    {
+      "id": "EV_GENERATE",
+      "predicate": "生成",
+      "kind": "ACTION",
+      "layer": "MAIN",
+      "use": "CURRENT_TASK",
+      "modality": "PERMITTED",
+      "polarity": "POSITIVE",
+      "owner_id": "ROOT",
+      "constraint_ids": [],
+      "requires": [],
+      "sources": [{"quote": "可以另外生成optional.md", "occurrence": 1}]
+    },
+    {
+      "id": "EV_DELIVER",
+      "predicate": "交付",
+      "kind": "ACTION",
+      "layer": "MAIN",
+      "use": "CURRENT_TASK",
+      "modality": "NOT_REQUIRED",
+      "polarity": "POSITIVE",
+      "owner_id": "ROOT",
+      "constraint_ids": [],
+      "requires": [],
+      "sources": [{"quote": "本任务不要求交付optional.md", "occurrence": 1}]
+    }
+  ],
+  "claims": [
+    {
+      "id": "C_CHECK_PM",
+      "kind": "ROLE",
+      "event_id": "EV_CHECK",
+      "entity_id": "E_PM",
+      "role": "PERFORMER",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "artifact_use": null,
+      "scope_id": "EV_CHECK",
+      "requires": [],
+      "sources": [{"quote": "请PM核对users.csv", "occurrence": 1}],
+      "note": "明确指定PM执行核对。"
+    },
+    {
+      "id": "C_CHECK_INPUT",
+      "kind": "ROLE",
+      "event_id": "EV_CHECK",
+      "entity_id": "E_USERS",
+      "role": "INPUT_OBJECT",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "artifact_use": null,
+      "scope_id": "EV_CHECK",
+      "requires": [],
+      "sources": [{"quote": "核对users.csv", "occurrence": 1}],
+      "note": "users.csv是明确受检范围。"
+    },
+    {
+      "id": "C_GENERATE_PM",
+      "kind": "ROLE",
+      "event_id": "EV_GENERATE",
+      "entity_id": "E_PM",
+      "role": "PERFORMER",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "artifact_use": null,
+      "scope_id": "EV_GENERATE",
+      "requires": [],
+      "sources": [
+        {"quote": "请PM核对users.csv", "occurrence": 1},
+        {"quote": "可以另外生成optional.md", "occurrence": 1}
+      ],
+      "note": "连续同一指令的追加动作承接主语PM，未出现主体切换。"
+    },
+    {
+      "id": "C_GENERATE_RESULT",
+      "kind": "ROLE",
+      "event_id": "EV_GENERATE",
+      "entity_id": "E_OPTIONAL",
+      "role": "RESULT",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "artifact_use": null,
+      "scope_id": "EV_GENERATE",
+      "requires": [],
+      "sources": [{"quote": "可以另外生成optional.md", "occurrence": 1}],
+      "note": "允许产生该文件，不要求生成或交付。"
+    },
+    {
+      "id": "C_DELIVER_PM",
+      "kind": "ROLE",
+      "event_id": "EV_DELIVER",
+      "entity_id": "E_PM",
+      "role": "PERFORMER",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "artifact_use": null,
+      "scope_id": "EV_DELIVER",
+      "requires": [],
+      "sources": [
+        {"quote": "请PM核对users.csv", "occurrence": 1},
+        {"quote": "本任务不要求交付optional.md", "occurrence": 1}
+      ],
+      "note": "同一指令中交付用途承接PM；该用途没有交付义务。"
+    },
+    {
+      "id": "C_DELIVER_ARTIFACT",
+      "kind": "ROLE",
+      "event_id": "EV_DELIVER",
+      "entity_id": "E_OPTIONAL",
+      "role": "DELIVERABLE",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "artifact_use": null,
+      "scope_id": "EV_DELIVER",
+      "requires": [],
+      "sources": [
+        {"quote": "可以另外生成optional.md", "occurrence": 1},
+        {"quote": "本任务不要求交付optional.md", "occurrence": 1}
+      ],
+      "note": "两处名称指向同一可选产物；保留无需交付用途，不增加正向交付要求或交付禁止。"
+    }
+  ],
+  "expressions": [],
+  "issues": [],
+  "coverage": [
+    {
+      "sources": [{"quote": "请PM核对users.csv", "occurrence": 1}],
+      "claim_ids": ["C_CHECK_PM", "C_CHECK_INPUT"],
+      "status": "EXPRESSED",
+      "affected_views": ["I", "A", "P"]
+    },
+    {
+      "sources": [{"quote": "可以另外生成optional.md", "occurrence": 1}],
+      "claim_ids": ["C_GENERATE_PM", "C_GENERATE_RESULT"],
+      "status": "EXPRESSED",
+      "affected_views": ["O", "A", "P"]
+    },
+    {
+      "sources": [{"quote": "本任务不要求交付optional.md", "occurrence": 1}],
+      "claim_ids": ["C_DELIVER_PM", "C_DELIVER_ARTIFACT"],
+      "status": "EXPRESSED",
+      "affected_views": ["O", "A", "P"]
+    }
+  ]
+}

@@ -1,0 +1,302 @@
+{
+  "contract_version": "031-r1.1",
+  "entities": [
+    {
+      "id": "ent_pm",
+      "label": "PM",
+      "type": "OTHER",
+      "mentions": [
+        {
+          "quote": "PM",
+          "occurrence": 1
+        }
+      ],
+      "alternatives": []
+    },
+    {
+      "id": "ent_data",
+      "label": "data.csv",
+      "type": "FILE",
+      "mentions": [
+        {
+          "quote": "data.csv",
+          "occurrence": 1
+        },
+        {
+          "quote": "data.csv",
+          "occurrence": 2
+        }
+      ],
+      "alternatives": []
+    },
+    {
+      "id": "ent_brief",
+      "label": "brief.md",
+      "type": "FILE",
+      "mentions": [
+        {
+          "quote": "brief.md",
+          "occurrence": 1
+        }
+      ],
+      "alternatives": []
+    }
+  ],
+  "events": [
+    {
+      "id": "ev_read",
+      "predicate": "读取",
+      "kind": "ACTION",
+      "layer": "MAIN",
+      "use": "CURRENT_TASK",
+      "modality": "REQUIRED",
+      "polarity": "POSITIVE",
+      "owner_id": "ROOT",
+      "constraint_ids": [],
+      "requires": [],
+      "sources": [
+        {
+          "quote": "请PM读取data.csv",
+          "occurrence": 1
+        }
+      ]
+    },
+    {
+      "id": "ev_generate",
+      "predicate": "生成",
+      "kind": "ACTION",
+      "layer": "MAIN",
+      "use": "CURRENT_TASK",
+      "modality": "REQUIRED",
+      "polarity": "POSITIVE",
+      "owner_id": "ROOT",
+      "constraint_ids": [],
+      "requires": [],
+      "sources": [
+        {
+          "quote": "并生成brief.md",
+          "occurrence": 1
+        }
+      ]
+    },
+    {
+      "id": "ev_modify",
+      "predicate": "修改",
+      "kind": "ACTION",
+      "layer": "MAIN",
+      "use": "CURRENT_TASK",
+      "modality": "FORBIDDEN",
+      "polarity": "POSITIVE",
+      "owner_id": "ROOT",
+      "constraint_ids": [],
+      "requires": [],
+      "sources": [
+        {
+          "quote": "不得修改data.csv",
+          "occurrence": 1
+        }
+      ]
+    }
+  ],
+  "claims": [
+    {
+      "id": "cl_read_performer",
+      "kind": "ROLE",
+      "event_id": "ev_read",
+      "entity_id": "ent_pm",
+      "role": "PERFORMER",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "artifact_use": null,
+      "scope_id": "ev_read",
+      "requires": [],
+      "sources": [
+        {
+          "quote": "请PM读取data.csv",
+          "occurrence": 1
+        }
+      ],
+      "note": "PM是读取动作的明确执行者；原文未指定其人员或群组类别。"
+    },
+    {
+      "id": "cl_read_input",
+      "kind": "ROLE",
+      "event_id": "ev_read",
+      "entity_id": "ent_data",
+      "role": "INPUT_OBJECT",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "artifact_use": null,
+      "scope_id": "ev_read",
+      "requires": [],
+      "sources": [
+        {
+          "quote": "读取data.csv",
+          "occurrence": 1
+        }
+      ],
+      "note": "data.csv是明确要求读取的输入文件。"
+    },
+    {
+      "id": "cl_generate_performer",
+      "kind": "ROLE",
+      "event_id": "ev_generate",
+      "entity_id": "ent_pm",
+      "role": "PERFORMER",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "artifact_use": null,
+      "scope_id": "ev_generate",
+      "requires": [],
+      "sources": [
+        {
+          "quote": "请PM读取data.csv",
+          "occurrence": 1
+        },
+        {
+          "quote": "并生成brief.md",
+          "occurrence": 1
+        }
+      ],
+      "note": "同一指令的并列生成动作承接明确主语PM，没有主体切换。"
+    },
+    {
+      "id": "cl_generate_result",
+      "kind": "ROLE",
+      "event_id": "ev_generate",
+      "entity_id": "ent_brief",
+      "role": "RESULT",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "artifact_use": null,
+      "scope_id": "ev_generate",
+      "requires": [],
+      "sources": [
+        {
+          "quote": "生成brief.md",
+          "occurrence": 1
+        }
+      ],
+      "note": "brief.md是要求生成的结果；原文没有交付要求。"
+    },
+    {
+      "id": "cl_modify_performer",
+      "kind": "ROLE",
+      "event_id": "ev_modify",
+      "entity_id": "ent_pm",
+      "role": "PERFORMER",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "artifact_use": null,
+      "scope_id": "ev_modify",
+      "requires": [],
+      "sources": [
+        {
+          "quote": "请PM读取data.csv",
+          "occurrence": 1
+        },
+        {
+          "quote": "不得修改data.csv",
+          "occurrence": 1
+        }
+      ],
+      "note": "追加的禁止要求承接同一任务主语PM，未另定主体。"
+    },
+    {
+      "id": "cl_modify_object",
+      "kind": "ROLE",
+      "event_id": "ev_modify",
+      "entity_id": "ent_data",
+      "role": "OBJECT",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "artifact_use": null,
+      "scope_id": "ev_modify",
+      "requires": [],
+      "sources": [
+        {
+          "quote": "不得修改data.csv",
+          "occurrence": 1
+        }
+      ],
+      "note": "禁止修改的是前文同一data.csv；禁止对象本身不新增输入用途。"
+    }
+  ],
+  "expressions": [],
+  "issues": [],
+  "coverage": [
+    {
+      "sources": [
+        {
+          "quote": "请PM读取data.csv",
+          "occurrence": 1
+        }
+      ],
+      "claim_ids": [
+        "cl_read_performer",
+        "cl_read_input"
+      ],
+      "status": "EXPRESSED",
+      "affected_views": [
+        "A",
+        "P",
+        "I"
+      ]
+    },
+    {
+      "sources": [
+        {
+          "quote": "请PM读取data.csv",
+          "occurrence": 1
+        },
+        {
+          "quote": "并生成brief.md",
+          "occurrence": 1
+        }
+      ],
+      "claim_ids": [
+        "cl_generate_performer",
+        "cl_generate_result"
+      ],
+      "status": "EXPRESSED",
+      "affected_views": [
+        "A",
+        "P",
+        "O"
+      ]
+    },
+    {
+      "sources": [
+        {
+          "quote": "请PM读取data.csv",
+          "occurrence": 1
+        },
+        {
+          "quote": "不得修改data.csv",
+          "occurrence": 1
+        }
+      ],
+      "claim_ids": [
+        "cl_modify_performer",
+        "cl_modify_object"
+      ],
+      "status": "EXPRESSED",
+      "affected_views": [
+        "B",
+        "P"
+      ]
+    }
+  ]
+}

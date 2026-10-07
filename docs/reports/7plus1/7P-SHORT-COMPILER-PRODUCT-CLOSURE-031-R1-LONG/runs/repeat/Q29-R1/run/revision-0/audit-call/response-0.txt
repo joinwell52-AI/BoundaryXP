@@ -1,0 +1,191 @@
+{
+  "contract_version": "031-r1.1",
+  "reviews": [
+    {
+      "subject_id": "ent_pm",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [{"quote": "PM", "occurrence": 1}],
+      "reason": "PM身份明确；OTHER可占位未指定的人或组类别。"
+    },
+    {
+      "subject_id": "ent_east",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [{"quote": "east.csv", "occurrence": 1}],
+      "reason": "明确命名的文件，读取用途不依赖后续指代消歧。"
+    },
+    {
+      "subject_id": "ent_west",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [{"quote": "west.csv", "occurrence": 1}],
+      "reason": "明确命名的文件，读取用途不依赖后续指代消歧。"
+    },
+    {
+      "subject_id": "ent_it",
+      "field_path": "",
+      "verdict": "UNCERTAIN",
+      "context_refs": ["ent_east", "ent_west"],
+      "sources": [{"quote": "east.csv和west.csv，再把它交给QA", "occurrence": 1}],
+      "reason": "两份文件均为合理先行项；保留alternatives恰当，但具体身份仍未决。"
+    },
+    {
+      "subject_id": "ent_qa",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [{"quote": "QA", "occurrence": 1}],
+      "reason": "接收方身份明确；OTHER可占位未指定类别。"
+    },
+    {
+      "subject_id": "ent_ops",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [{"quote": "OPS-01", "occurrence": 1}],
+      "reason": "主体标识明确；OTHER可占位未指定类别，01不是执行数量。"
+    },
+    {
+      "subject_id": "ent_port",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [{"quote": "port.md", "occurrence": 1}],
+      "reason": "明确命名的生成文件，与前述交付指代没有来源支持的身份关联。"
+    },
+    {
+      "subject_id": "ev_read",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [{"quote": "请PM读取east.csv和west.csv", "occurrence": 1}],
+      "reason": "明确要求当前读取两份文件，没有两文件内部的读取先后。"
+    },
+    {
+      "subject_id": "ev_deliver",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["cl_order"],
+      "sources": [{"quote": "再把它交给QA", "occurrence": 1}],
+      "reason": "交付义务明确，时间约束已绑定；对象身份未决不否定动作本身。"
+    },
+    {
+      "subject_id": "ev_generate",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [{"quote": "另请OPS-01生成port.md", "occurrence": 1}],
+      "reason": "独立的生成要求；另请不指定与前述工作之间的先后。"
+    },
+    {
+      "subject_id": "cl_read_performer",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["ev_read", "ent_pm"],
+      "sources": [{"quote": "请PM读取east.csv和west.csv", "occurrence": 1}],
+      "reason": "PM是明确的读取执行者。"
+    },
+    {
+      "subject_id": "cl_read_east",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["ev_read", "ent_east"],
+      "sources": [{"quote": "读取east.csv和west.csv", "occurrence": 1}],
+      "reason": "east.csv是明确读取输入，未被表述为本次内部生成结果。"
+    },
+    {
+      "subject_id": "cl_read_west",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["ev_read", "ent_west"],
+      "sources": [{"quote": "读取east.csv和west.csv", "occurrence": 1}],
+      "reason": "west.csv是明确读取输入，独立于交付指代竞争。"
+    },
+    {
+      "subject_id": "cl_deliver_performer",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["ev_deliver", "ent_pm"],
+      "sources": [
+        {"quote": "请PM读取east.csv和west.csv", "occurrence": 1},
+        {"quote": "再把它交给QA", "occurrence": 1}
+      ],
+      "reason": "连续追加动作承接PM主语，没有主体切换；QA是接收方。"
+    },
+    {
+      "subject_id": "cl_deliver_recipient",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["ev_deliver", "ent_qa"],
+      "sources": [{"quote": "交给QA", "occurrence": 1}],
+      "reason": "QA的接收角色明确，不依赖交付对象消歧。"
+    },
+    {
+      "subject_id": "cl_deliver_artifact",
+      "field_path": "",
+      "verdict": "UNCERTAIN",
+      "context_refs": ["ev_deliver", "ent_it"],
+      "sources": [{"quote": "east.csv和west.csv，再把它交给QA", "occurrence": 1}],
+      "reason": "DELIVERABLE用途有支持，但所绑定文件存在真实指代竞争，应保持局部未决。"
+    },
+    {
+      "subject_id": "cl_order",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["ev_read", "ev_deliver", "expr_read_done"],
+      "sources": [{"quote": "读取east.csv和west.csv，再把它交给QA", "occurrence": 1}],
+      "reason": "再要求交付位于两份文件读取之后；ORDER/AFTER及双向约束绑定正确，没有升格充分条件。"
+    },
+    {
+      "subject_id": "cl_generate_performer",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["ev_generate", "ent_ops"],
+      "sources": [{"quote": "另请OPS-01生成port.md", "occurrence": 1}],
+      "reason": "此处显式切换为OPS-01执行生成。"
+    },
+    {
+      "subject_id": "cl_generate_result",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["ev_generate", "ent_port"],
+      "sources": [{"quote": "生成port.md", "occurrence": 1}],
+      "reason": "port.md是生成结果；原文未要求其交付或供其他动作使用。"
+    },
+    {
+      "subject_id": "expr_read_done",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["ev_read", "ent_east", "ent_west"],
+      "sources": [{"quote": "读取east.csv和west.csv，再把它交给QA", "occurrence": 1}],
+      "reason": "状态引用正确读取事件，参数涵盖两份前置文件；不表示完成状态已被观测为真。"
+    }
+  ],
+  "issues": [
+    {
+      "id": "audit_it_identity",
+      "issue_kind": "IDENTITY",
+      "subject_ids": ["ent_it"],
+      "field_path": "",
+      "context_refs": ["ent_east", "ent_west", "cl_deliver_artifact"],
+      "sources": [{"quote": "east.csv和west.csv，再把它交给QA", "occurrence": 1}],
+      "reason": "它在两份文件之间存在身份竞争；候选保留备选正确，不能强选唯一文件，也不影响独立读取和生成用途。",
+      "suggested_json": null
+    },
+    {
+      "id": "audit_deliver_binding",
+      "issue_kind": "BINDING",
+      "subject_ids": ["cl_deliver_artifact"],
+      "field_path": "entity_id",
+      "context_refs": ["ent_it", "ev_deliver"],
+      "sources": [{"quote": "east.csv和west.csv，再把它交给QA", "occurrence": 1}],
+      "reason": "交付用途明确，但具体产物绑定依赖未决指代；仅此绑定保持未决，无需新增生成动作或产物流关联。",
+      "suggested_json": null
+    }
+  ],
+  "omissions": []
+}

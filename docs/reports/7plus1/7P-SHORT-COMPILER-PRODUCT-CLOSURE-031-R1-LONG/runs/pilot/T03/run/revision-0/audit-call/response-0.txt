@@ -1,0 +1,249 @@
+{
+  "contract_version": "031-r1.1",
+  "reviews": [
+    {
+      "subject_id": "ent_pm",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [
+        {"quote": "PM", "occurrence": 1},
+        {"quote": "PM", "occurrence": 2}
+      ],
+      "reason": "两处PM指同一生成及交付主体；OTHER可保留未指定的人或组类别。"
+    },
+    {
+      "subject_id": "ent_qa",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [{"quote": "QA", "occurrence": 1}],
+      "reason": "QA身份明确，OTHER适合作为未指定类别的占位。"
+    },
+    {
+      "subject_id": "ent_admin",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [
+        {"quote": "ADMIN", "occurrence": 1},
+        {"quote": "ADMIN", "occurrence": 2}
+      ],
+      "reason": "交付接收方与完成条件中的ADMIN身份一致；类别未指定可用OTHER。"
+    },
+    {
+      "subject_id": "ent_file",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [
+        {"quote": "summary.md", "occurrence": 1},
+        {"quote": "该文件", "occurrence": 1},
+        {"quote": "同一文件", "occurrence": 1},
+        {"quote": "summary.md", "occurrence": 2}
+      ],
+      "reason": "全文只有一个当前文件，各指称和名称已绑定同一FILE身份。"
+    },
+    {
+      "subject_id": "ev_generate",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [{"quote": "PM必须生成summary.md", "occurrence": 1}],
+      "reason": "明确要求当前任务生成文件，动作层级、模态与极性正确。"
+    },
+    {
+      "subject_id": "ev_review",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [{"quote": "QA复核该文件", "occurrence": 1}],
+      "reason": "并列指令明确要求QA复核，属于当前必做动作。"
+    },
+    {
+      "subject_id": "ev_deliver",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["cl_order"],
+      "sources": [{"quote": "随后PM把同一文件交给ADMIN", "occurrence": 1}],
+      "reason": "明确要求随后交付，时序约束已双向绑定。"
+    },
+    {
+      "subject_id": "ev_received",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["cl_completion"],
+      "sources": [{"quote": "summary.md被ADMIN接收即任务完成", "occurrence": 1}],
+      "reason": "接收是完成条件中的状态，未被提升为独立义务或已发生事实。"
+    },
+    {
+      "subject_id": "cl_generate_pm",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [{"quote": "PM必须生成summary.md", "occurrence": 1}],
+      "reason": "PM是明确生成执行者。"
+    },
+    {
+      "subject_id": "cl_generate_result",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [{"quote": "PM必须生成summary.md", "occurrence": 1}],
+      "reason": "summary.md是生成事件的RESULT。"
+    },
+    {
+      "subject_id": "cl_review_qa",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [{"quote": "QA复核该文件", "occurrence": 1}],
+      "reason": "QA明确承担复核者角色。"
+    },
+    {
+      "subject_id": "cl_review_object",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["cl_generate_result"],
+      "sources": [
+        {"quote": "PM必须生成summary.md", "occurrence": 1},
+        {"quote": "QA复核该文件", "occurrence": 1}
+      ],
+      "reason": "该文件指本次生成结果，作为内部复核对象而非外部输入。"
+    },
+    {
+      "subject_id": "cl_deliver_pm",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [{"quote": "随后PM把同一文件交给ADMIN", "occurrence": 1}],
+      "reason": "交付执行者明确为PM。"
+    },
+    {
+      "subject_id": "cl_deliver_file",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["cl_generate_result", "cl_review_object"],
+      "sources": [
+        {"quote": "PM必须生成summary.md", "occurrence": 1},
+        {"quote": "QA复核该文件", "occurrence": 1},
+        {"quote": "随后PM把同一文件交给ADMIN", "occurrence": 1}
+      ],
+      "reason": "同一文件明确承接生成及复核对象，DELIVERABLE正确表达交付用途。"
+    },
+    {
+      "subject_id": "cl_deliver_admin",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [{"quote": "随后PM把同一文件交给ADMIN", "occurrence": 1}],
+      "reason": "ADMIN为明确交付接收方。"
+    },
+    {
+      "subject_id": "cl_received_admin",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [{"quote": "summary.md被ADMIN接收", "occurrence": 1}],
+      "reason": "ADMIN是条件状态中的接收方，不新增接收义务。"
+    },
+    {
+      "subject_id": "cl_received_file",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["cl_generate_result", "cl_deliver_file"],
+      "sources": [
+        {"quote": "PM必须生成summary.md", "occurrence": 1},
+        {"quote": "随后PM把同一文件交给ADMIN", "occurrence": 1},
+        {"quote": "summary.md被ADMIN接收", "occurrence": 1}
+      ],
+      "reason": "完成条件的文件与本次生成、交付文件身份一致。"
+    },
+    {
+      "subject_id": "cl_review_flow",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["cl_generate_result", "cl_review_object"],
+      "sources": [
+        {"quote": "PM必须生成summary.md", "occurrence": 1},
+        {"quote": "QA复核该文件", "occurrence": 1}
+      ],
+      "reason": "复核明确使用本次生成结果，两端角色与同一实例相符；USED_PORTION未添加整体生成完成的强时序。"
+    },
+    {
+      "subject_id": "cl_deliver_flow",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["cl_generate_result", "cl_deliver_file", "cl_order"],
+      "sources": [
+        {"quote": "PM必须生成summary.md", "occurrence": 1},
+        {"quote": "随后PM把同一文件交给ADMIN", "occurrence": 1}
+      ],
+      "reason": "交付明确使用本次生成的同一文件，用途两端闭合；明确事件先后由独立时序主张表达。"
+    },
+    {
+      "subject_id": "cl_order",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["expr_prior_group", "ev_deliver"],
+      "sources": [
+        {"quote": "PM必须生成summary.md", "occurrence": 1},
+        {"quote": "QA复核该文件", "occurrence": 1},
+        {"quote": "随后PM把同一文件交给ADMIN", "occurrence": 1}
+      ],
+      "reason": "随后交付承接前述生成与复核整组工作，ORDER与AFTER保留纯先后且未捏造组内顺序。"
+    },
+    {
+      "subject_id": "cl_completion",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["expr_received"],
+      "sources": [{"quote": "summary.md被ADMIN接收即任务完成", "occurrence": 1}],
+      "reason": "接收足以触发根任务完成，SUFFICIENT正确，未增加必要性。"
+    },
+    {
+      "subject_id": "expr_generated",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["ev_generate", "cl_order"],
+      "sources": [
+        {"quote": "PM必须生成summary.md", "occurrence": 1},
+        {"quote": "随后PM把同一文件交给ADMIN", "occurrence": 1}
+      ],
+      "reason": "表达交付前的生成完成状态，引用事件、PM及文件参数一致，未断言状态已发生。"
+    },
+    {
+      "subject_id": "expr_reviewed",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["ev_review", "cl_order"],
+      "sources": [
+        {"quote": "QA复核该文件", "occurrence": 1},
+        {"quote": "随后PM把同一文件交给ADMIN", "occurrence": 1}
+      ],
+      "reason": "表达交付前的复核完成状态，事件、QA与文件参数正确。"
+    },
+    {
+      "subject_id": "expr_prior_group",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["expr_generated", "expr_reviewed"],
+      "sources": [
+        {"quote": "PM必须生成summary.md", "occurrence": 1},
+        {"quote": "QA复核该文件", "occurrence": 1},
+        {"quote": "随后PM把同一文件交给ADMIN", "occurrence": 1}
+      ],
+      "reason": "AND保留随后交付所承接的两项前置工作，不增加前置工作之间的顺序。"
+    },
+    {
+      "subject_id": "expr_received",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["ev_received"],
+      "sources": [{"quote": "summary.md被ADMIN接收", "occurrence": 1}],
+      "reason": "接收状态的事件、接收方、同一文件及正极性均与原文一致。"
+    }
+  ],
+  "issues": [],
+  "omissions": []
+}

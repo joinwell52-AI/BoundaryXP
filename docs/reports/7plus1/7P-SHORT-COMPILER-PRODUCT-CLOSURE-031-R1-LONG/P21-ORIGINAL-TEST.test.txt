@@ -1,0 +1,23 @@
+import test from 'node:test';import assert from 'node:assert/strict';import fs from 'node:fs';import path from 'node:path';
+import {once} from 'node:events';
+import {HistoryStore} from '../research/7plus1-parser/v0.3-p2.1-generalization/history.mjs';
+import {createServer} from '../research/7plus1-parser/v0.3-p2.1-generalization/server.mjs';
+import {compileNative} from '../research/7plus1-parser/v0.3-p2.1-generalization/engine.mjs';
+import {traceMarkdown,traceHTML} from '../research/7plus1-parser/v0.3-p2.1-generalization/export.mjs';
+const base=new URL('../research/7plus1-parser/v0.3-p2-semantic-coverage/',import.meta.url);
+const real=JSON.parse(fs.readFileSync(new URL('UNSEEN-NLP.json',base))),doc=real.doc;
+test('P21 native service: real recorded NLP compile, snapshot history and three exports',async()=>{
+ const parent=path.resolve('.boundx'),tmp=fs.mkdtempSync(path.join(parent,'p21-contract-test-')),store=new HistoryStore(path.join(tmp,'history'));let calls=0;
+ const server=createServer({store,reviewRoot:path.join(tmp,'reviews'),parse:async(input)=>{assert.equal(input.toString('utf8'),doc.source.raw_text);calls++;return compileNative(doc,real.signals,{run_id:'test-native-actual-evidence'});}});
+ try{server.listen(0,'127.0.0.1');await once(server,'listening');const url='http://127.0.0.1:'+server.address().port;
+  const response=await fetch(url+'/api/parse',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({text:doc.source.raw_text})});assert.equal(response.status,200);const run=await response.json();assert.equal(run.result.contract_gate_results.status,'PASS');
+  const before=fs.readFileSync(store.file(run.run_id));for(const ext of ['json','md','html']){const exported=await fetch(url+'/api/runs/'+run.run_id+'/trace.'+ext);assert.equal(exported.status,200);const content=await exported.text();if(ext==='json')assert.deepEqual(JSON.parse(content),run.result);else assert.equal(content,ext==='md'?traceMarkdown(run.result):traceHTML(run.result));assert.match(content,/eligibility/iu);}
+  assert.deepEqual((await (await fetch(url+'/api/runs/'+run.run_id)).json()).result,run.result);assert.equal(calls,1);assert.deepEqual(fs.readFileSync(store.file(run.run_id)),before);
+  const history=await (await fetch(url+'/api/runs')).json();assert.ok(history.some(x=>x.run_id===run.run_id));
+  const denied=await fetch(url+'/api/runs',{method:'DELETE',headers:{'content-type':'application/json'},body:JSON.stringify({confirmation:'DELETE_ALL_HISTORY'})});assert.equal(denied.status,409);assert.ok(fs.existsSync(store.file(run.run_id)));
+  const js=await (await fetch(url+'/app.js')).text();assert.match(js,/renderCompiler/);assert.ok(!js.includes('legacy_frames'));
+ }finally{await new Promise(resolve=>server.close(resolve));server.closeAllConnections();if(tmp.startsWith(parent+path.sep))fs.rmSync(tmp,{recursive:true,force:true});}
+});
+test('P21 history tampering rejects; stored snapshot does not mutate on export',()=>{
+ const parent=path.resolve('.boundx'),tmp=fs.mkdtempSync(path.join(parent,'p21-history-test-'));try{const store=new HistoryStore(tmp),r=compileNative(doc,real.signals,{run_id:'tamper-test'});store.save(r);const file=store.file('tamper-test'),data=JSON.parse(fs.readFileSync(file));data.payload.source_text='tampered';fs.writeFileSync(file,JSON.stringify(data));assert.throws(()=>store.get('tamper-test'),/HISTORY_INTEGRITY/);}finally{if(tmp.startsWith(parent+path.sep))fs.rmSync(tmp,{recursive:true,force:true});}
+});

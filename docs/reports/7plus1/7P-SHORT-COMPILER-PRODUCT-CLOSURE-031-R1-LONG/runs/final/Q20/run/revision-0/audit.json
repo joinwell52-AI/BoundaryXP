@@ -1,0 +1,278 @@
+{
+  "contract_version": "031-r1.1",
+  "reviews": [
+    {
+      "subject_id": "ent_ops",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [
+        {
+          "quote": "OPS-01",
+          "occurrence": 1
+        },
+        {
+          "quote": "OPS-01",
+          "occurrence": 2
+        }
+      ],
+      "reason": "两处明确指称同一OPS-01；OTHER可作未指定类别的占位。"
+    },
+    {
+      "subject_id": "ent_pm",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [
+        {
+          "quote": "PM",
+          "occurrence": 1
+        }
+      ],
+      "reason": "通知接收方身份明确，原文未指定实体类别，OTHER占位合理。"
+    },
+    {
+      "subject_id": "ent_anomaly",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [
+        {
+          "quote": "服务异常",
+          "occurrence": 1
+        },
+        {
+          "quote": "无论是否发现异常",
+          "occurrence": 1
+        }
+      ],
+      "reason": "后句异常承接前句服务异常，无其他竞争对象；mentions的出现次数正确。"
+    },
+    {
+      "subject_id": "ent_health",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [
+        {
+          "quote": "health.md",
+          "occurrence": 1
+        }
+      ],
+      "reason": "明示生成的文件名称与身份一致。"
+    },
+    {
+      "subject_id": "evt_discovery",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [
+        {
+          "quote": "若发现服务异常",
+          "occurrence": 1
+        }
+      ],
+      "reason": "发现仅作为条件状态，未被提升为当前发现义务或已发生事实。"
+    },
+    {
+      "subject_id": "evt_notify",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [
+        "cl_notify_condition"
+      ],
+      "sources": [
+        {
+          "quote": "若发现服务异常，OPS-01必须通知PM",
+          "occurrence": 1
+        }
+      ],
+      "reason": "通知是受发现条件约束的当前必需动作，条件约束双向绑定完整。"
+    },
+    {
+      "subject_id": "evt_generate",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [
+        "cl_generate_scope"
+      ],
+      "sources": [
+        {
+          "quote": "无论是否发现异常，OPS-01都必须生成health.md",
+          "occurrence": 1
+        }
+      ],
+      "reason": "生成义务不受是否发现异常限制，无限制性条件符合原文。"
+    },
+    {
+      "subject_id": "cl_discovery_object",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [
+        "evt_discovery",
+        "ent_anomaly"
+      ],
+      "sources": [
+        {
+          "quote": "发现服务异常",
+          "occurrence": 1
+        }
+      ],
+      "reason": "服务异常是条件发现状态的对象，不构成外部输入或独立发现义务。"
+    },
+    {
+      "subject_id": "cl_notify_performer",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [
+        "evt_notify",
+        "ent_ops"
+      ],
+      "sources": [
+        {
+          "quote": "OPS-01必须通知PM",
+          "occurrence": 1
+        }
+      ],
+      "reason": "OPS-01被明确指定为通知执行者。"
+    },
+    {
+      "subject_id": "cl_notify_recipient",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [
+        "evt_notify",
+        "ent_pm"
+      ],
+      "sources": [
+        {
+          "quote": "通知PM",
+          "occurrence": 1
+        }
+      ],
+      "reason": "PM被明确指定为通知接收方。"
+    },
+    {
+      "subject_id": "cl_notify_condition",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [
+        "evt_notify",
+        "expr_discovered"
+      ],
+      "sources": [
+        {
+          "quote": "若发现服务异常，OPS-01必须通知PM",
+          "occurrence": 1
+        }
+      ],
+      "reason": "发现异常足以触发通知义务；SUFFICIENT方向正确，未增加唯一必要条件或独立时序要求。"
+    },
+    {
+      "subject_id": "cl_generate_performer",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [
+        "evt_generate",
+        "ent_ops"
+      ],
+      "sources": [
+        {
+          "quote": "OPS-01都必须生成health.md",
+          "occurrence": 1
+        }
+      ],
+      "reason": "生成动作的执行者明确为同一OPS-01。"
+    },
+    {
+      "subject_id": "cl_generate_result",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [
+        "evt_generate",
+        "ent_health"
+      ],
+      "sources": [
+        {
+          "quote": "生成health.md",
+          "occurrence": 1
+        }
+      ],
+      "reason": "health.md是生成事件的RESULT；原文没有交付要求或后续消费用途。"
+    },
+    {
+      "subject_id": "cl_generate_scope",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [
+        "evt_generate",
+        "expr_all_discovery_states"
+      ],
+      "sources": [
+        {
+          "quote": "无论是否发现异常，OPS-01都必须生成health.md",
+          "occurrence": 1
+        }
+      ],
+      "reason": "范围涵盖发现与未发现两种互补状态，与无条件生成义务一致。"
+    },
+    {
+      "subject_id": "expr_discovered",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [
+        "evt_discovery",
+        "ent_anomaly"
+      ],
+      "sources": [
+        {
+          "quote": "若发现服务异常",
+          "occurrence": 1
+        }
+      ],
+      "reason": "正极性发现状态引用正确的条件事件和异常对象，未断言状态已发生。"
+    },
+    {
+      "subject_id": "expr_not_discovered",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [
+        "evt_discovery",
+        "ent_anomaly"
+      ],
+      "sources": [
+        {
+          "quote": "若发现服务异常",
+          "occurrence": 1
+        },
+        {
+          "quote": "无论是否发现异常",
+          "occurrence": 1
+        }
+      ],
+      "reason": "负极性表达未发现同一异常，与正状态保持同一事件和参数；不等同于不存在异常。"
+    },
+    {
+      "subject_id": "expr_all_discovery_states",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [
+        "expr_discovered",
+        "expr_not_discovered"
+      ],
+      "sources": [
+        {
+          "quote": "若发现服务异常",
+          "occurrence": 1
+        },
+        {
+          "quote": "无论是否发现异常",
+          "occurrence": 1
+        }
+      ],
+      "reason": "OR连接同参数的互补发现状态，完整表达无论是否发现的穷尽范围。"
+    }
+  ],
+  "issues": [],
+  "omissions": []
+}

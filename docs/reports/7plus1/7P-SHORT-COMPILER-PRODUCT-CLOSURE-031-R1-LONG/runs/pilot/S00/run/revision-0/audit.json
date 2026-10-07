@@ -1,0 +1,526 @@
+{
+  "contract_version": "031-r1.1",
+  "reviews": [
+    {
+      "subject_id": "ent_pm",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [
+        {
+          "quote": "PM",
+          "occurrence": 1
+        },
+        {
+          "quote": "PM",
+          "occurrence": 2
+        }
+      ],
+      "reason": "两处PM为同一明确主体；OTHER可保留未指定的人或组类别。"
+    },
+    {
+      "subject_id": "ent_qa",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [
+        {
+          "quote": "QA",
+          "occurrence": 1
+        },
+        {
+          "quote": "QA",
+          "occurrence": 2
+        }
+      ],
+      "reason": "当前复核者与本次复核通过条件中的QA身份一致；OTHER占位适当。"
+    },
+    {
+      "subject_id": "ent_admin",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [
+        {
+          "quote": "ADMIN",
+          "occurrence": 1
+        }
+      ],
+      "reason": "接收方身份明确，原文未指定其人或组类别，OTHER适当。"
+    },
+    {
+      "subject_id": "ent_spec",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [
+        {
+          "quote": "依据SPEC-42",
+          "occurrence": 1
+        }
+      ],
+      "reason": "SPEC-42作为具名规范依据，DOCUMENT解释有来源支持。"
+    },
+    {
+      "subject_id": "ent_routes",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [
+        {
+          "quote": "routes.csv",
+          "occurrence": 1
+        },
+        {
+          "quote": "routes.csv",
+          "occurrence": 2
+        }
+      ],
+      "reason": "读取与禁止修改指向同一具名文件，无版本或对象竞争。"
+    },
+    {
+      "subject_id": "ent_report",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [
+        {
+          "quote": "report.md",
+          "occurrence": 1
+        },
+        {
+          "quote": "该报告",
+          "occurrence": 1
+        },
+        {
+          "quote": "该报告",
+          "occurrence": 2
+        }
+      ],
+      "reason": "全文只有一个当前报告，生成、复核和提交的指称已绑定同一文件身份。"
+    },
+    {
+      "subject_id": "ev_read",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [
+        "cl_retry_limit"
+      ],
+      "sources": [
+        {
+          "quote": "请PM依据SPEC-42读取routes.csv",
+          "occurrence": 1
+        },
+        {
+          "quote": "该读取操作最多重试3次",
+          "occurrence": 1
+        }
+      ],
+      "reason": "读取为当前要求动作，重试限制正确回绑。"
+    },
+    {
+      "subject_id": "ev_generate",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [
+        {
+          "quote": "请PM依据SPEC-42读取routes.csv并生成report.md",
+          "occurrence": 1
+        }
+      ],
+      "reason": "并列生成动作属于当前要求；原文未明示读取与生成的严格先后。"
+    },
+    {
+      "subject_id": "ev_review",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [
+        {
+          "quote": "QA必须复核该报告",
+          "occurrence": 1
+        }
+      ],
+      "reason": "必须复核是独立的当前义务，未将复核通过误作已发生事实。"
+    },
+    {
+      "subject_id": "ev_submit",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [
+        "cl_submit_condition"
+      ],
+      "sources": [
+        {
+          "quote": "仅在本次QA复核通过后，允许PM向ADMIN提交该报告",
+          "occurrence": 1
+        }
+      ],
+      "reason": "提交为附必要前提的许可，模态与条件回绑正确。"
+    },
+    {
+      "subject_id": "ev_modify",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [
+        {
+          "quote": "不得修改routes.csv",
+          "occurrence": 1
+        }
+      ],
+      "reason": "当前修改动作被禁止，FORBIDDEN与正向动作极性相容。"
+    },
+    {
+      "subject_id": "cl_read_performer",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [
+        "ev_read",
+        "ent_pm"
+      ],
+      "sources": [
+        {
+          "quote": "请PM依据SPEC-42读取routes.csv",
+          "occurrence": 1
+        }
+      ],
+      "reason": "读取执行者明确为PM。"
+    },
+    {
+      "subject_id": "cl_read_input",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [
+        "ev_read",
+        "ent_routes"
+      ],
+      "sources": [
+        {
+          "quote": "读取routes.csv",
+          "occurrence": 1
+        }
+      ],
+      "reason": "routes.csv是明确读取输入。"
+    },
+    {
+      "subject_id": "cl_read_basis",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [
+        "ev_read",
+        "ent_spec"
+      ],
+      "sources": [
+        {
+          "quote": "依据SPEC-42读取routes.csv",
+          "occurrence": 1
+        }
+      ],
+      "reason": "SPEC-42明确约束读取用途。"
+    },
+    {
+      "subject_id": "cl_generate_performer",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [
+        "ev_generate",
+        "ent_pm"
+      ],
+      "sources": [
+        {
+          "quote": "请PM依据SPEC-42读取routes.csv",
+          "occurrence": 1
+        },
+        {
+          "quote": "并生成report.md",
+          "occurrence": 1
+        }
+      ],
+      "reason": "连续并列指令没有主体切换，生成承接PM，来源覆盖两端。"
+    },
+    {
+      "subject_id": "cl_generate_basis",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [
+        "ev_generate",
+        "ent_spec"
+      ],
+      "sources": [
+        {
+          "quote": "依据SPEC-42读取routes.csv并生成report.md",
+          "occurrence": 1
+        }
+      ],
+      "reason": "前置依据短语统摄同一指令的读取与生成。"
+    },
+    {
+      "subject_id": "cl_generate_result",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [
+        "ev_generate",
+        "ent_report"
+      ],
+      "sources": [
+        {
+          "quote": "生成report.md",
+          "occurrence": 1
+        }
+      ],
+      "reason": "report.md是生成事件的RESULT。"
+    },
+    {
+      "subject_id": "cl_review_reviewer",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [
+        "ev_review",
+        "ent_qa"
+      ],
+      "sources": [
+        {
+          "quote": "QA必须复核该报告",
+          "occurrence": 1
+        }
+      ],
+      "reason": "QA明确承担当前复核职责。"
+    },
+    {
+      "subject_id": "cl_review_object",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [
+        "ev_review",
+        "ent_report",
+        "cl_generate_result"
+      ],
+      "sources": [
+        {
+          "quote": "生成report.md",
+          "occurrence": 1
+        },
+        {
+          "quote": "QA必须复核该报告",
+          "occurrence": 1
+        }
+      ],
+      "reason": "复核对象为本次生成的同一报告，内部OBJECT未误作外部输入。"
+    },
+    {
+      "subject_id": "cl_review_artifact",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [
+        "cl_generate_result",
+        "cl_review_object"
+      ],
+      "sources": [
+        {
+          "quote": "生成report.md",
+          "occurrence": 1
+        },
+        {
+          "quote": "QA必须复核该报告",
+          "occurrence": 1
+        }
+      ],
+      "reason": "明确复核本次产物，生产与消费引用闭合；USED_PORTION未增加完整生成结束的强时序。"
+    },
+    {
+      "subject_id": "cl_submit_performer",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [
+        "ev_submit",
+        "ent_pm"
+      ],
+      "sources": [
+        {
+          "quote": "允许PM向ADMIN提交该报告",
+          "occurrence": 1
+        }
+      ],
+      "reason": "条件许可的提交执行者明确为PM。"
+    },
+    {
+      "subject_id": "cl_submit_recipient",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [
+        "ev_submit",
+        "ent_admin"
+      ],
+      "sources": [
+        {
+          "quote": "向ADMIN提交该报告",
+          "occurrence": 1
+        }
+      ],
+      "reason": "ADMIN为接收方，未增添批准职责。"
+    },
+    {
+      "subject_id": "cl_submit_deliverable",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [
+        "ev_submit",
+        "ent_report",
+        "cl_generate_result",
+        "cl_review_object"
+      ],
+      "sources": [
+        {
+          "quote": "生成report.md",
+          "occurrence": 1
+        },
+        {
+          "quote": "QA必须复核该报告",
+          "occurrence": 1
+        },
+        {
+          "quote": "允许PM向ADMIN提交该报告",
+          "occurrence": 1
+        }
+      ],
+      "reason": "同一本次报告具有条件许可的交付用途，DELIVERABLE绑定正确。"
+    },
+    {
+      "subject_id": "cl_submit_artifact",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [
+        "cl_generate_result",
+        "cl_submit_deliverable"
+      ],
+      "sources": [
+        {
+          "quote": "生成report.md",
+          "occurrence": 1
+        },
+        {
+          "quote": "允许PM向ADMIN提交该报告",
+          "occurrence": 1
+        }
+      ],
+      "reason": "提交使用本次生成报告，来源覆盖生产和消费；未明示完整产物要求，USED_PORTION适当。"
+    },
+    {
+      "subject_id": "cl_submit_condition",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [
+        "ev_submit",
+        "expr_review_passed"
+      ],
+      "sources": [
+        {
+          "quote": "仅在本次QA复核通过后，允许PM向ADMIN提交该报告",
+          "occurrence": 1
+        }
+      ],
+      "reason": "仅在表达必要许可前提，AFTER保留通过后的时序，未改成充分触发或复核通过义务。"
+    },
+    {
+      "subject_id": "cl_retry_limit",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [
+        "ev_read"
+      ],
+      "sources": [
+        {
+          "quote": "读取routes.csv",
+          "occurrence": 1
+        },
+        {
+          "quote": "该读取操作最多重试3次",
+          "occurrence": 1
+        }
+      ],
+      "reason": "计数项为重试，LTE 3次正确；执行限制目标与计数范围均绑定读取事件，约束双向闭合。"
+    },
+    {
+      "subject_id": "cl_completion",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [
+        "expr_submit_success"
+      ],
+      "sources": [
+        {
+          "quote": "提交成功即任务完成",
+          "occurrence": 1
+        }
+      ],
+      "reason": "提交成功是根任务完成的充分触发，未改写为必要或唯一条件。"
+    },
+    {
+      "subject_id": "cl_modify_object",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [
+        "ev_modify",
+        "ent_routes"
+      ],
+      "sources": [
+        {
+          "quote": "不得修改routes.csv",
+          "occurrence": 1
+        }
+      ],
+      "reason": "禁止对象为同一routes.csv；该用途未新增外部输入或执行者。"
+    },
+    {
+      "subject_id": "expr_review_passed",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [
+        "ev_review",
+        "ent_qa",
+        "ent_report"
+      ],
+      "sources": [
+        {
+          "quote": "生成report.md",
+          "occurrence": 1
+        },
+        {
+          "quote": "QA必须复核该报告",
+          "occurrence": 1
+        },
+        {
+          "quote": "本次QA复核通过",
+          "occurrence": 1
+        }
+      ],
+      "reason": "STATE对应本次复核事件、QA与同一报告，正极性表达通过条件而非已观测事实。"
+    },
+    {
+      "subject_id": "expr_submit_success",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [
+        "ev_submit",
+        "ent_pm",
+        "ent_report",
+        "ent_admin"
+      ],
+      "sources": [
+        {
+          "quote": "允许PM向ADMIN提交该报告",
+          "occurrence": 1
+        },
+        {
+          "quote": "提交成功即任务完成",
+          "occurrence": 1
+        }
+      ],
+      "reason": "成功状态引用唯一当前提交事件，执行者、报告和接收方参数一致，未断言成功已发生。"
+    }
+  ],
+  "issues": [],
+  "omissions": []
+}

@@ -1,0 +1,446 @@
+{
+  "contract_version": "031-r1.1",
+  "entities": [
+    {
+      "id": "ent_pm",
+      "label": "PM",
+      "type": "OTHER",
+      "mentions": [
+        {
+          "quote": "PM",
+          "occurrence": 1
+        }
+      ],
+      "alternatives": []
+    },
+    {
+      "id": "ent_a",
+      "label": "测试机A",
+      "type": "OTHER",
+      "mentions": [
+        {
+          "quote": "A",
+          "occurrence": 1
+        }
+      ],
+      "alternatives": []
+    },
+    {
+      "id": "ent_b",
+      "label": "测试机B",
+      "type": "OTHER",
+      "mentions": [
+        {
+          "quote": "B",
+          "occurrence": 1
+        },
+        {
+          "quote": "B",
+          "occurrence": 2
+        }
+      ],
+      "alternatives": []
+    },
+    {
+      "id": "ent_c",
+      "label": "测试机C",
+      "type": "OTHER",
+      "mentions": [
+        {
+          "quote": "C",
+          "occurrence": 1
+        }
+      ],
+      "alternatives": []
+    },
+    {
+      "id": "ent_d",
+      "label": "测试机D",
+      "type": "OTHER",
+      "mentions": [
+        {
+          "quote": "D",
+          "occurrence": 1
+        },
+        {
+          "quote": "D",
+          "occurrence": 2
+        }
+      ],
+      "alternatives": []
+    },
+    {
+      "id": "ent_any_machine",
+      "label": "任何测试机",
+      "type": "OTHER",
+      "mentions": [
+        {
+          "quote": "任何测试机",
+          "occurrence": 1
+        }
+      ],
+      "alternatives": []
+    }
+  ],
+  "events": [
+    {
+      "id": "evt_check",
+      "predicate": "检查",
+      "kind": "ACTION",
+      "layer": "MAIN",
+      "use": "CURRENT_TASK",
+      "modality": "REQUIRED",
+      "polarity": "POSITIVE",
+      "owner_id": "ROOT",
+      "constraint_ids": [],
+      "requires": [],
+      "sources": [
+        {
+          "quote": "请PM检查A、B、C、D四台测试机",
+          "occurrence": 1
+        },
+        {
+          "quote": "本次检查范围不含B和D",
+          "occurrence": 1
+        }
+      ]
+    },
+    {
+      "id": "evt_restart",
+      "predicate": "重启",
+      "kind": "ACTION",
+      "layer": "MAIN",
+      "use": "CURRENT_TASK",
+      "modality": "FORBIDDEN",
+      "polarity": "POSITIVE",
+      "owner_id": "ROOT",
+      "constraint_ids": [],
+      "requires": [],
+      "sources": [
+        {
+          "quote": "不得重启任何测试机",
+          "occurrence": 1
+        }
+      ]
+    }
+  ],
+  "claims": [
+    {
+      "id": "cl_check_performer",
+      "kind": "ROLE",
+      "event_id": "evt_check",
+      "entity_id": "ent_pm",
+      "role": "PERFORMER",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "artifact_use": null,
+      "scope_id": "evt_check",
+      "requires": [],
+      "sources": [
+        {
+          "quote": "请PM检查",
+          "occurrence": 1
+        }
+      ],
+      "note": "PM是明确指定的检查执行者；岗位简称不推定为个人或群组。"
+    },
+    {
+      "id": "cl_check_a",
+      "kind": "ROLE",
+      "event_id": "evt_check",
+      "entity_id": "ent_a",
+      "role": "INPUT_OBJECT",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "artifact_use": null,
+      "scope_id": "evt_check",
+      "requires": [],
+      "sources": [
+        {
+          "quote": "检查A、B、C、D四台测试机",
+          "occurrence": 1
+        },
+        {
+          "quote": "本次检查范围不含B和D",
+          "occurrence": 1
+        }
+      ],
+      "note": "从列举范围排除B和D后，A属于本次受检范围。"
+    },
+    {
+      "id": "cl_check_c",
+      "kind": "ROLE",
+      "event_id": "evt_check",
+      "entity_id": "ent_c",
+      "role": "INPUT_OBJECT",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "artifact_use": null,
+      "scope_id": "evt_check",
+      "requires": [],
+      "sources": [
+        {
+          "quote": "检查A、B、C、D四台测试机",
+          "occurrence": 1
+        },
+        {
+          "quote": "本次检查范围不含B和D",
+          "occurrence": 1
+        }
+      ],
+      "note": "从列举范围排除B和D后，C属于本次受检范围。"
+    },
+    {
+      "id": "cl_check_scope",
+      "kind": "SCOPE",
+      "event_id": "evt_check",
+      "entity_id": null,
+      "role": null,
+      "expression_id": "expr_check_scope",
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "artifact_use": null,
+      "scope_id": "evt_check",
+      "requires": [],
+      "sources": [
+        {
+          "quote": "A、B、C、D四台测试机",
+          "occurrence": 1
+        },
+        {
+          "quote": "本次检查范围不含B和D",
+          "occurrence": 1
+        }
+      ],
+      "note": "本次检查范围为列举的四台测试机集合减去B和D；四台描述列举集合，不是执行数量限制。"
+    },
+    {
+      "id": "cl_restart_performer",
+      "kind": "ROLE",
+      "event_id": "evt_restart",
+      "entity_id": "ent_pm",
+      "role": "PERFORMER",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "artifact_use": null,
+      "scope_id": "evt_restart",
+      "requires": [],
+      "sources": [
+        {
+          "quote": "请PM检查",
+          "occurrence": 1
+        },
+        {
+          "quote": "不得重启任何测试机",
+          "occurrence": 1
+        }
+      ],
+      "note": "连续同一指令没有主体切换，省略主语的重启禁令承接PM。"
+    },
+    {
+      "id": "cl_restart_object",
+      "kind": "ROLE",
+      "event_id": "evt_restart",
+      "entity_id": "ent_any_machine",
+      "role": "OBJECT",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "artifact_use": null,
+      "scope_id": "evt_restart",
+      "requires": [],
+      "sources": [
+        {
+          "quote": "不得重启任何测试机",
+          "occurrence": 1
+        }
+      ],
+      "note": "禁令涵盖任何测试机，不随本次检查范围的排除而缩小，也不由禁止对象新增外部输入。"
+    }
+  ],
+  "expressions": [
+    {
+      "id": "expr_a",
+      "op": "ITEM",
+      "operands": [
+        "ent_a"
+      ],
+      "state": null,
+      "sources": [
+        {
+          "quote": "A、B、C、D四台测试机",
+          "occurrence": 1
+        }
+      ]
+    },
+    {
+      "id": "expr_b",
+      "op": "ITEM",
+      "operands": [
+        "ent_b"
+      ],
+      "state": null,
+      "sources": [
+        {
+          "quote": "A、B、C、D四台测试机",
+          "occurrence": 1
+        },
+        {
+          "quote": "不含B和D",
+          "occurrence": 1
+        }
+      ]
+    },
+    {
+      "id": "expr_c",
+      "op": "ITEM",
+      "operands": [
+        "ent_c"
+      ],
+      "state": null,
+      "sources": [
+        {
+          "quote": "A、B、C、D四台测试机",
+          "occurrence": 1
+        }
+      ]
+    },
+    {
+      "id": "expr_d",
+      "op": "ITEM",
+      "operands": [
+        "ent_d"
+      ],
+      "state": null,
+      "sources": [
+        {
+          "quote": "A、B、C、D四台测试机",
+          "occurrence": 1
+        },
+        {
+          "quote": "不含B和D",
+          "occurrence": 1
+        }
+      ]
+    },
+    {
+      "id": "expr_listed",
+      "op": "UNION",
+      "operands": [
+        "expr_a",
+        "expr_b",
+        "expr_c",
+        "expr_d"
+      ],
+      "state": null,
+      "sources": [
+        {
+          "quote": "A、B、C、D四台测试机",
+          "occurrence": 1
+        }
+      ]
+    },
+    {
+      "id": "expr_excluded",
+      "op": "UNION",
+      "operands": [
+        "expr_b",
+        "expr_d"
+      ],
+      "state": null,
+      "sources": [
+        {
+          "quote": "本次检查范围不含B和D",
+          "occurrence": 1
+        }
+      ]
+    },
+    {
+      "id": "expr_check_scope",
+      "op": "EXCEPT",
+      "operands": [
+        "expr_listed",
+        "expr_excluded"
+      ],
+      "state": null,
+      "sources": [
+        {
+          "quote": "A、B、C、D四台测试机",
+          "occurrence": 1
+        },
+        {
+          "quote": "本次检查范围不含B和D",
+          "occurrence": 1
+        }
+      ]
+    }
+  ],
+  "issues": [],
+  "coverage": [
+    {
+      "sources": [
+        {
+          "quote": "请PM检查A、B、C、D四台测试机",
+          "occurrence": 1
+        }
+      ],
+      "claim_ids": [
+        "cl_check_performer",
+        "cl_check_a",
+        "cl_check_c",
+        "cl_check_scope"
+      ],
+      "status": "EXPRESSED",
+      "affected_views": [
+        "A",
+        "P",
+        "I"
+      ]
+    },
+    {
+      "sources": [
+        {
+          "quote": "本次检查范围不含B和D",
+          "occurrence": 1
+        }
+      ],
+      "claim_ids": [
+        "cl_check_scope",
+        "cl_check_a",
+        "cl_check_c"
+      ],
+      "status": "EXPRESSED",
+      "affected_views": [
+        "I",
+        "A"
+      ]
+    },
+    {
+      "sources": [
+        {
+          "quote": "不得重启任何测试机",
+          "occurrence": 1
+        }
+      ],
+      "claim_ids": [
+        "cl_restart_performer",
+        "cl_restart_object"
+      ],
+      "status": "EXPRESSED",
+      "affected_views": [
+        "B",
+        "P"
+      ]
+    }
+  ]
+}

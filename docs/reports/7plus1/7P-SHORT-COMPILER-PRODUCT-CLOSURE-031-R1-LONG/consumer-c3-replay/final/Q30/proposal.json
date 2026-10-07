@@ -1,0 +1,420 @@
+{
+  "contract_version": "031-r1.1",
+  "entities": [
+    {
+      "id": "E_PM",
+      "label": "PM",
+      "type": "OTHER",
+      "mentions": [
+        {
+          "quote": "PM",
+          "occurrence": 1
+        }
+      ],
+      "alternatives": []
+    },
+    {
+      "id": "E_EAST",
+      "label": "east.csv",
+      "type": "FILE",
+      "mentions": [
+        {
+          "quote": "east.csv",
+          "occurrence": 1
+        },
+        {
+          "quote": "前一个文件",
+          "occurrence": 1
+        }
+      ],
+      "alternatives": []
+    },
+    {
+      "id": "E_WEST",
+      "label": "west.csv",
+      "type": "FILE",
+      "mentions": [
+        {
+          "quote": "west.csv",
+          "occurrence": 1
+        }
+      ],
+      "alternatives": []
+    },
+    {
+      "id": "E_QA",
+      "label": "QA",
+      "type": "OTHER",
+      "mentions": [
+        {
+          "quote": "QA",
+          "occurrence": 1
+        }
+      ],
+      "alternatives": []
+    },
+    {
+      "id": "E_OPS",
+      "label": "OPS-01",
+      "type": "OTHER",
+      "mentions": [
+        {
+          "quote": "OPS-01",
+          "occurrence": 1
+        }
+      ],
+      "alternatives": []
+    },
+    {
+      "id": "E_PORT",
+      "label": "port.md",
+      "type": "FILE",
+      "mentions": [
+        {
+          "quote": "port.md",
+          "occurrence": 1
+        }
+      ],
+      "alternatives": []
+    }
+  ],
+  "events": [
+    {
+      "id": "EV_READ",
+      "predicate": "读取文件",
+      "kind": "ACTION",
+      "layer": "MAIN",
+      "use": "CURRENT_TASK",
+      "modality": "REQUIRED",
+      "polarity": "POSITIVE",
+      "owner_id": "ROOT",
+      "constraint_ids": [],
+      "requires": [],
+      "sources": [
+        {
+          "quote": "请PM读取east.csv和west.csv",
+          "occurrence": 1
+        }
+      ]
+    },
+    {
+      "id": "EV_HANDOFF",
+      "predicate": "交付文件",
+      "kind": "ACTION",
+      "layer": "MAIN",
+      "use": "CURRENT_TASK",
+      "modality": "REQUIRED",
+      "polarity": "POSITIVE",
+      "owner_id": "ROOT",
+      "constraint_ids": [
+        "C_ORDER"
+      ],
+      "requires": [],
+      "sources": [
+        {
+          "quote": "再把前一个文件交给QA",
+          "occurrence": 1
+        }
+      ]
+    },
+    {
+      "id": "EV_GENERATE",
+      "predicate": "生成文件",
+      "kind": "ACTION",
+      "layer": "MAIN",
+      "use": "CURRENT_TASK",
+      "modality": "REQUIRED",
+      "polarity": "POSITIVE",
+      "owner_id": "ROOT",
+      "constraint_ids": [],
+      "requires": [],
+      "sources": [
+        {
+          "quote": "另请OPS-01生成port.md",
+          "occurrence": 1
+        }
+      ]
+    }
+  ],
+  "claims": [
+    {
+      "id": "C_READ_PM",
+      "kind": "ROLE",
+      "event_id": "EV_READ",
+      "entity_id": "E_PM",
+      "role": "PERFORMER",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "artifact_use": null,
+      "scope_id": "EV_READ",
+      "requires": [],
+      "sources": [
+        {
+          "quote": "请PM读取east.csv和west.csv",
+          "occurrence": 1
+        }
+      ],
+      "note": ""
+    },
+    {
+      "id": "C_READ_EAST",
+      "kind": "ROLE",
+      "event_id": "EV_READ",
+      "entity_id": "E_EAST",
+      "role": "INPUT_OBJECT",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "artifact_use": null,
+      "scope_id": "EV_READ",
+      "requires": [],
+      "sources": [
+        {
+          "quote": "读取east.csv和west.csv",
+          "occurrence": 1
+        }
+      ],
+      "note": ""
+    },
+    {
+      "id": "C_READ_WEST",
+      "kind": "ROLE",
+      "event_id": "EV_READ",
+      "entity_id": "E_WEST",
+      "role": "INPUT_OBJECT",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "artifact_use": null,
+      "scope_id": "EV_READ",
+      "requires": [],
+      "sources": [
+        {
+          "quote": "读取east.csv和west.csv",
+          "occurrence": 1
+        }
+      ],
+      "note": ""
+    },
+    {
+      "id": "C_HANDOFF_PM",
+      "kind": "ROLE",
+      "event_id": "EV_HANDOFF",
+      "entity_id": "E_PM",
+      "role": "PERFORMER",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "artifact_use": null,
+      "scope_id": "EV_HANDOFF",
+      "requires": [],
+      "sources": [
+        {
+          "quote": "请PM读取east.csv和west.csv",
+          "occurrence": 1
+        },
+        {
+          "quote": "再把前一个文件交给QA",
+          "occurrence": 1
+        }
+      ],
+      "note": "交付动作承接同一连续指令的主语PM；后面的OPS-01是另一个生成动作的主体。"
+    },
+    {
+      "id": "C_HANDOFF_EAST",
+      "kind": "ROLE",
+      "event_id": "EV_HANDOFF",
+      "entity_id": "E_EAST",
+      "role": "DELIVERABLE",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "artifact_use": null,
+      "scope_id": "EV_HANDOFF",
+      "requires": [],
+      "sources": [
+        {
+          "quote": "east.csv和west.csv",
+          "occurrence": 1
+        },
+        {
+          "quote": "把前一个文件交给QA",
+          "occurrence": 1
+        }
+      ],
+      "note": "前一个文件指并列列举中的east.csv；交付不新增生成义务。"
+    },
+    {
+      "id": "C_HANDOFF_QA",
+      "kind": "ROLE",
+      "event_id": "EV_HANDOFF",
+      "entity_id": "E_QA",
+      "role": "RECIPIENT",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "artifact_use": null,
+      "scope_id": "EV_HANDOFF",
+      "requires": [],
+      "sources": [
+        {
+          "quote": "交给QA",
+          "occurrence": 1
+        }
+      ],
+      "note": "仅明确接收职责，未要求QA复核。"
+    },
+    {
+      "id": "C_ORDER",
+      "kind": "TEMPORAL",
+      "event_id": "EV_HANDOFF",
+      "entity_id": null,
+      "role": null,
+      "expression_id": "X_READ_DONE",
+      "direction": "ORDER",
+      "temporal": "AFTER",
+      "quantity": null,
+      "artifact_use": null,
+      "scope_id": "EV_HANDOFF",
+      "requires": [],
+      "sources": [
+        {
+          "quote": "读取east.csv和west.csv，再把前一个文件交给QA",
+          "occurrence": 1
+        }
+      ],
+      "note": "交付在两份文件的读取完成后；未指定两份文件读取之间的顺序。"
+    },
+    {
+      "id": "C_GENERATE_OPS",
+      "kind": "ROLE",
+      "event_id": "EV_GENERATE",
+      "entity_id": "E_OPS",
+      "role": "PERFORMER",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "artifact_use": null,
+      "scope_id": "EV_GENERATE",
+      "requires": [],
+      "sources": [
+        {
+          "quote": "另请OPS-01生成port.md",
+          "occurrence": 1
+        }
+      ],
+      "note": "OPS-01中的数字是身份标识，不是执行数量。"
+    },
+    {
+      "id": "C_GENERATE_PORT",
+      "kind": "ROLE",
+      "event_id": "EV_GENERATE",
+      "entity_id": "E_PORT",
+      "role": "RESULT",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "artifact_use": null,
+      "scope_id": "EV_GENERATE",
+      "requires": [],
+      "sources": [
+        {
+          "quote": "生成port.md",
+          "occurrence": 1
+        }
+      ],
+      "note": "明确生成结果，未要求交付该文件。"
+    }
+  ],
+  "expressions": [
+    {
+      "id": "X_READ_DONE",
+      "op": "STATE",
+      "operands": [],
+      "state": {
+        "predicate": "读取完成",
+        "event_id": "EV_READ",
+        "args": [
+          "E_EAST",
+          "E_WEST"
+        ],
+        "polarity": "POSITIVE"
+      },
+      "sources": [
+        {
+          "quote": "读取east.csv和west.csv，再",
+          "occurrence": 1
+        }
+      ]
+    }
+  ],
+  "issues": [],
+  "coverage": [
+    {
+      "sources": [
+        {
+          "quote": "请PM读取east.csv和west.csv",
+          "occurrence": 1
+        }
+      ],
+      "claim_ids": [
+        "C_READ_PM",
+        "C_READ_EAST",
+        "C_READ_WEST"
+      ],
+      "status": "EXPRESSED",
+      "affected_views": [
+        "A",
+        "I",
+        "P"
+      ]
+    },
+    {
+      "sources": [
+        {
+          "quote": "再把前一个文件交给QA",
+          "occurrence": 1
+        }
+      ],
+      "claim_ids": [
+        "C_HANDOFF_PM",
+        "C_HANDOFF_EAST",
+        "C_HANDOFF_QA",
+        "C_ORDER"
+      ],
+      "status": "EXPRESSED",
+      "affected_views": [
+        "A",
+        "O",
+        "P"
+      ]
+    },
+    {
+      "sources": [
+        {
+          "quote": "另请OPS-01生成port.md",
+          "occurrence": 1
+        }
+      ],
+      "claim_ids": [
+        "C_GENERATE_OPS",
+        "C_GENERATE_PORT"
+      ],
+      "status": "EXPRESSED",
+      "affected_views": [
+        "A",
+        "O",
+        "P"
+      ]
+    }
+  ]
+}

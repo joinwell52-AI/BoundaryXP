@@ -1,0 +1,167 @@
+{
+  "contract_version": "031-r1.1",
+  "reviews": [
+    {
+      "subject_id": "E_PM",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [{"quote": "请PM读取worker.log", "occurrence": 1}],
+      "reason": "PM身份明确；OTHER可保留未指定的人或组类别。"
+    },
+    {
+      "subject_id": "E_QA",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [{"quote": "由QA复核检查结果", "occurrence": 1}],
+      "reason": "QA身份明确；OTHER不推定其为个人或组。"
+    },
+    {
+      "subject_id": "E_LOG",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [{"quote": "读取worker.log", "occurrence": 1}],
+      "reason": "明确命名的日志文件，身份及FILE类型有支持。"
+    },
+    {
+      "subject_id": "E_ERRORS",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["E_LOG"],
+      "sources": [{"quote": "读取worker.log并检查其中的错误记录", "occurrence": 1}],
+      "reason": "其中指向worker.log，受检对象是该文件中的错误记录。"
+    },
+    {
+      "subject_id": "E_RESULT",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["EV_CHECK", "EV_REVIEW"],
+      "sources": [
+        {"quote": "检查其中的错误记录", "occurrence": 1},
+        {"quote": "由QA复核检查结果", "occurrence": 1}
+      ],
+      "reason": "全篇只有本次检查及其结果；两端mentions支持同一结果身份，未推定文件形式。"
+    },
+    {
+      "subject_id": "EV_READ",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["C_RETRY"],
+      "sources": [
+        {"quote": "请PM读取worker.log", "occurrence": 1},
+        {"quote": "该读取操作最多重试2次", "occurrence": 1}
+      ],
+      "reason": "读取是当前必需动作，重试数量约束已双向绑定。"
+    },
+    {
+      "subject_id": "EV_CHECK",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [{"quote": "请PM读取worker.log并检查其中的错误记录", "occurrence": 1}],
+      "reason": "检查是同一指令中的并列必需动作；原文未明确另加事件先后约束。"
+    },
+    {
+      "subject_id": "EV_REVIEW",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [{"quote": "由QA复核检查结果", "occurrence": 1}],
+      "reason": "复核是当前明确要求的动作，不是条件或背景内容。"
+    },
+    {
+      "subject_id": "C_READ_PM",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["EV_READ", "E_PM"],
+      "sources": [{"quote": "请PM读取worker.log", "occurrence": 1}],
+      "reason": "PM明确承担读取执行职责。"
+    },
+    {
+      "subject_id": "C_READ_LOG",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["EV_READ", "E_LOG"],
+      "sources": [{"quote": "读取worker.log", "occurrence": 1}],
+      "reason": "worker.log是明确读取输入。"
+    },
+    {
+      "subject_id": "C_CHECK_PM",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["EV_CHECK", "E_PM"],
+      "sources": [
+        {"quote": "请PM读取worker.log", "occurrence": 1},
+        {"quote": "并检查其中的错误记录", "occurrence": 1}
+      ],
+      "reason": "同一指令的并列动作承接PM主语，两端来源齐全；QA仅在后续复核职责处出现。"
+    },
+    {
+      "subject_id": "C_CHECK_ERRORS",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["EV_CHECK", "E_ERRORS", "E_LOG"],
+      "sources": [
+        {"quote": "worker.log", "occurrence": 1},
+        {"quote": "检查其中的错误记录", "occurrence": 1}
+      ],
+      "reason": "受检范围明确限定为worker.log中的错误记录，INPUT_OBJECT绑定正确。"
+    },
+    {
+      "subject_id": "C_CHECK_RESULT",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["EV_CHECK", "E_RESULT"],
+      "sources": [
+        {"quote": "检查其中的错误记录", "occurrence": 1},
+        {"quote": "复核检查结果", "occurrence": 1}
+      ],
+      "reason": "后文明确引用本次检查结果，支持检查的RESULT用途，不增加文件生成或交付要求。"
+    },
+    {
+      "subject_id": "C_RETRY",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["EV_READ"],
+      "sources": [
+        {"quote": "读取worker.log", "occurrence": 1},
+        {"quote": "该读取操作最多重试2次", "occurrence": 1}
+      ],
+      "reason": "计数项为重试次数，目标和范围均为读取事件；LTE、2、次及EXECUTION_LIMIT正确，未限制总读取次数。"
+    },
+    {
+      "subject_id": "C_REVIEW_QA",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["EV_REVIEW", "E_QA"],
+      "sources": [{"quote": "由QA复核检查结果", "occurrence": 1}],
+      "reason": "QA明确承担REVIEWER职责，不传播为读取或检查执行者。"
+    },
+    {
+      "subject_id": "C_REVIEW_OBJECT",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["EV_REVIEW", "E_RESULT", "C_CHECK_RESULT"],
+      "sources": [
+        {"quote": "检查其中的错误记录", "occurrence": 1},
+        {"quote": "复核检查结果", "occurrence": 1}
+      ],
+      "reason": "复核对象是本次检查产生的同一结果，OBJECT保留内部消费用途，不误增外部输入。"
+    },
+    {
+      "subject_id": "C_RESULT_USE",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["C_CHECK_RESULT", "C_REVIEW_OBJECT", "E_RESULT"],
+      "sources": [
+        {"quote": "检查其中的错误记录", "occurrence": 1},
+        {"quote": "由QA复核检查结果", "occurrence": 1}
+      ],
+      "reason": "生产RESULT与消费OBJECT引用同一当前结果，关联两端来源完整；USED_PORTION不额外要求整个检查动作先完成。"
+    }
+  ],
+  "issues": [],
+  "omissions": []
+}

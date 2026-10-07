@@ -1,0 +1,156 @@
+{
+  "contract_version": "031-r1.1",
+  "reviews": [
+    {
+      "subject_id": "ent_qa",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [
+        {
+          "quote": "QA",
+          "occurrence": 1
+        }
+      ],
+      "reason": "QA身份明确；未指定个人或群组类别，OTHER可作为占位。"
+    },
+    {
+      "subject_id": "ent_config",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [
+        {
+          "quote": "配置",
+          "occurrence": 1
+        }
+      ],
+      "reason": "配置是明确的受检对象，OTHER类型占位合理。"
+    },
+    {
+      "subject_id": "ent_error",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [
+        {
+          "quote": "权限错误",
+          "occurrence": 1
+        }
+      ],
+      "reason": "准确保留条件中的错误对象。"
+    },
+    {
+      "subject_id": "evt_verify",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [
+        "cl_duration"
+      ],
+      "sources": [
+        {
+          "quote": "请QA完成配置核验",
+          "occurrence": 1
+        },
+        {
+          "quote": "核验用时不得超过6分钟",
+          "occurrence": 1
+        }
+      ],
+      "reason": "配置核验是当前必需动作，执行时长约束已双向绑定。"
+    },
+    {
+      "subject_id": "evt_error",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [
+        {
+          "quote": "若出现权限错误",
+          "occurrence": 1
+        }
+      ],
+      "reason": "正确表达条件状态，未将错误出现当成义务或已发生事实。"
+    },
+    {
+      "subject_id": "cl_performer",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [
+        "ent_qa",
+        "evt_verify"
+      ],
+      "sources": [
+        {
+          "quote": "请QA完成配置核验",
+          "occurrence": 1
+        }
+      ],
+      "reason": "QA明确承担配置核验的执行者角色。"
+    },
+    {
+      "subject_id": "cl_input",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [
+        "ent_config",
+        "evt_verify"
+      ],
+      "sources": [
+        {
+          "quote": "配置核验",
+          "occurrence": 1
+        }
+      ],
+      "reason": "配置作为明示受检范围绑定到核验事件，INPUT_OBJECT用途成立。"
+    },
+    {
+      "subject_id": "cl_duration",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [
+        "evt_verify"
+      ],
+      "sources": [
+        {
+          "quote": "核验用时不得超过6分钟",
+          "occurrence": 1
+        }
+      ],
+      "reason": "计量项、事件目标、LTE比较符、6分钟及核验计量范围均准确；属于执行限制。"
+    },
+    {
+      "subject_id": "cl_stop",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [
+        "expr_error"
+      ],
+      "sources": [
+        {
+          "quote": "若出现权限错误，停止本任务",
+          "occurrence": 1
+        }
+      ],
+      "reason": "权限错误出现是停止根任务的充分触发条件，未混同为完成条件。"
+    },
+    {
+      "subject_id": "expr_error",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [
+        "evt_error",
+        "ent_error"
+      ],
+      "sources": [
+        {
+          "quote": "若出现权限错误",
+          "occurrence": 1
+        }
+      ],
+      "reason": "状态谓词、引用事件、错误对象和正极性与原文条件一致。"
+    }
+  ],
+  "issues": [],
+  "omissions": []
+}

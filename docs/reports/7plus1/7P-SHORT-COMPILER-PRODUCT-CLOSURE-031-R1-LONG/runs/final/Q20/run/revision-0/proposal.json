@@ -1,0 +1,403 @@
+{
+  "contract_version": "031-r1.1",
+  "entities": [
+    {
+      "id": "ent_ops",
+      "label": "OPS-01",
+      "type": "OTHER",
+      "mentions": [
+        {
+          "quote": "OPS-01",
+          "occurrence": 1
+        },
+        {
+          "quote": "OPS-01",
+          "occurrence": 2
+        }
+      ],
+      "alternatives": []
+    },
+    {
+      "id": "ent_pm",
+      "label": "PM",
+      "type": "OTHER",
+      "mentions": [
+        {
+          "quote": "PM",
+          "occurrence": 1
+        }
+      ],
+      "alternatives": []
+    },
+    {
+      "id": "ent_anomaly",
+      "label": "服务异常",
+      "type": "OTHER",
+      "mentions": [
+        {
+          "quote": "服务异常",
+          "occurrence": 1
+        },
+        {
+          "quote": "异常",
+          "occurrence": 2
+        }
+      ],
+      "alternatives": []
+    },
+    {
+      "id": "ent_health",
+      "label": "health.md",
+      "type": "FILE",
+      "mentions": [
+        {
+          "quote": "health.md",
+          "occurrence": 1
+        }
+      ],
+      "alternatives": []
+    }
+  ],
+  "events": [
+    {
+      "id": "evt_discovery",
+      "predicate": "发现服务异常",
+      "kind": "STATE",
+      "layer": "CONDITION",
+      "use": "MENTION_ONLY",
+      "modality": "UNSTATED",
+      "polarity": "POSITIVE",
+      "owner_id": "ROOT",
+      "constraint_ids": [],
+      "requires": [],
+      "sources": [
+        {
+          "quote": "若发现服务异常",
+          "occurrence": 1
+        }
+      ]
+    },
+    {
+      "id": "evt_notify",
+      "predicate": "通知",
+      "kind": "ACTION",
+      "layer": "MAIN",
+      "use": "CURRENT_TASK",
+      "modality": "REQUIRED",
+      "polarity": "POSITIVE",
+      "owner_id": "ROOT",
+      "constraint_ids": [
+        "cl_notify_condition"
+      ],
+      "requires": [],
+      "sources": [
+        {
+          "quote": "若发现服务异常，OPS-01必须通知PM",
+          "occurrence": 1
+        }
+      ]
+    },
+    {
+      "id": "evt_generate",
+      "predicate": "生成",
+      "kind": "ACTION",
+      "layer": "MAIN",
+      "use": "CURRENT_TASK",
+      "modality": "REQUIRED",
+      "polarity": "POSITIVE",
+      "owner_id": "ROOT",
+      "constraint_ids": [],
+      "requires": [],
+      "sources": [
+        {
+          "quote": "无论是否发现异常，OPS-01都必须生成health.md",
+          "occurrence": 1
+        }
+      ]
+    }
+  ],
+  "claims": [
+    {
+      "id": "cl_discovery_object",
+      "kind": "ROLE",
+      "event_id": "evt_discovery",
+      "entity_id": "ent_anomaly",
+      "role": "OBJECT",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "artifact_use": null,
+      "scope_id": "evt_discovery",
+      "requires": [],
+      "sources": [
+        {
+          "quote": "发现服务异常",
+          "occurrence": 1
+        }
+      ],
+      "note": "条件提及的状态对象，不新增发现或监测义务。"
+    },
+    {
+      "id": "cl_notify_performer",
+      "kind": "ROLE",
+      "event_id": "evt_notify",
+      "entity_id": "ent_ops",
+      "role": "PERFORMER",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "artifact_use": null,
+      "scope_id": "evt_notify",
+      "requires": [],
+      "sources": [
+        {
+          "quote": "OPS-01必须通知PM",
+          "occurrence": 1
+        }
+      ],
+      "note": ""
+    },
+    {
+      "id": "cl_notify_recipient",
+      "kind": "ROLE",
+      "event_id": "evt_notify",
+      "entity_id": "ent_pm",
+      "role": "RECIPIENT",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "artifact_use": null,
+      "scope_id": "evt_notify",
+      "requires": [],
+      "sources": [
+        {
+          "quote": "通知PM",
+          "occurrence": 1
+        }
+      ],
+      "note": ""
+    },
+    {
+      "id": "cl_notify_condition",
+      "kind": "CONDITION",
+      "event_id": "evt_notify",
+      "entity_id": null,
+      "role": null,
+      "expression_id": "expr_discovered",
+      "direction": "SUFFICIENT",
+      "temporal": null,
+      "quantity": null,
+      "artifact_use": null,
+      "scope_id": "evt_notify",
+      "requires": [],
+      "sources": [
+        {
+          "quote": "若发现服务异常，OPS-01必须通知PM",
+          "occurrence": 1
+        }
+      ],
+      "note": "发现服务异常足以触发通知义务；不宣称异常已被发现。"
+    },
+    {
+      "id": "cl_generate_performer",
+      "kind": "ROLE",
+      "event_id": "evt_generate",
+      "entity_id": "ent_ops",
+      "role": "PERFORMER",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "artifact_use": null,
+      "scope_id": "evt_generate",
+      "requires": [],
+      "sources": [
+        {
+          "quote": "OPS-01都必须生成health.md",
+          "occurrence": 1
+        }
+      ],
+      "note": ""
+    },
+    {
+      "id": "cl_generate_result",
+      "kind": "ROLE",
+      "event_id": "evt_generate",
+      "entity_id": "ent_health",
+      "role": "RESULT",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "artifact_use": null,
+      "scope_id": "evt_generate",
+      "requires": [],
+      "sources": [
+        {
+          "quote": "生成health.md",
+          "occurrence": 1
+        }
+      ],
+      "note": "明示生成结果，未另行要求交付。"
+    },
+    {
+      "id": "cl_generate_scope",
+      "kind": "SCOPE",
+      "event_id": "evt_generate",
+      "entity_id": null,
+      "role": null,
+      "expression_id": "expr_all_discovery_states",
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "artifact_use": null,
+      "scope_id": "evt_generate",
+      "requires": [],
+      "sources": [
+        {
+          "quote": "无论是否发现异常，OPS-01都必须生成health.md",
+          "occurrence": 1
+        }
+      ],
+      "note": "发现与未发现同一服务异常的状态穷尽适用范围；生成义务没有限制性前提。"
+    }
+  ],
+  "expressions": [
+    {
+      "id": "expr_discovered",
+      "op": "STATE",
+      "operands": [],
+      "state": {
+        "predicate": "发现服务异常",
+        "event_id": "evt_discovery",
+        "args": [
+          "ent_anomaly"
+        ],
+        "polarity": "POSITIVE"
+      },
+      "sources": [
+        {
+          "quote": "若发现服务异常",
+          "occurrence": 1
+        }
+      ]
+    },
+    {
+      "id": "expr_not_discovered",
+      "op": "STATE",
+      "operands": [],
+      "state": {
+        "predicate": "发现服务异常",
+        "event_id": "evt_discovery",
+        "args": [
+          "ent_anomaly"
+        ],
+        "polarity": "NEGATIVE"
+      },
+      "sources": [
+        {
+          "quote": "若发现服务异常",
+          "occurrence": 1
+        },
+        {
+          "quote": "无论是否发现异常",
+          "occurrence": 1
+        }
+      ]
+    },
+    {
+      "id": "expr_all_discovery_states",
+      "op": "OR",
+      "operands": [
+        "expr_discovered",
+        "expr_not_discovered"
+      ],
+      "state": null,
+      "sources": [
+        {
+          "quote": "若发现服务异常",
+          "occurrence": 1
+        },
+        {
+          "quote": "无论是否发现异常",
+          "occurrence": 1
+        }
+      ]
+    }
+  ],
+  "issues": [],
+  "coverage": [
+    {
+      "sources": [
+        {
+          "quote": "若发现服务异常",
+          "occurrence": 1
+        }
+      ],
+      "claim_ids": [
+        "cl_discovery_object",
+        "cl_notify_condition"
+      ],
+      "status": "EXPRESSED",
+      "affected_views": [
+        "A"
+      ]
+    },
+    {
+      "sources": [
+        {
+          "quote": "OPS-01必须通知PM",
+          "occurrence": 1
+        }
+      ],
+      "claim_ids": [
+        "cl_notify_performer",
+        "cl_notify_recipient",
+        "cl_notify_condition"
+      ],
+      "status": "EXPRESSED",
+      "affected_views": [
+        "A",
+        "P"
+      ]
+    },
+    {
+      "sources": [
+        {
+          "quote": "无论是否发现异常",
+          "occurrence": 1
+        }
+      ],
+      "claim_ids": [
+        "cl_generate_scope"
+      ],
+      "status": "EXPRESSED",
+      "affected_views": [
+        "A",
+        "O"
+      ]
+    },
+    {
+      "sources": [
+        {
+          "quote": "OPS-01都必须生成health.md",
+          "occurrence": 1
+        }
+      ],
+      "claim_ids": [
+        "cl_generate_performer",
+        "cl_generate_result",
+        "cl_generate_scope"
+      ],
+      "status": "EXPRESSED",
+      "affected_views": [
+        "A",
+        "P",
+        "O"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,369 @@
+{
+  "contract_version": "031-r1.1",
+  "entities": [
+    {
+      "id": "dev",
+      "label": "DEV",
+      "type": "OTHER",
+      "mentions": [
+        {"quote": "DEV", "occurrence": 1},
+        {"quote": "DEV", "occurrence": 2}
+      ],
+      "alternatives": []
+    },
+    {
+      "id": "qa",
+      "label": "QA",
+      "type": "OTHER",
+      "mentions": [{"quote": "QA", "occurrence": 1}],
+      "alternatives": []
+    },
+    {
+      "id": "admin",
+      "label": "ADMIN",
+      "type": "OTHER",
+      "mentions": [{"quote": "ADMIN", "occurrence": 1}],
+      "alternatives": []
+    },
+    {
+      "id": "settings",
+      "label": "settings.yaml",
+      "type": "FILE",
+      "mentions": [
+        {"quote": "settings.yaml", "occurrence": 1},
+        {"quote": "settings.yaml", "occurrence": 2}
+      ],
+      "alternatives": []
+    },
+    {
+      "id": "review",
+      "label": "review.md",
+      "type": "FILE",
+      "mentions": [
+        {"quote": "review.md", "occurrence": 1},
+        {"quote": "并交给ADMIN", "occurrence": 1}
+      ],
+      "alternatives": []
+    }
+  ],
+  "events": [
+    {
+      "id": "check",
+      "predicate": "检查",
+      "kind": "ACTION",
+      "layer": "MAIN",
+      "use": "CURRENT_TASK",
+      "modality": "REQUIRED",
+      "polarity": "POSITIVE",
+      "owner_id": "ROOT",
+      "constraint_ids": [],
+      "requires": [],
+      "sources": [{"quote": "请DEV检查settings.yaml", "occurrence": 1}]
+    },
+    {
+      "id": "generate",
+      "predicate": "生成",
+      "kind": "ACTION",
+      "layer": "MAIN",
+      "use": "CURRENT_TASK",
+      "modality": "REQUIRED",
+      "polarity": "POSITIVE",
+      "owner_id": "ROOT",
+      "constraint_ids": ["generate_order"],
+      "requires": [],
+      "sources": [{"quote": "随后由QA生成review.md", "occurrence": 1}]
+    },
+    {
+      "id": "deliver",
+      "predicate": "交付",
+      "kind": "ACTION",
+      "layer": "MAIN",
+      "use": "CURRENT_TASK",
+      "modality": "REQUIRED",
+      "polarity": "POSITIVE",
+      "owner_id": "ROOT",
+      "constraint_ids": ["deliver_order"],
+      "requires": [],
+      "sources": [{"quote": "随后由QA生成review.md，并交给ADMIN", "occurrence": 1}]
+    },
+    {
+      "id": "modify",
+      "predicate": "修改",
+      "kind": "ACTION",
+      "layer": "MAIN",
+      "use": "CURRENT_TASK",
+      "modality": "FORBIDDEN",
+      "polarity": "POSITIVE",
+      "owner_id": "ROOT",
+      "constraint_ids": [],
+      "requires": [],
+      "sources": [{"quote": "DEV不得修改settings.yaml", "occurrence": 1}]
+    }
+  ],
+  "claims": [
+    {
+      "id": "check_performer",
+      "kind": "ROLE",
+      "event_id": "check",
+      "entity_id": "dev",
+      "role": "PERFORMER",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "artifact_use": null,
+      "scope_id": "check",
+      "requires": [],
+      "sources": [{"quote": "请DEV检查settings.yaml", "occurrence": 1}],
+      "note": ""
+    },
+    {
+      "id": "check_input",
+      "kind": "ROLE",
+      "event_id": "check",
+      "entity_id": "settings",
+      "role": "INPUT_OBJECT",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "artifact_use": null,
+      "scope_id": "check",
+      "requires": [],
+      "sources": [{"quote": "请DEV检查settings.yaml", "occurrence": 1}],
+      "note": "明确受检文件。"
+    },
+    {
+      "id": "generate_performer",
+      "kind": "ROLE",
+      "event_id": "generate",
+      "entity_id": "qa",
+      "role": "PERFORMER",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "artifact_use": null,
+      "scope_id": "generate",
+      "requires": [],
+      "sources": [{"quote": "由QA生成review.md", "occurrence": 1}],
+      "note": ""
+    },
+    {
+      "id": "generate_result",
+      "kind": "ROLE",
+      "event_id": "generate",
+      "entity_id": "review",
+      "role": "RESULT",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "artifact_use": null,
+      "scope_id": "generate",
+      "requires": [],
+      "sources": [{"quote": "生成review.md", "occurrence": 1}],
+      "note": ""
+    },
+    {
+      "id": "deliver_performer",
+      "kind": "ROLE",
+      "event_id": "deliver",
+      "entity_id": "qa",
+      "role": "PERFORMER",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "artifact_use": null,
+      "scope_id": "deliver",
+      "requires": [],
+      "sources": [
+        {"quote": "由QA生成review.md", "occurrence": 1},
+        {"quote": "并交给ADMIN", "occurrence": 1}
+      ],
+      "note": "连续并列动作无主体切换，交付承接QA为执行者。"
+    },
+    {
+      "id": "deliver_artifact",
+      "kind": "ROLE",
+      "event_id": "deliver",
+      "entity_id": "review",
+      "role": "DELIVERABLE",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "artifact_use": null,
+      "scope_id": "deliver",
+      "requires": [],
+      "sources": [
+        {"quote": "生成review.md", "occurrence": 1},
+        {"quote": "并交给ADMIN", "occurrence": 1}
+      ],
+      "note": "交付对象承接本次生成的review.md。"
+    },
+    {
+      "id": "deliver_recipient",
+      "kind": "ROLE",
+      "event_id": "deliver",
+      "entity_id": "admin",
+      "role": "RECIPIENT",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "artifact_use": null,
+      "scope_id": "deliver",
+      "requires": [],
+      "sources": [{"quote": "交给ADMIN", "occurrence": 1}],
+      "note": ""
+    },
+    {
+      "id": "modify_performer",
+      "kind": "ROLE",
+      "event_id": "modify",
+      "entity_id": "dev",
+      "role": "PERFORMER",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "artifact_use": null,
+      "scope_id": "modify",
+      "requires": [],
+      "sources": [{"quote": "DEV不得修改settings.yaml", "occurrence": 1}],
+      "note": "绑定被禁止操作的主体，不构成执行义务。"
+    },
+    {
+      "id": "modify_object",
+      "kind": "ROLE",
+      "event_id": "modify",
+      "entity_id": "settings",
+      "role": "OBJECT",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "artifact_use": null,
+      "scope_id": "modify",
+      "requires": [],
+      "sources": [{"quote": "DEV不得修改settings.yaml", "occurrence": 1}],
+      "note": ""
+    },
+    {
+      "id": "generate_order",
+      "kind": "TEMPORAL",
+      "event_id": "generate",
+      "entity_id": null,
+      "role": null,
+      "expression_id": "check_completed",
+      "direction": "ORDER",
+      "temporal": "AFTER",
+      "quantity": null,
+      "artifact_use": null,
+      "scope_id": "generate",
+      "requires": [],
+      "sources": [
+        {"quote": "请DEV检查settings.yaml", "occurrence": 1},
+        {"quote": "随后由QA生成review.md", "occurrence": 1}
+      ],
+      "note": "生成在检查之后；不宣称检查已完成。"
+    },
+    {
+      "id": "deliver_order",
+      "kind": "TEMPORAL",
+      "event_id": "deliver",
+      "entity_id": null,
+      "role": null,
+      "expression_id": "check_completed",
+      "direction": "ORDER",
+      "temporal": "AFTER",
+      "quantity": null,
+      "artifact_use": null,
+      "scope_id": "deliver",
+      "requires": [],
+      "sources": [
+        {"quote": "请DEV检查settings.yaml", "occurrence": 1},
+        {"quote": "随后由QA生成review.md，并交给ADMIN", "occurrence": 1}
+      ],
+      "note": "随后统摄QA的生成与交付工作；并列本身不增加两者间完整事件顺序。"
+    },
+    {
+      "id": "review_flow",
+      "kind": "ARTIFACT_USE",
+      "event_id": "deliver",
+      "entity_id": "review",
+      "role": null,
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "artifact_use": {
+        "producer_result_id": "generate_result",
+        "consumer_role_id": "deliver_artifact",
+        "availability": "USED_PORTION"
+      },
+      "scope_id": "deliver",
+      "requires": ["generate_result", "deliver_artifact"],
+      "sources": [
+        {"quote": "生成review.md", "occurrence": 1},
+        {"quote": "并交给ADMIN", "occurrence": 1}
+      ],
+      "note": "交付使用本次生成的产物；原文未另行规定完整生产完成后才能交付。"
+    }
+  ],
+  "expressions": [
+    {
+      "id": "check_completed",
+      "op": "STATE",
+      "operands": [],
+      "state": {
+        "predicate": "检查完成",
+        "event_id": "check",
+        "args": ["dev", "settings"],
+        "polarity": "POSITIVE"
+      },
+      "sources": [
+        {"quote": "请DEV检查settings.yaml", "occurrence": 1},
+        {"quote": "随后", "occurrence": 1}
+      ]
+    }
+  ],
+  "issues": [],
+  "coverage": [
+    {
+      "sources": [{"quote": "请DEV检查settings.yaml", "occurrence": 1}],
+      "claim_ids": ["check_performer", "check_input"],
+      "status": "EXPRESSED",
+      "affected_views": ["A", "P", "I"]
+    },
+    {
+      "sources": [{"quote": "随后由QA生成review.md，并交给ADMIN", "occurrence": 1}],
+      "claim_ids": ["generate_order", "deliver_order"],
+      "status": "EXPRESSED",
+      "affected_views": ["A", "O"]
+    },
+    {
+      "sources": [{"quote": "由QA生成review.md", "occurrence": 1}],
+      "claim_ids": ["generate_performer", "generate_result"],
+      "status": "EXPRESSED",
+      "affected_views": ["A", "P", "O"]
+    },
+    {
+      "sources": [
+        {"quote": "由QA生成review.md", "occurrence": 1},
+        {"quote": "并交给ADMIN", "occurrence": 1}
+      ],
+      "claim_ids": ["deliver_performer", "deliver_artifact", "deliver_recipient", "review_flow"],
+      "status": "EXPRESSED",
+      "affected_views": ["A", "P", "O"]
+    },
+    {
+      "sources": [{"quote": "DEV不得修改settings.yaml", "occurrence": 1}],
+      "claim_ids": ["modify_performer", "modify_object"],
+      "status": "EXPRESSED",
+      "affected_views": ["B", "P"]
+    }
+  ]
+}
