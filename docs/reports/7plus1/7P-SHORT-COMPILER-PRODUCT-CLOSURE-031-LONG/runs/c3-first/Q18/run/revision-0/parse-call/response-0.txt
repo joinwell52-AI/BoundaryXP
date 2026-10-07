@@ -1,0 +1,189 @@
+{
+  "contract_version": "031-r01",
+  "entities": [
+    {
+      "id": "ent_pm",
+      "label": "PM",
+      "type": "OTHER",
+      "mentions": [{"quote": "PM", "occurrence": 1}],
+      "alternatives": []
+    },
+    {
+      "id": "ent_a",
+      "label": "a.ini",
+      "type": "FILE",
+      "mentions": [{"quote": "a.ini", "occurrence": 1}],
+      "alternatives": []
+    },
+    {
+      "id": "ent_b",
+      "label": "b.ini",
+      "type": "FILE",
+      "mentions": [
+        {"quote": "b.ini", "occurrence": 1},
+        {"quote": "b.ini", "occurrence": 2}
+      ],
+      "alternatives": []
+    }
+  ],
+  "events": [
+    {
+      "id": "evt_check_a",
+      "predicate": "核对",
+      "kind": "ACTION",
+      "layer": "MAIN",
+      "use": "CURRENT_TASK",
+      "modality": "REQUIRED",
+      "polarity": "POSITIVE",
+      "owner_id": "ROOT",
+      "constraint_ids": [],
+      "requires": [],
+      "sources": [{"quote": "请PM对a.ini与b.ini逐一核对", "occurrence": 1}]
+    },
+    {
+      "id": "evt_check_b",
+      "predicate": "核对",
+      "kind": "ACTION",
+      "layer": "MAIN",
+      "use": "CURRENT_TASK",
+      "modality": "REQUIRED",
+      "polarity": "POSITIVE",
+      "owner_id": "ROOT",
+      "constraint_ids": [],
+      "requires": [],
+      "sources": [{"quote": "请PM对a.ini与b.ini逐一核对", "occurrence": 1}]
+    },
+    {
+      "id": "evt_modify_b",
+      "predicate": "修改",
+      "kind": "ACTION",
+      "layer": "MAIN",
+      "use": "CURRENT_TASK",
+      "modality": "FORBIDDEN",
+      "polarity": "POSITIVE",
+      "owner_id": "ROOT",
+      "constraint_ids": [],
+      "requires": [],
+      "sources": [{"quote": "不得修改b.ini", "occurrence": 1}]
+    }
+  ],
+  "claims": [
+    {
+      "id": "cl_check_a_performer",
+      "kind": "ROLE",
+      "event_id": "evt_check_a",
+      "entity_id": "ent_pm",
+      "role": "PERFORMER",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "scope_id": "evt_check_a",
+      "requires": [],
+      "sources": [{"quote": "请PM对a.ini与b.ini逐一核对", "occurrence": 1}],
+      "note": "PM明确执行逐一核对中的a.ini核对。"
+    },
+    {
+      "id": "cl_check_a_input",
+      "kind": "ROLE",
+      "event_id": "evt_check_a",
+      "entity_id": "ent_a",
+      "role": "INPUT_OBJECT",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "scope_id": "evt_check_a",
+      "requires": [],
+      "sources": [{"quote": "请PM对a.ini与b.ini逐一核对", "occurrence": 1}],
+      "note": "a.ini是明确受检文件；逐一核对分别绑定两个文件，不推定二者互为比较依据。"
+    },
+    {
+      "id": "cl_check_b_performer",
+      "kind": "ROLE",
+      "event_id": "evt_check_b",
+      "entity_id": "ent_pm",
+      "role": "PERFORMER",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "scope_id": "evt_check_b",
+      "requires": [],
+      "sources": [{"quote": "请PM对a.ini与b.ini逐一核对", "occurrence": 1}],
+      "note": "PM明确执行逐一核对中的b.ini核对；两项核对之间没有指定先后。"
+    },
+    {
+      "id": "cl_check_b_input",
+      "kind": "ROLE",
+      "event_id": "evt_check_b",
+      "entity_id": "ent_b",
+      "role": "INPUT_OBJECT",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "scope_id": "evt_check_b",
+      "requires": [],
+      "sources": [{"quote": "请PM对a.ini与b.ini逐一核对", "occurrence": 1}],
+      "note": "b.ini是明确受检文件，与禁止修改的b.ini保持同一身份。"
+    },
+    {
+      "id": "cl_modify_b_performer",
+      "kind": "ROLE",
+      "event_id": "evt_modify_b",
+      "entity_id": "ent_pm",
+      "role": "PERFORMER",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "scope_id": "evt_modify_b",
+      "requires": [],
+      "sources": [
+        {"quote": "请PM对a.ini与b.ini逐一核对", "occurrence": 1},
+        {"quote": "不得修改b.ini", "occurrence": 1}
+      ],
+      "note": "连续同一指令未切换主体，禁止修改承接明确主语PM；该角色不表示实际发生修改。"
+    },
+    {
+      "id": "cl_modify_b_object",
+      "kind": "ROLE",
+      "event_id": "evt_modify_b",
+      "entity_id": "ent_b",
+      "role": "OBJECT",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "scope_id": "evt_modify_b",
+      "requires": [],
+      "sources": [
+        {"quote": "b.ini", "occurrence": 1},
+        {"quote": "不得修改b.ini", "occurrence": 1}
+      ],
+      "note": "禁止修改的对象是同一b.ini；禁止不扩展到a.ini，也不推定允许修改a.ini。"
+    }
+  ],
+  "expressions": [],
+  "issues": [],
+  "coverage": [
+    {
+      "sources": [{"quote": "请PM对a.ini与b.ini逐一核对", "occurrence": 1}],
+      "claim_ids": [
+        "cl_check_a_performer",
+        "cl_check_a_input",
+        "cl_check_b_performer",
+        "cl_check_b_input"
+      ],
+      "status": "EXPRESSED",
+      "affected_views": ["I", "A", "P"]
+    },
+    {
+      "sources": [{"quote": "不得修改b.ini", "occurrence": 1}],
+      "claim_ids": ["cl_modify_b_performer", "cl_modify_b_object"],
+      "status": "EXPRESSED",
+      "affected_views": ["B", "P"]
+    }
+  ]
+}

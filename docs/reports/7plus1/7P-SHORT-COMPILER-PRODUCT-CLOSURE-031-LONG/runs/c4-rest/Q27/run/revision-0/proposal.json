@@ -1,0 +1,467 @@
+{
+  "contract_version": "031-r01",
+  "entities": [
+    {
+      "id": "n_pm",
+      "label": "PM",
+      "type": "OTHER",
+      "mentions": [
+        {
+          "quote": "PM",
+          "occurrence": 1
+        }
+      ],
+      "alternatives": []
+    },
+    {
+      "id": "n_file",
+      "label": "howto.md",
+      "type": "FILE",
+      "mentions": [
+        {
+          "quote": "howto.md",
+          "occurrence": 1
+        },
+        {
+          "quote": "文中",
+          "occurrence": 1
+        }
+      ],
+      "alternatives": []
+    },
+    {
+      "id": "n_worker",
+      "label": "worker服务",
+      "type": "SYSTEM",
+      "mentions": [
+        {
+          "quote": "worker服务",
+          "occurrence": 1
+        },
+        {
+          "quote": "worker服务",
+          "occurrence": 2
+        }
+      ],
+      "alternatives": []
+    },
+    {
+      "id": "n_content",
+      "label": "可以停用worker服务",
+      "type": "OTHER",
+      "mentions": [
+        {
+          "quote": "可以停用worker服务",
+          "occurrence": 1
+        }
+      ],
+      "alternatives": []
+    }
+  ],
+  "events": [
+    {
+      "id": "e_generate",
+      "predicate": "生成文档",
+      "kind": "ACTION",
+      "layer": "MAIN",
+      "use": "CURRENT_TASK",
+      "modality": "REQUIRED",
+      "polarity": "POSITIVE",
+      "owner_id": "ROOT",
+      "constraint_ids": [],
+      "requires": [],
+      "sources": [
+        {
+          "quote": "请PM生成howto.md",
+          "occurrence": 1
+        }
+      ]
+    },
+    {
+      "id": "e_write",
+      "predicate": "写入文字",
+      "kind": "ACTION",
+      "layer": "MAIN",
+      "use": "CURRENT_TASK",
+      "modality": "REQUIRED",
+      "polarity": "POSITIVE",
+      "owner_id": "ROOT",
+      "constraint_ids": [],
+      "requires": [],
+      "sources": [
+        {
+          "quote": "只在文中写入“可以停用worker服务”",
+          "occurrence": 1
+        }
+      ]
+    },
+    {
+      "id": "e_quoted_stop",
+      "predicate": "停用服务",
+      "kind": "ACTION",
+      "layer": "QUOTED",
+      "use": "MENTION_ONLY",
+      "modality": "PERMITTED",
+      "polarity": "POSITIVE",
+      "owner_id": "e_write",
+      "constraint_ids": [],
+      "requires": [],
+      "sources": [
+        {
+          "quote": "可以停用worker服务",
+          "occurrence": 1
+        }
+      ]
+    },
+    {
+      "id": "e_stop",
+      "predicate": "停用服务",
+      "kind": "ACTION",
+      "layer": "MAIN",
+      "use": "CURRENT_TASK",
+      "modality": "FORBIDDEN",
+      "polarity": "POSITIVE",
+      "owner_id": "ROOT",
+      "constraint_ids": [],
+      "requires": [],
+      "sources": [
+        {
+          "quote": "本次不得停用worker服务",
+          "occurrence": 1
+        }
+      ]
+    }
+  ],
+  "claims": [
+    {
+      "id": "c_generate_pm",
+      "kind": "ROLE",
+      "event_id": "e_generate",
+      "entity_id": "n_pm",
+      "role": "PERFORMER",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "scope_id": "e_generate",
+      "requires": [],
+      "sources": [
+        {
+          "quote": "请PM生成howto.md",
+          "occurrence": 1
+        }
+      ],
+      "note": "明确指定PM生成文档。"
+    },
+    {
+      "id": "c_result",
+      "kind": "ROLE",
+      "event_id": "e_generate",
+      "entity_id": "n_file",
+      "role": "RESULT",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "scope_id": "e_generate",
+      "requires": [],
+      "sources": [
+        {
+          "quote": "请PM生成howto.md",
+          "occurrence": 1
+        }
+      ],
+      "note": "howto.md是要求生成的结果，未要求交付。"
+    },
+    {
+      "id": "c_write_pm",
+      "kind": "ROLE",
+      "event_id": "e_write",
+      "entity_id": "n_pm",
+      "role": "PERFORMER",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "scope_id": "e_write",
+      "requires": [],
+      "sources": [
+        {
+          "quote": "请PM生成howto.md",
+          "occurrence": 1
+        },
+        {
+          "quote": "只在文中写入“可以停用worker服务”",
+          "occurrence": 1
+        }
+      ],
+      "note": "连续指令的追加动作承接明确主语PM，无主体切换。"
+    },
+    {
+      "id": "c_write_object",
+      "kind": "ROLE",
+      "event_id": "e_write",
+      "entity_id": "n_file",
+      "role": "OBJECT",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "scope_id": "e_write",
+      "requires": [],
+      "sources": [
+        {
+          "quote": "howto.md",
+          "occurrence": 1
+        },
+        {
+          "quote": "文中",
+          "occurrence": 1
+        }
+      ],
+      "note": "文中指唯一当前文档howto.md，属于内部产物用途。"
+    },
+    {
+      "id": "c_write_content",
+      "kind": "ROLE",
+      "event_id": "e_write",
+      "entity_id": "n_content",
+      "role": "CONTENT",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "scope_id": "e_write",
+      "requires": [],
+      "sources": [
+        {
+          "quote": "写入“可以停用worker服务”",
+          "occurrence": 1
+        }
+      ],
+      "note": "引号内文字是要求写入的内容。"
+    },
+    {
+      "id": "c_write_scope",
+      "kind": "SCOPE",
+      "event_id": "e_write",
+      "entity_id": null,
+      "role": null,
+      "expression_id": "x_file",
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "scope_id": "e_write",
+      "requires": [],
+      "sources": [
+        {
+          "quote": "howto.md",
+          "occurrence": 1
+        },
+        {
+          "quote": "只在文中写入“可以停用worker服务”",
+          "occurrence": 1
+        }
+      ],
+      "note": "写入操作限定在该文档中；引文中的许可不成为实际停用许可。"
+    },
+    {
+      "id": "c_quoted_object",
+      "kind": "ROLE",
+      "event_id": "e_quoted_stop",
+      "entity_id": "n_worker",
+      "role": "OBJECT",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "scope_id": "e_quoted_stop",
+      "requires": [],
+      "sources": [
+        {
+          "quote": "可以停用worker服务",
+          "occurrence": 1
+        }
+      ],
+      "note": "仅为引文中的动作对象。"
+    },
+    {
+      "id": "c_stop_pm",
+      "kind": "ROLE",
+      "event_id": "e_stop",
+      "entity_id": "n_pm",
+      "role": "PERFORMER",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "scope_id": "e_stop",
+      "requires": [],
+      "sources": [
+        {
+          "quote": "请PM生成howto.md",
+          "occurrence": 1
+        },
+        {
+          "quote": "本次不得停用worker服务",
+          "occurrence": 1
+        }
+      ],
+      "note": "同一任务中的禁止承接PM主语，无主体切换；不从引文继承角色。"
+    },
+    {
+      "id": "c_stop_object",
+      "kind": "ROLE",
+      "event_id": "e_stop",
+      "entity_id": "n_worker",
+      "role": "OBJECT",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "scope_id": "e_stop",
+      "requires": [],
+      "sources": [
+        {
+          "quote": "本次不得停用worker服务",
+          "occurrence": 1
+        }
+      ],
+      "note": "禁止对象不据此成为外部输入。"
+    },
+    {
+      "id": "c_stop_scope",
+      "kind": "SCOPE",
+      "event_id": "e_stop",
+      "entity_id": null,
+      "role": null,
+      "expression_id": "x_current_task",
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "scope_id": "e_stop",
+      "requires": [],
+      "sources": [
+        {
+          "quote": "本次不得停用worker服务",
+          "occurrence": 1
+        }
+      ],
+      "note": "禁止适用于本次任务，不扩展为永久禁止。"
+    }
+  ],
+  "expressions": [
+    {
+      "id": "x_file",
+      "op": "ITEM",
+      "operands": [
+        "n_file"
+      ],
+      "state": null,
+      "sources": [
+        {
+          "quote": "howto.md",
+          "occurrence": 1
+        },
+        {
+          "quote": "只在文中",
+          "occurrence": 1
+        }
+      ]
+    },
+    {
+      "id": "x_current_task",
+      "op": "STATE",
+      "operands": [],
+      "state": {
+        "predicate": "属于本次任务",
+        "event_id": null,
+        "args": [
+          "ROOT"
+        ],
+        "polarity": "POSITIVE"
+      },
+      "sources": [
+        {
+          "quote": "本次",
+          "occurrence": 1
+        }
+      ]
+    }
+  ],
+  "issues": [],
+  "coverage": [
+    {
+      "sources": [
+        {
+          "quote": "请PM生成howto.md",
+          "occurrence": 1
+        }
+      ],
+      "claim_ids": [
+        "c_generate_pm",
+        "c_result"
+      ],
+      "status": "EXPRESSED",
+      "affected_views": [
+        "A",
+        "P",
+        "O"
+      ]
+    },
+    {
+      "sources": [
+        {
+          "quote": "只在文中写入“可以停用worker服务”",
+          "occurrence": 1
+        }
+      ],
+      "claim_ids": [
+        "c_write_pm",
+        "c_write_object",
+        "c_write_content",
+        "c_write_scope"
+      ],
+      "status": "EXPRESSED",
+      "affected_views": [
+        "A",
+        "P",
+        "B"
+      ]
+    },
+    {
+      "sources": [
+        {
+          "quote": "可以停用worker服务",
+          "occurrence": 1
+        }
+      ],
+      "claim_ids": [
+        "c_quoted_object",
+        "c_write_content"
+      ],
+      "status": "BACKGROUND",
+      "affected_views": [
+        "A"
+      ]
+    },
+    {
+      "sources": [
+        {
+          "quote": "本次不得停用worker服务",
+          "occurrence": 1
+        }
+      ],
+      "claim_ids": [
+        "c_stop_pm",
+        "c_stop_object",
+        "c_stop_scope"
+      ],
+      "status": "EXPRESSED",
+      "affected_views": [
+        "B",
+        "P"
+      ]
+    }
+  ]
+}

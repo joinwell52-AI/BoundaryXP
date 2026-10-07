@@ -1,0 +1,254 @@
+{
+  "contract_version": "031-r01",
+  "entities": [
+    {
+      "id": "entity_pm",
+      "label": "PM",
+      "type": "OTHER",
+      "mentions": [
+        {"quote": "PM", "occurrence": 1}
+      ],
+      "alternatives": []
+    },
+    {
+      "id": "entity_services",
+      "label": "被监测的服务",
+      "type": "SYSTEM",
+      "mentions": [
+        {"quote": "被监测的服务", "occurrence": 1}
+      ],
+      "alternatives": []
+    },
+    {
+      "id": "entity_report",
+      "label": "status.md",
+      "type": "FILE",
+      "mentions": [
+        {"quote": "status.md", "occurrence": 1}
+      ],
+      "alternatives": []
+    }
+  ],
+  "events": [
+    {
+      "id": "event_organize",
+      "predicate": "组织检查",
+      "kind": "ACTION",
+      "layer": "MAIN",
+      "use": "CURRENT_TASK",
+      "modality": "REQUIRED",
+      "polarity": "POSITIVE",
+      "owner_id": "ROOT",
+      "constraint_ids": [],
+      "requires": [],
+      "sources": [
+        {"quote": "请PM组织检查被监测的服务", "occurrence": 1}
+      ]
+    },
+    {
+      "id": "event_check",
+      "predicate": "检查",
+      "kind": "ACTION",
+      "layer": "CONTENT",
+      "use": "MENTION_ONLY",
+      "modality": "UNSTATED",
+      "polarity": "POSITIVE",
+      "owner_id": "event_organize",
+      "constraint_ids": [],
+      "requires": [],
+      "sources": [
+        {"quote": "组织检查被监测的服务", "occurrence": 1},
+        {"quote": "具体检查执行者未指定", "occurrence": 1}
+      ]
+    },
+    {
+      "id": "event_monitored",
+      "predicate": "受监测",
+      "kind": "STATE",
+      "layer": "MODIFIER",
+      "use": "MENTION_ONLY",
+      "modality": "UNSTATED",
+      "polarity": "POSITIVE",
+      "owner_id": "event_organize",
+      "constraint_ids": [],
+      "requires": [],
+      "sources": [
+        {"quote": "被监测的服务", "occurrence": 1}
+      ]
+    },
+    {
+      "id": "event_form",
+      "predicate": "形成文件",
+      "kind": "ACTION",
+      "layer": "MAIN",
+      "use": "CURRENT_TASK",
+      "modality": "REQUIRED",
+      "polarity": "POSITIVE",
+      "owner_id": "ROOT",
+      "constraint_ids": [],
+      "requires": [],
+      "sources": [
+        {"quote": "请PM组织检查被监测的服务，并形成status.md", "occurrence": 1}
+      ]
+    }
+  ],
+  "claims": [
+    {
+      "id": "claim_organizer",
+      "kind": "ROLE",
+      "event_id": "event_organize",
+      "entity_id": "entity_pm",
+      "role": "ORGANIZER",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "scope_id": "event_organize",
+      "requires": [],
+      "sources": [
+        {"quote": "请PM组织检查", "occurrence": 1}
+      ],
+      "note": "PM负责组织检查，不据此认定其为具体检查执行者。"
+    },
+    {
+      "id": "claim_inspection_scope",
+      "kind": "ROLE",
+      "event_id": "event_organize",
+      "entity_id": "entity_services",
+      "role": "INPUT_OBJECT",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "scope_id": "event_organize",
+      "requires": [],
+      "sources": [
+        {"quote": "组织检查被监测的服务", "occurrence": 1}
+      ],
+      "note": "被监测的服务是当前组织检查职责的明确受检范围。"
+    },
+    {
+      "id": "claim_check_object",
+      "kind": "ROLE",
+      "event_id": "event_check",
+      "entity_id": "entity_services",
+      "role": "OBJECT",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "scope_id": "event_check",
+      "requires": [],
+      "sources": [
+        {"quote": "检查被监测的服务", "occurrence": 1}
+      ],
+      "note": "保存被组织工作的检查对象，不新增具体执行者义务。"
+    },
+    {
+      "id": "claim_monitored_object",
+      "kind": "ROLE",
+      "event_id": "event_monitored",
+      "entity_id": "entity_services",
+      "role": "OBJECT",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "scope_id": "event_monitored",
+      "requires": [],
+      "sources": [
+        {"quote": "被监测的服务", "occurrence": 1}
+      ],
+      "note": "受监测是服务的定语，不构成当前监测命令。"
+    },
+    {
+      "id": "claim_form_performer",
+      "kind": "ROLE",
+      "event_id": "event_form",
+      "entity_id": "entity_pm",
+      "role": "PERFORMER",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "scope_id": "event_form",
+      "requires": [],
+      "sources": [
+        {"quote": "请PM组织检查被监测的服务", "occurrence": 1},
+        {"quote": "并形成status.md", "occurrence": 1}
+      ],
+      "note": "形成文件是同一主指令中由PM承接的并列动作；不将其组织者身份传播为具体检查执行者。"
+    },
+    {
+      "id": "claim_form_result",
+      "kind": "ROLE",
+      "event_id": "event_form",
+      "entity_id": "entity_report",
+      "role": "RESULT",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "scope_id": "event_form",
+      "requires": [],
+      "sources": [
+        {"quote": "形成status.md", "occurrence": 1}
+      ],
+      "note": "status.md是要求形成的结果；原文未要求提交或交付。"
+    }
+  ],
+  "expressions": [],
+  "issues": [
+    {
+      "id": "issue_check_performer",
+      "kind": "UNSPECIFIED",
+      "subject_ids": ["event_check"],
+      "field_path": "events[event_check]",
+      "alternatives": [],
+      "affected_views": ["P"],
+      "sources": [
+        {"quote": "具体检查执行者未指定", "occurrence": 1}
+      ],
+      "note": "具体检查执行者明确未指定，不能以PM的组织职责补定。"
+    }
+  ],
+  "coverage": [
+    {
+      "sources": [
+        {"quote": "请PM组织检查被监测的服务", "occurrence": 1}
+      ],
+      "claim_ids": [
+        "claim_organizer",
+        "claim_inspection_scope",
+        "claim_check_object"
+      ],
+      "status": "EXPRESSED",
+      "affected_views": ["A", "P", "I"]
+    },
+    {
+      "sources": [
+        {"quote": "被监测的服务", "occurrence": 1}
+      ],
+      "claim_ids": ["claim_monitored_object"],
+      "status": "BACKGROUND",
+      "affected_views": ["I"]
+    },
+    {
+      "sources": [
+        {"quote": "请PM", "occurrence": 1},
+        {"quote": "并形成status.md", "occurrence": 1}
+      ],
+      "claim_ids": ["claim_form_performer", "claim_form_result"],
+      "status": "EXPRESSED",
+      "affected_views": ["A", "P", "O"]
+    },
+    {
+      "sources": [
+        {"quote": "具体检查执行者未指定", "occurrence": 1}
+      ],
+      "claim_ids": [],
+      "status": "UNSPECIFIED",
+      "affected_views": ["P"]
+    }
+  ]
+}

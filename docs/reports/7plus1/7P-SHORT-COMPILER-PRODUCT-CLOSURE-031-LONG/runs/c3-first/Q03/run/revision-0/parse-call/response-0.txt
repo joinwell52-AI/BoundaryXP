@@ -1,0 +1,193 @@
+{
+  "contract_version": "031-r01",
+  "entities": [
+    {
+      "id": "n_pm",
+      "label": "PM",
+      "type": "OTHER",
+      "mentions": [{"quote": "PM", "occurrence": 1}],
+      "alternatives": []
+    },
+    {
+      "id": "n_service",
+      "label": "worker服务",
+      "type": "SYSTEM",
+      "mentions": [
+        {"quote": "worker服务", "occurrence": 1},
+        {"quote": "worker服务", "occurrence": 2}
+      ],
+      "alternatives": []
+    },
+    {
+      "id": "n_note",
+      "label": "service-note.md",
+      "type": "FILE",
+      "mentions": [{"quote": "service-note.md", "occurrence": 1}],
+      "alternatives": []
+    }
+  ],
+  "events": [
+    {
+      "id": "e_check",
+      "predicate": "检查运行状态",
+      "kind": "ACTION",
+      "layer": "MAIN",
+      "use": "CURRENT_TASK",
+      "modality": "REQUIRED",
+      "polarity": "POSITIVE",
+      "owner_id": "ROOT",
+      "constraint_ids": [],
+      "requires": [],
+      "sources": [{"quote": "请PM检查worker服务的运行状态", "occurrence": 1}]
+    },
+    {
+      "id": "e_generate",
+      "predicate": "生成文件",
+      "kind": "ACTION",
+      "layer": "MAIN",
+      "use": "CURRENT_TASK",
+      "modality": "REQUIRED",
+      "polarity": "POSITIVE",
+      "owner_id": "ROOT",
+      "constraint_ids": [],
+      "requires": [],
+      "sources": [{"quote": "生成service-note.md", "occurrence": 1}]
+    },
+    {
+      "id": "e_stop",
+      "predicate": "停止服务",
+      "kind": "ACTION",
+      "layer": "MAIN",
+      "use": "CURRENT_TASK",
+      "modality": "FORBIDDEN",
+      "polarity": "POSITIVE",
+      "owner_id": "ROOT",
+      "constraint_ids": [],
+      "requires": [],
+      "sources": [{"quote": "不得停止worker服务", "occurrence": 1}]
+    }
+  ],
+  "claims": [
+    {
+      "id": "c_check_pm",
+      "kind": "ROLE",
+      "event_id": "e_check",
+      "entity_id": "n_pm",
+      "role": "PERFORMER",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "scope_id": "e_check",
+      "requires": [],
+      "sources": [{"quote": "请PM检查worker服务的运行状态", "occurrence": 1}],
+      "note": "明确指定PM执行检查。"
+    },
+    {
+      "id": "c_check_service",
+      "kind": "ROLE",
+      "event_id": "e_check",
+      "entity_id": "n_service",
+      "role": "INPUT_OBJECT",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "scope_id": "e_check",
+      "requires": [],
+      "sources": [{"quote": "检查worker服务的运行状态", "occurrence": 1}],
+      "note": "受检范围为worker服务，检查内容为运行状态。"
+    },
+    {
+      "id": "c_generate_pm",
+      "kind": "ROLE",
+      "event_id": "e_generate",
+      "entity_id": "n_pm",
+      "role": "PERFORMER",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "scope_id": "e_generate",
+      "requires": [],
+      "sources": [
+        {"quote": "请PM检查worker服务的运行状态", "occurrence": 1},
+        {"quote": "生成service-note.md", "occurrence": 1}
+      ],
+      "note": "同一指令的并列动作承接明确主语PM，无主体切换。"
+    },
+    {
+      "id": "c_generate_result",
+      "kind": "ROLE",
+      "event_id": "e_generate",
+      "entity_id": "n_note",
+      "role": "RESULT",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "scope_id": "e_generate",
+      "requires": [],
+      "sources": [{"quote": "生成service-note.md", "occurrence": 1}],
+      "note": "文件是生成结果；原文未要求交付。"
+    },
+    {
+      "id": "c_stop_pm",
+      "kind": "ROLE",
+      "event_id": "e_stop",
+      "entity_id": "n_pm",
+      "role": "PERFORMER",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "scope_id": "e_stop",
+      "requires": [],
+      "sources": [
+        {"quote": "请PM检查worker服务的运行状态", "occurrence": 1},
+        {"quote": "不得停止worker服务", "occurrence": 1}
+      ],
+      "note": "追加禁止承接任务主体PM，表示其受禁止的操作，不产生停止义务。"
+    },
+    {
+      "id": "c_stop_service",
+      "kind": "ROLE",
+      "event_id": "e_stop",
+      "entity_id": "n_service",
+      "role": "OBJECT",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "scope_id": "e_stop",
+      "requires": [],
+      "sources": [
+        {"quote": "worker服务", "occurrence": 1},
+        {"quote": "不得停止worker服务", "occurrence": 1}
+      ],
+      "note": "禁止停止的对象与受检worker服务为同一实体。"
+    }
+  ],
+  "expressions": [],
+  "issues": [],
+  "coverage": [
+    {
+      "sources": [{"quote": "请PM检查worker服务的运行状态", "occurrence": 1}],
+      "claim_ids": ["c_check_pm", "c_check_service"],
+      "status": "EXPRESSED",
+      "affected_views": ["A", "P", "I"]
+    },
+    {
+      "sources": [{"quote": "生成service-note.md", "occurrence": 1}],
+      "claim_ids": ["c_generate_pm", "c_generate_result"],
+      "status": "EXPRESSED",
+      "affected_views": ["A", "P", "O"]
+    },
+    {
+      "sources": [{"quote": "不得停止worker服务", "occurrence": 1}],
+      "claim_ids": ["c_stop_pm", "c_stop_service"],
+      "status": "EXPRESSED",
+      "affected_views": ["B", "P"]
+    }
+  ]
+}

@@ -1,0 +1,160 @@
+{
+  "contract_version": "031-r01",
+  "entities": [
+    {
+      "id": "ent_qa",
+      "label": "QA",
+      "type": "OTHER",
+      "mentions": [{"quote": "QA", "occurrence": 1}],
+      "alternatives": []
+    },
+    {
+      "id": "ent_rule",
+      "label": "RULE-17",
+      "type": "DOCUMENT",
+      "mentions": [{"quote": "RULE-17", "occurrence": 1}],
+      "alternatives": []
+    },
+    {
+      "id": "ent_schema",
+      "label": "schema.yaml",
+      "type": "FILE",
+      "mentions": [{"quote": "schema.yaml", "occurrence": 1}],
+      "alternatives": []
+    },
+    {
+      "id": "ent_report",
+      "label": "conformance.md",
+      "type": "FILE",
+      "mentions": [{"quote": "conformance.md", "occurrence": 1}],
+      "alternatives": []
+    }
+  ],
+  "events": [
+    {
+      "id": "ev_check",
+      "predicate": "检查",
+      "kind": "ACTION",
+      "layer": "MAIN",
+      "use": "CURRENT_TASK",
+      "modality": "REQUIRED",
+      "polarity": "POSITIVE",
+      "owner_id": "ROOT",
+      "constraint_ids": [],
+      "requires": [],
+      "sources": [{"quote": "请QA按照RULE-17检查schema.yaml", "occurrence": 1}]
+    },
+    {
+      "id": "ev_generate",
+      "predicate": "生成",
+      "kind": "ACTION",
+      "layer": "MAIN",
+      "use": "CURRENT_TASK",
+      "modality": "REQUIRED",
+      "polarity": "POSITIVE",
+      "owner_id": "ROOT",
+      "constraint_ids": [],
+      "requires": [],
+      "sources": [{"quote": "生成conformance.md", "occurrence": 1}]
+    }
+  ],
+  "claims": [
+    {
+      "id": "cl_check_performer",
+      "kind": "ROLE",
+      "event_id": "ev_check",
+      "entity_id": "ent_qa",
+      "role": "PERFORMER",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "scope_id": "ev_check",
+      "requires": [],
+      "sources": [{"quote": "请QA按照RULE-17检查schema.yaml", "occurrence": 1}],
+      "note": "QA是明确指定的检查执行者，原文未指定其为个人或组。"
+    },
+    {
+      "id": "cl_check_input",
+      "kind": "ROLE",
+      "event_id": "ev_check",
+      "entity_id": "ent_schema",
+      "role": "INPUT_OBJECT",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "scope_id": "ev_check",
+      "requires": [],
+      "sources": [{"quote": "检查schema.yaml", "occurrence": 1}],
+      "note": "schema.yaml是明确的受检对象。"
+    },
+    {
+      "id": "cl_check_basis",
+      "kind": "ROLE",
+      "event_id": "ev_check",
+      "entity_id": "ent_rule",
+      "role": "BASIS",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "scope_id": "ev_check",
+      "requires": [],
+      "sources": [{"quote": "按照RULE-17检查schema.yaml", "occurrence": 1}],
+      "note": "RULE-17是检查依据；其中数字是标识符，不是执行数量限制。"
+    },
+    {
+      "id": "cl_generate_performer",
+      "kind": "ROLE",
+      "event_id": "ev_generate",
+      "entity_id": "ent_qa",
+      "role": "PERFORMER",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "scope_id": "ev_generate",
+      "requires": [],
+      "sources": [
+        {"quote": "请QA按照RULE-17检查schema.yaml", "occurrence": 1},
+        {"quote": "生成conformance.md", "occurrence": 1}
+      ],
+      "note": "连续同一指令的追加动作承接主语QA，没有主体切换。"
+    },
+    {
+      "id": "cl_generate_result",
+      "kind": "ROLE",
+      "event_id": "ev_generate",
+      "entity_id": "ent_report",
+      "role": "RESULT",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "scope_id": "ev_generate",
+      "requires": [],
+      "sources": [{"quote": "生成conformance.md", "occurrence": 1}],
+      "note": "conformance.md是要求生成的结果，原文未另行要求交付。"
+    }
+  ],
+  "expressions": [],
+  "issues": [],
+  "coverage": [
+    {
+      "sources": [{"quote": "请QA按照RULE-17检查schema.yaml", "occurrence": 1}],
+      "claim_ids": ["cl_check_performer", "cl_check_input", "cl_check_basis"],
+      "status": "EXPRESSED",
+      "affected_views": ["I", "A", "P", "V"]
+    },
+    {
+      "sources": [
+        {"quote": "请QA按照RULE-17检查schema.yaml", "occurrence": 1},
+        {"quote": "生成conformance.md", "occurrence": 1}
+      ],
+      "claim_ids": ["cl_generate_performer", "cl_generate_result"],
+      "status": "EXPRESSED",
+      "affected_views": ["O", "A", "P"]
+    }
+  ]
+}

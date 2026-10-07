@@ -1,0 +1,476 @@
+{
+  "contract_version": "031-r01",
+  "entities": [
+    {
+      "id": "ent_pm",
+      "label": "PM",
+      "type": "OTHER",
+      "mentions": [
+        {"quote": "PM", "occurrence": 1},
+        {"quote": "PM", "occurrence": 2}
+      ],
+      "alternatives": []
+    },
+    {
+      "id": "ent_qa",
+      "label": "QA",
+      "type": "OTHER",
+      "mentions": [
+        {"quote": "QA", "occurrence": 1},
+        {"quote": "QA", "occurrence": 2}
+      ],
+      "alternatives": []
+    },
+    {
+      "id": "ent_admin",
+      "label": "ADMIN",
+      "type": "OTHER",
+      "mentions": [{"quote": "ADMIN", "occurrence": 1}],
+      "alternatives": []
+    },
+    {
+      "id": "ent_spec",
+      "label": "SPEC-42",
+      "type": "DOCUMENT",
+      "mentions": [{"quote": "SPEC-42", "occurrence": 1}],
+      "alternatives": []
+    },
+    {
+      "id": "ent_routes",
+      "label": "routes.csv",
+      "type": "FILE",
+      "mentions": [
+        {"quote": "routes.csv", "occurrence": 1},
+        {"quote": "routes.csv", "occurrence": 2}
+      ],
+      "alternatives": []
+    },
+    {
+      "id": "ent_report",
+      "label": "report.md",
+      "type": "FILE",
+      "mentions": [
+        {"quote": "report.md", "occurrence": 1},
+        {"quote": "该报告", "occurrence": 1},
+        {"quote": "该报告", "occurrence": 2}
+      ],
+      "alternatives": []
+    }
+  ],
+  "events": [
+    {
+      "id": "ev_read",
+      "predicate": "读取",
+      "kind": "ACTION",
+      "layer": "MAIN",
+      "use": "CURRENT_TASK",
+      "modality": "REQUIRED",
+      "polarity": "POSITIVE",
+      "owner_id": "ROOT",
+      "constraint_ids": ["cl_retry"],
+      "requires": [],
+      "sources": [{"quote": "请PM依据SPEC-42读取routes.csv", "occurrence": 1}]
+    },
+    {
+      "id": "ev_generate",
+      "predicate": "生成报告",
+      "kind": "ACTION",
+      "layer": "MAIN",
+      "use": "CURRENT_TASK",
+      "modality": "REQUIRED",
+      "polarity": "POSITIVE",
+      "owner_id": "ROOT",
+      "constraint_ids": [],
+      "requires": [],
+      "sources": [{"quote": "并生成report.md", "occurrence": 1}]
+    },
+    {
+      "id": "ev_review",
+      "predicate": "复核报告",
+      "kind": "ACTION",
+      "layer": "MAIN",
+      "use": "CURRENT_TASK",
+      "modality": "REQUIRED",
+      "polarity": "POSITIVE",
+      "owner_id": "ROOT",
+      "constraint_ids": [],
+      "requires": [],
+      "sources": [{"quote": "QA必须复核该报告", "occurrence": 1}]
+    },
+    {
+      "id": "ev_submit",
+      "predicate": "提交报告",
+      "kind": "ACTION",
+      "layer": "MAIN",
+      "use": "CURRENT_TASK",
+      "modality": "PERMITTED",
+      "polarity": "POSITIVE",
+      "owner_id": "ROOT",
+      "constraint_ids": ["cl_submit_condition"],
+      "requires": [],
+      "sources": [{"quote": "仅在本次QA复核通过后，允许PM向ADMIN提交该报告", "occurrence": 1}]
+    },
+    {
+      "id": "ev_modify",
+      "predicate": "修改文件",
+      "kind": "ACTION",
+      "layer": "MAIN",
+      "use": "CURRENT_TASK",
+      "modality": "FORBIDDEN",
+      "polarity": "POSITIVE",
+      "owner_id": "ROOT",
+      "constraint_ids": [],
+      "requires": [],
+      "sources": [{"quote": "不得修改routes.csv", "occurrence": 1}]
+    }
+  ],
+  "claims": [
+    {
+      "id": "cl_read_performer",
+      "kind": "ROLE",
+      "event_id": "ev_read",
+      "entity_id": "ent_pm",
+      "role": "PERFORMER",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "scope_id": "ev_read",
+      "requires": [],
+      "sources": [{"quote": "请PM依据SPEC-42读取routes.csv", "occurrence": 1}],
+      "note": ""
+    },
+    {
+      "id": "cl_read_input",
+      "kind": "ROLE",
+      "event_id": "ev_read",
+      "entity_id": "ent_routes",
+      "role": "INPUT_OBJECT",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "scope_id": "ev_read",
+      "requires": [],
+      "sources": [{"quote": "读取routes.csv", "occurrence": 1}],
+      "note": "明确读取的输入文件。"
+    },
+    {
+      "id": "cl_read_basis",
+      "kind": "ROLE",
+      "event_id": "ev_read",
+      "entity_id": "ent_spec",
+      "role": "BASIS",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "scope_id": "ev_read",
+      "requires": [],
+      "sources": [{"quote": "依据SPEC-42读取routes.csv", "occurrence": 1}],
+      "note": ""
+    },
+    {
+      "id": "cl_generate_performer",
+      "kind": "ROLE",
+      "event_id": "ev_generate",
+      "entity_id": "ent_pm",
+      "role": "PERFORMER",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "scope_id": "ev_generate",
+      "requires": [],
+      "sources": [
+        {"quote": "请PM依据SPEC-42读取routes.csv", "occurrence": 1},
+        {"quote": "并生成report.md", "occurrence": 1}
+      ],
+      "note": "同一指令中并列生成动作承接明确主语PM。"
+    },
+    {
+      "id": "cl_generate_basis",
+      "kind": "ROLE",
+      "event_id": "ev_generate",
+      "entity_id": "ent_spec",
+      "role": "BASIS",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "scope_id": "ev_generate",
+      "requires": [],
+      "sources": [{"quote": "依据SPEC-42读取routes.csv并生成report.md", "occurrence": 1}],
+      "note": "依据修饰同一指令中的读取和生成动作。"
+    },
+    {
+      "id": "cl_generate_result",
+      "kind": "ROLE",
+      "event_id": "ev_generate",
+      "entity_id": "ent_report",
+      "role": "RESULT",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "scope_id": "ev_generate",
+      "requires": [],
+      "sources": [{"quote": "生成report.md", "occurrence": 1}],
+      "note": ""
+    },
+    {
+      "id": "cl_review_reviewer",
+      "kind": "ROLE",
+      "event_id": "ev_review",
+      "entity_id": "ent_qa",
+      "role": "REVIEWER",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "scope_id": "ev_review",
+      "requires": [],
+      "sources": [{"quote": "QA必须复核该报告", "occurrence": 1}],
+      "note": ""
+    },
+    {
+      "id": "cl_review_object",
+      "kind": "ROLE",
+      "event_id": "ev_review",
+      "entity_id": "ent_report",
+      "role": "OBJECT",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "scope_id": "ev_review",
+      "requires": [],
+      "sources": [
+        {"quote": "生成report.md", "occurrence": 1},
+        {"quote": "QA必须复核该报告", "occurrence": 1}
+      ],
+      "note": "该报告指唯一当前产物report.md；复核用途为内部对象。"
+    },
+    {
+      "id": "cl_submit_performer",
+      "kind": "ROLE",
+      "event_id": "ev_submit",
+      "entity_id": "ent_pm",
+      "role": "PERFORMER",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "scope_id": "ev_submit",
+      "requires": [],
+      "sources": [{"quote": "允许PM向ADMIN提交该报告", "occurrence": 1}],
+      "note": ""
+    },
+    {
+      "id": "cl_submit_recipient",
+      "kind": "ROLE",
+      "event_id": "ev_submit",
+      "entity_id": "ent_admin",
+      "role": "RECIPIENT",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "scope_id": "ev_submit",
+      "requires": [],
+      "sources": [{"quote": "向ADMIN提交该报告", "occurrence": 1}],
+      "note": ""
+    },
+    {
+      "id": "cl_submit_deliverable",
+      "kind": "ROLE",
+      "event_id": "ev_submit",
+      "entity_id": "ent_report",
+      "role": "DELIVERABLE",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "scope_id": "ev_submit",
+      "requires": [],
+      "sources": [
+        {"quote": "生成report.md", "occurrence": 1},
+        {"quote": "QA必须复核该报告", "occurrence": 1},
+        {"quote": "允许PM向ADMIN提交该报告", "occurrence": 1}
+      ],
+      "note": "生成、复核与提交保持同一报告身份；提交是有前提的许可。"
+    },
+    {
+      "id": "cl_submit_condition",
+      "kind": "CONDITION",
+      "event_id": "ev_submit",
+      "entity_id": null,
+      "role": null,
+      "expression_id": "expr_review_pass",
+      "direction": "NECESSARY",
+      "temporal": "AFTER",
+      "quantity": null,
+      "scope_id": "ev_submit",
+      "requires": [],
+      "sources": [
+        {"quote": "QA必须复核该报告", "occurrence": 1},
+        {"quote": "仅在本次QA复核通过后，允许PM向ADMIN提交该报告", "occurrence": 1}
+      ],
+      "note": "本次QA对该报告的复核通过是提交许可的必要前提；不断言已经通过。"
+    },
+    {
+      "id": "cl_retry",
+      "kind": "QUANTITY",
+      "event_id": "ev_read",
+      "entity_id": null,
+      "role": null,
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": {
+        "metric": "重试次数",
+        "target_id": "ev_read",
+        "comparator": "LTE",
+        "value": 3,
+        "unit": "次",
+        "use": "EXECUTION_LIMIT",
+        "count_scope": "ev_read"
+      },
+      "scope_id": "ev_read",
+      "requires": [],
+      "sources": [
+        {"quote": "读取routes.csv", "occurrence": 1},
+        {"quote": "该读取操作最多重试3次", "occurrence": 1}
+      ],
+      "note": "限制读取操作的重试次数，不将初次读取计作重试。"
+    },
+    {
+      "id": "cl_completion",
+      "kind": "COMPLETION",
+      "event_id": null,
+      "entity_id": null,
+      "role": null,
+      "expression_id": "expr_submit_success",
+      "direction": "SUFFICIENT",
+      "temporal": null,
+      "quantity": null,
+      "scope_id": "ROOT",
+      "requires": [],
+      "sources": [
+        {"quote": "允许PM向ADMIN提交该报告", "occurrence": 1},
+        {"quote": "提交成功即任务完成", "occurrence": 1}
+      ],
+      "note": "该报告提交成功是根任务完成的充分触发，不将提交许可改为提交义务。"
+    },
+    {
+      "id": "cl_modify_object",
+      "kind": "ROLE",
+      "event_id": "ev_modify",
+      "entity_id": "ent_routes",
+      "role": "OBJECT",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "scope_id": "ev_modify",
+      "requires": [],
+      "sources": [{"quote": "不得修改routes.csv", "occurrence": 1}],
+      "note": "禁止修改同一routes.csv；禁止对象用途不新增外部输入。"
+    }
+  ],
+  "expressions": [
+    {
+      "id": "expr_review_pass",
+      "op": "STATE",
+      "operands": [],
+      "state": {
+        "predicate": "复核通过",
+        "event_id": "ev_review",
+        "args": ["ent_qa", "ent_report"],
+        "polarity": "POSITIVE"
+      },
+      "sources": [
+        {"quote": "生成report.md", "occurrence": 1},
+        {"quote": "QA必须复核该报告", "occurrence": 1},
+        {"quote": "本次QA复核通过", "occurrence": 1}
+      ]
+    },
+    {
+      "id": "expr_submit_success",
+      "op": "STATE",
+      "operands": [],
+      "state": {
+        "predicate": "提交成功",
+        "event_id": "ev_submit",
+        "args": ["ent_pm", "ent_admin", "ent_report"],
+        "polarity": "POSITIVE"
+      },
+      "sources": [
+        {"quote": "允许PM向ADMIN提交该报告", "occurrence": 1},
+        {"quote": "提交成功即任务完成", "occurrence": 1}
+      ]
+    }
+  ],
+  "issues": [
+    {
+      "id": "issue_modify_performer",
+      "kind": "UNSPECIFIED",
+      "subject_ids": ["ev_modify"],
+      "field_path": "events[ev_modify]",
+      "alternatives": [],
+      "affected_views": ["P"],
+      "sources": [{"quote": "不得修改routes.csv", "occurrence": 1}],
+      "note": "禁止修改未明示参与主体；不跨越QA主体切换及条件许可句默认承接PM。禁止动作与对象仍明确。"
+    }
+  ],
+  "coverage": [
+    {
+      "sources": [{"quote": "请PM依据SPEC-42读取routes.csv", "occurrence": 1}],
+      "claim_ids": ["cl_read_performer", "cl_read_input", "cl_read_basis"],
+      "status": "EXPRESSED",
+      "affected_views": ["A", "P", "I", "V"]
+    },
+    {
+      "sources": [{"quote": "请PM依据SPEC-42读取routes.csv并生成report.md", "occurrence": 1}],
+      "claim_ids": ["cl_generate_performer", "cl_generate_basis", "cl_generate_result"],
+      "status": "EXPRESSED",
+      "affected_views": ["A", "P", "O", "V"]
+    },
+    {
+      "sources": [{"quote": "QA必须复核该报告", "occurrence": 1}],
+      "claim_ids": ["cl_review_reviewer", "cl_review_object"],
+      "status": "EXPRESSED",
+      "affected_views": ["A", "P"]
+    },
+    {
+      "sources": [{"quote": "仅在本次QA复核通过后，允许PM向ADMIN提交该报告", "occurrence": 1}],
+      "claim_ids": ["cl_submit_condition", "cl_submit_performer", "cl_submit_recipient", "cl_submit_deliverable"],
+      "status": "EXPRESSED",
+      "affected_views": ["A", "P", "O"]
+    },
+    {
+      "sources": [{"quote": "该读取操作最多重试3次", "occurrence": 1}],
+      "claim_ids": ["cl_retry"],
+      "status": "EXPRESSED",
+      "affected_views": ["R", "A"]
+    },
+    {
+      "sources": [{"quote": "提交成功即任务完成", "occurrence": 1}],
+      "claim_ids": ["cl_completion"],
+      "status": "EXPRESSED",
+      "affected_views": ["C"]
+    },
+    {
+      "sources": [{"quote": "不得修改routes.csv", "occurrence": 1}],
+      "claim_ids": ["cl_modify_object"],
+      "status": "EXPRESSED",
+      "affected_views": ["B"]
+    },
+    {
+      "sources": [{"quote": "不得修改routes.csv", "occurrence": 1}],
+      "claim_ids": [],
+      "status": "UNSPECIFIED",
+      "affected_views": ["P"]
+    }
+  ]
+}

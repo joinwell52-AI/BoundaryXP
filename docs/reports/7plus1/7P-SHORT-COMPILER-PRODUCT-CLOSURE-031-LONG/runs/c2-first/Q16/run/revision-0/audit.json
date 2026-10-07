@@ -1,0 +1,140 @@
+{
+  "contract_version": "031-r01",
+  "reviews": [
+    {
+      "subject_id": "ent_pm",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [
+        {
+          "quote": "PM",
+          "occurrence": 1
+        }
+      ],
+      "reason": "PM身份明确；原文未指定人或组类别，OTHER可作占位。"
+    },
+    {
+      "subject_id": "ent_users",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [
+        {
+          "quote": "users.csv",
+          "occurrence": 1
+        }
+      ],
+      "reason": "明确命名的受检文件，身份与FILE类型有支持。"
+    },
+    {
+      "subject_id": "ent_optional",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [
+        {
+          "quote": "optional.md",
+          "occurrence": 1
+        }
+      ],
+      "reason": "明确命名的禁止生成文件，不断言其存在。"
+    },
+    {
+      "subject_id": "evt_check",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [
+        {
+          "quote": "请PM核对users.csv",
+          "occurrence": 1
+        }
+      ],
+      "reason": "明确要求当前执行核对，REQUIRED及主动作层级正确。"
+    },
+    {
+      "subject_id": "evt_generate",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [
+        {
+          "quote": "不得生成optional.md",
+          "occurrence": 1
+        }
+      ],
+      "reason": "明确禁止生成；FORBIDDEN约束正向生成动作，未误作无需生成。"
+    },
+    {
+      "subject_id": "cl_check_performer",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [
+        "evt_check",
+        "ent_pm"
+      ],
+      "sources": [
+        {
+          "quote": "请PM核对users.csv",
+          "occurrence": 1
+        }
+      ],
+      "reason": "PM是核对动作的明确执行者。"
+    },
+    {
+      "subject_id": "cl_check_input",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [
+        "evt_check",
+        "ent_users"
+      ],
+      "sources": [
+        {
+          "quote": "核对users.csv",
+          "occurrence": 1
+        }
+      ],
+      "reason": "users.csv是明确受检范围，INPUT_OBJECT绑定正确。"
+    },
+    {
+      "subject_id": "cl_generate_performer",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [
+        "evt_generate",
+        "ent_pm"
+      ],
+      "sources": [
+        {
+          "quote": "请PM核对users.csv",
+          "occurrence": 1
+        },
+        {
+          "quote": "不得生成optional.md",
+          "occurrence": 1
+        }
+      ],
+      "reason": "连续同一指令无主体切换或竞争主体，禁令可承接PM；来源包含两端。"
+    },
+    {
+      "subject_id": "cl_generate_result",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [
+        "evt_generate",
+        "ent_optional"
+      ],
+      "sources": [
+        {
+          "quote": "不得生成optional.md",
+          "occurrence": 1
+        }
+      ],
+      "reason": "optional.md绑定为被禁止生成动作的RESULT；关联事件为FORBIDDEN，不产生正向O。"
+    }
+  ],
+  "issues": [],
+  "omissions": []
+}

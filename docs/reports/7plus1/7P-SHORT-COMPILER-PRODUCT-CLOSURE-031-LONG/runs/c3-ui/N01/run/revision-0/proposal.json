@@ -1,0 +1,293 @@
+{
+  "contract_version": "031-r01",
+  "entities": [
+    {
+      "id": "E_OPS",
+      "label": "OPS",
+      "type": "OTHER",
+      "mentions": [
+        {
+          "quote": "OPS",
+          "occurrence": 1
+        }
+      ],
+      "alternatives": []
+    },
+    {
+      "id": "E_MAP",
+      "label": "map.csv",
+      "type": "FILE",
+      "mentions": [
+        {
+          "quote": "map.csv",
+          "occurrence": 1
+        }
+      ],
+      "alternatives": []
+    },
+    {
+      "id": "E_EXTRA",
+      "label": "extra.md",
+      "type": "FILE",
+      "mentions": [
+        {
+          "quote": "extra.md",
+          "occurrence": 1
+        },
+        {
+          "quote": "extra.md",
+          "occurrence": 2
+        }
+      ],
+      "alternatives": []
+    }
+  ],
+  "events": [
+    {
+      "id": "A_CHECK",
+      "predicate": "核查",
+      "kind": "ACTION",
+      "layer": "MAIN",
+      "use": "CURRENT_TASK",
+      "modality": "REQUIRED",
+      "polarity": "POSITIVE",
+      "owner_id": "ROOT",
+      "constraint_ids": [],
+      "requires": [],
+      "sources": [
+        {
+          "quote": "请OPS核查map.csv",
+          "occurrence": 1
+        }
+      ]
+    },
+    {
+      "id": "A_GENERATE",
+      "predicate": "生成",
+      "kind": "ACTION",
+      "layer": "MAIN",
+      "use": "CURRENT_TASK",
+      "modality": "PERMITTED",
+      "polarity": "POSITIVE",
+      "owner_id": "ROOT",
+      "constraint_ids": [],
+      "requires": [],
+      "sources": [
+        {
+          "quote": "还可以生成extra.md",
+          "occurrence": 1
+        }
+      ]
+    },
+    {
+      "id": "A_DELIVER",
+      "predicate": "交付",
+      "kind": "ACTION",
+      "layer": "MAIN",
+      "use": "CURRENT_TASK",
+      "modality": "NOT_REQUIRED",
+      "polarity": "POSITIVE",
+      "owner_id": "ROOT",
+      "constraint_ids": [],
+      "requires": [],
+      "sources": [
+        {
+          "quote": "不要求交付extra.md",
+          "occurrence": 1
+        }
+      ]
+    }
+  ],
+  "claims": [
+    {
+      "id": "C_CHECK_PERFORMER",
+      "kind": "ROLE",
+      "event_id": "A_CHECK",
+      "entity_id": "E_OPS",
+      "role": "PERFORMER",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "scope_id": "A_CHECK",
+      "requires": [],
+      "sources": [
+        {
+          "quote": "请OPS核查map.csv",
+          "occurrence": 1
+        }
+      ],
+      "note": "OPS是明确的核查执行主体；原文未指定其人或组类别。"
+    },
+    {
+      "id": "C_CHECK_INPUT",
+      "kind": "ROLE",
+      "event_id": "A_CHECK",
+      "entity_id": "E_MAP",
+      "role": "INPUT_OBJECT",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "scope_id": "A_CHECK",
+      "requires": [],
+      "sources": [
+        {
+          "quote": "核查map.csv",
+          "occurrence": 1
+        }
+      ],
+      "note": "map.csv是明确受检范围。"
+    },
+    {
+      "id": "C_GENERATE_PERFORMER",
+      "kind": "ROLE",
+      "event_id": "A_GENERATE",
+      "entity_id": "E_OPS",
+      "role": "PERFORMER",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "scope_id": "A_GENERATE",
+      "requires": [],
+      "sources": [
+        {
+          "quote": "请OPS核查map.csv",
+          "occurrence": 1
+        },
+        {
+          "quote": "还可以生成extra.md",
+          "occurrence": 1
+        }
+      ],
+      "note": "连续追加动作没有主体切换，生成主体承接OPS；生成仅获允许。"
+    },
+    {
+      "id": "C_GENERATE_RESULT",
+      "kind": "ROLE",
+      "event_id": "A_GENERATE",
+      "entity_id": "E_EXTRA",
+      "role": "RESULT",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "scope_id": "A_GENERATE",
+      "requires": [],
+      "sources": [
+        {
+          "quote": "还可以生成extra.md",
+          "occurrence": 1
+        }
+      ],
+      "note": "extra.md是允许生成的结果，不表示实际已生成。"
+    },
+    {
+      "id": "C_DELIVER_PERFORMER",
+      "kind": "ROLE",
+      "event_id": "A_DELIVER",
+      "entity_id": "E_OPS",
+      "role": "PERFORMER",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "scope_id": "A_DELIVER",
+      "requires": [],
+      "sources": [
+        {
+          "quote": "请OPS核查map.csv",
+          "occurrence": 1
+        },
+        {
+          "quote": "不要求交付extra.md",
+          "occurrence": 1
+        }
+      ],
+      "note": "同一连续指令中的交付主体承接OPS；此用途不构成交付义务。"
+    },
+    {
+      "id": "C_DELIVER_OBJECT",
+      "kind": "ROLE",
+      "event_id": "A_DELIVER",
+      "entity_id": "E_EXTRA",
+      "role": "DELIVERABLE",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "scope_id": "A_DELIVER",
+      "requires": [],
+      "sources": [
+        {
+          "quote": "还可以生成extra.md",
+          "occurrence": 1
+        },
+        {
+          "quote": "不要求交付extra.md",
+          "occurrence": 1
+        }
+      ],
+      "note": "交付对象与允许生成的extra.md保持同一身份；不要求交付不是禁止交付，也不产生正向交付义务。"
+    }
+  ],
+  "expressions": [],
+  "issues": [],
+  "coverage": [
+    {
+      "sources": [
+        {
+          "quote": "请OPS核查map.csv",
+          "occurrence": 1
+        }
+      ],
+      "claim_ids": [
+        "C_CHECK_PERFORMER",
+        "C_CHECK_INPUT"
+      ],
+      "status": "EXPRESSED",
+      "affected_views": [
+        "I",
+        "A",
+        "P"
+      ]
+    },
+    {
+      "sources": [
+        {
+          "quote": "还可以生成extra.md",
+          "occurrence": 1
+        }
+      ],
+      "claim_ids": [
+        "C_GENERATE_PERFORMER",
+        "C_GENERATE_RESULT"
+      ],
+      "status": "EXPRESSED",
+      "affected_views": [
+        "O",
+        "A",
+        "P"
+      ]
+    },
+    {
+      "sources": [
+        {
+          "quote": "不要求交付extra.md",
+          "occurrence": 1
+        }
+      ],
+      "claim_ids": [
+        "C_DELIVER_PERFORMER",
+        "C_DELIVER_OBJECT"
+      ],
+      "status": "EXPRESSED",
+      "affected_views": [
+        "O",
+        "A",
+        "P"
+      ]
+    }
+  ]
+}

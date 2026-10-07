@@ -1,0 +1,156 @@
+{
+  "contract_version": "031-r01",
+  "reviews": [
+    {
+      "subject_id": "ent_pm",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [{"quote": "PM", "occurrence": 1}],
+      "reason": "执行者身份明确；OTHER可作为未指定人或组类别的占位。"
+    },
+    {
+      "subject_id": "ent_accounts",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [{"quote": "accounts.csv", "occurrence": 1}],
+      "reason": "受检文件的名称与身份明确。"
+    },
+    {
+      "subject_id": "ent_fields",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [{"quote": "生成fields.md", "occurrence": 1}],
+      "reason": "明确要求生成的文件为fields.md。"
+    },
+    {
+      "subject_id": "ent_names",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["ent_accounts"],
+      "sources": [
+        {"quote": "accounts.csv的字段名", "occurrence": 1},
+        {"quote": "只检查字段名", "occurrence": 1}
+      ],
+      "reason": "两处字段名指称承接同一受检文件，限定对象一致。"
+    },
+    {
+      "subject_id": "ent_records",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["ent_accounts"],
+      "sources": [
+        {"quote": "accounts.csv的字段名", "occurrence": 1},
+        {"quote": "不得读取记录内容", "occurrence": 1}
+      ],
+      "reason": "记录内容承接唯一当前文件accounts.csv，没有竞争对象。"
+    },
+    {
+      "subject_id": "evt_check",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [{"quote": "请PM核对accounts.csv的字段名", "occurrence": 1}],
+      "reason": "核对字段名是当前任务的明确要求。"
+    },
+    {
+      "subject_id": "evt_generate",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [{"quote": "生成fields.md", "occurrence": 1}],
+      "reason": "生成文件是明确要求的并列动作；原文没有明确先后词。"
+    },
+    {
+      "subject_id": "evt_read",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [{"quote": "不得读取记录内容", "occurrence": 1}],
+      "reason": "原文明示禁止读取记录内容，FORBIDDEN与正向动作谓词组合正确。"
+    },
+    {
+      "subject_id": "cl_check_actor",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["evt_check", "ent_pm"],
+      "sources": [{"quote": "请PM核对accounts.csv的字段名", "occurrence": 1}],
+      "reason": "PM是核对动作的明确执行者。"
+    },
+    {
+      "subject_id": "cl_check_input",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["evt_check", "ent_accounts", "cl_check_scope"],
+      "sources": [{"quote": "核对accounts.csv的字段名", "occurrence": 1}],
+      "reason": "文件是明确受检输入，关联范围主张将受检内容限定为字段名。"
+    },
+    {
+      "subject_id": "cl_check_scope",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["evt_check", "expr_names"],
+      "sources": [
+        {"quote": "核对accounts.csv的字段名", "occurrence": 1},
+        {"quote": "只检查字段名", "occurrence": 1}
+      ],
+      "reason": "范围准确绑定核对动作，仅限字段名，没有新增独立检查义务。"
+    },
+    {
+      "subject_id": "cl_generate_actor",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["evt_generate", "ent_pm"],
+      "sources": [
+        {"quote": "请PM核对accounts.csv的字段名", "occurrence": 1},
+        {"quote": "生成fields.md", "occurrence": 1}
+      ],
+      "reason": "同一连续指令的并列生成动作承接PM，来源包含主语与动作两端。"
+    },
+    {
+      "subject_id": "cl_generate_result",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["evt_generate", "ent_fields"],
+      "sources": [{"quote": "生成fields.md", "occurrence": 1}],
+      "reason": "fields.md是生成动作的RESULT；原文没有交付要求。"
+    },
+    {
+      "subject_id": "cl_read_actor",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["evt_read", "ent_pm"],
+      "sources": [
+        {"quote": "请PM核对accounts.csv的字段名", "occurrence": 1},
+        {"quote": "不得读取记录内容", "occurrence": 1}
+      ],
+      "reason": "追加禁止承接当前任务执行者PM，没有主体切换。"
+    },
+    {
+      "subject_id": "cl_read_object",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["evt_read", "ent_records"],
+      "sources": [
+        {"quote": "accounts.csv的字段名", "occurrence": 1},
+        {"quote": "不得读取记录内容", "occurrence": 1}
+      ],
+      "reason": "禁止对象为当前文件的记录内容，OBJECT用途没有将其扩展为外部输入。"
+    },
+    {
+      "subject_id": "expr_names",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["ent_names"],
+      "sources": [
+        {"quote": "accounts.csv的字段名", "occurrence": 1},
+        {"quote": "只检查字段名", "occurrence": 1}
+      ],
+      "reason": "ITEM引用唯一字段名实体，正确表达核对范围。"
+    }
+  ],
+  "issues": [],
+  "omissions": []
+}

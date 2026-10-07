@@ -1,0 +1,136 @@
+{
+  "contract_version": "031-r01",
+  "reviews": [
+    {
+      "subject_id": "ent_dev",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [{"quote": "DEV-01", "occurrence": 1}],
+      "reason": "执行主体身份明确；OTHER可占位未指定的实体类别。"
+    },
+    {
+      "subject_id": "ent_queue",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [{"quote": "读取queue.csv", "occurrence": 1}],
+      "reason": "明确命名的受读文件。"
+    },
+    {
+      "subject_id": "ent_report",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [
+        {"quote": "生成queue-note.md", "occurrence": 1},
+        {"quote": "该报告中的队列数量", "occurrence": 1}
+      ],
+      "reason": "该报告承接唯一前述生成文件，两处指向同一产物。"
+    },
+    {
+      "subject_id": "ent_ops",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [{"quote": "OPS-01", "occurrence": 1}],
+      "reason": "核对主体身份明确；OTHER可占位未指定的实体类别。"
+    },
+    {
+      "subject_id": "ent_count",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [{"quote": "该报告中的队列数量", "occurrence": 1}],
+      "reason": "明确的报告内容项，未指定具体数量值。"
+    },
+    {
+      "subject_id": "evt_read",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [{"quote": "请DEV-01读取queue.csv", "occurrence": 1}],
+      "reason": "原文明示当前必须执行的读取动作，无附加条件。"
+    },
+    {
+      "subject_id": "evt_generate",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [{"quote": "请DEV-01读取queue.csv并生成queue-note.md", "occurrence": 1}],
+      "reason": "生成是同一指令的并列必需动作。"
+    },
+    {
+      "subject_id": "evt_check",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [{"quote": "OPS-01核对该报告中的队列数量", "occurrence": 1}],
+      "reason": "明示当前核对要求，未附加条件或数量限制。"
+    },
+    {
+      "subject_id": "cl_read_performer",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["evt_read", "ent_dev"],
+      "sources": [{"quote": "请DEV-01读取queue.csv", "occurrence": 1}],
+      "reason": "DEV-01明确执行读取。"
+    },
+    {
+      "subject_id": "cl_read_input",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["evt_read", "ent_queue"],
+      "sources": [{"quote": "读取queue.csv", "occurrence": 1}],
+      "reason": "queue.csv是明确读取的外部输入文件。"
+    },
+    {
+      "subject_id": "cl_generate_performer",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["evt_generate", "ent_dev"],
+      "sources": [
+        {"quote": "请DEV-01读取queue.csv", "occurrence": 1},
+        {"quote": "并生成queue-note.md", "occurrence": 1}
+      ],
+      "reason": "连续并列动作无主体切换，生成承接DEV-01；来源包含两端。"
+    },
+    {
+      "subject_id": "cl_generate_result",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["evt_generate", "ent_report"],
+      "sources": [{"quote": "生成queue-note.md", "occurrence": 1}],
+      "reason": "文件是生成结果；原文没有另行交付要求。"
+    },
+    {
+      "subject_id": "cl_check_performer",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["evt_check", "ent_ops"],
+      "sources": [{"quote": "OPS-01核对该报告中的队列数量", "occurrence": 1}],
+      "reason": "核对执行者明确切换为OPS-01。"
+    },
+    {
+      "subject_id": "cl_check_report",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["evt_check", "ent_report", "cl_check_content"],
+      "sources": [
+        {"quote": "生成queue-note.md", "occurrence": 1},
+        {"quote": "核对该报告中的队列数量", "occurrence": 1}
+      ],
+      "reason": "核对涉及前述内部报告，内容用途限定为其中队列数量，OBJECT未将其新增为外部输入。"
+    },
+    {
+      "subject_id": "cl_check_content",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["evt_check", "ent_count", "cl_check_report"],
+      "sources": [{"quote": "核对该报告中的队列数量", "occurrence": 1}],
+      "reason": "队列数量是明确核对内容；没有数值、比较符或执行量化要求。"
+    }
+  ],
+  "issues": [],
+  "omissions": []
+}

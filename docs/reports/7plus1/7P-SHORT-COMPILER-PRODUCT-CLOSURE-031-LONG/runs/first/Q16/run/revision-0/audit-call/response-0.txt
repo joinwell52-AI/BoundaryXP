@@ -1,0 +1,82 @@
+{
+  "contract_version": "031-r01",
+  "reviews": [
+    {
+      "subject_id": "ent_pm",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [{"quote": "PM", "occurrence": 1}],
+      "reason": "PM身份明确；原文未指定其实体类别，OTHER可作占位。"
+    },
+    {
+      "subject_id": "ent_users",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [{"quote": "users.csv", "occurrence": 1}],
+      "reason": "原文明示受检文件users.csv，身份与文件类别有支持。"
+    },
+    {
+      "subject_id": "ent_optional",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [{"quote": "optional.md", "occurrence": 1}],
+      "reason": "原文明示禁止生成的文件optional.md；实体引用不断言其存在。"
+    },
+    {
+      "subject_id": "evt_check",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [{"quote": "请PM核对users.csv", "occurrence": 1}],
+      "reason": "核对是当前任务明确要求的主动作，无附加条件或数量限制。"
+    },
+    {
+      "subject_id": "evt_generate",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [{"quote": "不得生成optional.md", "occurrence": 1}],
+      "reason": "生成是当前任务明确禁止的动作，FORBIDDEN与正向动作极性配合准确。"
+    },
+    {
+      "subject_id": "cl_check_performer",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["evt_check", "ent_pm"],
+      "sources": [{"quote": "请PM核对users.csv", "occurrence": 1}],
+      "reason": "原文明示PM执行核对。"
+    },
+    {
+      "subject_id": "cl_check_input",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["evt_check", "ent_users"],
+      "sources": [{"quote": "核对users.csv", "occurrence": 1}],
+      "reason": "users.csv是明确受检范围，绑定为核对事件的INPUT_OBJECT正确。"
+    },
+    {
+      "subject_id": "cl_generate_performer",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["evt_generate", "ent_pm"],
+      "sources": [
+        {"quote": "请PM核对users.csv", "occurrence": 1},
+        {"quote": "不得生成optional.md", "occurrence": 1}
+      ],
+      "reason": "连续同一指令无主体切换或竞争主体，生成禁令可承接PM；来源包含两端。"
+    },
+    {
+      "subject_id": "cl_generate_result",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["evt_generate", "ent_optional"],
+      "sources": [{"quote": "不得生成optional.md", "occurrence": 1}],
+      "reason": "optional.md是被禁止生成的结果；RESULT用途保留，但不产生正向O或存在断言。"
+    }
+  ],
+  "issues": [],
+  "omissions": []
+}

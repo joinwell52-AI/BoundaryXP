@@ -1,0 +1,231 @@
+{
+  "contract_version": "031-r01",
+  "reviews": [
+    {
+      "subject_id": "ent_pm",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [
+        {
+          "quote": "PM",
+          "occurrence": 1
+        }
+      ],
+      "reason": "身份明确；OTHER可保留未指定的人或组类别，不推定岗位权限。"
+    },
+    {
+      "subject_id": "ent_baseline",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [
+        {
+          "quote": "commit 7ac921e",
+          "occurrence": 1
+        }
+      ],
+      "reason": "准确保留指定基线提交的身份，标识内数字不是数量要求。"
+    },
+    {
+      "subject_id": "ent_configuration",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [
+        {
+          "quote": "当前配置",
+          "occurrence": 1
+        }
+      ],
+      "reason": "准确对应明确的比较对象。"
+    },
+    {
+      "subject_id": "ent_diff",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [
+        {
+          "quote": "diff.md",
+          "occurrence": 1
+        }
+      ],
+      "reason": "明确命名的生成文件，FILE类别有支持。"
+    },
+    {
+      "subject_id": "ent_workspace_commit",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [
+        {
+          "quote": "当前工作区的commit",
+          "occurrence": 1
+        }
+      ],
+      "reason": "准确对应禁止切换的对象；原文未说其等同于指定基线提交。"
+    },
+    {
+      "subject_id": "ev_compare",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [
+        {
+          "quote": "请PM以commit 7ac921e作为基线比较当前配置",
+          "occurrence": 1
+        }
+      ],
+      "reason": "明确要求当前任务执行比较，动作层级、模态和极性正确。"
+    },
+    {
+      "subject_id": "ev_generate",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [
+        {
+          "quote": "生成diff.md",
+          "occurrence": 1
+        }
+      ],
+      "reason": "明确要求生成文件；原文没有明示独立先后条件或交付要求。"
+    },
+    {
+      "subject_id": "ev_switch",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [
+        {
+          "quote": "不得切换当前工作区的commit",
+          "occurrence": 1
+        }
+      ],
+      "reason": "明确禁止切换，FORBIDDEN与正向动作极性准确保留禁止语义。"
+    },
+    {
+      "subject_id": "cl_compare_performer",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [
+        "ev_compare",
+        "ent_pm"
+      ],
+      "sources": [
+        {
+          "quote": "请PM以commit 7ac921e作为基线比较当前配置",
+          "occurrence": 1
+        }
+      ],
+      "reason": "PM是明确指定的比较执行者。"
+    },
+    {
+      "subject_id": "cl_compare_input",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [
+        "ev_compare",
+        "ent_configuration"
+      ],
+      "sources": [
+        {
+          "quote": "比较当前配置",
+          "occurrence": 1
+        }
+      ],
+      "reason": "当前配置是明确的受比较范围，INPUT_OBJECT绑定正确。"
+    },
+    {
+      "subject_id": "cl_compare_basis",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [
+        "ev_compare",
+        "ent_baseline"
+      ],
+      "sources": [
+        {
+          "quote": "以commit 7ac921e作为基线比较当前配置",
+          "occurrence": 1
+        }
+      ],
+      "reason": "指定提交约束比较基线，BASIS绑定准确，未新增切换动作。"
+    },
+    {
+      "subject_id": "cl_generate_performer",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [
+        "ev_generate",
+        "ent_pm"
+      ],
+      "sources": [
+        {
+          "quote": "请PM",
+          "occurrence": 1
+        },
+        {
+          "quote": "生成diff.md",
+          "occurrence": 1
+        }
+      ],
+      "reason": "连续同一指令的追加动作承接PM，两端来源齐全，无主体切换。"
+    },
+    {
+      "subject_id": "cl_generate_result",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [
+        "ev_generate",
+        "ent_diff"
+      ],
+      "sources": [
+        {
+          "quote": "生成diff.md",
+          "occurrence": 1
+        }
+      ],
+      "reason": "diff.md是生成动作的RESULT；未凭生成要求增添交付用途。"
+    },
+    {
+      "subject_id": "cl_switch_performer",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [
+        "ev_switch",
+        "ent_pm"
+      ],
+      "sources": [
+        {
+          "quote": "请PM",
+          "occurrence": 1
+        },
+        {
+          "quote": "不得切换当前工作区的commit",
+          "occurrence": 1
+        }
+      ],
+      "reason": "追加禁止承接同一任务主体PM，两端来源支持且没有竞争主体。"
+    },
+    {
+      "subject_id": "cl_switch_object",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [
+        "ev_switch",
+        "ent_workspace_commit"
+      ],
+      "sources": [
+        {
+          "quote": "不得切换当前工作区的commit",
+          "occurrence": 1
+        }
+      ],
+      "reason": "OBJECT准确绑定禁止切换的工作区提交，未误作外部输入或指定基线。"
+    }
+  ],
+  "issues": [],
+  "omissions": []
+}

@@ -1,0 +1,220 @@
+{
+  "contract_version": "031-r01",
+  "entities": [
+    {
+      "id": "n1",
+      "label": "QA",
+      "type": "OTHER",
+      "mentions": [{"quote": "QA", "occurrence": 1}],
+      "alternatives": []
+    },
+    {
+      "id": "n2",
+      "label": "配置",
+      "type": "OTHER",
+      "mentions": [{"quote": "配置", "occurrence": 1}],
+      "alternatives": []
+    },
+    {
+      "id": "n3",
+      "label": "权限错误",
+      "type": "OTHER",
+      "mentions": [{"quote": "权限错误", "occurrence": 1}],
+      "alternatives": []
+    }
+  ],
+  "events": [
+    {
+      "id": "e1",
+      "predicate": "完成配置核验",
+      "kind": "ACTION",
+      "layer": "MAIN",
+      "use": "CURRENT_TASK",
+      "modality": "REQUIRED",
+      "polarity": "POSITIVE",
+      "owner_id": "ROOT",
+      "constraint_ids": ["c3"],
+      "requires": [],
+      "sources": [{"quote": "请QA完成配置核验", "occurrence": 1}]
+    },
+    {
+      "id": "e2",
+      "predicate": "停止本任务",
+      "kind": "ACTION",
+      "layer": "MAIN",
+      "use": "CURRENT_TASK",
+      "modality": "REQUIRED",
+      "polarity": "POSITIVE",
+      "owner_id": "ROOT",
+      "constraint_ids": ["c5"],
+      "requires": [],
+      "sources": [{"quote": "若出现权限错误，停止本任务", "occurrence": 1}]
+    },
+    {
+      "id": "e3",
+      "predicate": "出现权限错误",
+      "kind": "STATE",
+      "layer": "CONDITION",
+      "use": "MENTION_ONLY",
+      "modality": "UNSTATED",
+      "polarity": "POSITIVE",
+      "owner_id": "e2",
+      "constraint_ids": [],
+      "requires": [],
+      "sources": [{"quote": "若出现权限错误", "occurrence": 1}]
+    }
+  ],
+  "claims": [
+    {
+      "id": "c1",
+      "kind": "ROLE",
+      "event_id": "e1",
+      "entity_id": "n1",
+      "role": "PERFORMER",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "scope_id": "e1",
+      "requires": [],
+      "sources": [{"quote": "请QA完成配置核验", "occurrence": 1}],
+      "note": "QA为明确核验执行者，岗位简称不推定人员或群组类别。"
+    },
+    {
+      "id": "c2",
+      "kind": "ROLE",
+      "event_id": "e1",
+      "entity_id": "n2",
+      "role": "INPUT_OBJECT",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "scope_id": "e1",
+      "requires": [],
+      "sources": [{"quote": "完成配置核验", "occurrence": 1}],
+      "note": "配置是明确受核验范围。"
+    },
+    {
+      "id": "c3",
+      "kind": "QUANTITY",
+      "event_id": "e1",
+      "entity_id": null,
+      "role": null,
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": {
+        "metric": "核验用时",
+        "target_id": "e1",
+        "comparator": "LTE",
+        "value": 6,
+        "unit": "分钟",
+        "use": "EXECUTION_LIMIT",
+        "count_scope": "e1"
+      },
+      "scope_id": "e1",
+      "requires": [],
+      "sources": [{"quote": "核验用时不得超过6分钟", "occurrence": 1}],
+      "note": "限制核验执行时长，不新增独立禁止动作或根完成条件。"
+    },
+    {
+      "id": "c4",
+      "kind": "ROLE",
+      "event_id": "e2",
+      "entity_id": "n1",
+      "role": "PERFORMER",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "scope_id": "e2",
+      "requires": [],
+      "sources": [
+        {"quote": "请QA完成配置核验", "occurrence": 1},
+        {"quote": "停止本任务", "occurrence": 1}
+      ],
+      "note": "连续同一任务指令没有主体切换，停止动作承接明确主语QA。"
+    },
+    {
+      "id": "c5",
+      "kind": "CONDITION",
+      "event_id": "e2",
+      "entity_id": null,
+      "role": null,
+      "expression_id": "x1",
+      "direction": "SUFFICIENT",
+      "temporal": null,
+      "quantity": null,
+      "scope_id": "e2",
+      "requires": [],
+      "sources": [{"quote": "若出现权限错误，停止本任务", "occurrence": 1}],
+      "note": "出现权限错误足以触发停止义务，不宣称错误已经出现。"
+    },
+    {
+      "id": "c6",
+      "kind": "STOP",
+      "event_id": null,
+      "entity_id": null,
+      "role": null,
+      "expression_id": "x1",
+      "direction": "SUFFICIENT",
+      "temporal": null,
+      "quantity": null,
+      "scope_id": "ROOT",
+      "requires": [],
+      "sources": [{"quote": "若出现权限错误，停止本任务", "occurrence": 1}],
+      "note": "权限错误触发根任务停止，不表示任务完成。"
+    },
+    {
+      "id": "c7",
+      "kind": "ROLE",
+      "event_id": "e3",
+      "entity_id": "n3",
+      "role": "OBJECT",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "scope_id": "e3",
+      "requires": [],
+      "sources": [{"quote": "出现权限错误", "occurrence": 1}],
+      "note": "条件状态中的错误对象，不新增监测命令。"
+    }
+  ],
+  "expressions": [
+    {
+      "id": "x1",
+      "op": "STATE",
+      "operands": [],
+      "state": {
+        "predicate": "出现权限错误",
+        "event_id": "e3",
+        "args": ["n3", "ROOT"],
+        "polarity": "POSITIVE"
+      },
+      "sources": [{"quote": "若出现权限错误，停止本任务", "occurrence": 1}]
+    }
+  ],
+  "issues": [],
+  "coverage": [
+    {
+      "sources": [{"quote": "请QA完成配置核验", "occurrence": 1}],
+      "claim_ids": ["c1", "c2"],
+      "status": "EXPRESSED",
+      "affected_views": ["A", "P", "I"]
+    },
+    {
+      "sources": [{"quote": "核验用时不得超过6分钟", "occurrence": 1}],
+      "claim_ids": ["c3"],
+      "status": "EXPRESSED",
+      "affected_views": ["R"]
+    },
+    {
+      "sources": [{"quote": "若出现权限错误，停止本任务", "occurrence": 1}],
+      "claim_ids": ["c4", "c5", "c6", "c7"],
+      "status": "EXPRESSED",
+      "affected_views": ["A", "P", "C"]
+    }
+  ]
+}

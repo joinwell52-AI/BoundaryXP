@@ -1,0 +1,261 @@
+{
+  "contract_version": "031-r01",
+  "entities": [
+    {
+      "id": "ent_pm",
+      "label": "PM",
+      "type": "OTHER",
+      "mentions": [{"quote": "PM", "occurrence": 1}],
+      "alternatives": []
+    },
+    {
+      "id": "ent_note",
+      "label": "note.md",
+      "type": "FILE",
+      "mentions": [
+        {"quote": "note.md", "occurrence": 1},
+        {"quote": "文中", "occurrence": 1}
+      ],
+      "alternatives": []
+    },
+    {
+      "id": "ent_cache",
+      "label": "cache.db",
+      "type": "FILE",
+      "mentions": [{"quote": "cache.db", "occurrence": 1}],
+      "alternatives": []
+    },
+    {
+      "id": "ent_quote",
+      "label": "引用内容：删除cache.db",
+      "type": "DOCUMENT",
+      "mentions": [{"quote": "删除cache.db", "occurrence": 1}],
+      "alternatives": []
+    },
+    {
+      "id": "ent_files",
+      "label": "任何文件",
+      "type": "OTHER",
+      "mentions": [{"quote": "任何文件", "occurrence": 1}],
+      "alternatives": []
+    }
+  ],
+  "events": [
+    {
+      "id": "ev_generate",
+      "predicate": "生成",
+      "kind": "ACTION",
+      "layer": "MAIN",
+      "use": "CURRENT_TASK",
+      "modality": "REQUIRED",
+      "polarity": "POSITIVE",
+      "owner_id": "ROOT",
+      "constraint_ids": [],
+      "requires": [],
+      "sources": [{"quote": "请PM生成note.md", "occurrence": 1}]
+    },
+    {
+      "id": "ev_cite",
+      "predicate": "引用",
+      "kind": "ACTION",
+      "layer": "MAIN",
+      "use": "CURRENT_TASK",
+      "modality": "REQUIRED",
+      "polarity": "POSITIVE",
+      "owner_id": "ROOT",
+      "constraint_ids": [],
+      "requires": [],
+      "sources": [{"quote": "在文中引用“删除cache.db”", "occurrence": 1}]
+    },
+    {
+      "id": "ev_quoted_delete",
+      "predicate": "删除",
+      "kind": "ACTION",
+      "layer": "QUOTED",
+      "use": "MENTION_ONLY",
+      "modality": "UNSTATED",
+      "polarity": "POSITIVE",
+      "owner_id": "ev_cite",
+      "constraint_ids": [],
+      "requires": [],
+      "sources": [{"quote": "删除cache.db", "occurrence": 1}]
+    },
+    {
+      "id": "ev_forbidden_delete",
+      "predicate": "删除",
+      "kind": "ACTION",
+      "layer": "MAIN",
+      "use": "CURRENT_TASK",
+      "modality": "FORBIDDEN",
+      "polarity": "POSITIVE",
+      "owner_id": "ROOT",
+      "constraint_ids": [],
+      "requires": [],
+      "sources": [{"quote": "本任务不得删除任何文件", "occurrence": 1}]
+    }
+  ],
+  "claims": [
+    {
+      "id": "cl_generate_performer",
+      "kind": "ROLE",
+      "event_id": "ev_generate",
+      "entity_id": "ent_pm",
+      "role": "PERFORMER",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "scope_id": "ev_generate",
+      "requires": [],
+      "sources": [{"quote": "请PM生成note.md", "occurrence": 1}],
+      "note": "PM是明确的生成执行者；未指定其人或组类别。"
+    },
+    {
+      "id": "cl_generate_result",
+      "kind": "ROLE",
+      "event_id": "ev_generate",
+      "entity_id": "ent_note",
+      "role": "RESULT",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "scope_id": "ev_generate",
+      "requires": [],
+      "sources": [{"quote": "生成note.md", "occurrence": 1}],
+      "note": "生成结果为note.md，未明示交付要求。"
+    },
+    {
+      "id": "cl_cite_performer",
+      "kind": "ROLE",
+      "event_id": "ev_cite",
+      "entity_id": "ent_pm",
+      "role": "PERFORMER",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "scope_id": "ev_cite",
+      "requires": [],
+      "sources": [
+        {"quote": "请PM生成note.md", "occurrence": 1},
+        {"quote": "在文中引用“删除cache.db”", "occurrence": 1}
+      ],
+      "note": "连续同一指令的追加引用动作承接PM主语。"
+    },
+    {
+      "id": "cl_cite_object",
+      "kind": "ROLE",
+      "event_id": "ev_cite",
+      "entity_id": "ent_note",
+      "role": "OBJECT",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "scope_id": "ev_cite",
+      "requires": [],
+      "sources": [
+        {"quote": "生成note.md", "occurrence": 1},
+        {"quote": "在文中引用", "occurrence": 1}
+      ],
+      "note": "文中指唯一当前产物note.md，属于内部产物用途。"
+    },
+    {
+      "id": "cl_cite_content",
+      "kind": "ROLE",
+      "event_id": "ev_cite",
+      "entity_id": "ent_quote",
+      "role": "CONTENT",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "scope_id": "ev_cite",
+      "requires": [],
+      "sources": [{"quote": "引用“删除cache.db”", "occurrence": 1}],
+      "note": "要求引用这段文字，不要求执行其中的删除动作。"
+    },
+    {
+      "id": "cl_quoted_object",
+      "kind": "ROLE",
+      "event_id": "ev_quoted_delete",
+      "entity_id": "ent_cache",
+      "role": "OBJECT",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "scope_id": "ev_quoted_delete",
+      "requires": [],
+      "sources": [{"quote": "删除cache.db", "occurrence": 1}],
+      "note": "cache.db仅是引文内删除动作的对象，不构成当前输入或删除义务。"
+    },
+    {
+      "id": "cl_forbidden_object",
+      "kind": "ROLE",
+      "event_id": "ev_forbidden_delete",
+      "entity_id": "ent_files",
+      "role": "OBJECT",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "scope_id": "ev_forbidden_delete",
+      "requires": [],
+      "sources": [{"quote": "本任务不得删除任何文件", "occurrence": 1}],
+      "note": "禁止范围覆盖本任务删除任何文件的操作，无例外。"
+    },
+    {
+      "id": "cl_forbidden_scope",
+      "kind": "SCOPE",
+      "event_id": "ev_forbidden_delete",
+      "entity_id": null,
+      "role": null,
+      "expression_id": "ex_files",
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "scope_id": "ev_forbidden_delete",
+      "requires": [],
+      "sources": [{"quote": "本任务不得删除任何文件", "occurrence": 1}],
+      "note": "本任务内的全面禁止；不从禁止对象推导外部输入。"
+    }
+  ],
+  "expressions": [
+    {
+      "id": "ex_files",
+      "op": "ITEM",
+      "operands": ["ent_files"],
+      "state": null,
+      "sources": [{"quote": "任何文件", "occurrence": 1}]
+    }
+  ],
+  "issues": [],
+  "coverage": [
+    {
+      "sources": [{"quote": "请PM生成note.md", "occurrence": 1}],
+      "claim_ids": ["cl_generate_performer", "cl_generate_result"],
+      "status": "EXPRESSED",
+      "affected_views": ["A", "P", "O"]
+    },
+    {
+      "sources": [{"quote": "在文中引用“删除cache.db”", "occurrence": 1}],
+      "claim_ids": ["cl_cite_performer", "cl_cite_object", "cl_cite_content"],
+      "status": "EXPRESSED",
+      "affected_views": ["A", "P", "O"]
+    },
+    {
+      "sources": [{"quote": "删除cache.db", "occurrence": 1}],
+      "claim_ids": ["cl_quoted_object"],
+      "status": "BACKGROUND",
+      "affected_views": ["A"]
+    },
+    {
+      "sources": [{"quote": "本任务不得删除任何文件", "occurrence": 1}],
+      "claim_ids": ["cl_forbidden_object", "cl_forbidden_scope"],
+      "status": "EXPRESSED",
+      "affected_views": ["B"]
+    }
+  ]
+}

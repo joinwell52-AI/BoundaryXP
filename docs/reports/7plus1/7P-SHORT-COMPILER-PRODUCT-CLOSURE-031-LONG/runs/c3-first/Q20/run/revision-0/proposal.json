@@ -1,0 +1,291 @@
+{
+  "contract_version": "031-r01",
+  "entities": [
+    {
+      "id": "ent_ops",
+      "label": "OPS-01",
+      "type": "OTHER",
+      "mentions": [
+        {
+          "quote": "OPS-01",
+          "occurrence": 1
+        },
+        {
+          "quote": "OPS-01",
+          "occurrence": 2
+        }
+      ],
+      "alternatives": []
+    },
+    {
+      "id": "ent_pm",
+      "label": "PM",
+      "type": "OTHER",
+      "mentions": [
+        {
+          "quote": "PM",
+          "occurrence": 1
+        }
+      ],
+      "alternatives": []
+    },
+    {
+      "id": "ent_service",
+      "label": "服务",
+      "type": "OTHER",
+      "mentions": [
+        {
+          "quote": "服务",
+          "occurrence": 1
+        }
+      ],
+      "alternatives": []
+    },
+    {
+      "id": "ent_health",
+      "label": "health.md",
+      "type": "FILE",
+      "mentions": [
+        {
+          "quote": "health.md",
+          "occurrence": 1
+        }
+      ],
+      "alternatives": []
+    }
+  ],
+  "events": [
+    {
+      "id": "evt_notify",
+      "predicate": "通知",
+      "kind": "ACTION",
+      "layer": "MAIN",
+      "use": "CURRENT_TASK",
+      "modality": "REQUIRED",
+      "polarity": "POSITIVE",
+      "owner_id": "ROOT",
+      "constraint_ids": [
+        "cl_notify_condition"
+      ],
+      "requires": [],
+      "sources": [
+        {
+          "quote": "若发现服务异常，OPS-01必须通知PM",
+          "occurrence": 1
+        }
+      ]
+    },
+    {
+      "id": "evt_generate",
+      "predicate": "生成",
+      "kind": "ACTION",
+      "layer": "MAIN",
+      "use": "CURRENT_TASK",
+      "modality": "REQUIRED",
+      "polarity": "POSITIVE",
+      "owner_id": "ROOT",
+      "constraint_ids": [],
+      "requires": [],
+      "sources": [
+        {
+          "quote": "无论是否发现异常，OPS-01都必须生成health.md",
+          "occurrence": 1
+        }
+      ]
+    }
+  ],
+  "claims": [
+    {
+      "id": "cl_notify_performer",
+      "kind": "ROLE",
+      "event_id": "evt_notify",
+      "entity_id": "ent_ops",
+      "role": "PERFORMER",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "scope_id": "evt_notify",
+      "requires": [],
+      "sources": [
+        {
+          "quote": "OPS-01必须通知PM",
+          "occurrence": 1
+        }
+      ],
+      "note": "通知的执行者为OPS-01。"
+    },
+    {
+      "id": "cl_notify_recipient",
+      "kind": "ROLE",
+      "event_id": "evt_notify",
+      "entity_id": "ent_pm",
+      "role": "RECIPIENT",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "scope_id": "evt_notify",
+      "requires": [],
+      "sources": [
+        {
+          "quote": "通知PM",
+          "occurrence": 1
+        }
+      ],
+      "note": "PM为通知接收者。"
+    },
+    {
+      "id": "cl_notify_condition",
+      "kind": "CONDITION",
+      "event_id": "evt_notify",
+      "entity_id": null,
+      "role": null,
+      "expression_id": "expr_abnormal_found",
+      "direction": "SUFFICIENT",
+      "temporal": null,
+      "quantity": null,
+      "scope_id": "evt_notify",
+      "requires": [],
+      "sources": [
+        {
+          "quote": "若发现服务异常，OPS-01必须通知PM",
+          "occurrence": 1
+        }
+      ],
+      "note": "发现服务异常足以触发通知义务；不断言异常已被发现，也不新增发现或监测义务。"
+    },
+    {
+      "id": "cl_generate_performer",
+      "kind": "ROLE",
+      "event_id": "evt_generate",
+      "entity_id": "ent_ops",
+      "role": "PERFORMER",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "scope_id": "evt_generate",
+      "requires": [],
+      "sources": [
+        {
+          "quote": "OPS-01都必须生成health.md",
+          "occurrence": 1
+        }
+      ],
+      "note": "生成的执行者明确为OPS-01；无论是否发现服务异常，生成义务均适用。"
+    },
+    {
+      "id": "cl_generate_result",
+      "kind": "ROLE",
+      "event_id": "evt_generate",
+      "entity_id": "ent_health",
+      "role": "RESULT",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "scope_id": "evt_generate",
+      "requires": [],
+      "sources": [
+        {
+          "quote": "无论是否发现异常，OPS-01都必须生成health.md",
+          "occurrence": 1
+        }
+      ],
+      "note": "health.md为必须生成的结果，生成义务不受异常发现状态限制；未陈述交付要求。"
+    }
+  ],
+  "expressions": [
+    {
+      "id": "expr_abnormal_found",
+      "op": "STATE",
+      "operands": [],
+      "state": {
+        "predicate": "发现服务异常",
+        "event_id": null,
+        "args": [
+          "ent_service"
+        ],
+        "polarity": "POSITIVE"
+      },
+      "sources": [
+        {
+          "quote": "若发现服务异常",
+          "occurrence": 1
+        }
+      ]
+    }
+  ],
+  "issues": [],
+  "coverage": [
+    {
+      "sources": [
+        {
+          "quote": "若发现服务异常",
+          "occurrence": 1
+        }
+      ],
+      "claim_ids": [
+        "cl_notify_condition"
+      ],
+      "status": "EXPRESSED",
+      "affected_views": [
+        "A"
+      ]
+    },
+    {
+      "sources": [
+        {
+          "quote": "OPS-01必须通知PM",
+          "occurrence": 1
+        }
+      ],
+      "claim_ids": [
+        "cl_notify_performer",
+        "cl_notify_recipient",
+        "cl_notify_condition"
+      ],
+      "status": "EXPRESSED",
+      "affected_views": [
+        "A",
+        "P"
+      ]
+    },
+    {
+      "sources": [
+        {
+          "quote": "无论是否发现异常",
+          "occurrence": 1
+        }
+      ],
+      "claim_ids": [
+        "cl_generate_performer",
+        "cl_generate_result"
+      ],
+      "status": "EXPRESSED",
+      "affected_views": [
+        "A",
+        "O"
+      ]
+    },
+    {
+      "sources": [
+        {
+          "quote": "OPS-01都必须生成health.md",
+          "occurrence": 1
+        }
+      ],
+      "claim_ids": [
+        "cl_generate_performer",
+        "cl_generate_result"
+      ],
+      "status": "EXPRESSED",
+      "affected_views": [
+        "A",
+        "P",
+        "O"
+      ]
+    }
+  ]
+}

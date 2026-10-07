@@ -1,0 +1,165 @@
+{
+  "contract_version": "031-r01",
+  "reviews": [
+    {
+      "subject_id": "ent_pm",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [
+        {"quote": "请PM生成brief.md", "occurrence": 1},
+        {"quote": "再由PM把同一文件提交给ADMIN", "occurrence": 1}
+      ],
+      "reason": "两处PM身份一致；OTHER可作未指定类别的占位。"
+    },
+    {
+      "subject_id": "ent_qa",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [{"quote": "由QA复核brief.md", "occurrence": 1}],
+      "reason": "QA身份明确；OTHER占位不添加人员或组织类别判断。"
+    },
+    {
+      "subject_id": "ent_admin",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [{"quote": "提交给ADMIN", "occurrence": 1}],
+      "reason": "ADMIN身份明确；OTHER是允许的类别占位。"
+    },
+    {
+      "subject_id": "ent_brief",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [
+        {"quote": "生成brief.md", "occurrence": 1},
+        {"quote": "复核brief.md", "occurrence": 1},
+        {"quote": "同一文件提交给ADMIN", "occurrence": 1}
+      ],
+      "reason": "生成、复核和提交明确指向同一文件，mentions及统一实体身份完整。"
+    },
+    {
+      "subject_id": "evt_generate",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [{"quote": "请PM生成brief.md", "occurrence": 1}],
+      "reason": "原文明示当前要求的生成动作，无额外前提。"
+    },
+    {
+      "subject_id": "evt_review",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["cl_review_after_generate"],
+      "sources": [{"quote": "请PM生成brief.md，随后由QA复核brief.md", "occurrence": 1}],
+      "reason": "复核是当前要求动作，生成在先的约束已双向绑定。"
+    },
+    {
+      "subject_id": "evt_submit",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["cl_submit_after_review"],
+      "sources": [{"quote": "随后由QA复核brief.md，再由PM把同一文件提交给ADMIN", "occurrence": 1}],
+      "reason": "提交是当前要求动作，复核在先的约束已双向绑定。"
+    },
+    {
+      "subject_id": "cl_generate_performer",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["evt_generate", "ent_pm"],
+      "sources": [{"quote": "请PM生成brief.md", "occurrence": 1}],
+      "reason": "生成执行者明确为PM。"
+    },
+    {
+      "subject_id": "cl_generate_result",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["evt_generate", "ent_brief"],
+      "sources": [{"quote": "生成brief.md", "occurrence": 1}],
+      "reason": "brief.md是生成动作的RESULT。"
+    },
+    {
+      "subject_id": "cl_review_reviewer",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["evt_review", "ent_qa"],
+      "sources": [{"quote": "由QA复核brief.md", "occurrence": 1}],
+      "reason": "QA明确承担复核者职责。"
+    },
+    {
+      "subject_id": "cl_review_object",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["evt_review", "ent_brief", "cl_generate_result"],
+      "sources": [
+        {"quote": "生成brief.md", "occurrence": 1},
+        {"quote": "复核brief.md", "occurrence": 1}
+      ],
+      "reason": "复核对象是本任务生成的同一内部文件，OBJECT用途准确。"
+    },
+    {
+      "subject_id": "cl_submit_performer",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["evt_submit", "ent_pm"],
+      "sources": [{"quote": "由PM把同一文件提交给ADMIN", "occurrence": 1}],
+      "reason": "提交执行者明确为PM，无需从其他角色推导。"
+    },
+    {
+      "subject_id": "cl_submit_deliverable",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["evt_submit", "ent_brief", "cl_generate_result", "cl_review_object"],
+      "sources": [
+        {"quote": "生成brief.md", "occurrence": 1},
+        {"quote": "复核brief.md", "occurrence": 1},
+        {"quote": "同一文件提交给ADMIN", "occurrence": 1}
+      ],
+      "reason": "明确交付同一brief.md，DELIVERABLE绑定保留了跨用途身份。"
+    },
+    {
+      "subject_id": "cl_submit_recipient",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["evt_submit", "ent_admin"],
+      "sources": [{"quote": "提交给ADMIN", "occurrence": 1}],
+      "reason": "ADMIN明确为提交接收方。"
+    },
+    {
+      "subject_id": "cl_review_after_generate",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["evt_review", "evt_generate", "expr_generated"],
+      "sources": [{"quote": "请PM生成brief.md，随后由QA复核brief.md", "occurrence": 1}],
+      "reason": "随后支持复核在生成完成之后；ORDER/AFTER准确，未增加充分触发或已发生断言。"
+    },
+    {
+      "subject_id": "cl_submit_after_review",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["evt_submit", "evt_review", "expr_reviewed"],
+      "sources": [{"quote": "随后由QA复核brief.md，再由PM把同一文件提交给ADMIN", "occurrence": 1}],
+      "reason": "再支持提交在复核完成之后；未擅自增加复核通过条件。"
+    },
+    {
+      "subject_id": "expr_generated",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["evt_generate", "ent_pm", "ent_brief"],
+      "sources": [{"quote": "请PM生成brief.md，随后", "occurrence": 1}],
+      "reason": "生成完成状态引用正确事件、执行者和文件，仅作为先后参照。"
+    },
+    {
+      "subject_id": "expr_reviewed",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["evt_review", "ent_qa", "ent_brief"],
+      "sources": [{"quote": "由QA复核brief.md，再", "occurrence": 1}],
+      "reason": "复核完成状态引用正确事件、复核者和同一文件，不表示复核通过或已经发生。"
+    }
+  ],
+  "issues": [],
+  "omissions": []
+}

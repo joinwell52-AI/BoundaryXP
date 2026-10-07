@@ -1,0 +1,377 @@
+{
+  "contract_version": "031-r01",
+  "entities": [
+    {
+      "id": "ent_pm",
+      "label": "PM",
+      "type": "OTHER",
+      "mentions": [
+        {
+          "quote": "PM",
+          "occurrence": 1
+        }
+      ],
+      "alternatives": []
+    },
+    {
+      "id": "ent_qa",
+      "label": "QA",
+      "type": "OTHER",
+      "mentions": [
+        {
+          "quote": "QA",
+          "occurrence": 1
+        }
+      ],
+      "alternatives": []
+    },
+    {
+      "id": "ent_file",
+      "label": "r.md",
+      "type": "FILE",
+      "mentions": [
+        {
+          "quote": "r.md",
+          "occurrence": 1
+        }
+      ],
+      "alternatives": []
+    }
+  ],
+  "events": [
+    {
+      "id": "ev_approval",
+      "predicate": "批准",
+      "kind": "ACTION",
+      "layer": "CONDITION",
+      "use": "MENTION_ONLY",
+      "modality": "UNSTATED",
+      "polarity": "POSITIVE",
+      "owner_id": "ROOT",
+      "constraint_ids": [],
+      "requires": [],
+      "sources": [
+        {
+          "quote": "QA批准",
+          "occurrence": 1
+        }
+      ]
+    },
+    {
+      "id": "ev_submit_allowed",
+      "predicate": "提交",
+      "kind": "ACTION",
+      "layer": "MAIN",
+      "use": "CURRENT_TASK",
+      "modality": "PERMITTED",
+      "polarity": "POSITIVE",
+      "owner_id": "ROOT",
+      "constraint_ids": [
+        "cl_permission_condition"
+      ],
+      "requires": [],
+      "sources": [
+        {
+          "quote": "允许PM在QA批准后提交r.md",
+          "occurrence": 1
+        }
+      ]
+    },
+    {
+      "id": "ev_submit_forbidden",
+      "predicate": "提交",
+      "kind": "ACTION",
+      "layer": "MAIN",
+      "use": "CURRENT_TASK",
+      "modality": "FORBIDDEN",
+      "polarity": "POSITIVE",
+      "owner_id": "ROOT",
+      "constraint_ids": [
+        "cl_prohibition_condition"
+      ],
+      "requires": [],
+      "sources": [
+        {
+          "quote": "批准前不得提交",
+          "occurrence": 1
+        }
+      ]
+    }
+  ],
+  "claims": [
+    {
+      "id": "cl_approver",
+      "kind": "ROLE",
+      "event_id": "ev_approval",
+      "entity_id": "ent_qa",
+      "role": "APPROVER",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "scope_id": "ev_approval",
+      "requires": [],
+      "sources": [
+        {
+          "quote": "QA批准",
+          "occurrence": 1
+        }
+      ],
+      "note": "条件中的批准者，不增加当前批准义务。"
+    },
+    {
+      "id": "cl_allowed_performer",
+      "kind": "ROLE",
+      "event_id": "ev_submit_allowed",
+      "entity_id": "ent_pm",
+      "role": "PERFORMER",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "scope_id": "ev_submit_allowed",
+      "requires": [],
+      "sources": [
+        {
+          "quote": "允许PM在QA批准后提交r.md",
+          "occurrence": 1
+        }
+      ],
+      "note": ""
+    },
+    {
+      "id": "cl_allowed_deliverable",
+      "kind": "ROLE",
+      "event_id": "ev_submit_allowed",
+      "entity_id": "ent_file",
+      "role": "DELIVERABLE",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "scope_id": "ev_submit_allowed",
+      "requires": [],
+      "sources": [
+        {
+          "quote": "提交r.md",
+          "occurrence": 1
+        }
+      ],
+      "note": "允许交付，不推定生成、修改或外部输入。"
+    },
+    {
+      "id": "cl_permission_condition",
+      "kind": "CONDITION",
+      "event_id": "ev_submit_allowed",
+      "entity_id": null,
+      "role": null,
+      "expression_id": "expr_approved",
+      "direction": "NECESSARY",
+      "temporal": "AFTER",
+      "quantity": null,
+      "scope_id": "ev_submit_allowed",
+      "requires": [],
+      "sources": [
+        {
+          "quote": "允许PM在QA批准后提交r.md",
+          "occurrence": 1
+        }
+      ],
+      "note": "QA批准是提交许可的必要前提；不宣称批准已发生。"
+    },
+    {
+      "id": "cl_forbidden_performer",
+      "kind": "ROLE",
+      "event_id": "ev_submit_forbidden",
+      "entity_id": "ent_pm",
+      "role": "PERFORMER",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "scope_id": "ev_submit_forbidden",
+      "requires": [],
+      "sources": [
+        {
+          "quote": "允许PM在QA批准后提交r.md",
+          "occurrence": 1
+        },
+        {
+          "quote": "批准前不得提交",
+          "occurrence": 1
+        }
+      ],
+      "note": "连续同一指令未切换主体，后半句承接PM。"
+    },
+    {
+      "id": "cl_forbidden_deliverable",
+      "kind": "ROLE",
+      "event_id": "ev_submit_forbidden",
+      "entity_id": "ent_file",
+      "role": "DELIVERABLE",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "scope_id": "ev_submit_forbidden",
+      "requires": [],
+      "sources": [
+        {
+          "quote": "提交r.md",
+          "occurrence": 1
+        },
+        {
+          "quote": "批准前不得提交",
+          "occurrence": 1
+        }
+      ],
+      "note": "后半句承接同一提交对象r.md；禁止用途不产生正向O。"
+    },
+    {
+      "id": "cl_prohibition_condition",
+      "kind": "CONDITION",
+      "event_id": "ev_submit_forbidden",
+      "entity_id": null,
+      "role": null,
+      "expression_id": "expr_not_approved",
+      "direction": "SUFFICIENT",
+      "temporal": null,
+      "quantity": null,
+      "scope_id": "ev_submit_forbidden",
+      "requires": [],
+      "sources": [
+        {
+          "quote": "QA批准后",
+          "occurrence": 1
+        },
+        {
+          "quote": "批准前不得提交",
+          "occurrence": 1
+        }
+      ],
+      "note": "同一QA批准尚未发生的范围足以触发提交禁止，不要求未来批准已发生。"
+    }
+  ],
+  "expressions": [
+    {
+      "id": "expr_approved",
+      "op": "STATE",
+      "operands": [],
+      "state": {
+        "predicate": "批准已发生",
+        "event_id": "ev_approval",
+        "args": [
+          "ent_qa"
+        ],
+        "polarity": "POSITIVE"
+      },
+      "sources": [
+        {
+          "quote": "QA批准后",
+          "occurrence": 1
+        }
+      ]
+    },
+    {
+      "id": "expr_not_approved",
+      "op": "STATE",
+      "operands": [],
+      "state": {
+        "predicate": "批准已发生",
+        "event_id": "ev_approval",
+        "args": [
+          "ent_qa"
+        ],
+        "polarity": "NEGATIVE"
+      },
+      "sources": [
+        {
+          "quote": "QA批准后",
+          "occurrence": 1
+        },
+        {
+          "quote": "批准前",
+          "occurrence": 1
+        }
+      ]
+    }
+  ],
+  "issues": [
+    {
+      "id": "issue_approval_object",
+      "kind": "UNSPECIFIED",
+      "subject_ids": [
+        "ev_approval"
+      ],
+      "field_path": "events[ev_approval]",
+      "alternatives": [],
+      "affected_views": [
+        "A",
+        "O",
+        "B"
+      ],
+      "sources": [
+        {
+          "quote": "QA批准",
+          "occurrence": 1
+        }
+      ],
+      "note": "原文未明确QA批准的对象；不将r.md自动绑定为批准对象。前后批准仍指同一条件事件。"
+    }
+  ],
+  "coverage": [
+    {
+      "sources": [
+        {
+          "quote": "允许PM在QA批准后提交r.md",
+          "occurrence": 1
+        }
+      ],
+      "claim_ids": [
+        "cl_approver",
+        "cl_allowed_performer",
+        "cl_allowed_deliverable",
+        "cl_permission_condition"
+      ],
+      "status": "EXPRESSED",
+      "affected_views": [
+        "A",
+        "P",
+        "O"
+      ]
+    },
+    {
+      "sources": [
+        {
+          "quote": "批准前不得提交",
+          "occurrence": 1
+        }
+      ],
+      "claim_ids": [
+        "cl_forbidden_performer",
+        "cl_forbidden_deliverable",
+        "cl_prohibition_condition"
+      ],
+      "status": "EXPRESSED",
+      "affected_views": [
+        "B",
+        "P"
+      ]
+    },
+    {
+      "sources": [
+        {
+          "quote": "QA批准",
+          "occurrence": 1
+        }
+      ],
+      "claim_ids": [],
+      "status": "UNSPECIFIED",
+      "affected_views": [
+        "A",
+        "O",
+        "B"
+      ]
+    }
+  ]
+}

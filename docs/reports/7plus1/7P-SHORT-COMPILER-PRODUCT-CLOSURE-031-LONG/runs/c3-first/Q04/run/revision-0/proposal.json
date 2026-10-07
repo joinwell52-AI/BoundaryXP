@@ -1,0 +1,373 @@
+{
+  "contract_version": "031-r01",
+  "entities": [
+    {
+      "id": "n_pm",
+      "label": "PM",
+      "type": "OTHER",
+      "mentions": [
+        {
+          "quote": "PM",
+          "occurrence": 1
+        }
+      ],
+      "alternatives": []
+    },
+    {
+      "id": "n_tools",
+      "label": "tool-list.json",
+      "type": "FILE",
+      "mentions": [
+        {
+          "quote": "tool-list.json",
+          "occurrence": 1
+        }
+      ],
+      "alternatives": []
+    },
+    {
+      "id": "n_list",
+      "label": "tool-list.json中的MCP工具清单",
+      "type": "OTHER",
+      "mentions": [
+        {
+          "quote": "tool-list.json中的MCP工具清单",
+          "occurrence": 1
+        }
+      ],
+      "alternatives": []
+    },
+    {
+      "id": "n_report",
+      "label": "mcp-check.md",
+      "type": "FILE",
+      "mentions": [
+        {
+          "quote": "mcp-check.md",
+          "occurrence": 1
+        },
+        {
+          "quote": "mcp-check.md",
+          "occurrence": 2
+        }
+      ],
+      "alternatives": []
+    },
+    {
+      "id": "n_qa",
+      "label": "QA",
+      "type": "OTHER",
+      "mentions": [
+        {
+          "quote": "QA",
+          "occurrence": 1
+        }
+      ],
+      "alternatives": []
+    }
+  ],
+  "events": [
+    {
+      "id": "e_check",
+      "predicate": "检查工具清单",
+      "kind": "ACTION",
+      "layer": "MAIN",
+      "use": "CURRENT_TASK",
+      "modality": "REQUIRED",
+      "polarity": "POSITIVE",
+      "owner_id": "ROOT",
+      "constraint_ids": [],
+      "requires": [],
+      "sources": [
+        {
+          "quote": "请PM检查tool-list.json中的MCP工具清单",
+          "occurrence": 1
+        }
+      ]
+    },
+    {
+      "id": "e_generate",
+      "predicate": "生成检查报告",
+      "kind": "ACTION",
+      "layer": "MAIN",
+      "use": "CURRENT_TASK",
+      "modality": "REQUIRED",
+      "polarity": "POSITIVE",
+      "owner_id": "ROOT",
+      "constraint_ids": [],
+      "requires": [],
+      "sources": [
+        {
+          "quote": "并生成mcp-check.md",
+          "occurrence": 1
+        }
+      ]
+    },
+    {
+      "id": "e_review",
+      "predicate": "复核检查报告",
+      "kind": "ACTION",
+      "layer": "MAIN",
+      "use": "CURRENT_TASK",
+      "modality": "REQUIRED",
+      "polarity": "POSITIVE",
+      "owner_id": "ROOT",
+      "constraint_ids": [],
+      "requires": [],
+      "sources": [
+        {
+          "quote": "QA负责复核mcp-check.md",
+          "occurrence": 1
+        }
+      ]
+    }
+  ],
+  "claims": [
+    {
+      "id": "c_check_pm",
+      "kind": "ROLE",
+      "event_id": "e_check",
+      "entity_id": "n_pm",
+      "role": "PERFORMER",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "scope_id": "e_check",
+      "requires": [],
+      "sources": [
+        {
+          "quote": "请PM检查tool-list.json中的MCP工具清单",
+          "occurrence": 1
+        }
+      ],
+      "note": "PM是检查执行者；岗位简称未指定人或组类别。"
+    },
+    {
+      "id": "c_check_file",
+      "kind": "ROLE",
+      "event_id": "e_check",
+      "entity_id": "n_tools",
+      "role": "INPUT_OBJECT",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "scope_id": "e_check",
+      "requires": [],
+      "sources": [
+        {
+          "quote": "检查tool-list.json中的MCP工具清单",
+          "occurrence": 1
+        }
+      ],
+      "note": "tool-list.json是明确输入文件，检查范围限定为其中的MCP工具清单。"
+    },
+    {
+      "id": "c_check_list",
+      "kind": "ROLE",
+      "event_id": "e_check",
+      "entity_id": "n_list",
+      "role": "INPUT_OBJECT",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "scope_id": "e_check",
+      "requires": [],
+      "sources": [
+        {
+          "quote": "检查tool-list.json中的MCP工具清单",
+          "occurrence": 1
+        }
+      ],
+      "note": "文件中的MCP工具清单是明确受检对象。"
+    },
+    {
+      "id": "c_check_scope",
+      "kind": "SCOPE",
+      "event_id": "e_check",
+      "entity_id": null,
+      "role": null,
+      "expression_id": "x_list",
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "scope_id": "e_check",
+      "requires": [],
+      "sources": [
+        {
+          "quote": "检查tool-list.json中的MCP工具清单",
+          "occurrence": 1
+        }
+      ],
+      "note": "保留文件内清单这一检查范围，不扩展为检查整个文件的所有内容。"
+    },
+    {
+      "id": "c_generate_pm",
+      "kind": "ROLE",
+      "event_id": "e_generate",
+      "entity_id": "n_pm",
+      "role": "PERFORMER",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "scope_id": "e_generate",
+      "requires": [],
+      "sources": [
+        {
+          "quote": "请PM检查tool-list.json中的MCP工具清单",
+          "occurrence": 1
+        },
+        {
+          "quote": "并生成mcp-check.md",
+          "occurrence": 1
+        }
+      ],
+      "note": "生成是同一指令的并列追加动作，承接明确主语PM；主体切换发生在后续QA复核句。"
+    },
+    {
+      "id": "c_generate_result",
+      "kind": "ROLE",
+      "event_id": "e_generate",
+      "entity_id": "n_report",
+      "role": "RESULT",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "scope_id": "e_generate",
+      "requires": [],
+      "sources": [
+        {
+          "quote": "生成mcp-check.md",
+          "occurrence": 1
+        }
+      ],
+      "note": "mcp-check.md是明确要求生成的结果，原文未要求提交或交付。"
+    },
+    {
+      "id": "c_review_qa",
+      "kind": "ROLE",
+      "event_id": "e_review",
+      "entity_id": "n_qa",
+      "role": "REVIEWER",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "scope_id": "e_review",
+      "requires": [],
+      "sources": [
+        {
+          "quote": "QA负责复核mcp-check.md",
+          "occurrence": 1
+        }
+      ],
+      "note": "QA承担复核职责，不解释为组织职责或批准职责。"
+    },
+    {
+      "id": "c_review_object",
+      "kind": "ROLE",
+      "event_id": "e_review",
+      "entity_id": "n_report",
+      "role": "OBJECT",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "scope_id": "e_review",
+      "requires": [],
+      "sources": [
+        {
+          "quote": "生成mcp-check.md",
+          "occurrence": 1
+        },
+        {
+          "quote": "QA负责复核mcp-check.md",
+          "occurrence": 1
+        }
+      ],
+      "note": "复核对象与本任务生成的同名文件保持同一身份，是内部产物用途，不新增外部输入。"
+    }
+  ],
+  "expressions": [
+    {
+      "id": "x_list",
+      "op": "ITEM",
+      "operands": [
+        "n_list"
+      ],
+      "state": null,
+      "sources": [
+        {
+          "quote": "tool-list.json中的MCP工具清单",
+          "occurrence": 1
+        }
+      ]
+    }
+  ],
+  "issues": [],
+  "coverage": [
+    {
+      "sources": [
+        {
+          "quote": "请PM检查tool-list.json中的MCP工具清单",
+          "occurrence": 1
+        }
+      ],
+      "claim_ids": [
+        "c_check_pm",
+        "c_check_file",
+        "c_check_list",
+        "c_check_scope"
+      ],
+      "status": "EXPRESSED",
+      "affected_views": [
+        "A",
+        "P",
+        "I"
+      ]
+    },
+    {
+      "sources": [
+        {
+          "quote": "请PM检查tool-list.json中的MCP工具清单",
+          "occurrence": 1
+        },
+        {
+          "quote": "并生成mcp-check.md",
+          "occurrence": 1
+        }
+      ],
+      "claim_ids": [
+        "c_generate_pm",
+        "c_generate_result"
+      ],
+      "status": "EXPRESSED",
+      "affected_views": [
+        "A",
+        "P",
+        "O"
+      ]
+    },
+    {
+      "sources": [
+        {
+          "quote": "QA负责复核mcp-check.md",
+          "occurrence": 1
+        }
+      ],
+      "claim_ids": [
+        "c_review_qa",
+        "c_review_object"
+      ],
+      "status": "EXPRESSED",
+      "affected_views": [
+        "A",
+        "P"
+      ]
+    }
+  ]
+}

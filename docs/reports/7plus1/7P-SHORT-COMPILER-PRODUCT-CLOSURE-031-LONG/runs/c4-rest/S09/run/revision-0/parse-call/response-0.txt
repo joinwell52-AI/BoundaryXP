@@ -1,0 +1,185 @@
+{
+  "contract_version": "031-r01",
+  "entities": [
+    {
+      "id": "ent_pm",
+      "label": "PM",
+      "type": "OTHER",
+      "mentions": [
+        {"quote": "PM", "occurrence": 1}
+      ],
+      "alternatives": []
+    },
+    {
+      "id": "ent_report",
+      "label": "top.md报告",
+      "type": "FILE",
+      "mentions": [
+        {"quote": "top.md", "occurrence": 1},
+        {"quote": "报告", "occurrence": 1}
+      ],
+      "alternatives": []
+    },
+    {
+      "id": "ent_problems",
+      "label": "问题",
+      "type": "OTHER",
+      "mentions": [
+        {"quote": "问题", "occurrence": 1}
+      ],
+      "alternatives": []
+    }
+  ],
+  "events": [
+    {
+      "id": "evt_generate",
+      "predicate": "生成报告",
+      "kind": "ACTION",
+      "layer": "MAIN",
+      "use": "CURRENT_TASK",
+      "modality": "REQUIRED",
+      "polarity": "POSITIVE",
+      "owner_id": "ROOT",
+      "constraint_ids": ["cl_time", "cl_count"],
+      "requires": [],
+      "sources": [
+        {"quote": "请PM在10分钟内生成top.md", "occurrence": 1},
+        {"quote": "报告只列3个问题", "occurrence": 1}
+      ]
+    }
+  ],
+  "claims": [
+    {
+      "id": "cl_performer",
+      "kind": "ROLE",
+      "event_id": "evt_generate",
+      "entity_id": "ent_pm",
+      "role": "PERFORMER",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "scope_id": "evt_generate",
+      "requires": [],
+      "sources": [
+        {"quote": "请PM在10分钟内生成top.md", "occurrence": 1}
+      ],
+      "note": "PM是生成报告的明确执行者；原文未指定其人员或群组类别。"
+    },
+    {
+      "id": "cl_result",
+      "kind": "ROLE",
+      "event_id": "evt_generate",
+      "entity_id": "ent_report",
+      "role": "RESULT",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "scope_id": "evt_generate",
+      "requires": [],
+      "sources": [
+        {"quote": "生成top.md", "occurrence": 1},
+        {"quote": "报告只列3个问题", "occurrence": 1}
+      ],
+      "note": "报告指本句唯一要求生成的top.md，保持同一产物身份。"
+    },
+    {
+      "id": "cl_content",
+      "kind": "ROLE",
+      "event_id": "evt_generate",
+      "entity_id": "ent_problems",
+      "role": "CONTENT",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "scope_id": "ent_report",
+      "requires": [],
+      "sources": [
+        {"quote": "报告只列3个问题", "occurrence": 1}
+      ],
+      "note": "问题是报告中被计数的内容。"
+    },
+    {
+      "id": "cl_time",
+      "kind": "QUANTITY",
+      "event_id": "evt_generate",
+      "entity_id": null,
+      "role": null,
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": {
+        "metric": "生成用时",
+        "target_id": "evt_generate",
+        "comparator": "LTE",
+        "value": 10,
+        "unit": "分钟",
+        "use": "EXECUTION_LIMIT",
+        "count_scope": "evt_generate"
+      },
+      "scope_id": "evt_generate",
+      "requires": [],
+      "sources": [
+        {"quote": "在10分钟内生成top.md", "occurrence": 1}
+      ],
+      "note": "生成动作须在10分钟内完成；该期限不是根任务完成条件。"
+    },
+    {
+      "id": "cl_count",
+      "kind": "QUANTITY",
+      "event_id": "evt_generate",
+      "entity_id": null,
+      "role": null,
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": {
+        "metric": "列出的问题数",
+        "target_id": "ent_report",
+        "comparator": "EQ",
+        "value": 3,
+        "unit": "个",
+        "use": "OUTPUT_CONTENT",
+        "count_scope": "ent_report"
+      },
+      "scope_id": "evt_generate",
+      "requires": ["cl_result"],
+      "sources": [
+        {"quote": "生成top.md", "occurrence": 1},
+        {"quote": "报告只列3个问题", "occurrence": 1}
+      ],
+      "note": "报告所列问题恰为3个，数量约束生成产物的内容。"
+    }
+  ],
+  "expressions": [],
+  "issues": [],
+  "coverage": [
+    {
+      "sources": [
+        {"quote": "请PM", "occurrence": 1},
+        {"quote": "生成top.md", "occurrence": 1}
+      ],
+      "claim_ids": ["cl_performer", "cl_result"],
+      "status": "EXPRESSED",
+      "affected_views": ["A", "P", "O"]
+    },
+    {
+      "sources": [
+        {"quote": "在10分钟内", "occurrence": 1}
+      ],
+      "claim_ids": ["cl_time"],
+      "status": "EXPRESSED",
+      "affected_views": ["R"]
+    },
+    {
+      "sources": [
+        {"quote": "报告只列3个问题", "occurrence": 1}
+      ],
+      "claim_ids": ["cl_result", "cl_content", "cl_count"],
+      "status": "EXPRESSED",
+      "affected_views": ["O"]
+    }
+  ]
+}

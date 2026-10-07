@@ -1,0 +1,4883 @@
+{
+  "source": {
+    "text": "请PM核对users.csv；不得生成optional.md。",
+    "sha256": "842ad1a9aeecaad5f8f59cafa1a63639ad3166017731b8a77a2b21b2512b5587",
+    "encoding": "UTF-8",
+    "codepoints": 31,
+    "lines": [
+      {
+        "id": "L1",
+        "text": "请PM核对users.csv；不得生成optional.md。",
+        "span": [
+          0,
+          31
+        ]
+      }
+    ],
+    "literals": [
+      {
+        "text": "users.csv",
+        "span": [
+          5,
+          14
+        ]
+      },
+      {
+        "text": "optional.md",
+        "span": [
+          19,
+          30
+        ]
+      }
+    ]
+  },
+  "proposal": {
+    "contract_version": "031-r01",
+    "entities": [
+      {
+        "id": "entity_pm",
+        "label": "PM",
+        "type": "OTHER",
+        "mentions": [
+          {
+            "quote": "PM",
+            "occurrence": 1
+          }
+        ],
+        "alternatives": []
+      },
+      {
+        "id": "entity_users",
+        "label": "users.csv",
+        "type": "FILE",
+        "mentions": [
+          {
+            "quote": "users.csv",
+            "occurrence": 1
+          }
+        ],
+        "alternatives": []
+      },
+      {
+        "id": "entity_optional",
+        "label": "optional.md",
+        "type": "FILE",
+        "mentions": [
+          {
+            "quote": "optional.md",
+            "occurrence": 1
+          }
+        ],
+        "alternatives": []
+      }
+    ],
+    "events": [
+      {
+        "id": "event_check",
+        "predicate": "核对",
+        "kind": "ACTION",
+        "layer": "MAIN",
+        "use": "CURRENT_TASK",
+        "modality": "REQUIRED",
+        "polarity": "POSITIVE",
+        "owner_id": "ROOT",
+        "constraint_ids": [],
+        "requires": [],
+        "sources": [
+          {
+            "quote": "请PM核对users.csv",
+            "occurrence": 1
+          }
+        ]
+      },
+      {
+        "id": "event_generate",
+        "predicate": "生成",
+        "kind": "ACTION",
+        "layer": "MAIN",
+        "use": "CURRENT_TASK",
+        "modality": "FORBIDDEN",
+        "polarity": "POSITIVE",
+        "owner_id": "ROOT",
+        "constraint_ids": [],
+        "requires": [],
+        "sources": [
+          {
+            "quote": "不得生成optional.md",
+            "occurrence": 1
+          }
+        ]
+      }
+    ],
+    "claims": [
+      {
+        "id": "claim_check_performer",
+        "kind": "ROLE",
+        "event_id": "event_check",
+        "entity_id": "entity_pm",
+        "role": "PERFORMER",
+        "expression_id": null,
+        "direction": null,
+        "temporal": null,
+        "quantity": null,
+        "scope_id": "event_check",
+        "requires": [],
+        "sources": [
+          {
+            "quote": "请PM核对users.csv",
+            "occurrence": 1
+          }
+        ],
+        "note": "PM是核对动作的明确执行者；岗位简称不推定身份类别或权限。"
+      },
+      {
+        "id": "claim_check_input",
+        "kind": "ROLE",
+        "event_id": "event_check",
+        "entity_id": "entity_users",
+        "role": "INPUT_OBJECT",
+        "expression_id": null,
+        "direction": null,
+        "temporal": null,
+        "quantity": null,
+        "scope_id": "event_check",
+        "requires": [],
+        "sources": [
+          {
+            "quote": "核对users.csv",
+            "occurrence": 1
+          }
+        ],
+        "note": "users.csv是明确受核对的输入范围。"
+      },
+      {
+        "id": "claim_generate_performer",
+        "kind": "ROLE",
+        "event_id": "event_generate",
+        "entity_id": "entity_pm",
+        "role": "PERFORMER",
+        "expression_id": null,
+        "direction": null,
+        "temporal": null,
+        "quantity": null,
+        "scope_id": "event_generate",
+        "requires": [],
+        "sources": [
+          {
+            "quote": "请PM核对users.csv",
+            "occurrence": 1
+          },
+          {
+            "quote": "不得生成optional.md",
+            "occurrence": 1
+          }
+        ],
+        "note": "同一连续指令未切换主体，禁止生成动作承接PM为执行主体。"
+      },
+      {
+        "id": "claim_generate_result",
+        "kind": "ROLE",
+        "event_id": "event_generate",
+        "entity_id": "entity_optional",
+        "role": "RESULT",
+        "expression_id": null,
+        "direction": null,
+        "temporal": null,
+        "quantity": null,
+        "scope_id": "event_generate",
+        "requires": [],
+        "sources": [
+          {
+            "quote": "不得生成optional.md",
+            "occurrence": 1
+          }
+        ],
+        "note": "optional.md是被禁止生成的结果对象，不构成正向产出要求或存在断言。"
+      }
+    ],
+    "expressions": [],
+    "issues": [],
+    "coverage": [
+      {
+        "sources": [
+          {
+            "quote": "请PM核对users.csv",
+            "occurrence": 1
+          }
+        ],
+        "claim_ids": [
+          "claim_check_performer",
+          "claim_check_input"
+        ],
+        "status": "EXPRESSED",
+        "affected_views": [
+          "I",
+          "A",
+          "P"
+        ]
+      },
+      {
+        "sources": [
+          {
+            "quote": "不得生成optional.md",
+            "occurrence": 1
+          }
+        ],
+        "claim_ids": [
+          "claim_generate_performer",
+          "claim_generate_result"
+        ],
+        "status": "EXPRESSED",
+        "affected_views": [
+          "B",
+          "P"
+        ]
+      }
+    ]
+  },
+  "audit": {
+    "contract_version": "031-r01",
+    "reviews": [
+      {
+        "subject_id": "entity_pm",
+        "field_path": "",
+        "verdict": "SUPPORT",
+        "context_refs": [],
+        "sources": [
+          {
+            "quote": "PM",
+            "occurrence": 1
+          }
+        ],
+        "reason": "PM身份明确；OTHER可作未指定具体类别的占位，不推定岗位权限。"
+      },
+      {
+        "subject_id": "entity_users",
+        "field_path": "",
+        "verdict": "SUPPORT",
+        "context_refs": [],
+        "sources": [
+          {
+            "quote": "users.csv",
+            "occurrence": 1
+          }
+        ],
+        "reason": "原文明示受核对文件，名称与身份一致。"
+      },
+      {
+        "subject_id": "entity_optional",
+        "field_path": "",
+        "verdict": "SUPPORT",
+        "context_refs": [],
+        "sources": [
+          {
+            "quote": "optional.md",
+            "occurrence": 1
+          }
+        ],
+        "reason": "原文明示禁止生成的文件对象；实体表示不断言文件存在。"
+      },
+      {
+        "subject_id": "event_check",
+        "field_path": "",
+        "verdict": "SUPPORT",
+        "context_refs": [],
+        "sources": [
+          {
+            "quote": "请PM核对users.csv",
+            "occurrence": 1
+          }
+        ],
+        "reason": "明确要求当前执行核对，无条件或数量限制。"
+      },
+      {
+        "subject_id": "event_generate",
+        "field_path": "",
+        "verdict": "SUPPORT",
+        "context_refs": [],
+        "sources": [
+          {
+            "quote": "不得生成optional.md",
+            "occurrence": 1
+          }
+        ],
+        "reason": "明确禁止当前生成动作；FORBIDDEN与正向动作谓词搭配正确。"
+      },
+      {
+        "subject_id": "claim_check_performer",
+        "field_path": "",
+        "verdict": "SUPPORT",
+        "context_refs": [
+          "event_check",
+          "entity_pm"
+        ],
+        "sources": [
+          {
+            "quote": "请PM核对users.csv",
+            "occurrence": 1
+          }
+        ],
+        "reason": "PM是核对动作的明确执行者。"
+      },
+      {
+        "subject_id": "claim_check_input",
+        "field_path": "",
+        "verdict": "SUPPORT",
+        "context_refs": [
+          "event_check",
+          "entity_users"
+        ],
+        "sources": [
+          {
+            "quote": "核对users.csv",
+            "occurrence": 1
+          }
+        ],
+        "reason": "users.csv是明确受检范围，INPUT_OBJECT绑定正确。"
+      },
+      {
+        "subject_id": "claim_generate_performer",
+        "field_path": "",
+        "verdict": "SUPPORT",
+        "context_refs": [
+          "event_generate",
+          "entity_pm"
+        ],
+        "sources": [
+          {
+            "quote": "请PM核对users.csv",
+            "occurrence": 1
+          },
+          {
+            "quote": "不得生成optional.md",
+            "occurrence": 1
+          }
+        ],
+        "reason": "连续同一指令没有主体切换或竞争主体，禁止动作可承接PM；来源包含两端。"
+      },
+      {
+        "subject_id": "claim_generate_result",
+        "field_path": "",
+        "verdict": "SUPPORT",
+        "context_refs": [
+          "event_generate",
+          "entity_optional"
+        ],
+        "sources": [
+          {
+            "quote": "不得生成optional.md",
+            "occurrence": 1
+          }
+        ],
+        "reason": "optional.md绑定为被禁止生成动作的RESULT正确，不产生正向O或存在断言。"
+      }
+    ],
+    "issues": [],
+    "omissions": []
+  },
+  "technical": {
+    "policy": "028-r02-technical-v2",
+    "schemas": {
+      "proposal": {
+        "ok": true,
+        "errors": []
+      },
+      "audit": {
+        "ok": true,
+        "errors": []
+      }
+    },
+    "rows": [
+      {
+        "id": "entity_pm",
+        "collection": "entities",
+        "status": "ACCEPTED",
+        "identity_status": "ACCEPTED",
+        "errors": [],
+        "uncertain": [],
+        "sources": [
+          {
+            "quote": "PM",
+            "occurrence": 1,
+            "span": [
+              1,
+              3
+            ],
+            "source_sha256": "842ad1a9aeecaad5f8f59cafa1a63639ad3166017731b8a77a2b21b2512b5587"
+          }
+        ],
+        "audit_refs": [
+          {
+            "subject_id": "entity_pm",
+            "field_path": "",
+            "verdict": "SUPPORT"
+          }
+        ],
+        "required_dependencies": [],
+        "structural_refs": []
+      },
+      {
+        "id": "entity_users",
+        "collection": "entities",
+        "status": "ACCEPTED",
+        "identity_status": "ACCEPTED",
+        "errors": [],
+        "uncertain": [],
+        "sources": [
+          {
+            "quote": "users.csv",
+            "occurrence": 1,
+            "span": [
+              5,
+              14
+            ],
+            "source_sha256": "842ad1a9aeecaad5f8f59cafa1a63639ad3166017731b8a77a2b21b2512b5587"
+          }
+        ],
+        "audit_refs": [
+          {
+            "subject_id": "entity_users",
+            "field_path": "",
+            "verdict": "SUPPORT"
+          }
+        ],
+        "required_dependencies": [],
+        "structural_refs": []
+      },
+      {
+        "id": "entity_optional",
+        "collection": "entities",
+        "status": "ACCEPTED",
+        "identity_status": "ACCEPTED",
+        "errors": [],
+        "uncertain": [],
+        "sources": [
+          {
+            "quote": "optional.md",
+            "occurrence": 1,
+            "span": [
+              19,
+              30
+            ],
+            "source_sha256": "842ad1a9aeecaad5f8f59cafa1a63639ad3166017731b8a77a2b21b2512b5587"
+          }
+        ],
+        "audit_refs": [
+          {
+            "subject_id": "entity_optional",
+            "field_path": "",
+            "verdict": "SUPPORT"
+          }
+        ],
+        "required_dependencies": [],
+        "structural_refs": []
+      },
+      {
+        "id": "event_check",
+        "collection": "events",
+        "status": "ACCEPTED",
+        "errors": [],
+        "uncertain": [],
+        "sources": [
+          {
+            "quote": "请PM核对users.csv",
+            "occurrence": 1,
+            "span": [
+              0,
+              14
+            ],
+            "source_sha256": "842ad1a9aeecaad5f8f59cafa1a63639ad3166017731b8a77a2b21b2512b5587"
+          }
+        ],
+        "audit_refs": [
+          {
+            "subject_id": "event_check",
+            "field_path": "",
+            "verdict": "SUPPORT"
+          }
+        ],
+        "required_dependencies": [],
+        "structural_refs": [
+          "ROOT"
+        ]
+      },
+      {
+        "id": "event_generate",
+        "collection": "events",
+        "status": "ACCEPTED",
+        "errors": [],
+        "uncertain": [],
+        "sources": [
+          {
+            "quote": "不得生成optional.md",
+            "occurrence": 1,
+            "span": [
+              15,
+              30
+            ],
+            "source_sha256": "842ad1a9aeecaad5f8f59cafa1a63639ad3166017731b8a77a2b21b2512b5587"
+          }
+        ],
+        "audit_refs": [
+          {
+            "subject_id": "event_generate",
+            "field_path": "",
+            "verdict": "SUPPORT"
+          }
+        ],
+        "required_dependencies": [],
+        "structural_refs": [
+          "ROOT"
+        ]
+      },
+      {
+        "id": "claim_check_performer",
+        "collection": "claims",
+        "status": "ACCEPTED",
+        "errors": [],
+        "uncertain": [],
+        "sources": [
+          {
+            "quote": "请PM核对users.csv",
+            "occurrence": 1,
+            "span": [
+              0,
+              14
+            ],
+            "source_sha256": "842ad1a9aeecaad5f8f59cafa1a63639ad3166017731b8a77a2b21b2512b5587"
+          }
+        ],
+        "audit_refs": [
+          {
+            "subject_id": "claim_check_performer",
+            "field_path": "",
+            "verdict": "SUPPORT"
+          }
+        ],
+        "required_dependencies": [],
+        "structural_refs": [
+          "event_check",
+          "event_check",
+          "entity_pm"
+        ]
+      },
+      {
+        "id": "claim_check_input",
+        "collection": "claims",
+        "status": "ACCEPTED",
+        "errors": [],
+        "uncertain": [],
+        "sources": [
+          {
+            "quote": "核对users.csv",
+            "occurrence": 1,
+            "span": [
+              3,
+              14
+            ],
+            "source_sha256": "842ad1a9aeecaad5f8f59cafa1a63639ad3166017731b8a77a2b21b2512b5587"
+          }
+        ],
+        "audit_refs": [
+          {
+            "subject_id": "claim_check_input",
+            "field_path": "",
+            "verdict": "SUPPORT"
+          }
+        ],
+        "required_dependencies": [],
+        "structural_refs": [
+          "event_check",
+          "event_check",
+          "entity_users"
+        ]
+      },
+      {
+        "id": "claim_generate_performer",
+        "collection": "claims",
+        "status": "ACCEPTED",
+        "errors": [],
+        "uncertain": [],
+        "sources": [
+          {
+            "quote": "请PM核对users.csv",
+            "occurrence": 1,
+            "span": [
+              0,
+              14
+            ],
+            "source_sha256": "842ad1a9aeecaad5f8f59cafa1a63639ad3166017731b8a77a2b21b2512b5587"
+          },
+          {
+            "quote": "不得生成optional.md",
+            "occurrence": 1,
+            "span": [
+              15,
+              30
+            ],
+            "source_sha256": "842ad1a9aeecaad5f8f59cafa1a63639ad3166017731b8a77a2b21b2512b5587"
+          }
+        ],
+        "audit_refs": [
+          {
+            "subject_id": "claim_generate_performer",
+            "field_path": "",
+            "verdict": "SUPPORT"
+          }
+        ],
+        "required_dependencies": [],
+        "structural_refs": [
+          "event_generate",
+          "event_generate",
+          "entity_pm"
+        ]
+      },
+      {
+        "id": "claim_generate_result",
+        "collection": "claims",
+        "status": "ACCEPTED",
+        "errors": [],
+        "uncertain": [],
+        "sources": [
+          {
+            "quote": "不得生成optional.md",
+            "occurrence": 1,
+            "span": [
+              15,
+              30
+            ],
+            "source_sha256": "842ad1a9aeecaad5f8f59cafa1a63639ad3166017731b8a77a2b21b2512b5587"
+          }
+        ],
+        "audit_refs": [
+          {
+            "subject_id": "claim_generate_result",
+            "field_path": "",
+            "verdict": "SUPPORT"
+          }
+        ],
+        "required_dependencies": [],
+        "structural_refs": [
+          "event_generate",
+          "event_generate",
+          "entity_optional"
+        ]
+      }
+    ],
+    "diagnostics": [],
+    "coverage": [
+      {
+        "sources": [
+          {
+            "quote": "请PM核对users.csv",
+            "occurrence": 1,
+            "span": [
+              0,
+              14
+            ],
+            "source_sha256": "842ad1a9aeecaad5f8f59cafa1a63639ad3166017731b8a77a2b21b2512b5587"
+          }
+        ],
+        "claim_ids": [
+          "claim_check_performer",
+          "claim_check_input"
+        ],
+        "status": "EXPRESSED",
+        "affected_views": [
+          "I",
+          "A",
+          "P"
+        ],
+        "id": "coverage:0"
+      },
+      {
+        "sources": [
+          {
+            "quote": "不得生成optional.md",
+            "occurrence": 1,
+            "span": [
+              15,
+              30
+            ],
+            "source_sha256": "842ad1a9aeecaad5f8f59cafa1a63639ad3166017731b8a77a2b21b2512b5587"
+          }
+        ],
+        "claim_ids": [
+          "claim_generate_performer",
+          "claim_generate_result"
+        ],
+        "status": "EXPRESSED",
+        "affected_views": [
+          "B",
+          "P"
+        ],
+        "id": "coverage:1"
+      }
+    ],
+    "audit_sources": [
+      {
+        "subject_id": "entity_pm",
+        "sources": [
+          {
+            "quote": "PM",
+            "occurrence": 1,
+            "span": [
+              1,
+              3
+            ],
+            "source_sha256": "842ad1a9aeecaad5f8f59cafa1a63639ad3166017731b8a77a2b21b2512b5587"
+          }
+        ]
+      },
+      {
+        "subject_id": "entity_users",
+        "sources": [
+          {
+            "quote": "users.csv",
+            "occurrence": 1,
+            "span": [
+              5,
+              14
+            ],
+            "source_sha256": "842ad1a9aeecaad5f8f59cafa1a63639ad3166017731b8a77a2b21b2512b5587"
+          }
+        ]
+      },
+      {
+        "subject_id": "entity_optional",
+        "sources": [
+          {
+            "quote": "optional.md",
+            "occurrence": 1,
+            "span": [
+              19,
+              30
+            ],
+            "source_sha256": "842ad1a9aeecaad5f8f59cafa1a63639ad3166017731b8a77a2b21b2512b5587"
+          }
+        ]
+      },
+      {
+        "subject_id": "event_check",
+        "sources": [
+          {
+            "quote": "请PM核对users.csv",
+            "occurrence": 1,
+            "span": [
+              0,
+              14
+            ],
+            "source_sha256": "842ad1a9aeecaad5f8f59cafa1a63639ad3166017731b8a77a2b21b2512b5587"
+          }
+        ]
+      },
+      {
+        "subject_id": "event_generate",
+        "sources": [
+          {
+            "quote": "不得生成optional.md",
+            "occurrence": 1,
+            "span": [
+              15,
+              30
+            ],
+            "source_sha256": "842ad1a9aeecaad5f8f59cafa1a63639ad3166017731b8a77a2b21b2512b5587"
+          }
+        ]
+      },
+      {
+        "subject_id": "claim_check_performer",
+        "sources": [
+          {
+            "quote": "请PM核对users.csv",
+            "occurrence": 1,
+            "span": [
+              0,
+              14
+            ],
+            "source_sha256": "842ad1a9aeecaad5f8f59cafa1a63639ad3166017731b8a77a2b21b2512b5587"
+          }
+        ]
+      },
+      {
+        "subject_id": "claim_check_input",
+        "sources": [
+          {
+            "quote": "核对users.csv",
+            "occurrence": 1,
+            "span": [
+              3,
+              14
+            ],
+            "source_sha256": "842ad1a9aeecaad5f8f59cafa1a63639ad3166017731b8a77a2b21b2512b5587"
+          }
+        ]
+      },
+      {
+        "subject_id": "claim_generate_performer",
+        "sources": [
+          {
+            "quote": "请PM核对users.csv",
+            "occurrence": 1,
+            "span": [
+              0,
+              14
+            ],
+            "source_sha256": "842ad1a9aeecaad5f8f59cafa1a63639ad3166017731b8a77a2b21b2512b5587"
+          },
+          {
+            "quote": "不得生成optional.md",
+            "occurrence": 1,
+            "span": [
+              15,
+              30
+            ],
+            "source_sha256": "842ad1a9aeecaad5f8f59cafa1a63639ad3166017731b8a77a2b21b2512b5587"
+          }
+        ]
+      },
+      {
+        "subject_id": "claim_generate_result",
+        "sources": [
+          {
+            "quote": "不得生成optional.md",
+            "occurrence": 1,
+            "span": [
+              15,
+              30
+            ],
+            "source_sha256": "842ad1a9aeecaad5f8f59cafa1a63639ad3166017731b8a77a2b21b2512b5587"
+          }
+        ]
+      }
+    ],
+    "issue_sources": []
+  },
+  "ir": {
+    "format": "boundx-boundary-ir/031-r01",
+    "source_sha256": "842ad1a9aeecaad5f8f59cafa1a63639ad3166017731b8a77a2b21b2512b5587",
+    "facts": [
+      {
+        "id": "bf:6ac8e197675650413c87",
+        "kind": "EVENT",
+        "status": "ACCEPTED",
+        "claim_ids": [
+          "event_check",
+          "claim_check_performer",
+          "claim_check_input"
+        ],
+        "event": {
+          "id": "event_check",
+          "predicate": "核对",
+          "kind": "ACTION",
+          "layer": "MAIN",
+          "use": "CURRENT_TASK",
+          "modality": "REQUIRED",
+          "polarity": "POSITIVE",
+          "owner_id": "ROOT",
+          "constraint_ids": [],
+          "requires": [],
+          "sources": [
+            {
+              "quote": "请PM核对users.csv",
+              "occurrence": 1,
+              "span": [
+                0,
+                14
+              ],
+              "source_sha256": "842ad1a9aeecaad5f8f59cafa1a63639ad3166017731b8a77a2b21b2512b5587"
+            }
+          ]
+        },
+        "roles": [
+          {
+            "id": "claim_check_performer",
+            "kind": "ROLE",
+            "event_id": "event_check",
+            "entity_id": "entity_pm",
+            "role": "PERFORMER",
+            "expression_id": null,
+            "direction": null,
+            "temporal": null,
+            "quantity": null,
+            "scope_id": "event_check",
+            "requires": [],
+            "sources": [
+              {
+                "quote": "请PM核对users.csv",
+                "occurrence": 1,
+                "span": [
+                  0,
+                  14
+                ],
+                "source_sha256": "842ad1a9aeecaad5f8f59cafa1a63639ad3166017731b8a77a2b21b2512b5587"
+              }
+            ],
+            "note": "PM是核对动作的明确执行者；岗位简称不推定身份类别或权限。",
+            "entity": {
+              "id": "entity_pm",
+              "label": "PM",
+              "type": "OTHER",
+              "mentions": [
+                {
+                  "quote": "PM",
+                  "occurrence": 1,
+                  "span": [
+                    1,
+                    3
+                  ],
+                  "source_sha256": "842ad1a9aeecaad5f8f59cafa1a63639ad3166017731b8a77a2b21b2512b5587"
+                }
+              ],
+              "alternatives": []
+            },
+            "status": "ACCEPTED"
+          },
+          {
+            "id": "claim_check_input",
+            "kind": "ROLE",
+            "event_id": "event_check",
+            "entity_id": "entity_users",
+            "role": "INPUT_OBJECT",
+            "expression_id": null,
+            "direction": null,
+            "temporal": null,
+            "quantity": null,
+            "scope_id": "event_check",
+            "requires": [],
+            "sources": [
+              {
+                "quote": "核对users.csv",
+                "occurrence": 1,
+                "span": [
+                  3,
+                  14
+                ],
+                "source_sha256": "842ad1a9aeecaad5f8f59cafa1a63639ad3166017731b8a77a2b21b2512b5587"
+              }
+            ],
+            "note": "users.csv是明确受核对的输入范围。",
+            "entity": {
+              "id": "entity_users",
+              "label": "users.csv",
+              "type": "FILE",
+              "mentions": [
+                {
+                  "quote": "users.csv",
+                  "occurrence": 1,
+                  "span": [
+                    5,
+                    14
+                  ],
+                  "source_sha256": "842ad1a9aeecaad5f8f59cafa1a63639ad3166017731b8a77a2b21b2512b5587"
+                }
+              ],
+              "alternatives": []
+            },
+            "status": "ACCEPTED"
+          }
+        ],
+        "constraints": [],
+        "sources": [
+          {
+            "quote": "请PM核对users.csv",
+            "occurrence": 1,
+            "span": [
+              0,
+              14
+            ],
+            "source_sha256": "842ad1a9aeecaad5f8f59cafa1a63639ad3166017731b8a77a2b21b2512b5587"
+          },
+          {
+            "quote": "请PM核对users.csv",
+            "occurrence": 1,
+            "span": [
+              0,
+              14
+            ],
+            "source_sha256": "842ad1a9aeecaad5f8f59cafa1a63639ad3166017731b8a77a2b21b2512b5587"
+          },
+          {
+            "quote": "PM",
+            "occurrence": 1,
+            "span": [
+              1,
+              3
+            ],
+            "source_sha256": "842ad1a9aeecaad5f8f59cafa1a63639ad3166017731b8a77a2b21b2512b5587"
+          },
+          {
+            "quote": "核对users.csv",
+            "occurrence": 1,
+            "span": [
+              3,
+              14
+            ],
+            "source_sha256": "842ad1a9aeecaad5f8f59cafa1a63639ad3166017731b8a77a2b21b2512b5587"
+          },
+          {
+            "quote": "users.csv",
+            "occurrence": 1,
+            "span": [
+              5,
+              14
+            ],
+            "source_sha256": "842ad1a9aeecaad5f8f59cafa1a63639ad3166017731b8a77a2b21b2512b5587"
+          }
+        ],
+        "slots": [
+          "A"
+        ],
+        "proof": {
+          "source_sha256": "842ad1a9aeecaad5f8f59cafa1a63639ad3166017731b8a77a2b21b2512b5587",
+          "claim_ids": [
+            "event_check",
+            "claim_check_performer",
+            "claim_check_input"
+          ],
+          "provenance_refs": [
+            "event_check",
+            "claim_check_performer",
+            "entity_pm",
+            "claim_check_input",
+            "entity_users"
+          ],
+          "technical_policy": "028-r02-technical-v2",
+          "checks": [
+            {
+              "id": "event_check",
+              "collection": "events",
+              "status": "ACCEPTED",
+              "errors": [],
+              "uncertain": [],
+              "sources": [
+                {
+                  "quote": "请PM核对users.csv",
+                  "occurrence": 1,
+                  "span": [
+                    0,
+                    14
+                  ],
+                  "source_sha256": "842ad1a9aeecaad5f8f59cafa1a63639ad3166017731b8a77a2b21b2512b5587"
+                }
+              ],
+              "audit_refs": [
+                {
+                  "subject_id": "event_check",
+                  "field_path": "",
+                  "verdict": "SUPPORT"
+                }
+              ],
+              "required_dependencies": [],
+              "structural_refs": [
+                "ROOT"
+              ]
+            },
+            {
+              "id": "claim_check_performer",
+              "collection": "claims",
+              "status": "ACCEPTED",
+              "errors": [],
+              "uncertain": [],
+              "sources": [
+                {
+                  "quote": "请PM核对users.csv",
+                  "occurrence": 1,
+                  "span": [
+                    0,
+                    14
+                  ],
+                  "source_sha256": "842ad1a9aeecaad5f8f59cafa1a63639ad3166017731b8a77a2b21b2512b5587"
+                }
+              ],
+              "audit_refs": [
+                {
+                  "subject_id": "claim_check_performer",
+                  "field_path": "",
+                  "verdict": "SUPPORT"
+                }
+              ],
+              "required_dependencies": [],
+              "structural_refs": [
+                "event_check",
+                "event_check",
+                "entity_pm"
+              ]
+            },
+            {
+              "id": "entity_pm",
+              "collection": "entities",
+              "status": "ACCEPTED",
+              "identity_status": "ACCEPTED",
+              "errors": [],
+              "uncertain": [],
+              "sources": [
+                {
+                  "quote": "PM",
+                  "occurrence": 1,
+                  "span": [
+                    1,
+                    3
+                  ],
+                  "source_sha256": "842ad1a9aeecaad5f8f59cafa1a63639ad3166017731b8a77a2b21b2512b5587"
+                }
+              ],
+              "audit_refs": [
+                {
+                  "subject_id": "entity_pm",
+                  "field_path": "",
+                  "verdict": "SUPPORT"
+                }
+              ],
+              "required_dependencies": [],
+              "structural_refs": []
+            },
+            {
+              "id": "claim_check_input",
+              "collection": "claims",
+              "status": "ACCEPTED",
+              "errors": [],
+              "uncertain": [],
+              "sources": [
+                {
+                  "quote": "核对users.csv",
+                  "occurrence": 1,
+                  "span": [
+                    3,
+                    14
+                  ],
+                  "source_sha256": "842ad1a9aeecaad5f8f59cafa1a63639ad3166017731b8a77a2b21b2512b5587"
+                }
+              ],
+              "audit_refs": [
+                {
+                  "subject_id": "claim_check_input",
+                  "field_path": "",
+                  "verdict": "SUPPORT"
+                }
+              ],
+              "required_dependencies": [],
+              "structural_refs": [
+                "event_check",
+                "event_check",
+                "entity_users"
+              ]
+            },
+            {
+              "id": "entity_users",
+              "collection": "entities",
+              "status": "ACCEPTED",
+              "identity_status": "ACCEPTED",
+              "errors": [],
+              "uncertain": [],
+              "sources": [
+                {
+                  "quote": "users.csv",
+                  "occurrence": 1,
+                  "span": [
+                    5,
+                    14
+                  ],
+                  "source_sha256": "842ad1a9aeecaad5f8f59cafa1a63639ad3166017731b8a77a2b21b2512b5587"
+                }
+              ],
+              "audit_refs": [
+                {
+                  "subject_id": "entity_users",
+                  "field_path": "",
+                  "verdict": "SUPPORT"
+                }
+              ],
+              "required_dependencies": [],
+              "structural_refs": []
+            }
+          ],
+          "audit": [
+            {
+              "subject_id": "event_check",
+              "field_path": "",
+              "verdict": "SUPPORT",
+              "context_refs": [],
+              "sources": [
+                {
+                  "quote": "请PM核对users.csv",
+                  "occurrence": 1
+                }
+              ],
+              "reason": "明确要求当前执行核对，无条件或数量限制。"
+            },
+            {
+              "subject_id": "claim_check_performer",
+              "field_path": "",
+              "verdict": "SUPPORT",
+              "context_refs": [
+                "event_check",
+                "entity_pm"
+              ],
+              "sources": [
+                {
+                  "quote": "请PM核对users.csv",
+                  "occurrence": 1
+                }
+              ],
+              "reason": "PM是核对动作的明确执行者。"
+            },
+            {
+              "subject_id": "entity_pm",
+              "field_path": "",
+              "verdict": "SUPPORT",
+              "context_refs": [],
+              "sources": [
+                {
+                  "quote": "PM",
+                  "occurrence": 1
+                }
+              ],
+              "reason": "PM身份明确；OTHER可作未指定具体类别的占位，不推定岗位权限。"
+            },
+            {
+              "subject_id": "claim_check_input",
+              "field_path": "",
+              "verdict": "SUPPORT",
+              "context_refs": [
+                "event_check",
+                "entity_users"
+              ],
+              "sources": [
+                {
+                  "quote": "核对users.csv",
+                  "occurrence": 1
+                }
+              ],
+              "reason": "users.csv是明确受检范围，INPUT_OBJECT绑定正确。"
+            },
+            {
+              "subject_id": "entity_users",
+              "field_path": "",
+              "verdict": "SUPPORT",
+              "context_refs": [],
+              "sources": [
+                {
+                  "quote": "users.csv",
+                  "occurrence": 1
+                }
+              ],
+              "reason": "原文明示受核对文件，名称与身份一致。"
+            }
+          ],
+          "context_references_are_not_required_dependencies": true
+        }
+      },
+      {
+        "id": "bf:b6ec869cee53ccb21d8e",
+        "kind": "EVENT",
+        "status": "ACCEPTED",
+        "claim_ids": [
+          "event_generate",
+          "claim_generate_performer",
+          "claim_generate_result"
+        ],
+        "event": {
+          "id": "event_generate",
+          "predicate": "生成",
+          "kind": "ACTION",
+          "layer": "MAIN",
+          "use": "CURRENT_TASK",
+          "modality": "FORBIDDEN",
+          "polarity": "POSITIVE",
+          "owner_id": "ROOT",
+          "constraint_ids": [],
+          "requires": [],
+          "sources": [
+            {
+              "quote": "不得生成optional.md",
+              "occurrence": 1,
+              "span": [
+                15,
+                30
+              ],
+              "source_sha256": "842ad1a9aeecaad5f8f59cafa1a63639ad3166017731b8a77a2b21b2512b5587"
+            }
+          ]
+        },
+        "roles": [
+          {
+            "id": "claim_generate_performer",
+            "kind": "ROLE",
+            "event_id": "event_generate",
+            "entity_id": "entity_pm",
+            "role": "PERFORMER",
+            "expression_id": null,
+            "direction": null,
+            "temporal": null,
+            "quantity": null,
+            "scope_id": "event_generate",
+            "requires": [],
+            "sources": [
+              {
+                "quote": "请PM核对users.csv",
+                "occurrence": 1,
+                "span": [
+                  0,
+                  14
+                ],
+                "source_sha256": "842ad1a9aeecaad5f8f59cafa1a63639ad3166017731b8a77a2b21b2512b5587"
+              },
+              {
+                "quote": "不得生成optional.md",
+                "occurrence": 1,
+                "span": [
+                  15,
+                  30
+                ],
+                "source_sha256": "842ad1a9aeecaad5f8f59cafa1a63639ad3166017731b8a77a2b21b2512b5587"
+              }
+            ],
+            "note": "同一连续指令未切换主体，禁止生成动作承接PM为执行主体。",
+            "entity": {
+              "id": "entity_pm",
+              "label": "PM",
+              "type": "OTHER",
+              "mentions": [
+                {
+                  "quote": "PM",
+                  "occurrence": 1,
+                  "span": [
+                    1,
+                    3
+                  ],
+                  "source_sha256": "842ad1a9aeecaad5f8f59cafa1a63639ad3166017731b8a77a2b21b2512b5587"
+                }
+              ],
+              "alternatives": []
+            },
+            "status": "ACCEPTED"
+          },
+          {
+            "id": "claim_generate_result",
+            "kind": "ROLE",
+            "event_id": "event_generate",
+            "entity_id": "entity_optional",
+            "role": "RESULT",
+            "expression_id": null,
+            "direction": null,
+            "temporal": null,
+            "quantity": null,
+            "scope_id": "event_generate",
+            "requires": [],
+            "sources": [
+              {
+                "quote": "不得生成optional.md",
+                "occurrence": 1,
+                "span": [
+                  15,
+                  30
+                ],
+                "source_sha256": "842ad1a9aeecaad5f8f59cafa1a63639ad3166017731b8a77a2b21b2512b5587"
+              }
+            ],
+            "note": "optional.md是被禁止生成的结果对象，不构成正向产出要求或存在断言。",
+            "entity": {
+              "id": "entity_optional",
+              "label": "optional.md",
+              "type": "FILE",
+              "mentions": [
+                {
+                  "quote": "optional.md",
+                  "occurrence": 1,
+                  "span": [
+                    19,
+                    30
+                  ],
+                  "source_sha256": "842ad1a9aeecaad5f8f59cafa1a63639ad3166017731b8a77a2b21b2512b5587"
+                }
+              ],
+              "alternatives": []
+            },
+            "status": "ACCEPTED"
+          }
+        ],
+        "constraints": [],
+        "sources": [
+          {
+            "quote": "不得生成optional.md",
+            "occurrence": 1,
+            "span": [
+              15,
+              30
+            ],
+            "source_sha256": "842ad1a9aeecaad5f8f59cafa1a63639ad3166017731b8a77a2b21b2512b5587"
+          },
+          {
+            "quote": "请PM核对users.csv",
+            "occurrence": 1,
+            "span": [
+              0,
+              14
+            ],
+            "source_sha256": "842ad1a9aeecaad5f8f59cafa1a63639ad3166017731b8a77a2b21b2512b5587"
+          },
+          {
+            "quote": "不得生成optional.md",
+            "occurrence": 1,
+            "span": [
+              15,
+              30
+            ],
+            "source_sha256": "842ad1a9aeecaad5f8f59cafa1a63639ad3166017731b8a77a2b21b2512b5587"
+          },
+          {
+            "quote": "PM",
+            "occurrence": 1,
+            "span": [
+              1,
+              3
+            ],
+            "source_sha256": "842ad1a9aeecaad5f8f59cafa1a63639ad3166017731b8a77a2b21b2512b5587"
+          },
+          {
+            "quote": "不得生成optional.md",
+            "occurrence": 1,
+            "span": [
+              15,
+              30
+            ],
+            "source_sha256": "842ad1a9aeecaad5f8f59cafa1a63639ad3166017731b8a77a2b21b2512b5587"
+          },
+          {
+            "quote": "optional.md",
+            "occurrence": 1,
+            "span": [
+              19,
+              30
+            ],
+            "source_sha256": "842ad1a9aeecaad5f8f59cafa1a63639ad3166017731b8a77a2b21b2512b5587"
+          }
+        ],
+        "slots": [
+          "B"
+        ],
+        "proof": {
+          "source_sha256": "842ad1a9aeecaad5f8f59cafa1a63639ad3166017731b8a77a2b21b2512b5587",
+          "claim_ids": [
+            "event_generate",
+            "claim_generate_performer",
+            "claim_generate_result"
+          ],
+          "provenance_refs": [
+            "event_generate",
+            "claim_generate_performer",
+            "entity_pm",
+            "claim_generate_result",
+            "entity_optional"
+          ],
+          "technical_policy": "028-r02-technical-v2",
+          "checks": [
+            {
+              "id": "event_generate",
+              "collection": "events",
+              "status": "ACCEPTED",
+              "errors": [],
+              "uncertain": [],
+              "sources": [
+                {
+                  "quote": "不得生成optional.md",
+                  "occurrence": 1,
+                  "span": [
+                    15,
+                    30
+                  ],
+                  "source_sha256": "842ad1a9aeecaad5f8f59cafa1a63639ad3166017731b8a77a2b21b2512b5587"
+                }
+              ],
+              "audit_refs": [
+                {
+                  "subject_id": "event_generate",
+                  "field_path": "",
+                  "verdict": "SUPPORT"
+                }
+              ],
+              "required_dependencies": [],
+              "structural_refs": [
+                "ROOT"
+              ]
+            },
+            {
+              "id": "claim_generate_performer",
+              "collection": "claims",
+              "status": "ACCEPTED",
+              "errors": [],
+              "uncertain": [],
+              "sources": [
+                {
+                  "quote": "请PM核对users.csv",
+                  "occurrence": 1,
+                  "span": [
+                    0,
+                    14
+                  ],
+                  "source_sha256": "842ad1a9aeecaad5f8f59cafa1a63639ad3166017731b8a77a2b21b2512b5587"
+                },
+                {
+                  "quote": "不得生成optional.md",
+                  "occurrence": 1,
+                  "span": [
+                    15,
+                    30
+                  ],
+                  "source_sha256": "842ad1a9aeecaad5f8f59cafa1a63639ad3166017731b8a77a2b21b2512b5587"
+                }
+              ],
+              "audit_refs": [
+                {
+                  "subject_id": "claim_generate_performer",
+                  "field_path": "",
+                  "verdict": "SUPPORT"
+                }
+              ],
+              "required_dependencies": [],
+              "structural_refs": [
+                "event_generate",
+                "event_generate",
+                "entity_pm"
+              ]
+            },
+            {
+              "id": "entity_pm",
+              "collection": "entities",
+              "status": "ACCEPTED",
+              "identity_status": "ACCEPTED",
+              "errors": [],
+              "uncertain": [],
+              "sources": [
+                {
+                  "quote": "PM",
+                  "occurrence": 1,
+                  "span": [
+                    1,
+                    3
+                  ],
+                  "source_sha256": "842ad1a9aeecaad5f8f59cafa1a63639ad3166017731b8a77a2b21b2512b5587"
+                }
+              ],
+              "audit_refs": [
+                {
+                  "subject_id": "entity_pm",
+                  "field_path": "",
+                  "verdict": "SUPPORT"
+                }
+              ],
+              "required_dependencies": [],
+              "structural_refs": []
+            },
+            {
+              "id": "claim_generate_result",
+              "collection": "claims",
+              "status": "ACCEPTED",
+              "errors": [],
+              "uncertain": [],
+              "sources": [
+                {
+                  "quote": "不得生成optional.md",
+                  "occurrence": 1,
+                  "span": [
+                    15,
+                    30
+                  ],
+                  "source_sha256": "842ad1a9aeecaad5f8f59cafa1a63639ad3166017731b8a77a2b21b2512b5587"
+                }
+              ],
+              "audit_refs": [
+                {
+                  "subject_id": "claim_generate_result",
+                  "field_path": "",
+                  "verdict": "SUPPORT"
+                }
+              ],
+              "required_dependencies": [],
+              "structural_refs": [
+                "event_generate",
+                "event_generate",
+                "entity_optional"
+              ]
+            },
+            {
+              "id": "entity_optional",
+              "collection": "entities",
+              "status": "ACCEPTED",
+              "identity_status": "ACCEPTED",
+              "errors": [],
+              "uncertain": [],
+              "sources": [
+                {
+                  "quote": "optional.md",
+                  "occurrence": 1,
+                  "span": [
+                    19,
+                    30
+                  ],
+                  "source_sha256": "842ad1a9aeecaad5f8f59cafa1a63639ad3166017731b8a77a2b21b2512b5587"
+                }
+              ],
+              "audit_refs": [
+                {
+                  "subject_id": "entity_optional",
+                  "field_path": "",
+                  "verdict": "SUPPORT"
+                }
+              ],
+              "required_dependencies": [],
+              "structural_refs": []
+            }
+          ],
+          "audit": [
+            {
+              "subject_id": "event_generate",
+              "field_path": "",
+              "verdict": "SUPPORT",
+              "context_refs": [],
+              "sources": [
+                {
+                  "quote": "不得生成optional.md",
+                  "occurrence": 1
+                }
+              ],
+              "reason": "明确禁止当前生成动作；FORBIDDEN与正向动作谓词搭配正确。"
+            },
+            {
+              "subject_id": "claim_generate_performer",
+              "field_path": "",
+              "verdict": "SUPPORT",
+              "context_refs": [
+                "event_generate",
+                "entity_pm"
+              ],
+              "sources": [
+                {
+                  "quote": "请PM核对users.csv",
+                  "occurrence": 1
+                },
+                {
+                  "quote": "不得生成optional.md",
+                  "occurrence": 1
+                }
+              ],
+              "reason": "连续同一指令没有主体切换或竞争主体，禁止动作可承接PM；来源包含两端。"
+            },
+            {
+              "subject_id": "entity_pm",
+              "field_path": "",
+              "verdict": "SUPPORT",
+              "context_refs": [],
+              "sources": [
+                {
+                  "quote": "PM",
+                  "occurrence": 1
+                }
+              ],
+              "reason": "PM身份明确；OTHER可作未指定具体类别的占位，不推定岗位权限。"
+            },
+            {
+              "subject_id": "claim_generate_result",
+              "field_path": "",
+              "verdict": "SUPPORT",
+              "context_refs": [
+                "event_generate",
+                "entity_optional"
+              ],
+              "sources": [
+                {
+                  "quote": "不得生成optional.md",
+                  "occurrence": 1
+                }
+              ],
+              "reason": "optional.md绑定为被禁止生成动作的RESULT正确，不产生正向O或存在断言。"
+            },
+            {
+              "subject_id": "entity_optional",
+              "field_path": "",
+              "verdict": "SUPPORT",
+              "context_refs": [],
+              "sources": [
+                {
+                  "quote": "optional.md",
+                  "occurrence": 1
+                }
+              ],
+              "reason": "原文明示禁止生成的文件对象；实体表示不断言文件存在。"
+            }
+          ],
+          "context_references_are_not_required_dependencies": true
+        }
+      },
+      {
+        "id": "bf:cc77198249b1cfd7e61e",
+        "kind": "ROLE",
+        "status": "ACCEPTED",
+        "claim_ids": [
+          "claim_check_performer",
+          "entity_pm",
+          "event_check"
+        ],
+        "claim": {
+          "id": "claim_check_performer",
+          "kind": "ROLE",
+          "event_id": "event_check",
+          "entity_id": "entity_pm",
+          "role": "PERFORMER",
+          "expression_id": null,
+          "direction": null,
+          "temporal": null,
+          "quantity": null,
+          "scope_id": "event_check",
+          "requires": [],
+          "sources": [
+            {
+              "quote": "请PM核对users.csv",
+              "occurrence": 1,
+              "span": [
+                0,
+                14
+              ],
+              "source_sha256": "842ad1a9aeecaad5f8f59cafa1a63639ad3166017731b8a77a2b21b2512b5587"
+            }
+          ],
+          "note": "PM是核对动作的明确执行者；岗位简称不推定身份类别或权限。"
+        },
+        "event": {
+          "id": "event_check",
+          "predicate": "核对",
+          "kind": "ACTION",
+          "layer": "MAIN",
+          "use": "CURRENT_TASK",
+          "modality": "REQUIRED",
+          "polarity": "POSITIVE",
+          "owner_id": "ROOT",
+          "constraint_ids": [],
+          "requires": [],
+          "sources": [
+            {
+              "quote": "请PM核对users.csv",
+              "occurrence": 1,
+              "span": [
+                0,
+                14
+              ],
+              "source_sha256": "842ad1a9aeecaad5f8f59cafa1a63639ad3166017731b8a77a2b21b2512b5587"
+            }
+          ]
+        },
+        "entity": {
+          "id": "entity_pm",
+          "label": "PM",
+          "type": "OTHER",
+          "mentions": [
+            {
+              "quote": "PM",
+              "occurrence": 1,
+              "span": [
+                1,
+                3
+              ],
+              "source_sha256": "842ad1a9aeecaad5f8f59cafa1a63639ad3166017731b8a77a2b21b2512b5587"
+            }
+          ],
+          "alternatives": []
+        },
+        "expression": null,
+        "constraints": [],
+        "content_quantities": [],
+        "content_scopes": [],
+        "sources": [
+          {
+            "quote": "请PM核对users.csv",
+            "occurrence": 1,
+            "span": [
+              0,
+              14
+            ],
+            "source_sha256": "842ad1a9aeecaad5f8f59cafa1a63639ad3166017731b8a77a2b21b2512b5587"
+          },
+          {
+            "quote": "请PM核对users.csv",
+            "occurrence": 1,
+            "span": [
+              0,
+              14
+            ],
+            "source_sha256": "842ad1a9aeecaad5f8f59cafa1a63639ad3166017731b8a77a2b21b2512b5587"
+          },
+          {
+            "quote": "PM",
+            "occurrence": 1,
+            "span": [
+              1,
+              3
+            ],
+            "source_sha256": "842ad1a9aeecaad5f8f59cafa1a63639ad3166017731b8a77a2b21b2512b5587"
+          }
+        ],
+        "slots": [
+          "P"
+        ],
+        "proof": {
+          "source_sha256": "842ad1a9aeecaad5f8f59cafa1a63639ad3166017731b8a77a2b21b2512b5587",
+          "claim_ids": [
+            "claim_check_performer",
+            "entity_pm",
+            "event_check"
+          ],
+          "provenance_refs": [
+            "claim_check_performer",
+            "event_check",
+            "entity_pm"
+          ],
+          "technical_policy": "028-r02-technical-v2",
+          "checks": [
+            {
+              "id": "claim_check_performer",
+              "collection": "claims",
+              "status": "ACCEPTED",
+              "errors": [],
+              "uncertain": [],
+              "sources": [
+                {
+                  "quote": "请PM核对users.csv",
+                  "occurrence": 1,
+                  "span": [
+                    0,
+                    14
+                  ],
+                  "source_sha256": "842ad1a9aeecaad5f8f59cafa1a63639ad3166017731b8a77a2b21b2512b5587"
+                }
+              ],
+              "audit_refs": [
+                {
+                  "subject_id": "claim_check_performer",
+                  "field_path": "",
+                  "verdict": "SUPPORT"
+                }
+              ],
+              "required_dependencies": [],
+              "structural_refs": [
+                "event_check",
+                "event_check",
+                "entity_pm"
+              ]
+            },
+            {
+              "id": "event_check",
+              "collection": "events",
+              "status": "ACCEPTED",
+              "errors": [],
+              "uncertain": [],
+              "sources": [
+                {
+                  "quote": "请PM核对users.csv",
+                  "occurrence": 1,
+                  "span": [
+                    0,
+                    14
+                  ],
+                  "source_sha256": "842ad1a9aeecaad5f8f59cafa1a63639ad3166017731b8a77a2b21b2512b5587"
+                }
+              ],
+              "audit_refs": [
+                {
+                  "subject_id": "event_check",
+                  "field_path": "",
+                  "verdict": "SUPPORT"
+                }
+              ],
+              "required_dependencies": [],
+              "structural_refs": [
+                "ROOT"
+              ]
+            },
+            {
+              "id": "entity_pm",
+              "collection": "entities",
+              "status": "ACCEPTED",
+              "identity_status": "ACCEPTED",
+              "errors": [],
+              "uncertain": [],
+              "sources": [
+                {
+                  "quote": "PM",
+                  "occurrence": 1,
+                  "span": [
+                    1,
+                    3
+                  ],
+                  "source_sha256": "842ad1a9aeecaad5f8f59cafa1a63639ad3166017731b8a77a2b21b2512b5587"
+                }
+              ],
+              "audit_refs": [
+                {
+                  "subject_id": "entity_pm",
+                  "field_path": "",
+                  "verdict": "SUPPORT"
+                }
+              ],
+              "required_dependencies": [],
+              "structural_refs": []
+            }
+          ],
+          "audit": [
+            {
+              "subject_id": "claim_check_performer",
+              "field_path": "",
+              "verdict": "SUPPORT",
+              "context_refs": [
+                "event_check",
+                "entity_pm"
+              ],
+              "sources": [
+                {
+                  "quote": "请PM核对users.csv",
+                  "occurrence": 1
+                }
+              ],
+              "reason": "PM是核对动作的明确执行者。"
+            },
+            {
+              "subject_id": "event_check",
+              "field_path": "",
+              "verdict": "SUPPORT",
+              "context_refs": [],
+              "sources": [
+                {
+                  "quote": "请PM核对users.csv",
+                  "occurrence": 1
+                }
+              ],
+              "reason": "明确要求当前执行核对，无条件或数量限制。"
+            },
+            {
+              "subject_id": "entity_pm",
+              "field_path": "",
+              "verdict": "SUPPORT",
+              "context_refs": [],
+              "sources": [
+                {
+                  "quote": "PM",
+                  "occurrence": 1
+                }
+              ],
+              "reason": "PM身份明确；OTHER可作未指定具体类别的占位，不推定岗位权限。"
+            }
+          ],
+          "context_references_are_not_required_dependencies": true
+        }
+      },
+      {
+        "id": "bf:2f6f783790b191a3313f",
+        "kind": "ROLE",
+        "status": "ACCEPTED",
+        "claim_ids": [
+          "claim_check_input",
+          "entity_users",
+          "event_check"
+        ],
+        "claim": {
+          "id": "claim_check_input",
+          "kind": "ROLE",
+          "event_id": "event_check",
+          "entity_id": "entity_users",
+          "role": "INPUT_OBJECT",
+          "expression_id": null,
+          "direction": null,
+          "temporal": null,
+          "quantity": null,
+          "scope_id": "event_check",
+          "requires": [],
+          "sources": [
+            {
+              "quote": "核对users.csv",
+              "occurrence": 1,
+              "span": [
+                3,
+                14
+              ],
+              "source_sha256": "842ad1a9aeecaad5f8f59cafa1a63639ad3166017731b8a77a2b21b2512b5587"
+            }
+          ],
+          "note": "users.csv是明确受核对的输入范围。"
+        },
+        "event": {
+          "id": "event_check",
+          "predicate": "核对",
+          "kind": "ACTION",
+          "layer": "MAIN",
+          "use": "CURRENT_TASK",
+          "modality": "REQUIRED",
+          "polarity": "POSITIVE",
+          "owner_id": "ROOT",
+          "constraint_ids": [],
+          "requires": [],
+          "sources": [
+            {
+              "quote": "请PM核对users.csv",
+              "occurrence": 1,
+              "span": [
+                0,
+                14
+              ],
+              "source_sha256": "842ad1a9aeecaad5f8f59cafa1a63639ad3166017731b8a77a2b21b2512b5587"
+            }
+          ]
+        },
+        "entity": {
+          "id": "entity_users",
+          "label": "users.csv",
+          "type": "FILE",
+          "mentions": [
+            {
+              "quote": "users.csv",
+              "occurrence": 1,
+              "span": [
+                5,
+                14
+              ],
+              "source_sha256": "842ad1a9aeecaad5f8f59cafa1a63639ad3166017731b8a77a2b21b2512b5587"
+            }
+          ],
+          "alternatives": []
+        },
+        "expression": null,
+        "constraints": [],
+        "content_quantities": [],
+        "content_scopes": [],
+        "sources": [
+          {
+            "quote": "核对users.csv",
+            "occurrence": 1,
+            "span": [
+              3,
+              14
+            ],
+            "source_sha256": "842ad1a9aeecaad5f8f59cafa1a63639ad3166017731b8a77a2b21b2512b5587"
+          },
+          {
+            "quote": "请PM核对users.csv",
+            "occurrence": 1,
+            "span": [
+              0,
+              14
+            ],
+            "source_sha256": "842ad1a9aeecaad5f8f59cafa1a63639ad3166017731b8a77a2b21b2512b5587"
+          },
+          {
+            "quote": "users.csv",
+            "occurrence": 1,
+            "span": [
+              5,
+              14
+            ],
+            "source_sha256": "842ad1a9aeecaad5f8f59cafa1a63639ad3166017731b8a77a2b21b2512b5587"
+          }
+        ],
+        "slots": [
+          "I"
+        ],
+        "proof": {
+          "source_sha256": "842ad1a9aeecaad5f8f59cafa1a63639ad3166017731b8a77a2b21b2512b5587",
+          "claim_ids": [
+            "claim_check_input",
+            "entity_users",
+            "event_check"
+          ],
+          "provenance_refs": [
+            "claim_check_input",
+            "event_check",
+            "entity_users"
+          ],
+          "technical_policy": "028-r02-technical-v2",
+          "checks": [
+            {
+              "id": "claim_check_input",
+              "collection": "claims",
+              "status": "ACCEPTED",
+              "errors": [],
+              "uncertain": [],
+              "sources": [
+                {
+                  "quote": "核对users.csv",
+                  "occurrence": 1,
+                  "span": [
+                    3,
+                    14
+                  ],
+                  "source_sha256": "842ad1a9aeecaad5f8f59cafa1a63639ad3166017731b8a77a2b21b2512b5587"
+                }
+              ],
+              "audit_refs": [
+                {
+                  "subject_id": "claim_check_input",
+                  "field_path": "",
+                  "verdict": "SUPPORT"
+                }
+              ],
+              "required_dependencies": [],
+              "structural_refs": [
+                "event_check",
+                "event_check",
+                "entity_users"
+              ]
+            },
+            {
+              "id": "event_check",
+              "collection": "events",
+              "status": "ACCEPTED",
+              "errors": [],
+              "uncertain": [],
+              "sources": [
+                {
+                  "quote": "请PM核对users.csv",
+                  "occurrence": 1,
+                  "span": [
+                    0,
+                    14
+                  ],
+                  "source_sha256": "842ad1a9aeecaad5f8f59cafa1a63639ad3166017731b8a77a2b21b2512b5587"
+                }
+              ],
+              "audit_refs": [
+                {
+                  "subject_id": "event_check",
+                  "field_path": "",
+                  "verdict": "SUPPORT"
+                }
+              ],
+              "required_dependencies": [],
+              "structural_refs": [
+                "ROOT"
+              ]
+            },
+            {
+              "id": "entity_users",
+              "collection": "entities",
+              "status": "ACCEPTED",
+              "identity_status": "ACCEPTED",
+              "errors": [],
+              "uncertain": [],
+              "sources": [
+                {
+                  "quote": "users.csv",
+                  "occurrence": 1,
+                  "span": [
+                    5,
+                    14
+                  ],
+                  "source_sha256": "842ad1a9aeecaad5f8f59cafa1a63639ad3166017731b8a77a2b21b2512b5587"
+                }
+              ],
+              "audit_refs": [
+                {
+                  "subject_id": "entity_users",
+                  "field_path": "",
+                  "verdict": "SUPPORT"
+                }
+              ],
+              "required_dependencies": [],
+              "structural_refs": []
+            }
+          ],
+          "audit": [
+            {
+              "subject_id": "claim_check_input",
+              "field_path": "",
+              "verdict": "SUPPORT",
+              "context_refs": [
+                "event_check",
+                "entity_users"
+              ],
+              "sources": [
+                {
+                  "quote": "核对users.csv",
+                  "occurrence": 1
+                }
+              ],
+              "reason": "users.csv是明确受检范围，INPUT_OBJECT绑定正确。"
+            },
+            {
+              "subject_id": "event_check",
+              "field_path": "",
+              "verdict": "SUPPORT",
+              "context_refs": [],
+              "sources": [
+                {
+                  "quote": "请PM核对users.csv",
+                  "occurrence": 1
+                }
+              ],
+              "reason": "明确要求当前执行核对，无条件或数量限制。"
+            },
+            {
+              "subject_id": "entity_users",
+              "field_path": "",
+              "verdict": "SUPPORT",
+              "context_refs": [],
+              "sources": [
+                {
+                  "quote": "users.csv",
+                  "occurrence": 1
+                }
+              ],
+              "reason": "原文明示受核对文件，名称与身份一致。"
+            }
+          ],
+          "context_references_are_not_required_dependencies": true
+        }
+      },
+      {
+        "id": "bf:9b288e28dd82237e347f",
+        "kind": "ROLE",
+        "status": "ACCEPTED",
+        "claim_ids": [
+          "claim_generate_performer",
+          "entity_pm",
+          "event_generate"
+        ],
+        "claim": {
+          "id": "claim_generate_performer",
+          "kind": "ROLE",
+          "event_id": "event_generate",
+          "entity_id": "entity_pm",
+          "role": "PERFORMER",
+          "expression_id": null,
+          "direction": null,
+          "temporal": null,
+          "quantity": null,
+          "scope_id": "event_generate",
+          "requires": [],
+          "sources": [
+            {
+              "quote": "请PM核对users.csv",
+              "occurrence": 1,
+              "span": [
+                0,
+                14
+              ],
+              "source_sha256": "842ad1a9aeecaad5f8f59cafa1a63639ad3166017731b8a77a2b21b2512b5587"
+            },
+            {
+              "quote": "不得生成optional.md",
+              "occurrence": 1,
+              "span": [
+                15,
+                30
+              ],
+              "source_sha256": "842ad1a9aeecaad5f8f59cafa1a63639ad3166017731b8a77a2b21b2512b5587"
+            }
+          ],
+          "note": "同一连续指令未切换主体，禁止生成动作承接PM为执行主体。"
+        },
+        "event": {
+          "id": "event_generate",
+          "predicate": "生成",
+          "kind": "ACTION",
+          "layer": "MAIN",
+          "use": "CURRENT_TASK",
+          "modality": "FORBIDDEN",
+          "polarity": "POSITIVE",
+          "owner_id": "ROOT",
+          "constraint_ids": [],
+          "requires": [],
+          "sources": [
+            {
+              "quote": "不得生成optional.md",
+              "occurrence": 1,
+              "span": [
+                15,
+                30
+              ],
+              "source_sha256": "842ad1a9aeecaad5f8f59cafa1a63639ad3166017731b8a77a2b21b2512b5587"
+            }
+          ]
+        },
+        "entity": {
+          "id": "entity_pm",
+          "label": "PM",
+          "type": "OTHER",
+          "mentions": [
+            {
+              "quote": "PM",
+              "occurrence": 1,
+              "span": [
+                1,
+                3
+              ],
+              "source_sha256": "842ad1a9aeecaad5f8f59cafa1a63639ad3166017731b8a77a2b21b2512b5587"
+            }
+          ],
+          "alternatives": []
+        },
+        "expression": null,
+        "constraints": [],
+        "content_quantities": [],
+        "content_scopes": [],
+        "sources": [
+          {
+            "quote": "请PM核对users.csv",
+            "occurrence": 1,
+            "span": [
+              0,
+              14
+            ],
+            "source_sha256": "842ad1a9aeecaad5f8f59cafa1a63639ad3166017731b8a77a2b21b2512b5587"
+          },
+          {
+            "quote": "不得生成optional.md",
+            "occurrence": 1,
+            "span": [
+              15,
+              30
+            ],
+            "source_sha256": "842ad1a9aeecaad5f8f59cafa1a63639ad3166017731b8a77a2b21b2512b5587"
+          },
+          {
+            "quote": "不得生成optional.md",
+            "occurrence": 1,
+            "span": [
+              15,
+              30
+            ],
+            "source_sha256": "842ad1a9aeecaad5f8f59cafa1a63639ad3166017731b8a77a2b21b2512b5587"
+          },
+          {
+            "quote": "PM",
+            "occurrence": 1,
+            "span": [
+              1,
+              3
+            ],
+            "source_sha256": "842ad1a9aeecaad5f8f59cafa1a63639ad3166017731b8a77a2b21b2512b5587"
+          }
+        ],
+        "slots": [],
+        "proof": {
+          "source_sha256": "842ad1a9aeecaad5f8f59cafa1a63639ad3166017731b8a77a2b21b2512b5587",
+          "claim_ids": [
+            "claim_generate_performer",
+            "entity_pm",
+            "event_generate"
+          ],
+          "provenance_refs": [
+            "claim_generate_performer",
+            "event_generate",
+            "entity_pm"
+          ],
+          "technical_policy": "028-r02-technical-v2",
+          "checks": [
+            {
+              "id": "claim_generate_performer",
+              "collection": "claims",
+              "status": "ACCEPTED",
+              "errors": [],
+              "uncertain": [],
+              "sources": [
+                {
+                  "quote": "请PM核对users.csv",
+                  "occurrence": 1,
+                  "span": [
+                    0,
+                    14
+                  ],
+                  "source_sha256": "842ad1a9aeecaad5f8f59cafa1a63639ad3166017731b8a77a2b21b2512b5587"
+                },
+                {
+                  "quote": "不得生成optional.md",
+                  "occurrence": 1,
+                  "span": [
+                    15,
+                    30
+                  ],
+                  "source_sha256": "842ad1a9aeecaad5f8f59cafa1a63639ad3166017731b8a77a2b21b2512b5587"
+                }
+              ],
+              "audit_refs": [
+                {
+                  "subject_id": "claim_generate_performer",
+                  "field_path": "",
+                  "verdict": "SUPPORT"
+                }
+              ],
+              "required_dependencies": [],
+              "structural_refs": [
+                "event_generate",
+                "event_generate",
+                "entity_pm"
+              ]
+            },
+            {
+              "id": "event_generate",
+              "collection": "events",
+              "status": "ACCEPTED",
+              "errors": [],
+              "uncertain": [],
+              "sources": [
+                {
+                  "quote": "不得生成optional.md",
+                  "occurrence": 1,
+                  "span": [
+                    15,
+                    30
+                  ],
+                  "source_sha256": "842ad1a9aeecaad5f8f59cafa1a63639ad3166017731b8a77a2b21b2512b5587"
+                }
+              ],
+              "audit_refs": [
+                {
+                  "subject_id": "event_generate",
+                  "field_path": "",
+                  "verdict": "SUPPORT"
+                }
+              ],
+              "required_dependencies": [],
+              "structural_refs": [
+                "ROOT"
+              ]
+            },
+            {
+              "id": "entity_pm",
+              "collection": "entities",
+              "status": "ACCEPTED",
+              "identity_status": "ACCEPTED",
+              "errors": [],
+              "uncertain": [],
+              "sources": [
+                {
+                  "quote": "PM",
+                  "occurrence": 1,
+                  "span": [
+                    1,
+                    3
+                  ],
+                  "source_sha256": "842ad1a9aeecaad5f8f59cafa1a63639ad3166017731b8a77a2b21b2512b5587"
+                }
+              ],
+              "audit_refs": [
+                {
+                  "subject_id": "entity_pm",
+                  "field_path": "",
+                  "verdict": "SUPPORT"
+                }
+              ],
+              "required_dependencies": [],
+              "structural_refs": []
+            }
+          ],
+          "audit": [
+            {
+              "subject_id": "claim_generate_performer",
+              "field_path": "",
+              "verdict": "SUPPORT",
+              "context_refs": [
+                "event_generate",
+                "entity_pm"
+              ],
+              "sources": [
+                {
+                  "quote": "请PM核对users.csv",
+                  "occurrence": 1
+                },
+                {
+                  "quote": "不得生成optional.md",
+                  "occurrence": 1
+                }
+              ],
+              "reason": "连续同一指令没有主体切换或竞争主体，禁止动作可承接PM；来源包含两端。"
+            },
+            {
+              "subject_id": "event_generate",
+              "field_path": "",
+              "verdict": "SUPPORT",
+              "context_refs": [],
+              "sources": [
+                {
+                  "quote": "不得生成optional.md",
+                  "occurrence": 1
+                }
+              ],
+              "reason": "明确禁止当前生成动作；FORBIDDEN与正向动作谓词搭配正确。"
+            },
+            {
+              "subject_id": "entity_pm",
+              "field_path": "",
+              "verdict": "SUPPORT",
+              "context_refs": [],
+              "sources": [
+                {
+                  "quote": "PM",
+                  "occurrence": 1
+                }
+              ],
+              "reason": "PM身份明确；OTHER可作未指定具体类别的占位，不推定岗位权限。"
+            }
+          ],
+          "context_references_are_not_required_dependencies": true
+        }
+      },
+      {
+        "id": "bf:0079d7f0cb33943797c7",
+        "kind": "ROLE",
+        "status": "ACCEPTED",
+        "claim_ids": [
+          "claim_generate_result",
+          "entity_optional",
+          "event_generate"
+        ],
+        "claim": {
+          "id": "claim_generate_result",
+          "kind": "ROLE",
+          "event_id": "event_generate",
+          "entity_id": "entity_optional",
+          "role": "RESULT",
+          "expression_id": null,
+          "direction": null,
+          "temporal": null,
+          "quantity": null,
+          "scope_id": "event_generate",
+          "requires": [],
+          "sources": [
+            {
+              "quote": "不得生成optional.md",
+              "occurrence": 1,
+              "span": [
+                15,
+                30
+              ],
+              "source_sha256": "842ad1a9aeecaad5f8f59cafa1a63639ad3166017731b8a77a2b21b2512b5587"
+            }
+          ],
+          "note": "optional.md是被禁止生成的结果对象，不构成正向产出要求或存在断言。"
+        },
+        "event": {
+          "id": "event_generate",
+          "predicate": "生成",
+          "kind": "ACTION",
+          "layer": "MAIN",
+          "use": "CURRENT_TASK",
+          "modality": "FORBIDDEN",
+          "polarity": "POSITIVE",
+          "owner_id": "ROOT",
+          "constraint_ids": [],
+          "requires": [],
+          "sources": [
+            {
+              "quote": "不得生成optional.md",
+              "occurrence": 1,
+              "span": [
+                15,
+                30
+              ],
+              "source_sha256": "842ad1a9aeecaad5f8f59cafa1a63639ad3166017731b8a77a2b21b2512b5587"
+            }
+          ]
+        },
+        "entity": {
+          "id": "entity_optional",
+          "label": "optional.md",
+          "type": "FILE",
+          "mentions": [
+            {
+              "quote": "optional.md",
+              "occurrence": 1,
+              "span": [
+                19,
+                30
+              ],
+              "source_sha256": "842ad1a9aeecaad5f8f59cafa1a63639ad3166017731b8a77a2b21b2512b5587"
+            }
+          ],
+          "alternatives": []
+        },
+        "expression": null,
+        "constraints": [],
+        "content_quantities": [],
+        "content_scopes": [],
+        "sources": [
+          {
+            "quote": "不得生成optional.md",
+            "occurrence": 1,
+            "span": [
+              15,
+              30
+            ],
+            "source_sha256": "842ad1a9aeecaad5f8f59cafa1a63639ad3166017731b8a77a2b21b2512b5587"
+          },
+          {
+            "quote": "不得生成optional.md",
+            "occurrence": 1,
+            "span": [
+              15,
+              30
+            ],
+            "source_sha256": "842ad1a9aeecaad5f8f59cafa1a63639ad3166017731b8a77a2b21b2512b5587"
+          },
+          {
+            "quote": "optional.md",
+            "occurrence": 1,
+            "span": [
+              19,
+              30
+            ],
+            "source_sha256": "842ad1a9aeecaad5f8f59cafa1a63639ad3166017731b8a77a2b21b2512b5587"
+          }
+        ],
+        "slots": [],
+        "proof": {
+          "source_sha256": "842ad1a9aeecaad5f8f59cafa1a63639ad3166017731b8a77a2b21b2512b5587",
+          "claim_ids": [
+            "claim_generate_result",
+            "entity_optional",
+            "event_generate"
+          ],
+          "provenance_refs": [
+            "claim_generate_result",
+            "event_generate",
+            "entity_optional"
+          ],
+          "technical_policy": "028-r02-technical-v2",
+          "checks": [
+            {
+              "id": "claim_generate_result",
+              "collection": "claims",
+              "status": "ACCEPTED",
+              "errors": [],
+              "uncertain": [],
+              "sources": [
+                {
+                  "quote": "不得生成optional.md",
+                  "occurrence": 1,
+                  "span": [
+                    15,
+                    30
+                  ],
+                  "source_sha256": "842ad1a9aeecaad5f8f59cafa1a63639ad3166017731b8a77a2b21b2512b5587"
+                }
+              ],
+              "audit_refs": [
+                {
+                  "subject_id": "claim_generate_result",
+                  "field_path": "",
+                  "verdict": "SUPPORT"
+                }
+              ],
+              "required_dependencies": [],
+              "structural_refs": [
+                "event_generate",
+                "event_generate",
+                "entity_optional"
+              ]
+            },
+            {
+              "id": "event_generate",
+              "collection": "events",
+              "status": "ACCEPTED",
+              "errors": [],
+              "uncertain": [],
+              "sources": [
+                {
+                  "quote": "不得生成optional.md",
+                  "occurrence": 1,
+                  "span": [
+                    15,
+                    30
+                  ],
+                  "source_sha256": "842ad1a9aeecaad5f8f59cafa1a63639ad3166017731b8a77a2b21b2512b5587"
+                }
+              ],
+              "audit_refs": [
+                {
+                  "subject_id": "event_generate",
+                  "field_path": "",
+                  "verdict": "SUPPORT"
+                }
+              ],
+              "required_dependencies": [],
+              "structural_refs": [
+                "ROOT"
+              ]
+            },
+            {
+              "id": "entity_optional",
+              "collection": "entities",
+              "status": "ACCEPTED",
+              "identity_status": "ACCEPTED",
+              "errors": [],
+              "uncertain": [],
+              "sources": [
+                {
+                  "quote": "optional.md",
+                  "occurrence": 1,
+                  "span": [
+                    19,
+                    30
+                  ],
+                  "source_sha256": "842ad1a9aeecaad5f8f59cafa1a63639ad3166017731b8a77a2b21b2512b5587"
+                }
+              ],
+              "audit_refs": [
+                {
+                  "subject_id": "entity_optional",
+                  "field_path": "",
+                  "verdict": "SUPPORT"
+                }
+              ],
+              "required_dependencies": [],
+              "structural_refs": []
+            }
+          ],
+          "audit": [
+            {
+              "subject_id": "claim_generate_result",
+              "field_path": "",
+              "verdict": "SUPPORT",
+              "context_refs": [
+                "event_generate",
+                "entity_optional"
+              ],
+              "sources": [
+                {
+                  "quote": "不得生成optional.md",
+                  "occurrence": 1
+                }
+              ],
+              "reason": "optional.md绑定为被禁止生成动作的RESULT正确，不产生正向O或存在断言。"
+            },
+            {
+              "subject_id": "event_generate",
+              "field_path": "",
+              "verdict": "SUPPORT",
+              "context_refs": [],
+              "sources": [
+                {
+                  "quote": "不得生成optional.md",
+                  "occurrence": 1
+                }
+              ],
+              "reason": "明确禁止当前生成动作；FORBIDDEN与正向动作谓词搭配正确。"
+            },
+            {
+              "subject_id": "entity_optional",
+              "field_path": "",
+              "verdict": "SUPPORT",
+              "context_refs": [],
+              "sources": [
+                {
+                  "quote": "optional.md",
+                  "occurrence": 1
+                }
+              ],
+              "reason": "原文明示禁止生成的文件对象；实体表示不断言文件存在。"
+            }
+          ],
+          "context_references_are_not_required_dependencies": true
+        }
+      }
+    ],
+    "entities": [
+      {
+        "id": "entity_pm",
+        "label": "PM",
+        "type": "OTHER",
+        "mentions": [
+          {
+            "quote": "PM",
+            "occurrence": 1,
+            "span": [
+              1,
+              3
+            ],
+            "source_sha256": "842ad1a9aeecaad5f8f59cafa1a63639ad3166017731b8a77a2b21b2512b5587"
+          }
+        ],
+        "alternatives": []
+      },
+      {
+        "id": "entity_users",
+        "label": "users.csv",
+        "type": "FILE",
+        "mentions": [
+          {
+            "quote": "users.csv",
+            "occurrence": 1,
+            "span": [
+              5,
+              14
+            ],
+            "source_sha256": "842ad1a9aeecaad5f8f59cafa1a63639ad3166017731b8a77a2b21b2512b5587"
+          }
+        ],
+        "alternatives": []
+      },
+      {
+        "id": "entity_optional",
+        "label": "optional.md",
+        "type": "FILE",
+        "mentions": [
+          {
+            "quote": "optional.md",
+            "occurrence": 1,
+            "span": [
+              19,
+              30
+            ],
+            "source_sha256": "842ad1a9aeecaad5f8f59cafa1a63639ad3166017731b8a77a2b21b2512b5587"
+          }
+        ],
+        "alternatives": []
+      }
+    ],
+    "expressions": [],
+    "issues": [],
+    "audit_issues": [],
+    "gaps": [],
+    "technical_diagnostics": [],
+    "business_decision": null,
+    "execution_authorization": null
+  },
+  "canonical": {
+    "format": "boundx-canonical-7plus1/031-r01",
+    "source_sha256": "842ad1a9aeecaad5f8f59cafa1a63639ad3166017731b8a77a2b21b2512b5587",
+    "entities": [
+      {
+        "id": "entity_pm",
+        "label": "PM",
+        "type": "OTHER",
+        "mentions": [
+          {
+            "quote": "PM",
+            "occurrence": 1,
+            "span": [
+              1,
+              3
+            ],
+            "source_sha256": "842ad1a9aeecaad5f8f59cafa1a63639ad3166017731b8a77a2b21b2512b5587"
+          }
+        ],
+        "alternatives": []
+      },
+      {
+        "id": "entity_users",
+        "label": "users.csv",
+        "type": "FILE",
+        "mentions": [
+          {
+            "quote": "users.csv",
+            "occurrence": 1,
+            "span": [
+              5,
+              14
+            ],
+            "source_sha256": "842ad1a9aeecaad5f8f59cafa1a63639ad3166017731b8a77a2b21b2512b5587"
+          }
+        ],
+        "alternatives": []
+      },
+      {
+        "id": "entity_optional",
+        "label": "optional.md",
+        "type": "FILE",
+        "mentions": [
+          {
+            "quote": "optional.md",
+            "occurrence": 1,
+            "span": [
+              19,
+              30
+            ],
+            "source_sha256": "842ad1a9aeecaad5f8f59cafa1a63639ad3166017731b8a77a2b21b2512b5587"
+          }
+        ],
+        "alternatives": []
+      }
+    ],
+    "expressions": [],
+    "slots": {
+      "I": {
+        "status": "RESOLVED",
+        "openness": "CONSTRAINED",
+        "entries": [
+          {
+            "id": "bf:2f6f783790b191a3313f",
+            "kind": "ROLE",
+            "status": "ACCEPTED",
+            "claim_ids": [
+              "claim_check_input",
+              "entity_users",
+              "event_check"
+            ],
+            "claim": {
+              "id": "claim_check_input",
+              "kind": "ROLE",
+              "event_id": "event_check",
+              "entity_id": "entity_users",
+              "role": "INPUT_OBJECT",
+              "expression_id": null,
+              "direction": null,
+              "temporal": null,
+              "quantity": null,
+              "scope_id": "event_check",
+              "requires": [],
+              "sources": [
+                {
+                  "quote": "核对users.csv",
+                  "occurrence": 1,
+                  "span": [
+                    3,
+                    14
+                  ],
+                  "source_sha256": "842ad1a9aeecaad5f8f59cafa1a63639ad3166017731b8a77a2b21b2512b5587"
+                }
+              ],
+              "note": "users.csv是明确受核对的输入范围。"
+            },
+            "event": {
+              "id": "event_check",
+              "predicate": "核对",
+              "kind": "ACTION",
+              "layer": "MAIN",
+              "use": "CURRENT_TASK",
+              "modality": "REQUIRED",
+              "polarity": "POSITIVE",
+              "owner_id": "ROOT",
+              "constraint_ids": [],
+              "requires": [],
+              "sources": [
+                {
+                  "quote": "请PM核对users.csv",
+                  "occurrence": 1,
+                  "span": [
+                    0,
+                    14
+                  ],
+                  "source_sha256": "842ad1a9aeecaad5f8f59cafa1a63639ad3166017731b8a77a2b21b2512b5587"
+                }
+              ]
+            },
+            "entity": {
+              "id": "entity_users",
+              "label": "users.csv",
+              "type": "FILE",
+              "mentions": [
+                {
+                  "quote": "users.csv",
+                  "occurrence": 1,
+                  "span": [
+                    5,
+                    14
+                  ],
+                  "source_sha256": "842ad1a9aeecaad5f8f59cafa1a63639ad3166017731b8a77a2b21b2512b5587"
+                }
+              ],
+              "alternatives": []
+            },
+            "expression": null,
+            "constraints": [],
+            "content_quantities": [],
+            "content_scopes": [],
+            "sources": [
+              {
+                "quote": "核对users.csv",
+                "occurrence": 1,
+                "span": [
+                  3,
+                  14
+                ],
+                "source_sha256": "842ad1a9aeecaad5f8f59cafa1a63639ad3166017731b8a77a2b21b2512b5587"
+              },
+              {
+                "quote": "请PM核对users.csv",
+                "occurrence": 1,
+                "span": [
+                  0,
+                  14
+                ],
+                "source_sha256": "842ad1a9aeecaad5f8f59cafa1a63639ad3166017731b8a77a2b21b2512b5587"
+              },
+              {
+                "quote": "users.csv",
+                "occurrence": 1,
+                "span": [
+                  5,
+                  14
+                ],
+                "source_sha256": "842ad1a9aeecaad5f8f59cafa1a63639ad3166017731b8a77a2b21b2512b5587"
+              }
+            ],
+            "slots": [
+              "I"
+            ],
+            "proof": {
+              "source_sha256": "842ad1a9aeecaad5f8f59cafa1a63639ad3166017731b8a77a2b21b2512b5587",
+              "claim_ids": [
+                "claim_check_input",
+                "entity_users",
+                "event_check"
+              ],
+              "provenance_refs": [
+                "claim_check_input",
+                "event_check",
+                "entity_users"
+              ],
+              "technical_policy": "028-r02-technical-v2",
+              "checks": [
+                {
+                  "id": "claim_check_input",
+                  "collection": "claims",
+                  "status": "ACCEPTED",
+                  "errors": [],
+                  "uncertain": [],
+                  "sources": [
+                    {
+                      "quote": "核对users.csv",
+                      "occurrence": 1,
+                      "span": [
+                        3,
+                        14
+                      ],
+                      "source_sha256": "842ad1a9aeecaad5f8f59cafa1a63639ad3166017731b8a77a2b21b2512b5587"
+                    }
+                  ],
+                  "audit_refs": [
+                    {
+                      "subject_id": "claim_check_input",
+                      "field_path": "",
+                      "verdict": "SUPPORT"
+                    }
+                  ],
+                  "required_dependencies": [],
+                  "structural_refs": [
+                    "event_check",
+                    "event_check",
+                    "entity_users"
+                  ]
+                },
+                {
+                  "id": "event_check",
+                  "collection": "events",
+                  "status": "ACCEPTED",
+                  "errors": [],
+                  "uncertain": [],
+                  "sources": [
+                    {
+                      "quote": "请PM核对users.csv",
+                      "occurrence": 1,
+                      "span": [
+                        0,
+                        14
+                      ],
+                      "source_sha256": "842ad1a9aeecaad5f8f59cafa1a63639ad3166017731b8a77a2b21b2512b5587"
+                    }
+                  ],
+                  "audit_refs": [
+                    {
+                      "subject_id": "event_check",
+                      "field_path": "",
+                      "verdict": "SUPPORT"
+                    }
+                  ],
+                  "required_dependencies": [],
+                  "structural_refs": [
+                    "ROOT"
+                  ]
+                },
+                {
+                  "id": "entity_users",
+                  "collection": "entities",
+                  "status": "ACCEPTED",
+                  "identity_status": "ACCEPTED",
+                  "errors": [],
+                  "uncertain": [],
+                  "sources": [
+                    {
+                      "quote": "users.csv",
+                      "occurrence": 1,
+                      "span": [
+                        5,
+                        14
+                      ],
+                      "source_sha256": "842ad1a9aeecaad5f8f59cafa1a63639ad3166017731b8a77a2b21b2512b5587"
+                    }
+                  ],
+                  "audit_refs": [
+                    {
+                      "subject_id": "entity_users",
+                      "field_path": "",
+                      "verdict": "SUPPORT"
+                    }
+                  ],
+                  "required_dependencies": [],
+                  "structural_refs": []
+                }
+              ],
+              "audit": [
+                {
+                  "subject_id": "claim_check_input",
+                  "field_path": "",
+                  "verdict": "SUPPORT",
+                  "context_refs": [
+                    "event_check",
+                    "entity_users"
+                  ],
+                  "sources": [
+                    {
+                      "quote": "核对users.csv",
+                      "occurrence": 1
+                    }
+                  ],
+                  "reason": "users.csv是明确受检范围，INPUT_OBJECT绑定正确。"
+                },
+                {
+                  "subject_id": "event_check",
+                  "field_path": "",
+                  "verdict": "SUPPORT",
+                  "context_refs": [],
+                  "sources": [
+                    {
+                      "quote": "请PM核对users.csv",
+                      "occurrence": 1
+                    }
+                  ],
+                  "reason": "明确要求当前执行核对，无条件或数量限制。"
+                },
+                {
+                  "subject_id": "entity_users",
+                  "field_path": "",
+                  "verdict": "SUPPORT",
+                  "context_refs": [],
+                  "sources": [
+                    {
+                      "quote": "users.csv",
+                      "occurrence": 1
+                    }
+                  ],
+                  "reason": "原文明示受核对文件，名称与身份一致。"
+                }
+              ],
+              "context_references_are_not_required_dependencies": true
+            }
+          }
+        ]
+      },
+      "O": {
+        "status": "ABSENT",
+        "openness": "OPEN",
+        "entries": []
+      },
+      "A": {
+        "status": "RESOLVED",
+        "openness": "CONSTRAINED",
+        "entries": [
+          {
+            "id": "bf:6ac8e197675650413c87",
+            "kind": "EVENT",
+            "status": "ACCEPTED",
+            "claim_ids": [
+              "event_check",
+              "claim_check_performer",
+              "claim_check_input"
+            ],
+            "event": {
+              "id": "event_check",
+              "predicate": "核对",
+              "kind": "ACTION",
+              "layer": "MAIN",
+              "use": "CURRENT_TASK",
+              "modality": "REQUIRED",
+              "polarity": "POSITIVE",
+              "owner_id": "ROOT",
+              "constraint_ids": [],
+              "requires": [],
+              "sources": [
+                {
+                  "quote": "请PM核对users.csv",
+                  "occurrence": 1,
+                  "span": [
+                    0,
+                    14
+                  ],
+                  "source_sha256": "842ad1a9aeecaad5f8f59cafa1a63639ad3166017731b8a77a2b21b2512b5587"
+                }
+              ]
+            },
+            "roles": [
+              {
+                "id": "claim_check_performer",
+                "kind": "ROLE",
+                "event_id": "event_check",
+                "entity_id": "entity_pm",
+                "role": "PERFORMER",
+                "expression_id": null,
+                "direction": null,
+                "temporal": null,
+                "quantity": null,
+                "scope_id": "event_check",
+                "requires": [],
+                "sources": [
+                  {
+                    "quote": "请PM核对users.csv",
+                    "occurrence": 1,
+                    "span": [
+                      0,
+                      14
+                    ],
+                    "source_sha256": "842ad1a9aeecaad5f8f59cafa1a63639ad3166017731b8a77a2b21b2512b5587"
+                  }
+                ],
+                "note": "PM是核对动作的明确执行者；岗位简称不推定身份类别或权限。",
+                "entity": {
+                  "id": "entity_pm",
+                  "label": "PM",
+                  "type": "OTHER",
+                  "mentions": [
+                    {
+                      "quote": "PM",
+                      "occurrence": 1,
+                      "span": [
+                        1,
+                        3
+                      ],
+                      "source_sha256": "842ad1a9aeecaad5f8f59cafa1a63639ad3166017731b8a77a2b21b2512b5587"
+                    }
+                  ],
+                  "alternatives": []
+                },
+                "status": "ACCEPTED"
+              },
+              {
+                "id": "claim_check_input",
+                "kind": "ROLE",
+                "event_id": "event_check",
+                "entity_id": "entity_users",
+                "role": "INPUT_OBJECT",
+                "expression_id": null,
+                "direction": null,
+                "temporal": null,
+                "quantity": null,
+                "scope_id": "event_check",
+                "requires": [],
+                "sources": [
+                  {
+                    "quote": "核对users.csv",
+                    "occurrence": 1,
+                    "span": [
+                      3,
+                      14
+                    ],
+                    "source_sha256": "842ad1a9aeecaad5f8f59cafa1a63639ad3166017731b8a77a2b21b2512b5587"
+                  }
+                ],
+                "note": "users.csv是明确受核对的输入范围。",
+                "entity": {
+                  "id": "entity_users",
+                  "label": "users.csv",
+                  "type": "FILE",
+                  "mentions": [
+                    {
+                      "quote": "users.csv",
+                      "occurrence": 1,
+                      "span": [
+                        5,
+                        14
+                      ],
+                      "source_sha256": "842ad1a9aeecaad5f8f59cafa1a63639ad3166017731b8a77a2b21b2512b5587"
+                    }
+                  ],
+                  "alternatives": []
+                },
+                "status": "ACCEPTED"
+              }
+            ],
+            "constraints": [],
+            "sources": [
+              {
+                "quote": "请PM核对users.csv",
+                "occurrence": 1,
+                "span": [
+                  0,
+                  14
+                ],
+                "source_sha256": "842ad1a9aeecaad5f8f59cafa1a63639ad3166017731b8a77a2b21b2512b5587"
+              },
+              {
+                "quote": "请PM核对users.csv",
+                "occurrence": 1,
+                "span": [
+                  0,
+                  14
+                ],
+                "source_sha256": "842ad1a9aeecaad5f8f59cafa1a63639ad3166017731b8a77a2b21b2512b5587"
+              },
+              {
+                "quote": "PM",
+                "occurrence": 1,
+                "span": [
+                  1,
+                  3
+                ],
+                "source_sha256": "842ad1a9aeecaad5f8f59cafa1a63639ad3166017731b8a77a2b21b2512b5587"
+              },
+              {
+                "quote": "核对users.csv",
+                "occurrence": 1,
+                "span": [
+                  3,
+                  14
+                ],
+                "source_sha256": "842ad1a9aeecaad5f8f59cafa1a63639ad3166017731b8a77a2b21b2512b5587"
+              },
+              {
+                "quote": "users.csv",
+                "occurrence": 1,
+                "span": [
+                  5,
+                  14
+                ],
+                "source_sha256": "842ad1a9aeecaad5f8f59cafa1a63639ad3166017731b8a77a2b21b2512b5587"
+              }
+            ],
+            "slots": [
+              "A"
+            ],
+            "proof": {
+              "source_sha256": "842ad1a9aeecaad5f8f59cafa1a63639ad3166017731b8a77a2b21b2512b5587",
+              "claim_ids": [
+                "event_check",
+                "claim_check_performer",
+                "claim_check_input"
+              ],
+              "provenance_refs": [
+                "event_check",
+                "claim_check_performer",
+                "entity_pm",
+                "claim_check_input",
+                "entity_users"
+              ],
+              "technical_policy": "028-r02-technical-v2",
+              "checks": [
+                {
+                  "id": "event_check",
+                  "collection": "events",
+                  "status": "ACCEPTED",
+                  "errors": [],
+                  "uncertain": [],
+                  "sources": [
+                    {
+                      "quote": "请PM核对users.csv",
+                      "occurrence": 1,
+                      "span": [
+                        0,
+                        14
+                      ],
+                      "source_sha256": "842ad1a9aeecaad5f8f59cafa1a63639ad3166017731b8a77a2b21b2512b5587"
+                    }
+                  ],
+                  "audit_refs": [
+                    {
+                      "subject_id": "event_check",
+                      "field_path": "",
+                      "verdict": "SUPPORT"
+                    }
+                  ],
+                  "required_dependencies": [],
+                  "structural_refs": [
+                    "ROOT"
+                  ]
+                },
+                {
+                  "id": "claim_check_performer",
+                  "collection": "claims",
+                  "status": "ACCEPTED",
+                  "errors": [],
+                  "uncertain": [],
+                  "sources": [
+                    {
+                      "quote": "请PM核对users.csv",
+                      "occurrence": 1,
+                      "span": [
+                        0,
+                        14
+                      ],
+                      "source_sha256": "842ad1a9aeecaad5f8f59cafa1a63639ad3166017731b8a77a2b21b2512b5587"
+                    }
+                  ],
+                  "audit_refs": [
+                    {
+                      "subject_id": "claim_check_performer",
+                      "field_path": "",
+                      "verdict": "SUPPORT"
+                    }
+                  ],
+                  "required_dependencies": [],
+                  "structural_refs": [
+                    "event_check",
+                    "event_check",
+                    "entity_pm"
+                  ]
+                },
+                {
+                  "id": "entity_pm",
+                  "collection": "entities",
+                  "status": "ACCEPTED",
+                  "identity_status": "ACCEPTED",
+                  "errors": [],
+                  "uncertain": [],
+                  "sources": [
+                    {
+                      "quote": "PM",
+                      "occurrence": 1,
+                      "span": [
+                        1,
+                        3
+                      ],
+                      "source_sha256": "842ad1a9aeecaad5f8f59cafa1a63639ad3166017731b8a77a2b21b2512b5587"
+                    }
+                  ],
+                  "audit_refs": [
+                    {
+                      "subject_id": "entity_pm",
+                      "field_path": "",
+                      "verdict": "SUPPORT"
+                    }
+                  ],
+                  "required_dependencies": [],
+                  "structural_refs": []
+                },
+                {
+                  "id": "claim_check_input",
+                  "collection": "claims",
+                  "status": "ACCEPTED",
+                  "errors": [],
+                  "uncertain": [],
+                  "sources": [
+                    {
+                      "quote": "核对users.csv",
+                      "occurrence": 1,
+                      "span": [
+                        3,
+                        14
+                      ],
+                      "source_sha256": "842ad1a9aeecaad5f8f59cafa1a63639ad3166017731b8a77a2b21b2512b5587"
+                    }
+                  ],
+                  "audit_refs": [
+                    {
+                      "subject_id": "claim_check_input",
+                      "field_path": "",
+                      "verdict": "SUPPORT"
+                    }
+                  ],
+                  "required_dependencies": [],
+                  "structural_refs": [
+                    "event_check",
+                    "event_check",
+                    "entity_users"
+                  ]
+                },
+                {
+                  "id": "entity_users",
+                  "collection": "entities",
+                  "status": "ACCEPTED",
+                  "identity_status": "ACCEPTED",
+                  "errors": [],
+                  "uncertain": [],
+                  "sources": [
+                    {
+                      "quote": "users.csv",
+                      "occurrence": 1,
+                      "span": [
+                        5,
+                        14
+                      ],
+                      "source_sha256": "842ad1a9aeecaad5f8f59cafa1a63639ad3166017731b8a77a2b21b2512b5587"
+                    }
+                  ],
+                  "audit_refs": [
+                    {
+                      "subject_id": "entity_users",
+                      "field_path": "",
+                      "verdict": "SUPPORT"
+                    }
+                  ],
+                  "required_dependencies": [],
+                  "structural_refs": []
+                }
+              ],
+              "audit": [
+                {
+                  "subject_id": "event_check",
+                  "field_path": "",
+                  "verdict": "SUPPORT",
+                  "context_refs": [],
+                  "sources": [
+                    {
+                      "quote": "请PM核对users.csv",
+                      "occurrence": 1
+                    }
+                  ],
+                  "reason": "明确要求当前执行核对，无条件或数量限制。"
+                },
+                {
+                  "subject_id": "claim_check_performer",
+                  "field_path": "",
+                  "verdict": "SUPPORT",
+                  "context_refs": [
+                    "event_check",
+                    "entity_pm"
+                  ],
+                  "sources": [
+                    {
+                      "quote": "请PM核对users.csv",
+                      "occurrence": 1
+                    }
+                  ],
+                  "reason": "PM是核对动作的明确执行者。"
+                },
+                {
+                  "subject_id": "entity_pm",
+                  "field_path": "",
+                  "verdict": "SUPPORT",
+                  "context_refs": [],
+                  "sources": [
+                    {
+                      "quote": "PM",
+                      "occurrence": 1
+                    }
+                  ],
+                  "reason": "PM身份明确；OTHER可作未指定具体类别的占位，不推定岗位权限。"
+                },
+                {
+                  "subject_id": "claim_check_input",
+                  "field_path": "",
+                  "verdict": "SUPPORT",
+                  "context_refs": [
+                    "event_check",
+                    "entity_users"
+                  ],
+                  "sources": [
+                    {
+                      "quote": "核对users.csv",
+                      "occurrence": 1
+                    }
+                  ],
+                  "reason": "users.csv是明确受检范围，INPUT_OBJECT绑定正确。"
+                },
+                {
+                  "subject_id": "entity_users",
+                  "field_path": "",
+                  "verdict": "SUPPORT",
+                  "context_refs": [],
+                  "sources": [
+                    {
+                      "quote": "users.csv",
+                      "occurrence": 1
+                    }
+                  ],
+                  "reason": "原文明示受核对文件，名称与身份一致。"
+                }
+              ],
+              "context_references_are_not_required_dependencies": true
+            }
+          }
+        ]
+      },
+      "P": {
+        "status": "RESOLVED",
+        "openness": "CONSTRAINED",
+        "entries": [
+          {
+            "id": "bf:cc77198249b1cfd7e61e",
+            "kind": "ROLE",
+            "status": "ACCEPTED",
+            "claim_ids": [
+              "claim_check_performer",
+              "entity_pm",
+              "event_check"
+            ],
+            "claim": {
+              "id": "claim_check_performer",
+              "kind": "ROLE",
+              "event_id": "event_check",
+              "entity_id": "entity_pm",
+              "role": "PERFORMER",
+              "expression_id": null,
+              "direction": null,
+              "temporal": null,
+              "quantity": null,
+              "scope_id": "event_check",
+              "requires": [],
+              "sources": [
+                {
+                  "quote": "请PM核对users.csv",
+                  "occurrence": 1,
+                  "span": [
+                    0,
+                    14
+                  ],
+                  "source_sha256": "842ad1a9aeecaad5f8f59cafa1a63639ad3166017731b8a77a2b21b2512b5587"
+                }
+              ],
+              "note": "PM是核对动作的明确执行者；岗位简称不推定身份类别或权限。"
+            },
+            "event": {
+              "id": "event_check",
+              "predicate": "核对",
+              "kind": "ACTION",
+              "layer": "MAIN",
+              "use": "CURRENT_TASK",
+              "modality": "REQUIRED",
+              "polarity": "POSITIVE",
+              "owner_id": "ROOT",
+              "constraint_ids": [],
+              "requires": [],
+              "sources": [
+                {
+                  "quote": "请PM核对users.csv",
+                  "occurrence": 1,
+                  "span": [
+                    0,
+                    14
+                  ],
+                  "source_sha256": "842ad1a9aeecaad5f8f59cafa1a63639ad3166017731b8a77a2b21b2512b5587"
+                }
+              ]
+            },
+            "entity": {
+              "id": "entity_pm",
+              "label": "PM",
+              "type": "OTHER",
+              "mentions": [
+                {
+                  "quote": "PM",
+                  "occurrence": 1,
+                  "span": [
+                    1,
+                    3
+                  ],
+                  "source_sha256": "842ad1a9aeecaad5f8f59cafa1a63639ad3166017731b8a77a2b21b2512b5587"
+                }
+              ],
+              "alternatives": []
+            },
+            "expression": null,
+            "constraints": [],
+            "content_quantities": [],
+            "content_scopes": [],
+            "sources": [
+              {
+                "quote": "请PM核对users.csv",
+                "occurrence": 1,
+                "span": [
+                  0,
+                  14
+                ],
+                "source_sha256": "842ad1a9aeecaad5f8f59cafa1a63639ad3166017731b8a77a2b21b2512b5587"
+              },
+              {
+                "quote": "请PM核对users.csv",
+                "occurrence": 1,
+                "span": [
+                  0,
+                  14
+                ],
+                "source_sha256": "842ad1a9aeecaad5f8f59cafa1a63639ad3166017731b8a77a2b21b2512b5587"
+              },
+              {
+                "quote": "PM",
+                "occurrence": 1,
+                "span": [
+                  1,
+                  3
+                ],
+                "source_sha256": "842ad1a9aeecaad5f8f59cafa1a63639ad3166017731b8a77a2b21b2512b5587"
+              }
+            ],
+            "slots": [
+              "P"
+            ],
+            "proof": {
+              "source_sha256": "842ad1a9aeecaad5f8f59cafa1a63639ad3166017731b8a77a2b21b2512b5587",
+              "claim_ids": [
+                "claim_check_performer",
+                "entity_pm",
+                "event_check"
+              ],
+              "provenance_refs": [
+                "claim_check_performer",
+                "event_check",
+                "entity_pm"
+              ],
+              "technical_policy": "028-r02-technical-v2",
+              "checks": [
+                {
+                  "id": "claim_check_performer",
+                  "collection": "claims",
+                  "status": "ACCEPTED",
+                  "errors": [],
+                  "uncertain": [],
+                  "sources": [
+                    {
+                      "quote": "请PM核对users.csv",
+                      "occurrence": 1,
+                      "span": [
+                        0,
+                        14
+                      ],
+                      "source_sha256": "842ad1a9aeecaad5f8f59cafa1a63639ad3166017731b8a77a2b21b2512b5587"
+                    }
+                  ],
+                  "audit_refs": [
+                    {
+                      "subject_id": "claim_check_performer",
+                      "field_path": "",
+                      "verdict": "SUPPORT"
+                    }
+                  ],
+                  "required_dependencies": [],
+                  "structural_refs": [
+                    "event_check",
+                    "event_check",
+                    "entity_pm"
+                  ]
+                },
+                {
+                  "id": "event_check",
+                  "collection": "events",
+                  "status": "ACCEPTED",
+                  "errors": [],
+                  "uncertain": [],
+                  "sources": [
+                    {
+                      "quote": "请PM核对users.csv",
+                      "occurrence": 1,
+                      "span": [
+                        0,
+                        14
+                      ],
+                      "source_sha256": "842ad1a9aeecaad5f8f59cafa1a63639ad3166017731b8a77a2b21b2512b5587"
+                    }
+                  ],
+                  "audit_refs": [
+                    {
+                      "subject_id": "event_check",
+                      "field_path": "",
+                      "verdict": "SUPPORT"
+                    }
+                  ],
+                  "required_dependencies": [],
+                  "structural_refs": [
+                    "ROOT"
+                  ]
+                },
+                {
+                  "id": "entity_pm",
+                  "collection": "entities",
+                  "status": "ACCEPTED",
+                  "identity_status": "ACCEPTED",
+                  "errors": [],
+                  "uncertain": [],
+                  "sources": [
+                    {
+                      "quote": "PM",
+                      "occurrence": 1,
+                      "span": [
+                        1,
+                        3
+                      ],
+                      "source_sha256": "842ad1a9aeecaad5f8f59cafa1a63639ad3166017731b8a77a2b21b2512b5587"
+                    }
+                  ],
+                  "audit_refs": [
+                    {
+                      "subject_id": "entity_pm",
+                      "field_path": "",
+                      "verdict": "SUPPORT"
+                    }
+                  ],
+                  "required_dependencies": [],
+                  "structural_refs": []
+                }
+              ],
+              "audit": [
+                {
+                  "subject_id": "claim_check_performer",
+                  "field_path": "",
+                  "verdict": "SUPPORT",
+                  "context_refs": [
+                    "event_check",
+                    "entity_pm"
+                  ],
+                  "sources": [
+                    {
+                      "quote": "请PM核对users.csv",
+                      "occurrence": 1
+                    }
+                  ],
+                  "reason": "PM是核对动作的明确执行者。"
+                },
+                {
+                  "subject_id": "event_check",
+                  "field_path": "",
+                  "verdict": "SUPPORT",
+                  "context_refs": [],
+                  "sources": [
+                    {
+                      "quote": "请PM核对users.csv",
+                      "occurrence": 1
+                    }
+                  ],
+                  "reason": "明确要求当前执行核对，无条件或数量限制。"
+                },
+                {
+                  "subject_id": "entity_pm",
+                  "field_path": "",
+                  "verdict": "SUPPORT",
+                  "context_refs": [],
+                  "sources": [
+                    {
+                      "quote": "PM",
+                      "occurrence": 1
+                    }
+                  ],
+                  "reason": "PM身份明确；OTHER可作未指定具体类别的占位，不推定岗位权限。"
+                }
+              ],
+              "context_references_are_not_required_dependencies": true
+            }
+          }
+        ]
+      },
+      "R": {
+        "status": "ABSENT",
+        "openness": "OPEN",
+        "entries": []
+      },
+      "V": {
+        "status": "ABSENT",
+        "openness": "OPEN",
+        "entries": []
+      },
+      "C": {
+        "status": "ABSENT",
+        "openness": "OPEN",
+        "entries": []
+      },
+      "B": {
+        "status": "RESOLVED",
+        "openness": "CONSTRAINED",
+        "entries": [
+          {
+            "id": "bf:b6ec869cee53ccb21d8e",
+            "kind": "EVENT",
+            "status": "ACCEPTED",
+            "claim_ids": [
+              "event_generate",
+              "claim_generate_performer",
+              "claim_generate_result"
+            ],
+            "event": {
+              "id": "event_generate",
+              "predicate": "生成",
+              "kind": "ACTION",
+              "layer": "MAIN",
+              "use": "CURRENT_TASK",
+              "modality": "FORBIDDEN",
+              "polarity": "POSITIVE",
+              "owner_id": "ROOT",
+              "constraint_ids": [],
+              "requires": [],
+              "sources": [
+                {
+                  "quote": "不得生成optional.md",
+                  "occurrence": 1,
+                  "span": [
+                    15,
+                    30
+                  ],
+                  "source_sha256": "842ad1a9aeecaad5f8f59cafa1a63639ad3166017731b8a77a2b21b2512b5587"
+                }
+              ]
+            },
+            "roles": [
+              {
+                "id": "claim_generate_performer",
+                "kind": "ROLE",
+                "event_id": "event_generate",
+                "entity_id": "entity_pm",
+                "role": "PERFORMER",
+                "expression_id": null,
+                "direction": null,
+                "temporal": null,
+                "quantity": null,
+                "scope_id": "event_generate",
+                "requires": [],
+                "sources": [
+                  {
+                    "quote": "请PM核对users.csv",
+                    "occurrence": 1,
+                    "span": [
+                      0,
+                      14
+                    ],
+                    "source_sha256": "842ad1a9aeecaad5f8f59cafa1a63639ad3166017731b8a77a2b21b2512b5587"
+                  },
+                  {
+                    "quote": "不得生成optional.md",
+                    "occurrence": 1,
+                    "span": [
+                      15,
+                      30
+                    ],
+                    "source_sha256": "842ad1a9aeecaad5f8f59cafa1a63639ad3166017731b8a77a2b21b2512b5587"
+                  }
+                ],
+                "note": "同一连续指令未切换主体，禁止生成动作承接PM为执行主体。",
+                "entity": {
+                  "id": "entity_pm",
+                  "label": "PM",
+                  "type": "OTHER",
+                  "mentions": [
+                    {
+                      "quote": "PM",
+                      "occurrence": 1,
+                      "span": [
+                        1,
+                        3
+                      ],
+                      "source_sha256": "842ad1a9aeecaad5f8f59cafa1a63639ad3166017731b8a77a2b21b2512b5587"
+                    }
+                  ],
+                  "alternatives": []
+                },
+                "status": "ACCEPTED"
+              },
+              {
+                "id": "claim_generate_result",
+                "kind": "ROLE",
+                "event_id": "event_generate",
+                "entity_id": "entity_optional",
+                "role": "RESULT",
+                "expression_id": null,
+                "direction": null,
+                "temporal": null,
+                "quantity": null,
+                "scope_id": "event_generate",
+                "requires": [],
+                "sources": [
+                  {
+                    "quote": "不得生成optional.md",
+                    "occurrence": 1,
+                    "span": [
+                      15,
+                      30
+                    ],
+                    "source_sha256": "842ad1a9aeecaad5f8f59cafa1a63639ad3166017731b8a77a2b21b2512b5587"
+                  }
+                ],
+                "note": "optional.md是被禁止生成的结果对象，不构成正向产出要求或存在断言。",
+                "entity": {
+                  "id": "entity_optional",
+                  "label": "optional.md",
+                  "type": "FILE",
+                  "mentions": [
+                    {
+                      "quote": "optional.md",
+                      "occurrence": 1,
+                      "span": [
+                        19,
+                        30
+                      ],
+                      "source_sha256": "842ad1a9aeecaad5f8f59cafa1a63639ad3166017731b8a77a2b21b2512b5587"
+                    }
+                  ],
+                  "alternatives": []
+                },
+                "status": "ACCEPTED"
+              }
+            ],
+            "constraints": [],
+            "sources": [
+              {
+                "quote": "不得生成optional.md",
+                "occurrence": 1,
+                "span": [
+                  15,
+                  30
+                ],
+                "source_sha256": "842ad1a9aeecaad5f8f59cafa1a63639ad3166017731b8a77a2b21b2512b5587"
+              },
+              {
+                "quote": "请PM核对users.csv",
+                "occurrence": 1,
+                "span": [
+                  0,
+                  14
+                ],
+                "source_sha256": "842ad1a9aeecaad5f8f59cafa1a63639ad3166017731b8a77a2b21b2512b5587"
+              },
+              {
+                "quote": "不得生成optional.md",
+                "occurrence": 1,
+                "span": [
+                  15,
+                  30
+                ],
+                "source_sha256": "842ad1a9aeecaad5f8f59cafa1a63639ad3166017731b8a77a2b21b2512b5587"
+              },
+              {
+                "quote": "PM",
+                "occurrence": 1,
+                "span": [
+                  1,
+                  3
+                ],
+                "source_sha256": "842ad1a9aeecaad5f8f59cafa1a63639ad3166017731b8a77a2b21b2512b5587"
+              },
+              {
+                "quote": "不得生成optional.md",
+                "occurrence": 1,
+                "span": [
+                  15,
+                  30
+                ],
+                "source_sha256": "842ad1a9aeecaad5f8f59cafa1a63639ad3166017731b8a77a2b21b2512b5587"
+              },
+              {
+                "quote": "optional.md",
+                "occurrence": 1,
+                "span": [
+                  19,
+                  30
+                ],
+                "source_sha256": "842ad1a9aeecaad5f8f59cafa1a63639ad3166017731b8a77a2b21b2512b5587"
+              }
+            ],
+            "slots": [
+              "B"
+            ],
+            "proof": {
+              "source_sha256": "842ad1a9aeecaad5f8f59cafa1a63639ad3166017731b8a77a2b21b2512b5587",
+              "claim_ids": [
+                "event_generate",
+                "claim_generate_performer",
+                "claim_generate_result"
+              ],
+              "provenance_refs": [
+                "event_generate",
+                "claim_generate_performer",
+                "entity_pm",
+                "claim_generate_result",
+                "entity_optional"
+              ],
+              "technical_policy": "028-r02-technical-v2",
+              "checks": [
+                {
+                  "id": "event_generate",
+                  "collection": "events",
+                  "status": "ACCEPTED",
+                  "errors": [],
+                  "uncertain": [],
+                  "sources": [
+                    {
+                      "quote": "不得生成optional.md",
+                      "occurrence": 1,
+                      "span": [
+                        15,
+                        30
+                      ],
+                      "source_sha256": "842ad1a9aeecaad5f8f59cafa1a63639ad3166017731b8a77a2b21b2512b5587"
+                    }
+                  ],
+                  "audit_refs": [
+                    {
+                      "subject_id": "event_generate",
+                      "field_path": "",
+                      "verdict": "SUPPORT"
+                    }
+                  ],
+                  "required_dependencies": [],
+                  "structural_refs": [
+                    "ROOT"
+                  ]
+                },
+                {
+                  "id": "claim_generate_performer",
+                  "collection": "claims",
+                  "status": "ACCEPTED",
+                  "errors": [],
+                  "uncertain": [],
+                  "sources": [
+                    {
+                      "quote": "请PM核对users.csv",
+                      "occurrence": 1,
+                      "span": [
+                        0,
+                        14
+                      ],
+                      "source_sha256": "842ad1a9aeecaad5f8f59cafa1a63639ad3166017731b8a77a2b21b2512b5587"
+                    },
+                    {
+                      "quote": "不得生成optional.md",
+                      "occurrence": 1,
+                      "span": [
+                        15,
+                        30
+                      ],
+                      "source_sha256": "842ad1a9aeecaad5f8f59cafa1a63639ad3166017731b8a77a2b21b2512b5587"
+                    }
+                  ],
+                  "audit_refs": [
+                    {
+                      "subject_id": "claim_generate_performer",
+                      "field_path": "",
+                      "verdict": "SUPPORT"
+                    }
+                  ],
+                  "required_dependencies": [],
+                  "structural_refs": [
+                    "event_generate",
+                    "event_generate",
+                    "entity_pm"
+                  ]
+                },
+                {
+                  "id": "entity_pm",
+                  "collection": "entities",
+                  "status": "ACCEPTED",
+                  "identity_status": "ACCEPTED",
+                  "errors": [],
+                  "uncertain": [],
+                  "sources": [
+                    {
+                      "quote": "PM",
+                      "occurrence": 1,
+                      "span": [
+                        1,
+                        3
+                      ],
+                      "source_sha256": "842ad1a9aeecaad5f8f59cafa1a63639ad3166017731b8a77a2b21b2512b5587"
+                    }
+                  ],
+                  "audit_refs": [
+                    {
+                      "subject_id": "entity_pm",
+                      "field_path": "",
+                      "verdict": "SUPPORT"
+                    }
+                  ],
+                  "required_dependencies": [],
+                  "structural_refs": []
+                },
+                {
+                  "id": "claim_generate_result",
+                  "collection": "claims",
+                  "status": "ACCEPTED",
+                  "errors": [],
+                  "uncertain": [],
+                  "sources": [
+                    {
+                      "quote": "不得生成optional.md",
+                      "occurrence": 1,
+                      "span": [
+                        15,
+                        30
+                      ],
+                      "source_sha256": "842ad1a9aeecaad5f8f59cafa1a63639ad3166017731b8a77a2b21b2512b5587"
+                    }
+                  ],
+                  "audit_refs": [
+                    {
+                      "subject_id": "claim_generate_result",
+                      "field_path": "",
+                      "verdict": "SUPPORT"
+                    }
+                  ],
+                  "required_dependencies": [],
+                  "structural_refs": [
+                    "event_generate",
+                    "event_generate",
+                    "entity_optional"
+                  ]
+                },
+                {
+                  "id": "entity_optional",
+                  "collection": "entities",
+                  "status": "ACCEPTED",
+                  "identity_status": "ACCEPTED",
+                  "errors": [],
+                  "uncertain": [],
+                  "sources": [
+                    {
+                      "quote": "optional.md",
+                      "occurrence": 1,
+                      "span": [
+                        19,
+                        30
+                      ],
+                      "source_sha256": "842ad1a9aeecaad5f8f59cafa1a63639ad3166017731b8a77a2b21b2512b5587"
+                    }
+                  ],
+                  "audit_refs": [
+                    {
+                      "subject_id": "entity_optional",
+                      "field_path": "",
+                      "verdict": "SUPPORT"
+                    }
+                  ],
+                  "required_dependencies": [],
+                  "structural_refs": []
+                }
+              ],
+              "audit": [
+                {
+                  "subject_id": "event_generate",
+                  "field_path": "",
+                  "verdict": "SUPPORT",
+                  "context_refs": [],
+                  "sources": [
+                    {
+                      "quote": "不得生成optional.md",
+                      "occurrence": 1
+                    }
+                  ],
+                  "reason": "明确禁止当前生成动作；FORBIDDEN与正向动作谓词搭配正确。"
+                },
+                {
+                  "subject_id": "claim_generate_performer",
+                  "field_path": "",
+                  "verdict": "SUPPORT",
+                  "context_refs": [
+                    "event_generate",
+                    "entity_pm"
+                  ],
+                  "sources": [
+                    {
+                      "quote": "请PM核对users.csv",
+                      "occurrence": 1
+                    },
+                    {
+                      "quote": "不得生成optional.md",
+                      "occurrence": 1
+                    }
+                  ],
+                  "reason": "连续同一指令没有主体切换或竞争主体，禁止动作可承接PM；来源包含两端。"
+                },
+                {
+                  "subject_id": "entity_pm",
+                  "field_path": "",
+                  "verdict": "SUPPORT",
+                  "context_refs": [],
+                  "sources": [
+                    {
+                      "quote": "PM",
+                      "occurrence": 1
+                    }
+                  ],
+                  "reason": "PM身份明确；OTHER可作未指定具体类别的占位，不推定岗位权限。"
+                },
+                {
+                  "subject_id": "claim_generate_result",
+                  "field_path": "",
+                  "verdict": "SUPPORT",
+                  "context_refs": [
+                    "event_generate",
+                    "entity_optional"
+                  ],
+                  "sources": [
+                    {
+                      "quote": "不得生成optional.md",
+                      "occurrence": 1
+                    }
+                  ],
+                  "reason": "optional.md绑定为被禁止生成动作的RESULT正确，不产生正向O或存在断言。"
+                },
+                {
+                  "subject_id": "entity_optional",
+                  "field_path": "",
+                  "verdict": "SUPPORT",
+                  "context_refs": [],
+                  "sources": [
+                    {
+                      "quote": "optional.md",
+                      "occurrence": 1
+                    }
+                  ],
+                  "reason": "原文明示禁止生成的文件对象；实体表示不断言文件存在。"
+                }
+              ],
+              "context_references_are_not_required_dependencies": true
+            }
+          }
+        ]
+      }
+    },
+    "unresolved": [],
+    "retained_nonprojected": [
+      {
+        "id": "bf:9b288e28dd82237e347f",
+        "kind": "ROLE",
+        "status": "ACCEPTED",
+        "claim_ids": [
+          "claim_generate_performer",
+          "entity_pm",
+          "event_generate"
+        ],
+        "claim": {
+          "id": "claim_generate_performer",
+          "kind": "ROLE",
+          "event_id": "event_generate",
+          "entity_id": "entity_pm",
+          "role": "PERFORMER",
+          "expression_id": null,
+          "direction": null,
+          "temporal": null,
+          "quantity": null,
+          "scope_id": "event_generate",
+          "requires": [],
+          "sources": [
+            {
+              "quote": "请PM核对users.csv",
+              "occurrence": 1,
+              "span": [
+                0,
+                14
+              ],
+              "source_sha256": "842ad1a9aeecaad5f8f59cafa1a63639ad3166017731b8a77a2b21b2512b5587"
+            },
+            {
+              "quote": "不得生成optional.md",
+              "occurrence": 1,
+              "span": [
+                15,
+                30
+              ],
+              "source_sha256": "842ad1a9aeecaad5f8f59cafa1a63639ad3166017731b8a77a2b21b2512b5587"
+            }
+          ],
+          "note": "同一连续指令未切换主体，禁止生成动作承接PM为执行主体。"
+        },
+        "event": {
+          "id": "event_generate",
+          "predicate": "生成",
+          "kind": "ACTION",
+          "layer": "MAIN",
+          "use": "CURRENT_TASK",
+          "modality": "FORBIDDEN",
+          "polarity": "POSITIVE",
+          "owner_id": "ROOT",
+          "constraint_ids": [],
+          "requires": [],
+          "sources": [
+            {
+              "quote": "不得生成optional.md",
+              "occurrence": 1,
+              "span": [
+                15,
+                30
+              ],
+              "source_sha256": "842ad1a9aeecaad5f8f59cafa1a63639ad3166017731b8a77a2b21b2512b5587"
+            }
+          ]
+        },
+        "entity": {
+          "id": "entity_pm",
+          "label": "PM",
+          "type": "OTHER",
+          "mentions": [
+            {
+              "quote": "PM",
+              "occurrence": 1,
+              "span": [
+                1,
+                3
+              ],
+              "source_sha256": "842ad1a9aeecaad5f8f59cafa1a63639ad3166017731b8a77a2b21b2512b5587"
+            }
+          ],
+          "alternatives": []
+        },
+        "expression": null,
+        "constraints": [],
+        "content_quantities": [],
+        "content_scopes": [],
+        "sources": [
+          {
+            "quote": "请PM核对users.csv",
+            "occurrence": 1,
+            "span": [
+              0,
+              14
+            ],
+            "source_sha256": "842ad1a9aeecaad5f8f59cafa1a63639ad3166017731b8a77a2b21b2512b5587"
+          },
+          {
+            "quote": "不得生成optional.md",
+            "occurrence": 1,
+            "span": [
+              15,
+              30
+            ],
+            "source_sha256": "842ad1a9aeecaad5f8f59cafa1a63639ad3166017731b8a77a2b21b2512b5587"
+          },
+          {
+            "quote": "不得生成optional.md",
+            "occurrence": 1,
+            "span": [
+              15,
+              30
+            ],
+            "source_sha256": "842ad1a9aeecaad5f8f59cafa1a63639ad3166017731b8a77a2b21b2512b5587"
+          },
+          {
+            "quote": "PM",
+            "occurrence": 1,
+            "span": [
+              1,
+              3
+            ],
+            "source_sha256": "842ad1a9aeecaad5f8f59cafa1a63639ad3166017731b8a77a2b21b2512b5587"
+          }
+        ],
+        "slots": [],
+        "proof": {
+          "source_sha256": "842ad1a9aeecaad5f8f59cafa1a63639ad3166017731b8a77a2b21b2512b5587",
+          "claim_ids": [
+            "claim_generate_performer",
+            "entity_pm",
+            "event_generate"
+          ],
+          "provenance_refs": [
+            "claim_generate_performer",
+            "event_generate",
+            "entity_pm"
+          ],
+          "technical_policy": "028-r02-technical-v2",
+          "checks": [
+            {
+              "id": "claim_generate_performer",
+              "collection": "claims",
+              "status": "ACCEPTED",
+              "errors": [],
+              "uncertain": [],
+              "sources": [
+                {
+                  "quote": "请PM核对users.csv",
+                  "occurrence": 1,
+                  "span": [
+                    0,
+                    14
+                  ],
+                  "source_sha256": "842ad1a9aeecaad5f8f59cafa1a63639ad3166017731b8a77a2b21b2512b5587"
+                },
+                {
+                  "quote": "不得生成optional.md",
+                  "occurrence": 1,
+                  "span": [
+                    15,
+                    30
+                  ],
+                  "source_sha256": "842ad1a9aeecaad5f8f59cafa1a63639ad3166017731b8a77a2b21b2512b5587"
+                }
+              ],
+              "audit_refs": [
+                {
+                  "subject_id": "claim_generate_performer",
+                  "field_path": "",
+                  "verdict": "SUPPORT"
+                }
+              ],
+              "required_dependencies": [],
+              "structural_refs": [
+                "event_generate",
+                "event_generate",
+                "entity_pm"
+              ]
+            },
+            {
+              "id": "event_generate",
+              "collection": "events",
+              "status": "ACCEPTED",
+              "errors": [],
+              "uncertain": [],
+              "sources": [
+                {
+                  "quote": "不得生成optional.md",
+                  "occurrence": 1,
+                  "span": [
+                    15,
+                    30
+                  ],
+                  "source_sha256": "842ad1a9aeecaad5f8f59cafa1a63639ad3166017731b8a77a2b21b2512b5587"
+                }
+              ],
+              "audit_refs": [
+                {
+                  "subject_id": "event_generate",
+                  "field_path": "",
+                  "verdict": "SUPPORT"
+                }
+              ],
+              "required_dependencies": [],
+              "structural_refs": [
+                "ROOT"
+              ]
+            },
+            {
+              "id": "entity_pm",
+              "collection": "entities",
+              "status": "ACCEPTED",
+              "identity_status": "ACCEPTED",
+              "errors": [],
+              "uncertain": [],
+              "sources": [
+                {
+                  "quote": "PM",
+                  "occurrence": 1,
+                  "span": [
+                    1,
+                    3
+                  ],
+                  "source_sha256": "842ad1a9aeecaad5f8f59cafa1a63639ad3166017731b8a77a2b21b2512b5587"
+                }
+              ],
+              "audit_refs": [
+                {
+                  "subject_id": "entity_pm",
+                  "field_path": "",
+                  "verdict": "SUPPORT"
+                }
+              ],
+              "required_dependencies": [],
+              "structural_refs": []
+            }
+          ],
+          "audit": [
+            {
+              "subject_id": "claim_generate_performer",
+              "field_path": "",
+              "verdict": "SUPPORT",
+              "context_refs": [
+                "event_generate",
+                "entity_pm"
+              ],
+              "sources": [
+                {
+                  "quote": "请PM核对users.csv",
+                  "occurrence": 1
+                },
+                {
+                  "quote": "不得生成optional.md",
+                  "occurrence": 1
+                }
+              ],
+              "reason": "连续同一指令没有主体切换或竞争主体，禁止动作可承接PM；来源包含两端。"
+            },
+            {
+              "subject_id": "event_generate",
+              "field_path": "",
+              "verdict": "SUPPORT",
+              "context_refs": [],
+              "sources": [
+                {
+                  "quote": "不得生成optional.md",
+                  "occurrence": 1
+                }
+              ],
+              "reason": "明确禁止当前生成动作；FORBIDDEN与正向动作谓词搭配正确。"
+            },
+            {
+              "subject_id": "entity_pm",
+              "field_path": "",
+              "verdict": "SUPPORT",
+              "context_refs": [],
+              "sources": [
+                {
+                  "quote": "PM",
+                  "occurrence": 1
+                }
+              ],
+              "reason": "PM身份明确；OTHER可作未指定具体类别的占位，不推定岗位权限。"
+            }
+          ],
+          "context_references_are_not_required_dependencies": true
+        }
+      },
+      {
+        "id": "bf:0079d7f0cb33943797c7",
+        "kind": "ROLE",
+        "status": "ACCEPTED",
+        "claim_ids": [
+          "claim_generate_result",
+          "entity_optional",
+          "event_generate"
+        ],
+        "claim": {
+          "id": "claim_generate_result",
+          "kind": "ROLE",
+          "event_id": "event_generate",
+          "entity_id": "entity_optional",
+          "role": "RESULT",
+          "expression_id": null,
+          "direction": null,
+          "temporal": null,
+          "quantity": null,
+          "scope_id": "event_generate",
+          "requires": [],
+          "sources": [
+            {
+              "quote": "不得生成optional.md",
+              "occurrence": 1,
+              "span": [
+                15,
+                30
+              ],
+              "source_sha256": "842ad1a9aeecaad5f8f59cafa1a63639ad3166017731b8a77a2b21b2512b5587"
+            }
+          ],
+          "note": "optional.md是被禁止生成的结果对象，不构成正向产出要求或存在断言。"
+        },
+        "event": {
+          "id": "event_generate",
+          "predicate": "生成",
+          "kind": "ACTION",
+          "layer": "MAIN",
+          "use": "CURRENT_TASK",
+          "modality": "FORBIDDEN",
+          "polarity": "POSITIVE",
+          "owner_id": "ROOT",
+          "constraint_ids": [],
+          "requires": [],
+          "sources": [
+            {
+              "quote": "不得生成optional.md",
+              "occurrence": 1,
+              "span": [
+                15,
+                30
+              ],
+              "source_sha256": "842ad1a9aeecaad5f8f59cafa1a63639ad3166017731b8a77a2b21b2512b5587"
+            }
+          ]
+        },
+        "entity": {
+          "id": "entity_optional",
+          "label": "optional.md",
+          "type": "FILE",
+          "mentions": [
+            {
+              "quote": "optional.md",
+              "occurrence": 1,
+              "span": [
+                19,
+                30
+              ],
+              "source_sha256": "842ad1a9aeecaad5f8f59cafa1a63639ad3166017731b8a77a2b21b2512b5587"
+            }
+          ],
+          "alternatives": []
+        },
+        "expression": null,
+        "constraints": [],
+        "content_quantities": [],
+        "content_scopes": [],
+        "sources": [
+          {
+            "quote": "不得生成optional.md",
+            "occurrence": 1,
+            "span": [
+              15,
+              30
+            ],
+            "source_sha256": "842ad1a9aeecaad5f8f59cafa1a63639ad3166017731b8a77a2b21b2512b5587"
+          },
+          {
+            "quote": "不得生成optional.md",
+            "occurrence": 1,
+            "span": [
+              15,
+              30
+            ],
+            "source_sha256": "842ad1a9aeecaad5f8f59cafa1a63639ad3166017731b8a77a2b21b2512b5587"
+          },
+          {
+            "quote": "optional.md",
+            "occurrence": 1,
+            "span": [
+              19,
+              30
+            ],
+            "source_sha256": "842ad1a9aeecaad5f8f59cafa1a63639ad3166017731b8a77a2b21b2512b5587"
+          }
+        ],
+        "slots": [],
+        "proof": {
+          "source_sha256": "842ad1a9aeecaad5f8f59cafa1a63639ad3166017731b8a77a2b21b2512b5587",
+          "claim_ids": [
+            "claim_generate_result",
+            "entity_optional",
+            "event_generate"
+          ],
+          "provenance_refs": [
+            "claim_generate_result",
+            "event_generate",
+            "entity_optional"
+          ],
+          "technical_policy": "028-r02-technical-v2",
+          "checks": [
+            {
+              "id": "claim_generate_result",
+              "collection": "claims",
+              "status": "ACCEPTED",
+              "errors": [],
+              "uncertain": [],
+              "sources": [
+                {
+                  "quote": "不得生成optional.md",
+                  "occurrence": 1,
+                  "span": [
+                    15,
+                    30
+                  ],
+                  "source_sha256": "842ad1a9aeecaad5f8f59cafa1a63639ad3166017731b8a77a2b21b2512b5587"
+                }
+              ],
+              "audit_refs": [
+                {
+                  "subject_id": "claim_generate_result",
+                  "field_path": "",
+                  "verdict": "SUPPORT"
+                }
+              ],
+              "required_dependencies": [],
+              "structural_refs": [
+                "event_generate",
+                "event_generate",
+                "entity_optional"
+              ]
+            },
+            {
+              "id": "event_generate",
+              "collection": "events",
+              "status": "ACCEPTED",
+              "errors": [],
+              "uncertain": [],
+              "sources": [
+                {
+                  "quote": "不得生成optional.md",
+                  "occurrence": 1,
+                  "span": [
+                    15,
+                    30
+                  ],
+                  "source_sha256": "842ad1a9aeecaad5f8f59cafa1a63639ad3166017731b8a77a2b21b2512b5587"
+                }
+              ],
+              "audit_refs": [
+                {
+                  "subject_id": "event_generate",
+                  "field_path": "",
+                  "verdict": "SUPPORT"
+                }
+              ],
+              "required_dependencies": [],
+              "structural_refs": [
+                "ROOT"
+              ]
+            },
+            {
+              "id": "entity_optional",
+              "collection": "entities",
+              "status": "ACCEPTED",
+              "identity_status": "ACCEPTED",
+              "errors": [],
+              "uncertain": [],
+              "sources": [
+                {
+                  "quote": "optional.md",
+                  "occurrence": 1,
+                  "span": [
+                    19,
+                    30
+                  ],
+                  "source_sha256": "842ad1a9aeecaad5f8f59cafa1a63639ad3166017731b8a77a2b21b2512b5587"
+                }
+              ],
+              "audit_refs": [
+                {
+                  "subject_id": "entity_optional",
+                  "field_path": "",
+                  "verdict": "SUPPORT"
+                }
+              ],
+              "required_dependencies": [],
+              "structural_refs": []
+            }
+          ],
+          "audit": [
+            {
+              "subject_id": "claim_generate_result",
+              "field_path": "",
+              "verdict": "SUPPORT",
+              "context_refs": [
+                "event_generate",
+                "entity_optional"
+              ],
+              "sources": [
+                {
+                  "quote": "不得生成optional.md",
+                  "occurrence": 1
+                }
+              ],
+              "reason": "optional.md绑定为被禁止生成动作的RESULT正确，不产生正向O或存在断言。"
+            },
+            {
+              "subject_id": "event_generate",
+              "field_path": "",
+              "verdict": "SUPPORT",
+              "context_refs": [],
+              "sources": [
+                {
+                  "quote": "不得生成optional.md",
+                  "occurrence": 1
+                }
+              ],
+              "reason": "明确禁止当前生成动作；FORBIDDEN与正向动作谓词搭配正确。"
+            },
+            {
+              "subject_id": "entity_optional",
+              "field_path": "",
+              "verdict": "SUPPORT",
+              "context_refs": [],
+              "sources": [
+                {
+                  "quote": "optional.md",
+                  "occurrence": 1
+                }
+              ],
+              "reason": "原文明示禁止生成的文件对象；实体表示不断言文件存在。"
+            }
+          ],
+          "context_references_are_not_required_dependencies": true
+        }
+      }
+    ],
+    "issues": [],
+    "gaps": [],
+    "business_decision": null,
+    "execution_authorization": null
+  },
+  "chinese": "# BoundX 7+1（有限技术接受，不是业务授权）\n\n## I 输入与作用域 — RESOLVED\n- [ACCEPTED] 核对：输入/受检对象=users.csv；必须（bf:2f6f783790b191a3313f）\n\n## O 交付与结果 — ABSENT\n\n## A 正向动作 — RESOLVED\n- [ACCEPTED] 必须 核对；执行者=PM；输入/受检对象=users.csv（bf:6ac8e197675650413c87）\n\n## P 参与关系 — RESOLVED\n- [ACCEPTED] 核对：执行者=PM；必须（bf:cc77198249b1cfd7e61e）\n\n## R 执行量化限制 — ABSENT\n\n## V 版本与依据 — ABSENT\n\n## C 完成与停止 — ABSENT\n\n## B 禁止与限制 — RESOLVED\n- [ACCEPTED] 禁止 生成；执行者=PM；产生结果=optional.md（bf:b6ec869cee53ccb21d8e）\n\n## 未指定 / 歧义 / 未投影语义\n- [ACCEPTED] ROLE；事件=生成 [event_generate]；执行者=PM；产生结果=optional.md；执行者=PM（bf:9b288e28dd82237e347f）\n- [ACCEPTED] ROLE；事件=生成 [event_generate]；执行者=PM；产生结果=optional.md；产生结果=optional.md（bf:0079d7f0cb33943797c7）\n",
+  "model_calls": 0,
+  "revision": 0,
+  "revision_of": null,
+  "compiler_revision": "031-c5",
+  "execution_mode": "CAPTURED_RESPONSE_CONSUMER_RECOMPILE",
+  "original_trace": "runs/c3-first/Q16/run/trace.json",
+  "original_trace_sha256": "4e1a980f00af2741890d09fe27f0319a1b846eb99a79a68447d1bde78ae83ac1",
+  "candidate_sha256": "f7809f3b04754421ccc33859e31c1cb4364192d93f74401ea65c525af8f38532",
+  "audit_sha256": "7de790081a9e1dad5210804f4436e86ac170b74e9a39561a4b01ebe3d8e6fe6a"
+}
