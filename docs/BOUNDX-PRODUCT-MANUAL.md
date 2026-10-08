@@ -1,643 +1,138 @@
 # 界痕（BoundX）产品手册
 
-协议名称：**Boundary Xplain Protocol（BXP，边界分析协议）**。界痕（BoundX）是用于分析 ADMIN 任务文本、检查边界并提供建议的产品实现；协议与产品分开命名，不授予业务裁决权或执行权。
+文档编号：`BX-PRODUCT-MANUAL-001`。文档整编版：`2026-10-08-d01`。状态：产品定义与交付说明；**不构成产品正式验收或发布声明**。
 
-Protocol: **Boundary Xplain Protocol (BXP)**. BoundX is the product implementation for ADMIN task-text analysis and boundary recommendations, not a grant of decision or execution authority.
+[中文首页](../README.zh-CN.md) · [快速开始](../QUICKSTART.md) · [当前能力与版本](SHORT-COMPILER-STATUS.md) · [7+1方法手册](BoundX-7plus1-定义原理语义编译与边界计算说明-v0.4.md)
 
-文档编号：`BX-PRODUCT-MANUAL-001`  
-版本：`0.1.0-draft.5`\
-状态：`DRAFT_FOR_REVIEW`  
-适用产品：界痕（BoundX）  
-决定权：ADMIN  
-公开授权：`false`  
+## 1. 产品定义与终点
 
-**当前项目状态：** 独立目录 `D:\boundx`，私有仓库 `joinwell52-AI/BoundX`；源码 `1.3.0-preview.0`、BXP-0001 `0.3.0-draft.2`、BXP-CALC `1.0.0-draft.3`（208 条）。当前能力与验证见 [协议实现说明](../protocol/IMPLEMENTATION.md) 和 [验证说明](VALIDATION.md)。
+**BoundX把ADMIN自然语言任务中的边界意图，转换为有来源、可计算、可验证的边界对象。** BXP是边界分析协议，BoundX是其产品实现。产品既不是另一套Agent框架，也不是让模型给任务打一个安全分数。
 
-> 本手册定义 BoundX 的产品定位、集成方式、语义包、FDE 服务和商业边界。第 14 章列出当前已交付能力，第 15 章单列未来规划；其他章节的目标设计不代表已经交付。已有 [v1.3.0-preview.0 私有 GitHub 源码预发布](https://github.com/joinwell52-AI/BoundX/releases/tag/v1.3.0-preview.0)，无 npm/PyPI 分发、安装包或独立二进制。AGPL 是未生效的发布提案，不授权 BoundX 或宿主执行外部业务动作。
-
-A private GitHub source prerelease exists; there are no npm/PyPI packages, installers or standalone binaries. Chapter 14 describes current delivered capabilities; chapter 15 contains future plans. The existing tag is unchanged: later documentation corrections are not included in its source archive.
-
-## 1. 产品定义
-
-### 1.1 正式定位
-
-**界痕（BoundX）是一个可嵌入、可服务化的任务边界预检引擎（Task Boundary Preflight Engine）。**
-
-Agent 或其他生产者把任务整理为带原文证据的 I/O/A/P/R/V/C+B boundx-task/v1；BoundX 唯一本地 Core 负责 Schema、证据、语义验证与确定性计算，输出 boundx-result/v1。宿主或人类另行决定澄清、审批与执行。
-
-Producers form evidence-linked BXP IR; BoundX validates and calculates locally; hosts decide. BXP is a 7+1 data/computation standard, not an extraction algorithm. Python/Lark, prompts and L1/L2/L3 packs are producer methods. BXP-EXTRACT remains RESERVED.
-
-产品口号：
-
-> **执行之前，先把任务边界算清楚。**
-
-工程主线：
-
-> **表单收敛输入，数学把关边界，代码保证执行。**
-
-最后一句中的“代码保证执行”属于宿主系统职责：BoundX 提供结构化工单和预检结果，实际业务系统仍须根据真实身份、授权和审批执行。
-
-### 1.2 部署中立
-
-BoundX 不被定义为“只能本地运行”的工具，也不被定义为“必须连接中央服务器”的 SaaS。部署目标可扩展到以下入口；当前仅 Node API、CLI、MCP、本机 UI 已交付，Python SDK、生产 HTTP 和插件为规划：
-
-- Python 包导入；
-- `bx` 命令行；
-- MCP Server；
-- HTTP/API Server；
-- Web 表单；
-- IDE、协作平台和业务系统插件。
-
-本地、客户内网、私有云和集中服务器是部署选择；插件是集成方式。它们都必须调用同一语义合同和同一计算逻辑，不能各自解释 7+1。
-
-### 1.3 不是什么
-
-BoundX 不是：
-
-- 自动批准任务的权限系统；
-- 代替法务、财务、安全或行业专家的合规认证系统；
-- 自动执行退款、删除、部署、付款等动作的 RPA；
-- 用一个分数判断自然语言“是否安全”的黑箱模型；
-- 任何宿主的专属子模块；
-- 另一套工作流编排语言；
-- 已经获得行业采用的正式标准。
-
-BXP-0001 是 BoundX 内部统一数据合同和计算说明。它帮助不同入口交换同一种任务与结果，但不是首版产品宣传的中心。
-
-### 1.4 独立仓库与许可证状态
-
-BoundX 已作为独立产品维护。当前根目录 [LICENSE](../LICENSE) 为 MIT；拟议的独立开源仓库发布许可为 GNU AGPL v3（候选 SPDX `AGPL-3.0-only`），尚未生效。任何许可证变化必须先明确批准并同步实际许可证文件与包元数据。
-
-- 公开资产必须权属明确，并进入发布清单。
-- 客户 L3 包、私有行业资产、密钥、真实工单及未授权材料不得公开。
-- 仓库公开、包发布和网站上线须经过第 16 节验收与 ADMIN 的具体确认。
-- 商业 Pack 的组合与分发方式在实际发布前另行核对。
-
-## 2. 解决的问题
-
-许多事故不是因为执行程序不会运行，而是因为执行前的任务没有说清楚：
-
-- “清理旧数据”没有说明旧到什么程度；
-- “退款处理一下”没有说明金额、审批人和证据；
-- “修复并上线”没有说明仓库、版本、测试、时间窗口和禁止对象；
-- “Agent 自行处理”没有说明可以执行到哪一步；
-- 两个阶段各自正确，但下游需要的文件并不是上游产物；
-- 一条规则要求立即执行，另一条规则在相同状态下绝对禁止。
-
-BoundX 在任务进入执行系统之前，把这些问题变成可以看到、填写、计算和追溯的结构。
-
-## 3. 目标用户
-
-| 用户 | 使用目的 | 典型入口 |
-|---|---|---|
-| 任务发起人、部门负责人 | 写清对象、动作、责任、上限和禁区 | Web 表单、业务系统插件 |
-| 运维、仓储、车队、售后人员 | 在提交操作前发现明显矛盾和越界 | Web、CLI、现有工单插件 |
-| 软件与 AI 团队 | 在脚本或 Agent 执行前检查任务边界 | MCP、CLI、CI/CD 插件 |
-| 系统集成商 | 为客户系统增加统一任务预检 | Python SDK、HTTP、插件 |
-| 规则实施工程师/FDE | 把行业规程和企业口语整理成语义包 | Pack 工具、测试套件、管理界面 |
-| 审计与管理人员 | 查看原文、映射、计算和版本来源 | 工单、导出报告、宿主审计界面 |
-
-涉及金融、医疗、法律、安全生产等受监管事项时，BoundX 只负责结构化预检，不能替代法定系统或持证人员判断。
-
-## 4. 7+1 任务结构
-
-| 字段 | 含义 | 用户要回答的问题 |
-|---|---|---|
-| I — Input | 输入、对象与范围 | 处理什么？范围到哪里？ |
-| O — Output | 交付物 | 最后产生并交付什么？ |
-| A — Action | 允许动作 | 可以读取、修改、生成或提交什么？ |
-| P — Participants | 责任主体与角色分工 | 谁执行、谁审批、谁接收、谁复核？ |
-| R — Resource | 资源限制 | 时间、金额、数量、调用量和容量上限是什么？ |
-| V — Version/Provenance | 版本与依据 | 根据哪个制度、版本、数据或提交？ |
-| C — Completion | 完成与停止 | 什么证据代表完成？失败或超限时怎样停止？ |
-| B — Boundary | 禁止边界 | 哪些动作、对象或状态不能发生？有哪些明确例外？ |
-
-八项内容不是八个自动评分指标。字段齐全不证明语义正确，字段缺失也不证明现实制度中没有相应要求；系统只能评价已经提交并可追溯的表达。
-
-## 5. 标准用户流程
-
-### 5.1 收敛输入
-
-1. 用户把原始任务交给 Agent 或其他生产者；
-2. 生产者给出完整 boundx-task/v1 与原文码点位置；
-3. 已明确内容显式为 resolved；本地验证不证明抽取正确；
-4. 缺失内容保持 `absent`；
-5. 多种合法解释保持 `unresolved`；
-6. 用户只处理具体缺口，不需要把整段任务改写成程序语言。
-
-自然语言抽取不得编造原文中没有的审批、禁止项、产物或完成条件。
-
-### 5.2 确定性预检
-
-| 检查 | 数学对象 | 典型问题 |
-|---|---|---|
-| 完整性 | 必需字段集合差 | 当前任务缺少哪些必要要素？ |
-| 数值范围 | 类型化区间 | 最低 8,000 Token 与最高小于 4,000 Token 是否无解？ |
-| 对象越界 | 集合交集 | 清理目标是否包含受保护分支？ |
-| 阶段交接 | 集合差 | 下游输入是否未由上游产出或外部提供？ |
-| 工步依赖 | 有向前置图 | 必须先执行的步骤是否形成闭环？ |
-| 条件逻辑 | 布尔约束/SAT | 强制动作与禁止动作是否在某个状态同时生效？ |
-| 原文证据 | UTF-8 来源摘要与 Unicode 码点位置 | 映射引用是否真实来自提交原文？ |
-
-### 5.3 输出与处置
-
-BoundX 输出三条彼此独立的轴：
-
-- `validation`：数据结构和证据是否合法；
-- `completeness`：配置要求的要素是否齐全；
-- `consistency`：已提交的约束是否发现不一致。
-
-常见处置：
-
-| 结果 | 调用者应怎样处理 |
-|---|---|
-| 结构非法 | 修复输入或接口，不进入计算 |
-| 要素缺失 | 补充、声明不适用或交授权方确认 |
-| 语义未决 | 展示候选和原文，请用户选择或改写 |
-| 确定冲突 | 由宿主决定是否阻止工单；核对、修改后重新计算 |
-| 未发现结构问题 | 可以进入宿主后续审批；不代表 BoundX 已批准执行 |
-
-所有标准结果继续保持：
-
-```json
-{
-  "business_decision": null,
-  "execution_authorization": null
-}
-```
-
-## 6. 产品架构
-
-```mermaid
-flowchart TB
-    U["用户原文"] --> P["Agent / 其他生产者 · L1/L2/L3 方法"]
-    P --> A["boundx-task/v1 · CLI/MCP/UI"]
-    A --> E["唯一 BXP Core · 本地验证与计算"]
-    E --> R["boundx-result/v1 · 宿主裁决与授权"]
-```
-
-### 6.1 唯一语义主线
-
-所有入口遵循同一流程：
-
-`source text` → `evidence-linked candidate extraction` → `boundx-task/v1` → `deterministic evaluation` → `boundx-result/v1` → `clarification or work-order rendering`
-
-Python、TypeScript、MCP、HTTP 和宿主插件不得创建第二套字段、状态或计算方法。显示语言可以变化，原文、证据位置、字段 ID 和数学结果不能随界面变化。
-
-### 6.2 核心与适配器边界
-
-| BoundX Engine | 入口/宿主 Adapter |
-|---|---|
-| 校验 BXP 结构和证据 | 接收聊天、表单、文件或 API 请求 |
-| 不自动加载策略或语义包 | 生产者显式选择客户、租户与 Pack |
-| 执行区间、集合、图和逻辑计算 | 验证登录身份和真实权限 |
-| 输出发现、差异和待澄清项 | 决定是否阻断业务提交 |
-| 保持业务决定和执行授权为空 | 保存工单、通知人员、调用执行系统 |
-
-## 7. 五种集成入口
-
-### 7.1 Python / PyPI
-
-#### 目标体验
-
-```bash
-pip install boundx
-```
-
-```python
-from boundx import BoundX
-
-engine = BoundX(
-    packs=[
-        "core",
-        "software-ai",
-        "./customer-packs/acme"
-    ]
-)
-
-result = engine.check(
-    text="清理过期分支，严禁删除 main，执行时间不超过十分钟。"
-)
-```
-
-也应允许直接计算已经确认的 BXP IR：
-
-```python
-result = engine.evaluate(task_ir)
-```
-
-#### 当前状态
-
-Python 目录已经包含 Lark 文法、自然语言局部抽取、区间、集合、NetworkX 和 Z3 计算及测试，依赖锁定在 `python/requirements.txt`。当前没有 `pyproject.toml`、正式包目录、稳定 Python API、wheel/sdist 或干净环境回装证据，因此仓库目前不能宣称 `pip install boundx` 已可用。
-
-#### PyPI 完成标准
-
-- 包名可用性和冲突完成核对；
-- `pyproject.toml`、包元数据和许可证字段完整；
-- `src/boundx/` 或等价标准目录形成稳定 API；
-- 安装后同时得到 Python API 与 `bx` 控制台入口；
-- wheel 和 sdist 均能在干净环境安装；
-- 中文原文、规则包资源和 Lark 文法随包正确安装；
-- 安装包不包含测试缓存、客户数据、密钥或内部证据。
-
-### 7.2 CLI
-
-当前 `node cli.mjs evaluate <task.json>` 读取严格原始 UTF-8 JSON，返回完整 BXP Result；`node cli.mjs protocol-info` 返回精确版本。非法协议输入输出 invalid 信封且退出码0，用法或文件 I/O 错误才为非零。旧命令仅 `legacy task/plan/decomposition/responses`，明确弃用且不升级旧对象。
-
-The canonical CLI evaluates IR, not free text. Pack management, extraction and work-order commands are future proposals, not delivered commands.
-
-### 7.3 MCP Server
-
-主工具为 `bx_evaluate_task`（完整对象作为 arguments）和 `bx_evaluate_task_json`（raw_json 字符串），返回完整结果。资源列表直接来自唯一 Core，含协议信息和精确 task/result/suite Schema。
-
-Old tools are explicitly named `bx_legacy_*` and deprecated. MCP is stateless: no customer-text persistence, model/network calls, approval or execution. The host must register the service and decide what to do with results.
-
-### 7.4 HTTP/API Server
-
-#### 当前状态
-
-现有 `ui-server.mjs` 主路由 /api/bxp/evaluate 通过严格字节路径调用唯一 Core；/api/protocol-info 返回注册表信息。它为本机预览服务，固定校验 `127.0.0.1` Host、同源请求和会话 Token。它适合本机 Web 表单，不是生产级多用户服务器，也不应简单地把监听地址改成 `0.0.0.0` 后直接部署。
-
-#### 目标服务
-
-```http
-POST /v1/extract
-POST /v1/validate
-POST /v1/evaluate
-POST /v1/render
-GET  /v1/packs
-GET  /health
-```
-
-目标服务器必须补齐：
-
-- 明确身份认证；
-- 租户与 Pack 绑定；
-- 请求大小、速率、并发和超时限制；
-- TLS 或可信反向代理边界；
-- 审计记录与敏感字段脱敏；
-- 禁止通过请求任意加载服务器文件或执行 Pack 代码；
-- 无状态计算与客户数据存储职责分离；
-- 相同版本、相同 IR、相同 Pack 得到相同计算结果。
-
-### 7.5 Web 表单与宿主插件
-
-当前运行 npm run ui；主页面只提供 BXP IR 导入／粘贴，双语显示八桶三态、来源码点、Profile、作用域、五类计算和三轴，不调用模型、不持久化客户原文。旧研究页面为 /legacy，其旧端点为 /api/legacy/，不是 BXP。企业 Server 与工单导出为规划，未交付。
-
-宿主插件有两种合法模式：
-
-| 模式 | 适用场景 | 调用方式 |
-|---|---|---|
-| Embedded | 单机、IDE、桌面工具、离线环境 | 进程内 Python/Node API 或子进程 CLI |
-| Remote | 企业服务、多个业务系统、集中维护 Pack | MCP 或 HTTPS API |
-
-IDE、飞书、钉钉和客户工单系统都只实现 Adapter：准备输入、验证身份、调用 BoundX、展示结果、保存记录和控制执行入口。
-
-## 8. 统一产品 API
-
-当前稳定 Node API 为 evaluateBxpTask、parseAndEvaluateBxpTask、validateBxpTask、validateBxpResult，以及 protocolInfo；主出口 src/index.ts，生产实现 src/bxp/。validateBxpTask 内部评价后返回验证发现；validateBxpResult 仅验证结果合同，不证明计算真值。
-
-下表是长期产品能力规划，不表示抽取、渲染工单或 packs API 已交付：
-
-| 能力 | 输入 | 输出 |
-|---|---|---|
-| `extract` | 原始文本、语言、已选 Pack | 7+1 候选、证据、未决项 |
-| `validate` | `boundx-task/v1` | 结构和证据校验结果 |
-| `evaluate` | 合法任务 IR | 三轴状态、发现和类型化计算 |
-| `render` | 任务与结果、语言、模板 | 澄清卡或工单，不增加授权 |
-| `packs` | Pack ID、版本或路径 | 清单、校验、依赖和冲突结果 |
-
-CLI、MCP、HTTP 与 SDK 的名称可以符合各自生态习惯，但语义、输入 Schema、错误码和结果字段必须来自这一组统一能力。
-
-## 9. 三层语义包
-
-### 9.1 分层职责
-
-| 层级 | 内容 | 示例 | 维护者 |
-|---|---|---|---|
-| L0 内核 | 证据、未知、模态、区间、集合、图、逻辑和 7+1 投影不变量 | `resolved/unresolved/absent` | BoundX Core |
-| L1 通用包 | 跨行业动作、角色、单位、比较词和条件原语 | 读取、生成、批准、秒、元、不得 | BoundX 社区核心 |
-| L2 行业包 | 行业动作框架、实体、岗位、指标、依据和风险类别 | 软件工程、车队、仓储、售后 | BoundX 或行业合作方 |
-| L3 企业包 | 单位别名、具体岗位、额度、流程和系统对象 | “王总特批”、内部库名、企业审批限额 | 客户与 FDE |
-
-L0 是固定协议与计算不变量，不是第四种语义包。三层包仅为 L1 通用、L2 行业、L3 企业；由生产者显式选择，不能更改 7+1。当前 Python 研究投影不是标准 BXP 生产者，不能直接冒充 IR；正式生产者需按标准 Schema 明确转换、取证并验证。
-
-L1/L2/L3 are producer-side methods, not alternative protocol definitions. Pack acceptance is a host responsibility and never changes the two null authority fields.
-
-### 9.2 Pack 文件结构
-
-建议 Pack 继续采用可校验的数据文件，而不是任意可执行插件：
+完整产品主线是：
 
 ```text
-<pack-id>/
-├─ manifest.json
-├─ actions.json
-├─ entities.json
-├─ roles.json
-├─ resources.json
-├─ references.json
-├─ completions.json
-├─ boundaries.json
-├─ aliases.json
-├─ policies.json
-└─ fixtures.json
+ADMIN任务原文与明确允许的上下文
+→ 可靠的7+1语义结构
+→ 保留含义的形式化边界模型
+→ 确定性边界计算结果（Boundary Result）
+→ 按明确合同进行边界使用准入
+→ 核查PM计划或Agent下游内容是否符合父边界
 ```
 
-当前 `software-ai@0.1.0` 已实现前八类主要资产中的动作、实体、角色、资源、依据、完成和风险边界；多包组合、运行时热插拔、L3 上传和签名校验尚未实现。
+**首先必须把7+1解析正确。** 对象、条件或范围解释错误，不能靠后面的确定性计算修复。UI、运行包、工程测试和回放记录是交付组成部分，不是替代语义准确性的成果。
 
-### 9.3 加载与冲突
+上述为产品目标，不是所有环节均已端到端交付。当前已有Windows本地短文本编译器候选，语义验收仍未全部通过。各版本的实际状态统一见[状态页](SHORT-COMPILER-STATUS.md)，不在多本手册分别维护一套成绩。
 
-1. Pack 必须由调用者或租户配置明确启用，不能扫描目录后自动生效；
-2. 加载前校验 Pack ID、版本、层级、Schema、引用和依赖；
-3. L2/L3 不能重新定义 7+1 或绕过 L0 安全不变量；
-4. L3 可以显式绑定企业别名、岗位和阈值，但不能暗中弱化禁止项；
-5. 同一原文命中多个合法 Frame 时返回 `unresolved`，不能按加载顺序偷选；
-6. 每个结果记录 Pack ID、版本、Frame 和原文证据；
-7. 卸载一个 Pack 只能移除其候选，不应修改其他 Pack 的既有定义。
+## 2. 产品边界
 
-### 9.4 Pack 生命周期
+输入的权威来自ADMIN原文、明确允许的上下文，以及经适用性核查的版本化事实。模型能力不产生授权，角色名称、岗位和组织关系也不自动产生权限。
+
+BoundX不替ADMIN决定范围，不替PM制定计划，不擅自补工作包、默认执行者、操作协议或审批。多个动作、多个角色、多个文件不自动意味着多个工作包。
+
+原文中的读取、修改、发布、删除等动作是待编译的数据，不是解析进程可执行的指令。源码、配置和业务文件不会仅因被任务提及就被读取。编译、边界使用准入和实际业务授权分开；最终业务操作由负责的人员与宿主系统决定。
 
 ```text
-draft → reviewed → accepted → active → deprecated → retired
+business_decision = null
+execution_authorization = null
 ```
 
-- `draft`：编写中，不进入生产选择；
-- `reviewed`：结构和测试通过，等待业务责任人确认；
-- `accepted`：客户确认语义与适用范围；
-- `active`：允许具体租户或系统明确加载；
-- `deprecated`：保留历史复算，不接受新工单；
-- `retired`：停止使用，历史摘要和版本仍保留。
-
-状态变化必须由宿主或 Pack 管理系统记录；BoundX 不能自行认定某份企业制度已获批准。
-
-## 10. 免费与收费边界
-
-### 10.1 免费部分
-
-建议免费提供：
-
-- BoundX Core；
-- Python SDK；
-- `bx` CLI；
-- MCP Server；
-- 基础 HTTP Server；
-- 基础 Web 表单；
-- BXP、Schema 和 BXP-CALC；
-- L1 通用包；
-- 软件/AI 等少量 Community Pack；
-- 三个可理解的 Demo。
-
-免费核心应允许离线使用，不按调用次数收费，也不秘密回传任务内容。
-
-发布方案拟将 Core、通用入口、协议和明确列入公开清单的 Community Pack 按 GNU AGPL v3 发布；该提案尚未生效。商业语义包和客户 L3 包原则上保持声明式数据资产，通过稳定 Pack 合同加载，并使用单独的商业合同与授权；发布前应确认它们与 AGPL Core 的组合和分发方式满足许可证要求。本手册不是法律意见。
-
-### 10.2 收费部分
-
-| 收费对象 | 客户购买的实际价值 |
-|---|---|
-| 行业语义包 | 已整理的行业动作、对象、角色、指标、制度类型和风险模板 |
-| 企业 L3 包 | 企业别名、真实岗位、额度、审批链、系统对象和流程差异 |
-| FDE/实施服务 | 从规程和历史工单提取规则，处理歧义，制作并验收 Pack |
-| 系统集成 | 接入 ERP、工单、Agent、审批、日志、身份和现有执行系统 |
-| 持续维护 | 制度变化、词条更新、回归测试、版本迁移和支持 SLA |
-| 商业增强 | 高精度抽取、管理控制台、Pack 发布治理、企业连接器等候选能力 |
-
-商业价值不在于重复销售一个 `if amount > limit`，而在于准确确定哪个金额、哪类任务、哪个角色、哪个制度版本和哪些例外应进入这条规则。
-
-### 10.3 初始价格验证
-
-以下只是前三个客户的验证假设：
-
-- 小型单独交付：人民币 3,000—5,000 元；
-- 已有集成项目增加 BoundX：增价人民币 8,000—15,000 元；
-- 复杂行业、多个系统或持续驻场：根据规则量、接口量、FDE 人天和维护范围报价。
-
-价格不写死在软件许可证里，也不在没有真实成交前宣传成市场标准。
-
-## 11. FDE 落地服务
-
-### 11.1 什么时候需要 FDE
-
-满足以下任一情况时，模板式远程配置可能不够，需要 Forward Deployed Engineer；面向中小客户可以称为“规则实施工程师”：
-
-- 制度散落在 Word、群聊、Excel 和员工经验中；
-- 同一词语在不同部门含义不同；
-- 审批人、执行人和责任人经常混用；
-- 规则存在大量例外、临时通知和版本覆盖；
-- 需要接入多个现有系统；
-- 一次误操作可能产生明显资金、数据或生产损失；
-- 客户无法独立回答 7+1 中的关键歧义。
-
-### 11.2 FDE 工作流程
-
-| 阶段 | FDE 工作 | 客户责任 | 交付物 |
-|---|---|---|---|
-| 发现 | 收集规程、表单、事故和常用说法 | 提供合法材料和负责人 | 来源目录与范围说明 |
-| 建模 | 提取动作、对象、角色、指标、版本、完成和禁区 | 解释业务含义 | 术语与规则候选表 |
-| 澄清 | 列出冲突、歧义、缺项和例外 | 有权人员作决定 | 决定记录与未决清单 |
-| 制包 | 映射 L1，编写 L2/L3 数据 | 核对企业专有内容 | 版本化 Pack |
-| 测试 | 制作正例、反例、歧义例和历史回放 | 提供验收样本 | Pack 测试集与报告 |
-| 集成 | 接入表单、MCP、HTTP 或业务插件 | 提供测试环境和接口 | Adapter 与部署配置 |
-| 验收 | 演示任务从输入到工单的闭环 | 业务负责人签收 | 验收记录与已知限制 |
-| 维护 | 处理制度和组织变化 | 通知变更并确认新版 | 新 Pack 版本与迁移说明 |
-
-### 11.3 FDE 不得做什么
-
-FDE 不得：
-
-- 代替客户审批人决定业务规则；
-- 把经验猜测写成已批准制度；
-- 为了让测试通过而删除真实冲突；
-- 将一个客户的原文、数据或 L3 包带给另一个客户；
-- 把未确认的模型抽取结果直接激活；
-- 在未授权环境运行删除、退款、发布或付款动作。
-
-## 12. 客户集成合同
-
-每个客户接入至少固定以下内容：
-
-| 合同项 | 必须明确的内容 |
-|---|---|
-| 调用点 | 创建任务、提交工单、Agent 执行前或其他明确事件 |
-| 输入来源 | 用户表单、文件、聊天、API 或已有工单字段 |
-| Pack | 启用的 L1/L2/L3 ID 和版本 |
-| 结果处置 | 哪些结构问题阻断，哪些未决项转人工 |
-| 身份 | 谁可以确认映射、激活 Pack 和提交执行 |
-| 记录 | 保存哪些原文、摘要、结果和决定 |
-| 数据边界 | 是否离线、是否出网、保留时间与脱敏要求 |
-| 执行边界 | BoundX 只预检，哪个系统拥有最终执行权 |
-| 失败方式 | 超时、依赖缺失和服务不可用时 Fail Closed 还是人工接管 |
-| 版本 | 引擎、协议、Schema 和 Pack 的固定版本 |
-
-## 13. 安全与责任边界
-
-1. BoundX 默认不包含通用执行器；
-2. Pack 默认是受 Schema 约束的数据，不允许携带任意脚本；
-3. 原文、证据和 Pack 可能包含客户敏感信息，日志必须限制内容和访问；
-4. MCP、HTTP 和插件必须由宿主验证调用者身份；
-5. Server 不允许请求方提交任意服务器文件路径；
-6. 自然语言抽取失败必须显式暴露，不能回退成“没有问题”；
-7. `business_decision` 与 `execution_authorization` 始终为空；
-8. 任何“通过”只描述对应版本检查，没有获得现实审批的含义；
-9. 同一任务变化后必须重新提取和计算，旧结果不能继续套用；
-10. 客户 Pack 的导出、复制和训练用途必须在合同中分别约定。
-
-## 14. 当前已交付能力 / Current Delivered Capabilities
-
-### 14.1 产品资产
-
-| 资产 | 入口 |
-|---|---|
-| 产品首页 | [README.md](../README.md) |
-| 产品与发布方案 | [BOUNDX-LIGHTWEIGHT-PRODUCT-PLAN.md](BOUNDX-LIGHTWEIGHT-PRODUCT-PLAN.md) |
-| 双语协议与计算合同 | [protocol/README.md](../protocol/README.md) |
-| 三层语义包当前边界 | [语义包说明](../domain-packs/README.md)（含软件/AI 单包研究状态） |
-
-### 14.2 验证口径
-
-验证必须在本项目独立工作目录运行。[验证说明](VALIDATION.md) 列出命令、测试范围与最近实际结果。产品接口回归、结构化协议计算和自然语言抽取必须分开评价；通过向量不代表获得业务或执行许可。
-
-### 14.3 能力矩阵
-
-| 能力 | 当前状态 | 不能夸大的部分 |
-|---|---|---|
-| 唯一 BXP Core | src/bxp/，主出口 src/index.ts | 不证明自然语言抽取正确 |
-| Node CLI `bx` | evaluate、protocol-info；旧四命令仅 legacy | 不直接抽取自然语言 |
-| Node MCP | 两个 BXP 主工具与版本／Schema 资源；旧四工具仅 legacy | 不执行、不审批 |
-| 本机 Web UI | BXP 导入／粘贴、八桶三态、码点、三轴与五类计算 | 当前只允许 localhost，不是企业 Server |
-| Python 文法与数学检查 | 局部研究抽取器，133 项测试曾通过 | 不直接输出标准 BXP IR，不是 Python SDK |
-| 软件/AI L2 Pack | Python 研究适配器中的 `0.1.0` 单包预览 | 不是 BXP Core 包接入；多包、L3 和热插拔尚未实现 |
-| BXP-CALC | 208 条结构化计算向量 | 不是 BXP-EXTRACT 准确率 |
-
-当前研究代码的证据区间使用 Unicode 码点 `[start,end)`。历史研究文档中的 UTF-16、旧路径和旧命令只保留为历史记录，不是当前接入指南；任务书及实施回执保留原始快照，不替代当前能力说明。
-
-Current evidence spans use Unicode code points. Historical UTF-16 descriptions and old commands are archival, not current integration guidance. Research extractors are not standard BXP producers.
-
-## 15. 未来规划能力 / Future Planned Capabilities
-
-本章是候选路线，不是实施授权或交付声明；需要后续任务书单独确定范围。已经完成的 BXP Core、CLI/MCP/UI 统一见第 14 章。extract/render/packs 与 ADMIN 文本 7+1 生成均不在当前已交付入口内，不修改固定协议。
-
-This roadmap is not implementation authorization. Python SDK, production HTTP, pack activation and ADMIN text-to-7+1 generation remain future work, not delivered BXP entry points.
-
-| 规划能力 | 尚未交付的部分 |
-|---|---|
-| Python SDK / PyPI | 正式包、稳定 API、wheel/sdist 和干净环境回装 |
-| 生产 HTTP Server | 独立认证、租户隔离和部署验证；本机 UI Server 不能冒充 |
-| 通用宿主插件 SDK | 各宿主的独立适配和验证 |
-| 多包与 L3 接入 | 组合、激活、冲突处理和生命周期工具 |
-| FDE 交付流程 | 候选服务定义，尚无三个真实客户验收证据 |
-
-### P0.5：发布准备
-
-独立仓库与管理员已经确定。公开发布前仍需：
-
-- 核对发布资产的权属、依赖许可与公开清单。
-- 明确是否采用 AGPL，并在批准后同步 LICENSE 与包元数据。
-- 排除客户 L3、商业 Pack、密钥、真实工单与未授权材料。
-- 固定版本、完整验证和可复核构建结果。
-- 未获 ADMIN 明确发布批准，不公开仓库或发布包。
-
-### P1：PyPI 与 CLI
-
-- 建立正式 Python 包；
-- 形成 `pip install boundx` 和 `bx`；
-- 完成 wheel、sdist、干净环境回装；
-- 提供三个 Demo 和十五分钟教程。
-
-### P2：MCP 完整入口
-
-- 暴露五类统一能力；
-- 固定工具 Schema、错误和大小限制；
-- 在至少两个 Agent 宿主完成真实调用；
-- 验证模型不能把检查结果变成执行授权。
-
-### P3：Server 与插件
-
-- 新建生产 Server Adapter，而不是放宽本机 UI Server；
-- 完成认证、租户 Pack、速率、日志和部署文档；
-- 提供 Embedded 与 Remote 插件示例；
-- 在客户测试环境完成端到端工单接入。
-
-### P4：语义包与 FDE
-
-- 完成多包组合和 L3 合同；
-- 建立 Pack 制作、验证、激活和迁移工具；
-- 选择三个真实小客户；
-- 用真实工时、错误减少和付费结果校正产品与价格。
-
-## 16. 首个可发布版本验收
-
-首个公共版本只有同时满足以下条件才可声明可用：
-
-- 安装：干净环境可以安装、卸载和重新安装；
-- 入口：Python、CLI 和 MCP 对同一用例输出一致核心结果；
-- 示例：退款、保护分支和快照前置三个 Demo 完整跑通；
-- 证据：中文、英文与中英混合原文位置不乱码；
-- Pack：未启用的 Pack 不产生候选，非法 Pack 拒绝加载；
-- Server：若首版包含 Server，认证、限制和无任意文件加载测试通过；
-- 安全：无客户数据、密钥、内部账本和测试缓存进入制品；
-- 边界：README 明确不自动执行、不认证合规、不保证完整自然语言理解；
-- 来源：发布文件具备版本、SHA-256 和可核对来源；
-- ADMIN：确认独立仓库、包名、版本、`AGPL-3.0-only` 最终标识和公开资产清单，并明确授权本次发布。
-
-测试通过不替代最后一项发布决定。
-
-## 17. 产品对外表达
-
-### 17.1 当前产品主文案 / Current Product Copy
-
-> **BoundX — 执行之前，先把任务边界算清楚。**  
-> 一个本地任务边界预检引擎。接收生产者提供的带证据 7+1 结构化任务，验证输入并确定性计算缺项、冲突和边界约束；不自行抽取自然语言，不授予执行权。
-
-### 17.2 面向开发者
-
-> 从私有源码使用 Node API、CLI、MCP 或本机 UI，提交 `boundx-task/v1` 并获得 `boundx-result/v1`。这些已交付入口共用唯一 BXP Core；Python SDK、生产 HTTP 和语义包激活仍为规划。
-
-Current entry points are Node API, CLI, MCP and the local UI, sharing one BXP Core. Python SDK, production HTTP and pack activation are not delivered.
-
-### 17.3 未来服务定位（非当前交付承诺） / Future Service Positioning
-
-> 不替换您现有的业务系统，只在任务提交和执行之间增加一道可解释的防呆检查。通用工具免费，行业规则、企业配置和落地集成按项目服务。
-
-### 17.4 不使用的表述
-
-- “百分之百防止事故”；
-- “AI 自动理解全部企业制度”；
-- “数学证明任务绝对安全”；
-- “已经成为行业事实标准”；
-- “测试通过即获得执行许可”；
-- “安装 BoundX 即完成企业合规”。
-
-## 18. 产品与商业结论
-
-BoundX 当前是通过 Node API、CLI、MCP 和本机 UI 使用的统一预检引擎。未来拟增加 Python SDK/PyPI、生产 Server 和插件；免费核心、语义包与 FDE 是候选商业规划，不代表已有安装包、可激活语义包产品或客户交付。
-
-最终商业结构保持简单：
-
-- **BoundX Core**：免费引擎和通用入口；
-- **BoundX Packs**：社区包、行业包与企业包；
-- **BoundX FDE**：规则梳理、制包、系统接入、验收和持续维护。
-
-先把同一个引擎稳定地送进不同系统，再用真实客户验证哪些语义包和实施服务值得持续投入。
-
-## 19. 当前状态
-
-本手册仍是待审的产品候选定义，但源码已经有 `v1.3.0-preview.0` 私有预发布。文档审核状态、私有源码预发布与公开发行授权是不同事项；下列 `publication_authorized` 仅指公开发行授权，不否认已有私有预发布。现有标签及其源码归档不移动、不重写，本次文档补正不发布新版本。
-
-Document review status is separate from the existing private source prerelease. `publication_authorized` refers only to public distribution; no new release is authorized by these documentation corrections.
-
-```yaml
-status: DRAFT_FOR_REVIEW
-publication_authorized: false
-github_source_prerelease: v1.3.0-preview.0
-repository_private: true
-installers_available: false
-standalone_binaries_available: false
-license_change_effective: false
-repository: joinwell52-AI/BoundX
-future_repository_license: AGPL-3.0-only
-pypi_published: false
-npm_published: false
-production_server_ready: false
-commercial_pack_released: false
+产品可以在本地、内网或其他获授权环境部署，但当前候选只交付并验证了报告所列的Windows回环服务及CLI。不能把未来的多租户服务、SDK、插件或行业部署写成现成功能。
+
+## 3. 当前语义方法
+
+当前短文本候选采用唯一主链：
+
+```text
+完整短任务原文
+→ boundx-semantic-parse Skill指导LLM识别语义
+→ 带来源的实体、事件、角色、模态、条件、数量与范围
+→ boundx-semantic-audit Skill在新会话对照原文审阅
+→ 程序核对来源、结构、引用和必需依赖
+→ Boundary IR
+→ 确定性7+1 JSON与同源中文
 ```
+
+Skill是有版本的指令和资源包，不是另一个模型。两个Skill、共享合同和Schema必须实际进入调用。当前已验证模式是`INLINE_BUNDLE`；不能称原生Skill加载已验证。解析与审阅分开会话，但同一模型的两次一致意见不是真值证明。
+
+LLM承担主要语义理解；程序执行技术检查和保真转换，不回到旧NLP规则中重新猜执行者、对象、范围或条件。HanLP、spaCy、嵌入模型及NLI的历史探索保留为研究资料，不作为当前候选的默认主路径或强制依赖，也不因此宣称这些方法在所有任务上无用。
+
+## 4. 7+1承载什么
+
+| 视图 | 必须保留的含义 |
+|---|---|
+| I：输入与作用域 | 明确读取、检查、处理的资料、对象、系统及其范围；不是全部名词 |
+| O：交付与结果 | 明确要求或允许产生的结果、交付的产物，保留条件和可选性质；提交不等于生成 |
+| A：正向动作 | 当前要求或允许的动作实例，绑定角色、对象、模态与条件 |
+| P：参与关系 | 逐事件执行、组织、复核、批准、接收与协作；不由角色名推权限 |
+| R：执行量化限制 | 时间、容量、预算、次数等执行约束及目标、比较符、单位和计数范围 |
+| V：版本与依据 | 在特定用途上约束任务的规范、版本、基线和来源，不由编号外观猜用途 |
+| C：完成与停止 | 根任务的完成、停止、中止或升级条件，不混同普通动作前提 |
+| B：禁止与限制 | 禁止的动作、对象及适用范围，保留条件、量词和例外 |
+
+八个视图来自同一关联结构，不能拆成独立白名单后做任意组合。同一报告可分别是生成结果、复核对象和交付产物；身份、版本、用途、产物可用性和事件先后必须分开。
+
+“无需”表示没有该项义务，不自动变成禁止或许可；未指定执行工具不自动构成整案失败。未提及某维不等于该维无限授权。完整中文必须保留JSON中的对象、角色、状态所指事件、范围及条件，不能只显示动作名称。
+
+## 5. 状态与澄清
+
+编译状态必须区分技术接受、真实语义未决、未指定、来源缺失和解析覆盖缺口。`RESOLVED`只表示在所声明策略下已闭合，不是LLM永不出错的证明；`ABSENT`不能掩盖漏解析。
+
+若原文有边界相关的合理竞争，保留受影响主张和备选，不让其他独立事实一起失效。用户补充或修改原文后，产生新的源文身份和新运行；不能只点一个绿色按钮就把未决变成已确定。
+
+适用域未确定与明确没有容器限制不同。当前Q05在这方面尚未完成审定和产品验证，不因全称算子存在就宣布闭合。错误输出重复一致不是正确，模型两次不同也不单独证明原文有歧义。
+
+## 6. 从7+1到实际边界计算
+
+可靠7+1是下一阶段的输入。形式化映射必须逐项保留实体、作用域、义务、禁止、完成条件、关系、依赖、版本和数量逻辑；每个不支持或未映射的边界语义均须明确报告，不能丢弃后宣称完整计算。
+
+确定性程序在固定模型和观测下计算集合、区间、逻辑、依赖与冲突。未知业务状态保持未知，必要条件满足不等于完整执行许可；合法执行路径可以很多，不能与规范边界是否唯一混为一谈。
+
+目标Boundary Result区分`determined`、`underdetermined`、`inconsistent`和`invalid`，具体字段和判定条件以所选BXP版本为准。语义已读懂但约束冲突，不能误记成模型不理解；已保存证据摘要，也不能误记成语义已被证明。
+
+仓库[既有BXP入口](../src/bxp/index.mjs)提供形式化、类型化边界、ScopeGauge及相关核查能力。代码存在或旧结构化样例通过，不等于新LLM链已经与全部模块端到端对接。本阶段须用新原文贯通验证，不重新从零复制一套计算核心。
+
+## 7. 父边界与下游任务
+
+完整产品应先从ADMIN原文形成可正式使用的父边界，再允许PM在其中规划。下游符合性核查既检查越界，也检查必须完成的动作、结果和条件是否遗漏；“什么都不做”不能仅因没有触犯B而视为完成任务。
+
+核查对象、角色、资源、版本、产物流和作用域须绑定具体用途，不能只比较两个词语集合。原文或父边界版本变化时，旧绑定结果不能无条件复用。宿主负责执行门禁，不能改写边界结果或把未决强制标成通过。
+
+这属于后续交付阶段，不是本轮文档整理启动的新开发任务。
+
+## 8. 语义资源与企业事实
+
+L0指确定性Core与协议不变量；L1可提供通用语义；L2承载明确选择的领域语义；L3承载企业身份、组织、显式权限、委派及策略等事实。其作用不能混为默认授权。
+
+```text
+身份 ≠ 岗位 ≠ 职级 ≠ 权限
+```
+
+使用资源前应记录来源、版本、适用范围和授权。没有提供的企业事实不能由常识补出；缺少适用Profile时，不凭岗位判断准入通过。具体资源是否启用和哪些算子支持它们，按对应版本实测，而非从产品手册的目标能力推定。
+
+当前短文本候选不要求为解析通用ADMIN短任务先安装企业L3、训练模型或构造行业本体。涉及其他产品集成、FDE服务、行业包与商业方案时，应在专门项目和授权中定义，不作为首版短文本交付的隐含门槛。
+
+## 9. 本地使用与数据
+
+当前候选支持非空、最多300个Unicode码点的单一ADMIN短任务，中文正文可含技术标识符。支持粘贴、UTF-8文本上传、进度、取消、来源、局部未决、历史和导出。300码点是声明支持范围，不是LLM能力的理论上限；超限不得截断后伪报成功。
+
+用户入口固定58618，运行完整安装版本；开发工作区允许演进，但不能让旧进程混读新Skill或Schema。根仓库CLI与固定UI可能指向不同版本，进行同版比较须从相同安装包运行。操作见[快速开始](../QUICKSTART.md)。
+
+本地界面不等于离线推理：任务文本发送到配置的模型服务。登录、网络和可用额度是外部运行前提。历史与凭据不进入公开包，展示端不执行输入脚本，不将模型输出变成业务工具权限。取消只确认本机受控进程状态，不承诺云端计算或计费已经停止。
+
+## 10. 验收、维护与发布
+
+当前阶段的完成要求是同一版本的正确7+1、同源中文、准确的未知处理，以及可安装、可恢复、可升级的本地产品。已确认的对象错绑、禁止或条件丢失、范围错误等关键缺陷未关闭，不能正式交付。
+
+验证应分别报告首次候选、内部有界修订后的候选、JSON、中文及计算结构。回放、真实调用、人工来源复核、模型自审和工程测试分开统计。具体指标与当前缺陷见[状态页](SHORT-COMPILER-STATUS.md)，规程见[验证说明](VALIDATION.md)。
+
+升级时备份配置与历史，切换完整版本资源，校验失败不切换；回滚恢复完整旧版本，不混搭新旧Skill与Schema。历史按生成版本查看，不自动重算覆盖。停服或端口维护须核实目标与在途请求，并遵守正常审批，不能绕过策略拒绝。
+
+发布按阶段推进：短文本编译验收 → 短文本边界计算闭环 → 下游符合性 → 完整真实任务扩展。完整任务使用原始文本；Gold说明版不是模型输入，Gold机械回放也不是自然语言准确率。
+
+根仓库[LICENSE](../LICENSE)及第三方实际许可是发布依据；本次文档整理不变更许可、发布标签、包元数据或商业授权。运行包候选不等于npm/PyPI正式发行，也不等于完整BXP符合性认证。
+
+## 11. 文档与历史
+
+稳定方法看[7+1方法手册](BoundX-7plus1-定义原理语义编译与边界计算说明-v0.4.md)；当前状态看[状态页](SHORT-COMPILER-STATUS.md)；实际执行权限看[当前任务](tasks/7plus1/CURRENT-TASK.md)。旧任务编号、测试计划和成绩不再作为产品手册的永久指令。
+
+整编前的本文件保存在[2026-10-08整理基线](https://github.com/joinwell52-AI/BoundX/blob/9b437d7f3066774711892856a1bcdf4006508143/docs/BOUNDX-PRODUCT-MANUAL.md)；完整目标亦参考[主分支原产品定义](https://github.com/joinwell52-AI/BoundX/blob/f7aae6421681be22eb2035504b824f4d169bf90c/docs/BOUNDX-PRODUCT-MANUAL.md)。其中的旧主路线、试验限制、商业设想和发布状态不自动成为当前合同。
