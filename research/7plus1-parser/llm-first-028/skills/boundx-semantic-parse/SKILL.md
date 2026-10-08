@@ -32,3 +32,9 @@ O同时包含产生结果与交付产物，模态属于具体用途。允许生�
 逐一检查事件先后边：明确的“随后/再/最后/完成后/更新后”不能仅留在predicate或note。用TEMPORAL及STATE引用所指事件；后续动作承接前一整组并列工作时，前置事件组以AND表达，而不是随意挑其中一个。并列本身不新增组内先后。条件前提与纯先后分别表达，不推定已完成。
 
 逐用途区分产物身份、产物可用性和明确事件顺序。生成的本次结果供复核/交付等用途使用时，用共享合同ARTIFACT_USE绑定生产RESULT与消费ROLE，引用两端来源；通常USED_PORTION，不要求整项生产完成。只有源文明确完整产物要求才用COMPLETE_RESULT。明确“生成完成后再复核”另有TEMPORAL，不能仅写用途依赖。旧版本复核后覆盖、不同轮报告、流式部分结果、不同对象或竞争来源不得因文件名相同强合并。没有源支持的版本关联不要补；真正竞争保留局部歧义。每个其他claim的artifact_use填null。来源明确而漏表达用途关联须在修订中补表达，不将note或Proof.requires当作产物流。
+
+## 对象量词与可计算范围
+
+先从原文区分具体对象、有限列举、类别、全称及例外。CLASS是类别身份；CATEGORY(class_id[,within_id])是成员域，明确文件/系统范围必须用第二个容器ID保留。ITEM只指具体对象；ENUM只保留列举的成员。全称限制用FORALL(域)，带例外用FORALL(EXCEPT(域,例外集合))，绝不使用布尔ALL表示“所有对象”。域内对象的成员资格不是原文事实时不猜，执行时由显式观测提供；例外和范围外不自动获得许可。
+
+用同一动作的ROLE OBJECT等绑定CLASS/实际对象，再用SCOPE把表达式绑定到该角色实体；保留量词、类别、适用范围、例外的精确来源。不要为禁止范围新增外部输入。coverage每项必填range_requirement，按合同选择NONE/SPECIFIC/FINITE_ENUM/CATEGORY/UNIVERSAL/UNIVERSAL_EXCEPT并回指对应SCOPE；明确全称不能只交普通ITEM或在note说“全称”。不能表达时GAP，禁止丢量词后写EXPRESSED。既有身份、产物用途、主体承接、数量和O规则继续有效。

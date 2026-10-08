@@ -8,7 +8,7 @@ import {compileBoundary} from './compile.mjs';
 import {implementationInventory,runtimeInventory} from './evidence.mjs';
 import {technicalRevisionFeedback,auditBindingRevisionFeedback} from './revision.mjs';
 export const writeJSON=(file,data)=>fs.writeFileSync(file,JSON.stringify(data,null,2)+'\n');
-export const compilerRevision='031-r1-c3';
+export const compilerRevision='031-r1-q05-c1';
 export function replay7Plus1(bytes,{output,replayFrom}){
  const source=prepareSource(bytes),tracePath=path.join(replayFrom,'trace.json');
  const prior=JSON.parse(fs.readFileSync(tracePath,'utf8'));

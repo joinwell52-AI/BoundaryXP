@@ -291,3 +291,19 @@ v0.4初稿的方向是LLM主解析，但工程合同不完整且存在残留冲�
 - https://developers.openai.com/codex/noninteractive/
 
 固定职责结论：**LLM读懂短任务；Skill规定读什么、怎样输出；程序核对结构并保真编译为7+1。**
+
+## 031-R1 Q05 可计算对象范围（强制补充）
+
+新合同版本031-r1-q05.1；旧031-r1.1响应不静默升级。对象身份、类别域、全称适用和布尔逻辑严格分开：
+- ITEM(entity_id)：一个具体对象。ENUM(entity_id...)：非空有限枚举，不代表类别的其余成员。实体CLASS仅表示模型从原文识别的对象类别，不是单个成员或岗位权限。
+- CATEGORY(class_id[,within_id])：类别成员域。第一个引用须为CLASS；第二个可选引用是具体文件/系统/文档等容器身份。缺少容器表示原文未限定容器，不能擅自删掉明确容器扩大域。成员归属由宿主显式观测给出，不能从成员名称、标签或文件扩展名推断。
+- FORALL(domain_expression_id)：限制对该域的每个成员适用。只接收一个集合域，不表示布尔合取、不表示成员已穷尽枚举、也不推定动作发生。
+- EXCEPT(domain, exceptions)：集合差。带全称例外用FORALL(EXCEPT(CATEGORY(...),ENUM(...)))；有限枚举与该结构不能互换。例外脱离本条限制不等于许可，另有许可必须另有来源支持的事件。
+- ALL/AND只接收布尔表达式；ANY/OR同理。FORALL不能充当CONDITION或STATE的布尔值。UNION/INTERSECTION/EXCEPT只接收集合表达式；不接受FORALL作为集合操作数。
+- ITEM/CATEGORY/FORALL的一元参数，ENUM非空，CATEGORY可有一个类别和一个容器，逻辑与集合参数签名由scopes.mjs统一检查。
+
+逐事件通过SCOPE绑定范围：event_id是动作，scope_id是同一动作ROLE OBJECT/INPUT_OBJECT/CONTENT/RESULT/DELIVERABLE绑定的对象或类别，expression_id是范围根。相应ROLE、SCOPE及表达式必须独立审阅；表达式叶节点保留实际目标。类别范围使用ROLE OBJECT绑定CLASS，不凭禁止增外部I。域的CLASS及容器来源与量词、例外来源均保留，不能在note中代替结构。EVENT和对象用途事实携带object_scopes，JSON、中文从同一表达式渲染。
+
+每条coverage必须包含range_requirement={kind,scope_claim_ids}。kind=NONE/SPECIFIC/FINITE_ENUM/CATEGORY/UNIVERSAL/UNIVERSAL_EXCEPT由LLM从原文识别；NONE仅用于该义项无对象范围要求。其余类型分别要求ITEM/ENUM/CATEGORY/FORALL/FORALL(EXCEPT(...))，scope_claim_ids引用该coverage.claim_ids中的SCOPE。明确全称不能只提交ITEM；不能表达、被审阅质疑或技术结构不闭合时保留GAP，不能把kind改NONE掩盖限制。程序仅核对声明和结构，不能靠扫描原文、reason或note识别量词；完全未声明的模型语义遗漏仍需来源审阅和端到端评测发现，不声称Γ能独立读懂任意漏项。
+
+evaluateScope只消费已声明表达式、成员身份及显式memberships观测：{member_id,category_id,within_id,value}。容器必须完全匹配，未知/冲突归属为UNKNOWN；范围外FALSE并非execution_authorization。返回scope_membership_only=true，business_decision/execution_authorization=null。不读取业务文件、不枚举真实配置、不执行任务，不增加复杂求解器。

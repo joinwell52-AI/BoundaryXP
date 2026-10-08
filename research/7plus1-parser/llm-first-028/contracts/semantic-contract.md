@@ -1,4 +1,4 @@
-# BoundX 语义合同 031-r1.1
+# BoundX 语义合同 031-r1-q05.1
 
 依据v0.4/r04及031/031-R1 ADMIN批准的O口径与产物依赖区分。两个Skill、Schema、Γ和编译器共用本合同。模型提交候选；宿主的ACCEPTED仅代表有限技术检查与审阅支持，不证明自然语言真值。历史合同输出不静默升级；030/031不倒改。
 
@@ -8,11 +8,11 @@ I是明确输入/作用域；O包含明示要求或允许产生的结果及明�
 
 RESULT仅表示产生结果的用途；DELIVERABLE表示交付产物的用途。两种用途均绑定各自事件、模态和条件，正向时进入O。明确提交/交付/发送某产物应有DELIVERABLE，不凭它新增生成/修改事件、存在断言或外部输入I。禁止或无需交付不产生正向O，仍保留事件和DELIVERABLE用途；允许生成+无需交付分别为PERMITTED RESULT和NOT_REQUIRED DELIVERABLE，不变成必交。普通接收的OBJECT也不自动变成新结果。引用中的交付不是当前任务。
 
-实体有稳定 id、label、type、mentions 和 alternatives，不具有排他的全局槽位。FILE、PERSON、SYSTEM、DOCUMENT、GROUP、REFERENT、OTHER 是身份类型；角色与用途属于具体事件。生成的结果被复核、提交仍是同一实体，但这些内部用途不是外部输入。
+实体有稳定 id、label、type、mentions 和 alternatives，不具有排他的全局槽位。FILE、PERSON、SYSTEM、DOCUMENT、GROUP、REFERENT、CLASS、OTHER 是身份类型；角色与用途属于具体事件。生成的结果被复核、提交仍是同一实体，但这些内部用途不是外部输入。
 
 ## 数据约定
 
-顶层 contract_version 固定为 031-r1.1；entities/events/claims/expressions/issues/coverage 六个数组。所有 id 全图唯一，ROOT 是保留根任务标记。每项来源 sources/mentions 均使用真实非空 quote + occurrence（从 1 开始的完全相同字符串出现次数）。不要输出猜测偏移；宿主按 Unicode 码点定位。跨句指代/共享主体要引用两端；抽象状态可用多个片段，不伪造连续引文。每个claim的artifact_use不适用时为null；旧合同不静默升级。
+顶层 contract_version 固定为 031-r1-q05.1；entities/events/claims/expressions/issues/coverage 六个数组。所有 id 全图唯一，ROOT 是保留根任务标记。每项来源 sources/mentions 均使用真实非空 quote + occurrence（从 1 开始的完全相同字符串出现次数）。不要输出猜测偏移；宿主按 Unicode 码点定位。跨句指代/共享主体要引用两端；抽象状态可用多个片段，不伪造连续引文。每个claim的artifact_use不适用时为null；旧合同不静默升级。
 
 events：predicate 是模型解释的规范动作/状态名称（使用简洁中文），kind 为 ACTION/STATE；layer 是 MAIN/CONDITION/QUOTED/MODIFIER/PURPOSE/CONTENT/BACKGROUND；use 是 CURRENT_TASK/MENTION_ONLY；modality 为 REQUIRED/PERMITTED/NOT_REQUIRED/FORBIDDEN/UNSTATED；polarity 是 POSITIVE/NEGATIVE；owner_id 为 ROOT 或结构父事件；constraint_ids 是约束此事件的全部 CONDITION/QUANTITY/TEMPORAL 主张；requires 仅列真正必需的语义依赖。owner 和共现不是证明依赖。
 
@@ -34,7 +34,7 @@ claims 按 kind 区分：
 
 ## 表达式与条件
 
-expressions 的 op 为 STATE/ITEM/ALL/ANY/UNION/INTERSECTION/EXCEPT/AND/OR/NOT。STATE 的 state 包含 predicate、event_id（可空）、args（实体/事件/ROOT 引用）、polarity；表示有参数状态，不表示已观测为真。ITEM 的 operands 恰为一个实体引用。其他 operands 是表达式引用：NOT 恰一个；EXCEPT 恰两个；AND/OR/ALL/ANY/UNION/INTERSECTION 至少两个。只解释固定操作符，绝不执行模型代码。
+expressions 的 op 为 STATE/ITEM/ENUM/CATEGORY/FORALL/ALL/ANY/UNION/INTERSECTION/EXCEPT/AND/OR/NOT。STATE 的 state 包含 predicate、event_id（可空）、args（实体/事件/ROOT 引用）、polarity；表示有参数状态，不表示已观测为真。ITEM 的 operands 恰为一个非CLASS实体引用；ENUM至少一个非CLASS实体；CATEGORY引用CLASS及可选具体容器。FORALL和NOT恰一个表达式；EXCEPT恰两个；AND/OR/ALL/ANY/UNION/INTERSECTION至少两个；布尔、集合和全称范围类型不能混用。只解释固定操作符，绝不执行模型代码。
 
 必要前提限制目标动作，充分触发在前提成立时触发目标，IFF 双向，ORDER 仅时序。保持条件方向、目标、极性与时间；不能把有前提的许可编译成无条件许可，也不能把“即完成”改成唯一完成条件。
 
@@ -77,3 +77,19 @@ Q 固定消费用途，不用 predicate 字符串选槽：当前 REQUIRED/PERMIT
 明确的随后、再、最后等事件先后需以TEMPORAL/STATE表达，不能仅留在note。后继工作承接整组并列前置工作时，表达式保留整组状态；并列本身不增加组内顺序。不推定状态已发生，不能把ORDER升为SUFFICIENT。程序只消费声明的引用及方向。
 
 
+
+## 031-R1 Q05 可计算对象范围（强制补充）
+
+新合同版本031-r1-q05.1；旧031-r1.1响应不静默升级。对象身份、类别域、全称适用和布尔逻辑严格分开：
+- ITEM(entity_id)：一个具体对象。ENUM(entity_id...)：非空有限枚举，不代表类别的其余成员。实体CLASS仅表示模型从原文识别的对象类别，不是单个成员或岗位权限。
+- CATEGORY(class_id[,within_id])：类别成员域。第一个引用须为CLASS；第二个可选引用是具体文件/系统/文档等容器身份。缺少容器表示原文未限定容器，不能擅自删掉明确容器扩大域。成员归属由宿主显式观测给出，不能从成员名称、标签或文件扩展名推断。
+- FORALL(domain_expression_id)：限制对该域的每个成员适用。只接收一个集合域，不表示布尔合取、不表示成员已穷尽枚举、也不推定动作发生。
+- EXCEPT(domain, exceptions)：集合差。带全称例外用FORALL(EXCEPT(CATEGORY(...),ENUM(...)))；有限枚举与该结构不能互换。例外脱离本条限制不等于许可，另有许可必须另有来源支持的事件。
+- ALL/AND只接收布尔表达式；ANY/OR同理。FORALL不能充当CONDITION或STATE的布尔值。UNION/INTERSECTION/EXCEPT只接收集合表达式；不接受FORALL作为集合操作数。
+- ITEM/CATEGORY/FORALL的一元参数，ENUM非空，CATEGORY可有一个类别和一个容器，逻辑与集合参数签名由scopes.mjs统一检查。
+
+逐事件通过SCOPE绑定范围：event_id是动作，scope_id是同一动作ROLE OBJECT/INPUT_OBJECT/CONTENT/RESULT/DELIVERABLE绑定的对象或类别，expression_id是范围根。相应ROLE、SCOPE及表达式必须独立审阅；表达式叶节点保留实际目标。类别范围使用ROLE OBJECT绑定CLASS，不凭禁止增外部I。域的CLASS及容器来源与量词、例外来源均保留，不能在note中代替结构。EVENT和对象用途事实携带object_scopes，JSON、中文从同一表达式渲染。
+
+每条coverage必须包含range_requirement={kind,scope_claim_ids}。kind=NONE/SPECIFIC/FINITE_ENUM/CATEGORY/UNIVERSAL/UNIVERSAL_EXCEPT由LLM从原文识别；NONE仅用于该义项无对象范围要求。其余类型分别要求ITEM/ENUM/CATEGORY/FORALL/FORALL(EXCEPT(...))，scope_claim_ids引用该coverage.claim_ids中的SCOPE。明确全称不能只提交ITEM；不能表达、被审阅质疑或技术结构不闭合时保留GAP，不能把kind改NONE掩盖限制。程序仅核对声明和结构，不能靠扫描原文、reason或note识别量词；完全未声明的模型语义遗漏仍需来源审阅和端到端评测发现，不声称Γ能独立读懂任意漏项。
+
+evaluateScope只消费已声明表达式、成员身份及显式memberships观测：{member_id,category_id,within_id,value}。容器必须完全匹配，未知/冲突归属为UNKNOWN；范围外FALSE并非execution_authorization。返回scope_membership_only=true，business_decision/execution_authorization=null。不读取业务文件、不枚举真实配置、不执行任务，不增加复杂求解器。

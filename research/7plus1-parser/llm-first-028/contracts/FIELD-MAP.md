@@ -32,3 +32,7 @@
 ## 031-r01 修订
 
 O采用ADMIN确认的产生RESULT/交付DELIVERABLE用途；NOT_REQUIRED保留非投影完整事实。STATE中文显示event_id对应事件及参数。OUTPUT_CONTENT量化目标必须为同一事件的RESULT/DELIVERABLE；metric表示计数项，count_scope表示范围，不自动修正target。白名单技术反馈仅给真实字段错误和合同要求，错误候选仍保留，不靠删除限制通过。
+
+## Q05对象范围闭环
+
+CLASS→CATEGORY(class_id[,within_id])→FORALL/EXCEPT；固定逻辑ALL继续仅为BOOLEAN。scopes.expressionType是签名与类型权威；technicalValidate检查SCOPE_RANGE_BINDING和coverage.range_requirement，compileBoundary将object_scopes关联EVENT及对象用途，renderChinese消费同一树。evaluateScope只使用显式成员观测，FALSE不签发许可；类别未知仍UNKNOWN。旧响应须旧合同回归，禁止改变版本号冒充新Skill结果。

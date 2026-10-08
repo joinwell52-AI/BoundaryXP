@@ -1,6 +1,8 @@
 import {views,contractVersion} from './contracts/schema.mjs';
 import {sha256} from './source.mjs';
 import {artifactRelations} from './artifacts.mjs';
+export {evaluateScope} from './scopes.mjs';
+import {expressionType} from './scopes.mjs';
 export function compileBoundary(source,g,audit,checks){
  const rows=new Map(checks.rows.map(r=>[r.id,r]));
  const linked=x=>({...x,...(x.mentions?{mentions:rows.get(x.id)?.sources??x.mentions}:{sources:rows.get(x.id)?.sources??x.sources})});
@@ -20,9 +22,10 @@ export function compileBoundary(source,g,audit,checks){
  };
  const expression=id=>{
   if(id===null)return null;
-  const build=(k,path=[])=>{if(path.includes(k))return {id:k,invalid_cycle:true};const x=index.get(k);if(!x)return {id:k,missing:true};return {...x,children:x.op==='STATE'||x.op==='ITEM'?[]:x.operands.map(child=>build(child,[...path,k]))};};return build(id);
+  const build=(k,path=[])=>{if(path.includes(k))return {id:k,invalid_cycle:true};const x=index.get(k);if(!x)return {id:k,missing:true};return {...x,children:['STATE','ITEM','ENUM','CATEGORY'].includes(x.op)?[]:x.operands.map(child=>build(child,[...path,k]))};};return build(id);
  };
  const constraints=e=>g.claims.filter(c=>e.constraint_ids.includes(c.id)).map(c=>({...linked(c),expression:expression(c.expression_id)}));
+ const objectScopes=(eventId,entityId=null)=>g.claims.filter(c=>c.kind==='SCOPE'&&c.event_id===eventId&&(entityId===null||c.scope_id===entityId)).map(c=>({...linked(c),expression:expression(c.expression_id)}));
  const current=e=>e.use==='CURRENT_TASK';
  const positive=e=>current(e)&&['REQUIRED','PERMITTED'].includes(e.modality);
  // A condition can name a participant without commanding that participant's event.
@@ -36,8 +39,9 @@ export function compileBoundary(source,g,audit,checks){
  for(const raw of g.events){
   const e=linked(raw);
   const roles=g.claims.filter(c=>c.kind==='ROLE'&&c.event_id===e.id).map(c=>({...linked(c),entity:index.get(c.entity_id),status:status([c.id,c.entity_id])}));
-  const payload={event:e,roles,constraints:constraints(e),artifact_dependencies:artifacts.availability.filter(x=>x.consumer_event_id===e.id)};
-  make('EVENT',[e.id,...roles.map(c=>c.id),...e.constraint_ids],payload,positive(e)?['A']:current(e)&&e.modality==='FORBIDDEN'?['B']:[]);
+  const scopes=objectScopes(e.id);
+  const payload={event:e,roles,constraints:constraints(e),object_scopes:scopes,artifact_dependencies:artifacts.availability.filter(x=>x.consumer_event_id===e.id)};
+  make('EVENT',[e.id,...roles.map(c=>c.id),...e.constraint_ids,...scopes.map(c=>c.id)],payload,positive(e)?['A']:current(e)&&e.modality==='FORBIDDEN'?['B']:[]);
  }
  for(const raw of g.claims){
   const c=linked(raw);
@@ -57,7 +61,8 @@ export function compileBoundary(source,g,audit,checks){
   const ids=[c.id,c.entity_id,c.expression_id,c.event_id,...(e?.constraint_ids??[]),...projectionInputs];
   const quantities=c.kind==='ROLE'&&['RESULT','DELIVERABLE'].includes(c.role)?g.claims.filter(q=>q.kind==='QUANTITY'&&q.quantity?.use==='OUTPUT_CONTENT'&&q.quantity.target_id===c.entity_id&&q.event_id===c.event_id).map(linked):[];
   const contentScopes=c.kind==='ROLE'&&['RESULT','DELIVERABLE'].includes(c.role)?g.claims.filter(q=>q.kind==='SCOPE'&&q.scope_id===c.entity_id&&q.event_id===c.event_id).map(q=>({...linked(q),expression:expression(q.expression_id)})):[];
-  make(c.kind,[...ids,...quantities.map(q=>q.id),...contentScopes.map(q=>q.id)],{claim:c,event:e??null,entity:entity??null,expression:expression(c.expression_id),constraints:e?constraints(e):[],content_quantities:quantities,content_scopes:contentScopes},slots);
+  const scopes=c.kind==='ROLE'?objectScopes(c.event_id,c.entity_id):[];
+  make(c.kind,[...ids,...quantities.map(q=>q.id),...contentScopes.map(q=>q.id),...scopes.map(q=>q.id)],{claim:c,event:e??null,entity:entity??null,expression:expression(c.expression_id),constraints:e?constraints(e):[],object_scopes:scopes,content_quantities:quantities,content_scopes:contentScopes},slots);
  }
  for(const a of artifacts.availability.filter(x=>x.eligible)){
   const {id,...data}=a;make('ARTIFACT_AVAILABILITY',a.provenance_refs,{...data,relation_id:id,event:null,claim:null,constraints:[]},[]);
@@ -69,7 +74,7 @@ export function compileBoundary(source,g,audit,checks){
  return {ir,canonical,chinese:renderChinese(canonical)};
 }
 const modality={REQUIRED:'必须',PERMITTED:'允许',FORBIDDEN:'禁止',NOT_REQUIRED:'无需',UNSTATED:'未陈述模态'};
-function exprText(x,name=id=>id,eventText=id=>id){if(!x)return '';if(x.op==='STATE')return `${x.state?.predicate}(${(x.state?.args??[]).map(name).join(',')})${x.state?.event_id?`；所指事件=${eventText(x.state.event_id)}`:''} [${x.state?.polarity};运行值UNKNOWN]`;if(x.op==='ITEM')return `ITEM(${x.operands.map(name).join(',')})`;return `${x.op}(${(x.children??[]).map(child=>exprText(child,name,eventText)).join(',')})`;}
+function exprText(x,name=id=>id,eventText=id=>id){if(!x)return '';if(x.op==='STATE')return `${x.state?.predicate}(${(x.state?.args??[]).map(name).join(',')})${x.state?.event_id?`；所指事件=${eventText(x.state.event_id)}`:''} [${x.state?.polarity};运行值UNKNOWN]`;if(x.op==='ITEM')return `具体对象(${x.operands.map(name).join(',')})`;if(x.op==='ENUM')return `有限枚举{${x.operands.map(name).join(',')}}`;if(x.op==='CATEGORY')return `类别范围(${name(x.operands[0])}；适用范围=${x.operands[1]?name(x.operands[1]):'未限定容器'})`;const op={FORALL:'全称适用：范围内所有成员',ALL:'布尔全部成立',ANY:'布尔至少一项成立',EXCEPT:'范围排除'}[x.op]??x.op;return `${op}(${(x.children??[]).map(child=>exprText(child,name,eventText)).join(',')})`;}
 export function renderChinese(c){
  const names={I:'输入与作用域',O:'交付与结果',A:'正向动作',P:'参与关系',R:'执行量化限制',V:'版本与依据',C:'完成与停止',B:'禁止与限制'};
  const roleNames={PERFORMER:'执行者',ORGANIZER:'组织者',REVIEWER:'复核者',APPROVER:'批准者',RECIPIENT:'接收者',COLLABORATOR:'协作者',INPUT_OBJECT:'输入/受检对象',OBJECT:'对象',RESULT:'产生结果',DELIVERABLE:'交付产物',BASIS:'依据',CONTENT:'内容'};
@@ -93,7 +98,8 @@ export function renderChinese(c){
    else t=`${({COMPLETION:'任务完成',STOP:'任务停止/升级',SCOPE:'作用域'})[f.kind]??f.kind} ${directionNames[cl?.direction]??''} ${expressionText(f.expression)}；目标=${name(cl?.scope_id)}`;
    const cond=f.constraints.map(x=>x.kind==='QUANTITY'?quantityText(x.quantity):`${directionNames[x.direction]??x.kind} ${x.temporal==='AFTER'?'之后':x.temporal==='BEFORE'?'之前':''} ${expressionText(x.expression)}`).join('；');
    const content=f.content_quantities?.map(x=>`${x.quantity.metric} ${opNames[x.quantity.comparator]} ${x.quantity.value} ${x.quantity.unit}；目标=${name(x.quantity.target_id)}；计数范围=${name(x.quantity.count_scope)}`).join('；');
-   lines.push(`- [${f.status}] ${t}${cond?'；'+cond:''}${content?'；产物内容数量='+content:''}（${f.id}）`);
+   const scopes=(f.object_scopes??[]).map(s=>`对象范围=${expressionText(s.expression)}`).join('；');
+   lines.push(`- [${f.status}] ${t}${cond?'；'+cond:''}${content?'；产物内容数量='+content:''}${scopes?'；'+scopes:''}（${f.id}）`);
   }
  }
  lines.push('\n## 产物关联与可用性依赖（不等于事件强顺序）');
@@ -105,18 +111,21 @@ export function renderChinese(c){
   const constraints=f.constraints.map(x=>x.kind==='QUANTITY'?quantityText(x.quantity):`${directionNames[x.direction]??x.kind} ${x.temporal??''} ${expressionText(x.expression)}`).join('；');
   lines.push(`- [${f.status}] ${modality[f.event.modality]} ${eventText(f.event.id)}；层级=${f.event.layer}；用途=${f.event.use}${constraints?'；'+constraints:''}${f.event.modality==='NOT_REQUIRED'?'（不等于禁止，也不新增许可）':''}（${f.id}）`);
  }
- for(const f of c.retained_nonprojected.filter(f=>f.kind!=='EVENT'))lines.push(`- [${f.status}] ${f.kind}；事件=${f.event?eventText(f.event.id):'根任务'}${f.claim?.role?'；'+(roleNames[f.claim.role]??f.claim.role)+'='+name(f.claim.entity_id):''}${f.expression?'；'+expressionText(f.expression):''}${f.claim?.quantity?'；'+quantityText(f.claim.quantity):''}（${f.id}）`);
+ for(const f of c.retained_nonprojected.filter(f=>f.kind!=='EVENT'))lines.push(`- [${f.status}] ${f.kind}；事件=${f.event?eventText(f.event.id):'根任务'}${f.claim?.role?'；'+(roleNames[f.claim.role]??f.claim.role)+'='+name(f.claim.entity_id):''}${f.expression?'；'+expressionText(f.expression):''}${f.claim?.quantity?'；'+quantityText(f.claim.quantity):''}${(f.object_scopes??[]).map(s=>'；对象范围='+expressionText(s.expression)).join('')}（${f.id}）`);
  for(const g of c.gaps)lines.push(`- 覆盖缺口：${g.note??g.reason??g.id}`);
  return lines.join('\n')+'\n';
 }
 export function evaluateExpression(expressions,id,observations={}){
  const index=new Map(expressions.map(e=>[e.id,e]));
+ // Reject ill-typed Boolean trees even when one FALSE could otherwise mask a set operand.
+ const entities=[...new Set(expressions.filter(e=>['ITEM','ENUM','CATEGORY'].includes(e.op)).flatMap(e=>e.operands))].map(id=>({id,type:'OTHER'}));
+ if(expressionType(expressions,id,entities)==='INVALID')return 'UNKNOWN';
  const atom=x=>JSON.stringify([x.state.predicate,x.state.event_id,x.state.args]);
  const known=new Map(),reachable=new Map();let conflict=false;
  const collect=(key,path=[])=>{const x=index.get(key);if(!x||path.includes(key))return;if(x.op==='STATE'&&x.state)reachable.set(atom(x),x);else for(const child of x.operands??[])collect(child,[...path,key]);};collect(id);
  for(const x of expressions)if(x.op==='STATE'&&x.state&&reachable.has(atom(x))&&typeof observations[x.id]==='boolean'){const value=x.state.polarity==='NEGATIVE'?!observations[x.id]:observations[x.id],k=atom(x);if(known.has(k)&&known.get(k)!==value)conflict=true;known.set(k,value);}
  if(conflict)return 'UNKNOWN';
- const run=(key,assigned=known,path=[])=>{const x=index.get(key);if(!x||path.includes(key))return 'UNKNOWN';if(x.op==='STATE'){if(!x.state||!assigned.has(atom(x)))return 'UNKNOWN';const value=assigned.get(atom(x));return (x.state.polarity==='NEGATIVE'?!value:value)?'TRUE':'FALSE';}if(x.op==='ITEM')return new Set(x.operands);const values=x.operands.map(k=>run(k,assigned,[...path,key]));if(x.op==='NOT')return values[0]==='TRUE'?'FALSE':values[0]==='FALSE'?'TRUE':'UNKNOWN';if(['AND','ALL'].includes(x.op))return values.includes('FALSE')?'FALSE':values.every(v=>v==='TRUE')?'TRUE':'UNKNOWN';if(['OR','ANY'].includes(x.op))return values.includes('TRUE')?'TRUE':values.every(v=>v==='FALSE')?'FALSE':'UNKNOWN';if(!values.every(v=>v instanceof Set))return 'UNKNOWN';if(x.op==='UNION')return new Set(values.flatMap(v=>[...v]));if(x.op==='INTERSECTION')return new Set([...values[0]].filter(v=>values.every(s=>s.has(v))));if(x.op==='EXCEPT')return new Set([...values[0]].filter(v=>!values[1].has(v)));return 'UNKNOWN';};
+ const run=(key,assigned=known,path=[])=>{const x=index.get(key);if(!x||path.includes(key))return 'UNKNOWN';if(x.op==='STATE'){if(!x.state||!assigned.has(atom(x)))return 'UNKNOWN';const value=assigned.get(atom(x));return (x.state.polarity==='NEGATIVE'?!value:value)?'TRUE':'FALSE';}if(['ITEM','ENUM'].includes(x.op))return new Set(x.operands);if(['CATEGORY','FORALL'].includes(x.op))return 'UNKNOWN';const values=x.operands.map(k=>run(k,assigned,[...path,key]));if(x.op==='NOT')return values[0]==='TRUE'?'FALSE':values[0]==='FALSE'?'TRUE':'UNKNOWN';if(['AND','ALL'].includes(x.op))return values.includes('FALSE')?'FALSE':values.every(v=>v==='TRUE')?'TRUE':'UNKNOWN';if(['OR','ANY'].includes(x.op))return values.includes('TRUE')?'TRUE':values.every(v=>v==='FALSE')?'FALSE':'UNKNOWN';if(!values.every(v=>v instanceof Set))return 'UNKNOWN';if(x.op==='UNION')return new Set(values.flatMap(v=>[...v]));if(x.op==='INTERSECTION')return new Set([...values[0]].filter(v=>values.every(s=>s.has(v))));if(x.op==='EXCEPT')return new Set([...values[0]].filter(v=>!values[1].has(v)));return 'UNKNOWN';};
  const result=run(id);if(result!=='UNKNOWN')return result;
  // Finite Boolean fragment only; no inferred business observations or unbounded solver.
  const unknown=[...reachable.keys()].filter(k=>!known.has(k));if(unknown.length>10)return 'UNKNOWN';let invariant=null;
@@ -139,7 +148,3 @@ export function evaluateCondition(claim,expressions,observations={}){
   sufficient_trigger:claim.direction==='SUFFICIENT'||claim.direction==='IFF'?value:null,
   order_only:claim.direction==='ORDER',business_decision:null,execution_authorization:null};
 }
-
-
-
-

@@ -1,5 +1,8 @@
 // Technical feedback is generated from actual validator rows, never from source keywords.
 const repairable={
+ SCOPE_RANGE_BINDING:['scope_id','Bind a range to a source-supported role of the same event and actual object/category. Never substitute another object.'],
+ EXPRESSION_TYPE_MISMATCH:['operands','Boolean operators consume Boolean expressions; set operators consume sets; FORALL consumes one set domain. CATEGORY requires CLASS plus optional container; ITEM/ENUM never stand for an entire class.'],
+ CONDITION_EXPRESSION_TYPE:['expression_id','Condition/temporal state expressions are Boolean. FORALL is not Boolean ALL; preserve range separately.'],
  ARTIFACT_USE_SIGNATURE:['artifact_use','Bind a consumer event/entity to a producer RESULT and consumer ROLE. Inapplicable fields are null; preserve timing separately.'],
  ARTIFACT_PRODUCER_BINDING:['artifact_use.producer_result_id','Reference the source-supported RESULT of this exact artifact/version; never infer from a path or choose among competing producers.'],
  ARTIFACT_CONSUMER_BINDING:['artifact_use.consumer_role_id','Reference the same event/entity OBJECT/INPUT_OBJECT/DELIVERABLE use.'],
@@ -32,10 +35,11 @@ const repairable={
 };
 export function technicalRevisionFeedback(checks,g){
  const index=new Map([...g.entities,...g.events,...g.claims,...g.expressions].map(x=>[x.id,x]));
- return checks.rows.flatMap(row=>row.errors.filter(e=>repairable[e.code]).map(e=>{
+ const rows=checks.rows.flatMap(row=>row.errors.filter(e=>repairable[e.code]).map(e=>{
   const x=index.get(row.id),[property,requirement]=repairable[e.code];
   return {code:e.code,subject_id:row.id,field_path:`${row.collection}[${row.id}]${property?'.'+property:''}`,actual:{event_id:x?.event_id??null,entity_id:x?.entity_id??null,scope_id:x?.scope_id??null,quantity:x?.quantity??null,constraint_ids:x?.constraint_ids??null,detail:e.detail},requirement};
  }));
+ return [...rows,...checks.coverage.filter(c=>c.status==='GAP'&&c.reason?.startsWith('RANGE_REQUIREMENT')).map(c=>({code:'RANGE_REQUIREMENT_UNREPRESENTED',subject_id:c.id,field_path:'range_requirement',actual:c.range_requirement,sources:c.sources,requirement:'Preserve the source-interpreted range_requirement with matching typed SCOPE references. A universal restriction requires FORALL over its domain, including exceptions. If not representable retain GAP; never delete the requirement or infer from notes.'}))];
 }
 
 // An audit can identify an unsupported binding without claiming to know the

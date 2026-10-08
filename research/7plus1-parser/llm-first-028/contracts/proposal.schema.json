@@ -2,7 +2,7 @@
   "type": "object",
   "properties": {
     "contract_version": {
-      "const": "031-r1.1",
+      "const": "031-r1-q05.1",
       "type": "string"
     },
     "entities": {
@@ -27,6 +27,7 @@
               "DOCUMENT",
               "GROUP",
               "REFERENT",
+              "CLASS",
               "OTHER"
             ]
           },
@@ -455,6 +456,9 @@
             "enum": [
               "STATE",
               "ITEM",
+              "ENUM",
+              "CATEGORY",
+              "FORALL",
               "ALL",
               "ANY",
               "UNION",
@@ -700,13 +704,42 @@
                 "B"
               ]
             }
+          },
+          "range_requirement": {
+            "type": "object",
+            "properties": {
+              "kind": {
+                "type": "string",
+                "enum": [
+                  "NONE",
+                  "SPECIFIC",
+                  "FINITE_ENUM",
+                  "CATEGORY",
+                  "UNIVERSAL",
+                  "UNIVERSAL_EXCEPT"
+                ]
+              },
+              "scope_claim_ids": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              }
+            },
+            "required": [
+              "kind",
+              "scope_claim_ids"
+            ],
+            "additionalProperties": false
           }
         },
         "required": [
           "sources",
           "claim_ids",
           "status",
-          "affected_views"
+          "affected_views",
+          "range_requirement"
         ],
         "additionalProperties": false
       }
