@@ -1,34 +1,58 @@
-# 界痕 · BoundX 功能 / Functions
+# BoundX功能与交付状态
 
-产品 `1.3.0-preview.0`，私有研发。BXP 是 7+1 数据与计算标准，不是抽取算法。
+核对日期：2026-10-08。[状态页](SHORT-COMPILER-STATUS.md)是版本与验收数字的集中入口；本文区分当前可用功能、开发候选和完整产品目标。
 
-Agent or another producer submits `boundx-task/v1`; a single local BXP Core returns `boundx-result/v1`. BXP-EXTRACT is reserved.
+## 1. 短文本编译器
 
-| 能力 / Capability | 当前行为 / Current behavior |
-|---|---|
-| Schema | 精确版本、严格对象边界，不强转或补齐 / Exact-version validation without coercion |
-| 证据 / Evidence | 来源 ID、码点引文、UTF-8 摘要核对 / Source IDs, code-point spans and digests |
-| 三态 / States | I/O/A/P/R/V/C 与独立 B；resolved、unresolved、absent |
-| 完整性 / Completeness | 应用 Profile、resolved elements、deficit |
-| 区间 / Intervals | 同作用域与量纲的精确十进制，整数／实数域 |
-| 类型集合 / Target sets | 请求与禁止目标交集 / Requested/forbidden overlap |
-| 交接 / Handoffs | 输入供给缺项 / Missing supplied inputs |
-| 前置图 / Dependencies | 追踪节点和边 ID 的环 / Cycles with node/edge provenance |
-| 布尔逻辑 / Logic | 同作用域合取与反例 / Within-scope conjunction and witnesses |
+| 能力 | 固定58618安装候选 | Q05开发候选或后续状态 |
+|---|---|---|
+| 输入 | 非空、≤300 Unicode码点的单一ADMIN任务，粘贴或UTF-8文件上传 | 未解除长度限制，不截断 |
+| 主要语义分析 | 解析Skill指导LLM，新会话审阅Skill核对 | 同一架构；不是重回NLP |
+| Skill调用 | 同源INLINE_BUNDLE实际使用 | 原生加载仍未验证 |
+| 动作与模态 | 要求、允许、禁止、无需、未陈述分开 | 不因实例通过声称任意文本准确 |
+| 对象与角色 | 逐事件身份及执行、组织、复核、接收等关系 | 保留来源、真实竞争和未指定 |
+| 产生与交付 | RESULT与DELIVERABLE分开，正向用途进入O | 不从提交推生成或外部I |
+| 产物关系 | 当前结果使用、同身份关联和明确时间关系分开 | 不从同路径推全部生成结束 |
+| 数量与条件 | 绑定用途、目标、计数范围、方向、极性和未知观测 | 纯函数检查不是业务执行批准 |
+| 全称对象范围 | Q05仍存在范围表达限制 | 新包增加CLASS、CATEGORY、FORALL、有限枚举和例外；适用域尚未闭合，未安装到58618 |
+| 技术校验与修订 | 来源、Schema、引用、签名、依赖、局部疑点；共享有界修订 | 不能保证检出全部语义错误 |
+| 输出 | 7+1 JSON、同源中文、来源与完整Trace | 未决、非正向事实和覆盖缺口不能丢失 |
+| 使用 | 真实阶段、取消、错误提示、刷新恢复、历史、导出 | 取消不证明云端计费停止 |
+| 部署 | 完整版本安装、隔离、备份、升级回滚；固定用户入口58618 | 维护不自动升级语义方法，不新增端口掩盖故障 |
 
-三个结果轴分别为 validation、completeness、consistency；两项授权字段始终 null。结果不是业务裁决，不保证抽取正确或任务可执行。
+旧候选安装包和Q05新包不是同版。前者的52项有效结果、后者的6/8定向结果均须按对应报告解释，不合并成一个准确率。详见[状态页](SHORT-COMPILER-STATUS.md)。
 
-## API
+## 2. 入口对应关系
 
-[唯一入口](../src/bxp/index.mjs)：
-- `evaluateBxpTask(object)`：返回完整结果。
-- `parseAndEvaluateBxpTask(raw)`：接收 UTF-8 字节或字符串，严格 JSON 后返回完整结果。
-- `validateBxpTask(object)`：内部评价后返回 valid/findings；不是另一套验证器。
-- `validateBxpResult(object)`：结构与状态合同验证，不独立证明数学真值。
-- `protocolInfo()`：机器可读的产品／协议／Schema／套件版本。
+| 入口 | 实际用途 | 版本注意事项 |
+|---|---|---|
+| 工作区`npm run 7plus1:ui` | 固定启动完整已安装候选 | 当前固定031-r1.2/c3，缺安装不自动创建 |
+| 安装包内`npm run 7plus1` | 同一安装版本的短文本CLI | 用它与该版本UI核对 |
+| 工作区`npm run 7plus1` | 开发核心CLI | 当前可与固定UI不同版；会真实调用模型 |
+| `npm run ui` | 既有BXP应用 | 不是短文本58618入口 |
+| `node cli.mjs protocol-info` | 既有Core的实际协议/实现信息 | 不代表短文本新链通过整个BXP目标协议验收 |
+| 既有CLI/MCP/Node API | 结构化输入及Core适配能力 | 不默认为新短文本模型入口或新的权限门 |
 
-CLI、MCP、本机 UI 共用这些能力，见 [快速开始](../QUICKSTART.md)。对象 API 无法恢复上游已经丢失的精度或重复键，严格传输请用 raw API。
+命令与版本依据：[package.json](../package.json)、[固定启动器](../product/short-compiler/launch-installed.mjs)。操作见[快速开始](../QUICKSTART.md)。
 
-Legacy comparison, decomposition, Python/Lark and model-assisted research remain explicitly deprecated. They do not produce certified BXP IR and are not the product's main result. No general Python SDK, multi-tenant server or automatic pack activation is delivered.
+## 3. 既有边界计算模块
 
-[生产者指南](AGENT-BXP-PRODUCER.md) · [产品手册](BOUNDX-PRODUCT-MANUAL.md) · [验证](VALIDATION.md)
+[Core入口](../src/bxp/index.mjs)包含结构化BXP评价、语义IR校验与形式化编译、类型化边界、ScopeGauge、边界比较、准入绑定及下游符合性等导出。已有区间、集合、依赖和布尔计算能力不等于新LLM语义链已经完整接入。
+
+后续必须从同一原文编译结果建立等价映射，验证未映射语义、条件与范围、冲突和来源，再确认Boundary Result。不能手工补正式模型后宣称原文全自动贯通；不能把结构合法与Proof路径当语义正确。
+
+## 4. 产品阶段，不是已交付清单
+
+**当前阶段：** 完成可靠短文本7+1、准确的局部未决、同源中文及固定版本本地产品验收。
+
+**下一阶段：** 接通既有确定性计算，交付从短文本到实际Boundary Result的完整链。
+
+**后续阶段：** 父边界与PM/Agent下游符合性；完整真实TASK的长度、层级和上下文扩展。Gold-60原文不能被截短后当同一案例，计划或统计表存在不等于该阶段已实现。
+
+多租户云服务、正式通用Python SDK、任意模型接入市场、复杂调度、自动业务执行和包市场公开发布都不是当前候选已经通过验收的功能。本页不以重新包装旧API作新品交付声明。
+
+## 5. 保持不变的产品边界
+
+ADMIN定义范围与授权，PM负责规划，BoundX编译与核查。未知事实不猜；明确要求不漏；真实歧义不强选。业务决定与执行授权字段保持null。模型服务依赖、公开资源许可、版本升级和实际任务执行均按各自边界处理。
+
+[产品手册](BOUNDX-PRODUCT-MANUAL.md) · [方法手册](BoundX-7plus1-定义原理语义编译与边界计算说明-v0.4.md) · [验证规程](VALIDATION.md) · [文档导航](README.md)
