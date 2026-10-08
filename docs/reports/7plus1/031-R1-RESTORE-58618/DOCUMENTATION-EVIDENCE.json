@@ -1,0 +1,488 @@
+{
+  "at": "2026-10-08T14:43:28.598Z",
+  "main_commit": "f7aae6421681be22eb2035504b824f4d169bf90c",
+  "review_base_commit": "f039fb2639cadecc8fa6f00bbf6dad8cac48c55b",
+  "branch_relation": "MAIN_NOT_MERGED; current candidate lives on review/7plus1-parser",
+  "main_scripts": {
+    "test": "npm run test:core && npm run test:protocol",
+    "test:core": "node --test src/__tests__/*.test.ts",
+    "test:protocol": "node --test protocol/conformance/*.test.mjs && node protocol/conformance/run.mjs",
+    "protocol:build": "node protocol/conformance/build-suite.mjs && node protocol/provenance/build-manifest.mjs",
+    "protocol:manifest": "node protocol/provenance/build-manifest.mjs",
+    "mcp": "node mcp.mjs",
+    "ui": "node ui-server.mjs --open",
+    "test:ui": "node --test ui/*.test.mjs",
+    "test:docs": "python -X utf8 -m unittest discover -s scripts -p test_*.py && python -X utf8 scripts/check-doc-links.py"
+  },
+  "review_base_scripts": {
+    "ui": "node ui-server.mjs --open",
+    "short_ui": "node research/7plus1-parser/v0.3-p2.1-generalization/server.mjs"
+  },
+  "review_has_readme_zh_cn": false,
+  "docs": [
+    {
+      "ref": "f7aae6421681be22eb2035504b824f4d169bf90c",
+      "file": "README.zh-CN.md",
+      "sha256": "988a8b8b26027a336b39ec4784bc318e5c7f7a092ffe6e5de465f775a939dfe6",
+      "lines": [
+        {
+          "line": 90,
+          "text": "| **I — Input** | 输入、对象、范围 |"
+        },
+        {
+          "line": 91,
+          "text": "| **O — Output** | 交付物、结果 |"
+        },
+        {
+          "line": 211,
+          "text": "## Producer：模型可以替换，BXP 不变"
+        },
+        {
+          "line": 213,
+          "text": "自然语言进入 BXP 前需要 Producer。当前研究三条路线："
+        },
+        {
+          "line": 215,
+          "text": "| Producer | 定位 |"
+        },
+        {
+          "line": 218,
+          "text": "| **spaCy Local NLP** | 本地 NLP 商用候选路线，模型与数据许可证单独核验 |"
+        },
+        {
+          "line": 219,
+          "text": "| **HanLP Local NLP** | 中文 NLP 研究/对照路线，具体模型许可明确前保持 research-only |"
+        },
+        {
+          "line": 231,
+          "text": "**Gold Oracle 不是第四条 Producer。**"
+        },
+        {
+          "line": 268,
+          "text": "> 以下命令是当前仓库已经存在的入口。BXP 0.4 完整 Wire Contract 仍在开发中，当前运行结果不能冒充 0.4 正式符合性证明。"
+        },
+        {
+          "line": 276,
+          "text": "npm run ui"
+        },
+        {
+          "line": 306,
+          "text": "Core Gold 100"
+        },
+        {
+          "line": 308,
+          "text": "L3 Gold 100"
+        },
+        {
+          "line": 310,
+          "text": "200 cases"
+        },
+        {
+          "line": 318,
+          "text": "200\\times3=600"
+        },
+        {
+          "line": 324,
+          "text": "200\\times3\\times3=1800"
+        },
+        {
+          "line": 353,
+          "text": "## 当前状态"
+        },
+        {
+          "line": 357,
+          "text": "| 项目 | 当前状态 |"
+        },
+        {
+          "line": 359,
+          "text": "| 产品版本 | `1.3.0-preview.0` |"
+        },
+        {
+          "line": 361,
+          "text": "| 当前已实现 Wire Contract | BXP `0.3.0-draft.2` |"
+        },
+        {
+          "line": 372,
+          "text": "| npm / PyPI / 独立安装包 | 尚未发布 |"
+        },
+        {
+          "line": 402,
+          "text": "Producer adapter interfaces"
+        },
+        {
+          "line": 413,
+          "text": "- [完整产品手册](docs/BOUNDX-PRODUCT-MANUAL.md)"
+        },
+        {
+          "line": 423,
+          "text": "- [Producer Adapter Contract](docs/PRODUCER-ADAPTER-CONTRACT.md)"
+        }
+      ]
+    },
+    {
+      "ref": "f7aae6421681be22eb2035504b824f4d169bf90c",
+      "file": "QUICKSTART.md",
+      "sha256": "2a66780ebb3736409b5daec5fb50b726f0197fad2d896e71776752432170fdf3",
+      "lines": [
+        {
+          "line": 11,
+          "text": "npm run ui"
+        },
+        {
+          "line": 14,
+          "text": "打开终端实际打印的本地地址，不固定端口。NLP需要本地Python环境和已安装模型；运行阶段不得自动下载或静默改用云端。LLM连接由用户配置并明确选择发送任务及允许上下文。"
+        },
+        {
+          "line": 18,
+          "text": "1. 配置Producer路线、具体模型和语义上下文。"
+        }
+      ]
+    },
+    {
+      "ref": "f7aae6421681be22eb2035504b824f4d169bf90c",
+      "file": "docs/PRODUCER-ADAPTER-CONTRACT.md",
+      "sha256": "64b22673ef798336a1841165887bfa71695f4a9173a6796df4d551486e657667",
+      "lines": [
+        {
+          "line": 3,
+          "text": "目标链路：原文与允许上下文 → Producer候选7+1及证据 → 本地复核 → Formalizer → 唯一BXP Core → Boundary Result → Admission。"
+        },
+        {
+          "line": 5,
+          "text": "LLM、spaCy、HanLP是可替换被测路线。Gold只进入独立比较器，不能进入prompt、语义上下文或根据case ID选择答案。NLP不调用LLM补答案。"
+        },
+        {
+          "line": 7,
+          "text": "## 本地NLP接口"
+        },
+        {
+          "line": 15,
+          "text": "## LLM接口"
+        }
+      ]
+    },
+    {
+      "ref": "f7aae6421681be22eb2035504b824f4d169bf90c",
+      "file": "docs/FUNCTIONS.md",
+      "sha256": "aacc93d1c13141d4a80dd2039c4c4603829b0bea848bd2df3e54cc0f2183be7b",
+      "lines": [
+        {
+          "line": 5,
+          "text": "| 三路Producer | LLM / spaCy / HanLP生成有证据7+1 | 本地开发与适配；未完成新Gold正式验收 |"
+        },
+        {
+          "line": 6,
+          "text": "| Formalizer | 将IR编译为作用域与约束模型 | 0.4契约及版本冻结待完成 |"
+        },
+        {
+          "line": 11,
+          "text": "| Benchmark | 两套Gold、三路比较、FDR/FAR | Gold候选待审定，正式成绩未发布 |"
+        },
+        {
+          "line": 12,
+          "text": "| 本地交付 | ZIP、MANIFEST、测试及研究证据 | 最终验收尚未完成 |"
+        }
+      ]
+    },
+    {
+      "ref": "f7aae6421681be22eb2035504b824f4d169bf90c",
+      "file": "docs/BOUNDX-PRODUCT-MANUAL.md",
+      "sha256": "67bf3f5bf9334f4f3fcb009db591947d1c4316a2360f0f625d7bb0d50627cd81",
+      "lines": [
+        {
+          "line": 632,
+          "text": "Producer B — spaCy Local NLP"
+        },
+        {
+          "line": 633,
+          "text": "Producer C — HanLP Local NLP"
+        },
+        {
+          "line": 644,
+          "text": "- 高能力语义理解参考路线；"
+        },
+        {
+          "line": 653,
+          "text": "## 15.2 spaCy Local NLP"
+        },
+        {
+          "line": 657,
+          "text": "- 本地 NLP 商用候选主路线；"
+        },
+        {
+          "line": 665,
+          "text": "## 15.3 HanLP Local NLP"
+        },
+        {
+          "line": 670,
+          "text": "- 用于观察 spaCy 在中文语义、依存、SRL 等方面的缺陷；"
+        },
+        {
+          "line": 672,
+          "text": "- HanLP 框架许可与具体模型许可必须分开核验；"
+        },
+        {
+          "line": 1146,
+          "text": "Core Gold 100"
+        },
+        {
+          "line": 1148,
+          "text": "L3 Gold 100"
+        },
+        {
+          "line": 1150,
+          "text": "200"
+        },
+        {
+          "line": 1177,
+          "text": "spaCy"
+        },
+        {
+          "line": 1178,
+          "text": "HanLP"
+        },
+        {
+          "line": 1184,
+          "text": "200\\times3=600"
+        },
+        {
+          "line": 1190,
+          "text": "200\\times3\\times3=1800"
+        },
+        {
+          "line": 1374,
+          "text": "HanLP adapter 可以开源。"
+        },
+        {
+          "line": 1376,
+          "text": "但许可不明确的 HanLP 模型权重不得随 BoundX 分发。"
+        },
+        {
+          "line": 1518,
+          "text": "- LLM/spaCy/HanLP routes；"
+        },
+        {
+          "line": 1533,
+          "text": "5. spaCy/HanLP 模型分发边界；"
+        },
+        {
+          "line": 1550,
+          "text": "> 一个面向 Agent 任务的开源边界建模与确定性准入引擎。BoundX 将自然语言任务转化为标准 7+1 语义表示和 Formal Boundary Model，计算 Boundary Result，并在正式任务进入规划或执行前给出可验证的 Admission。LLM、spaCy、HanLP 等只负责语义识别；BXP 协议与确定性 Core 不依赖任何单一模型。"
+        },
+        {
+          "line": 1556,
+          "text": "> An open-source deterministic boundary modeling and admission engine for Agent tasks. BoundX transforms natural-language tasks into a standardized 7+1 semantic representation and Formal Boundary Model, computes a Boundary Result, and provides verifiable Admission before formal planning or execution. LLMs, spaCy, HanLP, and other systems are replaceable semantic producers; BXP and the deterministic Core remain model-independent."
+        },
+        {
+          "line": 1574,
+          "text": "> BoundX 提供一个研究自然语言任务确定性边界的开放实验框架：同一 BXP Core 下比较 LLM、spaCy、HanLP 等 Producer，使用 Gold、FDR、FAR、Boundary State、Admission 与 L3 企业语义评估“理解得像不像”之外更关键的问题——系统是否错误地制造了确定性。"
+        }
+      ]
+    },
+    {
+      "ref": "f7aae6421681be22eb2035504b824f4d169bf90c",
+      "file": "docs/VALIDATION.md",
+      "sha256": "b25325eb45436321dcf7d994fa92804dfaabdc292c2f28f1d58bb4f7dc8ee146",
+      "lines": [
+        {
+          "line": 13,
+          "text": "Core 100和L3 100分别包含四组各25例。Producer适用性逐例审定；非适用项报告N/A及原因，不能计为Producer失败或静默删除。"
+        },
+        {
+          "line": 15,
+          "text": "Primary计划200×3=600；Stability计划200×3×3=1800，独立保存。200例属于开发/符合性基线；论文泛化需独立封存Holdout。"
+        },
+        {
+          "line": 33,
+          "text": "完整任务及交付清单见[v1.2 LOCAL任务书](tasks/BXP-PRODUCER-BENCHMARK-DEVELOPMENT-TASKBOOK-v1.2-LOCAL.md)。当前无已审定完整三路线准确率结论。"
+        }
+      ]
+    },
+    {
+      "ref": "f039fb2639cadecc8fa6f00bbf6dad8cac48c55b",
+      "file": "README.md",
+      "sha256": "e85258bf5f76a97c510324c115c5b903549bb75485d027a78896215d3f235ece",
+      "lines": [
+        {
+          "line": 13,
+          "text": "BoundX 是独立的任务边界预检引擎。唯一目录 `D:\\boundx`，私有仓库 [joinwell52-AI/BoundX](https://github.com/joinwell52-AI/BoundX)。产品 `1.3.0-preview.0`，固定协议 BXP-0001 `0.3.0-draft.2`，计算套件 `1.0.0-draft.3`。已有[私有 GitHub 源码预发布版](https://github.com/joinwell52-AI/BoundX/releases/tag/v1.3.0-preview.0)；无 npm/PyPI 分发、安装包或独立二进制，不代表正式认证；[LICENSE](LICENSE) 保持不变。"
+        },
+        {
+          "line": 23,
+          "text": "Node.js 22.18+，在项目根目录运行。首个示例是完整 `boundx-task/v1`，不是旧映射对象。"
+        },
+        {
+          "line": 30,
+          "text": "npm run ui"
+        },
+        {
+          "line": 35,
+          "text": "## 产品架构 / Architecture"
+        },
+        {
+          "line": 37,
+          "text": "`Agent / other producer → boundx-task/v1 → local BXP Core → boundx-result/v1 → host decision`"
+        }
+      ]
+    },
+    {
+      "ref": "f039fb2639cadecc8fa6f00bbf6dad8cac48c55b",
+      "file": "AGENTS.md",
+      "sha256": "bf956c828565cf11eaefa5577d6c56f83f272af2703fdffe742c5cda470089da",
+      "lines": []
+    },
+    {
+      "ref": "f039fb2639cadecc8fa6f00bbf6dad8cac48c55b",
+      "file": "docs/BoundX-7plus1-定义原理语义编译与边界计算说明-v0.4.md",
+      "sha256": "e4c097586bdb4cfc7d9be69cbdf6853f24232e96819dbd57faa04a2e89be652e",
+      "lines": [
+        {
+          "line": 3,
+          "text": "**规范版本：v0.4；修订号：r04；修订日期：2026-10-08。**"
+        },
+        {
+          "line": 9,
+          "text": "本文件替换 v0.4 初稿中不一致的工程描述，章节重新整理。7+1 的八个维度、ADMIN 权威来源、禁止擅自拆 WP 和不补造授权等核心含义保持不变。运行时同时记录规范版本、修订号和文件摘要，不能只写“v0.4”而混用不同内容。"
+        },
+        {
+          "line": 38,
+          "text": "| O | 交付与结果 | 明示要求或允许产生的结果，以及明示要求或允许交付的产物；不以本任务中新建为前提，条件与许可性质分别保留 | 提交不等于生成或修改，不推定文件存在，不自动增加外部I；允许生成不等于必须交付 |"
+        },
+        {
+          "line": 41,
+          "text": "| R | 资源与量化约束 | 对任务执行的时间、预算、容量、次数等限制，包含目标、比较符、值与单位 | 数字本身不是 R；产物内容数量、分类阈值、完成计数不得混收 |"
+        },
+        {
+          "line": 73,
+          "text": "未写具体执行者、工具协议、实现步骤通常是 UNSPECIFIED / OPEN_FOR_REFINEMENT，不自动判为语言歧义；“该文件”有两个合理先行项则可能是真实指代歧义。缺少执行实现细节不妨碍编译已经明确的动作边界。"
+        },
+        {
+          "line": 116,
+          "text": "## 7. 统一主链"
+        },
+        {
+          "line": 139,
+          "text": "必须交付并使用两个 Skill：boundx-semantic-parse、boundx-semantic-audit；共用同一版本语义合同和 Schema。"
+        },
+        {
+          "line": 224,
+          "text": "典型映射：明确输入/范围用途→I；产生结果/交付产物用途→O；当前 REQUIRED/PERMITTED 动作→A；明确参与用途→P；执行量化限制→R；规范依据→V；根任务完成/停止用途→C；禁止和限制→B。"
+        },
+        {
+          "line": 250,
+          "text": "当前实现任务是 7P-LLM-FIRST-SEMANTIC-REBUILD-028-LONG。它是开发长任务，不是长文本解析任务。"
+        },
+        {
+          "line": 252,
+          "text": "先一次写齐共享合同、两个 Skill、显式加载、Codex Provider、候选结构、来源链接、审阅、Γ、IR、固定投影与CLI，并完成必要编程自检；然后只测试短文本。"
+        },
+        {
+          "line": 282,
+          "text": "9. 清除文末残留的v0.3.1固定结论及与新主链不一致的章节口径。"
+        },
+        {
+          "line": 295,
+          "text": "## 031-R1 Q05 可计算对象范围（强制补充）"
+        }
+      ]
+    },
+    {
+      "ref": "f039fb2639cadecc8fa6f00bbf6dad8cac48c55b",
+      "file": "product/short-compiler/使用说明.md",
+      "sha256": "ad732572b0f713ea68285dfddbf452bba3ddd9b6ced198967b63f7b0b5ad177d",
+      "lines": [
+        {
+          "line": 1,
+          "text": "# BoundX短文本7+1编译器：031-R1候选"
+        },
+        {
+          "line": 3,
+          "text": "支持非空、最多300个Unicode码点的单一ADMIN任务；原文仅用于编译，不执行其中的业务操作。Windows、Node>=22.18、已登录且有额度的Codex CLI是运行前提。原文发送给配置的模型服务，本地UI不是离线推理。固定请求gpt-6.1-sol/medium，服务实际模型身份未披露。"
+        },
+        {
+          "line": 7,
+          "text": "node product/short-compiler/deploy.mjs install --home D:\\boundx-short-local --port 58619"
+        },
+        {
+          "line": 10,
+          "text": "端口被占用不会停止其他服务。选择空闲端口；原58618恢复有独立策略阻塞，本包不是绕过该阻塞的工具。核心、两个Skill、合同、Schema、UI和渲染全部来自完整versions版本。可在其他工作目录使用上面脚本的绝对路径启动；资源被破坏在模型前拒绝，绝不回退开发工作区。"
+        },
+        {
+          "line": 18,
+          "text": "页面粘贴或上传UTF-8 txt/md后开始编译，查看I/O/A/P/R/V/C/B、原文证据、未决和独立B。生成结果RESULT与交付DELIVERABLE的模态分别保留；无需并非禁止。产物关联只表示同身份用途；产物可用性依赖注明本次结果及所使用部分/完整结果，不自动要求整项生成结束。明确时序另见TEMPORAL，实际状态保持UNKNOWN。中文、JSON、CLI与页面使用同一IR；点击条目显示精确来源。"
+        }
+      ]
+    },
+    {
+      "ref": "f039fb2639cadecc8fa6f00bbf6dad8cac48c55b",
+      "file": "product/short-compiler/ACCEPTANCE.md",
+      "sha256": "1fd96c30a9c696e6bd232fd67efce972c725cbfa5c254f02ddca3bb7f1d8efdb",
+      "lines": [
+        {
+          "line": 3,
+          "text": "本包是同一BoundX短文本编译器的版本化候选，不是生产发布；BUSINESS_EXECUTION_ENABLED=false，PRODUCTION_READY=false。最终语义/重复运行/工程门与剩余缺陷以docs/reports/7plus1/7P-SHORT-COMPILER-PRODUCT-CLOSURE-031-R1-LONG/REPORT.md及实际Trace为准。封装或安装成功不代替语义验收。"
+        },
+        {
+          "line": 7,
+          "text": "旧031报告和运行包不覆盖。原58618恢复策略拒绝保持POLICY_BLOCKED；候选功能验收与原入口恢复分开，未经正常许可不停止/重启原58618、不借替换资源绕过。"
+        },
+        {
+          "line": 9,
+          "text": "正式验收必须包括本任务路径B最终53份原文、规定额外重复10次、原N01–N08、完整回归、安装资源隔离、原UI真实调用及升级回滚。未运行、失败、真歧义和支持范围均如实报告，不以全填未决或JSON合法宣称完整成功。"
+        }
+      ]
+    },
+    {
+      "ref": "f039fb2639cadecc8fa6f00bbf6dad8cac48c55b",
+      "file": "docs/tasks/7plus1/CURRENT-TASK.md",
+      "sha256": "9f3ec0d0be93a90e31b973de2737838b356c50dc821b427ea4ecbba39d050384",
+      "lines": [
+        {
+          "line": 4,
+          "text": "**当前优先维护事项：用户入口固定回58618。**"
+        },
+        {
+          "line": 6,
+          "text": "## 2026-10-08 ADMIN最新要求：回到58618"
+        },
+        {
+          "line": 10,
+          "text": "`docs/tasks/7plus1/ADDENDUM-031-R1-RESTORE-58618.md`"
+        },
+        {
+          "line": 14,
+          "text": "本次只恢复固定用户入口，不重新设计编译器、不升级语义方法、不追加模型预算。以原58621对应的完整已安装候选`0.1.0-candidate.031-r1.2`为迁回对象，先核实本地指针与清单，不擅自覆盖另行授权的更新。Q05新包尚未完整验收且未安装，本次不自动安装。维护成功不改变PARTIAL/REVIEW_REQUIRED的语义状态。"
+        },
+        {
+          "line": 16,
+          "text": "目标地址：`http://127.0.0.1:58618/`。保留原UI，固定原有启动入口指向完整安装版本，不再新增端口或回退旧NLP。配置、历史、启动指针先备份；核对当前目标进程身份、版本和在途请求，不照抄历史PID。"
+        },
+        {
+          "line": 20,
+          "text": "默认零真实模型调用。以实际页面/会话、完整资源摘要、历史/导出和明确标记的同源回放检查恢复，不仅以首页HTTP200判完成。最终给实际58618地址、版本、PID、重启命令和真实检查结果；未恢复不得宣称已恢复。此指针更新仅发布任务，没有操作用户本地进程。"
+        },
+        {
+          "line": 24,
+          "text": "031-R1原候选`0.1.0-candidate.031-r1.2`：`SHORT_PRODUCT_031_R1=PARTIAL`、`SEMANTIC_ACCEPTANCE=REVIEW_REQUIRED`。报告："
+        },
+        {
+          "line": 32,
+          "text": "Q05源码冻结`445e6c44256a9aaa6be13cb7439ce4ce6a716d32`；候选`0.1.0-candidate.031-r1.q05.1`未安装。全称结构和无模型正反检查通过，真实8次运行来源复核6 PASS/2 REVIEW_REQUIRED；Q05两次适用域不同，未改旧判定。旧52项不得计为新Schema/Skill验证成绩。"
+        },
+        {
+          "line": 34,
+          "text": "当前保守模型预算175/180，剩5；旧031独立239/240，均不重置。本维护事项不授权Q05补测、扩大模型调用、购买额度或改变模型/账号。"
+        },
+        {
+          "line": 36,
+          "text": "58621最后报告检查为ECONNREFUSED，不能从GitHub证明本机当前状态；恢复前由本地执行者核验。原58619不要求本轮清理。原58618此前混版及策略阻塞不得隐去。"
+        },
+        {
+          "line": 48,
+          "text": "主链不变：ADMIN原文→解析Skill/LLM→候选→审阅Skill/新会话→技术校验→Boundary IR→7+1 JSON及同源中文。LLM负责语义理解，程序保真消费。O沿用已批准的产生/交付用途，不补执行授权、不重开定义。"
+        }
+      ]
+    }
+  ],
+  "scope": "READ_ONLY; no README/manual/Gold/definition edits"
+}
