@@ -1,48 +1,52 @@
 # 当前 BoundX 7+1 产品任务
 
-**当前任务：`7P-SHORT-COMPILER-PRODUCT-CLOSURE-031-R1-LONG`；任务修订：r01。**
+**主任务：`7P-SHORT-COMPILER-PRODUCT-CLOSURE-031-R1-LONG`。**
+**当前优先维护事项：用户入口固定回58618。**
 
-执行状态：`WAITING_ADMIN_REVIEW`。2026-10-08 ADMIN追加授权执行[对象范围闭环](ADDENDUM-031-R1-Q05-OBJECT-RANGE-CLOSURE.md)，原031-R1封存保持不变。031-R1候选0.1.0-candidate.031-r1.2已交付并验证；`SHORT_PRODUCT_031_R1=PARTIAL`、`SEMANTIC_ACCEPTANCE=REVIEW_REQUIRED`。Q05全称范围表达待审，原58618恢复仍`POLICY_BLOCKED`，未宣告产品全面完成。最终报告：`docs/reports/7plus1/7P-SHORT-COMPILER-PRODUCT-CLOSURE-031-R1-LONG/REPORT.md`。原031 BLOCKED结果不倒改。
+## 2026-10-08 ADMIN最新要求：回到58618
 
-Q05续作报告：`docs/reports/7plus1/7P-SHORT-COMPILER-PRODUCT-CLOSURE-031-R1-Q05/REPORT.md`。源码冻结`445e6c44256a9aaa6be13cb7439ce4ce6a716d32`，候选`0.1.0-candidate.031-r1.q05.1`未安装。全称范围结构及无模型正反检查通过；真实8次运行、来源复核6 PASS/2 REVIEW_REQUIRED，Q05两次适用域不同，不改旧判定。新方法完整模型验证预算不足，当前保守175/180，剩5。58621原候选安装资源未变，最终只读检查端口ECONNREFUSED，不宣称在线；未新启端口或尝试58618恢复。旧52项不计入新模型成绩。
+执行维护追加：
 
-任务书：`docs/tasks/7plus1/7P-SHORT-COMPILER-PRODUCT-CLOSURE-031-R1-LONG.md`。
-任务创建提交：`dae3e1bbf3179f806c8f7b4ab2f3b5cb56182267`。
-前序031结果提交：`eeb23f5452cf9a99a1e4623690572bcb33d6ea94`，原终态`BLOCKED`不倒改。
-规范基线：v0.4/r03，`docs/BoundX-7plus1-定义原理语义编译与边界计算说明-v0.4.md`。
+`docs/tasks/7plus1/ADDENDUM-031-R1-RESTORE-58618.md`
+
+创建提交：`8e3628db90711bc6ad020dc191e8cf36edfdddcb`。
+
+本次只恢复固定用户入口，不重新设计编译器、不升级语义方法、不追加模型预算。以原58621对应的完整已安装候选`0.1.0-candidate.031-r1.2`为迁回对象，先核实本地指针与清单，不擅自覆盖另行授权的更新。Q05新包尚未完整验收且未安装，本次不自动安装。维护成功不改变PARTIAL/REVIEW_REQUIRED的语义状态。
+
+目标地址：`http://127.0.0.1:58618/`。保留原UI，固定原有启动入口指向完整安装版本，不再新增端口或回退旧NLP。配置、历史、启动指针先备份；核对当前目标进程身份、版本和在途请求，不照抄历史PID。
+
+此前恢复收到“blocked by policy”。用户最新意图不覆盖环境安全限制：只通过正常审批渠道获准后执行受控停止与启动；若仍拒绝，停止并单列POLICY_BLOCKED，不换命令/工具/资源绕过，不反复尝试。不得停止未知占用者或其他Codex/Node进程。
+
+默认零真实模型调用。以实际页面/会话、完整资源摘要、历史/导出和明确标记的同源回放检查恢复，不仅以首页HTTP200判完成。最终给实际58618地址、版本、PID、重启命令和真实检查结果；未恢复不得宣称已恢复。此指针更新仅发布任务，没有操作用户本地进程。
+
+## 语义研发状态保持不变
+
+031-R1原候选`0.1.0-candidate.031-r1.2`：`SHORT_PRODUCT_031_R1=PARTIAL`、`SEMANTIC_ACCEPTANCE=REVIEW_REQUIRED`。报告：
+
+`docs/reports/7plus1/7P-SHORT-COMPILER-PRODUCT-CLOSURE-031-R1-LONG/REPORT.md`
+
+Q05对象范围续作已封存，提交`3c878d6132ac3beb6bcd15d28c0d5a4287544c61`。报告：
+
+`docs/reports/7plus1/7P-SHORT-COMPILER-PRODUCT-CLOSURE-031-R1-Q05/REPORT.md`
+
+Q05源码冻结`445e6c44256a9aaa6be13cb7439ce4ce6a716d32`；候选`0.1.0-candidate.031-r1.q05.1`未安装。全称结构和无模型正反检查通过，真实8次运行来源复核6 PASS/2 REVIEW_REQUIRED；Q05两次适用域不同，未改旧判定。旧52项不得计为新Schema/Skill验证成绩。
+
+当前保守模型预算175/180，剩5；旧031独立239/240，均不重置。本维护事项不授权Q05补测、扩大模型调用、购买额度或改变模型/账号。
+
+58621最后报告检查为ECONNREFUSED，不能从GitHub证明本机当前状态；恢复前由本地执行者核验。原58619不要求本轮清理。原58618此前混版及策略阻塞不得隐去。
+
+## 主任务合同与权威
+
+主任务书：`docs/tasks/7plus1/7P-SHORT-COMPILER-PRODUCT-CLOSURE-031-R1-LONG.md`。
+范围续作：`docs/tasks/7plus1/ADDENDUM-031-R1-Q05-OBJECT-RANGE-CLOSURE.md`。
+规范：`docs/BoundX-7plus1-定义原理语义编译与边界计算说明-v0.4.md`，按所选完整运行版本核对修订与摘要，不混用。
 产品总要求：`docs/tasks/7plus1/SHORT-COMPILER-PRODUCT-DELIVERY-CONTRACT.md`。
+
 仓库：`joinwell52-AI/BoundX`；工作及推送分支：`review/7plus1-parser`。
+唯一核心：`research/7plus1-parser/llm-first-028/`；产品封装：`product/short-compiler/`。
 
-## 最新安排：接续031，优先完成正确7+1，不另建原型
+主链不变：ADMIN原文→解析Skill/LLM→候选→审阅Skill/新会话→技术校验→Boundary IR→7+1 JSON及同源中文。LLM负责语义理解，程序保真消费。O沿用已批准的产生/交付用途，不补执行授权、不重开定义。
 
-按ADMIN“下一步的任务”要求，当前任务切为031-R1。此更新只发布执行合同，没有运行用户本地代码、模型或服务恢复。
+保护实际本地tracked/untracked工作与历史，历史160项仅作线索；不强制reset/clean，不吞入无关文件。中文用UTF-8 Python/Node编辑，不用PowerShell改写。候选运行资源必须与开发工作区隔离；不运行Gold-60/旧350、不扩长文本/WP/NLP/复杂求解或业务执行。
 
-继续完善`research/7plus1-parser/llm-first-028/`唯一核心与`product/short-compiler/`现有产品包，复用原UI。LLM承担语义理解，两个Skill实际进入请求，程序保真校验/编译。O维沿用031已批准口径，不重开讨论。
-
-本轮连续完成：
-
-1. 对Q04/S00/T03用原文与现有Trace定位产物生成/使用关系；区分身份关联、产物可用性与明确事件顺序，不机械补“全部生成完成后才复核”。有来源的图派生与模型补表达分开计分，不在程序读原文猜答案。
-2. 修好真正缺口与正反自检，保留031已经修好的身份、角色、数量、O投影及中文完整性。
-3. 核查并修复403相关回归合同，正常会话与无会话分别验证，不关闭安全检查。
-4. 完成产品运行资源与开发工作区隔离，防止旧进程混读新Skill/Schema；复用安装、升级、回滚。
-5. 冻结后按实际改动选择补测路径，交付同一版本的可用本地产品候选及完整7+1结果。
-
-## 补测与预算
-
-先完成无模型代码/合同检查，不先整批调用。若两个Skill、有效提示、Schema、模型可见合同和配置未变，可严格核对摘要后复用47份已有真实响应，在当前消费者重编译并明确标回放；补6份未运行、10份额外重复、原N01—N08，正常约48次外层模型启动。
-
-若上述任一模型可见资源改变，最终冻结后真实重跑53份，补10份额外重复并运行原N01—N08，正常约142次外层启动；不得把旧响应冒充新Skill验证。N01/N04已暴露按回归标记，不反复换一套所谓新盲测。
-
-本续作新增保守调用上限180；旧031的239/240独立保留，不重置。外层启动与可见内部重试信号分别记录，预算估计不当成精确服务端计费次数。必须预留最终验证与成组解析/审阅，连续3次同类网络失败暂停核查；登录/额度/策略拒绝停止相应自动操作，不自行换模型/通道或加预算。
-
-## 服务与保护
-
-原58618恢复曾被策略拒绝。本任务不覆盖该拒绝：不换命令、工具、修改资源等方式绕过，不反复尝试同一被拒绝操作。只读核查、准备材料；获正常授权渠道明确允许后才执行。未获准继续标POLICY_BLOCKED，与候选功能验收分别报告。
-
-58619维护也须确认实际进程、版本、无在途任务并遵守权限。保护现有工作与历史，不reset/clean、不混入无关文件；中文用UTF-8 Python/Node，不用PowerShell改写。不重跑Gold-60/350、不扩长文本/WP/NLP/业务执行或复杂边界求解。
-
-## 交付与停止
-
-交付运行包、实际本地入口、安装使用及回滚说明，随后给逐层准确性、重复/N组结果、版本隔离与全量回归、真实调用/回放记录和提交号。候选验收与原58618恢复分状态，不隐藏后者阻塞。
-
-普通缺陷在本任务内连续修复复测，不逐模块等待。语义/验证/工程未闭合不得以打包成功或SEAL通过宣称产品完成。仅推送review分支，不merge/release/tag或对外部署。最终停止`WAITING_ADMIN_REVIEW`。
+维护完成或遇到真实权限阻塞后停止`WAITING_ADMIN_REVIEW`。只推送review分支的必要改动，不merge/release/tag或公开部署；不自动开始后续语义补测。旧030、031及031-R1首次结果和封存不倒改。
