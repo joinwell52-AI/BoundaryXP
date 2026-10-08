@@ -1,0 +1,289 @@
+{
+  "contract_version": "031-r1-q05.1",
+  "entities": [
+    {
+      "id": "ent_qa",
+      "label": "QA",
+      "type": "OTHER",
+      "mentions": [
+        {
+          "quote": "QA",
+          "occurrence": 1
+        }
+      ],
+      "alternatives": []
+    },
+    {
+      "id": "ent_plan",
+      "label": "plan.md",
+      "type": "FILE",
+      "mentions": [
+        {
+          "quote": "plan.md",
+          "occurrence": 1
+        },
+        {
+          "quote": "plan.md",
+          "occurrence": 2
+        }
+      ],
+      "alternatives": []
+    }
+  ],
+  "events": [
+    {
+      "id": "evt_read",
+      "predicate": "读取",
+      "kind": "ACTION",
+      "layer": "MAIN",
+      "use": "CURRENT_TASK",
+      "modality": "REQUIRED",
+      "polarity": "POSITIVE",
+      "owner_id": "ROOT",
+      "constraint_ids": [],
+      "requires": [],
+      "sources": [
+        {
+          "quote": "QA must read plan.md.",
+          "occurrence": 1
+        }
+      ]
+    },
+    {
+      "id": "evt_modify",
+      "predicate": "修改",
+      "kind": "ACTION",
+      "layer": "MAIN",
+      "use": "CURRENT_TASK",
+      "modality": "FORBIDDEN",
+      "polarity": "POSITIVE",
+      "owner_id": "ROOT",
+      "constraint_ids": [],
+      "requires": [],
+      "sources": [
+        {
+          "quote": "Do not modify plan.md.",
+          "occurrence": 1
+        }
+      ]
+    }
+  ],
+  "claims": [
+    {
+      "id": "cl_read_performer",
+      "kind": "ROLE",
+      "event_id": "evt_read",
+      "entity_id": "ent_qa",
+      "role": "PERFORMER",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "artifact_use": null,
+      "scope_id": "evt_read",
+      "requires": [],
+      "sources": [
+        {
+          "quote": "QA must read plan.md.",
+          "occurrence": 1
+        }
+      ],
+      "note": "QA是明确的读取执行者，岗位简称未指定人或组类别。"
+    },
+    {
+      "id": "cl_read_input",
+      "kind": "ROLE",
+      "event_id": "evt_read",
+      "entity_id": "ent_plan",
+      "role": "INPUT_OBJECT",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "artifact_use": null,
+      "scope_id": "evt_read",
+      "requires": [],
+      "sources": [
+        {
+          "quote": "read plan.md",
+          "occurrence": 1
+        }
+      ],
+      "note": "plan.md是明确要求读取的输入文件。"
+    },
+    {
+      "id": "cl_read_scope",
+      "kind": "SCOPE",
+      "event_id": "evt_read",
+      "entity_id": null,
+      "role": null,
+      "expression_id": "expr_read_file",
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "artifact_use": null,
+      "scope_id": "ent_plan",
+      "requires": [],
+      "sources": [
+        {
+          "quote": "read plan.md",
+          "occurrence": 1
+        }
+      ],
+      "note": "读取范围是具体文件plan.md。"
+    },
+    {
+      "id": "cl_modify_performer",
+      "kind": "ROLE",
+      "event_id": "evt_modify",
+      "entity_id": "ent_qa",
+      "role": "PERFORMER",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "artifact_use": null,
+      "scope_id": "evt_modify",
+      "requires": [],
+      "sources": [
+        {
+          "quote": "QA must read plan.md.",
+          "occurrence": 1
+        },
+        {
+          "quote": "Do not modify plan.md.",
+          "occurrence": 1
+        }
+      ],
+      "note": "连续同一指令没有主体切换，禁止修改的执行主体承接QA。"
+    },
+    {
+      "id": "cl_modify_object",
+      "kind": "ROLE",
+      "event_id": "evt_modify",
+      "entity_id": "ent_plan",
+      "role": "OBJECT",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "artifact_use": null,
+      "scope_id": "evt_modify",
+      "requires": [],
+      "sources": [
+        {
+          "quote": "Do not modify plan.md.",
+          "occurrence": 1
+        }
+      ],
+      "note": "禁止修改的对象与读取文件为同一plan.md，不由禁止用途新增外部输入。"
+    },
+    {
+      "id": "cl_modify_scope",
+      "kind": "SCOPE",
+      "event_id": "evt_modify",
+      "entity_id": null,
+      "role": null,
+      "expression_id": "expr_modify_file",
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "artifact_use": null,
+      "scope_id": "ent_plan",
+      "requires": [],
+      "sources": [
+        {
+          "quote": "Do not modify plan.md.",
+          "occurrence": 1
+        }
+      ],
+      "note": "禁止修改的范围是具体文件plan.md。"
+    }
+  ],
+  "expressions": [
+    {
+      "id": "expr_read_file",
+      "op": "ITEM",
+      "operands": [
+        "ent_plan"
+      ],
+      "state": null,
+      "sources": [
+        {
+          "quote": "plan.md",
+          "occurrence": 1
+        }
+      ]
+    },
+    {
+      "id": "expr_modify_file",
+      "op": "ITEM",
+      "operands": [
+        "ent_plan"
+      ],
+      "state": null,
+      "sources": [
+        {
+          "quote": "plan.md",
+          "occurrence": 2
+        }
+      ]
+    }
+  ],
+  "issues": [],
+  "coverage": [
+    {
+      "sources": [
+        {
+          "quote": "QA must read plan.md.",
+          "occurrence": 1
+        }
+      ],
+      "claim_ids": [
+        "cl_read_performer",
+        "cl_read_input",
+        "cl_read_scope"
+      ],
+      "status": "EXPRESSED",
+      "affected_views": [
+        "I",
+        "A",
+        "P"
+      ],
+      "range_requirement": {
+        "kind": "SPECIFIC",
+        "scope_claim_ids": [
+          "cl_read_scope"
+        ]
+      }
+    },
+    {
+      "sources": [
+        {
+          "quote": "QA must read plan.md.",
+          "occurrence": 1
+        },
+        {
+          "quote": "Do not modify plan.md.",
+          "occurrence": 1
+        }
+      ],
+      "claim_ids": [
+        "cl_modify_performer",
+        "cl_modify_object",
+        "cl_modify_scope"
+      ],
+      "status": "EXPRESSED",
+      "affected_views": [
+        "P",
+        "B"
+      ],
+      "range_requirement": {
+        "kind": "SPECIFIC",
+        "scope_claim_ids": [
+          "cl_modify_scope"
+        ]
+      }
+    }
+  ]
+}

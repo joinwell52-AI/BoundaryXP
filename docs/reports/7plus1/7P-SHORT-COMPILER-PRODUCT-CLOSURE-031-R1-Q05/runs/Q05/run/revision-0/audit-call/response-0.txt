@@ -1,0 +1,183 @@
+{
+  "contract_version": "031-r1-q05.1",
+  "reviews": [
+    {
+      "subject_id": "ent_pm",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [{"quote": "PM", "occurrence": 1}],
+      "reason": "PM身份明确；OTHER可保留未指定的人或组类别，不推定岗位权限。"
+    },
+    {
+      "subject_id": "ent_settings",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [{"quote": "settings.json", "occurrence": 1}],
+      "reason": "明确的文件身份，也是配置项范围的容器。"
+    },
+    {
+      "subject_id": "ent_config",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [{"quote": "配置项", "occurrence": 1}, {"quote": "配置项", "occurrence": 2}],
+      "reason": "两处均指配置项类别；具体适用域由各事件的范围表达式区分。"
+    },
+    {
+      "subject_id": "ent_output",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [{"quote": "settings-list.md", "occurrence": 1}],
+      "reason": "明确指定的生成文件，无其他产物身份竞争。"
+    },
+    {
+      "subject_id": "ev_list",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [{"quote": "请PM列出settings.json中的配置项", "occurrence": 1}],
+      "reason": "当前任务明确要求列出配置项，没有另述条件或次数限制。"
+    },
+    {
+      "subject_id": "ev_generate",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [{"quote": "列出settings.json中的配置项，并生成settings-list.md", "occurrence": 1}],
+      "reason": "明确要求生成清单文件；并列关系不产生额外先后约束。"
+    },
+    {
+      "subject_id": "ev_change",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [{"quote": "不得更改任何配置项", "occurrence": 1}],
+      "reason": "更改动作受到明确禁止；FORBIDDEN与正向动作谓词正确配合。"
+    },
+    {
+      "subject_id": "cl_list_performer",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["ev_list", "ent_pm"],
+      "sources": [{"quote": "请PM列出settings.json中的配置项", "occurrence": 1}],
+      "reason": "PM是列出动作的明确执行者。"
+    },
+    {
+      "subject_id": "cl_list_input",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["ev_list", "cl_list_scope"],
+      "sources": [{"quote": "列出settings.json中的配置项", "occurrence": 1}],
+      "reason": "配置项是明确受作用范围，文件容器由同事件SCOPE保留。"
+    },
+    {
+      "subject_id": "cl_list_scope",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["cl_list_input", "ex_settings_config"],
+      "sources": [{"quote": "settings.json中的配置项", "occurrence": 1}],
+      "reason": "范围绑定同一列出事件的配置项类别，并完整保留文件容器。"
+    },
+    {
+      "subject_id": "cl_generate_performer",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["ev_generate", "ent_pm"],
+      "sources": [{"quote": "请PM列出settings.json中的配置项", "occurrence": 1}, {"quote": "并生成settings-list.md", "occurrence": 1}],
+      "reason": "连续并列指令没有主体切换，生成动作可承接PM；来源覆盖两端。"
+    },
+    {
+      "subject_id": "cl_generate_result",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["ev_generate", "ent_output"],
+      "sources": [{"quote": "并生成settings-list.md", "occurrence": 1}],
+      "reason": "文件明确作为生成结果；原文没有独立提交或交付要求。"
+    },
+    {
+      "subject_id": "cl_generate_scope",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["cl_generate_result", "ex_output"],
+      "sources": [{"quote": "生成settings-list.md", "occurrence": 1}],
+      "reason": "ITEM范围准确绑定同一生成事件的指定结果文件。"
+    },
+    {
+      "subject_id": "cl_generate_content",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["ev_generate", "cl_content_scope"],
+      "sources": [{"quote": "列出settings.json中的配置项，并生成settings-list.md", "occurrence": 1}],
+      "reason": "列出配置项与生成清单文件的连续语境支持配置项作为文件内容。"
+    },
+    {
+      "subject_id": "cl_content_scope",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["cl_generate_content", "ex_settings_config"],
+      "sources": [{"quote": "列出settings.json中的配置项，并生成settings-list.md", "occurrence": 1}],
+      "reason": "生成内容范围与原文列出的配置项一致，保留settings.json容器。"
+    },
+    {
+      "subject_id": "cl_change_performer",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["ev_change", "ent_pm"],
+      "sources": [{"quote": "请PM列出settings.json中的配置项", "occurrence": 1}, {"quote": "不得更改任何配置项", "occurrence": 1}],
+      "reason": "同一指令追加禁止限制，无主体切换，受约束执行者可承接PM。"
+    },
+    {
+      "subject_id": "cl_change_object",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["ev_change", "cl_change_scope"],
+      "sources": [{"quote": "不得更改任何配置项", "occurrence": 1}],
+      "reason": "配置项类别是禁止动作对象；OBJECT没有新增外部输入用途。"
+    },
+    {
+      "subject_id": "cl_change_scope",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["cl_change_object", "ex_all_config"],
+      "sources": [{"quote": "不得更改任何配置项", "occurrence": 1}],
+      "reason": "任何配置项形成全称禁止，绑定同一事件对象；该禁止未明示文件容器或例外。"
+    },
+    {
+      "subject_id": "ex_settings_config",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["ent_config", "ent_settings"],
+      "sources": [{"quote": "settings.json中的配置项", "occurrence": 1}],
+      "reason": "CATEGORY准确表达配置项类别及明确文件容器，没有将类别误作具体成员。"
+    },
+    {
+      "subject_id": "ex_output",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["ent_output"],
+      "sources": [{"quote": "settings-list.md", "occurrence": 1}],
+      "reason": "ITEM引用唯一指定的非CLASS文件实体。"
+    },
+    {
+      "subject_id": "ex_config_domain",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["ent_config"],
+      "sources": [{"quote": "任何配置项", "occurrence": 1}],
+      "reason": "配置项是类别域；此禁止没有另述容器限定。"
+    },
+    {
+      "subject_id": "ex_all_config",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["ex_config_domain"],
+      "sources": [{"quote": "任何配置项", "occurrence": 1}],
+      "reason": "FORALL以类别集合域为唯一操作数，完整表达任何配置项，无例外遗漏。"
+    }
+  ],
+  "issues": [],
+  "omissions": []
+}

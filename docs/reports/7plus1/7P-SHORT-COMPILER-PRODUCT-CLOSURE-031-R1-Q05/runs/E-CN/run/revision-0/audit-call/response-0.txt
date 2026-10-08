@@ -1,0 +1,143 @@
+{
+  "contract_version": "031-r1-q05.1",
+  "reviews": [
+    {
+      "subject_id": "qa",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [{"quote": "QA", "occurrence": 1}],
+      "reason": "QA身份明确；原文未指定个人或组，OTHER可作类别占位。"
+    },
+    {
+      "subject_id": "alpha",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [{"quote": "alpha.txt", "occurrence": 1}, {"quote": "alpha.txt", "occurrence": 2}],
+      "reason": "两处名称指同一文件，读取和禁止删除用途保持同一身份。"
+    },
+    {
+      "subject_id": "beta",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [{"quote": "beta.txt", "occurrence": 1}, {"quote": "beta.txt", "occurrence": 2}],
+      "reason": "两处名称指同一文件，读取和禁止删除用途保持同一身份。"
+    },
+    {
+      "subject_id": "read",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [{"quote": "请QA读取alpha.txt和beta.txt", "occurrence": 1}],
+      "reason": "明确要求当前读取动作，无额外条件或先后限制。"
+    },
+    {
+      "subject_id": "delete",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [{"quote": "不得删除alpha.txt或beta.txt", "occurrence": 1}],
+      "reason": "删除是当前明确禁止的动作，FORBIDDEN与正向动作谓词相符。"
+    },
+    {
+      "subject_id": "read_performer",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["read", "qa"],
+      "sources": [{"quote": "请QA读取", "occurrence": 1}],
+      "reason": "QA是明确的读取执行者。"
+    },
+    {
+      "subject_id": "read_alpha",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["read", "alpha"],
+      "sources": [{"quote": "读取alpha.txt和beta.txt", "occurrence": 1}],
+      "reason": "alpha.txt是明确要求读取的输入文件。"
+    },
+    {
+      "subject_id": "read_beta",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["read", "beta"],
+      "sources": [{"quote": "读取alpha.txt和beta.txt", "occurrence": 1}],
+      "reason": "beta.txt与alpha.txt并列，均须读取。"
+    },
+    {
+      "subject_id": "delete_performer",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["delete", "qa", "read_performer"],
+      "sources": [{"quote": "请QA读取", "occurrence": 1}, {"quote": "不得删除alpha.txt或beta.txt", "occurrence": 1}],
+      "reason": "连续同一指令无主体切换，删除禁止可承接明确主语QA。"
+    },
+    {
+      "subject_id": "delete_alpha",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["delete", "alpha"],
+      "sources": [{"quote": "不得删除alpha.txt或beta.txt", "occurrence": 1}],
+      "reason": "alpha.txt是禁止删除的对象；OBJECT未额外新增输入用途。"
+    },
+    {
+      "subject_id": "delete_beta",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["delete", "beta"],
+      "sources": [{"quote": "不得删除alpha.txt或beta.txt", "occurrence": 1}],
+      "reason": "禁止覆盖beta.txt；否定语境中的或不允许任选一个删除。"
+    },
+    {
+      "subject_id": "read_alpha_scope",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["read_alpha", "read_files"],
+      "sources": [{"quote": "读取alpha.txt和beta.txt", "occurrence": 1}],
+      "reason": "范围根为两个文件的有限枚举，目标alpha属于同一读取事件的输入角色。"
+    },
+    {
+      "subject_id": "read_beta_scope",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["read_beta", "read_files"],
+      "sources": [{"quote": "读取alpha.txt和beta.txt", "occurrence": 1}],
+      "reason": "范围根为两个文件的有限枚举，目标beta属于同一读取事件的输入角色。"
+    },
+    {
+      "subject_id": "delete_alpha_scope",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["delete_alpha", "delete_files"],
+      "sources": [{"quote": "不得删除alpha.txt或beta.txt", "occurrence": 1}],
+      "reason": "有限枚举准确覆盖禁止对象，目标alpha绑定同一删除事件。"
+    },
+    {
+      "subject_id": "delete_beta_scope",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["delete_beta", "delete_files"],
+      "sources": [{"quote": "不得删除alpha.txt或beta.txt", "occurrence": 1}],
+      "reason": "有限枚举准确覆盖禁止对象，目标beta绑定同一删除事件。"
+    },
+    {
+      "subject_id": "read_files",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["alpha", "beta"],
+      "sources": [{"quote": "alpha.txt和beta.txt", "occurrence": 1}],
+      "reason": "原文列举两个具体文件，ENUM准确，未扩大为类别或全称域。"
+    },
+    {
+      "subject_id": "delete_files",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["alpha", "beta"],
+      "sources": [{"quote": "不得删除alpha.txt或beta.txt", "occurrence": 1}],
+      "reason": "禁止范围是两个具体文件的有限枚举，或不构成许可选择。"
+    }
+  ],
+  "issues": [],
+  "omissions": []
+}

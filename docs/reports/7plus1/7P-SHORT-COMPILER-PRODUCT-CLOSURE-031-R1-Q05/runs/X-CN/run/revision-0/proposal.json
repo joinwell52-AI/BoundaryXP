@@ -1,0 +1,398 @@
+{
+  "contract_version": "031-r1-q05.1",
+  "entities": [
+    {
+      "id": "ent_dev",
+      "label": "DEV",
+      "type": "OTHER",
+      "mentions": [
+        {
+          "quote": "DEV",
+          "occurrence": 1
+        }
+      ],
+      "alternatives": []
+    },
+    {
+      "id": "ent_config",
+      "label": "config.json",
+      "type": "FILE",
+      "mentions": [
+        {
+          "quote": "config.json",
+          "occurrence": 1
+        },
+        {
+          "quote": "该文件",
+          "occurrence": 1
+        }
+      ],
+      "alternatives": []
+    },
+    {
+      "id": "ent_items",
+      "label": "配置项",
+      "type": "CLASS",
+      "mentions": [
+        {
+          "quote": "配置项",
+          "occurrence": 1
+        }
+      ],
+      "alternatives": []
+    },
+    {
+      "id": "ent_debug",
+      "label": "debug选项",
+      "type": "OTHER",
+      "mentions": [
+        {
+          "quote": "debug选项",
+          "occurrence": 1
+        }
+      ],
+      "alternatives": []
+    }
+  ],
+  "events": [
+    {
+      "id": "evt_check",
+      "predicate": "核对",
+      "kind": "ACTION",
+      "layer": "MAIN",
+      "use": "CURRENT_TASK",
+      "modality": "REQUIRED",
+      "polarity": "POSITIVE",
+      "owner_id": "ROOT",
+      "constraint_ids": [],
+      "requires": [],
+      "sources": [
+        {
+          "quote": "请DEV核对config.json",
+          "occurrence": 1
+        }
+      ]
+    },
+    {
+      "id": "evt_modify",
+      "predicate": "修改",
+      "kind": "ACTION",
+      "layer": "MAIN",
+      "use": "CURRENT_TASK",
+      "modality": "FORBIDDEN",
+      "polarity": "POSITIVE",
+      "owner_id": "ROOT",
+      "constraint_ids": [],
+      "requires": [],
+      "sources": [
+        {
+          "quote": "不得修改该文件中的任何配置项",
+          "occurrence": 1
+        },
+        {
+          "quote": "但debug选项不受本条禁止限制",
+          "occurrence": 1
+        }
+      ]
+    }
+  ],
+  "claims": [
+    {
+      "id": "cl_check_performer",
+      "kind": "ROLE",
+      "event_id": "evt_check",
+      "entity_id": "ent_dev",
+      "role": "PERFORMER",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "artifact_use": null,
+      "scope_id": "evt_check",
+      "requires": [],
+      "sources": [
+        {
+          "quote": "请DEV核对config.json",
+          "occurrence": 1
+        }
+      ],
+      "note": "DEV是明确的核对执行主体；原文未指定其人或组类别。"
+    },
+    {
+      "id": "cl_check_input",
+      "kind": "ROLE",
+      "event_id": "evt_check",
+      "entity_id": "ent_config",
+      "role": "INPUT_OBJECT",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "artifact_use": null,
+      "scope_id": "evt_check",
+      "requires": [],
+      "sources": [
+        {
+          "quote": "核对config.json",
+          "occurrence": 1
+        }
+      ],
+      "note": "config.json是明确受核对文件。"
+    },
+    {
+      "id": "cl_check_scope",
+      "kind": "SCOPE",
+      "event_id": "evt_check",
+      "entity_id": null,
+      "role": null,
+      "expression_id": "expr_config",
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "artifact_use": null,
+      "scope_id": "ent_config",
+      "requires": [],
+      "sources": [
+        {
+          "quote": "核对config.json",
+          "occurrence": 1
+        }
+      ],
+      "note": "核对范围是该具体文件。"
+    },
+    {
+      "id": "cl_modify_performer",
+      "kind": "ROLE",
+      "event_id": "evt_modify",
+      "entity_id": "ent_dev",
+      "role": "PERFORMER",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "artifact_use": null,
+      "scope_id": "evt_modify",
+      "requires": [],
+      "sources": [
+        {
+          "quote": "请DEV核对config.json",
+          "occurrence": 1
+        },
+        {
+          "quote": "不得修改该文件中的任何配置项",
+          "occurrence": 1
+        }
+      ],
+      "note": "同一连续指令未切换主体，禁止修改的主体承接DEV。"
+    },
+    {
+      "id": "cl_modify_object",
+      "kind": "ROLE",
+      "event_id": "evt_modify",
+      "entity_id": "ent_items",
+      "role": "OBJECT",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "artifact_use": null,
+      "scope_id": "evt_modify",
+      "requires": [],
+      "sources": [
+        {
+          "quote": "不得修改该文件中的任何配置项",
+          "occurrence": 1
+        }
+      ],
+      "note": "禁止的对象类别是配置项，不由禁止另增外部输入。"
+    },
+    {
+      "id": "cl_modify_scope",
+      "kind": "SCOPE",
+      "event_id": "evt_modify",
+      "entity_id": null,
+      "role": null,
+      "expression_id": "expr_forall_except",
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "artifact_use": null,
+      "scope_id": "ent_items",
+      "requires": [],
+      "sources": [
+        {
+          "quote": "config.json",
+          "occurrence": 1
+        },
+        {
+          "quote": "该文件中的任何配置项",
+          "occurrence": 1
+        },
+        {
+          "quote": "但debug选项不受本条禁止限制",
+          "occurrence": 1
+        }
+      ],
+      "note": "该文件指config.json；禁止适用于文件内除debug选项外的每个配置项。例外仅解除本条禁止，不构成修改许可。"
+    }
+  ],
+  "expressions": [
+    {
+      "id": "expr_config",
+      "op": "ITEM",
+      "operands": [
+        "ent_config"
+      ],
+      "state": null,
+      "sources": [
+        {
+          "quote": "config.json",
+          "occurrence": 1
+        }
+      ]
+    },
+    {
+      "id": "expr_item_domain",
+      "op": "CATEGORY",
+      "operands": [
+        "ent_items",
+        "ent_config"
+      ],
+      "state": null,
+      "sources": [
+        {
+          "quote": "config.json",
+          "occurrence": 1
+        },
+        {
+          "quote": "该文件中的任何配置项",
+          "occurrence": 1
+        }
+      ]
+    },
+    {
+      "id": "expr_debug_exception",
+      "op": "ENUM",
+      "operands": [
+        "ent_debug"
+      ],
+      "state": null,
+      "sources": [
+        {
+          "quote": "debug选项不受本条禁止限制",
+          "occurrence": 1
+        }
+      ]
+    },
+    {
+      "id": "expr_except",
+      "op": "EXCEPT",
+      "operands": [
+        "expr_item_domain",
+        "expr_debug_exception"
+      ],
+      "state": null,
+      "sources": [
+        {
+          "quote": "该文件中的任何配置项",
+          "occurrence": 1
+        },
+        {
+          "quote": "但debug选项不受本条禁止限制",
+          "occurrence": 1
+        }
+      ]
+    },
+    {
+      "id": "expr_forall_except",
+      "op": "FORALL",
+      "operands": [
+        "expr_except"
+      ],
+      "state": null,
+      "sources": [
+        {
+          "quote": "该文件中的任何配置项",
+          "occurrence": 1
+        },
+        {
+          "quote": "但debug选项不受本条禁止限制",
+          "occurrence": 1
+        }
+      ]
+    }
+  ],
+  "issues": [],
+  "coverage": [
+    {
+      "sources": [
+        {
+          "quote": "请DEV核对config.json",
+          "occurrence": 1
+        }
+      ],
+      "claim_ids": [
+        "cl_check_performer",
+        "cl_check_input",
+        "cl_check_scope"
+      ],
+      "status": "EXPRESSED",
+      "affected_views": [
+        "I",
+        "A",
+        "P"
+      ],
+      "range_requirement": {
+        "kind": "SPECIFIC",
+        "scope_claim_ids": [
+          "cl_check_scope"
+        ]
+      }
+    },
+    {
+      "sources": [
+        {
+          "quote": "不得修改该文件中的任何配置项",
+          "occurrence": 1
+        }
+      ],
+      "claim_ids": [
+        "cl_modify_performer",
+        "cl_modify_object",
+        "cl_modify_scope"
+      ],
+      "status": "EXPRESSED",
+      "affected_views": [
+        "P",
+        "B"
+      ],
+      "range_requirement": {
+        "kind": "UNIVERSAL_EXCEPT",
+        "scope_claim_ids": [
+          "cl_modify_scope"
+        ]
+      }
+    },
+    {
+      "sources": [
+        {
+          "quote": "但debug选项不受本条禁止限制",
+          "occurrence": 1
+        }
+      ],
+      "claim_ids": [
+        "cl_modify_scope"
+      ],
+      "status": "EXPRESSED",
+      "affected_views": [
+        "B"
+      ],
+      "range_requirement": {
+        "kind": "UNIVERSAL_EXCEPT",
+        "scope_claim_ids": [
+          "cl_modify_scope"
+        ]
+      }
+    }
+  ]
+}

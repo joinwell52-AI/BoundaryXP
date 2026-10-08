@@ -1,0 +1,231 @@
+{
+  "contract_version": "031-r1-q05.1",
+  "reviews": [
+    {
+      "subject_id": "ent_ops",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [
+        {
+          "quote": "OPS",
+          "occurrence": 1
+        }
+      ],
+      "reason": "OPS身份明确；OTHER可保留未指定的人员或组织类别。"
+    },
+    {
+      "subject_id": "ent_file",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [
+        {
+          "quote": "records.csv",
+          "occurrence": 1
+        },
+        {
+          "quote": "that file",
+          "occurrence": 1
+        }
+      ],
+      "reason": "全文只有这一文件，that file明确承接records.csv；两端mentions保持同一身份。"
+    },
+    {
+      "subject_id": "ent_record",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [
+        {
+          "quote": "any record",
+          "occurrence": 1
+        }
+      ],
+      "reason": "record表示受禁令约束的记录类别，不是某条具体记录。"
+    },
+    {
+      "subject_id": "evt_inspect",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [
+        {
+          "quote": "OPS must inspect records.csv.",
+          "occurrence": 1
+        }
+      ],
+      "reason": "must明确要求当前执行检查，无额外条件或时序。"
+    },
+    {
+      "subject_id": "evt_delete",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [
+        {
+          "quote": "Do not delete any record in that file.",
+          "occurrence": 1
+        }
+      ],
+      "reason": "明确禁止删除；FORBIDDEN与正向删除谓词正确组合，对象范围另由SCOPE绑定。"
+    },
+    {
+      "subject_id": "cl_inspect_performer",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [
+        "evt_inspect",
+        "ent_ops"
+      ],
+      "sources": [
+        {
+          "quote": "OPS must inspect records.csv.",
+          "occurrence": 1
+        }
+      ],
+      "reason": "OPS是检查动作的明确执行者。"
+    },
+    {
+      "subject_id": "cl_inspect_input",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [
+        "evt_inspect",
+        "ent_file"
+      ],
+      "sources": [
+        {
+          "quote": "inspect records.csv",
+          "occurrence": 1
+        }
+      ],
+      "reason": "records.csv是明确受检文件，INPUT_OBJECT用途成立。"
+    },
+    {
+      "subject_id": "cl_inspect_scope",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [
+        "cl_inspect_input",
+        "expr_file"
+      ],
+      "sources": [
+        {
+          "quote": "inspect records.csv",
+          "occurrence": 1
+        }
+      ],
+      "reason": "范围绑定检查事件及其受检对象，以ITEM表达这一具体文件。"
+    },
+    {
+      "subject_id": "cl_delete_performer",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [
+        "evt_delete",
+        "ent_ops"
+      ],
+      "sources": [
+        {
+          "quote": "OPS must inspect records.csv.",
+          "occurrence": 1
+        },
+        {
+          "quote": "Do not delete any record in that file.",
+          "occurrence": 1
+        }
+      ],
+      "reason": "连续同一指令没有主体切换或竞争执行者，删除禁令可承接OPS，来源覆盖两端。"
+    },
+    {
+      "subject_id": "cl_delete_object",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [
+        "evt_delete",
+        "ent_record"
+      ],
+      "sources": [
+        {
+          "quote": "delete any record in that file",
+          "occurrence": 1
+        }
+      ],
+      "reason": "删除对象绑定记录类别，并由同事件范围限定；未将禁止对象新增为外部输入。"
+    },
+    {
+      "subject_id": "cl_delete_scope",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [
+        "cl_delete_object",
+        "ent_file",
+        "expr_all_records"
+      ],
+      "sources": [
+        {
+          "quote": "records.csv",
+          "occurrence": 1
+        },
+        {
+          "quote": "Do not delete any record in that file.",
+          "occurrence": 1
+        }
+      ],
+      "reason": "同一删除事件的记录类别绑定FORALL范围，容器为records.csv，完整表达文件内任意记录的禁令。"
+    },
+    {
+      "subject_id": "expr_file",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [
+        "ent_file"
+      ],
+      "sources": [
+        {
+          "quote": "records.csv",
+          "occurrence": 1
+        }
+      ],
+      "reason": "ITEM的唯一操作数是明确的具体文件。"
+    },
+    {
+      "subject_id": "expr_record_domain",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [
+        "ent_record",
+        "ent_file"
+      ],
+      "sources": [
+        {
+          "quote": "records.csv",
+          "occurrence": 1
+        },
+        {
+          "quote": "any record in that file",
+          "occurrence": 1
+        }
+      ],
+      "reason": "CATEGORY以记录CLASS和明确文件容器构成成员域，没有扩大到其他文件。"
+    },
+    {
+      "subject_id": "expr_all_records",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [
+        "expr_record_domain"
+      ],
+      "sources": [
+        {
+          "quote": "Do not delete any record in that file.",
+          "occurrence": 1
+        }
+      ],
+      "reason": "否定命令中的any表示该域每条记录均受禁止，FORALL正确表达全称范围，无例外或成员归属观测断言。"
+    }
+  ],
+  "issues": [],
+  "omissions": []
+}
