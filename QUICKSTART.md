@@ -1,54 +1,93 @@
-# BoundX 快速开始 / Quick Start
+# BoundX短文本编译器：快速开始
 
-已有[私有 GitHub 源码预发布版 `1.3.0-preview.0`](https://github.com/joinwell52-AI/BoundX/releases/tag/v1.3.0-preview.0)；无 npm/PyPI 包、安装包或独立二进制。 / A private GitHub source prerelease is available; no npm/PyPI packages, installers or standalone binaries are published.
+[English](QUICKSTART.en.md) · [中文首页](README.zh-CN.md) · [版本与已知限制](docs/SHORT-COMPILER-STATUS.md)
 
-现有标签不移动，其源码归档仍保留发布前的文档；以下收尾说明适用于后续源码提交。 / The existing tag is unchanged and its archive retains pre-release documentation; these corrections apply to subsequent source commits.
+文档日期：2026-10-08。当前为可运行的**候选版**，不是已经通过全部产品质量门的正式版。请先区分已安装用户入口、开发工作区和旧BXP应用，不要混用命令或成绩。
 
-## 1. 安装与计算 / Install and evaluate
+## 1. 已经完成本机安装：固定打开58618
 
-Node.js 22.18+，在 `D:\boundx` 运行：
+在Windows命令提示符中运行：
 
-```text
-npm ci
-node cli.mjs evaluate examples/bxp/zh-CN-complete.json
-node cli.mjs evaluate examples/bxp/en-unresolved.json
-node cli.mjs protocol-info
+```bat
+cd /d D:\boundx
+npm run 7plus1:ui
 ```
 
-输入为生产者提供的 `boundx-task/v1`，输出为 `boundx-result/v1`；不是把自然语言文本直接交给计算器。No model key or Python is needed for the canonical BXP path.
+打开`http://127.0.0.1:58618/`。同一安装版本已经运行时，启动器只返回地址，不启动第二个服务。实际监听状态须在本机确认；维护报告中的旧PID不可拿来直接停止进程。
 
-## 2. 本机 UI / Local UI
+这个入口当前锁定完整安装候选`0.1.0-candidate.031-r1.2`、核心`031-r1-c3`和合同`031-r1.1`。配置与历史在`.boundx/short-compiler-031-r1/`，运行资源在其`versions/`目录，不混读开发工作区的Skill/Schema。
 
-```text
-npm run ui
-```
+**这不是全新克隆后的自动安装命令。** 安装目录缺失、指针换版、端口被未知进程占用或资源摘要不一致会明确拒绝，不自动选择另一个端口，也不停止未知进程。实现见[固定启动器](product/short-compiler/launch-installed.mjs)，维护依据见[恢复回执](docs/reports/7plus1/031-R1-RESTORE-58618/REPORT.md)。
 
-也可运行 `start-ui.cmd`。保持进程运行，打开显示的 127.0.0.1 地址，导入或粘贴 [BXP 示例](examples/README.md)。不要直接打开 HTML。八桶显式三态；三个结果轴独立；原文不翻译覆盖。
+## 2. 使用前提和操作
 
-Keep the server running and open its loopback URL. Import/paste producer IR; the UI calls the same local core as CLI/MCP. No extraction or model invocation occurs in the main page.
+需要Windows、Node.js 22.18或以上，以及本机已经安装、登录且有可用用量的Codex CLI。不要为本指南新增API key、切换收费通道或修改全局账号。任务文本会发送给配置的模型服务；本地页面不是离线推理。
 
-## 3. MCP / Agent
+粘贴或上传UTF-8的`.txt/.md`，非空且最多300个Unicode码点，点击“开始编译”。输入超限不能截断。示例仅用于演示，不是已运行的新验收案例：
 
 ```text
-npm run mcp
+请PM核对data.csv的字段名，并生成check.md；不得修改data.csv。
 ```
 
-宿主显式配置 Node 运行 `mcp.mjs`。优先使用 `bx_evaluate_task`（完整 IR 直接作为 arguments）或 `bx_evaluate_task_json`（仅 `raw_json` 文本字段）。读取 `boundx://protocol-info` 以及资源列表中的精确 task/result Schema。No automatic registration, approval or task execution.
+查看动作、对象、角色、模态、条件、来源与未决；展开全过程可检查候选、审阅、技术校验和IR。导出JSON、同源中文或完整Trace。历史打开不重新调用模型；修改原文再编译是新的运行。
 
-## 4. 可选研究依赖 / Optional research dependencies
+解析和独立审阅需要等待模型响应，界面显示真实阶段。刷新应恢复同一运行，不当作重新提交。取消只确认本机受控进程停止，不能由此证明云端停止计费。调用失败、未决、编译完成和产品验收通过是不同状态。
 
-Python 3.10+，仅旧研究功能与完整开发测试需要：
+## 3. 新目录安装：使用完整候选包，不用开发目录拼资源
 
-```text
-python -m venv .venv
-.venv\Scripts\python.exe -m pip install -r python/requirements.txt
-node cli.mjs legacy task examples/task.json
+已核验的旧候选包见[031-R1交付页](docs/reports/7plus1/7P-SHORT-COMPILER-PRODUCT-CLOSURE-031-R1-LONG/REPORT.md)及其[运行包](docs/reports/7plus1/7P-SHORT-COMPILER-PRODUCT-CLOSURE-031-R1-LONG/delivery/BoundX-short-compiler-0.1.0-candidate.031-r1.2.zip)。它仍有已知Q05范围限制；下载包不代表语义验收通过。
+
+以下仅适用于**新安装且58618没有被使用**的机器或环境。在解压后的包根目录执行：
+
+```bat
+node product/short-compiler/deploy.mjs install --home D:\boundx-short --port 58618
+node product/short-compiler/deploy.mjs start --home D:\boundx-short
 ```
 
-Linux/macOS 将路径改为 `.venv/bin/python`。旧界面位于 `/legacy`，旧 API 位于 `/api/legacy/`，均已弃用、不是 BXP。旧 PM 模型功能只有显式配置并调用时才会向选定服务发送任务；不要把它与 BXP 本地计算混淆。
+已有用户实例不要再次install，不要删目录重装或强抢端口。使用原安装home的启动方式。新安装home与`D:\boundx`工作区默认home不同，不能假定根仓库`npm run 7plus1:ui`会自动发现自选目录。
 
-## 5. 核对结果 / Inspect results
+Q05新候选`0.1.0-candidate.031-r1.q05.1`已包含全称结构，但适用域和完整补测尚未闭合，不作为本指南的自动升级目标。区别见[状态页](docs/SHORT-COMPILER-STATUS.md)。
 
-核对来源、码点、版本及发现；`absent` 要求补依据，`unresolved` 要求澄清解释。不要把完整或一致当成可执行。Both authority fields remain null; only the host and responsible people may decide what happens next.
+## 4. 网页与CLI比较必须同版
 
-[生产者指南](docs/AGENT-BXP-PRODUCER.md) · [UI](docs/UI-GUIDE.md) · [验证](docs/VALIDATION.md) · [首页](README.md)
+在**同一完整安装版本的包根目录**运行CLI：
+
+```bat
+npm run 7plus1 -- --input D:\boundx\task.txt --output D:\boundx\new-run-directory
+```
+
+输出目录必须是新目录，不能覆盖旧结果。命令会实际调用模型；查历史或纯程序回放应使用相应显式入口，不把它们计成新的模型能力验证。
+
+特别注意：根开发仓库的`npm run 7plus1`当前直接调用工作区核心，可能已经是较新的Q05合同；根仓库`npm run 7plus1:ui`却锁定已安装候选。两者使用同一核心的实现谱系，**不保证此时同一版本**。不能拿一次工作区CLI与旧安装UI的结果宣称同版一致。
+
+## 5. 停止、升级与回滚
+
+先核对具体实例、版本、当前运行和备份，确认空闲后使用正常审批及停止方式。不得按进程名停止所有Node/Codex，不得绕过策略拒绝，也不要重新启用历史混版进程。
+
+从获准且完整校验的新包执行：
+
+```bat
+node product/short-compiler/deploy.mjs upgrade --home D:\boundx-short --confirmed-idle
+node product/short-compiler/deploy.mjs start --home D:\boundx-short
+```
+
+回滚同样在正常停止目标实例后执行：
+
+```bat
+node product/short-compiler/deploy.mjs rollback --home D:\boundx-short --confirmed-idle
+node product/short-compiler/deploy.mjs start --home D:\boundx-short
+```
+
+这些是维护操作说明，不是本次文档更新自动启动升级的授权。已有固定工作区启动器还锁定具体版本，升级后必须同步其获准版本绑定，否则会拒绝；不能取消校验来强行启动。历史按原生成版本保留，不重新解析覆盖。
+
+## 6. 既有BXP入口和main分支
+
+`npm run ui`启动既有BXP应用，不是现在的短文本58618入口。结构化IR计算示例和`node cli.mjs protocol-info`也不等于直接解析自然语言。使用这些能力时参见[协议实现](protocol/IMPLEMENTATION.md)及[示例](examples/README.md)。
+
+`main`和`review/7plus1-parser`是不同代码快照。当前固定短文本启动脚本在开发分支，不能告诉只克隆main的用户该命令一定存在。不自动切换用户已有脏工作区、不为了阅读文档合并候选代码。
+
+## 7. 检查与故障提示
+
+先检查版本清单、安装home、端口、登录和网络，再看具体错误。遇到`SKILL_CONTRACT_VERSION_MISMATCH`或摘要错误应恢复完整同版资源，不能复制一份新Schema到旧安装目录“补好”。遇到登录、额度或策略拒绝停止对应重试，不循环调用。
+
+本轮文档只核对了命令与源码，不在用户电脑运行上述操作。测试和预算规则见[验证说明](docs/VALIDATION.md)，当前质量状态见[状态页](docs/SHORT-COMPILER-STATUS.md)。
