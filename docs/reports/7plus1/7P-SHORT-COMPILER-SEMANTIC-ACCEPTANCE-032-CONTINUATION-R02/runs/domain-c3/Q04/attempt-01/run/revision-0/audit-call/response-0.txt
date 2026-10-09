@@ -1,0 +1,221 @@
+{
+  "contract_version": "032.1",
+  "reviews": [
+    {
+      "subject_id": "pm",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [{"quote": "PM", "occurrence": 1}],
+      "reason": "身份明确；OTHER可保留未指定的人或组类别，不推定岗位权限。"
+    },
+    {
+      "subject_id": "qa",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [{"quote": "QA", "occurrence": 1}],
+      "reason": "身份明确；OTHER作为未指定类别占位合理。"
+    },
+    {
+      "subject_id": "tool_file",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [{"quote": "tool-list.json", "occurrence": 1}],
+      "reason": "明确命名的文件身份。"
+    },
+    {
+      "subject_id": "tool_list",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["tool_file"],
+      "sources": [{"quote": "tool-list.json中的MCP工具清单", "occurrence": 1}],
+      "reason": "指向文件内的具体清单，作为DOCUMENT合理；不是全体MCP工具类别。"
+    },
+    {
+      "subject_id": "report",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [
+        {"quote": "生成mcp-check.md", "occurrence": 1},
+        {"quote": "QA负责复核mcp-check.md", "occurrence": 1}
+      ],
+      "reason": "两次名称指向唯一当前产物，无版本或其他来源竞争；mentions完整保留同一身份。"
+    },
+    {
+      "subject_id": "check",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [{"quote": "请PM检查tool-list.json中的MCP工具清单", "occurrence": 1}],
+      "reason": "当前任务明确要求检查，动作层级、模态和极性正确。"
+    },
+    {
+      "subject_id": "generate",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [{"quote": "并生成mcp-check.md", "occurrence": 1}],
+      "reason": "生成是明确追加的要求；并列不产生检查与生成的强先后约束。"
+    },
+    {
+      "subject_id": "review",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [{"quote": "QA负责复核mcp-check.md", "occurrence": 1}],
+      "reason": "复核是当前明确职责，不是条件或背景事件。"
+    },
+    {
+      "subject_id": "check_performer",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["pm", "check"],
+      "sources": [{"quote": "请PM检查tool-list.json中的MCP工具清单", "occurrence": 1}],
+      "reason": "PM明确执行检查。"
+    },
+    {
+      "subject_id": "check_input",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["check", "tool_list"],
+      "sources": [{"quote": "检查tool-list.json中的MCP工具清单", "occurrence": 1}],
+      "reason": "明确受检输入是文件中的清单，没有扩大为整个文件。"
+    },
+    {
+      "subject_id": "check_scope",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["check_input", "list_item"],
+      "sources": [{"quote": "tool-list.json中的MCP工具清单", "occurrence": 1}],
+      "reason": "同一检查事件的输入对象与ITEM范围一致，具体清单没有被误写成全称类别域。"
+    },
+    {
+      "subject_id": "list_container",
+      "field_path": "",
+      "verdict": "CONTRADICT",
+      "context_refs": ["tool_list", "tool_file", "file_item", "check_scope"],
+      "sources": [{"quote": "tool-list.json中的MCP工具清单", "occurrence": 1}],
+      "reason": "ITEM(tool_file)表示文件本身，不能表达tool_list位于该文件中的关系；该SCOPE目标是清单，表达式实际叶对象却是文件，note不能补成容器绑定。"
+    },
+    {
+      "subject_id": "generate_performer",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["pm", "generate"],
+      "sources": [
+        {"quote": "请PM检查tool-list.json中的MCP工具清单", "occurrence": 1},
+        {"quote": "并生成mcp-check.md", "occurrence": 1}
+      ],
+      "reason": "连续并列指令承接PM主语，两端来源齐全；QA的主体切换发生在复核句。"
+    },
+    {
+      "subject_id": "generate_result",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["generate", "report"],
+      "sources": [{"quote": "生成mcp-check.md", "occurrence": 1}],
+      "reason": "文件是生成事件的RESULT；原文没有交付要求，不增加DELIVERABLE。"
+    },
+    {
+      "subject_id": "generate_scope",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["generate_result", "generated_report_item"],
+      "sources": [{"quote": "生成mcp-check.md", "occurrence": 1}],
+      "reason": "范围准确绑定同一生成事件的具体结果文件。"
+    },
+    {
+      "subject_id": "review_reviewer",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["qa", "review"],
+      "sources": [{"quote": "QA负责复核mcp-check.md", "occurrence": 1}],
+      "reason": "QA明确承担复核角色。"
+    },
+    {
+      "subject_id": "review_object",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["report", "generate_result", "review"],
+      "sources": [
+        {"quote": "生成mcp-check.md", "occurrence": 1},
+        {"quote": "QA负责复核mcp-check.md", "occurrence": 1}
+      ],
+      "reason": "复核对象是同一本次生成产物；OBJECT正确保留内部用途，没有新增外部输入。"
+    },
+    {
+      "subject_id": "review_scope",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["review_object", "reviewed_report_item"],
+      "sources": [{"quote": "复核mcp-check.md", "occurrence": 1}],
+      "reason": "范围与同一复核事件的具体对象一致。"
+    },
+    {
+      "subject_id": "report_use",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["generate_result", "review_object", "report"],
+      "sources": [
+        {"quote": "生成mcp-check.md", "occurrence": 1},
+        {"quote": "QA负责复核mcp-check.md", "occurrence": 1}
+      ],
+      "reason": "两端支持复核使用本次生成实例；生产RESULT和消费OBJECT引用闭合。USED_PORTION没有添加完整生成结束后的强时序。"
+    },
+    {
+      "subject_id": "list_item",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["tool_list"],
+      "sources": [{"quote": "tool-list.json中的MCP工具清单", "occurrence": 1}],
+      "reason": "ITEM准确表示具体清单。"
+    },
+    {
+      "subject_id": "file_item",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["tool_file"],
+      "sources": [{"quote": "tool-list.json中的MCP工具清单", "occurrence": 1}],
+      "reason": "独立表达式准确表示具体文件；它本身不表达清单与文件的包含关系。"
+    },
+    {
+      "subject_id": "generated_report_item",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["report"],
+      "sources": [{"quote": "生成mcp-check.md", "occurrence": 1}],
+      "reason": "具体生成文件的ITEM表达正确。"
+    },
+    {
+      "subject_id": "reviewed_report_item",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["report"],
+      "sources": [{"quote": "复核mcp-check.md", "occurrence": 1}],
+      "reason": "具体复核文件的ITEM表达正确，保留与生成产物的同一身份。"
+    }
+  ],
+  "issues": [
+    {
+      "id": "audit_container_binding",
+      "issue_kind": "BINDING",
+      "subject_ids": ["list_container"],
+      "field_path": "expression_id",
+      "context_refs": ["file_item", "tool_list", "tool_file", "check_scope"],
+      "sources": [{"quote": "tool-list.json中的MCP工具清单", "occurrence": 1}],
+      "reason": "以文件ITEM作清单的SCOPE不能表达容器关系。相关coverage不能凭该主张认定容器限定已结构化闭合；需由宿主经有界修订核对可表达方式或保留合同覆盖缺口。",
+      "suggested_json": null
+    }
+  ],
+  "omissions": [
+    {
+      "id": "omitted_container_relation",
+      "sources": [{"quote": "tool-list.json中的MCP工具清单", "occurrence": 1}],
+      "affected_views": ["I"],
+      "reason": "原文明示受检清单位于tool-list.json中。候选保留了名称和两个对象，但没有有效的可消费容器关系；list_container中的文件ITEM及note不能替代该关系。"
+    }
+  ]
+}

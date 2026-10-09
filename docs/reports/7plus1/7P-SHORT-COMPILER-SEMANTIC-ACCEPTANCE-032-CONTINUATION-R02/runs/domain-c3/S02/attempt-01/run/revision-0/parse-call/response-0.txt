@@ -1,0 +1,414 @@
+{
+  "contract_version": "032.1",
+  "entities": [
+    {
+      "id": "person_pm",
+      "label": "PM",
+      "type": "OTHER",
+      "mentions": [
+        {"quote": "PM", "occurrence": 1},
+        {"quote": "PM", "occurrence": 2}
+      ],
+      "alternatives": []
+    },
+    {
+      "id": "person_qa",
+      "label": "QA",
+      "type": "OTHER",
+      "mentions": [{"quote": "QA", "occurrence": 1}],
+      "alternatives": []
+    },
+    {
+      "id": "person_admin",
+      "label": "ADMIN",
+      "type": "OTHER",
+      "mentions": [{"quote": "ADMIN", "occurrence": 1}],
+      "alternatives": []
+    },
+    {
+      "id": "file_brief",
+      "label": "brief.md",
+      "type": "FILE",
+      "mentions": [
+        {"quote": "brief.md", "occurrence": 1},
+        {"quote": "brief.md", "occurrence": 2},
+        {"quote": "同一文件", "occurrence": 1}
+      ],
+      "alternatives": []
+    }
+  ],
+  "events": [
+    {
+      "id": "event_generate",
+      "predicate": "生成",
+      "kind": "ACTION",
+      "layer": "MAIN",
+      "use": "CURRENT_TASK",
+      "modality": "REQUIRED",
+      "polarity": "POSITIVE",
+      "owner_id": "ROOT",
+      "constraint_ids": [],
+      "requires": [],
+      "sources": [{"quote": "请PM生成brief.md", "occurrence": 1}]
+    },
+    {
+      "id": "event_review",
+      "predicate": "复核",
+      "kind": "ACTION",
+      "layer": "MAIN",
+      "use": "CURRENT_TASK",
+      "modality": "REQUIRED",
+      "polarity": "POSITIVE",
+      "owner_id": "ROOT",
+      "constraint_ids": ["temporal_review"],
+      "requires": [],
+      "sources": [{"quote": "随后由QA复核brief.md", "occurrence": 1}]
+    },
+    {
+      "id": "event_submit",
+      "predicate": "提交",
+      "kind": "ACTION",
+      "layer": "MAIN",
+      "use": "CURRENT_TASK",
+      "modality": "REQUIRED",
+      "polarity": "POSITIVE",
+      "owner_id": "ROOT",
+      "constraint_ids": ["temporal_submit"],
+      "requires": [],
+      "sources": [{"quote": "再由PM把同一文件提交给ADMIN", "occurrence": 1}]
+    }
+  ],
+  "claims": [
+    {
+      "id": "role_generate_pm",
+      "kind": "ROLE",
+      "event_id": "event_generate",
+      "entity_id": "person_pm",
+      "role": "PERFORMER",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "artifact_use": null,
+      "scope_id": "event_generate",
+      "requires": [],
+      "sources": [{"quote": "请PM生成brief.md", "occurrence": 1}],
+      "note": "PM是生成动作的明确执行者。"
+    },
+    {
+      "id": "role_generate_result",
+      "kind": "ROLE",
+      "event_id": "event_generate",
+      "entity_id": "file_brief",
+      "role": "RESULT",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "artifact_use": null,
+      "scope_id": "event_generate",
+      "requires": [],
+      "sources": [{"quote": "生成brief.md", "occurrence": 1}],
+      "note": "brief.md是生成结果。"
+    },
+    {
+      "id": "role_review_qa",
+      "kind": "ROLE",
+      "event_id": "event_review",
+      "entity_id": "person_qa",
+      "role": "REVIEWER",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "artifact_use": null,
+      "scope_id": "event_review",
+      "requires": [],
+      "sources": [{"quote": "由QA复核brief.md", "occurrence": 1}],
+      "note": "QA承担本次复核。"
+    },
+    {
+      "id": "role_review_object",
+      "kind": "ROLE",
+      "event_id": "event_review",
+      "entity_id": "file_brief",
+      "role": "OBJECT",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "artifact_use": null,
+      "scope_id": "event_review",
+      "requires": [],
+      "sources": [
+        {"quote": "生成brief.md", "occurrence": 1},
+        {"quote": "随后由QA复核brief.md", "occurrence": 1}
+      ],
+      "note": "复核的是本次生成的同一文件，属于内部产物用途。"
+    },
+    {
+      "id": "role_submit_pm",
+      "kind": "ROLE",
+      "event_id": "event_submit",
+      "entity_id": "person_pm",
+      "role": "PERFORMER",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "artifact_use": null,
+      "scope_id": "event_submit",
+      "requires": [],
+      "sources": [{"quote": "由PM把同一文件提交给ADMIN", "occurrence": 1}],
+      "note": "提交执行者明确为PM。"
+    },
+    {
+      "id": "role_submit_recipient",
+      "kind": "ROLE",
+      "event_id": "event_submit",
+      "entity_id": "person_admin",
+      "role": "RECIPIENT",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "artifact_use": null,
+      "scope_id": "event_submit",
+      "requires": [],
+      "sources": [{"quote": "提交给ADMIN", "occurrence": 1}],
+      "note": "ADMIN是提交接收者。"
+    },
+    {
+      "id": "role_submit_deliverable",
+      "kind": "ROLE",
+      "event_id": "event_submit",
+      "entity_id": "file_brief",
+      "role": "DELIVERABLE",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "artifact_use": null,
+      "scope_id": "event_submit",
+      "requires": [],
+      "sources": [
+        {"quote": "生成brief.md", "occurrence": 1},
+        {"quote": "复核brief.md", "occurrence": 1},
+        {"quote": "把同一文件提交给ADMIN", "occurrence": 1}
+      ],
+      "note": "同一文件明确回指本次生成并复核的brief.md。"
+    },
+    {
+      "id": "scope_generate",
+      "kind": "SCOPE",
+      "event_id": "event_generate",
+      "entity_id": null,
+      "role": null,
+      "expression_id": "item_brief",
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "artifact_use": null,
+      "scope_id": "file_brief",
+      "requires": [],
+      "sources": [{"quote": "生成brief.md", "occurrence": 1}],
+      "note": "生成结果范围为指定文件。"
+    },
+    {
+      "id": "scope_review",
+      "kind": "SCOPE",
+      "event_id": "event_review",
+      "entity_id": null,
+      "role": null,
+      "expression_id": "item_brief",
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "artifact_use": null,
+      "scope_id": "file_brief",
+      "requires": [],
+      "sources": [{"quote": "复核brief.md", "occurrence": 1}],
+      "note": "复核对象范围为指定文件。"
+    },
+    {
+      "id": "scope_submit",
+      "kind": "SCOPE",
+      "event_id": "event_submit",
+      "entity_id": null,
+      "role": null,
+      "expression_id": "item_brief",
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "artifact_use": null,
+      "scope_id": "file_brief",
+      "requires": [],
+      "sources": [
+        {"quote": "复核brief.md", "occurrence": 1},
+        {"quote": "把同一文件提交给ADMIN", "occurrence": 1}
+      ],
+      "note": "交付范围为回指的同一指定文件。"
+    },
+    {
+      "id": "temporal_review",
+      "kind": "TEMPORAL",
+      "event_id": "event_review",
+      "entity_id": null,
+      "role": null,
+      "expression_id": "state_generate_completed",
+      "direction": "ORDER",
+      "temporal": "AFTER",
+      "quantity": null,
+      "artifact_use": null,
+      "scope_id": "event_review",
+      "requires": [],
+      "sources": [
+        {"quote": "请PM生成brief.md", "occurrence": 1},
+        {"quote": "随后由QA复核brief.md", "occurrence": 1}
+      ],
+      "note": "随后表达复核在生成之后，不断言生成已完成。"
+    },
+    {
+      "id": "temporal_submit",
+      "kind": "TEMPORAL",
+      "event_id": "event_submit",
+      "entity_id": null,
+      "role": null,
+      "expression_id": "state_review_completed",
+      "direction": "ORDER",
+      "temporal": "AFTER",
+      "quantity": null,
+      "artifact_use": null,
+      "scope_id": "event_submit",
+      "requires": [],
+      "sources": [
+        {"quote": "随后由QA复核brief.md", "occurrence": 1},
+        {"quote": "再由PM把同一文件提交给ADMIN", "occurrence": 1}
+      ],
+      "note": "再表达提交在复核之后，未要求复核通过。"
+    },
+    {
+      "id": "artifact_review",
+      "kind": "ARTIFACT_USE",
+      "event_id": "event_review",
+      "entity_id": "file_brief",
+      "role": null,
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "artifact_use": {
+        "producer_result_id": "role_generate_result",
+        "consumer_role_id": "role_review_object",
+        "availability": "USED_PORTION"
+      },
+      "scope_id": "event_review",
+      "requires": [],
+      "sources": [
+        {"quote": "生成brief.md", "occurrence": 1},
+        {"quote": "随后由QA复核brief.md", "occurrence": 1}
+      ],
+      "note": "复核消费本次生成结果；明确先后另以TEMPORAL表达。"
+    },
+    {
+      "id": "artifact_submit",
+      "kind": "ARTIFACT_USE",
+      "event_id": "event_submit",
+      "entity_id": "file_brief",
+      "role": null,
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "artifact_use": {
+        "producer_result_id": "role_generate_result",
+        "consumer_role_id": "role_submit_deliverable",
+        "availability": "USED_PORTION"
+      },
+      "scope_id": "event_submit",
+      "requires": [],
+      "sources": [
+        {"quote": "生成brief.md", "occurrence": 1},
+        {"quote": "复核brief.md", "occurrence": 1},
+        {"quote": "再由PM把同一文件提交给ADMIN", "occurrence": 1}
+      ],
+      "note": "提交使用本次生成的同一结果，未另行明示完整产物要求。"
+    }
+  ],
+  "expressions": [
+    {
+      "id": "item_brief",
+      "op": "ITEM",
+      "operands": ["file_brief"],
+      "state": null,
+      "sources": [
+        {"quote": "brief.md", "occurrence": 1},
+        {"quote": "brief.md", "occurrence": 2},
+        {"quote": "同一文件", "occurrence": 1}
+      ]
+    },
+    {
+      "id": "state_generate_completed",
+      "op": "STATE",
+      "operands": [],
+      "state": {
+        "predicate": "生成完成",
+        "event_id": "event_generate",
+        "args": ["file_brief"],
+        "polarity": "POSITIVE"
+      },
+      "sources": [
+        {"quote": "请PM生成brief.md", "occurrence": 1},
+        {"quote": "随后", "occurrence": 1}
+      ]
+    },
+    {
+      "id": "state_review_completed",
+      "op": "STATE",
+      "operands": [],
+      "state": {
+        "predicate": "复核完成",
+        "event_id": "event_review",
+        "args": ["file_brief"],
+        "polarity": "POSITIVE"
+      },
+      "sources": [
+        {"quote": "由QA复核brief.md", "occurrence": 1},
+        {"quote": "再由PM", "occurrence": 1}
+      ]
+    }
+  ],
+  "issues": [],
+  "coverage": [
+    {
+      "sources": [{"quote": "请PM生成brief.md", "occurrence": 1}],
+      "claim_ids": ["role_generate_pm", "role_generate_result", "scope_generate"],
+      "status": "EXPRESSED",
+      "affected_views": ["A", "P", "O"],
+      "range_requirement": {
+        "kind": "SPECIFIC",
+        "scope_claim_ids": ["scope_generate"]
+      }
+    },
+    {
+      "sources": [{"quote": "随后由QA复核brief.md", "occurrence": 1}],
+      "claim_ids": ["role_review_qa", "role_review_object", "scope_review", "temporal_review", "artifact_review"],
+      "status": "EXPRESSED",
+      "affected_views": ["A", "P", "O"],
+      "range_requirement": {
+        "kind": "SPECIFIC",
+        "scope_claim_ids": ["scope_review"]
+      }
+    },
+    {
+      "sources": [{"quote": "再由PM把同一文件提交给ADMIN", "occurrence": 1}],
+      "claim_ids": ["role_submit_pm", "role_submit_recipient", "role_submit_deliverable", "scope_submit", "temporal_submit", "artifact_submit"],
+      "status": "EXPRESSED",
+      "affected_views": ["A", "P", "O"],
+      "range_requirement": {
+        "kind": "SPECIFIC",
+        "scope_claim_ids": ["scope_submit"]
+      }
+    }
+  ]
+}

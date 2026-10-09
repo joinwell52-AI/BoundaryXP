@@ -1,0 +1,220 @@
+{
+  "contract_version": "032.1",
+  "reviews": [
+    {
+      "subject_id": "ent_pm",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [
+        {
+          "quote": "PM",
+          "occurrence": 1
+        }
+      ],
+      "reason": "PM身份明确；OTHER可占位原文未指定的人或组类别。"
+    },
+    {
+      "subject_id": "ent_a",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [
+        {
+          "quote": "a.ini",
+          "occurrence": 1
+        }
+      ],
+      "reason": "明确列举的受检文件。"
+    },
+    {
+      "subject_id": "ent_b",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [
+        {
+          "quote": "b.ini",
+          "occurrence": 1
+        },
+        {
+          "quote": "b.ini",
+          "occurrence": 2
+        }
+      ],
+      "reason": "受检文件与禁止修改对象为同一b.ini，无版本或身份竞争。"
+    },
+    {
+      "subject_id": "ent_inputs",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [
+        {
+          "quote": "a.ini与b.ini",
+          "occurrence": 1
+        }
+      ],
+      "reason": "表示原文明示的有限对象集合，其成员由ENUM绑定，未扩大范围。"
+    },
+    {
+      "subject_id": "evt_check",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [
+        {
+          "quote": "请PM对a.ini与b.ini逐一核对",
+          "occurrence": 1
+        }
+      ],
+      "reason": "当前任务明确要求逐一核对两个文件。"
+    },
+    {
+      "subject_id": "evt_modify",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [
+        {
+          "quote": "不得修改b.ini",
+          "occurrence": 1
+        }
+      ],
+      "reason": "明确禁止修改，FORBIDDEN与正向动作谓词组合准确。"
+    },
+    {
+      "subject_id": "cl_check_performer",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [
+        "ent_pm",
+        "evt_check"
+      ],
+      "sources": [
+        {
+          "quote": "请PM对a.ini与b.ini逐一核对",
+          "occurrence": 1
+        }
+      ],
+      "reason": "PM被明确指定为核对执行者。"
+    },
+    {
+      "subject_id": "cl_check_input",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [
+        "ent_inputs",
+        "expr_inputs"
+      ],
+      "sources": [
+        {
+          "quote": "对a.ini与b.ini逐一核对",
+          "occurrence": 1
+        }
+      ],
+      "reason": "两个文件组成当前核对的明确受检范围，INPUT_OBJECT用途正确。"
+    },
+    {
+      "subject_id": "cl_check_scope",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [
+        "cl_check_input",
+        "expr_inputs"
+      ],
+      "sources": [
+        {
+          "quote": "a.ini与b.ini逐一核对",
+          "occurrence": 1
+        }
+      ],
+      "reason": "同一核对事件的对象范围绑定有限枚举；逐一覆盖列举成员，不要求扩展为类别全称。"
+    },
+    {
+      "subject_id": "cl_modify_performer",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [
+        "cl_check_performer",
+        "evt_modify"
+      ],
+      "sources": [
+        {
+          "quote": "请PM对a.ini与b.ini逐一核对",
+          "occurrence": 1
+        },
+        {
+          "quote": "不得修改b.ini",
+          "occurrence": 1
+        }
+      ],
+      "reason": "连续同一指令的追加禁令可承接PM主体，两端来源齐备且没有主体切换。"
+    },
+    {
+      "subject_id": "cl_modify_object",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [
+        "ent_b",
+        "evt_modify"
+      ],
+      "sources": [
+        {
+          "quote": "不得修改b.ini",
+          "occurrence": 1
+        }
+      ],
+      "reason": "禁令对象明确为b.ini，OBJECT不新增外部输入。"
+    },
+    {
+      "subject_id": "cl_modify_scope",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [
+        "cl_modify_object",
+        "expr_b"
+      ],
+      "sources": [
+        {
+          "quote": "不得修改b.ini",
+          "occurrence": 1
+        }
+      ],
+      "reason": "ITEM范围与同一修改事件的对象一致；未扩展禁令或新增其他文件的修改许可。"
+    },
+    {
+      "subject_id": "expr_inputs",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [
+        "ent_a",
+        "ent_b"
+      ],
+      "sources": [
+        {
+          "quote": "a.ini与b.ini",
+          "occurrence": 1
+        }
+      ],
+      "reason": "ENUM准确表达两个具体文件的有限列举，无类别域竞争。"
+    },
+    {
+      "subject_id": "expr_b",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [
+        "ent_b"
+      ],
+      "sources": [
+        {
+          "quote": "b.ini",
+          "occurrence": 2
+        }
+      ],
+      "reason": "ITEM准确表达禁令中的具体文件对象。"
+    }
+  ],
+  "issues": [],
+  "omissions": []
+}

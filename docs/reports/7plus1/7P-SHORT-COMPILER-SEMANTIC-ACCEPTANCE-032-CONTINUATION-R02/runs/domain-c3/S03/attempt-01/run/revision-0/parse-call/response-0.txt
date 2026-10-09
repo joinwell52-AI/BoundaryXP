@@ -1,0 +1,129 @@
+{
+  "contract_version": "032.1",
+  "entities": [
+    {
+      "id": "entity_pm",
+      "label": "PM",
+      "type": "OTHER",
+      "mentions": [{"quote": "PM", "occurrence": 1}],
+      "alternatives": []
+    },
+    {
+      "id": "entity_rule",
+      "label": "RULE-7",
+      "type": "DOCUMENT",
+      "mentions": [{"quote": "RULE-7", "occurrence": 1}],
+      "alternatives": []
+    },
+    {
+      "id": "entity_file",
+      "label": "a.csv",
+      "type": "FILE",
+      "mentions": [{"quote": "a.csv", "occurrence": 1}],
+      "alternatives": []
+    }
+  ],
+  "events": [
+    {
+      "id": "event_check",
+      "predicate": "检查",
+      "kind": "ACTION",
+      "layer": "MAIN",
+      "use": "CURRENT_TASK",
+      "modality": "REQUIRED",
+      "polarity": "POSITIVE",
+      "owner_id": "ROOT",
+      "constraint_ids": [],
+      "requires": [],
+      "sources": [{"quote": "请PM依据RULE-7检查a.csv。", "occurrence": 1}]
+    }
+  ],
+  "claims": [
+    {
+      "id": "claim_performer",
+      "kind": "ROLE",
+      "event_id": "event_check",
+      "entity_id": "entity_pm",
+      "role": "PERFORMER",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "artifact_use": null,
+      "scope_id": "event_check",
+      "requires": [],
+      "sources": [{"quote": "请PM依据RULE-7检查a.csv。", "occurrence": 1}],
+      "note": "PM是明确检查执行者；原文未说明其人或组类别。"
+    },
+    {
+      "id": "claim_basis",
+      "kind": "ROLE",
+      "event_id": "event_check",
+      "entity_id": "entity_rule",
+      "role": "BASIS",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "artifact_use": null,
+      "scope_id": "event_check",
+      "requires": [],
+      "sources": [{"quote": "依据RULE-7检查a.csv", "occurrence": 1}],
+      "note": "RULE-7是检查依据，其中数字不是数量限制。"
+    },
+    {
+      "id": "claim_input",
+      "kind": "ROLE",
+      "event_id": "event_check",
+      "entity_id": "entity_file",
+      "role": "INPUT_OBJECT",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "artifact_use": null,
+      "scope_id": "event_check",
+      "requires": [],
+      "sources": [{"quote": "检查a.csv", "occurrence": 1}],
+      "note": "a.csv是明确受检文件。"
+    },
+    {
+      "id": "claim_scope",
+      "kind": "SCOPE",
+      "event_id": "event_check",
+      "entity_id": null,
+      "role": null,
+      "expression_id": "expression_file",
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "artifact_use": null,
+      "scope_id": "entity_file",
+      "requires": [],
+      "sources": [{"quote": "检查a.csv", "occurrence": 1}],
+      "note": "检查对象范围为具体文件a.csv。"
+    }
+  ],
+  "expressions": [
+    {
+      "id": "expression_file",
+      "op": "ITEM",
+      "operands": ["entity_file"],
+      "state": null,
+      "sources": [{"quote": "a.csv", "occurrence": 1}]
+    }
+  ],
+  "issues": [],
+  "coverage": [
+    {
+      "sources": [{"quote": "请PM依据RULE-7检查a.csv。", "occurrence": 1}],
+      "claim_ids": ["claim_performer", "claim_basis", "claim_input", "claim_scope"],
+      "status": "EXPRESSED",
+      "affected_views": ["I", "A", "P", "V"],
+      "range_requirement": {
+        "kind": "SPECIFIC",
+        "scope_claim_ids": ["claim_scope"]
+      }
+    }
+  ]
+}

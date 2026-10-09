@@ -1,0 +1,281 @@
+{
+  "contract_version": "032.1",
+  "entities": [
+    {
+      "id": "ent_pm",
+      "label": "PM",
+      "type": "OTHER",
+      "mentions": [{"quote": "PM", "occurrence": 1}],
+      "alternatives": []
+    },
+    {
+      "id": "ent_file",
+      "label": "a.csv",
+      "type": "FILE",
+      "mentions": [
+        {"quote": "a.csv", "occurrence": 1},
+        {"quote": "a.csv", "occurrence": 2}
+      ],
+      "alternatives": []
+    },
+    {
+      "id": "ent_service",
+      "label": "服务",
+      "type": "SYSTEM",
+      "mentions": [{"quote": "服务", "occurrence": 1}],
+      "alternatives": []
+    }
+  ],
+  "events": [
+    {
+      "id": "evt_check",
+      "predicate": "检查",
+      "kind": "ACTION",
+      "layer": "MAIN",
+      "use": "CURRENT_TASK",
+      "modality": "REQUIRED",
+      "polarity": "POSITIVE",
+      "owner_id": "ROOT",
+      "constraint_ids": [],
+      "requires": [],
+      "sources": [{"quote": "请PM检查a.csv", "occurrence": 1}]
+    },
+    {
+      "id": "evt_restart",
+      "predicate": "重启",
+      "kind": "ACTION",
+      "layer": "MAIN",
+      "use": "CURRENT_TASK",
+      "modality": "NOT_REQUIRED",
+      "polarity": "POSITIVE",
+      "owner_id": "ROOT",
+      "constraint_ids": [],
+      "requires": [],
+      "sources": [{"quote": "无需重启服务", "occurrence": 1}]
+    },
+    {
+      "id": "evt_delete",
+      "predicate": "删除",
+      "kind": "ACTION",
+      "layer": "MAIN",
+      "use": "CURRENT_TASK",
+      "modality": "FORBIDDEN",
+      "polarity": "POSITIVE",
+      "owner_id": "ROOT",
+      "constraint_ids": [],
+      "requires": [],
+      "sources": [{"quote": "不得删除a.csv", "occurrence": 1}]
+    }
+  ],
+  "claims": [
+    {
+      "id": "cl_check_pm",
+      "kind": "ROLE",
+      "event_id": "evt_check",
+      "entity_id": "ent_pm",
+      "role": "PERFORMER",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "artifact_use": null,
+      "scope_id": "evt_check",
+      "requires": [],
+      "sources": [{"quote": "请PM检查a.csv", "occurrence": 1}],
+      "note": "PM为明确检查执行者；岗位类别未细分。"
+    },
+    {
+      "id": "cl_check_input",
+      "kind": "ROLE",
+      "event_id": "evt_check",
+      "entity_id": "ent_file",
+      "role": "INPUT_OBJECT",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "artifact_use": null,
+      "scope_id": "evt_check",
+      "requires": [],
+      "sources": [{"quote": "检查a.csv", "occurrence": 1}],
+      "note": "a.csv是明确受检文件。"
+    },
+    {
+      "id": "cl_check_scope",
+      "kind": "SCOPE",
+      "event_id": "evt_check",
+      "entity_id": null,
+      "role": null,
+      "expression_id": "ex_check_file",
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "artifact_use": null,
+      "scope_id": "ent_file",
+      "requires": [],
+      "sources": [{"quote": "检查a.csv", "occurrence": 1}],
+      "note": "检查范围为具体文件。"
+    },
+    {
+      "id": "cl_restart_pm",
+      "kind": "ROLE",
+      "event_id": "evt_restart",
+      "entity_id": "ent_pm",
+      "role": "PERFORMER",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "artifact_use": null,
+      "scope_id": "evt_restart",
+      "requires": [],
+      "sources": [
+        {"quote": "请PM检查a.csv", "occurrence": 1},
+        {"quote": "无需重启服务", "occurrence": 1}
+      ],
+      "note": "连续同一指令未切换主体，承接PM；无需不表示禁止或许可。"
+    },
+    {
+      "id": "cl_restart_object",
+      "kind": "ROLE",
+      "event_id": "evt_restart",
+      "entity_id": "ent_service",
+      "role": "OBJECT",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "artifact_use": null,
+      "scope_id": "evt_restart",
+      "requires": [],
+      "sources": [{"quote": "无需重启服务", "occurrence": 1}],
+      "note": "服务为无需重启动作的对象。"
+    },
+    {
+      "id": "cl_restart_scope",
+      "kind": "SCOPE",
+      "event_id": "evt_restart",
+      "entity_id": null,
+      "role": null,
+      "expression_id": "ex_service",
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "artifact_use": null,
+      "scope_id": "ent_service",
+      "requires": [],
+      "sources": [{"quote": "无需重启服务", "occurrence": 1}],
+      "note": "保留原文所指服务，不推定服务名称。"
+    },
+    {
+      "id": "cl_delete_pm",
+      "kind": "ROLE",
+      "event_id": "evt_delete",
+      "entity_id": "ent_pm",
+      "role": "PERFORMER",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "artifact_use": null,
+      "scope_id": "evt_delete",
+      "requires": [],
+      "sources": [
+        {"quote": "请PM检查a.csv", "occurrence": 1},
+        {"quote": "不得删除a.csv", "occurrence": 1}
+      ],
+      "note": "连续同一指令未切换主体，禁止删除的主体承接PM。"
+    },
+    {
+      "id": "cl_delete_object",
+      "kind": "ROLE",
+      "event_id": "evt_delete",
+      "entity_id": "ent_file",
+      "role": "OBJECT",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "artifact_use": null,
+      "scope_id": "evt_delete",
+      "requires": [],
+      "sources": [
+        {"quote": "检查a.csv", "occurrence": 1},
+        {"quote": "不得删除a.csv", "occurrence": 1}
+      ],
+      "note": "禁止删除的是同一a.csv；该禁止用途不新增外部输入。"
+    },
+    {
+      "id": "cl_delete_scope",
+      "kind": "SCOPE",
+      "event_id": "evt_delete",
+      "entity_id": null,
+      "role": null,
+      "expression_id": "ex_delete_file",
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "artifact_use": null,
+      "scope_id": "ent_file",
+      "requires": [],
+      "sources": [{"quote": "不得删除a.csv", "occurrence": 1}],
+      "note": "禁止范围为具体文件a.csv。"
+    }
+  ],
+  "expressions": [
+    {
+      "id": "ex_check_file",
+      "op": "ITEM",
+      "operands": ["ent_file"],
+      "state": null,
+      "sources": [{"quote": "a.csv", "occurrence": 1}]
+    },
+    {
+      "id": "ex_service",
+      "op": "ITEM",
+      "operands": ["ent_service"],
+      "state": null,
+      "sources": [{"quote": "服务", "occurrence": 1}]
+    },
+    {
+      "id": "ex_delete_file",
+      "op": "ITEM",
+      "operands": ["ent_file"],
+      "state": null,
+      "sources": [{"quote": "a.csv", "occurrence": 2}]
+    }
+  ],
+  "issues": [],
+  "coverage": [
+    {
+      "sources": [{"quote": "请PM检查a.csv", "occurrence": 1}],
+      "claim_ids": ["cl_check_pm", "cl_check_input", "cl_check_scope"],
+      "status": "EXPRESSED",
+      "affected_views": ["I", "A", "P"],
+      "range_requirement": {
+        "kind": "SPECIFIC",
+        "scope_claim_ids": ["cl_check_scope"]
+      }
+    },
+    {
+      "sources": [{"quote": "无需重启服务", "occurrence": 1}],
+      "claim_ids": ["cl_restart_pm", "cl_restart_object", "cl_restart_scope"],
+      "status": "EXPRESSED",
+      "affected_views": ["A", "P"],
+      "range_requirement": {
+        "kind": "SPECIFIC",
+        "scope_claim_ids": ["cl_restart_scope"]
+      }
+    },
+    {
+      "sources": [{"quote": "不得删除a.csv", "occurrence": 1}],
+      "claim_ids": ["cl_delete_pm", "cl_delete_object", "cl_delete_scope"],
+      "status": "EXPRESSED",
+      "affected_views": ["B", "P"],
+      "range_requirement": {
+        "kind": "SPECIFIC",
+        "scope_claim_ids": ["cl_delete_scope"]
+      }
+    }
+  ]
+}

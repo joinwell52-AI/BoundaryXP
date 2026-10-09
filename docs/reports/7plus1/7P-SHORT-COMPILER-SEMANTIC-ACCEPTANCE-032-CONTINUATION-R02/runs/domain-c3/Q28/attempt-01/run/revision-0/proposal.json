@@ -1,0 +1,429 @@
+{
+  "contract_version": "032.1",
+  "entities": [
+    {
+      "id": "ent_pm",
+      "label": "PM",
+      "type": "OTHER",
+      "mentions": [
+        {
+          "quote": "PM",
+          "occurrence": 1
+        }
+      ],
+      "alternatives": []
+    },
+    {
+      "id": "ent_archived_logs",
+      "label": "已归档日志",
+      "type": "CLASS",
+      "mentions": [
+        {
+          "quote": "已归档日志",
+          "occurrence": 1
+        }
+      ],
+      "alternatives": []
+    },
+    {
+      "id": "ent_report",
+      "label": "archive-check.md",
+      "type": "FILE",
+      "mentions": [
+        {
+          "quote": "archive-check.md",
+          "occurrence": 1
+        }
+      ],
+      "alternatives": []
+    },
+    {
+      "id": "ent_new_logs",
+      "label": "新日志",
+      "type": "CLASS",
+      "mentions": [
+        {
+          "quote": "新日志",
+          "occurrence": 1
+        }
+      ],
+      "alternatives": []
+    }
+  ],
+  "events": [
+    {
+      "id": "evt_check",
+      "predicate": "检查完整性",
+      "kind": "ACTION",
+      "layer": "MAIN",
+      "use": "CURRENT_TASK",
+      "modality": "REQUIRED",
+      "polarity": "POSITIVE",
+      "owner_id": "ROOT",
+      "constraint_ids": [],
+      "requires": [],
+      "sources": [
+        {
+          "quote": "请PM检查已归档日志的完整性",
+          "occurrence": 1
+        }
+      ]
+    },
+    {
+      "id": "evt_generate",
+      "predicate": "生成报告",
+      "kind": "ACTION",
+      "layer": "MAIN",
+      "use": "CURRENT_TASK",
+      "modality": "REQUIRED",
+      "polarity": "POSITIVE",
+      "owner_id": "ROOT",
+      "constraint_ids": [],
+      "requires": [],
+      "sources": [
+        {
+          "quote": "并生成archive-check.md",
+          "occurrence": 1
+        }
+      ]
+    },
+    {
+      "id": "evt_archive",
+      "predicate": "归档日志",
+      "kind": "ACTION",
+      "layer": "MAIN",
+      "use": "CURRENT_TASK",
+      "modality": "FORBIDDEN",
+      "polarity": "POSITIVE",
+      "owner_id": "ROOT",
+      "constraint_ids": [],
+      "requires": [],
+      "sources": [
+        {
+          "quote": "不得归档新日志",
+          "occurrence": 1
+        }
+      ]
+    }
+  ],
+  "claims": [
+    {
+      "id": "cl_check_performer",
+      "kind": "ROLE",
+      "event_id": "evt_check",
+      "entity_id": "ent_pm",
+      "role": "PERFORMER",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "artifact_use": null,
+      "scope_id": "evt_check",
+      "requires": [],
+      "sources": [
+        {
+          "quote": "请PM检查已归档日志的完整性",
+          "occurrence": 1
+        }
+      ],
+      "note": "PM为明确检查执行主体；岗位简称不推定具体人员或组类别。"
+    },
+    {
+      "id": "cl_check_input",
+      "kind": "ROLE",
+      "event_id": "evt_check",
+      "entity_id": "ent_archived_logs",
+      "role": "INPUT_OBJECT",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "artifact_use": null,
+      "scope_id": "evt_check",
+      "requires": [],
+      "sources": [
+        {
+          "quote": "检查已归档日志的完整性",
+          "occurrence": 1
+        }
+      ],
+      "note": "受检范围限定为已归档日志；不新增归档动作义务。"
+    },
+    {
+      "id": "cl_check_scope",
+      "kind": "SCOPE",
+      "event_id": "evt_check",
+      "entity_id": null,
+      "role": null,
+      "expression_id": "expr_archived_logs",
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "artifact_use": null,
+      "scope_id": "ent_archived_logs",
+      "requires": [],
+      "sources": [
+        {
+          "quote": "检查已归档日志的完整性",
+          "occurrence": 1
+        }
+      ],
+      "note": "原文未限定日志所在文件或系统。"
+    },
+    {
+      "id": "cl_generate_performer",
+      "kind": "ROLE",
+      "event_id": "evt_generate",
+      "entity_id": "ent_pm",
+      "role": "PERFORMER",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "artifact_use": null,
+      "scope_id": "evt_generate",
+      "requires": [],
+      "sources": [
+        {
+          "quote": "请PM检查已归档日志的完整性",
+          "occurrence": 1
+        },
+        {
+          "quote": "并生成archive-check.md",
+          "occurrence": 1
+        }
+      ],
+      "note": "同一指令的并列动作承接明确主语PM，无主体切换。"
+    },
+    {
+      "id": "cl_generate_result",
+      "kind": "ROLE",
+      "event_id": "evt_generate",
+      "entity_id": "ent_report",
+      "role": "RESULT",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "artifact_use": null,
+      "scope_id": "evt_generate",
+      "requires": [],
+      "sources": [
+        {
+          "quote": "生成archive-check.md",
+          "occurrence": 1
+        }
+      ],
+      "note": "明确要求产生该文件，未要求提交或交付。"
+    },
+    {
+      "id": "cl_generate_scope",
+      "kind": "SCOPE",
+      "event_id": "evt_generate",
+      "entity_id": null,
+      "role": null,
+      "expression_id": "expr_report",
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "artifact_use": null,
+      "scope_id": "ent_report",
+      "requires": [],
+      "sources": [
+        {
+          "quote": "生成archive-check.md",
+          "occurrence": 1
+        }
+      ],
+      "note": "生成对象为明确命名的具体文件。"
+    },
+    {
+      "id": "cl_archive_performer",
+      "kind": "ROLE",
+      "event_id": "evt_archive",
+      "entity_id": "ent_pm",
+      "role": "PERFORMER",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "artifact_use": null,
+      "scope_id": "evt_archive",
+      "requires": [],
+      "sources": [
+        {
+          "quote": "请PM检查已归档日志的完整性",
+          "occurrence": 1
+        },
+        {
+          "quote": "不得归档新日志",
+          "occurrence": 1
+        }
+      ],
+      "note": "连续任务中的追加禁令承接PM，无主体切换或另定执行者。"
+    },
+    {
+      "id": "cl_archive_object",
+      "kind": "ROLE",
+      "event_id": "evt_archive",
+      "entity_id": "ent_new_logs",
+      "role": "OBJECT",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "artifact_use": null,
+      "scope_id": "evt_archive",
+      "requires": [],
+      "sources": [
+        {
+          "quote": "不得归档新日志",
+          "occurrence": 1
+        }
+      ],
+      "note": "禁止对象为新日志，不因此新增正向输入。"
+    },
+    {
+      "id": "cl_archive_scope",
+      "kind": "SCOPE",
+      "event_id": "evt_archive",
+      "entity_id": null,
+      "role": null,
+      "expression_id": "expr_new_logs",
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "artifact_use": null,
+      "scope_id": "ent_new_logs",
+      "requires": [],
+      "sources": [
+        {
+          "quote": "不得归档新日志",
+          "occurrence": 1
+        }
+      ],
+      "note": "禁令作用于未限定容器的新日志类别；不继承已归档日志的受检类别。"
+    }
+  ],
+  "expressions": [
+    {
+      "id": "expr_archived_logs",
+      "op": "CATEGORY",
+      "operands": [
+        "ent_archived_logs"
+      ],
+      "state": null,
+      "sources": [
+        {
+          "quote": "已归档日志",
+          "occurrence": 1
+        }
+      ]
+    },
+    {
+      "id": "expr_report",
+      "op": "ITEM",
+      "operands": [
+        "ent_report"
+      ],
+      "state": null,
+      "sources": [
+        {
+          "quote": "archive-check.md",
+          "occurrence": 1
+        }
+      ]
+    },
+    {
+      "id": "expr_new_logs",
+      "op": "CATEGORY",
+      "operands": [
+        "ent_new_logs"
+      ],
+      "state": null,
+      "sources": [
+        {
+          "quote": "不得归档新日志",
+          "occurrence": 1
+        }
+      ]
+    }
+  ],
+  "issues": [],
+  "coverage": [
+    {
+      "sources": [
+        {
+          "quote": "请PM检查已归档日志的完整性",
+          "occurrence": 1
+        }
+      ],
+      "claim_ids": [
+        "cl_check_performer",
+        "cl_check_input",
+        "cl_check_scope"
+      ],
+      "status": "EXPRESSED",
+      "affected_views": [
+        "I",
+        "A",
+        "P"
+      ],
+      "range_requirement": {
+        "kind": "CATEGORY",
+        "scope_claim_ids": [
+          "cl_check_scope"
+        ]
+      }
+    },
+    {
+      "sources": [
+        {
+          "quote": "并生成archive-check.md",
+          "occurrence": 1
+        }
+      ],
+      "claim_ids": [
+        "cl_generate_performer",
+        "cl_generate_result",
+        "cl_generate_scope"
+      ],
+      "status": "EXPRESSED",
+      "affected_views": [
+        "O",
+        "A",
+        "P"
+      ],
+      "range_requirement": {
+        "kind": "SPECIFIC",
+        "scope_claim_ids": [
+          "cl_generate_scope"
+        ]
+      }
+    },
+    {
+      "sources": [
+        {
+          "quote": "不得归档新日志",
+          "occurrence": 1
+        }
+      ],
+      "claim_ids": [
+        "cl_archive_performer",
+        "cl_archive_object",
+        "cl_archive_scope"
+      ],
+      "status": "EXPRESSED",
+      "affected_views": [
+        "B",
+        "P"
+      ],
+      "range_requirement": {
+        "kind": "CATEGORY",
+        "scope_claim_ids": [
+          "cl_archive_scope"
+        ]
+      }
+    }
+  ]
+}

@@ -1,0 +1,495 @@
+{
+  "contract_version": "032.1",
+  "entities": [
+    {
+      "id": "actor_pm",
+      "label": "PM",
+      "type": "OTHER",
+      "mentions": [
+        {
+          "quote": "PM",
+          "occurrence": 1
+        }
+      ],
+      "alternatives": []
+    },
+    {
+      "id": "input_feed",
+      "label": "feed.json",
+      "type": "FILE",
+      "mentions": [
+        {
+          "quote": "feed.json",
+          "occurrence": 1
+        }
+      ],
+      "alternatives": []
+    },
+    {
+      "id": "output_note",
+      "label": "feed-note.md",
+      "type": "FILE",
+      "mentions": [
+        {
+          "quote": "feed-note.md",
+          "occurrence": 1
+        },
+        {
+          "quote": "报告",
+          "occurrence": 1
+        }
+      ],
+      "alternatives": []
+    },
+    {
+      "id": "anomaly_class",
+      "label": "异常记录",
+      "type": "CLASS",
+      "mentions": [
+        {
+          "quote": "异常记录",
+          "occurrence": 1
+        }
+      ],
+      "alternatives": []
+    }
+  ],
+  "events": [
+    {
+      "id": "read_feed",
+      "predicate": "读取",
+      "kind": "ACTION",
+      "layer": "MAIN",
+      "use": "CURRENT_TASK",
+      "modality": "REQUIRED",
+      "polarity": "POSITIVE",
+      "owner_id": "ROOT",
+      "constraint_ids": [
+        "retry_limit"
+      ],
+      "requires": [],
+      "sources": [
+        {
+          "quote": "请PM读取feed.json",
+          "occurrence": 1
+        }
+      ]
+    },
+    {
+      "id": "generate_note",
+      "predicate": "生成报告",
+      "kind": "ACTION",
+      "layer": "MAIN",
+      "use": "CURRENT_TASK",
+      "modality": "REQUIRED",
+      "polarity": "POSITIVE",
+      "owner_id": "ROOT",
+      "constraint_ids": [
+        "record_count"
+      ],
+      "requires": [],
+      "sources": [
+        {
+          "quote": "生成feed-note.md",
+          "occurrence": 1
+        },
+        {
+          "quote": "报告恰好列出2条异常记录",
+          "occurrence": 1
+        }
+      ]
+    }
+  ],
+  "claims": [
+    {
+      "id": "read_performer",
+      "kind": "ROLE",
+      "event_id": "read_feed",
+      "entity_id": "actor_pm",
+      "role": "PERFORMER",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "artifact_use": null,
+      "scope_id": "read_feed",
+      "requires": [],
+      "sources": [
+        {
+          "quote": "请PM读取feed.json",
+          "occurrence": 1
+        }
+      ],
+      "note": "PM是明确的读取执行者；岗位简称不推定人或组类别。"
+    },
+    {
+      "id": "read_input",
+      "kind": "ROLE",
+      "event_id": "read_feed",
+      "entity_id": "input_feed",
+      "role": "INPUT_OBJECT",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "artifact_use": null,
+      "scope_id": "read_feed",
+      "requires": [],
+      "sources": [
+        {
+          "quote": "读取feed.json",
+          "occurrence": 1
+        }
+      ],
+      "note": "明确读取的外部文件。"
+    },
+    {
+      "id": "read_scope",
+      "kind": "SCOPE",
+      "event_id": "read_feed",
+      "entity_id": null,
+      "role": null,
+      "expression_id": "feed_item",
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "artifact_use": null,
+      "scope_id": "input_feed",
+      "requires": [],
+      "sources": [
+        {
+          "quote": "读取feed.json",
+          "occurrence": 1
+        }
+      ],
+      "note": "读取范围为该具体文件。"
+    },
+    {
+      "id": "retry_limit",
+      "kind": "QUANTITY",
+      "event_id": "read_feed",
+      "entity_id": null,
+      "role": null,
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": {
+        "metric": "重试次数",
+        "target_id": "read_feed",
+        "comparator": "LTE",
+        "value": 4,
+        "unit": "次",
+        "use": "EXECUTION_LIMIT",
+        "count_scope": "read_feed"
+      },
+      "artifact_use": null,
+      "scope_id": "read_feed",
+      "requires": [],
+      "sources": [
+        {
+          "quote": "读取feed.json",
+          "occurrence": 1
+        },
+        {
+          "quote": "该读取最多重试4次",
+          "occurrence": 1
+        }
+      ],
+      "note": "该读取回指读取feed.json；限制重试次数，不将初次读取计为重试。"
+    },
+    {
+      "id": "generate_performer",
+      "kind": "ROLE",
+      "event_id": "generate_note",
+      "entity_id": "actor_pm",
+      "role": "PERFORMER",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "artifact_use": null,
+      "scope_id": "generate_note",
+      "requires": [],
+      "sources": [
+        {
+          "quote": "请PM读取feed.json",
+          "occurrence": 1
+        },
+        {
+          "quote": "生成feed-note.md",
+          "occurrence": 1
+        }
+      ],
+      "note": "连续同一指令未切换主体，生成动作承接PM。"
+    },
+    {
+      "id": "generate_result",
+      "kind": "ROLE",
+      "event_id": "generate_note",
+      "entity_id": "output_note",
+      "role": "RESULT",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "artifact_use": null,
+      "scope_id": "generate_note",
+      "requires": [],
+      "sources": [
+        {
+          "quote": "生成feed-note.md",
+          "occurrence": 1
+        },
+        {
+          "quote": "报告恰好列出2条异常记录",
+          "occurrence": 1
+        }
+      ],
+      "note": "报告与唯一当前生成产物feed-note.md为同一身份。"
+    },
+    {
+      "id": "result_scope",
+      "kind": "SCOPE",
+      "event_id": "generate_note",
+      "entity_id": null,
+      "role": null,
+      "expression_id": "note_item",
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "artifact_use": null,
+      "scope_id": "output_note",
+      "requires": [],
+      "sources": [
+        {
+          "quote": "生成feed-note.md",
+          "occurrence": 1
+        }
+      ],
+      "note": "明确生成的具体产物。"
+    },
+    {
+      "id": "report_content",
+      "kind": "ROLE",
+      "event_id": "generate_note",
+      "entity_id": "anomaly_class",
+      "role": "CONTENT",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "artifact_use": null,
+      "scope_id": "generate_note",
+      "requires": [],
+      "sources": [
+        {
+          "quote": "报告恰好列出2条异常记录",
+          "occurrence": 1
+        }
+      ],
+      "note": "异常记录是报告需列出的计数内容，不是独立外部输入。"
+    },
+    {
+      "id": "content_scope",
+      "kind": "SCOPE",
+      "event_id": "generate_note",
+      "entity_id": null,
+      "role": null,
+      "expression_id": "note_anomalies",
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "artifact_use": null,
+      "scope_id": "anomaly_class",
+      "requires": [],
+      "sources": [
+        {
+          "quote": "生成feed-note.md",
+          "occurrence": 1
+        },
+        {
+          "quote": "报告恰好列出2条异常记录",
+          "occurrence": 1
+        }
+      ],
+      "note": "限定为该报告所列出的异常记录内容，无全称要求。"
+    },
+    {
+      "id": "record_count",
+      "kind": "QUANTITY",
+      "event_id": "generate_note",
+      "entity_id": null,
+      "role": null,
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": {
+        "metric": "列出的异常记录条数",
+        "target_id": "output_note",
+        "comparator": "EQ",
+        "value": 2,
+        "unit": "条",
+        "use": "OUTPUT_CONTENT",
+        "count_scope": "output_note"
+      },
+      "artifact_use": null,
+      "scope_id": "generate_note",
+      "requires": [],
+      "sources": [
+        {
+          "quote": "生成feed-note.md",
+          "occurrence": 1
+        },
+        {
+          "quote": "报告恰好列出2条异常记录",
+          "occurrence": 1
+        }
+      ],
+      "note": "数量约束同一生成事件的报告产物内容，不是执行次数限制。"
+    }
+  ],
+  "expressions": [
+    {
+      "id": "feed_item",
+      "op": "ITEM",
+      "operands": [
+        "input_feed"
+      ],
+      "state": null,
+      "sources": [
+        {
+          "quote": "feed.json",
+          "occurrence": 1
+        }
+      ]
+    },
+    {
+      "id": "note_item",
+      "op": "ITEM",
+      "operands": [
+        "output_note"
+      ],
+      "state": null,
+      "sources": [
+        {
+          "quote": "feed-note.md",
+          "occurrence": 1
+        }
+      ]
+    },
+    {
+      "id": "note_anomalies",
+      "op": "CATEGORY",
+      "operands": [
+        "anomaly_class",
+        "output_note"
+      ],
+      "state": null,
+      "sources": [
+        {
+          "quote": "生成feed-note.md",
+          "occurrence": 1
+        },
+        {
+          "quote": "报告恰好列出2条异常记录",
+          "occurrence": 1
+        }
+      ]
+    }
+  ],
+  "issues": [],
+  "coverage": [
+    {
+      "sources": [
+        {
+          "quote": "请PM读取feed.json",
+          "occurrence": 1
+        }
+      ],
+      "claim_ids": [
+        "read_performer",
+        "read_input",
+        "read_scope"
+      ],
+      "status": "EXPRESSED",
+      "affected_views": [
+        "A",
+        "P",
+        "I"
+      ],
+      "range_requirement": {
+        "kind": "SPECIFIC",
+        "scope_claim_ids": [
+          "read_scope"
+        ]
+      }
+    },
+    {
+      "sources": [
+        {
+          "quote": "该读取最多重试4次",
+          "occurrence": 1
+        }
+      ],
+      "claim_ids": [
+        "retry_limit"
+      ],
+      "status": "EXPRESSED",
+      "affected_views": [
+        "R"
+      ],
+      "range_requirement": {
+        "kind": "NONE",
+        "scope_claim_ids": []
+      }
+    },
+    {
+      "sources": [
+        {
+          "quote": "生成feed-note.md",
+          "occurrence": 1
+        }
+      ],
+      "claim_ids": [
+        "generate_performer",
+        "generate_result",
+        "result_scope"
+      ],
+      "status": "EXPRESSED",
+      "affected_views": [
+        "A",
+        "P",
+        "O"
+      ],
+      "range_requirement": {
+        "kind": "SPECIFIC",
+        "scope_claim_ids": [
+          "result_scope"
+        ]
+      }
+    },
+    {
+      "sources": [
+        {
+          "quote": "报告恰好列出2条异常记录",
+          "occurrence": 1
+        }
+      ],
+      "claim_ids": [
+        "report_content",
+        "content_scope",
+        "record_count"
+      ],
+      "status": "EXPRESSED",
+      "affected_views": [
+        "O"
+      ],
+      "range_requirement": {
+        "kind": "CATEGORY",
+        "scope_claim_ids": [
+          "content_scope"
+        ]
+      }
+    }
+  ]
+}

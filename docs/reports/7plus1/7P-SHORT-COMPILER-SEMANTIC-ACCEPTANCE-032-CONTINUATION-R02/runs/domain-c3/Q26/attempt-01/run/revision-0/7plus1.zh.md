@@ -1,0 +1,33 @@
+# BoundX 7+1（有限技术接受，不是业务授权）
+
+## I 输入与作用域 — PARSER_COVERAGE_FAILURE
+- [REJECTED] 检查：输入/受检对象=测试机；必须；对象范围=有限枚举{测试机A,测试机C}（bf:bc915c308d591a5fdc4a）
+- [REJECTED] 作用域  有限枚举{测试机A,测试机C}；目标=测试机（bf:e4f03ab66fbc0f5d8552）
+
+## O 交付与结果 — ABSENT
+
+## A 正向动作 — PARSER_COVERAGE_FAILURE
+- [REJECTED] 必须 检查；执行者=PM；输入/受检对象=测试机；对象范围=有限枚举{测试机A,测试机C}（bf:316ddd25f9d3a33dc54c）
+
+## P 参与关系 — PARSER_COVERAGE_FAILURE
+- [ACCEPTED] 检查：执行者=PM；必须（bf:816d99407602326a99ba）
+
+## R 执行量化限制 — ABSENT
+
+## V 版本与依据 — ABSENT
+
+## C 完成与停止 — ABSENT
+
+## B 禁止与限制 — UNRESOLVED
+- [UNRESOLVED] 禁止 重启；执行者=PM；对象=测试机；对象范围=全称适用：范围内所有成员(待确认域：以下为备选解释，不能同时生效(有限枚举{测试机A,测试机B,测试机C,测试机D},类别范围(测试机；适用范围=未限定容器：本任务类别域)))（bf:ffdf7ed35048e2d8ba19）
+- [UNRESOLVED] 作用域  全称适用：范围内所有成员(待确认域：以下为备选解释，不能同时生效(有限枚举{测试机A,测试机B,测试机C,测试机D},类别范围(测试机；适用范围=未限定容器：本任务类别域)))；目标=测试机（bf:ff9a03928ba72561528d）
+
+## 产物关联与可用性依赖（不等于事件强顺序）
+
+## 未指定 / 歧义 / 未投影语义
+- [待用户澄清] 请明确这项限制的适用范围，哪些范围解释符合您的任务？请在原文中补充后重新编译。；限制目标=测试机；事件=重启 [restart]；执行者=PM；对象=测试机；在该解释下：有限枚举{测试机A,测试机B,测试机C,测试机D}；在该解释下：类别范围(测试机；适用范围=未限定容器：本任务类别域)；未决范围查询为UNKNOWN（restart_scope）
+- AMBIGUITY 禁令没有明确指示回指或重新限定范围，既可承接前文列举的四台测试机，也可作用于未限定容器的任务测试机类别域；两种读法改变禁令边界。；影响=restart_domain_choice,restart_scope
+- [ACCEPTED] ROLE；事件=重启 [restart]；执行者=PM；对象=测试机；执行者=PM（bf:117631ab28800a58e6c1）
+- [UNRESOLVED] ROLE；事件=重启 [restart]；执行者=PM；对象=测试机；对象=测试机；对象范围=全称适用：范围内所有成员(待确认域：以下为备选解释，不能同时生效(有限枚举{测试机A,测试机B,测试机C,测试机D},类别范围(测试机；适用范围=未限定容器：本任务类别域)))（bf:b8862a56dd39066112e0）
+- 覆盖缺口：RANGE_REQUIREMENT_UNREPRESENTED:inspect_scope
+- 覆盖缺口：RANGE_REQUIREMENT_UNREPRESENTED:inspect_scope

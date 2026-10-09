@@ -5,9 +5,10 @@ import assert from 'node:assert/strict';
 import {sha256} from '../llm-first-028/source.mjs';
 import {walk} from './transport-ledger.mjs';
 const root=path.resolve('docs/reports/7plus1/7P-SHORT-COMPILER-SEMANTIC-ACCEPTANCE-032-CONTINUATION');
+const roots=process.argv.includes('--resume-032')?[root,root+'-R02']:[root];
 const read=p=>JSON.parse(fs.readFileSync(p,'utf8'));
 const rows=[];
-for(const p of walk(path.join(root,'runs')).filter(p=>path.basename(p)==='execution.json')){
+for(const p of roots.flatMap(d=>walk(path.join(d,'runs'))).filter(p=>path.basename(p)==='execution.json')){
  const execution=read(p);if(execution.exit_code!==0)continue;
  const run=path.join(path.dirname(p),'run'),t=read(path.join(run,'trace.json'));
  assert.deepEqual(read(path.join(run,'7plus1.json')),t.canonical);

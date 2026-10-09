@@ -1,7 +1,7 @@
 # 当前 BoundX 7+1 产品开发任务
 
 **当前任务：7P-SHORT-COMPILER-SEMANTIC-ACCEPTANCE-032-LONG；任务修订r01。**
-状态：WAITING_ADMIN_REVIEW / TRANSPORT_STOPPED。ADMIN续作授权、执行顺序与360上限以[032续作追加说明](ADDENDUM-032-CONTINUATION-360.md)为准；授权与历史账本不重置。
+状态：WAITING_ADMIN_REVIEW / TRANSPORT_STOPPED。已执行[032有界传输恢复续作](ADDENDUM-032-TRANSPORT-RECOVERY.md)，仍为同一032、同版032.3；再次传输停止后不启动后续样本，原封存和360总上限不变。
 
 任务书：`docs/tasks/7plus1/7P-SHORT-COMPILER-SEMANTIC-ACCEPTANCE-032-LONG.md`。
 任务创建提交：`507b32fe95931b5481279b225da0e47ba0850907`。
@@ -25,6 +25,10 @@
 **ADMIN续作覆盖：032总保守上限360，追加120；既有占用108原样保留，续作可用252。** 先核对并使用现成032.3，按`Q05、D01—D08、S00`串行运行及逐来源复核；关键组通过后连续完成同一79次中的剩余69次。版本不变不重复关键组，不凭推测改Skill，不边测边改。原240预算及失败保留于`b8a5db364858f85ac3af2d3cf4e050d14ee02406`，不倒改旧账；续作报告单独封存。
 
 续作实际结果：关键组10/10完成并逐来源通过（8 SOURCE_FAITHFUL、2 CLARIFICATION_CORRECT）；随后Q01首次请求遇到`workspace routing discovery failed`，外层1次与内部5个重试信号触发停止保护，无语义响应。后续68次未启动，Q01仍须补测；部署冒烟未运行。保守占用135/360，剩余225；不是预算耗尽，也不是语义79/79通过。未修改032.3资源，未升级58618。完整证据：[032续作报告](../../reports/7plus1/7P-SHORT-COMPILER-SEMANTIC-ACCEPTANCE-032-CONTINUATION/REPORT.md)。
+
+本次授权从提交`2dfc65a0f9dd9dd07278a80fceb312564135ca50`的135占用继续：先只读核查二进制、登录与环境；没有账号/额度/策略拒绝时，Q01只做一次≤6保守请求的完整attempt-02。成功来源复核后不重跑Q01或已完成关键组，连续完成68个未启动位置。再次传输停止立即停止，不循环探测；不改032.3语义资源，不重新打包，质量门完成前不升级58618。
+
+本次实际结果：Q01 attempt-02使用2请求恢复并来源核对通过，首次失败仍保留；串行继续至S06。当前45/79项完整编译并复核：34 SOURCE_FAITHFUL、2 CLARIFICATION_CORRECT、1 SEMANTIC_FAIL、7 CONTRACT_FAIL、1 EVALUATION_REVIEW_REQUIRED。S07解析完成但独立审阅workspace routing discovery失败，4个内部重试信号触发本条6请求停止保护，未继续；33项未启动、重复/N组及部署D08未完成。原135+本轮82外层/4重试=221/360，剩余139，未完成保留0；本条配额耗尽不等于总预算耗尽。资源不变、未打包/升级，58618最终无监听且指针仍031-r1.2。证据：[R02报告](../../reports/7plus1/7P-SHORT-COMPILER-SEMANTIC-ACCEPTANCE-032-CONTINUATION-R02/REPORT.md)。未达到产品质量门，不宣称交付完成；等待ADMIN Review。
 
 真实首次、内置有界修订、相同响应回放、补测和来源复核分别统计。模型可见资源改变后不继承旧52/53或6/8；纯消费者变动可核对同源摘要后回放。连续3次同类传输失败暂停核查，账号/额度/策略拒绝不循环，预算不足以完成剩余工作时及时报告，不自行加限。
 

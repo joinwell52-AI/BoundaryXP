@@ -1,0 +1,114 @@
+{
+  "contract_version": "032.1",
+  "reviews": [
+    {
+      "subject_id": "ent_pm",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [{"quote": "PM", "occurrence": 1}],
+      "reason": "PM身份明确；OTHER可作为未指定人或组类别的占位。"
+    },
+    {
+      "subject_id": "ent_users",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [{"quote": "users.csv", "occurrence": 1}],
+      "reason": "明确受核对的文件，身份与名称一致。"
+    },
+    {
+      "subject_id": "ent_optional",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [{"quote": "optional.md", "occurrence": 1}],
+      "reason": "明确无需生成的文件，未与受核对文件混同。"
+    },
+    {
+      "subject_id": "evt_check",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [{"quote": "请PM核对users.csv", "occurrence": 1}],
+      "reason": "原文明示当前要求的核对动作，无附加条件。"
+    },
+    {
+      "subject_id": "evt_generate",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [{"quote": "无需生成optional.md", "occurrence": 1}],
+      "reason": "NOT_REQUIRED准确保留无需生成，未改成禁止或许可。"
+    },
+    {
+      "subject_id": "cl_check_performer",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["evt_check", "ent_pm"],
+      "sources": [{"quote": "请PM核对users.csv", "occurrence": 1}],
+      "reason": "PM是核对动作的明确执行者。"
+    },
+    {
+      "subject_id": "cl_check_input",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["evt_check", "ent_users"],
+      "sources": [{"quote": "核对users.csv", "occurrence": 1}],
+      "reason": "users.csv是明确受检范围，INPUT_OBJECT绑定正确。"
+    },
+    {
+      "subject_id": "cl_check_scope",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["cl_check_input", "expr_users"],
+      "sources": [{"quote": "核对users.csv", "occurrence": 1}],
+      "reason": "范围绑定同一核对事件的具体文件，并以ITEM表达。"
+    },
+    {
+      "subject_id": "cl_generate_performer",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["evt_generate", "ent_pm"],
+      "sources": [
+        {"quote": "请PM核对users.csv", "occurrence": 1},
+        {"quote": "无需生成optional.md", "occurrence": 1}
+      ],
+      "reason": "连续同一指令未切换主体，可承接PM；不因此增加生成义务。"
+    },
+    {
+      "subject_id": "cl_generate_result",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["evt_generate", "ent_optional"],
+      "sources": [{"quote": "无需生成optional.md", "occurrence": 1}],
+      "reason": "准确保留无需生成的RESULT用途，不构成正向产出要求。"
+    },
+    {
+      "subject_id": "cl_generate_scope",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["cl_generate_result", "expr_optional"],
+      "sources": [{"quote": "无需生成optional.md", "occurrence": 1}],
+      "reason": "无需生成的范围是同一事件绑定的optional.md具体文件。"
+    },
+    {
+      "subject_id": "expr_users",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["ent_users"],
+      "sources": [{"quote": "users.csv", "occurrence": 1}],
+      "reason": "原文指向单个具体文件，ITEM表达正确。"
+    },
+    {
+      "subject_id": "expr_optional",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["ent_optional"],
+      "sources": [{"quote": "optional.md", "occurrence": 1}],
+      "reason": "原文指向单个具体文件，ITEM表达正确。"
+    }
+  ],
+  "issues": [],
+  "omissions": []
+}

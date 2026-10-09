@@ -1,0 +1,156 @@
+{
+  "contract_version": "032.1",
+  "reviews": [
+    {
+      "subject_id": "ent_qa",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [
+        {
+          "quote": "请QA完成配置核验",
+          "occurrence": 1
+        }
+      ],
+      "reason": "QA身份及执行职责明确；OTHER可占位表示未指定的人或组类别。"
+    },
+    {
+      "subject_id": "ent_config",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [
+        {
+          "quote": "配置核验",
+          "occurrence": 1
+        }
+      ],
+      "reason": "配置是受检对象类别，未指定具体成员或容器。"
+    },
+    {
+      "subject_id": "evt_check",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [
+        {
+          "quote": "请QA完成配置核验",
+          "occurrence": 1
+        },
+        {
+          "quote": "核验用时不得超过6分钟",
+          "occurrence": 1
+        }
+      ],
+      "reason": "当前要求完成核验，执行用时约束已绑定；未将动作完成误作根任务完成条件。"
+    },
+    {
+      "subject_id": "cl_performer",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [
+        "ent_qa",
+        "evt_check"
+      ],
+      "sources": [
+        {
+          "quote": "请QA完成配置核验",
+          "occurrence": 1
+        }
+      ],
+      "reason": "QA被明确指定为核验执行者。"
+    },
+    {
+      "subject_id": "cl_input",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [
+        "ent_config",
+        "evt_check"
+      ],
+      "sources": [
+        {
+          "quote": "完成配置核验",
+          "occurrence": 1
+        }
+      ],
+      "reason": "配置是当前核验的明确受检范围，INPUT_OBJECT用途成立。"
+    },
+    {
+      "subject_id": "cl_scope",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [
+        "cl_input",
+        "expr_config"
+      ],
+      "sources": [
+        {
+          "quote": "配置核验",
+          "occurrence": 1
+        }
+      ],
+      "reason": "类别范围绑定同一核验事件及受检类别；原文无容器限定或全称要求，也无来源支持的竞争域。"
+    },
+    {
+      "subject_id": "cl_time",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [
+        "evt_check"
+      ],
+      "sources": [
+        {
+          "quote": "核验用时不得超过6分钟",
+          "occurrence": 1
+        }
+      ],
+      "reason": "计数项为核验用时，LTE、6、分钟正确；执行限制目标及计数范围均为核验事件，约束双向绑定完整。"
+    },
+    {
+      "subject_id": "cl_stop",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [
+        "expr_permission_error"
+      ],
+      "sources": [
+        {
+          "quote": "若出现权限错误，停止本任务",
+          "occurrence": 1
+        }
+      ],
+      "reason": "权限错误是根任务停止的充分触发条件，未误写成完成或必要条件。"
+    },
+    {
+      "subject_id": "expr_config",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [
+        "ent_config"
+      ],
+      "sources": [
+        {
+          "quote": "配置核验",
+          "occurrence": 1
+        }
+      ],
+      "reason": "CATEGORY引用配置CLASS，忠实保留未限定容器的类别域，不添加全称量词。"
+    },
+    {
+      "subject_id": "expr_permission_error",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [
+        {
+          "quote": "若出现权限错误，停止本任务",
+          "occurrence": 1
+        }
+      ],
+      "reason": "正极性STATE表达本任务出现权限错误的条件，未断言错误已发生；原文未指定更具体的事件或对象。"
+    }
+  ],
+  "issues": [],
+  "omissions": []
+}

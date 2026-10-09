@@ -1,0 +1,470 @@
+{
+  "contract_version": "032.1",
+  "entities": [
+    {
+      "id": "pm",
+      "label": "PM",
+      "type": "OTHER",
+      "mentions": [
+        {
+          "quote": "PM",
+          "occurrence": 1
+        }
+      ],
+      "alternatives": []
+    },
+    {
+      "id": "a",
+      "label": "测试机A",
+      "type": "OTHER",
+      "mentions": [
+        {
+          "quote": "A、B、C、D四台测试机",
+          "occurrence": 1
+        }
+      ],
+      "alternatives": []
+    },
+    {
+      "id": "b",
+      "label": "测试机B",
+      "type": "OTHER",
+      "mentions": [
+        {
+          "quote": "A、B、C、D四台测试机",
+          "occurrence": 1
+        },
+        {
+          "quote": "B和D",
+          "occurrence": 1
+        }
+      ],
+      "alternatives": []
+    },
+    {
+      "id": "c",
+      "label": "测试机C",
+      "type": "OTHER",
+      "mentions": [
+        {
+          "quote": "A、B、C、D四台测试机",
+          "occurrence": 1
+        }
+      ],
+      "alternatives": []
+    },
+    {
+      "id": "d",
+      "label": "测试机D",
+      "type": "OTHER",
+      "mentions": [
+        {
+          "quote": "A、B、C、D四台测试机",
+          "occurrence": 1
+        },
+        {
+          "quote": "B和D",
+          "occurrence": 1
+        }
+      ],
+      "alternatives": []
+    },
+    {
+      "id": "machines",
+      "label": "测试机",
+      "type": "CLASS",
+      "mentions": [
+        {
+          "quote": "四台测试机",
+          "occurrence": 1
+        },
+        {
+          "quote": "任何测试机",
+          "occurrence": 1
+        }
+      ],
+      "alternatives": []
+    }
+  ],
+  "events": [
+    {
+      "id": "inspect",
+      "predicate": "检查",
+      "kind": "ACTION",
+      "layer": "MAIN",
+      "use": "CURRENT_TASK",
+      "modality": "REQUIRED",
+      "polarity": "POSITIVE",
+      "owner_id": "ROOT",
+      "constraint_ids": [],
+      "requires": [],
+      "sources": [
+        {
+          "quote": "请PM检查A、B、C、D四台测试机，本次检查范围不含B和D",
+          "occurrence": 1
+        }
+      ]
+    },
+    {
+      "id": "restart",
+      "predicate": "重启",
+      "kind": "ACTION",
+      "layer": "MAIN",
+      "use": "CURRENT_TASK",
+      "modality": "FORBIDDEN",
+      "polarity": "POSITIVE",
+      "owner_id": "ROOT",
+      "constraint_ids": [],
+      "requires": [],
+      "sources": [
+        {
+          "quote": "不得重启任何测试机",
+          "occurrence": 1
+        }
+      ]
+    }
+  ],
+  "claims": [
+    {
+      "id": "inspect_performer",
+      "kind": "ROLE",
+      "event_id": "inspect",
+      "entity_id": "pm",
+      "role": "PERFORMER",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "artifact_use": null,
+      "scope_id": "inspect",
+      "requires": [],
+      "sources": [
+        {
+          "quote": "请PM检查",
+          "occurrence": 1
+        }
+      ],
+      "note": ""
+    },
+    {
+      "id": "inspect_input",
+      "kind": "ROLE",
+      "event_id": "inspect",
+      "entity_id": "machines",
+      "role": "INPUT_OBJECT",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "artifact_use": null,
+      "scope_id": "inspect",
+      "requires": [],
+      "sources": [
+        {
+          "quote": "检查A、B、C、D四台测试机，本次检查范围不含B和D",
+          "occurrence": 1
+        }
+      ],
+      "note": "明确受检对象经排除后为A、C；四台是列举对象的说明，不是独立执行次数限制。"
+    },
+    {
+      "id": "inspect_scope",
+      "kind": "SCOPE",
+      "event_id": "inspect",
+      "entity_id": null,
+      "role": null,
+      "expression_id": "inspection_members",
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "artifact_use": null,
+      "scope_id": "machines",
+      "requires": [],
+      "sources": [
+        {
+          "quote": "A、B、C、D四台测试机",
+          "occurrence": 1
+        },
+        {
+          "quote": "本次检查范围不含B和D",
+          "occurrence": 1
+        }
+      ],
+      "note": "有限列举减去明确排除的B、D，实际检查范围为A、C；排除不构成独立禁止检查命令。"
+    },
+    {
+      "id": "restart_performer",
+      "kind": "ROLE",
+      "event_id": "restart",
+      "entity_id": "pm",
+      "role": "PERFORMER",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "artifact_use": null,
+      "scope_id": "restart",
+      "requires": [],
+      "sources": [
+        {
+          "quote": "请PM检查",
+          "occurrence": 1
+        },
+        {
+          "quote": "不得重启任何测试机",
+          "occurrence": 1
+        }
+      ],
+      "note": "连续同一指令中的追加限制承接PM，未出现主体切换。"
+    },
+    {
+      "id": "restart_object",
+      "kind": "ROLE",
+      "event_id": "restart",
+      "entity_id": "machines",
+      "role": "OBJECT",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "artifact_use": null,
+      "scope_id": "restart",
+      "requires": [],
+      "sources": [
+        {
+          "quote": "不得重启任何测试机",
+          "occurrence": 1
+        }
+      ],
+      "note": "禁止对象不新增外部输入。"
+    },
+    {
+      "id": "restart_scope",
+      "kind": "SCOPE",
+      "event_id": "restart",
+      "entity_id": null,
+      "role": null,
+      "expression_id": "restart_all",
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "artifact_use": null,
+      "scope_id": "machines",
+      "requires": [],
+      "sources": [
+        {
+          "quote": "A、B、C、D四台测试机",
+          "occurrence": 1
+        },
+        {
+          "quote": "本次检查范围不含B和D",
+          "occurrence": 1
+        },
+        {
+          "quote": "不得重启任何测试机",
+          "occurrence": 1
+        }
+      ],
+      "note": "保留任何的全称限制；独立禁令是否继承先前列举的测试机域存在局部竞争。检查排除仅限定检查，不自动成为重启禁令的例外。"
+    }
+  ],
+  "expressions": [
+    {
+      "id": "inspection_members",
+      "op": "ENUM",
+      "operands": [
+        "a",
+        "c"
+      ],
+      "state": null,
+      "sources": [
+        {
+          "quote": "A、B、C、D四台测试机",
+          "occurrence": 1
+        },
+        {
+          "quote": "本次检查范围不含B和D",
+          "occurrence": 1
+        }
+      ]
+    },
+    {
+      "id": "listed_machine_domain",
+      "op": "ENUM",
+      "operands": [
+        "a",
+        "b",
+        "c",
+        "d"
+      ],
+      "state": null,
+      "sources": [
+        {
+          "quote": "A、B、C、D四台测试机",
+          "occurrence": 1
+        },
+        {
+          "quote": "不得重启任何测试机",
+          "occurrence": 1
+        }
+      ]
+    },
+    {
+      "id": "unrestricted_machine_domain",
+      "op": "CATEGORY",
+      "operands": [
+        "machines"
+      ],
+      "state": null,
+      "sources": [
+        {
+          "quote": "不得重启任何测试机",
+          "occurrence": 1
+        }
+      ]
+    },
+    {
+      "id": "restart_domain_choice",
+      "op": "DOMAIN_CHOICE",
+      "operands": [
+        "listed_machine_domain",
+        "unrestricted_machine_domain"
+      ],
+      "state": null,
+      "sources": [
+        {
+          "quote": "A、B、C、D四台测试机",
+          "occurrence": 1
+        },
+        {
+          "quote": "不得重启任何测试机",
+          "occurrence": 1
+        }
+      ]
+    },
+    {
+      "id": "restart_all",
+      "op": "FORALL",
+      "operands": [
+        "restart_domain_choice"
+      ],
+      "state": null,
+      "sources": [
+        {
+          "quote": "不得重启任何测试机",
+          "occurrence": 1
+        }
+      ]
+    }
+  ],
+  "issues": [
+    {
+      "id": "restart_domain_ambiguity",
+      "kind": "AMBIGUITY",
+      "subject_ids": [
+        "restart_domain_choice",
+        "restart_scope"
+      ],
+      "field_path": "expressions[restart_domain_choice].operands",
+      "alternatives": [
+        "listed_machine_domain",
+        "unrestricted_machine_domain"
+      ],
+      "affected_views": [
+        "B"
+      ],
+      "sources": [
+        {
+          "quote": "A、B、C、D四台测试机",
+          "occurrence": 1
+        },
+        {
+          "quote": "不得重启任何测试机",
+          "occurrence": 1
+        }
+      ],
+      "note": "禁令没有明确指示回指或重新限定范围，既可承接前文列举的四台测试机，也可作用于未限定容器的任务测试机类别域；两种读法改变禁令边界。"
+    }
+  ],
+  "coverage": [
+    {
+      "sources": [
+        {
+          "quote": "请PM检查A、B、C、D四台测试机",
+          "occurrence": 1
+        },
+        {
+          "quote": "本次检查范围不含B和D",
+          "occurrence": 1
+        }
+      ],
+      "claim_ids": [
+        "inspect_performer",
+        "inspect_input",
+        "inspect_scope"
+      ],
+      "status": "EXPRESSED",
+      "affected_views": [
+        "A",
+        "P",
+        "I"
+      ],
+      "range_requirement": {
+        "kind": "FINITE_ENUM",
+        "scope_claim_ids": [
+          "inspect_scope"
+        ]
+      }
+    },
+    {
+      "sources": [
+        {
+          "quote": "本次检查范围不含B和D",
+          "occurrence": 1
+        }
+      ],
+      "claim_ids": [
+        "inspect_input",
+        "inspect_scope"
+      ],
+      "status": "EXPRESSED",
+      "affected_views": [
+        "I"
+      ],
+      "range_requirement": {
+        "kind": "FINITE_ENUM",
+        "scope_claim_ids": [
+          "inspect_scope"
+        ]
+      }
+    },
+    {
+      "sources": [
+        {
+          "quote": "请PM检查",
+          "occurrence": 1
+        },
+        {
+          "quote": "不得重启任何测试机",
+          "occurrence": 1
+        }
+      ],
+      "claim_ids": [
+        "restart_performer",
+        "restart_object",
+        "restart_scope"
+      ],
+      "status": "EXPRESSED",
+      "affected_views": [
+        "P",
+        "B"
+      ],
+      "range_requirement": {
+        "kind": "UNIVERSAL",
+        "scope_claim_ids": [
+          "restart_scope"
+        ]
+      }
+    }
+  ]
+}

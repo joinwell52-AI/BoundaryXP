@@ -1,0 +1,83 @@
+{
+  "reviews": [],
+  "issues": [
+    {
+      "id": "audit_approval_object",
+      "issue_kind": "BINDING",
+      "subject_ids": [
+        "c_qa_object",
+        "c_ops_object"
+      ],
+      "field_path": "entity_id",
+      "context_refs": [
+        "e_report",
+        "c_allow_deliverable"
+      ],
+      "sources": [
+        {
+          "quote": "允许PM发布本次report.md，但必须等QA和OPS-01都批准后",
+          "occurrence": 1
+        }
+      ],
+      "reason": "批准对象未明示。批准文件与批准发布事项不能仅凭唯一当前文件排除其一；应局部保留未决，不影响文件身份、发布主体和批准者。",
+      "suggested_json": null
+    },
+    {
+      "id": "audit_approval_state_args",
+      "issue_kind": "CONDITION",
+      "subject_ids": [
+        "x_qa_approved",
+        "x_ops_approved",
+        "x_qa_missing",
+        "x_ops_missing"
+      ],
+      "field_path": "state.args",
+      "context_refs": [
+        "c_qa_object",
+        "c_ops_object"
+      ],
+      "sources": [
+        {
+          "quote": "允许PM发布本次report.md，但必须等QA和OPS-01都批准后",
+          "occurrence": 1
+        },
+        {
+          "quote": "任何一项批准尚未取得时，不得发布",
+          "occurrence": 1
+        }
+      ],
+      "reason": "正负状态均绑定了未获唯一来源支持的文件批准对象。修订应保留两批准者、互补极性及必要许可前提和充分禁止触发，不增加批准义务。",
+      "suggested_json": null
+    }
+  ],
+  "omissions": [],
+  "technical_errors": [],
+  "binding_errors": [
+    {
+      "code": "AUDIT_BINDING_UNSUPPORTED",
+      "issue_id": "audit_approval_object",
+      "subject_ids": [
+        "c_qa_object",
+        "c_ops_object"
+      ],
+      "field_path": "entity_id",
+      "context_refs": [
+        "e_report",
+        "c_allow_deliverable"
+      ],
+      "sources": [
+        {
+          "quote": "允许PM发布本次report.md，但必须等QA和OPS-01都批准后",
+          "occurrence": 1
+        }
+      ],
+      "reason": "批准对象未明示。批准文件与批准发布事项不能仅凭唯一当前文件排除其一；应局部保留未决，不影响文件身份、发布主体和批准者。",
+      "requirement": "Recheck this unsupported binding against the source. Do not invent a replacement or discard conditions/limits. Preserve genuine ambiguity locally and retain independently supported semantics.",
+      "selects_replacement": false
+    }
+  ],
+  "budget": {
+    "semantic_revisions_remaining": 1,
+    "shared_with_audit": true
+  }
+}

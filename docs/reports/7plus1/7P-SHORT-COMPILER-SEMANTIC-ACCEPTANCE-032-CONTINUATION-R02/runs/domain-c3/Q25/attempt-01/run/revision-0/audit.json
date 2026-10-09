@@ -1,0 +1,332 @@
+{
+  "contract_version": "032.1",
+  "reviews": [
+    {
+      "subject_id": "actor_pm",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [
+        {
+          "quote": "请PM读取feed.json",
+          "occurrence": 1
+        }
+      ],
+      "reason": "PM身份与执行职责明确；OTHER可占位未指定的人或组类别。"
+    },
+    {
+      "subject_id": "input_feed",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [
+        {
+          "quote": "feed.json",
+          "occurrence": 1
+        }
+      ],
+      "reason": "明确读取的文件身份。"
+    },
+    {
+      "subject_id": "output_note",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [
+        {
+          "quote": "生成feed-note.md",
+          "occurrence": 1
+        },
+        {
+          "quote": "报告恰好列出2条异常记录",
+          "occurrence": 1
+        }
+      ],
+      "reason": "唯一当前生成产物与后续报告指称为同一身份，mentions已覆盖两端。"
+    },
+    {
+      "subject_id": "anomaly_class",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [
+        {
+          "quote": "异常记录",
+          "occurrence": 1
+        }
+      ],
+      "reason": "表示被计数的内容类别，不是具体记录实例。"
+    },
+    {
+      "subject_id": "read_feed",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [
+        "retry_limit"
+      ],
+      "sources": [
+        {
+          "quote": "请PM读取feed.json",
+          "occurrence": 1
+        },
+        {
+          "quote": "该读取最多重试4次",
+          "occurrence": 1
+        }
+      ],
+      "reason": "当前必需读取动作及其重试约束均有来源，约束双向绑定。"
+    },
+    {
+      "subject_id": "generate_note",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [
+        "record_count"
+      ],
+      "sources": [
+        {
+          "quote": "生成feed-note.md",
+          "occurrence": 1
+        },
+        {
+          "quote": "报告恰好列出2条异常记录",
+          "occurrence": 1
+        }
+      ],
+      "reason": "明确要求生成报告，内容数量约束绑定该动作；原文未明确另设先后条件。"
+    },
+    {
+      "subject_id": "read_performer",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [
+        "actor_pm",
+        "read_feed"
+      ],
+      "sources": [
+        {
+          "quote": "请PM读取feed.json",
+          "occurrence": 1
+        }
+      ],
+      "reason": "PM是读取动作的明确执行者。"
+    },
+    {
+      "subject_id": "read_input",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [
+        "input_feed",
+        "read_feed"
+      ],
+      "sources": [
+        {
+          "quote": "读取feed.json",
+          "occurrence": 1
+        }
+      ],
+      "reason": "文件是明确读取输入，不是内部生成产物。"
+    },
+    {
+      "subject_id": "read_scope",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [
+        "read_input",
+        "feed_item"
+      ],
+      "sources": [
+        {
+          "quote": "读取feed.json",
+          "occurrence": 1
+        }
+      ],
+      "reason": "具体文件范围以ITEM绑定同一读取事件的输入对象。"
+    },
+    {
+      "subject_id": "retry_limit",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [
+        "read_feed"
+      ],
+      "sources": [
+        {
+          "quote": "读取feed.json",
+          "occurrence": 1
+        },
+        {
+          "quote": "该读取最多重试4次",
+          "occurrence": 1
+        }
+      ],
+      "reason": "回指同一读取；重试次数LTE 4次，target与计数范围均为读取事件，不包含初次读取。"
+    },
+    {
+      "subject_id": "generate_performer",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [
+        "actor_pm",
+        "generate_note"
+      ],
+      "sources": [
+        {
+          "quote": "请PM读取feed.json",
+          "occurrence": 1
+        },
+        {
+          "quote": "生成feed-note.md",
+          "occurrence": 1
+        }
+      ],
+      "reason": "连续同一指令没有主体切换，生成动作可承接PM；来源覆盖两端。"
+    },
+    {
+      "subject_id": "generate_result",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [
+        "output_note",
+        "generate_note"
+      ],
+      "sources": [
+        {
+          "quote": "生成feed-note.md",
+          "occurrence": 1
+        },
+        {
+          "quote": "报告恰好列出2条异常记录",
+          "occurrence": 1
+        }
+      ],
+      "reason": "RESULT正确绑定生成产物，报告指称保持同一身份；未新增交付义务。"
+    },
+    {
+      "subject_id": "result_scope",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [
+        "generate_result",
+        "note_item"
+      ],
+      "sources": [
+        {
+          "quote": "生成feed-note.md",
+          "occurrence": 1
+        }
+      ],
+      "reason": "ITEM准确表达同一生成事件的具体结果范围。"
+    },
+    {
+      "subject_id": "report_content",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [
+        "anomaly_class",
+        "generate_note"
+      ],
+      "sources": [
+        {
+          "quote": "报告恰好列出2条异常记录",
+          "occurrence": 1
+        }
+      ],
+      "reason": "异常记录属于报告内容用途，无来源要求将其作为外部输入。"
+    },
+    {
+      "subject_id": "content_scope",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [
+        "report_content",
+        "note_anomalies",
+        "output_note"
+      ],
+      "sources": [
+        {
+          "quote": "生成feed-note.md",
+          "occurrence": 1
+        },
+        {
+          "quote": "报告恰好列出2条异常记录",
+          "occurrence": 1
+        }
+      ],
+      "reason": "同一报告的内容谓词明确限定容器，CATEGORY绑定同事件CONTENT类别；没有全称或域竞争。"
+    },
+    {
+      "subject_id": "record_count",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [
+        "generate_result",
+        "output_note",
+        "report_content"
+      ],
+      "sources": [
+        {
+          "quote": "生成feed-note.md",
+          "occurrence": 1
+        },
+        {
+          "quote": "报告恰好列出2条异常记录",
+          "occurrence": 1
+        }
+      ],
+      "reason": "metric为列出的异常记录条数，EQ 2条；OUTPUT_CONTENT目标是同事件RESULT报告，计数范围为该报告，正确归入O。"
+    },
+    {
+      "subject_id": "feed_item",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [
+        "input_feed"
+      ],
+      "sources": [
+        {
+          "quote": "feed.json",
+          "occurrence": 1
+        }
+      ],
+      "reason": "ITEM单独引用明确的非CLASS文件对象。"
+    },
+    {
+      "subject_id": "note_item",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [
+        "output_note"
+      ],
+      "sources": [
+        {
+          "quote": "feed-note.md",
+          "occurrence": 1
+        }
+      ],
+      "reason": "ITEM单独引用明确生成的文件对象。"
+    },
+    {
+      "subject_id": "note_anomalies",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [
+        "anomaly_class",
+        "output_note"
+      ],
+      "sources": [
+        {
+          "quote": "生成feed-note.md",
+          "occurrence": 1
+        },
+        {
+          "quote": "报告恰好列出2条异常记录",
+          "occurrence": 1
+        }
+      ],
+      "reason": "CATEGORY表达该报告所列异常记录的内容域，容器由同一语法内容要求确定，不表示所有异常记录均须列出。"
+    }
+  ],
+  "issues": [],
+  "omissions": []
+}

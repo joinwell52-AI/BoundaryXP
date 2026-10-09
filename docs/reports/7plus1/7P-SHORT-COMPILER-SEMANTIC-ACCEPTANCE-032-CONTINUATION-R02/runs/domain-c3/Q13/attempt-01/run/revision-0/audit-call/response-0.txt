@@ -1,0 +1,181 @@
+{
+  "contract_version": "032.1",
+  "reviews": [
+    {
+      "subject_id": "n_pm",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [{"quote": "PM", "occurrence": 1}],
+      "reason": "主体身份明确；OTHER可占位，不推定人员或组织类别。"
+    },
+    {
+      "subject_id": "n_baseline",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [{"quote": "commit 7ac921e", "occurrence": 1}],
+      "reason": "明确指定的基线提交身份；标识中的数字不是数量要求。"
+    },
+    {
+      "subject_id": "n_config",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [{"quote": "当前配置", "occurrence": 1}],
+      "reason": "明确比较对象，未进一步指定实体类别。"
+    },
+    {
+      "subject_id": "n_diff",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [{"quote": "生成diff.md", "occurrence": 1}],
+      "reason": "明确命名的生成文件。"
+    },
+    {
+      "subject_id": "n_current_commit",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [{"quote": "当前工作区的commit", "occurrence": 1}],
+      "reason": "禁止切换的对象身份明确，不应与基线提交强合并。"
+    },
+    {
+      "subject_id": "e_compare",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [{"quote": "请PM以commit 7ac921e作为基线比较当前配置", "occurrence": 1}],
+      "reason": "当前任务明确要求比较，没有附加条件。"
+    },
+    {
+      "subject_id": "e_generate",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [{"quote": "生成diff.md", "occurrence": 1}],
+      "reason": "明确要求生成文件；原文没有明确的事件先后词。"
+    },
+    {
+      "subject_id": "e_switch",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [{"quote": "不得切换当前工作区的commit", "occurrence": 1}],
+      "reason": "切换动作被明确禁止，FORBIDDEN与动作正极性搭配正确。"
+    },
+    {
+      "subject_id": "c_compare_performer",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["e_compare", "n_pm"],
+      "sources": [{"quote": "请PM以commit 7ac921e作为基线比较当前配置", "occurrence": 1}],
+      "reason": "PM是比较动作的明确执行主体。"
+    },
+    {
+      "subject_id": "c_compare_input",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["e_compare", "n_config"],
+      "sources": [{"quote": "比较当前配置", "occurrence": 1}],
+      "reason": "当前配置是明确受检输入，不是本任务内部产生的结果。"
+    },
+    {
+      "subject_id": "c_compare_basis",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["e_compare", "n_baseline"],
+      "sources": [{"quote": "以commit 7ac921e作为基线比较当前配置", "occurrence": 1}],
+      "reason": "指定提交明确作为此次比较的基线依据。"
+    },
+    {
+      "subject_id": "c_compare_scope",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["c_compare_input", "x_config"],
+      "sources": [{"quote": "比较当前配置", "occurrence": 1}],
+      "reason": "范围绑定同一比较事件的具体输入对象，ITEM表达正确。"
+    },
+    {
+      "subject_id": "c_generate_performer",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["e_generate", "n_pm"],
+      "sources": [
+        {"quote": "请PM", "occurrence": 1},
+        {"quote": "生成diff.md", "occurrence": 1}
+      ],
+      "reason": "连续同一指令的追加动作承接PM，未出现主体切换。"
+    },
+    {
+      "subject_id": "c_generate_result",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["e_generate", "n_diff"],
+      "sources": [{"quote": "生成diff.md", "occurrence": 1}],
+      "reason": "diff.md是明确生成结果；没有交付要求，不需新增DELIVERABLE。"
+    },
+    {
+      "subject_id": "c_generate_scope",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["c_generate_result", "x_diff"],
+      "sources": [{"quote": "生成diff.md", "occurrence": 1}],
+      "reason": "范围绑定同一生成事件的指定结果文件。"
+    },
+    {
+      "subject_id": "c_switch_performer",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["e_switch", "n_pm"],
+      "sources": [
+        {"quote": "请PM", "occurrence": 1},
+        {"quote": "不得切换当前工作区的commit", "occurrence": 1}
+      ],
+      "reason": "同一任务追加禁令可承接PM，来源覆盖主体和禁令两端。"
+    },
+    {
+      "subject_id": "c_switch_object",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["e_switch", "n_current_commit"],
+      "sources": [{"quote": "不得切换当前工作区的commit", "occurrence": 1}],
+      "reason": "禁止对象明确；OBJECT用途不新增外部输入或基线同一性。"
+    },
+    {
+      "subject_id": "c_switch_scope",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["c_switch_object", "x_current_commit"],
+      "sources": [{"quote": "不得切换当前工作区的commit", "occurrence": 1}],
+      "reason": "禁令范围限定于当前工作区的commit，绑定同一事件对象。"
+    },
+    {
+      "subject_id": "x_config",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["n_config"],
+      "sources": [{"quote": "当前配置", "occurrence": 1}],
+      "reason": "具体配置对象使用ITEM，没有类别全称或容器竞争。"
+    },
+    {
+      "subject_id": "x_diff",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["n_diff"],
+      "sources": [{"quote": "diff.md", "occurrence": 1}],
+      "reason": "明确文件身份使用单对象ITEM。"
+    },
+    {
+      "subject_id": "x_current_commit",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["n_current_commit"],
+      "sources": [{"quote": "当前工作区的commit", "occurrence": 1}],
+      "reason": "明确限定的具体对象使用ITEM，无需构造类别域或全称。"
+    }
+  ],
+  "issues": [],
+  "omissions": []
+}

@@ -1,0 +1,53 @@
+{
+  "contract_version": "032.1",
+  "entities": [
+    {"id":"pm","label":"PM","type":"OTHER","mentions":[{"quote":"PM","occurrence":1}],"alternatives":[]},
+    {"id":"east","label":"east.csv","type":"FILE","mentions":[{"quote":"east.csv","occurrence":1}],"alternatives":[]},
+    {"id":"west","label":"west.csv","type":"FILE","mentions":[{"quote":"west.csv","occurrence":1}],"alternatives":[]},
+    {"id":"it","label":"它","type":"REFERENT","mentions":[{"quote":"它","occurrence":1},{"quote":"east.csv和west.csv","occurrence":1}],"alternatives":["east","west"]},
+    {"id":"qa","label":"QA","type":"OTHER","mentions":[{"quote":"QA","occurrence":1}],"alternatives":[]},
+    {"id":"ops","label":"OPS-01","type":"OTHER","mentions":[{"quote":"OPS-01","occurrence":1}],"alternatives":[]},
+    {"id":"port","label":"port.md","type":"FILE","mentions":[{"quote":"port.md","occurrence":1}],"alternatives":[]}
+  ],
+  "events": [
+    {"id":"read_east","predicate":"读取","kind":"ACTION","layer":"MAIN","use":"CURRENT_TASK","modality":"REQUIRED","polarity":"POSITIVE","owner_id":"ROOT","constraint_ids":[],"requires":[],"sources":[{"quote":"请PM读取east.csv和west.csv","occurrence":1}]},
+    {"id":"read_west","predicate":"读取","kind":"ACTION","layer":"MAIN","use":"CURRENT_TASK","modality":"REQUIRED","polarity":"POSITIVE","owner_id":"ROOT","constraint_ids":[],"requires":[],"sources":[{"quote":"请PM读取east.csv和west.csv","occurrence":1}]},
+    {"id":"handoff","predicate":"交给","kind":"ACTION","layer":"MAIN","use":"CURRENT_TASK","modality":"REQUIRED","polarity":"POSITIVE","owner_id":"ROOT","constraint_ids":["handoff_order"],"requires":[],"sources":[{"quote":"再把它交给QA","occurrence":1}]},
+    {"id":"generate","predicate":"生成","kind":"ACTION","layer":"MAIN","use":"CURRENT_TASK","modality":"REQUIRED","polarity":"POSITIVE","owner_id":"ROOT","constraint_ids":[],"requires":[],"sources":[{"quote":"另请OPS-01生成port.md","occurrence":1}]}
+  ],
+  "claims": [
+    {"id":"east_performer","kind":"ROLE","event_id":"read_east","entity_id":"pm","role":"PERFORMER","expression_id":null,"direction":null,"temporal":null,"quantity":null,"artifact_use":null,"scope_id":"read_east","requires":[],"sources":[{"quote":"请PM读取east.csv和west.csv","occurrence":1}],"note":""},
+    {"id":"east_input","kind":"ROLE","event_id":"read_east","entity_id":"east","role":"INPUT_OBJECT","expression_id":null,"direction":null,"temporal":null,"quantity":null,"artifact_use":null,"scope_id":"read_east","requires":[],"sources":[{"quote":"请PM读取east.csv和west.csv","occurrence":1}],"note":""},
+    {"id":"east_scope","kind":"SCOPE","event_id":"read_east","entity_id":null,"role":null,"expression_id":"east_item","direction":null,"temporal":null,"quantity":null,"artifact_use":null,"scope_id":"east","requires":[],"sources":[{"quote":"east.csv","occurrence":1}],"note":""},
+    {"id":"west_performer","kind":"ROLE","event_id":"read_west","entity_id":"pm","role":"PERFORMER","expression_id":null,"direction":null,"temporal":null,"quantity":null,"artifact_use":null,"scope_id":"read_west","requires":[],"sources":[{"quote":"请PM读取east.csv和west.csv","occurrence":1}],"note":"同一读取指令明确由PM读取两个并列文件；不增加组内先后。"},
+    {"id":"west_input","kind":"ROLE","event_id":"read_west","entity_id":"west","role":"INPUT_OBJECT","expression_id":null,"direction":null,"temporal":null,"quantity":null,"artifact_use":null,"scope_id":"read_west","requires":[],"sources":[{"quote":"请PM读取east.csv和west.csv","occurrence":1}],"note":""},
+    {"id":"west_scope","kind":"SCOPE","event_id":"read_west","entity_id":null,"role":null,"expression_id":"west_item","direction":null,"temporal":null,"quantity":null,"artifact_use":null,"scope_id":"west","requires":[],"sources":[{"quote":"west.csv","occurrence":1}],"note":""},
+    {"id":"handoff_performer","kind":"ROLE","event_id":"handoff","entity_id":"pm","role":"PERFORMER","expression_id":null,"direction":null,"temporal":null,"quantity":null,"artifact_use":null,"scope_id":"handoff","requires":[],"sources":[{"quote":"请PM读取east.csv和west.csv","occurrence":1},{"quote":"再把它交给QA","occurrence":1}],"note":"连续追加动作承接主语PM；主体在分号后的另请指令才切换。"},
+    {"id":"handoff_deliverable","kind":"ROLE","event_id":"handoff","entity_id":"it","role":"DELIVERABLE","expression_id":null,"direction":null,"temporal":null,"quantity":null,"artifact_use":null,"scope_id":"handoff","requires":[],"sources":[{"quote":"east.csv和west.csv","occurrence":1},{"quote":"再把它交给QA","occurrence":1}],"note":"交付对象的单数指代存在两个合理文件先行项；不默选其中一个，也不新增生成用途。"},
+    {"id":"handoff_recipient","kind":"ROLE","event_id":"handoff","entity_id":"qa","role":"RECIPIENT","expression_id":null,"direction":null,"temporal":null,"quantity":null,"artifact_use":null,"scope_id":"handoff","requires":[],"sources":[{"quote":"再把它交给QA","occurrence":1}],"note":""},
+    {"id":"handoff_scope","kind":"SCOPE","event_id":"handoff","entity_id":null,"role":null,"expression_id":"it_item","direction":null,"temporal":null,"quantity":null,"artifact_use":null,"scope_id":"it","requires":[],"sources":[{"quote":"east.csv和west.csv","occurrence":1},{"quote":"再把它交给QA","occurrence":1}],"note":"保留具体对象指代及其局部身份歧义。"},
+    {"id":"handoff_order","kind":"TEMPORAL","event_id":"handoff","entity_id":null,"role":null,"expression_id":"reads_completed","direction":"ORDER","temporal":"AFTER","quantity":null,"artifact_use":null,"scope_id":"handoff","requires":[],"sources":[{"quote":"请PM读取east.csv和west.csv","occurrence":1},{"quote":"再把它交给QA","occurrence":1}],"note":"交付在两个并列读取动作完成后；不断言读取已发生。"},
+    {"id":"generate_performer","kind":"ROLE","event_id":"generate","entity_id":"ops","role":"PERFORMER","expression_id":null,"direction":null,"temporal":null,"quantity":null,"artifact_use":null,"scope_id":"generate","requires":[],"sources":[{"quote":"另请OPS-01生成port.md","occurrence":1}],"note":"OPS-01为主体标识，其中数字不是执行数量。"},
+    {"id":"generate_result","kind":"ROLE","event_id":"generate","entity_id":"port","role":"RESULT","expression_id":null,"direction":null,"temporal":null,"quantity":null,"artifact_use":null,"scope_id":"generate","requires":[],"sources":[{"quote":"另请OPS-01生成port.md","occurrence":1}],"note":"明确生成结果；未指定交付用途。"},
+    {"id":"generate_scope","kind":"SCOPE","event_id":"generate","entity_id":null,"role":null,"expression_id":"port_item","direction":null,"temporal":null,"quantity":null,"artifact_use":null,"scope_id":"port","requires":[],"sources":[{"quote":"port.md","occurrence":1}],"note":""}
+  ],
+  "expressions": [
+    {"id":"east_item","op":"ITEM","operands":["east"],"state":null,"sources":[{"quote":"east.csv","occurrence":1}]},
+    {"id":"west_item","op":"ITEM","operands":["west"],"state":null,"sources":[{"quote":"west.csv","occurrence":1}]},
+    {"id":"it_item","op":"ITEM","operands":["it"],"state":null,"sources":[{"quote":"它","occurrence":1}]},
+    {"id":"port_item","op":"ITEM","operands":["port"],"state":null,"sources":[{"quote":"port.md","occurrence":1}]},
+    {"id":"east_completed","op":"STATE","operands":[],"state":{"predicate":"读取完成","event_id":"read_east","args":["east"],"polarity":"POSITIVE"},"sources":[{"quote":"请PM读取east.csv和west.csv","occurrence":1},{"quote":"再把它交给QA","occurrence":1}]},
+    {"id":"west_completed","op":"STATE","operands":[],"state":{"predicate":"读取完成","event_id":"read_west","args":["west"],"polarity":"POSITIVE"},"sources":[{"quote":"请PM读取east.csv和west.csv","occurrence":1},{"quote":"再把它交给QA","occurrence":1}]},
+    {"id":"reads_completed","op":"AND","operands":["east_completed","west_completed"],"state":null,"sources":[{"quote":"请PM读取east.csv和west.csv","occurrence":1},{"quote":"再把它交给QA","occurrence":1}]}
+  ],
+  "issues": [
+    {"id":"it_ambiguity","kind":"AMBIGUITY","subject_ids":["it","handoff_deliverable","handoff_scope"],"field_path":"entities[it].alternatives","alternatives":["east","west"],"affected_views":["O"],"sources":[{"quote":"east.csv和west.csv","occurrence":1},{"quote":"再把它交给QA","occurrence":1}],"note":"单数“它”未明确指向east.csv还是west.csv；仅交付对象身份未决，读取范围、交付主体、接收者及独立生成要求均明确。"}
+  ],
+  "coverage": [
+    {"sources":[{"quote":"请PM读取east.csv和west.csv","occurrence":1}],"claim_ids":["east_performer","east_input","east_scope"],"status":"EXPRESSED","affected_views":["I","A","P"],"range_requirement":{"kind":"SPECIFIC","scope_claim_ids":["east_scope"]}},
+    {"sources":[{"quote":"请PM读取east.csv和west.csv","occurrence":1}],"claim_ids":["west_performer","west_input","west_scope"],"status":"EXPRESSED","affected_views":["I","A","P"],"range_requirement":{"kind":"SPECIFIC","scope_claim_ids":["west_scope"]}},
+    {"sources":[{"quote":"再把它交给QA","occurrence":1}],"claim_ids":["handoff_performer","handoff_deliverable","handoff_recipient","handoff_scope"],"status":"EXPRESSED","affected_views":["A","O","P"],"range_requirement":{"kind":"SPECIFIC","scope_claim_ids":["handoff_scope"]}},
+    {"sources":[{"quote":"请PM读取east.csv和west.csv","occurrence":1},{"quote":"再把它交给QA","occurrence":1}],"claim_ids":["handoff_order"],"status":"EXPRESSED","affected_views":["A"],"range_requirement":{"kind":"NONE","scope_claim_ids":[]}},
+    {"sources":[{"quote":"另请OPS-01生成port.md","occurrence":1}],"claim_ids":["generate_performer","generate_result","generate_scope"],"status":"EXPRESSED","affected_views":["A","O","P"],"range_requirement":{"kind":"SPECIFIC","scope_claim_ids":["generate_scope"]}}
+  ]
+}
