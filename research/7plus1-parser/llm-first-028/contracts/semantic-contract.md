@@ -14,6 +14,8 @@ RESULT仅表示产生结果的用途；DELIVERABLE表示交付产物的用途。
 
 顶层 contract_version 固定为 032.1；entities/events/claims/expressions/issues/coverage 六个数组。所有 id 全图唯一，ROOT 是保留根任务标记。每项来源 sources/mentions 均使用真实非空 quote + occurrence（从 1 开始的完全相同字符串出现次数）。不要输出猜测偏移；宿主按 Unicode 码点定位。跨句指代/共享主体要引用两端；抽象状态可用多个片段，不伪造连续引文。每个claim的artifact_use不适用时为null；旧合同不静默升级。
 
+域来源比较规程修订为032-domain-interpretation-v2，结构Schema仍为032.1。域读法竞争不等于多个实体先行项竞争：同一CLASS可分别形成先前容器内的局部域与未限定容器的任务类别域，不需凭空生成第二个容器。独立全称限制不能仅因前句同类对象属于一个文件而自动继承排他限定。明示容器、明确指示回指、同一语法限定或允许上下文确能排除另一读法时确定单域；否则，对来源均支持、改变成员边界且无法唯一排除的局部继承/未限定任务域保留DOMAIN_CHOICE及局部AMBIGUITY，全称仍保留FORALL。没有真实竞争时不得过度澄清。模型负责这一语义比较，程序不按原文关键词、note或实体数量代做结论。模型可见规程发生变化，必须重新冻结并真实验收，旧模型成绩不能继承。
+
 events：predicate 是模型解释的规范动作/状态名称（使用简洁中文），kind 为 ACTION/STATE；layer 是 MAIN/CONDITION/QUOTED/MODIFIER/PURPOSE/CONTENT/BACKGROUND；use 是 CURRENT_TASK/MENTION_ONLY；modality 为 REQUIRED/PERMITTED/NOT_REQUIRED/FORBIDDEN/UNSTATED；polarity 是 POSITIVE/NEGATIVE；owner_id 为 ROOT 或结构父事件；constraint_ids 是约束此事件的全部 CONDITION/QUANTITY/TEMPORAL 主张；requires 仅列真正必需的语义依赖。owner 和共现不是证明依赖。
 
 claims 按 kind 区分：
