@@ -107,7 +107,7 @@ export function technicalValidate(source,g,audit){
    if(x.op==='DOMAIN_CHOICE'){
     const issue=g.issues.find(i=>i.kind==='AMBIGUITY'&&i.subject_ids.includes(x.id)&&i.alternatives.length===x.operands.length&&x.operands.every(k=>i.alternatives.includes(k))&&!sourceIssueBad.has(i.id));
     if(!issue)bad('DOMAIN_CHOICE_EVIDENCE_MISSING');
-    if(new Set(x.operands.map(k=>JSON.stringify(index.get(k)?.operands))).size!==x.operands.length)bad('DOMAIN_CHOICE_DUPLICATE_INTERPRETATION');
+    if(new Set(x.operands.map(k=>{const e=index.get(k);return JSON.stringify([e?.op,e?.operands,e?.state]);})).size!==x.operands.length)bad('DOMAIN_CHOICE_DUPLICATE_INTERPRETATION');
     uncertain.push('COMPETING_SCOPE_DOMAINS');
    }
    if(x.op==='UNRESOLVED_DOMAIN')uncertain.push('DOMAIN_UNPARSED');

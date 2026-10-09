@@ -37,6 +37,14 @@ test('Dropping choice evidence, corrupting ownership or installing both interpre
 test('Audit contradiction cannot be disguised as correctly preserved competition',()=>{
  const g=fixture(),a=audit(g);a.reviews.find(x=>x.subject_id==='local').verdict='CONTRADICT';assert.equal(run(g,a).canonical.slots.B.status,'PARSER_COVERAGE_FAILURE');assert.equal(run(g,a).canonical.slots.O.status,'RESOLVED');
 });
+
+test('Different typed set operators sharing endpoints remain different interpretations',()=>{
+ const g=fixture();g.expressions.push(expr('union','UNION',['local','wide']),expr('intersection','INTERSECTION',['local','wide']));
+ g.expressions.find(e=>e.id==='choice').operands=['union','intersection'];g.issues[0].alternatives=['union','intersection'];
+ const r=run(g);assert.deepEqual(r.canonical.gaps,[]);assert.equal(r.canonical.slots.B.status,'UNRESOLVED');
+ const obs=[{member_id:'member',category_id:'records',within_id:'directory',value:'FALSE'},{member_id:'member',category_id:'records',value:'TRUE'}];
+ assert.deepEqual(query(g,obs).alternative_results.map(x=>x.scope_value),['TRUE','FALSE']);assert.equal(query(g,obs).scope_value,'UNKNOWN');
+});
 test('Explicit two-container union is simultaneous, never a source-domain choice; no member-name inference',()=>{
  const g=fixture();g.issues=[];g.expressions.find(x=>x.id==='wide').operands=['records','other-directory'];g.expressions.find(x=>x.id==='choice').op='UNION';
  assert.equal(run(g).canonical.slots.B.status,'RESOLVED');assert.deepEqual(run(g).canonical.clarifications,[]);
