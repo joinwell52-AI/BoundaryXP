@@ -1,5 +1,9 @@
 // Technical feedback is generated from actual validator rows, never from source keywords.
 const repairable={
+ DOMAIN_CHOICE_EVIDENCE_MISSING:['operands','Preserve each source-supported alternative and an AMBIGUITY issue pointing to the choice and affected SCOPE. Never choose a winning interpretation.'],
+ DOMAIN_CHOICE_DUPLICATE_INTERPRETATION:['operands','Alternatives must express genuinely distinct supported domains. Do not invent ambiguity.'],
+ COMPETING_DOMAINS_SIMULTANEOUSLY_APPLIED:['expression_id','Bind a single source-domain choice, not simultaneously active alternative scopes. Preserve the quantifier and independent facts.'],
+ UNRESOLVED_DOMAIN_SIGNATURE:['operands','UNRESOLVED_DOMAIN requires one CLASS operand and explicit coverage GAP. It is not an unrestricted domain.'],
  SCOPE_RANGE_BINDING:['scope_id','Bind a range to a source-supported role of the same event and actual object/category. Never substitute another object.'],
  EXPRESSION_TYPE_MISMATCH:['operands','Boolean operators consume Boolean expressions; set operators consume sets; FORALL consumes one set domain. CATEGORY requires CLASS plus optional container; ITEM/ENUM never stand for an entire class.'],
  CONDITION_EXPRESSION_TYPE:['expression_id','Condition/temporal state expressions are Boolean. FORALL is not Boolean ALL; preserve range separately.'],

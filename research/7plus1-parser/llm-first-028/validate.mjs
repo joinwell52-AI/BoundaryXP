@@ -1,7 +1,7 @@
 import Ajv from 'ajv';
 import {proposalSchema,auditSchema,views} from './contracts/schema.mjs';
 import {linkSources} from './source.mjs';
-import {expressionType,scopeEntityRefs} from './scopes.mjs';
+import {expressionType,scopeEntityRefs,scopeDomainState} from './scopes.mjs';
 const ajv=new Ajv({allErrors:true,strict:false});
 const validators={proposal:ajv.compile(proposalSchema),audit:ajv.compile(auditSchema)};
 export function validateSchema(kind,value){const v=validators[kind];return {ok:v(value),errors:structuredClone(v.errors??[])};}
@@ -17,11 +17,16 @@ export function technicalValidate(source,g,audit){
  const rows=new Map(),diagnostics=[],audit_sources=[],issue_sources=[];
  const ref=(id,collection)=>id==='ROOT'?!collection:index.has(id)&&(!collection||index.get(id).collection===collection);
  const auditBad=new Set(),sourceIssueBad=new Set();
- for(const issue of g.issues){try{linkSources(source,issue.sources);}catch{sourceIssueBad.add(issue.id);}}
+ for(const issue of g.issues){
+  if(issue.id==='ROOT'||index.has(issue.id)||g.issues.filter(i=>i.id===issue.id).length!==1){sourceIssueBad.add(issue.id);diagnostics.push({code:'ISSUE_ID_NOT_UNIQUE',id:issue.id});}
+  try{linkSources(source,issue.sources);}catch{sourceIssueBad.add(issue.id);}
+ }
+ const contextRef=id=>ref(id)||g.issues.some(i=>i.id===id&&!sourceIssueBad.has(i.id));
  for(const item of [...audit.reviews,...audit.issues,...audit.omissions]){
   try{audit_sources.push({subject_id:item.subject_id??item.id,sources:linkSources(source,item.sources)});}
   catch(e){diagnostics.push({code:'AUDIT_SOURCE_INVALID',id:item.subject_id??item.id,message:e.message});auditBad.add(item.subject_id??item.id);}
-  for(const id of [...(item.subject_id?[item.subject_id]:item.subject_ids??[]),...(item.context_refs??[])])if(!ref(id)){diagnostics.push({code:'AUDIT_DANGLING_REFERENCE',id});auditBad.add(item.subject_id??item.id);}
+  for(const id of item.subject_id?[item.subject_id]:item.subject_ids??[])if(!ref(id)){diagnostics.push({code:'AUDIT_DANGLING_REFERENCE',id});auditBad.add(item.subject_id??item.id);}
+  for(const id of item.context_refs??[])if(!contextRef(id)){diagnostics.push({code:'AUDIT_DANGLING_REFERENCE',id});auditBad.add(item.subject_id??item.id);}
  }
  for(const x of items){
   const errors=[],uncertain=[],linked=[];
@@ -92,13 +97,20 @@ export function technicalValidate(source,g,audit){
     if(x.state){if(x.state.event_id!==null&&!ref(x.state.event_id,'events'))bad('STATE_EVENT_REFERENCE');for(const id of x.state.args)if(!ref(id))bad('STATE_ARGUMENT_REFERENCE',id);}
    }else{
     if(x.state!==null)bad('NON_STATE_SIGNATURE');
-    if(['ITEM','ENUM','CATEGORY'].includes(x.op)){
-     if((x.op==='ITEM'&&n!==1)||(x.op==='ENUM'&&n<1)||(x.op==='CATEGORY'&&![1,2].includes(n)))bad(x.op+'_SIGNATURE');
+    if(['ITEM','ENUM','CATEGORY','UNRESOLVED_DOMAIN'].includes(x.op)){
+     if((x.op==='ITEM'&&n!==1)||(x.op==='ENUM'&&n<1)||(x.op==='CATEGORY'&&![1,2].includes(n))||(x.op==='UNRESOLVED_DOMAIN'&&n!==1))bad(x.op+'_SIGNATURE');
      for(const id of x.operands)if(!ref(id,'entities'))bad(x.op+'_SIGNATURE',id);
     }
     else{if((['NOT','FORALL'].includes(x.op)&&n!==1)||(x.op==='EXCEPT'&&n!==2)||(!['NOT','FORALL','EXCEPT'].includes(x.op)&&n<2))bad('EXPRESSION_ARITY');for(const id of x.operands)if(!ref(id,'expressions'))bad('EXPRESSION_OPERAND',id);}
    }
    if(expressionType(g.expressions,x.id,g.entities)==='INVALID')bad('EXPRESSION_TYPE_MISMATCH');
+   if(x.op==='DOMAIN_CHOICE'){
+    const issue=g.issues.find(i=>i.kind==='AMBIGUITY'&&i.subject_ids.includes(x.id)&&i.alternatives.length===x.operands.length&&x.operands.every(k=>i.alternatives.includes(k))&&!sourceIssueBad.has(i.id));
+    if(!issue)bad('DOMAIN_CHOICE_EVIDENCE_MISSING');
+    if(new Set(x.operands.map(k=>JSON.stringify(index.get(k)?.operands))).size!==x.operands.length)bad('DOMAIN_CHOICE_DUPLICATE_INTERPRETATION');
+    uncertain.push('COMPETING_SCOPE_DOMAINS');
+   }
+   if(x.op==='UNRESOLVED_DOMAIN')uncertain.push('DOMAIN_UNPARSED');
   }
   const localIssues=g.issues.filter(i=>i.subject_ids.includes(x.id)&&i.kind!=='UNSPECIFIED');
   const auditIssues=audit.issues.filter(i=>i.subject_ids.includes(x.id));
@@ -118,6 +130,15 @@ export function technicalValidate(source,g,audit){
    &&reviews.every(r=>r.verdict==='SUPPORT'||r.field_path==='type'||r.field_path===''&&r.verdict==='UNCERTAIN');
   rows.set(x.id,{id:x.id,collection:x.collection,status,...(x.collection==='entities'?{identity_status:typeOnly?'ACCEPTED':status}:{}),errors,uncertain,sources:linked,audit_refs:reviews.map(r=>({subject_id:r.subject_id,field_path:r.field_path,verdict:r.verdict})),required_dependencies:x.requires??[],structural_refs:[],...(typeOnly?{unresolved_properties:['type'],identity_policy:'SOURCE_AND_IDENTITY_SUPPORTED_TYPE_METADATA_ONLY'}:{})});
  }
+ // A declared interpretation cannot simultaneously be installed as a second active
+ // scope on the same event/object. Source alternatives are not extra prohibitions.
+ for(const c of g.claims.filter(c=>c.kind==='SCOPE')){
+  const choices=[];const visit=(id,seen=new Set())=>{if(seen.has(id))return;seen.add(id);const x=index.get(id);if(x?.op==='DOMAIN_CHOICE')choices.push(x);else if(x?.collection==='expressions')for(const k of x.operands)visit(k,seen);};visit(c.expression_id);
+  for(const choice of choices)for(const other of g.claims.filter(o=>o.kind==='SCOPE'&&o.id!==c.id&&o.event_id===c.event_id&&o.scope_id===c.scope_id)){
+   const root=index.get(other.expression_id),domain=root?.op==='FORALL'?root.operands[0]:root?.id;
+   if(choice.operands.includes(domain)){for(const id of [c.id,other.id]){const row=rows.get(id);row.status='REJECTED';row.errors.push({code:'COMPETING_DOMAINS_SIMULTANEOUSLY_APPLIED',detail:choice.id});}}
+  }
+ }
  // Only real mandatory dependencies and identity/expression inputs propagate. Not owner/context edges.
  const scopeRole=x=>x.kind==='SCOPE'&&['SET','UNIVERSAL_SCOPE'].includes(expressionType(g.expressions,x.expression_id,g.entities))?g.claims.find(c=>c.kind==='ROLE'&&c.event_id===x.event_id&&c.entity_id===x.scope_id&&['OBJECT','INPUT_OBJECT','CONTENT','RESULT','DELIVERABLE'].includes(c.role)):null;
  const deps=x=>[...(x.requires??[]).map(id=>({id,full:true})),...(scopeRole(x)?[{id:scopeRole(x).id,full:true}]:[]),...(x.kind==='ARTIFACT_USE'&&x.artifact_use?[x.artifact_use.producer_result_id,x.artifact_use.consumer_role_id].map(id=>({id,full:true})):[]),...(x.collection==='claims'&&x.entity_id?[{id:x.entity_id,full:false}]:[]),...(x.collection==='claims'&&x.expression_id?[{id:x.expression_id,full:true}]:[]),...(x.collection==='expressions'?(x.op==='STATE'?x.state?.args??[]:x.operands).map(id=>({id,full:x.op==='CATEGORY'&&id===x.operands[0]||index.get(id)?.collection!=='entities'})):[])];
@@ -136,11 +157,14 @@ export function technicalValidate(source,g,audit){
    if(!requirement.scope_claim_ids.length)throw Error('RANGE_REQUIREMENT_UNREPRESENTED');
    for(const id of requirement.scope_claim_ids){
     const claim=index.get(id),expr=index.get(claim?.expression_id),domain=index.get(expr?.operands[0]);
-    if(!c.claim_ids.includes(id)||claim?.kind!=='SCOPE'||rows.get(id)?.status!=='ACCEPTED')throw Error('RANGE_REQUIREMENT_UNREPRESENTED:'+id);
+    const domainState=scopeDomainState(g.expressions,claim?.expression_id,g.entities);
+    const preservedCompetition=domainState==='COMPETING'&&(()=>{const seen=new Set();const valid=k=>{if(seen.has(k))return true;seen.add(k);const r=rows.get(k);if(!r||r.errors.length||r.status==='REJECTED')return false;if(r.status!=='ACCEPTED'&&!r.uncertain.every(u=>u==='AMBIGUITY'||u==='COMPETING_SCOPE_DOMAINS'||u.startsWith('REQUIRED_DEPENDENCY:')))return false;return deps(index.get(k)).every(d=>valid(d.id));};return valid(id);})();
+    if(!c.claim_ids.includes(id)||claim?.kind!=='SCOPE'||(rows.get(id)?.status!=='ACCEPTED'&&!preservedCompetition)||domainState==='UNPARSED')throw Error('RANGE_REQUIREMENT_UNREPRESENTED:'+id);
     const hasCategory=(key,seen=new Set())=>{if(seen.has(key))return false;seen.add(key);const x=index.get(key);return x?.op==='CATEGORY'||(x?.operands??[]).some(k=>hasCategory(k,seen));};
     if(['UNIVERSAL','UNIVERSAL_EXCEPT'].includes(requirement.kind)&&!hasCategory(expr?.operands[0]))throw Error('RANGE_REQUIREMENT_CATEGORY_MISSING:'+id);
     const expected={SPECIFIC:'ITEM',FINITE_ENUM:'ENUM',CATEGORY:'CATEGORY',UNIVERSAL:'FORALL',UNIVERSAL_EXCEPT:'FORALL'}[requirement.kind];
-    if(expr?.op!==expected||(requirement.kind==='UNIVERSAL_EXCEPT'&&domain?.op!=='EXCEPT')||(requirement.kind==='UNIVERSAL'&&domain?.op==='EXCEPT'))throw Error('RANGE_REQUIREMENT_TYPE_MISMATCH:'+id);
+    const categoryTree=k=>{const x=index.get(k);return x?.op==='CATEGORY'||['UNION','INTERSECTION','DOMAIN_CHOICE'].includes(x?.op)&&x.operands.every(categoryTree);};
+    if((expr?.op!==expected&&!(requirement.kind==='CATEGORY'&&categoryTree(expr?.id)))||(requirement.kind==='UNIVERSAL_EXCEPT'&&domain?.op!=='EXCEPT')||(requirement.kind==='UNIVERSAL'&&domain?.op==='EXCEPT'))throw Error('RANGE_REQUIREMENT_TYPE_MISMATCH:'+id);
    }
   }
   return {...c,id:`coverage:${i}`,sources:linkSources(source,c.sources)};
@@ -150,5 +174,5 @@ export function technicalValidate(source,g,audit){
   try{issue_sources.push({id:issue.id,sources:linkSources(source,issue.sources)});}
   catch(e){diagnostics.push({code:'ISSUE_SOURCE_INVALID',id:issue.id,message:e.message});}
  }
- return {policy:'031-r1-q05-technical-v1',schemas,rows:[...rows.values()],diagnostics,coverage,audit_sources,issue_sources};
+ return {policy:'032-domain-technical-v1',schemas,rows:[...rows.values()],diagnostics,coverage,audit_sources,issue_sources};
 }

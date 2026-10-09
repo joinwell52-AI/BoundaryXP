@@ -1,6 +1,6 @@
 import {spawn} from 'node:child_process';
 // Cancel only a child created by this invocation, never an executable name.
-export async function runChild(binary,args,{input='',signal,timeoutMs=300000,onEvent=()=>{},env=process.env}={}){
+export async function runChild(binary,args,{input='',signal,timeoutMs=300000,onEvent=()=>{},onStderr=()=>{},env=process.env}={}){
  signal?.throwIfAborted();
  let stdout='',stderr='',timedOut=false,cancelled=false,killReceipt=null;
  const started=Date.now();
@@ -21,7 +21,7 @@ export async function runChild(binary,args,{input='',signal,timeoutMs=300000,onE
  child.stdout.setEncoding('utf8');child.stderr.setEncoding('utf8');
  let pending='';
  child.stdout.on('data',chunk=>{stdout+=chunk;pending+=chunk;const lines=pending.split('\n');pending=lines.pop();for(const line of lines){try{onEvent(JSON.parse(line));}catch{}}});
- child.stderr.on('data',chunk=>stderr+=chunk);
+ child.stderr.on('data',chunk=>{stderr+=chunk;onStderr(stderr);});
  const result=await new Promise(resolve=>{
   child.once('error',e=>resolve({exit_code:null,error:e.message,exit_confirmed:true}));
   child.once('close',code=>resolve({exit_code:code,error:null,exit_confirmed:true}));

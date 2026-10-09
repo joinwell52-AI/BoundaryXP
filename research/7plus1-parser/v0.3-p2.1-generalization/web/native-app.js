@@ -51,6 +51,12 @@ function panel(kind){
  if(kind==='forbid'){for(const f of r.canonical.slots.B.entries)$('panel').append(entry(f));return;}
  if(kind==='retained'){for(const f of r.canonical.retained_nonprojected)$('panel').append(entry(f));return;}
  $('panel').append(el('h3','未决 / 最小澄清 / 未指定细节'));
+ for(const q of r.canonical.clarifications??[]){
+  const section=el('section');section.append(el('h3',q.question),el('p','备选仅用于解释差异，未预选答案；请手工修改左侧原文，再点击编译。旧记录保持不变。'));
+  const detail=el('button','查看该限制、备选与来源','secondary');detail.onclick=()=>record(q);section.append(detail);
+  for(const choice of q.choices){for(const x of choice.alternatives)section.append(el('pre',JSON.stringify({在该解释下:x,最终边界:false},null,2)));}
+  const edit=el('button','编辑原文并澄清此范围','secondary');edit.onclick=()=>{$('input').focus();$('input').setSelectionRange($('input').value.length,$('input').value.length);};section.append(edit);$('panel').append(section);
+ }
  for(const i of r.ir.issues){const b=el('button',i.kind+'：'+i.note,'entry');b.onclick=()=>record(i);$('panel').append(b);}
  for(const i of r.ir.audit_issues){const b=el('button','审阅待确认 '+i.subject_ids.join(',')+(i.field_path?' / '+i.field_path:'')+'：'+i.reason,'entry');b.onclick=()=>record(i);$('panel').append(b);}
  for(const f of r.canonical.unresolved)$('panel').append(entry(f));
@@ -72,6 +78,7 @@ $('parse').onclick=async()=>{
  if(busy)return;const n=count();if(!n||!$('input').value.replaceAll('\uFEFF','').trim())return showError(Error('EMPTY_SOURCE'));if(n>300)return showError(Error('SHORT_TEXT_SCOPE_EXCEEDED'));
  busy=true;$('parse').disabled=true;
  const sourcePayload=uploaded??{text:$('input').value},pending=JSON.parse(localStorage.getItem('boundx029-pending')??'null');
+ if(current?.result&&current.source_text!==$('input').value)sourcePayload.parent_run_id=current.run_id;
  const payload=pending&&(pending.text===sourcePayload.text&&pending.base64===sourcePayload.base64)?pending:{...sourcePayload,request_id:crypto.randomUUID()};localStorage.setItem('boundx029-pending',JSON.stringify(payload));
  try{const run=await jsonPost('/api/parse',payload);localStorage.setItem('boundx029-active',run.run_id);await open(run.run_id);}
  catch(e){busy=false;$('parse').disabled=false;showError(e);}
@@ -91,6 +98,6 @@ $('delete-run').onclick=async()=>{if(!current||busy||!await confirmation('从本
 $('clear-history').onclick=async()=>{if(busy||!await confirmation('隐藏本轮列表？不删除旧历史或运行文件。'))return;const c=await jsonPost('/api/clear-confirmation',{});if(!await confirmation(c.message))return;await api('/api/runs',{method:'DELETE',headers:{'content-type':'application/json'},body:JSON.stringify({token:c.token,confirmation:'DELETE_ALL_HISTORY'})});await history();};
 $('save').onclick=async()=>{if(!current)return;try{const x=await jsonPost('/api/review',{run_id:current.run_id,notes:$('notes').value});$('review-status').textContent='已保存 '+x.file;}catch(e){showError(e);}};
 $('refresh').onclick=()=>history().catch(showError);document.querySelectorAll('[data-tab]').forEach(b=>b.onclick=()=>panel(b.dataset.tab));
-async function boot(){session=await api('/api/session');$('engine-info').textContent=session.engine+' · '+session.contract+' · '+session.skill_mode+' · 实际模型未披露';await history();let id=localStorage.getItem('boundx029-active');if(!id){const pending=JSON.parse(localStorage.getItem('boundx029-pending')??'null');if(pending){id=(await api('/api/runs')).find(r=>r.request_id===pending.request_id)?.run_id;if(!id){$('input').value=pending.text??'';count();}}}if(id)await open(id);}
+async function boot(){session=await api('/api/session');const p=session.product_snapshot;$('product-version').textContent=p?`${p.product_version} · ${p.compiler_revision} · 合同 ${p.contract}`:`开发工作区 · ${session.compiler_revision} · 合同 ${session.contract}`;$('product-acceptance').textContent='产品验收：'+(p?.product_acceptance??'开发版本，尚未验收')+'；公开发布：'+(p?.public_release?'已发布':'未发布候选');$('product-limits').textContent=(p?.support_profile??'单一ADMIN短任务，非空且≤300码点')+'；'+(p?.known_limitations??['源文可能需澄清；不是业务执行授权']).join('；');$('engine-info').textContent=session.engine+' · '+session.contract+' · '+session.skill_mode+' · 实际模型未披露';await history();let id=localStorage.getItem('boundx029-active');if(!id){const pending=JSON.parse(localStorage.getItem('boundx029-pending')??'null');if(pending){id=(await api('/api/runs')).find(r=>r.request_id===pending.request_id)?.run_id;if(!id){$('input').value=pending.text??'';count();}}}if(id)await open(id);}
 boot().catch(showError);
 

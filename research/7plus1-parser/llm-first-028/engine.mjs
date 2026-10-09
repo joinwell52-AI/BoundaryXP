@@ -8,7 +8,7 @@ import {compileBoundary} from './compile.mjs';
 import {implementationInventory,runtimeInventory} from './evidence.mjs';
 import {technicalRevisionFeedback,auditBindingRevisionFeedback} from './revision.mjs';
 export const writeJSON=(file,data)=>fs.writeFileSync(file,JSON.stringify(data,null,2)+'\n');
-export const compilerRevision='031-r1-q05-c1';
+export const compilerRevision='032-c1';
 export function replay7Plus1(bytes,{output,replayFrom}){
  const source=prepareSource(bytes),tracePath=path.join(replayFrom,'trace.json');
  const prior=JSON.parse(fs.readFileSync(tracePath,'utf8'));
@@ -29,11 +29,12 @@ export function replay7Plus1(bytes,{output,replayFrom}){
  writeJSON(path.join(output,'run-summary.json'),{execution_mode:replay.execution_mode,real_calls:0,replays:1,origin_trace:replay.origin_trace,slot_status:Object.fromEntries(Object.entries(compiled.canonical.slots).map(([k,v])=>[k,v.status]))});
  return replay;
 }
-export async function parse7Plus1(bytes,{output,probe,model='gpt-6.1-sol',reasoning='medium',semanticRevision=true,signal,onProgress=()=>{},timeoutMs=300000,call=callCodex,maxModelRequests,resourceGuard=()=>{},productSnapshot=null}={}){
+export async function parse7Plus1(bytes,{output,probe,model='gpt-6.1-sol',reasoning='medium',semanticRevision=true,signal,onProgress=()=>{},timeoutMs=300000,call=callCodex,maxModelRequests,resourceGuard=()=>{},productSnapshot=null,sourceLineage=null}={}){
  if(!output)throw Error('OUTPUT_DIRECTORY_REQUIRED');
  fs.mkdirSync(output,{recursive:true});
  if(fs.existsSync(path.join(output,'source.txt')))throw Error('OUTPUT_ALREADY_EXISTS: first results are never overwritten');
  resourceGuard();const source=prepareSource(bytes);signal?.throwIfAborted();
+ if(sourceLineage&&(sourceLineage.source_sha256!==source.sha256||sourceLineage.parent_source_sha256===source.sha256))throw Error('INVALID_SOURCE_LINEAGE');
  if(maxModelRequests!==undefined&&(!Number.isSafeInteger(maxModelRequests)||maxModelRequests<0))throw Error('INVALID_MODEL_REQUEST_BUDGET');
  const requestBudget=maxModelRequests===undefined?null:{remaining:maxModelRequests};
  onProgress({stage:'PREPARING'});probe??=probeCodex();
@@ -56,7 +57,7 @@ export async function parse7Plus1(bytes,{output,probe,model='gpt-6.1-sol',reason
   const technical=technicalValidate(source,parsed.value,reviewed.value);writeJSON(path.join(directory,'technical-validation.json'),technical);
   onProgress({stage:'COMPILING',revision});
   const compiled=compileBoundary(source,parsed.value,reviewed.value,technical);writeJSON(path.join(directory,'boundary-ir.json'),compiled.ir);writeJSON(path.join(directory,'7plus1.json'),compiled.canonical);fs.writeFileSync(path.join(directory,'7plus1.zh.md'),compiled.chinese);
-  const trace={product_snapshot:productSnapshot,source,proposal:parsed.value,audit:reviewed.value,technical,...compiled,model_calls:{parse:parsed.attempts,audit:reviewed.attempts},revision,revision_of:revision?0:null};writeJSON(path.join(directory,'trace.json'),trace);passes.push(trace);
+  const trace={product_snapshot:productSnapshot,source_lineage:sourceLineage,source,proposal:parsed.value,audit:reviewed.value,technical,...compiled,model_calls:{parse:parsed.attempts,audit:reviewed.attempts},revision,revision_of:revision?0:null};writeJSON(path.join(directory,'trace.json'),trace);passes.push(trace);
   const contradictory=reviewed.value.reviews.filter(r=>r.verdict==='CONTRADICT');
   const technicalIssues=technicalRevisionFeedback(technical,parsed.value);
   const bindingIssues=auditBindingRevisionFeedback(technical,parsed.value,reviewed.value);

@@ -68,22 +68,26 @@ export function createServer({dataRoot=DATA,parse=parse7Plus1,legacyRoot=process
    let size=0;const chunks=[];for await(const chunk of req){size+=chunk.length;if(size>16384)return send(413,{error:'REQUEST_BYTE_LIMIT'});chunks.push(chunk);}
    const input=JSON.parse(new TextDecoder('utf-8',{fatal:true}).decode(Buffer.concat(chunks)));
    if(req.method==='POST'&&route==='/api/parse'){
-    if(Object.keys(input).some(k=>!['text','base64','filename','request_id'].includes(k)))return send(400,{error:'UNSUPPORTED_REQUEST_FIELD'});
+    if(Object.keys(input).some(k=>!['text','base64','filename','request_id','parent_run_id'].includes(k)))return send(400,{error:'UNSUPPORTED_REQUEST_FIELD'});
     if(!ID.test(input.request_id??''))return send(400,{error:'REQUEST_ID_REQUIRED'});
     if((typeof input.text==='string')===(typeof input.base64==='string'))return send(400,{error:'ONE_SOURCE_REQUIRED'});
     if(input.base64!==undefined&&!/^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=)?$/.test(input.base64))return send(400,{error:'INVALID_BASE64'});
     resourceGuard();
     if(JSON.stringify(runtimeInventory())!==loadedRuntime)return send(409,{error:'STALE_CODE_RESTART_REQUIRED'});
     const bytes=input.base64!==undefined?Buffer.from(input.base64,'base64'):Buffer.from(input.text,'utf8');const source=prepareSource(bytes);
+    const parent=input.parent_run_id===undefined?null:records.get(input.parent_run_id);
+    if(input.parent_run_id!==undefined&&(!ID.test(input.parent_run_id)||!parent||!terminal.has(parent.status)))return send(400,{error:'INVALID_CLARIFICATION_PARENT'});
+    if(parent?.source_sha256===source.sha256)return send(400,{error:'CLARIFICATION_SOURCE_UNCHANGED'});
+    const sourceLineage=parent?{parent_run_id:parent.run_id,parent_source_sha256:parent.source_sha256,source_sha256:source.sha256,kind:'USER_EDITED_NEW_SOURCE',user_confirmation:'EXPLICIT_COMPILE_SUBMISSION',business_approval:false}:null;
     const prior=[...records.values()].find(r=>r.request_id===input.request_id);
-    if(prior)return prior.source_sha256===source.sha256?send(200,summary(prior)):send(409,{error:'REQUEST_ID_SOURCE_MISMATCH'});
+    if(prior)return prior.source_sha256===source.sha256&&(prior.source_lineage?.parent_run_id??null)===(sourceLineage?.parent_run_id??null)?send(200,summary(prior)):send(409,{error:'REQUEST_ID_SOURCE_MISMATCH'});
     if(active.size)return send(409,{error:'COMPILER_BUSY'});
     const id=randomUUID(),controller=new AbortController(),created_at=new Date().toISOString();fs.mkdirSync(folder(id));
     record={run_id:id,request_id:input.request_id,created_at,status:'QUEUED',stage:'QUEUED',source_text:source.text,source_sha256:source.sha256,codepoints:source.codepoints,filename:typeof input.filename==='string'?path.basename(input.filename).slice(0,100):'pasted-task.txt',engine:'BoundX short compiler',contract:buildBundle('parse').schema.properties.contract_version.const,skill_mode:'INLINE_BUNDLE',native_skill_loading:'NOT_VERIFIED',requested_model:'gpt-6.1-sol',actual_model:null,execution_mode:'LIVE_CODEX',stages:[{stage:'QUEUED',at:created_at}]};
-    record.product_snapshot=productSnapshot;record.compiler_revision=compilerRevision;record.runtime_sha256=sha256(loadedRuntime);records.set(id,record);persist(record);active.set(id,controller);send(202,summary(record));
+    record.source_lineage=sourceLineage;record.product_snapshot=productSnapshot;record.compiler_revision=compilerRevision;record.runtime_sha256=sha256(loadedRuntime);records.set(id,record);persist(record);active.set(id,controller);send(202,summary(record));
     setImmediate(async()=>{
      try{
-      const result=await parse(bytes,{output:folder(id),resourceGuard,productSnapshot,timeoutMs,maxModelRequests,signal:controller.signal,onProgress:p=>{if(record.status==='CANCELLING')return;record.status='RUNNING';record.stage=p.stage;record.revision=p.revision??0;record.stages.push({...p,at:new Date().toISOString()});persist(record);}});
+      const result=await parse(bytes,{output:folder(id),resourceGuard,productSnapshot,sourceLineage,timeoutMs,maxModelRequests,signal:controller.signal,onProgress:p=>{if(record.status==='CANCELLING')return;record.status='RUNNING';record.stage=p.stage;record.revision=p.revision??0;record.stages.push({...p,at:new Date().toISOString()});persist(record);}});
       if(controller.signal.aborted)throw Error('CANCELLED');
       record.status=result.canonical.unresolved.length||result.canonical.gaps.length?'COMPLETED_WITH_UNRESOLVED':'COMPLETED';record.stage=record.status;
       record.slot_status=Object.fromEntries(Object.entries(result.canonical.slots).map(([k,v])=>[k,v.status]));

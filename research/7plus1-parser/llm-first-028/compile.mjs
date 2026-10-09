@@ -2,7 +2,7 @@ import {views,contractVersion} from './contracts/schema.mjs';
 import {sha256} from './source.mjs';
 import {artifactRelations} from './artifacts.mjs';
 export {evaluateScope} from './scopes.mjs';
-import {expressionType} from './scopes.mjs';
+import {expressionType,scopeDomainState} from './scopes.mjs';
 export function compileBoundary(source,g,audit,checks){
  const rows=new Map(checks.rows.map(r=>[r.id,r]));
  const linked=x=>({...x,...(x.mentions?{mentions:rows.get(x.id)?.sources??x.mentions}:{sources:rows.get(x.id)?.sources??x.sources})});
@@ -22,7 +22,7 @@ export function compileBoundary(source,g,audit,checks){
  };
  const expression=id=>{
   if(id===null)return null;
-  const build=(k,path=[])=>{if(path.includes(k))return {id:k,invalid_cycle:true};const x=index.get(k);if(!x)return {id:k,missing:true};return {...x,children:['STATE','ITEM','ENUM','CATEGORY'].includes(x.op)?[]:x.operands.map(child=>build(child,[...path,k]))};};return build(id);
+  const build=(k,path=[])=>{if(path.includes(k))return {id:k,invalid_cycle:true};const x=index.get(k);if(!x)return {id:k,missing:true};return {...x,domain_state:scopeDomainState(g.expressions,k,g.entities),children:['STATE','ITEM','ENUM','CATEGORY','UNRESOLVED_DOMAIN'].includes(x.op)?[]:x.operands.map(child=>build(child,[...path,k]))};};return build(id);
  };
  const constraints=e=>g.claims.filter(c=>e.constraint_ids.includes(c.id)).map(c=>({...linked(c),expression:expression(c.expression_id)}));
  const objectScopes=(eventId,entityId=null)=>g.claims.filter(c=>c.kind==='SCOPE'&&c.event_id===eventId&&(entityId===null||c.scope_id===entityId)).map(c=>({...linked(c),expression:expression(c.expression_id)}));
@@ -68,13 +68,18 @@ export function compileBoundary(source,g,audit,checks){
   const {id,...data}=a;make('ARTIFACT_AVAILABILITY',a.provenance_refs,{...data,relation_id:id,event:null,claim:null,constraints:[]},[]);
  }
  const unresolved=facts.filter(f=>f.status!=='ACCEPTED'), gaps=[...g.issues.filter(i=>i.kind==='COVERAGE_GAP'),...audit.omissions,...checks.coverage.filter(c=>c.status==='GAP')];
- const ir={format:'boundx-boundary-ir/'+contractVersion,source_sha256:source.sha256,facts,artifact_associations:artifacts.associations,artifact_dependencies:artifacts.availability,entities:g.entities.map(linked),expressions:g.expressions.map(linked),issues:g.issues.map(i=>({...i,sources:checks.issue_sources?.find(x=>x.id===i.id)?.sources??i.sources})),audit_issues:audit.issues,gaps,technical_diagnostics:checks.diagnostics,business_decision:null,execution_authorization:null};
+ const clarifications=[];
+ for(const c of g.claims.filter(x=>x.kind==='SCOPE'&&scopeDomainState(g.expressions,x.expression_id,g.entities)==='COMPETING')){
+  const tree=expression(c.expression_id),choices=[];const walk=x=>{if(x.op==='DOMAIN_CHOICE')choices.push(x);for(const child of x.children??[])walk(child);};walk(tree);
+  clarifications.push({scope_claim_id:c.id,event_id:c.event_id,target_id:c.scope_id,expression_id:c.expression_id,status:'USER_CLARIFICATION_REQUIRED',domain_state:'COMPETING',question:'请明确这项限制的适用范围，哪些范围解释符合您的任务？请在原文中补充后重新编译。',choices:choices.map(x=>({choice_id:x.id,alternatives:x.children,interpretation_only:true,is_final_boundary:false})),sources:rows.get(c.id)?.sources??[],issue_ids:g.issues.filter(i=>i.subject_ids.some(k=>k===c.id||choices.some(x=>x.id===k))).map(i=>i.id),business_decision:null,execution_authorization:null});
+ }
+ const ir={format:'boundx-boundary-ir/'+contractVersion,source_sha256:source.sha256,facts,clarifications,artifact_associations:artifacts.associations,artifact_dependencies:artifacts.availability,entities:g.entities.map(linked),expressions:g.expressions.map(linked),issues:g.issues.map(i=>({...i,sources:checks.issue_sources?.find(x=>x.id===i.id)?.sources??i.sources})),audit_issues:audit.issues,gaps,technical_diagnostics:checks.diagnostics,business_decision:null,execution_authorization:null};
  const slots=Object.fromEntries(views.map(slot=>{const entries=facts.filter(f=>f.slots.includes(slot));const coverageGap=gaps.some(g=>g.affected_views?.includes(slot))||!checks.schemas.proposal.ok||!checks.schemas.audit.ok;return [slot,{status:coverageGap?'PARSER_COVERAGE_FAILURE':entries.some(f=>f.status!=='ACCEPTED')?'UNRESOLVED':entries.length?'RESOLVED':'ABSENT',openness:entries.length?'CONSTRAINED':'OPEN',entries}];}));
- const canonical={format:'boundx-canonical-7plus1/'+contractVersion,source_sha256:source.sha256,artifact_associations:ir.artifact_associations,artifact_dependencies:ir.artifact_dependencies,entities:ir.entities,expressions:ir.expressions,slots,unresolved,retained_nonprojected:facts.filter(f=>f.slots.length===0),issues:g.issues,gaps,business_decision:null,execution_authorization:null};
+ const canonical={format:'boundx-canonical-7plus1/'+contractVersion,source_sha256:source.sha256,clarifications,artifact_associations:ir.artifact_associations,artifact_dependencies:ir.artifact_dependencies,entities:ir.entities,expressions:ir.expressions,slots,unresolved,retained_nonprojected:facts.filter(f=>f.slots.length===0),issues:g.issues,gaps,business_decision:null,execution_authorization:null};
  return {ir,canonical,chinese:renderChinese(canonical)};
 }
 const modality={REQUIRED:'必须',PERMITTED:'允许',FORBIDDEN:'禁止',NOT_REQUIRED:'无需',UNSTATED:'未陈述模态'};
-function exprText(x,name=id=>id,eventText=id=>id){if(!x)return '';if(x.op==='STATE')return `${x.state?.predicate}(${(x.state?.args??[]).map(name).join(',')})${x.state?.event_id?`；所指事件=${eventText(x.state.event_id)}`:''} [${x.state?.polarity};运行值UNKNOWN]`;if(x.op==='ITEM')return `具体对象(${x.operands.map(name).join(',')})`;if(x.op==='ENUM')return `有限枚举{${x.operands.map(name).join(',')}}`;if(x.op==='CATEGORY')return `类别范围(${name(x.operands[0])}；适用范围=${x.operands[1]?name(x.operands[1]):'未限定容器'})`;const op={FORALL:'全称适用：范围内所有成员',ALL:'布尔全部成立',ANY:'布尔至少一项成立',EXCEPT:'范围排除'}[x.op]??x.op;return `${op}(${(x.children??[]).map(child=>exprText(child,name,eventText)).join(',')})`;}
+function exprText(x,name=id=>id,eventText=id=>id){if(!x)return '';if(x.op==='STATE')return `${x.state?.predicate}(${(x.state?.args??[]).map(name).join(',')})${x.state?.event_id?`；所指事件=${eventText(x.state.event_id)}`:''} [${x.state?.polarity};运行值UNKNOWN]`;if(x.op==='ITEM')return `具体对象(${x.operands.map(name).join(',')})`;if(x.op==='ENUM')return `有限枚举{${x.operands.map(name).join(',')}}`;if(x.op==='CATEGORY')return `类别范围(${name(x.operands[0])}；适用范围=${x.operands[1]?name(x.operands[1]):'未限定容器：本任务类别域'})`;if(x.op==='UNRESOLVED_DOMAIN')return `尚未解析的域(${name(x.operands[0])}；覆盖缺口；运行值UNKNOWN)`;const op={DOMAIN_CHOICE:'待确认域：以下为备选解释，不能同时生效',FORALL:'全称适用：范围内所有成员',ALL:'布尔全部成立',ANY:'布尔至少一项成立',EXCEPT:'范围排除'}[x.op]??x.op;return `${op}(${(x.children??[]).map(child=>exprText(child,name,eventText)).join(',')})`;}
 export function renderChinese(c){
  const names={I:'输入与作用域',O:'交付与结果',A:'正向动作',P:'参与关系',R:'执行量化限制',V:'版本与依据',C:'完成与停止',B:'禁止与限制'};
  const roleNames={PERFORMER:'执行者',ORGANIZER:'组织者',REVIEWER:'复核者',APPROVER:'批准者',RECIPIENT:'接收者',COLLABORATOR:'协作者',INPUT_OBJECT:'输入/受检对象',OBJECT:'对象',RESULT:'产生结果',DELIVERABLE:'交付产物',BASIS:'依据',CONTENT:'内容'};
@@ -106,6 +111,7 @@ export function renderChinese(c){
  for(const a of c.artifact_associations??[])lines.push(`- [${a.status}] 同身份产物 ${name(a.artifact_id)}：${eventText(a.producer_event_id)} → ${eventText(a.consumer_event_id)}；仅关联，不推出版本可用或先后（${a.id}）`);
  for(const a of c.artifact_dependencies??[])lines.push(`- [${a.status}] 产物可用性 ${name(a.artifact_id)}：本次${eventText(a.producer_event_id)}结果 → ${eventText(a.consumer_event_id)}用途；${a.availability==='COMPLETE_RESULT'?'完整结果可用':'所使用部分可用'}；保留生产=${modality[a.producer_modality]} / 使用=${modality[a.consumer_modality]}；实际可用UNKNOWN，不推出整项生产完成或审批（${a.id}）`);
  lines.push('\n## 未指定 / 歧义 / 未投影语义');
+ for(const q of c.clarifications??[])lines.push(`- [待用户澄清] ${q.question}；限制目标=${name(q.target_id)}；事件=${eventText(q.event_id)}；${q.choices.map(x=>x.alternatives.map(a=>'在该解释下：'+expressionText(a)).join('；')).join('；')}；未决范围查询为UNKNOWN（${q.scope_claim_id}）`);
  for(const i of c.issues)lines.push(`- ${i.kind} ${i.note}；影响=${i.subject_ids.join(',')}`);
  for(const f of c.retained_nonprojected.filter(f=>f.kind==='EVENT')){
   const constraints=f.constraints.map(x=>x.kind==='QUANTITY'?quantityText(x.quantity):`${directionNames[x.direction]??x.kind} ${x.temporal??''} ${expressionText(x.expression)}`).join('；');
