@@ -1,0 +1,68 @@
+{
+  "contract_version": "032.1",
+  "entities": [
+    {"id":"pm","label":"PM","type":"OTHER","mentions":[{"quote":"PM","occurrence":1}],"alternatives":[]},
+    {"id":"qa","label":"QA","type":"OTHER","mentions":[{"quote":"QA","occurrence":1}],"alternatives":[]},
+    {"id":"file_a","label":"a.json","type":"FILE","mentions":[{"quote":"a.json","occurrence":1}],"alternatives":[]},
+    {"id":"file_b","label":"b.json","type":"FILE","mentions":[{"quote":"b.json","occurrence":1}],"alternatives":[]},
+    {"id":"config","label":"配置项","type":"CLASS","mentions":[{"quote":"配置项","occurrence":1}],"alternatives":[]},
+    {"id":"audit","label":"audit.md","type":"FILE","mentions":[{"quote":"audit.md","occurrence":1}],"alternatives":[]}
+  ],
+  "events": [
+    {"id":"read_a","predicate":"读取","kind":"ACTION","layer":"MAIN","use":"CURRENT_TASK","modality":"REQUIRED","polarity":"POSITIVE","owner_id":"ROOT","constraint_ids":[],"requires":[],"sources":[{"quote":"请PM读取a.json和b.json","occurrence":1}]},
+    {"id":"read_b","predicate":"读取","kind":"ACTION","layer":"MAIN","use":"CURRENT_TASK","modality":"REQUIRED","polarity":"POSITIVE","owner_id":"ROOT","constraint_ids":[],"requires":[],"sources":[{"quote":"请PM读取a.json和b.json","occurrence":1}]},
+    {"id":"change","predicate":"更改","kind":"ACTION","layer":"MAIN","use":"CURRENT_TASK","modality":"FORBIDDEN","polarity":"POSITIVE","owner_id":"ROOT","constraint_ids":[],"requires":[],"sources":[{"quote":"不得更改该文件中的任何配置项","occurrence":1}]},
+    {"id":"generate","predicate":"生成","kind":"ACTION","layer":"MAIN","use":"CURRENT_TASK","modality":"REQUIRED","polarity":"POSITIVE","owner_id":"ROOT","constraint_ids":[],"requires":[],"sources":[{"quote":"另请QA生成audit.md","occurrence":1}]}
+  ],
+  "claims": [
+    {"id":"ra_actor","kind":"ROLE","event_id":"read_a","entity_id":"pm","role":"PERFORMER","expression_id":null,"direction":null,"temporal":null,"quantity":null,"artifact_use":null,"scope_id":"read_a","requires":[],"sources":[{"quote":"请PM读取a.json和b.json","occurrence":1}],"note":""},
+    {"id":"ra_input","kind":"ROLE","event_id":"read_a","entity_id":"file_a","role":"INPUT_OBJECT","expression_id":null,"direction":null,"temporal":null,"quantity":null,"artifact_use":null,"scope_id":"read_a","requires":[],"sources":[{"quote":"请PM读取a.json和b.json","occurrence":1}],"note":""},
+    {"id":"ra_scope","kind":"SCOPE","event_id":"read_a","entity_id":null,"role":null,"expression_id":"item_a","direction":null,"temporal":null,"quantity":null,"artifact_use":null,"scope_id":"file_a","requires":[],"sources":[{"quote":"a.json","occurrence":1}],"note":""},
+    {"id":"rb_actor","kind":"ROLE","event_id":"read_b","entity_id":"pm","role":"PERFORMER","expression_id":null,"direction":null,"temporal":null,"quantity":null,"artifact_use":null,"scope_id":"read_b","requires":[],"sources":[{"quote":"请PM读取a.json和b.json","occurrence":1}],"note":"并列读取对象共享明确主语PM。"},
+    {"id":"rb_input","kind":"ROLE","event_id":"read_b","entity_id":"file_b","role":"INPUT_OBJECT","expression_id":null,"direction":null,"temporal":null,"quantity":null,"artifact_use":null,"scope_id":"read_b","requires":[],"sources":[{"quote":"请PM读取a.json和b.json","occurrence":1}],"note":""},
+    {"id":"rb_scope","kind":"SCOPE","event_id":"read_b","entity_id":null,"role":null,"expression_id":"item_b","direction":null,"temporal":null,"quantity":null,"artifact_use":null,"scope_id":"file_b","requires":[],"sources":[{"quote":"b.json","occurrence":1}],"note":""},
+    {"id":"change_actor","kind":"ROLE","event_id":"change","entity_id":"pm","role":"PERFORMER","expression_id":null,"direction":null,"temporal":null,"quantity":null,"artifact_use":null,"scope_id":"change","requires":[],"sources":[{"quote":"请PM读取a.json和b.json","occurrence":1},{"quote":"不得更改该文件中的任何配置项","occurrence":1}],"note":"连续指令中的禁止承接PM；下一分句才明确切换为QA。"},
+    {"id":"change_object","kind":"ROLE","event_id":"change","entity_id":"config","role":"OBJECT","expression_id":null,"direction":null,"temporal":null,"quantity":null,"artifact_use":null,"scope_id":"change","requires":[],"sources":[{"quote":"不得更改该文件中的任何配置项","occurrence":1}],"note":"禁止对象不新增外部输入。"},
+    {"id":"change_scope","kind":"SCOPE","event_id":"change","entity_id":null,"role":null,"expression_id":"all_configs","direction":null,"temporal":null,"quantity":null,"artifact_use":null,"scope_id":"config","requires":[],"sources":[{"quote":"a.json和b.json","occurrence":1},{"quote":"该文件中的任何配置项","occurrence":1}],"note":"以FORALL包裹DOMAIN_CHOICE保留全称及单数文件回指竞争；技术反馈未闭合，覆盖保留GAP。"},
+    {"id":"generate_actor","kind":"ROLE","event_id":"generate","entity_id":"qa","role":"PERFORMER","expression_id":null,"direction":null,"temporal":null,"quantity":null,"artifact_use":null,"scope_id":"generate","requires":[],"sources":[{"quote":"另请QA生成audit.md","occurrence":1}],"note":""},
+    {"id":"generate_result","kind":"ROLE","event_id":"generate","entity_id":"audit","role":"RESULT","expression_id":null,"direction":null,"temporal":null,"quantity":null,"artifact_use":null,"scope_id":"generate","requires":[],"sources":[{"quote":"另请QA生成audit.md","occurrence":1}],"note":"明确要求生成，未要求交付。"},
+    {"id":"generate_scope","kind":"SCOPE","event_id":"generate","entity_id":null,"role":null,"expression_id":"item_audit","direction":null,"temporal":null,"quantity":null,"artifact_use":null,"scope_id":"audit","requires":[],"sources":[{"quote":"audit.md","occurrence":1}],"note":""}
+  ],
+  "expressions": [
+    {"id":"item_a","op":"ITEM","operands":["file_a"],"state":null,"sources":[{"quote":"a.json","occurrence":1}]},
+    {"id":"item_b","op":"ITEM","operands":["file_b"],"state":null,"sources":[{"quote":"b.json","occurrence":1}]},
+    {"id":"configs_a","op":"CATEGORY","operands":["config","file_a"],"state":null,"sources":[{"quote":"a.json","occurrence":1},{"quote":"该文件中的任何配置项","occurrence":1}]},
+    {"id":"configs_b","op":"CATEGORY","operands":["config","file_b"],"state":null,"sources":[{"quote":"b.json","occurrence":1},{"quote":"该文件中的任何配置项","occurrence":1}]},
+    {"id":"config_domain_choice","op":"DOMAIN_CHOICE","operands":["configs_a","configs_b"],"state":null,"sources":[{"quote":"a.json和b.json","occurrence":1},{"quote":"该文件中的任何配置项","occurrence":1}]},
+    {"id":"all_configs","op":"FORALL","operands":["config_domain_choice"],"state":null,"sources":[{"quote":"该文件中的任何配置项","occurrence":1}]},
+    {"id":"item_audit","op":"ITEM","operands":["audit"],"state":null,"sources":[{"quote":"audit.md","occurrence":1}]}
+  ],
+  "issues": [
+    {
+      "id":"domain_ambiguity",
+      "kind":"AMBIGUITY",
+      "subject_ids":["config_domain_choice","change_scope"],
+      "field_path":"expressions[config_domain_choice].operands",
+      "alternatives":["configs_a","configs_b"],
+      "affected_views":["B"],
+      "sources":[{"quote":"a.json和b.json","occurrence":1},{"quote":"该文件中的任何配置项","occurrence":1}],
+      "note":"前文列出两个文件，单数“该文件”未唯一指定其中哪个；不按距离选择，也不将两个备选合并为同时适用范围。"
+    },
+    {
+      "id":"universal_range_gap",
+      "kind":"COVERAGE_GAP",
+      "subject_ids":["change_scope","all_configs","config_domain_choice"],
+      "field_path":"coverage[2].range_requirement",
+      "alternatives":[],
+      "affected_views":["B"],
+      "sources":[{"quote":"不得更改该文件中的任何配置项","occurrence":1}],
+      "note":"宿主报告RANGE_REQUIREMENT_UNREPRESENTED。现有SCOPE已引用FORALL(DOMAIN_CHOICE(CATEGORY(config,file_a),CATEGORY(config,file_b)))，符合交付合同的全称竞争域形状；反馈未指出该链的具体失配，无法据此作来源支持的结构替换。保留全部限制及UNIVERSAL声明，将该项覆盖标为GAP，等待重验，不宣称错误已消除。"
+    }
+  ],
+  "coverage": [
+    {"sources":[{"quote":"请PM读取a.json和b.json","occurrence":1}],"claim_ids":["ra_actor","ra_input","ra_scope"],"status":"EXPRESSED","affected_views":["I","A","P"],"range_requirement":{"kind":"SPECIFIC","scope_claim_ids":["ra_scope"]}},
+    {"sources":[{"quote":"请PM读取a.json和b.json","occurrence":1}],"claim_ids":["rb_actor","rb_input","rb_scope"],"status":"EXPRESSED","affected_views":["I","A","P"],"range_requirement":{"kind":"SPECIFIC","scope_claim_ids":["rb_scope"]}},
+    {"sources":[{"quote":"不得更改该文件中的任何配置项","occurrence":1}],"claim_ids":["change_actor","change_object","change_scope"],"status":"GAP","affected_views":["B","P"],"range_requirement":{"kind":"UNIVERSAL","scope_claim_ids":["change_scope"]}},
+    {"sources":[{"quote":"另请QA生成audit.md","occurrence":1}],"claim_ids":["generate_actor","generate_result","generate_scope"],"status":"EXPRESSED","affected_views":["A","P","O"],"range_requirement":{"kind":"SPECIFIC","scope_claim_ids":["generate_scope"]}}
+  ]
+}

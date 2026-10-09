@@ -1,0 +1,487 @@
+{
+  "contract_version": "032.1",
+  "entities": [
+    {
+      "id": "pm",
+      "label": "PM",
+      "type": "OTHER",
+      "mentions": [
+        {
+          "quote": "PM",
+          "occurrence": 1
+        }
+      ],
+      "alternatives": []
+    },
+    {
+      "id": "qa",
+      "label": "QA",
+      "type": "OTHER",
+      "mentions": [
+        {
+          "quote": "QA",
+          "occurrence": 1
+        }
+      ],
+      "alternatives": []
+    },
+    {
+      "id": "input_file",
+      "label": "tool-list.json",
+      "type": "FILE",
+      "mentions": [
+        {
+          "quote": "tool-list.json",
+          "occurrence": 1
+        }
+      ],
+      "alternatives": []
+    },
+    {
+      "id": "tool_list",
+      "label": "tool-list.json中的MCP工具清单",
+      "type": "DOCUMENT",
+      "mentions": [
+        {
+          "quote": "tool-list.json中的MCP工具清单",
+          "occurrence": 1
+        }
+      ],
+      "alternatives": []
+    },
+    {
+      "id": "report",
+      "label": "mcp-check.md",
+      "type": "FILE",
+      "mentions": [
+        {
+          "quote": "mcp-check.md",
+          "occurrence": 1
+        },
+        {
+          "quote": "mcp-check.md",
+          "occurrence": 2
+        }
+      ],
+      "alternatives": []
+    }
+  ],
+  "events": [
+    {
+      "id": "check",
+      "predicate": "检查",
+      "kind": "ACTION",
+      "layer": "MAIN",
+      "use": "CURRENT_TASK",
+      "modality": "REQUIRED",
+      "polarity": "POSITIVE",
+      "owner_id": "ROOT",
+      "constraint_ids": [],
+      "requires": [],
+      "sources": [
+        {
+          "quote": "请PM检查tool-list.json中的MCP工具清单",
+          "occurrence": 1
+        }
+      ]
+    },
+    {
+      "id": "generate",
+      "predicate": "生成",
+      "kind": "ACTION",
+      "layer": "MAIN",
+      "use": "CURRENT_TASK",
+      "modality": "REQUIRED",
+      "polarity": "POSITIVE",
+      "owner_id": "ROOT",
+      "constraint_ids": [],
+      "requires": [],
+      "sources": [
+        {
+          "quote": "并生成mcp-check.md",
+          "occurrence": 1
+        }
+      ]
+    },
+    {
+      "id": "review",
+      "predicate": "复核",
+      "kind": "ACTION",
+      "layer": "MAIN",
+      "use": "CURRENT_TASK",
+      "modality": "REQUIRED",
+      "polarity": "POSITIVE",
+      "owner_id": "ROOT",
+      "constraint_ids": [],
+      "requires": [],
+      "sources": [
+        {
+          "quote": "QA负责复核mcp-check.md",
+          "occurrence": 1
+        }
+      ]
+    }
+  ],
+  "claims": [
+    {
+      "id": "check_performer",
+      "kind": "ROLE",
+      "event_id": "check",
+      "entity_id": "pm",
+      "role": "PERFORMER",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "artifact_use": null,
+      "scope_id": "check",
+      "requires": [],
+      "sources": [
+        {
+          "quote": "请PM检查",
+          "occurrence": 1
+        }
+      ],
+      "note": ""
+    },
+    {
+      "id": "check_input",
+      "kind": "ROLE",
+      "event_id": "check",
+      "entity_id": "tool_list",
+      "role": "INPUT_OBJECT",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "artifact_use": null,
+      "scope_id": "check",
+      "requires": [],
+      "sources": [
+        {
+          "quote": "检查tool-list.json中的MCP工具清单",
+          "occurrence": 1
+        }
+      ],
+      "note": "受检对象是指定文件中的具体工具清单。"
+    },
+    {
+      "id": "check_scope",
+      "kind": "SCOPE",
+      "event_id": "check",
+      "entity_id": "tool_list",
+      "role": null,
+      "expression_id": "list_item",
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "artifact_use": null,
+      "scope_id": "tool_list",
+      "requires": [],
+      "sources": [
+        {
+          "quote": "tool-list.json中的MCP工具清单",
+          "occurrence": 1
+        }
+      ],
+      "note": "具体清单范围，不推定额外全称量词。"
+    },
+    {
+      "id": "generate_performer",
+      "kind": "ROLE",
+      "event_id": "generate",
+      "entity_id": "pm",
+      "role": "PERFORMER",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "artifact_use": null,
+      "scope_id": "generate",
+      "requires": [],
+      "sources": [
+        {
+          "quote": "请PM检查",
+          "occurrence": 1
+        },
+        {
+          "quote": "并生成mcp-check.md",
+          "occurrence": 1
+        }
+      ],
+      "note": "连续并列指令承接PM为生成动作的执行者。"
+    },
+    {
+      "id": "generate_result",
+      "kind": "ROLE",
+      "event_id": "generate",
+      "entity_id": "report",
+      "role": "RESULT",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "artifact_use": null,
+      "scope_id": "generate",
+      "requires": [],
+      "sources": [
+        {
+          "quote": "生成mcp-check.md",
+          "occurrence": 1
+        }
+      ],
+      "note": "明确要求生成；未要求提交或交付。"
+    },
+    {
+      "id": "generate_scope",
+      "kind": "SCOPE",
+      "event_id": "generate",
+      "entity_id": "report",
+      "role": null,
+      "expression_id": "generated_report_item",
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "artifact_use": null,
+      "scope_id": "report",
+      "requires": [],
+      "sources": [
+        {
+          "quote": "生成mcp-check.md",
+          "occurrence": 1
+        }
+      ],
+      "note": ""
+    },
+    {
+      "id": "review_reviewer",
+      "kind": "ROLE",
+      "event_id": "review",
+      "entity_id": "qa",
+      "role": "REVIEWER",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "artifact_use": null,
+      "scope_id": "review",
+      "requires": [],
+      "sources": [
+        {
+          "quote": "QA负责复核",
+          "occurrence": 1
+        }
+      ],
+      "note": ""
+    },
+    {
+      "id": "review_object",
+      "kind": "ROLE",
+      "event_id": "review",
+      "entity_id": "report",
+      "role": "OBJECT",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "artifact_use": null,
+      "scope_id": "review",
+      "requires": [],
+      "sources": [
+        {
+          "quote": "生成mcp-check.md",
+          "occurrence": 1
+        },
+        {
+          "quote": "复核mcp-check.md",
+          "occurrence": 1
+        }
+      ],
+      "note": "复核对象与本次生成的唯一同名产物保持同一身份，属于内部用途。"
+    },
+    {
+      "id": "review_scope",
+      "kind": "SCOPE",
+      "event_id": "review",
+      "entity_id": "report",
+      "role": null,
+      "expression_id": "reviewed_report_item",
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "artifact_use": null,
+      "scope_id": "report",
+      "requires": [],
+      "sources": [
+        {
+          "quote": "复核mcp-check.md",
+          "occurrence": 1
+        }
+      ],
+      "note": ""
+    },
+    {
+      "id": "report_use",
+      "kind": "ARTIFACT_USE",
+      "event_id": "review",
+      "entity_id": "report",
+      "role": null,
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "artifact_use": {
+        "producer_result_id": "generate_result",
+        "consumer_role_id": "review_object",
+        "availability": "USED_PORTION"
+      },
+      "scope_id": "review",
+      "requires": [
+        "generate_result",
+        "review_object"
+      ],
+      "sources": [
+        {
+          "quote": "生成mcp-check.md",
+          "occurrence": 1
+        },
+        {
+          "quote": "QA负责复核mcp-check.md",
+          "occurrence": 1
+        }
+      ],
+      "note": "复核使用本次生成产物；原文未明确要求完整产物可用或生成事件全部完成。"
+    }
+  ],
+  "expressions": [
+    {
+      "id": "list_item",
+      "op": "ITEM",
+      "operands": [
+        "tool_list"
+      ],
+      "state": null,
+      "sources": [
+        {
+          "quote": "tool-list.json中的MCP工具清单",
+          "occurrence": 1
+        }
+      ]
+    },
+    {
+      "id": "generated_report_item",
+      "op": "ITEM",
+      "operands": [
+        "report"
+      ],
+      "state": null,
+      "sources": [
+        {
+          "quote": "生成mcp-check.md",
+          "occurrence": 1
+        }
+      ]
+    },
+    {
+      "id": "reviewed_report_item",
+      "op": "ITEM",
+      "operands": [
+        "report"
+      ],
+      "state": null,
+      "sources": [
+        {
+          "quote": "复核mcp-check.md",
+          "occurrence": 1
+        }
+      ]
+    }
+  ],
+  "issues": [],
+  "coverage": [
+    {
+      "sources": [
+        {
+          "quote": "请PM检查tool-list.json中的MCP工具清单",
+          "occurrence": 1
+        }
+      ],
+      "claim_ids": [
+        "check_performer",
+        "check_input",
+        "check_scope"
+      ],
+      "status": "EXPRESSED",
+      "affected_views": [
+        "A",
+        "P",
+        "I"
+      ],
+      "range_requirement": {
+        "kind": "SPECIFIC",
+        "scope_claim_ids": [
+          "check_scope"
+        ]
+      }
+    },
+    {
+      "sources": [
+        {
+          "quote": "请PM检查",
+          "occurrence": 1
+        },
+        {
+          "quote": "并生成mcp-check.md",
+          "occurrence": 1
+        }
+      ],
+      "claim_ids": [
+        "generate_performer",
+        "generate_result",
+        "generate_scope"
+      ],
+      "status": "EXPRESSED",
+      "affected_views": [
+        "A",
+        "P",
+        "O"
+      ],
+      "range_requirement": {
+        "kind": "SPECIFIC",
+        "scope_claim_ids": [
+          "generate_scope"
+        ]
+      }
+    },
+    {
+      "sources": [
+        {
+          "quote": "生成mcp-check.md",
+          "occurrence": 1
+        },
+        {
+          "quote": "QA负责复核mcp-check.md",
+          "occurrence": 1
+        }
+      ],
+      "claim_ids": [
+        "review_reviewer",
+        "review_object",
+        "review_scope",
+        "report_use"
+      ],
+      "status": "EXPRESSED",
+      "affected_views": [
+        "A",
+        "P",
+        "O"
+      ],
+      "range_requirement": {
+        "kind": "SPECIFIC",
+        "scope_claim_ids": [
+          "review_scope"
+        ]
+      }
+    }
+  ]
+}

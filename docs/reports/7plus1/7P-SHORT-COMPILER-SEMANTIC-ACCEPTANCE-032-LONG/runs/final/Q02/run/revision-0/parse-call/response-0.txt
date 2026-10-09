@@ -1,0 +1,327 @@
+{
+  "contract_version": "032.1",
+  "entities": [
+    {
+      "id": "ent_pm",
+      "label": "PM",
+      "type": "OTHER",
+      "mentions": [{"quote": "PM", "occurrence": 1}],
+      "alternatives": []
+    },
+    {
+      "id": "ent_accounts",
+      "label": "accounts.csv",
+      "type": "FILE",
+      "mentions": [{"quote": "accounts.csv", "occurrence": 1}],
+      "alternatives": []
+    },
+    {
+      "id": "ent_fields",
+      "label": "fields.md",
+      "type": "FILE",
+      "mentions": [{"quote": "fields.md", "occurrence": 1}],
+      "alternatives": []
+    },
+    {
+      "id": "class_field_names",
+      "label": "字段名",
+      "type": "CLASS",
+      "mentions": [
+        {"quote": "accounts.csv的字段名", "occurrence": 1},
+        {"quote": "只检查字段名", "occurrence": 1}
+      ],
+      "alternatives": []
+    },
+    {
+      "id": "class_record_content",
+      "label": "记录内容",
+      "type": "CLASS",
+      "mentions": [{"quote": "记录内容", "occurrence": 1}],
+      "alternatives": []
+    }
+  ],
+  "events": [
+    {
+      "id": "ev_check",
+      "predicate": "核对字段名",
+      "kind": "ACTION",
+      "layer": "MAIN",
+      "use": "CURRENT_TASK",
+      "modality": "REQUIRED",
+      "polarity": "POSITIVE",
+      "owner_id": "ROOT",
+      "constraint_ids": [],
+      "requires": [],
+      "sources": [
+        {"quote": "请PM核对accounts.csv的字段名", "occurrence": 1},
+        {"quote": "只检查字段名", "occurrence": 1}
+      ]
+    },
+    {
+      "id": "ev_generate",
+      "predicate": "生成文件",
+      "kind": "ACTION",
+      "layer": "MAIN",
+      "use": "CURRENT_TASK",
+      "modality": "REQUIRED",
+      "polarity": "POSITIVE",
+      "owner_id": "ROOT",
+      "constraint_ids": [],
+      "requires": [],
+      "sources": [{"quote": "生成fields.md", "occurrence": 1}]
+    },
+    {
+      "id": "ev_read",
+      "predicate": "读取记录内容",
+      "kind": "ACTION",
+      "layer": "MAIN",
+      "use": "CURRENT_TASK",
+      "modality": "FORBIDDEN",
+      "polarity": "POSITIVE",
+      "owner_id": "ROOT",
+      "constraint_ids": [],
+      "requires": [],
+      "sources": [{"quote": "不得读取记录内容", "occurrence": 1}]
+    }
+  ],
+  "claims": [
+    {
+      "id": "cl_check_performer",
+      "kind": "ROLE",
+      "event_id": "ev_check",
+      "entity_id": "ent_pm",
+      "role": "PERFORMER",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "artifact_use": null,
+      "scope_id": "ev_check",
+      "requires": [],
+      "sources": [{"quote": "请PM核对accounts.csv的字段名", "occurrence": 1}],
+      "note": "PM是明确核对执行者；岗位类别未指定。"
+    },
+    {
+      "id": "cl_check_input",
+      "kind": "ROLE",
+      "event_id": "ev_check",
+      "entity_id": "class_field_names",
+      "role": "INPUT_OBJECT",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "artifact_use": null,
+      "scope_id": "ev_check",
+      "requires": [],
+      "sources": [
+        {"quote": "accounts.csv的字段名", "occurrence": 1},
+        {"quote": "只检查字段名", "occurrence": 1}
+      ],
+      "note": "明确受检输入仅为该文件的字段名。"
+    },
+    {
+      "id": "cl_check_scope",
+      "kind": "SCOPE",
+      "event_id": "ev_check",
+      "entity_id": null,
+      "role": null,
+      "expression_id": "ex_field_domain",
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "artifact_use": null,
+      "scope_id": "class_field_names",
+      "requires": [],
+      "sources": [
+        {"quote": "accounts.csv的字段名", "occurrence": 1},
+        {"quote": "只检查字段名", "occurrence": 1}
+      ],
+      "note": "“只检查”限制既有核对操作的内容范围，不新增检查动作；字段名域限定在accounts.csv内。"
+    },
+    {
+      "id": "cl_generate_performer",
+      "kind": "ROLE",
+      "event_id": "ev_generate",
+      "entity_id": "ent_pm",
+      "role": "PERFORMER",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "artifact_use": null,
+      "scope_id": "ev_generate",
+      "requires": [],
+      "sources": [
+        {"quote": "请PM核对accounts.csv的字段名", "occurrence": 1},
+        {"quote": "生成fields.md", "occurrence": 1}
+      ],
+      "note": "连续并列指令无主体切换，生成动作承接PM。"
+    },
+    {
+      "id": "cl_generate_result",
+      "kind": "ROLE",
+      "event_id": "ev_generate",
+      "entity_id": "ent_fields",
+      "role": "RESULT",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "artifact_use": null,
+      "scope_id": "ev_generate",
+      "requires": [],
+      "sources": [{"quote": "生成fields.md", "occurrence": 1}],
+      "note": "明确要求生成的结果；未另行要求交付。"
+    },
+    {
+      "id": "cl_generate_scope",
+      "kind": "SCOPE",
+      "event_id": "ev_generate",
+      "entity_id": null,
+      "role": null,
+      "expression_id": "ex_fields_item",
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "artifact_use": null,
+      "scope_id": "ent_fields",
+      "requires": [],
+      "sources": [{"quote": "生成fields.md", "occurrence": 1}],
+      "note": "生成对象为明确命名的文件。"
+    },
+    {
+      "id": "cl_read_performer",
+      "kind": "ROLE",
+      "event_id": "ev_read",
+      "entity_id": "ent_pm",
+      "role": "PERFORMER",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "artifact_use": null,
+      "scope_id": "ev_read",
+      "requires": [],
+      "sources": [
+        {"quote": "请PM核对accounts.csv的字段名", "occurrence": 1},
+        {"quote": "不得读取记录内容", "occurrence": 1}
+      ],
+      "note": "后续操作限制承接同一任务主体PM。"
+    },
+    {
+      "id": "cl_read_object",
+      "kind": "ROLE",
+      "event_id": "ev_read",
+      "entity_id": "class_record_content",
+      "role": "OBJECT",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "artifact_use": null,
+      "scope_id": "ev_read",
+      "requires": [],
+      "sources": [{"quote": "不得读取记录内容", "occurrence": 1}],
+      "note": "禁止读取的对象类别，不增加正向外部输入。"
+    },
+    {
+      "id": "cl_read_scope",
+      "kind": "SCOPE",
+      "event_id": "ev_read",
+      "entity_id": null,
+      "role": null,
+      "expression_id": "ex_all_record_content",
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "artifact_use": null,
+      "scope_id": "class_record_content",
+      "requires": [],
+      "sources": [
+        {"quote": "accounts.csv的字段名", "occurrence": 1},
+        {"quote": "只检查字段名，不得读取记录内容", "occurrence": 1}
+      ],
+      "note": "禁止适用于accounts.csv内的任意记录内容。该文件是原始受检容器；仅作为生成结果的fields.md不是竞争容器。"
+    }
+  ],
+  "expressions": [
+    {
+      "id": "ex_field_domain",
+      "op": "CATEGORY",
+      "operands": ["class_field_names", "ent_accounts"],
+      "state": null,
+      "sources": [
+        {"quote": "accounts.csv的字段名", "occurrence": 1},
+        {"quote": "只检查字段名", "occurrence": 1}
+      ]
+    },
+    {
+      "id": "ex_fields_item",
+      "op": "ITEM",
+      "operands": ["ent_fields"],
+      "state": null,
+      "sources": [{"quote": "生成fields.md", "occurrence": 1}]
+    },
+    {
+      "id": "ex_record_domain",
+      "op": "CATEGORY",
+      "operands": ["class_record_content", "ent_accounts"],
+      "state": null,
+      "sources": [
+        {"quote": "accounts.csv的字段名", "occurrence": 1},
+        {"quote": "只检查字段名，不得读取记录内容", "occurrence": 1}
+      ]
+    },
+    {
+      "id": "ex_all_record_content",
+      "op": "FORALL",
+      "operands": ["ex_record_domain"],
+      "state": null,
+      "sources": [{"quote": "不得读取记录内容", "occurrence": 1}]
+    }
+  ],
+  "issues": [],
+  "coverage": [
+    {
+      "sources": [{"quote": "请PM核对accounts.csv的字段名", "occurrence": 1}],
+      "claim_ids": ["cl_check_performer", "cl_check_input", "cl_check_scope"],
+      "status": "EXPRESSED",
+      "affected_views": ["A", "P", "I"],
+      "range_requirement": {
+        "kind": "CATEGORY",
+        "scope_claim_ids": ["cl_check_scope"]
+      }
+    },
+    {
+      "sources": [{"quote": "生成fields.md", "occurrence": 1}],
+      "claim_ids": ["cl_generate_performer", "cl_generate_result", "cl_generate_scope"],
+      "status": "EXPRESSED",
+      "affected_views": ["A", "P", "O"],
+      "range_requirement": {
+        "kind": "SPECIFIC",
+        "scope_claim_ids": ["cl_generate_scope"]
+      }
+    },
+    {
+      "sources": [{"quote": "只检查字段名", "occurrence": 1}],
+      "claim_ids": ["cl_check_input", "cl_check_scope"],
+      "status": "EXPRESSED",
+      "affected_views": ["I", "A", "B"],
+      "range_requirement": {
+        "kind": "CATEGORY",
+        "scope_claim_ids": ["cl_check_scope"]
+      }
+    },
+    {
+      "sources": [{"quote": "不得读取记录内容", "occurrence": 1}],
+      "claim_ids": ["cl_read_performer", "cl_read_object", "cl_read_scope"],
+      "status": "EXPRESSED",
+      "affected_views": ["B", "P"],
+      "range_requirement": {
+        "kind": "UNIVERSAL",
+        "scope_claim_ids": ["cl_read_scope"]
+      }
+    }
+  ]
+}

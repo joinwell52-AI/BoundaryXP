@@ -1,0 +1,195 @@
+{
+  "contract_version": "032.1",
+  "reviews": [
+    {
+      "subject_id": "person_pm",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [{"quote": "请PM列出", "occurrence": 1}],
+      "reason": "PM身份及执行职责明确；OTHER可保留未指定的人或组类别。"
+    },
+    {
+      "subject_id": "file_settings",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [{"quote": "settings.json", "occurrence": 1}],
+      "reason": "配置来源文件的名称与身份明确。"
+    },
+    {
+      "subject_id": "file_list",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [{"quote": "生成settings-list.md", "occurrence": 1}],
+      "reason": "明确命名的生成产物，与配置来源文件分别保留身份。"
+    },
+    {
+      "subject_id": "class_config",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [
+        {"quote": "配置项", "occurrence": 1},
+        {"quote": "配置项", "occurrence": 2}
+      ],
+      "reason": "两处均指配置项类别；不同用途的容器由各自范围表达。"
+    },
+    {
+      "subject_id": "event_list",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [{"quote": "请PM列出settings.json中的配置项", "occurrence": 1}],
+      "reason": "列出配置项是当前明确要求的动作。"
+    },
+    {
+      "subject_id": "event_generate",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [{"quote": "生成settings-list.md", "occurrence": 1}],
+      "reason": "生成指定文件是当前要求；原文没有另行明示事件先后。"
+    },
+    {
+      "subject_id": "event_change",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["scope_change"],
+      "sources": [{"quote": "本任务不得更改该文件内的任何配置项", "occurrence": 1}],
+      "reason": "更改属于当前任务禁令，容器竞争不否定禁令本身。"
+    },
+    {
+      "subject_id": "role_list_pm",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["person_pm", "event_list"],
+      "sources": [{"quote": "请PM列出", "occurrence": 1}],
+      "reason": "PM被明确指定执行列出动作。"
+    },
+    {
+      "subject_id": "role_list_input",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["scope_list_input"],
+      "sources": [{"quote": "列出settings.json中的配置项", "occurrence": 1}],
+      "reason": "配置项是明确处理范围，绑定类别并由SCOPE限定来源文件。"
+    },
+    {
+      "subject_id": "scope_list_input",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["role_list_input", "domain_list"],
+      "sources": [{"quote": "settings.json中的配置项", "occurrence": 1}],
+      "reason": "范围与同一列出事件的输入类别绑定，保留明确容器。"
+    },
+    {
+      "subject_id": "role_generate_pm",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["role_list_pm", "event_generate"],
+      "sources": [
+        {"quote": "请PM列出", "occurrence": 1},
+        {"quote": "生成settings-list.md", "occurrence": 1}
+      ],
+      "reason": "同一指令追加生成动作，无主体切换，PM执行者身份可承接。"
+    },
+    {
+      "subject_id": "role_generate_result",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["event_generate", "file_list"],
+      "sources": [{"quote": "生成settings-list.md", "occurrence": 1}],
+      "reason": "指定文件是生成动作的RESULT；未额外推定交付义务。"
+    },
+    {
+      "subject_id": "scope_generate_result",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["role_generate_result", "item_result"],
+      "sources": [{"quote": "生成settings-list.md", "occurrence": 1}],
+      "reason": "具体产物范围绑定同一生成事件的结果对象。"
+    },
+    {
+      "subject_id": "role_change_object",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["scope_change"],
+      "sources": [{"quote": "不得更改该文件内的任何配置项", "occurrence": 1}],
+      "reason": "禁止更改的对象是配置项类别，该用途不新增外部输入。"
+    },
+    {
+      "subject_id": "scope_change",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["role_change_object", "forall_change", "domain_change_choice"],
+      "sources": [
+        {"quote": "settings.json中的配置项", "occurrence": 1},
+        {"quote": "生成settings-list.md", "occurrence": 1},
+        {"quote": "该文件内的任何配置项", "occurrence": 1}
+      ],
+      "reason": "保留任何配置项的全称禁令，并以一个SCOPE绑定尚有竞争的容器解释。"
+    },
+    {
+      "subject_id": "domain_list",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["class_config", "file_settings"],
+      "sources": [{"quote": "settings.json中的配置项", "occurrence": 1}],
+      "reason": "CATEGORY正确表达settings.json容器内的配置项类别域。"
+    },
+    {
+      "subject_id": "item_result",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["file_list"],
+      "sources": [{"quote": "settings-list.md", "occurrence": 1}],
+      "reason": "ITEM表示明确命名的单个产物文件。"
+    },
+    {
+      "subject_id": "domain_change_settings",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["domain_change_choice"],
+      "sources": [
+        {"quote": "settings.json中的配置项", "occurrence": 1},
+        {"quote": "该文件内的任何配置项", "occurrence": 1}
+      ],
+      "reason": "配置来源文件是该文件的合理回指备选；支持备选结构，不裁定其为唯一边界。"
+    },
+    {
+      "subject_id": "domain_change_list",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["domain_change_choice"],
+      "sources": [
+        {"quote": "生成settings-list.md", "occurrence": 1},
+        {"quote": "该文件内的任何配置项", "occurrence": 1}
+      ],
+      "reason": "前句生成文件也是合理回指备选；该类别域不断言文件已存在或其中已有配置项。"
+    },
+    {
+      "subject_id": "domain_change_choice",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["domain_change_settings", "domain_change_list", "scope_change"],
+      "sources": [
+        {"quote": "settings.json中的配置项", "occurrence": 1},
+        {"quote": "生成settings-list.md", "occurrence": 1},
+        {"quote": "该文件内的任何配置项", "occurrence": 1}
+      ],
+      "reason": "两文件均有来源，回指解释会改变禁令边界，原文未明确排除其一；DOMAIN_CHOICE忠实保留局部竞争。"
+    },
+    {
+      "subject_id": "forall_change",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["domain_change_choice"],
+      "sources": [{"quote": "该文件内的任何配置项", "occurrence": 1}],
+      "reason": "任何要求对所选容器类别域的每个成员适用；FORALL保留量词且不合并竞争域。"
+    }
+  ],
+  "issues": [],
+  "omissions": []
+}

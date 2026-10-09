@@ -1,0 +1,310 @@
+{
+  "contract_version": "032.1",
+  "reviews": [
+    {
+      "subject_id": "entity_pm",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [
+        {
+          "quote": "PM",
+          "occurrence": 1
+        }
+      ],
+      "reason": "身份明确；原文未指定人或组类别，OTHER可作占位。"
+    },
+    {
+      "subject_id": "entity_settings",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [
+        {
+          "quote": "settings.json",
+          "occurrence": 1
+        },
+        {
+          "quote": "settings.json",
+          "occurrence": 2
+        }
+      ],
+      "reason": "两处名称指向同一文件，分别用于列出范围和跨文件禁令说明。"
+    },
+    {
+      "subject_id": "entity_config",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [
+        {
+          "quote": "settings.json中的配置项",
+          "occurrence": 1
+        },
+        {
+          "quote": "任何文件中的任何配置项",
+          "occurrence": 1
+        }
+      ],
+      "reason": "配置项是类别；各事件通过独立范围表达其不同容器限制。"
+    },
+    {
+      "subject_id": "entity_output",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [
+        {
+          "quote": "settings-list.md",
+          "occurrence": 1
+        }
+      ],
+      "reason": "明确命名的生成文件，未与输入文件混同。"
+    },
+    {
+      "subject_id": "event_list",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [
+        {
+          "quote": "请PM列出settings.json中的配置项",
+          "occurrence": 1
+        }
+      ],
+      "reason": "当前任务明确要求列出配置项。"
+    },
+    {
+      "subject_id": "event_generate",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [
+        {
+          "quote": "生成settings-list.md",
+          "occurrence": 1
+        }
+      ],
+      "reason": "同一指令明确要求生成文件，无条件或先后限定。"
+    },
+    {
+      "subject_id": "event_change",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [
+        {
+          "quote": "本任务不得更改任何文件中的任何配置项，包括settings.json以外文件中的配置项",
+          "occurrence": 1
+        }
+      ],
+      "reason": "当前任务禁止更改配置项；FORBIDDEN配合正向动作谓词准确保留禁令。"
+    },
+    {
+      "subject_id": "claim_list_performer",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [
+        "entity_pm",
+        "event_list"
+      ],
+      "sources": [
+        {
+          "quote": "请PM列出settings.json中的配置项",
+          "occurrence": 1
+        }
+      ],
+      "reason": "PM被明确指定为列出动作执行者。"
+    },
+    {
+      "subject_id": "claim_list_input",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [
+        "claim_list_scope"
+      ],
+      "sources": [
+        {
+          "quote": "列出settings.json中的配置项",
+          "occurrence": 1
+        }
+      ],
+      "reason": "受检输入为配置项类别，关联范围将其限定在settings.json内。"
+    },
+    {
+      "subject_id": "claim_list_scope",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [
+        "claim_list_input",
+        "expr_settings_config"
+      ],
+      "sources": [
+        {
+          "quote": "settings.json中的配置项",
+          "occurrence": 1
+        }
+      ],
+      "reason": "范围与同一事件的输入类别绑定，并保留明确容器。"
+    },
+    {
+      "subject_id": "claim_generate_performer",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [
+        "claim_list_performer",
+        "event_generate"
+      ],
+      "sources": [
+        {
+          "quote": "请PM列出settings.json中的配置项",
+          "occurrence": 1
+        },
+        {
+          "quote": "生成settings-list.md",
+          "occurrence": 1
+        }
+      ],
+      "reason": "连续并列指令无主体切换，生成动作承接PM；来源覆盖两端。"
+    },
+    {
+      "subject_id": "claim_generate_result",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [
+        "event_generate",
+        "entity_output"
+      ],
+      "sources": [
+        {
+          "quote": "生成settings-list.md",
+          "occurrence": 1
+        }
+      ],
+      "reason": "文件是生成结果，原文未要求提交或交付。"
+    },
+    {
+      "subject_id": "claim_generate_scope",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [
+        "claim_generate_result",
+        "expr_output"
+      ],
+      "sources": [
+        {
+          "quote": "生成settings-list.md",
+          "occurrence": 1
+        }
+      ],
+      "reason": "范围绑定同一生成事件的RESULT文件，具体对象表达正确。"
+    },
+    {
+      "subject_id": "claim_change_object",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [
+        "event_change",
+        "claim_change_scope"
+      ],
+      "sources": [
+        {
+          "quote": "本任务不得更改任何文件中的任何配置项",
+          "occurrence": 1
+        }
+      ],
+      "reason": "禁令对象为配置项类别，OBJECT不新增外部输入。"
+    },
+    {
+      "subject_id": "claim_change_scope",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [
+        "claim_change_object",
+        "expr_all_config"
+      ],
+      "sources": [
+        {
+          "quote": "任何文件中的任何配置项",
+          "occurrence": 1
+        },
+        {
+          "quote": "包括settings.json以外文件中的配置项",
+          "occurrence": 1
+        }
+      ],
+      "reason": "同一禁令对象绑定跨文件全称范围；包括外部文件是范围强调，没有例外或新增许可。"
+    },
+    {
+      "subject_id": "expr_settings_config",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [
+        "entity_config",
+        "entity_settings"
+      ],
+      "sources": [
+        {
+          "quote": "settings.json中的配置项",
+          "occurrence": 1
+        }
+      ],
+      "reason": "CATEGORY保留配置项类别及唯一明确容器，无来源支持的域竞争。"
+    },
+    {
+      "subject_id": "expr_output",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [
+        "entity_output"
+      ],
+      "sources": [
+        {
+          "quote": "settings-list.md",
+          "occurrence": 1
+        }
+      ],
+      "reason": "ITEM准确表示一个明确命名的文件。"
+    },
+    {
+      "subject_id": "expr_config_domain",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [
+        "entity_config"
+      ],
+      "sources": [
+        {
+          "quote": "任何文件中的任何配置项",
+          "occurrence": 1
+        },
+        {
+          "quote": "包括settings.json以外文件中的配置项",
+          "occurrence": 1
+        }
+      ],
+      "reason": "原文明确跨越所有文件，未限定容器的配置项类别域正确。"
+    },
+    {
+      "subject_id": "expr_all_config",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [
+        "expr_config_domain"
+      ],
+      "sources": [
+        {
+          "quote": "任何文件中的任何配置项",
+          "occurrence": 1
+        },
+        {
+          "quote": "包括settings.json以外文件中的配置项",
+          "occurrence": 1
+        }
+      ],
+      "reason": "FORALL作用于跨文件类别域，完整表达任何配置项均受禁令约束。"
+    }
+  ],
+  "issues": [],
+  "omissions": []
+}

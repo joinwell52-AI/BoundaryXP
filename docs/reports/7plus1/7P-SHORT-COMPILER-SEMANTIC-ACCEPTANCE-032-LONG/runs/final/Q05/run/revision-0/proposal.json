@@ -1,0 +1,450 @@
+{
+  "contract_version": "032.1",
+  "entities": [
+    {
+      "id": "E_PM",
+      "label": "PM",
+      "type": "OTHER",
+      "mentions": [
+        {
+          "quote": "PM",
+          "occurrence": 1
+        }
+      ],
+      "alternatives": []
+    },
+    {
+      "id": "E_SETTINGS",
+      "label": "settings.json",
+      "type": "FILE",
+      "mentions": [
+        {
+          "quote": "settings.json",
+          "occurrence": 1
+        }
+      ],
+      "alternatives": []
+    },
+    {
+      "id": "E_CONFIG",
+      "label": "配置项",
+      "type": "CLASS",
+      "mentions": [
+        {
+          "quote": "settings.json中的配置项",
+          "occurrence": 1
+        },
+        {
+          "quote": "任何配置项",
+          "occurrence": 1
+        }
+      ],
+      "alternatives": []
+    },
+    {
+      "id": "E_LIST",
+      "label": "settings-list.md",
+      "type": "FILE",
+      "mentions": [
+        {
+          "quote": "settings-list.md",
+          "occurrence": 1
+        }
+      ],
+      "alternatives": []
+    }
+  ],
+  "events": [
+    {
+      "id": "EV_LIST",
+      "predicate": "列出",
+      "kind": "ACTION",
+      "layer": "MAIN",
+      "use": "CURRENT_TASK",
+      "modality": "REQUIRED",
+      "polarity": "POSITIVE",
+      "owner_id": "ROOT",
+      "constraint_ids": [],
+      "requires": [],
+      "sources": [
+        {
+          "quote": "请PM列出settings.json中的配置项",
+          "occurrence": 1
+        }
+      ]
+    },
+    {
+      "id": "EV_GENERATE",
+      "predicate": "生成",
+      "kind": "ACTION",
+      "layer": "MAIN",
+      "use": "CURRENT_TASK",
+      "modality": "REQUIRED",
+      "polarity": "POSITIVE",
+      "owner_id": "ROOT",
+      "constraint_ids": [],
+      "requires": [],
+      "sources": [
+        {
+          "quote": "并生成settings-list.md",
+          "occurrence": 1
+        }
+      ]
+    },
+    {
+      "id": "EV_CHANGE",
+      "predicate": "更改",
+      "kind": "ACTION",
+      "layer": "MAIN",
+      "use": "CURRENT_TASK",
+      "modality": "FORBIDDEN",
+      "polarity": "POSITIVE",
+      "owner_id": "ROOT",
+      "constraint_ids": [],
+      "requires": [],
+      "sources": [
+        {
+          "quote": "不得更改任何配置项",
+          "occurrence": 1
+        }
+      ]
+    }
+  ],
+  "claims": [
+    {
+      "id": "C_LIST_PM",
+      "kind": "ROLE",
+      "event_id": "EV_LIST",
+      "entity_id": "E_PM",
+      "role": "PERFORMER",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "artifact_use": null,
+      "scope_id": "EV_LIST",
+      "requires": [],
+      "sources": [
+        {
+          "quote": "请PM列出settings.json中的配置项",
+          "occurrence": 1
+        }
+      ],
+      "note": "PM是明确的列出执行者，岗位简称不推定人员或组类别。"
+    },
+    {
+      "id": "C_LIST_INPUT",
+      "kind": "ROLE",
+      "event_id": "EV_LIST",
+      "entity_id": "E_CONFIG",
+      "role": "INPUT_OBJECT",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "artifact_use": null,
+      "scope_id": "EV_LIST",
+      "requires": [],
+      "sources": [
+        {
+          "quote": "列出settings.json中的配置项",
+          "occurrence": 1
+        }
+      ],
+      "note": "明确输入范围为settings.json中的配置项。"
+    },
+    {
+      "id": "C_LIST_SCOPE",
+      "kind": "SCOPE",
+      "event_id": "EV_LIST",
+      "entity_id": "E_CONFIG",
+      "role": null,
+      "expression_id": "X_CONFIG_DOMAIN",
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "artifact_use": null,
+      "scope_id": "E_CONFIG",
+      "requires": [],
+      "sources": [
+        {
+          "quote": "settings.json中的配置项",
+          "occurrence": 1
+        }
+      ],
+      "note": "保留配置项类别与明确文件容器。"
+    },
+    {
+      "id": "C_GENERATE_PM",
+      "kind": "ROLE",
+      "event_id": "EV_GENERATE",
+      "entity_id": "E_PM",
+      "role": "PERFORMER",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "artifact_use": null,
+      "scope_id": "EV_GENERATE",
+      "requires": [],
+      "sources": [
+        {
+          "quote": "请PM列出settings.json中的配置项",
+          "occurrence": 1
+        },
+        {
+          "quote": "并生成settings-list.md",
+          "occurrence": 1
+        }
+      ],
+      "note": "连续并列指令没有主体切换，生成动作承接明确主语PM。"
+    },
+    {
+      "id": "C_GENERATE_RESULT",
+      "kind": "ROLE",
+      "event_id": "EV_GENERATE",
+      "entity_id": "E_LIST",
+      "role": "RESULT",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "artifact_use": null,
+      "scope_id": "EV_GENERATE",
+      "requires": [],
+      "sources": [
+        {
+          "quote": "生成settings-list.md",
+          "occurrence": 1
+        }
+      ],
+      "note": "明确要求产生该文件，未明示交付动作。"
+    },
+    {
+      "id": "C_GENERATE_SCOPE",
+      "kind": "SCOPE",
+      "event_id": "EV_GENERATE",
+      "entity_id": "E_LIST",
+      "role": null,
+      "expression_id": "X_LIST_ITEM",
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "artifact_use": null,
+      "scope_id": "E_LIST",
+      "requires": [],
+      "sources": [
+        {
+          "quote": "生成settings-list.md",
+          "occurrence": 1
+        }
+      ],
+      "note": "生成结果是明确命名的具体文件。"
+    },
+    {
+      "id": "C_CHANGE_PM",
+      "kind": "ROLE",
+      "event_id": "EV_CHANGE",
+      "entity_id": "E_PM",
+      "role": "PERFORMER",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "artifact_use": null,
+      "scope_id": "EV_CHANGE",
+      "requires": [],
+      "sources": [
+        {
+          "quote": "请PM列出settings.json中的配置项",
+          "occurrence": 1
+        },
+        {
+          "quote": "不得更改任何配置项",
+          "occurrence": 1
+        }
+      ],
+      "note": "追加禁令没有主体切换，承接本指令的PM；不形成更改义务。"
+    },
+    {
+      "id": "C_CHANGE_OBJECT",
+      "kind": "ROLE",
+      "event_id": "EV_CHANGE",
+      "entity_id": "E_CONFIG",
+      "role": "OBJECT",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "artifact_use": null,
+      "scope_id": "EV_CHANGE",
+      "requires": [],
+      "sources": [
+        {
+          "quote": "不得更改任何配置项",
+          "occurrence": 1
+        }
+      ],
+      "note": "禁止对象绑定配置项类别，不由禁令新增外部输入。"
+    },
+    {
+      "id": "C_CHANGE_SCOPE",
+      "kind": "SCOPE",
+      "event_id": "EV_CHANGE",
+      "entity_id": "E_CONFIG",
+      "role": null,
+      "expression_id": "X_ALL_CONFIG",
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "artifact_use": null,
+      "scope_id": "E_CONFIG",
+      "requires": [],
+      "sources": [
+        {
+          "quote": "settings.json中的配置项",
+          "occurrence": 1
+        },
+        {
+          "quote": "不得更改任何配置项",
+          "occurrence": 1
+        }
+      ],
+      "note": "本任务配置项的唯一来源容器是settings.json，追加禁令承接该域并覆盖每个成员；仅生成的settings-list.md没有原始配置项容器关系，不构成域备选。"
+    }
+  ],
+  "expressions": [
+    {
+      "id": "X_CONFIG_DOMAIN",
+      "op": "CATEGORY",
+      "operands": [
+        "E_CONFIG",
+        "E_SETTINGS"
+      ],
+      "state": null,
+      "sources": [
+        {
+          "quote": "settings.json中的配置项",
+          "occurrence": 1
+        }
+      ]
+    },
+    {
+      "id": "X_LIST_ITEM",
+      "op": "ITEM",
+      "operands": [
+        "E_LIST"
+      ],
+      "state": null,
+      "sources": [
+        {
+          "quote": "settings-list.md",
+          "occurrence": 1
+        }
+      ]
+    },
+    {
+      "id": "X_ALL_CONFIG",
+      "op": "FORALL",
+      "operands": [
+        "X_CONFIG_DOMAIN"
+      ],
+      "state": null,
+      "sources": [
+        {
+          "quote": "settings.json中的配置项",
+          "occurrence": 1
+        },
+        {
+          "quote": "任何配置项",
+          "occurrence": 1
+        }
+      ]
+    }
+  ],
+  "issues": [],
+  "coverage": [
+    {
+      "sources": [
+        {
+          "quote": "请PM列出settings.json中的配置项",
+          "occurrence": 1
+        }
+      ],
+      "claim_ids": [
+        "C_LIST_PM",
+        "C_LIST_INPUT",
+        "C_LIST_SCOPE"
+      ],
+      "status": "EXPRESSED",
+      "affected_views": [
+        "A",
+        "P",
+        "I"
+      ],
+      "range_requirement": {
+        "kind": "CATEGORY",
+        "scope_claim_ids": [
+          "C_LIST_SCOPE"
+        ]
+      }
+    },
+    {
+      "sources": [
+        {
+          "quote": "请PM列出settings.json中的配置项",
+          "occurrence": 1
+        },
+        {
+          "quote": "并生成settings-list.md",
+          "occurrence": 1
+        }
+      ],
+      "claim_ids": [
+        "C_GENERATE_PM",
+        "C_GENERATE_RESULT",
+        "C_GENERATE_SCOPE"
+      ],
+      "status": "EXPRESSED",
+      "affected_views": [
+        "A",
+        "P",
+        "O"
+      ],
+      "range_requirement": {
+        "kind": "SPECIFIC",
+        "scope_claim_ids": [
+          "C_GENERATE_SCOPE"
+        ]
+      }
+    },
+    {
+      "sources": [
+        {
+          "quote": "请PM列出settings.json中的配置项",
+          "occurrence": 1
+        },
+        {
+          "quote": "不得更改任何配置项",
+          "occurrence": 1
+        }
+      ],
+      "claim_ids": [
+        "C_CHANGE_PM",
+        "C_CHANGE_OBJECT",
+        "C_CHANGE_SCOPE"
+      ],
+      "status": "EXPRESSED",
+      "affected_views": [
+        "B",
+        "P"
+      ],
+      "range_requirement": {
+        "kind": "UNIVERSAL",
+        "scope_claim_ids": [
+          "C_CHANGE_SCOPE"
+        ]
+      }
+    }
+  ]
+}

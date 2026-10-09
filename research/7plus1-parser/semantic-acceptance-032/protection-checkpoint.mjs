@@ -1,0 +1,8 @@
+import fs from 'node:fs';import path from 'node:path';import assert from 'node:assert/strict';import {execFileSync} from 'node:child_process';
+import {report,write} from './prepare.mjs';import {sha256} from '../llm-first-028/source.mjs';import {installedPlan,existingEntry} from '../../../product/short-compiler/launch-installed.mjs';
+const protectedResult=JSON.parse(execFileSync(process.execPath,['.boundx/experiments/032/protect.mjs','verify'],{encoding:'utf8'}));
+const installedResult=JSON.parse(execFileSync(process.execPath,['research/7plus1-parser/semantic-acceptance-032/snapshot.mjs','verify'],{encoding:'utf8'}));
+assert.equal(protectedResult.tracked_changes.length,0);assert.equal(installedResult.changed.length,0);
+const plan=installedPlan(),port=await existingEntry(plan);plan.verify();
+write(process.argv[2]??'FINAL-PROTECTION-CHECK.json',{at:new Date().toISOString(),protected_worktree:protectedResult,protection_snapshot_sha256:sha256(fs.readFileSync('.boundx/experiments/032/PRE-WORKTREE.json')),installed_original_files:installedResult,installed_version:plan.snapshot.product_version,compiler:plan.snapshot.compiler_revision,contract:plan.snapshot.contract,manifest_sha256:plan.snapshot.manifest_sha256,resources_sha256:plan.snapshot.resources_sha256,port:58618,entry_state:port.state,listener_reported:port.state==='SAME_INSTALLED_VERSION',service_stop_or_upgrade_attempted:false,private_history_copied:false,account_or_network_configuration_changed:false,model_requests:0});
+console.log(JSON.stringify({protected_files:protectedResult.tracked,installed_original_files:installedResult.original_files,entry_state:port.state,installed_version:plan.snapshot.product_version,models:0}));

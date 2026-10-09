@@ -1,5 +1,6 @@
 // Three bounded independent product runs. No task/Gold/review resources enter the model.
 import fs from 'node:fs';import path from 'node:path';import {spawn} from 'node:child_process';import {report,write} from './prepare.mjs';import {sha256} from '../llm-first-028/source.mjs';
+import {classifyRunFailure} from './transport-ledger.mjs';
 const label=process.argv[2],root=path.resolve('.boundx/experiments/032/packages',label),manifestPath=path.join(root,'PRODUCT-MANIFEST.json'),manifestBytes=fs.readFileSync(manifestPath),manifest=JSON.parse(manifestBytes),registry=JSON.parse(fs.readFileSync(path.join(report,'SOURCE-EXPECTATIONS.json'))),environment=JSON.parse(fs.readFileSync(path.join(report,'ENVIRONMENT.json')));
 if(!fs.existsSync(path.join(report,'CANDIDATE-FROZEN.json')))throw Error('FINAL_CANDIDATE_NOT_FROZEN');
 const walk=d=>fs.existsSync(d)?fs.readdirSync(d,{withFileTypes:true}).flatMap(x=>x.isDirectory()?walk(path.join(d,x.name)):[path.join(d,x.name)]):[];
@@ -13,7 +14,9 @@ async function launch(id,allocation){const sourceId=id.replace(/-R\d+$/,''),inpu
  const child=spawn(process.execPath,[path.join(root,'product/short-compiler/cli.mjs'),'--input',input,'--output',path.join(dir,'run'),'--request-budget',String(allocation)],{cwd:root,windowsHide:true,stdio:['ignore','pipe','pipe'],env:{...process.env,BOUNDX_CODEX_EXE:environment.binary}});let stdout='',stderr='';child.stdout.on('data',b=>stdout+=b);child.stderr.on('data',b=>stderr+=b);const exit=await new Promise(r=>{child.on('error',e=>r({exit_code:null,error:e.message}));child.on('close',code=>r({exit_code:code}));});fs.writeFileSync(path.join(dir,'stdout.md'),stdout,{flag:'wx'});fs.writeFileSync(path.join(dir,'stderr.txt'),stderr,{flag:'wx'});
  const result={...receipt,...exit,elapsed_ms:Date.now()-start,execution_status:exit.exit_code===0?'RUN_SUCCEEDED':'RUN_FAILED',semantic_status:'NOT_REVIEWED',counts_after:counts()};fs.writeFileSync(path.join(dir,'execution.json'),JSON.stringify(result,null,2)+'\n',{flag:'wx'});results.push(result);console.log('END '+id+' '+JSON.stringify({exit:exit.exit_code,elapsed_ms:result.elapsed_ms,counts:result.counts_after}));
  if(/CODEX_LOGIN_REQUIRED|CODEX_QUOTA_OR_RATE_LIMIT|CODEX_MODEL_UNAVAILABLE|CODEX_ENV_UNAVAILABLE|blocked by policy/i.test(stderr))stopped='EXTERNAL_ACCOUNT_QUOTA_PERMISSION_BLOCKER';
- if(exit.exit_code!==0&&/CODEX_NETWORK_FAILURE|CODEX_TRANSPORT_OR_SCHEMA_FAILURE|CODEX_TIMEOUT/.test(stderr))networkFailures++;else networkFailures=0;if(networkFailures>=3)stopped='THREE_CONSECUTIVE_TRANSPORT_FAILURES';verify();
+ const underlying=exit.exit_code===0?null:classifyRunFailure(dir);
+ if(['CODEX_LOGIN_REQUIRED','CODEX_QUOTA_OR_RATE_LIMIT','CODEX_MODEL_UNAVAILABLE','POLICY_BLOCKED'].includes(underlying))stopped='EXTERNAL_ACCOUNT_QUOTA_PERMISSION_BLOCKER';
+ if(exit.exit_code!==0&&(underlying==='CODEX_NETWORK_FAILURE'||/CODEX_TRANSPORT_OR_SCHEMA_FAILURE|CODEX_TIMEOUT/.test(stderr)))networkFailures++;else networkFailures=0;if(networkFailures>=3)stopped='THREE_CONSECUTIVE_TRANSPORT_FAILURES';verify();
 }
 while(pending.length||active.size){
  while(!stopped&&pending.length&&active.size<3){verify();const c=counts(),activeReserve=[...active.values()].reduce((n,a)=>n+Math.max(0,a.allocation-count(a.dir).conservative_used),0),minimumPending=(pending.length-1)*2+2,available=240-c.conservative_used-activeReserve-minimumPending,allocation=Math.min(6,available);

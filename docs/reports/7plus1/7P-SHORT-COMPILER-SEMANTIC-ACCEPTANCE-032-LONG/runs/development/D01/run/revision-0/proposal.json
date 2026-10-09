@@ -1,0 +1,512 @@
+{
+  "contract_version": "032.1",
+  "entities": [
+    {
+      "id": "person_pm",
+      "label": "PM",
+      "type": "OTHER",
+      "mentions": [
+        {
+          "quote": "PM",
+          "occurrence": 1
+        }
+      ],
+      "alternatives": []
+    },
+    {
+      "id": "file_settings",
+      "label": "settings.json",
+      "type": "FILE",
+      "mentions": [
+        {
+          "quote": "settings.json",
+          "occurrence": 1
+        }
+      ],
+      "alternatives": []
+    },
+    {
+      "id": "file_list",
+      "label": "settings-list.md",
+      "type": "FILE",
+      "mentions": [
+        {
+          "quote": "settings-list.md",
+          "occurrence": 1
+        }
+      ],
+      "alternatives": []
+    },
+    {
+      "id": "class_config",
+      "label": "配置项",
+      "type": "CLASS",
+      "mentions": [
+        {
+          "quote": "配置项",
+          "occurrence": 1
+        },
+        {
+          "quote": "配置项",
+          "occurrence": 2
+        }
+      ],
+      "alternatives": []
+    }
+  ],
+  "events": [
+    {
+      "id": "event_list",
+      "predicate": "列出",
+      "kind": "ACTION",
+      "layer": "MAIN",
+      "use": "CURRENT_TASK",
+      "modality": "REQUIRED",
+      "polarity": "POSITIVE",
+      "owner_id": "ROOT",
+      "constraint_ids": [],
+      "requires": [],
+      "sources": [
+        {
+          "quote": "请PM列出settings.json中的配置项",
+          "occurrence": 1
+        }
+      ]
+    },
+    {
+      "id": "event_generate",
+      "predicate": "生成",
+      "kind": "ACTION",
+      "layer": "MAIN",
+      "use": "CURRENT_TASK",
+      "modality": "REQUIRED",
+      "polarity": "POSITIVE",
+      "owner_id": "ROOT",
+      "constraint_ids": [],
+      "requires": [],
+      "sources": [
+        {
+          "quote": "生成settings-list.md",
+          "occurrence": 1
+        }
+      ]
+    },
+    {
+      "id": "event_change",
+      "predicate": "更改",
+      "kind": "ACTION",
+      "layer": "MAIN",
+      "use": "CURRENT_TASK",
+      "modality": "FORBIDDEN",
+      "polarity": "POSITIVE",
+      "owner_id": "ROOT",
+      "constraint_ids": [],
+      "requires": [],
+      "sources": [
+        {
+          "quote": "本任务不得更改该文件内的任何配置项",
+          "occurrence": 1
+        }
+      ]
+    }
+  ],
+  "claims": [
+    {
+      "id": "role_list_pm",
+      "kind": "ROLE",
+      "event_id": "event_list",
+      "entity_id": "person_pm",
+      "role": "PERFORMER",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "artifact_use": null,
+      "scope_id": "event_list",
+      "requires": [],
+      "sources": [
+        {
+          "quote": "请PM列出",
+          "occurrence": 1
+        }
+      ],
+      "note": ""
+    },
+    {
+      "id": "role_list_input",
+      "kind": "ROLE",
+      "event_id": "event_list",
+      "entity_id": "class_config",
+      "role": "INPUT_OBJECT",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "artifact_use": null,
+      "scope_id": "event_list",
+      "requires": [],
+      "sources": [
+        {
+          "quote": "列出settings.json中的配置项",
+          "occurrence": 1
+        }
+      ],
+      "note": "明确输入为settings.json中的配置项。"
+    },
+    {
+      "id": "scope_list_input",
+      "kind": "SCOPE",
+      "event_id": "event_list",
+      "entity_id": null,
+      "role": null,
+      "expression_id": "domain_list",
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "artifact_use": null,
+      "scope_id": "class_config",
+      "requires": [],
+      "sources": [
+        {
+          "quote": "settings.json中的配置项",
+          "occurrence": 1
+        }
+      ],
+      "note": ""
+    },
+    {
+      "id": "role_generate_pm",
+      "kind": "ROLE",
+      "event_id": "event_generate",
+      "entity_id": "person_pm",
+      "role": "PERFORMER",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "artifact_use": null,
+      "scope_id": "event_generate",
+      "requires": [],
+      "sources": [
+        {
+          "quote": "请PM列出",
+          "occurrence": 1
+        },
+        {
+          "quote": "生成settings-list.md",
+          "occurrence": 1
+        }
+      ],
+      "note": "同一指令中的并列动作承接明确主语PM。"
+    },
+    {
+      "id": "role_generate_result",
+      "kind": "ROLE",
+      "event_id": "event_generate",
+      "entity_id": "file_list",
+      "role": "RESULT",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "artifact_use": null,
+      "scope_id": "event_generate",
+      "requires": [],
+      "sources": [
+        {
+          "quote": "生成settings-list.md",
+          "occurrence": 1
+        }
+      ],
+      "note": ""
+    },
+    {
+      "id": "scope_generate_result",
+      "kind": "SCOPE",
+      "event_id": "event_generate",
+      "entity_id": null,
+      "role": null,
+      "expression_id": "item_result",
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "artifact_use": null,
+      "scope_id": "file_list",
+      "requires": [],
+      "sources": [
+        {
+          "quote": "生成settings-list.md",
+          "occurrence": 1
+        }
+      ],
+      "note": ""
+    },
+    {
+      "id": "role_change_object",
+      "kind": "ROLE",
+      "event_id": "event_change",
+      "entity_id": "class_config",
+      "role": "OBJECT",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "artifact_use": null,
+      "scope_id": "event_change",
+      "requires": [],
+      "sources": [
+        {
+          "quote": "不得更改该文件内的任何配置项",
+          "occurrence": 1
+        }
+      ],
+      "note": "禁止对象不增加外部输入。"
+    },
+    {
+      "id": "scope_change",
+      "kind": "SCOPE",
+      "event_id": "event_change",
+      "entity_id": null,
+      "role": null,
+      "expression_id": "forall_change",
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "artifact_use": null,
+      "scope_id": "class_config",
+      "requires": [],
+      "sources": [
+        {
+          "quote": "settings.json",
+          "occurrence": 1
+        },
+        {
+          "quote": "settings-list.md",
+          "occurrence": 1
+        },
+        {
+          "quote": "该文件内的任何配置项",
+          "occurrence": 1
+        }
+      ],
+      "note": "保留全称禁令；该文件的容器回指存在竞争。"
+    }
+  ],
+  "expressions": [
+    {
+      "id": "domain_list",
+      "op": "CATEGORY",
+      "operands": [
+        "class_config",
+        "file_settings"
+      ],
+      "state": null,
+      "sources": [
+        {
+          "quote": "settings.json中的配置项",
+          "occurrence": 1
+        }
+      ]
+    },
+    {
+      "id": "item_result",
+      "op": "ITEM",
+      "operands": [
+        "file_list"
+      ],
+      "state": null,
+      "sources": [
+        {
+          "quote": "settings-list.md",
+          "occurrence": 1
+        }
+      ]
+    },
+    {
+      "id": "domain_change_settings",
+      "op": "CATEGORY",
+      "operands": [
+        "class_config",
+        "file_settings"
+      ],
+      "state": null,
+      "sources": [
+        {
+          "quote": "settings.json中的配置项",
+          "occurrence": 1
+        },
+        {
+          "quote": "该文件内的任何配置项",
+          "occurrence": 1
+        }
+      ]
+    },
+    {
+      "id": "domain_change_list",
+      "op": "CATEGORY",
+      "operands": [
+        "class_config",
+        "file_list"
+      ],
+      "state": null,
+      "sources": [
+        {
+          "quote": "生成settings-list.md",
+          "occurrence": 1
+        },
+        {
+          "quote": "该文件内的任何配置项",
+          "occurrence": 1
+        }
+      ]
+    },
+    {
+      "id": "domain_change_choice",
+      "op": "DOMAIN_CHOICE",
+      "operands": [
+        "domain_change_settings",
+        "domain_change_list"
+      ],
+      "state": null,
+      "sources": [
+        {
+          "quote": "settings.json",
+          "occurrence": 1
+        },
+        {
+          "quote": "settings-list.md",
+          "occurrence": 1
+        },
+        {
+          "quote": "该文件内的任何配置项",
+          "occurrence": 1
+        }
+      ]
+    },
+    {
+      "id": "forall_change",
+      "op": "FORALL",
+      "operands": [
+        "domain_change_choice"
+      ],
+      "state": null,
+      "sources": [
+        {
+          "quote": "该文件内的任何配置项",
+          "occurrence": 1
+        }
+      ]
+    }
+  ],
+  "issues": [
+    {
+      "id": "issue_change_domain",
+      "kind": "AMBIGUITY",
+      "subject_ids": [
+        "domain_change_choice",
+        "scope_change"
+      ],
+      "field_path": "expressions[domain_change_choice].operands",
+      "alternatives": [
+        "domain_change_settings",
+        "domain_change_list"
+      ],
+      "affected_views": [
+        "B"
+      ],
+      "sources": [
+        {
+          "quote": "settings.json中的配置项",
+          "occurrence": 1
+        },
+        {
+          "quote": "生成settings-list.md",
+          "occurrence": 1
+        },
+        {
+          "quote": "该文件内的任何配置项",
+          "occurrence": 1
+        }
+      ],
+      "note": "该文件可回指配置来源settings.json，也可回指生成的settings-list.md；两种解释改变禁令边界，原文未明确排除其中之一。"
+    }
+  ],
+  "coverage": [
+    {
+      "sources": [
+        {
+          "quote": "请PM列出settings.json中的配置项",
+          "occurrence": 1
+        }
+      ],
+      "claim_ids": [
+        "role_list_pm",
+        "role_list_input",
+        "scope_list_input"
+      ],
+      "status": "EXPRESSED",
+      "affected_views": [
+        "A",
+        "I",
+        "P"
+      ],
+      "range_requirement": {
+        "kind": "CATEGORY",
+        "scope_claim_ids": [
+          "scope_list_input"
+        ]
+      }
+    },
+    {
+      "sources": [
+        {
+          "quote": "请PM列出",
+          "occurrence": 1
+        },
+        {
+          "quote": "生成settings-list.md",
+          "occurrence": 1
+        }
+      ],
+      "claim_ids": [
+        "role_generate_pm",
+        "role_generate_result",
+        "scope_generate_result"
+      ],
+      "status": "EXPRESSED",
+      "affected_views": [
+        "A",
+        "O",
+        "P"
+      ],
+      "range_requirement": {
+        "kind": "SPECIFIC",
+        "scope_claim_ids": [
+          "scope_generate_result"
+        ]
+      }
+    },
+    {
+      "sources": [
+        {
+          "quote": "本任务不得更改该文件内的任何配置项",
+          "occurrence": 1
+        }
+      ],
+      "claim_ids": [
+        "role_change_object",
+        "scope_change"
+      ],
+      "status": "EXPRESSED",
+      "affected_views": [
+        "B"
+      ],
+      "range_requirement": {
+        "kind": "UNIVERSAL",
+        "scope_claim_ids": [
+          "scope_change"
+        ]
+      }
+    }
+  ]
+}
