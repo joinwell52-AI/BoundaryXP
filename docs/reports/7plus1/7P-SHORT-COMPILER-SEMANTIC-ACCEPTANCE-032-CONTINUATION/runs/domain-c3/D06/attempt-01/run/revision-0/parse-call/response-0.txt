@@ -1,0 +1,332 @@
+{
+  "contract_version": "032.1",
+  "entities": [
+    {
+      "id": "person_pm",
+      "label": "PM",
+      "type": "OTHER",
+      "mentions": [{"quote": "PM", "occurrence": 1}],
+      "alternatives": []
+    },
+    {
+      "id": "file_a",
+      "label": "a.json",
+      "type": "FILE",
+      "mentions": [
+        {"quote": "a.json", "occurrence": 1},
+        {"quote": "a.json", "occurrence": 2}
+      ],
+      "alternatives": []
+    },
+    {
+      "id": "file_b",
+      "label": "b.json",
+      "type": "FILE",
+      "mentions": [
+        {"quote": "b.json", "occurrence": 1},
+        {"quote": "b.json", "occurrence": 2}
+      ],
+      "alternatives": []
+    },
+    {
+      "id": "item_timeout",
+      "label": "a.json中的timeout项",
+      "type": "OTHER",
+      "mentions": [{"quote": "a.json中的timeout项", "occurrence": 1}],
+      "alternatives": []
+    },
+    {
+      "id": "item_retries",
+      "label": "b.json中的retries项",
+      "type": "OTHER",
+      "mentions": [{"quote": "b.json中的retries项", "occurrence": 1}],
+      "alternatives": []
+    }
+  ],
+  "events": [
+    {
+      "id": "event_check",
+      "predicate": "核对",
+      "kind": "ACTION",
+      "layer": "MAIN",
+      "use": "CURRENT_TASK",
+      "modality": "REQUIRED",
+      "polarity": "POSITIVE",
+      "owner_id": "ROOT",
+      "constraint_ids": [],
+      "requires": [],
+      "sources": [{"quote": "请PM核对a.json和b.json。", "occurrence": 1}]
+    },
+    {
+      "id": "event_change_timeout",
+      "predicate": "更改",
+      "kind": "ACTION",
+      "layer": "MAIN",
+      "use": "CURRENT_TASK",
+      "modality": "FORBIDDEN",
+      "polarity": "POSITIVE",
+      "owner_id": "ROOT",
+      "constraint_ids": [],
+      "requires": [],
+      "sources": [{"quote": "不得更改a.json中的timeout项及b.json中的retries项。", "occurrence": 1}]
+    },
+    {
+      "id": "event_change_retries",
+      "predicate": "更改",
+      "kind": "ACTION",
+      "layer": "MAIN",
+      "use": "CURRENT_TASK",
+      "modality": "FORBIDDEN",
+      "polarity": "POSITIVE",
+      "owner_id": "ROOT",
+      "constraint_ids": [],
+      "requires": [],
+      "sources": [{"quote": "不得更改a.json中的timeout项及b.json中的retries项。", "occurrence": 1}]
+    }
+  ],
+  "claims": [
+    {
+      "id": "role_check_pm",
+      "kind": "ROLE",
+      "event_id": "event_check",
+      "entity_id": "person_pm",
+      "role": "PERFORMER",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "artifact_use": null,
+      "scope_id": "event_check",
+      "requires": [],
+      "sources": [{"quote": "请PM核对", "occurrence": 1}],
+      "note": "PM是核对动作的明确执行者；岗位的人或组类别未指定。"
+    },
+    {
+      "id": "role_check_a",
+      "kind": "ROLE",
+      "event_id": "event_check",
+      "entity_id": "file_a",
+      "role": "INPUT_OBJECT",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "artifact_use": null,
+      "scope_id": "event_check",
+      "requires": [],
+      "sources": [{"quote": "核对a.json和b.json", "occurrence": 1}],
+      "note": "a.json是明确受核对文件。"
+    },
+    {
+      "id": "role_check_b",
+      "kind": "ROLE",
+      "event_id": "event_check",
+      "entity_id": "file_b",
+      "role": "INPUT_OBJECT",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "artifact_use": null,
+      "scope_id": "event_check",
+      "requires": [],
+      "sources": [{"quote": "核对a.json和b.json", "occurrence": 1}],
+      "note": "b.json是明确受核对文件。"
+    },
+    {
+      "id": "scope_check_a",
+      "kind": "SCOPE",
+      "event_id": "event_check",
+      "entity_id": null,
+      "role": null,
+      "expression_id": "expr_a",
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "artifact_use": null,
+      "scope_id": "file_a",
+      "requires": [],
+      "sources": [{"quote": "核对a.json和b.json", "occurrence": 1}],
+      "note": "核对范围包含具体文件a.json。"
+    },
+    {
+      "id": "scope_check_b",
+      "kind": "SCOPE",
+      "event_id": "event_check",
+      "entity_id": null,
+      "role": null,
+      "expression_id": "expr_b",
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "artifact_use": null,
+      "scope_id": "file_b",
+      "requires": [],
+      "sources": [{"quote": "核对a.json和b.json", "occurrence": 1}],
+      "note": "核对范围包含具体文件b.json。"
+    },
+    {
+      "id": "role_timeout_pm",
+      "kind": "ROLE",
+      "event_id": "event_change_timeout",
+      "entity_id": "person_pm",
+      "role": "PERFORMER",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "artifact_use": null,
+      "scope_id": "event_change_timeout",
+      "requires": [],
+      "sources": [
+        {"quote": "请PM核对a.json和b.json。", "occurrence": 1},
+        {"quote": "不得更改a.json中的timeout项及b.json中的retries项。", "occurrence": 1}
+      ],
+      "note": "连续同一指令追加更改禁令，没有主体切换，承接PM作为受禁止动作的主体。"
+    },
+    {
+      "id": "role_timeout_object",
+      "kind": "ROLE",
+      "event_id": "event_change_timeout",
+      "entity_id": "item_timeout",
+      "role": "OBJECT",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "artifact_use": null,
+      "scope_id": "event_change_timeout",
+      "requires": [],
+      "sources": [{"quote": "不得更改a.json中的timeout项", "occurrence": 1}],
+      "note": "禁令对象是a.json中的具体timeout项，不扩大到其他文件或其他项。"
+    },
+    {
+      "id": "scope_timeout",
+      "kind": "SCOPE",
+      "event_id": "event_change_timeout",
+      "entity_id": null,
+      "role": null,
+      "expression_id": "expr_timeout",
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "artifact_use": null,
+      "scope_id": "item_timeout",
+      "requires": [],
+      "sources": [{"quote": "不得更改a.json中的timeout项", "occurrence": 1}],
+      "note": "具体项身份保留其所属文件限定；不从禁止对象新增外部输入。"
+    },
+    {
+      "id": "role_retries_pm",
+      "kind": "ROLE",
+      "event_id": "event_change_retries",
+      "entity_id": "person_pm",
+      "role": "PERFORMER",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "artifact_use": null,
+      "scope_id": "event_change_retries",
+      "requires": [],
+      "sources": [
+        {"quote": "请PM核对a.json和b.json。", "occurrence": 1},
+        {"quote": "不得更改a.json中的timeout项及b.json中的retries项。", "occurrence": 1}
+      ],
+      "note": "连续同一指令追加更改禁令，没有主体切换，承接PM作为受禁止动作的主体。"
+    },
+    {
+      "id": "role_retries_object",
+      "kind": "ROLE",
+      "event_id": "event_change_retries",
+      "entity_id": "item_retries",
+      "role": "OBJECT",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "artifact_use": null,
+      "scope_id": "event_change_retries",
+      "requires": [],
+      "sources": [{"quote": "不得更改a.json中的timeout项及b.json中的retries项。", "occurrence": 1}],
+      "note": "同一不得更改谓语并列覆盖b.json中的具体retries项。"
+    },
+    {
+      "id": "scope_retries",
+      "kind": "SCOPE",
+      "event_id": "event_change_retries",
+      "entity_id": null,
+      "role": null,
+      "expression_id": "expr_retries",
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "artifact_use": null,
+      "scope_id": "item_retries",
+      "requires": [],
+      "sources": [{"quote": "不得更改a.json中的timeout项及b.json中的retries项。", "occurrence": 1}],
+      "note": "具体项身份保留其所属文件限定；并列不增加时序或其他项的许可。"
+    }
+  ],
+  "expressions": [
+    {
+      "id": "expr_a",
+      "op": "ITEM",
+      "operands": ["file_a"],
+      "state": null,
+      "sources": [{"quote": "a.json", "occurrence": 1}]
+    },
+    {
+      "id": "expr_b",
+      "op": "ITEM",
+      "operands": ["file_b"],
+      "state": null,
+      "sources": [{"quote": "b.json", "occurrence": 1}]
+    },
+    {
+      "id": "expr_timeout",
+      "op": "ITEM",
+      "operands": ["item_timeout"],
+      "state": null,
+      "sources": [{"quote": "a.json中的timeout项", "occurrence": 1}]
+    },
+    {
+      "id": "expr_retries",
+      "op": "ITEM",
+      "operands": ["item_retries"],
+      "state": null,
+      "sources": [{"quote": "b.json中的retries项", "occurrence": 1}]
+    }
+  ],
+  "issues": [],
+  "coverage": [
+    {
+      "sources": [{"quote": "请PM核对a.json", "occurrence": 1}],
+      "claim_ids": ["role_check_pm", "role_check_a", "scope_check_a"],
+      "status": "EXPRESSED",
+      "affected_views": ["I", "A", "P"],
+      "range_requirement": {"kind": "SPECIFIC", "scope_claim_ids": ["scope_check_a"]}
+    },
+    {
+      "sources": [{"quote": "请PM核对a.json和b.json。", "occurrence": 1}],
+      "claim_ids": ["role_check_pm", "role_check_b", "scope_check_b"],
+      "status": "EXPRESSED",
+      "affected_views": ["I", "A", "P"],
+      "range_requirement": {"kind": "SPECIFIC", "scope_claim_ids": ["scope_check_b"]}
+    },
+    {
+      "sources": [{"quote": "不得更改a.json中的timeout项", "occurrence": 1}],
+      "claim_ids": ["role_timeout_pm", "role_timeout_object", "scope_timeout"],
+      "status": "EXPRESSED",
+      "affected_views": ["B", "P"],
+      "range_requirement": {"kind": "SPECIFIC", "scope_claim_ids": ["scope_timeout"]}
+    },
+    {
+      "sources": [{"quote": "不得更改a.json中的timeout项及b.json中的retries项。", "occurrence": 1}],
+      "claim_ids": ["role_retries_pm", "role_retries_object", "scope_retries"],
+      "status": "EXPRESSED",
+      "affected_views": ["B", "P"],
+      "range_requirement": {"kind": "SPECIFIC", "scope_claim_ids": ["scope_retries"]}
+    }
+  ]
+}

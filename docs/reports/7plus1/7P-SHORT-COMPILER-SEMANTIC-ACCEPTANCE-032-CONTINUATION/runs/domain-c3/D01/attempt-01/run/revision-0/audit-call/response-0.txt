@@ -1,0 +1,182 @@
+{
+  "contract_version": "032.1",
+  "reviews": [
+    {
+      "subject_id": "E_PM",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [{"quote": "PM", "occurrence": 1}],
+      "reason": "身份明确；OTHER可占位未指定的人或组类别。"
+    },
+    {
+      "subject_id": "E_SETTINGS",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["E_LIST", "E_CONFIG"],
+      "sources": [
+        {"quote": "settings.json中的配置项", "occurrence": 1},
+        {"quote": "该文件内的任何配置项", "occurrence": 1}
+      ],
+      "reason": "该文件承接配置项所属的settings.json；派生清单未被陈述为配置项容器，两处指称绑定同一身份有据。"
+    },
+    {
+      "subject_id": "E_CONFIG",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [
+        {"quote": "配置项", "occurrence": 1},
+        {"quote": "配置项", "occurrence": 2}
+      ],
+      "reason": "两处均指配置项类别，CLASS恰当；具体容器由各用途范围表达。"
+    },
+    {
+      "subject_id": "E_LIST",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [{"quote": "生成settings-list.md", "occurrence": 1}],
+      "reason": "明确命名的生成文件，身份与FILE类型有据。"
+    },
+    {
+      "subject_id": "EV_LIST",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [{"quote": "请PM列出settings.json中的配置项", "occurrence": 1}],
+      "reason": "列出是当前任务明确要求的主动作，无另述条件或先后约束。"
+    },
+    {
+      "subject_id": "EV_GENERATE",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [{"quote": "列出settings.json中的配置项，生成settings-list.md", "occurrence": 1}],
+      "reason": "生成是同一指令中的明确要求；并列措辞不增加事件先后。"
+    },
+    {
+      "subject_id": "EV_CHANGE",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [{"quote": "本任务不得更改该文件内的任何配置项", "occurrence": 1}],
+      "reason": "当前任务禁止更改，FORBIDDEN与正向动作谓词搭配正确；未新增执行义务。"
+    },
+    {
+      "subject_id": "C_LIST_PM",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["E_PM", "EV_LIST"],
+      "sources": [{"quote": "请PM列出settings.json中的配置项", "occurrence": 1}],
+      "reason": "PM是列出动作的明确执行者，绑定事件正确。"
+    },
+    {
+      "subject_id": "C_LIST_INPUT",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["C_LIST_SCOPE"],
+      "sources": [{"quote": "settings.json中的配置项", "occurrence": 1}],
+      "reason": "配置项是明确受检输入范围，容器限定由同事件SCOPE保留。"
+    },
+    {
+      "subject_id": "C_LIST_SCOPE",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["C_LIST_INPUT", "X_CONFIG_DOMAIN"],
+      "sources": [{"quote": "settings.json中的配置项", "occurrence": 1}],
+      "reason": "范围目标与输入角色属于同一事件，CATEGORY保留明确文件限定；原文无显式全称量词。"
+    },
+    {
+      "subject_id": "C_GENERATE_PM",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["C_LIST_PM", "EV_GENERATE"],
+      "sources": [
+        {"quote": "请PM列出settings.json中的配置项", "occurrence": 1},
+        {"quote": "生成settings-list.md", "occurrence": 1}
+      ],
+      "reason": "连续并列指令无主体切换，生成动作承接PM，来源覆盖承接两端。"
+    },
+    {
+      "subject_id": "C_GENERATE_RESULT",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["E_LIST", "EV_GENERATE"],
+      "sources": [{"quote": "生成settings-list.md", "occurrence": 1}],
+      "reason": "指定文件是生成结果；原文未要求交付，无须增加DELIVERABLE。"
+    },
+    {
+      "subject_id": "C_RESULT_SCOPE",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["C_GENERATE_RESULT", "X_LIST_FILE"],
+      "sources": [{"quote": "生成settings-list.md", "occurrence": 1}],
+      "reason": "ITEM指定同一生成事件的结果文件，目标绑定正确。"
+    },
+    {
+      "subject_id": "C_GENERATE_CONTENT",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["C_GENERATE_RESULT", "C_CONTENT_SCOPE"],
+      "sources": [{"quote": "列出settings.json中的配置项，生成settings-list.md", "occurrence": 1}],
+      "reason": "连续指令支持生成文件承载所列配置项，CONTENT未将类别误作结果文件。"
+    },
+    {
+      "subject_id": "C_CONTENT_SCOPE",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["C_GENERATE_CONTENT", "X_CONFIG_DOMAIN"],
+      "sources": [{"quote": "列出settings.json中的配置项，生成settings-list.md", "occurrence": 1}],
+      "reason": "清单内容承接已明确限定的settings.json配置项，范围与CONTENT属于同一事件。"
+    },
+    {
+      "subject_id": "C_CHANGE_OBJECT",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["EV_CHANGE", "C_CHANGE_SCOPE"],
+      "sources": [{"quote": "本任务不得更改该文件内的任何配置项", "occurrence": 1}],
+      "reason": "配置项类别是禁止动作对象，OBJECT不从禁令新增外部输入。"
+    },
+    {
+      "subject_id": "C_CHANGE_SCOPE",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["E_SETTINGS", "C_CHANGE_OBJECT", "X_ALL_CONFIG"],
+      "sources": [
+        {"quote": "settings.json中的配置项", "occurrence": 1},
+        {"quote": "该文件内的任何配置项", "occurrence": 1}
+      ],
+      "reason": "该文件明确回指配置项所属容器，任何配置项要求该容器内全称范围；不存在独立未限定任务域读法。"
+    },
+    {
+      "subject_id": "X_CONFIG_DOMAIN",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["E_CONFIG", "E_SETTINGS"],
+      "sources": [{"quote": "settings.json中的配置项", "occurrence": 1}],
+      "reason": "CATEGORY以CLASS及明确文件容器构成成员域，参数与来源一致。"
+    },
+    {
+      "subject_id": "X_LIST_FILE",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["E_LIST"],
+      "sources": [{"quote": "settings-list.md", "occurrence": 1}],
+      "reason": "单一具体文件用ITEM表达，未误作类别或全称。"
+    },
+    {
+      "subject_id": "X_ALL_CONFIG",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["X_CONFIG_DOMAIN", "E_SETTINGS"],
+      "sources": [
+        {"quote": "settings.json中的配置项", "occurrence": 1},
+        {"quote": "该文件内的任何配置项", "occurrence": 1}
+      ],
+      "reason": "FORALL保留任何的全称效力，唯一操作数是明确回指文件内的配置项域，无例外或域竞争漏项。"
+    }
+  ],
+  "issues": [],
+  "omissions": []
+}

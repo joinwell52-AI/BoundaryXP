@@ -1,0 +1,342 @@
+{
+  "contract_version": "032.1",
+  "reviews": [
+    {
+      "subject_id": "e_pm",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [
+        {
+          "quote": "PM",
+          "occurrence": 1
+        }
+      ],
+      "reason": "身份明确；OTHER可占位表示未指定的人或组类别，不推定权限。"
+    },
+    {
+      "subject_id": "e_settings",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [
+        {
+          "quote": "settings.json",
+          "occurrence": 1
+        }
+      ],
+      "reason": "明确命名的配置文件容器。"
+    },
+    {
+      "subject_id": "e_config",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [
+        {
+          "quote": "settings.json中的配置项",
+          "occurrence": 1
+        },
+        {
+          "quote": "任何配置项",
+          "occurrence": 1
+        }
+      ],
+      "reason": "两处均指配置项类别；共享类别身份不要求两个用途具有相同容器域。"
+    },
+    {
+      "subject_id": "e_output",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [
+        {
+          "quote": "settings-list.md",
+          "occurrence": 1
+        }
+      ],
+      "reason": "明确命名的生成文件，与输入容器身份分开。"
+    },
+    {
+      "subject_id": "ev_list",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [
+        {
+          "quote": "请PM列出settings.json中的配置项",
+          "occurrence": 1
+        }
+      ],
+      "reason": "当前任务明确要求列出配置项，无附加条件。"
+    },
+    {
+      "subject_id": "ev_generate",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [
+        {
+          "quote": "并生成settings-list.md",
+          "occurrence": 1
+        }
+      ],
+      "reason": "并列要求生成文件；原文没有另行指定先后或交付。"
+    },
+    {
+      "subject_id": "ev_change",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [
+        {
+          "quote": "不得更改任何配置项",
+          "occurrence": 1
+        }
+      ],
+      "reason": "明确禁止更改，FORBIDDEN与正向动作极性搭配正确；范围竞争不否定禁令存在。"
+    },
+    {
+      "subject_id": "c_list_pm",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [
+        "e_pm",
+        "ev_list"
+      ],
+      "sources": [
+        {
+          "quote": "请PM列出settings.json中的配置项",
+          "occurrence": 1
+        }
+      ],
+      "reason": "PM是列出动作的明确执行者。"
+    },
+    {
+      "subject_id": "c_list_input",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [
+        "ev_list",
+        "e_config",
+        "c_list_scope"
+      ],
+      "sources": [
+        {
+          "quote": "列出settings.json中的配置项",
+          "occurrence": 1
+        }
+      ],
+      "reason": "配置项是明确受处理输入范围，文件容器由同事件SCOPE绑定。"
+    },
+    {
+      "subject_id": "c_list_scope",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [
+        "c_list_input",
+        "x_local"
+      ],
+      "sources": [
+        {
+          "quote": "settings.json中的配置项",
+          "occurrence": 1
+        }
+      ],
+      "reason": "范围绑定同一列出事件的配置项类别，保留明确文件限定；此处没有显式全称量词。"
+    },
+    {
+      "subject_id": "c_generate_pm",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [
+        "e_pm",
+        "ev_generate"
+      ],
+      "sources": [
+        {
+          "quote": "请PM列出settings.json中的配置项",
+          "occurrence": 1
+        },
+        {
+          "quote": "并生成settings-list.md",
+          "occurrence": 1
+        }
+      ],
+      "reason": "连续并列指令没有主体切换，生成动作可承接PM；来源覆盖两端。"
+    },
+    {
+      "subject_id": "c_generate_result",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [
+        "ev_generate",
+        "e_output"
+      ],
+      "sources": [
+        {
+          "quote": "生成settings-list.md",
+          "occurrence": 1
+        }
+      ],
+      "reason": "该文件是生成事件的RESULT；未凭生成增加交付义务或外部输入。"
+    },
+    {
+      "subject_id": "c_generate_scope",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [
+        "c_generate_result",
+        "x_output"
+      ],
+      "sources": [
+        {
+          "quote": "生成settings-list.md",
+          "occurrence": 1
+        }
+      ],
+      "reason": "具体文件范围与同一事件的RESULT对象一致。"
+    },
+    {
+      "subject_id": "c_change_pm",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [
+        "e_pm",
+        "ev_change"
+      ],
+      "sources": [
+        {
+          "quote": "请PM列出settings.json中的配置项",
+          "occurrence": 1
+        },
+        {
+          "quote": "不得更改任何配置项",
+          "occurrence": 1
+        }
+      ],
+      "reason": "同一指令追加禁止要求，没有新主体或竞争执行者，可承接PM。"
+    },
+    {
+      "subject_id": "c_change_object",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [
+        "ev_change",
+        "e_config"
+      ],
+      "sources": [
+        {
+          "quote": "不得更改任何配置项",
+          "occurrence": 1
+        }
+      ],
+      "reason": "配置项类别是禁止更改的对象，OBJECT不扩增外部输入。"
+    },
+    {
+      "subject_id": "c_change_scope",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [
+        "c_change_object",
+        "x_all",
+        "i_change_domain"
+      ],
+      "sources": [
+        {
+          "quote": "settings.json中的配置项",
+          "occurrence": 1
+        },
+        {
+          "quote": "不得更改任何配置项",
+          "occurrence": 1
+        }
+      ],
+      "reason": "同事件对象绑定全称选择域；局部继承与未限定任务类别域均合理，原文未排除任一读法。支持保留竞争，不选择最终边界。"
+    },
+    {
+      "subject_id": "x_local",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [
+        "e_config",
+        "e_settings"
+      ],
+      "sources": [
+        {
+          "quote": "settings.json中的配置项",
+          "occurrence": 1
+        }
+      ],
+      "reason": "CATEGORY正确表达配置项类别及其明确文件容器；也可作为禁令的局部继承备选。"
+    },
+    {
+      "subject_id": "x_unbounded",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [
+        "e_config"
+      ],
+      "sources": [
+        {
+          "quote": "不得更改任何配置项",
+          "occurrence": 1
+        }
+      ],
+      "reason": "独立全称禁令未明示容器，未限定容器的任务类别域是来源支持的备选，并非默认未知容器。"
+    },
+    {
+      "subject_id": "x_choice",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [
+        "x_local",
+        "x_unbounded",
+        "i_change_domain"
+      ],
+      "sources": [
+        {
+          "quote": "settings.json中的配置项",
+          "occurrence": 1
+        },
+        {
+          "quote": "不得更改任何配置项",
+          "occurrence": 1
+        }
+      ],
+      "reason": "两个域读法会改变成员边界，独立禁令无明确排他回指；DOMAIN_CHOICE忠实保留竞争，没有把生成文件虚构为第二容器。"
+    },
+    {
+      "subject_id": "x_all",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [
+        "x_choice"
+      ],
+      "sources": [
+        {
+          "quote": "不得更改任何配置项",
+          "occurrence": 1
+        }
+      ],
+      "reason": "任何要求全称适用，FORALL作用于集合选择域，未因域竞争丢失量词。"
+    },
+    {
+      "subject_id": "x_output",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [
+        "e_output"
+      ],
+      "sources": [
+        {
+          "quote": "settings-list.md",
+          "occurrence": 1
+        }
+      ],
+      "reason": "ITEM准确表示单个明确命名的文件对象。"
+    }
+  ],
+  "issues": [],
+  "omissions": []
+}
