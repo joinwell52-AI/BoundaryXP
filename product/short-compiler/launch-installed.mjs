@@ -11,6 +11,7 @@ const approvedVersions={
  '0.1.0-candidate.031-r1.2-ui.4':{compiler:'031-r1-c3',contract:'031-r1.1'},
  '0.1.0-candidate.031-r1.2-ui.6':{compiler:'031-r1-c3',contract:'031-r1.1'},
  '0.1.0-candidate.031-r1.2-ui.7':{compiler:'031-r1-c3',contract:'031-r1.1'},
+ '0.1.0-candidate.031-r1.2-ui.8':{compiler:'031-r1-c3',contract:'031-r1.1'},
  '0.1.0-candidate.032.1':{compiler:'032-c1',contract:'032.1'},
  '0.1.0-candidate.032.2':{compiler:'032-c2',contract:'032.1'},
  '0.1.0-candidate.032.3':{compiler:'032-c3',contract:'032.1'}

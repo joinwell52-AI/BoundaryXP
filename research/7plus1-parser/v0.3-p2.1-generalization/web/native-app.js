@@ -1,4 +1,4 @@
-import {renderCompilerProcess, renderModelInfo, factText, readable} from '/process-view.js';
+import {renderCompilerProcess, renderModelInfo, factText, readable, sourceLength} from '/process-view.js';
 const $=id=>document.getElementById(id);
 const names={I:'输入与作用域',O:'交付与结果',A:'正向动作',P:'参与关系',R:'执行量化限制',V:'版本与依据',C:'完成与停止',B:'禁止与限制'};
 const stages={QUEUED:'等待',PREPARING:'准备与版本核对',PARSING:'Codex 正在解析原文',AUDITING:'新会话正在审阅',VALIDATING:'技术校验',COMPILING:'保真编译',COMPLETED:'编译流程完成',COMPLETED_WITH_UNRESOLVED:'编译流程完成 · 含未决/缺口',FAILED:'运行失败',CANCELLING:'取消中（等待本地子进程退出）',CANCELLED:'本地请求已取消（不声称云端停止计费）',INTERRUPTED:'服务中断 · 未自动重跑'};
@@ -19,7 +19,7 @@ function configureModels(){
 const el=(tag,value,cls)=>{const e=document.createElement(tag);if(value!==undefined)e.textContent=value;if(cls)e.className=cls;return e;};
 async function api(url,options={}){const response=await fetch(url,{...options,headers:{...options.headers,...(options.method?{'x-boundx-session':session?.token??''}: {})}});const data=await response.json();if(!response.ok)throw Error(data.error??data.code);return data;}
 const jsonPost=(url,data)=>api(url,{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify(data)});
-function count(){const n=Array.from($('input').value).length;$('input-count').textContent=n+' / 300 码点';return n;}
+function count(){const info=sourceLength($('input').value);$('input-count').textContent=info.label;$('input-count').title=info.explanation;return info.count;}
 function showError(e){$('status').textContent=errors[e.message]??e.message;$('status').className='failure';}
 function highlight(sources){
  if(!current||!sources?.length)return;

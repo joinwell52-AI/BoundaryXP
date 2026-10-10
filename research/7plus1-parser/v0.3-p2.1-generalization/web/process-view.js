@@ -12,6 +12,19 @@ const words = {
 };
 export const readable = value => words[value] ?? (value == null || value === '' ? '未记录' : String(value));
 const array = value => Array.isArray(value) ? value : [];
+export function sourceLength(value,limit=300){
+ const count=Array.from(value??'').length;
+ return {count,label:'原文长度：'+count+' / '+limit+' 字符',explanation:'按Unicode码点计数：汉字、字母、标点、空格和换行均计入；组合字符或组合表情可能占多个计数。不是字节数，也不是模型token数。'};
+}
+export function timingView(run){
+ if(!['COMPLETED','COMPLETED_WITH_UNRESOLVED','FAILED','CANCELLED','INTERRUPTED'].includes(run.status))return null;
+ const start=Date.parse(run.created_at),end=Date.parse(run.ended_at);
+ if(!Number.isFinite(start)||!Number.isFinite(end)||end<start)return null;
+ const calls=run.result?.model_calls??run.progress?.model_calls??{};
+ const phases=['parse','audit'].map(phase=>{const rows=array(calls[phase]);return {phase,count:rows.length,ms:rows.length&&rows.every(r=>Number.isFinite(r.elapsed_ms)&&r.elapsed_ms>=0)?rows.reduce((n,r)=>n+r.elapsed_ms,0):null};});
+ const total=end-start,model=phases.every(p=>p.ms!==null)?phases.reduce((n,p)=>n+p.ms,0):null;
+ return {total_ms:total,phases,other_ms:model!==null&&model<=total?total-model:null};
+}
 const validID = id => typeof id === 'string' && id.trim().length > 0;
 const indexed = rows => new Map(array(rows).filter(x=>validID(x.id)).map(x=>[x.id,x]));
 const text = value => value == null ? '未记录' : String(value);
@@ -151,6 +164,12 @@ export function liveView(run,now=Date.now()){
 function renderLive(target,run){
  target.replaceChildren();const view=liveView(run),labels={DONE:'已完成',RUNNING:'进行中',WAITING:'等待上一步',STOPPED:'已停止'};
  target.append(node('h3',view.phase),node('p',view.busy?'当前阶段已用 '+view.elapsed+' 秒。模型尚未返回完整结构时，不会虚构语义内容。':'本次运行阶段记录；完成不等于语义已人工验收。','muted'));
+ const timing=timingView(run);
+ if(timing){
+  const seconds=ms=>(ms/1000).toFixed(1)+'秒',labels={parse:'模型解析',audit:'独立模型审阅'};
+  target.append(node('p','本次耗时：'+seconds(timing.total_ms)+'；'+timing.phases.map(p=>labels[p.phase]+' '+(p.ms===null?'未记录':seconds(p.ms))+(p.count>1?'（含'+p.count+'次调用）':'')).join('；')+(timing.other_ms!==null?'；其余准备、校验及投影 '+seconds(timing.other_ms):''),'process-notice'));
+  target.append(node('p','原文短不代表模型请求短：解析还会收到完整Skill、语义合同和Schema；独立审阅另外收到候选结构。两次模型请求按顺序执行。以上是实际用时，不是剩余时间预测。','muted'));
+ }
  const steps=node('ol',null,'live-steps');for(const s of view.steps){const li=node('li',null,'live-step '+s.state.toLowerCase());li.append(node('strong',s.title),node('span',labels[s.state]));steps.append(li);}target.append(steps);
  if(view.lastSignal)target.append(node('p','最近收到阶段信号：'+new Date(view.lastSignal).toLocaleTimeString('zh-CN')+'；第'+(view.revision+1)+'轮。','muted'));
  if(view.failure)target.append(node('p','停止原因：'+view.failure+'。未完成步骤没有最终结果。','process-notice'));
