@@ -78,23 +78,23 @@ export function factText(f,trace){
  return (event?event+' → ':'')+claimText(f.claim??f,ctx);
 }
 export function modelView(run={},session={}){
- const calls=run.result?.model_calls??{}, parse=array(calls.parse),audit=array(calls.audit);
+ const calls=run.result?.model_calls??run.progress?.model_calls??{}, parse=array(calls.parse),audit=array(calls.audit);
  const parseIDs=parse.map(x=>x.thread_id).filter(validID),auditIDs=audit.map(x=>x.thread_id).filter(validID);
  const independent=parseIDs.length&&auditIDs.length?auditIDs.every(id=>!parseIDs.includes(id))?true:false:null;
  return {requested:run.requested_model??session.requested_model??'未记录',actual:run.actual_model??session.actual_model??'服务端未披露，不能凭请求名断言',
   mode:run.skill_mode??session.skill_mode??'未记录',independent,
   calls:[['解析',parse],['审阅',audit]].flatMap(([phase,xs])=>xs.map((x,i)=>({phase,attempt:i+1,seconds:Number.isFinite(x.elapsed_ms)?(x.elapsed_ms/1000).toFixed(1):'未记录',success:x.exit_code===0,thread:x.thread_id??'未记录',actual:x.actual_model??'未披露',usage:x.usage??null}))),
-  callCount:run.real_calls??null,version:run.product_snapshot?.product_version??session.product_snapshot?.product_version??'未记录'};
+  reasoning:run.requested_reasoning??session.requested_reasoning??'medium',callCount:run.real_calls??null,version:run.product_snapshot?.product_version??session.product_snapshot?.product_version??'未记录'};
 }
 function duration(run,stage){
- const xs=array(run.stages),first=xs.findIndex(x=>x.stage===stage);if(first<0)return null;
- const end=xs[first+1]?.at;if(!end)return null;
+ const xs=array(run.stages).filter(x=>(x.revision??0)===(run.revision??0)),first=xs.findIndex(x=>x.stage===stage);if(first<0)return null;
+ const end=xs.slice(first+1).find(x=>x.stage!==stage)?.at;if(!end)return null;
  const ms=Date.parse(end)-Date.parse(xs[first].at);return Number.isFinite(ms)&&ms>=0?(ms/1000).toFixed(1)+'秒':null;
 }
 function evidence(row,ctx){return array(ctx.rows.get(row.id)?.sources).length?ctx.rows.get(row.id).sources:array(row.sources??row.mentions);}
 function sourceEvidence(sources,ctx){return array(sources).map(s=>ctx.sources.find(v=>v.quote===s.quote&&Number.isInteger(s.occurrence)&&v.occurrence===s.occurrence)??s);}
 export function processView(run){
- const trace=run.result,ctx=context(trace),p=trace?.proposal,t=trace?.technical,a=trace?.audit,ir=trace?.ir,c=trace?.canonical;
+ const trace=run.result??{...run.progress,source:{text:run.source_text,sha256:run.source_sha256}},ctx=context(trace),p=trace?.proposal,t=trace?.technical,a=trace?.audit,ir=trace?.ir,c=trace?.canonical;
  const has=x=>x!=null;
  const stages=[
   {id:'parse',title:'1. 解析原文：形成语义候选',actor:'Codex + boundx-semantic-parse',input:'这次提交的原文、解析Skill、共享语义合同和Schema。',work:'识别对象和参与者、事件、必须/允许/无需/禁止、条件、范围和未明确项。这里生成候选，不直接证明正确。',
@@ -120,6 +120,43 @@ export function processView(run){
  return {stages,ctx};
 }
 function node(tag,value,cls){const n=document.createElement(tag);if(value!=null)n.textContent=value;if(cls)n.className=cls;return n;}
+const phaseNames={QUEUED:'原文已接收，等待编译',PREPARING:'核对版本与准备Skill',PARSING:'解析Skill：等待模型语义候选',AUDITING:'审阅Skill：新会话核对候选',VALIDATING:'程序检查来源、Schema与引用',COMPILING:'程序生成IR与固定7+1',COMPLETED:'本次编译完成',COMPLETED_WITH_UNRESOLVED:'本次编译完成，含待确认项',FAILED:'本次运行失败',CANCELLING:'正在取消本地调用',CANCELLED:'本次已取消',INTERRUPTED:'服务中断'};
+const signals={REQUEST_STARTED:'已启动Codex请求，正在等待返回',SESSION_STARTED:'Codex会话已建立',TURN_STARTED:'模型请求已开始处理',RESPONSE_RECEIVED:'收到模型响应，等待Schema验证',TURN_COMPLETED:'模型本次响应已完成',MODEL_ERROR_REPORTED:'模型调用报告错误',TRANSPORT_RETRY:'连接发生重试',RESPONSE_VALIDATED:'模型响应通过Schema检查',PARSE_READY:'语义候选已保存，可立即展开查看',AUDIT_READY:'独立审阅已保存，可立即展开查看',TECHNICAL_READY:'技术校验已完成并保存',COMPILE_READY:'IR及7+1投影已生成，正在确认本轮结束',REVISION_REQUIRED:'发现需修订项，进入既有有界修订'};
+export function decisionView(run){
+ const trace=run.result??{...run.progress,source:{sha256:run.source_sha256}},ctx=context(trace),p=trace.proposal??{},facts=array(trace.ir?.facts),slots=trace.canonical?.slots??{};
+ return [...array(p.events),...array(p.claims)].map(item=>{
+  const checks=ctx.rows.get(item.id),reviews=array(trace.audit?.reviews).filter(r=>validID(item.id)&&r.subject_id===item.id);
+  const related=facts.filter(f=>validID(item.id)&&array(f.claim_ids).includes(item.id));
+  const direct=related.filter(f=>f.event?.id===item.id&&f.kind==='EVENT'||f.claim?.id===item.id);
+  const destinations=related.flatMap(f=>Object.entries(slots).filter(([,s])=>array(s.entries).some(e=>e.id===f.id)).map(([slot])=>slot+(direct.includes(f)?'（直接）':'（作为依赖）')));
+  const reasons=[...array(checks?.errors),...array(checks?.uncertain)].map(e=>typeof e==='string'?readable(e):e.message??e.reason??e.code??'技术检查未确定');
+  for(const f of related)for(const check of array(f.proof?.checks).filter(x=>x.status!=='ACCEPTED'))reasons.push(subjectText(check.id,ctx)+'：'+readable(check.status));
+  return {id:item.id,cells:[subjectText(item.id,ctx),reviews.length?reviews.map(r=>readable(r.verdict)+'：'+(r.reason??'未记录理由')).join('；'):'等待独立审阅',checks?readable(checks.status)+(reasons.length?'；'+[...new Set(reasons)].join('；'):'；来源/结构检查未记录错误'):'等待技术校验',related.length?[...new Set(related.map(f=>readable(f.status)))].join('、'):'尚无对应IR事实',trace.canonical?destinations.length?[...new Set(destinations)].join('、'):related.length?'保留为上下文 / 未独立归槽':'没有进入最终事实':'等待最终投影'],sources:evidence(item,ctx)};
+ });
+}
+function renderDecision(target,run,onEvidence){
+ const rows=decisionView(run);if(!rows.length)return;
+ const section=node('details',null,'decision-map');section.append(node('summary','LLM候选怎样成为最终结果：逐项对照（'+rows.length+'项）'),node('p','候选不是最终结论。下面逐项展示模型审阅、技术状态和真实IR/槽位去向；程序依据已有结构和固定合同编译，不凭原文关键词补答案。','muted'));
+ section.append(table(['LLM提出的内容','独立审阅与理由','程序技术检查','IR状态','最终去向'],rows,onEvidence));
+ section.append(node('p','“已确定”表示本次编译记录满足固定接纳条件；不等于人工证明语义正确。未决、拒绝、遗漏和未归槽分别保留。','process-notice'));target.append(section);
+}
+export function liveView(run,now=Date.now()){
+ const entries=array(run.stages),revision=run.revision??0,xs=entries.filter(x=>(x.revision??0)===revision),first=xs.find(x=>x.stage===run.stage),last=xs.at(-1),busy=['QUEUED','RUNNING','CANCELLING'].includes(run.status),failure=['FAILED','CANCELLED','INTERRUPTED'].includes(run.status);
+ const {stages}=processView(run),active={PARSING:'parse',AUDITING:'audit',VALIDATING:'technical',COMPILING:'ir'}[failure?xs.findLast(x=>['PARSING','AUDITING','VALIDATING','COMPILING'].includes(x.stage))?.stage:run.stage];
+ const status=s=>s.ready?'DONE':active===s.id?(failure?'STOPPED':busy?'RUNNING':'WAITING'):'WAITING';
+ return {busy,revision,phase:phaseNames[run.stage]??'等待输入',elapsed:Math.max(0,Math.round((now-Date.parse(first?.at??run.created_at))/1000))||0,lastSignal:last?.at??null,
+  steps:[{id:'source',title:'原文',state:run.source_sha256?'DONE':'WAITING'},...stages.map(s=>({id:s.id,title:s.title.slice(3).split('：')[0],state:status(s)}))],
+  timeline:entries.map(x=>({at:x.at,revision:x.revision??0,label:signals[x.signal??x.kind]??phaseNames[x.stage]??x.stage,thread:x.thread_id??null,retries:x.retry_count??null,phase:x.phase??null})),failure:run.error?.code??null};
+}
+function renderLive(target,run){
+ target.replaceChildren();const view=liveView(run),labels={DONE:'已完成',RUNNING:'进行中',WAITING:'等待上一步',STOPPED:'已停止'};
+ target.append(node('h3',view.phase),node('p',view.busy?'当前阶段已用 '+view.elapsed+' 秒。模型尚未返回完整结构时，不会虚构语义内容。':'本次运行阶段记录；完成不等于语义已人工验收。','muted'));
+ const steps=node('ol',null,'live-steps');for(const s of view.steps){const li=node('li',null,'live-step '+s.state.toLowerCase());li.append(node('strong',s.title),node('span',labels[s.state]));steps.append(li);}target.append(steps);
+ if(view.lastSignal)target.append(node('p','最近收到阶段信号：'+new Date(view.lastSignal).toLocaleTimeString('zh-CN')+'；第'+(view.revision+1)+'轮。','muted'));
+ if(view.failure)target.append(node('p','停止原因：'+view.failure+'。未完成步骤没有最终结果。','process-notice'));
+ const log=node('details',null,'live-log');log.open=view.busy;log.append(node('summary','实时执行记录（'+view.timeline.length+'条）'));
+ const list=node('ol');for(const e of view.timeline){const li=node('li',new Date(e.at).toLocaleTimeString('zh-CN')+' · 第'+(e.revision+1)+'轮 · '+(e.phase==='parse'?'解析：':e.phase==='audit'?'审阅：':'')+e.label+(e.retries!==null?'（累计'+e.retries+'次重试）':''));if(e.thread)li.append(node('small',' 会话 '+e.thread));list.append(li);}log.append(list);target.append(log);
+}
 function rawDetails(title,value){const d=node('details',null,'developer-details');d.append(node('summary',title));if(value!=null)d.append(node('pre',JSON.stringify(value,null,2)));else d.append(node('p','尚无记录。'));return d;}
 function table(headers,rows,onEvidence){
  const wrap=node('div',null,'process-table-wrap'),t=node('table'),head=node('thead'),h=node('tr');
@@ -128,20 +165,38 @@ function table(headers,rows,onEvidence){
 }
 export function renderModelInfo(target,run={},session={}){
  target.replaceChildren();const view=modelView(run,session);target.append(node('h3','模型与两次Skill调用'),node('p','请求模型：'+view.requested+'；实际服务模型：'+view.actual));
- target.append(node('p','当前页面使用固定模型，没有模型选择开关。解析和审阅使用同一请求模型，分别启动会话；本次展示不变更模型配置。','muted'));
+ target.append(node('p','本次推理设置：'+view.reasoning+'。解析和独立审阅使用本次选定的同一请求模型，分别启动会话。新任务可在左侧“本次编译设置”选择；历史记录不会随选择改变。','muted'));
  target.append(node('p','Skill内容以 '+view.mode+' 方式送入请求；本机原生Skill发现/自动加载未被验证，不冒称已经验证。','muted'));
  if(view.calls.length)target.append(table(['环节','耗时','调用退出','会话'],view.calls.map(c=>({cells:[c.phase+'第'+c.attempt+'次',c.seconds+'秒',c.success?'正常退出（不等于语义正确）':'非正常退出',c.thread],sources:[]})),()=>{}));
  const independent=view.independent===true?'解析与审阅会话ID不同，独立会话已记录。':view.independent===false?'警告：会话ID存在重用。':'会话独立性暂无完整记录。';target.append(node('p',independent));
 }
 export function renderCompilerProcess(target,run,{onEvidence=()=>{},session={}}={}){
- target.replaceChildren();const {stages}=processView(run);
- target.append(node('h2','这次任务是怎样编译的'),node('p','每一步列出实际输入、处理职责、输出和问题。这里解读保存的结构，不重新调用模型，也不改变原结果。','muted'));
+ const key=JSON.stringify([run.run_id,run.status,run.stage,run.revision,run.stages,run.result,run.progress]);
+ if(target._processKey===key&&target.querySelector('.runtime-progress')){renderLive(target.querySelector('.runtime-progress'),run);return;}
+ const sameRun=target._processRunId===run.run_id;
+ const openState=new Map(sameRun?[...target.querySelectorAll('details[data-stage]')].map(d=>[d.dataset.stage,d.open]):[]);
+ const previousStage=sameRun?target._processStage:null;
+ target._processRunId=run.run_id;target._processStage=run.stage;
+ target._processKey=key;target.replaceChildren();const {stages}=processView(run);
+ target.append(node('h2','从原文到7+1：实时编译过程'),node('p','步骤实时更新，已生成的候选和审阅立即可查看；最后统一展示7+1结果。以下只读取本次实际产物，不重新解释原文。','muted'));
+ const live=node('section',null,'runtime-progress');live.setAttribute('aria-label','实时编译进度');renderLive(live,run);target.append(live);
  const settings=node('details',null,'model-panel');settings.append(node('summary','模型、两个Skill与独立会话记录'));const modelBody=node('div');renderModelInfo(modelBody,run,session);settings.append(modelBody);target.append(settings);
  for(const s of stages){const section=node('details',null,'process-stage');section.dataset.stage=s.id;
+  section.open=stageDisclosure(run,s.id,{previousStage,previousOpen:openState.get(s.id)});
   const summary=node('summary');summary.append(node('span',s.title,'stage-title'),node('span',s.outcome,'stage-outcome'));section.append(summary,node('p',s.actor+(s.time?' · '+s.time:''),'stage-actor'));
   const dl=node('dl',null,'stage-explanation');for(const [title,value] of [['收到什么',s.input],['做了什么',s.work],['得到什么',s.outcome]])dl.append(node('dt',title),node('dd',value));section.append(dl);
   if(s.rows.length)section.append(table(s.headers,s.rows,onEvidence));else section.append(node('p',s.ready?'本环节没有记录条目。':'未完成 / 尚无输出，不能当作通过。','muted'));
+  if(s.id==='parse'&&s.raw){const ctx=processView(run).ctx;
+   section.append(node('h3','LLM识别的对象与参与者'),table(['名称','候选类型'],array(s.raw.entities).map(e=>({cells:[e.label,readable(e.type)],sources:evidence(e,ctx)})),onEvidence));
+   section.append(node('h3','LLM识别的条件与范围'),table(['表达式内容','结构算子'],array(s.raw.expressions).map(e=>({cells:[expressionText(e,ctx),e.op],sources:evidence(e,ctx)})),onEvidence));
+  }
   for(const note of s.notes)section.append(node('p',note,'process-notice'));
   section.append(rawDetails('开发详情：本环节原始JSON',s.raw));target.append(section);
  }
+ renderDecision(target,run,onEvidence);
+}
+export function stageDisclosure(run,id,{previousStage=null,previousOpen}={}){
+ const active={PARSING:'parse',AUDITING:'audit',VALIDATING:'technical',COMPILING:'ir'}[run.stage];
+ if(['QUEUED','RUNNING','CANCELLING'].includes(run.status)&&active===id&&previousStage!==run.stage)return true;
+ return previousOpen??false;
 }

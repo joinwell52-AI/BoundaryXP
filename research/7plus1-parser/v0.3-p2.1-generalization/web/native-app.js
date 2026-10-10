@@ -4,6 +4,18 @@ const names={I:'输入与作用域',O:'交付与结果',A:'正向动作',P:'参�
 const stages={QUEUED:'等待',PREPARING:'准备与版本核对',PARSING:'Codex 正在解析原文',AUDITING:'新会话正在审阅',VALIDATING:'技术校验',COMPILING:'保真编译',COMPLETED:'编译流程完成',COMPLETED_WITH_UNRESOLVED:'编译流程完成 · 含未决/缺口',FAILED:'运行失败',CANCELLING:'取消中（等待本地子进程退出）',CANCELLED:'本地请求已取消（不声称云端停止计费）',INTERRUPTED:'服务中断 · 未自动重跑'};
 const errors={EMPTY_SOURCE:'请输入非空任务',SHORT_TEXT_SCOPE_EXCEEDED:'超过300码点，不会截断',SOURCE_BYTE_LIMIT:'输入字节超限',INVALID_UTF8:'文件不是有效UTF-8',CODEX_LOGIN_REQUIRED:'Codex 登录失效，请在本机重新登录',CODEX_QUOTA_OR_RATE_LIMIT:'Codex 额度或限流，未自动重试',CODEX_TIMEOUT:'本地调用超时，子进程已停止',CODEX_NETWORK_FAILURE:'网络调用失败',CODEX_MODEL_UNAVAILABLE:'请求模型不可用',COMPILER_BUSY:'已有编译正在进行',SESSION_REQUIRED:'页面会话失效，请刷新',COMPILER_ERROR:'编译失败，详情保存在本地运行目录'};
 let current=null,uploaded=null,session=null,pollTimer=null,busy=false,tab='pending';
+const settingLabels={low:'低 · 较少推理',medium:'中 · 默认',high:'高 · 更深入',xhigh:'很高',max:'最高'};
+function configureModels(){
+ document.querySelector('.model-settings summary').textContent='本次运行的模型与会话记录';
+ const box=el('fieldset',undefined,'compile-settings');box.append(el('legend','本次编译设置'));
+ const model=el('select');model.id='compile-model';model.setAttribute('aria-label','调用模型');
+ const reasoning=el('select');reasoning.id='compile-reasoning';reasoning.setAttribute('aria-label','推理强度');
+ for(const m of session.model_catalog?.models??[{id:session.requested_model,label:session.requested_model,reasoning:['medium']}]){const o=el('option',m.label);o.value=m.id;model.append(o);}
+ const previous=JSON.parse(localStorage.getItem('boundx-compile-settings')??'null');model.value=[...model.options].some(o=>o.value===previous?.model)?previous.model:session.requested_model;
+ const save=()=>localStorage.setItem('boundx-compile-settings',JSON.stringify({model:model.value,reasoning:reasoning.value}));
+ const update=()=>{const old=reasoning.value;reasoning.replaceChildren();const m=session.model_catalog?.models.find(x=>x.id===model.value);for(const level of m?.reasoning??['medium']){const o=el('option',settingLabels[level]??level);o.value=level;reasoning.append(o);}reasoning.value=[...reasoning.options].some(o=>o.value===old)?old:[...reasoning.options].some(o=>o.value==='medium')?'medium':reasoning.options[0]?.value;save();};
+ model.onchange=update;reasoning.onchange=save;const ml=el('label','调用模型 '),rl=el('label','推理强度 ');ml.append(model);rl.append(reasoning);box.append(ml,rl,el('p','解析Skill和独立审阅使用本次选择。列表来自本机Codex目录，实际调用仍须账号可用；不自动换模型。更换配置不继承原版语义验收。','muted'));$('input').insertAdjacentElement('afterend',box);update();if(previous?.model===model.value&&[...reasoning.options].some(o=>o.value===previous.reasoning)){reasoning.value=previous.reasoning;save();}
+}
 const el=(tag,value,cls)=>{const e=document.createElement(tag);if(value!==undefined)e.textContent=value;if(cls)e.className=cls;return e;};
 async function api(url,options={}){const response=await fetch(url,{...options,headers:{...options.headers,...(options.method?{'x-boundx-session':session?.token??''}: {})}});const data=await response.json();if(!response.ok)throw Error(data.error??data.code);return data;}
 const jsonPost=(url,data)=>api(url,{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify(data)});
@@ -33,6 +45,7 @@ function render(run){
   const d=el('details');d.append(el('summary','开发详情：旧引擎原始快照'),el('pre',JSON.stringify(run.raw,null,2)));$('panel').append(d);return;
  }
  busy=['QUEUED','RUNNING','CANCELLING'].includes(run.status);$('parse').disabled=busy;$('cancel').disabled=!busy||run.status==='CANCELLING';$('input').readOnly=busy;$('file').disabled=busy;
+ for(const id of ['compile-model','compile-reasoning'])if($(id))$(id).disabled=busy;
  $('run-id').textContent=run.run_id+' · '+run.source_sha256;$('status').textContent=(stages[run.stage]??run.stage)+' · 已用 '+Math.round(run.elapsed_ms/1000)+' 秒'+(run.error?' · '+(errors[run.error.code]??run.error.code):'');$('status').className=run.status==='FAILED'?'failure':'';
  $('engine-info').textContent=run.engine+' · '+(run.compiler_revision??'历史编译版本，详见Trace')+' · 合同 '+run.contract+' · '+run.skill_mode+' · 请求 '+run.requested_model+' · 实际服务模型 '+(run.actual_model??'未披露');
  $('evidence').textContent=run.source_text;$('trace-colors').textContent=run.source_text;$('trace-summary').textContent='原文 → 解析Skill → Codex → 审阅Skill / 新会话 → 技术校验 → IR → 固定7+1；技术接受不是业务授权';
@@ -91,9 +104,9 @@ async function open(id){
 $('parse').onclick=async()=>{
  if(busy)return;const n=count();if(!n||!$('input').value.replaceAll('\uFEFF','').trim())return showError(Error('EMPTY_SOURCE'));if(n>300)return showError(Error('SHORT_TEXT_SCOPE_EXCEEDED'));
  busy=true;$('parse').disabled=true;
- const sourcePayload=uploaded??{text:$('input').value},pending=JSON.parse(localStorage.getItem('boundx029-pending')??'null');
- if(current?.result&&current.source_text!==$('input').value)sourcePayload.parent_run_id=current.run_id;
- const payload=pending&&(pending.text===sourcePayload.text&&pending.base64===sourcePayload.base64)?pending:{...sourcePayload,request_id:crypto.randomUUID()};localStorage.setItem('boundx029-pending',JSON.stringify(payload));
+ const sourcePayload={...(uploaded??{text:$('input').value}),model:$('compile-model').value,reasoning:$('compile-reasoning').value},pending=JSON.parse(localStorage.getItem('boundx029-pending')??'null');
+ if(session.source_lineage_supported&&current?.result&&current.source_text!==$('input').value)sourcePayload.parent_run_id=current.run_id;
+ const payload=pending&&(pending.text===sourcePayload.text&&pending.base64===sourcePayload.base64)&&(pending.model??session.requested_model)===sourcePayload.model&&(pending.reasoning??'medium')===sourcePayload.reasoning?pending:{...sourcePayload,request_id:crypto.randomUUID()};localStorage.setItem('boundx029-pending',JSON.stringify(payload));
  try{const run=await jsonPost('/api/parse',payload);localStorage.setItem('boundx029-active',run.run_id);await open(run.run_id);}
  catch(e){busy=false;$('parse').disabled=false;showError(e);}
 };
@@ -113,4 +126,4 @@ $('clear-history').onclick=async()=>{if(busy||!await confirmation('隐藏本轮�
 $('save').onclick=async()=>{if(!current)return;try{const x=await jsonPost('/api/review',{run_id:current.run_id,notes:$('notes').value});$('review-status').textContent='已保存 '+x.file;}catch(e){showError(e);}};
 $('refresh').onclick=()=>history().catch(showError);document.querySelectorAll('[data-tab]').forEach(b=>b.onclick=()=>panel(b.dataset.tab));
 async function boot(){session=await api('/api/session');const p=session.product_snapshot;$('product-version').textContent=p?`${p.product_version} · ${p.compiler_revision} · 合同 ${p.contract}`:`开发工作区 · ${session.compiler_revision} · 合同 ${session.contract}`;$('product-acceptance').textContent='产品验收：'+(p?.product_acceptance??'开发版本，尚未验收')+'；公开发布：'+(p?.public_release?'已发布':'未发布候选');$('product-limits').textContent=(p?.support_profile??'单一ADMIN短任务，非空且≤300码点')+'；'+(p?.known_limitations??['源文可能需澄清；不是业务执行授权']).join('；');$('engine-info').textContent=session.engine+' · '+session.contract+' · '+session.skill_mode+' · 实际模型未披露';await history();let id=localStorage.getItem('boundx029-active');if(!id){const pending=JSON.parse(localStorage.getItem('boundx029-pending')??'null');if(pending){id=(await api('/api/runs')).find(r=>r.request_id===pending.request_id)?.run_id;if(!id){$('input').value=pending.text??'';count();}}}if(id)await open(id);}
-boot().then(()=>{const p=session.product_snapshot;$('product-acceptance').textContent='产品验收：'+readable(p?.product_acceptance??'开发版本，尚未验收')+'；公开发布：'+(p?.public_release?'已发布':'未发布候选');if(!current){renderModelInfo($('model-info'),{},session);renderCompilerProcess($('compiler-root'),{},{session});}}).catch(showError);
+boot().then(()=>{configureModels();for(const id of ['compile-model','compile-reasoning'])$(id).disabled=busy;const p=session.product_snapshot;$('product-acceptance').textContent='产品验收：'+readable(p?.product_acceptance??'开发版本，尚未验收')+'；公开发布：'+(p?.public_release?'已发布':'未发布候选');if(!current){renderModelInfo($('model-info'),{},session);renderCompilerProcess($('compiler-root'),{},{session});}}).catch(showError);

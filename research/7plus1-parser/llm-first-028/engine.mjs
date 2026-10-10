@@ -7,6 +7,7 @@ import {technicalValidate} from './validate.mjs';
 import {compileBoundary} from './compile.mjs';
 import {implementationInventory,runtimeInventory} from './evidence.mjs';
 import {technicalRevisionFeedback,auditBindingRevisionFeedback} from './revision.mjs';
+import {modelSignal} from './observability.mjs';
 export const writeJSON=(file,data)=>fs.writeFileSync(file,JSON.stringify(data,null,2)+'\n');
 export const compilerRevision='032-c3';
 export function replay7Plus1(bytes,{output,replayFrom}){
@@ -46,22 +47,28 @@ export async function parse7Plus1(bytes,{output,probe,model='gpt-6.1-sol',reason
  for(let revision=0;revision<(semanticRevision?2:1);revision++){
   const directory=path.join(output,`revision-${revision}`);fs.mkdirSync(directory);
   signal?.throwIfAborted();onProgress({stage:'PARSING',revision});
-  resourceGuard();const parsed=await call({bundle:parse,source,candidate:previous,revisionIssues:issues,directory:path.join(directory,'parse-call'),probe,model,reasoning,signal,timeoutMs,requestBudget});
+  const telemetry=phase=>({onEvent:event=>{const s=modelSignal(event);if(s)onProgress({stage:phase==='parse'?'PARSING':'AUDITING',revision,phase,...s});},onActivity:p=>onProgress({stage:phase==='parse'?'PARSING':'AUDITING',revision,phase,...p})});
+  resourceGuard();const parsed=await call({bundle:parse,source,candidate:previous,revisionIssues:issues,directory:path.join(directory,'parse-call'),probe,model,reasoning,signal,timeoutMs,requestBudget,...telemetry('parse')});
   writeJSON(path.join(directory,'proposal.json'),parsed.value);
+  onProgress({stage:'PARSING',revision,kind:'PARSE_READY',signal:'PARSE_READY'});
   signal?.throwIfAborted();onProgress({stage:'AUDITING',revision});
-  resourceGuard();const reviewed=await call({bundle:auditBundle,source,candidate:parsed.value,directory:path.join(directory,'audit-call'),probe,model,reasoning,signal,timeoutMs,requestBudget});
+  resourceGuard();const reviewed=await call({bundle:auditBundle,source,candidate:parsed.value,directory:path.join(directory,'audit-call'),probe,model,reasoning,signal,timeoutMs,requestBudget,...telemetry('audit')});
   resourceGuard();if(JSON.stringify(runtimeInventory())!==lockedRuntime)throw Error('METHOD_CHANGED_DURING_RUN');
   if(parsed.receipt.thread_id===reviewed.receipt.thread_id)throw Error('AUDIT_SESSION_NOT_INDEPENDENT');
   writeJSON(path.join(directory,'audit.json'),reviewed.value);
+  onProgress({stage:'AUDITING',revision,kind:'AUDIT_READY',signal:'AUDIT_READY'});
   signal?.throwIfAborted();onProgress({stage:'VALIDATING',revision});
   const technical=technicalValidate(source,parsed.value,reviewed.value);writeJSON(path.join(directory,'technical-validation.json'),technical);
+  onProgress({stage:'VALIDATING',revision,kind:'TECHNICAL_READY',signal:'TECHNICAL_READY'});
   onProgress({stage:'COMPILING',revision});
   const compiled=compileBoundary(source,parsed.value,reviewed.value,technical);writeJSON(path.join(directory,'boundary-ir.json'),compiled.ir);writeJSON(path.join(directory,'7plus1.json'),compiled.canonical);fs.writeFileSync(path.join(directory,'7plus1.zh.md'),compiled.chinese);
+  onProgress({stage:'COMPILING',revision,kind:'COMPILE_READY',signal:'COMPILE_READY'});
   const trace={product_snapshot:productSnapshot,source_lineage:sourceLineage,source,proposal:parsed.value,audit:reviewed.value,technical,...compiled,model_calls:{parse:parsed.attempts,audit:reviewed.attempts},revision,revision_of:revision?0:null};writeJSON(path.join(directory,'trace.json'),trace);passes.push(trace);
   const contradictory=reviewed.value.reviews.filter(r=>r.verdict==='CONTRADICT');
   const technicalIssues=technicalRevisionFeedback(technical,parsed.value);
   const bindingIssues=auditBindingRevisionFeedback(technical,parsed.value,reviewed.value);
   if(!semanticRevision||revision===1||(!contradictory.length&&!reviewed.value.omissions.length&&!technicalIssues.length&&!bindingIssues.length))break;
+  onProgress({stage:'COMPILING',revision,kind:'REVISION_REQUIRED',signal:'REVISION_REQUIRED'});
   previous=parsed.value;issues={reviews:contradictory,issues:reviewed.value.issues,omissions:reviewed.value.omissions,technical_errors:technicalIssues,binding_errors:bindingIssues,budget:{semantic_revisions_remaining:1,shared_with_audit:true}};writeJSON(path.join(directory,'revision-request.json'),issues);
  }
  const final=passes.at(-1);writeJSON(path.join(output,'trace.json'),final);writeJSON(path.join(output,'7plus1.json'),final.canonical);fs.writeFileSync(path.join(output,'7plus1.zh.md'),final.chinese);
