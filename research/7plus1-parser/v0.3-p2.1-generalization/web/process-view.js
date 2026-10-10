@@ -1,4 +1,4 @@
-// Presentation only: read the saved trace. Never infer semantics from source text.
+// Presentation only: identify runtime separately from saved runs, without changing semantics.
 const words = {
  'PARTIAL / REVIEW_REQUIRED':'部分完成，等待人工验收', REQUIRED:'必须', ALLOWED:'允许', PERMITTED:'允许', FORBIDDEN:'禁止', NOT_REQUIRED:'无需执行', RESTRICTED:'受限', UNSTATED:'原文未明确', UNKNOWN:'未知',
  PERFORMER:'执行者', ORGANIZER:'组织者', REVIEWER:'复核者', RECEIVER:'接收者', RECIPIENT:'接收者', COLLABORATOR:'协作者',
@@ -16,14 +16,22 @@ export function sourceLength(value,limit=300){
  const count=Array.from(value??'').length;
  return {count,label:'原文长度：'+count+' / '+limit+' 字符',explanation:'按Unicode码点计数：汉字、字母、标点、空格和换行均计入；组合字符或组合表情可能占多个计数。不是字节数，也不是模型token数。'};
 }
+function recordedCalls(run){
+ const activity=array(run.model_activity?.calls);
+ if(activity.length)return activity;
+ const calls=run.result?.model_calls??run.progress?.model_calls??{};
+ return ['parse','audit'].flatMap(phase=>array(calls[phase]).map((c,attempt)=>({...c,phase,revision:run.revision??0,attempt})));
+}
 export function timingView(run){
  if(!['COMPLETED','COMPLETED_WITH_UNRESOLVED','FAILED','CANCELLED','INTERRUPTED'].includes(run.status))return null;
  const start=Date.parse(run.created_at),end=Date.parse(run.ended_at);
  if(!Number.isFinite(start)||!Number.isFinite(end)||end<start)return null;
- const calls=run.result?.model_calls??run.progress?.model_calls??{};
- const phases=['parse','audit'].map(phase=>{const rows=array(calls[phase]);return {phase,count:rows.length,ms:rows.length&&rows.every(r=>Number.isFinite(r.elapsed_ms)&&r.elapsed_ms>=0)?rows.reduce((n,r)=>n+r.elapsed_ms,0):null};});
- const total=end-start,model=phases.every(p=>p.ms!==null)?phases.reduce((n,p)=>n+p.ms,0):null;
- return {total_ms:total,phases,other_ms:model!==null&&model<=total?total-model:null};
+ const calls=recordedCalls(run),valid=c=>Number.isFinite(c.elapsed_ms)&&c.elapsed_ms>=0;
+ const phases=['parse','audit'].map(phase=>{const rows=calls.filter(c=>c.phase===phase);return {phase,count:rows.length,ms:rows.length&&rows.every(valid)?rows.reduce((n,r)=>n+r.elapsed_ms,0):null};});
+ const expected=Number.isSafeInteger(run.real_calls)&&run.real_calls>=0?run.real_calls:null;
+ const complete=calls.length>0&&calls.every(valid)&&(expected===null||expected===calls.length)&&!(run.revision>0&&!array(run.model_activity?.calls).length);
+ const total=end-start,model=complete?calls.reduce((n,c)=>n+c.elapsed_ms,0):null;
+ return {total_ms:total,phases,calls,recorded_call_count:calls.length,expected_call_count:expected,round_count:new Set(calls.map(c=>c.revision)).size,model_ms:model,other_ms:model!==null&&model<=total?total-model:null};
 }
 const validID = id => typeof id === 'string' && id.trim().length > 0;
 const indexed = rows => new Map(array(rows).filter(x=>validID(x.id)).map(x=>[x.id,x]));
@@ -91,12 +99,12 @@ export function factText(f,trace){
  return (event?event+' → ':'')+claimText(f.claim??f,ctx);
 }
 export function modelView(run={},session={}){
- const calls=run.result?.model_calls??run.progress?.model_calls??{}, parse=array(calls.parse),audit=array(calls.audit);
+ const calls=recordedCalls(run),parse=calls.filter(c=>c.phase==='parse'),audit=calls.filter(c=>c.phase==='audit');
  const parseIDs=parse.map(x=>x.thread_id).filter(validID),auditIDs=audit.map(x=>x.thread_id).filter(validID);
  const independent=parseIDs.length&&auditIDs.length?auditIDs.every(id=>!parseIDs.includes(id))?true:false:null;
  return {requested:run.requested_model??session.requested_model??'未记录',actual:run.actual_model??session.actual_model??'服务端未披露，不能凭请求名断言',
   mode:run.skill_mode??session.skill_mode??'未记录',independent,
-  calls:[['解析',parse],['审阅',audit]].flatMap(([phase,xs])=>xs.map((x,i)=>({phase,attempt:i+1,seconds:Number.isFinite(x.elapsed_ms)?(x.elapsed_ms/1000).toFixed(1):'未记录',success:x.exit_code===0,thread:x.thread_id??'未记录',actual:x.actual_model??'未披露',usage:x.usage??null}))),
+  calls:calls.map(x=>({phase:x.phase==='parse'?'解析':'审阅',revision:x.revision+1,attempt:x.attempt+1,seconds:Number.isFinite(x.elapsed_ms)?(x.elapsed_ms/1000).toFixed(1):'未记录',success:x.exit_code===0,thread:x.thread_id??'未记录',actual:x.actual_model??'未披露',usage:x.usage??null})),
   reasoning:run.requested_reasoning??session.requested_reasoning??'medium',callCount:run.real_calls??null,version:run.product_snapshot?.product_version??session.product_snapshot?.product_version??'未记录'};
 }
 function duration(run,stage){
@@ -133,8 +141,40 @@ export function processView(run){
  return {stages,ctx};
 }
 function node(tag,value,cls){const n=document.createElement(tag);if(value!=null)n.textContent=value;if(cls)n.className=cls;return n;}
+export function versionView(run={},session={}){
+ const runtime=session.product_snapshot,record=run.product_snapshot;
+ return {runtime_version:runtime?.product_version??'未提供安装版本',compiler:runtime?.compiler_revision??session.compiler_revision??'未记录',contract:runtime?.contract??session.contract??'未记录',acceptance:readable(runtime?.product_acceptance??'尚未核实'),record_version:run.run_id?record?.product_version??'历史记录未保存完整安装版本':null};
+}
+export function renderVersionInfo(target,run={},session={}){
+ const v=versionView(run,session);target.replaceChildren();target.append(node('strong','当前页面版本：'+v.runtime_version),node('p','核心 '+v.compiler+' · 合同 '+v.contract+' · 产品验收：'+v.acceptance));if(v.record_version)target.append(node('small','本条编译记录的生成版本：'+v.record_version+'；查看历史不重新编译。'));
+}
 const phaseNames={QUEUED:'原文已接收，等待编译',PREPARING:'核对版本与准备Skill',PARSING:'解析Skill：等待模型语义候选',AUDITING:'审阅Skill：新会话核对候选',VALIDATING:'程序检查来源、Schema与引用',COMPILING:'程序生成IR与固定7+1',COMPLETED:'本次编译完成',COMPLETED_WITH_UNRESOLVED:'本次编译完成，含待确认项',FAILED:'本次运行失败',CANCELLING:'正在取消本地调用',CANCELLED:'本次已取消',INTERRUPTED:'服务中断'};
-const signals={REQUEST_STARTED:'已启动Codex请求，正在等待返回',SESSION_STARTED:'Codex会话已建立',TURN_STARTED:'模型请求已开始处理',RESPONSE_RECEIVED:'收到模型响应，等待Schema验证',TURN_COMPLETED:'模型本次响应已完成',MODEL_ERROR_REPORTED:'模型调用报告错误',TRANSPORT_RETRY:'连接发生重试',RESPONSE_VALIDATED:'模型响应通过Schema检查',PARSE_READY:'语义候选已保存，可立即展开查看',AUDIT_READY:'独立审阅已保存，可立即展开查看',TECHNICAL_READY:'技术校验已完成并保存',COMPILE_READY:'IR及7+1投影已生成，正在确认本轮结束',REVISION_REQUIRED:'发现需修订项，进入既有有界修订'};
+const signals={REQUEST_STARTED:'已启动Codex请求，正在等待返回',SESSION_STARTED:'Codex会话已建立',TURN_STARTED:'模型请求已开始处理',RESPONSE_RECEIVED:'收到模型响应，等待Schema验证',TURN_COMPLETED:'模型本次响应已完成',MODEL_ERROR_REPORTED:'模型调用报告错误',TRANSPORT_RETRY:'连接发生重试',RESPONSE_VALIDATED:'模型响应通过Schema检查',PARSE_READY:'语义候选已保存，可立即展开查看',AUDIT_READY:'独立审阅已保存，可立即展开查看',TECHNICAL_READY:'技术校验已完成并保存',COMPILE_READY:'IR及7+1投影已生成，正在确认本轮结束',REVISION_REQUIRED:'发现需修订项，进入既有有界修订',PUBLIC_REASONING_SUMMARY:'收到公开推理摘要（见下方会话区）',SESSION_DIAGNOSTIC:'Codex报告一条会话告警/错误（不单独判定整次失败）',TOOL_ACTIVITY:'收到工具活动事件'};
+export function sessionView(run){
+ const activity=run.model_activity;
+ return {available:activity?.kind==='PUBLIC_CODEX_SESSION_ACTIVITY',calls:array(activity?.calls).map(c=>({
+  ...c,title:(c.phase==='parse'?'解析Skill · Codex解析':'审阅Skill · 独立会话审阅')+' · 第'+(c.revision+1)+'轮 / 第'+(c.attempt+1)+'次调用',
+  message:c.summary_status==='AVAILABLE'?'以下是Codex实际返回的公开摘要；仍须核对正式候选及审阅结果。':c.summary_status==='NOT_RETURNED'?'本次会话未返回公开推理摘要。不能从token数量或最终结果反推当时如何思考。':c.summary_status==='UNVERIFIABLE'?'保存日志不完整或无法完整读取，不能确认是否曾返回公开摘要。':c.summary_status==='NOT_RECORDED'?'没有保存完整事件日志，不能确认是否曾返回公开摘要。':'公开推理摘要尚未返回；当前只能展示已经收到的执行事件。',
+  events:array(c.events).map(e=>({...e,label:signals[e.signal]??'已记录事件'}))
+ }))};
+}
+export function renderSessionActivity(target,run,{openState=new Map([...target.querySelectorAll('details[data-call]')].map(d=>[d.dataset.call,d.open]))}={}){
+ const view=sessionView(run);
+ target.replaceChildren();target.append(node('h3','Codex会话：公开摘要与实际事件'),node('p','解析与审阅分别记录。公开摘要是模型的过程说明，不是完整内部思维链，也不是技术校验或最终7+1结论。','muted'));
+ if(!view.available){target.append(node('p',run.run_id?'此运行入口尚未提供会话事件；未据此判断模型有没有思考。':'开始编译后，这里逐步显示真实会话事件。','muted'));return;}
+ if(!view.calls.length){target.append(node('p','尚未启动模型会话。','muted'));return;}
+ for(const c of view.calls){
+  const section=node('section',null,'session-call');section.append(node('h4',c.title),node('p','会话：'+(c.thread_id??'尚未收到ID')+' · '+({STARTED:'请求进行中',COMPLETED:'模型请求完成',ENDED:'调用已结束',STOPPED:'调用中断',FAILED:'模型调用失败'}[c.status]??c.status),'session-identity'));
+  section.append(node('p',c.message,'summary-state'));
+  for(const s of c.summaries){const summary=node('div',null,'public-summary');summary.append(node('strong','模型公开摘要'+(s.status==='completed'?'':' · 正在更新')),node('p',s.text,'public-summary-text'));if(s.at)summary.append(node('small','接收时间：'+new Date(s.at).toLocaleTimeString('zh-CN')));else summary.append(node('small','保存日志未记录该事件时间；按原事件顺序展示。'));section.append(summary);}
+  if(c.diagnostic_count)section.append(node('p','会话报告了 '+c.diagnostic_count+' 条告警/错误事件。保留真实事件，但不能仅凭这些事件判定编译失败；不展示可能含本机路径或凭据的原始错误文本。','process-notice'));
+  const events=node('details',null,'session-events');events.dataset.call=c.id;events.open=openState.get(c.id)??true;events.append(node('summary','已收到的实际事件（'+c.events.length+'条）'));
+  const saved=c.events.filter(e=>Number.isInteger(e.sequence)).sort((a,b)=>a.sequence-b.sequence),callbacks=c.events.filter(e=>!Number.isInteger(e.sequence));
+  for(const [title,rows] of [['Codex原始事件顺序',saved],['本地接收与校验事件',callbacks]])if(rows.length){events.append(node('strong',title));const list=node('ol');for(const e of rows){const line=node('li',(e.sequence?'原日志第'+e.sequence+'行 · ':'')+(e.at?new Date(e.at).toLocaleTimeString('zh-CN')+' · ':'')+e.label+(e.item_kind&&e.item_kind!=='reasoning'?' · '+e.item_kind:''));list.append(line);}events.append(list);}section.append(events);
+  if(c.log)section.append(node('p','来源：'+c.log.path+'；'+(c.log.read_status==='READ'?'读取保存的原始事件，不重跑模型':c.log.read_status==='TOO_LARGE'?'日志超出展示读取上限；原文件保持不变':'日志存在未解析行，不能把展示视为完整记录'),'muted'));target.append(section);
+ }
+ if(/^[a-f0-9-]{36}$/.test(run.run_id??'')){const link=node('a','导出本次公开会话记录（JSON）','session-export');link.href='/api/runs/'+run.run_id+'/activity.json';link.download='';target.append(link);}
+}
 export function decisionView(run){
  const trace=run.result??{...run.progress,source:{sha256:run.source_sha256}},ctx=context(trace),p=trace.proposal??{},facts=array(trace.ir?.facts),slots=trace.canonical?.slots??{};
  return [...array(p.events),...array(p.claims)].map(item=>{
@@ -167,8 +207,11 @@ function renderLive(target,run){
  const timing=timingView(run);
  if(timing){
   const seconds=ms=>(ms/1000).toFixed(1)+'秒',labels={parse:'模型解析',audit:'独立模型审阅'};
-  target.append(node('p','本次耗时：'+seconds(timing.total_ms)+'；'+timing.phases.map(p=>labels[p.phase]+' '+(p.ms===null?'未记录':seconds(p.ms))+(p.count>1?'（含'+p.count+'次调用）':'')).join('；')+(timing.other_ms!==null?'；其余准备、校验及投影 '+seconds(timing.other_ms):''),'process-notice'));
-  target.append(node('p','原文短不代表模型请求短：解析还会收到完整Skill、语义合同和Schema；独立审阅另外收到候选结构。两次模型请求按顺序执行。以上是实际用时，不是剩余时间预测。','muted'));
+  target.append(node('p','本次耗时：'+seconds(timing.total_ms)+'；'+timing.round_count+'轮，已记录'+timing.recorded_call_count+'次模型调用；'+timing.phases.map(p=>labels[p.phase]+' '+(p.ms===null?'用时未完整记录':seconds(p.ms))+(p.count>1?'（共'+p.count+'次）':'')).join('；')+(timing.other_ms!==null?'；其他流程 '+seconds(timing.other_ms):'；完整调用用时缺失，不把差值归为程序耗时'),'process-notice'));
+  target.append(table(['轮次 / 调用','实际耗时'],timing.calls.map(c=>({cells:['第'+(c.revision+1)+'轮 · '+labels[c.phase]+' · 第'+(c.attempt+1)+'次',Number.isFinite(c.elapsed_ms)?seconds(c.elapsed_ms):'未记录'],sources:[]})),()=>{}));
+  const revisions=array(run.model_activity?.revisions);
+  for(const r of revisions){target.append(node('h4','为什么进入第'+(r.next_revision+1)+'轮修订'));const reasons=node('ul');for(const reason of r.reasons)reasons.append(node('li',reason.reason));if(!r.reasons.length)reasons.append(node('li','修订请求未保存可读取的文字理由，不能补猜。'));target.append(reasons,node('small','实际修订依据：'+r.path));}
+  target.append(node('p','解析收到原文、Skill、语义合同和Schema；审阅另收到候选结构，按顺序调用。发现需修订项时会增加一轮解析与审阅。各次用时来自真实调用回执；“其他流程”为总时长减全部调用时长，未单独测量各项本地处理。','muted'));
  }
  const steps=node('ol',null,'live-steps');for(const s of view.steps){const li=node('li',null,'live-step '+s.state.toLowerCase());li.append(node('strong',s.title),node('span',labels[s.state]));steps.append(li);}target.append(steps);
  if(view.lastSignal)target.append(node('p','最近收到阶段信号：'+new Date(view.lastSignal).toLocaleTimeString('zh-CN')+'；第'+(view.revision+1)+'轮。','muted'));
@@ -183,22 +226,25 @@ function table(headers,rows,onEvidence){
  for(const row of rows){const tr=node('tr');for(const cell of row.cells)tr.append(node('td',cell));const td=node('td');if(row.sources?.length){const b=node('button','查看原文','evidence-button');b.onclick=()=>onEvidence(row.sources);td.append(b);}else td.textContent='无独立来源 / 见上游';tr.append(td);body.append(tr);}t.append(body);wrap.append(t);return wrap;
 }
 export function renderModelInfo(target,run={},session={}){
- target.replaceChildren();const view=modelView(run,session);target.append(node('h3','模型与两次Skill调用'),node('p','请求模型：'+view.requested+'；实际服务模型：'+view.actual));
+ target.replaceChildren();const view=modelView(run,session);target.append(node('h3','模型、两个Skill与全部调用'),node('p','请求模型：'+view.requested+'；实际服务模型：'+view.actual));
  target.append(node('p','本次推理设置：'+view.reasoning+'。解析和独立审阅使用本次选定的同一请求模型，分别启动会话。新任务可在左侧“本次编译设置”选择；历史记录不会随选择改变。','muted'));
  target.append(node('p','Skill内容以 '+view.mode+' 方式送入请求；本机原生Skill发现/自动加载未被验证，不冒称已经验证。','muted'));
- if(view.calls.length)target.append(table(['环节','耗时','调用退出','会话'],view.calls.map(c=>({cells:[c.phase+'第'+c.attempt+'次',c.seconds+'秒',c.success?'正常退出（不等于语义正确）':'非正常退出',c.thread],sources:[]})),()=>{}));
+ if(view.calls.length)target.append(table(['轮次 / 环节','耗时','调用退出','会话'],view.calls.map(c=>({cells:['第'+c.revision+'轮 · '+c.phase+'第'+c.attempt+'次',c.seconds+'秒',c.success?'正常退出（不等于语义正确）':'非正常退出',c.thread],sources:[]})),()=>{}));
  const independent=view.independent===true?'解析与审阅会话ID不同，独立会话已记录。':view.independent===false?'警告：会话ID存在重用。':'会话独立性暂无完整记录。';target.append(node('p',independent));
 }
 export function renderCompilerProcess(target,run,{onEvidence=()=>{},session={}}={}){
- const key=JSON.stringify([run.run_id,run.status,run.stage,run.revision,run.stages,run.result,run.progress]);
+ const key=JSON.stringify([session.product_snapshot,run.run_id,run.status,run.stage,run.revision,run.stages,run.result,run.progress,run.model_activity]);
  if(target._processKey===key&&target.querySelector('.runtime-progress')){renderLive(target.querySelector('.runtime-progress'),run);return;}
  const sameRun=target._processRunId===run.run_id;
+ const activityOpenState=new Map(sameRun?[...target.querySelectorAll('details[data-call]')].map(d=>[d.dataset.call,d.open]):[]);
  const openState=new Map(sameRun?[...target.querySelectorAll('details[data-stage]')].map(d=>[d.dataset.stage,d.open]):[]);
  const previousStage=sameRun?target._processStage:null;
  target._processRunId=run.run_id;target._processStage=run.stage;
  target._processKey=key;target.replaceChildren();const {stages}=processView(run);
  target.append(node('h2','从原文到7+1：实时编译过程'),node('p','步骤实时更新，已生成的候选和审阅立即可查看；最后统一展示7+1结果。以下只读取本次实际产物，不重新解释原文。','muted'));
+ const version=node('section',null,'runtime-version');version.setAttribute('aria-label','页面与编译记录版本');renderVersionInfo(version,run,session);target.append(version);
  const live=node('section',null,'runtime-progress');live.setAttribute('aria-label','实时编译进度');renderLive(live,run);target.append(live);
+ const activity=node('section',null,'session-activity');activity.setAttribute('aria-label','Codex公开会话摘要与事件');renderSessionActivity(activity,run,{openState:activityOpenState});target.append(activity);
  const settings=node('details',null,'model-panel');settings.append(node('summary','模型、两个Skill与独立会话记录'));const modelBody=node('div');renderModelInfo(modelBody,run,session);settings.append(modelBody);target.append(settings);
  for(const s of stages){const section=node('details',null,'process-stage');section.dataset.stage=s.id;
   section.open=stageDisclosure(run,s.id,{previousStage,previousOpen:openState.get(s.id)});

@@ -7,6 +7,7 @@ import {prepareSource,sha256} from './source.mjs';
 import {parse7Plus1,writeJSON,compilerRevision} from './engine.mjs';
 import {runtimeInventory} from './evidence.mjs';
 import {modelCatalog,requestSettings,publicProgress,partialArtifacts} from './observability.mjs';
+import {sessionActivity} from './model-activity.mjs';
 const loadedRuntime=JSON.stringify(runtimeInventory());
 export const WEB=path.resolve(ROOT,'../v0.3-p2.1-generalization/web');
 export const DATA=process.env.BOUNDX_DATA_DIR?path.resolve(process.env.BOUNDX_DATA_DIR):path.resolve(ROOT,'../../../.boundx/7plus1-short');
@@ -44,14 +45,15 @@ export function createServer({dataRoot=DATA,parse=parse7Plus1,legacyRoot=process
    if(req.method==='GET'&&route==='/api/runs')return send(200,[...[...records.values()].map(summary),...legacyList()].sort((a,b)=>String(b.created_at).localeCompare(String(a.created_at))));
    const legacy=/^\/api\/legacy\/([a-f0-9-]+)$/u.exec(route);
    if(req.method==='GET'&&legacy){if(!ID.test(legacy[1]))return send(400,{error:'INVALID_RUN_ID'});return send(200,{status:'LEGACY_READ_ONLY',raw:JSON.parse(fs.readFileSync(path.join(legacyRoot,legacy[1]+'.json'),'utf8'))});}
-   const match=/^\/api\/runs\/([^/]+)(?:\/(cancel|json|export|trace\.json|trace\.md|trace\.html))?$/u.exec(route);
+   const match=/^\/api\/runs\/([^/]+)(?:\/(cancel|json|export|trace\.json|trace\.md|trace\.html|activity\.json))?$/u.exec(route);
    let record=match?records.get(match[1]):null;
    if(match&&!ID.test(match[1]))return send(400,{error:'INVALID_RUN_ID'});
    if(req.method==='GET'&&match){
     if(!record)return send(404,{error:'RUN_NOT_FOUND'});
     const traceFile=path.join(folder(record.run_id),'trace.json');
     const trace=fs.existsSync(traceFile)&&record.status.startsWith('COMPLETED')?safeTrace(JSON.parse(fs.readFileSync(traceFile,'utf8'))):null;
-    if(!match[2])return send(200,{...summary(record),source_text:record.source_text,result:trace,progress:trace?null:partialArtifacts(folder(record.run_id),record)});
+    if(!match[2])return send(200,{...summary(record),source_text:record.source_text,result:trace,progress:trace?null:partialArtifacts(folder(record.run_id),record),model_activity:sessionActivity(folder(record.run_id),record)});
+    if(match[2]==='activity.json')return download(JSON.stringify({run_id:record.run_id,run_product_version:record.product_snapshot?.product_version??null,requested_model:record.requested_model,actual_model:record.actual_model??null,...sessionActivity(folder(record.run_id),record)},null,2)+'\n','application/json',record.run_id+'-sessions.json');
     if(!trace)return send(409,{error:'RESULT_NOT_READY'});
     if(match[2]==='json')return download(JSON.stringify(trace.canonical,null,2)+'\n','application/json',record.run_id+'-7plus1.json');
     if(match[2]==='export')return download(trace.chinese,'text/markdown',record.run_id+'-7plus1.md');

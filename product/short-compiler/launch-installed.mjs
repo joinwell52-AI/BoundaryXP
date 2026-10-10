@@ -1,4 +1,4 @@
-// User entry transport only. Semantic core, Skills, Schema and UI load from the installed version.
+// User entry transport only. Preserve complete installed core, Skills, Schema and UI identity.
 import fs from 'node:fs';
 import path from 'node:path';
 import {fileURLToPath,pathToFileURL} from 'node:url';
@@ -12,6 +12,9 @@ const approvedVersions={
  '0.1.0-candidate.031-r1.2-ui.6':{compiler:'031-r1-c3',contract:'031-r1.1'},
  '0.1.0-candidate.031-r1.2-ui.7':{compiler:'031-r1-c3',contract:'031-r1.1'},
  '0.1.0-candidate.031-r1.2-ui.8':{compiler:'031-r1-c3',contract:'031-r1.1'},
+ '0.1.0-candidate.031-r1.2-ui.10':{compiler:'031-r1-c3',contract:'031-r1.1'},
+ '0.1.0-candidate.031-r1.2-ui.11':{compiler:'031-r1-c3',contract:'031-r1.1'},
+ '0.1.0-candidate.031-r1.2-ui.12':{compiler:'031-r1-c3',contract:'031-r1.1'},
  '0.1.0-candidate.032.1':{compiler:'032-c1',contract:'032.1'},
  '0.1.0-candidate.032.2':{compiler:'032-c2',contract:'032.1'},
  '0.1.0-candidate.032.3':{compiler:'032-c3',contract:'032.1'}
