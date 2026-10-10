@@ -1,5 +1,15 @@
 <p align="center"><strong>English</strong> · <a href="README.zh-CN.md">简体中文</a></p>
 
+<p align="center">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="assets/branding/v1/BoundX_Logo_EN_white.png">
+    <source media="(prefers-color-scheme: light)" srcset="assets/branding/v1/BoundX_Logo_EN_transparent.png">
+    <img src="assets/branding/v1/BoundX_Logo_EN_transparent.png" alt="BoundX" width="420">
+  </picture>
+</p>
+
+<p align="center"><a href="https://github.com/joinwell52-AI/BoundX/tree/main">Repository files</a> · <a href="#document-list">Document list</a> · <a href="#repository-files-and-directories">Directory index</a> · <a href="#brand-assets">Logo and brand assets</a></p>
+
 # BoundX
 
 **Turn ADMIN task boundaries into computable objects. Clarify task boundaries before execution.**
@@ -100,3 +110,57 @@ User history, credentials, real enterprise identity/policy data, and model weigh
 The [LICENSE](LICENSE) and actual third-party terms govern redistribution; this documentation update changes neither license nor package release status. Existing [brand assets](assets/branding/README.md) are retained.
 
 Further reading: [capability matrix — Chinese](docs/FUNCTIONS.md), [validation — Chinese](docs/VALIDATION.md), and [development branch current task — Chinese](https://github.com/joinwell52-AI/BoundX/blob/review/7plus1-parser/docs/tasks/7plus1/CURRENT-TASK.md). Historical experiments and results remain separate from current candidate claims. Test reports support the product; they are not the product itself.
+
+## Document list
+
+The original documentation entries remain accessible alongside the updated 7+1 method and status pages. Read older specifications and historical tasks under their stated versions; listing them does not make them current execution instructions or acceptance results. Detailed manuals are Chinese unless an English version is explicitly linked.
+
+| Document | Entry |
+|---|---|
+| Complete documentation index | [Documentation](docs/README.md) |
+| Product manual | [BoundX product manual — Chinese](docs/BOUNDX-PRODUCT-MANUAL.md) |
+| 7+1 compilation method | [Definitions, semantic compilation and boundary calculation v0.4 — Chinese](docs/BoundX-7plus1-定义原理语义编译与边界计算说明-v0.4.md) |
+| Boundary calculation method and product role | [Calculation guide — Chinese](docs/BOUNDARY-CALCULATION-METHOD.md) |
+| Quick start | [English](QUICKSTART.en.md) · [Chinese](QUICKSTART.md) |
+| Capabilities, versions and delivery status | [Capability matrix — Chinese](docs/FUNCTIONS.md) · [Short-text compiler status — Chinese](docs/SHORT-COMPILER-STATUS.md) |
+| BXP protocol | [English specification](protocol/BXP-0001.md) · [Chinese specification](protocol/BXP-0001.zh-CN.md) · [Protocol index](protocol/README.md) |
+| Gold case specifications | [Specification index — Chinese](docs/GOLD-CASE-SPECIFICATIONS.md) |
+| Real Gold generation and adjudication | [Standard — Chinese](docs/GOLD-GENERATION-AND-ADJUDICATION-STANDARD.md) |
+| Real Gold generation procedure | [SOP — Chinese](docs/GOLD-GENERATION-SOP.md) |
+| Real Gold presentation and bilingual format | [Presentation standard — Chinese](docs/GOLD-PRESENTATION-AND-BILINGUAL-FORMAT.md) |
+| Producer interface | [Producer Adapter Contract](docs/PRODUCER-ADAPTER-CONTRACT.md) |
+| Semantic resources and Enterprise L3 | [Semantic packages](domain-packs/) · [Enterprise L3 guide — Chinese](docs/L3-EMPLOYEE-DIRECTORY-GUIDE.md) |
+| Local validation and research metrics | [Validation guide — Chinese](docs/VALIDATION.md) |
+| Historical BXP 0.4 local development task | [v1.2 task book — historical, Chinese](docs/tasks/BXP-PRODUCER-BENCHMARK-DEVELOPMENT-TASKBOOK-v1.2-LOCAL.md) |
+| Current development task | [Review-branch task pointer — Chinese](https://github.com/joinwell52-AI/BoundX/blob/review/7plus1-parser/docs/tasks/7plus1/CURRENT-TASK.md) |
+| Versions and license | [Changelog](CHANGELOG.md) · [LICENSE](LICENSE) |
+
+## Repository files and directories
+
+[Open the complete main-branch file list](https://github.com/joinwell52-AI/BoundX/tree/main). A README file-reading page and the repository's file browser are different views; the documentation links below do not replace the file browser.
+
+| Directory or file | Contents |
+|---|---|
+| [docs/](docs/) | Product, method, capability, validation and development documentation |
+| [protocol/](protocol/) | BXP specifications, schemas and conformance material |
+| [src/](src/) | Current main-branch source |
+| [domain-packs/](domain-packs/) | Semantic packages and resource notes for this branch |
+| [examples/](examples/) · [fixtures/](fixtures/) | Examples and test material |
+| [ui/](ui/) · [ui-server.mjs](ui-server.mjs) | Existing local application pages and server entry |
+| [python/](python/) · [scripts/](scripts/) | Python components and helper scripts |
+| [cli.mjs](cli.mjs) · [mcp.mjs](mcp.mjs) | CLI and MCP entries |
+| [package.json](package.json) · [package-lock.json](package-lock.json) | Actual branch commands and dependency lock |
+| [assets/](assets/) | Logo and brand assets |
+
+Short-text candidate source and packages are on the [development branch](https://github.com/joinwell52-AI/BoundX/tree/review/7plus1-parser); they are not the same snapshot as the existing main-branch files.
+
+## Brand assets
+
+The original logo files are reused without redesign, recoloring or renaming. See the [brand directory](assets/branding/README.md) and the [original logo asset package](assets/branding/BoundX-logo-pack-v1.zip).
+
+| Asset | Original files |
+|---|---|
+| Chinese logo: icon and Chinese wordmark | [Transparent](assets/branding/v1/BoundX_Logo_CN_JieHen_transparent.png) · [White background](assets/branding/v1/BoundX_Logo_CN_JieHen_white.png) |
+| English logo: icon and BoundX wordmark | [Transparent](assets/branding/v1/BoundX_Logo_EN_transparent.png) · [White background](assets/branding/v1/BoundX_Logo_EN_white.png) |
+| Standalone icon | [Transparent](assets/branding/v1/BoundX_Icon_transparent.png) · [White background](assets/branding/v1/BoundX_Icon_white.png) |
+| GitHub / App icon | [512-pixel transparent icon](assets/branding/v1/BoundX_Icon_512_transparent.png) |

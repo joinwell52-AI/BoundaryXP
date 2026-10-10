@@ -1,5 +1,15 @@
 <p align="center"><a href="README.md">English</a> · <strong>简体中文</strong></p>
 
+<p align="center">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="assets/branding/v1/BoundX_Logo_CN_JieHen_white.png">
+    <source media="(prefers-color-scheme: light)" srcset="assets/branding/v1/BoundX_Logo_CN_JieHen_transparent.png">
+    <img src="assets/branding/v1/BoundX_Logo_CN_JieHen_transparent.png" alt="界痕" width="420">
+  </picture>
+</p>
+
+<p align="center"><a href="https://github.com/joinwell52-AI/BoundX/tree/main">仓库文件列表</a> · <a href="#文档列表">文档列表</a> · <a href="#仓库文件与目录">目录索引</a> · <a href="#品牌资产">Logo与品牌资产</a></p>
+
 # 界痕 · BoundX
 
 **把ADMIN的任务边界变成可计算对象。执行之前，先把任务边界算清楚。**
@@ -100,3 +110,57 @@ BXP协议版本、方法手册修订、根仓库包版本与短文本安装包�
 许可以[LICENSE](LICENSE)及第三方实际条款为准；本轮不变更许可或包发布状态。[品牌资产](assets/branding/README.md)保留，不因方法更新重做Logo。
 
 进一步阅读：[功能矩阵](docs/FUNCTIONS.md) · [验证规程](docs/VALIDATION.md) · [开发分支当前任务](https://github.com/joinwell52-AI/BoundX/blob/review/7plus1-parser/docs/tasks/7plus1/CURRENT-TASK.md)。历史研究方法和成绩与当前候选能力分开，不把测试报告当产品本身。
+
+## 文档列表
+
+保留原有文档入口，同时列出新的7+1方法与状态说明。旧规范和历史任务按各自版本阅读，不因列入导航而成为当前开发指令或验收结论。
+
+| 文档 | 入口 |
+|---|---|
+| 完整文档导航 | [文档目录](docs/README.md) |
+| 完整产品手册 | [BoundX产品手册](docs/BOUNDX-PRODUCT-MANUAL.md) |
+| 7+1编译方法 | [定义、原理、语义编译与边界计算说明 v0.4](docs/BoundX-7plus1-定义原理语义编译与边界计算说明-v0.4.md) |
+| 边界计算方法与产品作用 | [边界计算说明](docs/BOUNDARY-CALCULATION-METHOD.md) |
+| 快速开始 | [中文](QUICKSTART.md) · [英文](QUICKSTART.en.md) |
+| 功能、版本与交付状态 | [功能矩阵](docs/FUNCTIONS.md) · [短文本编译器状态](docs/SHORT-COMPILER-STATUS.md) |
+| BXP协议 | [中文规范](protocol/BXP-0001.zh-CN.md) · [英文规范](protocol/BXP-0001.md) · [协议导航](protocol/README.md) |
+| Gold案例规范入口 | [案例规范索引](docs/GOLD-CASE-SPECIFICATIONS.md) |
+| Real Gold生成与审定标准 | [生成与审定标准](docs/GOLD-GENERATION-AND-ADJUDICATION-STANDARD.md) |
+| Real Gold生成执行方法 | [SOP](docs/GOLD-GENERATION-SOP.md) |
+| Real Gold文件版式与双语展示 | [展示规范](docs/GOLD-PRESENTATION-AND-BILINGUAL-FORMAT.md) |
+| Producer接口 | [Producer Adapter Contract](docs/PRODUCER-ADAPTER-CONTRACT.md) |
+| 语义资源与企业L3 | [语义包目录](domain-packs/) · [Enterprise L3说明](docs/L3-EMPLOYEE-DIRECTORY-GUIDE.md) |
+| 本地验证与研究指标 | [验证说明](docs/VALIDATION.md) |
+| 历史BXP 0.4本地开发任务 | [v1.2任务书，历史记录](docs/tasks/BXP-PRODUCER-BENCHMARK-DEVELOPMENT-TASKBOOK-v1.2-LOCAL.md) |
+| 当前开发任务 | [review分支当前指针](https://github.com/joinwell52-AI/BoundX/blob/review/7plus1-parser/docs/tasks/7plus1/CURRENT-TASK.md) |
+| 版本与许可 | [变更历史](CHANGELOG.md) · [LICENSE](LICENSE) |
+
+## 仓库文件与目录
+
+[打开main的完整文件列表](https://github.com/joinwell52-AI/BoundX/tree/main)。当前这个`README.zh-CN.md`地址是单个文件的阅读页；文件浏览入口与README中的文档列表是两回事。
+
+| 目录或文件 | 内容 |
+|---|---|
+| [docs/](docs/) | 产品、方法、功能、验证与开发文档 |
+| [protocol/](protocol/) | BXP规范、Schema及符合性资料 |
+| [src/](src/) | 当前main源码 |
+| [domain-packs/](domain-packs/) | 当前分支语义包与资源说明 |
+| [examples/](examples/) · [fixtures/](fixtures/) | 示例和测试资料 |
+| [ui/](ui/) · [ui-server.mjs](ui-server.mjs) | 既有本地应用页面与服务入口 |
+| [python/](python/) · [scripts/](scripts/) | Python组件与辅助脚本 |
+| [cli.mjs](cli.mjs) · [mcp.mjs](mcp.mjs) | CLI与MCP入口 |
+| [package.json](package.json) · [package-lock.json](package-lock.json) | 本分支实际命令与依赖锁 |
+| [assets/](assets/) | Logo与品牌素材 |
+
+短文本候选源码与运行包在[开发分支](https://github.com/joinwell52-AI/BoundX/tree/review/7plus1-parser)，不与main现有文件混为同一版本。
+
+## 品牌资产
+
+原有Logo文件继续使用，不重新设计、不改色、不改名。全部素材见[品牌目录](assets/branding/README.md)及[原Logo素材包](assets/branding/BoundX-logo-pack-v1.zip)。
+
+| 素材 | 原文件 |
+|---|---|
+| 中文Logo：图标＋界痕 | [透明版](assets/branding/v1/BoundX_Logo_CN_JieHen_transparent.png) · [白底版](assets/branding/v1/BoundX_Logo_CN_JieHen_white.png) |
+| 英文Logo：图标＋BoundX | [透明版](assets/branding/v1/BoundX_Logo_EN_transparent.png) · [白底版](assets/branding/v1/BoundX_Logo_EN_white.png) |
+| 独立图标 | [透明版](assets/branding/v1/BoundX_Icon_transparent.png) · [白底版](assets/branding/v1/BoundX_Icon_white.png) |
+| GitHub／App图标 | [512像素透明版](assets/branding/v1/BoundX_Icon_512_transparent.png) |
