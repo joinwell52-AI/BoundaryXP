@@ -1,0 +1,554 @@
+--- a/research/7plus1-parser/llm-first-028/bundle.mjs
++++ b/research/7plus1-parser/llm-first-028/bundle.mjs
+@@ -22,5 +22,5 @@
+  }
+  const delivery=outputSchemaDelivery(phase,schema);
+  const text=`显式调用 $${name}。加载方式 INLINE_BUNDLE：宿主从真实 Skill 与同源合同读取资源，本次目标输出Schema通过CLI结构化输出通道交付；不是原生 Skill 加载声明。只消费这些资源，禁止工具、文件、网络、业务操作。\n`+renderResources(resources,delivery);
+- return applyWireBundle({phase,name,mode:'INLINE_BUNDLE',resource_profile:'SEMANTIC_CLOSURE_R01',request_profile:requestProfile,schema_delivery:delivery,resources,schema,text,sha256:sha256(text)});
++ return applyWireBundle({phase,name,mode:'INLINE_BUNDLE',resource_profile:'SEMANTIC_CLOSURE_R02',request_profile:requestProfile,schema_delivery:delivery,resources,schema,text,sha256:sha256(text)});
+ }
+--- a/research/7plus1-parser/llm-first-028/calculus.mjs
++++ b/research/7plus1-parser/llm-first-028/calculus.mjs
+@@ -21,6 +21,7 @@
+  const expressionFormula=(id,ancestors=[])=>{
+   if(ancestors.includes(id))throw Error('EXPRESSION_CYCLE');const e=index.get(id);if(!e)throw Error('MISSING_EXPRESSION');
+   if(e.op==='STATE'&&e.state){const base=atom(['STATE',e.state.predicate,e.state.event_id,e.state.args],{kind:'STATE',predicate:e.state.predicate,event_id:e.state.event_id,args:e.state.args});return e.state.polarity==='NEGATIVE'?{not:base}:base;}
++  if(e.op==='TEST'&&e.test)return atom(['PROPERTY_TEST',e.test],{kind:'PROPERTY_TEST',test:e.test});
+   if(e.op==='NOT')return {not:expressionFormula(e.operands[0],[...ancestors,id])};
+   if(['AND','ALL','OR','ANY'].includes(e.op))return {[['AND','ALL'].includes(e.op)?'all':'any']:e.operands.map(x=>expressionFormula(x,[...ancestors,id]))};
+   throw Error('NOT_A_BOOLEAN_EXPRESSION');
+@@ -37,14 +38,14 @@
+   if(f.status!=='ACCEPTED'){unsupported.push({...provenance(f),reason:'IR_FACT_NOT_ACCEPTED',status:f.status});continue;}
+   const c=f.claim;
+   if(['CONDITION','TEMPORAL','COMPLETION','STOP'].includes(f.kind)&&c){
+-   const evaluation=evaluateCondition(c,expressions,observations.states??{});
+-   conditions.push({...provenance(f),kind:f.kind,expression_id:c.expression_id,...evaluation});
++   const evaluation=evaluateCondition(c,expressions,observations.states??{},observations.tests??{});
++   conditions.push({...provenance(f),kind:f.kind,expression_id:c.expression_id,...evaluation,...(f.output_specification?{output_specification:f.output_specification}: {})});
+    try{
+-    const event=events.get(c.event_id);
+-    const currentTarget=!c.event_id||(event?.owner_id==='ROOT'&&event.use==='CURRENT_TASK'&&event.layer==='MAIN'&&event.polarity==='POSITIVE'&&['REQUIRED','PERMITTED','FORBIDDEN'].includes(event.modality));
++    const event=events.get(c.event_id),spec=f.output_specification;
++    const currentTarget=!!spec&&event?.polarity==='POSITIVE'&&['REQUIRED','PERMITTED','FORBIDDEN'].includes(event.modality)||!c.event_id||(event?.owner_id==='ROOT'&&event.use==='CURRENT_TASK'&&event.layer==='MAIN'&&event.polarity==='POSITIVE'&&['REQUIRED','PERMITTED','FORBIDDEN'].includes(event.modality));
+     if(c.direction!=='ORDER'&&currentTarget){
+      const antecedent=expressionFormula(c.expression_id);
+-     const target=atom([f.kind==='COMPLETION'?'TASK_COMPLETE':f.kind==='STOP'?'TASK_STOP':'EVENT_EXECUTED',c.event_id??c.scope_id],{kind:f.kind==='COMPLETION'?'TASK_COMPLETE':f.kind==='STOP'?'TASK_STOP':'EVENT_EXECUTED',event_id:c.event_id??null});
++     const target=spec?atom(['OUTPUT_BEHAVIOR',spec.artifact_id,c.event_id],{kind:'OUTPUT_BEHAVIOR',artifact_id:spec.artifact_id,event_id:c.event_id,producer_result_id:spec.producer_result_id}):atom([f.kind==='COMPLETION'?'TASK_COMPLETE':f.kind==='STOP'?'TASK_STOP':'EVENT_EXECUTED',c.event_id??c.scope_id],{kind:f.kind==='COMPLETION'?'TASK_COMPLETE':f.kind==='STOP'?'TASK_STOP':'EVENT_EXECUTED',event_id:c.event_id??null});
+      if(event?.modality==='FORBIDDEN'){
+       if(c.direction!=='SUFFICIENT')throw Error('CONDITIONAL_PROHIBITION_DIRECTION_NOT_SUPPORTED');
+       addFormula({implies:[antecedent,{not:target}]},f,'EXPLICIT_SUFFICIENT_PROHIBITION');
+@@ -69,6 +70,14 @@
+   }
+   if(f.kind==='EVENT'){
+    const e=f.event,cs=f.constraints??[];
++   if(f.output_specification){
++    if(e.polarity!=='POSITIVE')continue;
++    const conditional=cs.filter(x=>x.kind==='CONDITION');
++    const target=atom(['OUTPUT_BEHAVIOR',f.output_specification.artifact_id,e.id],{kind:'OUTPUT_BEHAVIOR',artifact_id:f.output_specification.artifact_id,event_id:e.id,producer_result_id:f.output_specification.producer_result_id});
++    if(e.modality==='REQUIRED'&&!conditional.some(x=>['SUFFICIENT','IFF'].includes(x.direction)))addFormula(target,f,'REQUIRED_OUTPUT_BEHAVIOR_NOT_TASK_EXECUTION');
++    if(e.modality==='FORBIDDEN'&&!conditional.length)addFormula({not:target},f,'FORBIDDEN_OUTPUT_BEHAVIOR_NOT_TASK_PROHIBITION');
++    continue;
++   }
+    if(e.use!=='CURRENT_TASK'||e.layer!=='MAIN'||e.polarity!=='POSITIVE')continue;
+    if(e.owner_id!=='ROOT'){unsupported.push({...provenance(f),reason:'OWNED_EVENT_ACTIVATION_SCOPE_NOT_SUPPORTED'});continue;}
+    const conditional=cs.filter(x=>x.kind==='CONDITION');
+@@ -92,11 +101,18 @@
+   }
+   if(f.kind==='SCOPE'&&c){
+    const domain=isSetDomain(expressions,ir.entities??[],c.expression_id)?setDomain(expressions,ir.entities??[],c.expression_id,observations.memberships??{}):null;
+-   const booleanScope=(id,seen=new Set())=>{if(seen.has(id))return false;const x=index.get(id);if(!x)return false;if(x.op==='STATE')return !!x.state;return ['NOT','AND','ALL','OR','ANY'].includes(x.op)&&x.operands.every(k=>booleanScope(k,new Set([...seen,id])));};
++   const booleanScope=(id,seen=new Set())=>{if(seen.has(id))return false;const x=index.get(id);if(!x)return false;if(x.op==='STATE')return !!x.state;if(x.op==='TEST')return !!x.test;return ['NOT','AND','ALL','OR','ANY'].includes(x.op)&&x.operands.every(k=>booleanScope(k,new Set([...seen,id])));};
+    const booleanQualifier=!domain&&booleanScope(c.expression_id);
+-   const value=domain?domain.complete?new Set(domain.members):'UNKNOWN':evaluateExpression(expressions,c.expression_id,observations.states??{});
++   const value=domain?domain.complete?new Set(domain.members):'UNKNOWN':evaluateExpression(expressions,c.expression_id,observations.states??{},observations.tests??{});
+    ranges.push({...provenance(f),expression_id:c.expression_id,target_id:c.scope_id,scope_fragment:domain?'ENTITY_SET':booleanQualifier?'BOOLEAN_QUALIFIER':'UNSUPPORTED',result:value instanceof Set?'FINITE_SET':typeof value==='string'?value:'UNKNOWN',members:value instanceof Set?[...value].sort():null,...(domain?{membership_complete:domain.complete,domain_provenance_ids:domain.provenance_ids??[],reason:domain.reason??null}:{}),structurally_expressed:!!domain||booleanQualifier,evaluation_is_execution_proof:false,execution_authorization:null});
+    if(!domain&&!booleanQualifier)unsupported.push({...provenance(f),reason:'SCOPE_EXPRESSION_NOT_SUPPORTED'});
++   const hasTests=(id,seen=new Set())=>{if(seen.has(id))return false;seen.add(id);const x=index.get(id);return x?.op==='TEST'||(x?.operands??[]).some(k=>hasTests(k,seen));};
++   if(hasTests(c.expression_id)&&booleanQualifier&&f.event?.polarity==='POSITIVE'&&(f.event?.use==='CURRENT_TASK'&&['REQUIRED','PERMITTED'].includes(f.event.modality)||f.output_specification&&['REQUIRED','PERMITTED'].includes(f.event?.modality))){
++    // Event-local method constraints apply when this action/behavior occurs;
++    // they do not demand execution of a permitted or conditional action.
++    const event=f.event,target=f.output_specification?atom(['OUTPUT_BEHAVIOR',f.output_specification.artifact_id,event.id],{kind:'OUTPUT_BEHAVIOR',artifact_id:f.output_specification.artifact_id,event_id:event.id}):atom(['EVENT_EXECUTED',event.id],{kind:'EVENT_EXECUTED',event_id:event.id});
++    addFormula({implies:[target,expressionFormula(c.expression_id)]},f,'EXPLICIT_PROPERTY_SCOPE_WHEN_EVENT_OCCURS');
++   }
+   }
+  }
+  for(const relation of ir.artifact_dependencies??[])availability.push({relation_id:relation.id,input_claim_ids:relation.input_claim_ids,sources:relation.sources,artifact_id:relation.artifact_id,producer_event_id:relation.producer_event_id,consumer_event_id:relation.consumer_event_id,availability:relation.availability,result:evaluateArtifactAvailability(relation,observations.artifacts?.[relation.id]),implies_event_order:false});
+--- a/research/7plus1-parser/llm-first-028/compact-wire.mjs
++++ b/research/7plus1-parser/llm-first-028/compact-wire.mjs
+@@ -49,13 +49,14 @@
+ });
+ const expression=proposalSchema.properties.expressions.items;
+ const stateExpr=compactShape(expression,{drop:['operands']});stateExpr.properties.op={const:'STATE',type:'string'};stateExpr.properties.state=expression.properties.state.anyOf[0];
+-const otherExpr=compactShape(expression,{drop:['state']});otherExpr.properties.op={type:'string',enum:expression.properties.op.enum.filter(x=>x!=='STATE')};
++const testExpr=compactShape(expression,{drop:['operands','state']});testExpr.properties.op={const:'TEST',type:'string'};testExpr.properties.test=expression.properties.test.anyOf[0];
++const otherExpr=compactShape(expression,{drop:['state']});otherExpr.properties.op={type:'string',enum:expression.properties.op.enum.filter(x=>!['STATE','TEST'].includes(x))};
+ export const wireProposalSchema={$defs:defs,...obj({
+  transport_version:{type:'string',const:wireVersion},contract_version:proposalSchema.properties.contract_version,
+  source_table:arr(ref('sourceEntry')),
+  entities:arr(compactShape(proposalSchema.properties.entities.items,{mentions:true})),
+  events:arr(compactShape(proposalSchema.properties.events.items,{drop:['constraint_ids']})),
+- claims:arr(obj({id:ref('id'),scope_id:ref('id'),requires:ref('ids'),source_refs:ref('sourceRefs'),note:{type:'string'},binding:{anyOf:claimVariants}})),expressions:arr({anyOf:[stateExpr,otherExpr]}),
++ claims:arr(obj({id:ref('id'),scope_id:ref('id'),requires:ref('ids'),source_refs:ref('sourceRefs'),note:{type:'string'},binding:{anyOf:claimVariants}})),expressions:arr({anyOf:[stateExpr,testExpr,otherExpr]}),
+  issues:arr(compactShape(proposalSchema.properties.issues.items)),coverage:arr(compactShape(proposalSchema.properties.coverage.items))
+ })};
+ export const wireAuditSchema={$defs:defs,...obj({
+@@ -106,6 +107,7 @@
+   derivations.push({kind:'KIND_CONTRACT_CONSTANTS',canonical_path:'/claims/'+i,claim_kind:claim.kind,constants:clone(defaults[claim.kind])});
+  }
+  for(const [i,e] of value.expressions.entries()){
++  if(e.op==='TEST'){e.operands=[];e.state=null;derivations.push({kind:'TEST_CONTRACT_CONSTANTS',canonical_path:'/expressions/'+i,constants:{operands:[],state:null}});continue;}
+   const field=e.op==='STATE'?'operands':'state';e[field]=e.op==='STATE'?[]:null;
+   derivations.push({kind:'EXPRESSION_CONTRACT_CONSTANT',canonical_path:'/expressions/'+i+'/'+field,value:clone(e[field])});
+  }
+@@ -119,6 +121,8 @@
+  }
+  // The existing compiler hashes JSON bytes, so retain its Schema property order.
+  for(const x of value.entities)if(x.members===null)delete x.members;
++ for(const x of value.events)if(x.specifies_result_id===null)delete x.specifies_result_id;
++ for(const x of value.expressions)if(x.test===null)delete x.test;
+  for(const x of value.coverage)if(x.requirement_kind==='GENERAL')delete x.requirement_kind;
+  for(const x of value.claims)if(x.quantity?.distribution===null)delete x.quantity.distribution;
+  for(const group of ['entities','events','claims','expressions','issues','coverage'])value[group]=value[group].map(n=>canonicalOrder(n,proposalSchema.properties[group].items));
+@@ -141,13 +145,15 @@
+  // Empty/unspecified extension metadata is not a guessed semantic answer.
+  // Old responses remain explicitly old responses in the replay report.
+  for(const x of wire.entities)if(x.members===undefined)x.members=null;
++ for(const x of wire.events)if(x.specifies_result_id===undefined)x.specifies_result_id=null;
++ for(const x of wire.expressions)if(x.test===undefined)x.test=null;
+  for(const x of wire.coverage)if(x.requirement_kind===undefined)x.requirement_kind='GENERAL';
+  for(const x of wire.claims)if(x.quantity&&x.quantity.distribution===undefined)x.quantity.distribution=null;
+  for(const claim of wire.claims){
+   if(!defaults[claim.kind])throw Error('UNKNOWN_CLAIM_KIND');
+   for(const [k,v] of Object.entries(defaults[claim.kind])){if(claim[k]!==v)throw Error('NON_CONSTANT_CANONICAL_FIELD:'+claim.id+'/'+k);delete claim[k];}
+  }
+- for(const x of wire.expressions){const k=x.op==='STATE'?'operands':'state';if(JSON.stringify(x[k])!==JSON.stringify(x.op==='STATE'?[]:null))throw Error('NON_CONSTANT_EXPRESSION_FIELD:'+x.id);delete x[k];}
++ for(const x of wire.expressions){if(x.op==='TEST'){if(x.state!==null||x.operands.length)throw Error('NON_CONSTANT_TEST_FIELD:'+x.id);delete x.state;delete x.operands;continue;}const k=x.op==='STATE'?'operands':'state';if(JSON.stringify(x[k])!==JSON.stringify(x.op==='STATE'?[]:null))throw Error('NON_CONSTANT_EXPRESSION_FIELD:'+x.id);delete x[k];}
+  for(const event of wire.events){
+   const derived=canonical.claims.filter(c=>['CONDITION','TEMPORAL','QUANTITY'].includes(c.kind)&&c.event_id===event.id).map(c=>c.id);
+   if(strictInverse&&JSON.stringify([...event.constraint_ids].sort())!==JSON.stringify([...derived].sort()))throw Error('CANONICAL_INVERSE_INDEX_MISMATCH:'+event.id);
+--- a/research/7plus1-parser/llm-first-028/compile.mjs
++++ b/research/7plus1-parser/llm-first-028/compile.mjs
+@@ -1,6 +1,7 @@
+ import {views,contractVersion} from './contracts/schema.mjs';
+ import {sha256} from './source.mjs';
+ import {artifactRelations} from './artifacts.mjs';
++import {evaluatePropertyTest} from './property-tests.mjs';
+ export function compileBoundary(source,g,audit,checks){
+  const rows=new Map(checks.rows.map(r=>[r.id,r]));
+  const linked=x=>({...x,...(x.mentions?{mentions:rows.get(x.id)?.sources??x.mentions}:{sources:rows.get(x.id)?.sources??x.sources})});
+@@ -20,11 +21,12 @@
+  };
+  const expression=id=>{
+   if(id===null)return null;
+-  const build=(k,path=[])=>{if(path.includes(k))return {id:k,invalid_cycle:true};const x=index.get(k);if(!x)return {id:k,missing:true};return {...x,children:x.op==='STATE'||x.op==='ITEM'?[]:x.operands.map(child=>build(child,[...path,k]))};};return build(id);
++  const build=(k,path=[])=>{if(path.includes(k))return {id:k,invalid_cycle:true};const x=index.get(k);if(!x)return {id:k,missing:true};return {...x,children:['STATE','TEST','ITEM'].includes(x.op)?[]:x.operands.map(child=>build(child,[...path,k]))};};return build(id);
+  };
+  const constraints=e=>g.claims.filter(c=>e.constraint_ids.includes(c.id)).map(c=>({...linked(c),expression:expression(c.expression_id)}));
+  const current=e=>e.use==='CURRENT_TASK';
+  const positive=e=>current(e)&&['REQUIRED','PERMITTED'].includes(e.modality);
++ const outputBinding=e=>{const r=index.get(e?.specifies_result_id);return e?.use==='MENTION_ONLY'&&e.layer==='CONTENT'&&r?.kind==='ROLE'&&r.role==='RESULT'&&r.event_id===e.owner_id&&positive(index.get(r.event_id)??{})?r:null;};
+  const membersOf=(id,seen=new Set())=>{if(seen.has(id))return [];seen.add(id);return [id,...(index.get(id)?.members??[]).flatMap(k=>membersOf(k,seen))];};
+  const inputScopeRoles=c=>{
+   const leaves=(id,seen=new Set())=>{if(seen.has(id))return [];seen.add(id);const x=index.get(id);return x?.op==='ITEM'?x.operands:x?.op==='STATE'?[]:(x?.operands??[]).flatMap(k=>leaves(k,seen));};
+@@ -50,11 +52,13 @@
+   const e=linked(raw);
+   const roles=g.claims.filter(c=>c.kind==='ROLE'&&c.event_id===e.id).map(c=>({...linked(c),entity:index.get(c.entity_id),status:status([c.id,c.entity_id])}));
+   const payload={event:e,roles,constraints:constraints(e),artifact_dependencies:artifacts.availability.filter(x=>x.consumer_event_id===e.id)};
+-  make('EVENT',[e.id,...roles.map(c=>c.id),...e.constraint_ids],payload,positive(e)?['A']:current(e)&&e.modality==='FORBIDDEN'?['B']:[]);
++  const spec=outputBinding(e);
++  make('EVENT',[e.id,...roles.map(c=>c.id),...e.constraint_ids,...(spec?[spec.id]:[])],{...payload,...(spec?{output_specification:{producer_result_id:spec.id,artifact_id:spec.entity_id,producer_event_id:spec.event_id,scope:'OUTPUT_BEHAVIOR_NOT_TASK_EXECUTION'}}:{})},spec?['O']:positive(e)?['A']:current(e)&&e.modality==='FORBIDDEN'?['B']:[]);
+  }
+  for(const raw of g.claims){
+   const c=linked(raw);
+   const e=index.get(c.event_id),entity=index.get(c.entity_id);let slots=[],projectionInputs=[];
++  const specification=outputBinding(e);
+   if(c.kind==='ROLE'&&positive(e??{}))slots=c.role==='INPUT_OBJECT'?['I']:['RESULT','DELIVERABLE'].includes(c.role)?['O']:c.role==='BASIS'?['V']:['PERFORMER','ORGANIZER','REVIEWER','APPROVER','RECIPIENT','COLLABORATOR'].includes(c.role)?['P']:[];
+   if(c.kind==='ROLE'&&['PERFORMER','ORGANIZER','REVIEWER','APPROVER','RECIPIENT','COLLABORATOR'].includes(c.role)&&e?.layer==='CONDITION'&&e.use==='MENTION_ONLY'&&governingConditions.has(e.id)){slots=['P'];projectionInputs=governingConditions.get(e.id);}
+   if(c.kind==='QUANTITY'&&positive(e??{}))slots=c.quantity.use==='EXECUTION_LIMIT'?['R']:[];
+@@ -71,11 +75,12 @@
+     else if(positive(e??{})&&(c.scope_id===c.event_id||c.scope_id==='ROOT'))slots=['A'];
+    }
+   }
++  if(specification){slots=['O'];projectionInputs.push(specification.id);}
+   const ids=[c.id,c.entity_id,c.expression_id,c.event_id,...(e?.constraint_ids??[]),...projectionInputs];
+   const quantities=c.kind==='ROLE'&&['RESULT','DELIVERABLE'].includes(c.role)?g.claims.filter(q=>q.kind==='QUANTITY'&&q.quantity?.use==='OUTPUT_CONTENT'&&q.quantity.target_id===c.entity_id&&q.event_id===c.event_id).map(linked):[];
+   const contentScopes=c.kind==='ROLE'&&['RESULT','DELIVERABLE'].includes(c.role)?g.claims.filter(q=>q.kind==='SCOPE'&&q.scope_id===c.entity_id&&q.event_id===c.event_id).map(q=>({...linked(q),expression:expression(q.expression_id)})):[];
+   const bindingStatus=c.kind==='ROLE'?status([c.id,c.entity_id]):null;
+-  make(c.kind,[...ids,...quantities.map(q=>q.id),...contentScopes.map(q=>q.id)],{claim:c,event:e??null,entity:entity??null,expression:expression(c.expression_id),constraints:e?constraints(e):[],content_quantities:quantities,content_scopes:contentScopes,...(bindingStatus?{binding_status:bindingStatus,context_status:status(ids),binding_acceptance_is_not_event_acceptance:true}:{})},slots);
++  make(c.kind,[...ids,...quantities.map(q=>q.id),...contentScopes.map(q=>q.id)],{claim:c,event:e??null,entity:entity??null,expression:expression(c.expression_id),constraints:e?constraints(e):[],content_quantities:quantities,content_scopes:contentScopes,...(specification?{output_specification:{producer_result_id:specification.id,artifact_id:specification.entity_id,producer_event_id:specification.event_id,scope:'OUTPUT_BEHAVIOR_NOT_TASK_EXECUTION'}}:{}),...(bindingStatus?{binding_status:bindingStatus,context_status:status(ids),binding_acceptance_is_not_event_acceptance:true}:{})},slots);
+  }
+  for(const a of artifacts.availability.filter(x=>x.eligible)){
+   const {id,...data}=a;make('ARTIFACT_AVAILABILITY',a.provenance_refs,{...data,relation_id:id,event:null,claim:null,constraints:[]},[]);
+@@ -87,7 +92,7 @@
+  return {ir,canonical,chinese:renderChinese(canonical)};
+ }
+ const modality={REQUIRED:'必须',PERMITTED:'允许',FORBIDDEN:'禁止',NOT_REQUIRED:'无需',UNSTATED:'未陈述模态'};
+-function exprText(x,name=id=>id,eventText=id=>id){if(!x)return '';if(x.op==='STATE')return `${x.state?.predicate}(${(x.state?.args??[]).map(name).join(',')})${x.state?.event_id?`；所指事件=${eventText(x.state.event_id)}`:''} [${x.state?.polarity};运行值UNKNOWN]`;if(x.op==='ITEM')return `ITEM(${x.operands.map(name).join(',')})`;return `${x.op}(${(x.children??[]).map(child=>exprText(child,name,eventText)).join(',')})`;}
++function exprText(x,name=id=>id,eventText=id=>id){if(!x)return '';if(x.op==='TEST')return `属性约束：${name(x.test.target_id)}${x.test.property_path.length?'.'+x.test.property_path.join('.'):''} ${x.test.operator} ${JSON.stringify(x.test.value)} [运行值UNKNOWN]`;if(x.op==='STATE')return `${x.state?.predicate}(${(x.state?.args??[]).map(name).join(',')})${x.state?.event_id?`；所指事件=${eventText(x.state.event_id)}`:''} [${x.state?.polarity};运行值UNKNOWN]`;if(x.op==='ITEM')return `ITEM(${x.operands.map(name).join(',')})`;return `${x.op}(${(x.children??[]).map(child=>exprText(child,name,eventText)).join(',')})`;}
+ export function renderChinese(c){
+  const names={I:'输入与作用域',O:'交付与结果',A:'正向动作',P:'参与关系',R:'执行量化限制',V:'版本与依据',C:'完成与停止',B:'禁止与限制'};
+  const roleNames={PERFORMER:'执行者',ORGANIZER:'组织者',REVIEWER:'复核者',APPROVER:'批准者',RECIPIENT:'接收者',COLLABORATOR:'协作者',INPUT_OBJECT:'输入/受检对象',OBJECT:'对象',RESULT:'产生结果',DELIVERABLE:'交付产物',BASIS:'依据',CONTENT:'内容'};
+@@ -111,7 +116,7 @@
+    else t=`${({COMPLETION:'任务完成',STOP:'任务停止/升级',SCOPE:'作用域'})[f.kind]??f.kind} ${directionNames[cl?.direction]??''} ${expressionText(f.expression)}；目标=${name(cl?.scope_id)}`;
+    const cond=f.constraints.map(x=>x.kind==='QUANTITY'?quantityText(x.quantity):`${directionNames[x.direction]??x.kind} ${x.temporal==='AFTER'?'之后':x.temporal==='BEFORE'?'之前':''} ${expressionText(x.expression)}`).join('；');
+    const content=f.content_quantities?.map(x=>quantityText(x.quantity)).join('；');
+-   lines.push(`- [${f.status}] ${t}${cond?'；'+cond:''}${content?'；产物内容数量='+content:''}（${f.id}）`);
++   lines.push(`- [${f.status}] ${f.output_specification?'产物内部行为要求（不要求当前执行）：'+name(f.output_specification.artifact_id)+'；':''}${t}${cond?'；'+cond:''}${content?'；产物内容数量='+content:''}（${f.id}）`);
+   }
+  }
+  lines.push('\n## 产物关联与可用性依赖（不等于事件强顺序）');
+@@ -127,14 +132,14 @@
+  for(const g of c.gaps)lines.push(`- 覆盖缺口：${g.note??g.reason??g.id}`);
+  return lines.join('\n')+'\n';
+ }
+-export function evaluateExpression(expressions,id,observations={}){
++export function evaluateExpression(expressions,id,observations={},testObservations={}){
+  const index=new Map(expressions.map(e=>[e.id,e]));
+  const atom=x=>JSON.stringify([x.state.predicate,x.state.event_id,x.state.args]);
+  const known=new Map(),reachable=new Map();let conflict=false;
+  const collect=(key,path=[])=>{const x=index.get(key);if(!x||path.includes(key))return;if(x.op==='STATE'&&x.state)reachable.set(atom(x),x);else for(const child of x.operands??[])collect(child,[...path,key]);};collect(id);
+  for(const x of expressions)if(x.op==='STATE'&&x.state&&reachable.has(atom(x))&&typeof observations[x.id]==='boolean'){const value=x.state.polarity==='NEGATIVE'?!observations[x.id]:observations[x.id],k=atom(x);if(known.has(k)&&known.get(k)!==value)conflict=true;known.set(k,value);}
+  if(conflict)return 'UNKNOWN';
+- const run=(key,assigned=known,path=[])=>{const x=index.get(key);if(!x||path.includes(key))return 'UNKNOWN';if(x.op==='STATE'){if(!x.state||!assigned.has(atom(x)))return 'UNKNOWN';const value=assigned.get(atom(x));return (x.state.polarity==='NEGATIVE'?!value:value)?'TRUE':'FALSE';}if(x.op==='ITEM')return new Set(x.operands);const values=x.operands.map(k=>run(k,assigned,[...path,key]));if(x.op==='NOT')return values[0]==='TRUE'?'FALSE':values[0]==='FALSE'?'TRUE':'UNKNOWN';if(['AND','ALL'].includes(x.op))return values.includes('FALSE')?'FALSE':values.every(v=>v==='TRUE')?'TRUE':'UNKNOWN';if(['OR','ANY'].includes(x.op))return values.includes('TRUE')?'TRUE':values.every(v=>v==='FALSE')?'FALSE':'UNKNOWN';if(!values.every(v=>v instanceof Set))return 'UNKNOWN';if(x.op==='UNION')return new Set(values.flatMap(v=>[...v]));if(x.op==='INTERSECTION')return new Set([...values[0]].filter(v=>values.every(s=>s.has(v))));if(x.op==='EXCEPT')return new Set([...values[0]].filter(v=>!values[1].has(v)));return 'UNKNOWN';};
++ const run=(key,assigned=known,path=[])=>{const x=index.get(key);if(!x||path.includes(key))return 'UNKNOWN';if(x.op==='TEST')return evaluatePropertyTest(x.test,testObservations[key]);if(x.op==='STATE'){if(!x.state||!assigned.has(atom(x)))return 'UNKNOWN';const value=assigned.get(atom(x));return (x.state.polarity==='NEGATIVE'?!value:value)?'TRUE':'FALSE';}if(x.op==='ITEM')return new Set(x.operands);const values=x.operands.map(k=>run(k,assigned,[...path,key]));if(x.op==='NOT')return values[0]==='TRUE'?'FALSE':values[0]==='FALSE'?'TRUE':'UNKNOWN';if(['AND','ALL'].includes(x.op))return values.includes('FALSE')?'FALSE':values.every(v=>v==='TRUE')?'TRUE':'UNKNOWN';if(['OR','ANY'].includes(x.op))return values.includes('TRUE')?'TRUE':values.every(v=>v==='FALSE')?'FALSE':'UNKNOWN';if(!values.every(v=>v instanceof Set))return 'UNKNOWN';if(x.op==='UNION')return new Set(values.flatMap(v=>[...v]));if(x.op==='INTERSECTION')return new Set([...values[0]].filter(v=>values.every(s=>s.has(v))));if(x.op==='EXCEPT')return new Set([...values[0]].filter(v=>!values[1].has(v)));return 'UNKNOWN';};
+  const result=run(id);if(result!=='UNKNOWN')return result;
+  // Finite Boolean fragment only; no inferred business observations or unbounded solver.
+  const unknown=[...reachable.keys()].filter(k=>!known.has(k));if(unknown.length>10)return 'UNKNOWN';let invariant=null;
+@@ -150,8 +155,8 @@
+  const compare={EQ:()=>observed===q.value,LT:()=>observed<q.value,LTE:()=>observed<=q.value,GT:()=>observed>q.value,GTE:()=>observed>=q.value}[q.comparator];
+  return compare?(compare()?'TRUE':'FALSE'):'UNKNOWN';
+ }
+-export function evaluateCondition(claim,expressions,observations={}){
+- const value=evaluateExpression(expressions,claim.expression_id,observations);
++export function evaluateCondition(claim,expressions,observations={},testObservations={}){
++ const value=evaluateExpression(expressions,claim.expression_id,observations,testObservations);
+  return {target_id:claim.event_id??claim.scope_id,direction:claim.direction,temporal:claim.temporal,condition_value:value,
+   necessary_precondition:claim.direction==='NECESSARY'||claim.direction==='IFF'?value:null,
+   sufficient_trigger:claim.direction==='SUFFICIENT'||claim.direction==='IFF'?value:null,
+--- a/research/7plus1-parser/llm-first-028/contracts/compact-wire.md
++++ b/research/7plus1-parser/llm-first-028/contracts/compact-wire.md
+@@ -1,4 +1,6 @@
+ # 精简传输接口 r01
++
++031-r1.3-additive：events新增specifies_result_id，非产物内部行为为null。表达式新增TEST分支，仅输出test与来源，不输出固定operands=[]、state=null；程序机械展开。STATE及集合/逻辑分支的test必须null。内部属性测试、结果绑定和层级都是LLM的语义选择，程序不从词汇补齐。PROPERTY_CONSTRAINT与OUTPUT_BEHAVIOR按共享合同核查结构；旧响应缺省只代表未表达。
+ 
+ 本资源追加031-r1.2-additive：GROUP.members、quantity.distribution、coverage.requirement_kind和audit.source_checks在本次wire中显式填写。普通实体members=null；未表达distribution=null不是AGGREGATE。MEMBERS只表达显式GROUP的成员域；程序不从文字补成员、量词或限定对象。WORK_PLAN是保留计划数量的用途，不自动进入R。旧内部响应只作标记后的消费者回放，不继承新Skill验收成绩。
+ 
+--- a/research/7plus1-parser/llm-first-028/contracts/schema.mjs
++++ b/research/7plus1-parser/llm-first-028/contracts/schema.mjs
+@@ -15,13 +15,14 @@
+ // The compact output Schema makes every field explicit for new model responses.
+ const extended=(shape,properties)=>({...shape,properties:{...shape.properties,...properties}});
+ const quantity=extended(obj({metric:id,target_id:id,comparator:en('EQ','LT','LTE','GT','GTE'),value:{type:'number'},unit:id,use:en('EXECUTION_LIMIT','OUTPUT_CONTENT','COMPLETION_THRESHOLD','CLASSIFICATION_THRESHOLD','WORK_PLAN'),count_scope:id}),{distribution:nil(obj({mode:en('AGGREGATE','EACH'),domain_id:nil(id)}))});
+-const requirement=en('GENERAL','RESTRICTION','QUANTITY_TOTAL','QUANTITY_EACH','WORK_PLAN','NON_BOUNDARY');
++const requirement=en('GENERAL','RESTRICTION','QUANTITY_TOTAL','QUANTITY_EACH','WORK_PLAN','NON_BOUNDARY','PROPERTY_CONSTRAINT','OUTPUT_BEHAVIOR');
++const propertyTest=obj({target_id:id,event_id:nil(id),property_path:arr(id),operator:en('EQ','NEQ','IN','NOT_IN','LT','LTE','GT','GTE','EMPTY','NONEMPTY','EXISTS','NOT_EXISTS','UNCHANGED'),value:{anyOf:[{type:'string'},{type:'number'},{type:'boolean'},{type:'null'},{type:'array',items:{anyOf:[{type:'string'},{type:'number'},{type:'boolean'}]}}]}});
+ export const proposalSchema=obj({
+  contract_version:{const:contractVersion,type:'string'},
+  entities:arr(extended(obj({id,label:id,type:en('PERSON','FILE','SYSTEM','DOCUMENT','GROUP','REFERENT','OTHER'),mentions:sources,alternatives:ids}),{members:nil(ids)})),
+- events:arr(obj({id,predicate:id,kind:en('ACTION','STATE'),layer:en('MAIN','CONDITION','QUOTED','MODIFIER','PURPOSE','CONTENT','BACKGROUND'),use:en('CURRENT_TASK','MENTION_ONLY'),modality:en('REQUIRED','PERMITTED','NOT_REQUIRED','FORBIDDEN','UNSTATED'),polarity:en('POSITIVE','NEGATIVE'),owner_id:id,constraint_ids:ids,requires:ids,sources})),
++ events:arr(extended(obj({id,predicate:id,kind:en('ACTION','STATE'),layer:en('MAIN','CONDITION','QUOTED','MODIFIER','PURPOSE','CONTENT','BACKGROUND'),use:en('CURRENT_TASK','MENTION_ONLY'),modality:en('REQUIRED','PERMITTED','NOT_REQUIRED','FORBIDDEN','UNSTATED'),polarity:en('POSITIVE','NEGATIVE'),owner_id:id,constraint_ids:ids,requires:ids,sources}),{specifies_result_id:nil(id)})),
+  claims:arr(obj({id,kind:en('ROLE','CONDITION','TEMPORAL','QUANTITY','COMPLETION','STOP','SCOPE','ARTIFACT_USE'),event_id:nil(id),entity_id:nil(id),role:nil(en(...roles)),expression_id:nil(id),direction:nil(en('NECESSARY','SUFFICIENT','IFF','ORDER')),temporal:nil(en('AFTER','BEFORE')),quantity:nil(quantity),artifact_use:nil(obj({producer_result_id:id,consumer_role_id:id,availability:en('USED_PORTION','COMPLETE_RESULT')})),scope_id:id,requires:ids,sources,note:s})),
+- expressions:arr(obj({id,op:en('STATE','ITEM','MEMBERS','ALL','ANY','UNION','INTERSECTION','EXCEPT','AND','OR','NOT'),operands:ids,state:nil(obj({predicate:id,event_id:nil(id),args:ids,polarity:en('POSITIVE','NEGATIVE')})),sources})),
++ expressions:arr(extended(obj({id,op:en('STATE','TEST','ITEM','MEMBERS','ALL','ANY','UNION','INTERSECTION','EXCEPT','AND','OR','NOT'),operands:ids,state:nil(obj({predicate:id,event_id:nil(id),args:ids,polarity:en('POSITIVE','NEGATIVE')})),sources}),{test:nil(propertyTest)})),
+  issues:arr(obj({id,kind:en('AMBIGUITY','UNSPECIFIED','COVERAGE_GAP'),subject_ids:ids,field_path:s,alternatives:ids,affected_views:affected,sources,note:s})),
+  coverage:arr(extended(obj({sources,claim_ids:ids,status:en('EXPRESSED','BACKGROUND','UNSPECIFIED','GAP'),affected_views:affected}),{requirement_kind:requirement}))
+ });
+--- a/research/7plus1-parser/llm-first-028/contracts/semantic-contract.md
++++ b/research/7plus1-parser/llm-first-028/contracts/semantic-contract.md
+@@ -1,4 +1,19 @@
+ # BoundX 语义合同 031-r1.1
++
++## 可计算属性与产物行为（031-r1.3-additive；优先于下文旧字段列表）
++
++结构兼容版本仍为031-r1.1，实际资源摘要区分031-r1.3。新增TEST表达式与events.specifies_result_id。新wire必须填全部字段；旧响应可缺省为未表达，不继承新模型验收。
++
++- TEST是一项原文明示的原子属性约束：test={target_id,event_id,property_path,operator,value}。target_id为具体实体/事件；property_path为来源支持的属性层次数组，[]表示对象本身；event_id为属性所属用途，未说明才null。不得从注释、对象标签或predicate字符串机械补测试。
++- operator为EQ/NEQ、IN/NOT_IN、LT/LTE/GT/GTE、EMPTY/NONEMPTY、EXISTS/NOT_EXISTS、UNCHANGED。前四种大小比较用数字；IN/NOT_IN用明示非空有限字面值数组；EMPTY/NONEMPTY、EXISTS/NOT_EXISTS、UNCHANGED的value=null；EQ/NEQ用原文明示的单个字面值。类别全称、方法调用、业务授权不由IN或EXISTS替代。属性路径不能冒充整句说明。
++- TEST没有state和operands。多个独立属性分别TEST，合取/析取/否定用AND/OR/NOT；条件方向仍在CONDITION上。仅提到一个字符串或枚举不是要求其成立。真正的完成/批准等事件状态仍用STATE；不得把条件、例外、方法和后果整段合并成一个不透明predicate。
++- 产物内部行为：CONTENT层、MENTION_ONLY事件用specifies_result_id显式引用所属生产者的RESULT主张；owner_id等于该RESULT的event_id。来源必须覆盖产物和行为。其角色、条件、模态保留，作为O的规格要求，不新增当前A/B/C执行义务。内部REQUIRED表示产物必须具备该行为；FORBIDDEN表示产物不得具备该行为。没有唯一产物绑定时保留局部GAP，不借最近对象。
++- 原文要求实现的函数加载/调用某个输入，分别保留CONTENT行为及其OBJECT、条件、来源；只有原文明确当前内部产物供另一个当前事件使用时才建立ARTIFACT_USE。产物内部“应拒绝”不能变成当前禁止批准/提交；被要求实现的行为与当前实际执行分开。
++- 如可明确表示操作方式、启用模式、保留既有状态，用SCOPE绑定具体操作/产物和TEST/Boolean表达式，不把复合政策塞进OTHER名称后用ITEM冒充可计算限定。仅opt-in若原文的限制对象仍竞争，保留局部歧义；不得因新增TEST就代替作者选择。
++- coverage和source_checks新增PROPERTY_CONSTRAINT、OUTPUT_BEHAVIOR：前者须引用实际SCOPE/CONDITION及可达TEST，后者须引用显式specifies_result_id的行为或主张。普通CONTENT、ITEM和note不满足这些声明。无法表达的明确要求记录GAP及最小缺失，不报告完整解析。
++- 程序对TEST只使用提供的运行观测tests[expression_id]={target_id,event_id,property_path,known:true,value}；UNCHANGED需unchanged布尔，EXISTS/NOT_EXISTS需exists布尔。对象/用途/路径不匹配或缺少观测为UNKNOWN，不读取业务文件。UNKNOWN观测不是源文语义缺口，未命中禁止不是许可。
++- ARTIFACT_USE、TEMPORAL、owner与requires仍互不替代。只有明确先后形成时间边，不给每个含owner的阶段自动加调度边，不把产品内容比较变成资源R。先检查完整原文的明确用途与流程，再生成结构；逐项source_checks独立复核。
++
+ 
+ 结构合同兼容标记仍为031-r1.1；本资源修订为031-r1.2-additive，冻结摘要区分版本。新增字段在旧响应回放中允许缺省为未表达，不把旧响应当作新版本模型验收；本次wire输出必须显式填写新增字段。
+ 
+--- a/research/7plus1-parser/llm-first-028/engine.mjs
++++ b/research/7plus1-parser/llm-first-028/engine.mjs
+@@ -11,8 +11,9 @@
+ import {technicalRevisionFeedback,auditBindingRevisionFeedback} from './revision.mjs';
+ import {modelSignal} from './observability.mjs';
+ export const writeJSON=(file,data)=>fs.writeFileSync(file,JSON.stringify(data,null,2)+'\n');
+-export const compilerRevision='031-r1-c6';
+-export function replay7Plus1(bytes,{output,replayFrom}){
++export const compilerRevision='031-r1-c7';
++export function replay7Plus1(bytes,{output,replayFrom,resourceGuard=()=>{},productSnapshot=null}){
++ resourceGuard();
+  const source=prepareSource(bytes),tracePath=path.join(replayFrom,'trace.json');
+  const prior=JSON.parse(fs.readFileSync(tracePath,'utf8'));
+  if(prior.source.sha256!==source.sha256)throw Error('REPLAY_SOURCE_DIGEST_MISMATCH');
+@@ -24,13 +25,14 @@
+  fs.mkdirSync(output,{recursive:true});
+  if(fs.existsSync(path.join(output,'source.txt')))throw Error('OUTPUT_ALREADY_EXISTS');
+  fs.writeFileSync(path.join(output,'source.txt'),bytes);writeJSON(path.join(output,'source.json'),source);writeJSON(path.join(output,'implementation.json'),implementationInventory());
+- const technical=technicalValidate(source,prior.proposal,prior.audit);
++ const technical=technicalValidate(source,prior.proposal,prior.audit,{requireSourceAudit:true});
+  const compiled=compileBoundary(source,prior.proposal,prior.audit,technical);
+- const replay={...(prior.parse_method?{parse_method:prior.parse_method}:{}),source,proposal:prior.proposal,audit:prior.audit,technical,...compiled,model_calls:prior.model_calls,revision:prior.revision,execution_mode:'FROZEN_RESPONSE_REPLAY',origin_trace:{path:path.resolve(tracePath),sha256:sha256(fs.readFileSync(tracePath))},real_calls_in_this_replay:0};
+- for(const [file,data] of Object.entries({'proposal.json':replay.proposal,'audit.json':replay.audit,'technical-validation.json':technical,'boundary-ir.json':compiled.ir,'7plus1.json':compiled.canonical,'trace.json':replay}))writeJSON(path.join(output,file),data);
+- fs.writeFileSync(path.join(output,'7plus1.zh.md'),compiled.chinese);
++ const boundary_calculations=calculateBoundary(compiled.ir),chinese=compiled.chinese+renderCalculations(boundary_calculations);
++ const replay={...(prior.parse_method?{parse_method:prior.parse_method}:{}),product_snapshot:productSnapshot,model_origin_product_snapshot:prior.product_snapshot??null,consumer_revision:compilerRevision,source,proposal:prior.proposal,audit:prior.audit,technical,...compiled,chinese,boundary_calculations,model_calls:prior.model_calls,revision:prior.revision,execution_mode:'FROZEN_RESPONSE_REPLAY',origin_trace:{path:path.resolve(tracePath),sha256:sha256(fs.readFileSync(tracePath))},real_calls_in_this_replay:0};
++ for(const [file,data] of Object.entries({'proposal.json':replay.proposal,'audit.json':replay.audit,'technical-validation.json':technical,'boundary-ir.json':compiled.ir,'7plus1.json':compiled.canonical,'boundary-calculations.json':boundary_calculations,'trace.json':replay}))writeJSON(path.join(output,file),data);
++ fs.writeFileSync(path.join(output,'7plus1.zh.md'),chinese);
+  writeJSON(path.join(output,'run-summary.json'),{execution_mode:replay.execution_mode,real_calls:0,replays:1,origin_trace:replay.origin_trace,slot_status:Object.fromEntries(Object.entries(compiled.canonical.slots).map(([k,v])=>[k,v.status]))});
+- return replay;
++ resourceGuard();return replay;
+ }
+ export async function parse7Plus1(bytes,{output,probe,model='gpt-6.1-sol',reasoning='medium',parseMethod=null,semanticRevision=true,signal,onProgress=()=>{},timeoutMs=null,call=callCodex,maxModelRequests,resourceGuard=()=>{},productSnapshot=null}={}){
+  if(parseMethod==='MD')throw Error('MD_COMPARISON_STOPPED');
+@@ -43,7 +45,7 @@
+  onProgress({stage:'PREPARING'});probe??=probeCodex();
+  fs.writeFileSync(path.join(output,'source.txt'),bytes);writeJSON(path.join(output,'source.json'),source);writeJSON(path.join(output,'environment.json'),probe);writeJSON(path.join(output,'implementation.json'),implementationInventory());
+  const parse=buildBundle('parse',{parseMethod}),auditBundle=buildBundle('audit',{parseMethod});
+- const methodEvidence={parse_method:'SKILL',resource_profile:'SEMANTIC_CLOSURE_R01',request_profile:parse.request_profile,transport_version:parse.transport_version,selected_resources:{parse:bundleEvidence(parse),audit:bundleEvidence(auditBundle)}};
++ const methodEvidence={parse_method:'SKILL',resource_profile:'SEMANTIC_CLOSURE_R02',request_profile:parse.request_profile,transport_version:parse.transport_version,selected_resources:{parse:bundleEvidence(parse),audit:bundleEvidence(auditBundle)}};
+  writeJSON(path.join(output,'selected-resources.json'),methodEvidence);
+  const lockedRuntime=JSON.stringify(runtimeInventory());
+  const passes=[];
+--- a/research/7plus1-parser/llm-first-028/identity.mjs
++++ b/research/7plus1-parser/llm-first-028/identity.mjs
+@@ -34,7 +34,7 @@
+  for(const collection of groups)for(const [i,node] of value[collection].entries()){
+   const p=`/${collection}/${i}`;many(node,'requires',p);
+   if(collection==='entities'){many(node,'alternatives',p,'entities');many(node,'members',p,'entities');}
+-  if(collection==='events'){bind(node,'owner_id',p+'/owner_id','events');many(node,'constraint_ids',p,'claims');}
++  if(collection==='events'){bind(node,'owner_id',p+'/owner_id','events');bind(node,'specifies_result_id',p+'/specifies_result_id','claims');many(node,'constraint_ids',p,'claims');}
+   if(collection==='claims'){
+    bind(node,'event_id',p+'/event_id','events');bind(node,'entity_id',p+'/entity_id','entities');bind(node,'expression_id',p+'/expression_id','expressions');bind(node,'scope_id',p+'/scope_id');
+    if(node.quantity){bind(node.quantity,'target_id',p+'/quantity/target_id',['EXECUTION_LIMIT','WORK_PLAN'].includes(node.quantity.use)?'events':node.quantity.use==='OUTPUT_CONTENT'?'entities':null);bind(node.quantity,'count_scope',p+'/quantity/count_scope');if(node.quantity.distribution)bind(node.quantity.distribution,'domain_id',p+'/quantity/distribution/domain_id','expressions');}
+@@ -43,6 +43,7 @@
+   if(collection==='expressions'){
+    many(node,'operands',p,node.op==='ITEM'?'entities':'expressions');
+    if(node.state){bind(node.state,'event_id',p+'/state/event_id','events');many(node.state,'args',p+'/state');}
++   if(node.test){bind(node.test,'event_id',p+'/test/event_id','events');bind(node.test,'target_id',p+'/test/target_id');}
+   }
+   if(collection==='issues'){many(node,'subject_ids',p);many(node,'alternatives',p);}
+   // A qualified field path explicitly identifies a collection. Unqualified prose is untouched.
+--- a/research/7plus1-parser/llm-first-028/revision.mjs
++++ b/research/7plus1-parser/llm-first-028/revision.mjs
+@@ -1,5 +1,10 @@
+ // Technical feedback is generated from actual validator rows, never from source keywords.
+ const repairable={
++ PROPERTY_TEST_ARGUMENT_OWNERSHIP:['test.target_id','The exact test target must be this event or its explicitly declared role endpoint. Do not borrow a neighboring object.'],
++ PROPERTY_SCOPE_ARGUMENT_OWNERSHIP:['expression_id','Property scope must own each tested target through this scope or this event role; preserve the constraint rather than substituting another target.'],
++ PROPERTY_TEST_SIGNATURE:['test','TEST requires target_id, event_id, property_path, operator and value, with no state or operands.'],
++ OUTPUT_BEHAVIOR_OWNER_BINDING:['specifies_result_id','A CONTENT/MENTION_ONLY behavior explicitly references a RESULT claim of its owning producer event. Never promote product behavior to current execution.'],
++ OUTPUT_BEHAVIOR_SOURCE_BINDING:['sources','Provide exact sources linking this behavior to its producing RESULT.'],
+  GROUP_MEMBER_BINDING:['members','Declare only source-supported entity members of a GROUP; null means the membership is unspecified, not an empty set.'],
+  STATE_EVENT_ARGUMENT_OWNERSHIP:['state.args','Bind state arguments to roles of this exact event, or a source-declared subset through GROUP.members. Do not substitute a broader group or borrow another event argument.'],
+  EACH_QUANTITY_DOMAIN:['quantity.distribution','EACH needs a set-expression domain; MEMBERS(ITEM(group)) selects members, while ITEM(group) selects the group as a single item. Preserve the explicit per-member requirement.'],
+--- a/research/7plus1-parser/llm-first-028/service.mjs
++++ b/research/7plus1-parser/llm-first-028/service.mjs
+@@ -13,8 +13,9 @@
+ import {modelCatalog,requestSettings,publicProgress,partialArtifacts,savedCallHistory} from './observability.mjs';
+ import {sessionActivity} from './model-activity.mjs';
+ const loadedRuntime=JSON.stringify(runtimeInventory());
+-const resourceProfile='SEMANTIC_CLOSURE_R01';
+-const resourceEvidence=()=>({parse_method:'SKILL',resource_profile:resourceProfile,selected_resources:{parse:bundleEvidence(buildBundle('parse')),audit:bundleEvidence(buildBundle('audit'))}});
++const resourceProfile='SEMANTIC_CLOSURE_R02';
++const resourceFingerprint=()=>sha256(JSON.stringify([buildBundle('parse').sha256,buildBundle('audit').sha256,compilerRevision,sha256(loadedRuntime)]));
++const resourceEvidence=()=>({parse_method:'SKILL',resource_profile:resourceProfile,request_profile:requestProfile,effective_resource_sha256:resourceFingerprint(),selected_resources:{parse:bundleEvidence(buildBundle('parse')),audit:bundleEvidence(buildBundle('audit'))}});
+ export const WEB=path.resolve(ROOT,'../v0.3-p2.1-generalization/web');
+ export const DATA=process.env.BOUNDX_DATA_DIR?path.resolve(process.env.BOUNDX_DATA_DIR):path.resolve(ROOT,'../../../.boundx/7plus1-short');
+ const ID=/^[a-f0-9]{8}(?:-[a-f0-9]{4}){3}-[a-f0-9]{12}$/;
+@@ -99,7 +100,7 @@
+     if(JSON.stringify(runtimeInventory())!==loadedRuntime)return send(409,{error:'STALE_CODE_RESTART_REQUIRED'});
+     const bytes=input.base64!==undefined?Buffer.from(input.base64,'base64'):Buffer.from(input.text,'utf8');const source=prepareSource(bytes);
+     const prior=[...records.values()].find(r=>r.request_id===input.request_id);
+-    if(prior)return prior.source_sha256===source.sha256&&prior.requested_model===settings.model&&(prior.requested_reasoning??'medium')===settings.reasoning&&(prior.parse_method??'SKILL')===method&&prior.resource_profile===resourceProfile&&prior.request_profile===requestProfile?send(200,summary(prior)):send(409,{error:'REQUEST_ID_SOURCE_MISMATCH'});
++    if(prior)return prior.source_sha256===source.sha256&&prior.requested_model===settings.model&&(prior.requested_reasoning??'medium')===settings.reasoning&&(prior.parse_method??'SKILL')===method&&prior.resource_profile===resourceProfile&&prior.request_profile===requestProfile&&prior.effective_resource_sha256===resourceFingerprint()?send(200,summary(prior)):send(409,{error:'REQUEST_ID_SOURCE_MISMATCH'});
+     if(active.size)return send(409,{error:'COMPILER_BUSY'});
+     const id=randomUUID(),controller=new AbortController(),created_at=new Date().toISOString();fs.mkdirSync(folder(id));
+     record={run_id:id,request_id:input.request_id,created_at,status:'QUEUED',stage:'QUEUED',source_text:source.text,source_sha256:source.sha256,codepoints:source.codepoints,filename:typeof input.filename==='string'?path.basename(input.filename).slice(0,100):'pasted-task.txt',engine:'BoundX 7+1 compiler',contract:buildBundle('parse').schema.properties.contract_version.const,skill_mode:'INLINE_BUNDLE',native_skill_loading:'NOT_VERIFIED',requested_model:'gpt-6.1-sol',actual_model:null,execution_mode:'LIVE_CODEX',stages:[{stage:'QUEUED',at:created_at}]};
+--- a/research/7plus1-parser/llm-first-028/skills/boundx-semantic-audit/SKILL.md
++++ b/research/7plus1-parser/llm-first-028/skills/boundx-semantic-audit/SKILL.md
+@@ -4,6 +4,8 @@
+ ---
+ 
+ # 原文优先的语义审阅
++
++本资源修订031-r1.3：独立核查可计算属性与产物行为。将政策整段塞进OTHER标签/CONTENT、用ITEM包政策或用一个STATE.predicate隐藏条件和例外，不能仅因quote真实而SUPPORT完整表达。明示属性须有TEST及正确对象/用途/路径/算子/值，source_checks用PROPERTY_CONSTRAINT；明示产物内部行为须CONTENT/MENTION_ONLY及正确specifies_result_id，source_checks用OUTPUT_BEHAVIOR。其REQUIRED/FORBIDDEN不变成当前A/B/C业务执行。逐函数/产物核对参数、调用、结果和条件；函数加载另一个产物不同于当前执行者已经加载。审阅当前内部产物使用和明确阶段先后是否缺少ARTIFACT_USE/TEMPORAL，不凭owner推顺序。局部真实竞争继续UNSPECIFIED/UNCERTAIN，别通过TEST选定原文未唯一限定的opt-in对象。已无模型观测不会使明确属性结构变成语义未知。
+ 
+ 本资源修订031-r1.2-additive：先完成独立source_checks，再核对候选节点。逐原文义项保留限制、数量用途、角色、交付、依据、条件和阶段，给source_refs/requirement_kind/候选claim_ids/status/affected_views/短理由；不可仅审已有候选或以整段引文掩盖漏项。漏掉选择性/方式限制必须omissions和GAP。真正竞争可UNSPECIFIED，但不扩大为整个任务未知。
+ 
+--- a/research/7plus1-parser/llm-first-028/skills/boundx-semantic-parse/SKILL.md
++++ b/research/7plus1-parser/llm-first-028/skills/boundx-semantic-parse/SKILL.md
+@@ -4,6 +4,8 @@
+ ---
+ 
+ # ADMIN 任务语义解析
++
++本资源修订031-r1.3：先读共享合同的TEST和specifies_result_id。当前任务动作与产物内部行为分别表达，不能把产物要求的条件拒绝变成当前任务禁止，也不能把函数行为藏在一个CONTENT字符串。原子属性按明确对象、用途、属性路径、比较符和值生成TEST，多个约束用逻辑组合；普通ITEM只指对象，不表示对象名里写出的限定。存在/不变/有限枚举/空或非空按固定算子表达，不把类别全称当有限枚举。方法调用保留CONTENT行为和参数角色，不额外要求当前执行该方法。明确依赖保留ARTIFACT_USE及两端，明确先后保留TEMPORAL，不能用owner或note替代。逐义项coverage标PROPERTY_CONSTRAINT或OUTPUT_BEHAVIOR，不能表示的明确GAP；真实限制对象竞争继续保留。上述规则通用，不参考Gold答案，不补规划。
+ 
+ 本资源修订031-r1.2-additive：先核对共享合同新增的members/distribution/requirement_kind。逐义项保留限制；仅/only/opt-in等选择性条件不能只在引文或note出现，明确限制对象和必要前提，不能唯一绑定时保留局部GAP/疑点。EACH给出真正成员域；ITEM(group)不是该组所有成员。阶段/提交数量若为计划用WORK_PLAN，不按数字或单位自动当R。
+ 
+--- a/research/7plus1-parser/llm-first-028/validate.mjs
++++ b/research/7plus1-parser/llm-first-028/validate.mjs
+@@ -2,6 +2,7 @@
+ import {proposalSchema,auditSchema,views} from './contracts/schema.mjs';
+ import {linkSources} from './source.mjs';
+ import {isSetDomain} from './quantity-domain.mjs';
++import {propertyTestErrors} from './property-tests.mjs';
+ const ajv=new Ajv({allErrors:true,strict:false});
+ const validators={proposal:ajv.compile(proposalSchema),audit:ajv.compile(auditSchema)};
+ export function validateSchema(kind,value){const v=validators[kind];return {ok:v(value),errors:structuredClone(v.errors??[])};}
+@@ -37,6 +38,12 @@
+   }
+   if(x.collection==='events'){
+    if(!ref(x.owner_id,x.owner_id==='ROOT'?null:'events'))bad('BAD_STRUCTURAL_OWNER');
++   if(x.specifies_result_id!=null){
++    const result=index.get(x.specifies_result_id),producer=index.get(result?.event_id);
++    if(x.layer!=='CONTENT'||x.use!=='MENTION_ONLY'||result?.kind!=='ROLE'||result.role!=='RESULT'||x.owner_id!==result.event_id||producer?.use!=='CURRENT_TASK'||!['REQUIRED','PERMITTED'].includes(producer.modality))bad('OUTPUT_BEHAVIOR_OWNER_BINDING');
++    const covers=(result?.sources??[]).some(s=>{try{return linkSources(source,[s]).some(t=>linked.some(p=>p.span[0]<=t.span[0]&&p.span[1]>=t.span[1]));}catch{return false;}});
++    if(!covers)bad('OUTPUT_BEHAVIOR_SOURCE_BINDING');
++   }
+    for(const id of x.constraint_ids){const c=index.get(id);if(c?.collection!=='claims'||!['CONDITION','QUANTITY','TEMPORAL'].includes(c.kind)||c.event_id!==x.id)bad('CONSTRAINT_BINDING_MISSING',id);}
+    if(new Set(x.constraint_ids).size!==x.constraint_ids.length)bad('DUPLICATE_CONSTRAINT');
+   }
+@@ -94,7 +101,20 @@
+   }
+   if(x.collection==='expressions'){
+    const n=x.operands.length;
+-   if(x.op==='STATE'){
++   if(x.op!=='TEST'&&x.test!=null)bad('PROPERTY_TEST_MISPLACED');
++   if(x.op==='TEST'){
++    if(n!==0||x.state!==null||!x.test)bad('PROPERTY_TEST_SIGNATURE');
++    const t=x.test;
++    if(t){
++     for(const code of propertyTestErrors(t))bad(code);
++     if(!ref(t.target_id)||t.target_id==='ROOT'||!['entities','events'].includes(index.get(t.target_id)?.collection))bad('PROPERTY_TEST_TARGET');
++     if(t.event_id!==null){
++      if(!ref(t.event_id,'events'))bad('PROPERTY_TEST_EVENT_REFERENCE');
++      const owns=t.target_id===t.event_id||g.claims.some(c=>c.kind==='ROLE'&&c.event_id===t.event_id&&c.entity_id===t.target_id);
++      if(!owns)bad('PROPERTY_TEST_ARGUMENT_OWNERSHIP');
++     }
++    }
++   }else if(x.op==='STATE'){
+     if(!x.state||n!==0)bad('STATE_SIGNATURE');
+     if(x.state){
+      if(x.state.event_id!==null&&!ref(x.state.event_id,'events'))bad('STATE_EVENT_REFERENCE');
+@@ -134,18 +154,26 @@
+    &&reviews.every(r=>r.verdict==='SUPPORT'||r.field_path==='type'||r.field_path===''&&r.verdict==='UNCERTAIN');
+   rows.set(x.id,{id:x.id,collection:x.collection,status,direct_status:status,...(x.collection==='entities'?{identity_status:typeOnly?'ACCEPTED':status}:{}),errors,uncertain,sources:linked,audit_refs:reviews.map(r=>({subject_id:r.subject_id,field_path:r.field_path,verdict:r.verdict})),required_dependencies:x.requires??[],structural_refs:[],...(typeOnly?{unresolved_properties:['type'],identity_policy:'SOURCE_AND_IDENTITY_SUPPORTED_TYPE_METADATA_ONLY'}:{})});
+  }
++ const typedTests=(id,seen=new Set())=>{if(seen.has(id))return [];seen.add(id);const e=index.get(id);if(e?.op==='TEST')return rows.get(id)?.errors.length?[]:[id];return (e?.operands??[]).flatMap(k=>typedTests(k,seen));};
++ for(const c of g.claims.filter(c=>c.kind==='SCOPE')){
++  const targets=new Set([c.scope_id,...g.claims.filter(r=>r.kind==='ROLE'&&r.event_id===c.event_id).map(r=>r.entity_id)]);
++  for(const id of typedTests(c.expression_id)){const t=index.get(id).test;if(!targets.has(t.target_id)||t.event_id!==null&&t.event_id!==c.event_id){const row=rows.get(c.id);row.status='REJECTED';row.errors.push({code:'PROPERTY_SCOPE_ARGUMENT_OWNERSHIP',detail:id});}}
++ }
+  // Only real mandatory dependencies and identity/expression inputs propagate. Not owner/context edges.
+  const membersOf=(id,seen=new Set())=>{if(seen.has(id))return [];seen.add(id);return [id,...(index.get(id)?.members??[]).flatMap(k=>membersOf(k,seen))];};
+- const bindingRoles=x=>x.op==='STATE'&&x.state?.event_id?g.claims.filter(c=>c.kind==='ROLE'&&c.event_id===x.state.event_id&&x.state.args.some(id=>membersOf(id).some(k=>membersOf(c.entity_id).includes(k)))):[];
++ const bindingRoles=x=>x.op==='TEST'&&x.test?.event_id?g.claims.filter(c=>c.kind==='ROLE'&&c.event_id===x.test.event_id&&c.entity_id===x.test.target_id):x.op==='STATE'&&x.state?.event_id?g.claims.filter(c=>c.kind==='ROLE'&&c.event_id===x.state.event_id&&x.state.args.some(id=>membersOf(id).some(k=>membersOf(c.entity_id).includes(k)))):[];
++ const explicitDeps=x=>[...(x.test?[{id:x.test.target_id,full:false}]:[]),...(x.specifies_result_id?[{id:x.specifies_result_id,full:true}]:[])];
+  const deps=x=>[...(x.requires??[]).map(id=>({id,full:true})),...(x.members??[]).map(id=>({id,full:false})),...(x.quantity?.distribution?.domain_id?[{id:x.quantity.distribution.domain_id,full:true}]:[]),...bindingRoles(x).map(c=>({id:c.id,full:true})),...(x.kind==='ARTIFACT_USE'&&x.artifact_use?[x.artifact_use.producer_result_id,x.artifact_use.consumer_role_id].map(id=>({id,full:true})):[]),...(x.collection==='claims'&&x.entity_id?[{id:x.entity_id,full:false}]:[]),...(x.collection==='claims'&&x.expression_id?[{id:x.expression_id,full:true}]:[]),...(x.collection==='expressions'?(x.op==='ITEM'?x.operands:x.op==='STATE'?x.state?.args??[]:x.operands).map(id=>({id,full:index.get(id)?.collection!=='entities'})):[])];
+  const visit=(id,path=[])=>{
+   if(path.includes(id)){for(const k of path.slice(path.indexOf(id))){const r=rows.get(k);r.status='REJECTED';if(!r.errors.some(e=>e.code==='REQUIRED_DEPENDENCY_CYCLE'))r.errors.push({code:'REQUIRED_DEPENDENCY_CYCLE',detail:path});}return;}
+-  for(const d of deps(index.get(id)??{}))if(index.has(d.id))visit(d.id,[...path,id]);
++  for(const d of [...deps(index.get(id)??{}),...explicitDeps(index.get(id)??{})])if(index.has(d.id))visit(d.id,[...path,id]);
+  };
+  for(const x of items)visit(x.id);
+- for(let n=0;n<items.length;n++)for(const x of items){const r=rows.get(x.id);if(r.status==='ACCEPTED')for(const d of deps(x)){const dependency=rows.get(d.id);if(d.id!=='ROOT'&&(d.full?dependency?.status:dependency?.identity_status??dependency?.status)!=='ACCEPTED'){r.status='UNRESOLVED';if(r.identity_status)r.identity_status=r.status;r.uncertain.push('REQUIRED_DEPENDENCY:'+d.id);}}}
++ for(let n=0;n<items.length;n++)for(const x of items){const r=rows.get(x.id);if(r.status==='ACCEPTED')for(const d of [...deps(x),...explicitDeps(x)]){const dependency=rows.get(d.id);if(d.id!=='ROOT'&&(d.full?dependency?.status:dependency?.identity_status??dependency?.status)!=='ACCEPTED'){r.status='UNRESOLVED';if(r.identity_status)r.identity_status=r.status;r.uncertain.push('REQUIRED_DEPENDENCY:'+d.id);}}}
+  for(const x of items){const r=rows.get(x.id);r.structural_refs=[x.owner_id,x.scope_id,x.event_id,x.entity_id,x.expression_id,x.artifact_use?.producer_result_id,x.artifact_use?.consumer_role_id,x.quantity?.target_id,x.quantity?.count_scope,x.quantity?.distribution?.domain_id,...(x.members??[]),...bindingRoles(x).map(c=>c.id),...(x.constraint_ids??[]),...(x.state?.event_id?[x.state.event_id]:[])].filter(Boolean);}
+  // Follow only declared graph bindings. A ROLE can cite its own explicit
++ for(const x of items){rows.get(x.id).structural_refs.push(...explicitDeps(x).map(d=>d.id),...(x.test?.event_id?[x.test.event_id]:[]));}
++ const behavioralEvent=x=>x?.collection==='events'?x:x?.event_id?index.get(x.event_id):null;
+  // prohibition; merely mentioning an object, or quoting another task, cannot.
+  const restrictionEvidence=x=>{
+   if(!x||rows.get(x.id)?.errors.length)return null;
+@@ -158,6 +186,8 @@
+   for(const id of c.claim_ids)if(!ref(id))throw Error('COVERAGE_REFERENCE:'+id);
+   if(c.status==='EXPRESSED'){
+    const linked=c.claim_ids.map(id=>index.get(id));
++   if(c.requirement_kind==='PROPERTY_CONSTRAINT'&&!linked.some(x=>['SCOPE','CONDITION'].includes(x?.kind)&&rows.get(x.id)?.errors.length===0&&typedTests(x.expression_id).length))throw Error('PROPERTY_CONSTRAINT_UNREPRESENTED');
++   if(c.requirement_kind==='OUTPUT_BEHAVIOR'&&!linked.some(x=>{const e=behavioralEvent(x);return e?.specifies_result_id!=null&&rows.get(e.id)?.errors.length===0;}))throw Error('OUTPUT_BEHAVIOR_UNREPRESENTED');
+    if(c.requirement_kind==='QUANTITY_EACH'&&!linked.some(x=>x?.kind==='QUANTITY'&&rows.get(x.id)?.errors.length===0&&x.quantity?.distribution?.mode==='EACH'&&isSetDomain(g.expressions,g.entities,x.quantity.distribution.domain_id)))throw Error('EACH_REQUIREMENT_UNREPRESENTED');
+    if(c.requirement_kind==='QUANTITY_TOTAL'&&!linked.some(x=>x?.kind==='QUANTITY'&&x.quantity?.distribution?.mode==='AGGREGATE'))throw Error('AGGREGATE_REQUIREMENT_UNREPRESENTED');
+    if(c.requirement_kind==='WORK_PLAN'&&!linked.some(x=>x?.kind==='QUANTITY'&&x.quantity?.use==='WORK_PLAN'))throw Error('WORK_PLAN_REQUIREMENT_UNREPRESENTED');
+--- a/research/7plus1-parser/v0.3-p2.1-generalization/web/calculation-view.js
++++ b/research/7plus1-parser/v0.3-p2.1-generalization/web/calculation-view.js
+@@ -9,7 +9,8 @@
+  for(const f of trace.ir.facts.filter(x=>x.kind==='EVENT'))labels.set(f.event.id,f.event.predicate+'（'+(f.roles??[]).map(r=>(r.role==='PERFORMER'?'执行者：':'')+(r.entity?.label??r.entity_id)).join('、')+'）');
+  const name=id=>labels.get(id)??id;
+  const atoms=new Map(c.boolean.atoms.map(x=>[x.id,x.meaning]));
+- const formula=x=>typeof x==='boolean'?String(x):x.var?(atoms.get(x.var)?.kind==='STATE'?atoms.get(x.var).predicate+'('+atoms.get(x.var).args.map(name).join('、')+')':atoms.get(x.var)?.event_id?'执行 '+name(atoms.get(x.var).event_id):atoms.get(x.var)?.kind==='TASK_COMPLETE'?'任务完成':atoms.get(x.var)?.kind==='TASK_STOP'?'任务停止':x.var):x.not?'非('+formula(x.not)+')':x.all?'('+x.all.map(formula).join(' 且 ')+')':x.any?'('+x.any.map(formula).join(' 或 ')+')':x.implies?'('+formula(x.implies[0])+' ⇒ '+formula(x.implies[1])+')':'未支持表达式';
++ const atomText=a=>a?.kind==='PROPERTY_TEST'?name(a.test.target_id)+(a.test.property_path.length?'.'+a.test.property_path.join('.'):'')+' '+a.test.operator+' '+JSON.stringify(a.test.value):a?.kind==='OUTPUT_BEHAVIOR'?'产物 '+name(a.artifact_id)+' 的内部行为 '+name(a.event_id):a?.kind==='STATE'?a.predicate+'('+a.args.map(name).join('、')+')':a?.event_id?'执行 '+name(a.event_id):a?.kind==='TASK_COMPLETE'?'任务完成':a?.kind==='TASK_STOP'?'任务停止':null;
++ const formula=x=>typeof x==='boolean'?String(x):x.var?(atomText(atoms.get(x.var))??x.var):x.not?'非('+formula(x.not)+')':x.all?'('+x.all.map(formula).join(' 且 ')+')':x.any?'('+x.any.map(formula).join(' 或 ')+')':x.implies?'('+formula(x.implies[0])+' ⇒ '+formula(x.implies[1])+')':'未支持表达式';
+  const row=(section,text,sources)=>{const p=el('p',text);if(sources?.length){const button=el('button','查看本条原文依据');button.className='secondary';button.onclick=()=>onEvidence(sources);p.append(document.createTextNode(' '),button);}section.append(p);};
+  const section=title=>{const d=el('details');d.open=true;d.append(el('summary',title));container.append(d);return d;};
+  container.append(el('p',states[c.status]??c.status),el('p','输入来自同一次IR；程序计算，不再调用LLM。可行组合不是实际完成，技术接受与计算均不构成业务授权。'));
+--- a/research/7plus1-parser/v0.3-p2.1-generalization/web/process-view.js
++++ b/research/7plus1-parser/v0.3-p2.1-generalization/web/process-view.js
+@@ -45,6 +45,7 @@
+  const children=array(x.children).length?x.children:array(x.operands).map(id=>ctx.expressions.get(id)??{id,op:'MISSING'});
+  const parts=children.map(child=>expressionText(child,ctx,next));
+  if(x.op==='ITEM')return entityLabel(x.entity_id??x.item_id??x.operands?.[0],ctx);
++ if(x.op==='TEST'){const t=x.test;return '属性约束：'+entityLabel(t.target_id,ctx)+(t.property_path.length?'.'+t.property_path.join('.'):'')+' '+t.operator+' '+JSON.stringify(t.value);}
+  if(x.op==='STATE'){
+   const s=x.state??{},args=array(s.args).map(id=>entityLabel(id,ctx));
+   return (s.polarity==='NEGATIVE'?'不成立：':'')+(s.predicate??'未记录状态')+(args.length?'（'+args.join('、')+'）':'');
+@@ -85,13 +86,14 @@
+ const tallyText=(rows,key)=>Object.entries(tally(rows,key)).map(([s,n])=>readable(s)+' '+n+'项').join('，')||'尚无结果';
+ export function factText(f,trace){
+  const ctx=context(trace);
++ const prefix=f.output_specification?'产物 '+entityLabel(f.output_specification.artifact_id,ctx)+' 的内部行为要求（非当前执行）：':'';
+  if(f.kind==='EVENT'){
+   const e=eventDescription(f.event??{},ctx,array(f.roles).map(r=>r.claim??r));
+   const constraints=array(f.constraints).map(c=>claimText(c.claim??c,ctx));
+-  return [e.modality+'：'+e.name,...e.roles,...constraints].join('；');
++  return prefix+[e.modality+'：'+e.name,...e.roles,...constraints].join('；');
+  }
+  const event=f.event?.predicate??ctx.events.get(f.claim?.event_id)?.predicate;
+- return (event?event+' → ':'')+claimText(f.claim??f,ctx);
++ return prefix+(event?event+' → ':'')+claimText(f.claim??f,ctx);
+ }
+ export function modelView(run={},session={}){
+  const calls=Array.isArray(run.call_history)?Object.fromEntries(['parse','audit'].map(phase=>[phase,run.call_history.filter(x=>x.phase===phase)])):run.result?.model_calls??run.progress?.model_calls??{}, parse=array(calls.parse),audit=array(calls.audit);
+--- a/research/7plus1-parser/llm-first-028/property-tests.mjs
++++ b/research/7plus1-parser/llm-first-028/property-tests.mjs
+@@ -0,0 +1,30 @@
++// Explicit candidate operators only. No source, label or note interpretation.
++export const propertyOperators=['EQ','NEQ','IN','NOT_IN','LT','LTE','GT','GTE','EMPTY','NONEMPTY','EXISTS','NOT_EXISTS','UNCHANGED'];
++export function propertyTestErrors(t){
++ const errors=[];if(!t)return ['PROPERTY_TEST_MISSING'];
++ const unary=['EMPTY','NONEMPTY','EXISTS','NOT_EXISTS','UNCHANGED'];
++ if(unary.includes(t.operator)&&t.value!==null)errors.push('UNARY_TEST_HAS_VALUE');
++ if(['IN','NOT_IN'].includes(t.operator)&&(!Array.isArray(t.value)||!t.value.length||new Set(t.value).size!==t.value.length))errors.push('TEST_ENUM_VALUE');
++ if(['LT','LTE','GT','GTE'].includes(t.operator)&&(typeof t.value!=='number'||!Number.isFinite(t.value)))errors.push('TEST_NUMERIC_VALUE');
++ if(['EQ','NEQ'].includes(t.operator)&&Array.isArray(t.value))errors.push('TEST_EQUALITY_VALUE');
++ return errors;
++}
++export function evaluatePropertyTest(t,observed){
++ if(propertyTestErrors(t).length||!observed||observed.target_id!==t.target_id||observed.event_id!==t.event_id||JSON.stringify(observed.property_path)!==JSON.stringify(t.property_path))return 'UNKNOWN';
++ const truth=v=>v?'TRUE':'FALSE';
++ if(t.operator==='UNCHANGED')return typeof observed.unchanged==='boolean'?truth(observed.unchanged):'UNKNOWN';
++ if(['EXISTS','NOT_EXISTS'].includes(t.operator))return typeof observed.exists==='boolean'?truth(t.operator==='EXISTS'?observed.exists:!observed.exists):'UNKNOWN';
++ if(!Object.hasOwn(observed,'value')||observed.known!==true)return 'UNKNOWN';
++ const v=observed.value;
++ if(['EMPTY','NONEMPTY'].includes(t.operator)){
++  if(typeof v!=='string'&&!Array.isArray(v))return 'UNKNOWN';return truth(t.operator==='EMPTY'?v.length===0:v.length>0);
++ }
++ if(['IN','NOT_IN'].includes(t.operator)){
++  if(v!==null&&!['string','number','boolean'].includes(typeof v))return 'UNKNOWN';const hit=t.value.some(x=>Object.is(x,v));return truth(t.operator==='IN'?hit:!hit);
++ }
++ if(['EQ','NEQ'].includes(t.operator)){
++  if(v!==null&&!['string','number','boolean'].includes(typeof v))return 'UNKNOWN';if(typeof v!==typeof t.value)return 'UNKNOWN';return truth(t.operator==='EQ'?Object.is(v,t.value):!Object.is(v,t.value));
++ }
++ if(typeof v!=='number'||!Number.isFinite(v))return 'UNKNOWN';
++ return truth(({LT:()=>v<t.value,LTE:()=>v<=t.value,GT:()=>v>t.value,GTE:()=>v>=t.value})[t.operator]?.()??false);
++}

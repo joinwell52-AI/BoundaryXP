@@ -1,0 +1,14 @@
+import fs from 'node:fs';import path from 'node:path';import {pathToFileURL} from 'node:url';import {createHash} from 'node:crypto';import {lockProduct} from './resources.mjs';
+const root=path.resolve('.boundx/products/0.1.0-candidate.031-r1.2-ui.30'),lock=lockProduct(root),out=path.resolve('.boundx/exports/SEMANTIC-CONTRACT-CLOSURE-r02/live-REAL-GOLD-015');
+const prior=JSON.parse(fs.readFileSync('.boundx/exports/SEMANTIC-CONTRACT-CLOSURE-r01/CALL-LEDGER.json','utf8'));
+if(prior.maximum_conservative_requests!==6||prior.outer_requests_started!==4||prior.remaining_attempt_cap!==2)throw Error('PRIOR_LEDGER_CHANGED');
+if(fs.existsSync(out))throw Error('FIRST_ATTEMPT_EXISTS');lock.verify();
+const source=fs.readFileSync('.boundx/exports/TRANSPORT-INPUT-CLOSURE-r01/live-REAL-GOLD-015/original-run/source.txt'),sha256=createHash('sha256').update(source).digest('hex');if(sha256!=='2c844c38f858e89a8534202011d780a389cb542c2896e5162244662b58e04642')throw Error('SOURCE_CHANGED');
+fs.mkdirSync(out,{recursive:true});const start=Date.now(),record=(name,v)=>fs.writeFileSync(path.join(out,name),JSON.stringify(v,null,2)+'\n',{flag:'wx'});
+record('START.json',{started_at:new Date(start).toISOString(),version:lock.snapshot.product_version,manifest:lock.snapshot.manifest_sha256,source_sha256:sha256,codepoints:Array.from(source.toString('utf8')).length,prior_outer_calls:4,maximum_new_calls:2,total_cap:6,model:'gpt-6.1-sol',reasoning:'medium',semantic_revision:false,automatic_timeout_ms:null});
+const {parse7Plus1}=await import(pathToFileURL(path.join(root,'research/7plus1-parser/llm-first-028/engine.mjs')));
+let result=null,failure=null;
+try{result=await parse7Plus1(source,{output:out,productSnapshot:lock.snapshot,resourceGuard:lock.verify,parseMethod:'SKILL',model:'gpt-6.1-sol',reasoning:'medium',semanticRevision:false,maxModelRequests:2,timeoutMs:null,onProgress:p=>{const event={...p,at:new Date().toISOString(),elapsed_ms:Date.now()-start};fs.appendFileSync(path.join(out,'progress.ndjson'),JSON.stringify(event)+'\n');if(p.signal||!p.phase)console.log(JSON.stringify({stage:p.stage,signal:p.signal??null,elapsed_ms:event.elapsed_ms}));}});}catch(e){failure={code:e.code??e.message,detail:e.detail??null};record('FAILURE.json',failure);}
+lock.verify();const summary=fs.existsSync(path.join(out,'run-summary.json'))?JSON.parse(fs.readFileSync(path.join(out,'run-summary.json'),'utf8')):null;
+record('ACTUAL-RESULT.json',{status:failure?'FAILED':result.canonical.gaps.length||result.canonical.unresolved.length?'COMPLETED_WITH_UNRESOLVED':'COMPLETED',failure,summary,elapsed_ms:Date.now()-start,source_sha256:sha256,semantic_acceptance:'NOT_PROVEN',installed_pointer_changed:false});
+console.log(JSON.stringify({failure,elapsed_ms:Date.now()-start,calls:summary?.real_calls,slots:summary?.slot_status}));
