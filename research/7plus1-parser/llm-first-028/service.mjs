@@ -31,8 +31,8 @@ export function createServer({dataRoot=DATA,parse=parse7Plus1,legacyRoot=process
    if(!allowed.includes(host))return send(403,{error:'LOCALHOST_ONLY'});
    if(req.headers.origin&&req.headers.origin!=='http://'+host)return send(403,{error:'SAME_ORIGIN_REQUIRED'});
    const url=new URL(req.url,'http://'+host),route=url.pathname;
-   if(req.method==='GET'&&['/','/app.js','/style.css'].includes(route)){
-    const name=route==='/'?'index.html':route==='/app.js'?'native-app.js':'style.css';
+   if(req.method==='GET'&&['/','/app.js','/process-view.js','/style.css'].includes(route)){
+    const name=route==='/'?'index.html':route==='/app.js'?'native-app.js':route==='/process-view.js'?'process-view.js':'style.css';
     res.writeHead(200,{'content-type':name.endsWith('.html')?'text/html; charset=utf-8':name.endsWith('.js')?'text/javascript; charset=utf-8':'text/css; charset=utf-8','cache-control':'no-store','content-security-policy':"default-src 'self'; script-src 'self'; style-src 'self'; object-src 'none'; frame-ancestors 'none'; base-uri 'none'"});return res.end(fs.readFileSync(path.join(WEB,name)));
    }
    if(req.method==='GET'&&route==='/api/session'){
