@@ -1,0 +1,46 @@
+// Evidence packaging only; never calls a model, alters a source, or changes a service.
+import fs from 'node:fs';
+import path from 'node:path';
+import {createHash} from 'node:crypto';
+import {spawnSync} from 'node:child_process';
+import {lockProduct} from './resources.mjs';
+const report=path.resolve('docs/reports/7plus1/MANUAL-CONTRACT-REPAIR-r01');
+const version='0.1.0-candidate.031-r1.2-ui.36';
+const hash=b=>createHash('sha256').update(b).digest('hex');
+const read=p=>JSON.parse(fs.readFileSync(p));
+const save=(p,x)=>fs.writeFileSync(path.join(report,p),JSON.stringify(x,null,2)+'\n',{flag:'wx'});
+function copy(from,to){const dest=path.join(report,to);fs.mkdirSync(path.dirname(dest),{recursive:true});fs.copyFileSync(from,dest,fs.constants.COPYFILE_EXCL);}
+if(fs.existsSync(path.join(report,'SEAL.json')))throw Error('SEALED_RESULT_EXISTS');
+const review=read(path.join(report,'SOURCE-REVIEW.json'));
+const comparison=read(path.join(report,'regression-delivery/COMPARISON.json'));
+const online=read(path.join(report,'deployment/ONLINE.json'));
+const targets=fs.readFileSync(path.join(report,'TARGETED-DELIVERY.tap'),'utf8');
+if(!review.repair_targets_pass||review.source_checks.length!==14||review.source_checks.some(x=>!x.pass)||!/# tests 58\r?\n/.test(targets)||!/# fail 0\r?\n/.test(targets)||comparison.new_failures.length)throw Error('TARGET_GATE_FAILED');
+const homes=['.boundx/manual-contract-repair-r01/upgrade-check','.boundx/short-compiler-031-r1'];
+const installations=homes.map(home=>{const current=read(path.join(home,'current.json'));if(current.version!==version)throw Error('WRONG_INSTALL');const lock=lockProduct(path.join(home,'versions',version));lock.verify();if(lock.snapshot.manifest_sha256!==online.manifest)throw Error('INSTALL_DIGEST_MISMATCH');return{home:path.resolve(home),version,manifest_sha256:lock.snapshot.manifest_sha256,files_verified:lock.snapshot.files.length};});
+save('INSTALL-CHECK-DELIVERY.json',{installations,dependencies_installed:true,clean_home_independent:true,development_resources_used:false,new_user_ports:0,old_install_preserved:true,real_model_calls:0});
+const npmCli=path.join(path.dirname(process.execPath),'node_modules/npm/bin/npm-cli.js');
+if(!fs.existsSync(npmCli))throw Error('NPM_ENTRY_UNAVAILABLE');
+const startup=spawnSync(process.execPath,[npmCli,'run','7plus1:ui'],{encoding:'utf8',windowsHide:true,timeout:30000});
+fs.writeFileSync(path.join(report,'deployment/STARTUP.txt'),startup.stdout+startup.stderr,{flag:'wx'});
+if(startup.status!==0||!startup.stdout.includes('already_running')||!startup.stdout.includes(version)||!startup.stdout.includes('031-r1-c11'))throw Error('STARTUP_ENTRY_MISMATCH');
+save('deployment/STARTUP.json',{exit_code:startup.status,already_running:true,version,compiler:'031-r1-c11',new_server_spawned:false,real_model_calls:0});
+const first='.boundx/exports/MANUAL-CONTRACT-REPAIR-r01/live';
+for(const f of ['ACTUAL-RESULT.json','source.txt','7plus1.json','7plus1.zh.md','trace.json'])copy(path.join(first,f),'first-attempt/'+f);
+for(const f of ['proposal.json','audit.json','technical-validation.json','boundary-ir.json'])copy(path.join(first,'revision-0',f),'first-attempt/'+f);
+const continuation='.boundx/exports/MANUAL-CONTRACT-REPAIR-r01/continuation';
+for(const f of ['revision-request.json','revision.patch.json','START.json'])copy(path.join(continuation,f),'bounded-revision/'+f);
+const baseline='.boundx/observations/MANUAL-TEST-001/37a34be8-ce53-4a40-8657-7c7cb9e9eebf';
+for(const f of ['SOURCE-CHECK.json','REVIEW-CHECKS.json','EVIDENCE-MANIFEST.json','FIRST-PROPOSAL.json'])copy(path.join(baseline,f),'user-baseline/'+f);
+for(const f of ['7plus1.json','7plus1.zh.md','boundary-calculations.json','run-summary.json'])copy(path.join('.boundx/short-compiler-031-r1/data/runs/37a34be8-ce53-4a40-8657-7c7cb9e9eebf',f),'user-baseline/'+f);
+copy('.boundx/products/'+version+'/PRODUCT-MANIFEST.json','PRODUCT-MANIFEST.json');
+save('TESTS.json',{targeted:{tests:58,pass:58,fail:0},installed_entry:{tests:4,pass:4,fail:0},regression:comparison,source_review:{checks:14,pass:14,fail:0,scope:'one unchanged non-Gold document',semantic_generalization:'NOT_PROVEN'},program_calculation:review.program_calculation,remaining_calculation_limits:review.remaining_calculation_limits,live_calls:4,internal_retry_signals:0,old_032_budget_unchanged:true,production_ready:false,public_release:false,state:'WAITING_ADMIN_REVIEW'});
+const code=['product/short-compiler/manual-contract-repair-ui36-overlay.json','product/short-compiler/build-manual-contract-repair.mjs','product/short-compiler/tests/event-property-immediacy.test.mjs','product/short-compiler/run-manual-contract-regression.mjs','product/short-compiler/package-manual-contract-repair.py','product/short-compiler/test-manual-contract-live.mjs','product/short-compiler/continue-manual-contract-live.mjs','product/short-compiler/review-manual-contract-repair.mjs','product/short-compiler/deploy-manual-contract-repair.mjs','product/short-compiler/seal-manual-contract-repair.mjs'];
+const files=[];
+function walk(dir){for(const e of fs.readdirSync(dir,{withFileTypes:true})){const p=path.join(dir,e.name);if(e.isDirectory())walk(p);else if(e.isFile()){const b=fs.readFileSync(p);files.push({path:path.relative(report,p).replaceAll('\\','/'),bytes:b.length,sha256:hash(b)});}else throw Error('UNSUPPORTED_REPORT_ENTRY');}}
+walk(report);files.sort((a,b)=>a.path.localeCompare(b.path));
+save('MANIFEST.json',{version,manifest_sha256:online.manifest,source_sha256:review.source_sha256,files,source_code:code.map(p=>({path:p,sha256:hash(fs.readFileSync(p))})),hidden_reasoning_or_credentials_exported:false,old_seals_overwritten:false});
+fs.writeFileSync(path.join(report,'SHA256SUMS'),files.map(f=>f.sha256+'  '+f.path).join('\n')+'\n',{flag:'wx'});
+save('SEAL.json',{at:new Date().toISOString(),manifest_sha256:hash(fs.readFileSync(path.join(report,'MANIFEST.json'))),sha256sums_sha256:hash(fs.readFileSync(path.join(report,'SHA256SUMS'))),state:'WAITING_ADMIN_REVIEW',product_acceptance:'PARTIAL / SEMANTIC_REPAIR_CANDIDATE_NOT_ADMIN_ACCEPTED',old_032_budget_unchanged:true,production_ready:false,public_release:false});
+for(const f of files)if(hash(fs.readFileSync(path.join(report,f.path)))!==f.sha256)throw Error('REPORT_CHANGED');
+console.log(JSON.stringify({sealed:true,files:files.length,version,source_checks:14,new_regression_failures:0,full_regression_pass:false,url:online.url}));

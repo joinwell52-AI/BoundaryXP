@@ -1,0 +1,30 @@
+// Diagnostic continuation uses the same frozen provider, patch adapter, validator and compiler.
+// No source interpretation, model response edits, or new parser implementation.
+import fs from 'node:fs';import path from 'node:path';import {pathToFileURL} from 'node:url';import {lockProduct} from './resources.mjs';
+const root=path.resolve('.boundx/products/0.1.0-candidate.031-r1.2-ui.35'),priorRoot=path.resolve('.boundx/exports/MANUAL-CONTRACT-REPAIR-r01/live'),out=path.resolve('.boundx/exports/MANUAL-CONTRACT-REPAIR-r01/continuation');
+const lock=lockProduct(root),load=f=>import(pathToFileURL(path.join(root,'research/7plus1-parser/llm-first-028',f)));
+const {buildBundle}=await load('bundle.mjs'),{bundleEvidence}=await load('comparison-bundle.mjs'),{callCodex,probeCodex}=await load('provider.mjs'),{technicalRevisionFeedback}=await load('revision.mjs');
+const {technicalValidate}=await load('validate.mjs'),{compileBoundary}=await load('compile.mjs'),{calculateBoundary,renderCalculations}=await load('calculus.mjs'),{sha256}=await load('source.mjs');
+const prior=JSON.parse(fs.readFileSync(path.join(priorRoot,'trace.json'))),oldSummary=JSON.parse(fs.readFileSync(path.join(priorRoot,'run-summary.json'))),parse=buildBundle('parse'),auditBundle=buildBundle('audit');
+if(oldSummary.real_calls!==2)throw Error('PRIOR_CALL_LEDGER_CHANGED');
+for(const phase of ['parse','audit']){const request=JSON.parse(fs.readFileSync(path.join(priorRoot,'revision-0',phase+'-call','request-0.json')));if(request.bundle_sha256!==buildBundle(phase).sha256)throw Error('MODEL_RESOURCES_CHANGED');}
+if(fs.existsSync(out))throw Error('FIRST_CONTINUATION_EXISTS');fs.mkdirSync(out,{recursive:true});
+const save=(f,x)=>fs.writeFileSync(path.join(out,f),JSON.stringify(x,null,2)+'\n',{flag:'wx'}),bytes=fs.readFileSync(path.join(priorRoot,'source.txt'));
+if(sha256(bytes)!==prior.source.sha256)throw Error('SOURCE_CHANGED');fs.writeFileSync(path.join(out,'source.txt'),bytes,{flag:'wx'});save('source.json',prior.source);
+const feedback={reviews:[],issues:[],omissions:[],technical_errors:technicalRevisionFeedback(prior.technical,prior.proposal),budget:{semantic_revisions_remaining:1,shared_with_audit:true}};
+save('revision-request.json',feedback);save('START.json',{prior_root:priorRoot,prior_trace_sha256:sha256(fs.readFileSync(path.join(priorRoot,'trace.json'))),prior_calls:2,maximum_total_conservative_requests:6,remaining:4,model_resources_identical:true,product:lock.snapshot});
+const requestBudget={remaining:4},controller=new AbortController(),start=Date.now();let retrySignals=0,lastRetry=0,failure=null,parsed=null,reviewed=null;
+const progress=phase=>({onActivity:p=>{if(p.signal==='REQUEST_STARTED')lastRetry=0;if(p.signal==='TRANSPORT_RETRY'){retrySignals+=Math.max(0,(p.retry_count??0)-lastRetry);lastRetry=p.retry_count??0;if(requestBudget.remaining-retrySignals<=0)controller.abort(Error('CONSERVATIVE_REQUEST_CAP'));}const row={phase,...p,at:new Date().toISOString(),elapsed_ms:Date.now()-start};fs.appendFileSync(path.join(out,'progress.ndjson'),JSON.stringify(row)+'\n');console.log(JSON.stringify(row));}});
+try{
+ const probe=probeCodex();lock.verify();parsed=await callCodex({bundle:parse,source:prior.source,candidate:prior.proposal,revisionIssues:feedback,directory:path.join(out,'parse-call'),probe,model:'gpt-6.1-sol',reasoning:'medium',timeoutMs:null,signal:controller.signal,requestBudget,...progress('patch')});
+ save('revision.patch.json',parsed.patch_value);save('proposal.json',parsed.value);
+ if(parsed.no_change)throw Error('NO_SAFE_CHANGE_REMAINS_UNRESOLVED');
+ if(requestBudget.remaining-retrySignals<=0)throw Error('CONSERVATIVE_REQUEST_CAP');
+ reviewed=await callCodex({bundle:auditBundle,source:prior.source,candidate:parsed.value,directory:path.join(out,'audit-call'),probe,model:'gpt-6.1-sol',reasoning:'medium',timeoutMs:null,signal:controller.signal,requestBudget,...progress('audit')});
+ if(parsed.receipt.thread_id===reviewed.receipt.thread_id)throw Error('AUDIT_NOT_INDEPENDENT');
+ save('audit.json',reviewed.value);const technical=technicalValidate(prior.source,parsed.value,reviewed.value,{requireSourceAudit:true}),compiled=compileBoundary(prior.source,parsed.value,reviewed.value,technical),calculation=calculateBoundary(compiled.ir),chinese=compiled.chinese+renderCalculations(calculation);
+ const trace={product_snapshot:lock.snapshot,model_origin_product_snapshot:prior.product_snapshot,parse_method:'SKILL',resource_profile:parse.resource_profile,source:prior.source,proposal:parsed.value,audit:reviewed.value,technical,...compiled,chinese,boundary_calculations:calculation,revision:1,revision_of:0,execution_mode:'BOUNDED_LOCAL_PATCH_AND_FRESH_AUDIT',origin_trace:{path:path.join(priorRoot,'trace.json'),sha256:sha256(fs.readFileSync(path.join(priorRoot,'trace.json')))},selected_resources:{parse:bundleEvidence(parse),audit:bundleEvidence(auditBundle)},model_calls:{parse:parsed.attempts,audit:reviewed.attempts}};
+ for(const [f,x] of Object.entries({'trace.json':trace,'technical-validation.json':technical,'boundary-ir.json':compiled.ir,'7plus1.json':compiled.canonical,'boundary-calculations.json':calculation}))save(f,x);fs.writeFileSync(path.join(out,'7plus1.zh.md'),chinese,{flag:'wx'});
+ save('run-summary.json',{elapsed_ms:Date.now()-start,real_calls:4-requestBudget.remaining,total_outer_calls:6-requestBudget.remaining,prior_calls:2,revision_count:1,slot_status:Object.fromEntries(Object.entries(compiled.canonical.slots).map(([s,v])=>[s,v.status]))});
+}catch(e){failure={code:e.code??e.message,detail:e.detail??null};save('FAILURE.json',failure);}
+lock.verify();save('CALL-LEDGER.json',{maximum_conservative_requests:6,prior_outer_requests:2,new_outer_requests:4-requestBudget.remaining,internal_retry_signals:retrySignals,total_conservative_occupied:6-requestBudget.remaining+retrySignals,remaining:requestBudget.remaining-retrySignals,elapsed_ms:Date.now()-start,failure,service_billing_calls:'NOT_OBSERVED',old_032_budget_unchanged:true});console.log(JSON.stringify({failure,calls:6-requestBudget.remaining,retrySignals,elapsed_ms:Date.now()-start}));
