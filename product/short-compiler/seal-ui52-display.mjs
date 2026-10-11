@@ -1,0 +1,11 @@
+import fs from 'node:fs';import path from 'node:path';import {createHash} from 'node:crypto';import {spawnSync} from 'node:child_process';
+const root='docs/reports/7plus1/UI52-FINAL-RESULT-DISPLAY-r01',sha=b=>createHash('sha256').update(b).digest('hex');
+const files=fs.readdirSync(root).map(name=>({path:name,sha256:sha(fs.readFileSync(path.join(root,name)))}));
+fs.writeFileSync(root+'/MANIFEST.json',JSON.stringify({files},null,2)+'\n',{flag:'wx'});fs.writeFileSync(root+'/SHA256SUMS',files.map(x=>x.sha256+'  '+x.path).join('\n')+'\n',{flag:'wx'});fs.writeFileSync(root+'/SEAL.json',JSON.stringify({status:'WAITING_ADMIN_REVIEW',manifest_sha256:sha(fs.readFileSync(root+'/MANIFEST.json')),sha256sums_sha256:sha(fs.readFileSync(root+'/SHA256SUMS'))},null,2)+'\n',{flag:'wx'});
+const git=args=>{const r=spawnSync('git',args,{windowsHide:true,encoding:'utf8'});if(r.status)throw Error(r.stderr);return r.stdout;};
+if(git(['branch','--show-current']).trim()!=='review/7plus1-parser'||git(['diff','--cached','--name-only']).trim())throw Error('WRONG_BRANCH_OR_EXISTING_INDEX');
+let launch=git(['show','HEAD:product/short-compiler/launch-installed.mjs']).replace('const approvedVersions={',"const approvedVersions={\n '0.1.0-candidate.031-r1.2-ui.52':{compiler:'031-r1-c25',contract:'031-r1.1'},");
+const b=spawnSync('git',['hash-object','-w','--stdin'],{windowsHide:true,input:launch,encoding:'utf8'});if(b.status)throw Error(b.stderr);git(['update-index','--cacheinfo','100644,'+b.stdout.trim()+',product/short-compiler/launch-installed.mjs']);
+git(['add','--','.gitattributes',root,'product/short-compiler/check-ui52-display-entry.mjs','product/short-compiler/freeze-ui52-display.mjs','product/short-compiler/ui52-display-overlay.json','product/short-compiler/verify-ui52-display.mjs','product/short-compiler/package-ui52-display.py','product/short-compiler/seal-ui52-display.mjs','product/short-compiler/tests/final-result-overview.test.mjs']);
+for(const f of files){const b=spawnSync('git',['show',':'+root+'/'+f.path],{windowsHide:true,maxBuffer:16*1024*1024});if(b.status||sha(b.stdout)!==f.sha256)throw Error('STAGED_HASH_MISMATCH');}
+console.log(JSON.stringify({sealed:true,index_verified:true,files:files.length}));
