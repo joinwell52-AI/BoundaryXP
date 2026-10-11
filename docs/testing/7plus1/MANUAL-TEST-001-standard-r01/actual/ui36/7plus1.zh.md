@@ -1,0 +1,156 @@
+# BoundX 7+1（有限技术接受，不是业务授权）
+
+## I 输入与作用域 — RESOLVED
+- [ACCEPTED] 组织核查：输入/受检对象=app.yaml；必须（bf:a15a9c871208a0ddffbc）
+- [ACCEPTED] 组织核查：输入/受检对象=env.json；必须（bf:63c32f0f891178b9c9be）
+- [ACCEPTED] 完成全部工作：输入/受检对象=app.yaml；必须；合计：全部工作完成耗时 ≤ 30 分钟；目标=完成全部工作；计数范围=根任务（bf:d09fbfe6a1d9423c2818）
+- [ACCEPTED] 完成全部工作：输入/受检对象=env.json；必须；合计：全部工作完成耗时 ≤ 30 分钟；目标=完成全部工作；计数范围=根任务（bf:d395dc6e1fe763f0d4fc）
+- [ACCEPTED] 作用域  UNION(ITEM(app.yaml),ITEM(env.json))；目标=完成全部工作；合计：全部工作完成耗时 ≤ 30 分钟；目标=完成全部工作；计数范围=根任务（bf:e8150712ec12f7b779f5）
+- [ACCEPTED] 检查配置文件：输入/受检对象=app.yaml；必须（bf:356b70690e4b125e87e3）
+- [ACCEPTED] 检查环境文件：输入/受检对象=env.json；必须（bf:d31b9baab5a839e5fad1）
+
+## O 交付与结果 — RESOLVED
+- [ACCEPTED] 生成DEV报告：产生结果=dev.md；必须（bf:04ddd21b53635ad53a28）
+- [ACCEPTED] 生成OPS报告：产生结果=ops.md；必须（bf:b53045f06b1b2e73643a）
+- [ACCEPTED] 提交DEV报告：交付产物=dev.md；必须（bf:650b1244d1a87711931a）
+- [ACCEPTED] 提交OPS报告：交付产物=ops.md；必须（bf:b1e32b24aad9df1e1ef8）
+- [ACCEPTED] 生成汇总报告：产生结果=summary.md；必须；充分触发 之后 复核通过(QA,DEV与OPS的两份报告)；所指事件=复核两份报告 [e_review]；复核者=QA；对象=DEV与OPS的两份报告；对象=dev.md；对象=ops.md [POSITIVE;运行值UNKNOWN]（bf:f04746aaff88acbd0ce1）
+- [ACCEPTED] 交付汇总报告：交付产物=summary.md；必须；充分触发 之后 复核通过(QA,DEV与OPS的两份报告)；所指事件=复核两份报告 [e_review]；复核者=QA；对象=DEV与OPS的两份报告；对象=dev.md；对象=ops.md [POSITIVE;运行值UNKNOWN]（bf:e78d8de08580afabd6cd）
+
+## A 正向动作 — RESOLVED
+- [ACCEPTED] 必须 完成全部工作；依据=《配置核查规程》v1.2；输入/受检对象=app.yaml；输入/受检对象=env.json；对象=测试环境；合计：全部工作完成耗时 ≤ 30 分钟；目标=完成全部工作；计数范围=根任务（bf:d8dd89c8ead02e366094）
+- [ACCEPTED] 必须 组织核查；组织者=PM；输入/受检对象=app.yaml；输入/受检对象=env.json（bf:c2c1519254ac055e25f7）
+- [ACCEPTED] 必须 检查配置文件；执行者=DEV；输入/受检对象=app.yaml（bf:4be4d193b0b5567c678f）
+- [ACCEPTED] 必须 生成DEV报告；执行者=DEV；产生结果=dev.md（bf:34b90128bf68301e8c44）
+- [ACCEPTED] 必须 检查环境文件；执行者=OPS；输入/受检对象=env.json（bf:02f4feb357424baa892f）
+- [ACCEPTED] 必须 生成OPS报告；执行者=OPS；产生结果=ops.md（bf:fcaefcbf557b4fdea9fd）
+- [ACCEPTED] 必须 提交DEV报告；执行者=DEV；交付产物=dev.md；接收者=QA（bf:2194c81d95404e6804d1）
+- [ACCEPTED] 必须 提交OPS报告；执行者=OPS；交付产物=ops.md；接收者=QA（bf:c4469218658edc284352）
+- [ACCEPTED] 必须 复核两份报告；复核者=QA；对象=DEV与OPS的两份报告；对象=dev.md；对象=ops.md；时间先后 之后 AND(已提交(dev.md,QA)；所指事件=提交DEV报告 [e_dev_submit]；执行者=DEV；交付产物=dev.md；接收者=QA [POSITIVE;运行值UNKNOWN],已提交(ops.md,QA)；所指事件=提交OPS报告 [e_ops_submit]；执行者=OPS；交付产物=ops.md；接收者=QA [POSITIVE;运行值UNKNOWN])（bf:883e6bb37effd0953018）
+- [ACCEPTED] 必须 生成汇总报告；执行者=PM；依据=dev.md；依据=ops.md；对象=dev.md；对象=ops.md；产生结果=summary.md；充分触发 之后 复核通过(QA,DEV与OPS的两份报告)；所指事件=复核两份报告 [e_review]；复核者=QA；对象=DEV与OPS的两份报告；对象=dev.md；对象=ops.md [POSITIVE;运行值UNKNOWN]（bf:ddc4b19ed0b9a15f5813）
+- [ACCEPTED] 必须 交付汇总报告；执行者=PM；交付产物=summary.md；接收者=ADMIN；充分触发 之后 复核通过(QA,DEV与OPS的两份报告)；所指事件=复核两份报告 [e_review]；复核者=QA；对象=DEV与OPS的两份报告；对象=dev.md；对象=ops.md [POSITIVE;运行值UNKNOWN]（bf:d2f347f6b61efc751d5d）
+- [ACCEPTED] 必须 停止本任务；执行者=PM；对象=本任务；充分触发  发现高危问题(高危问题) [POSITIVE;运行值UNKNOWN]（bf:126545a084c3dff91c9b）
+- [ACCEPTED] 必须 汇报高危问题；执行者=PM；接收者=ADMIN；内容=高危问题；充分触发  发现高危问题(高危问题) [POSITIVE;运行值UNKNOWN]（bf:fa072192d785b20850e9）
+- [ACCEPTED] 作用域  ITEM(测试环境)；目标=完成全部工作；合计：全部工作完成耗时 ≤ 30 分钟；目标=完成全部工作；计数范围=根任务（bf:fcba952b9517b0cf5202）
+- [ACCEPTED] 作用域  立即执行限定：停止本任务 [e_stop]；执行者=PM；对象=本任务；不得无故延迟；未指定数值期限 [运行值UNKNOWN]；目标=停止本任务；充分触发  发现高危问题(高危问题) [POSITIVE;运行值UNKNOWN]（bf:cfaaf0b8201956ce99fb）
+
+## P 参与关系 — RESOLVED
+- [ACCEPTED] 组织核查：组织者=PM；必须（bf:cbd92a78393ab8cc2016）
+- [ACCEPTED] 检查配置文件：执行者=DEV；必须（bf:0f900b1fc243ecb14e6f）
+- [ACCEPTED] 生成DEV报告：执行者=DEV；必须（bf:6be635de0ba1fe457715）
+- [ACCEPTED] 检查环境文件：执行者=OPS；必须（bf:80443beabba9abc78944）
+- [ACCEPTED] 生成OPS报告：执行者=OPS；必须（bf:5d7c4d8c90a474b95de8）
+- [ACCEPTED] 提交DEV报告：执行者=DEV；必须（bf:0c6d51f1c1159dd8c140）
+- [ACCEPTED] 提交DEV报告：接收者=QA；必须（bf:06db9d3f1d0687d930fc）
+- [ACCEPTED] 提交OPS报告：执行者=OPS；必须（bf:ee39bf42ab0d43e108be）
+- [ACCEPTED] 提交OPS报告：接收者=QA；必须（bf:2abc7d2a281046cff3ec）
+- [ACCEPTED] 复核两份报告：复核者=QA；必须；时间先后 之后 AND(已提交(dev.md,QA)；所指事件=提交DEV报告 [e_dev_submit]；执行者=DEV；交付产物=dev.md；接收者=QA [POSITIVE;运行值UNKNOWN],已提交(ops.md,QA)；所指事件=提交OPS报告 [e_ops_submit]；执行者=OPS；交付产物=ops.md；接收者=QA [POSITIVE;运行值UNKNOWN])（bf:cc67fd5ec33f88de7f7f）
+- [ACCEPTED] 生成汇总报告：执行者=PM；必须；充分触发 之后 复核通过(QA,DEV与OPS的两份报告)；所指事件=复核两份报告 [e_review]；复核者=QA；对象=DEV与OPS的两份报告；对象=dev.md；对象=ops.md [POSITIVE;运行值UNKNOWN]（bf:4ea45caaefee85166afe）
+- [ACCEPTED] 交付汇总报告：执行者=PM；必须；充分触发 之后 复核通过(QA,DEV与OPS的两份报告)；所指事件=复核两份报告 [e_review]；复核者=QA；对象=DEV与OPS的两份报告；对象=dev.md；对象=ops.md [POSITIVE;运行值UNKNOWN]（bf:8ffa89e3fa124d7c1c0d）
+- [ACCEPTED] 交付汇总报告：接收者=ADMIN；必须；充分触发 之后 复核通过(QA,DEV与OPS的两份报告)；所指事件=复核两份报告 [e_review]；复核者=QA；对象=DEV与OPS的两份报告；对象=dev.md；对象=ops.md [POSITIVE;运行值UNKNOWN]（bf:65c24a30e68dbe228b62）
+- [ACCEPTED] 停止本任务：执行者=PM；必须；充分触发  发现高危问题(高危问题) [POSITIVE;运行值UNKNOWN]（bf:c83da3b135ef0a3f745d）
+- [ACCEPTED] 汇报高危问题：执行者=PM；必须；充分触发  发现高危问题(高危问题) [POSITIVE;运行值UNKNOWN]（bf:bbcdf20431d9975620b3）
+- [ACCEPTED] 汇报高危问题：接收者=ADMIN；必须；充分触发  发现高危问题(高危问题) [POSITIVE;运行值UNKNOWN]（bf:c07745e0938d115d61ec）
+
+## R 执行量化限制 — RESOLVED
+- [ACCEPTED] 完成全部工作：合计：全部工作完成耗时 ≤ 30 分钟；目标=完成全部工作；计数范围=根任务；合计：全部工作完成耗时 ≤ 30 分钟；目标=完成全部工作；计数范围=根任务（bf:a1bc9f0219bdff323eb7）
+
+## V 版本与依据 — RESOLVED
+- [ACCEPTED] 完成全部工作：依据=《配置核查规程》v1.2；必须；合计：全部工作完成耗时 ≤ 30 分钟；目标=完成全部工作；计数范围=根任务（bf:f6169a3bfaf09065ccbe）
+- [ACCEPTED] 生成汇总报告：依据=dev.md；必须；充分触发 之后 复核通过(QA,DEV与OPS的两份报告)；所指事件=复核两份报告 [e_review]；复核者=QA；对象=DEV与OPS的两份报告；对象=dev.md；对象=ops.md [POSITIVE;运行值UNKNOWN]（bf:77379233b49296c3d134）
+- [ACCEPTED] 生成汇总报告：依据=ops.md；必须；充分触发 之后 复核通过(QA,DEV与OPS的两份报告)；所指事件=复核两份报告 [e_review]；复核者=QA；对象=DEV与OPS的两份报告；对象=dev.md；对象=ops.md [POSITIVE;运行值UNKNOWN]（bf:674c2cb4c6dfc1da0fb6）
+
+## C 完成与停止 — RESOLVED
+- [ACCEPTED] 任务完成 充分触发 AND(AND(已提交(dev.md,QA)；所指事件=提交DEV报告 [e_dev_submit]；执行者=DEV；交付产物=dev.md；接收者=QA [POSITIVE;运行值UNKNOWN],已提交(ops.md,QA)；所指事件=提交OPS报告 [e_ops_submit]；执行者=OPS；交付产物=ops.md；接收者=QA [POSITIVE;运行值UNKNOWN]),复核通过(QA,DEV与OPS的两份报告)；所指事件=复核两份报告 [e_review]；复核者=QA；对象=DEV与OPS的两份报告；对象=dev.md；对象=ops.md [POSITIVE;运行值UNKNOWN],已交付(summary.md,ADMIN)；所指事件=交付汇总报告 [e_deliver]；执行者=PM；交付产物=summary.md；接收者=ADMIN [POSITIVE;运行值UNKNOWN])；目标=根任务（bf:2a531999fd8717de8fbc）
+- [ACCEPTED] 任务停止/升级 充分触发 发现高危问题(高危问题) [POSITIVE;运行值UNKNOWN]；目标=根任务（bf:8493b2a88872946207b5）
+
+## B 禁止与限制 — RESOLVED
+- [ACCEPTED] 禁止 修改输入文件；对象=本任务输入文件（bf:e461c7cb94b2855cf6b2）
+- [ACCEPTED] 禁止 访问生产环境；对象=生产环境（bf:4102f96d5d811b3b9ff5）
+- [ACCEPTED] 作用域  MEMBERS(ITEM(本任务输入文件))；目标=修改输入文件（bf:be4c1bce0043778e7269）
+
+## 产物关联与可用性依赖（不等于事件强顺序）
+- [ACCEPTED] 同身份产物 dev.md：生成DEV报告 [e_dev_gen]；执行者=DEV；产生结果=dev.md → 提交DEV报告 [e_dev_submit]；执行者=DEV；交付产物=dev.md；接收者=QA；仅关联，不推出版本可用或先后（ai:1bd87eabc38bc90a6833）
+- [ACCEPTED] 同身份产物 dev.md：生成DEV报告 [e_dev_gen]；执行者=DEV；产生结果=dev.md → 复核两份报告 [e_review]；复核者=QA；对象=DEV与OPS的两份报告；对象=dev.md；对象=ops.md；仅关联，不推出版本可用或先后（ai:1b4662227ba9b1fe2351）
+- [ACCEPTED] 同身份产物 dev.md：生成DEV报告 [e_dev_gen]；执行者=DEV；产生结果=dev.md → 生成汇总报告 [e_summary]；执行者=PM；依据=dev.md；依据=ops.md；对象=dev.md；对象=ops.md；产生结果=summary.md；仅关联，不推出版本可用或先后（ai:ab6ce14c2eb9fc5fc3a3）
+- [ACCEPTED] 同身份产物 ops.md：生成OPS报告 [e_ops_gen]；执行者=OPS；产生结果=ops.md → 提交OPS报告 [e_ops_submit]；执行者=OPS；交付产物=ops.md；接收者=QA；仅关联，不推出版本可用或先后（ai:0d35275241f5d81e7de5）
+- [ACCEPTED] 同身份产物 ops.md：生成OPS报告 [e_ops_gen]；执行者=OPS；产生结果=ops.md → 复核两份报告 [e_review]；复核者=QA；对象=DEV与OPS的两份报告；对象=dev.md；对象=ops.md；仅关联，不推出版本可用或先后（ai:a1e5bf0fbfbb2dc8e4d1）
+- [ACCEPTED] 同身份产物 ops.md：生成OPS报告 [e_ops_gen]；执行者=OPS；产生结果=ops.md → 生成汇总报告 [e_summary]；执行者=PM；依据=dev.md；依据=ops.md；对象=dev.md；对象=ops.md；产生结果=summary.md；仅关联，不推出版本可用或先后（ai:89da6e31c982cf54ea97）
+- [ACCEPTED] 同身份产物 summary.md：生成汇总报告 [e_summary]；执行者=PM；依据=dev.md；依据=ops.md；对象=dev.md；对象=ops.md；产生结果=summary.md → 交付汇总报告 [e_deliver]；执行者=PM；交付产物=summary.md；接收者=ADMIN；仅关联，不推出版本可用或先后（ai:4d82afcf629375fca917）
+- [ACCEPTED] 产物可用性 dev.md：本次生成DEV报告 [e_dev_gen]；执行者=DEV；产生结果=dev.md结果 → 提交DEV报告 [e_dev_submit]；执行者=DEV；交付产物=dev.md；接收者=QA用途；所使用部分可用；保留生产=必须 / 使用=必须；实际可用UNKNOWN，不推出整项生产完成或审批（ad:f50f5149b49800d668b1）
+- [ACCEPTED] 产物可用性 ops.md：本次生成OPS报告 [e_ops_gen]；执行者=OPS；产生结果=ops.md结果 → 提交OPS报告 [e_ops_submit]；执行者=OPS；交付产物=ops.md；接收者=QA用途；所使用部分可用；保留生产=必须 / 使用=必须；实际可用UNKNOWN，不推出整项生产完成或审批（ad:4434fa666e169fa4793b）
+- [ACCEPTED] 产物可用性 dev.md：本次生成DEV报告 [e_dev_gen]；执行者=DEV；产生结果=dev.md结果 → 复核两份报告 [e_review]；复核者=QA；对象=DEV与OPS的两份报告；对象=dev.md；对象=ops.md用途；所使用部分可用；保留生产=必须 / 使用=必须；实际可用UNKNOWN，不推出整项生产完成或审批（ad:7c8f19ee290f4175ea16）
+- [ACCEPTED] 产物可用性 ops.md：本次生成OPS报告 [e_ops_gen]；执行者=OPS；产生结果=ops.md结果 → 复核两份报告 [e_review]；复核者=QA；对象=DEV与OPS的两份报告；对象=dev.md；对象=ops.md用途；所使用部分可用；保留生产=必须 / 使用=必须；实际可用UNKNOWN，不推出整项生产完成或审批（ad:18f1b5d8591bf81ceb28）
+- [ACCEPTED] 产物可用性 dev.md：本次生成DEV报告 [e_dev_gen]；执行者=DEV；产生结果=dev.md结果 → 生成汇总报告 [e_summary]；执行者=PM；依据=dev.md；依据=ops.md；对象=dev.md；对象=ops.md；产生结果=summary.md用途；所使用部分可用；保留生产=必须 / 使用=必须；实际可用UNKNOWN，不推出整项生产完成或审批（ad:ce374a6da8f7f963ae73）
+- [ACCEPTED] 产物可用性 ops.md：本次生成OPS报告 [e_ops_gen]；执行者=OPS；产生结果=ops.md结果 → 生成汇总报告 [e_summary]；执行者=PM；依据=dev.md；依据=ops.md；对象=dev.md；对象=ops.md；产生结果=summary.md用途；所使用部分可用；保留生产=必须 / 使用=必须；实际可用UNKNOWN，不推出整项生产完成或审批（ad:9eb8f655212fb14fdc3f）
+- [ACCEPTED] 产物可用性 summary.md：本次生成汇总报告 [e_summary]；执行者=PM；依据=dev.md；依据=ops.md；对象=dev.md；对象=ops.md；产生结果=summary.md结果 → 交付汇总报告 [e_deliver]；执行者=PM；交付产物=summary.md；接收者=ADMIN用途；所使用部分可用；保留生产=必须 / 使用=必须；实际可用UNKNOWN，不推出整项生产完成或审批（ad:ada8c1601089e67143a6）
+
+## 未指定 / 歧义 / 未投影语义
+- [ACCEPTED] ROLE；事件=完成全部工作 [e_work]；依据=《配置核查规程》v1.2；输入/受检对象=app.yaml；输入/受检对象=env.json；对象=测试环境；对象=测试环境（bf:d42d9cc802aea052830c）
+- [ACCEPTED] ARTIFACT_USE；事件=提交DEV报告 [e_dev_submit]；执行者=DEV；交付产物=dev.md；接收者=QA（bf:577463d84ded86568c05）
+- [ACCEPTED] ARTIFACT_USE；事件=提交OPS报告 [e_ops_submit]；执行者=OPS；交付产物=ops.md；接收者=QA（bf:436b275cf5038d3d8994）
+- [ACCEPTED] ROLE；事件=复核两份报告 [e_review]；复核者=QA；对象=DEV与OPS的两份报告；对象=dev.md；对象=ops.md；对象=DEV与OPS的两份报告（bf:d3be582f31b251000393）
+- [ACCEPTED] ROLE；事件=复核两份报告 [e_review]；复核者=QA；对象=DEV与OPS的两份报告；对象=dev.md；对象=ops.md；对象=dev.md（bf:68cd9c711e7e5bbbeb24）
+- [ACCEPTED] ROLE；事件=复核两份报告 [e_review]；复核者=QA；对象=DEV与OPS的两份报告；对象=dev.md；对象=ops.md；对象=ops.md（bf:0a12201d52dbcff7aca0）
+- [ACCEPTED] TEMPORAL；事件=复核两份报告 [e_review]；复核者=QA；对象=DEV与OPS的两份报告；对象=dev.md；对象=ops.md；AND(已提交(dev.md,QA)；所指事件=提交DEV报告 [e_dev_submit]；执行者=DEV；交付产物=dev.md；接收者=QA [POSITIVE;运行值UNKNOWN],已提交(ops.md,QA)；所指事件=提交OPS报告 [e_ops_submit]；执行者=OPS；交付产物=ops.md；接收者=QA [POSITIVE;运行值UNKNOWN])（bf:eddea4afc2e56ef2079c）
+- [ACCEPTED] ARTIFACT_USE；事件=复核两份报告 [e_review]；复核者=QA；对象=DEV与OPS的两份报告；对象=dev.md；对象=ops.md（bf:1601da5635a853f8871f）
+- [ACCEPTED] ARTIFACT_USE；事件=复核两份报告 [e_review]；复核者=QA；对象=DEV与OPS的两份报告；对象=dev.md；对象=ops.md（bf:2be7e712a3a55c948129）
+- [ACCEPTED] ROLE；事件=生成汇总报告 [e_summary]；执行者=PM；依据=dev.md；依据=ops.md；对象=dev.md；对象=ops.md；产生结果=summary.md；对象=dev.md（bf:d876015a31cac31234dd）
+- [ACCEPTED] ROLE；事件=生成汇总报告 [e_summary]；执行者=PM；依据=dev.md；依据=ops.md；对象=dev.md；对象=ops.md；产生结果=summary.md；对象=ops.md（bf:a10fdb7fddd117282c4e）
+- [ACCEPTED] CONDITION；事件=生成汇总报告 [e_summary]；执行者=PM；依据=dev.md；依据=ops.md；对象=dev.md；对象=ops.md；产生结果=summary.md；复核通过(QA,DEV与OPS的两份报告)；所指事件=复核两份报告 [e_review]；复核者=QA；对象=DEV与OPS的两份报告；对象=dev.md；对象=ops.md [POSITIVE;运行值UNKNOWN]（bf:0b37b6f3b39be7772722）
+- [ACCEPTED] ARTIFACT_USE；事件=生成汇总报告 [e_summary]；执行者=PM；依据=dev.md；依据=ops.md；对象=dev.md；对象=ops.md；产生结果=summary.md（bf:e75a2ac151d3ca6c99ca）
+- [ACCEPTED] ARTIFACT_USE；事件=生成汇总报告 [e_summary]；执行者=PM；依据=dev.md；依据=ops.md；对象=dev.md；对象=ops.md；产生结果=summary.md（bf:abf9c76483fa985f5520）
+- [ACCEPTED] CONDITION；事件=交付汇总报告 [e_deliver]；执行者=PM；交付产物=summary.md；接收者=ADMIN；复核通过(QA,DEV与OPS的两份报告)；所指事件=复核两份报告 [e_review]；复核者=QA；对象=DEV与OPS的两份报告；对象=dev.md；对象=ops.md [POSITIVE;运行值UNKNOWN]（bf:9d8c35654a54296a0aca）
+- [ACCEPTED] ARTIFACT_USE；事件=交付汇总报告 [e_deliver]；执行者=PM；交付产物=summary.md；接收者=ADMIN（bf:80f39d7cdc830e96220a）
+- [ACCEPTED] ROLE；事件=停止本任务 [e_stop]；执行者=PM；对象=本任务；对象=本任务（bf:b215eb4f810cd75a8d28）
+- [ACCEPTED] CONDITION；事件=停止本任务 [e_stop]；执行者=PM；对象=本任务；发现高危问题(高危问题) [POSITIVE;运行值UNKNOWN]（bf:a58e38867927f90afa53）
+- [ACCEPTED] ROLE；事件=汇报高危问题 [e_notify]；执行者=PM；接收者=ADMIN；内容=高危问题；内容=高危问题（bf:8f31fbc6ffe1adb5f874）
+- [ACCEPTED] CONDITION；事件=汇报高危问题 [e_notify]；执行者=PM；接收者=ADMIN；内容=高危问题；发现高危问题(高危问题) [POSITIVE;运行值UNKNOWN]（bf:6412962aac4c7a7e597d）
+- [ACCEPTED] ROLE；事件=修改输入文件 [e_modify]；对象=本任务输入文件；对象=本任务输入文件（bf:37c08186d0605d032a64）
+- [ACCEPTED] ROLE；事件=访问生产环境 [e_access]；对象=生产环境；对象=生产环境（bf:96784c77a4085de8d3b4）
+- [ACCEPTED] ARTIFACT_AVAILABILITY；事件=根任务（bf:8faf91ded983e4728b96）
+- [ACCEPTED] ARTIFACT_AVAILABILITY；事件=根任务（bf:7a1d3d30da11f1fbc42a）
+- [ACCEPTED] ARTIFACT_AVAILABILITY；事件=根任务（bf:469abcc7ddfedb42f4c4）
+- [ACCEPTED] ARTIFACT_AVAILABILITY；事件=根任务（bf:0afb2e165918babf4dc3）
+- [ACCEPTED] ARTIFACT_AVAILABILITY；事件=根任务（bf:4cb650623d2c44e7375a）
+- [ACCEPTED] ARTIFACT_AVAILABILITY；事件=根任务（bf:c34298f96ef1d035bd10）
+- [ACCEPTED] ARTIFACT_AVAILABILITY；事件=根任务（bf:561feb566a973415b648）
+
+## 程序边界计算
+部分计算，存在缺口
+计算仅消费本次IR，不读取原文补语义；可行组合不是已发生状态，也不是执行授权。
+布尔约束：约束存在可行组合。
+- 数量 合计：全部工作完成耗时 LTE 30 分钟；目标=e_work；当前核验=未知：没有足够运行观测。
+- 合并区间：目标=e_work，单位=分钟，下界=null，上界={"value":"30","inclusive":true}；区间非空。
+- TEMPORAL：目标=e_review，方向=ORDER，时序=AFTER，当前前提=未知：没有足够运行观测。
+- CONDITION：目标=e_summary，方向=SUFFICIENT，时序=AFTER，当前前提=未知：没有足够运行观测。
+- CONDITION：目标=e_deliver，方向=SUFFICIENT，时序=AFTER，当前前提=未知：没有足够运行观测。
+- COMPLETION：目标=ROOT，方向=SUFFICIENT，时序=无，当前前提=未知：没有足够运行观测。
+- CONDITION：目标=e_stop，方向=SUFFICIENT，时序=无，当前前提=未知：没有足够运行观测。
+- STOP：目标=ROOT，方向=SUFFICIENT，时序=无，当前前提=未知：没有足够运行观测。
+- CONDITION：目标=e_notify，方向=SUFFICIENT，时序=无，当前前提=未知：没有足够运行观测。
+显式时序：0条；循环0个；条件时序保留0条。
+- 范围：目标=e_work；["n_app","n_env"]。范围外不等于获准执行。
+- 范围：目标=e_work；["n_test"]。范围外不等于获准执行。
+- 范围：目标=e_stop；未知：没有足够运行观测。范围外不等于获准执行。
+- 范围：目标=e_modify；["n_app","n_env"]。范围外不等于获准执行。
+- 产物可用性：n_dev_report → e_dev_submit；未知：没有足够运行观测；不推出整项生产完成。
+- 产物可用性：n_ops_report → e_ops_submit；未知：没有足够运行观测；不推出整项生产完成。
+- 产物可用性：n_dev_report → e_review；未知：没有足够运行观测；不推出整项生产完成。
+- 产物可用性：n_ops_report → e_review；未知：没有足够运行观测；不推出整项生产完成。
+- 产物可用性：n_dev_report → e_summary；未知：没有足够运行观测；不推出整项生产完成。
+- 产物可用性：n_ops_report → e_summary；未知：没有足够运行观测；不推出整项生产完成。
+- 产物可用性：n_summary → e_deliver；未知：没有足够运行观测；不推出整项生产完成。
+- 未计算 bf:c2c1519254ac055e25f7：OWNED_EVENT_ACTIVATION_SCOPE_NOT_SUPPORTED。
+- 未计算 bf:4be4d193b0b5567c678f：OWNED_EVENT_ACTIVATION_SCOPE_NOT_SUPPORTED。
+- 未计算 bf:34b90128bf68301e8c44：OWNED_EVENT_ACTIVATION_SCOPE_NOT_SUPPORTED。
+- 未计算 bf:02f4feb357424baa892f：OWNED_EVENT_ACTIVATION_SCOPE_NOT_SUPPORTED。
+- 未计算 bf:fcaefcbf557b4fdea9fd：OWNED_EVENT_ACTIVATION_SCOPE_NOT_SUPPORTED。
+- 未计算 bf:2194c81d95404e6804d1：OWNED_EVENT_ACTIVATION_SCOPE_NOT_SUPPORTED。
+- 未计算 bf:c4469218658edc284352：OWNED_EVENT_ACTIVATION_SCOPE_NOT_SUPPORTED。
+- 未计算 bf:883e6bb37effd0953018：OWNED_EVENT_ACTIVATION_SCOPE_NOT_SUPPORTED。
+- 未计算 bf:ddc4b19ed0b9a15f5813：OWNED_EVENT_ACTIVATION_SCOPE_NOT_SUPPORTED。
+- 未计算 bf:d2f347f6b61efc751d5d：OWNED_EVENT_ACTIVATION_SCOPE_NOT_SUPPORTED。
+- 未计算 bf:eddea4afc2e56ef2079c：ORDER_ENDPOINT_ACTIVATION_SCOPE_NOT_SUPPORTED。
+- 未计算 bf:0b37b6f3b39be7772722：ORDER_ENDPOINT_ACTIVATION_SCOPE_NOT_SUPPORTED。
+- 未计算 bf:9d8c35654a54296a0aca：ORDER_ENDPOINT_ACTIVATION_SCOPE_NOT_SUPPORTED。

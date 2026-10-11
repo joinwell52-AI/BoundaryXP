@@ -1,0 +1,143 @@
+diff --git "a/D:\\boundx\\.boundx\\short-compiler-031-r1\\versions\\0.1.0-candidate.031-r1.2-ui.36\\research\\7plus1-parser\\llm-first-028\\calculus.mjs" "b/D:\\boundx\\.boundx\\short-compiler-031-r1\\versions\\0.1.0-candidate.031-r1.2-ui.38\\research\\7plus1-parser\\llm-first-028\\calculus.mjs"
+index ed402e53..f8c785c1 100644
+--- "a/D:\\boundx\\.boundx\\short-compiler-031-r1\\versions\\0.1.0-candidate.031-r1.2-ui.36\\research\\7plus1-parser\\llm-first-028\\calculus.mjs"
++++ "b/D:\\boundx\\.boundx\\short-compiler-031-r1\\versions\\0.1.0-candidate.031-r1.2-ui.38\\research\\7plus1-parser\\llm-first-028\\calculus.mjs"
+@@ -3,6 +3,7 @@
+ import {solveBooleanConstraints} from '../../../src/bxp/boolean-solver.mjs';
+ import {intersectValidatedIntervals} from '../../../src/bxp/interval-solver.mjs';
+ import {solveValidatedPrerequisites} from '../../../src/bxp/dependency-solver.mjs';
++import {evaluateValidatedTargetSet} from '../../../src/bxp/target-set-solver.mjs';
+ import {evaluateExpression,evaluateCondition,evaluateQuantity} from './compile.mjs';
+ import {evaluateArtifactAvailability} from './artifacts.mjs';
+ import {sha256} from './source.mjs';
+@@ -15,8 +16,37 @@ export function calculateBoundary(ir,observations={}){
+  const expressions=ir.expressions??[],index=new Map(expressions.map(x=>[x.id,x]));
+  const accepted=(ir.facts??[]).filter(f=>f.status==='ACCEPTED');
+  const events=new Map(accepted.filter(f=>f.kind==='EVENT').map(f=>[f.event.id,f.event]));
++ const eventFacts=new Map(accepted.filter(f=>f.kind==='EVENT').map(f=>[f.event.id,f]));
+  const conditions=[],quantities=[],ranges=[],availability=[],unsupported=[],formulas=[],atoms=new Map(),intervals=[],edges=[];
+  const provenance=f=>({fact_id:f.id,claim_ids:f.claim_ids??[],source_sha256:ir.source_sha256,sources:f.sources??[]});
++ // owner is a structural container, never an execution or ordering edge.
++ // Only a closed, accepted, unconditional current-task ownership path is
++ // supported here. Ancestor conditions/permissions are not silently copied.
++ const scopeCache=new Map();
++ const eventScope=event=>{
++  if(!event)return {supported:false,reason:'EVENT_NOT_ACCEPTED',path:[]};
++  if(scopeCache.has(event.id))return scopeCache.get(event.id);
++  const path=[],facts=[],seen=new Set();let current=event,reason=null;
++  while(current){
++   if(seen.has(current.id)){reason='OWNER_CYCLE';break;}seen.add(current.id);path.push(current.id);
++   const fact=eventFacts.get(current.id);
++   if(!fact){reason='OWNER_NOT_ACCEPTED';break;}facts.push(fact);
++   if(current.use!=='CURRENT_TASK'||current.layer!=='MAIN'||current.polarity!=='POSITIVE'){reason='OWNER_LAYER_NOT_CURRENT_MAIN';break;}
++   if(current.id!==event.id){
++    if(!(fact.sources??[]).some(s=>s.source_sha256===ir.source_sha256&&Array.isArray(s.span)&&s.span.length===2&&typeof s.quote==='string'&&s.quote.length)){reason='OWNER_PROVENANCE_MISSING';break;}
++    if(current.kind!=='ACTION'||current.modality!=='REQUIRED'){reason='OWNER_ACTIVATION_NOT_UNCONDITIONAL_REQUIRED';break;}
++    const constraints=[...(fact.constraints??[]),...accepted.filter(f=>f.claim?.event_id===current.id).map(f=>f.claim)];
++    if(constraints.some(c=>['CONDITION','TEMPORAL'].includes(c.kind))){reason='OWNER_GUARDED_ACTIVATION_NOT_SUPPORTED';break;}
++   }
++   if(current.owner_id==='ROOT'){path.push('ROOT');break;}
++   current=events.get(current.owner_id);
++   if(!current){reason='OWNER_NOT_ACCEPTED';break;}
++  }
++  const result={supported:!reason&&path.at(-1)==='ROOT',reason,path,
++   evidence:facts.map(f=>({event_id:f.event.id,...provenance(f)}))};
++  scopeCache.set(event.id,result);return result;
++ };
++ const ownershipProof=ids=>distinct(ids.filter(Boolean)).map(id=>({event_id:id,...eventScope(events.get(id))}));
+  const atom=(key,meaning)=>{const id='v:'+digest(key).slice(0,24);atoms.set(id,{id,meaning});return {var:id};};
+  const expressionFormula=(id,ancestors=[])=>{
+   if(ancestors.includes(id))throw Error('EXPRESSION_CYCLE');const e=index.get(id);if(!e)throw Error('MISSING_EXPRESSION');
+@@ -33,7 +63,7 @@ export function calculateBoundary(ir,observations={}){
+   if(['AND','ALL'].includes(e.op))return distinct(e.operands.flatMap(x=>declaredStateEvents(x,[...ancestors,id])));
+   throw Error('ORDER_ENDPOINT_NOT_UNIQUE_CONJUNCTIVE_EVENT');
+  };
+- const addFormula=(formula,f,rule)=>formulas.push({formula,rule,...provenance(f)});
++ const addFormula=(formula,f,rule)=>formulas.push({formula,rule,...provenance(f),ownership_paths:ownershipProof([f.event?.id,f.claim?.event_id])});
+  for(const f of ir.facts??[]){
+   if(f.status!=='ACCEPTED'){unsupported.push({...provenance(f),reason:'IR_FACT_NOT_ACCEPTED',status:f.status});continue;}
+   const c=f.claim;
+@@ -42,7 +72,7 @@ export function calculateBoundary(ir,observations={}){
+    conditions.push({...provenance(f),kind:f.kind,expression_id:c.expression_id,...evaluation,...(f.output_specification?{output_specification:f.output_specification}: {})});
+    try{
+     const event=events.get(c.event_id),spec=f.output_specification;
+-    const currentTarget=!!spec&&event?.polarity==='POSITIVE'&&['REQUIRED','PERMITTED','FORBIDDEN'].includes(event.modality)||!c.event_id||(event?.owner_id==='ROOT'&&event.use==='CURRENT_TASK'&&event.layer==='MAIN'&&event.polarity==='POSITIVE'&&['REQUIRED','PERMITTED','FORBIDDEN'].includes(event.modality));
++    const currentTarget=!!spec&&event?.polarity==='POSITIVE'&&['REQUIRED','PERMITTED','FORBIDDEN'].includes(event.modality)||!c.event_id||(eventScope(event).supported&&['REQUIRED','PERMITTED','FORBIDDEN'].includes(event.modality));
+     if(c.direction!=='ORDER'&&currentTarget){
+      const antecedent=expressionFormula(c.expression_id);
+      const target=spec?atom(['OUTPUT_BEHAVIOR',spec.artifact_id,c.event_id],{kind:'OUTPUT_BEHAVIOR',artifact_id:spec.artifact_id,event_id:c.event_id,producer_result_id:spec.producer_result_id}):atom([f.kind==='COMPLETION'?'TASK_COMPLETE':f.kind==='STOP'?'TASK_STOP':'EVENT_EXECUTED',c.event_id??c.scope_id],{kind:f.kind==='COMPLETION'?'TASK_COMPLETE':f.kind==='STOP'?'TASK_STOP':'EVENT_EXECUTED',event_id:c.event_id??null});
+@@ -60,11 +90,11 @@ export function calculateBoundary(ir,observations={}){
+    }catch(e){unsupported.push({...provenance(f),reason:e.message});}
+    if(c.temporal){
+     try{
+-     const activeEvent=e=>e?.use==='CURRENT_TASK'&&e.layer==='MAIN'&&e.polarity==='POSITIVE'&&e.owner_id==='ROOT';
++     const activeEvent=e=>eventScope(e).supported;
+      const previous=declaredStateEvents(c.expression_id);
+      if(!c.event_id||!events.has(c.event_id)||previous.some(x=>!events.has(x)))throw Error('ORDER_ENDPOINT_NOT_ACCEPTED_EVENT');
+      if(!activeEvent(events.get(c.event_id))||previous.some(x=>!activeEvent(events.get(x))))throw Error('ORDER_ENDPOINT_ACTIVATION_SCOPE_NOT_SUPPORTED');
+-     for(const before of previous)edges.push({id:c.id+':'+before,kind:'prerequisite',from:c.temporal==='AFTER'?before:c.event_id,to:c.temporal==='AFTER'?c.event_id:before,guard_context:digest([c.direction,c.expression_id]),direction:c.direction,...provenance(f)});
++     for(const before of previous)edges.push({id:c.id+':'+before,kind:'prerequisite',from:c.temporal==='AFTER'?before:c.event_id,to:c.temporal==='AFTER'?c.event_id:before,guard_context:digest([c.direction,c.expression_id]),direction:c.direction,expression_id:c.expression_id,ownership_paths:ownershipProof([before,c.event_id]),...provenance(f)});
+     }catch(e){unsupported.push({...provenance(f),reason:e.message});}
+    }
+   }
+@@ -79,7 +109,8 @@ export function calculateBoundary(ir,observations={}){
+     continue;
+    }
+    if(e.use!=='CURRENT_TASK'||e.layer!=='MAIN'||e.polarity!=='POSITIVE')continue;
+-   if(e.owner_id!=='ROOT'){unsupported.push({...provenance(f),reason:'OWNED_EVENT_ACTIVATION_SCOPE_NOT_SUPPORTED'});continue;}
++   const scope=eventScope(e);
++   if(!scope.supported){unsupported.push({...provenance(f),reason:'OWNED_EVENT_ACTIVATION_SCOPE_NOT_SUPPORTED',detail:scope.reason,ownership_path:scope.path});continue;}
+    const conditional=cs.filter(x=>x.kind==='CONDITION');
+    const target=atom(['EVENT_EXECUTED',e.id],{kind:'EVENT_EXECUTED',event_id:e.id,predicate:e.predicate});
+    if(e.modality==='REQUIRED'&&!conditional.some(x=>['SUFFICIENT','IFF'].includes(x.direction)))addFormula(target,f,'REQUIRED_CURRENT_MAIN_EVENT');
+@@ -104,7 +135,14 @@ export function calculateBoundary(ir,observations={}){
+    const booleanScope=(id,seen=new Set())=>{if(seen.has(id))return false;const x=index.get(id);if(!x)return false;if(x.op==='STATE')return !!x.state;if(x.op==='TEST')return !!x.test;return ['NOT','AND','ALL','OR','ANY'].includes(x.op)&&x.operands.every(k=>booleanScope(k,new Set([...seen,id])));};
+    const booleanQualifier=!domain&&booleanScope(c.expression_id);
+    const value=domain?domain.complete?new Set(domain.members):'UNKNOWN':evaluateExpression(expressions,c.expression_id,observations.states??{},observations.tests??{});
+-   ranges.push({...provenance(f),expression_id:c.expression_id,target_id:c.scope_id,scope_fragment:domain?'ENTITY_SET':booleanQualifier?'BOOLEAN_QUALIFIER':'UNSUPPORTED',result:value instanceof Set?'FINITE_SET':typeof value==='string'?value:'UNKNOWN',members:value instanceof Set?[...value].sort():null,...(domain?{membership_complete:domain.complete,domain_provenance_ids:domain.provenance_ids??[],reason:domain.reason??null}:{}),structurally_expressed:!!domain||booleanQualifier,evaluation_is_execution_proof:false,execution_authorization:null});
++   const suppliedQueries=observations.range_queries?.[c.id];
++   const membership_queries=(Array.isArray(suppliedQueries)?suppliedQueries:[]).map(query=>{
++    const entity=ir.entities?.find(e=>e.id===query.target_id);
++    const known=domain?.complete===true&&query.identity_known===true&&!!entity&&entity.type!=='REFERENT'&&!(entity.alternatives??[]).length;
++    const evaluated=evaluateValidatedTargetSet({id:query.id??null,scope_id:c.scope_id,forbidden:domain?.members??[],requested:known?[entity.id]:[],identity_status:known?'resolved':'unresolved'});
++    return {query_id:query.id??null,target_id:query.target_id??null,result:evaluated.result==='overlap'?'TRUE':evaluated.result==='disjoint'?'FALSE':'UNKNOWN',core_result:evaluated.result,...provenance(f),execution_authorization:null};
++   });
++   ranges.push({...provenance(f),expression_id:c.expression_id,target_id:c.scope_id,scope_fragment:domain?'ENTITY_SET':booleanQualifier?'BOOLEAN_QUALIFIER':'UNSUPPORTED',result:value instanceof Set?'FINITE_SET':typeof value==='string'?value:'UNKNOWN',members:value instanceof Set?[...value].sort():null,membership_queries,...(domain?{membership_complete:domain.complete,domain_provenance_ids:domain.provenance_ids??[],reason:domain.reason??null}:{}),structurally_expressed:!!domain||booleanQualifier,evaluation_is_execution_proof:false,execution_authorization:null});
+    if(!domain&&!booleanQualifier)unsupported.push({...provenance(f),reason:'SCOPE_EXPRESSION_NOT_SUPPORTED'});
+    const hasTests=(id,seen=new Set())=>{if(seen.has(id))return false;seen.add(id);const x=index.get(id);return x?.op==='TEST'||(x?.operands??[]).some(k=>hasTests(k,seen));};
+    if(hasTests(c.expression_id)&&booleanQualifier&&f.event?.polarity==='POSITIVE'&&(f.event?.use==='CURRENT_TASK'&&['REQUIRED','PERMITTED'].includes(f.event.modality)||f.output_specification&&['REQUIRED','PERMITTED'].includes(f.event?.modality))){
+@@ -135,7 +173,7 @@ export function calculateBoundary(ir,observations={}){
+  const dependency={status:unconditional.length?'CALCULATED':'NOT_APPLICABLE',...solveValidatedPrerequisites(unconditional),edges:unconditional,conditional_edges:edges.filter(x=>!unconditional.includes(x)),availability_not_order:true};
+  const conflicts=[...(boolean.result==='unsatisfiable'?[{kind:'BOOLEAN_UNSAT',fact_ids:formulas.map(x=>x.fact_id)}]:[]),...intervalResults.filter(x=>x.empty).map(x=>({kind:'EMPTY_QUANTITY_INTERVAL',constraint_ids:x.constraint_ids})),...dependency.cycles.map(x=>({kind:'TEMPORAL_CYCLE',...x}))];
+  const gaps=ir.gaps??[],unresolved=(ir.facts??[]).filter(x=>x.status!=='ACCEPTED');
+- return {format:'boundx-calculation-trace/experimental-v1',adapter_version:'native-ir-to-existing-core-r01',input_ir_sha256:digest(ir),source_sha256:ir.source_sha256,status:conflicts.length?'CONFLICT':unsupported.length||gaps.length||unresolved.length||boolean.status==='PARTIAL'?'PARTIAL':'CALCULATED_FRAGMENT',boolean:{...boolean,atoms:[...atoms.values()].filter(a=>formulas.some(f=>variablesOf(f.formula).includes(a.id))),formulas},conditions,quantities,ranges,availability,intervals:intervalResults,dependency,conflicts,unsupported,coverage:{ir_facts:(ir.facts??[]).length,accepted_facts:accepted.length,unresolved_facts:unresolved.length,source_gaps:gaps.length,source_semantic_completeness:'NOT_PROVEN',full_bxp_conformance:'NOT_PROVEN'},observations_supplied:Object.keys(observations).length>0,business_decision:null,execution_authorization:null};
++ return {format:'boundx-calculation-trace/experimental-v1',adapter_version:'native-ir-to-existing-core-r02',input_ir_sha256:digest(ir),source_sha256:ir.source_sha256,status:conflicts.length?'CONFLICT':unsupported.length||gaps.length||unresolved.length||boolean.status==='PARTIAL'?'PARTIAL':'CALCULATED_FRAGMENT',boolean:{...boolean,atoms:[...atoms.values()].filter(a=>formulas.some(f=>variablesOf(f.formula).includes(a.id))),formulas},conditions,quantities,ranges,availability,intervals:intervalResults,dependency,conflicts,unsupported,coverage:{ir_facts:(ir.facts??[]).length,accepted_facts:accepted.length,unresolved_facts:unresolved.length,source_gaps:gaps.length,source_semantic_completeness:'NOT_PROVEN',full_bxp_conformance:'NOT_PROVEN'},observations_supplied:Object.keys(observations).length>0,business_decision:null,execution_authorization:null};
+ }
+ 
+ export function renderCalculations(c){
+@@ -149,7 +187,10 @@ export function renderCalculations(c){
+  for(const x of c.intervals)lines.push(`- 合并区间：目标=${x.subject}，单位=${x.unit}，下界=${JSON.stringify(x.lower)}，上界=${JSON.stringify(x.upper)}；${x.empty?'空区间：冲突':'区间非空'}。`);
+  for(const x of c.conditions)lines.push(`- ${x.kind}：目标=${x.target_id}，方向=${x.direction}，时序=${x.temporal??'无'}，当前前提=${labels[x.condition_value]??x.condition_value}。`);
+  lines.push(`显式时序：${c.dependency.prerequisite_edges}条；循环${c.dependency.cycles.length}个；条件时序保留${c.dependency.conditional_edges.length}条。`);
+- for(const x of c.ranges)lines.push(`- 范围：目标=${x.target_id}；${x.members?JSON.stringify(x.members):labels[x.result]??x.result}。范围外不等于获准执行。`);
++ for(const x of c.ranges){
++  lines.push(`- 范围：目标=${x.target_id}；${x.members?JSON.stringify(x.members):labels[x.result]??x.result}。范围外不等于获准执行。`);
++  for(const query of x.membership_queries??[])lines.push(`  - 成员核验：对象=${query.target_id}；${labels[query.result]??query.result}；这只是本条范围适用性，不是执行许可。`);
++ }
+  for(const x of c.availability)lines.push(`- 产物可用性：${x.artifact_id} → ${x.consumer_event_id}；${labels[x.result]??x.result}；不推出整项生产完成。`);
+  for(const x of c.unsupported)lines.push(`- 未计算 ${x.fact_id}：${x.reason}。`);
+  return lines.join('\n')+'\n';
+
+diff --git "a/D:\\boundx\\.boundx\\short-compiler-031-r1\\versions\\0.1.0-candidate.031-r1.2-ui.36\\research\\7plus1-parser\\llm-first-028\\engine.mjs" "b/D:\\boundx\\.boundx\\short-compiler-031-r1\\versions\\0.1.0-candidate.031-r1.2-ui.38\\research\\7plus1-parser\\llm-first-028\\engine.mjs"
+index b1231eff..da18fb55 100644
+--- "a/D:\\boundx\\.boundx\\short-compiler-031-r1\\versions\\0.1.0-candidate.031-r1.2-ui.36\\research\\7plus1-parser\\llm-first-028\\engine.mjs"
++++ "b/D:\\boundx\\.boundx\\short-compiler-031-r1\\versions\\0.1.0-candidate.031-r1.2-ui.38\\research\\7plus1-parser\\llm-first-028\\engine.mjs"
+@@ -11,7 +11,7 @@ import {implementationInventory,runtimeInventory} from './evidence.mjs';
+ import {technicalRevisionFeedback,auditBindingRevisionFeedback} from './revision.mjs';
+ import {modelSignal} from './observability.mjs';
+ export const writeJSON=(file,data)=>fs.writeFileSync(file,JSON.stringify(data,null,2)+'\n');
+-export const compilerRevision='031-r1-c11';
++export const compilerRevision='031-r1-c12';
+ export function replay7Plus1(bytes,{output,replayFrom,resourceGuard=()=>{},productSnapshot=null}){
+  resourceGuard();
+  const source=prepareSource(bytes),tracePath=path.join(replayFrom,'trace.json');
