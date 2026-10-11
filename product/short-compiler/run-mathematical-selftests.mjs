@@ -1,0 +1,5 @@
+import fs from 'node:fs';import path from 'node:path';import {spawnSync} from 'node:child_process';
+const report=path.resolve('docs/reports/7plus1/MATHEMATICAL-RESULT-CLOSURE-r01'),root=path.resolve('.boundx/products/0.1.0-candidate.031-r1.2-ui.48');
+const tests=['mathematical-result-report.test.mjs','mathematical-result-ui.test.mjs','root-limit-contract.test.mjs','boundary-order-calculus.test.mjs'].map(x=>'product/short-compiler/tests/'+x);
+const r=spawnSync(process.execPath,['--test','--test-reporter=tap',...tests],{env:{...process.env,BOUNDARY_WORK:root},windowsHide:true,encoding:'utf8'});
+fs.writeFileSync(path.join(report,'selftests-ui48.tap'),r.stdout,{flag:'wx'});const result={exit_code:r.status,version:path.basename(root),real_model_calls:0,counts:Object.fromEntries(['tests','pass','fail'].map(k=>[k,Number(r.stdout.match(new RegExp('^# '+k+' (\\d+)','m'))?.[1]??0)]))};fs.writeFileSync(path.join(report,'SELFTESTS-ui48.json'),JSON.stringify(result,null,2)+'\n',{flag:'wx'});console.log(JSON.stringify(result));process.exitCode=r.status;
