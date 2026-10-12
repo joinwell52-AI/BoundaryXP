@@ -13,6 +13,7 @@ export function projectDirectIR(ir,acceptance){
   if(n.operator==='GROUP_MEMBERS')return a[0]+'的成员';
   if(n.operator==='TASK_EVENTS')return a[0]+'范围内的全部执行事件（含后续事件）';
   if(n.operator==='TRUE_AT_START')return a[1]+'开始时，'+a[0]+'已成立';
+  if(n.operator==='IMMEDIATE_AFTER')return a[0]+'触发后，'+a[1]+'立即优先响应（无数值延迟要求）';
   const op={NOT:'非',STATE_VALUE:'状态成立',EVENT_OCCURRED:'事件发生',EVENT_START:'开始时点',EVENT_END:'结束时点',STATE_ESTABLISHED:'状态成立时点',REAL_INTERVAL:'实数区间',INTEGER_RANGE:'整数区间',CARDINALITY:'数量',OBJECT_OF:'对象',RECIPIENT_OF:'接收者',ENVIRONMENT_OF:'环境',EVENT_INSTANCE:'事件实例',PREVIOUS_INSTANCE:'紧邻前次实例',FORALL:'对所有成员',EXISTS:'存在成员'};
   return (op[n.operator]??n.operator)+'('+a.join('，')+')';
  };
@@ -24,7 +25,9 @@ export function projectDirectIR(ir,acceptance){
   if(e.use==='CURRENT_TASK'&&e.kind==='ACTION'&&norm.length)put('A',e,modal+'：'+e.label+'；'+e.roles.map(r=>(labels[r.role]??r.role)+'='+show(r.value)).join('；'));
   for(const role of e.roles){const text=e.label+'：'+labels[role.role]+'='+show(role.value);if(['PERFORMER','ORGANIZER','REVIEWER','APPROVER','RECIPIENT','COLLABORATOR'].includes(role.role))put('P',e,text,{role:role.role,value:role.value});if(role.role==='INPUT_OBJECT')put('I',e,text,{value:role.value});if(['RESULT','DELIVERABLE'].includes(role.role))put('O',e,text+'；'+modal,{value:role.value});if(role.role==='BASIS')put('V',e,text,{value:role.value});}
  }
- for(const r of ir.requirements){const text=(labels[r.modality]??r.modality)+'：'+show(r.body)+(r.applicability?'；适用条件：'+show(r.applicability):'');
+ for(const r of ir.requirements){const body=nodes.get(r.body.id),norm=['EVENT_NORM','STOP'].includes(r.kind),isTrue=body?.operator==='BOOLEAN'&&body.literal===true,sameOccurrence=body?.operator==='EVENT_OCCURRED'&&body.arguments[0]?.id===r.subject?.id;
+  const description=norm?(sameOccurrence?show(r.body):'事件发生('+show(r.subject)+')'+(isTrue?'':' 且 '+show(r.body))):show(r.body);
+  const text=(labels[r.modality]??r.modality)+'：'+description+(r.applicability?'；适用条件：'+show(r.applicability):'');
   if(r.modality==='FORBIDDEN'||r.kind==='STOP')put('B',r,text);
   if(['STOP','COMPLETION'].includes(r.kind))put('C',r,text);
   if(r.kind==='DATA_USE')put('I',r,'产物使用依赖：'+show(r.data_use?.object)+' → '+show(r.data_use?.consumer),{external_input:false});

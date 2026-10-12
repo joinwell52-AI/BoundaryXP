@@ -17,7 +17,7 @@ function ranking(edges){const nodes=[...new Set(edges.flatMap(x=>[x.from,x.to]))
 export function verifyJointWitness(problem,witness){
  const checks=[];const add=(id,pass,kind)=>checks.push({id,pass,kind});
  add('EXACT_VARIABLE_ASSIGNMENT',Object.keys(witness.boolean).length===problem.variables.length&&problem.variables.every(v=>typeof witness.boolean[v]==='boolean'),'BINDING');
- for(const c of problem.constraints){const vars=[...new Set(variablesOf(c.formula))];let pass=false;try{pass=evaluateBooleanAssignment(vars,c.formula,Object.fromEntries(vars.map(v=>[v,witness.boolean[v]])));}catch{}add(c.id,pass,'BOOLEAN');}
+ for(const c of problem.constraints){const vars=[...new Set(variablesOf(c.formula))];let pass=false;try{pass=evaluateBooleanAssignment(vars,c.formula,Object.fromEntries(vars.map(v=>[v,witness.boolean[v]])),{maxVariables:128});}catch{}add(c.id,pass,'BOOLEAN');}
  for(const x of problem.intervals)add('interval:'+x.id,typeof witness.intervals[x.id]==='string'&&intervalContains(x,witness.intervals[x.id]),'INTERVAL');
  for(const d of problem.domains??[]){if(d.guard&&partial(d.guard,witness.boolean)!==true)continue;const value=witness.domain_values?.[d.variable_id??d.id];add('domain:'+d.id,evaluateScopeMembership(d.allowed,[value],{identityKnown:typeof value==='string'}).result==='SATISFIED','FINITE_SCOPE_MEMBERSHIP');}
  for(const x of activeEdges(problem,witness.boolean))add('order:'+x.id,Number.isSafeInteger(witness.order_rank[x.from])&&Number.isSafeInteger(witness.order_rank[x.to])&&(x.relation==='LTE'?witness.order_rank[x.from]<=witness.order_rank[x.to]:witness.order_rank[x.from]<witness.order_rank[x.to]),'ABSTRACT_ORDER');
@@ -31,9 +31,9 @@ export function verifyJointWitness(problem,witness){
 export function solveJointBoundary(problem,{maxNodes=100000}={}){
  if(!Array.isArray(problem.variables)||problem.variables.length>128||new Set(problem.variables).size!==problem.variables.length||problem.constraints.length>1024||problem.orders.length>1024||!Number.isSafeInteger(maxNodes)||maxNodes<1)throw Error('JOINT_CAPACITY_OR_SIGNATURE');
  const declared=new Set(problem.variables);
- for(const c of problem.constraints){const vars=[...new Set(variablesOf(c.formula))];if(vars.some(v=>!declared.has(v)))throw Error('JOINT_DANGLING_VARIABLE');validateBooleanConstraints(vars,[c.formula]);}
- for(const e of problem.orders)if(e.guard){const vars=[...new Set(variablesOf(e.guard))];if(vars.some(v=>!declared.has(v)))throw Error('ORDER_DANGLING_VARIABLE');validateBooleanConstraints(vars,[e.guard]);}
- for(const d of problem.domains??[]){if(typeof d.id!=='string'||!Array.isArray(d.allowed)||d.allowed.some(x=>typeof x!=='string'||!x))throw Error('FINITE_SCOPE_SIGNATURE');if(d.guard){const vs=[...new Set(variablesOf(d.guard))];if(vs.some(v=>!declared.has(v)))throw Error('SCOPE_DANGLING_VARIABLE');validateBooleanConstraints(vs,[d.guard]);}}
+ for(const c of problem.constraints){const vars=[...new Set(variablesOf(c.formula))];if(vars.some(v=>!declared.has(v)))throw Error('JOINT_DANGLING_VARIABLE');validateBooleanConstraints(vars,[c.formula],{maxVariables:128});}
+ for(const e of problem.orders)if(e.guard){const vars=[...new Set(variablesOf(e.guard))];if(vars.some(v=>!declared.has(v)))throw Error('ORDER_DANGLING_VARIABLE');validateBooleanConstraints(vars,[e.guard],{maxVariables:128});}
+ for(const d of problem.domains??[]){if(typeof d.id!=='string'||!Array.isArray(d.allowed)||d.allowed.some(x=>typeof x!=='string'||!x))throw Error('FINITE_SCOPE_SIGNATURE');if(d.guard){const vs=[...new Set(variablesOf(d.guard))];if(vs.some(v=>!declared.has(v)))throw Error('SCOPE_DANGLING_VARIABLE');validateBooleanConstraints(vs,[d.guard],{maxVariables:128});}}
  for(const s of problem.state_checks??[])if(!declared.has(s.global_variable)||!declared.has(s.local_variable)||typeof s.state_point!=='string'||typeof s.event_start!=='string')throw Error('STATE_START_BINDING_SIGNATURE');
  const numeric=Object.fromEntries(problem.intervals.map(x=>[x.id,intervalValue(x)]));if(Object.values(numeric).includes(null))return {result:'unsatisfiable',reason:'EMPTY_INTERVAL',witness:null};
  const frequency=new Map(problem.variables.map(v=>[v,0]));for(const c of problem.constraints)for(const v of new Set(variablesOf(c.formula)))frequency.set(v,frequency.get(v)+1);

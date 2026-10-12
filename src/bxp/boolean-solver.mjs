@@ -31,8 +31,9 @@ function evaluateExpression(expression, values) {
   return !evaluateExpression(expression.implies[0], values) || evaluateExpression(expression.implies[1], values);
 }
 
-export function validateBooleanConstraints(variables, formulas) {
-  if (!boundedJson({ variables, formulas }) || !Array.isArray(variables) || variables.length > 12
+export function validateBooleanConstraints(variables, formulas, {maxVariables=12}={}) {
+  if (!Number.isSafeInteger(maxVariables)||maxVariables<1||maxVariables>128)throw new TypeError('Invalid Boolean validation capacity');
+  if (!boundedJson({ variables, formulas }) || !Array.isArray(variables) || variables.length > maxVariables
     || variables.some(name => typeof name !== 'string' || !name.length || name.length > 128)
     || new Set(variables).size !== variables.length || !Array.isArray(formulas) || formulas.length > 256) {
     throw new TypeError('Invalid or oversized Boolean problem');
@@ -55,8 +56,8 @@ export function solveBooleanConstraints(variables, formulas) {
   return { result: 'unsatisfiable', witness: null };
 }
 
-export function evaluateBooleanAssignment(variables, formula, values) {
-  const ordered = validateBooleanConstraints(variables, [formula]);
+export function evaluateBooleanAssignment(variables, formula, values, options={}) {
+  const ordered = validateBooleanConstraints(variables, [formula], options);
   if (!boundedJson(values) || !values || typeof values !== 'object' || Array.isArray(values)
     || Object.keys(values).length !== ordered.length || ordered.some(name => !Object.hasOwn(values, name) || typeof values[name] !== 'boolean')) {
     throw new TypeError('A complete exact Boolean assignment is required');

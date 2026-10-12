@@ -15,13 +15,14 @@ export function validateCandidateIR(ir,source){
   if(x.operator==='GROUP_MEMBERS'&&(x.arguments[0]?.kind!=='ENTITY'||target(x.arguments[0])?.kind!=='GROUP'))fail('GROUP_MEMBERS_DIRECT_GROUP',x.id);
   if(['UNION','INTERSECTION','DIFFERENCE','SUBSET'].includes(x.operator)&&ts.some(t=>t!=='SET'))fail('SET_TYPE',x.id);
   if(x.operator==='CARDINALITY'&&ts[0]!=='SET')fail('CARDINALITY_TYPE',x.id);
-  if(x.operator==='MEMBER'&&(ts[0]!=='OBJECT'||!['SET','DOMAIN'].includes(ts[1])))fail('MEMBERSHIP_TYPE',x.id);
+  if(x.operator==='MEMBER'){const domain=target(x.arguments[1]);const numeric=['NUMBER','INTEGER','REAL'].includes(ts[0])&&ts[1]==='DOMAIN'&&['REAL_INTERVAL','INTEGER_RANGE'].includes(domain?.operator);const object=ts[0]==='OBJECT'&&ts[1]==='SET';if(!numeric&&!object)fail('MEMBERSHIP_TYPE',x.id);}
   if(['FORALL','EXISTS'].includes(x.operator)){if(x.bound_variable?.kind!=='VARIABLE'||!['SET','DOMAIN','EVENT_DOMAIN'].includes(ts[0])||ts[1]!=='BOOLEAN')fail('QUANTIFIER_BINDING',x.id);if(ts[0]==='EVENT_DOMAIN'&&target(x.bound_variable)?.type!=='EVENT')fail('EVENT_QUANTIFIER_VARIABLE',x.id);}else if(x.bound_variable!==null)fail('UNEXPECTED_BINDER',x.id);
   if(x.operator==='TASK_EVENTS'&&(x.arguments[0]?.kind!=='EVENT'||target(x.arguments[0])?.kind!=='TASK'))fail('TASK_EVENT_DOMAIN_OWNER',x.id);
   if(x.operator==='BOOLEAN'&&typeof x.literal!=='boolean'||x.operator==='NUMBER'&&typeof x.literal!=='number')fail('LITERAL_TYPE',x.id);
   if(!['BOOLEAN','NUMBER'].includes(x.operator)&&x.literal!==null)fail('UNEXPECTED_LITERAL',x.id);
   if(['REAL_INTERVAL','INTEGER_RANGE','LT','LTE','GT','GTE','ADD'].includes(x.operator)&&ts.some(t=>!['NUMBER','INTEGER','REAL','TIME'].includes(t)))fail('NUMERIC_TYPE',x.id);
   if(x.operator==='TRUE_AT_START'&&(ts[0]!=='STATE'||ts[1]!=='EVENT'))fail('START_STATE_TYPE',x.id);
+  if(x.operator==='IMMEDIATE_AFTER'&&(ts[0]!=='STATE'||ts[1]!=='EVENT'))fail('IMMEDIATE_STATE_EVENT_TYPE',x.id);
   if(x.operator==='EVENT_INSTANCE'&&(x.arguments[0]?.kind!=='EVENT'||target(x.arguments[0])?.kind!=='TEMPLATE'||!['INTEGER','NUMBER'].includes(ts[1])))fail('INSTANCE_TYPE',x.id);
   if(x.operator==='STATE_VALUE'&&ts[0]!=='STATE'||x.operator==='EVENT_OCCURRED'&&ts[0]!=='EVENT')fail('STATE_EVENT_TYPE',x.id);
   if(['EVENT_START','EVENT_END','OBJECT_OF','RECIPIENT_OF','ENVIRONMENT_OF','PREVIOUS_INSTANCE'].includes(x.operator)&&ts[0]!=='EVENT')fail('EVENT_ARGUMENT_TYPE',x.id);
@@ -32,9 +33,16 @@ export function validateCandidateIR(ir,source){
  for(const e of ir.expressions)expressionType({kind:'EXPRESSION',id:e.id});
  for(const v of ir.variables){if(v.domain.kind!=='EXPRESSION')fail('DOMAIN_REFERENCE',v.id);const t=expressionType(v.domain);if(!['SET','DOMAIN','EVENT_DOMAIN'].includes(t))fail('VARIABLE_DOMAIN_TYPE',v.id);if(v.type==='EVENT'&&t!=='EVENT_DOMAIN')fail('EVENT_VARIABLE_DOMAIN',v.id);}
  for(const r of ir.requirements){if(r.body.kind!=='EXPRESSION'||expressionType(r.body)!=='BOOLEAN')fail('REQUIREMENT_BOOLEAN_BODY',r.id);if(r.applicability&&(r.applicability.kind!=='EXPRESSION'||expressionType(r.applicability)!=='BOOLEAN'))fail('APPLICABILITY_TYPE',r.id);if(r.kind==='DATA_USE'?!r.data_use:r.data_use!==null)fail('DATA_USE_PAYLOAD',r.id);}
+ const contains=(ref,id,seen=new Set())=>{if(ref.kind!=='ENTITY'||seen.has(ref.id))return false;const n=target(ref);return ref.id===id||n?.kind==='GROUP'&&n.members.some(x=>contains(x,id,new Set([...seen,ref.id])));};
+ for(const r of ir.requirements.filter(r=>['EVENT_NORM','STOP'].includes(r.kind)))if(!r.subject||expressionType(r.subject)!=='EVENT')fail('EVENT_NORM_SUBJECT_REQUIRED',r.id);
+ const eventNode=ref=>ref.kind==='EVENT'?target(ref):ref.kind==='EXPRESSION'&&target(ref)?.operator==='EVENT_INSTANCE'?target(target(ref).arguments[0]):null;
+ for(const r of ir.requirements.filter(x=>x.kind==='DATA_USE')){const d=r.data_use;if(d.object.kind!=='ENTITY'){fail('DATA_OBJECT_TYPE',r.id);continue;}const consumer=eventNode(d.consumer);if(!consumer||consumer.kind==='TASK')fail('DATA_CONSUMER_EVENT',r.id);else if(!consumer.roles.some(role=>['OBJECT','INPUT_OBJECT','BASIS','DELIVERABLE','CONTENT'].includes(role.role)&&contains(role.value,d.object.id)))fail('DATA_CONSUMER_OBJECT_BINDING',r.id);
+  if(d.producer){const producer=eventNode(d.producer);if(!producer?.roles.some(role=>role.role==='RESULT'&&contains(role.value,d.object.id)))fail('DATA_PRODUCER_OBJECT_BINDING',r.id);}
+ }
  const units=(r,seen=new Set())=>{if(seen.has(r.id))return null;const n=target(r);if(!n)return null;if(r.kind==='VARIABLE')return units(n.domain,new Set([...seen,r.id]));if(r.kind!=='EXPRESSION')return null;if(['NUMBER','REAL_INTERVAL','INTEGER_RANGE'].includes(n.operator))return n.unit;if(n.operator==='CARDINALITY')return null;if(n.operator==='ADD')return units(n.arguments[0],new Set([...seen,r.id]));return null;};
  for(const x of ir.expressions){if(['REAL_INTERVAL','INTEGER_RANGE','ADD','LT','LTE','GT','GTE','EQ'].includes(x.operator)){const numeric=x.arguments.filter(a=>['NUMBER','INTEGER','REAL'].includes(expressionType(a)));const us=numeric.map(a=>units(a));if(new Set(us).size>1)fail('UNIT_MISMATCH',x.id,{units:us});if(['REAL_INTERVAL','INTEGER_RANGE'].includes(x.operator)&&us.some(u=>u!==x.unit))fail('DOMAIN_UNIT_MISMATCH',x.id);}
   if(x.operator==='INTEGER_RANGE'&&x.arguments.some(a=>a.kind==='EXPRESSION'&&target(a)?.operator==='NUMBER'&&!Number.isSafeInteger(target(a).literal)))fail('INTEGER_ENDPOINT',x.id);
+  if(x.operator==='MEMBER'&&['NUMBER','INTEGER','REAL'].includes(expressionType(x.arguments[0]))&&units(x.arguments[0])!==units(x.arguments[1]))fail('UNIT_MISMATCH',x.id);
  }
  const validOwner=id=>id==='ROOT'||index.has(id);
  for(const e of ir.events)if(!validOwner(e.owner_id))fail('EVENT_OWNER_REFERENCE',e.id);

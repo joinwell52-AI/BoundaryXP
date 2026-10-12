@@ -12,7 +12,7 @@ import {technicalRevisionFeedback,auditBindingRevisionFeedback} from './revision
 import {modelSignal} from './observability.mjs';
 import {parseDirectIR} from './direct-ir-engine.mjs';
 export const writeJSON=(file,data)=>fs.writeFileSync(file,JSON.stringify(data,null,2)+'\n');
-export const compilerRevision='direct-ir-r02.2-test';
+export const compilerRevision='direct-ir-r03.2-test';
 export function replay7Plus1(bytes,{output,replayFrom,resourceGuard=()=>{},productSnapshot=null}){
  resourceGuard();
  const source=prepareSource(bytes),tracePath=path.join(replayFrom,'trace.json');

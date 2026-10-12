@@ -1,0 +1,102 @@
+{
+  "format": "boundx-candidate-ir-audit/1",
+  "contract_version": "candidate-ir/1.2",
+  "source_table": [
+    {
+      "id": "s4",
+      "quote": "DEV检查app.yaml，生成dev.md并提交QA",
+      "occurrence": 1
+    },
+    {
+      "id": "s5",
+      "quote": "OPS检查env.json，生成ops.md并提交QA",
+      "occurrence": 1
+    },
+    {
+      "id": "s7",
+      "quote": "PM必须依据两份报告生成summary.md并交付ADMIN",
+      "occurrence": 1
+    },
+    {
+      "id": "s8",
+      "quote": "只有QA复核通过，PM才能生成和交付summary.md。",
+      "occurrence": 1
+    }
+  ],
+  "reviews": [
+    {
+      "target": {
+        "kind": "REQUIREMENT",
+        "id": "use_dev_for_summary"
+      },
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [
+        {
+          "kind": "ENTITY",
+          "id": "dev_report"
+        },
+        {
+          "kind": "ENTITY",
+          "id": "reports"
+        },
+        {
+          "kind": "EVENT",
+          "id": "create_dev"
+        },
+        {
+          "kind": "EVENT",
+          "id": "create_summary"
+        },
+        {
+          "kind": "REQUIREMENT",
+          "id": "create_requires_pass"
+        }
+      ],
+      "source_refs": [
+        "s4",
+        "s7",
+        "s8"
+      ],
+      "reason": "整节点支持：ROOT内必需的数据使用绑定当前dev.md、其明确生产事件create_dev及消费者create_summary，subject与consumer一致；引用类型、来源及I/O/A用途相符。USED_PORTION保留依据报告的使用要求，不新增全部生产事件结束的强时序；QA通过的开始前提由独立约束保留。"
+    },
+    {
+      "target": {
+        "kind": "REQUIREMENT",
+        "id": "use_ops_for_summary"
+      },
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [
+        {
+          "kind": "ENTITY",
+          "id": "ops_report"
+        },
+        {
+          "kind": "ENTITY",
+          "id": "reports"
+        },
+        {
+          "kind": "EVENT",
+          "id": "create_ops"
+        },
+        {
+          "kind": "EVENT",
+          "id": "create_summary"
+        },
+        {
+          "kind": "REQUIREMENT",
+          "id": "create_requires_pass"
+        }
+      ],
+      "source_refs": [
+        "s5",
+        "s7",
+        "s8"
+      ],
+      "reason": "整节点支持：ROOT内必需的数据使用绑定当前ops.md、其明确生产事件create_ops及消费者create_summary，subject与consumer一致；引用类型、来源及I/O/A用途相符。USED_PORTION保留依据报告的使用要求，不新增全部生产事件结束的强时序；QA通过的开始前提由独立约束保留。"
+    }
+  ],
+  "omissions": [],
+  "issues": []
+}
