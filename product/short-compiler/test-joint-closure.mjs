@@ -1,0 +1,5 @@
+import fs from 'node:fs';import path from 'node:path';import {spawnSync} from 'node:child_process';
+const root=path.resolve('.boundx/local-joint-repair/work'),report='docs/reports/7plus1/JOINT-BOUNDARY-CLOSURE-r01';fs.mkdirSync(report,{recursive:true});
+const files=['joint-boundary-closure.test.mjs','final-result-overview.test.mjs','mathematical-result-report.test.mjs','mathematical-result-ui.test.mjs','root-limit-contract.test.mjs','boundary-order-calculus.test.mjs'].map(x=>'product/short-compiler/tests/'+x);
+const r=spawnSync(process.execPath,['--test','--test-reporter=tap',...files],{env:{...process.env,BOUNDARY_WORK:root},windowsHide:true,encoding:'utf8'});
+const tag=process.argv[2]??'initial';if(!/^[a-z0-9-]+$/.test(tag))throw Error('TAG');fs.writeFileSync(report+'/tests-'+tag+'.tap',r.stdout,{flag:'wx'});const j={pass:Number(r.stdout.match(/^# pass (\d+)/m)?.[1]),fail:Number(r.stdout.match(/^# fail (\d+)/m)?.[1]),exit:r.status,model_calls:0};fs.writeFileSync(report+'/TESTS-'+tag+'.json',JSON.stringify(j,null,2)+'\n',{flag:'wx'});console.log(JSON.stringify(j));if(r.status)console.log(r.stdout.slice(-5500));process.exitCode=r.status;

@@ -1,0 +1,5 @@
+import fs from 'node:fs';import path from 'node:path';import {pathToFileURL} from 'node:url';import {lockProduct} from './resources.mjs';
+const root=path.resolve('.boundx/products/0.1.0-candidate.031-r1.2-ui.60'),lock=lockProduct(root),report='docs/reports/7plus1/SCOPE-CONSUMPTION-CLOSURE-r01';
+const {replay7Plus1}=await import(pathToFileURL(path.join(root,'research/7plus1-parser/llm-first-028/engine.mjs')));
+const r=replay7Plus1(fs.readFileSync('docs/testing/7plus1/MANUAL-TEST-001.txt'),{output:path.join(report,'final-ui60-replay'),replayFrom:path.resolve(report,'live-standard-first'),resourceGuard:lock.verify,productSnapshot:lock.snapshot});const m=r.boundary_calculations.mathematical_results;
+console.log(JSON.stringify({joint:m.joint.status,base:m.joint.base.result,completion:m.joint.completion.map(q=>({result:q.result,checks:q.verification?.checks.length})),trigger:m.joint.trigger_branches.map(q=>({result:q.result,checks:q.verification?.checks.length})),gaps:m.joint.gaps,domains:m.joint.problem?.domains?.length,binding_checks:m.joint.problem?.binding_checks?.length}));

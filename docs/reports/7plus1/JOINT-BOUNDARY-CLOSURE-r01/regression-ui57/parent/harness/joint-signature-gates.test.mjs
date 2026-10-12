@@ -1,0 +1,9 @@
+import test from 'node:test';import assert from 'node:assert/strict';import fs from 'node:fs';import path from 'node:path';import {pathToFileURL} from 'node:url';
+const root=path.resolve(process.env.BOUNDARY_WORK??'.boundx/products/0.1.0-candidate.031-r1.2-ui.56');const {technicalValidate}=await import(pathToFileURL(path.join(root,'research/7plus1-parser/llm-first-028/validate.mjs')));
+const original=JSON.parse(fs.readFileSync('docs/reports/7plus1/JOINT-BOUNDARY-CLOSURE-r01/final-ui56-replay/trace.json'));
+const check=(change,code)=>{const t=structuredClone(original),event=t.proposal.events.find(e=>e.semantic_signature.state_links.some(x=>x.aspect==='SUCCESS'));change(t,event);const r=technicalValidate(t.source,t.proposal,t.audit,{requireSourceAudit:true});assert.ok(r.rows.some(x=>x.errors.some(e=>e.code===code)));};
+test('success link cannot equate performing review with review passing',()=>check((t,e)=>{e.semantic_signature.state_links[0].relation='IFF';},'SUCCESS_IS_NOT_EVENT_COMPLETION'));
+test('state from another event cannot be borrowed',()=>check((t,e)=>{e.semantic_signature.state_links[0].expression_id=t.proposal.events.find(x=>x.id!==e.id&&x.semantic_signature.state_links.length).semantic_signature.state_links[0].expression_id;},'STATE_LINK_OWNERSHIP'));
+test('dangling continuation scope event is rejected',()=>check((t,e)=>{const stop=t.proposal.events.find(x=>x.semantic_signature.effects.includes('STOP'));stop.semantic_signature.continuation_targets.push('missing-event');},'CONTINUATION_SCOPE_ENDPOINT'));
+test('non-control event cannot carry control range members',()=>check((t,e)=>{e.semantic_signature.continuation_targets=[t.proposal.events[0].id];},'CONTINUATION_SCOPE_MISPLACED'));
+test('duplicate effect declarations fail technical signature check',()=>check((t,e)=>{e.semantic_signature.effects.push(e.semantic_signature.effects[0]);},'SEMANTIC_EFFECT_SIGNATURE'));

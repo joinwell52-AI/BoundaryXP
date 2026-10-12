@@ -1,0 +1,5 @@
+import fs from 'node:fs';import path from 'node:path';import {pathToFileURL} from 'node:url';import {lockProduct} from './resources.mjs';
+const root=path.resolve('.boundx/products/0.1.0-candidate.031-r1.2-ui.55'),lock=lockProduct(root),report='docs/reports/7plus1/JOINT-BOUNDARY-CLOSURE-r01',origin=path.resolve(report,'live-standard-first');
+const {replay7Plus1}=await import(pathToFileURL(path.join(root,'research/7plus1-parser/llm-first-028/engine.mjs')));
+const r=replay7Plus1(fs.readFileSync('docs/testing/7plus1/MANUAL-TEST-001.txt'),{output:path.join(report,'final-ui55-replay'),replayFrom:origin,resourceGuard:lock.verify,productSnapshot:lock.snapshot});
+const m=r.boundary_calculations.mathematical_results;console.log(JSON.stringify({joint:m.joint.status,base:m.joint.base.result,completion:m.joint.completion.map(x=>({result:x.result,checks:x.verification?.checks.length,valid:x.verification?.valid})),triggers:m.joint.trigger_branches.map(x=>({result:x.result,valid:x.verification?.valid})),gaps:m.joint.gaps,frontier:m.unknown_frontier.length,unsupported:r.boundary_calculations.unsupported.length}));
