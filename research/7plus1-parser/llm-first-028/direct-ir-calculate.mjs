@@ -5,12 +5,15 @@ import {sha256} from './source.mjs';
 import {evaluateDirectEventPolicies} from './direct-ir-event-policy.mjs';
 import {directMathSummary} from './direct-ir-math-summary.mjs';
 import {evaluateDirectInputPolicies,taskMembership} from './direct-ir-input-policy.mjs';
+import {evaluateDirectObservations} from './direct-ir-observations.mjs';
+import {queryDirectIRCounterexamples} from './direct-ir-queries.mjs';
 const refkey=r=>r.kind+':'+r.id,unique=a=>[...new Set(a)];
 const all=xs=>xs.includes(false)?false:xs.filter(x=>x!==true).length?{all:xs.filter(x=>x!==true)}:true;
 const any=xs=>xs.includes(true)?true:xs.filter(x=>x!==false).length?{any:xs.filter(x=>x!==false)}:false;
-export function calculateDirectIR(ir,acceptance,{observations={}}={}){
+export function calculateDirectIR(ir,acceptance,options={}){
+ const observationsSupplied=Object.hasOwn(options,'observations'),observations=options.observations;
  const index=new Map(['entities','variables','events','states','expressions','requirements'].flatMap(k=>ir[k].map(x=>[x.id,x])));
- const rows=new Map(acceptance.rows.map(x=>[x.id,x])),constraints=[],orders=[],intervalInputs=[],domains={},atoms=new Map(),gaps=[],stateChecks=[],statesSeen=new Map(),instances=new Map(),quantifiedRules=[],priorityRules=[],roleChoices=new Map();
+ const rows=new Map(acceptance.rows.map(x=>[x.id,x])),constraints=[],orders=[],intervalInputs=[],domains={},atoms=new Map(),gaps=[],stateChecks=[],statesSeen=new Map(),instances=new Map(),quantifiedRules=[],priorityRules=[],roleChoices=new Map(),dataUses=[];
  const add=(id,formula,rule,source_refs=[])=>constraints.push({id,formula,rule,source_refs});
  const atom=(key,meaning)=>{const id='ir:'+sha256(JSON.stringify(key)).slice(0,24);atoms.set(id,{id,meaning});return {var:id};};
  const node=r=>{const n=index.get(r.id);if(!n)throw Error('IR_REFERENCE_MISSING:'+r.id);return n;};
@@ -116,10 +119,27 @@ export function calculateDirectIR(ir,acceptance,{observations={}}={}){
  for(const row of acceptance.rows)if(row.status!=='ACCEPTED')gaps.push({node_id:row.id,reason:'IR_NODE_'+row.status});
  for(const d of acceptance.diagnostics)gaps.push({reason:d.code});
  for(const v of ir.variables){try{const d=expression(v.domain);if(d.operator==='REAL_INTERVAL'){const [lo,hi]=d.arguments.map(a=>expression(a));if(lo.operator!=='NUMBER'||hi.operator!=='NUMBER'||!d.unit)throw Error('REAL_DOMAIN_LITERAL_UNIT_REQUIRED');intervalInputs.push({id:'domain:'+v.id,scope_id:v.scope_id,subject:v.id,dimension:v.id,unit:d.unit,domain:'real',lower:{value:String(lo.literal),inclusive:true},upper:{value:String(hi.literal),inclusive:true}});}else if(v.binding_mode!=='INSTANCE_LOCAL')terms({kind:'VARIABLE',id:v.id},{});}catch(e){gaps.push({node_id:v.id,reason:e.message});}}
- for(const r of ir.requirements){try{if(rows.get(r.id)?.status!=='ACCEPTED')continue;if(r.kind==='DATA_USE'){const d=r.data_use,consumer=event(d.consumer,{});if(d.producer){const producer=event(d.producer,{});add('data-producer:'+r.id,{implies:[occurred(d.consumer,{}),occurred(d.producer,{})]},'DECLARED_DATA_PRODUCER_REQUIRED_AT_USE',r.source_refs);orders.push({id:'data-use:'+r.id,from:producer.key+(d.availability==='COMPLETE_RESULT'?':end':':start'),to:consumer.key+':start',relation:'LTE',guard:occurred(d.consumer,{})});}else{const available=any(terms(d.object,{}).map(v=>all([v.guard,atom(['DATA_AVAILABLE',v.value,consumer.key,d.availability],{kind:'DATA_AVAILABLE_AT_USE',object_id:v.value,consumer:consumer.key,availability:d.availability})])));add('external-data:'+r.id,{implies:[occurred(d.consumer,{}),available]},'DECLARED_DATA_USE_AVAILABILITY',r.source_refs);}}
+ const localSubject=r=>r.kind==='CONSTRAINT'&&r.subject&&(r.subject.kind==='EVENT'&&node(r.subject).kind==='ACTION'||r.subject.kind==='EXPRESSION'&&['EVENT_INSTANCE','PREVIOUS_INSTANCE'].includes(expression(r.subject).operator));
+ for(const r of ir.requirements){try{if(rows.get(r.id)?.status!=='ACCEPTED')continue;
    if(['PERMITTED','NOT_REQUIRED','UNSTATED'].includes(r.modality))continue;
-   if(['CONSTRAINT','TOTAL_DURATION'].includes(r.kind)&&r.modality==='REQUIRED'&&!r.applicability&&bound(r.body,r))continue;
-   const body=bool(r.body),f=['EVENT_NORM','STOP'].includes(r.kind)?all([occurred(r.subject,{}),body]):body,ap=r.applicability?bool(r.applicability):true;if(r.modality==='REQUIRED')add(r.id,{implies:[ap,f]},'DECLARED_IR_REQUIREMENT',r.source_refs);else if(r.modality==='FORBIDDEN')add(r.id,{implies:[ap,{not:f}]},'DECLARED_IR_PROHIBITION',r.source_refs);
+   if(r.kind==='DATA_USE'){
+    if(r.modality!=='REQUIRED')throw Error('DATA_USE_PROHIBITION_NOT_IMPLEMENTED');
+    const d=r.data_use,consumer=event(d.consumer,{}),guard=all([occurred(d.consumer,{}),r.applicability?bool(r.applicability):true]);
+    const usePoint='use:'+r.id,readyPoint='available:'+r.id;
+    const available=any(terms(d.object,{}).map(v=>all([v.guard,atom(['DATA_AVAILABLE',v.value,consumer.key,d.availability],{kind:'DATA_AVAILABLE_AT_USE',object_id:v.value,consumer:consumer.key,availability:d.availability})])));
+    add('data-available:'+r.id,{implies:[guard,available]},'DECLARED_DATA_USE_AVAILABILITY',r.source_refs);
+    add(r.id,{implies:[guard,bool(r.body)]},'DECLARED_DATA_USE_BODY',r.source_refs);
+    orders.push({id:'use-start:'+r.id,from:consumer.key+':start',to:usePoint,relation:'LTE',guard},{id:'use-end:'+r.id,from:usePoint,to:consumer.key+':end',relation:'LTE',guard},{id:'data-use:'+r.id,from:readyPoint,to:usePoint,relation:'LTE',guard});
+    let producer=null;if(d.producer){producer=event(d.producer,{});add('data-producer:'+r.id,{implies:[guard,occurred(d.producer,{})]},'DECLARED_DATA_PRODUCER_REQUIRED_AT_USE',r.source_refs);orders.push({id:'data-ready:'+r.id,from:producer.key+(d.availability==='COMPLETE_RESULT'?':end':':start'),to:readyPoint,relation:'LTE',guard});}
+    dataUses.push({requirement_id:r.id,...d,consumer_key:consumer.key,producer_key:producer?.key??null,use_point:usePoint,availability_point:readyPoint,guard,source_refs:r.source_refs});continue;
+   }
+   if(['CONSTRAINT','TOTAL_DURATION'].includes(r.kind)&&r.modality==='REQUIRED'&&!r.applicability&&!localSubject(r)&&bound(r.body,r))continue;
+   const body=bool(r.body),f=['EVENT_NORM','STOP'].includes(r.kind)?all([occurred(r.subject,{}),body]):body;
+   // TASK is a global scope carrier. ACTION/instance CONSTRAINT subjects
+   // restrict an activated action and do not create a new action obligation.
+   const local=localSubject(r);
+   const ap=all([r.applicability?bool(r.applicability):true,local?occurred(r.subject,{}):true]);
+   if(r.modality==='REQUIRED')add(r.id,{implies:[ap,f]},local?'DECLARED_LOCAL_ACTION_CONSTRAINT':'DECLARED_IR_REQUIREMENT',r.source_refs);else if(r.modality==='FORBIDDEN')add(r.id,{implies:[ap,{not:f}]},'DECLARED_IR_PROHIBITION',r.source_refs);
   }catch(e){gaps.push({node_id:r.id,reason:e.message});}}
  for(const e of instances.values()){const v=atom(['EVENT',e.key],{kind:'EVENT_OCCURRED',event_id:e.event.id,instance:e.index??null});orders.push({id:'lifecycle:'+e.key,from:e.key+':start',to:e.key+':end',relation:'LTE',guard:v});}
  for(const e of instances.values()){if(e.event.kind!=='ACTION')continue;let owner=e.event.owner_id;const seen=new Set();while(!seen.has(owner)&&index.get(owner)?.kind==='TASK'){seen.add(owner);const scope=index.get(owner),guard=occurred({kind:'EVENT',id:e.event.id},{});orders.push({id:'scope-start:'+owner+':'+e.key,from:owner+':start',to:e.key+':start',relation:'LTE',guard},{id:'scope-end:'+owner+':'+e.key,from:e.key+':end',to:owner+':end',relation:'LTE',guard});if(scope.owner_id===owner)break;owner=scope.owner_id;}}
@@ -143,13 +163,13 @@ export function calculateDirectIR(ir,acceptance,{observations={}}={}){
   if(r.scope_id!=='ROOT'||v?.type!=='REAL'||r.modality!=='REQUIRED'||r.applicability){gaps.push({node_id:r.id,reason:'TOTAL_DURATION_BINDING_REQUIRED'});continue;}
   for(const x of problem.intervals.filter(x=>x.subject===v.id))problem.temporal_horizons.push({interval_id:x.id,unit:x.unit,start_point:r.scope_id+':start',end_point:r.scope_id+':end'});
  }
- const result={format:'boundx-direct-ir-calculation/1',input_ir_sha256:sha256(JSON.stringify(ir)),mathematical_summary:directMathSummary(ir,acceptance),gaps,quantified_rules:quantifiedRules,priority_rules:priorityRules,finite_domains:Object.fromEntries(Object.entries(domains).map(([id,x])=>[id,x.map(v=>v.value)])),intervals,problem,observations_supplied:Object.keys(observations).length>0,business_decision:null,execution_authorization:null};
- if(Object.keys(observations).length){gaps.push({reason:'DIRECT_IR_OBSERVATION_BINDING_NOT_IMPLEMENTED'});}
+ const observed=observationsSupplied?evaluateDirectObservations(ir,acceptance,observations):null;
+ const result={format:'boundx-direct-ir-calculation/1',input_ir_sha256:sha256(JSON.stringify(ir)),source_links:acceptance.source_links??[],mathematical_summary:directMathSummary(ir,acceptance),gaps,quantified_rules:quantifiedRules,priority_rules:priorityRules,data_uses:dataUses,finite_domains:Object.fromEntries(Object.entries(domains).map(([id,x])=>[id,x.map(v=>v.value)])),intervals,problem,observations_supplied:observed!==null,observed_evaluation:observed,business_decision:null,execution_authorization:null};
  if(gaps.length)return {...result,status:'PARTIAL',joint:{status:'PARTIAL',base:{result:'unknown',witness:null}}};
  const completionQueries=[];
  try{for(const r of ir.requirements.filter(r=>r.kind==='COMPLETION'&&rows.get(r.id)?.status==='ACCEPTED')){const root=expression(r.body);if(root.operator!=='IFF')continue;const left=expression(root.arguments[0]);if(left.operator!=='STATE_VALUE')continue;const state=left.arguments[0],meaning=[...atoms].find(([,a])=>a.meaning.kind==='STATE'&&a.meaning.state_id===state.id);if(!meaning)continue;const extra={id:'query-complete:'+r.id,formula:{var:meaning[0]},rule:'EXPLICIT_COMPLETION_QUERY_NOT_ADDED_SOURCE_OBLIGATION',source_refs:r.source_refs};const query=solveJointBoundary({...problem,constraints:[...problem.constraints,extra]});completionQueries.push({requirement_id:r.id,assumption:{state_id:state.id,value:true},result:query.result,witness:query.witness,verification:query.verification,not_actual_completion:true,not_new_source_obligation:true});}
  const solved=solveJointBoundary(problem);const complete=completionQueries.find(q=>q.result==='satisfiable');if(complete){solved.witness=complete.witness;solved.verification=complete.verification;solved.selected_witness_scope='SOURCE_CONSTRAINTS_PLUS_EXPLICIT_COMPLETION_QUERY';}
  if(solved.result==='satisfiable'){const records=[];for(const [id,a]of atoms){if(a.meaning.kind!=='EVENT_OCCURRED'||!solved.witness.boolean[id])continue;const e=instances.get(a.meaning.event_id);if(e?.event.kind!=='ACTION')continue;const roles=Object.fromEntries(e.event.roles.filter(r=>r.value.kind==='ENTITY').map(r=>[r.role,r.value]));for(const choice of roleChoices.get(e.key+':ENVIRONMENT')??[])if(solved.witness.boolean[choice.guard.var])roles.ENVIRONMENT={kind:'ENTITY',id:choice.value};const external_inputs=ir.requirements.filter(r=>r.kind==='DATA_USE'&&r.data_use.origin==='EXTERNAL'&&r.data_use.consumer.id===e.key).map(r=>r.data_use.object);records.push({event_id:e.key,owner_id:e.event.owner_id,roles,external_inputs,role_values_are_witness_assignments:true});}
    const verification=records.map(record=>({record,check:evaluateDirectEventPolicies(ir,acceptance,record)}));if(verification.some(x=>x.check.results.some(r=>!['SATISFIED','NOT_APPLICABLE'].includes(r.result))))throw Error('QUANTIFIED_WITNESS_VERIFICATION_FAILED');const inputs=evaluateDirectInputPolicies(ir,acceptance,records);if(inputs.results.some(r=>r.result!=='SATISFIED'))throw Error('INPUT_BOUNDARY_WITNESS_VERIFICATION_FAILED');solved.witness.execution_trace=records;solved.input_boundary_verification=inputs;solved.quantified_verification={scope:'EVERY_EVENT_IN_THIS_CONSTRUCTED_EXECUTION_TRACE',checks:verification,future_execution_not_certified:true};
-  }return {...result,completion_queries:completionQueries,status:solved.result==='satisfiable'?'CALCULATED':solved.result==='unsatisfiable'?'CONFLICT':'PARTIAL',joint:{status:solved.result==='satisfiable'?'PROVEN':solved.result==='unsatisfiable'?'UNSAT':'PARTIAL',base:solved}};}catch(e){return {...result,status:'PARTIAL',gaps:[...gaps,{reason:e.message,...(e.failed_checks?{failed_checks:e.failed_checks}:{})}],joint:{status:'PARTIAL',base:{result:'unknown',witness:null}}};}
+  }return {...result,completion_queries:completionQueries,counterexample_queries:queryDirectIRCounterexamples(problem),status:solved.result==='satisfiable'?'CALCULATED':solved.result==='unsatisfiable'?'CONFLICT':'PARTIAL',joint:{status:solved.result==='satisfiable'?'PROVEN':solved.result==='unsatisfiable'?'UNSAT':'PARTIAL',base:solved}};}catch(e){return {...result,status:'PARTIAL',gaps:[...gaps,{reason:e.message,...(e.failed_checks?{failed_checks:e.failed_checks}:{})}],joint:{status:'PARTIAL',base:{result:'unknown',witness:null}}};}
 }

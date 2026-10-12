@@ -1,12 +1,46 @@
 // Read the saved program result. No model calls, source parsing or computation.
 const el=(tag,text)=>{const e=document.createElement(tag);if(text!==undefined)e.textContent=text;return e;};
 const states={PARTIAL:'部分计算：存在缺口',CONFLICT:'发现约束冲突',CALCULATED_FRAGMENT:'受支持的明确约束已计算',UNKNOWN:'未知：未提供运行观测',TRUE:'成立',FALSE:'不成立',satisfiable:'存在可行组合',unsatisfiable:'不存在可行组合',NOT_APPLICABLE:'没有此类明确计算项',CALCULATED:'已计算',UNSUPPORTED:'超出受支持计算范围'};
+function appendDirectObservationForm(container,trace,onObserve,onEvidence){
+ const ir=trace.ir,names=new Map(['entities','events','states','variables'].flatMap(k=>(ir[k]??[]).map(n=>[n.id,n.label]))),form=el('form'),fields=[];
+ form.append(el('h3','提供实际观测'),el('p','未知留空。逐项确认实际主体、对象、接收者、时间与材料可用性；候选中的关系仅作为核对项目，不代表实际已发生。每次核查另存记录，不调用模型。'));
+ const section=title=>{const d=el('details');d.append(el('summary',title));form.append(d);return d;};
+ const field=(parent,label,kind='number',choices=[])=>{const line=el('label',label+' '),input=el(kind==='select'?'select':'input');if(kind==='select'){for(const [value,text]of [['','未知'],...choices]){const option=el('option',text);option.value=value;input.append(option);}}else{input.type=kind;input.step='any';}line.append(input);parent.append(line,el('br'));return input;};
+ const boolChoices=[['true','已确认成立'],['false','已确认不成立']];
+ const refs=ir.entities.map(e=>[JSON.stringify({kind:'ENTITY',id:e.id}),e.label]);for(const e of ir.events.filter(e=>e.kind==='TASK'))refs.push([JSON.stringify({kind:'EVENT',id:e.id}),e.label]);
+ const units=[...new Set((trace.boundary_calculations.intervals??[]).map(x=>x.unit))];
+ const unit=field(form,'时点单位','select',units.map(u=>[u,u]));
+ const complete=field(form,'已列出本次全部实际操作（包括后续与重复操作）','select',[['true','已确认完整'],['false','尚不完整']]);
+ const stateBox=section('状态与成立时点');
+ for(const s of ir.states){const box=el('fieldset');box.append(el('legend',s.label));stateBox.append(box);fields.push({kind:'state',id:s.id,value:field(box,'当前值','select',boolChoices),at:field(box,'成立时点'),...(s.kind==='CONTROL_EFFECT'?{from:field(box,'已确认停止期间开始'),until:field(box,'已确认停止期间结束（不推断恢复许可）')}: {})});}
+ const quantityBox=section('整体时间与数量');for(const v of ir.variables.filter(v=>['REAL','INTEGER'].includes(v.type))){const domain=ir.expressions.find(e=>e.id===v.domain.id);fields.push({kind:'quantity',id:v.id,target:v.owner?.id??v.scope_id,unit:domain?.unit,value:field(quantityBox,v.label+'（'+(domain?.unit??'无单位')+'）')});}
+ const actions=section('逐项实际动作与材料使用');
+ for(const e of ir.events.filter(e=>e.kind==='ACTION')){
+  const box=el('fieldset');box.append(el('legend',e.label));actions.append(box);
+  const f={kind:'event',event:e,occurred:field(box,'是否发生','select',boolChoices),start:field(box,'开始时点'),end:field(box,'结束时点'),environment:field(box,'实际环境','select',ir.entities.filter(n=>n.kind==='ENVIRONMENT').map(n=>[JSON.stringify({kind:'ENTITY',id:n.id}),n.label])),roles:[],uses:[]};
+  for(const r of e.roles)f.roles.push({role:r.role,input:field(box,r.role+'（'+(names.get(r.value.id)??r.value.id)+'）','select',refs)});
+  for(const r of ir.requirements.filter(r=>r.kind==='DATA_USE'&&r.data_use.consumer.id===e.id)){const d=r.data_use,u=el('fieldset');u.append(el('legend','使用材料：'+(names.get(d.object.id)??d.object.id)));box.append(u);f.uses.push({object:field(u,'实际对象','select',refs),origin:field(u,'来源','select',[['EXTERNAL','外部输入'],['INTERNAL','内部产物'],['NON_INPUT','非输入通信内容']]),producer:field(u,'实际生产动作','select',ir.events.filter(x=>x.kind==='ACTION').map(x=>[JSON.stringify({kind:'EVENT',id:x.id}),x.label])),available:field(u,'使用点是否可用','select',boolChoices),level:field(u,'可用程度','select',[['AT_USE','使用点所需数据'],['USED_PORTION','所用部分'],['COMPLETE_RESULT','完整结果']]),at:field(u,'使用时点'),ready:field(u,'可用时点')});}
+  fields.push(f);
+ }
+ const extra=section('补充其他实际操作与未列身份'),extraInput=el('textarea');extraInput.setAttribute('aria-label','补充实际操作记录');extra.append(el('p','需要核查重复操作、后续动作或另一个同名对象时，可在此提供明确身份的事件记录数组。格式见观测接口说明。'),extraInput);
+ const button=el('button','保存观测并核查'),message=el('p'),output=el('section');button.type='submit';form.append(button,message,output);
+ const number=input=>input.value===''?undefined:Number(input.value),reference=input=>input.value===''?undefined:JSON.parse(input.value);
+ form.onsubmit=async event=>{event.preventDefault();button.disabled=true;try{
+  const input={states:{},quantities:{},events:[],closed_world:{events:complete.value==='true',inputs:complete.value==='true'},...(unit.value?{time_unit:unit.value}:{})};
+  for(const f of fields){if(f.kind==='state'){if(f.value.value||f.at.value||f.from?.value||f.until?.value){const s={...(f.value.value?{value:f.value.value==='true'}:{}),...(f.at.value?{established_at:number(f.at)}:{})};if(f.from?.value&&f.until?.value)s.periods=[{start:number(f.from),end:number(f.until),value:true}];input.states[f.id]=s;}}else if(f.kind==='quantity'){if(f.value.value)input.quantities[f.id]={value:number(f.value),unit:f.unit,target_id:f.target};}else if(f.occurred.value){const e={event_id:f.event.id,owner_id:f.event.owner_id,operation:f.event.operation,occurred:f.occurred.value==='true',roles:{}};if(f.start.value)e.start=number(f.start);if(f.end.value)e.end=number(f.end);if(f.environment.value)e.roles.ENVIRONMENT=reference(f.environment);for(const r of f.roles)if(r.input.value)e.roles[r.role]=reference(r.input);e.uses=f.uses.map(u=>({...(u.object.value?{object:reference(u.object)}:{}),...(u.producer.value?{producer:reference(u.producer)}:{}),...(u.origin.value?{origin:u.origin.value}:{}),...(u.available.value?{available:u.available.value==='true'}:{}),...(u.level.value?{availability:u.level.value}:{}),...(u.at.value?{use_at:number(u.at)}:{}),...(u.ready.value?{available_at:number(u.ready)}:{})}));if(e.uses.every(u=>u.origin))e.external_inputs=e.uses.filter(u=>u.origin==='EXTERNAL').map(u=>u.object);input.events.push(e);}}
+  if(extraInput.value.trim()){const additional=JSON.parse(extraInput.value);if(!Array.isArray(additional))throw Error('补充操作须为数组');input.events.push(...additional);}
+  const saved=await onObserve(input);message.textContent='已保存本次自报观测：'+saved.observation_id;renderBoundaryCalculations(output,{...trace,boundary_calculations:saved.calculation},onEvidence);
+  const link=el('a','下载本次观测与计算');link.href=URL.createObjectURL(new Blob([JSON.stringify(saved,null,2)],{type:'application/json'}));link.download=saved.observation_id+'.json';output.append(link);
+ }catch(error){message.textContent='未接受本次观测：'+error.message;}finally{button.disabled=false;}};
+ container.append(form);
+}
 export function renderBoundaryCalculations(container,trace,onEvidence=()=>{},onObserve=null){
  container.replaceChildren();container.append(el('h2','最终结果：7+1边界数学计算'));
  const c=trace?.boundary_calculations;
  if(!c){container.append(el('p',trace?'此历史记录没有保存本版计算阶段；未重算、未补造。':'等待IR与固定7+1生成后，计算程序直接消费同一IR。'));return;}
  if(c.format==='boundx-direct-ir-calculation/1'){
-  const names=new Map([...(trace.ir.entities??[]),...(trace.ir.variables??[])].map(x=>[x.id,x.label]));
+  const nodes=new Map(['entities','variables','events','states','expressions'].flatMap(k=>(trace.ir[k]??[]).map(x=>[x.id,x]))),names=new Map([...nodes].filter(([,x])=>x.label).map(([id,x])=>[id,x.label]));
+  const point=r=>{const x=nodes.get(r.id);if(!x?.operator)return names.get(r.id)??r.id;const suffix={EVENT_START:'开始时点',EVENT_END:'结束时点',STATE_ESTABLISHED:'成立时点'}[x.operator];return suffix?point(x.arguments[0])+suffix:r.id;};
   container.append(el('h3',(states[c.status]??c.status)+'；联合求解：'+(states[c.joint?.base?.result]??c.joint?.base?.result??'未保存')));
   container.append(el('p','计算输入就是LLM候选IR；技术接受状态另存。以下是真实操作数与程序输出，不是模型自报结论。'));
   const math=c.mathematical_summary;
@@ -15,9 +49,16 @@ export function renderBoundaryCalculations(container,trace,onEvidence=()=>{},onO
   for(const q of c.completion_queries??[])container.append(el('p','完成分支可满足性：假设任务完成为真，联合求解 '+(states[q.result]??q.result)+'；见证核验 '+(q.verification?.valid?'通过':'未通过')+'。这是可行完成分支，不是实际已完成。'));
   for(const r of c.joint?.base?.input_boundary_verification?.results??[])container.append(el('p','外部输入范围：实际使用={'+r.used.map(id=>names.get(id)??id).join('，')+'} ⊆ 允许={'+r.allowed.map(id=>names.get(id)??id).join('，')+'}；核验 '+({SATISFIED:'成立',VIOLATED:'违反',UNKNOWN:'未知'}[r.result]??r.result)+'。这是构造见证，实际执行需另提供观测。'));
   for(const [id,values]of Object.entries(c.finite_domains??{}))container.append(el('p','可选范围：'+(names.get(id)??id)+' = {'+values.map(x=>names.get(x)??x).join('，')+'}；数量 '+values.length));
-  for(const x of c.intervals??[])container.append(el('p','区间 '+x.subject+'：'+JSON.stringify({lower:x.lower,upper:x.upper,unit:x.unit,empty:x.empty})));
+  for(const x of c.intervals??[])container.append(el('p',(names.get(x.subject)??x.subject)+' ∈ '+(x.lower?.inclusive?'[':'(')+(x.lower?.value??'-∞')+','+(x.upper?.value??'+∞')+(x.upper?.inclusive?']':')')+' '+x.unit+'；'+(x.empty?'空区间':'非空区间')));
+  if(math?.dependency){container.append(el('h3','显式时间先后图'),el('p','环数量 '+math.dependency.cycles.length+'；以下是严格先后，必要条件另列。'));for(const e of math.dependency.explicit_order_edges){const edge=el('div');edge.className='graph-edge';edge.append(el('span',point(e.from)),el('strong',' → '),el('span',point(e.to)));const sources=(c.source_links??[]).filter(s=>e.source_refs.includes(s.id));if(sources.length){const button=el('button','原文依据');button.type='button';button.onclick=()=>onEvidence(sources);edge.append(button);}container.append(edge);}container.append(el('h3','动作开始时的必要前提'));for(const g of math.dependency.necessary_gates)container.append(el('p',(names.get(g.event.id)??g.event.id)+'发生 ⇒ '+(names.get(g.state.id)??g.state.id)+'截至该动作开始已成立'));}
+  container.append(el('h3','材料使用依赖'));for(const u of c.data_uses??[])container.append(el('p',(names.get(u.consumer_key)??u.consumer_key)+'使用'+(names.get(u.object.id)??u.object.id)+'；来源 '+({EXTERNAL:'外部输入',INTERNAL:'内部产物',NON_INPUT:'非输入通信内容',UNSTATED:'未明确'}[u.origin]??u.origin)+'；生产者 '+(names.get(u.producer_key)??u.producer_key??'未指定')+'；'+({AT_USE:'使用点所需数据可用',USED_PORTION:'所用部分可用',COMPLETE_RESULT:'完整结果可用'}[u.availability]??u.availability)));
+  if(math?.forbidden_patterns){container.append(el('h3','禁止边界'));for(const p of math.forbidden_patterns)container.append(el('p',(p.event?.operation??'未明确操作')+'：'+(p.event?.roles??[]).map(r=>r.role+'='+point(r.value)).join('；')+'；'+(p.applicability?'适用条件见 '+p.applicability.id:'无条件')));}
+  if(c.counterexample_queries?.length){container.append(el('h3','程序反例查询'));for(const q of c.counterexample_queries){const detail=el('details');detail.append(el('summary',q.id+'：'+(states[q.result]??q.result)+'；冲突核验 '+(q.conflict_verification?.valid?'通过':'未提供')));detail.append(el('p','查询假设与冲突依据独立保存，不写回原文约束。'),el('pre',JSON.stringify({assumptions:q.assumptions,orders:q.additional_orders,reason:q.reason,conflict:q.conflict,verification:q.conflict_verification},null,2)));container.append(detail);}}
+  if(c.observed_evaluation){const o=c.observed_evaluation;container.append(el('h3','实际观测核查：'+({SATISFIED:'满足',VIOLATED:'违反',UNKNOWN:'未知'}[o.status]??o.status)),el('p','这些是用户自报观测，与上述程序构造见证分开保存。'));const table=el('table');for(const r of [...o.requirements,...o.checks]){const tr=el('tr');tr.append(el('td',r.requirement_id??r.id),el('td',r.result));table.append(tr);}container.append(table);for(const g of o.gaps)container.append(el('p','观测未支持：'+g.node_id+' · '+g.reason));}
   for(const gap of c.gaps??[])container.append(el('p','未完成：'+(gap.node_id??'整体')+' · '+gap.reason));
-  const d=el('details');d.append(el('summary','程序输入公式、联合求解与原始计算结果'),el('pre',JSON.stringify(c,null,2)));container.append(d);return;
+  const d=el('details');d.append(el('summary','程序输入公式、联合求解与原始计算结果'),el('pre',JSON.stringify(c,null,2)));container.append(d);
+  if(onObserve)appendDirectObservationForm(container,trace,onObserve,onEvidence);
+  return;
  }
  const labels=new Map((trace.ir.entities??[]).map(x=>[x.id,x.label]));labels.set('ROOT','根任务');
  for(const f of trace.ir.facts.filter(x=>x.kind==='EVENT'))labels.set(f.event.id,f.event.predicate+'（'+(f.roles??[]).map(r=>(r.role==='PERFORMER'?'执行者：':'')+(r.entity?.label??r.entity_id)).join('、')+'）');

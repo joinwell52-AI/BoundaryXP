@@ -14,6 +14,46 @@ function temporalEmbedding(problem,numeric,ranks){const schedules={};for(const h
  const d=decimal(value),den=10n**BigInt(d.scale)*BigInt(Math.max(1,max));schedules[h.interval_id]={duration:value,unit:h.unit,origin:'0',measure:'ELAPSED_FIRST_START_TO_LAST_END',points:Object.fromEntries(Object.entries(ranks).map(([id,rank])=>[id,{numerator:(BigInt(rank)*d.n).toString(),denominator:den.toString()}])),interpretation:'Constructive abstract elapsed time assignment; not predicted/observed durations'};}return schedules;}
 function activeEdges(p,values){return p.orders.filter(x=>!x.guard||partial(x.guard,values)===true);}
 function ranking(edges){const nodes=[...new Set(edges.flatMap(x=>[x.from,x.to]))].sort(),rank=Object.fromEntries(nodes.map(id=>[id,0]));for(let i=0;i<=nodes.length;i++){let changed=false;for(const e of edges){const bound=rank[e.from]+(e.relation==='LTE'?0:1);if(rank[e.to]<bound){rank[e.to]=bound;changed=true;}}if(!changed)return rank;if(i===nodes.length)return null;}return rank;}
+// Force only consequences of a required truth value. No guessed value enters
+// this trail; disjunctions with several possible members remain search choices.
+function propagate(constraints,initial={}){
+ const values={...initial},trail=[];let changed=false,conflict=null;
+ const force=(f,wanted,id)=>{
+  if(conflict)return;
+  const actual=partial(f,values);
+  if(actual===wanted)return;
+  if(actual!==undefined){conflict={kind:'BOOLEAN',constraint_id:id};return;}
+  if(f.var){values[f.var]=wanted;trail.push({constraint_id:id,variable:f.var,value:wanted});changed=true;return;}
+  if('not' in f){force(f.not,!wanted,id);return;}
+  if(f.implies){force({any:[{not:f.implies[0]},f.implies[1]]},wanted,id);return;}
+  const members=f.all??f.any;
+  if((!!f.all&&wanted)||(!f.all&&!wanted)){for(const member of members)force(member,wanted,id);return;}
+  const undecided=members.filter(member=>partial(member,values)===undefined);
+  if(undecided.length===1)force(undecided[0],wanted,id);
+ };
+ do{changed=false;for(const c of constraints)force(c.formula,true,c.id);}while(changed&&!conflict);
+ return {values,trail,conflict};
+}
+function strictCycle(edges){
+ for(const strict of edges.filter(e=>e.relation!=='LTE')){
+  const queue=[strict.to],previous=new Map([[strict.to,null]]);
+  for(let i=0;i<queue.length&&!previous.has(strict.from);i++)for(const edge of edges.filter(e=>e.from===queue[i]))if(!previous.has(edge.to)){previous.set(edge.to,edge);queue.push(edge.to);}
+  if(!previous.has(strict.from))continue;
+  const path=[];let at=strict.from;while(at!==strict.to){const edge=previous.get(at);path.push(edge.id);at=edge.from;}
+  return {kind:'STRICT_ORDER_CYCLE',edge_ids:[strict.id,...path.reverse()]};
+ }
+ return null;
+}
+// A root conflict is a certificate of forced values and a concrete Boolean
+// contradiction or closed order path with at least one strict edge.
+export function verifyJointConflict(problem,certificate){
+ if(!certificate||certificate.initial_assignment&&Object.keys(certificate.initial_assignment).length)return {valid:false};
+ const p=propagate(problem.constraints),same=JSON.stringify(p.trail)===JSON.stringify(certificate.propagation);
+ if(certificate.kind==='BOOLEAN')return {valid:same&&p.conflict?.constraint_id===certificate.constraint_id};
+ if(certificate.kind!=='STRICT_ORDER_CYCLE'||!same||p.conflict)return {valid:false};
+ const active=new Map(activeEdges(problem,p.values).map(e=>[e.id,e])),path=certificate.edge_ids.map(id=>active.get(id));
+ return {valid:path.length>0&&path.every(Boolean)&&path.some(e=>e.relation!=='LTE')&&path.every((e,i)=>e.to===path[(i+1)%path.length].from)};
+}
 export function verifyJointWitness(problem,witness){
  const checks=[];const add=(id,pass,kind)=>checks.push({id,pass,kind});
  add('EXACT_VARIABLE_ASSIGNMENT',Object.keys(witness.boolean).length===problem.variables.length&&problem.variables.every(v=>typeof witness.boolean[v]==='boolean'),'BINDING');
@@ -39,9 +79,12 @@ export function solveJointBoundary(problem,{maxNodes=100000}={}){
  const numeric=Object.fromEntries(problem.intervals.map(x=>[x.id,intervalValue(x)]));if(Object.values(numeric).includes(null))return {result:'unsatisfiable',reason:'EMPTY_INTERVAL',witness:null};
  const frequency=new Map(problem.variables.map(v=>[v,0]));for(const c of problem.constraints)for(const v of new Set(variablesOf(c.formula)))frequency.set(v,frequency.get(v)+1);
  const ordered=[...problem.variables].sort((a,b)=>frequency.get(b)-frequency.get(a)||a.localeCompare(b));let nodes=0,limited=false;
- const search=values=>{if(++nodes>maxNodes){limited=true;return null;}if(problem.constraints.some(c=>partial(c.formula,values)===false))return null;
+ let rootConflict=null;
+ const search=initial=>{if(++nodes>maxNodes){limited=true;return null;}const propagated=propagate(problem.constraints,initial),values=propagated.values;
+  const edges=activeEdges(problem,values),orderConflict=!propagated.conflict&&ranking(edges)===null?strictCycle(edges):null;
+  if(propagated.conflict||orderConflict){if(nodes===1)rootConflict={...(propagated.conflict??orderConflict),initial_assignment:{},propagation:propagated.trail};return null;}
   if(ordered.every(v=>values[v]!==undefined)){const edges=activeEdges(problem,values);let ranks=ranking(edges);if(!ranks)return null;if(Math.max(0,...Object.values(ranks))===0){const positive=(problem.temporal_horizons??[]).filter(h=>!intervalContains(problem.intervals.find(i=>i.id===h.interval_id),'0'));if(positive.length){if(positive.some(h=>!h.start_point||!h.end_point))return null;ranks=ranking([...edges,...positive.map(h=>({from:h.start_point,to:h.end_point,relation:'LT'}))]);if(!ranks)return null;}}const domain_values=finiteDomainAssignment(problem.domains??[],values,partial);if(!domain_values)return null;const intervals={...numeric},metric_schedule=temporalEmbedding(problem,intervals,ranks);return metric_schedule?{boolean:{...values},intervals,order_rank:ranks,metric_schedule,domain_values}:null;}
   const v=ordered.find(v=>values[v]===undefined);for(const value of [false,true]){const found=search({...values,[v]:value});if(found)return found;if(limited)return null;}return null;};
- const witness=search({});if(limited)return {result:'unknown',reason:'SEARCH_CAPACITY',nodes,witness:null};if(!witness)return {result:'unsatisfiable',reason:'BOOLEAN_OR_ACTIVE_ORDER',nodes,witness:null};
+ const witness=search({});if(limited)return {result:'unknown',reason:'SEARCH_CAPACITY',nodes,witness:null};if(!witness)return {result:'unsatisfiable',reason:rootConflict?.kind??'BOOLEAN_OR_ACTIVE_ORDER',nodes,witness:null,...(rootConflict?{conflict:rootConflict,conflict_verification:verifyJointConflict(problem,rootConflict)}:{})};
  const verification=verifyJointWitness(problem,witness);if(!verification.valid){const error=Error('JOINT_WITNESS_VERIFICATION_FAILED');error.failed_checks=verification.checks.filter(c=>!c.pass);error.witness=witness;throw error;}return {result:'satisfiable',nodes,witness,verification,proof_scope:'FINITE_DECLARED_BOOLEAN_INTERVAL_AND_ABSTRACT_ORDER'};
 }

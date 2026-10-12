@@ -5,7 +5,11 @@ export function renderDirectCalculations(c){
  for(const x of c.joint.base.input_boundary_verification?.results??[])lines.push(`外部输入子集边界 ${x.requirement_id}：实际使用={${x.used.join('，')}} ⊆ 允许={${x.allowed.join('，')}}；核验=${x.result}。此处为构造见证，不是实际业务观测。`);
  if(c.joint.base.witness){lines.push('','### 程序联合见证','这是一份构造数学赋值，不是业务执行记录。');for(const schedule of Object.values(c.joint.base.witness.metric_schedule??{}))lines.push(`构造整体耗时=${schedule.duration} ${schedule.unit}；逐时间点与核验见完整Trace。`);lines.push(`见证逐约束核验=${c.joint.base.verification?.valid}。`);if(c.joint.base.quantified_verification)lines.push('全称约束覆盖本构造执行的全部实际事件；不证明任意未来执行自动合规。');}
  for(const x of c.priority_rules??[])lines.push(`优先响应 ${x.id}：触发后优先响应；没有追加数值延迟。`);
+ if(m?.dependency){lines.push('','### 显式先后与必要条件');for(const edge of m.dependency.explicit_order_edges)lines.push(`严格先后 ${edge.expression_id}：${edge.from.id} → ${edge.to.id}。`);lines.push(`显式先后环数量=${m.dependency.cycles.length}；必要条件另列，不混为严格时间边。`);for(const gate of m.dependency.necessary_gates)lines.push(`开始时必要条件 ${gate.expression_id}：${gate.event.id}发生 ⇒ ${gate.state.id}在开始时已成立。`);}
+ for(const use of c.data_uses??[])lines.push(`使用依赖 ${use.requirement_id}：对象=${use.object.id}，消费者=${use.consumer_key}，生产者=${use.producer_key??'未指定'}；${use.availability}，可用点=${use.availability_point} ≤ 使用点=${use.use_point}。`);
  for(const q of c.completion_queries??[])lines.push(`完成分支查询：假设${q.assumption.state_id}=true，结果=${q.result}，见证核验=${q.verification?.valid}。不是新增原文义务，也不是实际完成记录。`);
+ for(const q of c.counterexample_queries??[])lines.push(`反例查询 ${q.id}：${q.result}；${q.reason??'见证存在'}；冲突证书核验=${q.conflict_verification?.valid??'不适用'}。`);
+ if(c.observed_evaluation){const o=c.observed_evaluation;lines.push('','### 用户提供的实际观测核查',`观测结果=${o.status}；不是程序构造见证，不代表独立采集事实。`,...o.requirements.map(r=>`${r.requirement_id}：${r.result}`),...o.checks.map(r=>`${r.id}：${r.result}`),...o.gaps.map(g=>`观测未支持项 ${g.node_id}：${g.reason}`));}
  if(c.gaps.length)lines.push('','### 未完成项',...c.gaps.map(x=>'- '+(x.node_id??'整体')+'：'+x.reason));
  lines.push('','技术接受、抽象可满足、实际完成和业务授权分别判断。business_decision=null；execution_authorization=null。');return lines.join('\n')+'\n';
 }

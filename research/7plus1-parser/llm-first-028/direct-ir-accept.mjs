@@ -1,6 +1,7 @@
 import Ajv from 'ajv';
 import {validateCandidateIR} from './contracts/candidate-ir-v1/validate.mjs';
 import {auditSchema} from './contracts/candidate-ir-v1/schema.mjs';
+import {linkQuote,sha256} from './source.mjs';
 const auditCheck=new Ajv({strict:false,allErrors:true}).compile(auditSchema);
 const pathOf=p=>p.replace(/^\//,'').replaceAll('/','.');
 const overlaps=(a,b)=>!a||!b||a===b||a.startsWith(b+'.')||b.startsWith(a+'.');
@@ -43,5 +44,6 @@ export function acceptCandidateIR(ir,audit,source){
   row.status=Object.values(row.field_status).includes('REJECTED')?'REJECTED':Object.values(row.field_status).every(s=>s==='ACCEPTED')?'ACCEPTED':'UNRESOLVED';
  }}
  const diagnostics=[...errors,...(audit.omissions??[]).map(x=>({code:'AUDIT_OMISSION',...x})),...(ir.coverage??[]).filter(x=>x.status==='GAP').map(x=>({code:'COVERAGE_GAP',...x})),...(audit.issues??[]).filter(x=>pathOf(x.field_path)==='coverage').map(x=>({code:'COVERAGE_REVIEW_ISSUE',...x}))];
- return {format:'boundx-candidate-ir-acceptance/1',source_sha256:source.sha256,rows,errors,diagnostics,technical_ok:errors.length===0,schemas:{proposal:{ok:check.ok},audit:{ok:!!auditCheck(audit)}},audit_agreement_is_not_correctness_proof:true,business_decision:null,execution_authorization:null};
+ const linkedSource={...source,sha256:source.sha256??sha256(source.text)},link=table=>(table??[]).flatMap(c=>{try{return [linkQuote(linkedSource,c)];}catch{return [];}});
+ return {format:'boundx-candidate-ir-acceptance/1',source_sha256:linkedSource.sha256,source_links:link(ir.source_table),audit_source_links:link(audit.source_table),rows,errors,diagnostics,technical_ok:errors.length===0,schemas:{proposal:{ok:check.ok},audit:{ok:!!auditCheck(audit)}},audit_agreement_is_not_correctness_proof:true,business_decision:null,execution_authorization:null};
 }

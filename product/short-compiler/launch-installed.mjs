@@ -5,6 +5,7 @@ import {fileURLToPath,pathToFileURL} from 'node:url';
 import {spawn} from 'node:child_process';
 import {lockProduct} from './resources.mjs';
 const approvedVersions={
+ '0.1.0-candidate.031-r1.2-ui.77':{compiler:'direct-ir-r05-test',contract:'candidate-ir/1.4'},
  '0.1.0-candidate.031-r1.2-ui.76':{compiler:'direct-ir-r04.1-test',contract:'candidate-ir/1.4'},
  '0.1.0-candidate.031-r1.2-ui.75':{compiler:'direct-ir-r04.1-test',contract:'candidate-ir/1.4'},
  '0.1.0-candidate.031-r1.2-ui.74':{compiler:'direct-ir-r04-test',contract:'candidate-ir/1.4'},
@@ -88,8 +89,8 @@ export async function launchInstalled({home=installedHome,probe=existingEntry,sp
  return{already_running:false,child,plan};
 }
 if(process.argv[1]&&import.meta.url===pathToFileURL(process.argv[1]).href){
- if(process.argv.length!==2)throw Error('Usage: npm run 7plus1:ui (fixed installed home and port; no override)');
- const {child}=await launchInstalled();
+ if(process.argv.length!==2&&!(process.argv.length===4&&process.argv[2]==='--home'&&path.isAbsolute(process.argv[3])))throw Error('Usage: npm run 7plus1:ui [-- --home ABSOLUTE_INSTALLATION_HOME] (fixed port 58618)');
+ const {child}=await launchInstalled(process.argv.length===4?{home:process.argv[3]}:{});
  if(child){
   child.on('error',e=>{console.error(e.message);process.exitCode=1;});
   child.on('exit',code=>{process.exitCode=code??1;});

@@ -50,6 +50,10 @@ IMMEDIATE_AFTER(STATE,EVENT)是定性优先响应谓词：触发成立后该响�
 
 事件时间点、状态成立点和必要前提是独立表达。TRUE_AT_START(state,event)约束动作开始时该状态已经成立，不接受后来通过的终态追认；BEFORE表达纯先后，不自动增加动作义务或完整生产事件结束依赖。若原文同时要求收到后必须复核，既保留收到后的义务，又保留不得提前执行的边界。必要、充分、充要不互换。
 
+CONSTRAINT的subject为ACTION或已绑定事件实例时，固定消费为`(EVENT_OCCURRED(subject) ∧ applicability) ⇒ body`，applicability=null表示true；这是执行时的局部限制，不单独要求动作发生。subject为TASK时承载全局约束，不加TASK发生保护；subject为数值变量或null时也不机械追加事件保护。EVENT_NORM与STOP的REQUIRED仍为`applicability ⇒ (EVENT_OCCURRED(subject) ∧ body)`。纯BEFORE只约束先后，不自动追加动作义务；全局输入子集、环境全称、完成公式及整体期限不因局部门而弱化。
+
+原文独立要求“必须执行”，另有“只有前提成立才能执行”时，分别表达独立EVENT_NORM义务和动作局部必要门。不能把后者反用为前者的applicability，悄悄允许前提未成立时省略独立必需动作。只有原文明示“若前提成立则必须执行”的充分触发，才以该前提作为义务applicability。只有必要门而没有独立义务时，不补造必须动作。适用条件、必要前提与独立义务逐来源分开审阅；原文真的条件化或有撤回例外时忠实保持，不能把所有要求都改成无条件义务。
+
 重复以TEMPLATE事件、EVENT_INSTANCE(template,index)和有界整数索引域表达；PREVIOUS_INSTANCE只指该序列直接前一实例，不能指任意曾失败事件。每次尝试的对象都引用同一任务固定变量；次数域、首次与重试偏移及每次前提独立保留。不明确的次数/失败观测是运行未知，不是源文边界不明确。
 
 DATA_USE明确消费者、对象、生产实例（若源文指定）、origin及availability。origin=EXTERNAL表示本任务外部输入，INTERNAL表示本任务产物；没有来源依据时为UNSTATED，不仅由producer=null推断外部输入。AT_USE表示使用点所需数据可用，不声称完整结果或原文限定部分数据；USED_PORTION用于明确部分可用，COMPLETE_RESULT用于明确完整交付/结果依赖。普通检查或“依据材料”不自动增加完整数据门。所有者owner不是时间边。

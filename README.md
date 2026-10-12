@@ -6,6 +6,8 @@
 
 [Quick start](QUICKSTART.en.md) · [Product manual — Chinese](docs/BOUNDX-PRODUCT-MANUAL.md) · [7+1 method — Chinese](docs/BoundX-7plus1-定义原理语义编译与边界计算说明-v0.4.md) · [Current status — Chinese](docs/SHORT-COMPILER-STATUS.md) · [Documentation](docs/README.md)
 
+> **2026-10-12 cloud candidate: ui77 / direct-ir-r05-test, awaiting ADMIN review.** The existing compiler now has action-local constraint activation, propagated temporal conflict certificates, explicit observation evaluation, and a complete build from a clean checkout. Revised Skill guidance still needs live model validation. See the [delivery report](docs/reports/7plus1/CLOUD-REPAIR-ui77/REPORT.md) and [build/controlled local upgrade](product/short-compiler/CLOUD-CANDIDATE.md). The cloud task has not operated the user's local 58618 installation. The older status below is historical.
+
 > **Status as of 2026-10-08: a runnable short-text compiler candidate exists; full product semantic acceptance has not passed.** This page describes candidate progress on `review/7plus1-parser`. It does not imply that `main`, an existing release tag, or a local installation has been updated to the same version.
 
 ## What is BoundX?

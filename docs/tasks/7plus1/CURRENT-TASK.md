@@ -1,5 +1,15 @@
 # 当前 BoundX 7+1 产品开发任务
 
+## 2026-10-12 最新云端交付指针
+
+本次续作以 [CLOUD-DEVELOPMENT-HANDOFF-20261012](CLOUD-DEVELOPMENT-HANDOFF-20261012.md) 及 ADMIN 最新授权为准，唯一分支 `review/7plus1-parser`，基线已确认包含 `e25ad6a1`。云端沿用同一核心、两个 Skill 和 UI；ui77 候选为 `direct-ir-r05-test` / `candidate-ir/1.4`，状态 `WAITING_ADMIN_REVIEW`。
+
+结果、冻结响应回放、剩余真实模型与观测限制见 [云端交付报告](../../reports/7plus1/CLOUD-REPAIR-ui77/REPORT.md)。完整干净签出构建与本地受控升级见 [候选说明](../../../product/short-compiler/CLOUD-CANDIDATE.md)。云端没有操作用户本地 58618，没有使用或触发 GitHub Actions，没有 merge/release/tag。
+
+以下保留032历史任务及停止记录，不作为本次云端续作的当前范围或模型预算。
+
+## 032历史指针（保留）
+
 **当前任务：7P-SHORT-COMPILER-SEMANTIC-ACCEPTANCE-032-LONG；任务修订r01。**
 状态：WAITING_ADMIN_REVIEW / TRANSPORT_STOPPED。已执行[032有界传输恢复续作](ADDENDUM-032-TRANSPORT-RECOVERY.md)，仍为同一032、同版032.3；再次传输停止后不启动后续样本，原封存和360总上限不变。
 

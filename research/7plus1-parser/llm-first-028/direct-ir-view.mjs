@@ -2,7 +2,7 @@
 export function projectDirectIR(ir,acceptance){
  const collections=['entities','variables','events','states','expressions','requirements'];
  const nodes=new Map(collections.flatMap(k=>ir[k].map(n=>[n.id,n]))),statuses=new Map(acceptance.rows.map(r=>[r.id,r.status]));
- const labels={REQUIRED:'必须',PERMITTED:'允许',NOT_REQUIRED:'无需',FORBIDDEN:'禁止',UNSTATED:'未明确',PERFORMER:'执行者',ORGANIZER:'组织者',REVIEWER:'复核者',APPROVER:'批准者',RECIPIENT:'接收者',COLLABORATOR:'协作者',INPUT_OBJECT:'输入对象',OBJECT:'对象',RESULT:'结果',DELIVERABLE:'交付物',BASIS:'依据',CONTENT:'内容'};
+ const labels={REQUIRED:'必须',PERMITTED:'允许',NOT_REQUIRED:'无需',FORBIDDEN:'禁止',UNSTATED:'未明确',PERFORMER:'执行者',ORGANIZER:'组织者',REVIEWER:'复核者',APPROVER:'批准者',RECIPIENT:'接收者',COLLABORATOR:'协作者',INPUT_OBJECT:'输入对象',OBJECT:'对象',RESULT:'结果',DELIVERABLE:'交付物',BASIS:'依据',CONTENT:'内容',ENVIRONMENT:'执行环境'};
  const show=(r,seen=new Set())=>{if(!r)return '未指定';const n=nodes.get(r.id);if(!n)return '缺失引用 '+r.id;if(seen.has(r.id))return n.label??r.id;const next=new Set([...seen,r.id]);
   if(r.kind!=='EXPRESSION')return n.label??r.id;
   const a=n.arguments.map(x=>show(x,next));
@@ -19,20 +19,28 @@ export function projectDirectIR(ir,acceptance){
   return (op[n.operator]??n.operator)+'('+a.join('，')+')';
  };
  const slots=Object.fromEntries('IOAPRVCB'.split('').map(k=>[k,{status:'ABSENT',items:[]}]));
- const put=(slot,node,text,extra={})=>slots[slot].items.push({id:node.id,node_ref:node.id,text,status:statuses.get(node.id)??'UNRESOLVED',source_refs:node.source_refs,...extra});
+ const put=(slot,node,text,extra={})=>slots[slot].items.push({id:node.id,node_ref:node.id,text,status:statuses.get(node.id)??'UNRESOLVED',source_refs:node.source_refs,sources:(acceptance.source_links??[]).filter(s=>node.source_refs.includes(s.id)),...extra});
  const refs=value=>!value||typeof value!=='object'?[]:value.kind&&value.id&&Object.keys(value).length===2?[value]:Object.values(value).flatMap(refs);
  const exprNodes=r=>{const seen=new Set(),out=[];const visit=x=>{if(!x||seen.has(x.id))return;seen.add(x.id);const n=nodes.get(x.id);if(!n)return;out.push(n);if(x.kind==='EXPRESSION')n.arguments.forEach(visit);};visit(r);return out;};
- for(const e of ir.events){const norm=ir.requirements.filter(r=>r.kind==='EVENT_NORM'&&r.subject?.id===e.id);const modal=norm.map(r=>labels[r.modality]).join(' / ')||'未明确义务';
-  if(e.use==='CURRENT_TASK'&&e.kind==='ACTION'&&norm.length)put('A',e,modal+'：'+e.label+'；'+e.roles.map(r=>(labels[r.role]??r.role)+'='+show(r.value)).join('；'));
-  for(const role of e.roles){const text=e.label+'：'+labels[role.role]+'='+show(role.value);if(['PERFORMER','ORGANIZER','REVIEWER','APPROVER','RECIPIENT','COLLABORATOR'].includes(role.role))put('P',e,text,{role:role.role,value:role.value});if(role.role==='INPUT_OBJECT')put('I',e,text,{value:role.value});if(['RESULT','DELIVERABLE'].includes(role.role))put('O',e,text+'；'+modal,{value:role.value});if(role.role==='BASIS')put('V',e,text,{value:role.value});}
+ const modalText=r=>(r.applicability?'当'+show(r.applicability)+'时，':'')+labels[r.modality];
+ for(const e of ir.events){const norm=ir.requirements.filter(r=>['EVENT_NORM','STOP'].includes(r.kind)&&r.subject?.id===e.id);const gates=ir.requirements.filter(r=>r.kind==='CONSTRAINT'&&r.subject?.id===e.id);
+  const modal=norm.map(modalText).join(' / ')||'未明确义务',gateText=gates.map(r=>'；执行时'+modalText(r)+'满足：'+show(r.body)).join('');
+  const related=[...norm,...gates],extra={related_requirement_ids:related.map(r=>r.id),status:statuses.get(e.id)==='ACCEPTED'&&related.every(r=>statuses.get(r.id)==='ACCEPTED')?'ACCEPTED':'UNRESOLVED'};
+  if(e.use==='CURRENT_TASK'&&e.kind==='ACTION'&&norm.length)put('A',e,modal+'：'+e.label+'；'+e.roles.map(r=>(labels[r.role]??r.role)+'='+show(r.value)).join('；')+gateText,extra);
+  for(const role of e.roles){const text=e.label+'：'+labels[role.role]+'='+show(role.value);if(['PERFORMER','ORGANIZER','REVIEWER','APPROVER','RECIPIENT','COLLABORATOR'].includes(role.role))put('P',e,text,{role:role.role,value:role.value});if(role.role==='INPUT_OBJECT')put('I',e,text,{value:role.value});if(['RESULT','DELIVERABLE'].includes(role.role))put('O',e,text+'；'+modal+gateText,{value:role.value,...extra});if(role.role==='BASIS')put('V',e,text,{value:role.value});}
  }
  for(const r of ir.requirements){const body=nodes.get(r.body.id),norm=['EVENT_NORM','STOP'].includes(r.kind),isTrue=body?.operator==='BOOLEAN'&&body.literal===true,sameOccurrence=body?.operator==='EVENT_OCCURRED'&&body.arguments[0]?.id===r.subject?.id;
   const description=norm?(sameOccurrence?show(r.body):'事件发生('+show(r.subject)+')'+(isTrue?'':' 且 '+show(r.body))):show(r.body);
-  const text=(labels[r.modality]??r.modality)+'：'+description+(r.applicability?'；适用条件：'+show(r.applicability):'');
+  const local=r.kind==='CONSTRAINT'&&nodes.get(r.subject?.id)?.kind==='ACTION';
+  const use=r.data_use,origin={EXTERNAL:'外部输入',INTERNAL:'内部产物',NON_INPUT:'非输入通信内容',UNSTATED:'来源未明确'},availability={AT_USE:'使用点所需数据可用',USED_PORTION:'所用部分可用',COMPLETE_RESULT:'完整结果可用'};
+  const text=r.kind==='DATA_USE'?modalText(r)+'：'+show(use.consumer)+'使用'+show(use.object)+'；来源='+origin[use.origin]+'；生产者='+show(use.producer)+'；依赖='+availability[use.availability]:
+   (local?'执行'+show(r.subject)+'时，':'')+modalText(r)+'：'+description;
   if(r.modality==='FORBIDDEN'||r.kind==='STOP')put('B',r,text);
   if(['STOP','COMPLETION'].includes(r.kind))put('C',r,text);
-  if(r.kind==='DATA_USE'&&r.data_use?.origin!=='NON_INPUT')put('I',r,'产物使用依赖：'+show(r.data_use?.object)+' → '+show(r.data_use?.consumer),{external_input:r.data_use?.origin==='EXTERNAL',origin:r.data_use?.origin});
-  for(const slot of r.views)if(!slots[slot].items.some(x=>x.id===r.id))put(slot,r,text);
+  if(r.kind==='DATA_USE'&&use?.origin!=='NON_INPUT')put('I',r,text,{external_input:use?.origin==='EXTERNAL',origin:use?.origin});
+  const tree=exprNodes(r.body),environment=body?.operator==='FORALL'&&tree.some(n=>n.operator==='TASK_EVENTS')&&tree.some(n=>n.operator==='ENVIRONMENT_OF');
+  const views=environment?[...new Set([...r.views.filter(v=>v!=='R'),'I'])]:r.views;
+  for(const slot of views)if(!slots[slot].items.some(x=>x.id===r.id))put(slot,r,text,{declared_views:r.views,...(environment?{projection_rule:'TYPED_TASK_ENVIRONMENT_IS_INPUT_SCOPE'}:{})});
  }
  const unresolved=acceptance.rows.filter(r=>r.status!=='ACCEPTED').map(r=>({id:r.id,status:r.status,reason:r.blocked_dependencies?'引用的节点尚未接受':'审阅或技术校验未接受'}));
  const gaps=acceptance.diagnostics.map(d=>({...d,reason:d.reason??d.code}));

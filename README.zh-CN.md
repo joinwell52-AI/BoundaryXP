@@ -6,6 +6,8 @@
 
 [快速开始](QUICKSTART.md) · [产品手册](docs/BOUNDX-PRODUCT-MANUAL.md) · [7+1方法](docs/BoundX-7plus1-定义原理语义编译与边界计算说明-v0.4.md) · [当前状态](docs/SHORT-COMPILER-STATUS.md) · [文档导航](docs/README.md)
 
+> **2026-10-12云端候选：ui77 / direct-ir-r05-test，等待ADMIN Review。** 同一核心新增局部动作约束激活、时序冲突证书、明确实际观测核查及干净签出完整构建。修订后Skill的真实模型验证仍待本地补做。见[交付报告](docs/reports/7plus1/CLOUD-REPAIR-ui77/REPORT.md)和[构建及本地受控升级](product/short-compiler/CLOUD-CANDIDATE.md)。云端未操作用户电脑的58618；以下旧状态为历史记录。
+
 > **2026-10-08状态：短文本编译器候选可运行，完整产品语义验收尚未通过。** 本页说明`review/7plus1-parser`上的候选进展，不表示`main`、旧发布标签或本机安装版本已经同步更新。
 
 ## BoundX是什么？

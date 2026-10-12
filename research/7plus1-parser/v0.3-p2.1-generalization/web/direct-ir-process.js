@@ -4,7 +4,7 @@ export function directIRProcess(trace){
  const p=trace.proposal??trace.ir,a=trace.audit,t=trace.technical,c=trace.canonical,calc=trace.boundary_calculations;
  const nodes=new Map(['entities','variables','events','states','expressions','requirements'].flatMap(k=>list(p?.[k]).map(n=>[n.id,n])));
  const name=r=>nodes.get(r?.id??r)?.label??r?.id??r??'未指定';
- const sources=n=>list(n?.source_refs).map(id=>list(p?.source_table).find(s=>s.id===id)).filter(Boolean);
+ const sources=n=>list(n?.source_refs).map(id=>list(t?.source_links??p?.source_table).find(s=>s.id===id)).filter(Boolean);
  const base={time:null,notes:[],rows:[],headers:[],ready:false};
  return {stages:[
   {...base,id:'parse',title:'1. LLM直接生成候选IR：语义与可计算表达',actor:'Codex + boundx-semantic-parse',input:'原文、解析Skill、共享IR合同与Schema。',work:'模型解释动作、对象、角色、条件和范围，直接给出带来源的IR。程序不再重新猜语义或另造IR。',ready:!!p,outcome:p?`${list(p.events).length}个事件，${list(p.states).length}个状态，${list(p.expressions).length}个计算表达式，${list(p.requirements).length}项要求。`:'等待模型候选IR；没有返回前不伪造内容。',headers:['模型识别的事件','角色与对象','语义层'],rows:list(p?.events).map(e=>({cells:[e.label,e.roles.map(r=>r.role+'：'+name(r.value)).join('；'),e.layer+' / '+e.use],sources:sources(e)})),notes:list(p?.issues).map(x=>x.reason),raw:p},

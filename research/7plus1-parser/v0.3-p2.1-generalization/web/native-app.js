@@ -75,7 +75,7 @@ function highlight(sources){
 }
 function record(value){$('panel').replaceChildren();$('panel').append(el('p',value.event||value.claim?factText(value,current?.result):value.note??value.reason??'查看本项来源与记录'));for(const s of value.sources??[]){if(!s.span)continue;const b=el('button','['+s.span.join(',')+') '+s.quote,'secondary');b.onclick=()=>highlight([s]);$('panel').append(b);}const detail=el('details');detail.append(el('summary','开发详情：原始JSON'),el('pre',JSON.stringify(value,null,2)));$('panel').append(detail);highlight(value.sources);}
 function entry(f){
- if(current.result?.pipeline==='LLM_DIRECT_CANDIDATE_IR'){const b=el('button',f.text,'entry');b.append(el('small',readable(f.status)+' · 查看原文来源'));b.onclick=()=>{const refs=new Set(f.source_refs);highlight(current.result.ir.source_table.filter(s=>refs.has(s.id)));};return b;}
+ if(current.result?.pipeline==='LLM_DIRECT_CANDIDATE_IR'){const b=el('button',f.text,'entry');b.append(el('small',readable(f.status)+' · 查看原文来源'));b.onclick=()=>{const refs=new Set(f.source_refs);highlight(f.sources??(current.result.technical.source_links??current.result.ir.source_table).filter(s=>refs.has(s.id)));};return b;}
  const b=el('button',factText(f,current.result),'entry');
  b.append(el('small',readable(f.status)+' · 点击查看原文证据'));b.onclick=()=>record(f);return b;
 }

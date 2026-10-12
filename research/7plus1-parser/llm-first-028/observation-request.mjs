@@ -1,6 +1,12 @@
 // Host observations are separate from the immutable semantic trace.
 import {calculateBoundary,renderCalculations} from './calculus.mjs';
+import {calculateDirectIR} from './direct-ir-calculate.mjs';
+import {renderDirectCalculations} from './direct-ir-render-results.mjs';
 export function recalculateObservedTrace(trace,input){
+ if(trace?.ir?.format==='boundx-candidate-ir/1'){
+  const calculation=calculateDirectIR(trace.ir,trace.technical,{observations:input});
+  return {source_sha256:trace.source.sha256,observation_kind:'USER_REPORTED_NOT_INDEPENDENTLY_VERIFIED',observations:input,calculation,chinese:renderDirectCalculations(calculation),model_calls:0,business_decision:null,execution_authorization:null};
+ }
  const fail=()=>{throw Error('INVALID_OBSERVATIONS');};
  const object=x=>x&&typeof x==='object'&&!Array.isArray(x);
  if(!object(input)||Object.keys(input).some(k=>!['states','outcomes','quantities'].includes(k)))fail();
