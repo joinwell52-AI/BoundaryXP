@@ -3,21 +3,34 @@ import path from 'node:path';
 import http from 'node:http';
 import {randomUUID,randomBytes,timingSafeEqual} from 'node:crypto';
 import {ROOT,buildBundle} from './bundle.mjs';
+import {parseMethod,bundleEvidence} from './comparison-bundle.mjs';
+const requestProfile='DIRECT_CANDIDATE_IR_R01';
 import {prepareSource,sha256} from './source.mjs';
+import {MAX_REQUEST_BYTES,INPUT_LIMITS} from './input-limits.mjs';
+import {sourceExamples,loadSourceExample} from './examples.mjs';
 import {parse7Plus1,writeJSON,compilerRevision} from './engine.mjs';
 import {runtimeInventory} from './evidence.mjs';
-import {modelCatalog,requestSettings,publicProgress,partialArtifacts} from './observability.mjs';
+import {modelCatalog,requestSettings,publicProgress,partialArtifacts,savedCallHistory} from './observability.mjs';
 import {sessionActivity} from './model-activity.mjs';
+import {recalculateObservedTrace} from './observation-request.mjs';
 const loadedRuntime=JSON.stringify(runtimeInventory());
+const resourceProfile=buildBundle('parse').resource_profile;
+const resourceFingerprint=()=>sha256(JSON.stringify([buildBundle('parse').sha256,buildBundle('audit').sha256,compilerRevision,sha256(loadedRuntime)]));
+const resourceEvidence=()=>({parse_method:'SKILL',resource_profile:resourceProfile,request_profile:requestProfile,effective_resource_sha256:resourceFingerprint(),selected_resources:{parse:bundleEvidence(buildBundle('parse')),audit:bundleEvidence(buildBundle('audit'))}});
 export const WEB=path.resolve(ROOT,'../v0.3-p2.1-generalization/web');
 export const DATA=process.env.BOUNDX_DATA_DIR?path.resolve(process.env.BOUNDX_DATA_DIR):path.resolve(ROOT,'../../../.boundx/7plus1-short');
 const ID=/^[a-f0-9]{8}(?:-[a-f0-9]{4}){3}-[a-f0-9]{12}$/;
 const terminal=new Set(['COMPLETED','COMPLETED_WITH_UNRESOLVED','FAILED','CANCELLED','INTERRUPTED']);
 const save=(file,value)=>{const temp=file+'.'+randomUUID()+'.tmp';writeJSON(temp,value);fs.renameSync(temp,file);};
 const knownErrors=['INSTALLED_RESOURCE_CHANGED','EMPTY_SOURCE','SOURCE_BYTE_LIMIT','SHORT_TEXT_SCOPE_EXCEEDED','SOURCE_UTF8_ROUNDTRIP_FAILED','CODEX_TIMEOUT','CODEX_LOGIN_REQUIRED','CODEX_QUOTA_OR_RATE_LIMIT','CODEX_NETWORK_FAILURE','CODEX_MODEL_UNAVAILABLE','CODEX_TRANSPORT_OR_SCHEMA_FAILURE','CODEX_ENV_UNAVAILABLE','UNSUPPORTED_CLI_FLAG','SKILL_CONTRACT_VERSION_MISMATCH','UNEXPECTED_TOOL_ACTIVITY','AUDIT_SESSION_NOT_INDEPENDENT','CANCELLED'];
-export function publicError(e){const code=knownErrors.find(c=>String(e.code??e.message).startsWith(c))??(e instanceof TypeError?'INVALID_UTF8':'COMPILER_ERROR');return {code,message:code,details_available_locally:true};}
+export function publicError(e){
+ const additional=['CODEX_OUTPUT_SCHEMA_REJECTED','DIRECT_IR_PATCH_TRANSPORT_NOT_IMPLEMENTED','COMPACT_WIRE_CONTRACT_FAILURE','MODEL_REQUEST_BUDGET_EXHAUSTED','IDENTITY_RESERVED_ID','PATCH_GLOBAL_ID_COLLISION','REVISION_BASE_DIGEST_MISMATCH'];
+ const code=[...knownErrors,...additional].find(c=>String(e.code??e.message).startsWith(c))??(e instanceof TypeError?'INVALID_UTF8':'COMPILER_ERROR');
+ const safeDetails=['PATCH_GLOBAL_ID_COLLISION','IDENTITY_RESERVED_ID','WIRE_SCHEMA_INVALID','REVISION_BASE_DIGEST_MISMATCH'];
+ return {code,message:code,...(safeDetails.includes(e.detail)?{detail_code:e.detail}:{}),details_available_locally:true};
+}
 const safeTrace=trace=>{const {model_calls,...rest}=trace;return {...rest,model_calls:Object.fromEntries(Object.entries(model_calls??{}).map(([phase,calls])=>[phase,calls.map(({thread_id,elapsed_ms,exit_code,usage,skill_mode,actual_model,schema_check})=>({thread_id,elapsed_ms,exit_code,usage,skill_mode,actual_model,schema_check}))]))};};
-export function createServer({dataRoot=DATA,parse=parse7Plus1,legacyRoot=process.env.BOUNDX_LEGACY_DIR?path.resolve(process.env.BOUNDX_LEGACY_DIR):path.resolve(ROOT,'../local-lab/history'),timeoutMs=300000,resourceGuard=()=>{},productSnapshot=null,maxModelRequests=6,catalog=modelCatalog()}={}){
+export function createServer({dataRoot=DATA,parse=parse7Plus1,legacyRoot=process.env.BOUNDX_LEGACY_DIR?path.resolve(process.env.BOUNDX_LEGACY_DIR):path.resolve(ROOT,'../local-lab/history'),timeoutMs=null,resourceGuard=()=>{},productSnapshot=null,maxModelRequests=6,catalog=modelCatalog()}={}){
  fs.mkdirSync(path.join(dataRoot,'runs'),{recursive:true});
  const records=new Map(),sessions=new Map(),active=new Map(),clearTokens=new Map();
  const folder=id=>{if(!ID.test(id))throw Error('INVALID_RUN_ID');return path.join(dataRoot,'runs',id);};
@@ -33,28 +46,35 @@ export function createServer({dataRoot=DATA,parse=parse7Plus1,legacyRoot=process
    if(!allowed.includes(host))return send(403,{error:'LOCALHOST_ONLY'});
    if(req.headers.origin&&req.headers.origin!=='http://'+host)return send(403,{error:'SAME_ORIGIN_REQUIRED'});
    const url=new URL(req.url,'http://'+host),route=url.pathname;
-   if(req.method==='GET'&&['/','/app.js','/process-view.js','/style.css'].includes(route)){
-    const name=route==='/'?'index.html':route==='/app.js'?'native-app.js':route==='/process-view.js'?'process-view.js':'style.css';
+   if(req.method==='GET'&&route==='/api/examples'){resourceGuard();return send(200,{count:sourceExamples().length,cases:sourceExamples(),answers_included:false,automatic_model_calls:false});}
+   const example=/^\/api\/examples\/(REAL-GOLD-\d{3})$/.exec(route);
+   if(req.method==='GET'&&example){resourceGuard();try{return send(200,loadSourceExample(example[1]));}catch(e){if(e.message==='SOURCE_EXAMPLE_NOT_FOUND')return send(404,{error:e.message});throw e;}}
+   if(req.method==='GET'&&route==='/input-limits.js'){
+    res.writeHead(200,{'content-type':'text/javascript; charset=utf-8','cache-control':'no-store'});return res.end(fs.readFileSync(path.join(ROOT,'input-limits.mjs')));
+   }
+   if(req.method==='GET'&&['/','/app.js','/process-view.js','/direct-ir-process.js','/calculation-view.js','/style.css'].includes(route)){
+    const name=route==='/'?'index.html':route==='/app.js'?'native-app.js':route==='/process-view.js'?'process-view.js':route==='/direct-ir-process.js'?'direct-ir-process.js':route==='/calculation-view.js'?'calculation-view.js':'style.css';
     res.writeHead(200,{'content-type':name.endsWith('.html')?'text/html; charset=utf-8':name.endsWith('.js')?'text/javascript; charset=utf-8':'text/css; charset=utf-8','cache-control':'no-store','content-security-policy':"default-src 'self'; script-src 'self'; style-src 'self'; object-src 'none'; frame-ancestors 'none'; base-uri 'none'"});return res.end(fs.readFileSync(path.join(WEB,name)));
    }
    if(req.method==='GET'&&route==='/api/session'){
     resourceGuard();
     const session=randomBytes(32).toString('hex');sessions.set(session,true);res.setHeader('set-cookie',`boundx_session=${session}; HttpOnly; SameSite=Strict; Path=/`);
-    return send(200,{token:session,product_snapshot:productSnapshot,engine:'BoundX short compiler',compiler_revision:compilerRevision,runtime_sha256:sha256(loadedRuntime),contract:buildBundle('parse').schema.properties.contract_version.const,skill_mode:'INLINE_BUNDLE',native_skill_loading:'NOT_VERIFIED',actual_model:null,requested_model:catalog.default_model,requested_reasoning:catalog.default_reasoning,model_catalog:catalog,source_lineage_supported:true,limit_codepoints:300,business_execution_enabled:false});
+    return send(200,{token:session,product_snapshot:productSnapshot,engine:'BoundX 7+1 compiler',compiler_revision:compilerRevision,runtime_sha256:sha256(loadedRuntime),contract:buildBundle('parse').schema.properties.contract_version.const,skill_mode:'INLINE_BUNDLE',parse_method:'SKILL',parse_methods:['SKILL'],resource_profile:resourceProfile,request_profile:requestProfile,comparison_resources:{SKILL:resourceEvidence()},native_skill_loading:'NOT_VERIFIED',actual_model:null,requested_model:catalog.default_model,requested_reasoning:catalog.default_reasoning,model_catalog:catalog,source_lineage_supported:false,limit_codepoints:null,input_limits:INPUT_LIMITS,model_wait_policy:{automatic_timeout_ms:timeoutMs>0?timeoutMs:null,manual_cancel:true},business_execution_enabled:false});
    }
    if(req.method==='GET'&&route==='/api/runs')return send(200,[...[...records.values()].map(summary),...legacyList()].sort((a,b)=>String(b.created_at).localeCompare(String(a.created_at))));
    const legacy=/^\/api\/legacy\/([a-f0-9-]+)$/u.exec(route);
    if(req.method==='GET'&&legacy){if(!ID.test(legacy[1]))return send(400,{error:'INVALID_RUN_ID'});return send(200,{status:'LEGACY_READ_ONLY',raw:JSON.parse(fs.readFileSync(path.join(legacyRoot,legacy[1]+'.json'),'utf8'))});}
-   const match=/^\/api\/runs\/([^/]+)(?:\/(cancel|json|export|trace\.json|trace\.md|trace\.html|activity\.json))?$/u.exec(route);
+   const match=/^\/api\/runs\/([^/]+)(?:\/(cancel|json|export|trace\.json|trace\.md|trace\.html|activity\.json|calculations\.json))?$/u.exec(route);
    let record=match?records.get(match[1]):null;
    if(match&&!ID.test(match[1]))return send(400,{error:'INVALID_RUN_ID'});
    if(req.method==='GET'&&match){
     if(!record)return send(404,{error:'RUN_NOT_FOUND'});
     const traceFile=path.join(folder(record.run_id),'trace.json');
     const trace=fs.existsSync(traceFile)&&record.status.startsWith('COMPLETED')?safeTrace(JSON.parse(fs.readFileSync(traceFile,'utf8'))):null;
-    if(!match[2])return send(200,{...summary(record),source_text:record.source_text,result:trace,progress:trace?null:partialArtifacts(folder(record.run_id),record),model_activity:sessionActivity(folder(record.run_id),record)});
+    if(!match[2])return send(200,{...summary(record),source_text:record.source_text,result:trace,progress:trace?null:partialArtifacts(folder(record.run_id),record),call_history:savedCallHistory(folder(record.run_id)),model_activity:sessionActivity(folder(record.run_id),record)});
     if(match[2]==='activity.json')return download(JSON.stringify({run_id:record.run_id,run_product_version:record.product_snapshot?.product_version??null,requested_model:record.requested_model,actual_model:record.actual_model??null,...sessionActivity(folder(record.run_id),record)},null,2)+'\n','application/json',record.run_id+'-sessions.json');
     if(!trace)return send(409,{error:'RESULT_NOT_READY'});
+    if(match[2]==='calculations.json')return trace.boundary_calculations?download(JSON.stringify(trace.boundary_calculations,null,2)+'\n','application/json',record.run_id+'-calculations.json'):send(404,{error:'CALCULATIONS_NOT_RECORDED'});
     if(match[2]==='json')return download(JSON.stringify(trace.canonical,null,2)+'\n','application/json',record.run_id+'-7plus1.json');
     if(match[2]==='export')return download(trace.chinese,'text/markdown',record.run_id+'-7plus1.md');
     if(match[2]==='trace.json')return download(JSON.stringify({run:summary(record),...trace},null,2)+'\n','application/json',record.run_id+'-trace.json');
@@ -68,33 +88,46 @@ export function createServer({dataRoot=DATA,parse=parse7Plus1,legacyRoot=process
    const token=String(req.headers['x-boundx-session']??'');
    if(!cookie||!sessions.has(cookie)||token.length!==cookie.length||!timingSafeEqual(Buffer.from(token),Buffer.from(cookie)))return send(403,{error:'SESSION_REQUIRED'});
    if(!/^application\/json\b/i.test(req.headers['content-type']??''))return send(415,{error:'JSON_REQUIRED'});
-   let size=0;const chunks=[];for await(const chunk of req){size+=chunk.length;if(size>16384)return send(413,{error:'REQUEST_BYTE_LIMIT'});chunks.push(chunk);}
+   let size=0;const chunks=[];for await(const chunk of req){size+=chunk.length;if(size>MAX_REQUEST_BYTES)return send(413,{error:'REQUEST_BYTE_LIMIT',limit_bytes:MAX_REQUEST_BYTES,source_truncated:false});chunks.push(chunk);}
    const input=JSON.parse(new TextDecoder('utf-8',{fatal:true}).decode(Buffer.concat(chunks)));
+   const observed=/^\/api\/runs\/([a-f0-9-]+)\/observations$/u.exec(route);
+   if(req.method==='POST'&&observed){
+    if(!ID.test(observed[1]))return send(400,{error:'INVALID_RUN_ID'});
+    const r=records.get(observed[1]);if(!r)return send(404,{error:'RUN_NOT_FOUND'});
+    if(!r.status.startsWith('COMPLETED'))return send(409,{error:'RESULT_NOT_READY'});
+    resourceGuard();
+    const trace=JSON.parse(fs.readFileSync(path.join(folder(r.run_id),'trace.json'),'utf8'));
+    if(productSnapshot&&trace.product_snapshot?.manifest_sha256!==productSnapshot.manifest_sha256)return send(409,{error:'OBSERVATION_VERSION_MISMATCH'});
+    let result;try{result=recalculateObservedTrace(trace,input);}catch(e){return send(400,{error:e.message});}
+    const observation_id=randomUUID(),at=new Date().toISOString();
+    const output={run_id:r.run_id,observation_id,at,calculator_revision:compilerRevision,...result};
+    const dir=path.join(folder(r.run_id),'observations');fs.mkdirSync(dir,{recursive:true});
+    fs.writeFileSync(path.join(dir,observation_id+'.json'),JSON.stringify(output,null,2)+'\n',{flag:'wx'});
+    return send(201,output);
+   }
    if(req.method==='POST'&&route==='/api/parse'){
-    if(Object.keys(input).some(k=>!['text','base64','filename','request_id','parent_run_id','model','reasoning'].includes(k)))return send(400,{error:'UNSUPPORTED_REQUEST_FIELD'});
+    if(Object.keys(input).some(k=>!['text','base64','filename','request_id','model','reasoning','parse_method'].includes(k)))return send(400,{error:'UNSUPPORTED_REQUEST_FIELD'});
     let settings;try{settings=requestSettings(input,catalog);}catch(e){return send(400,{error:e.message});}
+    let method;try{method=parseMethod(input.parse_method);if(method==='MD')throw Error('MD_COMPARISON_STOPPED');}catch(e){return send(400,{error:e.message});}
     if(!ID.test(input.request_id??''))return send(400,{error:'REQUEST_ID_REQUIRED'});
     if((typeof input.text==='string')===(typeof input.base64==='string'))return send(400,{error:'ONE_SOURCE_REQUIRED'});
     if(input.base64!==undefined&&!/^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=)?$/.test(input.base64))return send(400,{error:'INVALID_BASE64'});
     resourceGuard();
     if(JSON.stringify(runtimeInventory())!==loadedRuntime)return send(409,{error:'STALE_CODE_RESTART_REQUIRED'});
     const bytes=input.base64!==undefined?Buffer.from(input.base64,'base64'):Buffer.from(input.text,'utf8');const source=prepareSource(bytes);
-    const parent=input.parent_run_id===undefined?null:records.get(input.parent_run_id);
-    if(input.parent_run_id!==undefined&&(!ID.test(input.parent_run_id)||!parent||!terminal.has(parent.status)))return send(400,{error:'INVALID_CLARIFICATION_PARENT'});
-    if(parent?.source_sha256===source.sha256)return send(400,{error:'CLARIFICATION_SOURCE_UNCHANGED'});
-    const sourceLineage=parent?{parent_run_id:parent.run_id,parent_source_sha256:parent.source_sha256,source_sha256:source.sha256,kind:'USER_EDITED_NEW_SOURCE',user_confirmation:'EXPLICIT_COMPILE_SUBMISSION',business_approval:false}:null;
     const prior=[...records.values()].find(r=>r.request_id===input.request_id);
-    if(prior)return prior.source_sha256===source.sha256&&(prior.source_lineage?.parent_run_id??null)===(sourceLineage?.parent_run_id??null)&&prior.requested_model===settings.model&&(prior.requested_reasoning??'medium')===settings.reasoning?send(200,summary(prior)):send(409,{error:'REQUEST_ID_SOURCE_MISMATCH'});
+    if(prior)return prior.source_sha256===source.sha256&&prior.requested_model===settings.model&&(prior.requested_reasoning??'medium')===settings.reasoning&&(prior.parse_method??'SKILL')===method&&prior.resource_profile===resourceProfile&&prior.request_profile===requestProfile&&prior.effective_resource_sha256===resourceFingerprint()?send(200,summary(prior)):send(409,{error:'REQUEST_ID_SOURCE_MISMATCH'});
     if(active.size)return send(409,{error:'COMPILER_BUSY'});
     const id=randomUUID(),controller=new AbortController(),created_at=new Date().toISOString();fs.mkdirSync(folder(id));
-    record={run_id:id,request_id:input.request_id,created_at,status:'QUEUED',stage:'QUEUED',source_text:source.text,source_sha256:source.sha256,codepoints:source.codepoints,filename:typeof input.filename==='string'?path.basename(input.filename).slice(0,100):'pasted-task.txt',engine:'BoundX short compiler',contract:buildBundle('parse').schema.properties.contract_version.const,skill_mode:'INLINE_BUNDLE',native_skill_loading:'NOT_VERIFIED',requested_model:'gpt-6.1-sol',actual_model:null,execution_mode:'LIVE_CODEX',stages:[{stage:'QUEUED',at:created_at}]};
+    record={run_id:id,request_id:input.request_id,created_at,status:'QUEUED',stage:'QUEUED',source_text:source.text,source_sha256:source.sha256,codepoints:source.codepoints,filename:typeof input.filename==='string'?path.basename(input.filename).slice(0,100):'pasted-task.txt',engine:'BoundX 7+1 compiler',contract:buildBundle('parse').schema.properties.contract_version.const,skill_mode:'INLINE_BUNDLE',native_skill_loading:'NOT_VERIFIED',requested_model:'gpt-6.1-sol',actual_model:null,execution_mode:'LIVE_CODEX',stages:[{stage:'QUEUED',at:created_at}]};
     record.requested_model=settings.model;record.requested_reasoning=settings.reasoning;record.model_catalog_sha256=catalog.sha256;record.model_config_acceptance=settings.model===catalog.default_model&&settings.reasoning===catalog.default_reasoning?'BASELINE_PARTIAL':'USER_SELECTED_NOT_SEMANTICALLY_ACCEPTED';
-    record.source_lineage=sourceLineage;record.product_snapshot=productSnapshot;record.compiler_revision=compilerRevision;record.runtime_sha256=sha256(loadedRuntime);records.set(id,record);persist(record);active.set(id,controller);send(202,summary(record));
+    Object.assign(record,resourceEvidence());record.parse_resource_acceptance='SEMANTIC_REPAIR_CANDIDATE_NOT_ADMIN_ACCEPTED';
+    record.product_snapshot=productSnapshot;record.compiler_revision=compilerRevision;record.runtime_sha256=sha256(loadedRuntime);records.set(id,record);persist(record);active.set(id,controller);send(202,summary(record));
     setImmediate(async()=>{
      try{
-      const result=await parse(bytes,{output:folder(id),resourceGuard,productSnapshot,sourceLineage,timeoutMs,maxModelRequests,model:settings.model,reasoning:settings.reasoning,signal:controller.signal,onProgress:p=>{if(record.status==='CANCELLING')return;const event=publicProgress(p);record.status='RUNNING';record.stage=event.stage;record.revision=event.revision;record.stages.push({...event,at:new Date().toISOString()});persist(record);}});
+      const result=await parse(bytes,{output:folder(id),resourceGuard,productSnapshot,timeoutMs,maxModelRequests,model:settings.model,reasoning:settings.reasoning,parseMethod:method,signal:controller.signal,onProgress:p=>{if(record.status==='CANCELLING')return;const event=publicProgress(p);record.status='RUNNING';record.stage=event.stage;record.revision=event.revision;record.stages.push({...event,at:new Date().toISOString()});persist(record);}});
       if(controller.signal.aborted)throw Error('CANCELLED');
-      record.status=result.canonical.unresolved.length||result.canonical.gaps.length?'COMPLETED_WITH_UNRESOLVED':'COMPLETED';record.stage=record.status;
+      record.calculation_status=result.boundary_calculations?.status??'NOT_RECORDED';record.status=result.canonical.unresolved.length||result.canonical.gaps.length||['PARTIAL','CONFLICT'].includes(record.calculation_status)?'COMPLETED_WITH_UNRESOLVED':'COMPLETED';record.stage=record.status;
       record.slot_status=Object.fromEntries(Object.entries(result.canonical.slots).map(([k,v])=>[k,v.status]));
       const s=JSON.parse(fs.readFileSync(path.join(folder(id),'run-summary.json'),'utf8'));record.real_calls=s.real_calls;
      }catch(e){record.status=controller.signal.aborted?'CANCELLED':'FAILED';record.stage=record.status;record.error=publicError(e);}

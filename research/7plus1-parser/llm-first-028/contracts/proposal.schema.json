@@ -2,7 +2,7 @@
   "type": "object",
   "properties": {
     "contract_version": {
-      "const": "032.1",
+      "const": "031-r1.1",
       "type": "string"
     },
     "entities": {
@@ -27,7 +27,6 @@
               "DOCUMENT",
               "GROUP",
               "REFERENT",
-              "CLASS",
               "OTHER"
             ]
           },
@@ -59,6 +58,20 @@
               "type": "string",
               "minLength": 1
             }
+          },
+          "members": {
+            "anyOf": [
+              {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              },
+              {
+                "type": "null"
+              }
+            ]
           }
         },
         "required": [
@@ -166,6 +179,119 @@
               "additionalProperties": false
             },
             "minItems": 1
+          },
+          "specifies_result_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "minLength": 1
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "semantic_signature": {
+            "anyOf": [
+              {
+                "type": "object",
+                "properties": {
+                  "effects": {
+                    "type": "array",
+                    "items": {
+                      "type": "string",
+                      "enum": [
+                        "READ",
+                        "WRITE",
+                        "CREATE",
+                        "DELIVER",
+                        "REVIEW",
+                        "ORGANIZE",
+                        "STOP",
+                        "CONTINUE",
+                        "ACCESS",
+                        "REPORT",
+                        "OTHER"
+                      ]
+                    }
+                  },
+                  "extent": {
+                    "type": "string",
+                    "enum": [
+                      "EXACT",
+                      "OPEN"
+                    ]
+                  },
+                  "actor_domain": {
+                    "type": "string",
+                    "enum": [
+                      "EXPLICIT",
+                      "TASK_SCOPE",
+                      "UNKNOWN"
+                    ]
+                  },
+                  "continuation_targets": {
+                    "type": "array",
+                    "items": {
+                      "type": "string",
+                      "minLength": 1
+                    }
+                  },
+                  "state_links": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "expression_id": {
+                          "type": "string",
+                          "minLength": 1
+                        },
+                        "aspect": {
+                          "type": "string",
+                          "enum": [
+                            "COMPLETION",
+                            "SUCCESS",
+                            "CONTROL_EFFECT"
+                          ]
+                        },
+                        "relation": {
+                          "type": "string",
+                          "enum": [
+                            "IFF",
+                            "STATE_IMPLIES_EVENT",
+                            "EVENT_IMPLIES_STATE"
+                          ]
+                        }
+                      },
+                      "required": [
+                        "expression_id",
+                        "aspect",
+                        "relation"
+                      ],
+                      "additionalProperties": false
+                    }
+                  },
+                  "external_input_ids": {
+                    "type": "array",
+                    "items": {
+                      "type": "string",
+                      "minLength": 1
+                    }
+                  }
+                },
+                "required": [
+                  "effects",
+                  "extent",
+                  "actor_domain",
+                  "continuation_targets",
+                  "state_links"
+                ],
+                "additionalProperties": false
+              },
+              {
+                "type": "null"
+              }
+            ]
           }
         },
         "required": [
@@ -329,12 +455,48 @@
                       "EXECUTION_LIMIT",
                       "OUTPUT_CONTENT",
                       "COMPLETION_THRESHOLD",
-                      "CLASSIFICATION_THRESHOLD"
+                      "CLASSIFICATION_THRESHOLD",
+                      "WORK_PLAN"
                     ]
                   },
                   "count_scope": {
                     "type": "string",
                     "minLength": 1
+                  },
+                  "distribution": {
+                    "anyOf": [
+                      {
+                        "type": "object",
+                        "properties": {
+                          "mode": {
+                            "type": "string",
+                            "enum": [
+                              "AGGREGATE",
+                              "EACH"
+                            ]
+                          },
+                          "domain_id": {
+                            "anyOf": [
+                              {
+                                "type": "string",
+                                "minLength": 1
+                              },
+                              {
+                                "type": "null"
+                              }
+                            ]
+                          }
+                        },
+                        "required": [
+                          "mode",
+                          "domain_id"
+                        ],
+                        "additionalProperties": false
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
                   }
                 },
                 "required": [
@@ -421,6 +583,52 @@
           },
           "note": {
             "type": "string"
+          },
+          "scope_binding": {
+            "anyOf": [
+              {
+                "type": "object",
+                "properties": {
+                  "domain_kind": {
+                    "type": "string",
+                    "enum": [
+                      "EXTERNAL_INPUT",
+                      "EXECUTION_ENVIRONMENT"
+                    ]
+                  },
+                  "relation": {
+                    "type": "string",
+                    "enum": [
+                      "ONLY_ALLOWED"
+                    ]
+                  },
+                  "subject_mode": {
+                    "type": "string",
+                    "enum": [
+                      "TASK_OPERATIONS",
+                      "EVENTS"
+                    ]
+                  },
+                  "subject_event_ids": {
+                    "type": "array",
+                    "items": {
+                      "type": "string",
+                      "minLength": 1
+                    }
+                  }
+                },
+                "required": [
+                  "domain_kind",
+                  "relation",
+                  "subject_mode",
+                  "subject_event_ids"
+                ],
+                "additionalProperties": false
+              },
+              {
+                "type": "null"
+              }
+            ]
           }
         },
         "required": [
@@ -455,12 +663,9 @@
             "type": "string",
             "enum": [
               "STATE",
+              "TEST",
               "ITEM",
-              "ENUM",
-              "CATEGORY",
-              "DOMAIN_CHOICE",
-              "UNRESOLVED_DOMAIN",
-              "FORALL",
+              "MEMBERS",
               "ALL",
               "ANY",
               "UNION",
@@ -547,6 +752,99 @@
               "additionalProperties": false
             },
             "minItems": 1
+          },
+          "test": {
+            "anyOf": [
+              {
+                "type": "object",
+                "properties": {
+                  "target_id": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "event_id": {
+                    "anyOf": [
+                      {
+                        "type": "string",
+                        "minLength": 1
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "property_path": {
+                    "type": "array",
+                    "items": {
+                      "type": "string",
+                      "minLength": 1
+                    }
+                  },
+                  "operator": {
+                    "type": "string",
+                    "enum": [
+                      "EQ",
+                      "NEQ",
+                      "IN",
+                      "NOT_IN",
+                      "LT",
+                      "LTE",
+                      "GT",
+                      "GTE",
+                      "EMPTY",
+                      "NONEMPTY",
+                      "EXISTS",
+                      "NOT_EXISTS",
+                      "UNCHANGED",
+                      "IMMEDIATE"
+                    ]
+                  },
+                  "value": {
+                    "anyOf": [
+                      {
+                        "type": "string"
+                      },
+                      {
+                        "type": "number"
+                      },
+                      {
+                        "type": "boolean"
+                      },
+                      {
+                        "type": "null"
+                      },
+                      {
+                        "type": "array",
+                        "items": {
+                          "anyOf": [
+                            {
+                              "type": "string"
+                            },
+                            {
+                              "type": "number"
+                            },
+                            {
+                              "type": "boolean"
+                            }
+                          ]
+                        }
+                      }
+                    ]
+                  }
+                },
+                "required": [
+                  "target_id",
+                  "event_id",
+                  "property_path",
+                  "operator",
+                  "value"
+                ],
+                "additionalProperties": false
+              },
+              {
+                "type": "null"
+              }
+            ]
           }
         },
         "required": [
@@ -707,41 +1005,25 @@
               ]
             }
           },
-          "range_requirement": {
-            "type": "object",
-            "properties": {
-              "kind": {
-                "type": "string",
-                "enum": [
-                  "NONE",
-                  "SPECIFIC",
-                  "FINITE_ENUM",
-                  "CATEGORY",
-                  "UNIVERSAL",
-                  "UNIVERSAL_EXCEPT"
-                ]
-              },
-              "scope_claim_ids": {
-                "type": "array",
-                "items": {
-                  "type": "string",
-                  "minLength": 1
-                }
-              }
-            },
-            "required": [
-              "kind",
-              "scope_claim_ids"
-            ],
-            "additionalProperties": false
+          "requirement_kind": {
+            "type": "string",
+            "enum": [
+              "GENERAL",
+              "RESTRICTION",
+              "QUANTITY_TOTAL",
+              "QUANTITY_EACH",
+              "WORK_PLAN",
+              "NON_BOUNDARY",
+              "PROPERTY_CONSTRAINT",
+              "OUTPUT_BEHAVIOR"
+            ]
           }
         },
         "required": [
           "sources",
           "claim_ids",
           "status",
-          "affected_views",
-          "range_requirement"
+          "affected_views"
         ],
         "additionalProperties": false
       }

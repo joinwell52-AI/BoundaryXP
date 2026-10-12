@@ -1,10 +1,10 @@
-# 032本地产品候选验收说明
+# 031-R1本地产品候选验收说明
 
-本包是同一BoundX短文本编译器的版本化候选，不是生产发布；BUSINESS_EXECUTION_ENABLED=false，PRODUCTION_READY=false。最终语义/重复运行/工程门与剩余缺陷以docs/reports/7plus1/7P-SHORT-COMPILER-SEMANTIC-ACCEPTANCE-032-LONG/REPORT.md及实际Trace为准。封装或安装成功不代替语义验收。
+本包是同一BoundX短文本编译器的版本化候选，不是生产发布；BUSINESS_EXECUTION_ENABLED=false，PRODUCTION_READY=false。最终语义/重复运行/工程门与剩余缺陷以docs/reports/7plus1/7P-SHORT-COMPILER-PRODUCT-CLOSURE-031-R1-LONG/REPORT.md及实际Trace为准。封装或安装成功不代替语义验收。
 
 固定模型主语义链、两个INLINE_BUNDLE Skill、来源与Schema技术校验、产物用途/身份/时序分开消费、Boundary IR与确定性JSON/中文。模型版本身份未披露；原生Skill加载不宣称已验证。
 
-旧031、031-R1与Q05报告和运行包不覆盖。开发期间固定58618安装不变；G1–G6通过、确认实例空闲并完成备份、正常权限允许后才受控同入口升级。策略拒绝不得绕过，失败回滚完整版本。
+旧031报告和运行包不覆盖。原58618恢复策略拒绝保持POLICY_BLOCKED；候选功能验收与原入口恢复分开，未经正常许可不停止/重启原58618、不借替换资源绕过。
 
-正式验收包括53固定、指定5条各2次额外重复、原N01–N08、D01–D08，共79次同版真实编译；另有部署后D08冒烟。Q05按预声明规程允许正确局部澄清，明确对照不允许过度未决。包括完整回归、资源隔离、原UI及升级回滚。032调用限240、开发≤24且冻结预留≥216；旧账独立。未运行、失败、真歧义和支持范围均如实报告，不以全填未决或JSON合法宣称完整成功。
+正式验收必须包括本任务路径B最终53份原文、规定额外重复10次、原N01–N08、完整回归、安装资源隔离、原UI真实调用及升级回滚。未运行、失败、真歧义和支持范围均如实报告，不以全填未决或JSON合法宣称完整成功。
 

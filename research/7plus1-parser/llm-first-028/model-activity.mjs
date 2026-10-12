@@ -39,19 +39,9 @@ export function sessionActivity(folder,record){
  // Exact recorded files only: no neighbor text, global sessions, raw stderr or prompt content.
  const revision=Number.isSafeInteger(record.revision)&&record.revision>=0?Math.min(record.revision,10):0;
  for(let r=0;r<=revision;r++)for(const phase of ['parse','audit'])for(let attempt=0;attempt<3;attempt++){
-  const rel=`revision-${r}/${phase}-call/events-${attempt}.jsonl`,file=path.join(folder,rel),receiptRel=`revision-${r}/${phase}-call/receipt-${attempt}.json`,receiptFile=path.join(folder,receiptRel);
-  if(!fs.existsSync(file)&&!fs.existsSync(receiptFile))continue;
-  const call=get(r,phase,attempt);
-  if(fs.existsSync(receiptFile))try{
-   const bytes=fs.readFileSync(receiptFile),receipt=JSON.parse(bytes);
-   call.elapsed_ms=Number.isFinite(receipt.elapsed_ms)&&receipt.elapsed_ms>=0?receipt.elapsed_ms:null;
-   call.exit_code=Number.isInteger(receipt.exit_code)?receipt.exit_code:null;
-   call.timed_out=receipt.timed_out===true;call.cancelled=receipt.cancelled===true;
-   call.receipt={path:receiptRel,sha256:createHash('sha256').update(bytes).digest('hex')};
-   if(typeof receipt.thread_id==='string'&&/^[a-zA-Z0-9-]{1,100}$/.test(receipt.thread_id))call.thread_id=receipt.thread_id;
-  }catch{call.receipt={path:receiptRel,read_status:'UNREADABLE'};}
+  const rel=`revision-${r}/${phase}-call/events-${attempt}.jsonl`,file=path.join(folder,rel);
   if(!fs.existsSync(file))continue;
-  const size=fs.statSync(file).size;
+  const call=get(r,phase,attempt),size=fs.statSync(file).size;
   if(size>maxLogBytes){call.log={path:rel,read_status:'TOO_LARGE',bytes:size};continue;}
   const bytes=fs.readFileSync(file),lines=bytes.toString('utf8').split('\n');
   let parsed=0,malformed=0,partial=0;
@@ -70,13 +60,5 @@ export function sessionActivity(folder,record){
   const completed=['COMPLETED','ENDED','STOPPED','FAILED'].includes(c.status);
   c.summary_status=c.summaries.length?'AVAILABLE':!completed?'NOT_YET_RETURNED':!c.log?'NOT_RECORDED':c.log.read_status==='READ'?'NOT_RETURNED':'UNVERIFIABLE';
  }
- const revisions=[];
- for(let r=0;r<revision;r++){
-  const rel=`revision-${r}/revision-request.json`,file=path.join(folder,rel);if(!fs.existsSync(file))continue;
-  try{const bytes=fs.readFileSync(file),x=JSON.parse(bytes),reasons=[];
-   for(const [kind,items] of [['AUDIT_CONTRADICTION',x.reviews],['AUDIT_OMISSION',x.omissions],['TECHNICAL_CONTRACT',x.technical_errors],['BINDING',x.binding_errors]])for(const item of Array.isArray(items)?items:[]){const reason=item.reason??item.message??item.code;reasons.push({kind,subject_id:typeof item.subject_id==='string'?item.subject_id:null,reason:typeof reason==='string'?reason.slice(0,2000):'未记录文字理由'});}
-   revisions.push({revision:r,next_revision:r+1,reasons,path:rel,sha256:createHash('sha256').update(bytes).digest('hex')});
-  }catch{revisions.push({revision:r,next_revision:r+1,path:rel,read_status:'UNREADABLE',reasons:[]});}
- }
- return {kind:'PUBLIC_CODEX_SESSION_ACTIVITY',hidden_reasoning_included:false,semantic_evidence:false,provisional:!terminals.has(record.status),calls:ordered,revisions};
+ return {kind:'PUBLIC_CODEX_SESSION_ACTIVITY',hidden_reasoning_included:false,semantic_evidence:false,provisional:!terminals.has(record.status),calls:ordered};
 }

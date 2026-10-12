@@ -5,6 +5,10 @@ import {fileURLToPath,pathToFileURL} from 'node:url';
 import {spawn} from 'node:child_process';
 import {lockProduct} from './resources.mjs';
 const approvedVersions={
+ '0.1.0-candidate.031-r1.2-ui.70':{compiler:'direct-ir-r02.2-test',contract:'candidate-ir/1.1'},
+ '0.1.0-candidate.031-r1.2-ui.69':{compiler:'direct-ir-r02.2-test',contract:'candidate-ir/1.1'},
+ '0.1.0-candidate.031-r1.2-ui.68':{compiler:'direct-ir-r02.1-test',contract:'candidate-ir/1.1'},
+ '0.1.0-candidate.031-r1.2-ui.67':{compiler:'direct-ir-r02-test',contract:'candidate-ir/1.1'},
  '0.1.0-candidate.031-r1.2-ui.65':{compiler:'031-r1-c37',contract:'031-r1.1'},
  '0.1.0-candidate.031-r1.2-ui.64':{compiler:'031-r1-c36',contract:'031-r1.1'},
  '0.1.0-candidate.031-r1.2-ui.57':{compiler:'031-r1-c29',contract:'031-r1.1'},
@@ -28,6 +32,12 @@ const approvedVersions={
  '0.1.0-candidate.031-r1.2-ui.10':{compiler:'031-r1-c3',contract:'031-r1.1'},
  '0.1.0-candidate.031-r1.2-ui.11':{compiler:'031-r1-c3',contract:'031-r1.1'},
  '0.1.0-candidate.031-r1.2-ui.12':{compiler:'031-r1-c3',contract:'031-r1.1'},
+ '0.1.0-candidate.031-r1.2-ui.13':{compiler:'031-r1-c3',contract:'031-r1.1'},
+ '0.1.0-candidate.031-r1.2-ui.18':{compiler:'031-r1-c3',contract:'031-r1.1'},
+ '0.1.0-candidate.031-r1.2-ui.19':{compiler:'031-r1-c3',contract:'031-r1.1'},
+ '0.1.0-candidate.031-r1.2-ui.20':{compiler:'031-r1-c3',contract:'031-r1.1'},
+ '0.1.0-candidate.031-r1.2-ui.21':{compiler:'031-r1-c4',contract:'031-r1.1'},
+ '0.1.0-candidate.031-r1.2-ui.22':{compiler:'031-r1-c5',contract:'031-r1.1'},
  '0.1.0-candidate.032.1':{compiler:'032-c1',contract:'032.1'},
  '0.1.0-candidate.032.2':{compiler:'032-c2',contract:'032.1'},
  '0.1.0-candidate.032.3':{compiler:'032-c3',contract:'032.1'}
@@ -81,3 +91,5 @@ if(process.argv[1]&&import.meta.url===pathToFileURL(process.argv[1]).href){
   process.on('SIGINT',()=>child.kill('SIGINT'));
  }
 }
+
+

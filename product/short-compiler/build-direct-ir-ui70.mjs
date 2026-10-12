@@ -1,0 +1,9 @@
+import fs from 'node:fs';import path from 'node:path';import {createHash} from 'node:crypto';import {lockProduct} from './resources.mjs';
+const parent='0.1.0-candidate.031-r1.2-ui.69',version='0.1.0-candidate.031-r1.2-ui.70',base=path.resolve('.boundx/short-compiler-031-r1/versions',parent),target=path.resolve('.boundx/products',version);
+if(fs.existsSync(target))throw Error('IMMUTABLE_CANDIDATE_EXISTS');const prior=lockProduct(base),m=JSON.parse(fs.readFileSync(path.join(base,'PRODUCT-MANIFEST.json')));prior.verify();
+for(const f of m.files){const p=path.join(target,f.path);fs.mkdirSync(path.dirname(p),{recursive:true});fs.copyFileSync(path.join(base,f.path),p,fs.constants.COPYFILE_EXCL);}
+fs.copyFileSync('research/7plus1-parser/v0.3-p2.1-generalization/web/native-app.js',path.join(target,'research/7plus1-parser/v0.3-p2.1-generalization/web/native-app.js'));
+for(const file of ['package.json','package-lock.json']){const p=path.join(target,file),j=JSON.parse(fs.readFileSync(p));j.version=version;if(j.packages?.[''])j.packages[''].version=version;fs.writeFileSync(p,JSON.stringify(j,null,2)+'\n');}
+const sha=b=>createHash('sha256').update(b).digest('hex');
+const manifest={...m,version,created_at:new Date().toISOString(),parent_version:parent,parent_manifest:prior.snapshot.manifest_sha256,model_resources_changed:false,change_scope:'Direct IR result tabs use actual IR, independent audit and technical records; preserve raw diagnostics and sources',files:m.files.map(f=>({path:f.path,sha256:sha(fs.readFileSync(path.join(target,f.path)))}))};
+fs.writeFileSync(path.join(target,'PRODUCT-MANIFEST.json'),JSON.stringify(manifest,null,2)+'\n');const lock=lockProduct(target);lock.verify();prior.verify();console.log(JSON.stringify({target,version,manifest:lock.snapshot.manifest_sha256,model_resources_changed:false}));

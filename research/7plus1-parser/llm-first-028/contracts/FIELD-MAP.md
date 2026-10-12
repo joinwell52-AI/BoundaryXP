@@ -1,7 +1,5 @@
 # 字段闭环
 
-032.1范围解释：CATEGORY一元为确定未限定容器域；DOMAIN_CHOICE+AMBIGUITY为真实域竞争；UNRESOLVED_DOMAIN+GAP为漏解析。scopes.expressionType统一签名，scopeDomainState给类型化域状态，technicalValidate检查备选来源与单一SCOPE、禁止备选同时生效。compileBoundary.clarifications与object_scopes、renderChinese、UI和导出共享同一引用树。evaluateScope的竞争最终UNKNOWN，alternative_results仅在该解释下，不授予执行权限。service的parent_run_id验证已存在终态父记录且源文不同；新run/source_lineage包含父摘要，旧文件不改。产品状态来自PRODUCT-MANIFEST，经lockProduct注入session，与单案状态分开。
-
 | Skill要求 | Schema字段 | 校验函数 | 编译消费 |
 |---|---|---|---|
 | 引文/重复出现定位 | sources/mentions.quote+occurrence | linkQuote/linkSources | compileBoundary.make/proof |
@@ -34,7 +32,3 @@
 ## 031-r01 修订
 
 O采用ADMIN确认的产生RESULT/交付DELIVERABLE用途；NOT_REQUIRED保留非投影完整事实。STATE中文显示event_id对应事件及参数。OUTPUT_CONTENT量化目标必须为同一事件的RESULT/DELIVERABLE；metric表示计数项，count_scope表示范围，不自动修正target。白名单技术反馈仅给真实字段错误和合同要求，错误候选仍保留，不靠删除限制通过。
-
-## 对象范围闭环
-
-CLASS→CATEGORY(class_id[,within_id])→FORALL/EXCEPT；固定逻辑ALL继续仅为BOOLEAN。scopes.expressionType是签名与类型权威；technicalValidate检查SCOPE_RANGE_BINDING和coverage.range_requirement，compileBoundary将object_scopes关联EVENT及对象用途，renderChinese消费同一树。evaluateScope只使用显式成员观测，FALSE不签发许可；类别未知仍UNKNOWN。旧响应须旧合同回归，禁止改变版本号冒充新Skill结果。

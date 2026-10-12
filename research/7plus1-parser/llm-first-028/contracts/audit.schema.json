@@ -2,7 +2,7 @@
   "type": "object",
   "properties": {
     "contract_version": {
-      "const": "032.1",
+      "const": "031-r1.1",
       "type": "string"
     },
     "reviews": {
@@ -212,6 +212,93 @@
         "required": [
           "id",
           "sources",
+          "affected_views",
+          "reason"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "source_checks": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "sources": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "quote": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "occurrence": {
+                  "type": "integer",
+                  "minimum": 1
+                }
+              },
+              "required": [
+                "quote",
+                "occurrence"
+              ],
+              "additionalProperties": false
+            },
+            "minItems": 1
+          },
+          "claim_ids": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "requirement_kind": {
+            "type": "string",
+            "enum": [
+              "GENERAL",
+              "RESTRICTION",
+              "QUANTITY_TOTAL",
+              "QUANTITY_EACH",
+              "WORK_PLAN",
+              "NON_BOUNDARY",
+              "PROPERTY_CONSTRAINT",
+              "OUTPUT_BEHAVIOR"
+            ]
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "EXPRESSED",
+              "BACKGROUND",
+              "UNSPECIFIED",
+              "GAP"
+            ]
+          },
+          "affected_views": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "enum": [
+                "I",
+                "O",
+                "A",
+                "P",
+                "R",
+                "V",
+                "C",
+                "B"
+              ]
+            }
+          },
+          "reason": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "sources",
+          "claim_ids",
+          "requirement_kind",
+          "status",
           "affected_views",
           "reason"
         ],

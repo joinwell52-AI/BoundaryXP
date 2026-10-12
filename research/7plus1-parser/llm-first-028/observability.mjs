@@ -51,11 +51,15 @@ export function publicProgress(p){
  if(typeof p.thread_id==='string'&&/^[a-zA-Z0-9-]{1,100}$/.test(p.thread_id))out.thread_id=p.thread_id;
  if(Number.isSafeInteger(p.attempt)&&p.attempt>=0)out.attempt=p.attempt;
  if(Number.isSafeInteger(p.retry_count)&&p.retry_count>=0)out.retry_count=p.retry_count;
+ if(p.kind==='IDENTITY_NORMALIZED'){out.signal='IDENTITY_NORMALIZED';for(const k of ['renamed_nodes','ambiguous_references'])if(Number.isSafeInteger(p[k])&&p[k]>=0)out[k]=p[k];}
  return out;
 }
 export function partialArtifacts(folder,record){
- const read=name=>{try{return JSON.parse(fs.readFileSync(path.join(folder,`revision-${record.revision??0}`,name),'utf8'));}catch{return null;}};
- const proposal=read('proposal.json'),audit=read('audit.json'),technical=read('technical-validation.json'),ir=read('boundary-ir.json');
+ const current=record.revision??0;
+ const available=fs.existsSync(folder)?fs.readdirSync(folder).filter(x=>/^revision-\d+$/.test(x)).map(x=>Number(x.slice(9))).filter(n=>n<=current&&fs.existsSync(path.join(folder,`revision-${n}`,'proposal.json'))).sort((a,b)=>b-a):[];
+ const artifactRevision=['FAILED','CANCELLED','INTERRUPTED'].includes(record.status)?available[0]??current:current;
+ const read=name=>{try{return JSON.parse(fs.readFileSync(path.join(folder,`revision-${artifactRevision}`,name),'utf8'));}catch{return null;}};
+ const proposal=read('proposal.json'),audit=read('audit.json'),technical=read('technical-validation.json'),ir=read('candidate-ir.json')??read('boundary-ir.json');
  // No canonical result here: an intermediate revision is never a final result.
  const calls={parse:[],audit:[]};
  for(const phase of ['parse','audit'])for(let attempt=0;attempt<3;attempt++){
@@ -63,5 +67,20 @@ export function partialArtifacts(folder,record){
    calls[phase].push({thread_id:receipt.thread_id,elapsed_ms:receipt.elapsed_ms,exit_code:receipt.exit_code,usage:receipt.usage,skill_mode:receipt.skill_mode,actual_model:receipt.actual_model,schema_check:receipt.schema_check});
   }catch{}
  }
- return {revision:record.revision??0,proposal,audit,technical,ir,model_calls:calls,provisional:true};
+ return {revision:current,artifact_revision:artifactRevision,proposal,audit,technical,ir,identity:read('proposal-mechanical-expansion.json')?.identity??null,model_calls:calls,provisional:true};
+}
+export function savedCallHistory(folder){
+ const rows=[];
+ if(!fs.existsSync(folder))return rows;
+ for(const revisionName of fs.readdirSync(folder).filter(x=>/^revision-\d+$/.test(x)).sort((a,b)=>Number(a.slice(9))-Number(b.slice(9)))){
+  for(const phase of ['parse','audit']){
+   const calls=path.join(folder,revisionName,phase+'-call');if(!fs.existsSync(calls))continue;
+   for(const name of fs.readdirSync(calls).filter(x=>/^receipt-\d+\.json$/.test(x)).sort((a,b)=>Number(a.slice(8,-5))-Number(b.slice(8,-5)))){
+    try{const {thread_id,elapsed_ms,exit_code,usage,skill_mode,actual_model,schema_check}=JSON.parse(fs.readFileSync(path.join(calls,name),'utf8'));
+     rows.push({revision:Number(revisionName.slice(9)),phase,attempt:Number(name.slice(8,-5)),thread_id,elapsed_ms,exit_code,usage,skill_mode,actual_model,schema_check});
+    }catch{}
+   }
+  }
+ }
+ return rows;
 }

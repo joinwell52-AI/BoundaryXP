@@ -1,6 +1,7 @@
 import {spawn} from 'node:child_process';
 // Cancel only a child created by this invocation, never an executable name.
-export async function runChild(binary,args,{input='',signal,timeoutMs=300000,onEvent=()=>{},onStderr=()=>{},env=process.env}={}){
+export async function runChild(binary,args,{input='',signal,timeoutMs=null,onEvent=()=>{},onStderr=()=>{},env=process.env}={}){
+ if(timeoutMs!==null&&(typeof timeoutMs!=='number'||!Number.isFinite(timeoutMs)||timeoutMs<0))throw Error('INVALID_TIMEOUT');
  signal?.throwIfAborted();
  let stdout='',stderr='',timedOut=false,cancelled=false,killReceipt=null;
  const started=Date.now();
@@ -17,7 +18,8 @@ export async function runChild(binary,args,{input='',signal,timeoutMs=300000,onE
  };
  const abort=()=>{cancelled=true;stop();};
  signal?.addEventListener('abort',abort,{once:true});
- const timer=setTimeout(()=>{timedOut=true;stop();},timeoutMs);
+ // No implicit model deadline. Explicit deadlines and manual cancel remain.
+ const timer=timeoutMs>0?setTimeout(()=>{timedOut=true;stop();},timeoutMs):null;
  child.stdout.setEncoding('utf8');child.stderr.setEncoding('utf8');
  let pending='';
  child.stdout.on('data',chunk=>{stdout+=chunk;pending+=chunk;const lines=pending.split('\n');pending=lines.pop();for(const line of lines){try{onEvent(JSON.parse(line));}catch{}}});
@@ -27,7 +29,7 @@ export async function runChild(binary,args,{input='',signal,timeoutMs=300000,onE
   child.once('close',code=>resolve({exit_code:code,error:null,exit_confirmed:true}));
   child.stdin.on('error',()=>{});child.stdin.end(input);
  });
- clearTimeout(timer);signal?.removeEventListener('abort',abort);
+ if(timer!==null)clearTimeout(timer);signal?.removeEventListener('abort',abort);
  if(killPromise)await killPromise;
  return {...result,stdout,stderr,timed_out:timedOut,cancelled,pid:child.pid??null,kill_receipt:killReceipt,elapsed_ms:Date.now()-started};
 }

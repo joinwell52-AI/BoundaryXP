@@ -3,8 +3,18 @@ import path from 'node:path';
 import {fileURLToPath} from 'node:url';
 import {sha256} from './source.mjs';
 import {contractVersion,proposalSchema,auditSchema} from './contracts/schema.mjs';
+import {comparisonBundle} from './comparison-bundle.mjs';
+import {requestProfile,outputSchemaDelivery,renderResources} from './prompt-profile.mjs';
+import {applyWireBundle} from './compact-wire.mjs';
+import {directIRBundle} from './direct-ir-bundle.mjs';
 export const ROOT=path.dirname(fileURLToPath(import.meta.url));
-export function buildBundle(phase){
+export function buildBundle(phase,{parseMethod=null}={}){
+ if(parseMethod==='MD')throw Error('MD_COMPARISON_STOPPED');
+ return directIRBundle(phase);
+}
+export function buildLegacyBundle(phase,{parseMethod=null}={}){
+ if(parseMethod==='MD')throw Error('MD_COMPARISON_STOPPED');
+ if(parseMethod!==null&&parseMethod!=='SKILL')throw Error('INVALID_PARSE_METHOD');
  if(!['parse','audit'].includes(phase))throw Error('INVALID_SKILL_PHASE');
  const name=`boundx-semantic-${phase}`;
  const files=[`skills/${name}/SKILL.md`,'contracts/semantic-contract.md','contracts/proposal.schema.json',...(phase==='audit'?['contracts/audit.schema.json']:[])];
@@ -15,6 +25,7 @@ export function buildBundle(phase){
   const resource=resources.find(r=>r.path==='contracts/'+file);
   if(resource&&JSON.stringify(JSON.parse(resource.text))!==JSON.stringify(expected))throw Error('SKILL_SCHEMA_CONSUMER_MISMATCH');
  }
- const text=`显式调用 $${name}。加载方式 INLINE_BUNDLE：以下是宿主从真实 Skill 与同源合同读取的完整资源，不是原生 Skill 加载声明。只消费这些资源，禁止工具、文件、网络、业务操作。\n`+resources.map(r=>`\n<RESOURCE path=${JSON.stringify(r.path)} sha256=${r.sha256}>\n${r.text}\n</RESOURCE>`).join('\n');
- return {phase,name,mode:'INLINE_BUNDLE',resources,schema,text,sha256:sha256(text)};
+ const delivery=outputSchemaDelivery(phase,schema);
+ const text=`显式调用 $${name}。加载方式 INLINE_BUNDLE：宿主从真实 Skill 与同源合同读取资源，本次目标输出Schema通过CLI结构化输出通道交付；不是原生 Skill 加载声明。只消费这些资源，禁止工具、文件、网络、业务操作。\n`+renderResources(resources,delivery);
+  return applyWireBundle({phase,name,mode:'INLINE_BUNDLE',resource_profile:'SEMANTIC_CLOSURE_R02',request_profile:requestProfile,schema_delivery:delivery,resources,schema,text,sha256:sha256(text)});
 }
