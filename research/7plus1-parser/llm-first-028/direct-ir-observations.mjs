@@ -34,7 +34,7 @@ export function validateDirectObservations(ir,input){
   if(!states.has(id)||!object(s)||s.value!==undefined&&typeof s.value!=='boolean')fail();
   if(s.established_at!==undefined&&time(s.established_at)===null)fail();
   if(s.subject!==undefined&&!identity(s.subject))fail();
-  if(s.periods!==undefined){if(!Array.isArray(s.periods))fail();for(const p of s.periods)if(!object(p)||time(p.start)===null||time(p.end)===null||p.start>=p.end||typeof p.value!=='boolean')fail();}
+  if(s.periods!==undefined){if(ir.states.find(state=>state.id===id)?.kind!=='CONTROL_EFFECT'||!Array.isArray(s.periods))fail();for(const p of s.periods)if(!object(p)||time(p.start)===null||time(p.end)===null||p.start>=p.end||typeof p.value!=='boolean')fail();}
  }
  for(const [id,q]of Object.entries(input.quantities??{}))if(!quantities.has(id)||!object(q)||time(q.value)===null||typeof q.unit!=='string'||typeof q.target_id!=='string')fail();
  return input;
