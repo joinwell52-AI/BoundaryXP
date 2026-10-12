@@ -1,0 +1,9 @@
+import fs from 'node:fs';import {createHash} from 'node:crypto';
+const phase=process.argv[2],report='docs/reports/7plus1/CONDITION-REFERENCE-AND-DELIVERY-r01',u='http://127.0.0.1:58618/';if(!['before','after'].includes(phase))throw Error('PHASE');
+const response=await fetch(u+'api/session'),session=await response.json(),headers={cookie:response.headers.get('set-cookie').split(';')[0]},runs=await(await fetch(u+'api/runs',{headers})).json();
+const active=runs.filter(x=>['RUNNING','QUEUED','PREPARING','PARSING','AUDITING','REVISING','VALIDATING','COMPILING','CALCULATING'].includes(x.status));if(active.length)throw Error('INFLIGHT_REQUESTS');
+const record=runs.find(x=>x.run_id==='4e06a02b-1c50-4554-8dce-3f4e23ab8816'),trace=await fetch(u+'api/runs/'+record.run_id+'/trace.json',{headers});if(!trace.ok)throw Error('HISTORY_EXPORT_FAILED');
+const hash=createHash('sha256').update(await trace.text()).digest('hex'),page=await fetch(u),js=await(await fetch(u+'calculation-view.js')).text();
+const result={phase,version:session.product_snapshot.product_version,compiler:session.compiler_revision,manifest:session.product_snapshot.manifest_sha256,history_count:runs.length,active_count:active.length,page_http:page.status,sample_id:record.run_id,sample_trace_sha256:hash,scope_view:js.includes('逐操作允许环境'),timed_gate_view:js.includes('开始时已成立'),session_available:true,browser_click_smoke:'NOT_RUN_PREVIOUS_POLICY_REJECTION_NOT_BYPASSED'};
+if(phase==='after'){const old=JSON.parse(fs.readFileSync(report+'/ENTRY-before.json'));result.history_preserved=old.history_count===result.history_count&&old.sample_trace_sha256===hash;if(!result.history_preserved||result.version!=='0.1.0-candidate.031-r1.2-ui.65'||result.compiler!=='031-r1-c37')throw Error('ENTRY_VERIFY_FAILED');}
+fs.writeFileSync(report+'/ENTRY-'+phase+'.json',JSON.stringify(result,null,2)+'\n',{flag:'wx'});console.log(JSON.stringify(result));

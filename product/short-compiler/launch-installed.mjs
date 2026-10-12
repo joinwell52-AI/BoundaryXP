@@ -5,6 +5,7 @@ import {fileURLToPath,pathToFileURL} from 'node:url';
 import {spawn} from 'node:child_process';
 import {lockProduct} from './resources.mjs';
 const approvedVersions={
+ '0.1.0-candidate.031-r1.2-ui.65':{compiler:'031-r1-c37',contract:'031-r1.1'},
  '0.1.0-candidate.031-r1.2-ui.64':{compiler:'031-r1-c36',contract:'031-r1.1'},
  '0.1.0-candidate.031-r1.2-ui.57':{compiler:'031-r1-c29',contract:'031-r1.1'},
  '0.1.0-candidate.031-r1.2-ui.56':{compiler:'031-r1-c28',contract:'031-r1.1'},

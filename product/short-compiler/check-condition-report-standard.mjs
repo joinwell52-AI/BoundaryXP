@@ -1,0 +1,6 @@
+import fs from 'node:fs';import path from 'node:path';import {pathToFileURL} from 'node:url';import assert from 'node:assert/strict';
+const root=path.resolve('.boundx/products/0.1.0-candidate.031-r1.2-ui.65');const {calculateBoundary}=await import(pathToFileURL(path.join(root,'research/7plus1-parser/llm-first-028/calculus.mjs')));
+const prior=JSON.parse(fs.readFileSync('docs/reports/7plus1/SCOPE-CONSUMPTION-CLOSURE-r01/final-ui64-replay/trace.json'));const r=calculateBoundary(prior.ir),m=r.mathematical_results,old=prior.boundary_calculations.mathematical_results;
+const summary={execution_mode:'CONSUMER_ONLY_SAME_REVIEWED_IR',real_model_calls:0,joint:m.joint.status,completion:m.joint.completion.map(x=>x.result),risk:m.joint.trigger_branches.map(x=>x.result),gaps:m.joint.gaps,unsupported:r.unsupported.map(x=>x.reason),original_semantic_candidate_unchanged:true};
+assert.equal(m.joint.status,old.joint.status);assert.deepEqual(summary.completion,old.joint.completion.map(x=>x.result));assert.deepEqual(summary.risk,old.joint.trigger_branches.map(x=>x.result));assert.equal(summary.gaps.length,0);assert.equal(summary.unsupported.length,0);
+fs.writeFileSync('docs/reports/7plus1/CONDITION-REFERENCE-AND-DELIVERY-r01/STANDARD-CONSUMER-REGRESSION.json',JSON.stringify(summary,null,2)+'\n',{flag:'wx'});console.log(JSON.stringify(summary));

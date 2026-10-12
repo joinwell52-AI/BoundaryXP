@@ -51,7 +51,14 @@ export function buildJointResults(ir,c,{atoms,comparisons}){
   const guard=ready,mid='result:'+r.relation_id+':'+r.availability;
   orders.push({id:'production:'+r.relation_id,from:r.producer_event_id+':start',to:mid,guard,rule:'RESULT_READINESS_MILESTONE_NOT_WHOLE_PRODUCER_COMPLETION',sources:r.sources},{id:'use:'+r.relation_id,from:mid,to:r.consumer_event_id+':use',guard,rule:'DECLARED_USE_REQUIRES_READINESS',sources:r.sources});
  }
- for(const edge of c.dependency.edges)orders.push({...edge,from:edge.from+':end',to:edge.to+':start',guard:{all:[performed(edge.from),performed(edge.to),expression(edge.expression_id)]},rule:'EXPLICIT_ORDER_WITH_DECLARED_STATE_GUARD'});
+ for(const edge of c.dependency.edges){
+  const endpoint=id=>edge.ownership_paths?.find(p=>p.event_id===id);
+  const from=endpoint(edge.from),to=endpoint(edge.to),reference=from?.reference_only;
+  if(to?.reference_only){gaps.push({fact_id:edge.fact_id,reason:'REFERENCE_DESTINATION_ORDER_NOT_SUPPORTED'});continue;}
+  const guard=reference?{all:[performed(edge.to),expression(edge.expression_id)]}:{all:[performed(edge.from),performed(edge.to),expression(edge.expression_id)]};
+  if(reference)add('reference-before:'+edge.id,{implies:[performed(edge.to),expression(edge.expression_id)]},'DECLARED_REFERENCE_COMPLETION_REQUIRED_BEFORE_TARGET',[edge.fact_id,from.reference_state_id],edge.sources);
+  orders.push({...edge,from:reference?'reference-state:'+from.reference_state_id:edge.from+':end',to:edge.to+':start',guard,rule:reference?'EXPLICIT_REFERENCE_COMPLETION_BEFORE_TARGET_NO_ACTIVATION':'EXPLICIT_ORDER_WITH_DECLARED_STATE_GUARD'});
+ }
  for(const a of atoms){orders.push({id:'lifecycle:'+a.event_id,from:a.event_id+':start',to:a.event_id+':use',guard:activated(a.event_id),rule:'ABSTRACT_EVENT_MILESTONE_ORDER'},{id:'lifecycle-end:'+a.event_id,from:a.event_id+':use',to:a.event_id+':end',guard:performed(a.event_id),rule:'ABSTRACT_EVENT_MILESTONE_ORDER'});}
  for(const a of atoms.filter(a=>a.mode==='FORBIDDEN'&&a.semantic_signature?.effects.includes('CONTINUE'))){
   const targets=a.semantic_signature.continuation_targets;

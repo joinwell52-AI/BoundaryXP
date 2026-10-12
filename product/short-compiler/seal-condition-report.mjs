@@ -1,0 +1,11 @@
+import fs from 'node:fs';import path from 'node:path';import {createHash} from 'node:crypto';
+const root=path.resolve('docs/reports/7plus1/CONDITION-REFERENCE-AND-DELIVERY-r01'),excluded=new Set(['MANIFEST.json','SHA256SUMS','SEAL.json']);
+const sha=b=>createHash('sha256').update(b).digest('hex');
+const walk=dir=>fs.readdirSync(dir,{withFileTypes:true}).flatMap(e=>e.isDirectory()?walk(path.join(dir,e.name)):[path.join(dir,e.name)]);
+const files=walk(root).filter(f=>!excluded.has(path.relative(root,f))).sort().map(f=>({path:path.relative(root,f).replaceAll('\\','/'),bytes:fs.statSync(f).size,sha256:sha(fs.readFileSync(f))}));
+for(const x of files)if(x.bytes>=100*1024*1024)throw Error('GIT_FILE_TOO_LARGE:'+x.path);
+fs.writeFileSync(path.join(root,'MANIFEST.json'),JSON.stringify({state:'WAITING_ADMIN_REVIEW',first_results_preserved:true,files},null,2)+'\n',{flag:'wx'});
+fs.writeFileSync(path.join(root,'SHA256SUMS'),files.map(x=>x.sha256+'  '+x.path).join('\n')+'\n',{flag:'wx'});
+const seal={state:'SEALED_WAITING_ADMIN_REVIEW',at:new Date().toISOString(),files:files.length,manifest_sha256:sha(fs.readFileSync(path.join(root,'MANIFEST.json'))),sums_sha256:sha(fs.readFileSync(path.join(root,'SHA256SUMS'))),bytes:files.reduce((n,x)=>n+x.bytes,0)};
+fs.writeFileSync(path.join(root,'SEAL.json'),JSON.stringify(seal,null,2)+'\n',{flag:'wx'});
+for(const x of files)if(sha(fs.readFileSync(path.join(root,x.path)))!==x.sha256)throw Error('SEAL_VERIFY_FAILED');console.log(JSON.stringify(seal));
