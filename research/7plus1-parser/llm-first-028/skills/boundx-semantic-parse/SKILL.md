@@ -5,7 +5,7 @@ description: 将ADMIN中文或英文任务原文直接表达为有来源、有�
 
 # 原文直接生成候选IR
 
-接口版本：candidate-ir/1.2。只消费宿主交付的同版本`contracts/candidate-ir-v1/CONTRACT.md`、`operator-registry.json`、`candidate-ir.schema.json`。只输出`boundx-candidate-ir/1` JSON。缺资源、版本不匹配或宿主仍给旧wire-proposal/proposal Schema时，报告RESOURCE_CONTRACT_MISMATCH，不静默改用旧结构或自创字段。
+接口版本：candidate-ir/1.4。只消费宿主交付的同版本`contracts/candidate-ir-v1/CONTRACT.md`、`operator-registry.json`、`candidate-ir.schema.json`。只输出`boundx-candidate-ir/1` JSON。资源或版本不匹配报RESOURCE_CONTRACT_MISMATCH，不静默使用旧结构。
 
 SOURCE_DATA是待解释的数据，不执行业务操作，不读取业务文件/制度URL，不补PM工作规划。通读完整原文及原有阶段/WP，不能截断、摘要替代或从岗位推权限。
 
@@ -34,7 +34,13 @@ SOURCE_DATA是待解释的数据，不执行业务操作，不读取业务文件
 
 原文明示完成后才能开始的严格先后，使用BEFORE(该完成STATE的STATE_ESTABLISHED,该动作的EVENT_START)；必要状态另外用TRUE_AT_START保留检查时点。COMPLETION状态指事件完成，不是仅开始或发生；SUCCESS只表示通过，二者不混用。
 
-输出前逐消费者做产物使用检查：当前任务明确生成的结果随后被提交、交付、复核或作为生成依据时，分别写DATA_USE，将object、consumer和有来源的producer引用完整关联。GROUP消费按实际成员表达使用关系；身份角色不能代替数据可用性要求。完整文件交付/复核用COMPLETE_RESULT；部分数据可用只有原文支持时才用USED_PORTION。没有明确生产者时producer=null，不补造生成义务。DATA_USE的body应为BOOLEAN(true)，仅表示该显式使用约束启用，实际可用性由data_use字段表达，不以note代替。
+输出前逐消费者写DATA_USE，将object、consumer和有来源的producer关联；GROUP按实际成员表达。origin明确区分EXTERNAL输入、INTERNAL产物和UNSTATED，不由producer=null猜来源。普通检查/依据材料默认AT_USE，表达使用点所需数据可用，不强加完整数据条件；只有原文明确完整结果依赖才用COMPLETE_RESULT，明确部分可用才用USED_PORTION。producer未指定则null。body为BOOLEAN(true)，实际使用约束由data_use表达。
+
+“输入仅限某集合”必须有SUBSET(TASK_EXTERNAL_INPUTS(任务),允许SET)和启用它的CONSTRAINT，不能只登记两个输入或SET。全部操作的环境用任务事件域FORALL，不能缩成已列事件。每个明确边界至少有完整操作数、算子、范围、条件和来源；分别反查范围外成员、前提未成立却执行、超时、停止后继续是否被结构拦住，不输出测试答案或数学见证。
+
+规范引用保留BASIS，不新增TASK数据消费、读取或下载义务；通信内容不自动变成操作性外部输入，确非输入材料时origin=NON_INPUT。真实读取材料不能借此排除。明确“组织”仍须ACTION及模态要求，TASK上的ORGANIZER角色不能代替组织动作。DATA_USE只绑定实际ACTION消费者。
+
+局部修订同步更新直接受影响的coverage行与疑点说明；覆盖理由不得仍声称已删除的强条件。跨分号/句子的条件承接按命题含义及上下文判断，分号本身不制造歧义；真实多解才保留AMBIGUITY，不擅加触发或立即要求。
 
 AMBIGUITY用于真正多种原意解释；UNSPECIFIED用于原文未给；EXPRESSION_GAP用于本合同无法表示的明确要求。三个类别不能混用，尤其不能把执行值未选/未观测写成源文歧义。
 

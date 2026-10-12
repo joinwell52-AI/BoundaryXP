@@ -1,4 +1,4 @@
-# 直接候选IR合同 candidate-ir/1.2
+# 直接候选IR合同 candidate-ir/1.4
 
 本合同落实用户选择的第二种接口：LLM直接输出候选IR，不输出旧proposal后再由程序重新解释语义。它是候选，不是已认证事实或最终求解结果。七个维度加独立B定义不变。
 
@@ -8,7 +8,7 @@
 
 不能把旧wire-proposal、proposal或带程序认证字段的boundx-boundary-ir改名后提交。模型不生成ACCEPTED、RESOLVED、技术Proof、数学见证、耗时预测、业务完成记录或授权。business_decision和execution_authorization始终由宿主保持null。
 
-本版本Schema与语义校验能检查候选接口，不代表所有算子已有运行消费者。宿主必须另提供消费者能力清单；未实现算子保持NOT_IMPLEMENTED，不能据Schema合法宣布可计算。本资源尚未接入58618，不能继承ui65或历史验收。
+本版本Schema与语义校验能检查候选接口，不代表所有算子组合均可计算。operator-registry.json描述实际分派与已知限制；运行时对未支持的组合报告NOT_IMPLEMENTED，不删约束，不把技术接受当作语义证明。每个安装版本独立记录验收。
 
 ## 一份结构与有类型引用
 
@@ -52,9 +52,21 @@ IMMEDIATE_AFTER(STATE,EVENT)是定性优先响应谓词：触发成立后该响�
 
 重复以TEMPLATE事件、EVENT_INSTANCE(template,index)和有界整数索引域表达；PREVIOUS_INSTANCE只指该序列直接前一实例，不能指任意曾失败事件。每次尝试的对象都引用同一任务固定变量；次数域、首次与重试偏移及每次前提独立保留。不明确的次数/失败观测是运行未知，不是源文边界不明确。
 
-DATA_USE明确消费者、被使用对象、生产实例（若源文指定）、USED_PORTION或COMPLETE_RESULT；不把全部数据可用性升级成整个生产任务完成的强顺序。所有者owner不是时间边。
+DATA_USE明确消费者、对象、生产实例（若源文指定）、origin及availability。origin=EXTERNAL表示本任务外部输入，INTERNAL表示本任务产物；没有来源依据时为UNSTATED，不仅由producer=null推断外部输入。AT_USE表示使用点所需数据可用，不声称完整结果或原文限定部分数据；USED_PORTION用于明确部分可用，COMPLETE_RESULT用于明确完整交付/结果依赖。普通检查或“依据材料”不自动增加完整数据门。所有者owner不是时间边。
 
-requirements.data_use仅在DATA_USE时非null，固定object/consumer/producer/availability；其他要求为null。producer无来源指定则null，不能凭文件存在虚构生成者。
+requirements.data_use仅在DATA_USE时非null，固定object/consumer/producer/origin/availability；其他要求为null。producer无来源指定则null，不虚构生成者；EXTERNAL不得引用本任务producer。
+
+NON_INPUT表示规范性引用或非输入材料的通信内容，不进入操作性外部输入集合。它必须有明确用途来源；不能用它把实际读取的外部材料移出输入域。规范依据由BASIS角色保持，不新增读取、下载、数据就绪等原文没有的义务。DATA_USE的消费者必须是实际ACTION实例，TASK仅是范围载体；组织者角色不替代明确组织ACTION。
+
+## 输入排他性与字段接受
+
+TASK_EXTERNAL_INPUTS(TASK)表示该任务及明确子任务实际使用的外部输入身份集合，包含后续执行；根任务INPUT_OBJECT角色是允许/声明对象，不能代替实际使用集合。输入“仅限某集合”表达为SUBSET(TASK_EXTERNAL_INPUTS(task),allowed_set)，由REQUIRED CONSTRAINT启用。只有允许SET时覆盖状态必须为GAP。内部产物使用不扩大外部输入域。
+
+程序对构造执行按实际发生的消费者及origin=EXTERNAL形成集合，再验证子集；此见证不认证任意未来执行。后续记录用同一约束检查：确定范围外输入违反，身份/归属未知保持UNKNOWN，缺观测不默认空集合。未违反本条不产生执行许可。
+
+逐义项核对操作数、算子、身份、作用域、模态、条件方向、单位和来源。疑点写实际field_path，其他明确事实仍表达。整节点有疑点时不得SUPPORT，但须对其余明确语义字段单独SUPPORT。TASK身份/归属引用消费kind/layer/use/owner_id，不依赖无关输入角色。局部缺口不扩散，完整联合计算仍受真实缺口阻断。
+
+有界修订的coverage_updates以原图行索引替换直接受影响的活动覆盖说明；旧行、替换行均进patch-changes，首次响应文件不覆盖。新增义项写coverage。覆盖理由不参与数学运算，不可用理由多造事实。
 
 ## 算子固定语义
 

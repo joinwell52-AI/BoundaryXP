@@ -1,0 +1,188 @@
+{
+  "format": "boundx-candidate-ir-patch/1",
+  "contract_version": "candidate-ir/1.4",
+  "source_table": [],
+  "entities": [],
+  "variables": [],
+  "events": [
+    {
+      "id": "organize_check",
+      "source_refs": [
+        "s1"
+      ],
+      "label": "PM组织本次核查",
+      "kind": "ACTION",
+      "layer": "MAIN",
+      "use": "CURRENT_TASK",
+      "owner_id": "work",
+      "operation": "ORGANIZE",
+      "operation_extent": "EXACT",
+      "actor_domain": "EXPLICIT",
+      "roles": [
+        {
+          "role": "ORGANIZER",
+          "value": {
+            "kind": "ENTITY",
+            "id": "pm"
+          },
+          "source_refs": [
+            "s1"
+          ]
+        },
+        {
+          "role": "OBJECT",
+          "value": {
+            "kind": "EVENT",
+            "id": "work"
+          },
+          "source_refs": [
+            "s1"
+          ]
+        },
+        {
+          "role": "BASIS",
+          "value": {
+            "kind": "ENTITY",
+            "id": "procedure"
+          },
+          "source_refs": [
+            "s1"
+          ]
+        }
+      ]
+    }
+  ],
+  "states": [],
+  "expressions": [],
+  "requirements": [
+    {
+      "id": "organize_check_required",
+      "source_refs": [
+        "s1"
+      ],
+      "kind": "EVENT_NORM",
+      "views": [
+        "A",
+        "P",
+        "V"
+      ],
+      "scope_id": "work",
+      "modality": "REQUIRED",
+      "subject": {
+        "kind": "EVENT",
+        "id": "organize_check"
+      },
+      "applicability": null,
+      "body": {
+        "kind": "EXPRESSION",
+        "id": "true"
+      },
+      "data_use": null,
+      "note": ""
+    },
+    {
+      "id": "risk_report_use",
+      "source_refs": [
+        "s13",
+        "s14"
+      ],
+      "kind": "DATA_USE",
+      "views": [
+        "O"
+      ],
+      "scope_id": "ROOT",
+      "modality": "REQUIRED",
+      "subject": {
+        "kind": "EVENT",
+        "id": "report_risk"
+      },
+      "applicability": {
+        "kind": "EXPRESSION",
+        "id": "risk_value"
+      },
+      "body": {
+        "kind": "EXPRESSION",
+        "id": "true"
+      },
+      "data_use": {
+        "object": {
+          "kind": "ENTITY",
+          "id": "risk"
+        },
+        "consumer": {
+          "kind": "EVENT",
+          "id": "report_risk"
+        },
+        "producer": null,
+        "origin": "NON_INPUT",
+        "availability": "AT_USE"
+      },
+      "note": ""
+    }
+  ],
+  "issues": [],
+  "coverage": [],
+  "removed_nodes": [
+    {
+      "kind": "REQUIREMENT",
+      "id": "basis_use"
+    }
+  ],
+  "coverage_updates": [
+    {
+      "previous_index": 0,
+      "replacement": {
+        "source_refs": [
+          "s1"
+        ],
+        "node_refs": [
+          {
+            "kind": "EVENT",
+            "id": "work"
+          },
+          {
+            "kind": "ENTITY",
+            "id": "procedure"
+          },
+          {
+            "kind": "EVENT",
+            "id": "organize_check"
+          },
+          {
+            "kind": "REQUIREMENT",
+            "id": "organize_check_required"
+          }
+        ],
+        "status": "EXPRESSED",
+        "reason": "PM组织本次核查由ORGANIZE动作及REQUIRED要求表达；规程版本保留为BASIS规范依据，不新增读取或TASK数据消费义务，不从组织职责推定其他动作的执行职责。"
+      }
+    },
+    {
+      "previous_index": 17,
+      "replacement": {
+        "source_refs": [
+          "s13",
+          "s14"
+        ],
+        "node_refs": [
+          {
+            "kind": "EVENT",
+            "id": "report_risk"
+          },
+          {
+            "kind": "REQUIREMENT",
+            "id": "risk_report_required"
+          },
+          {
+            "kind": "REQUIREMENT",
+            "id": "risk_report_use"
+          }
+        ],
+        "status": "EXPRESSED",
+        "reason": "高危问题情境下PM必须向ADMIN汇报，保留非文件交付内容；高危问题作为通信内容以NON_INPUT表达，不作为操作性外部输入，未新增立即汇报要求。"
+      }
+    }
+  ],
+  "base_ir_sha256": "e77f1a0cf03b3cef62c7803a763ee859d907961105d50992cbe526fc3e31de17",
+  "reason": "按授权迁移至candidate-ir/1.4，仅补组织动作及其义务，删除无效TASK消费者basis_use，修订高危问题通信内容的origin并同步直接受影响的覆盖行。"
+}

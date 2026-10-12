@@ -18,6 +18,7 @@ export function validateCandidateIR(ir,source){
   if(x.operator==='MEMBER'){const domain=target(x.arguments[1]);const numeric=['NUMBER','INTEGER','REAL'].includes(ts[0])&&ts[1]==='DOMAIN'&&['REAL_INTERVAL','INTEGER_RANGE'].includes(domain?.operator);const object=ts[0]==='OBJECT'&&ts[1]==='SET';if(!numeric&&!object)fail('MEMBERSHIP_TYPE',x.id);}
   if(['FORALL','EXISTS'].includes(x.operator)){if(x.bound_variable?.kind!=='VARIABLE'||!['SET','DOMAIN','EVENT_DOMAIN'].includes(ts[0])||ts[1]!=='BOOLEAN')fail('QUANTIFIER_BINDING',x.id);if(ts[0]==='EVENT_DOMAIN'&&target(x.bound_variable)?.type!=='EVENT')fail('EVENT_QUANTIFIER_VARIABLE',x.id);}else if(x.bound_variable!==null)fail('UNEXPECTED_BINDER',x.id);
   if(x.operator==='TASK_EVENTS'&&(x.arguments[0]?.kind!=='EVENT'||target(x.arguments[0])?.kind!=='TASK'))fail('TASK_EVENT_DOMAIN_OWNER',x.id);
+  if(x.operator==='TASK_EXTERNAL_INPUTS'&&(x.arguments[0]?.kind!=='EVENT'||target(x.arguments[0])?.kind!=='TASK'))fail('TASK_INPUT_SET_OWNER',x.id);
   if(x.operator==='BOOLEAN'&&typeof x.literal!=='boolean'||x.operator==='NUMBER'&&typeof x.literal!=='number')fail('LITERAL_TYPE',x.id);
   if(!['BOOLEAN','NUMBER'].includes(x.operator)&&x.literal!==null)fail('UNEXPECTED_LITERAL',x.id);
   if(['REAL_INTERVAL','INTEGER_RANGE','LT','LTE','GT','GTE','ADD'].includes(x.operator)&&ts.some(t=>!['NUMBER','INTEGER','REAL','TIME'].includes(t)))fail('NUMERIC_TYPE',x.id);
@@ -37,6 +38,7 @@ export function validateCandidateIR(ir,source){
  for(const r of ir.requirements.filter(r=>['EVENT_NORM','STOP'].includes(r.kind)))if(!r.subject||expressionType(r.subject)!=='EVENT')fail('EVENT_NORM_SUBJECT_REQUIRED',r.id);
  const eventNode=ref=>ref.kind==='EVENT'?target(ref):ref.kind==='EXPRESSION'&&target(ref)?.operator==='EVENT_INSTANCE'?target(target(ref).arguments[0]):null;
  for(const r of ir.requirements.filter(x=>x.kind==='DATA_USE')){const d=r.data_use;if(d.object.kind!=='ENTITY'){fail('DATA_OBJECT_TYPE',r.id);continue;}const consumer=eventNode(d.consumer);if(!consumer||consumer.kind==='TASK')fail('DATA_CONSUMER_EVENT',r.id);else if(!consumer.roles.some(role=>['OBJECT','INPUT_OBJECT','BASIS','DELIVERABLE','CONTENT'].includes(role.role)&&contains(role.value,d.object.id)))fail('DATA_CONSUMER_OBJECT_BINDING',r.id);
+  if(d.origin==='EXTERNAL'&&d.producer)fail('EXTERNAL_DATA_HAS_TASK_PRODUCER',r.id);
   if(d.producer){const producer=eventNode(d.producer);if(!producer?.roles.some(role=>role.role==='RESULT'&&contains(role.value,d.object.id)))fail('DATA_PRODUCER_OBJECT_BINDING',r.id);}
  }
  const units=(r,seen=new Set())=>{if(seen.has(r.id))return null;const n=target(r);if(!n)return null;if(r.kind==='VARIABLE')return units(n.domain,new Set([...seen,r.id]));if(r.kind!=='EXPRESSION')return null;if(['NUMBER','REAL_INTERVAL','INTEGER_RANGE'].includes(n.operator))return n.unit;if(n.operator==='CARDINALITY')return null;if(n.operator==='ADD')return units(n.arguments[0],new Set([...seen,r.id]));return null;};
