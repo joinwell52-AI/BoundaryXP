@@ -1,0 +1,27 @@
+// Same real model responses, deterministic replay only; no Codex login or network.
+import fs from 'node:fs';
+import path from 'node:path';
+import {fileURLToPath} from 'node:url';
+import {createHash} from 'node:crypto';
+import {prepareSource} from '../research/7plus1-parser/llm-first-028/source.mjs';
+import {acceptCandidateIR} from '../research/7plus1-parser/llm-first-028/direct-ir-accept.mjs';
+import {calculateDirectIR} from '../research/7plus1-parser/llm-first-028/direct-ir-calculate.mjs';
+import {projectDirectIR} from '../research/7plus1-parser/llm-first-028/direct-ir-view.mjs';
+const root=path.resolve(path.dirname(fileURLToPath(import.meta.url)),'..');
+const evidence=path.join(root,'docs/reports/7plus1/MANUAL-TEST-001-ui76-FIRST-RUN');
+const original=JSON.parse(fs.readFileSync(path.join(evidence,'TRACE.json'),'utf8'));
+const source=prepareSource(fs.readFileSync(path.join(root,'docs/testing/7plus1/MANUAL-TEST-001.txt')));
+if(source.sha256!==original.source.sha256)throw Error('FROZEN_SOURCE_MISMATCH');
+const technical=acceptCandidateIR(original.ir,original.audit,source);
+const calculation=calculateDirectIR(original.ir,technical);
+const {canonical}=projectDirectIR(original.ir,technical);
+const sha=x=>createHash('sha256').update(x).digest('hex');
+const output=path.resolve(process.argv[2]??path.join(root,'.boundx/cloud-replay',new Date().toISOString().replaceAll(':','-')));
+if(fs.existsSync(output))throw Error('REPLAY_OUTPUT_ALREADY_EXISTS');
+fs.mkdirSync(output,{recursive:true});
+const files={'TECHNICAL.json':technical,'CALCULATION.json':calculation,'7plus1.json':canonical};
+for(const [name,value]of Object.entries(files))fs.writeFileSync(path.join(output,name),JSON.stringify(value,null,2)+'\n',{flag:'wx'});
+const result={mode:'OFFLINE_REPLAY_OF_FROZEN_LIVE_MODEL_RESPONSES',real_model_calls:0,original_run_id:'7671553d-7b8d-4a82-906a-2db224be43ab',source_sha256:source.sha256,ir_sha256:sha(JSON.stringify(original.ir)),technical_ok:technical.technical_ok,calculation_status:calculation.status,gaps:calculation.gaps,slot_statuses:Object.fromEntries(Object.entries(canonical.slots).map(([k,v])=>[k,v.status])),joint:calculation.joint.base.result,witness_verified:calculation.joint.base.verification?.valid??null,not_a_new_model_validation:true,not_complete_standard_acceptance:true,output};
+fs.writeFileSync(path.join(output,'REPLAY-SUMMARY.json'),JSON.stringify(result,null,2)+'\n',{flag:'wx'});
+console.log(JSON.stringify(result));
+if(!technical.technical_ok)process.exitCode=1;

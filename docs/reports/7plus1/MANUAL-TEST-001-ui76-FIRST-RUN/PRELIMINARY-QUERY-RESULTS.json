@@ -1,0 +1,806 @@
+{
+  "run_id": "7671553d-7b8d-4a82-906a-2db224be43ab",
+  "source_sha256": "0b9b336d11a39a5e50d3ac361025211a742abe3c9578403098d3e3bcb45fda70",
+  "standard_sha256": "a4656583929d6799c75c75861c8cbb4ce0ef7308452ffa9288a2d858e42bc736",
+  "version": "0.1.0-candidate.031-r1.2-ui.76",
+  "mode": "POST_RUN_INDEPENDENT_STANDARD_COMPARISON_NO_MODEL_CALLS",
+  "rows": [
+    {
+      "name": "Source matches MD and TXT",
+      "result": "MATCH",
+      "evidence": "0b9b336d11a39a5e50d3ac361025211a742abe3c9578403098d3e3bcb45fda70"
+    },
+    {
+      "name": "Sets and cardinality",
+      "result": "MATCH",
+      "evidence": {
+        "inputs": 2,
+        "outputs": 3,
+        "intersection": [],
+        "union": 5
+      }
+    },
+    {
+      "name": "External input subset operand and internal origin",
+      "result": "MATCH",
+      "evidence": {
+        "format": "boundx-direct-input-policy-result/1",
+        "results": [
+          {
+            "requirement_id": "r_inputs",
+            "task_id": "ROOT",
+            "operator": "SUBSET",
+            "allowed": [
+              "app",
+              "envfile"
+            ],
+            "used": [
+              "app",
+              "envfile"
+            ],
+            "outside": [],
+            "unknown": [],
+            "result": "SATISFIED",
+            "source_refs": [
+              "s2"
+            ]
+          }
+        ],
+        "business_decision": null,
+        "execution_authorization": null,
+        "not_applicable_is_not_permission": true
+      }
+    },
+    {
+      "name": "12 event identity and role bindings",
+      "result": "MATCH",
+      "evidence": [
+        "organize",
+        "check_app",
+        "make_dev",
+        "submit_dev",
+        "check_env",
+        "make_ops",
+        "submit_ops",
+        "review",
+        "make_summary",
+        "deliver_summary",
+        "stop",
+        "report_risk"
+      ]
+    },
+    {
+      "name": "Basis version and same two-report identity",
+      "result": "MATCH",
+      "evidence": [
+        "du_summary_dev",
+        "du_summary_ops"
+      ]
+    },
+    {
+      "name": "Nine input/report use dependencies",
+      "result": "MATCH",
+      "evidence": [
+        [
+          "app",
+          "check_app"
+        ],
+        [
+          "envfile",
+          "check_env"
+        ],
+        [
+          "devreport",
+          "submit_dev"
+        ],
+        [
+          "opsreport",
+          "submit_ops"
+        ],
+        [
+          "devreport",
+          "review"
+        ],
+        [
+          "opsreport",
+          "review"
+        ],
+        [
+          "devreport",
+          "make_summary"
+        ],
+        [
+          "opsreport",
+          "make_summary"
+        ],
+        [
+          "summary",
+          "deliver_summary"
+        ]
+      ]
+    },
+    {
+      "name": "Global test environment stays quantified",
+      "result": "MATCH",
+      "evidence": {
+        "actualWitnessEvents": 10,
+        "futureUniversalExecutionProof": false
+      }
+    },
+    {
+      "name": "Closed duration interval [0,30] minutes",
+      "result": "MATCH",
+      "evidence": {
+        "scope_id": "ROOT",
+        "subject": "duration",
+        "dimension": "duration",
+        "unit": "分钟",
+        "domain": "real",
+        "lower": {
+          "value": "0",
+          "inclusive": true
+        },
+        "upper": {
+          "value": "30",
+          "inclusive": true
+        },
+        "empty": false,
+        "constraint_ids": [
+          "domain:duration",
+          "r_duration:duration_max",
+          "r_duration:duration_min"
+        ]
+      }
+    },
+    {
+      "name": "Two explicit submission-before-review edges",
+      "result": "MATCH",
+      "evidence": [
+        {
+          "id": "dev_before_review",
+          "arguments": [
+            {
+              "kind": "EXPRESSION",
+              "id": "dev_submit_time"
+            },
+            {
+              "kind": "EXPRESSION",
+              "id": "review_start"
+            }
+          ]
+        },
+        {
+          "id": "ops_before_review",
+          "arguments": [
+            {
+              "kind": "EXPRESSION",
+              "id": "ops_submit_time"
+            },
+            {
+              "kind": "EXPRESSION",
+              "id": "review_start"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "QA passed required at each summary action start",
+      "result": "MATCH",
+      "evidence": [
+        {
+          "id": "passed_at_generation:make_summary",
+          "global_variable": "ir:23f8fc9afb0f50252beafcad",
+          "local_variable": "ir:5cea3d335b72593a54cfe921",
+          "state_point": "state:review_passed@review",
+          "event_start": "make_summary:start",
+          "guard": {
+            "var": "ir:4ebfb94d0e53a116533d6f21"
+          }
+        },
+        {
+          "id": "passed_at_delivery:deliver_summary",
+          "global_variable": "ir:23f8fc9afb0f50252beafcad",
+          "local_variable": "ir:a83429fe13bf7e3b413a0a78",
+          "state_point": "state:review_passed@review",
+          "event_start": "deliver_summary:start",
+          "guard": {
+            "var": "ir:baa7eb1821ea0e23ad332453"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Completion IFF truth table: 1/15 and 16/16",
+      "result": "MATCH",
+      "evidence": {
+        "premise": [
+          1,
+          15
+        ],
+        "iff": [
+          16,
+          16
+        ]
+      }
+    },
+    {
+      "name": "Three static forbidden patterns",
+      "result": "MATCH",
+      "evidence": [
+        "ACCESS:生产环境",
+        "WRITE:app.yaml",
+        "WRITE:env.json"
+      ]
+    },
+    {
+      "name": "Risk obligations, immediate stop only, stopped continuation ban",
+      "result": "MATCH",
+      "evidence": {
+        "immediateResponse": "stop",
+        "reportIsAlsoImmediate": false
+      }
+    },
+    {
+      "name": "Program joint and completion witnesses",
+      "result": "MATCH",
+      "evidence": {
+        "checks": 142,
+        "duration": {
+          "numeric:0": {
+            "duration": "30",
+            "unit": "分钟",
+            "origin": "0",
+            "measure": "ELAPSED_FIRST_START_TO_LAST_END",
+            "points": {
+              "ROOT:end": {
+                "numerator": "30",
+                "denominator": "1"
+              },
+              "ROOT:start": {
+                "numerator": "0",
+                "denominator": "1"
+              },
+              "check_app:end": {
+                "numerator": "0",
+                "denominator": "1"
+              },
+              "check_app:start": {
+                "numerator": "0",
+                "denominator": "1"
+              },
+              "check_env:end": {
+                "numerator": "0",
+                "denominator": "1"
+              },
+              "check_env:start": {
+                "numerator": "0",
+                "denominator": "1"
+              },
+              "deliver_summary:end": {
+                "numerator": "30",
+                "denominator": "1"
+              },
+              "deliver_summary:start": {
+                "numerator": "30",
+                "denominator": "1"
+              },
+              "make_dev:end": {
+                "numerator": "0",
+                "denominator": "1"
+              },
+              "make_dev:start": {
+                "numerator": "0",
+                "denominator": "1"
+              },
+              "make_ops:end": {
+                "numerator": "0",
+                "denominator": "1"
+              },
+              "make_ops:start": {
+                "numerator": "0",
+                "denominator": "1"
+              },
+              "make_summary:end": {
+                "numerator": "30",
+                "denominator": "1"
+              },
+              "make_summary:start": {
+                "numerator": "30",
+                "denominator": "1"
+              },
+              "organize:end": {
+                "numerator": "0",
+                "denominator": "1"
+              },
+              "organize:start": {
+                "numerator": "0",
+                "denominator": "1"
+              },
+              "review:end": {
+                "numerator": "30",
+                "denominator": "1"
+              },
+              "review:start": {
+                "numerator": "30",
+                "denominator": "1"
+              },
+              "state:dev_submitted@submit_dev": {
+                "numerator": "0",
+                "denominator": "1"
+              },
+              "state:ops_submitted@submit_ops": {
+                "numerator": "0",
+                "denominator": "1"
+              },
+              "state:review_passed@review": {
+                "numerator": "30",
+                "denominator": "1"
+              },
+              "state:summary_delivered@deliver_summary": {
+                "numerator": "30",
+                "denominator": "1"
+              },
+              "state:task_completed@ROOT": {
+                "numerator": "30",
+                "denominator": "1"
+              },
+              "submit_dev:end": {
+                "numerator": "0",
+                "denominator": "1"
+              },
+              "submit_dev:start": {
+                "numerator": "0",
+                "denominator": "1"
+              },
+              "submit_ops:end": {
+                "numerator": "0",
+                "denominator": "1"
+              },
+              "submit_ops:start": {
+                "numerator": "0",
+                "denominator": "1"
+              }
+            },
+            "interpretation": "Constructive abstract elapsed time assignment; not predicted/observed durations"
+          }
+        },
+        "manualIllustrativeDuration": 16
+      }
+    },
+    {
+      "name": "Environment query testenv",
+      "result": "MATCH",
+      "evidence": {
+        "requirement_id": "r_environment",
+        "scope": "IN_SCOPE",
+        "result": "SATISFIED",
+        "source_refs": [
+          "s3"
+        ]
+      }
+    },
+    {
+      "name": "Environment query prodenv",
+      "result": "MATCH",
+      "evidence": {
+        "requirement_id": "r_environment",
+        "scope": "IN_SCOPE",
+        "result": "VIOLATED",
+        "source_refs": [
+          "s3"
+        ]
+      }
+    },
+    {
+      "name": "Environment query null",
+      "result": "MATCH",
+      "evidence": {
+        "requirement_id": "r_environment",
+        "scope": "IN_SCOPE",
+        "result": "UNKNOWN",
+        "source_refs": [
+          "s3"
+        ]
+      }
+    },
+    {
+      "name": "External input query SATISFIED",
+      "result": "MATCH",
+      "evidence": {
+        "requirement_id": "r_inputs",
+        "task_id": "ROOT",
+        "operator": "SUBSET",
+        "allowed": [
+          "app",
+          "envfile"
+        ],
+        "used": [
+          "app",
+          "envfile"
+        ],
+        "outside": [],
+        "unknown": [],
+        "result": "SATISFIED",
+        "source_refs": [
+          "s2"
+        ]
+      }
+    },
+    {
+      "name": "External input query VIOLATED",
+      "result": "MATCH",
+      "evidence": {
+        "requirement_id": "r_inputs",
+        "task_id": "ROOT",
+        "operator": "SUBSET",
+        "allowed": [
+          "app",
+          "envfile"
+        ],
+        "used": [
+          "app",
+          "envfile",
+          "third_confirmed_input"
+        ],
+        "outside": [
+          "third_confirmed_input"
+        ],
+        "unknown": [],
+        "result": "VIOLATED",
+        "source_refs": [
+          "s2"
+        ]
+      }
+    },
+    {
+      "name": "External input query UNKNOWN",
+      "result": "MATCH",
+      "evidence": {
+        "requirement_id": "r_inputs",
+        "task_id": "ROOT",
+        "operator": "SUBSET",
+        "allowed": [
+          "app",
+          "envfile"
+        ],
+        "used": [],
+        "outside": [],
+        "unknown": [
+          "EXTERNAL_USE_NOT_OBSERVED"
+        ],
+        "result": "UNKNOWN",
+        "source_refs": [
+          "s2"
+        ]
+      }
+    },
+    {
+      "name": "High risk triggers stop and report",
+      "result": "MATCH",
+      "evidence": {
+        "name": "risk",
+        "assumptions": [
+          [
+            "STATE",
+            "risk_found",
+            true
+          ]
+        ],
+        "expected": "satisfiable",
+        "actual": "satisfiable",
+        "verified": true,
+        "reason": null
+      }
+    },
+    {
+      "name": "High risk without stop is impossible",
+      "result": "MATCH",
+      "evidence": {
+        "name": "risk-no-stop",
+        "assumptions": [
+          [
+            "STATE",
+            "risk_found",
+            true
+          ],
+          [
+            "EVENT_OCCURRED",
+            "stop",
+            false
+          ]
+        ],
+        "expected": "unsatisfiable",
+        "actual": "unsatisfiable",
+        "verified": null,
+        "reason": "BOOLEAN_OR_ACTIVE_ORDER"
+      }
+    },
+    {
+      "name": "High risk without report is impossible",
+      "result": "MATCH",
+      "evidence": {
+        "name": "risk-no-report",
+        "assumptions": [
+          [
+            "STATE",
+            "risk_found",
+            true
+          ],
+          [
+            "EVENT_OCCURRED",
+            "report_risk",
+            false
+          ]
+        ],
+        "expected": "unsatisfiable",
+        "actual": "unsatisfiable",
+        "verified": null,
+        "reason": "BOOLEAN_OR_ACTIVE_ORDER"
+      }
+    },
+    {
+      "name": "Stopped plus continuation is impossible",
+      "result": "MATCH",
+      "evidence": {
+        "name": "stopped-continue",
+        "assumptions": [
+          [
+            "STATE",
+            "stopped",
+            true
+          ],
+          [
+            "PATTERN_OCCURRED",
+            "continue",
+            true
+          ]
+        ],
+        "expected": "unsatisfiable",
+        "actual": "unsatisfiable",
+        "verified": null,
+        "reason": "BOOLEAN_OR_ACTIVE_ORDER"
+      }
+    },
+    {
+      "name": "QA absent pass but summary generated is impossible",
+      "result": "MATCH",
+      "evidence": {
+        "name": "summary-no-pass",
+        "assumptions": [
+          [
+            "STATE",
+            "review_passed",
+            false
+          ],
+          [
+            "EVENT_OCCURRED",
+            "make_summary",
+            true
+          ]
+        ],
+        "expected": "unsatisfiable",
+        "actual": "unsatisfiable",
+        "verified": null,
+        "reason": "BOOLEAN_OR_ACTIVE_ORDER"
+      }
+    },
+    {
+      "name": "Necessary gate does not itself require QA success or summary occurrence",
+      "result": "MISMATCH",
+      "error": "Expected values to be strictly equal:\n+ actual - expected\n\n+ 'unsatisfiable'\n- 'satisfiable'\n"
+    },
+    {
+      "name": "QA pass later cannot authorize earlier summary generation",
+      "result": "MISMATCH",
+      "error": "Expected values to be strictly equal:\n+ actual - expected\n\n+ 'unknown'\n- 'unsatisfiable'\n     ^\n"
+    },
+    {
+      "name": "Summary before submitted report is impossible",
+      "result": "MISMATCH",
+      "error": "Expected values to be strictly equal:\n+ actual - expected\n\n+ 'unknown'\n- 'unsatisfiable'\n     ^\n"
+    },
+    {
+      "name": "Constructed elapsed time equals task endpoint difference",
+      "result": "MATCH",
+      "evidence": {
+        "manualWitness": 16,
+        "programWitness": 30,
+        "bothWithinAllowedInterval": true
+      }
+    }
+  ],
+  "queries": [
+    {
+      "name": "risk",
+      "assumptions": [
+        [
+          "STATE",
+          "risk_found",
+          true
+        ]
+      ],
+      "expected": "satisfiable",
+      "actual": "satisfiable",
+      "verified": true,
+      "reason": null
+    },
+    {
+      "name": "risk-no-stop",
+      "assumptions": [
+        [
+          "STATE",
+          "risk_found",
+          true
+        ],
+        [
+          "EVENT_OCCURRED",
+          "stop",
+          false
+        ]
+      ],
+      "expected": "unsatisfiable",
+      "actual": "unsatisfiable",
+      "verified": null,
+      "reason": "BOOLEAN_OR_ACTIVE_ORDER"
+    },
+    {
+      "name": "risk-no-report",
+      "assumptions": [
+        [
+          "STATE",
+          "risk_found",
+          true
+        ],
+        [
+          "EVENT_OCCURRED",
+          "report_risk",
+          false
+        ]
+      ],
+      "expected": "unsatisfiable",
+      "actual": "unsatisfiable",
+      "verified": null,
+      "reason": "BOOLEAN_OR_ACTIVE_ORDER"
+    },
+    {
+      "name": "stopped-continue",
+      "assumptions": [
+        [
+          "STATE",
+          "stopped",
+          true
+        ],
+        [
+          "PATTERN_OCCURRED",
+          "continue",
+          true
+        ]
+      ],
+      "expected": "unsatisfiable",
+      "actual": "unsatisfiable",
+      "verified": null,
+      "reason": "BOOLEAN_OR_ACTIVE_ORDER"
+    },
+    {
+      "name": "summary-no-pass",
+      "assumptions": [
+        [
+          "STATE",
+          "review_passed",
+          false
+        ],
+        [
+          "EVENT_OCCURRED",
+          "make_summary",
+          true
+        ]
+      ],
+      "expected": "unsatisfiable",
+      "actual": "unsatisfiable",
+      "verified": null,
+      "reason": "BOOLEAN_OR_ACTIVE_ORDER"
+    },
+    {
+      "name": "no-pass-no-summary",
+      "assumptions": [
+        [
+          "STATE",
+          "review_passed",
+          false
+        ],
+        [
+          "EVENT_OCCURRED",
+          "make_summary",
+          false
+        ],
+        [
+          "EVENT_OCCURRED",
+          "deliver_summary",
+          false
+        ]
+      ],
+      "expected": "satisfiable",
+      "actual": "unsatisfiable",
+      "verified": null,
+      "reason": "BOOLEAN_OR_ACTIVE_ORDER"
+    },
+    {
+      "name": "late-pass",
+      "assumptions": [
+        [
+          "STATE",
+          "review_passed",
+          true
+        ],
+        [
+          "EVENT_OCCURRED",
+          "make_summary",
+          true
+        ]
+      ],
+      "expected": "unsatisfiable",
+      "actual": "unknown",
+      "verified": null,
+      "reason": "SEARCH_CAPACITY"
+    },
+    {
+      "name": "early-review",
+      "assumptions": [
+        [
+          "EVENT_OCCURRED",
+          "review",
+          true
+        ]
+      ],
+      "expected": "unsatisfiable",
+      "actual": "unknown",
+      "verified": null,
+      "reason": "SEARCH_CAPACITY"
+    },
+    {
+      "name": "risk-with-continuation-probe",
+      "assumptions": [
+        [
+          "STATE",
+          "risk_found",
+          true
+        ],
+        [
+          "EVENT_OCCURRED",
+          "stop",
+          true
+        ],
+        [
+          "PATTERN_OCCURRED",
+          "continue",
+          true
+        ]
+      ],
+      "expected": "satisfiable",
+      "actual": "satisfiable",
+      "verified": true,
+      "reason": null
+    }
+  ],
+  "limitations": [
+    {
+      "name": "This non-temporal query cannot prove continuation occurred during stop",
+      "result": "satisfiable",
+      "detail": "CONTROL_EFFECT currently only implies its source event. The query can leave stopped=false; event occurrence is not stop completion. Therefore this probe is not evidence that a timed stop-phase violation was wrongly accepted.",
+      "standard_scope": "Requires phase/time observations to distinguish events before stop from continuation during stop; no claim of all future execution safety."
+    }
+  ],
+  "display_issues": [
+    "Conditional summary action captions omit their condition in the initial event row; later requirement rows retain it.",
+    "Repeated DATA_USE body=true captions obscure the real dependency; IR bindings are present.",
+    "Global environment is in R rather than the standard I summary, but the typed constraint remains global."
+  ],
+  "unverified": [
+    "Full arbitrary business observation binding, wrong-role/object swap observations and availability observations were not supplied by this original run.",
+    "UNKNOWN completion conjunction evaluation has no explicit result in this original run.",
+    "Current consumer does not prove compliance of every possible future execution."
+  ],
+  "business_decision": null,
+  "execution_authorization": null
+}
