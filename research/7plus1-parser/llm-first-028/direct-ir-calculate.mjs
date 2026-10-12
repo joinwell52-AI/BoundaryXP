@@ -7,13 +7,14 @@ import {directMathSummary} from './direct-ir-math-summary.mjs';
 import {evaluateDirectInputPolicies,taskMembership} from './direct-ir-input-policy.mjs';
 import {evaluateDirectObservations} from './direct-ir-observations.mjs';
 import {queryDirectIRCounterexamples} from './direct-ir-queries.mjs';
+import {evaluateBooleanAssignment} from '../../../src/bxp/boolean-solver.mjs';
 const refkey=r=>r.kind+':'+r.id,unique=a=>[...new Set(a)];
 const all=xs=>xs.includes(false)?false:xs.filter(x=>x!==true).length?{all:xs.filter(x=>x!==true)}:true;
 const any=xs=>xs.includes(true)?true:xs.filter(x=>x!==false).length?{any:xs.filter(x=>x!==false)}:false;
 export function calculateDirectIR(ir,acceptance,options={}){
  const observationsSupplied=Object.hasOwn(options,'observations'),observations=options.observations;
  const index=new Map(['entities','variables','events','states','expressions','requirements'].flatMap(k=>ir[k].map(x=>[x.id,x])));
- const rows=new Map(acceptance.rows.map(x=>[x.id,x])),constraints=[],orders=[],intervalInputs=[],domains={},atoms=new Map(),gaps=[],stateChecks=[],statesSeen=new Map(),instances=new Map(),quantifiedRules=[],priorityRules=[],roleChoices=new Map(),dataUses=[];
+ const rows=new Map(acceptance.rows.map(x=>[x.id,x])),constraints=[],orders=[],intervalInputs=[],domains={},atoms=new Map(),gaps=[],stateChecks=[],statesSeen=new Map(),instances=new Map(),quantifiedRules=[],priorityRules=[],roleChoices=new Map(),dataUses=[],inputDomainsActive=new Set();
  const add=(id,formula,rule,source_refs=[])=>constraints.push({id,formula,rule,source_refs});
  const atom=(key,meaning)=>{const id='ir:'+sha256(JSON.stringify(key)).slice(0,24);atoms.set(id,{id,meaning});return {var:id};};
  const node=r=>{const n=index.get(r.id);if(!n)throw Error('IR_REFERENCE_MISSING:'+r.id);return n;};
@@ -34,14 +35,16 @@ export function calculateDirectIR(ir,acceptance,options={}){
   if(x.operator==='SET')return x.arguments.flatMap(a=>terms(a,ctx));
   if(x.operator==='GROUP_MEMBERS'){const g=node(x.arguments[0]);if(g.kind!=='GROUP')throw Error('GROUP_TYPE_REQUIRED');return g.members.flatMap(a=>terms(a,ctx));}
   if(x.operator==='TASK_EXTERNAL_INPUTS'){
-   const scope=x.arguments[0].id,out=[];
-   for(const use of ir.requirements.filter(r=>r.kind==='DATA_USE')){
+   const scope=x.arguments[0].id,out=[],key=scope+':'+JSON.stringify(ctx);if(inputDomainsActive.has(key))throw Error('RECURSIVE_INPUT_ACTIVATION_NOT_IMPLEMENTED');inputDomainsActive.add(key);
+   try{
+   for(const use of ir.requirements.filter(r=>r.kind==='DATA_USE'&&r.modality==='REQUIRED')){
     const d=use.data_use,consumer=event(d.consumer,ctx),member=taskMembership(ir,consumer.event.owner_id,scope);
     if(member===false)continue;if(member===null)throw Error('INPUT_USE_SCOPE_UNKNOWN');
     if(d.origin==='UNSTATED')throw Error('INPUT_ORIGIN_UNSTATED');if(d.origin!=='EXTERNAL')continue;
-    for(const t of terms(d.object,ctx))out.push({...t,guard:all([t.guard,occurred(d.consumer,ctx)])});
+    for(const t of terms(d.object,ctx))out.push({...t,guard:all([t.guard,occurred(d.consumer,ctx),use.applicability?bool(use.applicability,ctx):true])});
    }
    return out;
+   }finally{inputDomainsActive.delete(key);}
   }
   if(['UNION','INTERSECTION','DIFFERENCE'].includes(x.operator)){const sets=x.arguments.map(a=>finiteDomain(a,ctx));if(sets.some(s=>s.some(a=>a.guard!==true)))throw Error('DYNAMIC_SET_OPERATION_NOT_IMPLEMENTED');const a=unique(sets[0].map(v=>v.value));const out=x.operator==='UNION'?unique(sets.flatMap(s=>s.map(v=>v.value))):x.operator==='INTERSECTION'?a.filter(v=>sets.every(s=>s.some(x=>x.value===v))):a.filter(v=>!sets[1].some(x=>x.value===v));return out.map(value=>({value,guard:true}));}
   if(x.operator==='INTEGER_RANGE'){const lo=numeric(x.arguments[0],ctx),hi=numeric(x.arguments[1],ctx),out=[];for(const a of lo)for(const b of hi){if(!Number.isSafeInteger(a.value)||!Number.isSafeInteger(b.value)||b.value-a.value>16)throw Error('INTEGER_DOMAIN_CAPACITY_OR_TYPE');for(let n=a.value;n<=b.value;n++)out.push({value:n,guard:all([a.guard,b.guard])});}return out;}
@@ -169,7 +172,7 @@ export function calculateDirectIR(ir,acceptance,options={}){
  const completionQueries=[];
  try{for(const r of ir.requirements.filter(r=>r.kind==='COMPLETION'&&rows.get(r.id)?.status==='ACCEPTED')){const root=expression(r.body);if(root.operator!=='IFF')continue;const left=expression(root.arguments[0]);if(left.operator!=='STATE_VALUE')continue;const state=left.arguments[0],meaning=[...atoms].find(([,a])=>a.meaning.kind==='STATE'&&a.meaning.state_id===state.id);if(!meaning)continue;const extra={id:'query-complete:'+r.id,formula:{var:meaning[0]},rule:'EXPLICIT_COMPLETION_QUERY_NOT_ADDED_SOURCE_OBLIGATION',source_refs:r.source_refs};const query=solveJointBoundary({...problem,constraints:[...problem.constraints,extra]});completionQueries.push({requirement_id:r.id,assumption:{state_id:state.id,value:true},result:query.result,witness:query.witness,verification:query.verification,not_actual_completion:true,not_new_source_obligation:true});}
  const solved=solveJointBoundary(problem);const complete=completionQueries.find(q=>q.result==='satisfiable');if(complete){solved.witness=complete.witness;solved.verification=complete.verification;solved.selected_witness_scope='SOURCE_CONSTRAINTS_PLUS_EXPLICIT_COMPLETION_QUERY';}
- if(solved.result==='satisfiable'){const records=[];for(const [id,a]of atoms){if(a.meaning.kind!=='EVENT_OCCURRED'||!solved.witness.boolean[id])continue;const e=instances.get(a.meaning.event_id);if(e?.event.kind!=='ACTION')continue;const roles=Object.fromEntries(e.event.roles.filter(r=>r.value.kind==='ENTITY').map(r=>[r.role,r.value]));for(const choice of roleChoices.get(e.key+':ENVIRONMENT')??[])if(solved.witness.boolean[choice.guard.var])roles.ENVIRONMENT={kind:'ENTITY',id:choice.value};const external_inputs=ir.requirements.filter(r=>r.kind==='DATA_USE'&&r.data_use.origin==='EXTERNAL'&&r.data_use.consumer.id===e.key).map(r=>r.data_use.object);records.push({event_id:e.key,owner_id:e.event.owner_id,roles,external_inputs,role_values_are_witness_assignments:true});}
+ if(solved.result==='satisfiable'){const records=[];for(const [id,a]of atoms){if(a.meaning.kind!=='EVENT_OCCURRED'||!solved.witness.boolean[id])continue;const e=instances.get(a.meaning.event_id);if(e?.event.kind!=='ACTION')continue;const roles=Object.fromEntries(e.event.roles.filter(r=>r.value.kind==='ENTITY').map(r=>[r.role,r.value]));for(const choice of roleChoices.get(e.key+':ENVIRONMENT')??[])if(solved.witness.boolean[choice.guard.var])roles.ENVIRONMENT={kind:'ENTITY',id:choice.value};const external_inputs=dataUses.filter(u=>u.origin==='EXTERNAL'&&u.consumer_key===e.key&&evaluateBooleanAssignment(problem.variables,u.guard,solved.witness.boolean,{maxVariables:128})).map(u=>u.object);records.push({event_id:e.key,owner_id:e.event.owner_id,roles,external_inputs,role_values_are_witness_assignments:true});}
    const verification=records.map(record=>({record,check:evaluateDirectEventPolicies(ir,acceptance,record)}));if(verification.some(x=>x.check.results.some(r=>!['SATISFIED','NOT_APPLICABLE'].includes(r.result))))throw Error('QUANTIFIED_WITNESS_VERIFICATION_FAILED');const inputs=evaluateDirectInputPolicies(ir,acceptance,records);if(inputs.results.some(r=>r.result!=='SATISFIED'))throw Error('INPUT_BOUNDARY_WITNESS_VERIFICATION_FAILED');solved.witness.execution_trace=records;solved.input_boundary_verification=inputs;solved.quantified_verification={scope:'EVERY_EVENT_IN_THIS_CONSTRUCTED_EXECUTION_TRACE',checks:verification,future_execution_not_certified:true};
   }return {...result,completion_queries:completionQueries,counterexample_queries:queryDirectIRCounterexamples(problem),status:solved.result==='satisfiable'?'CALCULATED':solved.result==='unsatisfiable'?'CONFLICT':'PARTIAL',joint:{status:solved.result==='satisfiable'?'PROVEN':solved.result==='unsatisfiable'?'UNSAT':'PARTIAL',base:solved}};}catch(e){return {...result,status:'PARTIAL',gaps:[...gaps,{reason:e.message,...(e.failed_checks?{failed_checks:e.failed_checks}:{})}],joint:{status:'PARTIAL',base:{result:'unknown',witness:null}}};}
 }
