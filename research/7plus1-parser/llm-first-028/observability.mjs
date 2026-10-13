@@ -73,11 +73,12 @@ export function savedCallHistory(folder){
  const rows=[];
  if(!fs.existsSync(folder))return rows;
  for(const revisionName of fs.readdirSync(folder).filter(x=>/^revision-\d+$/.test(x)).sort((a,b)=>Number(a.slice(9))-Number(b.slice(9)))){
-  for(const phase of ['parse','audit']){
-   const calls=path.join(folder,revisionName,phase+'-call');if(!fs.existsSync(calls))continue;
+  for(const call_kind of ['parse','patch','audit']){
+   const phase=call_kind==='patch'?'parse':call_kind;
+   const calls=path.join(folder,revisionName,call_kind+'-call');if(!fs.existsSync(calls))continue;
    for(const name of fs.readdirSync(calls).filter(x=>/^receipt-\d+\.json$/.test(x)).sort((a,b)=>Number(a.slice(8,-5))-Number(b.slice(8,-5)))){
     try{const {thread_id,elapsed_ms,exit_code,usage,skill_mode,actual_model,schema_check}=JSON.parse(fs.readFileSync(path.join(calls,name),'utf8'));
-     rows.push({revision:Number(revisionName.slice(9)),phase,attempt:Number(name.slice(8,-5)),thread_id,elapsed_ms,exit_code,usage,skill_mode,actual_model,schema_check});
+     rows.push({revision:Number(revisionName.slice(9)),phase,call_kind,attempt:Number(name.slice(8,-5)),thread_id,elapsed_ms,exit_code,usage,skill_mode,actual_model,schema_check});
     }catch{}
    }
   }

@@ -4,6 +4,7 @@ import {intersectValidatedIntervals} from '../../../src/bxp/interval-solver.mjs'
 import {sha256} from './source.mjs';
 import {evaluateDirectEventPolicies} from './direct-ir-event-policy.mjs';
 import {directMathSummary} from './direct-ir-math-summary.mjs';
+import {combineFiniteSets} from './direct-ir-sets.mjs';
 import {evaluateDirectInputPolicies,taskMembership} from './direct-ir-input-policy.mjs';
 import {evaluateDirectObservations} from './direct-ir-observations.mjs';
 import {queryDirectIRCounterexamples} from './direct-ir-queries.mjs';
@@ -46,7 +47,7 @@ export function calculateDirectIR(ir,acceptance,options={}){
    return out;
    }finally{inputDomainsActive.delete(key);}
   }
-  if(['UNION','INTERSECTION','DIFFERENCE'].includes(x.operator)){const sets=x.arguments.map(a=>finiteDomain(a,ctx));if(sets.some(s=>s.some(a=>a.guard!==true)))throw Error('DYNAMIC_SET_OPERATION_NOT_IMPLEMENTED');const a=unique(sets[0].map(v=>v.value));const out=x.operator==='UNION'?unique(sets.flatMap(s=>s.map(v=>v.value))):x.operator==='INTERSECTION'?a.filter(v=>sets.every(s=>s.some(x=>x.value===v))):a.filter(v=>!sets[1].some(x=>x.value===v));return out.map(value=>({value,guard:true}));}
+  if(['UNION','INTERSECTION','DIFFERENCE'].includes(x.operator)){const sets=x.arguments.map(a=>finiteDomain(a,ctx));if(sets.some(s=>s.some(a=>a.guard!==true)))throw Error('DYNAMIC_SET_OPERATION_NOT_IMPLEMENTED');return combineFiniteSets(x.operator,sets.map(s=>s.map(v=>v.value))).map(value=>({value,guard:true}));}
   if(x.operator==='INTEGER_RANGE'){const lo=numeric(x.arguments[0],ctx),hi=numeric(x.arguments[1],ctx),out=[];for(const a of lo)for(const b of hi){if(!Number.isSafeInteger(a.value)||!Number.isSafeInteger(b.value)||b.value-a.value>16)throw Error('INTEGER_DOMAIN_CAPACITY_OR_TYPE');for(let n=a.value;n<=b.value;n++)out.push({value:n,guard:all([a.guard,b.guard])});}return out;}
   throw Error('FINITE_DOMAIN_NOT_IMPLEMENTED:'+x.operator);
  };
@@ -174,7 +175,9 @@ export function calculateDirectIR(ir,acceptance,options={}){
   for(const x of problem.intervals.filter(x=>x.subject===v.id))problem.temporal_horizons.push({interval_id:x.id,unit:x.unit,start_point:r.scope_id+':start',end_point:r.scope_id+':end'});
  }
  const observed=observationsSupplied?evaluateDirectObservations(ir,acceptance,observations):null;
- const result={format:'boundx-direct-ir-calculation/1',input_ir_sha256:sha256(JSON.stringify(ir)),source_links:acceptance.source_links??[],mathematical_summary:directMathSummary(ir,acceptance),gaps,quantified_rules:quantifiedRules,priority_rules:priorityRules,data_uses:dataUses,finite_domains:Object.fromEntries(Object.entries(domains).map(([id,x])=>[id,x.map(v=>v.value)])),intervals,problem,observations_supplied:observed!==null,observed_evaluation:observed,business_decision:null,execution_authorization:null};
+ const mathematical_summary=directMathSummary(ir,acceptance);
+ for(const f of mathematical_summary.completions)if(f.status==='NOT_IMPLEMENTED')gaps.push({node_id:f.requirement_id,reason:f.reason,consumer:'COMPLETION_SUMMARY'});
+ const result={format:'boundx-direct-ir-calculation/1',input_ir_sha256:sha256(JSON.stringify(ir)),source_links:acceptance.source_links??[],mathematical_summary,gaps,quantified_rules:quantifiedRules,priority_rules:priorityRules,data_uses:dataUses,finite_domains:Object.fromEntries(Object.entries(domains).map(([id,x])=>[id,x.map(v=>v.value)])),intervals,problem,observations_supplied:observed!==null,observed_evaluation:observed,business_decision:null,execution_authorization:null};
  if(gaps.length)return {...result,status:'PARTIAL',joint:{status:'PARTIAL',base:{result:'unknown',witness:null}}};
  const completionQueries=[];
  try{for(const r of ir.requirements.filter(r=>r.kind==='COMPLETION'&&rows.get(r.id)?.status==='ACCEPTED')){const root=expression(r.body);if(root.operator!=='IFF')continue;const left=expression(root.arguments[0]);if(left.operator!=='STATE_VALUE')continue;const state=left.arguments[0],meaning=[...atoms].find(([,a])=>a.meaning.kind==='STATE'&&a.meaning.state_id===state.id);if(!meaning)continue;const extra={id:'query-complete:'+r.id,formula:{var:meaning[0]},rule:'EXPLICIT_COMPLETION_QUERY_NOT_ADDED_SOURCE_OBLIGATION',source_refs:r.source_refs};const query=solveJointBoundary({...problem,constraints:[...problem.constraints,extra]});completionQueries.push({requirement_id:r.id,assumption:{state_id:state.id,value:true},result:query.result,witness:query.witness,verification:query.verification,not_actual_completion:true,not_new_source_obligation:true});}

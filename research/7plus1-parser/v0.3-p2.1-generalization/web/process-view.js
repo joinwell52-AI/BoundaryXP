@@ -27,7 +27,8 @@ export function timingView(run){
  const expected=array(run.stages).filter(s=>s.signal==='REQUEST_STARTED').length||run.real_calls;
  const complete=Number.isInteger(expected)&&expected>0&&phases.reduce((n,p)=>n+p.count,0)===expected;
  const first=phase=>array(calls[phase]).filter(x=>x.revision===0||(!Array.isArray(run.call_history)&&expected===phases.reduce((n,p)=>n+p.count,0))).reduce((n,x)=>n+x.elapsed_ms,0)||null;
- return {total_ms:total,phases,complete,first_parse_ms:first('parse'),first_audit_ms:first('audit'),other_ms:complete&&model!==null&&model<=total?total-model:null};
+ const patches=array(calls.parse).filter(c=>c.call_kind==='patch');
+ return {total_ms:total,phases,complete,patch_count:patches.length,patch_ms:patches.length&&patches.every(c=>Number.isFinite(c.elapsed_ms))?patches.reduce((n,c)=>n+c.elapsed_ms,0):null,first_parse_ms:first('parse'),first_audit_ms:first('audit'),other_ms:complete&&model!==null&&model<=total?total-model:null};
 }
 const validID = id => typeof id === 'string' && id.trim().length > 0;
 const indexed = rows => new Map(array(rows).filter(x=>validID(x.id)).map(x=>[x.id,x]));
@@ -205,9 +206,10 @@ function renderLive(target,run){
  target.append(node('h3',view.phase),node('p',view.busy?'当前阶段已用 '+view.elapsed+' 秒。模型尚未返回完整结构时，不会虚构语义内容。':'本次运行阶段记录；完成不等于语义已人工验收。','muted'));
  const timing=timingView(run);
  if(timing){
-  const seconds=ms=>(ms/1000).toFixed(1)+'秒',labels={parse:'模型解析',audit:'独立模型审阅'};
+  const seconds=ms=>(ms/1000).toFixed(1)+'秒',labels={parse:timing.patch_count?'模型解析及局部修订':'模型解析',audit:'独立模型审阅'};
   target.append(node('p','本次耗时：'+seconds(timing.total_ms)+'；'+timing.phases.map(p=>labels[p.phase]+'合计 '+(p.ms===null?'未记录':seconds(p.ms))+'（'+p.count+'次调用）').join('；')+(timing.other_ms!==null?'；本地其他开销 '+seconds(timing.other_ms):'；回执不完整，不推算本地开销'),'process-notice'));
   if(timing.first_parse_ms!==null)target.append(node('p','首轮识别语义：'+seconds(timing.first_parse_ms)+(timing.first_audit_ms!==null?'；首轮独立审阅：'+seconds(timing.first_audit_ms):'')+'。修订轮次已单独记录，全部模型调用均计入上述合计。','muted'));
+  if(timing.patch_count)target.append(node('p','其中局部修订：'+timing.patch_count+'次，'+(timing.patch_ms===null?'耗时未记录':seconds(timing.patch_ms))+'；即使修订未应用，也计入模型调用与总耗时。','muted'));
   target.append(node('p','解析收到本次选择的'+methodLabel(run)+'、语义合同和Schema；独立审阅另外收到候选结构。两次模型请求按顺序执行；需要修订时会另行记录。以上是实际用时，不是剩余时间预测。','muted'));
  }
  const steps=node('ol',null,'live-steps');for(const s of view.steps){const li=node('li',null,'live-step '+s.state.toLowerCase());li.append(node('strong',s.title),node('span',labels[s.state]));steps.append(li);}target.append(steps);
