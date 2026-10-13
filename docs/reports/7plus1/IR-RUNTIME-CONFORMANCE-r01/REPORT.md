@@ -2,7 +2,7 @@
 
 2026-10-13。ADMIN目标是“IR合同规定的每一种合法表达，都有一致、经过验证的计算实现”。**本轮已落地一批通用修复，但该完整目标尚未达成，不宣称产品验收通过。**
 
-代码沿用llm-first-028及src/bxp核心；未按004句子、文件名或case ID加入规则。主工作区未提交改动未覆盖。58618仍为原ui81，本轮未启动新模型请求、未重启或升级服务。
+代码沿用llm-first-028及src/bxp核心；未按004句子、文件名或case ID加入规则。主工作区未提交改动未覆盖。本轮未启动新模型请求；按ADMIN“逐步升级测试”的续作授权，已将本轮增量测试版ui82安装至58618，保留明确未决项。
 
 ## 已实现
 
@@ -54,4 +54,40 @@
 3. 004需要的开放事件筛选与穷尽计数、主体例外以及完整收件程度：当前IR不能完整表达，不是原文不清楚。合同扩展必须连同校验和计算一起实现。
 4. 本轮合同说明与运算注册资源已变化，旧模型运行不能冒称新资源验证通过；新模型验证尚未运行。
 
-候选构建号预留ui82，核心direct-ir-r05.5-test。本轮没有重新打包、升级58618或发起模型调用。本报告是进行中的工程记录，不是完成声明，不以212项工程检查替代完整产品语义验收。
+本报告是进行中的工程记录，不是完整目标完成声明，不以工程检查替代完整产品语义验收。
+
+## ui82增量测试版交付
+
+- 代码提交：19cc806c3591b6f55d2210e179f756e5660f586a，已推送review/7plus1-parser；没有merge、release或tag。
+- 实际地址：http://127.0.0.1:58618/，浏览器可见版本v0.1.82 · 候选。
+- 完整版本：0.1.0-candidate.031-r1.2-ui.82；计算核心direct-ir-r05.5-test；合同candidate-ir/1.4。
+- 包目录：D:/boundx/.boundx/products/0.1.0-candidate.031-r1.2-ui.82。
+- 安装目录：D:/boundx/.boundx/short-compiler-031-r1/versions/0.1.0-candidate.031-r1.2-ui.82。
+- Manifest SHA256：d02f77af82e75c2d1717bab385bc50b7e0b51808269f21f763e95f5c9d839242。
+- 独立安装依赖后，001旧响应回放CALCULATED、见证独立核验通过，10项反例查询均得到经核验的UNSAT；12项HTTP检查及观测接口检查通过。这里验证程序，不继承新资源的模型语义验收。
+- 额外4项启动入口测试通过。测试夹具不再依赖开发副本下恰好存在真实安装。
+- 升级前核对原ui81监听PID10828、其部署父进程及完整版本，确认0项在途请求；完成备份后仅停止该服务。
+- 升级后87条历史身份一致，1930份数据文件逐字节哈希不变；首页、JS、历史JSON、中文与计算导出均HTTP 200。
+- 备份：D:/boundx/.boundx/short-compiler-031-r1/backups/2026-10-13T08-20-36.655Z；升级前另有pre-upgrade-ui82完整备份。
+- 完整部署证据、安装验证和四份真实响应回放在本报告目录的JSON附件中。原始失败未覆盖，新增模型调用0次。
+
+### 电脑重启后的启动
+
+当前主工作区旧启动脚本的最小补丁写入失败，没有换工具强行覆盖本地文件。新版本安装自带的启动脚本已验证可以识别同一58618安装、避免重复启动。可直接执行：
+
+```powershell
+node D:/boundx/.boundx/short-compiler-031-r1/versions/0.1.0-candidate.031-r1.2-ui.82/product/short-compiler/launch-installed.mjs --home D:/boundx/.boundx/short-compiler-031-r1
+```
+
+因此不能宣称主工作区现有npm快捷入口已经修复。GitHub上的启动入口已包含ui82及ui81身份。
+
+### 回滚
+
+先核对58618无在途请求并停止已确认身份的该服务，随后执行：
+
+```powershell
+node D:/boundx/.boundx/short-compiler-031-r1/versions/0.1.0-candidate.031-r1.2-ui.82/product/short-compiler/deploy.mjs rollback --home D:/boundx/.boundx/short-compiler-031-r1 --confirmed-idle
+node D:/boundx/.boundx/short-compiler-031-r1/versions/0.1.0-candidate.031-r1.2-ui.82/product/short-compiler/launch-installed.mjs --home D:/boundx/.boundx/short-compiler-031-r1
+```
+
+当前previous为ui81。回滚不重新解析、不覆盖历史。候选状态仍为WAITING_ADMIN_REVIEW，未完成的通用计算和新资源模型验证见上节。
