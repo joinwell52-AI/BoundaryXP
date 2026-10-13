@@ -1,0 +1,10 @@
+import fs from 'node:fs';import path from 'node:path';import {spawnSync} from 'node:child_process';
+const output=process.argv[2];if(!output)throw Error('OUTPUT_DIRECTORY_REQUIRED');fs.mkdirSync(output,{recursive:true});
+const files=fs.readdirSync('tests').filter(n=>/^direct-ir-.*\.test\.mjs$/.test(n)).map(n=>'tests/'+n);
+files.push('tests/direct-candidate-ir.test.mjs','product/short-compiler/tests/live-progress.test.mjs','product/short-compiler/tests/process-presentation.test.mjs',...['condition-reference-order','joint-boundary-closure','scope-domain-closure','final-result-overview'].map(n=>'product/short-compiler/tests/'+n+'.test.mjs'));
+const resources=spawnSync(process.execPath,['research/7plus1-parser/llm-first-028/contracts/candidate-ir-v1/build-resources.mjs','--check'],{encoding:'utf8'});
+const tests=spawnSync(process.execPath,['--test','--test-reporter=tap',...files],{encoding:'utf8',maxBuffer:16*1024*1024,env:{...process.env,BOUNDARY_WORK:process.cwd()}});
+fs.writeFileSync(path.join(output,'TESTS.tap'),tests.stdout+tests.stderr,{flag:'wx'});
+const metric=name=>Number(tests.stdout.match(new RegExp('^# '+name+' (\\d+)','m'))?.[1]??0);
+const result={at:new Date().toISOString(),tests:metric('tests'),pass:metric('pass'),fail:metric('fail'),test_exit:tests.status,generated_resources_exit:resources.status,model_calls:0,live_service_changed:false,full_semantic_acceptance:false};
+fs.writeFileSync(path.join(output,'VERIFICATION.json'),JSON.stringify(result,null,2)+'\n',{flag:'wx'});console.log(JSON.stringify(result));if(tests.status!==0||resources.status!==0)process.exitCode=1;

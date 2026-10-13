@@ -4,9 +4,11 @@ import {intersectValidatedIntervals} from '../../../src/bxp/interval-solver.mjs'
 import {sha256} from './source.mjs';
 import {evaluateDirectEventPolicies} from './direct-ir-event-policy.mjs';
 import {directMathSummary} from './direct-ir-math-summary.mjs';
-import {combineFiniteSets} from './direct-ir-sets.mjs';
 import {taskScope} from './direct-ir-task-scope.mjs';
 import {resolveEventTerm} from './direct-ir-event-identity.mjs';
+import {isProhibitionPattern} from './direct-ir-pattern-scope.mjs';
+import {operators} from './contracts/candidate-ir-v1/schema.mjs';
+import {addDecimals,compareDecimal,decimalText} from '../../../src/bxp/decimal.mjs';
 import {evaluateDirectInputPolicies,taskMembership} from './direct-ir-input-policy.mjs';
 import {evaluateDirectObservations} from './direct-ir-observations.mjs';
 import {queryDirectIRCounterexamples} from './direct-ir-queries.mjs';
@@ -14,20 +16,21 @@ import {evaluateBooleanAssignment} from '../../../src/bxp/boolean-solver.mjs';
 const refkey=r=>r.kind+':'+r.id,unique=a=>[...new Set(a)];
 const all=xs=>xs.includes(false)?false:xs.filter(x=>x!==true).length?{all:xs.filter(x=>x!==true)}:true;
 const any=xs=>xs.includes(true)?true:xs.filter(x=>x!==false).length?{any:xs.filter(x=>x!==false)}:false;
+const neg=x=>x===true?false:x===false?true:{not:x};
 export function calculateDirectIR(ir,acceptance,options={}){
  const observationsSupplied=Object.hasOwn(options,'observations'),observations=options.observations;
  const scope=taskScope(ir);
  const index=new Map(['entities','variables','events','states','expressions','requirements'].flatMap(k=>ir[k].map(x=>[x.id,x])));
- const rows=new Map(acceptance.rows.map(x=>[x.id,x])),constraints=[],orders=[],intervalInputs=[],domains={},atoms=new Map(),gaps=[],stateChecks=[],statesSeen=new Map(),instances=new Map(),quantifiedRules=[],priorityRules=[],roleChoices=new Map(),dataUses=[],inputDomainsActive=new Set();
+ const rows=new Map(acceptance.rows.map(x=>[x.id,x])),constraints=[],orders=[],intervalInputs=[],guardedIntervals=[],domains={},atoms=new Map(),gaps=[],conditionalGaps=[],stateChecks=[],statesSeen=new Map(),instances=new Map(),quantifiedRules=[],priorityRules=[],roleChoices=new Map(),dataUses=[],inputDomainsActive=new Set();
  const add=(id,formula,rule,source_refs=[])=>constraints.push({id,formula,rule,source_refs});
  const atom=(key,meaning)=>{const id='ir:'+sha256(JSON.stringify(key)).slice(0,24);atoms.set(id,{id,meaning});return {var:id};};
  const node=r=>{const n=index.get(r.id);if(!n)throw Error('IR_REFERENCE_MISSING:'+r.id);return n;};
  const expression=r=>{if(r.kind!=='EXPRESSION')throw Error('IR_EXPRESSION_EXPECTED:'+r.id);return node(r);};
  const numeric=(r,ctx)=>terms(r,ctx).map(x=>{if(typeof x.value!=='number')throw Error('NUMERIC_VALUE_EXPECTED');return x;});
- const event=(r,ctx)=>resolveEventTerm(r,{node,variable:r=>Object.hasOwn(ctx,r.id)?ctx[r.id]:null,
+ const event=(r,ctx)=>ctx.__patterns?.[r.id]??resolveEventTerm(r,{node,variable:r=>Object.hasOwn(ctx,r.id)?ctx[r.id]:null,
   number:r=>{const values=numeric(r,ctx);return values.length===1&&values[0].guard===true?values[0].value:null;},register:e=>instances.set(e.key,e)});
- const patterns=new Map();
- const occurred=(r,ctx)=>{if(r.kind==='EVENT'&&node(r).kind==='TEMPLATE'){patterns.set(r.id,node(r));return atom(['PATTERN',r.id],{kind:'PATTERN_OCCURRED',event_id:r.id});}const e=event(r,ctx);return atom(['EVENT',e.key],{kind:'EVENT_OCCURRED',event_id:e.event.id,instance:e.index??null});};
+ const patterns=new Map(),prohibitionPatterns=[];
+ const occurred=(r,ctx)=>{if(!ctx.__patterns?.[r.id]&&r.kind==='EVENT'&&node(r).kind==='TEMPLATE'){patterns.set(r.id,node(r));return atom(['PATTERN',r.id],{kind:'PATTERN_OCCURRED',event_id:r.id});}const e=event(r,ctx);return atom(['EVENT',e.key],{kind:'EVENT_OCCURRED',event_id:e.event.id,instance:e.index??null});};
  const finiteDomain=(r,ctx)=>{
   const x=expression(r);
   if(x.operator==='SET')return x.arguments.flatMap(a=>terms(a,ctx));
@@ -44,7 +47,11 @@ export function calculateDirectIR(ir,acceptance,options={}){
    return out;
    }finally{inputDomainsActive.delete(key);}
   }
-  if(['UNION','INTERSECTION','DIFFERENCE'].includes(x.operator)){const sets=x.arguments.map(a=>finiteDomain(a,ctx));if(sets.some(s=>s.some(a=>a.guard!==true)))throw Error('DYNAMIC_SET_OPERATION_NOT_IMPLEMENTED');return combineFiniteSets(x.operator,sets.map(s=>s.map(v=>v.value))).map(value=>({value,guard:true}));}
+  if(['UNION','INTERSECTION','DIFFERENCE'].includes(x.operator)){
+   const sets=x.arguments.map(a=>finiteDomain(a,ctx)),values=unique(sets.flatMap(s=>s.map(v=>v.value)));
+   const member=(set,value)=>any(set.filter(v=>v.value===value).map(v=>v.guard));
+   return values.map(value=>({value,guard:x.operator==='UNION'?any(sets.map(s=>member(s,value))):x.operator==='INTERSECTION'?all(sets.map(s=>member(s,value))):all([member(sets[0],value),neg(member(sets[1],value))])})).filter(v=>v.guard!==false);
+  }
   if(x.operator==='INTEGER_RANGE'){const lo=numeric(x.arguments[0],ctx),hi=numeric(x.arguments[1],ctx),out=[];for(const a of lo)for(const b of hi){if(!Number.isSafeInteger(a.value)||!Number.isSafeInteger(b.value)||b.value-a.value>16)throw Error('INTEGER_DOMAIN_CAPACITY_OR_TYPE');for(let n=a.value;n<=b.value;n++)out.push({value:n,guard:all([a.guard,b.guard])});}return out;}
   throw Error('FINITE_DOMAIN_NOT_IMPLEMENTED:'+x.operator);
  };
@@ -61,8 +68,16 @@ export function calculateDirectIR(ir,acceptance,options={}){
   if(['EVENT_INSTANCE','PREVIOUS_INSTANCE'].includes(x.operator))return [{value:'EVENT:'+event(r,ctx).key,guard:true}];
   if(x.operator==='NUMBER')return [{value:x.literal,guard:true}];
   if(x.operator==='BOOLEAN')return [{value:x.literal,guard:true}];
-  if(x.operator==='CARDINALITY'){const d=finiteDomain(x.arguments[0],ctx);if(d.some(v=>v.guard!==true))throw Error('DYNAMIC_CARDINALITY_NOT_IMPLEMENTED');return [{value:unique(d.map(v=>v.value)).length,guard:true}];}
-  if(x.operator==='ADD'){let out=[{value:0,guard:true}];for(const a of x.arguments){const d=numeric(a,ctx);out=out.flatMap(l=>d.map(r=>({value:l.value+r.value,guard:all([l.guard,r.guard])})));if(out.length>128)throw Error('ARITHMETIC_PRODUCT_CAPACITY');}return out;}
+  if(x.operator==='CARDINALITY'){
+   const d=finiteDomain(x.arguments[0],ctx),values=unique(d.map(v=>v.value));if(values.length>16)throw Error('CARDINALITY_DOMAIN_CAPACITY');
+   let counts=[{value:0,guard:true}];
+   for(const value of values){const present=any(d.filter(v=>v.value===value).map(v=>v.guard)),next=[];
+    for(let n=0;n<=counts.length;n++)next.push({value:n,guard:any([n<counts.length?all([counts[n].guard,neg(present)]):false,n>0?all([counts[n-1].guard,present]):false])});
+    counts=next;
+   }
+   return counts.filter(c=>c.guard!==false);
+  }
+  if(x.operator==='ADD'){let out=[{value:0,exact:'0',guard:true}];for(const a of x.arguments){const d=numeric(a,ctx);out=out.flatMap(l=>d.map(r=>{const exact=addDecimals([l.exact??l.value,r.exact??r.value]);return {value:Number(exact),exact,guard:all([l.guard,r.guard])};}));if(out.length>128)throw Error('ARITHMETIC_PRODUCT_CAPACITY');}return out;}
   if(['OBJECT_OF','RECIPIENT_OF','ENVIRONMENT_OF'].includes(x.operator)){const e=event(x.arguments[0],ctx),rs=e.event.roles.filter(a=>x.operator==='RECIPIENT_OF'?a.role==='RECIPIENT':x.operator==='ENVIRONMENT_OF'?a.role==='ENVIRONMENT':['OBJECT','INPUT_OBJECT','RESULT','DELIVERABLE'].includes(a.role));
    if(!rs.length&&x.operator==='ENVIRONMENT_OF'){const key=e.key+':ENVIRONMENT';if(!roleChoices.has(key)){const ids=ir.entities.filter(n=>n.kind==='ENVIRONMENT').map(n=>n.id);if(!ids.length)throw Error('ENVIRONMENT_VALUE_DOMAIN_MISSING');const choices=ids.map(value=>({value,guard:atom(['WITNESS_ROLE',key,value],{kind:'WITNESS_ROLE',event_id:e.key,role:'ENVIRONMENT',value})}));roleChoices.set(key,choices);add('role-domain:'+key,any(choices.map(c=>c.guard)),'CONSTRUCTIVE_ROLE_VALUE',x.source_refs);for(let a=0;a<choices.length;a++)for(let b=a+1;b<choices.length;b++)add('role-unique:'+key+':'+a+':'+b,{not:all([choices[a].guard,choices[b].guard])},'CONSTRUCTIVE_ROLE_SINGLE_VALUE',x.source_refs);}return roleChoices.get(key);}
    const distinct=[...new Map(rs.map(r=>[refkey(r.value),r])).values()];
@@ -70,38 +85,71 @@ export function calculateDirectIR(ir,acceptance,options={}){
   throw Error('TERM_NOT_IMPLEMENTED:'+x.operator);
  };
  const stateValue=(r,ctx)=>{
-  const s=node(r);if(r.kind!=='STATE')throw Error('STATE_EXPECTED');const e=s.subject&&['EVENT','EXPRESSION'].includes(s.subject.kind)?event(s.subject,ctx):null;
+  const s=node(r);if(r.kind!=='STATE')throw Error('STATE_EXPECTED');const e=s.subject&&(['EVENT','EXPRESSION'].includes(s.subject.kind)||s.subject.kind==='VARIABLE'&&node(s.subject).type==='EVENT')?event(s.subject,ctx):null;
   const key=s.id+(e?'@'+e.key:''),v=atom(['STATE',key],{kind:'STATE',state_id:s.id,instance:e?.index??null}),point='state:'+key;
   if(!statesSeen.has(key)){statesSeen.set(key,{state:s,value:v,point,event:e});if(e){const occur=occurred(s.subject,ctx);if(['SUCCESS','FAILURE','COMPLETION','CONTROL_EFFECT'].includes(s.kind))add('state-occur:'+key,{implies:[v,occur]},'TYPED_STATE_REQUIRES_EVENT',s.source_refs);if(s.kind==='COMPLETION')orders.push({id:'completion-end:'+key,from:e.key+':end',to:point,relation:'LTE',guard:v});
     orders.push({id:'state-start:'+key,from:e.key+':start',to:point,relation:'LTE',guard:v},{id:'state-end:'+key,from:point,to:e.key+':end',relation:'LTE',guard:v});}}
   return {value:v,point,key};
  };
  const time=(r,ctx)=>{const x=expression(r);if(x.operator==='STATE_ESTABLISHED')return stateValue(x.arguments[0],ctx).point;const e=event(x.arguments[0],ctx);if(x.operator==='EVENT_START')return e.key+':start';if(x.operator==='EVENT_END')return e.key+':end';throw Error('TIME_POINT_REQUIRED');};
- const compare=(operator,a,b)=>({EQ:()=>a===b,LT:()=>a<b,LTE:()=>a<=b,GT:()=>a>b,GTE:()=>a>=b})[operator]();
+ const compare=(operator,a,b)=>{if(typeof a.value==='number'&&typeof b.value==='number'){const c=compareDecimal(a.exact??a.value,b.exact??b.value);return {EQ:c===0,LT:c<0,LTE:c<=0,GT:c>0,GTE:c>=0}[operator];}return operator==='EQ'?a.value===b.value:false;};
+ const realVariable=r=>r.kind==='VARIABLE'&&node(r).type==='REAL';
+ const realCompare=(operator,variable,threshold,ctx,source)=>{
+  if(Object.hasOwn(ctx,variable.id))throw Error('CONTINUOUS_BOUND_VARIABLE_REQUIRES_QUANTIFIER_SOLVER');
+  const choices=Array.isArray(threshold)?threshold:numeric(threshold,ctx),thresholdKey=Array.isArray(threshold)?choices:threshold.id,v=atom(['REAL_COMPARE',source.id,operator,variable.id,thresholdKey,ctx],{kind:'REAL_COMPARE',variable_id:variable.id,operator,expression_id:source.id});
+  const put=(suffix,op,n,guard)=>{const b={value:decimalText(n.exact??n.value),inclusive:['EQ','GTE','LTE'].includes(op)};guardedIntervals.push({id:source.id+':'+operator+':'+suffix+':'+guardedIntervals.length,variable_id:variable.id,lower:['EQ','GT','GTE'].includes(op)?b:null,upper:['EQ','LT','LTE'].includes(op)?b:null,guard,source_refs:source.source_refs});};
+  for(const n of choices){put('true',operator,n,all([n.guard,v]));
+   if(operator==='EQ'){const side=atom(['REAL_NEQ_SIDE',source.id,variable.id,thresholdKey,ctx],{kind:'REAL_ORDER_CHOICE'});put('less','LT',n,all([n.guard,neg(v),side]));put('greater','GT',n,all([n.guard,neg(v),neg(side)]));}
+   else put('false',{LT:'GTE',LTE:'GT',GT:'LTE',GTE:'LT'}[operator],n,all([n.guard,neg(v)]));
+  }
+  return v;
+ };
  const bool=(r,ctx={})=>{
   if(r.kind==='VARIABLE'){const v=node(r);if(v.type!=='BOOLEAN')throw Error('BOOLEAN_VARIABLE_REQUIRED');return any(terms(r,ctx).filter(x=>x.value===true).map(x=>x.guard));}
   const x=expression(r),args=x.arguments;
   if(x.operator==='BOOLEAN')return x.literal;
-  if(['AND','OR'].includes(x.operator))return x.operator==='AND'?all(args.map(a=>bool(a,ctx))):any(args.map(a=>bool(a,ctx)));
+  if(['AND','OR'].includes(x.operator)){
+   const values=[],errors=[];for(const a of args)try{values.push(bool(a,ctx));}catch(error){errors.push(error);}
+   // A decisive constant makes an undefined inactive branch irrelevant, in either order.
+   if(x.operator==='AND'&&values.includes(false))return false;
+   if(x.operator==='OR'&&values.includes(true))return true;
+   if(errors.length)throw errors[0];return x.operator==='AND'?all(values):any(values);
+  }
   if(x.operator==='NOT')return {not:bool(args[0],ctx)};
-  if(x.operator==='IMPLIES')return {implies:args.map(a=>bool(a,ctx))};
+  if(x.operator==='IMPLIES'){
+   const values=[],errors=[];for(const a of args)try{values.push(bool(a,ctx));}catch(error){errors.push(error);values.push(null);}
+   if(values[0]===false||values[1]===true)return true;if(errors.length)throw errors[0];return {implies:values};
+  }
   if(x.operator==='IFF'){const [a,b]=args.map(a=>bool(a,ctx));return all([{implies:[a,b]},{implies:[b,a]}]);}
-  if(x.operator==='EQ'&&args.every(a=>a.kind==='EXPRESSION'&&['SET','GROUP_MEMBERS','UNION','INTERSECTION','DIFFERENCE'].includes(expression(a).operator))){const [a,b]=args.map(r=>finiteDomain(r,ctx));const subset=(l,r)=>all(l.map(v=>({implies:[v.guard,any(r.filter(x=>x.value===v.value).map(x=>x.guard))]})));return all([subset(a,b),subset(b,a)]);}
-  if(['EQ','LT','LTE','GT','GTE'].includes(x.operator)&&args.every(a=>a.kind==='EXPRESSION'&&['EVENT_START','EVENT_END','STATE_ESTABLISHED'].includes(expression(a).operator))){
-   const left=time(args[0],ctx),right=time(args[1],ctx),v=atom(['TIME_COMPARE',x.id,ctx],{kind:'TIME_COMPARE',operator:x.operator,left,right});
+  if(['EQ','LT','LTE','GT','GTE'].includes(x.operator)){
+   if(realVariable(args[0])&&!Object.hasOwn(ctx,args[0].id))return realCompare(x.operator,args[0],args[1],ctx,x);
+   if(realVariable(args[1])&&!Object.hasOwn(ctx,args[1].id))return realCompare({EQ:'EQ',LT:'GT',LTE:'GTE',GT:'LT',GTE:'LTE'}[x.operator],args[1],args[0],ctx,x);
+  }
+  if(x.operator==='EQ'&&args.every(a=>a.kind==='VARIABLE'?node(a).type==='BOOLEAN':a.kind==='EXPRESSION'&&operators[expression(a).operator][0]==='BOOLEAN')){const [a,b]=args.map(a=>bool(a,ctx));return all([{implies:[a,b]},{implies:[b,a]}]);}
+  if(x.operator==='EQ'&&args.every(a=>a.kind==='EXPRESSION'&&operators[expression(a).operator][0]==='SET')){const [a,b]=args.map(r=>finiteDomain(r,ctx));const subset=(l,r)=>all(l.map(v=>({implies:[v.guard,any(r.filter(x=>x.value===v.value).map(x=>x.guard))]})));return all([subset(a,b),subset(b,a)]);}
+  if(['EQ','LT','LTE','GT','GTE','BEFORE'].includes(x.operator)&&args.every(a=>a.kind==='EXPRESSION'&&['EVENT_START','EVENT_END','STATE_ESTABLISHED'].includes(expression(a).operator))){
+   const left=time(args[0],ctx),right=time(args[1],ctx),v=atom(['TIME_COMPARE',x.id,ctx],{kind:x.operator==='BEFORE'?'ORDER':'TIME_COMPARE',operator:x.operator,left,right});
    const edge=(suffix,from,to,relation,guard)=>orders.push({id:'time:'+x.id+':'+suffix,from,to,relation,guard});
    if(x.operator==='EQ'){edge('equal-forward',left,right,'LTE',v);edge('equal-backward',right,left,'LTE',v);const direction=atom(['TIME_NEQ_DIRECTION',x.id,ctx],{kind:'TIME_ORDER_CHOICE'});edge('unequal-forward',left,right,'LT',all([{not:v},direction]));edge('unequal-backward',right,left,'LT',all([{not:v},{not:direction}]));}
-   else{const reverse=['GT','GTE'].includes(x.operator),a=reverse?right:left,b=reverse?left:right;edge('true',a,b,['LT','GT'].includes(x.operator)?'LT':'LTE',v);edge('false',b,a,['LT','GT'].includes(x.operator)?'LTE':'LT',{not:v});}return v;
+   else{const reverse=['GT','GTE'].includes(x.operator),a=reverse?right:left,b=reverse?left:right,strict=['LT','GT','BEFORE'].includes(x.operator);edge('true',a,b,strict?'LT':'LTE',v);edge('false',b,a,strict?'LTE':'LT',{not:v});}return v;
   }
-  if(['EQ','LT','LTE','GT','GTE'].includes(x.operator))return any(terms(args[0],ctx).flatMap(a=>terms(args[1],ctx).map(b=>all([a.guard,b.guard,compare(x.operator,a.value,b.value)]))));
-  if(x.operator==='MEMBER'){const d=finiteDomain(args[1],ctx);return any(terms(args[0],ctx).flatMap(a=>d.map(b=>all([a.guard,b.guard,a.value===b.value]))));}
+  if(['EQ','LT','LTE','GT','GTE'].includes(x.operator))return any(terms(args[0],ctx).flatMap(a=>terms(args[1],ctx).map(b=>all([a.guard,b.guard,compare(x.operator,a,b)]))));
+  if(x.operator==='MEMBER'){
+   const domain=expression(args[1]);
+   if(domain.operator==='REAL_INTERVAL'){
+    if(realVariable(args[0])&&!Object.hasOwn(ctx,args[0].id))return all([realCompare('GTE',args[0],domain.arguments[0],ctx,x),realCompare('LTE',args[0],domain.arguments[1],ctx,x)]);
+    return any(numeric(args[0],ctx).flatMap(v=>numeric(domain.arguments[0],ctx).flatMap(lo=>numeric(domain.arguments[1],ctx).map(hi=>all([v.guard,lo.guard,hi.guard,compare('GTE',v,lo),compare('LTE',v,hi)])))));
+   }
+   const d=finiteDomain(args[1],ctx);
+   if(realVariable(args[0])&&!Object.hasOwn(ctx,args[0].id))return any(d.map(v=>all([v.guard,realCompare('EQ',args[0],[{...v,guard:true}],ctx,x)])));
+   return any(terms(args[0],ctx).flatMap(a=>d.map(b=>all([a.guard,b.guard,a.value===b.value]))));
+  }
   if(x.operator==='SUBSET'){const a=finiteDomain(args[0],ctx),b=finiteDomain(args[1],ctx);return all(a.map(x=>({implies:[x.guard,any(b.filter(y=>y.value===x.value).map(y=>y.guard))]})));}
   if(x.operator==='EVENT_OCCURRED')return occurred(args[0],ctx);
   if(x.operator==='STATE_VALUE')return stateValue(args[0],ctx).value;
   if(x.operator==='IMMEDIATE_AFTER'){const s=stateValue(args[0],ctx),e=event(args[1],ctx),v=atom(['PRIORITY_RESPONSE',x.id,ctx],{kind:'PRIORITY_RESPONSE',state:s.key,event:e.key});orders.push({id:'priority:'+x.id,from:s.point,to:e.key+':start',relation:'LTE',guard:v});const target=e.event.operation==='STOP'?e.event.roles.find(r=>r.role==='OBJECT'&&r.value.kind==='EVENT'&&node(r.value).kind==='TASK'):null;priorityRules.push({id:x.id,state_point:s.point,event:e.key,scope_id:target?.value.id??e.event.owner_id,guard:v,source_refs:x.source_refs,interpretation:'Qualitative priority response; no numerical delay asserted'});return v;}
   if(x.operator==='TRUE_AT_START'){const s=stateValue(args[0],ctx),e=event(args[1],ctx),local=atom(['STATE_AT_START',s.key,e.key],{kind:'STATE_AT_START',state:s.key,event:e.key}),guard=occurred(args[1],ctx);
    add('local-state:'+x.id+':'+e.key,{implies:[local,s.value]},'STATE_AT_START_REQUIRES_GLOBAL_STATE',x.source_refs);orders.push({id:'already:'+x.id+':'+e.key,from:s.point,to:e.key+':start',relation:'LTE',guard:all([guard,local])},{id:'later:'+x.id+':'+e.key,from:e.key+':start',to:s.point,guard:all([guard,s.value,{not:local}])});stateChecks.push({id:x.id+':'+e.key,global_variable:s.value.var,local_variable:local.var,state_point:s.point,event_start:e.key+':start',guard});return local;}
-  if(x.operator==='BEFORE'){const v=atom(['ORDER',x.id,ctx],{kind:'ORDER'});orders.push({id:x.id+':'+sha256(JSON.stringify(ctx)).slice(0,8),from:time(args[0],ctx),to:time(args[1],ctx),guard:v});return v;}
   if(['FORALL','EXISTS'].includes(x.operator)){if(expression(args[0]).operator==='TASK_EVENTS'){
    if(x.operator!=='FORALL')throw Error('OPEN_EVENT_EXISTENTIAL_NOT_IMPLEMENTED');const scope=expression(args[0]).arguments[0].id;
    const belongs=e=>{const member=taskMembership(ir,e.owner_id,scope);if(member===null)throw Error('TASK_EVENT_SCOPE_UNKNOWN:'+e.id);return member;};
@@ -126,6 +174,7 @@ export function calculateDirectIR(ir,acceptance,options={}){
  const localSubject=r=>r.kind==='CONSTRAINT'&&r.subject&&(r.subject.kind==='EVENT'&&node(r.subject).kind==='ACTION'||r.subject.kind==='EXPRESSION'&&['EVENT_INSTANCE','PREVIOUS_INSTANCE'].includes(expression(r.subject).operator));
  for(const r of ir.requirements){try{if(rows.get(r.id)?.status!=='ACCEPTED')continue;
    if(['PERMITTED','NOT_REQUIRED','UNSTATED'].includes(r.modality))continue;
+   if(isProhibitionPattern(r,r.subject?.kind==='EVENT'?node(r.subject):null)){prohibitionPatterns.push(r);continue;}
    if(r.kind==='DATA_USE'){
     if(r.modality!=='REQUIRED')throw Error('DATA_USE_PROHIBITION_NOT_IMPLEMENTED');
     const d=r.data_use,consumer=event(d.consumer,{}),guard=all([occurred(d.consumer,{}),r.applicability?bool(r.applicability):true]);
@@ -151,6 +200,29 @@ export function calculateDirectIR(ir,acceptance,options={}){
    add('quantified-instance:'+rule.expression_id+':'+e.key,{implies:[guard,bool(rule.body,{[rule.bound_variable.id]:e})]},'TASK_DOMAIN_INCLUDES_TEMPLATE_INSTANCE',rule.source_refs);
   }catch(error){gaps.push({node_id:rule.expression_id,event_id:e.key,reason:error.message});}
  }
+ // Each matching occurrence gets its own applicability and time/state evaluation.
+ // Never collapse a conditional prohibition into one global pattern Boolean.
+ for(const r of prohibitionPatterns){const p=node(r.subject);
+  if(p.operation_extent!=='EXACT'||p.actor_domain==='UNKNOWN'){gaps.push({node_id:r.id,reason:'PROHIBITION_PATTERN_NOT_EXACT'});continue;}
+  for(const e of [...instances.values()]){
+   if(!['ACTION','TEMPLATE'].includes(e.event.kind)||e.event.use!=='CURRENT_TASK'||e.event.layer!=='MAIN')continue;
+   const implicitRoot=p.owner_id==='ROOT'&&e.event.owner_id==='ROOT'&&!ir.events.some(n=>n.kind==='TASK');
+   const member=implicitRoot?true:taskMembership(ir,e.event.owner_id,p.owner_id);if(member===false)continue;
+   if(e.event.operation_extent==='EXACT'&&p.operation!==e.event.operation)continue;
+   try{
+    const ctx={__patterns:{[p.id]:e}},matches=[];let missingRole=false;
+    for(const role of p.roles){const actual=e.event.roles.filter(v=>v.role===role.role);if(!actual.length){missingRole=true;continue;}
+     try{matches.push(any(terms(role.value,ctx).flatMap(a=>actual.flatMap(v=>terms(v.value,ctx).map(b=>all([a.guard,b.guard,a.value===b.value]))))));}catch{missingRole=true;}
+    }
+    if(matches.includes(false))continue;
+    if(member!==true||e.event.operation_extent!=='EXACT')throw Error('PROHIBITION_PATTERN_MEMBERSHIP_UNKNOWN');
+    if(missingRole)throw Error('PATTERN_ROLE_MEMBERSHIP_UNKNOWN');
+    const occurrence=atom(['EVENT',e.key],{kind:'EVENT_OCCURRED',event_id:e.event.id,instance:e.index??null});
+    const guard=all([occurrence,...matches,r.applicability?bool(r.applicability,ctx):true]);
+    add('prohibition:'+r.id+':'+e.key,{implies:[guard,{not:bool(r.body,ctx)}]},'PER_OCCURRENCE_PROHIBITION_PATTERN',r.source_refs);
+   }catch(error){conditionalGaps.push({node_id:r.id,event_id:e.key,reason:error.message,guard:atom(['EVENT',e.key],{kind:'EVENT_OCCURRED',event_id:e.event.id,instance:e.index??null})});}
+  }
+ }
  for(const e of instances.values()){const v=atom(['EVENT',e.key],{kind:'EVENT_OCCURRED',event_id:e.event.id,instance:e.index??null});orders.push({id:'lifecycle:'+e.key,from:e.key+':start',to:e.key+':end',relation:'LTE',guard:v});}
  for(const e of instances.values()){if(!['ACTION','TEMPLATE'].includes(e.event.kind))continue;const chain=scope.ancestry(e.event.owner_id);
   if(!chain.complete&&ir.events.some(n=>n.kind==='TASK'))gaps.push({node_id:e.event.id,reason:chain.reason});
@@ -172,6 +244,8 @@ export function calculateDirectIR(ir,acceptance,options={}){
  }
  for(const [key,s]of statesSeen)if(['SUCCESS','FAILURE'].includes(s.state.kind)&&s.event)for(const [other,t]of statesSeen)if(other>key&&t.event?.key===s.event.key&&t.state.kind!==s.state.kind&&['SUCCESS','FAILURE'].includes(t.state.kind))add('outcome-exclusive:'+key+':'+other,{not:all([s.value,t.value])},'SUCCESS_AND_FAILURE_EXCLUSIVE');
  const intervals=intersectValidatedIntervals(intervalInputs),problem={variables:[...atoms.keys()],constraints,intervals:intervals.map((x,i)=>({...x,id:'numeric:'+i})),orders,domains:[],state_checks:stateChecks,variable_meanings:Object.fromEntries([...atoms].map(([id,x])=>[id,x.meaning])),temporal_horizons:[]};
+ problem.guarded_intervals=guardedIntervals.map(x=>({...x,interval_id:problem.intervals.find(i=>i.subject===x.variable_id)?.id}));
+ for(const x of problem.guarded_intervals)if(!x.interval_id)gaps.push({node_id:x.variable_id,reason:'CONDITIONAL_INTERVAL_DOMAIN_MISSING'});
  // Only an explicitly typed total-duration requirement enables horizon binding.
  for(const r of ir.requirements.filter(r=>r.kind==='TOTAL_DURATION')){
   const v=r.subject?.kind==='VARIABLE'?index.get(r.subject.id):null;
@@ -184,19 +258,27 @@ export function calculateDirectIR(ir,acceptance,options={}){
  const observed=observationsSupplied?evaluateDirectObservations(ir,acceptance,observations):null;
  const mathematical_summary=directMathSummary(ir,acceptance);
  for(const f of mathematical_summary.completions)if(f.status==='NOT_IMPLEMENTED')gaps.push({node_id:f.requirement_id,reason:f.reason,consumer:'COMPLETION_SUMMARY'});
- const result={format:'boundx-direct-ir-calculation/1',input_ir_sha256:sha256(JSON.stringify(ir)),source_links:acceptance.source_links??[],mathematical_summary,gaps,quantified_rules:quantifiedRules,priority_rules:priorityRules,data_uses:dataUses,finite_domains:Object.fromEntries(Object.entries(domains).map(([id,x])=>[id,x.map(v=>v.value)])),intervals,problem,observations_supplied:observed!==null,observed_evaluation:observed,business_decision:null,execution_authorization:null};
+ const result={format:'boundx-direct-ir-calculation/1',input_ir_sha256:sha256(JSON.stringify(ir)),source_links:acceptance.source_links??[],mathematical_summary,gaps,conditional_gaps:conditionalGaps,quantified_rules:quantifiedRules,priority_rules:priorityRules,data_uses:dataUses,finite_domains:Object.fromEntries(Object.entries(domains).map(([id,x])=>[id,x.map(v=>v.value)])),intervals,problem,observations_supplied:observed!==null,observed_evaluation:observed,business_decision:null,execution_authorization:null};
  if(gaps.length)return {...result,status:'PARTIAL',joint:{status:'PARTIAL',base:{result:'unknown',witness:null}}};
  const completionQueries=[];
- try{for(const r of ir.requirements.filter(r=>r.kind==='COMPLETION'&&rows.get(r.id)?.status==='ACCEPTED')){const root=expression(r.body);if(root.operator!=='IFF')continue;const left=expression(root.arguments[0]);if(left.operator!=='STATE_VALUE')continue;const state=left.arguments[0],meaning=[...atoms].find(([,a])=>a.meaning.kind==='STATE'&&a.meaning.state_id===state.id);if(!meaning)continue;const extra={id:'query-complete:'+r.id,formula:{var:meaning[0]},rule:'EXPLICIT_COMPLETION_QUERY_NOT_ADDED_SOURCE_OBLIGATION',source_refs:r.source_refs};const query=solveJointBoundary({...problem,constraints:[...problem.constraints,extra]});completionQueries.push({requirement_id:r.id,assumption:{state_id:state.id,value:true},result:query.result,witness:query.witness,verification:query.verification,not_actual_completion:true,not_new_source_obligation:true});}
- const solved=solveJointBoundary(problem);const complete=completionQueries.find(q=>q.result==='satisfiable');if(complete){solved.witness=complete.witness;solved.verification=complete.verification;solved.selected_witness_scope='SOURCE_CONSTRAINTS_PLUS_EXPLICIT_COMPLETION_QUERY';}
+ const exclusionConstraints=[...new Map(conditionalGaps.map(g=>[g.guard.var,{id:'witness-inactive:'+g.guard.var,formula:neg(g.guard),rule:'WITNESS_CHOICE_NOT_SOURCE_OBLIGATION'}])).values()];
+ const solve=p=>{
+  if(!exclusionConstraints.length)return solveJointBoundary(p);
+  const chosen=solveJointBoundary({...p,constraints:[...p.constraints,...exclusionConstraints]});
+  if(chosen.result==='satisfiable')return {...chosen,witness_branch_assumptions:exclusionConstraints,conditional_gaps_inactive_in_witness:true,not_all_execution_branches_proven:true};
+  const relaxed=solveJointBoundary(p);return relaxed.result==='unsatisfiable'?relaxed:{result:'unknown',reason:'ACTIVE_PROHIBITION_PATTERN_GAP',witness:null,conditional_gaps:conditionalGaps};
+ };
+ try{for(const r of ir.requirements.filter(r=>r.kind==='COMPLETION'&&rows.get(r.id)?.status==='ACCEPTED')){const root=expression(r.body);if(root.operator!=='IFF')continue;const left=expression(root.arguments[0]);if(left.operator!=='STATE_VALUE')continue;const state=left.arguments[0],meaning=[...atoms].find(([,a])=>a.meaning.kind==='STATE'&&a.meaning.state_id===state.id);if(!meaning)continue;const extra={id:'query-complete:'+r.id,formula:{var:meaning[0]},rule:'EXPLICIT_COMPLETION_QUERY_NOT_ADDED_SOURCE_OBLIGATION',source_refs:r.source_refs};const query=solve({...problem,constraints:[...problem.constraints,extra]});completionQueries.push({requirement_id:r.id,assumption:{state_id:state.id,value:true},result:query.result,witness:query.witness,verification:query.verification,witness_branch_assumptions:query.witness_branch_assumptions??[],not_actual_completion:true,not_new_source_obligation:true});}
+ const solved=solve(problem);const complete=completionQueries.find(q=>q.result==='satisfiable');if(complete){solved.witness=complete.witness;solved.verification=complete.verification;solved.selected_witness_scope='SOURCE_CONSTRAINTS_PLUS_EXPLICIT_COMPLETION_QUERY';}
  if(solved.result==='satisfiable'){const records=[];
   const active=guard=>evaluateBooleanAssignment(problem.variables,guard,solved.witness.boolean,{maxVariables:128});
   const resolveObject=ref=>{if(ref.kind!=='VARIABLE')return ref;const values=(domains[ref.id]??[]).filter(v=>active(v.guard));if(values.length!==1||node(ref).type!=='OBJECT')throw Error('WITNESS_OBJECT_BINDING_NOT_UNIQUE:'+ref.id);return {kind:'ENTITY',id:values[0].value};};
   for(const [id,a]of atoms){if(a.meaning.kind!=='EVENT_OCCURRED'||!solved.witness.boolean[id])continue;const key=a.meaning.event_id+(a.meaning.instance===null?'':'@'+a.meaning.instance),e=instances.get(key);if(!e||!['ACTION','TEMPLATE'].includes(e.event.kind))continue;
-   const roles=Object.fromEntries(e.event.roles.map(r=>[r.role,resolveObject(r.value)]));for(const choice of roleChoices.get(e.key+':ENVIRONMENT')??[])if(solved.witness.boolean[choice.guard.var])roles.ENVIRONMENT={kind:'ENTITY',id:choice.value};
+   const roles={};for(const r of e.event.roles){const value=resolveObject(r.value),previous=roles[r.role];if(previous===undefined)roles[r.role]=value;else{const members=Array.isArray(previous)?previous:[previous];if(!members.some(v=>JSON.stringify(v)===JSON.stringify(value)))roles[r.role]=[...members,value];}}
+   for(const choice of roleChoices.get(e.key+':ENVIRONMENT')??[])if(solved.witness.boolean[choice.guard.var])roles.ENVIRONMENT={kind:'ENTITY',id:choice.value};
    const external_inputs=dataUses.filter(u=>u.origin==='EXTERNAL'&&u.consumer_key===e.key&&active(u.guard)).map(u=>resolveObject(u.object));
    records.push({event_id:e.key,template_id:e.index===undefined?null:e.event.id,instance:e.index??null,owner_id:e.event.owner_id,roles,external_inputs,role_values_are_witness_assignments:true});
   }
    const verification=records.map(record=>({record,check:evaluateDirectEventPolicies(ir,acceptance,record)}));if(verification.some(x=>x.check.results.some(r=>!['SATISFIED','NOT_APPLICABLE'].includes(r.result))))throw Error('QUANTIFIED_WITNESS_VERIFICATION_FAILED');const inputs=evaluateDirectInputPolicies(ir,acceptance,records);if(inputs.results.some(r=>r.result!=='SATISFIED'))throw Error('INPUT_BOUNDARY_WITNESS_VERIFICATION_FAILED');solved.witness.execution_trace=records;solved.input_boundary_verification=inputs;solved.quantified_verification={scope:'EVERY_EVENT_IN_THIS_CONSTRUCTED_EXECUTION_TRACE',checks:verification,future_execution_not_certified:true};
-  }return {...result,completion_queries:completionQueries,counterexample_queries:queryDirectIRCounterexamples(problem),status:solved.result==='satisfiable'?'CALCULATED':solved.result==='unsatisfiable'?'CONFLICT':'PARTIAL',joint:{status:solved.result==='satisfiable'?'PROVEN':solved.result==='unsatisfiable'?'UNSAT':'PARTIAL',base:solved}};}catch(e){return {...result,status:'PARTIAL',gaps:[...gaps,{reason:e.message,...(e.failed_checks?{failed_checks:e.failed_checks}:{})}],joint:{status:'PARTIAL',base:{result:'unknown',witness:null}}};}
+  }return {...result,completion_queries:completionQueries,counterexample_queries:conditionalGaps.length?[]:queryDirectIRCounterexamples(problem),...(conditionalGaps.length?{counterexample_query_limit:'UNRESOLVED_OCCURRENCE_BRANCHES_NOT_CERTIFIED'}:{}),...(solved.result==='unknown'&&conditionalGaps.length?{gaps:[...gaps,...conditionalGaps]}:{}),status:solved.result==='satisfiable'?'CALCULATED':solved.result==='unsatisfiable'?'CONFLICT':'PARTIAL',joint:{status:solved.result==='satisfiable'?'PROVEN':solved.result==='unsatisfiable'?'UNSAT':'PARTIAL',base:solved}};}catch(e){return {...result,status:'PARTIAL',gaps:[...gaps,{reason:e.message,...(e.failed_checks?{failed_checks:e.failed_checks}:{})}],joint:{status:'PARTIAL',base:{result:'unknown',witness:null}}};}
 }

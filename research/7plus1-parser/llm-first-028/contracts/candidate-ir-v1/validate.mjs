@@ -6,7 +6,7 @@ export function validateCandidateIR(ir,source){
  const fail=(code,id,detail)=>errors.push({code,id,detail});
  for(const [collection,kind]of Object.entries(groups))for(const node of ir[collection]){if(index.has(node.id))fail('DUPLICATE_ID',node.id);index.set(node.id,{kind,node});}
  const sources=new Map();for(const s of ir.source_table){if(sources.has(s.id))fail('DUPLICATE_SOURCE',s.id);sources.set(s.id,s);let position=-1;for(let n=0;n<s.occurrence;n++){position=source.indexOf(s.quote,position+1);if(position<0)break;}if(position<0)fail('SOURCE_QUOTE_MISMATCH',s.id);}
- const target=r=>{const x=index.get(r.id);if(!x||x.kind!==r.kind)fail('TYPED_REFERENCE',r.id,{declared:r.kind,actual:x?.kind??null});return x?.node;};
+ const target=r=>{const x=index.get(r.id);if(!x||x.kind!==r.kind){fail('TYPED_REFERENCE',r.id,{declared:r.kind,actual:x?.kind??null});return null;}return x.node;};
  const inspect=x=>{if(Array.isArray(x)){x.forEach(inspect);return;}if(!x||typeof x!=='object')return;if(Object.keys(x).length===2&&'id'in x&&'kind'in x){target(x);return;}for(const [k,v]of Object.entries(x)){if(k==='source_refs'){for(const id of v)if(!sources.has(id))fail('SOURCE_REFERENCE',id);}else inspect(v);}};inspect(ir);
  for(const e of ir.entities){if(e.kind!=='GROUP'&&e.members.length)fail('NONGROUP_MEMBERS',e.id);for(const r of e.members)if(r.kind!=='ENTITY')fail('GROUP_MEMBER_TYPE',e.id);}
  for(const e of ir.events)if(e.operation==='OTHER'&&e.operation_extent==='EXACT')fail('OTHER_NOT_EXACT',e.id);

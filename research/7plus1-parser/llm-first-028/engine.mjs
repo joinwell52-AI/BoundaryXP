@@ -18,7 +18,7 @@ import {projectDirectIR} from './direct-ir-view.mjs';
 import {directIRBundle} from './direct-ir-bundle.mjs';
 import {renderDirectCalculations} from './direct-ir-render-results.mjs';
 export const writeJSON=(file,data)=>fs.writeFileSync(file,JSON.stringify(data,null,2)+'\n');
-export const compilerRevision='direct-ir-r05.4-test';
+export const compilerRevision='direct-ir-r05.5-test';
 export function replay7Plus1(bytes,{output,replayFrom,resourceGuard=()=>{},productSnapshot=null,allowPriorModelResources=false}){
  resourceGuard();
  const source=prepareSource(bytes),tracePath=path.join(replayFrom,fs.existsSync(path.join(replayFrom,'trace.json'))?'trace.json':'TRACE.json');
@@ -29,7 +29,7 @@ export function replay7Plus1(bytes,{output,replayFrom,resourceGuard=()=>{},produ
   const prefix='research/7plus1-parser/llm-first-028/';
   const resources=[...directIRBundle('parse',{parseMethod:prior.parse_method??'SKILL'}).resources,...directIRBundle('audit',{parseMethod:prior.parse_method??'SKILL'}).resources];
   const modelResourceChanges=[];
-  for(const resource of resources){const original=frozen.get(prefix+resource.path)??frozen.get(resource.path);if(!original)throw Error('REPLAY_RESOURCE_EVIDENCE_MISSING:'+resource.path);if(original!==resource.sha256){if(!allowPriorModelResources||!(resource.path.startsWith('skills/')||resource.path.startsWith('skill-profiles/')||resource.path.endsWith('/CONTRACT.md')))throw Error('REPLAY_SKILL_BUNDLE_CHANGED:'+resource.path);modelResourceChanges.push({path:resource.path,original_sha256:original,current_sha256:resource.sha256});}}
+  for(const resource of resources){const original=frozen.get(prefix+resource.path)??frozen.get(resource.path);if(!original)throw Error('REPLAY_RESOURCE_EVIDENCE_MISSING:'+resource.path);if(original!==resource.sha256){if(!allowPriorModelResources||!(resource.path.startsWith('skills/')||resource.path.startsWith('skill-profiles/')||resource.path.endsWith('/CONTRACT.md')||resource.path.endsWith('/operator-registry.json')))throw Error('REPLAY_SKILL_BUNDLE_CHANGED:'+resource.path);modelResourceChanges.push({path:resource.path,original_sha256:original,current_sha256:resource.sha256});}}
   for(const name of ['schema.mjs','candidate-ir.schema.json','candidate-ir-audit.schema.json']){const file='contracts/candidate-ir-v1/'+name;if((frozen.get(prefix+file)??frozen.get(file))!==sha256(fs.readFileSync(new URL(file,import.meta.url))))throw Error('REPLAY_SCHEMA_CHANGED:'+file);}
   const completed=finishDirectIR(prior.ir,acceptCandidateIR(prior.ir,prior.audit,source),prior.revision_outcome);
   const {technical,boundary_calculations:calculation,problem_report}=completed,projected=completed;

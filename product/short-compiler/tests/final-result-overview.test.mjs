@@ -8,3 +8,8 @@ test('saved user result shows readable conclusions without opening JSON or truth
 test('conflict and coverage gaps are not rendered as full success',async()=>{const j=structuredClone(original);j.boundary_calculations.mathematical_results.conflicts.push({kind:'test'});assert.match((await render(j)).text,/发现已证明的约束冲突/);j.boundary_calculations.mathematical_results.conflicts=[];j.boundary_calculations.coverage.source_gaps=1;assert.match((await render(j)).text,/已得到部分结果/);});
 test('necessary condition is not promoted to sufficient or IFF',async()=>{const j=structuredClone(original);j.boundary_calculations.mathematical_results.completion[0].direction='NECESSARY';const r=await render(j);assert.match(r.text,/原文未声明这些条件已足够/);assert.doesNotMatch(r.text,/当且仅当以下条件/);});
 test('legacy record is not supplied a fabricated mathematical summary',async()=>{const j=structuredClone(original);delete j.boundary_calculations.mathematical_results;const r=await render(j);assert.match(r.text,/没有自动重算或补造/);assert.doesNotMatch(r.text,/这次算出了什么/);});
+
+test('a witness with an inactive unresolved branch displays that limitation outside collapsed JSON',async()=>{
+ const trace={ir:{entities:[],variables:[],events:[{id:'optional',label:'可选交付'}],states:[],expressions:[]},boundary_calculations:{format:'boundx-direct-ir-calculation/1',status:'CALCULATED',joint:{base:{result:'satisfiable',conditional_gaps_inactive_in_witness:true,witness:{execution_trace:[]}}},conditional_gaps:[{node_id:'ban',event_id:'optional',reason:'PATTERN_ROLE_MEMBERSHIP_UNKNOWN'}],gaps:[]}};
+ const r=await render(trace);assert.match(r.text,/仍未证明的执行分支/);assert.match(r.text,/不代表所有分支都已算清/);assert.match(r.text,/可选交付：PATTERN_ROLE_MEMBERSHIP_UNKNOWN/);
+});

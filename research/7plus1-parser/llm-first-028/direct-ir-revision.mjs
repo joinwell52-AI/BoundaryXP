@@ -1,5 +1,13 @@
 import {candidateSchema} from './contracts/candidate-ir-v1/schema.mjs';import {sha256} from './source.mjs';
 export const patchSchema={type:'object',additionalProperties:false,required:['format','contract_version','base_ir_sha256','reason','coverage_updates','removed_nodes',...Object.keys(candidateSchema.properties).filter(k=>!['format','contract_version'].includes(k))],properties:{...candidateSchema.properties,removed_nodes:{type:'array',items:{$ref:'#/$defs/ref'}},coverage_updates:{type:'array',items:{type:'object',additionalProperties:false,required:['previous_index','replacement'],properties:{previous_index:{type:'integer',minimum:0},replacement:candidateSchema.properties.coverage.items}}},format:{type:'string',const:'boundx-candidate-ir-patch/1'},base_ir_sha256:{type:'string',minLength:64,maxLength:64},reason:{type:'string',minLength:1}},$defs:candidateSchema.$defs};
+export function revisionPermissions(base,audit,technical){
+ const flagged=new Set([...technical.errors.map(e=>e.id),...audit.issues.flatMap(i=>i.targets.map(t=>t.id)),...audit.reviews.filter(r=>r.verdict!=='SUPPORT').map(r=>r.target.id),...technical.rows.filter(r=>r.missing_review_fields?.length).map(r=>r.id)]);
+ const replacements=technical.rows.filter(r=>r.status!=='ACCEPTED'&&(technical.technical_ok||flagged.has(r.id))).map(r=>r.id);
+ // Issues are not acceptance rows. Link them through audited node AND source identity.
+ // Never authorize all issues merely because a patch is requested.
+ for(const issue of base.issues){if(audit.issues.some(problem=>problem.targets.some(t=>issue.targets.some(u=>u.kind===t.kind&&u.id===t.id))&&problem.source_refs.some(s=>issue.source_refs.includes(s))))replacements.push(issue.id);}
+ return {replacements:[...new Set(replacements)],removals:[...audit.reviews.filter(r=>r.verdict==='CONTRADICT'&&!r.field_path).map(r=>r.target.id),...technical.errors.filter(e=>e.code==='DATA_CONSUMER_EVENT').map(e=>e.id)]};
+}
 export function revisionBundle(bundle){const text=bundle.text+'\n有界局部修订：输出boundx-candidate-ir-patch/1，base_ir_sha256为宿主摘要。各集合只列新增或获准替换节点，空集合不修改。不得重建整图或改变无关事实。removed_nodes仅允许removable_node_ids内被审阅CONTRADICT或程序证实消费者类型错误的候选，真实边界及UNCERTAIN节点不能删除；原文要求必须在正确节点中保留，引用和coverage须同步修正。coverage_updates保留原行索引及同一来源。只修实际审阅、technical_errors和缺审问题；所有修订由独立新会话再次审阅。';return {...bundle,schema:patchSchema,text,sha256:sha256(text)};}
 export function applyIRPatch(base,patch,{allowed_replacements=[],allowed_coverage_targets=[],allowed_removals=[],authorized_contract_transition=null}={}){
  if(patch.base_ir_sha256!==sha256(JSON.stringify(base)))throw Error('PATCH_BASE_DIGEST_MISMATCH');

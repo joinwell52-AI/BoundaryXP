@@ -2,7 +2,7 @@ import fs from 'node:fs';import path from 'node:path';
 import {isDeepStrictEqual} from 'node:util';
 import {prepareSource,sha256} from './source.mjs';import {callCodex,probeCodex} from './provider.mjs';import {modelSignal} from './observability.mjs';
 import {directIRBundle} from './direct-ir-bundle.mjs';import {acceptCandidateIR} from './direct-ir-accept.mjs';import {projectDirectIR} from './direct-ir-view.mjs';import {calculateDirectIR} from './direct-ir-calculate.mjs';
-import {revisionBundle,applyIRPatch} from './direct-ir-revision.mjs';
+import {revisionBundle,applyIRPatch,revisionPermissions} from './direct-ir-revision.mjs';
 import {finishDirectIR} from './direct-ir-result.mjs';
 import {renderDirectCalculations} from './direct-ir-render-results.mjs';
 import {affectedAuditTargets,targetedAuditBundle,mergeIndependentAudit} from './direct-ir-audit-merge.mjs';
@@ -26,11 +26,11 @@ export async function parseDirectIR(bytes,{output,probe,model='gpt-6.1-sol',reas
  const repairableTechnical=technical.schemas.proposal.ok&&technical.schemas.audit.ok&&technical.errors.every(e=>['DATA_CONSUMER_EVENT','DATA_CONSUMER_OBJECT_BINDING','DATA_PRODUCER_OBJECT_BINDING','EXTERNAL_DATA_HAS_TASK_PRODUCER','BOOLEAN_TYPE','MEMBERSHIP_TYPE','START_STATE_TYPE','IMMEDIATE_STATE_EVENT_TYPE'].includes(e.code));
  if((technical.technical_ok||repairableTechnical)&&requestBudget.remaining>=2&&((reviewed.value.omissions??[]).length||technical.rows.some(r=>r.status!=='ACCEPTED')||technical.diagnostics.some(d=>d.code==='COVERAGE_REVIEW_ISSUE'))){
   revision=1;dir=path.join(output,'revision-1');fs.mkdirSync(dir);const base=parsed.value;
+  const {replacements,removals}=revisionPermissions(base,reviewed.value,technical);
   const problems={base_ir_sha256:sha256(JSON.stringify(base)),omissions:reviewed.value.omissions,issues:reviewed.value.issues,technical_errors:technical.errors,removable_node_ids:[...reviewed.value.reviews.filter(r=>r.verdict==='CONTRADICT'&&!r.field_path).map(r=>r.target.id),...technical.errors.filter(e=>e.code==='DATA_CONSUMER_EVENT').map(e=>e.id)],missing_review_fields:technical.rows.filter(r=>r.missing_review_fields?.length).map(r=>({id:r.id,fields:r.missing_review_fields}))};
+  problems.allowed_replacement_ids=replacements;problems.removable_node_ids=removals;
   write(dir,'revision-request.json',problems);onProgress({stage:'PARSING',revision:1});
   const patched=await call({bundle:revisionBundle(parse),source,candidate:base,revisionIssues:problems,directory:path.join(dir,'patch-call'),probe,model,reasoning,signal,timeoutMs,requestBudget,...telemetry('parse')});
-  const directlyFlagged=new Set([...technical.errors.map(e=>e.id),...reviewed.value.issues.flatMap(i=>i.targets.map(t=>t.id)),...reviewed.value.reviews.filter(r=>r.verdict!=='SUPPORT').map(r=>r.target.id),...technical.rows.filter(r=>r.missing_review_fields?.length).map(r=>r.id)]);
-  const replacements=technical.rows.filter(r=>r.status!=='ACCEPTED'&&(technical.technical_ok||directlyFlagged.has(r.id))).map(r=>r.id),removals=problems.removable_node_ids;
   write(dir,'patch.json',patched.value);let applied;
   parsed={...parsed,attempts:[...parsed.attempts,...patched.attempts]};
   try{applied=applyIRPatch(base,patched.value,{allowed_replacements:replacements,allowed_removals:removals,allowed_coverage_targets:reviewed.value.issues.filter(i=>i.field_path==='coverage').flatMap(i=>i.targets.map(t=>t.id))});}

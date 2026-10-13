@@ -1,8 +1,20 @@
 export function decimal(value) {
-  const text = String(value);
-  const negative = text.startsWith('-');
-  const [whole, fraction = ''] = (negative ? text.slice(1) : text).split('.');
-  return { coefficient: BigInt(whole + fraction) * (negative ? -1n : 1n), scale: fraction.length };
+  const match = /^(-?)(\d+)(?:\.(\d+))?(?:[eE]([+-]?\d+))?$/.exec(String(value));
+  if (!match) throw Error('INVALID_DECIMAL');
+  const [, sign, whole, fraction = '', exponent = '0'] = match;
+  let coefficient = BigInt(whole + fraction) * (sign ? -1n : 1n);
+  let scale = fraction.length - Number(exponent);
+  if (!Number.isSafeInteger(scale) || Math.abs(scale) > 10000) throw Error('DECIMAL_CAPACITY');
+  if (scale < 0) { coefficient *= 10n ** BigInt(-scale); scale = 0; }
+  return { coefficient, scale };
+}
+
+export function addDecimals(values) {
+  const parts = values.map(decimal), scale = Math.max(0, ...parts.map(p => p.scale));
+  const coefficient = parts.reduce((sum, p) => sum + p.coefficient * 10n ** BigInt(scale - p.scale), 0n);
+  const sign = coefficient < 0n ? '-' : '';
+  const digits = (coefficient < 0n ? -coefficient : coefficient).toString().padStart(scale + 1, '0');
+  return decimalText(sign + (scale ? digits.slice(0, -scale) + '.' + digits.slice(-scale) : digits));
 }
 
 export function decimalText(value) {
