@@ -5,6 +5,7 @@ import {fileURLToPath,pathToFileURL} from 'node:url';
 import {spawn} from 'node:child_process';
 import {lockProduct} from './resources.mjs';
 const approvedVersions={
+ '0.1.0-candidate.031-r1.2-ui.78':{compiler:'direct-ir-r05.1-test',contract:'candidate-ir/1.4'},
  '0.1.0-candidate.031-r1.2-ui.77':{compiler:'direct-ir-r05-test',contract:'candidate-ir/1.4'},
  '0.1.0-candidate.031-r1.2-ui.76':{compiler:'direct-ir-r04.1-test',contract:'candidate-ir/1.4'},
  '0.1.0-candidate.031-r1.2-ui.75':{compiler:'direct-ir-r04.1-test',contract:'candidate-ir/1.4'},

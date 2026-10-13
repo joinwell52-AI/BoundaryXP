@@ -17,7 +17,7 @@ import {projectDirectIR} from './direct-ir-view.mjs';
 import {directIRBundle} from './direct-ir-bundle.mjs';
 import {renderDirectCalculations} from './direct-ir-render-results.mjs';
 export const writeJSON=(file,data)=>fs.writeFileSync(file,JSON.stringify(data,null,2)+'\n');
-export const compilerRevision='direct-ir-r05-test';
+export const compilerRevision='direct-ir-r05.1-test';
 export function replay7Plus1(bytes,{output,replayFrom,resourceGuard=()=>{},productSnapshot=null,allowPriorModelResources=false}){
  resourceGuard();
  const source=prepareSource(bytes),tracePath=path.join(replayFrom,fs.existsSync(path.join(replayFrom,'trace.json'))?'trace.json':'TRACE.json');
@@ -26,9 +26,9 @@ export function replay7Plus1(bytes,{output,replayFrom,resourceGuard=()=>{},produ
  if(prior.ir?.format==='boundx-candidate-ir/1'){
   const frozen=new Map((prior.model_resource_digests??prior.product_snapshot?.files??[]).map(f=>[f.path,f.sha256]));
   const prefix='research/7plus1-parser/llm-first-028/';
-  const resources=[...directIRBundle('parse').resources,...directIRBundle('audit').resources];
+  const resources=[...directIRBundle('parse',{parseMethod:prior.parse_method??'SKILL'}).resources,...directIRBundle('audit',{parseMethod:prior.parse_method??'SKILL'}).resources];
   const modelResourceChanges=[];
-  for(const resource of resources){const original=frozen.get(prefix+resource.path)??frozen.get(resource.path);if(!original)throw Error('REPLAY_RESOURCE_EVIDENCE_MISSING:'+resource.path);if(original!==resource.sha256){if(!allowPriorModelResources||!(resource.path.startsWith('skills/')||resource.path.endsWith('/CONTRACT.md')))throw Error('REPLAY_SKILL_BUNDLE_CHANGED:'+resource.path);modelResourceChanges.push({path:resource.path,original_sha256:original,current_sha256:resource.sha256});}}
+  for(const resource of resources){const original=frozen.get(prefix+resource.path)??frozen.get(resource.path);if(!original)throw Error('REPLAY_RESOURCE_EVIDENCE_MISSING:'+resource.path);if(original!==resource.sha256){if(!allowPriorModelResources||!(resource.path.startsWith('skills/')||resource.path.startsWith('skill-profiles/')||resource.path.endsWith('/CONTRACT.md')))throw Error('REPLAY_SKILL_BUNDLE_CHANGED:'+resource.path);modelResourceChanges.push({path:resource.path,original_sha256:original,current_sha256:resource.sha256});}}
   for(const name of ['schema.mjs','candidate-ir.schema.json','candidate-ir-audit.schema.json']){const file='contracts/candidate-ir-v1/'+name;if((frozen.get(prefix+file)??frozen.get(file))!==sha256(fs.readFileSync(new URL(file,import.meta.url))))throw Error('REPLAY_SCHEMA_CHANGED:'+file);}
   const technical=acceptCandidateIR(prior.ir,prior.audit,source),projected=projectDirectIR(prior.ir,technical),calculation=calculateDirectIR(prior.ir,technical);
   fs.mkdirSync(output,{recursive:true});if(fs.existsSync(path.join(output,'source.txt')))throw Error('OUTPUT_ALREADY_EXISTS');
@@ -55,7 +55,7 @@ export function replay7Plus1(bytes,{output,replayFrom,resourceGuard=()=>{},produ
  resourceGuard();return replay;
 }
 export async function parse7Plus1(bytes,{output,probe,model='gpt-6.1-sol',reasoning='medium',parseMethod=null,semanticRevision=true,signal,onProgress=()=>{},timeoutMs=null,call=callCodex,maxModelRequests,resourceGuard=()=>{},productSnapshot=null}={}){
- return parseDirectIR(bytes,{output,probe,model,reasoning,signal,onProgress,timeoutMs,call,maxModelRequests,resourceGuard,productSnapshot});
+ return parseDirectIR(bytes,{output,probe,model,reasoning,parseMethod,signal,onProgress,timeoutMs,call,maxModelRequests,resourceGuard,productSnapshot});
 }
 // Historical frozen-response route only. Not a runtime fallback.
 export async function parseLegacy7Plus1(bytes,{output,probe,model='gpt-6.1-sol',reasoning='medium',parseMethod=null,semanticRevision=true,signal,onProgress=()=>{},timeoutMs=null,call=callCodex,maxModelRequests,resourceGuard=()=>{},productSnapshot=null}={}){

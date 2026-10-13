@@ -10,7 +10,7 @@ import {directIRBundle} from './direct-ir-bundle.mjs';
 export const ROOT=path.dirname(fileURLToPath(import.meta.url));
 export function buildBundle(phase,{parseMethod=null}={}){
  if(parseMethod==='MD')throw Error('MD_COMPARISON_STOPPED');
- return directIRBundle(phase);
+ return directIRBundle(phase,{parseMethod});
 }
 export function buildLegacyBundle(phase,{parseMethod=null}={}){
  if(parseMethod==='MD')throw Error('MD_COMPARISON_STOPPED');

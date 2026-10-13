@@ -8,7 +8,7 @@ import {applyWireBundle,wireVersion} from './compact-wire.mjs';
 const root=path.dirname(fileURLToPath(import.meta.url));
 export const comparisonProfile='COMPACT_R01';
 export function parseMethod(value='SKILL'){
- if(!['SKILL','MD'].includes(value))throw Error('INVALID_PARSE_METHOD');
+ if(!['SKILL','SKILL1','MD'].includes(value))throw Error('INVALID_PARSE_METHOD');
  return value;
 }
 const expected={

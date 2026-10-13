@@ -105,7 +105,7 @@ export function modelView(run={},session={}){
   calls:[['解析',parse],['审阅',audit]].flatMap(([phase,xs])=>xs.map((x,i)=>({phase:phase+(Number.isInteger(x.revision)?' · 第'+(x.revision+1)+'轮':''),attempt:Number.isInteger(x.attempt)?x.attempt+1:i+1,seconds:Number.isFinite(x.elapsed_ms)?(x.elapsed_ms/1000).toFixed(1):'未记录',success:x.exit_code===0,thread:x.thread_id??'未记录',actual:x.actual_model??'未披露',usage:x.usage??null}))),
   reasoning:run.requested_reasoning??session.requested_reasoning??'medium',callCount:run.real_calls??null,version:run.product_snapshot?.product_version??session.product_snapshot?.product_version??'未记录'};
 }
-export const methodLabel=run=>run.parse_method==='MD'?'r02 MD':'解析Skill';
+export const methodLabel=run=>run.parse_method==='MD'?'r02 MD':run.parse_method==='SKILL1'?'解析skill1 · semantics-first-r02':'解析Skill';
 const phaseLabel=(run,stage)=>stage==='PARSING'?methodLabel(run)+'：等待模型语义候选':stage==='PREPARING'?'核对版本与准备'+methodLabel(run):phaseNames[stage]??stage;
 function duration(run,stage){
  const xs=array(run.stages).filter(x=>(x.revision??0)===(run.revision??0)),first=xs.findIndex(x=>x.stage===stage);if(first<0)return null;

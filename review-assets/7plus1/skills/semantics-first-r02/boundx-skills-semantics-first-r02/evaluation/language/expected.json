@@ -1,0 +1,423 @@
+{
+  "format": "boundx-language-review-expectations/1",
+  "model_input_allowed": false,
+  "not_boundx_native_schema": true,
+  "live_model_validation": "NOT_RUN",
+  "cases": [
+    {
+      "pair_id": "BI01",
+      "topic_zh": "明确祈使义务",
+      "checks": [
+        "Imperative tasks are REQUIRED even without must.",
+        "DEV performs the inspection, creation, and submission.",
+        "One current receipt.md identity is created and delivered to QA.",
+        "No deadline or additional filename is supplied."
+      ],
+      "expected_output_schema": "REVIEW_CHECKLIST_NOT_BOUNDX_IR",
+      "live_model_validation": "NOT_RUN"
+    },
+    {
+      "pair_id": "BI02",
+      "topic_zh": "许可不是义务",
+      "checks": [
+        "Creation is PERMITTED and NOT_REQUIRED, not REQUIRED.",
+        "Not creating the optional file must not become a completion failure."
+      ],
+      "expected_output_schema": "REVIEW_CHECKLIST_NOT_BOUNDX_IR",
+      "live_model_validation": "NOT_RUN"
+    },
+    {
+      "pair_id": "BI03",
+      "topic_zh": "无需不是禁止",
+      "checks": [
+        "Delivery is NOT_REQUIRED.",
+        "Do not turn non-obligation into either permission or prohibition."
+      ],
+      "expected_output_schema": "REVIEW_CHECKLIST_NOT_BOUNDX_IR",
+      "live_model_validation": "NOT_RUN",
+      "evidence_anchors": {
+        "zh-CN": {
+          "quote": "无需",
+          "occurrence": 1,
+          "codepoint_span": [
+            2,
+            4
+          ]
+        },
+        "en": {
+          "quote": "is not required to",
+          "occurrence": 1,
+          "codepoint_span": [
+            3,
+            21
+          ]
+        }
+      }
+    },
+    {
+      "pair_id": "BI04",
+      "topic_zh": "明确禁止",
+      "checks": [
+        "FORBIDDEN delivery is restricted to the stated actor, artifact, recipient, and task.",
+        "No positive creation or delivery obligation follows from the prohibition."
+      ],
+      "expected_output_schema": "REVIEW_CHECKLIST_NOT_BOUNDX_IR",
+      "live_model_validation": "NOT_RUN",
+      "evidence_anchors": {
+        "zh-CN": {
+          "quote": "禁止",
+          "occurrence": 1,
+          "codepoint_span": [
+            3,
+            5
+          ]
+        },
+        "en": {
+          "quote": "must not",
+          "occurrence": 1,
+          "codepoint_span": [
+            17,
+            25
+          ]
+        }
+      }
+    },
+    {
+      "pair_id": "BI05",
+      "topic_zh": "两个动作各有必要前提",
+      "checks": [
+        "Each action independently requires QA approval at its start.",
+        "Both actions have separately stated obligations.",
+        "A condition on simultaneous occurrence alone is insufficient.",
+        "QA reviewing is not QA approving."
+      ],
+      "expected_output_schema": "REVIEW_CHECKLIST_NOT_BOUNDX_IR",
+      "live_model_validation": "NOT_RUN"
+    },
+    {
+      "pair_id": "BI06",
+      "topic_zh": "条件义务不是反向禁令",
+      "checks": [
+        "Each valid receipt triggers a matching archive obligation.",
+        "Do not add archive implies valid-receipt-received as a reverse restriction.",
+        "Do not reduce repeated triggers to one occurrence."
+      ],
+      "expected_output_schema": "REVIEW_CHECKLIST_NOT_BOUNDX_IR",
+      "live_model_validation": "NOT_RUN"
+    },
+    {
+      "pair_id": "BI07",
+      "topic_zh": "完成充要与独立时间限制",
+      "checks": [
+        "Completion is IFF with a two-state conjunction.",
+        "The duration upper bound is inclusive and independently constrained.",
+        "Do not insert the time limit into the source completion formula."
+      ],
+      "expected_output_schema": "REVIEW_CHECKLIST_NOT_BOUNDX_IR",
+      "live_model_validation": "NOT_RUN",
+      "evidence_anchors": {
+        "zh-CN": {
+          "quote": "当且仅当",
+          "occurrence": 1,
+          "codepoint_span": [
+            4,
+            8
+          ]
+        },
+        "en": {
+          "quote": "if and only if",
+          "occurrence": 1,
+          "codepoint_span": [
+            21,
+            35
+          ]
+        }
+      }
+    },
+    {
+      "pair_id": "BI08",
+      "topic_zh": "unless并不自动授予许可",
+      "checks": [
+        "Without approval the delivery is forbidden.",
+        "The exception alone is neither delivery permission nor delivery obligation.",
+        "Approval belongs to this delivery."
+      ],
+      "expected_output_schema": "REVIEW_CHECKLIST_NOT_BOUNDX_IR",
+      "live_model_validation": "NOT_RUN"
+    },
+    {
+      "pair_id": "BI09",
+      "topic_zh": "类别全称和例外",
+      "checks": [
+        "Universal prohibition over the stated directory domain with an explicit exception.",
+        "The domain is not limited to currently enumerated files.",
+        "The exception does not grant a positive deletion permission."
+      ],
+      "expected_output_schema": "REVIEW_CHECKLIST_NOT_BOUNDX_IR",
+      "live_model_validation": "NOT_RUN",
+      "capability_note": "If the locked IR contract cannot represent this category domain, record an expression gap without narrowing the source."
+    },
+    {
+      "pair_id": "BI10",
+      "topic_zh": "恰选一个与选择自由",
+      "checks": [
+        "Exactly one choice, not at least one.",
+        "All relevant uses share the fixed selected identity.",
+        "Either allowed choice remains a runtime freedom, not an ADMIN clarification."
+      ],
+      "expected_output_schema": "REVIEW_CHECKLIST_NOT_BOUNDX_IR",
+      "live_model_validation": "NOT_RUN"
+    },
+    {
+      "pair_id": "BI11",
+      "topic_zh": "including不是穷尽清单",
+      "checks": [
+        "All supplied inputs form the required inspection domain.",
+        "The two examples do not establish an exclusive two-file allowlist.",
+        "Do not invent names of other inputs."
+      ],
+      "expected_output_schema": "REVIEW_CHECKLIST_NOT_BOUNDX_IR",
+      "live_model_validation": "NOT_RUN"
+    },
+    {
+      "pair_id": "BI12",
+      "topic_zh": "首次与累计重试",
+      "checks": [
+        "Initial attempt is required; retries are conditional permission.",
+        "Count retries separately from the initial attempt and preserve the +1 relation.",
+        "Use the immediately preceding instance, not any earlier failure.",
+        "All attempts use the same file."
+      ],
+      "expected_output_schema": "REVIEW_CHECKLIST_NOT_BOUNDX_IR",
+      "live_model_validation": "NOT_RUN"
+    },
+    {
+      "pair_id": "BI13",
+      "topic_zh": "团队共享预算",
+      "checks": [
+        "Retain both local constraints and a single shared total.",
+        "The shared upper bound must not be copied into independent budgets.",
+        "The model expresses constraints; the program calculates joint feasible allocations."
+      ],
+      "expected_output_schema": "REVIEW_CHECKLIST_NOT_BOUNDX_IR",
+      "live_model_validation": "NOT_RUN"
+    },
+    {
+      "pair_id": "BI14",
+      "topic_zh": "同名不同轮次",
+      "checks": [
+        "Separate the old artifact version from the current one despite the same path.",
+        "QA consumes the current OPS-produced version.",
+        "Background use is not a requirement to recreate the previous file."
+      ],
+      "expected_output_schema": "REVIEW_CHECKLIST_NOT_BOUNDX_IR",
+      "live_model_validation": "NOT_RUN"
+    },
+    {
+      "pair_id": "BI15",
+      "topic_zh": "被动语态施事和接收者",
+      "checks": [
+        "DEV is the creator, OPS the submitter, and QA the recipient.",
+        "The same current artifact is passed along.",
+        "Do not infer actor from the recipient."
+      ],
+      "expected_output_schema": "REVIEW_CHECKLIST_NOT_BOUNDX_IR",
+      "live_model_validation": "NOT_RUN"
+    },
+    {
+      "pair_id": "BI16",
+      "topic_zh": "respectively配对",
+      "checks": [
+        "DEV binds to left.json and OPS to right.json based on explicit respectively pairing.",
+        "Do not require each actor to inspect both files."
+      ],
+      "expected_output_schema": "REVIEW_CHECKLIST_NOT_BOUNDX_IR",
+      "live_model_validation": "NOT_RUN"
+    },
+    {
+      "pair_id": "BI17",
+      "topic_zh": "不能两个都做",
+      "checks": [
+        "Independent permissions with NOT(A AND B).",
+        "Do not encode NOT A AND NOT B.",
+        "Do not require exactly one release."
+      ],
+      "expected_output_schema": "REVIEW_CHECKLIST_NOT_BOUNDX_IR",
+      "live_model_validation": "NOT_RUN"
+    },
+    {
+      "pair_id": "BI18",
+      "topic_zh": "两个都禁止",
+      "checks": [
+        "Two prohibitions: NOT A AND NOT B.",
+        "Do not weaken to merely NOT(A AND B).",
+        "This intentionally differs from BI17."
+      ],
+      "expected_output_schema": "REVIEW_CHECKLIST_NOT_BOUNDX_IR",
+      "live_model_validation": "NOT_RUN"
+    },
+    {
+      "pair_id": "BI19",
+      "topic_zh": "开闭端点和单位",
+      "checks": [
+        "The task duration domain is (0,18] in minutes.",
+        "Do not replace greater-than with greater-or-equal.",
+        "Do not distribute the whole-task limit to each action."
+      ],
+      "expected_output_schema": "REVIEW_CHECKLIST_NOT_BOUNDX_IR",
+      "live_model_validation": "NOT_RUN"
+    },
+    {
+      "pair_id": "BI20",
+      "topic_zh": "开发者与产物行为分层",
+      "checks": [
+        "Current development obligation and source-edit permission are distinct from delivered-product behavior.",
+        "The product input prohibition does not prohibit DEV from editing the authorized source file.",
+        "Preserve per-invocation scope; do not count team actions instead."
+      ],
+      "expected_output_schema": "REVIEW_CHECKLIST_NOT_BOUNDX_IR",
+      "live_model_validation": "NOT_RUN",
+      "capability_note": "Keep a scoped expression gap if product-behavior semantics cannot be encoded; do not flatten the layers."
+    },
+    {
+      "pair_id": "BI21",
+      "topic_zh": "引文中的指令不能执行",
+      "checks": [
+        "Quoted text is report content, not a current deletion obligation.",
+        "Preserve the alert quotation exactly.",
+        "Actual deletion prohibition is independently represented."
+      ],
+      "expected_output_schema": "REVIEW_CHECKLIST_NOT_BOUNDX_IR",
+      "live_model_validation": "NOT_RUN"
+    },
+    {
+      "pair_id": "BI22",
+      "topic_zh": "触发与立即的局部范围",
+      "checks": [
+        "The leak condition governs both stopping and notification.",
+        "Immediate urgency qualifies stopping only, with no invented zero-second threshold.",
+        "The stop-phase prohibition is not permanent shutdown."
+      ],
+      "expected_output_schema": "REVIEW_CHECKLIST_NOT_BOUNDX_IR",
+      "live_model_validation": "NOT_RUN"
+    },
+    {
+      "pair_id": "BI23",
+      "topic_zh": "可能性与建议不是硬义务",
+      "checks": [
+        "The two background may clauses express possibility, not permission or prohibition.",
+        "Preserve the explicit recommendation and lack of mandatory caching.",
+        "Do not replace the recommendation with REQUIRED or drop it silently."
+      ],
+      "expected_output_schema": "REVIEW_CHECKLIST_NOT_BOUNDX_IR",
+      "live_model_validation": "NOT_RUN",
+      "capability_note": "A distinct advisory meaning not representable by the contract is a local expression gap; NOT_REQUIRED alone does not encode the recommendation."
+    },
+    {
+      "pair_id": "BI24",
+      "topic_zh": "真正的指代歧义",
+      "checks": [
+        "Preserve the explicitly unresolved reviewer identity.",
+        "Do not choose one participant for Schema convenience.",
+        "Separate supported receipt statements from the unresolved reviewer binding."
+      ],
+      "expected_output_schema": "REVIEW_CHECKLIST_NOT_BOUNDX_IR",
+      "live_model_validation": "NOT_RUN"
+    },
+    {
+      "source_id": "MX01",
+      "topic_zh": "混合条件和中文文件名",
+      "protected_tokens": [
+        "QA",
+        "PM",
+        "核查表.md",
+        "ADMIN"
+      ],
+      "checks": [
+        "Approval is a necessary start prerequisite of delivery.",
+        "The Chinese clause explicitly requires delivery.",
+        "Keep the Chinese filename unchanged."
+      ],
+      "expected_output_schema": "REVIEW_CHECKLIST_NOT_BOUNDX_IR",
+      "live_model_validation": "NOT_RUN"
+    },
+    {
+      "source_id": "MX02",
+      "topic_zh": "混合非义务和禁止",
+      "protected_tokens": [
+        "DEV",
+        "附注.md",
+        "ADMIN"
+      ],
+      "checks": [
+        "Optional creation, non-obligatory delivery, and recipient-specific forbidden delivery remain separate.",
+        "Cross-language it refers to the same current artifact."
+      ],
+      "expected_output_schema": "REVIEW_CHECKLIST_NOT_BOUNDX_IR",
+      "live_model_validation": "NOT_RUN"
+    },
+    {
+      "source_id": "MX03",
+      "topic_zh": "Unicode身份与证据",
+      "protected_tokens": [
+        "DEV",
+        "café.csv",
+        "café.csv"
+      ],
+      "checks": [
+        "The two explicitly distinct spellings remain two identities.",
+        "Do not Unicode-normalize evidence or merge the two paths.",
+        "Both reads are required and renaming either is forbidden."
+      ],
+      "expected_output_schema": "REVIEW_CHECKLIST_NOT_BOUNDX_IR",
+      "live_model_validation": "NOT_RUN"
+    },
+    {
+      "source_id": "MX04",
+      "topic_zh": "同一要求的明确双语重复",
+      "protected_tokens": [
+        "DEV",
+        "QA"
+      ],
+      "checks": [
+        "One explicit requirement with two source supports, not two independent deliveries.",
+        "The explicitly stated translation relationship supports merging the duplicated requirement."
+      ],
+      "expected_output_schema": "REVIEW_CHECKLIST_NOT_BOUNDX_IR",
+      "live_model_validation": "NOT_RUN"
+    },
+    {
+      "source_id": "MX05",
+      "topic_zh": "冲突译文无优先级",
+      "protected_tokens": [
+        "PM",
+        "QA",
+        "ADMIN"
+      ],
+      "checks": [
+        "Retain the conflicting recipient restrictions and missing precedence.",
+        "Do not silently prefer either language, intersect to an empty allowlist, or turn the two recipients into an authorized union.",
+        "This is a source-version conflict requiring local clarification."
+      ],
+      "expected_output_schema": "REVIEW_CHECKLIST_NOT_BOUNDX_IR",
+      "live_model_validation": "NOT_RUN"
+    },
+    {
+      "source_id": "MX06",
+      "topic_zh": "英文日期不默认地区",
+      "protected_tokens": [
+        "PM",
+        "note.md",
+        "03/04/2027",
+        "16:00"
+      ],
+      "checks": [
+        "Preserve the delivery obligation and literal deadline.",
+        "Flag the explicitly missing date convention and time zone locally.",
+        "Do not infer US formatting merely because part of the source is English."
+      ],
+      "expected_output_schema": "REVIEW_CHECKLIST_NOT_BOUNDX_IR",
+      "live_model_validation": "NOT_RUN"
+    }
+  ]
+}

@@ -14,10 +14,10 @@ function configureModels(){
  const model=el('select');model.id='compile-model';model.setAttribute('aria-label','调用模型');
  const reasoning=el('select');reasoning.id='compile-reasoning';reasoning.setAttribute('aria-label','推理强度');
  const method=el('select');method.id='compile-method';method.setAttribute('aria-label','解析方式');
- for(const [value,label] of [['SKILL','Skill']]){const o=el('option',label);o.value=value;method.append(o);}
+ for(const [value,label] of [['SKILL','Skill'],['SKILL1','skill1']]){const o=el('option',label);o.value=value;method.append(o);}
  for(const m of session.model_catalog?.models??[{id:session.requested_model,label:session.requested_model,reasoning:['medium']}]){const o=el('option',m.label);o.value=m.id;model.append(o);}
  const previous=JSON.parse(localStorage.getItem('boundx-compile-settings')??'null');model.value=[...model.options].some(o=>o.value===previous?.model)?previous.model:session.requested_model;
- method.value='SKILL';
+ method.value=[...method.options].some(o=>o.value===previous?.parse_method)?previous.parse_method:'SKILL';
  const save=()=>localStorage.setItem('boundx-compile-settings',JSON.stringify({model:model.value,reasoning:reasoning.value,parse_method:method.value}));
  const update=()=>{const old=reasoning.value;reasoning.replaceChildren();const m=session.model_catalog?.models.find(x=>x.id===model.value);for(const level of m?.reasoning??['medium']){const o=el('option',settingLabels[level]??level);o.value=level;reasoning.append(o);}reasoning.value=[...reasoning.options].some(o=>o.value===old)?old:[...reasoning.options].some(o=>o.value==='medium')?'medium':reasoning.options[0]?.value;save();};
  const resourceInfo=el('p',undefined,'muted');resourceInfo.id='compile-resource-info';
@@ -29,7 +29,7 @@ function configureModels(){
 function updateViewedSettings(){
  const box=$('compile-settings');if(!box)return;
  box.querySelector('legend').textContent=current?(busy?'本次运行设置（已锁定）':'下一次编译设置'):'本次编译设置';
- $('compile-viewed-settings').textContent=current?'当前查看记录实际使用：'+(current.parse_method==='MD'?'MD · r02（历史只读）':current.parse_method==='SKILL'?'Skill':'历史记录，模式以原始记录为准')+'；请求模型 '+(current.requested_model??'未记录')+'；推理 '+(current.requested_reasoning??'未记录')+(busy?'。':'。下方选择只影响下一次编译，不改变此记录。'):'新编译固定使用Skill；以前的MD对比记录保留只读，不再启动MD调用。';
+ $('compile-viewed-settings').textContent=current?'当前查看记录实际使用：'+(current.parse_method==='MD'?'MD · r02（历史只读）':current.parse_method==='SKILL1'?'skill1 · semantics-first-r02':current.parse_method==='SKILL'?'Skill':'历史记录，模式以原始记录为准')+'；请求模型 '+(current.requested_model??'未记录')+'；推理 '+(current.requested_reasoning??'未记录')+(busy?'。':'。下方选择只影响下一次编译，不改变此记录。'):'选择Skill原版或skill1新规程进行对比；两者共用同版合同、Schema及计算核心。MD历史记录保持只读。';
  updateResourceInfo();
 }
 function updateResourceInfo(){
