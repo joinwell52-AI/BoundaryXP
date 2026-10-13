@@ -62,6 +62,8 @@ node scripts/ir-kernel.mjs --ir D:/boundx/.boundx/ir-kernel-implementation-v1/ev
 
 被测模型调用0；58618停启／升级0；新监听端口0；merge、release、tag、对外发布0。58618仍为 `0.1.0-candidate.031-r1.2-ui.82`，只读核对时监听PID为3552，安装manifest未变化。业务裁决与执行授权均为null。
 
+最后收尾再次只读核对，58618没有LISTEN记录，Get-NetTCPConnection返回CmdletizationQuery_NotFound；安装指针仍为上述ui82。本任务未执行任何服务停启，未据此恢复服务。前述PID3552是较早核对的快照，不是当前运行声明；最终监听状态见 `evidence/FINAL-RUNTIME-CHECK.json`。
+
 源码差异检查通过；用户原始PLAN中的Markdown换行空格、Z3原始SMT导出的注释尾空格按冻结材料保留，未为了消除样式提示改写原字节。提交在本地隔离分支保存；此次未推送远端。
 
 主工作区新增的未跟踪测试文件完整保留且不并入候选；初始状态条目、原Skill和冻结历史核对结果见 [BASELINE.md](BASELINE.md)。主目录未整体暂存。本轮终态：**隔离内核候选交付，等待ADMIN审阅；生产和新模型语义验收未完成。**
