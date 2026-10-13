@@ -11,13 +11,14 @@ import {implementationInventory,runtimeInventory} from './evidence.mjs';
 import {technicalRevisionFeedback,auditBindingRevisionFeedback} from './revision.mjs';
 import {modelSignal} from './observability.mjs';
 import {parseDirectIR} from './direct-ir-engine.mjs';
+import {finishDirectIR} from './direct-ir-result.mjs';
 import {acceptCandidateIR} from './direct-ir-accept.mjs';
 import {calculateDirectIR} from './direct-ir-calculate.mjs';
 import {projectDirectIR} from './direct-ir-view.mjs';
 import {directIRBundle} from './direct-ir-bundle.mjs';
 import {renderDirectCalculations} from './direct-ir-render-results.mjs';
 export const writeJSON=(file,data)=>fs.writeFileSync(file,JSON.stringify(data,null,2)+'\n');
-export const compilerRevision='direct-ir-r05.2-test';
+export const compilerRevision='direct-ir-r05.3-test';
 export function replay7Plus1(bytes,{output,replayFrom,resourceGuard=()=>{},productSnapshot=null,allowPriorModelResources=false}){
  resourceGuard();
  const source=prepareSource(bytes),tracePath=path.join(replayFrom,fs.existsSync(path.join(replayFrom,'trace.json'))?'trace.json':'TRACE.json');
@@ -30,10 +31,12 @@ export function replay7Plus1(bytes,{output,replayFrom,resourceGuard=()=>{},produ
   const modelResourceChanges=[];
   for(const resource of resources){const original=frozen.get(prefix+resource.path)??frozen.get(resource.path);if(!original)throw Error('REPLAY_RESOURCE_EVIDENCE_MISSING:'+resource.path);if(original!==resource.sha256){if(!allowPriorModelResources||!(resource.path.startsWith('skills/')||resource.path.startsWith('skill-profiles/')||resource.path.endsWith('/CONTRACT.md')))throw Error('REPLAY_SKILL_BUNDLE_CHANGED:'+resource.path);modelResourceChanges.push({path:resource.path,original_sha256:original,current_sha256:resource.sha256});}}
   for(const name of ['schema.mjs','candidate-ir.schema.json','candidate-ir-audit.schema.json']){const file='contracts/candidate-ir-v1/'+name;if((frozen.get(prefix+file)??frozen.get(file))!==sha256(fs.readFileSync(new URL(file,import.meta.url))))throw Error('REPLAY_SCHEMA_CHANGED:'+file);}
-  const technical=acceptCandidateIR(prior.ir,prior.audit,source),projected=projectDirectIR(prior.ir,technical),calculation=calculateDirectIR(prior.ir,technical);
+  const completed=finishDirectIR(prior.ir,acceptCandidateIR(prior.ir,prior.audit,source),prior.revision_outcome);
+  const {technical,boundary_calculations:calculation,problem_report}=completed,projected=completed;
   fs.mkdirSync(output,{recursive:true});if(fs.existsSync(path.join(output,'source.txt')))throw Error('OUTPUT_ALREADY_EXISTS');
   fs.writeFileSync(path.join(output,'source.txt'),bytes,{flag:'wx'});
-  const replay={...prior,product_snapshot:productSnapshot,model_origin_product_snapshot:prior.product_snapshot??null,consumer_revision:compilerRevision,technical,canonical:projected.canonical,chinese:projected.chinese+'\n'+renderDirectCalculations(calculation),boundary_calculations:calculation,execution_mode:'FROZEN_RESPONSE_REPLAY',origin_trace:{sha256:sha256(fs.readFileSync(tracePath))},real_calls_in_this_replay:0,not_new_model_validation:true,model_resource_changes:modelResourceChanges,model_validation_scope:modelResourceChanges.length?'PRIOR_MODEL_RESOURCES_RESPONSES_CURRENT_CONSUMER_ONLY':'UNCHANGED_MODEL_RESOURCES_RESPONSES_CURRENT_CONSUMER_ONLY'};
+  const replay={...prior,product_snapshot:productSnapshot,model_origin_product_snapshot:prior.product_snapshot??null,consumer_revision:compilerRevision,technical,canonical:projected.canonical,chinese:projected.chinese,problem_report,boundary_calculations:calculation,execution_mode:'FROZEN_RESPONSE_REPLAY',origin_trace:{sha256:sha256(fs.readFileSync(tracePath))},real_calls_in_this_replay:0,not_new_model_validation:true,model_resource_changes:modelResourceChanges,model_validation_scope:modelResourceChanges.length?'PRIOR_MODEL_RESOURCES_RESPONSES_CURRENT_CONSUMER_ONLY':'UNCHANGED_MODEL_RESOURCES_RESPONSES_CURRENT_CONSUMER_ONLY'};
+  writeJSON(path.join(output,'problem-report.json'),problem_report);
   for(const [file,data]of Object.entries({'trace.json':replay,'candidate-ir.json':prior.ir,'audit.json':prior.audit,'technical-validation.json':technical,'7plus1.json':projected.canonical,'boundary-calculations.json':calculation,'run-summary.json':{execution_mode:replay.execution_mode,real_calls:0,consumer_revision:compilerRevision,source_sha256:source.sha256}}))writeJSON(path.join(output,file),data);
   fs.writeFileSync(path.join(output,'7plus1.zh.md'),replay.chinese);resourceGuard();return replay;
  }

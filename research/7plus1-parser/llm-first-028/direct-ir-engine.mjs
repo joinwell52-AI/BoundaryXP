@@ -2,6 +2,7 @@ import fs from 'node:fs';import path from 'node:path';
 import {prepareSource,sha256} from './source.mjs';import {callCodex,probeCodex} from './provider.mjs';import {modelSignal} from './observability.mjs';
 import {directIRBundle} from './direct-ir-bundle.mjs';import {acceptCandidateIR} from './direct-ir-accept.mjs';import {projectDirectIR} from './direct-ir-view.mjs';import {calculateDirectIR} from './direct-ir-calculate.mjs';
 import {revisionBundle,applyIRPatch} from './direct-ir-revision.mjs';
+import {finishDirectIR} from './direct-ir-result.mjs';
 import {renderDirectCalculations} from './direct-ir-render-results.mjs';
 import {affectedAuditTargets,targetedAuditBundle,mergeIndependentAudit} from './direct-ir-audit-merge.mjs';
 const write=(dir,name,value)=>fs.writeFileSync(path.join(dir,name),JSON.stringify(value,null,2)+'\n');
@@ -12,7 +13,7 @@ export async function parseDirectIR(bytes,{output,probe,model='gpt-6.1-sol',reas
  onProgress({stage:'PREPARING',revision:0});probe??=probeCodex();write(output,'environment.json',probe);
  const parse=directIRBundle('parse',{parseMethod}),audit=directIRBundle('audit',{parseMethod}),fingerprint=sha256(parse.sha256+audit.sha256),requestBudget={remaining:maxModelRequests};parseMethod=parse.parse_method;
  write(output,'selected-resources.json',{parse_method:parseMethod,resource_profile:parse.resource_profile,request_profile:'DIRECT_CANDIDATE_IR_R01',resources:{parse:parse.resources.map(({text,...r})=>r),audit:audit.resources.map(({text,...r})=>r)},sha256:fingerprint});
- let dir=path.join(output,'revision-0');fs.mkdirSync(dir);let revision=0;
+ let dir=path.join(output,'revision-0');fs.mkdirSync(dir);let revision=0,revisionOutcome=null;
  const telemetry=phase=>({onEvent:event=>{const s=modelSignal(event);if(s)onProgress({stage:phase==='parse'?'PARSING':'AUDITING',phase,revision,...s});},onActivity:p=>onProgress({stage:phase==='parse'?'PARSING':'AUDITING',phase,revision,...p})});
  onProgress({stage:'PARSING',revision:0});let parsed=await call({bundle:parse,source,directory:path.join(dir,'parse-call'),probe,model,reasoning,signal,timeoutMs,requestBudget,...telemetry('parse')});
  write(dir,'proposal.json',parsed.value);write(dir,'candidate-ir.json',parsed.value);onProgress({stage:'PARSING',revision:0,kind:'PARSE_READY',signal:'PARSE_READY'});
@@ -29,19 +30,35 @@ export async function parseDirectIR(bytes,{output,probe,model='gpt-6.1-sol',reas
   const patched=await call({bundle:revisionBundle(parse),source,candidate:base,revisionIssues:problems,directory:path.join(dir,'patch-call'),probe,model,reasoning,signal,timeoutMs,requestBudget,...telemetry('parse')});
   const directlyFlagged=new Set([...technical.errors.map(e=>e.id),...reviewed.value.issues.flatMap(i=>i.targets.map(t=>t.id)),...reviewed.value.reviews.filter(r=>r.verdict!=='SUPPORT').map(r=>r.target.id),...technical.rows.filter(r=>r.missing_review_fields?.length).map(r=>r.id)]);
   const replacements=technical.rows.filter(r=>r.status!=='ACCEPTED'&&(technical.technical_ok||directlyFlagged.has(r.id))).map(r=>r.id),removals=problems.removable_node_ids;
-  write(dir,'patch.json',patched.value);const applied=applyIRPatch(base,patched.value,{allowed_replacements:replacements,allowed_removals:removals,allowed_coverage_targets:reviewed.value.issues.filter(i=>i.field_path==='coverage').flatMap(i=>i.targets.map(t=>t.id))});write(dir,'patch-changes.json',applied.changed);
-  parsed={...parsed,value:applied.ir,attempts:[...parsed.attempts,...patched.attempts]};write(dir,'proposal.json',parsed.value);write(dir,'candidate-ir.json',parsed.value);onProgress({stage:'PARSING',revision:1,kind:'PARSE_READY',signal:'PARSE_READY'});
+  write(dir,'patch.json',patched.value);let applied;
+  parsed={...parsed,attempts:[...parsed.attempts,...patched.attempts]};
+  try{applied=applyIRPatch(base,patched.value,{allowed_replacements:replacements,allowed_removals:removals,allowed_coverage_targets:reviewed.value.issues.filter(i=>i.field_path==='coverage').flatMap(i=>i.targets.map(t=>t.id))});}
+  catch(error){
+   if(!/^PATCH_[A-Z_]+(?::|$)/.test(error.message))throw error;
+   revisionOutcome={status:'NOT_APPLIED',reason:error.message,retained_revision:0,retained_ir_sha256:sha256(JSON.stringify(base)),patch_sha256:sha256(JSON.stringify(patched.value)),requires_review:true};
+   technical={...technical,diagnostics:[...technical.diagnostics,{code:'REVISION_NOT_APPLIED',reason:'局部修订未应用，保留首轮IR与审阅；'+error.message}]};
+   write(dir,'revision-outcome.json',revisionOutcome);write(dir,'candidate-ir.json',base);write(dir,'audit.json',reviewed.value);write(dir,'technical-validation.json',technical);
+   onProgress({stage:'VALIDATING',revision:1,signal:'REVISION_NOT_APPLIED'});
+  }
+  if(applied){
+  write(dir,'patch-changes.json',applied.changed);
+  parsed={...parsed,value:applied.ir};write(dir,'proposal.json',parsed.value);write(dir,'candidate-ir.json',parsed.value);onProgress({stage:'PARSING',revision:1,kind:'PARSE_READY',signal:'PARSE_READY'});
   const targets=affectedAuditTargets(parsed.value,applied.changed,reviewed.value).filter(id=>['entities','variables','events','states','expressions','requirements'].some(k=>parsed.value[k].some(n=>n.id===id))),targeted=!reviewed.value.omissions?.length&&!removals.length;write(dir,'audit-targets.json',{targets,mode:targeted?'CHANGED_AND_DEPENDENT':'FULL_OMISSION_REVIEW'});
   const next=await call({bundle:targeted?targetedAuditBundle(audit,targets):audit,source,candidate:parsed.value,directory:path.join(dir,'audit-call'),probe,model,reasoning,signal,timeoutMs,requestBudget,...telemetry('audit')});
   if(!next.receipt.thread_id||[parsed.receipt.thread_id,patched.receipt.thread_id,reviewed.receipt.thread_id].includes(next.receipt.thread_id))throw Error('AUDIT_SESSION_NOT_INDEPENDENT');
   write(dir,'independent-audit.json',next.value);reviewed={...next,value:targeted?mergeIndependentAudit(reviewed.value,next.value,targets):next.value,attempts:[...reviewed.attempts,...next.attempts]};write(dir,'audit.json',reviewed.value);technical=acceptCandidateIR(parsed.value,reviewed.value,source);write(dir,'technical-validation.json',technical);onProgress({stage:'VALIDATING',revision:1,kind:'TECHNICAL_READY',signal:'TECHNICAL_READY'});
+  revisionOutcome={status:'APPLIED_AND_REVIEWED',retained_revision:1};write(dir,'revision-outcome.json',revisionOutcome);
+  }
  }
- if(!technical.technical_ok)throw Error('DIRECT_IR_TECHNICAL_REJECTED');
  resourceGuard();if(sha256(directIRBundle('parse',{parseMethod}).sha256+directIRBundle('audit',{parseMethod}).sha256)!==fingerprint)throw Error('METHOD_CHANGED_DURING_RUN');
- onProgress({stage:'COMPILING',revision});const {canonical,chinese}=projectDirectIR(parsed.value,technical);write(dir,'7plus1.json',canonical);write(dir,'boundary-ir.json',parsed.value);onProgress({stage:'COMPILING',revision,kind:'COMPILE_READY',signal:'COMPILE_READY'});
- onProgress({stage:'CALCULATING',revision});const boundary_calculations=calculateDirectIR(parsed.value,technical);onProgress({stage:'CALCULATING',revision,kind:'CALCULATION_READY',signal:'CALCULATION_READY'});
+ onProgress({stage:'COMPILING',revision});
+ const completed=finishDirectIR(parsed.value,technical,revisionOutcome);
+ const {canonical,chinese,boundary_calculations,problem_report}=completed;technical=completed.technical;
+ write(dir,'7plus1.json',canonical);write(dir,'boundary-ir.json',parsed.value);onProgress({stage:'COMPILING',revision,kind:'COMPILE_READY',signal:'COMPILE_READY'});
+ onProgress({stage:'CALCULATING',revision});onProgress({stage:'CALCULATING',revision,kind:'CALCULATION_READY',signal:'CALCULATION_READY'});
  const model_resource_digests=[...new Map([...parse.resources,...audit.resources].map(r=>[r.path,{path:r.path,sha256:r.sha256}])).values(),{path:'contracts/candidate-ir-v1/schema.mjs',sha256:sha256(fs.readFileSync(new URL('./contracts/candidate-ir-v1/schema.mjs',import.meta.url)))}];
- const final={format:'boundx-direct-ir-trace/1',pipeline:'LLM_DIRECT_CANDIDATE_IR',product_snapshot:productSnapshot,model_resource_digests,source,proposal:parsed.value,ir:parsed.value,audit:reviewed.value,technical,canonical,chinese:chinese+'\n'+renderDirectCalculations(boundary_calculations),boundary_calculations,model_calls:{parse:parsed.attempts,audit:reviewed.attempts},revision,parse_method:parseMethod,resource_profile:parse.resource_profile,request_profile:'DIRECT_CANDIDATE_IR_R01',ir_origin:revision?'LLM_BOUNDED_PATCH_PRESERVING_FIRST_RESPONSE':'LLM_RESPONSE_UNCHANGED',input_ir_sha256:sha256(JSON.stringify(parsed.value)),business_decision:null,execution_authorization:null};
+ const final={format:'boundx-direct-ir-trace/1',pipeline:'LLM_DIRECT_CANDIDATE_IR',product_snapshot:productSnapshot,model_resource_digests,source,proposal:parsed.value,ir:parsed.value,audit:reviewed.value,technical,canonical,chinese,boundary_calculations,problem_report,model_calls:{parse:parsed.attempts,audit:reviewed.attempts},revision,revision_outcome:revisionOutcome,parse_method:parseMethod,resource_profile:parse.resource_profile,request_profile:'DIRECT_CANDIDATE_IR_R01',ir_origin:revisionOutcome?.status==='APPLIED_AND_REVIEWED'?'LLM_BOUNDED_PATCH_PRESERVING_FIRST_RESPONSE':'LLM_RESPONSE_UNCHANGED',input_ir_sha256:sha256(JSON.stringify(parsed.value)),business_decision:null,execution_authorization:null};
+ write(output,'problem-report.json',problem_report);
  for(const [name,value]of Object.entries({'trace.json':final,'7plus1.json':canonical,'boundary-calculations.json':boundary_calculations,'candidate-ir.json':parsed.value}))write(output,name,value);
  fs.writeFileSync(path.join(output,'7plus1.zh.md'),final.chinese);
  write(output,'run-summary.json',{parse_method:parseMethod,resource_profile:parse.resource_profile,real_calls:parsed.attempts.length+reviewed.attempts.length,requested_model:model,actual_model:null,requested_reasoning:reasoning,revision_count:revision,pipeline:final.pipeline,source_sha256:source.sha256,slot_status:Object.fromEntries(Object.entries(canonical.slots).map(([k,v])=>[k,v.status])),semantic_acceptance_is_not_proven:true});return final;

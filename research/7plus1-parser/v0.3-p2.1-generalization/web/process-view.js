@@ -190,17 +190,18 @@ function renderDecision(target,run,onEvidence){
  section.append(node('p','“已确定”表示本次编译记录满足固定接纳条件；不等于人工证明语义正确。未决、拒绝、遗漏和未归槽分别保留。','process-notice'));target.append(section);
 }
 export function liveView(run,now=Date.now()){
+ signals.REVISION_NOT_APPLIED='局部修订未应用，保留原IR并继续生成结果和问题建议';
  const entries=array(run.stages),revision=run.revision??0,xs=entries.filter(x=>(x.revision??0)===revision),first=xs.find(x=>x.stage===run.stage),last=xs.at(-1),busy=['QUEUED','RUNNING','CANCELLING'].includes(run.status),failure=['FAILED','CANCELLED','INTERRUPTED'].includes(run.status);
  const direct=run.request_profile==='DIRECT_CANDIDATE_IR_R01';
  const {stages}=processView(run),active={PARSING:'parse',AUDITING:'audit',VALIDATING:'technical',COMPILING:direct?'canonical':'ir',CALCULATING:'calculus'}[failure?xs.findLast(x=>['PARSING','AUDITING','VALIDATING','COMPILING','CALCULATING'].includes(x.stage))?.stage:run.stage];
  const technical=(run.result??run.progress)?.technical;
- const status=s=>s.id==='technical'&&technical?.technical_ok===false?'REJECTED':s.ready?'DONE':failure&&technical?.technical_ok===false&&['ir','canonical','calculus'].includes(s.id)?'BLOCKED':active===s.id?(failure?'STOPPED':busy?'RUNNING':'WAITING'):'WAITING';
+ const status=s=>s.id==='technical'&&technical?.technical_ok===false?'REJECTED':technical?.technical_ok===false&&['ir','canonical','calculus'].includes(s.id)?'BLOCKED':s.ready?'DONE':active===s.id?(failure?'STOPPED':busy?'RUNNING':'WAITING'):'WAITING';
  return {busy,revision,phase:run.stage?phaseLabel(run,run.stage):'等待输入',elapsed:Math.max(0,Math.round((now-Date.parse(first?.at??run.created_at))/1000))||0,lastSignal:last?.at??null,
   steps:[{id:'source',title:'原文',state:run.source_sha256?'DONE':'WAITING'},...stages.map(s=>({id:s.id,title:s.title.slice(3).split('：')[0],state:status(s)}))],
   timeline:entries.map(x=>({at:x.at,revision:x.revision??0,label:direct&&x.stage==='COMPILING'?'程序生成同源7+1视图（不另造IR）':direct&&x.signal==='PARSE_READY'?'LLM候选IR已保存，可立即查看':signals[x.signal??x.kind]??phaseLabel(run,x.stage),thread:x.thread_id??null,retries:x.retry_count??null,phase:x.phase??null})),failure:run.error?.code??null};
 }
 function renderLive(target,run){
- target.replaceChildren();const view=liveView(run),labels={DONE:'已完成',RUNNING:'进行中',WAITING:'等待上一步',STOPPED:'已停止',REJECTED:'技术校验未通过',BLOCKED:'被技术校验阻断'};
+ target.replaceChildren();const view=liveView(run),labels={DONE:'已完成',RUNNING:'进行中',WAITING:'等待上一步',STOPPED:'已停止',REJECTED:'已检查，有待修正问题',BLOCKED:'已列出问题，数学结果待修正后计算'};
  target.append(node('h3',view.phase),node('p',view.busy?'当前阶段已用 '+view.elapsed+' 秒。模型尚未返回完整结构时，不会虚构语义内容。':'本次运行阶段记录；完成不等于语义已人工验收。','muted'));
  const timing=timingView(run);
  if(timing){
@@ -212,6 +213,10 @@ function renderLive(target,run){
  const steps=node('ol',null,'live-steps');for(const s of view.steps){const li=node('li',null,'live-step '+s.state.toLowerCase());li.append(node('strong',s.title),node('span',labels[s.state]));steps.append(li);}target.append(steps);
  if(view.lastSignal)target.append(node('p','最近收到阶段信号：'+new Date(view.lastSignal).toLocaleTimeString('zh-CN')+'；第'+(view.revision+1)+'轮。','muted'));
  if(view.failure)target.append(node('p','停止原因：'+view.failure+'。未完成步骤没有最终结果。','process-notice'));
+ const revisionOutcome=run.result?.revision_outcome;
+ const findings=array(run.result?.problem_report?.findings);
+ if(findings.length){const section=node('details',null,'process-notice');section.open=true;section.append(node('summary','发现的问题与修订建议（'+findings.length+'项）'));for(const f of findings){const item=node('div');item.append(node('p',f.problem+(f.node_id?' · '+f.node_id:'')),node('p','影响：'+f.impact),node('p','建议：'+f.suggestion));section.append(item);}target.append(section);}
+ if(revisionOutcome?.status==='NOT_APPLIED')target.append(node('p','局部修订未应用：'+revisionOutcome.reason+'。已保留首轮IR与审阅，展示可计算部分及缺口；没有将未接受的修订当作正确结果。','process-notice'));
  const technical=(run.result??run.progress)?.technical;
  if(technical?.technical_ok===false)for(const e of array(technical.errors))target.append(node('p','校验问题：'+e.code+' · '+(e.id??e.path??'结构')+(e.code==='DATA_OBJECT_TYPE'?'：数据对象必须是实体或对象类型变量。':''),'process-notice'));
  const log=node('details',null,'live-log');log.open=view.busy;log.append(node('summary','实时执行记录（'+view.timeline.length+'条）'));

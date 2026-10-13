@@ -43,7 +43,7 @@ export function publicProgress(p){
  if(typeof p.kind==='string'&&/^[A-Z_]{1,50}$/.test(p.kind))out.kind=p.kind;
  if(['parse','audit'].includes(p.phase))out.phase=p.phase;
  const s=modelSignal(p.event);if(s)Object.assign(out,s);
- if(p.signal&&['REQUEST_STARTED','SESSION_STARTED','TURN_STARTED','TURN_COMPLETED','MODEL_ERROR_REPORTED','RESPONSE_RECEIVED','TRANSPORT_RETRY','RESPONSE_VALIDATED','PARSE_READY','AUDIT_READY','TECHNICAL_READY','COMPILE_READY','REVISION_REQUIRED','PUBLIC_REASONING_SUMMARY','SESSION_DIAGNOSTIC','TOOL_ACTIVITY'].includes(p.signal))out.signal=p.signal;
+ if(p.signal&&['REQUEST_STARTED','SESSION_STARTED','TURN_STARTED','TURN_COMPLETED','MODEL_ERROR_REPORTED','RESPONSE_RECEIVED','TRANSPORT_RETRY','RESPONSE_VALIDATED','PARSE_READY','AUDIT_READY','TECHNICAL_READY','COMPILE_READY','REVISION_REQUIRED','REVISION_NOT_APPLIED','PUBLIC_REASONING_SUMMARY','SESSION_DIAGNOSTIC','TOOL_ACTIVITY'].includes(p.signal))out.signal=p.signal;
  if(typeof p.item_id==='string'&&/^[a-zA-Z0-9_.:-]{1,100}$/.test(p.item_id))out.item_id=p.item_id;
  if(['reasoning','error','command_execution','mcp_tool_call','web_search','file_change','plan','todo_list'].includes(p.item_kind))out.item_kind=p.item_kind;
  if(['started','updated','completed'].includes(p.item_status))out.item_status=p.item_status;

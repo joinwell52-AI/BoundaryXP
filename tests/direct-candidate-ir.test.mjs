@@ -2,7 +2,7 @@ import test from 'node:test';import assert from 'node:assert/strict';import fs f
 import {validateCandidateIR} from '../research/7plus1-parser/llm-first-028/contracts/candidate-ir-v1/validate.mjs';
 import {acceptCandidateIR} from '../research/7plus1-parser/llm-first-028/direct-ir-accept.mjs';
 import {calculateDirectIR} from '../research/7plus1-parser/llm-first-028/direct-ir-calculate.mjs';
-import {parse7Plus1} from '../research/7plus1-parser/llm-first-028/engine.mjs';
+import {parse7Plus1,replay7Plus1} from '../research/7plus1-parser/llm-first-028/engine.mjs';
 import {directIRProcess} from '../research/7plus1-parser/v0.3-p2.1-generalization/web/direct-ir-process.js';
 import {candidateSchema} from '../research/7plus1-parser/llm-first-028/contracts/candidate-ir-v1/schema.mjs';
 import {directIROutputSchema} from '../research/7plus1-parser/llm-first-028/direct-ir-output-schema.mjs';
@@ -26,6 +26,30 @@ test('required delivery is a real boolean/order problem with a checked witness',
 test('contradictory declared delivery constraints are unsatisfiable',()=>{const ir=fixture();ir.requirements.push({...ir.requirements[0],id:'forbid',modality:'FORBIDDEN'});const c=calculateDirectIR(ir,acceptCandidateIR(ir,audit(ir),{text}));assert.equal(c.joint.base.result,'unsatisfiable');});
 test('two independent calls preserve exact IR and expose no program IR creation stage',async()=>{const ir=fixture(),a=audit(ir),dir=fs.mkdtempSync(path.join(os.tmpdir(),'boundx-direct-test-')),calls=[],progress=[];const result=await parse7Plus1(Buffer.from(text),{output:dir,probe:{test:true},maxModelRequests:2,onProgress:x=>progress.push(x),call:async x=>{calls.push(x);return {value:x.bundle.phase==='parse'?ir:a,receipt:{thread_id:x.bundle.phase},attempts:[{thread_id:x.bundle.phase,elapsed_ms:1}]};}});assert.equal(calls.length,2);assert.deepEqual(calls[1].candidate,ir);assert.deepEqual(result.ir,ir);assert.deepEqual(result.proposal,result.ir);assert.equal(result.ir_origin,'LLM_RESPONSE_UNCHANGED');assert.ok(result.canonical.slots.O.entries[0].text.includes('报告'));const stages=directIRProcess(result).stages;assert.equal(stages.length,5);assert.ok(!stages.some(x=>x.title.includes('生成Boundary IR')));assert.equal(result.business_decision,null);assert.ok(progress.some(x=>x.signal==='PARSE_READY'));});
 test('same session audit is refused',async()=>{await assert.rejects(parse7Plus1(Buffer.from(text),{output:fs.mkdtempSync(path.join(os.tmpdir(),'boundx-direct-bad-')),probe:{},call:async x=>({value:x.bundle.phase==='parse'?fixture():audit(fixture()),receipt:{thread_id:'same'},attempts:[]})}),/AUDIT_SESSION_NOT_INDEPENDENT/);});
+test('unrelated patch yields a report and unchanged original IR, with no extra audit or erased replay gap',async()=>{
+ const ir=fixture(),first=audit(ir);first.omissions.push({source_refs:['s'],affected_views:['O'],reason:'待补充的关系'});
+ const output=fs.mkdtempSync(path.join(os.tmpdir(),'boundx-retain-ir-'));let calls=0;
+ const result=await parse7Plus1(Buffer.from(text),{output,probe:{},maxModelRequests:4,call:async x=>{
+  const step=++calls;x.requestBudget.remaining--;let value=step===1?ir:first;
+  if(step===3){value={format:'boundx-candidate-ir-patch/1',contract_version:ir.contract_version,base_ir_sha256:sha256(JSON.stringify(ir)),reason:'不相关替换'};for(const k of ['source_table','entities','variables','events','states','expressions','requirements','issues','coverage_updates','removals'])value[k]=[];value.entities=[{...ir.entities[0],label:'不可覆盖的主体'}];}
+  if(step>3)throw Error('UNNECESSARY_FOURTH_CALL');
+  return {value,receipt:{thread_id:'retained-'+step},attempts:[{thread_id:'retained-'+step}]};
+ }});
+ assert.equal(calls,3);assert.deepEqual(result.ir,ir);assert.deepEqual(result.audit,first);
+ assert.equal(result.revision_outcome.status,'NOT_APPLIED');assert.match(result.revision_outcome.reason,/PATCH_UNRELATED_REPLACEMENT/);
+ assert.equal(result.model_calls.parse.length+result.model_calls.audit.length,3);assert.equal(result.boundary_calculations.status,'PARTIAL');
+ assert.ok(result.problem_report.findings.some(x=>x.code==='REVISION_NOT_APPLIED'&&x.suggestion));assert.match(result.chinese,/修订建议/);
+ const replay=replay7Plus1(Buffer.from(text),{replayFrom:output,output:fs.mkdtempSync(path.join(os.tmpdir(),'boundx-retain-replay-'))});
+ assert.equal(replay.real_calls_in_this_replay,0);assert.deepEqual(replay.ir,ir);assert.equal(replay.boundary_calculations.status,'PARTIAL');assert.ok(replay.problem_report.findings.some(x=>x.code==='REVISION_NOT_APPLIED'));
+});
+test('invalid typed reference completes with actionable findings but no fabricated mathematical witness',async()=>{
+ const ir=fixture(),a=audit(ir);ir.events[0].roles[0].value.id='missing';let calls=0;
+ const result=await parse7Plus1(Buffer.from(text),{output:fs.mkdtempSync(path.join(os.tmpdir(),'boundx-invalid-report-')),probe:{},maxModelRequests:2,call:async x=>({value:++calls===1?ir:a,receipt:{thread_id:'invalid-'+calls},attempts:[{}]})});
+ assert.equal(calls,2);assert.equal(result.technical.technical_ok,false);assert.deepEqual(result.ir,ir);
+ assert.equal(result.boundary_calculations.calculation_performed,false);assert.equal(result.boundary_calculations.joint.base.witness,null);
+ assert.ok(result.problem_report.findings.length);assert.ok(result.problem_report.findings.every(x=>x.problem&&x.impact&&x.suggestion));
+ assert.ok(Object.values(result.canonical.slots).every(x=>x.status==='UNRESOLVED'));assert.equal(result.execution_authorization,null);
+});
 test('bad provenance cannot display an accepted node or resolved slot',()=>{const ir=fixture();const t=acceptCandidateIR(ir,audit(ir),{text:'别的任务'});assert.equal(t.technical_ok,false);assert.ok(t.rows.every(r=>r.status!=='ACCEPTED'));});
 test('output transport adjustment preserves authoritative uniqueness checks',()=>{const before=JSON.stringify(candidateSchema),wire=directIROutputSchema(candidateSchema);assert.ok(wire.adjustments.length>0);assert.equal(JSON.stringify(candidateSchema),before);assert.equal(JSON.stringify(wire.schema).includes('uniqueItems'),false);const ir=fixture();ir.requirements[0].views.push('A');assert.equal(validateCandidateIR(ir,text).ok,false);});
 test('all output constants use explicit types and equivalent singleton enums',()=>{const before=JSON.stringify(candidateSchema),wire=directIROutputSchema(candidateSchema);assert.equal(wire.schema.properties.format.type,'string');assert.deepEqual(wire.schema.properties.format.enum,['boundx-candidate-ir/1']);assert.deepEqual(wire.schema.properties.contract_version.enum,[candidateSchema.properties.contract_version.const]);assert.equal(JSON.stringify(wire.schema).includes('"const":'),false);assert.equal(JSON.stringify(candidateSchema),before);assert.throws(()=>directIROutputSchema({type:'number',const:'wrong'}),/OUTPUT_CONST_TYPE_MISMATCH/);});
