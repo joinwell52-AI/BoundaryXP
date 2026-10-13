@@ -1,8 +1,8 @@
 // Consume typed task/set IR and supplied external-use observations only.
 import {typedInputDomains} from './direct-ir-sets.mjs';
+import {taskScope} from './direct-ir-task-scope.mjs';
 export function taskMembership(ir,owner,task){
- const tasks=new Map(ir.events.filter(e=>e.kind==='TASK').map(e=>[e.id,e])),seen=new Set();
- while(owner){if(owner===task)return true;if(seen.has(owner))return null;seen.add(owner);const n=tasks.get(owner);if(!n)return null;if(n.owner_id===owner)return false;owner=n.owner_id;}return null;
+ return taskScope(ir).member(owner,task);
 }
 export function evaluateDirectInputPolicies(ir,acceptance,records){
  const results=[];

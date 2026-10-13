@@ -5,6 +5,8 @@ import {sha256} from './source.mjs';
 import {evaluateDirectEventPolicies} from './direct-ir-event-policy.mjs';
 import {directMathSummary} from './direct-ir-math-summary.mjs';
 import {combineFiniteSets} from './direct-ir-sets.mjs';
+import {taskScope} from './direct-ir-task-scope.mjs';
+import {resolveEventTerm} from './direct-ir-event-identity.mjs';
 import {evaluateDirectInputPolicies,taskMembership} from './direct-ir-input-policy.mjs';
 import {evaluateDirectObservations} from './direct-ir-observations.mjs';
 import {queryDirectIRCounterexamples} from './direct-ir-queries.mjs';
@@ -14,6 +16,7 @@ const all=xs=>xs.includes(false)?false:xs.filter(x=>x!==true).length?{all:xs.fil
 const any=xs=>xs.includes(true)?true:xs.filter(x=>x!==false).length?{any:xs.filter(x=>x!==false)}:false;
 export function calculateDirectIR(ir,acceptance,options={}){
  const observationsSupplied=Object.hasOwn(options,'observations'),observations=options.observations;
+ const scope=taskScope(ir);
  const index=new Map(['entities','variables','events','states','expressions','requirements'].flatMap(k=>ir[k].map(x=>[x.id,x])));
  const rows=new Map(acceptance.rows.map(x=>[x.id,x])),constraints=[],orders=[],intervalInputs=[],domains={},atoms=new Map(),gaps=[],stateChecks=[],statesSeen=new Map(),instances=new Map(),quantifiedRules=[],priorityRules=[],roleChoices=new Map(),dataUses=[],inputDomainsActive=new Set();
  const add=(id,formula,rule,source_refs=[])=>constraints.push({id,formula,rule,source_refs});
@@ -21,14 +24,8 @@ export function calculateDirectIR(ir,acceptance,options={}){
  const node=r=>{const n=index.get(r.id);if(!n)throw Error('IR_REFERENCE_MISSING:'+r.id);return n;};
  const expression=r=>{if(r.kind!=='EXPRESSION')throw Error('IR_EXPRESSION_EXPECTED:'+r.id);return node(r);};
  const numeric=(r,ctx)=>terms(r,ctx).map(x=>{if(typeof x.value!=='number')throw Error('NUMERIC_VALUE_EXPECTED');return x;});
- const event=(r,ctx)=>{
-  if(r.kind==='VARIABLE'&&Object.hasOwn(ctx,r.id))return ctx[r.id]?.event?ctx[r.id]:event({kind:'EVENT',id:ctx[r.id]},ctx);
-  if(r.kind==='EVENT'){const n=node(r);if(n.kind==='TEMPLATE')throw Error('TEMPLATE_INSTANCE_REQUIRED:'+n.id);instances.set(n.id,{key:n.id,event:n});return {key:n.id,event:n};}
-  const x=expression(r);
-  if(x.operator==='EVENT_INSTANCE'){const t=node(x.arguments[0]),values=numeric(x.arguments[1],ctx);if(t.kind!=='TEMPLATE'||values.length!==1||values[0].guard!==true||!Number.isSafeInteger(values[0].value)||values[0].value<0)throw Error('INSTANCE_INDEX_NOT_FIXED_NONNEGATIVE_INTEGER');const key=t.id+'@'+values[0].value;const e={key,event:t,index:values[0].value};instances.set(key,e);return e;}
-  if(x.operator==='PREVIOUS_INSTANCE'){const e=event(x.arguments[0],ctx);if(e.index===undefined||e.index===0)throw Error('PREVIOUS_INSTANCE_OUTSIDE_SEQUENCE');const key=e.event.id+'@'+(e.index-1),out={key,event:e.event,index:e.index-1};instances.set(key,out);return out;}
-  throw Error('NOT_EVENT_EXPRESSION:'+x.id);
- };
+ const event=(r,ctx)=>resolveEventTerm(r,{node,variable:r=>Object.hasOwn(ctx,r.id)?ctx[r.id]:null,
+  number:r=>{const values=numeric(r,ctx);return values.length===1&&values[0].guard===true?values[0].value:null;},register:e=>instances.set(e.key,e)});
  const patterns=new Map();
  const occurred=(r,ctx)=>{if(r.kind==='EVENT'&&node(r).kind==='TEMPLATE'){patterns.set(r.id,node(r));return atom(['PATTERN',r.id],{kind:'PATTERN_OCCURRED',event_id:r.id});}const e=event(r,ctx);return atom(['EVENT',e.key],{kind:'EVENT_OCCURRED',event_id:e.event.id,instance:e.index??null});};
  const finiteDomain=(r,ctx)=>{
@@ -53,13 +50,15 @@ export function calculateDirectIR(ir,acceptance,options={}){
  };
  const terms=(r,ctx={})=>{
   if(r.kind==='ENTITY')return [{value:r.id,guard:true}];
-  if(r.kind==='EVENT')return [{value:'EVENT:'+r.id,guard:true}];
+  if(r.kind==='EVENT')return [{value:'EVENT:'+event(r,ctx).key,guard:true}];
   if(r.kind==='VARIABLE'){
+   if(node(r).type==='EVENT'){if(!Object.hasOwn(ctx,r.id))throw Error('EVENT_VARIABLE_UNBOUND:'+r.id);return [{value:'EVENT:'+event(r,ctx).key,guard:true}];}
    if(Object.hasOwn(ctx,r.id))return [{value:ctx[r.id],guard:true}];if(domains[r.id])return domains[r.id];const v=node(r);if(expression(v.domain).operator==='REAL_INTERVAL')throw Error('CONTINUOUS_TERM_REQUIRES_DIRECT_BOUND');
    const possible=finiteDomain(v.domain,ctx);if(possible.some(x=>x.guard!==true))throw Error('DYNAMIC_VARIABLE_DOMAIN_NOT_IMPLEMENTED');if(v.type==='INTEGER'&&possible.some(x=>!Number.isSafeInteger(x.value)))throw Error('INTEGER_DOMAIN_TYPE');const values=unique(possible.map(x=>x.value));if(values.length>16)throw Error('FINITE_VARIABLE_CAPACITY');
    const choices=values.map(value=>({value,guard:atom(['VALUE',v.id,value],{kind:'VARIABLE_VALUE',variable_id:v.id,value})}));domains[r.id]=choices;add('domain:'+v.id,any(choices.map(x=>x.guard)),'FINITE_VARIABLE_HAS_ONE_VALUE',v.source_refs);for(let a=0;a<choices.length;a++)for(let b=a+1;b<choices.length;b++)add('exclusive:'+v.id+':'+a+':'+b,{not:all([choices[a].guard,choices[b].guard])},'FINITE_VARIABLE_SINGLE_BINDING',v.source_refs);return choices;
   }
   const x=expression(r);
+  if(['EVENT_INSTANCE','PREVIOUS_INSTANCE'].includes(x.operator))return [{value:'EVENT:'+event(r,ctx).key,guard:true}];
   if(x.operator==='NUMBER')return [{value:x.literal,guard:true}];
   if(x.operator==='BOOLEAN')return [{value:x.literal,guard:true}];
   if(x.operator==='CARDINALITY'){const d=finiteDomain(x.arguments[0],ctx);if(d.some(v=>v.guard!==true))throw Error('DYNAMIC_CARDINALITY_NOT_IMPLEMENTED');return [{value:unique(d.map(v=>v.value)).length,guard:true}];}
@@ -105,7 +104,7 @@ export function calculateDirectIR(ir,acceptance,options={}){
   if(x.operator==='BEFORE'){const v=atom(['ORDER',x.id,ctx],{kind:'ORDER'});orders.push({id:x.id+':'+sha256(JSON.stringify(ctx)).slice(0,8),from:time(args[0],ctx),to:time(args[1],ctx),guard:v});return v;}
   if(['FORALL','EXISTS'].includes(x.operator)){if(expression(args[0]).operator==='TASK_EVENTS'){
    if(x.operator!=='FORALL')throw Error('OPEN_EVENT_EXISTENTIAL_NOT_IMPLEMENTED');const scope=expression(args[0]).arguments[0].id;
-   const belongs=e=>{let id=e.owner_id;const seen=new Set();while(id&&!seen.has(id)){if(id===scope)return true;seen.add(id);const parent=index.get(id);if(parent?.kind!=='TASK')return false;id=parent.owner_id;}return false;};
+   const belongs=e=>{const member=taskMembership(ir,e.owner_id,scope);if(member===null)throw Error('TASK_EVENT_SCOPE_UNKNOWN:'+e.id);return member;};
    const candidates=ir.events.filter(e=>e.kind==='ACTION'&&e.use==='CURRENT_TASK'&&e.layer==='MAIN'&&belongs(e));
    if(ir.events.some(e=>e.kind==='TEMPLATE'&&e.use==='CURRENT_TASK'&&belongs(e)&&ir.requirements.some(r=>r.subject?.id===e.id&&r.modality==='REQUIRED')))throw Error('UNBOUNDED_REQUIRED_TEMPLATE_WITNESS_NOT_IMPLEMENTED');
    quantifiedRules.push({expression_id:x.id,domain:args[0],bound_variable:x.bound_variable,body:args[1],source_refs:x.source_refs,witness_scope:'ALL_ACTUAL_EVENTS_OF_CONSTRUCTED_TRACE',future_query_consumer:'evaluateDirectEventPolicies'});
@@ -153,14 +152,19 @@ export function calculateDirectIR(ir,acceptance,options={}){
   }catch(error){gaps.push({node_id:rule.expression_id,event_id:e.key,reason:error.message});}
  }
  for(const e of instances.values()){const v=atom(['EVENT',e.key],{kind:'EVENT_OCCURRED',event_id:e.event.id,instance:e.index??null});orders.push({id:'lifecycle:'+e.key,from:e.key+':start',to:e.key+':end',relation:'LTE',guard:v});}
- for(const e of instances.values()){if(!['ACTION','TEMPLATE'].includes(e.event.kind))continue;let owner=e.event.owner_id;const seen=new Set();while(!seen.has(owner)&&index.get(owner)?.kind==='TASK'){seen.add(owner);const scope=index.get(owner),guard=atom(['EVENT',e.key],{kind:'EVENT_OCCURRED',event_id:e.event.id,instance:e.index??null});orders.push({id:'scope-start:'+owner+':'+e.key,from:owner+':start',to:e.key+':start',relation:'LTE',guard},{id:'scope-end:'+owner+':'+e.key,from:e.key+':end',to:owner+':end',relation:'LTE',guard});if(scope.owner_id===owner)break;owner=scope.owner_id;}}
+ for(const e of instances.values()){if(!['ACTION','TEMPLATE'].includes(e.event.kind))continue;const chain=scope.ancestry(e.event.owner_id);
+  if(!chain.complete&&ir.events.some(n=>n.kind==='TASK'))gaps.push({node_id:e.event.id,reason:chain.reason});
+  for(const owner of chain.path){const guard=atom(['EVENT',e.key],{kind:'EVENT_OCCURRED',event_id:e.event.id,instance:e.index??null});orders.push({id:'scope-start:'+owner+':'+e.key,from:owner+':start',to:e.key+':start',relation:'LTE',guard},{id:'scope-end:'+owner+':'+e.key,from:e.key+':end',to:owner+':end',relation:'LTE',guard});}}
  for(const p of priorityRules)for(const e of instances.values()){if(e.event.kind!=='ACTION'||taskMembership(ir,e.event.owner_id,p.scope_id)!==true||['STOP','REPORT'].includes(e.event.operation)||e.key===p.event)continue;const side=atom(['PRIORITY_SIDE',p.id,e.key],{kind:'PRIORITY_ORDER_CHOICE'}),guard=all([p.guard,occurred({kind:'EVENT',id:e.event.id},{})]);orders.push({id:'priority-before:'+p.id+':'+e.key,from:e.key+':start',to:p.state_point,relation:'LTE',guard:all([guard,side])},{id:'priority-after:'+p.id+':'+e.key,from:p.event+':start',to:e.key+':start',relation:'LTE',guard:all([guard,{not:side}])});}
  // Exact structural pattern matching: operation, explicit roles, owner and actor.
  // It never infers an operation or entity from label/note/source text.
  for(const [id,p]of patterns)for(const e of instances.values()){
   if(e.event.kind==='TASK'||e.event.kind==='REFERENCE'||e.event.use==='MENTION_ONLY'||e.event.layer!=='MAIN')continue;
   if(p.operation_extent!=='EXACT'||e.event.operation_extent!=='EXACT'){gaps.push({node_id:id,reason:'OPEN_OPERATION_PATTERN_NOT_COMPUTABLE'});continue;}
-  if(p.operation!==e.event.operation||p.owner_id!==e.event.owner_id)continue;
+  if(p.operation!==e.event.operation)continue;
+  const patternOwner=scope.resolve(p.owner_id),eventOwner=scope.resolve(e.event.owner_id);
+  if(patternOwner===null||eventOwner===null){if(p.owner_id!==e.event.owner_id||p.owner_id!=='ROOT'||ir.events.some(n=>n.kind==='TASK')){gaps.push({node_id:id,event_id:e.key,reason:'PATTERN_TASK_SCOPE_UNKNOWN'});continue;}}
+  else if(patternOwner!==eventOwner)continue;
   const matches=[];let unknown=false;
   for(const r of p.roles){const candidates=e.event.roles.filter(v=>v.role===r.role);if(!candidates.length){unknown=true;break;}try{matches.push(any(terms(r.value,{}).flatMap(a=>candidates.flatMap(v=>terms(v.value,{}).map(b=>all([a.guard,b.guard,a.value===b.value]))))));}catch{unknown=true;break;}}
   if(unknown){gaps.push({node_id:id,event_id:e.key,reason:'PATTERN_ROLE_MEMBERSHIP_UNKNOWN'});continue;}
@@ -172,7 +176,10 @@ export function calculateDirectIR(ir,acceptance,options={}){
  for(const r of ir.requirements.filter(r=>r.kind==='TOTAL_DURATION')){
   const v=r.subject?.kind==='VARIABLE'?index.get(r.subject.id):null;
   if(r.scope_id!=='ROOT'||v?.type!=='REAL'||r.modality!=='REQUIRED'||r.applicability){gaps.push({node_id:r.id,reason:'TOTAL_DURATION_BINDING_REQUIRED'});continue;}
-  for(const x of problem.intervals.filter(x=>x.subject===v.id))problem.temporal_horizons.push({interval_id:x.id,unit:x.unit,start_point:r.scope_id+':start',end_point:r.scope_id+':end'});
+  const task=v.owner?.kind==='EVENT'?index.get(v.owner.id):null,taskId=task?.kind==='TASK'?task.id:null;
+  if(!taskId||scope.resolve(r.scope_id)!==taskId||scope.resolve(v.scope_id)!==taskId){gaps.push({node_id:r.id,reason:'TOTAL_DURATION_TASK_OWNER_REQUIRED'});continue;}
+  orders.push({id:'duration-lifecycle:'+r.id,from:taskId+':start',to:taskId+':end',relation:'LTE',guard:true});
+  for(const x of problem.intervals.filter(x=>x.subject===v.id))problem.temporal_horizons.push({interval_id:x.id,unit:x.unit,start_point:taskId+':start',end_point:taskId+':end'});
  }
  const observed=observationsSupplied?evaluateDirectObservations(ir,acceptance,observations):null;
  const mathematical_summary=directMathSummary(ir,acceptance);
