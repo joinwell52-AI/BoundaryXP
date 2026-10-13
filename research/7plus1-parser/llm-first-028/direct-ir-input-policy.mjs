@@ -1,10 +1,12 @@
 // Consume typed task/set IR and supplied external-use observations only.
+import {evaluateKernel} from '../../../src/bxp/ir-kernel/service.mjs';
 import {typedInputDomains} from './direct-ir-sets.mjs';
 import {taskScope} from './direct-ir-task-scope.mjs';
 export function taskMembership(ir,owner,task){
  return taskScope(ir).member(owner,task);
 }
 export function evaluateDirectInputPolicies(ir,acceptance,records){
+ if(ir.contract_version==='candidate-ir/2.0')return evaluateKernel(ir,records);
  const results=[];
  for(const policy of typedInputDomains(ir,acceptance).policies){
   const task=policy.task_id,allowed=policy.allowed,uses=[],unknown=[...policy.diagnostics];

@@ -1,0 +1,11 @@
+import fs from 'node:fs';import path from 'node:path';import {runKernel} from '../src/bxp/ir-kernel/service.mjs';
+const args=process.argv.slice(2),get=k=>args[args.indexOf(k)+1];
+if(!args.includes('--ir')||!args.includes('--out'))throw Error('Usage: node scripts/ir-kernel.mjs --ir candidate.json [--query query.json] --out NEW_DIRECTORY');
+const out=path.resolve(get('--out'));if(fs.existsSync(out))throw Error('OUTPUT_ALREADY_EXISTS');
+const raw=fs.readFileSync(get('--ir')),query=args.includes('--query')?JSON.parse(fs.readFileSync(get('--query'),'utf8')):{},result=await runKernel(raw,query);
+fs.mkdirSync(out,{recursive:true});
+fs.writeFileSync(path.join(out,'candidate-ir.json'),raw);fs.writeFileSync(path.join(out,'query.json'),JSON.stringify(query,null,2)+'\n');
+for(const [name,value]of Object.entries({'result.json':result.calculation,'core.json':result.compiled?.core,'source-map.json':result.compiled?.source_map,'7plus1.json':result.canonical}))if(value)fs.writeFileSync(path.join(out,name),JSON.stringify(value,null,2)+'\n');
+if(result.chinese)fs.writeFileSync(path.join(out,'7plus1.zh.md'),result.chinese);
+process.stdout.write(JSON.stringify({output:out,result:result.calculation.result,verification:result.calculation.verification})+'\n');
+if(result.calculation.compile_status==='FAILED')process.exitCode=1;

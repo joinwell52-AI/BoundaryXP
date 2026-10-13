@@ -2,6 +2,8 @@ import Ajv from 'ajv';
 import {validateCandidateIR} from './contracts/candidate-ir-v1/validate.mjs';
 import {auditSchema} from './contracts/candidate-ir-v1/schema.mjs';
 import {linkQuote,sha256} from './source.mjs';
+import {compileCore} from '../../../src/bxp/ir-kernel/index.mjs';import {v2AuditSchema} from '../../../src/bxp/ir-kernel/contract-registry.mjs';
+const auditV2Check=new Ajv({strict:false,allErrors:true}).compile(v2AuditSchema);
 const auditCheck=new Ajv({strict:false,allErrors:true}).compile(auditSchema);
 const pathOf=p=>p.replace(/^\//,'').replaceAll('/','.');
 const overlaps=(a,b)=>!a||!b||a===b||a.startsWith(b+'.')||b.startsWith(a+'.');
@@ -11,8 +13,11 @@ export function acceptedIRFields(row,paths){
  return paths.every(p=>row.field_status[p]==='ACCEPTED'||Object.entries(row.field_status).some(([k,s])=>s==='ACCEPTED'&&(p===k||p.startsWith(k+'.'))));
 }
 export function acceptCandidateIR(ir,audit,source){
- const check=validateCandidateIR(ir,source.text),errors=[...check.errors],rows=[];
- if(!auditCheck(audit))errors.push({code:'AUDIT_SCHEMA',errors:auditCheck.errors});
+ let check;const selectedAuditCheck=ir.contract_version==='candidate-ir/2.0'?auditV2Check:auditCheck;
+ if(ir.contract_version==='candidate-ir/2.0'){try{compileCore(ir);for(const s of ir.source_table)linkQuote(source,s);check={ok:true,errors:[]};}catch(e){check={ok:false,errors:[e.diagnostic??{code:'SOURCE_OR_CORE_INVALID',message:e.message}]};}}
+ else check=validateCandidateIR(ir,source.text);
+ const errors=[...check.errors],rows=[];
+ if(!selectedAuditCheck(audit))errors.push({code:'AUDIT_SCHEMA',errors:selectedAuditCheck.errors});
  const collections={entities:'ENTITY',variables:'VARIABLE',events:'EVENT',states:'STATE',expressions:'EXPRESSION',requirements:'REQUIREMENT'};
  const index=new Map(Object.entries(collections).flatMap(([k,kind])=>(ir[k]??[]).map(node=>[node.id,{kind,node}])));
  const src=new Map((audit.source_table??[]).map(s=>[s.id,s]));
@@ -45,5 +50,6 @@ export function acceptCandidateIR(ir,audit,source){
  }}
  const diagnostics=[...errors,...(audit.omissions??[]).map(x=>({code:'AUDIT_OMISSION',...x})),...(ir.coverage??[]).filter(x=>x.status==='GAP').map(x=>({code:'COVERAGE_GAP',...x})),...(audit.issues??[]).filter(x=>pathOf(x.field_path)==='coverage').map(x=>({code:'COVERAGE_REVIEW_ISSUE',...x}))];
  const linkedSource={...source,sha256:source.sha256??sha256(source.text)},link=table=>(table??[]).flatMap(c=>{try{return [linkQuote(linkedSource,c)];}catch{return [];}});
- return {format:'boundx-candidate-ir-acceptance/1',source_sha256:linkedSource.sha256,source_links:link(ir.source_table),audit_source_links:link(audit.source_table),rows,errors,diagnostics,technical_ok:errors.length===0,schemas:{proposal:{ok:check.ok},audit:{ok:!!auditCheck(audit)}},audit_agreement_is_not_correctness_proof:true,business_decision:null,execution_authorization:null};
+ for(const sequence of ir.sequences??[])if(!(audit.reviews??[]).some(r=>r.target.id===sequence.template.id&&r.field_path==='sequence'&&r.verdict==='SUPPORT'))diagnostics.push({code:'SEQUENCE_REVIEW_REQUIRED',id:sequence.template.id});
+ return {format:'boundx-candidate-ir-acceptance/1',source_sha256:linkedSource.sha256,source_links:link(ir.source_table),audit_source_links:link(audit.source_table),rows,errors,diagnostics,technical_ok:errors.length===0,schemas:{proposal:{ok:check.ok},audit:{ok:!!selectedAuditCheck(audit)}},audit_agreement_is_not_correctness_proof:true,business_decision:null,execution_authorization:null};
 }

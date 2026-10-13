@@ -1,9 +1,11 @@
 // A per-event query uses the same typed expression interpreter as observations.
 // No second, smaller operator grammar; no source-text or label interpretation.
 import {taskScope} from './direct-ir-task-scope.mjs';
+import {evaluateKernel} from '../../../src/bxp/ir-kernel/service.mjs';
 import {evaluateDirectObservations} from './direct-ir-observations.mjs';
 
 export function evaluateDirectEventPolicies(ir,acceptance,eventRecord,context={}){
+ if(ir.contract_version==='candidate-ir/2.0')return evaluateKernel(ir,{...context,plan:{...context.plan,events:[...(context.plan?.events??[]).filter(e=>e.id!==eventRecord.id),eventRecord]}});
  const expressions=new Map(ir.expressions.map(x=>[x.id,x])),accepted=new Map(acceptance.rows.map(x=>[x.id,x.status]));
  const expr=r=>r?.kind==='EXPRESSION'?expressions.get(r.id):null,membership=taskScope(ir).member,results=[];
  // A counterfactual query assumes this event occurs. It does not certify execution.

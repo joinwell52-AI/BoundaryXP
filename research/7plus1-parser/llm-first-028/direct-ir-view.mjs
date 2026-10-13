@@ -1,5 +1,7 @@
 // Read-only views of the model's IR. Never parse source text to fill semantics.
+import {compileCore} from '../../../src/bxp/ir-kernel/index.mjs';import {projectCore} from '../../../src/bxp/ir-kernel/projection.mjs';
 export function projectDirectIR(ir,acceptance){
+ if(ir.contract_version==='candidate-ir/2.0')return projectCore(compileCore(ir));
  const collections=['entities','variables','events','states','expressions','requirements'];
  const nodes=new Map(collections.flatMap(k=>ir[k].map(n=>[n.id,n]))),statuses=new Map(acceptance.rows.map(r=>[r.id,r.status]));
  const labels={REQUIRED:'必须',PERMITTED:'允许',NOT_REQUIRED:'无需',FORBIDDEN:'禁止',UNSTATED:'未明确',PERFORMER:'执行者',ORGANIZER:'组织者',REVIEWER:'复核者',APPROVER:'批准者',RECIPIENT:'接收者',COLLABORATOR:'协作者',INPUT_OBJECT:'输入对象',OBJECT:'对象',RESULT:'结果',DELIVERABLE:'交付物',BASIS:'依据',CONTENT:'内容',ENVIRONMENT:'执行环境'};

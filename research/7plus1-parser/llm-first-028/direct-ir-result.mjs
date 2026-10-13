@@ -2,6 +2,7 @@
 import {projectDirectIR} from './direct-ir-view.mjs';
 import {calculateDirectIR} from './direct-ir-calculate.mjs';
 import {renderDirectCalculations} from './direct-ir-render-results.mjs';
+import {runKernel} from '../../../src/bxp/ir-kernel/service.mjs';
 
 function suggestion(code){
  if(code==='REVISION_NOT_APPLIED')return '核对修订目标与允许修改的节点；只提交相关局部修订并独立审阅。原候选和未应用补丁均保留。';
@@ -13,6 +14,7 @@ function suggestion(code){
 }
 
 export function finishDirectIR(ir,acceptance,revisionOutcome=null){
+ if(ir.contract_version==='candidate-ir/2.0')return finishKernelIR(ir,acceptance,revisionOutcome);
  const technical={...acceptance,diagnostics:[...(acceptance.diagnostics??[])]};
  if(revisionOutcome?.status==='NOT_APPLIED'&&!technical.diagnostics.some(x=>x.code==='REVISION_NOT_APPLIED'))technical.diagnostics.push({code:'REVISION_NOT_APPLIED',reason:'局部修订未应用：'+revisionOutcome.reason});
  const blocked=!technical.technical_ok;
@@ -38,4 +40,11 @@ export function finishDirectIR(ir,acceptance,revisionOutcome=null){
  const problem_report={format:'boundx-ir-problem-report/1',status:findings.length?'REVIEW_REQUIRED':'NO_RECORDED_GAPS',findings,revision_outcome:revisionOutcome,semantic_correctness_proven:false};
  if(findings.length)chinese+='\n\n## 发现的问题与修订建议\n\n'+findings.map((x,i)=>`${i+1}. ${x.problem}${x.node_id?'（'+x.node_id+'）':''}\n   影响：${x.impact}\n   建议：${x.suggestion}`).join('\n');
  return {technical,canonical,chinese,boundary_calculations,problem_report};
+}
+async function finishKernelIR(ir,technical,revisionOutcome){
+ if(!technical.technical_ok)return {technical,canonical:{slots:{}},chinese:'技术校验失败，原始候选与问题保留。',boundary_calculations:{status:'PARTIAL',calculation_performed:false,result:'NOT_RUN'},problem_report:{status:'REVIEW_REQUIRED',findings:technical.errors}};
+ const result=await runKernel(ir),unreviewed=technical.rows.filter(r=>r.status!=='ACCEPTED'),gaps=[...(result.compiled?.semantic_gaps??[]),...technical.diagnostics,...unreviewed.map(r=>({code:'NODE_REVIEW_REQUIRED',id:r.id}))];
+ const calculation=result.calculation;if(gaps.length)calculation.ir_status='SEMANTIC_REVIEW_REQUIRED';
+ const status=calculation.compile_status!=='SUPPORTED'||gaps.length||!['SAT','UNSAT','SATISFIED','VIOLATED'].includes(calculation.result)?'PARTIAL':calculation.result==='UNSAT'?'CONFLICT':'CALCULATED';
+ return {technical,canonical:result.canonical,chinese:result.chinese+'\n\n## 计算\n\n'+calculation.result+'；证明等级：'+calculation.verification+'。'+(gaps.length?'候选仍有语义审阅项，不能宣称完整边界已通过。':''),boundary_calculations:{...calculation,status,gaps,calculation_performed:calculation.result!=='NOT_RUN',core_sha256:result.compiled?.core_sha256},problem_report:{status:gaps.length?'REVIEW_REQUIRED':'NO_RECORDED_GAPS',findings:gaps,revision_outcome:revisionOutcome,semantic_correctness_proven:false}};
 }

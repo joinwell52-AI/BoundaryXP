@@ -6,10 +6,15 @@ export function revisionPermissions(base,audit,technical){
  // Issues are not acceptance rows. Link them through audited node AND source identity.
  // Never authorize all issues merely because a patch is requested.
  for(const issue of base.issues){if(audit.issues.some(problem=>problem.targets.some(t=>issue.targets.some(u=>u.kind===t.kind&&u.id===t.id))&&problem.source_refs.some(s=>issue.source_refs.includes(s))))replacements.push(issue.id);}
- return {replacements:[...new Set(replacements)],removals:[...audit.reviews.filter(r=>r.verdict==='CONTRADICT'&&!r.field_path).map(r=>r.target.id),...technical.errors.filter(e=>e.code==='DATA_CONSUMER_EVENT').map(e=>e.id)]};
+ for(const issue of base.issues)if(issue.kind==='EXPRESSION_GAP'&&!issue.targets.length&&(audit.omissions??[]).some(o=>o.source_refs.length===issue.source_refs.length&&issue.source_refs.every(s=>o.source_refs.includes(s))))replacements.push(issue.id);
+ const coverage_indices=base.coverage.flatMap((row,index)=>{
+  const matching=(audit.omissions??[]).some(o=>row.source_refs.length===o.source_refs.length&&row.source_refs.every(s=>o.source_refs.includes(s)))||(audit.issues??[]).some(i=>i.field_path==='coverage'&&row.source_refs.length===i.source_refs.length&&row.source_refs.every(s=>i.source_refs.includes(s)));
+  return matching?[index]:[];
+ });
+ return {replacements:[...new Set(replacements)],coverage_indices,removals:[...audit.reviews.filter(r=>r.verdict==='CONTRADICT'&&!r.field_path).map(r=>r.target.id),...technical.errors.filter(e=>e.code==='DATA_CONSUMER_EVENT').map(e=>e.id)]};
 }
 export function revisionBundle(bundle){const text=bundle.text+'\n有界局部修订：输出boundx-candidate-ir-patch/1，base_ir_sha256为宿主摘要。各集合只列新增或获准替换节点，空集合不修改。不得重建整图或改变无关事实。removed_nodes仅允许removable_node_ids内被审阅CONTRADICT或程序证实消费者类型错误的候选，真实边界及UNCERTAIN节点不能删除；原文要求必须在正确节点中保留，引用和coverage须同步修正。coverage_updates保留原行索引及同一来源。只修实际审阅、technical_errors和缺审问题；所有修订由独立新会话再次审阅。';return {...bundle,schema:patchSchema,text,sha256:sha256(text)};}
-export function applyIRPatch(base,patch,{allowed_replacements=[],allowed_coverage_targets=[],allowed_removals=[],authorized_contract_transition=null}={}){
+export function applyIRPatch(base,patch,{allowed_replacements=[],allowed_coverage_targets=[],allowed_coverage_indices=[],allowed_removals=[],authorized_contract_transition=null}={}){
  if(patch.base_ir_sha256!==sha256(JSON.stringify(base)))throw Error('PATCH_BASE_DIGEST_MISMATCH');
  const transition=patch.contract_version!==base.contract_version;
  if(transition&&!(authorized_contract_transition?.from===base.contract_version&&authorized_contract_transition?.to===patch.contract_version&&patch.contract_version===candidateSchema.properties.contract_version.const))throw Error('PATCH_CONTRACT_MISMATCH');
@@ -24,6 +29,6 @@ export function applyIRPatch(base,patch,{allowed_replacements=[],allowed_coverag
  }
  for(const ref of patch.removed_nodes??[]){const collection=globalIds.get(ref.id),at=collection&&out[collection].findIndex(n=>n.id===ref.id);if(!allowed_removals.includes(ref.id)||!collection||collection==='source_table'||at<0)throw Error('PATCH_UNAUTHORIZED_REMOVAL');const expected={entities:'ENTITY',variables:'VARIABLE',events:'EVENT',states:'STATE',expressions:'EXPRESSION',requirements:'REQUIREMENT'}[collection];if(ref.kind!==expected)throw Error('PATCH_REMOVAL_TYPE');const previous=out[collection][at];out[collection].splice(at,1);changed.push({collection,id:ref.id,operation:'REMOVE_CONTRADICTED_CANDIDATE',previous});}
  const updated=new Set(),permitted=new Set([...allowed_replacements,...allowed_coverage_targets,...allowed_removals,...changed.map(c=>c.id)]);
- for(const update of patch.coverage_updates??[]){const i=update.previous_index,old=base.coverage[i],next=update.replacement;if(!old||updated.has(i))throw Error('PATCH_COVERAGE_INDEX');if(!old.node_refs.some(r=>permitted.has(r.id)))throw Error('PATCH_UNRELATED_COVERAGE');if(JSON.stringify([...old.source_refs].sort())!==JSON.stringify([...next.source_refs].sort()))throw Error('PATCH_COVERAGE_SOURCE_CHANGED');out.coverage[i]=next;updated.add(i);for(const ref of next.node_refs)changed.push({collection:'coverage',id:ref.id,operation:'REPLACE_COVERAGE',previous_index:i,previous:old,replacement:next});}
+ for(const update of patch.coverage_updates??[]){const i=update.previous_index,old=base.coverage[i],next=update.replacement;if(!old||updated.has(i))throw Error('PATCH_COVERAGE_INDEX');if(!allowed_coverage_indices.includes(i)&&!old.node_refs.some(r=>permitted.has(r.id)))throw Error('PATCH_UNRELATED_COVERAGE');if(JSON.stringify([...old.source_refs].sort())!==JSON.stringify([...next.source_refs].sort()))throw Error('PATCH_COVERAGE_SOURCE_CHANGED');out.coverage[i]=next;updated.add(i);changed.push({collection:'coverage',id:null,operation:'REPLACE_COVERAGE',previous_index:i,previous:old,replacement:next});for(const ref of next.node_refs)changed.push({collection:'coverage',id:ref.id,operation:'REPLACE_COVERAGE',previous_index:i,previous:old,replacement:next});}
  out.coverage.push(...patch.coverage);return {ir:out,changed};
 }

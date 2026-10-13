@@ -1,7 +1,9 @@
 // Summaries computed from typed IR only; no source text, label or note parsing.
+import {compileCore} from '../../../src/bxp/ir-kernel/index.mjs';import {projectCore} from '../../../src/bxp/ir-kernel/projection.mjs';
 import {typedInputDomains} from './direct-ir-sets.mjs';
 import {completionSummary} from './direct-ir-completion-summary.mjs';
 export function directMathSummary(ir,acceptance){
+ if(ir.contract_version==='candidate-ir/2.0')return projectCore(compileCore(ir)).summary;
  const nodes=new Map(['entities','events','states','expressions','requirements'].flatMap(k=>ir[k].map(x=>[x.id,x]))),status=new Map(acceptance.rows.map(x=>[x.id,x.status]));
  const members=r=>r?.kind==='ENTITY'?(nodes.get(r.id)?.kind==='GROUP'?nodes.get(r.id).members.flatMap(members):[r.id]):[];
  const input_boundary=typedInputDomains(ir,acceptance),inputs=input_boundary.allowed;

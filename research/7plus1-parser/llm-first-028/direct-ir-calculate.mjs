@@ -1,4 +1,5 @@
 // Candidate AST -> mathematical constraints. No task-text, note or label interpretation.
+import {evaluateKernel} from '../../../src/bxp/ir-kernel/service.mjs';
 import {solveJointBoundary} from '../../../src/bxp/joint-boundary-solver.mjs';
 import {intersectValidatedIntervals} from '../../../src/bxp/interval-solver.mjs';
 import {sha256} from './source.mjs';
@@ -18,6 +19,7 @@ const all=xs=>xs.includes(false)?false:xs.filter(x=>x!==true).length?{all:xs.fil
 const any=xs=>xs.includes(true)?true:xs.filter(x=>x!==false).length?{any:xs.filter(x=>x!==false)}:false;
 const neg=x=>x===true?false:x===false?true:{not:x};
 export function calculateDirectIR(ir,acceptance,options={}){
+ if(ir.contract_version==='candidate-ir/2.0')return evaluateKernel(ir,options.query??{});
  const observationsSupplied=Object.hasOwn(options,'observations'),observations=options.observations;
  const scope=taskScope(ir);
  const index=new Map(['entities','variables','events','states','expressions','requirements'].flatMap(k=>ir[k].map(x=>[x.id,x])));
