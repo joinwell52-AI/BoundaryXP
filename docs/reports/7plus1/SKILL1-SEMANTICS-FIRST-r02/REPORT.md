@@ -33,6 +33,8 @@
 
 首次离线路由测试4通过、1失败：原有审阅后资源锁重算默认Skill，导致SKILL1出现METHOD_CHANGED_DURING_RUN。已修正为始终检查选定方式，资源锁没有关闭。首次失败保存在FIRST-ROUTING-FAILURE.json。修正后5项专项通过，未新增真实模型调用。
 
+最终相关回归81项通过、0失败，其中新增5项离线路由检查；两个兼容副本通过Skill结构核查，UI JavaScript语法检查通过。完整包203项资源摘要通过，冻结响应回放、10项反例证书及12项页面/API检查通过。
+
 工程验证、冻结响应和测试provider仅验证路由、结构及消费者回归，不是新Skill的真实理解/审阅成绩。附件54份语言文本及20份继承用例没有运行；等待用户以相同原文、模型和推理强度进行实际对比。
 
 本次不修复此前MANUAL-TEST-001发现的输入数学摘要和停止范围消费者缺陷，不将新增选项宣称为这些缺陷已经关闭。完整产品语义验收仍未通过。
@@ -41,4 +43,6 @@
 
 58618刷新后，在“解析方式”选择`Skill`或`skill1`，再点击开始编译。模型和推理强度不自动变化。CLI使用 `--parse-method SKILL1`。原版和新版的真实运行分别保留，不挑选或覆盖失败结果。
 
-完整源码和开发包提交到私有`review/7plus1-parser`，不merge/release/tag，不依赖GitHub Actions。安装、运行包摘要及本地检查记录另存TESTS.json与DEPLOYMENT.json。business_decision与execution_authorization始终为null。
+本地58618已运行ui78，实际会话提供SKILL和SKILL1，8项在线页面、资源、历史及导出接口检查通过。原有1489个历史文件和配置逐摘要核对未改变，ui77保留为回滚版本。重启在D:\boundx执行`npm run 7plus1:ui`。没有声称执行了真实浏览器点击或新的模型准确性验收。
+
+完整源码和开发包提交到私有`review/7plus1-parser`，不merge/release/tag，不依赖GitHub Actions。安装、运行包摘要及本地检查记录另存TESTS.json与DEPLOYMENT.json；候选ZIP在`review-assets/7plus1/skill1-ui78/`。business_decision与execution_authorization始终为null。
