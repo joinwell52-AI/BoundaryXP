@@ -107,6 +107,15 @@ export function compileQuery(core,query={}){
   fail('OPERATOR_QUERY_UNSUPPORTED',n.id,null,'CAPABILITY',{operator:op});
  };
  const formulas={};
+ // Plan records cannot override a declaration's bound variable roles.
+ for(const record of plan.events){
+  if(!record.roles)continue;
+  const declared=nodes[record.template_id??record.id];if(declared?.category!=='EVENT')continue;
+  for(const role of declared.roles){
+   const expected=visit(role.value),actual=record.roles.filter(r=>r.role===role.role).map(r=>visit(r.value));
+   assertion('role:'+record.id+':'+role.role+':'+digest(stable(role.value)),term('or',actual.map(value=>eq(expected,value))),declared.id);
+  }
+ }
  for(const id of query.requirements??core.requirements){
   const r=nodes[id];if(!r||r.category!=='REQUIREMENT')fail('QUERY_REQUIREMENT_MISSING',id);
   if(['PERMITTED','NOT_REQUIRED','UNSTATED'].includes(r.modality))continue;

@@ -1,4 +1,4 @@
-import {evaluateCore} from './evaluate.mjs';import {preparePlan,planEvent,taskContains} from './events.mjs';import {UNKNOWN,unknown,not,or,and,compare,add,toBase,stable} from './values.mjs';
+import {evaluateCore} from './evaluate.mjs';import {preparePlan,planEvent,taskContains,roleBindingFailures} from './events.mjs';import {UNKNOWN,unknown,not,or,and,compare,add,toBase,stable} from './values.mjs';
 export function evaluateRequirements(core,query={}){
  const context={...query,plan:preparePlan(core,query.plan)},rows=[];
  for(const id of query.requirements??core.requirements){
@@ -23,5 +23,6 @@ export function evaluateRequirements(core,query={}){
   if(unknown(app))value=or([not(app),value]);
   rows.push({id,modality:r.modality,value,constraining:!['PERMITTED','NOT_REQUIRED','UNSTATED'].includes(r.modality)});
  }
- return {rows,result:rows.some(r=>r.constraining&&r.value===false)?'VIOLATED':rows.some(r=>r.constraining&&unknown(r.value))?'UNKNOWN':'SATISFIED',business_decision:null,execution_authorization:null};
+ const identity_checks=roleBindingFailures(core,context,r=>evaluateCore(core,r,context));
+ return {rows,identity_checks,result:identity_checks.some(e=>e.code==='PLAN_ROLE_BINDING_CONFLICT')||rows.some(r=>r.constraining&&r.value===false)?'VIOLATED':identity_checks.length||rows.some(r=>r.constraining&&unknown(r.value))?'UNKNOWN':'SATISFIED',business_decision:null,execution_authorization:null};
 }

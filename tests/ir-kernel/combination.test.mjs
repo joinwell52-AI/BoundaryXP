@@ -9,7 +9,7 @@ test('K04 state values remain distinct across bound instances and illegal free b
  i.requirements[0].body=E('value');assert.throws(()=>compileCore(i),/FREE_LOCAL_VARIABLE/);
 });
 test('K15 event norm and duration cannot disappear from backend lowering',async()=>{
- const i=v2();i.events.push(event('work'));i.expressions.push(expr('yes','BOOLEAN',[],true),expr('lo','NUMBER',[],'0','minute'),expr('hi','NUMBER',[],'30','minute'),expr('duration','REAL_INTERVAL',[E('lo'),E('hi')]));i.variables.push(variable('elapsed','REAL',E('duration')));i.requirements.push(req('must',E('yes'),{kind:'EVENT_NORM',subject:T('work')}),req('time',E('yes'),{kind:'TOTAL_DURATION',subject:V('elapsed')}));
+ const i=v2();i.events.push(event('work'));i.expressions.push(expr('yes','BOOLEAN',[],true),expr('lo','NUMBER',[],'0','minute'),expr('hi','NUMBER',[],'30','minute'),expr('duration','REAL_INTERVAL',[E('lo'),E('hi')]));i.variables.push(variable('elapsed','REAL',E('duration')));i.requirements.push(req('must',E('yes'),{kind:'EVENT_NORM',subject:T('work')}),req('time',E('yes'),{kind:'TOTAL_DURATION',subject:V('elapsed'),views:['R']}));
  let c=compileCore(i);let r=await queryCore(c,{plan:plan([])});assert.equal(r.result,'UNSAT');
  r=await queryCore(c,{plan:plan([{id:'work',task_id:'task',occurred:true,start:'0',end:'1860'}])});assert.equal(r.result,'UNSAT');
  r=await queryCore(c,{plan:plan([{id:'work',task_id:'task',occurred:true,start:'0',end:'960'}])});assert.equal(r.result,'SAT');assert.equal(r.verification,'MODEL_CHECKED');

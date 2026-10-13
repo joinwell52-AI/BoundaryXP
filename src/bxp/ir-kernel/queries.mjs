@@ -2,6 +2,7 @@ import {inferQueryCapability} from './capabilities.mjs';import {solve} from './b
 import {diagnostic} from './diagnostics.mjs';
 export async function queryCore(compiled,query={},budget={}){
  const {core}=compiled,base={ir_status:compiled.semantic_gaps.length?'SEMANTIC_REVIEW_REQUIRED':'VALID',query_kind:query.kind??'SAT',business_decision:null,execution_authorization:null};
+ if(compiled.frame_errors?.length){const {affectedFrameErrors}=await import('./analysis.mjs'),errors=affectedFrameErrors(compiled,query.requirements??core.requirements);if(errors.length)return {...base,ir_status:'INVALID',compile_status:'FAILED',result:'NOT_RUN',verification:'NOT_RUN',diagnostics:errors};}
  if(query.kind==='EVALUATE'){try{const evaluated=evaluateRequirements(core,query);return {...base,compile_status:'SUPPORTED',...evaluated,verification:evaluated.result==='UNKNOWN'?'NOT_RUN':'MODEL_CHECKED'};}catch(e){const d=diagnostic(e);return {...base,compile_status:d.layer==='CAPABILITY'?'UNSUPPORTED':d.layer==='RESOURCE'?'RESOURCE_LIMIT':'FAILED',result:'NOT_RUN',verification:'NOT_RUN',diagnostics:[d]};}}
  const cap=inferQueryCapability(core,query);if(cap.status!=='SUPPORTED')return {...base,compile_status:cap.status,result:'NOT_RUN',verification:'NOT_RUN',diagnostics:cap.diagnostics};
  const solved=await solve(cap.problem,budget);const check=solved.result==='SAT'?verifyModel(core,cap.problem,solved.model):null;

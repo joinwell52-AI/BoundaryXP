@@ -187,6 +187,9 @@ function renderKernelCalculation(container,trace){
  const c=trace.boundary_calculations,meaning={SAT:'存在满足所列约束的安排',UNSAT:'所列约束不能同时满足',SATISFIED:'给定安排满足所检查约束',VIOLATED:'给定安排违反约束',UNKNOWN:'当前证据或资源不足，尚未确定',NOT_RUN:'该查询未进入求解，请看下面的具体原因'};
  container.append(el('p','统一IR内核 2.0 · '+(meaning[c.result]??c.result)),el('p','计算支持状态：'+c.compile_status+'；复核等级：'+c.verification+'；候选状态：'+c.ir_status));
  container.append(el('p','Schema通过、审阅一致、约束可满足和原文解释正确分别判断；计算结果不构成业务授权。'));
+ if(c.full_query)container.append(el('p','完整查询：'+(meaning[c.full_query.result]??c.full_query.result)+'；'+c.full_query.compile_status));
+ if(c.global_infeasibility_from_necessary_constraints)container.append(el('h3','已证明必要约束冲突：保留这些约束的完整安排无解'),el('p','该结论来自下列必要约束证明；原文覆盖、技术问题和独立审阅状态仍分别保留。'));
+ for(const p of c.parts??[]){const box=el('section');box.append(el('h3','已计算的必要约束子问题'),el('p',(meaning[p.result]??p.result)+'；'+p.verification),el('p','覆盖要求：'+p.query_scope.requirements.join('、')),el('p','没有将原文事件域关闭成现实快照；局部SAT不证明完整任务有解。'));if(p.conflict_core?.length)box.append(el('p','冲突断言：'+p.conflict_core.join('、')));container.append(box);}
  if(c.core_sha256)container.append(el('p','本次Core摘要：'+c.core_sha256));
  const problems=[...new Map([...(c.diagnostics??[]),...(c.gaps??[])].map(x=>[JSON.stringify(x),x])).values()];
  if(problems.length){const section=el('section');section.append(el('h3','本次尚未完成的部分'));for(const x of problems)section.append(el('p',(x.node_id??x.id??'整体')+'：'+(x.reason??x.message??x.code)));container.append(section);}

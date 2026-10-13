@@ -1,5 +1,6 @@
 import {collections,registry} from './contract-registry.mjs';import {taskScope} from '../../../research/7plus1-parser/llm-first-028/direct-ir-task-scope.mjs';import {dimension,rational} from './values.mjs';import {fail} from './diagnostics.mjs';
-export function bindAndTypecheck(loaded,{maxDepth=128}={}){
+import {frameDiagnostics} from './frames.mjs';
+export function bindAndTypecheck(loaded,{maxDepth=128,collectFrameErrors=false}={}){
  const ir=loaded.raw,nodes=new Map(),sources=new Set(ir.source_table.map(s=>s.id)),kinds=new Map(),scope=taskScope(ir);
  if(sources.size!==ir.source_table.length)fail('DUPLICATE_SOURCE_ID');
  for(const [collection,kind]of Object.entries(collections))for(const n of ir[collection]){if(nodes.has(n.id)||sources.has(n.id))fail('DUPLICATE_ID',n.id);nodes.set(n.id,n);kinds.set(n.id,kind);for(const s of n.source_refs)if(!sources.has(s))fail('SOURCE_REF_MISSING',n.id,s);}
@@ -69,7 +70,10 @@ export function bindAndTypecheck(loaded,{maxDepth=128}={}){
  const dim=(r,seen=new Set())=>{r=ref(r);if(dimensions.has(r.id))return dimensions.get(r.id);if(seen.has(r.id))fail('EXPRESSION_CYCLE',r.id);seen=new Set([...seen,r.id]);const n=nodes.get(r.id);let d='SCALAR';if(['EVENT_START','EVENT_END','STATE_ESTABLISHED'].includes(n.operator))d='TIME';else if(n.operator==='ADD'){const ds=n.arguments.map(a=>dim(a,seen));if(new Set(ds).size!==1)fail('UNIT_DIMENSION_MISMATCH',n.id);d=ds[0];}else if(r.kind==='VARIABLE'&&['INTEGER','REAL'].includes(n.type)){const domain=nodes.get(n.domain.id);if(domain?.arguments?.[0])d=dim(domain.arguments[0],seen);}dimensions.set(r.id,d);return d;};
  for(const n of ir.expressions){if(['EQ','LT','LTE','GT','GTE','BEFORE','ADD','REAL_INTERVAL','INTEGER_RANGE'].includes(n.operator)&&n.arguments.every(a=>['INTEGER','REAL','NUMBER','TIME'].includes(type(a)))){const ds=n.arguments.map(a=>dim(a));if(new Set(ds).size!==1)fail('UNIT_DIMENSION_MISMATCH',n.id);}dim({kind:'EXPRESSION',id:n.id});}
  for(const n of ir.expressions)if(n.operator==='BEFORE'||['ACTIVE_DURING','ACTIVE_SINCE'].includes(n.operator)){const args=n.operator==='BEFORE'?n.arguments:n.arguments.slice(1);if(args.some(a=>dim(a)!=='TIME'))fail('TIME_UNIT_REQUIRED',n.id);}
+ for(const v of ir.variables)if(['INTEGER','REAL'].includes(v.type))dim({kind:'VARIABLE',id:v.id});
  const checkBound=(r,env=new Set(),stack=[])=>{r=ref(r);const n=nodes.get(r.id);if(r.kind==='VARIABLE'){if(n.binding_mode==='INSTANCE_LOCAL'&&!env.has(n.id))fail('FREE_LOCAL_VARIABLE',n.id);return;}if(!['EXPRESSION','STATE'].includes(r.kind))return;if(stack.includes(r.id))fail('EXPRESSION_CYCLE',r.id);const next=[...stack,r.id];if(n.subject)checkBound(n.subject,env,next);if(n.bound_variable){checkBound(n.arguments[0],env,next);const inner=new Set(env);inner.add(n.bound_variable.id);for(const a of n.arguments.slice(1))checkBound(a,inner,next);}else for(const a of n.arguments??[])checkBound(a,env,next);};
  for(const r of ir.requirements){checkBound(r.body);if(r.applicability)checkBound(r.applicability);}
- return {...loaded,nodes,kinds,types,dimensions,root,scope,ref};
+ const frame_errors=ir.contract_version==='candidate-ir/2.0'?frameDiagnostics(ir,{nodes,types,ref,dimensions}):[];
+ if(frame_errors.length&&!collectFrameErrors){const d=frame_errors[0];fail(d.code,d.node_id,d.path,d.layer);}
+ return {...loaded,nodes,kinds,types,dimensions,root,scope,ref,frame_errors};
 }

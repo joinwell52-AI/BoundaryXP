@@ -18,12 +18,13 @@ import {projectDirectIR} from './direct-ir-view.mjs';
 import {directIRBundle} from './direct-ir-bundle.mjs';
 import {renderDirectCalculations} from './direct-ir-render-results.mjs';
 export const writeJSON=(file,data)=>fs.writeFileSync(file,JSON.stringify(data,null,2)+'\n');
-export const compilerRevision='direct-ir-kernel-r01-test';
+export const compilerRevision='direct-ir-kernel-r02-test';
 export function replay7Plus1(bytes,{output,replayFrom,resourceGuard=()=>{},productSnapshot=null,allowPriorModelResources=false}){
  resourceGuard();
  const source=prepareSource(bytes),tracePath=path.join(replayFrom,fs.existsSync(path.join(replayFrom,'trace.json'))?'trace.json':'TRACE.json');
  const prior=JSON.parse(fs.readFileSync(tracePath,'utf8'));
  if(prior.source.sha256!==source.sha256)throw Error('REPLAY_SOURCE_DIGEST_MISMATCH');
+ if(prior.ir?.contract_version==='candidate-ir/2.0')return replayKernelIR(prior,source,bytes,{output,tracePath,resourceGuard,productSnapshot,allowPriorModelResources});
  if(prior.ir?.format==='boundx-candidate-ir/1'){
   const frozen=new Map((prior.model_resource_digests??prior.product_snapshot?.files??[]).map(f=>[f.path,f.sha256]));
   const prefix='research/7plus1-parser/llm-first-028/';
@@ -56,6 +57,19 @@ export function replay7Plus1(bytes,{output,replayFrom,resourceGuard=()=>{},produ
  fs.writeFileSync(path.join(output,'7plus1.zh.md'),chinese);
  writeJSON(path.join(output,'run-summary.json'),{execution_mode:replay.execution_mode,real_calls:0,replays:1,origin_trace:replay.origin_trace,slot_status:Object.fromEntries(Object.entries(compiled.canonical.slots).map(([k,v])=>[k,v.status]))});
  resourceGuard();return replay;
+}
+async function replayKernelIR(prior,source,bytes,{output,tracePath,resourceGuard,productSnapshot,allowPriorModelResources}){
+ const frozen=new Map((prior.model_resource_digests??[]).map(r=>[r.path,r.sha256]));
+ const current=[...directIRBundle('parse',{parseMethod:prior.parse_method??'SKILL',contractVersion:'candidate-ir/2.0'}).resources,...directIRBundle('audit',{parseMethod:prior.parse_method??'SKILL',contractVersion:'candidate-ir/2.0'}).resources];
+ const changes=[];
+ for(const r of current){const matching=frozen.has(r.path)?r.path:r.path.includes('SKILL.md#')?[...frozen.keys()].find(p=>p.startsWith(r.path.split('#')[0]+'#')):r.path.endsWith('/CONTRACT.md')?[...frozen.keys()].find(p=>p.endsWith('/CONTRACT.md')||p.endsWith('/SEMANTICS.md')):null;const previous=matching?frozen.get(matching):null;
+  if(previous!==r.sha256){if(!allowPriorModelResources)throw Error('REPLAY_SKILL_BUNDLE_CHANGED:'+r.path);changes.push({path:r.path,original_path:matching,original_sha256:previous,current_sha256:r.sha256});}
+ }
+ const technical=acceptCandidateIR(prior.ir,prior.audit,source),completed=await finishDirectIR(prior.ir,technical,prior.revision_outcome);
+ const replay={...prior,...completed,product_snapshot:productSnapshot,model_origin_product_snapshot:prior.product_snapshot??null,consumer_revision:compilerRevision,execution_mode:'FROZEN_RESPONSE_REPLAY',origin_trace:{sha256:sha256(fs.readFileSync(tracePath))},real_calls_in_this_replay:0,not_new_model_validation:true,model_resource_changes:changes,model_validation_scope:'PRIOR_MODEL_RESOURCES_RESPONSES_CURRENT_CONSUMER_ONLY'};
+ fs.mkdirSync(output,{recursive:true});if(fs.existsSync(path.join(output,'source.txt')))throw Error('OUTPUT_ALREADY_EXISTS');fs.writeFileSync(path.join(output,'source.txt'),bytes,{flag:'wx'});
+ for(const [file,value]of Object.entries({'trace.json':replay,'candidate-ir.json':prior.ir,'audit.json':prior.audit,'technical-validation.json':completed.technical,'7plus1.json':completed.canonical,'boundary-calculations.json':completed.boundary_calculations,'problem-report.json':completed.problem_report}))writeJSON(path.join(output,file),value);
+ fs.writeFileSync(path.join(output,'7plus1.zh.md'),replay.chinese);resourceGuard();return replay;
 }
 export async function parse7Plus1(bytes,{output,probe,model='gpt-6.1-sol',reasoning='medium',parseMethod=null,semanticRevision=true,signal,onProgress=()=>{},timeoutMs=null,call=callCodex,maxModelRequests,resourceGuard=()=>{},productSnapshot=null}={}){
  return parseDirectIR(bytes,{output,probe,model,reasoning,parseMethod,signal,onProgress,timeoutMs,call,maxModelRequests,resourceGuard,productSnapshot});

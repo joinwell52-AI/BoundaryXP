@@ -6,6 +6,7 @@ import {revisionBundle,applyIRPatch,revisionPermissions} from './direct-ir-revis
 import {finishDirectIR} from './direct-ir-result.mjs';
 import {renderDirectCalculations} from './direct-ir-render-results.mjs';
 import {affectedAuditTargets,targetedAuditBundle,mergeIndependentAudit} from './direct-ir-audit-merge.mjs';
+import {repairableFrameCodes} from '../../../src/bxp/ir-kernel/frames.mjs';
 const write=(dir,name,value)=>fs.writeFileSync(path.join(dir,name),JSON.stringify(value,null,2)+'\n');
 export async function parseDirectIR(bytes,{output,probe,model='gpt-6.1-sol',reasoning='medium',parseMethod='SKILL',signal,onProgress=()=>{},timeoutMs=null,call=callCodex,maxModelRequests=2,resourceGuard=()=>{},productSnapshot=null}={}){
  if(!output)throw Error('OUTPUT_DIRECTORY_REQUIRED');if(!Number.isSafeInteger(maxModelRequests)||maxModelRequests<2)throw Error('MODEL_REQUEST_BUDGET_EXHAUSTED');
@@ -24,8 +25,11 @@ export async function parseDirectIR(bytes,{output,probe,model='gpt-6.1-sol',reas
  write(dir,'audit.json',reviewed.value);onProgress({stage:'AUDITING',revision:0,kind:'AUDIT_READY',signal:'AUDIT_READY'});resourceGuard();
  if(sha256(selectedBundle('parse').sha256+selectedBundle('audit').sha256)!==fingerprint)throw Error('METHOD_CHANGED_DURING_RUN');
  onProgress({stage:'VALIDATING',revision:0});let technical=acceptCandidateIR(parsed.value,reviewed.value,source);write(dir,'technical-validation.json',technical);onProgress({stage:'VALIDATING',revision:0,kind:'TECHNICAL_READY',signal:'TECHNICAL_READY'});
- const repairableTechnical=technical.schemas.proposal.ok&&technical.schemas.audit.ok&&technical.errors.every(e=>['DATA_CONSUMER_EVENT','DATA_CONSUMER_OBJECT_BINDING','DATA_PRODUCER_OBJECT_BINDING','EXTERNAL_DATA_HAS_TASK_PRODUCER','BOOLEAN_TYPE','MEMBERSHIP_TYPE','START_STATE_TYPE','IMMEDIATE_STATE_EVENT_TYPE'].includes(e.code));
- if((technical.technical_ok||repairableTechnical)&&requestBudget.remaining>=2&&((reviewed.value.omissions??[]).length||technical.rows.some(r=>r.status!=='ACCEPTED')||technical.diagnostics.some(d=>d.code==='COVERAGE_REVIEW_ISSUE'))){
+ const repairableTechnical=technical.schemas.proposal.ok&&technical.schemas.audit.ok&&technical.errors.every(e=>repairableFrameCodes.has(e.code)||['DATA_CONSUMER_EVENT','DATA_CONSUMER_OBJECT_BINDING','DATA_PRODUCER_OBJECT_BINDING','EXTERNAL_DATA_HAS_TASK_PRODUCER','BOOLEAN_TYPE','MEMBERSHIP_TYPE','START_STATE_TYPE','IMMEDIATE_STATE_EVENT_TYPE'].includes(e.code));
+ const semanticFeedback=(reviewed.value.omissions??[]).length||(reviewed.value.reviews??[]).some(r=>r.verdict!=='SUPPORT')||technical.diagnostics.some(d=>d.code==='COVERAGE_REVIEW_ISSUE');
+ const needsRepair=contractVersion==='candidate-ir/2.0'?technical.audit_status==='PERFORMED'&&(technical.errors.length||semanticFeedback):((reviewed.value.omissions??[]).length||technical.rows.some(r=>r.status!=='ACCEPTED')||technical.diagnostics.some(d=>d.code==='COVERAGE_REVIEW_ISSUE'));
+ if(contractVersion==='candidate-ir/2.0'&&technical.audit_status==='NOT_PERFORMED')revisionOutcome={status:'NOT_APPLIED',reason:'AUDIT_NOT_PERFORMED',retained_revision:0,requires_review:true};
+ if((technical.technical_ok||repairableTechnical)&&requestBudget.remaining>=2&&needsRepair){
   revision=1;dir=path.join(output,'revision-1');fs.mkdirSync(dir);const base=parsed.value;
   const {replacements,removals,coverage_indices}=revisionPermissions(base,reviewed.value,technical);
   const problems={base_ir_sha256:sha256(JSON.stringify(base)),omissions:reviewed.value.omissions,issues:reviewed.value.issues,technical_errors:technical.errors,removable_node_ids:[...reviewed.value.reviews.filter(r=>r.verdict==='CONTRADICT'&&!r.field_path).map(r=>r.target.id),...technical.errors.filter(e=>e.code==='DATA_CONSUMER_EVENT').map(e=>e.id)],missing_review_fields:technical.rows.filter(r=>r.missing_review_fields?.length).map(r=>({id:r.id,fields:r.missing_review_fields}))};
@@ -62,7 +66,9 @@ export async function parseDirectIR(bytes,{output,probe,model='gpt-6.1-sol',reas
   const targets=affectedAuditTargets(parsed.value,applied.changed,reviewed.value).filter(id=>['entities','variables','events','states','expressions','requirements'].some(k=>parsed.value[k].some(n=>n.id===id))),targeted=!reviewed.value.omissions?.length&&!removals.length&&!applied.changed.some(c=>['issues','coverage','sequences'].includes(c.collection));write(dir,'audit-targets.json',{targets,mode:targeted?'CHANGED_AND_DEPENDENT':'FULL_OMISSION_REVIEW'});
   const next=nextAuditResponse=await call({bundle:targeted?targetedAuditBundle(audit,targets):audit,source,candidate:parsed.value,directory:path.join(dir,'audit-call'),probe,model,reasoning,signal,timeoutMs,requestBudget,...telemetry('audit')});
   if(!next.receipt.thread_id||[parsed.receipt.thread_id,patched.receipt.thread_id,reviewed.receipt.thread_id].includes(next.receipt.thread_id))throw Error('AUDIT_SESSION_NOT_INDEPENDENT');
-  write(dir,'independent-audit.json',next.value);reviewed={...next,value:targeted?mergeIndependentAudit(reviewed.value,next.value,targets):next.value,attempts:[...reviewed.attempts,...next.attempts]};write(dir,'audit.json',reviewed.value);technical=acceptCandidateIR(parsed.value,reviewed.value,source);write(dir,'technical-validation.json',technical);if(!technical.technical_ok)throw Error('REVISION_TECHNICAL_REJECTED');onProgress({stage:'VALIDATING',revision:1,kind:'TECHNICAL_READY',signal:'TECHNICAL_READY'});
+  write(dir,'independent-audit.json',next.value);
+  if(contractVersion==='candidate-ir/2.0'&&(!(next.value.reviews??[]).length||targets.some(id=>!next.value.reviews.some(r=>r.target.id===id))))throw Error('REVISION_AUDIT_INCOMPLETE');
+  reviewed={...next,value:targeted?mergeIndependentAudit(reviewed.value,next.value,targets):next.value,attempts:[...reviewed.attempts,...next.attempts]};write(dir,'audit.json',reviewed.value);technical=acceptCandidateIR(parsed.value,reviewed.value,source);write(dir,'technical-validation.json',technical);if(!technical.technical_ok)throw Error('REVISION_TECHNICAL_REJECTED');onProgress({stage:'VALIDATING',revision:1,kind:'TECHNICAL_READY',signal:'TECHNICAL_READY'});
   revisionOutcome={status:'APPLIED_AND_REVIEWED',retained_revision:1};write(dir,'revision-outcome.json',revisionOutcome);
   }catch(error){
    if(!nextAuditResponse)incompleteModelRequests.push({phase:'revision-audit',revision:1,call_invoked:true,server_request_count_unknown:true,reason:error.message});

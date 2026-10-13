@@ -11,5 +11,5 @@ export function normalize(bound){
   annotations[n.id]={label:n.label??null,note:n.note??null};
  }
  const core={format:'boundx-ir-core/1',semantic_version:'kernel/1.0',input_contract:bound.raw.contract_version,root_task:bound.root,nodes:Object.fromEntries(Object.entries(nodes).sort(([a],[b])=>a.localeCompare(b))),requirements:bound.raw.requirements.map(r=>r.id).sort(),sequences:clean(bound.raw.sequences??[])};
- return {core,core_sha256:digest(stable(core)),source_map:sourceMap,annotations,raw_sha256:bound.raw_sha256,semantic_gaps:[...bound.raw.coverage.filter(c=>c.status!=='EXPRESSED').map(c=>({code:'SOURCE_COVERAGE_GAP',source_refs:c.source_refs,status:c.status})),...bound.raw.issues.map(i=>({code:'DECLARED_SEMANTIC_ISSUE',id:i.id,source_refs:i.source_refs}))]};
+ return {core,core_sha256:digest(stable(core)),source_map:sourceMap,annotations,raw_sha256:bound.raw_sha256,frame_errors:bound.frame_errors??[],semantic_gaps:[...bound.raw.coverage.filter(c=>c.status==='GAP'||c.status==='AMBIGUOUS').map(c=>({code:'SOURCE_COVERAGE_GAP',source_refs:c.source_refs,status:c.status})),...bound.raw.issues.filter(i=>i.kind!=='UNSPECIFIED').map(i=>({code:'DECLARED_SEMANTIC_ISSUE',id:i.id,source_refs:i.source_refs}))]};
 }

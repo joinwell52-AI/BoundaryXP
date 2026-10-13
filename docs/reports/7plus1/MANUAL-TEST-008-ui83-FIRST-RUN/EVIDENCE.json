@@ -1,0 +1,684 @@
+{
+  "format": "boundx-case-comparison-evidence/1",
+  "run_id": "8491302a-1c65-4774-b691-19159ad459a4",
+  "created_at": "2026-10-13T13:15:53.022Z",
+  "new_model_calls": 0,
+  "original_run_unchanged": true,
+  "source_matches_standard": true,
+  "hashes": {
+    "source.txt": "bc83e93cc4b07da76462362c151357c164965853710d2fdcb41dd49cef9e57ab",
+    "candidate-ir.json": "bc92224396900159ba1ee910e95842b7bd3c43d162d41ec40aa622f8d5835d3b",
+    "core.json": "fbf16e2c8bdcec06a19c9952285be57938d8a179f77611daa28edc369ad5c5e4",
+    "trace.json": "220bf3425163f08d9b997037bfaf4d594cbe3c8ec63668c29d3ae27ef3dd8f98",
+    "selected-resources.json": "610d5075712964ce80d99c03696d44a6647b04eca418191527cc0cc88c8f9cdd",
+    "boundary-calculations.json": "226dd018d7d70f99ae3a50bf26ce2d56bf3d30f679bd852be4bfcecc34cce7b1",
+    "revision-0/candidate-ir.json": "b126eff1af129543273abc43a75be166ef038b594941bfdcbd849accb6c5f6f8",
+    "revision-0/audit.json": "7736583227a5dcd439fb96c4748b6f699adbaedd599481e15e2cda08cee9a94e",
+    "revision-1/independent-audit.json": "1f6ec9bb85aa7c7c1b3153a7421b7979c3f0edb73eec850cdf786d258cbda56c",
+    "revision-1/patch-changes.json": "7f3d4b7ebbbc4d4a2fa1f69e45522ad89685658bef4638363affbd6b2e05a207"
+  },
+  "standard": {
+    "txt_sha256": "bc83e93cc4b07da76462362c151357c164965853710d2fdcb41dd49cef9e57ab",
+    "md_sha256": "dd6c1b88bdda8ec96c72de7efd4ce9ae9117d81ccbc6ac047c815cf1cbf18fb9"
+  },
+  "version": "0.1.0-candidate.031-r1.2-ui.83",
+  "contract": "candidate-ir/2.0",
+  "node_counts": {
+    "entities": 11,
+    "variables": 4,
+    "events": 7,
+    "states": 3,
+    "expressions": 76,
+    "requirements": 23
+  },
+  "calls": [
+    {
+      "phase": "parse",
+      "index": 0,
+      "elapsed_ms": 240470,
+      "thread_id": "01a13555-51d0-76d2-a19c-e5bf2256d0bf",
+      "schema_ok": true,
+      "observed_internal_retries": 0,
+      "conservative_request_count": 1,
+      "usage": {
+        "input_tokens": 25087,
+        "cached_input_tokens": 0,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 9916,
+        "reasoning_output_tokens": 1034
+      },
+      "actual_model": null
+    },
+    {
+      "phase": "parse",
+      "index": 1,
+      "elapsed_ms": 91504,
+      "thread_id": "01a1355c-5dde-7a43-a235-5637385b6192",
+      "schema_ok": true,
+      "observed_internal_retries": 0,
+      "conservative_request_count": 1,
+      "usage": {
+        "input_tokens": 35112,
+        "cached_input_tokens": 0,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 2653,
+        "reasoning_output_tokens": 795
+      },
+      "actual_model": null
+    },
+    {
+      "phase": "audit",
+      "index": 0,
+      "elapsed_ms": 220768,
+      "thread_id": "01a13558-fdb3-7453-9b05-2f2e2e112557",
+      "schema_ok": true,
+      "observed_internal_retries": 0,
+      "conservative_request_count": 1,
+      "usage": {
+        "input_tokens": 34994,
+        "cached_input_tokens": 0,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 8234,
+        "reasoning_output_tokens": 732
+      },
+      "actual_model": null
+    },
+    {
+      "phase": "audit",
+      "index": 1,
+      "elapsed_ms": 25876,
+      "thread_id": "01a1355d-c383-7f93-b47c-ce26bc11c6d8",
+      "schema_ok": true,
+      "observed_internal_retries": 0,
+      "conservative_request_count": 1,
+      "usage": {
+        "input_tokens": 35943,
+        "cached_input_tokens": 0,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 369,
+        "reasoning_output_tokens": 212
+      },
+      "actual_model": null
+    }
+  ],
+  "audits": {
+    "first": {
+      "review_count": 112,
+      "verdicts": [
+        "SUPPORT"
+      ],
+      "omissions": [
+        {
+          "source_refs": [
+            "s6"
+          ],
+          "affected_views": [
+            "A",
+            "R",
+            "B"
+          ],
+          "reason": "两个指定完成义务不排除开放TASK_EVENTS中第三次诊断或重试；无可消费的诊断封闭域约束。coverage已标GAP，但来源边界仍未表达。sequences为空本身不能禁止额外实例。"
+        },
+        {
+          "source_refs": [
+            "s11"
+          ],
+          "affected_views": [
+            "P",
+            "B"
+          ],
+          "reason": "test_slot仅声明身份，没有与两诊断关联的全程占用及独占关系。nonoverlap只表达两个执行区间不重叠，不能证明它们从开始到结束占用同一个槽位。"
+        },
+        {
+          "source_refs": [
+            "s12"
+          ],
+          "affected_views": [
+            "O",
+            "P"
+          ],
+          "reason": "RESULT及DATA_USE保留本次报告身份和生产者，但没有生成事件或可用时点等于对应诊断结束的明确约束；COMPLETE_RESULT仅限制生产完成不晚于消费，不能替代结束时生成。"
+        }
+      ],
+      "issues": [
+        {
+          "targets": [
+            {
+              "kind": "EVENT",
+              "id": "task"
+            }
+          ],
+          "field_path": "resources.contract",
+          "source_refs": [
+            "s1"
+          ],
+          "reason": "RESOURCE_CONTRACT_MISMATCH：输入未提供技能指定的同版CONTRACT.md，仅提供SEMANTICS.md、注册表及两个Schema；不能确认合同资源匹配。候选额外声称必须为contracts/candidate-ir-v1/CONTRACT.md，该具体路径也没有输入依据。上述来源语义裁定不构成合同符合性确认。"
+        },
+        {
+          "targets": [
+            {
+              "kind": "EVENT",
+              "id": "dev_diagnosis"
+            },
+            {
+              "kind": "EVENT",
+              "id": "ops_diagnosis"
+            },
+            {
+              "kind": "EXPRESSION",
+              "id": "task_events"
+            }
+          ],
+          "field_path": "requirements",
+          "source_refs": [
+            "s6"
+          ],
+          "reason": "给定注册表未提供诊断类别或模板归属提取算子；OTHER不能区分诊断与其他业务动作。当前无法据该操作符精确表达全部诊断只限这两个固定事件，应保留来源表达缺口，不能禁掉所有OTHER或把快照声明当作原文封闭域。"
+        },
+        {
+          "targets": [
+            {
+              "kind": "ENTITY",
+              "id": "test_slot"
+            },
+            {
+              "kind": "EVENT",
+              "id": "dev_diagnosis"
+            },
+            {
+              "kind": "EVENT",
+              "id": "ops_diagnosis"
+            },
+            {
+              "kind": "REQUIREMENT",
+              "id": "slot_nonoverlap"
+            }
+          ],
+          "field_path": "events.roles",
+          "source_refs": [
+            "s11"
+          ],
+          "reason": "给定角色及注册算子没有资源占用关系，现有字段无法建立整个执行区间对同一槽位的独占。对象实体、执行环境角色和两事件不重叠均不能替代该关系。"
+        },
+        {
+          "targets": [
+            {
+              "kind": "EVENT",
+              "id": "dev_diagnosis"
+            },
+            {
+              "kind": "EVENT",
+              "id": "ops_diagnosis"
+            },
+            {
+              "kind": "ENTITY",
+              "id": "dev_report"
+            },
+            {
+              "kind": "ENTITY",
+              "id": "ops_report"
+            }
+          ],
+          "field_path": "requirements",
+          "source_refs": [
+            "s12"
+          ],
+          "reason": "候选report_generation_time_gap关于无法表达生成精确时点的结论未获支持：给定Schema允许CREATE动作、RESULT对象及EVENT_START/EVENT_END与诊断结束的EQ约束，原文明确有生成动作。当前是生成及其时点结构遗漏；不能仅因缺少对象时点提取算子就断言合同不可表达。合同资源缺失仍须单独确认。"
+        }
+      ]
+    },
+    "final": {
+      "review_count": 0,
+      "issues": [
+        {
+          "targets": [
+            {
+              "kind": "EVENT",
+              "id": "task"
+            }
+          ],
+          "field_path": "resources.contract",
+          "source_refs": [
+            "s1"
+          ],
+          "reason": "RESOURCE_CONTRACT_MISMATCH：缺少指定的candidate-ir/2.0同版CONTRACT.md；SEMANTICS.md不能替代该必需资源。未开展逐节点语义审阅；空reviews和omissions不表示候选获得支持或不存在遗漏。"
+        }
+      ]
+    }
+  },
+  "production_result": {
+    "status": "PARTIAL",
+    "result": "NOT_RUN",
+    "calculation_performed": false,
+    "diagnostics": [
+      {
+        "layer": "CAPABILITY",
+        "code": "OPEN_EVENT_DOMAIN",
+        "node_id": "task_events",
+        "path": null,
+        "depends_on": []
+      }
+    ]
+  },
+  "checks": [
+    {
+      "name": "exact-minute-0.5",
+      "scope": "local-expression",
+      "actual": {
+        "number": "30"
+      },
+      "expected": {
+        "number": "30"
+      },
+      "matched": true
+    },
+    {
+      "name": "exact-minute-0.75",
+      "scope": "local-expression",
+      "actual": {
+        "number": "45"
+      },
+      "expected": {
+        "number": "45"
+      },
+      "matched": true
+    },
+    {
+      "name": "DEV-closed-domain",
+      "scope": "local-expression",
+      "actual": {
+        "interval": [
+          "30",
+          "45"
+        ]
+      },
+      "expected": {
+        "interval": [
+          "30",
+          "45"
+        ]
+      },
+      "matched": true
+    },
+    {
+      "name": "OPS-closed-domain",
+      "scope": "local-expression",
+      "actual": {
+        "interval": [
+          "20",
+          "40"
+        ]
+      },
+      "expected": {
+        "interval": [
+          "20",
+          "40"
+        ]
+      },
+      "matched": true
+    },
+    {
+      "name": "nonoverlap-DEV-first-touching",
+      "scope": "synthetic-local-observation",
+      "actual": true,
+      "expected": true,
+      "matched": true
+    },
+    {
+      "name": "nonoverlap-OPS-first-touching",
+      "scope": "synthetic-local-observation",
+      "actual": true,
+      "expected": true,
+      "matched": true
+    },
+    {
+      "name": "nonoverlap-overlap-rejected",
+      "scope": "synthetic-local-observation",
+      "actual": false,
+      "expected": false,
+      "matched": true
+    },
+    {
+      "name": "execution-sum-upper-included",
+      "scope": "synthetic-local-observation",
+      "actual": true,
+      "expected": true,
+      "matched": true
+    },
+    {
+      "name": "execution-sum-71-rejected",
+      "scope": "synthetic-local-observation",
+      "actual": false,
+      "expected": false,
+      "matched": true
+    },
+    {
+      "name": "total-60-included",
+      "scope": "synthetic-local-observation",
+      "actual": true,
+      "expected": true,
+      "matched": true
+    },
+    {
+      "name": "total-120-excluded",
+      "scope": "synthetic-local-observation",
+      "actual": false,
+      "expected": false,
+      "matched": true
+    },
+    {
+      "name": "generation-time-matched",
+      "scope": "synthetic-local-observation",
+      "actual": true,
+      "expected": true,
+      "matched": true
+    },
+    {
+      "name": "generation-time-mismatch",
+      "scope": "synthetic-local-observation",
+      "actual": false,
+      "expected": false,
+      "matched": true
+    },
+    {
+      "name": "actual-IR-correct-DEV-receipt-does-not-match",
+      "scope": "defect-reproduction",
+      "actual": {
+        "unknown": true
+      },
+      "expected": {
+        "unknown": true
+      },
+      "matched": true
+    },
+    {
+      "name": "actual-IR-correct-OPS-receipt-does-not-match",
+      "scope": "defect-reproduction",
+      "actual": {
+        "unknown": true
+      },
+      "expected": {
+        "unknown": true
+      },
+      "matched": true
+    },
+    {
+      "name": "actual-IR-reversed-DEV-receipt-matches",
+      "scope": "defect-reproduction",
+      "actual": true,
+      "expected": true,
+      "matched": true
+    },
+    {
+      "name": "actual-IR-reversed-OPS-receipt-matches",
+      "scope": "defect-reproduction",
+      "actual": true,
+      "expected": true,
+      "matched": true
+    }
+  ],
+  "subset_solver": [
+    {
+      "name": "numeric-temporal-subset",
+      "scope": "EXPLICIT_REQUIREMENT_SUBSET_NOT_WHOLE_CASE",
+      "requirements": [
+        "dev_required",
+        "ops_required",
+        "delivery_required",
+        "dev_time",
+        "ops_time",
+        "execution_sum",
+        "slot_nonoverlap",
+        "task_total_time",
+        "delivery_necessary_gate"
+      ],
+      "variables": {},
+      "expected": "SAT",
+      "result": "SAT",
+      "verification": "MODEL_CHECKED",
+      "compile_status": "SUPPORTED",
+      "diagnostics": [],
+      "model_check": {
+        "valid": true,
+        "failures": [],
+        "evaluation": {
+          "rows": [
+            {
+              "id": "dev_required",
+              "modality": "REQUIRED",
+              "value": true,
+              "constraining": true
+            },
+            {
+              "id": "ops_required",
+              "modality": "REQUIRED",
+              "value": true,
+              "constraining": true
+            },
+            {
+              "id": "delivery_required",
+              "modality": "REQUIRED",
+              "value": true,
+              "constraining": true
+            },
+            {
+              "id": "dev_time",
+              "modality": "REQUIRED",
+              "value": true,
+              "constraining": true
+            },
+            {
+              "id": "ops_time",
+              "modality": "REQUIRED",
+              "value": true,
+              "constraining": true
+            },
+            {
+              "id": "execution_sum",
+              "modality": "REQUIRED",
+              "value": true,
+              "constraining": true
+            },
+            {
+              "id": "slot_nonoverlap",
+              "modality": "REQUIRED",
+              "value": true,
+              "constraining": true
+            },
+            {
+              "id": "task_total_time",
+              "modality": "REQUIRED",
+              "value": true,
+              "constraining": true
+            },
+            {
+              "id": "delivery_necessary_gate",
+              "modality": "REQUIRED",
+              "value": true,
+              "constraining": true
+            }
+          ],
+          "result": "SATISFIED",
+          "business_decision": null,
+          "execution_authorization": null
+        },
+        "context": {
+          "kind": "SAT",
+          "requirements": [
+            "dev_required",
+            "ops_required",
+            "delivery_required",
+            "dev_time",
+            "ops_time",
+            "execution_sum",
+            "slot_nonoverlap",
+            "task_total_time",
+            "delivery_necessary_gate"
+          ],
+          "variables": {
+            "dev_duration": {
+              "number": "30"
+            },
+            "ops_duration": {
+              "number": "20"
+            },
+            "total_duration": {
+              "number": "60"
+            }
+          },
+          "plan": {
+            "events": []
+          },
+          "event_values": {
+            "dev_diagnosis": {
+              "id": "dev_diagnosis",
+              "task_id": "task",
+              "unit": "second",
+              "completed": true,
+              "occurred": true,
+              "end": "-20",
+              "start": "-50",
+              "succeeded": false
+            },
+            "ops_diagnosis": {
+              "id": "ops_diagnosis",
+              "task_id": "task",
+              "unit": "second",
+              "completed": true,
+              "occurred": true,
+              "end": "0",
+              "start": "-20",
+              "succeeded": false
+            },
+            "deliver": {
+              "id": "deliver",
+              "task_id": "task",
+              "unit": "second",
+              "occurred": true,
+              "start": "0",
+              "completed": false,
+              "succeeded": false,
+              "end": "0"
+            },
+            "task": {
+              "id": "task",
+              "task_id": "task",
+              "unit": "second",
+              "start": "-60",
+              "end": "0",
+              "occurred": false,
+              "completed": false,
+              "succeeded": false
+            },
+            "dev_report_create": {
+              "id": "dev_report_create",
+              "task_id": "task",
+              "unit": "second",
+              "occurred": false,
+              "completed": false,
+              "succeeded": false,
+              "start": "0",
+              "end": "0"
+            },
+            "ops_report_create": {
+              "id": "ops_report_create",
+              "task_id": "task",
+              "unit": "second",
+              "occurred": false,
+              "completed": false,
+              "succeeded": false,
+              "start": "0",
+              "end": "0"
+            },
+            "organize": {
+              "id": "organize",
+              "task_id": "task",
+              "unit": "second",
+              "occurred": false,
+              "completed": false,
+              "succeeded": false,
+              "start": "0",
+              "end": "0"
+            }
+          },
+          "states": {
+            "[\"dev_complete\",\"dev_diagnosis\"]": {
+              "value": true,
+              "unit": "second",
+              "established_at": "-20"
+            },
+            "[\"ops_complete\",\"ops_diagnosis\"]": {
+              "value": true,
+              "unit": "second",
+              "established_at": "0"
+            }
+          },
+          "receipts": [],
+          "availability": {}
+        },
+        "against": "CORE_SEMANTICS_NOT_BACKEND_AST"
+      }
+    },
+    {
+      "name": "numeric-temporal-subset-total120",
+      "scope": "EXPLICIT_REQUIREMENT_SUBSET_NOT_WHOLE_CASE",
+      "requirements": [
+        "dev_required",
+        "ops_required",
+        "delivery_required",
+        "dev_time",
+        "ops_time",
+        "execution_sum",
+        "slot_nonoverlap",
+        "task_total_time",
+        "delivery_necessary_gate"
+      ],
+      "variables": {
+        "total_duration": {
+          "number": "120"
+        }
+      },
+      "expected": "UNSAT",
+      "result": "UNSAT",
+      "verification": "BACKEND_RESULT",
+      "compile_status": "SUPPORTED",
+      "diagnostics": [],
+      "model_check": null
+    },
+    {
+      "name": "numeric-temporal-subset-sum71",
+      "scope": "EXPLICIT_REQUIREMENT_SUBSET_NOT_WHOLE_CASE",
+      "requirements": [
+        "dev_required",
+        "ops_required",
+        "delivery_required",
+        "dev_time",
+        "ops_time",
+        "execution_sum",
+        "slot_nonoverlap",
+        "task_total_time",
+        "delivery_necessary_gate"
+      ],
+      "variables": {
+        "dev_duration": {
+          "number": "45"
+        },
+        "ops_duration": {
+          "number": "26"
+        }
+      },
+      "expected": "UNSAT",
+      "result": "UNSAT",
+      "verification": "BACKEND_RESULT",
+      "compile_status": "SUPPORTED",
+      "diagnostics": [],
+      "model_check": null
+    }
+  ],
+  "limitations": [
+    "Synthetic observations are comparison inputs, not business execution evidence.",
+    "Local expressions and subset SAT do not prove the original text is fully represented.",
+    "The production global query was NOT_RUN; offline subset results do not replace it.",
+    "No actual skill/schema/compiler resources or original test artifacts were changed."
+  ]
+}

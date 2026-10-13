@@ -1,5 +1,5 @@
 import {evaluateRequirements} from './rules.mjs';import {evaluateCore} from './evaluate.mjs';import {unknown,compare,toBase,identity} from './values.mjs';
-import {planEvent} from './events.mjs';
+import {planEvent,roleBindingFailures} from './events.mjs';
 export function modelContext(core,problem,model){
  const ctx={...structuredClone(problem.query),plan:structuredClone(problem.plan),event_values:{},variables:{...problem.query.variables},states:structuredClone(problem.query.states??{}),receipts:structuredClone(problem.query.receipts??[]),availability:structuredClone(problem.query.availability??{})};
  for(const s of Object.values(ctx.states))if(s&&typeof s==='object'&&s.established_at!=null){s.established_at=toBase(s.established_at,s.unit??'second');s.unit='second';}
@@ -17,6 +17,8 @@ export function modelContext(core,problem,model){
 export function verifyModel(core,problem,model,{refinement=null}={}){
  try{
   const ctx=modelContext(core,problem,model),evaluation=evaluateRequirements(core,ctx),failures=evaluation.rows.filter(r=>r.constraining&&r.value!==true).map(r=>({id:r.id,code:unknown(r.value)?'MODEL_UNDECIDED':'MODEL_CONSTRAINT_VIOLATED'}));
+  failures.push(...roleBindingFailures(core,ctx,r=>evaluateCore(core,r,ctx)));
+  for(const [id,expected]of Object.entries(problem.query.variables??{})){const actual=ctx.variables[id];if(expected?.number!==undefined?actual?.number===undefined||compare(expected.number,actual.number)!==0:identity(expected)!==identity(actual))failures.push({id,code:'QUERY_VARIABLE_BINDING_CONFLICT'});}
   for(const e of [...ctx.plan.events,...Object.values(ctx.event_values)]){if(e.completed===true&&e.occurred!==true||e.succeeded===true&&e.completed!==true)failures.push({id:e.id,code:'EVENT_STATE_AXIOM'});if(e.occurred===true&&e.start!=null&&e.end!=null&&compare(e.start,e.end)>0)failures.push({id:e.id,code:'EVENT_TIME_AXIOM'});}
   for(const x of ctx.receipts)if(x.complete===true&&x.any===false)failures.push({id:x.artifact,code:'RECEIPT_AXIOM'});
   const states=[];

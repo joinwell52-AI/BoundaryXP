@@ -14,7 +14,7 @@ export function acceptedIRFields(row,paths){
 }
 export function acceptCandidateIR(ir,audit,source){
  let check;const selectedAuditCheck=ir.contract_version==='candidate-ir/2.0'?auditV2Check:auditCheck;
- if(ir.contract_version==='candidate-ir/2.0'){try{compileCore(ir);for(const s of ir.source_table)linkQuote(source,s);check={ok:true,errors:[]};}catch(e){check={ok:false,errors:[e.diagnostic??{code:'SOURCE_OR_CORE_INVALID',message:e.message}]};}}
+ if(ir.contract_version==='candidate-ir/2.0'){try{const core=compileCore(ir,{collectFrameErrors:true});for(const s of ir.source_table)linkQuote(source,s);check={ok:true,errors:core.frame_errors};}catch(e){check={ok:false,errors:[e.diagnostic??{code:'SOURCE_OR_CORE_INVALID',message:e.message}]};}}
  else check=validateCandidateIR(ir,source.text);
  const errors=[...check.errors],rows=[];
  if(!selectedAuditCheck(audit))errors.push({code:'AUDIT_SCHEMA',errors:selectedAuditCheck.errors});
@@ -49,7 +49,9 @@ export function acceptCandidateIR(ir,audit,source){
   row.status=Object.values(row.field_status).includes('REJECTED')?'REJECTED':Object.values(row.field_status).every(s=>s==='ACCEPTED')?'ACCEPTED':'UNRESOLVED';
  }}
  const diagnostics=[...errors,...(audit.omissions??[]).map(x=>({code:'AUDIT_OMISSION',...x})),...(ir.coverage??[]).filter(x=>x.status==='GAP').map(x=>({code:'COVERAGE_GAP',...x})),...(audit.issues??[]).filter(x=>pathOf(x.field_path)==='coverage').map(x=>({code:'COVERAGE_REVIEW_ISSUE',...x}))];
+ const audit_status=(audit.reviews??[]).length?'PERFORMED':'NOT_PERFORMED';
+ if(ir.contract_version==='candidate-ir/2.0'&&audit_status==='NOT_PERFORMED')diagnostics.push({code:'AUDIT_NOT_PERFORMED',reason:'审阅没有给出节点裁定；不能将空审阅当作没有语义问题。'});
  const linkedSource={...source,sha256:source.sha256??sha256(source.text)},link=table=>(table??[]).flatMap(c=>{try{return [linkQuote(linkedSource,c)];}catch{return [];}});
  for(const sequence of ir.sequences??[])if(!(audit.reviews??[]).some(r=>r.target.id===sequence.template.id&&r.field_path==='sequence'&&r.verdict==='SUPPORT'))diagnostics.push({code:'SEQUENCE_REVIEW_REQUIRED',id:sequence.template.id});
- return {format:'boundx-candidate-ir-acceptance/1',source_sha256:linkedSource.sha256,source_links:link(ir.source_table),audit_source_links:link(audit.source_table),rows,errors,diagnostics,technical_ok:errors.length===0,schemas:{proposal:{ok:check.ok},audit:{ok:!!selectedAuditCheck(audit)}},audit_agreement_is_not_correctness_proof:true,business_decision:null,execution_authorization:null};
+ return {format:'boundx-candidate-ir-acceptance/1',source_sha256:linkedSource.sha256,source_links:link(ir.source_table),audit_source_links:link(audit.source_table),rows,errors,diagnostics,technical_ok:errors.length===0,audit_status,schemas:{proposal:{ok:check.ok},audit:{ok:!!selectedAuditCheck(audit)}},audit_agreement_is_not_correctness_proof:true,business_decision:null,execution_authorization:null};
 }

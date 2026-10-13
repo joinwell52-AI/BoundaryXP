@@ -29,6 +29,20 @@ export function preparePlan(core,plan={}){
  return result;
 }
 export const rolesOf=(core,event,role)=>unique((event.roles??core.nodes[event.template_id??event.id]?.roles??[]).filter(r=>r.role===role).map(r=>r.value));
+export function roleBindingFailures(core,context,resolve){
+ const failures=[];
+ for(const e of context.plan?.events??[]){
+  if(!e.roles)continue;
+  const declaration=core.nodes[e.template_id??e.id];
+  if(declaration?.category!=='EVENT')continue;
+  for(const role of declaration.roles){
+   const expected=resolve(role.value),observed=e.roles.filter(r=>r.role===role.role).map(r=>resolve(r.value));
+   if(expected?.unknown||observed.some(v=>v?.unknown))failures.push({id:e.id,code:'PLAN_ROLE_BINDING_UNDECIDED',role:role.role});
+   else if(!observed.some(v=>stable(v)===stable(expected)))failures.push({id:e.id,code:'PLAN_ROLE_BINDING_CONFLICT',role:role.role,expected});
+  }
+ }
+ return failures;
+}
 export function planEvent(core,context,id){
  const found=context.plan?.events?.find(e=>e.id===id)??context.event_values?.[id];
  if(found)return found;
