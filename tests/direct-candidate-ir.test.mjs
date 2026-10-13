@@ -15,6 +15,29 @@ function fixture(){return {format:'boundx-candidate-ir/1',contract_version:'cand
 function audit(ir){const kinds={entities:'ENTITY',variables:'VARIABLE',events:'EVENT',states:'STATE',expressions:'EXPRESSION',requirements:'REQUIREMENT'};return {format:'boundx-candidate-ir-audit/1',contract_version:'candidate-ir/1.0',source_table:ir.source_table,reviews:Object.entries(kinds).flatMap(([k,kind])=>ir[k].map(n=>({target:R(kind,n.id),field_path:'',verdict:'SUPPORT',context_refs:[],source_refs:['s'],reason:'人工机制测试固定响应，不是实际模型结果'}))),omissions:[],issues:[]};}
 const originalFixture=fixture;fixture=()=>({...originalFixture(),contract_version:candidateSchema.properties.contract_version.const});
 const originalAudit=audit;audit=ir=>{for(const r of ir.requirements)if(r.kind==='DATA_USE'&&!r.data_use.origin)r.data_use.origin=r.data_use.producer?'INTERNAL':'UNSTATED';return {...originalAudit(ir),contract_version:candidateSchema.properties.contract_version.const};};
+
+test('empty and structurally identical patches retain original review without a redundant fourth model request',async()=>{
+ for(const identicalReplacement of [false,true]){
+  const ir=fixture(),review=audit(ir);review.omissions.push({source_refs:['s'],affected_views:['O'],reason:'Unexpressed condition remains unresolved'});
+  review.issues.push({targets:[R('EVENT','deliver')],field_path:'roles',source_refs:['s'],reason:'Keep local doubt'});
+  const dir=fs.mkdtempSync(path.join(os.tmpdir(),'boundx-unchanged-patch-'));let calls=0;
+  try{
+   const result=await parse7Plus1(Buffer.from(text),{output:dir,probe:{},maxModelRequests:4,call:async x=>{
+    const step=++calls;x.requestBudget.remaining--;let value;
+    if(step===1)value=ir;else if(step===2)value=review;else if(step===3){
+     value={...structuredClone(ir),format:'boundx-candidate-ir-patch/1',base_ir_sha256:sha256(JSON.stringify(ir)),reason:'No faithful change possible'};
+     for(const key of ['source_table','entities','variables','events','states','expressions','requirements','issues','coverage'])value[key]=[];
+     if(identicalReplacement)value.events=[Object.fromEntries(Object.entries(ir.events[0]).reverse())];
+    }else throw Error('UNNECESSARY_REAUDIT');
+    return {value,receipt:{thread_id:'session-'+step},attempts:[{thread_id:'session-'+step}]};
+   }});
+   assert.equal(calls,3);assert.equal(result.revision_outcome.reason,'PATCH_NO_CHANGE');assert.equal(result.ir_origin,'LLM_RESPONSE_UNCHANGED');
+   assert.deepEqual(result.ir,ir);assert.deepEqual(result.audit,review);assert.equal(result.model_calls.parse.length,2);assert.equal(result.model_calls.audit.length,1);
+   assert.ok(result.technical.diagnostics.some(d=>d.code==='AUDIT_OMISSION'));assert.equal(result.boundary_calculations.status,'PARTIAL');
+   assert.equal(fs.existsSync(path.join(dir,'revision-1/audit-call')),false);
+  }finally{fs.rmSync(dir,{recursive:true,force:true});}
+ }
+});
 test('data use enforces producer identity and rejects an unrelated result',()=>{const ir=fixture();ir.entities.push({...common('other_report'),label:'另一报告',kind:'DOCUMENT',instance_scope:'ROOT',members:[]});ir.events.push({...structuredClone(ir.events[0]),id:'create',operation:'CREATE',roles:[{role:'RESULT',value:R('ENTITY','report'),source_refs:['s']}]});ir.expressions.push({...common('enabled'),operator:'BOOLEAN',arguments:[],literal:true,unit:null,bound_variable:null},{...common('create_occurred'),operator:'EVENT_OCCURRED',arguments:[R('EVENT','create')],literal:null,unit:null,bound_variable:null});ir.requirements.push({...ir.requirements[0],id:'use',kind:'DATA_USE',body:R('EXPRESSION','enabled'),data_use:{object:R('ENTITY','report'),consumer:R('EVENT','deliver'),producer:R('EVENT','create'),availability:'COMPLETE_RESULT'}});let c=calculateDirectIR(ir,acceptCandidateIR(ir,audit(ir),{text}));assert.equal(c.status,'CALCULATED',JSON.stringify(c.gaps));ir.requirements.push({...ir.requirements[0],id:'deny_create',modality:'FORBIDDEN',subject:R('EVENT','create'),body:R('EXPRESSION','create_occurred')});assert.equal(calculateDirectIR(ir,acceptCandidateIR(ir,audit(ir),{text})).status,'CONFLICT');ir.events.find(e=>e.id==='create').roles[0].value=R('ENTITY','other_report');assert.ok(validateCandidateIR(ir,text).errors.some(e=>e.code==='DATA_PRODUCER_OBJECT_BINDING'));});
 test('qualitative immediate response has no invented numeric deadline',()=>{const ir=fixture();ir.states.push({...common('trigger'),label:'触发状态',kind:'EXTERNAL',subject:null,arguments:[]});ir.events.push({...structuredClone(ir.events[0]),id:'stop',operation:'STOP',roles:[]});ir.expressions.push({...common('immediate'),operator:'IMMEDIATE_AFTER',arguments:[R('STATE','trigger'),R('EVENT','stop')],literal:null,unit:null,bound_variable:null});ir.requirements.push({...ir.requirements[0],id:'urgent',kind:'CONSTRAINT',subject:R('EVENT','stop'),body:R('EXPRESSION','immediate')});const c=calculateDirectIR(ir,acceptCandidateIR(ir,audit(ir),{text}));assert.equal(c.status,'CALCULATED',JSON.stringify(c.gaps));assert.equal(c.priority_rules.length,1);assert.deepEqual(c.intervals,[]);assert.ok(c.problem.orders.some(x=>x.id.startsWith('priority:')));});
 test('field audit needs complete coverage; a member-only verdict cannot certify identity and scope',()=>{const ir=fixture(),a=audit(ir);a.reviews=a.reviews.filter(x=>x.target.id!=='report');a.reviews.push({target:R('ENTITY','report'),field_path:'members',verdict:'SUPPORT',source_refs:['s'],context_refs:[],reason:'局部支持'});let t=acceptCandidateIR(ir,a,{text});assert.equal(t.rows.find(r=>r.id==='report').status,'UNRESOLVED');for(const key of ['label','kind','instance_scope'])a.reviews.push({...a.reviews.at(-1),field_path:key});t=acceptCandidateIR(ir,a,{text});assert.equal(t.rows.find(r=>r.id==='report').status,'ACCEPTED');a.reviews.at(-1).verdict='CONTRADICT';assert.equal(acceptCandidateIR(ir,a,{text}).rows.find(r=>r.id==='report').status,'REJECTED');});

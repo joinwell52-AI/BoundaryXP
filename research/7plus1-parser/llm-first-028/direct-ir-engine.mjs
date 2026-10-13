@@ -1,4 +1,5 @@
 import fs from 'node:fs';import path from 'node:path';
+import {isDeepStrictEqual} from 'node:util';
 import {prepareSource,sha256} from './source.mjs';import {callCodex,probeCodex} from './provider.mjs';import {modelSignal} from './observability.mjs';
 import {directIRBundle} from './direct-ir-bundle.mjs';import {acceptCandidateIR} from './direct-ir-accept.mjs';import {projectDirectIR} from './direct-ir-view.mjs';import {calculateDirectIR} from './direct-ir-calculate.mjs';
 import {revisionBundle,applyIRPatch} from './direct-ir-revision.mjs';
@@ -39,6 +40,11 @@ export async function parseDirectIR(bytes,{output,probe,model='gpt-6.1-sol',reas
    technical={...technical,diagnostics:[...technical.diagnostics,{code:'REVISION_NOT_APPLIED',reason:'局部修订未应用，保留首轮IR与审阅；'+error.message}]};
    write(dir,'revision-outcome.json',revisionOutcome);write(dir,'candidate-ir.json',base);write(dir,'audit.json',reviewed.value);write(dir,'technical-validation.json',technical);
    onProgress({stage:'VALIDATING',revision:1,signal:'REVISION_NOT_APPLIED'});
+  }
+  if(applied&&isDeepStrictEqual(applied.ir,base)){
+   revisionOutcome={status:'NOT_APPLIED',reason:'PATCH_NO_CHANGE',retained_revision:0,retained_ir_sha256:sha256(JSON.stringify(base)),patch_sha256:sha256(JSON.stringify(patched.value)),requires_review:false};
+   write(dir,'patch-changes.json',[]);write(dir,'revision-outcome.json',revisionOutcome);write(dir,'proposal.json',base);write(dir,'candidate-ir.json',base);write(dir,'audit.json',reviewed.value);write(dir,'technical-validation.json',technical);
+   write(dir,'audit-targets.json',{targets:[],mode:'SKIPPED_UNCHANGED_IR'});onProgress({stage:'VALIDATING',revision:1,signal:'REVISION_NOT_APPLIED'});applied=null;
   }
   if(applied){
   write(dir,'patch-changes.json',applied.changed);
