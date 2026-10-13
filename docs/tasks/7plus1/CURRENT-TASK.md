@@ -1,5 +1,9 @@
 # 当前 BoundX 7+1 产品开发任务
 
+## 2026-10-13 最新启动授权与ui83
+
+ADMIN在WP0—WP5隔离交付后授权“启动新的58618”“同步最新的”“安装最新的”。已将统一IR内核2.0接入原UI，备份后安装并实际启动同一个58618入口。页面版本v0.1.83，合同candidate-ir/2.0，产品状态仍WAITING_ADMIN_REVIEW；本次部署没有真实模型验收调用。详见 [ui83安装与启动报告](../../reports/7plus1/UI83-IR-KERNEL-DEPLOYMENT/REPORT.md)。以下隔离阶段的未部署记录按当时状态保留。
+
 ## 2026-10-13 当前隔离任务
 
 ADMIN 在当前会话下发 `BoundX-IR-Kernel-Implementation-v1.0.zip` 并授权连续实施 WP0—WP5。当前任务为 **BXP-IR-KERNEL-CLOSURE-001**，任务依据保存在 [原始任务包](BXP-IR-KERNEL-CLOSURE-001/CODEX-TASK.zh-CN.md) 及同目录 PLAN；状态及实际证据见 [内核报告](../../ir-kernel/REPORT.md)。以下云端及032指针保留为历史，不覆盖本次授权。
