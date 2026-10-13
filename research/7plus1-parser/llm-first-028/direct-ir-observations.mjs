@@ -47,6 +47,7 @@ export function evaluateDirectObservations(ir,acceptance,input={}){
  const unknown=(id,reason)=>{if(!gaps.some(g=>g.node_id===id&&g.reason===reason))gaps.push({node_id:id,reason});return null;};
  const expand=r=>{if(r?.kind==='ENTITY'&&nodes.get(r.id)?.kind==='GROUP')return nodes.get(r.id).members.flatMap(expand);return identity(r)?[r]:null;};
  const refsEqual=(expected,actual)=>{
+  if(expected?.kind==='VARIABLE')return unknown(expected.id,'OBSERVED_OBJECT_VARIABLE_BINDING_NOT_IMPLEMENTED');
   const a=expand(expected),b=(Array.isArray(actual)?actual:[actual]).flatMap(r=>expand(r)??[null]);
   if(!a||b.includes(null))return null;
   return a.length===b.length&&a.every(x=>b.some(y=>same(x,y)===true))&&b.every(x=>a.some(y=>same(x,y)===true));
@@ -169,6 +170,7 @@ export function evaluateDirectObservations(ir,acceptance,input={}){
  };
  const dataUse=(requirement,record)=>{
   const d=requirement.data_use;if(!Array.isArray(record.uses))return null;
+  if(d.object.kind==='VARIABLE')return unknown(requirement.id,'OBSERVED_OBJECT_VARIABLE_BINDING_NOT_IMPLEMENTED');
   const uses=record.uses.filter(u=>same(d.object,u.object)===true);if(!uses.length)return record.uses.some(u=>!identity(u.object))?null:false;
   return any(uses.map(u=>{
    const checks=[u.origin===undefined?null:u.origin===d.origin,u.available===false?false:u.available===true?true:null];

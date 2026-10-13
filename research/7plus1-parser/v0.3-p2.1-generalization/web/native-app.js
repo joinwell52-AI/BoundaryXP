@@ -7,6 +7,7 @@ const stages={QUEUED:'等待',PREPARING:'准备与版本核对',PARSING:'Codex �
 const errors={EMPTY_SOURCE:'请输入非空任务',SOURCE_BYTE_LIMIT:'原文容量超过1 MiB，不会截断',INVALID_UTF8:'文件不是有效UTF-8',CODEX_LOGIN_REQUIRED:'Codex 登录失效，请在本机重新登录',CODEX_QUOTA_OR_RATE_LIMIT:'Codex 额度或限流，未自动重试',CODEX_TIMEOUT:'本地调用超时，子进程已停止',CODEX_NETWORK_FAILURE:'网络调用失败',CODEX_MODEL_UNAVAILABLE:'请求模型不可用',COMPILER_BUSY:'已有编译正在进行',SESSION_REQUIRED:'页面会话失效，请刷新',COMPILER_ERROR:'编译失败，详情保存在本地运行目录'};
 Object.assign(errors,{COMPACT_WIRE_CONTRACT_FAILURE:'模型响应未通过结构或引用检查，原响应已保存，未自动重跑',PATCH_GLOBAL_ID_COLLISION:'局部修订引入重复编号，未接受该修订',IDENTITY_RESERVED_ID:'候选节点使用了保留编号 ROOT，未接受该候选',MODEL_REQUEST_BUDGET_EXHAUSTED:'本次有界请求数已用完，已保留结果与缺口'});
 let current=null,uploaded=null,session=null,pollTimer=null,busy=false,tab='pending';
+errors.DIRECT_IR_TECHNICAL_REJECTED='候选IR未通过技术校验；具体字段和错误见过程区，后续计算未启动';
 const settingLabels={low:'低 · 较少推理',medium:'中 · 默认',high:'高 · 更深入',xhigh:'很高',max:'最高'};
 function configureModels(){
  document.querySelector('.model-settings summary').textContent='本次运行的模型与会话记录';
