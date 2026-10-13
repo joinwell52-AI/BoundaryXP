@@ -38,6 +38,7 @@ export function renderBoundaryCalculations(container,trace,onEvidence=()=>{},onO
  container.replaceChildren();container.append(el('h2','最终结果：7+1边界数学计算'));
  const c=trace?.boundary_calculations;
  if(!c){container.append(el('p',trace?'此历史记录没有保存本版计算阶段；未重算、未补造。':'等待IR与固定7+1生成后，计算程序直接消费同一IR。'));return;}
+ if(c.format==='boundx-kernel-result/1')return renderKernelCalculation(container,trace);
  if(c.format==='boundx-direct-ir-calculation/1'){
   const nodes=new Map(['entities','variables','events','states','expressions'].flatMap(k=>(trace.ir[k]??[]).map(x=>[x.id,x]))),names=new Map([...nodes].filter(([,x])=>x.label).map(([id,x])=>[id,x.label]));
   const point=r=>{const x=nodes.get(r.id);if(!x?.operator)return names.get(r.id)??r.id;const suffix={EVENT_START:'开始时点',EVENT_END:'结束时点',STATE_ESTABLISHED:'成立时点'}[x.operator];return suffix?point(x.arguments[0])+suffix:r.id;};
@@ -180,4 +181,17 @@ export function renderBoundaryCalculations(container,trace,onEvidence=()=>{},onO
   container.append(form);
  }
  if(container.dataset.runId){const download=el('a','导出原编译的完整计算JSON');download.href='/api/runs/'+container.dataset.runId+'/calculations.json';download.download='';container.append(download);}
+}
+
+function renderKernelCalculation(container,trace){
+ const c=trace.boundary_calculations,meaning={SAT:'存在满足所列约束的安排',UNSAT:'所列约束不能同时满足',SATISFIED:'给定安排满足所检查约束',VIOLATED:'给定安排违反约束',UNKNOWN:'当前证据或资源不足，尚未确定',NOT_RUN:'该查询未进入求解，请看下面的具体原因'};
+ container.append(el('p','统一IR内核 2.0 · '+(meaning[c.result]??c.result)),el('p','计算支持状态：'+c.compile_status+'；复核等级：'+c.verification+'；候选状态：'+c.ir_status));
+ container.append(el('p','Schema通过、审阅一致、约束可满足和原文解释正确分别判断；计算结果不构成业务授权。'));
+ if(c.core_sha256)container.append(el('p','本次Core摘要：'+c.core_sha256));
+ const problems=[...new Map([...(c.diagnostics??[]),...(c.gaps??[])].map(x=>[JSON.stringify(x),x])).values()];
+ if(problems.length){const section=el('section');section.append(el('h3','本次尚未完成的部分'));for(const x of problems)section.append(el('p',(x.node_id??x.id??'整体')+'：'+(x.reason??x.message??x.code)));container.append(section);}
+ const values=c.kernel_summary?.values??[];if(values.length){const section=el('details');section.append(el('summary','逐表达式结果：操作数、运算与计算值'));for(const x of values)section.append(el('p',x.id+' · '+x.operator+' → '+JSON.stringify(x.value??x.diagnostic)));container.append(section);}
+ if(c.model_check)container.append(el('p','Core见证复核：'+(c.model_check.valid?'通过':'未通过')));
+ const raw=el('details');raw.append(el('summary','查看查询范围、模型、SMT与完整计算证据'),el('pre',JSON.stringify(c,null,2)));container.append(raw);
+ if(trace.kernel_core){const core=el('details');core.append(el('summary','技术下降：Core与来源映射'),el('pre',JSON.stringify(trace.kernel_core,null,2)));container.append(core);}
 }

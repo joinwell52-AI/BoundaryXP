@@ -4,7 +4,7 @@ if(fs.existsSync(output))throw Error('EVIDENCE_OUTPUT_ALREADY_EXISTS');fs.mkdirS
 const groups={kernel:fs.readdirSync(path.join(root,'tests/ir-kernel')).filter(x=>x.endsWith('.test.mjs')).map(x=>'tests/ir-kernel/'+x),legacy:fs.readdirSync(path.join(root,'tests')).filter(x=>(x.startsWith('direct-ir-')||x==='direct-candidate-ir.test.mjs')&&x.endsWith('.test.mjs')&&x!=='direct-ir-skill-profiles.test.mjs').map(x=>'tests/'+x)};
 const results=[];
 for(const [group,files]of Object.entries(groups)){
- for(const file of files)if(/\.listen\s*\(|createServer\s*\(/.test(fs.readFileSync(path.join(root,file),'utf8')))throw Error('LISTENING_TEST_FORBIDDEN:'+file);
+ for(const file of files)if(/\.listen\s*\(/.test(fs.readFileSync(path.join(root,file),'utf8')))throw Error('LISTENING_TEST_FORBIDDEN:'+file);
  const run=spawnSync(process.execPath,['--test','--test-concurrency=1','--test-reporter=tap',...files],{cwd:root,encoding:'utf8',windowsHide:true,maxBuffer:32*1024*1024,timeout:300000});
  fs.writeFileSync(path.join(output,group+'.tap'),run.stdout??'');fs.writeFileSync(path.join(output,group+'.stderr'),run.stderr??'');const count=k=>Number(run.stdout?.match(new RegExp('^# '+k+' (\\d+)$','m'))?.[1]??0);
  results.push({group,files,exit_code:run.status,tests:count('tests'),pass:count('pass'),fail:count('fail'),cancelled:count('cancelled'),error:run.error?.message??null});

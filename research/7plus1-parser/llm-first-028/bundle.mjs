@@ -8,9 +8,9 @@ import {requestProfile,outputSchemaDelivery,renderResources} from './prompt-prof
 import {applyWireBundle} from './compact-wire.mjs';
 import {directIRBundle} from './direct-ir-bundle.mjs';
 export const ROOT=path.dirname(fileURLToPath(import.meta.url));
-export function buildBundle(phase,{parseMethod=null}={}){
+export function buildBundle(phase,{parseMethod=null,contractVersion='candidate-ir/1.4'}={}){
  if(parseMethod==='MD')throw Error('MD_COMPARISON_STOPPED');
- return directIRBundle(phase,{parseMethod});
+ return directIRBundle(phase,{parseMethod,contractVersion});
 }
 export function buildLegacyBundle(phase,{parseMethod=null}={}){
  if(parseMethod==='MD')throw Error('MD_COMPARISON_STOPPED');

@@ -31,6 +31,10 @@ export function publicError(e){
 }
 const safeTrace=trace=>{const {model_calls,...rest}=trace;return {...rest,model_calls:Object.fromEntries(Object.entries(model_calls??{}).map(([phase,calls])=>[phase,calls.map(({thread_id,elapsed_ms,exit_code,usage,skill_mode,actual_model,schema_check})=>({thread_id,elapsed_ms,exit_code,usage,skill_mode,actual_model,schema_check}))]))};};
 export function createServer({dataRoot=DATA,parse=parse7Plus1,legacyRoot=process.env.BOUNDX_LEGACY_DIR?path.resolve(process.env.BOUNDX_LEGACY_DIR):path.resolve(ROOT,'../local-lab/history'),timeoutMs=null,resourceGuard=()=>{},productSnapshot=null,maxModelRequests=6,catalog=modelCatalog()}={}){
+ const selectedBundle=(phase,method='SKILL')=>buildBundle(phase,{parseMethod:method,contractVersion:productSnapshot?.contract??'candidate-ir/1.4'});
+ const resourceProfile=selectedBundle('parse').resource_profile;
+ const resourceFingerprint=(method='SKILL')=>sha256(JSON.stringify([selectedBundle('parse',method).sha256,selectedBundle('audit',method).sha256,compilerRevision,sha256(loadedRuntime)]));
+ const resourceEvidence=(method='SKILL')=>({parse_method:method,resource_profile:selectedBundle('parse',method).resource_profile,request_profile:requestProfile,effective_resource_sha256:resourceFingerprint(method),selected_resources:{parse:bundleEvidence(selectedBundle('parse',method)),audit:bundleEvidence(selectedBundle('audit',method))}});
  fs.mkdirSync(path.join(dataRoot,'runs'),{recursive:true});
  const records=new Map(),sessions=new Map(),active=new Map(),clearTokens=new Map();
  const folder=id=>{if(!ID.test(id))throw Error('INVALID_RUN_ID');return path.join(dataRoot,'runs',id);};
@@ -59,7 +63,7 @@ export function createServer({dataRoot=DATA,parse=parse7Plus1,legacyRoot=process
    if(req.method==='GET'&&route==='/api/session'){
     resourceGuard();
     const session=randomBytes(32).toString('hex');sessions.set(session,true);res.setHeader('set-cookie',`boundx_session=${session}; HttpOnly; SameSite=Strict; Path=/`);
-    return send(200,{token:session,product_snapshot:productSnapshot,engine:'BoundX 7+1 compiler',compiler_revision:compilerRevision,runtime_sha256:sha256(loadedRuntime),contract:buildBundle('parse').schema.properties.contract_version.const,skill_mode:'INLINE_BUNDLE',parse_method:'SKILL',parse_methods:['SKILL','SKILL1'],resource_profile:resourceProfile,request_profile:requestProfile,comparison_resources:{SKILL:resourceEvidence(),SKILL1:resourceEvidence('SKILL1')},native_skill_loading:'NOT_VERIFIED',actual_model:null,requested_model:catalog.default_model,requested_reasoning:catalog.default_reasoning,model_catalog:catalog,source_lineage_supported:false,limit_codepoints:null,input_limits:INPUT_LIMITS,model_wait_policy:{automatic_timeout_ms:timeoutMs>0?timeoutMs:null,manual_cancel:true},business_execution_enabled:false});
+    return send(200,{token:session,product_snapshot:productSnapshot,engine:'BoundX 7+1 compiler',compiler_revision:compilerRevision,runtime_sha256:sha256(loadedRuntime),contract:selectedBundle('parse').schema.properties.contract_version.const,skill_mode:'INLINE_BUNDLE',parse_method:'SKILL',parse_methods:['SKILL','SKILL1'],resource_profile:resourceProfile,request_profile:requestProfile,comparison_resources:{SKILL:resourceEvidence(),SKILL1:resourceEvidence('SKILL1')},native_skill_loading:'NOT_VERIFIED',actual_model:null,requested_model:catalog.default_model,requested_reasoning:catalog.default_reasoning,model_catalog:catalog,source_lineage_supported:false,limit_codepoints:null,input_limits:INPUT_LIMITS,model_wait_policy:{automatic_timeout_ms:timeoutMs>0?timeoutMs:null,manual_cancel:true},business_execution_enabled:false});
    }
    if(req.method==='GET'&&route==='/api/runs')return send(200,[...[...records.values()].map(summary),...legacyList()].sort((a,b)=>String(b.created_at).localeCompare(String(a.created_at))));
    const legacy=/^\/api\/legacy\/([a-f0-9-]+)$/u.exec(route);

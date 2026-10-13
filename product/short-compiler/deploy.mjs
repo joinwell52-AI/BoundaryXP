@@ -19,7 +19,7 @@ if(operation==='install'||operation==='upgrade'){
  }
  fs.mkdirSync(target,{recursive:true});for(const x of manifest.files){const p=path.join(target,x.path);fs.mkdirSync(path.dirname(p),{recursive:true});fs.copyFileSync(path.join(source,x.path),p,fs.constants.COPYFILE_EXCL);}
  fs.copyFileSync(path.join(source,'PRODUCT-MANIFEST.json'),path.join(target,'PRODUCT-MANIFEST.json'));verify(target);
- const installed=spawnSync(process.platform==='win32'?'npm.cmd':'npm',['ci','--omit=dev','--ignore-scripts'],{cwd:target,stdio:'inherit',shell:process.platform==='win32',windowsHide:true});if(installed.status!==0)throw Error('DEPENDENCY_INSTALL_FAILED');
+ const installed=spawnSync(process.platform==='win32'?'npm.cmd':'npm',['ci','--omit=dev','--ignore-scripts',...(args.includes('--offline')?['--offline','--no-audit','--no-fund']:[])],{cwd:target,stdio:'inherit',shell:process.platform==='win32',windowsHide:true});if(installed.status!==0)throw Error('DEPENDENCY_INSTALL_FAILED');
  if(!fs.existsSync(configFile))atomic(configFile,{port:Number(get('--port','58619')),data_dir:path.join(home,'data'),codex_binary:process.env.BOUNDX_CODEX_EXE??null,legacy_dir:null});
  atomic(currentFile,{version:manifest.version,previous:fs.existsSync(currentFile)?read(currentFile).version:null});console.log('INSTALLED '+manifest.version+' at '+home);
 }else if(operation==='rollback'){

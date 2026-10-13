@@ -1,6 +1,9 @@
 import fs from 'node:fs';import path from 'node:path';import {fileURLToPath} from 'node:url';import {sha256} from './source.mjs';import {candidateSchema,auditSchema} from './contracts/candidate-ir-v1/schema.mjs';
+import {directIRKernelBundle} from './direct-ir-kernel-resources.mjs';
 const root=path.dirname(fileURLToPath(import.meta.url));
-export function directIRBundle(phase,{parseMethod='SKILL'}={}){
+export function directIRBundle(phase,{parseMethod='SKILL',contractVersion='candidate-ir/1.4'}={}){
+ if(contractVersion==='candidate-ir/2.0')return directIRKernelBundle(phase,{parseMethod:parseMethod??'SKILL'});
+ if(contractVersion!=='candidate-ir/1.4')throw Error('UNSUPPORTED_RUNTIME_CONTRACT');
  if(!['parse','audit'].includes(phase))throw Error('DIRECT_IR_PHASE');
  parseMethod??='SKILL';if(!['SKILL','SKILL1'].includes(parseMethod))throw Error('INVALID_PARSE_METHOD');
  const skillPath=parseMethod==='SKILL1'?`skill-profiles/semantics-first-r02/boundx-semantic-${phase}/SKILL.md`:`skills/boundx-semantic-${phase}/SKILL.md`;
