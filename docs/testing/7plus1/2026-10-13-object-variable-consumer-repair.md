@@ -36,3 +36,11 @@ CALCULATED 表示当前候选 IR 的支持部分能被计算，不等于原文�
 当前相关直接IR、观测、回放、两种Skill、页面过程及实时状态测试：113通过，0失败。另行尝试的旧 product/short-compiler/tests/runtime-version.test.mjs 在导入已不存在的 renderVersionInfo 时失败；该导出在本轮父提交已不存在，未计为本次通过，不宣称仓库全量回归零失败。
 
 本地逐层产物：D:/boundx/.boundx/manual-002-variable-repair-20261013/。失败的首轮消费者回放也保留。本轮第三份文本正在 ui78 上真实运行时，未替换其运行目录或中断进程。ui79 包须在目标空闲后安装，安装状态以交付核查记录为准。
+
+## 冻结安装验收
+
+ui79 已在独立干净目录安装，203个清单文件校验通过。两份真实冻结候选与审阅均逐对象核对不变；解析/审阅实际资源摘要与原调用一致。安装版 CLI 回放的 IR、7+1 JSON、数学结果与同版全链回放完全一致，新增模型请求0。机器核查记录见同目录 2026-10-13-object-variable-consumer-verification.json。
+
+包位置：D:/boundx/.boundx/products/0.1.0-candidate.031-r1.2-ui.79。运行时源码提交 0a3c5abacf26ebe9186ab983fb6813bd31923975，清单摘要 bd26875fce1d22dce56854405e2a2462faceedab8deea53f6b31f0596debd8f7。
+
+当前用户入口仍为ui78，第三份真实测试尚在运行，未升级。待其结束并完成目标空闲核对后，使用现有 deploy.mjs upgrade --confirmed-idle 流程备份并切换版本，仍使用58618；回滚使用同模块 rollback --confirmed-idle，恢复前一完整安装版本。当前日常启动命令仍是 D:/boundx 下 npm run 7plus1:ui。
