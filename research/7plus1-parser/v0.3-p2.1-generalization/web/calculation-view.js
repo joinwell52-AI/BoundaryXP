@@ -193,7 +193,7 @@ function renderDeclaration(container,trace){
  for(const x of c.static_values??[]){const tr=el('tr');tr.append(el('td',(names.get(x.id)??x.id)+' · '+x.operator),el('td',value(x.value)),el('td',x.source_refs.join('、')));table.append(tr);}staticDetails.append(table);container.append(staticDetails);
  container.append(el('h3','保留的选择与未知量'));for(const v of c.variables??[])container.append(el('p',v.label+' · '+v.type+' · '+v.binding_mode+'；域：'+(names.get(v.domain?.id)??v.domain?.id??'未指定')+'；尚未替执行者赋值'));
  const rules=el('details');rules.append(el('summary','边界规则及来源（'+c.rules.length+'项；7+1视图见上方）'));for(const r of c.rules)rules.append(el('p',r.id+' · '+r.kind+' / '+r.modality+'；'+(names.get(r.body?.id)??r.body?.id)+'；来源 '+r.source_refs.join('、')));container.append(rules);
- if(c.gaps.length){container.append(el('h3','待修正问题'));for(const g of c.gaps)container.append(el('p',(g.id??g.node_id??'')+' '+(g.reason??g.message??g.code)));}
+ if(c.gaps.length){const gaps=el('details');gaps.append(el('summary','查看边界缺口明细（'+c.gaps.length+'条诊断，并非独立错误数量）'));for(const g of c.gaps)gaps.append(el('p',(g.id??g.node_id??'')+' '+(g.reason??g.message??g.code)));container.append(gaps);}
  container.append(el('p','本次未提交PM规划或实际执行证据，因此尚未判定具体安排是否越界、任务是否完成。未命中禁止不等于执行许可；业务裁决和执行授权均为空。'));
 }
 function renderLLMCalculation(container,trace){

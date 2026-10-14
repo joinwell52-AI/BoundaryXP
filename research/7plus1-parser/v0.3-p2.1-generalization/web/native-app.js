@@ -68,6 +68,7 @@ const jsonPost=(url,data)=>api(url,{method:'POST',headers:{'content-type':'appli
 function count(){const info=sourceLength($('input').value);$('input-count').textContent=info.label;$('input-count').title=info.explanation;return info.count;}
 function showError(e){$('status').textContent=errors[e.message]??e.message;$('status').className='failure';}
 function highlight(sources){
+ if($('source-evidence'))$('source-evidence').open=true;
  if(!current||!sources?.length)return;
  const chars=Array.from(current.source_text),spans=sources.filter(s=>s.source_sha256===current.source_sha256&&s.span&&Number.isInteger(s.span[0])&&s.span[0]>=0&&s.span[1]<=chars.length);
  if(!spans.length)return;
@@ -85,11 +86,12 @@ function render(run){
  if(!$('boundary-summary')){const summary=el('section');summary.id='boundary-summary';$('compiler-root').parentElement.insertAdjacentElement('beforebegin',summary);}
  const boundarySummary=$('boundary-summary');boundarySummary.replaceChildren();
  if(run.request_profile==='DECLARATIVE_BOUNDARY_R01'){
-  const trace=run.result,findings=[...new Map((trace?.problem_report?.findings??[]).map(f=>[[f.code,f.node_id??f.id,f.requirement_id,f.problem].join('|'),f])).values()],ready=trace?.boundary_calculations?.status==='BOUNDARY_READY';
+  const trace=run.result,allFindings=trace?.problem_report?.findings??[],deferred=allFindings.filter(f=>f.code==='NODE_REVIEW_REQUIRED').length,findings=[...new Map(allFindings.filter(f=>f.code!=='NODE_REVIEW_REQUIRED').map(f=>[[f.code,f.node_id??f.id,f.requirement_id,f.problem].join('|'),f])).values()],ready=trace?.boundary_calculations?.status==='BOUNDARY_READY';
   boundarySummary.append(el('h2','本次边界结果'));
   boundarySummary.append(el('h3','1. ADMIN边界'),el('p',!trace?'正在提取与核对，尚无最终结果。':ready?'已建立边界结构；7+1及来源见下方，模型审阅不等于人工验收。':'已保存候选边界，仍有待修正问题；当前不能作为完整比较基准。'));
   boundarySummary.append(el('h3','2. 需要处理的问题'));
-  if(!trace)boundarySummary.append(el('p','等待核对结果。'));else if(findings.length)for(const f of findings.slice(0,5)){const explanation={FREE_LOCAL_VARIABLE:'规则引用了未绑定的局部变量，程序无法确定它对应哪一次或哪一个对象',NODE_REVIEW_REQUIRED:'该节点仍待核验，不能当作已确认边界'}[f.code]??f.problem;boundarySummary.append(el('p',explanation+(f.node_id?'（'+f.node_id+'）':'')+'；建议：'+f.suggestion));}else boundarySummary.append(el('p','程序未列出问题；仍需核对是否忠实完整表达原文。'));
+  if(!trace)boundarySummary.append(el('p','等待核对结果。'));else if(findings.length)for(const f of findings.slice(0,5)){const explanation={FREE_LOCAL_VARIABLE:'规则引用了未绑定的局部变量，程序无法确定它对应哪一次或哪一个对象',MODEL_REQUEST_BUDGET_EXHAUSTED:'本次运行的请求数保护已触发，局部修订未采用，首轮结果保留'}[f.code]??f.problem??f.code;boundarySummary.append(el('p',explanation+(f.node_id?'（'+f.node_id+'）':'')+(f.suggestion?'；建议：'+f.suggestion:'')));}else if(!deferred)boundarySummary.append(el('p','程序未列出问题；仍需核对是否忠实完整表达原文。'));
+  if(deferred)boundarySummary.append(el('p',deferred+'条节点待核验记录不代表同样数量的独立语义错误；完整技术记录保留在详情中。'));
   if(findings.length>5)boundarySummary.append(el('p','另有'+(findings.length-5)+'项，展开处理过程查看全部。'));
   boundarySummary.append(el('h3','3. PM规划核验'),el('p','本次没有提交PM子任务，尚未核验。边界提取完成不代表PM拆分通过。'));
  }
@@ -135,21 +137,23 @@ function directPanel(kind,r){
   const section=el('section');section.append(el('p',label));
   const refs=item.source_refs??[];
   for(const ref of refs){const id=typeof ref==='string'?ref:ref.id;const source=(r.ir.source_table??[]).find(x=>x.id===id);if(source)section.append(el('p','原文依据：'+source.quote));}
-  const detail=el('details');detail.append(el('summary','查看实际结构'),el('pre',JSON.stringify(item,null,2)));section.append(detail);root.append(section);
+  const detail=el('details');detail.append(el('summary','查看实际结构'),el('pre',JSON.stringify(item,null,2)));section.append(detail);return section;
  };
  if(kind==='json'){root.append(el('pre',JSON.stringify(r.canonical,null,2)));return;}
  if(kind==='frames'){renderCompilerProcess(root,current,{session,onEvidence:highlight});return;}
- if(kind==='forbid'){for(const f of r.canonical.slots?.B?.entries??[])row(f.text??f.reason??f.id,f);return;}
+ if(kind==='forbid'){for(const f of r.canonical.slots?.B?.entries??[])root.append(row(f.text??f.reason??f.id,f));return;}
  if(kind==='retained'){
   root.append(el('h3','作用域、引文及背景（不自动成为业务动作）'));
   const items=(r.ir.events??[]).filter(x=>x.kind!=='ACTION'||x.layer!=='MAIN'||x.use==='MENTION_ONLY');
-  for(const x of items)row([x.id,x.kind,x.layer,x.use].filter(Boolean).join(' · '),x);
+  for(const x of items)root.append(row([x.id,x.kind,x.layer,x.use].filter(Boolean).join(' · '),x));
   if(!items.length)root.append(el('p','本次没有这类事件记录。'));return;
  }
  root.append(el('h3',kind==='diagnostics'?'独立审阅与技术校验问题':'未决、歧义与计算覆盖缺口'));
  let count=0;
  for(const [label,items] of [['IR局部疑点',r.ir.issues],['独立审阅问题',r.audit?.issues],['独立审阅遗漏',r.audit?.omissions],['技术诊断',r.technical?.diagnostics],['未接受的节点',(r.technical?.rows??[]).filter(x=>x.status!=='ACCEPTED')],['最终未决',r.canonical.unresolved],['覆盖缺口',r.canonical.gaps]]){
-  for(const x of items??[]){count++;row(label+'：'+(x.reason??x.message??x.code??x.id??x.status??'查看结构'),x);}
+  if(!items?.length)continue;
+  const group=el('details');group.append(el('summary',label+'（'+items.length+'条记录）'));root.append(group);
+  for(const x of items){count++;group.append(row(label+'：'+(x.reason??x.message??x.code??x.id??x.status??'查看结构'),x));}
  }
  if(!count)root.append(el('p','本次未记录未决或缺口；技术接受不等于语义必然正确或业务授权。'));
 }

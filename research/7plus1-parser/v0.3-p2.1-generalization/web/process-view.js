@@ -217,7 +217,7 @@ function renderLive(target,run){
  if(view.failure)target.append(node('p','停止原因：'+view.failure+'。未完成步骤没有最终结果。','process-notice'));
  const revisionOutcome=run.result?.revision_outcome;
  const findings=array(run.result?.problem_report?.findings);
- if(findings.length){const section=node('details',null,'process-notice');section.open=true;section.append(node('summary','发现的问题与修订建议（'+findings.length+'项）'));for(const f of findings){const item=node('div');item.append(node('p',f.problem+(f.node_id?' · '+f.node_id:'')),node('p','影响：'+f.impact),node('p','建议：'+f.suggestion));section.append(item);}target.append(section);}
+ if(findings.length){const section=node('details',null,'process-notice');section.append(node('summary','查看完整诊断记录（'+findings.length+'条，含连带未接受节点）'));for(const f of findings){const item=node('div');item.append(node('p',(f.problem??f.code??'待核对')+(f.node_id?' · '+f.node_id:'')));if(f.impact)item.append(node('p','影响：'+f.impact));if(f.suggestion)item.append(node('p','建议：'+f.suggestion));section.append(item);}target.append(section);}
  if(revisionOutcome?.status==='NOT_APPLIED')target.append(node('p','局部修订未应用：'+revisionOutcome.reason+'。已保留首轮IR与审阅，展示可计算部分及缺口；没有将未接受的修订当作正确结果。','process-notice'));
  const technical=(run.result??run.progress)?.technical;
  if(technical?.technical_ok===false)for(const e of array(technical.errors))target.append(node('p','校验问题：'+e.code+' · '+(e.id??e.path??'结构')+(e.code==='DATA_OBJECT_TYPE'?'：数据对象必须是实体或对象类型变量。':''),'process-notice'));

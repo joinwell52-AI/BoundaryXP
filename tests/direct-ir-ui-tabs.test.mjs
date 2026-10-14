@@ -7,4 +7,5 @@ for(const pipeline of ['DECLARATIVE_BOUNDARY','LLM_DIRECT_CANDIDATE_IR','LLM_IR_
  r.pipeline=pipeline;
  const context={current:{result:r},session:{},highlight(){},el:(tag,text)=>new Element(tag,text),$:()=>root,renderCompilerProcess:(e)=>e.append(new Element('p','过程')),tab:null};vm.createContext(context);vm.runInContext(functionCode,context);context.panel(kind);assert.ok(root.children.length);
  const text=JSON.stringify(root);if(['pending','diagnostics'].includes(kind))for(const expected of ['IR疑点','审阅错误','审阅遗漏','SOURCE_ERROR','节点未决','计算缺口'])assert.ok(text.includes(expected),expected);if(kind==='retained')assert.ok(text.includes('实际来源'));
+ if(['pending','diagnostics'].includes(kind)){const groups=root.children.filter(x=>x.tag==='details');assert.equal(groups.length,7);assert.ok(groups.every(x=>!x.open),'diagnostic groups are collapsed');}
 });
