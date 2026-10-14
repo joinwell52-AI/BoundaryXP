@@ -1,0 +1,289 @@
+{
+  "kind": "OFFLINE_PM_PLAN_COMPARISON",
+  "model_calls": 0,
+  "raw_declaration_unchanged": true,
+  "core_sha256": "c49b41e73253105620569fdd6b23e8ef0fab82c8e24a2abc518b27a5b4d5fc4d",
+  "rows": [
+    {
+      "id": "P01",
+      "label": "固定a，直接前次失败后重试，额外最多2次",
+      "expected": "SATISFIED",
+      "actual": {
+        "rows": [
+          {
+            "id": "choice~5",
+            "modality": "REQUIRED",
+            "value": true,
+            "constraining": true
+          },
+          {
+            "id": "choice~9",
+            "modality": "REQUIRED",
+            "value": true,
+            "constraining": true
+          },
+          {
+            "id": "choice~29",
+            "modality": "REQUIRED",
+            "value": true,
+            "constraining": true
+          },
+          {
+            "id": "retry~21",
+            "modality": "REQUIRED",
+            "value": true,
+            "constraining": true
+          },
+          {
+            "id": "retry~25",
+            "modality": "REQUIRED",
+            "value": true,
+            "constraining": true
+          },
+          {
+            "id": "retry~35",
+            "modality": "REQUIRED",
+            "value": true,
+            "constraining": true
+          }
+        ],
+        "identity_checks": [],
+        "result": "SATISFIED",
+        "business_decision": null,
+        "execution_authorization": null
+      },
+      "pass": true
+    },
+    {
+      "id": "P02",
+      "label": "首次a，失败改读b",
+      "expected": "VIOLATED",
+      "actual": {
+        "rows": [
+          {
+            "id": "choice~5",
+            "modality": "REQUIRED",
+            "value": true,
+            "constraining": true
+          },
+          {
+            "id": "choice~29",
+            "modality": "REQUIRED",
+            "value": false,
+            "constraining": true
+          }
+        ],
+        "identity_checks": [],
+        "result": "VIOLATED",
+        "business_decision": null,
+        "execution_authorization": null
+      },
+      "pass": true
+    },
+    {
+      "id": "P03",
+      "label": "同一业务拆成两个子任务，各分配2次重试",
+      "expected": "VIOLATED",
+      "actual": {
+        "kind": "RETRY_ALLOCATION",
+        "template_id": "read",
+        "scope_id": "t",
+        "business_decision": null,
+        "execution_authorization": null,
+        "boundary_template": {
+          "kind": "EVENT",
+          "id": "read"
+        },
+        "allocations": [
+          {
+            "fragment_id": "child_1",
+            "max_extra": 2
+          },
+          {
+            "fragment_id": "child_2",
+            "max_extra": 2
+          }
+        ],
+        "allocated_extra": "4",
+        "allowed_extra": "2",
+        "result": "VIOLATED",
+        "reason": "SHARED_RETRY_BUDGET_EXCEEDED"
+      },
+      "pass": true
+    },
+    {
+      "id": "P04",
+      "label": "QA未通过就开始交付check",
+      "expected": "VIOLATED",
+      "actual": {
+        "rows": [
+          {
+            "id": "gdeliver~17",
+            "modality": "REQUIRED",
+            "value": false,
+            "constraining": true
+          }
+        ],
+        "identity_checks": [],
+        "result": "VIOLATED",
+        "business_decision": null,
+        "execution_authorization": null
+      },
+      "pass": true
+    },
+    {
+      "id": "P05",
+      "label": "任意人把extra交给ADMIN",
+      "expected": "VIOLATED",
+      "actual": {
+        "rows": [
+          {
+            "id": "noextra~13",
+            "modality": "FORBIDDEN",
+            "value": false,
+            "constraining": true
+          }
+        ],
+        "identity_checks": [],
+        "result": "VIOLATED",
+        "business_decision": null,
+        "execution_authorization": null
+      },
+      "pass": true
+    },
+    {
+      "id": "P06",
+      "label": "声明完整规划却省略PM交付check",
+      "expected": "VIOLATED",
+      "actual": {
+        "rows": [
+          {
+            "id": "ndeliver~2",
+            "modality": "REQUIRED",
+            "value": false,
+            "constraining": true
+          }
+        ],
+        "identity_checks": [],
+        "result": "VIOLATED",
+        "business_decision": null,
+        "execution_authorization": null
+      },
+      "pass": true
+    },
+    {
+      "id": "R01",
+      "label": "QA未收到报告就复核，REVIEWER必须被识别",
+      "expected": "VIOLATED",
+      "actual": {
+        "rows": [
+          {
+            "id": "greview~15",
+            "modality": "REQUIRED",
+            "value": false,
+            "constraining": true
+          }
+        ],
+        "identity_checks": [],
+        "result": "VIOLATED",
+        "business_decision": null,
+        "execution_authorization": null
+      },
+      "pass": true
+    },
+    {
+      "id": "R02",
+      "label": "QA开始时已经通过，相关交付前提满足",
+      "expected": "SATISFIED",
+      "actual": {
+        "rows": [
+          {
+            "id": "gdeliver~17",
+            "modality": "REQUIRED",
+            "value": true,
+            "constraining": true
+          }
+        ],
+        "identity_checks": [],
+        "result": "SATISFIED",
+        "business_decision": null,
+        "execution_authorization": null
+      },
+      "pass": true
+    },
+    {
+      "id": "R03",
+      "label": "QA状态未提供，前提保持未知",
+      "expected": "UNKNOWN",
+      "actual": {
+        "rows": [
+          {
+            "id": "gdeliver~17",
+            "modality": "REQUIRED",
+            "value": {
+              "unknown": true
+            },
+            "constraining": true
+          }
+        ],
+        "identity_checks": [],
+        "result": "UNKNOWN",
+        "business_decision": null,
+        "execution_authorization": null
+      },
+      "pass": true
+    },
+    {
+      "id": "R04",
+      "label": "只提供规划片段，遗漏交付不直接判违反",
+      "expected": "UNKNOWN",
+      "actual": {
+        "rows": [
+          {
+            "id": "ndeliver~2",
+            "modality": "REQUIRED",
+            "value": {
+              "unknown": true
+            },
+            "constraining": true
+          }
+        ],
+        "identity_checks": [],
+        "result": "UNKNOWN",
+        "business_decision": null,
+        "execution_authorization": null
+      },
+      "pass": true
+    }
+  ],
+  "output_projection": [
+    {
+      "id": "ndeliver~2",
+      "kind": "EVENT_NORM",
+      "operation": "DELIVER",
+      "modality": "REQUIRED"
+    },
+    {
+      "id": "nextra~2",
+      "kind": "EVENT_NORM",
+      "operation": "CREATE",
+      "modality": "PERMITTED"
+    },
+    {
+      "id": "ngen~2",
+      "kind": "EVENT_NORM",
+      "operation": "CREATE",
+      "modality": "REQUIRED"
+    },
+    {
+      "id": "nsubmit~2",
+      "kind": "EVENT_NORM",
+      "operation": "DELIVER",
+      "modality": "REQUIRED"
+    }
+  ],
+  "retained_model_gap": "delex lacks DEV actor; original declaration and audit are not repaired or regraded",
+  "scope": "Only listed clauses and hypothetical plans; not whole-product semantic approval, actual execution or authorization",
+  "business_decision": null,
+  "execution_authorization": null
+}

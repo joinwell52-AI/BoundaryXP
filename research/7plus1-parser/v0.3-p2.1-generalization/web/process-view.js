@@ -212,7 +212,9 @@ function renderLive(target,run){
   if(timing.patch_count)target.append(node('p','其中局部修订：'+timing.patch_count+'次，'+(timing.patch_ms===null?'耗时未记录':seconds(timing.patch_ms))+'；即使修订未应用，也计入模型调用与总耗时。','muted'));
   target.append(node('p','解析收到本次选择的'+methodLabel(run)+'、语义合同和Schema；独立审阅另外收到候选结构。两次模型请求按顺序执行；需要修订时会另行记录。以上是实际用时，不是剩余时间预测。','muted'));
  }
- const steps=node('ol',null,'live-steps');for(const s of view.steps){const li=node('li',null,'live-step '+s.state.toLowerCase());li.append(node('strong',s.title),node('span',labels[s.state]));steps.append(li);}target.append(steps);
+ const groups=[['输入',[...view.steps.filter(s=>s.id==='source')]],['LLM负责：提取边界与独立审阅',view.steps.filter(s=>['parse','audit'].includes(s.id))],['程序负责：校验、转换与展示',view.steps.filter(s=>!['source','parse','audit'].includes(s.id))]];
+ for(const [heading,items]of groups){const section=node('section',null,'responsibility-group');section.append(node('h4',heading));const steps=node('ol',null,'live-steps');for(const s of items){const li=node('li',null,'live-step '+s.state.toLowerCase());li.append(node('strong',s.title),node('span',labels[s.state]));steps.append(li);}section.append(steps);target.append(section);}
+ if(run.request_profile==='DECLARATIVE_BOUNDARY_R01')target.append(node('p','下一阶段 · 程序比较PM规划：本次仅提取ADMIN边界，未提交PM规划，尚未核验。边界生成完成不代表子任务已经通过。','process-notice'));
  if(view.lastSignal)target.append(node('p','最近收到阶段信号：'+new Date(view.lastSignal).toLocaleTimeString('zh-CN')+'；第'+(view.revision+1)+'轮。','muted'));
  if(view.failure)target.append(node('p','停止原因：'+view.failure+'。未完成步骤没有最终结果。','process-notice'));
  const revisionOutcome=run.result?.revision_outcome;
@@ -241,7 +243,8 @@ export function renderModelInfo(target,run={},session={}){
  const independent=view.independent===true?'解析与审阅会话ID不同，独立会话已记录。':view.independent===false?'警告：会话ID存在重用。':'会话独立性暂无完整记录。';target.append(node('p',independent));
 }
 export function renderCompilerProcess(target,run,{onEvidence=()=>{},session={}}={}){
- const key=JSON.stringify([run.run_id,run.status,run.stage,run.revision,run.stages,run.result,run.progress,run.model_activity]);
+ if(!run.run_id&&!run.request_profile)run={...run,request_profile:session.request_profile};
+ const key=JSON.stringify([run.run_id,run.request_profile,run.status,run.stage,run.revision,run.stages,run.result,run.progress,run.model_activity]);
  if(target._processKey===key&&target.querySelector('.runtime-progress')){renderLive(target.querySelector('.runtime-progress'),run);return;}
  const sameRun=target._processRunId===run.run_id;
  const activityOpenState=new Map(sameRun?[...target.querySelectorAll('details[data-call]')].map(d=>[d.dataset.call,d.open]):[]);

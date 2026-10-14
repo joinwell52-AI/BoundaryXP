@@ -58,7 +58,11 @@ export function evaluateCore(core,reference,context={},bindings={}){
   if(['ACTORS_OF','TARGETS_OF','RECIPIENTS_OF','OBJECT_OF','RECIPIENT_OF','ENVIRONMENT_OF','OPERATION_OF'].includes(op)){
    const rec=record(a[0]),def=eventDef(a[0]),roles=rec?.roles??def?.roles;
    if(op==='OPERATION_OF')return (rec?.operation??(def?.operation_extent==='EXACT'&&def?.operation))?{symbol:rec?.operation??def.operation}:UNKNOWN;
-   if(!roles)return UNKNOWN;const names={ACTORS_OF:['PERFORMER'],TARGETS_OF:['OBJECT','INPUT_OBJECT','RESULT','DELIVERABLE'],RECIPIENTS_OF:['RECIPIENT'],OBJECT_OF:['OBJECT','INPUT_OBJECT','RESULT','DELIVERABLE'],RECIPIENT_OF:['RECIPIENT'],ENVIRONMENT_OF:['ENVIRONMENT']}[op];
+   const operation=rec?.operation??(def?.operation_extent==='EXACT'?def.operation:null);
+   // Operation-specific actor roles are equivalent for matching only. Preserve
+   // the original role; an organizer is not the performer of every task action.
+   const actorRoles=['PERFORMER',...(operation==='REVIEW'?['REVIEWER']:[]),...(operation==='ORGANIZE'?['ORGANIZER']:[])];
+   if(!roles)return UNKNOWN;const names={ACTORS_OF:actorRoles,TARGETS_OF:['OBJECT','INPUT_OBJECT','RESULT','DELIVERABLE'],RECIPIENTS_OF:['RECIPIENT'],OBJECT_OF:['OBJECT','INPUT_OBJECT','RESULT','DELIVERABLE'],RECIPIENT_OF:['RECIPIENT'],ENVIRONMENT_OF:['ENVIRONMENT']}[op];
    const vals=unique(roles.filter(x=>names.includes(x.role)).map(x=>go(x.value)));
    if(!vals.length||vals.some(unknown))return UNKNOWN;
    return op.endsWith('S_OF')?{set:vals}:vals.length===1?vals[0]:UNKNOWN;

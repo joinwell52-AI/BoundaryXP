@@ -11,6 +11,12 @@ class Element {
  addEventListener(){}
 }
 const text=e=>[e.textContent,...e.children.map(x=>typeof x==='string'?x:text(x))].join(' ');
+test('idle page uses installed profile and separates LLM, program and not-yet-submitted PM plan',()=>{
+ const previous=globalThis.document;globalThis.document={createElement:tag=>new Element(tag)};
+ try{const target=new Element('root');renderCompilerProcess(target,{},{session:{request_profile:'DECLARATIVE_BOUNDARY_R01'}});const shown=text(target);
+ assert.match(shown,/LLM负责：提取边界与独立审阅/);assert.match(shown,/程序负责：校验、转换与展示/);assert.match(shown,/未提交PM规划，尚未核验/);assert.doesNotMatch(shown,/生成Boundary IR/);
+ }finally{globalThis.document=previous;}
+});
 test('compact candidate in flight never enters legacy semantic renderer',()=>{
  const previous=globalThis.document;globalThis.document={createElement:tag=>new Element(tag)};
  try {

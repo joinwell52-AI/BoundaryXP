@@ -43,11 +43,11 @@ export function directIRProcess(trace){
     if(stage.id==='audit')return {...stage,title:'3. 新会话独立核对边界',input:'完整原文、同一紧凑边界及共享合同。',work:'核对原文与边界声明，不审阅程序派生表达式，不要求执行计划。',outcome:trace.boundary_review?trace.boundary_review.verdicts.length+'项声明核对；'+trace.boundary_review.omissions.length+'项遗漏。':'等待独立审阅。',rows:list(trace.boundary_review?.verdicts).map(v=>({cells:[v.id,v.verdict,v.reason],sources:[]})),raw:trace.boundary_review};
     if(stage.id==='technical')return {...stage,title:'4. 程序展开与技术检查',work:'按固定规则展开到既有IR，检查来源、类型、引用及审阅状态。原始边界与派生IR分别保存，不从原文补语义。'};
    }
-   if(stage.id==='parse')return {...stage,title:'1. LLM提取完整可计算边界',work:'直接生成有来源的边界IR，保留变量及条件；不替PM选择对象、编执行安排或完整见证。'};
+   if(stage.id==='parse')return {...stage,title:'1. LLM提取任务边界',work:'生成有来源的边界结构，保留变量及条件；不替PM选择对象、编执行安排或完整见证。'};
    if(stage.id==='audit')return {...stage,title:'3. 新会话核对边界与原文',work:'核对全部来源与结构；正确节点分组确认，明确报告遗漏、多造、身份、方向及范围差异。'};
    if(stage.id==='technical')return {...stage,title:'4. 程序汇总技术校验与审阅问题'};
-   if(stage.id==='canonical')return {...stage,title:'5. 同源7+1边界视图'};
-   if(stage.id==='calculus')return {...stage,title:'6. 建立边界，计算确定值',work:'同一Core检查结构并计算封闭表达。等待具体规划或执行证据的变量保持未赋值，不作为语义缺口。',outcome:calc?(calc.status==='BOUNDARY_READY'?'边界已建立，待核验具体对象。':'边界仍有待修正项。'):'等待边界建立。',notes:['未提出或验证整套执行安排；尚未判断业务完成。']};
+   if(stage.id==='canonical')return {...stage,title:'5. 程序展示7+1边界',work:'按固定字段映射形成7+1视图；不新增语义。原始LLM边界、程序转换和归类分别保存。'};
+   if(stage.id==='calculus')return {...stage,title:'6. 程序保存边界及确定值',work:'同一Core检查结构并计算封闭表达。等待具体规划或执行证据的变量保持未赋值，不作为语义缺口。',outcome:calc?(calc.status==='BOUNDARY_READY'?'程序已建立边界版本；未提交PM规划，尚未核验。':'边界仍有待修正项。'):'等待边界建立。',notes:['未提出或验证整套执行安排；尚未判断业务完成。']};
    return stage;
   }
   if(!llmMode)return stage;

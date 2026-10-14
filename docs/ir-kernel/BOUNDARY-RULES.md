@@ -6,6 +6,8 @@ sources登记精确引文及occurrence；tasks、objects、actions、states、ru
 
 tasks/actions.roles直接表达原文明示的PERFORMER、ORGANIZER、REVIEWER、RECIPIENT、OBJECT、RESULT、DELIVERABLE、INPUT_OBJECT、BASIS、ENVIRONMENT等关系。依据不自动增加读取义务，交付不自动增加生成义务。动作声明本身不代表必须执行。
 
+同一主体承接的“允许生成、无需交付”须在两个动作中分别保留主体，不能丢失无需条款的主体，也不能将其变成任何人。主体不明确时保留疑点；审阅须检查该绑定。程序不从中文补写主体。REVIEW的REVIEWER、ORGANIZE的ORGANIZER参与相应动作的主体匹配，不扩成其他操作的执行者。O只汇集明确生成或交付要求（保留必须/允许区别）；无需交付、复核和数据使用关系分别保留，不冒充正向交付。
+
 ## 固定规则
 
 - INPUT_SCOPE.members是允许外部输入域，实际使用为其子集，不要求全部使用。
