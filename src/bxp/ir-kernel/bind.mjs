@@ -1,6 +1,8 @@
 import {collections,registry} from './contract-registry.mjs';import {taskScope} from '../../../research/7plus1-parser/llm-first-028/direct-ir-task-scope.mjs';import {dimension,rational} from './values.mjs';import {fail} from './diagnostics.mjs';
 import {frameDiagnostics} from './frames.mjs';
-export function bindAndTypecheck(loaded,{maxDepth=128,collectFrameErrors=false}={}){
+export function bindAndTypecheck(loaded,{maxDepth=128,collectFrameErrors=false,collectIndependentErrors=false}={}){
+ const independent=[];
+ const inspect=(fn,context={})=>{try{fn();}catch(e){if(!collectIndependentErrors||!e.diagnostic)throw e;independent.push({...e.diagnostic,...context});}};
  const ir=loaded.raw,nodes=new Map(),sources=new Set(ir.source_table.map(s=>s.id)),kinds=new Map(),scope=taskScope(ir);
  if(sources.size!==ir.source_table.length)fail('DUPLICATE_SOURCE_ID');
  for(const [collection,kind]of Object.entries(collections))for(const n of ir[collection]){if(nodes.has(n.id)||sources.has(n.id))fail('DUPLICATE_ID',n.id);nodes.set(n.id,n);kinds.set(n.id,kind);for(const s of n.source_refs)if(!sources.has(s))fail('SOURCE_REF_MISSING',n.id,s);}
@@ -13,7 +15,7 @@ export function bindAndTypecheck(loaded,{maxDepth=128,collectFrameErrors=false}=
  const issueIds=new Set();for(const issue of ir.issues){if(nodes.has(issue.id)||sources.has(issue.id)||issueIds.has(issue.id))fail('DUPLICATE_ID',issue.id);issueIds.add(issue.id);walk(issue,issue.id);}for(const row of ir.coverage)walk(row,null);
  for(const t of tasks){const a=scope.ancestry(t.id);if(!a.complete)fail(a.reason,t.id,'owner_id');}
  for(const e of ir.events)if(e.kind!=='TASK'&&!scope.resolve(e.owner_id))fail('EVENT_OWNER_MISSING',e.id,'owner_id');
- for(const r of ir.requirements)if(!scope.resolve(r.scope_id))fail('REQUIREMENT_SCOPE_MISSING',r.id,'scope_id');
+ for(const r of ir.requirements)if(!scope.resolve(r.scope_id))inspect(()=>fail('REQUIREMENT_SCOPE_MISSING',r.id,'scope_id'));
  for(const seq of ir.sequences??[]){ref(seq.template);ref(seq.task);if(nodes.get(seq.template.id)?.kind!=='TEMPLATE'||nodes.get(seq.task.id)?.kind!=='TASK')fail('SEQUENCE_BINDING',seq.template.id);if(nodes.get(seq.template.id).owner_id!==seq.task.id)fail('SEQUENCE_OWNER',seq.template.id);for(const s of seq.source_refs)if(!sources.has(s))fail('SOURCE_REF_MISSING',seq.template.id,s);}
  if(new Set((ir.sequences??[]).map(s=>s.template.id)).size!==(ir.sequences??[]).length)fail('DUPLICATE_SEQUENCE_DECLARATION');
  for(const seq of ir.sequences??[])if([...nodes.keys()].some(id=>id.startsWith(seq.template.id+'@')))fail('INSTANCE_IDENTITY_COLLISION',seq.template.id);
@@ -75,8 +77,9 @@ export function bindAndTypecheck(loaded,{maxDepth=128,collectFrameErrors=false}=
  for(const n of ir.expressions)if(n.operator==='BEFORE'||['ACTIVE_DURING','ACTIVE_SINCE'].includes(n.operator)){const args=n.operator==='BEFORE'?n.arguments:n.arguments.slice(1);if(args.some(a=>dim(a)!=='TIME'))fail('TIME_UNIT_REQUIRED',n.id);}
  for(const v of ir.variables)if(['INTEGER','REAL'].includes(v.type))dim({kind:'VARIABLE',id:v.id});
  const checkBound=(r,env=new Set(),stack=[])=>{r=ref(r);const n=nodes.get(r.id);if(r.kind==='VARIABLE'){if(n.binding_mode==='INSTANCE_LOCAL'&&!env.has(n.id))fail('FREE_LOCAL_VARIABLE',n.id);return;}if(!['EXPRESSION','STATE'].includes(r.kind))return;if(stack.includes(r.id))fail('EXPRESSION_CYCLE',r.id);const next=[...stack,r.id];if(n.subject)checkBound(n.subject,env,next);if(n.bound_variable){checkBound(n.arguments[0],env,next);const inner=new Set(env);inner.add(n.bound_variable.id);for(const a of n.arguments.slice(1))checkBound(a,inner,next);}else for(const a of n.arguments??[])checkBound(a,env,next);};
- for(const r of ir.requirements){checkBound(r.body);if(r.applicability)checkBound(r.applicability);}
+ for(const r of ir.requirements){inspect(()=>checkBound(r.body),{requirement_id:r.id,requirement_field:'body'});if(r.applicability)inspect(()=>checkBound(r.applicability),{requirement_id:r.id,requirement_field:'applicability'});}
  const frame_errors=ir.contract_version==='candidate-ir/2.0'?frameDiagnostics(ir,{nodes,types,ref,dimensions}):[];
+ if(independent.length){const first=independent[0];fail(first.code,first.node_id,first.path,first.layer,{errors:[...independent,...frame_errors]});}
  if(frame_errors.length&&!collectFrameErrors){const d=frame_errors[0];fail(d.code,d.node_id,d.path,d.layer);}
  return {...loaded,nodes,kinds,types,dimensions,root,scope,ref,frame_errors};
 }

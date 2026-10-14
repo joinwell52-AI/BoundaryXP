@@ -19,7 +19,7 @@ export function repairableBoundaryContract(ir,technical,source){
  if(!technical.schemas.audit.ok||!technical.errors.length)return false;
  // A binding error is not a schema/source error. Permit only a bounded model
  // correction of the identified node, never silently repair it in the host.
- if(!technical.errors.every(e=>e.code==='REQUIREMENT_SCOPE_MISSING'&&e.node_id&&ir.requirements.some(r=>r.id===e.node_id)))return false;
+ if(!technical.errors.every(e=>e.code==='REQUIREMENT_SCOPE_MISSING'&&ir.requirements.some(r=>r.id===e.node_id)||e.code==='FREE_LOCAL_VARIABLE'&&ir.requirements.some(r=>r.id===e.requirement_id)&&ir.variables.some(v=>v.id===e.node_id)))return false;
  try{loadCandidate(ir);for(const s of ir.source_table)linkQuote(source,s);return true;}catch{return false;}
 }
 export async function parseDirectIR(bytes,{output,probe,model='gpt-6.1-sol',reasoning='medium',parseMethod='SKILL',signal,onProgress=()=>{},timeoutMs=null,call=callCodex,maxModelRequests=2,resourceGuard=()=>{},productSnapshot=null,bundleFactory=directIRBundle}={}){

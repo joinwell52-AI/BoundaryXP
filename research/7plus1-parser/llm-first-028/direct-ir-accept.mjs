@@ -16,7 +16,7 @@ export function acceptedIRFields(row,paths){
 export function acceptCandidateIR(ir,audit,source){
  audit=auditOnly(audit);
  let check;const selectedAuditCheck=ir.contract_version==='candidate-ir/2.0'?auditV2Check:auditCheck;
- if(ir.contract_version==='candidate-ir/2.0'){try{const core=compileCore(ir,{collectFrameErrors:true});for(const s of ir.source_table)linkQuote(source,s);check={ok:true,errors:core.frame_errors};}catch(e){check={ok:false,errors:[e.diagnostic??{code:'SOURCE_OR_CORE_INVALID',message:e.message}]};}}
+ if(ir.contract_version==='candidate-ir/2.0'){try{const core=compileCore(ir,{collectFrameErrors:true,collectIndependentErrors:true});for(const s of ir.source_table)linkQuote(source,s);check={ok:true,errors:core.frame_errors};}catch(e){check={ok:false,errors:e.diagnostic?.errors??[e.diagnostic??{code:'SOURCE_OR_CORE_INVALID',message:e.message}]};}}
  else check=validateCandidateIR(ir,source.text);
  const errors=[...check.errors],rows=[];
  if(!selectedAuditCheck(audit))errors.push({code:'AUDIT_SCHEMA',errors:selectedAuditCheck.errors});

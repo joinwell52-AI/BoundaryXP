@@ -1,0 +1,727 @@
+{
+  "input_ir_path": "D:\\boundx\\.boundx\\ir-kernel-implementation-v1\\evidence\\declarative-boundary-r01/recovery-1/revision-1/candidate-ir.json",
+  "full_candidate_compile_error": {
+    "layer": "BIND",
+    "code": "FREE_LOCAL_VARIABLE",
+    "node_id": "index",
+    "path": null,
+    "depends_on": []
+  },
+  "diagnostic_slice_requirements": [
+    "r_inputs",
+    "r_selection",
+    "r_duration",
+    "r_no_c",
+    "r_extra_admin_ban",
+    "r_no_mutation",
+    "r_no_production",
+    "r_environment"
+  ],
+  "core_sha256": "dba69701d51234019e2b0b1d0e86435d02deb7279a38fd8358df98e5bde4a8c0",
+  "frame_errors": [],
+  "saved_candidate_modified": false,
+  "models_called": 0,
+  "scope": "Diagnostic slice only. Tested operands unchanged; other requirements excluded. Not acceptance/repair of full candidate, not joint witness, not production output.",
+  "total": 25,
+  "matched": 21,
+  "cases": [
+    {
+      "id": "input-",
+      "expression": "external_input_rule",
+      "context": {
+        "plan": {
+          "external_inputs": {
+            "task": []
+          }
+        }
+      },
+      "expected": true,
+      "actual": false,
+      "match": false,
+      "explanation": "External input usage is a subset of the allowed domain, not required to use all three."
+    },
+    {
+      "id": "input-a",
+      "expression": "external_input_rule",
+      "context": {
+        "plan": {
+          "external_inputs": {
+            "task": [
+              "a"
+            ]
+          }
+        }
+      },
+      "expected": true,
+      "actual": false,
+      "match": false,
+      "explanation": "External input usage is a subset of the allowed domain, not required to use all three."
+    },
+    {
+      "id": "input-b",
+      "expression": "external_input_rule",
+      "context": {
+        "plan": {
+          "external_inputs": {
+            "task": [
+              "b"
+            ]
+          }
+        }
+      },
+      "expected": true,
+      "actual": false,
+      "match": false,
+      "explanation": "External input usage is a subset of the allowed domain, not required to use all three."
+    },
+    {
+      "id": "input-a-b-c",
+      "expression": "external_input_rule",
+      "context": {
+        "plan": {
+          "external_inputs": {
+            "task": [
+              "a",
+              "b",
+              "c"
+            ]
+          }
+        }
+      },
+      "expected": true,
+      "actual": true,
+      "match": true,
+      "explanation": "External input usage is a subset of the allowed domain, not required to use all three."
+    },
+    {
+      "id": "input-a-outside",
+      "expression": "external_input_rule",
+      "context": {
+        "plan": {
+          "external_inputs": {
+            "task": [
+              "a",
+              "outside"
+            ]
+          }
+        }
+      },
+      "expected": false,
+      "actual": false,
+      "match": true,
+      "explanation": "External input usage is a subset of the allowed domain, not required to use all three."
+    },
+    {
+      "id": "selection-a",
+      "expression": "selection_rule",
+      "context": {
+        "variables": {
+          "chosen": {
+            "object": "a"
+          }
+        }
+      },
+      "expected": true,
+      "actual": true,
+      "match": true,
+      "explanation": "Fixed selection remains free between a and b; c is prohibited."
+    },
+    {
+      "id": "selection-b",
+      "expression": "selection_rule",
+      "context": {
+        "variables": {
+          "chosen": {
+            "object": "b"
+          }
+        }
+      },
+      "expected": true,
+      "actual": true,
+      "match": true,
+      "explanation": "Fixed selection remains free between a and b; c is prohibited."
+    },
+    {
+      "id": "selection-c",
+      "expression": "selection_rule",
+      "context": {
+        "variables": {
+          "chosen": {
+            "object": "c"
+          }
+        }
+      },
+      "expected": false,
+      "actual": false,
+      "match": true,
+      "explanation": "Fixed selection remains free between a and b; c is prohibited."
+    },
+    {
+      "id": "time-seconds-0",
+      "expression": "duration_rule",
+      "context": {
+        "variables": {
+          "duration": {
+            "number": "0"
+          }
+        }
+      },
+      "expected": false,
+      "actual": false,
+      "match": true,
+      "explanation": "Whole task duration is (0,1200] seconds."
+    },
+    {
+      "id": "time-seconds-1",
+      "expression": "duration_rule",
+      "context": {
+        "variables": {
+          "duration": {
+            "number": "1"
+          }
+        }
+      },
+      "expected": true,
+      "actual": true,
+      "match": true,
+      "explanation": "Whole task duration is (0,1200] seconds."
+    },
+    {
+      "id": "time-seconds-1200",
+      "expression": "duration_rule",
+      "context": {
+        "variables": {
+          "duration": {
+            "number": "1200"
+          }
+        }
+      },
+      "expected": true,
+      "actual": true,
+      "match": true,
+      "explanation": "Whole task duration is (0,1200] seconds."
+    },
+    {
+      "id": "time-seconds-1201",
+      "expression": "duration_rule",
+      "context": {
+        "variables": {
+          "duration": {
+            "number": "1201"
+          }
+        }
+      },
+      "expected": false,
+      "actual": false,
+      "match": true,
+      "explanation": "Whole task duration is (0,1200] seconds."
+    },
+    {
+      "id": "read-a",
+      "expression": "any_c_read",
+      "context": {
+        "plan": {
+          "events": [
+            {
+              "id": "read-query",
+              "task_id": "task",
+              "operation": "READ",
+              "occurred": true,
+              "roles": [
+                {
+                  "role": "PERFORMER",
+                  "value": {
+                    "kind": "ENTITY",
+                    "id": "dev"
+                  }
+                },
+                {
+                  "role": "OBJECT",
+                  "value": {
+                    "kind": "ENTITY",
+                    "id": "a"
+                  }
+                }
+              ]
+            }
+          ],
+          "completeness": {
+            "kind": "EXACT_SNAPSHOT",
+            "task_id": "task",
+            "basis": "INDEPENDENT_OFFLINE_BOUNDARY_QUERY"
+          }
+        }
+      },
+      "expected": false,
+      "actual": false,
+      "match": true,
+      "explanation": "Prohibited read predicate, not a grant of permission."
+    },
+    {
+      "id": "read-c",
+      "expression": "any_c_read",
+      "context": {
+        "plan": {
+          "events": [
+            {
+              "id": "read-query",
+              "task_id": "task",
+              "operation": "READ",
+              "occurred": true,
+              "roles": [
+                {
+                  "role": "PERFORMER",
+                  "value": {
+                    "kind": "ENTITY",
+                    "id": "dev"
+                  }
+                },
+                {
+                  "role": "OBJECT",
+                  "value": {
+                    "kind": "ENTITY",
+                    "id": "c"
+                  }
+                }
+              ]
+            }
+          ],
+          "completeness": {
+            "kind": "EXACT_SNAPSHOT",
+            "task_id": "task",
+            "basis": "INDEPENDENT_OFFLINE_BOUNDARY_QUERY"
+          }
+        }
+      },
+      "expected": true,
+      "actual": true,
+      "match": true,
+      "explanation": "Prohibited read predicate, not a grant of permission."
+    },
+    {
+      "id": "extra-to-admin",
+      "expression": "any_extra_admin_delivery",
+      "context": {
+        "plan": {
+          "events": [
+            {
+              "id": "extra-query",
+              "task_id": "task",
+              "operation": "DELIVER",
+              "occurred": true,
+              "roles": [
+                {
+                  "role": "PERFORMER",
+                  "value": {
+                    "kind": "ENTITY",
+                    "id": "unknown_actor"
+                  }
+                },
+                {
+                  "role": "DELIVERABLE",
+                  "value": {
+                    "kind": "ENTITY",
+                    "id": "extra"
+                  }
+                },
+                {
+                  "role": "RECIPIENT",
+                  "value": {
+                    "kind": "ENTITY",
+                    "id": "admin"
+                  }
+                }
+              ]
+            }
+          ],
+          "completeness": {
+            "kind": "EXACT_SNAPSHOT",
+            "task_id": "task",
+            "basis": "INDEPENDENT_OFFLINE_BOUNDARY_QUERY"
+          }
+        }
+      },
+      "expected": true,
+      "actual": true,
+      "match": true,
+      "explanation": "Any actor is covered; nonmatching recipient is only not prohibited by this rule."
+    },
+    {
+      "id": "extra-to-qa",
+      "expression": "any_extra_admin_delivery",
+      "context": {
+        "plan": {
+          "events": [
+            {
+              "id": "extra-query",
+              "task_id": "task",
+              "operation": "DELIVER",
+              "occurred": true,
+              "roles": [
+                {
+                  "role": "PERFORMER",
+                  "value": {
+                    "kind": "ENTITY",
+                    "id": "unknown_actor"
+                  }
+                },
+                {
+                  "role": "DELIVERABLE",
+                  "value": {
+                    "kind": "ENTITY",
+                    "id": "extra"
+                  }
+                },
+                {
+                  "role": "RECIPIENT",
+                  "value": {
+                    "kind": "ENTITY",
+                    "id": "qa"
+                  }
+                }
+              ]
+            }
+          ],
+          "completeness": {
+            "kind": "EXACT_SNAPSHOT",
+            "task_id": "task",
+            "basis": "INDEPENDENT_OFFLINE_BOUNDARY_QUERY"
+          }
+        }
+      },
+      "expected": false,
+      "actual": false,
+      "match": true,
+      "explanation": "Any actor is covered; nonmatching recipient is only not prohibited by this rule."
+    },
+    {
+      "id": "modify-a",
+      "expression": "any_input_mutation",
+      "context": {
+        "plan": {
+          "events": [
+            {
+              "id": "modify-query",
+              "task_id": "task",
+              "operation": "MODIFY",
+              "occurred": true,
+              "roles": [
+                {
+                  "role": "OBJECT",
+                  "value": {
+                    "kind": "ENTITY",
+                    "id": "a"
+                  }
+                }
+              ]
+            }
+          ],
+          "completeness": {
+            "kind": "EXACT_SNAPSHOT",
+            "task_id": "task",
+            "basis": "INDEPENDENT_OFFLINE_BOUNDARY_QUERY"
+          }
+        }
+      },
+      "expected": true,
+      "actual": true,
+      "match": true,
+      "explanation": "All three input files are protected."
+    },
+    {
+      "id": "modify-b",
+      "expression": "any_input_mutation",
+      "context": {
+        "plan": {
+          "events": [
+            {
+              "id": "modify-query",
+              "task_id": "task",
+              "operation": "MODIFY",
+              "occurred": true,
+              "roles": [
+                {
+                  "role": "OBJECT",
+                  "value": {
+                    "kind": "ENTITY",
+                    "id": "b"
+                  }
+                }
+              ]
+            }
+          ],
+          "completeness": {
+            "kind": "EXACT_SNAPSHOT",
+            "task_id": "task",
+            "basis": "INDEPENDENT_OFFLINE_BOUNDARY_QUERY"
+          }
+        }
+      },
+      "expected": true,
+      "actual": true,
+      "match": true,
+      "explanation": "All three input files are protected."
+    },
+    {
+      "id": "modify-c",
+      "expression": "any_input_mutation",
+      "context": {
+        "plan": {
+          "events": [
+            {
+              "id": "modify-query",
+              "task_id": "task",
+              "operation": "MODIFY",
+              "occurred": true,
+              "roles": [
+                {
+                  "role": "OBJECT",
+                  "value": {
+                    "kind": "ENTITY",
+                    "id": "c"
+                  }
+                }
+              ]
+            }
+          ],
+          "completeness": {
+            "kind": "EXACT_SNAPSHOT",
+            "task_id": "task",
+            "basis": "INDEPENDENT_OFFLINE_BOUNDARY_QUERY"
+          }
+        }
+      },
+      "expected": true,
+      "actual": true,
+      "match": true,
+      "explanation": "All three input files are protected."
+    },
+    {
+      "id": "modify-extra",
+      "expression": "any_input_mutation",
+      "context": {
+        "plan": {
+          "events": [
+            {
+              "id": "modify-query",
+              "task_id": "task",
+              "operation": "MODIFY",
+              "occurred": true,
+              "roles": [
+                {
+                  "role": "OBJECT",
+                  "value": {
+                    "kind": "ENTITY",
+                    "id": "extra"
+                  }
+                }
+              ]
+            }
+          ],
+          "completeness": {
+            "kind": "EXACT_SNAPSHOT",
+            "task_id": "task",
+            "basis": "INDEPENDENT_OFFLINE_BOUNDARY_QUERY"
+          }
+        }
+      },
+      "expected": false,
+      "actual": false,
+      "match": true,
+      "explanation": "All three input files are protected."
+    },
+    {
+      "id": "access-test_env",
+      "expression": "any_production_access",
+      "context": {
+        "plan": {
+          "events": [
+            {
+              "id": "access-query",
+              "task_id": "task",
+              "operation": "ACCESS",
+              "occurred": true,
+              "roles": [
+                {
+                  "role": "OBJECT",
+                  "value": {
+                    "kind": "ENTITY",
+                    "id": "test_env"
+                  }
+                },
+                {
+                  "role": "ENVIRONMENT",
+                  "value": {
+                    "kind": "ENTITY",
+                    "id": "test_env"
+                  }
+                }
+              ]
+            }
+          ],
+          "completeness": {
+            "kind": "EXACT_SNAPSHOT",
+            "task_id": "task",
+            "basis": "INDEPENDENT_OFFLINE_BOUNDARY_QUERY"
+          }
+        }
+      },
+      "expected": false,
+      "actual": false,
+      "match": true,
+      "explanation": "Accessing production is distinct from where the operation runs."
+    },
+    {
+      "id": "access-prod_env",
+      "expression": "any_production_access",
+      "context": {
+        "plan": {
+          "events": [
+            {
+              "id": "access-query",
+              "task_id": "task",
+              "operation": "ACCESS",
+              "occurred": true,
+              "roles": [
+                {
+                  "role": "OBJECT",
+                  "value": {
+                    "kind": "ENTITY",
+                    "id": "prod_env"
+                  }
+                },
+                {
+                  "role": "ENVIRONMENT",
+                  "value": {
+                    "kind": "ENTITY",
+                    "id": "test_env"
+                  }
+                }
+              ]
+            }
+          ],
+          "completeness": {
+            "kind": "EXACT_SNAPSHOT",
+            "task_id": "task",
+            "basis": "INDEPENDENT_OFFLINE_BOUNDARY_QUERY"
+          }
+        }
+      },
+      "expected": true,
+      "actual": true,
+      "match": true,
+      "explanation": "Accessing production is distinct from where the operation runs."
+    },
+    {
+      "id": "environment-test_env",
+      "expression": "all_test_environment",
+      "context": {
+        "plan": {
+          "events": [
+            {
+              "id": "operation-query",
+              "task_id": "task",
+              "operation": "OTHER",
+              "occurred": true,
+              "roles": [
+                {
+                  "role": "ENVIRONMENT",
+                  "value": {
+                    "kind": "ENTITY",
+                    "id": "test_env"
+                  }
+                }
+              ]
+            }
+          ],
+          "completeness": {
+            "kind": "EXACT_SNAPSHOT",
+            "task_id": "task",
+            "basis": "INDEPENDENT_OFFLINE_BOUNDARY_QUERY"
+          }
+        }
+      },
+      "expected": true,
+      "actual": true,
+      "match": true,
+      "explanation": "Every operation is confined to test; simultaneous production association is a violation."
+    },
+    {
+      "id": "environment-prod_env",
+      "expression": "all_test_environment",
+      "context": {
+        "plan": {
+          "events": [
+            {
+              "id": "operation-query",
+              "task_id": "task",
+              "operation": "OTHER",
+              "occurred": true,
+              "roles": [
+                {
+                  "role": "ENVIRONMENT",
+                  "value": {
+                    "kind": "ENTITY",
+                    "id": "prod_env"
+                  }
+                }
+              ]
+            }
+          ],
+          "completeness": {
+            "kind": "EXACT_SNAPSHOT",
+            "task_id": "task",
+            "basis": "INDEPENDENT_OFFLINE_BOUNDARY_QUERY"
+          }
+        }
+      },
+      "expected": false,
+      "actual": false,
+      "match": true,
+      "explanation": "Every operation is confined to test; simultaneous production association is a violation."
+    },
+    {
+      "id": "environment-test_env-prod_env",
+      "expression": "all_test_environment",
+      "context": {
+        "plan": {
+          "events": [
+            {
+              "id": "operation-query",
+              "task_id": "task",
+              "operation": "OTHER",
+              "occurred": true,
+              "roles": [
+                {
+                  "role": "ENVIRONMENT",
+                  "value": {
+                    "kind": "ENTITY",
+                    "id": "test_env"
+                  }
+                },
+                {
+                  "role": "ENVIRONMENT",
+                  "value": {
+                    "kind": "ENTITY",
+                    "id": "prod_env"
+                  }
+                }
+              ]
+            }
+          ],
+          "completeness": {
+            "kind": "EXACT_SNAPSHOT",
+            "task_id": "task",
+            "basis": "INDEPENDENT_OFFLINE_BOUNDARY_QUERY"
+          }
+        }
+      },
+      "expected": false,
+      "actual": {
+        "unknown": true
+      },
+      "match": false,
+      "explanation": "Every operation is confined to test; simultaneous production association is a violation."
+    }
+  ]
+}
