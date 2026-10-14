@@ -10,6 +10,7 @@ import {repairableFrameCodes} from '../../../src/bxp/ir-kernel/frames.mjs';
 import {irOnly,calculationTargets,calculationAuditBundle} from './boundary-calculation-schema.mjs';
 import {attachLLMCalculation,checkLLMBoundary} from './boundary-calculation.mjs';
 import {expandCompactBoundary,compactBoundaryCandidate} from './compact-boundary.mjs';
+import {applyCalculationPatch,requireCompleteCalculationReplacement} from './calculation-patch.mjs';
 const write=(dir,name,value)=>fs.writeFileSync(path.join(dir,name),JSON.stringify(value,null,2)+'\n');
 export async function parseDirectIR(bytes,{output,probe,model='gpt-6.1-sol',reasoning='medium',parseMethod='SKILL',signal,onProgress=()=>{},timeoutMs=null,call=callCodex,maxModelRequests=2,resourceGuard=()=>{},productSnapshot=null}={}){
  if(!output)throw Error('OUTPUT_DIRECTORY_REQUIRED');if(!Number.isSafeInteger(maxModelRequests)||maxModelRequests<2)throw Error('MODEL_REQUEST_BUDGET_EXHAUSTED');
@@ -49,6 +50,7 @@ export async function parseDirectIR(bytes,{output,probe,model='gpt-6.1-sol',reas
   const problems={base_ir_sha256:sha256(JSON.stringify(base)),omissions:reviewed.value.omissions,issues:reviewed.value.issues,technical_errors:technical.errors,removable_node_ids:[...reviewed.value.reviews.filter(r=>r.verdict==='CONTRADICT'&&!r.field_path).map(r=>r.target.id),...technical.errors.filter(e=>e.code==='DATA_CONSUMER_EVENT').map(e=>e.id)],missing_review_fields:technical.rows.filter(r=>r.missing_review_fields?.length).map(r=>({id:r.id,fields:r.missing_review_fields}))};
   problems.allowed_replacement_ids=replacements;problems.removable_node_ids=removals;problems.allowed_coverage_indices=coverage_indices;
   problems.calculation_findings=calculationProblems;
+  if(llmCalculation)problems.base_calculation_sha256=sha256(JSON.stringify(llmCalculation));
   if(llmCalculation)problems.calculation_reviews=reviewed.value.calculation_reviews??[];
   write(dir,'revision-request.json',problems);onProgress({stage:'PARSING',revision:1});
   let patched;
@@ -59,17 +61,18 @@ export async function parseDirectIR(bytes,{output,probe,model='gpt-6.1-sol',reas
    technical={...technical,diagnostics:[...technical.diagnostics,{code:'REVISION_NOT_APPLIED',reason:error.message}]};write(dir,'revision-outcome.json',revisionOutcome);write(dir,'retained-candidate-ir.json',base);write(dir,'retained-audit.json',reviewed.value);
   }
   if(patched){
-  write(dir,'patch.json',patched.value);let applied;
+  write(dir,'patch.json',patched.value);let applied,nextCalculation=llmCalculation;
   parsed={...parsed,attempts:[...parsed.attempts,...patched.attempts]};
-  try{applied=applyIRPatch(base,patched.value,{allowed_replacements:replacements,allowed_removals:removals,allowed_coverage_indices:coverage_indices,allowed_coverage_targets:reviewed.value.issues.filter(i=>i.field_path==='coverage').flatMap(i=>i.targets.map(t=>t.id))});}
+  try{applied=applyIRPatch(base,patched.value,{allowed_replacements:replacements,allowed_removals:removals,allowed_coverage_indices:coverage_indices,allowed_coverage_targets:reviewed.value.issues.filter(i=>i.field_path==='coverage').flatMap(i=>i.targets.map(t=>t.id))});if(patched.value.calculation_patch!=null){const merged=applyCalculationPatch(llmCalculation,patched.value.calculation_patch);nextCalculation=merged.calculation;write(dir,'calculation-patch-changes.json',merged.changed);}else if(patched.value.boundary_calculation!=null)nextCalculation=requireCompleteCalculationReplacement(llmCalculation,patched.value.boundary_calculation);}
   catch(error){
    if(!/^PATCH_[A-Z_]+(?::|$)/.test(error.message))throw error;
+   applied=null;
    revisionOutcome={status:'NOT_APPLIED',reason:error.message,retained_revision:0,retained_ir_sha256:sha256(JSON.stringify(base)),patch_sha256:sha256(JSON.stringify(patched.value)),requires_review:true};
    technical={...technical,diagnostics:[...technical.diagnostics,{code:'REVISION_NOT_APPLIED',reason:'局部修订未应用，保留首轮IR与审阅；'+error.message}]};
    write(dir,'revision-outcome.json',revisionOutcome);write(dir,'candidate-ir.json',base);write(dir,'audit.json',reviewed.value);write(dir,'technical-validation.json',technical);
    onProgress({stage:'VALIDATING',revision:1,signal:'REVISION_NOT_APPLIED'});
   }
-  const calculationChanged=patched.value.boundary_calculation!=null&&!isDeepStrictEqual(patched.value.boundary_calculation,llmCalculation);
+  const calculationChanged=!isDeepStrictEqual(nextCalculation,llmCalculation);
   if(applied&&calculationChanged&&!calculationFeedback&&(isDeepStrictEqual(applied.ir,base)||explanationOnlyPatch(base,applied.ir))){revisionOutcome={status:'NOT_APPLIED',reason:'PATCH_UNRELATED_CALCULATION',retained_revision:0,requires_review:true};write(dir,'revision-outcome.json',revisionOutcome);applied=null;}
   if(applied&&!calculationChanged&&(isDeepStrictEqual(applied.ir,base)||contractVersion==='candidate-ir/2.0'&&explanationOnlyPatch(base,applied.ir))){
    const explanationOnly=!isDeepStrictEqual(applied.ir,base);
@@ -81,8 +84,8 @@ export async function parseDirectIR(bytes,{output,probe,model='gpt-6.1-sol',reas
   const retained={parsed,reviewed,technical,llmCalculation};let nextAuditResponse;
   try{
   write(dir,'patch-changes.json',applied.changed);
-  if(llmCalculation&&!explanationOnlyPatch(base,applied.ir)&&!isDeepStrictEqual(applied.ir,base)&&patched.value.boundary_calculation==null)throw Error('PATCH_CALCULATION_NOT_UPDATED');
-  parsed={...parsed,value:applied.ir};if(patched.value.boundary_calculation!=null)llmCalculation=patched.value.boundary_calculation;
+  if(llmCalculation&&!explanationOnlyPatch(base,applied.ir)&&!isDeepStrictEqual(applied.ir,base)&&patched.value.boundary_calculation==null&&patched.value.calculation_patch==null)throw Error('PATCH_CALCULATION_NOT_UPDATED');
+  parsed={...parsed,value:applied.ir};llmCalculation=nextCalculation;
   write(dir,'proposal.json',reviewInput());write(dir,'candidate-ir.json',parsed.value);if(llmCalculation)write(dir,'llm-boundary-calculation.json',llmCalculation);onProgress({stage:'PARSING',revision:1,kind:'PARSE_READY',signal:'PARSE_READY'});
   const targets=affectedAuditTargets(parsed.value,applied.changed,reviewed.value).filter(id=>['entities','variables','events','states','expressions','requirements'].some(k=>parsed.value[k].some(n=>n.id===id))),targeted=!llmCalculation&&!reviewed.value.omissions?.length&&!removals.length&&!applied.changed.some(c=>['issues','coverage','sequences'].includes(c.collection));write(dir,'audit-targets.json',{targets,mode:targeted?'CHANGED_AND_DEPENDENT':'FULL_IR_AND_CALCULATION_REVIEW'});
   const next=nextAuditResponse=await call({bundle:calculationAuditBundle(targeted?targetedAuditBundle(audit,targets):audit,llmCalculation),source,candidate:reviewInput(),directory:path.join(dir,'audit-call'),probe,model,reasoning,signal,timeoutMs,requestBudget,...telemetry('audit')});

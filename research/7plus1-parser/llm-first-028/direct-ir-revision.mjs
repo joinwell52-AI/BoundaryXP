@@ -1,6 +1,7 @@
 import {candidateSchema} from './contracts/candidate-ir-v1/schema.mjs';import {sha256} from './source.mjs';
 import {v2Schema} from '../../../src/bxp/ir-kernel/contract-registry.mjs';
 import {boundaryCalculationSchema} from './boundary-calculation-schema.mjs';
+import {calculationPatchSchema} from './calculation-patch.mjs';
 import {isDeepStrictEqual} from 'node:util';
 // Only explanatory text in existing issue/coverage records may be ignored.
 // Status, kind, references, source text, labels and every mathematical field
@@ -25,7 +26,8 @@ export function revisionPermissions(base,audit,technical){
  return {replacements:[...new Set(replacements)],coverage_indices,removals:[...audit.reviews.filter(r=>r.verdict==='CONTRADICT'&&!r.field_path).map(r=>r.target.id),...technical.errors.filter(e=>e.code==='DATA_CONSUMER_EVENT').map(e=>e.id)]};
 }
 export function revisionBundle(bundle){let text=bundle.text+'\n有界局部修订：输出boundx-candidate-ir-patch/1，base_ir_sha256为宿主摘要。各集合只列新增或获准替换节点，空集合不修改。不得重建整图或改变无关事实。removed_nodes仅允许removable_node_ids内被审阅CONTRADICT或程序证实消费者类型错误的候选，真实边界及UNCERTAIN节点不能删除；原文要求必须在正确节点中保留，引用和coverage须同步修正。coverage_updates保留原行索引及同一来源。只修实际审阅、technical_errors和缺审问题；所有修订由独立新会话再次审阅。'+(bundle.contract_version==='candidate-ir/2.0'?' root_task必须原样保留；sequences只列新增或获准替换的序列，空数组不修改。':'');let schema=bundle.contract_version==='candidate-ir/2.0'?kernelPatchSchema:patchSchema;
- if(['LLM_BOUNDARY_CALCULATION_R01','LLM_BOUNDARY_CALCULATION_R02','LLM_BOUNDARY_CALCULATION_R03'].includes(bundle.request_profile)){schema=structuredClone(schema);const calculation=structuredClone(boundaryCalculationSchema);delete calculation.$defs;schema.properties.boundary_calculation={anyOf:[calculation,{type:'null'}]};schema.required.push('boundary_calculation');text+=' boundary_calculation=null表示不改计算；真实计算审阅、程序证据诊断或IR语义改动允许局部替换计算候选。IR改动影响计算时必须同步更新受影响计算及coverage，不能保留旧答案。修订使用当前补丁Schema，计算证据context_json/witness_query_json直接给值，不用首次输出的共享context_id；审阅仍可分组。';}
+ if(bundle.request_profile==='LLM_BOUNDARY_CALCULATION_R03'){schema=structuredClone(schema);const calculation=structuredClone(calculationPatchSchema);delete calculation.$defs;schema.properties.calculation_patch={anyOf:[calculation,{type:'null'}]};schema.required.push('calculation_patch');text+=' 计算修订仅输出calculation_patch（无变更为null），format=boundx-calculation-patch/1，base_calculation_sha256使用宿主提供的摘要。constraints/calculations/unresolved按id、coverage按source_ref合并，空数组保留原项；只列真正变化项。删除必须明列remove_*_ids，不得因省略丢弃边界；joint=null保留原联合结论。evidence_contexts只列新的证据，允许引用输入候选已有ctx编号但不可改写其内容；joint或计算对照使用witness_context_id/context_id。必要时新增唯一ctx编号。IR修改影响计算时同步修订受影响项，合并后的完整IR和计算将重新独立审阅。不得重输整份未变计算。';}
+ else if(['LLM_BOUNDARY_CALCULATION_R01','LLM_BOUNDARY_CALCULATION_R02'].includes(bundle.request_profile)){schema=structuredClone(schema);const calculation=structuredClone(boundaryCalculationSchema);delete calculation.$defs;schema.properties.boundary_calculation={anyOf:[calculation,{type:'null'}]};schema.required.push('boundary_calculation');text+=' boundary_calculation=null表示不改计算；非null须为完整替换，不能用省略表示删除。';}
  return {...bundle,schema,text,sha256:sha256(text)};}
 export function applyIRPatch(base,patch,{allowed_replacements=[],allowed_coverage_targets=[],allowed_coverage_indices=[],allowed_removals=[],authorized_contract_transition=null}={}){
  if(patch.base_ir_sha256!==sha256(JSON.stringify(base)))throw Error('PATCH_BASE_DIGEST_MISMATCH');
