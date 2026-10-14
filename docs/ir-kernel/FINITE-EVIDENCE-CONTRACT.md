@@ -1,4 +1,20 @@
-# 有限计算证据接口 r01
+# 有限计算证据接口 r02：实例绑定与紧凑传输
+
+## R03运行输出优先规则
+
+交付仅为一份IR＋计算；不另写7+1、中文报告或重复IR。IR结构就是计算操作数。计算保留方法、操作数引用、公式、结果及必要证据；短说明，不逐条复述原文。
+
+解析输出Schema将重复的context_json移入boundary_calculation.evidence_contexts，每条{id,context_json}。expression_cases使用context_id，joint使用witness_context_id（无见证为null）。同一上下文复用同一ID，程序只做精确引用展开；不同假设另建上下文，不能因为省字合并不同观测。requirements.note和calculations.steps不再由模型重复输出，程序恢复为空字符串/数组，不能把语义只放说明。数学假设、未决、操作数及来源不可省略。
+
+独立审阅输出use_candidate_source_table=true，表示已对照原文核验候选source_table，并复用其ID，不再次抄写引文。正确节点在support_groups中显式列出targets、field_path、共同source_refs和短reason；不同来源分组。序列须单独以template EVENT为target、field_path="sequence"确认。只在reviews逐条写不支持项及需要单独支持的字段。计算正确项在calculation_support_groups显式列targets；问题在calculation_reviews逐条列出。遗漏或未列入组的目标不默认为通过；审阅的是完整IR和计算而不是只看差异。omissions、issues照常保留。
+
+## 重复事件及参数化状态
+
+plan.events增加可空template_id、index。普通事件两者省略或null；重复事件两者必须同时提供，引用真实TEMPLATE及其序列范围内整数索引。id只是证据记录ID，不使用EXPRESSION ID冒充实例。程序机械规范化为模板与索引身份；声明3次最多实例不要求发生3次。
+
+states增加bindings数组，每条{variable_id,value}，仅绑定该STATE.subject表达式实际需要的INSTANCE_LOCAL整数变量；value必须在变量域内。同一STATE可针对不同实例提供多条记录，程序先按表达式解析subject，再形成唯一状态键，不能自行拼复合索引。直接EVENT主体使用空bindings。FAILURE为真不能对应succeeded=true的事件；成立时点属于所绑定实例，不能用任意早先失败代替直接前次。
+
+例：序列try从1计数，状态previous_failed的subject=PREVIOUS_INSTANCE(EVENT_INSTANCE(try,k))。首次失败记录可为{id:"attempt1",template_id:"try",index:1,task_id:"task",occurred:true,completed:true,succeeded:false,start:"1",end:"2",unit:"minute",roles:null}；状态证据为{id:"previous_failed",bindings:[{variable_id:"k",value:2}],value:true,established_at:"2",unit:"minute",periods:null}。这样k=2的重试检查的是第1次失败；k=3须单独给第2次状态。示例ID须替换为本次真实引用。
 
 该接口由程序机械绑定到同版Core；不从原文、label或note抽取语义。解析模型负责提供本次真实引用、数学赋值及计算主张。程序整理状态键、单位和产物使用键，不让模型重复拼索引。
 

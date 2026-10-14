@@ -5,6 +5,8 @@ description: 在独立会话双向审阅中文、英文或中英混合任务对�
 
 ## LLM_BOUNDARY_CALCULATION_R02运行接口
 
+R03优先：完整审阅IR＋计算，正确目标按共同来源放support_groups/calculation_support_groups显式列ID，问题逐项放reviews/calculation_reviews。use_candidate_source_table=true复用已核对引文；遗漏目标不默认支持。序列单独field_path="sequence"审阅；实例template_id/index及状态bindings已交付。只缩短输出，不缩小核对范围。
+
 按同版FINITE-EVIDENCE-CONTRACT.md核对机器证据。calculation_reviews.target只用Schema列出的约束ID、计算ID、joint、coverage.<source_ref>，不另加整体coverage。检查完整源文与完整IR、计数绑定、有限见证、状态时点、活动分类、停止期间重叠及端点；缺机器证据不能凭文字给SUPPORT。omissions.repairability区分REPAIRABLE、CONTRACT_UNSUPPORTED、CLARIFICATION_REQUIRED；本版已有ACTIVITY_CLASS、ACTIVE_WHILE和有限见证接口，不按旧版报缺。保留首次答案，短理由指出真实差异，不重复整份合同。
 
 # BoundX：从原文到结构、从结构到原文的独立审阅

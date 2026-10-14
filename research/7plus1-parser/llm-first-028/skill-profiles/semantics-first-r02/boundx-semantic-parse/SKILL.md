@@ -5,6 +5,8 @@ description: 将中文、英文或中英混合任务原文编译为带来源的B
 
 ## LLM_BOUNDARY_CALCULATION_R02运行接口
 
+R03优先：只输出IR＋计算；共享证据使用evidence_contexts、context_id、witness_context_id，省去重复note/steps及第二份7+1。重复实例证据显式template_id/index，参数状态用bindings。精确字段见同版FINITE-EVIDENCE-CONTRACT.md，来源、假设、完整边界不因压缩删减。
+
 同版2.0/r04共享合同、FINITE-EVIDENCE-CONTRACT.md及Schema优先于旧单输出限制。生成IR和完整数学候选时同时给可验证证据：LOGIC绑定真实公式与布尔原子，rows=[]允许程序机械枚举；条件/禁止给expression_cases；SAT给完整有限证据JSON。程序整理状态键与单位，不负责猜语义。活动分类显式用ACTIVITY_CLASS，期间重叠用ACTIVE_WHILE；别把本版已支持的结构判为缺口。数学见证不是实际业务值或工作规划。推导与理由简短，不重复合同或模板答案。
 
 # BoundX：先理解原文，再编码候选IR

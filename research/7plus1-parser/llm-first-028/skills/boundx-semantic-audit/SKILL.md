@@ -5,6 +5,10 @@ description: 在独立新会话逐来源审阅BoundX候选IR及启用配置中�
 
 # 独立审阅候选IR
 
+## R03：完整审阅，分组输出
+
+核验完整原文、IR与计算后，use_candidate_source_table=true复用已核对的来源表。正确节点用support_groups明确列目标；计算正确项用calculation_support_groups明确列目标，按共同来源分组并给短理由，不为每个正确节点重复同样说明。问题保留在reviews/calculation_reviews、omissions及issues；未列目标不默认支持。序列需单独field_path="sequence"支持。重复事件检查template_id/index及STATE.bindings；接口已交付，不再以没有实例接口为由拒绝。只保留完整审阅结论及具体差异，不重写IR、计算或原文。
+
 ## 计算证据审阅 r02
 
 宿主启用LLM_BOUNDARY_CALCULATION_R02时，按同版FINITE-EVIDENCE-CONTRACT.md审阅机器证据及源文。calculation_reviews.target严格使用输出Schema枚举：各约束/计算ID、joint、coverage.<source_ref>；不另写整体coverage。检查计数的公式绑定、有限见证全部要求、状态成立时点、角色和活动类别、停止期间持续重叠及端点。缺机器证据不能只凭文字推导给SUPPORT。omissions明确repairability：可由本合同修正为REPAIRABLE；确实超出本版能力为CONTRACT_UNSUPPORTED；需要原文澄清为CLARIFICATION_REQUIRED。本版已有ACTIVE_WHILE、活动类别和有限查询接口，不能沿旧版宣称无接口。短理由说明实际支持或反例，避免复述合同。

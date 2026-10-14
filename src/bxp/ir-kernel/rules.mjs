@@ -14,10 +14,14 @@ export function evaluateRequirements(core,query={}){
    value=and([value,valid,...horizon]);
   }
   if(app!==false&&r.kind==='DATA_USE'){
-   const use=r.data_use,consumer=event(use.consumer);let available=UNKNOWN;
+   const use=r.data_use,template=use.consumer.kind==='EVENT'&&core.nodes[use.consumer.id]?.kind==='TEMPLATE';
+   const consumers=template?context.plan.events.filter(e=>e.template_id===use.consumer.id):[event(use.consumer)];
+   const consumption=consumers.map(consumer=>{let available=UNKNOWN;
    if(use.producer&&use.availability==='COMPLETE_RESULT'){const producer=event(use.producer);available=producer?.occurred!=null&&producer?.completed!=null&&producer?.end!=null&&consumer?.start!=null?producer.occurred&&producer.completed&&compare(producer.end,consumer.start)<=0:UNKNOWN;}
    else{const key=stable({object:evaluateCore(core,use.object,context),producer:use.producer?evaluateCore(core,use.producer,context):null}),entry=context.availability?.[key];if(entry&&consumer?.start!=null){const point=toBase(entry.at,entry.unit??'second');available=compare(point,consumer.start)<=0;if(use.producer){const producer=event(use.producer);available=and([available,producer?.occurred??UNKNOWN,producer?.start!=null&&producer?.end!=null?compare(producer.start,point)<=0&&compare(point,producer.end)<=0:UNKNOWN]);}}}
-   value=and([value,or([not(consumer?.occurred??UNKNOWN),available])]);
+   return or([not(consumer?.occurred??UNKNOWN),available]);});
+   if(template&&!context.plan.completeness)consumption.push(UNKNOWN);
+   value=and([value,...consumption]);
   }
   if(r.modality==='FORBIDDEN'&&app!==false)value=not(value);
   if(unknown(app))value=or([not(app),value]);

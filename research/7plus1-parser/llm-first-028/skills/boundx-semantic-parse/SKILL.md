@@ -5,6 +5,10 @@ description: 将ADMIN中文或英文任务原文表达为有来源的BoundX候�
 
 # 原文直接生成候选IR
 
+## R03：IR＋计算，精简重复输出
+
+本配置只生成一份IR及绑定它的边界计算，不另生成7+1或中文报告。按FINITE-EVIDENCE-CONTRACT.md的R03传输：evidence_contexts保存可复用证据，局部对照引用context_id，联合见证引用witness_context_id；不再输出note/steps的重复说明。必要假设、来源和缺口保留。重复事件证据显式template_id/index，参数化STATE用bindings绑定本次索引；不猜复合ID。全部实际重复操作须归属于对应序列，不能让开放域额外操作绕过前次条件。只给必要且足够的证据，不重复同一赋值。
+
 ## 计算证据接口 r02
 
 宿主启用LLM_BOUNDARY_CALCULATION_R02时，同版2.0/r04合同及FINITE-EVIDENCE-CONTRACT.md优先于旧IR单输出限制。首次输出同时给IR、数学结论及可验证证据：布尔计数绑定真实公式，rows=[]由程序枚举；条件/禁止用expression_cases；SAT给完整有限见证JSON，不能说接口未交付后只写文字赋值。活动类别用ACTIVITY_CLASS，停止期间用ACTIVE_WHILE与明确状态期间，不把已支持结构写成EXPRESSION_GAP。见证是数学赋值，未观测的现实值仍未知。推导简短，避免重复合同与长段理由；不让程序按原文补答案。

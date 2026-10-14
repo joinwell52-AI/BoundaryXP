@@ -1,6 +1,8 @@
 # LLM边界计算统一方法与样例
 
-方法合同：`boundx-boundary-math/1`，接口修订r02。运行配置：`LLM_BOUNDARY_CALCULATION_R02`。解析与审阅只加载各自Skill，但共用本文件；Skill与skill1采用同一种计算方法。IR接口仍为candidate-ir/2.0，计算是绑定本次IR的独立输出，不冒充程序Core结果。
+方法合同：`boundx-boundary-math/1`，接口修订r03。运行配置：`LLM_BOUNDARY_CALCULATION_R03`。解析与审阅只加载各自Skill，但共用本文件；Skill与skill1采用同一种计算方法。IR接口仍为candidate-ir/2.0，计算是绑定本次IR的独立输出，不冒充程序Core结果。
+
+当前首次输出为紧凑IR＋计算，按FINITE-EVIDENCE-CONTRACT.md的共享上下文和分组审阅接口，不重复7+1或中文报告。下文witness_query_json/context_json是规范展开后的保存格式；首次传输用witness_context_id/context_id引用evidence_contexts。计算主张仍由LLM给出；程序只展开引用、校验和复核，不补语义。公开推导保留必要公式和假设，steps重复说明不再要求输出。
 
 机器证据的完整字段、通用样例与审阅目标以同版FINITE-EVIDENCE-CONTRACT.md及实际内联Schema为准。LOGIC必须绑定真实公式和布尔原子；rows=[]由程序机械枚举并核对模型给出的true_count/false_count，避免模型重复书写真值表。开始门、禁止和停止用expression_cases给正反及UNKNOWN对照；JOINT的SAT必须给完整有限证据JSON，不只给文字见证。输出紧凑JSON、简短公开推导，不反复复述合同。
 

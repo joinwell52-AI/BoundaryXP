@@ -44,6 +44,7 @@ export function calculationAuditBundle(bundle,c){
  if(!c)return bundle;
  const schema=structuredClone(bundle.schema);
  schema.properties.calculation_reviews.items.properties.target={type:'string',enum:[...new Set(calculationTargets(c))]};
- schema.properties.calculation_reviews.minItems=calculationTargets(c).length;
+ if(schema.properties.calculation_support_groups){schema.properties.calculation_support_groups.items.properties.targets.items={type:'string',enum:[...new Set(calculationTargets(c))]};}
+ else schema.properties.calculation_reviews.minItems=calculationTargets(c).length;
  return {...bundle,schema};
 }
