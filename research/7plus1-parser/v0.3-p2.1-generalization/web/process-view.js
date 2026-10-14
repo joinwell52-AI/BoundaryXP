@@ -117,7 +117,7 @@ function evidence(row,ctx){return array(ctx.rows.get(row.id)?.sources).length?ct
 function sourceEvidence(sources,ctx){return array(sources).map(s=>ctx.sources.find(v=>v.quote===s.quote&&Number.isInteger(s.occurrence)&&v.occurrence===s.occurrence)??s);}
 export function processView(run){
  const trace=run.result??{...run.progress,source:{text:run.source_text,sha256:run.source_sha256}},ctx=context(trace),p=trace?.proposal,t=trace?.technical,a=trace?.audit,ir=trace?.ir,c=trace?.canonical;
- if(p?.format==='boundx-candidate-ir/1'||['DIRECT_CANDIDATE_IR_R01','LLM_BOUNDARY_CALCULATION_R01','LLM_BOUNDARY_CALCULATION_R02','LLM_BOUNDARY_CALCULATION_R03'].includes(run.request_profile))return directIRProcess({...trace,request_profile:trace.request_profile??run.request_profile});
+ if(p?.format==='boundx-candidate-ir/1'||['DECLARATIVE_BOUNDARY_R01','DIRECT_CANDIDATE_IR_R01','LLM_BOUNDARY_CALCULATION_R01','LLM_BOUNDARY_CALCULATION_R02','LLM_BOUNDARY_CALCULATION_R03'].includes(run.request_profile))return directIRProcess({...trace,request_profile:trace.request_profile??run.request_profile});
  const has=x=>x!=null;
  const stages=[
   {id:'parse',title:'1. 解析原文：形成语义候选',actor:'Codex + '+methodLabel(run),input:'这次提交的原文、'+methodLabel(run)+'、'+(run.resource_profile==='COMPACT_R01'?'精简共享语义合同和精简Schema。':'共享语义合同和Schema。'),work:'识别对象和参与者、事件、必须/允许/无需/禁止、条件、范围和未明确项。这里生成候选，不直接证明正确。',

@@ -19,7 +19,7 @@ import {directIRBundle} from './direct-ir-bundle.mjs';
 import {renderDirectCalculations} from './direct-ir-render-results.mjs';
 import {attachLLMCalculation} from './boundary-calculation.mjs';
 export const writeJSON=(file,data)=>fs.writeFileSync(file,JSON.stringify(data,null,2)+'\n');
-export const compilerRevision='llm-boundary-r03.1-test';
+export const compilerRevision='declarative-boundary-r01-test';
 export function replay7Plus1(bytes,{output,replayFrom,resourceGuard=()=>{},productSnapshot=null,allowPriorModelResources=false}){
  resourceGuard();
  const source=prepareSource(bytes),tracePath=path.join(replayFrom,fs.existsSync(path.join(replayFrom,'trace.json'))?'trace.json':'TRACE.json');
@@ -66,7 +66,7 @@ async function replayKernelIR(prior,source,bytes,{output,tracePath,resourceGuard
  for(const r of current){const matching=frozen.has(r.path)?r.path:r.path.includes('SKILL.md#')?[...frozen.keys()].find(p=>p.startsWith(r.path.split('#')[0]+'#')):r.path.endsWith('/CONTRACT.md')?[...frozen.keys()].find(p=>p.endsWith('/CONTRACT.md')||p.endsWith('/SEMANTICS.md')):null;const previous=matching?frozen.get(matching):null;
   if(previous!==r.sha256){if(!allowPriorModelResources)throw Error('REPLAY_SKILL_BUNDLE_CHANGED:'+r.path);changes.push({path:r.path,original_path:matching,original_sha256:previous,current_sha256:r.sha256});}
  }
- const technical=acceptCandidateIR(prior.ir,prior.audit,source),completed=await finishDirectIR(prior.ir,technical,prior.revision_outcome);
+ const technical=acceptCandidateIR(prior.ir,prior.audit,source),completed=await finishDirectIR(prior.ir,technical,prior.revision_outcome,{declarative:prior.request_profile==='DECLARATIVE_BOUNDARY_R01'});
  if(prior.llm_boundary_calculation)await attachLLMCalculation(completed,prior.ir,prior.llm_boundary_calculation,prior.audit,{requireWire:['LLM_BOUNDARY_CALCULATION_R02','LLM_BOUNDARY_CALCULATION_R03'].includes(prior.request_profile)});
  const replay={...prior,...completed,product_snapshot:productSnapshot,model_origin_product_snapshot:prior.product_snapshot??null,consumer_revision:compilerRevision,execution_mode:'FROZEN_RESPONSE_REPLAY',origin_trace:{sha256:sha256(fs.readFileSync(tracePath))},real_calls_in_this_replay:0,not_new_model_validation:true,model_resource_changes:changes,model_validation_scope:'PRIOR_MODEL_RESOURCES_RESPONSES_CURRENT_CONSUMER_ONLY'};
  fs.mkdirSync(output,{recursive:true});if(fs.existsSync(path.join(output,'source.txt')))throw Error('OUTPUT_ALREADY_EXISTS');fs.writeFileSync(path.join(output,'source.txt'),bytes,{flag:'wx'});

@@ -5,7 +5,8 @@ import {fileURLToPath,pathToFileURL} from 'node:url';
 import {spawn} from 'node:child_process';
 import {lockProduct} from './resources.mjs';
 const approvedVersions={
- '0.1.0-candidate.031-r1.2-ui.91':{compiler:'llm-boundary-r03.1-test',contract:'candidate-ir/2.0'},
+ '0.1.0-candidate.031-r1.2-ui.92':{compiler:'declarative-boundary-r01-test',contract:'candidate-ir/2.0'},
+  '0.1.0-candidate.031-r1.2-ui.91':{compiler:'llm-boundary-r03.1-test',contract:'candidate-ir/2.0'},
  '0.1.0-candidate.031-r1.2-ui.90':{compiler:'llm-boundary-r03-test',contract:'candidate-ir/2.0'},
  '0.1.0-candidate.031-r1.2-ui.89':{compiler:'llm-boundary-r03-test',contract:'candidate-ir/2.0'},
  '0.1.0-candidate.031-r1.2-ui.88':{compiler:'llm-boundary-r02.2-test',contract:'candidate-ir/2.0'},

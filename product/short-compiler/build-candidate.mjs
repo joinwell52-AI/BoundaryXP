@@ -1,7 +1,7 @@
 // Complete immutable package from this checkout, never from a prior installation.
 import fs from 'node:fs';import path from 'node:path';import {fileURLToPath,pathToFileURL} from 'node:url';import {execFileSync} from 'node:child_process';import {createHash} from 'node:crypto';
 import {lockProduct} from './resources.mjs';
-export const candidateVersion='0.1.0-candidate.031-r1.2-ui.91';
+export const candidateVersion='0.1.0-candidate.031-r1.2-ui.92';
 const root=path.resolve(path.dirname(fileURLToPath(import.meta.url)),'../..'),hash=b=>createHash('sha256').update(b).digest('hex');
 const tree=directory=>fs.readdirSync(path.join(root,directory),{withFileTypes:true}).flatMap(e=>e.isDirectory()?tree(directory+'/'+e.name):e.isFile()?[directory+'/'+e.name]:[]);
 export function buildCandidate(output=path.join(root,'.boundx/products',candidateVersion)){
@@ -9,7 +9,7 @@ export function buildCandidate(output=path.join(root,'.boundx/products',candidat
  const core='research/7plus1-parser/llm-first-028',web='research/7plus1-parser/v0.3-p2.1-generalization/web';
  const paths=[...tree(core).filter(p=>!p.slice(core.length+1).startsWith('tests/')),...tree('src/bxp'),...tree('protocol/schemas'),...['CONTRACT.md','SEMANTICS.md','BOUNDARY-CALCULATION-METHOD.md','candidate-ir.schema.json','candidate-ir-audit.schema.json','LANGUAGE-CAPABILITIES.json'].map(p=>'docs/ir-kernel/'+p),...['index.html','native-app.js','process-view.js','direct-ir-process.js','calculation-view.js','style.css'].map(p=>web+'/'+p),...['cli.mjs','deploy.mjs','resources.mjs','ui.mjs','verify.mjs','verify-candidate.mjs','launch-installed.mjs','cli-installed.mjs','CLOUD-CANDIDATE.md'].map(p=>'product/short-compiler/'+p),'package.json','package-lock.json','LICENSE'];
  const files=[...new Set(paths)].sort();for(const file of files)if(!fs.statSync(path.join(root,file)).isFile())throw Error('FULL_SOURCE_MISSING:'+file);
- files.push('docs/ir-kernel/FINITE-EVIDENCE-CONTRACT.md');
+ files.push('docs/ir-kernel/FINITE-EVIDENCE-CONTRACT.md','docs/ir-kernel/DECLARATIVE-BOUNDARY.md');
  const schema=JSON.parse(fs.readFileSync(path.join(root,'docs/ir-kernel/candidate-ir.schema.json')));
  const compiler=fs.readFileSync(path.join(root,core,'engine.mjs'),'utf8').match(/compilerRevision='([^']+)'/)?.[1];if(!compiler)throw Error('BUILD_COMPILER_IDENTITY_MISSING');
  // Documentation/evidence-only commits do not change a frozen runtime package.

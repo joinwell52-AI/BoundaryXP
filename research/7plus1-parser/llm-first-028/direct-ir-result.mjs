@@ -4,6 +4,7 @@ import {calculateDirectIR} from './direct-ir-calculate.mjs';
 import {renderDirectCalculations} from './direct-ir-render-results.mjs';
 import {runKernel} from '../../../src/bxp/ir-kernel/service.mjs';
 import {repairableFrameCodes} from '../../../src/bxp/ir-kernel/frames.mjs';
+import {declareBoundary} from '../../../src/bxp/ir-kernel/declaration.mjs';
 
 function suggestion(code){
  if(code==='REVISION_NOT_APPLIED')return '核对修订目标与允许修改的节点；只提交相关局部修订并独立审阅。原候选和未应用补丁均保留。';
@@ -14,7 +15,8 @@ function suggestion(code){
  return '核对该节点及依赖的合同表达和消费者支持；补齐有依据的局部结构后复算，不删除限制换取通过。';
 }
 
-export function finishDirectIR(ir,acceptance,revisionOutcome=null){
+export function finishDirectIR(ir,acceptance,revisionOutcome=null,{declarative=false}={}){
+ if(declarative&&ir.contract_version==='candidate-ir/2.0')return finishDeclaration(ir,acceptance,revisionOutcome);
  if(ir.contract_version==='candidate-ir/2.0')return finishKernelIR(ir,acceptance,revisionOutcome);
  const technical={...acceptance,diagnostics:[...(acceptance.diagnostics??[])]};
  if(revisionOutcome?.status==='NOT_APPLIED'&&!technical.diagnostics.some(x=>x.code==='REVISION_NOT_APPLIED'))technical.diagnostics.push({code:'REVISION_NOT_APPLIED',reason:'局部修订未应用：'+revisionOutcome.reason});
@@ -41,6 +43,18 @@ export function finishDirectIR(ir,acceptance,revisionOutcome=null){
  const problem_report={format:'boundx-ir-problem-report/1',status:findings.length?'REVIEW_REQUIRED':'NO_RECORDED_GAPS',findings,revision_outcome:revisionOutcome,semantic_correctness_proven:false};
  if(findings.length)chinese+='\n\n## 发现的问题与修订建议\n\n'+findings.map((x,i)=>`${i+1}. ${x.problem}${x.node_id?'（'+x.node_id+'）':''}\n   影响：${x.impact}\n   建议：${x.suggestion}`).join('\n');
  return {technical,canonical,chinese,boundary_calculations,problem_report};
+}
+function finishDeclaration(ir,technical,revisionOutcome){
+ let declared;const gaps=[...technical.errors,...technical.diagnostics,...technical.rows.filter(r=>r.status!=='ACCEPTED').map(r=>({code:'NODE_REVIEW_REQUIRED',id:r.id}))];
+ if(technical.technical_ok){try{declared=declareBoundary(ir);gaps.push(...declared.compiled.semantic_gaps);}catch(e){gaps.push(e.diagnostic??{code:'BOUNDARY_COMPILE_ERROR',reason:e.message});}}
+ const canonical=declared?.canonical??{format:'boundx-kernel-7plus1/1',slots:Object.fromEntries('IOAPRVCB'.split('').map(k=>[k,{status:'UNRESOLVED',items:[],entries:[]}]))};
+ canonical.unresolved=technical.rows.filter(r=>r.status!=='ACCEPTED');canonical.gaps=gaps;canonical.business_decision=null;canonical.execution_authorization=null;
+ const byId=new Map(technical.rows.map(r=>[r.id,r]));for(const slot of Object.values(canonical.slots))for(const item of slot.entries??[]){item.status=byId.get(item.id)?.status??'UNRESOLVED';item.text=[item.kind==='BASIS_DECLARATION'?'依据声明':item.modality,item.subject_label,item.roles.map(r=>r.role+'='+r.value.id).join('；'),item.expression].filter(Boolean).join('；');item.sources=technical.source_links.filter(s=>item.source_refs.includes(s.id));}
+ const status=gaps.length||!declared?'PARTIAL':'BOUNDARY_READY';
+ const boundary_calculations={format:'boundx-declarative-boundary/1',status,compile_status:declared?'SUPPORTED':'FAILED',result:'BOUNDARY_DECLARED',verification:'STRUCTURE_AND_SOURCE_CHECKED_NOT_SEMANTIC_PROOF',query_status:'AWAITING_PLAN_OR_EVIDENCE',static_values:declared?.static_values??[],rules:ir.requirements.map(r=>({id:r.id,kind:r.kind,modality:r.modality,subject:r.subject,scope_id:r.scope_id,body:r.body,applicability:r.applicability,source_refs:r.source_refs})),variables:ir.variables,source_table:ir.source_table,core_sha256:declared?.compiled.core_sha256??null,gaps,calculation_performed:!!declared,witness_generated:false,business_decision:null,execution_authorization:null};
+ const findings=gaps.map(g=>({...g,problem:g.reason??g.message??g.code,suggestion:'核对本条原文及候选结构；仅修有依据的边界，不补执行安排。'}));
+ const chinese=(declared?.chinese??'# 边界待修正')+'\n\n## 边界建立结果\n\n'+(status==='BOUNDARY_READY'?'边界已建立，待核验具体规划或执行证据。':'仍有边界表达或审阅问题。')+'\n未生成PM执行安排或完整执行见证；未判断业务完成。\n\n### 确定的静态计算\n'+boundary_calculations.static_values.map(x=>'- '+x.id+' / '+x.operator+' = '+JSON.stringify(x.value)).join('\n')+'\n\n'+findings.map(f=>'- '+f.problem).join('\n');
+ return {technical,canonical,chinese,boundary_calculations,problem_report:{status:gaps.length?'REVIEW_REQUIRED':'NO_RECORDED_GAPS',findings,revision_outcome:revisionOutcome,semantic_correctness_proven:false},...(declared?{kernel_core:declared.compiled}:{})};
 }
 async function finishKernelIR(ir,technical,revisionOutcome){
  const emptySlots=()=>Object.fromEntries('IOAPRVCB'.split('').map(k=>[k,{status:'UNRESOLVED',items:[],entries:[]}]));

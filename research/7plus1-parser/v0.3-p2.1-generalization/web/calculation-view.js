@@ -37,6 +37,7 @@ function appendDirectObservationForm(container,trace,onObserve,onEvidence){
 export function renderBoundaryCalculations(container,trace,onEvidence=()=>{},onObserve=null){
  container.replaceChildren();container.append(el('h2','最终结果：7+1边界数学计算'));
  const c=trace?.boundary_calculations;
+ if(c?.format==='boundx-declarative-boundary/1')return renderDeclaration(container,trace);
  if(!c){container.append(el('p',trace?'此历史记录没有保存本版计算阶段；未重算、未补造。':'等待IR与固定7+1生成后，计算程序直接消费同一IR。'));return;}
  if(c.format==='boundx-llm-boundary-result/1')return renderLLMCalculation(container,trace);
  if(c.format==='boundx-kernel-result/1')return renderKernelCalculation(container,trace);
@@ -182,6 +183,18 @@ export function renderBoundaryCalculations(container,trace,onEvidence=()=>{},onO
   container.append(form);
  }
  if(container.dataset.runId){const download=el('a','导出原编译的完整计算JSON');download.href='/api/runs/'+container.dataset.runId+'/calculations.json';download.download='';container.append(download);}
+}
+function renderDeclaration(container,trace){
+ const c=trace.boundary_calculations,ir=trace.ir,names=new Map(['entities','variables','events','states','expressions'].flatMap(k=>(ir[k]??[]).map(n=>[n.id,n.label??n.id])));
+ container.replaceChildren();container.append(el('h2','最终结果：完整可计算的任务边界'),el('p',c.status==='BOUNDARY_READY'?'边界已建立 · 等待PM规划或执行证据核验':'边界仍有待修正项'),el('p','保留原文规定的变量、范围、数量、前提与禁止；没有替PM选对象、安排时间或生成执行记录。技术检查与模型审阅不等于语义已证明正确。'));
+ container.append(el('h3','确定的静态计算'));
+ const value=v=>v?.object?names.get(v.object)??v.object:v?.set?'{'+v.set.map(value).join('，')+'}':v?.number!==undefined?v.number:v?.symbol!==undefined?v.symbol:JSON.stringify(v);
+ const table=el('table'),head=el('tr');for(const x of ['表达式','计算值','来源'])head.append(el('th',x));table.append(head);
+ for(const x of c.static_values??[]){const tr=el('tr');tr.append(el('td',(names.get(x.id)??x.id)+' · '+x.operator),el('td',value(x.value)),el('td',x.source_refs.join('、')));table.append(tr);}container.append(table);
+ container.append(el('h3','保留的选择与未知量'));for(const v of c.variables??[])container.append(el('p',v.label+' · '+v.type+' · '+v.binding_mode+'；域：'+(names.get(v.domain?.id)??v.domain?.id??'未指定')+'；尚未替执行者赋值'));
+ const rules=el('details');rules.append(el('summary','边界规则及来源（'+c.rules.length+'项；7+1视图见上方）'));for(const r of c.rules)rules.append(el('p',r.id+' · '+r.kind+' / '+r.modality+'；'+(names.get(r.body?.id)??r.body?.id)+'；来源 '+r.source_refs.join('、')));container.append(rules);
+ if(c.gaps.length){container.append(el('h3','待修正问题'));for(const g of c.gaps)container.append(el('p',(g.id??g.node_id??'')+' '+(g.reason??g.message??g.code)));}
+ container.append(el('p','本次未提交PM规划或实际执行证据，因此尚未判定具体安排是否越界、任务是否完成。未命中禁止不等于执行许可；业务裁决和执行授权均为空。'));
 }
 function renderLLMCalculation(container,trace){
  const c=trace.boundary_calculations,p=c.proposal;

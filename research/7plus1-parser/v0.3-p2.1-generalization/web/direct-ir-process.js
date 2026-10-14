@@ -17,10 +17,16 @@ export function directIRProcess(trace){
   {...base,id:'calculus',title:'5. 程序边界计算：公式、数值与缺口',actor:'统一确定性计算Core，零模型调用',input:'同一IR的类型化表达式及技术接受记录。',work:'类型化IR下降为Core并保留source-map；支持片段由本地求解器计算，见证回到Core复核。能力限制明确列出，不以模型审阅替代计算。',ready:!!calc,outcome:calc?`${calc.status}；联合结果：${calc.result??calc.joint?.base?.result??'未保存'}；缺口${list(calc.gaps).length}项。`:'等待计算。',headers:['缺口节点','原因'],rows:list(calc?.gaps).map(x=>({cells:[name(x.node_id??x.id),x.reason??x.message??x.code],sources:[]})),notes:['可满足不等于已经执行完成；业务裁决和执行授权均为空。'],raw:calc}
  ].map(stage=>{
   if(stage.id==='technical')stage={...stage,notes:[...stage.notes,...findingNotes]};
+  if(trace.request_profile==='DECLARATIVE_BOUNDARY_R01'){
+   if(stage.id==='parse')return {...stage,title:'1. LLM提取完整可计算边界',work:'直接生成有来源的边界IR，保留变量及条件；不替PM选择对象、编执行安排或完整见证。'};
+   if(stage.id==='audit')return {...stage,title:'2. 新会话核对边界与原文',work:'核对全部来源与结构；正确节点分组确认，明确报告遗漏、多造、身份、方向及范围差异。'};
+   if(stage.id==='calculus')return {...stage,title:'5. 建立边界，计算确定值',work:'同一Core检查结构并计算封闭表达。等待具体规划或执行证据的变量保持未赋值，不作为语义缺口。',outcome:calc?(calc.status==='BOUNDARY_READY'?'边界已建立，待核验具体对象。':'边界仍有待修正项。'):'等待边界建立。',notes:['未提出或验证整套执行安排；尚未判断业务完成。']};
+   return stage;
+  }
   if(!llmMode)return stage;
   if(stage.id==='parse')return {...stage,title:'1. LLM理解原文、生成IR并完成边界计算候选',work:'模型按统一方法表达边界、公式、操作数、分项结果与联合结论；数学见证不是实际执行记录。',outcome:stage.outcome+(modelCalculation?' 同次响应包含'+modelCalculation.calculations.length+'项数学计算，联合候选结论 '+modelCalculation.joint.result+'。':' 等待同次响应中的IR与数学计算；不伪造中间内容。'),raw:modelCalculation?{ir:p,boundary_calculation:modelCalculation}:p};
   if(stage.id==='audit')return {...stage,title:'2. 新会话独立审阅IR与完整边界计算',work:'核对原文遗漏、多造、身份和范围，并独立复算公式、端点、逻辑、见证及冲突推导。',outcome:stage.outcome+' '+list(a?.calculation_reviews).length+'项计算审阅。'};
   if(stage.id==='calculus')return {...stage,title:'5. 程序复核与结果对照',actor:'程序检查具体操作数与可支持的见证，零模型调用',work:'模型计算原答、独立审阅和程序复核分别保存；复核失败提出具体问题，不吞掉模型结果，也不伪标证明通过。'};
   return stage;
- })};
+ }).flatMap(stage=>trace.request_profile==='DECLARATIVE_BOUNDARY_R01'&&stage.id==='parse'?[stage,{...base,id:'precheck',title:'2. 程序预检：格式、来源与绑定',actor:'程序，零模型调用',input:'紧凑边界候选。',work:'机械展开引用类型，检查Schema、来源、类型与引用；不重读中文补语义。随后交给独立审阅。',ready:!!trace.technical_precheck,outcome:trace.technical_precheck?(trace.technical_precheck.technical_ok?'技术预检通过；尚未进行语义审阅。':'技术预检发现问题，保留候选及诊断。'):'等待候选预检。',raw:trace.technical_precheck}]:[stage])};
 }
