@@ -1,4 +1,22 @@
-# v0.1.85安装事实：启动被工具策略拒绝
+# v0.1.85安装与运行记录
+
+## 当前：原npm入口恢复，58618实际在线
+
+2026-10-14 10:17（本地）核对：用户另行明确授权修复原本地启动入口并通过`npm run 7plus1:ui`启动最新完整安装版本。原`D:/boundx/product/short-compiler/launch-installed.mjs`只登记到ui78，无法接受已安装ui85；先保存原字节，再仅增加ui85/ui84/ui83三条版本登记，没有替换用户其他修改。
+
+正常原npm入口已实际执行成功，监听127.0.0.1:58618，PID25752。运行版本ui85／llm-boundary-r01-test／candidate-ir/2.0，请求配置LLM_BOUNDARY_CALCULATION_R01；241文件完整安装摘要仍为2e808292e9142a109cd9a42794fe31c1c943ba158a73f6e816041e7a0b25b664，与实际会话一致。再次执行同一命令返回already_running，未启动第二个服务；没有执行曾受拒绝的隐藏后台命令、停止其他进程或更改端口。
+
+实际浏览器页面显示v0.1.85及新流程；模型和Skill/skill1选择、93条历史、旧001记录查看正常，浏览器未观察到错误。实际点击JSON导出得到下载文件，与原canonical一致；HTTP JSON/中文导出均200且与原trace一致。2246份历史文件及config摘要保持原样。本次新增模型调用0，新Skill真实语义验收仍NOT_RUN，产品状态WAITING_ADMIN_REVIEW。
+
+以后在`D:/boundx`使用唯一短入口：
+
+```text
+npm run 7plus1:ui
+```
+
+实际地址：http://127.0.0.1:58618/。本地证据在`.boundx/ir-kernel-implementation-v1/evidence/ui85-deployment/SHORT-ENTRY-LIVE-VERIFICATION.json`及`PAGE-ui85-LIVE.png`；原启动文件备份在同目录`main-launcher-before-short-entry.mjs`。
+
+## 以下为此前安装及首次启动受阻的原始记录
 
 日期：2026-10-14。代码提交e042bab857f0fae007494e1ca8dd914018172e0b。包为0.1.0-candidate.031-r1.2-ui.85，compiler llm-boundary-r01-test，Core合同candidate-ir/2.0。**完整包已经安装，但58618尚未在线，不能报告页面启动成功或语义验收通过。**
 

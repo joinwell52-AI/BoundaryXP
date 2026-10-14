@@ -1,5 +1,11 @@
 # 当前 BoundX 7+1 产品开发任务
 
+## 2026-10-14 本地短启动入口恢复与实际页面验证
+
+ADMIN在本会话授权修复本地原入口、恢复`npm run 7plus1:ui`、启动最新完整安装版58618并实际验证页面。原启动文件已先备份；只增加ui85/ui84/ui83三条安装版本登记，其他既有字节保留。2026-10-14 10:17（本地）实际58618运行ui85／llm-boundary-r01-test／candidate-ir/2.0，请求配置LLM_BOUNDARY_CALCULATION_R01，完整安装摘要一致。正常原npm入口执行成功，重复执行只返回already_running，未停止其他进程或新增端口。
+
+实际浏览器页面、模型及Skill/skill1设置、93条历史、旧001记录与JSON下载已核对；HTTP JSON/中文导出均200且与原保存结果一致。2246份历史文件及配置摘要未变。本轮新增被测模型0，新Skill语义准确性仍NOT_RUN，产品状态WAITING_ADMIN_REVIEW。核验材料：本地`.boundx/ir-kernel-implementation-v1/evidence/ui85-deployment/SHORT-ENTRY-LIVE-VERIFICATION.json`及同目录`PAGE-ui85-LIVE.png`。以下先前启动受阻记录保留为当时事实，不再代表当前在线状态。
+
 ## 2026-10-14 LLM完整边界计算续作授权
 
 ADMIN在本会话明确要求IR→完整边界计算交由LLM、同步增加Skill要求与统一方法/样例，并授权立即修改代码和58618页面。沿用同一IR Core、两个Skill与原入口，不另建原型。首次模型输出IR＋完整边界计算候选，新会话审阅两者，程序技术检查/复核/展示差异；不将LLM结论或审阅一致自动认证为数学证明或业务授权。
