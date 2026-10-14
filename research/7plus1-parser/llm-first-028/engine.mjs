@@ -19,12 +19,18 @@ import {directIRBundle} from './direct-ir-bundle.mjs';
 import {renderDirectCalculations} from './direct-ir-render-results.mjs';
 import {attachLLMCalculation} from './boundary-calculation.mjs';
 export const writeJSON=(file,data)=>fs.writeFileSync(file,JSON.stringify(data,null,2)+'\n');
-export const compilerRevision='boundary-rules-r01.1-test';
+export const compilerRevision='boundary-report-r01-test';
 export function replay7Plus1(bytes,{output,replayFrom,resourceGuard=()=>{},productSnapshot=null,allowPriorModelResources=false}){
  resourceGuard();
  const source=prepareSource(bytes),tracePath=path.join(replayFrom,fs.existsSync(path.join(replayFrom,'trace.json'))?'trace.json':'TRACE.json');
  const prior=JSON.parse(fs.readFileSync(tracePath,'utf8'));
  if(prior.source.sha256!==source.sha256)throw Error('REPLAY_SOURCE_DIGEST_MISMATCH');
+ if(prior.pipeline==='BOUNDARY_REPORT_R01'){
+  if(prior.canonical?.report!==prior.report||sha256(prior.report)!==prior.canonical.report_sha256||sha256(prior.review)!==prior.audit.sha256)throw Error('REPLAY_REPORT_DIGEST_MISMATCH');
+  if(fs.existsSync(path.join(output,'source.txt')))throw Error('OUTPUT_ALREADY_EXISTS');fs.mkdirSync(output,{recursive:true});
+  const replay={...prior,execution_mode:'FROZEN_REPORT_REPLAY',model_origin_product_snapshot:prior.product_snapshot,product_snapshot:productSnapshot,real_calls_in_this_replay:0,not_new_model_validation:true,origin_trace:{sha256:sha256(fs.readFileSync(tracePath))}};
+  fs.writeFileSync(path.join(output,'source.txt'),bytes);writeJSON(path.join(output,'trace.json'),replay);writeJSON(path.join(output,'7plus1.json'),prior.canonical);writeJSON(path.join(output,'boundary-calculations.json'),prior.boundary_calculations);fs.writeFileSync(path.join(output,'7plus1.zh.md'),prior.chinese);resourceGuard();return replay;
+ }
  if(prior.ir?.contract_version==='candidate-ir/2.0')return replayKernelIR(prior,source,bytes,{output,tracePath,resourceGuard,productSnapshot,allowPriorModelResources});
  if(prior.ir?.format==='boundx-candidate-ir/1'){
   const frozen=new Map((prior.model_resource_digests??prior.product_snapshot?.files??[]).map(f=>[f.path,f.sha256]));

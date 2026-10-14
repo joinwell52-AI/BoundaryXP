@@ -15,6 +15,7 @@ import {expandCompactBoundary,compactBoundaryCandidate} from './compact-boundary
 import {applyCalculationPatch,requireCompleteCalculationReplacement} from './calculation-patch.mjs';
 import {boundaryProfile,boundaryReviewInput,expandBoundaryAudit,expandDeclaration} from './declarative-boundary.mjs';
 import {rulesFormat,rulesAuditFormat,lowerBoundaryRules,rulesReviewInput,expandRulesAudit} from './boundary-rules.mjs';
+import {parseBoundaryReport,reportProfile} from './boundary-report.mjs';
 const write=(dir,name,value)=>fs.writeFileSync(path.join(dir,name),JSON.stringify(value,null,2)+'\n');
 export function repairableBoundaryContract(ir,technical,source){
  if(!technical.schemas.audit.ok||!technical.errors.length)return false;
@@ -24,6 +25,7 @@ export function repairableBoundaryContract(ir,technical,source){
  try{loadCandidate(ir);for(const s of ir.source_table)linkQuote(source,s);return true;}catch{return false;}
 }
 export async function parseDirectIR(bytes,{output,probe,model='gpt-6.1-sol',reasoning='medium',parseMethod='SKILL',signal,onProgress=()=>{},timeoutMs=null,call=callCodex,maxModelRequests=2,resourceGuard=()=>{},productSnapshot=null,bundleFactory=directIRBundle}={}){
+ if(bundleFactory('parse',{parseMethod,contractVersion:productSnapshot?.contract??'candidate-ir/1.4'}).request_profile===reportProfile)return parseBoundaryReport(bytes,{output,probe,model,reasoning,parseMethod,signal,onProgress,timeoutMs,call,maxModelRequests,resourceGuard,productSnapshot,bundleFactory:phase=>bundleFactory(phase,{parseMethod,contractVersion:productSnapshot?.contract??'candidate-ir/1.4'})});
  if(!output)throw Error('OUTPUT_DIRECTORY_REQUIRED');if(!Number.isSafeInteger(maxModelRequests)||maxModelRequests<2)throw Error('MODEL_REQUEST_BUDGET_EXHAUSTED');
  const rawCall=call;call=async args=>{const response=await rawCall(args);
   if(args.bundle.boundary_rules){

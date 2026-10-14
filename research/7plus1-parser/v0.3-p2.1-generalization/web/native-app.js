@@ -1,4 +1,4 @@
-import {renderCompilerProcess, renderModelInfo, factText, readable, sourceLength} from '/process-view.js';
+import {renderCompilerProcess, renderModelInfo, factText, readable, sourceLength,renderReportText} from '/process-view.js';
 import {MAX_SOURCE_BYTES} from '/input-limits.js';
 import {renderBoundaryCalculations} from '/calculation-view.js';
 import {boundaryRuleRows} from '/direct-ir-process.js';
@@ -34,9 +34,11 @@ function updateViewedSettings(){
  box.querySelector('legend').textContent=current?(busy?'本次运行设置（已锁定）':'下一次编译设置'):'本次编译设置';
  $('compile-viewed-settings').textContent=current?'当前查看记录实际使用：'+(current.parse_method==='MD'?'MD · r02（历史只读）':current.parse_method==='SKILL1'?'skill1 · semantics-first-r02':current.parse_method==='SKILL'?'Skill':'历史记录，模式以原始记录为准')+'；请求模型 '+(current.requested_model??'未记录')+'；推理 '+(current.requested_reasoning??'未记录')+(busy?'。':'。下方选择只影响下一次编译，不改变此记录。'):'选择Skill原版或skill1新规程进行对比；两者共用同版合同、Schema及计算核心。MD历史记录保持只读。';
  updateResourceInfo();
+ if(session?.request_profile==='BOUNDARY_REPORT_R01'&&!current)$('compile-viewed-settings').textContent='Skill与skill1均已取消固定类型和输出Schema；两者分别加载生成Skill、审阅Skill，共用7+1方法。';
 }
 function updateResourceInfo(){
  const mode=$('compile-method')?.value,r=session?.comparison_resources?.[mode]?.selected_resources,target=$('compile-resource-info');if(!target)return;
+ if(session.request_profile==='BOUNDARY_REPORT_R01'){target.textContent='LLM直接生成完整7+1边界与必要的简短计算，新会话独立审阅。无固定规则类型、输出Schema或自动证明展开。'+(r?'生成说明 '+r.parse.characters+' 字符；审阅说明 '+r.audit.characters+' 字符（另含原文及待审报告）。':'');return;}
  target.textContent=(session.request_profile==='DECLARATIVE_BOUNDARY_R01'?'LLM提取完整边界，新会话审阅；程序校验并生成同源7+1与确定值。不编执行安排。':['LLM_BOUNDARY_CALCULATION_R01','LLM_BOUNDARY_CALCULATION_R02','LLM_BOUNDARY_CALCULATION_R03'].includes(session.request_profile)?'LLM负责IR与完整边界计算，新会话独立审阅；程序校验、复核并展示结果差异。':session.request_profile==='DIRECT_CANDIDATE_IR_R01'?'直接候选IR：模型解释原文并输出可计算结构，新会话独立审阅；程序校验后形成7+1视图并计算，不另造语义IR。':'历史语义接口。')+(r?'解析正文资源 '+r.parse.characters+' 字符；审阅正文资源 '+r.audit.characters+' 字符（不含通道Schema及本次候选）。':'')+' 请求配置 '+(session.request_profile??'未记录')+'；完整产品语义验收状态另见版本详情。';
 }
 const el=(tag,value,cls)=>{const e=document.createElement(tag);if(value!==undefined)e.textContent=value;if(cls)e.className=cls;return e;};
@@ -102,7 +104,7 @@ function render(run){
  }
  if(!$('calculation-root')){const root=el('div');root.id='calculation-root';$('slots').insertAdjacentElement('afterend',root);}
  $('calculation-root').dataset.runId=run.run_id??'';
- renderBoundaryCalculations($('calculation-root'),run.result,sources=>{highlight(sources);$('evidence').scrollIntoView({behavior:'smooth',block:'center'});},input=>jsonPost('/api/runs/'+run.run_id+'/observations',input));
+ if(run.request_profile==='BOUNDARY_REPORT_R01')$('calculation-root').replaceChildren();else renderBoundaryCalculations($('calculation-root'),run.result,sources=>{highlight(sources);$('evidence').scrollIntoView({behavior:'smooth',block:'center'});},input=>jsonPost('/api/runs/'+run.run_id+'/observations',input));
  current=run;if(run.status==='LEGACY_READ_ONLY'){
   $('status').textContent='旧引擎历史 · 原格式只读；未提供本版五阶段记录';
   for(const id of ['slots','compiler-root','trace-root','trace-detail','pipeline','trace-colors','evidence','span-info','run-id'])$(id).replaceChildren();
@@ -126,6 +128,19 @@ function render(run){
  renderModelInfo($('model-info'),run,session);
  renderCompilerProcess($('compiler-root'),run,{session,onEvidence:sources=>{highlight(sources);$('evidence').scrollIntoView({behavior:'smooth',block:'center'});}});
  $('pipeline').textContent=JSON.stringify({parse_method:run.parse_method??'SKILL',resource_profile:run.resource_profile??'LEGACY_ORIGINAL',selected_resources:run.selected_resources,stages:run.stages,slot_status:run.slot_status,real_calls:run.real_calls,semantic_test:'用户运行未进行标准答案评分',native_skill_loading:run.native_skill_loading,error:run.error??null},null,2);
+ if(run.request_profile==='BOUNDARY_REPORT_R01'){
+  $('trace-summary').textContent='原文 → LLM生成完整7+1边界 → 新会话独立审阅 → 程序核对记录、保存与展示；PM规划尚未核验。';
+  if(run.status==='COMPLETED')$('status').textContent='7+1生成与审阅完成 · 已用 '+Math.round(run.elapsed_ms/1000)+' 秒 · 审阅结论见下方';
+  $('slots').replaceChildren();$('panel').replaceChildren();
+  const generated=result?.report??run.progress?.proposal?.text,review=result?.review??run.progress?.audit?.text;
+  $('v03-canonical-status').textContent=generated?'LLM原始7+1边界 · 未自动判定语义完整性':'等待LLM生成7+1边界';
+  boundarySummary.append(el('h2','LLM生成：7+1边界与必要计算'));
+  if(generated)renderReportText(boundarySummary,generated);else boundarySummary.append(el('p','正在等待模型结果。'));
+  boundarySummary.append(el('h2','独立LLM审阅：问题与建议'));
+  if(review)renderReportText(boundarySummary,review);else boundarySummary.append(el('p','尚无审阅结果；已生成内容可先查看。'));
+  boundarySummary.append(el('h3','程序核对范围'),el('p',result?'已核对回执、同版资源绑定与会话独立性，完整保存上述两份原文。程序未自动证明语义完整性或复算自由表达的公式；PM规划尚未核验。':'程序随运行保存记录；生成完成不代表审阅已完成。'));
+  if(result)panel(tab);return;
+ }
  if(!result){$('slots').replaceChildren();$('panel').replaceChildren();$('v03-canonical-status').textContent='本次尚无最终结果';return;}
  $('v03-canonical-status').textContent=Object.entries(result.canonical.slots).map(([s,v])=>s+'：'+readable(v.status)).join(' · ');$('slots').replaceChildren();
  for(const [slot,name] of Object.entries(names)){const v=result.canonical.slots[slot],card=el('div',undefined,slot==='B'?'card b':'card'),h=el('h3');h.append(el('span',slot,'letter'),document.createTextNode(name),el('span',readable(v.status),'badge '+(v.status==='UNRESOLVED'?'unresolved':'')));card.append(h);for(const f of v.entries)card.append(entry(f));if(!v.entries.length)card.append(el('p',v.status==='ABSENT'?'原文未明确此维边界（不等于禁止或授权）':'存在覆盖缺口或未决'));$('slots').append(card);}
@@ -165,6 +180,12 @@ function directPanel(kind,r){
 }
 function panel(kind){
  tab=kind;$('panel').replaceChildren();const r=current?.result;if(!r)return;
+ if(r.pipeline==='BOUNDARY_REPORT_R01'){
+  if(kind==='json')$('panel').append(el('pre',JSON.stringify(r.canonical,null,2)));
+  else if(kind==='frames')renderCompilerProcess($('panel'),current,{session,onEvidence:highlight});
+  else { $('panel').append(el('h3',kind==='forbid'?'禁止边界请对照上方完整7+1报告':'独立审阅原文'));renderReportText($('panel'),r.review); }
+  return;
+ }
  if(directTrace(r))return directPanel(kind,r);
  if(kind==='json')return $('panel').append(el('pre',JSON.stringify(r.canonical,null,2)));
  if(kind==='diagnostics'&&directTrace(r)){

@@ -10,7 +10,8 @@ export const boundaryOperatorRegistry=Object.fromEntries(Object.entries(modelReg
 export function directIRKernelBundle(phase,{parseMethod='SKILL',boundaryRules=true}={}){
  if(!['parse','audit'].includes(phase)||!['SKILL','SKILL1'].includes(parseMethod))throw Error('KERNEL_RESOURCE_SELECTION');
  const file=!boundaryRules?`contracts/candidate-ir-v1/legacy-skills/${parseMethod==='SKILL1'?'skill1':'skill'}/boundx-semantic-${phase}/SKILL.md`:parseMethod==='SKILL1'?`skill-profiles/semantics-first-r02/boundx-semantic-${phase}/SKILL.md`:`skills/boundx-semantic-${phase}/SKILL.md`;
- const original=fs.readFileSync(path.join(here,file),'utf8'),adapted=original.replaceAll('candidate-ir/1.4','candidate-ir/2.0').replaceAll('contracts/candidate-ir-v1/CONTRACT.md','docs/ir-kernel/CONTRACT.md');
+ const sourceFile=boundaryRules?`contracts/boundary-rules-r01/${parseMethod==='SKILL1'?'skill1':'skill'}/boundx-semantic-${phase}/SKILL.md`:file;
+ const original=fs.readFileSync(path.join(here,sourceFile),'utf8'),adapted=original.replaceAll('candidate-ir/1.4','candidate-ir/2.0').replaceAll('contracts/candidate-ir-v1/CONTRACT.md','docs/ir-kernel/CONTRACT.md');
  if(boundaryRules){
   const resources=[{path:file,text:original,original_sha256:sha256(original)},{path:'docs/ir-kernel/BOUNDARY-RULES.md',text:fs.readFileSync(new URL('../../../docs/ir-kernel/BOUNDARY-RULES.md',import.meta.url),'utf8')}].map(r=>({...r,sha256:sha256(r.text)}));
   const text=resources.map(r=>`<RESOURCE path="${r.path}">\n${r.text}\n</RESOURCE>`).join('\n');

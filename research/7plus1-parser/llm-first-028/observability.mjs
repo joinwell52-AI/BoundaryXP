@@ -40,6 +40,7 @@ function publicSummary(text){
 }
 export function publicProgress(p){
  const out={stage:p.stage,revision:Number.isSafeInteger(p.revision)?p.revision:0};
+ if(p.signal==='REPORT_SAVED')out.signal='REPORT_SAVED';
  if(typeof p.kind==='string'&&/^[A-Z_]{1,50}$/.test(p.kind))out.kind=p.kind;
  if(['parse','audit'].includes(p.phase))out.phase=p.phase;
  const s=modelSignal(p.event);if(s)Object.assign(out,s);

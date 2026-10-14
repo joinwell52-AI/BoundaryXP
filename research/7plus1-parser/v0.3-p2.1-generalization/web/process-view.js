@@ -117,6 +117,11 @@ function evidence(row,ctx){return array(ctx.rows.get(row.id)?.sources).length?ct
 function sourceEvidence(sources,ctx){return array(sources).map(s=>ctx.sources.find(v=>v.quote===s.quote&&Number.isInteger(s.occurrence)&&v.occurrence===s.occurrence)??s);}
 export function processView(run){
  const trace=run.result??{...run.progress,source:{text:run.source_text,sha256:run.source_sha256}},ctx=context(trace),p=trace?.proposal,t=trace?.technical,a=trace?.audit,ir=trace?.ir,c=trace?.canonical;
+ if(run.request_profile==='BOUNDARY_REPORT_R01')return {stages:[
+  {id:'parse',title:'1. LLM生成7+1边界',actor:'生成LLM',input:'原文、生成Skill及7+1方法',work:'完整提取边界、来源与必要的简短计算，不受固定规则类型限制。',ready:!!p?.text,outcome:p?.text?'已收到原始边界报告':'等待LLM生成',raw:p,notes:[],headers:['生成原文'],rows:p?.text?[{cells:[p.text],sources:[]}]:[]},
+  {id:'audit',title:'2. LLM独立审阅',actor:'新会话审阅LLM',input:'同一原文、生成报告及审阅Skill',work:'核对遗漏、多加、错绑、条件及必要计算；重点报告问题。',ready:!!a?.text,outcome:a?.text?'已收到审阅，结论见原文':'等待独立审阅',raw:a,notes:[],headers:['审阅原文'],rows:a?.text?[{cells:[a.text],sources:[]}]:[]},
+  {id:'technical',title:'3. 程序保存与核对',actor:'程序',input:'原文、两个回执和本版资源',work:'核对版本绑定与会话独立性，完整保存并展示，不按规则类型过滤。',ready:!!t,outcome:t?'记录核对完成；语义与数学结果未自动证明':'等待记录核对',raw:t,notes:['尚未核验PM规划。'],headers:[],rows:[]}
+ ]};
  if(p?.format==='boundx-candidate-ir/1'||['DECLARATIVE_BOUNDARY_R01','DIRECT_CANDIDATE_IR_R01','LLM_BOUNDARY_CALCULATION_R01','LLM_BOUNDARY_CALCULATION_R02','LLM_BOUNDARY_CALCULATION_R03'].includes(run.request_profile))return directIRProcess({...trace,request_profile:trace.request_profile??run.request_profile});
  const has=x=>x!=null;
  const stages=[
@@ -191,6 +196,7 @@ function renderDecision(target,run,onEvidence){
  section.append(node('p','“已确定”表示本次编译记录满足固定接纳条件；不等于人工证明语义正确。未决、拒绝、遗漏和未归槽分别保留。','process-notice'));target.append(section);
 }
 export function liveView(run,now=Date.now()){
+ const report=run.request_profile==='BOUNDARY_REPORT_R01';
  signals.REVISION_NOT_APPLIED='局部修订未应用，保留原IR并继续生成结果和问题建议';
  const entries=array(run.stages),revision=run.revision??0,xs=entries.filter(x=>(x.revision??0)===revision),first=xs.find(x=>x.stage===run.stage),last=xs.at(-1),busy=['QUEUED','RUNNING','CANCELLING'].includes(run.status),failure=['FAILED','CANCELLED','INTERRUPTED'].includes(run.status);
  const direct=run.request_profile==='DIRECT_CANDIDATE_IR_R01';
@@ -199,21 +205,23 @@ export function liveView(run,now=Date.now()){
  const status=s=>s.id==='technical'&&technical?.technical_ok===false?'REJECTED':technical?.technical_ok===false&&['ir','canonical','calculus'].includes(s.id)?'BLOCKED':s.ready?'DONE':active===s.id?(failure?'STOPPED':busy?'RUNNING':'WAITING'):'WAITING';
  return {busy,revision,phase:run.stage?phaseLabel(run,run.stage):'等待输入',elapsed:Math.max(0,Math.round((now-Date.parse(first?.at??run.created_at))/1000))||0,lastSignal:last?.at??null,
   steps:[{id:'source',title:'原文',state:run.source_sha256?'DONE':'WAITING'},...stages.map(s=>({id:s.id,title:s.title.slice(3).split('：')[0],state:status(s)}))],
-  timeline:entries.map(x=>({at:x.at,revision:x.revision??0,label:direct&&x.stage==='COMPILING'?'程序生成同源7+1视图（不另造IR）':direct&&x.signal==='PARSE_READY'?'LLM候选IR已保存，可立即查看':signals[x.signal??x.kind]??phaseLabel(run,x.stage),thread:x.thread_id??null,retries:x.retry_count??null,phase:x.phase??null})),failure:run.error?.code??null};
+  timeline:entries.map(x=>({at:x.at,revision:x.revision??0,label:report?(reportSignals[x.signal??x.kind]??reportStages[x.stage]??signals[x.signal??x.kind]??phaseLabel(run,x.stage)):direct&&x.stage==='COMPILING'?'程序生成同源7+1视图（不另造IR）':direct&&x.signal==='PARSE_READY'?'LLM候选IR已保存，可立即查看':signals[x.signal??x.kind]??phaseLabel(run,x.stage),thread:x.thread_id??null,retries:x.retry_count??null,phase:x.phase??null})),failure:run.error?.code??null};
 }
+const reportStages={PARSING:'LLM正在生成7+1边界',AUDITING:'新会话正在核对边界',VALIDATING:'程序核对回执与版本绑定',COMPILING:'程序保存并展示原始结果',COMPLETED:'生成与审阅完成；结论见报告'};
+const reportSignals={RESPONSE_RECEIVED:'收到模型结果',REPORT_SAVED:'模型原始结果已保存',PARSE_READY:'7+1边界报告已保存，可立即查看',AUDIT_READY:'独立审阅已保存，可立即查看',TECHNICAL_READY:'回执与版本绑定核对完成',COMPILE_READY:'生成与审阅原文已完整保存'};
 function renderLive(target,run){
  target.replaceChildren();const view=liveView(run),labels={DONE:'已完成',RUNNING:'进行中',WAITING:'等待上一步',STOPPED:'已停止',REJECTED:'已检查，有待修正问题',BLOCKED:'已列出问题，数学结果待修正后计算'};
- target.append(node('h3',view.phase),node('p',view.busy?'当前阶段已用 '+view.elapsed+' 秒。模型尚未返回完整结构时，不会虚构语义内容。':'本次运行阶段记录；完成不等于语义已人工验收。','muted'));
+ target.append(node('h3',run.request_profile==='BOUNDARY_REPORT_R01'?(reportStages[run.stage]??view.phase):view.phase),node('p',view.busy?'当前阶段已用 '+view.elapsed+' 秒。模型尚未返回完整结果时，不会虚构语义内容。':'本次运行阶段记录；完成不等于语义已人工验收。','muted'));
  const timing=timingView(run);
  if(timing){
   const seconds=ms=>(ms/1000).toFixed(1)+'秒',labels={parse:timing.patch_count?'模型解析及局部修订':'模型解析',audit:'独立模型审阅'};
   target.append(node('p','本次耗时：'+seconds(timing.total_ms)+'；'+timing.phases.map(p=>labels[p.phase]+'合计 '+(p.ms===null?'未记录':seconds(p.ms))+'（'+p.count+'次调用）').join('；')+(timing.other_ms!==null?'；本地其他开销 '+seconds(timing.other_ms):'；回执不完整，不推算本地开销'),'process-notice'));
   if(timing.first_parse_ms!==null)target.append(node('p','首轮识别语义：'+seconds(timing.first_parse_ms)+(timing.first_audit_ms!==null?'；首轮独立审阅：'+seconds(timing.first_audit_ms):'')+'。修订轮次已单独记录，全部模型调用均计入上述合计。','muted'));
   if(timing.patch_count)target.append(node('p','其中局部修订：'+timing.patch_count+'次，'+(timing.patch_ms===null?'耗时未记录':seconds(timing.patch_ms))+'；即使修订未应用，也计入模型调用与总耗时。','muted'));
-  target.append(node('p','解析收到本次选择的'+methodLabel(run)+'、语义合同和Schema；独立审阅另外收到候选结构。两次模型请求按顺序执行；需要修订时会另行记录。以上是实际用时，不是剩余时间预测。','muted'));
+  target.append(node('p',run.request_profile==='BOUNDARY_REPORT_R01'?'生成仅接收生成Skill、7+1方法和原文；新会话审阅另收到生成原文。未强制输出Schema，未自动修订或展开证明。':'解析收到本次选择的'+methodLabel(run)+'、语义合同和Schema；独立审阅另外收到候选结构。两次模型请求按顺序执行；需要修订时会另行记录。以上是实际用时，不是剩余时间预测。','muted'));
  }
  const groups=[['输入',[...view.steps.filter(s=>s.id==='source')]],['LLM负责：提取边界与独立审阅',view.steps.filter(s=>['parse','audit'].includes(s.id))],['程序负责：校验、转换与展示',view.steps.filter(s=>!['source','parse','audit'].includes(s.id))]];
- for(const [heading,items]of groups){const section=node('section',null,'responsibility-group');section.append(node('h4',heading));const steps=node('ol',null,'live-steps');for(const s of items){const li=node('li',null,'live-step '+s.state.toLowerCase());li.append(node('strong',s.title),node('span',labels[s.state]));steps.append(li);}section.append(steps);target.append(section);}
+ for(const [heading,items]of groups){const section=node('section',null,'responsibility-group');section.append(node('h4',run.request_profile==='BOUNDARY_REPORT_R01'&&heading.startsWith('程序')?'程序负责：核对记录、保存与展示':heading));const steps=node('ol',null,'live-steps');for(const s of items){const li=node('li',null,'live-step '+s.state.toLowerCase());li.append(node('strong',s.title),node('span',labels[s.state]));steps.append(li);}section.append(steps);target.append(section);}
  if(run.request_profile==='DECLARATIVE_BOUNDARY_R01')target.append(node('p','下一阶段 · 程序比较PM规划：本次仅提取ADMIN边界，未提交PM规划，尚未核验。边界生成完成不代表子任务已经通过。','process-notice'));
  if(view.lastSignal)target.append(node('p','最近收到阶段信号：'+new Date(view.lastSignal).toLocaleTimeString('zh-CN')+'；第'+(view.revision+1)+'轮。','muted'));
  if(view.failure)target.append(node('p','停止原因：'+view.failure+'。未完成步骤没有最终结果。','process-notice'));
@@ -277,4 +285,24 @@ export function stageDisclosure(run,id,{previousStage=null,previousOpen}={}){
  const active={PARSING:'parse',AUDITING:'audit',VALIDATING:'technical',COMPILING:run.request_profile==='DIRECT_CANDIDATE_IR_R01'?'canonical':'ir',CALCULATING:'calculus'}[run.stage];
  if(['QUEUED','RUNNING','CANCELLING'].includes(run.status)&&active===id&&previousStage!==run.stage)return true;
  return previousOpen??false;
+}
+// Presentation only: never infer semantic fields or execute model HTML/links.
+export function renderReportText(target,text){
+ const root=node('article',null,'boundary-report-text');target.append(root);
+ let code=null,list=null,grid=null;
+ for(const line of String(text??'').split('\n')){
+  if(/^\s*```/.test(line)){if(code){code=null;}else{code=node('pre');root.append(code);}list=null;grid=null;continue;}
+  if(code){code.textContent+=(code.textContent?'\n':'')+line;continue;}
+  const heading=/^\s*#{1,6}\s+(.+)$/.exec(line),bullet=/^\s*(?:[-*+] |\d+[.)] )(.+)$/.exec(line);
+  if(heading){root.append(node('h3',heading[1]));list=null;grid=null;continue;}
+  if(/^\s*\|.*\|\s*$/.test(line)){
+   const cells=line.trim().slice(1,-1).split('|').map(x=>x.trim());
+   if(cells.every(x=>/^:?-+:?$/.test(x)))continue;
+   if(!grid){grid=node('table');root.append(grid);}const row=node('tr');for(const c of cells)row.append(node('td',c));grid.append(row);list=null;continue;
+  }
+  grid=null;
+  if(bullet){if(!list){list=node('ul');root.append(list);}list.append(node('li',bullet[1]));continue;}
+  list=null;if(line.trim())root.append(node('p',line));
+ }
+ return root;
 }

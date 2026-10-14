@@ -48,9 +48,9 @@ test('strict duration endpoints and completion direction preserved without execu
  const c=s.ir.requirements.find(r=>r.kind==='COMPLETION');assert.equal(s.ir.expressions.find(e=>e.id===c.body.id).operator,'IFF');
  const w=boundaryFixture();w.rules.find(r=>r.id==='duration').upper='7';w.rules.find(r=>r.id==='retry').max_extra=4;const s2=setup(w);assert.equal(s2.ir.sequences[0].max_instances,5);
 });
-test('new runtime uses two compact calls, keeps original wire and does not invoke old IR repair',async()=>{
+test('explicit historical rules route uses two compact calls and preserves original wire',async()=>{
  for(const rejected of [false,true]){const w=boundaryFixture(),dir=fs.mkdtempSync(path.join(os.tmpdir(),'boundary-rules-'));let calls=0;
- const result=await parseDirectIR(Buffer.from(w.sources[0].quote),{output:dir,probe:{},productSnapshot:{contract:'candidate-ir/2.0'},maxModelRequests:6,call:async args=>{calls++;assert.equal(args.bundle.boundary_rules,true);assert.equal(args.bundle.resources.length,2);if(calls===2){assert.equal(args.candidate.format,w.format);assert.equal(args.candidate.expressions,undefined);}const a=review(w);if(rejected)a.verdicts.find(v=>v.id==='use_submit').verdict='CONTRADICT';return {value:calls===1?w:a,receipt:{thread_id:'mock-'+calls},attempts:[{thread_id:'mock-'+calls}]};}});
+ const result=await parseDirectIR(Buffer.from(w.sources[0].quote),{output:dir,probe:{},bundleFactory:directIRKernelBundle,productSnapshot:{contract:'candidate-ir/2.0'},maxModelRequests:6,call:async args=>{calls++;assert.equal(args.bundle.boundary_rules,true);assert.equal(args.bundle.resources.length,2);if(calls===2){assert.equal(args.candidate.format,w.format);assert.equal(args.candidate.expressions,undefined);}const a=review(w);if(rejected)a.verdicts.find(v=>v.id==='use_submit').verdict='CONTRADICT';return {value:calls===1?w:a,receipt:{thread_id:'mock-'+calls},attempts:[{thread_id:'mock-'+calls}]};}});
  assert.equal(calls,2);assert.deepEqual(result.boundary_declaration,w);assert.equal(result.ir_origin,'DETERMINISTIC_BOUNDARY_RULE_LOWERING');assert.equal(result.boundary_calculations.status,rejected?'PARTIAL':'BOUNDARY_READY');
  }
 });

@@ -102,6 +102,7 @@ export function createServer({dataRoot=DATA,parse=parse7Plus1,legacyRoot=process
     if(!r.status.startsWith('COMPLETED'))return send(409,{error:'RESULT_NOT_READY'});
     resourceGuard();
     const trace=JSON.parse(fs.readFileSync(path.join(folder(r.run_id),'trace.json'),'utf8'));
+    if(trace.pipeline==='BOUNDARY_REPORT_R01')return send(409,{error:'REPORT_PLAN_COMPARISON_NOT_PERFORMED',message:'本次保留LLM边界报告，尚未接入结构化PM规划核验。'});
     if(productSnapshot&&trace.product_snapshot?.manifest_sha256!==productSnapshot.manifest_sha256)return send(409,{error:'OBSERVATION_VERSION_MISMATCH'});
     let result;try{result=recalculateObservedTrace(trace,input);}catch(e){return send(400,{error:e.message});}
     const observation_id=randomUUID(),at=new Date().toISOString();
