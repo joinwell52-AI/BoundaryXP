@@ -10,7 +10,7 @@ import {sha256} from './source.mjs';
 const check=new Ajv({strict:false,allErrors:true}).compile(savedCalculationSchema);
 const identity=r=>r.kind+':'+r.id;
 function acyclic(g){const edges=new Map(g.nodes.map(n=>[identity(n),[]]));for(const e of g.edges){if(!edges.has(identity(e.from))||!edges.has(identity(e.to)))throw Error('GRAPH_ENDPOINT_MISSING');edges.get(identity(e.from)).push(identity(e.to));}const visiting=new Set(),done=new Set();function walk(n){if(visiting.has(n))return false;if(done.has(n))return true;visiting.add(n);for(const t of edges.get(n))if(!walk(t))return false;visiting.delete(n);done.add(n);return true;}return [...edges.keys()].every(walk);}
-function finiteTruth(ir,item){
+function finiteTruth(ir,item,{compareCounts=true}={}){
  const table=item.evidence.truth_table;if(table.bindings.length>12)return {status:'UNVERIFIED',reason:'TRUTH_TABLE_CAPACITY'};
  const generated=table.rows.length===0,names=table.bindings.map(b=>b.name),rows=generated?Array.from({length:2**names.length},(_,i)=>({values:names.map((_,j)=>Boolean(i&2**j)),result:null})):table.rows,keys=rows.map(r=>JSON.stringify(r.values));
  if(new Set(names).size!==names.length||new Set(keys).size!==keys.length||rows.length!==2**names.length||rows.some(r=>r.values.length!==names.length))return {status:'MISMATCH',reason:'TRUTH_TABLE_NOT_EXHAUSTIVE'};
@@ -33,18 +33,29 @@ function finiteTruth(ir,item){
   recomputed.push({values:row.values,result:unknown(value)?'UNKNOWN':value});
  }
  const actualTrue=recomputed.filter(r=>r.result===true).length;
- if(!unverified&&(actualTrue!==table.true_count||recomputed.length-actualTrue!==table.false_count))return {status:'MISMATCH',reason:'TRUTH_TABLE_COUNT',true_count:actualTrue,false_count:recomputed.length-actualTrue};
+ if(compareCounts&&!unverified&&(actualTrue!==table.true_count||recomputed.length-actualTrue!==table.false_count))return {status:'MISMATCH',reason:'TRUTH_TABLE_COUNT',true_count:actualTrue,false_count:recomputed.length-actualTrue};
  return unverified?{status:'PARTIAL',reason:'COUNTS_CHECKED_FORMULA_UNKNOWN'}:{status:'VERIFIED',reason:'ALL_BOOLEAN_ASSIGNMENTS_RECOMPUTED',generated_rows:generated,rows:recomputed,true_count:actualTrue,false_count:recomputed.length-actualTrue};
+}
+function derivedTruth(ir,item){
+ const table=item.evidence.truth_table;if(!table)return [];
+ const nodes=new Map([...ir.expressions,...ir.states,...ir.variables].map(n=>[n.id,n])),root=table.formula_ref??item.input_refs.find(r=>r.kind==='EXPRESSION'),out=[];
+ const atom=r=>{if(!r)return null;const n=nodes.get(r.id);if(r.kind==='STATE'||r.kind==='VARIABLE')return identity(r);if(n?.operator==='STATE_VALUE')return atom(n.arguments[0]);if(['EVENT_OCCURRED','EVENT_COMPLETED','EVENT_SUCCEEDED'].includes(n?.operator))return n.operator+':'+identity(n.arguments[0]);return null;};
+ const visited=new Set();function walk(r){if(r.kind!=='EXPRESSION'||visited.has(r.id))return;visited.add(r.id);const n=nodes.get(r.id);if(!n)return;for(const a of n.arguments??[])walk(a);if(r.id===root?.id||!['AND','OR','NOT','IMPLIES','IFF'].includes(n.operator))return;
+  const atoms=new Set(),seen=new Set();function collect(x){const key=atom(x);if(key)atoms.add(key);if(x.kind!=='EXPRESSION'||seen.has(x.id))return;seen.add(x.id);for(const a of nodes.get(x.id)?.arguments??[])collect(a);}collect(r);
+  const bindings=table.bindings.filter(b=>atoms.has(atom(b.reference)));if(!bindings.length)return;
+  const t=finiteTruth(ir,{input_refs:[r],evidence:{truth_table:{formula_ref:r,bindings,rows:[],true_count:0,false_count:0}}},{compareCounts:false});
+  out.push({origin:'PROGRAM_DERIVED_FROM_BOUND_IR_SUBFORMULA',operator:n.operator,formula_ref:r,bindings,...t});
+ }if(root)walk(root);return out;
 }
 function checkItem(ir,item,{requireWire=false}={}){
  const e=item.evidence,results=[];
  if(e.set_members!==null){const size=new Set(e.set_members.map(identity)).size;results.push({status:e.cardinality===size?'VERIFIED':'MISMATCH',reason:'SET_IDENTITY_CARDINALITY',value:size});}
  if(e.interval!==null){const x=e.interval;if(x.lower!==null)rational(x.lower);if(x.upper!==null)rational(x.upper);const c=x.lower!==null&&x.upper!==null?compare(x.lower,x.upper):null;const empty=c!==null&&(c>0||c===0&&(!x.lower_inclusive||!x.upper_inclusive));results.push({status:empty===x.empty?'VERIFIED':'MISMATCH',reason:'EXACT_INTERVAL_EMPTINESS',value:empty});}
- if(e.truth_table!==null)results.push(finiteTruth(ir,item));
+ if(e.truth_table!==null)results.push({...finiteTruth(ir,item),derived_subformulas:derivedTruth(ir,item)});
  if(e.graph!==null)results.push({status:acyclic(e.graph)===e.graph.acyclic?'VERIFIED':'MISMATCH',reason:'DECLARED_GRAPH_CYCLE_CHECK'});
  for(const c of e.expression_cases??[]){
   if(!item.input_refs.some(r=>r.kind===c.input_ref.kind&&r.id===c.input_ref.id)||c.input_ref.kind!=='EXPRESSION')throw Error('CASE_FORMULA_NOT_BOUND');
-  const compiled=prepareKernel(ir),context=evidenceQuery(ir,JSON.parse(c.context_json),{requireWire}),value=evaluateCore(compiled.core,c.input_ref,context),expected=c.expected==='UNKNOWN'?unknown(value):value===c.expected;
+  const compiled=prepareKernel(ir),context=evidenceQuery(ir,JSON.parse(c.context_json),{requireWire,scope:'LOCAL_EXPRESSION'}),value=evaluateCore(compiled.core,c.input_ref,context),expected=c.expected==='UNKNOWN'?unknown(value):value===c.expected;
   results.push({status:expected?'VERIFIED':'MISMATCH',reason:'BOUND_FORMULA_CASE',input_ref:c.input_ref,value:unknown(value)?'UNKNOWN':value,expected:c.expected});
  }
  // Arithmetic agreement does not prove the operands or formula match source.
@@ -60,8 +71,11 @@ export async function checkLLMBoundary(ir,proposal,audit,technical,{requireWire=
  for(const x of [...proposal.constraints,...proposal.calculations,...proposal.unresolved])sourceRefs(x);
  const constraintIds=new Set(proposal.constraints.map(x=>x.id));for(const id of proposal.joint.constraint_ids)if(!constraintIds.has(id))findings.push({code:'LLM_JOINT_CONSTRAINT_REFERENCE',id});
  for(const id of constraintIds)if(!proposal.joint.constraint_ids.includes(id))findings.push({code:'LLM_JOINT_OMITS_CONSTRAINT',id});
- for(const c of proposal.constraints)if(c.requirement_refs.some(r=>r.kind!=='REQUIREMENT'))findings.push({code:'LLM_CONSTRAINT_REQUIREMENT_TYPE',id:c.id});
- const mapped=new Set(proposal.constraints.flatMap(c=>c.requirement_refs.map(r=>r.id)));
+ // The delivered Schema permits typed declaration references here (e.g. a BASIS
+ // role and its document). Preserve them as declarations; only REQUIREMENT refs
+ // count toward mathematical requirement coverage. No formula text is parsed.
+ const constraintBindings=proposal.constraints.map(c=>({id:c.id,requirement_refs:c.requirement_refs.filter(r=>r.kind==='REQUIREMENT'),declaration_refs:c.requirement_refs.filter(r=>r.kind!=='REQUIREMENT')}));
+ const mapped=new Set(constraintBindings.flatMap(c=>c.requirement_refs.map(r=>r.id)));
  for(const r of ir.requirements)if(!['PERMITTED','NOT_REQUIRED','UNSTATED'].includes(r.modality)&&!mapped.has(r.id))findings.push({code:'LLM_JOINT_OMITS_IR_REQUIREMENT',id:r.id});
  if(new Set(proposal.coverage.map(x=>x.source_ref)).size!==proposal.coverage.length)findings.push({code:'LLM_CALCULATION_DUPLICATE_COVERAGE'});
  for(const c of proposal.coverage){if(!sources.has(c.source_ref)||c.constraint_ids.some(id=>!constraintIds.has(id)))findings.push({code:'LLM_CALCULATION_COVERAGE_REFERENCE',id:c.source_ref});if(c.status==='GAP')findings.push({code:'LLM_CALCULATION_COVERAGE_GAP',id:c.source_ref,reason:c.reason});}
@@ -80,11 +94,12 @@ export async function checkLLMBoundary(ir,proposal,audit,technical,{requireWire=
  }
  if(proposal.joint.result==='UNSAT')findings.push({code:'LLM_UNSAT_PROOF_REQUIRES_VERIFICATION',reason:'模型的冲突推导已保存，尚未得到程序冲突证明。'});
  const allReviewed=targets.every(t=>reviews.some(r=>r.target===t&&r.verdict==='SUPPORT')&&!reviews.some(r=>r.target===t&&r.verdict!=='SUPPORT'));
- return {format:'boundx-llm-boundary-result/1',origin:'LLM_CALCULATION_IN_PARSE_RESPONSE',method_version:proposal.method_version,status:findings.length||proposal.unresolved.length||!technical.technical_ok||technical.rows.some(r=>r.status!=='ACCEPTED')?'PARTIAL':'MODEL_REVIEWED',result:proposal.joint.result,verification:'LLM_REVIEWED_CANDIDATE_NOT_MATHEMATICAL_CERTIFICATION',calculation_performed:true,proposal,calculation_reviews:reviews,checks,witness_check:witnessCheck,findings,independent_review_complete:allReviewed,ir_sha256:sha256(JSON.stringify(ir)),proposal_sha256:sha256(JSON.stringify(proposal)),source_semantics_proven:false,business_decision:null,execution_authorization:null};
+ return {format:'boundx-llm-boundary-result/1',origin:'LLM_CALCULATION_IN_PARSE_RESPONSE',method_version:proposal.method_version,status:findings.length||proposal.unresolved.length||!technical.technical_ok||technical.rows.some(r=>r.status!=='ACCEPTED')?'PARTIAL':'MODEL_REVIEWED',result:proposal.joint.result,verification:'LLM_REVIEWED_CANDIDATE_NOT_MATHEMATICAL_CERTIFICATION',calculation_performed:true,proposal,calculation_reviews:reviews,checks,constraint_bindings:constraintBindings,witness_check:witnessCheck,findings,independent_review_complete:allReviewed,ir_sha256:sha256(JSON.stringify(ir)),proposal_sha256:sha256(JSON.stringify(proposal)),source_semantics_proven:false,business_decision:null,execution_authorization:null};
 }
 export function renderLLMBoundary(result){
  const p=result.proposal;if(!p)return '\n\n## LLM边界计算\n\n没有模型计算结果。';
- return '\n\n## LLM完整边界计算候选\n\n模型联合结论：'+p.joint.result+'；作用域：'+p.joint.domain+'。独立审阅与程序复核分开；未认证为完整数学证明。\n\n完整边界公式：\n\n'+p.joint.formula+'\n\n'+p.calculations.map(x=>'### '+x.title+'\n\n方法：'+x.method+'\n\n公式：'+x.formula+'\n\n结果：'+x.result+'\n\n'+x.steps.map(s=>'- '+s).join('\n')).join('\n\n')+'\n\n### 程序复核\n\n'+result.checks.map(x=>'- '+x.id+'：'+x.status+'（'+x.scope+'）').join('\n')+'\n\n'+result.findings.map(x=>'- '+x.code+'：'+(x.reason??x.id??'')).join('\n');
+ const sub=result.checks.flatMap(x=>x.checks.flatMap(y=>y.derived_subformulas??[])).map(x=>'- '+x.operator+'子公式 '+x.formula_ref.id+'：真 '+x.true_count+'，假 '+x.false_count+'；程序从同一IR机械穷举。').join('\n');
+ return '\n\n## LLM完整边界计算候选\n\n模型联合结论：'+p.joint.result+'；作用域：'+p.joint.domain+'。独立审阅与程序复核分开；未认证为完整数学证明。\n\n完整边界公式：\n\n'+p.joint.formula+'\n\n'+p.calculations.map(x=>'### '+x.title+'\n\n方法：'+x.method+'\n\n公式：'+x.formula+'\n\n结果：'+x.result+'\n\n'+x.steps.map(s=>'- '+s).join('\n')).join('\n\n')+'\n\n### 程序复核\n\n'+result.checks.map(x=>'- '+x.id+'：'+x.status+'（'+x.scope+'）').join('\n')+(sub?'\n\n### 程序计算IR子公式\n\n'+sub:'')+'\n\n'+result.findings.map(x=>'- '+x.code+'：'+(x.reason??x.id??'')).join('\n');
 }
 export async function attachLLMCalculation(completed,ir,proposal,audit,options={}){
  const checked=await checkLLMBoundary(ir,proposal,audit,completed.technical,options);

@@ -1,7 +1,7 @@
 // Complete immutable package from this checkout, never from a prior installation.
 import fs from 'node:fs';import path from 'node:path';import {fileURLToPath,pathToFileURL} from 'node:url';import {execFileSync} from 'node:child_process';import {createHash} from 'node:crypto';
 import {lockProduct} from './resources.mjs';
-export const candidateVersion='0.1.0-candidate.031-r1.2-ui.86';
+export const candidateVersion='0.1.0-candidate.031-r1.2-ui.87';
 const root=path.resolve(path.dirname(fileURLToPath(import.meta.url)),'../..'),hash=b=>createHash('sha256').update(b).digest('hex');
 const tree=directory=>fs.readdirSync(path.join(root,directory),{withFileTypes:true}).flatMap(e=>e.isDirectory()?tree(directory+'/'+e.name):e.isFile()?[directory+'/'+e.name]:[]);
 export function buildCandidate(output=path.join(root,'.boundx/products',candidateVersion)){
@@ -34,8 +34,9 @@ export function buildCandidate(output=path.join(root,'.boundx/products',candidat
  const exampleManifest='fixtures/7plus1/real-gold-60-inputs/MANIFEST.json';fs.writeFileSync(path.join(target,exampleManifest),JSON.stringify({format:'boundx-real-gold-source-inputs/v1',count:60,answers_included:false,cases},null,2)+'\n',{flag:'wx'});files.push(exampleManifest);files.sort();
  for(const file of ['package.json','package-lock.json']){const destination=path.join(target,file),pkg=JSON.parse(fs.readFileSync(destination));pkg.version=candidateVersion;if(pkg.packages?.['']){pkg.packages[''].version=candidateVersion;delete pkg.packages[''].bin;}if(file==='package.json'){pkg.private=true;delete pkg.exports;delete pkg.bin;pkg.scripts={'7plus1':'node product/short-compiler/cli.mjs','7plus1:ui':'node product/short-compiler/ui.mjs','verify':'node product/short-compiler/verify.mjs'};}fs.writeFileSync(destination,JSON.stringify(pkg,null,2)+'\n');}
  const manifest={format:'boundx-short-compiler-product/1',version:candidateVersion,compiler_revision:compiler,contract:schema.properties.contract_version.const,created_at:sourceTime,source_revision:sourceRevision,source_runtime_clean:!changed,build_entry:'product/short-compiler/build-candidate.mjs',model_resources_changed:true,model_validation_scope:'PRIOR_PROFILE_FROZEN_RESPONSES_ONLY_NEW_SKILL_LIVE_VALIDATION_PENDING',public_release:false,product_acceptance:'WAITING_ADMIN_REVIEW',support_profile:'完整ADMIN原文；容量1MiB；明确身份与时点的自报观测；未知不判满足',known_limitations:['冻结响应回放仅验证消费者；修订后Skill的真实首次解析、新会话审阅及重复验证待本地完成','实际观测为用户自报；缺身份、时点、阶段或单位保持UNKNOWN','开放事件域仅验证所提供的完整记录或构造见证，不认证任意未来执行','未支持的实例、有限量词与连续局部数值组合保留具体缺口'],files:files.map(file=>({path:file,sha256:hash(fs.readFileSync(path.join(target,file)))}))};
- manifest.model_resources_changed=true;
- manifest.model_validation_scope='LLM_BOUNDARY_R02_FROZEN_VERIFIABLE_EVIDENCE_LIVE_VALIDATION_RECORDED_SEPARATELY';
+ manifest.model_resources_changed=false;
+ manifest.model_resources_reference_version='0.1.0-candidate.031-r1.2-ui.86';
+ manifest.model_validation_scope='SAME_R02_RESOURCES_REAL_RESPONSES_CONSUMER_REPLAY_RECORDED_SEPARATELY';
  manifest.support_profile='LLM生成IR及完整边界计算候选；同版统一方法与样例；新会话审阅；程序技术检查与操作数/见证复核';
  manifest.known_limitations=['真实模型验证成绩按冻结版本及逐次报告保存；未获得完整产品语义验收','有限见证只证明所列IR约束有合法赋值；原文覆盖须独立核对','开放域未来执行与定性立即仍有程序支持边界，不换算立即为零秒','旧模型响应与成绩保持原样，不补造LLM计算或自动认证'];
  fs.writeFileSync(path.join(target,'PRODUCT-MANIFEST.json'),JSON.stringify(manifest,null,2)+'\n',{flag:'wx'});const lock=lockProduct(target);lock.verify();return {version:candidateVersion,target,compiler,contract:manifest.contract,files:files.length,source_revision:sourceRevision,source_runtime_clean:!changed,manifest_sha256:lock.snapshot.manifest_sha256};

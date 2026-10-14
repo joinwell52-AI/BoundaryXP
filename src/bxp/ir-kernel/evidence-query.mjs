@@ -19,7 +19,8 @@ export const evidenceQuerySchema=obj({
 evidenceQuerySchema.$defs=v2Schema.$defs;
 evidenceQuerySchema.properties.plan.properties.events.items.properties.operation={anyOf:[{type:'string',enum:v2Schema.properties.events.items.properties.operation.enum},{type:'null'}]};
 const validate=new Ajv({strict:false,allErrors:true}).compile(evidenceQuerySchema);
-export function evidenceQuery(ir,raw,{requireWire=false}={}){
+export function evidenceQuery(ir,raw,{requireWire=false,scope='COMPLETE_WITNESS'}={}){
+ if(!['COMPLETE_WITNESS','LOCAL_EXPRESSION'].includes(scope))throw Error('EVIDENCE_QUERY_SCOPE');
  if(requireWire&&raw?.format!=='boundx-finite-evidence/1')throw Error('FINITE_EVIDENCE_WIRE_REQUIRED');
  if(!raw||raw.format!=='boundx-finite-evidence/1')return raw; // Explicit historical Core query, never upgraded.
  if(!validate(raw))throw Error('FINITE_EVIDENCE_SCHEMA:'+JSON.stringify(validate.errors));
@@ -39,10 +40,12 @@ export function evidenceQuery(ir,raw,{requireWire=false}={}){
  for(const r of context.receipts)if(r.complete===true&&r.any===false)throw Error('EVIDENCE_RECEIPT_INVARIANT');
  if(raw.plan.completeness){
   const core=compileCore(ir).core;
-  const task=events.find(e=>e.id===core.root_task);if(!task)throw Error('EVIDENCE_ROOT_TASK_REQUIRED');
+  const task=events.find(e=>e.id===core.root_task);if(!task&&scope==='COMPLETE_WITNESS')throw Error('EVIDENCE_ROOT_TASK_REQUIRED');
   for(const v of raw.variables){const domain=evaluateCore(core,nodes.get(v.id).domain,context),value=variables[v.id];if(unknown(domain))throw Error('EVIDENCE_VARIABLE_DOMAIN_UNKNOWN:'+v.id);const member=domain.set?domain.set.some(x=>identity(x)===identity(value)):domain.interval&&value.number!==undefined?compare(value.number,domain.interval[0])>=0&&compare(value.number,domain.interval[1])<=0:false;if(!member)throw Error('EVIDENCE_VARIABLE_DOMAIN:'+v.id);}
-  for(const s of raw.states){const n=nodes.get(s.id);if(s.value!==true||!n.subject)continue;const e=events.find(e=>e.id===n.subject.id);if(!e||s.established_at==null)throw Error('EVIDENCE_STATE_TIME_REQUIRED:'+s.id);const time=toBase(s.established_at,s.unit),start=toBase(e.start,e.unit),end=toBase(e.end,e.unit);if(compare(time,start)<0||compare(time,end)>0||['SUCCESS','FAILURE','COMPLETION','CONTROL_EFFECT'].includes(n.kind)&&!e.occurred||n.kind==='COMPLETION'&&(compare(time,end)!==0||!e.completed))throw Error('EVIDENCE_STATE_TIME_INVARIANT:'+s.id);}
-  for(const s of raw.states){if(!s.periods||s.value==null)continue;const periods=controlPeriods(s,core.root_task);if(unknown(periods))continue;const terminal=activeWhile({id:task.id,occurred:true,start:task.end,end:task.end,unit:task.unit},periods);if(terminal!==s.value)throw Error('EVIDENCE_STATE_PERIOD_MISMATCH:'+s.id);}
+  if(scope==='COMPLETE_WITNESS'){
+   for(const s of raw.states){const n=nodes.get(s.id);if(s.value!==true||!n.subject)continue;const e=events.find(e=>e.id===n.subject.id);if(!e||s.established_at==null)throw Error('EVIDENCE_STATE_TIME_REQUIRED:'+s.id);const time=toBase(s.established_at,s.unit),start=toBase(e.start,e.unit),end=toBase(e.end,e.unit);if(compare(time,start)<0||compare(time,end)>0||['SUCCESS','FAILURE','COMPLETION','CONTROL_EFFECT'].includes(n.kind)&&!e.occurred||n.kind==='COMPLETION'&&(compare(time,end)!==0||!e.completed))throw Error('EVIDENCE_STATE_TIME_INVARIANT:'+s.id);}
+   for(const s of raw.states){if(!s.periods||s.value==null)continue;const periods=controlPeriods(s,core.root_task);if(unknown(periods))continue;const terminal=activeWhile({id:task.id,occurred:true,start:task.end,end:task.end,unit:task.unit},periods);if(terminal!==s.value)throw Error('EVIDENCE_STATE_PERIOD_MISMATCH:'+s.id);}
+  }
  }
  return context;
 }
