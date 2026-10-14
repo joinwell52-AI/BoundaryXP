@@ -44,4 +44,18 @@
 
 该材料尚未进行新的模型提取或完整程序比较，不计本轮通过。
 
-部署事实及无模型汇总在验证后追加。当前仅review分支，不merge/release/tag。
+## 部署与验证事实
+
+相关无模型回归216/216通过；六项PM对照与四项控制全部符合预期。运行源码提交`3a550b03b8fbe4e39d16d10d0874f088aa977e9c`，完整包256文件，源码构建时干净；包清单摘要`6bbd0b543774a2f0ec8f67efa2129bd19b392371f56faf3f218dff858bfdcc89`。包自身依赖及15项离线HTTP处理核验通过，新增模型0。
+
+备份并核对空闲后，正常停止已核实ui99进程2044，安装完整ui100。原`npm run 7plus1:ui`实际启动58618，PID31436；浏览器实际显示v0.1.100、LLM与程序职责分组、未提交PM规划提示。旧102条历史、2705份文件和配置摘要保留，ui99原始结果未改写，六种导出HTTP200。
+
+用户随后自行启动005，因此首次部署后空闲断言报告TARGET_BUSY；没有停止或重启该请求。部署后核验改为只读历史与导出比较，无需要求新用户请求空闲；全部旧文件摘要通过，列表新增为103条。此检查调整不解除部署前空闲保护。
+
+- 地址：<http://127.0.0.1:58618/>；本版为测试候选，不宣称整个产品通过。
+- 重启电脑后：在`D:\boundx`运行`npm run 7plus1:ui`。
+- 包：`D:\boundx\.boundx\ir-kernel-implementation-v1\products\verified\0.1.0-candidate.031-r1.2-ui.100`。
+- 停机前备份：`D:\boundx\.boundx\short-compiler-031-r1\backups\ui100-prestop-1791969123136`；部署器另存`2026-10-14T09-14-07.533Z`。
+- 回滚：空闲时正常停止已核实目标进程；在ui100包目录执行`node product/short-compiler/deploy.mjs rollback --home D:/boundx/.boundx/short-compiler-031-r1 --confirmed-idle`，再从D:\boundx运行原npm入口，回到ui99。不得在用户005在途时操作。
+
+主工作区入口原地写入失败，保留原文件并对副本使用apply_patch；核对唯一差异为ui100登记后替换。原文件留在`product/short-compiler/launch-installed.ui99-pre-ui100.mjs`，其他已有修改不动。部署核验原始记录在`.boundx/ir-kernel-implementation-v1/evidence/pm-comparison-ui100`。仅review分支，不merge/release/tag。
