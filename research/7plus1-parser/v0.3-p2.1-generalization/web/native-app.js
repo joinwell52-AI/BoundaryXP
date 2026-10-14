@@ -4,7 +4,7 @@ import {renderBoundaryCalculations} from '/calculation-view.js';
 const $=id=>document.getElementById(id);
 const names={I:'输入与作用域',O:'交付与结果',A:'正向动作',P:'参与关系',R:'执行量化限制',V:'版本与依据',C:'完成与停止',B:'禁止与限制'};
 const stages={QUEUED:'等待',PREPARING:'准备与版本核对',PARSING:'Codex 正在解析原文',AUDITING:'新会话正在审阅',VALIDATING:'技术校验',COMPILING:'保真编译',CALCULATING:'程序正在计算边界',COMPLETED:'编译流程完成',COMPLETED_WITH_UNRESOLVED:'编译流程完成 · 含未决/缺口',FAILED:'运行失败',CANCELLING:'取消中（等待本地子进程退出）',CANCELLED:'本地请求已取消（不声称云端停止计费）',INTERRUPTED:'服务中断 · 未自动重跑'};
-const directTrace=r=>['LLM_DIRECT_CANDIDATE_IR','LLM_IR_AND_BOUNDARY_CALCULATION'].includes(r?.pipeline);
+const directTrace=r=>['DECLARATIVE_BOUNDARY','LLM_DIRECT_CANDIDATE_IR','LLM_IR_AND_BOUNDARY_CALCULATION'].includes(r?.pipeline);
 const errors={EMPTY_SOURCE:'请输入非空任务',SOURCE_BYTE_LIMIT:'原文容量超过1 MiB，不会截断',INVALID_UTF8:'文件不是有效UTF-8',CODEX_LOGIN_REQUIRED:'Codex 登录失效，请在本机重新登录',CODEX_QUOTA_OR_RATE_LIMIT:'Codex 额度或限流，未自动重试',CODEX_TIMEOUT:'本地调用超时，子进程已停止',CODEX_NETWORK_FAILURE:'网络调用失败',CODEX_MODEL_UNAVAILABLE:'请求模型不可用',COMPILER_BUSY:'已有编译正在进行',SESSION_REQUIRED:'页面会话失效，请刷新',COMPILER_ERROR:'编译失败，详情保存在本地运行目录'};
 Object.assign(errors,{COMPACT_WIRE_CONTRACT_FAILURE:'模型响应未通过结构或引用检查，原响应已保存，未自动重跑',PATCH_GLOBAL_ID_COLLISION:'局部修订引入重复编号，未接受该修订',IDENTITY_RESERVED_ID:'候选节点使用了保留编号 ROOT，未接受该候选',MODEL_REQUEST_BUDGET_EXHAUSTED:'本次有界请求数已用完，已保留结果与缺口'});
 let current=null,uploaded=null,session=null,pollTimer=null,busy=false,tab='pending';
