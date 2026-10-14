@@ -152,3 +152,7 @@ Schema字段、枚举、算子及版本标识不翻译，不新建`language/loca
 ## 同版完整边界计算扩展
 
 宿主声明LLM_BOUNDARY_CALCULATION_R01时，本Skill也由LLM完成完整数学边界候选。采用已内联docs/ir-kernel/BOUNDARY-CALCULATION-METHOD.md与五组通用样例，统一集合、区间、逻辑、图、动态停止及联合可满足性方法。输出boundary_calculation中的操作数、公式、结果、简短公开推导及见证/冲突依据。数学赋值不是实际业务观测；程序未支持不取消明确边界，不套用样例答案，不签发认证或授权。
+
+## 2.0/r05 用途与状态时态
+
+同版合同的明确依据须在本地事件保留BASIS角色及真实来源；内部文件可同时是INPUT_OBJECT和DATA_USE，不能只在label说“依据”。普通消费不自动增加BASIS。停止效果建立与查询终态分开，用STATE_ESTABLISHED及响应范围表达建立时点，动态禁令消费控制期间，不要求终态永久停止。

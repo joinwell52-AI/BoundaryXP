@@ -62,7 +62,7 @@ T∈(0,12]分钟，重试n∈{0,1,2}，总启动次数=1+n∈{1,2,3}。T=0违反
 
 交付开始门StartDeliver(t)⇒Q_passed(t)。t=3开始交付、t=7才通过复核违反开始门，最终Q=D=true不能追认早先动作。Q未知和D真时Q∧D=UNKNOWN；D=false则合取FALSE。
 
-truth_table.bindings逐个绑定本次状态/布尔变量；input_refs首个EXPRESSION是被计算的公式。rows枚举全部布尔组合并给结果；true_count/false_count对应同一张表。没有可引用的IR公式时仍给公开公式与表，但不宣称程序已经验证公式等价。
+truth_table.bindings逐个绑定本次状态/布尔变量；formula_ref明确引用input_refs中的被计算EXPRESSION。rows=[]时程序机械枚举全部布尔组合；给出rows时必须完整。true_count/false_count对应同一公式。没有可引用的IR公式时不宣称程序已经验证公式等价。
 
 ## 样例四：图与联合冲突
 
@@ -84,7 +84,7 @@ H触发停止响应；核查活动的可继续运行域受H及停止状态约束
 
 ## 独立审阅与验证等级
 
-审阅先独立从原文核对边界，再复算候选操作数和结论。calculation_reviews逐constraint ID、calculation ID、joint和coverage给SUPPORT/CONTRADICT/UNCERTAIN及真实来源。检查有没有漏掉某独立事实、添加工作规划、缩放范围、改变条件方向、把局部SAT升格整案SAT或把模型见证当已执行。
+审阅先独立从原文核对边界，再复算候选操作数和结论。calculation_reviews逐constraint ID、calculation ID、unresolved ID、joint和coverage.<source_ref>给SUPPORT/CONTRADICT/UNCERTAIN及真实来源。检查有没有漏掉某独立事实、添加工作规划、缩放范围、改变条件方向、把局部SAT升格整案SAT或把模型见证当已执行。
 
 必须区分：模型报告结果、独立审阅意见、程序结构检查、程序对所给操作数复算、Core见证核验。集合数量核对成功只证明所给集合的数量，不能证明集合来自原文且完整；图检查只证明所给图无环。程序尚不能核验的公开推导保留原结论及具体待验证项，不拒绝整份处理、不伪标证明通过。
 

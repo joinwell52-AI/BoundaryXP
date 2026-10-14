@@ -8,6 +8,7 @@ export function normalize(bound){
   if(node.operator==='SET')node.arguments=[...new Map(node.arguments.map(a=>[stable(a),a])).values()].sort((a,b)=>stable(a).localeCompare(stable(b)));
   nodes[n.id]={...node,category:kind,value_type:bound.types.get(n.id)};
   sourceMap[n.id]={source_refs:n.source_refs,collection,fields:Object.fromEntries(Object.keys(node).map(k=>[k,{path:collection+'.'+n.id+'.'+k,source_refs:n.source_refs}])),rule:node.operator?registry[node.operator].rule:'IDENTITY_PRESERVING',root_alias:bound.root!=='ROOT'?'ROOT_TO_UNIQUE_TASK':null};
+  if(n.roles)sourceMap[n.id].role_sources=n.roles.map(r=>({role:r.role,value:clean(r.value),source_refs:r.source_refs}));
   annotations[n.id]={label:n.label??null,note:n.note??null};
  }
  const core={format:'boundx-ir-core/1',semantic_version:'kernel/1.0',input_contract:bound.raw.contract_version,root_task:bound.root,nodes:Object.fromEntries(Object.entries(nodes).sort(([a],[b])=>a.localeCompare(b))),requirements:bound.raw.requirements.map(r=>r.id).sort(),sequences:clean(bound.raw.sequences??[])};

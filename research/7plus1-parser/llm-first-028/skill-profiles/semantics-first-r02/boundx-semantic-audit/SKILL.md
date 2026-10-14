@@ -105,3 +105,7 @@ description: 在独立会话双向审阅中文、英文或中英混合任务对�
 ## 同版完整计算审阅扩展
 
 宿主声明LLM_BOUNDARY_CALCULATION_R01时，按已内联docs/ir-kernel/BOUNDARY-CALCULATION-METHOD.md与解析端同一方法和五组通用样例独立复算。calculation_reviews核对全部constraint、calculation、joint和coverage。检查完整边界合取、输入身份与集合、区间端点、条件方向、开始门、停止活动及重叠、例外、见证或冲突推导；不得把局部SAT升格整案，把模型结论升格数学证明，或将程序能力限制归因于原文。给具体问题和局部修订依据，保留原始计算。
+
+## 2.0/r05 用途与状态时态审阅
+
+逐来源检查明示依据是否成为本地BASIS角色，而非仅INPUT_OBJECT或label；内部数据消费与依据用途可以同时存在。查出V丢失及依据身份错接，不把普通使用扩大成依据。停止效果建立要核对STATE_ESTABLISHED及响应范围；终态false不等于历史从未停止，终态true也不能追认此前控制，禁止补恢复许可。

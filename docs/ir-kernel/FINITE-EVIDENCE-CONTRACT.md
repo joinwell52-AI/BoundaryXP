@@ -17,6 +17,8 @@
 
 完整见证不能包含requirements子集、additional_assertions或放宽限制。Core检查全部声明要求、绑定、数据可用性、整体期限及时间范围。数学时间由模型自行构造，不能混成源文指定工作规划或真实结果。
 
+expression_cases是局部公式对照：EXACT_SNAPSHOT只关闭所给该任务的事件域，不要求提供根TASK载体和所有其他动作，不能升格为整案见证。joint.witness_query_json仍必须给根TASK、完整时间域及全部所需状态/变量，并核对终态与历史一致。局部假设不能被程序自动补齐为联合证明。
+
 ## 通用完整见证片段
 
 新假设事件没有IR声明时，plan.events可显式提供operation枚举及roles，程序按这些结构值检查通用禁止/范围，不按名称猜操作。已声明事件的operation=null或省略表示沿用IR，不能覆盖其固定操作身份。
@@ -28,6 +30,8 @@
 ```
 
 ## 分项证据
+
+constraints.requirement_refs的当前Schema允许合法类型的IR引用。REQUIREMENT引用用于要求覆盖及联合核验；EVENT/ENTITY等引用作为声明操作数单独绑定，不能代替任何必须覆盖的REQUIREMENT。依据声明保留真实BASIS关系，不从formula文字生成额外约束。
 
 evidence保留set_members/cardinality、interval、truth_table、graph，并增加expression_cases。
 

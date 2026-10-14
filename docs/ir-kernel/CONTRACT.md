@@ -1,6 +1,10 @@
 # BoundX候选IR共享合同
 
-接口版本：`candidate-ir/2.0`。资源修订：`r04-verifiable-boundary`。本文件是运行时解析和独立审阅共同使用的完整接口合同；数学参考语义见同版SEMANTICS.md。Schema和算子注册表由src/bxp/ir-kernel/contract-registry.mjs唯一导出。旧资源、历史响应和成绩不自动升级。
+接口版本：`candidate-ir/2.0`。资源修订：`r05-basis-and-state-history`。本文件是运行时解析和独立审阅共同使用的完整接口合同；数学参考语义见同版SEMANTICS.md。Schema和算子注册表由src/bxp/ir-kernel/contract-registry.mjs唯一导出。旧资源、历史响应和成绩不自动升级。
+
+明确的“依据”必须绑定到相应本地事件的BASIS角色及同一对象身份；文件作为内部消费时可同时保留INPUT_OBJECT与DATA_USE，不用INPUT_OBJECT或label替代BASIS用途。普通“使用”不自动变成依据。程序仅将已声明BASIS关系投影为V，不从原文或note补用途，也不为依据制造REQUIRED义务。解析与审阅均检查依据名称、版本、用途和来源。
+
+控制效果的建立与查询终态必须分开：STATE_VALUE是查询真值，STATE_ESTABLISHED是曾建立的时点。停止响应中的控制效果可用事件开始≤状态建立≤事件结束表达，不强迫查询终态仍停止，不添加恢复许可。动态禁止另外消费明确控制期间；历史未知保持UNKNOWN。
 
 当前运行配置LLM_BOUNDARY_CALCULATION_R02。计算证据与审阅目标的唯一合同见同版FINITE-EVIDENCE-CONTRACT.md，有限证据Schema由src/bxp/ir-kernel/evidence-query.mjs唯一导出并实际内联。SAT须给完整有限见证；计数、条件和禁止须给可复核证据，不能只留下文字。审阅目标逐来源使用coverage.<source_ref>，不另造整体coverage目标。只有已明确可修的问题进入有界修订，正常接口未支持或局部澄清不会启动空补丁调用。
 
