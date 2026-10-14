@@ -1,7 +1,7 @@
 // Complete immutable package from this checkout, never from a prior installation.
 import fs from 'node:fs';import path from 'node:path';import {fileURLToPath,pathToFileURL} from 'node:url';import {execFileSync} from 'node:child_process';import {createHash} from 'node:crypto';
 import {lockProduct} from './resources.mjs';
-export const candidateVersion='0.1.0-candidate.031-r1.2-ui.89';
+export const candidateVersion='0.1.0-candidate.031-r1.2-ui.90';
 const root=path.resolve(path.dirname(fileURLToPath(import.meta.url)),'../..'),hash=b=>createHash('sha256').update(b).digest('hex');
 const tree=directory=>fs.readdirSync(path.join(root,directory),{withFileTypes:true}).flatMap(e=>e.isDirectory()?tree(directory+'/'+e.name):e.isFile()?[directory+'/'+e.name]:[]);
 export function buildCandidate(output=path.join(root,'.boundx/products',candidateVersion)){

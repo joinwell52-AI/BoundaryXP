@@ -3,7 +3,7 @@ const list=x=>Array.isArray(x)?x:[];
 export function directIRProcess(trace){
  const p=trace.proposal??trace.ir,a=trace.audit,t=trace.technical,c=trace.canonical,calc=trace.boundary_calculations;
  const modelCalculation=trace.llm_boundary_calculation??p?.boundary_calculation;
- const llmMode=!!modelCalculation||['LLM_BOUNDARY_CALCULATION_R01','LLM_BOUNDARY_CALCULATION_R02'].includes(trace.request_profile);
+ const llmMode=!!modelCalculation||['LLM_BOUNDARY_CALCULATION_R01','LLM_BOUNDARY_CALCULATION_R02','LLM_BOUNDARY_CALCULATION_R03'].includes(trace.request_profile);
  const nodes=new Map(['entities','variables','events','states','expressions','requirements'].flatMap(k=>list(p?.[k]).map(n=>[n.id,n])));
  const name=r=>nodes.get(r?.id??r)?.label??r?.id??r??'未指定';
  const sources=n=>list(n?.source_refs).map(id=>list(t?.source_links??p?.source_table).find(s=>s.id===id)).filter(Boolean);
