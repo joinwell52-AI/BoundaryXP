@@ -5,6 +5,7 @@ import {fileURLToPath,pathToFileURL} from 'node:url';
 import {spawn} from 'node:child_process';
 import {lockProduct} from './resources.mjs';
 const approvedVersions={
+ '0.1.0-candidate.031-r1.2-ui.85':{compiler:'llm-boundary-r01-test',contract:'candidate-ir/2.0'},
  '0.1.0-candidate.031-r1.2-ui.84':{compiler:'direct-ir-kernel-r02-test',contract:'candidate-ir/2.0'},
  '0.1.0-candidate.031-r1.2-ui.83':{compiler:'direct-ir-kernel-r01-test',contract:'candidate-ir/2.0'},
  '0.1.0-candidate.031-r1.2-ui.82':{compiler:'direct-ir-r05.5-test',contract:'candidate-ir/1.4'},

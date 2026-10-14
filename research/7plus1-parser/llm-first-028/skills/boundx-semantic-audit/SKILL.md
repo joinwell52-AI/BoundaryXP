@@ -1,6 +1,6 @@
 ---
 name: boundx-semantic-audit
-description: 在独立新会话逐来源审阅BoundX候选IR，检查边界解释、类型和引用、遗漏、多造、身份、条件方向及适用域；不执行任务、不改候选、不生成计算见证或业务授权。
+description: 在独立新会话逐来源审阅BoundX候选IR及启用配置中的完整边界计算；复算公式、检查范围和见证；不执行业务、不覆盖候选或签发授权。
 ---
 
 # 独立审阅候选IR
@@ -36,6 +36,10 @@ description: 在独立新会话逐来源审阅BoundX候选IR，检查边界解�
 
 规范BASIS不推出读取/下载/就绪义务；TASK不能作为DATA_USE消费者。通信内容可为NON_INPUT，实际外部读取材料不能被此标记排除。TASK的ORGANIZER角色不替代原文明示的组织ACTION，逐来源检查该遗漏。
 
-SUPPORT、CONTRADICT、UNCERTAIN逐目标带短理由和真实来源。不替模型重写整图，不生成Proof、ACCEPTED、RESOLVED、最终7+1、计算结果或业务授权。支持语义不等于程序已实现算子；消费者缺口由宿主单独记录，不冒充原文歧义或用Schema合法宣布计算通过。
+SUPPORT、CONTRADICT、UNCERTAIN逐目标带短理由和真实来源。不替模型重写整图，不签发Proof认证、ACCEPTED、RESOLVED或业务授权。在LLM_BOUNDARY_CALCULATION_R01配置中独立复算并审阅已有数学结果，不能直接覆盖解析端答案。支持语义不等于程序已实现算子；消费者缺口由宿主单独记录，不冒充原文歧义或用Schema合法宣布计算通过。
+
+## 完整计算审阅及样例
+
+按已内联的docs/ir-kernel/BOUNDARY-CALCULATION-METHOD.md与解析端同一方法和五组样例核对。先独立从原文形成边界，再复算集合/区间/真值表/图/联合模型，检查停止活动归属与时间重叠、端点、开始门、例外和全称域。calculation_reviews覆盖全部constraint、calculation、joint与coverage目标。漏项、多造、局部SAT升格整案、见证冒充业务记录、未来通过追认早先动作均给具体反例或理由。程序不支持不是原文不明确；模型算完不是已证明正确。只给审阅及局部修订依据，保留原答。
 
 候选字段/边界改动必须由解析端按同版本合同修订，再新会话审阅；不能由审阅建议直接写进已接受IR。不能挑最好结果覆盖首次失败。

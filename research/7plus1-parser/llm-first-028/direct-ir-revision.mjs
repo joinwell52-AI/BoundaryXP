@@ -1,5 +1,14 @@
 import {candidateSchema} from './contracts/candidate-ir-v1/schema.mjs';import {sha256} from './source.mjs';
 import {v2Schema} from '../../../src/bxp/ir-kernel/contract-registry.mjs';
+import {boundaryCalculationSchema} from './boundary-calculation-schema.mjs';
+import {isDeepStrictEqual} from 'node:util';
+// Only explanatory text in existing issue/coverage records may be ignored.
+// Status, kind, references, source text, labels and every mathematical field
+// must still be identical. Retain the already-audited original IR in this case.
+export function explanationOnlyPatch(base,next){
+ const withoutExplanation=ir=>{const copy=structuredClone(ir);for(const k of ['issues','coverage'])for(const x of copy[k]??[])x.reason='';return copy;};
+ return !isDeepStrictEqual(base,next)&&isDeepStrictEqual(withoutExplanation(base),withoutExplanation(next));
+}
 export const patchSchema={type:'object',additionalProperties:false,required:['format','contract_version','base_ir_sha256','reason','coverage_updates','removed_nodes',...Object.keys(candidateSchema.properties).filter(k=>!['format','contract_version'].includes(k))],properties:{...candidateSchema.properties,removed_nodes:{type:'array',items:{$ref:'#/$defs/ref'}},coverage_updates:{type:'array',items:{type:'object',additionalProperties:false,required:['previous_index','replacement'],properties:{previous_index:{type:'integer',minimum:0},replacement:candidateSchema.properties.coverage.items}}},format:{type:'string',const:'boundx-candidate-ir-patch/1'},base_ir_sha256:{type:'string',minLength:64,maxLength:64},reason:{type:'string',minLength:1}},$defs:candidateSchema.$defs};
 export const kernelPatchSchema={...structuredClone(patchSchema),properties:{...structuredClone(patchSchema.properties),...structuredClone(v2Schema.properties),format:structuredClone(patchSchema.properties.format)},required:[...patchSchema.required,'root_task','sequences'],$defs:v2Schema.$defs};
 export function revisionPermissions(base,audit,technical){
@@ -15,7 +24,9 @@ export function revisionPermissions(base,audit,technical){
  });
  return {replacements:[...new Set(replacements)],coverage_indices,removals:[...audit.reviews.filter(r=>r.verdict==='CONTRADICT'&&!r.field_path).map(r=>r.target.id),...technical.errors.filter(e=>e.code==='DATA_CONSUMER_EVENT').map(e=>e.id)]};
 }
-export function revisionBundle(bundle){const text=bundle.text+'\n有界局部修订：输出boundx-candidate-ir-patch/1，base_ir_sha256为宿主摘要。各集合只列新增或获准替换节点，空集合不修改。不得重建整图或改变无关事实。removed_nodes仅允许removable_node_ids内被审阅CONTRADICT或程序证实消费者类型错误的候选，真实边界及UNCERTAIN节点不能删除；原文要求必须在正确节点中保留，引用和coverage须同步修正。coverage_updates保留原行索引及同一来源。只修实际审阅、technical_errors和缺审问题；所有修订由独立新会话再次审阅。'+(bundle.contract_version==='candidate-ir/2.0'?' root_task必须原样保留；sequences只列新增或获准替换的序列，空数组不修改。':'');return {...bundle,schema:bundle.contract_version==='candidate-ir/2.0'?kernelPatchSchema:patchSchema,text,sha256:sha256(text)};}
+export function revisionBundle(bundle){let text=bundle.text+'\n有界局部修订：输出boundx-candidate-ir-patch/1，base_ir_sha256为宿主摘要。各集合只列新增或获准替换节点，空集合不修改。不得重建整图或改变无关事实。removed_nodes仅允许removable_node_ids内被审阅CONTRADICT或程序证实消费者类型错误的候选，真实边界及UNCERTAIN节点不能删除；原文要求必须在正确节点中保留，引用和coverage须同步修正。coverage_updates保留原行索引及同一来源。只修实际审阅、technical_errors和缺审问题；所有修订由独立新会话再次审阅。'+(bundle.contract_version==='candidate-ir/2.0'?' root_task必须原样保留；sequences只列新增或获准替换的序列，空数组不修改。':'');let schema=bundle.contract_version==='candidate-ir/2.0'?kernelPatchSchema:patchSchema;
+ if(bundle.request_profile==='LLM_BOUNDARY_CALCULATION_R01'){schema=structuredClone(schema);const calculation=structuredClone(boundaryCalculationSchema);delete calculation.$defs;schema.properties.boundary_calculation={anyOf:[calculation,{type:'null'}]};schema.required.push('boundary_calculation');text+=' boundary_calculation=null表示不改计算；只有真实计算审阅问题或IR语义改动才允许替换计算候选。IR改动影响计算时必须同步更新全部受影响计算及coverage，不能保留旧答案。';}
+ return {...bundle,schema,text,sha256:sha256(text)};}
 export function applyIRPatch(base,patch,{allowed_replacements=[],allowed_coverage_targets=[],allowed_coverage_indices=[],allowed_removals=[],authorized_contract_transition=null}={}){
  if(patch.base_ir_sha256!==sha256(JSON.stringify(base)))throw Error('PATCH_BASE_DIGEST_MISMATCH');
  const transition=patch.contract_version!==base.contract_version;

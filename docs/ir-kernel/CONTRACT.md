@@ -1,10 +1,12 @@
 # BoundX候选IR共享合同
 
-接口版本：`candidate-ir/2.0`。资源修订：`r02`。本文件是运行时解析和独立审阅共同使用的完整接口合同；数学参考语义见同版SEMANTICS.md。Schema和算子注册表由src/bxp/ir-kernel/contract-registry.mjs唯一导出。旧1.4资源、历史响应和成绩不自动升级。
+接口版本：`candidate-ir/2.0`。资源修订：`r03-llm-boundary`。本文件是运行时解析和独立审阅共同使用的完整接口合同；数学参考语义见同版SEMANTICS.md。Schema和算子注册表由src/bxp/ir-kernel/contract-registry.mjs唯一导出。旧1.4资源、历史响应和成绩不自动升级。
 
 ## 职责与资源
 
-原文→解析LLM候选IR→新会话审阅→技术校验→同一Core的7+1与数学计算。LLM解释原文、真实来源和局部疑点；程序检查结构、绑定和计算，不扫描原文、label或note补语义。审阅一致不是原文理解必然正确。
+原文→解析LLM候选IR与完整边界计算候选→新会话审阅两者→程序技术校验及可支持部分复核→同源7+1与模型/程序结果对照。统一方法与样例见BOUNDARY-CALCULATION-METHOD.md。LLM解释原文并计算数学候选；程序检查结构、绑定、来源并复核具体操作数或见证，不扫描原文、label或note补语义。审阅一致不是原文理解必然正确。
+
+LLM_BOUNDARY_CALCULATION_R01运行输出在IR字段之外附加boundary_calculation；独立审阅附加calculation_reviews。宿主机械分离计算候选，Core仍只接收原2.0 IR；模型原始响应、分离后的IR和计算分别保存并以摘要绑定。新扩展不对旧响应补造模型计算。IR改动影响数学表达时必须同步修订计算并重新审阅；不得拿旧计算证明新IR。
 
 每次解析只加载解析Skill、本合同、算子注册表及由CLI提交的候选输出Schema。审阅只加载审阅Skill、本合同、注册表、候选Schema、审阅Schema、原文和本次候选；不加载解析Skill。局部修订使用对应补丁Schema，资源缺失应由宿主处理，不修改语义图补宿主文件。
 

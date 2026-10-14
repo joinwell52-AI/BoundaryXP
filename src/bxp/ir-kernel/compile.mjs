@@ -119,6 +119,10 @@ export function compileQuery(core,query={}){
  for(const id of query.requirements??core.requirements){
   const r=nodes[id];if(!r||r.category!=='REQUIREMENT')fail('QUERY_REQUIREMENT_MISSING',id);
   if(['PERMITTED','NOT_REQUIRED','UNSTATED'].includes(r.modality))continue;
+  const applicability=r.applicability?visit(r.applicability):null;
+  // The requirement is valid and typed, but its body is irrelevant when this
+  // query proves its applicability false. Never replace an unknown gate.
+  if(applicability?.op==='const'&&applicability.value===false){formulas[id]=bool(true);assertion('req:'+id,formulas[id],id);continue;}
   let body=visit(r.body);
   if(['EVENT_NORM','STOP'].includes(r.kind)){
    if(!r.subject)fail('EVENT_NORM_SUBJECT_REQUIRED',r.id);
@@ -144,7 +148,7 @@ export function compileQuery(core,query={}){
    body=term('and',[body,term('or',[term('not',[field(consumer,'occurred','Bool')]),available])]);
   }
   const formula=r.modality==='FORBIDDEN'?term('not',[body]):body;
-  formulas[id]=r.applicability?term('or',[term('not',[visit(r.applicability)]),formula]):formula;
+  formulas[id]=applicability?term('or',[term('not',[applicability]),formula]):formula;
   assertion('req:'+id,formulas[id],id);
  }
  // Fundamental event state implications and well-formed finite plan intervals.

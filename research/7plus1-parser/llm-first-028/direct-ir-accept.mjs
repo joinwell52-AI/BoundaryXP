@@ -3,6 +3,7 @@ import {validateCandidateIR} from './contracts/candidate-ir-v1/validate.mjs';
 import {auditSchema} from './contracts/candidate-ir-v1/schema.mjs';
 import {linkQuote,sha256} from './source.mjs';
 import {compileCore} from '../../../src/bxp/ir-kernel/index.mjs';import {v2AuditSchema} from '../../../src/bxp/ir-kernel/contract-registry.mjs';
+import {auditOnly} from './boundary-calculation-schema.mjs';
 const auditV2Check=new Ajv({strict:false,allErrors:true}).compile(v2AuditSchema);
 const auditCheck=new Ajv({strict:false,allErrors:true}).compile(auditSchema);
 const pathOf=p=>p.replace(/^\//,'').replaceAll('/','.');
@@ -13,6 +14,7 @@ export function acceptedIRFields(row,paths){
  return paths.every(p=>row.field_status[p]==='ACCEPTED'||Object.entries(row.field_status).some(([k,s])=>s==='ACCEPTED'&&(p===k||p.startsWith(k+'.'))));
 }
 export function acceptCandidateIR(ir,audit,source){
+ audit=auditOnly(audit);
  let check;const selectedAuditCheck=ir.contract_version==='candidate-ir/2.0'?auditV2Check:auditCheck;
  if(ir.contract_version==='candidate-ir/2.0'){try{const core=compileCore(ir,{collectFrameErrors:true});for(const s of ir.source_table)linkQuote(source,s);check={ok:true,errors:core.frame_errors};}catch(e){check={ok:false,errors:[e.diagnostic??{code:'SOURCE_OR_CORE_INVALID',message:e.message}]};}}
  else check=validateCandidateIR(ir,source.text);

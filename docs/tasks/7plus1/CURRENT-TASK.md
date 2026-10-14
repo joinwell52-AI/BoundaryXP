@@ -1,5 +1,11 @@
 # 当前 BoundX 7+1 产品开发任务
 
+## 2026-10-14 LLM完整边界计算续作授权
+
+ADMIN在本会话明确要求IR→完整边界计算交由LLM、同步增加Skill要求与统一方法/样例，并授权立即修改代码和58618页面。沿用同一IR Core、两个Skill与原入口，不另建原型。首次模型输出IR＋完整边界计算候选，新会话审阅两者，程序技术检查/复核/展示差异；不将LLM结论或审阅一致自动认证为数学证明或业务授权。
+
+候选v0.1.85／llm-boundary-r01-test，运行扩展LLM_BOUNDARY_CALCULATION_R01，Core接口仍candidate-ir/2.0。无模型内核60/60、IR接口126/126；新Skill真实验收NOT_RUN，旧成绩和首次失败不改写。详细方法与五组通用样例见[统一方法](../../ir-kernel/BOUNDARY-CALCULATION-METHOD.md)，代码/检查事实见[报告](../../reports/7plus1/LLM-BOUNDARY-r01/REPORT.md)。本轮新增被测模型0。安装与实际启动事实须读取DEPLOYMENT.md，不由本指针推定成功；终态WAITING_ADMIN_REVIEW。以下为不可覆盖的历史记录。
+
 ## 2026-10-13 IR内核r02修复续作
 
 ADMIN在006／008／010实际比较后授权“开始修复”。沿用已完成WP0—WP5的唯一Core与原58618产品，隔离实现通用角色绑定、跨字段合同、已知假前提、必要约束冲突计算及空审阅保护；不按文本逐案写规则，不覆盖历史，不新增被测模型调用。完整合同2.0/r02与原Skill接口适配一起冻结，真实新资源验证NOT_RUN。实际内核51/51、原接口120/120及原响应回放见[修复报告](../../reports/7plus1/IR-KERNEL-REPAIR-r02/REPORT.md)。候选v0.1.84，部署事实另记DEPLOYMENT.md；旧ui83记录按当时事实保留。终态WAITING_ADMIN_REVIEW。

@@ -2,6 +2,8 @@
 const list=x=>Array.isArray(x)?x:[];
 export function directIRProcess(trace){
  const p=trace.proposal??trace.ir,a=trace.audit,t=trace.technical,c=trace.canonical,calc=trace.boundary_calculations;
+ const modelCalculation=trace.llm_boundary_calculation??p?.boundary_calculation;
+ const llmMode=!!modelCalculation||trace.request_profile==='LLM_BOUNDARY_CALCULATION_R01';
  const nodes=new Map(['entities','variables','events','states','expressions','requirements'].flatMap(k=>list(p?.[k]).map(n=>[n.id,n])));
  const name=r=>nodes.get(r?.id??r)?.label??r?.id??r??'未指定';
  const sources=n=>list(n?.source_refs).map(id=>list(t?.source_links??p?.source_table).find(s=>s.id===id)).filter(Boolean);
@@ -13,5 +15,12 @@ export function directIRProcess(trace){
   {...base,id:'technical',title:'3. 程序技术校验：原始IR不改写',actor:'程序，零模型调用',input:'候选IR、审阅结果、来源及引用。',work:'校验Schema、类型、来源、引用与依赖；接受状态单独保存，不覆盖模型IR。技术接受不是业务授权。',ready:!!t,outcome:t?`技术合同${t.technical_ok?'通过':'失败'}；${list(t.rows).filter(r=>r.status==='ACCEPTED').length}个节点接受，${list(t.rows).filter(r=>r.status!=='ACCEPTED').length}个节点待处理。`:'等待技术校验。',headers:['节点','技术状态','被阻断的依赖'],rows:list(t?.rows).map(r=>({cells:[name(r.id),r.status,list(r.blocked_dependencies).map(name).join('；')],sources:sources(nodes.get(r.id))})),notes:[...list(t?.errors).map(x=>x.code+' · '+(x.id??x.path??'结构')),...list(t?.diagnostics).map(x=>x.reason??x.code)],raw:t},
   {...base,id:'canonical',title:'4. 固定7+1视图：使用同一候选IR与接受状态',actor:'确定性程序，零模型调用',input:'原始候选IR和技术接受记录。',work:'按同版映射显示八个边界维度，中文、JSON与导出同源。不新增语义、不另生成IR。',ready:!!c,outcome:c?'最终7+1在下方展示。':'等待固定视图。',headers:['维度','状态','条目数'],rows:Object.entries(c?.slots??{}).map(([k,v])=>({cells:[k,v.status,String(list(v.items).length)],sources:[]})),raw:c},
   {...base,id:'calculus',title:'5. 程序边界计算：公式、数值与缺口',actor:'统一确定性计算Core，零模型调用',input:'同一IR的类型化表达式及技术接受记录。',work:'类型化IR下降为Core并保留source-map；支持片段由本地求解器计算，见证回到Core复核。能力限制明确列出，不以模型审阅替代计算。',ready:!!calc,outcome:calc?`${calc.status}；联合结果：${calc.result??calc.joint?.base?.result??'未保存'}；缺口${list(calc.gaps).length}项。`:'等待计算。',headers:['缺口节点','原因'],rows:list(calc?.gaps).map(x=>({cells:[name(x.node_id??x.id),x.reason??x.message??x.code],sources:[]})),notes:['可满足不等于已经执行完成；业务裁决和执行授权均为空。'],raw:calc}
- ].map(stage=>stage.id==='technical'?{...stage,notes:[...stage.notes,...findingNotes]}:stage)};
+ ].map(stage=>{
+  if(stage.id==='technical')stage={...stage,notes:[...stage.notes,...findingNotes]};
+  if(!llmMode)return stage;
+  if(stage.id==='parse')return {...stage,title:'1. LLM理解原文、生成IR并完成边界计算候选',work:'模型按统一方法表达边界、公式、操作数、分项结果与联合结论；数学见证不是实际执行记录。',outcome:stage.outcome+(modelCalculation?' 同次响应包含'+modelCalculation.calculations.length+'项数学计算，联合候选结论 '+modelCalculation.joint.result+'。':' 等待同次响应中的IR与数学计算；不伪造中间内容。'),raw:modelCalculation?{ir:p,boundary_calculation:modelCalculation}:p};
+  if(stage.id==='audit')return {...stage,title:'2. 新会话独立审阅IR与完整边界计算',work:'核对原文遗漏、多造、身份和范围，并独立复算公式、端点、逻辑、见证及冲突推导。',outcome:stage.outcome+' '+list(a?.calculation_reviews).length+'项计算审阅。'};
+  if(stage.id==='calculus')return {...stage,title:'5. 程序复核与结果对照',actor:'程序检查具体操作数与可支持的见证，零模型调用',work:'模型计算原答、独立审阅和程序复核分别保存；复核失败提出具体问题，不吞掉模型结果，也不伪标证明通过。'};
+  return stage;
+ })};
 }

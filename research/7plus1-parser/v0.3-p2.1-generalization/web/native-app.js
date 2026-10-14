@@ -4,6 +4,7 @@ import {renderBoundaryCalculations} from '/calculation-view.js';
 const $=id=>document.getElementById(id);
 const names={I:'输入与作用域',O:'交付与结果',A:'正向动作',P:'参与关系',R:'执行量化限制',V:'版本与依据',C:'完成与停止',B:'禁止与限制'};
 const stages={QUEUED:'等待',PREPARING:'准备与版本核对',PARSING:'Codex 正在解析原文',AUDITING:'新会话正在审阅',VALIDATING:'技术校验',COMPILING:'保真编译',CALCULATING:'程序正在计算边界',COMPLETED:'编译流程完成',COMPLETED_WITH_UNRESOLVED:'编译流程完成 · 含未决/缺口',FAILED:'运行失败',CANCELLING:'取消中（等待本地子进程退出）',CANCELLED:'本地请求已取消（不声称云端停止计费）',INTERRUPTED:'服务中断 · 未自动重跑'};
+const directTrace=r=>['LLM_DIRECT_CANDIDATE_IR','LLM_IR_AND_BOUNDARY_CALCULATION'].includes(r?.pipeline);
 const errors={EMPTY_SOURCE:'请输入非空任务',SOURCE_BYTE_LIMIT:'原文容量超过1 MiB，不会截断',INVALID_UTF8:'文件不是有效UTF-8',CODEX_LOGIN_REQUIRED:'Codex 登录失效，请在本机重新登录',CODEX_QUOTA_OR_RATE_LIMIT:'Codex 额度或限流，未自动重试',CODEX_TIMEOUT:'本地调用超时，子进程已停止',CODEX_NETWORK_FAILURE:'网络调用失败',CODEX_MODEL_UNAVAILABLE:'请求模型不可用',COMPILER_BUSY:'已有编译正在进行',SESSION_REQUIRED:'页面会话失效，请刷新',COMPILER_ERROR:'编译失败，详情保存在本地运行目录'};
 Object.assign(errors,{COMPACT_WIRE_CONTRACT_FAILURE:'模型响应未通过结构或引用检查，原响应已保存，未自动重跑',PATCH_GLOBAL_ID_COLLISION:'局部修订引入重复编号，未接受该修订',IDENTITY_RESERVED_ID:'候选节点使用了保留编号 ROOT，未接受该候选',MODEL_REQUEST_BUDGET_EXHAUSTED:'本次有界请求数已用完，已保留结果与缺口'});
 let current=null,uploaded=null,session=null,pollTimer=null,busy=false,tab='pending';
@@ -35,7 +36,7 @@ function updateViewedSettings(){
 }
 function updateResourceInfo(){
  const mode=$('compile-method')?.value,r=session?.comparison_resources?.[mode]?.selected_resources,target=$('compile-resource-info');if(!target)return;
- target.textContent=(session.request_profile==='DIRECT_CANDIDATE_IR_R01'?'直接候选IR：模型解释原文并输出可计算结构，新会话独立审阅；程序校验后形成7+1视图并计算，不另造语义IR。':'历史语义接口。')+(r?'解析正文资源 '+r.parse.characters+' 字符；审阅正文资源 '+r.audit.characters+' 字符（不含通道Schema及本次候选）。':'')+' 请求配置 '+(session.request_profile??'未记录')+'；尚未通过完整产品语义验收。';
+ target.textContent=(session.request_profile==='LLM_BOUNDARY_CALCULATION_R01'?'LLM负责IR与完整边界计算，新会话独立审阅；程序校验、复核并展示结果差异。':session.request_profile==='DIRECT_CANDIDATE_IR_R01'?'直接候选IR：模型解释原文并输出可计算结构，新会话独立审阅；程序校验后形成7+1视图并计算，不另造语义IR。':'历史语义接口。')+(r?'解析正文资源 '+r.parse.characters+' 字符；审阅正文资源 '+r.audit.characters+' 字符（不含通道Schema及本次候选）。':'')+' 请求配置 '+(session.request_profile??'未记录')+'；尚未通过完整产品语义验收。';
 }
 const el=(tag,value,cls)=>{const e=document.createElement(tag);if(value!==undefined)e.textContent=value;if(cls)e.className=cls;return e;};
 function configureRuntimeVersion(){
@@ -76,7 +77,7 @@ function highlight(sources){
 }
 function record(value){$('panel').replaceChildren();$('panel').append(el('p',value.event||value.claim?factText(value,current?.result):value.note??value.reason??'查看本项来源与记录'));for(const s of value.sources??[]){if(!s.span)continue;const b=el('button','['+s.span.join(',')+') '+s.quote,'secondary');b.onclick=()=>highlight([s]);$('panel').append(b);}const detail=el('details');detail.append(el('summary','开发详情：原始JSON'),el('pre',JSON.stringify(value,null,2)));$('panel').append(detail);highlight(value.sources);}
 function entry(f){
- if(current.result?.pipeline==='LLM_DIRECT_CANDIDATE_IR'){const b=el('button',f.text,'entry');b.append(el('small',readable(f.status)+' · 查看原文来源'));b.onclick=()=>{const refs=new Set(f.source_refs);highlight(f.sources??(current.result.technical.source_links??current.result.ir.source_table).filter(s=>refs.has(s.id)));};return b;}
+ if(directTrace(current.result)){const b=el('button',f.text,'entry');b.append(el('small',readable(f.status)+' · 查看原文来源'));b.onclick=()=>{const refs=new Set(f.source_refs);highlight(f.sources??(current.result.technical.source_links??current.result.ir.source_table).filter(s=>refs.has(s.id)));};return b;}
  const b=el('button',factText(f,current.result),'entry');
  b.append(el('small',readable(f.status)+' · 点击查看原文证据'));b.onclick=()=>record(f);return b;
 }
@@ -97,9 +98,10 @@ function render(run){
  for(const id of ['compile-model','compile-reasoning','compile-method','source-example','load-example'])if($(id))$(id).disabled=busy;
  if(busy){if($('compile-method')&&run.parse_method)$('compile-method').value=run.parse_method;if($('compile-model')&&run.requested_model)$('compile-model').value=run.requested_model;if($('compile-reasoning')&&run.requested_reasoning)$('compile-reasoning').value=run.requested_reasoning;}
  updateViewedSettings();
- $('run-id').textContent=run.run_id+' · '+run.source_sha256;$('status').textContent=(stages[run.stage]??run.stage)+' · 已用 '+Math.round(run.elapsed_ms/1000)+' 秒'+(run.error?' · '+(errors[run.error.code]??run.error.code):'');$('status').className=run.status==='FAILED'?'failure':'';
+ const stageTitle=run.request_profile==='LLM_BOUNDARY_CALCULATION_R01'?({PARSING:'LLM正在识别IR与计算边界',AUDITING:'新会话正在核对IR与计算结果',CALCULATING:'程序正在复核并整理结果'}[run.stage]??stages[run.stage]):stages[run.stage];
+ $('run-id').textContent=run.run_id+' · '+run.source_sha256;$('status').textContent=(stageTitle??run.stage)+' · 已用 '+Math.round(run.elapsed_ms/1000)+' 秒'+(run.error?' · '+(errors[run.error.code]??run.error.code):'');$('status').className=run.status==='FAILED'?'failure':'';
  $('engine-info').textContent=run.engine+' · '+(run.compiler_revision??'历史编译版本，详见Trace')+' · 合同 '+run.contract+' · '+(run.parse_method??'SKILL')+' / '+(run.resource_profile??'原资源')+' · 请求 '+run.requested_model+' · 实际服务模型 '+(run.actual_model??'未披露');
- $('evidence').textContent=run.source_text;$('trace-colors').textContent=run.source_text;$('trace-summary').textContent=run.request_profile==='DIRECT_CANDIDATE_IR_R01'?'原文 → 解析Skill / Codex候选IR → 审阅Skill / 新会话 → 技术校验 → 固定7+1 → 程序边界计算；技术接受不是业务授权':'历史流程：原文 → 语义候选 → 独立审阅 → 技术校验 → IR → 7+1 → 计算';
+ $('evidence').textContent=run.source_text;$('trace-colors').textContent=run.source_text;$('trace-summary').textContent=run.request_profile==='LLM_BOUNDARY_CALCULATION_R01'?'原文 → 解析Skill / Codex：IR＋完整边界计算 → 审阅Skill / 新会话：核对两者 → 程序校验与复核 → 固定7+1及结果对照；模型结论不是数学认证或业务授权':run.request_profile==='DIRECT_CANDIDATE_IR_R01'?'原文 → 解析Skill / Codex候选IR → 审阅Skill / 新会话 → 技术校验 → 固定7+1 → 程序边界计算；技术接受不是业务授权':'历史流程：原文 → 语义候选 → 独立审阅 → 技术校验 → IR → 7+1 → 计算';
  $('input').value=run.source_text;uploaded=null;count();
  const result=run.result;for(const id of ['export','export-json','trace-html','trace-md','trace-json'])$(id).disabled=!result;
  renderModelInfo($('model-info'),run,session);
@@ -142,9 +144,9 @@ function directPanel(kind,r){
 }
 function panel(kind){
  tab=kind;$('panel').replaceChildren();const r=current?.result;if(!r)return;
- if(r.pipeline==='LLM_DIRECT_CANDIDATE_IR')return directPanel(kind,r);
+ if(directTrace(r))return directPanel(kind,r);
  if(kind==='json')return $('panel').append(el('pre',JSON.stringify(r.canonical,null,2)));
- if(kind==='diagnostics'&&r.pipeline==='LLM_DIRECT_CANDIDATE_IR'){
+ if(kind==='diagnostics'&&directTrace(r)){
   $('panel').append(el('h3','本次审阅与技术诊断'));
   for(const i of [...(r.audit.issues??[]),...(r.audit.omissions??[]),...(r.technical.diagnostics??[])])$('panel').append(el('p',i.reason??i.code));
   for(const i of r.technical.rows.filter(x=>x.status!=='ACCEPTED'))$('panel').append(el('p',i.id+'：'+readable(i.status)+(i.blocked_dependencies?'；依赖未接受：'+i.blocked_dependencies.join('，'):'')));
