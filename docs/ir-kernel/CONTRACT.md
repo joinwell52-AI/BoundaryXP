@@ -1,6 +1,6 @@
 # BoundX候选IR共享合同
 
-接口版本：`candidate-ir/2.0`。资源修订：`r06-declarative-boundary`。本文件是运行时解析和独立审阅共同使用的完整接口合同；数学参考语义见同版SEMANTICS.md。Schema和算子注册表由src/bxp/ir-kernel/contract-registry.mjs唯一导出。旧资源、历史响应和成绩不自动升级。
+接口版本：`candidate-ir/2.0`。资源修订：`r07-declarative-compact`。本文件是运行时解析和独立审阅共同使用的完整接口合同；数学参考语义见同版SEMANTICS.md。Schema和算子注册表由src/bxp/ir-kernel/contract-registry.mjs唯一导出。旧资源、历史响应和成绩不自动升级。
 
 明确的“依据”必须绑定到相应本地事件的BASIS角色及同一对象身份；文件作为内部消费时可同时保留INPUT_OBJECT与DATA_USE，不用INPUT_OBJECT或label替代BASIS用途。普通“使用”不自动变成依据。程序仅将已声明BASIS关系投影为V，不从原文或note补用途，也不为依据制造REQUIRED义务。解析与审阅均检查依据名称、版本、用途和来源。
 
