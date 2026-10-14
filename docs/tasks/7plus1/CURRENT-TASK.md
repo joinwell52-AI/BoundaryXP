@@ -6,6 +6,8 @@ ADMIN在本会话明确要求IR→完整边界计算交由LLM、同步增加Skil
 
 候选v0.1.85／llm-boundary-r01-test，运行扩展LLM_BOUNDARY_CALCULATION_R01，Core接口仍candidate-ir/2.0。无模型内核60/60、IR接口126/126；新Skill真实验收NOT_RUN，旧成绩和首次失败不改写。详细方法与五组通用样例见[统一方法](../../ir-kernel/BOUNDARY-CALCULATION-METHOD.md)，代码/检查事实见[报告](../../reports/7plus1/LLM-BOUNDARY-r01/REPORT.md)。本轮新增被测模型0。安装与实际启动事实须读取DEPLOYMENT.md，不由本指针推定成功；终态WAITING_ADMIN_REVIEW。以下为不可覆盖的历史记录。
 
+实际交付：241文件完整ui85已安装；备份就绪，2246份历史data文件及配置摘要未变。58618安装前已无监听；正常隐藏后台启动被工具策略拒绝，命令未执行，没有换命令或工具绕过；随后HTTP仍ECONNREFUSED。在线页面/会话/版本/导出冒烟NOT_RUN，不能宣称已运行。详见[安装及阻断报告](../../reports/7plus1/LLM-BOUNDARY-r01/DEPLOYMENT.md)。状态WAITING_ADMIN_REVIEW / START_BLOCKED_BY_POLICY。
+
 ## 2026-10-13 IR内核r02修复续作
 
 ADMIN在006／008／010实际比较后授权“开始修复”。沿用已完成WP0—WP5的唯一Core与原58618产品，隔离实现通用角色绑定、跨字段合同、已知假前提、必要约束冲突计算及空审阅保护；不按文本逐案写规则，不覆盖历史，不新增被测模型调用。完整合同2.0/r02与原Skill接口适配一起冻结，真实新资源验证NOT_RUN。实际内核51/51、原接口120/120及原响应回放见[修复报告](../../reports/7plus1/IR-KERNEL-REPAIR-r02/REPORT.md)。候选v0.1.84，部署事实另记DEPLOYMENT.md；旧ui83记录按当时事实保留。终态WAITING_ADMIN_REVIEW。
