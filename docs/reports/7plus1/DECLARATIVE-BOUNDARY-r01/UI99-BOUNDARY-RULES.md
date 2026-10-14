@@ -38,3 +38,19 @@ ui98虽压缩字段，模型仍须编写底层IR表达式、实例和引用。�
 本版是固定规则集合，不声称覆盖任意自然语言。非固定选择、非双向完成定义、当前开始前提接口无法表示的形式须明确列缺口，不能放进label冒充可计算。开放事件域与未来未知不等于边界提取失败；显式约束缺失仍不能通过。边界建立不等于PM拆分通过；业务裁决与执行授权保持null。
 
 安装版本、备份、实际地址与启动检查另附部署记录；本文件中的工程通过不替代实际安装或语义准确性。
+
+## 实际部署完成（2026-10-14）
+
+同一58618已运行`0.1.0-candidate.031-r1.2-ui.99`，编译器`boundary-rules-r01-test`，Core合同`candidate-ir/2.0`，在线模型资源`BOUNDARY_RULES_R01`。运行源码提交`9cf57a79a56e906b5094e46b329be79a02da1370`；完整安装清单SHA256为`33ff226dffa82722d1f8ecedf52e46b4b4dc3f1287c67c800fd9eb61088a7014`。构建时运行源码干净。
+
+备份、重复空闲核对后，正常停止已核实的旧PID14716。通过原npm入口启动新PID2044。浏览器实际显示v0.1.99、Skill/skill1选择、模型设置及新资源字符数，未见JavaScript错误。101条历史、2663份旧文件、配置及旧002的IR/审阅/技术校验/7+1/边界结果摘要均不变；六种导出HTTP200，同源JSON核对通过。包自身依赖、清单及15项离线HTTP处理检查通过；无新增监听端口或模型请求。
+
+原入口文件无法原地写入，经保留原文件、对备份副本使用apply_patch、核对原字节未变后替换，唯一源码差异是新增ui99版本登记。原文件额外保留为`D:\boundx\product\short-compiler\launch-installed.ui98-pre-ui99.mjs`，未修改其他本地工作区改动。
+
+- 地址：<http://127.0.0.1:58618/>，刷新后新运行使用ui99；历史仍显示各自原版本。
+- 重启电脑后：在`D:\boundx`运行`npm run 7plus1:ui`。
+- 完整运行包：`D:\boundx\.boundx\ir-kernel-implementation-v1\products\verified\0.1.0-candidate.031-r1.2-ui.99`。
+- 完整备份：`D:\boundx\.boundx\short-compiler-031-r1\backups\ui99-prestop-1791966041798`；部署器另存一份`2026-10-14T08-24-49.940Z`。
+- 回滚：先确认无在途请求，正常停止当前已核实PID；在上述ui99包目录运行`node product/short-compiler/deploy.mjs rollback --home D:/boundx/.boundx/short-compiler-031-r1 --confirmed-idle`，再从`D:\boundx`运行原npm启动命令。previous为ui98，历史不重解析。
+
+部署实证及测试原始日志位于`D:\boundx\.boundx\ir-kernel-implementation-v1\evidence\boundary-rules-ui99`。只同步review/7plus1-parser，未merge/release/tag。新模型接口真实002验收及少于60秒目标仍未验证，终态WAITING_ADMIN_REVIEW。
