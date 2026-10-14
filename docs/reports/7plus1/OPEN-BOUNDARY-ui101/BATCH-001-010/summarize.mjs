@@ -1,0 +1,23 @@
+import fs from 'node:fs';
+import assert from 'node:assert/strict';
+import {createHash} from 'node:crypto';
+const here=new URL('./',import.meta.url),hash=b=>createHash('sha256').update(b).digest('hex');
+const cases=Array.from({length:10},(_,i)=>{
+ const c=String(i+1).padStart(3,'0'),r=JSON.parse(fs.readFileSync(new URL(c+'.json',here),'utf8'));
+ assert.equal(r.status,'COMPLETED');assert.equal(r.exports.length,6);
+ const source=fs.readFileSync('D:/boundx/docs/testing/7plus1/MANUAL-TEST-'+c+'.txt');
+ assert.equal(hash(source),r.source_sha256);
+ assert.equal(hash(fs.readFileSync('D:/boundx/docs/testing/7plus1/MANUAL-TEST-'+c+'.md')),r.standard_sha256);
+ assert.equal(hash(fs.readFileSync(new URL(c+'-parse.md',here))),r.parse_sha256);
+ assert.equal(hash(fs.readFileSync(new URL(c+'-audit.md',here))),r.audit_sha256);
+ assert.ok(fs.existsSync(new URL(c+'-comparison.md',here)));
+ return {...r,source_characters:Array.from(source.toString().trimEnd()).length,comparison:c==='005'?'CORE_RETAINED_WITH_MODAL_HEADING_CORRECTION':'NO_SUBSTANTIVE_DIFFERENCE_FOUND'};
+});
+const short=cases.filter(r=>r.case!=='003'),stats={cases:10,completed:10,outer_calls:20,observed_internal_retries:cases.reduce((s,r)=>s+r.observed_internal_retries,0),conservative_requests:cases.reduce((s,r)=>s+r.conservative_requests,0),limit:22,server_billable_requests:'UNKNOWN',generation_under_60:cases.filter(r=>r.parse_ms<60000).length,short_cases:9,short_generation_under_60:short.filter(r=>r.parse_ms<60000).length,short_generation_mean_seconds:short.reduce((s,r)=>s+r.parse_ms,0)/short.length/1000,total_runtime_seconds:cases.reduce((s,r)=>s+r.total_ms,0)/1000};
+assert.equal(stats.conservative_requests,22);
+const ledger={format:'boundx-manual-batch-observation/1',runtime_version:'0.1.0-candidate.031-r1.2-ui.101',stats,cases};
+fs.writeFileSync(new URL('LEDGER.json',here),JSON.stringify(ledger,null,2)+'\n',{flag:'wx'});
+const dest='D:/boundx/.boundx/ir-kernel-implementation-v1/candidate/docs/reports/7plus1/OPEN-BOUNDARY-ui101/BATCH-001-010';
+fs.mkdirSync(dest,{recursive:true});
+for(const name of ['AUTHORIZATION.md','LEDGER.json','run.mjs','summarize.mjs',...cases.flatMap(r=>[r.case+'.json',r.case+'-parse.md',r.case+'-audit.md',r.case+'-comparison.md'])])fs.copyFileSync(new URL(name,here),dest+'/'+name,fs.constants.COPYFILE_EXCL);
+console.log(JSON.stringify({stats,rows:cases.map(r=>({case:r.case,chars:r.source_characters,generation:r.parse_ms/1000,audit:r.audit_ms/1000,local:r.other_ms/1000,total:r.total_ms/1000,result:r.comparison}))},null,2));
