@@ -7,12 +7,21 @@ import {finishDirectIR} from './direct-ir-result.mjs';
 import {renderDirectCalculations} from './direct-ir-render-results.mjs';
 import {affectedAuditTargets,targetedAuditBundle,mergeIndependentAudit} from './direct-ir-audit-merge.mjs';
 import {repairableFrameCodes} from '../../../src/bxp/ir-kernel/frames.mjs';
+import {loadCandidate} from '../../../src/bxp/ir-kernel/load.mjs';
+import {linkQuote} from './source.mjs';
 import {irOnly,calculationTargets,calculationAuditBundle} from './boundary-calculation-schema.mjs';
 import {attachLLMCalculation,checkLLMBoundary} from './boundary-calculation.mjs';
 import {expandCompactBoundary,compactBoundaryCandidate} from './compact-boundary.mjs';
 import {applyCalculationPatch,requireCompleteCalculationReplacement} from './calculation-patch.mjs';
 import {boundaryProfile,boundaryReviewInput,expandBoundaryAudit,expandDeclaration} from './declarative-boundary.mjs';
 const write=(dir,name,value)=>fs.writeFileSync(path.join(dir,name),JSON.stringify(value,null,2)+'\n');
+export function repairableBoundaryContract(ir,technical,source){
+ if(!technical.schemas.audit.ok||!technical.errors.length)return false;
+ // A binding error is not a schema/source error. Permit only a bounded model
+ // correction of the identified node, never silently repair it in the host.
+ if(!technical.errors.every(e=>e.code==='REQUIREMENT_SCOPE_MISSING'&&e.node_id&&ir.requirements.some(r=>r.id===e.node_id)))return false;
+ try{loadCandidate(ir);for(const s of ir.source_table)linkQuote(source,s);return true;}catch{return false;}
+}
 export async function parseDirectIR(bytes,{output,probe,model='gpt-6.1-sol',reasoning='medium',parseMethod='SKILL',signal,onProgress=()=>{},timeoutMs=null,call=callCodex,maxModelRequests=2,resourceGuard=()=>{},productSnapshot=null,bundleFactory=directIRBundle}={}){
  if(!output)throw Error('OUTPUT_DIRECTORY_REQUIRED');if(!Number.isSafeInteger(maxModelRequests)||maxModelRequests<2)throw Error('MODEL_REQUEST_BUDGET_EXHAUSTED');
  const rawCall=call;call=async args=>{const response=await rawCall(args);return {...response,value:expandCompactBoundary(expandDeclaration(expandBoundaryAudit(response.value,args.candidate)),args.candidate)};};
@@ -30,12 +39,13 @@ export async function parseDirectIR(bytes,{output,probe,model='gpt-6.1-sol',reas
  if(llmCalculation)write(dir,'llm-boundary-calculation.json',llmCalculation);
  write(dir,'candidate-ir.json',parsed.value);onProgress({stage:'PARSING',revision:0,kind:'PARSE_READY',signal:'PARSE_READY'});
  const precheck=acceptCandidateIR(parsed.value,{format:'boundx-candidate-ir-audit/1',contract_version:parsed.value.contract_version,source_table:[],reviews:[],issues:[],omissions:[]},source);write(dir,'technical-precheck.json',{technical_ok:precheck.technical_ok,errors:precheck.errors,semantic_review:'NOT_YET_PERFORMED'});onProgress({stage:'VALIDATING',revision:0,kind:'PRECHECK_READY',signal:'PRECHECK_READY'});
- resourceGuard();signal?.throwIfAborted();onProgress({stage:'AUDITING',revision:0});let reviewed=await call({bundle:calculationAuditBundle(audit,llmCalculation),source,candidate:reviewInput(),directory:path.join(dir,'audit-call'),probe,model,reasoning,signal,timeoutMs,requestBudget,...telemetry('audit')});
+ const initialReviewInput=reviewInput();if(parse.request_profile===boundaryProfile)initialReviewInput.technical_precheck={errors:precheck.errors,semantic_review:'NOT_YET_PERFORMED'};
+ resourceGuard();signal?.throwIfAborted();onProgress({stage:'AUDITING',revision:0});let reviewed=await call({bundle:calculationAuditBundle(audit,llmCalculation),source,candidate:initialReviewInput,directory:path.join(dir,'audit-call'),probe,model,reasoning,signal,timeoutMs,requestBudget,...telemetry('audit')});
  if(!parsed.receipt.thread_id||!reviewed.receipt.thread_id||parsed.receipt.thread_id===reviewed.receipt.thread_id)throw Error('AUDIT_SESSION_NOT_INDEPENDENT');
  write(dir,'audit.json',reviewed.value);onProgress({stage:'AUDITING',revision:0,kind:'AUDIT_READY',signal:'AUDIT_READY'});resourceGuard();
  if(sha256(selectedBundle('parse').sha256+selectedBundle('audit').sha256)!==fingerprint)throw Error('METHOD_CHANGED_DURING_RUN');
  onProgress({stage:'VALIDATING',revision:0});let technical=acceptCandidateIR(parsed.value,reviewed.value,source);write(dir,'technical-validation.json',technical);onProgress({stage:'VALIDATING',revision:0,kind:'TECHNICAL_READY',signal:'TECHNICAL_READY'});
- const repairableTechnical=technical.schemas.proposal.ok&&technical.schemas.audit.ok&&technical.errors.every(e=>repairableFrameCodes.has(e.code)||['DATA_CONSUMER_EVENT','DATA_CONSUMER_OBJECT_BINDING','DATA_PRODUCER_OBJECT_BINDING','EXTERNAL_DATA_HAS_TASK_PRODUCER','BOOLEAN_TYPE','MEMBERSHIP_TYPE','START_STATE_TYPE','IMMEDIATE_STATE_EVENT_TYPE'].includes(e.code));
+ const repairableTechnical=repairableBoundaryContract(parsed.value,technical,source)||technical.schemas.proposal.ok&&technical.schemas.audit.ok&&technical.errors.every(e=>repairableFrameCodes.has(e.code)||['DATA_CONSUMER_EVENT','DATA_CONSUMER_OBJECT_BINDING','DATA_PRODUCER_OBJECT_BINDING','EXTERNAL_DATA_HAS_TASK_PRODUCER','BOOLEAN_TYPE','MEMBERSHIP_TYPE','START_STATE_TYPE','IMMEDIATE_STATE_EVENT_TYPE'].includes(e.code));
  const evidenceOptions={requireWire:['LLM_BOUNDARY_CALCULATION_R02','LLM_BOUNDARY_CALCULATION_R03'].includes(parse.request_profile)};
  const initialCalculation=llmCalculation?await checkLLMBoundary(parsed.value,llmCalculation,reviewed.value,technical,evidenceOptions):null;
  const repairableCalculationCodes=new Set(['LLM_CALCULATION_EVIDENCE_REQUIRED','LLM_CALCULATION_MISMATCH','LLM_SAT_WITHOUT_CHECKABLE_WITNESS','LLM_WITNESS_INVALID','LLM_WITNESS_NOT_VERIFIED','LLM_CALCULATION_AUDIT_REFERENCE','LLM_CALCULATION_REVIEW_REQUIRED']);

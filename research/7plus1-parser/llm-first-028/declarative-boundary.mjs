@@ -26,6 +26,11 @@ function mapReferences(value,schema,fn){
 export function compactDeclaration(ir){const wire=mapReferences(ir,v2Schema,r=>r.id);wire.format='boundx-boundary/1';for(const r of wire.requirements)if(!r.note)delete r.note;return wire;}
 export function expandDeclaration(value){
  if(value?.format!=='boundx-boundary/1')return value;
+ value=structuredClone(value);
+ // Coverage may point to an explicit issue record. It is metadata, not a new
+ // semantic node: link its existing targets while retaining the issue and GAP.
+ const issues=new Map(value.issues.map(i=>[i.id,i]));
+ for(const row of value.coverage)row.node_refs=[...new Set(row.node_refs.flatMap(id=>issues.has(id)?issues.get(id).targets:id))];
  const ids=new Map();for(const [k,kind]of Object.entries(collections))for(const n of value[k]){if(ids.has(n.id))throw Error('BOUNDARY_DUPLICATE_ID');ids.set(n.id,kind);}
  const ir=mapReferences(value,v2Schema,id=>{if(!ids.has(id))throw Error('BOUNDARY_REFERENCE_MISSING:'+id);return {kind:ids.get(id),id};});
  ir.format='boundx-candidate-ir/1';for(const r of ir.requirements)r.note=r.note??'';return ir;
