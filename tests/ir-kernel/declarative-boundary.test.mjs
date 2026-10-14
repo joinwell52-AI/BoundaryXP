@@ -3,10 +3,11 @@ import {v2} from './domain-fixtures.mjs';import {expr,req,E,V,variable} from './
 import {compileCore} from '../../src/bxp/ir-kernel/index.mjs';
 import {declareBoundary} from '../../src/bxp/ir-kernel/declaration.mjs';
 import {boundaryReviewInput,expandBoundaryAudit,boundarySchema,compactDeclaration,expandDeclaration} from '../../research/7plus1-parser/llm-first-028/declarative-boundary.mjs';
-import {parseDirectIR,repairableBoundaryContract} from '../../research/7plus1-parser/llm-first-028/direct-ir-engine.mjs';
+import {repairableBoundaryContract} from '../../research/7plus1-parser/llm-first-028/direct-ir-engine.mjs';
+import {parseLegacyIR as parseDirectIR,legacyBoundaryBundle as directIRKernelBundle} from './legacy-boundary-bundle.mjs';
 import {revisionPermissions} from '../../research/7plus1-parser/llm-first-028/direct-ir-revision.mjs';
 import {acceptCandidateIR} from '../../research/7plus1-parser/llm-first-028/direct-ir-accept.mjs';
-import {directIRKernelBundle,boundaryOperatorRegistry} from '../../research/7plus1-parser/llm-first-028/direct-ir-kernel-resources.mjs';
+import {boundaryOperatorRegistry} from '../../research/7plus1-parser/llm-first-028/direct-ir-kernel-resources.mjs';
 import {modelRegistry} from '../../src/bxp/ir-kernel/contract-registry.mjs';
 test('smaller phase resources preserve every operator signature and isolated review responsibilities',()=>{
  assert.deepEqual(boundaryOperatorRegistry,Object.fromEntries(Object.entries(modelRegistry).map(([k,{support,...v}])=>[k,v])));

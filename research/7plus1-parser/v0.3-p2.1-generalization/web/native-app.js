@@ -1,6 +1,7 @@
 import {renderCompilerProcess, renderModelInfo, factText, readable, sourceLength} from '/process-view.js';
 import {MAX_SOURCE_BYTES} from '/input-limits.js';
 import {renderBoundaryCalculations} from '/calculation-view.js';
+import {boundaryRuleRows} from '/direct-ir-process.js';
 const $=id=>document.getElementById(id);
 const names={I:'输入与作用域',O:'交付与结果',A:'正向动作',P:'参与关系',R:'执行量化限制',V:'版本与依据',C:'完成与停止',B:'禁止与限制'};
 const stages={QUEUED:'等待',PREPARING:'准备与版本核对',PARSING:'Codex 正在解析原文',AUDITING:'新会话正在审阅',VALIDATING:'技术校验',COMPILING:'保真编译',CALCULATING:'程序正在计算边界',COMPLETED:'编译流程完成',COMPLETED_WITH_UNRESOLVED:'编译流程完成 · 含未决/缺口',FAILED:'运行失败',CANCELLING:'取消中（等待本地子进程退出）',CANCELLED:'本地请求已取消（不声称云端停止计费）',INTERRUPTED:'服务中断 · 未自动重跑'};
@@ -89,6 +90,10 @@ function render(run){
   const trace=run.result,allFindings=trace?.problem_report?.findings??[],deferred=allFindings.filter(f=>f.code==='NODE_REVIEW_REQUIRED').length,findings=[...new Map(allFindings.filter(f=>f.code!=='NODE_REVIEW_REQUIRED').map(f=>[[f.code,f.node_id??f.id,f.requirement_id,f.problem].join('|'),f])).values()],ready=trace?.boundary_calculations?.status==='BOUNDARY_READY';
   boundarySummary.append(el('h2','本次边界结果'));
   boundarySummary.append(el('h3','1. ADMIN边界'),el('p',!trace?'正在提取与核对，尚无最终结果。':ready?'已建立边界结构；7+1及来源见下方，模型审阅不等于人工验收。':'已保存候选边界，仍有待修正问题；当前不能作为完整比较基准。'));
+  if(trace?.boundary_declaration){
+   const declarations=el('details');declarations.open=true;declarations.append(el('summary','LLM提取的边界（'+trace.boundary_declaration.rules.length+'条）'));
+   for(const row of boundaryRuleRows(trace.boundary_declaration)){const p=el('p');p.append(el('strong',row.cells[0]+'：'),document.createTextNode(row.cells[1]+'；'+row.cells[2]));declarations.append(p);}boundarySummary.append(declarations);
+  }
   boundarySummary.append(el('h3','2. 需要处理的问题'));
   if(!trace)boundarySummary.append(el('p','等待核对结果。'));else if(findings.length)for(const f of findings.slice(0,5)){const explanation={FREE_LOCAL_VARIABLE:'规则引用了未绑定的局部变量，程序无法确定它对应哪一次或哪一个对象',MODEL_REQUEST_BUDGET_EXHAUSTED:'本次运行的请求数保护已触发，局部修订未采用，首轮结果保留'}[f.code]??f.problem??f.code;boundarySummary.append(el('p',explanation+(f.node_id?'（'+f.node_id+'）':'')+(f.suggestion?'；建议：'+f.suggestion:'')));}else if(!deferred)boundarySummary.append(el('p','程序未列出问题；仍需核对是否忠实完整表达原文。'));
   if(deferred)boundarySummary.append(el('p',deferred+'条节点待核验记录不代表同样数量的独立语义错误；完整技术记录保留在详情中。'));
@@ -115,6 +120,7 @@ function render(run){
  $('run-id').textContent=run.run_id+' · '+run.source_sha256;$('status').textContent=(stageTitle??run.stage)+' · 已用 '+Math.round(run.elapsed_ms/1000)+' 秒'+(run.error?' · '+(errors[run.error.code]??run.error.code):'');$('status').className=run.status==='FAILED'?'failure':'';
  $('engine-info').textContent=run.engine+' · '+(run.compiler_revision??'历史编译版本，详见Trace')+' · 合同 '+run.contract+' · '+(run.parse_method??'SKILL')+' / '+(run.resource_profile??'原资源')+' · 请求 '+run.requested_model+' · 实际服务模型 '+(run.actual_model??'未披露');
  $('evidence').textContent=run.source_text;$('trace-colors').textContent=run.source_text;$('trace-summary').textContent=run.request_profile==='DECLARATIVE_BOUNDARY_R01'?'原文 → 解析Skill / Codex：完整边界IR → 新会话独立审阅 → 技术校验 → 同源7+1与静态计算 → 待核验PM规划；技术接受不是业务授权':['LLM_BOUNDARY_CALCULATION_R01','LLM_BOUNDARY_CALCULATION_R02','LLM_BOUNDARY_CALCULATION_R03'].includes(run.request_profile)?'原文 → 解析Skill / Codex：IR＋完整边界计算 → 审阅Skill / 新会话：核对两者 → 程序校验与证据复核 → 固定7+1及数学结果；技术接受不是业务授权':run.request_profile==='DIRECT_CANDIDATE_IR_R01'?'原文 → 解析Skill / Codex候选IR → 审阅Skill / 新会话 → 技术校验 → 固定7+1 → 程序边界计算；技术接受不是业务授权':'历史流程：原文 → 语义候选 → 独立审阅 → 技术校验 → IR → 7+1 → 计算';
+ if((run.resource_profile??'').includes('BOUNDARY_RULES_R01'))$('trace-summary').textContent='原文 → LLM提取边界 → 程序展开与预检 → 新会话核对边界 → 同源7+1 → 待核验PM规划；不编执行安排，技术接受不是业务授权';
  $('input').value=run.source_text;uploaded=null;count();
  const result=run.result;for(const id of ['export','export-json','trace-html','trace-md','trace-json'])$(id).disabled=!result;
  renderModelInfo($('model-info'),run,session);

@@ -14,6 +14,7 @@ import {attachLLMCalculation,checkLLMBoundary} from './boundary-calculation.mjs'
 import {expandCompactBoundary,compactBoundaryCandidate} from './compact-boundary.mjs';
 import {applyCalculationPatch,requireCompleteCalculationReplacement} from './calculation-patch.mjs';
 import {boundaryProfile,boundaryReviewInput,expandBoundaryAudit,expandDeclaration} from './declarative-boundary.mjs';
+import {rulesFormat,rulesAuditFormat,lowerBoundaryRules,rulesReviewInput,expandRulesAudit} from './boundary-rules.mjs';
 const write=(dir,name,value)=>fs.writeFileSync(path.join(dir,name),JSON.stringify(value,null,2)+'\n');
 export function repairableBoundaryContract(ir,technical,source){
  if(!technical.schemas.audit.ok||!technical.errors.length)return false;
@@ -24,7 +25,20 @@ export function repairableBoundaryContract(ir,technical,source){
 }
 export async function parseDirectIR(bytes,{output,probe,model='gpt-6.1-sol',reasoning='medium',parseMethod='SKILL',signal,onProgress=()=>{},timeoutMs=null,call=callCodex,maxModelRequests=2,resourceGuard=()=>{},productSnapshot=null,bundleFactory=directIRBundle}={}){
  if(!output)throw Error('OUTPUT_DIRECTORY_REQUIRED');if(!Number.isSafeInteger(maxModelRequests)||maxModelRequests<2)throw Error('MODEL_REQUEST_BUDGET_EXHAUSTED');
- const rawCall=call;call=async args=>{const response=await rawCall(args);return {...response,value:expandCompactBoundary(expandDeclaration(expandBoundaryAudit(response.value,args.candidate)),args.candidate)};};
+ const rawCall=call;call=async args=>{const response=await rawCall(args);
+  if(args.bundle.boundary_rules){
+   fs.mkdirSync(args.directory,{recursive:true});
+   if(args.bundle.phase==='parse'){
+    if(response.value?.format!==rulesFormat)throw Error('BOUNDARY_RULE_FORMAT_REQUIRED');
+    write(args.directory,'boundary-declaration.json',response.value);
+    const lowered=lowerBoundaryRules(response.value);write(args.directory,'lowering-map.json',lowered.groups);
+    return {...response,boundary_declaration:response.value,value:lowered.ir};
+   }
+   if(response.value?.format!==rulesAuditFormat)throw Error('BOUNDARY_RULE_AUDIT_FORMAT_REQUIRED');
+   write(args.directory,'boundary-review.json',response.value);
+   return {...response,boundary_review:response.value,value:expandRulesAudit(response.value,args.candidate)};
+  }
+  return {...response,value:expandCompactBoundary(expandDeclaration(expandBoundaryAudit(response.value,args.candidate)),args.candidate)};};
  fs.mkdirSync(output,{recursive:true});if(fs.existsSync(path.join(output,'source.txt')))throw Error('OUTPUT_ALREADY_EXISTS');
  resourceGuard();signal?.throwIfAborted();const source=prepareSource(bytes);fs.writeFileSync(path.join(output,'source.txt'),bytes);write(output,'source.json',source);
  onProgress({stage:'PREPARING',revision:0});probe??=probeCodex();write(output,'environment.json',probe);
@@ -35,7 +49,7 @@ export async function parseDirectIR(bytes,{output,probe,model='gpt-6.1-sol',reas
  const telemetry=phase=>({onEvent:event=>{const s=modelSignal(event);if(s)onProgress({stage:phase==='parse'?'PARSING':'AUDITING',phase,revision,...s});},onActivity:p=>onProgress({stage:phase==='parse'?'PARSING':'AUDITING',phase,revision,...p})});
  onProgress({stage:'PARSING',revision:0});let parsed=await call({bundle:parse,source,directory:path.join(dir,'parse-call'),probe,model,reasoning,signal,timeoutMs,requestBudget,...telemetry('parse')});
  write(dir,'proposal.json',parsed.value);let llmCalculation=parsed.value.boundary_calculation??null;parsed={...parsed,value:irOnly(parsed.value)};
- const reviewInput=()=>llmCalculation?(parse.request_profile==='LLM_BOUNDARY_CALCULATION_R03'?compactBoundaryCandidate({...parsed.value,boundary_calculation:llmCalculation}):{...parsed.value,boundary_calculation:llmCalculation}):(parse.request_profile===boundaryProfile?boundaryReviewInput(parsed.value):parsed.value);
+ const reviewInput=()=>parsed.boundary_declaration?rulesReviewInput(parsed.boundary_declaration):llmCalculation?(parse.request_profile==='LLM_BOUNDARY_CALCULATION_R03'?compactBoundaryCandidate({...parsed.value,boundary_calculation:llmCalculation}):{...parsed.value,boundary_calculation:llmCalculation}):(parse.request_profile===boundaryProfile?boundaryReviewInput(parsed.value):parsed.value);
  if(llmCalculation)write(dir,'llm-boundary-calculation.json',llmCalculation);
  write(dir,'candidate-ir.json',parsed.value);onProgress({stage:'PARSING',revision:0,kind:'PARSE_READY',signal:'PARSE_READY'});
  const precheck=acceptCandidateIR(parsed.value,{format:'boundx-candidate-ir-audit/1',contract_version:parsed.value.contract_version,source_table:[],reviews:[],issues:[],omissions:[]},source);write(dir,'technical-precheck.json',{technical_ok:precheck.technical_ok,errors:precheck.errors,semantic_review:'NOT_YET_PERFORMED'});onProgress({stage:'VALIDATING',revision:0,kind:'PRECHECK_READY',signal:'PRECHECK_READY'});
@@ -56,7 +70,8 @@ export async function parseDirectIR(bytes,{output,probe,model='gpt-6.1-sol',reas
  if(!semanticFeedback&&reviewed.value.omissions?.length)revisionOutcome={status:'NOT_APPLIED',reason:'SKIPPED_NON_REPAIRABLE_OMISSION',retained_revision:0,requires_review:false};
  const needsRepair=contractVersion==='candidate-ir/2.0'?technical.audit_status==='PERFORMED'&&(technical.errors.length||semanticFeedback):((reviewed.value.omissions??[]).length||technical.rows.some(r=>r.status!=='ACCEPTED')||technical.diagnostics.some(d=>d.code==='COVERAGE_REVIEW_ISSUE'));
  if(contractVersion==='candidate-ir/2.0'&&technical.audit_status==='NOT_PERFORMED')revisionOutcome={status:'NOT_APPLIED',reason:'AUDIT_NOT_PERFORMED',retained_revision:0,requires_review:true};
- if((technical.technical_ok||repairableTechnical)&&requestBudget.remaining>=2&&needsRepair){
+ if(parse.boundary_rules&&needsRepair)revisionOutcome={status:'NOT_APPLIED',reason:'BOUNDARY_RULE_ISSUES_RETAINED_NO_AUTOMATIC_IR_PATCH',retained_revision:0,requires_review:true};
+ if(!parse.boundary_rules&&(technical.technical_ok||repairableTechnical)&&requestBudget.remaining>=2&&needsRepair){
   revision=1;dir=path.join(output,'revision-1');fs.mkdirSync(dir);const base=parsed.value;
   const {replacements,removals,coverage_indices}=revisionPermissions(base,reviewed.value,technical);
   const problems={base_ir_sha256:sha256(JSON.stringify(base)),omissions:reviewed.value.omissions,issues:reviewed.value.issues,technical_errors:technical.errors,removable_node_ids:[...reviewed.value.reviews.filter(r=>r.verdict==='CONTRADICT'&&!r.field_path).map(r=>r.target.id),...technical.errors.filter(e=>e.code==='DATA_CONSUMER_EVENT').map(e=>e.id)],missing_review_fields:technical.rows.filter(r=>r.missing_review_fields?.length).map(r=>({id:r.id,fields:r.missing_review_fields}))};
@@ -131,6 +146,7 @@ export async function parseDirectIR(bytes,{output,probe,model='gpt-6.1-sol',reas
  const model_resource_digests=[...new Map([...parse.resources,...audit.resources].map(r=>[r.path,{path:r.path,sha256:r.sha256}])).values(),{path:'contracts/candidate-ir-v1/schema.mjs',sha256:sha256(fs.readFileSync(new URL('./contracts/candidate-ir-v1/schema.mjs',import.meta.url)))}];
  const final={format:'boundx-direct-ir-trace/1',pipeline:parse.request_profile===boundaryProfile?'DECLARATIVE_BOUNDARY':llmCalculation?'LLM_IR_AND_BOUNDARY_CALCULATION':'LLM_DIRECT_CANDIDATE_IR',product_snapshot:productSnapshot,model_resource_digests,source,proposal:parsed.value,ir:parsed.value,audit:reviewed.value,technical,canonical,chinese,boundary_calculations,problem_report,...(llmCalculation?{llm_boundary_calculation:llmCalculation,program_boundary_calculations:completed.program_boundary_calculations}:{}),...(completed.kernel_core?{kernel_core:completed.kernel_core}:{}),model_calls:{parse:parsed.attempts,audit:reviewed.attempts},revision,revision_outcome:revisionOutcome,parse_method:parseMethod,resource_profile:parse.resource_profile,request_profile:parse.request_profile,ir_origin:revisionOutcome?.status==='APPLIED_AND_REVIEWED'?'LLM_BOUNDED_PATCH_PRESERVING_FIRST_RESPONSE':'LLM_RESPONSE_UNCHANGED',input_ir_sha256:sha256(JSON.stringify(parsed.value)),business_decision:null,execution_authorization:null};
  if(completed.kernel_core){write(output,'core.json',completed.kernel_core.core);write(output,'source-map.json',completed.kernel_core.source_map);}
+ if(parsed.boundary_declaration){final.boundary_declaration=parsed.boundary_declaration;final.boundary_review=reviewed.boundary_review;final.ir_origin='DETERMINISTIC_BOUNDARY_RULE_LOWERING';write(output,'boundary-declaration.json',parsed.boundary_declaration);write(output,'boundary-review.json',reviewed.boundary_review);}
  write(output,'problem-report.json',problem_report);
  final.technical_precheck={technical_ok:precheck.technical_ok,errors:precheck.errors,semantic_review:'NOT_YET_PERFORMED'};
  final.incomplete_model_requests=incompleteModelRequests;write(output,'incomplete-model-requests.json',incompleteModelRequests);

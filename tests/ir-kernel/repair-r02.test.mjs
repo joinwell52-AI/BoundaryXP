@@ -1,7 +1,7 @@
 import test from 'node:test';import assert from 'node:assert/strict';import fs from 'node:fs';import os from 'node:os';import path from 'node:path';
 import {v2,plan} from './domain-fixtures.mjs';import {event,entity,variable,expr,req,common,E,O,T,V,S,rename} from './fixtures.mjs';
 import {compileCore} from '../../src/bxp/ir-kernel/index.mjs';import {queryCore} from '../../src/bxp/ir-kernel/queries.mjs';import {runKernel} from '../../src/bxp/ir-kernel/service.mjs';import {verifyModel} from '../../src/bxp/ir-kernel/verify-model.mjs';import {evaluateCore} from '../../src/bxp/ir-kernel/evaluate.mjs';
-import {directIRKernelBundle} from '../../research/7plus1-parser/llm-first-028/direct-ir-kernel-resources.mjs';import {parseDirectIR} from '../../research/7plus1-parser/llm-first-028/direct-ir-engine.mjs';
+import {legacyBoundaryBundle as directIRKernelBundle,parseLegacyIR as parseDirectIR} from './legacy-boundary-bundle.mjs';
 import {sha256} from '../../research/7plus1-parser/llm-first-028/source.mjs';
 function objectIR(){const i=v2();i.entities.push(entity('left'),entity('right'));i.expressions.push(expr('domain','SET',[O('left'),O('right')]),expr('yes','BOOLEAN',[],true));i.variables.push(variable('picked','OBJECT',E('domain')));i.events.push(event('inspect',{operation:'REVIEW',roles:[{role:'OBJECT',value:V('picked'),source_refs:['s']}]}));i.requirements.push(req('must-inspect',E('yes'),{kind:'EVENT_NORM',subject:T('inspect'),views:['A']}));return i;}
 test('R02 fixed object roles agree in SAT, EVALUATE and independent model verification',async()=>{

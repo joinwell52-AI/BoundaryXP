@@ -1,5 +1,25 @@
 // Presentation of saved typed IR only. No semantic extraction or model calls.
 const list=x=>Array.isArray(x)?x:[];
+export function boundaryRuleRows(w){
+ const labels=new Map(['tasks','objects','actions','states','rules'].flatMap(k=>list(w?.[k]).map(n=>[n.id,n.label??n.id]))),name=id=>labels.get(id)??id,join=xs=>xs.map(name).join('、');
+ const condition=c=>c?.state?name(c.state):c?.completed?name(c.completed)+'已完成':c?.all?c.all.map(condition).join(' 且 '):c?.any?'（'+c.any.map(condition).join(' 或 ')+'）':c?.not?'非（'+condition(c.not)+'）':'无前提';
+ const match=m=>(m.actors.length?join(m.actors):'任何主体')+' · '+({READ:'读取',MODIFY:'修改',ACCESS:'访问',DELIVER:'交付',REVIEW:'复核',CREATE:'生成'}[m.operation]??m.operation??'任意操作')+(m.objects.length?' · '+join(m.objects):' · 作用对象不限')+(m.recipients.length?' → '+join(m.recipients):'');
+ return list(w?.rules).map(r=>{let label=r.type,text='';
+  if(r.type==='INPUT_SCOPE'){label='输入范围';text='仅限 '+join(r.members)+'；不要求全部使用';}
+  if(r.type==='ENVIRONMENT'){label='环境边界';text='全部操作仅限 '+name(r.environment);}
+  if(r.type==='NORM'){label={REQUIRED:'必须',PERMITTED:'允许',NOT_REQUIRED:'无需'}[r.modality];text=name(r.action)+(r.when?'；条件：'+condition(r.when):'');}
+  if(r.type==='FORBID'){label='禁止';text=match(r.match)+(r.during_state?'；仅在'+name(r.during_state)+'有效期间':'');}
+  if(r.type==='GATE'){label='开始前提';text=match(r.match)+'；开始前必须：'+condition(r.condition);}
+  if(r.type==='CHOICE'){label='固定选择';text=name(r.actor)+'从 '+join(r.options)+(r.excluded.length?' 排除 '+join(r.excluded):'')+' 后恰选一个；选后不换'+(r.first_required?'；首次必须执行':'');}
+  if(r.type==='RETRY'){label='重试边界';text=name(r.action)+'；额外最多'+r.max_extra+'次，不含首次，跨子任务累计'+(r.previous_failure_required?'；仅直接前次失败后可重试':'');}
+  if(r.type==='DATA_USE'){label='对象使用';text=name(r.consumer)+'使用 '+name(r.object)+(r.producer?'，来自 '+name(r.producer):'，外部输入')+'；'+(r.availability==='AT_USE'?'使用点可用':'生产动作完整结束后使用');}
+  if(r.type==='DURATION'){label='总耗时';text=(r.lower_inclusive?'[':'(')+r.lower+', '+r.upper+(r.upper_inclusive?']':')')+' '+({minute:'分钟',second:'秒',hour:'小时'}[r.unit]??r.unit);}
+  if(r.type==='COMPLETION'){label='完成边界';text='当且仅当 '+condition(r.condition);}
+  if(r.type==='RESPONSE'){label='触发责任';text=name(r.trigger)+'时，必须'+(r.immediate?'立即':'')+name(r.action);}
+  if(r.type==='CONTROL_EFFECT'){label='控制状态';text=name(r.action)+'期间建立 '+name(r.state);}
+  return {id:r.id,cells:[label,text,'范围：'+name(r.scope)],sources:r.source_refs.map(id=>w.sources.find(s=>s.id===id)).filter(Boolean)};
+ });
+}
 export function directIRProcess(trace){
  const p=trace.ir??trace.proposal,a=trace.audit,t=trace.technical,c=trace.canonical,calc=trace.boundary_calculations;
  const modelCalculation=trace.llm_boundary_calculation??p?.boundary_calculation;
@@ -18,6 +38,11 @@ export function directIRProcess(trace){
  ].map(stage=>{
   if(stage.id==='technical')stage={...stage,notes:[...stage.notes,...findingNotes]};
   if(trace.request_profile==='DECLARATIVE_BOUNDARY_R01'){
+   if(trace.boundary_declaration){
+    if(stage.id==='parse')return {...stage,title:'1. LLM提取边界规则',input:'原文、解析Skill和紧凑边界合同。',work:'只输出对象、责任及边界规则。底层表达式、编号和引用由程序机械展开。',outcome:trace.boundary_declaration.rules.length+'条边界规则；'+trace.boundary_declaration.gaps.length+'项表达缺口。',headers:['边界','内容','作用域'],rows:boundaryRuleRows(trace.boundary_declaration),raw:trace.boundary_declaration};
+    if(stage.id==='audit')return {...stage,title:'3. 新会话独立核对边界',input:'完整原文、同一紧凑边界及共享合同。',work:'核对原文与边界声明，不审阅程序派生表达式，不要求执行计划。',outcome:trace.boundary_review?trace.boundary_review.verdicts.length+'项声明核对；'+trace.boundary_review.omissions.length+'项遗漏。':'等待独立审阅。',rows:list(trace.boundary_review?.verdicts).map(v=>({cells:[v.id,v.verdict,v.reason],sources:[]})),raw:trace.boundary_review};
+    if(stage.id==='technical')return {...stage,title:'4. 程序展开与技术检查',work:'按固定规则展开到既有IR，检查来源、类型、引用及审阅状态。原始边界与派生IR分别保存，不从原文补语义。'};
+   }
    if(stage.id==='parse')return {...stage,title:'1. LLM提取完整可计算边界',work:'直接生成有来源的边界IR，保留变量及条件；不替PM选择对象、编执行安排或完整见证。'};
    if(stage.id==='audit')return {...stage,title:'3. 新会话核对边界与原文',work:'核对全部来源与结构；正确节点分组确认，明确报告遗漏、多造、身份、方向及范围差异。'};
    if(stage.id==='technical')return {...stage,title:'4. 程序汇总技术校验与审阅问题'};

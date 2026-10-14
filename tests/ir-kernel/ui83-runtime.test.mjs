@@ -1,6 +1,6 @@
 import test from 'node:test';import assert from 'node:assert/strict';import fs from 'node:fs';import path from 'node:path';import os from 'node:os';import vm from 'node:vm';import Ajv from 'ajv';
 import {v2} from './domain-fixtures.mjs';import {expr,req,E} from './fixtures.mjs';
-import {parseDirectIR} from '../../research/7plus1-parser/llm-first-028/direct-ir-engine.mjs';
+import {parseLegacyIR as parseDirectIR} from './legacy-boundary-bundle.mjs';
 import {directIRBundle} from '../../research/7plus1-parser/llm-first-028/direct-ir-bundle.mjs';
 import {revisionBundle,applyIRPatch} from '../../research/7plus1-parser/llm-first-028/direct-ir-revision.mjs';
 import {createServer} from '../../research/7plus1-parser/llm-first-028/service.mjs';import {sha256} from '../../research/7plus1-parser/llm-first-028/source.mjs';
@@ -17,7 +17,7 @@ test('2.0 revision uses the same schema version and cannot replace root identity
 test('session advertises installed 2.0 resources without opening a listening socket',async()=>{
  const server=createServer({dataRoot:fs.mkdtempSync(path.join(os.tmpdir(),'boundx-ui83-session-')),productSnapshot:{contract:'candidate-ir/2.0'},catalog:{default_model:'offline',default_reasoning:'medium',models:[]}});
  const data=await new Promise(resolve=>server.emit('request',{headers:{host:'127.0.0.1:58618'},socket:{localPort:58618},method:'GET',url:'/api/session'},{setHeader(){},writeHead(status){assert.equal(status,200);},end(body){resolve(JSON.parse(body));}}));
- assert.equal(data.contract,'candidate-ir/2.0');assert.equal(data.resource_profile,'IR_DECLARATIVE_BOUNDARY_R02');assert.equal(data.request_profile,'DECLARATIVE_BOUNDARY_R01');assert.equal(data.comparison_resources.SKILL1.resource_profile,'SEMANTICS_FIRST_R02_DECLARATIVE_R02');assert.equal(server.listening,false);
+ assert.equal(data.contract,'candidate-ir/2.0');assert.equal(data.resource_profile,'BOUNDARY_RULES_R01');assert.equal(data.request_profile,'DECLARATIVE_BOUNDARY_R01');assert.equal(data.comparison_resources.SKILL1.resource_profile,'SEMANTICS_FIRST_R02_BOUNDARY_RULES_R01');assert.equal(server.listening,false);
 });
 test('kernel calculation and technical-failure shapes both render in the existing UI',()=>{
  class Element{constructor(tag,text){this.tag=tag;this.text=text;this.children=[];}append(...items){this.children.push(...items);}replaceChildren(...items){this.children=items;}}

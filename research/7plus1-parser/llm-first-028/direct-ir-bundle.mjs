@@ -7,8 +7,10 @@ export function directIRBundle(phase,{parseMethod='SKILL',contractVersion='candi
  if(!['parse','audit'].includes(phase))throw Error('DIRECT_IR_PHASE');
  parseMethod??='SKILL';if(!['SKILL','SKILL1'].includes(parseMethod))throw Error('INVALID_PARSE_METHOD');
  const skillPath=parseMethod==='SKILL1'?`skill-profiles/semantics-first-r02/boundx-semantic-${phase}/SKILL.md`:`skills/boundx-semantic-${phase}/SKILL.md`;
+ const archivedSkill=`contracts/candidate-ir-v1/legacy-skills/${parseMethod==='SKILL1'?'skill1':'skill'}/boundx-semantic-${phase}/SKILL.md`;
  const names=[skillPath,'contracts/candidate-ir-v1/CONTRACT.md','contracts/candidate-ir-v1/operator-registry.json',...(phase==='audit'?['contracts/candidate-ir-v1/candidate-ir.schema.json','contracts/candidate-ir-v1/candidate-ir-audit.schema.json']:[])];
- const resources=names.map(p=>{const text=fs.readFileSync(path.join(root,p),'utf8');return {path:p,text,sha256:sha256(text)};});
+ // Preserve the historical resource identity for explicit 1.4 replay, with frozen bytes.
+ const resources=names.map(p=>{const text=fs.readFileSync(path.join(root,p===skillPath?archivedSkill:p),'utf8');return {path:p,text,sha256:sha256(text)};});
  const schema=phase==='parse'?candidateSchema:auditSchema;
  const expected=candidateSchema.properties.contract_version.const,skill=resources[0].text;
  if(!skill.includes('name: boundx-semantic-'+phase)||!skill.includes('接口版本：'+expected)||!resources.find(r=>r.path.endsWith('CONTRACT.md'))?.text.includes(expected))throw Error('SKILL_CONTRACT_VERSION_MISMATCH');

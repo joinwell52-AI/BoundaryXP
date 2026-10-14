@@ -67,7 +67,7 @@ export function partialArtifacts(folder,record){
    calls[phase].push({thread_id:receipt.thread_id,elapsed_ms:receipt.elapsed_ms,exit_code:receipt.exit_code,usage:receipt.usage,skill_mode:receipt.skill_mode,actual_model:receipt.actual_model,schema_check:receipt.schema_check});
   }catch{}
  }
- return {revision:current,artifact_revision:artifactRevision,proposal,audit,technical,technical_precheck:read('technical-precheck.json'),ir,identity:read('proposal-mechanical-expansion.json')?.identity??null,model_calls:calls,provisional:true};
+ return {revision:current,artifact_revision:artifactRevision,proposal,audit,technical,technical_precheck:read('technical-precheck.json'),boundary_declaration:read('parse-call/boundary-declaration.json'),boundary_review:read('audit-call/boundary-review.json'),ir,identity:read('proposal-mechanical-expansion.json')?.identity??null,model_calls:calls,provisional:true};
 }
 export function savedCallHistory(folder){
  const rows=[];

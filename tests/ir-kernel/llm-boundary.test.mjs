@@ -4,7 +4,7 @@ import {checkLLMBoundary} from '../../research/7plus1-parser/llm-first-028/bound
 import {calculationOutputSchema,calculationTargets} from '../../research/7plus1-parser/llm-first-028/boundary-calculation-schema.mjs';
 import {parseDirectIR} from '../../research/7plus1-parser/llm-first-028/direct-ir-engine.mjs';
 import {replay7Plus1} from '../../research/7plus1-parser/llm-first-028/engine.mjs';
-import {directIRBundle} from '../../research/7plus1-parser/llm-first-028/direct-ir-bundle.mjs';
+import {legacyBoundaryBundle as directIRBundle} from './legacy-boundary-bundle.mjs';
 import {directIROutputSchema} from '../../research/7plus1-parser/llm-first-028/direct-ir-output-schema.mjs';
 import {sha256} from '../../research/7plus1-parser/llm-first-028/source.mjs';
 import {compactBoundarySchema} from '../../research/7plus1-parser/llm-first-028/compact-boundary.mjs';

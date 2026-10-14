@@ -60,7 +60,7 @@ export function evaluateCore(core,reference,context={},bindings={}){
    if(op==='OPERATION_OF')return (rec?.operation??(def?.operation_extent==='EXACT'&&def?.operation))?{symbol:rec?.operation??def.operation}:UNKNOWN;
    if(!roles)return UNKNOWN;const names={ACTORS_OF:['PERFORMER'],TARGETS_OF:['OBJECT','INPUT_OBJECT','RESULT','DELIVERABLE'],RECIPIENTS_OF:['RECIPIENT'],OBJECT_OF:['OBJECT','INPUT_OBJECT','RESULT','DELIVERABLE'],RECIPIENT_OF:['RECIPIENT'],ENVIRONMENT_OF:['ENVIRONMENT']}[op];
    const vals=unique(roles.filter(x=>names.includes(x.role)).map(x=>go(x.value)));
-   if(!vals.length)return UNKNOWN;
+   if(!vals.length||vals.some(unknown))return UNKNOWN;
    return op.endsWith('S_OF')?{set:vals}:vals.length===1?vals[0]:UNKNOWN;
   }
   if(op==='COUNT_STARTED'){const vals=a[0].set.map(e=>record(e)?.occurred);return vals.some(x=>x==null)?UNKNOWN:{number:String(vals.filter(Boolean).length)};}
