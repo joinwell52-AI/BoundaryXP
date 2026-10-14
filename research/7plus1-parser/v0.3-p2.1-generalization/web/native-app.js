@@ -82,6 +82,17 @@ function entry(f){
  b.append(el('small',readable(f.status)+' · 点击查看原文证据'));b.onclick=()=>record(f);return b;
 }
 function render(run){
+ if(!$('boundary-summary')){const summary=el('section');summary.id='boundary-summary';$('compiler-root').parentElement.insertAdjacentElement('beforebegin',summary);}
+ const boundarySummary=$('boundary-summary');boundarySummary.replaceChildren();
+ if(run.request_profile==='DECLARATIVE_BOUNDARY_R01'){
+  const trace=run.result,findings=[...new Map((trace?.problem_report?.findings??[]).map(f=>[[f.code,f.node_id??f.id,f.requirement_id,f.problem].join('|'),f])).values()],ready=trace?.boundary_calculations?.status==='BOUNDARY_READY';
+  boundarySummary.append(el('h2','本次边界结果'));
+  boundarySummary.append(el('h3','1. ADMIN边界'),el('p',!trace?'正在提取与核对，尚无最终结果。':ready?'已建立边界结构；7+1及来源见下方，模型审阅不等于人工验收。':'已保存候选边界，仍有待修正问题；当前不能作为完整比较基准。'));
+  boundarySummary.append(el('h3','2. 需要处理的问题'));
+  if(!trace)boundarySummary.append(el('p','等待核对结果。'));else if(findings.length)for(const f of findings.slice(0,5)){const explanation={FREE_LOCAL_VARIABLE:'规则引用了未绑定的局部变量，程序无法确定它对应哪一次或哪一个对象',NODE_REVIEW_REQUIRED:'该节点仍待核验，不能当作已确认边界'}[f.code]??f.problem;boundarySummary.append(el('p',explanation+(f.node_id?'（'+f.node_id+'）':'')+'；建议：'+f.suggestion));}else boundarySummary.append(el('p','程序未列出问题；仍需核对是否忠实完整表达原文。'));
+  if(findings.length>5)boundarySummary.append(el('p','另有'+(findings.length-5)+'项，展开处理过程查看全部。'));
+  boundarySummary.append(el('h3','3. PM规划核验'),el('p','本次没有提交PM子任务，尚未核验。边界提取完成不代表PM拆分通过。'));
+ }
  if(!$('calculation-root')){const root=el('div');root.id='calculation-root';$('slots').insertAdjacentElement('afterend',root);}
  $('calculation-root').dataset.runId=run.run_id??'';
  renderBoundaryCalculations($('calculation-root'),run.result,sources=>{highlight(sources);$('evidence').scrollIntoView({behavior:'smooth',block:'center'});},input=>jsonPost('/api/runs/'+run.run_id+'/observations',input));

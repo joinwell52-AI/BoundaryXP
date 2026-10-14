@@ -187,10 +187,10 @@ export function renderBoundaryCalculations(container,trace,onEvidence=()=>{},onO
 function renderDeclaration(container,trace){
  const c=trace.boundary_calculations,ir=trace.ir,names=new Map(['entities','variables','events','states','expressions'].flatMap(k=>(ir[k]??[]).map(n=>[n.id,n.label??n.id])));
  container.replaceChildren();container.append(el('h2','最终结果：完整可计算的任务边界'),el('p',c.status==='BOUNDARY_READY'?'边界已建立 · 等待PM规划或执行证据核验':'边界仍有待修正项'),el('p','保留原文规定的变量、范围、数量、前提与禁止；没有替PM选对象、安排时间或生成执行记录。技术检查与模型审阅不等于语义已证明正确。'));
- container.append(el('h3','确定的静态计算'));
+ const staticDetails=el('details');staticDetails.append(el('summary','查看确定的集合、数值与计算依据'));
  const value=v=>v?.object?names.get(v.object)??v.object:v?.set?'{'+v.set.map(value).join('，')+'}':v?.number!==undefined?v.number:v?.symbol!==undefined?v.symbol:JSON.stringify(v);
  const table=el('table'),head=el('tr');for(const x of ['表达式','计算值','来源'])head.append(el('th',x));table.append(head);
- for(const x of c.static_values??[]){const tr=el('tr');tr.append(el('td',(names.get(x.id)??x.id)+' · '+x.operator),el('td',value(x.value)),el('td',x.source_refs.join('、')));table.append(tr);}container.append(table);
+ for(const x of c.static_values??[]){const tr=el('tr');tr.append(el('td',(names.get(x.id)??x.id)+' · '+x.operator),el('td',value(x.value)),el('td',x.source_refs.join('、')));table.append(tr);}staticDetails.append(table);container.append(staticDetails);
  container.append(el('h3','保留的选择与未知量'));for(const v of c.variables??[])container.append(el('p',v.label+' · '+v.type+' · '+v.binding_mode+'；域：'+(names.get(v.domain?.id)??v.domain?.id??'未指定')+'；尚未替执行者赋值'));
  const rules=el('details');rules.append(el('summary','边界规则及来源（'+c.rules.length+'项；7+1视图见上方）'));for(const r of c.rules)rules.append(el('p',r.id+' · '+r.kind+' / '+r.modality+'；'+(names.get(r.body?.id)??r.body?.id)+'；来源 '+r.source_refs.join('、')));container.append(rules);
  if(c.gaps.length){container.append(el('h3','待修正问题'));for(const g of c.gaps)container.append(el('p',(g.id??g.node_id??'')+' '+(g.reason??g.message??g.code)));}

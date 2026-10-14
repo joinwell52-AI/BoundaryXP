@@ -248,9 +248,10 @@ export function renderCompilerProcess(target,run,{onEvidence=()=>{},session={}}=
  const openState=new Map(sameRun?[...target.querySelectorAll('details[data-stage]')].map(d=>[d.dataset.stage,d.open]):[]);
  const previousStage=sameRun?target._processStage:null;
  target._processRunId=run.run_id;target._processStage=run.stage;
- target._processKey=key;target.replaceChildren();const {stages}=processView(run);
+ target._processKey=key;target.replaceChildren();const view=processView(run),{stages}=view;
  target.append(node('h2','从原文到7+1：实时编译过程'),node('p','步骤实时更新，已生成的候选和审阅立即可查看；最后统一展示7+1结果。以下只读取本次实际产物，不重新解释原文。','muted'));
  const live=node('section',null,'runtime-progress');live.setAttribute('aria-label','实时编译进度');renderLive(live,run);target.append(live);
+ const details=node('details',null,'process-details');details.open=sameRun&&target._detailsOpen===true;details.ontoggle=()=>{const root=details.parentElement;if(root)root._detailsOpen=details.open;};details.append(node('summary','查看处理过程、模型记录与技术详情'));target.append(details);target=details;
  const activity=node('section',null,'session-activity');activity.setAttribute('aria-label','Codex公开会话摘要与事件');renderSessionActivity(activity,run,{openState:activityOpenState});target.append(activity);
  const settings=node('details',null,'model-panel');settings.append(node('summary','模型、'+methodLabel(run)+'与独立审阅记录'));const modelBody=node('div');renderModelInfo(modelBody,run,session);settings.append(modelBody);target.append(settings);
  for(const s of stages){const section=node('details',null,'process-stage');section.dataset.stage=s.id;
@@ -260,14 +261,14 @@ export function renderCompilerProcess(target,run,{onEvidence=()=>{},session={}}=
   const summary=node('summary');summary.append(node('span',s.title,'stage-title'),node('span',s.outcome,'stage-outcome'));section.append(summary,node('p',s.actor+(s.time?' · '+s.time:''),'stage-actor'));
   const dl=node('dl',null,'stage-explanation');for(const [title,value] of [['收到什么',s.input],['做了什么',s.work],['得到什么',s.outcome]])dl.append(node('dt',title),node('dd',value));section.append(dl);
   if(s.rows.length)section.append(table(s.headers,s.rows,onEvidence));else section.append(node('p',s.ready?'本环节没有记录条目。':'未完成 / 尚无输出，不能当作通过。','muted'));
-  if(s.id==='parse'&&s.raw&&s.raw.format!=='boundx-candidate-ir/1'){const ctx=processView(run).ctx;
+  if(s.id==='parse'&&s.raw&&view.ctx){const ctx=view.ctx;
    section.append(node('h3','LLM识别的对象与参与者'),table(['名称','候选类型'],array(s.raw.entities).map(e=>({cells:[e.label,readable(e.type)],sources:evidence(e,ctx)})),onEvidence));
    section.append(node('h3','LLM识别的条件与范围'),table(['表达式内容','结构算子'],array(s.raw.expressions).map(e=>({cells:[expressionText(e,ctx),e.op],sources:evidence(e,ctx)})),onEvidence));
   }
   for(const note of s.notes)section.append(node('p',note,'process-notice'));
   section.append(rawDetails('开发详情：本环节原始JSON',s.raw));target.append(section);
  }
- if((run.result??run.progress)?.proposal?.format!=='boundx-candidate-ir/1')renderDecision(target,run,onEvidence);
+ if(view.ctx)renderDecision(target,run,onEvidence);
 }
 export function stageDisclosure(run,id,{previousStage=null,previousOpen}={}){
  const active={PARSING:'parse',AUDITING:'audit',VALIDATING:'technical',COMPILING:run.request_profile==='DIRECT_CANDIDATE_IR_R01'?'canonical':'ir',CALCULATING:'calculus'}[run.stage];

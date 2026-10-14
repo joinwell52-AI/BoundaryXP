@@ -1,7 +1,7 @@
 // Presentation of saved typed IR only. No semantic extraction or model calls.
 const list=x=>Array.isArray(x)?x:[];
 export function directIRProcess(trace){
- const p=trace.proposal??trace.ir,a=trace.audit,t=trace.technical,c=trace.canonical,calc=trace.boundary_calculations;
+ const p=trace.ir??trace.proposal,a=trace.audit,t=trace.technical,c=trace.canonical,calc=trace.boundary_calculations;
  const modelCalculation=trace.llm_boundary_calculation??p?.boundary_calculation;
  const llmMode=!!modelCalculation||['LLM_BOUNDARY_CALCULATION_R01','LLM_BOUNDARY_CALCULATION_R02','LLM_BOUNDARY_CALCULATION_R03'].includes(trace.request_profile);
  const nodes=new Map(['entities','variables','events','states','expressions','requirements'].flatMap(k=>list(p?.[k]).map(n=>[n.id,n])));
