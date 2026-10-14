@@ -1,8 +1,14 @@
 # LLM边界计算统一方法与样例
 
-方法合同：`boundx-boundary-math/1`。运行配置：`LLM_BOUNDARY_CALCULATION_R01`。解析与审阅只加载各自Skill，但共用本文件；Skill与skill1采用同一种计算方法。IR接口仍为candidate-ir/2.0，计算是绑定本次IR的独立输出，不冒充程序Core结果。
+方法合同：`boundx-boundary-math/1`，接口修订r02。运行配置：`LLM_BOUNDARY_CALCULATION_R02`。解析与审阅只加载各自Skill，但共用本文件；Skill与skill1采用同一种计算方法。IR接口仍为candidate-ir/2.0，计算是绑定本次IR的独立输出，不冒充程序Core结果。
+
+机器证据的完整字段、通用样例与审阅目标以同版FINITE-EVIDENCE-CONTRACT.md及实际内联Schema为准。LOGIC必须绑定真实公式和布尔原子；rows=[]由程序机械枚举并核对模型给出的true_count/false_count，避免模型重复书写真值表。开始门、禁止和停止用expression_cases给正反及UNKNOWN对照；JOINT的SAT必须给完整有限证据JSON，不只给文字见证。输出紧凑JSON、简短公开推导，不反复复述合同。
+
+停止域使用ACTIVITY_CLASS、ACTIVITY_CLASSES_OF及ACTIVE_WHILE，不因操作名不同漏掉持续活动。所有事件类别和状态期间都显式提交；期间终点未知时保留UNKNOWN，不自动推定永久停止或恢复许可。下面的公开数学样例仍适用，证据接口以r02为准。
 
 ## 职责和交付
+
+有明示输入与产物时，分别列允许输入、要求/允许产物的成员与基数，以及它们按身份计算的交集和并集。内部报告消费不扩大外部输入，许可产物不变成必交；静态集合基数不冒充实际生成数量。禁止模式数量与可能发生事件数分开，引用本次真实结构给依据，不强造模板指标。
 
 LLM解释完整原文，生成有来源的IR，并完成边界建模与计算候选；独立新会话核对原文、IR、数学表达和结果。程序管理调用、校验来源/Schema/引用/单位/绑定，复核可支持的具体操作数及见证，保存模型结论、审阅和复核差异。程序不扫描原文、label或note补语义。模型结论、审阅一致、技术接受、数学复核、实际完成和业务授权分别报告。
 

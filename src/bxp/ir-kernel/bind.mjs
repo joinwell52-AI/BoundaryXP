@@ -38,6 +38,8 @@ export function bindAndTypecheck(loaded,{maxDepth=128,collectFrameErrors=false}=
    if(['RECEIVED_ANY','RECEIVED_COMPLETE'].includes(n.operator))require(ts[0]==='OBJECT'&&ts[1]==='OBJECT'&&(ts.length===2||ts[2]==='EVENT'));
    if(n.operator==='SELECT_EVENTS')require(ts[0]==='EVENT_DOMAIN'&&ts[1]==='BOOLEAN'&&n.bound_variable?.kind==='VARIABLE'&&nodes.get(n.bound_variable.id).type==='EVENT');
    if(n.operator==='COUNT_STARTED')require(ts[0]==='EVENT_DOMAIN');
+   if(n.operator==='ACTIVITY_CLASSES_OF')require(ts[0]==='EVENT');
+   if(n.operator==='ACTIVE_WHILE')require(ts[0]==='EVENT'&&ts[1]==='STATE');
    if(n.operator==='SYMBOL')require(typeof n.literal==='string');
    if(n.operator==='BOOLEAN')require(typeof n.literal==='boolean');
    if(['TRUE_AT_START','IMMEDIATE_AFTER'].includes(n.operator))require(ts[0]==='STATE'&&ts[1]==='EVENT');
@@ -54,6 +56,7 @@ export function bindAndTypecheck(loaded,{maxDepth=128,collectFrameErrors=false}=
   if(['TASK_EVENTS','SELECT_EVENTS'].includes(op))return 'EVENT';if(op==='INTEGER_RANGE')return 'INTEGER';if(op==='REAL_INTERVAL')return 'REAL';
   if(['GROUP_MEMBERS','TASK_EXTERNAL_INPUTS','ACTORS_OF','TARGETS_OF','RECIPIENTS_OF'].includes(op))return 'OBJECT';
   if(op==='SET'){const ts=n.arguments.map(a=>type(a));if(ts.some(t=>!same(t,ts[0])))fail('HETEROGENEOUS_SET',n.id);return ts[0]??'EMPTY';}
+  if(op==='ACTIVITY_CLASSES_OF')return 'OBJECT';
   if(['UNION','INTERSECTION','DIFFERENCE'].includes(op)){const ts=n.arguments.map(a=>element(a,seen)).filter(t=>t!=='EMPTY');if(ts.some(t=>!same(t,ts[0])))fail('SET_ELEMENT_TYPE',n.id);return ts[0]??'EMPTY';}
   fail('DOMAIN_ELEMENT_TYPE',r.id);
  };

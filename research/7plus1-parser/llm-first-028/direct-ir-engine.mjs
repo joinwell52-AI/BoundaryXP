@@ -7,8 +7,8 @@ import {finishDirectIR} from './direct-ir-result.mjs';
 import {renderDirectCalculations} from './direct-ir-render-results.mjs';
 import {affectedAuditTargets,targetedAuditBundle,mergeIndependentAudit} from './direct-ir-audit-merge.mjs';
 import {repairableFrameCodes} from '../../../src/bxp/ir-kernel/frames.mjs';
-import {irOnly,calculationTargets} from './boundary-calculation-schema.mjs';
-import {attachLLMCalculation} from './boundary-calculation.mjs';
+import {irOnly,calculationTargets,calculationAuditBundle} from './boundary-calculation-schema.mjs';
+import {attachLLMCalculation,checkLLMBoundary} from './boundary-calculation.mjs';
 const write=(dir,name,value)=>fs.writeFileSync(path.join(dir,name),JSON.stringify(value,null,2)+'\n');
 export async function parseDirectIR(bytes,{output,probe,model='gpt-6.1-sol',reasoning='medium',parseMethod='SKILL',signal,onProgress=()=>{},timeoutMs=null,call=callCodex,maxModelRequests=2,resourceGuard=()=>{},productSnapshot=null}={}){
  if(!output)throw Error('OUTPUT_DIRECTORY_REQUIRED');if(!Number.isSafeInteger(maxModelRequests)||maxModelRequests<2)throw Error('MODEL_REQUEST_BUDGET_EXHAUSTED');
@@ -25,14 +25,20 @@ export async function parseDirectIR(bytes,{output,probe,model='gpt-6.1-sol',reas
  const reviewInput=()=>llmCalculation?{...parsed.value,boundary_calculation:llmCalculation}:parsed.value;
  if(llmCalculation)write(dir,'llm-boundary-calculation.json',llmCalculation);
  write(dir,'candidate-ir.json',parsed.value);onProgress({stage:'PARSING',revision:0,kind:'PARSE_READY',signal:'PARSE_READY'});
- resourceGuard();signal?.throwIfAborted();onProgress({stage:'AUDITING',revision:0});let reviewed=await call({bundle:audit,source,candidate:reviewInput(),directory:path.join(dir,'audit-call'),probe,model,reasoning,signal,timeoutMs,requestBudget,...telemetry('audit')});
+ resourceGuard();signal?.throwIfAborted();onProgress({stage:'AUDITING',revision:0});let reviewed=await call({bundle:calculationAuditBundle(audit,llmCalculation),source,candidate:reviewInput(),directory:path.join(dir,'audit-call'),probe,model,reasoning,signal,timeoutMs,requestBudget,...telemetry('audit')});
  if(!parsed.receipt.thread_id||!reviewed.receipt.thread_id||parsed.receipt.thread_id===reviewed.receipt.thread_id)throw Error('AUDIT_SESSION_NOT_INDEPENDENT');
  write(dir,'audit.json',reviewed.value);onProgress({stage:'AUDITING',revision:0,kind:'AUDIT_READY',signal:'AUDIT_READY'});resourceGuard();
  if(sha256(selectedBundle('parse').sha256+selectedBundle('audit').sha256)!==fingerprint)throw Error('METHOD_CHANGED_DURING_RUN');
  onProgress({stage:'VALIDATING',revision:0});let technical=acceptCandidateIR(parsed.value,reviewed.value,source);write(dir,'technical-validation.json',technical);onProgress({stage:'VALIDATING',revision:0,kind:'TECHNICAL_READY',signal:'TECHNICAL_READY'});
  const repairableTechnical=technical.schemas.proposal.ok&&technical.schemas.audit.ok&&technical.errors.every(e=>repairableFrameCodes.has(e.code)||['DATA_CONSUMER_EVENT','DATA_CONSUMER_OBJECT_BINDING','DATA_PRODUCER_OBJECT_BINDING','EXTERNAL_DATA_HAS_TASK_PRODUCER','BOOLEAN_TYPE','MEMBERSHIP_TYPE','START_STATE_TYPE','IMMEDIATE_STATE_EVENT_TYPE'].includes(e.code));
- const calculationFeedback=(reviewed.value.calculation_reviews??[]).some(r=>r.verdict!=='SUPPORT');
- const semanticFeedback=(reviewed.value.omissions??[]).length||(reviewed.value.reviews??[]).some(r=>r.verdict!=='SUPPORT')||technical.diagnostics.some(d=>d.code==='COVERAGE_REVIEW_ISSUE')||calculationFeedback;
+ const evidenceOptions={requireWire:parse.request_profile==='LLM_BOUNDARY_CALCULATION_R02'};
+ const initialCalculation=llmCalculation?await checkLLMBoundary(parsed.value,llmCalculation,reviewed.value,technical,evidenceOptions):null;
+ const repairableCalculationCodes=new Set(['LLM_CALCULATION_EVIDENCE_REQUIRED','LLM_CALCULATION_MISMATCH','LLM_SAT_WITHOUT_CHECKABLE_WITNESS','LLM_WITNESS_INVALID','LLM_WITNESS_NOT_VERIFIED','LLM_CALCULATION_AUDIT_REFERENCE','LLM_CALCULATION_REVIEW_REQUIRED']);
+ const calculationProblems=(initialCalculation?.findings??[]).filter(x=>repairableCalculationCodes.has(x.code));
+ const calculationFeedback=(reviewed.value.calculation_reviews??[]).some(r=>r.verdict!=='SUPPORT')||calculationProblems.length>0;
+ const repairableOmissions=(reviewed.value.omissions??[]).filter(o=>!['CONTRACT_UNSUPPORTED','CLARIFICATION_REQUIRED'].includes(o.repairability));
+ const semanticFeedback=repairableOmissions.length||(reviewed.value.reviews??[]).some(r=>r.verdict!=='SUPPORT')||technical.diagnostics.some(d=>d.code==='COVERAGE_REVIEW_ISSUE')||calculationFeedback;
+ if(!semanticFeedback&&reviewed.value.omissions?.length)revisionOutcome={status:'NOT_APPLIED',reason:'SKIPPED_NON_REPAIRABLE_OMISSION',retained_revision:0,requires_review:false};
  const needsRepair=contractVersion==='candidate-ir/2.0'?technical.audit_status==='PERFORMED'&&(technical.errors.length||semanticFeedback):((reviewed.value.omissions??[]).length||technical.rows.some(r=>r.status!=='ACCEPTED')||technical.diagnostics.some(d=>d.code==='COVERAGE_REVIEW_ISSUE'));
  if(contractVersion==='candidate-ir/2.0'&&technical.audit_status==='NOT_PERFORMED')revisionOutcome={status:'NOT_APPLIED',reason:'AUDIT_NOT_PERFORMED',retained_revision:0,requires_review:true};
  if((technical.technical_ok||repairableTechnical)&&requestBudget.remaining>=2&&needsRepair){
@@ -40,6 +46,7 @@ export async function parseDirectIR(bytes,{output,probe,model='gpt-6.1-sol',reas
   const {replacements,removals,coverage_indices}=revisionPermissions(base,reviewed.value,technical);
   const problems={base_ir_sha256:sha256(JSON.stringify(base)),omissions:reviewed.value.omissions,issues:reviewed.value.issues,technical_errors:technical.errors,removable_node_ids:[...reviewed.value.reviews.filter(r=>r.verdict==='CONTRADICT'&&!r.field_path).map(r=>r.target.id),...technical.errors.filter(e=>e.code==='DATA_CONSUMER_EVENT').map(e=>e.id)],missing_review_fields:technical.rows.filter(r=>r.missing_review_fields?.length).map(r=>({id:r.id,fields:r.missing_review_fields}))};
   problems.allowed_replacement_ids=replacements;problems.removable_node_ids=removals;problems.allowed_coverage_indices=coverage_indices;
+  problems.calculation_findings=calculationProblems;
   if(llmCalculation)problems.calculation_reviews=reviewed.value.calculation_reviews??[];
   write(dir,'revision-request.json',problems);onProgress({stage:'PARSING',revision:1});
   let patched;
@@ -76,7 +83,7 @@ export async function parseDirectIR(bytes,{output,probe,model='gpt-6.1-sol',reas
   parsed={...parsed,value:applied.ir};if(patched.value.boundary_calculation!=null)llmCalculation=patched.value.boundary_calculation;
   write(dir,'proposal.json',reviewInput());write(dir,'candidate-ir.json',parsed.value);if(llmCalculation)write(dir,'llm-boundary-calculation.json',llmCalculation);onProgress({stage:'PARSING',revision:1,kind:'PARSE_READY',signal:'PARSE_READY'});
   const targets=affectedAuditTargets(parsed.value,applied.changed,reviewed.value).filter(id=>['entities','variables','events','states','expressions','requirements'].some(k=>parsed.value[k].some(n=>n.id===id))),targeted=!llmCalculation&&!reviewed.value.omissions?.length&&!removals.length&&!applied.changed.some(c=>['issues','coverage','sequences'].includes(c.collection));write(dir,'audit-targets.json',{targets,mode:targeted?'CHANGED_AND_DEPENDENT':'FULL_IR_AND_CALCULATION_REVIEW'});
-  const next=nextAuditResponse=await call({bundle:targeted?targetedAuditBundle(audit,targets):audit,source,candidate:reviewInput(),directory:path.join(dir,'audit-call'),probe,model,reasoning,signal,timeoutMs,requestBudget,...telemetry('audit')});
+  const next=nextAuditResponse=await call({bundle:calculationAuditBundle(targeted?targetedAuditBundle(audit,targets):audit,llmCalculation),source,candidate:reviewInput(),directory:path.join(dir,'audit-call'),probe,model,reasoning,signal,timeoutMs,requestBudget,...telemetry('audit')});
   if(!next.receipt.thread_id||[parsed.receipt.thread_id,patched.receipt.thread_id,reviewed.receipt.thread_id].includes(next.receipt.thread_id))throw Error('AUDIT_SESSION_NOT_INDEPENDENT');
   write(dir,'independent-audit.json',next.value);
   if(contractVersion==='candidate-ir/2.0'&&(!(next.value.reviews??[]).length||targets.some(id=>!next.value.reviews.some(r=>r.target.id===id))))throw Error('REVISION_AUDIT_INCOMPLETE');
@@ -97,7 +104,7 @@ export async function parseDirectIR(bytes,{output,probe,model='gpt-6.1-sol',reas
  onProgress({stage:'COMPILING',revision});
  const completed=await finishDirectIR(parsed.value,technical,revisionOutcome);
  if(llmCalculation){
-  await attachLLMCalculation(completed,parsed.value,llmCalculation,reviewed.value);
+  await attachLLMCalculation(completed,parsed.value,llmCalculation,reviewed.value,evidenceOptions);
   write(output,'llm-boundary-calculation.json',llmCalculation);write(output,'calculation-verification.json',completed.boundary_calculations);write(output,'program-boundary-calculations.json',completed.program_boundary_calculations);
  }
  write(output,'final-audit-binding.json',{ir_sha256:sha256(JSON.stringify(parsed.value)),audit_sha256:sha256(JSON.stringify(reviewed.value)),parse_session:parsed.receipt.thread_id,audit_session:reviewed.receipt.thread_id,revision_outcome:revisionOutcome});

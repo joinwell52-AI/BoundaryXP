@@ -6,6 +6,7 @@ export function frameDiagnostics(ir,{nodes,types,ref,dimensions}){
  const node=r=>r?nodes.get(ref(r).id):null;
  const same=(a,b)=>a?.kind===b?.kind&&ref(a).id===ref(b).id;
  const incompatible=(value,roles)=>value?.kind==='ENTITY'&&roles.length>0&&roles.every(r=>r.kind==='ENTITY'&&!same(value,r));
+ for(const e of ir.events)for(const r of e.roles)if(r.role==='ACTIVITY_CLASS'&&(r.value.kind!=='ENTITY'||node(r.value)?.kind!=='ACTIVITY_CLASS'))issue('ACTIVITY_CLASS_BINDING',e.id,'roles');
  for(const r of ir.requirements){
   if(['EVENT_NORM','STOP'].includes(r.kind)&&type(r.subject)!=='EVENT')issue('EVENT_NORM_SUBJECT_TYPE',r.id,'subject');
   if(r.kind==='TOTAL_DURATION'){
@@ -35,3 +36,4 @@ export function frameDiagnostics(ir,{nodes,types,ref,dimensions}){
  return errors;
 }
 export const repairableFrameCodes=new Set(['EVENT_NORM_SUBJECT_TYPE','DURATION_VARIABLE_REQUIRED','DURATION_SCOPE_BINDING','DURATION_TIME_UNIT_REQUIRED','VIEW_REQUIREMENT_MISMATCH','DATA_USE_FRAME_TYPE','EXTERNAL_DATA_HAS_TASK_PRODUCER','UNEXPECTED_DATA_USE','RECEIPT_RECEIVER_BINDING','RECEIPT_ARTIFACT_BINDING']);
+repairableFrameCodes.add('ACTIVITY_CLASS_BINDING');

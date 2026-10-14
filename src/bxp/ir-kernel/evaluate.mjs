@@ -1,5 +1,6 @@
 import {UNKNOWN,unknown,and,or,not,unique,identity,compare,add,toBase,stable} from './values.mjs';import {fail} from './diagnostics.mjs';import {resolveInstance,instanceDefinition} from './instances.mjs';
 import {planEvent,taskContains} from './events.mjs';
+import {controlPeriods,activeWhile} from './control-periods.mjs';
 export function evaluateCore(core,reference,context={},bindings={}){
  const nodes=core.nodes,plan=context.plan??{},records=plan.events??[],budget={steps:0,max:context.maxSteps??100000};
  const find=(r,env)=>r.kind==='VARIABLE'?(Object.hasOwn(env,r.id)?env[r.id]:Object.hasOwn(context.variables??{},r.id)?context.variables[r.id]:UNKNOWN):r.kind==='EVENT'?{event:r.id}:r.kind==='ENTITY'?{object:r.id}:null;
@@ -26,9 +27,19 @@ export function evaluateCore(core,reference,context={},bindings={}){
   if(op==='TASK_EVENTS'){
    const task=a[0].event,open=plan.completeness?.kind!=='EXACT_SNAPSHOT'||plan.completeness.task_id!==core.root_task;
    const belongs=id=>taskContains(core,id,task);
-   return {set:records.filter(e=>n.literal===false?e.task_id===task:belongs(e.task_id)).map(e=>({event:e.id})),...(open?{open:true}:{})};
+   return {set:records.filter(e=>nodes[e.template_id??e.id]?.kind!=='TASK'&&(n.literal===false?e.task_id===task:belongs(e.task_id))).map(e=>({event:e.id})),...(open?{open:true}:{})};
   }
   if(op==='TASK_EXTERNAL_INPUTS')return Object.hasOwn(plan.external_inputs??{},a[0].event)?{set:unique(plan.external_inputs[a[0].event].map(id=>({object:id})))}:UNKNOWN;
+  if(op==='ACTIVE_WHILE'){
+   if(a.some(unknown))return UNKNOWN;
+   if(record(a[0])?.occurred===false)return false;
+   const entry=context.states?.[a[1].state]??(a[1].fallback?context.states?.[a[1].fallback]:null);
+   return activeWhile(record(a[0]),controlPeriods(entry,core.root_task));
+  }
+  if(op==='ACTIVITY_CLASSES_OF'){
+   const roles=record(a[0])?.roles??eventDef(a[0])?.roles,classes=roles?.filter(r=>r.role==='ACTIVITY_CLASS');
+   return classes?.length?{set:unique(classes.map(r=>go(r.value)))}:UNKNOWN;
+  }
   if(a.some(unknown))return UNKNOWN;
   if(a.some(x=>x?.open)&&['UNION','INTERSECTION','DIFFERENCE','EQ','CARDINALITY','COUNT_STARTED'].includes(op))return UNKNOWN;
   const num=x=>x.number??fail('NUMERIC_VALUE_REQUIRED',n.id);

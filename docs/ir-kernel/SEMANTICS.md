@@ -60,3 +60,11 @@ EVALUATE 保留三值事实；SAT 使用符号变量求一个满足安排。精�
 SAT 模型必须逐项回到 Core 检查；模型损坏或漏约束时不得返回已验证 SAT。UNSAT 保留 SMT-LIB、断言映射和冲突核，标 BACKEND_RESULT；没有一般独立证书检查器，不标 CERTIFICATE_CHECKED。
 
 任何结果的 business_decision、execution_authorization 均为 null。Schema、模型自审、程序可满足与原文语义完整正确是四件不同的事。
+
+## r04：活动分类与控制状态期间
+
+ACTIVITY_CLASS实体是活动类别，事件ACTIVITY_CLASS角色给出显式归属；ACTIVITY_CLASSES_OF读集合，缺少归属是UNKNOWN。类别不能从operation、label或note推导。TASK_EVENTS排除TASK载体记录，仍包含所属动作、后代任务动作及开放域未知性。
+
+ACTIVE_WHILE(event,state)在明确完整的有限任务时间域上检查事件占用与状态期间的交集。期间字段及端点由FINITE-EVIDENCE-CONTRACT.md规定；终态false不是历史全假，未知终点不推定无限或恢复。持续事件占用[start,end)，零时长事件占其时点；控制期间开闭端点按显式数学查询。两个求值后端使用相同语义，匹配未知保持UNKNOWN或UNSUPPORTED，不获得许可。
+
+有限数学见证通过evidence-query.mjs机械绑定到Core。对象/生产者及状态/主体键由程序整理，单位按精确比例转换；明确完整查询检查全部IR要求、变量域、时间/事件状态及身份，不接受requirements子集。模型布尔计数可提交绑定与空rows，程序枚举并复核；不因此补源文缺失语义。

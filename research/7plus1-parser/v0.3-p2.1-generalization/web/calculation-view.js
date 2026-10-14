@@ -187,14 +187,19 @@ function renderLLMCalculation(container,trace){
  const c=trace.boundary_calculations,p=c.proposal;
  container.append(el('h3','LLM完整边界计算候选：'+(p?.joint?.result??'没有有效结果')),el('p','模型负责建模与计算，新会话独立审阅；程序检查结构、来源和可验证操作数。模型结论与程序复核等级分开，本页不签发业务授权。'));
  if(!p?.joint){container.append(el('pre',JSON.stringify(c.findings??[],null,2)));return;}
+ const proven=c.verification==='CORE_WITNESS_CHECKED_FOR_DECLARED_IR';
+ container.append(el('h3','程序最终复核'),el('p',proven?'本次有限数学见证满足全部声明IR约束；模型SAT结论已得到Core见证复核。':'本次仍有未完成的计算验证，具体缺口见下方。'),el('p','已复核 '+(c.checks??[]).filter(x=>x.status==='VERIFIED').length+'/'+(c.checks??[]).length+' 项计算；完整见证核对 '+(c.witness_check?.rows??[]).length+' 条要求。原文解释、有限可满足性、现实完成和执行授权分别判断。'));
  container.append(el('h3','完整边界公式 Φ'),el('p',p.joint.formula),el('p','求解域：'+p.joint.domain+'；方法：'+p.method_version+'；模型审阅：'+(c.independent_review_complete?'已覆盖计算目标':'仍有缺审或反对项')));
  const constraints=el('details');constraints.open=true;constraints.append(el('summary','原文各项边界如何进入 Φ（'+p.constraints.length+'项）'));
  for(const x of p.constraints)constraints.append(el('p',x.id+' · '+x.views.join('/')+'：'+x.formula+'；来源 '+x.source_refs.join('、')));container.append(constraints);
  for(const x of p.calculations){const section=el('section');section.className='calculation-card';section.append(el('h3',x.title),el('p','计算方法：'+x.method),el('p','公式：'+x.formula),el('strong','LLM结果：'+x.result));for(const step of x.steps)section.append(el('p',step));if(x.assumptions.length)section.append(el('p','建模假设：'+x.assumptions.join('；')));const checked=c.checks?.find(r=>r.id===x.id);section.append(el('p','程序复核：'+(checked?.status??'未验证')+'；仅针对所给操作数，不能代替原文准确性核对。'));const evidence=el('details');evidence.append(el('summary','操作数与结构化证据'),el('pre',JSON.stringify(x.evidence,null,2)));section.append(evidence);container.append(section);}
  container.append(el('h3','联合结论的依据'));for(const s of p.joint.proof_steps)container.append(el('p',s));if(p.joint.assumptions.length)container.append(el('p','联合假设：'+p.joint.assumptions.join('；')));
  if(p.joint.witness_query_json){const d=el('details');d.append(el('summary','LLM数学见证（不是实际执行记录）'),el('pre',p.joint.witness_query_json));container.append(d);}
- container.append(el('p','程序见证核验：'+(c.witness_check?.result??'未提供或未支持')));
- const program=c.program_recheck;if(program)container.append(el('h3','与程序计算的对照'),el('p','程序结果：'+program.result+'；验证等级：'+program.verification+'。程序的支持范围可能小于LLM给出的完整公式；不以局部一致宣布整案通过。'));
+ container.append(el('p','程序见证核验：'+({SATISFIED:'全部声明要求满足',VIOLATED:'存在违反要求',UNKNOWN:'有要求尚不能确定'}[c.witness_check?.result]??'未提供或未支持')));
+ if(c.witness_check?.rows){const d=el('details');d.append(el('summary','完整见证：逐要求实际核验结果'));for(const r of c.witness_check.rows){const requirement=(trace.ir?.requirements??[]).find(x=>x.id===r.id);d.append(el('p',(requirement?.note||r.id)+' · '+r.id+'：'+(r.value===true?'满足':r.value===false?'违反':'未知')));}container.append(d);}
+ const tables=(c.checks??[]).flatMap(x=>(x.checks??[]).filter(y=>y.reason==='ALL_BOOLEAN_ASSIGNMENTS_RECOMPUTED').map(y=>({id:x.id,...y})));
+ for(const t of tables){const d=el('details');d.append(el('summary','程序穷举真值表：'+t.id+' · '+t.true_count+'满足 / '+t.false_count+'违反'));for(const r of t.rows??[])d.append(el('p',r.values.map(v=>v?'真':'假').join('，')+' → '+(r.result?'真':'假')));container.append(d);}
+ const program=c.program_recheck;if(program){const d=el('details');d.append(el('summary','未提供见证时的探索结果（历史诊断保留）'),el('p','结果：'+program.result+'；验证等级：'+program.verification+'。这是查询前探索，不能替代上面的完整见证核验。'));container.append(d);}
  const reviews=el('details');reviews.append(el('summary','独立模型如何核对计算（'+(c.calculation_reviews??[]).length+'项）'));for(const r of c.calculation_reviews??[])reviews.append(el('p',r.target+'：'+r.verdict+'；'+r.reason));container.append(reviews);
  const unresolved=[...(c.findings??[]),...p.unresolved,...p.joint.limitations.map(reason=>({reason}))];container.append(el('h3','尚未确认的部分'));if(!unresolved.length)container.append(el('p','没有记录到局部问题；仍未将模型结论认证为完整数学证明。'));for(const f of unresolved)container.append(el('p',(f.code??f.id??'待验证')+'：'+(f.reason??'见结构检查记录')+(f.suggestion?'；建议：'+f.suggestion:'')));
  const raw=el('details');raw.append(el('summary','同源JSON：模型原答、审阅及程序复核'),el('pre',JSON.stringify(c,null,2)));container.append(raw);

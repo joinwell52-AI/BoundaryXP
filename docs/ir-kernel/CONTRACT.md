@@ -1,6 +1,10 @@
 # BoundX候选IR共享合同
 
-接口版本：`candidate-ir/2.0`。资源修订：`r03-llm-boundary`。本文件是运行时解析和独立审阅共同使用的完整接口合同；数学参考语义见同版SEMANTICS.md。Schema和算子注册表由src/bxp/ir-kernel/contract-registry.mjs唯一导出。旧1.4资源、历史响应和成绩不自动升级。
+接口版本：`candidate-ir/2.0`。资源修订：`r04-verifiable-boundary`。本文件是运行时解析和独立审阅共同使用的完整接口合同；数学参考语义见同版SEMANTICS.md。Schema和算子注册表由src/bxp/ir-kernel/contract-registry.mjs唯一导出。旧资源、历史响应和成绩不自动升级。
+
+当前运行配置LLM_BOUNDARY_CALCULATION_R02。计算证据与审阅目标的唯一合同见同版FINITE-EVIDENCE-CONTRACT.md，有限证据Schema由src/bxp/ir-kernel/evidence-query.mjs唯一导出并实际内联。SAT须给完整有限见证；计数、条件和禁止须给可复核证据，不能只留下文字。审阅目标逐来源使用coverage.<source_ref>，不另造整体coverage目标。只有已明确可修的问题进入有界修订，正常接口未支持或局部澄清不会启动空补丁调用。
+
+新增ACTIVITY_CLASS角色及ACTIVITY_CLASSES_OF(event)、ACTIVE_WHILE(event,state)：活动归属由LLM从原文明示/上下文解释并独立审阅，Core只按该结构与查询中的完整状态期间计算重叠。终态false不代表从未停止；未知终点不补成永久停止或恢复。全称域、持续活动、零时长事件、控制端点和应急动作的类别须显式区分。
 
 ## 职责与资源
 

@@ -19,5 +19,9 @@ export function samples(){
  const selected=add('SELECT_EVENTS',[events,yes],null,null,V('ev'));add('COUNT_STARTED',[selected]);add('SYMBOL',[],'INVOKE');
  for(const op of ['RECEIVED_ANY','RECEIVED_COMPLETE'])add(op,[O('person'),O('a')]);add('ACTIVE_DURING',[T('job'),time,until]);add('ACTIVE_SINCE',[T('job'),time]);
  const query={plan:{...plan([{id:'job',task_id:'task',operation:'INVOKE',occurred:true,completed:true,succeeded:false,start:'2',end:'4'}]),external_inputs:{task:['a','b']}},states:{state:{value:true,established_at:'1',unit:'second'}},receipts:[{receiver:'person',artifact:'a',any:true,complete:false}]};
+ ir.entities.push(entity('activity','ACTIVITY_CLASS'));
+ ir.events.find(e=>e.id==='job').roles.push({role:'ACTIVITY_CLASS',value:O('activity'),source_refs:['s']});
+ add('ACTIVITY_CLASSES_OF',[T('job')]);add('ACTIVE_WHILE',[T('job'),S('state')]);
+ query.states.state.periods={completeness:'EXACT_FOR_TASK_HORIZON',task_id:'task',intervals:[{start:'3',end:'8',unit:'second',start_inclusive:true,end_inclusive:false}]};
  return {ir,entries,query};
 }

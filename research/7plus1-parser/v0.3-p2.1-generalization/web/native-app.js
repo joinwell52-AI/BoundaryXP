@@ -36,7 +36,7 @@ function updateViewedSettings(){
 }
 function updateResourceInfo(){
  const mode=$('compile-method')?.value,r=session?.comparison_resources?.[mode]?.selected_resources,target=$('compile-resource-info');if(!target)return;
- target.textContent=(session.request_profile==='LLM_BOUNDARY_CALCULATION_R01'?'LLM负责IR与完整边界计算，新会话独立审阅；程序校验、复核并展示结果差异。':session.request_profile==='DIRECT_CANDIDATE_IR_R01'?'直接候选IR：模型解释原文并输出可计算结构，新会话独立审阅；程序校验后形成7+1视图并计算，不另造语义IR。':'历史语义接口。')+(r?'解析正文资源 '+r.parse.characters+' 字符；审阅正文资源 '+r.audit.characters+' 字符（不含通道Schema及本次候选）。':'')+' 请求配置 '+(session.request_profile??'未记录')+'；尚未通过完整产品语义验收。';
+ target.textContent=(['LLM_BOUNDARY_CALCULATION_R01','LLM_BOUNDARY_CALCULATION_R02'].includes(session.request_profile)?'LLM负责IR与完整边界计算，新会话独立审阅；程序校验、复核并展示结果差异。':session.request_profile==='DIRECT_CANDIDATE_IR_R01'?'直接候选IR：模型解释原文并输出可计算结构，新会话独立审阅；程序校验后形成7+1视图并计算，不另造语义IR。':'历史语义接口。')+(r?'解析正文资源 '+r.parse.characters+' 字符；审阅正文资源 '+r.audit.characters+' 字符（不含通道Schema及本次候选）。':'')+' 请求配置 '+(session.request_profile??'未记录')+'；完整产品语义验收状态另见版本详情。';
 }
 const el=(tag,value,cls)=>{const e=document.createElement(tag);if(value!==undefined)e.textContent=value;if(cls)e.className=cls;return e;};
 function configureRuntimeVersion(){
@@ -98,10 +98,10 @@ function render(run){
  for(const id of ['compile-model','compile-reasoning','compile-method','source-example','load-example'])if($(id))$(id).disabled=busy;
  if(busy){if($('compile-method')&&run.parse_method)$('compile-method').value=run.parse_method;if($('compile-model')&&run.requested_model)$('compile-model').value=run.requested_model;if($('compile-reasoning')&&run.requested_reasoning)$('compile-reasoning').value=run.requested_reasoning;}
  updateViewedSettings();
- const stageTitle=run.request_profile==='LLM_BOUNDARY_CALCULATION_R01'?({PARSING:'LLM正在识别IR与计算边界',AUDITING:'新会话正在核对IR与计算结果',CALCULATING:'程序正在复核并整理结果'}[run.stage]??stages[run.stage]):stages[run.stage];
+ const stageTitle=['LLM_BOUNDARY_CALCULATION_R01','LLM_BOUNDARY_CALCULATION_R02'].includes(run.request_profile)?({PARSING:'LLM正在识别IR与计算边界',AUDITING:'新会话正在核对IR与计算结果',CALCULATING:'程序正在复核并整理结果'}[run.stage]??stages[run.stage]):stages[run.stage];
  $('run-id').textContent=run.run_id+' · '+run.source_sha256;$('status').textContent=(stageTitle??run.stage)+' · 已用 '+Math.round(run.elapsed_ms/1000)+' 秒'+(run.error?' · '+(errors[run.error.code]??run.error.code):'');$('status').className=run.status==='FAILED'?'failure':'';
  $('engine-info').textContent=run.engine+' · '+(run.compiler_revision??'历史编译版本，详见Trace')+' · 合同 '+run.contract+' · '+(run.parse_method??'SKILL')+' / '+(run.resource_profile??'原资源')+' · 请求 '+run.requested_model+' · 实际服务模型 '+(run.actual_model??'未披露');
- $('evidence').textContent=run.source_text;$('trace-colors').textContent=run.source_text;$('trace-summary').textContent=run.request_profile==='LLM_BOUNDARY_CALCULATION_R01'?'原文 → 解析Skill / Codex：IR＋完整边界计算 → 审阅Skill / 新会话：核对两者 → 程序校验与复核 → 固定7+1及结果对照；模型结论不是数学认证或业务授权':run.request_profile==='DIRECT_CANDIDATE_IR_R01'?'原文 → 解析Skill / Codex候选IR → 审阅Skill / 新会话 → 技术校验 → 固定7+1 → 程序边界计算；技术接受不是业务授权':'历史流程：原文 → 语义候选 → 独立审阅 → 技术校验 → IR → 7+1 → 计算';
+ $('evidence').textContent=run.source_text;$('trace-colors').textContent=run.source_text;$('trace-summary').textContent=['LLM_BOUNDARY_CALCULATION_R01','LLM_BOUNDARY_CALCULATION_R02'].includes(run.request_profile)?'原文 → 解析Skill / Codex：IR＋完整边界计算 → 审阅Skill / 新会话：核对两者 → 程序校验与证据复核 → 固定7+1及数学结果；技术接受不是业务授权':run.request_profile==='DIRECT_CANDIDATE_IR_R01'?'原文 → 解析Skill / Codex候选IR → 审阅Skill / 新会话 → 技术校验 → 固定7+1 → 程序边界计算；技术接受不是业务授权':'历史流程：原文 → 语义候选 → 独立审阅 → 技术校验 → IR → 7+1 → 计算';
  $('input').value=run.source_text;uploaded=null;count();
  const result=run.result;for(const id of ['export','export-json','trace-html','trace-md','trace-json'])$(id).disabled=!result;
  renderModelInfo($('model-info'),run,session);

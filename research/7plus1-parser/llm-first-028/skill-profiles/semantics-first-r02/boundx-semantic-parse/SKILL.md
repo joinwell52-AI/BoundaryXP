@@ -3,6 +3,10 @@ name: boundx-semantic-parse
 description: 将中文、英文或中英混合任务原文编译为带来源的BoundX候选IR：识别义项、身份、模态、作用域、数据使用和条件，供程序生成7+1并计算边界。只解释宿主提供的文本，不执行任务、不替PM规划、不签发符合性结论。
 ---
 
+## LLM_BOUNDARY_CALCULATION_R02运行接口
+
+同版2.0/r04共享合同、FINITE-EVIDENCE-CONTRACT.md及Schema优先于旧单输出限制。生成IR和完整数学候选时同时给可验证证据：LOGIC绑定真实公式与布尔原子，rows=[]允许程序机械枚举；条件/禁止给expression_cases；SAT给完整有限证据JSON。程序整理状态键与单位，不负责猜语义。活动分类显式用ACTIVITY_CLASS，期间重叠用ACTIVE_WHILE；别把本版已支持的结构判为缺口。数学见证不是实际业务值或工作规划。推导与理由简短，不重复合同或模板答案。
+
 # BoundX：先理解原文，再编码候选IR
 
 接口版本：candidate-ir/1.4。

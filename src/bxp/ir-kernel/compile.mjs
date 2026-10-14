@@ -59,11 +59,26 @@ export function compileQuery(core,query={}){
   if(op==='BOOLEAN')return bool(n.literal);if(op==='SYMBOL')return {symbol:n.literal};
   if(op==='GROUP_MEMBERS')return set(nodes[ar[0].id].members.map(r=>({value:go(r),guard:bool(true)})));
   const a=ar.map(go);
+  if(op==='ACTIVITY_CLASSES_OF'){
+   const classes=(rec(a[0])?.roles??def(a[0])?.roles??[]).filter(r=>r.role==='ACTIVITY_CLASS');
+   if(!classes.length)fail('ACTIVITY_CLASS_UNKNOWN',n.id,null,'CAPABILITY');
+   return set(classes.map(r=>({value:go(r.value),guard:bool(true)})));
+  }
+  if(op==='ACTIVE_WHILE'){
+   const occurred=field(a[0],'occurred','Bool');if(occurred.op==='const'&&!occurred.value)return bool(false);
+   const entry=query.states?.[a[1].state]??(a[1].fallback?query.states?.[a[1].fallback]:null),periods=controlPeriods(entry,core.root_task);
+   if(periods?.unknown)fail('CONTROL_PERIODS_UNKNOWN',n.id,null,'CAPABILITY');
+   const start=field(a[0],'start','Real'),end=field(a[0],'end','Real'),point=term('eq',[start,end]);
+   return term('and',[occurred,term('or',periods.map(p=>term('and',[
+    term('or',[term('gt',[end,num(p.start)]),...(p.start_inclusive?[term('and',[point,term('eq',[start,num(p.start)])])]:[])]),
+    term(p.end_inclusive?'le':'lt',[start,num(p.end)])
+   ])))]);
+  }
   if(op==='SET')return set(a.map(value=>({value,guard:bool(true)})));
   if(op==='TASK_EVENTS'){
    if(plan.completeness?.kind!=='EXACT_SNAPSHOT'||plan.completeness.task_id!==core.root_task)fail('OPEN_EVENT_DOMAIN',n.id,null,'CAPABILITY');
    const belongs=id=>taskContains(core,id,a[0].event);
-   return set(plan.events.filter(e=>n.literal===false?e.task_id===a[0].event:belongs(e.task_id)).map(e=>({value:{event:e.id},guard:bool(true)})));
+   return set(plan.events.filter(e=>nodes[e.template_id??e.id]?.kind!=='TASK'&&(n.literal===false?e.task_id===a[0].event:belongs(e.task_id))).map(e=>({value:{event:e.id},guard:bool(true)})));
   }
   if(op==='TASK_EXTERNAL_INPUTS'){if(!Object.hasOwn(plan.external_inputs??{},a[0].event))fail('INPUT_DOMAIN_NOT_GIVEN',n.id,null,'CAPABILITY');return set(plan.external_inputs[a[0].event].map(id=>({value:{object:id},guard:bool(true)})));}
   if(op==='INTEGER_RANGE'){if(a.some(x=>x.op!=='const'))fail('DYNAMIC_ENUMERATION_DOMAIN',n.id,null,'CAPABILITY');const lo=BigInt(a[0].value),hi=BigInt(a[1].value);if(hi-lo>10000n)fail('INSTANCE_LIMIT',n.id,null,'RESOURCE');return set(Array.from({length:Number(hi>=lo?hi-lo+1n:0n)},(_,i)=>({value:num(lo+BigInt(i),'Int'),guard:bool(true)})));}
@@ -165,3 +180,4 @@ export function compileQuery(core,query={}){
  const uniqueAssertions=[...new Map(assertions.map(a=>[a.id,a])).values()];
  return {format:'boundx-kernel-problem/1',core_sha256:digest(stable(core)),declarations,assertions:uniqueAssertions,formulas,query_scope:{kind:plan.completeness?.kind??'DECLARED_SYMBOLS',task_id:core.root_task,events:plan.events.map(e=>e.id),completeness:plan.completeness??null},plan,query,term_count:count.n};
 }
+import {controlPeriods} from './control-periods.mjs';
