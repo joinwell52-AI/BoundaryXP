@@ -2,7 +2,7 @@
 import fs from 'node:fs';import path from 'node:path';import {fileURLToPath,pathToFileURL} from 'node:url';import {execFileSync} from 'node:child_process';import {createHash} from 'node:crypto';
 import {lockProduct} from './resources.mjs';
 import {dictionaryResourcePaths} from '../../research/7plus1-parser/llm-first-028/dictionaries.mjs';
-export const candidateVersion='0.1.0-candidate.031-r1.2-ui.105';
+export const candidateVersion='0.1.0-candidate.031-r1.2-ui.106';
 const root=path.resolve(path.dirname(fileURLToPath(import.meta.url)),'../..'),hash=b=>createHash('sha256').update(b).digest('hex');
 const tree=directory=>fs.readdirSync(path.join(root,directory),{withFileTypes:true}).flatMap(e=>e.isDirectory()?tree(directory+'/'+e.name):e.isFile()?[directory+'/'+e.name]:[]);
 export function buildCandidate(output=path.join(root,'.boundx/products',candidateVersion)){

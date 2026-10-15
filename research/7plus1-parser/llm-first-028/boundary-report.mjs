@@ -4,7 +4,7 @@ import fs from 'node:fs';import path from 'node:path';
 import {prepareSource,sha256} from './source.mjs';
 import {callCodex,probeCodex} from './provider.mjs';
 import {modelSignal} from './observability.mjs';
-import {selectDictionaries,dictionaryIdentity,dictionaryInstructions,verifyDictionarySnapshot} from './dictionaries.mjs';
+import {selectDictionaries,dictionaryIdentity,dictionaryInstructions,verifyDictionarySnapshot,scanDictionaries,dictionaryScanInstructions} from './dictionaries.mjs';
 export const reportProfile='BOUNDARY_REPORT_R01';
 export function boundaryReportBundle(phase,{parseMethod='SKILL'}={}){
  if(!['parse','audit'].includes(phase)||!['SKILL','SKILL1'].includes(parseMethod))throw Error('INVALID_REPORT_RESOURCE_SELECTION');
@@ -21,8 +21,10 @@ export async function parseBoundaryReport(bytes,{output,probe,model='gpt-6.1-sol
  if(fs.existsSync(path.join(output,'source.txt')))throw Error('OUTPUT_ALREADY_EXISTS');
  resourceGuard();signal?.throwIfAborted();fs.mkdirSync(output,{recursive:true});
  const snapshot=selectDictionaries(dictionaries),selection=dictionaryIdentity(snapshot);
- const withDictionary=phase=>{const b=bundleFactory(phase,{parseMethod}),text=b.text+dictionaryInstructions(snapshot);return {...b,text,sha256:sha256(text),dictionary_snapshot:snapshot};};
- const source=prepareSource(bytes),parse=withDictionary('parse'),audit=withDictionary('audit'),fingerprint=sha256(parse.sha256+audit.sha256);
+ const source=prepareSource(bytes),scan=scanDictionaries(snapshot,source.text);
+ const withDictionary=phase=>{const b=bundleFactory(phase,{parseMethod}),text=b.text+dictionaryInstructions(snapshot)+dictionaryScanInstructions(scan);return {...b,text,sha256:sha256(text),dictionary_snapshot:snapshot};};
+ const parse=withDictionary('parse'),audit=withDictionary('audit'),fingerprint=sha256(parse.sha256+audit.sha256);
+ write(output,'dictionary-scan.json',scan);
  write(output,'dictionary-selection.json',selection);write(output,'dictionary-snapshot.json',snapshot);
  fs.writeFileSync(path.join(output,'source.txt'),bytes);write(output,'source.json',source);
  write(output,'selected-resources.json',{parse_method:parseMethod,request_profile:reportProfile,resource_profile:parse.resource_profile,sha256:fingerprint,resources:{parse:parse.resources.map(({text,...r})=>r),audit:audit.resources.map(({text,...r})=>r)}});
@@ -54,6 +56,8 @@ export async function parseBoundaryReport(bytes,{output,probe,model='gpt-6.1-sol
  const chinese=parsed.value+'\n\n---\n\n## 独立LLM审阅（保留原文）\n\n'+reviewed.value+'\n\n---\n\n程序已核对回执、版本绑定及独立会话；未自动证明边界完整性或计算正确性。尚未核验PM规划。\n';
  const final={format:'boundx-boundary-report-trace/1',pipeline:reportProfile,request_profile:reportProfile,resource_profile:parse.resource_profile,parse_method:parseMethod,product_snapshot:productSnapshot,source,proposal,audit:review,technical,canonical,chinese,boundary_calculations,model_calls:{parse:parsed.attempts,audit:reviewed.attempts},revision:0,report:parsed.value,review:reviewed.value,model_resource_digests:[...parse.resources,...audit.resources].map(({path,sha256})=>({path,sha256})),business_decision:null,execution_authorization:null};
  final.dictionaries=selection;
+ final.dictionary_scan=scan;
+ final.chinese+='\n程序语义库扫描：命中 '+scan.matches.length+' 处，涉及 '+scan.entries.length+' 个候选词条。扫描仅提示查询入口，不代表词义确认；完整位置和版本见 dictionary_scan。\n';
  final.dictionary_lookups={parse:parsed.attempts.flatMap(r=>r.dictionary_lookups??[]),audit:reviewed.attempts.flatMap(r=>r.dictionary_lookups??[])};
  final.chinese+='\n## 本次字典\n\n'+(selection.packs.map(p=>`${p.layer}：${p.label}；${p.id}；SHA256 ${p.sha256}`).join('\n\n')||'未启用')+'\n\n生成实际查询 '+final.dictionary_lookups.parse.length+' 次；审阅实际查询 '+final.dictionary_lookups.audit.length+' 次。选中不代表实际查阅。\n';
  write(output,'final-audit-binding.json',{source_sha256:source.sha256,report_sha256:proposal.sha256,review_sha256:review.sha256,parse_session:parsed.receipt.thread_id,audit_session:reviewed.receipt.thread_id});

@@ -9,6 +9,35 @@ const directTrace=r=>['DECLARATIVE_BOUNDARY','LLM_DIRECT_CANDIDATE_IR','LLM_IR_A
 const errors={EMPTY_SOURCE:'请输入非空任务',SOURCE_BYTE_LIMIT:'原文容量超过1 MiB，不会截断',INVALID_UTF8:'文件不是有效UTF-8',CODEX_LOGIN_REQUIRED:'Codex 登录失效，请在本机重新登录',CODEX_QUOTA_OR_RATE_LIMIT:'Codex 额度或限流，未自动重试',CODEX_TIMEOUT:'本地调用超时，子进程已停止',CODEX_NETWORK_FAILURE:'网络调用失败',CODEX_MODEL_UNAVAILABLE:'请求模型不可用',COMPILER_BUSY:'已有编译正在进行',SESSION_REQUIRED:'页面会话失效，请刷新',COMPILER_ERROR:'编译失败，详情保存在本地运行目录'};
 Object.assign(errors,{COMPACT_WIRE_CONTRACT_FAILURE:'模型响应未通过结构或引用检查，原响应已保存，未自动重跑',PATCH_GLOBAL_ID_COLLISION:'局部修订引入重复编号，未接受该修订',IDENTITY_RESERVED_ID:'候选节点使用了保留编号 ROOT，未接受该候选',MODEL_REQUEST_BUDGET_EXHAUSTED:'本次有界请求数已用完，已保留结果与缺口'});
 let current=null,uploaded=null,session=null,pollTimer=null,busy=false,tab='pending';
+let scanTimer=null,scanKey=null,scanSequence=0;
+function renderDictionaryScan(target,text,scan){
+ target.replaceChildren();
+ target.append(el('p',`程序扫描命中 ${scan.matches.length} 处，涉及 ${scan.entries.length} 个词条。点击划线词查看候选入口；命中不等于词义已确认或LLM已查阅。`,'muted'));
+ const preview=el('div',undefined,'dictionary-source'),detail=el('div');detail.setAttribute('aria-live','polite');
+ const chars=Array.from(text),events=new Map(),active=new Map();
+ for(const m of scan.matches)for(const [at,delta]of [[m.span[0],1],[m.span[1],-1]]){if(!events.has(at))events.set(at,[]);events.get(at).push([m.entry_refs,delta]);}
+ const points=[...new Set([0,chars.length,...events.keys()])].sort((a,b)=>a-b);
+ const explain=refs=>{detail.replaceChildren();for(const i of refs){const r=scan.entries[i];detail.append(el('p',`${r.layer} · ${r.pack_id} · ${r.entry_id??'词条'} · ${r.path}${r.pointer}`));}};
+ for(let i=0;i<points.length-1;i++){
+  const a=points[i],b=points[i+1],part=chars.slice(a,b).join('');
+  for(const [refs,delta]of events.get(a)??[])for(const ref of refs){const n=(active.get(ref)??0)+delta;if(n)active.set(ref,n);else active.delete(ref);}
+  if(!active.size){preview.append(document.createTextNode(part));continue;}
+  const refs=[...active.keys()],button=el('button',part,'dictionary-hit');button.type='button';
+  button.title=refs.map(j=>scan.entries[j].layer+' '+scan.entries[j].pack_id+' '+(scan.entries[j].entry_id??scan.entries[j].pointer)).join('\n');
+  button.setAttribute('aria-label',part+'：查看 '+refs.length+' 个语义库候选');button.onclick=()=>explain(refs);preview.append(button);
+ }
+ target.append(preview,detail);
+ if(!scan.matches.length)detail.append(el('p','未命中不代表无需查词；LLM仍可按需主动查询。','muted'));
+}
+function scheduleDictionaryScan(){
+ if(!session||!$('dictionary-scan-preview'))return;
+ const text=$('input').value,dictionaries={l2:$('compile-l2').value,l3:$('compile-l3').value},key=JSON.stringify([text,dictionaries]);
+ if(key===scanKey)return;scanKey=key;const sequence=++scanSequence;clearTimeout(scanTimer);
+ const target=$('dictionary-scan-preview');target.replaceChildren(el('p','正在扫描当前输入（本地程序，不调用LLM）…','muted'));
+ if(!dictionaries.l2&&!dictionaries.l3){target.replaceChildren(el('p','未启用语义库。选择L2或L3后自动扫描。','muted'));return;}
+ if(new TextEncoder().encode(text).length>MAX_SOURCE_BYTES){target.replaceChildren(el('p','原文超过扫描容量，未截断。'));return;}
+ scanTimer=setTimeout(async()=>{try{const scan=await jsonPost('/api/dictionaries/scan',{text,dictionaries});if(sequence===scanSequence)renderDictionaryScan(target,text,scan);}catch(e){if(sequence===scanSequence){scanKey=null;target.replaceChildren(el('p','扫描未完成：'+(errors[e.message]??e.message)));}}},250);
+}
 errors.DIRECT_IR_TECHNICAL_REJECTED='候选IR未通过技术校验；具体字段和错误见过程区，后续计算未启动';
 const settingLabels={low:'低 · 较少推理',medium:'中 · 默认',high:'高 · 更深入',xhigh:'很高',max:'最高'};
 function configureModels(){
@@ -34,10 +63,11 @@ function configureModels(){
  const viewedInfo=el('p',undefined,'process-notice');viewedInfo.id='compile-viewed-settings';
  const describe=()=>updateResourceInfo();
  model.onchange=update;reasoning.onchange=save;method.onchange=()=>{save();describe();};const ml=el('label','调用模型 '),rl=el('label','推理强度 '),pl=el('label','解析方式 ');ml.append(model);rl.append(reasoning);pl.append(method);box.append(viewedInfo,pl,ml,rl,resourceInfo,el('p','解析和独立审阅使用本次选择的同一模型。列表来自本机Codex目录，实际调用仍须账号可用；不自动换模型。更换配置不继承原版语义验收。','muted'));$('input').insertAdjacentElement('afterend',box);
- for(const [layer,label]of [['L2','行业字典 L2 '],['L3','企业字典 L3 ']]){const l=el('label',label);l.append(selectors[layer]);selectors[layer].onchange=save;box.append(l);}
+ for(const [layer,label]of [['L2','行业字典 L2 '],['L3','企业字典 L3 ']]){const l=el('label',label);l.append(selectors[layer]);selectors[layer].onchange=()=>{save();scheduleDictionaryScan();};box.append(l);}
  box.append(el('p','生成与审阅按需查询同版字典，不整包加载。L2解释行业术语；L3解释本企业对象与别名。标注“虚构测试”的包不代表真实企业；字典不授予权限。','muted'));
  const actual=el('div');actual.id='dictionary-usage';box.append(actual);
- update();describe();if(previous?.model===model.value&&[...reasoning.options].some(o=>o.value===previous.reasoning)){reasoning.value=previous.reasoning;save();}updateViewedSettings();
+ const scanBox=el('details');scanBox.open=true;scanBox.append(el('summary','语义库扫描 · 当前输入预览（使用下方所选字典）'));const preview=el('div');preview.id='dictionary-scan-preview';scanBox.append(preview);box.insertAdjacentElement('beforebegin',scanBox);
+ update();describe();if(previous?.model===model.value&&[...reasoning.options].some(o=>o.value===previous.reasoning)){reasoning.value=previous.reasoning;save();}updateViewedSettings();scheduleDictionaryScan();
 }
 function updateViewedSettings(){
  const box=$('compile-settings');if(!box)return;
@@ -46,6 +76,7 @@ function updateViewedSettings(){
  updateResourceInfo();
  if(session?.request_profile==='BOUNDARY_REPORT_R01'&&!current)$('compile-viewed-settings').textContent='Skill与skill1均已取消固定类型和输出Schema；两者分别加载生成Skill、审阅Skill，共用7+1方法。';
  const usage=$('dictionary-usage');if(usage){usage.replaceChildren();if(current){const selection=current.dictionaries??current.result?.dictionaries;usage.append(el('p','本条记录选择的字典：'+(selection?selection.packs.map(p=>p.layer+' '+p.label).join('；')||'未启用':'历史记录未记录字典选择')));
+  const scan=current.result?.dictionary_scan??current.dictionary_scan;if(scan){const saved=el('details');saved.append(el('summary','本次实际发送的语义库扫描（固定记录）'));const content=el('div');renderDictionaryScan(content,current.source_text,scan);saved.append(content);usage.append(saved);}else usage.append(el('p','此记录尚无扫描回执；上方预览不代替历史记录。','muted'));
   const lookups=current.result?.dictionary_lookups;if(lookups){usage.append(el('p',`实际查阅：生成 ${lookups.parse.length} 次；审阅 ${lookups.audit.length} 次。选中不代表已查阅。`));
    for(const [phase,label]of [['parse','生成LLM'],['audit','审阅LLM']])for(const entry of lookups[phase]){const d=el('details');d.append(el('summary',`${label}查询“${entry.arguments?.query??''}”：${entry.error??('命中 '+entry.result.total+' 条')}`));for(const row of entry.result?.entries??[]){const v=row.value,title=v.display_name??v.surface??(typeof v.label==='string'?v.label:v.label?.['zh-CN'])??v.id??'词条';d.append(el('p',`${title} · ${row.pack_id} · ${row.path}${row.pointer}`));}usage.append(d);}
   }else usage.append(el('p',busy?'运行中；完成后显示实际字典查询记录。':'此记录没有字典查询回执。','muted'));}}
@@ -82,7 +113,7 @@ async function configureExamples(){
 }
 async function api(url,options={}){const response=await fetch(url,{...options,headers:{...options.headers,...(options.method?{'x-boundx-session':session?.token??''}: {})}});const data=await response.json();if(!response.ok)throw Error(data.error??data.code);return data;}
 const jsonPost=(url,data)=>api(url,{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify(data)});
-function count(){const info=sourceLength($('input').value);$('input-count').textContent=info.label;$('input-count').title=info.explanation;return info.count;}
+function count(){const info=sourceLength($('input').value);$('input-count').textContent=info.label;$('input-count').title=info.explanation;scheduleDictionaryScan();return info.count;}
 function showError(e){$('status').textContent=errors[e.message]??e.message;$('status').className='failure';}
 function highlight(sources){
  if($('source-evidence'))$('source-evidence').open=true;

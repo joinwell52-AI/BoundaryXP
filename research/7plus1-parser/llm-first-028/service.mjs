@@ -13,7 +13,7 @@ import {runtimeInventory} from './evidence.mjs';
 import {modelCatalog,requestSettings,publicProgress,partialArtifacts,savedCallHistory} from './observability.mjs';
 import {sessionActivity} from './model-activity.mjs';
 import {recalculateObservedTrace} from './observation-request.mjs';
-import {dictionaryCatalog,selectDictionaries,dictionaryIdentity} from './dictionaries.mjs';
+import {dictionaryCatalog,selectDictionaries,dictionaryIdentity,scanDictionaries} from './dictionaries.mjs';
 const loadedRuntime=JSON.stringify(runtimeInventory());
 const resourceProfile=buildBundle('parse').resource_profile;
 const resourceFingerprint=(method='SKILL')=>sha256(JSON.stringify([buildBundle('parse',{parseMethod:method}).sha256,buildBundle('audit',{parseMethod:method}).sha256,compilerRevision,sha256(loadedRuntime)]));
@@ -77,7 +77,7 @@ export function createServer({dataRoot=DATA,parse=parse7Plus1,legacyRoot=process
     if(!record)return send(404,{error:'RUN_NOT_FOUND'});
     const traceFile=path.join(folder(record.run_id),'trace.json');
     const trace=fs.existsSync(traceFile)&&record.status.startsWith('COMPLETED')?safeTrace(JSON.parse(fs.readFileSync(traceFile,'utf8'))):null;
-    if(!match[2])return send(200,{...summary(record),source_text:record.source_text,result:trace,progress:trace?null:partialArtifacts(folder(record.run_id),record),call_history:savedCallHistory(folder(record.run_id)),model_activity:sessionActivity(folder(record.run_id),record)});
+    if(!match[2]){const scanFile=path.join(folder(record.run_id),'dictionary-scan.json');return send(200,{...summary(record),source_text:record.source_text,dictionary_scan:fs.existsSync(scanFile)?JSON.parse(fs.readFileSync(scanFile,'utf8')):null,result:trace,progress:trace?null:partialArtifacts(folder(record.run_id),record),call_history:savedCallHistory(folder(record.run_id)),model_activity:sessionActivity(folder(record.run_id),record)});}
     if(match[2]==='activity.json')return download(JSON.stringify({run_id:record.run_id,run_product_version:record.product_snapshot?.product_version??null,requested_model:record.requested_model,actual_model:record.actual_model??null,...sessionActivity(folder(record.run_id),record)},null,2)+'\n','application/json',record.run_id+'-sessions.json');
     if(!trace)return send(409,{error:'RESULT_NOT_READY'});
     if(match[2]==='calculations.json')return trace.boundary_calculations?download(JSON.stringify(trace.boundary_calculations,null,2)+'\n','application/json',record.run_id+'-calculations.json'):send(404,{error:'CALCULATIONS_NOT_RECORDED'});
@@ -96,6 +96,13 @@ export function createServer({dataRoot=DATA,parse=parse7Plus1,legacyRoot=process
    if(!/^application\/json\b/i.test(req.headers['content-type']??''))return send(415,{error:'JSON_REQUIRED'});
    let size=0;const chunks=[];for await(const chunk of req){size+=chunk.length;if(size>MAX_REQUEST_BYTES)return send(413,{error:'REQUEST_BYTE_LIMIT',limit_bytes:MAX_REQUEST_BYTES,source_truncated:false});chunks.push(chunk);}
    const input=JSON.parse(new TextDecoder('utf-8',{fatal:true}).decode(Buffer.concat(chunks)));
+   if(req.method==='POST'&&route==='/api/dictionaries/scan'){
+    if(!input||typeof input.text!=='string'||Object.keys(input).some(k=>!['text','dictionaries'].includes(k)))return send(400,{error:'INVALID_SCAN_TEXT'});
+    if(Buffer.byteLength(input.text,'utf8')>INPUT_LIMITS.max_source_bytes)return send(413,{error:'SOURCE_BYTE_LIMIT'});
+    resourceGuard();
+    let snapshot;try{snapshot=selectDictionaries(input.dictionaries??{});}catch{return send(400,{error:'INVALID_DICTIONARY_SELECTION'});}
+    return send(200,scanDictionaries(snapshot,input.text));
+   }
    const observed=/^\/api\/runs\/([a-f0-9-]+)\/observations$/u.exec(route);
    if(req.method==='POST'&&observed){
     if(!ID.test(observed[1]))return send(400,{error:'INVALID_RUN_ID'});
