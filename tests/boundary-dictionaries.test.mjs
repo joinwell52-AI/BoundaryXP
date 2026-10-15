@@ -14,7 +14,7 @@ const selection={l2:'software-ai@0.2.0',l3:'tenant-a@0.2.0'};
 const probe={binary:'OFFLINE_TEST_NO_MODEL',version:'fixture',outputs:{features:{stdout:'shell_tool stable true\napps stable true'}}};
 const temp=t=>{const root=fs.mkdtempSync(path.join(os.tmpdir(),'boundx-dictionary-test-'));t.after(()=>fs.rmSync(root,{recursive:true,force:true}));return root;};
 test('only selected packages; shared aliases preserved; missing names never assigned',()=>{
- assert.equal(dictionaryCatalog().length,4);
+ assert.equal(dictionaryCatalog().length,15);
  const a=selectDictionaries(selection),b=selectDictionaries({l3:'tenant-b@0.1.0'});
  assert.equal(lookupDictionary(a,{query:'小王'}).total,2);
  assert.deepEqual(lookupDictionary(b,{query:'小王'}).entries.map(r=>r.value.employee_id),['b101']);
@@ -27,6 +27,22 @@ test('only selected packages; shared aliases preserved; missing names never assi
  const alias=lookupDictionary(selectDictionaries({l3:'example-software-team@0.1.0'}),{query:'上灰度'});assert.equal(alias.entries[0].value.mapsTo,'release.deploy');
  const broad=lookupDictionary(a,{query:'e'});assert.ok(broad.total>6);assert.equal(broad.next_offset,6);assert.notDeepEqual(broad.entries,lookupDictionary(a,{query:'e',offset:6}).entries);
  assert.ok(!dictionaryInstructions(a).includes('王明'));assert.ok(dictionaryInstructions(a).length<1800);
+});
+test('every registered industry is packaged, searchable and isolated from unselected industries',()=>{
+ const industries=dictionaryCatalog().filter(p=>p.layer==='L2');
+ assert.equal(industries.length,12);
+ const available=fs.readdirSync('domain-packs/l2',{withFileTypes:true}).filter(d=>d.isDirectory()).map(d=>d.name).sort();
+ assert.deepEqual(industries.map(p=>p.id.split('@')[0]).sort(),available);
+ for(const industry of industries){
+  const snapshot=selectDictionaries({l2:industry.id}),pack=snapshot.packs[0];
+  assert.equal(pack.files.length,7);
+  const action=pack.files.find(f=>f.path.endsWith('/actions.json')).data.frames[0];
+  const result=lookupDictionary(snapshot,{query:action.id});
+  assert.ok(result.entries.some(row=>row.value.id===action.id),industry.id);
+  assert.ok(result.entries.every(row=>row.pack_id===industry.id));
+  const other=industries.find(p=>p.id!==industry.id);
+  assert.throws(()=>lookupDictionary(snapshot,{query:action.id,pack_id:other.id}),/NOT_SELECTED/);
+ }
 });
 test('MCP exposes a single read-only lookup and returns explicit errors',()=>{
  const s=selectDictionaries(selection),logs=[];
@@ -56,7 +72,8 @@ test('generation and independent review use same snapshot; content stays out of 
   fs.writeFileSync(argv[argv.indexOf('--output-last-message')+1],args.bundle.phase==='parse'?'I：输入未明确。P：“小王”有两个候选，待明确。':'已查字典，保留同名疑点。');
   return {exit_code:0,elapsed_ms:5,timed_out:false,stderr:'',stdout:[{type:'thread.started',thread_id:args.bundle.phase},{type:'item.completed',item:{type:'mcp_tool_call',server:'boundx_dictionary',tool:'lookup'}},{type:'turn.completed'}].map(JSON.stringify).join('\n')};
  }});
- const r=await parse7Plus1(Buffer.from('小王核对报告。'),{output:root,probe,call,dictionaries:selection,maxModelRequests:2,productSnapshot:{contract:'candidate-ir/2.0'}});
+ const r=await parse7Plus1(Buffer.from('小王核对报告。'),{output:root,probe,call,dictionaries:{...selection,l2:'auto-rental@1.0.0'},maxModelRequests:2,productSnapshot:{contract:'candidate-ir/2.0'}});
+ assert.equal(r.dictionaries.packs.find(p=>p.layer==='L2').id,'auto-rental@1.0.0');
  assert.equal(seen.length,2);assert.equal(seen[0],seen[1]);assert.equal(r.dictionary_lookups.parse.length,1);assert.equal(r.dictionary_lookups.audit.length,1);assert.equal(r.dictionaries.sha256,seen[0]);assert.match(r.chinese,/生成实际查询 1 次/);assert.equal(r.technical.semantic_completeness,'NOT_PROGRAM_VERIFIED');
 });
 // Exercise the real HTTP handler in memory: no additional port, credentials or model.
@@ -68,7 +85,7 @@ async function request(server,url,{body,headers={}}={}){
 test('HTTP selection reaches engine, rejects invalid IDs, and binds idempotency',async t=>{
  const root=temp(t);let received,finish;
  const server=createServer({dataRoot:root,legacyRoot:path.join(root,'empty'),productSnapshot:{contract:'candidate-ir/2.0'},catalog:{default_model:'test',default_reasoning:'medium',sha256:'offline',models:[{id:'test',reasoning:['medium']}]},parse:async(bytes,args)=>{received=args;await new Promise(resolve=>finish=resolve);throw Error('OFFLINE_TEST_DONE');}});
- const session=await request(server,'/api/session');assert.equal(session.data.dictionary_catalog.length,4);
+ const session=await request(server,'/api/session');assert.equal(session.data.dictionary_catalog.length,15);
  const headers={cookie:'boundx_session='+session.data.token,'x-boundx-session':session.data.token};
  const body={text:'任务',request_id:'10000000-0000-4000-8000-000000000102',model:'test',reasoning:'medium',parse_method:'SKILL',dictionaries:selection};
  assert.equal((await request(server,'/api/parse',{body:{...body,dictionaries:{l3:'bad'}},headers})).status,400);

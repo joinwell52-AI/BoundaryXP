@@ -1,0 +1,133 @@
+{
+  "schema": "boundx-domain-actions/v1",
+  "packId": "warehouse-inventory",
+  "version": "1.0.0",
+  "invariants": [
+    "source_evidence_required",
+    "effect_not_inferred",
+    "completion_not_inferred",
+    "authorization_not_inferred"
+  ],
+  "roleContracts": {
+    "create/v1": {
+      "operation": "CREATE",
+      "primaryRole": "artifact",
+      "optionalRoles": ["executor"]
+    },
+    "change/v1": {
+      "operation": "CHANGE",
+      "primaryRole": "target",
+      "optionalRoles": ["executor"]
+    },
+    "process/v1": {
+      "operation": "PROCESS",
+      "primaryRole": "target",
+      "optionalRoles": ["executor"]
+    }
+  },
+  "projectionContracts": {
+    "create/v1": {
+      "operation": "CREATE",
+      "candidates": [
+        { "field": "A", "basis": "action_source" },
+        { "field": "P", "basis": "explicit_executor_only" },
+        { "field": "O", "basis": "bound_primary_role" }
+      ]
+    },
+    "change/v1": {
+      "operation": "CHANGE",
+      "candidates": [
+        { "field": "A", "basis": "action_source" },
+        { "field": "P", "basis": "explicit_executor_only" }
+      ]
+    },
+    "process/v1": {
+      "operation": "PROCESS",
+      "candidates": [
+        { "field": "A", "basis": "action_source" },
+        { "field": "P", "basis": "explicit_executor_only" },
+        { "field": "I", "basis": "bound_primary_role" }
+      ]
+    }
+  },
+  "frames": [
+    {
+      "id": "warehouse.inbound_goods",
+      "category": "warehouse-ops",
+      "label": { "zh-CN": "货物入库登记", "en": "Inbound goods registration" },
+      "operation": "CREATE",
+      "roleContract": "create/v1",
+      "projectionContract": "create/v1",
+      "entityTypes": ["goods-batch", "warehouse"],
+      "triggers": {
+        "zh": ["入库", "商品入库", "货物入库"],
+        "en": ["inbound goods", "stock in", "receive goods"]
+      }
+    },
+    {
+      "id": "warehouse.outbound_goods",
+      "category": "warehouse-ops",
+      "label": { "zh-CN": "货物出库扣减", "en": "Outbound goods deduction" },
+      "operation": "CHANGE",
+      "roleContract": "change/v1",
+      "projectionContract": "change/v1",
+      "entityTypes": ["goods-batch", "warehouse"],
+      "triggers": {
+        "zh": ["出库", "商品出库", "发货出库"],
+        "en": ["outbound goods", "stock out", "dispatch goods"]
+      }
+    },
+    {
+      "id": "warehouse.transfer_location",
+      "category": "warehouse-ops",
+      "label": { "zh-CN": "移库库位调拨", "en": "Transfer storage location" },
+      "operation": "CHANGE",
+      "roleContract": "change/v1",
+      "projectionContract": "change/v1",
+      "entityTypes": ["location", "goods-batch"],
+      "triggers": {
+        "zh": ["调拨", "移库", "库位调拨"],
+        "en": ["transfer location", "relocate goods"]
+      }
+    },
+    {
+      "id": "warehouse.stock_take",
+      "category": "warehouse-ops",
+      "label": { "zh-CN": "库存盘点核对", "en": "Stocktaking inventory count" },
+      "operation": "PROCESS",
+      "roleContract": "process/v1",
+      "projectionContract": "process/v1",
+      "entityTypes": ["inventory-record", "warehouse"],
+      "triggers": {
+        "zh": ["盘点", "库存盘点", "核对库存"],
+        "en": ["stock take", "inventory count", "take stock"]
+      }
+    },
+    {
+      "id": "warehouse.scrap_damaged",
+      "category": "warehouse-ops",
+      "label": { "zh-CN": "残损货物报废", "en": "Scrap damaged goods" },
+      "operation": "CHANGE",
+      "roleContract": "change/v1",
+      "projectionContract": "change/v1",
+      "entityTypes": ["goods-batch"],
+      "triggers": {
+        "zh": ["报废", "残损清理", "报损"],
+        "en": ["scrap goods", "write off damaged"]
+      }
+    },
+    {
+      "id": "warehouse.isolate_hazmat",
+      "category": "safety-compliance",
+      "label": { "zh-CN": "危险品隔离管控", "en": "Isolate hazardous materials" },
+      "operation": "CHANGE",
+      "roleContract": "change/v1",
+      "projectionContract": "change/v1",
+      "entityTypes": ["hazardous-material", "location"],
+      "triggers": {
+        "zh": ["危险品隔离", "危化品封存"],
+        "en": ["isolate hazmat", "quarantine hazardous"]
+      }
+    }
+  ]
+}

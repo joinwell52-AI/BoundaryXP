@@ -1,0 +1,220 @@
+{
+  "schema": "boundx-domain-actions/v1",
+  "packId": "government-affairs",
+  "version": "1.0.0",
+  "invariants": [
+    "source_evidence_required",
+    "effect_not_inferred",
+    "completion_not_inferred",
+    "authorization_not_inferred"
+  ],
+  "roleContracts": {
+    "create/v1": {
+      "operation": "CREATE",
+      "primaryRole": "artifact",
+      "optionalRoles": [
+        "executor"
+      ]
+    },
+    "process/v1": {
+      "operation": "PROCESS",
+      "primaryRole": "target",
+      "optionalRoles": [
+        "executor"
+      ]
+    },
+    "change/v1": {
+      "operation": "CHANGE",
+      "primaryRole": "target",
+      "optionalRoles": [
+        "executor"
+      ]
+    }
+  },
+  "projectionContracts": {
+    "create/v1": {
+      "operation": "CREATE",
+      "candidates": [
+        {
+          "field": "A",
+          "basis": "action_source"
+        },
+        {
+          "field": "P",
+          "basis": "explicit_executor_only"
+        },
+        {
+          "field": "O",
+          "basis": "bound_primary_role"
+        }
+      ]
+    },
+    "process/v1": {
+      "operation": "PROCESS",
+      "candidates": [
+        {
+          "field": "A",
+          "basis": "action_source"
+        },
+        {
+          "field": "P",
+          "basis": "explicit_executor_only"
+        },
+        {
+          "field": "I",
+          "basis": "bound_primary_role"
+        }
+      ]
+    },
+    "change/v1": {
+      "operation": "CHANGE",
+      "candidates": [
+        {
+          "field": "A",
+          "basis": "action_source"
+        },
+        {
+          "field": "P",
+          "basis": "explicit_executor_only"
+        }
+      ]
+    }
+  },
+  "frames": [
+    {
+      "id": "gov.draft_document",
+      "category": "doc-drafting",
+      "label": {
+        "zh-CN": "起草正式公文",
+        "en": "Draft official document"
+      },
+      "operation": "CREATE",
+      "roleContract": "create/v1",
+      "projectionContract": "create/v1",
+      "entityTypes": [
+        "official-document",
+        "drafter-info"
+      ],
+      "triggers": {
+        "zh": [
+          "起草公文",
+          "起草议案",
+          "拟办发文"
+        ],
+        "en": [
+          "draft official document",
+          "draft proposal",
+          "compose official document"
+        ]
+      }
+    },
+    {
+      "id": "gov.countersign_department",
+      "category": "doc-countersign",
+      "label": {
+        "zh-CN": "跨部门联合会签",
+        "en": "Countersign document"
+      },
+      "operation": "PROCESS",
+      "roleContract": "process/v1",
+      "projectionContract": "process/v1",
+      "entityTypes": [
+        "countersign-opinion",
+        "official-document"
+      ],
+      "triggers": {
+        "zh": [
+          "部门会签",
+          "联合会签",
+          "流转会签"
+        ],
+        "en": [
+          "countersign document",
+          "department countersign",
+          "circulate countersign"
+        ]
+      }
+    },
+    {
+      "id": "gov.approve_official_seal",
+      "category": "seal-approval",
+      "label": {
+        "zh-CN": "用印申请批复",
+        "en": "Approve official seal application"
+      },
+      "operation": "PROCESS",
+      "roleContract": "process/v1",
+      "projectionContract": "process/v1",
+      "entityTypes": [
+        "seal-application",
+        "official-seal"
+      ],
+      "triggers": {
+        "zh": [
+          "用印审批",
+          "公章审批",
+          "审批用印申请"
+        ],
+        "en": [
+          "approve seal application",
+          "approve official seal",
+          "stamp approval"
+        ]
+      }
+    },
+    {
+      "id": "gov.trigger_seal_device",
+      "category": "seal-execution",
+      "label": {
+        "zh-CN": "智能印章机加盖盖印",
+        "en": "Trigger seal device"
+      },
+      "operation": "CHANGE",
+      "roleContract": "change/v1",
+      "projectionContract": "change/v1",
+      "entityTypes": [
+        "smart-seal-device",
+        "official-seal"
+      ],
+      "triggers": {
+        "zh": [
+          "智能盖印",
+          "开锁盖印",
+          "触发印章机"
+        ],
+        "en": [
+          "trigger seal device",
+          "execute stamp",
+          "stamp machine trigger"
+        ]
+      }
+    },
+    {
+      "id": "gov.archive_file",
+      "category": "file-archival",
+      "label": {
+        "zh-CN": "档案定卷归档",
+        "en": "Archive official document"
+      },
+      "operation": "PROCESS",
+      "roleContract": "process/v1",
+      "projectionContract": "process/v1",
+      "entityTypes": [
+        "official-document",
+        "archive-dossier"
+      ],
+      "triggers": {
+        "zh": [
+          "档案归档",
+          "公文归档",
+          "封卷入库"
+        ],
+        "en": [
+          "archive document",
+          "archive official file",
+          "file dossier"
+        ]
+      }
+    }
+  ]
+}

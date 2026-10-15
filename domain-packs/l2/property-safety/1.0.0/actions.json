@@ -1,0 +1,219 @@
+{
+  "schema": "boundx-domain-actions/v1",
+  "packId": "property-safety",
+  "version": "1.0.0",
+  "invariants": [
+    "source_evidence_required",
+    "effect_not_inferred",
+    "completion_not_inferred",
+    "authorization_not_inferred"
+  ],
+  "roleContracts": {
+    "create/v1": {
+      "operation": "CREATE",
+      "primaryRole": "artifact",
+      "optionalRoles": [
+        "executor"
+      ]
+    },
+    "process/v1": {
+      "operation": "PROCESS",
+      "primaryRole": "target",
+      "optionalRoles": [
+        "executor"
+      ]
+    },
+    "change/v1": {
+      "operation": "CHANGE",
+      "primaryRole": "target",
+      "optionalRoles": [
+        "executor"
+      ]
+    }
+  },
+  "projectionContracts": {
+    "create/v1": {
+      "operation": "CREATE",
+      "candidates": [
+        {
+          "field": "A",
+          "basis": "action_source"
+        },
+        {
+          "field": "P",
+          "basis": "explicit_executor_only"
+        },
+        {
+          "field": "O",
+          "basis": "bound_primary_role"
+        }
+      ]
+    },
+    "process/v1": {
+      "operation": "PROCESS",
+      "candidates": [
+        {
+          "field": "A",
+          "basis": "action_source"
+        },
+        {
+          "field": "P",
+          "basis": "explicit_executor_only"
+        },
+        {
+          "field": "I",
+          "basis": "bound_primary_role"
+        }
+      ]
+    },
+    "change/v1": {
+      "operation": "CHANGE",
+      "candidates": [
+        {
+          "field": "A",
+          "basis": "action_source"
+        },
+        {
+          "field": "P",
+          "basis": "explicit_executor_only"
+        }
+      ]
+    }
+  },
+  "frames": [
+    {
+      "id": "safety.apply_hot_work",
+      "category": "permit-application",
+      "label": {
+        "zh-CN": "申请特种动火许可",
+        "en": "Apply hot work permit"
+      },
+      "operation": "CREATE",
+      "roleContract": "create/v1",
+      "projectionContract": "create/v1",
+      "entityTypes": [
+        "hot-work-permit",
+        "operator-cert"
+      ],
+      "triggers": {
+        "zh": [
+          "申请动火许可",
+          "申请动火票",
+          "动火作业申请"
+        ],
+        "en": [
+          "apply hot work permit",
+          "request hot work",
+          "apply welding permit"
+        ]
+      }
+    },
+    {
+      "id": "safety.check_site_safety",
+      "category": "site-verification",
+      "label": {
+        "zh-CN": "作业现场安全交底核验",
+        "en": "Check site safety"
+      },
+      "operation": "PROCESS",
+      "roleContract": "process/v1",
+      "projectionContract": "process/v1",
+      "entityTypes": [
+        "site-inspection-record",
+        "firefighting-equipment"
+      ],
+      "triggers": {
+        "zh": [
+          "现场安全核验",
+          "动火前核验",
+          "核查消防器材"
+        ],
+        "en": [
+          "check site safety",
+          "inspect work site",
+          "verify fire protection"
+        ]
+      }
+    },
+    {
+      "id": "safety.approve_permit",
+      "category": "permit-approval",
+      "label": {
+        "zh-CN": "安全总监签署作业票",
+        "en": "Approve work permit"
+      },
+      "operation": "PROCESS",
+      "roleContract": "process/v1",
+      "projectionContract": "process/v1",
+      "entityTypes": [
+        "hot-work-permit",
+        "safety-checklist"
+      ],
+      "triggers": {
+        "zh": [
+          "审批作业许可",
+          "签署动火票",
+          "批复特种作业"
+        ],
+        "en": [
+          "approve work permit",
+          "sign hot work permit",
+          "grant work permit"
+        ]
+      }
+    },
+    {
+      "id": "safety.inspect_special_equipment",
+      "category": "equipment-inspection",
+      "label": {
+        "zh-CN": "特种设备定期巡检维保",
+        "en": "Inspect special equipment"
+      },
+      "operation": "PROCESS",
+      "roleContract": "process/v1",
+      "projectionContract": "process/v1",
+      "entityTypes": [
+        "special-equipment",
+        "maintenance-log"
+      ],
+      "triggers": {
+        "zh": [
+          "特种设备定检",
+          "维保巡检",
+          "特种设备巡检"
+        ],
+        "en": [
+          "inspect special equipment",
+          "maintenance inspection",
+          "routine check equipment"
+        ]
+      }
+    },
+    {
+      "id": "safety.shutdown_hazard_machine",
+      "category": "hazard-control",
+      "label": {
+        "zh-CN": "高危隐患紧急停机整改",
+        "en": "Shutdown hazard machine"
+      },
+      "operation": "CHANGE",
+      "roleContract": "change/v1",
+      "projectionContract": "change/v1",
+      "entityTypes": [
+        "special-equipment"
+      ],
+      "triggers": {
+        "zh": [
+          "隐患停机整改",
+          "拉闸停机",
+          "紧急停用设备"
+        ],
+        "en": [
+          "shutdown hazard machine",
+          "emergency shutdown",
+          "disable unsafe equipment"
+        ]
+      }
+    }
+  ]
+}

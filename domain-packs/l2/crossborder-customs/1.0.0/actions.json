@@ -1,0 +1,220 @@
+{
+  "schema": "boundx-domain-actions/v1",
+  "packId": "crossborder-customs",
+  "version": "1.0.0",
+  "invariants": [
+    "source_evidence_required",
+    "effect_not_inferred",
+    "completion_not_inferred",
+    "authorization_not_inferred"
+  ],
+  "roleContracts": {
+    "create/v1": {
+      "operation": "CREATE",
+      "primaryRole": "artifact",
+      "optionalRoles": [
+        "executor"
+      ]
+    },
+    "process/v1": {
+      "operation": "PROCESS",
+      "primaryRole": "target",
+      "optionalRoles": [
+        "executor"
+      ]
+    },
+    "change/v1": {
+      "operation": "CHANGE",
+      "primaryRole": "target",
+      "optionalRoles": [
+        "executor"
+      ]
+    }
+  },
+  "projectionContracts": {
+    "create/v1": {
+      "operation": "CREATE",
+      "candidates": [
+        {
+          "field": "A",
+          "basis": "action_source"
+        },
+        {
+          "field": "P",
+          "basis": "explicit_executor_only"
+        },
+        {
+          "field": "O",
+          "basis": "bound_primary_role"
+        }
+      ]
+    },
+    "process/v1": {
+      "operation": "PROCESS",
+      "candidates": [
+        {
+          "field": "A",
+          "basis": "action_source"
+        },
+        {
+          "field": "P",
+          "basis": "explicit_executor_only"
+        },
+        {
+          "field": "I",
+          "basis": "bound_primary_role"
+        }
+      ]
+    },
+    "change/v1": {
+      "operation": "CHANGE",
+      "candidates": [
+        {
+          "field": "A",
+          "basis": "action_source"
+        },
+        {
+          "field": "P",
+          "basis": "explicit_executor_only"
+        }
+      ]
+    }
+  },
+  "frames": [
+    {
+      "id": "customs.declare_entry_bill",
+      "category": "declaration-init",
+      "label": {
+        "zh-CN": "录入申报进出口报关单",
+        "en": "Declare entry bill"
+      },
+      "operation": "CREATE",
+      "roleContract": "create/v1",
+      "projectionContract": "create/v1",
+      "entityTypes": [
+        "customs-declaration-bill",
+        "cargo-manifest"
+      ],
+      "triggers": {
+        "zh": [
+          "申报报关单",
+          "报关申报",
+          "录入报关单"
+        ],
+        "en": [
+          "declare entry bill",
+          "submit customs declaration",
+          "create customs bill"
+        ]
+      }
+    },
+    {
+      "id": "customs.calculate_tariffs",
+      "category": "tariff-calculation",
+      "label": {
+        "zh-CN": "智能关税税费核算",
+        "en": "Calculate tariffs"
+      },
+      "operation": "PROCESS",
+      "roleContract": "process/v1",
+      "projectionContract": "process/v1",
+      "entityTypes": [
+        "tariff-calculation",
+        "hs-code-mapping"
+      ],
+      "triggers": {
+        "zh": [
+          "核算关税",
+          "税费核算",
+          "计算关税增值税"
+        ],
+        "en": [
+          "calculate tariffs",
+          "compute duty tax",
+          "calculate customs tariff"
+        ]
+      }
+    },
+    {
+      "id": "customs.inspect_bonded_cargo",
+      "category": "bonded-inspection",
+      "label": {
+        "zh-CN": "保税仓库到货查验",
+        "en": "Inspect bonded cargo"
+      },
+      "operation": "PROCESS",
+      "roleContract": "process/v1",
+      "projectionContract": "process/v1",
+      "entityTypes": [
+        "bonded-inventory",
+        "inspection-check-sheet"
+      ],
+      "triggers": {
+        "zh": [
+          "保税到货查验",
+          "海关查验",
+          "保税货物核验"
+        ],
+        "en": [
+          "inspect bonded cargo",
+          "customs inspection",
+          "verify bonded goods"
+        ]
+      }
+    },
+    {
+      "id": "customs.release_clearance",
+      "category": "clearance-release",
+      "label": {
+        "zh-CN": "海关正式放行核销",
+        "en": "Release clearance"
+      },
+      "operation": "CHANGE",
+      "roleContract": "change/v1",
+      "projectionContract": "change/v1",
+      "entityTypes": [
+        "customs-clearance-status",
+        "customs-declaration-bill"
+      ],
+      "triggers": {
+        "zh": [
+          "放行结关",
+          "海关放行",
+          "通关放行核销"
+        ],
+        "en": [
+          "release customs clearance",
+          "customs release",
+          "approve clearance"
+        ]
+      }
+    },
+    {
+      "id": "customs.settle_foreign_exchange",
+      "category": "forex-audit",
+      "label": {
+        "zh-CN": "外汇收付汇合规核销",
+        "en": "Settle foreign exchange"
+      },
+      "operation": "PROCESS",
+      "roleContract": "process/v1",
+      "projectionContract": "process/v1",
+      "entityTypes": [
+        "foreign-exchange-order",
+        "customs-declaration-bill"
+      ],
+      "triggers": {
+        "zh": [
+          "核验付汇",
+          "外汇付汇结算",
+          "跨境收付汇核销"
+        ],
+        "en": [
+          "settle foreign exchange",
+          "verify forex payout",
+          "fx settlement audit"
+        ]
+      }
+    }
+  ]
+}

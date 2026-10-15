@@ -1,0 +1,219 @@
+{
+  "schema": "boundx-domain-actions/v1",
+  "packId": "procurement-bidding",
+  "version": "1.0.0",
+  "invariants": [
+    "source_evidence_required",
+    "effect_not_inferred",
+    "completion_not_inferred",
+    "authorization_not_inferred"
+  ],
+  "roleContracts": {
+    "create/v1": {
+      "operation": "CREATE",
+      "primaryRole": "artifact",
+      "optionalRoles": [
+        "executor"
+      ]
+    },
+    "process/v1": {
+      "operation": "PROCESS",
+      "primaryRole": "target",
+      "optionalRoles": [
+        "executor"
+      ]
+    },
+    "change/v1": {
+      "operation": "CHANGE",
+      "primaryRole": "target",
+      "optionalRoles": [
+        "executor"
+      ]
+    }
+  },
+  "projectionContracts": {
+    "create/v1": {
+      "operation": "CREATE",
+      "candidates": [
+        {
+          "field": "A",
+          "basis": "action_source"
+        },
+        {
+          "field": "P",
+          "basis": "explicit_executor_only"
+        },
+        {
+          "field": "O",
+          "basis": "bound_primary_role"
+        }
+      ]
+    },
+    "process/v1": {
+      "operation": "PROCESS",
+      "candidates": [
+        {
+          "field": "A",
+          "basis": "action_source"
+        },
+        {
+          "field": "P",
+          "basis": "explicit_executor_only"
+        },
+        {
+          "field": "I",
+          "basis": "bound_primary_role"
+        }
+      ]
+    },
+    "change/v1": {
+      "operation": "CHANGE",
+      "candidates": [
+        {
+          "field": "A",
+          "basis": "action_source"
+        },
+        {
+          "field": "P",
+          "basis": "explicit_executor_only"
+        }
+      ]
+    }
+  },
+  "frames": [
+    {
+      "id": "procure.publish_tender",
+      "category": "tender-initiation",
+      "label": {
+        "zh-CN": "发布招标公告",
+        "en": "Publish tender notice"
+      },
+      "operation": "CREATE",
+      "roleContract": "create/v1",
+      "projectionContract": "create/v1",
+      "entityTypes": [
+        "tender-notice",
+        "bidding-document"
+      ],
+      "triggers": {
+        "zh": [
+          "发布招标公告",
+          "发布招标",
+          "挂网招标"
+        ],
+        "en": [
+          "publish tender",
+          "issue tender",
+          "announce bid"
+        ]
+      }
+    },
+    {
+      "id": "procure.register_bidder",
+      "category": "bidder-checkin",
+      "label": {
+        "zh-CN": "登记投标人资格",
+        "en": "Register bidder qualification"
+      },
+      "operation": "PROCESS",
+      "roleContract": "process/v1",
+      "projectionContract": "process/v1",
+      "entityTypes": [
+        "bidder-qualification",
+        "bid-deposit"
+      ],
+      "triggers": {
+        "zh": [
+          "登记投标人",
+          "投标签到",
+          "资格预审"
+        ],
+        "en": [
+          "register bidder",
+          "sign-in bidder",
+          "check bidder qualification"
+        ]
+      }
+    },
+    {
+      "id": "procure.evaluate_proposals",
+      "category": "bid-evaluation",
+      "label": {
+        "zh-CN": "专家评审打分汇总",
+        "en": "Evaluate bid proposals"
+      },
+      "operation": "PROCESS",
+      "roleContract": "process/v1",
+      "projectionContract": "process/v1",
+      "entityTypes": [
+        "evaluation-scorecard",
+        "bid-proposal"
+      ],
+      "triggers": {
+        "zh": [
+          "评标打分",
+          "专家评审",
+          "汇总评分"
+        ],
+        "en": [
+          "evaluate proposals",
+          "expert scoring",
+          "evaluate bids"
+        ]
+      }
+    },
+    {
+      "id": "procure.award_contract",
+      "category": "contract-award",
+      "label": {
+        "zh-CN": "定标签订采购合同",
+        "en": "Award procurement contract"
+      },
+      "operation": "CREATE",
+      "roleContract": "create/v1",
+      "projectionContract": "create/v1",
+      "entityTypes": [
+        "procurement-contract",
+        "award-notice"
+      ],
+      "triggers": {
+        "zh": [
+          "定标签署合同",
+          "签订采购合同",
+          "发布中标公示"
+        ],
+        "en": [
+          "award contract",
+          "sign procurement contract",
+          "publish award notice"
+        ]
+      }
+    },
+    {
+      "id": "procure.freeze_bidder",
+      "category": "supplier-risk",
+      "label": {
+        "zh-CN": "违规供应商熔断拉黑",
+        "en": "Freeze bidder qualification"
+      },
+      "operation": "CHANGE",
+      "roleContract": "change/v1",
+      "projectionContract": "change/v1",
+      "entityTypes": [
+        "bidder-qualification"
+      ],
+      "triggers": {
+        "zh": [
+          "拉黑供应商",
+          "冻结投标资格",
+          "违规熔断"
+        ],
+        "en": [
+          "freeze bidder",
+          "blacklist vendor",
+          "suspend qualification"
+        ]
+      }
+    }
+  ]
+}

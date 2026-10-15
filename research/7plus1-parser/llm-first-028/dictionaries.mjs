@@ -6,6 +6,19 @@ import {sha256} from './source.mjs';
 const root=path.resolve(path.dirname(fileURLToPath(import.meta.url)),'../../..');
 const definitions=[
  {id:'software-ai@0.2.0',layer:'L2',label:'软件与AI行业 · 0.2.0',version:'0.2.0',test_only:false,files:['actions','entities','roles','resources','boundaries','completions','references'].map(n=>`domain-packs/l2/software-ai/0.2.0/${n}.json`)},
+ ...[
+  ['auto-rental','汽车租赁'],
+  ['crossborder-customs','跨境关务'],
+  ['customer-refund','客服退款'],
+  ['financial-credit','金融信贷'],
+  ['fleet-logistics','车队物流'],
+  ['government-affairs','政务公文'],
+  ['healthcare-prescription','医疗处方'],
+  ['ops-sys','系统运维'],
+  ['procurement-bidding','采购招投标'],
+  ['property-safety','物业安全'],
+  ['warehouse-inventory','仓储库存']
+ ].map(([name,label])=>({id:name+'@1.0.0',layer:'L2',label:label+' · 1.0.0',version:'1.0.0',test_only:false,files:['actions','entities','roles','resources','boundaries','completions','references'].map(n=>`domain-packs/l2/${name}/1.0.0/${n}.json`)})),
  {id:'tenant-a@0.2.0',layer:'L3',label:'企业A名册 · 0.2.0（虚构测试）',version:'0.2.0',test_only:true,files:['examples/semantic-packs/tenant-a/0.2.0/employees.json']},
  {id:'tenant-b@0.1.0',layer:'L3',label:'企业B名册 · 0.1.0（虚构测试）',version:'0.1.0',test_only:true,files:['examples/semantic-packs/tenant-b/0.1.0/employees.json']},
  {id:'example-software-team@0.1.0',layer:'L3',label:'企业术语别名 · 0.1.0（虚构测试）',version:'0.1.0',test_only:true,files:['domain-packs/l3/example-software-team.json']}

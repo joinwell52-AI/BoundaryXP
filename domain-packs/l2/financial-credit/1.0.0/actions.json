@@ -1,0 +1,195 @@
+{
+  "schema": "boundx-domain-actions/v1",
+  "packId": "financial-credit",
+  "version": "1.0.0",
+  "invariants": [
+    "source_evidence_required",
+    "effect_not_inferred",
+    "completion_not_inferred",
+    "authorization_not_inferred"
+  ],
+  "roleContracts": {
+    "process/v1": {
+      "operation": "PROCESS",
+      "primaryRole": "target",
+      "optionalRoles": [
+        "executor"
+      ]
+    },
+    "change/v1": {
+      "operation": "CHANGE",
+      "primaryRole": "target",
+      "optionalRoles": [
+        "executor"
+      ]
+    }
+  },
+  "projectionContracts": {
+    "process/v1": {
+      "operation": "PROCESS",
+      "candidates": [
+        {
+          "field": "A",
+          "basis": "action_source"
+        },
+        {
+          "field": "P",
+          "basis": "explicit_executor_only"
+        },
+        {
+          "field": "I",
+          "basis": "bound_primary_role"
+        }
+      ]
+    },
+    "change/v1": {
+      "operation": "CHANGE",
+      "candidates": [
+        {
+          "field": "A",
+          "basis": "action_source"
+        },
+        {
+          "field": "P",
+          "basis": "explicit_executor_only"
+        }
+      ]
+    }
+  },
+  "frames": [
+    {
+      "id": "credit.pre_screen",
+      "category": "credit-preflight",
+      "label": {
+        "zh-CN": "征信准入初审",
+        "en": "Pre-screen credit"
+      },
+      "operation": "PROCESS",
+      "roleContract": "process/v1",
+      "projectionContract": "process/v1",
+      "entityTypes": [
+        "borrower-profile",
+        "credit-report"
+      ],
+      "triggers": {
+        "zh": [
+          "征信准入初审",
+          "准入初审",
+          "审查征信"
+        ],
+        "en": [
+          "pre-screen credit",
+          "credit screening",
+          "pre-screen borrower"
+        ]
+      }
+    },
+    {
+      "id": "credit.approve_limit",
+      "category": "credit-approval",
+      "label": {
+        "zh-CN": "审批授信额度",
+        "en": "Approve credit limit"
+      },
+      "operation": "PROCESS",
+      "roleContract": "process/v1",
+      "projectionContract": "process/v1",
+      "entityTypes": [
+        "credit-limit",
+        "approval-record"
+      ],
+      "triggers": {
+        "zh": [
+          "审批授信额度",
+          "批复额度",
+          "授信批复"
+        ],
+        "en": [
+          "approve credit limit",
+          "approve loan limit",
+          "grant limit"
+        ]
+      }
+    },
+    {
+      "id": "credit.disburse_loan",
+      "category": "credit-disbursement",
+      "label": {
+        "zh-CN": "放款划扣出账",
+        "en": "Disburse loan funds"
+      },
+      "operation": "CHANGE",
+      "roleContract": "change/v1",
+      "projectionContract": "change/v1",
+      "entityTypes": [
+        "loan-disbursement",
+        "disbursement-order"
+      ],
+      "triggers": {
+        "zh": [
+          "放款出账",
+          "放款划扣",
+          "发放贷款"
+        ],
+        "en": [
+          "disburse loan",
+          "execute disbursement",
+          "release loan funds"
+        ]
+      }
+    },
+    {
+      "id": "credit.freeze_account",
+      "category": "credit-risk-control",
+      "label": {
+        "zh-CN": "风控冻结账户",
+        "en": "Freeze credit account"
+      },
+      "operation": "CHANGE",
+      "roleContract": "change/v1",
+      "projectionContract": "change/v1",
+      "entityTypes": [
+        "borrower-account"
+      ],
+      "triggers": {
+        "zh": [
+          "风控冻结账户",
+          "欺诈冻结",
+          "冻结授信"
+        ],
+        "en": [
+          "freeze credit account",
+          "freeze loan account",
+          "lock account"
+        ]
+      }
+    },
+    {
+      "id": "credit.extend_repayment",
+      "category": "credit-risk-control",
+      "label": {
+        "zh-CN": "还款展期申请",
+        "en": "Extend repayment schedule"
+      },
+      "operation": "CHANGE",
+      "roleContract": "change/v1",
+      "projectionContract": "change/v1",
+      "entityTypes": [
+        "loan-contract",
+        "repayment-schedule"
+      ],
+      "triggers": {
+        "zh": [
+          "还款展期",
+          "申请展期",
+          "延期还款"
+        ],
+        "en": [
+          "extend repayment",
+          "loan extension",
+          "reschedule loan"
+        ]
+      }
+    }
+  ]
+}

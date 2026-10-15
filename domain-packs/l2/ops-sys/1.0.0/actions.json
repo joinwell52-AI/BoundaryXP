@@ -1,0 +1,172 @@
+{
+  "schema": "boundx-domain-actions/v1",
+  "packId": "ops-sys",
+  "version": "1.0.0",
+  "invariants": [
+    "source_evidence_required",
+    "effect_not_inferred",
+    "completion_not_inferred",
+    "authorization_not_inferred"
+  ],
+  "roleContracts": {
+    "create/v1": {
+      "operation": "CREATE",
+      "primaryRole": "artifact",
+      "optionalRoles": ["executor"]
+    },
+    "change/v1": {
+      "operation": "CHANGE",
+      "primaryRole": "target",
+      "optionalRoles": ["executor"]
+    },
+    "process/v1": {
+      "operation": "PROCESS",
+      "primaryRole": "target",
+      "optionalRoles": ["executor"]
+    },
+    "read/v1": {
+      "operation": "READ",
+      "primaryRole": "input",
+      "optionalRoles": ["executor"]
+    }
+  },
+  "projectionContracts": {
+    "create/v1": {
+      "operation": "CREATE",
+      "candidates": [
+        { "field": "A", "basis": "action_source" },
+        { "field": "P", "basis": "explicit_executor_only" },
+        { "field": "O", "basis": "bound_primary_role" }
+      ]
+    },
+    "change/v1": {
+      "operation": "CHANGE",
+      "candidates": [
+        { "field": "A", "basis": "action_source" },
+        { "field": "P", "basis": "explicit_executor_only" }
+      ]
+    },
+    "process/v1": {
+      "operation": "PROCESS",
+      "candidates": [
+        { "field": "A", "basis": "action_source" },
+        { "field": "P", "basis": "explicit_executor_only" },
+        { "field": "I", "basis": "bound_primary_role" }
+      ]
+    },
+    "read/v1": {
+      "operation": "READ",
+      "candidates": [
+        { "field": "A", "basis": "action_source" },
+        { "field": "P", "basis": "explicit_executor_only" },
+        { "field": "I", "basis": "bound_primary_role" }
+      ]
+    }
+  },
+  "frames": [
+    {
+      "id": "ops.create_snapshot",
+      "category": "infrastructure-ops",
+      "label": { "zh-CN": "创建系统快照", "en": "Create system snapshot" },
+      "operation": "CREATE",
+      "roleContract": "create/v1",
+      "projectionContract": "create/v1",
+      "entityTypes": ["snapshot", "server"],
+      "triggers": {
+        "zh": ["创建快照", "生成快照", "打快照"],
+        "en": ["create snapshot", "make snapshot", "take snapshot"]
+      }
+    },
+    {
+      "id": "ops.restore_snapshot",
+      "category": "infrastructure-ops",
+      "label": { "zh-CN": "恢复系统快照", "en": "Restore system snapshot" },
+      "operation": "CHANGE",
+      "roleContract": "change/v1",
+      "projectionContract": "change/v1",
+      "entityTypes": ["snapshot", "server"],
+      "triggers": {
+        "zh": ["恢复快照", "还原快照"],
+        "en": ["restore snapshot", "revert snapshot"]
+      }
+    },
+    {
+      "id": "ops.backup_database",
+      "category": "infrastructure-ops",
+      "label": { "zh-CN": "备份数据库", "en": "Backup database" },
+      "operation": "CREATE",
+      "roleContract": "create/v1",
+      "projectionContract": "create/v1",
+      "entityTypes": ["backup", "database"],
+      "triggers": {
+        "zh": ["备份数据库", "数据库备份", "导库备份"],
+        "en": ["backup database", "db backup"]
+      }
+    },
+    {
+      "id": "ops.purge_database",
+      "category": "infrastructure-ops",
+      "label": { "zh-CN": "清理数据库", "en": "Purge database" },
+      "operation": "CHANGE",
+      "roleContract": "change/v1",
+      "projectionContract": "change/v1",
+      "entityTypes": ["database"],
+      "triggers": {
+        "zh": ["清理数据库", "删除数据库", "清库", "删除表数据"],
+        "en": ["purge database", "drop database", "clear database"]
+      }
+    },
+    {
+      "id": "ops.update_config",
+      "category": "infrastructure-ops",
+      "label": { "zh-CN": "更新环境配置", "en": "Update environment configuration" },
+      "operation": "CHANGE",
+      "roleContract": "change/v1",
+      "projectionContract": "change/v1",
+      "entityTypes": ["env-config", "server"],
+      "triggers": {
+        "zh": ["更新配置", "修改环境配置", "改配置"],
+        "en": ["update config", "modify config", "change config"]
+      }
+    },
+    {
+      "id": "ops.open_port",
+      "category": "infrastructure-ops",
+      "label": { "zh-CN": "开放网络端口", "en": "Open network port" },
+      "operation": "CHANGE",
+      "roleContract": "change/v1",
+      "projectionContract": "change/v1",
+      "entityTypes": ["port", "firewall-rule"],
+      "triggers": {
+        "zh": ["开放端口", "解封端口", "开通端口"],
+        "en": ["open port", "allow port", "unblock port"]
+      }
+    },
+    {
+      "id": "ops.rotate_credential",
+      "category": "infrastructure-ops",
+      "label": { "zh-CN": "轮换运维凭据", "en": "Rotate operational credentials" },
+      "operation": "CHANGE",
+      "roleContract": "change/v1",
+      "projectionContract": "change/v1",
+      "entityTypes": ["credential"],
+      "triggers": {
+        "zh": ["轮换凭据", "更新密钥", "更换密码"],
+        "en": ["rotate credential", "rotate key", "update secret"]
+      }
+    },
+    {
+      "id": "ops.rollback_system",
+      "category": "infrastructure-ops",
+      "label": { "zh-CN": "回滚系统环境", "en": "Rollback system environment" },
+      "operation": "CHANGE",
+      "roleContract": "change/v1",
+      "projectionContract": "change/v1",
+      "entityTypes": ["server", "env-config"],
+      "triggers": {
+        "zh": ["回滚系统", "回退环境"],
+        "en": ["rollback system", "revert environment"]
+      }
+    }
+  ]
+}

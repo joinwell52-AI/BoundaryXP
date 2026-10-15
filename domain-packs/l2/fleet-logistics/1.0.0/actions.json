@@ -1,0 +1,133 @@
+{
+  "schema": "boundx-domain-actions/v1",
+  "packId": "fleet-logistics",
+  "version": "1.0.0",
+  "invariants": [
+    "source_evidence_required",
+    "effect_not_inferred",
+    "completion_not_inferred",
+    "authorization_not_inferred"
+  ],
+  "roleContracts": {
+    "send/v1": {
+      "operation": "SEND",
+      "primaryRole": "payload",
+      "optionalRoles": ["executor", "recipient"]
+    },
+    "change/v1": {
+      "operation": "CHANGE",
+      "primaryRole": "target",
+      "optionalRoles": ["executor"]
+    },
+    "process/v1": {
+      "operation": "PROCESS",
+      "primaryRole": "target",
+      "optionalRoles": ["executor"]
+    }
+  },
+  "projectionContracts": {
+    "send/v1": {
+      "operation": "SEND",
+      "candidates": [
+        { "field": "A", "basis": "action_source" },
+        { "field": "P", "basis": "explicit_executor_only" },
+        { "field": "O", "basis": "bound_primary_role" }
+      ]
+    },
+    "change/v1": {
+      "operation": "CHANGE",
+      "candidates": [
+        { "field": "A", "basis": "action_source" },
+        { "field": "P", "basis": "explicit_executor_only" }
+      ]
+    },
+    "process/v1": {
+      "operation": "PROCESS",
+      "candidates": [
+        { "field": "A", "basis": "action_source" },
+        { "field": "P", "basis": "explicit_executor_only" },
+        { "field": "I", "basis": "bound_primary_role" }
+      ]
+    }
+  },
+  "frames": [
+    {
+      "id": "fleet.dispatch_order",
+      "category": "dispatch-scheduling",
+      "label": { "zh-CN": "下发运单派单", "en": "Dispatch freight order" },
+      "operation": "SEND",
+      "roleContract": "send/v1",
+      "projectionContract": "send/v1",
+      "entityTypes": ["waybill", "driver"],
+      "triggers": {
+        "zh": ["下发运单", "派单", "指派车次"],
+        "en": ["dispatch order", "dispatch waybill", "assign driver"]
+      }
+    },
+    {
+      "id": "fleet.register_departure",
+      "category": "dispatch-scheduling",
+      "label": { "zh-CN": "登记出车发车", "en": "Register vehicle departure" },
+      "operation": "CHANGE",
+      "roleContract": "change/v1",
+      "projectionContract": "change/v1",
+      "entityTypes": ["vehicle", "driver"],
+      "triggers": {
+        "zh": ["登记出车", "发车登记", "出车"],
+        "en": ["register departure", "depart vehicle"]
+      }
+    },
+    {
+      "id": "fleet.calculate_freight",
+      "category": "freight-settlement",
+      "label": { "zh-CN": "计算核算运费", "en": "Calculate freight cost" },
+      "operation": "PROCESS",
+      "roleContract": "process/v1",
+      "projectionContract": "process/v1",
+      "entityTypes": ["shipping-fee", "waybill"],
+      "triggers": {
+        "zh": ["计算运费", "核算运费", "结算费用"],
+        "en": ["calculate freight", "settle freight"]
+      }
+    },
+    {
+      "id": "fleet.change_route",
+      "category": "route-management",
+      "label": { "zh-CN": "变更运输路线", "en": "Change transport route" },
+      "operation": "CHANGE",
+      "roleContract": "change/v1",
+      "projectionContract": "change/v1",
+      "entityTypes": ["route", "vehicle"],
+      "triggers": {
+        "zh": ["变更路线", "改路", "调整线路"],
+        "en": ["change route", "reroute vehicle"]
+      }
+    },
+    {
+      "id": "fleet.check_overweight",
+      "category": "safety-compliance",
+      "label": { "zh-CN": "核验车辆超载", "en": "Check vehicle overweight" },
+      "operation": "PROCESS",
+      "roleContract": "process/v1",
+      "projectionContract": "process/v1",
+      "entityTypes": ["payload-weight", "vehicle"],
+      "triggers": {
+        "zh": ["超载核验", "检查载重", "核对吨位"],
+        "en": ["check overweight", "check tonnage"]
+      }
+    },
+    {
+      "id": "fleet.confirm_delivery",
+      "category": "dispatch-scheduling",
+      "label": { "zh-CN": "确认送达签收", "en": "Confirm delivery" },
+      "operation": "CHANGE",
+      "roleContract": "change/v1",
+      "projectionContract": "change/v1",
+      "entityTypes": ["waybill"],
+      "triggers": {
+        "zh": ["确认送达", "签收", "送达登记"],
+        "en": ["confirm delivery", "signed for delivery"]
+      }
+    }
+  ]
+}

@@ -1,0 +1,133 @@
+{
+  "schema": "boundx-domain-actions/v1",
+  "packId": "auto-rental",
+  "version": "1.0.0",
+  "invariants": [
+    "source_evidence_required",
+    "effect_not_inferred",
+    "completion_not_inferred",
+    "authorization_not_inferred"
+  ],
+  "roleContracts": {
+    "create/v1": {
+      "operation": "CREATE",
+      "primaryRole": "artifact",
+      "optionalRoles": ["executor"]
+    },
+    "change/v1": {
+      "operation": "CHANGE",
+      "primaryRole": "target",
+      "optionalRoles": ["executor"]
+    },
+    "process/v1": {
+      "operation": "PROCESS",
+      "primaryRole": "target",
+      "optionalRoles": ["executor"]
+    }
+  },
+  "projectionContracts": {
+    "create/v1": {
+      "operation": "CREATE",
+      "candidates": [
+        { "field": "A", "basis": "action_source" },
+        { "field": "P", "basis": "explicit_executor_only" },
+        { "field": "O", "basis": "bound_primary_role" }
+      ]
+    },
+    "change/v1": {
+      "operation": "CHANGE",
+      "candidates": [
+        { "field": "A", "basis": "action_source" },
+        { "field": "P", "basis": "explicit_executor_only" }
+      ]
+    },
+    "process/v1": {
+      "operation": "PROCESS",
+      "candidates": [
+        { "field": "A", "basis": "action_source" },
+        { "field": "P", "basis": "explicit_executor_only" },
+        { "field": "I", "basis": "bound_primary_role" }
+      ]
+    }
+  },
+  "frames": [
+    {
+      "id": "rental.create_contract",
+      "category": "contract-mgmt",
+      "label": { "zh-CN": "签订租车合同", "en": "Create rental contract" },
+      "operation": "CREATE",
+      "roleContract": "create/v1",
+      "projectionContract": "create/v1",
+      "entityTypes": ["rental-contract", "tenant-driver"],
+      "triggers": {
+        "zh": ["签订合同", "签租车单", "签约"],
+        "en": ["create contract", "sign lease", "sign rental agreement"]
+      }
+    },
+    {
+      "id": "rental.deliver_vehicle",
+      "category": "vehicle-handover",
+      "label": { "zh-CN": "交车验车交付", "en": "Deliver vehicle" },
+      "operation": "CHANGE",
+      "roleContract": "change/v1",
+      "projectionContract": "change/v1",
+      "entityTypes": ["rental-car", "inspection-sheet"],
+      "triggers": {
+        "zh": ["交车", "验车交付", "发车交接"],
+        "en": ["deliver vehicle", "handover car"]
+      }
+    },
+    {
+      "id": "rental.return_vehicle",
+      "category": "vehicle-handover",
+      "label": { "zh-CN": "还车验收登记", "en": "Return vehicle" },
+      "operation": "PROCESS",
+      "roleContract": "process/v1",
+      "projectionContract": "process/v1",
+      "entityTypes": ["rental-car", "inspection-sheet"],
+      "triggers": {
+        "zh": ["还车", "验收还车", "退车"],
+        "en": ["return vehicle", "return car"]
+      }
+    },
+    {
+      "id": "rental.deduct_deposit",
+      "category": "fee-settlement",
+      "label": { "zh-CN": "扣除押金违章扣款", "en": "Deduct deposit" },
+      "operation": "CHANGE",
+      "roleContract": "change/v1",
+      "projectionContract": "change/v1",
+      "entityTypes": ["deposit"],
+      "triggers": {
+        "zh": ["扣押金", "违章扣款", "扣除押金"],
+        "en": ["deduct deposit", "charge deposit"]
+      }
+    },
+    {
+      "id": "rental.settle_fee",
+      "category": "fee-settlement",
+      "label": { "zh-CN": "结算租金及费用", "en": "Settle rental fee" },
+      "operation": "PROCESS",
+      "roleContract": "process/v1",
+      "projectionContract": "process/v1",
+      "entityTypes": ["rental-fee", "mileage-limit"],
+      "triggers": {
+        "zh": ["结算租金", "核算费用", "结算租车费"],
+        "en": ["settle fee", "calculate rental cost"]
+      }
+    },
+    {
+      "id": "rental.lock_unreturned",
+      "category": "vehicle-control",
+      "label": { "zh-CN": "逾期断电控车锁车", "en": "Lock unreturned vehicle" },
+      "operation": "CHANGE",
+      "roleContract": "change/v1",
+      "projectionContract": "change/v1",
+      "entityTypes": ["rental-car"],
+      "triggers": {
+        "zh": ["逾期锁车", "远程控车", "拉断电源"],
+        "en": ["lock vehicle", "remote lock", "disable vehicle"]
+      }
+    }
+  ]
+}
