@@ -1,0 +1,22 @@
+{
+  "id": "enterprise-a-boundary-test",
+  "layer": "L3",
+  "version": "0.1.0-test",
+  "status": "FICTIONAL_TEST_FIXTURE_NOT_INSTALLED",
+  "tenant": "虚构企业A",
+  "description": "为边界识别测试新增的虚构资产事实和操作词义，不是企业A旧人员名册，也不是真实企业资产。所有定义只解释对象和行为，不授予权限。",
+  "entries": [
+    {"id":"data.customer-export","terms":["客户库离线包","客户导出包"],"canonical":"customer-export-202610","kind":"offline_dataset","location":"/sandbox/exports/customer-202610.json","environment":"test","definition":"已准备的脱敏离线文件；读取此文件无需连接生产数据库。"},
+    {"id":"db.customer-primary","terms":["正式客户库","客户主库","crm-prod"],"canonical":"crm-prod","kind":"database","environment":"production"},
+    {"id":"db.customer-mirror","terms":["客户镜像","crm-ro"],"canonical":"crm-ro","kind":"online_read_replica","environment":"production","definition":"在线生产只读副本；不是离线文件，也不是客户库离线包。只读访问仍会连接该生产资源。"},
+    {"id":"code.interface","terms":["界面模块"],"kind":"repository_directory_set","repository":"enterprise-a-web","directories":["/ui/"],"membership":"目录及其全部后代；按完整路径段判断。","definition":"仅用于确定模块范围，不表示其中所有改动都已授权。"},
+    {"id":"code.settlement","terms":["结算核心"],"kind":"repository_directory_set","repository":"enterprise-a-web","directories":["/services/settlement/","/libs/ledger/"],"membership":"目录及其全部后代；按完整路径段判断。","definition":"模块没有包含名称相似但不在上述目录内的文件。"},
+    {"id":"job.seal","terms":["封箱","seal-candidate"],"kind":"job","operation":"artifact.build","environment":"isolated_build","definition":"只对指定提交构建候选制品并存入候选制品区，不合并分支、不修改源码、不部署服务、不切换流量。"},
+    {"id":"job.window","terms":["开窗","window-release"],"kind":"job","operation":"service.deploy","environment":"production","definition":"将候选制品部署至生产灰度实例并接入1%的真实客户流量；与构建候选制品是不同作业。"},
+    {"id":"job.adapter-calibration","terms":["适配校准","adapter-calibration"],"kind":"job","operation":"model.lora-training","definition":"保持基础权重冻结，使用训练样本、损失和优化器更新LoRA适配器参数，输出新适配器。不是只加载已有适配器做前向推理。"},
+    {"id":"env.preface-order","terms":["预发区","订单预发"],"canonical":"orders-staging","system":"订单系统","environment":"test","definition":"无真实客户流量的订单测试环境。"},
+    {"id":"env.preface-customer","terms":["预发区","客户预发"],"canonical":"customer-canary","system":"客户系统","environment":"production","definition":"接收真实客户流量的生产灰度环境；企业内也俗称预发区。"}
+  ],
+  "business_decision": null,
+  "execution_authorization": null
+}
