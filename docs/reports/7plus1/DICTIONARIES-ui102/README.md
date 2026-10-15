@@ -30,3 +30,17 @@ L2/L3只提供释义和企业上下文。Core没有新增模型或网络调用�
 MCP配置依据：[OpenAI Docs](https://developers.openai.com/codex/mcp)。配置仅在当前子进程argv中，保留登录、模型和原有禁用工具策略，仅开放字典lookup。
 
 状态：WAITING_ADMIN_REVIEW。无合并、公开发布或tag。
+
+## 本地安装与页面检查（2026-10-15）
+
+- 实际运行版本：0.1.0-candidate.031-r1.2-ui.102；核心boundary-report-r02-dictionaries。
+- 构建源码：ecbfa564ccd582d354bd535c8c26e5876621a575，source_runtime_clean=true。
+- 安装manifest SHA256：8b543fc55341b2897f4b8c31a10f0d59e699b2da56c30cc7bac3fb816f704247。
+- 包含274个受摘要保护的文件，独立依赖安装及14个离线HTTP处理检查通过；旧报告只读回放保持来源和报告。
+- 更新前确认58618无运行请求，备份current/config及data到 `.boundx/short-compiler-031-r1/backups/2026-10-15T05-11-09.310Z`。
+- 更新后仍有178条历史，4838个数据文件逐摘要比较无变化。
+- 实际浏览器显示v0.1.102，L2/L3选项正确；选择软件行业与企业A后刷新保持选择；测试后恢复为不启用。未点击开始编译，浏览器错误日志为空。
+- 正常启动仍为根目录 `npm run 7plus1:ui`。原入口文件在替换前完整保留，其他本地改动不重置。
+- 回滚：先确认无活动请求并停止已识别的58618进程，再执行安装包deploy.mjs的rollback操作（home为现有short-compiler-031-r1，confirmed-idle），随后正常启动。previous指针为ui101，历史数据不重算。
+
+实际验证附件：UNIT-TESTS.txt、CODEX-MCP.txt、PACKAGE-VERIFICATION.json、DEPLOYMENT.json。界面截图保存在本地evidence/dictionaries-ui102/settings.png。未提交真实用户任务正文或登录资料。
