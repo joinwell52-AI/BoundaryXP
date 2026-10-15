@@ -14,7 +14,7 @@ const selection={l2:'software-ai@0.2.0',l3:'tenant-a@0.2.0'};
 const probe={binary:'OFFLINE_TEST_NO_MODEL',version:'fixture',outputs:{features:{stdout:'shell_tool stable true\napps stable true\ncode_mode_host stable true'}}};
 const temp=t=>{const root=fs.mkdtempSync(path.join(os.tmpdir(),'boundx-dictionary-test-'));t.after(()=>fs.rmSync(root,{recursive:true,force:true}));return root;};
 test('only selected packages; shared aliases preserved; missing names never assigned',()=>{
- assert.equal(dictionaryCatalog().length,15);
+ assert.equal(dictionaryCatalog().length,17);
  const a=selectDictionaries(selection),b=selectDictionaries({l3:'tenant-b@0.1.0'});
  assert.equal(lookupDictionary(a,{query:'小王'}).total,2);
  assert.deepEqual(lookupDictionary(b,{query:'小王'}).entries.map(r=>r.value.employee_id),['b101']);
@@ -29,7 +29,7 @@ test('only selected packages; shared aliases preserved; missing names never assi
  assert.ok(!dictionaryInstructions(a).includes('王明'));assert.ok(dictionaryInstructions(a).length<1800);
 });
 test('every registered industry is packaged, searchable and isolated from unselected industries',()=>{
- const industries=dictionaryCatalog().filter(p=>p.layer==='L2');
+ const industries=dictionaryCatalog().filter(p=>p.layer==='L2'&&!p.test_only);
  assert.equal(industries.length,12);
  const available=fs.readdirSync('domain-packs/l2',{withFileTypes:true}).filter(d=>d.isDirectory()).map(d=>d.name).sort();
  assert.deepEqual(industries.map(p=>p.id.split('@')[0]).sort(),available);
@@ -86,7 +86,7 @@ async function request(server,url,{body,headers={}}={}){
 test('HTTP selection reaches engine, rejects invalid IDs, and binds idempotency',async t=>{
  const root=temp(t);let received,finish;
  const server=createServer({dataRoot:root,legacyRoot:path.join(root,'empty'),productSnapshot:{contract:'candidate-ir/2.0'},catalog:{default_model:'test',default_reasoning:'medium',sha256:'offline',models:[{id:'test',reasoning:['medium']}]},parse:async(bytes,args)=>{received=args;await new Promise(resolve=>finish=resolve);throw Error('OFFLINE_TEST_DONE');}});
- const session=await request(server,'/api/session');assert.equal(session.data.dictionary_catalog.length,15);
+ const session=await request(server,'/api/session');assert.equal(session.data.dictionary_catalog.length,17);
  const headers={cookie:'boundx_session='+session.data.token,'x-boundx-session':session.data.token};
  const body={text:'任务',request_id:'10000000-0000-4000-8000-000000000102',model:'test',reasoning:'medium',parse_method:'SKILL',dictionaries:selection};
  assert.equal((await request(server,'/api/parse',{body:{...body,dictionaries:{l3:'bad'}},headers})).status,400);

@@ -5,6 +5,8 @@ import {fileURLToPath} from 'node:url';
 import {sha256} from './source.mjs';
 const root=path.resolve(path.dirname(fileURLToPath(import.meta.url)),'../../..');
 const definitions=[
+ {id:'software-ai-boundary-test@0.1.0-test',layer:'L2',label:'软件与AI边界定义 · r02测试',version:'0.1.0-test',test_only:true,files:['examples/semantic-packs/boundary-test-r02/l2-software-ai-boundary-test.json']},
+ {id:'enterprise-a-boundary-test@0.1.0-test',layer:'L3',label:'企业A边界词典 · r02虚构测试',version:'0.1.0-test',test_only:true,files:['examples/semantic-packs/boundary-test-r02/l3-enterprise-a-boundary-test.json']},
  {id:'software-ai@0.2.0',layer:'L2',label:'软件与AI行业 · 0.2.0',version:'0.2.0',test_only:false,files:['actions','entities','roles','resources','boundaries','completions','references'].map(n=>`domain-packs/l2/software-ai/0.2.0/${n}.json`)},
  ...[
   ['auto-rental','汽车租赁'],

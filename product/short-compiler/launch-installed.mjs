@@ -5,6 +5,7 @@ import {fileURLToPath,pathToFileURL} from 'node:url';
 import {spawn} from 'node:child_process';
 import {lockProduct} from './resources.mjs';
 const approvedVersions={
+ '0.1.0-candidate.031-r1.2-ui.105':{compiler:'boundary-report-r02-dictionaries',contract:'candidate-ir/2.0'},
  '0.1.0-candidate.031-r1.2-ui.104':{compiler:'boundary-report-r02-dictionaries',contract:'candidate-ir/2.0'},
  '0.1.0-candidate.031-r1.2-ui.103':{compiler:'boundary-report-r02-dictionaries',contract:'candidate-ir/2.0'},
  '0.1.0-candidate.031-r1.2-ui.102':{compiler:'boundary-report-r02-dictionaries',contract:'candidate-ir/2.0'},
