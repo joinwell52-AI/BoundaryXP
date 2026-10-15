@@ -14,7 +14,9 @@ import {dictionaryIdentity} from './dictionaries.mjs';
 export function dictionaryMcpFlags(snapshotPath,logPath){
  const config={command:process.execPath,args:[fileURLToPath(new URL('./dictionary-mcp.mjs',import.meta.url)),snapshotPath,logPath],enabled:true,required:true,enabled_tools:['lookup']};
  // Each value is TOML-compatible JSON, passed directly as argv (never through a shell).
- return Object.entries(config).flatMap(([key,value])=>['-c',`mcp_servers.boundx_dictionary.${key}=${JSON.stringify(value)}`]);
+ // code_mode_only models need the bundled tool dispatcher even for read-only MCP.
+ // This does not enable shell, browser, file tools or other MCP servers.
+ return ['-c','features.code_mode_host=true',...Object.entries(config).flatMap(([key,value])=>['-c',`mcp_servers.boundx_dictionary.${key}=${JSON.stringify(value)}`])];
 }
 export const allowedDictionaryEvent=e=>e.item?.type==='mcp_tool_call'&&e.item.server==='boundx_dictionary'&&e.item.tool==='lookup';
 const toolFeatures=['shell_tool','multi_agent','multi_agent_v2','apps','plugins','remote_plugin','hooks','memories','skill_search','tool_suggest','browser_use','browser_use_external','computer_use','image_generation','view_image','code_mode_host','code_mode_only','sleep_tool','workspace_dependencies','in_app_browser','in_app_chat','in_app_local_automation','artifact'];
@@ -67,8 +69,8 @@ export async function callCodex({bundle,source,candidate=null,revisionIssues=nul
   const schemaDelivery=openReport?{schema:null,adjustments:[],local_schema_sha256:null,output_schema_sha256:null}:bundle.transport_version==='DIRECT_CANDIDATE_IR_R01'?directIROutputSchema(targetSchema):bundle.transport_version===wireVersion?codexWireOutputSchema(targetSchema):{schema:targetSchema,adjustments:[],local_schema_sha256:sha256(JSON.stringify(targetSchema)),output_schema_sha256:sha256(JSON.stringify(targetSchema))};
   if(!openReport){fs.writeFileSync(schemaPath,JSON.stringify(schemaDelivery.schema));fs.writeFileSync(path.join(directory,`output-schema-${attempt}.json`),JSON.stringify(schemaDelivery.schema));}
   const featureLines=probe.outputs.features.stdout;
-  const flags=toolFeatures.filter(f=>new RegExp('^'+f+'\\s','m').test(featureLines)).flatMap(f=>['-c',`features.${f}=false`]);
   const dictionaries=openReport&&bundle.dictionary_snapshot?.packs.length?bundle.dictionary_snapshot:null;
+  const flags=toolFeatures.filter(f=>(!dictionaries||f!=='code_mode_host')&&new RegExp('^'+f+'\\s','m').test(featureLines)).flatMap(f=>['-c',`features.${f}=false`]);
   const dictionaryLog=path.resolve(directory,`dictionary-lookups-${attempt}.jsonl`),dictionarySnapshotPath=path.join(work,'dictionary-snapshot.json');
   if(dictionaries){fs.writeFileSync(dictionarySnapshotPath,JSON.stringify(dictionaries));fs.writeFileSync(dictionaryLog,'',{flag:'wx'});}
   const args=['exec','--ignore-user-config','--ignore-rules','--ephemeral','--skip-git-repo-check','--sandbox','read-only','--json','--color','never','--cd',work,'--model',model,...(openReport?[]:['--output-schema',schemaPath]),'--output-last-message',outputPath,'-c',`model_reasoning_effort="${reasoning}"`,'-c','project_doc_max_bytes=0','-c','web_search="disabled"','-c','features.skip_host_skill_discovery=true',...flags,'-'];
@@ -77,6 +79,7 @@ export async function callCodex({bundle,source,candidate=null,revisionIssues=nul
   request.request_profile=bundle.request_profile??'LEGACY_INLINE';request.schema_delivery=bundle.schema_delivery??{mode:'INLINE_AND_CLI_OUTPUT_SCHEMA'};
   request.dictionaries=dictionaries?dictionaryIdentity(dictionaries):null;
   request.isolation.dictionary_tool=dictionaries?'boundx_dictionary.lookup (selected snapshot only)':'DISABLED';
+  request.isolation.code_mode_dispatcher=dictionaries?'ENABLED_FOR_SELECTED_DICTIONARY':'DISABLED';
   if(dictionaries)request.isolation.filesystem='read-only policy; only selected dictionary MCP lookup enabled; other tools disabled';
   request.source_delivery={representation:'EXACT_TEXT_ONCE',source_sha256:source.sha256,source_codepoints:source.codepoints,derived_lines_and_literals:'LOCAL_PROVENANCE_ONLY'};
   request.wait_policy={automatic_timeout_ms:timeoutMs>0?timeoutMs:null,manual_cancel:true};

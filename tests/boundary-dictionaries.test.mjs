@@ -11,7 +11,7 @@ import {parse7Plus1} from '../research/7plus1-parser/llm-first-028/engine.mjs';
 import {callCodex,allowedDictionaryEvent} from '../research/7plus1-parser/llm-first-028/provider.mjs';
 import {createServer} from '../research/7plus1-parser/llm-first-028/service.mjs';
 const selection={l2:'software-ai@0.2.0',l3:'tenant-a@0.2.0'};
-const probe={binary:'OFFLINE_TEST_NO_MODEL',version:'fixture',outputs:{features:{stdout:'shell_tool stable true\napps stable true'}}};
+const probe={binary:'OFFLINE_TEST_NO_MODEL',version:'fixture',outputs:{features:{stdout:'shell_tool stable true\napps stable true\ncode_mode_host stable true'}}};
 const temp=t=>{const root=fs.mkdtempSync(path.join(os.tmpdir(),'boundx-dictionary-test-'));t.after(()=>fs.rmSync(root,{recursive:true,force:true}));return root;};
 test('only selected packages; shared aliases preserved; missing names never assigned',()=>{
  assert.equal(dictionaryCatalog().length,15);
@@ -66,6 +66,7 @@ test('generation and independent review use same snapshot; content stays out of 
  const root=temp(t),seen=[];
  const call=args=>callCodex({...args,execute:async(_binary,argv,options)=>{
   assert.ok(options.input.includes('SELECTED_DICTIONARIES'));assert.ok(!options.input.includes('王明'));assert.ok(argv.includes('features.shell_tool=false'));assert.ok(argv.some(a=>a.startsWith('mcp_servers.boundx_dictionary.command=')));
+  assert.ok(argv.includes('features.code_mode_host=true'));assert.ok(!argv.includes('features.code_mode_host=false'));
   const payload=JSON.parse(argv.find(a=>a.startsWith('mcp_servers.boundx_dictionary.args=')).split('=').slice(1).join('='));
   const snapshot=JSON.parse(fs.readFileSync(payload[1]));seen.push(snapshot.sha256);
   const result=lookupDictionary(snapshot,{query:'小王'});fs.appendFileSync(payload[2],JSON.stringify({arguments:{query:'小王'},result})+'\n');
