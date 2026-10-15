@@ -24,8 +24,8 @@ export function repairableBoundaryContract(ir,technical,source){
  if(!technical.errors.every(e=>e.code==='REQUIREMENT_SCOPE_MISSING'&&ir.requirements.some(r=>r.id===e.node_id)||e.code==='FREE_LOCAL_VARIABLE'&&ir.requirements.some(r=>r.id===e.requirement_id)&&ir.variables.some(v=>v.id===e.node_id)))return false;
  try{loadCandidate(ir);for(const s of ir.source_table)linkQuote(source,s);return true;}catch{return false;}
 }
-export async function parseDirectIR(bytes,{output,probe,model='gpt-6.1-sol',reasoning='medium',parseMethod='SKILL',signal,onProgress=()=>{},timeoutMs=null,call=callCodex,maxModelRequests=2,resourceGuard=()=>{},productSnapshot=null,bundleFactory=directIRBundle}={}){
- if(bundleFactory('parse',{parseMethod,contractVersion:productSnapshot?.contract??'candidate-ir/1.4'}).request_profile===reportProfile)return parseBoundaryReport(bytes,{output,probe,model,reasoning,parseMethod,signal,onProgress,timeoutMs,call,maxModelRequests,resourceGuard,productSnapshot,bundleFactory:phase=>bundleFactory(phase,{parseMethod,contractVersion:productSnapshot?.contract??'candidate-ir/1.4'})});
+export async function parseDirectIR(bytes,{output,probe,model='gpt-6.1-sol',reasoning='medium',parseMethod='SKILL',dictionaries={},signal,onProgress=()=>{},timeoutMs=null,call=callCodex,maxModelRequests=2,resourceGuard=()=>{},productSnapshot=null,bundleFactory=directIRBundle}={}){
+ if(bundleFactory('parse',{parseMethod,contractVersion:productSnapshot?.contract??'candidate-ir/1.4'}).request_profile===reportProfile)return parseBoundaryReport(bytes,{output,probe,model,reasoning,parseMethod,dictionaries,signal,onProgress,timeoutMs,call,maxModelRequests,resourceGuard,productSnapshot,bundleFactory:phase=>bundleFactory(phase,{parseMethod,contractVersion:productSnapshot?.contract??'candidate-ir/1.4'})});
  if(!output)throw Error('OUTPUT_DIRECTORY_REQUIRED');if(!Number.isSafeInteger(maxModelRequests)||maxModelRequests<2)throw Error('MODEL_REQUEST_BUDGET_EXHAUSTED');
  const rawCall=call;call=async args=>{const response=await rawCall(args);
   if(args.bundle.boundary_rules){

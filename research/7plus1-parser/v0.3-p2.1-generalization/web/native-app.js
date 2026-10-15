@@ -21,13 +21,23 @@ function configureModels(){
  for(const m of session.model_catalog?.models??[{id:session.requested_model,label:session.requested_model,reasoning:['medium']}]){const o=el('option',m.label);o.value=m.id;model.append(o);}
  const previous=JSON.parse(localStorage.getItem('boundx-compile-settings')??'null');model.value=[...model.options].some(o=>o.value===previous?.model)?previous.model:session.requested_model;
  method.value=[...method.options].some(o=>o.value===previous?.parse_method)?previous.parse_method:'SKILL';
- const save=()=>localStorage.setItem('boundx-compile-settings',JSON.stringify({model:model.value,reasoning:reasoning.value,parse_method:method.value}));
+ const selectors={};
+ for(const [layer,label]of [['L2','行业字典 L2'],['L3','企业字典 L3']]){
+  const select=el('select');select.id='compile-'+layer.toLowerCase();select.setAttribute('aria-label',label);const none=el('option','不启用');none.value='';select.append(none);
+  for(const pack of session.dictionary_catalog??[]){if(pack.layer!==layer)continue;const o=el('option',pack.label);o.value=pack.id;select.append(o);}
+  const old=previous?.dictionaries?.[layer.toLowerCase()];select.value=[...select.options].some(o=>o.value===old)?old:'';selectors[layer]=select;
+ }
+ const save=()=>localStorage.setItem('boundx-compile-settings',JSON.stringify({model:model.value,reasoning:reasoning.value,parse_method:method.value,dictionaries:{l2:selectors.L2.value,l3:selectors.L3.value}}));
  const update=()=>{const old=reasoning.value;reasoning.replaceChildren();const m=session.model_catalog?.models.find(x=>x.id===model.value);for(const level of m?.reasoning??['medium']){const o=el('option',settingLabels[level]??level);o.value=level;reasoning.append(o);}reasoning.value=[...reasoning.options].some(o=>o.value===old)?old:[...reasoning.options].some(o=>o.value==='medium')?'medium':reasoning.options[0]?.value;save();};
  const resourceInfo=el('p',undefined,'muted');resourceInfo.id='compile-resource-info';
  const waitInfo=el('p',session.model_wait_policy?.automatic_timeout_ms==null?'模型等待不设固定超时；可以手动取消。网络、登录及额度错误仍如实报告。':'模型等待上限：'+session.model_wait_policy.automatic_timeout_ms/1000+' 秒。','muted');box.append(waitInfo);
  const viewedInfo=el('p',undefined,'process-notice');viewedInfo.id='compile-viewed-settings';
  const describe=()=>updateResourceInfo();
- model.onchange=update;reasoning.onchange=save;method.onchange=()=>{save();describe();};const ml=el('label','调用模型 '),rl=el('label','推理强度 '),pl=el('label','解析方式 ');ml.append(model);rl.append(reasoning);pl.append(method);box.append(viewedInfo,pl,ml,rl,resourceInfo,el('p','解析和独立审阅使用本次选择的同一模型。列表来自本机Codex目录，实际调用仍须账号可用；不自动换模型。更换配置不继承原版语义验收。','muted'));$('input').insertAdjacentElement('afterend',box);update();describe();if(previous?.model===model.value&&[...reasoning.options].some(o=>o.value===previous.reasoning)){reasoning.value=previous.reasoning;save();}updateViewedSettings();
+ model.onchange=update;reasoning.onchange=save;method.onchange=()=>{save();describe();};const ml=el('label','调用模型 '),rl=el('label','推理强度 '),pl=el('label','解析方式 ');ml.append(model);rl.append(reasoning);pl.append(method);box.append(viewedInfo,pl,ml,rl,resourceInfo,el('p','解析和独立审阅使用本次选择的同一模型。列表来自本机Codex目录，实际调用仍须账号可用；不自动换模型。更换配置不继承原版语义验收。','muted'));$('input').insertAdjacentElement('afterend',box);
+ for(const [layer,label]of [['L2','行业字典 L2 '],['L3','企业字典 L3 ']]){const l=el('label',label);l.append(selectors[layer]);selectors[layer].onchange=save;box.append(l);}
+ box.append(el('p','生成与审阅按需查询同版字典，不整包加载。L2解释行业术语；L3解释本企业对象与别名。标注“虚构测试”的包不代表真实企业；字典不授予权限。','muted'));
+ const actual=el('div');actual.id='dictionary-usage';box.append(actual);
+ update();describe();if(previous?.model===model.value&&[...reasoning.options].some(o=>o.value===previous.reasoning)){reasoning.value=previous.reasoning;save();}updateViewedSettings();
 }
 function updateViewedSettings(){
  const box=$('compile-settings');if(!box)return;
@@ -35,6 +45,10 @@ function updateViewedSettings(){
  $('compile-viewed-settings').textContent=current?'当前查看记录实际使用：'+(current.parse_method==='MD'?'MD · r02（历史只读）':current.parse_method==='SKILL1'?'skill1 · semantics-first-r02':current.parse_method==='SKILL'?'Skill':'历史记录，模式以原始记录为准')+'；请求模型 '+(current.requested_model??'未记录')+'；推理 '+(current.requested_reasoning??'未记录')+(busy?'。':'。下方选择只影响下一次编译，不改变此记录。'):'选择Skill原版或skill1新规程进行对比；两者共用同版合同、Schema及计算核心。MD历史记录保持只读。';
  updateResourceInfo();
  if(session?.request_profile==='BOUNDARY_REPORT_R01'&&!current)$('compile-viewed-settings').textContent='Skill与skill1均已取消固定类型和输出Schema；两者分别加载生成Skill、审阅Skill，共用7+1方法。';
+ const usage=$('dictionary-usage');if(usage){usage.replaceChildren();if(current){const selection=current.dictionaries??current.result?.dictionaries;usage.append(el('p','本条记录选择的字典：'+(selection?selection.packs.map(p=>p.layer+' '+p.label).join('；')||'未启用':'历史记录未记录字典选择')));
+  const lookups=current.result?.dictionary_lookups;if(lookups){usage.append(el('p',`实际查阅：生成 ${lookups.parse.length} 次；审阅 ${lookups.audit.length} 次。选中不代表已查阅。`));
+   for(const [phase,label]of [['parse','生成LLM'],['audit','审阅LLM']])for(const entry of lookups[phase]){const d=el('details');d.append(el('summary',`${label}查询“${entry.arguments?.query??''}”：${entry.error??('命中 '+entry.result.total+' 条')}`));for(const row of entry.result?.entries??[]){const v=row.value,title=v.display_name??v.surface??(typeof v.label==='string'?v.label:v.label?.['zh-CN'])??v.id??'词条';d.append(el('p',`${title} · ${row.pack_id} · ${row.path}${row.pointer}`));}usage.append(d);}
+  }else usage.append(el('p',busy?'运行中；完成后显示实际字典查询记录。':'此记录没有字典查询回执。','muted'));}}
 }
 function updateResourceInfo(){
  const mode=$('compile-method')?.value,r=session?.comparison_resources?.[mode]?.selected_resources,target=$('compile-resource-info');if(!target)return;
@@ -115,7 +129,7 @@ function render(run){
   const d=el('details');d.append(el('summary','开发详情：旧引擎原始快照'),el('pre',JSON.stringify(run.raw,null,2)));$('panel').append(d);return;
  }
  busy=['QUEUED','RUNNING','CANCELLING'].includes(run.status);$('parse').disabled=busy;$('cancel').disabled=!busy||run.status==='CANCELLING';$('input').readOnly=busy;$('file').disabled=busy;
- for(const id of ['compile-model','compile-reasoning','compile-method','source-example','load-example'])if($(id))$(id).disabled=busy;
+ for(const id of ['compile-model','compile-reasoning','compile-method','compile-l2','compile-l3','source-example','load-example'])if($(id))$(id).disabled=busy;
  if(busy){if($('compile-method')&&run.parse_method)$('compile-method').value=run.parse_method;if($('compile-model')&&run.requested_model)$('compile-model').value=run.requested_model;if($('compile-reasoning')&&run.requested_reasoning)$('compile-reasoning').value=run.requested_reasoning;}
  updateViewedSettings();
  const stageTitle=run.request_profile==='DECLARATIVE_BOUNDARY_R01'?({PARSING:'LLM正在提取任务边界',AUDITING:'新会话正在核对边界',CALCULATING:'程序正在计算确定值并建立边界'}[run.stage]??stages[run.stage]):['LLM_BOUNDARY_CALCULATION_R01','LLM_BOUNDARY_CALCULATION_R02','LLM_BOUNDARY_CALCULATION_R03'].includes(run.request_profile)?({PARSING:'LLM正在识别IR与计算边界',AUDITING:'新会话正在核对IR与计算结果',CALCULATING:'程序正在复核并整理结果'}[run.stage]??stages[run.stage]):stages[run.stage];
@@ -230,9 +244,9 @@ async function open(id){
 $('parse').onclick=async()=>{
  if(busy)return;const n=count();if(!n||!$('input').value.replaceAll('\uFEFF','').trim())return showError(Error('EMPTY_SOURCE'));if(new TextEncoder().encode($('input').value).length>MAX_SOURCE_BYTES)return showError(Error('SOURCE_BYTE_LIMIT'));
  busy=true;$('parse').disabled=true;
- const sourcePayload={...(uploaded??{text:$('input').value}),model:$('compile-model').value,reasoning:$('compile-reasoning').value,parse_method:$('compile-method').value},pending=JSON.parse(localStorage.getItem('boundx029-pending')??'null');
+ const sourcePayload={...(uploaded??{text:$('input').value}),model:$('compile-model').value,reasoning:$('compile-reasoning').value,parse_method:$('compile-method').value,dictionaries:{l2:$('compile-l2').value,l3:$('compile-l3').value}},pending=JSON.parse(localStorage.getItem('boundx029-pending')??'null');
  if(session.source_lineage_supported&&current?.result&&current.source_text!==$('input').value)sourcePayload.parent_run_id=current.run_id;
- const payload=pending&&(pending.text===sourcePayload.text&&pending.base64===sourcePayload.base64)&&(pending.model??session.requested_model)===sourcePayload.model&&(pending.reasoning??'medium')===sourcePayload.reasoning&&pending.parse_method===sourcePayload.parse_method?pending:{...sourcePayload,request_id:crypto.randomUUID()};localStorage.setItem('boundx029-pending',JSON.stringify(payload));
+ const payload=pending&&(pending.text===sourcePayload.text&&pending.base64===sourcePayload.base64)&&(pending.model??session.requested_model)===sourcePayload.model&&(pending.reasoning??'medium')===sourcePayload.reasoning&&pending.parse_method===sourcePayload.parse_method&&JSON.stringify(pending.dictionaries)===JSON.stringify(sourcePayload.dictionaries)?pending:{...sourcePayload,request_id:crypto.randomUUID()};localStorage.setItem('boundx029-pending',JSON.stringify(payload));
  try{const run=await jsonPost('/api/parse',payload);localStorage.setItem('boundx029-active',run.run_id);await open(run.run_id);}
  catch(e){busy=false;$('parse').disabled=false;showError(e);}
 };
@@ -252,4 +266,4 @@ $('clear-history').onclick=async()=>{if(busy||!await confirmation('隐藏本轮�
 $('save').onclick=async()=>{if(!current)return;try{const x=await jsonPost('/api/review',{run_id:current.run_id,notes:$('notes').value});$('review-status').textContent='已保存 '+x.file;}catch(e){showError(e);}};
 $('refresh').onclick=()=>history().catch(showError);document.querySelectorAll('[data-tab]').forEach(b=>b.onclick=()=>panel(b.dataset.tab));
 async function boot(){session=await api('/api/session');const p=session.product_snapshot;$('product-version').textContent=p?`${p.product_version} · ${p.compiler_revision} · 合同 ${p.contract}`:`开发工作区 · ${session.compiler_revision} · 合同 ${session.contract}`;$('product-acceptance').textContent='产品验收：'+(p?.product_acceptance??'开发版本，尚未验收')+'；公开发布：'+(p?.public_release?'已发布':'未发布候选');$('product-limits').textContent=(p?.support_profile??'完整ADMIN任务原文，不设短文本字符上限')+'；'+(p?.known_limitations??['源文可能需澄清；不是业务执行授权']).join('；');$('engine-info').textContent=session.engine+' · '+session.contract+' · '+session.skill_mode+' · 实际模型未披露';await history();let id=localStorage.getItem('boundx029-active');if(!id){const pending=JSON.parse(localStorage.getItem('boundx029-pending')??'null');if(pending){id=(await api('/api/runs')).find(r=>r.request_id===pending.request_id)?.run_id;if(!id){$('input').value=pending.text??'';count();}}}if(id)await open(id);}
-boot().then(async()=>{configureRuntimeVersion();configureModels();await configureExamples();for(const id of ['compile-model','compile-reasoning','compile-method','source-example','load-example'])$(id).disabled=busy;const p=session.product_snapshot;$('product-acceptance').textContent='产品验收：'+readable(p?.product_acceptance??'开发版本，尚未验收')+'；公开发布：'+(p?.public_release?'已发布':'未发布候选');if(!current){renderModelInfo($('model-info'),{},session);renderCompilerProcess($('compiler-root'),{},{session});}}).catch(showError);
+boot().then(async()=>{configureRuntimeVersion();configureModels();await configureExamples();for(const id of ['compile-model','compile-reasoning','compile-method','compile-l2','compile-l3','source-example','load-example'])$(id).disabled=busy;const p=session.product_snapshot;$('product-acceptance').textContent='产品验收：'+readable(p?.product_acceptance??'开发版本，尚未验收')+'；公开发布：'+(p?.public_release?'已发布':'未发布候选');if(!current){renderModelInfo($('model-info'),{},session);renderCompilerProcess($('compiler-root'),{},{session});}}).catch(showError);

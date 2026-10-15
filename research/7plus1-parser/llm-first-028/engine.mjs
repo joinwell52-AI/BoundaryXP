@@ -19,7 +19,7 @@ import {directIRBundle} from './direct-ir-bundle.mjs';
 import {renderDirectCalculations} from './direct-ir-render-results.mjs';
 import {attachLLMCalculation} from './boundary-calculation.mjs';
 export const writeJSON=(file,data)=>fs.writeFileSync(file,JSON.stringify(data,null,2)+'\n');
-export const compilerRevision='boundary-report-r01-test';
+export const compilerRevision='boundary-report-r02-dictionaries';
 export function replay7Plus1(bytes,{output,replayFrom,resourceGuard=()=>{},productSnapshot=null,allowPriorModelResources=false}){
  resourceGuard();
  const source=prepareSource(bytes),tracePath=path.join(replayFrom,fs.existsSync(path.join(replayFrom,'trace.json'))?'trace.json':'TRACE.json');
@@ -79,8 +79,8 @@ async function replayKernelIR(prior,source,bytes,{output,tracePath,resourceGuard
  for(const [file,value]of Object.entries({'trace.json':replay,'candidate-ir.json':prior.ir,'audit.json':prior.audit,'technical-validation.json':completed.technical,'7plus1.json':completed.canonical,'boundary-calculations.json':completed.boundary_calculations,'problem-report.json':completed.problem_report}))writeJSON(path.join(output,file),value);
  fs.writeFileSync(path.join(output,'7plus1.zh.md'),replay.chinese);resourceGuard();return replay;
 }
-export async function parse7Plus1(bytes,{output,probe,model='gpt-6.1-sol',reasoning='medium',parseMethod=null,semanticRevision=true,signal,onProgress=()=>{},timeoutMs=null,call=callCodex,maxModelRequests,resourceGuard=()=>{},productSnapshot=null}={}){
- return parseDirectIR(bytes,{output,probe,model,reasoning,parseMethod,signal,onProgress,timeoutMs,call,maxModelRequests,resourceGuard,productSnapshot});
+export async function parse7Plus1(bytes,{output,probe,model='gpt-6.1-sol',reasoning='medium',parseMethod=null,dictionaries={},semanticRevision=true,signal,onProgress=()=>{},timeoutMs=null,call=callCodex,maxModelRequests,resourceGuard=()=>{},productSnapshot=null}={}){
+ return parseDirectIR(bytes,{output,probe,model,reasoning,parseMethod,dictionaries,signal,onProgress,timeoutMs,call,maxModelRequests,resourceGuard,productSnapshot});
 }
 // Historical frozen-response route only. Not a runtime fallback.
 export async function parseLegacy7Plus1(bytes,{output,probe,model='gpt-6.1-sol',reasoning='medium',parseMethod=null,semanticRevision=true,signal,onProgress=()=>{},timeoutMs=null,call=callCodex,maxModelRequests,resourceGuard=()=>{},productSnapshot=null}={}){

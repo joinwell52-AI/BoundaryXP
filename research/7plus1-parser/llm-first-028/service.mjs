@@ -13,6 +13,7 @@ import {runtimeInventory} from './evidence.mjs';
 import {modelCatalog,requestSettings,publicProgress,partialArtifacts,savedCallHistory} from './observability.mjs';
 import {sessionActivity} from './model-activity.mjs';
 import {recalculateObservedTrace} from './observation-request.mjs';
+import {dictionaryCatalog,selectDictionaries,dictionaryIdentity} from './dictionaries.mjs';
 const loadedRuntime=JSON.stringify(runtimeInventory());
 const resourceProfile=buildBundle('parse').resource_profile;
 const resourceFingerprint=(method='SKILL')=>sha256(JSON.stringify([buildBundle('parse',{parseMethod:method}).sha256,buildBundle('audit',{parseMethod:method}).sha256,compilerRevision,sha256(loadedRuntime)]));
@@ -64,7 +65,7 @@ export function createServer({dataRoot=DATA,parse=parse7Plus1,legacyRoot=process
    if(req.method==='GET'&&route==='/api/session'){
     resourceGuard();
     const session=randomBytes(32).toString('hex');sessions.set(session,true);res.setHeader('set-cookie',`boundx_session=${session}; HttpOnly; SameSite=Strict; Path=/`);
-    return send(200,{token:session,product_snapshot:productSnapshot,engine:'BoundX 7+1 compiler',compiler_revision:compilerRevision,runtime_sha256:sha256(loadedRuntime),contract:selectedBundle('parse').contract_version??selectedBundle('parse').schema.properties.contract_version.const,skill_mode:'INLINE_BUNDLE',parse_method:'SKILL',parse_methods:['SKILL','SKILL1'],resource_profile:resourceProfile,request_profile:requestProfile,comparison_resources:{SKILL:resourceEvidence(),SKILL1:resourceEvidence('SKILL1')},native_skill_loading:'NOT_VERIFIED',actual_model:null,requested_model:catalog.default_model,requested_reasoning:catalog.default_reasoning,model_catalog:catalog,source_lineage_supported:false,limit_codepoints:null,input_limits:INPUT_LIMITS,model_wait_policy:{automatic_timeout_ms:timeoutMs>0?timeoutMs:null,manual_cancel:true},business_execution_enabled:false});
+    return send(200,{token:session,dictionary_catalog:dictionaryCatalog(),product_snapshot:productSnapshot,engine:'BoundX 7+1 compiler',compiler_revision:compilerRevision,runtime_sha256:sha256(loadedRuntime),contract:selectedBundle('parse').contract_version??selectedBundle('parse').schema.properties.contract_version.const,skill_mode:'INLINE_BUNDLE',parse_method:'SKILL',parse_methods:['SKILL','SKILL1'],resource_profile:resourceProfile,request_profile:requestProfile,comparison_resources:{SKILL:resourceEvidence(),SKILL1:resourceEvidence('SKILL1')},native_skill_loading:'NOT_VERIFIED',actual_model:null,requested_model:catalog.default_model,requested_reasoning:catalog.default_reasoning,model_catalog:catalog,source_lineage_supported:false,limit_codepoints:null,input_limits:INPUT_LIMITS,model_wait_policy:{automatic_timeout_ms:timeoutMs>0?timeoutMs:null,manual_cancel:true},business_execution_enabled:false});
    }
    if(req.method==='GET'&&route==='/api/runs')return send(200,[...[...records.values()].map(summary),...legacyList()].sort((a,b)=>String(b.created_at).localeCompare(String(a.created_at))));
    const legacy=/^\/api\/legacy\/([a-f0-9-]+)$/u.exec(route);
@@ -112,7 +113,8 @@ export function createServer({dataRoot=DATA,parse=parse7Plus1,legacyRoot=process
     return send(201,output);
    }
    if(req.method==='POST'&&route==='/api/parse'){
-    if(Object.keys(input).some(k=>!['text','base64','filename','request_id','model','reasoning','parse_method'].includes(k)))return send(400,{error:'UNSUPPORTED_REQUEST_FIELD'});
+    if(Object.keys(input).some(k=>!['text','base64','filename','request_id','model','reasoning','parse_method','dictionaries'].includes(k)))return send(400,{error:'UNSUPPORTED_REQUEST_FIELD'});
+    let dictionarySelection;try{dictionarySelection=dictionaryIdentity(selectDictionaries(input.dictionaries??{}));}catch(e){return send(400,{error:'INVALID_DICTIONARY_SELECTION'});}
     let settings;try{settings=requestSettings(input,catalog);}catch(e){return send(400,{error:e.message});}
     let method;try{method=parseMethod(input.parse_method);if(method==='MD')throw Error('MD_COMPARISON_STOPPED');}catch(e){return send(400,{error:e.message});}
     if(!ID.test(input.request_id??''))return send(400,{error:'REQUEST_ID_REQUIRED'});
@@ -122,16 +124,16 @@ export function createServer({dataRoot=DATA,parse=parse7Plus1,legacyRoot=process
     if(JSON.stringify(runtimeInventory())!==loadedRuntime)return send(409,{error:'STALE_CODE_RESTART_REQUIRED'});
     const bytes=input.base64!==undefined?Buffer.from(input.base64,'base64'):Buffer.from(input.text,'utf8');const source=prepareSource(bytes);
     const prior=[...records.values()].find(r=>r.request_id===input.request_id);
-    if(prior)return prior.source_sha256===source.sha256&&prior.requested_model===settings.model&&(prior.requested_reasoning??'medium')===settings.reasoning&&(prior.parse_method??'SKILL')===method&&prior.resource_profile===selectedBundle('parse',method).resource_profile&&prior.request_profile===requestProfile&&prior.effective_resource_sha256===resourceFingerprint(method)?send(200,summary(prior)):send(409,{error:'REQUEST_ID_SOURCE_MISMATCH'});
+    if(prior)return (prior.dictionaries?.sha256??dictionaryIdentity(selectDictionaries()).sha256)===dictionarySelection.sha256&&prior.source_sha256===source.sha256&&prior.requested_model===settings.model&&(prior.requested_reasoning??'medium')===settings.reasoning&&(prior.parse_method??'SKILL')===method&&prior.resource_profile===selectedBundle('parse',method).resource_profile&&prior.request_profile===requestProfile&&prior.effective_resource_sha256===resourceFingerprint(method)?send(200,summary(prior)):send(409,{error:'REQUEST_ID_SOURCE_MISMATCH'});
     if(active.size)return send(409,{error:'COMPILER_BUSY'});
     const id=randomUUID(),controller=new AbortController(),created_at=new Date().toISOString();fs.mkdirSync(folder(id));
     record={run_id:id,request_id:input.request_id,created_at,status:'QUEUED',stage:'QUEUED',source_text:source.text,source_sha256:source.sha256,codepoints:source.codepoints,filename:typeof input.filename==='string'?path.basename(input.filename).slice(0,100):'pasted-task.txt',engine:'BoundX 7+1 compiler',contract:selectedBundle('parse',method).contract_version??selectedBundle('parse',method).schema.properties.contract_version.const,skill_mode:'INLINE_BUNDLE',native_skill_loading:'NOT_VERIFIED',requested_model:'gpt-6.1-sol',actual_model:null,execution_mode:'LIVE_CODEX',stages:[{stage:'QUEUED',at:created_at}]};
     record.requested_model=settings.model;record.requested_reasoning=settings.reasoning;record.model_catalog_sha256=catalog.sha256;record.model_config_acceptance=settings.model===catalog.default_model&&settings.reasoning===catalog.default_reasoning?'BASELINE_PARTIAL':'USER_SELECTED_NOT_SEMANTICALLY_ACCEPTED';
-    Object.assign(record,resourceEvidence(method));record.parse_resource_acceptance='SEMANTIC_REPAIR_CANDIDATE_NOT_ADMIN_ACCEPTED';
+    Object.assign(record,resourceEvidence(method));record.dictionaries=dictionarySelection;record.parse_resource_acceptance='SEMANTIC_REPAIR_CANDIDATE_NOT_ADMIN_ACCEPTED';
     record.product_snapshot=productSnapshot;record.compiler_revision=compilerRevision;record.runtime_sha256=sha256(loadedRuntime);records.set(id,record);persist(record);active.set(id,controller);send(202,summary(record));
     setImmediate(async()=>{
      try{
-      const result=await parse(bytes,{output:folder(id),resourceGuard,productSnapshot,timeoutMs,maxModelRequests,model:settings.model,reasoning:settings.reasoning,parseMethod:method,signal:controller.signal,onProgress:p=>{if(record.status==='CANCELLING')return;const event=publicProgress(p);record.status='RUNNING';record.stage=event.stage;record.revision=event.revision;record.stages.push({...event,at:new Date().toISOString()});persist(record);}});
+      const result=await parse(bytes,{output:folder(id),resourceGuard,productSnapshot,timeoutMs,maxModelRequests,model:settings.model,reasoning:settings.reasoning,parseMethod:method,dictionaries:input.dictionaries??{},signal:controller.signal,onProgress:p=>{if(record.status==='CANCELLING')return;const event=publicProgress(p);record.status='RUNNING';record.stage=event.stage;record.revision=event.revision;record.stages.push({...event,at:new Date().toISOString()});persist(record);}});
       if(controller.signal.aborted)throw Error('CANCELLED');
       record.calculation_status=result.boundary_calculations?.status??'NOT_RECORDED';record.status=result.canonical.unresolved.length||result.canonical.gaps.length||['PARTIAL','CONFLICT'].includes(record.calculation_status)?'COMPLETED_WITH_UNRESOLVED':'COMPLETED';record.stage=record.status;
       record.slot_status=Object.fromEntries(Object.entries(result.canonical.slots).map(([k,v])=>[k,v.status]));
