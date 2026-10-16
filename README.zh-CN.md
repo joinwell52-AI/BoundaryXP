@@ -120,6 +120,7 @@ BXP协议版本、方法手册修订、根仓库包版本与短文本安装包�
 | 完整文档导航 | [文档目录](docs/README.md) |
 | 完整产品手册 | [BoundX产品手册](docs/BOUNDX-PRODUCT-MANUAL.md) |
 | 7+1编译方法 | [定义、原理、语义编译与边界计算说明 v0.4](docs/BoundX-7plus1-定义原理语义编译与边界计算说明-v0.4.md) |
+| 7+1雷达图形展示方法 | [单文本条款—维度关联投影与展示规范](docs/7PLUS1-RADAR-VISUALIZATION-METHOD.md) |
 | 边界计算方法与产品作用 | [边界计算说明](docs/BOUNDARY-CALCULATION-METHOD.md) |
 | 快速开始 | [中文](QUICKSTART.md) · [英文](QUICKSTART.en.md) |
 | 功能、版本与交付状态 | [功能矩阵](docs/FUNCTIONS.md) · [短文本编译器状态](docs/SHORT-COMPILER-STATUS.md) |
