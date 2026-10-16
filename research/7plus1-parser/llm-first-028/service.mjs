@@ -14,6 +14,7 @@ import {modelCatalog,requestSettings,publicProgress,partialArtifacts,savedCallHi
 import {sessionActivity} from './model-activity.mjs';
 import {recalculateObservedTrace} from './observation-request.mjs';
 import {dictionaryCatalog,selectDictionaries,dictionaryIdentity,scanDictionaries} from './dictionaries.mjs';
+import {createWorkbench} from './workbench-store.mjs';
 const loadedRuntime=JSON.stringify(runtimeInventory());
 const resourceProfile=buildBundle('parse').resource_profile;
 const resourceFingerprint=(method='SKILL')=>sha256(JSON.stringify([buildBundle('parse',{parseMethod:method}).sha256,buildBundle('audit',{parseMethod:method}).sha256,compilerRevision,sha256(loadedRuntime)]));
@@ -39,6 +40,7 @@ export function createServer({dataRoot=DATA,parse=parse7Plus1,legacyRoot=process
  const resourceEvidence=(method='SKILL')=>({parse_method:method,resource_profile:selectedBundle('parse',method).resource_profile,request_profile:requestProfile,effective_resource_sha256:resourceFingerprint(method),selected_resources:{parse:bundleEvidence(selectedBundle('parse',method)),audit:bundleEvidence(selectedBundle('audit',method))}});
  fs.mkdirSync(path.join(dataRoot,'runs'),{recursive:true});
  const records=new Map(),sessions=new Map(),active=new Map(),clearTokens=new Map();
+ const workbench=createWorkbench({dataRoot,resourceGuard,productSnapshot,active});
  const folder=id=>{if(!ID.test(id))throw Error('INVALID_RUN_ID');return path.join(dataRoot,'runs',id);};
  const persist=r=>save(path.join(folder(r.run_id),'run.json'),r);
  for(const dir of fs.readdirSync(path.join(dataRoot,'runs'))){if(!ID.test(dir))continue;const file=path.join(folder(dir),'run.json');if(!fs.existsSync(file))continue;const r=JSON.parse(fs.readFileSync(file,'utf8'));if(!terminal.has(r.status)){r.status='INTERRUPTED';r.stage='INTERRUPTED';r.ended_at=new Date().toISOString();r.error={code:'SERVER_RESTART_INTERRUPTED'};persist(r);}if(!r.hidden)records.set(dir,r);}
@@ -58,8 +60,8 @@ export function createServer({dataRoot=DATA,parse=parse7Plus1,legacyRoot=process
    if(req.method==='GET'&&route==='/input-limits.js'){
     res.writeHead(200,{'content-type':'text/javascript; charset=utf-8','cache-control':'no-store'});return res.end(fs.readFileSync(path.join(ROOT,'input-limits.mjs')));
    }
-   if(req.method==='GET'&&['/','/app.js','/process-view.js','/direct-ir-process.js','/calculation-view.js','/style.css'].includes(route)){
-    const name=route==='/'?'index.html':route==='/app.js'?'native-app.js':route==='/process-view.js'?'process-view.js':route==='/direct-ir-process.js'?'direct-ir-process.js':route==='/calculation-view.js'?'calculation-view.js':'style.css';
+   if(req.method==='GET'&&['/','/history','/workbench.js','/workbench.css','/app.js','/process-view.js','/direct-ir-process.js','/calculation-view.js','/style.css'].includes(route)){
+    const name=route==='/'?'workbench.html':route==='/history'?'index.html':route==='/workbench.js'?'workbench.js':route==='/workbench.css'?'workbench.css':route==='/app.js'?'native-app.js':route==='/process-view.js'?'process-view.js':route==='/direct-ir-process.js'?'direct-ir-process.js':route==='/calculation-view.js'?'calculation-view.js':'style.css';
     res.writeHead(200,{'content-type':name.endsWith('.html')?'text/html; charset=utf-8':name.endsWith('.js')?'text/javascript; charset=utf-8':'text/css; charset=utf-8','cache-control':'no-store','content-security-policy':"default-src 'self'; script-src 'self'; style-src 'self'; object-src 'none'; frame-ancestors 'none'; base-uri 'none'"});return res.end(fs.readFileSync(path.join(WEB,name)));
    }
    if(req.method==='GET'&&route==='/api/session'){
@@ -68,6 +70,15 @@ export function createServer({dataRoot=DATA,parse=parse7Plus1,legacyRoot=process
     return send(200,{token:session,dictionary_catalog:dictionaryCatalog(),product_snapshot:productSnapshot,engine:'BoundX 7+1 compiler',compiler_revision:compilerRevision,runtime_sha256:sha256(loadedRuntime),contract:selectedBundle('parse').contract_version??selectedBundle('parse').schema.properties.contract_version.const,skill_mode:'INLINE_BUNDLE',parse_method:'SKILL',parse_methods:['SKILL','SKILL1'],resource_profile:resourceProfile,request_profile:requestProfile,comparison_resources:{SKILL:resourceEvidence(),SKILL1:resourceEvidence('SKILL1')},native_skill_loading:'NOT_VERIFIED',actual_model:null,requested_model:catalog.default_model,requested_reasoning:catalog.default_reasoning,model_catalog:catalog,source_lineage_supported:false,limit_codepoints:null,input_limits:INPUT_LIMITS,model_wait_policy:{automatic_timeout_ms:timeoutMs>0?timeoutMs:null,manual_cancel:true},business_execution_enabled:false});
    }
    if(req.method==='GET'&&route==='/api/runs')return send(200,[...[...records.values()].map(summary),...legacyList()].sort((a,b)=>String(b.created_at).localeCompare(String(a.created_at))));
+   if(req.method==='GET'&&route==='/api/workbench/projects')return send(200,workbench.list());
+   const wb=/^\/api\/workbench\/projects\/([a-f0-9-]{36})(?:\/(snapshots|jobs|export))?$/.exec(route);
+   if(req.method==='GET'&&wb){
+    if(wb[2]==='snapshots')return send(200,workbench.snapshots(wb[1]));
+    if(wb[2]==='jobs')return send(200,workbench.jobs(wb[1]));
+    const p=workbench.get(wb[1],url.searchParams.has('revision')?url.searchParams.get('revision'):undefined);
+    if(wb[2]==='export')return download(JSON.stringify({plan:p,jobs:workbench.jobs(wb[1]),business_decision:null,execution_authorization:null},null,2),'application/json',wb[1]+'-plan.json');
+    return send(200,p);
+   }
    const legacy=/^\/api\/legacy\/([a-f0-9-]+)$/u.exec(route);
    if(req.method==='GET'&&legacy){if(!ID.test(legacy[1]))return send(400,{error:'INVALID_RUN_ID'});return send(200,{status:'LEGACY_READ_ONLY',raw:JSON.parse(fs.readFileSync(path.join(legacyRoot,legacy[1]+'.json'),'utf8'))});}
    const match=/^\/api\/runs\/([^/]+)(?:\/(cancel|json|export|trace\.json|trace\.md|trace\.html|activity\.json|calculations\.json))?$/u.exec(route);
@@ -96,6 +107,16 @@ export function createServer({dataRoot=DATA,parse=parse7Plus1,legacyRoot=process
    if(!/^application\/json\b/i.test(req.headers['content-type']??''))return send(415,{error:'JSON_REQUIRED'});
    let size=0;const chunks=[];for await(const chunk of req){size+=chunk.length;if(size>MAX_REQUEST_BYTES)return send(413,{error:'REQUEST_BYTE_LIMIT',limit_bytes:MAX_REQUEST_BYTES,source_truncated:false});chunks.push(chunk);}
    const input=JSON.parse(new TextDecoder('utf-8',{fatal:true}).decode(Buffer.concat(chunks)));
+   if(route.startsWith('/api/workbench/')&&req.method==='POST'){
+    resourceGuard();
+    const validatedSettings=s=>{const parsed=requestSettings(s??{},catalog);const method=parseMethod(s?.parse_method);if(!['SKILL','SKILL1'].includes(method))throw Error('INVALID_PARSE_METHOD');selectDictionaries(s?.dictionaries??{});return {model:parsed.model,reasoning:parsed.reasoning,parse_method:method,dictionaries:s?.dictionaries??{}};};
+    try{
+     if(route==='/api/workbench/projects')return send(201,workbench.create(String(input.label??'新任务').slice(0,100),validatedSettings(input.settings)));
+     if(wb&&!wb[2]){if(input.command?.type==='recalculate')return send(200,workbench.recalculate(wb[1],input.revision));if(['add','edit'].includes(input.command?.type)&&input.command.text!==undefined)prepareSource(Buffer.from(input.command.text,'utf8'));if(input.command?.type==='settings')input.command.settings=validatedSettings(input.command.settings);return send(200,workbench.update(wb[1],input.revision,input.command));}
+     if(wb?.[2]==='jobs')return send(202,workbench.start(wb[1],input));
+     const cancel=/^\/api\/workbench\/jobs\/([a-f0-9-]{36})\/cancel$/.exec(route);if(cancel)return send(200,workbench.cancel(cancel[1]));
+    }catch(e){return send(e.message==='COMPILER_BUSY'||e.message==='PLAN_VERSION_CONFLICT'?409:400,{error:e.message});}
+   }
    if(req.method==='POST'&&route==='/api/dictionaries/scan'){
     if(!input||typeof input.text!=='string'||Object.keys(input).some(k=>!['text','dictionaries'].includes(k)))return send(400,{error:'INVALID_SCAN_TEXT'});
     if(Buffer.byteLength(input.text,'utf8')>INPUT_LIMITS.max_source_bytes)return send(413,{error:'SOURCE_BYTE_LIMIT'});

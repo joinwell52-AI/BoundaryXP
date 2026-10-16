@@ -14,14 +14,17 @@ export function boundaryReportBundle(phase,{parseMethod='SKILL'}={}){
  return {phase,name:'boundx-semantic-'+phase,contract_version:'candidate-ir/2.0',parse_method:parseMethod,mode:'INLINE_BUNDLE',schema:null,resources,text,sha256:sha256(text),transport_version:reportProfile,request_profile:reportProfile,resource_profile:parseMethod+'_OPEN_BOUNDARY_R01',schema_delivery:{mode:'NONE_SKILL_GUIDED_REPORT'},real_model_acceptance:'NOT_RUN'};
 }
 const write=(dir,name,value)=>fs.writeFileSync(path.join(dir,name),JSON.stringify(value,null,2)+'\n');
-export async function parseBoundaryReport(bytes,{output,probe,model='gpt-6.1-sol',reasoning='medium',parseMethod='SKILL',dictionaries={},signal,onProgress=()=>{},timeoutMs=null,call=callCodex,maxModelRequests=2,resourceGuard=()=>{},productSnapshot=null,bundleFactory=boundaryReportBundle}={}){
+export async function parseBoundaryReport(bytes,{output,probe,model='gpt-6.1-sol',reasoning='medium',parseMethod='SKILL',dictionaries={},signal,onProgress=()=>{},timeoutMs=null,call=callCodex,maxModelRequests=null,resourceGuard=()=>{},productSnapshot=null,bundleFactory=boundaryReportBundle}={}){
  parseMethod??='SKILL';
  if(!output)throw Error('OUTPUT_DIRECTORY_REQUIRED');
- if(!Number.isSafeInteger(maxModelRequests)||maxModelRequests<2)throw Error('MODEL_REQUEST_BUDGET_EXHAUSTED');
+ if(maxModelRequests!==null&&(!Number.isSafeInteger(maxModelRequests)||maxModelRequests<2))throw Error('INVALID_MODEL_REQUEST_LIMIT');
  if(fs.existsSync(path.join(output,'source.txt')))throw Error('OUTPUT_ALREADY_EXISTS');
  resourceGuard();signal?.throwIfAborted();fs.mkdirSync(output,{recursive:true});
  const snapshot=selectDictionaries(dictionaries),selection=dictionaryIdentity(snapshot);
- const source=prepareSource(bytes),scan=scanDictionaries(snapshot,source.text);
+ const source=prepareSource(bytes);
+ onProgress({stage:'SCANNING',revision:0});const scanStarted=performance.now(),scan=scanDictionaries(snapshot,source.text);
+ scan.elapsed_ms=performance.now()-scanStarted;
+ onProgress({stage:'SCANNING',revision:0,signal:'SCAN_READY',elapsed_ms:scan.elapsed_ms});
  const withDictionary=phase=>{const b=bundleFactory(phase,{parseMethod}),text=b.text+dictionaryInstructions(snapshot)+dictionaryScanInstructions(scan);return {...b,text,sha256:sha256(text),dictionary_snapshot:snapshot};};
  const parse=withDictionary('parse'),audit=withDictionary('audit'),fingerprint=sha256(parse.sha256+audit.sha256);
  write(output,'dictionary-scan.json',scan);
@@ -30,7 +33,7 @@ export async function parseBoundaryReport(bytes,{output,probe,model='gpt-6.1-sol
  write(output,'selected-resources.json',{parse_method:parseMethod,request_profile:reportProfile,resource_profile:parse.resource_profile,sha256:fingerprint,resources:{parse:parse.resources.map(({text,...r})=>r),audit:audit.resources.map(({text,...r})=>r)}});
  onProgress({stage:'PREPARING',revision:0});probe??=probeCodex();write(output,'environment.json',probe);
  const dir=path.join(output,'revision-0');fs.mkdirSync(dir);
- const requestBudget={remaining:maxModelRequests},telemetry=phase=>({onEvent:event=>{const s=modelSignal(event);if(s)onProgress({stage:phase==='parse'?'PARSING':'AUDITING',phase,revision:0,...s});},onActivity:p=>onProgress({stage:phase==='parse'?'PARSING':'AUDITING',phase,revision:0,...p})});
+ const requestBudget=maxModelRequests===null?null:{remaining:maxModelRequests},telemetry=phase=>({onEvent:event=>{const s=modelSignal(event);if(s)onProgress({stage:phase==='parse'?'PARSING':'AUDITING',phase,revision:0,...s});},onActivity:p=>onProgress({stage:phase==='parse'?'PARSING':'AUDITING',phase,revision:0,...p})});
  const invoke=async(phase,bundle,candidate)=>{
   resourceGuard();signal?.throwIfAborted();onProgress({stage:phase==='parse'?'PARSING':'AUDITING',revision:0});
   const response=await call({bundle,source,candidate,directory:path.join(dir,phase+'-call'),probe,model,reasoning,signal,timeoutMs,requestBudget,...telemetry(phase)});
