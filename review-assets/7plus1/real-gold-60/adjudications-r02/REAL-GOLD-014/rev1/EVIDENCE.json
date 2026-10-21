@@ -1,0 +1,52 @@
+{
+  "case_id": "REAL-GOLD-014",
+  "source_sha256": "e28a41781a351a1936dcdd7c1b1d40871f8827a8a1dfcf23a9d99008e1b8a764",
+  "status": "EVIDENCE_VERIFIED",
+  "evidence": [
+    {
+      "evidence_id": "E001",
+      "source_id": "SOURCE_TASK",
+      "origin": "SOURCE",
+      "start": 0,
+      "end": 771,
+      "quote": "---\r\nprotocol: fcop\r\nversion: 1\r\ntype: TASK\r\nsender: ADMIN\r\nrecipient: ME\r\ndate: 2026-05-09\r\npriority: P0\r\nstatus: in_progress\r\nsubject: Materialize ADR-0015..0021 into machine-readable schema + long-form spec\r\nref_charter: adr/ADR-0015-fcop-1.0-ai-os-protocol-charter.md\r\nref_predecessor: docs/agents/log/tasks/TASK-20260509-002-ADMIN-to-ME.md\r\nacceptance_criteria_count: 8\r\n---\r\n\r\n# TASK-20260509-003-ADMIN-to-ME\r\n\r\n> Solo-mode task. The TASK-002 reframing closed with the charter on paper (ADR-0015..0022 + READMEs + getting-started + mdc tags). The next atomic step is to **materialize that paper into a machine-readable contract** — 7 JSON Schemas + one consolidated long-form spec — so v1.0.0 implementation work has a single source of truth to point at.\r\n\r\n---\r\n\r\n",
+      "purpose": "source metadata and atomic machine-readable-contract scope"
+    },
+    {
+      "evidence_id": "E002",
+      "source_id": "SOURCE_TASK",
+      "origin": "SOURCE",
+      "start": 771,
+      "end": 4676,
+      "quote": "## 1 · Background — what TASK-002 left open\r\n\r\nREPORT-20260509-002 §6 listed 8 next-task seeds:\r\n\r\n1. ✅ this task — `spec/schemas/*.schema.json` × 7 + long-form spec\r\n2. ⏳ next task (TASK-004) — Python API: `Project.write_review` / `subscribe_events` / `recover_session` / `report_failure` + dataclass alignment + pytest\r\n3. ⏳ TASK-005 — `fcop migrate-workspace` CLI + detect+warn\r\n4. ⏳ TASK-006 — Reply to GitHub Issue #2 (governance fields → Deferred to v1.2+)\r\n5. ⏳ TASK-007 — `fcop deploy_rules` re-emit so `.cursor/rules/*.mdc` references the new schemas\r\n6. ⏳ TASK-008 — v1.0.0 RC tagging + Zenodo DOI bump\r\n\r\nThis TASK-003 only owns item #1. **Strict scope**: nothing in `src/fcop/` is touched. Pure `spec/` work.\r\n\r\nThe reason for splitting it out: schemas are the **contract** that all subsequent code must match. Writing schemas first lets ADR-0016's \"schema is truth, dataclass is derived\" rule actually apply. If we wrote dataclass first and schema second we would be deciding the contract by accident — exactly the failure mode ADR-0008 era exhibited.\r\n\r\n---\r\n\r\n## 2 · ADMIN decisions for TASK-003\r\n\r\n### Decision 1 · Schema layout\r\n\r\n7 files exactly as ADR-0016 §Decision lists:\r\n\r\n```\r\nspec/schemas/\r\n├── README.md                  ← index + how-to-validate\r\n├── agent.schema.json          ← abstraction 1: Agent (lifecycle + identity)\r\n├── encoding.schema.json       ← abstraction 2: Encoding (filename + workspace_dir)\r\n├── ipc-envelope.schema.json   ← abstraction 3: IPC (4 envelope types share a base)\r\n├── event.schema.json          ← abstraction 4: Event Model\r\n├── failure.schema.json        ← abstraction 5: Failure & Recovery\r\n├── boundary.schema.json       ← abstraction 6: Boundary & Capability\r\n└── review.schema.json         ← abstraction 7: Audit (REVIEW)\r\n```\r\n\r\nEach schema:\r\n\r\n- JSON Schema Draft 2020-12 (`$schema: \"https://json-schema.org/draft/2020-12/schema\"`)\r\n- `$id: \"https://fcop.dev/schemas/{abstraction}/v1.0.json\"`\r\n- Top-level `title`, `description`, `version: \"1.0.0\"`, `additionalProperties: false` on closed objects\r\n- Cross-reference siblings via relative `$ref` where it cuts duplication (e.g. boundary capabilities referenced from agent + ipc-envelope)\r\n- Each enum / required field traceable to the originating ADR by inline `description`\r\n\r\n### Decision 2 · Long-form spec\r\n\r\n`spec/fcop-runtime-protocol-v1.0.md` — single normative spec consolidating ADR-0015..0022 into one readable document. **NOT** a copy-paste of ADRs; a re-organized normative spec that says \"this is what FCoP v1.0 IS\" — ADRs say \"this is WHY we decided.\" Both must exist.\r\n\r\nStructure:\r\n\r\n1. Abstract + status block + version\r\n2. Conformance language (RFC-2119 MUST / SHOULD / MAY)\r\n3. The 5-layer AI OS stack diagram + FCoP's position\r\n4. The 7 core abstractions, each as one §\r\n5. Protocol invariants (the things implementations MUST preserve)\r\n6. Reference Encoding (Markdown) — concrete file format\r\n7. Versioning & stability (link to ADR-0003)\r\n8. Conformance test surface (link to schemas)\r\n9. Glossary\r\n\r\n`spec/fcop-spec-v1.0.3.md` (the existing 0.7.x-era document) is **not** deleted. It stays as historical artefact + the 0.7.x conformance baseline. The new file is the v1.0 spec.\r\n\r\n### Decision 3 · Dependency\r\n\r\nAdd `jsonschema>=4.0,<5.0` to `pyproject.toml` `dependencies` list. **Only** the dependency entry — no Python import yet (that's TASK-004's work).\r\n\r\n### Decision 4 · Out-of-scope (do NOT do in this task)\r\n\r\n- Python `models.*` dataclass changes\r\n- `core/schema.py` validator implementation\r\n- `Project.*` new methods\r\n- `pytest` tests for schemas\r\n- `fcop_report` CLI changes\r\n- `MIGRATION-1.0.md` (deferred to TASK-005 alongside `migrate-workspace` CLI)\r\n- Reply to GitHub Issue #2 (TASK-006)\r\n- Anything in `src/fcop_mcp/`\r\n\r\nIf any of these creep in during execution, **stop and split into a follow-up TASK** — do not silently expand scope.\r\n\r\n---\r\n\r\n",
+      "purpose": "background and four ADMIN decisions"
+    },
+    {
+      "evidence_id": "E003",
+      "source_id": "SOURCE_TASK",
+      "origin": "SOURCE",
+      "start": 4676,
+      "end": 6239,
+      "quote": "## 3 · Acceptance criteria (8)\r\n\r\n| # | Criterion | Evidence |\r\n|---|---|---|\r\n| A1 | `spec/schemas/` exists with exactly 8 files (7 schemas + 1 README) | `ls spec/schemas/` |\r\n| A2 | Each `.schema.json` is valid JSON, parseable by `python -c \"import json; json.load(open(p))\"` | manual sanity check |\r\n| A3 | Each `.schema.json` declares Draft 2020-12, `$id` under `https://fcop.dev/schemas/`, `version: \"1.0.0\"` | grep top-level keys |\r\n| A4 | Each schema's `description` for every field cites its originating ADR (ADR-0015..0022) | grep `\"ADR-\"` count > 30 |\r\n| A5 | `spec/fcop-runtime-protocol-v1.0.md` exists with the 9-section structure listed in Decision 2 | structural read |\r\n| A6 | Long-form spec uses RFC-2119 keywords (MUST / SHOULD / MAY) consistently and links each abstraction to its schema + ADR | grep MUST count, link audit |\r\n| A7 | `pyproject.toml` `dependencies` includes `jsonschema>=4.0,<5.0` | grep `jsonschema` |\r\n| A8 | REPORT-003 + TASK-003 archive + commit + push | git log shows TASK-003 closed |\r\n\r\n---\r\n\r\n## 4 · Execution plan (one TASK, two commits)\r\n\r\n| Round | Deliverable | Commit |\r\n|---|---|---|\r\n| R1 | All 7 schemas + `spec/schemas/README.md` + `pyproject.toml` patch | `spec(schemas): freeze 7 JSON Schemas for FCoP v1.0 abstractions` |\r\n| R2 | `spec/fcop-runtime-protocol-v1.0.md` long-form spec + REPORT-003 + TASK-003 archive | `spec: ship fcop-runtime-protocol-v1.0.md (close TASK-20260509-003)` |\r\n\r\nTwo commits, in order. R1 lands the contract; R2 lands the human-readable spec that points at the contract.\r\n\r\n---\r\n\r\n",
+      "purpose": "eight acceptance criteria and two-commit plan"
+    },
+    {
+      "evidence_id": "E004",
+      "source_id": "SOURCE_TASK",
+      "origin": "SOURCE",
+      "start": 6239,
+      "end": 8130,
+      "quote": "## 5 · Risk register\r\n\r\n| Risk | Mitigation |\r\n|---|---|\r\n| Schemas drift from ADR text | Inline `description` on every field cites ADR §; spec doc cross-links the schema files |\r\n| Spec doc becomes a copy of ADRs | Use different voice — ADR = \"we decided X because Y\"; spec = \"implementations MUST do X\". No \"we\" in spec |\r\n| `additionalProperties: false` is too strict and breaks 0.7.x files | Use `additionalProperties: false` ONLY on closed sub-objects; envelope frontmatter root uses `additionalProperties: true` so 0.7.x extra fields stay legal |\r\n| `$id` URL doesn't resolve (fcop.dev not registered) | Acceptable in v1.0 — `$id` is a protocol identifier, not a fetch URL. Document this in `spec/schemas/README.md` |\r\n| Long-form spec turns into 2000 lines | Cap at ~600 lines; details live in ADRs and schemas; spec is the **normative summary** |\r\n\r\n---\r\n\r\n## 6 · Three-angle pre-flight check (proposer / executor / reviewer)\r\n\r\n### Proposer (does this task move v1.0 closer to ship?)\r\n\r\nYes. Without machine-readable schemas, no implementation can claim conformance. Without a long-form spec, downstream consumers (CodeFlow v2, third-party host adapters) can't cite a single document. This task closes the \"charter exists but is unenforceable\" gap.\r\n\r\n### Executor (is the work bounded?)\r\n\r\nYes. Hard scope boundary: nothing in `src/`. Two commits. ~600 + ~7×80 ≈ 1200 lines total. Doable in one session.\r\n\r\n### Reviewer (would I block this if a peer submitted it?)\r\n\r\nWould-block conditions to watch for during execution:\r\n- Any schema with no `description` on required fields → block\r\n- Any spec section without an ADR backref → block\r\n- `additionalProperties: false` on the root envelope → block (breaks 0.7.x compat)\r\n- Long-form spec exceeding 800 lines → block (means ADR content was duplicated)\r\n\r\nIf executor catches itself doing any of those, **stop and split**.\r\n\r\n---\r\n\r\n",
+      "purpose": "risk register and three-angle block conditions"
+    },
+    {
+      "evidence_id": "E005",
+      "source_id": "SOURCE_TASK",
+      "origin": "SOURCE",
+      "start": 8130,
+      "end": 8364,
+      "quote": "## 7 · Sign-off\r\n\r\n```\r\nSender:    ADMIN\r\nRecipient: ME (solo mode)\r\nStatus:    in_progress\r\nOpened:    2026-05-09\r\nCharter:   ADR-0015 §execution roadmap step 1 (machine-readable spec)\r\n```\r\n\r\nBegin execution immediately. R1 first.\r\n",
+      "purpose": "sign-off and R1-first instruction"
+    }
+  ]
+}

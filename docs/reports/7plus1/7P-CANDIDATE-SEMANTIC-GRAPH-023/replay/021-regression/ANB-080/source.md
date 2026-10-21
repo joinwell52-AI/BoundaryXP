@@ -1,0 +1,1 @@
+审计员查看 audit.db 的只读快照并生成 audit-snapshot.md。只允许离线读取，不得连接在线数据库。

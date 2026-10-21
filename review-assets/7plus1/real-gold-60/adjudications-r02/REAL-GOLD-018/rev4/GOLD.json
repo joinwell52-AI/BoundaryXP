@@ -1,0 +1,141 @@
+{
+  "case_id": "REAL-GOLD-018",
+  "source_sha256": "8c389de9eca92721286a1f6d8afea2dad33ad97dd285de7513a8393ab4cc8811",
+  "protocol_version": "BXP-0001 0.4.0-draft.1",
+  "slots": {
+    "I": {
+      "status": "resolved",
+      "value_zh": "event.schema.json、ADR-0018/0015、TASK-005/006 的事件 stub、Project 状态、文件系统快照与现有测试。",
+      "value_en": "event.schema.json, ADR-0018/0015, event stubs from TASK-005/006, Project state, filesystem snapshots, and existing tests.",
+      "evidence": [
+        "E001",
+        "E002",
+        "E003"
+      ],
+      "origin": [
+        "SOURCE"
+      ],
+      "normalization": "source_stated_event_wiring_inputs",
+      "ontology_binding": null,
+      "notes_zh": "不访问 OS watcher 或外部文件系统。",
+      "notes_en": "No OS watcher or external filesystem is accessed."
+    },
+    "O": {
+      "status": "resolved",
+      "value_zh": "Event 模型、12 值 enum、polling/state-diff、订阅 API、同步 emitter、去重、测试、snapshot、ADR、报告、归档、提交和推送。",
+      "value_en": "Event model, a 12-value enum, polling/state-diff, subscription API, synchronous emitter, deduplication, tests, snapshot, ADR, report, archive, commits, and push.",
+      "evidence": [
+        "E002",
+        "E003"
+      ],
+      "origin": [
+        "SOURCE"
+      ],
+      "normalization": "explicit_event_reference_implementation_outputs",
+      "ontology_binding": null,
+      "notes_zh": "输出不代表已经执行。",
+      "notes_en": "Outputs do not mean execution has occurred."
+    },
+    "A": {
+      "status": "unresolved",
+      "value_zh": "以四轮提交实现 events 模块、state diff、订阅与 poll_once、接入 boundary/failure stub、测试和文档收尾；但 12 个事件在 polling 与同步 callback 两条路径中的完整归属未被唯一确定。",
+      "value_en": "Use four commits to implement events module, state diff, subscription and poll_once, integrate boundary/failure stubs, tests, and documentation closeout; however, the complete allocation of 12 events between polling and synchronous callback paths is not uniquely determined.",
+      "evidence": [
+        "E002",
+        "E003"
+      ],
+      "origin": [
+        "SOURCE"
+      ],
+      "normalization": "explicit_actions_with_source_path_count_ambiguity",
+      "ontology_binding": null,
+      "notes_zh": "原文同时称文件类为 11、列名为 8（实际列出 7），并称同步类为 5。",
+      "notes_en": "Source calls file events 11, names 8 (actually lists 7), and calls synchronous events 5."
+    },
+    "P": {
+      "status": "resolved",
+      "value_zh": "ADMIN 发起；ME solo 执行；caller 显式调用 poll_once，host adapter 负责后台循环或 OS watcher。",
+      "value_en": "ADMIN originates; ME executes solo; caller explicitly calls poll_once, while host adapter owns background loop or OS watcher.",
+      "evidence": [
+        "E001",
+        "E002",
+        "E004"
+      ],
+      "origin": [
+        "SOURCE"
+      ],
+      "normalization": "source_stated_actor_split",
+      "ontology_binding": null,
+      "notes_zh": "不推导权限。",
+      "notes_en": "No authority is inferred."
+    },
+    "R": {
+      "status": "resolved",
+      "value_zh": "跨 OS mtime 精度降级处理：±1 秒视为同一时刻；文件类事件数的冲突属于动作/触发路径范围，不是资源预算。",
+      "value_en": "Cross-OS mtime precision mitigation treats values within ±1 second as the same instant; conflicting file-event counts concern action/trigger scope, not a resource budget.",
+      "evidence": [
+        "E004"
+      ],
+      "origin": [
+        "SOURCE"
+      ],
+      "normalization": "source_stated_mtime_tolerance",
+      "ontology_binding": null,
+      "notes_zh": "P0、4/7 进度、四轮提交、12 类型与测试数量分别属于元数据、计划或验收，不填充 R。",
+      "notes_en": "P0, 4/7 progress, four commits, twelve types, and test counts belong to metadata, plan, or acceptance rather than R."
+    },
+    "V": {
+      "status": "resolved",
+      "value_zh": "ADR-0018、ADR-0015、TASK-005、TASK-006、TASK-008、TASK-010、event.schema.json、v1.0/v1.x 边界。",
+      "value_en": "ADR-0018, ADR-0015, TASK-005, TASK-006, TASK-008, TASK-010, event.schema.json, and v1.0/v1.x boundaries.",
+      "evidence": [
+        "E001",
+        "E002",
+        "E003"
+      ],
+      "origin": [
+        "SOURCE"
+      ],
+      "normalization": "source_stated_reference_basis",
+      "ontology_binding": null,
+      "notes_zh": "仅保留引用。",
+      "notes_en": "References only."
+    },
+    "C": {
+      "status": "resolved",
+      "value_zh": "A1–A12：模块、模型与 enum、订阅/poll、boundary/failure/session 集成、角色切换、去重、schema、snapshot、ADR、报告归档提交推送。",
+      "value_en": "A1–A12: module, model and enum, subscription/poll, boundary/failure/session integration, role switch, deduplication, schema, snapshot, ADR, report/archive/commits/push.",
+      "evidence": [
+        "E003",
+        "E004"
+      ],
+      "origin": [
+        "SOURCE"
+      ],
+      "normalization": "explicit_acceptance_conjunction",
+      "ontology_binding": null,
+      "notes_zh": "验收不是已完成事实。",
+      "notes_en": "Acceptance is not completed fact."
+    },
+    "B": {
+      "status": "resolved",
+      "value_zh": "不得新增 EVENT 文件 envelope、偏离 12 值 enum、引入后台线程/asyncio 自动轮询、持久化事件流、使用 OS filesystem watcher、实现跨 agent ordering/Lamport clock、破坏 TASK-006 测试、加入迁移段或 MCP 工具。",
+      "value_en": "Do not add EVENT file envelopes, deviate from the 12-value enum, add background thread/asyncio polling, persist event streams, use OS filesystem watchers, implement cross-agent ordering/Lamport clock, break TASK-006 tests, or add a migration section or MCP tool.",
+      "evidence": [
+        "E002",
+        "E003",
+        "E004"
+      ],
+      "origin": [
+        "SOURCE"
+      ],
+      "normalization": "explicit_scope_and_side_effect_boundaries",
+      "ontology_binding": null,
+      "notes_zh": "host adapter 责任保持在外部。",
+      "notes_en": "Host-adapter responsibility remains external."
+    }
+  },
+  "boundary_state": "underdetermined",
+  "policy_evaluation": "NOT_EVALUATED_NO_OPERATOR_PROFILE",
+  "admission": "BLOCKED_BOUNDARY_UNDERDETERMINED"
+}

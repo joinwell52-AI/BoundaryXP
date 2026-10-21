@@ -1,0 +1,1 @@
+OPS must probe the test endpoint and retry at least 3 times before writing endpoint-probe.md. Do not change endpoint configuration.

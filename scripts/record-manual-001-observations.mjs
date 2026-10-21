@@ -1,0 +1,25 @@
+import fs from 'node:fs';import path from 'node:path';import assert from 'node:assert/strict';
+import {evaluateDirectObservations} from '../research/7plus1-parser/llm-first-028/direct-ir-observations.mjs';
+import {normalObservations} from '../tests/helpers/manual-001-observations.mjs';
+const trace=JSON.parse(fs.readFileSync('docs/reports/7plus1/MANUAL-TEST-001-ui76-FIRST-RUN/TRACE.json')),output=path.resolve(process.argv[2]);
+if(fs.existsSync(output))throw Error('OBSERVATION_EVIDENCE_ALREADY_EXISTS');fs.mkdirSync(output,{recursive:true});
+const rows=[],ref=(kind,id)=>({kind,id});
+function check(name,change,expected,target=null){const input=normalObservations(trace.ir);change(input);const actual=evaluateDirectObservations(trace.ir,trace.technical,input),selected=target?actual.requirements.find(r=>r.requirement_id===target).result:actual.status;assert.equal(selected,expected);rows.push({name,target,expected,actual:selected,observations:input,evaluation:actual});}
+check('NORMAL_HUMAN_16_MINUTE_MECHANISM_FIXTURE',()=>{},'SATISFIED');
+check('WRONG_PERFORMER',o=>o.events.find(e=>e.event_id==='submit_dev').roles.PERFORMER=ref('ENTITY','ops'),'VIOLATED');
+check('WRONG_RECIPIENT',o=>o.events.find(e=>e.event_id==='deliver_summary').roles.RECIPIENT=ref('ENTITY','qa'),'VIOLATED');
+check('SAME_NAME_OTHER_INSTANCE',o=>o.events.find(e=>e.event_id==='submit_dev').roles.OBJECT=ref('ENTITY','another-round-dev-report'),'VIOLATED');
+check('THIRD_CONFIRMED_EXTERNAL_INPUT',o=>o.events[0].external_inputs.push(ref('ENTITY','third-input')),'VIOLATED','r_inputs');
+check('UNKNOWN_ENVIRONMENT',o=>delete o.events[0].roles.ENVIRONMENT,'UNKNOWN','r_environment');
+check('NON_TEST_ENVIRONMENT',o=>o.events[0].roles.ENVIRONMENT=ref('ENTITY','prodenv'),'VIOLATED','r_environment');
+check('QA_BEFORE_REPORT_SUBMISSION',o=>o.events.find(e=>e.event_id==='review').start=7,'VIOLATED','r_review_boundary');
+check('QA_PASSED_ONLY_AFTER_GENERATION_STARTED',o=>o.events.find(e=>e.event_id==='make_summary').start=5,'VIOLATED','r_summary_generation_gate');
+check('MATERIAL_NOT_AVAILABLE_AT_USE',o=>o.events.find(e=>e.event_id==='make_summary').uses[0].available_at=13.5,'VIOLATED','du_summary_dev');
+check('MISSING_MATERIAL_USE',o=>o.events.find(e=>e.event_id==='make_summary').uses.pop(),'VIOLATED','du_summary_ops');
+check('COMPLETED_BUT_DURATION_31',o=>o.quantities.duration.value=31,'VIOLATED','r_duration');
+check('HIGH_RISK_TRUE_WITHOUT_STOP',o=>o.states.risk_found={value:true,established_at:12},'VIOLATED','r_stop');
+check('HIGH_RISK_TRUE_WITHOUT_REPORT',o=>o.states.risk_found={value:true,established_at:12},'VIOLATED','r_report_risk');
+check('TIMED_CONTINUATION_DURING_STOP',o=>{o.states.stopped={value:true,periods:[{start:20,end:25,value:true}]};o.events.push({event_id:'confirmed-continuation',owner_id:'ROOT',operation:'CONTINUE',occurred:true,start:22,end:23,roles:{OBJECT:ref('EVENT','ROOT'),ENVIRONMENT:ref('ENTITY','testenv')},external_inputs:[]});},'VIOLATED','r_no_continue');
+check('UNTIMED_CONTINUATION_NOT_SUFFICIENT',o=>{o.states.stopped={value:true};o.events.push({event_id:'untimed-continuation',owner_id:'ROOT',operation:'CONTINUE',occurred:true,roles:{OBJECT:ref('EVENT','ROOT'),ENVIRONMENT:ref('ENTITY','testenv')},external_inputs:[]});},'UNKNOWN','r_no_continue');
+const summary={mode:'HUMAN_MECHANISM_OBSERVATIONS_NOT_ACTUAL_EXECUTION',source_sha256:trace.source.sha256,real_model_calls:0,checks:rows.length,matched:rows.length,not_new_model_validation:true,not_complete_source_semantic_acceptance:true,business_decision:null,execution_authorization:null};
+fs.writeFileSync(path.join(output,'OBSERVATION-CHECKS.json'),JSON.stringify({summary,rows},null,2)+'\n',{flag:'wx'});console.log(JSON.stringify(summary));

@@ -1,0 +1,1 @@
+PM must organize a read-only model smoke check in staging and deliver smoke-note.md. Memory usage must not exceed 2 GB, and no different model may be loaded.

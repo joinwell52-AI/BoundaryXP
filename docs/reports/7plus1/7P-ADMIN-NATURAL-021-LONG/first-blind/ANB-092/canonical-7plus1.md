@@ -1,0 +1,33 @@
+# ANB-092 Actual Canonical 7+1
+
+## I ABSENT
+
+
+
+## O UNRESOLVED
+
+
+
+## A UNRESOLVED
+
+
+
+## P UNRESOLVED
+
+- ADMIN [RECIPIENT] [RESOLVED]
+
+## R ABSENT
+
+
+
+## V ABSENT
+
+
+
+## C ABSENT
+
+
+
+## B RESOLVED
+
+- FORBIDDEN 执行 发布 [RESOLVED]

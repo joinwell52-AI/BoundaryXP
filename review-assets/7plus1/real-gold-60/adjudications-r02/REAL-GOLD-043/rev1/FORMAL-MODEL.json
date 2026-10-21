@@ -1,0 +1,54 @@
+{
+  "case_id": "REAL-GOLD-043",
+  "source_sha256": "2f30fd29d2265e3cc797b181dadba5df339ac906751c14bd4ca2530954d60641",
+  "E": [
+    "E={SOP,inventory,checklist,origin,backup,TASK,REPORT}"
+  ],
+  "Sigma": [
+    "Sigma.categories=A..L",
+    "Sigma.fields=6",
+    "Sigma.hard_constraints=4",
+    "Sigma.remotes={origin,backup}"
+  ],
+  "Q": [
+    "Q.create_inventory",
+    "Q.upgrade_checklist_SOP",
+    "Q.scan6",
+    "Q.readlint",
+    "Q.push(origin/main)",
+    "Q.push(backup/main)",
+    "Q.push(backup/tags)",
+    "Q.record_SHA"
+  ],
+  "F": [
+    "F.push(backup,--mirror)",
+    "F.force_overwrite(backup)",
+    "F.wildcard_inventory",
+    "F.omit_backup"
+  ],
+  "K": [
+    "K.inventory=12x6",
+    "K.scans={0hit,#4=1hit,#6=2hit}",
+    "K.remote_SHA=equal",
+    "K.backup_after_origin=true"
+  ],
+  "Relations": [
+    "origin_push -> precedes -> backup_push",
+    "backup_append_only -> protects_against -> force_push",
+    "release -> requires -> backup_sync"
+  ],
+  "D": [
+    "D.priority=P0",
+    "D.risk=medium",
+    "D.deadline=absent"
+  ],
+  "Phi": [
+    "Phi.origin_authority=not_bound",
+    "Phi.backup_authority=not_bound",
+    "Phi.remote_SHA=not_observed"
+  ],
+  "losslessness_zh": "保留 12类清单、四硬约束、双发次序、非 mirror 灾备哲学与 SHA 验收。",
+  "losslessness_en": "Retains 12-class inventory, four hard constraints, dual-push sequence, non-mirror backup philosophy and SHA acceptance.",
+  "formal_coverage_gap": [],
+  "invented_constraints": []
+}

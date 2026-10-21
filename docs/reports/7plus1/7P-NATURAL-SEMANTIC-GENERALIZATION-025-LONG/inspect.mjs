@@ -1,0 +1,8 @@
+import fs from 'node:fs';
+const [rev='baseline',caseNumber='1',view='all']=process.argv.slice(2),cid='NROOT-'+caseNumber.padStart(3,'0'),root=rev==='baseline'?'docs/reports/7plus1/7P-ADMIN-ROOT-COMPILER-CLOSURE-024-LONG/natural-first/r01':'docs/reports/7plus1/7P-NATURAL-SEMANTIC-GENERALIZATION-025-LONG/development/'+rev+'/natural';
+const r=JSON.parse(fs.readFileSync(root+'/'+cid+'/trace.json')),c=r.compiler_v03,nm=new Map(c.semantic_nodes.map(n=>[n.node_id,n]));
+console.log(c.source.raw_text);
+if(view==='nlp'||view==='all')for(const a of c.nlp_signals.clauses){console.log('CLAUSE',a.id,a.span.quote);console.table(a.tokens.map((t,i)=>({i,text:t.text,pos:t.pos,dep:t.dep,head:t.head,lemma:t.lemma})));console.log('SRL',JSON.stringify(a.srl));}
+if(view==='facts'||view==='all'){for(const [slot,v]of Object.entries(c.canonical_7plus1.slots))console.log(slot,JSON.stringify(v));console.log('FACTS',JSON.stringify(c.boundary_ir.facts.map(x=>({...x,nodes:x.node_ids.map(i=>[nm.get(i)?.surface,nm.get(i)?.metadata.sense])}))));console.log('GU',JSON.stringify(c.unresolved));}
+if(view==='candidates')for(const rel of c.candidate_semantic_graph.candidate_relations)console.log(rel.relation_type,rel.state,nm.get(rel.head_node_id)?.surface,'→',nm.get(rel.tail_node_id)?.surface,'modal='+nm.get(rel.head_node_id)?.metadata.modality);
+if(view==='brief'){for(const x of c.boundary_ir.facts)console.log(x.fact_type,x.state,x.predicate_node_id?nm.get(x.predicate_node_id)?.surface:'',JSON.stringify((x.object_node_ids??x.participant_node_ids??[]).map(i=>nm.get(i)?.surface)),x.condition_expr_id??'');for(const u of c.unresolved)console.log('GU',u.kind,u.reason);}

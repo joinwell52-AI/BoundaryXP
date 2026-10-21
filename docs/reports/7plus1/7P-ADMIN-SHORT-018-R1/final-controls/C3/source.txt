@@ -1,0 +1,1 @@
+ENG 读取 definitions.tsv，生成 state.txt。AUD 确认每个删除且改名的字段都已记录后，COORD 将报告交给 DIRECTOR。

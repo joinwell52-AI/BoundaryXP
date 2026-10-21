@@ -1,0 +1,1 @@
+ENG 读取 catalog.tsv，检查其中所有条目的评分。

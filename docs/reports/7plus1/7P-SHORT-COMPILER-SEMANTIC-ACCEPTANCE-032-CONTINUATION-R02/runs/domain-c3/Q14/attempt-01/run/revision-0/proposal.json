@@ -1,0 +1,414 @@
+{
+  "contract_version": "032.1",
+  "entities": [
+    {
+      "id": "person_pm",
+      "label": "PM",
+      "type": "OTHER",
+      "mentions": [
+        {
+          "quote": "PM",
+          "occurrence": 1
+        }
+      ],
+      "alternatives": []
+    },
+    {
+      "id": "file_ticket",
+      "label": "ticket-516.txt",
+      "type": "FILE",
+      "mentions": [
+        {
+          "quote": "ticket-516.txt",
+          "occurrence": 1
+        },
+        {
+          "quote": "ticket-516.txt",
+          "occurrence": 2
+        }
+      ],
+      "alternatives": []
+    },
+    {
+      "id": "file_brief",
+      "label": "brief-516.md",
+      "type": "FILE",
+      "mentions": [
+        {
+          "quote": "brief-516.md",
+          "occurrence": 1
+        }
+      ],
+      "alternatives": []
+    }
+  ],
+  "events": [
+    {
+      "id": "event_read",
+      "predicate": "读取",
+      "kind": "ACTION",
+      "layer": "MAIN",
+      "use": "CURRENT_TASK",
+      "modality": "REQUIRED",
+      "polarity": "POSITIVE",
+      "owner_id": "ROOT",
+      "constraint_ids": [],
+      "requires": [],
+      "sources": [
+        {
+          "quote": "请PM读取ticket-516.txt",
+          "occurrence": 1
+        }
+      ]
+    },
+    {
+      "id": "event_generate",
+      "predicate": "生成",
+      "kind": "ACTION",
+      "layer": "MAIN",
+      "use": "CURRENT_TASK",
+      "modality": "REQUIRED",
+      "polarity": "POSITIVE",
+      "owner_id": "ROOT",
+      "constraint_ids": [],
+      "requires": [],
+      "sources": [
+        {
+          "quote": "并生成brief-516.md",
+          "occurrence": 1
+        }
+      ]
+    },
+    {
+      "id": "state_basis",
+      "predicate": "作为任务依据",
+      "kind": "STATE",
+      "layer": "BACKGROUND",
+      "use": "MENTION_ONLY",
+      "modality": "UNSTATED",
+      "polarity": "NEGATIVE",
+      "owner_id": "ROOT",
+      "constraint_ids": [],
+      "requires": [],
+      "sources": [
+        {
+          "quote": "ticket-516.txt是待读材料，不是任务依据",
+          "occurrence": 1
+        }
+      ]
+    }
+  ],
+  "claims": [
+    {
+      "id": "role_read_pm",
+      "kind": "ROLE",
+      "event_id": "event_read",
+      "entity_id": "person_pm",
+      "role": "PERFORMER",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "artifact_use": null,
+      "scope_id": "event_read",
+      "requires": [],
+      "sources": [
+        {
+          "quote": "请PM读取ticket-516.txt",
+          "occurrence": 1
+        }
+      ],
+      "note": "PM是明确的读取执行者，岗位身份类型未进一步指定。"
+    },
+    {
+      "id": "role_read_input",
+      "kind": "ROLE",
+      "event_id": "event_read",
+      "entity_id": "file_ticket",
+      "role": "INPUT_OBJECT",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "artifact_use": null,
+      "scope_id": "event_read",
+      "requires": [],
+      "sources": [
+        {
+          "quote": "读取ticket-516.txt",
+          "occurrence": 1
+        },
+        {
+          "quote": "ticket-516.txt是待读材料",
+          "occurrence": 1
+        }
+      ],
+      "note": "该文件是明确待读输入，不绑定BASIS用途。"
+    },
+    {
+      "id": "scope_read",
+      "kind": "SCOPE",
+      "event_id": "event_read",
+      "entity_id": null,
+      "role": null,
+      "expression_id": "item_ticket",
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "artifact_use": null,
+      "scope_id": "file_ticket",
+      "requires": [],
+      "sources": [
+        {
+          "quote": "读取ticket-516.txt",
+          "occurrence": 1
+        }
+      ],
+      "note": "读取范围是指定文件。"
+    },
+    {
+      "id": "role_generate_pm",
+      "kind": "ROLE",
+      "event_id": "event_generate",
+      "entity_id": "person_pm",
+      "role": "PERFORMER",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "artifact_use": null,
+      "scope_id": "event_generate",
+      "requires": [],
+      "sources": [
+        {
+          "quote": "请PM读取ticket-516.txt",
+          "occurrence": 1
+        },
+        {
+          "quote": "并生成brief-516.md",
+          "occurrence": 1
+        }
+      ],
+      "note": "同一指令的并列生成动作承接主语PM；未出现主体切换。"
+    },
+    {
+      "id": "role_generate_result",
+      "kind": "ROLE",
+      "event_id": "event_generate",
+      "entity_id": "file_brief",
+      "role": "RESULT",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "artifact_use": null,
+      "scope_id": "event_generate",
+      "requires": [],
+      "sources": [
+        {
+          "quote": "生成brief-516.md",
+          "occurrence": 1
+        }
+      ],
+      "note": "明确要求生成的结果；原文未要求交付。"
+    },
+    {
+      "id": "scope_generate",
+      "kind": "SCOPE",
+      "event_id": "event_generate",
+      "entity_id": null,
+      "role": null,
+      "expression_id": "item_brief",
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "artifact_use": null,
+      "scope_id": "file_brief",
+      "requires": [],
+      "sources": [
+        {
+          "quote": "生成brief-516.md",
+          "occurrence": 1
+        }
+      ],
+      "note": "生成结果为指定文件，文件名中的数字不是数量限制。"
+    },
+    {
+      "id": "role_basis_object",
+      "kind": "ROLE",
+      "event_id": "state_basis",
+      "entity_id": "file_ticket",
+      "role": "OBJECT",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "artifact_use": null,
+      "scope_id": "state_basis",
+      "requires": [],
+      "sources": [
+        {
+          "quote": "ticket-516.txt是待读材料，不是任务依据",
+          "occurrence": 1
+        }
+      ],
+      "note": "否定任务依据身份的陈述对象；不转成独立禁止动作。"
+    },
+    {
+      "id": "scope_basis_object",
+      "kind": "SCOPE",
+      "event_id": "state_basis",
+      "entity_id": null,
+      "role": null,
+      "expression_id": "item_ticket",
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "artifact_use": null,
+      "scope_id": "file_ticket",
+      "requires": [],
+      "sources": [
+        {
+          "quote": "ticket-516.txt是待读材料，不是任务依据",
+          "occurrence": 1
+        }
+      ],
+      "note": "该否定陈述仅针对同一指定输入文件。"
+    }
+  ],
+  "expressions": [
+    {
+      "id": "item_ticket",
+      "op": "ITEM",
+      "operands": [
+        "file_ticket"
+      ],
+      "state": null,
+      "sources": [
+        {
+          "quote": "ticket-516.txt",
+          "occurrence": 1
+        },
+        {
+          "quote": "ticket-516.txt",
+          "occurrence": 2
+        }
+      ]
+    },
+    {
+      "id": "item_brief",
+      "op": "ITEM",
+      "operands": [
+        "file_brief"
+      ],
+      "state": null,
+      "sources": [
+        {
+          "quote": "brief-516.md",
+          "occurrence": 1
+        }
+      ]
+    }
+  ],
+  "issues": [],
+  "coverage": [
+    {
+      "sources": [
+        {
+          "quote": "请PM读取ticket-516.txt",
+          "occurrence": 1
+        }
+      ],
+      "claim_ids": [
+        "role_read_pm",
+        "role_read_input",
+        "scope_read"
+      ],
+      "status": "EXPRESSED",
+      "affected_views": [
+        "A",
+        "P",
+        "I"
+      ],
+      "range_requirement": {
+        "kind": "SPECIFIC",
+        "scope_claim_ids": [
+          "scope_read"
+        ]
+      }
+    },
+    {
+      "sources": [
+        {
+          "quote": "请PM读取ticket-516.txt",
+          "occurrence": 1
+        },
+        {
+          "quote": "并生成brief-516.md",
+          "occurrence": 1
+        }
+      ],
+      "claim_ids": [
+        "role_generate_pm",
+        "role_generate_result",
+        "scope_generate"
+      ],
+      "status": "EXPRESSED",
+      "affected_views": [
+        "A",
+        "P",
+        "O"
+      ],
+      "range_requirement": {
+        "kind": "SPECIFIC",
+        "scope_claim_ids": [
+          "scope_generate"
+        ]
+      }
+    },
+    {
+      "sources": [
+        {
+          "quote": "ticket-516.txt是待读材料",
+          "occurrence": 1
+        }
+      ],
+      "claim_ids": [
+        "role_read_input",
+        "scope_read"
+      ],
+      "status": "EXPRESSED",
+      "affected_views": [
+        "I"
+      ],
+      "range_requirement": {
+        "kind": "SPECIFIC",
+        "scope_claim_ids": [
+          "scope_read"
+        ]
+      }
+    },
+    {
+      "sources": [
+        {
+          "quote": "ticket-516.txt是待读材料，不是任务依据",
+          "occurrence": 1
+        }
+      ],
+      "claim_ids": [
+        "role_basis_object",
+        "scope_basis_object"
+      ],
+      "status": "BACKGROUND",
+      "affected_views": [
+        "V"
+      ],
+      "range_requirement": {
+        "kind": "SPECIFIC",
+        "scope_claim_ids": [
+          "scope_basis_object"
+        ]
+      }
+    }
+  ]
+}

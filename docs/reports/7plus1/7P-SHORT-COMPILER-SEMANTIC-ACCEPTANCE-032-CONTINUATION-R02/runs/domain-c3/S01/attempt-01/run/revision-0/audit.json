@@ -1,0 +1,279 @@
+{
+  "contract_version": "032.1",
+  "reviews": [
+    {
+      "subject_id": "entity_pm",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [
+        {
+          "quote": "PM",
+          "occurrence": 1
+        }
+      ],
+      "reason": "PM身份明确；原文未指定人或组类别，OTHER可作占位。"
+    },
+    {
+      "subject_id": "entity_data",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [
+        {
+          "quote": "data.csv",
+          "occurrence": 1
+        },
+        {
+          "quote": "data.csv",
+          "occurrence": 2
+        }
+      ],
+      "reason": "读取与禁止修改指向同一明确文件，mentions完整关联两处指称。"
+    },
+    {
+      "subject_id": "entity_brief",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [
+        {
+          "quote": "brief.md",
+          "occurrence": 1
+        }
+      ],
+      "reason": "明确命名的生成文件，无身份竞争。"
+    },
+    {
+      "subject_id": "event_read",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [
+        {
+          "quote": "请PM读取data.csv",
+          "occurrence": 1
+        }
+      ],
+      "reason": "当前任务明确要求读取，无条件或数量限制。"
+    },
+    {
+      "subject_id": "event_generate",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [
+        {
+          "quote": "请PM读取data.csv并生成brief.md",
+          "occurrence": 1
+        }
+      ],
+      "reason": "生成是并列的明确要求；“并”未规定事件先后或产物消费关系。"
+    },
+    {
+      "subject_id": "event_modify",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [
+        {
+          "quote": "不得修改data.csv",
+          "occurrence": 1
+        }
+      ],
+      "reason": "明确禁止修改；FORBIDDEN与正向动作谓词准确保留禁令。"
+    },
+    {
+      "subject_id": "claim_read_performer",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [
+        "event_read",
+        "entity_pm"
+      ],
+      "sources": [
+        {
+          "quote": "请PM读取data.csv",
+          "occurrence": 1
+        }
+      ],
+      "reason": "PM为明示读取执行者。"
+    },
+    {
+      "subject_id": "claim_read_input",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [
+        "event_read",
+        "entity_data"
+      ],
+      "sources": [
+        {
+          "quote": "读取data.csv",
+          "occurrence": 1
+        }
+      ],
+      "reason": "data.csv是本任务明确读取的输入对象。"
+    },
+    {
+      "subject_id": "claim_read_scope",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [
+        "claim_read_input",
+        "expr_data_item"
+      ],
+      "sources": [
+        {
+          "quote": "读取data.csv",
+          "occurrence": 1
+        }
+      ],
+      "reason": "ITEM范围与同一读取事件的输入文件绑定，未扩大为类别域。"
+    },
+    {
+      "subject_id": "claim_generate_performer",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [
+        "event_generate",
+        "entity_pm"
+      ],
+      "sources": [
+        {
+          "quote": "请PM读取data.csv",
+          "occurrence": 1
+        },
+        {
+          "quote": "并生成brief.md",
+          "occurrence": 1
+        }
+      ],
+      "reason": "同一指令的并列动作承接PM，来源覆盖主语与生成动作。"
+    },
+    {
+      "subject_id": "claim_generate_result",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [
+        "event_generate",
+        "entity_brief"
+      ],
+      "sources": [
+        {
+          "quote": "生成brief.md",
+          "occurrence": 1
+        }
+      ],
+      "reason": "brief.md是生成结果；原文没有提交或交付要求。"
+    },
+    {
+      "subject_id": "claim_generate_scope",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [
+        "claim_generate_result",
+        "expr_brief_item"
+      ],
+      "sources": [
+        {
+          "quote": "生成brief.md",
+          "occurrence": 1
+        }
+      ],
+      "reason": "具体文件范围绑定同一生成事件的RESULT。"
+    },
+    {
+      "subject_id": "claim_modify_performer",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [
+        "event_modify",
+        "entity_pm"
+      ],
+      "sources": [
+        {
+          "quote": "请PM读取data.csv",
+          "occurrence": 1
+        },
+        {
+          "quote": "不得修改data.csv",
+          "occurrence": 1
+        }
+      ],
+      "reason": "连续任务的追加禁令承接PM，无主体切换或竞争执行者。"
+    },
+    {
+      "subject_id": "claim_modify_object",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [
+        "event_modify",
+        "entity_data"
+      ],
+      "sources": [
+        {
+          "quote": "读取data.csv",
+          "occurrence": 1
+        },
+        {
+          "quote": "不得修改data.csv",
+          "occurrence": 1
+        }
+      ],
+      "reason": "禁令针对同一data.csv，OBJECT用途未新增外部输入。"
+    },
+    {
+      "subject_id": "claim_modify_scope",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [
+        "claim_modify_object",
+        "expr_data_item"
+      ],
+      "sources": [
+        {
+          "quote": "不得修改data.csv",
+          "occurrence": 1
+        }
+      ],
+      "reason": "禁止范围为明确的具体文件，与禁令对象及事件一致。"
+    },
+    {
+      "subject_id": "expr_data_item",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [
+        "entity_data"
+      ],
+      "sources": [
+        {
+          "quote": "data.csv",
+          "occurrence": 1
+        },
+        {
+          "quote": "data.csv",
+          "occurrence": 2
+        }
+      ],
+      "reason": "两处指称为同一具体文件，单操作数ITEM正确。"
+    },
+    {
+      "subject_id": "expr_brief_item",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [
+        "entity_brief"
+      ],
+      "sources": [
+        {
+          "quote": "brief.md",
+          "occurrence": 1
+        }
+      ],
+      "reason": "原文指定具体生成文件，ITEM准确表达其范围。"
+    }
+  ],
+  "issues": [],
+  "omissions": []
+}

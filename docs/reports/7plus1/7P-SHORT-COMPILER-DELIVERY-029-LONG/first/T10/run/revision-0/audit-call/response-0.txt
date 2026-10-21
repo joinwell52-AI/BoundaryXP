@@ -1,0 +1,151 @@
+{
+  "contract_version": "028-r02.2",
+  "reviews": [
+    {
+      "subject_id": "n_pm",
+      "field_path": "entities[n_pm]",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [{"quote": "PM", "occurrence": 1}],
+      "reason": "原文明示PM，未补充其权限或其他身份。"
+    },
+    {
+      "subject_id": "n_log",
+      "field_path": "entities[n_log]",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [{"quote": "worker.log", "occurrence": 1}],
+      "reason": "原文明示读取的日志文件。"
+    },
+    {
+      "subject_id": "n_errors",
+      "field_path": "entities[n_errors]",
+      "verdict": "SUPPORT",
+      "context_refs": ["n_log"],
+      "sources": [{"quote": "worker.log", "occurrence": 1}, {"quote": "其中的错误记录", "occurrence": 1}],
+      "reason": "其中指向前述日志，错误记录是明确受检对象。"
+    },
+    {
+      "subject_id": "n_result",
+      "field_path": "entities[n_result]",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [{"quote": "检查结果", "occurrence": 1}],
+      "reason": "原文明示检查结果，候选未虚构文件载体。"
+    },
+    {
+      "subject_id": "n_qa",
+      "field_path": "entities[n_qa]",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [{"quote": "QA", "occurrence": 1}],
+      "reason": "原文明示QA作为复核参与者。"
+    },
+    {
+      "subject_id": "e_read",
+      "field_path": "events[e_read]",
+      "verdict": "SUPPORT",
+      "context_refs": ["c_retry_limit"],
+      "sources": [{"quote": "请PM读取worker.log", "occurrence": 1}, {"quote": "该读取操作最多重试2次", "occurrence": 1}],
+      "reason": "读取是当前明确要求，读取重试上限已通过constraint_ids绑定。"
+    },
+    {
+      "subject_id": "e_check",
+      "field_path": "events[e_check]",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [{"quote": "请PM读取worker.log并检查其中的错误记录", "occurrence": 1}],
+      "reason": "检查是并列的当前要求；工具未指定不撤销该动作义务。"
+    },
+    {
+      "subject_id": "e_review",
+      "field_path": "events[e_review]",
+      "verdict": "SUPPORT",
+      "context_refs": ["c_check_result"],
+      "sources": [{"quote": "由QA复核检查结果", "occurrence": 1}],
+      "reason": "复核是直接要求，依赖本次检查结果的形成合理，未误作条件中的提及。"
+    },
+    {
+      "subject_id": "c_read_pm",
+      "field_path": "claims[c_read_pm]",
+      "verdict": "SUPPORT",
+      "context_refs": ["e_read", "n_pm"],
+      "sources": [{"quote": "请PM读取worker.log", "occurrence": 1}],
+      "reason": "PM明确执行读取。"
+    },
+    {
+      "subject_id": "c_read_log",
+      "field_path": "claims[c_read_log]",
+      "verdict": "SUPPORT",
+      "context_refs": ["e_read", "n_log"],
+      "sources": [{"quote": "读取worker.log", "occurrence": 1}],
+      "reason": "worker.log是明确外部读取输入。"
+    },
+    {
+      "subject_id": "c_check_pm",
+      "field_path": "claims[c_check_pm]",
+      "verdict": "SUPPORT",
+      "context_refs": ["e_check", "n_pm"],
+      "sources": [{"quote": "请PM读取worker.log并检查其中的错误记录", "occurrence": 1}],
+      "reason": "并列谓词共享PM作为执行者。"
+    },
+    {
+      "subject_id": "c_check_errors",
+      "field_path": "claims[c_check_errors]",
+      "verdict": "SUPPORT",
+      "context_refs": ["e_check", "n_errors", "c_error_scope"],
+      "sources": [{"quote": "worker.log", "occurrence": 1}, {"quote": "检查其中的错误记录", "occurrence": 1}],
+      "reason": "日志中的错误记录是明确受检范围，INPUT_OBJECT用途及范围依赖正确。"
+    },
+    {
+      "subject_id": "c_error_scope",
+      "field_path": "claims[c_error_scope]",
+      "verdict": "SUPPORT",
+      "context_refs": ["e_check", "x_errors_in_log"],
+      "sources": [{"quote": "worker.log", "occurrence": 1}, {"quote": "其中的错误记录", "occurrence": 1}],
+      "reason": "范围限定为前述日志中的错误记录，跨片段指代来源完整。"
+    },
+    {
+      "subject_id": "c_check_result",
+      "field_path": "claims[c_check_result]",
+      "verdict": "SUPPORT",
+      "context_refs": ["e_check", "n_result"],
+      "sources": [{"quote": "检查其中的错误记录", "occurrence": 1}, {"quote": "检查结果", "occurrence": 1}],
+      "reason": "后文复核的检查结果对应本次检查产物，未增加额外提交或载体要求。"
+    },
+    {
+      "subject_id": "c_review_qa",
+      "field_path": "claims[c_review_qa]",
+      "verdict": "SUPPORT",
+      "context_refs": ["e_review", "n_qa"],
+      "sources": [{"quote": "由QA复核检查结果", "occurrence": 1}],
+      "reason": "QA明确承担复核角色，未推导批准权限。"
+    },
+    {
+      "subject_id": "c_review_result",
+      "field_path": "claims[c_review_result]",
+      "verdict": "SUPPORT",
+      "context_refs": ["e_review", "n_result", "c_check_result"],
+      "sources": [{"quote": "检查其中的错误记录", "occurrence": 1}, {"quote": "复核检查结果", "occurrence": 1}],
+      "reason": "复核对象是同一检查结果，作为内部OBJECT而非新增外部输入正确。"
+    },
+    {
+      "subject_id": "c_retry_limit",
+      "field_path": "claims[c_retry_limit]",
+      "verdict": "SUPPORT",
+      "context_refs": ["e_read"],
+      "sources": [{"quote": "请PM读取worker.log", "occurrence": 1}, {"quote": "该读取操作最多重试2次", "occurrence": 1}],
+      "reason": "数量限制针对读取重试，LTE 2次、执行限制用途和计数范围均正确；与读取事件双向绑定，未计入首次读取或强制重试。"
+    },
+    {
+      "subject_id": "x_errors_in_log",
+      "field_path": "expressions[x_errors_in_log]",
+      "verdict": "SUPPORT",
+      "context_refs": ["n_errors", "n_log"],
+      "sources": [{"quote": "worker.log", "occurrence": 1}, {"quote": "其中的错误记录", "occurrence": 1}],
+      "reason": "带参数状态正确表达错误记录与日志的范围关系，不宣称已观测到错误。"
+    }
+  ],
+  "issues": [],
+  "omissions": []
+}

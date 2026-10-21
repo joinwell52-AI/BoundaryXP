@@ -1,0 +1,1 @@
+Nora 读取 source.ini，生成 proof.txt。Iris 复核报告后，由 Owen 提交给 ADMIN。

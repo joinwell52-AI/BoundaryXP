@@ -1,0 +1,1 @@
+DEV 不得修改 probe-6.ini，必须生成 fresh-polarity-006-0.txt。

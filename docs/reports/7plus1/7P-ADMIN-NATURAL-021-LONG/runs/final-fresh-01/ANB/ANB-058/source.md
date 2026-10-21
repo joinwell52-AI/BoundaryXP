@@ -1,0 +1,1 @@
+未经负责人批准，不得读取 finance-snapshot.csv；批准后由 QA 读取并生成 finance-review.md。不得连接财务数据库。

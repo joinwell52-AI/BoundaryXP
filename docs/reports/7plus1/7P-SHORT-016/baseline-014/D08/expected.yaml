@@ -1,0 +1,51 @@
+I:
+  status: RESOLVED
+  entries:
+    - INPUT policy.yaml
+
+O:
+  status: RESOLVED
+  entries:
+    - GENERATED_OUTPUT compliance-note.md
+
+A:
+  status: RESOLVED
+  entries:
+    - REQUIRED READ policy.yaml
+      agent: Olivia Chen
+    - REQUIRED GENERATE compliance-note.md
+      agent: Olivia Chen
+
+P:
+  status: RESOLVED
+  entries:
+    - Olivia Chen [PERFORMER]
+
+R:
+  status: ABSENT
+
+V:
+  status: ABSENT
+
+C:
+  status: RESOLVED
+  entries:
+    - AND
+      - OUTPUT_EXISTS(compliance-note.md)
+      - OUTPUT_CONTENT_PRESENT(compliance-note.md, Findings)
+      - OUTPUT_CONTENT_PRESENT(compliance-note.md, Follow-up)
+
+B:
+  status: RESOLVED
+  entries:
+    - FORBIDDEN MODIFY policy.yaml
+
+OwnedOutputContent:
+  owner: compliance-note.md
+  requirements:
+    - REQUIRED SECTION Findings
+    - REQUIRED SECTION Follow-up
+
+NonProjection:
+  - Findings is content, not a current-task action.
+  - Follow-up is content, not a current-task action.

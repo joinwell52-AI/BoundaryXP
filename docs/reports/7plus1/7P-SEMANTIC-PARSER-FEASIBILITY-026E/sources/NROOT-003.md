@@ -1,0 +1,1 @@
+请 PM 组织检查 evidence-index.csv 中证据记录是否包含文件名、哈希和时间信息，最终交付 evidence-integrity.md。缺项应记录，不得补造证据。

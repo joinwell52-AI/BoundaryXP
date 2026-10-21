@@ -1,0 +1,1 @@
+DEV 查看 target.csv，生成 beacon.txt。范围仅限 devbox，不包含 releasebox。

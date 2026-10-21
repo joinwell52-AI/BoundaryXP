@@ -1,0 +1,193 @@
+{
+  "contract_version": "031-r01",
+  "reviews": [
+    {
+      "subject_id": "ent_pm",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [
+        {
+          "quote": "PM",
+          "occurrence": 1
+        }
+      ],
+      "reason": "PM身份明确；OTHER可作为未指定人或组类别的占位，不推定岗位权限。"
+    },
+    {
+      "subject_id": "ent_data",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [
+        {
+          "quote": "data.csv",
+          "occurrence": 1
+        },
+        {
+          "quote": "data.csv",
+          "occurrence": 2
+        }
+      ],
+      "reason": "读取与禁止修改指向同一data.csv文件，mentions完整关联两处用途。"
+    },
+    {
+      "subject_id": "ent_brief",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [
+        {
+          "quote": "brief.md",
+          "occurrence": 1
+        }
+      ],
+      "reason": "明确命名的生成文件，身份与类型有来源支持。"
+    },
+    {
+      "subject_id": "evt_read",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [
+        {
+          "quote": "请PM读取data.csv",
+          "occurrence": 1
+        }
+      ],
+      "reason": "原文明示当前必须执行读取，无额外条件或数量限制。"
+    },
+    {
+      "subject_id": "evt_generate",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [
+        {
+          "quote": "请PM读取data.csv并生成brief.md",
+          "occurrence": 1
+        }
+      ],
+      "reason": "生成是当前要求的并列动作；原文未明示读取与生成之间的先后约束。"
+    },
+    {
+      "subject_id": "evt_modify",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [
+        {
+          "quote": "不得修改data.csv",
+          "occurrence": 1
+        }
+      ],
+      "reason": "明确禁止修改；FORBIDDEN与正向动作谓词组合正确表达禁止。"
+    },
+    {
+      "subject_id": "cl_read_performer",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [
+        "evt_read",
+        "ent_pm"
+      ],
+      "sources": [
+        {
+          "quote": "请PM读取data.csv",
+          "occurrence": 1
+        }
+      ],
+      "reason": "PM是原文明示的读取执行者。"
+    },
+    {
+      "subject_id": "cl_read_input",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [
+        "evt_read",
+        "ent_data"
+      ],
+      "sources": [
+        {
+          "quote": "读取data.csv",
+          "occurrence": 1
+        }
+      ],
+      "reason": "data.csv是明确读取输入，INPUT_OBJECT绑定正确。"
+    },
+    {
+      "subject_id": "cl_generate_performer",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [
+        "evt_generate",
+        "ent_pm"
+      ],
+      "sources": [
+        {
+          "quote": "请PM读取data.csv",
+          "occurrence": 1
+        },
+        {
+          "quote": "并生成brief.md",
+          "occurrence": 1
+        }
+      ],
+      "reason": "同一指令中的并列生成动作承接PM，来源包含主体与追加动作两端。"
+    },
+    {
+      "subject_id": "cl_generate_result",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [
+        "evt_generate",
+        "ent_brief"
+      ],
+      "sources": [
+        {
+          "quote": "生成brief.md",
+          "occurrence": 1
+        }
+      ],
+      "reason": "brief.md是生成事件的RESULT；原文没有要求交付，不需增加DELIVERABLE。"
+    },
+    {
+      "subject_id": "cl_modify_performer",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [
+        "evt_modify",
+        "ent_pm"
+      ],
+      "sources": [
+        {
+          "quote": "请PM读取data.csv",
+          "occurrence": 1
+        },
+        {
+          "quote": "不得修改data.csv",
+          "occurrence": 1
+        }
+      ],
+      "reason": "连续同一任务的追加禁止承接PM，未出现主体切换或竞争执行者。"
+    },
+    {
+      "subject_id": "cl_modify_object",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [
+        "evt_modify",
+        "ent_data"
+      ],
+      "sources": [
+        {
+          "quote": "不得修改data.csv",
+          "occurrence": 1
+        }
+      ],
+      "reason": "禁止修改对象绑定到同一data.csv，OBJECT用途不另增外部输入。"
+    }
+  ],
+  "issues": [],
+  "omissions": []
+}

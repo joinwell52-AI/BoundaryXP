@@ -1,0 +1,351 @@
+{
+  "reviewer": "executing Codex; not ADMIN acceptance or independent human Gold",
+  "confirmed": [
+    {
+      "id": "Q08-RENDER-01",
+      "category": "来源/渲染错误",
+      "first_layer": "RENDERING",
+      "verdict": "ERROR",
+      "affects": [
+        "delivered"
+      ],
+      "fact_ids": [
+        "Q08-F07"
+      ],
+      "item_ids": [
+        "evt_review",
+        "cl_review_reviewer",
+        "cl_review_object"
+      ],
+      "source": "本任务不要求QA复核",
+      "actual": "无需 复核（不等于禁止）",
+      "reason": "免除义务的执行角色和目标已在候选与JSON明确，中文没有渲染；只保留谓词不是该指定免除事实的完整中文表达。",
+      "run": "first/Q08",
+      "trace": "runs/first/Q08/run/trace.json"
+    },
+    {
+      "id": "Q09-RENDER-01",
+      "category": "来源/渲染错误",
+      "first_layer": "RENDERING",
+      "verdict": "ERROR",
+      "affects": [
+        "delivered"
+      ],
+      "fact_ids": [
+        "Q09-F05"
+      ],
+      "item_ids": [
+        "e4",
+        "c8"
+      ],
+      "source": "QA仅负责接收该报告，不负责执行核对",
+      "actual": "无需 执行核对（不等于禁止）",
+      "reason": "只免除QA的核对职责，中文省略QA，不能完整区分QA职责免除与DEV仍须核对。",
+      "run": "first/Q09",
+      "trace": "runs/first/Q09/run/trace.json"
+    },
+    {
+      "id": "Q10-RENDER-01",
+      "category": "来源/渲染错误",
+      "first_layer": "RENDERING",
+      "verdict": "ERROR",
+      "affects": [
+        "delivered"
+      ],
+      "fact_ids": [
+        "Q10-F07"
+      ],
+      "item_ids": [
+        "X_REVIEW_DONE",
+        "X_UPDATE_DONE",
+        "C_SUBMIT_ORDER"
+      ],
+      "source": "请QA复核并更新这份报告，PM再将更新后的同一报告提交给ADMIN",
+      "actual": "时间先后 之后 AND(已完成(QA,report-a.md) [POSITIVE;运行值UNKNOWN],已完成(QA,report-a.md) [POSITIVE;运行值UNKNOWN])",
+      "reason": "STATE.event_id在JSON分别指复核和更新，中文formatExpression未显示所指事件；无法从两个同名状态分辨先后所要求的两个动作。",
+      "run": "first/Q10",
+      "trace": "runs/first/Q10/run/trace.json"
+    },
+    {
+      "id": "Q15-ROLE-01",
+      "category": "遗漏明确角色",
+      "first_layer": "LLM_PARSE",
+      "verdict": "ERROR",
+      "affects": [
+        "first",
+        "final_candidate",
+        "canonical_json",
+        "delivered"
+      ],
+      "fact_ids": [
+        "Q15-F02"
+      ],
+      "item_ids": [
+        "A2",
+        "U1"
+      ],
+      "source": "请PM核对users.csv；可以另外生成optional.md",
+      "actual": "A2=PERMITTED生成，仅C3 RESULT；U1=生成动作未另行明确执行者",
+      "reason": "同一短任务只有PM，另外生成延续该主体；冻结预期已要求PM生成许可。审阅器没有纠正该遗漏。",
+      "run": "first/Q15",
+      "trace": "runs/first/Q15/run/trace.json"
+    },
+    {
+      "id": "Q15-RENDER-01",
+      "category": "来源/渲染错误",
+      "first_layer": "RENDERING",
+      "verdict": "ERROR",
+      "affects": [
+        "delivered"
+      ],
+      "fact_ids": [
+        "Q15-F05"
+      ],
+      "item_ids": [
+        "A3",
+        "C4"
+      ],
+      "source": "本任务不要求交付optional.md",
+      "actual": "无需 交付（不等于禁止）",
+      "reason": "NOT_REQUIRED的文件目标在候选/JSON存在，中文没有渲染目标，免除项不完整。",
+      "run": "first/Q15",
+      "trace": "runs/first/Q15/run/trace.json"
+    },
+    {
+      "id": "Q17-RENDER-01",
+      "category": "来源/渲染错误",
+      "first_layer": "RENDERING",
+      "verdict": "ERROR",
+      "affects": [
+        "delivered"
+      ],
+      "fact_ids": [
+        "Q17-F03"
+      ],
+      "item_ids": [
+        "evt_generate",
+        "cl_generate_result"
+      ],
+      "source": "无需生成optional.md",
+      "actual": "无需 生成（不等于禁止）",
+      "reason": "该文件只在非投影NOT_REQUIRED用途存在；中文不显示目标，全文无optional.md。",
+      "run": "first/Q17",
+      "trace": "runs/first/Q17/run/trace.json"
+    },
+    {
+      "id": "Q19-IDENTITY-01",
+      "category": "错误对象/角色绑定",
+      "first_layer": "LLM_PARSE",
+      "verdict": "ERROR",
+      "affects": [
+        "first",
+        "final_candidate",
+        "canonical_json",
+        "delivered"
+      ],
+      "fact_ids": [
+        "Q19-F03",
+        "Q19-F04"
+      ],
+      "item_ids": [
+        "ent_report",
+        "ent_file",
+        "cl_review_object",
+        "cl_submit_object",
+        "expr_review_pass",
+        "cl_submit_condition"
+      ],
+      "source": "仅当本次报告通过QA复核时，允许PM向ADMIN提交check.md。",
+      "actual": "条件state.args=[ent_report,ent_qa]；提交OBJECT/RESULT=ent_file；ent_report与ent_file分别独立且无链接；全SUPPORT/RESOLVED",
+      "reason": "源文只有这一个报告，必要前提必须约束将提交的同一check.md。分离身份使机器条件无法与该交付物一致绑定。",
+      "run": "first/Q19",
+      "trace": "runs/first/Q19/run/trace.json"
+    },
+    {
+      "id": "Q23-I-01",
+      "category": "错误槽用途",
+      "first_layer": "LLM_PARSE",
+      "verdict": "ERROR",
+      "affects": [
+        "first"
+      ],
+      "fact_ids": [
+        "Q23-F01"
+      ],
+      "item_ids": [
+        "c2"
+      ],
+      "source": "PM必须提交handover.md",
+      "actual": "首候选c2.role=INPUT_OBJECT；首次审阅CONTRADICT；修订后OBJECT",
+      "reason": "只指定提交对象，没有外部输入或受检用途。原审阅阻断并有界修订，首次候选不能算正确；首次用户交付用修订后结果。",
+      "run": "first/Q23",
+      "trace": "runs/first/Q23/run/trace.json"
+    },
+    {
+      "id": "Q25-R1-CONTRACT-01",
+      "category": "数量合同表达错误",
+      "first_layer": "SKILL_SCHEMA_CONTRACT",
+      "verdict": "ERROR",
+      "affects": [
+        "first",
+        "final_candidate",
+        "canonical_json",
+        "delivered"
+      ],
+      "fact_ids": [
+        "Q25-F02",
+        "Q25-F04",
+        "Q25-F06"
+      ],
+      "item_ids": [
+        "cl_record_count",
+        "evt_generate",
+        "cl_generate_result"
+      ],
+      "source": "生成feed-note.md，报告恰好列出2条异常记录",
+      "actual": "cl_record_count.quantity.target_id=ent_records，count_scope=ent_report；技术CONTENT_QUANTITY_RESULT_TARGET拒绝；O/A生成REJECTED，中文没有2条约束",
+      "reason": "共享合同要求OUTPUT_CONTENT.target_id为报告RESULT。模型候选和审阅未遵守该字段合同；技术拒绝有效但最终任务要求未完整交付。不是修改编译器或降低状态就通过。",
+      "run": "repeat-1/Q25",
+      "trace": "runs/repeat-1/Q25/run/trace.json"
+    }
+  ],
+  "pending": [
+    {
+      "id": "Q22-O-REVIEW",
+      "category": "交付视图合同待审",
+      "first_layer": "SKILL_SCHEMA_CONTRACT",
+      "verdict": "REVIEW_REQUIRED",
+      "affects": [
+        "canonical_json",
+        "delivered"
+      ],
+      "fact_ids": [
+        "Q22-F01"
+      ],
+      "item_ids": [
+        "e1",
+        "c2"
+      ],
+      "source": "PM必须提交handover.md",
+      "actual": "e1.required/c2.OBJECT=handover；O=ABSENT",
+      "reason": "交付动作与对象保留，是否现有文件提交也必须作为O结果：v0.4产生定义与提交OBJECT例子存在解释空间；冻结预期未明确该槽位要求，须ADMIN裁定，不擅自修改预期。",
+      "run": "first/Q22",
+      "trace": "runs/first/Q22/run/trace.json"
+    },
+    {
+      "id": "Q23-O-REVIEW",
+      "category": "交付视图合同待审",
+      "first_layer": "SKILL_SCHEMA_CONTRACT",
+      "verdict": "REVIEW_REQUIRED",
+      "affects": [
+        "canonical_json",
+        "delivered"
+      ],
+      "fact_ids": [
+        "Q23-F01"
+      ],
+      "item_ids": [
+        "e1",
+        "c2"
+      ],
+      "source": "PM必须提交handover.md",
+      "actual": "最终OBJECT=handover；O=ABSENT",
+      "reason": "同Q22：预先账本只规定提交及完成语义，是否现有文件必须另外作为O交付结果存在方法解释空间，留ADMIN裁定，不改预期。",
+      "run": "first/Q23",
+      "trace": "runs/first/Q23/run/trace.json"
+    }
+  ],
+  "categories": [
+    {
+      "category": "来源/渲染错误",
+      "confirmed_run_count": 5,
+      "pending_run_count": 0,
+      "first_cases": [
+        "Q08",
+        "Q09",
+        "Q10",
+        "Q15",
+        "Q17"
+      ],
+      "facts": [
+        "Q08-F07",
+        "Q09-F05",
+        "Q10-F07",
+        "Q15-F05",
+        "Q17-F03"
+      ],
+      "note": "Categories and facts may overlap; not token precision/recall."
+    },
+    {
+      "category": "遗漏明确角色",
+      "confirmed_run_count": 1,
+      "pending_run_count": 0,
+      "first_cases": [
+        "Q15"
+      ],
+      "facts": [
+        "Q15-F02"
+      ],
+      "note": "Categories and facts may overlap; not token precision/recall."
+    },
+    {
+      "category": "错误对象/角色绑定",
+      "confirmed_run_count": 1,
+      "pending_run_count": 0,
+      "first_cases": [
+        "Q19"
+      ],
+      "facts": [
+        "Q19-F03",
+        "Q19-F04"
+      ],
+      "note": "Categories and facts may overlap; not token precision/recall."
+    },
+    {
+      "category": "交付视图合同待审",
+      "confirmed_run_count": 0,
+      "pending_run_count": 2,
+      "first_cases": [
+        "Q22",
+        "Q23"
+      ],
+      "facts": [
+        "Q22-F01",
+        "Q23-F01"
+      ],
+      "note": "Categories and facts may overlap; not token precision/recall."
+    },
+    {
+      "category": "错误槽用途",
+      "confirmed_run_count": 1,
+      "pending_run_count": 0,
+      "first_cases": [
+        "Q23"
+      ],
+      "facts": [
+        "Q23-F01"
+      ],
+      "note": "Categories and facts may overlap; not token precision/recall."
+    },
+    {
+      "category": "数量合同表达错误",
+      "confirmed_run_count": 1,
+      "pending_run_count": 0,
+      "first_cases": [],
+      "facts": [
+        "Q25-F02",
+        "Q25-F04",
+        "Q25-F06"
+      ],
+      "note": "Categories and facts may overlap; not token precision/recall."
+    }
+  ],
+  "source_ambiguities": [
+    {
+      "id": "Q29",
+      "verdict": "PASS",
+      "reason": "Local competing east/west reference is correctly preserved, not an error."
+    }
+  ],
+  "no_unsupported_error_total_from_suspicion": true
+}

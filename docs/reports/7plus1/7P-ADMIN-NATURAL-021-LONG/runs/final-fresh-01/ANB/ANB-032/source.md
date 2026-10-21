@@ -1,0 +1,1 @@
+QA 对 sandbox 接口执行恰好 3 次可用性查询，并将结果写入 availability.md。不得调用生产接口。

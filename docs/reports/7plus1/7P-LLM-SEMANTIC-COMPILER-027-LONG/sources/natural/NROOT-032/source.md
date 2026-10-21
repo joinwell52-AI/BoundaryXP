@@ -1,0 +1,1 @@
+请 PM 组织在 sandbox 接口执行恰好 3 次可用性查询，并形成 availability.md。不得调用生产接口。

@@ -1,0 +1,151 @@
+{
+  "contract_version": "028-r02.2",
+  "reviews": [
+    {
+      "subject_id": "ent_pm",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [{"quote": "PM", "occurrence": 1}],
+      "reason": "原文明示PM，作为被请求执行任务的角色实体合理。"
+    },
+    {
+      "subject_id": "ent_note",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [{"quote": "生成note.md", "occurrence": 1}, {"quote": "在文中引用", "occurrence": 1}],
+      "reason": "note.md是生成文件；“文中”指向该文件，保持同一实体合理。"
+    },
+    {
+      "subject_id": "ent_quote",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [{"quote": "引用“删除cache.db”", "occurrence": 1}],
+      "reason": "将待引用文字作为内容实体，与文件实体分开，符合原文。"
+    },
+    {
+      "subject_id": "ent_cache",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [{"quote": "cache.db", "occurrence": 1}],
+      "reason": "引文中明确出现该文件名；实体存在不表示当前输入或删除授权。"
+    },
+    {
+      "subject_id": "ent_files",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [{"quote": "任何文件", "occurrence": 1}],
+      "reason": "表示禁止所覆盖的文件集合，未缩窄范围。"
+    },
+    {
+      "subject_id": "ev_generate",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [{"quote": "请PM生成note.md", "occurrence": 1}],
+      "reason": "原文明示当前生成要求，主动作与义务模态正确。"
+    },
+    {
+      "subject_id": "ev_cite",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [{"quote": "在文中引用“删除cache.db”", "occurrence": 1}],
+      "reason": "引用指定文字是当前要求，独立于实际删除动作。"
+    },
+    {
+      "subject_id": "ev_quoted_delete",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["ev_cite"],
+      "sources": [{"quote": "引用“删除cache.db”", "occurrence": 1}],
+      "reason": "删除祈使内容置于QUOTED和MENTION_ONLY层；REQUIRED限于引文内部解读，未形成当前删除义务。"
+    },
+    {
+      "subject_id": "ev_forbidden_delete",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [{"quote": "本任务不得删除任何文件", "occurrence": 1}],
+      "reason": "当前任务明确禁止删除；FORBIDDEN配合正向删除谓词准确表达禁止。"
+    },
+    {
+      "subject_id": "cl_generate_performer",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["ev_generate", "ent_pm"],
+      "sources": [{"quote": "请PM生成note.md", "occurrence": 1}],
+      "reason": "PM明确是生成动作的执行者。"
+    },
+    {
+      "subject_id": "cl_generate_result",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["ev_generate", "ent_note"],
+      "sources": [{"quote": "生成note.md", "occurrence": 1}],
+      "reason": "note.md是生成动作的结果。"
+    },
+    {
+      "subject_id": "cl_cite_performer",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["ev_cite", "ent_pm"],
+      "sources": [{"quote": "请PM生成note.md", "occurrence": 1}, {"quote": "在文中引用“删除cache.db”", "occurrence": 1}],
+      "reason": "同句连续请求共享PM作为执行者，有两端来源支持。"
+    },
+    {
+      "subject_id": "cl_cite_object",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["ev_cite", "ent_note", "cl_generate_result"],
+      "sources": [{"quote": "生成note.md", "occurrence": 1}, {"quote": "在文中引用", "occurrence": 1}],
+      "reason": "引用发生在生成的note.md中；内部产物用作OBJECT，未误列外部输入。"
+    },
+    {
+      "subject_id": "cl_cite_content",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["ev_cite", "ent_quote"],
+      "sources": [{"quote": "引用“删除cache.db”", "occurrence": 1}],
+      "reason": "指定字符串是引用内容，CONTENT绑定准确。"
+    },
+    {
+      "subject_id": "cl_quoted_object",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["ev_quoted_delete", "ent_cache"],
+      "sources": [{"quote": "删除cache.db", "occurrence": 1}],
+      "reason": "cache.db仅是引文中删除谓词的对象，不构成当前删除要求或外部输入。"
+    },
+    {
+      "subject_id": "cl_forbidden_object",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["ev_forbidden_delete", "ent_files"],
+      "sources": [{"quote": "不得删除任何文件", "occurrence": 1}],
+      "reason": "禁止对象覆盖任何文件，不限于引文中的cache.db。"
+    },
+    {
+      "subject_id": "cl_prohibition_scope",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["ev_forbidden_delete", "expr_task_scope"],
+      "sources": [{"quote": "本任务不得删除任何文件", "occurrence": 1}],
+      "reason": "原文明示任务全域禁止，SCOPE保留了其适用范围。"
+    },
+    {
+      "subject_id": "expr_task_scope",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [{"quote": "本任务", "occurrence": 1}],
+      "reason": "以ROOT表示本任务范围合理；该表达式不声称观测状态或新增条件义务。"
+    }
+  ],
+  "issues": [],
+  "omissions": []
+}

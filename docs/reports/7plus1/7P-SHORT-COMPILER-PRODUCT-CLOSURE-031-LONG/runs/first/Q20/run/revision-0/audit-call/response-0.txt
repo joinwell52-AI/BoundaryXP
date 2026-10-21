@@ -1,0 +1,125 @@
+{
+  "contract_version": "031-r01",
+  "reviews": [
+    {
+      "subject_id": "N1",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [
+        {"quote": "服务异常", "occurrence": 1},
+        {"quote": "无论是否发现异常", "occurrence": 1}
+      ],
+      "reason": "后句异常承接前句服务异常；OTHER可作未指定类别占位。"
+    },
+    {
+      "subject_id": "N2",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [
+        {"quote": "OPS-01", "occurrence": 1},
+        {"quote": "OPS-01", "occurrence": 2}
+      ],
+      "reason": "两个动作均明示同一OPS-01，身份无竞争；OTHER不推定具体类别。"
+    },
+    {
+      "subject_id": "N3",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [{"quote": "PM", "occurrence": 1}],
+      "reason": "PM身份明确，具体类别未指定，OTHER占位合理。"
+    },
+    {
+      "subject_id": "N4",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [{"quote": "health.md", "occurrence": 1}],
+      "reason": "原文明示生成的文件名，FILE类型及身份有支持。"
+    },
+    {
+      "subject_id": "E1",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [{"quote": "若发现服务异常", "occurrence": 1}],
+      "reason": "发现异常仅作为条件状态提及，不构成独立发现义务或已发生断言。"
+    },
+    {
+      "subject_id": "E2",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["C1"],
+      "sources": [{"quote": "若发现服务异常，OPS-01必须通知PM", "occurrence": 1}],
+      "reason": "通知是条件触发的当前必需动作，constraint_ids正确回指C1。"
+    },
+    {
+      "subject_id": "E3",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [{"quote": "无论是否发现异常，OPS-01都必须生成health.md", "occurrence": 1}],
+      "reason": "生成义务不受是否发现异常限制，无条件表达符合原文。"
+    },
+    {
+      "subject_id": "C1",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["E1", "E2", "X1"],
+      "sources": [{"quote": "若发现服务异常，OPS-01必须通知PM", "occurrence": 1}],
+      "reason": "发现服务异常足以触发通知义务，SUFFICIENT方向正确，未增加时序要求。"
+    },
+    {
+      "subject_id": "C2",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["E1", "N1"],
+      "sources": [{"quote": "发现服务异常", "occurrence": 1}],
+      "reason": "服务异常是条件发现状态的对象，不是外部输入或新增动作。"
+    },
+    {
+      "subject_id": "C3",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["E2", "N2"],
+      "sources": [{"quote": "OPS-01必须通知PM", "occurrence": 1}],
+      "reason": "通知的执行者明确为OPS-01。"
+    },
+    {
+      "subject_id": "C4",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["E2", "N3"],
+      "sources": [{"quote": "通知PM", "occurrence": 1}],
+      "reason": "PM明确为通知接收者。"
+    },
+    {
+      "subject_id": "C5",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["E3", "N2"],
+      "sources": [{"quote": "OPS-01都必须生成health.md", "occurrence": 1}],
+      "reason": "生成动作再次明示OPS-01为执行者，无需默认传播主体。"
+    },
+    {
+      "subject_id": "C6",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["E3", "N4"],
+      "sources": [{"quote": "无论是否发现异常，OPS-01都必须生成health.md", "occurrence": 1}],
+      "reason": "health.md是生成动作的RESULT；原文未要求交付。"
+    },
+    {
+      "subject_id": "X1",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["E1", "N1"],
+      "sources": [{"quote": "若发现服务异常", "occurrence": 1}],
+      "reason": "STATE引用对应发现事件，以服务异常为对象，正极性及参数正确；不宣称条件已成立。"
+    }
+  ],
+  "issues": [],
+  "omissions": []
+}

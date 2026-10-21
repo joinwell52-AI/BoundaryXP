@@ -1,0 +1,320 @@
+{
+  "contract_version": "031-r1-q05.1",
+  "entities": [
+    {
+      "id": "ent_ops",
+      "label": "OPS",
+      "type": "OTHER",
+      "mentions": [
+        {
+          "quote": "OPS",
+          "occurrence": 1
+        }
+      ],
+      "alternatives": []
+    },
+    {
+      "id": "ent_file",
+      "label": "records.csv",
+      "type": "FILE",
+      "mentions": [
+        {
+          "quote": "records.csv",
+          "occurrence": 1
+        },
+        {
+          "quote": "that file",
+          "occurrence": 1
+        }
+      ],
+      "alternatives": []
+    },
+    {
+      "id": "ent_record",
+      "label": "记录",
+      "type": "CLASS",
+      "mentions": [
+        {
+          "quote": "any record",
+          "occurrence": 1
+        }
+      ],
+      "alternatives": []
+    }
+  ],
+  "events": [
+    {
+      "id": "evt_inspect",
+      "predicate": "检查",
+      "kind": "ACTION",
+      "layer": "MAIN",
+      "use": "CURRENT_TASK",
+      "modality": "REQUIRED",
+      "polarity": "POSITIVE",
+      "owner_id": "ROOT",
+      "constraint_ids": [],
+      "requires": [],
+      "sources": [
+        {
+          "quote": "OPS must inspect records.csv.",
+          "occurrence": 1
+        }
+      ]
+    },
+    {
+      "id": "evt_delete",
+      "predicate": "删除",
+      "kind": "ACTION",
+      "layer": "MAIN",
+      "use": "CURRENT_TASK",
+      "modality": "FORBIDDEN",
+      "polarity": "POSITIVE",
+      "owner_id": "ROOT",
+      "constraint_ids": [],
+      "requires": [],
+      "sources": [
+        {
+          "quote": "Do not delete any record in that file.",
+          "occurrence": 1
+        }
+      ]
+    }
+  ],
+  "claims": [
+    {
+      "id": "cl_inspect_performer",
+      "kind": "ROLE",
+      "event_id": "evt_inspect",
+      "entity_id": "ent_ops",
+      "role": "PERFORMER",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "artifact_use": null,
+      "scope_id": "evt_inspect",
+      "requires": [],
+      "sources": [
+        {
+          "quote": "OPS must inspect records.csv.",
+          "occurrence": 1
+        }
+      ],
+      "note": "OPS是明确检查执行者；其人员或组织类别未指定。"
+    },
+    {
+      "id": "cl_inspect_input",
+      "kind": "ROLE",
+      "event_id": "evt_inspect",
+      "entity_id": "ent_file",
+      "role": "INPUT_OBJECT",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "artifact_use": null,
+      "scope_id": "evt_inspect",
+      "requires": [],
+      "sources": [
+        {
+          "quote": "inspect records.csv",
+          "occurrence": 1
+        }
+      ],
+      "note": "明确受检文件。"
+    },
+    {
+      "id": "cl_inspect_scope",
+      "kind": "SCOPE",
+      "event_id": "evt_inspect",
+      "entity_id": null,
+      "role": null,
+      "expression_id": "expr_file",
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "artifact_use": null,
+      "scope_id": "ent_file",
+      "requires": [],
+      "sources": [
+        {
+          "quote": "inspect records.csv",
+          "occurrence": 1
+        }
+      ],
+      "note": "检查范围是这一具体文件。"
+    },
+    {
+      "id": "cl_delete_performer",
+      "kind": "ROLE",
+      "event_id": "evt_delete",
+      "entity_id": "ent_ops",
+      "role": "PERFORMER",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "artifact_use": null,
+      "scope_id": "evt_delete",
+      "requires": [],
+      "sources": [
+        {
+          "quote": "OPS must inspect records.csv.",
+          "occurrence": 1
+        },
+        {
+          "quote": "Do not delete any record in that file.",
+          "occurrence": 1
+        }
+      ],
+      "note": "连续同一指令未切换主体，删除禁令承接OPS。"
+    },
+    {
+      "id": "cl_delete_object",
+      "kind": "ROLE",
+      "event_id": "evt_delete",
+      "entity_id": "ent_record",
+      "role": "OBJECT",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "artifact_use": null,
+      "scope_id": "evt_delete",
+      "requires": [],
+      "sources": [
+        {
+          "quote": "delete any record in that file",
+          "occurrence": 1
+        }
+      ],
+      "note": "禁止删除的对象类别；不新增外部输入。"
+    },
+    {
+      "id": "cl_delete_scope",
+      "kind": "SCOPE",
+      "event_id": "evt_delete",
+      "entity_id": null,
+      "role": null,
+      "expression_id": "expr_all_records",
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "artifact_use": null,
+      "scope_id": "ent_record",
+      "requires": [],
+      "sources": [
+        {
+          "quote": "records.csv",
+          "occurrence": 1
+        },
+        {
+          "quote": "Do not delete any record in that file.",
+          "occurrence": 1
+        }
+      ],
+      "note": "that file指records.csv；禁令适用于该文件内每一条记录。"
+    }
+  ],
+  "expressions": [
+    {
+      "id": "expr_file",
+      "op": "ITEM",
+      "operands": [
+        "ent_file"
+      ],
+      "state": null,
+      "sources": [
+        {
+          "quote": "records.csv",
+          "occurrence": 1
+        }
+      ]
+    },
+    {
+      "id": "expr_record_domain",
+      "op": "CATEGORY",
+      "operands": [
+        "ent_record",
+        "ent_file"
+      ],
+      "state": null,
+      "sources": [
+        {
+          "quote": "records.csv",
+          "occurrence": 1
+        },
+        {
+          "quote": "any record in that file",
+          "occurrence": 1
+        }
+      ]
+    },
+    {
+      "id": "expr_all_records",
+      "op": "FORALL",
+      "operands": [
+        "expr_record_domain"
+      ],
+      "state": null,
+      "sources": [
+        {
+          "quote": "Do not delete any record in that file.",
+          "occurrence": 1
+        }
+      ]
+    }
+  ],
+  "issues": [],
+  "coverage": [
+    {
+      "sources": [
+        {
+          "quote": "OPS must inspect records.csv.",
+          "occurrence": 1
+        }
+      ],
+      "claim_ids": [
+        "cl_inspect_performer",
+        "cl_inspect_input",
+        "cl_inspect_scope"
+      ],
+      "status": "EXPRESSED",
+      "affected_views": [
+        "I",
+        "A",
+        "P"
+      ],
+      "range_requirement": {
+        "kind": "SPECIFIC",
+        "scope_claim_ids": [
+          "cl_inspect_scope"
+        ]
+      }
+    },
+    {
+      "sources": [
+        {
+          "quote": "Do not delete any record in that file.",
+          "occurrence": 1
+        }
+      ],
+      "claim_ids": [
+        "cl_delete_performer",
+        "cl_delete_object",
+        "cl_delete_scope"
+      ],
+      "status": "EXPRESSED",
+      "affected_views": [
+        "B",
+        "P"
+      ],
+      "range_requirement": {
+        "kind": "UNIVERSAL",
+        "scope_claim_ids": [
+          "cl_delete_scope"
+        ]
+      }
+    }
+  ]
+}

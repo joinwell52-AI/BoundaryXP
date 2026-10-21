@@ -1,0 +1,1 @@
+You must read config.json, may inspect README.md, and must create config-note.md. Do not modify either file.

@@ -1,0 +1,7 @@
+import fs from 'node:fs';import path from 'node:path';import {createHash} from 'node:crypto';
+const sha=b=>createHash('sha256').update(b).digest('hex'),roots=['docs/reports/7plus1/JOINT-BOUNDARY-CLOSURE-r01','docs/reports/7plus1/SCOPE-CONSUMPTION-CLOSURE-r01'];
+const walk=dir=>fs.readdirSync(dir,{withFileTypes:true}).flatMap(e=>e.isDirectory()?walk(path.join(dir,e.name)):[path.join(dir,e.name)]);
+for(const root of roots){if(fs.existsSync(root+'/SEAL.json'))throw Error('SEALED_REPORT_EXISTS');const files=walk(root).filter(p=>!['MANIFEST.json','SHA256SUMS','SEAL.json'].includes(path.basename(p))).sort().map(p=>({path:path.relative(root,p).replaceAll('\\','/'),sha256:sha(fs.readFileSync(p)),bytes:fs.statSync(p).size}));
+ const manifest={format:'boundx-report-manifest/v1',created_at:new Date().toISOString(),files};const bytes=Buffer.from(JSON.stringify(manifest,null,2)+'\n');fs.writeFileSync(root+'/MANIFEST.json',bytes,{flag:'wx'});const sums=files.map(f=>f.sha256+'  '+f.path).join('\n')+'\n';fs.writeFileSync(root+'/SHA256SUMS',sums,{flag:'wx'});fs.writeFileSync(root+'/SEAL.json',JSON.stringify({status:'SEALED',manifest_sha256:sha(bytes),sha256sums_sha256:sha(Buffer.from(sums)),file_count:files.length,raw_failures_preserved:true,product_status:'WAITING_ADMIN_REVIEW',production_ready:false},null,2)+'\n',{flag:'wx'});
+ for(const f of files)if(sha(fs.readFileSync(path.join(root,f.path)))!==f.sha256)throw Error('SEAL_VERIFY_FAILED');console.log(JSON.stringify({root,files:files.length,bytes:files.reduce((s,f)=>s+f.bytes,0),seal:'VERIFIED'}));
+}

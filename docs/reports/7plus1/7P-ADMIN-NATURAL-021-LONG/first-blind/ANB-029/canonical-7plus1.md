@@ -1,0 +1,38 @@
+# ANB-029 Actual Canonical 7+1
+
+## I PARSER_COVERAGE_FAILURE
+
+- 最近 90 分钟的 audit.log [RESOLVED]
+- error [RESOLVED]
+- warning 数量 [RESOLVED]
+- audit.log [RESOLVED]
+
+## O PARSER_COVERAGE_FAILURE
+
+- log-window.md [RESOLVED]
+
+## A PARSER_COVERAGE_FAILURE
+
+- REQUIRED 查看 最近 90 分钟的 audit.log [RESOLVED]
+- REQUIRED 统计 error、warning 数量 [RESOLVED]
+- REQUIRED 生成 log-window.md [RESOLVED]
+
+## P PARSER_COVERAGE_FAILURE
+
+- OPS [PERFORMER] [RESOLVED]
+
+## R PARSER_COVERAGE_FAILURE
+
+
+
+## V PARSER_COVERAGE_FAILURE
+
+
+
+## C PARSER_COVERAGE_FAILURE
+
+
+
+## B PARSER_COVERAGE_FAILURE
+
+- FORBIDDEN 删除 日志 [RESOLVED]

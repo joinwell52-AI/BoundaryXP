@@ -1,0 +1,425 @@
+# Actual Canonical 7+1
+
+```json
+{
+  "projection_id": "p1:659e15a32230df57dbacc8c7",
+  "I": {
+    "slot": "I",
+    "status": "PARSER_COVERAGE_FAILURE",
+    "entries": [
+      {
+        "canonical_entry_id": "p1:8c49c4267c6b69937fac2397",
+        "slot": "I",
+        "boundary_fact_ids": [
+          "p1:8b7eab4320679443d3685957"
+        ],
+        "state": "RESOLVED",
+        "display_value": "模型卡字段",
+        "source_span_ids": [
+          "p1:9e5ccba5beae20aca35ab772",
+          "p1:bcfa93500ee694c4967bf84d",
+          "p1:11f3f392278e18b5caff68dc"
+        ],
+        "scope_expr_id": "p1:66cf14c4496b524034dee4de"
+      },
+      {
+        "canonical_entry_id": "p1:2eaa90ccd1b9fa6d1042a4cf",
+        "slot": "I",
+        "boundary_fact_ids": [
+          "p1:2c756b02adbeb86adb4a33ad"
+        ],
+        "state": "RESOLVED",
+        "display_value": "model-card.md",
+        "source_span_ids": [
+          "p1:9cca5de749cdfcf42f13199b",
+          "p1:e38b96cf2ff5377c51f0364b",
+          "p1:11f3f392278e18b5caff68dc"
+        ],
+        "scope_expr_id": "p1:411c4fd1358a05ad909e2864"
+      },
+      {
+        "canonical_entry_id": "p1:4dbd92f989cea1d2abaaf5ba",
+        "slot": "I",
+        "boundary_fact_ids": [
+          "p1:c5e2974ee760c23c699687fe"
+        ],
+        "state": "RESOLVED",
+        "display_value": "metric-sheet.json",
+        "source_span_ids": [
+          "p1:d90515a754ab2dd876de32ef",
+          "p1:e38b96cf2ff5377c51f0364b",
+          "p1:11f3f392278e18b5caff68dc"
+        ],
+        "scope_expr_id": "p1:cb1e15a74d528a2ef6d298d0"
+      },
+      {
+        "canonical_entry_id": "p1:ed9afec3df237a5409a17b2d",
+        "slot": "I",
+        "boundary_fact_ids": [
+          "p1:15a8aa92031451fe11ccd5e3"
+        ],
+        "state": "RESOLVED",
+        "display_value": "model-card.md",
+        "source_span_ids": [
+          "p1:55bfb1e811c552d170913f30",
+          "p1:f6df88ed565d481c5d8350eb",
+          "p1:ee9673b31193dd4cabd4d950"
+        ],
+        "scope_expr_id": "p1:689088ff5b2d71d41d825d53"
+      },
+      {
+        "canonical_entry_id": "p1:19b6f145fc39115699635543",
+        "slot": "I",
+        "boundary_fact_ids": [
+          "p1:79d34982c9028eb24e09b471"
+        ],
+        "state": "RESOLVED",
+        "display_value": "metric-sheet.json",
+        "source_span_ids": [
+          "p1:7b6c66bb2f9e6029c2f03038",
+          "p1:f6df88ed565d481c5d8350eb",
+          "p1:ee9673b31193dd4cabd4d950"
+        ],
+        "scope_expr_id": "p1:b4f1f133ad08107e07c9edd1"
+      }
+    ]
+  },
+  "O": {
+    "slot": "O",
+    "status": "PARSER_COVERAGE_FAILURE",
+    "entries": [
+      {
+        "canonical_entry_id": "p1:0d80a350f6a8d2ab907e5468",
+        "slot": "O",
+        "boundary_fact_ids": [
+          "p1:28fe50e468fa7c27b5495961"
+        ],
+        "state": "RESOLVED",
+        "display_value": "model-card-review.md",
+        "source_span_ids": [
+          "p1:d36d26ad3237e54925b503cd",
+          "p1:d0a302b3a70310c8fba83a07",
+          "p1:336a84949c7f1c9292e8b52e"
+        ],
+        "scope_expr_id": "p1:2c728e40280ccd7858c49deb"
+      },
+      {
+        "canonical_entry_id": "p1:7f368ed5620a046aaad51706",
+        "slot": "O",
+        "boundary_fact_ids": [
+          "p1:57fa547c4469ae16c15d9fd5"
+        ],
+        "state": "RESOLVED",
+        "display_value": "份独立交付物",
+        "source_span_ids": [
+          "p1:26c0b2d08abedc4572e11dcf",
+          "p1:9353a58214b903287b85cd30",
+          "p1:ddd86b9c0124ad39c5f224c7",
+          "p1:7a3db6bf463ee1a570ed60c6"
+        ],
+        "scope_expr_id": "p1:20d0b250eb563cb283680d62"
+      },
+      {
+        "canonical_entry_id": "p1:eddfc5593eb02590801421a1",
+        "slot": "O",
+        "boundary_fact_ids": [
+          "p1:78887b1cd1a3f1baa19f9cba"
+        ],
+        "state": "RESOLVED",
+        "display_value": "model-card-index.md",
+        "source_span_ids": [
+          "p1:26c0b2d08abedc4572e11dcf",
+          "p1:9353a58214b903287b85cd30",
+          "p1:7a3db6bf463ee1a570ed60c6",
+          "p1:ddd86b9c0124ad39c5f224c7"
+        ],
+        "scope_expr_id": "p1:abb8213275e385afb023128d"
+      }
+    ]
+  },
+  "A": {
+    "slot": "A",
+    "status": "UNRESOLVED",
+    "entries": [
+      {
+        "canonical_entry_id": "p1:20ebf2ace552ddaee4b2a6b5",
+        "slot": "A",
+        "boundary_fact_ids": [
+          "p1:1226a07da3f7b5b55c64a928"
+        ],
+        "state": "RESOLVED",
+        "display_value": "REQUIRED 核对 模型卡字段",
+        "source_span_ids": [
+          "p1:432e5c6f3339e0cf1ca34591",
+          "p1:bcfa93500ee694c4967bf84d",
+          "p1:a1ef1ddaca278f1921b6ba82",
+          "p1:9e5ccba5beae20aca35ab772"
+        ],
+        "scope_expr_id": "p1:fad0999a14e28af45c31b2a4"
+      },
+      {
+        "canonical_entry_id": "p1:6187e07f7f60b990776349a9",
+        "slot": "A",
+        "boundary_fact_ids": [
+          "p1:74bfb1d5a20ceeb4e05b785d"
+        ],
+        "state": "RESOLVED",
+        "display_value": "REQUIRED 读取 metric-sheet.json、model-card.md",
+        "source_span_ids": [
+          "p1:ee9673b31193dd4cabd4d950",
+          "p1:f6df88ed565d481c5d8350eb",
+          "p1:d53bfd945d17740459c9e7b7",
+          "p1:7b6c66bb2f9e6029c2f03038",
+          "p1:55bfb1e811c552d170913f30"
+        ],
+        "scope_expr_id": "p1:0a9c22ae796d771979aa654f"
+      },
+      {
+        "canonical_entry_id": "p1:2959991deb15054e0ca762b8",
+        "slot": "A",
+        "boundary_fact_ids": [
+          "p1:16e62562717f318be4ad96c5"
+        ],
+        "state": "RESOLVED",
+        "display_value": "REQUIRED 生成 model-card-review.md",
+        "source_span_ids": [
+          "p1:d36d26ad3237e54925b503cd",
+          "p1:d0a302b3a70310c8fba83a07",
+          "p1:336a84949c7f1c9292e8b52e"
+        ],
+        "scope_expr_id": "p1:d2dce5434f82321f4e4cb9a5"
+      },
+      {
+        "canonical_entry_id": "p1:4611b3561f78f376380a276d",
+        "slot": "A",
+        "boundary_fact_ids": [
+          "p1:0d90e2c378dd3b4780e0cb31"
+        ],
+        "state": "RESOLVED",
+        "display_value": "REQUIRED 生成 份独立交付物、model-card-index.md",
+        "source_span_ids": [
+          "p1:26c0b2d08abedc4572e11dcf",
+          "p1:9353a58214b903287b85cd30",
+          "p1:ddd86b9c0124ad39c5f224c7",
+          "p1:7a3db6bf463ee1a570ed60c6"
+        ]
+      },
+      {
+        "canonical_entry_id": "p1:dd871cbf736ab8b321b8ee7a",
+        "slot": "A",
+        "boundary_fact_ids": [
+          "p1:b6c064c54a461e9f106e9068"
+        ],
+        "state": "UNRESOLVED",
+        "display_value": "REQUIRED 保留",
+        "source_span_ids": [
+          "p1:67fffb9a0c6b6cb8d5c8f207",
+          "p1:e1fbd969193528841cf0b006"
+        ]
+      },
+      {
+        "canonical_entry_id": "p1:2eaa75360a0b70733428e8a0",
+        "slot": "A",
+        "boundary_fact_ids": [
+          "p1:b7a70c349c6bb0034153058e"
+        ],
+        "state": "RESOLVED",
+        "display_value": "REQUIRED 包含 差异证据两项内容",
+        "source_span_ids": [
+          "p1:b7c86414ee34441cdc1aa4e4",
+          "p1:b04d71eef8abf26d2b9e7cbe",
+          "p1:de4efcbb1f5c5c6861a38fa5",
+          "p1:851322c94fe21ca5bbf1f346"
+        ],
+        "scope_expr_id": "p1:345e90e116da9fea663b8648"
+      }
+    ]
+  },
+  "P": {
+    "slot": "P",
+    "status": "PARSER_COVERAGE_FAILURE",
+    "entries": [
+      {
+        "canonical_entry_id": "p1:ace699b18b0f660da67954d6",
+        "slot": "P",
+        "boundary_fact_ids": [
+          "p1:ab874de2400ef00b189723d9",
+          "p1:fc2e4a7472ee0c3023ce9f5c",
+          "p1:3052417a42abfbc39600e59b",
+          "p1:dc15910045611c9c219de7c6"
+        ],
+        "state": "RESOLVED",
+        "display_value": "审阅员何晏 [PERFORMER]",
+        "source_span_ids": [
+          "p1:a1ef1ddaca278f1921b6ba82",
+          "p1:bcfa93500ee694c4967bf84d",
+          "p1:432e5c6f3339e0cf1ca34591",
+          "p1:d53bfd945d17740459c9e7b7",
+          "p1:f6df88ed565d481c5d8350eb",
+          "p1:ee9673b31193dd4cabd4d950",
+          "p1:6a3c0f411d36902aedbe0556",
+          "p1:6dc0bd4dd1ec6308fe553b4c",
+          "p1:e2f3e55b668e367937d6ffb4"
+        ]
+      },
+      {
+        "canonical_entry_id": "p1:e676fa0ea775dfd9ca9f29b8",
+        "slot": "P",
+        "boundary_fact_ids": [
+          "p1:1e0222b1a6e5ddeebe4374b3"
+        ],
+        "state": "RESOLVED",
+        "display_value": "复核人袁书 [PERFORMER]",
+        "source_span_ids": [
+          "p1:e0c8fd4263695cd906859d47",
+          "p1:0cd3ac044cce9443b6f37c05",
+          "p1:c833067edd345d453b16937f"
+        ]
+      }
+    ]
+  },
+  "R": {
+    "slot": "R",
+    "status": "PARSER_COVERAGE_FAILURE",
+    "entries": []
+  },
+  "V": {
+    "slot": "V",
+    "status": "PARSER_COVERAGE_FAILURE",
+    "entries": [
+      {
+        "canonical_entry_id": "p1:8e6392945f1ff2a0f8a7b74f",
+        "slot": "V",
+        "boundary_fact_ids": [
+          "p1:e15651cc4f04311a857cdd36"
+        ],
+        "state": "RESOLVED",
+        "display_value": "v4.2.0",
+        "source_span_ids": [
+          "p1:f62b13a9e6b802ab62e0d2e2",
+          "p1:ece8730766850c6d0f49f74f",
+          "p1:11f3f392278e18b5caff68dc"
+        ]
+      },
+      {
+        "canonical_entry_id": "p1:9a6a5de6d0d9852803b02fa6",
+        "slot": "V",
+        "boundary_fact_ids": [
+          "p1:cad9658fc13f41527713831d"
+        ],
+        "state": "RESOLVED",
+        "display_value": "MODEL-STYLE-7",
+        "source_span_ids": [
+          "p1:b12af747eb2320b93d026475",
+          "p1:ece8730766850c6d0f49f74f",
+          "p1:11f3f392278e18b5caff68dc"
+        ]
+      },
+      {
+        "canonical_entry_id": "p1:dbba1951fcf9a181f9c84d07",
+        "slot": "V",
+        "boundary_fact_ids": [
+          "p1:834bc37313bcdbc847dbe8de"
+        ],
+        "state": "RESOLVED",
+        "display_value": "v4.2.0",
+        "source_span_ids": [
+          "p1:f62b13a9e6b802ab62e0d2e2",
+          "p1:ece8730766850c6d0f49f74f",
+          "p1:11f3f392278e18b5caff68dc"
+        ]
+      }
+    ]
+  },
+  "C": {
+    "slot": "C",
+    "status": "PARSER_COVERAGE_FAILURE",
+    "entries": [
+      {
+        "canonical_entry_id": "p1:fbd278cf1a7d1d4fdde46177",
+        "slot": "C",
+        "boundary_fact_ids": [
+          "p1:1ff6db25e517fb582bd7d7e6"
+        ],
+        "state": "RESOLVED",
+        "display_value": "完成",
+        "source_span_ids": [
+          "p1:8d14681f7ccaa6dc30eccb74",
+          "p1:7b53411d05bf95f3b3a32a05",
+          "p1:fcb30f22e0a100c59e7be755",
+          "p1:61eaa3e72473cd11956f6650",
+          "p1:8e0cfa9246347160421e9e7d"
+        ],
+        "condition_expr_id": "p1:30ae80b80a0623fddff29076"
+      }
+    ]
+  },
+  "B": {
+    "slot": "B",
+    "status": "UNRESOLVED",
+    "entries": [
+      {
+        "canonical_entry_id": "p1:96fdff0733cbeb9988d3734c",
+        "slot": "B",
+        "boundary_fact_ids": [
+          "p1:c6ddfe4c14c0ea6a631e6ea7"
+        ],
+        "state": "RESOLVED",
+        "display_value": "FORBIDDEN 包括 历史资料",
+        "source_span_ids": [
+          "p1:6a3c0f411d36902aedbe0556",
+          "p1:6dc0bd4dd1ec6308fe553b4c",
+          "p1:d6f66af9563bfd11ddf39c74",
+          "p1:a1ef1ddaca278f1921b6ba82",
+          "p1:bcfa93500ee694c4967bf84d"
+        ],
+        "scope_expr_id": "p1:64ffae7221b916a972528d42"
+      },
+      {
+        "canonical_entry_id": "p1:3a5701cf6080dc1777a466c1",
+        "slot": "B",
+        "boundary_fact_ids": [
+          "p1:78ded2d139a08b71117c5b26"
+        ],
+        "state": "UNRESOLVED",
+        "display_value": "FORBIDDEN 互换",
+        "source_span_ids": [
+          "p1:108d790323bdbf79d57b964b",
+          "p1:9b5496b0d9de880344d1d9e3"
+        ]
+      },
+      {
+        "canonical_entry_id": "p1:89c3aaa191d17893c3c3d9d7",
+        "slot": "B",
+        "boundary_fact_ids": [
+          "p1:2dcf1834f7667dfaccaffba3"
+        ],
+        "state": "RESOLVED",
+        "display_value": "FORBIDDEN 选 一个文件",
+        "source_span_ids": [
+          "p1:f04d7219ede8a9b0bdba67b5",
+          "p1:5bbb5d6786f8ef89f77f1eb3",
+          "p1:db06ae32035e837d14f1a3d0"
+        ],
+        "scope_expr_id": "p1:8f6aa3e30ce3e5317de48c2e"
+      },
+      {
+        "canonical_entry_id": "p1:af8902ab0f7a4965204fbf67",
+        "slot": "B",
+        "boundary_fact_ids": [
+          "p1:c49f8ea06013d56eb02ca0d5"
+        ],
+        "state": "RESOLVED",
+        "display_value": "FORBIDDEN 修改 metric-sheet.json、model-card.md",
+        "source_span_ids": [
+          "p1:f93cc3fba3fee46638082b38",
+          "p1:7b7e8c1047f6bcc866f0e468",
+          "p1:d038d9c57f97a3f3abbbc253",
+          "p1:b19436b3efdbfaf91286724d"
+        ],
+        "scope_expr_id": "p1:91b8f2384fc623fab5104003"
+      }
+    ]
+  }
+}
+```

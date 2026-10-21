@@ -1,0 +1,1 @@
+According to POLICY-88 v1.9, Nina must read input.ini and create proof.txt.

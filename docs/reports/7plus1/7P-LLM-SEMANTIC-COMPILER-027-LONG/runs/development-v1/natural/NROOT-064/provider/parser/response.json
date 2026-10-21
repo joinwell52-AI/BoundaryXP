@@ -1,0 +1,259 @@
+{
+  "structure_status": "SINGLE_ROOT",
+  "nodes": [
+    {
+      "id": "n1",
+      "type": "ENTITY",
+      "sources": [
+        {"quote": "测试结果", "clause_id": "c1", "occurrence": 0, "context_anchor": null},
+        {"quote": "测试结果", "clause_id": "c1", "occurrence": 1, "context_anchor": null}
+      ],
+      "semantic_identity": "测试结果",
+      "entity_kind": "DATA",
+      "layer": "MAIN",
+      "owner": "TASK",
+      "modality": "UNSTATED",
+      "polarity": "AFFIRMATIVE",
+      "artifact_use": "READ_ONLY_INPUT",
+      "predicate_class": "NONE",
+      "alternative_group_id": null
+    },
+    {
+      "id": "n2",
+      "type": "EVENT",
+      "sources": [
+        {"quote": "要求审阅", "clause_id": "c1", "occurrence": 0, "context_anchor": null}
+      ],
+      "semantic_identity": "review",
+      "entity_kind": "NONE",
+      "layer": "MAIN",
+      "owner": "TASK",
+      "modality": "REQUIRED",
+      "polarity": "AFFIRMATIVE",
+      "artifact_use": "NONE",
+      "predicate_class": "REVIEW",
+      "alternative_group_id": null
+    },
+    {
+      "id": "n3",
+      "type": "STATE",
+      "sources": [
+        {"quote": "至少 8 个完成复核", "clause_id": "c1", "occurrence": 0, "context_anchor": null}
+      ],
+      "semantic_identity": "recheck_completed",
+      "entity_kind": "NONE",
+      "layer": "ACCEPTANCE",
+      "owner": "TASK",
+      "modality": "UNSTATED",
+      "polarity": "AFFIRMATIVE",
+      "artifact_use": "NONE",
+      "predicate_class": "REVIEW",
+      "alternative_group_id": null
+    },
+    {
+      "id": "n4",
+      "type": "ENTITY",
+      "sources": [
+        {"quote": "qa-summary.md", "clause_id": "c1", "occurrence": 0, "context_anchor": null}
+      ],
+      "semantic_identity": "qa-summary.md",
+      "entity_kind": "FILE",
+      "layer": "ACCEPTANCE",
+      "owner": "TASK",
+      "modality": "UNSTATED",
+      "polarity": "AFFIRMATIVE",
+      "artifact_use": "GENERATED_OUTPUT",
+      "predicate_class": "NONE",
+      "alternative_group_id": null
+    },
+    {
+      "id": "n5",
+      "type": "STATE",
+      "sources": [
+        {"quote": "qa-summary.md 已生成", "clause_id": "c1", "occurrence": 0, "context_anchor": null}
+      ],
+      "semantic_identity": "generate_completed",
+      "entity_kind": "NONE",
+      "layer": "ACCEPTANCE",
+      "owner": "TASK",
+      "modality": "UNSTATED",
+      "polarity": "AFFIRMATIVE",
+      "artifact_use": "NONE",
+      "predicate_class": "PRODUCE",
+      "alternative_group_id": null
+    },
+    {
+      "id": "n6",
+      "type": "EVENT",
+      "sources": [
+        {"quote": "不得修改", "clause_id": "c1", "occurrence": 0, "context_anchor": null}
+      ],
+      "semantic_identity": "modify",
+      "entity_kind": "NONE",
+      "layer": "MAIN",
+      "owner": "TASK",
+      "modality": "FORBIDDEN",
+      "polarity": "AFFIRMATIVE",
+      "artifact_use": "NONE",
+      "predicate_class": "OPERATION",
+      "alternative_group_id": null
+    }
+  ],
+  "relations": [
+    {
+      "id": "r1",
+      "type": "PATIENT",
+      "head": "n2",
+      "tail": "n1",
+      "sources": [
+        {"quote": "审阅 10 个测试结果", "clause_id": "c1", "occurrence": 0, "context_anchor": null}
+      ],
+      "ownership": "LOCAL",
+      "role": "NONE",
+      "alternative_group_id": null
+    },
+    {
+      "id": "r2",
+      "type": "PATIENT",
+      "head": "n3",
+      "tail": "n1",
+      "sources": [
+        {"quote": "10 个测试结果，至少 8 个完成复核", "clause_id": "c1", "occurrence": 0, "context_anchor": null}
+      ],
+      "ownership": "COREFERENCE",
+      "role": "NONE",
+      "alternative_group_id": null
+    },
+    {
+      "id": "r3",
+      "type": "THEME",
+      "head": "n5",
+      "tail": "n4",
+      "sources": [
+        {"quote": "qa-summary.md 已生成", "clause_id": "c1", "occurrence": 0, "context_anchor": null}
+      ],
+      "ownership": "LOCAL",
+      "role": "NONE",
+      "alternative_group_id": null
+    },
+    {
+      "id": "r4",
+      "type": "PATIENT",
+      "head": "n6",
+      "tail": "n1",
+      "sources": [
+        {"quote": "修改测试结果", "clause_id": "c1", "occurrence": 0, "context_anchor": null}
+      ],
+      "ownership": "LOCAL",
+      "role": "NONE",
+      "alternative_group_id": null
+    },
+    {
+      "id": "r5",
+      "type": "FORBIDS",
+      "head": "TASK",
+      "tail": "n6",
+      "sources": [
+        {"quote": "不得修改测试结果", "clause_id": "c1", "occurrence": 0, "context_anchor": null}
+      ],
+      "ownership": "STRUCTURAL",
+      "role": "NONE",
+      "alternative_group_id": null
+    },
+    {
+      "id": "r6",
+      "type": "COMPLETION_OF",
+      "head": "e5",
+      "tail": "TASK",
+      "sources": [
+        {"quote": "至少 8 个完成复核且 qa-summary.md 已生成时任务完成", "clause_id": "c1", "occurrence": 0, "context_anchor": null}
+      ],
+      "ownership": "STRUCTURAL",
+      "role": "NONE",
+      "alternative_group_id": null
+    }
+  ],
+  "expressions": [
+    {
+      "id": "e1",
+      "kind": "QUANTITY",
+      "operator": "EQ",
+      "operands": ["n1"],
+      "owner": "n2",
+      "sources": [
+        {"quote": "10 个测试结果", "clause_id": "c1", "occurrence": 0, "context_anchor": null}
+      ],
+      "quantity": {
+        "metric": "review_scope_count",
+        "target": "n1",
+        "value": 10,
+        "unit": "个",
+        "use": "UNKNOWN"
+      },
+      "alternative_group_id": null
+    },
+    {
+      "id": "e2",
+      "kind": "QUANTITY",
+      "operator": "GTE",
+      "operands": ["n3"],
+      "owner": "TASK",
+      "sources": [
+        {"quote": "至少 8 个完成复核", "clause_id": "c1", "occurrence": 0, "context_anchor": null}
+      ],
+      "quantity": {
+        "metric": "completed_recheck_count",
+        "target": "n1",
+        "value": 8,
+        "unit": "个",
+        "use": "ACCEPTANCE_THRESHOLD"
+      },
+      "alternative_group_id": null
+    },
+    {
+      "id": "e3",
+      "kind": "CONDITION",
+      "operator": "STATE_REF",
+      "operands": ["n3"],
+      "owner": "TASK",
+      "sources": [
+        {"quote": "至少 8 个完成复核", "clause_id": "c1", "occurrence": 0, "context_anchor": null}
+      ],
+      "quantity": null,
+      "alternative_group_id": null
+    },
+    {
+      "id": "e4",
+      "kind": "CONDITION",
+      "operator": "STATE_REF",
+      "operands": ["n5"],
+      "owner": "TASK",
+      "sources": [
+        {"quote": "qa-summary.md 已生成", "clause_id": "c1", "occurrence": 0, "context_anchor": null}
+      ],
+      "quantity": null,
+      "alternative_group_id": null
+    },
+    {
+      "id": "e5",
+      "kind": "CONDITION",
+      "operator": "AND",
+      "operands": ["e3", "e4"],
+      "owner": "TASK",
+      "sources": [
+        {"quote": "且", "clause_id": "c1", "occurrence": 0, "context_anchor": "至少 8 个完成复核且 qa-summary.md 已生成时任务完成"}
+      ],
+      "quantity": null,
+      "alternative_group_id": null
+    }
+  ],
+  "unresolved": [],
+  "coverage": [
+    {
+      "region_id": "c1",
+      "disposition": "BOUNDARY_SEMANTIC",
+      "candidate_ids": ["n1", "n2", "n3", "n4", "n5", "n6", "r1", "r2", "r3", "r4", "r5", "r6", "e1", "e2", "e3", "e4", "e5"],
+      "reason": "明确要求审阅指定数量的测试结果，以复核完成数量与文件已生成的合取条件定义任务完成，并禁止修改测试结果。"
+    }
+  ]
+}

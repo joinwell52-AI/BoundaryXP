@@ -1,0 +1,47 @@
+{
+  "case_id": "REAL-GOLD-060",
+  "source_sha256": "b16f280674743f0bb8d858848628444ac6db1e8b3eea8c76e40c2f9369212799",
+  "E": [
+    "E={task_008,task_009,old_report_008,old_report_009,new_report_008,new_report_009,summary_report,log_tasks,open_tasks}"
+  ],
+  "Sigma": [
+    "Sigma.scope={008,009}",
+    "Sigma.old_report_identity=unresolved",
+    "Sigma.current_task_state=runtime_observed"
+  ],
+  "Q": [
+    "Q.append_superseding_report(008)",
+    "Q.append_superseding_report(009)",
+    "Q.restore_open_blocked_task(008,009)",
+    "Q.create_summary(ME,ADMIN)"
+  ],
+  "F": [
+    "F.modify(old_TASK_or_REPORT_body)",
+    "F.handle(push_007)",
+    "F.handle(010_or_011)",
+    "F.auto_finish",
+    "F.auto_archive"
+  ],
+  "K": [
+    "K.008_009_in_open_area",
+    "K.each_new_report_supersedes_old",
+    "K.summary_report_exists"
+  ],
+  "Relations": [
+    "new_report_i -> supersedes -> old_report_i",
+    "summary_report -> sender -> ME",
+    "summary_report -> recipient -> ADMIN"
+  ],
+  "D": [
+    "D.deadline=absent"
+  ],
+  "Phi": [
+    "Phi.referenced_rule_text=unavailable",
+    "Phi.old_report_identity=unresolved",
+    "Phi.current_state_and_paths=runtime_observed"
+  ],
+  "losslessness_zh": "保留 008/009 恢复、逐案 supersedes、新汇总 REPORT、旧正文 append-only、排除项及禁止自动 finish/archive；只将外部规则正文与旧 REPORT 身份保留为待确认，不把现场状态或报告命名虚列为任务缺口。",
+  "losslessness_en": "Retains restoration of 008/009, per-task supersedes links, the new summary REPORT, append-only old bodies, exclusions, and no automatic finish/archive. Only external rule text and old REPORT identities remain to be confirmed; runtime state and report naming are not invented as task deficits.",
+  "formal_coverage_gap": [],
+  "invented_constraints": []
+}

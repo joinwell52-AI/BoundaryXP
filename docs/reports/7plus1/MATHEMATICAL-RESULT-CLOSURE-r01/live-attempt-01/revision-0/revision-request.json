@@ -1,0 +1,185 @@
+{
+  "reviews": [
+    {
+      "subject_id": "c43",
+      "field_path": "",
+      "verdict": "CONTRADICT",
+      "context_refs": [
+        "e1"
+      ],
+      "sources": [
+        {
+          "quote": "本任务总耗时必须在0至30分钟内，含两端。",
+          "occurrence": 1
+        },
+        {
+          "quote": "依据《配置核查规程》v1.2，PM组织本次核查。",
+          "occurrence": 1
+        }
+      ],
+      "reason": "下界数值及用途正确，但根任务总耗时被错误绑定为组织核查事件耗时。"
+    },
+    {
+      "subject_id": "c44",
+      "field_path": "",
+      "verdict": "CONTRADICT",
+      "context_refs": [
+        "e1"
+      ],
+      "sources": [
+        {
+          "quote": "本任务总耗时必须在0至30分钟内，含两端。",
+          "occurrence": 1
+        },
+        {
+          "quote": "依据《配置核查规程》v1.2，PM组织本次核查。",
+          "occurrence": 1
+        },
+        {
+          "quote": "PM必须依据两份报告生成summary.md并交付ADMIN",
+          "occurrence": 1
+        }
+      ],
+      "reason": "上界数值及用途正确，但组织核查事件不能代表包含汇总等工作的根任务。"
+    }
+  ],
+  "issues": [
+    {
+      "id": "a1",
+      "issue_kind": "BINDING",
+      "subject_ids": [
+        "c43"
+      ],
+      "field_path": "binding.quantity.target_id",
+      "context_refs": [
+        "e1",
+        "c44"
+      ],
+      "sources": [
+        {
+          "quote": "本任务总耗时必须在0至30分钟内，含两端。",
+          "occurrence": 1
+        },
+        {
+          "quote": "依据《配置核查规程》v1.2，PM组织本次核查。",
+          "occurrence": 1
+        }
+      ],
+      "reason": "根任务总耗时下界不能绑定为组织核查事件耗时；count_scope=ROOT不能替代正确目标。",
+      "suggested_json": null
+    },
+    {
+      "id": "a2",
+      "issue_kind": "BINDING",
+      "subject_ids": [
+        "c44"
+      ],
+      "field_path": "binding.quantity.target_id",
+      "context_refs": [
+        "e1",
+        "c43"
+      ],
+      "sources": [
+        {
+          "quote": "本任务总耗时必须在0至30分钟内，含两端。",
+          "occurrence": 1
+        },
+        {
+          "quote": "依据《配置核查规程》v1.2，PM组织本次核查。",
+          "occurrence": 1
+        },
+        {
+          "quote": "PM必须依据两份报告生成summary.md并交付ADMIN",
+          "occurrence": 1
+        }
+      ],
+      "reason": "根任务总耗时上界不能绑定为组织核查事件耗时，汇总等工作不在该事件身份内。",
+      "suggested_json": null
+    },
+    {
+      "id": "a3",
+      "issue_kind": "CONTRACT",
+      "subject_ids": [
+        "c43",
+        "c44"
+      ],
+      "field_path": "",
+      "context_refs": [
+        "e1"
+      ],
+      "sources": [
+        {
+          "quote": "本任务总耗时必须在0至30分钟内，含两端。",
+          "occurrence": 1
+        }
+      ],
+      "reason": "当前执行量合同要求事件目标且不允许ROOT作为目标；候选缺少忠实承载根任务总耗时的结构。不得以note或普通ITEM补造。",
+      "suggested_json": null
+    }
+  ],
+  "omissions": [
+    {
+      "id": "o1",
+      "sources": [
+        {
+          "quote": "本任务总耗时必须在0至30分钟内，含两端。",
+          "occurrence": 1
+        }
+      ],
+      "affected_views": [
+        "R"
+      ],
+      "reason": "根任务总耗时含端点的0至30分钟限制未获忠实目标绑定；候选已记录GAP，但两条组织事件数量不能消费为全任务限制。"
+    }
+  ],
+  "technical_errors": [
+    {
+      "code": "PROPERTY_SCOPE_ARGUMENT_OWNERSHIP",
+      "subject_id": "c7",
+      "field_path": "claims[c7].expression_id",
+      "actual": {
+        "event_id": null,
+        "entity_id": "operations",
+        "scope_id": "ROOT",
+        "quantity": null,
+        "constraint_ids": null,
+        "detail": "xtest"
+      },
+      "requirement": "Property scope must own each tested target through this scope or this event role; preserve the constraint rather than substituting another target."
+    },
+    {
+      "code": "COVERAGE_INVALID",
+      "detail": {
+        "code": "COVERAGE_INVALID",
+        "message": "PROPERTY_CONSTRAINT_UNREPRESENTED",
+        "origin": "coverage"
+      },
+      "requirement": "Repair the declared reference using source-supported identities. Preserve sources and coverage gaps; do not remove the requirement."
+    },
+    {
+      "code": "COVERAGE_INVALID",
+      "detail": {
+        "code": "COVERAGE_INVALID",
+        "message": "PROPERTY_CONSTRAINT_UNREPRESENTED",
+        "origin": "audit-source-check"
+      },
+      "requirement": "Repair the declared reference using source-supported identities. Preserve sources and coverage gaps; do not remove the requirement."
+    }
+  ],
+  "mechanical_identity": {
+    "policy": "TYPED_IDENTITY_NORMALIZATION_R01",
+    "input_sha256": "d98f4b8a6cd34ea810d2c9da4ce08dab83756f02acc59ab615f780d2ef2600a3",
+    "output_sha256": "d98f4b8a6cd34ea810d2c9da4ce08dab83756f02acc59ab615f780d2ef2600a3",
+    "renames": [],
+    "references": [],
+    "unresolved": [],
+    "semantic_choices_inferred": 0,
+    "source_bytes_changed": false,
+    "node_counts_preserved": true
+  },
+  "binding_errors": [],
+  "budget": {
+    "semantic_revisions_remaining": 1,
+    "shared_with_audit": true
+  }
+}

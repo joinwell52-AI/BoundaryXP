@@ -1,0 +1,1 @@
+OPS 比较 node-a.json 和 node-b.json 中的服务版本与启动参数，生成 node-diff.md。仅检查现有快照，不连接实际主机。

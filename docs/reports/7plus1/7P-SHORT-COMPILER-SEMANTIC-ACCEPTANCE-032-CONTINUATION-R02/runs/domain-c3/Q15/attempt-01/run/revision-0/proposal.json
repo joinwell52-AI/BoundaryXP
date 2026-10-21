@@ -1,0 +1,430 @@
+{
+  "contract_version": "032.1",
+  "entities": [
+    {
+      "id": "ent_pm",
+      "label": "PM",
+      "type": "OTHER",
+      "mentions": [
+        {
+          "quote": "PM",
+          "occurrence": 1
+        }
+      ],
+      "alternatives": []
+    },
+    {
+      "id": "ent_users",
+      "label": "users.csv",
+      "type": "FILE",
+      "mentions": [
+        {
+          "quote": "users.csv",
+          "occurrence": 1
+        }
+      ],
+      "alternatives": []
+    },
+    {
+      "id": "ent_optional",
+      "label": "optional.md",
+      "type": "FILE",
+      "mentions": [
+        {
+          "quote": "optional.md",
+          "occurrence": 1
+        },
+        {
+          "quote": "optional.md",
+          "occurrence": 2
+        }
+      ],
+      "alternatives": []
+    }
+  ],
+  "events": [
+    {
+      "id": "evt_check",
+      "predicate": "核对",
+      "kind": "ACTION",
+      "layer": "MAIN",
+      "use": "CURRENT_TASK",
+      "modality": "REQUIRED",
+      "polarity": "POSITIVE",
+      "owner_id": "ROOT",
+      "constraint_ids": [],
+      "requires": [],
+      "sources": [
+        {
+          "quote": "请PM核对users.csv",
+          "occurrence": 1
+        }
+      ]
+    },
+    {
+      "id": "evt_generate",
+      "predicate": "生成",
+      "kind": "ACTION",
+      "layer": "MAIN",
+      "use": "CURRENT_TASK",
+      "modality": "PERMITTED",
+      "polarity": "POSITIVE",
+      "owner_id": "ROOT",
+      "constraint_ids": [],
+      "requires": [],
+      "sources": [
+        {
+          "quote": "可以另外生成optional.md",
+          "occurrence": 1
+        }
+      ]
+    },
+    {
+      "id": "evt_deliver",
+      "predicate": "交付",
+      "kind": "ACTION",
+      "layer": "MAIN",
+      "use": "CURRENT_TASK",
+      "modality": "NOT_REQUIRED",
+      "polarity": "POSITIVE",
+      "owner_id": "ROOT",
+      "constraint_ids": [],
+      "requires": [],
+      "sources": [
+        {
+          "quote": "本任务不要求交付optional.md",
+          "occurrence": 1
+        }
+      ]
+    }
+  ],
+  "claims": [
+    {
+      "id": "role_check_pm",
+      "kind": "ROLE",
+      "event_id": "evt_check",
+      "entity_id": "ent_pm",
+      "role": "PERFORMER",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "artifact_use": null,
+      "scope_id": "evt_check",
+      "requires": [],
+      "sources": [
+        {
+          "quote": "请PM核对users.csv",
+          "occurrence": 1
+        }
+      ],
+      "note": "PM是明确的核对执行者，岗位类别未指定。"
+    },
+    {
+      "id": "role_check_input",
+      "kind": "ROLE",
+      "event_id": "evt_check",
+      "entity_id": "ent_users",
+      "role": "INPUT_OBJECT",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "artifact_use": null,
+      "scope_id": "evt_check",
+      "requires": [],
+      "sources": [
+        {
+          "quote": "核对users.csv",
+          "occurrence": 1
+        }
+      ],
+      "note": "明确受核对的输入文件。"
+    },
+    {
+      "id": "scope_check",
+      "kind": "SCOPE",
+      "event_id": "evt_check",
+      "entity_id": null,
+      "role": null,
+      "expression_id": "expr_users",
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "artifact_use": null,
+      "scope_id": "ent_users",
+      "requires": [],
+      "sources": [
+        {
+          "quote": "核对users.csv",
+          "occurrence": 1
+        }
+      ],
+      "note": "核对范围为该具体文件。"
+    },
+    {
+      "id": "role_generate_pm",
+      "kind": "ROLE",
+      "event_id": "evt_generate",
+      "entity_id": "ent_pm",
+      "role": "PERFORMER",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "artifact_use": null,
+      "scope_id": "evt_generate",
+      "requires": [],
+      "sources": [
+        {
+          "quote": "请PM核对users.csv",
+          "occurrence": 1
+        },
+        {
+          "quote": "可以另外生成optional.md",
+          "occurrence": 1
+        }
+      ],
+      "note": "连续指令的追加动作承接PM主语，没有主体切换。"
+    },
+    {
+      "id": "role_generate_result",
+      "kind": "ROLE",
+      "event_id": "evt_generate",
+      "entity_id": "ent_optional",
+      "role": "RESULT",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "artifact_use": null,
+      "scope_id": "evt_generate",
+      "requires": [],
+      "sources": [
+        {
+          "quote": "可以另外生成optional.md",
+          "occurrence": 1
+        }
+      ],
+      "note": "允许产生该结果，不要求生成。"
+    },
+    {
+      "id": "scope_generate",
+      "kind": "SCOPE",
+      "event_id": "evt_generate",
+      "entity_id": null,
+      "role": null,
+      "expression_id": "expr_optional_generate",
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "artifact_use": null,
+      "scope_id": "ent_optional",
+      "requires": [],
+      "sources": [
+        {
+          "quote": "生成optional.md",
+          "occurrence": 1
+        }
+      ],
+      "note": "生成用途对应具体文件。"
+    },
+    {
+      "id": "role_deliver_pm",
+      "kind": "ROLE",
+      "event_id": "evt_deliver",
+      "entity_id": "ent_pm",
+      "role": "PERFORMER",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "artifact_use": null,
+      "scope_id": "evt_deliver",
+      "requires": [],
+      "sources": [
+        {
+          "quote": "请PM核对users.csv",
+          "occurrence": 1
+        },
+        {
+          "quote": "本任务不要求交付optional.md",
+          "occurrence": 1
+        }
+      ],
+      "note": "交付用途承接同一指令的PM主体；其交付义务被明确撤回。"
+    },
+    {
+      "id": "role_deliver_artifact",
+      "kind": "ROLE",
+      "event_id": "evt_deliver",
+      "entity_id": "ent_optional",
+      "role": "DELIVERABLE",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "artifact_use": null,
+      "scope_id": "evt_deliver",
+      "requires": [],
+      "sources": [
+        {
+          "quote": "可以另外生成optional.md",
+          "occurrence": 1
+        },
+        {
+          "quote": "本任务不要求交付optional.md",
+          "occurrence": 1
+        }
+      ],
+      "note": "两处名称指同一当前产物；不要求交付不表示禁止交付，也不形成正向交付O。"
+    },
+    {
+      "id": "scope_deliver",
+      "kind": "SCOPE",
+      "event_id": "evt_deliver",
+      "entity_id": null,
+      "role": null,
+      "expression_id": "expr_optional_deliver",
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "artifact_use": null,
+      "scope_id": "ent_optional",
+      "requires": [],
+      "sources": [
+        {
+          "quote": "本任务不要求交付optional.md",
+          "occurrence": 1
+        }
+      ],
+      "note": "撤回交付义务的范围为该具体文件。"
+    }
+  ],
+  "expressions": [
+    {
+      "id": "expr_users",
+      "op": "ITEM",
+      "operands": [
+        "ent_users"
+      ],
+      "state": null,
+      "sources": [
+        {
+          "quote": "users.csv",
+          "occurrence": 1
+        }
+      ]
+    },
+    {
+      "id": "expr_optional_generate",
+      "op": "ITEM",
+      "operands": [
+        "ent_optional"
+      ],
+      "state": null,
+      "sources": [
+        {
+          "quote": "optional.md",
+          "occurrence": 1
+        }
+      ]
+    },
+    {
+      "id": "expr_optional_deliver",
+      "op": "ITEM",
+      "operands": [
+        "ent_optional"
+      ],
+      "state": null,
+      "sources": [
+        {
+          "quote": "optional.md",
+          "occurrence": 1
+        },
+        {
+          "quote": "optional.md",
+          "occurrence": 2
+        }
+      ]
+    }
+  ],
+  "issues": [],
+  "coverage": [
+    {
+      "sources": [
+        {
+          "quote": "请PM核对users.csv",
+          "occurrence": 1
+        }
+      ],
+      "claim_ids": [
+        "role_check_pm",
+        "role_check_input",
+        "scope_check"
+      ],
+      "status": "EXPRESSED",
+      "affected_views": [
+        "I",
+        "A",
+        "P"
+      ],
+      "range_requirement": {
+        "kind": "SPECIFIC",
+        "scope_claim_ids": [
+          "scope_check"
+        ]
+      }
+    },
+    {
+      "sources": [
+        {
+          "quote": "可以另外生成optional.md",
+          "occurrence": 1
+        }
+      ],
+      "claim_ids": [
+        "role_generate_pm",
+        "role_generate_result",
+        "scope_generate"
+      ],
+      "status": "EXPRESSED",
+      "affected_views": [
+        "O",
+        "A",
+        "P"
+      ],
+      "range_requirement": {
+        "kind": "SPECIFIC",
+        "scope_claim_ids": [
+          "scope_generate"
+        ]
+      }
+    },
+    {
+      "sources": [
+        {
+          "quote": "但本任务不要求交付optional.md",
+          "occurrence": 1
+        }
+      ],
+      "claim_ids": [
+        "role_deliver_pm",
+        "role_deliver_artifact",
+        "scope_deliver"
+      ],
+      "status": "EXPRESSED",
+      "affected_views": [
+        "O",
+        "A",
+        "P"
+      ],
+      "range_requirement": {
+        "kind": "SPECIFIC",
+        "scope_claim_ids": [
+          "scope_deliver"
+        ]
+      }
+    }
+  ]
+}

@@ -1,0 +1,20 @@
+// Offline manual review ledger. These entry IDs and Gold references NEVER enter runtime.
+import fs from'node:fs';const dir='docs/reports/7plus1/7P-REPAIR-003',old=JSON.parse(fs.readFileSync('docs/reports/7plus1/7P-REPAIR-002/SEMANTIC-REVIEW-LEDGER.json')),actual={};
+const add=(id,decision,refs,reason)=>actual[id]={decision,expected_entry_refs:refs,reason};
+add('p1:6a3f019d9ba2d45cd27ca9c4','MATCH',['SWAI-001:I0'],'复合身份精确保留父文件及三个 method 成员；Qualified Members 通过 PART_OF 和单一 scope ITEM 限定，没有另建整个父文件的无限定输入。');
+add('p1:42630afa4da8b882338aaf06','PARTIAL_SUPPORT',['SWAI-001:O1'],'同一复合 artifact 的 UPDATED_OUTPUT 已建立，但 union-scan 的 active+archive 结果语义尚未闭合，不计完整 O 匹配。');
+add('p1:b885885a1ff0c66734f2d67f','PARTIAL_SUPPORT',['SWAI-001:A1','SWAI-001:A2','SWAI-001:A3'],'修复动作与三个方法组成完整绑定；每个 writer 的双目录扫描关系尚缺，不将概括动作计为三个完整操作。');
+add('p1:ef11083ad1b2baf0c21ff0f3','MATCH',['SWAI-001:B2'],'NO_CHANGE 原子预占逻辑，negative change predicate + 完整 target + ITEM scope，未新增 Action modality。');
+add('p1:70c3754215a35a6bf8712b9c','MATCH',['SWAI-001:B3'],'NO_CHANGE retry 限，完整局部目标及 restriction provenance。');
+add('p1:02ae4f4303b050b24ea04f0e','MATCH',['SWAI-001:B1'],'函数本身不变作为禁止改变该函数语义的 restriction，保留本身限定及技术 identity。');
+add('p1:e9d757badafebfd122470b4f','PARTIAL_SUPPORT',['SWAI-002:B0'],'仅表达独立后半句现有 caller 不变；前半句 opt-in 的范围仍为 UNKNOWN/UNRESOLVED_SCOPE。未声称已确定 validator 强制接入的全部含义。');
+for(const [id,index]of [['p1:291bf33e3f8ce91d470f5f6b',0],['p1:c698b0ee4d6b0c5bdae8318e',1],['p1:201f203d92248197efad19c1',2],['p1:efc203238d2e50f0720d0e2d',3]])add(id,'MATCH',['SWAI-008:I'+index],'显式只读操作的完整文件对象，scope/关系/对象一致；未把下面的问题借为父句对象。');
+add('p1:97b17b81b261f6afa4c7fb13','MATCH',['SWAI-008:I8'],'比较左操作数包含规范及其描述对象；组成 provenance 明确引用 spec 文件，没有以局部 lifecycle 碎片代替规范。');
+add('p1:2c3858c67d2b2e6268c0a491','MATCH',['SWAI-008:I3','SWAI-008:I4'],'比较右操作数是两份源文件的实际实现，精确保留两文件的成员实体、局部作用域及来源。');
+add('p1:425dd29b8cab69c52ef8b6a2','MATCH',['SWAI-008:O0'],'显式只产出一份报告，产出谓词、报告对象和 RESULT/DELIVERABLE 均已确定。');
+add('p1:5a4bed00b4b6b27ff438dc51','PARTIAL_SUPPORT',['SWAI-008:A0','SWAI-008:A1','SWAI-008:A2','SWAI-008:A3','SWAI-008:A4'],'产出报告是原文明示动作；报告的五类回答/建议内容未完整组合，不能按报告文字命中全记 A。');
+add('p1:0676001a2427b57632e8f08d','PARTIAL_SUPPORT',['SWAI-008:A0'],'调查所需读取的四文件对象已闭合；谁负责创建目标目录的调查问题还未成为完整复合行动。');
+add('p1:fba30dde5d6bfc5ed9ca916b','MATCH',['SWAI-008:A2'],'compare 左规范描述对象 vs 右代码实现的完整双操作数；反引号逗号保留在同一技术对象中，并保留子 artifact identity。');
+add('p1:147ea9ffaad34f89be8b31a0','MATCH',['SWAI-008:B0'],'FORBID modify + 两个 FILE_CLASS 对象；UNION(ALL(.md),ALL(.py)) 保存任何源文件的全称范围，未解释成两个具体扩展名文件。');
+const output_content=structuredClone(old.output_content);output_content['SWAI-010:O:OCR-01']={finding:'MATCH',reason:'输出正文 §2 括号内独立否定谓词：FORBIDS(锁,版本号)，精确括号层与双语 owner_output_ids；没有提升为当前任务 B。',matching_requirement_ids:['p1:bea7b6809dd0eb5726f49862']};
+fs.writeFileSync(dir+'/SEMANTIC-REVIEW-LEDGER.json',JSON.stringify({task:'7P-REPAIR-003',scope:'OFFLINE_REVIEW_ONLY',actual,output_content},null,2)+'\n',{flag:'wx'});

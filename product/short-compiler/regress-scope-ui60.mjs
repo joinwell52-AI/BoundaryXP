@@ -1,0 +1,4 @@
+import fs from 'node:fs';import path from 'node:path';import {spawnSync} from 'node:child_process';
+let code=fs.readFileSync('product/short-compiler/regress-scope-ui59.mjs','utf8');
+code=code.replace("const file=path.resolve('.boundx/scope-regression-launch.mjs')","code=code.replaceAll('SCOPE-CONSUMPTION-CLOSURE-r01/regression-comparable','SCOPE-CONSUMPTION-CLOSURE-r01/regression-final').replaceAll('0.1.0-candidate.031-r1.2-ui.59','0.1.0-candidate.031-r1.2-ui.60').replaceAll('.boundx/scope-comparable-regression','.boundx/scope-comparable-regression-final');const file=path.resolve('.boundx/scope-regression-launch-final.mjs')");
+const file=path.resolve('.boundx/scope-regression-driver-final.mjs');fs.writeFileSync(file,code,{flag:'wx'});const r=spawnSync(process.execPath,[file],{stdio:'inherit',windowsHide:true});process.exitCode=r.status;

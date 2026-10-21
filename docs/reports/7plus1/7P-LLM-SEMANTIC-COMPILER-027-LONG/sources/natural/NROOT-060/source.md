@@ -1,0 +1,1 @@
+PM must organize a review of health.log. If a fatal error appears, the task must stop and PM must be notified; otherwise health-summary.md must be created. The service must not be restarted.

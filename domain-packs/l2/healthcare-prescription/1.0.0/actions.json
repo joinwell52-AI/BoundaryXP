@@ -1,0 +1,220 @@
+{
+  "schema": "boundx-domain-actions/v1",
+  "packId": "healthcare-prescription",
+  "version": "1.0.0",
+  "invariants": [
+    "source_evidence_required",
+    "effect_not_inferred",
+    "completion_not_inferred",
+    "authorization_not_inferred"
+  ],
+  "roleContracts": {
+    "create/v1": {
+      "operation": "CREATE",
+      "primaryRole": "artifact",
+      "optionalRoles": [
+        "executor"
+      ]
+    },
+    "process/v1": {
+      "operation": "PROCESS",
+      "primaryRole": "target",
+      "optionalRoles": [
+        "executor"
+      ]
+    },
+    "send/v1": {
+      "operation": "SEND",
+      "primaryRole": "payload",
+      "optionalRoles": [
+        "executor"
+      ]
+    }
+  },
+  "projectionContracts": {
+    "create/v1": {
+      "operation": "CREATE",
+      "candidates": [
+        {
+          "field": "A",
+          "basis": "action_source"
+        },
+        {
+          "field": "P",
+          "basis": "explicit_executor_only"
+        },
+        {
+          "field": "O",
+          "basis": "bound_primary_role"
+        }
+      ]
+    },
+    "process/v1": {
+      "operation": "PROCESS",
+      "candidates": [
+        {
+          "field": "A",
+          "basis": "action_source"
+        },
+        {
+          "field": "P",
+          "basis": "explicit_executor_only"
+        },
+        {
+          "field": "I",
+          "basis": "bound_primary_role"
+        }
+      ]
+    },
+    "send/v1": {
+      "operation": "SEND",
+      "candidates": [
+        {
+          "field": "A",
+          "basis": "action_source"
+        },
+        {
+          "field": "P",
+          "basis": "explicit_executor_only"
+        }
+      ]
+    }
+  },
+  "frames": [
+    {
+      "id": "medical.issue_prescription",
+      "category": "clinical-order",
+      "label": {
+        "zh-CN": "开立门诊处方",
+        "en": "Issue prescription"
+      },
+      "operation": "CREATE",
+      "roleContract": "create/v1",
+      "projectionContract": "create/v1",
+      "entityTypes": [
+        "electronic-prescription",
+        "patient-record"
+      ],
+      "triggers": {
+        "zh": [
+          "开立处方",
+          "开具处方",
+          "下达医嘱"
+        ],
+        "en": [
+          "issue prescription",
+          "prescribe medication",
+          "create prescription"
+        ]
+      }
+    },
+    {
+      "id": "medical.review_prescription",
+      "category": "pharmacy-audit",
+      "label": {
+        "zh-CN": "前置药师审方",
+        "en": "Review prescription"
+      },
+      "operation": "PROCESS",
+      "roleContract": "process/v1",
+      "projectionContract": "process/v1",
+      "entityTypes": [
+        "electronic-prescription",
+        "contraindication-check"
+      ],
+      "triggers": {
+        "zh": [
+          "前置审方",
+          "药师审方",
+          "审查处方"
+        ],
+        "en": [
+          "review prescription",
+          "audit prescription",
+          "pharmacist review"
+        ]
+      }
+    },
+    {
+      "id": "medical.dispense_medication",
+      "category": "pharmacy-dispense",
+      "label": {
+        "zh-CN": "调配核发药品",
+        "en": "Dispense medication"
+      },
+      "operation": "PROCESS",
+      "roleContract": "process/v1",
+      "projectionContract": "process/v1",
+      "entityTypes": [
+        "medication-dispense-order",
+        "drug-inventory"
+      ],
+      "triggers": {
+        "zh": [
+          "调配发药",
+          "核发药品",
+          "发药出库"
+        ],
+        "en": [
+          "dispense medication",
+          "release medicine",
+          "dispense drug"
+        ]
+      }
+    },
+    {
+      "id": "medical.verify_narcotics",
+      "category": "narcotic-control",
+      "label": {
+        "zh-CN": "麻精特殊药品复核",
+        "en": "Verify narcotic drugs"
+      },
+      "operation": "PROCESS",
+      "roleContract": "process/v1",
+      "projectionContract": "process/v1",
+      "entityTypes": [
+        "narcotic-drug-ledger",
+        "dual-signature-witness"
+      ],
+      "triggers": {
+        "zh": [
+          "麻精药品核对",
+          "特药复核",
+          "双人复核出库"
+        ],
+        "en": [
+          "verify narcotics",
+          "dual check controlled drug",
+          "audit narcotics"
+        ]
+      }
+    },
+    {
+      "id": "medical.push_critical_alert",
+      "category": "clinical-alert",
+      "label": {
+        "zh-CN": "检验危急值直报推送",
+        "en": "Push critical alert"
+      },
+      "operation": "SEND",
+      "roleContract": "send/v1",
+      "projectionContract": "send/v1",
+      "entityTypes": [
+        "critical-alert",
+        "patient-record"
+      ],
+      "triggers": {
+        "zh": [
+          "推送危急值",
+          "危急值直报",
+          "下发紧急警报"
+        ],
+        "en": [
+          "push critical alert",
+          "send critical value",
+          "notify critical alert"
+        ]
+      }
+    }
+  ]
+}

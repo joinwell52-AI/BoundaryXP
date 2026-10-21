@@ -1,0 +1,1 @@
+Reese must coordinate the task: verify snapshot-6794.csv in isolated environment. Deliver audit-513398.md. The scope is limited to the stated environment; production resources are excluded. The whole task must finish within 12 minutes. Send the final report to Taylor.

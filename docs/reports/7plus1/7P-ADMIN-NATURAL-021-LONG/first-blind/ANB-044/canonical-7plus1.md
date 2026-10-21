@@ -1,0 +1,35 @@
+# ANB-044 Actual Canonical 7+1
+
+## I RESOLVED
+
+- 最终提交 [RESOLVED]
+
+## O RESOLVED
+
+- host-audit.md [RESOLVED]
+
+## A UNRESOLVED
+
+- REQUIRED 生成 host-audit.md [RESOLVED]
+- REQUIRED 最终提交 [RESOLVED]
+
+## P UNRESOLVED
+
+- OPS [PERFORMER] [RESOLVED]
+- ADMIN [RECIPIENT] [RESOLVED]
+
+## R ABSENT
+
+
+
+## V ABSENT
+
+
+
+## C ABSENT
+
+
+
+## B ABSENT
+
+

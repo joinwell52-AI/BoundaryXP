@@ -1,0 +1,6 @@
+import fs from 'node:fs';import path from 'node:path';import {spawnSync} from 'node:child_process';import assert from 'node:assert/strict';
+const report='docs/reports/7plus1/CONDITION-REFERENCE-AND-DELIVERY-r01',input=report+'/live-source-retest/source.txt',output=report+'/installed-cli-replay';
+const run=spawnSync(process.execPath,['product/short-compiler/cli-installed.mjs','--input',input,'--output',output,'--replay-from',report+'/live-source-retest'],{encoding:'utf8',windowsHide:true,maxBuffer:5*1024*1024});
+fs.writeFileSync(report+'/INSTALLED-CLI-stdout.md',run.stdout??'',{flag:'wx'});fs.writeFileSync(report+'/INSTALLED-CLI-stderr.txt',run.stderr??'',{flag:'wx'});assert.equal(run.status,0,run.stderr);
+const live=JSON.parse(fs.readFileSync(report+'/live-source-retest/trace.json')),replay=JSON.parse(fs.readFileSync(output+'/trace.json'));assert.deepEqual(replay.canonical,live.canonical);assert.deepEqual(replay.boundary_calculations,live.boundary_calculations);
+const check={same_installed_ui_cli_version:replay.product_snapshot.product_version==='0.1.0-candidate.031-r1.2-ui.65',same_json_and_math:true,real_new_calls:0,source_digest:replay.source.sha256};fs.writeFileSync(report+'/INSTALLED-CLI.json',JSON.stringify(check,null,2)+'\n',{flag:'wx'});console.log(JSON.stringify(check));

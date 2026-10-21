@@ -1,0 +1,128 @@
+{
+  "contract_version": "028-r02.3",
+  "reviews": [
+    {
+      "subject_id": "ent_qa",
+      "field_path": "label",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [{"quote": "QA", "occurrence": 1}],
+      "reason": "原文明示执行者身份名称为QA。"
+    },
+    {
+      "subject_id": "ent_qa",
+      "field_path": "mentions",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [{"quote": "QA", "occurrence": 1}],
+      "reason": "身份引文真实且定位正确。"
+    },
+    {
+      "subject_id": "ent_qa",
+      "field_path": "type",
+      "verdict": "UNCERTAIN",
+      "context_refs": [],
+      "sources": [{"quote": "请QA", "occurrence": 1}],
+      "reason": "原文未明确QA是人员、团队或其他类别，不能确定OTHER；此疑点不影响其明确身份与执行职责。"
+    },
+    {
+      "subject_id": "ent_rule",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [{"quote": "按照RULE-17", "occurrence": 1}],
+      "reason": "RULE-17是具名规则依据，DOCUMENT类型合理，17属于标识符。"
+    },
+    {
+      "subject_id": "ent_schema",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [{"quote": "schema.yaml", "occurrence": 1}],
+      "reason": "原文明示具名受检文件。"
+    },
+    {
+      "subject_id": "ent_conformance",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [{"quote": "conformance.md", "occurrence": 1}],
+      "reason": "原文明示要求生成的具名文件。"
+    },
+    {
+      "subject_id": "evt_check",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [{"quote": "请QA按照RULE-17检查schema.yaml", "occurrence": 1}],
+      "reason": "检查是当前明确要求的正向主动作，未附条件或执行数量限制。"
+    },
+    {
+      "subject_id": "evt_generate",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [
+        {"quote": "请QA", "occurrence": 1},
+        {"quote": "生成conformance.md", "occurrence": 1}
+      ],
+      "reason": "生成是共享请求语气的当前主动作；原文未明确额外条件或必需依赖。"
+    },
+    {
+      "subject_id": "cl_check_performer",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["ent_qa", "evt_check"],
+      "sources": [{"quote": "请QA按照RULE-17检查schema.yaml", "occurrence": 1}],
+      "reason": "QA被明确指定执行检查，职责不依赖其人员或团队类别。"
+    },
+    {
+      "subject_id": "cl_check_basis",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["ent_rule", "evt_check"],
+      "sources": [{"quote": "按照RULE-17检查schema.yaml", "occurrence": 1}],
+      "reason": "按照明确将RULE-17绑定为检查依据。"
+    },
+    {
+      "subject_id": "cl_check_input",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["ent_schema", "evt_check"],
+      "sources": [{"quote": "检查schema.yaml", "occurrence": 1}],
+      "reason": "schema.yaml是明确受检范围，INPUT_OBJECT用途正确。"
+    },
+    {
+      "subject_id": "cl_generate_performer",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["ent_qa", "evt_generate"],
+      "sources": [
+        {"quote": "请QA", "occurrence": 1},
+        {"quote": "生成conformance.md", "occurrence": 1}
+      ],
+      "reason": "并列生成动作共享执行者QA，原文没有引入另一执行者。"
+    },
+    {
+      "subject_id": "cl_generate_result",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["ent_conformance", "evt_generate"],
+      "sources": [{"quote": "生成conformance.md", "occurrence": 1}],
+      "reason": "conformance.md是生成动作的结果，未误作外部输入。"
+    }
+  ],
+  "issues": [
+    {
+      "id": "audit_qa_type",
+      "issue_kind": "IDENTITY",
+      "subject_ids": ["ent_qa"],
+      "field_path": "type",
+      "context_refs": [],
+      "sources": [{"quote": "请QA", "occurrence": 1}],
+      "reason": "QA的实体类别未明确，OTHER缺乏确定支持。仅保留type属性未决，不质疑QA身份或其两项执行职责。",
+      "suggested_json": null
+    }
+  ],
+  "omissions": []
+}

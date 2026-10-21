@@ -1,0 +1,1 @@
+必须生成 snapshot.md。

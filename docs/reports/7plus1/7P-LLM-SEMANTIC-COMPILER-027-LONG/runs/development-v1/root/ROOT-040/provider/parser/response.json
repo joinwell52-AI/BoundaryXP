@@ -1,0 +1,453 @@
+{
+  "structure_status": "SINGLE_ROOT",
+  "nodes": [
+    {
+      "id": "pm",
+      "type": "ENTITY",
+      "sources": [
+        {"quote": "PM", "clause_id": "c1", "occurrence": 0, "context_anchor": "请 PM 组织检查"},
+        {"quote": "PM", "clause_id": "c1", "occurrence": 1, "context_anchor": "通知 PM"},
+        {"quote": "PM", "clause_id": "c1", "occurrence": 2, "context_anchor": "只有 PM 明确批准后才能恢复"}
+      ],
+      "semantic_identity": "PM",
+      "entity_kind": "ROLE",
+      "layer": "MAIN",
+      "owner": "TASK",
+      "modality": "UNSTATED",
+      "polarity": "AFFIRMATIVE",
+      "artifact_use": "NONE",
+      "predicate_class": "NONE",
+      "alternative_group_id": null
+    },
+    {
+      "id": "log",
+      "type": "ENTITY",
+      "sources": [
+        {"quote": "service.log", "clause_id": "c1", "occurrence": 0, "context_anchor": null}
+      ],
+      "semantic_identity": "service.log",
+      "entity_kind": "FILE",
+      "layer": "MAIN",
+      "owner": "check",
+      "modality": "UNSTATED",
+      "polarity": "AFFIRMATIVE",
+      "artifact_use": "EXISTING_INPUT",
+      "predicate_class": "NONE",
+      "alternative_group_id": null
+    },
+    {
+      "id": "report",
+      "type": "ENTITY",
+      "sources": [
+        {"quote": "operation-review.md", "clause_id": "c1", "occurrence": 0, "context_anchor": null}
+      ],
+      "semantic_identity": "operation-review.md",
+      "entity_kind": "FILE",
+      "layer": "MAIN",
+      "owner": "generate",
+      "modality": "UNSTATED",
+      "polarity": "AFFIRMATIVE",
+      "artifact_use": "GENERATED_OUTPUT",
+      "predicate_class": "NONE",
+      "alternative_group_id": null
+    },
+    {
+      "id": "organize",
+      "type": "EVENT",
+      "sources": [
+        {"quote": "请 PM 组织检查", "clause_id": "c1", "occurrence": 0, "context_anchor": null}
+      ],
+      "semantic_identity": "organize",
+      "entity_kind": "NONE",
+      "layer": "MAIN",
+      "owner": "TASK",
+      "modality": "REQUIRED",
+      "polarity": "AFFIRMATIVE",
+      "artifact_use": "NONE",
+      "predicate_class": "ORGANIZE",
+      "alternative_group_id": null
+    },
+    {
+      "id": "check",
+      "type": "EVENT",
+      "sources": [
+        {"quote": "检查 service.log", "clause_id": "c1", "occurrence": 0, "context_anchor": "请 PM 组织检查 service.log"}
+      ],
+      "semantic_identity": "check",
+      "entity_kind": "NONE",
+      "layer": "COMPLEMENT",
+      "owner": "organize",
+      "modality": "REQUIRED",
+      "polarity": "AFFIRMATIVE",
+      "artifact_use": "NONE",
+      "predicate_class": "OPERATION",
+      "alternative_group_id": null
+    },
+    {
+      "id": "generate",
+      "type": "EVENT",
+      "sources": [
+        {"quote": "形成 operation-review.md", "clause_id": "c1", "occurrence": 0, "context_anchor": "请 PM 组织检查 service.log 并形成 operation-review.md"}
+      ],
+      "semantic_identity": "generate",
+      "entity_kind": "NONE",
+      "layer": "MAIN",
+      "owner": "TASK",
+      "modality": "REQUIRED",
+      "polarity": "AFFIRMATIVE",
+      "artifact_use": "NONE",
+      "predicate_class": "PRODUCE",
+      "alternative_group_id": null
+    },
+    {
+      "id": "alert",
+      "type": "ENTITY",
+      "sources": [
+        {"quote": "高危告警", "clause_id": "c1", "occurrence": 0, "context_anchor": null}
+      ],
+      "semantic_identity": "高危告警",
+      "entity_kind": "DATA",
+      "layer": "CONDITION_ANTECEDENT",
+      "owner": "discovered",
+      "modality": "UNSTATED",
+      "polarity": "AFFIRMATIVE",
+      "artifact_use": "NONE",
+      "predicate_class": "NONE",
+      "alternative_group_id": null
+    },
+    {
+      "id": "discovered",
+      "type": "STATE",
+      "sources": [
+        {"quote": "发现高危告警时", "clause_id": "c1", "occurrence": 0, "context_anchor": null}
+      ],
+      "semantic_identity": "high_risk_alert_discovered",
+      "entity_kind": "NONE",
+      "layer": "CONDITION_ANTECEDENT",
+      "owner": "TASK",
+      "modality": "UNSTATED",
+      "polarity": "AFFIRMATIVE",
+      "artifact_use": "NONE",
+      "predicate_class": "STATE",
+      "alternative_group_id": null
+    },
+    {
+      "id": "stop",
+      "type": "EVENT",
+      "sources": [
+        {"quote": "必须停止检查", "clause_id": "c1", "occurrence": 0, "context_anchor": null}
+      ],
+      "semantic_identity": "stop_check",
+      "entity_kind": "NONE",
+      "layer": "CONDITION_CONSEQUENT",
+      "owner": "TASK",
+      "modality": "REQUIRED",
+      "polarity": "AFFIRMATIVE",
+      "artifact_use": "NONE",
+      "predicate_class": "STOP",
+      "alternative_group_id": null
+    },
+    {
+      "id": "notify",
+      "type": "EVENT",
+      "sources": [
+        {"quote": "通知 PM", "clause_id": "c1", "occurrence": 0, "context_anchor": "必须停止检查并通知 PM"}
+      ],
+      "semantic_identity": "notify",
+      "entity_kind": "NONE",
+      "layer": "CONDITION_CONSEQUENT",
+      "owner": "TASK",
+      "modality": "REQUIRED",
+      "polarity": "AFFIRMATIVE",
+      "artifact_use": "NONE",
+      "predicate_class": "COMMUNICATE",
+      "alternative_group_id": null
+    },
+    {
+      "id": "approved",
+      "type": "STATE",
+      "sources": [
+        {"quote": "PM 明确批准后", "clause_id": "c1", "occurrence": 0, "context_anchor": "只有 PM 明确批准后才能恢复"}
+      ],
+      "semantic_identity": "explicit_PM_approval_obtained",
+      "entity_kind": "NONE",
+      "layer": "CONDITION_ANTECEDENT",
+      "owner": "resume",
+      "modality": "UNSTATED",
+      "polarity": "AFFIRMATIVE",
+      "artifact_use": "NONE",
+      "predicate_class": "APPROVE",
+      "alternative_group_id": null
+    },
+    {
+      "id": "resume",
+      "type": "EVENT",
+      "sources": [
+        {"quote": "才能恢复", "clause_id": "c1", "occurrence": 0, "context_anchor": "只有 PM 明确批准后才能恢复"}
+      ],
+      "semantic_identity": "resume_check",
+      "entity_kind": "NONE",
+      "layer": "CONDITION_CONSEQUENT",
+      "owner": "TASK",
+      "modality": "PERMITTED",
+      "polarity": "AFFIRMATIVE",
+      "artifact_use": "NONE",
+      "predicate_class": "OPERATION",
+      "alternative_group_id": null
+    },
+    {
+      "id": "service",
+      "type": "ENTITY",
+      "sources": [
+        {"quote": "服务", "clause_id": "c1", "occurrence": 0, "context_anchor": "不得自行重启服务"}
+      ],
+      "semantic_identity": "服务",
+      "entity_kind": "SERVICE",
+      "layer": "MAIN",
+      "owner": "restart",
+      "modality": "UNSTATED",
+      "polarity": "AFFIRMATIVE",
+      "artifact_use": "NONE",
+      "predicate_class": "NONE",
+      "alternative_group_id": null
+    },
+    {
+      "id": "restart",
+      "type": "EVENT",
+      "sources": [
+        {"quote": "不得自行重启服务", "clause_id": "c1", "occurrence": 0, "context_anchor": null}
+      ],
+      "semantic_identity": "restart_service_on_own_authority",
+      "entity_kind": "NONE",
+      "layer": "MAIN",
+      "owner": "TASK",
+      "modality": "FORBIDDEN",
+      "polarity": "AFFIRMATIVE",
+      "artifact_use": "NONE",
+      "predicate_class": "OPERATION",
+      "alternative_group_id": null
+    }
+  ],
+  "relations": [
+    {
+      "id": "r1",
+      "type": "AGENT",
+      "head": "organize",
+      "tail": "pm",
+      "sources": [{"quote": "PM 组织", "clause_id": "c1", "occurrence": 0, "context_anchor": null}],
+      "ownership": "LOCAL",
+      "role": "PERFORMER",
+      "alternative_group_id": null
+    },
+    {
+      "id": "r2",
+      "type": "PART_OF",
+      "head": "check",
+      "tail": "organize",
+      "sources": [{"quote": "组织检查", "clause_id": "c1", "occurrence": 0, "context_anchor": null}],
+      "ownership": "LOCAL",
+      "role": "NONE",
+      "alternative_group_id": null
+    },
+    {
+      "id": "r3",
+      "type": "PATIENT",
+      "head": "check",
+      "tail": "log",
+      "sources": [{"quote": "检查 service.log", "clause_id": "c1", "occurrence": 0, "context_anchor": null}],
+      "ownership": "LOCAL",
+      "role": "NONE",
+      "alternative_group_id": null
+    },
+    {
+      "id": "r4",
+      "type": "CONJUNCTION",
+      "head": "organize",
+      "tail": "generate",
+      "sources": [{"quote": "组织检查 service.log 并形成 operation-review.md", "clause_id": "c1", "occurrence": 0, "context_anchor": null}],
+      "ownership": "STRUCTURAL",
+      "role": "NONE",
+      "alternative_group_id": null
+    },
+    {
+      "id": "r5",
+      "type": "AGENT",
+      "head": "generate",
+      "tail": "pm",
+      "sources": [{"quote": "请 PM 组织检查 service.log 并形成 operation-review.md", "clause_id": "c1", "occurrence": 0, "context_anchor": null}],
+      "ownership": "SHARED_EXPLICIT",
+      "role": "PERFORMER",
+      "alternative_group_id": null
+    },
+    {
+      "id": "r6",
+      "type": "RESULT",
+      "head": "generate",
+      "tail": "report",
+      "sources": [{"quote": "形成 operation-review.md", "clause_id": "c1", "occurrence": 0, "context_anchor": null}],
+      "ownership": "LOCAL",
+      "role": "NONE",
+      "alternative_group_id": null
+    },
+    {
+      "id": "r7",
+      "type": "THEME",
+      "head": "discovered",
+      "tail": "alert",
+      "sources": [{"quote": "发现高危告警", "clause_id": "c1", "occurrence": 0, "context_anchor": null}],
+      "ownership": "LOCAL",
+      "role": "NONE",
+      "alternative_group_id": null
+    },
+    {
+      "id": "r8",
+      "type": "CONDITION_OF",
+      "head": "discovered",
+      "tail": "stop",
+      "sources": [{"quote": "发现高危告警时必须停止检查", "clause_id": "c1", "occurrence": 0, "context_anchor": null}],
+      "ownership": "LOCAL",
+      "role": "NONE",
+      "alternative_group_id": null
+    },
+    {
+      "id": "r9",
+      "type": "CONDITION_OF",
+      "head": "discovered",
+      "tail": "notify",
+      "sources": [{"quote": "发现高危告警时必须停止检查并通知 PM", "clause_id": "c1", "occurrence": 0, "context_anchor": null}],
+      "ownership": "SHARED_EXPLICIT",
+      "role": "NONE",
+      "alternative_group_id": null
+    },
+    {
+      "id": "r10",
+      "type": "CONJUNCTION",
+      "head": "stop",
+      "tail": "notify",
+      "sources": [{"quote": "停止检查并通知 PM", "clause_id": "c1", "occurrence": 0, "context_anchor": null}],
+      "ownership": "STRUCTURAL",
+      "role": "NONE",
+      "alternative_group_id": null
+    },
+    {
+      "id": "r11",
+      "type": "STOP_OF",
+      "head": "stop",
+      "tail": "check",
+      "sources": [{"quote": "停止检查", "clause_id": "c1", "occurrence": 0, "context_anchor": null}],
+      "ownership": "COREFERENCE",
+      "role": "NONE",
+      "alternative_group_id": null
+    },
+    {
+      "id": "r12",
+      "type": "STOP_OF",
+      "head": "stop",
+      "tail": "TASK",
+      "sources": [{"quote": "发现高危告警时必须停止检查", "clause_id": "c1", "occurrence": 0, "context_anchor": null}],
+      "ownership": "STRUCTURAL",
+      "role": "NONE",
+      "alternative_group_id": null
+    },
+    {
+      "id": "r13",
+      "type": "RECIPIENT",
+      "head": "notify",
+      "tail": "pm",
+      "sources": [{"quote": "通知 PM", "clause_id": "c1", "occurrence": 0, "context_anchor": null}],
+      "ownership": "LOCAL",
+      "role": "RECIPIENT",
+      "alternative_group_id": null
+    },
+    {
+      "id": "r14",
+      "type": "AGENT",
+      "head": "approved",
+      "tail": "pm",
+      "sources": [{"quote": "PM 明确批准", "clause_id": "c1", "occurrence": 0, "context_anchor": null}],
+      "ownership": "LOCAL",
+      "role": "APPROVER",
+      "alternative_group_id": null
+    },
+    {
+      "id": "r15",
+      "type": "APPROVAL_OF",
+      "head": "approved",
+      "tail": "resume",
+      "sources": [{"quote": "只有 PM 明确批准后才能恢复", "clause_id": "c1", "occurrence": 0, "context_anchor": null}],
+      "ownership": "LOCAL",
+      "role": "NONE",
+      "alternative_group_id": null
+    },
+    {
+      "id": "r16",
+      "type": "CONDITION_OF",
+      "head": "approval_guard",
+      "tail": "resume",
+      "sources": [{"quote": "只有 PM 明确批准后才能恢复", "clause_id": "c1", "occurrence": 0, "context_anchor": null}],
+      "ownership": "LOCAL",
+      "role": "NONE",
+      "alternative_group_id": null
+    },
+    {
+      "id": "r17",
+      "type": "SEQUENCE",
+      "head": "approved",
+      "tail": "resume",
+      "sources": [{"quote": "明确批准后才能恢复", "clause_id": "c1", "occurrence": 0, "context_anchor": null}],
+      "ownership": "LOCAL",
+      "role": "NONE",
+      "alternative_group_id": null
+    },
+    {
+      "id": "r18",
+      "type": "PATIENT",
+      "head": "restart",
+      "tail": "service",
+      "sources": [{"quote": "重启服务", "clause_id": "c1", "occurrence": 0, "context_anchor": null}],
+      "ownership": "LOCAL",
+      "role": "NONE",
+      "alternative_group_id": null
+    },
+    {
+      "id": "r19",
+      "type": "FORBIDS",
+      "head": "TASK",
+      "tail": "restart",
+      "sources": [{"quote": "不得自行重启服务", "clause_id": "c1", "occurrence": 0, "context_anchor": null}],
+      "ownership": "STRUCTURAL",
+      "role": "NONE",
+      "alternative_group_id": null
+    }
+  ],
+  "expressions": [
+    {
+      "id": "approval_guard",
+      "kind": "CONDITION",
+      "operator": "STATE_REF",
+      "operands": ["approved"],
+      "owner": "resume",
+      "sources": [
+        {"quote": "只有 PM 明确批准后才能恢复", "clause_id": "c1", "occurrence": 0, "context_anchor": null}
+      ],
+      "quantity": null,
+      "alternative_group_id": null
+    }
+  ],
+  "unresolved": [],
+  "coverage": [
+    {
+      "region_id": "c1",
+      "disposition": "BOUNDARY_SEMANTIC",
+      "candidate_ids": [
+        "pm", "log", "report", "organize", "check", "generate",
+        "alert", "discovered", "stop", "notify", "approved", "resume",
+        "service", "restart", "approval_guard",
+        "r1", "r2", "r3", "r4", "r5", "r6", "r7", "r8", "r9",
+        "r10", "r11", "r12", "r13", "r14", "r15", "r16", "r17",
+        "r18", "r19"
+      ],
+      "reason": "全文包含组织检查、形成文件、高危告警触发的停止和通知、仅在 PM 明确批准后恢复的必要条件，以及禁止自行重启服务。未声明 WP；检查、停止、通知、恢复和重启的执行者未明确指定。"
+    }
+  ]
+}

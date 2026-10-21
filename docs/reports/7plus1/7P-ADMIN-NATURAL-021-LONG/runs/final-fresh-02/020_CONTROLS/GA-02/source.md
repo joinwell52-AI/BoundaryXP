@@ -1,0 +1,1 @@
+OPS 检查 rehearsal 环境，生成 atlas.txt。范围排除 customer-live。

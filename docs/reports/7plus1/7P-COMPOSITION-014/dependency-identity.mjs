@@ -1,0 +1,4 @@
+import assert from 'node:assert/strict';import fs from 'node:fs';import {spawnSync} from 'node:child_process';import {out,runtime,read,write,sha,digest} from './common.mjs';
+const closure=read(out+'ANTI-OVERFIT-AUDIT.json').actual_engine_module_closure,rows=[];
+for(const x of closure.filter(x=>!x.path.startsWith(runtime))){const r=spawnSync('git',['show','HEAD:'+x.path],{encoding:null,maxBuffer:30e6});rows.push({path:x.path,actual_sha256:digest(x.path),HEAD_git_sha256:r.status===0?sha(r.stdout):null,exact_HEAD_blob:r.status===0&&sha(r.stdout)===digest(x.path)});}
+assert(rows.every(r=>r.exact_HEAD_blob),'Non-HEAD runtime dependency requires separate explicit provenance');write(out+'EXTERNAL-DEPENDENCY-GIT-IDENTITY.json',{task:'7P-COMPOSITION-014',status:'PASS',external_modules:rows.length,non_HEAD_dependencies:0,rows});

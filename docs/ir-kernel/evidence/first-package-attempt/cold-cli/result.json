@@ -1,0 +1,681 @@
+{
+  "ir_status": "VALID",
+  "query_kind": "SAT",
+  "business_decision": null,
+  "execution_authorization": null,
+  "compile_status": "SUPPORTED",
+  "query_scope": {
+    "kind": "EXACT_SNAPSHOT",
+    "task_id": "task",
+    "events": [
+      "outside-template-call-0",
+      "outside-template-call-1",
+      "outside-template-call-2"
+    ],
+    "completeness": {
+      "kind": "EXACT_SNAPSHOT",
+      "task_id": "task",
+      "basis": "EXPLICIT_TEST_PLAN_SNAPSHOT"
+    }
+  },
+  "result": "SAT",
+  "model": {
+    "v29be75688f72874de35ab518": "0",
+    "v1bedc7247f79430f15d6f7d9": "0",
+    "vc847c3768d13537fcff9870f": "0",
+    "v98497627b17123a50f1f3933": "0",
+    "vfe56813bb3a89811d6977bdf": "0",
+    "v1ad561034a096e70d2a68682": "0"
+  },
+  "conflict_core": [],
+  "verification": "MODEL_CHECKED",
+  "smtlib": "; \n(set-info :status unknown)\n(declare-fun a0 () Bool)\n(declare-fun a1 () Bool)\n(declare-fun v1bedc7247f79430f15d6f7d9 () Real)\n(declare-fun v29be75688f72874de35ab518 () Real)\n(declare-fun a2 () Bool)\n(declare-fun v98497627b17123a50f1f3933 () Real)\n(declare-fun vc847c3768d13537fcff9870f () Real)\n(declare-fun a3 () Bool)\n(declare-fun v1ad561034a096e70d2a68682 () Real)\n(declare-fun vfe56813bb3a89811d6977bdf () Real)\n(declare-fun a4 () Bool)\n(assert\n (let ((?x13 (ite true 1 0)))\n (let ((?x14 (+ ?x13 ?x13)))\n (let ((?x15 (+ ?x14 ?x13)))\n (let (($x17 (<= ?x15 3)))\n (=> a0 $x17))))))\n(assert\n (=> a1 true))\n(assert\n (let (($x40 (<= v29be75688f72874de35ab518 v1bedc7247f79430f15d6f7d9)))\n (=> a2 $x40)))\n(assert\n (let (($x50 (<= vc847c3768d13537fcff9870f v98497627b17123a50f1f3933)))\n (=> a3 $x50)))\n(assert\n (let (($x58 (<= vfe56813bb3a89811d6977bdf v1ad561034a096e70d2a68682)))\n(=> a4 $x58)))\n(check-sat-assuming (a0 a1 a2 a3 a4))\n",
+  "assertion_map": [
+    {
+      "name": "a0",
+      "id": "req:shared-budget",
+      "source_id": "shared-budget"
+    },
+    {
+      "name": "a1",
+      "id": "req:actor-boundary",
+      "source_id": "actor-boundary"
+    },
+    {
+      "name": "a2",
+      "id": "event:outside-template-call-0",
+      "source_id": null
+    },
+    {
+      "name": "a3",
+      "id": "event:outside-template-call-1",
+      "source_id": null
+    },
+    {
+      "name": "a4",
+      "id": "event:outside-template-call-2",
+      "source_id": null
+    }
+  ],
+  "reason": null,
+  "backend": {
+    "name": "z3-solver",
+    "version": "5.2.0",
+    "local": true,
+    "offline": true,
+    "budget": {
+      "wallMs": 15000,
+      "solverMs": 5000,
+      "memoryMb": 256
+    }
+  },
+  "worker_pid": 2024,
+  "worker_exited": true,
+  "model_check": {
+    "valid": true,
+    "failures": [],
+    "evaluation": {
+      "rows": [
+        {
+          "id": "shared-budget",
+          "modality": "REQUIRED",
+          "value": true,
+          "constraining": true
+        },
+        {
+          "id": "actor-boundary",
+          "modality": "REQUIRED",
+          "value": true,
+          "constraining": true
+        }
+      ],
+      "result": "SATISFIED",
+      "business_decision": null,
+      "execution_authorization": null
+    },
+    "context": {
+      "requirements": [
+        "shared-budget",
+        "actor-boundary"
+      ],
+      "plan": {
+        "events": [
+          {
+            "id": "outside-template-call-0",
+            "task_id": "task",
+            "operation": "INVOKE",
+            "occurred": true,
+            "completed": true,
+            "succeeded": true,
+            "roles": [
+              {
+                "role": "OBJECT",
+                "value": {
+                  "kind": "ENTITY",
+                  "id": "tool"
+                }
+              },
+              {
+                "role": "PERFORMER",
+                "value": {
+                  "kind": "ENTITY",
+                  "id": "worker1"
+                }
+              }
+            ],
+            "unit": "second",
+            "start": "0",
+            "end": "0"
+          },
+          {
+            "id": "outside-template-call-1",
+            "task_id": "task",
+            "operation": "INVOKE",
+            "occurred": true,
+            "completed": true,
+            "succeeded": false,
+            "roles": [
+              {
+                "role": "OBJECT",
+                "value": {
+                  "kind": "ENTITY",
+                  "id": "tool"
+                }
+              },
+              {
+                "role": "PERFORMER",
+                "value": {
+                  "kind": "ENTITY",
+                  "id": "worker1"
+                }
+              }
+            ],
+            "unit": "second",
+            "start": "0",
+            "end": "0"
+          },
+          {
+            "id": "outside-template-call-2",
+            "task_id": "task",
+            "operation": "INVOKE",
+            "occurred": true,
+            "completed": true,
+            "succeeded": true,
+            "roles": [
+              {
+                "role": "OBJECT",
+                "value": {
+                  "kind": "ENTITY",
+                  "id": "tool"
+                }
+              },
+              {
+                "role": "PERFORMER",
+                "value": {
+                  "kind": "ENTITY",
+                  "id": "worker1"
+                }
+              }
+            ],
+            "unit": "second",
+            "start": "0",
+            "end": "0"
+          }
+        ],
+        "completeness": {
+          "kind": "EXACT_SNAPSHOT",
+          "task_id": "task",
+          "basis": "EXPLICIT_TEST_PLAN_SNAPSHOT"
+        }
+      },
+      "event_values": {},
+      "variables": {},
+      "states": {},
+      "receipts": [],
+      "availability": {}
+    },
+    "against": "CORE_SEMANTICS_NOT_BACKEND_AST"
+  },
+  "problem": {
+    "format": "boundx-kernel-problem/1",
+    "core_sha256": "b8ece78251fdc9b344ab73c44d75410befa65d6f765444ffe3f38dbca20e401d",
+    "declarations": {
+      "v29be75688f72874de35ab518": {
+        "sort": "Real",
+        "meaning": {
+          "kind": "EVENT_FIELD",
+          "event": "outside-template-call-0",
+          "field": "start"
+        }
+      },
+      "v1bedc7247f79430f15d6f7d9": {
+        "sort": "Real",
+        "meaning": {
+          "kind": "EVENT_FIELD",
+          "event": "outside-template-call-0",
+          "field": "end"
+        }
+      },
+      "vc847c3768d13537fcff9870f": {
+        "sort": "Real",
+        "meaning": {
+          "kind": "EVENT_FIELD",
+          "event": "outside-template-call-1",
+          "field": "start"
+        }
+      },
+      "v98497627b17123a50f1f3933": {
+        "sort": "Real",
+        "meaning": {
+          "kind": "EVENT_FIELD",
+          "event": "outside-template-call-1",
+          "field": "end"
+        }
+      },
+      "vfe56813bb3a89811d6977bdf": {
+        "sort": "Real",
+        "meaning": {
+          "kind": "EVENT_FIELD",
+          "event": "outside-template-call-2",
+          "field": "start"
+        }
+      },
+      "v1ad561034a096e70d2a68682": {
+        "sort": "Real",
+        "meaning": {
+          "kind": "EVENT_FIELD",
+          "event": "outside-template-call-2",
+          "field": "end"
+        }
+      }
+    },
+    "assertions": [
+      {
+        "id": "req:shared-budget",
+        "formula": {
+          "sort": "Bool",
+          "op": "le",
+          "args": [
+            {
+              "sort": "Int",
+              "op": "add",
+              "args": [
+                {
+                  "sort": "Int",
+                  "op": "ite",
+                  "args": [
+                    {
+                      "sort": "Bool",
+                      "op": "const",
+                      "value": true
+                    },
+                    {
+                      "sort": "Int",
+                      "op": "const",
+                      "value": "1"
+                    },
+                    {
+                      "sort": "Int",
+                      "op": "const",
+                      "value": "0"
+                    }
+                  ]
+                },
+                {
+                  "sort": "Int",
+                  "op": "ite",
+                  "args": [
+                    {
+                      "sort": "Bool",
+                      "op": "const",
+                      "value": true
+                    },
+                    {
+                      "sort": "Int",
+                      "op": "const",
+                      "value": "1"
+                    },
+                    {
+                      "sort": "Int",
+                      "op": "const",
+                      "value": "0"
+                    }
+                  ]
+                },
+                {
+                  "sort": "Int",
+                  "op": "ite",
+                  "args": [
+                    {
+                      "sort": "Bool",
+                      "op": "const",
+                      "value": true
+                    },
+                    {
+                      "sort": "Int",
+                      "op": "const",
+                      "value": "1"
+                    },
+                    {
+                      "sort": "Int",
+                      "op": "const",
+                      "value": "0"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "sort": "Int",
+              "op": "const",
+              "value": "3"
+            }
+          ]
+        },
+        "source_id": "shared-budget"
+      },
+      {
+        "id": "req:actor-boundary",
+        "formula": {
+          "sort": "Bool",
+          "op": "const",
+          "value": true
+        },
+        "source_id": "actor-boundary"
+      },
+      {
+        "id": "event:outside-template-call-0",
+        "formula": {
+          "sort": "Bool",
+          "op": "le",
+          "args": [
+            {
+              "sort": "Real",
+              "op": "var",
+              "name": "v29be75688f72874de35ab518"
+            },
+            {
+              "sort": "Real",
+              "op": "var",
+              "name": "v1bedc7247f79430f15d6f7d9"
+            }
+          ]
+        },
+        "source_id": null
+      },
+      {
+        "id": "event:outside-template-call-1",
+        "formula": {
+          "sort": "Bool",
+          "op": "le",
+          "args": [
+            {
+              "sort": "Real",
+              "op": "var",
+              "name": "vc847c3768d13537fcff9870f"
+            },
+            {
+              "sort": "Real",
+              "op": "var",
+              "name": "v98497627b17123a50f1f3933"
+            }
+          ]
+        },
+        "source_id": null
+      },
+      {
+        "id": "event:outside-template-call-2",
+        "formula": {
+          "sort": "Bool",
+          "op": "le",
+          "args": [
+            {
+              "sort": "Real",
+              "op": "var",
+              "name": "vfe56813bb3a89811d6977bdf"
+            },
+            {
+              "sort": "Real",
+              "op": "var",
+              "name": "v1ad561034a096e70d2a68682"
+            }
+          ]
+        },
+        "source_id": null
+      }
+    ],
+    "formulas": {
+      "shared-budget": {
+        "sort": "Bool",
+        "op": "le",
+        "args": [
+          {
+            "sort": "Int",
+            "op": "add",
+            "args": [
+              {
+                "sort": "Int",
+                "op": "ite",
+                "args": [
+                  {
+                    "sort": "Bool",
+                    "op": "const",
+                    "value": true
+                  },
+                  {
+                    "sort": "Int",
+                    "op": "const",
+                    "value": "1"
+                  },
+                  {
+                    "sort": "Int",
+                    "op": "const",
+                    "value": "0"
+                  }
+                ]
+              },
+              {
+                "sort": "Int",
+                "op": "ite",
+                "args": [
+                  {
+                    "sort": "Bool",
+                    "op": "const",
+                    "value": true
+                  },
+                  {
+                    "sort": "Int",
+                    "op": "const",
+                    "value": "1"
+                  },
+                  {
+                    "sort": "Int",
+                    "op": "const",
+                    "value": "0"
+                  }
+                ]
+              },
+              {
+                "sort": "Int",
+                "op": "ite",
+                "args": [
+                  {
+                    "sort": "Bool",
+                    "op": "const",
+                    "value": true
+                  },
+                  {
+                    "sort": "Int",
+                    "op": "const",
+                    "value": "1"
+                  },
+                  {
+                    "sort": "Int",
+                    "op": "const",
+                    "value": "0"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "sort": "Int",
+            "op": "const",
+            "value": "3"
+          }
+        ]
+      },
+      "actor-boundary": {
+        "sort": "Bool",
+        "op": "const",
+        "value": true
+      }
+    },
+    "query_scope": {
+      "kind": "EXACT_SNAPSHOT",
+      "task_id": "task",
+      "events": [
+        "outside-template-call-0",
+        "outside-template-call-1",
+        "outside-template-call-2"
+      ],
+      "completeness": {
+        "kind": "EXACT_SNAPSHOT",
+        "task_id": "task",
+        "basis": "EXPLICIT_TEST_PLAN_SNAPSHOT"
+      }
+    },
+    "plan": {
+      "events": [
+        {
+          "id": "outside-template-call-0",
+          "task_id": "task",
+          "operation": "INVOKE",
+          "occurred": true,
+          "completed": true,
+          "succeeded": true,
+          "roles": [
+            {
+              "role": "OBJECT",
+              "value": {
+                "kind": "ENTITY",
+                "id": "tool"
+              }
+            },
+            {
+              "role": "PERFORMER",
+              "value": {
+                "kind": "ENTITY",
+                "id": "worker1"
+              }
+            }
+          ],
+          "unit": "second"
+        },
+        {
+          "id": "outside-template-call-1",
+          "task_id": "task",
+          "operation": "INVOKE",
+          "occurred": true,
+          "completed": true,
+          "succeeded": false,
+          "roles": [
+            {
+              "role": "OBJECT",
+              "value": {
+                "kind": "ENTITY",
+                "id": "tool"
+              }
+            },
+            {
+              "role": "PERFORMER",
+              "value": {
+                "kind": "ENTITY",
+                "id": "worker1"
+              }
+            }
+          ],
+          "unit": "second"
+        },
+        {
+          "id": "outside-template-call-2",
+          "task_id": "task",
+          "operation": "INVOKE",
+          "occurred": true,
+          "completed": true,
+          "succeeded": true,
+          "roles": [
+            {
+              "role": "OBJECT",
+              "value": {
+                "kind": "ENTITY",
+                "id": "tool"
+              }
+            },
+            {
+              "role": "PERFORMER",
+              "value": {
+                "kind": "ENTITY",
+                "id": "worker1"
+              }
+            }
+          ],
+          "unit": "second"
+        }
+      ],
+      "completeness": {
+        "kind": "EXACT_SNAPSHOT",
+        "task_id": "task",
+        "basis": "EXPLICIT_TEST_PLAN_SNAPSHOT"
+      }
+    },
+    "query": {
+      "requirements": [
+        "shared-budget",
+        "actor-boundary"
+      ],
+      "plan": {
+        "events": [
+          {
+            "id": "outside-template-call-0",
+            "task_id": "task",
+            "operation": "INVOKE",
+            "occurred": true,
+            "completed": true,
+            "succeeded": true,
+            "roles": [
+              {
+                "role": "PERFORMER",
+                "value": {
+                  "kind": "ENTITY",
+                  "id": "worker1"
+                }
+              },
+              {
+                "role": "OBJECT",
+                "value": {
+                  "kind": "ENTITY",
+                  "id": "tool"
+                }
+              }
+            ]
+          },
+          {
+            "id": "outside-template-call-1",
+            "task_id": "task",
+            "operation": "INVOKE",
+            "occurred": true,
+            "completed": true,
+            "succeeded": false,
+            "roles": [
+              {
+                "role": "PERFORMER",
+                "value": {
+                  "kind": "ENTITY",
+                  "id": "worker1"
+                }
+              },
+              {
+                "role": "OBJECT",
+                "value": {
+                  "kind": "ENTITY",
+                  "id": "tool"
+                }
+              }
+            ]
+          },
+          {
+            "id": "outside-template-call-2",
+            "task_id": "task",
+            "operation": "INVOKE",
+            "occurred": true,
+            "completed": true,
+            "succeeded": true,
+            "roles": [
+              {
+                "role": "PERFORMER",
+                "value": {
+                  "kind": "ENTITY",
+                  "id": "worker1"
+                }
+              },
+              {
+                "role": "OBJECT",
+                "value": {
+                  "kind": "ENTITY",
+                  "id": "tool"
+                }
+              }
+            ]
+          }
+        ],
+        "completeness": {
+          "kind": "EXACT_SNAPSHOT",
+          "task_id": "task",
+          "basis": "EXPLICIT_TEST_PLAN_SNAPSHOT"
+        }
+      }
+    },
+    "term_count": 100
+  }
+}

@@ -1,0 +1,1 @@
+Casey must coordinate the task: review build-5001.csv in isolated environment. Attempt the check at most 4 times. Completion requires at least 3 successful checks and existence of the report. Deliver audit-771393.md. The whole task must finish within 31 minutes. Send the final report to Rowan.

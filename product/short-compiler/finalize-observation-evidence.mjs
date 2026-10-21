@@ -1,0 +1,13 @@
+import fs from 'node:fs';import path from 'node:path';import {createHash} from 'node:crypto';
+const root=path.resolve('docs/reports/7plus1/LOCAL-CONDITION-REPAIR-r02'),hash=b=>createHash('sha256').update(b).digest('hex');
+const save=(name,x)=>fs.writeFileSync(path.join(root,name),JSON.stringify(x,null,2)+'\n',{flag:'wx'});
+const taps=fs.readFileSync(path.join(root,'frozen-final-tests.tap'),'utf8');
+const tests=Object.fromEntries(['tests','pass','fail'].map(k=>[k,Number(taps.match(new RegExp('^# '+k+' (\\d+)','m'))?.[1]??0)]));if(tests.tests!==23||tests.fail!==0)throw Error('TESTS_NOT_PASS');
+const refused=fs.readFileSync(path.join(root,'install/CLI.txt'),'utf8');if(!refused.includes('REPLAY_SKILL_BUNDLE_CHANGED'))throw Error('EXPECTED_REPLAY_GUARD_MISSING');
+save('INSTALL-REVIEW.json',{install:true,upgrade:true,rollback:true,cli_old_bundle_replay:'CORRECTLY_REFUSED',initial_runner_exit:1,reason:'Changed Skills/contract cannot inherit prior model response validation. No guard bypassed.',new_resource_live_cli:'NOT_RUN',listeners_started:0});
+const regression=JSON.parse(fs.readFileSync(path.join(root,'regression/SUMMARY.json')));
+save('TESTS.json',{frozen:tests,regression,skill_static_validation:'BOTH_PASS_UTF8',ui_validation:'DOM_FORM_AND_HTTP_API_NOT_ACTUAL_BROWSER_ACCEPTANCE',model_calls:0,live_semantic_validation:false,product_complete:false});
+const online=await fetch('http://127.0.0.1:58618/api/session');const session=await online.json();save('ENTRY.json',{http:online.status,checked_at:new Date().toISOString(),version:session.product_snapshot?.product_version,compiler:session.compiler_revision,upgraded:false});
+const files=[];const walk=d=>{for(const e of fs.readdirSync(d,{withFileTypes:true})){const p=path.join(d,e.name);if(e.isDirectory())walk(p);else {const b=fs.readFileSync(p);files.push({path:path.relative(root,p).replaceAll('\\','/'),bytes:b.length,sha256:hash(b)});}}};walk(root);files.sort((a,b)=>a.path.localeCompare(b.path,'en'));
+save('MANIFEST.json',{status:'SEALED_IMPLEMENTATION_EVIDENCE_NOT_LIVE_SEMANTIC_ACCEPTANCE',files});const sums=files.map(f=>f.sha256+'  '+f.path).join('\n')+'\n';fs.writeFileSync(path.join(root,'SHA256SUMS'),sums,{flag:'wx'});save('SEAL.json',{manifest_sha256:hash(fs.readFileSync(path.join(root,'MANIFEST.json'))),sha256sums_sha256:hash(Buffer.from(sums)),payload_files:files.length});
+console.log(JSON.stringify({tests,payload_files:files.length,model_calls:0,semantic_acceptance:false}));

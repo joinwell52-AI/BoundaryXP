@@ -1,0 +1,190 @@
+{
+  "contract_version": "031-r01",
+  "entities": [
+    {
+      "id": "person_pm",
+      "label": "PM",
+      "type": "OTHER",
+      "mentions": [{"quote": "PM", "occurrence": 1}],
+      "alternatives": []
+    },
+    {
+      "id": "file_users",
+      "label": "users.csv",
+      "type": "FILE",
+      "mentions": [{"quote": "users.csv", "occurrence": 1}],
+      "alternatives": []
+    },
+    {
+      "id": "file_optional",
+      "label": "optional.md",
+      "type": "FILE",
+      "mentions": [
+        {"quote": "optional.md", "occurrence": 1},
+        {"quote": "optional.md", "occurrence": 2}
+      ],
+      "alternatives": []
+    }
+  ],
+  "events": [
+    {
+      "id": "event_check",
+      "predicate": "核对",
+      "kind": "ACTION",
+      "layer": "MAIN",
+      "use": "CURRENT_TASK",
+      "modality": "REQUIRED",
+      "polarity": "POSITIVE",
+      "owner_id": "ROOT",
+      "constraint_ids": [],
+      "requires": [],
+      "sources": [{"quote": "请PM核对users.csv", "occurrence": 1}]
+    },
+    {
+      "id": "event_generate",
+      "predicate": "生成",
+      "kind": "ACTION",
+      "layer": "MAIN",
+      "use": "CURRENT_TASK",
+      "modality": "PERMITTED",
+      "polarity": "POSITIVE",
+      "owner_id": "ROOT",
+      "constraint_ids": [],
+      "requires": [],
+      "sources": [{"quote": "可以另外生成optional.md", "occurrence": 1}]
+    },
+    {
+      "id": "event_deliver",
+      "predicate": "交付",
+      "kind": "ACTION",
+      "layer": "MAIN",
+      "use": "CURRENT_TASK",
+      "modality": "NOT_REQUIRED",
+      "polarity": "POSITIVE",
+      "owner_id": "ROOT",
+      "constraint_ids": [],
+      "requires": [],
+      "sources": [{"quote": "本任务不要求交付optional.md", "occurrence": 1}]
+    }
+  ],
+  "claims": [
+    {
+      "id": "role_check_performer",
+      "kind": "ROLE",
+      "event_id": "event_check",
+      "entity_id": "person_pm",
+      "role": "PERFORMER",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "scope_id": "event_check",
+      "requires": [],
+      "sources": [{"quote": "请PM核对users.csv", "occurrence": 1}],
+      "note": "PM是核对动作的明确执行者。"
+    },
+    {
+      "id": "role_check_input",
+      "kind": "ROLE",
+      "event_id": "event_check",
+      "entity_id": "file_users",
+      "role": "INPUT_OBJECT",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "scope_id": "event_check",
+      "requires": [],
+      "sources": [{"quote": "核对users.csv", "occurrence": 1}],
+      "note": "users.csv是明确受检文件。"
+    },
+    {
+      "id": "role_generate_performer",
+      "kind": "ROLE",
+      "event_id": "event_generate",
+      "entity_id": "person_pm",
+      "role": "PERFORMER",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "scope_id": "event_generate",
+      "requires": [],
+      "sources": [
+        {"quote": "请PM核对users.csv", "occurrence": 1},
+        {"quote": "可以另外生成optional.md", "occurrence": 1}
+      ],
+      "note": "同一指令追加生成动作，未切换主体，承接PM。"
+    },
+    {
+      "id": "role_generate_result",
+      "kind": "ROLE",
+      "event_id": "event_generate",
+      "entity_id": "file_optional",
+      "role": "RESULT",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "scope_id": "event_generate",
+      "requires": [],
+      "sources": [{"quote": "可以另外生成optional.md", "occurrence": 1}],
+      "note": "optional.md是允许生成的结果。"
+    },
+    {
+      "id": "role_deliver_performer",
+      "kind": "ROLE",
+      "event_id": "event_deliver",
+      "entity_id": "person_pm",
+      "role": "PERFORMER",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "scope_id": "event_deliver",
+      "requires": [],
+      "sources": [
+        {"quote": "请PM核对users.csv", "occurrence": 1},
+        {"quote": "本任务不要求交付optional.md", "occurrence": 1}
+      ],
+      "note": "同一指令中的交付义务撤回承接PM；本任务表示义务范围。"
+    },
+    {
+      "id": "role_deliver_artifact",
+      "kind": "ROLE",
+      "event_id": "event_deliver",
+      "entity_id": "file_optional",
+      "role": "DELIVERABLE",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "scope_id": "event_deliver",
+      "requires": [],
+      "sources": [{"quote": "本任务不要求交付optional.md", "occurrence": 1}],
+      "note": "与允许生成的文件身份相同；交付不要求，不构成禁止或正向交付义务。"
+    }
+  ],
+  "expressions": [],
+  "issues": [],
+  "coverage": [
+    {
+      "sources": [{"quote": "请PM核对users.csv", "occurrence": 1}],
+      "claim_ids": ["role_check_performer", "role_check_input"],
+      "status": "EXPRESSED",
+      "affected_views": ["I", "A", "P"]
+    },
+    {
+      "sources": [{"quote": "可以另外生成optional.md", "occurrence": 1}],
+      "claim_ids": ["role_generate_performer", "role_generate_result"],
+      "status": "EXPRESSED",
+      "affected_views": ["O", "A", "P"]
+    },
+    {
+      "sources": [{"quote": "本任务不要求交付optional.md", "occurrence": 1}],
+      "claim_ids": ["role_deliver_performer", "role_deliver_artifact"],
+      "status": "EXPRESSED",
+      "affected_views": ["O", "A", "P"]
+    }
+  ]
+}

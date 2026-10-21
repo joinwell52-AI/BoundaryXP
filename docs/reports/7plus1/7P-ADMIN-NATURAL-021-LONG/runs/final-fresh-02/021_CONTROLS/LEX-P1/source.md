@@ -1,0 +1,1 @@
+TEAM817 比较 amber-a.json 与 amber-b.json，并生成 amber-diff.md。

@@ -1,0 +1,98 @@
+{
+  "reviews": [
+    {
+      "subject_id": "evt_deliver",
+      "field_path": "",
+      "verdict": "CONTRADICT",
+      "context_refs": [
+        "evt_generate",
+        "cl_generate_result",
+        "cl_deliver_file"
+      ],
+      "sources": [
+        {
+          "quote": "并生成access.md",
+          "occurrence": 1
+        },
+        {
+          "quote": "由OPS-01将access.md交给QA",
+          "occurrence": 1
+        }
+      ],
+      "reason": "交付义务本身明确，但同一内部文件生成后交付的时序未表达，空constraint_ids未保留该约束。"
+    },
+    {
+      "subject_id": "evt_deliver",
+      "field_path": "constraint_ids",
+      "verdict": "CONTRADICT",
+      "context_refs": [
+        "evt_generate",
+        "ent_file"
+      ],
+      "sources": [
+        {
+          "quote": "并生成access.md",
+          "occurrence": 1
+        },
+        {
+          "quote": "由OPS-01将access.md交给QA",
+          "occurrence": 1
+        }
+      ],
+      "reason": "缺少回指生成先于交付的TEMPORAL主张。"
+    }
+  ],
+  "issues": [
+    {
+      "id": "audit_temporal_delivery",
+      "issue_kind": "BINDING",
+      "subject_ids": [
+        "evt_deliver"
+      ],
+      "field_path": "constraint_ids",
+      "context_refs": [
+        "evt_generate",
+        "cl_generate_result",
+        "cl_deliver_file",
+        "ent_file"
+      ],
+      "sources": [
+        {
+          "quote": "并生成access.md",
+          "occurrence": 1
+        },
+        {
+          "quote": "由OPS-01将access.md交给QA",
+          "occurrence": 1
+        }
+      ],
+      "reason": "同一内部产物的生成与交付缺少可消费的先后关系。应表达交付AFTER生成的ORDER约束，并双向绑定；不增加检查与生成之间的顺序，不改为充分触发。",
+      "suggested_json": null
+    }
+  ],
+  "omissions": [
+    {
+      "id": "omission_generation_before_delivery",
+      "sources": [
+        {
+          "quote": "并生成access.md",
+          "occurrence": 1
+        },
+        {
+          "quote": "由OPS-01将access.md交给QA",
+          "occurrence": 1
+        }
+      ],
+      "affected_views": [
+        "A",
+        "O"
+      ],
+      "reason": "遗漏生成同一access.md后交付的事件时序：需以引用evt_generate的STATE及约束evt_deliver的TEMPORAL表达，不能仅靠对象同一性代替时序。"
+    }
+  ],
+  "technical_errors": [],
+  "budget": {
+    "semantic_revisions_remaining": 1,
+    "shared_with_audit": true
+  }
+}

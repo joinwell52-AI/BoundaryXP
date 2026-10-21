@@ -1,0 +1,219 @@
+{
+  "contract_version": "031-r1.1",
+  "entities": [
+    {
+      "id": "ent_pm",
+      "label": "PM",
+      "type": "OTHER",
+      "mentions": [{"quote": "PM", "occurrence": 1}],
+      "alternatives": []
+    },
+    {
+      "id": "ent_log",
+      "label": "audit.log",
+      "type": "FILE",
+      "mentions": [
+        {"quote": "audit.log", "occurrence": 1},
+        {"quote": "audit.log", "occurrence": 2}
+      ],
+      "alternatives": []
+    },
+    {
+      "id": "ent_total",
+      "label": "错误总数",
+      "type": "OTHER",
+      "mentions": [{"quote": "错误总数", "occurrence": 1}],
+      "alternatives": []
+    },
+    {
+      "id": "ent_count",
+      "label": "count.md",
+      "type": "FILE",
+      "mentions": [{"quote": "count.md", "occurrence": 1}],
+      "alternatives": []
+    }
+  ],
+  "events": [
+    {
+      "id": "ev_count",
+      "predicate": "统计错误总数",
+      "kind": "ACTION",
+      "layer": "MAIN",
+      "use": "CURRENT_TASK",
+      "modality": "REQUIRED",
+      "polarity": "POSITIVE",
+      "owner_id": "ROOT",
+      "constraint_ids": [],
+      "requires": [],
+      "sources": [{"quote": "请PM统计audit.log中的错误总数", "occurrence": 1}]
+    },
+    {
+      "id": "ev_generate",
+      "predicate": "生成文件",
+      "kind": "ACTION",
+      "layer": "MAIN",
+      "use": "CURRENT_TASK",
+      "modality": "REQUIRED",
+      "polarity": "POSITIVE",
+      "owner_id": "ROOT",
+      "constraint_ids": [],
+      "requires": [],
+      "sources": [{"quote": "并生成count.md", "occurrence": 1}]
+    },
+    {
+      "id": "ev_clear",
+      "predicate": "清空日志",
+      "kind": "ACTION",
+      "layer": "MAIN",
+      "use": "CURRENT_TASK",
+      "modality": "FORBIDDEN",
+      "polarity": "POSITIVE",
+      "owner_id": "ROOT",
+      "constraint_ids": [],
+      "requires": [],
+      "sources": [{"quote": "不得清空audit.log", "occurrence": 1}]
+    }
+  ],
+  "claims": [
+    {
+      "id": "cl_count_performer",
+      "kind": "ROLE",
+      "event_id": "ev_count",
+      "entity_id": "ent_pm",
+      "role": "PERFORMER",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "artifact_use": null,
+      "scope_id": "ev_count",
+      "requires": [],
+      "sources": [{"quote": "请PM统计audit.log中的错误总数", "occurrence": 1}],
+      "note": "PM是统计动作的明确执行者；原文未指定其人员或群组类别。"
+    },
+    {
+      "id": "cl_count_input",
+      "kind": "ROLE",
+      "event_id": "ev_count",
+      "entity_id": "ent_log",
+      "role": "INPUT_OBJECT",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "artifact_use": null,
+      "scope_id": "ev_count",
+      "requires": [],
+      "sources": [{"quote": "统计audit.log中的错误总数", "occurrence": 1}],
+      "note": "audit.log是统计输入，统计内容限定为其中的错误总数。"
+    },
+    {
+      "id": "cl_count_result",
+      "kind": "ROLE",
+      "event_id": "ev_count",
+      "entity_id": "ent_total",
+      "role": "RESULT",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "artifact_use": null,
+      "scope_id": "ev_count",
+      "requires": [],
+      "sources": [{"quote": "统计audit.log中的错误总数", "occurrence": 1}],
+      "note": "统计产生错误总数；原文没有给定数值或执行次数限制。"
+    },
+    {
+      "id": "cl_generate_performer",
+      "kind": "ROLE",
+      "event_id": "ev_generate",
+      "entity_id": "ent_pm",
+      "role": "PERFORMER",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "artifact_use": null,
+      "scope_id": "ev_generate",
+      "requires": [],
+      "sources": [
+        {"quote": "请PM统计audit.log中的错误总数", "occurrence": 1},
+        {"quote": "并生成count.md", "occurrence": 1}
+      ],
+      "note": "连续并列指令未切换主体，生成动作承接PM。"
+    },
+    {
+      "id": "cl_generate_result",
+      "kind": "ROLE",
+      "event_id": "ev_generate",
+      "entity_id": "ent_count",
+      "role": "RESULT",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "artifact_use": null,
+      "scope_id": "ev_generate",
+      "requires": [],
+      "sources": [{"quote": "生成count.md", "occurrence": 1}],
+      "note": "明确要求生成count.md，未要求提交或交付。"
+    },
+    {
+      "id": "cl_clear_performer",
+      "kind": "ROLE",
+      "event_id": "ev_clear",
+      "entity_id": "ent_pm",
+      "role": "PERFORMER",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "artifact_use": null,
+      "scope_id": "ev_clear",
+      "requires": [],
+      "sources": [
+        {"quote": "请PM统计audit.log中的错误总数", "occurrence": 1},
+        {"quote": "不得清空audit.log", "occurrence": 1}
+      ],
+      "note": "同一指令追加的禁止承接PM，表示其不得执行清空动作。"
+    },
+    {
+      "id": "cl_clear_object",
+      "kind": "ROLE",
+      "event_id": "ev_clear",
+      "entity_id": "ent_log",
+      "role": "OBJECT",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "artifact_use": null,
+      "scope_id": "ev_clear",
+      "requires": [],
+      "sources": [{"quote": "不得清空audit.log", "occurrence": 1}],
+      "note": "禁止清空的对象与统计输入为同一audit.log；禁止不扩展为所有修改均禁止。"
+    }
+  ],
+  "expressions": [],
+  "issues": [],
+  "coverage": [
+    {
+      "sources": [{"quote": "请PM统计audit.log中的错误总数", "occurrence": 1}],
+      "claim_ids": ["cl_count_performer", "cl_count_input", "cl_count_result"],
+      "status": "EXPRESSED",
+      "affected_views": ["I", "O", "A", "P"]
+    },
+    {
+      "sources": [{"quote": "并生成count.md", "occurrence": 1}],
+      "claim_ids": ["cl_generate_performer", "cl_generate_result"],
+      "status": "EXPRESSED",
+      "affected_views": ["O", "A", "P"]
+    },
+    {
+      "sources": [{"quote": "不得清空audit.log", "occurrence": 1}],
+      "claim_ids": ["cl_clear_performer", "cl_clear_object"],
+      "status": "EXPRESSED",
+      "affected_views": ["B", "P"]
+    }
+  ]
+}

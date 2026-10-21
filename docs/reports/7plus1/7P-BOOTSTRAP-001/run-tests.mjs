@@ -1,0 +1,7 @@
+import fs from'node:fs';import path from'node:path';import{spawn}from'node:child_process';
+const root='D:/boundx',base=path.join(root,'docs/reports/7plus1/7P-BOOTSTRAP-001'),results=[];
+async function run(name,args){const out=fs.openSync(path.join(base,name+'.log'),'wx');await new Promise(resolve=>{const p=spawn(process.execPath,args,{cwd:root,windowsHide:true,stdio:['ignore',out,out]});p.on('close',code=>{fs.closeSync(out);const log=fs.readFileSync(path.join(base,name+'.log'),'utf8'),counts=Object.fromEntries(['tests','pass','fail','skipped','cancelled'].map(k=>[k,Number(log.match(new RegExp('(?:#|ℹ) '+k+' (\\d+)'))?.[1]??NaN)])),r={name,exit_code:code,...counts,command:[process.execPath,...args]};results.push(r);fs.writeFileSync(path.join(base,name+'.json'),JSON.stringify(r,null,2)+'\n',{flag:'wx'});console.log(JSON.stringify(r));resolve();});});}
+await run('BOOTSTRAP-REGRESSION',['--test','src/__tests__/7plus1/regression/bootstrap.test.mjs']);
+await run('CURRENT-REPAIR-REGRESSION',['--test','tests/parser-v03-p22-scope-consistency.test.mjs','tests/parser-v03-p22-meeting-repair.test.mjs','tests/parser-v03-p22-semantic-decoding.test.mjs']);
+await run('FULL-REGRESSION',['--test','--test-concurrency=1',...fs.readdirSync(path.join(root,'tests')).filter(n=>n.endsWith('.test.mjs')).map(n=>'tests/'+n)]);
+fs.writeFileSync(path.join(base,'TESTS.json'),JSON.stringify(results,null,2)+'\n',{flag:'wx'});

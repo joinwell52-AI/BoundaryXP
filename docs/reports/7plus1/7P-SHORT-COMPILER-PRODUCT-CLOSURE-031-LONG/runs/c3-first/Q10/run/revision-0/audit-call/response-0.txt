@@ -1,0 +1,274 @@
+{
+  "contract_version": "031-r01",
+  "reviews": [
+    {
+      "subject_id": "ent_pm",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [
+        {"quote": "PM", "occurrence": 1},
+        {"quote": "PM", "occurrence": 2}
+      ],
+      "reason": "两处PM身份一致，分别执行生成和提交；OTHER可保留未指定的人或组类别。"
+    },
+    {
+      "subject_id": "ent_qa",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [
+        {"quote": "QA", "occurrence": 1}
+      ],
+      "reason": "QA身份明确，承担复核与更新；OTHER符合类别未指定的占位用途。"
+    },
+    {
+      "subject_id": "ent_admin",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [
+        {"quote": "ADMIN", "occurrence": 1}
+      ],
+      "reason": "ADMIN是明确的提交接收方；原文未指定其人或组类别，OTHER可用。"
+    },
+    {
+      "subject_id": "ent_report",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [
+        {"quote": "report-a.md", "occurrence": 1},
+        {"quote": "这份报告", "occurrence": 1},
+        {"quote": "更新后的同一报告", "occurrence": 1}
+      ],
+      "reason": "唯一当前报告的名称与两处指称已合并为同一文件身份，没有竞争对象。"
+    },
+    {
+      "subject_id": "ev_generate",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [
+        {"quote": "请PM生成report-a.md", "occurrence": 1}
+      ],
+      "reason": "明确要求当前任务生成报告，动作层级、模态及极性正确。"
+    },
+    {
+      "subject_id": "ev_review",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["cl_review_after_generate"],
+      "sources": [
+        {"quote": "请PM生成report-a.md", "occurrence": 1},
+        {"quote": "请QA复核并更新这份报告", "occurrence": 1}
+      ],
+      "reason": "复核是独立的明确要求，引用前述生成报告，生成后使用的时序约束已回指。"
+    },
+    {
+      "subject_id": "ev_update",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["cl_update_after_generate"],
+      "sources": [
+        {"quote": "请PM生成report-a.md", "occurrence": 1},
+        {"quote": "请QA复核并更新这份报告", "occurrence": 1}
+      ],
+      "reason": "更新是并列的明确要求，生成后使用的约束已回指，未捏造与复核的组内顺序。"
+    },
+    {
+      "subject_id": "ev_submit",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["cl_submit_after_group"],
+      "sources": [
+        {"quote": "请QA复核并更新这份报告", "occurrence": 1},
+        {"quote": "PM再将更新后的同一报告提交给ADMIN", "occurrence": 1}
+      ],
+      "reason": "明确要求提交，且再承接复核与更新整组前置工作，时序约束已回指。"
+    },
+    {
+      "subject_id": "cl_generate_performer",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["ent_pm", "ev_generate"],
+      "sources": [
+        {"quote": "请PM生成report-a.md", "occurrence": 1}
+      ],
+      "reason": "PM是生成动作的明确执行者。"
+    },
+    {
+      "subject_id": "cl_generate_result",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["ent_report", "ev_generate"],
+      "sources": [
+        {"quote": "生成report-a.md", "occurrence": 1}
+      ],
+      "reason": "report-a.md是生成事件的结果，RESULT用途正确。"
+    },
+    {
+      "subject_id": "cl_review_reviewer",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["ent_qa", "ev_review"],
+      "sources": [
+        {"quote": "请QA复核并更新这份报告", "occurrence": 1}
+      ],
+      "reason": "QA明确承担复核，REVIEWER绑定正确。"
+    },
+    {
+      "subject_id": "cl_review_object",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["ent_report", "ev_review", "cl_generate_result"],
+      "sources": [
+        {"quote": "生成report-a.md", "occurrence": 1},
+        {"quote": "复核并更新这份报告", "occurrence": 1}
+      ],
+      "reason": "复核对象是前述生成的同一内部报告，OBJECT未误增外部输入。"
+    },
+    {
+      "subject_id": "cl_update_performer",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["ent_qa", "ev_update"],
+      "sources": [
+        {"quote": "请QA复核", "occurrence": 1},
+        {"quote": "并更新这份报告", "occurrence": 1}
+      ],
+      "reason": "同一并列指令中更新承接QA主语，两端来源完整且无主体切换。"
+    },
+    {
+      "subject_id": "cl_update_object",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["ent_report", "ev_update", "cl_generate_result"],
+      "sources": [
+        {"quote": "生成report-a.md", "occurrence": 1},
+        {"quote": "更新这份报告", "occurrence": 1}
+      ],
+      "reason": "更新对象与生成结果保持同一身份，内部OBJECT用途正确。"
+    },
+    {
+      "subject_id": "cl_update_result",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["ent_report", "ev_update"],
+      "sources": [
+        {"quote": "更新这份报告", "occurrence": 1},
+        {"quote": "更新后的同一报告", "occurrence": 1}
+      ],
+      "reason": "更新形成同一文件的更新结果，RESULT没有引入另一报告身份。"
+    },
+    {
+      "subject_id": "cl_submit_performer",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["ent_pm", "ev_submit"],
+      "sources": [
+        {"quote": "PM再将更新后的同一报告提交给ADMIN", "occurrence": 1}
+      ],
+      "reason": "提交明确由PM执行，正确保留从QA到PM的主体切换。"
+    },
+    {
+      "subject_id": "cl_submit_deliverable",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["ent_report", "ev_submit", "cl_update_result"],
+      "sources": [
+        {"quote": "生成report-a.md", "occurrence": 1},
+        {"quote": "更新这份报告", "occurrence": 1},
+        {"quote": "更新后的同一报告提交给ADMIN", "occurrence": 1}
+      ],
+      "reason": "交付对象是经更新的同一report-a.md，DELIVERABLE正确绑定提交事件。"
+    },
+    {
+      "subject_id": "cl_submit_recipient",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["ent_admin", "ev_submit"],
+      "sources": [
+        {"quote": "提交给ADMIN", "occurrence": 1}
+      ],
+      "reason": "ADMIN明确是提交接收方，没有增设审批职责。"
+    },
+    {
+      "subject_id": "cl_review_after_generate",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["ev_review", "ev_generate", "expr_generated"],
+      "sources": [
+        {"quote": "请PM生成report-a.md", "occurrence": 1},
+        {"quote": "请QA复核并更新这份报告", "occurrence": 1}
+      ],
+      "reason": "复核使用前述要求生成的报告，AFTER和ORDER保留内部产物先生成后使用的顺序。"
+    },
+    {
+      "subject_id": "cl_update_after_generate",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["ev_update", "ev_generate", "expr_generated"],
+      "sources": [
+        {"quote": "请PM生成report-a.md", "occurrence": 1},
+        {"quote": "请QA复核并更新这份报告", "occurrence": 1}
+      ],
+      "reason": "更新同一生成报告应在生成后，时序没有被误写为充分触发条件。"
+    },
+    {
+      "subject_id": "cl_submit_after_group",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["ev_submit", "expr_review_update_done"],
+      "sources": [
+        {"quote": "请QA复核并更新这份报告", "occurrence": 1},
+        {"quote": "PM再将更新后的同一报告提交给ADMIN", "occurrence": 1}
+      ],
+      "reason": "再统摄复核和更新整组工作，AND保留两项前置，ORDER与AFTER方向正确。"
+    },
+    {
+      "subject_id": "expr_generated",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["ev_generate", "ent_report"],
+      "sources": [
+        {"quote": "请PM生成report-a.md", "occurrence": 1}
+      ],
+      "reason": "生成完成状态正确引用生成事件及同一报告，表示时序参照而非已发生事实。"
+    },
+    {
+      "subject_id": "expr_reviewed",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["ev_review", "ent_report"],
+      "sources": [
+        {"quote": "请QA复核并更新这份报告", "occurrence": 1}
+      ],
+      "reason": "复核完成状态的事件与对象正确，用于提交前置时序而不新增条件义务。"
+    },
+    {
+      "subject_id": "expr_updated",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["ev_update", "ent_report"],
+      "sources": [
+        {"quote": "更新这份报告", "occurrence": 1},
+        {"quote": "更新后的同一报告", "occurrence": 1}
+      ],
+      "reason": "更新完成状态与更新事件及同一报告一致，保留提交所要求的更新后状态。"
+    },
+    {
+      "subject_id": "expr_review_update_done",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["expr_reviewed", "expr_updated"],
+      "sources": [
+        {"quote": "请QA复核并更新这份报告", "occurrence": 1},
+        {"quote": "PM再将更新后的同一报告提交给ADMIN", "occurrence": 1}
+      ],
+      "reason": "AND完整表达提交前复核与更新均完成，没有增加并列工作之间的先后。"
+    }
+  ],
+  "issues": [],
+  "omissions": []
+}

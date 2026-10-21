@@ -1,0 +1,720 @@
+{
+  "contract_version": "028-r02.2",
+  "entities": [
+    {
+      "id": "n1",
+      "label": "PM",
+      "type": "PERSON",
+      "mentions": [
+        {
+          "quote": "PM",
+          "occurrence": 1
+        },
+        {
+          "quote": "PM",
+          "occurrence": 2
+        }
+      ],
+      "alternatives": []
+    },
+    {
+      "id": "n2",
+      "label": "系统环境",
+      "type": "OTHER",
+      "mentions": [
+        {
+          "quote": "系统环境",
+          "occurrence": 1
+        }
+      ],
+      "alternatives": []
+    },
+    {
+      "id": "n3",
+      "label": "FCoP配置",
+      "type": "OTHER",
+      "mentions": [
+        {
+          "quote": "FCoP配置",
+          "occurrence": 1
+        },
+        {
+          "quote": "被检查的配置",
+          "occurrence": 1
+        }
+      ],
+      "alternatives": []
+    },
+    {
+      "id": "n4",
+      "label": "env-review.md",
+      "type": "FILE",
+      "mentions": [
+        {
+          "quote": "env-review.md",
+          "occurrence": 1
+        },
+        {
+          "quote": "报告",
+          "occurrence": 1
+        }
+      ],
+      "alternatives": []
+    },
+    {
+      "id": "n5",
+      "label": "QA",
+      "type": "PERSON",
+      "mentions": [
+        {
+          "quote": "QA",
+          "occurrence": 1
+        }
+      ],
+      "alternatives": []
+    },
+    {
+      "id": "n6",
+      "label": "ADMIN",
+      "type": "PERSON",
+      "mentions": [
+        {
+          "quote": "ADMIN",
+          "occurrence": 1
+        }
+      ],
+      "alternatives": []
+    },
+    {
+      "id": "n7",
+      "label": "服务",
+      "type": "OTHER",
+      "mentions": [
+        {
+          "quote": "服务",
+          "occurrence": 1
+        }
+      ],
+      "alternatives": []
+    }
+  ],
+  "events": [
+    {
+      "id": "e1",
+      "predicate": "组织检查",
+      "kind": "ACTION",
+      "layer": "MAIN",
+      "use": "CURRENT_TASK",
+      "modality": "REQUIRED",
+      "polarity": "POSITIVE",
+      "owner_id": "ROOT",
+      "constraint_ids": [],
+      "requires": [],
+      "sources": [
+        {
+          "quote": "请PM组织检查系统环境和FCoP配置",
+          "occurrence": 1
+        }
+      ]
+    },
+    {
+      "id": "e2",
+      "predicate": "检查",
+      "kind": "ACTION",
+      "layer": "MAIN",
+      "use": "CURRENT_TASK",
+      "modality": "REQUIRED",
+      "polarity": "POSITIVE",
+      "owner_id": "e1",
+      "constraint_ids": [],
+      "requires": [],
+      "sources": [
+        {
+          "quote": "请PM组织检查系统环境和FCoP配置",
+          "occurrence": 1
+        }
+      ]
+    },
+    {
+      "id": "e3",
+      "predicate": "形成报告",
+      "kind": "ACTION",
+      "layer": "MAIN",
+      "use": "CURRENT_TASK",
+      "modality": "REQUIRED",
+      "polarity": "POSITIVE",
+      "owner_id": "ROOT",
+      "constraint_ids": [],
+      "requires": [],
+      "sources": [
+        {
+          "quote": "请PM组织检查系统环境和FCoP配置，并形成env-review.md",
+          "occurrence": 1
+        }
+      ]
+    },
+    {
+      "id": "e4",
+      "predicate": "复核报告",
+      "kind": "ACTION",
+      "layer": "MAIN",
+      "use": "CURRENT_TASK",
+      "modality": "REQUIRED",
+      "polarity": "POSITIVE",
+      "owner_id": "ROOT",
+      "constraint_ids": [],
+      "requires": [],
+      "sources": [
+        {
+          "quote": "QA必须复核报告",
+          "occurrence": 1
+        }
+      ]
+    },
+    {
+      "id": "e5",
+      "predicate": "提交报告",
+      "kind": "ACTION",
+      "layer": "MAIN",
+      "use": "CURRENT_TASK",
+      "modality": "REQUIRED",
+      "polarity": "POSITIVE",
+      "owner_id": "ROOT",
+      "constraint_ids": [
+        "c13"
+      ],
+      "requires": [],
+      "sources": [
+        {
+          "quote": "QA必须复核报告，最后由PM向ADMIN提交",
+          "occurrence": 1
+        }
+      ]
+    },
+    {
+      "id": "e6",
+      "predicate": "修改配置",
+      "kind": "ACTION",
+      "layer": "MAIN",
+      "use": "CURRENT_TASK",
+      "modality": "FORBIDDEN",
+      "polarity": "POSITIVE",
+      "owner_id": "ROOT",
+      "constraint_ids": [],
+      "requires": [],
+      "sources": [
+        {
+          "quote": "不得修改被检查的配置",
+          "occurrence": 1
+        }
+      ]
+    },
+    {
+      "id": "e7",
+      "predicate": "重启服务",
+      "kind": "ACTION",
+      "layer": "MAIN",
+      "use": "CURRENT_TASK",
+      "modality": "FORBIDDEN",
+      "polarity": "POSITIVE",
+      "owner_id": "ROOT",
+      "constraint_ids": [],
+      "requires": [],
+      "sources": [
+        {
+          "quote": "不得重启服务",
+          "occurrence": 1
+        }
+      ]
+    }
+  ],
+  "claims": [
+    {
+      "id": "c1",
+      "kind": "ROLE",
+      "event_id": "e1",
+      "entity_id": "n1",
+      "role": "PERFORMER",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "scope_id": "e1",
+      "requires": [],
+      "sources": [
+        {
+          "quote": "请PM组织检查",
+          "occurrence": 1
+        }
+      ],
+      "note": "PM执行组织工作。"
+    },
+    {
+      "id": "c2",
+      "kind": "ROLE",
+      "event_id": "e2",
+      "entity_id": "n1",
+      "role": "ORGANIZER",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "scope_id": "e2",
+      "requires": [],
+      "sources": [
+        {
+          "quote": "请PM组织检查",
+          "occurrence": 1
+        }
+      ],
+      "note": "组织者不自动成为检查执行者。"
+    },
+    {
+      "id": "c3",
+      "kind": "ROLE",
+      "event_id": "e2",
+      "entity_id": "n2",
+      "role": "INPUT_OBJECT",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "scope_id": "e2",
+      "requires": [],
+      "sources": [
+        {
+          "quote": "检查系统环境和FCoP配置",
+          "occurrence": 1
+        }
+      ],
+      "note": ""
+    },
+    {
+      "id": "c4",
+      "kind": "ROLE",
+      "event_id": "e2",
+      "entity_id": "n3",
+      "role": "INPUT_OBJECT",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "scope_id": "e2",
+      "requires": [],
+      "sources": [
+        {
+          "quote": "检查系统环境和FCoP配置",
+          "occurrence": 1
+        }
+      ],
+      "note": ""
+    },
+    {
+      "id": "c5",
+      "kind": "ROLE",
+      "event_id": "e3",
+      "entity_id": "n1",
+      "role": "PERFORMER",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "scope_id": "e3",
+      "requires": [],
+      "sources": [
+        {
+          "quote": "请PM组织检查系统环境和FCoP配置，并形成env-review.md",
+          "occurrence": 1
+        }
+      ],
+      "note": "并列谓语沿用PM为主语。"
+    },
+    {
+      "id": "c6",
+      "kind": "ROLE",
+      "event_id": "e3",
+      "entity_id": "n4",
+      "role": "RESULT",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "scope_id": "e3",
+      "requires": [],
+      "sources": [
+        {
+          "quote": "形成env-review.md",
+          "occurrence": 1
+        }
+      ],
+      "note": ""
+    },
+    {
+      "id": "c7",
+      "kind": "ROLE",
+      "event_id": "e4",
+      "entity_id": "n5",
+      "role": "REVIEWER",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "scope_id": "e4",
+      "requires": [],
+      "sources": [
+        {
+          "quote": "QA必须复核报告",
+          "occurrence": 1
+        }
+      ],
+      "note": ""
+    },
+    {
+      "id": "c8",
+      "kind": "ROLE",
+      "event_id": "e4",
+      "entity_id": "n4",
+      "role": "OBJECT",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "scope_id": "e4",
+      "requires": [],
+      "sources": [
+        {
+          "quote": "形成env-review.md",
+          "occurrence": 1
+        },
+        {
+          "quote": "QA必须复核报告",
+          "occurrence": 1
+        }
+      ],
+      "note": "报告指已要求形成的同一产物，属于内部复核对象。"
+    },
+    {
+      "id": "c9",
+      "kind": "ROLE",
+      "event_id": "e5",
+      "entity_id": "n1",
+      "role": "PERFORMER",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "scope_id": "e5",
+      "requires": [],
+      "sources": [
+        {
+          "quote": "由PM向ADMIN提交",
+          "occurrence": 1
+        }
+      ],
+      "note": ""
+    },
+    {
+      "id": "c10",
+      "kind": "ROLE",
+      "event_id": "e5",
+      "entity_id": "n6",
+      "role": "RECIPIENT",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "scope_id": "e5",
+      "requires": [],
+      "sources": [
+        {
+          "quote": "向ADMIN提交",
+          "occurrence": 1
+        }
+      ],
+      "note": ""
+    },
+    {
+      "id": "c11",
+      "kind": "ROLE",
+      "event_id": "e5",
+      "entity_id": "n4",
+      "role": "OBJECT",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "scope_id": "e5",
+      "requires": [],
+      "sources": [
+        {
+          "quote": "形成env-review.md",
+          "occurrence": 1
+        },
+        {
+          "quote": "QA必须复核报告，最后由PM向ADMIN提交",
+          "occurrence": 1
+        }
+      ],
+      "note": "省略的提交对象为同一报告。"
+    },
+    {
+      "id": "c12",
+      "kind": "ROLE",
+      "event_id": "e6",
+      "entity_id": "n3",
+      "role": "OBJECT",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "scope_id": "e6",
+      "requires": [],
+      "sources": [
+        {
+          "quote": "FCoP配置",
+          "occurrence": 1
+        },
+        {
+          "quote": "不得修改被检查的配置",
+          "occurrence": 1
+        }
+      ],
+      "note": "禁止修改的对象绑定被检查的FCoP配置。"
+    },
+    {
+      "id": "c13",
+      "kind": "TEMPORAL",
+      "event_id": "e5",
+      "entity_id": null,
+      "role": null,
+      "expression_id": "x1",
+      "direction": "ORDER",
+      "temporal": "AFTER",
+      "quantity": null,
+      "scope_id": "e5",
+      "requires": [],
+      "sources": [
+        {
+          "quote": "QA必须复核报告，最后由PM向ADMIN提交",
+          "occurrence": 1
+        }
+      ],
+      "note": "提交置于复核之后；不增加复核通过或批准前提，也不声明根任务完成条件。"
+    },
+    {
+      "id": "c14",
+      "kind": "ROLE",
+      "event_id": "e7",
+      "entity_id": "n7",
+      "role": "OBJECT",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "scope_id": "e7",
+      "requires": [],
+      "sources": [
+        {
+          "quote": "不得重启服务",
+          "occurrence": 1
+        }
+      ],
+      "note": "禁止对象不自动成为外部输入。"
+    }
+  ],
+  "expressions": [
+    {
+      "id": "x1",
+      "op": "STATE",
+      "operands": [],
+      "state": {
+        "predicate": "复核已完成",
+        "event_id": "e4",
+        "args": [
+          "n5",
+          "n4"
+        ],
+        "polarity": "POSITIVE"
+      },
+      "sources": [
+        {
+          "quote": "QA必须复核报告，最后由PM向ADMIN提交",
+          "occurrence": 1
+        }
+      ]
+    }
+  ],
+  "issues": [
+    {
+      "id": "i1",
+      "kind": "UNSPECIFIED",
+      "subject_ids": [
+        "e2"
+      ],
+      "field_path": "roles.PERFORMER",
+      "alternatives": [],
+      "affected_views": [
+        "P"
+      ],
+      "sources": [
+        {
+          "quote": "请PM组织检查系统环境和FCoP配置",
+          "occurrence": 1
+        }
+      ],
+      "note": "明确指定PM组织检查，未指定实际检查执行者。"
+    },
+    {
+      "id": "i2",
+      "kind": "UNSPECIFIED",
+      "subject_ids": [
+        "e6",
+        "e7"
+      ],
+      "field_path": "roles.PERFORMER",
+      "alternatives": [],
+      "affected_views": [
+        "P"
+      ],
+      "sources": [
+        {
+          "quote": "不得修改被检查的配置，不得重启服务",
+          "occurrence": 1
+        }
+      ],
+      "note": "禁止事项未单独指定受约束执行者，不默认绑定PM或QA。"
+    }
+  ],
+  "coverage": [
+    {
+      "sources": [
+        {
+          "quote": "请PM组织检查系统环境和FCoP配置",
+          "occurrence": 1
+        }
+      ],
+      "claim_ids": [
+        "c1",
+        "c2",
+        "c3",
+        "c4"
+      ],
+      "status": "EXPRESSED",
+      "affected_views": [
+        "A",
+        "I",
+        "P"
+      ]
+    },
+    {
+      "sources": [
+        {
+          "quote": "请PM组织检查系统环境和FCoP配置",
+          "occurrence": 1
+        }
+      ],
+      "claim_ids": [],
+      "status": "UNSPECIFIED",
+      "affected_views": [
+        "P"
+      ]
+    },
+    {
+      "sources": [
+        {
+          "quote": "请PM组织检查系统环境和FCoP配置，并形成env-review.md",
+          "occurrence": 1
+        }
+      ],
+      "claim_ids": [
+        "c5",
+        "c6"
+      ],
+      "status": "EXPRESSED",
+      "affected_views": [
+        "A",
+        "O",
+        "P"
+      ]
+    },
+    {
+      "sources": [
+        {
+          "quote": "QA必须复核报告",
+          "occurrence": 1
+        }
+      ],
+      "claim_ids": [
+        "c7",
+        "c8"
+      ],
+      "status": "EXPRESSED",
+      "affected_views": [
+        "A",
+        "P"
+      ]
+    },
+    {
+      "sources": [
+        {
+          "quote": "最后由PM向ADMIN提交",
+          "occurrence": 1
+        }
+      ],
+      "claim_ids": [
+        "c9",
+        "c10",
+        "c11",
+        "c13"
+      ],
+      "status": "EXPRESSED",
+      "affected_views": [
+        "A",
+        "P"
+      ]
+    },
+    {
+      "sources": [
+        {
+          "quote": "不得修改被检查的配置",
+          "occurrence": 1
+        }
+      ],
+      "claim_ids": [
+        "c12"
+      ],
+      "status": "EXPRESSED",
+      "affected_views": [
+        "B"
+      ]
+    },
+    {
+      "sources": [
+        {
+          "quote": "不得重启服务",
+          "occurrence": 1
+        }
+      ],
+      "claim_ids": [
+        "c14"
+      ],
+      "status": "EXPRESSED",
+      "affected_views": [
+        "B"
+      ]
+    },
+    {
+      "sources": [
+        {
+          "quote": "不得修改被检查的配置，不得重启服务",
+          "occurrence": 1
+        }
+      ],
+      "claim_ids": [],
+      "status": "UNSPECIFIED",
+      "affected_views": [
+        "P"
+      ]
+    }
+  ]
+}

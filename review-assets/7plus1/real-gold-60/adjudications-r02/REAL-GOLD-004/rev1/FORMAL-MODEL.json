@@ -1,0 +1,55 @@
+{
+  "case_id": "REAL-GOLD-004",
+  "source_sha256": "47dfb331551b6366774d73ebc9bb464416d9a815cf11f6b2c333b4920b6b727f",
+  "E": [
+    "E.library = fcop",
+    "E.mcp = fcop-mcp",
+    "E.docs = {fcop-rules.mdc, fcop-protocol.mdc, letter-to-admin.zh/en.md}",
+    "E.issues = {ISSUE-001, ISSUE-004, ISSUE-005, ISSUE-006}"
+  ],
+  "Sigma": [
+    "Sigma.fcop_version = 0.7.1",
+    "Sigma.mcp_version = 0.7.1",
+    "Sigma.rules_version = 1.8.0",
+    "Sigma.protocol_version = 1.6.0",
+    "Sigma.mcp_fcop_pin = >=0.7,<0.8"
+  ],
+  "Q": [
+    "Q.update_protocol_and_release_documents",
+    "Q.add_audit_drift_and_role_lock",
+    "Q.add_fcop_check_and_report_extensions",
+    "Q.add_four_tests",
+    "Q.run_validation_sync_closeout_and_release_steps"
+  ],
+  "F": [
+    "F.defer_any_listed_item",
+    "F.retain_AMEND_or_v2_examples",
+    "F.reinsert_unbound_report_alias",
+    "F.allow_cross_sender_second_write"
+  ],
+  "K": [
+    "K = pytest_x_green AND ruff_clean AND refreshed_mcp_tools_start AND package_versions_equal_071 AND legacy_unbound_report_errors AND four_issues_closed_with_reports"
+  ],
+  "Relations": [
+    "ADMIN -> assigns -> ME",
+    "session_id -> first_sender -> role_lock",
+    "fcop_check -> reports_to -> ADMIN",
+    "identity_or_authority_binding = unresolved_not_inferred"
+  ],
+  "D": [
+    "D.rule_versions = {1.8.0, 1.6.0}",
+    "D.package_versions = {fcop:0.7.1, fcop-mcp:0.7.1}",
+    "D.related_issues = {001,004,005,006}",
+    "D.release_commands = {uv_build, twine_check, twine_upload, yank, git_tag_push, gh_release_create}"
+  ],
+  "Phi": [
+    "Phi.release_is_all_in_one_no_deferral",
+    "Phi.child_agent_inherits_caller_identity_clause",
+    "Phi.tripwire_is_post_audit_not_write_path_exemption",
+    "Phi.legacy_unbound_report_remains_error"
+  ],
+  "losslessness_zh": "任务列出的协议、库、MCP、测试、发布基建、验证与发布动作，以及不得延后、不得保留旧文件名示例、不得回插 alias 等边界均被表示；未补造任何外部发布权限、凭据或审批。",
+  "losslessness_en": "The stated protocol, library, MCP, tests, release infrastructure, validation and release actions, plus no-deferral, no obsolete filename examples, and no alias restoration boundaries are represented; no external publishing authority, credential, or approval is fabricated.",
+  "formal_coverage_gap": [],
+  "invented_constraints": []
+}

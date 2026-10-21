@@ -1,0 +1,1 @@
+QA may read finance-export.csv only after Dana approves the request. Create finance-audit.md and do not connect to the production database.

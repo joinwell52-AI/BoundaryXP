@@ -1,0 +1,1 @@
+The whole task must finish within 28 minutes. Quinn must coordinate the task: inspect connection-2467.csv in isolated environment. Attempt the check at most 3 times. Completion requires at least 2 successful checks and existence of the report. Deliver audit-841133.md. Send the final report to Quinn.

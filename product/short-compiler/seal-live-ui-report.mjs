@@ -1,0 +1,14 @@
+import fs from 'node:fs';import path from 'node:path';import {createHash} from 'node:crypto';import {execFileSync} from 'node:child_process';
+const root=path.resolve('docs/reports/7plus1/LIVE-COMPILATION-UI'),sha=b=>createHash('sha256').update(b).digest('hex');
+if(fs.existsSync(path.join(root,'SEAL.json')))throw Error('REPORT_ALREADY_SEALED');
+const sourcePaths=['product/short-compiler/launch-installed.mjs','product/short-compiler/build-live-ui.mjs','product/short-compiler/verify-live-ui.mjs','product/short-compiler/prepare-live-ui-switch.mjs','product/short-compiler/collect-live-ui.mjs','product/short-compiler/seal-live-ui-report.mjs','product/short-compiler/tests/live-progress.test.mjs','research/7plus1-parser/llm-first-028/engine.mjs','research/7plus1-parser/llm-first-028/provider.mjs','research/7plus1-parser/llm-first-028/service.mjs','research/7plus1-parser/llm-first-028/observability.mjs','research/7plus1-parser/v0.3-p2.1-generalization/web/native-app.js','research/7plus1-parser/v0.3-p2.1-generalization/web/process-view.js','research/7plus1-parser/v0.3-p2.1-generalization/web/style.css'];
+const put=(name,x)=>fs.writeFileSync(path.join(root,name),JSON.stringify(x,null,2)+'\n',{flag:'wx'});
+const code=sourcePaths.map(p=>({path:p,sha256:sha(fs.readFileSync(p))}));
+put('SOURCE-MANIFEST.json',{source_parent_commit:execFileSync('git',['rev-parse','HEAD'],{encoding:'utf8'}).trim(),files:code,installed_runtime_manifest:'PRODUCT-MANIFEST.json',note:'Source changes apply to development 032 code; the separate installed complete 031 version is built with recorded observation-only patches.'});
+const files=[];const walk=dir=>{for(const ent of fs.readdirSync(dir,{withFileTypes:true})){const p=path.join(dir,ent.name);if(ent.isDirectory())walk(p);else files.push({path:path.relative(root,p).replaceAll('\\','/'),sha256:sha(fs.readFileSync(p))});}};walk(root);files.sort((a,b)=>a.path.localeCompare(b.path));
+put('MANIFEST.json',{schema:'boundx-local-evidence-manifest/v1',status:'WAITING_ADMIN_REVIEW',created_at:new Date().toISOString(),files});
+fs.writeFileSync(path.join(root,'SHA256SUMS'),files.map(x=>x.sha256+'  '+x.path).join('\n')+'\n',{flag:'wx'});
+put('SEAL.json',{status:'SEALED_WAITING_ADMIN_REVIEW',manifest_sha256:sha(fs.readFileSync(path.join(root,'MANIFEST.json'))),sha256sums_sha256:sha(fs.readFileSync(path.join(root,'SHA256SUMS'))),model_calls:2,semantic_acceptance:'NOT_CLAIMED',source_unchanged:true,prior_seals_unchanged:true});
+for(const x of files)if(sha(fs.readFileSync(path.join(root,x.path)))!==x.sha256)throw Error('EVIDENCE_CHANGED:'+x.path);
+for(const x of code)if(sha(fs.readFileSync(x.path))!==x.sha256)throw Error('SOURCE_CHANGED:'+x.path);
+console.log(JSON.stringify({sealed:true,report:root,evidence_files:files.length,source_files:code.length}));

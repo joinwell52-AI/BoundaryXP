@@ -1,0 +1,106 @@
+{
+  "contract_version": "028-r02.3",
+  "entities": [
+    {"id":"ent_pm","label":"PM","type":"OTHER","mentions":[{"quote":"PM","occurrence":1}],"alternatives":[]},
+    {"id":"ent_qa","label":"QA","type":"OTHER","mentions":[{"quote":"QA","occurrence":1}],"alternatives":[]},
+    {"id":"ent_ops","label":"OPS-01","type":"OTHER","mentions":[{"quote":"OPS-01","occurrence":1}],"alternatives":[]},
+    {"id":"ent_report","label":"本次report.md","type":"FILE","mentions":[{"quote":"本次report.md","occurrence":1}],"alternatives":[]}
+  ],
+  "events": [
+    {
+      "id":"ev_publish_permitted","predicate":"发布","kind":"ACTION","layer":"MAIN","use":"CURRENT_TASK","modality":"PERMITTED","polarity":"POSITIVE","owner_id":"ROOT","constraint_ids":["cl_permission_condition"],"requires":[],
+      "sources":[{"quote":"允许PM发布本次report.md，但必须等QA和OPS-01都批准后","occurrence":1}]
+    },
+    {
+      "id":"ev_qa_approval","predicate":"批准","kind":"ACTION","layer":"CONDITION","use":"MENTION_ONLY","modality":"UNSTATED","polarity":"POSITIVE","owner_id":"ROOT","constraint_ids":[],"requires":[],
+      "sources":[{"quote":"QA和OPS-01都批准后","occurrence":1}]
+    },
+    {
+      "id":"ev_ops_approval","predicate":"批准","kind":"ACTION","layer":"CONDITION","use":"MENTION_ONLY","modality":"UNSTATED","polarity":"POSITIVE","owner_id":"ROOT","constraint_ids":[],"requires":[],
+      "sources":[{"quote":"QA和OPS-01都批准后","occurrence":1}]
+    },
+    {
+      "id":"ev_publish_forbidden","predicate":"发布","kind":"ACTION","layer":"MAIN","use":"CURRENT_TASK","modality":"FORBIDDEN","polarity":"POSITIVE","owner_id":"ROOT","constraint_ids":["cl_prohibition_condition"],"requires":[],
+      "sources":[{"quote":"任何一项批准尚未取得时，不得发布","occurrence":1}]
+    }
+  ],
+  "claims": [
+    {
+      "id":"cl_publish_performer","kind":"ROLE","event_id":"ev_publish_permitted","entity_id":"ent_pm","role":"PERFORMER","expression_id":null,"direction":null,"temporal":null,"quantity":null,"scope_id":"ev_publish_permitted","requires":[],
+      "sources":[{"quote":"允许PM发布本次report.md","occurrence":1}],"note":"PM是获准发布的执行者。"
+    },
+    {
+      "id":"cl_publish_object","kind":"ROLE","event_id":"ev_publish_permitted","entity_id":"ent_report","role":"OBJECT","expression_id":null,"direction":null,"temporal":null,"quantity":null,"scope_id":"ev_publish_permitted","requires":[],
+      "sources":[{"quote":"允许PM发布本次report.md","occurrence":1}],"note":"发布对象是本次report.md，未声明生成该文件。"
+    },
+    {
+      "id":"cl_qa_approver","kind":"ROLE","event_id":"ev_qa_approval","entity_id":"ent_qa","role":"APPROVER","expression_id":null,"direction":null,"temporal":null,"quantity":null,"scope_id":"ev_qa_approval","requires":[],
+      "sources":[{"quote":"QA和OPS-01都批准后","occurrence":1}],"note":"条件中引用QA的批准，不新增批准义务。"
+    },
+    {
+      "id":"cl_ops_approver","kind":"ROLE","event_id":"ev_ops_approval","entity_id":"ent_ops","role":"APPROVER","expression_id":null,"direction":null,"temporal":null,"quantity":null,"scope_id":"ev_ops_approval","requires":[],
+      "sources":[{"quote":"QA和OPS-01都批准后","occurrence":1}],"note":"条件中引用OPS-01的批准；标识符中的01不是数量限制。"
+    },
+    {
+      "id":"cl_permission_condition","kind":"CONDITION","event_id":"ev_publish_permitted","entity_id":null,"role":null,"expression_id":"ex_both_approved","direction":"NECESSARY","temporal":"AFTER","quantity":null,"scope_id":"ev_publish_permitted","requires":[],
+      "sources":[{"quote":"允许PM发布本次report.md，但必须等QA和OPS-01都批准后","occurrence":1}],"note":"发布许可以两项批准均已取得为必要前提，并须在其后发布。"
+    },
+    {
+      "id":"cl_forbidden_performer","kind":"ROLE","event_id":"ev_publish_forbidden","entity_id":"ent_pm","role":"PERFORMER","expression_id":null,"direction":null,"temporal":null,"quantity":null,"scope_id":"ev_publish_forbidden","requires":[],
+      "sources":[{"quote":"允许PM发布本次report.md","occurrence":1},{"quote":"任何一项批准尚未取得时，不得发布","occurrence":1}],"note":"后半句沿用前半句的发布执行者PM。"
+    },
+    {
+      "id":"cl_forbidden_object","kind":"ROLE","event_id":"ev_publish_forbidden","entity_id":"ent_report","role":"OBJECT","expression_id":null,"direction":null,"temporal":null,"quantity":null,"scope_id":"ev_publish_forbidden","requires":[],
+      "sources":[{"quote":"允许PM发布本次report.md","occurrence":1},{"quote":"任何一项批准尚未取得时，不得发布","occurrence":1}],"note":"禁止发布的对象沿用本次report.md，不由禁止推定外部输入。"
+    },
+    {
+      "id":"cl_prohibition_condition","kind":"CONDITION","event_id":"ev_publish_forbidden","entity_id":null,"role":null,"expression_id":"ex_any_missing","direction":"SUFFICIENT","temporal":null,"quantity":null,"scope_id":"ev_publish_forbidden","requires":[],
+      "sources":[{"quote":"QA和OPS-01都批准后","occurrence":1},{"quote":"任何一项批准尚未取得时，不得发布","occurrence":1}],"note":"两项批准中任一尚未取得，即触发发布禁止。"
+    }
+  ],
+  "expressions": [
+    {
+      "id":"ex_qa_approved","op":"STATE","operands":[],
+      "state":{"predicate":"批准已取得","event_id":"ev_qa_approval","args":["ent_qa","ent_report"],"polarity":"POSITIVE"},
+      "sources":[{"quote":"本次report.md","occurrence":1},{"quote":"QA和OPS-01都批准后","occurrence":1}]
+    },
+    {
+      "id":"ex_ops_approved","op":"STATE","operands":[],
+      "state":{"predicate":"批准已取得","event_id":"ev_ops_approval","args":["ent_ops","ent_report"],"polarity":"POSITIVE"},
+      "sources":[{"quote":"本次report.md","occurrence":1},{"quote":"QA和OPS-01都批准后","occurrence":1}]
+    },
+    {
+      "id":"ex_both_approved","op":"AND","operands":["ex_qa_approved","ex_ops_approved"],"state":null,
+      "sources":[{"quote":"QA和OPS-01都批准后","occurrence":1}]
+    },
+    {
+      "id":"ex_qa_missing","op":"STATE","operands":[],
+      "state":{"predicate":"批准已取得","event_id":"ev_qa_approval","args":["ent_qa","ent_report"],"polarity":"NEGATIVE"},
+      "sources":[{"quote":"本次report.md","occurrence":1},{"quote":"QA和OPS-01都批准后","occurrence":1},{"quote":"任何一项批准尚未取得时","occurrence":1}]
+    },
+    {
+      "id":"ex_ops_missing","op":"STATE","operands":[],
+      "state":{"predicate":"批准已取得","event_id":"ev_ops_approval","args":["ent_ops","ent_report"],"polarity":"NEGATIVE"},
+      "sources":[{"quote":"本次report.md","occurrence":1},{"quote":"QA和OPS-01都批准后","occurrence":1},{"quote":"任何一项批准尚未取得时","occurrence":1}]
+    },
+    {
+      "id":"ex_any_missing","op":"OR","operands":["ex_qa_missing","ex_ops_missing"],"state":null,
+      "sources":[{"quote":"QA和OPS-01都批准后","occurrence":1},{"quote":"任何一项批准尚未取得时","occurrence":1}]
+    }
+  ],
+  "issues": [],
+  "coverage": [
+    {
+      "sources":[{"quote":"允许PM发布本次report.md","occurrence":1}],
+      "claim_ids":["cl_publish_performer","cl_publish_object","cl_permission_condition"],"status":"EXPRESSED","affected_views":["A","P"]
+    },
+    {
+      "sources":[{"quote":"但必须等QA和OPS-01都批准后","occurrence":1}],
+      "claim_ids":["cl_qa_approver","cl_ops_approver","cl_permission_condition"],"status":"EXPRESSED","affected_views":["A"]
+    },
+    {
+      "sources":[{"quote":"任何一项批准尚未取得时，不得发布","occurrence":1}],
+      "claim_ids":["cl_forbidden_performer","cl_forbidden_object","cl_prohibition_condition"],"status":"EXPRESSED","affected_views":["B","P"]
+    }
+  ]
+}

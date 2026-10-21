@@ -1,0 +1,1 @@
+The whole task must finish within 22 minutes. Reese must coordinate the task: verify snapshot-6870.csv in isolated environment. Compare event-17249.json as well. Deliver audit-999543.md. Send the final report to Rowan.

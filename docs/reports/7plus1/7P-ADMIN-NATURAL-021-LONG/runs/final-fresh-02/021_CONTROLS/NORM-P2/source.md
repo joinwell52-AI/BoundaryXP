@@ -1,0 +1,1 @@
+请检验员沈卓查看 violet.json，并生成 violet-check.md。

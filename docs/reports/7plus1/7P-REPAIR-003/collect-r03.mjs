@@ -1,0 +1,3 @@
+import fs from 'node:fs';import {cases}from './non-gold-inputs-r03.mjs';import{sourceDocument}from '../../../../research/7plus1-parser/p0-semantic-repair-r02/source.mjs';import{analyze,closeNlp}from '../../../../research/7plus1-parser/v0.3-7p-repair-003-r03/linguistic.mjs';
+const dir='docs/reports/7plus1/7P-REPAIR-003/non-gold';fs.mkdirSync(dir,{recursive:true});
+try{for(const x of cases){const path=dir+'/'+x.id+'.json';if(fs.existsSync(path))continue;const signals=await analyze(sourceDocument(x.text));fs.writeFileSync(path,JSON.stringify({...x,signals},null,2)+'\n',{flag:'wx'});console.log(x.id);}}finally{closeNlp();}

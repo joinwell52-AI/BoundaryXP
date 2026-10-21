@@ -1,0 +1,34 @@
+{
+  "case_id": "REAL-GOLD-032",
+  "source_sha256": "687cc24af6a868a30b23b9c2e571ed1664a0c27d3a4768c0b99f3bbad806c645",
+  "status": "EVIDENCE_VERIFIED",
+  "evidence": [
+    {
+      "evidence_id": "E001",
+      "source_id": "SOURCE_TASK",
+      "origin": "SOURCE",
+      "start": 0,
+      "end": 956,
+      "quote": "---\r\nprotocol: fcop\r\nversion: 1\r\nkind: task\r\ntask_id: TASK-20260513-002\r\nsender: ADMIN\r\nrecipient: ME\r\npriority: P1\r\nrisk_level: low\r\nthread_key: release-sop-v2\r\nsession_id: sess-20260513-me-01\r\ncreated_at: \"2026-05-13T01:12:00+08:00\"\r\nrelated:\r\n  - TASK-20260513-001   # SOP v2 沉淀主刀(已归档)\r\n  - REPORT-20260513-001\r\n---\r\n\r\n# 把\"`git add` 用显式路径,不用 `-A`\"写进 `docs/release-process.md`(带依据)\r\n\r\n## 背景 / Background\r\n\r\n上一轮 `TASK-20260513-001` 沉淀 SOP v2 时,我自己在 `Step 4 闭环 commit` 阶\r\n段用 `git add -A` 一把抓,意外把 19 份 untracked 残留(`.scratch/` 临时\r\nmsg、`fcop_events.jsonl` 运行时日志、`scripts/_*.txt` 历史 commit msg\r\n等)一起塞进了 `commit d2ed13c`。ADMIN 决策 revert + redo,最终通过\r\n`cc60186 (revert) → 979bcd2 (clean SOP) → dfe68e3 (artifacts + .gitignore\r\ntighten)` 三个 commit 修复。\r\n\r\n汇报里我提了一句\"下次应在 SOP 里加这条规则\",ADMIN 当即回:\r\n\r\n> **写到文档中,有依据!!**\r\n\r\n意思是:**口头沉淀不算数,必须落文件**——这正是 FCoP 的根原则(Rule 0.a)\r\n本身。同时,有 `d2ed13c → cc60186 → 979bcd2 → dfe68e3` 这条完整的 main\r\n历史作为依据,新规则不是凭空写的\"教条\",是从实际事故里抽出来的硬约束。\r\n\r",
+      "purpose": "metadata, incident, and ADMIN directive"
+    },
+    {
+      "evidence_id": "E002",
+      "source_id": "SOURCE_TASK",
+      "origin": "SOURCE",
+      "start": 957,
+      "end": 1607,
+      "quote": "## 要做的事 / Deliverables\r\n\r\n在 `docs/release-process.md` **两处**加新条款:\r\n\r\n### 处 1 · 阶段 4 \"发布后验证 + Rule 0.a.1 闭环\" 的 `archive + commit` 子段\r\n\r\n把现有 `git add -A && git commit -F ...` 命令**整段重写**,强调:\r\n\r\n- ❌ 不要 `git add -A`(会抓所有 untracked 残留)\r\n- ✅ 用显式路径列出所有要入库的文件\r\n- ✅ 在 `git commit` 前先跑 `git status --short` 二次确认 staging 区只\r\n  包含本意文件\r\n- 引用 `d2ed13c → cc60186 → 979bcd2 → dfe68e3` 这串 commit 作为\"反面\r\n  教材 + 修复案例\"的链接,说明依据\r\n\r\n### 处 2 · \"常见故障与回滚\" 新增 `问题 7`\r\n\r\n```\r\n### 问题 7:commit 意外携带 untracked 残留(`git add -A` 后悔药)\r\n```\r\n\r\n- 现象、根因、立即修复(revert + redo)、长期防范(显式路径 + `.gitignore`\r\n  补 `.scratch/` / `fcop_events.jsonl` / `scripts/_*.txt`)\r\n- 直接引用本次 4-commit 修复链作为现实案例\r\n\r",
+      "purpose": "two SOP additions"
+    },
+    {
+      "evidence_id": "E003",
+      "source_id": "SOURCE_TASK",
+      "origin": "SOURCE",
+      "start": 1608,
+      "end": 2190,
+      "quote": "## 验收 / Acceptance\r\n\r\n- [ ] `docs/release-process.md` 阶段 4 闭环段命令重写,显式列路径\r\n- [ ] `docs/release-process.md` 常见故障新增 \"问题 7\" 整段\r\n- [ ] 两处都明确指向 `d2ed13c` / `cc60186` / `979bcd2` / `dfe68e3`\r\n      作为依据(commit hash 短)\r\n- [ ] 写 `REPORT-20260513-002-ME-to-ADMIN-add-git-add-explicit-paths-rule.md`\r\n- [ ] **Dogfood**:本任务的 commit 阶段 **必须用显式路径** `git add`,\r\n      不许再用 `-A`;commit 前 `git status --short` 确认 staging 区只\r\n      包含本意 3 个文件(docs + TASK-002 + REPORT-002)\r\n- [ ] push origin main 成功,main 历史保持单 commit 干净\r\n\r\n## 风险 / Risk\r\n\r\nrisk_level: low。只改维护者文档,加约束、不动协议、不发版。\r\n回滚:`git revert` 即可。\r\n",
+      "purpose": "acceptance, dogfood, push, risk"
+    }
+  ]
+}

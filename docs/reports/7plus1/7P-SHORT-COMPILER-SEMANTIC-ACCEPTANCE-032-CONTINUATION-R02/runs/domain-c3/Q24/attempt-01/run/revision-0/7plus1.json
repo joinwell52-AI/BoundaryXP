@@ -1,0 +1,2560 @@
+{
+  "format": "boundx-canonical-7plus1/032.1",
+  "source_sha256": "a179c7b8fbc3e79da76791506b578c499ad591d4244230c0e6bf0e1b0b79489d",
+  "clarifications": [],
+  "artifact_associations": [],
+  "artifact_dependencies": [],
+  "entities": [
+    {
+      "id": "ent_qa",
+      "label": "QA",
+      "type": "OTHER",
+      "mentions": [
+        {
+          "quote": "QA",
+          "occurrence": 1,
+          "span": [
+            1,
+            3
+          ],
+          "source_sha256": "a179c7b8fbc3e79da76791506b578c499ad591d4244230c0e6bf0e1b0b79489d"
+        }
+      ],
+      "alternatives": []
+    },
+    {
+      "id": "ent_config",
+      "label": "配置",
+      "type": "CLASS",
+      "mentions": [
+        {
+          "quote": "配置",
+          "occurrence": 1,
+          "span": [
+            5,
+            7
+          ],
+          "source_sha256": "a179c7b8fbc3e79da76791506b578c499ad591d4244230c0e6bf0e1b0b79489d"
+        }
+      ],
+      "alternatives": []
+    }
+  ],
+  "expressions": [
+    {
+      "id": "expr_config",
+      "op": "CATEGORY",
+      "operands": [
+        "ent_config"
+      ],
+      "state": null,
+      "sources": [
+        {
+          "quote": "配置核验",
+          "occurrence": 1,
+          "span": [
+            5,
+            9
+          ],
+          "source_sha256": "a179c7b8fbc3e79da76791506b578c499ad591d4244230c0e6bf0e1b0b79489d"
+        }
+      ]
+    },
+    {
+      "id": "expr_permission_error",
+      "op": "STATE",
+      "operands": [],
+      "state": {
+        "predicate": "出现权限错误",
+        "event_id": null,
+        "args": [
+          "ROOT"
+        ],
+        "polarity": "POSITIVE"
+      },
+      "sources": [
+        {
+          "quote": "若出现权限错误，停止本任务",
+          "occurrence": 1,
+          "span": [
+            22,
+            35
+          ],
+          "source_sha256": "a179c7b8fbc3e79da76791506b578c499ad591d4244230c0e6bf0e1b0b79489d"
+        }
+      ]
+    }
+  ],
+  "slots": {
+    "I": {
+      "status": "RESOLVED",
+      "openness": "CONSTRAINED",
+      "entries": [
+        {
+          "id": "bf:f2f906e4c60b29861169",
+          "kind": "ROLE",
+          "status": "ACCEPTED",
+          "claim_ids": [
+            "cl_input",
+            "ent_config",
+            "evt_check",
+            "cl_time",
+            "cl_scope"
+          ],
+          "claim": {
+            "id": "cl_input",
+            "kind": "ROLE",
+            "event_id": "evt_check",
+            "entity_id": "ent_config",
+            "role": "INPUT_OBJECT",
+            "expression_id": null,
+            "direction": null,
+            "temporal": null,
+            "quantity": null,
+            "artifact_use": null,
+            "scope_id": "evt_check",
+            "requires": [],
+            "sources": [
+              {
+                "quote": "完成配置核验",
+                "occurrence": 1,
+                "span": [
+                  3,
+                  9
+                ],
+                "source_sha256": "a179c7b8fbc3e79da76791506b578c499ad591d4244230c0e6bf0e1b0b79489d"
+              }
+            ],
+            "note": "配置是明确受检类别，原文未限定容器或使用全称量词。"
+          },
+          "event": {
+            "id": "evt_check",
+            "predicate": "完成配置核验",
+            "kind": "ACTION",
+            "layer": "MAIN",
+            "use": "CURRENT_TASK",
+            "modality": "REQUIRED",
+            "polarity": "POSITIVE",
+            "owner_id": "ROOT",
+            "constraint_ids": [
+              "cl_time"
+            ],
+            "requires": [],
+            "sources": [
+              {
+                "quote": "请QA完成配置核验",
+                "occurrence": 1,
+                "span": [
+                  0,
+                  9
+                ],
+                "source_sha256": "a179c7b8fbc3e79da76791506b578c499ad591d4244230c0e6bf0e1b0b79489d"
+              }
+            ]
+          },
+          "entity": {
+            "id": "ent_config",
+            "label": "配置",
+            "type": "CLASS",
+            "mentions": [
+              {
+                "quote": "配置",
+                "occurrence": 1,
+                "span": [
+                  5,
+                  7
+                ],
+                "source_sha256": "a179c7b8fbc3e79da76791506b578c499ad591d4244230c0e6bf0e1b0b79489d"
+              }
+            ],
+            "alternatives": []
+          },
+          "expression": null,
+          "constraints": [
+            {
+              "id": "cl_time",
+              "kind": "QUANTITY",
+              "event_id": "evt_check",
+              "entity_id": null,
+              "role": null,
+              "expression_id": null,
+              "direction": null,
+              "temporal": null,
+              "quantity": {
+                "metric": "核验用时",
+                "target_id": "evt_check",
+                "comparator": "LTE",
+                "value": 6,
+                "unit": "分钟",
+                "use": "EXECUTION_LIMIT",
+                "count_scope": "evt_check"
+              },
+              "artifact_use": null,
+              "scope_id": "evt_check",
+              "requires": [],
+              "sources": [
+                {
+                  "quote": "核验用时不得超过6分钟",
+                  "occurrence": 1,
+                  "span": [
+                    10,
+                    21
+                  ],
+                  "source_sha256": "a179c7b8fbc3e79da76791506b578c499ad591d4244230c0e6bf0e1b0b79489d"
+                }
+              ],
+              "note": "约束已有核验动作的执行用时，不另造禁止动作或完成条件。",
+              "expression": null
+            }
+          ],
+          "object_scopes": [
+            {
+              "id": "cl_scope",
+              "kind": "SCOPE",
+              "event_id": "evt_check",
+              "entity_id": null,
+              "role": null,
+              "expression_id": "expr_config",
+              "direction": null,
+              "temporal": null,
+              "quantity": null,
+              "artifact_use": null,
+              "scope_id": "ent_config",
+              "requires": [],
+              "sources": [
+                {
+                  "quote": "配置核验",
+                  "occurrence": 1,
+                  "span": [
+                    5,
+                    9
+                  ],
+                  "source_sha256": "a179c7b8fbc3e79da76791506b578c499ad591d4244230c0e6bf0e1b0b79489d"
+                }
+              ],
+              "note": "保留未限定容器的配置类别域，不增加全称要求。",
+              "expression": {
+                "id": "expr_config",
+                "op": "CATEGORY",
+                "operands": [
+                  "ent_config"
+                ],
+                "state": null,
+                "sources": [
+                  {
+                    "quote": "配置核验",
+                    "occurrence": 1,
+                    "span": [
+                      5,
+                      9
+                    ],
+                    "source_sha256": "a179c7b8fbc3e79da76791506b578c499ad591d4244230c0e6bf0e1b0b79489d"
+                  }
+                ],
+                "domain_state": "TASK_CATEGORY_UNRESTRICTED",
+                "children": []
+              }
+            }
+          ],
+          "content_quantities": [],
+          "content_scopes": [],
+          "sources": [
+            {
+              "quote": "完成配置核验",
+              "occurrence": 1,
+              "span": [
+                3,
+                9
+              ],
+              "source_sha256": "a179c7b8fbc3e79da76791506b578c499ad591d4244230c0e6bf0e1b0b79489d"
+            },
+            {
+              "quote": "请QA完成配置核验",
+              "occurrence": 1,
+              "span": [
+                0,
+                9
+              ],
+              "source_sha256": "a179c7b8fbc3e79da76791506b578c499ad591d4244230c0e6bf0e1b0b79489d"
+            },
+            {
+              "quote": "核验用时不得超过6分钟",
+              "occurrence": 1,
+              "span": [
+                10,
+                21
+              ],
+              "source_sha256": "a179c7b8fbc3e79da76791506b578c499ad591d4244230c0e6bf0e1b0b79489d"
+            },
+            {
+              "quote": "配置",
+              "occurrence": 1,
+              "span": [
+                5,
+                7
+              ],
+              "source_sha256": "a179c7b8fbc3e79da76791506b578c499ad591d4244230c0e6bf0e1b0b79489d"
+            },
+            {
+              "quote": "配置核验",
+              "occurrence": 1,
+              "span": [
+                5,
+                9
+              ],
+              "source_sha256": "a179c7b8fbc3e79da76791506b578c499ad591d4244230c0e6bf0e1b0b79489d"
+            },
+            {
+              "quote": "配置核验",
+              "occurrence": 1,
+              "span": [
+                5,
+                9
+              ],
+              "source_sha256": "a179c7b8fbc3e79da76791506b578c499ad591d4244230c0e6bf0e1b0b79489d"
+            }
+          ],
+          "slots": [
+            "I"
+          ],
+          "proof": {
+            "source_sha256": "a179c7b8fbc3e79da76791506b578c499ad591d4244230c0e6bf0e1b0b79489d",
+            "claim_ids": [
+              "cl_input",
+              "ent_config",
+              "evt_check",
+              "cl_time",
+              "cl_scope"
+            ],
+            "provenance_refs": [
+              "cl_input",
+              "evt_check",
+              "cl_time",
+              "ent_config",
+              "cl_scope",
+              "expr_config"
+            ],
+            "technical_policy": "032-domain-technical-v1",
+            "checks": [
+              {
+                "id": "cl_input",
+                "collection": "claims",
+                "status": "ACCEPTED",
+                "errors": [],
+                "uncertain": [],
+                "sources": [
+                  {
+                    "quote": "完成配置核验",
+                    "occurrence": 1,
+                    "span": [
+                      3,
+                      9
+                    ],
+                    "source_sha256": "a179c7b8fbc3e79da76791506b578c499ad591d4244230c0e6bf0e1b0b79489d"
+                  }
+                ],
+                "audit_refs": [
+                  {
+                    "subject_id": "cl_input",
+                    "field_path": "",
+                    "verdict": "SUPPORT"
+                  }
+                ],
+                "required_dependencies": [],
+                "structural_refs": [
+                  "evt_check",
+                  "evt_check",
+                  "ent_config"
+                ]
+              },
+              {
+                "id": "evt_check",
+                "collection": "events",
+                "status": "ACCEPTED",
+                "errors": [],
+                "uncertain": [],
+                "sources": [
+                  {
+                    "quote": "请QA完成配置核验",
+                    "occurrence": 1,
+                    "span": [
+                      0,
+                      9
+                    ],
+                    "source_sha256": "a179c7b8fbc3e79da76791506b578c499ad591d4244230c0e6bf0e1b0b79489d"
+                  }
+                ],
+                "audit_refs": [
+                  {
+                    "subject_id": "evt_check",
+                    "field_path": "",
+                    "verdict": "SUPPORT"
+                  }
+                ],
+                "required_dependencies": [],
+                "structural_refs": [
+                  "ROOT",
+                  "cl_time"
+                ]
+              },
+              {
+                "id": "cl_time",
+                "collection": "claims",
+                "status": "ACCEPTED",
+                "errors": [],
+                "uncertain": [],
+                "sources": [
+                  {
+                    "quote": "核验用时不得超过6分钟",
+                    "occurrence": 1,
+                    "span": [
+                      10,
+                      21
+                    ],
+                    "source_sha256": "a179c7b8fbc3e79da76791506b578c499ad591d4244230c0e6bf0e1b0b79489d"
+                  }
+                ],
+                "audit_refs": [
+                  {
+                    "subject_id": "cl_time",
+                    "field_path": "",
+                    "verdict": "SUPPORT"
+                  }
+                ],
+                "required_dependencies": [],
+                "structural_refs": [
+                  "evt_check",
+                  "evt_check",
+                  "evt_check",
+                  "evt_check"
+                ]
+              },
+              {
+                "id": "ent_config",
+                "collection": "entities",
+                "status": "ACCEPTED",
+                "identity_status": "ACCEPTED",
+                "errors": [],
+                "uncertain": [],
+                "sources": [
+                  {
+                    "quote": "配置",
+                    "occurrence": 1,
+                    "span": [
+                      5,
+                      7
+                    ],
+                    "source_sha256": "a179c7b8fbc3e79da76791506b578c499ad591d4244230c0e6bf0e1b0b79489d"
+                  }
+                ],
+                "audit_refs": [
+                  {
+                    "subject_id": "ent_config",
+                    "field_path": "",
+                    "verdict": "SUPPORT"
+                  }
+                ],
+                "required_dependencies": [],
+                "structural_refs": []
+              },
+              {
+                "id": "cl_scope",
+                "collection": "claims",
+                "status": "ACCEPTED",
+                "errors": [],
+                "uncertain": [],
+                "sources": [
+                  {
+                    "quote": "配置核验",
+                    "occurrence": 1,
+                    "span": [
+                      5,
+                      9
+                    ],
+                    "source_sha256": "a179c7b8fbc3e79da76791506b578c499ad591d4244230c0e6bf0e1b0b79489d"
+                  }
+                ],
+                "audit_refs": [
+                  {
+                    "subject_id": "cl_scope",
+                    "field_path": "",
+                    "verdict": "SUPPORT"
+                  }
+                ],
+                "required_dependencies": [],
+                "structural_refs": [
+                  "ent_config",
+                  "evt_check",
+                  "expr_config"
+                ]
+              },
+              {
+                "id": "expr_config",
+                "collection": "expressions",
+                "status": "ACCEPTED",
+                "errors": [],
+                "uncertain": [],
+                "sources": [
+                  {
+                    "quote": "配置核验",
+                    "occurrence": 1,
+                    "span": [
+                      5,
+                      9
+                    ],
+                    "source_sha256": "a179c7b8fbc3e79da76791506b578c499ad591d4244230c0e6bf0e1b0b79489d"
+                  }
+                ],
+                "audit_refs": [
+                  {
+                    "subject_id": "expr_config",
+                    "field_path": "",
+                    "verdict": "SUPPORT"
+                  }
+                ],
+                "required_dependencies": [],
+                "structural_refs": []
+              }
+            ],
+            "audit": [
+              {
+                "subject_id": "cl_input",
+                "field_path": "",
+                "verdict": "SUPPORT",
+                "context_refs": [
+                  "ent_config",
+                  "evt_check"
+                ],
+                "sources": [
+                  {
+                    "quote": "完成配置核验",
+                    "occurrence": 1
+                  }
+                ],
+                "reason": "配置是当前核验的明确受检范围，INPUT_OBJECT用途成立。"
+              },
+              {
+                "subject_id": "evt_check",
+                "field_path": "",
+                "verdict": "SUPPORT",
+                "context_refs": [],
+                "sources": [
+                  {
+                    "quote": "请QA完成配置核验",
+                    "occurrence": 1
+                  },
+                  {
+                    "quote": "核验用时不得超过6分钟",
+                    "occurrence": 1
+                  }
+                ],
+                "reason": "当前要求完成核验，执行用时约束已绑定；未将动作完成误作根任务完成条件。"
+              },
+              {
+                "subject_id": "cl_time",
+                "field_path": "",
+                "verdict": "SUPPORT",
+                "context_refs": [
+                  "evt_check"
+                ],
+                "sources": [
+                  {
+                    "quote": "核验用时不得超过6分钟",
+                    "occurrence": 1
+                  }
+                ],
+                "reason": "计数项为核验用时，LTE、6、分钟正确；执行限制目标及计数范围均为核验事件，约束双向绑定完整。"
+              },
+              {
+                "subject_id": "ent_config",
+                "field_path": "",
+                "verdict": "SUPPORT",
+                "context_refs": [],
+                "sources": [
+                  {
+                    "quote": "配置核验",
+                    "occurrence": 1
+                  }
+                ],
+                "reason": "配置是受检对象类别，未指定具体成员或容器。"
+              },
+              {
+                "subject_id": "cl_scope",
+                "field_path": "",
+                "verdict": "SUPPORT",
+                "context_refs": [
+                  "cl_input",
+                  "expr_config"
+                ],
+                "sources": [
+                  {
+                    "quote": "配置核验",
+                    "occurrence": 1
+                  }
+                ],
+                "reason": "类别范围绑定同一核验事件及受检类别；原文无容器限定或全称要求，也无来源支持的竞争域。"
+              },
+              {
+                "subject_id": "expr_config",
+                "field_path": "",
+                "verdict": "SUPPORT",
+                "context_refs": [
+                  "ent_config"
+                ],
+                "sources": [
+                  {
+                    "quote": "配置核验",
+                    "occurrence": 1
+                  }
+                ],
+                "reason": "CATEGORY引用配置CLASS，忠实保留未限定容器的类别域，不添加全称量词。"
+              }
+            ],
+            "context_references_are_not_required_dependencies": true
+          }
+        },
+        {
+          "id": "bf:a85175b30513d762e4ee",
+          "kind": "SCOPE",
+          "status": "ACCEPTED",
+          "claim_ids": [
+            "cl_scope",
+            "expr_config",
+            "evt_check",
+            "cl_time"
+          ],
+          "claim": {
+            "id": "cl_scope",
+            "kind": "SCOPE",
+            "event_id": "evt_check",
+            "entity_id": null,
+            "role": null,
+            "expression_id": "expr_config",
+            "direction": null,
+            "temporal": null,
+            "quantity": null,
+            "artifact_use": null,
+            "scope_id": "ent_config",
+            "requires": [],
+            "sources": [
+              {
+                "quote": "配置核验",
+                "occurrence": 1,
+                "span": [
+                  5,
+                  9
+                ],
+                "source_sha256": "a179c7b8fbc3e79da76791506b578c499ad591d4244230c0e6bf0e1b0b79489d"
+              }
+            ],
+            "note": "保留未限定容器的配置类别域，不增加全称要求。"
+          },
+          "event": {
+            "id": "evt_check",
+            "predicate": "完成配置核验",
+            "kind": "ACTION",
+            "layer": "MAIN",
+            "use": "CURRENT_TASK",
+            "modality": "REQUIRED",
+            "polarity": "POSITIVE",
+            "owner_id": "ROOT",
+            "constraint_ids": [
+              "cl_time"
+            ],
+            "requires": [],
+            "sources": [
+              {
+                "quote": "请QA完成配置核验",
+                "occurrence": 1,
+                "span": [
+                  0,
+                  9
+                ],
+                "source_sha256": "a179c7b8fbc3e79da76791506b578c499ad591d4244230c0e6bf0e1b0b79489d"
+              }
+            ]
+          },
+          "entity": null,
+          "expression": {
+            "id": "expr_config",
+            "op": "CATEGORY",
+            "operands": [
+              "ent_config"
+            ],
+            "state": null,
+            "sources": [
+              {
+                "quote": "配置核验",
+                "occurrence": 1,
+                "span": [
+                  5,
+                  9
+                ],
+                "source_sha256": "a179c7b8fbc3e79da76791506b578c499ad591d4244230c0e6bf0e1b0b79489d"
+              }
+            ],
+            "domain_state": "TASK_CATEGORY_UNRESTRICTED",
+            "children": []
+          },
+          "constraints": [
+            {
+              "id": "cl_time",
+              "kind": "QUANTITY",
+              "event_id": "evt_check",
+              "entity_id": null,
+              "role": null,
+              "expression_id": null,
+              "direction": null,
+              "temporal": null,
+              "quantity": {
+                "metric": "核验用时",
+                "target_id": "evt_check",
+                "comparator": "LTE",
+                "value": 6,
+                "unit": "分钟",
+                "use": "EXECUTION_LIMIT",
+                "count_scope": "evt_check"
+              },
+              "artifact_use": null,
+              "scope_id": "evt_check",
+              "requires": [],
+              "sources": [
+                {
+                  "quote": "核验用时不得超过6分钟",
+                  "occurrence": 1,
+                  "span": [
+                    10,
+                    21
+                  ],
+                  "source_sha256": "a179c7b8fbc3e79da76791506b578c499ad591d4244230c0e6bf0e1b0b79489d"
+                }
+              ],
+              "note": "约束已有核验动作的执行用时，不另造禁止动作或完成条件。",
+              "expression": null
+            }
+          ],
+          "object_scopes": [],
+          "content_quantities": [],
+          "content_scopes": [],
+          "sources": [
+            {
+              "quote": "配置核验",
+              "occurrence": 1,
+              "span": [
+                5,
+                9
+              ],
+              "source_sha256": "a179c7b8fbc3e79da76791506b578c499ad591d4244230c0e6bf0e1b0b79489d"
+            },
+            {
+              "quote": "配置",
+              "occurrence": 1,
+              "span": [
+                5,
+                7
+              ],
+              "source_sha256": "a179c7b8fbc3e79da76791506b578c499ad591d4244230c0e6bf0e1b0b79489d"
+            },
+            {
+              "quote": "请QA完成配置核验",
+              "occurrence": 1,
+              "span": [
+                0,
+                9
+              ],
+              "source_sha256": "a179c7b8fbc3e79da76791506b578c499ad591d4244230c0e6bf0e1b0b79489d"
+            },
+            {
+              "quote": "核验用时不得超过6分钟",
+              "occurrence": 1,
+              "span": [
+                10,
+                21
+              ],
+              "source_sha256": "a179c7b8fbc3e79da76791506b578c499ad591d4244230c0e6bf0e1b0b79489d"
+            },
+            {
+              "quote": "配置核验",
+              "occurrence": 1,
+              "span": [
+                5,
+                9
+              ],
+              "source_sha256": "a179c7b8fbc3e79da76791506b578c499ad591d4244230c0e6bf0e1b0b79489d"
+            }
+          ],
+          "slots": [
+            "I"
+          ],
+          "proof": {
+            "source_sha256": "a179c7b8fbc3e79da76791506b578c499ad591d4244230c0e6bf0e1b0b79489d",
+            "claim_ids": [
+              "cl_scope",
+              "expr_config",
+              "evt_check",
+              "cl_time"
+            ],
+            "provenance_refs": [
+              "cl_scope",
+              "ent_config",
+              "evt_check",
+              "cl_time",
+              "expr_config"
+            ],
+            "technical_policy": "032-domain-technical-v1",
+            "checks": [
+              {
+                "id": "cl_scope",
+                "collection": "claims",
+                "status": "ACCEPTED",
+                "errors": [],
+                "uncertain": [],
+                "sources": [
+                  {
+                    "quote": "配置核验",
+                    "occurrence": 1,
+                    "span": [
+                      5,
+                      9
+                    ],
+                    "source_sha256": "a179c7b8fbc3e79da76791506b578c499ad591d4244230c0e6bf0e1b0b79489d"
+                  }
+                ],
+                "audit_refs": [
+                  {
+                    "subject_id": "cl_scope",
+                    "field_path": "",
+                    "verdict": "SUPPORT"
+                  }
+                ],
+                "required_dependencies": [],
+                "structural_refs": [
+                  "ent_config",
+                  "evt_check",
+                  "expr_config"
+                ]
+              },
+              {
+                "id": "ent_config",
+                "collection": "entities",
+                "status": "ACCEPTED",
+                "identity_status": "ACCEPTED",
+                "errors": [],
+                "uncertain": [],
+                "sources": [
+                  {
+                    "quote": "配置",
+                    "occurrence": 1,
+                    "span": [
+                      5,
+                      7
+                    ],
+                    "source_sha256": "a179c7b8fbc3e79da76791506b578c499ad591d4244230c0e6bf0e1b0b79489d"
+                  }
+                ],
+                "audit_refs": [
+                  {
+                    "subject_id": "ent_config",
+                    "field_path": "",
+                    "verdict": "SUPPORT"
+                  }
+                ],
+                "required_dependencies": [],
+                "structural_refs": []
+              },
+              {
+                "id": "evt_check",
+                "collection": "events",
+                "status": "ACCEPTED",
+                "errors": [],
+                "uncertain": [],
+                "sources": [
+                  {
+                    "quote": "请QA完成配置核验",
+                    "occurrence": 1,
+                    "span": [
+                      0,
+                      9
+                    ],
+                    "source_sha256": "a179c7b8fbc3e79da76791506b578c499ad591d4244230c0e6bf0e1b0b79489d"
+                  }
+                ],
+                "audit_refs": [
+                  {
+                    "subject_id": "evt_check",
+                    "field_path": "",
+                    "verdict": "SUPPORT"
+                  }
+                ],
+                "required_dependencies": [],
+                "structural_refs": [
+                  "ROOT",
+                  "cl_time"
+                ]
+              },
+              {
+                "id": "cl_time",
+                "collection": "claims",
+                "status": "ACCEPTED",
+                "errors": [],
+                "uncertain": [],
+                "sources": [
+                  {
+                    "quote": "核验用时不得超过6分钟",
+                    "occurrence": 1,
+                    "span": [
+                      10,
+                      21
+                    ],
+                    "source_sha256": "a179c7b8fbc3e79da76791506b578c499ad591d4244230c0e6bf0e1b0b79489d"
+                  }
+                ],
+                "audit_refs": [
+                  {
+                    "subject_id": "cl_time",
+                    "field_path": "",
+                    "verdict": "SUPPORT"
+                  }
+                ],
+                "required_dependencies": [],
+                "structural_refs": [
+                  "evt_check",
+                  "evt_check",
+                  "evt_check",
+                  "evt_check"
+                ]
+              },
+              {
+                "id": "expr_config",
+                "collection": "expressions",
+                "status": "ACCEPTED",
+                "errors": [],
+                "uncertain": [],
+                "sources": [
+                  {
+                    "quote": "配置核验",
+                    "occurrence": 1,
+                    "span": [
+                      5,
+                      9
+                    ],
+                    "source_sha256": "a179c7b8fbc3e79da76791506b578c499ad591d4244230c0e6bf0e1b0b79489d"
+                  }
+                ],
+                "audit_refs": [
+                  {
+                    "subject_id": "expr_config",
+                    "field_path": "",
+                    "verdict": "SUPPORT"
+                  }
+                ],
+                "required_dependencies": [],
+                "structural_refs": []
+              }
+            ],
+            "audit": [
+              {
+                "subject_id": "cl_scope",
+                "field_path": "",
+                "verdict": "SUPPORT",
+                "context_refs": [
+                  "cl_input",
+                  "expr_config"
+                ],
+                "sources": [
+                  {
+                    "quote": "配置核验",
+                    "occurrence": 1
+                  }
+                ],
+                "reason": "类别范围绑定同一核验事件及受检类别；原文无容器限定或全称要求，也无来源支持的竞争域。"
+              },
+              {
+                "subject_id": "ent_config",
+                "field_path": "",
+                "verdict": "SUPPORT",
+                "context_refs": [],
+                "sources": [
+                  {
+                    "quote": "配置核验",
+                    "occurrence": 1
+                  }
+                ],
+                "reason": "配置是受检对象类别，未指定具体成员或容器。"
+              },
+              {
+                "subject_id": "evt_check",
+                "field_path": "",
+                "verdict": "SUPPORT",
+                "context_refs": [],
+                "sources": [
+                  {
+                    "quote": "请QA完成配置核验",
+                    "occurrence": 1
+                  },
+                  {
+                    "quote": "核验用时不得超过6分钟",
+                    "occurrence": 1
+                  }
+                ],
+                "reason": "当前要求完成核验，执行用时约束已绑定；未将动作完成误作根任务完成条件。"
+              },
+              {
+                "subject_id": "cl_time",
+                "field_path": "",
+                "verdict": "SUPPORT",
+                "context_refs": [
+                  "evt_check"
+                ],
+                "sources": [
+                  {
+                    "quote": "核验用时不得超过6分钟",
+                    "occurrence": 1
+                  }
+                ],
+                "reason": "计数项为核验用时，LTE、6、分钟正确；执行限制目标及计数范围均为核验事件，约束双向绑定完整。"
+              },
+              {
+                "subject_id": "expr_config",
+                "field_path": "",
+                "verdict": "SUPPORT",
+                "context_refs": [
+                  "ent_config"
+                ],
+                "sources": [
+                  {
+                    "quote": "配置核验",
+                    "occurrence": 1
+                  }
+                ],
+                "reason": "CATEGORY引用配置CLASS，忠实保留未限定容器的类别域，不添加全称量词。"
+              }
+            ],
+            "context_references_are_not_required_dependencies": true
+          }
+        }
+      ]
+    },
+    "O": {
+      "status": "ABSENT",
+      "openness": "OPEN",
+      "entries": []
+    },
+    "A": {
+      "status": "RESOLVED",
+      "openness": "CONSTRAINED",
+      "entries": [
+        {
+          "id": "bf:82d03efe54eb3f4de442",
+          "kind": "EVENT",
+          "status": "ACCEPTED",
+          "claim_ids": [
+            "evt_check",
+            "cl_performer",
+            "cl_input",
+            "cl_time",
+            "cl_scope"
+          ],
+          "event": {
+            "id": "evt_check",
+            "predicate": "完成配置核验",
+            "kind": "ACTION",
+            "layer": "MAIN",
+            "use": "CURRENT_TASK",
+            "modality": "REQUIRED",
+            "polarity": "POSITIVE",
+            "owner_id": "ROOT",
+            "constraint_ids": [
+              "cl_time"
+            ],
+            "requires": [],
+            "sources": [
+              {
+                "quote": "请QA完成配置核验",
+                "occurrence": 1,
+                "span": [
+                  0,
+                  9
+                ],
+                "source_sha256": "a179c7b8fbc3e79da76791506b578c499ad591d4244230c0e6bf0e1b0b79489d"
+              }
+            ]
+          },
+          "roles": [
+            {
+              "id": "cl_performer",
+              "kind": "ROLE",
+              "event_id": "evt_check",
+              "entity_id": "ent_qa",
+              "role": "PERFORMER",
+              "expression_id": null,
+              "direction": null,
+              "temporal": null,
+              "quantity": null,
+              "artifact_use": null,
+              "scope_id": "evt_check",
+              "requires": [],
+              "sources": [
+                {
+                  "quote": "请QA完成配置核验",
+                  "occurrence": 1,
+                  "span": [
+                    0,
+                    9
+                  ],
+                  "source_sha256": "a179c7b8fbc3e79da76791506b578c499ad591d4244230c0e6bf0e1b0b79489d"
+                }
+              ],
+              "note": "QA是明确指定的核验执行者；未指定其人或组类别。",
+              "entity": {
+                "id": "ent_qa",
+                "label": "QA",
+                "type": "OTHER",
+                "mentions": [
+                  {
+                    "quote": "QA",
+                    "occurrence": 1,
+                    "span": [
+                      1,
+                      3
+                    ],
+                    "source_sha256": "a179c7b8fbc3e79da76791506b578c499ad591d4244230c0e6bf0e1b0b79489d"
+                  }
+                ],
+                "alternatives": []
+              },
+              "status": "ACCEPTED"
+            },
+            {
+              "id": "cl_input",
+              "kind": "ROLE",
+              "event_id": "evt_check",
+              "entity_id": "ent_config",
+              "role": "INPUT_OBJECT",
+              "expression_id": null,
+              "direction": null,
+              "temporal": null,
+              "quantity": null,
+              "artifact_use": null,
+              "scope_id": "evt_check",
+              "requires": [],
+              "sources": [
+                {
+                  "quote": "完成配置核验",
+                  "occurrence": 1,
+                  "span": [
+                    3,
+                    9
+                  ],
+                  "source_sha256": "a179c7b8fbc3e79da76791506b578c499ad591d4244230c0e6bf0e1b0b79489d"
+                }
+              ],
+              "note": "配置是明确受检类别，原文未限定容器或使用全称量词。",
+              "entity": {
+                "id": "ent_config",
+                "label": "配置",
+                "type": "CLASS",
+                "mentions": [
+                  {
+                    "quote": "配置",
+                    "occurrence": 1,
+                    "span": [
+                      5,
+                      7
+                    ],
+                    "source_sha256": "a179c7b8fbc3e79da76791506b578c499ad591d4244230c0e6bf0e1b0b79489d"
+                  }
+                ],
+                "alternatives": []
+              },
+              "status": "ACCEPTED"
+            }
+          ],
+          "constraints": [
+            {
+              "id": "cl_time",
+              "kind": "QUANTITY",
+              "event_id": "evt_check",
+              "entity_id": null,
+              "role": null,
+              "expression_id": null,
+              "direction": null,
+              "temporal": null,
+              "quantity": {
+                "metric": "核验用时",
+                "target_id": "evt_check",
+                "comparator": "LTE",
+                "value": 6,
+                "unit": "分钟",
+                "use": "EXECUTION_LIMIT",
+                "count_scope": "evt_check"
+              },
+              "artifact_use": null,
+              "scope_id": "evt_check",
+              "requires": [],
+              "sources": [
+                {
+                  "quote": "核验用时不得超过6分钟",
+                  "occurrence": 1,
+                  "span": [
+                    10,
+                    21
+                  ],
+                  "source_sha256": "a179c7b8fbc3e79da76791506b578c499ad591d4244230c0e6bf0e1b0b79489d"
+                }
+              ],
+              "note": "约束已有核验动作的执行用时，不另造禁止动作或完成条件。",
+              "expression": null
+            }
+          ],
+          "object_scopes": [
+            {
+              "id": "cl_scope",
+              "kind": "SCOPE",
+              "event_id": "evt_check",
+              "entity_id": null,
+              "role": null,
+              "expression_id": "expr_config",
+              "direction": null,
+              "temporal": null,
+              "quantity": null,
+              "artifact_use": null,
+              "scope_id": "ent_config",
+              "requires": [],
+              "sources": [
+                {
+                  "quote": "配置核验",
+                  "occurrence": 1,
+                  "span": [
+                    5,
+                    9
+                  ],
+                  "source_sha256": "a179c7b8fbc3e79da76791506b578c499ad591d4244230c0e6bf0e1b0b79489d"
+                }
+              ],
+              "note": "保留未限定容器的配置类别域，不增加全称要求。",
+              "expression": {
+                "id": "expr_config",
+                "op": "CATEGORY",
+                "operands": [
+                  "ent_config"
+                ],
+                "state": null,
+                "sources": [
+                  {
+                    "quote": "配置核验",
+                    "occurrence": 1,
+                    "span": [
+                      5,
+                      9
+                    ],
+                    "source_sha256": "a179c7b8fbc3e79da76791506b578c499ad591d4244230c0e6bf0e1b0b79489d"
+                  }
+                ],
+                "domain_state": "TASK_CATEGORY_UNRESTRICTED",
+                "children": []
+              }
+            }
+          ],
+          "artifact_dependencies": [],
+          "sources": [
+            {
+              "quote": "请QA完成配置核验",
+              "occurrence": 1,
+              "span": [
+                0,
+                9
+              ],
+              "source_sha256": "a179c7b8fbc3e79da76791506b578c499ad591d4244230c0e6bf0e1b0b79489d"
+            },
+            {
+              "quote": "核验用时不得超过6分钟",
+              "occurrence": 1,
+              "span": [
+                10,
+                21
+              ],
+              "source_sha256": "a179c7b8fbc3e79da76791506b578c499ad591d4244230c0e6bf0e1b0b79489d"
+            },
+            {
+              "quote": "请QA完成配置核验",
+              "occurrence": 1,
+              "span": [
+                0,
+                9
+              ],
+              "source_sha256": "a179c7b8fbc3e79da76791506b578c499ad591d4244230c0e6bf0e1b0b79489d"
+            },
+            {
+              "quote": "QA",
+              "occurrence": 1,
+              "span": [
+                1,
+                3
+              ],
+              "source_sha256": "a179c7b8fbc3e79da76791506b578c499ad591d4244230c0e6bf0e1b0b79489d"
+            },
+            {
+              "quote": "完成配置核验",
+              "occurrence": 1,
+              "span": [
+                3,
+                9
+              ],
+              "source_sha256": "a179c7b8fbc3e79da76791506b578c499ad591d4244230c0e6bf0e1b0b79489d"
+            },
+            {
+              "quote": "配置",
+              "occurrence": 1,
+              "span": [
+                5,
+                7
+              ],
+              "source_sha256": "a179c7b8fbc3e79da76791506b578c499ad591d4244230c0e6bf0e1b0b79489d"
+            },
+            {
+              "quote": "配置核验",
+              "occurrence": 1,
+              "span": [
+                5,
+                9
+              ],
+              "source_sha256": "a179c7b8fbc3e79da76791506b578c499ad591d4244230c0e6bf0e1b0b79489d"
+            },
+            {
+              "quote": "配置核验",
+              "occurrence": 1,
+              "span": [
+                5,
+                9
+              ],
+              "source_sha256": "a179c7b8fbc3e79da76791506b578c499ad591d4244230c0e6bf0e1b0b79489d"
+            }
+          ],
+          "slots": [
+            "A"
+          ],
+          "proof": {
+            "source_sha256": "a179c7b8fbc3e79da76791506b578c499ad591d4244230c0e6bf0e1b0b79489d",
+            "claim_ids": [
+              "evt_check",
+              "cl_performer",
+              "cl_input",
+              "cl_time",
+              "cl_scope"
+            ],
+            "provenance_refs": [
+              "evt_check",
+              "cl_time",
+              "cl_performer",
+              "ent_qa",
+              "cl_input",
+              "ent_config",
+              "cl_scope",
+              "expr_config"
+            ],
+            "technical_policy": "032-domain-technical-v1",
+            "checks": [
+              {
+                "id": "evt_check",
+                "collection": "events",
+                "status": "ACCEPTED",
+                "errors": [],
+                "uncertain": [],
+                "sources": [
+                  {
+                    "quote": "请QA完成配置核验",
+                    "occurrence": 1,
+                    "span": [
+                      0,
+                      9
+                    ],
+                    "source_sha256": "a179c7b8fbc3e79da76791506b578c499ad591d4244230c0e6bf0e1b0b79489d"
+                  }
+                ],
+                "audit_refs": [
+                  {
+                    "subject_id": "evt_check",
+                    "field_path": "",
+                    "verdict": "SUPPORT"
+                  }
+                ],
+                "required_dependencies": [],
+                "structural_refs": [
+                  "ROOT",
+                  "cl_time"
+                ]
+              },
+              {
+                "id": "cl_time",
+                "collection": "claims",
+                "status": "ACCEPTED",
+                "errors": [],
+                "uncertain": [],
+                "sources": [
+                  {
+                    "quote": "核验用时不得超过6分钟",
+                    "occurrence": 1,
+                    "span": [
+                      10,
+                      21
+                    ],
+                    "source_sha256": "a179c7b8fbc3e79da76791506b578c499ad591d4244230c0e6bf0e1b0b79489d"
+                  }
+                ],
+                "audit_refs": [
+                  {
+                    "subject_id": "cl_time",
+                    "field_path": "",
+                    "verdict": "SUPPORT"
+                  }
+                ],
+                "required_dependencies": [],
+                "structural_refs": [
+                  "evt_check",
+                  "evt_check",
+                  "evt_check",
+                  "evt_check"
+                ]
+              },
+              {
+                "id": "cl_performer",
+                "collection": "claims",
+                "status": "ACCEPTED",
+                "errors": [],
+                "uncertain": [],
+                "sources": [
+                  {
+                    "quote": "请QA完成配置核验",
+                    "occurrence": 1,
+                    "span": [
+                      0,
+                      9
+                    ],
+                    "source_sha256": "a179c7b8fbc3e79da76791506b578c499ad591d4244230c0e6bf0e1b0b79489d"
+                  }
+                ],
+                "audit_refs": [
+                  {
+                    "subject_id": "cl_performer",
+                    "field_path": "",
+                    "verdict": "SUPPORT"
+                  }
+                ],
+                "required_dependencies": [],
+                "structural_refs": [
+                  "evt_check",
+                  "evt_check",
+                  "ent_qa"
+                ]
+              },
+              {
+                "id": "ent_qa",
+                "collection": "entities",
+                "status": "ACCEPTED",
+                "identity_status": "ACCEPTED",
+                "errors": [],
+                "uncertain": [],
+                "sources": [
+                  {
+                    "quote": "QA",
+                    "occurrence": 1,
+                    "span": [
+                      1,
+                      3
+                    ],
+                    "source_sha256": "a179c7b8fbc3e79da76791506b578c499ad591d4244230c0e6bf0e1b0b79489d"
+                  }
+                ],
+                "audit_refs": [
+                  {
+                    "subject_id": "ent_qa",
+                    "field_path": "",
+                    "verdict": "SUPPORT"
+                  }
+                ],
+                "required_dependencies": [],
+                "structural_refs": []
+              },
+              {
+                "id": "cl_input",
+                "collection": "claims",
+                "status": "ACCEPTED",
+                "errors": [],
+                "uncertain": [],
+                "sources": [
+                  {
+                    "quote": "完成配置核验",
+                    "occurrence": 1,
+                    "span": [
+                      3,
+                      9
+                    ],
+                    "source_sha256": "a179c7b8fbc3e79da76791506b578c499ad591d4244230c0e6bf0e1b0b79489d"
+                  }
+                ],
+                "audit_refs": [
+                  {
+                    "subject_id": "cl_input",
+                    "field_path": "",
+                    "verdict": "SUPPORT"
+                  }
+                ],
+                "required_dependencies": [],
+                "structural_refs": [
+                  "evt_check",
+                  "evt_check",
+                  "ent_config"
+                ]
+              },
+              {
+                "id": "ent_config",
+                "collection": "entities",
+                "status": "ACCEPTED",
+                "identity_status": "ACCEPTED",
+                "errors": [],
+                "uncertain": [],
+                "sources": [
+                  {
+                    "quote": "配置",
+                    "occurrence": 1,
+                    "span": [
+                      5,
+                      7
+                    ],
+                    "source_sha256": "a179c7b8fbc3e79da76791506b578c499ad591d4244230c0e6bf0e1b0b79489d"
+                  }
+                ],
+                "audit_refs": [
+                  {
+                    "subject_id": "ent_config",
+                    "field_path": "",
+                    "verdict": "SUPPORT"
+                  }
+                ],
+                "required_dependencies": [],
+                "structural_refs": []
+              },
+              {
+                "id": "cl_scope",
+                "collection": "claims",
+                "status": "ACCEPTED",
+                "errors": [],
+                "uncertain": [],
+                "sources": [
+                  {
+                    "quote": "配置核验",
+                    "occurrence": 1,
+                    "span": [
+                      5,
+                      9
+                    ],
+                    "source_sha256": "a179c7b8fbc3e79da76791506b578c499ad591d4244230c0e6bf0e1b0b79489d"
+                  }
+                ],
+                "audit_refs": [
+                  {
+                    "subject_id": "cl_scope",
+                    "field_path": "",
+                    "verdict": "SUPPORT"
+                  }
+                ],
+                "required_dependencies": [],
+                "structural_refs": [
+                  "ent_config",
+                  "evt_check",
+                  "expr_config"
+                ]
+              },
+              {
+                "id": "expr_config",
+                "collection": "expressions",
+                "status": "ACCEPTED",
+                "errors": [],
+                "uncertain": [],
+                "sources": [
+                  {
+                    "quote": "配置核验",
+                    "occurrence": 1,
+                    "span": [
+                      5,
+                      9
+                    ],
+                    "source_sha256": "a179c7b8fbc3e79da76791506b578c499ad591d4244230c0e6bf0e1b0b79489d"
+                  }
+                ],
+                "audit_refs": [
+                  {
+                    "subject_id": "expr_config",
+                    "field_path": "",
+                    "verdict": "SUPPORT"
+                  }
+                ],
+                "required_dependencies": [],
+                "structural_refs": []
+              }
+            ],
+            "audit": [
+              {
+                "subject_id": "evt_check",
+                "field_path": "",
+                "verdict": "SUPPORT",
+                "context_refs": [],
+                "sources": [
+                  {
+                    "quote": "请QA完成配置核验",
+                    "occurrence": 1
+                  },
+                  {
+                    "quote": "核验用时不得超过6分钟",
+                    "occurrence": 1
+                  }
+                ],
+                "reason": "当前要求完成核验，执行用时约束已绑定；未将动作完成误作根任务完成条件。"
+              },
+              {
+                "subject_id": "cl_time",
+                "field_path": "",
+                "verdict": "SUPPORT",
+                "context_refs": [
+                  "evt_check"
+                ],
+                "sources": [
+                  {
+                    "quote": "核验用时不得超过6分钟",
+                    "occurrence": 1
+                  }
+                ],
+                "reason": "计数项为核验用时，LTE、6、分钟正确；执行限制目标及计数范围均为核验事件，约束双向绑定完整。"
+              },
+              {
+                "subject_id": "cl_performer",
+                "field_path": "",
+                "verdict": "SUPPORT",
+                "context_refs": [
+                  "ent_qa",
+                  "evt_check"
+                ],
+                "sources": [
+                  {
+                    "quote": "请QA完成配置核验",
+                    "occurrence": 1
+                  }
+                ],
+                "reason": "QA被明确指定为核验执行者。"
+              },
+              {
+                "subject_id": "ent_qa",
+                "field_path": "",
+                "verdict": "SUPPORT",
+                "context_refs": [],
+                "sources": [
+                  {
+                    "quote": "请QA完成配置核验",
+                    "occurrence": 1
+                  }
+                ],
+                "reason": "QA身份及执行职责明确；OTHER可占位表示未指定的人或组类别。"
+              },
+              {
+                "subject_id": "cl_input",
+                "field_path": "",
+                "verdict": "SUPPORT",
+                "context_refs": [
+                  "ent_config",
+                  "evt_check"
+                ],
+                "sources": [
+                  {
+                    "quote": "完成配置核验",
+                    "occurrence": 1
+                  }
+                ],
+                "reason": "配置是当前核验的明确受检范围，INPUT_OBJECT用途成立。"
+              },
+              {
+                "subject_id": "ent_config",
+                "field_path": "",
+                "verdict": "SUPPORT",
+                "context_refs": [],
+                "sources": [
+                  {
+                    "quote": "配置核验",
+                    "occurrence": 1
+                  }
+                ],
+                "reason": "配置是受检对象类别，未指定具体成员或容器。"
+              },
+              {
+                "subject_id": "cl_scope",
+                "field_path": "",
+                "verdict": "SUPPORT",
+                "context_refs": [
+                  "cl_input",
+                  "expr_config"
+                ],
+                "sources": [
+                  {
+                    "quote": "配置核验",
+                    "occurrence": 1
+                  }
+                ],
+                "reason": "类别范围绑定同一核验事件及受检类别；原文无容器限定或全称要求，也无来源支持的竞争域。"
+              },
+              {
+                "subject_id": "expr_config",
+                "field_path": "",
+                "verdict": "SUPPORT",
+                "context_refs": [
+                  "ent_config"
+                ],
+                "sources": [
+                  {
+                    "quote": "配置核验",
+                    "occurrence": 1
+                  }
+                ],
+                "reason": "CATEGORY引用配置CLASS，忠实保留未限定容器的类别域，不添加全称量词。"
+              }
+            ],
+            "context_references_are_not_required_dependencies": true
+          }
+        }
+      ]
+    },
+    "P": {
+      "status": "RESOLVED",
+      "openness": "CONSTRAINED",
+      "entries": [
+        {
+          "id": "bf:a83bbbbea506d3dbbaa7",
+          "kind": "ROLE",
+          "status": "ACCEPTED",
+          "claim_ids": [
+            "cl_performer",
+            "ent_qa",
+            "evt_check",
+            "cl_time"
+          ],
+          "claim": {
+            "id": "cl_performer",
+            "kind": "ROLE",
+            "event_id": "evt_check",
+            "entity_id": "ent_qa",
+            "role": "PERFORMER",
+            "expression_id": null,
+            "direction": null,
+            "temporal": null,
+            "quantity": null,
+            "artifact_use": null,
+            "scope_id": "evt_check",
+            "requires": [],
+            "sources": [
+              {
+                "quote": "请QA完成配置核验",
+                "occurrence": 1,
+                "span": [
+                  0,
+                  9
+                ],
+                "source_sha256": "a179c7b8fbc3e79da76791506b578c499ad591d4244230c0e6bf0e1b0b79489d"
+              }
+            ],
+            "note": "QA是明确指定的核验执行者；未指定其人或组类别。"
+          },
+          "event": {
+            "id": "evt_check",
+            "predicate": "完成配置核验",
+            "kind": "ACTION",
+            "layer": "MAIN",
+            "use": "CURRENT_TASK",
+            "modality": "REQUIRED",
+            "polarity": "POSITIVE",
+            "owner_id": "ROOT",
+            "constraint_ids": [
+              "cl_time"
+            ],
+            "requires": [],
+            "sources": [
+              {
+                "quote": "请QA完成配置核验",
+                "occurrence": 1,
+                "span": [
+                  0,
+                  9
+                ],
+                "source_sha256": "a179c7b8fbc3e79da76791506b578c499ad591d4244230c0e6bf0e1b0b79489d"
+              }
+            ]
+          },
+          "entity": {
+            "id": "ent_qa",
+            "label": "QA",
+            "type": "OTHER",
+            "mentions": [
+              {
+                "quote": "QA",
+                "occurrence": 1,
+                "span": [
+                  1,
+                  3
+                ],
+                "source_sha256": "a179c7b8fbc3e79da76791506b578c499ad591d4244230c0e6bf0e1b0b79489d"
+              }
+            ],
+            "alternatives": []
+          },
+          "expression": null,
+          "constraints": [
+            {
+              "id": "cl_time",
+              "kind": "QUANTITY",
+              "event_id": "evt_check",
+              "entity_id": null,
+              "role": null,
+              "expression_id": null,
+              "direction": null,
+              "temporal": null,
+              "quantity": {
+                "metric": "核验用时",
+                "target_id": "evt_check",
+                "comparator": "LTE",
+                "value": 6,
+                "unit": "分钟",
+                "use": "EXECUTION_LIMIT",
+                "count_scope": "evt_check"
+              },
+              "artifact_use": null,
+              "scope_id": "evt_check",
+              "requires": [],
+              "sources": [
+                {
+                  "quote": "核验用时不得超过6分钟",
+                  "occurrence": 1,
+                  "span": [
+                    10,
+                    21
+                  ],
+                  "source_sha256": "a179c7b8fbc3e79da76791506b578c499ad591d4244230c0e6bf0e1b0b79489d"
+                }
+              ],
+              "note": "约束已有核验动作的执行用时，不另造禁止动作或完成条件。",
+              "expression": null
+            }
+          ],
+          "object_scopes": [],
+          "content_quantities": [],
+          "content_scopes": [],
+          "sources": [
+            {
+              "quote": "请QA完成配置核验",
+              "occurrence": 1,
+              "span": [
+                0,
+                9
+              ],
+              "source_sha256": "a179c7b8fbc3e79da76791506b578c499ad591d4244230c0e6bf0e1b0b79489d"
+            },
+            {
+              "quote": "请QA完成配置核验",
+              "occurrence": 1,
+              "span": [
+                0,
+                9
+              ],
+              "source_sha256": "a179c7b8fbc3e79da76791506b578c499ad591d4244230c0e6bf0e1b0b79489d"
+            },
+            {
+              "quote": "核验用时不得超过6分钟",
+              "occurrence": 1,
+              "span": [
+                10,
+                21
+              ],
+              "source_sha256": "a179c7b8fbc3e79da76791506b578c499ad591d4244230c0e6bf0e1b0b79489d"
+            },
+            {
+              "quote": "QA",
+              "occurrence": 1,
+              "span": [
+                1,
+                3
+              ],
+              "source_sha256": "a179c7b8fbc3e79da76791506b578c499ad591d4244230c0e6bf0e1b0b79489d"
+            }
+          ],
+          "slots": [
+            "P"
+          ],
+          "proof": {
+            "source_sha256": "a179c7b8fbc3e79da76791506b578c499ad591d4244230c0e6bf0e1b0b79489d",
+            "claim_ids": [
+              "cl_performer",
+              "ent_qa",
+              "evt_check",
+              "cl_time"
+            ],
+            "provenance_refs": [
+              "cl_performer",
+              "evt_check",
+              "cl_time",
+              "ent_qa"
+            ],
+            "technical_policy": "032-domain-technical-v1",
+            "checks": [
+              {
+                "id": "cl_performer",
+                "collection": "claims",
+                "status": "ACCEPTED",
+                "errors": [],
+                "uncertain": [],
+                "sources": [
+                  {
+                    "quote": "请QA完成配置核验",
+                    "occurrence": 1,
+                    "span": [
+                      0,
+                      9
+                    ],
+                    "source_sha256": "a179c7b8fbc3e79da76791506b578c499ad591d4244230c0e6bf0e1b0b79489d"
+                  }
+                ],
+                "audit_refs": [
+                  {
+                    "subject_id": "cl_performer",
+                    "field_path": "",
+                    "verdict": "SUPPORT"
+                  }
+                ],
+                "required_dependencies": [],
+                "structural_refs": [
+                  "evt_check",
+                  "evt_check",
+                  "ent_qa"
+                ]
+              },
+              {
+                "id": "evt_check",
+                "collection": "events",
+                "status": "ACCEPTED",
+                "errors": [],
+                "uncertain": [],
+                "sources": [
+                  {
+                    "quote": "请QA完成配置核验",
+                    "occurrence": 1,
+                    "span": [
+                      0,
+                      9
+                    ],
+                    "source_sha256": "a179c7b8fbc3e79da76791506b578c499ad591d4244230c0e6bf0e1b0b79489d"
+                  }
+                ],
+                "audit_refs": [
+                  {
+                    "subject_id": "evt_check",
+                    "field_path": "",
+                    "verdict": "SUPPORT"
+                  }
+                ],
+                "required_dependencies": [],
+                "structural_refs": [
+                  "ROOT",
+                  "cl_time"
+                ]
+              },
+              {
+                "id": "cl_time",
+                "collection": "claims",
+                "status": "ACCEPTED",
+                "errors": [],
+                "uncertain": [],
+                "sources": [
+                  {
+                    "quote": "核验用时不得超过6分钟",
+                    "occurrence": 1,
+                    "span": [
+                      10,
+                      21
+                    ],
+                    "source_sha256": "a179c7b8fbc3e79da76791506b578c499ad591d4244230c0e6bf0e1b0b79489d"
+                  }
+                ],
+                "audit_refs": [
+                  {
+                    "subject_id": "cl_time",
+                    "field_path": "",
+                    "verdict": "SUPPORT"
+                  }
+                ],
+                "required_dependencies": [],
+                "structural_refs": [
+                  "evt_check",
+                  "evt_check",
+                  "evt_check",
+                  "evt_check"
+                ]
+              },
+              {
+                "id": "ent_qa",
+                "collection": "entities",
+                "status": "ACCEPTED",
+                "identity_status": "ACCEPTED",
+                "errors": [],
+                "uncertain": [],
+                "sources": [
+                  {
+                    "quote": "QA",
+                    "occurrence": 1,
+                    "span": [
+                      1,
+                      3
+                    ],
+                    "source_sha256": "a179c7b8fbc3e79da76791506b578c499ad591d4244230c0e6bf0e1b0b79489d"
+                  }
+                ],
+                "audit_refs": [
+                  {
+                    "subject_id": "ent_qa",
+                    "field_path": "",
+                    "verdict": "SUPPORT"
+                  }
+                ],
+                "required_dependencies": [],
+                "structural_refs": []
+              }
+            ],
+            "audit": [
+              {
+                "subject_id": "cl_performer",
+                "field_path": "",
+                "verdict": "SUPPORT",
+                "context_refs": [
+                  "ent_qa",
+                  "evt_check"
+                ],
+                "sources": [
+                  {
+                    "quote": "请QA完成配置核验",
+                    "occurrence": 1
+                  }
+                ],
+                "reason": "QA被明确指定为核验执行者。"
+              },
+              {
+                "subject_id": "evt_check",
+                "field_path": "",
+                "verdict": "SUPPORT",
+                "context_refs": [],
+                "sources": [
+                  {
+                    "quote": "请QA完成配置核验",
+                    "occurrence": 1
+                  },
+                  {
+                    "quote": "核验用时不得超过6分钟",
+                    "occurrence": 1
+                  }
+                ],
+                "reason": "当前要求完成核验，执行用时约束已绑定；未将动作完成误作根任务完成条件。"
+              },
+              {
+                "subject_id": "cl_time",
+                "field_path": "",
+                "verdict": "SUPPORT",
+                "context_refs": [
+                  "evt_check"
+                ],
+                "sources": [
+                  {
+                    "quote": "核验用时不得超过6分钟",
+                    "occurrence": 1
+                  }
+                ],
+                "reason": "计数项为核验用时，LTE、6、分钟正确；执行限制目标及计数范围均为核验事件，约束双向绑定完整。"
+              },
+              {
+                "subject_id": "ent_qa",
+                "field_path": "",
+                "verdict": "SUPPORT",
+                "context_refs": [],
+                "sources": [
+                  {
+                    "quote": "请QA完成配置核验",
+                    "occurrence": 1
+                  }
+                ],
+                "reason": "QA身份及执行职责明确；OTHER可占位表示未指定的人或组类别。"
+              }
+            ],
+            "context_references_are_not_required_dependencies": true
+          }
+        }
+      ]
+    },
+    "R": {
+      "status": "RESOLVED",
+      "openness": "CONSTRAINED",
+      "entries": [
+        {
+          "id": "bf:57ac1a6fda83e63d6e7e",
+          "kind": "QUANTITY",
+          "status": "ACCEPTED",
+          "claim_ids": [
+            "cl_time",
+            "evt_check"
+          ],
+          "claim": {
+            "id": "cl_time",
+            "kind": "QUANTITY",
+            "event_id": "evt_check",
+            "entity_id": null,
+            "role": null,
+            "expression_id": null,
+            "direction": null,
+            "temporal": null,
+            "quantity": {
+              "metric": "核验用时",
+              "target_id": "evt_check",
+              "comparator": "LTE",
+              "value": 6,
+              "unit": "分钟",
+              "use": "EXECUTION_LIMIT",
+              "count_scope": "evt_check"
+            },
+            "artifact_use": null,
+            "scope_id": "evt_check",
+            "requires": [],
+            "sources": [
+              {
+                "quote": "核验用时不得超过6分钟",
+                "occurrence": 1,
+                "span": [
+                  10,
+                  21
+                ],
+                "source_sha256": "a179c7b8fbc3e79da76791506b578c499ad591d4244230c0e6bf0e1b0b79489d"
+              }
+            ],
+            "note": "约束已有核验动作的执行用时，不另造禁止动作或完成条件。"
+          },
+          "event": {
+            "id": "evt_check",
+            "predicate": "完成配置核验",
+            "kind": "ACTION",
+            "layer": "MAIN",
+            "use": "CURRENT_TASK",
+            "modality": "REQUIRED",
+            "polarity": "POSITIVE",
+            "owner_id": "ROOT",
+            "constraint_ids": [
+              "cl_time"
+            ],
+            "requires": [],
+            "sources": [
+              {
+                "quote": "请QA完成配置核验",
+                "occurrence": 1,
+                "span": [
+                  0,
+                  9
+                ],
+                "source_sha256": "a179c7b8fbc3e79da76791506b578c499ad591d4244230c0e6bf0e1b0b79489d"
+              }
+            ]
+          },
+          "entity": null,
+          "expression": null,
+          "constraints": [
+            {
+              "id": "cl_time",
+              "kind": "QUANTITY",
+              "event_id": "evt_check",
+              "entity_id": null,
+              "role": null,
+              "expression_id": null,
+              "direction": null,
+              "temporal": null,
+              "quantity": {
+                "metric": "核验用时",
+                "target_id": "evt_check",
+                "comparator": "LTE",
+                "value": 6,
+                "unit": "分钟",
+                "use": "EXECUTION_LIMIT",
+                "count_scope": "evt_check"
+              },
+              "artifact_use": null,
+              "scope_id": "evt_check",
+              "requires": [],
+              "sources": [
+                {
+                  "quote": "核验用时不得超过6分钟",
+                  "occurrence": 1,
+                  "span": [
+                    10,
+                    21
+                  ],
+                  "source_sha256": "a179c7b8fbc3e79da76791506b578c499ad591d4244230c0e6bf0e1b0b79489d"
+                }
+              ],
+              "note": "约束已有核验动作的执行用时，不另造禁止动作或完成条件。",
+              "expression": null
+            }
+          ],
+          "object_scopes": [],
+          "content_quantities": [],
+          "content_scopes": [],
+          "sources": [
+            {
+              "quote": "核验用时不得超过6分钟",
+              "occurrence": 1,
+              "span": [
+                10,
+                21
+              ],
+              "source_sha256": "a179c7b8fbc3e79da76791506b578c499ad591d4244230c0e6bf0e1b0b79489d"
+            },
+            {
+              "quote": "请QA完成配置核验",
+              "occurrence": 1,
+              "span": [
+                0,
+                9
+              ],
+              "source_sha256": "a179c7b8fbc3e79da76791506b578c499ad591d4244230c0e6bf0e1b0b79489d"
+            }
+          ],
+          "slots": [
+            "R"
+          ],
+          "proof": {
+            "source_sha256": "a179c7b8fbc3e79da76791506b578c499ad591d4244230c0e6bf0e1b0b79489d",
+            "claim_ids": [
+              "cl_time",
+              "evt_check"
+            ],
+            "provenance_refs": [
+              "cl_time",
+              "evt_check"
+            ],
+            "technical_policy": "032-domain-technical-v1",
+            "checks": [
+              {
+                "id": "cl_time",
+                "collection": "claims",
+                "status": "ACCEPTED",
+                "errors": [],
+                "uncertain": [],
+                "sources": [
+                  {
+                    "quote": "核验用时不得超过6分钟",
+                    "occurrence": 1,
+                    "span": [
+                      10,
+                      21
+                    ],
+                    "source_sha256": "a179c7b8fbc3e79da76791506b578c499ad591d4244230c0e6bf0e1b0b79489d"
+                  }
+                ],
+                "audit_refs": [
+                  {
+                    "subject_id": "cl_time",
+                    "field_path": "",
+                    "verdict": "SUPPORT"
+                  }
+                ],
+                "required_dependencies": [],
+                "structural_refs": [
+                  "evt_check",
+                  "evt_check",
+                  "evt_check",
+                  "evt_check"
+                ]
+              },
+              {
+                "id": "evt_check",
+                "collection": "events",
+                "status": "ACCEPTED",
+                "errors": [],
+                "uncertain": [],
+                "sources": [
+                  {
+                    "quote": "请QA完成配置核验",
+                    "occurrence": 1,
+                    "span": [
+                      0,
+                      9
+                    ],
+                    "source_sha256": "a179c7b8fbc3e79da76791506b578c499ad591d4244230c0e6bf0e1b0b79489d"
+                  }
+                ],
+                "audit_refs": [
+                  {
+                    "subject_id": "evt_check",
+                    "field_path": "",
+                    "verdict": "SUPPORT"
+                  }
+                ],
+                "required_dependencies": [],
+                "structural_refs": [
+                  "ROOT",
+                  "cl_time"
+                ]
+              }
+            ],
+            "audit": [
+              {
+                "subject_id": "cl_time",
+                "field_path": "",
+                "verdict": "SUPPORT",
+                "context_refs": [
+                  "evt_check"
+                ],
+                "sources": [
+                  {
+                    "quote": "核验用时不得超过6分钟",
+                    "occurrence": 1
+                  }
+                ],
+                "reason": "计数项为核验用时，LTE、6、分钟正确；执行限制目标及计数范围均为核验事件，约束双向绑定完整。"
+              },
+              {
+                "subject_id": "evt_check",
+                "field_path": "",
+                "verdict": "SUPPORT",
+                "context_refs": [],
+                "sources": [
+                  {
+                    "quote": "请QA完成配置核验",
+                    "occurrence": 1
+                  },
+                  {
+                    "quote": "核验用时不得超过6分钟",
+                    "occurrence": 1
+                  }
+                ],
+                "reason": "当前要求完成核验，执行用时约束已绑定；未将动作完成误作根任务完成条件。"
+              }
+            ],
+            "context_references_are_not_required_dependencies": true
+          }
+        }
+      ]
+    },
+    "V": {
+      "status": "ABSENT",
+      "openness": "OPEN",
+      "entries": []
+    },
+    "C": {
+      "status": "RESOLVED",
+      "openness": "CONSTRAINED",
+      "entries": [
+        {
+          "id": "bf:464c82ec76b374504142",
+          "kind": "STOP",
+          "status": "ACCEPTED",
+          "claim_ids": [
+            "cl_stop",
+            "expr_permission_error"
+          ],
+          "claim": {
+            "id": "cl_stop",
+            "kind": "STOP",
+            "event_id": null,
+            "entity_id": null,
+            "role": null,
+            "expression_id": "expr_permission_error",
+            "direction": "SUFFICIENT",
+            "temporal": null,
+            "quantity": null,
+            "artifact_use": null,
+            "scope_id": "ROOT",
+            "requires": [],
+            "sources": [
+              {
+                "quote": "若出现权限错误，停止本任务",
+                "occurrence": 1,
+                "span": [
+                  22,
+                  35
+                ],
+                "source_sha256": "a179c7b8fbc3e79da76791506b578c499ad591d4244230c0e6bf0e1b0b79489d"
+              }
+            ],
+            "note": "出现权限错误足以触发根任务停止；不表示该错误已发生，也不表示任务完成。"
+          },
+          "event": null,
+          "entity": null,
+          "expression": {
+            "id": "expr_permission_error",
+            "op": "STATE",
+            "operands": [],
+            "state": {
+              "predicate": "出现权限错误",
+              "event_id": null,
+              "args": [
+                "ROOT"
+              ],
+              "polarity": "POSITIVE"
+            },
+            "sources": [
+              {
+                "quote": "若出现权限错误，停止本任务",
+                "occurrence": 1,
+                "span": [
+                  22,
+                  35
+                ],
+                "source_sha256": "a179c7b8fbc3e79da76791506b578c499ad591d4244230c0e6bf0e1b0b79489d"
+              }
+            ],
+            "domain_state": "DETERMINED",
+            "children": []
+          },
+          "constraints": [],
+          "object_scopes": [],
+          "content_quantities": [],
+          "content_scopes": [],
+          "sources": [
+            {
+              "quote": "若出现权限错误，停止本任务",
+              "occurrence": 1,
+              "span": [
+                22,
+                35
+              ],
+              "source_sha256": "a179c7b8fbc3e79da76791506b578c499ad591d4244230c0e6bf0e1b0b79489d"
+            },
+            {
+              "quote": "若出现权限错误，停止本任务",
+              "occurrence": 1,
+              "span": [
+                22,
+                35
+              ],
+              "source_sha256": "a179c7b8fbc3e79da76791506b578c499ad591d4244230c0e6bf0e1b0b79489d"
+            }
+          ],
+          "slots": [
+            "C"
+          ],
+          "proof": {
+            "source_sha256": "a179c7b8fbc3e79da76791506b578c499ad591d4244230c0e6bf0e1b0b79489d",
+            "claim_ids": [
+              "cl_stop",
+              "expr_permission_error"
+            ],
+            "provenance_refs": [
+              "cl_stop",
+              "expr_permission_error"
+            ],
+            "technical_policy": "032-domain-technical-v1",
+            "checks": [
+              {
+                "id": "cl_stop",
+                "collection": "claims",
+                "status": "ACCEPTED",
+                "errors": [],
+                "uncertain": [],
+                "sources": [
+                  {
+                    "quote": "若出现权限错误，停止本任务",
+                    "occurrence": 1,
+                    "span": [
+                      22,
+                      35
+                    ],
+                    "source_sha256": "a179c7b8fbc3e79da76791506b578c499ad591d4244230c0e6bf0e1b0b79489d"
+                  }
+                ],
+                "audit_refs": [
+                  {
+                    "subject_id": "cl_stop",
+                    "field_path": "",
+                    "verdict": "SUPPORT"
+                  }
+                ],
+                "required_dependencies": [],
+                "structural_refs": [
+                  "ROOT",
+                  "expr_permission_error"
+                ]
+              },
+              {
+                "id": "expr_permission_error",
+                "collection": "expressions",
+                "status": "ACCEPTED",
+                "errors": [],
+                "uncertain": [],
+                "sources": [
+                  {
+                    "quote": "若出现权限错误，停止本任务",
+                    "occurrence": 1,
+                    "span": [
+                      22,
+                      35
+                    ],
+                    "source_sha256": "a179c7b8fbc3e79da76791506b578c499ad591d4244230c0e6bf0e1b0b79489d"
+                  }
+                ],
+                "audit_refs": [
+                  {
+                    "subject_id": "expr_permission_error",
+                    "field_path": "",
+                    "verdict": "SUPPORT"
+                  }
+                ],
+                "required_dependencies": [],
+                "structural_refs": []
+              }
+            ],
+            "audit": [
+              {
+                "subject_id": "cl_stop",
+                "field_path": "",
+                "verdict": "SUPPORT",
+                "context_refs": [
+                  "expr_permission_error"
+                ],
+                "sources": [
+                  {
+                    "quote": "若出现权限错误，停止本任务",
+                    "occurrence": 1
+                  }
+                ],
+                "reason": "权限错误是根任务停止的充分触发条件，未误写成完成或必要条件。"
+              },
+              {
+                "subject_id": "expr_permission_error",
+                "field_path": "",
+                "verdict": "SUPPORT",
+                "context_refs": [],
+                "sources": [
+                  {
+                    "quote": "若出现权限错误，停止本任务",
+                    "occurrence": 1
+                  }
+                ],
+                "reason": "正极性STATE表达本任务出现权限错误的条件，未断言错误已发生；原文未指定更具体的事件或对象。"
+              }
+            ],
+            "context_references_are_not_required_dependencies": true
+          }
+        }
+      ]
+    },
+    "B": {
+      "status": "ABSENT",
+      "openness": "OPEN",
+      "entries": []
+    }
+  },
+  "unresolved": [],
+  "retained_nonprojected": [],
+  "issues": [],
+  "gaps": [],
+  "business_decision": null,
+  "execution_authorization": null
+}

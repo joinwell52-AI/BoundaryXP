@@ -1,0 +1,1 @@
+QA 检查索引声明和约束声明，两类检查都完成后生成 schema-check.md。不得修改 schema.sql。

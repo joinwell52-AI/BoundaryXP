@@ -1,0 +1,377 @@
+{
+  "contract_version": "031-r01",
+  "entities": [
+    {
+      "id": "n1",
+      "label": "PM",
+      "type": "OTHER",
+      "mentions": [
+        {
+          "quote": "PM",
+          "occurrence": 1
+        }
+      ],
+      "alternatives": []
+    },
+    {
+      "id": "n2",
+      "label": "issue.md",
+      "type": "FILE",
+      "mentions": [
+        {
+          "quote": "issue.md",
+          "occurrence": 1
+        },
+        {
+          "quote": "未发现异常时无需生成",
+          "occurrence": 1
+        }
+      ],
+      "alternatives": []
+    },
+    {
+      "id": "n3",
+      "label": "input.csv",
+      "type": "FILE",
+      "mentions": [
+        {
+          "quote": "input.csv",
+          "occurrence": 1
+        }
+      ],
+      "alternatives": []
+    }
+  ],
+  "events": [
+    {
+      "id": "e1",
+      "predicate": "生成文件",
+      "kind": "ACTION",
+      "layer": "MAIN",
+      "use": "CURRENT_TASK",
+      "modality": "REQUIRED",
+      "polarity": "POSITIVE",
+      "owner_id": "ROOT",
+      "constraint_ids": [
+        "c1"
+      ],
+      "requires": [],
+      "sources": [
+        {
+          "quote": "若发现异常，PM必须生成issue.md",
+          "occurrence": 1
+        }
+      ]
+    },
+    {
+      "id": "e2",
+      "predicate": "生成文件",
+      "kind": "ACTION",
+      "layer": "MAIN",
+      "use": "CURRENT_TASK",
+      "modality": "NOT_REQUIRED",
+      "polarity": "POSITIVE",
+      "owner_id": "ROOT",
+      "constraint_ids": [
+        "c2"
+      ],
+      "requires": [],
+      "sources": [
+        {
+          "quote": "未发现异常时无需生成",
+          "occurrence": 1
+        }
+      ]
+    },
+    {
+      "id": "e3",
+      "predicate": "删除文件",
+      "kind": "ACTION",
+      "layer": "MAIN",
+      "use": "CURRENT_TASK",
+      "modality": "FORBIDDEN",
+      "polarity": "POSITIVE",
+      "owner_id": "ROOT",
+      "constraint_ids": [],
+      "requires": [],
+      "sources": [
+        {
+          "quote": "无论是否异常，均不得删除input.csv",
+          "occurrence": 1
+        }
+      ]
+    }
+  ],
+  "claims": [
+    {
+      "id": "c1",
+      "kind": "CONDITION",
+      "event_id": "e1",
+      "entity_id": null,
+      "role": null,
+      "expression_id": "x1",
+      "direction": "SUFFICIENT",
+      "temporal": null,
+      "quantity": null,
+      "scope_id": "e1",
+      "requires": [],
+      "sources": [
+        {
+          "quote": "若发现异常，PM必须生成issue.md",
+          "occurrence": 1
+        }
+      ],
+      "note": "发现异常足以触发生成义务；不宣称已发现异常。"
+    },
+    {
+      "id": "c2",
+      "kind": "CONDITION",
+      "event_id": "e2",
+      "entity_id": null,
+      "role": null,
+      "expression_id": "x2",
+      "direction": "SUFFICIENT",
+      "temporal": null,
+      "quantity": null,
+      "scope_id": "e2",
+      "requires": [],
+      "sources": [
+        {
+          "quote": "未发现异常时无需生成",
+          "occurrence": 1
+        }
+      ],
+      "note": "未发现异常触发无需生成，不表示禁止生成。"
+    },
+    {
+      "id": "c3",
+      "kind": "ROLE",
+      "event_id": "e1",
+      "entity_id": "n1",
+      "role": "PERFORMER",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "scope_id": "e1",
+      "requires": [],
+      "sources": [
+        {
+          "quote": "PM必须生成issue.md",
+          "occurrence": 1
+        }
+      ],
+      "note": ""
+    },
+    {
+      "id": "c4",
+      "kind": "ROLE",
+      "event_id": "e1",
+      "entity_id": "n2",
+      "role": "RESULT",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "scope_id": "e1",
+      "requires": [],
+      "sources": [
+        {
+          "quote": "生成issue.md",
+          "occurrence": 1
+        }
+      ],
+      "note": "生成结果，不新增交付义务。"
+    },
+    {
+      "id": "c5",
+      "kind": "ROLE",
+      "event_id": "e2",
+      "entity_id": "n1",
+      "role": "PERFORMER",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "scope_id": "e2",
+      "requires": [],
+      "sources": [
+        {
+          "quote": "PM必须生成issue.md",
+          "occurrence": 1
+        },
+        {
+          "quote": "未发现异常时无需生成",
+          "occurrence": 1
+        }
+      ],
+      "note": "同一指令的互补条件分支承接明确主体PM。"
+    },
+    {
+      "id": "c6",
+      "kind": "ROLE",
+      "event_id": "e2",
+      "entity_id": "n2",
+      "role": "RESULT",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "scope_id": "e2",
+      "requires": [],
+      "sources": [
+        {
+          "quote": "生成issue.md",
+          "occurrence": 1
+        },
+        {
+          "quote": "未发现异常时无需生成",
+          "occurrence": 1
+        }
+      ],
+      "note": "省略的生成对象承接同一issue.md；该用途为NOT_REQUIRED。"
+    },
+    {
+      "id": "c7",
+      "kind": "ROLE",
+      "event_id": "e3",
+      "entity_id": "n1",
+      "role": "PERFORMER",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "scope_id": "e3",
+      "requires": [],
+      "sources": [
+        {
+          "quote": "PM必须生成issue.md",
+          "occurrence": 1
+        },
+        {
+          "quote": "无论是否异常，均不得删除input.csv",
+          "occurrence": 1
+        }
+      ],
+      "note": "连续追加限制未切换主体，承接PM；禁止不受异常状态限制。"
+    },
+    {
+      "id": "c8",
+      "kind": "ROLE",
+      "event_id": "e3",
+      "entity_id": "n3",
+      "role": "OBJECT",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "scope_id": "e3",
+      "requires": [],
+      "sources": [
+        {
+          "quote": "无论是否异常，均不得删除input.csv",
+          "occurrence": 1
+        }
+      ],
+      "note": "任何异常状态下均禁止删除此文件；不从禁止对象推定外部输入。"
+    }
+  ],
+  "expressions": [
+    {
+      "id": "x1",
+      "op": "STATE",
+      "operands": [],
+      "state": {
+        "predicate": "发现异常",
+        "event_id": null,
+        "args": [
+          "ROOT"
+        ],
+        "polarity": "POSITIVE"
+      },
+      "sources": [
+        {
+          "quote": "若发现异常",
+          "occurrence": 1
+        }
+      ]
+    },
+    {
+      "id": "x2",
+      "op": "STATE",
+      "operands": [],
+      "state": {
+        "predicate": "发现异常",
+        "event_id": null,
+        "args": [
+          "ROOT"
+        ],
+        "polarity": "NEGATIVE"
+      },
+      "sources": [
+        {
+          "quote": "未发现异常",
+          "occurrence": 1
+        }
+      ]
+    }
+  ],
+  "issues": [],
+  "coverage": [
+    {
+      "sources": [
+        {
+          "quote": "若发现异常，PM必须生成issue.md",
+          "occurrence": 1
+        }
+      ],
+      "claim_ids": [
+        "c1",
+        "c3",
+        "c4"
+      ],
+      "status": "EXPRESSED",
+      "affected_views": [
+        "A",
+        "O",
+        "P"
+      ]
+    },
+    {
+      "sources": [
+        {
+          "quote": "未发现异常时无需生成",
+          "occurrence": 1
+        }
+      ],
+      "claim_ids": [
+        "c2",
+        "c5",
+        "c6"
+      ],
+      "status": "EXPRESSED",
+      "affected_views": [
+        "A",
+        "O",
+        "P"
+      ]
+    },
+    {
+      "sources": [
+        {
+          "quote": "无论是否异常，均不得删除input.csv",
+          "occurrence": 1
+        }
+      ],
+      "claim_ids": [
+        "c7",
+        "c8"
+      ],
+      "status": "EXPRESSED",
+      "affected_views": [
+        "B",
+        "P"
+      ]
+    }
+  ]
+}

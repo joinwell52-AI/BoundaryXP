@@ -1,0 +1,1 @@
+请 PM 组织读取 coverage.json，检查支付模块的分支覆盖率并形成 coverage-review.md。低于 85% 的文件应列入报告；本任务不新增测试，也不修改阈值。

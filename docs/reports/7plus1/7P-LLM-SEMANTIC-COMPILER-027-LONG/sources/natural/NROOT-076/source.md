@@ -1,0 +1,1 @@
+请 PM 组织只检查测试环境中的 service.yaml，并形成 scope-review.md。生产环境不在本次范围内，不得修改任何配置。

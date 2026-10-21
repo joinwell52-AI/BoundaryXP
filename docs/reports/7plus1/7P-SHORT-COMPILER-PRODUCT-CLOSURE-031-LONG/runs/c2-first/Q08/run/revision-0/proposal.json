@@ -1,0 +1,409 @@
+{
+  "contract_version": "031-r01",
+  "entities": [
+    {
+      "id": "ent_ops",
+      "label": "OPS-01",
+      "type": "OTHER",
+      "mentions": [
+        {
+          "quote": "OPS-01",
+          "occurrence": 1
+        },
+        {
+          "quote": "OPS-01",
+          "occurrence": 2
+        }
+      ],
+      "alternatives": []
+    },
+    {
+      "id": "ent_backup",
+      "label": "备份目录",
+      "type": "OTHER",
+      "mentions": [
+        {
+          "quote": "备份目录",
+          "occurrence": 1
+        }
+      ],
+      "alternatives": []
+    },
+    {
+      "id": "ent_access",
+      "label": "access.md",
+      "type": "FILE",
+      "mentions": [
+        {
+          "quote": "access.md",
+          "occurrence": 1
+        },
+        {
+          "quote": "access.md",
+          "occurrence": 2
+        }
+      ],
+      "alternatives": []
+    },
+    {
+      "id": "ent_qa",
+      "label": "QA",
+      "type": "OTHER",
+      "mentions": [
+        {
+          "quote": "QA",
+          "occurrence": 1
+        },
+        {
+          "quote": "QA",
+          "occurrence": 2
+        }
+      ],
+      "alternatives": []
+    }
+  ],
+  "events": [
+    {
+      "id": "evt_check",
+      "predicate": "检查可读性",
+      "kind": "ACTION",
+      "layer": "MAIN",
+      "use": "CURRENT_TASK",
+      "modality": "REQUIRED",
+      "polarity": "POSITIVE",
+      "owner_id": "ROOT",
+      "constraint_ids": [],
+      "requires": [],
+      "sources": [
+        {
+          "quote": "请OPS-01检查备份目录的可读性",
+          "occurrence": 1
+        }
+      ]
+    },
+    {
+      "id": "evt_generate",
+      "predicate": "生成文件",
+      "kind": "ACTION",
+      "layer": "MAIN",
+      "use": "CURRENT_TASK",
+      "modality": "REQUIRED",
+      "polarity": "POSITIVE",
+      "owner_id": "ROOT",
+      "constraint_ids": [],
+      "requires": [],
+      "sources": [
+        {
+          "quote": "并生成access.md",
+          "occurrence": 1
+        }
+      ]
+    },
+    {
+      "id": "evt_deliver",
+      "predicate": "交付文件",
+      "kind": "ACTION",
+      "layer": "MAIN",
+      "use": "CURRENT_TASK",
+      "modality": "REQUIRED",
+      "polarity": "POSITIVE",
+      "owner_id": "ROOT",
+      "constraint_ids": [],
+      "requires": [],
+      "sources": [
+        {
+          "quote": "由OPS-01将access.md交给QA",
+          "occurrence": 1
+        }
+      ]
+    },
+    {
+      "id": "evt_review",
+      "predicate": "复核",
+      "kind": "ACTION",
+      "layer": "MAIN",
+      "use": "CURRENT_TASK",
+      "modality": "NOT_REQUIRED",
+      "polarity": "POSITIVE",
+      "owner_id": "ROOT",
+      "constraint_ids": [],
+      "requires": [],
+      "sources": [
+        {
+          "quote": "本任务不要求QA复核",
+          "occurrence": 1
+        }
+      ]
+    }
+  ],
+  "claims": [
+    {
+      "id": "cl_check_performer",
+      "kind": "ROLE",
+      "event_id": "evt_check",
+      "entity_id": "ent_ops",
+      "role": "PERFORMER",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "scope_id": "evt_check",
+      "requires": [],
+      "sources": [
+        {
+          "quote": "请OPS-01检查备份目录的可读性",
+          "occurrence": 1
+        }
+      ],
+      "note": "OPS-01是明确执行者；岗位身份类别未指定。"
+    },
+    {
+      "id": "cl_check_input",
+      "kind": "ROLE",
+      "event_id": "evt_check",
+      "entity_id": "ent_backup",
+      "role": "INPUT_OBJECT",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "scope_id": "evt_check",
+      "requires": [],
+      "sources": [
+        {
+          "quote": "检查备份目录的可读性",
+          "occurrence": 1
+        }
+      ],
+      "note": "备份目录是明确受检范围，检查属性为可读性。"
+    },
+    {
+      "id": "cl_generate_performer",
+      "kind": "ROLE",
+      "event_id": "evt_generate",
+      "entity_id": "ent_ops",
+      "role": "PERFORMER",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "scope_id": "evt_generate",
+      "requires": [],
+      "sources": [
+        {
+          "quote": "请OPS-01检查备份目录的可读性",
+          "occurrence": 1
+        },
+        {
+          "quote": "并生成access.md",
+          "occurrence": 1
+        }
+      ],
+      "note": "连续同一指令的并列动作承接明确主语OPS-01，没有主体切换。"
+    },
+    {
+      "id": "cl_generate_result",
+      "kind": "ROLE",
+      "event_id": "evt_generate",
+      "entity_id": "ent_access",
+      "role": "RESULT",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "scope_id": "evt_generate",
+      "requires": [],
+      "sources": [
+        {
+          "quote": "生成access.md",
+          "occurrence": 1
+        }
+      ],
+      "note": "access.md是要求生成的结果。"
+    },
+    {
+      "id": "cl_deliver_performer",
+      "kind": "ROLE",
+      "event_id": "evt_deliver",
+      "entity_id": "ent_ops",
+      "role": "PERFORMER",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "scope_id": "evt_deliver",
+      "requires": [],
+      "sources": [
+        {
+          "quote": "由OPS-01将access.md交给QA",
+          "occurrence": 1
+        }
+      ],
+      "note": "交付执行者明确为OPS-01。"
+    },
+    {
+      "id": "cl_deliver_artifact",
+      "kind": "ROLE",
+      "event_id": "evt_deliver",
+      "entity_id": "ent_access",
+      "role": "DELIVERABLE",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "scope_id": "evt_deliver",
+      "requires": [],
+      "sources": [
+        {
+          "quote": "生成access.md",
+          "occurrence": 1
+        },
+        {
+          "quote": "将access.md交给QA",
+          "occurrence": 1
+        }
+      ],
+      "note": "生成与交付指向同一access.md，原文没有其他同名文件或轮次。"
+    },
+    {
+      "id": "cl_deliver_recipient",
+      "kind": "ROLE",
+      "event_id": "evt_deliver",
+      "entity_id": "ent_qa",
+      "role": "RECIPIENT",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "scope_id": "evt_deliver",
+      "requires": [],
+      "sources": [
+        {
+          "quote": "将access.md交给QA",
+          "occurrence": 1
+        }
+      ],
+      "note": "QA是交付接收者，接收不自动产生复核义务。"
+    },
+    {
+      "id": "cl_review_reviewer",
+      "kind": "ROLE",
+      "event_id": "evt_review",
+      "entity_id": "ent_qa",
+      "role": "REVIEWER",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "scope_id": "evt_review",
+      "requires": [],
+      "sources": [
+        {
+          "quote": "本任务不要求QA复核",
+          "occurrence": 1
+        }
+      ],
+      "note": "明确撤回复核义务，不表示禁止复核。"
+    },
+    {
+      "id": "cl_review_object",
+      "kind": "ROLE",
+      "event_id": "evt_review",
+      "entity_id": "ent_access",
+      "role": "OBJECT",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "scope_id": "evt_review",
+      "requires": [],
+      "sources": [
+        {
+          "quote": "将access.md交给QA",
+          "occurrence": 1
+        },
+        {
+          "quote": "本任务不要求QA复核",
+          "occurrence": 1
+        }
+      ],
+      "note": "复核的省略对象承接交给QA的唯一文件access.md；该用途不新增外部输入。"
+    }
+  ],
+  "expressions": [],
+  "issues": [],
+  "coverage": [
+    {
+      "sources": [
+        {
+          "quote": "请OPS-01检查备份目录的可读性",
+          "occurrence": 1
+        }
+      ],
+      "claim_ids": [
+        "cl_check_performer",
+        "cl_check_input"
+      ],
+      "status": "EXPRESSED",
+      "affected_views": [
+        "I",
+        "A",
+        "P"
+      ]
+    },
+    {
+      "sources": [
+        {
+          "quote": "并生成access.md",
+          "occurrence": 1
+        }
+      ],
+      "claim_ids": [
+        "cl_generate_performer",
+        "cl_generate_result"
+      ],
+      "status": "EXPRESSED",
+      "affected_views": [
+        "A",
+        "O",
+        "P"
+      ]
+    },
+    {
+      "sources": [
+        {
+          "quote": "由OPS-01将access.md交给QA",
+          "occurrence": 1
+        }
+      ],
+      "claim_ids": [
+        "cl_deliver_performer",
+        "cl_deliver_artifact",
+        "cl_deliver_recipient"
+      ],
+      "status": "EXPRESSED",
+      "affected_views": [
+        "A",
+        "O",
+        "P"
+      ]
+    },
+    {
+      "sources": [
+        {
+          "quote": "本任务不要求QA复核",
+          "occurrence": 1
+        }
+      ],
+      "claim_ids": [
+        "cl_review_reviewer",
+        "cl_review_object"
+      ],
+      "status": "EXPRESSED",
+      "affected_views": [
+        "A",
+        "P"
+      ]
+    }
+  ]
+}

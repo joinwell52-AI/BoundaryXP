@@ -1,0 +1,1 @@
+PM must organize a review of test-cluster.yaml only. Production clusters are outside the task scope. The deliverable is cluster-review.md.

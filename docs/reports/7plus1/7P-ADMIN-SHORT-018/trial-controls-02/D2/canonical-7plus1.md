@@ -1,0 +1,31 @@
+# Actual Canonical Root 7+1
+
+## I RESOLVED
+
+- RESOLVED sample.tsv [p1:5b64f8f5943cfa4b6c4aa1c1]
+
+## O RESOLVED
+
+- RESOLVED quality.txt [p1:7a51969449fcb7ed6c64e9f6]
+
+## A UNRESOLVED
+
+- RESOLVED REQUIRED 读取 sample.tsv [p1:8ac88ad744bffdc0ea697569]
+- RESOLVED REQUIRED 生成 quality.txt [p1:a25180d180567f905de2c409]
+
+## P UNRESOLVED
+
+- RESOLVED DIRECTOR [RECIPIENT] [p1:a2a5323310398a5728a4be1a]
+- RESOLVED ENG [PERFORMER] [p1:a71595cf4db372147b99adae,p1:077aa4aa2676ab353294e38d]
+
+## R ABSENT
+
+
+## V ABSENT
+
+
+## C ABSENT
+
+
+## B ABSENT
+

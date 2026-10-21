@@ -1,0 +1,182 @@
+{
+  "status": "DIAGNOSTIC_NOT_ACCEPTED",
+  "rows": [
+    {
+      "path": "research/7plus1-parser/v0.3-admin-natural-021/argument-evidence.mjs",
+      "sha256": "7a39931c26925cb19939169512be9b82f88b90bea4328f7dd207fb5c0e972da4",
+      "parent_path": "research/7plus1-parser/v0.3-admin-short-020/argument-evidence.mjs",
+      "parent_sha256": "230963384fb6db52a87c072d82efbc6a89f58921c974c2cea6f1a5a4b739ac7d",
+      "changed": true,
+      "patch": "diff --git a/research/7plus1-parser/v0.3-admin-short-020/argument-evidence.mjs b/research/7plus1-parser/v0.3-admin-natural-021/argument-evidence.mjs\nindex 2c5f6b75..dab11bea 100644\n--- a/research/7plus1-parser/v0.3-admin-short-020/argument-evidence.mjs\n+++ b/research/7plus1-parser/v0.3-admin-natural-021/argument-evidence.mjs\n@@ -4,7 +4,7 @@ import {buildSemanticOwnership} from '../v0.3-7p-composition-014/semantic-owners\n export function closeArgumentEvidence(f){const {nm,sp,edge,expr}=graphApi(f);f.semantic_decoding.argument_binding_ir=[];\n  for(const a of f.analyses){\n   const live=f.relations.filter(r=>r.state==='RESOLVED'&&r.clause_id===a.cl.id),raw=a.cl.span.quote;\n-  for(const r of live.filter(r=>r.relation_type==='PATIENT'&&nm(r.head_node_id).metadata.sense==='review')){const object=nm(r.tail_node_id);if(!/^(?:汇总报告|检查报告|报告|文档)(?:是否|中|的)/u.test(object.surface))continue;const os=graphApi(f).outputs(a);if(os.length!==1)continue;const link=edge(a,'CONJUNCTION',object,os[0]);object.metadata.output_review_owner_id=os[0].node_id;for(const rr of f.relations.filter(rr=>rr.state==='RESOLVED'&&rr.relation_type==='SCOPE_MEMBER'&&rr.tail_node_id===object.node_id))rr.state='REJECTED';f.semantic_decoding.argument_binding_ir.push({event_node_id:r.head_node_id,object_node_id:object.node_id,owner_output_id:os[0].node_id,relation_ids:[r.relation_id,link.relation_id],source_span_ids:uniq([a.sid,...object.source_span_ids,...os[0].source_span_ids]),rule:'REVIEW_REQUIREMENT_OWNS_UNIQUE_GENERATED_OUTPUT'});}\n+  for(const r of live.filter(r=>r.relation_type==='PATIENT'&&nm(r.head_node_id).metadata.sense==='review')){const object=nm(r.tail_node_id);if(!/^(?:汇总报告|检查报告|报告|文档)(?:是否|中|的|内容)/u.test(object.surface))continue;const os=graphApi(f).outputs(a);if(os.length!==1)continue;const link=edge(a,'CONJUNCTION',object,os[0]);object.metadata.output_review_owner_id=os[0].node_id;for(const rr of f.relations.filter(rr=>rr.state==='RESOLVED'&&rr.relation_type==='SCOPE_MEMBER'&&rr.tail_node_id===object.node_id))rr.state='REJECTED';f.semantic_decoding.argument_binding_ir.push({event_node_id:r.head_node_id,object_node_id:object.node_id,owner_output_id:os[0].node_id,relation_ids:[r.relation_id,link.relation_id],source_span_ids:uniq([a.sid,...object.source_span_ids,...os[0].source_span_ids]),rule:'REVIEW_REQUIREMENT_OWNS_UNIQUE_GENERATED_OUTPUT'});}\n   for(const r of live.filter(r=>['PATIENT','THEME','FORBIDS'].includes(r.relation_type))){const object=nm(r.tail_node_id),e=nm(r.head_node_id);if(!object||!e)continue;\n    const result=f.relations.find(rr=>rr.state==='RESOLVED'&&rr.relation_type==='RESULT'&&rr.tail_node_id===object.node_id);if(!result)continue;\n    const tokens=[...raw.matchAll(/(?:[A-Z][A-Z0-9_-]*\\s*)?(?:检查报告|汇总报告|报告|文档)|\\bthe report\\b|\\breport\\b|\\bit\\b/giu)];\n"
+    },
+    {
+      "path": "research/7plus1-parser/v0.3-admin-natural-021/certification-frontier.mjs",
+      "sha256": "017bf47682388f84f4d093bf9a318d4b28d8c8cfe4cc2601f9a8699e4f6dc7ac",
+      "parent_path": null,
+      "parent_sha256": null,
+      "changed": true,
+      "patch": "NEW_FILE"
+    },
+    {
+      "path": "research/7plus1-parser/v0.3-admin-natural-021/composition.mjs",
+      "sha256": "49522c5f22b5ac06a0697329f35ac77bbc9c0c65d945011cb9914c3cf84d4e15",
+      "parent_path": "research/7plus1-parser/v0.3-admin-short-020/composition.mjs",
+      "parent_sha256": "49522c5f22b5ac06a0697329f35ac77bbc9c0c65d945011cb9914c3cf84d4e15",
+      "changed": false,
+      "patch": ""
+    },
+    {
+      "path": "research/7plus1-parser/v0.3-admin-natural-021/conditions.mjs",
+      "sha256": "4572f9311ce0fdbe53b43521a8f273576c792ec5f51ced72cd5419d0e415f594",
+      "parent_path": "research/7plus1-parser/v0.3-admin-short-020/conditions.mjs",
+      "parent_sha256": "4572f9311ce0fdbe53b43521a8f273576c792ec5f51ced72cd5419d0e415f594",
+      "changed": false,
+      "patch": ""
+    },
+    {
+      "path": "research/7plus1-parser/v0.3-admin-natural-021/content-local.mjs",
+      "sha256": "8064abd143dbd8d34a637fc3b875831e57fac2ef6a95e699ae4fa4f884cf1357",
+      "parent_path": "research/7plus1-parser/v0.3-admin-short-020/content-local.mjs",
+      "parent_sha256": "8064abd143dbd8d34a637fc3b875831e57fac2ef6a95e699ae4fa4f884cf1357",
+      "changed": false,
+      "patch": ""
+    },
+    {
+      "path": "research/7plus1-parser/v0.3-admin-natural-021/context-domains.mjs",
+      "sha256": "bc8c7c347fcc76c2a8bc5f5b73b71efb87fec3386c8d4f086d522b00050e2ec8",
+      "parent_path": "research/7plus1-parser/v0.3-admin-short-020/context-domains.mjs",
+      "parent_sha256": "bc8c7c347fcc76c2a8bc5f5b73b71efb87fec3386c8d4f086d522b00050e2ec8",
+      "changed": false,
+      "patch": ""
+    },
+    {
+      "path": "research/7plus1-parser/v0.3-admin-natural-021/domain-local.mjs",
+      "sha256": "9e57fe27760f6ceff639f030eefd8f2f1088d202923d463dcc3a94c383662acb",
+      "parent_path": "research/7plus1-parser/v0.3-admin-short-020/domain-local.mjs",
+      "parent_sha256": "9e57fe27760f6ceff639f030eefd8f2f1088d202923d463dcc3a94c383662acb",
+      "changed": false,
+      "patch": ""
+    },
+    {
+      "path": "research/7plus1-parser/v0.3-admin-natural-021/engine.mjs",
+      "sha256": "ff1972b962f254e46b106ade4120bf6ddd339d95ba055684d97a7db433e17e0b",
+      "parent_path": "research/7plus1-parser/v0.3-admin-short-020/engine.mjs",
+      "parent_sha256": "5c6026a2c106ad70c4d4baeaf8c8aa2363db064876610b0909af0e44ed3b4be8",
+      "changed": true,
+      "patch": "diff --git a/research/7plus1-parser/v0.3-admin-short-020/engine.mjs b/research/7plus1-parser/v0.3-admin-natural-021/engine.mjs\nindex ab86aa21..49e26204 100644\n--- a/research/7plus1-parser/v0.3-admin-short-020/engine.mjs\n+++ b/research/7plus1-parser/v0.3-admin-natural-021/engine.mjs\n@@ -26,13 +26,15 @@ import {markRetainedContracts} from './retained-contracts.mjs';\n import {closeContextDomains} from './context-domains.mjs';\n import {installLexicalContract} from './lexical.mjs';\n import {closeGeneralization} from './generalization.mjs';\n-export function prepareNative(doc,signals){const f=installLexicalContract(markRetainedContracts(installPartOf(prepareR2(doc,signals))));prepareOwnership(f);prepareBasis(f);prepareConditionLayers(f);closeAdminRoot(f);closeBasis(f);closeFlows(f);closeTeamFlows(f);closePredicateSemantics(f);closeResources(f);closeRootStateBindings(f);normalizeParticipantIdentity(f);closeQualifiedDomains(f);closeContentAndStructure(f);closeContentComponents(f);closeEmbeddedInputs(f);closeConditions(f);closeScopeIdentity(f);closeRoleDeclarations(f);closeArgumentEvidence(f);closeLocalDomains(f);closeContextDomains(f);closeGeneralization(f);synchronizeBundles(f);return f;}\n+import {closeReferenceFrontier,closeNegativeRoleDeclarations} from './certification-frontier.mjs';\n+export function prepareNative(doc,signals){const f=installLexicalContract(markRetainedContracts(installPartOf(prepareR2(doc,signals))));prepareOwnership(f);prepareBasis(f);prepareConditionLayers(f);closeAdminRoot(f);closeBasis(f);closeFlows(f);closeTeamFlows(f);closePredicateSemantics(f);closeResources(f);closeRootStateBindings(f);normalizeParticipantIdentity(f);closeQualifiedDomains(f);closeContentAndStructure(f);closeContentComponents(f);closeEmbeddedInputs(f);closeConditions(f);closeScopeIdentity(f);closeRoleDeclarations(f);closeArgumentEvidence(f);closeLocalDomains(f);closeContextDomains(f);closeGeneralization(f);closeNegativeRoleDeclarations(f);closeReferenceFrontier(f);synchronizeBundles(f);return f;}\n function synchronizeBundles(f){const live=new Set(f.unresolved.map(u=>u.unresolved_id));for(const b of f.relation_bundles){b.unresolved_refs=b.unresolved_refs.filter(x=>live.has(x));b.relation_ids=f.relations.filter(r=>b.clause_ids.includes(r.clause_id)).map(r=>r.relation_id);b.bundle_state=b.unresolved_refs.length?'PARTIALLY_RESOLVED':'RESOLVED';}}\n export function compileNative(doc,signals,options={}){\n  const f=prepareNative(doc,signals);produceEligibility(f);certifyResourceEligibility(f);closeDomainEvidence(f);enrichFactEvidence(f);finalizeAdminRoles(f);produceBoundaryIR(f);produceCoverage(f);localizeCoverage(f);localizeTypedUnresolved(f);\n  const c={metadata:{run_id:options.run_id??randomUUID(),compiler_version:'0.3-admin-short-020',created_at:options.created_at??new Date().toISOString(),source_sha256:f.source.sha256},source:f.source,structure:f.structure,nlp_signals:{...f.nlp_signals,semantic_decoding:f.semantic_decoding},span_lattice:f.span_lattice,semantic_nodes:f.semantic_nodes,relations:f.relations,relation_bundles:f.relation_bundles,unresolved:f.unresolved,eligibility_decisions:f.eligibility_decisions,coverage:f.coverage,boundary_ir:f.boundary_ir,canonical_7plus1:projectCanonical(f.boundary_ir,f.semantic_nodes,f.coverage,f.unresolved),proof_dag:{},diagnostics:f.diagnostics,performance:f.performance};c.proof_dag=produceProof(c,f.source_spans);attachDomainProof(c);attachReferenceProof(c);\n+ c.metadata.compiler_version='0.3-admin-natural-021';\n  const stage_availability=Object.fromEntries(['source','structure','nlp_signals','span_lattice','semantic_nodes','relations','relation_bundles','unresolved','eligibility_decisions','coverage','boundary_ir','canonical_7plus1','proof_dag'].map(k=>[k,['source','structure','nlp_signals'].includes(k)?'AVAILABLE':f.unresolved.length||f.coverage.some(c=>c.disposition==='COVERAGE_FAILURE')?'PARTIAL':'AVAILABLE']));\n const gates=contractGates(c,{spans:f.source_spans,availability:stage_availability});return {parser_revision:'v0.3-admin-short-020',contract_version:'0.3-normative-part-of-r1',parser_status:gates.status==='PASS'?(f.unresolved.length?'PARSED_WITH_UNRESOLVED':'PARSED'):'CONTRACT_FAILURE',compiler_v03:c,source_spans:f.source_spans,stage_availability,contract_gate_results:gates,relation_type_audit:relationTypeAudit(c),native_provenance:{input_stages:['SOURCE','NLP_SIGNALS','TYPED_RECOGNIZERS'],legacy_reverse_projection_edges:0,direct_raw_nlp_to_slot_edges:0,LLM:'NOT_USED',WP_decomposition:false},first_divergence:f.unresolved.length?{stage:'RELATION_DECODE',reason:f.unresolved[0].reason,unresolved_id:f.unresolved[0].unresolved_id}:null};\n }\n-export async function parse7Plus1(input,options={}){const start=performance.now(),doc=sourceDocument(input,options),signals=await analyze(doc),r=compileNative(doc,signals,options);r.parser_revision='v0.3-admin-short-020';r.compiler_v03.nlp_signals.semantic_model_signals={status:'NOT_USED',reason:'019 deterministic semantic compiler candidate; no hybrid lane authorized'};r.compiler_v03.performance.total_ms=performance.now()-start;return r;}\n+export async function parse7Plus1(input,options={}){const start=performance.now(),doc=sourceDocument(input,options),signals=await analyze(doc),r=compileNative(doc,signals,options);r.parser_revision='v0.3-admin-natural-021';r.compiler_v03.nlp_signals.semantic_model_signals={status:'NOT_USED',reason:'021 deterministic compiler candidate; models/config/thresholds retained from frozen 020'};r.compiler_v03.performance.total_ms=performance.now()-start;return r;}\n \n"
+    },
+    {
+      "path": "research/7plus1-parser/v0.3-admin-natural-021/generalization.mjs",
+      "sha256": "c8dc710f538bd94d19d2ea97e35f46c8bfba37afb26e423019cbb0cf563bb782",
+      "parent_path": "research/7plus1-parser/v0.3-admin-short-020/generalization.mjs",
+      "parent_sha256": "c8dc710f538bd94d19d2ea97e35f46c8bfba37afb26e423019cbb0cf563bb782",
+      "changed": false,
+      "patch": ""
+    },
+    {
+      "path": "research/7plus1-parser/v0.3-admin-natural-021/graph-api.mjs",
+      "sha256": "d945b8444b409035030e6ff25d0934304dbdf4f147a43b7d6db7ac870f6cbce8",
+      "parent_path": "research/7plus1-parser/v0.3-admin-short-020/graph-api.mjs",
+      "parent_sha256": "d945b8444b409035030e6ff25d0934304dbdf4f147a43b7d6db7ac870f6cbce8",
+      "changed": false,
+      "patch": ""
+    },
+    {
+      "path": "research/7plus1-parser/v0.3-admin-natural-021/lexical.mjs",
+      "sha256": "aaa8ba91f45531ad9cb6aa76f17db2494185fa7aaadcfda2f9bd665ebd8cffed",
+      "parent_path": "research/7plus1-parser/v0.3-admin-short-020/lexical.mjs",
+      "parent_sha256": "68f6490f38243010cd0f8a715ee957597569e30e6d4ac58ecebdcf4d1c923236",
+      "changed": true,
+      "patch": "diff --git a/research/7plus1-parser/v0.3-admin-short-020/lexical.mjs b/research/7plus1-parser/v0.3-admin-natural-021/lexical.mjs\nindex 01d53ba2..58d471a0 100644\n--- a/research/7plus1-parser/v0.3-admin-short-020/lexical.mjs\n+++ b/research/7plus1-parser/v0.3-admin-natural-021/lexical.mjs\n@@ -1,5 +1,5 @@\n // Shared finite senses. All indices and source surfaces remain original.\n-export const PREDICATE_WORDS={read:['读取','查看','read','reads'],review:['检查','核查','核对','核验','复核','审查','inspect','inspects','check','checks','review','reviews','reviewed'],generate:['生成','编写','创建','generate','create','write','writes','created','written','generated'],send:['提交','交给','发送','send','sends','submit','submits','sent','submitted'],report:['汇报','上报','报告','report','reports'],receive:['收到','接收','receive','received'],complete:['完成','结束','complete','completed','finished'],confirm:['确认','confirm','confirms','confirmed']};\n+export const PREDICATE_WORDS={read:['读取','查看','read','reads'],review:['检查','核查','核对','核验','复核','审查','审阅','inspect','inspects','check','checks','review','reviews','reviewed','verify'],generate:['生成','编写','创建','输出','generate','create','write','writes','created','written','generated'],send:['提交','交给','发送','send','sends','submit','submits','sent','submitted'],report:['汇报','上报','报告','report','reports'],receive:['收到','接收','receive','received'],complete:['完成','结束','complete','completed','finished'],confirm:['确认','confirm','confirms','confirmed'],compare:['比较','对比','compare'],clear:['清空','清理','clear'],rewrite:['重写','rewrite'],recalculate:['重新计算','重算','recalculate']};\n const escape=s=>s.replace(/[.*+?^${}()|[\\]\\\\]/g,'\\\\$&');\n export function sensePattern(senses){return '(?:'+senses.flatMap(s=>PREDICATE_WORDS[s]??[]).sort((a,b)=>b.length-a.length).map(w=>/^[a-z]/iu.test(w)?'\\\\b'+escape(w)+'\\\\b':escape(w)).join('|')+')';}\n export function predicates(text,senses=Object.keys(PREDICATE_WORDS)){const map=new Map(senses.flatMap(s=>(PREDICATE_WORDS[s]??[]).map(w=>[w.toLowerCase(),s])));return [...text.matchAll(new RegExp(sensePattern(senses),'giu'))].map(m=>({sense:map.get(m[0].toLowerCase()),surface:m[0],index:m.index,end:m.index+m[0].length,start_cp:[...text.slice(0,m.index)].length,end_cp:[...text.slice(0,m.index+m[0].length)].length}));}\n"
+    },
+    {
+      "path": "research/7plus1-parser/v0.3-admin-natural-021/ownership.mjs",
+      "sha256": "f1c220e6682b682daa4ea9d0f3762e3e18a89bc7e06d8c475e1316962f38d1a1",
+      "parent_path": "research/7plus1-parser/v0.3-admin-short-020/ownership.mjs",
+      "parent_sha256": "ea284ebd11867a5d5374fa9343330a40688649c8f842808e14e3893aae6e4fa4",
+      "changed": true,
+      "patch": "diff --git a/research/7plus1-parser/v0.3-admin-short-020/ownership.mjs b/research/7plus1-parser/v0.3-admin-natural-021/ownership.mjs\nindex bb06bda5..1aebd002 100644\n--- a/research/7plus1-parser/v0.3-admin-short-020/ownership.mjs\n+++ b/research/7plus1-parser/v0.3-admin-natural-021/ownership.mjs\n@@ -1,7 +1,10 @@\n import {id,uniq} from '../v0.3-7p-composition-014/identity.mjs';\n import {buildSemanticOwnership} from '../v0.3-7p-composition-014/semantic-ownership.mjs';\n import {graphApi,length} from './graph-api.mjs';\n-export function prepareOwnership(f){for(const a of f.analyses){const text=a.cl.span.quote;const review=/^\\s*(?:[A-Z][A-Z0-9_-]*|[\\p{Script=Han}]{2,8})\\s*(?:确认|复核|审核).*后$/u.test(text);const current=/^(?:不执行|不得|禁止|严禁)/u.test(text)&&/文档|报告/u.test(text);if(a.discourse.kind==='OUTPUT_CONTENT'&&(review||current)){a.discourse={...a.discourse,kind:'CURRENT_TASK',ownership_recovery_rule:'EXPLICIT_OUTER_REVIEW_OR_CONSTRAINT'};for(const n of f.semantic_nodes.filter(n=>n.metadata.clause_id===a.cl.id))n.metadata.discourse=a.discourse;}}return f;}\n+export function prepareOwnership(f){for(const a of f.analyses){const text=a.cl.span.quote;const review=/^\\s*(?:[A-Z][A-Z0-9_-]*|[\\p{Script=Han}]{2,8})\\s*(?:确认|复核|审核).*后$/u.test(text);const current=/^(?:不执行|不得|禁止|严禁)/u.test(text)&&/文档|报告/u.test(text);if(a.discourse.kind==='OUTPUT_CONTENT'&&(review||current)){a.discourse={...a.discourse,kind:'CURRENT_TASK',ownership_recovery_rule:'EXPLICIT_OUTER_REVIEW_OR_CONSTRAINT'};for(const n of f.semantic_nodes.filter(n=>n.metadata.clause_id===a.cl.id))n.metadata.discourse=a.discourse;}\n+ if(contentSyntax(text)&&!review&&!current){a.discourse={...a.discourse,kind:'OUTPUT_CONTENT',ownership_recovery_rule:'EXPLICIT_CONTENT_PREDICATE_OWNER'};a.r2_nonexecution=true;for(const n of f.semantic_nodes.filter(n=>n.metadata.clause_id===a.cl.id))n.metadata.discourse=a.discourse;}\n+ }return f;}\n+const contentSyntax=text=>/^(?:并|也)?(?:在)?(?:报告|文档|指南|纪要|(?:the\\s+)?(?:report|document|guide))\\s*(?:中|里|内)?\\s*(?:必须|须|应|要|must)?\\s*(?:逐项|明确|原样|分别|单独)?\\s*(?:包含|写入|写明|列出|说明|记录|contain|include)/iu.test(text);\n // Discourse classification is separate from execution candidate generation.\n // The requirement keeps its own source even when its words resemble actions.\n export function closeContentAndStructure(f){\n"
+    },
+    {
+      "path": "research/7plus1-parser/v0.3-admin-natural-021/predicate-semantics.mjs",
+      "sha256": "d042005f281d7da5771c74103f0ab533da3c24f602d9d5613fbed7e571ecb7e3",
+      "parent_path": "research/7plus1-parser/v0.3-admin-short-020/predicate-semantics.mjs",
+      "parent_sha256": "d042005f281d7da5771c74103f0ab533da3c24f602d9d5613fbed7e571ecb7e3",
+      "changed": false,
+      "patch": ""
+    },
+    {
+      "path": "research/7plus1-parser/v0.3-admin-natural-021/retained-contracts.mjs",
+      "sha256": "5868f0654c52d8e40f29248f7da373d71ad8566cc3fad86aac6d06a675feea86",
+      "parent_path": "research/7plus1-parser/v0.3-admin-short-020/retained-contracts.mjs",
+      "parent_sha256": "5868f0654c52d8e40f29248f7da373d71ad8566cc3fad86aac6d06a675feea86",
+      "changed": false,
+      "patch": ""
+    },
+    {
+      "path": "research/7plus1-parser/v0.3-admin-natural-021/roles.mjs",
+      "sha256": "49cda317ebe9ba00f7df3c9b547a29a7352a0f5fb54b4130dc74707570200e04",
+      "parent_path": "research/7plus1-parser/v0.3-admin-short-020/roles.mjs",
+      "parent_sha256": "49cda317ebe9ba00f7df3c9b547a29a7352a0f5fb54b4130dc74707570200e04",
+      "changed": false,
+      "patch": ""
+    },
+    {
+      "path": "research/7plus1-parser/v0.3-admin-natural-021/root-frames.mjs",
+      "sha256": "4c29d883b8df32b618255e03c4431d4f4a4319117246293d994f36a112b2b631",
+      "parent_path": "research/7plus1-parser/v0.3-admin-short-020/root-frames.mjs",
+      "parent_sha256": "e2cc94dd3c3daea0d9d530c64d5fda17c5ff3afc28a14e1be5eaac82b1ca5028",
+      "changed": true,
+      "patch": "diff --git a/research/7plus1-parser/v0.3-admin-short-020/root-frames.mjs b/research/7plus1-parser/v0.3-admin-natural-021/root-frames.mjs\nindex cb06ba9b..a5e8a5ec 100644\n--- a/research/7plus1-parser/v0.3-admin-short-020/root-frames.mjs\n+++ b/research/7plus1-parser/v0.3-admin-natural-021/root-frames.mjs\n@@ -26,7 +26,7 @@ export function closeAdminRoot(f){\n  function person(a,start,end,role){const range=trimRange(cp,start,end);if(!range.text)return null;const candidate=node(a.cl,'ENTITY',range.start,range.end,{literal_tag:'PERSON',sense:'PARTICIPANT_IDENTITY',owner:a.cl.id,discourse:a.discourse});markRole(candidate,role,[a.sid,...candidate.source_span_ids]);mentions.push({a,node:candidate});return candidate;}\n  function actorRange(a,range){\n   if(!range.text)return null;\n-  const text=range.text.replace(/^(?:最后)?\\s*(?:并|最后|此次|本次|由|and\\s+|then\\s+|by\\s+)/iu,'').replace(/(?:\\s*(?:只负责|负责|才能|必须|可以|最后|统一|立即|明确|must|may))+\\s*$/iu,'').trim();\n+  const text=range.text.replace(/^(?:(?:请|请由|最后|并|此次|本次|由|and\\b|then\\b|by\\b|please\\b)\\s*)+/iu,'').replace(/(?:\\s*(?:只负责|负责|才能|必须|可以|最后|统一|立即|明确|只|仅|must|may))+\\s*$/iu,'').trim();\n   if(!text)return null;const start=range.start+cps(range.text.slice(0,range.text.indexOf(text))),end=start+cps(text);\n   const ner=a.cl.entities?.some(e=>['PERSON','PER'].includes(e.label)&&e.span.start>=start&&e.span.end<=end);\n   const names=a.cl.tokens.filter(t=>t.start>=start&&t.end<=end&&/^(NR|PROPN)$/u.test(t.pos??''));\n@@ -91,7 +91,16 @@ export function closeAdminRoot(f){\n    f.expression_plans.set(task.node_id,{quantity_expr_id:expr});value.metadata.quantity_classification={resource_eligible:true,category:'EXECUTION_RESOURCE'};\n    log.rules.push({rule:'EXPLICIT_TASK_WIDE_DURATION',clause_id:a.cl.id,relation_ids:[witness.relation_id],quantity_expr_id:expr,source_span_ids:[a.sid]});continue;\n   }\n-  const lexicalVerbs=[...raw.matchAll(matcher)].map(m=>({text:m[0],sense:dict.get(m[0].toLowerCase()),start:a.cl.span.start+cps(raw.slice(0,m.index)),end:a.cl.span.start+cps(raw.slice(0,m.index))+cps(m[0])})).filter(v=>(!a.r2_execution_start||v.start>=a.r2_execution_start)&&a.cl.tokens.some(t=>t.start===v.start)&&a.cl.tokens.some(t=>t.end===v.end)&&(v.text.toLowerCase()!=='report'&&v.text!=='报告'||a.cl.tokens.some(t=>t.start===v.start&&/^(VV|VERB)$/u.test(t.pos??''))||/向\\s*[^\\s]+\\s*(?:统一|升级)?$/u.test(cp.slice(a.cl.span.start,v.start).join('')))&&!f.nlp_signals.literals.some(l=>l.span.start<=v.start&&l.span.end>=v.end&&['FILE','PATH','IDENTIFIER','VERSION','REFERENCE'].includes(l.type)));\n+  const exact=[...raw.matchAll(matcher)].map(m=>({text:m[0],sense:dict.get(m[0].toLowerCase()),start:a.cl.span.start+cps(raw.slice(0,m.index)),end:a.cl.span.start+cps(raw.slice(0,m.index))+cps(m[0])}));\n+  // The real NLP lemma is a candidate, with the inflected token's exact span.\n+  // It cannot override a literal or turn a noun modifier into a root action.\n+  const lemma=a.cl.tokens.filter(t=>/^(VERB|VV)$/u.test(t.pos??'')&&dict.has(t.lemma?.toLowerCase())).map(t=>({text:t.text,sense:dict.get(t.lemma.toLowerCase()),start:t.start,end:t.end}));\n+  const lexicalVerbs=[...new Map([...exact,...lemma].map(v=>[v.start+':'+v.end,v])).values()].sort((a,b)=>a.start-b.start).filter((v,index)=>{\n+   const tokens=a.cl.tokens.filter(t=>t.start>=v.start&&t.end<=v.end),head=tokens[0];\n+   if(!head||!tokens.some(t=>t.end===v.end)||head.start!==v.start)return false;\n+   if(index>0&&!/^(?:VV|VERB)$/u.test(head.pos??'')&&/^(?:compound|nmod|amod|attr)/u.test(head.dep??''))return false;\n+   return (!a.r2_execution_start||v.start>=a.r2_execution_start)&&(v.text.toLowerCase()!=='report'&&v.text!=='报告'||/^(VV|VERB)$/u.test(head.pos??'')||/向\\s*[^\\s]+\\s*(?:统一|升级)?$/u.test(cp.slice(a.cl.span.start,v.start).join('')))&&!f.nlp_signals.literals.some(l=>l.span.start<=v.start&&l.span.end>=v.end&&['FILE','PATH','IDENTIFIER','VERSION','REFERENCE'].includes(l.type));\n+  });\n   // A lexical predicate inside the argument is not another root predicate.\n   // Subsequent roots require an overt coordination/temporal connector.\n   const verbs=lexicalVerbs.filter((v,i)=>!i||/(?:并|及|以及|和|或|、|\\band\\b|\\bor\\b|\\bbefore\\s+|\\bafter\\s+)\\s*(?:\\s*(?:向|给|to|由|by)\\s*)?(?:[\\p{L}\\p{N}_-]+\\s+)?(?:必须|须|可以|重新|再|must(?:\\s+not)?|may)?\\s*$/iu.test(cp.slice(a.cl.span.start,v.start).join('')));if(!verbs.length)continue;\n@@ -155,7 +164,7 @@ export function closeAdminRoot(f){\n   if(coordinator){const n=person(a,coordinator.start,coordinator.end,'COLLABORATOR');const st=node(a.cl,'STATE',coordinator.end,actor.start,{sense:'EXPLICIT_ASSIGNMENT',owner:a.cl.id,discourse:a.discourse});edge(a,'AGENT',st,n);a.state=st;}\n   let previousEvent=null;\n   for(const s of specs){\n-   const metadata={sense:s.verb.sense,owner:a.cl.id,discourse:a.discourse,modality:s.modality,stop:s.verb.sense==='stop',modality_rule:'EXPLICIT_ROOT_DIRECTIVE_SYNTAX',frame_certification:{state:'CERTIFIED',boundary_role:'EXECUTION',frame_id:id(a.cl.id,'admin',s.verb.start),source_span_ids:[a.sid]}};\n+   const metadata={sense:s.verb.sense,owner:a.cl.id,discourse:a.discourse,modality:s.modality,stop:s.verb.sense==='stop'&&s.modality!=='FORBIDDEN',modality_rule:'EXPLICIT_ROOT_DIRECTIVE_SYNTAX',frame_certification:{state:'CERTIFIED',boundary_role:'EXECUTION',frame_id:id(a.cl.id,'admin',s.verb.start),source_span_ids:[a.sid]}};\n    const e=node(a.cl,'EVENT',s.verb.start,s.verb.end,metadata);Object.assign(e.metadata,metadata);e.state='RESOLVED';delete e.metadata.modality_unresolved;delete e.unresolved_ref;a.events.push(e);\n    const rs=s.objects.map(o=>edge(a,s.modality==='FORBIDDEN'?'FORBIDS':s.verb.sense==='generate'?'RESULT':['send','report'].includes(s.verb.sense)?'THEME':'PATIENT',e,o));setPlan(a,e,s.objects,rs);\n    const accepted=priorSubjects.get(s.verb.start)??[];\n"
+    },
+    {
+      "path": "research/7plus1-parser/v0.3-admin-natural-021/scope.mjs",
+      "sha256": "198a258c59e265172a09a7f67e37d2af248ab88f16a4ee4281cf022406ac9e62",
+      "parent_path": "research/7plus1-parser/v0.3-admin-short-020/scope.mjs",
+      "parent_sha256": "198a258c59e265172a09a7f67e37d2af248ab88f16a4ee4281cf022406ac9e62",
+      "changed": false,
+      "patch": ""
+    },
+    {
+      "path": "research/7plus1-parser/v0.3-admin-natural-021/team-flow.mjs",
+      "sha256": "2f8986a11b7c3f4e16e2bd479c49387ffec77c4f10f0c2ad68f062de92cf313c",
+      "parent_path": "research/7plus1-parser/v0.3-admin-short-020/team-flow.mjs",
+      "parent_sha256": "2f8986a11b7c3f4e16e2bd479c49387ffec77c4f10f0c2ad68f062de92cf313c",
+      "changed": false,
+      "patch": ""
+    },
+    {
+      "path": "research/7plus1-parser/v0.3-admin-natural-021/typed-composition.mjs",
+      "sha256": "8927c4d16e57cbd44b7044084fe7d2f5a33cb0c2539f884cc6bd2df83fcdac90",
+      "parent_path": "research/7plus1-parser/v0.3-admin-short-020/typed-composition.mjs",
+      "parent_sha256": "8927c4d16e57cbd44b7044084fe7d2f5a33cb0c2539f884cc6bd2df83fcdac90",
+      "changed": false,
+      "patch": ""
+    }
+  ],
+  "changes": [
+    {
+      "round": "r01",
+      "mechanisms": [
+        "source-preserving lexical/lemma proposals",
+        "polite discourse prefix and explicit actor separation",
+        "shared coordinated complement and forbidden-stop classification"
+      ],
+      "primary": "20/100; +4 below minimum5"
+    },
+    {
+      "round": "r02",
+      "mechanisms": [
+        "document-content non-execution ownership",
+        "negative responsibility state",
+        "unresolved argument dependency frontier",
+        "local output-review argument binding",
+        "NLP noun-layer candidate separation"
+      ],
+      "primary": "21/100; +1 below minimum5"
+    }
+  ],
+  "method_schema_projection_unchanged": true,
+  "production_entry_unchanged": true,
+  "parent_own_files_verified": 18
+}

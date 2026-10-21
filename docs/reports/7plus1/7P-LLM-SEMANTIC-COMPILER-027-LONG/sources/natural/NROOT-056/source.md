@@ -1,0 +1,1 @@
+本次任务要求检查索引声明与约束声明，两类检查都完成后形成 schema-check.md。由 PM 组织，不得修改 schema.sql。

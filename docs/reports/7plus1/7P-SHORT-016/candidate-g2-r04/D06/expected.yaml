@@ -1,0 +1,50 @@
+I:
+  status: RESOLVED
+  entries:
+    - INPUT changes.csv
+
+O:
+  status: RESOLVED
+  entries:
+    - GENERATED_OUTPUT review.md
+    - CONDITIONAL_OUTPUT diff.csv
+      condition: DIFFERENCE_EXISTS
+
+A:
+  status: RESOLVED
+  entries:
+    - REQUIRED READ changes.csv
+      agent: 林秋
+    - REQUIRED GENERATE review.md
+      agent: 林秋
+    - REQUIRED GENERATE diff.csv
+      agent: 林秋
+      condition: DIFFERENCE_EXISTS
+
+P:
+  status: RESOLVED
+  entries:
+    - 林秋 [PERFORMER]
+
+R:
+  status: ABSENT
+
+V:
+  status: ABSENT
+
+C:
+  status: RESOLVED
+  entries:
+    - AND
+      - OUTPUT_EXISTS(review.md)
+      - ALL_FOUND_DIFFERENCES_RECORDED
+
+B:
+  status: RESOLVED
+  entries:
+    - FORBIDDEN MODIFY changes.csv
+
+Auxiliary:
+  - NOT_REQUIRED GENERATE diff.csv
+    condition: NOT DIFFERENCE_EXISTS
+  - Auxiliary NOT_REQUIRED must not project to B.

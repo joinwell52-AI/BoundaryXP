@@ -1,0 +1,295 @@
+{
+  "contract_version": "032.1",
+  "reviews": [
+    {
+      "subject_id": "ent_pm",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [
+        {
+          "quote": "PM",
+          "occurrence": 1
+        }
+      ],
+      "reason": "PM身份明确；OTHER可占位表示未指定的人或组类别。"
+    },
+    {
+      "subject_id": "ent_users",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [
+        {
+          "quote": "users.csv",
+          "occurrence": 1
+        }
+      ],
+      "reason": "明确的受核对文件，身份与类型有来源支持。"
+    },
+    {
+      "subject_id": "ent_optional",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [
+        {
+          "quote": "optional.md",
+          "occurrence": 1
+        },
+        {
+          "quote": "optional.md",
+          "occurrence": 2
+        }
+      ],
+      "reason": "两处名称指同一可选产物，无版本或对象竞争。"
+    },
+    {
+      "subject_id": "evt_check",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [
+        {
+          "quote": "请PM核对users.csv",
+          "occurrence": 1
+        }
+      ],
+      "reason": "核对是当前任务明确要求的动作。"
+    },
+    {
+      "subject_id": "evt_generate",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [
+        {
+          "quote": "可以另外生成optional.md",
+          "occurrence": 1
+        }
+      ],
+      "reason": "生成被允许，未被要求；另外不构成先后约束。"
+    },
+    {
+      "subject_id": "evt_deliver",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [
+        {
+          "quote": "本任务不要求交付optional.md",
+          "occurrence": 1
+        }
+      ],
+      "reason": "NOT_REQUIRED准确表达无需交付，不新增许可或禁止。"
+    },
+    {
+      "subject_id": "role_check_pm",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [
+        "ent_pm",
+        "evt_check"
+      ],
+      "sources": [
+        {
+          "quote": "请PM核对users.csv",
+          "occurrence": 1
+        }
+      ],
+      "reason": "PM是明确的核对执行者。"
+    },
+    {
+      "subject_id": "role_check_input",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [
+        "ent_users",
+        "evt_check"
+      ],
+      "sources": [
+        {
+          "quote": "核对users.csv",
+          "occurrence": 1
+        }
+      ],
+      "reason": "users.csv是明确的受检输入范围。"
+    },
+    {
+      "subject_id": "scope_check",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [
+        "role_check_input",
+        "expr_users"
+      ],
+      "sources": [
+        {
+          "quote": "核对users.csv",
+          "occurrence": 1
+        }
+      ],
+      "reason": "范围绑定同一核对事件的具体文件对象。"
+    },
+    {
+      "subject_id": "role_generate_pm",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [
+        "ent_pm",
+        "evt_generate"
+      ],
+      "sources": [
+        {
+          "quote": "请PM核对users.csv",
+          "occurrence": 1
+        },
+        {
+          "quote": "可以另外生成optional.md",
+          "occurrence": 1
+        }
+      ],
+      "reason": "连续追加动作可承接PM主体，原文无主体切换。"
+    },
+    {
+      "subject_id": "role_generate_result",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [
+        "ent_optional",
+        "evt_generate"
+      ],
+      "sources": [
+        {
+          "quote": "可以另外生成optional.md",
+          "occurrence": 1
+        }
+      ],
+      "reason": "optional.md是允许生成的结果，形成允许产生的O用途。"
+    },
+    {
+      "subject_id": "scope_generate",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [
+        "role_generate_result",
+        "expr_optional_generate"
+      ],
+      "sources": [
+        {
+          "quote": "生成optional.md",
+          "occurrence": 1
+        }
+      ],
+      "reason": "生成范围准确绑定该事件的具体结果文件。"
+    },
+    {
+      "subject_id": "role_deliver_pm",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [
+        "ent_pm",
+        "evt_deliver"
+      ],
+      "sources": [
+        {
+          "quote": "请PM核对users.csv",
+          "occurrence": 1
+        },
+        {
+          "quote": "本任务不要求交付optional.md",
+          "occurrence": 1
+        }
+      ],
+      "reason": "同一指令可承接PM作为交付用途主体，且未增加交付义务。"
+    },
+    {
+      "subject_id": "role_deliver_artifact",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [
+        "ent_optional",
+        "evt_deliver",
+        "role_generate_result"
+      ],
+      "sources": [
+        {
+          "quote": "可以另外生成optional.md",
+          "occurrence": 1
+        },
+        {
+          "quote": "本任务不要求交付optional.md",
+          "occurrence": 1
+        }
+      ],
+      "reason": "同一产物的DELIVERABLE用途应保留；无需交付不形成正向交付O，也不要求正向产物消费关联。"
+    },
+    {
+      "subject_id": "scope_deliver",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [
+        "role_deliver_artifact",
+        "expr_optional_deliver"
+      ],
+      "sources": [
+        {
+          "quote": "本任务不要求交付optional.md",
+          "occurrence": 1
+        }
+      ],
+      "reason": "无需交付的范围准确绑定同一事件的optional.md。"
+    },
+    {
+      "subject_id": "expr_users",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [
+        "ent_users"
+      ],
+      "sources": [
+        {
+          "quote": "users.csv",
+          "occurrence": 1
+        }
+      ],
+      "reason": "ITEM准确表达单个具体文件，无类别或全称要求。"
+    },
+    {
+      "subject_id": "expr_optional_generate",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [
+        "ent_optional"
+      ],
+      "sources": [
+        {
+          "quote": "optional.md",
+          "occurrence": 1
+        }
+      ],
+      "reason": "ITEM准确表达生成用途的具体文件。"
+    },
+    {
+      "subject_id": "expr_optional_deliver",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [
+        "ent_optional"
+      ],
+      "sources": [
+        {
+          "quote": "optional.md",
+          "occurrence": 1
+        },
+        {
+          "quote": "optional.md",
+          "occurrence": 2
+        }
+      ],
+      "reason": "交付范围引用与可选生成结果相同的文件身份。"
+    }
+  ],
+  "issues": [],
+  "omissions": []
+}

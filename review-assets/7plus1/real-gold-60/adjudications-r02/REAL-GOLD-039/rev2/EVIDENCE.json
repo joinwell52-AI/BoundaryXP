@@ -1,0 +1,43 @@
+{
+  "case_id": "REAL-GOLD-039",
+  "source_sha256": "c992ab6498799ec40338241db44da9914b9b98dc104e5e104bdd250bb9a865cd",
+  "status": "EVIDENCE_VERIFIED",
+  "evidence": [
+    {
+      "evidence_id": "E001",
+      "source_id": "SOURCE_TASK",
+      "origin": "SOURCE",
+      "start": 0,
+      "end": 893,
+      "quote": "---\r\nprotocol: fcop\r\nversion: 1\r\nkind: task\r\ntask_id: TASK-20260513-009\r\nsender: ADMIN\r\nrecipient: ME\r\npriority: P1\r\nparent: TASK-20260513-008\r\nrelated: [ISSUE-20260513-008, ISSUE-20260513-009, ISSUE-20260513-010]\r\nthread_key: fcop-2-0-0-release-sprint\r\nsession_id: sess-20260513-me-c8_5\r\nrisk_level: medium\r\n---\r\n\r\n# 把 codeflow 上报的 3 个上游 bug 一并并入 fcop 2.0.0\r\n\r\n## 背景\r\n\r\n在 codeflow 跨项目巡检（TASK-20260513-003 / -004）中，扇出了 3 份针对\r\n`fcop` 上游的 ISSUE：\r\n\r\n- **ISSUE-008** · `fcop_audit` 不豁免 `_archive/` 与 `log/`，导致\r\n  *合规* 的归档文件被误报 `P1-002 misplaced_envelope`（4 个 sub-case）。\r\n- **ISSUE-009** · `_read_local_rules_version` 永远返回 `null`——\r\n  函数在文件里搜 `\"Rules version:\"` 字面量，但实际版本字段是\r\n  frontmatter 的 `fcop_rules_version:`。\r\n- **ISSUE-010** · 四个预设团队的 `PM.md` 角色模板停留在 v1.3.0\r\n  时代的内容，缺 `supersedes` / `risk_level` / **REVIEW envelope**\r\n  三段——与 DEV/QA/OPS 模板（已含上述三段）失衡。\r\n\r\nADMIN 明确指示：\"加进去全部修复，合并为 2.0.0！\"\r\n\r\n",
+      "purpose": "three issue facts and directive"
+    },
+    {
+      "evidence_id": "E002",
+      "source_id": "SOURCE_TASK",
+      "origin": "SOURCE",
+      "start": 893,
+      "end": 1722,
+      "quote": "## 范围 / Scope\r\n\r\n将上述 3 个 ISSUE 的修复 **作为 sub-task** 加入 `2.0.0` sprint\r\n（TASK-20260513-008），不开 `2.0.1` patch。\r\n\r\n### 修复要点 / Fix Outline\r\n\r\n1. **ISSUE-008** —— `src/fcop/project.py`\r\n   - `_scan_misplaced_envelopes` 加桶豁免列表（`fcop/log/**`、\r\n     `fcop/**/_archive/**`、`**/legacy-non-protocol/**`）。\r\n   - `_scan_ghost_prefixes` 同步加豁免。\r\n   - `InspectionReport` 加 `violation_file_count` 字段（distinct\r\n     file count）+ frontmatter 渲染。\r\n\r\n2. **ISSUE-009** —— `src/fcop/project.py`\r\n   - `_read_local_rules_version` 改为：先按 YAML frontmatter 抓\r\n     `fcop_rules_version:` 字段，找不到再 fallback 旧的\r\n     `Rules version:` 哨兵（不破坏老 1.x 项目）。\r\n\r\n3. **ISSUE-010** —— `src/fcop/teams/_data/{dev,media,mvp,qa}-team/roles/PM.{md,en.md}`\r\n   - 对齐 DEV/QA/OPS 模板的三段：\r\n     - `supersedes:` 用法\r\n     - `risk_level:` 写入与升级路径\r\n     - **REVIEW envelope** 写作时机与字段\r\n\r\n",
+      "purpose": "sprint scope and three repair outlines"
+    },
+    {
+      "evidence_id": "E003",
+      "source_id": "SOURCE_TASK",
+      "origin": "SOURCE",
+      "start": 1722,
+      "end": 2117,
+      "quote": "## 验收 / Acceptance\r\n\r\n- [ ] `pytest` 全过，回归 0。\r\n- [ ] `fcop_audit` 在含 `fcop/log/` 与 `_archive/` 的项目（如本仓\r\n      + codeflow）跑出来 `P1-002 = 0`（活动桶里仍正常扫）。\r\n- [ ] `fcop_audit` 输出含 `fcop_rules_version_local: 3.0.0`（非 null）。\r\n- [ ] 4 个团队的 PM.md / PM.en.md 同时含\r\n      `supersedes:` / `risk_level:` / `REVIEW envelope` 三段（命中数与\r\n      DEV.md 相当）。\r\n- [ ] CHANGELOG.md `[2.0.0]` 段在 **Fixed** 子节列出三个 ISSUE。\r\n\r\n",
+      "purpose": "acceptance"
+    },
+    {
+      "evidence_id": "E004",
+      "source_id": "SOURCE_TASK",
+      "origin": "SOURCE",
+      "start": 2117,
+      "end": 2306,
+      "quote": "## 回滚 / Rollback\r\n\r\n三处修复都是非破坏性（豁免列表 = 软扩展，frontmatter 解析 = 向后\r\n兼容，模板补丁 = 内容追加）。若某一项打破回归，按 Rule 5 追加\r\nTASK-010 + `supersedes: TASK-009` 撤回该改动；老版本仍可\r\n`pip install fcop==1.6.0` 回到上一个 stable。\r\n",
+      "purpose": "rollback"
+    }
+  ]
+}

@@ -1,0 +1,1 @@
+本任务由 PM 组织。未经负责人批准不得读取 finance-snapshot.csv；批准后方可进行只读检查并形成 finance-review.md。不得连接财务数据库。

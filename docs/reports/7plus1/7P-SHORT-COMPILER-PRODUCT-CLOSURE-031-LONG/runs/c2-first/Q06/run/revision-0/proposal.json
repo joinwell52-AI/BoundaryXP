@@ -1,0 +1,333 @@
+{
+  "contract_version": "031-r01",
+  "entities": [
+    {
+      "id": "ent_dev",
+      "label": "DEV-01",
+      "type": "OTHER",
+      "mentions": [
+        {
+          "quote": "DEV-01",
+          "occurrence": 1
+        }
+      ],
+      "alternatives": []
+    },
+    {
+      "id": "ent_input",
+      "label": "queue.csv",
+      "type": "FILE",
+      "mentions": [
+        {
+          "quote": "queue.csv",
+          "occurrence": 1
+        }
+      ],
+      "alternatives": []
+    },
+    {
+      "id": "ent_report",
+      "label": "queue-note.md",
+      "type": "FILE",
+      "mentions": [
+        {
+          "quote": "queue-note.md",
+          "occurrence": 1
+        },
+        {
+          "quote": "该报告",
+          "occurrence": 1
+        }
+      ],
+      "alternatives": []
+    },
+    {
+      "id": "ent_ops",
+      "label": "OPS-01",
+      "type": "OTHER",
+      "mentions": [
+        {
+          "quote": "OPS-01",
+          "occurrence": 1
+        }
+      ],
+      "alternatives": []
+    },
+    {
+      "id": "ent_queue_count",
+      "label": "报告中的队列数量",
+      "type": "OTHER",
+      "mentions": [
+        {
+          "quote": "该报告中的队列数量",
+          "occurrence": 1
+        }
+      ],
+      "alternatives": []
+    }
+  ],
+  "events": [
+    {
+      "id": "evt_read",
+      "predicate": "读取",
+      "kind": "ACTION",
+      "layer": "MAIN",
+      "use": "CURRENT_TASK",
+      "modality": "REQUIRED",
+      "polarity": "POSITIVE",
+      "owner_id": "ROOT",
+      "constraint_ids": [],
+      "requires": [],
+      "sources": [
+        {
+          "quote": "请DEV-01读取queue.csv",
+          "occurrence": 1
+        }
+      ]
+    },
+    {
+      "id": "evt_generate",
+      "predicate": "生成报告",
+      "kind": "ACTION",
+      "layer": "MAIN",
+      "use": "CURRENT_TASK",
+      "modality": "REQUIRED",
+      "polarity": "POSITIVE",
+      "owner_id": "ROOT",
+      "constraint_ids": [],
+      "requires": [],
+      "sources": [
+        {
+          "quote": "请DEV-01读取queue.csv并生成queue-note.md",
+          "occurrence": 1
+        }
+      ]
+    },
+    {
+      "id": "evt_check",
+      "predicate": "核对队列数量",
+      "kind": "ACTION",
+      "layer": "MAIN",
+      "use": "CURRENT_TASK",
+      "modality": "REQUIRED",
+      "polarity": "POSITIVE",
+      "owner_id": "ROOT",
+      "constraint_ids": [],
+      "requires": [],
+      "sources": [
+        {
+          "quote": "OPS-01核对该报告中的队列数量",
+          "occurrence": 1
+        }
+      ]
+    }
+  ],
+  "claims": [
+    {
+      "id": "cl_read_performer",
+      "kind": "ROLE",
+      "event_id": "evt_read",
+      "entity_id": "ent_dev",
+      "role": "PERFORMER",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "scope_id": "evt_read",
+      "requires": [],
+      "sources": [
+        {
+          "quote": "DEV-01读取queue.csv",
+          "occurrence": 1
+        }
+      ],
+      "note": "DEV-01是读取动作的明确执行者。"
+    },
+    {
+      "id": "cl_read_input",
+      "kind": "ROLE",
+      "event_id": "evt_read",
+      "entity_id": "ent_input",
+      "role": "INPUT_OBJECT",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "scope_id": "evt_read",
+      "requires": [],
+      "sources": [
+        {
+          "quote": "读取queue.csv",
+          "occurrence": 1
+        }
+      ],
+      "note": "queue.csv是明确要求读取的输入文件。"
+    },
+    {
+      "id": "cl_generate_performer",
+      "kind": "ROLE",
+      "event_id": "evt_generate",
+      "entity_id": "ent_dev",
+      "role": "PERFORMER",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "scope_id": "evt_generate",
+      "requires": [],
+      "sources": [
+        {
+          "quote": "DEV-01读取queue.csv",
+          "occurrence": 1
+        },
+        {
+          "quote": "并生成queue-note.md",
+          "occurrence": 1
+        }
+      ],
+      "note": "连续并列指令中，生成动作承接DEV-01为执行者；主体在后续核对动作处切换为OPS-01。"
+    },
+    {
+      "id": "cl_generate_result",
+      "kind": "ROLE",
+      "event_id": "evt_generate",
+      "entity_id": "ent_report",
+      "role": "RESULT",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "scope_id": "evt_generate",
+      "requires": [],
+      "sources": [
+        {
+          "quote": "生成queue-note.md",
+          "occurrence": 1
+        }
+      ],
+      "note": "queue-note.md是要求生成的报告结果。"
+    },
+    {
+      "id": "cl_check_performer",
+      "kind": "ROLE",
+      "event_id": "evt_check",
+      "entity_id": "ent_ops",
+      "role": "PERFORMER",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "scope_id": "evt_check",
+      "requires": [],
+      "sources": [
+        {
+          "quote": "OPS-01核对该报告中的队列数量",
+          "occurrence": 1
+        }
+      ],
+      "note": "OPS-01是核对动作的明确执行者。"
+    },
+    {
+      "id": "cl_check_report",
+      "kind": "ROLE",
+      "event_id": "evt_check",
+      "entity_id": "ent_report",
+      "role": "OBJECT",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "scope_id": "evt_check",
+      "requires": [],
+      "sources": [
+        {
+          "quote": "生成queue-note.md",
+          "occurrence": 1
+        },
+        {
+          "quote": "核对该报告中的队列数量",
+          "occurrence": 1
+        }
+      ],
+      "note": "该报告指唯一当前报告queue-note.md；核对范围限定为其中的队列数量，属于生成结果的内部使用。"
+    },
+    {
+      "id": "cl_check_content",
+      "kind": "ROLE",
+      "event_id": "evt_check",
+      "entity_id": "ent_queue_count",
+      "role": "CONTENT",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "scope_id": "evt_check",
+      "requires": [],
+      "sources": [
+        {
+          "quote": "核对该报告中的队列数量",
+          "occurrence": 1
+        }
+      ],
+      "note": "队列数量是核对的内容；原文未给数值或比较阈值，不构成量化限制。"
+    }
+  ],
+  "expressions": [],
+  "issues": [],
+  "coverage": [
+    {
+      "sources": [
+        {
+          "quote": "请DEV-01读取queue.csv",
+          "occurrence": 1
+        }
+      ],
+      "claim_ids": [
+        "cl_read_performer",
+        "cl_read_input"
+      ],
+      "status": "EXPRESSED",
+      "affected_views": [
+        "I",
+        "A",
+        "P"
+      ]
+    },
+    {
+      "sources": [
+        {
+          "quote": "并生成queue-note.md",
+          "occurrence": 1
+        }
+      ],
+      "claim_ids": [
+        "cl_generate_performer",
+        "cl_generate_result"
+      ],
+      "status": "EXPRESSED",
+      "affected_views": [
+        "O",
+        "A",
+        "P"
+      ]
+    },
+    {
+      "sources": [
+        {
+          "quote": "OPS-01核对该报告中的队列数量",
+          "occurrence": 1
+        }
+      ],
+      "claim_ids": [
+        "cl_check_performer",
+        "cl_check_report",
+        "cl_check_content"
+      ],
+      "status": "EXPRESSED",
+      "affected_views": [
+        "A",
+        "P"
+      ]
+    }
+  ]
+}

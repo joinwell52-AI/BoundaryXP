@@ -1,0 +1,1 @@
+OPS check storage and network, create state.txt. After QA confirms both categories are complete, the task is complete.

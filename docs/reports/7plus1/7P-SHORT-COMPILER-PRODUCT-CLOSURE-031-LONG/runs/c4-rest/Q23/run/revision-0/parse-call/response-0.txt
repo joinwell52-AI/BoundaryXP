@@ -1,0 +1,169 @@
+{
+  "contract_version": "031-r01",
+  "entities": [
+    {
+      "id": "n1",
+      "label": "PM",
+      "type": "OTHER",
+      "mentions": [{"quote": "PM", "occurrence": 1}],
+      "alternatives": []
+    },
+    {
+      "id": "n2",
+      "label": "handover.md",
+      "type": "FILE",
+      "mentions": [
+        {"quote": "handover.md", "occurrence": 1},
+        {"quote": "该文件", "occurrence": 1}
+      ],
+      "alternatives": []
+    },
+    {
+      "id": "n3",
+      "label": "ADMIN",
+      "type": "OTHER",
+      "mentions": [{"quote": "ADMIN", "occurrence": 1}],
+      "alternatives": []
+    }
+  ],
+  "events": [
+    {
+      "id": "e1",
+      "predicate": "提交",
+      "kind": "ACTION",
+      "layer": "MAIN",
+      "use": "CURRENT_TASK",
+      "modality": "REQUIRED",
+      "polarity": "POSITIVE",
+      "owner_id": "ROOT",
+      "constraint_ids": [],
+      "requires": [],
+      "sources": [{"quote": "PM必须提交handover.md", "occurrence": 1}]
+    },
+    {
+      "id": "e2",
+      "predicate": "确认已收到文件",
+      "kind": "ACTION",
+      "layer": "CONDITION",
+      "use": "MENTION_ONLY",
+      "modality": "UNSTATED",
+      "polarity": "POSITIVE",
+      "owner_id": "ROOT",
+      "constraint_ids": [],
+      "requires": [],
+      "sources": [{"quote": "ADMIN确认已收到该文件", "occurrence": 1}]
+    }
+  ],
+  "claims": [
+    {
+      "id": "c1",
+      "kind": "ROLE",
+      "event_id": "e1",
+      "entity_id": "n1",
+      "role": "PERFORMER",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "scope_id": "e1",
+      "requires": [],
+      "sources": [{"quote": "PM必须提交handover.md", "occurrence": 1}],
+      "note": "PM是明确的提交执行者。"
+    },
+    {
+      "id": "c2",
+      "kind": "ROLE",
+      "event_id": "e1",
+      "entity_id": "n2",
+      "role": "DELIVERABLE",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "scope_id": "e1",
+      "requires": [],
+      "sources": [{"quote": "提交handover.md", "occurrence": 1}],
+      "note": "明确交付该文件，不推定本任务生成或修改它。"
+    },
+    {
+      "id": "c3",
+      "kind": "ROLE",
+      "event_id": "e2",
+      "entity_id": "n3",
+      "role": "PERFORMER",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "scope_id": "e2",
+      "requires": [],
+      "sources": [{"quote": "ADMIN确认已收到该文件", "occurrence": 1}],
+      "note": "完成条件中的确认主体，不新增确认义务。"
+    },
+    {
+      "id": "c4",
+      "kind": "ROLE",
+      "event_id": "e2",
+      "entity_id": "n2",
+      "role": "OBJECT",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "scope_id": "e2",
+      "requires": [],
+      "sources": [
+        {"quote": "handover.md", "occurrence": 1},
+        {"quote": "ADMIN确认已收到该文件", "occurrence": 1}
+      ],
+      "note": "该文件指前述唯一文件handover.md；确认内容为ADMIN已收到它。"
+    },
+    {
+      "id": "c5",
+      "kind": "COMPLETION",
+      "event_id": null,
+      "entity_id": null,
+      "role": null,
+      "expression_id": "x1",
+      "direction": "SUFFICIENT",
+      "temporal": null,
+      "quantity": null,
+      "scope_id": "ROOT",
+      "requires": [],
+      "sources": [{"quote": "ADMIN确认已收到该文件即表示本任务完成", "occurrence": 1}],
+      "note": "确认收到是根任务完成的充分触发条件，不断言该状态已经成立，也不解释为唯一完成条件。"
+    }
+  ],
+  "expressions": [
+    {
+      "id": "x1",
+      "op": "STATE",
+      "operands": [],
+      "state": {
+        "predicate": "已确认收到文件",
+        "event_id": "e2",
+        "args": ["n3", "n2"],
+        "polarity": "POSITIVE"
+      },
+      "sources": [
+        {"quote": "handover.md", "occurrence": 1},
+        {"quote": "ADMIN确认已收到该文件", "occurrence": 1}
+      ]
+    }
+  ],
+  "issues": [],
+  "coverage": [
+    {
+      "sources": [{"quote": "PM必须提交handover.md", "occurrence": 1}],
+      "claim_ids": ["c1", "c2"],
+      "status": "EXPRESSED",
+      "affected_views": ["A", "P", "O"]
+    },
+    {
+      "sources": [{"quote": "ADMIN确认已收到该文件即表示本任务完成", "occurrence": 1}],
+      "claim_ids": ["c3", "c4", "c5"],
+      "status": "EXPRESSED",
+      "affected_views": ["C"]
+    }
+  ]
+}

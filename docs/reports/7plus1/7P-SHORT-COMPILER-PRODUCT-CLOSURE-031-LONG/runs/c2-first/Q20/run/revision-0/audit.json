@@ -1,0 +1,213 @@
+{
+  "contract_version": "031-r01",
+  "reviews": [
+    {
+      "subject_id": "ent_ops",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [
+        {
+          "quote": "OPS-01",
+          "occurrence": 1
+        },
+        {
+          "quote": "OPS-01",
+          "occurrence": 2
+        }
+      ],
+      "reason": "两处明确指称同一OPS-01；OTHER可占位未指定的身份类别。"
+    },
+    {
+      "subject_id": "ent_pm",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [
+        {
+          "quote": "PM",
+          "occurrence": 1
+        }
+      ],
+      "reason": "通知接收者身份明确；原文未指定人或组类别，OTHER占位合理。"
+    },
+    {
+      "subject_id": "ent_health",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [
+        {
+          "quote": "health.md",
+          "occurrence": 1
+        }
+      ],
+      "reason": "明确命名的文件产物，身份及FILE类型有支持。"
+    },
+    {
+      "subject_id": "ent_anomaly",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [
+        {
+          "quote": "服务异常",
+          "occurrence": 1
+        }
+      ],
+      "reason": "条件中的异常对象明确，OTHER占位合理。"
+    },
+    {
+      "subject_id": "evt_discovered",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [
+        {
+          "quote": "若发现服务异常",
+          "occurrence": 1
+        }
+      ],
+      "reason": "发现异常仅作为条件状态，不表示已发生，也不新增发现义务。"
+    },
+    {
+      "subject_id": "evt_notify",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [
+        "cl_notify_condition"
+      ],
+      "sources": [
+        {
+          "quote": "若发现服务异常，OPS-01必须通知PM",
+          "occurrence": 1
+        }
+      ],
+      "reason": "通知是受异常发现条件约束的当前必须动作，约束双向绑定完整。"
+    },
+    {
+      "subject_id": "evt_generate",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [
+        {
+          "quote": "无论是否发现异常，OPS-01都必须生成health.md",
+          "occurrence": 1
+        }
+      ],
+      "reason": "生成义务覆盖发现与未发现异常两种状态，无条件表达准确。"
+    },
+    {
+      "subject_id": "cl_discovered_object",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [
+        "evt_discovered"
+      ],
+      "sources": [
+        {
+          "quote": "发现服务异常",
+          "occurrence": 1
+        }
+      ],
+      "reason": "服务异常是条件状态的对象，不是新增外部输入或检查义务。"
+    },
+    {
+      "subject_id": "cl_notify_performer",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [
+        "evt_notify"
+      ],
+      "sources": [
+        {
+          "quote": "OPS-01必须通知PM",
+          "occurrence": 1
+        }
+      ],
+      "reason": "原文明示OPS-01执行通知。"
+    },
+    {
+      "subject_id": "cl_notify_recipient",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [
+        "evt_notify"
+      ],
+      "sources": [
+        {
+          "quote": "通知PM",
+          "occurrence": 1
+        }
+      ],
+      "reason": "PM明确为通知接收者。"
+    },
+    {
+      "subject_id": "cl_notify_condition",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [
+        "evt_notify",
+        "expr_discovered"
+      ],
+      "sources": [
+        {
+          "quote": "若发现服务异常，OPS-01必须通知PM",
+          "occurrence": 1
+        }
+      ],
+      "reason": "发现服务异常足以触发通知义务，SUFFICIENT方向准确；未增添独立先后要求。"
+    },
+    {
+      "subject_id": "cl_generate_performer",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [
+        "evt_generate",
+        "ent_ops"
+      ],
+      "sources": [
+        {
+          "quote": "OPS-01都必须生成health.md",
+          "occurrence": 1
+        }
+      ],
+      "reason": "生成动作的执行者由本分句明确指定为同一OPS-01。"
+    },
+    {
+      "subject_id": "cl_generate_result",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [
+        "evt_generate",
+        "ent_health"
+      ],
+      "sources": [
+        {
+          "quote": "无论是否发现异常，OPS-01都必须生成health.md",
+          "occurrence": 1
+        }
+      ],
+      "reason": "health.md绑定为生成事件的RESULT准确；原文未要求交付。"
+    },
+    {
+      "subject_id": "expr_discovered",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [
+        "evt_discovered",
+        "cl_discovered_object"
+      ],
+      "sources": [
+        {
+          "quote": "若发现服务异常",
+          "occurrence": 1
+        }
+      ],
+      "reason": "STATE引用对应发现事件，参数为服务异常，正极性准确且不断言状态为真。"
+    }
+  ],
+  "issues": [],
+  "omissions": []
+}

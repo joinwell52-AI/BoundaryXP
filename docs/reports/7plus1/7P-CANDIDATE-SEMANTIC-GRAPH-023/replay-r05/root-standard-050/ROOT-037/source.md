@@ -1,0 +1,1 @@
+请 PM 组织读取 dev-report.md 与 ops-report.md，形成 consolidated.md，并确保两份报告的全部风险项得到保留。QA 确认无遗漏后，PM 才能提交给 ADMIN。

@@ -1,0 +1,1 @@
+The whole task must finish within 23 minutes. Taylor must coordinate the task: inspect permission-9015.csv in isolated environment. Attempt the check at most 4 times. Completion requires at least 3 successful checks and existence of the report. Deliver audit-486940.md. Send the final report to Jordan.

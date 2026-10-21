@@ -1,0 +1,1 @@
+请 PM 组织对 roles.csv 与 grants.csv 进行权限最小化核查，范围仅限测试环境，并形成 permission-review.md。生产环境不在本次范围内；不得修改授权。

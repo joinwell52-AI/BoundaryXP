@@ -1,0 +1,44 @@
+{
+  "contract_version": "031-r01",
+  "entities": [
+    {"id":"n1","label":"PM","type":"OTHER","mentions":[{"quote":"PM","occurrence":1}],"alternatives":[]},
+    {"id":"n2","label":"east.csv","type":"FILE","mentions":[{"quote":"east.csv","occurrence":1}],"alternatives":[]},
+    {"id":"n3","label":"west.csv","type":"FILE","mentions":[{"quote":"west.csv","occurrence":1}],"alternatives":[]},
+    {"id":"n4","label":"它所指的交付对象","type":"REFERENT","mentions":[{"quote":"它","occurrence":1},{"quote":"east.csv","occurrence":1},{"quote":"west.csv","occurrence":1}],"alternatives":["n2","n3"]},
+    {"id":"n5","label":"QA","type":"OTHER","mentions":[{"quote":"QA","occurrence":1}],"alternatives":[]},
+    {"id":"n6","label":"OPS-01","type":"OTHER","mentions":[{"quote":"OPS-01","occurrence":1}],"alternatives":[]},
+    {"id":"n7","label":"port.md","type":"FILE","mentions":[{"quote":"port.md","occurrence":1}],"alternatives":[]}
+  ],
+  "events": [
+    {"id":"e1","predicate":"读取","kind":"ACTION","layer":"MAIN","use":"CURRENT_TASK","modality":"REQUIRED","polarity":"POSITIVE","owner_id":"ROOT","constraint_ids":[],"requires":[],"sources":[{"quote":"请PM读取east.csv和west.csv","occurrence":1}]},
+    {"id":"e2","predicate":"读取","kind":"ACTION","layer":"MAIN","use":"CURRENT_TASK","modality":"REQUIRED","polarity":"POSITIVE","owner_id":"ROOT","constraint_ids":[],"requires":[],"sources":[{"quote":"请PM读取east.csv和west.csv","occurrence":1}]},
+    {"id":"e3","predicate":"交付","kind":"ACTION","layer":"MAIN","use":"CURRENT_TASK","modality":"REQUIRED","polarity":"POSITIVE","owner_id":"ROOT","constraint_ids":["c10"],"requires":[],"sources":[{"quote":"再把它交给QA","occurrence":1}]},
+    {"id":"e4","predicate":"生成","kind":"ACTION","layer":"MAIN","use":"CURRENT_TASK","modality":"REQUIRED","polarity":"POSITIVE","owner_id":"ROOT","constraint_ids":[],"requires":[],"sources":[{"quote":"另请OPS-01生成port.md","occurrence":1}]}
+  ],
+  "claims": [
+    {"id":"c1","kind":"ROLE","event_id":"e1","entity_id":"n1","role":"PERFORMER","expression_id":null,"direction":null,"temporal":null,"quantity":null,"scope_id":"e1","requires":[],"sources":[{"quote":"请PM读取east.csv和west.csv","occurrence":1}],"note":"PM明确执行读取。"},
+    {"id":"c2","kind":"ROLE","event_id":"e1","entity_id":"n2","role":"INPUT_OBJECT","expression_id":null,"direction":null,"temporal":null,"quantity":null,"scope_id":"e1","requires":[],"sources":[{"quote":"读取east.csv","occurrence":1}],"note":"明确读取输入。"},
+    {"id":"c3","kind":"ROLE","event_id":"e2","entity_id":"n1","role":"PERFORMER","expression_id":null,"direction":null,"temporal":null,"quantity":null,"scope_id":"e2","requires":[],"sources":[{"quote":"请PM读取east.csv和west.csv","occurrence":1}],"note":"PM执行同一读取指令的两个并列对象。"},
+    {"id":"c4","kind":"ROLE","event_id":"e2","entity_id":"n3","role":"INPUT_OBJECT","expression_id":null,"direction":null,"temporal":null,"quantity":null,"scope_id":"e2","requires":[],"sources":[{"quote":"读取east.csv和west.csv","occurrence":1}],"note":"west.csv为并列的明确读取输入。"},
+    {"id":"c5","kind":"ROLE","event_id":"e3","entity_id":"n1","role":"PERFORMER","expression_id":null,"direction":null,"temporal":null,"quantity":null,"scope_id":"e3","requires":[],"sources":[{"quote":"请PM读取east.csv和west.csv","occurrence":1},{"quote":"再把它交给QA","occurrence":1}],"note":"交付为连续指令的追加动作，承接主语PM；后面的OPS-01是另一指令的主体。"},
+    {"id":"c6","kind":"ROLE","event_id":"e3","entity_id":"n4","role":"DELIVERABLE","expression_id":null,"direction":null,"temporal":null,"quantity":null,"scope_id":"e3","requires":[],"sources":[{"quote":"east.csv和west.csv","occurrence":1},{"quote":"把它交给QA","occurrence":1}],"note":"明确要求交付，但单数指代存在两个合理文件先行项，不按距离选定。"},
+    {"id":"c7","kind":"ROLE","event_id":"e3","entity_id":"n5","role":"RECIPIENT","expression_id":null,"direction":null,"temporal":null,"quantity":null,"scope_id":"e3","requires":[],"sources":[{"quote":"交给QA","occurrence":1}],"note":"QA是交付接收者。"},
+    {"id":"c8","kind":"ROLE","event_id":"e4","entity_id":"n6","role":"PERFORMER","expression_id":null,"direction":null,"temporal":null,"quantity":null,"scope_id":"e4","requires":[],"sources":[{"quote":"请OPS-01生成port.md","occurrence":1}],"note":"OPS-01为明确生成执行者；标识中的数字不是数量限制。"},
+    {"id":"c9","kind":"ROLE","event_id":"e4","entity_id":"n7","role":"RESULT","expression_id":null,"direction":null,"temporal":null,"quantity":null,"scope_id":"e4","requires":[],"sources":[{"quote":"生成port.md","occurrence":1}],"note":"port.md为生成结果，未要求交付。"},
+    {"id":"c10","kind":"TEMPORAL","event_id":"e3","entity_id":null,"role":null,"expression_id":"x3","direction":"ORDER","temporal":"AFTER","quantity":null,"scope_id":"e3","requires":[],"sources":[{"quote":"请PM读取east.csv和west.csv，再把它交给QA","occurrence":1}],"note":"交付在两个文件的读取工作完成后进行；不添加两次读取之间的顺序。"}
+  ],
+  "expressions": [
+    {"id":"x1","op":"STATE","operands":[],"state":{"predicate":"读取完成","event_id":"e1","args":["n1","n2"],"polarity":"POSITIVE"},"sources":[{"quote":"请PM读取east.csv和west.csv","occurrence":1},{"quote":"再","occurrence":1}]},
+    {"id":"x2","op":"STATE","operands":[],"state":{"predicate":"读取完成","event_id":"e2","args":["n1","n3"],"polarity":"POSITIVE"},"sources":[{"quote":"请PM读取east.csv和west.csv","occurrence":1},{"quote":"再","occurrence":1}]},
+    {"id":"x3","op":"AND","operands":["x1","x2"],"state":null,"sources":[{"quote":"读取east.csv和west.csv，再","occurrence":1}]}
+  ],
+  "issues": [
+    {"id":"i1","kind":"AMBIGUITY","subject_ids":["n4","c6"],"field_path":"entities[n4].alternatives","alternatives":["n2","n3"],"affected_views":["O"],"sources":[{"quote":"east.csv和west.csv","occurrence":1},{"quote":"把它交给QA","occurrence":1}],"note":"“它”可指east.csv或west.csv；交付对象身份待澄清，其他明确读取及生成用途不受影响。"}
+  ],
+  "coverage": [
+    {"sources":[{"quote":"请PM读取east.csv","occurrence":1}],"claim_ids":["c1","c2"],"status":"EXPRESSED","affected_views":["A","I","P"]},
+    {"sources":[{"quote":"请PM读取east.csv和west.csv","occurrence":1}],"claim_ids":["c3","c4"],"status":"EXPRESSED","affected_views":["A","I","P"]},
+    {"sources":[{"quote":"再把它交给QA","occurrence":1}],"claim_ids":["c5","c6","c7","c10"],"status":"EXPRESSED","affected_views":["A","O","P"]},
+    {"sources":[{"quote":"另请OPS-01生成port.md","occurrence":1}],"claim_ids":["c8","c9"],"status":"EXPRESSED","affected_views":["A","O","P"]}
+  ]
+}

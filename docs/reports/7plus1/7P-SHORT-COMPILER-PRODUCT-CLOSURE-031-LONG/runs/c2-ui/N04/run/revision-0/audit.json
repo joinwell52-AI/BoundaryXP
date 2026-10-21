@@ -1,0 +1,217 @@
+{
+  "contract_version": "031-r01",
+  "reviews": [
+    {
+      "subject_id": "e_report",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [
+        {
+          "quote": "这份报告",
+          "occurrence": 1
+        },
+        {
+          "quote": "checklist.md",
+          "occurrence": 1
+        }
+      ],
+      "reason": "全文只有一个当前报告指称和一个交付文件名，无竞争对象；允许向后指称，两端绑定同一文件身份有来源支持。"
+    },
+    {
+      "subject_id": "e_qa",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [
+        {
+          "quote": "QA",
+          "occurrence": 1
+        }
+      ],
+      "reason": "QA身份明确；原文未指定人或组类别，OTHER可作占位。"
+    },
+    {
+      "subject_id": "e_dev",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [
+        {
+          "quote": "DEV",
+          "occurrence": 1
+        }
+      ],
+      "reason": "DEV身份明确；OTHER保留未指定的实体类别。"
+    },
+    {
+      "subject_id": "e_admin",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [
+        {
+          "quote": "ADMIN",
+          "occurrence": 1
+        }
+      ],
+      "reason": "ADMIN身份明确；OTHER保留未指定的实体类别。"
+    },
+    {
+      "subject_id": "ev_review",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [
+        {
+          "quote": "这份报告经QA复核通过",
+          "occurrence": 1
+        }
+      ],
+      "reason": "复核通过是许可前提中的正向状态，不是独立复核义务，也未断言已经发生。"
+    },
+    {
+      "subject_id": "ev_deliver",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [
+        "c_condition"
+      ],
+      "sources": [
+        {
+          "quote": "仅在这份报告经QA复核通过后，允许DEV向ADMIN交付checklist.md。",
+          "occurrence": 1
+        }
+      ],
+      "reason": "交付是当前任务的条件许可动作；必要前提已通过constraint_ids绑定。"
+    },
+    {
+      "subject_id": "c_reviewer",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [
+        "ev_review",
+        "e_qa"
+      ],
+      "sources": [
+        {
+          "quote": "这份报告经QA复核通过",
+          "occurrence": 1
+        }
+      ],
+      "reason": "QA是条件复核状态中的复核者，不由此增加执行义务。"
+    },
+    {
+      "subject_id": "c_review_object",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [
+        "e_report",
+        "ev_review"
+      ],
+      "sources": [
+        {
+          "quote": "这份报告经QA复核通过",
+          "occurrence": 1
+        },
+        {
+          "quote": "交付checklist.md",
+          "occurrence": 1
+        }
+      ],
+      "reason": "复核对象是随后命名的同一当前报告；OBJECT用途不将其升为外部输入。"
+    },
+    {
+      "subject_id": "c_performer",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [
+        "ev_deliver",
+        "e_dev"
+      ],
+      "sources": [
+        {
+          "quote": "允许DEV向ADMIN交付checklist.md",
+          "occurrence": 1
+        }
+      ],
+      "reason": "DEV被明确指定为条件许可交付的执行者。"
+    },
+    {
+      "subject_id": "c_recipient",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [
+        "ev_deliver",
+        "e_admin"
+      ],
+      "sources": [
+        {
+          "quote": "向ADMIN交付checklist.md",
+          "occurrence": 1
+        }
+      ],
+      "reason": "ADMIN被明确指定为交付接收方。"
+    },
+    {
+      "subject_id": "c_deliverable",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [
+        "ev_deliver",
+        "e_report"
+      ],
+      "sources": [
+        {
+          "quote": "这份报告",
+          "occurrence": 1
+        },
+        {
+          "quote": "交付checklist.md",
+          "occurrence": 1
+        }
+      ],
+      "reason": "checklist.md是获条件许可交付的产物，与复核对象身份一致；未增加生成或修改要求。"
+    },
+    {
+      "subject_id": "c_condition",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [
+        "ev_deliver",
+        "ev_review",
+        "x_review_passed"
+      ],
+      "sources": [
+        {
+          "quote": "仅在这份报告经QA复核通过后，允许DEV向ADMIN交付checklist.md。",
+          "occurrence": 1
+        }
+      ],
+      "reason": "“仅在……后”表达许可的必要前提及交付晚于复核通过；方向、时间和双向约束绑定正确。"
+    },
+    {
+      "subject_id": "x_review_passed",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [
+        "ev_review",
+        "e_report",
+        "e_qa"
+      ],
+      "sources": [
+        {
+          "quote": "这份报告经QA复核通过",
+          "occurrence": 1
+        },
+        {
+          "quote": "checklist.md",
+          "occurrence": 1
+        }
+      ],
+      "reason": "STATE引用对应复核事件，参数为同一报告和QA，正向极性正确；不宣称状态已成立。"
+    }
+  ],
+  "issues": [],
+  "omissions": []
+}

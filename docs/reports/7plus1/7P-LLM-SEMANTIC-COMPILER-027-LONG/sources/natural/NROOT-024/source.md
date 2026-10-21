@@ -1,0 +1,1 @@
+Using OPS-GUIDE-7 version v2.0, PM must organize an inspection of host-state.json and deliver host-state-review.md. The task must not change host settings or restart the host.

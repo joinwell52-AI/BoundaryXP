@@ -1,0 +1,151 @@
+{
+  "contract_version": "028-r02.3",
+  "reviews": [
+    {
+      "subject_id": "ent_pm",
+      "field_path": "label",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [{"quote": "PM", "occurrence": 1}],
+      "reason": "原文明示PM身份；类别未明不影响该身份及明确职责。"
+    },
+    {
+      "subject_id": "ent_pm",
+      "field_path": "type",
+      "verdict": "UNCERTAIN",
+      "context_refs": [],
+      "sources": [{"quote": "请PM读取feed.json", "occurrence": 1}],
+      "reason": "原文未说明PM是个人、团队或其他类别，不能确定OTHER分类。"
+    },
+    {
+      "subject_id": "ent_feed",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [{"quote": "feed.json", "occurrence": 1}],
+      "reason": "明确命名的读取文件，身份及FILE类型有依据。"
+    },
+    {
+      "subject_id": "ent_report",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [
+        {"quote": "生成feed-note.md", "occurrence": 1},
+        {"quote": "报告恰好列出2条异常记录", "occurrence": 1}
+      ],
+      "reason": "报告承接生成的feed-note.md，同一文件身份合理且明确。"
+    },
+    {
+      "subject_id": "ent_anomalies",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [{"quote": "异常记录", "occurrence": 1}],
+      "reason": "明确的报告内容对象，OTHER类型适用。"
+    },
+    {
+      "subject_id": "evt_read",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["cl_retry_limit"],
+      "sources": [
+        {"quote": "请PM读取feed.json", "occurrence": 1},
+        {"quote": "该读取最多重试4次", "occurrence": 1}
+      ],
+      "reason": "读取是当前要求的主动作，重试限制已双向绑定。"
+    },
+    {
+      "subject_id": "evt_generate",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["cl_output_count"],
+      "sources": [
+        {"quote": "生成feed-note.md", "occurrence": 1},
+        {"quote": "报告恰好列出2条异常记录", "occurrence": 1}
+      ],
+      "reason": "生成报告是当前要求的主动作，内容数量约束已双向绑定。"
+    },
+    {
+      "subject_id": "cl_read_performer",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["ent_pm", "evt_read"],
+      "sources": [{"quote": "请PM读取feed.json", "occurrence": 1}],
+      "reason": "PM明确承担读取执行职责，无需先确定其人或组类别。"
+    },
+    {
+      "subject_id": "cl_read_input",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["ent_feed", "evt_read"],
+      "sources": [{"quote": "读取feed.json", "occurrence": 1}],
+      "reason": "feed.json是明确要求读取的外部输入对象。"
+    },
+    {
+      "subject_id": "cl_retry_limit",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["evt_read"],
+      "sources": [
+        {"quote": "读取feed.json", "occurrence": 1},
+        {"quote": "该读取最多重试4次", "occurrence": 1}
+      ],
+      "reason": "该读取的重试次数上限为4次；目标、范围、单位及执行限制用途正确，不含首次读取。"
+    },
+    {
+      "subject_id": "cl_generate_performer",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["ent_pm", "evt_generate"],
+      "sources": [
+        {"quote": "请PM读取feed.json", "occurrence": 1},
+        {"quote": "生成feed-note.md", "occurrence": 1}
+      ],
+      "reason": "同一请求中的并列命令沿用PM主体，执行职责有依据。"
+    },
+    {
+      "subject_id": "cl_generate_result",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["ent_report", "evt_generate"],
+      "sources": [
+        {"quote": "生成feed-note.md", "occurrence": 1},
+        {"quote": "报告恰好列出2条异常记录", "occurrence": 1}
+      ],
+      "reason": "feed-note.md是生成产物，后续报告内容要求未改变其身份。"
+    },
+    {
+      "subject_id": "cl_report_content",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["ent_report", "ent_anomalies", "evt_generate"],
+      "sources": [{"quote": "报告恰好列出2条异常记录", "occurrence": 1}],
+      "reason": "异常记录是报告要求列出的内容，绑定到该报告合理。"
+    },
+    {
+      "subject_id": "cl_output_count",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["ent_report", "evt_generate", "cl_report_content"],
+      "sources": [
+        {"quote": "生成feed-note.md", "occurrence": 1},
+        {"quote": "报告恰好列出2条异常记录", "occurrence": 1}
+      ],
+      "reason": "报告列出的异常记录恰为2条，属于输出内容数量；目标、范围、比较符及单位正确。"
+    }
+  ],
+  "issues": [
+    {
+      "id": "audit_pm_type",
+      "issue_kind": "IDENTITY",
+      "subject_ids": ["ent_pm"],
+      "field_path": "type",
+      "context_refs": ["cl_read_performer", "cl_generate_performer"],
+      "sources": [{"quote": "请PM读取feed.json", "occurrence": 1}],
+      "reason": "仅实体类别未明确；保留type局部未决，不否定PM身份，也不影响无需该类别的执行职责。",
+      "suggested_json": null
+    }
+  ],
+  "omissions": []
+}

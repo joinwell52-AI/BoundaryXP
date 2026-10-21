@@ -1,0 +1,339 @@
+# ADM-024 — actual Canonical 7+1
+
+## I
+
+```json
+{
+  "slot": "I",
+  "status": "RESOLVED",
+  "entries": [
+    {
+      "canonical_entry_id": "p1:9938bd3adb65d3528c89dda8",
+      "slot": "I",
+      "boundary_fact_ids": [
+        "p1:f8c3cae277c3359d844a8c02"
+      ],
+      "state": "RESOLVED",
+      "display_value": "revenue.csv",
+      "source_span_ids": [
+        "p1:b72e713430f65b90bc3e6d62",
+        "p1:c640dcf056a8d03a5309af27",
+        "p1:606717bba2b76ae90f0d523d"
+      ],
+      "scope_expr_id": "p1:5ed719ddb70df60b3cf58305"
+    },
+    {
+      "canonical_entry_id": "p1:c959a822db6598c75bfe8759",
+      "slot": "I",
+      "boundary_fact_ids": [
+        "p1:5203cc0277d8dd970ffeb7a3"
+      ],
+      "state": "RESOLVED",
+      "display_value": "monthly-report.xlsx",
+      "source_span_ids": [
+        "p1:669e4b2572aa893766823f1c",
+        "p1:c640dcf056a8d03a5309af27",
+        "p1:606717bba2b76ae90f0d523d"
+      ],
+      "scope_expr_id": "p1:cefe73291d60a122c40328f5"
+    },
+    {
+      "canonical_entry_id": "p1:545cffef27181f4498723fdd",
+      "slot": "I",
+      "boundary_fact_ids": [
+        "p1:562663421037217232536e9f"
+      ],
+      "state": "RESOLVED",
+      "display_value": "报表汇总金额",
+      "source_span_ids": [
+        "p1:3ccb6da8623dd2f65aa62b8d",
+        "p1:d28cfc4508f468dbf1cc810a",
+        "p1:606717bba2b76ae90f0d523d"
+      ],
+      "scope_expr_id": "p1:bd7bc1a5f6211f60d871e37c"
+    }
+  ]
+}
+```
+
+## O
+
+```json
+{
+  "slot": "O",
+  "status": "RESOLVED",
+  "entries": [
+    {
+      "canonical_entry_id": "p1:46312b4cfbe1d9bf5da681d5",
+      "slot": "O",
+      "boundary_fact_ids": [
+        "p1:df7bb76110e30c7889be4363"
+      ],
+      "state": "RESOLVED",
+      "display_value": "finance-review.md",
+      "source_span_ids": [
+        "p1:5a2167427b249277183f2b22",
+        "p1:595c15bf024bd9b488fc2a33",
+        "p1:87522ed3255c4dcbd098f6ca",
+        "p1:253f846de85d5f1068700bc3",
+        "p1:c640dcf056a8d03a5309af27",
+        "p1:a745b0a8b8298ffb5a6e1648",
+        "p1:581e031d0f3ed5fb552487c1"
+      ],
+      "scope_expr_id": "p1:1bc48625ff6aac30d291b52a"
+    }
+  ]
+}
+```
+
+## A
+
+```json
+{
+  "slot": "A",
+  "status": "RESOLVED",
+  "entries": [
+    {
+      "canonical_entry_id": "p1:25a70b1d1a3b38ba47d1bb17",
+      "slot": "A",
+      "boundary_fact_ids": [
+        "p1:dd33d612e143a340759d4a2e"
+      ],
+      "state": "RESOLVED",
+      "display_value": "REQUIRED 读取 revenue.csv、monthly-report.xlsx",
+      "source_span_ids": [
+        "p1:042bb5dc559a622de7c514b4",
+        "p1:c640dcf056a8d03a5309af27",
+        "p1:b72e713430f65b90bc3e6d62",
+        "p1:669e4b2572aa893766823f1c",
+        "p1:253f846de85d5f1068700bc3"
+      ],
+      "scope_expr_id": "p1:58d47c3147ea249af7822fb1"
+    },
+    {
+      "canonical_entry_id": "p1:d8b5d4f69abd20bcaed78935",
+      "slot": "A",
+      "boundary_fact_ids": [
+        "p1:44b027361a1c4ee354adf6d4"
+      ],
+      "state": "RESOLVED",
+      "display_value": "REQUIRED 复核 报表汇总金额",
+      "source_span_ids": [
+        "p1:6a76b5218e8a192d2a843681",
+        "p1:d28cfc4508f468dbf1cc810a",
+        "p1:3ccb6da8623dd2f65aa62b8d",
+        "p1:253f846de85d5f1068700bc3",
+        "p1:c640dcf056a8d03a5309af27"
+      ],
+      "scope_expr_id": "p1:46d829c49bb4c5e3995a4c4c"
+    },
+    {
+      "canonical_entry_id": "p1:046d77bce1ccf55fab9a1b69",
+      "slot": "A",
+      "boundary_fact_ids": [
+        "p1:82278d7ce28547ef94826c2a"
+      ],
+      "state": "RESOLVED",
+      "display_value": "REQUIRED 生成 finance-review.md",
+      "source_span_ids": [
+        "p1:5a2167427b249277183f2b22",
+        "p1:595c15bf024bd9b488fc2a33",
+        "p1:87522ed3255c4dcbd098f6ca",
+        "p1:253f846de85d5f1068700bc3",
+        "p1:c640dcf056a8d03a5309af27",
+        "p1:a745b0a8b8298ffb5a6e1648",
+        "p1:581e031d0f3ed5fb552487c1"
+      ],
+      "scope_expr_id": "p1:b9c3ce8b7d3480227ae6db96"
+    },
+    {
+      "canonical_entry_id": "p1:99232a54262135b234d50dd5",
+      "slot": "A",
+      "boundary_fact_ids": [
+        "p1:00292d635f3643cfd2a63390"
+      ],
+      "state": "RESOLVED",
+      "display_value": "REQUIRED 记录 复核误差",
+      "source_span_ids": [
+        "p1:b344007e967a4282b6387b45",
+        "p1:b734711b36565676200e8ada",
+        "p1:b8ed9ab5e99cda6da9ffefa8"
+      ],
+      "scope_expr_id": "p1:c42faccddbecc6fb9365aa75"
+    },
+    {
+      "canonical_entry_id": "p1:b4e004eae9d1efd0e6ec676c",
+      "slot": "A",
+      "boundary_fact_ids": [
+        "p1:edd5fd22e618e51962e86cfc"
+      ],
+      "state": "RESOLVED",
+      "display_value": "REQUIRED 复核 finance-review.md",
+      "source_span_ids": [
+        "p1:d5b76bf73b2076804ab09613",
+        "p1:a745b0a8b8298ffb5a6e1648",
+        "p1:87522ed3255c4dcbd098f6ca",
+        "p1:595c15bf024bd9b488fc2a33",
+        "p1:027a609c8580ede6e3d11cd1",
+        "p1:a6b412b067f78d81d1c726a2",
+        "p1:581e031d0f3ed5fb552487c1"
+      ],
+      "scope_expr_id": "p1:852b5ae037ca934dbeef22db"
+    },
+    {
+      "canonical_entry_id": "p1:0364175f33918982233aa8fe",
+      "slot": "A",
+      "boundary_fact_ids": [
+        "p1:f5ab41318df0ccfbf49f07e4"
+      ],
+      "state": "RESOLVED",
+      "display_value": "REQUIRED 提交 finance-review.md",
+      "source_span_ids": [
+        "p1:a6b412b067f78d81d1c726a2",
+        "p1:a745b0a8b8298ffb5a6e1648",
+        "p1:87522ed3255c4dcbd098f6ca",
+        "p1:595c15bf024bd9b488fc2a33",
+        "p1:dddbaa4443940ebf13a904d6",
+        "p1:9a2a842891b1c4ffe60e875a",
+        "p1:19756257580873868d5cc057",
+        "p1:581e031d0f3ed5fb552487c1"
+      ],
+      "scope_expr_id": "p1:9a8c71c7209f0f35dfff6400",
+      "condition_expr_id": "p1:e8d8c253c637221e4f5cbf26"
+    }
+  ]
+}
+```
+
+## P
+
+```json
+{
+  "slot": "P",
+  "status": "RESOLVED",
+  "entries": [
+    {
+      "canonical_entry_id": "p1:27a0b89200585ed24675e4a6",
+      "slot": "P",
+      "boundary_fact_ids": [
+        "p1:a9cd666ad13b865a57c20d3b",
+        "p1:e8e33ceb3c1c3b18aecff41d",
+        "p1:85375ac4353a80298d0f756c"
+      ],
+      "state": "RESOLVED",
+      "display_value": "财务员林悦 [PERFORMER,REVIEWER]",
+      "source_span_ids": [
+        "p1:253f846de85d5f1068700bc3",
+        "p1:c640dcf056a8d03a5309af27",
+        "p1:042bb5dc559a622de7c514b4",
+        "p1:6a76b5218e8a192d2a843681",
+        "p1:d28cfc4508f468dbf1cc810a",
+        "p1:5a2167427b249277183f2b22",
+        "p1:595c15bf024bd9b488fc2a33"
+      ]
+    },
+    {
+      "canonical_entry_id": "p1:fd8ac671f0eab8a9868c9e81",
+      "slot": "P",
+      "boundary_fact_ids": [
+        "p1:43697fb4711d13ba65084a8c"
+      ],
+      "state": "RESOLVED",
+      "display_value": "QA [REVIEWER]",
+      "source_span_ids": [
+        "p1:027a609c8580ede6e3d11cd1",
+        "p1:a745b0a8b8298ffb5a6e1648",
+        "p1:d5b76bf73b2076804ab09613"
+      ]
+    },
+    {
+      "canonical_entry_id": "p1:926dc5571357545709e2cb39",
+      "slot": "P",
+      "boundary_fact_ids": [
+        "p1:7b9e906c1e6a4f0aaa6c5c13"
+      ],
+      "state": "RESOLVED",
+      "display_value": "PM [PERFORMER]",
+      "source_span_ids": [
+        "p1:dddbaa4443940ebf13a904d6",
+        "p1:a745b0a8b8298ffb5a6e1648",
+        "p1:a6b412b067f78d81d1c726a2",
+        "p1:87522ed3255c4dcbd098f6ca",
+        "p1:595c15bf024bd9b488fc2a33"
+      ]
+    },
+    {
+      "canonical_entry_id": "p1:47b770dfcfff9d5ce789b0a3",
+      "slot": "P",
+      "boundary_fact_ids": [
+        "p1:4a0b3e1d2b01bb665ce10824"
+      ],
+      "state": "RESOLVED",
+      "display_value": "ADMIN [RECIPIENT]",
+      "source_span_ids": [
+        "p1:9a2a842891b1c4ffe60e875a",
+        "p1:a745b0a8b8298ffb5a6e1648",
+        "p1:a6b412b067f78d81d1c726a2",
+        "p1:87522ed3255c4dcbd098f6ca",
+        "p1:595c15bf024bd9b488fc2a33"
+      ]
+    }
+  ]
+}
+```
+
+## R
+
+```json
+{
+  "slot": "R",
+  "status": "ABSENT",
+  "entries": []
+}
+```
+
+## V
+
+```json
+{
+  "slot": "V",
+  "status": "ABSENT",
+  "entries": []
+}
+```
+
+## C
+
+```json
+{
+  "slot": "C",
+  "status": "ABSENT",
+  "entries": []
+}
+```
+
+## B
+
+```json
+{
+  "slot": "B",
+  "status": "RESOLVED",
+  "entries": [
+    {
+      "canonical_entry_id": "p1:e326992ebc2203096eba3ef6",
+      "slot": "B",
+      "boundary_fact_ids": [
+        "p1:454071be0799905cec890ed1"
+      ],
+      "state": "RESOLVED",
+      "display_value": "FORBIDDEN 隐藏 差异",
+      "source_span_ids": [
+        "p1:95efdd17f735f683fc64c548",
+        "p1:668733ba94b4833ccbd1d2df",
+        "p1:1a07eb8d08ca6300a63b1bee"
+      ],
+      "scope_expr_id": "p1:94e012c2d417ada1cebde570"
+    }
+  ]
+}
+```

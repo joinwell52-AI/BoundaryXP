@@ -1,0 +1,119 @@
+{
+  "contract_version": "031-r01",
+  "reviews": [
+    {
+      "subject_id": "ent_pm",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [{"quote": "PM", "occurrence": 1}],
+      "reason": "PM身份明确；OTHER可占位未指定的人或组类别，不推定具体类别。"
+    },
+    {
+      "subject_id": "ent_worker",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [{"quote": "worker服务", "occurrence": 1}, {"quote": "worker服务", "occurrence": 2}],
+      "reason": "两处均指同一worker服务，SYSTEM类别与服务身份相符。"
+    },
+    {
+      "subject_id": "ent_status",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [{"quote": "worker服务的运行状态", "occurrence": 1}],
+      "reason": "运行状态是明确检查内容，OTHER占位合理，未断言实际状态值。"
+    },
+    {
+      "subject_id": "ent_note",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [{"quote": "service-note.md", "occurrence": 1}],
+      "reason": "文件名及FILE身份明确。"
+    },
+    {
+      "subject_id": "evt_check",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [{"quote": "请PM检查worker服务的运行状态", "occurrence": 1}],
+      "reason": "明确要求当前检查动作，主层级、正向极性和REQUIRED模态正确，无明示条件。"
+    },
+    {
+      "subject_id": "evt_generate",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [{"quote": "生成service-note.md", "occurrence": 1}],
+      "reason": "生成文件是并列的明确要求；未明示检查完成为其必要前提。"
+    },
+    {
+      "subject_id": "evt_stop",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [{"quote": "不得停止worker服务", "occurrence": 1}],
+      "reason": "当前停止动作受到明确禁止，FORBIDDEN与正向动作极性的组合正确。"
+    },
+    {
+      "subject_id": "cl_check_performer",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["ent_pm", "evt_check"],
+      "sources": [{"quote": "请PM检查worker服务的运行状态", "occurrence": 1}],
+      "reason": "PM是检查动作的明示执行者。"
+    },
+    {
+      "subject_id": "cl_check_input",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["ent_worker", "evt_check", "cl_check_content"],
+      "sources": [{"quote": "检查worker服务的运行状态", "occurrence": 1}],
+      "reason": "worker服务是明确受检范围；CONTENT关系进一步保留运行状态这一检查内容。"
+    },
+    {
+      "subject_id": "cl_check_content",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["ent_status", "evt_check"],
+      "sources": [{"quote": "检查worker服务的运行状态", "occurrence": 1}],
+      "reason": "运行状态绑定为检查内容，未升格为独立动作或已观测状态。"
+    },
+    {
+      "subject_id": "cl_generate_performer",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["ent_pm", "evt_generate", "cl_check_performer"],
+      "sources": [{"quote": "请PM检查worker服务的运行状态", "occurrence": 1}, {"quote": "生成service-note.md", "occurrence": 1}],
+      "reason": "同一连续指令中的并列生成动作没有主体切换，可承接PM；来源保留两端。"
+    },
+    {
+      "subject_id": "cl_generate_result",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["ent_note", "evt_generate"],
+      "sources": [{"quote": "生成service-note.md", "occurrence": 1}],
+      "reason": "文件是生成动作的RESULT；原文未要求提交或交付。"
+    },
+    {
+      "subject_id": "cl_stop_performer",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["ent_pm", "evt_stop", "cl_check_performer"],
+      "sources": [{"quote": "请PM检查worker服务的运行状态", "occurrence": 1}, {"quote": "不得停止worker服务", "occurrence": 1}],
+      "reason": "追加禁止延续同一指令主体PM，无主体切换；参与绑定不产生停止义务。"
+    },
+    {
+      "subject_id": "cl_stop_object",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["ent_worker", "evt_stop"],
+      "sources": [{"quote": "检查worker服务的运行状态", "occurrence": 1}, {"quote": "不得停止worker服务", "occurrence": 1}],
+      "reason": "禁止停止的对象与受检worker服务身份一致；OBJECT用途不新增外部输入。"
+    }
+  ],
+  "issues": [],
+  "omissions": []
+}

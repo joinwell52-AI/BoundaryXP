@@ -1,0 +1,244 @@
+{
+  "controls": [
+    {
+      "id": "NORM-P1",
+      "mechanism": "ACTOR_PREFIX",
+      "kind": "POSITIVE",
+      "source": "请 TEAM811 读取 copper.csv，生成 copper-note.md。",
+      "expect": {
+        "inputs": [
+          "copper.csv"
+        ],
+        "outputs": [
+          "copper-note.md"
+        ],
+        "actor": "TEAM811"
+      }
+    },
+    {
+      "id": "NORM-P2",
+      "mechanism": "ACTOR_PREFIX",
+      "kind": "POSITIVE",
+      "source": "请检验员沈卓查看 violet.json，并生成 violet-check.md。",
+      "expect": {
+        "inputs": [
+          "violet.json"
+        ],
+        "outputs": [
+          "violet-check.md"
+        ],
+        "actor": "检验员沈卓"
+      }
+    },
+    {
+      "id": "NORM-P3",
+      "mechanism": "ACTOR_PREFIX",
+      "kind": "POSITIVE",
+      "source": "Please TEAM812 read cyan.txt and create cyan-review.md.",
+      "expect": {
+        "inputs": [
+          "cyan.txt"
+        ],
+        "outputs": [
+          "cyan-review.md"
+        ],
+        "actor": "TEAM812"
+      }
+    },
+    {
+      "id": "NORM-N1",
+      "mechanism": "ACTOR_PREFIX",
+      "kind": "NEGATIVE",
+      "source": "读取 maple.csv，生成 maple.md。",
+      "expect": {
+        "inputs": [
+          "maple.csv"
+        ],
+        "outputs": [
+          "maple.md"
+        ],
+        "no_actor": true
+      }
+    },
+    {
+      "id": "NORM-N2",
+      "mechanism": "ACTOR_PREFIX",
+      "kind": "NEGATIVE",
+      "source": "文档中说明“请 TEAM813 删除 pine.csv”。",
+      "expect": {
+        "no_execution": true
+      }
+    },
+    {
+      "id": "NORM-U1",
+      "mechanism": "ACTOR_PREFIX",
+      "kind": "AMBIGUITY",
+      "source": "TEAM814 与 TEAM815 各自生成报告，然后将该报告交给 TEAM816。",
+      "expect": {
+        "unresolved": true,
+        "no_guessed_transfer": true
+      }
+    },
+    {
+      "id": "LEX-P1",
+      "mechanism": "LEXICAL_FRAME",
+      "kind": "POSITIVE",
+      "source": "TEAM817 比较 amber-a.json 与 amber-b.json，并生成 amber-diff.md。",
+      "expect": {
+        "inputs": [
+          "amber-a.json",
+          "amber-b.json"
+        ],
+        "outputs": [
+          "amber-diff.md"
+        ],
+        "actor": "TEAM817",
+        "action": "compare"
+      }
+    },
+    {
+      "id": "LEX-P2",
+      "mechanism": "LEXICAL_FRAME",
+      "kind": "POSITIVE",
+      "source": "Iris reads bronze.csv and creates bronze-review.md.",
+      "expect": {
+        "inputs": [
+          "bronze.csv"
+        ],
+        "outputs": [
+          "bronze-review.md"
+        ],
+        "actor": "Iris"
+      }
+    },
+    {
+      "id": "LEX-P3",
+      "mechanism": "LEXICAL_FRAME",
+      "kind": "POSITIVE",
+      "source": "TEAM818 检查 moss.json，输出 moss-review.md。",
+      "expect": {
+        "inputs": [
+          "moss.json"
+        ],
+        "outputs": [
+          "moss-review.md"
+        ],
+        "actor": "TEAM818"
+      }
+    },
+    {
+      "id": "LEX-N1",
+      "mechanism": "LEXICAL_FRAME",
+      "kind": "NEGATIVE",
+      "source": "TEAM819 查看 metadata.csv 中的生成时间，生成 meta-note.md。",
+      "expect": {
+        "outputs": [
+          "meta-note.md"
+        ],
+        "no_output": "时间",
+        "actor": "TEAM819"
+      }
+    },
+    {
+      "id": "LEX-N2",
+      "mechanism": "LEXICAL_FRAME",
+      "kind": "NEGATIVE",
+      "source": "TEAM820 检查 inspect-label.json，并生成 label-note.md。",
+      "expect": {
+        "inputs": [
+          "inspect-label.json"
+        ],
+        "outputs": [
+          "label-note.md"
+        ],
+        "no_literal_predicate": true
+      }
+    },
+    {
+      "id": "LEX-U1",
+      "mechanism": "LEXICAL_FRAME",
+      "kind": "AMBIGUITY",
+      "source": "TEAM821 生成 south.md 和 north.md，随后复核该报告。",
+      "expect": {
+        "unresolved": true,
+        "no_guessed_review": true
+      }
+    },
+    {
+      "id": "COORD-P1",
+      "mechanism": "COORDINATION",
+      "kind": "POSITIVE",
+      "source": "不得修复或重写训练数据。",
+      "expect": {
+        "forbid_senses": [
+          "repair",
+          "rewrite"
+        ],
+        "shared_object": "训练数据"
+      }
+    },
+    {
+      "id": "COORD-P2",
+      "mechanism": "COORDINATION",
+      "kind": "POSITIVE",
+      "source": "不得清空队列或重启代理。",
+      "expect": {
+        "forbid_senses": [
+          "clear",
+          "restart"
+        ],
+        "forbid_objects": [
+          "队列",
+          "代理"
+        ]
+      }
+    },
+    {
+      "id": "COORD-P3",
+      "mechanism": "COORDINATION",
+      "kind": "POSITIVE",
+      "source": "Do not restart or stop the worker.",
+      "expect": {
+        "forbid_senses": [
+          "restart",
+          "stop"
+        ],
+        "shared_object": "the worker",
+        "no_stop_completion": true
+      }
+    },
+    {
+      "id": "COORD-N1",
+      "mechanism": "COORDINATION",
+      "kind": "NEGATIVE",
+      "source": "TEAM822 检查更新记录和生成时间，生成 timing-review.md。",
+      "expect": {
+        "outputs": [
+          "timing-review.md"
+        ],
+        "no_output": "时间",
+        "actor": "TEAM822"
+      }
+    },
+    {
+      "id": "COORD-N2",
+      "mechanism": "COORDINATION",
+      "kind": "NEGATIVE",
+      "source": "文档必须写明“不得修复或重写源数据”。",
+      "expect": {
+        "no_execution": true
+      }
+    },
+    {
+      "id": "COORD-U1",
+      "mechanism": "COORDINATION",
+      "kind": "AMBIGUITY",
+      "source": "读取 oak.csv 与 birch.csv，随后修复或重写其中一个。",
+      "expect": {
+        "unresolved": true,
+        "no_guessed_object": true
+      }
+    }
+  ],
+  "source_authoring": "New independent lexical/syntactic contrasts, authored before candidate creation; no case IDs or answers imported into runtime."
+}

@@ -1,0 +1,53 @@
+{
+  "contract_version": "028-r02.2",
+  "entities": [
+    {"id":"n1","label":"PM","type":"PERSON","mentions":[{"quote":"PM","occurrence":1},{"quote":"PM","occurrence":2}],"alternatives":[]},
+    {"id":"n2","label":"SPEC-42","type":"DOCUMENT","mentions":[{"quote":"SPEC-42","occurrence":1}],"alternatives":[]},
+    {"id":"n3","label":"routes.csv","type":"FILE","mentions":[{"quote":"routes.csv","occurrence":1},{"quote":"routes.csv","occurrence":2}],"alternatives":[]},
+    {"id":"n4","label":"report.md","type":"FILE","mentions":[{"quote":"report.md","occurrence":1},{"quote":"该报告","occurrence":1},{"quote":"该报告","occurrence":2}],"alternatives":[]},
+    {"id":"n5","label":"QA","type":"PERSON","mentions":[{"quote":"QA","occurrence":1},{"quote":"QA","occurrence":2}],"alternatives":[]},
+    {"id":"n6","label":"ADMIN","type":"PERSON","mentions":[{"quote":"ADMIN","occurrence":1}],"alternatives":[]}
+  ],
+  "events": [
+    {"id":"e1","predicate":"读取","kind":"ACTION","layer":"MAIN","use":"CURRENT_TASK","modality":"REQUIRED","polarity":"POSITIVE","owner_id":"ROOT","constraint_ids":["c14"],"requires":[],"sources":[{"quote":"请PM依据SPEC-42读取routes.csv并生成report.md","occurrence":1},{"quote":"该读取操作最多重试3次","occurrence":1}]},
+    {"id":"e2","predicate":"生成","kind":"ACTION","layer":"MAIN","use":"CURRENT_TASK","modality":"REQUIRED","polarity":"POSITIVE","owner_id":"ROOT","constraint_ids":[],"requires":[],"sources":[{"quote":"请PM依据SPEC-42读取routes.csv并生成report.md","occurrence":1}]},
+    {"id":"e3","predicate":"复核","kind":"ACTION","layer":"MAIN","use":"CURRENT_TASK","modality":"REQUIRED","polarity":"POSITIVE","owner_id":"ROOT","constraint_ids":[],"requires":[],"sources":[{"quote":"QA必须复核该报告","occurrence":1}]},
+    {"id":"e4","predicate":"提交","kind":"ACTION","layer":"MAIN","use":"CURRENT_TASK","modality":"PERMITTED","polarity":"POSITIVE","owner_id":"ROOT","constraint_ids":["c13"],"requires":[],"sources":[{"quote":"仅在本次QA复核通过后，允许PM向ADMIN提交该报告","occurrence":1}]},
+    {"id":"e5","predicate":"修改","kind":"ACTION","layer":"MAIN","use":"CURRENT_TASK","modality":"FORBIDDEN","polarity":"POSITIVE","owner_id":"ROOT","constraint_ids":[],"requires":[],"sources":[{"quote":"不得修改routes.csv","occurrence":1}]}
+  ],
+  "claims": [
+    {"id":"c1","kind":"ROLE","event_id":"e1","entity_id":"n1","role":"PERFORMER","expression_id":null,"direction":null,"temporal":null,"quantity":null,"scope_id":"e1","requires":[],"sources":[{"quote":"请PM依据SPEC-42读取routes.csv","occurrence":1}],"note":""},
+    {"id":"c2","kind":"ROLE","event_id":"e1","entity_id":"n2","role":"BASIS","expression_id":null,"direction":null,"temporal":null,"quantity":null,"scope_id":"e1","requires":[],"sources":[{"quote":"依据SPEC-42读取routes.csv","occurrence":1}],"note":""},
+    {"id":"c3","kind":"ROLE","event_id":"e1","entity_id":"n3","role":"INPUT_OBJECT","expression_id":null,"direction":null,"temporal":null,"quantity":null,"scope_id":"e1","requires":[],"sources":[{"quote":"读取routes.csv","occurrence":1}],"note":""},
+    {"id":"c4","kind":"ROLE","event_id":"e2","entity_id":"n1","role":"PERFORMER","expression_id":null,"direction":null,"temporal":null,"quantity":null,"scope_id":"e2","requires":[],"sources":[{"quote":"请PM依据SPEC-42读取routes.csv并生成report.md","occurrence":1}],"note":"并列动作共享PM主体。"},
+    {"id":"c5","kind":"ROLE","event_id":"e2","entity_id":"n2","role":"BASIS","expression_id":null,"direction":null,"temporal":null,"quantity":null,"scope_id":"e2","requires":[],"sources":[{"quote":"依据SPEC-42读取routes.csv并生成report.md","occurrence":1}],"note":"依据补语作用于并列的读取与生成。"},
+    {"id":"c6","kind":"ROLE","event_id":"e2","entity_id":"n4","role":"RESULT","expression_id":null,"direction":null,"temporal":null,"quantity":null,"scope_id":"e2","requires":[],"sources":[{"quote":"生成report.md","occurrence":1}],"note":""},
+    {"id":"c7","kind":"ROLE","event_id":"e3","entity_id":"n5","role":"REVIEWER","expression_id":null,"direction":null,"temporal":null,"quantity":null,"scope_id":"e3","requires":[],"sources":[{"quote":"QA必须复核该报告","occurrence":1}],"note":""},
+    {"id":"c8","kind":"ROLE","event_id":"e3","entity_id":"n4","role":"OBJECT","expression_id":null,"direction":null,"temporal":null,"quantity":null,"scope_id":"e3","requires":[],"sources":[{"quote":"生成report.md","occurrence":1},{"quote":"QA必须复核该报告","occurrence":1}],"note":"该报告指生成的report.md，属于内部产物用途。"},
+    {"id":"c9","kind":"ROLE","event_id":"e4","entity_id":"n1","role":"PERFORMER","expression_id":null,"direction":null,"temporal":null,"quantity":null,"scope_id":"e4","requires":[],"sources":[{"quote":"允许PM向ADMIN提交该报告","occurrence":1}],"note":""},
+    {"id":"c10","kind":"ROLE","event_id":"e4","entity_id":"n4","role":"OBJECT","expression_id":null,"direction":null,"temporal":null,"quantity":null,"scope_id":"e4","requires":[],"sources":[{"quote":"生成report.md","occurrence":1},{"quote":"提交该报告","occurrence":1}],"note":"提交对象仍为同一report.md。"},
+    {"id":"c11","kind":"ROLE","event_id":"e4","entity_id":"n6","role":"RECIPIENT","expression_id":null,"direction":null,"temporal":null,"quantity":null,"scope_id":"e4","requires":[],"sources":[{"quote":"向ADMIN提交该报告","occurrence":1}],"note":""},
+    {"id":"c12","kind":"ROLE","event_id":"e5","entity_id":"n3","role":"OBJECT","expression_id":null,"direction":null,"temporal":null,"quantity":null,"scope_id":"e5","requires":[],"sources":[{"quote":"不得修改routes.csv","occurrence":1}],"note":"禁止对象用途不另增加外部输入。"},
+    {"id":"c13","kind":"CONDITION","event_id":"e4","entity_id":null,"role":null,"expression_id":"x1","direction":"NECESSARY","temporal":"AFTER","quantity":null,"scope_id":"e4","requires":[],"sources":[{"quote":"仅在本次QA复核通过后，允许PM向ADMIN提交该报告","occurrence":1}],"note":"本次QA复核通过是提交许可的必要前提，并保留通过后这一时间关系；不宣称已通过。"},
+    {"id":"c14","kind":"QUANTITY","event_id":"e1","entity_id":null,"role":null,"expression_id":null,"direction":null,"temporal":null,"quantity":{"metric":"重试次数","target_id":"e1","comparator":"LTE","value":3,"unit":"次","use":"EXECUTION_LIMIT","count_scope":"e1"},"scope_id":"e1","requires":[],"sources":[{"quote":"读取routes.csv","occurrence":1},{"quote":"该读取操作最多重试3次","occurrence":1}],"note":"仅限制该读取操作的重试次数，不将首次读取计为重试。"},
+    {"id":"c15","kind":"COMPLETION","event_id":null,"entity_id":null,"role":null,"expression_id":"x2","direction":"SUFFICIENT","temporal":null,"quantity":null,"scope_id":"ROOT","requires":[],"sources":[{"quote":"提交成功即任务完成","occurrence":1}],"note":"提交成功足以触发根任务完成，不表示唯一完成条件或成功已发生。"}
+  ],
+  "expressions": [
+    {"id":"x1","op":"STATE","operands":[],"state":{"predicate":"复核通过","event_id":"e3","args":["n5","n4"],"polarity":"POSITIVE"},"sources":[{"quote":"生成report.md","occurrence":1},{"quote":"QA必须复核该报告","occurrence":1},{"quote":"本次QA复核通过","occurrence":1}]},
+    {"id":"x2","op":"STATE","operands":[],"state":{"predicate":"提交成功","event_id":"e4","args":["n4","n6"],"polarity":"POSITIVE"},"sources":[{"quote":"生成report.md","occurrence":1},{"quote":"允许PM向ADMIN提交该报告","occurrence":1},{"quote":"提交成功即任务完成","occurrence":1}]}
+  ],
+  "issues": [
+    {"id":"u1","kind":"UNSPECIFIED","subject_ids":["e5"],"field_path":"claims.role=PERFORMER","alternatives":[],"affected_views":["P"],"sources":[{"quote":"不得修改routes.csv","occurrence":1}],"note":"修改禁令未显式指定主体，不默认继承PM或扩展为所有参与者；禁止动作及对象明确。"}
+  ],
+  "coverage": [
+    {"sources":[{"quote":"请PM依据SPEC-42读取routes.csv","occurrence":1}],"claim_ids":["c1","c2","c3"],"status":"EXPRESSED","affected_views":["I","A","P","V"]},
+    {"sources":[{"quote":"请PM依据SPEC-42读取routes.csv并生成report.md","occurrence":1}],"claim_ids":["c4","c5","c6"],"status":"EXPRESSED","affected_views":["O","A","P","V"]},
+    {"sources":[{"quote":"QA必须复核该报告","occurrence":1}],"claim_ids":["c7","c8"],"status":"EXPRESSED","affected_views":["A","P"]},
+    {"sources":[{"quote":"允许PM向ADMIN提交该报告","occurrence":1}],"claim_ids":["c9","c10","c11"],"status":"EXPRESSED","affected_views":["A","P"]},
+    {"sources":[{"quote":"仅在本次QA复核通过后，允许PM向ADMIN提交该报告","occurrence":1}],"claim_ids":["c13"],"status":"EXPRESSED","affected_views":["A"]},
+    {"sources":[{"quote":"该读取操作最多重试3次","occurrence":1}],"claim_ids":["c14"],"status":"EXPRESSED","affected_views":["R"]},
+    {"sources":[{"quote":"提交成功即任务完成","occurrence":1}],"claim_ids":["c15"],"status":"EXPRESSED","affected_views":["C"]},
+    {"sources":[{"quote":"不得修改routes.csv","occurrence":1}],"claim_ids":["c12"],"status":"EXPRESSED","affected_views":["B"]},
+    {"sources":[{"quote":"不得修改routes.csv","occurrence":1}],"claim_ids":[],"status":"UNSPECIFIED","affected_views":["P"]}
+  ]
+}

@@ -1,0 +1,291 @@
+{
+  "contract_version": "031-r01",
+  "entities": [
+    {
+      "id": "E_PM",
+      "label": "PM",
+      "type": "OTHER",
+      "mentions": [
+        {
+          "quote": "PM",
+          "occurrence": 1
+        }
+      ],
+      "alternatives": []
+    },
+    {
+      "id": "E_FILE",
+      "label": "a.csv",
+      "type": "FILE",
+      "mentions": [
+        {
+          "quote": "a.csv",
+          "occurrence": 1
+        },
+        {
+          "quote": "a.csv",
+          "occurrence": 2
+        }
+      ],
+      "alternatives": []
+    },
+    {
+      "id": "E_SERVICE",
+      "label": "服务",
+      "type": "SYSTEM",
+      "mentions": [
+        {
+          "quote": "服务",
+          "occurrence": 1
+        }
+      ],
+      "alternatives": []
+    }
+  ],
+  "events": [
+    {
+      "id": "EV_CHECK",
+      "predicate": "检查",
+      "kind": "ACTION",
+      "layer": "MAIN",
+      "use": "CURRENT_TASK",
+      "modality": "REQUIRED",
+      "polarity": "POSITIVE",
+      "owner_id": "ROOT",
+      "constraint_ids": [],
+      "requires": [],
+      "sources": [
+        {
+          "quote": "请PM检查a.csv",
+          "occurrence": 1
+        }
+      ]
+    },
+    {
+      "id": "EV_RESTART",
+      "predicate": "重启",
+      "kind": "ACTION",
+      "layer": "MAIN",
+      "use": "CURRENT_TASK",
+      "modality": "NOT_REQUIRED",
+      "polarity": "POSITIVE",
+      "owner_id": "ROOT",
+      "constraint_ids": [],
+      "requires": [],
+      "sources": [
+        {
+          "quote": "无需重启服务",
+          "occurrence": 1
+        }
+      ]
+    },
+    {
+      "id": "EV_DELETE",
+      "predicate": "删除",
+      "kind": "ACTION",
+      "layer": "MAIN",
+      "use": "CURRENT_TASK",
+      "modality": "FORBIDDEN",
+      "polarity": "POSITIVE",
+      "owner_id": "ROOT",
+      "constraint_ids": [],
+      "requires": [],
+      "sources": [
+        {
+          "quote": "不得删除a.csv",
+          "occurrence": 1
+        }
+      ]
+    }
+  ],
+  "claims": [
+    {
+      "id": "C_CHECK_PM",
+      "kind": "ROLE",
+      "event_id": "EV_CHECK",
+      "entity_id": "E_PM",
+      "role": "PERFORMER",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "scope_id": "EV_CHECK",
+      "requires": [],
+      "sources": [
+        {
+          "quote": "请PM检查a.csv",
+          "occurrence": 1
+        }
+      ],
+      "note": "明确指定PM执行检查；岗位简称不推定人员或群组类别。"
+    },
+    {
+      "id": "C_CHECK_FILE",
+      "kind": "ROLE",
+      "event_id": "EV_CHECK",
+      "entity_id": "E_FILE",
+      "role": "INPUT_OBJECT",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "scope_id": "EV_CHECK",
+      "requires": [],
+      "sources": [
+        {
+          "quote": "检查a.csv",
+          "occurrence": 1
+        }
+      ],
+      "note": "a.csv是明确受检对象。"
+    },
+    {
+      "id": "C_RESTART_PM",
+      "kind": "ROLE",
+      "event_id": "EV_RESTART",
+      "entity_id": "E_PM",
+      "role": "PERFORMER",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "scope_id": "EV_RESTART",
+      "requires": [],
+      "sources": [
+        {
+          "quote": "请PM检查a.csv",
+          "occurrence": 1
+        },
+        {
+          "quote": "无需重启服务",
+          "occurrence": 1
+        }
+      ],
+      "note": "同一连续指令未切换主体，承接PM；无需重启撤回义务，不构成禁止。"
+    },
+    {
+      "id": "C_RESTART_SERVICE",
+      "kind": "ROLE",
+      "event_id": "EV_RESTART",
+      "entity_id": "E_SERVICE",
+      "role": "OBJECT",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "scope_id": "EV_RESTART",
+      "requires": [],
+      "sources": [
+        {
+          "quote": "无需重启服务",
+          "occurrence": 1
+        }
+      ],
+      "note": "服务是重启动作的对象。"
+    },
+    {
+      "id": "C_DELETE_PM",
+      "kind": "ROLE",
+      "event_id": "EV_DELETE",
+      "entity_id": "E_PM",
+      "role": "PERFORMER",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "scope_id": "EV_DELETE",
+      "requires": [],
+      "sources": [
+        {
+          "quote": "请PM检查a.csv",
+          "occurrence": 1
+        },
+        {
+          "quote": "不得删除a.csv",
+          "occurrence": 1
+        }
+      ],
+      "note": "同一连续指令未切换主体，删除禁令承接PM。"
+    },
+    {
+      "id": "C_DELETE_FILE",
+      "kind": "ROLE",
+      "event_id": "EV_DELETE",
+      "entity_id": "E_FILE",
+      "role": "OBJECT",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "scope_id": "EV_DELETE",
+      "requires": [],
+      "sources": [
+        {
+          "quote": "检查a.csv",
+          "occurrence": 1
+        },
+        {
+          "quote": "不得删除a.csv",
+          "occurrence": 1
+        }
+      ],
+      "note": "两处a.csv指同一文件；禁止对象用途不另增外部输入。"
+    }
+  ],
+  "expressions": [],
+  "issues": [],
+  "coverage": [
+    {
+      "sources": [
+        {
+          "quote": "请PM检查a.csv",
+          "occurrence": 1
+        }
+      ],
+      "claim_ids": [
+        "C_CHECK_PM",
+        "C_CHECK_FILE"
+      ],
+      "status": "EXPRESSED",
+      "affected_views": [
+        "I",
+        "A",
+        "P"
+      ]
+    },
+    {
+      "sources": [
+        {
+          "quote": "无需重启服务",
+          "occurrence": 1
+        }
+      ],
+      "claim_ids": [
+        "C_RESTART_PM",
+        "C_RESTART_SERVICE"
+      ],
+      "status": "EXPRESSED",
+      "affected_views": [
+        "A",
+        "P"
+      ]
+    },
+    {
+      "sources": [
+        {
+          "quote": "不得删除a.csv",
+          "occurrence": 1
+        }
+      ],
+      "claim_ids": [
+        "C_DELETE_PM",
+        "C_DELETE_FILE"
+      ],
+      "status": "EXPRESSED",
+      "affected_views": [
+        "B",
+        "P"
+      ]
+    }
+  ]
+}

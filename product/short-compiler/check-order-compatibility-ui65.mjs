@@ -1,0 +1,4 @@
+import fs from 'node:fs';import path from 'node:path';import {spawnSync} from 'node:child_process';
+let code=fs.readFileSync('.boundx/scope-comparable-regression-ui62-final/runner.mjs','utf8').replaceAll('0.1.0-candidate.031-r1.2-ui.52','0.1.0-candidate.031-r1.2-ui.64').replaceAll('0.1.0-candidate.031-r1.2-ui.62','0.1.0-candidate.031-r1.2-ui.65').replaceAll('SCOPE-CONSUMPTION-CLOSURE-r01/regression-ui62-final','CONDITION-REFERENCE-AND-DELIVERY-r01/order-compatibility');
+code=code.replace(/const tests=.*?\.sort\(\);/,"const tests=['boundary-order-calculus.test.mjs','boundary-order-independence.test.mjs'];");
+const file=path.resolve('.boundx/condition-order-compatibility-ui65.mjs');fs.writeFileSync(file,code,{flag:'wx'});const result=spawnSync(process.execPath,[file],{windowsHide:true,encoding:'utf8'});console.log(result.stdout);if(result.status)console.error(result.stderr);process.exitCode=result.status;

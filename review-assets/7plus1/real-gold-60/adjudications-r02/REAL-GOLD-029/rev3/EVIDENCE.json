@@ -1,0 +1,43 @@
+{
+  "case_id": "REAL-GOLD-029",
+  "source_sha256": "e897a0f7eed3cab3551f731498a08a9e0beef67191eec2ac411f9ef6cc0ec5f5",
+  "status": "EVIDENCE_VERIFIED",
+  "evidence": [
+    {
+      "evidence_id": "E001",
+      "source_id": "SOURCE_TASK",
+      "origin": "SOURCE",
+      "start": 0,
+      "end": 1204,
+      "quote": "---\r\nprotocol: fcop\r\nversion: 1\r\nkind: task\r\ntask_id: TASK-20260512-008\r\nsender: ADMIN\r\nrecipient: ME\r\npriority: P1\r\nthread_key: adr-0033-trailing-slug-adoption\r\nrisk_level: low\r\ncreated_at: \"2026-05-12T23:35:00+08:00\"\r\n---\r\n\r\n# ADR-0033 sprint atomic commit · 物理收口\r\n\r\n> 注:本 task 文件名自带 trailing slug\r\n> `-adr-0033-sprint-commit`,这是 1.6.0 新文法的首次落盘自证。\r\n> ADMIN 当前的 working tree 已含 ADR-0033 全部产物(`fcop` 1.6.0),\r\n> 因此本 task 直接以新文法落档合规。\r\n\r\n## 背景 · Why\r\n\r\nADR-0033 五个 Phase 已 ALL GREEN 闭环(详见 `REPORT-20260512-007`),\r\n但**物理产物仍在 working tree、未 commit**。当前 `git status` 含:\r\n\r\n```\r\nM  CHANGELOG.md\r\nM  adr/README.md\r\nM  mcp/src/fcop_mcp/_version.py\r\nM  src/fcop/_version.py\r\nM  src/fcop/core/filename.py\r\nM  src/fcop/rules/_data/fcop-protocol.mdc\r\nM  tests/test_fcop/test_core_filename.py\r\n?? adr/ADR-0033-trailing-slug-filename-adoption.md\r\n?? fcop/log/tasks/TASK-20260512-006-ADMIN-to-ME.md           # 已 archive 的 task\r\n?? fcop/reports/REPORT-20260512-007-ME-to-ADMIN-adr-0033-trailing-slug.md\r\n?? fcop/tasks/TASK-20260512-008-ADMIN-to-ME-adr-0033-sprint-commit.md  # 本 task\r\n```\r\n\r\nADMIN 决策(2026-05-12 23:33):**排期 X · 收 ADR-0033 sprint metadata\r\natomic commit**(类比 codeflow PM Phase D collection commit 范式)。\r\n\r",
+      "purpose": "metadata, trailing-slug self-evidence, and working-tree inputs"
+    },
+    {
+      "evidence_id": "E002",
+      "source_id": "SOURCE_TASK",
+      "origin": "SOURCE",
+      "start": 1205,
+      "end": 2166,
+      "quote": "## 范围 · What\r\n\r\n**双 atomic commit 闭环**(参照 codeflow 6 件 atomic commit 风格):\r\n\r\n### Commit #1 · ADR-0033 sprint 物理产物\r\n\r\n`feat(filename): adopt trailing-slug grammar (ADR-0033 · fcop 1.6.0)`\r\n\r\n含:\r\n- 7 件 M(代码 + 文档 + 版本号)\r\n- 3 件 ??(`ADR-0033` 本体 + `TASK-006` 已归档形态 + `REPORT-007`)\r\n- **+ 本 TASK-008**(commit 决策载体,与产物同 batch 入历史)\r\n\r\n### Commit #2 · Rule 0.a.1 sprint 元数据收口\r\n\r\n`chore(fcop): rule 0.a.1 closure for ADR-0033 sprint (TASK-008 archive + REPORT-008)`\r\n\r\n含:\r\n- `D fcop/tasks/TASK-20260512-008-...` (commit #1 后从 tasks/ 移走)\r\n- `?? fcop/log/tasks/TASK-20260512-008-...` (archive 落点)\r\n- `?? fcop/reports/REPORT-20260512-008-...` (本 task 的 REPORT)\r\n\r\n## 实施步骤 · How(Rule 0.a.1 双层闭环)\r\n\r\n| Step | 动作 | git 状态 |\r\n|---|---|---|\r\n| 1 | 写 TASK-008(本文件) | + 1 ?? |\r\n| 2 | `git add <精确清单>` + commit #1 | tree clean except #2 后续产物 |\r\n| 3 | 写 REPORT-008 | + 1 ?? |\r\n| 4 | archive TASK-008 → log/tasks/ | + 1 D + 1 ?? |\r\n| 5 | `git add <精确清单>` + commit #2 | tree clean |\r\n\r",
+      "purpose": "two commits and closure steps"
+    },
+    {
+      "evidence_id": "E003",
+      "source_id": "SOURCE_TASK",
+      "origin": "SOURCE",
+      "start": 2167,
+      "end": 3475,
+      "quote": "## 精确文件清单 · Whitelist(Rule 7.5 精神 + codeflow PM #69 教训)\r\n\r\n### Commit #1 范围(白名单)\r\n\r\n```\r\nCHANGELOG.md\r\nadr/README.md\r\nadr/ADR-0033-trailing-slug-filename-adoption.md\r\nmcp/src/fcop_mcp/_version.py\r\nsrc/fcop/_version.py\r\nsrc/fcop/core/filename.py\r\nsrc/fcop/rules/_data/fcop-protocol.mdc\r\ntests/test_fcop/test_core_filename.py\r\nfcop/log/tasks/TASK-20260512-006-ADMIN-to-ME.md\r\nfcop/reports/REPORT-20260512-007-ME-to-ADMIN-adr-0033-trailing-slug.md\r\nfcop/tasks/TASK-20260512-008-ADMIN-to-ME-adr-0033-sprint-commit.md\r\n```\r\n\r\n### Commit #1 排除(显式不加,留作未来评估)\r\n\r\n| 路径 | 性质 | 处置 |\r\n|---|---|---|\r\n| `.scratch/` | 临时草稿目录 | **不加**,改进 `.gitignore` 候选 |\r\n| `fcop_events.jsonl` | 运行时事件日志 | **不加**,改进 `.gitignore` 候选 |\r\n| `mcp/fcop_events.jsonl` | 同上 | **不加**,改进 `.gitignore` 候选 |\r\n| `scripts/_*_commit_msg.txt` | 历史 commit message 草稿 | **不加**,改进 `.gitignore` 候选 |\r\n| `scripts/patch_*.py` | 历史升级 patch 脚本 | **不加**,待 ADMIN 评估去留 |\r\n\r\n→ 这五类是历史 untracked 噪音,**不在 ADR-0033 范围内**,要单独评估,\r\n不混进本 sprint commit。会在 commit #2 末尾或 REPORT-008 末尾向 ADMIN\r\n列出\"建议另起 task 处理\"。\r\n\r\n### Commit #2 范围(白名单)\r\n\r\n```\r\nfcop/tasks/TASK-20260512-008-ADMIN-to-ME-adr-0033-sprint-commit.md  # 状态: deleted\r\nfcop/log/tasks/TASK-20260512-008-ADMIN-to-ME-adr-0033-sprint-commit.md\r\nfcop/reports/REPORT-20260512-008-ME-to-ADMIN-adr-0033-sprint-commit.md\r\n```\r\n\r",
+      "purpose": "commit whitelists and explicit exclusions"
+    },
+    {
+      "evidence_id": "E004",
+      "source_id": "SOURCE_TASK",
+      "origin": "SOURCE",
+      "start": 3476,
+      "end": 4370,
+      "quote": "## 验收标准 · DoD\r\n\r\n- [ ] Commit #1 落盘 + commit hash 记入 REPORT-008\r\n- [ ] Commit #2 落盘 + commit hash 记入 REPORT-008\r\n- [ ] `git status` 在两 commit 之后:**只剩 ADR-0033 范围外的 5 类历史\r\n      untracked**(可向 ADMIN 列出清单 + 处置建议)\r\n- [ ] 两个 commit message 严格遵守仓库历史风格\r\n      (`<type>(<scope>): <subject>`),无 emoji\r\n- [ ] **不**打 tag(tag v1.6.0 推迟到 ADMIN 单独触发,因为 tag 会引发\r\n      CI lockstep + 发布流程,Rule 7 范畴)\r\n- [ ] **不** push origin(本次只本地落 commit,push 由 ADMIN 评估)\r\n\r\n## 协议合规守则\r\n\r\n- Rule 0.a.1:四步走完整执行(write_task → do → write_report → archive)\r\n- Rule 0.b:本 task 由 ADMIN 提案、ME 执行,文件即代表两个视角\r\n- Rule 0.c:commit message 内容必带出处(commit hash + 文件路径 + ADR-0033)\r\n- Rule 5:TASK-006 + REPORT-007 + ADR-0033 已落,**不**回头改它们的内容\r\n- Rule 7:**不**打 tag、**不** push origin、**不**发布 PyPI ——\r\n  这些都需要 ADMIN 二次确认,本 sprint 不涉及\r\n- Rule 7.5:不向项目根写业务代码(本次只是 commit,无新文件落根)\r\n\r\n---\r\n\r\n**status**:READY\r\n**closes_on**:两个 commit hash 都进 REPORT-008\r\n",
+      "purpose": "DoD, protocol compliance, and READY state"
+    }
+  ]
+}

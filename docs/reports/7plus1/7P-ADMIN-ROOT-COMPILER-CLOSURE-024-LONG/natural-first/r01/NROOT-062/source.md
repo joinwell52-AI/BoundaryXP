@@ -1,0 +1,1 @@
+本任务要求读取 before.csv 与 after.csv 并形成 compare.md。QA 确认两份输入均已核对且报告已生成后，PM 才能提交报告。

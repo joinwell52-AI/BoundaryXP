@@ -1,0 +1,316 @@
+{
+  "type": "object",
+  "properties": {
+    "contract_version": {
+      "const": "031-r1.1",
+      "type": "string"
+    },
+    "reviews": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "subject_id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "field_path": {
+            "type": "string"
+          },
+          "verdict": {
+            "type": "string",
+            "enum": [
+              "SUPPORT",
+              "CONTRADICT",
+              "UNCERTAIN"
+            ]
+          },
+          "context_refs": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "sources": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "quote": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "occurrence": {
+                  "type": "integer",
+                  "minimum": 1
+                }
+              },
+              "required": [
+                "quote",
+                "occurrence"
+              ],
+              "additionalProperties": false
+            },
+            "minItems": 1
+          },
+          "reason": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "subject_id",
+          "field_path",
+          "verdict",
+          "context_refs",
+          "sources",
+          "reason"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "issues": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "issue_kind": {
+            "type": "string",
+            "enum": [
+              "BINDING",
+              "SCOPE",
+              "MODALITY",
+              "LAYER",
+              "IDENTITY",
+              "CONDITION",
+              "QUANTITY",
+              "SOURCE",
+              "CONTRACT"
+            ]
+          },
+          "subject_ids": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "field_path": {
+            "type": "string"
+          },
+          "context_refs": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "sources": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "quote": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "occurrence": {
+                  "type": "integer",
+                  "minimum": 1
+                }
+              },
+              "required": [
+                "quote",
+                "occurrence"
+              ],
+              "additionalProperties": false
+            },
+            "minItems": 1
+          },
+          "reason": {
+            "type": "string"
+          },
+          "suggested_json": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "required": [
+          "id",
+          "issue_kind",
+          "subject_ids",
+          "field_path",
+          "context_refs",
+          "sources",
+          "reason",
+          "suggested_json"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "omissions": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "sources": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "quote": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "occurrence": {
+                  "type": "integer",
+                  "minimum": 1
+                }
+              },
+              "required": [
+                "quote",
+                "occurrence"
+              ],
+              "additionalProperties": false
+            },
+            "minItems": 1
+          },
+          "affected_views": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "enum": [
+                "I",
+                "O",
+                "A",
+                "P",
+                "R",
+                "V",
+                "C",
+                "B"
+              ]
+            }
+          },
+          "reason": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "sources",
+          "affected_views",
+          "reason"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "source_checks": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "sources": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "quote": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "occurrence": {
+                  "type": "integer",
+                  "minimum": 1
+                }
+              },
+              "required": [
+                "quote",
+                "occurrence"
+              ],
+              "additionalProperties": false
+            },
+            "minItems": 1
+          },
+          "claim_ids": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "requirement_kind": {
+            "type": "string",
+            "enum": [
+              "GENERAL",
+              "RESTRICTION",
+              "QUANTITY_TOTAL",
+              "QUANTITY_EACH",
+              "WORK_PLAN",
+              "NON_BOUNDARY",
+              "PROPERTY_CONSTRAINT",
+              "OUTPUT_BEHAVIOR"
+            ]
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "EXPRESSED",
+              "BACKGROUND",
+              "UNSPECIFIED",
+              "GAP"
+            ]
+          },
+          "affected_views": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "enum": [
+                "I",
+                "O",
+                "A",
+                "P",
+                "R",
+                "V",
+                "C",
+                "B"
+              ]
+            }
+          },
+          "reason": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "sources",
+          "claim_ids",
+          "requirement_kind",
+          "status",
+          "affected_views",
+          "reason"
+        ],
+        "additionalProperties": false
+      }
+    }
+  },
+  "required": [
+    "contract_version",
+    "reviews",
+    "issues",
+    "omissions"
+  ],
+  "additionalProperties": false
+}

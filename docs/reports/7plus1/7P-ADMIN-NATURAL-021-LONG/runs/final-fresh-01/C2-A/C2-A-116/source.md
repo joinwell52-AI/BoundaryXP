@@ -1,0 +1,1 @@
+TEAM316 check cache-6. The output instructions-c2-a-6.txt must quote "both checks are complete".

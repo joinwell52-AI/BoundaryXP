@@ -1,0 +1,1 @@
+Using CHECK-19 version v2.4, PM must organize an inspection of routes.yaml and deliver route-audit.md within 30 minutes. The task must not change the configuration, and QA must review the report before delivery.

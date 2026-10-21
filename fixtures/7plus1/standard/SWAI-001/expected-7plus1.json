@@ -1,0 +1,154 @@
+{
+  "sample_id": "SWAI-001",
+  "status": "GOLD_7PLUS1_CONFIRMED",
+  "slots": {
+    "I": {
+      "status": "RESOLVED",
+      "entries": [
+        {
+          "value": "src/fcop/project.py 中：",
+          "scope": {
+            "items": [
+              "write_task",
+              "write_report",
+              "write_issue"
+            ]
+          }
+        },
+        {
+          "value": "对应 active 与 log/archive 的 task/report/issue 文件集合"
+        },
+        {
+          "value": "三个对应测试文件"
+        }
+      ]
+    },
+    "O": {
+      "status": "RESOLVED",
+      "entries": [
+        {
+          "value": "私有 helper `_existing_filenames_for_seq`"
+        },
+        {
+          "value": "三个 writer 的 union-scan 修复"
+        },
+        {
+          "value": "三个 `seq_skips_archived` 回归测试"
+        }
+      ]
+    },
+    "A": {
+      "status": "RESOLVED",
+      "entries": [
+        {
+          "value": "新增 `_existing_filenames_for_seq`",
+          "modality": "REQUIRED"
+        },
+        {
+          "value": "write_task 同时扫描 tasks_dir + log/tasks",
+          "modality": "REQUIRED"
+        },
+        {
+          "value": "write_report 同时扫描 reports_dir + log/reports",
+          "modality": "REQUIRED"
+        },
+        {
+          "value": "write_issue 同时扫描 issues_dir + log/issues",
+          "modality": "REQUIRED"
+        },
+        {
+          "value": "新增三项 archived-basename sequence 回归测试",
+          "modality": "REQUIRED"
+        }
+      ]
+    },
+    "P": {
+      "status": "RESOLVED",
+      "entries": [
+        {
+          "value": "ME [PERFORMER]",
+          "target": "ME",
+          "role": [
+            "PERFORMER"
+          ]
+        }
+      ]
+    },
+    "R": {
+      "status": "ABSENT",
+      "entries": []
+    },
+    "V": {
+      "status": "RESOLVED",
+      "entries": [
+        {
+          "value": "ISSUE-20260427-003-ME.md"
+        },
+        {
+          "value": "TASK-20260427-002-ADMIN-to-ME.md"
+        },
+        {
+          "value": "src/fcop/project.py 对应现状代码位置"
+        }
+      ]
+    },
+    "C": {
+      "status": "RESOLVED",
+      "entries": [
+        {
+          "value": "三份新测试通过",
+          "condition": {
+            "operator": "AND",
+            "group": "C",
+            "operand_index": 0
+          }
+        },
+        {
+          "value": "原有 587 passed 不退",
+          "condition": {
+            "operator": "AND",
+            "group": "C",
+            "operand_index": 1
+          }
+        },
+        {
+          "value": "ruff clean",
+          "condition": {
+            "operator": "AND",
+            "group": "C",
+            "operand_index": 2
+          }
+        },
+        {
+          "value": "两件人工 rename 文件不被误伤",
+          "condition": {
+            "operator": "AND",
+            "group": "C",
+            "operand_index": 3
+          }
+        }
+      ]
+    },
+    "B": {
+      "status": "RESOLVED",
+      "entries": [
+        {
+          "value": "FORBIDDEN 引入 `.archived/<id>.tombstone`",
+          "modality": "FORBIDDEN"
+        },
+        {
+          "value": "FORBIDDEN 修改 `next_sequence()` 本身语义",
+          "modality": "FORBIDDEN"
+        },
+        {
+          "value": "O_EXCL 原子预占逻辑保持不变",
+          "modality": "PRESERVE"
+        },
+        {
+          "value": "retry 限保持不变",
+          "modality": "PRESERVE"
+        }
+      ]
+    }
+  }
+}

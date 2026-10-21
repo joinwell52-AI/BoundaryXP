@@ -1,0 +1,302 @@
+{
+  "contract_version": "031-r1.1",
+  "entities": [
+    {
+      "id": "n_pm",
+      "label": "PM",
+      "type": "OTHER",
+      "mentions": [
+        {
+          "quote": "PM",
+          "occurrence": 1
+        }
+      ],
+      "alternatives": []
+    },
+    {
+      "id": "n_a",
+      "label": "a.csv",
+      "type": "FILE",
+      "mentions": [
+        {
+          "quote": "a.csv",
+          "occurrence": 1
+        }
+      ],
+      "alternatives": []
+    },
+    {
+      "id": "n_service",
+      "label": "服务",
+      "type": "SYSTEM",
+      "mentions": [
+        {
+          "quote": "服务",
+          "occurrence": 1
+        }
+      ],
+      "alternatives": []
+    },
+    {
+      "id": "n_b",
+      "label": "b.csv",
+      "type": "FILE",
+      "mentions": [
+        {
+          "quote": "b.csv",
+          "occurrence": 1
+        }
+      ],
+      "alternatives": []
+    }
+  ],
+  "events": [
+    {
+      "id": "e_check",
+      "predicate": "检查",
+      "kind": "ACTION",
+      "layer": "MAIN",
+      "use": "CURRENT_TASK",
+      "modality": "REQUIRED",
+      "polarity": "POSITIVE",
+      "owner_id": "ROOT",
+      "constraint_ids": [],
+      "requires": [],
+      "sources": [
+        {
+          "quote": "请PM检查a.csv",
+          "occurrence": 1
+        }
+      ]
+    },
+    {
+      "id": "e_restart",
+      "predicate": "重启",
+      "kind": "ACTION",
+      "layer": "MAIN",
+      "use": "CURRENT_TASK",
+      "modality": "FORBIDDEN",
+      "polarity": "POSITIVE",
+      "owner_id": "ROOT",
+      "constraint_ids": [],
+      "requires": [],
+      "sources": [
+        {
+          "quote": "不得重启服务",
+          "occurrence": 1
+        }
+      ]
+    },
+    {
+      "id": "e_read",
+      "predicate": "读取",
+      "kind": "ACTION",
+      "layer": "MAIN",
+      "use": "CURRENT_TASK",
+      "modality": "PERMITTED",
+      "polarity": "POSITIVE",
+      "owner_id": "ROOT",
+      "constraint_ids": [],
+      "requires": [],
+      "sources": [
+        {
+          "quote": "可以读取b.csv",
+          "occurrence": 1
+        }
+      ]
+    }
+  ],
+  "claims": [
+    {
+      "id": "c_check_pm",
+      "kind": "ROLE",
+      "event_id": "e_check",
+      "entity_id": "n_pm",
+      "role": "PERFORMER",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "artifact_use": null,
+      "scope_id": "e_check",
+      "requires": [],
+      "sources": [
+        {
+          "quote": "请PM检查a.csv",
+          "occurrence": 1
+        }
+      ],
+      "note": "PM是明确的检查执行者；岗位简称未指定人或组类别。"
+    },
+    {
+      "id": "c_check_input",
+      "kind": "ROLE",
+      "event_id": "e_check",
+      "entity_id": "n_a",
+      "role": "INPUT_OBJECT",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "artifact_use": null,
+      "scope_id": "e_check",
+      "requires": [],
+      "sources": [
+        {
+          "quote": "检查a.csv",
+          "occurrence": 1
+        }
+      ],
+      "note": "a.csv是明确受检范围。"
+    },
+    {
+      "id": "c_restart_pm",
+      "kind": "ROLE",
+      "event_id": "e_restart",
+      "entity_id": "n_pm",
+      "role": "PERFORMER",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "artifact_use": null,
+      "scope_id": "e_restart",
+      "requires": [],
+      "sources": [
+        {
+          "quote": "请PM检查a.csv",
+          "occurrence": 1
+        },
+        {
+          "quote": "不得重启服务",
+          "occurrence": 1
+        }
+      ],
+      "note": "连续同一指令没有主体切换，重启禁止的主体承接PM；不表示要求执行重启。"
+    },
+    {
+      "id": "c_restart_object",
+      "kind": "ROLE",
+      "event_id": "e_restart",
+      "entity_id": "n_service",
+      "role": "OBJECT",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "artifact_use": null,
+      "scope_id": "e_restart",
+      "requires": [],
+      "sources": [
+        {
+          "quote": "不得重启服务",
+          "occurrence": 1
+        }
+      ],
+      "note": "服务是禁止重启的对象，不据此推定外部输入。"
+    },
+    {
+      "id": "c_read_pm",
+      "kind": "ROLE",
+      "event_id": "e_read",
+      "entity_id": "n_pm",
+      "role": "PERFORMER",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "artifact_use": null,
+      "scope_id": "e_read",
+      "requires": [],
+      "sources": [
+        {
+          "quote": "请PM检查a.csv",
+          "occurrence": 1
+        },
+        {
+          "quote": "可以读取b.csv",
+          "occurrence": 1
+        }
+      ],
+      "note": "连续同一指令没有主体切换，读取许可的执行者承接PM。"
+    },
+    {
+      "id": "c_read_input",
+      "kind": "ROLE",
+      "event_id": "e_read",
+      "entity_id": "n_b",
+      "role": "INPUT_OBJECT",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "artifact_use": null,
+      "scope_id": "e_read",
+      "requires": [],
+      "sources": [
+        {
+          "quote": "可以读取b.csv",
+          "occurrence": 1
+        }
+      ],
+      "note": "b.csv是允许读取的明确输入对象。"
+    }
+  ],
+  "expressions": [],
+  "issues": [],
+  "coverage": [
+    {
+      "sources": [
+        {
+          "quote": "请PM检查a.csv",
+          "occurrence": 1
+        }
+      ],
+      "claim_ids": [
+        "c_check_pm",
+        "c_check_input"
+      ],
+      "status": "EXPRESSED",
+      "affected_views": [
+        "I",
+        "A",
+        "P"
+      ]
+    },
+    {
+      "sources": [
+        {
+          "quote": "不得重启服务",
+          "occurrence": 1
+        }
+      ],
+      "claim_ids": [
+        "c_restart_pm",
+        "c_restart_object"
+      ],
+      "status": "EXPRESSED",
+      "affected_views": [
+        "P",
+        "B"
+      ]
+    },
+    {
+      "sources": [
+        {
+          "quote": "可以读取b.csv",
+          "occurrence": 1
+        }
+      ],
+      "claim_ids": [
+        "c_read_pm",
+        "c_read_input"
+      ],
+      "status": "EXPRESSED",
+      "affected_views": [
+        "I",
+        "A",
+        "P"
+      ]
+    }
+  ]
+}

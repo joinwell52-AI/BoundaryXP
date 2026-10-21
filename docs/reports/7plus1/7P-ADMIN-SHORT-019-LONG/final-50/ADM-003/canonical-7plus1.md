@@ -1,0 +1,327 @@
+# ADM-003 — actual Canonical 7+1
+
+## I
+
+```json
+{
+  "slot": "I",
+  "status": "RESOLVED",
+  "entries": [
+    {
+      "canonical_entry_id": "p1:ee3b4266caeff2aea9b0bc4f",
+      "slot": "I",
+      "boundary_fact_ids": [
+        "p1:34c13c5ec09fffb6e0bd3ad1"
+      ],
+      "state": "RESOLVED",
+      "display_value": "mcp-config.json",
+      "source_span_ids": [
+        "p1:dcc775c789a7d98babddf90b",
+        "p1:727f0895f0f951da9e2314b1",
+        "p1:e86d896ae1ecc33343945071",
+        "p1:d1964e1639a8b7fed324370b",
+        "p1:51210d1a663b4637de90254b"
+      ],
+      "scope_expr_id": "p1:0ee8dcfaf5387bf6815de92b"
+    },
+    {
+      "canonical_entry_id": "p1:6f343f69cae84406a7006121",
+      "slot": "I",
+      "boundary_fact_ids": [
+        "p1:376480c5af1111fc3b7cd4a6"
+      ],
+      "state": "RESOLVED",
+      "display_value": "已启用 MCP 工具的访问权限",
+      "source_span_ids": [
+        "p1:81aabe69934a9f3b21927627",
+        "p1:fccceddd010f7ac7906ade1f",
+        "p1:e86d896ae1ecc33343945071",
+        "p1:d1964e1639a8b7fed324370b",
+        "p1:51210d1a663b4637de90254b"
+      ],
+      "scope_expr_id": "p1:28a2c289cb425f035225e299"
+    }
+  ]
+}
+```
+
+## O
+
+```json
+{
+  "slot": "O",
+  "status": "RESOLVED",
+  "entries": [
+    {
+      "canonical_entry_id": "p1:7f105fb203d0dd3babb1191a",
+      "slot": "O",
+      "boundary_fact_ids": [
+        "p1:cd45bdfbaf360206241b45d3"
+      ],
+      "state": "RESOLVED",
+      "display_value": "mcp-access.md",
+      "source_span_ids": [
+        "p1:f7e52ea09bf3259961157c79",
+        "p1:00b02c0fb408dcec5fb3057b",
+        "p1:51210d1a663b4637de90254b",
+        "p1:c0ea4adf6df22b4226a59acc",
+        "p1:d1964e1639a8b7fed324370b"
+      ],
+      "scope_expr_id": "p1:f1bb057c8c339a5af9dc11dc"
+    }
+  ]
+}
+```
+
+## A
+
+```json
+{
+  "slot": "A",
+  "status": "RESOLVED",
+  "entries": [
+    {
+      "canonical_entry_id": "p1:3b8023724a09471db81b986e",
+      "slot": "A",
+      "boundary_fact_ids": [
+        "p1:19ed60776bf051fa5d4e406a"
+      ],
+      "state": "RESOLVED",
+      "display_value": "REQUIRED 读取 mcp-config.json",
+      "source_span_ids": [
+        "p1:fc1fa9d9388813834679e3f6",
+        "p1:727f0895f0f951da9e2314b1",
+        "p1:dcc775c789a7d98babddf90b",
+        "p1:2156d52fe5196797da3fbaa8"
+      ],
+      "scope_expr_id": "p1:52dfaa34252ea7536f928432"
+    },
+    {
+      "canonical_entry_id": "p1:3e615d0c39c63e6c4e41a51e",
+      "slot": "A",
+      "boundary_fact_ids": [
+        "p1:9a63479b595b53e3c866645c"
+      ],
+      "state": "RESOLVED",
+      "display_value": "REQUIRED 检查 已启用 MCP 工具的访问权限",
+      "source_span_ids": [
+        "p1:7fcea87f0d6c95ba4e970376",
+        "p1:fccceddd010f7ac7906ade1f",
+        "p1:81aabe69934a9f3b21927627",
+        "p1:2156d52fe5196797da3fbaa8",
+        "p1:727f0895f0f951da9e2314b1"
+      ],
+      "scope_expr_id": "p1:285d0bed1f2736d5d3ff8294"
+    },
+    {
+      "canonical_entry_id": "p1:00f0516b4c9aedb97027da9e",
+      "slot": "A",
+      "boundary_fact_ids": [
+        "p1:38eaff99cab60c3e6cebe354"
+      ],
+      "state": "RESOLVED",
+      "display_value": "REQUIRED 协调 本次审计",
+      "source_span_ids": [
+        "p1:60ee31bca4c8607ffe67d85c",
+        "p1:46728915b453883020718db0",
+        "p1:5fc2b1fe6ac773fb541ecc16",
+        "p1:04db39a1f6d26b341540e1f9"
+      ],
+      "scope_expr_id": "p1:23d51b44f2df0cf2f7f2c4dd"
+    },
+    {
+      "canonical_entry_id": "p1:905463040fd6fb87915ebea2",
+      "slot": "A",
+      "boundary_fact_ids": [
+        "p1:fd0c97261b3c66c18c5ca775"
+      ],
+      "state": "RESOLVED",
+      "display_value": "REQUIRED 生成 mcp-access.md",
+      "source_span_ids": [
+        "p1:f7e52ea09bf3259961157c79",
+        "p1:00b02c0fb408dcec5fb3057b",
+        "p1:51210d1a663b4637de90254b",
+        "p1:c0ea4adf6df22b4226a59acc",
+        "p1:d1964e1639a8b7fed324370b"
+      ],
+      "scope_expr_id": "p1:4109b94c431bfda2bcd8345c"
+    },
+    {
+      "canonical_entry_id": "p1:87c459c1244ee41db4210d6d",
+      "slot": "A",
+      "boundary_fact_ids": [
+        "p1:e05216e366b672d44cffd364"
+      ],
+      "state": "RESOLVED",
+      "display_value": "REQUIRED 交给 mcp-access.md",
+      "source_span_ids": [
+        "p1:b7a7e1a70556ff0de124471c",
+        "p1:d1964e1639a8b7fed324370b",
+        "p1:51210d1a663b4637de90254b",
+        "p1:00b02c0fb408dcec5fb3057b",
+        "p1:c0ea4adf6df22b4226a59acc",
+        "p1:a6fbfb83d4ad0fd123303bd9",
+        "p1:c743673e503855bb9f52cc86"
+      ],
+      "scope_expr_id": "p1:8bcc7d8dd11538ac98d7011c"
+    },
+    {
+      "canonical_entry_id": "p1:fcdb80712c4b160b0f2b60d6",
+      "slot": "A",
+      "boundary_fact_ids": [
+        "p1:f5da7dc1cda62ad215472f74"
+      ],
+      "state": "RESOLVED",
+      "display_value": "REQUIRED 复核 mcp-access.md",
+      "source_span_ids": [
+        "p1:c743673e503855bb9f52cc86",
+        "p1:d1964e1639a8b7fed324370b",
+        "p1:a6fbfb83d4ad0fd123303bd9",
+        "p1:51210d1a663b4637de90254b",
+        "p1:00b02c0fb408dcec5fb3057b"
+      ],
+      "scope_expr_id": "p1:3e01769ab3f834af3f93827d"
+    }
+  ]
+}
+```
+
+## P
+
+```json
+{
+  "slot": "P",
+  "status": "RESOLVED",
+  "entries": [
+    {
+      "canonical_entry_id": "p1:11abc882d87d65d69f27166b",
+      "slot": "P",
+      "boundary_fact_ids": [
+        "p1:19344d319f829dd3282aaa7c",
+        "p1:b62554f0a75e7cd825bc664a",
+        "p1:8128bdb2a37e116e3695ae3f",
+        "p1:40a8108ae303b1d8c73a4480"
+      ],
+      "state": "RESOLVED",
+      "display_value": "OPS [PERFORMER]",
+      "source_span_ids": [
+        "p1:2156d52fe5196797da3fbaa8",
+        "p1:727f0895f0f951da9e2314b1",
+        "p1:fc1fa9d9388813834679e3f6",
+        "p1:d1964e1639a8b7fed324370b",
+        "p1:51210d1a663b4637de90254b",
+        "p1:7fcea87f0d6c95ba4e970376",
+        "p1:fccceddd010f7ac7906ade1f",
+        "p1:c0ea4adf6df22b4226a59acc",
+        "p1:00b02c0fb408dcec5fb3057b",
+        "p1:f7e52ea09bf3259961157c79",
+        "p1:b7a7e1a70556ff0de124471c"
+      ]
+    },
+    {
+      "canonical_entry_id": "p1:fda63c4041e27a200950f724",
+      "slot": "P",
+      "boundary_fact_ids": [
+        "p1:d27258c35be25b88cf6a4a4c"
+      ],
+      "state": "RESOLVED",
+      "display_value": "PM [COLLABORATOR]",
+      "source_span_ids": [
+        "p1:04db39a1f6d26b341540e1f9",
+        "p1:46728915b453883020718db0",
+        "p1:60ee31bca4c8607ffe67d85c",
+        "p1:d1964e1639a8b7fed324370b",
+        "p1:51210d1a663b4637de90254b"
+      ]
+    },
+    {
+      "canonical_entry_id": "p1:7d3918f9d5b078352893338f",
+      "slot": "P",
+      "boundary_fact_ids": [
+        "p1:085c235542289807822b03b5",
+        "p1:cd8cb317e4be3ad23247e733"
+      ],
+      "state": "RESOLVED",
+      "display_value": "QA [REVIEWER,RECIPIENT]",
+      "source_span_ids": [
+        "p1:a6fbfb83d4ad0fd123303bd9",
+        "p1:d1964e1639a8b7fed324370b",
+        "p1:c743673e503855bb9f52cc86",
+        "p1:51210d1a663b4637de90254b",
+        "p1:b7a7e1a70556ff0de124471c"
+      ]
+    }
+  ]
+}
+```
+
+## R
+
+```json
+{
+  "slot": "R",
+  "status": "ABSENT",
+  "entries": []
+}
+```
+
+## V
+
+```json
+{
+  "slot": "V",
+  "status": "ABSENT",
+  "entries": []
+}
+```
+
+## C
+
+```json
+{
+  "slot": "C",
+  "status": "ABSENT",
+  "entries": []
+}
+```
+
+## B
+
+```json
+{
+  "slot": "B",
+  "status": "RESOLVED",
+  "entries": [
+    {
+      "canonical_entry_id": "p1:08f1fc6b4f5767d754c149ae",
+      "slot": "B",
+      "boundary_fact_ids": [
+        "p1:a7b8f1d7c24697365c0ece23"
+      ],
+      "state": "RESOLVED",
+      "display_value": "FORBIDDEN 调用 被审计的工具",
+      "source_span_ids": [
+        "p1:a99c0435c1ccb22839481ab9",
+        "p1:f7fe77ae058928547dcc350c",
+        "p1:db4a17b449a5e608bd6c8b5c"
+      ],
+      "scope_expr_id": "p1:069a77085fb53d0d775ca6f7"
+    },
+    {
+      "canonical_entry_id": "p1:060fdbc9992cc8281ff1a561",
+      "slot": "B",
+      "boundary_fact_ids": [
+        "p1:994a17b7200871873fe5ef4b"
+      ],
+      "state": "RESOLVED",
+      "display_value": "FORBIDDEN 改动 mcp-config.json",
+      "source_span_ids": [
+        "p1:db960460262a8919c4f0b417",
+        "p1:57ff33403f80f04e881de122",
+        "p1:d133489c756b86dad4ab3a14"
+      ],
+      "scope_expr_id": "p1:ece447a8a4a85896a29e67f8"
+    }
+  ]
+}
+```

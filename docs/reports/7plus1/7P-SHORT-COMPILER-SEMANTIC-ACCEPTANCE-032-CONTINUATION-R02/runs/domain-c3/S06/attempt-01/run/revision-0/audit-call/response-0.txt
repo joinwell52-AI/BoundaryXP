@@ -1,0 +1,165 @@
+{
+  "contract_version": "032.1",
+  "reviews": [
+    {
+      "subject_id": "ent_pm",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [{"quote": "PM", "occurrence": 1}],
+      "reason": "PM身份明确；OTHER可占位原文未指定的人或组类别。"
+    },
+    {
+      "subject_id": "ent_a",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [{"quote": "a.csv", "occurrence": 1}],
+      "reason": "明确的受检文件，身份与名称一致。"
+    },
+    {
+      "subject_id": "ent_service",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [{"quote": "不得重启服务", "occurrence": 1}],
+      "reason": "服务作为禁止动作的对象类别，未指定具体实例。"
+    },
+    {
+      "subject_id": "ent_b",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [{"quote": "b.csv", "occurrence": 1}],
+      "reason": "明确的可读文件，与a.csv为不同对象。"
+    },
+    {
+      "subject_id": "ev_check",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [{"quote": "请PM检查a.csv", "occurrence": 1}],
+      "reason": "当前指令明确要求检查，没有附加条件或时序。"
+    },
+    {
+      "subject_id": "ev_restart",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [{"quote": "不得重启服务", "occurrence": 1}],
+      "reason": "明确禁止重启动作，FORBIDDEN与正向动作极性相符。"
+    },
+    {
+      "subject_id": "ev_read",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [{"quote": "可以读取b.csv", "occurrence": 1}],
+      "reason": "明确允许读取，未提升为必须执行。"
+    },
+    {
+      "subject_id": "cl_check_performer",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["ent_pm", "ev_check"],
+      "sources": [{"quote": "请PM检查a.csv", "occurrence": 1}],
+      "reason": "PM是检查动作的明示执行者。"
+    },
+    {
+      "subject_id": "cl_check_input",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["ent_a", "ev_check"],
+      "sources": [{"quote": "检查a.csv", "occurrence": 1}],
+      "reason": "a.csv是明确受检范围，INPUT_OBJECT绑定正确。"
+    },
+    {
+      "subject_id": "cl_check_scope",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["cl_check_input", "ex_a"],
+      "sources": [{"quote": "检查a.csv", "occurrence": 1}],
+      "reason": "具体文件范围绑定同一检查事件及对象，ITEM表达正确。"
+    },
+    {
+      "subject_id": "cl_restart_performer",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["ent_pm", "ev_restart"],
+      "sources": [
+        {"quote": "请PM检查a.csv", "occurrence": 1},
+        {"quote": "不得重启服务", "occurrence": 1}
+      ],
+      "reason": "同一连续指令无主体切换，禁令主体可承接PM；来源覆盖两端。"
+    },
+    {
+      "subject_id": "cl_restart_object",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["ent_service", "ev_restart"],
+      "sources": [{"quote": "不得重启服务", "occurrence": 1}],
+      "reason": "服务类别是重启禁令对象，未被误作外部输入。"
+    },
+    {
+      "subject_id": "cl_restart_scope",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["cl_restart_object", "ex_services"],
+      "sources": [{"quote": "不得重启服务", "occurrence": 1}],
+      "reason": "服务类别未限定容器；原文没有CSV内服务域的关联，也没有明示全称量词。"
+    },
+    {
+      "subject_id": "cl_read_performer",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["ent_pm", "ev_read"],
+      "sources": [
+        {"quote": "请PM检查a.csv", "occurrence": 1},
+        {"quote": "可以读取b.csv", "occurrence": 1}
+      ],
+      "reason": "连续同一指令无主体切换，读取许可可承接PM；来源覆盖两端。"
+    },
+    {
+      "subject_id": "cl_read_input",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["ent_b", "ev_read"],
+      "sources": [{"quote": "可以读取b.csv", "occurrence": 1}],
+      "reason": "b.csv是明确允许读取的输入对象，并非内部生成产物。"
+    },
+    {
+      "subject_id": "cl_read_scope",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["cl_read_input", "ex_b"],
+      "sources": [{"quote": "可以读取b.csv", "occurrence": 1}],
+      "reason": "许可范围为具体文件b.csv，与同一事件对象绑定一致。"
+    },
+    {
+      "subject_id": "ex_a",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["ent_a"],
+      "sources": [{"quote": "a.csv", "occurrence": 1}],
+      "reason": "ITEM准确表示单个具体文件。"
+    },
+    {
+      "subject_id": "ex_services",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["ent_service"],
+      "sources": [{"quote": "不得重启服务", "occurrence": 1}],
+      "reason": "CATEGORY准确保留未限定容器的服务类别域，没有制造域竞争。"
+    },
+    {
+      "subject_id": "ex_b",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["ent_b"],
+      "sources": [{"quote": "b.csv", "occurrence": 1}],
+      "reason": "ITEM准确表示许可读取的单个具体文件。"
+    }
+  ],
+  "issues": [],
+  "omissions": []
+}

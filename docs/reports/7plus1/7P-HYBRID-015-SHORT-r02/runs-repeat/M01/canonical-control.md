@@ -1,0 +1,368 @@
+# Actual Canonical 7+1
+
+```json
+{
+  "projection_id": "p1:d16f5257979a3fd702b30aa5",
+  "I": {
+    "slot": "I",
+    "status": "PARSER_COVERAGE_FAILURE",
+    "entries": [
+      {
+        "canonical_entry_id": "p1:cee0b7763fe752f76c5b3bdb",
+        "slot": "I",
+        "boundary_fact_ids": [
+          "p1:406074db9013b62c2cb1ae6b"
+        ],
+        "state": "RESOLVED",
+        "display_value": "账单字段",
+        "source_span_ids": [
+          "p1:976fb67cbb4e8af98bf961e8",
+          "p1:0f5d798b2af001cc8bb04fd8",
+          "p1:dd6dcd2dcd06f7ea574ec57c"
+        ],
+        "scope_expr_id": "p1:6d3c9547d272447e7dcf189d"
+      },
+      {
+        "canonical_entry_id": "p1:56c5f342f3a5f00b607c4da2",
+        "slot": "I",
+        "boundary_fact_ids": [
+          "p1:43888abfa4cbec50524c485d"
+        ],
+        "state": "RESOLVED",
+        "display_value": "bill-schema.json",
+        "source_span_ids": [
+          "p1:77d9bf21add1c29030bcffc2",
+          "p1:10a012b34636f3ebeab72cd4",
+          "p1:dd6dcd2dcd06f7ea574ec57c"
+        ],
+        "scope_expr_id": "p1:fff54f05b90823e0b5677e9a"
+      },
+      {
+        "canonical_entry_id": "p1:90d2c677f677db3de482af49",
+        "slot": "I",
+        "boundary_fact_ids": [
+          "p1:86f7999b2c71ecf6fa2213b3"
+        ],
+        "state": "RESOLVED",
+        "display_value": "billing.tsv",
+        "source_span_ids": [
+          "p1:a7b87ad7837ef35304140c9b",
+          "p1:10a012b34636f3ebeab72cd4",
+          "p1:dd6dcd2dcd06f7ea574ec57c"
+        ],
+        "scope_expr_id": "p1:4c7d16d70e629c6bd811b050"
+      },
+      {
+        "canonical_entry_id": "p1:9f51cf4ee5ab1ea9cb9f224a",
+        "slot": "I",
+        "boundary_fact_ids": [
+          "p1:d0b4027c81be05fc7c3b056e"
+        ],
+        "state": "RESOLVED",
+        "display_value": "bill-schema.json",
+        "source_span_ids": [
+          "p1:97a7e6740587c999bca60991",
+          "p1:5ed75a69e494b478aafd8d90",
+          "p1:34b479fe21342601b400f564"
+        ],
+        "scope_expr_id": "p1:86d70e44030c07e10bf456a5"
+      },
+      {
+        "canonical_entry_id": "p1:02d570ac2e493fbd6db9e9d6",
+        "slot": "I",
+        "boundary_fact_ids": [
+          "p1:5f0454a0e10b355d0f231aa7"
+        ],
+        "state": "RESOLVED",
+        "display_value": "billing.tsv",
+        "source_span_ids": [
+          "p1:a313460787b277f90002713f",
+          "p1:5ed75a69e494b478aafd8d90",
+          "p1:34b479fe21342601b400f564"
+        ],
+        "scope_expr_id": "p1:62ae56b0c8a83a158725f107"
+      }
+    ]
+  },
+  "O": {
+    "slot": "O",
+    "status": "PARSER_COVERAGE_FAILURE",
+    "entries": [
+      {
+        "canonical_entry_id": "p1:fe5914c3f5363b13e8d54184",
+        "slot": "O",
+        "boundary_fact_ids": [
+          "p1:168af72d970a53b88dca8b60"
+        ],
+        "state": "RESOLVED",
+        "display_value": "billing-review.md",
+        "source_span_ids": [
+          "p1:2df47bac3902e34123003bd3",
+          "p1:c7f6f2839df0f313baa69f71",
+          "p1:65e4d335b7ad12dfc252ab2f"
+        ],
+        "scope_expr_id": "p1:6b39608df8236c3fa0a964f7"
+      }
+    ]
+  },
+  "A": {
+    "slot": "A",
+    "status": "PARSER_COVERAGE_FAILURE",
+    "entries": [
+      {
+        "canonical_entry_id": "p1:cbbd042bbc8cf358691a2660",
+        "slot": "A",
+        "boundary_fact_ids": [
+          "p1:a5881dcbad36424687f65ac6"
+        ],
+        "state": "RESOLVED",
+        "display_value": "REQUIRED 核对 账单字段",
+        "source_span_ids": [
+          "p1:5a84e4c6b90b473ca9e8baae",
+          "p1:0f5d798b2af001cc8bb04fd8",
+          "p1:8a3c58da431d561e1043a510",
+          "p1:976fb67cbb4e8af98bf961e8"
+        ],
+        "scope_expr_id": "p1:ff7c17dbf771597c5a90d594"
+      },
+      {
+        "canonical_entry_id": "p1:de7f2584b75be9359eec0aa9",
+        "slot": "A",
+        "boundary_fact_ids": [
+          "p1:64d65ff06c9e16d6e4d0dfd1"
+        ],
+        "state": "RESOLVED",
+        "display_value": "REQUIRED 读取 bill-schema.json、billing.tsv",
+        "source_span_ids": [
+          "p1:34b479fe21342601b400f564",
+          "p1:5ed75a69e494b478aafd8d90",
+          "p1:811b5cf0355edf7cbc9873f3",
+          "p1:97a7e6740587c999bca60991",
+          "p1:a313460787b277f90002713f"
+        ],
+        "scope_expr_id": "p1:393c59315c35ab70cc6c1cbe"
+      },
+      {
+        "canonical_entry_id": "p1:3eaed33fbd42b09ba5b67825",
+        "slot": "A",
+        "boundary_fact_ids": [
+          "p1:31b3447df5a33169cdda0eb8"
+        ],
+        "state": "RESOLVED",
+        "display_value": "REQUIRED 核对 账单字段",
+        "source_span_ids": [
+          "p1:5eef9d95090b8aaa89d7772f",
+          "p1:910294328545205084d1496e",
+          "p1:eac674238cb3e9deb71dea64",
+          "p1:8a3c58da431d561e1043a510",
+          "p1:0f5d798b2af001cc8bb04fd8"
+        ],
+        "scope_expr_id": "p1:d73ed6679baa339868eb38c6"
+      },
+      {
+        "canonical_entry_id": "p1:b38f53840948aa998a1cc9ff",
+        "slot": "A",
+        "boundary_fact_ids": [
+          "p1:9fae9a9dd0412c43e2b21251"
+        ],
+        "state": "RESOLVED",
+        "display_value": "REQUIRED 生成 billing-review.md",
+        "source_span_ids": [
+          "p1:2df47bac3902e34123003bd3",
+          "p1:c7f6f2839df0f313baa69f71",
+          "p1:65e4d335b7ad12dfc252ab2f"
+        ],
+        "scope_expr_id": "p1:3b28394fcc837a30a116b93e"
+      },
+      {
+        "canonical_entry_id": "p1:7e6d7d00897e0456c51aec73",
+        "slot": "A",
+        "boundary_fact_ids": [
+          "p1:008e3559d13e0875838c02e7"
+        ],
+        "state": "RESOLVED",
+        "display_value": "REQUIRED 包含 差异证据两项内容",
+        "source_span_ids": [
+          "p1:7bcb5ce92d5c7ca3b812fe32",
+          "p1:1cb04071d56cb841e37ce7e4",
+          "p1:33c1cb77ca14d1ebb1d2902d",
+          "p1:35eb51434e531c2c3e403386"
+        ],
+        "scope_expr_id": "p1:edecd06c976cf3c0605a399f"
+      }
+    ]
+  },
+  "P": {
+    "slot": "P",
+    "status": "PARSER_COVERAGE_FAILURE",
+    "entries": [
+      {
+        "canonical_entry_id": "p1:7fbe4dcde34a09feb1a4ebaf",
+        "slot": "P",
+        "boundary_fact_ids": [
+          "p1:1b1bfe2f7239bf120f561222",
+          "p1:43259f232e41b138b121700e",
+          "p1:fc0fb0bea8fde8d72cc6276d",
+          "p1:994d4b0c462d57adb3525f51"
+        ],
+        "state": "RESOLVED",
+        "display_value": "审阅员林乔 [PERFORMER]",
+        "source_span_ids": [
+          "p1:8a3c58da431d561e1043a510",
+          "p1:0f5d798b2af001cc8bb04fd8",
+          "p1:5a84e4c6b90b473ca9e8baae",
+          "p1:811b5cf0355edf7cbc9873f3",
+          "p1:5ed75a69e494b478aafd8d90",
+          "p1:34b479fe21342601b400f564",
+          "p1:5eef9d95090b8aaa89d7772f",
+          "p1:910294328545205084d1496e",
+          "p1:81428116837ad9d2e4c4a925",
+          "p1:2feb1bf779a0315ff2446d6a"
+        ]
+      },
+      {
+        "canonical_entry_id": "p1:0826127c7cdc5244fe81a085",
+        "slot": "P",
+        "boundary_fact_ids": [
+          "p1:e6ac446c6fb284684570d562"
+        ],
+        "state": "RESOLVED",
+        "display_value": "复核人顾辰 [PERFORMER]",
+        "source_span_ids": [
+          "p1:3e098829f45e13fb12234bfb",
+          "p1:f97818c67199ca26bf009c8b",
+          "p1:2362d12a6da89e4004cd720d"
+        ]
+      }
+    ]
+  },
+  "R": {
+    "slot": "R",
+    "status": "PARSER_COVERAGE_FAILURE",
+    "entries": []
+  },
+  "V": {
+    "slot": "V",
+    "status": "PARSER_COVERAGE_FAILURE",
+    "entries": [
+      {
+        "canonical_entry_id": "p1:f73540b9d55720f979cf1e47",
+        "slot": "V",
+        "boundary_fact_ids": [
+          "p1:1213ad93b20ebcbbcb90a306"
+        ],
+        "state": "RESOLVED",
+        "display_value": "v2.3.0",
+        "source_span_ids": [
+          "p1:ac4f042d6c3c74a4695d2e4e",
+          "p1:910294328545205084d1496e",
+          "p1:dd6dcd2dcd06f7ea574ec57c"
+        ]
+      },
+      {
+        "canonical_entry_id": "p1:f3347f7d901c0643034c09fd",
+        "slot": "V",
+        "boundary_fact_ids": [
+          "p1:97844f8744d3d5edc2afade2"
+        ],
+        "state": "RESOLVED",
+        "display_value": "BILLING-STYLE-2",
+        "source_span_ids": [
+          "p1:d638765146194668153b8e87",
+          "p1:910294328545205084d1496e",
+          "p1:dd6dcd2dcd06f7ea574ec57c"
+        ]
+      },
+      {
+        "canonical_entry_id": "p1:1c0a68bc444563c5d0827ee3",
+        "slot": "V",
+        "boundary_fact_ids": [
+          "p1:ab3ae4f151cd3f5fd7a892cf"
+        ],
+        "state": "RESOLVED",
+        "display_value": "v2.3.0",
+        "source_span_ids": [
+          "p1:ac4f042d6c3c74a4695d2e4e",
+          "p1:910294328545205084d1496e",
+          "p1:dd6dcd2dcd06f7ea574ec57c"
+        ]
+      }
+    ]
+  },
+  "C": {
+    "slot": "C",
+    "status": "PARSER_COVERAGE_FAILURE",
+    "entries": [
+      {
+        "canonical_entry_id": "p1:1b17d4ce3334a58105966ff8",
+        "slot": "C",
+        "boundary_fact_ids": [
+          "p1:0d9afd7d331bbde34431b14f"
+        ],
+        "state": "RESOLVED",
+        "display_value": "完成",
+        "source_span_ids": [
+          "p1:f2c3511568bef82949af231f",
+          "p1:732a437672309e066d067f56",
+          "p1:cf8321546654c8436ec4347f",
+          "p1:06ca1428815879fd01f70c60",
+          "p1:eb9e0ffbe7ee2d822cc51ad0"
+        ],
+        "condition_expr_id": "p1:84d865624c5f99a465b058b5"
+      }
+    ]
+  },
+  "B": {
+    "slot": "B",
+    "status": "UNRESOLVED",
+    "entries": [
+      {
+        "canonical_entry_id": "p1:a9a594b151772ebec5865a07",
+        "slot": "B",
+        "boundary_fact_ids": [
+          "p1:141ccd10d78d926cdc06a4bf"
+        ],
+        "state": "RESOLVED",
+        "display_value": "FORBIDDEN 包括 历史资料",
+        "source_span_ids": [
+          "p1:81428116837ad9d2e4c4a925",
+          "p1:2feb1bf779a0315ff2446d6a",
+          "p1:f9564e9ea96a6b008f3f7fac",
+          "p1:8a3c58da431d561e1043a510",
+          "p1:0f5d798b2af001cc8bb04fd8"
+        ],
+        "scope_expr_id": "p1:cd7262eb1c8b78d5cc482798"
+      },
+      {
+        "canonical_entry_id": "p1:60e15d8e5b7a17221d9f4d16",
+        "slot": "B",
+        "boundary_fact_ids": [
+          "p1:707f48e97358fbf81737f36a"
+        ],
+        "state": "UNRESOLVED",
+        "display_value": "FORBIDDEN 互换",
+        "source_span_ids": [
+          "p1:122d0182fd3f39ee339173e0",
+          "p1:0a2b97cb4e9fd2de3320875e"
+        ]
+      },
+      {
+        "canonical_entry_id": "p1:b570417ea456839ffa7a3132",
+        "slot": "B",
+        "boundary_fact_ids": [
+          "p1:9779fb708bbf9edc5f220241"
+        ],
+        "state": "RESOLVED",
+        "display_value": "FORBIDDEN 修改 bill-schema.json、billing.tsv",
+        "source_span_ids": [
+          "p1:5496e9a57ff73a6241e6d81d",
+          "p1:fa8ad4c43dbd9cee1e429b86",
+          "p1:1e41216b84d4f053e1f867e8",
+          "p1:ed1d28cfcaef964952a448f6"
+        ],
+        "scope_expr_id": "p1:6aa4c3532f3d6f60878f991b"
+      }
+    ]
+  }
+}
+```

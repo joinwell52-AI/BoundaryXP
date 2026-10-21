@@ -1,0 +1,1 @@
+Inspect only staging resources and exclude production resources from this review. Create staging-scope.md and make no configuration changes.

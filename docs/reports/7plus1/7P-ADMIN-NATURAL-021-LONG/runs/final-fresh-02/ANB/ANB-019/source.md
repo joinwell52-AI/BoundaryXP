@@ -1,0 +1,1 @@
+PM 安排 DEV 检查 task-ledger.json 的状态记录是否完整，DEV 生成 task-ledger-review.md，QA 复核后由 PM 提交给 ADMIN。不得补造缺失历史。

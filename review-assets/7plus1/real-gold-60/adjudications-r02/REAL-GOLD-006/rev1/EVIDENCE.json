@@ -1,0 +1,79 @@
+{
+  "case_id": "REAL-GOLD-006",
+  "source_sha256": "3cc8d1bb54115c1fa1dba0e11256a3d3d26cea3a21b4d72b492f1f70fdb35956",
+  "status": "EVIDENCE_VERIFIED",
+  "evidence": [
+    {
+      "evidence_id": "E001",
+      "source_id": "SOURCE_TASK",
+      "origin": "SOURCE",
+      "start": 0,
+      "end": 231,
+      "quote": "---\r\nprotocol: fcop\r\nversion: 1\r\nkind: task\r\ntask_id: TASK-20260427-006\r\nsender: ADMIN\r\nrecipient: ME\r\npriority: P0\r\nrelated: [ISSUE-20260427-007]\r\nsession_id: sess-20260427-me-072\r\n---\r\n\r\n# 0.7.2 元数据一致性 hotfix——同类 bug 第三次，必须刹车\r\n\r\n",
+      "purpose": "source metadata, assigned participants, related issue, and hotfix title"
+    },
+    {
+      "evidence_id": "E002",
+      "source_id": "SOURCE_TASK",
+      "origin": "SOURCE",
+      "start": 231,
+      "end": 819,
+      "quote": "## 背景\r\n\r\n0.7.1 发版当天 dogfood `fcop_report()` 发现：\r\n\r\n- `src/fcop/rules/_data/fcop-rules.mdc` frontmatter `fcop_rules_version`\r\n  仍是 **1.7.0**，但同一文件 body 末尾的 changelog 写的是 **1.8.0**，\r\n  规则正文也是 1.8.0 内容（sub-agent 条款 / Rule 5 删 AMEND /\r\n  Rule 0.a.1 澄清）。\r\n- 即\"frontmatter 没跟着 body 一起 bump\"。\r\n\r\n这是 **0.7.x 周期内第三次\"多处编辑只编了 N-1 处\"同类 bug**：\r\n\r\n1. ISSUE-006（0.7.0）：`mcp/pyproject.toml` 多处编辑漏 dep pin。\r\n2. REPORT-005 写\"Phase 23 待 ADMIN 启 yank\"——改决策时漏改文档（已被 REPORT-006 修正）。\r\n3. **本次（0.7.1）**：rules.mdc 多处编辑漏 frontmatter 版本号。\r\n\r\nADMIN 指令：\"走 0.7.2，真的不要有 BUG 了！！\"——0.7.2 必须做到\r\n**全表面对齐 + 自动化守门**，杜绝同类。\r\n\r\n",
+      "purpose": "observed frontmatter/body mismatch, prior same-class defects, and all-surface guardrail objective"
+    },
+    {
+      "evidence_id": "E003",
+      "source_id": "SOURCE_TASK",
+      "origin": "SOURCE",
+      "start": 819,
+      "end": 1529,
+      "quote": "## 要求\r\n\r\n### A. 全表面元数据扫描 + 修复\r\n\r\n把以下字段全部对齐到 **正确目标**（不是 0.7.1，而是真值），任何\r\n不一致都要修：\r\n\r\n1. `src/fcop/_version.py` → 0.7.2\r\n2. `mcp/src/fcop_mcp/_version.py` → 0.7.2\r\n3. 根 `pyproject.toml` version → 0.7.2（如果是静态字段）\r\n4. `mcp/pyproject.toml` version → 0.7.2\r\n5. `mcp/pyproject.toml` description → 提到的 fcop minor 仍为 0.7.x\r\n6. `mcp/pyproject.toml` dependencies → `fcop>=0.7,<0.8`（lockstep）\r\n7. **`fcop-rules.mdc` frontmatter `fcop_rules_version` → 1.8.0**（核心 bug）\r\n8. `fcop-protocol.mdc` frontmatter `fcop_protocol_version` → 1.6.0\r\n9. `.cursor/rules/*.mdc` → redeploy 后自动同步\r\n10. `AGENTS.md` / `CLAUDE.md` → redeploy 后自动同步\r\n11. README / mcp/README / docs/releases/ 等任何提到\"latest\"或显式 0.7.0 / 1.7.0 / 1.5.0 的地方 → 检查 + 更新\r\n\r\n",
+      "purpose": "eleven explicit version and metadata scan/fix requirements"
+    },
+    {
+      "evidence_id": "E004",
+      "source_id": "SOURCE_TASK",
+      "origin": "SOURCE",
+      "start": 1529,
+      "end": 2152,
+      "quote": "### B. 自动化守门（防同类）\r\n\r\n新增/补强测试：\r\n\r\n12. `tests/test_fcop/test_rules_metadata_consistency.py`：\r\n    - assert `fcop-rules.mdc` frontmatter `fcop_rules_version` 等于\r\n      文件 body 中最高的 `## v1.X` / `## 1.X.0 changes` 标题。\r\n    - 同样核 `fcop-protocol.mdc` 与其 protocol_version。\r\n13. `tests/test_fcop/test_package_version_consistency.py`：\r\n    - assert `fcop._version.__version__` 等于根 `pyproject.toml` 的\r\n      version 字段（如果是静态）。\r\n    - assert `fcop_mcp._version.__version__` 等于 `mcp/pyproject.toml`\r\n      version 字段。\r\n14. `tests/test_fcop/test_pyproject_pins.py` 已有，复查覆盖。\r\n15. 运行 `pytest -q` + `ruff check src/ mcp/src/ tests/` 全绿。\r\n\r\n",
+      "purpose": "metadata and package consistency test requirements and quality checks"
+    },
+    {
+      "evidence_id": "E005",
+      "source_id": "SOURCE_TASK",
+      "origin": "SOURCE",
+      "start": 2152,
+      "end": 2462,
+      "quote": "### C. 协议账本\r\n\r\n16. 立 `ISSUE-20260427-007`：rules.mdc frontmatter 版本号未跟随 body\r\n    bump，根因 = 多行编辑只编了 N-1 处，同 ISSUE-006 一类。\r\n17. `redeploy_rules` 同步本地 `.cursor/rules/` + `AGENTS.md` +\r\n    `CLAUDE.md`，把 rules 字段也对齐到 1.8.0。\r\n18. 写 `REPORT-20260427-007` done report，archive task；ISSUE-007\r\n    `status: closed`。\r\n\r\n",
+      "purpose": "issue, redeploy, report, archive, and closeout requirements"
+    },
+    {
+      "evidence_id": "E006",
+      "source_id": "SOURCE_TASK",
+      "origin": "SOURCE",
+      "start": 2462,
+      "end": 2879,
+      "quote": "### D. 发版\r\n\r\n19. `CHANGELOG.md` `[0.7.2]` 段：同类 bug post-mortem + 新增的\r\n    consistency 测试守门。\r\n20. `docs/releases/0.7.2.md` 含简短 post-mortem（\"third time\r\n    same-class bug; consistency tests now block this class\"）。\r\n21. build × 2、twine check × 2、upload PyPI（fcop 先、wait、fcop-mcp 后）。\r\n22. `uvx --refresh fcop-mcp@0.7.2` 干净缓存冒烟。\r\n23. git tag v0.7.2 + push + `gh release create`。\r\n24. 0.7.1 不 yank（同 0.7.0 决策；版本号自动覆盖）。\r\n\r\n",
+      "purpose": "release documentation, build, upload, smoke, tag, release, and no-yank requirements"
+    },
+    {
+      "evidence_id": "E007",
+      "source_id": "SOURCE_TASK",
+      "origin": "SOURCE",
+      "start": 2879,
+      "end": 3255,
+      "quote": "## 验收\r\n\r\n- `pytest -q` 全绿，新增的两道 consistency 测试也绿。\r\n- `fcop_report()` 显示 `fcop-mcp 0.7.2 / fcop 0.7.2 / rules 1.8.0 /\r\n  protocol 1.6.0`，且**包内**与\"项目本地\"两栏数值一致。\r\n- `grep -rn \"fcop_rules_version: 1\\.7\\.0\\|fcop_protocol_version: 1\\.5\\.0\"`\r\n  整仓零命中（本机部署 + src/_data/ 双保险）。\r\n- 任何\"X.Y.0 changes\"标题数字 ≤ frontmatter 版本号——回归测试自动核。\r\n- ISSUE-007 closed；REPORT-007 入档；TASK-006 archived。\r\n\r\n",
+      "purpose": "explicit acceptance checks"
+    },
+    {
+      "evidence_id": "E008",
+      "source_id": "SOURCE_TASK",
+      "origin": "SOURCE",
+      "start": 3255,
+      "end": 3302,
+      "quote": "## 红线\r\n\r\n不允许\"实质对、元数据错\"二度发生；这就是 0.7.2 守门的全部意义。\r\n",
+      "purpose": "explicit redline against repeated substantive/metadata mismatch"
+    }
+  ]
+}

@@ -1,0 +1,1 @@
+请 PM 组织读取 license.csv 并形成 license-note.md。许可证范围不清楚的条目必须标记为“待确认”，不得自动判为可商用。

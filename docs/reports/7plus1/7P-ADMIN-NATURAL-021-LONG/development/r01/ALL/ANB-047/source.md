@@ -1,0 +1,1 @@
+QA 检查 diff.csv；若没有差异，无需生成 difference.md，只向 PM 汇报“无差异”。不得修改 diff.csv。

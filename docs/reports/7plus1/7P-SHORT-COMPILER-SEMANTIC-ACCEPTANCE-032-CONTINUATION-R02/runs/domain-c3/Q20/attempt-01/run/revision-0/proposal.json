@@ -1,0 +1,349 @@
+{
+  "contract_version": "032.1",
+  "entities": [
+    {
+      "id": "E_OPS",
+      "label": "OPS-01",
+      "type": "OTHER",
+      "mentions": [
+        {
+          "quote": "OPS-01",
+          "occurrence": 1
+        },
+        {
+          "quote": "OPS-01",
+          "occurrence": 2
+        }
+      ],
+      "alternatives": []
+    },
+    {
+      "id": "E_PM",
+      "label": "PM",
+      "type": "OTHER",
+      "mentions": [
+        {
+          "quote": "PM",
+          "occurrence": 1
+        }
+      ],
+      "alternatives": []
+    },
+    {
+      "id": "E_SERVICE",
+      "label": "服务",
+      "type": "SYSTEM",
+      "mentions": [
+        {
+          "quote": "服务",
+          "occurrence": 1
+        }
+      ],
+      "alternatives": []
+    },
+    {
+      "id": "E_HEALTH",
+      "label": "health.md",
+      "type": "FILE",
+      "mentions": [
+        {
+          "quote": "health.md",
+          "occurrence": 1
+        }
+      ],
+      "alternatives": []
+    }
+  ],
+  "events": [
+    {
+      "id": "EV_NOTIFY",
+      "predicate": "通知",
+      "kind": "ACTION",
+      "layer": "MAIN",
+      "use": "CURRENT_TASK",
+      "modality": "REQUIRED",
+      "polarity": "POSITIVE",
+      "owner_id": "ROOT",
+      "constraint_ids": [
+        "C_NOTIFY_CONDITION"
+      ],
+      "requires": [],
+      "sources": [
+        {
+          "quote": "若发现服务异常，OPS-01必须通知PM",
+          "occurrence": 1
+        }
+      ]
+    },
+    {
+      "id": "EV_GENERATE",
+      "predicate": "生成",
+      "kind": "ACTION",
+      "layer": "MAIN",
+      "use": "CURRENT_TASK",
+      "modality": "REQUIRED",
+      "polarity": "POSITIVE",
+      "owner_id": "ROOT",
+      "constraint_ids": [],
+      "requires": [],
+      "sources": [
+        {
+          "quote": "无论是否发现异常，OPS-01都必须生成health.md",
+          "occurrence": 1
+        }
+      ]
+    }
+  ],
+  "claims": [
+    {
+      "id": "C_NOTIFY_PERFORMER",
+      "kind": "ROLE",
+      "event_id": "EV_NOTIFY",
+      "entity_id": "E_OPS",
+      "role": "PERFORMER",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "artifact_use": null,
+      "scope_id": "EV_NOTIFY",
+      "requires": [],
+      "sources": [
+        {
+          "quote": "OPS-01必须通知PM",
+          "occurrence": 1
+        }
+      ],
+      "note": ""
+    },
+    {
+      "id": "C_NOTIFY_RECIPIENT",
+      "kind": "ROLE",
+      "event_id": "EV_NOTIFY",
+      "entity_id": "E_PM",
+      "role": "RECIPIENT",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "artifact_use": null,
+      "scope_id": "EV_NOTIFY",
+      "requires": [],
+      "sources": [
+        {
+          "quote": "通知PM",
+          "occurrence": 1
+        }
+      ],
+      "note": ""
+    },
+    {
+      "id": "C_NOTIFY_CONDITION",
+      "kind": "CONDITION",
+      "event_id": "EV_NOTIFY",
+      "entity_id": null,
+      "role": null,
+      "expression_id": "X_ABNORMAL_FOUND",
+      "direction": "SUFFICIENT",
+      "temporal": null,
+      "quantity": null,
+      "artifact_use": null,
+      "scope_id": "EV_NOTIFY",
+      "requires": [],
+      "sources": [
+        {
+          "quote": "若发现服务异常，OPS-01必须通知PM",
+          "occurrence": 1
+        }
+      ],
+      "note": "发现服务异常足以触发通知义务；不断言已发现，也不新增发现或监测义务。"
+    },
+    {
+      "id": "C_GENERATE_PERFORMER",
+      "kind": "ROLE",
+      "event_id": "EV_GENERATE",
+      "entity_id": "E_OPS",
+      "role": "PERFORMER",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "artifact_use": null,
+      "scope_id": "EV_GENERATE",
+      "requires": [],
+      "sources": [
+        {
+          "quote": "OPS-01都必须生成health.md",
+          "occurrence": 1
+        }
+      ],
+      "note": ""
+    },
+    {
+      "id": "C_GENERATE_RESULT",
+      "kind": "ROLE",
+      "event_id": "EV_GENERATE",
+      "entity_id": "E_HEALTH",
+      "role": "RESULT",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "artifact_use": null,
+      "scope_id": "EV_GENERATE",
+      "requires": [],
+      "sources": [
+        {
+          "quote": "无论是否发现异常，OPS-01都必须生成health.md",
+          "occurrence": 1
+        }
+      ],
+      "note": "生成义务不受是否发现异常限制；原文未要求交付。"
+    },
+    {
+      "id": "C_GENERATE_SCOPE",
+      "kind": "SCOPE",
+      "event_id": "EV_GENERATE",
+      "entity_id": null,
+      "role": null,
+      "expression_id": "X_HEALTH",
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "artifact_use": null,
+      "scope_id": "E_HEALTH",
+      "requires": [],
+      "sources": [
+        {
+          "quote": "生成health.md",
+          "occurrence": 1
+        }
+      ],
+      "note": ""
+    }
+  ],
+  "expressions": [
+    {
+      "id": "X_ABNORMAL_FOUND",
+      "op": "STATE",
+      "operands": [],
+      "state": {
+        "predicate": "发现服务异常",
+        "event_id": null,
+        "args": [
+          "E_SERVICE"
+        ],
+        "polarity": "POSITIVE"
+      },
+      "sources": [
+        {
+          "quote": "若发现服务异常",
+          "occurrence": 1
+        }
+      ]
+    },
+    {
+      "id": "X_HEALTH",
+      "op": "ITEM",
+      "operands": [
+        "E_HEALTH"
+      ],
+      "state": null,
+      "sources": [
+        {
+          "quote": "health.md",
+          "occurrence": 1
+        }
+      ]
+    }
+  ],
+  "issues": [],
+  "coverage": [
+    {
+      "sources": [
+        {
+          "quote": "若发现服务异常",
+          "occurrence": 1
+        }
+      ],
+      "claim_ids": [
+        "C_NOTIFY_CONDITION"
+      ],
+      "status": "EXPRESSED",
+      "affected_views": [
+        "A"
+      ],
+      "range_requirement": {
+        "kind": "NONE",
+        "scope_claim_ids": []
+      }
+    },
+    {
+      "sources": [
+        {
+          "quote": "OPS-01必须通知PM",
+          "occurrence": 1
+        }
+      ],
+      "claim_ids": [
+        "C_NOTIFY_PERFORMER",
+        "C_NOTIFY_RECIPIENT",
+        "C_NOTIFY_CONDITION"
+      ],
+      "status": "EXPRESSED",
+      "affected_views": [
+        "A",
+        "P"
+      ],
+      "range_requirement": {
+        "kind": "NONE",
+        "scope_claim_ids": []
+      }
+    },
+    {
+      "sources": [
+        {
+          "quote": "无论是否发现异常",
+          "occurrence": 1
+        }
+      ],
+      "claim_ids": [
+        "C_GENERATE_RESULT"
+      ],
+      "status": "EXPRESSED",
+      "affected_views": [
+        "A",
+        "O"
+      ],
+      "range_requirement": {
+        "kind": "NONE",
+        "scope_claim_ids": []
+      }
+    },
+    {
+      "sources": [
+        {
+          "quote": "OPS-01都必须生成health.md",
+          "occurrence": 1
+        }
+      ],
+      "claim_ids": [
+        "C_GENERATE_PERFORMER",
+        "C_GENERATE_RESULT",
+        "C_GENERATE_SCOPE"
+      ],
+      "status": "EXPRESSED",
+      "affected_views": [
+        "A",
+        "P",
+        "O"
+      ],
+      "range_requirement": {
+        "kind": "SPECIFIC",
+        "scope_claim_ids": [
+          "C_GENERATE_SCOPE"
+        ]
+      }
+    }
+  ]
+}

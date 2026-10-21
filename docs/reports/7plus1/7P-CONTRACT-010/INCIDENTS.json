@@ -1,0 +1,35 @@
+{
+  "task": "7P-CONTRACT-010",
+  "parser_failures_this_task": "NOT_RUN",
+  "events": [
+    {
+      "stage": "Read-only inspection",
+      "failure": "TypeError reading canonical_7plus1.slots.I",
+      "cause": "Diagnostic probe assumed slots wrapper; actual frozen schema uses canonical_7plus1.I",
+      "fix": "Read actual field layout; no Trace/runtime change",
+      "parser_failure": false
+    },
+    {
+      "stage": "Comparator construction",
+      "failure": "INVALID_AGGREGATE SWAI-001:I2",
+      "cause": "Initial offline validator wrongly required every leaf to be independently MATCH; frozen three test-file leaves are PARTIAL_SUPPORT while the full explicit UNION is a reviewed MATCH",
+      "fix": "Require complete reviewed aggregate and typed roles/provenance; leaf PARTIAL accepted only inside full certificate. Three leaf reviews become component-only MATCH under C3; required unit was already MATCH",
+      "parser_failure": false
+    },
+    {
+      "stage": "Contract tests attempt 1",
+      "failure": "24 PASS / 1 FAIL: deepEqual memory object vs persisted JSON",
+      "cause": "In-memory optional undefined fields are omitted in JSON; semantic result JSON and hash already equal",
+      "fix": "Compare full serialized JSON SHA-256, without omitting any serialized semantic field",
+      "retained_first_failure_file": "docs/reports/7plus1/7P-CONTRACT-010/TESTS-attempt-1.json",
+      "final_result": "TESTS-attempt-2.json: 25 PASS / 0 FAIL",
+      "parser_failure": false
+    },
+    {
+      "stage": "Localization inspection",
+      "cause": "A whole-document DISCOURSE node overlaps every source span",
+      "fix": "Local candidate inventory excludes the task-container node; overlap remains localization-only. Full frozen Trace is unchanged."
+    }
+  ],
+  "no_runtime_or_source_repair": true
+}

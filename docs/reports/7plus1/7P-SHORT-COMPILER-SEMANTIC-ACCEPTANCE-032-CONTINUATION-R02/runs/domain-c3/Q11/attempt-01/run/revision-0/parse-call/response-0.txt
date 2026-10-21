@@ -1,0 +1,233 @@
+{
+  "contract_version": "032.1",
+  "entities": [
+    {
+      "id": "n_qa",
+      "label": "QA",
+      "type": "OTHER",
+      "mentions": [{"quote": "QA", "occurrence": 1}],
+      "alternatives": []
+    },
+    {
+      "id": "n_rule",
+      "label": "RULE-17",
+      "type": "DOCUMENT",
+      "mentions": [{"quote": "RULE-17", "occurrence": 1}],
+      "alternatives": []
+    },
+    {
+      "id": "n_schema",
+      "label": "schema.yaml",
+      "type": "FILE",
+      "mentions": [{"quote": "schema.yaml", "occurrence": 1}],
+      "alternatives": []
+    },
+    {
+      "id": "n_report",
+      "label": "conformance.md",
+      "type": "FILE",
+      "mentions": [{"quote": "conformance.md", "occurrence": 1}],
+      "alternatives": []
+    }
+  ],
+  "events": [
+    {
+      "id": "e_check",
+      "predicate": "检查",
+      "kind": "ACTION",
+      "layer": "MAIN",
+      "use": "CURRENT_TASK",
+      "modality": "REQUIRED",
+      "polarity": "POSITIVE",
+      "owner_id": "ROOT",
+      "constraint_ids": [],
+      "requires": [],
+      "sources": [{"quote": "请QA按照RULE-17检查schema.yaml", "occurrence": 1}]
+    },
+    {
+      "id": "e_generate",
+      "predicate": "生成",
+      "kind": "ACTION",
+      "layer": "MAIN",
+      "use": "CURRENT_TASK",
+      "modality": "REQUIRED",
+      "polarity": "POSITIVE",
+      "owner_id": "ROOT",
+      "constraint_ids": [],
+      "requires": [],
+      "sources": [
+        {"quote": "请QA", "occurrence": 1},
+        {"quote": "生成conformance.md", "occurrence": 1}
+      ]
+    }
+  ],
+  "claims": [
+    {
+      "id": "c_check_performer",
+      "kind": "ROLE",
+      "event_id": "e_check",
+      "entity_id": "n_qa",
+      "role": "PERFORMER",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "artifact_use": null,
+      "scope_id": "e_check",
+      "requires": [],
+      "sources": [{"quote": "请QA按照RULE-17检查schema.yaml", "occurrence": 1}],
+      "note": "QA是检查执行者；原文未明确其个人或组织类别。"
+    },
+    {
+      "id": "c_check_input",
+      "kind": "ROLE",
+      "event_id": "e_check",
+      "entity_id": "n_schema",
+      "role": "INPUT_OBJECT",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "artifact_use": null,
+      "scope_id": "e_check",
+      "requires": [],
+      "sources": [{"quote": "检查schema.yaml", "occurrence": 1}],
+      "note": "明确受检文件。"
+    },
+    {
+      "id": "c_check_basis",
+      "kind": "ROLE",
+      "event_id": "e_check",
+      "entity_id": "n_rule",
+      "role": "BASIS",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "artifact_use": null,
+      "scope_id": "e_check",
+      "requires": [],
+      "sources": [{"quote": "按照RULE-17检查schema.yaml", "occurrence": 1}],
+      "note": "RULE-17是检查依据，其中数字属于标识符。"
+    },
+    {
+      "id": "c_generate_performer",
+      "kind": "ROLE",
+      "event_id": "e_generate",
+      "entity_id": "n_qa",
+      "role": "PERFORMER",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "artifact_use": null,
+      "scope_id": "e_generate",
+      "requires": [],
+      "sources": [
+        {"quote": "请QA", "occurrence": 1},
+        {"quote": "生成conformance.md", "occurrence": 1}
+      ],
+      "note": "连续同一指令的并列生成动作承接主语QA。"
+    },
+    {
+      "id": "c_generate_result",
+      "kind": "ROLE",
+      "event_id": "e_generate",
+      "entity_id": "n_report",
+      "role": "RESULT",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "artifact_use": null,
+      "scope_id": "e_generate",
+      "requires": [],
+      "sources": [{"quote": "生成conformance.md", "occurrence": 1}],
+      "note": "明确要求产生的结果文件。"
+    },
+    {
+      "id": "c_check_scope",
+      "kind": "SCOPE",
+      "event_id": "e_check",
+      "entity_id": null,
+      "role": null,
+      "expression_id": "x_schema",
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "artifact_use": null,
+      "scope_id": "n_schema",
+      "requires": [],
+      "sources": [{"quote": "检查schema.yaml", "occurrence": 1}],
+      "note": "受检范围为指定文件。"
+    },
+    {
+      "id": "c_generate_scope",
+      "kind": "SCOPE",
+      "event_id": "e_generate",
+      "entity_id": null,
+      "role": null,
+      "expression_id": "x_report",
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "artifact_use": null,
+      "scope_id": "n_report",
+      "requires": [],
+      "sources": [{"quote": "生成conformance.md", "occurrence": 1}],
+      "note": "结果对象为指定文件。"
+    }
+  ],
+  "expressions": [
+    {
+      "id": "x_schema",
+      "op": "ITEM",
+      "operands": ["n_schema"],
+      "state": null,
+      "sources": [{"quote": "schema.yaml", "occurrence": 1}]
+    },
+    {
+      "id": "x_report",
+      "op": "ITEM",
+      "operands": ["n_report"],
+      "state": null,
+      "sources": [{"quote": "conformance.md", "occurrence": 1}]
+    }
+  ],
+  "issues": [],
+  "coverage": [
+    {
+      "sources": [{"quote": "请QA按照RULE-17检查schema.yaml", "occurrence": 1}],
+      "claim_ids": ["c_check_performer", "c_check_input", "c_check_scope"],
+      "status": "EXPRESSED",
+      "affected_views": ["A", "P", "I"],
+      "range_requirement": {
+        "kind": "SPECIFIC",
+        "scope_claim_ids": ["c_check_scope"]
+      }
+    },
+    {
+      "sources": [{"quote": "按照RULE-17", "occurrence": 1}],
+      "claim_ids": ["c_check_basis"],
+      "status": "EXPRESSED",
+      "affected_views": ["V"],
+      "range_requirement": {
+        "kind": "NONE",
+        "scope_claim_ids": []
+      }
+    },
+    {
+      "sources": [
+        {"quote": "请QA", "occurrence": 1},
+        {"quote": "生成conformance.md", "occurrence": 1}
+      ],
+      "claim_ids": ["c_generate_performer", "c_generate_result", "c_generate_scope"],
+      "status": "EXPRESSED",
+      "affected_views": ["A", "P", "O"],
+      "range_requirement": {
+        "kind": "SPECIFIC",
+        "scope_claim_ids": ["c_generate_scope"]
+      }
+    }
+  ]
+}

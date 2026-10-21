@@ -1,0 +1,49 @@
+{
+  "case_id": "REAL-GOLD-001",
+  "source_sha256": "17c25de4278deafeecf5914dfea99dff0ab5f9a632e2dbccddfc909401d2feb2",
+  "E": [
+    "E.participants = {ADMIN, ME}",
+    "E.documents = {docs/mcp-tools.md, mcp/README.md, LETTER-TO-ADMIN.{zh,en}.md, README.md, README.zh.md, CHANGELOG.md, docs/releases/0.6.6.md}",
+    "E.artifacts = {tool_surface.json, public_surface.json}"
+  ],
+  "Sigma": [
+    "Sigma.document_patch_scope = listed_document_targets OR broader_all_document_github_pypi_scope",
+    "Sigma.excluded_mutation_targets = {_version.py, PyPI publication, release tag}"
+  ],
+  "Q": [
+    "Q.document_patch(listed_document_targets)",
+    "Q.record_documentation_of_two_commits_and_non_actions",
+    "Q.run_explicit_acceptance_checks",
+    "Q.follow_up_record_report_archive_in_same_session"
+  ],
+  "F": [
+    "F.modify(_version.py)",
+    "F.republish(PyPI)",
+    "F.create_release_tag",
+    "F.change(tool_surface.json OR public_surface.json)",
+    "F.remove_required_letter_title"
+  ],
+  "K": [
+    "K = lint_clean AND pytest_587_of_587 AND snapshots_unchanged AND required_letter_strings AND no_old_highlights_match AND paired_readme_structure_aligned"
+  ],
+  "Relations": [
+    "ADMIN -> initiates_and_reviews -> ME",
+    "ME -> delivers_and_records -> task_artifacts",
+    "identity_or_authority_binding = unresolved_not_inferred"
+  ],
+  "D": [
+    "D.protocol = fcop@1",
+    "D.references = {commit:274ce06, commit:87e178a, docs/releases/0.6.6.md}",
+    "D.baseline = 0.6.5_test_baseline"
+  ],
+  "Phi": [
+    "Phi.resource_count: 10 -> 12",
+    "Phi.test_count = 587/587",
+    "Phi.scope_interpretations = {enumerated_targets, broader_surface_review}",
+    "Phi.no_implied_execution_order"
+  ],
+  "losslessness_zh": "所有已审定的义务、禁止、完成条件、关系、版本来源与范围歧义均保留；范围歧义表示为两个候选边界而非被任意选定。",
+  "losslessness_en": "All adjudicated obligations, prohibitions, completion conditions, relations, provenance, and the scope ambiguity are retained; the ambiguity is represented as two candidate boundaries rather than selected arbitrarily.",
+  "formal_coverage_gap": [],
+  "invented_constraints": []
+}

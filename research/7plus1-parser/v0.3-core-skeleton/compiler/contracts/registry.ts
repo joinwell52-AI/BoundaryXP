@@ -1,0 +1,34 @@
+import type {EvidenceTier, SourceSpan, SpanCandidateType, SpanCandidateStatus, LiteralTag, SpanCandidate, SpanLatticeEdgeType, SpanLatticeEdge, SpanLattice, SemanticNodeType, SemanticNode, RelationType, DecodedRelation, RelationBundle, UnresolvedKind, UnresolvedRecord, SetExpr, ConditionExpr, QuantityOperator, QuantityExpr, BoundaryFactType, BoundaryFact, BoundaryAST, CanonicalSlot, CanonicalEntry, ProofNode, ProofEdgeType, ProofEdge, ProofDAG, NotImplementedStage, CompilerExecutionContext} from "./core.js";
+export interface ContractMap {
+ EvidenceTier: EvidenceTier;
+ SourceSpan: SourceSpan;
+ SpanCandidateType: SpanCandidateType;
+ SpanCandidateStatus: SpanCandidateStatus;
+ LiteralTag: LiteralTag;
+ SpanCandidate: SpanCandidate;
+ SpanLatticeEdgeType: SpanLatticeEdgeType;
+ SpanLatticeEdge: SpanLatticeEdge;
+ SpanLattice: SpanLattice;
+ SemanticNodeType: SemanticNodeType;
+ SemanticNode: SemanticNode;
+ RelationType: RelationType;
+ DecodedRelation: DecodedRelation;
+ RelationBundle: RelationBundle;
+ UnresolvedKind: UnresolvedKind;
+ UnresolvedRecord: UnresolvedRecord;
+ SetExpr: SetExpr;
+ ConditionExpr: ConditionExpr;
+ QuantityOperator: QuantityOperator;
+ QuantityExpr: QuantityExpr;
+ BoundaryFactType: BoundaryFactType;
+ BoundaryFact: BoundaryFact;
+ BoundaryAST: BoundaryAST;
+ CanonicalSlot: CanonicalSlot;
+ CanonicalEntry: CanonicalEntry;
+ ProofNode: ProofNode;
+ ProofEdgeType: ProofEdgeType;
+ ProofEdge: ProofEdge;
+ ProofDAG: ProofDAG;
+ NotImplementedStage: NotImplementedStage;
+ CompilerExecutionContext: CompilerExecutionContext;
+}

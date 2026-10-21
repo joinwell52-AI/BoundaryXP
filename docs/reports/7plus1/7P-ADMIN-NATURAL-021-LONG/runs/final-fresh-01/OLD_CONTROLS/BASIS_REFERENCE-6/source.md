@@ -1,0 +1,1 @@
+依据 RULE-71 v2.0 或 v3.0，QA 读取 request.toml，生成 analysis.txt。

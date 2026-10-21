@@ -1,0 +1,1 @@
+import{cases as old}from './non-gold-inputs.mjs';export const cases=[...old];for(let i=0;i<5;i++)cases.push({id:'INVARIANCE_LAYER-'+i,kind:'INVARIANCE_LAYER',text:`仅手动触发——现有 loader_${i} 完全不变。`,values:[`现有 loader_${i}`]});

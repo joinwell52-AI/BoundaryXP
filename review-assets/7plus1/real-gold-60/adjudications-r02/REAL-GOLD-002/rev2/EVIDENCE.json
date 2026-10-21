@@ -1,0 +1,88 @@
+{
+  "case_id": "REAL-GOLD-002",
+  "source_sha256": "d0d671fff98f9b972034e8426e6bf32b306db86cca0fa17bf83c91e4dbdffc41",
+  "status": "EVIDENCE_VERIFIED",
+  "evidence": [
+    {
+      "evidence_id": "E001",
+      "source_id": "SOURCE_TASK",
+      "origin": "SOURCE",
+      "start": 0,
+      "end": 366,
+      "quote": "---\nprotocol: fcop\nversion: 1\nsender: ADMIN\nrecipient: ME\npriority: P1\nsubject: Rule 1 角色身份唯一性硬化（一人一角色、从磁盘账本判定、ADMIN 受约束）——0.7.0 预站\nreferences:\n- ISSUE-20260427-002-ME.md; ISSUE-20260427-001-ME.md; TASK-20260427-001-ADMIN-to-ME.md;\n  src/fcop/rules/_data/fcop-rules.mdc Rule 1/4/7/8; src/fcop/rules/_data/fcop-protocol.mdc\n  UNBOUND 节 + Architectural Principle\n---\n\n",
+      "purpose": "source metadata, named participants, protocol references, and proposed rule-hardening subject"
+    },
+    {
+      "evidence_id": "E002",
+      "source_id": "SOURCE_TASK",
+      "origin": "SOURCE",
+      "start": 366,
+      "end": 1102,
+      "quote": "## 起因\n\n2026-04-27 下午。ADMIN 在 dogfood 合拢后接连抛出三个制约问题，逐次锁紧了同一道子：\n\n1. 「两个 agent，如果我们都说他是 ME，会发生什么情况？」\n2. 「这里问题是，如果有两个一样的 ME，那么犯错的是 admin；我们要从落盘的文件去分析，因为文件即协议；如果再用的已经有角色的报告了，就不能发生冲突，即使是临时性的 temp，也不能产生本质的角色冲突。」\n3. 「每个 agent，都要 admin 确认身份，但是 admin 不能把同一身份给多 agent！」\n\n从「现象」到「原则」到「安位」，本任务是这条原则的站台。\n\n## ADMIN 立的三条推论\n\n1. **「角色被谁占着」≡「磁盘上是谁在用这个角色码写文件」**。`docs/agents/tasks/`、`reports/`、`issues/`、`log/` 是占用状态的**唯一权威源**，和 `fcop.json` 同等级：fcop.json 说「这个角色存在」，tasks/reports/log 说「这个角色正活跃」。\n\n2. **ADMIN 双 bind 是 ADMIN 的失误，但协议必须接得住**。agent 在 BOUND 之前**自己**去翻文件账本，发现角色已被使用就**拒绝默认占领**，反向问 ADMIN：「ME 已被 `sess-...` 写过 N 份文件，你是要交班、协审、还是另立角色？」\n\n3. **「临时」/「temp」不是 bypass 通行证**。任何要写盘的 agent 都要拿到和已有角色码不重合的代号。临时身份 = 临时**角色码**，不是临时**借用 ME**。「我就快速顶一下」在协议里不是合法理由。\n\n",
+      "purpose": "originating role-collision questions and the stated disk-ledger principle"
+    },
+    {
+      "evidence_id": "E003",
+      "source_id": "SOURCE_TASK",
+      "origin": "SOURCE",
+      "start": 1102,
+      "end": 1399,
+      "quote": "## 合并后的 Rule 1 不变量\n\n> **角色 ↔ 身份 是一对一映射。ADMIN 是不可借出的人类角色（→ 0 个 agent）；其他每个角色至多 1 个 agent；身份必须由 ADMIN 显式指派且不得重复发放。**\n\n这是现有 Rule 1 「ADMIN 这个**特殊角色**不能被指派」的对偶升级：不仅 ADMIN 一对零，**任何**非 ADMIN 角色也一对一。\n\nADMIN 受协议约束并不是新事——Rule 7 早就写过：「本规则约束 OPS，也约束任何实际执行破坏性动作的角色（包括 ADMIN 本人）。」本任务只是把这个性质从 Rule 7 拓到 Rule 1。\n\n",
+      "purpose": "merged Rule 1 invariant and explicit ADMIN/non-ADMIN role constraints"
+    },
+    {
+      "evidence_id": "E004",
+      "source_id": "SOURCE_TASK",
+      "origin": "SOURCE",
+      "start": 1399,
+      "end": 1988,
+      "quote": "## 双 bind 现场的执行链路（不需新工具）\n\n```\nADMIN: 「你是 ME」\n   │\n   ▼\nAgent（新 session）：\n   1) fcop_report → 看到 ME 占用状态：ACTIVE，last session_id ≠ 我\n   2) 触发 Rule 1 + Rule 8 联动：拒绝 BOUND 转换\n   3) 落一份 .fcop/proposals/double-bind-{ts}.md：\n      - 「ADMIN 试图把 ME 指派给我，但磁盘上 ME 已被 sess-... 占用」\n      - 三选一推荐：handoff / co-review / 另立角色码\n   4) 报告 ADMIN，等回复\n   5) ADMIN 说「那你做 co-reviewer」 → 接受 BOUND，但只读+只写二审段落\n      或 ADMIN 说「那旧那个先归档」 → 等旧 session 写 handoff TASK\n      或 ADMIN 说「叫你 ME-2 吧」 → 走 create_custom_team / init_* force=True\n```\n\n**0 个新工具**。现有的 `fcop_report` 输出 + `.fcop/proposals/` 下落盘 + Rule 8 拒绝权合起来就够了。\n\n",
+      "purpose": "illustrative double-bind handling chain and stated no-new-tool constraint"
+    },
+    {
+      "evidence_id": "E005",
+      "source_id": "SOURCE_TASK",
+      "origin": "SOURCE",
+      "start": 1988,
+      "end": 2754,
+      "quote": "## 修订清单（趋紧后的最终版）\n\n| 文件 | 改动 |\n|---|---|\n| `src/fcop/rules/_data/fcop-rules.mdc` | **改 Rule 1**——「贯穿两阶段的硬约束」那一节加一条：「ADMIN 不得把同一角色码指派给多个 agent；磁盘账本是占用状态的唯一权威源。」 Rule 4 的 thread-driver 那条不动 |\n| `src/fcop/rules/_data/fcop-protocol.mdc` | **改 UNBOUND 协议那一节**：在「等 ADMIN 明确指派」步骤后加一段——agent 转 BOUND 前，必须先用 `fcop_report` 输出的 occupancy 段对照自己的 session_id；冲突时按 Rule 8 拒绝、落 `.fcop/proposals/`、向 ADMIN 出三选一 |\n| `src/fcop/rules/_data/letter-to-admin.{zh,en}.md` | 加一段 ADMIN 纪律提醒：「FCoP 协议约束 ADMIN：你不能把 ME 同时给两个 agent。要让两个 agent 协作请用 team 模式；要协审请明说『你是 ME 的 co-reviewer』。」 |\n| `mcp/src/fcop_mcp/server.py` `fcop_report` | UNBOUND 分支输出增加 occupancy 段：逐角色统计 open tasks/reports/issues + archived + last session_id seen + 状态标签 |\n| 【不动】 | `init_*`；不引入 lock/lease 文件；frontmatter 不改；不加新工具 |\n\n",
+      "purpose": "proposed future 0.7.0 revision targets and explicit non-targets"
+    },
+    {
+      "evidence_id": "E006",
+      "source_id": "SOURCE_TASK",
+      "origin": "SOURCE",
+      "start": 2754,
+      "end": 3405,
+      "quote": "## 验收标准（0.7.0 实现后）\n\n- `fcop_report()` （包括 UNBOUND 与 initialised 两分支）输出底部含「角色占用 / Role occupancy」段，逐角色列出：open tasks 数 + open reports 数 + open issues 数 + archived 数 + last session_id seen + 状态标签（UNUSED / ARCHIVED / ACTIVE）。\n- `fcop-rules.mdc` 中 Rule 1 「贯穿两阶段的硬约束」含「一角色一 agent」条款；中英各一份。\n- `fcop-protocol.mdc` UNBOUND 节含 agent 转 BOUND 前的 occupancy 自检步骤 + 三选一出口。\n- `letter-to-admin.{zh,en}.md` 含 ADMIN 纪律提醒（双 bind 禁令明文）。\n- `fcop_protocol_version: 1.4.0 → 1.5.0`、`fcop_rules_version: 1.6.0 → 1.7.0`。\n- 包版本 `fcop` / `fcop-mcp` 从 0.6.5 跳 0.7.0（minor bump）。\n- 新增测试：双 bind 场景下 agent 拒绝转 BOUND + 落 `.fcop/proposals/` 的 happy/sad path 各一道。\n- 现有 587 passed 基线不降。\n\n",
+      "purpose": "future implementation acceptance criteria and proposed version changes"
+    },
+    {
+      "evidence_id": "E007",
+      "source_id": "SOURCE_TASK",
+      "origin": "SOURCE",
+      "start": 3405,
+      "end": 3677,
+      "quote": "## 范围外明确不做\n\n- **不引入运行时 lock / lease 文件**。`.fcop/sessions/<role>.lock` 是我上一轮草拟的 0.6.7 候选 B，ADMIN 明确否定。理由：违反 `fcop-protocol.mdc`「Tools are a Convenience Layer」公理——协议长在文件系统上，不能拼接运行时状态。\n- **不改 frontmatter 语义**。`session_id` 字段 v1.1 已落地，本轮只读不改。\n- **不改 init_***。初始化不是双 bind 现场。\n\n",
+      "purpose": "explicit scope exclusions for the current design"
+    },
+    {
+      "evidence_id": "E008",
+      "source_id": "SOURCE_TASK",
+      "origin": "SOURCE",
+      "start": 3677,
+      "end": 3822,
+      "quote": "## 责任人\n\nME（本角色）负责抽明、起草、验证；ADMIN 拍板启动 0.7.0 发布窗口。本任务本身讯息是**“落设计记录 + 排队”**，实现不在本轮会话范围内。REPORT 会以 status=in_progress 走，任务保持 OPEN，等 ADMIN 启动 0.7.0。\n\n",
+      "purpose": "responsibility split and statement that this task records and queues design rather than implements it"
+    },
+    {
+      "evidence_id": "E009",
+      "source_id": "SOURCE_TASK",
+      "origin": "SOURCE",
+      "start": 3822,
+      "end": 4170,
+      "quote": "## 关联\n\n- ISSUE：`ISSUE-20260427-002-ME.md`（同轮落盘、作为裂缝追踪）\n- 上游违规：`ISSUE-20260427-001-ME.md`（tripwire 覆盖不到手工 git，0.7.0 可一起修）\n- 上游任务：`docs/agents/log/tasks/TASK-20260427-001-ADMIN-to-ME.md`（0.6.6 文档级 patch）\n- 原生说明书：`docs/agents/LETTER-TO-ADMIN.md`、`fcop://letter/zh`\n- 架构公理：`fcop-protocol.mdc` 「Architectural Principle: Tools are a Convenience Layer」一节\n",
+      "purpose": "related issue, task, manual, and architectural-principle references"
+    }
+  ]
+}

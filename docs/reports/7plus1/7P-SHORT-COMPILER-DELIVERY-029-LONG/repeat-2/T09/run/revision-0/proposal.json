@@ -1,0 +1,492 @@
+{
+  "contract_version": "028-r02.3",
+  "entities": [
+    {
+      "id": "ent_pm",
+      "label": "PM",
+      "type": "OTHER",
+      "mentions": [
+        {
+          "quote": "PM",
+          "occurrence": 1
+        }
+      ],
+      "alternatives": []
+    },
+    {
+      "id": "ent_alpha",
+      "label": "alpha.csv",
+      "type": "FILE",
+      "mentions": [
+        {
+          "quote": "alpha.csv",
+          "occurrence": 1
+        }
+      ],
+      "alternatives": []
+    },
+    {
+      "id": "ent_beta",
+      "label": "beta.csv",
+      "type": "FILE",
+      "mentions": [
+        {
+          "quote": "beta.csv",
+          "occurrence": 1
+        }
+      ],
+      "alternatives": []
+    },
+    {
+      "id": "ent_ref",
+      "label": "它",
+      "type": "REFERENT",
+      "mentions": [
+        {
+          "quote": "它",
+          "occurrence": 1
+        },
+        {
+          "quote": "alpha.csv",
+          "occurrence": 1
+        },
+        {
+          "quote": "beta.csv",
+          "occurrence": 1
+        }
+      ],
+      "alternatives": [
+        "ent_alpha",
+        "ent_beta"
+      ]
+    },
+    {
+      "id": "ent_baseline",
+      "label": "baseline.csv",
+      "type": "FILE",
+      "mentions": [
+        {
+          "quote": "baseline.csv",
+          "occurrence": 1
+        }
+      ],
+      "alternatives": []
+    },
+    {
+      "id": "ent_readme",
+      "label": "readme.md",
+      "type": "FILE",
+      "mentions": [
+        {
+          "quote": "readme.md",
+          "occurrence": 1
+        }
+      ],
+      "alternatives": []
+    },
+    {
+      "id": "ent_admin",
+      "label": "ADMIN",
+      "type": "OTHER",
+      "mentions": [
+        {
+          "quote": "ADMIN",
+          "occurrence": 1
+        }
+      ],
+      "alternatives": []
+    }
+  ],
+  "events": [
+    {
+      "id": "ev_read",
+      "predicate": "读取",
+      "kind": "ACTION",
+      "layer": "MAIN",
+      "use": "CURRENT_TASK",
+      "modality": "REQUIRED",
+      "polarity": "POSITIVE",
+      "owner_id": "ROOT",
+      "constraint_ids": [],
+      "requires": [],
+      "sources": [
+        {
+          "quote": "请PM读取alpha.csv和beta.csv。",
+          "occurrence": 1
+        }
+      ]
+    },
+    {
+      "id": "ev_compare",
+      "predicate": "比较",
+      "kind": "ACTION",
+      "layer": "MAIN",
+      "use": "CURRENT_TASK",
+      "modality": "REQUIRED",
+      "polarity": "POSITIVE",
+      "owner_id": "ROOT",
+      "constraint_ids": [
+        "cl_order"
+      ],
+      "requires": [],
+      "sources": [
+        {
+          "quote": "随后把它与baseline.csv比较",
+          "occurrence": 1
+        }
+      ]
+    },
+    {
+      "id": "ev_send",
+      "predicate": "发送",
+      "kind": "ACTION",
+      "layer": "MAIN",
+      "use": "CURRENT_TASK",
+      "modality": "REQUIRED",
+      "polarity": "POSITIVE",
+      "owner_id": "ROOT",
+      "constraint_ids": [],
+      "requires": [],
+      "sources": [
+        {
+          "quote": "另将readme.md发送给ADMIN",
+          "occurrence": 1
+        }
+      ]
+    }
+  ],
+  "claims": [
+    {
+      "id": "cl_read_performer",
+      "kind": "ROLE",
+      "event_id": "ev_read",
+      "entity_id": "ent_pm",
+      "role": "PERFORMER",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "scope_id": "ev_read",
+      "requires": [],
+      "sources": [
+        {
+          "quote": "请PM读取alpha.csv和beta.csv。",
+          "occurrence": 1
+        }
+      ],
+      "note": ""
+    },
+    {
+      "id": "cl_read_alpha",
+      "kind": "ROLE",
+      "event_id": "ev_read",
+      "entity_id": "ent_alpha",
+      "role": "INPUT_OBJECT",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "scope_id": "ev_read",
+      "requires": [],
+      "sources": [
+        {
+          "quote": "读取alpha.csv和beta.csv",
+          "occurrence": 1
+        }
+      ],
+      "note": ""
+    },
+    {
+      "id": "cl_read_beta",
+      "kind": "ROLE",
+      "event_id": "ev_read",
+      "entity_id": "ent_beta",
+      "role": "INPUT_OBJECT",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "scope_id": "ev_read",
+      "requires": [],
+      "sources": [
+        {
+          "quote": "读取alpha.csv和beta.csv",
+          "occurrence": 1
+        }
+      ],
+      "note": ""
+    },
+    {
+      "id": "cl_compare_performer",
+      "kind": "ROLE",
+      "event_id": "ev_compare",
+      "entity_id": "ent_pm",
+      "role": "PERFORMER",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "scope_id": "ev_compare",
+      "requires": [],
+      "sources": [
+        {
+          "quote": "请PM读取alpha.csv和beta.csv。",
+          "occurrence": 1
+        },
+        {
+          "quote": "随后把它与baseline.csv比较",
+          "occurrence": 1
+        }
+      ],
+      "note": "后续命令沿用PM作为执行主体。"
+    },
+    {
+      "id": "cl_compare_ref",
+      "kind": "ROLE",
+      "event_id": "ev_compare",
+      "entity_id": "ent_ref",
+      "role": "INPUT_OBJECT",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "scope_id": "ev_compare",
+      "requires": [],
+      "sources": [
+        {
+          "quote": "alpha.csv和beta.csv",
+          "occurrence": 1
+        },
+        {
+          "quote": "把它与baseline.csv比较",
+          "occurrence": 1
+        }
+      ],
+      "note": "比较对象的指代身份存在局部歧义。"
+    },
+    {
+      "id": "cl_compare_baseline",
+      "kind": "ROLE",
+      "event_id": "ev_compare",
+      "entity_id": "ent_baseline",
+      "role": "INPUT_OBJECT",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "scope_id": "ev_compare",
+      "requires": [],
+      "sources": [
+        {
+          "quote": "把它与baseline.csv比较",
+          "occurrence": 1
+        }
+      ],
+      "note": "明确的比较参照文件；不据此推定为规范依据。"
+    },
+    {
+      "id": "cl_order",
+      "kind": "TEMPORAL",
+      "event_id": "ev_compare",
+      "entity_id": null,
+      "role": null,
+      "expression_id": "expr_read_done",
+      "direction": "ORDER",
+      "temporal": "AFTER",
+      "quantity": null,
+      "scope_id": "ev_compare",
+      "requires": [],
+      "sources": [
+        {
+          "quote": "请PM读取alpha.csv和beta.csv。",
+          "occurrence": 1
+        },
+        {
+          "quote": "随后把它与baseline.csv比较",
+          "occurrence": 1
+        }
+      ],
+      "note": "比较在读取之后；仅表达先后关系。"
+    },
+    {
+      "id": "cl_send_performer",
+      "kind": "ROLE",
+      "event_id": "ev_send",
+      "entity_id": "ent_pm",
+      "role": "PERFORMER",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "scope_id": "ev_send",
+      "requires": [],
+      "sources": [
+        {
+          "quote": "请PM读取alpha.csv和beta.csv。",
+          "occurrence": 1
+        },
+        {
+          "quote": "另将readme.md发送给ADMIN",
+          "occurrence": 1
+        }
+      ],
+      "note": "并列命令沿用PM作为执行主体。"
+    },
+    {
+      "id": "cl_send_input",
+      "kind": "ROLE",
+      "event_id": "ev_send",
+      "entity_id": "ent_readme",
+      "role": "INPUT_OBJECT",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "scope_id": "ev_send",
+      "requires": [],
+      "sources": [
+        {
+          "quote": "将readme.md发送给ADMIN",
+          "occurrence": 1
+        }
+      ],
+      "note": "待发送的既有文件。"
+    },
+    {
+      "id": "cl_send_recipient",
+      "kind": "ROLE",
+      "event_id": "ev_send",
+      "entity_id": "ent_admin",
+      "role": "RECIPIENT",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "scope_id": "ev_send",
+      "requires": [],
+      "sources": [
+        {
+          "quote": "将readme.md发送给ADMIN",
+          "occurrence": 1
+        }
+      ],
+      "note": ""
+    }
+  ],
+  "expressions": [
+    {
+      "id": "expr_read_done",
+      "op": "STATE",
+      "operands": [],
+      "state": {
+        "predicate": "读取完成",
+        "event_id": "ev_read",
+        "args": [
+          "ent_alpha",
+          "ent_beta"
+        ],
+        "polarity": "POSITIVE"
+      },
+      "sources": [
+        {
+          "quote": "读取alpha.csv和beta.csv",
+          "occurrence": 1
+        },
+        {
+          "quote": "随后",
+          "occurrence": 1
+        }
+      ]
+    }
+  ],
+  "issues": [
+    {
+      "id": "issue_ref",
+      "kind": "AMBIGUITY",
+      "subject_ids": [
+        "ent_ref",
+        "cl_compare_ref"
+      ],
+      "field_path": "entities[ent_ref].alternatives",
+      "alternatives": [
+        "ent_alpha",
+        "ent_beta"
+      ],
+      "affected_views": [
+        "I",
+        "A"
+      ],
+      "sources": [
+        {
+          "quote": "alpha.csv和beta.csv",
+          "occurrence": 1
+        },
+        {
+          "quote": "把它与baseline.csv比较",
+          "occurrence": 1
+        }
+      ],
+      "note": "“它”可指alpha.csv或beta.csv，不能仅按距离选定。歧义仅影响该比较对象，不影响两文件的读取、baseline.csv的比较用途或readme.md的发送。"
+    }
+  ],
+  "coverage": [
+    {
+      "sources": [
+        {
+          "quote": "请PM读取alpha.csv和beta.csv。",
+          "occurrence": 1
+        }
+      ],
+      "claim_ids": [
+        "cl_read_performer",
+        "cl_read_alpha",
+        "cl_read_beta"
+      ],
+      "status": "EXPRESSED",
+      "affected_views": [
+        "A",
+        "I",
+        "P"
+      ]
+    },
+    {
+      "sources": [
+        {
+          "quote": "随后把它与baseline.csv比较",
+          "occurrence": 1
+        }
+      ],
+      "claim_ids": [
+        "cl_order",
+        "cl_compare_performer",
+        "cl_compare_ref",
+        "cl_compare_baseline"
+      ],
+      "status": "EXPRESSED",
+      "affected_views": [
+        "A",
+        "I",
+        "P"
+      ]
+    },
+    {
+      "sources": [
+        {
+          "quote": "另将readme.md发送给ADMIN",
+          "occurrence": 1
+        }
+      ],
+      "claim_ids": [
+        "cl_send_performer",
+        "cl_send_input",
+        "cl_send_recipient"
+      ],
+      "status": "EXPRESSED",
+      "affected_views": [
+        "A",
+        "I",
+        "P"
+      ]
+    }
+  ]
+}

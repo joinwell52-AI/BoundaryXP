@@ -1,0 +1,1 @@
+TEAM274 检查cache204和queue204，生成 acceptance-c2-a-4.txt。只有cache204与queue204均完成后，任务才完成。

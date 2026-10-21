@@ -1,0 +1,166 @@
+{
+  "format": "boundx-kernel-7plus1/1",
+  "contract_version": "candidate-ir/2.0",
+  "core_sha256": "b8ece78251fdc9b344ab73c44d75410befa65d6f765444ffe3f38dbca20e401d",
+  "slots": {
+    "I": {
+      "status": "EXPLICIT_REQUIREMENTS",
+      "items": [],
+      "entries": []
+    },
+    "O": {
+      "status": "EXPLICIT_REQUIREMENTS",
+      "items": [],
+      "entries": []
+    },
+    "A": {
+      "status": "EXPLICIT_REQUIREMENTS",
+      "items": [],
+      "entries": []
+    },
+    "P": {
+      "status": "EXPLICIT_REQUIREMENTS",
+      "items": [],
+      "entries": []
+    },
+    "R": {
+      "status": "EXPLICIT_REQUIREMENTS",
+      "items": [],
+      "entries": []
+    },
+    "V": {
+      "status": "EXPLICIT_REQUIREMENTS",
+      "items": [],
+      "entries": []
+    },
+    "C": {
+      "status": "EXPLICIT_REQUIREMENTS",
+      "items": [],
+      "entries": []
+    },
+    "B": {
+      "status": "EXPLICIT_REQUIREMENTS",
+      "items": [
+        {
+          "id": "P",
+          "kind": "CONSTRAINT",
+          "modality": "REQUIRED",
+          "scope_id": "task",
+          "subject": null,
+          "subject_label": null,
+          "roles": [],
+          "operation": null,
+          "applicability": null,
+          "body": {
+            "kind": "EXPRESSION",
+            "id": "yes"
+          },
+          "expression": "BOOLEAN(true)",
+          "source_refs": [
+            "s"
+          ]
+        },
+        {
+          "id": "actor-boundary",
+          "kind": "CONSTRAINT",
+          "modality": "REQUIRED",
+          "scope_id": "task",
+          "subject": null,
+          "subject_label": null,
+          "roles": [],
+          "operation": null,
+          "applicability": null,
+          "body": {
+            "kind": "EXPRESSION",
+            "id": "allActors"
+          },
+          "expression": "FORALL(SELECT_EVENTS(TASK_EVENTS(task), AND(EQ(OPERATION_OF(e), SYMBOL(INVOKE)), MEMBER(tool, TARGETS_OF(e)))), IMPLIES(EVENT_OCCURRED(e), SUBSET(ACTORS_OF(e), GROUP_MEMBERS(allowed))))",
+          "source_refs": [
+            "s"
+          ]
+        },
+        {
+          "id": "shared-budget",
+          "kind": "CONSTRAINT",
+          "modality": "REQUIRED",
+          "scope_id": "task",
+          "subject": null,
+          "subject_label": null,
+          "roles": [],
+          "operation": null,
+          "applicability": null,
+          "body": {
+            "kind": "EXPRESSION",
+            "id": "budget"
+          },
+          "expression": "LTE(COUNT_STARTED(SELECT_EVENTS(TASK_EVENTS(task), AND(EQ(OPERATION_OF(e), SYMBOL(INVOKE)), MEMBER(tool, TARGETS_OF(e))))), NUMBER(3))",
+          "source_refs": [
+            "s"
+          ]
+        }
+      ],
+      "entries": [
+        {
+          "id": "P",
+          "kind": "CONSTRAINT",
+          "modality": "REQUIRED",
+          "scope_id": "task",
+          "subject": null,
+          "subject_label": null,
+          "roles": [],
+          "operation": null,
+          "applicability": null,
+          "body": {
+            "kind": "EXPRESSION",
+            "id": "yes"
+          },
+          "expression": "BOOLEAN(true)",
+          "source_refs": [
+            "s"
+          ]
+        },
+        {
+          "id": "actor-boundary",
+          "kind": "CONSTRAINT",
+          "modality": "REQUIRED",
+          "scope_id": "task",
+          "subject": null,
+          "subject_label": null,
+          "roles": [],
+          "operation": null,
+          "applicability": null,
+          "body": {
+            "kind": "EXPRESSION",
+            "id": "allActors"
+          },
+          "expression": "FORALL(SELECT_EVENTS(TASK_EVENTS(task), AND(EQ(OPERATION_OF(e), SYMBOL(INVOKE)), MEMBER(tool, TARGETS_OF(e)))), IMPLIES(EVENT_OCCURRED(e), SUBSET(ACTORS_OF(e), GROUP_MEMBERS(allowed))))",
+          "source_refs": [
+            "s"
+          ]
+        },
+        {
+          "id": "shared-budget",
+          "kind": "CONSTRAINT",
+          "modality": "REQUIRED",
+          "scope_id": "task",
+          "subject": null,
+          "subject_label": null,
+          "roles": [],
+          "operation": null,
+          "applicability": null,
+          "body": {
+            "kind": "EXPRESSION",
+            "id": "budget"
+          },
+          "expression": "LTE(COUNT_STARTED(SELECT_EVENTS(TASK_EVENTS(task), AND(EQ(OPERATION_OF(e), SYMBOL(INVOKE)), MEMBER(tool, TARGETS_OF(e))))), NUMBER(3))",
+          "source_refs": [
+            "s"
+          ]
+        }
+      ]
+    }
+  },
+  "gaps": [],
+  "business_decision": null,
+  "execution_authorization": null
+}

@@ -1,0 +1,1 @@
+请 PM 组织一次生产快照只读检查：只有负责人批准后才允许读取 production-snapshot.csv，并形成 snapshot-review.md。未经批准不得读取快照，也不得连接生产数据库。

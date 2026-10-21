@@ -1,0 +1,1 @@
+TEAM295 read inventory-c2-a-5.json and write handoff-c2-a-5.md. Send the report to LEAD295 after REVIEWER has reviewed it.

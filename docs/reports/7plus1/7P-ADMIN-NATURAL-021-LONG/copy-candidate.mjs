@@ -1,0 +1,5 @@
+import fs from 'node:fs';import assert from 'node:assert/strict';import {OUT,ROOT,OLD,read,write,digest} from './common.mjs';
+assert.equal(digest(OUT+'development/r01/CONTROLS.json'),read(OUT+'development/r01/CONTROL-FREEZE.json').sha256);assert.equal(fs.readdirSync(ROOT).length,0);
+write(OUT+'development/r01/HARNESS-ERROR.json',{stage:'CANDIDATE_COPY',error:'TypeError: read.own_runtime is not iterable',reason:'Frozen manifest key is own_runtime_files, not own_runtime. Controls and hypothesis were already frozen; empty candidate directory, no runtime copied or changed.',runtime_changed:false,continuation:'copy-candidate.mjs'});
+for(const f of read(OLD+'candidate-freezes/2.json').own_runtime_files){const dest=ROOT+f.path.split('/').at(-1);assert.equal(digest(f.path),f.sha256);fs.copyFileSync(f.path,dest);}
+write(OUT+'development/r01/COPY-PROVENANCE.json',{source_candidate:read(OLD+'candidate-freezes/2.json').candidate_hash,files:fs.readdirSync(ROOT).map(name=>({path:ROOT+name,sha256:digest(ROOT+name)})),first_blind_sealed_before_copy:true});console.log('COPIED',fs.readdirSync(ROOT).length);

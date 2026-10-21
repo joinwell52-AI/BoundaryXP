@@ -1,0 +1,1 @@
+OPS 读取 host-list.csv，逐项检查全部主机记录并生成 host-review.md。只有清单中的每项都有检查结果时才完成。

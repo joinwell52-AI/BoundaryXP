@@ -1,0 +1,52 @@
+{
+  "case_id": "REAL-GOLD-039",
+  "source_sha256": "c992ab6498799ec40338241db44da9914b9b98dc104e5e104bdd250bb9a865cd",
+  "E": [
+    "E={ISSUE008,ISSUE009,ISSUE010,project.py,PM_templates,CHANGELOG}"
+  ],
+  "Sigma": [
+    "Sigma.issues=3",
+    "Sigma.teams=4",
+    "Sigma.version_local=3.0.0"
+  ],
+  "Q": [
+    "Q.exempt(fcop/log/**|fcop/**/_archive/**|**/legacy-non-protocol/**)",
+    "Q.keep_active_buckets_scanned",
+    "Q.add_violation_count",
+    "Q.parse_frontmatter_then_fallback",
+    "Q.align_PM_templates",
+    "Q.update_changelog",
+    "Q.pytest"
+  ],
+  "F": [
+    "F.break(1.x_fallback)",
+    "F.exempt(active_bucket)",
+    "F.rewrite_history"
+  ],
+  "K": [
+    "K.pytest=pass",
+    "K.P1-002(named_audit_projects)=0",
+    "K.active_bucket_scan=enabled",
+    "K.fcop_rules_version_local=3.0.0",
+    "K.PM_sections=3",
+    "K.Fixed_issues=3"
+  ],
+  "Relations": [
+    "TASK-009 -> subtask_of -> TASK-008",
+    "fallback -> preserves -> 1.x",
+    "new_TASK -> supersedes -> failed_fix"
+  ],
+  "D": [
+    "D.priority=P1",
+    "D.risk=medium",
+    "D.deadline=absent"
+  ],
+  "Phi": [
+    "Phi.execution=not_performed",
+    "Phi.OperatorProfile=absent"
+  ],
+  "losslessness_zh": "保留三类精确豁免、活动桶继续扫描、版本兼容回退、四队双语模板与回归验收，不把活动桶违规数误设为零。",
+  "losslessness_en": "Retains the three exact exemptions, active-bucket scanning, compatible version fallback, four-team bilingual templates and regression acceptance without requiring zero active-bucket violations.",
+  "formal_coverage_gap": [],
+  "invented_constraints": []
+}

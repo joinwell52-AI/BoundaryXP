@@ -1,0 +1,1 @@
+Nina must read x.ini, may inspect y.ini and must not delete either file.

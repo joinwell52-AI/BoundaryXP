@@ -1,0 +1,45 @@
+{
+  "case_id": "REAL-GOLD-032",
+  "source_sha256": "687cc24af6a868a30b23b9c2e571ed1664a0c27d3a4768c0b99f3bbad806c645",
+  "E": [
+    "E={SOP,git_add,staging,commit_chain,REPORT}"
+  ],
+  "Sigma": [
+    "Sigma.SOP_locations=2",
+    "Sigma.hashes=4",
+    "Sigma.staged_files=3"
+  ],
+  "Q": [
+    "Q.explicit_git_add",
+    "Q.status_short",
+    "Q.commit",
+    "Q.push"
+  ],
+  "F": [
+    "F.git_add_A",
+    "F.untracked_capture",
+    "F.protocol_change",
+    "F.release"
+  ],
+  "K": [
+    "K=acceptance",
+    "K.staging=three_intended_files"
+  ],
+  "Relations": [
+    "explicit_paths -> constrain -> staging",
+    "status_short -> verifies -> staging",
+    "history -> supports -> SOP_rule"
+  ],
+  "D": [
+    "D.risk=low",
+    "D.commit=single"
+  ],
+  "Phi": [
+    "Phi.actual_history=not_observed",
+    "Phi.remote_authority=not_bound"
+  ],
+  "losslessness_zh": "两处 SOP、四 hash、三文件 dogfood 和远端动作边界均保留。",
+  "losslessness_en": "Two SOP sections, four hashes, three-file dogfood, and remote-action boundary retained.",
+  "formal_coverage_gap": [],
+  "invented_constraints": []
+}

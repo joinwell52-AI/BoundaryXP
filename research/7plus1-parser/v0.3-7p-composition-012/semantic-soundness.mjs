@@ -1,0 +1,13 @@
+import {MODALS,COMPARATORS} from './grammar.mjs';
+// Content invariants supplement, but do not replace, schema/proof contract gates.
+export function semanticSoundness(f){
+ const errors=[],p=[...f.source.raw_text],sp=n=>f.source_spans.find(s=>s.span_id===n.source_span_ids[0]);
+ for(const a of f.analyses){const text=a.cl.span.quote;const ranges=[...text.matchAll(/“[^”]*”|「[^」]*」|"[^"\n]*"/gu)].map(m=>({start:a.cl.span.start+[...text.slice(0,m.index)].length,end:a.cl.span.start+[...text.slice(0,m.index+m[0].length)].length,kind:'QUOTED_VALUE'}));
+  for(const [word] of [...MODALS,...COMPARATORS])for(const m of text.matchAll(new RegExp(word.replace(/[.*+?^${}()|[\]\\]/gu,'\\$&'),'gu')))ranges.push({start:a.cl.span.start+[...text.slice(0,m.index)].length,end:a.cl.span.start+[...text.slice(0,m.index+word.length)].length,kind:'GRAMMATICAL_OPERATOR'});
+  for(const e of a.events){const s=sp(e);if(ranges.some(q=>q.start<=s.start&&q.end>=s.end))errors.push({clause_id:a.cl.id,node_id:e.node_id,code:'PREDICATE_LAYER_OWNERSHIP_VIOLATION'});}
+ }
+ for(const q of f.expressions.quantity_expr_nodes)for(const nid of q.target_node_ids){const n=f.semantic_nodes.find(n=>n.node_id===nid);if(!n||n.metadata.candidate_disposition==='REJECTED'||/^(得|能|须|超过)$/u.test(n.surface))errors.push({clause_id:n?.metadata.clause_id,node_id:nid,code:'INVALID_QUANTITY_TARGET'});}
+ for(const r of f.relations.filter(r=>r.state==='RESOLVED'&&r.relation_type==='SCOPE_MEMBER')){const n=f.semantic_nodes.find(n=>n.node_id===r.tail_node_id);if(f.analyses.find(a=>a.cl.id===r.clause_id)?.cl.tokens.some(t=>t.dep==='root'&&['符合','遵循','conform'].includes(t.text)&&t.end<=sp(n).start)||n.node_type==='REFERENCE'||f.relations.some(x=>x.tail_node_id===n.node_id&&x.relation_type==='CONFORMS_TO'&&x.state==='RESOLVED'))errors.push({clause_id:r.clause_id,node_id:n.node_id,code:'NORMATIVE_REFERENCE_IN_TASK_SCOPE'});}
+ for(const error of errors){const a=f.analyses.find(a=>a.cl.id===error.clause_id);const uid=f.tools.unknown(a?.cl,'UNRESOLVED_RELATION',error.code,[error.node_id]);for(const r of f.relations.filter(r=>(r.head_node_id===error.node_id||r.tail_node_id===error.node_id)&&r.state==='RESOLVED')){r.state='UNRESOLVED';r.unresolved_ref=uid;}const plan=f.expression_plans.get(error.node_id)??{};plan.unresolved_ref=uid;f.expression_plans.set(error.node_id,plan);f.diagnostics.push({stage:'SEMANTIC_SOUNDNESS',...error,unresolved_ref:uid});}
+ f.semantic_decoding.soundness={status:errors.length?'FAIL':'PASS',errors,checks:['PREDICATE_LAYER_OWNERSHIP','QUANTITY_TARGET_IDENTITY','NORMATIVE_REFERENCE_SCOPE'],contract_gates_are_not_semantic_certification:true};return f;
+}

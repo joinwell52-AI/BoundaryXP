@@ -1,0 +1,1 @@
+Probe the staging endpoint at most 4 times and create probe-log.md. At least 2 probes must succeed before the task is complete.

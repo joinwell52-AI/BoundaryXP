@@ -1,0 +1,51 @@
+I:
+  status: RESOLVED
+  entries:
+    - INPUT service.yaml
+
+O:
+  status: RESOLVED
+  entries:
+    - GENERATED_OUTPUT deployment-guide.md
+
+A:
+  status: RESOLVED
+  entries:
+    - REQUIRED READ service.yaml
+      agent: 王齐
+    - REQUIRED GENERATE deployment-guide.md
+      agent: 王齐
+
+P:
+  status: RESOLVED
+  entries:
+    - 王齐 [PERFORMER]
+
+R:
+  status: ABSENT
+
+V:
+  status: ABSENT
+
+C:
+  status: RESOLVED
+  entries:
+    - AND
+      - OUTPUT_EXISTS(deployment-guide.md)
+      - OUTPUT_CONTENT_PRESENT(deployment-guide.md, 部署步骤)
+      - OUTPUT_CONTENT_PRESENT(deployment-guide.md, 回滚说明)
+
+B:
+  status: RESOLVED
+  entries:
+    - FORBIDDEN MODIFY service.yaml
+
+OwnedOutputContent:
+  owner: deployment-guide.md
+  requirements:
+    - REQUIRED SECTION 部署步骤
+    - REQUIRED SECTION 回滚说明
+
+NonProjection:
+  - “部署步骤” must not become a current-task ACTION named “部署”.
+  - “回滚说明” must not become a current-task ACTION named “回滚”.

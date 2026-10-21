@@ -1,0 +1,17 @@
+import fs from 'node:fs';
+import path from 'node:path';
+import {pathToFileURL} from 'node:url';
+const root=path.resolve('.boundx/condition-report-repair/work');
+const report='docs/reports/7plus1/CONDITION-REFERENCE-AND-DELIVERY-r01';
+fs.mkdirSync(report,{recursive:true});
+const response=await fetch('http://127.0.0.1:58618/api/session');
+const headers={cookie:response.headers.get('set-cookie').split(';')[0]};
+const run=await(await fetch('http://127.0.0.1:58618/api/runs/4e06a02b-1c50-4554-8dce-3f4e23ab8816',{headers})).json();
+const prior=run.result;
+for(const [name,value] of Object.entries({'FIRST-RUN.json':run,'FIRST-TRACE.json':prior}))if(!fs.existsSync(path.join(report,name)))fs.writeFileSync(path.join(report,name),JSON.stringify(value,null,2)+'\n',{flag:'wx'});
+const {calculateBoundary}=await import(pathToFileURL(path.join(root,'research/7plus1-parser/llm-first-028/calculus.mjs')));
+const after=calculateBoundary(prior.ir);
+fs.writeFileSync(path.join(report,'CONSUMER-REPLAY.json'),JSON.stringify(after,null,2)+'\n');
+const summary={old_status:prior.boundary_calculations.status,new_status:after.status,unsupported:after.unsupported.map(x=>({reason:x.reason,ids:x.claim_ids})),joint:after.mathematical_results.joint.status,gaps:after.mathematical_results.joint.gaps,base:after.mathematical_results.joint.base.result,edges:after.dependency.edges.map(x=>({from:x.from,to:x.to})),llm_calls:0,O_repaired:false};
+fs.writeFileSync(path.join(report,'CONSUMER-REPLAY-SUMMARY.json'),JSON.stringify(summary,null,2)+'\n');
+console.log(JSON.stringify(summary,null,2));

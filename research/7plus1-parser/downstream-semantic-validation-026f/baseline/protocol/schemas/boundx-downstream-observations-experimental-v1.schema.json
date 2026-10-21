@@ -1,0 +1,42 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:boundx:implementation:downstream-observations:experimental-v1",
+  "type": "object", "additionalProperties": false,
+  "required": ["schema", "task_id", "task_revision", "binding_digest", "sources", "observations"],
+  "properties": {
+    "schema": {"const": "boundx-downstream-observations/experimental-v1"},
+    "task_id": {"$ref": "#/$defs/id"}, "task_revision": {"$ref": "#/$defs/id"},
+    "binding_digest": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+    "sources": {"type": "array", "maxItems": 32, "items": {
+      "type": "object", "additionalProperties": false, "required": ["id", "text", "sha256"],
+      "properties": {"id": {"$ref": "#/$defs/id"}, "text": {"type": "string", "minLength": 1, "maxLength": 100000},
+        "sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"}}
+    }},
+    "observations": {"type": "array", "maxItems": 256, "items": {
+      "type": "object", "additionalProperties": false, "required": ["node_id", "scope_id", "value", "evidence"],
+      "properties": {
+        "node_id": {"$ref": "#/$defs/id"}, "scope_id": {"$ref": "#/$defs/id"},
+        "value": {"oneOf": [
+          {"type": "object", "additionalProperties": false, "required": ["entity_id", "entity_type"], "properties": {
+            "entity_id": {"$ref": "#/$defs/id"},
+            "entity_type": {"$ref": "urn:boundx:implementation:formalization-input:experimental-v1#/$defs/entityBinding/properties/entity_type"}}},
+          {"type": "object", "additionalProperties": false, "required": ["relation", "from_id", "to_id"], "properties": {
+            "relation": {"$ref": "urn:boundx:implementation:formalization-input:experimental-v1#/$defs/relationBinding/properties/relation"},
+            "from_id": {"$ref": "#/$defs/id"}, "to_id": {"$ref": "#/$defs/id"}}},
+          {"type": "object", "additionalProperties": false, "required": ["booleans"], "properties": {
+            "booleans": {"type": "object", "maxProperties": 12, "additionalProperties": {"type": "boolean"}}}},
+          {"type": "object", "additionalProperties": false, "required": ["numeric", "unit"], "properties": {
+            "numeric": {"type": "string", "maxLength": 128, "pattern": "^-?(0|[1-9][0-9]*)(\\.[0-9]+)?$"}, "unit": {"$ref": "#/$defs/id"}}},
+          {"type": "object", "additionalProperties": false, "required": ["present"], "properties": {"present": {"type": "boolean"}}},
+          {"type": "object", "additionalProperties": false, "required": ["targets", "complete"], "properties": {
+            "targets": {"$ref": "#/$defs/identities"}, "complete": {"type": "boolean"}}},
+          {"type": "object", "additionalProperties": false, "required": ["delivered", "external_inputs", "complete"], "properties": {
+            "delivered": {"$ref": "#/$defs/identities"}, "external_inputs": {"$ref": "#/$defs/identities"}, "complete": {"type": "boolean"}}}
+        ]},
+        "evidence": {"$ref": "urn:boundx:implementation:semantic-ir:experimental-v1#/$defs/evidence"}
+      }
+    }}
+  },
+  "$defs": {"id": {"type": "string", "minLength": 1, "maxLength": 256, "pattern": "\\S"},
+    "identities": {"type": "array", "maxItems": 256, "uniqueItems": true, "items": {"$ref": "#/$defs/id"}}}
+}

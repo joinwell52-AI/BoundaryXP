@@ -1,0 +1,4 @@
+import fs from 'node:fs';import path from 'node:path';import {newTexts} from './new-texts.mjs';import {sha256} from '../llm-first-028/source.mjs';
+const report=path.resolve('docs/reports/7plus1/7P-SHORT-COMPILER-PRODUCT-CLOSURE-031-LONG'),freeze=fs.readFileSync(path.join(report,'CANDIDATE-FROZEN.json'));
+const cases=newTexts.map(c=>{const bytes=Buffer.from(c.text);fs.writeFileSync(path.join(report,'inputs',c.id+'.txt'),bytes,{flag:'wx'});return {...c,source_sha256:sha256(bytes),codepoints:[...c.text].length};});
+fs.writeFileSync(path.join(report,'NEW-TEXTS-PREREGISTERED.json'),JSON.stringify({registered_at:new Date().toISOString(),candidate_freeze_sha256:sha256(freeze),reviewer:'executing Codex, not independent ADMIN Gold',evaluated_before_registration:false,cases},null,2)+'\n',{flag:'wx'});console.log('registered '+cases.length);

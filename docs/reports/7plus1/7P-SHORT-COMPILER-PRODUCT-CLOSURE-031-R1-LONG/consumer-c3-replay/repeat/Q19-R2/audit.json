@@ -1,0 +1,216 @@
+{
+  "contract_version": "031-r1.1",
+  "reviews": [
+    {
+      "subject_id": "E_REPORT",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [
+        {
+          "quote": "本次报告",
+          "occurrence": 1
+        },
+        {
+          "quote": "check.md",
+          "occurrence": 1
+        }
+      ],
+      "reason": "全文只有一个当前报告，无其他对象或轮次竞争；报告指称与文件名共享身份，mentions覆盖两端。"
+    },
+    {
+      "subject_id": "E_QA",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [
+        {
+          "quote": "QA",
+          "occurrence": 1
+        }
+      ],
+      "reason": "QA身份明确；OTHER可作为未指定人或组类别的占位。"
+    },
+    {
+      "subject_id": "E_PM",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [
+        {
+          "quote": "PM",
+          "occurrence": 1
+        }
+      ],
+      "reason": "PM身份明确；OTHER可作为未指定人或组类别的占位。"
+    },
+    {
+      "subject_id": "E_ADMIN",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [
+        {
+          "quote": "ADMIN",
+          "occurrence": 1
+        }
+      ],
+      "reason": "ADMIN身份明确；OTHER可作为未指定人或组类别的占位。"
+    },
+    {
+      "subject_id": "EV_SUBMIT",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [
+        "C_CONDITION"
+      ],
+      "sources": [
+        {
+          "quote": "仅当本次报告通过QA复核时，允许PM向ADMIN提交check.md",
+          "occurrence": 1
+        }
+      ],
+      "reason": "提交是当前任务的条件许可动作，PERMITTED正确，且constraint_ids回指必要条件。"
+    },
+    {
+      "subject_id": "EV_REVIEW_PASS",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [
+        {
+          "quote": "本次报告通过QA复核",
+          "occurrence": 1
+        }
+      ],
+      "reason": "复核通过是条件状态；MENTION_ONLY与UNSTATED未新增复核义务，也未断言状态已发生。"
+    },
+    {
+      "subject_id": "C_PERFORMER",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [
+        "EV_SUBMIT",
+        "E_PM"
+      ],
+      "sources": [
+        {
+          "quote": "允许PM向ADMIN提交check.md",
+          "occurrence": 1
+        }
+      ],
+      "reason": "PM明确是条件许可下的提交执行者。"
+    },
+    {
+      "subject_id": "C_RECIPIENT",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [
+        "EV_SUBMIT",
+        "E_ADMIN"
+      ],
+      "sources": [
+        {
+          "quote": "向ADMIN提交check.md",
+          "occurrence": 1
+        }
+      ],
+      "reason": "ADMIN明确是提交接收方。"
+    },
+    {
+      "subject_id": "C_DELIVERABLE",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [
+        "EV_SUBMIT",
+        "E_REPORT"
+      ],
+      "sources": [
+        {
+          "quote": "本次报告",
+          "occurrence": 1
+        },
+        {
+          "quote": "提交check.md",
+          "occurrence": 1
+        }
+      ],
+      "reason": "check.md具有明确交付用途，并与唯一当前报告共享实体；不据此增加生产或外部输入。"
+    },
+    {
+      "subject_id": "C_REVIEWER",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [
+        "EV_REVIEW_PASS",
+        "E_QA"
+      ],
+      "sources": [
+        {
+          "quote": "本次报告通过QA复核",
+          "occurrence": 1
+        }
+      ],
+      "reason": "QA是条件中的复核者，未传播为主动作执行者或新增当前义务。"
+    },
+    {
+      "subject_id": "C_REVIEW_OBJECT",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [
+        "EV_REVIEW_PASS",
+        "E_REPORT"
+      ],
+      "sources": [
+        {
+          "quote": "本次报告通过QA复核",
+          "occurrence": 1
+        },
+        {
+          "quote": "提交check.md",
+          "occurrence": 1
+        }
+      ],
+      "reason": "复核对象是本次报告，与提交文件为同一身份；OBJECT未将其转为外部输入。"
+    },
+    {
+      "subject_id": "C_CONDITION",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [
+        "EV_SUBMIT",
+        "X_REVIEW_PASS"
+      ],
+      "sources": [
+        {
+          "quote": "仅当本次报告通过QA复核时，允许PM向ADMIN提交check.md",
+          "occurrence": 1
+        }
+      ],
+      "reason": "“仅当”限定提交许可的必要前提；NECESSARY方向、目标事件及双向约束绑定正确，不增加充分触发或提交义务。"
+    },
+    {
+      "subject_id": "X_REVIEW_PASS",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [
+        "EV_REVIEW_PASS",
+        "E_REPORT",
+        "E_QA"
+      ],
+      "sources": [
+        {
+          "quote": "本次报告通过QA复核",
+          "occurrence": 1
+        },
+        {
+          "quote": "check.md",
+          "occurrence": 1
+        }
+      ],
+      "reason": "STATE引用正确的复核通过事件，参数包含同一报告及QA，正极性表达通过条件而非已观测事实。"
+    }
+  ],
+  "issues": [],
+  "omissions": []
+}

@@ -1,0 +1,282 @@
+# ADM-048 — actual Canonical 7+1
+
+## I
+
+```json
+{
+  "slot": "I",
+  "status": "RESOLVED",
+  "entries": [
+    {
+      "canonical_entry_id": "p1:26068a91efc1e0dde90fc1ed",
+      "slot": "I",
+      "boundary_fact_ids": [
+        "p1:4bea6f50eadd4cece2d1b84d"
+      ],
+      "state": "RESOLVED",
+      "display_value": "routes.yaml",
+      "source_span_ids": [
+        "p1:675401bc1739745bd780f026",
+        "p1:39788dc619e322fc035e811f",
+        "p1:34088d95c91a5517fb4664f9",
+        "p1:cec090962a9aba958e559fe1",
+        "p1:bdc497c62422af4ff91d40c4",
+        "p1:2ab6917fd9774c373da446e4",
+        "p1:50fd9c73ebe514ac4dfe8914"
+      ],
+      "scope_expr_id": "p1:31edaa5cae0fd39e202406ab"
+    }
+  ]
+}
+```
+
+## O
+
+```json
+{
+  "slot": "O",
+  "status": "RESOLVED",
+  "entries": [
+    {
+      "canonical_entry_id": "p1:86e5d4b4f3b63957c58fd259",
+      "slot": "O",
+      "boundary_fact_ids": [
+        "p1:c8713491689f29f59224b606"
+      ],
+      "state": "RESOLVED",
+      "display_value": "route-audit.md",
+      "source_span_ids": [
+        "p1:489f0b66f10f202fc5085b28",
+        "p1:39788dc619e322fc035e811f",
+        "p1:40035a48d27b7c054f552c61",
+        "p1:ca8831dd1462eddc2d25e9aa",
+        "p1:aaed3141b0310f8304c45f36",
+        "p1:283a1caaa5685ac2cc5893cf"
+      ],
+      "scope_expr_id": "p1:f6a43271e4c075032e8d641e"
+    }
+  ]
+}
+```
+
+## A
+
+```json
+{
+  "slot": "A",
+  "status": "RESOLVED",
+  "entries": [
+    {
+      "canonical_entry_id": "p1:dee462bdf664f23b7ad8de32",
+      "slot": "A",
+      "boundary_fact_ids": [
+        "p1:937c41c9cf201c02bd8fdb96"
+      ],
+      "state": "RESOLVED",
+      "display_value": "REQUIRED inspect routes.yaml",
+      "source_span_ids": [
+        "p1:c0706e9a543ad341a7a1039a",
+        "p1:39788dc619e322fc035e811f",
+        "p1:675401bc1739745bd780f026"
+      ],
+      "scope_expr_id": "p1:c15e109f36001bab7953ded4"
+    },
+    {
+      "canonical_entry_id": "p1:bbc409c10ff9ba7802046954",
+      "slot": "A",
+      "boundary_fact_ids": [
+        "p1:e9d7fc727a0b94c2e7c3be5e"
+      ],
+      "state": "RESOLVED",
+      "display_value": "REQUIRED generate route-audit.md",
+      "source_span_ids": [
+        "p1:489f0b66f10f202fc5085b28",
+        "p1:39788dc619e322fc035e811f",
+        "p1:40035a48d27b7c054f552c61",
+        "p1:ca8831dd1462eddc2d25e9aa",
+        "p1:aaed3141b0310f8304c45f36",
+        "p1:283a1caaa5685ac2cc5893cf"
+      ],
+      "scope_expr_id": "p1:0e7861b12d941653a02e804d"
+    },
+    {
+      "canonical_entry_id": "p1:5ffb11201884036293852615",
+      "slot": "A",
+      "boundary_fact_ids": [
+        "p1:82d750b9628f26e759b84995"
+      ],
+      "state": "RESOLVED",
+      "display_value": "REQUIRED reviewed route-audit.md",
+      "source_span_ids": [
+        "p1:0a718a5e861ecd402529a48a",
+        "p1:ca8831dd1462eddc2d25e9aa",
+        "p1:40035a48d27b7c054f552c61",
+        "p1:39788dc619e322fc035e811f",
+        "p1:508e0eb99ef7a02b6e63269d",
+        "p1:acc03f35239865bb01683db4",
+        "p1:aaed3141b0310f8304c45f36",
+        "p1:283a1caaa5685ac2cc5893cf"
+      ],
+      "scope_expr_id": "p1:0d74093b32ab1b0ea6620fcd"
+    },
+    {
+      "canonical_entry_id": "p1:02565e7eb9b44638a8a8b5ce",
+      "slot": "A",
+      "boundary_fact_ids": [
+        "p1:2dbe87796214b7d67ade2b2d"
+      ],
+      "state": "RESOLVED",
+      "display_value": "REQUIRED Send route-audit.md",
+      "source_span_ids": [
+        "p1:acc03f35239865bb01683db4",
+        "p1:ca8831dd1462eddc2d25e9aa",
+        "p1:40035a48d27b7c054f552c61",
+        "p1:39788dc619e322fc035e811f",
+        "p1:7999e847653537913aab21fa",
+        "p1:0a718a5e861ecd402529a48a",
+        "p1:aaed3141b0310f8304c45f36",
+        "p1:283a1caaa5685ac2cc5893cf"
+      ],
+      "scope_expr_id": "p1:b619b56b4c7b42d329b17ff1",
+      "condition_expr_id": "p1:9fe9a8388ae2c623083f5ca8"
+    }
+  ]
+}
+```
+
+## P
+
+```json
+{
+  "slot": "P",
+  "status": "RESOLVED",
+  "entries": [
+    {
+      "canonical_entry_id": "p1:cbf5e9886779b7bedef235fb",
+      "slot": "P",
+      "boundary_fact_ids": [
+        "p1:9d6f3a6c575abf016f74b913",
+        "p1:0e8a83292add031e2243dd45"
+      ],
+      "state": "RESOLVED",
+      "display_value": "QA [REVIEWER]",
+      "source_span_ids": [
+        "p1:508e0eb99ef7a02b6e63269d",
+        "p1:ca8831dd1462eddc2d25e9aa",
+        "p1:0a718a5e861ecd402529a48a",
+        "p1:cec090962a9aba958e559fe1",
+        "p1:bdc497c62422af4ff91d40c4",
+        "p1:2ab6917fd9774c373da446e4",
+        "p1:50fd9c73ebe514ac4dfe8914"
+      ]
+    },
+    {
+      "canonical_entry_id": "p1:0b4d7811c806e18d811f44fa",
+      "slot": "P",
+      "boundary_fact_ids": [
+        "p1:b337deb72b1d3b3e62658998"
+      ],
+      "state": "RESOLVED",
+      "display_value": "PM [RECIPIENT]",
+      "source_span_ids": [
+        "p1:7999e847653537913aab21fa",
+        "p1:ca8831dd1462eddc2d25e9aa",
+        "p1:acc03f35239865bb01683db4",
+        "p1:cec090962a9aba958e559fe1",
+        "p1:bdc497c62422af4ff91d40c4",
+        "p1:2ab6917fd9774c373da446e4",
+        "p1:50fd9c73ebe514ac4dfe8914"
+      ]
+    }
+  ]
+}
+```
+
+## R
+
+```json
+{
+  "slot": "R",
+  "status": "RESOLVED",
+  "entries": [
+    {
+      "canonical_entry_id": "p1:4fbc5269f595a1612c39918f",
+      "slot": "R",
+      "boundary_fact_ids": [
+        "p1:cf37cea04ed8d2d0a921b14e"
+      ],
+      "state": "RESOLVED",
+      "display_value": "30",
+      "source_span_ids": [
+        "p1:34088d95c91a5517fb4664f9",
+        "p1:98e0ffcb9ef94aa48b093572",
+        "p1:39788dc619e322fc035e811f"
+      ],
+      "quantity_expr_id": "p1:ac8c1eeddcd6c48d39300c43"
+    }
+  ]
+}
+```
+
+## V
+
+```json
+{
+  "slot": "V",
+  "status": "RESOLVED",
+  "entries": [
+    {
+      "canonical_entry_id": "p1:a81f3b0227789de9c3c81c80",
+      "slot": "V",
+      "boundary_fact_ids": [
+        "p1:0bbe20c7f2f9bdbed15bb3db"
+      ],
+      "state": "RESOLVED",
+      "display_value": "CHECK-19",
+      "source_span_ids": [
+        "p1:2ab6917fd9774c373da446e4",
+        "p1:cec090962a9aba958e559fe1",
+        "p1:34088d95c91a5517fb4664f9",
+        "p1:bdc497c62422af4ff91d40c4",
+        "p1:50fd9c73ebe514ac4dfe8914"
+      ]
+    }
+  ]
+}
+```
+
+## C
+
+```json
+{
+  "slot": "C",
+  "status": "ABSENT",
+  "entries": []
+}
+```
+
+## B
+
+```json
+{
+  "slot": "B",
+  "status": "RESOLVED",
+  "entries": [
+    {
+      "canonical_entry_id": "p1:e461e0340b6e859172634cd2",
+      "slot": "B",
+      "boundary_fact_ids": [
+        "p1:b0b8e7397196b89205d15b8c"
+      ],
+      "state": "RESOLVED",
+      "display_value": "FORBIDDEN change the configuration",
+      "source_span_ids": [
+        "p1:019ebd55e5edf7528c6cb2bc",
+        "p1:465cc57cf7cfea74681537fd",
+        "p1:265703b8df007b9df25de181"
+      ],
+      "scope_expr_id": "p1:6a83e2b93a25ae1ab9f615f6"
+    }
+  ]
+}
+```

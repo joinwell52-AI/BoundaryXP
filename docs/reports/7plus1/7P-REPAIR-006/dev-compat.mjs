@@ -1,0 +1,2 @@
+import fs from'node:fs';import{spawnSync}from'node:child_process';
+const files=fs.readdirSync('tests').filter(n=>n.startsWith('parser-7p-repair-006')&&n.endsWith('.test.mjs')).map(n=>'tests/'+n),fd=fs.openSync('docs/reports/7plus1/7P-REPAIR-006/development-compat.log','wx'),r=spawnSync(process.execPath,['--test','--test-reporter=tap',...files],{stdio:['ignore',fd,fd]});fs.closeSync(fd);console.log({exit:r.status});

@@ -1,0 +1,1 @@
+DEV 读取 old.json，不得发送 old.json 给 QA。

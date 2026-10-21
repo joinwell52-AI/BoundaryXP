@@ -1,0 +1,5290 @@
+{
+  "format": "boundx-case-comparison-evidence/1",
+  "run_id": "bad152ac-8b97-4035-998b-f751f569046e",
+  "created_at": "2026-10-13T15:53:44.763Z",
+  "new_model_calls": 0,
+  "source_matches_standard": true,
+  "standard": {
+    "txt_sha256": "10c3089be0ac5b9b5288fc864f26642d418385eb27c5b64f84faf7b3d0abaf15",
+    "md_sha256": "68fc6b4ae2fd58b334c18436f7f970015489b6032aeca63ca5bd633ccb8e0879"
+  },
+  "version": "0.1.0-candidate.031-r1.2-ui.84",
+  "compiler": "direct-ir-kernel-r02-test",
+  "contract": "candidate-ir/2.0",
+  "call_count": 2,
+  "calls": [
+    {
+      "phase": "parse",
+      "elapsed_ms": 228945,
+      "thread_id": "01a135ed-e991-7772-a541-e42f8665f34b",
+      "retries": 0,
+      "usage": {
+        "input_tokens": 18194,
+        "cached_input_tokens": 0,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 9314,
+        "reasoning_output_tokens": 516
+      }
+    },
+    {
+      "phase": "audit",
+      "elapsed_ms": 185081,
+      "thread_id": "01a135f1-698d-79b1-9f4c-1db087e1a06a",
+      "retries": 0,
+      "usage": {
+        "input_tokens": 28016,
+        "cached_input_tokens": 0,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 6772,
+        "reasoning_output_tokens": 341
+      }
+    }
+  ],
+  "timing": {
+    "total_ms": 416790,
+    "parse_ms": 228945,
+    "audit_ms": 185081,
+    "local_residual_ms": 2764
+  },
+  "technical": {
+    "ok": true,
+    "errors": [],
+    "accepted_nodes": 113
+  },
+  "audit": {
+    "review_count": 113,
+    "verdict_counts": {
+      "SUPPORT": 113
+    },
+    "omissions": [],
+    "issues": [
+      {
+        "targets": [
+          {
+            "kind": "EVENT",
+            "id": "generate"
+          },
+          {
+            "kind": "REQUIREMENT",
+            "id": "r_generation_gate"
+          },
+          {
+            "kind": "REQUIREMENT",
+            "id": "use_generate_a"
+          },
+          {
+            "kind": "REQUIREMENT",
+            "id": "use_generate_b"
+          }
+        ],
+        "field_path": "events.generate.roles.BASIS",
+        "source_refs": [
+          "s9"
+        ],
+        "reason": "原文明示生成只能依据DEV自己读取的文件。当前两个BASIS角色、两项DATA_USE及已读取开始门只表达正向使用，不能排除其他生成依据；注册表缺少消费依据集合查询，候选gap_basis_exclusivity及s9的GAP覆盖已如实保留该表达缺口。节点字段支持不表示此排他边界已完整表达。"
+      }
+    ]
+  },
+  "production_calculation": {
+    "status": "PARTIAL",
+    "result": "UNSAT",
+    "analysis_scope": "NECESSARY_CONSTRAINT_CONFLICT",
+    "full_query": {
+      "ir_status": "SEMANTIC_REVIEW_REQUIRED",
+      "query_kind": "SAT",
+      "business_decision": null,
+      "execution_authorization": null,
+      "compile_status": "UNSUPPORTED",
+      "result": "NOT_RUN",
+      "verification": "NOT_RUN",
+      "diagnostics": [
+        {
+          "layer": "CAPABILITY",
+          "code": "OPEN_EVENT_DOMAIN",
+          "node_id": "task_events",
+          "path": null,
+          "depends_on": []
+        }
+      ]
+    },
+    "parts": [
+      {
+        "result": "UNSAT",
+        "requirements": [
+          "r_access_ban",
+          "r_completion",
+          "r_deliver",
+          "r_delivery_gate",
+          "r_distinct",
+          "r_duration",
+          "r_generate",
+          "r_generation_gate",
+          "r_modify_ban",
+          "r_no_third",
+          "r_organize",
+          "r_read_a",
+          "r_read_b",
+          "r_read_ban",
+          "r_review",
+          "r_submit",
+          "use_deliver",
+          "use_generate_a",
+          "use_generate_b",
+          "use_read_a",
+          "use_read_b",
+          "use_review",
+          "use_submit"
+        ],
+        "conflict_core": [
+          "domain:v8d98279ea0f4e1cb71cd068d",
+          "domain:vbd57a88fc6f5b032f492eb97",
+          "req:r_distinct",
+          "req:r_read_ban"
+        ],
+        "query_scope": {
+          "kind": "NECESSARY_FRAGMENT",
+          "requirements": [
+            "r_access_ban",
+            "r_completion",
+            "r_deliver",
+            "r_delivery_gate",
+            "r_distinct",
+            "r_duration",
+            "r_generate",
+            "r_generation_gate",
+            "r_modify_ban",
+            "r_no_third",
+            "r_organize",
+            "r_read_a",
+            "r_read_b",
+            "r_read_ban",
+            "r_review",
+            "r_submit",
+            "use_deliver",
+            "use_generate_a",
+            "use_generate_b",
+            "use_read_a",
+            "use_read_b",
+            "use_review",
+            "use_submit"
+          ],
+          "source_required_events": [
+            {
+              "event": "deliver",
+              "requirement": "r_deliver"
+            },
+            {
+              "event": "generate",
+              "requirement": "r_generate"
+            },
+            {
+              "event": "organize",
+              "requirement": "r_organize"
+            },
+            {
+              "event": "read_a",
+              "requirement": "r_read_a"
+            },
+            {
+              "event": "read_b",
+              "requirement": "r_read_b"
+            },
+            {
+              "event": "review",
+              "requirement": "r_review"
+            },
+            {
+              "event": "submit",
+              "requirement": "r_submit"
+            }
+          ],
+          "projection": "POSITIVE_UNIVERSAL_WEAKENING",
+          "real_event_domain_closed": false
+        }
+      }
+    ],
+    "unavailable": [
+      {
+        "id": "r_environment",
+        "diagnostics": [
+          {
+            "layer": "CAPABILITY",
+            "code": "ROLE_VALUE_UNKNOWN",
+            "node_id": "environment",
+            "path": null,
+            "depends_on": []
+          }
+        ]
+      },
+      {
+        "id": "r_inputs",
+        "diagnostics": [
+          {
+            "layer": "CAPABILITY",
+            "code": "INPUT_DOMAIN_NOT_GIVEN",
+            "node_id": "external_inputs",
+            "path": null,
+            "depends_on": []
+          }
+        ]
+      }
+    ]
+  },
+  "checks": [
+    {
+      "name": "input-domain-three",
+      "actual": {
+        "set": [
+          {
+            "object": "x"
+          },
+          {
+            "object": "y"
+          },
+          {
+            "object": "z"
+          }
+        ]
+      },
+      "expected": {
+        "set": [
+          {
+            "object": "x"
+          },
+          {
+            "object": "y"
+          },
+          {
+            "object": "z"
+          }
+        ]
+      },
+      "matched": true,
+      "scope": "LOCAL_EXPRESSION"
+    },
+    {
+      "name": "duration-closed-seconds",
+      "actual": {
+        "interval": [
+          "300",
+          "600"
+        ]
+      },
+      "expected": {
+        "interval": [
+          "300",
+          "600"
+        ]
+      },
+      "matched": true,
+      "scope": "LOCAL_EXPRESSION"
+    },
+    {
+      "name": "duration-bound-299",
+      "actual": false,
+      "expected": false,
+      "matched": true,
+      "scope": "LOCAL_EXPRESSION"
+    },
+    {
+      "name": "duration-bound-300",
+      "actual": true,
+      "expected": true,
+      "matched": true,
+      "scope": "LOCAL_EXPRESSION"
+    },
+    {
+      "name": "duration-bound-450",
+      "actual": true,
+      "expected": true,
+      "matched": true,
+      "scope": "LOCAL_EXPRESSION"
+    },
+    {
+      "name": "duration-bound-600",
+      "actual": true,
+      "expected": true,
+      "matched": true,
+      "scope": "LOCAL_EXPRESSION"
+    },
+    {
+      "name": "duration-bound-601",
+      "actual": false,
+      "expected": false,
+      "matched": true,
+      "scope": "LOCAL_EXPRESSION"
+    },
+    {
+      "name": "required-read-assignment-solutions",
+      "actual": 0,
+      "expected": 0,
+      "matched": true,
+      "scope": "NECESSARY_READ_CONSTRAINTS"
+    },
+    {
+      "name": "necessary-conflict",
+      "actual": "UNSAT",
+      "expected": "UNSAT",
+      "matched": true,
+      "scope": "DIAGNOSTIC_NECESSARY_SUBSET"
+    },
+    {
+      "name": "control-without-distinct",
+      "actual": "SAT",
+      "expected": "SAT",
+      "matched": true,
+      "scope": "DIAGNOSTIC_RULE_REMOVAL_ONLY"
+    },
+    {
+      "name": "control-without-ban",
+      "actual": "SAT",
+      "expected": "SAT",
+      "matched": true,
+      "scope": "DIAGNOSTIC_RULE_REMOVAL_ONLY"
+    },
+    {
+      "name": "unperformed-third-read-not-a-violation",
+      "actual": true,
+      "expected": true,
+      "matched": true,
+      "scope": "NONOCCURRENCE_CONTROL"
+    },
+    {
+      "name": "completion-conjunction-truth-table",
+      "actual": true,
+      "expected": true,
+      "matched": true,
+      "scope": "LOCAL_BOOLEAN_ASSIGNMENTS_NOT_EXECUTIONS"
+    },
+    {
+      "name": "completion-iff-truth-table",
+      "actual": true,
+      "expected": true,
+      "matched": true,
+      "scope": "LOCAL_BOOLEAN_ASSIGNMENTS_NOT_EXECUTIONS"
+    },
+    {
+      "name": "completion-iff-satisfying-rows",
+      "actual": 4,
+      "expected": 4,
+      "matched": true,
+      "scope": "LOCAL_BOOLEAN_ASSIGNMENTS_NOT_EXECUTIONS"
+    },
+    {
+      "name": "duration-alone-is-not-the-conflict",
+      "actual": "SAT",
+      "expected": "SAT",
+      "matched": true,
+      "scope": "LOCAL_DURATION_SUBSET"
+    }
+  ],
+  "assignments": [
+    {
+      "a": "x",
+      "b": "x",
+      "distinct": false,
+      "ban": true,
+      "satisfies": false
+    },
+    {
+      "a": "x",
+      "b": "y",
+      "distinct": true,
+      "ban": false,
+      "satisfies": false
+    },
+    {
+      "a": "x",
+      "b": "z",
+      "distinct": true,
+      "ban": false,
+      "satisfies": false
+    },
+    {
+      "a": "y",
+      "b": "x",
+      "distinct": true,
+      "ban": false,
+      "satisfies": false
+    },
+    {
+      "a": "y",
+      "b": "y",
+      "distinct": false,
+      "ban": false,
+      "satisfies": false
+    },
+    {
+      "a": "y",
+      "b": "z",
+      "distinct": true,
+      "ban": false,
+      "satisfies": false
+    },
+    {
+      "a": "z",
+      "b": "x",
+      "distinct": true,
+      "ban": false,
+      "satisfies": false
+    },
+    {
+      "a": "z",
+      "b": "y",
+      "distinct": true,
+      "ban": false,
+      "satisfies": false
+    },
+    {
+      "a": "z",
+      "b": "z",
+      "distinct": false,
+      "ban": false,
+      "satisfies": false
+    }
+  ],
+  "completion": [
+    {
+      "passed": false,
+      "received": false,
+      "done": false,
+      "K": false,
+      "relation": true,
+      "expectedK": false,
+      "expectedRelation": true
+    },
+    {
+      "passed": false,
+      "received": false,
+      "done": true,
+      "K": false,
+      "relation": false,
+      "expectedK": false,
+      "expectedRelation": false
+    },
+    {
+      "passed": false,
+      "received": true,
+      "done": false,
+      "K": false,
+      "relation": true,
+      "expectedK": false,
+      "expectedRelation": true
+    },
+    {
+      "passed": false,
+      "received": true,
+      "done": true,
+      "K": false,
+      "relation": false,
+      "expectedK": false,
+      "expectedRelation": false
+    },
+    {
+      "passed": true,
+      "received": false,
+      "done": false,
+      "K": false,
+      "relation": true,
+      "expectedK": false,
+      "expectedRelation": true
+    },
+    {
+      "passed": true,
+      "received": false,
+      "done": true,
+      "K": false,
+      "relation": false,
+      "expectedK": false,
+      "expectedRelation": false
+    },
+    {
+      "passed": true,
+      "received": true,
+      "done": false,
+      "K": true,
+      "relation": false,
+      "expectedK": true,
+      "expectedRelation": false
+    },
+    {
+      "passed": true,
+      "received": true,
+      "done": true,
+      "K": true,
+      "relation": true,
+      "expectedK": true,
+      "expectedRelation": true
+    }
+  ],
+  "necessary_query": {
+    "query": {
+      "kind": "SAT",
+      "requirements": [
+        "r_distinct",
+        "r_read_a",
+        "r_read_b",
+        "r_read_ban"
+      ],
+      "plan": {
+        "events": [
+          {
+            "id": "read_a",
+            "task_id": "task",
+            "operation": "READ",
+            "occurred": true,
+            "completed": true,
+            "start": "0",
+            "end": "1",
+            "unit": "second"
+          },
+          {
+            "id": "read_b",
+            "task_id": "task",
+            "operation": "READ",
+            "occurred": true,
+            "completed": true,
+            "start": "0",
+            "end": "1",
+            "unit": "second"
+          }
+        ],
+        "completeness": {
+          "kind": "EXACT_SNAPSHOT",
+          "task_id": "task",
+          "basis": "DIAGNOSTIC_REQUIRED_READ_INSTANCES_NOT_SOURCE_CLOSURE"
+        }
+      }
+    },
+    "result": {
+      "result": "UNSAT",
+      "verification": "BACKEND_RESULT",
+      "conflict_core": [
+        "domain:v8d98279ea0f4e1cb71cd068d",
+        "domain:vbd57a88fc6f5b032f492eb97",
+        "req:r_distinct",
+        "req:r_read_ban"
+      ],
+      "model_check": null,
+      "problem": {
+        "format": "boundx-kernel-problem/1",
+        "core_sha256": "6feb88d91ac21c6825e2885f86533e5869faa9b3809cd11ef9bf94500f0f0595",
+        "declarations": {
+          "v8d98279ea0f4e1cb71cd068d": {
+            "sort": "Int",
+            "meaning": {
+              "kind": "OBJECT_VARIABLE",
+              "id": "file_a",
+              "values": [
+                {
+                  "object": "x"
+                },
+                {
+                  "object": "y"
+                },
+                {
+                  "object": "z"
+                }
+              ]
+            }
+          },
+          "vbd57a88fc6f5b032f492eb97": {
+            "sort": "Int",
+            "meaning": {
+              "kind": "OBJECT_VARIABLE",
+              "id": "file_b",
+              "values": [
+                {
+                  "object": "x"
+                },
+                {
+                  "object": "y"
+                },
+                {
+                  "object": "z"
+                }
+              ]
+            }
+          },
+          "v3ae581d569cc96402b9b40ce": {
+            "sort": "Real",
+            "meaning": {
+              "kind": "EVENT_FIELD",
+              "event": "deliver",
+              "field": "start"
+            }
+          },
+          "v94087bd0842ff13885e2dd23": {
+            "sort": "Real",
+            "meaning": {
+              "kind": "EVENT_FIELD",
+              "event": "deliver",
+              "field": "end"
+            }
+          },
+          "vc60b46c74e9a0f15ac2f35fb": {
+            "sort": "Real",
+            "meaning": {
+              "kind": "EVENT_FIELD",
+              "event": "generate",
+              "field": "start"
+            }
+          },
+          "v949909c62b188cd987cc7e53": {
+            "sort": "Real",
+            "meaning": {
+              "kind": "EVENT_FIELD",
+              "event": "generate",
+              "field": "end"
+            }
+          },
+          "v1a208021ea35a308d74aae07": {
+            "sort": "Real",
+            "meaning": {
+              "kind": "EVENT_FIELD",
+              "event": "organize",
+              "field": "start"
+            }
+          },
+          "v0993e1b0a2334333d43a9e70": {
+            "sort": "Real",
+            "meaning": {
+              "kind": "EVENT_FIELD",
+              "event": "organize",
+              "field": "end"
+            }
+          },
+          "vb4c30398653aa786cbe61736": {
+            "sort": "Bool",
+            "meaning": {
+              "kind": "EVENT_FIELD",
+              "event": "read_a",
+              "field": "succeeded"
+            }
+          },
+          "v97890c630f31cf5142b890bc": {
+            "sort": "Bool",
+            "meaning": {
+              "kind": "EVENT_FIELD",
+              "event": "read_b",
+              "field": "succeeded"
+            }
+          },
+          "v23b432d949fdf571372a5dd5": {
+            "sort": "Real",
+            "meaning": {
+              "kind": "EVENT_FIELD",
+              "event": "review",
+              "field": "start"
+            }
+          },
+          "vd603c6a872edec03c8591871": {
+            "sort": "Real",
+            "meaning": {
+              "kind": "EVENT_FIELD",
+              "event": "review",
+              "field": "end"
+            }
+          },
+          "v27120718d195cc24244ab949": {
+            "sort": "Real",
+            "meaning": {
+              "kind": "EVENT_FIELD",
+              "event": "submit",
+              "field": "start"
+            }
+          },
+          "vfeadebc660e719acf899bfa5": {
+            "sort": "Real",
+            "meaning": {
+              "kind": "EVENT_FIELD",
+              "event": "submit",
+              "field": "end"
+            }
+          }
+        },
+        "assertions": [
+          {
+            "id": "domain:v8d98279ea0f4e1cb71cd068d",
+            "formula": {
+              "sort": "Bool",
+              "op": "or",
+              "args": [
+                {
+                  "sort": "Bool",
+                  "op": "eq",
+                  "args": [
+                    {
+                      "sort": "Int",
+                      "op": "var",
+                      "name": "v8d98279ea0f4e1cb71cd068d"
+                    },
+                    {
+                      "sort": "Int",
+                      "op": "const",
+                      "value": "0"
+                    }
+                  ]
+                },
+                {
+                  "sort": "Bool",
+                  "op": "eq",
+                  "args": [
+                    {
+                      "sort": "Int",
+                      "op": "var",
+                      "name": "v8d98279ea0f4e1cb71cd068d"
+                    },
+                    {
+                      "sort": "Int",
+                      "op": "const",
+                      "value": "1"
+                    }
+                  ]
+                },
+                {
+                  "sort": "Bool",
+                  "op": "eq",
+                  "args": [
+                    {
+                      "sort": "Int",
+                      "op": "var",
+                      "name": "v8d98279ea0f4e1cb71cd068d"
+                    },
+                    {
+                      "sort": "Int",
+                      "op": "const",
+                      "value": "2"
+                    }
+                  ]
+                }
+              ]
+            },
+            "source_id": null
+          },
+          {
+            "id": "domain:vbd57a88fc6f5b032f492eb97",
+            "formula": {
+              "sort": "Bool",
+              "op": "or",
+              "args": [
+                {
+                  "sort": "Bool",
+                  "op": "eq",
+                  "args": [
+                    {
+                      "sort": "Int",
+                      "op": "var",
+                      "name": "vbd57a88fc6f5b032f492eb97"
+                    },
+                    {
+                      "sort": "Int",
+                      "op": "const",
+                      "value": "0"
+                    }
+                  ]
+                },
+                {
+                  "sort": "Bool",
+                  "op": "eq",
+                  "args": [
+                    {
+                      "sort": "Int",
+                      "op": "var",
+                      "name": "vbd57a88fc6f5b032f492eb97"
+                    },
+                    {
+                      "sort": "Int",
+                      "op": "const",
+                      "value": "1"
+                    }
+                  ]
+                },
+                {
+                  "sort": "Bool",
+                  "op": "eq",
+                  "args": [
+                    {
+                      "sort": "Int",
+                      "op": "var",
+                      "name": "vbd57a88fc6f5b032f492eb97"
+                    },
+                    {
+                      "sort": "Int",
+                      "op": "const",
+                      "value": "2"
+                    }
+                  ]
+                }
+              ]
+            },
+            "source_id": null
+          },
+          {
+            "id": "req:r_distinct",
+            "formula": {
+              "sort": "Bool",
+              "op": "not",
+              "args": [
+                {
+                  "sort": "Bool",
+                  "op": "or",
+                  "args": [
+                    {
+                      "sort": "Bool",
+                      "op": "and",
+                      "args": [
+                        {
+                          "sort": "Bool",
+                          "op": "eq",
+                          "args": [
+                            {
+                              "sort": "Int",
+                              "op": "var",
+                              "name": "vbd57a88fc6f5b032f492eb97"
+                            },
+                            {
+                              "sort": "Int",
+                              "op": "const",
+                              "value": "0"
+                            }
+                          ]
+                        },
+                        {
+                          "sort": "Bool",
+                          "op": "eq",
+                          "args": [
+                            {
+                              "sort": "Int",
+                              "op": "var",
+                              "name": "v8d98279ea0f4e1cb71cd068d"
+                            },
+                            {
+                              "sort": "Int",
+                              "op": "const",
+                              "value": "0"
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "sort": "Bool",
+                      "op": "and",
+                      "args": [
+                        {
+                          "sort": "Bool",
+                          "op": "eq",
+                          "args": [
+                            {
+                              "sort": "Int",
+                              "op": "var",
+                              "name": "vbd57a88fc6f5b032f492eb97"
+                            },
+                            {
+                              "sort": "Int",
+                              "op": "const",
+                              "value": "1"
+                            }
+                          ]
+                        },
+                        {
+                          "sort": "Bool",
+                          "op": "eq",
+                          "args": [
+                            {
+                              "sort": "Int",
+                              "op": "var",
+                              "name": "v8d98279ea0f4e1cb71cd068d"
+                            },
+                            {
+                              "sort": "Int",
+                              "op": "const",
+                              "value": "1"
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "sort": "Bool",
+                      "op": "and",
+                      "args": [
+                        {
+                          "sort": "Bool",
+                          "op": "eq",
+                          "args": [
+                            {
+                              "sort": "Int",
+                              "op": "var",
+                              "name": "vbd57a88fc6f5b032f492eb97"
+                            },
+                            {
+                              "sort": "Int",
+                              "op": "const",
+                              "value": "2"
+                            }
+                          ]
+                        },
+                        {
+                          "sort": "Bool",
+                          "op": "eq",
+                          "args": [
+                            {
+                              "sort": "Int",
+                              "op": "var",
+                              "name": "v8d98279ea0f4e1cb71cd068d"
+                            },
+                            {
+                              "sort": "Int",
+                              "op": "const",
+                              "value": "2"
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            "source_id": "r_distinct"
+          },
+          {
+            "id": "req:r_read_a",
+            "formula": {
+              "sort": "Bool",
+              "op": "const",
+              "value": true
+            },
+            "source_id": "r_read_a"
+          },
+          {
+            "id": "req:r_read_b",
+            "formula": {
+              "sort": "Bool",
+              "op": "const",
+              "value": true
+            },
+            "source_id": "r_read_b"
+          },
+          {
+            "id": "req:r_read_ban",
+            "formula": {
+              "sort": "Bool",
+              "op": "and",
+              "args": [
+                {
+                  "sort": "Bool",
+                  "op": "not",
+                  "args": [
+                    {
+                      "sort": "Bool",
+                      "op": "or",
+                      "args": [
+                        {
+                          "sort": "Bool",
+                          "op": "eq",
+                          "args": [
+                            {
+                              "sort": "Int",
+                              "op": "var",
+                              "name": "v8d98279ea0f4e1cb71cd068d"
+                            },
+                            {
+                              "sort": "Int",
+                              "op": "const",
+                              "value": "1"
+                            }
+                          ]
+                        },
+                        {
+                          "sort": "Bool",
+                          "op": "eq",
+                          "args": [
+                            {
+                              "sort": "Int",
+                              "op": "var",
+                              "name": "v8d98279ea0f4e1cb71cd068d"
+                            },
+                            {
+                              "sort": "Int",
+                              "op": "const",
+                              "value": "2"
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "sort": "Bool",
+                  "op": "not",
+                  "args": [
+                    {
+                      "sort": "Bool",
+                      "op": "or",
+                      "args": [
+                        {
+                          "sort": "Bool",
+                          "op": "eq",
+                          "args": [
+                            {
+                              "sort": "Int",
+                              "op": "var",
+                              "name": "vbd57a88fc6f5b032f492eb97"
+                            },
+                            {
+                              "sort": "Int",
+                              "op": "const",
+                              "value": "1"
+                            }
+                          ]
+                        },
+                        {
+                          "sort": "Bool",
+                          "op": "eq",
+                          "args": [
+                            {
+                              "sort": "Int",
+                              "op": "var",
+                              "name": "vbd57a88fc6f5b032f492eb97"
+                            },
+                            {
+                              "sort": "Int",
+                              "op": "const",
+                              "value": "2"
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            "source_id": "r_read_ban"
+          },
+          {
+            "id": "event:deliver",
+            "formula": {
+              "sort": "Bool",
+              "op": "const",
+              "value": true
+            },
+            "source_id": null
+          },
+          {
+            "id": "event:generate",
+            "formula": {
+              "sort": "Bool",
+              "op": "const",
+              "value": true
+            },
+            "source_id": null
+          },
+          {
+            "id": "event:organize",
+            "formula": {
+              "sort": "Bool",
+              "op": "const",
+              "value": true
+            },
+            "source_id": null
+          },
+          {
+            "id": "event:read_a",
+            "formula": {
+              "sort": "Bool",
+              "op": "le",
+              "args": [
+                {
+                  "sort": "Real",
+                  "op": "const",
+                  "value": "0"
+                },
+                {
+                  "sort": "Real",
+                  "op": "const",
+                  "value": "1"
+                }
+              ]
+            },
+            "source_id": null
+          },
+          {
+            "id": "event:read_b",
+            "formula": {
+              "sort": "Bool",
+              "op": "le",
+              "args": [
+                {
+                  "sort": "Real",
+                  "op": "const",
+                  "value": "0"
+                },
+                {
+                  "sort": "Real",
+                  "op": "const",
+                  "value": "1"
+                }
+              ]
+            },
+            "source_id": null
+          },
+          {
+            "id": "event:review",
+            "formula": {
+              "sort": "Bool",
+              "op": "const",
+              "value": true
+            },
+            "source_id": null
+          },
+          {
+            "id": "event:submit",
+            "formula": {
+              "sort": "Bool",
+              "op": "const",
+              "value": true
+            },
+            "source_id": null
+          }
+        ],
+        "formulas": {
+          "r_distinct": {
+            "sort": "Bool",
+            "op": "not",
+            "args": [
+              {
+                "sort": "Bool",
+                "op": "or",
+                "args": [
+                  {
+                    "sort": "Bool",
+                    "op": "and",
+                    "args": [
+                      {
+                        "sort": "Bool",
+                        "op": "eq",
+                        "args": [
+                          {
+                            "sort": "Int",
+                            "op": "var",
+                            "name": "vbd57a88fc6f5b032f492eb97"
+                          },
+                          {
+                            "sort": "Int",
+                            "op": "const",
+                            "value": "0"
+                          }
+                        ]
+                      },
+                      {
+                        "sort": "Bool",
+                        "op": "eq",
+                        "args": [
+                          {
+                            "sort": "Int",
+                            "op": "var",
+                            "name": "v8d98279ea0f4e1cb71cd068d"
+                          },
+                          {
+                            "sort": "Int",
+                            "op": "const",
+                            "value": "0"
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "sort": "Bool",
+                    "op": "and",
+                    "args": [
+                      {
+                        "sort": "Bool",
+                        "op": "eq",
+                        "args": [
+                          {
+                            "sort": "Int",
+                            "op": "var",
+                            "name": "vbd57a88fc6f5b032f492eb97"
+                          },
+                          {
+                            "sort": "Int",
+                            "op": "const",
+                            "value": "1"
+                          }
+                        ]
+                      },
+                      {
+                        "sort": "Bool",
+                        "op": "eq",
+                        "args": [
+                          {
+                            "sort": "Int",
+                            "op": "var",
+                            "name": "v8d98279ea0f4e1cb71cd068d"
+                          },
+                          {
+                            "sort": "Int",
+                            "op": "const",
+                            "value": "1"
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "sort": "Bool",
+                    "op": "and",
+                    "args": [
+                      {
+                        "sort": "Bool",
+                        "op": "eq",
+                        "args": [
+                          {
+                            "sort": "Int",
+                            "op": "var",
+                            "name": "vbd57a88fc6f5b032f492eb97"
+                          },
+                          {
+                            "sort": "Int",
+                            "op": "const",
+                            "value": "2"
+                          }
+                        ]
+                      },
+                      {
+                        "sort": "Bool",
+                        "op": "eq",
+                        "args": [
+                          {
+                            "sort": "Int",
+                            "op": "var",
+                            "name": "v8d98279ea0f4e1cb71cd068d"
+                          },
+                          {
+                            "sort": "Int",
+                            "op": "const",
+                            "value": "2"
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          "r_read_a": {
+            "sort": "Bool",
+            "op": "const",
+            "value": true
+          },
+          "r_read_b": {
+            "sort": "Bool",
+            "op": "const",
+            "value": true
+          },
+          "r_read_ban": {
+            "sort": "Bool",
+            "op": "and",
+            "args": [
+              {
+                "sort": "Bool",
+                "op": "not",
+                "args": [
+                  {
+                    "sort": "Bool",
+                    "op": "or",
+                    "args": [
+                      {
+                        "sort": "Bool",
+                        "op": "eq",
+                        "args": [
+                          {
+                            "sort": "Int",
+                            "op": "var",
+                            "name": "v8d98279ea0f4e1cb71cd068d"
+                          },
+                          {
+                            "sort": "Int",
+                            "op": "const",
+                            "value": "1"
+                          }
+                        ]
+                      },
+                      {
+                        "sort": "Bool",
+                        "op": "eq",
+                        "args": [
+                          {
+                            "sort": "Int",
+                            "op": "var",
+                            "name": "v8d98279ea0f4e1cb71cd068d"
+                          },
+                          {
+                            "sort": "Int",
+                            "op": "const",
+                            "value": "2"
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "sort": "Bool",
+                "op": "not",
+                "args": [
+                  {
+                    "sort": "Bool",
+                    "op": "or",
+                    "args": [
+                      {
+                        "sort": "Bool",
+                        "op": "eq",
+                        "args": [
+                          {
+                            "sort": "Int",
+                            "op": "var",
+                            "name": "vbd57a88fc6f5b032f492eb97"
+                          },
+                          {
+                            "sort": "Int",
+                            "op": "const",
+                            "value": "1"
+                          }
+                        ]
+                      },
+                      {
+                        "sort": "Bool",
+                        "op": "eq",
+                        "args": [
+                          {
+                            "sort": "Int",
+                            "op": "var",
+                            "name": "vbd57a88fc6f5b032f492eb97"
+                          },
+                          {
+                            "sort": "Int",
+                            "op": "const",
+                            "value": "2"
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "query_scope": {
+          "kind": "EXACT_SNAPSHOT",
+          "task_id": "task",
+          "events": [
+            "read_a",
+            "read_b"
+          ],
+          "completeness": {
+            "kind": "EXACT_SNAPSHOT",
+            "task_id": "task",
+            "basis": "DIAGNOSTIC_REQUIRED_READ_INSTANCES_NOT_SOURCE_CLOSURE"
+          }
+        },
+        "plan": {
+          "events": [
+            {
+              "id": "read_a",
+              "task_id": "task",
+              "operation": "READ",
+              "occurred": true,
+              "completed": true,
+              "start": "0",
+              "end": "1",
+              "unit": "second"
+            },
+            {
+              "id": "read_b",
+              "task_id": "task",
+              "operation": "READ",
+              "occurred": true,
+              "completed": true,
+              "start": "0",
+              "end": "1",
+              "unit": "second"
+            }
+          ],
+          "completeness": {
+            "kind": "EXACT_SNAPSHOT",
+            "task_id": "task",
+            "basis": "DIAGNOSTIC_REQUIRED_READ_INSTANCES_NOT_SOURCE_CLOSURE"
+          }
+        },
+        "query": {
+          "kind": "SAT",
+          "requirements": [
+            "r_distinct",
+            "r_read_a",
+            "r_read_b",
+            "r_read_ban"
+          ],
+          "plan": {
+            "events": [
+              {
+                "id": "read_a",
+                "task_id": "task",
+                "operation": "READ",
+                "occurred": true,
+                "completed": true,
+                "start": "0",
+                "end": "1",
+                "unit": "second"
+              },
+              {
+                "id": "read_b",
+                "task_id": "task",
+                "operation": "READ",
+                "occurred": true,
+                "completed": true,
+                "start": "0",
+                "end": "1",
+                "unit": "second"
+              }
+            ],
+            "completeness": {
+              "kind": "EXACT_SNAPSHOT",
+              "task_id": "task",
+              "basis": "DIAGNOSTIC_REQUIRED_READ_INSTANCES_NOT_SOURCE_CLOSURE"
+            }
+          }
+        },
+        "term_count": 61
+      },
+      "smtlib": "; \n(set-info :status unknown)\n(declare-fun v8d98279ea0f4e1cb71cd068d () Int)\n(declare-fun a0 () Bool)\n(declare-fun vbd57a88fc6f5b032f492eb97 () Int)\n(declare-fun a1 () Bool)\n(declare-fun a2 () Bool)\n(declare-fun a3 () Bool)\n(declare-fun a4 () Bool)\n(declare-fun a5 () Bool)\n(declare-fun a6 () Bool)\n(declare-fun a7 () Bool)\n(declare-fun a8 () Bool)\n(declare-fun a9 () Bool)\n(declare-fun a10 () Bool)\n(declare-fun a11 () Bool)\n(declare-fun a12 () Bool)\n(assert\n (let (($x24 (= v8d98279ea0f4e1cb71cd068d 2)))\n (let (($x22 (= v8d98279ea0f4e1cb71cd068d 1)))\n (let (($x20 (= v8d98279ea0f4e1cb71cd068d 0)))\n (let (($x25 (or $x20 $x22 $x24)))\n (=> a0 $x25))))))\n(assert\n (let (($x49 (= vbd57a88fc6f5b032f492eb97 2)))\n (let (($x48 (= vbd57a88fc6f5b032f492eb97 1)))\n (let (($x47 (= vbd57a88fc6f5b032f492eb97 0)))\n (let (($x50 (or $x47 $x48 $x49)))\n (=> a1 $x50))))))\n(assert\n (let (($x24 (= v8d98279ea0f4e1cb71cd068d 2)))\n (let (($x49 (= vbd57a88fc6f5b032f492eb97 2)))\n (let (($x57 (and $x49 $x24)))\n (let (($x22 (= v8d98279ea0f4e1cb71cd068d 1)))\n (let (($x48 (= vbd57a88fc6f5b032f492eb97 1)))\n (let (($x56 (and $x48 $x22)))\n (let (($x20 (= v8d98279ea0f4e1cb71cd068d 0)))\n (let (($x47 (= vbd57a88fc6f5b032f492eb97 0)))\n (let (($x55 (and $x47 $x20)))\n (let (($x58 (or $x55 $x56 $x57)))\n (let (($x59 (not $x58)))\n (=> a2 $x59)))))))))))))\n(assert\n (=> a3 true))\n(assert\n (=> a4 true))\n(assert\n (let (($x49 (= vbd57a88fc6f5b032f492eb97 2)))\n (let (($x48 (= vbd57a88fc6f5b032f492eb97 1)))\n (let (($x70 (or $x48 $x49)))\n (let (($x71 (not $x70)))\n (let (($x24 (= v8d98279ea0f4e1cb71cd068d 2)))\n (let (($x22 (= v8d98279ea0f4e1cb71cd068d 1)))\n (let (($x68 (or $x22 $x24)))\n (let (($x69 (not $x68)))\n (let (($x72 (and $x69 $x71)))\n (=> a5 $x72)))))))))))\n(assert\n (=> a6 true))\n(assert\n (=> a7 true))\n(assert\n (=> a8 true))\n(assert\n (let (($x85 (<= 0.0 1.0)))\n (=> a9 $x85)))\n(assert\n (let (($x85 (<= 0.0 1.0)))\n (=> a10 $x85)))\n(assert\n (=> a11 true))\n(assert\n (=> a12 true))\n(check-sat-assuming (a0 a1 a2 a3 a4 a5 a6 a7 a8 a9 a10 a11 a12))\n"
+    }
+  },
+  "controls": {
+    "without_distinct": {
+      "result": "SAT",
+      "verification": "MODEL_CHECKED",
+      "conflict_core": [],
+      "model_check": {
+        "valid": true,
+        "failures": [],
+        "evaluation": {
+          "rows": [
+            {
+              "id": "r_read_a",
+              "modality": "REQUIRED",
+              "value": true,
+              "constraining": true
+            },
+            {
+              "id": "r_read_b",
+              "modality": "REQUIRED",
+              "value": true,
+              "constraining": true
+            },
+            {
+              "id": "r_read_ban",
+              "modality": "REQUIRED",
+              "value": true,
+              "constraining": true
+            }
+          ],
+          "identity_checks": [],
+          "result": "SATISFIED",
+          "business_decision": null,
+          "execution_authorization": null
+        },
+        "context": {
+          "kind": "SAT",
+          "requirements": [
+            "r_read_a",
+            "r_read_b",
+            "r_read_ban"
+          ],
+          "plan": {
+            "events": [
+              {
+                "id": "read_a",
+                "task_id": "task",
+                "operation": "READ",
+                "occurred": true,
+                "completed": true,
+                "start": "0",
+                "end": "1",
+                "unit": "second",
+                "succeeded": false
+              },
+              {
+                "id": "read_b",
+                "task_id": "task",
+                "operation": "READ",
+                "occurred": true,
+                "completed": true,
+                "start": "0",
+                "end": "1",
+                "unit": "second",
+                "succeeded": false
+              }
+            ],
+            "completeness": {
+              "kind": "EXACT_SNAPSHOT",
+              "task_id": "task",
+              "basis": "DIAGNOSTIC_REQUIRED_READ_INSTANCES_NOT_SOURCE_CLOSURE"
+            }
+          },
+          "event_values": {
+            "deliver": {
+              "id": "deliver",
+              "task_id": "task",
+              "unit": "second",
+              "start": "0",
+              "end": "0"
+            },
+            "generate": {
+              "id": "generate",
+              "task_id": "task",
+              "unit": "second",
+              "start": "0",
+              "end": "0"
+            },
+            "organize": {
+              "id": "organize",
+              "task_id": "task",
+              "unit": "second",
+              "start": "0",
+              "end": "0"
+            },
+            "review": {
+              "id": "review",
+              "task_id": "task",
+              "unit": "second",
+              "start": "0",
+              "end": "0"
+            },
+            "submit": {
+              "id": "submit",
+              "task_id": "task",
+              "unit": "second",
+              "start": "0",
+              "end": "0"
+            }
+          },
+          "variables": {
+            "file_a": {
+              "object": "x"
+            },
+            "file_b": {
+              "object": "x"
+            }
+          },
+          "states": {},
+          "receipts": [],
+          "availability": {}
+        },
+        "against": "CORE_SEMANTICS_NOT_BACKEND_AST"
+      },
+      "problem": {
+        "format": "boundx-kernel-problem/1",
+        "core_sha256": "6feb88d91ac21c6825e2885f86533e5869faa9b3809cd11ef9bf94500f0f0595",
+        "declarations": {
+          "v8d98279ea0f4e1cb71cd068d": {
+            "sort": "Int",
+            "meaning": {
+              "kind": "OBJECT_VARIABLE",
+              "id": "file_a",
+              "values": [
+                {
+                  "object": "x"
+                },
+                {
+                  "object": "y"
+                },
+                {
+                  "object": "z"
+                }
+              ]
+            }
+          },
+          "vbd57a88fc6f5b032f492eb97": {
+            "sort": "Int",
+            "meaning": {
+              "kind": "OBJECT_VARIABLE",
+              "id": "file_b",
+              "values": [
+                {
+                  "object": "x"
+                },
+                {
+                  "object": "y"
+                },
+                {
+                  "object": "z"
+                }
+              ]
+            }
+          },
+          "v3ae581d569cc96402b9b40ce": {
+            "sort": "Real",
+            "meaning": {
+              "kind": "EVENT_FIELD",
+              "event": "deliver",
+              "field": "start"
+            }
+          },
+          "v94087bd0842ff13885e2dd23": {
+            "sort": "Real",
+            "meaning": {
+              "kind": "EVENT_FIELD",
+              "event": "deliver",
+              "field": "end"
+            }
+          },
+          "vc60b46c74e9a0f15ac2f35fb": {
+            "sort": "Real",
+            "meaning": {
+              "kind": "EVENT_FIELD",
+              "event": "generate",
+              "field": "start"
+            }
+          },
+          "v949909c62b188cd987cc7e53": {
+            "sort": "Real",
+            "meaning": {
+              "kind": "EVENT_FIELD",
+              "event": "generate",
+              "field": "end"
+            }
+          },
+          "v1a208021ea35a308d74aae07": {
+            "sort": "Real",
+            "meaning": {
+              "kind": "EVENT_FIELD",
+              "event": "organize",
+              "field": "start"
+            }
+          },
+          "v0993e1b0a2334333d43a9e70": {
+            "sort": "Real",
+            "meaning": {
+              "kind": "EVENT_FIELD",
+              "event": "organize",
+              "field": "end"
+            }
+          },
+          "vb4c30398653aa786cbe61736": {
+            "sort": "Bool",
+            "meaning": {
+              "kind": "EVENT_FIELD",
+              "event": "read_a",
+              "field": "succeeded"
+            }
+          },
+          "v97890c630f31cf5142b890bc": {
+            "sort": "Bool",
+            "meaning": {
+              "kind": "EVENT_FIELD",
+              "event": "read_b",
+              "field": "succeeded"
+            }
+          },
+          "v23b432d949fdf571372a5dd5": {
+            "sort": "Real",
+            "meaning": {
+              "kind": "EVENT_FIELD",
+              "event": "review",
+              "field": "start"
+            }
+          },
+          "vd603c6a872edec03c8591871": {
+            "sort": "Real",
+            "meaning": {
+              "kind": "EVENT_FIELD",
+              "event": "review",
+              "field": "end"
+            }
+          },
+          "v27120718d195cc24244ab949": {
+            "sort": "Real",
+            "meaning": {
+              "kind": "EVENT_FIELD",
+              "event": "submit",
+              "field": "start"
+            }
+          },
+          "vfeadebc660e719acf899bfa5": {
+            "sort": "Real",
+            "meaning": {
+              "kind": "EVENT_FIELD",
+              "event": "submit",
+              "field": "end"
+            }
+          }
+        },
+        "assertions": [
+          {
+            "id": "req:r_read_a",
+            "formula": {
+              "sort": "Bool",
+              "op": "const",
+              "value": true
+            },
+            "source_id": "r_read_a"
+          },
+          {
+            "id": "req:r_read_b",
+            "formula": {
+              "sort": "Bool",
+              "op": "const",
+              "value": true
+            },
+            "source_id": "r_read_b"
+          },
+          {
+            "id": "domain:v8d98279ea0f4e1cb71cd068d",
+            "formula": {
+              "sort": "Bool",
+              "op": "or",
+              "args": [
+                {
+                  "sort": "Bool",
+                  "op": "eq",
+                  "args": [
+                    {
+                      "sort": "Int",
+                      "op": "var",
+                      "name": "v8d98279ea0f4e1cb71cd068d"
+                    },
+                    {
+                      "sort": "Int",
+                      "op": "const",
+                      "value": "0"
+                    }
+                  ]
+                },
+                {
+                  "sort": "Bool",
+                  "op": "eq",
+                  "args": [
+                    {
+                      "sort": "Int",
+                      "op": "var",
+                      "name": "v8d98279ea0f4e1cb71cd068d"
+                    },
+                    {
+                      "sort": "Int",
+                      "op": "const",
+                      "value": "1"
+                    }
+                  ]
+                },
+                {
+                  "sort": "Bool",
+                  "op": "eq",
+                  "args": [
+                    {
+                      "sort": "Int",
+                      "op": "var",
+                      "name": "v8d98279ea0f4e1cb71cd068d"
+                    },
+                    {
+                      "sort": "Int",
+                      "op": "const",
+                      "value": "2"
+                    }
+                  ]
+                }
+              ]
+            },
+            "source_id": null
+          },
+          {
+            "id": "domain:vbd57a88fc6f5b032f492eb97",
+            "formula": {
+              "sort": "Bool",
+              "op": "or",
+              "args": [
+                {
+                  "sort": "Bool",
+                  "op": "eq",
+                  "args": [
+                    {
+                      "sort": "Int",
+                      "op": "var",
+                      "name": "vbd57a88fc6f5b032f492eb97"
+                    },
+                    {
+                      "sort": "Int",
+                      "op": "const",
+                      "value": "0"
+                    }
+                  ]
+                },
+                {
+                  "sort": "Bool",
+                  "op": "eq",
+                  "args": [
+                    {
+                      "sort": "Int",
+                      "op": "var",
+                      "name": "vbd57a88fc6f5b032f492eb97"
+                    },
+                    {
+                      "sort": "Int",
+                      "op": "const",
+                      "value": "1"
+                    }
+                  ]
+                },
+                {
+                  "sort": "Bool",
+                  "op": "eq",
+                  "args": [
+                    {
+                      "sort": "Int",
+                      "op": "var",
+                      "name": "vbd57a88fc6f5b032f492eb97"
+                    },
+                    {
+                      "sort": "Int",
+                      "op": "const",
+                      "value": "2"
+                    }
+                  ]
+                }
+              ]
+            },
+            "source_id": null
+          },
+          {
+            "id": "req:r_read_ban",
+            "formula": {
+              "sort": "Bool",
+              "op": "and",
+              "args": [
+                {
+                  "sort": "Bool",
+                  "op": "not",
+                  "args": [
+                    {
+                      "sort": "Bool",
+                      "op": "or",
+                      "args": [
+                        {
+                          "sort": "Bool",
+                          "op": "eq",
+                          "args": [
+                            {
+                              "sort": "Int",
+                              "op": "var",
+                              "name": "v8d98279ea0f4e1cb71cd068d"
+                            },
+                            {
+                              "sort": "Int",
+                              "op": "const",
+                              "value": "1"
+                            }
+                          ]
+                        },
+                        {
+                          "sort": "Bool",
+                          "op": "eq",
+                          "args": [
+                            {
+                              "sort": "Int",
+                              "op": "var",
+                              "name": "v8d98279ea0f4e1cb71cd068d"
+                            },
+                            {
+                              "sort": "Int",
+                              "op": "const",
+                              "value": "2"
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "sort": "Bool",
+                  "op": "not",
+                  "args": [
+                    {
+                      "sort": "Bool",
+                      "op": "or",
+                      "args": [
+                        {
+                          "sort": "Bool",
+                          "op": "eq",
+                          "args": [
+                            {
+                              "sort": "Int",
+                              "op": "var",
+                              "name": "vbd57a88fc6f5b032f492eb97"
+                            },
+                            {
+                              "sort": "Int",
+                              "op": "const",
+                              "value": "1"
+                            }
+                          ]
+                        },
+                        {
+                          "sort": "Bool",
+                          "op": "eq",
+                          "args": [
+                            {
+                              "sort": "Int",
+                              "op": "var",
+                              "name": "vbd57a88fc6f5b032f492eb97"
+                            },
+                            {
+                              "sort": "Int",
+                              "op": "const",
+                              "value": "2"
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            "source_id": "r_read_ban"
+          },
+          {
+            "id": "event:deliver",
+            "formula": {
+              "sort": "Bool",
+              "op": "const",
+              "value": true
+            },
+            "source_id": null
+          },
+          {
+            "id": "event:generate",
+            "formula": {
+              "sort": "Bool",
+              "op": "const",
+              "value": true
+            },
+            "source_id": null
+          },
+          {
+            "id": "event:organize",
+            "formula": {
+              "sort": "Bool",
+              "op": "const",
+              "value": true
+            },
+            "source_id": null
+          },
+          {
+            "id": "event:read_a",
+            "formula": {
+              "sort": "Bool",
+              "op": "le",
+              "args": [
+                {
+                  "sort": "Real",
+                  "op": "const",
+                  "value": "0"
+                },
+                {
+                  "sort": "Real",
+                  "op": "const",
+                  "value": "1"
+                }
+              ]
+            },
+            "source_id": null
+          },
+          {
+            "id": "event:read_b",
+            "formula": {
+              "sort": "Bool",
+              "op": "le",
+              "args": [
+                {
+                  "sort": "Real",
+                  "op": "const",
+                  "value": "0"
+                },
+                {
+                  "sort": "Real",
+                  "op": "const",
+                  "value": "1"
+                }
+              ]
+            },
+            "source_id": null
+          },
+          {
+            "id": "event:review",
+            "formula": {
+              "sort": "Bool",
+              "op": "const",
+              "value": true
+            },
+            "source_id": null
+          },
+          {
+            "id": "event:submit",
+            "formula": {
+              "sort": "Bool",
+              "op": "const",
+              "value": true
+            },
+            "source_id": null
+          }
+        ],
+        "formulas": {
+          "r_read_a": {
+            "sort": "Bool",
+            "op": "const",
+            "value": true
+          },
+          "r_read_b": {
+            "sort": "Bool",
+            "op": "const",
+            "value": true
+          },
+          "r_read_ban": {
+            "sort": "Bool",
+            "op": "and",
+            "args": [
+              {
+                "sort": "Bool",
+                "op": "not",
+                "args": [
+                  {
+                    "sort": "Bool",
+                    "op": "or",
+                    "args": [
+                      {
+                        "sort": "Bool",
+                        "op": "eq",
+                        "args": [
+                          {
+                            "sort": "Int",
+                            "op": "var",
+                            "name": "v8d98279ea0f4e1cb71cd068d"
+                          },
+                          {
+                            "sort": "Int",
+                            "op": "const",
+                            "value": "1"
+                          }
+                        ]
+                      },
+                      {
+                        "sort": "Bool",
+                        "op": "eq",
+                        "args": [
+                          {
+                            "sort": "Int",
+                            "op": "var",
+                            "name": "v8d98279ea0f4e1cb71cd068d"
+                          },
+                          {
+                            "sort": "Int",
+                            "op": "const",
+                            "value": "2"
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "sort": "Bool",
+                "op": "not",
+                "args": [
+                  {
+                    "sort": "Bool",
+                    "op": "or",
+                    "args": [
+                      {
+                        "sort": "Bool",
+                        "op": "eq",
+                        "args": [
+                          {
+                            "sort": "Int",
+                            "op": "var",
+                            "name": "vbd57a88fc6f5b032f492eb97"
+                          },
+                          {
+                            "sort": "Int",
+                            "op": "const",
+                            "value": "1"
+                          }
+                        ]
+                      },
+                      {
+                        "sort": "Bool",
+                        "op": "eq",
+                        "args": [
+                          {
+                            "sort": "Int",
+                            "op": "var",
+                            "name": "vbd57a88fc6f5b032f492eb97"
+                          },
+                          {
+                            "sort": "Int",
+                            "op": "const",
+                            "value": "2"
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "query_scope": {
+          "kind": "EXACT_SNAPSHOT",
+          "task_id": "task",
+          "events": [
+            "read_a",
+            "read_b"
+          ],
+          "completeness": {
+            "kind": "EXACT_SNAPSHOT",
+            "task_id": "task",
+            "basis": "DIAGNOSTIC_REQUIRED_READ_INSTANCES_NOT_SOURCE_CLOSURE"
+          }
+        },
+        "plan": {
+          "events": [
+            {
+              "id": "read_a",
+              "task_id": "task",
+              "operation": "READ",
+              "occurred": true,
+              "completed": true,
+              "start": "0",
+              "end": "1",
+              "unit": "second"
+            },
+            {
+              "id": "read_b",
+              "task_id": "task",
+              "operation": "READ",
+              "occurred": true,
+              "completed": true,
+              "start": "0",
+              "end": "1",
+              "unit": "second"
+            }
+          ],
+          "completeness": {
+            "kind": "EXACT_SNAPSHOT",
+            "task_id": "task",
+            "basis": "DIAGNOSTIC_REQUIRED_READ_INSTANCES_NOT_SOURCE_CLOSURE"
+          }
+        },
+        "query": {
+          "kind": "SAT",
+          "requirements": [
+            "r_read_a",
+            "r_read_b",
+            "r_read_ban"
+          ],
+          "plan": {
+            "events": [
+              {
+                "id": "read_a",
+                "task_id": "task",
+                "operation": "READ",
+                "occurred": true,
+                "completed": true,
+                "start": "0",
+                "end": "1",
+                "unit": "second"
+              },
+              {
+                "id": "read_b",
+                "task_id": "task",
+                "operation": "READ",
+                "occurred": true,
+                "completed": true,
+                "start": "0",
+                "end": "1",
+                "unit": "second"
+              }
+            ],
+            "completeness": {
+              "kind": "EXACT_SNAPSHOT",
+              "task_id": "task",
+              "basis": "DIAGNOSTIC_REQUIRED_READ_INSTANCES_NOT_SOURCE_CLOSURE"
+            }
+          }
+        },
+        "term_count": 49
+      },
+      "smtlib": "; \n(set-info :status unknown)\n(declare-fun a0 () Bool)\n(declare-fun a1 () Bool)\n(declare-fun v8d98279ea0f4e1cb71cd068d () Int)\n(declare-fun a2 () Bool)\n(declare-fun vbd57a88fc6f5b032f492eb97 () Int)\n(declare-fun a3 () Bool)\n(declare-fun a4 () Bool)\n(declare-fun a5 () Bool)\n(declare-fun a6 () Bool)\n(declare-fun a7 () Bool)\n(declare-fun a8 () Bool)\n(declare-fun a9 () Bool)\n(declare-fun a10 () Bool)\n(declare-fun a11 () Bool)\n(assert\n (=> a0 true))\n(assert\n (=> a1 true))\n(assert\n (let (($x45 (= v8d98279ea0f4e1cb71cd068d 2)))\n (let (($x43 (= v8d98279ea0f4e1cb71cd068d 1)))\n (let (($x41 (= v8d98279ea0f4e1cb71cd068d 0)))\n (let (($x46 (or $x41 $x43 $x45)))\n (=> a2 $x46))))))\n(assert\n (let (($x53 (= vbd57a88fc6f5b032f492eb97 2)))\n (let (($x52 (= vbd57a88fc6f5b032f492eb97 1)))\n (let (($x51 (= vbd57a88fc6f5b032f492eb97 0)))\n (let (($x54 (or $x51 $x52 $x53)))\n (=> a3 $x54))))))\n(assert\n (let (($x53 (= vbd57a88fc6f5b032f492eb97 2)))\n (let (($x52 (= vbd57a88fc6f5b032f492eb97 1)))\n (let (($x61 (or $x52 $x53)))\n (let (($x62 (not $x61)))\n (let (($x45 (= v8d98279ea0f4e1cb71cd068d 2)))\n (let (($x43 (= v8d98279ea0f4e1cb71cd068d 1)))\n (let (($x59 (or $x43 $x45)))\n (let (($x60 (not $x59)))\n (let (($x63 (and $x60 $x62)))\n (=> a4 $x63)))))))))))\n(assert\n (=> a5 true))\n(assert\n (=> a6 true))\n(assert\n (=> a7 true))\n(assert\n (let (($x76 (<= 0.0 1.0)))\n (=> a8 $x76)))\n(assert\n (let (($x76 (<= 0.0 1.0)))\n (=> a9 $x76)))\n(assert\n (=> a10 true))\n(assert\n (=> a11 true))\n(check-sat-assuming (a0 a1 a2 a3 a4 a5 a6 a7 a8 a9 a10 a11))\n"
+    },
+    "without_ban": {
+      "result": "SAT",
+      "verification": "MODEL_CHECKED",
+      "conflict_core": [],
+      "model_check": {
+        "valid": true,
+        "failures": [],
+        "evaluation": {
+          "rows": [
+            {
+              "id": "r_distinct",
+              "modality": "REQUIRED",
+              "value": true,
+              "constraining": true
+            },
+            {
+              "id": "r_read_a",
+              "modality": "REQUIRED",
+              "value": true,
+              "constraining": true
+            },
+            {
+              "id": "r_read_b",
+              "modality": "REQUIRED",
+              "value": true,
+              "constraining": true
+            }
+          ],
+          "identity_checks": [],
+          "result": "SATISFIED",
+          "business_decision": null,
+          "execution_authorization": null
+        },
+        "context": {
+          "kind": "SAT",
+          "requirements": [
+            "r_distinct",
+            "r_read_a",
+            "r_read_b"
+          ],
+          "plan": {
+            "events": [
+              {
+                "id": "read_a",
+                "task_id": "task",
+                "operation": "READ",
+                "occurred": true,
+                "completed": true,
+                "start": "0",
+                "end": "1",
+                "unit": "second",
+                "succeeded": false
+              },
+              {
+                "id": "read_b",
+                "task_id": "task",
+                "operation": "READ",
+                "occurred": true,
+                "completed": true,
+                "start": "0",
+                "end": "1",
+                "unit": "second",
+                "succeeded": false
+              }
+            ],
+            "completeness": {
+              "kind": "EXACT_SNAPSHOT",
+              "task_id": "task",
+              "basis": "DIAGNOSTIC_REQUIRED_READ_INSTANCES_NOT_SOURCE_CLOSURE"
+            }
+          },
+          "event_values": {
+            "deliver": {
+              "id": "deliver",
+              "task_id": "task",
+              "unit": "second",
+              "start": "0",
+              "end": "0"
+            },
+            "generate": {
+              "id": "generate",
+              "task_id": "task",
+              "unit": "second",
+              "start": "0",
+              "end": "0"
+            },
+            "organize": {
+              "id": "organize",
+              "task_id": "task",
+              "unit": "second",
+              "start": "0",
+              "end": "0"
+            },
+            "review": {
+              "id": "review",
+              "task_id": "task",
+              "unit": "second",
+              "start": "0",
+              "end": "0"
+            },
+            "submit": {
+              "id": "submit",
+              "task_id": "task",
+              "unit": "second",
+              "start": "0",
+              "end": "0"
+            }
+          },
+          "variables": {
+            "file_a": {
+              "object": "y"
+            },
+            "file_b": {
+              "object": "x"
+            }
+          },
+          "states": {},
+          "receipts": [],
+          "availability": {}
+        },
+        "against": "CORE_SEMANTICS_NOT_BACKEND_AST"
+      },
+      "problem": {
+        "format": "boundx-kernel-problem/1",
+        "core_sha256": "6feb88d91ac21c6825e2885f86533e5869faa9b3809cd11ef9bf94500f0f0595",
+        "declarations": {
+          "v8d98279ea0f4e1cb71cd068d": {
+            "sort": "Int",
+            "meaning": {
+              "kind": "OBJECT_VARIABLE",
+              "id": "file_a",
+              "values": [
+                {
+                  "object": "x"
+                },
+                {
+                  "object": "y"
+                },
+                {
+                  "object": "z"
+                }
+              ]
+            }
+          },
+          "vbd57a88fc6f5b032f492eb97": {
+            "sort": "Int",
+            "meaning": {
+              "kind": "OBJECT_VARIABLE",
+              "id": "file_b",
+              "values": [
+                {
+                  "object": "x"
+                },
+                {
+                  "object": "y"
+                },
+                {
+                  "object": "z"
+                }
+              ]
+            }
+          },
+          "v3ae581d569cc96402b9b40ce": {
+            "sort": "Real",
+            "meaning": {
+              "kind": "EVENT_FIELD",
+              "event": "deliver",
+              "field": "start"
+            }
+          },
+          "v94087bd0842ff13885e2dd23": {
+            "sort": "Real",
+            "meaning": {
+              "kind": "EVENT_FIELD",
+              "event": "deliver",
+              "field": "end"
+            }
+          },
+          "vc60b46c74e9a0f15ac2f35fb": {
+            "sort": "Real",
+            "meaning": {
+              "kind": "EVENT_FIELD",
+              "event": "generate",
+              "field": "start"
+            }
+          },
+          "v949909c62b188cd987cc7e53": {
+            "sort": "Real",
+            "meaning": {
+              "kind": "EVENT_FIELD",
+              "event": "generate",
+              "field": "end"
+            }
+          },
+          "v1a208021ea35a308d74aae07": {
+            "sort": "Real",
+            "meaning": {
+              "kind": "EVENT_FIELD",
+              "event": "organize",
+              "field": "start"
+            }
+          },
+          "v0993e1b0a2334333d43a9e70": {
+            "sort": "Real",
+            "meaning": {
+              "kind": "EVENT_FIELD",
+              "event": "organize",
+              "field": "end"
+            }
+          },
+          "vb4c30398653aa786cbe61736": {
+            "sort": "Bool",
+            "meaning": {
+              "kind": "EVENT_FIELD",
+              "event": "read_a",
+              "field": "succeeded"
+            }
+          },
+          "v97890c630f31cf5142b890bc": {
+            "sort": "Bool",
+            "meaning": {
+              "kind": "EVENT_FIELD",
+              "event": "read_b",
+              "field": "succeeded"
+            }
+          },
+          "v23b432d949fdf571372a5dd5": {
+            "sort": "Real",
+            "meaning": {
+              "kind": "EVENT_FIELD",
+              "event": "review",
+              "field": "start"
+            }
+          },
+          "vd603c6a872edec03c8591871": {
+            "sort": "Real",
+            "meaning": {
+              "kind": "EVENT_FIELD",
+              "event": "review",
+              "field": "end"
+            }
+          },
+          "v27120718d195cc24244ab949": {
+            "sort": "Real",
+            "meaning": {
+              "kind": "EVENT_FIELD",
+              "event": "submit",
+              "field": "start"
+            }
+          },
+          "vfeadebc660e719acf899bfa5": {
+            "sort": "Real",
+            "meaning": {
+              "kind": "EVENT_FIELD",
+              "event": "submit",
+              "field": "end"
+            }
+          }
+        },
+        "assertions": [
+          {
+            "id": "domain:v8d98279ea0f4e1cb71cd068d",
+            "formula": {
+              "sort": "Bool",
+              "op": "or",
+              "args": [
+                {
+                  "sort": "Bool",
+                  "op": "eq",
+                  "args": [
+                    {
+                      "sort": "Int",
+                      "op": "var",
+                      "name": "v8d98279ea0f4e1cb71cd068d"
+                    },
+                    {
+                      "sort": "Int",
+                      "op": "const",
+                      "value": "0"
+                    }
+                  ]
+                },
+                {
+                  "sort": "Bool",
+                  "op": "eq",
+                  "args": [
+                    {
+                      "sort": "Int",
+                      "op": "var",
+                      "name": "v8d98279ea0f4e1cb71cd068d"
+                    },
+                    {
+                      "sort": "Int",
+                      "op": "const",
+                      "value": "1"
+                    }
+                  ]
+                },
+                {
+                  "sort": "Bool",
+                  "op": "eq",
+                  "args": [
+                    {
+                      "sort": "Int",
+                      "op": "var",
+                      "name": "v8d98279ea0f4e1cb71cd068d"
+                    },
+                    {
+                      "sort": "Int",
+                      "op": "const",
+                      "value": "2"
+                    }
+                  ]
+                }
+              ]
+            },
+            "source_id": null
+          },
+          {
+            "id": "domain:vbd57a88fc6f5b032f492eb97",
+            "formula": {
+              "sort": "Bool",
+              "op": "or",
+              "args": [
+                {
+                  "sort": "Bool",
+                  "op": "eq",
+                  "args": [
+                    {
+                      "sort": "Int",
+                      "op": "var",
+                      "name": "vbd57a88fc6f5b032f492eb97"
+                    },
+                    {
+                      "sort": "Int",
+                      "op": "const",
+                      "value": "0"
+                    }
+                  ]
+                },
+                {
+                  "sort": "Bool",
+                  "op": "eq",
+                  "args": [
+                    {
+                      "sort": "Int",
+                      "op": "var",
+                      "name": "vbd57a88fc6f5b032f492eb97"
+                    },
+                    {
+                      "sort": "Int",
+                      "op": "const",
+                      "value": "1"
+                    }
+                  ]
+                },
+                {
+                  "sort": "Bool",
+                  "op": "eq",
+                  "args": [
+                    {
+                      "sort": "Int",
+                      "op": "var",
+                      "name": "vbd57a88fc6f5b032f492eb97"
+                    },
+                    {
+                      "sort": "Int",
+                      "op": "const",
+                      "value": "2"
+                    }
+                  ]
+                }
+              ]
+            },
+            "source_id": null
+          },
+          {
+            "id": "req:r_distinct",
+            "formula": {
+              "sort": "Bool",
+              "op": "not",
+              "args": [
+                {
+                  "sort": "Bool",
+                  "op": "or",
+                  "args": [
+                    {
+                      "sort": "Bool",
+                      "op": "and",
+                      "args": [
+                        {
+                          "sort": "Bool",
+                          "op": "eq",
+                          "args": [
+                            {
+                              "sort": "Int",
+                              "op": "var",
+                              "name": "vbd57a88fc6f5b032f492eb97"
+                            },
+                            {
+                              "sort": "Int",
+                              "op": "const",
+                              "value": "0"
+                            }
+                          ]
+                        },
+                        {
+                          "sort": "Bool",
+                          "op": "eq",
+                          "args": [
+                            {
+                              "sort": "Int",
+                              "op": "var",
+                              "name": "v8d98279ea0f4e1cb71cd068d"
+                            },
+                            {
+                              "sort": "Int",
+                              "op": "const",
+                              "value": "0"
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "sort": "Bool",
+                      "op": "and",
+                      "args": [
+                        {
+                          "sort": "Bool",
+                          "op": "eq",
+                          "args": [
+                            {
+                              "sort": "Int",
+                              "op": "var",
+                              "name": "vbd57a88fc6f5b032f492eb97"
+                            },
+                            {
+                              "sort": "Int",
+                              "op": "const",
+                              "value": "1"
+                            }
+                          ]
+                        },
+                        {
+                          "sort": "Bool",
+                          "op": "eq",
+                          "args": [
+                            {
+                              "sort": "Int",
+                              "op": "var",
+                              "name": "v8d98279ea0f4e1cb71cd068d"
+                            },
+                            {
+                              "sort": "Int",
+                              "op": "const",
+                              "value": "1"
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "sort": "Bool",
+                      "op": "and",
+                      "args": [
+                        {
+                          "sort": "Bool",
+                          "op": "eq",
+                          "args": [
+                            {
+                              "sort": "Int",
+                              "op": "var",
+                              "name": "vbd57a88fc6f5b032f492eb97"
+                            },
+                            {
+                              "sort": "Int",
+                              "op": "const",
+                              "value": "2"
+                            }
+                          ]
+                        },
+                        {
+                          "sort": "Bool",
+                          "op": "eq",
+                          "args": [
+                            {
+                              "sort": "Int",
+                              "op": "var",
+                              "name": "v8d98279ea0f4e1cb71cd068d"
+                            },
+                            {
+                              "sort": "Int",
+                              "op": "const",
+                              "value": "2"
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            "source_id": "r_distinct"
+          },
+          {
+            "id": "req:r_read_a",
+            "formula": {
+              "sort": "Bool",
+              "op": "const",
+              "value": true
+            },
+            "source_id": "r_read_a"
+          },
+          {
+            "id": "req:r_read_b",
+            "formula": {
+              "sort": "Bool",
+              "op": "const",
+              "value": true
+            },
+            "source_id": "r_read_b"
+          },
+          {
+            "id": "event:deliver",
+            "formula": {
+              "sort": "Bool",
+              "op": "const",
+              "value": true
+            },
+            "source_id": null
+          },
+          {
+            "id": "event:generate",
+            "formula": {
+              "sort": "Bool",
+              "op": "const",
+              "value": true
+            },
+            "source_id": null
+          },
+          {
+            "id": "event:organize",
+            "formula": {
+              "sort": "Bool",
+              "op": "const",
+              "value": true
+            },
+            "source_id": null
+          },
+          {
+            "id": "event:read_a",
+            "formula": {
+              "sort": "Bool",
+              "op": "le",
+              "args": [
+                {
+                  "sort": "Real",
+                  "op": "const",
+                  "value": "0"
+                },
+                {
+                  "sort": "Real",
+                  "op": "const",
+                  "value": "1"
+                }
+              ]
+            },
+            "source_id": null
+          },
+          {
+            "id": "event:read_b",
+            "formula": {
+              "sort": "Bool",
+              "op": "le",
+              "args": [
+                {
+                  "sort": "Real",
+                  "op": "const",
+                  "value": "0"
+                },
+                {
+                  "sort": "Real",
+                  "op": "const",
+                  "value": "1"
+                }
+              ]
+            },
+            "source_id": null
+          },
+          {
+            "id": "event:review",
+            "formula": {
+              "sort": "Bool",
+              "op": "const",
+              "value": true
+            },
+            "source_id": null
+          },
+          {
+            "id": "event:submit",
+            "formula": {
+              "sort": "Bool",
+              "op": "const",
+              "value": true
+            },
+            "source_id": null
+          }
+        ],
+        "formulas": {
+          "r_distinct": {
+            "sort": "Bool",
+            "op": "not",
+            "args": [
+              {
+                "sort": "Bool",
+                "op": "or",
+                "args": [
+                  {
+                    "sort": "Bool",
+                    "op": "and",
+                    "args": [
+                      {
+                        "sort": "Bool",
+                        "op": "eq",
+                        "args": [
+                          {
+                            "sort": "Int",
+                            "op": "var",
+                            "name": "vbd57a88fc6f5b032f492eb97"
+                          },
+                          {
+                            "sort": "Int",
+                            "op": "const",
+                            "value": "0"
+                          }
+                        ]
+                      },
+                      {
+                        "sort": "Bool",
+                        "op": "eq",
+                        "args": [
+                          {
+                            "sort": "Int",
+                            "op": "var",
+                            "name": "v8d98279ea0f4e1cb71cd068d"
+                          },
+                          {
+                            "sort": "Int",
+                            "op": "const",
+                            "value": "0"
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "sort": "Bool",
+                    "op": "and",
+                    "args": [
+                      {
+                        "sort": "Bool",
+                        "op": "eq",
+                        "args": [
+                          {
+                            "sort": "Int",
+                            "op": "var",
+                            "name": "vbd57a88fc6f5b032f492eb97"
+                          },
+                          {
+                            "sort": "Int",
+                            "op": "const",
+                            "value": "1"
+                          }
+                        ]
+                      },
+                      {
+                        "sort": "Bool",
+                        "op": "eq",
+                        "args": [
+                          {
+                            "sort": "Int",
+                            "op": "var",
+                            "name": "v8d98279ea0f4e1cb71cd068d"
+                          },
+                          {
+                            "sort": "Int",
+                            "op": "const",
+                            "value": "1"
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "sort": "Bool",
+                    "op": "and",
+                    "args": [
+                      {
+                        "sort": "Bool",
+                        "op": "eq",
+                        "args": [
+                          {
+                            "sort": "Int",
+                            "op": "var",
+                            "name": "vbd57a88fc6f5b032f492eb97"
+                          },
+                          {
+                            "sort": "Int",
+                            "op": "const",
+                            "value": "2"
+                          }
+                        ]
+                      },
+                      {
+                        "sort": "Bool",
+                        "op": "eq",
+                        "args": [
+                          {
+                            "sort": "Int",
+                            "op": "var",
+                            "name": "v8d98279ea0f4e1cb71cd068d"
+                          },
+                          {
+                            "sort": "Int",
+                            "op": "const",
+                            "value": "2"
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          "r_read_a": {
+            "sort": "Bool",
+            "op": "const",
+            "value": true
+          },
+          "r_read_b": {
+            "sort": "Bool",
+            "op": "const",
+            "value": true
+          }
+        },
+        "query_scope": {
+          "kind": "EXACT_SNAPSHOT",
+          "task_id": "task",
+          "events": [
+            "read_a",
+            "read_b"
+          ],
+          "completeness": {
+            "kind": "EXACT_SNAPSHOT",
+            "task_id": "task",
+            "basis": "DIAGNOSTIC_REQUIRED_READ_INSTANCES_NOT_SOURCE_CLOSURE"
+          }
+        },
+        "plan": {
+          "events": [
+            {
+              "id": "read_a",
+              "task_id": "task",
+              "operation": "READ",
+              "occurred": true,
+              "completed": true,
+              "start": "0",
+              "end": "1",
+              "unit": "second"
+            },
+            {
+              "id": "read_b",
+              "task_id": "task",
+              "operation": "READ",
+              "occurred": true,
+              "completed": true,
+              "start": "0",
+              "end": "1",
+              "unit": "second"
+            }
+          ],
+          "completeness": {
+            "kind": "EXACT_SNAPSHOT",
+            "task_id": "task",
+            "basis": "DIAGNOSTIC_REQUIRED_READ_INSTANCES_NOT_SOURCE_CLOSURE"
+          }
+        },
+        "query": {
+          "kind": "SAT",
+          "requirements": [
+            "r_distinct",
+            "r_read_a",
+            "r_read_b"
+          ],
+          "plan": {
+            "events": [
+              {
+                "id": "read_a",
+                "task_id": "task",
+                "operation": "READ",
+                "occurred": true,
+                "completed": true,
+                "start": "0",
+                "end": "1",
+                "unit": "second"
+              },
+              {
+                "id": "read_b",
+                "task_id": "task",
+                "operation": "READ",
+                "occurred": true,
+                "completed": true,
+                "start": "0",
+                "end": "1",
+                "unit": "second"
+              }
+            ],
+            "completeness": {
+              "kind": "EXACT_SNAPSHOT",
+              "task_id": "task",
+              "basis": "DIAGNOSTIC_REQUIRED_READ_INSTANCES_NOT_SOURCE_CLOSURE"
+            }
+          }
+        },
+        "term_count": 16
+      },
+      "smtlib": "; \n(set-info :status unknown)\n(declare-fun v8d98279ea0f4e1cb71cd068d () Int)\n(declare-fun a0 () Bool)\n(declare-fun vbd57a88fc6f5b032f492eb97 () Int)\n(declare-fun a1 () Bool)\n(declare-fun a2 () Bool)\n(declare-fun a3 () Bool)\n(declare-fun a4 () Bool)\n(declare-fun a5 () Bool)\n(declare-fun a6 () Bool)\n(declare-fun a7 () Bool)\n(declare-fun a8 () Bool)\n(declare-fun a9 () Bool)\n(declare-fun a10 () Bool)\n(declare-fun a11 () Bool)\n(assert\n (let (($x24 (= v8d98279ea0f4e1cb71cd068d 2)))\n (let (($x22 (= v8d98279ea0f4e1cb71cd068d 1)))\n (let (($x20 (= v8d98279ea0f4e1cb71cd068d 0)))\n (let (($x25 (or $x20 $x22 $x24)))\n (=> a0 $x25))))))\n(assert\n (let (($x49 (= vbd57a88fc6f5b032f492eb97 2)))\n (let (($x48 (= vbd57a88fc6f5b032f492eb97 1)))\n (let (($x47 (= vbd57a88fc6f5b032f492eb97 0)))\n (let (($x50 (or $x47 $x48 $x49)))\n (=> a1 $x50))))))\n(assert\n (let (($x24 (= v8d98279ea0f4e1cb71cd068d 2)))\n (let (($x49 (= vbd57a88fc6f5b032f492eb97 2)))\n (let (($x57 (and $x49 $x24)))\n (let (($x22 (= v8d98279ea0f4e1cb71cd068d 1)))\n (let (($x48 (= vbd57a88fc6f5b032f492eb97 1)))\n (let (($x56 (and $x48 $x22)))\n (let (($x20 (= v8d98279ea0f4e1cb71cd068d 0)))\n (let (($x47 (= vbd57a88fc6f5b032f492eb97 0)))\n (let (($x55 (and $x47 $x20)))\n (let (($x58 (or $x55 $x56 $x57)))\n (let (($x59 (not $x58)))\n (=> a2 $x59)))))))))))))\n(assert\n (=> a3 true))\n(assert\n (=> a4 true))\n(assert\n (=> a5 true))\n(assert\n (=> a6 true))\n(assert\n (=> a7 true))\n(assert\n (let (($x76 (<= 0.0 1.0)))\n (=> a8 $x76)))\n(assert\n (let (($x76 (<= 0.0 1.0)))\n (=> a9 $x76)))\n(assert\n (=> a10 true))\n(assert\n (=> a11 true))\n(check-sat-assuming (a0 a1 a2 a3 a4 a5 a6 a7 a8 a9 a10 a11))\n"
+    },
+    "duration": {
+      "result": "SAT",
+      "verification": "MODEL_CHECKED",
+      "conflict_core": [],
+      "model_check": {
+        "valid": true,
+        "failures": [],
+        "evaluation": {
+          "rows": [
+            {
+              "id": "r_duration",
+              "modality": "REQUIRED",
+              "value": true,
+              "constraining": true
+            }
+          ],
+          "identity_checks": [],
+          "result": "SATISFIED",
+          "business_decision": null,
+          "execution_authorization": null
+        },
+        "context": {
+          "kind": "SAT",
+          "requirements": [
+            "r_duration"
+          ],
+          "plan": {
+            "events": []
+          },
+          "event_values": {
+            "task": {
+              "id": "task",
+              "task_id": "task",
+              "unit": "second",
+              "start": "-300",
+              "end": "0",
+              "occurred": false,
+              "completed": false,
+              "succeeded": false
+            },
+            "deliver": {
+              "id": "deliver",
+              "task_id": "task",
+              "unit": "second",
+              "occurred": false,
+              "completed": false,
+              "succeeded": false,
+              "start": "0",
+              "end": "0"
+            },
+            "generate": {
+              "id": "generate",
+              "task_id": "task",
+              "unit": "second",
+              "occurred": false,
+              "completed": false,
+              "succeeded": false,
+              "start": "0",
+              "end": "0"
+            },
+            "organize": {
+              "id": "organize",
+              "task_id": "task",
+              "unit": "second",
+              "occurred": false,
+              "completed": false,
+              "succeeded": false,
+              "start": "0",
+              "end": "0"
+            },
+            "read_a": {
+              "id": "read_a",
+              "task_id": "task",
+              "unit": "second",
+              "occurred": false,
+              "completed": false,
+              "succeeded": false,
+              "start": "0",
+              "end": "0"
+            },
+            "read_b": {
+              "id": "read_b",
+              "task_id": "task",
+              "unit": "second",
+              "occurred": false,
+              "completed": false,
+              "succeeded": false,
+              "start": "0",
+              "end": "0"
+            },
+            "review": {
+              "id": "review",
+              "task_id": "task",
+              "unit": "second",
+              "occurred": false,
+              "completed": false,
+              "succeeded": false,
+              "start": "0",
+              "end": "0"
+            },
+            "submit": {
+              "id": "submit",
+              "task_id": "task",
+              "unit": "second",
+              "occurred": false,
+              "completed": false,
+              "succeeded": false,
+              "start": "0",
+              "end": "0"
+            }
+          },
+          "variables": {
+            "duration": {
+              "number": "300"
+            }
+          },
+          "states": {},
+          "receipts": [],
+          "availability": {}
+        },
+        "against": "CORE_SEMANTICS_NOT_BACKEND_AST"
+      },
+      "problem": {
+        "format": "boundx-kernel-problem/1",
+        "core_sha256": "6feb88d91ac21c6825e2885f86533e5869faa9b3809cd11ef9bf94500f0f0595",
+        "declarations": {
+          "v377f55de66a1d54a2c91b2ae": {
+            "sort": "Real",
+            "meaning": {
+              "kind": "VARIABLE",
+              "id": "duration"
+            }
+          },
+          "v5185226601a8f426b348b34b": {
+            "sort": "Real",
+            "meaning": {
+              "kind": "EVENT_FIELD",
+              "event": "task",
+              "field": "start"
+            }
+          },
+          "v40899268d1ce5d33ef8599d1": {
+            "sort": "Real",
+            "meaning": {
+              "kind": "EVENT_FIELD",
+              "event": "task",
+              "field": "end"
+            }
+          },
+          "v640a9ec6f00a4b53ee1bad0e": {
+            "sort": "Bool",
+            "meaning": {
+              "kind": "EVENT_FIELD",
+              "event": "deliver",
+              "field": "occurred"
+            }
+          },
+          "v6cb91c40b65c7448063b178e": {
+            "sort": "Bool",
+            "meaning": {
+              "kind": "EVENT_FIELD",
+              "event": "deliver",
+              "field": "completed"
+            }
+          },
+          "v65ff5b347581fc005ea799ce": {
+            "sort": "Bool",
+            "meaning": {
+              "kind": "EVENT_FIELD",
+              "event": "deliver",
+              "field": "succeeded"
+            }
+          },
+          "v3ae581d569cc96402b9b40ce": {
+            "sort": "Real",
+            "meaning": {
+              "kind": "EVENT_FIELD",
+              "event": "deliver",
+              "field": "start"
+            }
+          },
+          "v94087bd0842ff13885e2dd23": {
+            "sort": "Real",
+            "meaning": {
+              "kind": "EVENT_FIELD",
+              "event": "deliver",
+              "field": "end"
+            }
+          },
+          "vc9c75e9bce83db62ca51f85a": {
+            "sort": "Bool",
+            "meaning": {
+              "kind": "EVENT_FIELD",
+              "event": "generate",
+              "field": "occurred"
+            }
+          },
+          "v5e4f99fe5bfba3b25d8b6579": {
+            "sort": "Bool",
+            "meaning": {
+              "kind": "EVENT_FIELD",
+              "event": "generate",
+              "field": "completed"
+            }
+          },
+          "vfed425cd2a2b56e5aaea452f": {
+            "sort": "Bool",
+            "meaning": {
+              "kind": "EVENT_FIELD",
+              "event": "generate",
+              "field": "succeeded"
+            }
+          },
+          "vc60b46c74e9a0f15ac2f35fb": {
+            "sort": "Real",
+            "meaning": {
+              "kind": "EVENT_FIELD",
+              "event": "generate",
+              "field": "start"
+            }
+          },
+          "v949909c62b188cd987cc7e53": {
+            "sort": "Real",
+            "meaning": {
+              "kind": "EVENT_FIELD",
+              "event": "generate",
+              "field": "end"
+            }
+          },
+          "v2ace9a276b4febce9ea86093": {
+            "sort": "Bool",
+            "meaning": {
+              "kind": "EVENT_FIELD",
+              "event": "organize",
+              "field": "occurred"
+            }
+          },
+          "vf03e9415eb3fdea5425a7776": {
+            "sort": "Bool",
+            "meaning": {
+              "kind": "EVENT_FIELD",
+              "event": "organize",
+              "field": "completed"
+            }
+          },
+          "v5fcc7e421f4420af03e2df23": {
+            "sort": "Bool",
+            "meaning": {
+              "kind": "EVENT_FIELD",
+              "event": "organize",
+              "field": "succeeded"
+            }
+          },
+          "v1a208021ea35a308d74aae07": {
+            "sort": "Real",
+            "meaning": {
+              "kind": "EVENT_FIELD",
+              "event": "organize",
+              "field": "start"
+            }
+          },
+          "v0993e1b0a2334333d43a9e70": {
+            "sort": "Real",
+            "meaning": {
+              "kind": "EVENT_FIELD",
+              "event": "organize",
+              "field": "end"
+            }
+          },
+          "v6900fd2f069fe9f73f8c61d2": {
+            "sort": "Bool",
+            "meaning": {
+              "kind": "EVENT_FIELD",
+              "event": "read_a",
+              "field": "occurred"
+            }
+          },
+          "v52e6b0c68d0ea79c12b1aeb5": {
+            "sort": "Bool",
+            "meaning": {
+              "kind": "EVENT_FIELD",
+              "event": "read_a",
+              "field": "completed"
+            }
+          },
+          "vb4c30398653aa786cbe61736": {
+            "sort": "Bool",
+            "meaning": {
+              "kind": "EVENT_FIELD",
+              "event": "read_a",
+              "field": "succeeded"
+            }
+          },
+          "vcbc9a74b6375de3d858a38fa": {
+            "sort": "Real",
+            "meaning": {
+              "kind": "EVENT_FIELD",
+              "event": "read_a",
+              "field": "start"
+            }
+          },
+          "v163e4096420dc04c78347786": {
+            "sort": "Real",
+            "meaning": {
+              "kind": "EVENT_FIELD",
+              "event": "read_a",
+              "field": "end"
+            }
+          },
+          "v22b1ae4210dcc3133430568e": {
+            "sort": "Bool",
+            "meaning": {
+              "kind": "EVENT_FIELD",
+              "event": "read_b",
+              "field": "occurred"
+            }
+          },
+          "vd2671a456b960ab770cbc743": {
+            "sort": "Bool",
+            "meaning": {
+              "kind": "EVENT_FIELD",
+              "event": "read_b",
+              "field": "completed"
+            }
+          },
+          "v97890c630f31cf5142b890bc": {
+            "sort": "Bool",
+            "meaning": {
+              "kind": "EVENT_FIELD",
+              "event": "read_b",
+              "field": "succeeded"
+            }
+          },
+          "va1823a237b11410538020667": {
+            "sort": "Real",
+            "meaning": {
+              "kind": "EVENT_FIELD",
+              "event": "read_b",
+              "field": "start"
+            }
+          },
+          "vb2639a933460ade7697b8e58": {
+            "sort": "Real",
+            "meaning": {
+              "kind": "EVENT_FIELD",
+              "event": "read_b",
+              "field": "end"
+            }
+          },
+          "v7e6c6e78e799e9ce2fab62dc": {
+            "sort": "Bool",
+            "meaning": {
+              "kind": "EVENT_FIELD",
+              "event": "review",
+              "field": "occurred"
+            }
+          },
+          "v98c25db0428737de0f064021": {
+            "sort": "Bool",
+            "meaning": {
+              "kind": "EVENT_FIELD",
+              "event": "review",
+              "field": "completed"
+            }
+          },
+          "veacf07ea1530ed0ffc26f6b7": {
+            "sort": "Bool",
+            "meaning": {
+              "kind": "EVENT_FIELD",
+              "event": "review",
+              "field": "succeeded"
+            }
+          },
+          "v23b432d949fdf571372a5dd5": {
+            "sort": "Real",
+            "meaning": {
+              "kind": "EVENT_FIELD",
+              "event": "review",
+              "field": "start"
+            }
+          },
+          "vd603c6a872edec03c8591871": {
+            "sort": "Real",
+            "meaning": {
+              "kind": "EVENT_FIELD",
+              "event": "review",
+              "field": "end"
+            }
+          },
+          "ve1017cb0fbf45bfc4fd9f79b": {
+            "sort": "Bool",
+            "meaning": {
+              "kind": "EVENT_FIELD",
+              "event": "submit",
+              "field": "occurred"
+            }
+          },
+          "v9cf003a7d2d5a01ca612d9e7": {
+            "sort": "Bool",
+            "meaning": {
+              "kind": "EVENT_FIELD",
+              "event": "submit",
+              "field": "completed"
+            }
+          },
+          "v88ee7b839606c271c6fe7249": {
+            "sort": "Bool",
+            "meaning": {
+              "kind": "EVENT_FIELD",
+              "event": "submit",
+              "field": "succeeded"
+            }
+          },
+          "v27120718d195cc24244ab949": {
+            "sort": "Real",
+            "meaning": {
+              "kind": "EVENT_FIELD",
+              "event": "submit",
+              "field": "start"
+            }
+          },
+          "vfeadebc660e719acf899bfa5": {
+            "sort": "Real",
+            "meaning": {
+              "kind": "EVENT_FIELD",
+              "event": "submit",
+              "field": "end"
+            }
+          },
+          "v2272c3c898ede64486f421c7": {
+            "sort": "Bool",
+            "meaning": {
+              "kind": "EVENT_FIELD",
+              "event": "task",
+              "field": "occurred"
+            }
+          },
+          "v719ccbad3a30cc4b92a01d4a": {
+            "sort": "Bool",
+            "meaning": {
+              "kind": "EVENT_FIELD",
+              "event": "task",
+              "field": "completed"
+            }
+          },
+          "v47c50e2c1dfc703cc3d82b42": {
+            "sort": "Bool",
+            "meaning": {
+              "kind": "EVENT_FIELD",
+              "event": "task",
+              "field": "succeeded"
+            }
+          }
+        },
+        "assertions": [
+          {
+            "id": "domain:v377f55de66a1d54a2c91b2ae",
+            "formula": {
+              "sort": "Bool",
+              "op": "and",
+              "args": [
+                {
+                  "sort": "Bool",
+                  "op": "ge",
+                  "args": [
+                    {
+                      "sort": "Real",
+                      "op": "var",
+                      "name": "v377f55de66a1d54a2c91b2ae"
+                    },
+                    {
+                      "sort": "Real",
+                      "op": "const",
+                      "value": "300"
+                    }
+                  ]
+                },
+                {
+                  "sort": "Bool",
+                  "op": "le",
+                  "args": [
+                    {
+                      "sort": "Real",
+                      "op": "var",
+                      "name": "v377f55de66a1d54a2c91b2ae"
+                    },
+                    {
+                      "sort": "Real",
+                      "op": "const",
+                      "value": "600"
+                    }
+                  ]
+                }
+              ]
+            },
+            "source_id": null
+          },
+          {
+            "id": "req:r_duration",
+            "formula": {
+              "sort": "Bool",
+              "op": "and",
+              "args": [
+                {
+                  "sort": "Bool",
+                  "op": "and",
+                  "args": [
+                    {
+                      "sort": "Bool",
+                      "op": "and",
+                      "args": [
+                        {
+                          "sort": "Bool",
+                          "op": "ge",
+                          "args": [
+                            {
+                              "sort": "Real",
+                              "op": "var",
+                              "name": "v377f55de66a1d54a2c91b2ae"
+                            },
+                            {
+                              "sort": "Real",
+                              "op": "const",
+                              "value": "300"
+                            }
+                          ]
+                        },
+                        {
+                          "sort": "Bool",
+                          "op": "le",
+                          "args": [
+                            {
+                              "sort": "Real",
+                              "op": "var",
+                              "name": "v377f55de66a1d54a2c91b2ae"
+                            },
+                            {
+                              "sort": "Real",
+                              "op": "const",
+                              "value": "600"
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "sort": "Bool",
+                      "op": "eq",
+                      "args": [
+                        {
+                          "sort": "Real",
+                          "op": "var",
+                          "name": "v40899268d1ce5d33ef8599d1"
+                        },
+                        {
+                          "sort": "Real",
+                          "op": "add",
+                          "args": [
+                            {
+                              "sort": "Real",
+                              "op": "var",
+                              "name": "v5185226601a8f426b348b34b"
+                            },
+                            {
+                              "sort": "Real",
+                              "op": "var",
+                              "name": "v377f55de66a1d54a2c91b2ae"
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "sort": "Bool",
+                      "op": "ge",
+                      "args": [
+                        {
+                          "sort": "Real",
+                          "op": "var",
+                          "name": "v377f55de66a1d54a2c91b2ae"
+                        },
+                        {
+                          "sort": "Real",
+                          "op": "const",
+                          "value": "0"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "sort": "Bool",
+                  "op": "or",
+                  "args": [
+                    {
+                      "sort": "Bool",
+                      "op": "not",
+                      "args": [
+                        {
+                          "sort": "Bool",
+                          "op": "var",
+                          "name": "v640a9ec6f00a4b53ee1bad0e"
+                        }
+                      ]
+                    },
+                    {
+                      "sort": "Bool",
+                      "op": "and",
+                      "args": [
+                        {
+                          "sort": "Bool",
+                          "op": "ge",
+                          "args": [
+                            {
+                              "sort": "Real",
+                              "op": "var",
+                              "name": "v3ae581d569cc96402b9b40ce"
+                            },
+                            {
+                              "sort": "Real",
+                              "op": "var",
+                              "name": "v5185226601a8f426b348b34b"
+                            }
+                          ]
+                        },
+                        {
+                          "sort": "Bool",
+                          "op": "le",
+                          "args": [
+                            {
+                              "sort": "Real",
+                              "op": "var",
+                              "name": "v94087bd0842ff13885e2dd23"
+                            },
+                            {
+                              "sort": "Real",
+                              "op": "var",
+                              "name": "v40899268d1ce5d33ef8599d1"
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "sort": "Bool",
+                  "op": "or",
+                  "args": [
+                    {
+                      "sort": "Bool",
+                      "op": "not",
+                      "args": [
+                        {
+                          "sort": "Bool",
+                          "op": "var",
+                          "name": "vc9c75e9bce83db62ca51f85a"
+                        }
+                      ]
+                    },
+                    {
+                      "sort": "Bool",
+                      "op": "and",
+                      "args": [
+                        {
+                          "sort": "Bool",
+                          "op": "ge",
+                          "args": [
+                            {
+                              "sort": "Real",
+                              "op": "var",
+                              "name": "vc60b46c74e9a0f15ac2f35fb"
+                            },
+                            {
+                              "sort": "Real",
+                              "op": "var",
+                              "name": "v5185226601a8f426b348b34b"
+                            }
+                          ]
+                        },
+                        {
+                          "sort": "Bool",
+                          "op": "le",
+                          "args": [
+                            {
+                              "sort": "Real",
+                              "op": "var",
+                              "name": "v949909c62b188cd987cc7e53"
+                            },
+                            {
+                              "sort": "Real",
+                              "op": "var",
+                              "name": "v40899268d1ce5d33ef8599d1"
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "sort": "Bool",
+                  "op": "or",
+                  "args": [
+                    {
+                      "sort": "Bool",
+                      "op": "not",
+                      "args": [
+                        {
+                          "sort": "Bool",
+                          "op": "var",
+                          "name": "v2ace9a276b4febce9ea86093"
+                        }
+                      ]
+                    },
+                    {
+                      "sort": "Bool",
+                      "op": "and",
+                      "args": [
+                        {
+                          "sort": "Bool",
+                          "op": "ge",
+                          "args": [
+                            {
+                              "sort": "Real",
+                              "op": "var",
+                              "name": "v1a208021ea35a308d74aae07"
+                            },
+                            {
+                              "sort": "Real",
+                              "op": "var",
+                              "name": "v5185226601a8f426b348b34b"
+                            }
+                          ]
+                        },
+                        {
+                          "sort": "Bool",
+                          "op": "le",
+                          "args": [
+                            {
+                              "sort": "Real",
+                              "op": "var",
+                              "name": "v0993e1b0a2334333d43a9e70"
+                            },
+                            {
+                              "sort": "Real",
+                              "op": "var",
+                              "name": "v40899268d1ce5d33ef8599d1"
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "sort": "Bool",
+                  "op": "or",
+                  "args": [
+                    {
+                      "sort": "Bool",
+                      "op": "not",
+                      "args": [
+                        {
+                          "sort": "Bool",
+                          "op": "var",
+                          "name": "v6900fd2f069fe9f73f8c61d2"
+                        }
+                      ]
+                    },
+                    {
+                      "sort": "Bool",
+                      "op": "and",
+                      "args": [
+                        {
+                          "sort": "Bool",
+                          "op": "ge",
+                          "args": [
+                            {
+                              "sort": "Real",
+                              "op": "var",
+                              "name": "vcbc9a74b6375de3d858a38fa"
+                            },
+                            {
+                              "sort": "Real",
+                              "op": "var",
+                              "name": "v5185226601a8f426b348b34b"
+                            }
+                          ]
+                        },
+                        {
+                          "sort": "Bool",
+                          "op": "le",
+                          "args": [
+                            {
+                              "sort": "Real",
+                              "op": "var",
+                              "name": "v163e4096420dc04c78347786"
+                            },
+                            {
+                              "sort": "Real",
+                              "op": "var",
+                              "name": "v40899268d1ce5d33ef8599d1"
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "sort": "Bool",
+                  "op": "or",
+                  "args": [
+                    {
+                      "sort": "Bool",
+                      "op": "not",
+                      "args": [
+                        {
+                          "sort": "Bool",
+                          "op": "var",
+                          "name": "v22b1ae4210dcc3133430568e"
+                        }
+                      ]
+                    },
+                    {
+                      "sort": "Bool",
+                      "op": "and",
+                      "args": [
+                        {
+                          "sort": "Bool",
+                          "op": "ge",
+                          "args": [
+                            {
+                              "sort": "Real",
+                              "op": "var",
+                              "name": "va1823a237b11410538020667"
+                            },
+                            {
+                              "sort": "Real",
+                              "op": "var",
+                              "name": "v5185226601a8f426b348b34b"
+                            }
+                          ]
+                        },
+                        {
+                          "sort": "Bool",
+                          "op": "le",
+                          "args": [
+                            {
+                              "sort": "Real",
+                              "op": "var",
+                              "name": "vb2639a933460ade7697b8e58"
+                            },
+                            {
+                              "sort": "Real",
+                              "op": "var",
+                              "name": "v40899268d1ce5d33ef8599d1"
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "sort": "Bool",
+                  "op": "or",
+                  "args": [
+                    {
+                      "sort": "Bool",
+                      "op": "not",
+                      "args": [
+                        {
+                          "sort": "Bool",
+                          "op": "var",
+                          "name": "v7e6c6e78e799e9ce2fab62dc"
+                        }
+                      ]
+                    },
+                    {
+                      "sort": "Bool",
+                      "op": "and",
+                      "args": [
+                        {
+                          "sort": "Bool",
+                          "op": "ge",
+                          "args": [
+                            {
+                              "sort": "Real",
+                              "op": "var",
+                              "name": "v23b432d949fdf571372a5dd5"
+                            },
+                            {
+                              "sort": "Real",
+                              "op": "var",
+                              "name": "v5185226601a8f426b348b34b"
+                            }
+                          ]
+                        },
+                        {
+                          "sort": "Bool",
+                          "op": "le",
+                          "args": [
+                            {
+                              "sort": "Real",
+                              "op": "var",
+                              "name": "vd603c6a872edec03c8591871"
+                            },
+                            {
+                              "sort": "Real",
+                              "op": "var",
+                              "name": "v40899268d1ce5d33ef8599d1"
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "sort": "Bool",
+                  "op": "or",
+                  "args": [
+                    {
+                      "sort": "Bool",
+                      "op": "not",
+                      "args": [
+                        {
+                          "sort": "Bool",
+                          "op": "var",
+                          "name": "ve1017cb0fbf45bfc4fd9f79b"
+                        }
+                      ]
+                    },
+                    {
+                      "sort": "Bool",
+                      "op": "and",
+                      "args": [
+                        {
+                          "sort": "Bool",
+                          "op": "ge",
+                          "args": [
+                            {
+                              "sort": "Real",
+                              "op": "var",
+                              "name": "v27120718d195cc24244ab949"
+                            },
+                            {
+                              "sort": "Real",
+                              "op": "var",
+                              "name": "v5185226601a8f426b348b34b"
+                            }
+                          ]
+                        },
+                        {
+                          "sort": "Bool",
+                          "op": "le",
+                          "args": [
+                            {
+                              "sort": "Real",
+                              "op": "var",
+                              "name": "vfeadebc660e719acf899bfa5"
+                            },
+                            {
+                              "sort": "Real",
+                              "op": "var",
+                              "name": "v40899268d1ce5d33ef8599d1"
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            "source_id": "r_duration"
+          },
+          {
+            "id": "event:deliver",
+            "formula": {
+              "sort": "Bool",
+              "op": "and",
+              "args": [
+                {
+                  "sort": "Bool",
+                  "op": "or",
+                  "args": [
+                    {
+                      "sort": "Bool",
+                      "op": "not",
+                      "args": [
+                        {
+                          "sort": "Bool",
+                          "op": "var",
+                          "name": "v6cb91c40b65c7448063b178e"
+                        }
+                      ]
+                    },
+                    {
+                      "sort": "Bool",
+                      "op": "var",
+                      "name": "v640a9ec6f00a4b53ee1bad0e"
+                    }
+                  ]
+                },
+                {
+                  "sort": "Bool",
+                  "op": "or",
+                  "args": [
+                    {
+                      "sort": "Bool",
+                      "op": "not",
+                      "args": [
+                        {
+                          "sort": "Bool",
+                          "op": "var",
+                          "name": "v65ff5b347581fc005ea799ce"
+                        }
+                      ]
+                    },
+                    {
+                      "sort": "Bool",
+                      "op": "var",
+                      "name": "v6cb91c40b65c7448063b178e"
+                    }
+                  ]
+                },
+                {
+                  "sort": "Bool",
+                  "op": "or",
+                  "args": [
+                    {
+                      "sort": "Bool",
+                      "op": "not",
+                      "args": [
+                        {
+                          "sort": "Bool",
+                          "op": "var",
+                          "name": "v640a9ec6f00a4b53ee1bad0e"
+                        }
+                      ]
+                    },
+                    {
+                      "sort": "Bool",
+                      "op": "le",
+                      "args": [
+                        {
+                          "sort": "Real",
+                          "op": "var",
+                          "name": "v3ae581d569cc96402b9b40ce"
+                        },
+                        {
+                          "sort": "Real",
+                          "op": "var",
+                          "name": "v94087bd0842ff13885e2dd23"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            "source_id": null
+          },
+          {
+            "id": "event:generate",
+            "formula": {
+              "sort": "Bool",
+              "op": "and",
+              "args": [
+                {
+                  "sort": "Bool",
+                  "op": "or",
+                  "args": [
+                    {
+                      "sort": "Bool",
+                      "op": "not",
+                      "args": [
+                        {
+                          "sort": "Bool",
+                          "op": "var",
+                          "name": "v5e4f99fe5bfba3b25d8b6579"
+                        }
+                      ]
+                    },
+                    {
+                      "sort": "Bool",
+                      "op": "var",
+                      "name": "vc9c75e9bce83db62ca51f85a"
+                    }
+                  ]
+                },
+                {
+                  "sort": "Bool",
+                  "op": "or",
+                  "args": [
+                    {
+                      "sort": "Bool",
+                      "op": "not",
+                      "args": [
+                        {
+                          "sort": "Bool",
+                          "op": "var",
+                          "name": "vfed425cd2a2b56e5aaea452f"
+                        }
+                      ]
+                    },
+                    {
+                      "sort": "Bool",
+                      "op": "var",
+                      "name": "v5e4f99fe5bfba3b25d8b6579"
+                    }
+                  ]
+                },
+                {
+                  "sort": "Bool",
+                  "op": "or",
+                  "args": [
+                    {
+                      "sort": "Bool",
+                      "op": "not",
+                      "args": [
+                        {
+                          "sort": "Bool",
+                          "op": "var",
+                          "name": "vc9c75e9bce83db62ca51f85a"
+                        }
+                      ]
+                    },
+                    {
+                      "sort": "Bool",
+                      "op": "le",
+                      "args": [
+                        {
+                          "sort": "Real",
+                          "op": "var",
+                          "name": "vc60b46c74e9a0f15ac2f35fb"
+                        },
+                        {
+                          "sort": "Real",
+                          "op": "var",
+                          "name": "v949909c62b188cd987cc7e53"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            "source_id": null
+          },
+          {
+            "id": "event:organize",
+            "formula": {
+              "sort": "Bool",
+              "op": "and",
+              "args": [
+                {
+                  "sort": "Bool",
+                  "op": "or",
+                  "args": [
+                    {
+                      "sort": "Bool",
+                      "op": "not",
+                      "args": [
+                        {
+                          "sort": "Bool",
+                          "op": "var",
+                          "name": "vf03e9415eb3fdea5425a7776"
+                        }
+                      ]
+                    },
+                    {
+                      "sort": "Bool",
+                      "op": "var",
+                      "name": "v2ace9a276b4febce9ea86093"
+                    }
+                  ]
+                },
+                {
+                  "sort": "Bool",
+                  "op": "or",
+                  "args": [
+                    {
+                      "sort": "Bool",
+                      "op": "not",
+                      "args": [
+                        {
+                          "sort": "Bool",
+                          "op": "var",
+                          "name": "v5fcc7e421f4420af03e2df23"
+                        }
+                      ]
+                    },
+                    {
+                      "sort": "Bool",
+                      "op": "var",
+                      "name": "vf03e9415eb3fdea5425a7776"
+                    }
+                  ]
+                },
+                {
+                  "sort": "Bool",
+                  "op": "or",
+                  "args": [
+                    {
+                      "sort": "Bool",
+                      "op": "not",
+                      "args": [
+                        {
+                          "sort": "Bool",
+                          "op": "var",
+                          "name": "v2ace9a276b4febce9ea86093"
+                        }
+                      ]
+                    },
+                    {
+                      "sort": "Bool",
+                      "op": "le",
+                      "args": [
+                        {
+                          "sort": "Real",
+                          "op": "var",
+                          "name": "v1a208021ea35a308d74aae07"
+                        },
+                        {
+                          "sort": "Real",
+                          "op": "var",
+                          "name": "v0993e1b0a2334333d43a9e70"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            "source_id": null
+          },
+          {
+            "id": "event:read_a",
+            "formula": {
+              "sort": "Bool",
+              "op": "and",
+              "args": [
+                {
+                  "sort": "Bool",
+                  "op": "or",
+                  "args": [
+                    {
+                      "sort": "Bool",
+                      "op": "not",
+                      "args": [
+                        {
+                          "sort": "Bool",
+                          "op": "var",
+                          "name": "v52e6b0c68d0ea79c12b1aeb5"
+                        }
+                      ]
+                    },
+                    {
+                      "sort": "Bool",
+                      "op": "var",
+                      "name": "v6900fd2f069fe9f73f8c61d2"
+                    }
+                  ]
+                },
+                {
+                  "sort": "Bool",
+                  "op": "or",
+                  "args": [
+                    {
+                      "sort": "Bool",
+                      "op": "not",
+                      "args": [
+                        {
+                          "sort": "Bool",
+                          "op": "var",
+                          "name": "vb4c30398653aa786cbe61736"
+                        }
+                      ]
+                    },
+                    {
+                      "sort": "Bool",
+                      "op": "var",
+                      "name": "v52e6b0c68d0ea79c12b1aeb5"
+                    }
+                  ]
+                },
+                {
+                  "sort": "Bool",
+                  "op": "or",
+                  "args": [
+                    {
+                      "sort": "Bool",
+                      "op": "not",
+                      "args": [
+                        {
+                          "sort": "Bool",
+                          "op": "var",
+                          "name": "v6900fd2f069fe9f73f8c61d2"
+                        }
+                      ]
+                    },
+                    {
+                      "sort": "Bool",
+                      "op": "le",
+                      "args": [
+                        {
+                          "sort": "Real",
+                          "op": "var",
+                          "name": "vcbc9a74b6375de3d858a38fa"
+                        },
+                        {
+                          "sort": "Real",
+                          "op": "var",
+                          "name": "v163e4096420dc04c78347786"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            "source_id": null
+          },
+          {
+            "id": "event:read_b",
+            "formula": {
+              "sort": "Bool",
+              "op": "and",
+              "args": [
+                {
+                  "sort": "Bool",
+                  "op": "or",
+                  "args": [
+                    {
+                      "sort": "Bool",
+                      "op": "not",
+                      "args": [
+                        {
+                          "sort": "Bool",
+                          "op": "var",
+                          "name": "vd2671a456b960ab770cbc743"
+                        }
+                      ]
+                    },
+                    {
+                      "sort": "Bool",
+                      "op": "var",
+                      "name": "v22b1ae4210dcc3133430568e"
+                    }
+                  ]
+                },
+                {
+                  "sort": "Bool",
+                  "op": "or",
+                  "args": [
+                    {
+                      "sort": "Bool",
+                      "op": "not",
+                      "args": [
+                        {
+                          "sort": "Bool",
+                          "op": "var",
+                          "name": "v97890c630f31cf5142b890bc"
+                        }
+                      ]
+                    },
+                    {
+                      "sort": "Bool",
+                      "op": "var",
+                      "name": "vd2671a456b960ab770cbc743"
+                    }
+                  ]
+                },
+                {
+                  "sort": "Bool",
+                  "op": "or",
+                  "args": [
+                    {
+                      "sort": "Bool",
+                      "op": "not",
+                      "args": [
+                        {
+                          "sort": "Bool",
+                          "op": "var",
+                          "name": "v22b1ae4210dcc3133430568e"
+                        }
+                      ]
+                    },
+                    {
+                      "sort": "Bool",
+                      "op": "le",
+                      "args": [
+                        {
+                          "sort": "Real",
+                          "op": "var",
+                          "name": "va1823a237b11410538020667"
+                        },
+                        {
+                          "sort": "Real",
+                          "op": "var",
+                          "name": "vb2639a933460ade7697b8e58"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            "source_id": null
+          },
+          {
+            "id": "event:review",
+            "formula": {
+              "sort": "Bool",
+              "op": "and",
+              "args": [
+                {
+                  "sort": "Bool",
+                  "op": "or",
+                  "args": [
+                    {
+                      "sort": "Bool",
+                      "op": "not",
+                      "args": [
+                        {
+                          "sort": "Bool",
+                          "op": "var",
+                          "name": "v98c25db0428737de0f064021"
+                        }
+                      ]
+                    },
+                    {
+                      "sort": "Bool",
+                      "op": "var",
+                      "name": "v7e6c6e78e799e9ce2fab62dc"
+                    }
+                  ]
+                },
+                {
+                  "sort": "Bool",
+                  "op": "or",
+                  "args": [
+                    {
+                      "sort": "Bool",
+                      "op": "not",
+                      "args": [
+                        {
+                          "sort": "Bool",
+                          "op": "var",
+                          "name": "veacf07ea1530ed0ffc26f6b7"
+                        }
+                      ]
+                    },
+                    {
+                      "sort": "Bool",
+                      "op": "var",
+                      "name": "v98c25db0428737de0f064021"
+                    }
+                  ]
+                },
+                {
+                  "sort": "Bool",
+                  "op": "or",
+                  "args": [
+                    {
+                      "sort": "Bool",
+                      "op": "not",
+                      "args": [
+                        {
+                          "sort": "Bool",
+                          "op": "var",
+                          "name": "v7e6c6e78e799e9ce2fab62dc"
+                        }
+                      ]
+                    },
+                    {
+                      "sort": "Bool",
+                      "op": "le",
+                      "args": [
+                        {
+                          "sort": "Real",
+                          "op": "var",
+                          "name": "v23b432d949fdf571372a5dd5"
+                        },
+                        {
+                          "sort": "Real",
+                          "op": "var",
+                          "name": "vd603c6a872edec03c8591871"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            "source_id": null
+          },
+          {
+            "id": "event:submit",
+            "formula": {
+              "sort": "Bool",
+              "op": "and",
+              "args": [
+                {
+                  "sort": "Bool",
+                  "op": "or",
+                  "args": [
+                    {
+                      "sort": "Bool",
+                      "op": "not",
+                      "args": [
+                        {
+                          "sort": "Bool",
+                          "op": "var",
+                          "name": "v9cf003a7d2d5a01ca612d9e7"
+                        }
+                      ]
+                    },
+                    {
+                      "sort": "Bool",
+                      "op": "var",
+                      "name": "ve1017cb0fbf45bfc4fd9f79b"
+                    }
+                  ]
+                },
+                {
+                  "sort": "Bool",
+                  "op": "or",
+                  "args": [
+                    {
+                      "sort": "Bool",
+                      "op": "not",
+                      "args": [
+                        {
+                          "sort": "Bool",
+                          "op": "var",
+                          "name": "v88ee7b839606c271c6fe7249"
+                        }
+                      ]
+                    },
+                    {
+                      "sort": "Bool",
+                      "op": "var",
+                      "name": "v9cf003a7d2d5a01ca612d9e7"
+                    }
+                  ]
+                },
+                {
+                  "sort": "Bool",
+                  "op": "or",
+                  "args": [
+                    {
+                      "sort": "Bool",
+                      "op": "not",
+                      "args": [
+                        {
+                          "sort": "Bool",
+                          "op": "var",
+                          "name": "ve1017cb0fbf45bfc4fd9f79b"
+                        }
+                      ]
+                    },
+                    {
+                      "sort": "Bool",
+                      "op": "le",
+                      "args": [
+                        {
+                          "sort": "Real",
+                          "op": "var",
+                          "name": "v27120718d195cc24244ab949"
+                        },
+                        {
+                          "sort": "Real",
+                          "op": "var",
+                          "name": "vfeadebc660e719acf899bfa5"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            "source_id": null
+          },
+          {
+            "id": "event:task",
+            "formula": {
+              "sort": "Bool",
+              "op": "and",
+              "args": [
+                {
+                  "sort": "Bool",
+                  "op": "or",
+                  "args": [
+                    {
+                      "sort": "Bool",
+                      "op": "not",
+                      "args": [
+                        {
+                          "sort": "Bool",
+                          "op": "var",
+                          "name": "v719ccbad3a30cc4b92a01d4a"
+                        }
+                      ]
+                    },
+                    {
+                      "sort": "Bool",
+                      "op": "var",
+                      "name": "v2272c3c898ede64486f421c7"
+                    }
+                  ]
+                },
+                {
+                  "sort": "Bool",
+                  "op": "or",
+                  "args": [
+                    {
+                      "sort": "Bool",
+                      "op": "not",
+                      "args": [
+                        {
+                          "sort": "Bool",
+                          "op": "var",
+                          "name": "v47c50e2c1dfc703cc3d82b42"
+                        }
+                      ]
+                    },
+                    {
+                      "sort": "Bool",
+                      "op": "var",
+                      "name": "v719ccbad3a30cc4b92a01d4a"
+                    }
+                  ]
+                },
+                {
+                  "sort": "Bool",
+                  "op": "or",
+                  "args": [
+                    {
+                      "sort": "Bool",
+                      "op": "not",
+                      "args": [
+                        {
+                          "sort": "Bool",
+                          "op": "var",
+                          "name": "v2272c3c898ede64486f421c7"
+                        }
+                      ]
+                    },
+                    {
+                      "sort": "Bool",
+                      "op": "le",
+                      "args": [
+                        {
+                          "sort": "Real",
+                          "op": "var",
+                          "name": "v5185226601a8f426b348b34b"
+                        },
+                        {
+                          "sort": "Real",
+                          "op": "var",
+                          "name": "v40899268d1ce5d33ef8599d1"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            "source_id": null
+          }
+        ],
+        "formulas": {
+          "r_duration": {
+            "sort": "Bool",
+            "op": "and",
+            "args": [
+              {
+                "sort": "Bool",
+                "op": "and",
+                "args": [
+                  {
+                    "sort": "Bool",
+                    "op": "and",
+                    "args": [
+                      {
+                        "sort": "Bool",
+                        "op": "ge",
+                        "args": [
+                          {
+                            "sort": "Real",
+                            "op": "var",
+                            "name": "v377f55de66a1d54a2c91b2ae"
+                          },
+                          {
+                            "sort": "Real",
+                            "op": "const",
+                            "value": "300"
+                          }
+                        ]
+                      },
+                      {
+                        "sort": "Bool",
+                        "op": "le",
+                        "args": [
+                          {
+                            "sort": "Real",
+                            "op": "var",
+                            "name": "v377f55de66a1d54a2c91b2ae"
+                          },
+                          {
+                            "sort": "Real",
+                            "op": "const",
+                            "value": "600"
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "sort": "Bool",
+                    "op": "eq",
+                    "args": [
+                      {
+                        "sort": "Real",
+                        "op": "var",
+                        "name": "v40899268d1ce5d33ef8599d1"
+                      },
+                      {
+                        "sort": "Real",
+                        "op": "add",
+                        "args": [
+                          {
+                            "sort": "Real",
+                            "op": "var",
+                            "name": "v5185226601a8f426b348b34b"
+                          },
+                          {
+                            "sort": "Real",
+                            "op": "var",
+                            "name": "v377f55de66a1d54a2c91b2ae"
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "sort": "Bool",
+                    "op": "ge",
+                    "args": [
+                      {
+                        "sort": "Real",
+                        "op": "var",
+                        "name": "v377f55de66a1d54a2c91b2ae"
+                      },
+                      {
+                        "sort": "Real",
+                        "op": "const",
+                        "value": "0"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "sort": "Bool",
+                "op": "or",
+                "args": [
+                  {
+                    "sort": "Bool",
+                    "op": "not",
+                    "args": [
+                      {
+                        "sort": "Bool",
+                        "op": "var",
+                        "name": "v640a9ec6f00a4b53ee1bad0e"
+                      }
+                    ]
+                  },
+                  {
+                    "sort": "Bool",
+                    "op": "and",
+                    "args": [
+                      {
+                        "sort": "Bool",
+                        "op": "ge",
+                        "args": [
+                          {
+                            "sort": "Real",
+                            "op": "var",
+                            "name": "v3ae581d569cc96402b9b40ce"
+                          },
+                          {
+                            "sort": "Real",
+                            "op": "var",
+                            "name": "v5185226601a8f426b348b34b"
+                          }
+                        ]
+                      },
+                      {
+                        "sort": "Bool",
+                        "op": "le",
+                        "args": [
+                          {
+                            "sort": "Real",
+                            "op": "var",
+                            "name": "v94087bd0842ff13885e2dd23"
+                          },
+                          {
+                            "sort": "Real",
+                            "op": "var",
+                            "name": "v40899268d1ce5d33ef8599d1"
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "sort": "Bool",
+                "op": "or",
+                "args": [
+                  {
+                    "sort": "Bool",
+                    "op": "not",
+                    "args": [
+                      {
+                        "sort": "Bool",
+                        "op": "var",
+                        "name": "vc9c75e9bce83db62ca51f85a"
+                      }
+                    ]
+                  },
+                  {
+                    "sort": "Bool",
+                    "op": "and",
+                    "args": [
+                      {
+                        "sort": "Bool",
+                        "op": "ge",
+                        "args": [
+                          {
+                            "sort": "Real",
+                            "op": "var",
+                            "name": "vc60b46c74e9a0f15ac2f35fb"
+                          },
+                          {
+                            "sort": "Real",
+                            "op": "var",
+                            "name": "v5185226601a8f426b348b34b"
+                          }
+                        ]
+                      },
+                      {
+                        "sort": "Bool",
+                        "op": "le",
+                        "args": [
+                          {
+                            "sort": "Real",
+                            "op": "var",
+                            "name": "v949909c62b188cd987cc7e53"
+                          },
+                          {
+                            "sort": "Real",
+                            "op": "var",
+                            "name": "v40899268d1ce5d33ef8599d1"
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "sort": "Bool",
+                "op": "or",
+                "args": [
+                  {
+                    "sort": "Bool",
+                    "op": "not",
+                    "args": [
+                      {
+                        "sort": "Bool",
+                        "op": "var",
+                        "name": "v2ace9a276b4febce9ea86093"
+                      }
+                    ]
+                  },
+                  {
+                    "sort": "Bool",
+                    "op": "and",
+                    "args": [
+                      {
+                        "sort": "Bool",
+                        "op": "ge",
+                        "args": [
+                          {
+                            "sort": "Real",
+                            "op": "var",
+                            "name": "v1a208021ea35a308d74aae07"
+                          },
+                          {
+                            "sort": "Real",
+                            "op": "var",
+                            "name": "v5185226601a8f426b348b34b"
+                          }
+                        ]
+                      },
+                      {
+                        "sort": "Bool",
+                        "op": "le",
+                        "args": [
+                          {
+                            "sort": "Real",
+                            "op": "var",
+                            "name": "v0993e1b0a2334333d43a9e70"
+                          },
+                          {
+                            "sort": "Real",
+                            "op": "var",
+                            "name": "v40899268d1ce5d33ef8599d1"
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "sort": "Bool",
+                "op": "or",
+                "args": [
+                  {
+                    "sort": "Bool",
+                    "op": "not",
+                    "args": [
+                      {
+                        "sort": "Bool",
+                        "op": "var",
+                        "name": "v6900fd2f069fe9f73f8c61d2"
+                      }
+                    ]
+                  },
+                  {
+                    "sort": "Bool",
+                    "op": "and",
+                    "args": [
+                      {
+                        "sort": "Bool",
+                        "op": "ge",
+                        "args": [
+                          {
+                            "sort": "Real",
+                            "op": "var",
+                            "name": "vcbc9a74b6375de3d858a38fa"
+                          },
+                          {
+                            "sort": "Real",
+                            "op": "var",
+                            "name": "v5185226601a8f426b348b34b"
+                          }
+                        ]
+                      },
+                      {
+                        "sort": "Bool",
+                        "op": "le",
+                        "args": [
+                          {
+                            "sort": "Real",
+                            "op": "var",
+                            "name": "v163e4096420dc04c78347786"
+                          },
+                          {
+                            "sort": "Real",
+                            "op": "var",
+                            "name": "v40899268d1ce5d33ef8599d1"
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "sort": "Bool",
+                "op": "or",
+                "args": [
+                  {
+                    "sort": "Bool",
+                    "op": "not",
+                    "args": [
+                      {
+                        "sort": "Bool",
+                        "op": "var",
+                        "name": "v22b1ae4210dcc3133430568e"
+                      }
+                    ]
+                  },
+                  {
+                    "sort": "Bool",
+                    "op": "and",
+                    "args": [
+                      {
+                        "sort": "Bool",
+                        "op": "ge",
+                        "args": [
+                          {
+                            "sort": "Real",
+                            "op": "var",
+                            "name": "va1823a237b11410538020667"
+                          },
+                          {
+                            "sort": "Real",
+                            "op": "var",
+                            "name": "v5185226601a8f426b348b34b"
+                          }
+                        ]
+                      },
+                      {
+                        "sort": "Bool",
+                        "op": "le",
+                        "args": [
+                          {
+                            "sort": "Real",
+                            "op": "var",
+                            "name": "vb2639a933460ade7697b8e58"
+                          },
+                          {
+                            "sort": "Real",
+                            "op": "var",
+                            "name": "v40899268d1ce5d33ef8599d1"
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "sort": "Bool",
+                "op": "or",
+                "args": [
+                  {
+                    "sort": "Bool",
+                    "op": "not",
+                    "args": [
+                      {
+                        "sort": "Bool",
+                        "op": "var",
+                        "name": "v7e6c6e78e799e9ce2fab62dc"
+                      }
+                    ]
+                  },
+                  {
+                    "sort": "Bool",
+                    "op": "and",
+                    "args": [
+                      {
+                        "sort": "Bool",
+                        "op": "ge",
+                        "args": [
+                          {
+                            "sort": "Real",
+                            "op": "var",
+                            "name": "v23b432d949fdf571372a5dd5"
+                          },
+                          {
+                            "sort": "Real",
+                            "op": "var",
+                            "name": "v5185226601a8f426b348b34b"
+                          }
+                        ]
+                      },
+                      {
+                        "sort": "Bool",
+                        "op": "le",
+                        "args": [
+                          {
+                            "sort": "Real",
+                            "op": "var",
+                            "name": "vd603c6a872edec03c8591871"
+                          },
+                          {
+                            "sort": "Real",
+                            "op": "var",
+                            "name": "v40899268d1ce5d33ef8599d1"
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "sort": "Bool",
+                "op": "or",
+                "args": [
+                  {
+                    "sort": "Bool",
+                    "op": "not",
+                    "args": [
+                      {
+                        "sort": "Bool",
+                        "op": "var",
+                        "name": "ve1017cb0fbf45bfc4fd9f79b"
+                      }
+                    ]
+                  },
+                  {
+                    "sort": "Bool",
+                    "op": "and",
+                    "args": [
+                      {
+                        "sort": "Bool",
+                        "op": "ge",
+                        "args": [
+                          {
+                            "sort": "Real",
+                            "op": "var",
+                            "name": "v27120718d195cc24244ab949"
+                          },
+                          {
+                            "sort": "Real",
+                            "op": "var",
+                            "name": "v5185226601a8f426b348b34b"
+                          }
+                        ]
+                      },
+                      {
+                        "sort": "Bool",
+                        "op": "le",
+                        "args": [
+                          {
+                            "sort": "Real",
+                            "op": "var",
+                            "name": "vfeadebc660e719acf899bfa5"
+                          },
+                          {
+                            "sort": "Real",
+                            "op": "var",
+                            "name": "v40899268d1ce5d33ef8599d1"
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "query_scope": {
+          "kind": "DECLARED_SYMBOLS",
+          "task_id": "task",
+          "events": [],
+          "completeness": null
+        },
+        "plan": {
+          "events": []
+        },
+        "query": {
+          "kind": "SAT",
+          "requirements": [
+            "r_duration"
+          ]
+        },
+        "term_count": 17
+      },
+      "smtlib": "; \n(set-info :status unknown)\n(declare-fun v377f55de66a1d54a2c91b2ae () Real)\n(declare-fun a0 () Bool)\n(declare-fun v40899268d1ce5d33ef8599d1 () Real)\n(declare-fun vfeadebc660e719acf899bfa5 () Real)\n(declare-fun v5185226601a8f426b348b34b () Real)\n(declare-fun v27120718d195cc24244ab949 () Real)\n(declare-fun ve1017cb0fbf45bfc4fd9f79b () Bool)\n(declare-fun vd603c6a872edec03c8591871 () Real)\n(declare-fun v23b432d949fdf571372a5dd5 () Real)\n(declare-fun v7e6c6e78e799e9ce2fab62dc () Bool)\n(declare-fun vb2639a933460ade7697b8e58 () Real)\n(declare-fun va1823a237b11410538020667 () Real)\n(declare-fun v22b1ae4210dcc3133430568e () Bool)\n(declare-fun v163e4096420dc04c78347786 () Real)\n(declare-fun vcbc9a74b6375de3d858a38fa () Real)\n(declare-fun v6900fd2f069fe9f73f8c61d2 () Bool)\n(declare-fun v0993e1b0a2334333d43a9e70 () Real)\n(declare-fun v1a208021ea35a308d74aae07 () Real)\n(declare-fun v2ace9a276b4febce9ea86093 () Bool)\n(declare-fun v949909c62b188cd987cc7e53 () Real)\n(declare-fun vc60b46c74e9a0f15ac2f35fb () Real)\n(declare-fun vc9c75e9bce83db62ca51f85a () Bool)\n(declare-fun v94087bd0842ff13885e2dd23 () Real)\n(declare-fun v3ae581d569cc96402b9b40ce () Real)\n(declare-fun v640a9ec6f00a4b53ee1bad0e () Bool)\n(declare-fun a1 () Bool)\n(declare-fun v6cb91c40b65c7448063b178e () Bool)\n(declare-fun v65ff5b347581fc005ea799ce () Bool)\n(declare-fun a2 () Bool)\n(declare-fun v5e4f99fe5bfba3b25d8b6579 () Bool)\n(declare-fun vfed425cd2a2b56e5aaea452f () Bool)\n(declare-fun a3 () Bool)\n(declare-fun vf03e9415eb3fdea5425a7776 () Bool)\n(declare-fun v5fcc7e421f4420af03e2df23 () Bool)\n(declare-fun a4 () Bool)\n(declare-fun v52e6b0c68d0ea79c12b1aeb5 () Bool)\n(declare-fun vb4c30398653aa786cbe61736 () Bool)\n(declare-fun a5 () Bool)\n(declare-fun vd2671a456b960ab770cbc743 () Bool)\n(declare-fun v97890c630f31cf5142b890bc () Bool)\n(declare-fun a6 () Bool)\n(declare-fun v98c25db0428737de0f064021 () Bool)\n(declare-fun veacf07ea1530ed0ffc26f6b7 () Bool)\n(declare-fun a7 () Bool)\n(declare-fun v9cf003a7d2d5a01ca612d9e7 () Bool)\n(declare-fun v88ee7b839606c271c6fe7249 () Bool)\n(declare-fun a8 () Bool)\n(declare-fun v2272c3c898ede64486f421c7 () Bool)\n(declare-fun v719ccbad3a30cc4b92a01d4a () Bool)\n(declare-fun v47c50e2c1dfc703cc3d82b42 () Bool)\n(declare-fun a9 () Bool)\n(assert\n (let (($x49 (<= v377f55de66a1d54a2c91b2ae 600.0)))\n (let (($x47 (>= v377f55de66a1d54a2c91b2ae 300.0)))\n (let (($x50 (and $x47 $x49)))\n (=> a0 $x50)))))\n(assert\n (let (($x109 (<= vfeadebc660e719acf899bfa5 v40899268d1ce5d33ef8599d1)))\n (let (($x108 (>= v27120718d195cc24244ab949 v5185226601a8f426b348b34b)))\n (let (($x110 (and $x108 $x109)))\n (let (($x107 (not ve1017cb0fbf45bfc4fd9f79b)))\n (let (($x111 (or $x107 $x110)))\n (let (($x104 (<= vd603c6a872edec03c8591871 v40899268d1ce5d33ef8599d1)))\n (let (($x103 (>= v23b432d949fdf571372a5dd5 v5185226601a8f426b348b34b)))\n (let (($x105 (and $x103 $x104)))\n (let (($x102 (not v7e6c6e78e799e9ce2fab62dc)))\n (let (($x106 (or $x102 $x105)))\n (let (($x99 (<= vb2639a933460ade7697b8e58 v40899268d1ce5d33ef8599d1)))\n (let (($x98 (>= va1823a237b11410538020667 v5185226601a8f426b348b34b)))\n (let (($x100 (and $x98 $x99)))\n (let (($x97 (not v22b1ae4210dcc3133430568e)))\n (let (($x101 (or $x97 $x100)))\n (let (($x94 (<= v163e4096420dc04c78347786 v40899268d1ce5d33ef8599d1)))\n (let (($x93 (>= vcbc9a74b6375de3d858a38fa v5185226601a8f426b348b34b)))\n (let (($x95 (and $x93 $x94)))\n (let (($x92 (not v6900fd2f069fe9f73f8c61d2)))\n (let (($x96 (or $x92 $x95)))\n (let (($x89 (<= v0993e1b0a2334333d43a9e70 v40899268d1ce5d33ef8599d1)))\n (let (($x88 (>= v1a208021ea35a308d74aae07 v5185226601a8f426b348b34b)))\n (let (($x90 (and $x88 $x89)))\n (let (($x87 (not v2ace9a276b4febce9ea86093)))\n (let (($x91 (or $x87 $x90)))\n (let (($x84 (<= v949909c62b188cd987cc7e53 v40899268d1ce5d33ef8599d1)))\n (let (($x83 (>= vc60b46c74e9a0f15ac2f35fb v5185226601a8f426b348b34b)))\n (let (($x85 (and $x83 $x84)))\n (let (($x82 (not vc9c75e9bce83db62ca51f85a)))\n (let (($x86 (or $x82 $x85)))\n (let (($x79 (<= v94087bd0842ff13885e2dd23 v40899268d1ce5d33ef8599d1)))\n (let (($x78 (>= v3ae581d569cc96402b9b40ce v5185226601a8f426b348b34b)))\n (let (($x80 (and $x78 $x79)))\n (let (($x77 (not v640a9ec6f00a4b53ee1bad0e)))\n (let (($x81 (or $x77 $x80)))\n (let (($x75 (>= v377f55de66a1d54a2c91b2ae 0.0)))\n (let ((?x72 (+ v5185226601a8f426b348b34b v377f55de66a1d54a2c91b2ae)))\n (let (($x73 (= v40899268d1ce5d33ef8599d1 ?x72)))\n (let (($x49 (<= v377f55de66a1d54a2c91b2ae 600.0)))\n (let (($x47 (>= v377f55de66a1d54a2c91b2ae 300.0)))\n (let (($x50 (and $x47 $x49)))\n (let (($x76 (and $x50 $x73 $x75)))\n (let (($x112 (and $x76 $x81 $x86 $x91 $x96 $x101 $x106 $x111)))\n (=> a1 $x112)))))))))))))))))))))))))))))))))))))))))))))\n(assert\n (let (($x184 (<= v3ae581d569cc96402b9b40ce v94087bd0842ff13885e2dd23)))\n (let (($x77 (not v640a9ec6f00a4b53ee1bad0e)))\n (let (($x185 (or $x77 $x184)))\n (let (($x182 (not v65ff5b347581fc005ea799ce)))\n (let (($x183 (or $x182 v6cb91c40b65c7448063b178e)))\n (let (($x180 (not v6cb91c40b65c7448063b178e)))\n (let (($x181 (or $x180 v640a9ec6f00a4b53ee1bad0e)))\n (let (($x186 (and $x181 $x183 $x185)))\n (=> a2 $x186))))))))))\n(assert\n (let (($x201 (<= vc60b46c74e9a0f15ac2f35fb v949909c62b188cd987cc7e53)))\n (let (($x82 (not vc9c75e9bce83db62ca51f85a)))\n (let (($x202 (or $x82 $x201)))\n (let (($x199 (not vfed425cd2a2b56e5aaea452f)))\n (let (($x200 (or $x199 v5e4f99fe5bfba3b25d8b6579)))\n (let (($x197 (not v5e4f99fe5bfba3b25d8b6579)))\n (let (($x198 (or $x197 vc9c75e9bce83db62ca51f85a)))\n (let (($x203 (and $x198 $x200 $x202)))\n (=> a3 $x203))))))))))\n(assert\n (let (($x218 (<= v1a208021ea35a308d74aae07 v0993e1b0a2334333d43a9e70)))\n (let (($x87 (not v2ace9a276b4febce9ea86093)))\n (let (($x219 (or $x87 $x218)))\n (let (($x216 (not v5fcc7e421f4420af03e2df23)))\n (let (($x217 (or $x216 vf03e9415eb3fdea5425a7776)))\n (let (($x214 (not vf03e9415eb3fdea5425a7776)))\n (let (($x215 (or $x214 v2ace9a276b4febce9ea86093)))\n (let (($x220 (and $x215 $x217 $x219)))\n (=> a4 $x220))))))))))\n(assert\n (let (($x235 (<= vcbc9a74b6375de3d858a38fa v163e4096420dc04c78347786)))\n (let (($x92 (not v6900fd2f069fe9f73f8c61d2)))\n (let (($x236 (or $x92 $x235)))\n (let (($x233 (not vb4c30398653aa786cbe61736)))\n (let (($x234 (or $x233 v52e6b0c68d0ea79c12b1aeb5)))\n (let (($x231 (not v52e6b0c68d0ea79c12b1aeb5)))\n (let (($x232 (or $x231 v6900fd2f069fe9f73f8c61d2)))\n (let (($x237 (and $x232 $x234 $x236)))\n (=> a5 $x237))))))))))\n(assert\n (let (($x252 (<= va1823a237b11410538020667 vb2639a933460ade7697b8e58)))\n (let (($x97 (not v22b1ae4210dcc3133430568e)))\n (let (($x253 (or $x97 $x252)))\n (let (($x250 (not v97890c630f31cf5142b890bc)))\n (let (($x251 (or $x250 vd2671a456b960ab770cbc743)))\n (let (($x248 (not vd2671a456b960ab770cbc743)))\n (let (($x249 (or $x248 v22b1ae4210dcc3133430568e)))\n (let (($x254 (and $x249 $x251 $x253)))\n (=> a6 $x254))))))))))\n(assert\n (let (($x269 (<= v23b432d949fdf571372a5dd5 vd603c6a872edec03c8591871)))\n (let (($x102 (not v7e6c6e78e799e9ce2fab62dc)))\n (let (($x270 (or $x102 $x269)))\n (let (($x267 (not veacf07ea1530ed0ffc26f6b7)))\n (let (($x268 (or $x267 v98c25db0428737de0f064021)))\n (let (($x265 (not v98c25db0428737de0f064021)))\n (let (($x266 (or $x265 v7e6c6e78e799e9ce2fab62dc)))\n (let (($x271 (and $x266 $x268 $x270)))\n (=> a7 $x271))))))))))\n(assert\n (let (($x286 (<= v27120718d195cc24244ab949 vfeadebc660e719acf899bfa5)))\n (let (($x107 (not ve1017cb0fbf45bfc4fd9f79b)))\n (let (($x287 (or $x107 $x286)))\n (let (($x284 (not v88ee7b839606c271c6fe7249)))\n (let (($x285 (or $x284 v9cf003a7d2d5a01ca612d9e7)))\n (let (($x282 (not v9cf003a7d2d5a01ca612d9e7)))\n (let (($x283 (or $x282 ve1017cb0fbf45bfc4fd9f79b)))\n (let (($x288 (and $x283 $x285 $x287)))\n (=> a8 $x288))))))))))\n(assert\n (let (($x304 (<= v5185226601a8f426b348b34b v40899268d1ce5d33ef8599d1)))\n(let (($x303 (not v2272c3c898ede64486f421c7)))\n(let (($x305 (or $x303 $x304)))\n(let (($x301 (not v47c50e2c1dfc703cc3d82b42)))\n(let (($x302 (or $x301 v719ccbad3a30cc4b92a01d4a)))\n(let (($x299 (not v719ccbad3a30cc4b92a01d4a)))\n(let (($x300 (or $x299 v2272c3c898ede64486f421c7)))\n(let (($x306 (and $x300 $x302 $x305)))\n(=> a9 $x306))))))))))\n(check-sat-assuming (a0 a1 a2 a3 a4 a5 a6 a7 a8 a9))\n"
+    }
+  },
+  "remaining": [
+    {
+      "layer": "CONTRACT_EXPRESSIVITY",
+      "code": "BASIS_EXCLUSIVITY_GAP",
+      "source_refs": [
+        "s9"
+      ],
+      "description": "已绑定两份由DEV读取的生成依据及开始门；当前算子没有消费依据集合查询，无法以开放域约束排除生成时使用其他依据。BASIS角色列举本身不作为全称排他约束。"
+    },
+    {
+      "layer": "LLM_VIEW_AND_CONSUMER",
+      "code": "V_VIEW_NOT_ASSIGNED_AND_EMPTY_MISREPORTED",
+      "source_refs": [
+        "s1"
+      ],
+      "task_basis_present": true,
+      "llm_v_requirement_count": 0,
+      "final_v_count": 0,
+      "description": "The basis/version is in raw IR; no requirement has view V. Projection only consumes requirement views and Chinese incorrectly says no explicit requirement."
+    },
+    {
+      "layer": "QUERY_CAPABILITY",
+      "code": "ROLE_VALUE_UNKNOWN",
+      "target": "environment"
+    },
+    {
+      "layer": "QUERY_CAPABILITY",
+      "code": "INPUT_DOMAIN_NOT_GIVEN",
+      "target": "external_inputs"
+    }
+  ],
+  "original_hashes": {
+    "source.txt": "10c3089be0ac5b9b5288fc864f26642d418385eb27c5b64f84faf7b3d0abaf15",
+    "candidate-ir.json": "bbc4857bdda44004be258d954d2cbb73d214a77219845263fd50856cc204c60e",
+    "core.json": "e73ad68b171ab49049ea095491d2b42312b71b538881e589493c9a87f34f9c65",
+    "trace.json": "f78ad8cde8a2d0709e99c115ed1dacc5f406ea21cbfc3c2be0dcb4289f43608b",
+    "selected-resources.json": "098c9a218c122798fc4dd580e7d91bc8d394defdb303358bf1c58ca4dc197d57",
+    "boundary-calculations.json": "bde59cc203d4c3716f93462e71fb9b01b9e59c4b16fb152ce98130fefbda039e",
+    "run.json": "191eafc79c7895dd99a3fc229cdef21ff5a4b14422ede12a34b85549a70fbf91",
+    "revision-0/audit.json": "d61b22d07c89ac5bad9cc56a7ccd25187dce5e326d3a2de6a7215729e7b365ae"
+  },
+  "original_run_unchanged": true,
+  "assessment_scope": "CORE_CONFLICT_CORRECT_FULL_7PLUS1_AND_COVERAGE_NOT_COMPLETE"
+}

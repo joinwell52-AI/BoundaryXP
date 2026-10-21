@@ -1,0 +1,1 @@
+PM must organize a review limited to staging resources and exclude production resources. The deliverable is staging-scope.md, and no configuration changes are allowed.

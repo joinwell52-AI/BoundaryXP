@@ -1,0 +1,1 @@
+请 PM 组织 review release.json 并形成 release-review.md；QA review 通过后，PM 才能 send the report to ADMIN。不得执行发布。

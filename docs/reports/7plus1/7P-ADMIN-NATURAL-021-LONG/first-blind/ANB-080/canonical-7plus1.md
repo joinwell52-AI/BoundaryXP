@@ -1,0 +1,34 @@
+# ANB-080 Actual Canonical 7+1
+
+## I ABSENT
+
+
+
+## O UNRESOLVED
+
+
+
+## A UNRESOLVED
+
+
+
+## P ABSENT
+
+
+
+## R ABSENT
+
+
+
+## V ABSENT
+
+
+
+## C ABSENT
+
+
+
+## B UNRESOLVED
+
+- PERMITTED 读取 [UNRESOLVED]
+- FORBIDDEN 连接 在线数据库 [RESOLVED]

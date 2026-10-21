@@ -1,0 +1,7 @@
+import fs from 'node:fs';import {OUT,read,write} from './common.mjs';import {review} from './review.mjs';
+import {sourceDocument} from '../../../../research/7plus1-parser/p0-semantic-repair-r02/source.mjs';
+import {compileNative,parse7Plus1} from '../../../../research/7plus1-parser/v0.3-admin-short-019/engine.mjs';
+import {closeNlp} from '../../../../research/7plus1-parser/v0.3-7p-composition-014/linguistic.mjs';
+const revision=process.argv[2];if(!revision)throw Error('Explicit attempt label required');const cache=process.argv.includes('--cached'),selected=process.argv.find(x=>/^--case=/.test(x))?.split('=')[1];
+const out=OUT+'attempts/'+revision+'/';if(fs.existsSync(out))throw Error('Attempt already exists');
+try{const rows=[];for(const o of read(OUT+'ADMIN-SHORT-050-ORACLE.json').cases.filter(o=>!selected||o.id===selected)){const source=fs.readFileSync(o.source_path,'utf8'),old=read(OUT+'baseline-50/'+o.id+'/trace.json');const r=cache?compileNative(sourceDocument(source),structuredClone(old.compiler_v03.nlp_signals)):await parse7Plus1(source);const v=review(o,r);write(out+o.id+'/trace.json',r);write(out+o.id+'/review.json',v);rows.push({id:o.id,contract:r.contract_gate_results.status,candidate_matches:v.candidate_matches,total:v.oracle_fact_count,unresolved:r.compiler_v03.unresolved.length});console.log(JSON.stringify(rows.at(-1)));}write(out+'SUMMARY.json',{cached_nlp:cache,semantic_closure_not_certified:true,rows});}finally{closeNlp();}

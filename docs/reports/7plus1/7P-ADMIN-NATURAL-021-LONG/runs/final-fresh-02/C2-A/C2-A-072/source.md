@@ -1,0 +1,1 @@
+TEAM272 检查cache202和queue202，生成 acceptance-c2-a-2.txt。只有cache202与queue202均完成后，任务才完成。

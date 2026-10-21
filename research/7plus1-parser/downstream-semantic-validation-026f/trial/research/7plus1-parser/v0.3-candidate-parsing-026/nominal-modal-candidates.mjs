@@ -1,0 +1,22 @@
+import {modifierPhrase} from '../v0.3-7p-composition-014/syntax-mechanisms.mjs';
+const actions=new Map([['modification','modify'],['recovery','restore'],['reading','read'],['inspection','review'],['verification','review'],['publication','publish'],['deletion','delete'],['creation','generate'],['execution','run']]);
+// A passive modal with an action nominal subject licenses an event alternative.
+// Neither/nor is preserved as a distributed negative modal, not as permission.
+export function nominalModalCandidates(f){
+ f.proposals.provider='NOMINAL_MODAL_CONSTRUCTION_CANDIDATES';
+ for(const a of f.analyses){const ts=a.cl.tokens;
+  for(const governor of ts.filter(t=>/^(allowed|permitted|required|forbidden|prohibited)$/iu.test(t.text))){
+   const gi=ts.indexOf(governor),subjects=ts.filter(t=>t.head===gi&&/nsubj/u.test(t.dep??'')),domain=[...subjects];for(let i=0;i<domain.length;i++)for(const q of ts.filter(t=>t.head===ts.indexOf(domain[i])&&t.dep==='conj'))if(!domain.includes(q))domain.push(q);
+   const neither=ts.some(t=>/^neither$/iu.test(t.text)&&subjects.some(s=>ts[t.head]===s))&&ts.some(t=>/^nor$/iu.test(t.text));if(neither)for(const t of ts.filter(t=>actions.has(t.text.toLowerCase())&&ts.some(c=>/^nor$/iu.test(c.text)&&c.end<=t.start)&&t.start<governor.start))if(!domain.includes(t))domain.push(t);
+   const nominals=domain.filter(t=>actions.has(t.text.toLowerCase())),negative=neither||ts.some(t=>/^not$/iu.test(t.text)&&t.head===gi),require=/^required$/iu.test(governor.text),mode=/forbidden|prohibited/iu.test(governor.text)?'FORBIDDEN':require?negative?'NOT_REQUIRED':'REQUIRED':negative?'FORBIDDEN':'PERMITTED';
+   if(!nominals.length)continue;
+   const state=f.tools.node(a.cl,'STATE',governor.start,governor.end,{sense:'NOMINAL_MODAL_GOVERNOR',owner:a.cl.id,discourse:a.discourse,syntactic_layer:'MAIN',governed_predicate_token_ids:nominals.map(t=>t.id),marker_evidence:{source_span_ids:[a.sid],token_ids:ts.filter(t=>t===governor||t.head===gi).map(t=>t.id)},attachment_path:[a.parent_structure_id,a.cl.id,governor.id]});
+   for(const nominal of nominals){const e=f.tools.node(a.cl,'EVENT',nominal.start,nominal.end,{sense:actions.get(nominal.text.toLowerCase()),token_id:nominal.id,owner:a.cl.id,discourse:a.discourse,syntactic_layer:'MAIN',modality:mode,modality_rule:'EXPLICIT_PASSIVE_NOMINAL_MODAL',source_predicate_license:{rule:'ACTION_NOMINAL_SUBJECT_OF_EXPLICIT_MODAL',source_span_ids:[a.sid],token_ids:[nominal.id,governor.id]},local_modal_license:{modality:mode,rule:'EXPLICIT_PASSIVE_NOMINAL_MODAL',token_ids:[governor.id]},attachment_path:[a.parent_structure_id,a.cl.id,governor.id,nominal.id]});a.events.push(e);
+    const conjunction=f.tools.relation(a.cl,'CONJUNCTION',state,e,[a.sid]);conjunction.generic_evidence??=[];conjunction.generic_evidence.push({rule:'EXPLICIT_ACTION_NOMINAL_MODAL_OWNERSHIP',source_span_ids:[a.sid],token_ids:[nominal.id,governor.id]});
+    for(const q of ts.filter(t=>t.head===ts.indexOf(nominal)&&/^(obj|dobj)$/u.test(t.dep??''))){const [start,end]=modifierPhrase(a.cl,q),n=f.tools.node(a.cl,'ENTITY',start,end,{sense:'NOMINAL_ACTION_ARGUMENT',owner:e.node_id,argument_role:'PATIENT',syntax_token_ids:ts.filter(t=>t.start>=start&&t.end<=end).map(t=>t.id),discourse:a.discourse,attachment_path:[a.parent_structure_id,a.cl.id,governor.id,nominal.id,q.id]});const r=f.tools.relation(a.cl,mode==='FORBIDDEN'?'FORBIDS':'PATIENT',e,n,[a.sid]);r.generic_evidence??=[];r.generic_evidence.push({rule:'DEPENDENCY_NOMINAL_DIRECT_ARGUMENT',token_ids:[nominal.id,q.id],source_span_ids:[a.sid,...n.source_span_ids]});}
+    for(const prep of ts.filter(t=>/^of$/iu.test(t.text)&&t.dep==='prep'&&(t.head===ts.indexOf(nominal)||neither&&t.start>=nominal.end&&!nominals.some(q=>q!==nominal&&q.start>nominal.start&&q.start<t.start))))for(const q of ts.filter(t=>t.head===ts.indexOf(prep)&&t.dep==='pobj')){const [start,end]=modifierPhrase(a.cl,q),n=f.tools.node(a.cl,'ENTITY',start,end,{sense:'NOMINAL_ACTION_ARGUMENT',owner:e.node_id,argument_role:'PATIENT',syntax_token_ids:ts.filter(t=>t.start>=start&&t.end<=end).map(t=>t.id),discourse:a.discourse,attachment_path:[a.parent_structure_id,a.cl.id,nominal.id,prep.id,q.id]});const r=f.tools.relation(a.cl,mode==='FORBIDDEN'?'FORBIDS':'PATIENT',e,n,[a.sid]);r.generic_evidence??=[];r.generic_evidence.push({rule:'DEPENDENCY_NOMINAL_OF_ARGUMENT',token_ids:[nominal.id,prep.id,q.id],source_span_ids:[a.sid,...n.source_span_ids],distributed_negative:neither});}
+   }
+  }
+ }
+ return f;
+}

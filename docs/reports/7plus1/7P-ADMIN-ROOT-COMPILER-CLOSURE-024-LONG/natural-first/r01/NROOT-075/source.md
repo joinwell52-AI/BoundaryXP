@@ -1,0 +1,1 @@
+PM must organize the creation of operator-guide.md. The document must contain sections named “Risks” and “Rollback”. No rollback may actually be performed.

@@ -1,0 +1,118 @@
+{
+  "runtime_first_diagnostic": {
+    "type": "UNRESOLVED_RELATION",
+    "wp_id": "WP1",
+    "local_run_id": "view:2",
+    "local_unresolved_id": "p1:c7ff8d6f12edce2f6ece7f3a",
+    "reason": "Action modality is not explicit",
+    "source_spans": [
+      {
+        "source_id": "source:6116a41d97c8ba56e82bf0d7c9c38621f68889fae5253480ed5b941d18f7e0a0",
+        "start": 21,
+        "end": 39,
+        "quote": "张宁读取 inventory.csv"
+      }
+    ]
+  },
+  "first_in_source_order": "M01 B2 [11,21): stage responsibility is unsupported; runtime diagnostic emission order first reports B3 modality. Both orders recorded explicitly.",
+  "locations": [
+    {
+      "class": "Stage responsibility interface gap",
+      "path": "research/7plus1-parser/v0.3-7p-short-direct-016/short-frames.mjs",
+      "start": 35,
+      "end": 46,
+      "reason": "Assignment expects task/work target tokens after responsible predicate. Stage-by-person-responsible has its target before predicate, so no local task assignment is created.",
+      "case_id": "M01",
+      "block": "B2",
+      "sha256": "6262d91b073b7c7696945ac90bf5a8d565dbc70e24e24ec136e91e8093e56c14",
+      "source_lines": [
+        " for(const a of f.analyses){if(!boundaryDomain(a.discourse))continue;const text=a.cl.span.quote;",
+        "  const marker=a.cl.tokens.find(t=>t.text==='负责'||t.text.toLowerCase()==='responsible');",
+        "  if(!marker)continue;",
+        "  let ner=a.cl.entities.filter(e=>['PERSON','PER'].includes(e.label)&&e.span.end<=marker.start);",
+        "  const subjects=a.cl.tokens.filter(t=>t.end<=marker.start&&/^(NR|PROPN)$/u.test(t.pos??'')&&/^nsubj$/iu.test(t.dep??'')&&a.cl.tokens[t.head]===marker);",
+        "  if(subjects.length===1&&(!ner.length||ner.every(en=>en.span.start>=subjects[0].start&&en.span.end<=subjects[0].end)))ner=[{label:'PROPER_NAME_SUBJECT',span:{start:subjects[0].start,end:subjects[0].end},token_id:subjects[0].id}];",
+        "  const refs=a.cl.tokens.filter(t=>t.start>=marker.end&&/任务|工作|整理|核对|检查|task|work/iu.test(t.text));",
+        "  if(ner.length!==1||!refs.length)continue;",
+        "  const en=ner[0],actor=node(a.cl,'ENTITY',en.span.start,en.span.end,{literal_tag:'PERSON',owner:a.cl.id,discourse:a.discourse});",
+        "  actor.metadata.participant_roles=['PERFORMER'];actor.metadata.current_task_assignment=true;actor.metadata.participant_eligibility={eligible:true,reason:'EXPLICIT_TASK_RESPONSIBILITY_AND_NER',source_span_ids:[a.sid,...actor.source_span_ids]};",
+        "  const st=node(a.cl,'STATE',marker.start,marker.end,{sense:'TASK_ASSIGNMENT',owner:a.cl.id,discourse:a.discourse,assignment_target_id:task.node_id});",
+        "  a.state??=st;acceptedEdge(a,'AGENT',st,actor);assignments.push({a,actor,st});audit.assignments.push({actor_node_id:actor.node_id,state_node_id:st.node_id,target_node_id:task.node_id,source_span_ids:[a.sid],ner_evidence:en,structural_path:a.discourse.structural_path});a.handled=true;"
+      ]
+    },
+    {
+      "class": "Declarative execution modality remains unresolved",
+      "path": "research/7plus1-parser/v0.3-7p-composition-014/whole-composition.mjs",
+      "start": 9,
+      "end": 15,
+      "reason": "Local whole-frame check requires explicit certified modality. Named-agent READ receives UNSTATED; matrix passes exact view but no certified WP-local directive context.",
+      "case_id": "M01",
+      "span": [
+        21,
+        39
+      ],
+      "sha256": "a1340a9ee0cfc6a4eae235a066008afaa8f5c43feb4e576df9533fdb31a51621",
+      "source_lines": [
+        "  const owner=f.semantic_ownership.get(e.node_id),plan=f.expression_plans.get(e.node_id)??{},rs=f.relations.filter(r=>r.state!=='REJECTED'&&r.head_node_id===e.node_id),args=rs.filter(r=>['PATIENT','THEME','RESULT','AGENT','RECIPIENT'].includes(r.relation_type)),member=e.metadata.qualified_member_certificate,aggregate=f.semantic_decoding.cross_instruction_identity.aggregates.find(a=>a.governing_event_id===e.node_id&&a.state==='CERTIFIED'),a=f.analyses.find(a=>a.cl.id===e.metadata.clause_id);",
+        "  const each=a?.cl.tokens.filter(t=>/^(各|each|every)$/iu.test(t.text)&&t.head===a.cl.tokens.findIndex(t=>t.id===e.metadata.token_id))??[],distribution=e.metadata.distribution;",
+        "  const members=member?.member_node_ids??aggregate?.member_node_ids??distribution?.file_node_ids??[];",
+        "  const rec={certificate_id:id(f.source.sha256,'whole-frame',e.node_id),status:'PARTIAL',predicate_node_id:e.node_id,semantic_owner_id:owner?.semantic_owner_id,owner_status:owner?.status,predicate_layer:owner?.predicate_layer,syntactic_layer_id:owner?.syntactic_layer_id,modality:e.metadata.modality,argument_relation_ids:args.map(r=>r.relation_id),participant_role_witnesses:args.filter(r=>['AGENT','RECIPIENT'].includes(r.relation_type)).map(r=>({relation_id:r.relation_id,node_id:r.tail_node_id,roles:ns.get(r.tail_node_id)?.metadata.participant_roles??[],identity_eligible:!!ns.get(r.tail_node_id)?.metadata.participant_eligibility?.eligible})),member_node_ids:members,scope_expr_id:plan.scope_expr_id??null,condition_expr_id:plan.condition_expr_id??null,scope_member_ids:scopeMembers(plan.scope_expr_id),distribution:distribution??null,output_owner_ids:owner?.owner_output_ids??[],negative_evidence:owner?.negative_ownership_evidence??[],source_span_ids:uniq([...e.source_span_ids,...args.flatMap(r=>r.evidence_span_ids),...(member?.source_span_ids??aggregate?.source_span_ids??[])]),structural_path:owner?.attachment_path??[],checks:{},reasons:[]};",
+        "  const exact=ids=>ids.length>0&&ids.every(i=>{const s=ss.get(i);return s&&[...f.source.raw_text].slice(s.start,s.end).join('')===s.text;});",
+        "  rec.checks={unique_owner:owner?.status==='UNIQUE',explicit_modality:['REQUIRED','PERMITTED','FORBIDDEN'].includes(e.metadata.modality),arguments_resolved:args.length>0&&args.every(r=>r.state==='RESOLVED'&&ns.get(r.tail_node_id)?.state==='RESOLVED'&&!ns.get(r.tail_node_id)?.unresolved_ref),predicate_provenance:exact(e.source_span_ids),argument_provenance:args.every(r=>exact(r.evidence_span_ids)),required_condition:!plan.unresolved_ref&&e.metadata.condition_binding_certificate?.status!=='UNRESOLVED_CONDITION_BINDING',qualified_member_completeness:!member||member.status==='CERTIFIED'&&members.length>0&&members.every(i=>rec.scope_member_ids.includes(i)&&args.some(r=>r.tail_node_id===i)&&ns.get(i)?.metadata.structural_ownership?.file_node_id===member.owner_file_node_ids[0]),distribution_if_explicit:!each.length||!!distribution&&distribution.operator==='EACH'&&Number.isFinite(distribution.count_per_member)&&members.length>0};",
+        "  const insertion=typeof distribution==='object'&&f.semantic_decoding.frame_certification?.test_insertions?.find(t=>t.state==='CERTIFIED'&&t.event_node_id===e.node_id);"
+      ]
+    },
+    {
+      "class": "Stage completion domain unsupported",
+      "path": "research/7plus1-parser/v0.3-7p-short-direct-016/short-frames.mjs",
+      "start": 94,
+      "end": 111,
+      "reason": "Output-exists state is available, but completion admission explicitly tests task/任务, not a typed child-WP domain. Missing local C blocks C→Enable.",
+      "sha256": "6262d91b073b7c7696945ac90bf5a8d565dbc70e24e24ec136e91e8093e56c14",
+      "source_lines": [
+        "  const completed=ts.find(t=>/^(?:生成|产生|generated|created|produced)$/iu.test(t.text)&&ts.some(q=>q.end<=t.start&&/^(?:已|已经|has|have|been)$/iu.test(q.text)));",
+        "  if(!completed)continue;",
+        "  const files=a.locals.filter(n=>n.metadata.literal_tag==='FILEPATH'&&sp(n).end<=completed.start);",
+        "  if(files.length!==1)continue;const file=files[0],outputs=f.relations.filter(r=>r.relation_type==='RESULT'&&r.state==='RESOLVED').map(r=>f.semantic_nodes.find(n=>n.node_id===r.tail_node_id)).filter(n=>n.surface===file.surface);",
+        "  const unique=[...new Map(outputs.map(n=>[n.metadata.artifact_identity??n.surface,n])).values()];if(unique.length!==1)continue;",
+        "  const st=node(a.cl,'STATE',sp(file).start,completed.end,{sense:'OUTPUT_EXISTS',owner:a.cl.id,discourse:a.discourse,object_node_ids:[unique[0].node_id],polarity:'POSITIVE',perfective_token_id:completed.id});",
+        "  const evidence=acceptedEdge(a,'CONJUNCTION',st,unique[0]);states.push({a,st,evidence});a.state=st;a.handled=true;",
+        "  for(const e of [...a.events])if(sp(e).start===completed.start)retire(a,e,'PERFECTIVE_OUTPUT_STATE_NOT_NEW_ACTION');",
+        " }",
+        " // Completion antecedents are confined to the same source sentence, with an",
+        " // explicit when/after marker. Adjacency is not a scope certificate.",
+        " for(const a of f.analyses){const complete=a.cl.tokens.find(t=>/^(?:完成|complete)$/iu.test(t.text));if(!complete||!a.cl.tokens.some(t=>/^(?:任务|task)$/iu.test(t.text)))continue;",
+        "  const sentence=f.analyses.filter(x=>x.cl.sentence_id===a.cl.sentence_id),explicit=sentence.some(x=>/后|只有|\\bwhen\\b/iu.test(x.cl.span.quote));",
+        "  const candidates=states.filter(x=>x.a.cl.sentence_id===a.cl.sentence_id&&explicit);",
+        "  if(!candidates.length||candidates.length>1&&!sentence.some(x=>/并且|且|\\band\\b/iu.test(x.cl.span.quote)))continue;",
+        "  const {st,evidence}=candidates[0];let e=a.events.find(e=>e.metadata.completion);if(!e){e=node(a.cl,'EVENT',complete.start,complete.end,{sense:'complete',owner:a.cl.id,discourse:a.discourse,modality:'REQUIRED',completion:true});a.events.push(e);}",
+        "  mode(e,'REQUIRED');e.metadata.completion=true;a.handled=true;",
+        "  const r=acceptedEdge(a,'COMPLETION_OF',st,e,[candidates[0].a.sid]);"
+      ]
+    },
+    {
+      "class": "Matrix basis endpoint certification incomplete",
+      "path": "research/7plus1-parser/v0.3-7p-matrix-017-r1/engine.mjs",
+      "start": 27,
+      "end": 38,
+      "reason": "Root V entry state alone allows inheritance, even when its object is only a version token. Three M04 edges retain explicit relation evidence but fail complete endpoint identity. This new-layer defect is reported, not hidden.",
+      "sha256": "d28d3ba695d0ad311183216db847a8add1a2196d39e3ce326033ffb9c6144722",
+      "source_lines": [
+        " for(const edge of candidates.edges){if(edge.state==='UNRESOLVED'){unresolvedEdges.push(edge);continue;}if(edge.type==='REQUIRES_COMPLETION'){const completions=items.filter(i=>i.wp_id===edge.to_wp&&i.slot==='C'&&i.state==='RESOLVED');if(completions.length!==1||local[edge.to_wp].C.status!=='RESOLVED'){unresolvedEdges.push({...edge,state:'UNRESOLVED',reason:'Predecessor completion is not uniquely certified by local R2',candidate_completion_ids:completions.map(i=>i.semantic_item_id)});continue;}edge.completion_item_id=completions[0].semantic_item_id;edge.state='RESOLVED';edge.proof.local_completion_proof=completions[0].proof_lineage;}edges.push(edge);}",
+        " for(const input of items.filter(i=>i.slot==='I'&&i.artifact&&i.wp_id!=='WP0')){",
+        "  const producers=items.filter(i=>i.slot==='O'&&i.artifact&&i.semantic_identity===input.semantic_identity&&i.wp_id!==input.wp_id&&i.state==='RESOLVED');",
+        "  if(producers.length>1){diagnostics.push({type:'UNRESOLVED_ARTIFACT_PRODUCER',item_id:input.semantic_item_id,candidates:producers.map(i=>i.semantic_item_id)});continue;}",
+        "  if(producers.length===1&&input.state==='RESOLVED'){const output=producers[0];input.stage_role='INTERMEDIATE_INPUT';input.produced_by=[output.wp_id];output.stage_role='INTERMEDIATE_OUTPUT';output.consumed_by=unique([...output.consumed_by,input.wp_id]);for(const type of ['PRODUCES_FOR','CONSUMES_OUTPUT'])edges.push({edge_id:uid(type,output.semantic_item_id,input.semantic_item_id),type,state:'RESOLVED',from_wp:type==='PRODUCES_FOR'?output.wp_id:input.wp_id,to_wp:type==='PRODUCES_FOR'?input.wp_id:output.wp_id,output_item_id:output.semantic_item_id,input_item_id:input.semantic_item_id,semantic_identity:input.semantic_identity,source_spans:[...output.source_spans,...input.source_spans],proof:{rule:'SAME_TYPED_FILE_IDENTITY_AND_UNIQUE_CERTIFIED_LOCAL_PRODUCER',local:[output.proof_lineage,input.proof_lineage]}});}",
+        " }",
+        " // References to a root constraint are not copied local BoundaryFacts.",
+        " for(const root of items.filter(i=>i.wp_id==='WP0'&&['B','V'].includes(i.slot)&&i.state==='RESOLVED'))for(const wp of structure.wp_tree.wps.filter(w=>w.wp_id!=='WP0')){",
+        "  const targets=items.filter(i=>i.wp_id===wp.wp_id&&i.slot==='I'&&i.semantic_identity===root.semantic_identity);",
+        "  if(root.slot==='B'&&targets.length)local[wp.wp_id].B.inherited_refs.push({item_id:root.semantic_item_id,rule:'ROOT_CONSTRAINT_EXPLICIT_OBJECT_IDENTITY',input_item_ids:targets.map(i=>i.semantic_item_id)});",
+        "  // A root BASIS is inherited only as an explicit root contract, never from",
+        "  // shared strings. Child-local basis mentions remain visible for review."
+      ]
+    }
+  ],
+  "additional_syntax": "M01 local NLP marks 记录 as VV/conj after 检查, so duplicate-record object is not established. Full tokens are preserved in final-first/M01/trace.json.",
+  "other_errors": "M01/M02 output files become V in basis-adjunct phrases; M02 reviewed completion incomplete; M04 rule identity/global B referents/inheritance remain incomplete."
+}

@@ -1,0 +1,43 @@
+{
+  "case_id": "REAL-GOLD-047",
+  "source_sha256": "377a1d1c59c04a5cf55c74f8aec053f2146d3063be243d340bed028a577cdc06",
+  "status": "EVIDENCE_VERIFIED",
+  "evidence": [
+    {
+      "evidence_id": "E001",
+      "source_id": "SOURCE_TASK",
+      "origin": "SOURCE",
+      "start": 0,
+      "end": 801,
+      "quote": "---\nprotocol: fcop\nversion: 1\nsender: ADMIN\nrecipient: ME\npriority: P0\nthread_key: fix-init-v3-topology-3.0.2\nsubject: 修复 FCoP 3.0 init 不创建 _lifecycle/ 的协议层 bug（发版 3.0.2）\n---\n\n# 任务 · 修复 FCoP 3.0 init 协议层 bug\n\n## 背景\n\nFCoP 3.0.0/3.0.1 spec §1.1 钦定 v3 项目 MUST 有 `_lifecycle/{inbox,active,review,done,archive}/`，但 `Project._apply_init`(`src/fcop/project.py:924-931`) 只创建 v2 五桶，未调 `ensure_lifecycle_dirs()`。所有 3.0.x 全新初始化的项目都不合规。详见 ISSUE-20260522-001-ME。\n\n完整草案见 `.fcop/proposals/TASK-004-draft-fix-init-v3-topology.md`（ADMIN 已确认 v2 版本）。\n\n## 钦定方案\n\n- **A1**：`_apply_init` 默认落 v3 拓扑，按 spec §6 不再创建 `tasks/` / `log/`，保留 `reports/` / `issues/` / `shared/`。\n- **MCP tools 同步纳入本 task**。\n- **版本号 3.0.2**（patch，对齐 spec 既有承诺，非 breaking）。\n- **v3+C**：LETTER 不回滚 v3 承诺；audit 加 `_scan_lifecycle_topology_compliance()`。\n\n",
+      "purpose": "bug, chosen solution and version"
+    },
+    {
+      "evidence_id": "E002",
+      "source_id": "SOURCE_TASK",
+      "origin": "SOURCE",
+      "start": 801,
+      "end": 2247,
+      "quote": "## 实施范围\n\n### 4.1 代码\n\n修改 `src/fcop/project.py::_apply_init` line 924-931：\n- 删除 `self.tasks_dir`、`self.log_dir` 的 `mkdir`。\n- 调用 `from fcop.lifecycle.state import ensure_lifecycle_dirs; ensure_lifecycle_dirs(self._workspace_root / '_lifecycle')`。\n- 保留 `reports_dir` / `issues_dir` / `shared_dir`。\n\n### 4.2 单元测试\n\n新建 `tests/test_init_v3_topology.py`：\n- `test_init_solo_creates_lifecycle()` —— 五子桶必须存在。\n- `test_init_project_creates_lifecycle()` —— 同上（dev-team）。\n- `test_init_custom_team_creates_lifecycle()` —— 同上。\n- `test_init_v3_does_not_create_tasks_dir()` —— `tasks/` 不存在。\n- `test_init_v3_does_not_create_log_dir()` —— `log/` 不存在。\n- `test_init_v3_keeps_reports_issues_shared()` —— 三桶必须存在。\n- `test_is_v3_after_init()` —— `Project.is_v3` 返回 True。\n\n`pytest tests/` 全绿。\n\n### 4.3 audit 层\n\n新建 `_scan_lifecycle_topology_compliance()`：\n- v3 协议号但缺 `_lifecycle/` → P0 violation，建议 `python -m fcop migrate --to-v3` 或重新 init。\n- v3 项目残留 `tasks/` / `log/` → P1 hygiene warning。\n- 单元测试覆盖：v3 完整 / v3 缺 / v3 残留 v2 桶 / v2 项目（无 violation）。\n\n### 4.4 文档\n\n- `fcop/LETTER-TO-ADMIN.md`：保留 v3 承诺，加一句\"3.0.2 起 fresh init 立即兑现\"。\n- `README.md`：补 3.0 安装节 + 两条路径（init / migrate）+ 升级指南。\n- `docs/getting-started.md`：同步两条路径。\n- `mcps/user-fcop/tools/*.json` 中 `init_solo` / `init_project` / `create_custom_team` 描述加\"v3 拓扑\"字样。\n\n### 4.5 发布\n\n- 版本：3.0.2 patch。\n- CHANGELOG.md 加 3.0.2 节，引用 ISSUE-001 / TASK-004 / REPORT-004。\n- 发布前：`pytest tests/` 全绿 + `fcop_audit(scope=takeover)` 自检通过。\n\n",
+      "purpose": "code, tests, audit, docs and release scope"
+    },
+    {
+      "evidence_id": "E003",
+      "source_id": "SOURCE_TASK",
+      "origin": "SOURCE",
+      "start": 2247,
+      "end": 2927,
+      "quote": "## 风险（Rule 7）\n\n- **risk_level: high**（协议核心初始化路径 + audit + LETTER）。\n- 改动落 git 分支 `fix/init-v3-topology`，CI 不绿不 merge。\n- 回滚：`pip install fcop==3.0.1`；3.0.2 删除目录改动不可逆但只影响 fresh init，已存在项目不受影响。\n- **needs_human_approval: true**：risk=high 自动触发，发版前 ADMIN 必须 `mark_human_approved`。\n\n## 验收标准\n\n1. `pytest tests/` 全绿，含新加测试。\n2. fresh `init_solo` / `init_project` / `create_custom_team` 之后磁盘上有 `_lifecycle/{inbox,active,review,done,archive}/` + `reports/` + `issues/` + `shared/`，无 `tasks/` 无 `log/`。\n3. `fcop_audit` 在 v3 项目缺 `_lifecycle/` 时报 P0；在 v3 项目残留 v2 桶时报 P1。\n4. LETTER / README / docs / MCP tool descriptions 全部对齐 v3 拓扑承诺。\n5. CHANGELOG 3.0.2 节落地。\n6. ADMIN `mark_human_approved` 后才发版。\n\n",
+      "purpose": "risk, human approval and acceptance"
+    },
+    {
+      "evidence_id": "E004",
+      "source_id": "SOURCE_TASK",
+      "origin": "SOURCE",
+      "start": 2927,
+      "end": 3060,
+      "quote": "## 完成后\n\n- 写 REPORT-20260522-004-ME-to-ADMIN。\n- 归档 TASK-004。\n- 关 ISSUE-20260522-001-ME。\n- 在本仓跑 `python -m fcop migrate --to-v3` 升夹生项目。",
+      "purpose": "post-completion actions"
+    }
+  ]
+}

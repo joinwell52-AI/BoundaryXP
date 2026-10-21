@@ -1,0 +1,33 @@
+# Actual Canonical 7+1
+
+## I RESOLVED
+
+- RESOLVED api.yaml [p1:7ce301fbb6ed96138a8ab2b3]
+
+## O RESOLVED
+
+- RESOLVED api-check.md [p1:9d23c8058597726c68dfe404]
+
+## A RESOLVED
+
+- RESOLVED REQUIRED 核对 api.yaml [p1:97e89c52296530f969ebe0ca]
+- RESOLVED REQUIRED 生成 api-check.md [p1:f2b928bd24cf22eaf9c6afb4]
+
+## P RESOLVED
+
+- RESOLVED 陈默 [PERFORMER] [p1:6710f5fd4f85b16d1cd31e82,p1:57bfb91a6fb0c6efd5a58b05,p1:cc51ed9ce023a9807af3de6a]
+
+## R ABSENT
+
+
+## V RESOLVED
+
+- RESOLVED API-SPEC-12 [p1:9cf6da4a1fef7545da245468]
+
+## C RESOLVED
+
+- RESOLVED 完成 [p1:29cf3d6f29b48c591ea05231]
+
+## B RESOLVED
+
+- RESOLVED FORBIDDEN 修改 api.yaml [p1:a948421cc33ec693b0dfda1e]

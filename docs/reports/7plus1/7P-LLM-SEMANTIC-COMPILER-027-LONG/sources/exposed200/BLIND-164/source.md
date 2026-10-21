@@ -1,0 +1,1 @@
+本任务由 Taylor 负责组织：verify 测试集群 中的 event-8178.csv。若 event-8178.csv 存在差异，必须生成 audit-600106.md；否则无需生成 audit-600106.md。

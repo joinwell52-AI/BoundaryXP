@@ -1,0 +1,17 @@
+// Capture actual UI evidence; compare the installed CLI using exactly the same responses.
+import fs from 'node:fs';import path from 'node:path';import os from 'node:os';import assert from 'node:assert/strict';import {spawnSync} from 'node:child_process';
+import {report} from './prepare.mjs';import {sha256} from '../llm-first-028/source.mjs';
+const id='7228d06c-d9db-49fe-bcbd-44ea235cbeb9',home=path.resolve('.boundx/short-compiler-031-r1'),origin=path.join(home,'data/runs',id),dir=path.join(report,'runs/ui-final/N01');
+const record=JSON.parse(fs.readFileSync(path.join(origin,'run.json'))),trace=JSON.parse(fs.readFileSync(path.join(origin,'trace.json')));assert.equal(record.status,'COMPLETED');assert.equal(record.compiler_revision,'031-r1-c3');assert.equal(record.real_calls,2);
+fs.mkdirSync(dir,{recursive:true});fs.cpSync(origin,path.join(dir,'run'),{recursive:true,force:false,errorOnExist:true});
+const exports=['7plus1.json','7plus1.md','trace.json','trace.md','trace.html'].map(s=>({file:id+'-'+s,suffix:s}));
+for(const x of exports)fs.copyFileSync(path.join(process.env.USERPROFILE,'Downloads',x.file),path.join(dir,x.file),fs.constants.COPYFILE_EXCL);
+assert.deepEqual(JSON.parse(fs.readFileSync(path.join(dir,id+'-7plus1.json'))),trace.canonical);assert.equal(fs.readFileSync(path.join(dir,id+'-7plus1.md'),'utf8'),trace.chinese);
+const root=path.join(home,'versions',record.product_snapshot.product_version),out=path.join(report,'ui-cli-replay-c3');
+const cli=spawnSync(process.execPath,[path.join(root,'product/short-compiler/cli.mjs'),'--input',path.join(origin,'source.txt'),'--output',out,'--replay-from',origin],{cwd:os.tmpdir(),encoding:'utf8',windowsHide:true});assert.equal(cli.status,0,cli.stderr);
+assert.deepEqual(JSON.parse(fs.readFileSync(path.join(out,'7plus1.json'))),trace.canonical);assert.equal(fs.readFileSync(path.join(out,'7plus1.zh.md'),'utf8'),trace.chinese);
+const rows=await(await fetch('http://127.0.0.1:58621/api/runs')).json();assert.equal(rows.find(r=>r.run_id===id).real_calls,2);assert.equal(rows.find(r=>r.run_id==='35765e9a-a8c1-4512-8be1-f895b05525cb').real_calls,2);
+const oldHash=sha256(fs.readFileSync(path.join(home,'data/runs/35765e9a-a8c1-4512-8be1-f895b05525cb/trace.json')));assert.equal(oldHash,'049b1f94ac657b8c14af4999e3e4f73ee1916e416a52a14cc27811d086c2c389');
+fs.writeFileSync(path.join(dir,'execution.json'),JSON.stringify({id:'N01',group:'ui-final',interface:'INSTALLED_ORIGINAL_UI',execution_status:'RUN_SUCCEEDED',semantic_status:'NOT_REVIEWED',run_id:id,source_sha256:record.source_sha256,elapsed_ms:JSON.parse(fs.readFileSync(path.join(origin,'run-summary.json'))).elapsed_ms??Date.parse(record.ended_at)-Date.parse(record.created_at),real_outer_calls:2,product_snapshot:record.product_snapshot,created_at:record.created_at},null,2)+'\n',{flag:'wx'});
+fs.writeFileSync(path.join(report,'UI-CLI-CONSISTENCY-c3.json'),JSON.stringify({status:'PASS',run_id:id,actual_ui_real_calls:2,cli_mode:'FROZEN_RESPONSE_REPLAY',extra_model_calls:0,canonical_json_identical:true,chinese_byte_identical:true,exports:exports.map(x=>({...x,sha256:sha256(fs.readFileSync(path.join(dir,x.file)))})),exact_source_highlight_verified:[{span:[14,27],quote:'还可以生成extra.md'},{span:[1,4],quote:'OPS'}],refresh_history_reopen:true,old_c2_history_sha256:oldHash,old_history_unchanged:true,original_58618_and_58619_untouched:true},null,2)+'\n',{flag:'wx'});
+console.log('Final c3 UI / CLI / downloads / history consistency PASS; 2 actual calls + 0 replay calls');

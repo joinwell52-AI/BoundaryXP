@@ -1,0 +1,32 @@
+# Actual Canonical 7+1
+
+## I RESOLVED
+
+- RESOLVED input.csv [p1:c270c61ef5601af2a43abd89]
+
+## O RESOLVED
+
+- RESOLVED report.md [p1:0b2e346df94c2cd855640c11]
+
+## A RESOLVED
+
+- RESOLVED REQUIRED 读取 input.csv [p1:ab94829f4543e13fb55d8902]
+- RESOLVED REQUIRED 生成 report.md [p1:ecc515d73931873fbb1013ff]
+
+## P RESOLVED
+
+- RESOLVED 张宁 [PERFORMER] [p1:3cf8374a471711a39f37828a,p1:0fd728867025bcf62ca6f49c,p1:39def642cb34db8d48d1d139]
+
+## R ABSENT
+
+
+## V ABSENT
+
+
+## C RESOLVED
+
+- RESOLVED 完成 [p1:00caae879dc953284721395a]
+
+## B RESOLVED
+
+- RESOLVED FORBIDDEN 修改 input.csv [p1:7b3fac158b8c710177e7b7ee]

@@ -1,0 +1,1 @@
+UNITC2B2298 reads inventory-c2-b2-8.json and write handoff-c2-b2-8.md. Send the report to OWNERC2B2298 after REVIEWER has reviewed it.

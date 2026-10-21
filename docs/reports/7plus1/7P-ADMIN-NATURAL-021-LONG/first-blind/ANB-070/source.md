@@ -1,0 +1,1 @@
+DEV 读取 license.csv 并生成 license-note.md。许可证范围不清楚的条目必须标记为“待确认”，不得自动判为可商用。

@@ -1,0 +1,1 @@
+PM must organize a review of service.csv and deliver service-review.md. QA must review the report, and Leo may send the final report to ADMIN. Nora is not an approver.

@@ -1,0 +1,1 @@
+如果 manifest.json 缺失，则必须生成 alert.md。

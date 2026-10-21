@@ -1,0 +1,1 @@
+TEAM225 依据 POLICY-2025 v5.25 查看 dataset-c2-a-25.csv，编写 decision-c2-a-25.md，随后发送报告给 LEAD225。

@@ -1,0 +1,1 @@
+QA 读取 one.ini 和 two.ini，检查上述材料的全部记录。

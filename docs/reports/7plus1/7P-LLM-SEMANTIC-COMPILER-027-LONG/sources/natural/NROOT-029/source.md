@@ -1,0 +1,1 @@
+本次任务要求查看 audit.log 最近 90 分钟的 error 与 warning 情况并形成 log-window.md。90 分钟是观察窗口，不是任务时限；不得删除日志。

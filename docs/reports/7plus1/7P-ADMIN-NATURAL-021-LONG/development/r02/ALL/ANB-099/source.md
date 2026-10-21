@@ -1,0 +1,1 @@
+只有王宁或李澄批准后，QA 才能读取 snapshot.csv 并生成 snapshot-review.md。原文没有说明需要任一人还是两人共同批准，审批条件必须保持歧义。

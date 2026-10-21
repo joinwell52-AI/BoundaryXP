@@ -1,0 +1,13 @@
+import fs from 'node:fs';import path from 'node:path';import {createHash} from 'node:crypto';import {lockProduct} from './resources.mjs';
+const report=path.resolve('docs/reports/7plus1/UI42-ENTRY-UPGRADE-r01'),home=path.resolve('.boundx/short-compiler-031-r1');
+if(fs.existsSync(report))throw Error('FIRST_DEPLOY_RECORD_EXISTS');fs.mkdirSync(report,{recursive:true});
+const session=await fetch('http://127.0.0.1:58618/api/session').then(r=>r.json());
+const runs=await fetch('http://127.0.0.1:58618/api/runs').then(r=>r.json());
+const active=runs.filter(x=>!['COMPLETED','COMPLETED_WITH_UNRESOLVED','FAILED','CANCELLED','INTERRUPTED','LEGACY_READ_ONLY'].includes(x.status));if(active.length)throw Error('TARGET_NOT_IDLE');
+const old=lockProduct(path.join(home,'versions','0.1.0-candidate.031-r1.2-ui.40')),next=lockProduct(path.resolve('.boundx/products/0.1.0-candidate.031-r1.2-ui.42'));old.verify();next.verify();
+if(session.product_snapshot?.manifest_sha256!==old.snapshot.manifest_sha256)throw Error('UNEXPECTED_RUNNING_VERSION');
+const config=JSON.parse(fs.readFileSync(path.join(home,'config.json'))),backup=path.join(home,'backups','ui42-pre-stop-'+new Date().toISOString().replaceAll(':','-'));fs.mkdirSync(backup,{recursive:true});
+const hashes=[];const hash=b=>createHash('sha256').update(b).digest('hex');const scan=d=>{for(const e of fs.readdirSync(d,{withFileTypes:true})){const p=path.join(d,e.name);if(e.isDirectory())scan(p);else hashes.push({path:path.relative(config.data_dir,p),sha256:hash(fs.readFileSync(p))});}};scan(config.data_dir);
+for(const name of ['current.json','config.json'])fs.copyFileSync(path.join(home,name),path.join(backup,name),fs.constants.COPYFILE_EXCL);fs.cpSync(config.data_dir,path.join(backup,'data'),{recursive:true,errorOnExist:true,force:false});
+for(const f of hashes)if(hash(fs.readFileSync(path.join(backup,'data',f.path)))!==f.sha256)throw Error('BACKUP_MISMATCH');
+fs.writeFileSync(path.join(report,'PRE-UPGRADE.json'),JSON.stringify({authorization:'User explicitly authorized ui42 upgrade to 58618',before:old.snapshot.product_version,after:next.snapshot.product_version,before_manifest:old.snapshot.manifest_sha256,after_manifest:next.snapshot.manifest_sha256,checked_at:new Date().toISOString(),active:[],history_count:runs.length,backup,history_hashes:hashes,model_calls:0},null,2)+'\n',{flag:'wx'});console.log(JSON.stringify({backup,history_files:hashes.length,target_idle:true}));

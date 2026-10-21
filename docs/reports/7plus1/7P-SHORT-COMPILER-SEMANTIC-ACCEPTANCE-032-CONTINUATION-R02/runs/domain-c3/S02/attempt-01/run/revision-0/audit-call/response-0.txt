@@ -1,0 +1,199 @@
+{
+  "contract_version": "032.1",
+  "reviews": [
+    {
+      "subject_id": "person_pm",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [{"quote": "PM", "occurrence": 1}, {"quote": "PM", "occurrence": 2}],
+      "reason": "两处PM指同一参与身份；OTHER保留未指定的人或组类别。"
+    },
+    {
+      "subject_id": "person_qa",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [{"quote": "QA", "occurrence": 1}],
+      "reason": "QA身份明确；OTHER可作为未指定类别的占位。"
+    },
+    {
+      "subject_id": "person_admin",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [{"quote": "ADMIN", "occurrence": 1}],
+      "reason": "ADMIN接收身份明确，原文未限定为个人或组织。"
+    },
+    {
+      "subject_id": "file_brief",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [{"quote": "brief.md", "occurrence": 1}, {"quote": "brief.md", "occurrence": 2}, {"quote": "同一文件", "occurrence": 1}],
+      "reason": "唯一当前文件贯穿生成、复核与提交，名称及回指已合并为同一身份。"
+    },
+    {
+      "subject_id": "event_generate",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [{"quote": "请PM生成brief.md", "occurrence": 1}],
+      "reason": "明确要求当前生成动作，无附加条件。"
+    },
+    {
+      "subject_id": "event_review",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["temporal_review"],
+      "sources": [{"quote": "随后由QA复核brief.md", "occurrence": 1}],
+      "reason": "复核是明确要求的当前动作，随后时序已绑定。"
+    },
+    {
+      "subject_id": "event_submit",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["temporal_submit"],
+      "sources": [{"quote": "再由PM把同一文件提交给ADMIN", "occurrence": 1}],
+      "reason": "提交是明确要求的当前动作，再的时序已绑定。"
+    },
+    {
+      "subject_id": "role_generate_pm",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["person_pm", "event_generate"],
+      "sources": [{"quote": "请PM生成brief.md", "occurrence": 1}],
+      "reason": "PM明确执行生成。"
+    },
+    {
+      "subject_id": "role_generate_result",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["file_brief", "event_generate"],
+      "sources": [{"quote": "生成brief.md", "occurrence": 1}],
+      "reason": "brief.md是该生成动作的结果。"
+    },
+    {
+      "subject_id": "role_review_qa",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["person_qa", "event_review"],
+      "sources": [{"quote": "由QA复核brief.md", "occurrence": 1}],
+      "reason": "QA明确承担复核角色。"
+    },
+    {
+      "subject_id": "role_review_object",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["file_brief", "role_generate_result"],
+      "sources": [{"quote": "生成brief.md", "occurrence": 1}, {"quote": "随后由QA复核brief.md", "occurrence": 1}],
+      "reason": "复核消费本次生成的文件，OBJECT未将内部产物误作外部输入。"
+    },
+    {
+      "subject_id": "role_submit_pm",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["person_pm", "event_submit"],
+      "sources": [{"quote": "由PM把同一文件提交给ADMIN", "occurrence": 1}],
+      "reason": "提交执行者明确为PM。"
+    },
+    {
+      "subject_id": "role_submit_recipient",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["person_admin", "event_submit"],
+      "sources": [{"quote": "提交给ADMIN", "occurrence": 1}],
+      "reason": "ADMIN明确为提交接收者。"
+    },
+    {
+      "subject_id": "role_submit_deliverable",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["file_brief", "event_submit"],
+      "sources": [{"quote": "生成brief.md", "occurrence": 1}, {"quote": "复核brief.md", "occurrence": 1}, {"quote": "把同一文件提交给ADMIN", "occurrence": 1}],
+      "reason": "同一文件是明确交付产物，DELIVERABLE绑定正确且未新增生成动作。"
+    },
+    {
+      "subject_id": "scope_generate",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["role_generate_result", "item_brief"],
+      "sources": [{"quote": "生成brief.md", "occurrence": 1}],
+      "reason": "ITEM准确限定该事件的指定结果文件。"
+    },
+    {
+      "subject_id": "scope_review",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["role_review_object", "item_brief"],
+      "sources": [{"quote": "复核brief.md", "occurrence": 1}],
+      "reason": "范围绑定同一复核事件的具体对象，无类别或全称要求。"
+    },
+    {
+      "subject_id": "scope_submit",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["role_submit_deliverable", "item_brief"],
+      "sources": [{"quote": "复核brief.md", "occurrence": 1}, {"quote": "把同一文件提交给ADMIN", "occurrence": 1}],
+      "reason": "提交范围准确回指同一指定文件。"
+    },
+    {
+      "subject_id": "temporal_review",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["event_generate", "event_review", "state_generate_completed"],
+      "sources": [{"quote": "请PM生成brief.md", "occurrence": 1}, {"quote": "随后由QA复核brief.md", "occurrence": 1}],
+      "reason": "随后支持生成后复核；ORDER与AFTER保留纯先后，不增加充分触发或已发生断言。"
+    },
+    {
+      "subject_id": "temporal_submit",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["event_review", "event_submit", "state_review_completed"],
+      "sources": [{"quote": "随后由QA复核brief.md", "occurrence": 1}, {"quote": "再由PM把同一文件提交给ADMIN", "occurrence": 1}],
+      "reason": "再支持复核后提交，未将复核完成改为复核通过或批准。"
+    },
+    {
+      "subject_id": "artifact_review",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["role_generate_result", "role_review_object", "temporal_review"],
+      "sources": [{"quote": "生成brief.md", "occurrence": 1}, {"quote": "随后由QA复核brief.md", "occurrence": 1}],
+      "reason": "生产与消费两端支持同一本次结果实例；USED_PORTION保留基本可用性，明确事件先后另行表达。"
+    },
+    {
+      "subject_id": "artifact_submit",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["role_generate_result", "role_submit_deliverable", "temporal_submit"],
+      "sources": [{"quote": "生成brief.md", "occurrence": 1}, {"quote": "复核brief.md", "occurrence": 1}, {"quote": "再由PM把同一文件提交给ADMIN", "occurrence": 1}],
+      "reason": "提交使用本次生成并复核的同一结果，无版本竞争；原文未另加完整产物可用性要求。"
+    },
+    {
+      "subject_id": "item_brief",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["file_brief"],
+      "sources": [{"quote": "brief.md", "occurrence": 1}, {"quote": "brief.md", "occurrence": 2}, {"quote": "同一文件", "occurrence": 1}],
+      "reason": "ITEM引用一个明确具体文件，符合三个动作的对象范围。"
+    },
+    {
+      "subject_id": "state_generate_completed",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["event_generate", "file_brief"],
+      "sources": [{"quote": "请PM生成brief.md", "occurrence": 1}, {"quote": "随后", "occurrence": 1}],
+      "reason": "作为随后时序的参照，生成完成状态对应正确事件和文件，不断言当前已完成。"
+    },
+    {
+      "subject_id": "state_review_completed",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["event_review", "file_brief"],
+      "sources": [{"quote": "由QA复核brief.md", "occurrence": 1}, {"quote": "再由PM", "occurrence": 1}],
+      "reason": "作为提交先后关系的参照，复核完成状态对应正确事件和对象，不增复核通过条件。"
+    }
+  ],
+  "issues": [],
+  "omissions": []
+}

@@ -1,0 +1,253 @@
+{
+  "contract_version": "031-r1-q05.1",
+  "entities": [
+    {
+      "id": "ent_ops",
+      "label": "OPS",
+      "type": "OTHER",
+      "mentions": [
+        {"quote": "OPS", "occurrence": 1}
+      ],
+      "alternatives": []
+    },
+    {
+      "id": "ent_file",
+      "label": "inventory.csv",
+      "type": "FILE",
+      "mentions": [
+        {"quote": "inventory.csv", "occurrence": 1},
+        {"quote": "该文件", "occurrence": 1}
+      ],
+      "alternatives": []
+    },
+    {
+      "id": "ent_asset_records",
+      "label": "资产记录",
+      "type": "CLASS",
+      "mentions": [
+        {"quote": "所有资产记录", "occurrence": 1},
+        {"quote": "任何资产记录", "occurrence": 1}
+      ],
+      "alternatives": []
+    }
+  ],
+  "events": [
+    {
+      "id": "evt_check",
+      "predicate": "核对",
+      "kind": "ACTION",
+      "layer": "MAIN",
+      "use": "CURRENT_TASK",
+      "modality": "REQUIRED",
+      "polarity": "POSITIVE",
+      "owner_id": "ROOT",
+      "constraint_ids": [],
+      "requires": [],
+      "sources": [
+        {"quote": "请OPS核对inventory.csv中的所有资产记录", "occurrence": 1}
+      ]
+    },
+    {
+      "id": "evt_delete",
+      "predicate": "删除",
+      "kind": "ACTION",
+      "layer": "MAIN",
+      "use": "CURRENT_TASK",
+      "modality": "FORBIDDEN",
+      "polarity": "POSITIVE",
+      "owner_id": "ROOT",
+      "constraint_ids": [],
+      "requires": [],
+      "sources": [
+        {"quote": "不得删除该文件中的任何资产记录", "occurrence": 1}
+      ]
+    }
+  ],
+  "claims": [
+    {
+      "id": "cl_check_performer",
+      "kind": "ROLE",
+      "event_id": "evt_check",
+      "entity_id": "ent_ops",
+      "role": "PERFORMER",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "artifact_use": null,
+      "scope_id": "evt_check",
+      "requires": [],
+      "sources": [
+        {"quote": "请OPS核对", "occurrence": 1}
+      ],
+      "note": "OPS是明确的核对执行者；岗位简称不推定个人或组织类别。"
+    },
+    {
+      "id": "cl_check_input",
+      "kind": "ROLE",
+      "event_id": "evt_check",
+      "entity_id": "ent_asset_records",
+      "role": "INPUT_OBJECT",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "artifact_use": null,
+      "scope_id": "evt_check",
+      "requires": [],
+      "sources": [
+        {"quote": "核对inventory.csv中的所有资产记录", "occurrence": 1}
+      ],
+      "note": "受检范围是inventory.csv内的资产记录，具体全称域由SCOPE绑定。"
+    },
+    {
+      "id": "cl_check_scope",
+      "kind": "SCOPE",
+      "event_id": "evt_check",
+      "entity_id": null,
+      "role": null,
+      "expression_id": "expr_check_all",
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "artifact_use": null,
+      "scope_id": "ent_asset_records",
+      "requires": [],
+      "sources": [
+        {"quote": "inventory.csv中的所有资产记录", "occurrence": 1}
+      ],
+      "note": "核对适用于该文件内每一条资产记录。"
+    },
+    {
+      "id": "cl_delete_performer",
+      "kind": "ROLE",
+      "event_id": "evt_delete",
+      "entity_id": "ent_ops",
+      "role": "PERFORMER",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "artifact_use": null,
+      "scope_id": "evt_delete",
+      "requires": [],
+      "sources": [
+        {"quote": "请OPS核对", "occurrence": 1},
+        {"quote": "不得删除该文件中的任何资产记录", "occurrence": 1}
+      ],
+      "note": "同一连续指令未切换主体，删除禁令承接OPS。"
+    },
+    {
+      "id": "cl_delete_object",
+      "kind": "ROLE",
+      "event_id": "evt_delete",
+      "entity_id": "ent_asset_records",
+      "role": "OBJECT",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "artifact_use": null,
+      "scope_id": "evt_delete",
+      "requires": [],
+      "sources": [
+        {"quote": "不得删除该文件中的任何资产记录", "occurrence": 1}
+      ],
+      "note": "禁止对象绑定资产记录类别，不因禁止另增外部输入。"
+    },
+    {
+      "id": "cl_delete_scope",
+      "kind": "SCOPE",
+      "event_id": "evt_delete",
+      "entity_id": null,
+      "role": null,
+      "expression_id": "expr_delete_all",
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "artifact_use": null,
+      "scope_id": "ent_asset_records",
+      "requires": [],
+      "sources": [
+        {"quote": "inventory.csv", "occurrence": 1},
+        {"quote": "该文件中的任何资产记录", "occurrence": 1}
+      ],
+      "note": "该文件指inventory.csv；删除禁令全称适用于文件内资产记录，无例外。"
+    }
+  ],
+  "expressions": [
+    {
+      "id": "expr_check_domain",
+      "op": "CATEGORY",
+      "operands": ["ent_asset_records", "ent_file"],
+      "state": null,
+      "sources": [
+        {"quote": "inventory.csv中的所有资产记录", "occurrence": 1}
+      ]
+    },
+    {
+      "id": "expr_check_all",
+      "op": "FORALL",
+      "operands": ["expr_check_domain"],
+      "state": null,
+      "sources": [
+        {"quote": "所有资产记录", "occurrence": 1}
+      ]
+    },
+    {
+      "id": "expr_delete_domain",
+      "op": "CATEGORY",
+      "operands": ["ent_asset_records", "ent_file"],
+      "state": null,
+      "sources": [
+        {"quote": "inventory.csv", "occurrence": 1},
+        {"quote": "该文件中的任何资产记录", "occurrence": 1}
+      ]
+    },
+    {
+      "id": "expr_delete_all",
+      "op": "FORALL",
+      "operands": ["expr_delete_domain"],
+      "state": null,
+      "sources": [
+        {"quote": "不得删除该文件中的任何资产记录", "occurrence": 1}
+      ]
+    }
+  ],
+  "issues": [],
+  "coverage": [
+    {
+      "sources": [
+        {"quote": "请OPS核对inventory.csv中的所有资产记录", "occurrence": 1}
+      ],
+      "claim_ids": [
+        "cl_check_performer",
+        "cl_check_input",
+        "cl_check_scope"
+      ],
+      "status": "EXPRESSED",
+      "affected_views": ["I", "A", "P"],
+      "range_requirement": {
+        "kind": "UNIVERSAL",
+        "scope_claim_ids": ["cl_check_scope"]
+      }
+    },
+    {
+      "sources": [
+        {"quote": "请OPS核对", "occurrence": 1},
+        {"quote": "不得删除该文件中的任何资产记录", "occurrence": 1}
+      ],
+      "claim_ids": [
+        "cl_delete_performer",
+        "cl_delete_object",
+        "cl_delete_scope"
+      ],
+      "status": "EXPRESSED",
+      "affected_views": ["B", "P"],
+      "range_requirement": {
+        "kind": "UNIVERSAL",
+        "scope_claim_ids": ["cl_delete_scope"]
+      }
+    }
+  ]
+}

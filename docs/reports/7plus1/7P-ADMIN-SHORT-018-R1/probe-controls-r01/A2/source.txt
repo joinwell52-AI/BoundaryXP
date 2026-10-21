@@ -1,0 +1,1 @@
+ENG 读取 north.tsv 和 south.tsv，检查其中所有条目的评分。

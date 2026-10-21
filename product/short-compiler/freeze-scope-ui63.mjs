@@ -1,0 +1,3 @@
+import fs from 'node:fs';
+let code=fs.readFileSync(new URL('./freeze-scope-ui61.mjs',import.meta.url),'utf8').replace("parent='0.1.0-candidate.031-r1.2-ui.60'","parent='0.1.0-candidate.031-r1.2-ui.62'").replace("version='0.1.0-candidate.031-r1.2-ui.61'","version='0.1.0-candidate.031-r1.2-ui.63'").replaceAll('031-r1-c33','031-r1-c35').replaceAll('scope-ui61-overlay','scope-ui63-overlay').replaceAll('FREEZE-ui61','FREEZE-ui63');
+await import('data:text/javascript;base64,'+Buffer.from(code.replace("from './resources.mjs'","from '"+new URL('./resources.mjs',import.meta.url).href+"'")).toString('base64'));

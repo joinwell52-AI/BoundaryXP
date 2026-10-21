@@ -1,0 +1,7 @@
+import {RELATION_CONTRACT} from './relations.mjs';
+export function finalizeDecodingTrace(f){
+ const nm=new Map(f.semantic_nodes.map(n=>[n.node_id,n])),trace=f.semantic_decoding;
+ for(const r of f.relations){const spec=RELATION_CONTRACT[r.relation_type],compatible=spec.head_node_types.includes(nm.get(r.head_node_id)?.node_type)&&spec.tail_node_types.includes(nm.get(r.tail_node_id)?.node_type);trace.candidates.push({candidate_id:r.relation_id,kind:'RELATION',clause_id:r.clause_id,source_span_ids:r.evidence_span_ids,endpoint_ids:[r.head_node_id,r.tail_node_id],hard_type_compatible:compatible,evidence_score:{typed:compatible?1:0,structural:r.evidence_tier==='STRONG'?1:0,model_override:0},evidence_priority:['TYPED_EXACT','SRL','DEPENDENCY','LOCAL_COMPOSITION','DISCOURSE','NLI','BGE_E5'],decision:r.state==='RESOLVED'?'ACCEPTED':r.state==='REJECTED'?'REJECTED':'UNRESOLVED',reason:r.rule_refs.join(' / ')});}
+ for(const n of f.semantic_nodes.filter(n=>n.metadata.resolution)){const x=n.metadata.resolution;for(const candidate of x.candidate_node_ids)trace.candidates.push({candidate_id:n.node_id+':'+candidate,kind:'COREFERENCE',clause_id:n.metadata.clause_id,source_span_ids:x.source_span_ids,endpoint_ids:[n.node_id,candidate],hard_type_compatible:true,cardinality_constraint:n.metadata.cardinality_diagnostic??null,decision:x.selected_node_ids.includes(candidate)?'ACCEPTED':'UNRESOLVED',reason:x.rule});}
+ trace.unresolved=f.unresolved.map(u=>({unresolved_id:u.unresolved_id,kind:u.kind,reason:u.reason,clause_ids:u.related_clause_ids}));return f;
+}

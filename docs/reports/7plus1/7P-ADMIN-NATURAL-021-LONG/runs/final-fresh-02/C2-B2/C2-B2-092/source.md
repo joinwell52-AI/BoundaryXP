@@ -1,0 +1,1 @@
+UNITC2B2292 读取 inventory-c2-b2-2.json，创建 handoff-c2-b2-2.md。OWNERC2B2292 在 UNITC2B2292 发送报告后向 COORD 汇报。

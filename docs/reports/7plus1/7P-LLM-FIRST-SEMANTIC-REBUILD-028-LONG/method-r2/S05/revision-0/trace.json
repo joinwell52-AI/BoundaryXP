@@ -1,0 +1,5467 @@
+{
+  "source": {
+    "text": "请PM检查a.csv；无需重启服务，不得删除a.csv。",
+    "sha256": "f65c9ff03b3fe3fe65f92f42c1b3ebf74b1b64be74a1340e773ea114732dd29c",
+    "encoding": "UTF-8",
+    "codepoints": 28,
+    "lines": [
+      {
+        "id": "L1",
+        "text": "请PM检查a.csv；无需重启服务，不得删除a.csv。",
+        "span": [
+          0,
+          28
+        ]
+      }
+    ],
+    "literals": [
+      {
+        "text": "a.csv",
+        "span": [
+          5,
+          10
+        ]
+      },
+      {
+        "text": "a.csv",
+        "span": [
+          22,
+          27
+        ]
+      }
+    ]
+  },
+  "proposal": {
+    "contract_version": "028-r02.2",
+    "entities": [
+      {
+        "id": "ent_pm",
+        "label": "PM",
+        "type": "PERSON",
+        "mentions": [
+          {
+            "quote": "PM",
+            "occurrence": 1
+          }
+        ],
+        "alternatives": []
+      },
+      {
+        "id": "ent_file",
+        "label": "a.csv",
+        "type": "FILE",
+        "mentions": [
+          {
+            "quote": "a.csv",
+            "occurrence": 1
+          },
+          {
+            "quote": "a.csv",
+            "occurrence": 2
+          }
+        ],
+        "alternatives": []
+      },
+      {
+        "id": "ent_service",
+        "label": "服务",
+        "type": "SYSTEM",
+        "mentions": [
+          {
+            "quote": "服务",
+            "occurrence": 1
+          }
+        ],
+        "alternatives": []
+      }
+    ],
+    "events": [
+      {
+        "id": "evt_check",
+        "predicate": "检查",
+        "kind": "ACTION",
+        "layer": "MAIN",
+        "use": "CURRENT_TASK",
+        "modality": "REQUIRED",
+        "polarity": "POSITIVE",
+        "owner_id": "ROOT",
+        "constraint_ids": [],
+        "requires": [],
+        "sources": [
+          {
+            "quote": "请PM检查a.csv",
+            "occurrence": 1
+          }
+        ]
+      },
+      {
+        "id": "evt_restart",
+        "predicate": "重启",
+        "kind": "ACTION",
+        "layer": "MAIN",
+        "use": "CURRENT_TASK",
+        "modality": "NOT_REQUIRED",
+        "polarity": "POSITIVE",
+        "owner_id": "ROOT",
+        "constraint_ids": [],
+        "requires": [],
+        "sources": [
+          {
+            "quote": "无需重启服务",
+            "occurrence": 1
+          }
+        ]
+      },
+      {
+        "id": "evt_delete",
+        "predicate": "删除",
+        "kind": "ACTION",
+        "layer": "MAIN",
+        "use": "CURRENT_TASK",
+        "modality": "FORBIDDEN",
+        "polarity": "POSITIVE",
+        "owner_id": "ROOT",
+        "constraint_ids": [],
+        "requires": [],
+        "sources": [
+          {
+            "quote": "不得删除a.csv",
+            "occurrence": 1
+          }
+        ]
+      }
+    ],
+    "claims": [
+      {
+        "id": "cl_check_performer",
+        "kind": "ROLE",
+        "event_id": "evt_check",
+        "entity_id": "ent_pm",
+        "role": "PERFORMER",
+        "expression_id": null,
+        "direction": null,
+        "temporal": null,
+        "quantity": null,
+        "scope_id": "evt_check",
+        "requires": [],
+        "sources": [
+          {
+            "quote": "请PM检查a.csv",
+            "occurrence": 1
+          }
+        ],
+        "note": "PM是检查事件的明确执行者。"
+      },
+      {
+        "id": "cl_check_input",
+        "kind": "ROLE",
+        "event_id": "evt_check",
+        "entity_id": "ent_file",
+        "role": "INPUT_OBJECT",
+        "expression_id": null,
+        "direction": null,
+        "temporal": null,
+        "quantity": null,
+        "scope_id": "evt_check",
+        "requires": [],
+        "sources": [
+          {
+            "quote": "检查a.csv",
+            "occurrence": 1
+          }
+        ],
+        "note": "a.csv是明确受检对象。"
+      },
+      {
+        "id": "cl_restart_object",
+        "kind": "ROLE",
+        "event_id": "evt_restart",
+        "entity_id": "ent_service",
+        "role": "OBJECT",
+        "expression_id": null,
+        "direction": null,
+        "temporal": null,
+        "quantity": null,
+        "scope_id": "evt_restart",
+        "requires": [],
+        "sources": [
+          {
+            "quote": "无需重启服务",
+            "occurrence": 1
+          }
+        ],
+        "note": "撤回重启义务，不构成重启禁止或明确许可。"
+      },
+      {
+        "id": "cl_delete_object",
+        "kind": "ROLE",
+        "event_id": "evt_delete",
+        "entity_id": "ent_file",
+        "role": "OBJECT",
+        "expression_id": null,
+        "direction": null,
+        "temporal": null,
+        "quantity": null,
+        "scope_id": "evt_delete",
+        "requires": [],
+        "sources": [
+          {
+            "quote": "不得删除a.csv",
+            "occurrence": 1
+          }
+        ],
+        "note": "禁止删除的对象与受检文件为同一实体；禁止用途不新增外部输入。"
+      }
+    ],
+    "expressions": [],
+    "issues": [
+      {
+        "id": "issue_implicit_performers",
+        "kind": "UNSPECIFIED",
+        "subject_ids": [
+          "evt_restart",
+          "evt_delete"
+        ],
+        "field_path": "claims.role=PERFORMER",
+        "alternatives": [],
+        "affected_views": [
+          "P"
+        ],
+        "sources": [
+          {
+            "quote": "无需重启服务",
+            "occurrence": 1
+          },
+          {
+            "quote": "不得删除a.csv",
+            "occurrence": 1
+          }
+        ],
+        "note": "后两个分句未明确执行者，不自动扩展PM在检查事件中的执行角色。"
+      }
+    ],
+    "coverage": [
+      {
+        "sources": [
+          {
+            "quote": "请PM检查a.csv",
+            "occurrence": 1
+          }
+        ],
+        "claim_ids": [
+          "cl_check_performer",
+          "cl_check_input"
+        ],
+        "status": "EXPRESSED",
+        "affected_views": [
+          "I",
+          "A",
+          "P"
+        ]
+      },
+      {
+        "sources": [
+          {
+            "quote": "无需重启服务",
+            "occurrence": 1
+          }
+        ],
+        "claim_ids": [
+          "cl_restart_object"
+        ],
+        "status": "EXPRESSED",
+        "affected_views": [
+          "A",
+          "B"
+        ]
+      },
+      {
+        "sources": [
+          {
+            "quote": "不得删除a.csv",
+            "occurrence": 1
+          }
+        ],
+        "claim_ids": [
+          "cl_delete_object"
+        ],
+        "status": "EXPRESSED",
+        "affected_views": [
+          "B"
+        ]
+      },
+      {
+        "sources": [
+          {
+            "quote": "无需重启服务",
+            "occurrence": 1
+          },
+          {
+            "quote": "不得删除a.csv",
+            "occurrence": 1
+          }
+        ],
+        "claim_ids": [],
+        "status": "UNSPECIFIED",
+        "affected_views": [
+          "P"
+        ]
+      }
+    ]
+  },
+  "audit": {
+    "contract_version": "028-r02.2",
+    "reviews": [
+      {
+        "subject_id": "ent_pm",
+        "field_path": "",
+        "verdict": "SUPPORT",
+        "context_refs": [],
+        "sources": [
+          {
+            "quote": "PM",
+            "occurrence": 1
+          }
+        ],
+        "reason": "原文明示PM，可作为人员实体；未据岗位推定权限。"
+      },
+      {
+        "subject_id": "ent_file",
+        "field_path": "",
+        "verdict": "SUPPORT",
+        "context_refs": [],
+        "sources": [
+          {
+            "quote": "a.csv",
+            "occurrence": 1
+          },
+          {
+            "quote": "a.csv",
+            "occurrence": 2
+          }
+        ],
+        "reason": "两处同名文件分别用于检查和禁止删除，合并为同一实体有原文支持。"
+      },
+      {
+        "subject_id": "ent_service",
+        "field_path": "",
+        "verdict": "SUPPORT",
+        "context_refs": [],
+        "sources": [
+          {
+            "quote": "服务",
+            "occurrence": 1
+          }
+        ],
+        "reason": "服务是重启动作的明确对象，SYSTEM类型合理。"
+      },
+      {
+        "subject_id": "evt_check",
+        "field_path": "",
+        "verdict": "SUPPORT",
+        "context_refs": [],
+        "sources": [
+          {
+            "quote": "请PM检查a.csv",
+            "occurrence": 1
+          }
+        ],
+        "reason": "这是当前任务的明确检查要求，无额外条件。"
+      },
+      {
+        "subject_id": "evt_restart",
+        "field_path": "",
+        "verdict": "SUPPORT",
+        "context_refs": [],
+        "sources": [
+          {
+            "quote": "无需重启服务",
+            "occurrence": 1
+          }
+        ],
+        "reason": "无需表示不要求重启，NOT_REQUIRED准确，未改成禁止或许可。"
+      },
+      {
+        "subject_id": "evt_delete",
+        "field_path": "",
+        "verdict": "SUPPORT",
+        "context_refs": [],
+        "sources": [
+          {
+            "quote": "不得删除a.csv",
+            "occurrence": 1
+          }
+        ],
+        "reason": "不得明确禁止删除；FORBIDDEN与正向动作谓词组合准确。"
+      },
+      {
+        "subject_id": "cl_check_performer",
+        "field_path": "",
+        "verdict": "SUPPORT",
+        "context_refs": [
+          "evt_check",
+          "ent_pm"
+        ],
+        "sources": [
+          {
+            "quote": "请PM检查a.csv",
+            "occurrence": 1
+          }
+        ],
+        "reason": "PM明确承担检查事件的执行者角色。"
+      },
+      {
+        "subject_id": "cl_check_input",
+        "field_path": "",
+        "verdict": "SUPPORT",
+        "context_refs": [
+          "evt_check",
+          "ent_file"
+        ],
+        "sources": [
+          {
+            "quote": "检查a.csv",
+            "occurrence": 1
+          }
+        ],
+        "reason": "a.csv是明确受检范围，INPUT_OBJECT用途有支持。"
+      },
+      {
+        "subject_id": "cl_restart_object",
+        "field_path": "",
+        "verdict": "SUPPORT",
+        "context_refs": [
+          "evt_restart",
+          "ent_service"
+        ],
+        "sources": [
+          {
+            "quote": "无需重启服务",
+            "occurrence": 1
+          }
+        ],
+        "reason": "服务是无需执行的重启动作对象，不自动成为外部输入。"
+      },
+      {
+        "subject_id": "cl_delete_object",
+        "field_path": "",
+        "verdict": "SUPPORT",
+        "context_refs": [
+          "evt_delete",
+          "ent_file"
+        ],
+        "sources": [
+          {
+            "quote": "检查a.csv",
+            "occurrence": 1
+          },
+          {
+            "quote": "不得删除a.csv",
+            "occurrence": 1
+          }
+        ],
+        "reason": "禁止删除指向同一a.csv；OBJECT用途不会额外推导输入。"
+      }
+    ],
+    "issues": [],
+    "omissions": []
+  },
+  "technical": {
+    "policy": "028-r02-technical-v1",
+    "schemas": {
+      "proposal": {
+        "ok": true,
+        "errors": []
+      },
+      "audit": {
+        "ok": true,
+        "errors": []
+      }
+    },
+    "rows": [
+      {
+        "id": "ent_pm",
+        "collection": "entities",
+        "status": "ACCEPTED",
+        "errors": [],
+        "uncertain": [],
+        "sources": [
+          {
+            "quote": "PM",
+            "occurrence": 1,
+            "span": [
+              1,
+              3
+            ],
+            "source_sha256": "f65c9ff03b3fe3fe65f92f42c1b3ebf74b1b64be74a1340e773ea114732dd29c"
+          }
+        ],
+        "audit_refs": [
+          {
+            "subject_id": "ent_pm",
+            "field_path": "",
+            "verdict": "SUPPORT"
+          }
+        ],
+        "required_dependencies": [],
+        "structural_refs": []
+      },
+      {
+        "id": "ent_file",
+        "collection": "entities",
+        "status": "ACCEPTED",
+        "errors": [],
+        "uncertain": [],
+        "sources": [
+          {
+            "quote": "a.csv",
+            "occurrence": 1,
+            "span": [
+              5,
+              10
+            ],
+            "source_sha256": "f65c9ff03b3fe3fe65f92f42c1b3ebf74b1b64be74a1340e773ea114732dd29c"
+          },
+          {
+            "quote": "a.csv",
+            "occurrence": 2,
+            "span": [
+              22,
+              27
+            ],
+            "source_sha256": "f65c9ff03b3fe3fe65f92f42c1b3ebf74b1b64be74a1340e773ea114732dd29c"
+          }
+        ],
+        "audit_refs": [
+          {
+            "subject_id": "ent_file",
+            "field_path": "",
+            "verdict": "SUPPORT"
+          }
+        ],
+        "required_dependencies": [],
+        "structural_refs": []
+      },
+      {
+        "id": "ent_service",
+        "collection": "entities",
+        "status": "ACCEPTED",
+        "errors": [],
+        "uncertain": [],
+        "sources": [
+          {
+            "quote": "服务",
+            "occurrence": 1,
+            "span": [
+              15,
+              17
+            ],
+            "source_sha256": "f65c9ff03b3fe3fe65f92f42c1b3ebf74b1b64be74a1340e773ea114732dd29c"
+          }
+        ],
+        "audit_refs": [
+          {
+            "subject_id": "ent_service",
+            "field_path": "",
+            "verdict": "SUPPORT"
+          }
+        ],
+        "required_dependencies": [],
+        "structural_refs": []
+      },
+      {
+        "id": "evt_check",
+        "collection": "events",
+        "status": "ACCEPTED",
+        "errors": [],
+        "uncertain": [],
+        "sources": [
+          {
+            "quote": "请PM检查a.csv",
+            "occurrence": 1,
+            "span": [
+              0,
+              10
+            ],
+            "source_sha256": "f65c9ff03b3fe3fe65f92f42c1b3ebf74b1b64be74a1340e773ea114732dd29c"
+          }
+        ],
+        "audit_refs": [
+          {
+            "subject_id": "evt_check",
+            "field_path": "",
+            "verdict": "SUPPORT"
+          }
+        ],
+        "required_dependencies": [],
+        "structural_refs": [
+          "ROOT"
+        ]
+      },
+      {
+        "id": "evt_restart",
+        "collection": "events",
+        "status": "ACCEPTED",
+        "errors": [],
+        "uncertain": [],
+        "sources": [
+          {
+            "quote": "无需重启服务",
+            "occurrence": 1,
+            "span": [
+              11,
+              17
+            ],
+            "source_sha256": "f65c9ff03b3fe3fe65f92f42c1b3ebf74b1b64be74a1340e773ea114732dd29c"
+          }
+        ],
+        "audit_refs": [
+          {
+            "subject_id": "evt_restart",
+            "field_path": "",
+            "verdict": "SUPPORT"
+          }
+        ],
+        "required_dependencies": [],
+        "structural_refs": [
+          "ROOT"
+        ]
+      },
+      {
+        "id": "evt_delete",
+        "collection": "events",
+        "status": "ACCEPTED",
+        "errors": [],
+        "uncertain": [],
+        "sources": [
+          {
+            "quote": "不得删除a.csv",
+            "occurrence": 1,
+            "span": [
+              18,
+              27
+            ],
+            "source_sha256": "f65c9ff03b3fe3fe65f92f42c1b3ebf74b1b64be74a1340e773ea114732dd29c"
+          }
+        ],
+        "audit_refs": [
+          {
+            "subject_id": "evt_delete",
+            "field_path": "",
+            "verdict": "SUPPORT"
+          }
+        ],
+        "required_dependencies": [],
+        "structural_refs": [
+          "ROOT"
+        ]
+      },
+      {
+        "id": "cl_check_performer",
+        "collection": "claims",
+        "status": "ACCEPTED",
+        "errors": [],
+        "uncertain": [],
+        "sources": [
+          {
+            "quote": "请PM检查a.csv",
+            "occurrence": 1,
+            "span": [
+              0,
+              10
+            ],
+            "source_sha256": "f65c9ff03b3fe3fe65f92f42c1b3ebf74b1b64be74a1340e773ea114732dd29c"
+          }
+        ],
+        "audit_refs": [
+          {
+            "subject_id": "cl_check_performer",
+            "field_path": "",
+            "verdict": "SUPPORT"
+          }
+        ],
+        "required_dependencies": [],
+        "structural_refs": [
+          "evt_check",
+          "ent_pm"
+        ]
+      },
+      {
+        "id": "cl_check_input",
+        "collection": "claims",
+        "status": "ACCEPTED",
+        "errors": [],
+        "uncertain": [],
+        "sources": [
+          {
+            "quote": "检查a.csv",
+            "occurrence": 1,
+            "span": [
+              3,
+              10
+            ],
+            "source_sha256": "f65c9ff03b3fe3fe65f92f42c1b3ebf74b1b64be74a1340e773ea114732dd29c"
+          }
+        ],
+        "audit_refs": [
+          {
+            "subject_id": "cl_check_input",
+            "field_path": "",
+            "verdict": "SUPPORT"
+          }
+        ],
+        "required_dependencies": [],
+        "structural_refs": [
+          "evt_check",
+          "ent_file"
+        ]
+      },
+      {
+        "id": "cl_restart_object",
+        "collection": "claims",
+        "status": "ACCEPTED",
+        "errors": [],
+        "uncertain": [],
+        "sources": [
+          {
+            "quote": "无需重启服务",
+            "occurrence": 1,
+            "span": [
+              11,
+              17
+            ],
+            "source_sha256": "f65c9ff03b3fe3fe65f92f42c1b3ebf74b1b64be74a1340e773ea114732dd29c"
+          }
+        ],
+        "audit_refs": [
+          {
+            "subject_id": "cl_restart_object",
+            "field_path": "",
+            "verdict": "SUPPORT"
+          }
+        ],
+        "required_dependencies": [],
+        "structural_refs": [
+          "evt_restart",
+          "ent_service"
+        ]
+      },
+      {
+        "id": "cl_delete_object",
+        "collection": "claims",
+        "status": "ACCEPTED",
+        "errors": [],
+        "uncertain": [],
+        "sources": [
+          {
+            "quote": "不得删除a.csv",
+            "occurrence": 1,
+            "span": [
+              18,
+              27
+            ],
+            "source_sha256": "f65c9ff03b3fe3fe65f92f42c1b3ebf74b1b64be74a1340e773ea114732dd29c"
+          }
+        ],
+        "audit_refs": [
+          {
+            "subject_id": "cl_delete_object",
+            "field_path": "",
+            "verdict": "SUPPORT"
+          }
+        ],
+        "required_dependencies": [],
+        "structural_refs": [
+          "evt_delete",
+          "ent_file"
+        ]
+      }
+    ],
+    "diagnostics": [],
+    "coverage": [
+      {
+        "sources": [
+          {
+            "quote": "请PM检查a.csv",
+            "occurrence": 1,
+            "span": [
+              0,
+              10
+            ],
+            "source_sha256": "f65c9ff03b3fe3fe65f92f42c1b3ebf74b1b64be74a1340e773ea114732dd29c"
+          }
+        ],
+        "claim_ids": [
+          "cl_check_performer",
+          "cl_check_input"
+        ],
+        "status": "EXPRESSED",
+        "affected_views": [
+          "I",
+          "A",
+          "P"
+        ],
+        "id": "coverage:0"
+      },
+      {
+        "sources": [
+          {
+            "quote": "无需重启服务",
+            "occurrence": 1,
+            "span": [
+              11,
+              17
+            ],
+            "source_sha256": "f65c9ff03b3fe3fe65f92f42c1b3ebf74b1b64be74a1340e773ea114732dd29c"
+          }
+        ],
+        "claim_ids": [
+          "cl_restart_object"
+        ],
+        "status": "EXPRESSED",
+        "affected_views": [
+          "A",
+          "B"
+        ],
+        "id": "coverage:1"
+      },
+      {
+        "sources": [
+          {
+            "quote": "不得删除a.csv",
+            "occurrence": 1,
+            "span": [
+              18,
+              27
+            ],
+            "source_sha256": "f65c9ff03b3fe3fe65f92f42c1b3ebf74b1b64be74a1340e773ea114732dd29c"
+          }
+        ],
+        "claim_ids": [
+          "cl_delete_object"
+        ],
+        "status": "EXPRESSED",
+        "affected_views": [
+          "B"
+        ],
+        "id": "coverage:2"
+      },
+      {
+        "sources": [
+          {
+            "quote": "无需重启服务",
+            "occurrence": 1,
+            "span": [
+              11,
+              17
+            ],
+            "source_sha256": "f65c9ff03b3fe3fe65f92f42c1b3ebf74b1b64be74a1340e773ea114732dd29c"
+          },
+          {
+            "quote": "不得删除a.csv",
+            "occurrence": 1,
+            "span": [
+              18,
+              27
+            ],
+            "source_sha256": "f65c9ff03b3fe3fe65f92f42c1b3ebf74b1b64be74a1340e773ea114732dd29c"
+          }
+        ],
+        "claim_ids": [],
+        "status": "UNSPECIFIED",
+        "affected_views": [
+          "P"
+        ],
+        "id": "coverage:3"
+      }
+    ],
+    "audit_sources": [
+      {
+        "subject_id": "ent_pm",
+        "sources": [
+          {
+            "quote": "PM",
+            "occurrence": 1,
+            "span": [
+              1,
+              3
+            ],
+            "source_sha256": "f65c9ff03b3fe3fe65f92f42c1b3ebf74b1b64be74a1340e773ea114732dd29c"
+          }
+        ]
+      },
+      {
+        "subject_id": "ent_file",
+        "sources": [
+          {
+            "quote": "a.csv",
+            "occurrence": 1,
+            "span": [
+              5,
+              10
+            ],
+            "source_sha256": "f65c9ff03b3fe3fe65f92f42c1b3ebf74b1b64be74a1340e773ea114732dd29c"
+          },
+          {
+            "quote": "a.csv",
+            "occurrence": 2,
+            "span": [
+              22,
+              27
+            ],
+            "source_sha256": "f65c9ff03b3fe3fe65f92f42c1b3ebf74b1b64be74a1340e773ea114732dd29c"
+          }
+        ]
+      },
+      {
+        "subject_id": "ent_service",
+        "sources": [
+          {
+            "quote": "服务",
+            "occurrence": 1,
+            "span": [
+              15,
+              17
+            ],
+            "source_sha256": "f65c9ff03b3fe3fe65f92f42c1b3ebf74b1b64be74a1340e773ea114732dd29c"
+          }
+        ]
+      },
+      {
+        "subject_id": "evt_check",
+        "sources": [
+          {
+            "quote": "请PM检查a.csv",
+            "occurrence": 1,
+            "span": [
+              0,
+              10
+            ],
+            "source_sha256": "f65c9ff03b3fe3fe65f92f42c1b3ebf74b1b64be74a1340e773ea114732dd29c"
+          }
+        ]
+      },
+      {
+        "subject_id": "evt_restart",
+        "sources": [
+          {
+            "quote": "无需重启服务",
+            "occurrence": 1,
+            "span": [
+              11,
+              17
+            ],
+            "source_sha256": "f65c9ff03b3fe3fe65f92f42c1b3ebf74b1b64be74a1340e773ea114732dd29c"
+          }
+        ]
+      },
+      {
+        "subject_id": "evt_delete",
+        "sources": [
+          {
+            "quote": "不得删除a.csv",
+            "occurrence": 1,
+            "span": [
+              18,
+              27
+            ],
+            "source_sha256": "f65c9ff03b3fe3fe65f92f42c1b3ebf74b1b64be74a1340e773ea114732dd29c"
+          }
+        ]
+      },
+      {
+        "subject_id": "cl_check_performer",
+        "sources": [
+          {
+            "quote": "请PM检查a.csv",
+            "occurrence": 1,
+            "span": [
+              0,
+              10
+            ],
+            "source_sha256": "f65c9ff03b3fe3fe65f92f42c1b3ebf74b1b64be74a1340e773ea114732dd29c"
+          }
+        ]
+      },
+      {
+        "subject_id": "cl_check_input",
+        "sources": [
+          {
+            "quote": "检查a.csv",
+            "occurrence": 1,
+            "span": [
+              3,
+              10
+            ],
+            "source_sha256": "f65c9ff03b3fe3fe65f92f42c1b3ebf74b1b64be74a1340e773ea114732dd29c"
+          }
+        ]
+      },
+      {
+        "subject_id": "cl_restart_object",
+        "sources": [
+          {
+            "quote": "无需重启服务",
+            "occurrence": 1,
+            "span": [
+              11,
+              17
+            ],
+            "source_sha256": "f65c9ff03b3fe3fe65f92f42c1b3ebf74b1b64be74a1340e773ea114732dd29c"
+          }
+        ]
+      },
+      {
+        "subject_id": "cl_delete_object",
+        "sources": [
+          {
+            "quote": "检查a.csv",
+            "occurrence": 1,
+            "span": [
+              3,
+              10
+            ],
+            "source_sha256": "f65c9ff03b3fe3fe65f92f42c1b3ebf74b1b64be74a1340e773ea114732dd29c"
+          },
+          {
+            "quote": "不得删除a.csv",
+            "occurrence": 1,
+            "span": [
+              18,
+              27
+            ],
+            "source_sha256": "f65c9ff03b3fe3fe65f92f42c1b3ebf74b1b64be74a1340e773ea114732dd29c"
+          }
+        ]
+      }
+    ],
+    "issue_sources": [
+      {
+        "id": "issue_implicit_performers",
+        "sources": [
+          {
+            "quote": "无需重启服务",
+            "occurrence": 1,
+            "span": [
+              11,
+              17
+            ],
+            "source_sha256": "f65c9ff03b3fe3fe65f92f42c1b3ebf74b1b64be74a1340e773ea114732dd29c"
+          },
+          {
+            "quote": "不得删除a.csv",
+            "occurrence": 1,
+            "span": [
+              18,
+              27
+            ],
+            "source_sha256": "f65c9ff03b3fe3fe65f92f42c1b3ebf74b1b64be74a1340e773ea114732dd29c"
+          }
+        ]
+      }
+    ]
+  },
+  "ir": {
+    "format": "boundx-boundary-ir/028-r02.2",
+    "source_sha256": "f65c9ff03b3fe3fe65f92f42c1b3ebf74b1b64be74a1340e773ea114732dd29c",
+    "facts": [
+      {
+        "id": "bf:f43e0b447040493e324e",
+        "kind": "EVENT",
+        "status": "ACCEPTED",
+        "claim_ids": [
+          "evt_check",
+          "cl_check_performer",
+          "cl_check_input"
+        ],
+        "event": {
+          "id": "evt_check",
+          "predicate": "检查",
+          "kind": "ACTION",
+          "layer": "MAIN",
+          "use": "CURRENT_TASK",
+          "modality": "REQUIRED",
+          "polarity": "POSITIVE",
+          "owner_id": "ROOT",
+          "constraint_ids": [],
+          "requires": [],
+          "sources": [
+            {
+              "quote": "请PM检查a.csv",
+              "occurrence": 1,
+              "span": [
+                0,
+                10
+              ],
+              "source_sha256": "f65c9ff03b3fe3fe65f92f42c1b3ebf74b1b64be74a1340e773ea114732dd29c"
+            }
+          ]
+        },
+        "roles": [
+          {
+            "id": "cl_check_performer",
+            "kind": "ROLE",
+            "event_id": "evt_check",
+            "entity_id": "ent_pm",
+            "role": "PERFORMER",
+            "expression_id": null,
+            "direction": null,
+            "temporal": null,
+            "quantity": null,
+            "scope_id": "evt_check",
+            "requires": [],
+            "sources": [
+              {
+                "quote": "请PM检查a.csv",
+                "occurrence": 1,
+                "span": [
+                  0,
+                  10
+                ],
+                "source_sha256": "f65c9ff03b3fe3fe65f92f42c1b3ebf74b1b64be74a1340e773ea114732dd29c"
+              }
+            ],
+            "note": "PM是检查事件的明确执行者。",
+            "entity": {
+              "id": "ent_pm",
+              "label": "PM",
+              "type": "PERSON",
+              "mentions": [
+                {
+                  "quote": "PM",
+                  "occurrence": 1,
+                  "span": [
+                    1,
+                    3
+                  ],
+                  "source_sha256": "f65c9ff03b3fe3fe65f92f42c1b3ebf74b1b64be74a1340e773ea114732dd29c"
+                }
+              ],
+              "alternatives": []
+            },
+            "status": "ACCEPTED"
+          },
+          {
+            "id": "cl_check_input",
+            "kind": "ROLE",
+            "event_id": "evt_check",
+            "entity_id": "ent_file",
+            "role": "INPUT_OBJECT",
+            "expression_id": null,
+            "direction": null,
+            "temporal": null,
+            "quantity": null,
+            "scope_id": "evt_check",
+            "requires": [],
+            "sources": [
+              {
+                "quote": "检查a.csv",
+                "occurrence": 1,
+                "span": [
+                  3,
+                  10
+                ],
+                "source_sha256": "f65c9ff03b3fe3fe65f92f42c1b3ebf74b1b64be74a1340e773ea114732dd29c"
+              }
+            ],
+            "note": "a.csv是明确受检对象。",
+            "entity": {
+              "id": "ent_file",
+              "label": "a.csv",
+              "type": "FILE",
+              "mentions": [
+                {
+                  "quote": "a.csv",
+                  "occurrence": 1,
+                  "span": [
+                    5,
+                    10
+                  ],
+                  "source_sha256": "f65c9ff03b3fe3fe65f92f42c1b3ebf74b1b64be74a1340e773ea114732dd29c"
+                },
+                {
+                  "quote": "a.csv",
+                  "occurrence": 2,
+                  "span": [
+                    22,
+                    27
+                  ],
+                  "source_sha256": "f65c9ff03b3fe3fe65f92f42c1b3ebf74b1b64be74a1340e773ea114732dd29c"
+                }
+              ],
+              "alternatives": []
+            },
+            "status": "ACCEPTED"
+          }
+        ],
+        "constraints": [],
+        "sources": [
+          {
+            "quote": "请PM检查a.csv",
+            "occurrence": 1,
+            "span": [
+              0,
+              10
+            ],
+            "source_sha256": "f65c9ff03b3fe3fe65f92f42c1b3ebf74b1b64be74a1340e773ea114732dd29c"
+          },
+          {
+            "quote": "请PM检查a.csv",
+            "occurrence": 1,
+            "span": [
+              0,
+              10
+            ],
+            "source_sha256": "f65c9ff03b3fe3fe65f92f42c1b3ebf74b1b64be74a1340e773ea114732dd29c"
+          },
+          {
+            "quote": "PM",
+            "occurrence": 1,
+            "span": [
+              1,
+              3
+            ],
+            "source_sha256": "f65c9ff03b3fe3fe65f92f42c1b3ebf74b1b64be74a1340e773ea114732dd29c"
+          },
+          {
+            "quote": "检查a.csv",
+            "occurrence": 1,
+            "span": [
+              3,
+              10
+            ],
+            "source_sha256": "f65c9ff03b3fe3fe65f92f42c1b3ebf74b1b64be74a1340e773ea114732dd29c"
+          },
+          {
+            "quote": "a.csv",
+            "occurrence": 1,
+            "span": [
+              5,
+              10
+            ],
+            "source_sha256": "f65c9ff03b3fe3fe65f92f42c1b3ebf74b1b64be74a1340e773ea114732dd29c"
+          },
+          {
+            "quote": "a.csv",
+            "occurrence": 2,
+            "span": [
+              22,
+              27
+            ],
+            "source_sha256": "f65c9ff03b3fe3fe65f92f42c1b3ebf74b1b64be74a1340e773ea114732dd29c"
+          }
+        ],
+        "slots": [
+          "A"
+        ],
+        "proof": {
+          "source_sha256": "f65c9ff03b3fe3fe65f92f42c1b3ebf74b1b64be74a1340e773ea114732dd29c",
+          "claim_ids": [
+            "evt_check",
+            "cl_check_performer",
+            "cl_check_input"
+          ],
+          "provenance_refs": [
+            "evt_check",
+            "cl_check_performer",
+            "ent_pm",
+            "cl_check_input",
+            "ent_file"
+          ],
+          "technical_policy": "028-r02-technical-v1",
+          "checks": [
+            {
+              "id": "evt_check",
+              "collection": "events",
+              "status": "ACCEPTED",
+              "errors": [],
+              "uncertain": [],
+              "sources": [
+                {
+                  "quote": "请PM检查a.csv",
+                  "occurrence": 1,
+                  "span": [
+                    0,
+                    10
+                  ],
+                  "source_sha256": "f65c9ff03b3fe3fe65f92f42c1b3ebf74b1b64be74a1340e773ea114732dd29c"
+                }
+              ],
+              "audit_refs": [
+                {
+                  "subject_id": "evt_check",
+                  "field_path": "",
+                  "verdict": "SUPPORT"
+                }
+              ],
+              "required_dependencies": [],
+              "structural_refs": [
+                "ROOT"
+              ]
+            },
+            {
+              "id": "cl_check_performer",
+              "collection": "claims",
+              "status": "ACCEPTED",
+              "errors": [],
+              "uncertain": [],
+              "sources": [
+                {
+                  "quote": "请PM检查a.csv",
+                  "occurrence": 1,
+                  "span": [
+                    0,
+                    10
+                  ],
+                  "source_sha256": "f65c9ff03b3fe3fe65f92f42c1b3ebf74b1b64be74a1340e773ea114732dd29c"
+                }
+              ],
+              "audit_refs": [
+                {
+                  "subject_id": "cl_check_performer",
+                  "field_path": "",
+                  "verdict": "SUPPORT"
+                }
+              ],
+              "required_dependencies": [],
+              "structural_refs": [
+                "evt_check",
+                "ent_pm"
+              ]
+            },
+            {
+              "id": "ent_pm",
+              "collection": "entities",
+              "status": "ACCEPTED",
+              "errors": [],
+              "uncertain": [],
+              "sources": [
+                {
+                  "quote": "PM",
+                  "occurrence": 1,
+                  "span": [
+                    1,
+                    3
+                  ],
+                  "source_sha256": "f65c9ff03b3fe3fe65f92f42c1b3ebf74b1b64be74a1340e773ea114732dd29c"
+                }
+              ],
+              "audit_refs": [
+                {
+                  "subject_id": "ent_pm",
+                  "field_path": "",
+                  "verdict": "SUPPORT"
+                }
+              ],
+              "required_dependencies": [],
+              "structural_refs": []
+            },
+            {
+              "id": "cl_check_input",
+              "collection": "claims",
+              "status": "ACCEPTED",
+              "errors": [],
+              "uncertain": [],
+              "sources": [
+                {
+                  "quote": "检查a.csv",
+                  "occurrence": 1,
+                  "span": [
+                    3,
+                    10
+                  ],
+                  "source_sha256": "f65c9ff03b3fe3fe65f92f42c1b3ebf74b1b64be74a1340e773ea114732dd29c"
+                }
+              ],
+              "audit_refs": [
+                {
+                  "subject_id": "cl_check_input",
+                  "field_path": "",
+                  "verdict": "SUPPORT"
+                }
+              ],
+              "required_dependencies": [],
+              "structural_refs": [
+                "evt_check",
+                "ent_file"
+              ]
+            },
+            {
+              "id": "ent_file",
+              "collection": "entities",
+              "status": "ACCEPTED",
+              "errors": [],
+              "uncertain": [],
+              "sources": [
+                {
+                  "quote": "a.csv",
+                  "occurrence": 1,
+                  "span": [
+                    5,
+                    10
+                  ],
+                  "source_sha256": "f65c9ff03b3fe3fe65f92f42c1b3ebf74b1b64be74a1340e773ea114732dd29c"
+                },
+                {
+                  "quote": "a.csv",
+                  "occurrence": 2,
+                  "span": [
+                    22,
+                    27
+                  ],
+                  "source_sha256": "f65c9ff03b3fe3fe65f92f42c1b3ebf74b1b64be74a1340e773ea114732dd29c"
+                }
+              ],
+              "audit_refs": [
+                {
+                  "subject_id": "ent_file",
+                  "field_path": "",
+                  "verdict": "SUPPORT"
+                }
+              ],
+              "required_dependencies": [],
+              "structural_refs": []
+            }
+          ],
+          "audit": [
+            {
+              "subject_id": "evt_check",
+              "field_path": "",
+              "verdict": "SUPPORT",
+              "context_refs": [],
+              "sources": [
+                {
+                  "quote": "请PM检查a.csv",
+                  "occurrence": 1
+                }
+              ],
+              "reason": "这是当前任务的明确检查要求，无额外条件。"
+            },
+            {
+              "subject_id": "cl_check_performer",
+              "field_path": "",
+              "verdict": "SUPPORT",
+              "context_refs": [
+                "evt_check",
+                "ent_pm"
+              ],
+              "sources": [
+                {
+                  "quote": "请PM检查a.csv",
+                  "occurrence": 1
+                }
+              ],
+              "reason": "PM明确承担检查事件的执行者角色。"
+            },
+            {
+              "subject_id": "ent_pm",
+              "field_path": "",
+              "verdict": "SUPPORT",
+              "context_refs": [],
+              "sources": [
+                {
+                  "quote": "PM",
+                  "occurrence": 1
+                }
+              ],
+              "reason": "原文明示PM，可作为人员实体；未据岗位推定权限。"
+            },
+            {
+              "subject_id": "cl_check_input",
+              "field_path": "",
+              "verdict": "SUPPORT",
+              "context_refs": [
+                "evt_check",
+                "ent_file"
+              ],
+              "sources": [
+                {
+                  "quote": "检查a.csv",
+                  "occurrence": 1
+                }
+              ],
+              "reason": "a.csv是明确受检范围，INPUT_OBJECT用途有支持。"
+            },
+            {
+              "subject_id": "ent_file",
+              "field_path": "",
+              "verdict": "SUPPORT",
+              "context_refs": [],
+              "sources": [
+                {
+                  "quote": "a.csv",
+                  "occurrence": 1
+                },
+                {
+                  "quote": "a.csv",
+                  "occurrence": 2
+                }
+              ],
+              "reason": "两处同名文件分别用于检查和禁止删除，合并为同一实体有原文支持。"
+            }
+          ],
+          "context_references_are_not_required_dependencies": true
+        }
+      },
+      {
+        "id": "bf:af27d36031fb5a91b4ef",
+        "kind": "EVENT",
+        "status": "ACCEPTED",
+        "claim_ids": [
+          "evt_restart",
+          "cl_restart_object"
+        ],
+        "event": {
+          "id": "evt_restart",
+          "predicate": "重启",
+          "kind": "ACTION",
+          "layer": "MAIN",
+          "use": "CURRENT_TASK",
+          "modality": "NOT_REQUIRED",
+          "polarity": "POSITIVE",
+          "owner_id": "ROOT",
+          "constraint_ids": [],
+          "requires": [],
+          "sources": [
+            {
+              "quote": "无需重启服务",
+              "occurrence": 1,
+              "span": [
+                11,
+                17
+              ],
+              "source_sha256": "f65c9ff03b3fe3fe65f92f42c1b3ebf74b1b64be74a1340e773ea114732dd29c"
+            }
+          ]
+        },
+        "roles": [
+          {
+            "id": "cl_restart_object",
+            "kind": "ROLE",
+            "event_id": "evt_restart",
+            "entity_id": "ent_service",
+            "role": "OBJECT",
+            "expression_id": null,
+            "direction": null,
+            "temporal": null,
+            "quantity": null,
+            "scope_id": "evt_restart",
+            "requires": [],
+            "sources": [
+              {
+                "quote": "无需重启服务",
+                "occurrence": 1,
+                "span": [
+                  11,
+                  17
+                ],
+                "source_sha256": "f65c9ff03b3fe3fe65f92f42c1b3ebf74b1b64be74a1340e773ea114732dd29c"
+              }
+            ],
+            "note": "撤回重启义务，不构成重启禁止或明确许可。",
+            "entity": {
+              "id": "ent_service",
+              "label": "服务",
+              "type": "SYSTEM",
+              "mentions": [
+                {
+                  "quote": "服务",
+                  "occurrence": 1,
+                  "span": [
+                    15,
+                    17
+                  ],
+                  "source_sha256": "f65c9ff03b3fe3fe65f92f42c1b3ebf74b1b64be74a1340e773ea114732dd29c"
+                }
+              ],
+              "alternatives": []
+            },
+            "status": "ACCEPTED"
+          }
+        ],
+        "constraints": [],
+        "sources": [
+          {
+            "quote": "无需重启服务",
+            "occurrence": 1,
+            "span": [
+              11,
+              17
+            ],
+            "source_sha256": "f65c9ff03b3fe3fe65f92f42c1b3ebf74b1b64be74a1340e773ea114732dd29c"
+          },
+          {
+            "quote": "无需重启服务",
+            "occurrence": 1,
+            "span": [
+              11,
+              17
+            ],
+            "source_sha256": "f65c9ff03b3fe3fe65f92f42c1b3ebf74b1b64be74a1340e773ea114732dd29c"
+          },
+          {
+            "quote": "服务",
+            "occurrence": 1,
+            "span": [
+              15,
+              17
+            ],
+            "source_sha256": "f65c9ff03b3fe3fe65f92f42c1b3ebf74b1b64be74a1340e773ea114732dd29c"
+          }
+        ],
+        "slots": [],
+        "proof": {
+          "source_sha256": "f65c9ff03b3fe3fe65f92f42c1b3ebf74b1b64be74a1340e773ea114732dd29c",
+          "claim_ids": [
+            "evt_restart",
+            "cl_restart_object"
+          ],
+          "provenance_refs": [
+            "evt_restart",
+            "cl_restart_object",
+            "ent_service"
+          ],
+          "technical_policy": "028-r02-technical-v1",
+          "checks": [
+            {
+              "id": "evt_restart",
+              "collection": "events",
+              "status": "ACCEPTED",
+              "errors": [],
+              "uncertain": [],
+              "sources": [
+                {
+                  "quote": "无需重启服务",
+                  "occurrence": 1,
+                  "span": [
+                    11,
+                    17
+                  ],
+                  "source_sha256": "f65c9ff03b3fe3fe65f92f42c1b3ebf74b1b64be74a1340e773ea114732dd29c"
+                }
+              ],
+              "audit_refs": [
+                {
+                  "subject_id": "evt_restart",
+                  "field_path": "",
+                  "verdict": "SUPPORT"
+                }
+              ],
+              "required_dependencies": [],
+              "structural_refs": [
+                "ROOT"
+              ]
+            },
+            {
+              "id": "cl_restart_object",
+              "collection": "claims",
+              "status": "ACCEPTED",
+              "errors": [],
+              "uncertain": [],
+              "sources": [
+                {
+                  "quote": "无需重启服务",
+                  "occurrence": 1,
+                  "span": [
+                    11,
+                    17
+                  ],
+                  "source_sha256": "f65c9ff03b3fe3fe65f92f42c1b3ebf74b1b64be74a1340e773ea114732dd29c"
+                }
+              ],
+              "audit_refs": [
+                {
+                  "subject_id": "cl_restart_object",
+                  "field_path": "",
+                  "verdict": "SUPPORT"
+                }
+              ],
+              "required_dependencies": [],
+              "structural_refs": [
+                "evt_restart",
+                "ent_service"
+              ]
+            },
+            {
+              "id": "ent_service",
+              "collection": "entities",
+              "status": "ACCEPTED",
+              "errors": [],
+              "uncertain": [],
+              "sources": [
+                {
+                  "quote": "服务",
+                  "occurrence": 1,
+                  "span": [
+                    15,
+                    17
+                  ],
+                  "source_sha256": "f65c9ff03b3fe3fe65f92f42c1b3ebf74b1b64be74a1340e773ea114732dd29c"
+                }
+              ],
+              "audit_refs": [
+                {
+                  "subject_id": "ent_service",
+                  "field_path": "",
+                  "verdict": "SUPPORT"
+                }
+              ],
+              "required_dependencies": [],
+              "structural_refs": []
+            }
+          ],
+          "audit": [
+            {
+              "subject_id": "evt_restart",
+              "field_path": "",
+              "verdict": "SUPPORT",
+              "context_refs": [],
+              "sources": [
+                {
+                  "quote": "无需重启服务",
+                  "occurrence": 1
+                }
+              ],
+              "reason": "无需表示不要求重启，NOT_REQUIRED准确，未改成禁止或许可。"
+            },
+            {
+              "subject_id": "cl_restart_object",
+              "field_path": "",
+              "verdict": "SUPPORT",
+              "context_refs": [
+                "evt_restart",
+                "ent_service"
+              ],
+              "sources": [
+                {
+                  "quote": "无需重启服务",
+                  "occurrence": 1
+                }
+              ],
+              "reason": "服务是无需执行的重启动作对象，不自动成为外部输入。"
+            },
+            {
+              "subject_id": "ent_service",
+              "field_path": "",
+              "verdict": "SUPPORT",
+              "context_refs": [],
+              "sources": [
+                {
+                  "quote": "服务",
+                  "occurrence": 1
+                }
+              ],
+              "reason": "服务是重启动作的明确对象，SYSTEM类型合理。"
+            }
+          ],
+          "context_references_are_not_required_dependencies": true
+        }
+      },
+      {
+        "id": "bf:8e416fe13dd2d5cf5b6e",
+        "kind": "EVENT",
+        "status": "ACCEPTED",
+        "claim_ids": [
+          "evt_delete",
+          "cl_delete_object"
+        ],
+        "event": {
+          "id": "evt_delete",
+          "predicate": "删除",
+          "kind": "ACTION",
+          "layer": "MAIN",
+          "use": "CURRENT_TASK",
+          "modality": "FORBIDDEN",
+          "polarity": "POSITIVE",
+          "owner_id": "ROOT",
+          "constraint_ids": [],
+          "requires": [],
+          "sources": [
+            {
+              "quote": "不得删除a.csv",
+              "occurrence": 1,
+              "span": [
+                18,
+                27
+              ],
+              "source_sha256": "f65c9ff03b3fe3fe65f92f42c1b3ebf74b1b64be74a1340e773ea114732dd29c"
+            }
+          ]
+        },
+        "roles": [
+          {
+            "id": "cl_delete_object",
+            "kind": "ROLE",
+            "event_id": "evt_delete",
+            "entity_id": "ent_file",
+            "role": "OBJECT",
+            "expression_id": null,
+            "direction": null,
+            "temporal": null,
+            "quantity": null,
+            "scope_id": "evt_delete",
+            "requires": [],
+            "sources": [
+              {
+                "quote": "不得删除a.csv",
+                "occurrence": 1,
+                "span": [
+                  18,
+                  27
+                ],
+                "source_sha256": "f65c9ff03b3fe3fe65f92f42c1b3ebf74b1b64be74a1340e773ea114732dd29c"
+              }
+            ],
+            "note": "禁止删除的对象与受检文件为同一实体；禁止用途不新增外部输入。",
+            "entity": {
+              "id": "ent_file",
+              "label": "a.csv",
+              "type": "FILE",
+              "mentions": [
+                {
+                  "quote": "a.csv",
+                  "occurrence": 1,
+                  "span": [
+                    5,
+                    10
+                  ],
+                  "source_sha256": "f65c9ff03b3fe3fe65f92f42c1b3ebf74b1b64be74a1340e773ea114732dd29c"
+                },
+                {
+                  "quote": "a.csv",
+                  "occurrence": 2,
+                  "span": [
+                    22,
+                    27
+                  ],
+                  "source_sha256": "f65c9ff03b3fe3fe65f92f42c1b3ebf74b1b64be74a1340e773ea114732dd29c"
+                }
+              ],
+              "alternatives": []
+            },
+            "status": "ACCEPTED"
+          }
+        ],
+        "constraints": [],
+        "sources": [
+          {
+            "quote": "不得删除a.csv",
+            "occurrence": 1,
+            "span": [
+              18,
+              27
+            ],
+            "source_sha256": "f65c9ff03b3fe3fe65f92f42c1b3ebf74b1b64be74a1340e773ea114732dd29c"
+          },
+          {
+            "quote": "不得删除a.csv",
+            "occurrence": 1,
+            "span": [
+              18,
+              27
+            ],
+            "source_sha256": "f65c9ff03b3fe3fe65f92f42c1b3ebf74b1b64be74a1340e773ea114732dd29c"
+          },
+          {
+            "quote": "a.csv",
+            "occurrence": 1,
+            "span": [
+              5,
+              10
+            ],
+            "source_sha256": "f65c9ff03b3fe3fe65f92f42c1b3ebf74b1b64be74a1340e773ea114732dd29c"
+          },
+          {
+            "quote": "a.csv",
+            "occurrence": 2,
+            "span": [
+              22,
+              27
+            ],
+            "source_sha256": "f65c9ff03b3fe3fe65f92f42c1b3ebf74b1b64be74a1340e773ea114732dd29c"
+          }
+        ],
+        "slots": [
+          "B"
+        ],
+        "proof": {
+          "source_sha256": "f65c9ff03b3fe3fe65f92f42c1b3ebf74b1b64be74a1340e773ea114732dd29c",
+          "claim_ids": [
+            "evt_delete",
+            "cl_delete_object"
+          ],
+          "provenance_refs": [
+            "evt_delete",
+            "cl_delete_object",
+            "ent_file"
+          ],
+          "technical_policy": "028-r02-technical-v1",
+          "checks": [
+            {
+              "id": "evt_delete",
+              "collection": "events",
+              "status": "ACCEPTED",
+              "errors": [],
+              "uncertain": [],
+              "sources": [
+                {
+                  "quote": "不得删除a.csv",
+                  "occurrence": 1,
+                  "span": [
+                    18,
+                    27
+                  ],
+                  "source_sha256": "f65c9ff03b3fe3fe65f92f42c1b3ebf74b1b64be74a1340e773ea114732dd29c"
+                }
+              ],
+              "audit_refs": [
+                {
+                  "subject_id": "evt_delete",
+                  "field_path": "",
+                  "verdict": "SUPPORT"
+                }
+              ],
+              "required_dependencies": [],
+              "structural_refs": [
+                "ROOT"
+              ]
+            },
+            {
+              "id": "cl_delete_object",
+              "collection": "claims",
+              "status": "ACCEPTED",
+              "errors": [],
+              "uncertain": [],
+              "sources": [
+                {
+                  "quote": "不得删除a.csv",
+                  "occurrence": 1,
+                  "span": [
+                    18,
+                    27
+                  ],
+                  "source_sha256": "f65c9ff03b3fe3fe65f92f42c1b3ebf74b1b64be74a1340e773ea114732dd29c"
+                }
+              ],
+              "audit_refs": [
+                {
+                  "subject_id": "cl_delete_object",
+                  "field_path": "",
+                  "verdict": "SUPPORT"
+                }
+              ],
+              "required_dependencies": [],
+              "structural_refs": [
+                "evt_delete",
+                "ent_file"
+              ]
+            },
+            {
+              "id": "ent_file",
+              "collection": "entities",
+              "status": "ACCEPTED",
+              "errors": [],
+              "uncertain": [],
+              "sources": [
+                {
+                  "quote": "a.csv",
+                  "occurrence": 1,
+                  "span": [
+                    5,
+                    10
+                  ],
+                  "source_sha256": "f65c9ff03b3fe3fe65f92f42c1b3ebf74b1b64be74a1340e773ea114732dd29c"
+                },
+                {
+                  "quote": "a.csv",
+                  "occurrence": 2,
+                  "span": [
+                    22,
+                    27
+                  ],
+                  "source_sha256": "f65c9ff03b3fe3fe65f92f42c1b3ebf74b1b64be74a1340e773ea114732dd29c"
+                }
+              ],
+              "audit_refs": [
+                {
+                  "subject_id": "ent_file",
+                  "field_path": "",
+                  "verdict": "SUPPORT"
+                }
+              ],
+              "required_dependencies": [],
+              "structural_refs": []
+            }
+          ],
+          "audit": [
+            {
+              "subject_id": "evt_delete",
+              "field_path": "",
+              "verdict": "SUPPORT",
+              "context_refs": [],
+              "sources": [
+                {
+                  "quote": "不得删除a.csv",
+                  "occurrence": 1
+                }
+              ],
+              "reason": "不得明确禁止删除；FORBIDDEN与正向动作谓词组合准确。"
+            },
+            {
+              "subject_id": "cl_delete_object",
+              "field_path": "",
+              "verdict": "SUPPORT",
+              "context_refs": [
+                "evt_delete",
+                "ent_file"
+              ],
+              "sources": [
+                {
+                  "quote": "检查a.csv",
+                  "occurrence": 1
+                },
+                {
+                  "quote": "不得删除a.csv",
+                  "occurrence": 1
+                }
+              ],
+              "reason": "禁止删除指向同一a.csv；OBJECT用途不会额外推导输入。"
+            },
+            {
+              "subject_id": "ent_file",
+              "field_path": "",
+              "verdict": "SUPPORT",
+              "context_refs": [],
+              "sources": [
+                {
+                  "quote": "a.csv",
+                  "occurrence": 1
+                },
+                {
+                  "quote": "a.csv",
+                  "occurrence": 2
+                }
+              ],
+              "reason": "两处同名文件分别用于检查和禁止删除，合并为同一实体有原文支持。"
+            }
+          ],
+          "context_references_are_not_required_dependencies": true
+        }
+      },
+      {
+        "id": "bf:24c42506ee7e26500852",
+        "kind": "ROLE",
+        "status": "ACCEPTED",
+        "claim_ids": [
+          "cl_check_performer",
+          "ent_pm",
+          "evt_check"
+        ],
+        "claim": {
+          "id": "cl_check_performer",
+          "kind": "ROLE",
+          "event_id": "evt_check",
+          "entity_id": "ent_pm",
+          "role": "PERFORMER",
+          "expression_id": null,
+          "direction": null,
+          "temporal": null,
+          "quantity": null,
+          "scope_id": "evt_check",
+          "requires": [],
+          "sources": [
+            {
+              "quote": "请PM检查a.csv",
+              "occurrence": 1,
+              "span": [
+                0,
+                10
+              ],
+              "source_sha256": "f65c9ff03b3fe3fe65f92f42c1b3ebf74b1b64be74a1340e773ea114732dd29c"
+            }
+          ],
+          "note": "PM是检查事件的明确执行者。"
+        },
+        "event": {
+          "id": "evt_check",
+          "predicate": "检查",
+          "kind": "ACTION",
+          "layer": "MAIN",
+          "use": "CURRENT_TASK",
+          "modality": "REQUIRED",
+          "polarity": "POSITIVE",
+          "owner_id": "ROOT",
+          "constraint_ids": [],
+          "requires": [],
+          "sources": [
+            {
+              "quote": "请PM检查a.csv",
+              "occurrence": 1,
+              "span": [
+                0,
+                10
+              ],
+              "source_sha256": "f65c9ff03b3fe3fe65f92f42c1b3ebf74b1b64be74a1340e773ea114732dd29c"
+            }
+          ]
+        },
+        "entity": {
+          "id": "ent_pm",
+          "label": "PM",
+          "type": "PERSON",
+          "mentions": [
+            {
+              "quote": "PM",
+              "occurrence": 1,
+              "span": [
+                1,
+                3
+              ],
+              "source_sha256": "f65c9ff03b3fe3fe65f92f42c1b3ebf74b1b64be74a1340e773ea114732dd29c"
+            }
+          ],
+          "alternatives": []
+        },
+        "expression": null,
+        "constraints": [],
+        "content_quantities": [],
+        "content_scopes": [],
+        "sources": [
+          {
+            "quote": "请PM检查a.csv",
+            "occurrence": 1,
+            "span": [
+              0,
+              10
+            ],
+            "source_sha256": "f65c9ff03b3fe3fe65f92f42c1b3ebf74b1b64be74a1340e773ea114732dd29c"
+          },
+          {
+            "quote": "请PM检查a.csv",
+            "occurrence": 1,
+            "span": [
+              0,
+              10
+            ],
+            "source_sha256": "f65c9ff03b3fe3fe65f92f42c1b3ebf74b1b64be74a1340e773ea114732dd29c"
+          },
+          {
+            "quote": "PM",
+            "occurrence": 1,
+            "span": [
+              1,
+              3
+            ],
+            "source_sha256": "f65c9ff03b3fe3fe65f92f42c1b3ebf74b1b64be74a1340e773ea114732dd29c"
+          }
+        ],
+        "slots": [
+          "P"
+        ],
+        "proof": {
+          "source_sha256": "f65c9ff03b3fe3fe65f92f42c1b3ebf74b1b64be74a1340e773ea114732dd29c",
+          "claim_ids": [
+            "cl_check_performer",
+            "ent_pm",
+            "evt_check"
+          ],
+          "provenance_refs": [
+            "cl_check_performer",
+            "evt_check",
+            "ent_pm"
+          ],
+          "technical_policy": "028-r02-technical-v1",
+          "checks": [
+            {
+              "id": "cl_check_performer",
+              "collection": "claims",
+              "status": "ACCEPTED",
+              "errors": [],
+              "uncertain": [],
+              "sources": [
+                {
+                  "quote": "请PM检查a.csv",
+                  "occurrence": 1,
+                  "span": [
+                    0,
+                    10
+                  ],
+                  "source_sha256": "f65c9ff03b3fe3fe65f92f42c1b3ebf74b1b64be74a1340e773ea114732dd29c"
+                }
+              ],
+              "audit_refs": [
+                {
+                  "subject_id": "cl_check_performer",
+                  "field_path": "",
+                  "verdict": "SUPPORT"
+                }
+              ],
+              "required_dependencies": [],
+              "structural_refs": [
+                "evt_check",
+                "ent_pm"
+              ]
+            },
+            {
+              "id": "evt_check",
+              "collection": "events",
+              "status": "ACCEPTED",
+              "errors": [],
+              "uncertain": [],
+              "sources": [
+                {
+                  "quote": "请PM检查a.csv",
+                  "occurrence": 1,
+                  "span": [
+                    0,
+                    10
+                  ],
+                  "source_sha256": "f65c9ff03b3fe3fe65f92f42c1b3ebf74b1b64be74a1340e773ea114732dd29c"
+                }
+              ],
+              "audit_refs": [
+                {
+                  "subject_id": "evt_check",
+                  "field_path": "",
+                  "verdict": "SUPPORT"
+                }
+              ],
+              "required_dependencies": [],
+              "structural_refs": [
+                "ROOT"
+              ]
+            },
+            {
+              "id": "ent_pm",
+              "collection": "entities",
+              "status": "ACCEPTED",
+              "errors": [],
+              "uncertain": [],
+              "sources": [
+                {
+                  "quote": "PM",
+                  "occurrence": 1,
+                  "span": [
+                    1,
+                    3
+                  ],
+                  "source_sha256": "f65c9ff03b3fe3fe65f92f42c1b3ebf74b1b64be74a1340e773ea114732dd29c"
+                }
+              ],
+              "audit_refs": [
+                {
+                  "subject_id": "ent_pm",
+                  "field_path": "",
+                  "verdict": "SUPPORT"
+                }
+              ],
+              "required_dependencies": [],
+              "structural_refs": []
+            }
+          ],
+          "audit": [
+            {
+              "subject_id": "cl_check_performer",
+              "field_path": "",
+              "verdict": "SUPPORT",
+              "context_refs": [
+                "evt_check",
+                "ent_pm"
+              ],
+              "sources": [
+                {
+                  "quote": "请PM检查a.csv",
+                  "occurrence": 1
+                }
+              ],
+              "reason": "PM明确承担检查事件的执行者角色。"
+            },
+            {
+              "subject_id": "evt_check",
+              "field_path": "",
+              "verdict": "SUPPORT",
+              "context_refs": [],
+              "sources": [
+                {
+                  "quote": "请PM检查a.csv",
+                  "occurrence": 1
+                }
+              ],
+              "reason": "这是当前任务的明确检查要求，无额外条件。"
+            },
+            {
+              "subject_id": "ent_pm",
+              "field_path": "",
+              "verdict": "SUPPORT",
+              "context_refs": [],
+              "sources": [
+                {
+                  "quote": "PM",
+                  "occurrence": 1
+                }
+              ],
+              "reason": "原文明示PM，可作为人员实体；未据岗位推定权限。"
+            }
+          ],
+          "context_references_are_not_required_dependencies": true
+        }
+      },
+      {
+        "id": "bf:a6e59b556a12bc02b010",
+        "kind": "ROLE",
+        "status": "ACCEPTED",
+        "claim_ids": [
+          "cl_check_input",
+          "ent_file",
+          "evt_check"
+        ],
+        "claim": {
+          "id": "cl_check_input",
+          "kind": "ROLE",
+          "event_id": "evt_check",
+          "entity_id": "ent_file",
+          "role": "INPUT_OBJECT",
+          "expression_id": null,
+          "direction": null,
+          "temporal": null,
+          "quantity": null,
+          "scope_id": "evt_check",
+          "requires": [],
+          "sources": [
+            {
+              "quote": "检查a.csv",
+              "occurrence": 1,
+              "span": [
+                3,
+                10
+              ],
+              "source_sha256": "f65c9ff03b3fe3fe65f92f42c1b3ebf74b1b64be74a1340e773ea114732dd29c"
+            }
+          ],
+          "note": "a.csv是明确受检对象。"
+        },
+        "event": {
+          "id": "evt_check",
+          "predicate": "检查",
+          "kind": "ACTION",
+          "layer": "MAIN",
+          "use": "CURRENT_TASK",
+          "modality": "REQUIRED",
+          "polarity": "POSITIVE",
+          "owner_id": "ROOT",
+          "constraint_ids": [],
+          "requires": [],
+          "sources": [
+            {
+              "quote": "请PM检查a.csv",
+              "occurrence": 1,
+              "span": [
+                0,
+                10
+              ],
+              "source_sha256": "f65c9ff03b3fe3fe65f92f42c1b3ebf74b1b64be74a1340e773ea114732dd29c"
+            }
+          ]
+        },
+        "entity": {
+          "id": "ent_file",
+          "label": "a.csv",
+          "type": "FILE",
+          "mentions": [
+            {
+              "quote": "a.csv",
+              "occurrence": 1,
+              "span": [
+                5,
+                10
+              ],
+              "source_sha256": "f65c9ff03b3fe3fe65f92f42c1b3ebf74b1b64be74a1340e773ea114732dd29c"
+            },
+            {
+              "quote": "a.csv",
+              "occurrence": 2,
+              "span": [
+                22,
+                27
+              ],
+              "source_sha256": "f65c9ff03b3fe3fe65f92f42c1b3ebf74b1b64be74a1340e773ea114732dd29c"
+            }
+          ],
+          "alternatives": []
+        },
+        "expression": null,
+        "constraints": [],
+        "content_quantities": [],
+        "content_scopes": [],
+        "sources": [
+          {
+            "quote": "检查a.csv",
+            "occurrence": 1,
+            "span": [
+              3,
+              10
+            ],
+            "source_sha256": "f65c9ff03b3fe3fe65f92f42c1b3ebf74b1b64be74a1340e773ea114732dd29c"
+          },
+          {
+            "quote": "请PM检查a.csv",
+            "occurrence": 1,
+            "span": [
+              0,
+              10
+            ],
+            "source_sha256": "f65c9ff03b3fe3fe65f92f42c1b3ebf74b1b64be74a1340e773ea114732dd29c"
+          },
+          {
+            "quote": "a.csv",
+            "occurrence": 1,
+            "span": [
+              5,
+              10
+            ],
+            "source_sha256": "f65c9ff03b3fe3fe65f92f42c1b3ebf74b1b64be74a1340e773ea114732dd29c"
+          },
+          {
+            "quote": "a.csv",
+            "occurrence": 2,
+            "span": [
+              22,
+              27
+            ],
+            "source_sha256": "f65c9ff03b3fe3fe65f92f42c1b3ebf74b1b64be74a1340e773ea114732dd29c"
+          }
+        ],
+        "slots": [
+          "I"
+        ],
+        "proof": {
+          "source_sha256": "f65c9ff03b3fe3fe65f92f42c1b3ebf74b1b64be74a1340e773ea114732dd29c",
+          "claim_ids": [
+            "cl_check_input",
+            "ent_file",
+            "evt_check"
+          ],
+          "provenance_refs": [
+            "cl_check_input",
+            "evt_check",
+            "ent_file"
+          ],
+          "technical_policy": "028-r02-technical-v1",
+          "checks": [
+            {
+              "id": "cl_check_input",
+              "collection": "claims",
+              "status": "ACCEPTED",
+              "errors": [],
+              "uncertain": [],
+              "sources": [
+                {
+                  "quote": "检查a.csv",
+                  "occurrence": 1,
+                  "span": [
+                    3,
+                    10
+                  ],
+                  "source_sha256": "f65c9ff03b3fe3fe65f92f42c1b3ebf74b1b64be74a1340e773ea114732dd29c"
+                }
+              ],
+              "audit_refs": [
+                {
+                  "subject_id": "cl_check_input",
+                  "field_path": "",
+                  "verdict": "SUPPORT"
+                }
+              ],
+              "required_dependencies": [],
+              "structural_refs": [
+                "evt_check",
+                "ent_file"
+              ]
+            },
+            {
+              "id": "evt_check",
+              "collection": "events",
+              "status": "ACCEPTED",
+              "errors": [],
+              "uncertain": [],
+              "sources": [
+                {
+                  "quote": "请PM检查a.csv",
+                  "occurrence": 1,
+                  "span": [
+                    0,
+                    10
+                  ],
+                  "source_sha256": "f65c9ff03b3fe3fe65f92f42c1b3ebf74b1b64be74a1340e773ea114732dd29c"
+                }
+              ],
+              "audit_refs": [
+                {
+                  "subject_id": "evt_check",
+                  "field_path": "",
+                  "verdict": "SUPPORT"
+                }
+              ],
+              "required_dependencies": [],
+              "structural_refs": [
+                "ROOT"
+              ]
+            },
+            {
+              "id": "ent_file",
+              "collection": "entities",
+              "status": "ACCEPTED",
+              "errors": [],
+              "uncertain": [],
+              "sources": [
+                {
+                  "quote": "a.csv",
+                  "occurrence": 1,
+                  "span": [
+                    5,
+                    10
+                  ],
+                  "source_sha256": "f65c9ff03b3fe3fe65f92f42c1b3ebf74b1b64be74a1340e773ea114732dd29c"
+                },
+                {
+                  "quote": "a.csv",
+                  "occurrence": 2,
+                  "span": [
+                    22,
+                    27
+                  ],
+                  "source_sha256": "f65c9ff03b3fe3fe65f92f42c1b3ebf74b1b64be74a1340e773ea114732dd29c"
+                }
+              ],
+              "audit_refs": [
+                {
+                  "subject_id": "ent_file",
+                  "field_path": "",
+                  "verdict": "SUPPORT"
+                }
+              ],
+              "required_dependencies": [],
+              "structural_refs": []
+            }
+          ],
+          "audit": [
+            {
+              "subject_id": "cl_check_input",
+              "field_path": "",
+              "verdict": "SUPPORT",
+              "context_refs": [
+                "evt_check",
+                "ent_file"
+              ],
+              "sources": [
+                {
+                  "quote": "检查a.csv",
+                  "occurrence": 1
+                }
+              ],
+              "reason": "a.csv是明确受检范围，INPUT_OBJECT用途有支持。"
+            },
+            {
+              "subject_id": "evt_check",
+              "field_path": "",
+              "verdict": "SUPPORT",
+              "context_refs": [],
+              "sources": [
+                {
+                  "quote": "请PM检查a.csv",
+                  "occurrence": 1
+                }
+              ],
+              "reason": "这是当前任务的明确检查要求，无额外条件。"
+            },
+            {
+              "subject_id": "ent_file",
+              "field_path": "",
+              "verdict": "SUPPORT",
+              "context_refs": [],
+              "sources": [
+                {
+                  "quote": "a.csv",
+                  "occurrence": 1
+                },
+                {
+                  "quote": "a.csv",
+                  "occurrence": 2
+                }
+              ],
+              "reason": "两处同名文件分别用于检查和禁止删除，合并为同一实体有原文支持。"
+            }
+          ],
+          "context_references_are_not_required_dependencies": true
+        }
+      },
+      {
+        "id": "bf:c179f86074c66a852e73",
+        "kind": "ROLE",
+        "status": "ACCEPTED",
+        "claim_ids": [
+          "cl_restart_object",
+          "ent_service",
+          "evt_restart"
+        ],
+        "claim": {
+          "id": "cl_restart_object",
+          "kind": "ROLE",
+          "event_id": "evt_restart",
+          "entity_id": "ent_service",
+          "role": "OBJECT",
+          "expression_id": null,
+          "direction": null,
+          "temporal": null,
+          "quantity": null,
+          "scope_id": "evt_restart",
+          "requires": [],
+          "sources": [
+            {
+              "quote": "无需重启服务",
+              "occurrence": 1,
+              "span": [
+                11,
+                17
+              ],
+              "source_sha256": "f65c9ff03b3fe3fe65f92f42c1b3ebf74b1b64be74a1340e773ea114732dd29c"
+            }
+          ],
+          "note": "撤回重启义务，不构成重启禁止或明确许可。"
+        },
+        "event": {
+          "id": "evt_restart",
+          "predicate": "重启",
+          "kind": "ACTION",
+          "layer": "MAIN",
+          "use": "CURRENT_TASK",
+          "modality": "NOT_REQUIRED",
+          "polarity": "POSITIVE",
+          "owner_id": "ROOT",
+          "constraint_ids": [],
+          "requires": [],
+          "sources": [
+            {
+              "quote": "无需重启服务",
+              "occurrence": 1,
+              "span": [
+                11,
+                17
+              ],
+              "source_sha256": "f65c9ff03b3fe3fe65f92f42c1b3ebf74b1b64be74a1340e773ea114732dd29c"
+            }
+          ]
+        },
+        "entity": {
+          "id": "ent_service",
+          "label": "服务",
+          "type": "SYSTEM",
+          "mentions": [
+            {
+              "quote": "服务",
+              "occurrence": 1,
+              "span": [
+                15,
+                17
+              ],
+              "source_sha256": "f65c9ff03b3fe3fe65f92f42c1b3ebf74b1b64be74a1340e773ea114732dd29c"
+            }
+          ],
+          "alternatives": []
+        },
+        "expression": null,
+        "constraints": [],
+        "content_quantities": [],
+        "content_scopes": [],
+        "sources": [
+          {
+            "quote": "无需重启服务",
+            "occurrence": 1,
+            "span": [
+              11,
+              17
+            ],
+            "source_sha256": "f65c9ff03b3fe3fe65f92f42c1b3ebf74b1b64be74a1340e773ea114732dd29c"
+          },
+          {
+            "quote": "无需重启服务",
+            "occurrence": 1,
+            "span": [
+              11,
+              17
+            ],
+            "source_sha256": "f65c9ff03b3fe3fe65f92f42c1b3ebf74b1b64be74a1340e773ea114732dd29c"
+          },
+          {
+            "quote": "服务",
+            "occurrence": 1,
+            "span": [
+              15,
+              17
+            ],
+            "source_sha256": "f65c9ff03b3fe3fe65f92f42c1b3ebf74b1b64be74a1340e773ea114732dd29c"
+          }
+        ],
+        "slots": [],
+        "proof": {
+          "source_sha256": "f65c9ff03b3fe3fe65f92f42c1b3ebf74b1b64be74a1340e773ea114732dd29c",
+          "claim_ids": [
+            "cl_restart_object",
+            "ent_service",
+            "evt_restart"
+          ],
+          "provenance_refs": [
+            "cl_restart_object",
+            "evt_restart",
+            "ent_service"
+          ],
+          "technical_policy": "028-r02-technical-v1",
+          "checks": [
+            {
+              "id": "cl_restart_object",
+              "collection": "claims",
+              "status": "ACCEPTED",
+              "errors": [],
+              "uncertain": [],
+              "sources": [
+                {
+                  "quote": "无需重启服务",
+                  "occurrence": 1,
+                  "span": [
+                    11,
+                    17
+                  ],
+                  "source_sha256": "f65c9ff03b3fe3fe65f92f42c1b3ebf74b1b64be74a1340e773ea114732dd29c"
+                }
+              ],
+              "audit_refs": [
+                {
+                  "subject_id": "cl_restart_object",
+                  "field_path": "",
+                  "verdict": "SUPPORT"
+                }
+              ],
+              "required_dependencies": [],
+              "structural_refs": [
+                "evt_restart",
+                "ent_service"
+              ]
+            },
+            {
+              "id": "evt_restart",
+              "collection": "events",
+              "status": "ACCEPTED",
+              "errors": [],
+              "uncertain": [],
+              "sources": [
+                {
+                  "quote": "无需重启服务",
+                  "occurrence": 1,
+                  "span": [
+                    11,
+                    17
+                  ],
+                  "source_sha256": "f65c9ff03b3fe3fe65f92f42c1b3ebf74b1b64be74a1340e773ea114732dd29c"
+                }
+              ],
+              "audit_refs": [
+                {
+                  "subject_id": "evt_restart",
+                  "field_path": "",
+                  "verdict": "SUPPORT"
+                }
+              ],
+              "required_dependencies": [],
+              "structural_refs": [
+                "ROOT"
+              ]
+            },
+            {
+              "id": "ent_service",
+              "collection": "entities",
+              "status": "ACCEPTED",
+              "errors": [],
+              "uncertain": [],
+              "sources": [
+                {
+                  "quote": "服务",
+                  "occurrence": 1,
+                  "span": [
+                    15,
+                    17
+                  ],
+                  "source_sha256": "f65c9ff03b3fe3fe65f92f42c1b3ebf74b1b64be74a1340e773ea114732dd29c"
+                }
+              ],
+              "audit_refs": [
+                {
+                  "subject_id": "ent_service",
+                  "field_path": "",
+                  "verdict": "SUPPORT"
+                }
+              ],
+              "required_dependencies": [],
+              "structural_refs": []
+            }
+          ],
+          "audit": [
+            {
+              "subject_id": "cl_restart_object",
+              "field_path": "",
+              "verdict": "SUPPORT",
+              "context_refs": [
+                "evt_restart",
+                "ent_service"
+              ],
+              "sources": [
+                {
+                  "quote": "无需重启服务",
+                  "occurrence": 1
+                }
+              ],
+              "reason": "服务是无需执行的重启动作对象，不自动成为外部输入。"
+            },
+            {
+              "subject_id": "evt_restart",
+              "field_path": "",
+              "verdict": "SUPPORT",
+              "context_refs": [],
+              "sources": [
+                {
+                  "quote": "无需重启服务",
+                  "occurrence": 1
+                }
+              ],
+              "reason": "无需表示不要求重启，NOT_REQUIRED准确，未改成禁止或许可。"
+            },
+            {
+              "subject_id": "ent_service",
+              "field_path": "",
+              "verdict": "SUPPORT",
+              "context_refs": [],
+              "sources": [
+                {
+                  "quote": "服务",
+                  "occurrence": 1
+                }
+              ],
+              "reason": "服务是重启动作的明确对象，SYSTEM类型合理。"
+            }
+          ],
+          "context_references_are_not_required_dependencies": true
+        }
+      },
+      {
+        "id": "bf:cc01e52420fec64e924d",
+        "kind": "ROLE",
+        "status": "ACCEPTED",
+        "claim_ids": [
+          "cl_delete_object",
+          "ent_file",
+          "evt_delete"
+        ],
+        "claim": {
+          "id": "cl_delete_object",
+          "kind": "ROLE",
+          "event_id": "evt_delete",
+          "entity_id": "ent_file",
+          "role": "OBJECT",
+          "expression_id": null,
+          "direction": null,
+          "temporal": null,
+          "quantity": null,
+          "scope_id": "evt_delete",
+          "requires": [],
+          "sources": [
+            {
+              "quote": "不得删除a.csv",
+              "occurrence": 1,
+              "span": [
+                18,
+                27
+              ],
+              "source_sha256": "f65c9ff03b3fe3fe65f92f42c1b3ebf74b1b64be74a1340e773ea114732dd29c"
+            }
+          ],
+          "note": "禁止删除的对象与受检文件为同一实体；禁止用途不新增外部输入。"
+        },
+        "event": {
+          "id": "evt_delete",
+          "predicate": "删除",
+          "kind": "ACTION",
+          "layer": "MAIN",
+          "use": "CURRENT_TASK",
+          "modality": "FORBIDDEN",
+          "polarity": "POSITIVE",
+          "owner_id": "ROOT",
+          "constraint_ids": [],
+          "requires": [],
+          "sources": [
+            {
+              "quote": "不得删除a.csv",
+              "occurrence": 1,
+              "span": [
+                18,
+                27
+              ],
+              "source_sha256": "f65c9ff03b3fe3fe65f92f42c1b3ebf74b1b64be74a1340e773ea114732dd29c"
+            }
+          ]
+        },
+        "entity": {
+          "id": "ent_file",
+          "label": "a.csv",
+          "type": "FILE",
+          "mentions": [
+            {
+              "quote": "a.csv",
+              "occurrence": 1,
+              "span": [
+                5,
+                10
+              ],
+              "source_sha256": "f65c9ff03b3fe3fe65f92f42c1b3ebf74b1b64be74a1340e773ea114732dd29c"
+            },
+            {
+              "quote": "a.csv",
+              "occurrence": 2,
+              "span": [
+                22,
+                27
+              ],
+              "source_sha256": "f65c9ff03b3fe3fe65f92f42c1b3ebf74b1b64be74a1340e773ea114732dd29c"
+            }
+          ],
+          "alternatives": []
+        },
+        "expression": null,
+        "constraints": [],
+        "content_quantities": [],
+        "content_scopes": [],
+        "sources": [
+          {
+            "quote": "不得删除a.csv",
+            "occurrence": 1,
+            "span": [
+              18,
+              27
+            ],
+            "source_sha256": "f65c9ff03b3fe3fe65f92f42c1b3ebf74b1b64be74a1340e773ea114732dd29c"
+          },
+          {
+            "quote": "不得删除a.csv",
+            "occurrence": 1,
+            "span": [
+              18,
+              27
+            ],
+            "source_sha256": "f65c9ff03b3fe3fe65f92f42c1b3ebf74b1b64be74a1340e773ea114732dd29c"
+          },
+          {
+            "quote": "a.csv",
+            "occurrence": 1,
+            "span": [
+              5,
+              10
+            ],
+            "source_sha256": "f65c9ff03b3fe3fe65f92f42c1b3ebf74b1b64be74a1340e773ea114732dd29c"
+          },
+          {
+            "quote": "a.csv",
+            "occurrence": 2,
+            "span": [
+              22,
+              27
+            ],
+            "source_sha256": "f65c9ff03b3fe3fe65f92f42c1b3ebf74b1b64be74a1340e773ea114732dd29c"
+          }
+        ],
+        "slots": [],
+        "proof": {
+          "source_sha256": "f65c9ff03b3fe3fe65f92f42c1b3ebf74b1b64be74a1340e773ea114732dd29c",
+          "claim_ids": [
+            "cl_delete_object",
+            "ent_file",
+            "evt_delete"
+          ],
+          "provenance_refs": [
+            "cl_delete_object",
+            "evt_delete",
+            "ent_file"
+          ],
+          "technical_policy": "028-r02-technical-v1",
+          "checks": [
+            {
+              "id": "cl_delete_object",
+              "collection": "claims",
+              "status": "ACCEPTED",
+              "errors": [],
+              "uncertain": [],
+              "sources": [
+                {
+                  "quote": "不得删除a.csv",
+                  "occurrence": 1,
+                  "span": [
+                    18,
+                    27
+                  ],
+                  "source_sha256": "f65c9ff03b3fe3fe65f92f42c1b3ebf74b1b64be74a1340e773ea114732dd29c"
+                }
+              ],
+              "audit_refs": [
+                {
+                  "subject_id": "cl_delete_object",
+                  "field_path": "",
+                  "verdict": "SUPPORT"
+                }
+              ],
+              "required_dependencies": [],
+              "structural_refs": [
+                "evt_delete",
+                "ent_file"
+              ]
+            },
+            {
+              "id": "evt_delete",
+              "collection": "events",
+              "status": "ACCEPTED",
+              "errors": [],
+              "uncertain": [],
+              "sources": [
+                {
+                  "quote": "不得删除a.csv",
+                  "occurrence": 1,
+                  "span": [
+                    18,
+                    27
+                  ],
+                  "source_sha256": "f65c9ff03b3fe3fe65f92f42c1b3ebf74b1b64be74a1340e773ea114732dd29c"
+                }
+              ],
+              "audit_refs": [
+                {
+                  "subject_id": "evt_delete",
+                  "field_path": "",
+                  "verdict": "SUPPORT"
+                }
+              ],
+              "required_dependencies": [],
+              "structural_refs": [
+                "ROOT"
+              ]
+            },
+            {
+              "id": "ent_file",
+              "collection": "entities",
+              "status": "ACCEPTED",
+              "errors": [],
+              "uncertain": [],
+              "sources": [
+                {
+                  "quote": "a.csv",
+                  "occurrence": 1,
+                  "span": [
+                    5,
+                    10
+                  ],
+                  "source_sha256": "f65c9ff03b3fe3fe65f92f42c1b3ebf74b1b64be74a1340e773ea114732dd29c"
+                },
+                {
+                  "quote": "a.csv",
+                  "occurrence": 2,
+                  "span": [
+                    22,
+                    27
+                  ],
+                  "source_sha256": "f65c9ff03b3fe3fe65f92f42c1b3ebf74b1b64be74a1340e773ea114732dd29c"
+                }
+              ],
+              "audit_refs": [
+                {
+                  "subject_id": "ent_file",
+                  "field_path": "",
+                  "verdict": "SUPPORT"
+                }
+              ],
+              "required_dependencies": [],
+              "structural_refs": []
+            }
+          ],
+          "audit": [
+            {
+              "subject_id": "cl_delete_object",
+              "field_path": "",
+              "verdict": "SUPPORT",
+              "context_refs": [
+                "evt_delete",
+                "ent_file"
+              ],
+              "sources": [
+                {
+                  "quote": "检查a.csv",
+                  "occurrence": 1
+                },
+                {
+                  "quote": "不得删除a.csv",
+                  "occurrence": 1
+                }
+              ],
+              "reason": "禁止删除指向同一a.csv；OBJECT用途不会额外推导输入。"
+            },
+            {
+              "subject_id": "evt_delete",
+              "field_path": "",
+              "verdict": "SUPPORT",
+              "context_refs": [],
+              "sources": [
+                {
+                  "quote": "不得删除a.csv",
+                  "occurrence": 1
+                }
+              ],
+              "reason": "不得明确禁止删除；FORBIDDEN与正向动作谓词组合准确。"
+            },
+            {
+              "subject_id": "ent_file",
+              "field_path": "",
+              "verdict": "SUPPORT",
+              "context_refs": [],
+              "sources": [
+                {
+                  "quote": "a.csv",
+                  "occurrence": 1
+                },
+                {
+                  "quote": "a.csv",
+                  "occurrence": 2
+                }
+              ],
+              "reason": "两处同名文件分别用于检查和禁止删除，合并为同一实体有原文支持。"
+            }
+          ],
+          "context_references_are_not_required_dependencies": true
+        }
+      }
+    ],
+    "entities": [
+      {
+        "id": "ent_pm",
+        "label": "PM",
+        "type": "PERSON",
+        "mentions": [
+          {
+            "quote": "PM",
+            "occurrence": 1,
+            "span": [
+              1,
+              3
+            ],
+            "source_sha256": "f65c9ff03b3fe3fe65f92f42c1b3ebf74b1b64be74a1340e773ea114732dd29c"
+          }
+        ],
+        "alternatives": []
+      },
+      {
+        "id": "ent_file",
+        "label": "a.csv",
+        "type": "FILE",
+        "mentions": [
+          {
+            "quote": "a.csv",
+            "occurrence": 1,
+            "span": [
+              5,
+              10
+            ],
+            "source_sha256": "f65c9ff03b3fe3fe65f92f42c1b3ebf74b1b64be74a1340e773ea114732dd29c"
+          },
+          {
+            "quote": "a.csv",
+            "occurrence": 2,
+            "span": [
+              22,
+              27
+            ],
+            "source_sha256": "f65c9ff03b3fe3fe65f92f42c1b3ebf74b1b64be74a1340e773ea114732dd29c"
+          }
+        ],
+        "alternatives": []
+      },
+      {
+        "id": "ent_service",
+        "label": "服务",
+        "type": "SYSTEM",
+        "mentions": [
+          {
+            "quote": "服务",
+            "occurrence": 1,
+            "span": [
+              15,
+              17
+            ],
+            "source_sha256": "f65c9ff03b3fe3fe65f92f42c1b3ebf74b1b64be74a1340e773ea114732dd29c"
+          }
+        ],
+        "alternatives": []
+      }
+    ],
+    "expressions": [],
+    "issues": [
+      {
+        "id": "issue_implicit_performers",
+        "kind": "UNSPECIFIED",
+        "subject_ids": [
+          "evt_restart",
+          "evt_delete"
+        ],
+        "field_path": "claims.role=PERFORMER",
+        "alternatives": [],
+        "affected_views": [
+          "P"
+        ],
+        "sources": [
+          {
+            "quote": "无需重启服务",
+            "occurrence": 1,
+            "span": [
+              11,
+              17
+            ],
+            "source_sha256": "f65c9ff03b3fe3fe65f92f42c1b3ebf74b1b64be74a1340e773ea114732dd29c"
+          },
+          {
+            "quote": "不得删除a.csv",
+            "occurrence": 1,
+            "span": [
+              18,
+              27
+            ],
+            "source_sha256": "f65c9ff03b3fe3fe65f92f42c1b3ebf74b1b64be74a1340e773ea114732dd29c"
+          }
+        ],
+        "note": "后两个分句未明确执行者，不自动扩展PM在检查事件中的执行角色。"
+      }
+    ],
+    "audit_issues": [],
+    "gaps": [],
+    "technical_diagnostics": [],
+    "business_decision": null,
+    "execution_authorization": null
+  },
+  "canonical": {
+    "format": "boundx-canonical-7plus1/028-r02.2",
+    "source_sha256": "f65c9ff03b3fe3fe65f92f42c1b3ebf74b1b64be74a1340e773ea114732dd29c",
+    "slots": {
+      "I": {
+        "status": "RESOLVED",
+        "openness": "CONSTRAINED",
+        "entries": [
+          {
+            "id": "bf:a6e59b556a12bc02b010",
+            "kind": "ROLE",
+            "status": "ACCEPTED",
+            "claim_ids": [
+              "cl_check_input",
+              "ent_file",
+              "evt_check"
+            ],
+            "claim": {
+              "id": "cl_check_input",
+              "kind": "ROLE",
+              "event_id": "evt_check",
+              "entity_id": "ent_file",
+              "role": "INPUT_OBJECT",
+              "expression_id": null,
+              "direction": null,
+              "temporal": null,
+              "quantity": null,
+              "scope_id": "evt_check",
+              "requires": [],
+              "sources": [
+                {
+                  "quote": "检查a.csv",
+                  "occurrence": 1,
+                  "span": [
+                    3,
+                    10
+                  ],
+                  "source_sha256": "f65c9ff03b3fe3fe65f92f42c1b3ebf74b1b64be74a1340e773ea114732dd29c"
+                }
+              ],
+              "note": "a.csv是明确受检对象。"
+            },
+            "event": {
+              "id": "evt_check",
+              "predicate": "检查",
+              "kind": "ACTION",
+              "layer": "MAIN",
+              "use": "CURRENT_TASK",
+              "modality": "REQUIRED",
+              "polarity": "POSITIVE",
+              "owner_id": "ROOT",
+              "constraint_ids": [],
+              "requires": [],
+              "sources": [
+                {
+                  "quote": "请PM检查a.csv",
+                  "occurrence": 1,
+                  "span": [
+                    0,
+                    10
+                  ],
+                  "source_sha256": "f65c9ff03b3fe3fe65f92f42c1b3ebf74b1b64be74a1340e773ea114732dd29c"
+                }
+              ]
+            },
+            "entity": {
+              "id": "ent_file",
+              "label": "a.csv",
+              "type": "FILE",
+              "mentions": [
+                {
+                  "quote": "a.csv",
+                  "occurrence": 1,
+                  "span": [
+                    5,
+                    10
+                  ],
+                  "source_sha256": "f65c9ff03b3fe3fe65f92f42c1b3ebf74b1b64be74a1340e773ea114732dd29c"
+                },
+                {
+                  "quote": "a.csv",
+                  "occurrence": 2,
+                  "span": [
+                    22,
+                    27
+                  ],
+                  "source_sha256": "f65c9ff03b3fe3fe65f92f42c1b3ebf74b1b64be74a1340e773ea114732dd29c"
+                }
+              ],
+              "alternatives": []
+            },
+            "expression": null,
+            "constraints": [],
+            "content_quantities": [],
+            "content_scopes": [],
+            "sources": [
+              {
+                "quote": "检查a.csv",
+                "occurrence": 1,
+                "span": [
+                  3,
+                  10
+                ],
+                "source_sha256": "f65c9ff03b3fe3fe65f92f42c1b3ebf74b1b64be74a1340e773ea114732dd29c"
+              },
+              {
+                "quote": "请PM检查a.csv",
+                "occurrence": 1,
+                "span": [
+                  0,
+                  10
+                ],
+                "source_sha256": "f65c9ff03b3fe3fe65f92f42c1b3ebf74b1b64be74a1340e773ea114732dd29c"
+              },
+              {
+                "quote": "a.csv",
+                "occurrence": 1,
+                "span": [
+                  5,
+                  10
+                ],
+                "source_sha256": "f65c9ff03b3fe3fe65f92f42c1b3ebf74b1b64be74a1340e773ea114732dd29c"
+              },
+              {
+                "quote": "a.csv",
+                "occurrence": 2,
+                "span": [
+                  22,
+                  27
+                ],
+                "source_sha256": "f65c9ff03b3fe3fe65f92f42c1b3ebf74b1b64be74a1340e773ea114732dd29c"
+              }
+            ],
+            "slots": [
+              "I"
+            ],
+            "proof": {
+              "source_sha256": "f65c9ff03b3fe3fe65f92f42c1b3ebf74b1b64be74a1340e773ea114732dd29c",
+              "claim_ids": [
+                "cl_check_input",
+                "ent_file",
+                "evt_check"
+              ],
+              "provenance_refs": [
+                "cl_check_input",
+                "evt_check",
+                "ent_file"
+              ],
+              "technical_policy": "028-r02-technical-v1",
+              "checks": [
+                {
+                  "id": "cl_check_input",
+                  "collection": "claims",
+                  "status": "ACCEPTED",
+                  "errors": [],
+                  "uncertain": [],
+                  "sources": [
+                    {
+                      "quote": "检查a.csv",
+                      "occurrence": 1,
+                      "span": [
+                        3,
+                        10
+                      ],
+                      "source_sha256": "f65c9ff03b3fe3fe65f92f42c1b3ebf74b1b64be74a1340e773ea114732dd29c"
+                    }
+                  ],
+                  "audit_refs": [
+                    {
+                      "subject_id": "cl_check_input",
+                      "field_path": "",
+                      "verdict": "SUPPORT"
+                    }
+                  ],
+                  "required_dependencies": [],
+                  "structural_refs": [
+                    "evt_check",
+                    "ent_file"
+                  ]
+                },
+                {
+                  "id": "evt_check",
+                  "collection": "events",
+                  "status": "ACCEPTED",
+                  "errors": [],
+                  "uncertain": [],
+                  "sources": [
+                    {
+                      "quote": "请PM检查a.csv",
+                      "occurrence": 1,
+                      "span": [
+                        0,
+                        10
+                      ],
+                      "source_sha256": "f65c9ff03b3fe3fe65f92f42c1b3ebf74b1b64be74a1340e773ea114732dd29c"
+                    }
+                  ],
+                  "audit_refs": [
+                    {
+                      "subject_id": "evt_check",
+                      "field_path": "",
+                      "verdict": "SUPPORT"
+                    }
+                  ],
+                  "required_dependencies": [],
+                  "structural_refs": [
+                    "ROOT"
+                  ]
+                },
+                {
+                  "id": "ent_file",
+                  "collection": "entities",
+                  "status": "ACCEPTED",
+                  "errors": [],
+                  "uncertain": [],
+                  "sources": [
+                    {
+                      "quote": "a.csv",
+                      "occurrence": 1,
+                      "span": [
+                        5,
+                        10
+                      ],
+                      "source_sha256": "f65c9ff03b3fe3fe65f92f42c1b3ebf74b1b64be74a1340e773ea114732dd29c"
+                    },
+                    {
+                      "quote": "a.csv",
+                      "occurrence": 2,
+                      "span": [
+                        22,
+                        27
+                      ],
+                      "source_sha256": "f65c9ff03b3fe3fe65f92f42c1b3ebf74b1b64be74a1340e773ea114732dd29c"
+                    }
+                  ],
+                  "audit_refs": [
+                    {
+                      "subject_id": "ent_file",
+                      "field_path": "",
+                      "verdict": "SUPPORT"
+                    }
+                  ],
+                  "required_dependencies": [],
+                  "structural_refs": []
+                }
+              ],
+              "audit": [
+                {
+                  "subject_id": "cl_check_input",
+                  "field_path": "",
+                  "verdict": "SUPPORT",
+                  "context_refs": [
+                    "evt_check",
+                    "ent_file"
+                  ],
+                  "sources": [
+                    {
+                      "quote": "检查a.csv",
+                      "occurrence": 1
+                    }
+                  ],
+                  "reason": "a.csv是明确受检范围，INPUT_OBJECT用途有支持。"
+                },
+                {
+                  "subject_id": "evt_check",
+                  "field_path": "",
+                  "verdict": "SUPPORT",
+                  "context_refs": [],
+                  "sources": [
+                    {
+                      "quote": "请PM检查a.csv",
+                      "occurrence": 1
+                    }
+                  ],
+                  "reason": "这是当前任务的明确检查要求，无额外条件。"
+                },
+                {
+                  "subject_id": "ent_file",
+                  "field_path": "",
+                  "verdict": "SUPPORT",
+                  "context_refs": [],
+                  "sources": [
+                    {
+                      "quote": "a.csv",
+                      "occurrence": 1
+                    },
+                    {
+                      "quote": "a.csv",
+                      "occurrence": 2
+                    }
+                  ],
+                  "reason": "两处同名文件分别用于检查和禁止删除，合并为同一实体有原文支持。"
+                }
+              ],
+              "context_references_are_not_required_dependencies": true
+            }
+          }
+        ]
+      },
+      "O": {
+        "status": "ABSENT",
+        "openness": "OPEN",
+        "entries": []
+      },
+      "A": {
+        "status": "RESOLVED",
+        "openness": "CONSTRAINED",
+        "entries": [
+          {
+            "id": "bf:f43e0b447040493e324e",
+            "kind": "EVENT",
+            "status": "ACCEPTED",
+            "claim_ids": [
+              "evt_check",
+              "cl_check_performer",
+              "cl_check_input"
+            ],
+            "event": {
+              "id": "evt_check",
+              "predicate": "检查",
+              "kind": "ACTION",
+              "layer": "MAIN",
+              "use": "CURRENT_TASK",
+              "modality": "REQUIRED",
+              "polarity": "POSITIVE",
+              "owner_id": "ROOT",
+              "constraint_ids": [],
+              "requires": [],
+              "sources": [
+                {
+                  "quote": "请PM检查a.csv",
+                  "occurrence": 1,
+                  "span": [
+                    0,
+                    10
+                  ],
+                  "source_sha256": "f65c9ff03b3fe3fe65f92f42c1b3ebf74b1b64be74a1340e773ea114732dd29c"
+                }
+              ]
+            },
+            "roles": [
+              {
+                "id": "cl_check_performer",
+                "kind": "ROLE",
+                "event_id": "evt_check",
+                "entity_id": "ent_pm",
+                "role": "PERFORMER",
+                "expression_id": null,
+                "direction": null,
+                "temporal": null,
+                "quantity": null,
+                "scope_id": "evt_check",
+                "requires": [],
+                "sources": [
+                  {
+                    "quote": "请PM检查a.csv",
+                    "occurrence": 1,
+                    "span": [
+                      0,
+                      10
+                    ],
+                    "source_sha256": "f65c9ff03b3fe3fe65f92f42c1b3ebf74b1b64be74a1340e773ea114732dd29c"
+                  }
+                ],
+                "note": "PM是检查事件的明确执行者。",
+                "entity": {
+                  "id": "ent_pm",
+                  "label": "PM",
+                  "type": "PERSON",
+                  "mentions": [
+                    {
+                      "quote": "PM",
+                      "occurrence": 1,
+                      "span": [
+                        1,
+                        3
+                      ],
+                      "source_sha256": "f65c9ff03b3fe3fe65f92f42c1b3ebf74b1b64be74a1340e773ea114732dd29c"
+                    }
+                  ],
+                  "alternatives": []
+                },
+                "status": "ACCEPTED"
+              },
+              {
+                "id": "cl_check_input",
+                "kind": "ROLE",
+                "event_id": "evt_check",
+                "entity_id": "ent_file",
+                "role": "INPUT_OBJECT",
+                "expression_id": null,
+                "direction": null,
+                "temporal": null,
+                "quantity": null,
+                "scope_id": "evt_check",
+                "requires": [],
+                "sources": [
+                  {
+                    "quote": "检查a.csv",
+                    "occurrence": 1,
+                    "span": [
+                      3,
+                      10
+                    ],
+                    "source_sha256": "f65c9ff03b3fe3fe65f92f42c1b3ebf74b1b64be74a1340e773ea114732dd29c"
+                  }
+                ],
+                "note": "a.csv是明确受检对象。",
+                "entity": {
+                  "id": "ent_file",
+                  "label": "a.csv",
+                  "type": "FILE",
+                  "mentions": [
+                    {
+                      "quote": "a.csv",
+                      "occurrence": 1,
+                      "span": [
+                        5,
+                        10
+                      ],
+                      "source_sha256": "f65c9ff03b3fe3fe65f92f42c1b3ebf74b1b64be74a1340e773ea114732dd29c"
+                    },
+                    {
+                      "quote": "a.csv",
+                      "occurrence": 2,
+                      "span": [
+                        22,
+                        27
+                      ],
+                      "source_sha256": "f65c9ff03b3fe3fe65f92f42c1b3ebf74b1b64be74a1340e773ea114732dd29c"
+                    }
+                  ],
+                  "alternatives": []
+                },
+                "status": "ACCEPTED"
+              }
+            ],
+            "constraints": [],
+            "sources": [
+              {
+                "quote": "请PM检查a.csv",
+                "occurrence": 1,
+                "span": [
+                  0,
+                  10
+                ],
+                "source_sha256": "f65c9ff03b3fe3fe65f92f42c1b3ebf74b1b64be74a1340e773ea114732dd29c"
+              },
+              {
+                "quote": "请PM检查a.csv",
+                "occurrence": 1,
+                "span": [
+                  0,
+                  10
+                ],
+                "source_sha256": "f65c9ff03b3fe3fe65f92f42c1b3ebf74b1b64be74a1340e773ea114732dd29c"
+              },
+              {
+                "quote": "PM",
+                "occurrence": 1,
+                "span": [
+                  1,
+                  3
+                ],
+                "source_sha256": "f65c9ff03b3fe3fe65f92f42c1b3ebf74b1b64be74a1340e773ea114732dd29c"
+              },
+              {
+                "quote": "检查a.csv",
+                "occurrence": 1,
+                "span": [
+                  3,
+                  10
+                ],
+                "source_sha256": "f65c9ff03b3fe3fe65f92f42c1b3ebf74b1b64be74a1340e773ea114732dd29c"
+              },
+              {
+                "quote": "a.csv",
+                "occurrence": 1,
+                "span": [
+                  5,
+                  10
+                ],
+                "source_sha256": "f65c9ff03b3fe3fe65f92f42c1b3ebf74b1b64be74a1340e773ea114732dd29c"
+              },
+              {
+                "quote": "a.csv",
+                "occurrence": 2,
+                "span": [
+                  22,
+                  27
+                ],
+                "source_sha256": "f65c9ff03b3fe3fe65f92f42c1b3ebf74b1b64be74a1340e773ea114732dd29c"
+              }
+            ],
+            "slots": [
+              "A"
+            ],
+            "proof": {
+              "source_sha256": "f65c9ff03b3fe3fe65f92f42c1b3ebf74b1b64be74a1340e773ea114732dd29c",
+              "claim_ids": [
+                "evt_check",
+                "cl_check_performer",
+                "cl_check_input"
+              ],
+              "provenance_refs": [
+                "evt_check",
+                "cl_check_performer",
+                "ent_pm",
+                "cl_check_input",
+                "ent_file"
+              ],
+              "technical_policy": "028-r02-technical-v1",
+              "checks": [
+                {
+                  "id": "evt_check",
+                  "collection": "events",
+                  "status": "ACCEPTED",
+                  "errors": [],
+                  "uncertain": [],
+                  "sources": [
+                    {
+                      "quote": "请PM检查a.csv",
+                      "occurrence": 1,
+                      "span": [
+                        0,
+                        10
+                      ],
+                      "source_sha256": "f65c9ff03b3fe3fe65f92f42c1b3ebf74b1b64be74a1340e773ea114732dd29c"
+                    }
+                  ],
+                  "audit_refs": [
+                    {
+                      "subject_id": "evt_check",
+                      "field_path": "",
+                      "verdict": "SUPPORT"
+                    }
+                  ],
+                  "required_dependencies": [],
+                  "structural_refs": [
+                    "ROOT"
+                  ]
+                },
+                {
+                  "id": "cl_check_performer",
+                  "collection": "claims",
+                  "status": "ACCEPTED",
+                  "errors": [],
+                  "uncertain": [],
+                  "sources": [
+                    {
+                      "quote": "请PM检查a.csv",
+                      "occurrence": 1,
+                      "span": [
+                        0,
+                        10
+                      ],
+                      "source_sha256": "f65c9ff03b3fe3fe65f92f42c1b3ebf74b1b64be74a1340e773ea114732dd29c"
+                    }
+                  ],
+                  "audit_refs": [
+                    {
+                      "subject_id": "cl_check_performer",
+                      "field_path": "",
+                      "verdict": "SUPPORT"
+                    }
+                  ],
+                  "required_dependencies": [],
+                  "structural_refs": [
+                    "evt_check",
+                    "ent_pm"
+                  ]
+                },
+                {
+                  "id": "ent_pm",
+                  "collection": "entities",
+                  "status": "ACCEPTED",
+                  "errors": [],
+                  "uncertain": [],
+                  "sources": [
+                    {
+                      "quote": "PM",
+                      "occurrence": 1,
+                      "span": [
+                        1,
+                        3
+                      ],
+                      "source_sha256": "f65c9ff03b3fe3fe65f92f42c1b3ebf74b1b64be74a1340e773ea114732dd29c"
+                    }
+                  ],
+                  "audit_refs": [
+                    {
+                      "subject_id": "ent_pm",
+                      "field_path": "",
+                      "verdict": "SUPPORT"
+                    }
+                  ],
+                  "required_dependencies": [],
+                  "structural_refs": []
+                },
+                {
+                  "id": "cl_check_input",
+                  "collection": "claims",
+                  "status": "ACCEPTED",
+                  "errors": [],
+                  "uncertain": [],
+                  "sources": [
+                    {
+                      "quote": "检查a.csv",
+                      "occurrence": 1,
+                      "span": [
+                        3,
+                        10
+                      ],
+                      "source_sha256": "f65c9ff03b3fe3fe65f92f42c1b3ebf74b1b64be74a1340e773ea114732dd29c"
+                    }
+                  ],
+                  "audit_refs": [
+                    {
+                      "subject_id": "cl_check_input",
+                      "field_path": "",
+                      "verdict": "SUPPORT"
+                    }
+                  ],
+                  "required_dependencies": [],
+                  "structural_refs": [
+                    "evt_check",
+                    "ent_file"
+                  ]
+                },
+                {
+                  "id": "ent_file",
+                  "collection": "entities",
+                  "status": "ACCEPTED",
+                  "errors": [],
+                  "uncertain": [],
+                  "sources": [
+                    {
+                      "quote": "a.csv",
+                      "occurrence": 1,
+                      "span": [
+                        5,
+                        10
+                      ],
+                      "source_sha256": "f65c9ff03b3fe3fe65f92f42c1b3ebf74b1b64be74a1340e773ea114732dd29c"
+                    },
+                    {
+                      "quote": "a.csv",
+                      "occurrence": 2,
+                      "span": [
+                        22,
+                        27
+                      ],
+                      "source_sha256": "f65c9ff03b3fe3fe65f92f42c1b3ebf74b1b64be74a1340e773ea114732dd29c"
+                    }
+                  ],
+                  "audit_refs": [
+                    {
+                      "subject_id": "ent_file",
+                      "field_path": "",
+                      "verdict": "SUPPORT"
+                    }
+                  ],
+                  "required_dependencies": [],
+                  "structural_refs": []
+                }
+              ],
+              "audit": [
+                {
+                  "subject_id": "evt_check",
+                  "field_path": "",
+                  "verdict": "SUPPORT",
+                  "context_refs": [],
+                  "sources": [
+                    {
+                      "quote": "请PM检查a.csv",
+                      "occurrence": 1
+                    }
+                  ],
+                  "reason": "这是当前任务的明确检查要求，无额外条件。"
+                },
+                {
+                  "subject_id": "cl_check_performer",
+                  "field_path": "",
+                  "verdict": "SUPPORT",
+                  "context_refs": [
+                    "evt_check",
+                    "ent_pm"
+                  ],
+                  "sources": [
+                    {
+                      "quote": "请PM检查a.csv",
+                      "occurrence": 1
+                    }
+                  ],
+                  "reason": "PM明确承担检查事件的执行者角色。"
+                },
+                {
+                  "subject_id": "ent_pm",
+                  "field_path": "",
+                  "verdict": "SUPPORT",
+                  "context_refs": [],
+                  "sources": [
+                    {
+                      "quote": "PM",
+                      "occurrence": 1
+                    }
+                  ],
+                  "reason": "原文明示PM，可作为人员实体；未据岗位推定权限。"
+                },
+                {
+                  "subject_id": "cl_check_input",
+                  "field_path": "",
+                  "verdict": "SUPPORT",
+                  "context_refs": [
+                    "evt_check",
+                    "ent_file"
+                  ],
+                  "sources": [
+                    {
+                      "quote": "检查a.csv",
+                      "occurrence": 1
+                    }
+                  ],
+                  "reason": "a.csv是明确受检范围，INPUT_OBJECT用途有支持。"
+                },
+                {
+                  "subject_id": "ent_file",
+                  "field_path": "",
+                  "verdict": "SUPPORT",
+                  "context_refs": [],
+                  "sources": [
+                    {
+                      "quote": "a.csv",
+                      "occurrence": 1
+                    },
+                    {
+                      "quote": "a.csv",
+                      "occurrence": 2
+                    }
+                  ],
+                  "reason": "两处同名文件分别用于检查和禁止删除，合并为同一实体有原文支持。"
+                }
+              ],
+              "context_references_are_not_required_dependencies": true
+            }
+          }
+        ]
+      },
+      "P": {
+        "status": "RESOLVED",
+        "openness": "CONSTRAINED",
+        "entries": [
+          {
+            "id": "bf:24c42506ee7e26500852",
+            "kind": "ROLE",
+            "status": "ACCEPTED",
+            "claim_ids": [
+              "cl_check_performer",
+              "ent_pm",
+              "evt_check"
+            ],
+            "claim": {
+              "id": "cl_check_performer",
+              "kind": "ROLE",
+              "event_id": "evt_check",
+              "entity_id": "ent_pm",
+              "role": "PERFORMER",
+              "expression_id": null,
+              "direction": null,
+              "temporal": null,
+              "quantity": null,
+              "scope_id": "evt_check",
+              "requires": [],
+              "sources": [
+                {
+                  "quote": "请PM检查a.csv",
+                  "occurrence": 1,
+                  "span": [
+                    0,
+                    10
+                  ],
+                  "source_sha256": "f65c9ff03b3fe3fe65f92f42c1b3ebf74b1b64be74a1340e773ea114732dd29c"
+                }
+              ],
+              "note": "PM是检查事件的明确执行者。"
+            },
+            "event": {
+              "id": "evt_check",
+              "predicate": "检查",
+              "kind": "ACTION",
+              "layer": "MAIN",
+              "use": "CURRENT_TASK",
+              "modality": "REQUIRED",
+              "polarity": "POSITIVE",
+              "owner_id": "ROOT",
+              "constraint_ids": [],
+              "requires": [],
+              "sources": [
+                {
+                  "quote": "请PM检查a.csv",
+                  "occurrence": 1,
+                  "span": [
+                    0,
+                    10
+                  ],
+                  "source_sha256": "f65c9ff03b3fe3fe65f92f42c1b3ebf74b1b64be74a1340e773ea114732dd29c"
+                }
+              ]
+            },
+            "entity": {
+              "id": "ent_pm",
+              "label": "PM",
+              "type": "PERSON",
+              "mentions": [
+                {
+                  "quote": "PM",
+                  "occurrence": 1,
+                  "span": [
+                    1,
+                    3
+                  ],
+                  "source_sha256": "f65c9ff03b3fe3fe65f92f42c1b3ebf74b1b64be74a1340e773ea114732dd29c"
+                }
+              ],
+              "alternatives": []
+            },
+            "expression": null,
+            "constraints": [],
+            "content_quantities": [],
+            "content_scopes": [],
+            "sources": [
+              {
+                "quote": "请PM检查a.csv",
+                "occurrence": 1,
+                "span": [
+                  0,
+                  10
+                ],
+                "source_sha256": "f65c9ff03b3fe3fe65f92f42c1b3ebf74b1b64be74a1340e773ea114732dd29c"
+              },
+              {
+                "quote": "请PM检查a.csv",
+                "occurrence": 1,
+                "span": [
+                  0,
+                  10
+                ],
+                "source_sha256": "f65c9ff03b3fe3fe65f92f42c1b3ebf74b1b64be74a1340e773ea114732dd29c"
+              },
+              {
+                "quote": "PM",
+                "occurrence": 1,
+                "span": [
+                  1,
+                  3
+                ],
+                "source_sha256": "f65c9ff03b3fe3fe65f92f42c1b3ebf74b1b64be74a1340e773ea114732dd29c"
+              }
+            ],
+            "slots": [
+              "P"
+            ],
+            "proof": {
+              "source_sha256": "f65c9ff03b3fe3fe65f92f42c1b3ebf74b1b64be74a1340e773ea114732dd29c",
+              "claim_ids": [
+                "cl_check_performer",
+                "ent_pm",
+                "evt_check"
+              ],
+              "provenance_refs": [
+                "cl_check_performer",
+                "evt_check",
+                "ent_pm"
+              ],
+              "technical_policy": "028-r02-technical-v1",
+              "checks": [
+                {
+                  "id": "cl_check_performer",
+                  "collection": "claims",
+                  "status": "ACCEPTED",
+                  "errors": [],
+                  "uncertain": [],
+                  "sources": [
+                    {
+                      "quote": "请PM检查a.csv",
+                      "occurrence": 1,
+                      "span": [
+                        0,
+                        10
+                      ],
+                      "source_sha256": "f65c9ff03b3fe3fe65f92f42c1b3ebf74b1b64be74a1340e773ea114732dd29c"
+                    }
+                  ],
+                  "audit_refs": [
+                    {
+                      "subject_id": "cl_check_performer",
+                      "field_path": "",
+                      "verdict": "SUPPORT"
+                    }
+                  ],
+                  "required_dependencies": [],
+                  "structural_refs": [
+                    "evt_check",
+                    "ent_pm"
+                  ]
+                },
+                {
+                  "id": "evt_check",
+                  "collection": "events",
+                  "status": "ACCEPTED",
+                  "errors": [],
+                  "uncertain": [],
+                  "sources": [
+                    {
+                      "quote": "请PM检查a.csv",
+                      "occurrence": 1,
+                      "span": [
+                        0,
+                        10
+                      ],
+                      "source_sha256": "f65c9ff03b3fe3fe65f92f42c1b3ebf74b1b64be74a1340e773ea114732dd29c"
+                    }
+                  ],
+                  "audit_refs": [
+                    {
+                      "subject_id": "evt_check",
+                      "field_path": "",
+                      "verdict": "SUPPORT"
+                    }
+                  ],
+                  "required_dependencies": [],
+                  "structural_refs": [
+                    "ROOT"
+                  ]
+                },
+                {
+                  "id": "ent_pm",
+                  "collection": "entities",
+                  "status": "ACCEPTED",
+                  "errors": [],
+                  "uncertain": [],
+                  "sources": [
+                    {
+                      "quote": "PM",
+                      "occurrence": 1,
+                      "span": [
+                        1,
+                        3
+                      ],
+                      "source_sha256": "f65c9ff03b3fe3fe65f92f42c1b3ebf74b1b64be74a1340e773ea114732dd29c"
+                    }
+                  ],
+                  "audit_refs": [
+                    {
+                      "subject_id": "ent_pm",
+                      "field_path": "",
+                      "verdict": "SUPPORT"
+                    }
+                  ],
+                  "required_dependencies": [],
+                  "structural_refs": []
+                }
+              ],
+              "audit": [
+                {
+                  "subject_id": "cl_check_performer",
+                  "field_path": "",
+                  "verdict": "SUPPORT",
+                  "context_refs": [
+                    "evt_check",
+                    "ent_pm"
+                  ],
+                  "sources": [
+                    {
+                      "quote": "请PM检查a.csv",
+                      "occurrence": 1
+                    }
+                  ],
+                  "reason": "PM明确承担检查事件的执行者角色。"
+                },
+                {
+                  "subject_id": "evt_check",
+                  "field_path": "",
+                  "verdict": "SUPPORT",
+                  "context_refs": [],
+                  "sources": [
+                    {
+                      "quote": "请PM检查a.csv",
+                      "occurrence": 1
+                    }
+                  ],
+                  "reason": "这是当前任务的明确检查要求，无额外条件。"
+                },
+                {
+                  "subject_id": "ent_pm",
+                  "field_path": "",
+                  "verdict": "SUPPORT",
+                  "context_refs": [],
+                  "sources": [
+                    {
+                      "quote": "PM",
+                      "occurrence": 1
+                    }
+                  ],
+                  "reason": "原文明示PM，可作为人员实体；未据岗位推定权限。"
+                }
+              ],
+              "context_references_are_not_required_dependencies": true
+            }
+          }
+        ]
+      },
+      "R": {
+        "status": "ABSENT",
+        "openness": "OPEN",
+        "entries": []
+      },
+      "V": {
+        "status": "ABSENT",
+        "openness": "OPEN",
+        "entries": []
+      },
+      "C": {
+        "status": "ABSENT",
+        "openness": "OPEN",
+        "entries": []
+      },
+      "B": {
+        "status": "RESOLVED",
+        "openness": "CONSTRAINED",
+        "entries": [
+          {
+            "id": "bf:8e416fe13dd2d5cf5b6e",
+            "kind": "EVENT",
+            "status": "ACCEPTED",
+            "claim_ids": [
+              "evt_delete",
+              "cl_delete_object"
+            ],
+            "event": {
+              "id": "evt_delete",
+              "predicate": "删除",
+              "kind": "ACTION",
+              "layer": "MAIN",
+              "use": "CURRENT_TASK",
+              "modality": "FORBIDDEN",
+              "polarity": "POSITIVE",
+              "owner_id": "ROOT",
+              "constraint_ids": [],
+              "requires": [],
+              "sources": [
+                {
+                  "quote": "不得删除a.csv",
+                  "occurrence": 1,
+                  "span": [
+                    18,
+                    27
+                  ],
+                  "source_sha256": "f65c9ff03b3fe3fe65f92f42c1b3ebf74b1b64be74a1340e773ea114732dd29c"
+                }
+              ]
+            },
+            "roles": [
+              {
+                "id": "cl_delete_object",
+                "kind": "ROLE",
+                "event_id": "evt_delete",
+                "entity_id": "ent_file",
+                "role": "OBJECT",
+                "expression_id": null,
+                "direction": null,
+                "temporal": null,
+                "quantity": null,
+                "scope_id": "evt_delete",
+                "requires": [],
+                "sources": [
+                  {
+                    "quote": "不得删除a.csv",
+                    "occurrence": 1,
+                    "span": [
+                      18,
+                      27
+                    ],
+                    "source_sha256": "f65c9ff03b3fe3fe65f92f42c1b3ebf74b1b64be74a1340e773ea114732dd29c"
+                  }
+                ],
+                "note": "禁止删除的对象与受检文件为同一实体；禁止用途不新增外部输入。",
+                "entity": {
+                  "id": "ent_file",
+                  "label": "a.csv",
+                  "type": "FILE",
+                  "mentions": [
+                    {
+                      "quote": "a.csv",
+                      "occurrence": 1,
+                      "span": [
+                        5,
+                        10
+                      ],
+                      "source_sha256": "f65c9ff03b3fe3fe65f92f42c1b3ebf74b1b64be74a1340e773ea114732dd29c"
+                    },
+                    {
+                      "quote": "a.csv",
+                      "occurrence": 2,
+                      "span": [
+                        22,
+                        27
+                      ],
+                      "source_sha256": "f65c9ff03b3fe3fe65f92f42c1b3ebf74b1b64be74a1340e773ea114732dd29c"
+                    }
+                  ],
+                  "alternatives": []
+                },
+                "status": "ACCEPTED"
+              }
+            ],
+            "constraints": [],
+            "sources": [
+              {
+                "quote": "不得删除a.csv",
+                "occurrence": 1,
+                "span": [
+                  18,
+                  27
+                ],
+                "source_sha256": "f65c9ff03b3fe3fe65f92f42c1b3ebf74b1b64be74a1340e773ea114732dd29c"
+              },
+              {
+                "quote": "不得删除a.csv",
+                "occurrence": 1,
+                "span": [
+                  18,
+                  27
+                ],
+                "source_sha256": "f65c9ff03b3fe3fe65f92f42c1b3ebf74b1b64be74a1340e773ea114732dd29c"
+              },
+              {
+                "quote": "a.csv",
+                "occurrence": 1,
+                "span": [
+                  5,
+                  10
+                ],
+                "source_sha256": "f65c9ff03b3fe3fe65f92f42c1b3ebf74b1b64be74a1340e773ea114732dd29c"
+              },
+              {
+                "quote": "a.csv",
+                "occurrence": 2,
+                "span": [
+                  22,
+                  27
+                ],
+                "source_sha256": "f65c9ff03b3fe3fe65f92f42c1b3ebf74b1b64be74a1340e773ea114732dd29c"
+              }
+            ],
+            "slots": [
+              "B"
+            ],
+            "proof": {
+              "source_sha256": "f65c9ff03b3fe3fe65f92f42c1b3ebf74b1b64be74a1340e773ea114732dd29c",
+              "claim_ids": [
+                "evt_delete",
+                "cl_delete_object"
+              ],
+              "provenance_refs": [
+                "evt_delete",
+                "cl_delete_object",
+                "ent_file"
+              ],
+              "technical_policy": "028-r02-technical-v1",
+              "checks": [
+                {
+                  "id": "evt_delete",
+                  "collection": "events",
+                  "status": "ACCEPTED",
+                  "errors": [],
+                  "uncertain": [],
+                  "sources": [
+                    {
+                      "quote": "不得删除a.csv",
+                      "occurrence": 1,
+                      "span": [
+                        18,
+                        27
+                      ],
+                      "source_sha256": "f65c9ff03b3fe3fe65f92f42c1b3ebf74b1b64be74a1340e773ea114732dd29c"
+                    }
+                  ],
+                  "audit_refs": [
+                    {
+                      "subject_id": "evt_delete",
+                      "field_path": "",
+                      "verdict": "SUPPORT"
+                    }
+                  ],
+                  "required_dependencies": [],
+                  "structural_refs": [
+                    "ROOT"
+                  ]
+                },
+                {
+                  "id": "cl_delete_object",
+                  "collection": "claims",
+                  "status": "ACCEPTED",
+                  "errors": [],
+                  "uncertain": [],
+                  "sources": [
+                    {
+                      "quote": "不得删除a.csv",
+                      "occurrence": 1,
+                      "span": [
+                        18,
+                        27
+                      ],
+                      "source_sha256": "f65c9ff03b3fe3fe65f92f42c1b3ebf74b1b64be74a1340e773ea114732dd29c"
+                    }
+                  ],
+                  "audit_refs": [
+                    {
+                      "subject_id": "cl_delete_object",
+                      "field_path": "",
+                      "verdict": "SUPPORT"
+                    }
+                  ],
+                  "required_dependencies": [],
+                  "structural_refs": [
+                    "evt_delete",
+                    "ent_file"
+                  ]
+                },
+                {
+                  "id": "ent_file",
+                  "collection": "entities",
+                  "status": "ACCEPTED",
+                  "errors": [],
+                  "uncertain": [],
+                  "sources": [
+                    {
+                      "quote": "a.csv",
+                      "occurrence": 1,
+                      "span": [
+                        5,
+                        10
+                      ],
+                      "source_sha256": "f65c9ff03b3fe3fe65f92f42c1b3ebf74b1b64be74a1340e773ea114732dd29c"
+                    },
+                    {
+                      "quote": "a.csv",
+                      "occurrence": 2,
+                      "span": [
+                        22,
+                        27
+                      ],
+                      "source_sha256": "f65c9ff03b3fe3fe65f92f42c1b3ebf74b1b64be74a1340e773ea114732dd29c"
+                    }
+                  ],
+                  "audit_refs": [
+                    {
+                      "subject_id": "ent_file",
+                      "field_path": "",
+                      "verdict": "SUPPORT"
+                    }
+                  ],
+                  "required_dependencies": [],
+                  "structural_refs": []
+                }
+              ],
+              "audit": [
+                {
+                  "subject_id": "evt_delete",
+                  "field_path": "",
+                  "verdict": "SUPPORT",
+                  "context_refs": [],
+                  "sources": [
+                    {
+                      "quote": "不得删除a.csv",
+                      "occurrence": 1
+                    }
+                  ],
+                  "reason": "不得明确禁止删除；FORBIDDEN与正向动作谓词组合准确。"
+                },
+                {
+                  "subject_id": "cl_delete_object",
+                  "field_path": "",
+                  "verdict": "SUPPORT",
+                  "context_refs": [
+                    "evt_delete",
+                    "ent_file"
+                  ],
+                  "sources": [
+                    {
+                      "quote": "检查a.csv",
+                      "occurrence": 1
+                    },
+                    {
+                      "quote": "不得删除a.csv",
+                      "occurrence": 1
+                    }
+                  ],
+                  "reason": "禁止删除指向同一a.csv；OBJECT用途不会额外推导输入。"
+                },
+                {
+                  "subject_id": "ent_file",
+                  "field_path": "",
+                  "verdict": "SUPPORT",
+                  "context_refs": [],
+                  "sources": [
+                    {
+                      "quote": "a.csv",
+                      "occurrence": 1
+                    },
+                    {
+                      "quote": "a.csv",
+                      "occurrence": 2
+                    }
+                  ],
+                  "reason": "两处同名文件分别用于检查和禁止删除，合并为同一实体有原文支持。"
+                }
+              ],
+              "context_references_are_not_required_dependencies": true
+            }
+          }
+        ]
+      }
+    },
+    "unresolved": [],
+    "retained_nonprojected": [
+      {
+        "id": "bf:af27d36031fb5a91b4ef",
+        "kind": "EVENT",
+        "status": "ACCEPTED",
+        "claim_ids": [
+          "evt_restart",
+          "cl_restart_object"
+        ],
+        "event": {
+          "id": "evt_restart",
+          "predicate": "重启",
+          "kind": "ACTION",
+          "layer": "MAIN",
+          "use": "CURRENT_TASK",
+          "modality": "NOT_REQUIRED",
+          "polarity": "POSITIVE",
+          "owner_id": "ROOT",
+          "constraint_ids": [],
+          "requires": [],
+          "sources": [
+            {
+              "quote": "无需重启服务",
+              "occurrence": 1,
+              "span": [
+                11,
+                17
+              ],
+              "source_sha256": "f65c9ff03b3fe3fe65f92f42c1b3ebf74b1b64be74a1340e773ea114732dd29c"
+            }
+          ]
+        },
+        "roles": [
+          {
+            "id": "cl_restart_object",
+            "kind": "ROLE",
+            "event_id": "evt_restart",
+            "entity_id": "ent_service",
+            "role": "OBJECT",
+            "expression_id": null,
+            "direction": null,
+            "temporal": null,
+            "quantity": null,
+            "scope_id": "evt_restart",
+            "requires": [],
+            "sources": [
+              {
+                "quote": "无需重启服务",
+                "occurrence": 1,
+                "span": [
+                  11,
+                  17
+                ],
+                "source_sha256": "f65c9ff03b3fe3fe65f92f42c1b3ebf74b1b64be74a1340e773ea114732dd29c"
+              }
+            ],
+            "note": "撤回重启义务，不构成重启禁止或明确许可。",
+            "entity": {
+              "id": "ent_service",
+              "label": "服务",
+              "type": "SYSTEM",
+              "mentions": [
+                {
+                  "quote": "服务",
+                  "occurrence": 1,
+                  "span": [
+                    15,
+                    17
+                  ],
+                  "source_sha256": "f65c9ff03b3fe3fe65f92f42c1b3ebf74b1b64be74a1340e773ea114732dd29c"
+                }
+              ],
+              "alternatives": []
+            },
+            "status": "ACCEPTED"
+          }
+        ],
+        "constraints": [],
+        "sources": [
+          {
+            "quote": "无需重启服务",
+            "occurrence": 1,
+            "span": [
+              11,
+              17
+            ],
+            "source_sha256": "f65c9ff03b3fe3fe65f92f42c1b3ebf74b1b64be74a1340e773ea114732dd29c"
+          },
+          {
+            "quote": "无需重启服务",
+            "occurrence": 1,
+            "span": [
+              11,
+              17
+            ],
+            "source_sha256": "f65c9ff03b3fe3fe65f92f42c1b3ebf74b1b64be74a1340e773ea114732dd29c"
+          },
+          {
+            "quote": "服务",
+            "occurrence": 1,
+            "span": [
+              15,
+              17
+            ],
+            "source_sha256": "f65c9ff03b3fe3fe65f92f42c1b3ebf74b1b64be74a1340e773ea114732dd29c"
+          }
+        ],
+        "slots": [],
+        "proof": {
+          "source_sha256": "f65c9ff03b3fe3fe65f92f42c1b3ebf74b1b64be74a1340e773ea114732dd29c",
+          "claim_ids": [
+            "evt_restart",
+            "cl_restart_object"
+          ],
+          "provenance_refs": [
+            "evt_restart",
+            "cl_restart_object",
+            "ent_service"
+          ],
+          "technical_policy": "028-r02-technical-v1",
+          "checks": [
+            {
+              "id": "evt_restart",
+              "collection": "events",
+              "status": "ACCEPTED",
+              "errors": [],
+              "uncertain": [],
+              "sources": [
+                {
+                  "quote": "无需重启服务",
+                  "occurrence": 1,
+                  "span": [
+                    11,
+                    17
+                  ],
+                  "source_sha256": "f65c9ff03b3fe3fe65f92f42c1b3ebf74b1b64be74a1340e773ea114732dd29c"
+                }
+              ],
+              "audit_refs": [
+                {
+                  "subject_id": "evt_restart",
+                  "field_path": "",
+                  "verdict": "SUPPORT"
+                }
+              ],
+              "required_dependencies": [],
+              "structural_refs": [
+                "ROOT"
+              ]
+            },
+            {
+              "id": "cl_restart_object",
+              "collection": "claims",
+              "status": "ACCEPTED",
+              "errors": [],
+              "uncertain": [],
+              "sources": [
+                {
+                  "quote": "无需重启服务",
+                  "occurrence": 1,
+                  "span": [
+                    11,
+                    17
+                  ],
+                  "source_sha256": "f65c9ff03b3fe3fe65f92f42c1b3ebf74b1b64be74a1340e773ea114732dd29c"
+                }
+              ],
+              "audit_refs": [
+                {
+                  "subject_id": "cl_restart_object",
+                  "field_path": "",
+                  "verdict": "SUPPORT"
+                }
+              ],
+              "required_dependencies": [],
+              "structural_refs": [
+                "evt_restart",
+                "ent_service"
+              ]
+            },
+            {
+              "id": "ent_service",
+              "collection": "entities",
+              "status": "ACCEPTED",
+              "errors": [],
+              "uncertain": [],
+              "sources": [
+                {
+                  "quote": "服务",
+                  "occurrence": 1,
+                  "span": [
+                    15,
+                    17
+                  ],
+                  "source_sha256": "f65c9ff03b3fe3fe65f92f42c1b3ebf74b1b64be74a1340e773ea114732dd29c"
+                }
+              ],
+              "audit_refs": [
+                {
+                  "subject_id": "ent_service",
+                  "field_path": "",
+                  "verdict": "SUPPORT"
+                }
+              ],
+              "required_dependencies": [],
+              "structural_refs": []
+            }
+          ],
+          "audit": [
+            {
+              "subject_id": "evt_restart",
+              "field_path": "",
+              "verdict": "SUPPORT",
+              "context_refs": [],
+              "sources": [
+                {
+                  "quote": "无需重启服务",
+                  "occurrence": 1
+                }
+              ],
+              "reason": "无需表示不要求重启，NOT_REQUIRED准确，未改成禁止或许可。"
+            },
+            {
+              "subject_id": "cl_restart_object",
+              "field_path": "",
+              "verdict": "SUPPORT",
+              "context_refs": [
+                "evt_restart",
+                "ent_service"
+              ],
+              "sources": [
+                {
+                  "quote": "无需重启服务",
+                  "occurrence": 1
+                }
+              ],
+              "reason": "服务是无需执行的重启动作对象，不自动成为外部输入。"
+            },
+            {
+              "subject_id": "ent_service",
+              "field_path": "",
+              "verdict": "SUPPORT",
+              "context_refs": [],
+              "sources": [
+                {
+                  "quote": "服务",
+                  "occurrence": 1
+                }
+              ],
+              "reason": "服务是重启动作的明确对象，SYSTEM类型合理。"
+            }
+          ],
+          "context_references_are_not_required_dependencies": true
+        }
+      },
+      {
+        "id": "bf:c179f86074c66a852e73",
+        "kind": "ROLE",
+        "status": "ACCEPTED",
+        "claim_ids": [
+          "cl_restart_object",
+          "ent_service",
+          "evt_restart"
+        ],
+        "claim": {
+          "id": "cl_restart_object",
+          "kind": "ROLE",
+          "event_id": "evt_restart",
+          "entity_id": "ent_service",
+          "role": "OBJECT",
+          "expression_id": null,
+          "direction": null,
+          "temporal": null,
+          "quantity": null,
+          "scope_id": "evt_restart",
+          "requires": [],
+          "sources": [
+            {
+              "quote": "无需重启服务",
+              "occurrence": 1,
+              "span": [
+                11,
+                17
+              ],
+              "source_sha256": "f65c9ff03b3fe3fe65f92f42c1b3ebf74b1b64be74a1340e773ea114732dd29c"
+            }
+          ],
+          "note": "撤回重启义务，不构成重启禁止或明确许可。"
+        },
+        "event": {
+          "id": "evt_restart",
+          "predicate": "重启",
+          "kind": "ACTION",
+          "layer": "MAIN",
+          "use": "CURRENT_TASK",
+          "modality": "NOT_REQUIRED",
+          "polarity": "POSITIVE",
+          "owner_id": "ROOT",
+          "constraint_ids": [],
+          "requires": [],
+          "sources": [
+            {
+              "quote": "无需重启服务",
+              "occurrence": 1,
+              "span": [
+                11,
+                17
+              ],
+              "source_sha256": "f65c9ff03b3fe3fe65f92f42c1b3ebf74b1b64be74a1340e773ea114732dd29c"
+            }
+          ]
+        },
+        "entity": {
+          "id": "ent_service",
+          "label": "服务",
+          "type": "SYSTEM",
+          "mentions": [
+            {
+              "quote": "服务",
+              "occurrence": 1,
+              "span": [
+                15,
+                17
+              ],
+              "source_sha256": "f65c9ff03b3fe3fe65f92f42c1b3ebf74b1b64be74a1340e773ea114732dd29c"
+            }
+          ],
+          "alternatives": []
+        },
+        "expression": null,
+        "constraints": [],
+        "content_quantities": [],
+        "content_scopes": [],
+        "sources": [
+          {
+            "quote": "无需重启服务",
+            "occurrence": 1,
+            "span": [
+              11,
+              17
+            ],
+            "source_sha256": "f65c9ff03b3fe3fe65f92f42c1b3ebf74b1b64be74a1340e773ea114732dd29c"
+          },
+          {
+            "quote": "无需重启服务",
+            "occurrence": 1,
+            "span": [
+              11,
+              17
+            ],
+            "source_sha256": "f65c9ff03b3fe3fe65f92f42c1b3ebf74b1b64be74a1340e773ea114732dd29c"
+          },
+          {
+            "quote": "服务",
+            "occurrence": 1,
+            "span": [
+              15,
+              17
+            ],
+            "source_sha256": "f65c9ff03b3fe3fe65f92f42c1b3ebf74b1b64be74a1340e773ea114732dd29c"
+          }
+        ],
+        "slots": [],
+        "proof": {
+          "source_sha256": "f65c9ff03b3fe3fe65f92f42c1b3ebf74b1b64be74a1340e773ea114732dd29c",
+          "claim_ids": [
+            "cl_restart_object",
+            "ent_service",
+            "evt_restart"
+          ],
+          "provenance_refs": [
+            "cl_restart_object",
+            "evt_restart",
+            "ent_service"
+          ],
+          "technical_policy": "028-r02-technical-v1",
+          "checks": [
+            {
+              "id": "cl_restart_object",
+              "collection": "claims",
+              "status": "ACCEPTED",
+              "errors": [],
+              "uncertain": [],
+              "sources": [
+                {
+                  "quote": "无需重启服务",
+                  "occurrence": 1,
+                  "span": [
+                    11,
+                    17
+                  ],
+                  "source_sha256": "f65c9ff03b3fe3fe65f92f42c1b3ebf74b1b64be74a1340e773ea114732dd29c"
+                }
+              ],
+              "audit_refs": [
+                {
+                  "subject_id": "cl_restart_object",
+                  "field_path": "",
+                  "verdict": "SUPPORT"
+                }
+              ],
+              "required_dependencies": [],
+              "structural_refs": [
+                "evt_restart",
+                "ent_service"
+              ]
+            },
+            {
+              "id": "evt_restart",
+              "collection": "events",
+              "status": "ACCEPTED",
+              "errors": [],
+              "uncertain": [],
+              "sources": [
+                {
+                  "quote": "无需重启服务",
+                  "occurrence": 1,
+                  "span": [
+                    11,
+                    17
+                  ],
+                  "source_sha256": "f65c9ff03b3fe3fe65f92f42c1b3ebf74b1b64be74a1340e773ea114732dd29c"
+                }
+              ],
+              "audit_refs": [
+                {
+                  "subject_id": "evt_restart",
+                  "field_path": "",
+                  "verdict": "SUPPORT"
+                }
+              ],
+              "required_dependencies": [],
+              "structural_refs": [
+                "ROOT"
+              ]
+            },
+            {
+              "id": "ent_service",
+              "collection": "entities",
+              "status": "ACCEPTED",
+              "errors": [],
+              "uncertain": [],
+              "sources": [
+                {
+                  "quote": "服务",
+                  "occurrence": 1,
+                  "span": [
+                    15,
+                    17
+                  ],
+                  "source_sha256": "f65c9ff03b3fe3fe65f92f42c1b3ebf74b1b64be74a1340e773ea114732dd29c"
+                }
+              ],
+              "audit_refs": [
+                {
+                  "subject_id": "ent_service",
+                  "field_path": "",
+                  "verdict": "SUPPORT"
+                }
+              ],
+              "required_dependencies": [],
+              "structural_refs": []
+            }
+          ],
+          "audit": [
+            {
+              "subject_id": "cl_restart_object",
+              "field_path": "",
+              "verdict": "SUPPORT",
+              "context_refs": [
+                "evt_restart",
+                "ent_service"
+              ],
+              "sources": [
+                {
+                  "quote": "无需重启服务",
+                  "occurrence": 1
+                }
+              ],
+              "reason": "服务是无需执行的重启动作对象，不自动成为外部输入。"
+            },
+            {
+              "subject_id": "evt_restart",
+              "field_path": "",
+              "verdict": "SUPPORT",
+              "context_refs": [],
+              "sources": [
+                {
+                  "quote": "无需重启服务",
+                  "occurrence": 1
+                }
+              ],
+              "reason": "无需表示不要求重启，NOT_REQUIRED准确，未改成禁止或许可。"
+            },
+            {
+              "subject_id": "ent_service",
+              "field_path": "",
+              "verdict": "SUPPORT",
+              "context_refs": [],
+              "sources": [
+                {
+                  "quote": "服务",
+                  "occurrence": 1
+                }
+              ],
+              "reason": "服务是重启动作的明确对象，SYSTEM类型合理。"
+            }
+          ],
+          "context_references_are_not_required_dependencies": true
+        }
+      },
+      {
+        "id": "bf:cc01e52420fec64e924d",
+        "kind": "ROLE",
+        "status": "ACCEPTED",
+        "claim_ids": [
+          "cl_delete_object",
+          "ent_file",
+          "evt_delete"
+        ],
+        "claim": {
+          "id": "cl_delete_object",
+          "kind": "ROLE",
+          "event_id": "evt_delete",
+          "entity_id": "ent_file",
+          "role": "OBJECT",
+          "expression_id": null,
+          "direction": null,
+          "temporal": null,
+          "quantity": null,
+          "scope_id": "evt_delete",
+          "requires": [],
+          "sources": [
+            {
+              "quote": "不得删除a.csv",
+              "occurrence": 1,
+              "span": [
+                18,
+                27
+              ],
+              "source_sha256": "f65c9ff03b3fe3fe65f92f42c1b3ebf74b1b64be74a1340e773ea114732dd29c"
+            }
+          ],
+          "note": "禁止删除的对象与受检文件为同一实体；禁止用途不新增外部输入。"
+        },
+        "event": {
+          "id": "evt_delete",
+          "predicate": "删除",
+          "kind": "ACTION",
+          "layer": "MAIN",
+          "use": "CURRENT_TASK",
+          "modality": "FORBIDDEN",
+          "polarity": "POSITIVE",
+          "owner_id": "ROOT",
+          "constraint_ids": [],
+          "requires": [],
+          "sources": [
+            {
+              "quote": "不得删除a.csv",
+              "occurrence": 1,
+              "span": [
+                18,
+                27
+              ],
+              "source_sha256": "f65c9ff03b3fe3fe65f92f42c1b3ebf74b1b64be74a1340e773ea114732dd29c"
+            }
+          ]
+        },
+        "entity": {
+          "id": "ent_file",
+          "label": "a.csv",
+          "type": "FILE",
+          "mentions": [
+            {
+              "quote": "a.csv",
+              "occurrence": 1,
+              "span": [
+                5,
+                10
+              ],
+              "source_sha256": "f65c9ff03b3fe3fe65f92f42c1b3ebf74b1b64be74a1340e773ea114732dd29c"
+            },
+            {
+              "quote": "a.csv",
+              "occurrence": 2,
+              "span": [
+                22,
+                27
+              ],
+              "source_sha256": "f65c9ff03b3fe3fe65f92f42c1b3ebf74b1b64be74a1340e773ea114732dd29c"
+            }
+          ],
+          "alternatives": []
+        },
+        "expression": null,
+        "constraints": [],
+        "content_quantities": [],
+        "content_scopes": [],
+        "sources": [
+          {
+            "quote": "不得删除a.csv",
+            "occurrence": 1,
+            "span": [
+              18,
+              27
+            ],
+            "source_sha256": "f65c9ff03b3fe3fe65f92f42c1b3ebf74b1b64be74a1340e773ea114732dd29c"
+          },
+          {
+            "quote": "不得删除a.csv",
+            "occurrence": 1,
+            "span": [
+              18,
+              27
+            ],
+            "source_sha256": "f65c9ff03b3fe3fe65f92f42c1b3ebf74b1b64be74a1340e773ea114732dd29c"
+          },
+          {
+            "quote": "a.csv",
+            "occurrence": 1,
+            "span": [
+              5,
+              10
+            ],
+            "source_sha256": "f65c9ff03b3fe3fe65f92f42c1b3ebf74b1b64be74a1340e773ea114732dd29c"
+          },
+          {
+            "quote": "a.csv",
+            "occurrence": 2,
+            "span": [
+              22,
+              27
+            ],
+            "source_sha256": "f65c9ff03b3fe3fe65f92f42c1b3ebf74b1b64be74a1340e773ea114732dd29c"
+          }
+        ],
+        "slots": [],
+        "proof": {
+          "source_sha256": "f65c9ff03b3fe3fe65f92f42c1b3ebf74b1b64be74a1340e773ea114732dd29c",
+          "claim_ids": [
+            "cl_delete_object",
+            "ent_file",
+            "evt_delete"
+          ],
+          "provenance_refs": [
+            "cl_delete_object",
+            "evt_delete",
+            "ent_file"
+          ],
+          "technical_policy": "028-r02-technical-v1",
+          "checks": [
+            {
+              "id": "cl_delete_object",
+              "collection": "claims",
+              "status": "ACCEPTED",
+              "errors": [],
+              "uncertain": [],
+              "sources": [
+                {
+                  "quote": "不得删除a.csv",
+                  "occurrence": 1,
+                  "span": [
+                    18,
+                    27
+                  ],
+                  "source_sha256": "f65c9ff03b3fe3fe65f92f42c1b3ebf74b1b64be74a1340e773ea114732dd29c"
+                }
+              ],
+              "audit_refs": [
+                {
+                  "subject_id": "cl_delete_object",
+                  "field_path": "",
+                  "verdict": "SUPPORT"
+                }
+              ],
+              "required_dependencies": [],
+              "structural_refs": [
+                "evt_delete",
+                "ent_file"
+              ]
+            },
+            {
+              "id": "evt_delete",
+              "collection": "events",
+              "status": "ACCEPTED",
+              "errors": [],
+              "uncertain": [],
+              "sources": [
+                {
+                  "quote": "不得删除a.csv",
+                  "occurrence": 1,
+                  "span": [
+                    18,
+                    27
+                  ],
+                  "source_sha256": "f65c9ff03b3fe3fe65f92f42c1b3ebf74b1b64be74a1340e773ea114732dd29c"
+                }
+              ],
+              "audit_refs": [
+                {
+                  "subject_id": "evt_delete",
+                  "field_path": "",
+                  "verdict": "SUPPORT"
+                }
+              ],
+              "required_dependencies": [],
+              "structural_refs": [
+                "ROOT"
+              ]
+            },
+            {
+              "id": "ent_file",
+              "collection": "entities",
+              "status": "ACCEPTED",
+              "errors": [],
+              "uncertain": [],
+              "sources": [
+                {
+                  "quote": "a.csv",
+                  "occurrence": 1,
+                  "span": [
+                    5,
+                    10
+                  ],
+                  "source_sha256": "f65c9ff03b3fe3fe65f92f42c1b3ebf74b1b64be74a1340e773ea114732dd29c"
+                },
+                {
+                  "quote": "a.csv",
+                  "occurrence": 2,
+                  "span": [
+                    22,
+                    27
+                  ],
+                  "source_sha256": "f65c9ff03b3fe3fe65f92f42c1b3ebf74b1b64be74a1340e773ea114732dd29c"
+                }
+              ],
+              "audit_refs": [
+                {
+                  "subject_id": "ent_file",
+                  "field_path": "",
+                  "verdict": "SUPPORT"
+                }
+              ],
+              "required_dependencies": [],
+              "structural_refs": []
+            }
+          ],
+          "audit": [
+            {
+              "subject_id": "cl_delete_object",
+              "field_path": "",
+              "verdict": "SUPPORT",
+              "context_refs": [
+                "evt_delete",
+                "ent_file"
+              ],
+              "sources": [
+                {
+                  "quote": "检查a.csv",
+                  "occurrence": 1
+                },
+                {
+                  "quote": "不得删除a.csv",
+                  "occurrence": 1
+                }
+              ],
+              "reason": "禁止删除指向同一a.csv；OBJECT用途不会额外推导输入。"
+            },
+            {
+              "subject_id": "evt_delete",
+              "field_path": "",
+              "verdict": "SUPPORT",
+              "context_refs": [],
+              "sources": [
+                {
+                  "quote": "不得删除a.csv",
+                  "occurrence": 1
+                }
+              ],
+              "reason": "不得明确禁止删除；FORBIDDEN与正向动作谓词组合准确。"
+            },
+            {
+              "subject_id": "ent_file",
+              "field_path": "",
+              "verdict": "SUPPORT",
+              "context_refs": [],
+              "sources": [
+                {
+                  "quote": "a.csv",
+                  "occurrence": 1
+                },
+                {
+                  "quote": "a.csv",
+                  "occurrence": 2
+                }
+              ],
+              "reason": "两处同名文件分别用于检查和禁止删除，合并为同一实体有原文支持。"
+            }
+          ],
+          "context_references_are_not_required_dependencies": true
+        }
+      }
+    ],
+    "issues": [
+      {
+        "id": "issue_implicit_performers",
+        "kind": "UNSPECIFIED",
+        "subject_ids": [
+          "evt_restart",
+          "evt_delete"
+        ],
+        "field_path": "claims.role=PERFORMER",
+        "alternatives": [],
+        "affected_views": [
+          "P"
+        ],
+        "sources": [
+          {
+            "quote": "无需重启服务",
+            "occurrence": 1
+          },
+          {
+            "quote": "不得删除a.csv",
+            "occurrence": 1
+          }
+        ],
+        "note": "后两个分句未明确执行者，不自动扩展PM在检查事件中的执行角色。"
+      }
+    ],
+    "gaps": [],
+    "business_decision": null,
+    "execution_authorization": null
+  },
+  "chinese": "# BoundX 7+1（有限技术接受，不是业务授权）\n\n## I 输入与作用域 — RESOLVED\n- [ACCEPTED] 检查：输入/受检对象=a.csv；必须（bf:a6e59b556a12bc02b010）\n\n## O 交付与结果 — ABSENT\n\n## A 正向动作 — RESOLVED\n- [ACCEPTED] 必须 检查；执行者=PM；输入/受检对象=a.csv（bf:f43e0b447040493e324e）\n\n## P 参与关系 — RESOLVED\n- [ACCEPTED] 检查：执行者=PM；必须（bf:24c42506ee7e26500852）\n\n## R 执行量化限制 — ABSENT\n\n## V 版本与依据 — ABSENT\n\n## C 完成与停止 — ABSENT\n\n## B 禁止与限制 — RESOLVED\n- [ACCEPTED] 禁止 删除；对象=a.csv（bf:8e416fe13dd2d5cf5b6e）\n\n## 未指定 / 歧义 / 未投影语义\n- UNSPECIFIED 后两个分句未明确执行者，不自动扩展PM在检查事件中的执行角色。；影响=evt_restart,evt_delete\n- 无需 重启（不等于禁止）\n",
+  "model_calls": {
+    "parse": [
+      {
+        "exit_code": 0,
+        "error": null,
+        "elapsed_ms": 40324,
+        "timed_out": false,
+        "thread_id": "01a11542-679b-7db1-bb47-0c4265306b07",
+        "usage": {
+          "input_tokens": 16781,
+          "cached_input_tokens": 0,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 1496,
+          "reasoning_output_tokens": 96
+        },
+        "tool_events": [],
+        "schema_check": {
+          "ok": true,
+          "errors": []
+        },
+        "response_sha256": "9055ad3d6cbf225df1ec32ce6ed91352ff65a32867ce22f239f37860f05f68e5",
+        "attempt": 0,
+        "skill_content_delivered": true,
+        "skill_mode": "INLINE_BUNDLE",
+        "actual_model": null
+      }
+    ],
+    "audit": [
+      {
+        "exit_code": 0,
+        "error": null,
+        "elapsed_ms": 30068,
+        "timed_out": false,
+        "thread_id": "01a11543-0520-73e1-ba35-33c151755de5",
+        "usage": {
+          "input_tokens": 17980,
+          "cached_input_tokens": 0,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 915,
+          "reasoning_output_tokens": 49
+        },
+        "tool_events": [],
+        "schema_check": {
+          "ok": true,
+          "errors": []
+        },
+        "response_sha256": "ca3b5dea7b7558ccb66715a9b60f146d1b741117ed944803e20a5966b44b7c59",
+        "attempt": 0,
+        "skill_content_delivered": true,
+        "skill_mode": "INLINE_BUNDLE",
+        "actual_model": null
+      }
+    ]
+  },
+  "revision": 0,
+  "revision_of": null
+}

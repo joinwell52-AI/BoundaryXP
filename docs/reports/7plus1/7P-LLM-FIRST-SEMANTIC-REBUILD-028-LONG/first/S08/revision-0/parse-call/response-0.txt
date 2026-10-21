@@ -1,0 +1,116 @@
+{
+  "contract_version": "028-r02.1",
+  "entities": [
+    {
+      "id": "person_pm",
+      "label": "PM",
+      "type": "PERSON",
+      "mentions": [{"quote": "PM", "occurrence": 1}],
+      "alternatives": []
+    },
+    {
+      "id": "file_r",
+      "label": "r.md",
+      "type": "FILE",
+      "mentions": [{"quote": "r.md", "occurrence": 1}],
+      "alternatives": []
+    }
+  ],
+  "events": [
+    {
+      "id": "event_submit",
+      "predicate": "提交",
+      "kind": "ACTION",
+      "layer": "MAIN",
+      "use": "CURRENT_TASK",
+      "modality": "REQUIRED",
+      "polarity": "POSITIVE",
+      "owner_id": "ROOT",
+      "constraint_ids": [],
+      "requires": [],
+      "sources": [{"quote": "PM必须提交r.md", "occurrence": 1}]
+    }
+  ],
+  "claims": [
+    {
+      "id": "claim_performer",
+      "kind": "ROLE",
+      "event_id": "event_submit",
+      "entity_id": "person_pm",
+      "role": "PERFORMER",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "scope_id": "event_submit",
+      "requires": [],
+      "sources": [{"quote": "PM必须提交r.md", "occurrence": 1}],
+      "note": "PM是提交动作的执行者。"
+    },
+    {
+      "id": "claim_delivery",
+      "kind": "ROLE",
+      "event_id": "event_submit",
+      "entity_id": "file_r",
+      "role": "RESULT",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "scope_id": "event_submit",
+      "requires": [],
+      "sources": [{"quote": "提交r.md", "occurrence": 1}],
+      "note": "r.md是要求提交的交付物；不推定另有生成义务。"
+    },
+    {
+      "id": "claim_completion",
+      "kind": "COMPLETION",
+      "event_id": null,
+      "entity_id": null,
+      "role": null,
+      "expression_id": "expr_submit_success",
+      "direction": "SUFFICIENT",
+      "temporal": null,
+      "quantity": null,
+      "scope_id": "ROOT",
+      "requires": [],
+      "sources": [
+        {"quote": "PM必须提交r.md", "occurrence": 1},
+        {"quote": "提交成功即任务完成", "occurrence": 1}
+      ],
+      "note": "提交成功足以触发根任务完成，不宣称提交已成功，也不将其解释为唯一完成条件。"
+    }
+  ],
+  "expressions": [
+    {
+      "id": "expr_submit_success",
+      "op": "STATE",
+      "operands": [],
+      "state": {
+        "predicate": "提交成功",
+        "event_id": "event_submit",
+        "args": ["file_r"],
+        "polarity": "POSITIVE"
+      },
+      "sources": [
+        {"quote": "PM必须提交r.md", "occurrence": 1},
+        {"quote": "提交成功", "occurrence": 1}
+      ]
+    }
+  ],
+  "issues": [],
+  "coverage": [
+    {
+      "sources": [{"quote": "PM必须提交r.md", "occurrence": 1}],
+      "claim_ids": ["claim_performer", "claim_delivery"],
+      "status": "EXPRESSED",
+      "affected_views": ["A", "P", "O"]
+    },
+    {
+      "sources": [{"quote": "提交成功即任务完成", "occurrence": 1}],
+      "claim_ids": ["claim_completion"],
+      "status": "EXPRESSED",
+      "affected_views": ["C"]
+    }
+  ]
+}

@@ -1,0 +1,1 @@
+Reese must coordinate the task: verify permission-6486.csv in staging environment. Deliver audit-179377.md. Neither modification of permission-6486.csv nor recovery of any event inventory is allowed. The whole task must finish within 23 minutes. Send the final report to Casey.

@@ -1,0 +1,1 @@
+QA 核查 sandbox 环境，生成 orbit.txt。核查范围仅限 sandbox，production 不在本次核查范围内。

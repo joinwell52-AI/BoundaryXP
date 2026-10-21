@@ -1,0 +1,1 @@
+请 PM 组织读取 qa-result.json 并形成 qa-note.md。只有 qa-note.md 已生成后，PM 才能向 ADMIN 汇报。不得修改 qa-result.json。

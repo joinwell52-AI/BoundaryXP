@@ -1,0 +1,330 @@
+{
+  "contract_version": "031-r01",
+  "entities": [
+    {
+      "id": "ent_pm",
+      "label": "PM",
+      "type": "OTHER",
+      "mentions": [
+        {
+          "quote": "PM",
+          "occurrence": 1
+        }
+      ],
+      "alternatives": []
+    },
+    {
+      "id": "ent_baseline",
+      "label": "commit 7ac921e",
+      "type": "OTHER",
+      "mentions": [
+        {
+          "quote": "commit 7ac921e",
+          "occurrence": 1
+        }
+      ],
+      "alternatives": []
+    },
+    {
+      "id": "ent_configuration",
+      "label": "当前配置",
+      "type": "OTHER",
+      "mentions": [
+        {
+          "quote": "当前配置",
+          "occurrence": 1
+        }
+      ],
+      "alternatives": []
+    },
+    {
+      "id": "ent_diff",
+      "label": "diff.md",
+      "type": "FILE",
+      "mentions": [
+        {
+          "quote": "diff.md",
+          "occurrence": 1
+        }
+      ],
+      "alternatives": []
+    },
+    {
+      "id": "ent_workspace_commit",
+      "label": "当前工作区的commit",
+      "type": "OTHER",
+      "mentions": [
+        {
+          "quote": "当前工作区的commit",
+          "occurrence": 1
+        }
+      ],
+      "alternatives": []
+    }
+  ],
+  "events": [
+    {
+      "id": "ev_compare",
+      "predicate": "比较配置",
+      "kind": "ACTION",
+      "layer": "MAIN",
+      "use": "CURRENT_TASK",
+      "modality": "REQUIRED",
+      "polarity": "POSITIVE",
+      "owner_id": "ROOT",
+      "constraint_ids": [],
+      "requires": [],
+      "sources": [
+        {
+          "quote": "请PM以commit 7ac921e作为基线比较当前配置",
+          "occurrence": 1
+        }
+      ]
+    },
+    {
+      "id": "ev_generate",
+      "predicate": "生成差异文件",
+      "kind": "ACTION",
+      "layer": "MAIN",
+      "use": "CURRENT_TASK",
+      "modality": "REQUIRED",
+      "polarity": "POSITIVE",
+      "owner_id": "ROOT",
+      "constraint_ids": [],
+      "requires": [],
+      "sources": [
+        {
+          "quote": "生成diff.md",
+          "occurrence": 1
+        }
+      ]
+    },
+    {
+      "id": "ev_switch",
+      "predicate": "切换工作区提交",
+      "kind": "ACTION",
+      "layer": "MAIN",
+      "use": "CURRENT_TASK",
+      "modality": "FORBIDDEN",
+      "polarity": "POSITIVE",
+      "owner_id": "ROOT",
+      "constraint_ids": [],
+      "requires": [],
+      "sources": [
+        {
+          "quote": "不得切换当前工作区的commit",
+          "occurrence": 1
+        }
+      ]
+    }
+  ],
+  "claims": [
+    {
+      "id": "cl_compare_performer",
+      "kind": "ROLE",
+      "event_id": "ev_compare",
+      "entity_id": "ent_pm",
+      "role": "PERFORMER",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "scope_id": "ev_compare",
+      "requires": [],
+      "sources": [
+        {
+          "quote": "请PM以commit 7ac921e作为基线比较当前配置",
+          "occurrence": 1
+        }
+      ],
+      "note": "PM是明确的比较执行者；岗位简称不推定人员或组类别。"
+    },
+    {
+      "id": "cl_compare_input",
+      "kind": "ROLE",
+      "event_id": "ev_compare",
+      "entity_id": "ent_configuration",
+      "role": "INPUT_OBJECT",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "scope_id": "ev_compare",
+      "requires": [],
+      "sources": [
+        {
+          "quote": "比较当前配置",
+          "occurrence": 1
+        }
+      ],
+      "note": "当前配置是明确的比较输入范围。"
+    },
+    {
+      "id": "cl_compare_basis",
+      "kind": "ROLE",
+      "event_id": "ev_compare",
+      "entity_id": "ent_baseline",
+      "role": "BASIS",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "scope_id": "ev_compare",
+      "requires": [],
+      "sources": [
+        {
+          "quote": "以commit 7ac921e作为基线比较当前配置",
+          "occurrence": 1
+        }
+      ],
+      "note": "指定提交作为比较基线；提交标识中的数字不是数量限制。"
+    },
+    {
+      "id": "cl_generate_performer",
+      "kind": "ROLE",
+      "event_id": "ev_generate",
+      "entity_id": "ent_pm",
+      "role": "PERFORMER",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "scope_id": "ev_generate",
+      "requires": [],
+      "sources": [
+        {
+          "quote": "请PM",
+          "occurrence": 1
+        },
+        {
+          "quote": "生成diff.md",
+          "occurrence": 1
+        }
+      ],
+      "note": "生成动作与比较动作处于连续同一指令，未切换主体，承接PM。"
+    },
+    {
+      "id": "cl_generate_result",
+      "kind": "ROLE",
+      "event_id": "ev_generate",
+      "entity_id": "ent_diff",
+      "role": "RESULT",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "scope_id": "ev_generate",
+      "requires": [],
+      "sources": [
+        {
+          "quote": "生成diff.md",
+          "occurrence": 1
+        }
+      ],
+      "note": "diff.md是要求生成的结果；原文没有另行要求交付。"
+    },
+    {
+      "id": "cl_switch_performer",
+      "kind": "ROLE",
+      "event_id": "ev_switch",
+      "entity_id": "ent_pm",
+      "role": "PERFORMER",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "scope_id": "ev_switch",
+      "requires": [],
+      "sources": [
+        {
+          "quote": "请PM",
+          "occurrence": 1
+        },
+        {
+          "quote": "不得切换当前工作区的commit",
+          "occurrence": 1
+        }
+      ],
+      "note": "追加禁止限制承接同一任务主体PM，未出现主体切换。"
+    },
+    {
+      "id": "cl_switch_object",
+      "kind": "ROLE",
+      "event_id": "ev_switch",
+      "entity_id": "ent_workspace_commit",
+      "role": "OBJECT",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "scope_id": "ev_switch",
+      "requires": [],
+      "sources": [
+        {
+          "quote": "不得切换当前工作区的commit",
+          "occurrence": 1
+        }
+      ],
+      "note": "禁止切换的对象是当前工作区的提交；不推定它等同于指定比较基线，也不由禁止对象新增输入范围。"
+    }
+  ],
+  "expressions": [],
+  "issues": [],
+  "coverage": [
+    {
+      "sources": [
+        {
+          "quote": "请PM以commit 7ac921e作为基线比较当前配置",
+          "occurrence": 1
+        }
+      ],
+      "claim_ids": [
+        "cl_compare_performer",
+        "cl_compare_input",
+        "cl_compare_basis"
+      ],
+      "status": "EXPRESSED",
+      "affected_views": [
+        "I",
+        "A",
+        "P",
+        "V"
+      ]
+    },
+    {
+      "sources": [
+        {
+          "quote": "生成diff.md",
+          "occurrence": 1
+        }
+      ],
+      "claim_ids": [
+        "cl_generate_performer",
+        "cl_generate_result"
+      ],
+      "status": "EXPRESSED",
+      "affected_views": [
+        "O",
+        "A",
+        "P"
+      ]
+    },
+    {
+      "sources": [
+        {
+          "quote": "不得切换当前工作区的commit",
+          "occurrence": 1
+        }
+      ],
+      "claim_ids": [
+        "cl_switch_performer",
+        "cl_switch_object"
+      ],
+      "status": "EXPRESSED",
+      "affected_views": [
+        "B",
+        "P"
+      ]
+    }
+  ]
+}

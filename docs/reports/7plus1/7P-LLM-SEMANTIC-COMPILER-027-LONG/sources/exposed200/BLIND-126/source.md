@@ -1,0 +1,1 @@
+Morgan must coordinate the task: review storage-9266.csv in isolated environment. Deliver audit-818757.md. The document must contain sections “Risks” and “Verification steps”.

@@ -1,0 +1,1 @@
+PM 安排 DEV 读取 build-info.json 并生成 build-info-review.md；QA 复核报告，PM 最后提交给 ADMIN。PM 不负责具体检查。

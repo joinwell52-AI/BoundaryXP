@@ -1,0 +1,93 @@
+{
+  "contract_version": "028-r02.2",
+  "reviews": [
+    {
+      "subject_id": "ent_pm",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [{"quote": "PM", "occurrence": 1}],
+      "reason": "原文明示PM，可作为人员实体；未据岗位推定权限。"
+    },
+    {
+      "subject_id": "ent_file",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [
+        {"quote": "a.csv", "occurrence": 1},
+        {"quote": "a.csv", "occurrence": 2}
+      ],
+      "reason": "两处同名文件分别用于检查和禁止删除，合并为同一实体有原文支持。"
+    },
+    {
+      "subject_id": "ent_service",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [{"quote": "服务", "occurrence": 1}],
+      "reason": "服务是重启动作的明确对象，SYSTEM类型合理。"
+    },
+    {
+      "subject_id": "evt_check",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [{"quote": "请PM检查a.csv", "occurrence": 1}],
+      "reason": "这是当前任务的明确检查要求，无额外条件。"
+    },
+    {
+      "subject_id": "evt_restart",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [{"quote": "无需重启服务", "occurrence": 1}],
+      "reason": "无需表示不要求重启，NOT_REQUIRED准确，未改成禁止或许可。"
+    },
+    {
+      "subject_id": "evt_delete",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [{"quote": "不得删除a.csv", "occurrence": 1}],
+      "reason": "不得明确禁止删除；FORBIDDEN与正向动作谓词组合准确。"
+    },
+    {
+      "subject_id": "cl_check_performer",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["evt_check", "ent_pm"],
+      "sources": [{"quote": "请PM检查a.csv", "occurrence": 1}],
+      "reason": "PM明确承担检查事件的执行者角色。"
+    },
+    {
+      "subject_id": "cl_check_input",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["evt_check", "ent_file"],
+      "sources": [{"quote": "检查a.csv", "occurrence": 1}],
+      "reason": "a.csv是明确受检范围，INPUT_OBJECT用途有支持。"
+    },
+    {
+      "subject_id": "cl_restart_object",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["evt_restart", "ent_service"],
+      "sources": [{"quote": "无需重启服务", "occurrence": 1}],
+      "reason": "服务是无需执行的重启动作对象，不自动成为外部输入。"
+    },
+    {
+      "subject_id": "cl_delete_object",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["evt_delete", "ent_file"],
+      "sources": [
+        {"quote": "检查a.csv", "occurrence": 1},
+        {"quote": "不得删除a.csv", "occurrence": 1}
+      ],
+      "reason": "禁止删除指向同一a.csv；OBJECT用途不会额外推导输入。"
+    }
+  ],
+  "issues": [],
+  "omissions": []
+}

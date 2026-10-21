@@ -1,0 +1,1 @@
+Taylor must coordinate the task: verify snapshot-6865.csv in test cluster. Deliver audit-743725.md. The scope is limited to the stated environment; production resources are excluded. The whole task must finish within 29 minutes. Send the final report to Jordan.

@@ -1,0 +1,186 @@
+{
+  "contract_version": "031-r01",
+  "reviews": [
+    {
+      "subject_id": "ent_ops",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [
+        {
+          "quote": "OPS-01",
+          "occurrence": 1
+        },
+        {
+          "quote": "OPS-01",
+          "occurrence": 2
+        }
+      ],
+      "reason": "两处名称指向同一明确主体；OTHER可作为未指定类别的占位。"
+    },
+    {
+      "subject_id": "ent_pm",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [
+        {
+          "quote": "PM",
+          "occurrence": 1
+        }
+      ],
+      "reason": "通知接收对象身份明确；原文未指定其实体类别，OTHER占位合理。"
+    },
+    {
+      "subject_id": "ent_service",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [
+        {
+          "quote": "服务",
+          "occurrence": 1
+        }
+      ],
+      "reason": "服务是异常发现状态的对象，身份与来源一致，OTHER占位合理。"
+    },
+    {
+      "subject_id": "ent_health",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [
+        {
+          "quote": "health.md",
+          "occurrence": 1
+        }
+      ],
+      "reason": "明确命名的生成文件，名称、类型和指称一致。"
+    },
+    {
+      "subject_id": "evt_notify",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [
+        "cl_notify_condition"
+      ],
+      "sources": [
+        {
+          "quote": "若发现服务异常，OPS-01必须通知PM",
+          "occurrence": 1
+        }
+      ],
+      "reason": "通知是当前要求动作，发现异常的触发条件已双向绑定，未表达为无条件义务。"
+    },
+    {
+      "subject_id": "evt_generate",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [
+        {
+          "quote": "无论是否发现异常，OPS-01都必须生成health.md",
+          "occurrence": 1
+        }
+      ],
+      "reason": "生成是当前必须动作，异常发现与否均适用，无条件表达符合原文。"
+    },
+    {
+      "subject_id": "cl_notify_performer",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [
+        "ent_ops",
+        "evt_notify"
+      ],
+      "sources": [
+        {
+          "quote": "OPS-01必须通知PM",
+          "occurrence": 1
+        }
+      ],
+      "reason": "原文明示OPS-01执行通知，角色与事件绑定正确。"
+    },
+    {
+      "subject_id": "cl_notify_recipient",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [
+        "ent_pm",
+        "evt_notify"
+      ],
+      "sources": [
+        {
+          "quote": "通知PM",
+          "occurrence": 1
+        }
+      ],
+      "reason": "PM是通知接收者，未被误绑定为执行者。"
+    },
+    {
+      "subject_id": "cl_notify_condition",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [
+        "evt_notify",
+        "expr_abnormal_found"
+      ],
+      "sources": [
+        {
+          "quote": "若发现服务异常，OPS-01必须通知PM",
+          "occurrence": 1
+        }
+      ],
+      "reason": "发现服务异常充分触发通知义务；SUFFICIENT方向正确，未增加发现义务或状态已发生断言。"
+    },
+    {
+      "subject_id": "cl_generate_performer",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [
+        "ent_ops",
+        "evt_generate"
+      ],
+      "sources": [
+        {
+          "quote": "OPS-01都必须生成health.md",
+          "occurrence": 1
+        }
+      ],
+      "reason": "生成动作的执行者由原文明示为OPS-01。"
+    },
+    {
+      "subject_id": "cl_generate_result",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [
+        "ent_health",
+        "evt_generate"
+      ],
+      "sources": [
+        {
+          "quote": "无论是否发现异常，OPS-01都必须生成health.md",
+          "occurrence": 1
+        }
+      ],
+      "reason": "health.md是生成事件的RESULT，义务不受异常状态限制；原文没有交付要求。"
+    },
+    {
+      "subject_id": "expr_abnormal_found",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [
+        "ent_service"
+      ],
+      "sources": [
+        {
+          "quote": "若发现服务异常",
+          "occurrence": 1
+        }
+      ],
+      "reason": "表达条件中的正向发现状态，对象为服务；未指定发现者，未虚构引用事件或断言状态为真。"
+    }
+  ],
+  "issues": [],
+  "omissions": []
+}

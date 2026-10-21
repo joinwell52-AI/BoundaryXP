@@ -1,0 +1,234 @@
+{
+  "contract_version": "031-r1.1",
+  "entities": [
+    {
+      "id": "ent_dev",
+      "label": "DEV",
+      "type": "OTHER",
+      "mentions": [{"quote": "DEV", "occurrence": 1}],
+      "alternatives": []
+    },
+    {
+      "id": "ent_bundle",
+      "label": "bundle.md",
+      "type": "FILE",
+      "mentions": [
+        {"quote": "bundle.md", "occurrence": 1},
+        {"quote": "该文件", "occurrence": 1}
+      ],
+      "alternatives": []
+    },
+    {
+      "id": "ent_changes",
+      "label": "变更",
+      "type": "OTHER",
+      "mentions": [{"quote": "变更", "occurrence": 1}],
+      "alternatives": []
+    },
+    {
+      "id": "ent_cfg",
+      "label": "cfg.json",
+      "type": "FILE",
+      "mentions": [{"quote": "cfg.json", "occurrence": 1}],
+      "alternatives": []
+    }
+  ],
+  "events": [
+    {
+      "id": "evt_deliver",
+      "predicate": "交付文件",
+      "kind": "ACTION",
+      "layer": "MAIN",
+      "use": "CURRENT_TASK",
+      "modality": "REQUIRED",
+      "polarity": "POSITIVE",
+      "owner_id": "ROOT",
+      "constraint_ids": ["cl_deadline", "cl_changes_quantity"],
+      "requires": [],
+      "sources": [{"quote": "请DEV在6分钟内交付bundle.md", "occurrence": 1}]
+    },
+    {
+      "id": "evt_modify",
+      "predicate": "修改配置文件",
+      "kind": "ACTION",
+      "layer": "MAIN",
+      "use": "CURRENT_TASK",
+      "modality": "FORBIDDEN",
+      "polarity": "POSITIVE",
+      "owner_id": "ROOT",
+      "constraint_ids": [],
+      "requires": [],
+      "sources": [{"quote": "不得修改cfg.json", "occurrence": 1}]
+    }
+  ],
+  "claims": [
+    {
+      "id": "cl_deliver_performer",
+      "kind": "ROLE",
+      "event_id": "evt_deliver",
+      "entity_id": "ent_dev",
+      "role": "PERFORMER",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "artifact_use": null,
+      "scope_id": "evt_deliver",
+      "requires": [],
+      "sources": [{"quote": "请DEV在6分钟内交付bundle.md", "occurrence": 1}],
+      "note": ""
+    },
+    {
+      "id": "cl_deliverable",
+      "kind": "ROLE",
+      "event_id": "evt_deliver",
+      "entity_id": "ent_bundle",
+      "role": "DELIVERABLE",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "artifact_use": null,
+      "scope_id": "evt_deliver",
+      "requires": [],
+      "sources": [
+        {"quote": "交付bundle.md", "occurrence": 1},
+        {"quote": "该文件必须列出3项变更", "occurrence": 1}
+      ],
+      "note": "该文件指向唯一交付文件bundle.md；交付要求不推定生成或修改文件。"
+    },
+    {
+      "id": "cl_deadline",
+      "kind": "QUANTITY",
+      "event_id": "evt_deliver",
+      "entity_id": null,
+      "role": null,
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": {
+        "metric": "交付时限",
+        "target_id": "evt_deliver",
+        "comparator": "LTE",
+        "value": 6,
+        "unit": "分钟",
+        "use": "EXECUTION_LIMIT",
+        "count_scope": "evt_deliver"
+      },
+      "artifact_use": null,
+      "scope_id": "evt_deliver",
+      "requires": [],
+      "sources": [{"quote": "在6分钟内交付bundle.md", "occurrence": 1}],
+      "note": "交付执行时限，不作为根任务完成条件。"
+    },
+    {
+      "id": "cl_changes_content",
+      "kind": "ROLE",
+      "event_id": "evt_deliver",
+      "entity_id": "ent_changes",
+      "role": "CONTENT",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "artifact_use": null,
+      "scope_id": "ent_bundle",
+      "requires": [],
+      "sources": [
+        {"quote": "交付bundle.md", "occurrence": 1},
+        {"quote": "该文件必须列出3项变更", "occurrence": 1}
+      ],
+      "note": "交付文件必须列出的内容为变更。"
+    },
+    {
+      "id": "cl_changes_quantity",
+      "kind": "QUANTITY",
+      "event_id": "evt_deliver",
+      "entity_id": null,
+      "role": null,
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": {
+        "metric": "列出的变更项数",
+        "target_id": "ent_bundle",
+        "comparator": "EQ",
+        "value": 3,
+        "unit": "项",
+        "use": "OUTPUT_CONTENT",
+        "count_scope": "ent_bundle"
+      },
+      "artifact_use": null,
+      "scope_id": "evt_deliver",
+      "requires": ["cl_deliverable"],
+      "sources": [
+        {"quote": "交付bundle.md", "occurrence": 1},
+        {"quote": "该文件必须列出3项变更", "occurrence": 1}
+      ],
+      "note": "数量约束交付产物中列出的内容，不表示执行三次变更。"
+    },
+    {
+      "id": "cl_modify_performer",
+      "kind": "ROLE",
+      "event_id": "evt_modify",
+      "entity_id": "ent_dev",
+      "role": "PERFORMER",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "artifact_use": null,
+      "scope_id": "evt_modify",
+      "requires": [],
+      "sources": [
+        {"quote": "请DEV在6分钟内交付bundle.md", "occurrence": 1},
+        {"quote": "不得修改cfg.json", "occurrence": 1}
+      ],
+      "note": "连续同一指令的追加禁止承接DEV主体，原文无主体切换。"
+    },
+    {
+      "id": "cl_modify_object",
+      "kind": "ROLE",
+      "event_id": "evt_modify",
+      "entity_id": "ent_cfg",
+      "role": "OBJECT",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "artifact_use": null,
+      "scope_id": "evt_modify",
+      "requires": [],
+      "sources": [{"quote": "不得修改cfg.json", "occurrence": 1}],
+      "note": "禁止修改的对象，不由此推定外部输入。"
+    }
+  ],
+  "expressions": [],
+  "issues": [],
+  "coverage": [
+    {
+      "sources": [{"quote": "请DEV在6分钟内交付bundle.md", "occurrence": 1}],
+      "claim_ids": ["cl_deliver_performer", "cl_deliverable"],
+      "status": "EXPRESSED",
+      "affected_views": ["A", "O", "P"]
+    },
+    {
+      "sources": [{"quote": "在6分钟内", "occurrence": 1}],
+      "claim_ids": ["cl_deadline"],
+      "status": "EXPRESSED",
+      "affected_views": ["R"]
+    },
+    {
+      "sources": [{"quote": "该文件必须列出3项变更", "occurrence": 1}],
+      "claim_ids": ["cl_deliverable", "cl_changes_content", "cl_changes_quantity"],
+      "status": "EXPRESSED",
+      "affected_views": ["O"]
+    },
+    {
+      "sources": [{"quote": "不得修改cfg.json", "occurrence": 1}],
+      "claim_ids": ["cl_modify_performer", "cl_modify_object"],
+      "status": "EXPRESSED",
+      "affected_views": ["B", "P"]
+    }
+  ]
+}

@@ -1,0 +1,1 @@
+OPS 检查 east 和 west，生成 scope2.md。限制在前述某一环境。

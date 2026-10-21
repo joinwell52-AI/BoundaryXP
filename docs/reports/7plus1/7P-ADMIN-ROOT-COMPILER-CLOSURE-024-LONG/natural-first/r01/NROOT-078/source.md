@@ -1,0 +1,1 @@
+请 PM 组织核对 active.csv 中的在用设备并形成 active-device-review.md。已报废设备不属于此次核对范围。

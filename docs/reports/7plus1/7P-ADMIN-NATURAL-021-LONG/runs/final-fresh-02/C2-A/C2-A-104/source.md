@@ -1,0 +1,1 @@
+TEAM304 按 POLICY-2104 v5.104 读取 basis-c2-a-4.yaml，生成 basis-review-c2-a-4.txt。

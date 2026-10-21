@@ -1,0 +1,1 @@
+ENG 读取 manifest.tsv，生成 diff.txt。AUD 确认每个新增或移除的条目都已记录后，COORD 将报告交给 DIRECTOR。

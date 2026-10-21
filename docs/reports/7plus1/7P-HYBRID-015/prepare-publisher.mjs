@@ -1,0 +1,3 @@
+// Copy publication mechanics only, never modify sealed 014 source.
+import fs from 'node:fs';import {out,write} from './common.mjs';
+const s=fs.readFileSync('docs/reports/7plus1/7P-COMPOSITION-014/publish.mjs','utf8').replaceAll('7P-COMPOSITION-014','7P-HYBRID-015').replaceAll('v0.3-7p-composition-014','v0.3-7p-hybrid-015').replaceAll('parser-7p-composition-014-','parser-7p-hybrid-015-').replaceAll('owner-role.test.mjs','admission.test.mjs').replace('close bounded R4 distribution and seal architecture verdict','seal controlled upstream proposal experiment and unsafe admission evidence');write(out+'publish.mjs',s);

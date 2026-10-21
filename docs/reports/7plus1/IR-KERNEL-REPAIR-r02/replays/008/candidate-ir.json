@@ -1,0 +1,3078 @@
+{
+  "format": "boundx-candidate-ir/1",
+  "contract_version": "candidate-ir/2.0",
+  "source_table": [
+    {
+      "id": "s1",
+      "quote": "PM组织双项诊断",
+      "occurrence": 1
+    },
+    {
+      "id": "s2",
+      "quote": "外部输入仅dev.json和ops.json",
+      "occurrence": 1
+    },
+    {
+      "id": "s3",
+      "quote": "全部操作限测试环境",
+      "occurrence": 1
+    },
+    {
+      "id": "s4",
+      "quote": "DEV必须针对dev.json完成一次诊断",
+      "occurrence": 1
+    },
+    {
+      "id": "s5",
+      "quote": "OPS必须针对ops.json完成一次诊断",
+      "occurrence": 1
+    },
+    {
+      "id": "s6",
+      "quote": "本任务只允许这两次诊断，不得重试",
+      "occurrence": 1
+    },
+    {
+      "id": "s7",
+      "quote": "DEV诊断执行时长为0.5至0.75分钟，含两端",
+      "occurrence": 1
+    },
+    {
+      "id": "s8",
+      "quote": "OPS诊断执行时长为20至40秒，含两端",
+      "occurrence": 1
+    },
+    {
+      "id": "s9",
+      "quote": "两项实际执行时长之和不得超过70秒，等待和交付不计入此和",
+      "occurrence": 1
+    },
+    {
+      "id": "s10",
+      "quote": "两项诊断不指定先后",
+      "occurrence": 1
+    },
+    {
+      "id": "s11",
+      "quote": "从各自开始到结束均须独占同一个测试槽位；占用区间含开始、不含结束，禁止重叠；一项结束与另一项开始同一时刻允许",
+      "occurrence": 1
+    },
+    {
+      "id": "s12",
+      "quote": "两项结束时分别生成本次dev.md和ops.md",
+      "occurrence": 1
+    },
+    {
+      "id": "s13",
+      "quote": "PM必须将两份报告交付ADMIN",
+      "occurrence": 1
+    },
+    {
+      "id": "s14",
+      "quote": "交付不得早于任何一项诊断结束；允许两项均结束与交付开始在同一时刻",
+      "occurrence": 1
+    },
+    {
+      "id": "s15",
+      "quote": "本任务整体耗时至少1分钟且小于2分钟，包括等待和交付",
+      "occurrence": 1
+    },
+    {
+      "id": "s16",
+      "quote": "禁止修改输入、访问生产环境",
+      "occurrence": 1
+    },
+    {
+      "id": "s17",
+      "quote": "当且仅当两项诊断均已完成且ADMIN完整收到两份本次报告，任务完成",
+      "occurrence": 1
+    },
+    {
+      "id": "s18",
+      "quote": "诊断完成不要求诊断结论为健康",
+      "occurrence": 1
+    }
+  ],
+  "entities": [
+    {
+      "id": "pm",
+      "source_refs": [
+        "s1",
+        "s13"
+      ],
+      "label": "PM",
+      "kind": "PERSON",
+      "instance_scope": "task",
+      "members": []
+    },
+    {
+      "id": "dev",
+      "source_refs": [
+        "s4",
+        "s7"
+      ],
+      "label": "DEV",
+      "kind": "PERSON",
+      "instance_scope": "task",
+      "members": []
+    },
+    {
+      "id": "ops",
+      "source_refs": [
+        "s5",
+        "s8"
+      ],
+      "label": "OPS",
+      "kind": "PERSON",
+      "instance_scope": "task",
+      "members": []
+    },
+    {
+      "id": "admin",
+      "source_refs": [
+        "s13",
+        "s17"
+      ],
+      "label": "ADMIN",
+      "kind": "PERSON",
+      "instance_scope": "task",
+      "members": []
+    },
+    {
+      "id": "dev_input",
+      "source_refs": [
+        "s2",
+        "s4"
+      ],
+      "label": "dev.json",
+      "kind": "FILE",
+      "instance_scope": "task",
+      "members": []
+    },
+    {
+      "id": "ops_input",
+      "source_refs": [
+        "s2",
+        "s5"
+      ],
+      "label": "ops.json",
+      "kind": "FILE",
+      "instance_scope": "task",
+      "members": []
+    },
+    {
+      "id": "dev_report",
+      "source_refs": [
+        "s12",
+        "s13",
+        "s17"
+      ],
+      "label": "本次dev.md",
+      "kind": "FILE",
+      "instance_scope": "task",
+      "members": []
+    },
+    {
+      "id": "ops_report",
+      "source_refs": [
+        "s12",
+        "s13",
+        "s17"
+      ],
+      "label": "本次ops.md",
+      "kind": "FILE",
+      "instance_scope": "task",
+      "members": []
+    },
+    {
+      "id": "test_environment",
+      "source_refs": [
+        "s3"
+      ],
+      "label": "测试环境",
+      "kind": "ENVIRONMENT",
+      "instance_scope": "task",
+      "members": []
+    },
+    {
+      "id": "production_environment",
+      "source_refs": [
+        "s16"
+      ],
+      "label": "生产环境",
+      "kind": "ENVIRONMENT",
+      "instance_scope": "task",
+      "members": []
+    },
+    {
+      "id": "test_slot",
+      "source_refs": [
+        "s11"
+      ],
+      "label": "同一个测试槽位",
+      "kind": "OBJECT",
+      "instance_scope": "task",
+      "members": []
+    }
+  ],
+  "variables": [
+    {
+      "id": "event",
+      "source_refs": [
+        "s3",
+        "s6",
+        "s16"
+      ],
+      "label": "任务范围内任一事件",
+      "type": "EVENT",
+      "domain": {
+        "kind": "EXPRESSION",
+        "id": "task_events"
+      },
+      "binding_mode": "INSTANCE_LOCAL",
+      "scope_id": "task",
+      "owner": {
+        "kind": "EVENT",
+        "id": "task"
+      }
+    },
+    {
+      "id": "dev_duration",
+      "source_refs": [
+        "s7"
+      ],
+      "label": "DEV诊断实际执行时长",
+      "type": "REAL",
+      "domain": {
+        "kind": "EXPRESSION",
+        "id": "dev_duration_domain"
+      },
+      "binding_mode": "OBSERVATION",
+      "scope_id": "task",
+      "owner": {
+        "kind": "EVENT",
+        "id": "dev_diagnosis"
+      }
+    },
+    {
+      "id": "ops_duration",
+      "source_refs": [
+        "s8"
+      ],
+      "label": "OPS诊断实际执行时长",
+      "type": "REAL",
+      "domain": {
+        "kind": "EXPRESSION",
+        "id": "ops_duration_domain"
+      },
+      "binding_mode": "OBSERVATION",
+      "scope_id": "task",
+      "owner": {
+        "kind": "EVENT",
+        "id": "ops_diagnosis"
+      }
+    },
+    {
+      "id": "total_duration",
+      "source_refs": [
+        "s15"
+      ],
+      "label": "任务整体耗时",
+      "type": "REAL",
+      "domain": {
+        "kind": "EXPRESSION",
+        "id": "total_duration_domain"
+      },
+      "binding_mode": "OBSERVATION",
+      "scope_id": "task",
+      "owner": {
+        "kind": "EVENT",
+        "id": "task"
+      }
+    }
+  ],
+  "events": [
+    {
+      "id": "task",
+      "source_refs": [
+        "s1",
+        "s6",
+        "s15",
+        "s17"
+      ],
+      "label": "双项诊断任务",
+      "kind": "TASK",
+      "layer": "MAIN",
+      "use": "CURRENT_TASK",
+      "owner_id": "task",
+      "operation": "OTHER",
+      "operation_extent": "OPEN",
+      "actor_domain": "UNKNOWN",
+      "roles": [
+        {
+          "role": "ORGANIZER",
+          "value": {
+            "kind": "ENTITY",
+            "id": "pm"
+          },
+          "source_refs": [
+            "s1"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "organize",
+      "source_refs": [
+        "s1"
+      ],
+      "label": "组织双项诊断",
+      "kind": "ACTION",
+      "layer": "MAIN",
+      "use": "CURRENT_TASK",
+      "owner_id": "task",
+      "operation": "ORGANIZE",
+      "operation_extent": "EXACT",
+      "actor_domain": "EXPLICIT",
+      "roles": [
+        {
+          "role": "PERFORMER",
+          "value": {
+            "kind": "ENTITY",
+            "id": "pm"
+          },
+          "source_refs": [
+            "s1"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "dev_diagnosis",
+      "source_refs": [
+        "s4",
+        "s7",
+        "s11",
+        "s12"
+      ],
+      "label": "DEV针对dev.json的一次诊断",
+      "kind": "ACTION",
+      "layer": "MAIN",
+      "use": "CURRENT_TASK",
+      "owner_id": "task",
+      "operation": "OTHER",
+      "operation_extent": "EXACT",
+      "actor_domain": "EXPLICIT",
+      "roles": [
+        {
+          "role": "PERFORMER",
+          "value": {
+            "kind": "ENTITY",
+            "id": "dev"
+          },
+          "source_refs": [
+            "s4"
+          ]
+        },
+        {
+          "role": "INPUT_OBJECT",
+          "value": {
+            "kind": "ENTITY",
+            "id": "dev_input"
+          },
+          "source_refs": [
+            "s4"
+          ]
+        },
+        {
+          "role": "OBJECT",
+          "value": {
+            "kind": "ENTITY",
+            "id": "dev_input"
+          },
+          "source_refs": [
+            "s4"
+          ]
+        },
+        {
+          "role": "RESULT",
+          "value": {
+            "kind": "ENTITY",
+            "id": "dev_report"
+          },
+          "source_refs": [
+            "s4",
+            "s12"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "ops_diagnosis",
+      "source_refs": [
+        "s5",
+        "s8",
+        "s11",
+        "s12"
+      ],
+      "label": "OPS针对ops.json的一次诊断",
+      "kind": "ACTION",
+      "layer": "MAIN",
+      "use": "CURRENT_TASK",
+      "owner_id": "task",
+      "operation": "OTHER",
+      "operation_extent": "EXACT",
+      "actor_domain": "EXPLICIT",
+      "roles": [
+        {
+          "role": "PERFORMER",
+          "value": {
+            "kind": "ENTITY",
+            "id": "ops"
+          },
+          "source_refs": [
+            "s5"
+          ]
+        },
+        {
+          "role": "INPUT_OBJECT",
+          "value": {
+            "kind": "ENTITY",
+            "id": "ops_input"
+          },
+          "source_refs": [
+            "s5"
+          ]
+        },
+        {
+          "role": "OBJECT",
+          "value": {
+            "kind": "ENTITY",
+            "id": "ops_input"
+          },
+          "source_refs": [
+            "s5"
+          ]
+        },
+        {
+          "role": "RESULT",
+          "value": {
+            "kind": "ENTITY",
+            "id": "ops_report"
+          },
+          "source_refs": [
+            "s5",
+            "s12"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "deliver",
+      "source_refs": [
+        "s12",
+        "s13",
+        "s14"
+      ],
+      "label": "将两份本次报告交付ADMIN",
+      "kind": "ACTION",
+      "layer": "MAIN",
+      "use": "CURRENT_TASK",
+      "owner_id": "task",
+      "operation": "DELIVER",
+      "operation_extent": "EXACT",
+      "actor_domain": "EXPLICIT",
+      "roles": [
+        {
+          "role": "PERFORMER",
+          "value": {
+            "kind": "ENTITY",
+            "id": "pm"
+          },
+          "source_refs": [
+            "s13"
+          ]
+        },
+        {
+          "role": "RECIPIENT",
+          "value": {
+            "kind": "ENTITY",
+            "id": "admin"
+          },
+          "source_refs": [
+            "s13"
+          ]
+        },
+        {
+          "role": "DELIVERABLE",
+          "value": {
+            "kind": "ENTITY",
+            "id": "dev_report"
+          },
+          "source_refs": [
+            "s12",
+            "s13"
+          ]
+        },
+        {
+          "role": "DELIVERABLE",
+          "value": {
+            "kind": "ENTITY",
+            "id": "ops_report"
+          },
+          "source_refs": [
+            "s12",
+            "s13"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "dev_report_create",
+      "source_refs": [
+        "s12"
+      ],
+      "label": "生成本次dev.md",
+      "kind": "ACTION",
+      "layer": "MAIN",
+      "use": "CURRENT_TASK",
+      "owner_id": "task",
+      "operation": "CREATE",
+      "operation_extent": "EXACT",
+      "actor_domain": "UNKNOWN",
+      "roles": [
+        {
+          "role": "RESULT",
+          "value": {
+            "kind": "ENTITY",
+            "id": "dev_report"
+          },
+          "source_refs": [
+            "s12"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "ops_report_create",
+      "source_refs": [
+        "s12"
+      ],
+      "label": "生成本次ops.md",
+      "kind": "ACTION",
+      "layer": "MAIN",
+      "use": "CURRENT_TASK",
+      "owner_id": "task",
+      "operation": "CREATE",
+      "operation_extent": "EXACT",
+      "actor_domain": "UNKNOWN",
+      "roles": [
+        {
+          "role": "RESULT",
+          "value": {
+            "kind": "ENTITY",
+            "id": "ops_report"
+          },
+          "source_refs": [
+            "s12"
+          ]
+        }
+      ]
+    }
+  ],
+  "states": [
+    {
+      "id": "dev_complete",
+      "source_refs": [
+        "s4",
+        "s12",
+        "s17"
+      ],
+      "label": "DEV诊断完成",
+      "kind": "COMPLETION",
+      "subject": {
+        "kind": "EVENT",
+        "id": "dev_diagnosis"
+      },
+      "arguments": [
+        {
+          "kind": "ENTITY",
+          "id": "dev_input"
+        },
+        {
+          "kind": "ENTITY",
+          "id": "dev_report"
+        }
+      ]
+    },
+    {
+      "id": "ops_complete",
+      "source_refs": [
+        "s5",
+        "s12",
+        "s17"
+      ],
+      "label": "OPS诊断完成",
+      "kind": "COMPLETION",
+      "subject": {
+        "kind": "EVENT",
+        "id": "ops_diagnosis"
+      },
+      "arguments": [
+        {
+          "kind": "ENTITY",
+          "id": "ops_input"
+        },
+        {
+          "kind": "ENTITY",
+          "id": "ops_report"
+        }
+      ]
+    },
+    {
+      "id": "task_complete",
+      "source_refs": [
+        "s17"
+      ],
+      "label": "任务完成",
+      "kind": "COMPLETION",
+      "subject": {
+        "kind": "EVENT",
+        "id": "task"
+      },
+      "arguments": []
+    }
+  ],
+  "expressions": [
+    {
+      "id": "true",
+      "source_refs": [
+        "s4",
+        "s5",
+        "s13"
+      ],
+      "operator": "BOOLEAN",
+      "arguments": [],
+      "literal": true,
+      "unit": null,
+      "bound_variable": null
+    },
+    {
+      "id": "task_events",
+      "source_refs": [
+        "s3",
+        "s6",
+        "s16"
+      ],
+      "operator": "TASK_EVENTS",
+      "arguments": [
+        {
+          "kind": "EVENT",
+          "id": "task"
+        }
+      ],
+      "literal": null,
+      "unit": null,
+      "bound_variable": null
+    },
+    {
+      "id": "allowed_inputs",
+      "source_refs": [
+        "s2"
+      ],
+      "operator": "SET",
+      "arguments": [
+        {
+          "kind": "ENTITY",
+          "id": "dev_input"
+        },
+        {
+          "kind": "ENTITY",
+          "id": "ops_input"
+        }
+      ],
+      "literal": null,
+      "unit": null,
+      "bound_variable": null
+    },
+    {
+      "id": "external_inputs",
+      "source_refs": [
+        "s2"
+      ],
+      "operator": "TASK_EXTERNAL_INPUTS",
+      "arguments": [
+        {
+          "kind": "EVENT",
+          "id": "task"
+        }
+      ],
+      "literal": null,
+      "unit": null,
+      "bound_variable": null
+    },
+    {
+      "id": "input_boundary",
+      "source_refs": [
+        "s2"
+      ],
+      "operator": "SUBSET",
+      "arguments": [
+        {
+          "kind": "EXPRESSION",
+          "id": "external_inputs"
+        },
+        {
+          "kind": "EXPRESSION",
+          "id": "allowed_inputs"
+        }
+      ],
+      "literal": null,
+      "unit": null,
+      "bound_variable": null
+    },
+    {
+      "id": "event_environment",
+      "source_refs": [
+        "s3"
+      ],
+      "operator": "ENVIRONMENT_OF",
+      "arguments": [
+        {
+          "kind": "VARIABLE",
+          "id": "event"
+        }
+      ],
+      "literal": null,
+      "unit": null,
+      "bound_variable": null
+    },
+    {
+      "id": "environment_match",
+      "source_refs": [
+        "s3"
+      ],
+      "operator": "EQ",
+      "arguments": [
+        {
+          "kind": "EXPRESSION",
+          "id": "event_environment"
+        },
+        {
+          "kind": "ENTITY",
+          "id": "test_environment"
+        }
+      ],
+      "literal": null,
+      "unit": null,
+      "bound_variable": null
+    },
+    {
+      "id": "all_test_environment",
+      "source_refs": [
+        "s3"
+      ],
+      "operator": "FORALL",
+      "arguments": [
+        {
+          "kind": "EXPRESSION",
+          "id": "task_events"
+        },
+        {
+          "kind": "EXPRESSION",
+          "id": "environment_match"
+        }
+      ],
+      "literal": null,
+      "unit": null,
+      "bound_variable": {
+        "kind": "VARIABLE",
+        "id": "event"
+      }
+    },
+    {
+      "id": "organize_occurred",
+      "source_refs": [
+        "s1"
+      ],
+      "operator": "EVENT_OCCURRED",
+      "arguments": [
+        {
+          "kind": "EVENT",
+          "id": "organize"
+        }
+      ],
+      "literal": null,
+      "unit": null,
+      "bound_variable": null
+    },
+    {
+      "id": "dev_completed",
+      "source_refs": [
+        "s4",
+        "s17"
+      ],
+      "operator": "EVENT_COMPLETED",
+      "arguments": [
+        {
+          "kind": "EVENT",
+          "id": "dev_diagnosis"
+        }
+      ],
+      "literal": null,
+      "unit": null,
+      "bound_variable": null
+    },
+    {
+      "id": "ops_completed",
+      "source_refs": [
+        "s5",
+        "s17"
+      ],
+      "operator": "EVENT_COMPLETED",
+      "arguments": [
+        {
+          "kind": "EVENT",
+          "id": "ops_diagnosis"
+        }
+      ],
+      "literal": null,
+      "unit": null,
+      "bound_variable": null
+    },
+    {
+      "id": "deliver_occurred",
+      "source_refs": [
+        "s13"
+      ],
+      "operator": "EVENT_OCCURRED",
+      "arguments": [
+        {
+          "kind": "EVENT",
+          "id": "deliver"
+        }
+      ],
+      "literal": null,
+      "unit": null,
+      "bound_variable": null
+    },
+    {
+      "id": "n05",
+      "source_refs": [
+        "s7"
+      ],
+      "operator": "NUMBER",
+      "arguments": [],
+      "literal": "0.5",
+      "unit": "minute",
+      "bound_variable": null
+    },
+    {
+      "id": "n075",
+      "source_refs": [
+        "s7"
+      ],
+      "operator": "NUMBER",
+      "arguments": [],
+      "literal": "0.75",
+      "unit": "minute",
+      "bound_variable": null
+    },
+    {
+      "id": "n20",
+      "source_refs": [
+        "s8"
+      ],
+      "operator": "NUMBER",
+      "arguments": [],
+      "literal": "20",
+      "unit": "second",
+      "bound_variable": null
+    },
+    {
+      "id": "n40",
+      "source_refs": [
+        "s8"
+      ],
+      "operator": "NUMBER",
+      "arguments": [],
+      "literal": "40",
+      "unit": "second",
+      "bound_variable": null
+    },
+    {
+      "id": "n70",
+      "source_refs": [
+        "s9"
+      ],
+      "operator": "NUMBER",
+      "arguments": [],
+      "literal": "70",
+      "unit": "second",
+      "bound_variable": null
+    },
+    {
+      "id": "n1minute",
+      "source_refs": [
+        "s15"
+      ],
+      "operator": "NUMBER",
+      "arguments": [],
+      "literal": "1",
+      "unit": "minute",
+      "bound_variable": null
+    },
+    {
+      "id": "n2minute",
+      "source_refs": [
+        "s15"
+      ],
+      "operator": "NUMBER",
+      "arguments": [],
+      "literal": "2",
+      "unit": "minute",
+      "bound_variable": null
+    },
+    {
+      "id": "dev_duration_domain",
+      "source_refs": [
+        "s7"
+      ],
+      "operator": "REAL_INTERVAL",
+      "arguments": [
+        {
+          "kind": "EXPRESSION",
+          "id": "n05"
+        },
+        {
+          "kind": "EXPRESSION",
+          "id": "n075"
+        }
+      ],
+      "literal": null,
+      "unit": null,
+      "bound_variable": null
+    },
+    {
+      "id": "ops_duration_domain",
+      "source_refs": [
+        "s8"
+      ],
+      "operator": "REAL_INTERVAL",
+      "arguments": [
+        {
+          "kind": "EXPRESSION",
+          "id": "n20"
+        },
+        {
+          "kind": "EXPRESSION",
+          "id": "n40"
+        }
+      ],
+      "literal": null,
+      "unit": null,
+      "bound_variable": null
+    },
+    {
+      "id": "total_duration_domain",
+      "source_refs": [
+        "s15"
+      ],
+      "operator": "REAL_INTERVAL",
+      "arguments": [
+        {
+          "kind": "EXPRESSION",
+          "id": "n1minute"
+        },
+        {
+          "kind": "EXPRESSION",
+          "id": "n2minute"
+        }
+      ],
+      "literal": null,
+      "unit": null,
+      "bound_variable": null
+    },
+    {
+      "id": "dev_start",
+      "source_refs": [
+        "s7",
+        "s11"
+      ],
+      "operator": "EVENT_START",
+      "arguments": [
+        {
+          "kind": "EVENT",
+          "id": "dev_diagnosis"
+        }
+      ],
+      "literal": null,
+      "unit": null,
+      "bound_variable": null
+    },
+    {
+      "id": "dev_end",
+      "source_refs": [
+        "s7",
+        "s11",
+        "s12",
+        "s14"
+      ],
+      "operator": "EVENT_END",
+      "arguments": [
+        {
+          "kind": "EVENT",
+          "id": "dev_diagnosis"
+        }
+      ],
+      "literal": null,
+      "unit": null,
+      "bound_variable": null
+    },
+    {
+      "id": "ops_start",
+      "source_refs": [
+        "s8",
+        "s11"
+      ],
+      "operator": "EVENT_START",
+      "arguments": [
+        {
+          "kind": "EVENT",
+          "id": "ops_diagnosis"
+        }
+      ],
+      "literal": null,
+      "unit": null,
+      "bound_variable": null
+    },
+    {
+      "id": "ops_end",
+      "source_refs": [
+        "s8",
+        "s11",
+        "s12",
+        "s14"
+      ],
+      "operator": "EVENT_END",
+      "arguments": [
+        {
+          "kind": "EVENT",
+          "id": "ops_diagnosis"
+        }
+      ],
+      "literal": null,
+      "unit": null,
+      "bound_variable": null
+    },
+    {
+      "id": "dev_start_plus_duration",
+      "source_refs": [
+        "s7"
+      ],
+      "operator": "ADD",
+      "arguments": [
+        {
+          "kind": "EXPRESSION",
+          "id": "dev_start"
+        },
+        {
+          "kind": "VARIABLE",
+          "id": "dev_duration"
+        }
+      ],
+      "literal": null,
+      "unit": null,
+      "bound_variable": null
+    },
+    {
+      "id": "dev_duration_binding",
+      "source_refs": [
+        "s7"
+      ],
+      "operator": "EQ",
+      "arguments": [
+        {
+          "kind": "EXPRESSION",
+          "id": "dev_end"
+        },
+        {
+          "kind": "EXPRESSION",
+          "id": "dev_start_plus_duration"
+        }
+      ],
+      "literal": null,
+      "unit": null,
+      "bound_variable": null
+    },
+    {
+      "id": "ops_start_plus_duration",
+      "source_refs": [
+        "s8"
+      ],
+      "operator": "ADD",
+      "arguments": [
+        {
+          "kind": "EXPRESSION",
+          "id": "ops_start"
+        },
+        {
+          "kind": "VARIABLE",
+          "id": "ops_duration"
+        }
+      ],
+      "literal": null,
+      "unit": null,
+      "bound_variable": null
+    },
+    {
+      "id": "ops_duration_binding",
+      "source_refs": [
+        "s8"
+      ],
+      "operator": "EQ",
+      "arguments": [
+        {
+          "kind": "EXPRESSION",
+          "id": "ops_end"
+        },
+        {
+          "kind": "EXPRESSION",
+          "id": "ops_start_plus_duration"
+        }
+      ],
+      "literal": null,
+      "unit": null,
+      "bound_variable": null
+    },
+    {
+      "id": "execution_duration_sum",
+      "source_refs": [
+        "s9"
+      ],
+      "operator": "ADD",
+      "arguments": [
+        {
+          "kind": "VARIABLE",
+          "id": "dev_duration"
+        },
+        {
+          "kind": "VARIABLE",
+          "id": "ops_duration"
+        }
+      ],
+      "literal": null,
+      "unit": null,
+      "bound_variable": null
+    },
+    {
+      "id": "execution_sum_limit",
+      "source_refs": [
+        "s9"
+      ],
+      "operator": "LTE",
+      "arguments": [
+        {
+          "kind": "EXPRESSION",
+          "id": "execution_duration_sum"
+        },
+        {
+          "kind": "EXPRESSION",
+          "id": "n70"
+        }
+      ],
+      "literal": null,
+      "unit": null,
+      "bound_variable": null
+    },
+    {
+      "id": "dev_then_ops",
+      "source_refs": [
+        "s10",
+        "s11"
+      ],
+      "operator": "LTE",
+      "arguments": [
+        {
+          "kind": "EXPRESSION",
+          "id": "dev_end"
+        },
+        {
+          "kind": "EXPRESSION",
+          "id": "ops_start"
+        }
+      ],
+      "literal": null,
+      "unit": null,
+      "bound_variable": null
+    },
+    {
+      "id": "ops_then_dev",
+      "source_refs": [
+        "s10",
+        "s11"
+      ],
+      "operator": "LTE",
+      "arguments": [
+        {
+          "kind": "EXPRESSION",
+          "id": "ops_end"
+        },
+        {
+          "kind": "EXPRESSION",
+          "id": "dev_start"
+        }
+      ],
+      "literal": null,
+      "unit": null,
+      "bound_variable": null
+    },
+    {
+      "id": "nonoverlap",
+      "source_refs": [
+        "s10",
+        "s11"
+      ],
+      "operator": "OR",
+      "arguments": [
+        {
+          "kind": "EXPRESSION",
+          "id": "dev_then_ops"
+        },
+        {
+          "kind": "EXPRESSION",
+          "id": "ops_then_dev"
+        }
+      ],
+      "literal": null,
+      "unit": null,
+      "bound_variable": null
+    },
+    {
+      "id": "deliver_start",
+      "source_refs": [
+        "s14"
+      ],
+      "operator": "EVENT_START",
+      "arguments": [
+        {
+          "kind": "EVENT",
+          "id": "deliver"
+        }
+      ],
+      "literal": null,
+      "unit": null,
+      "bound_variable": null
+    },
+    {
+      "id": "dev_end_before_delivery",
+      "source_refs": [
+        "s14"
+      ],
+      "operator": "LTE",
+      "arguments": [
+        {
+          "kind": "EXPRESSION",
+          "id": "dev_end"
+        },
+        {
+          "kind": "EXPRESSION",
+          "id": "deliver_start"
+        }
+      ],
+      "literal": null,
+      "unit": null,
+      "bound_variable": null
+    },
+    {
+      "id": "ops_end_before_delivery",
+      "source_refs": [
+        "s14"
+      ],
+      "operator": "LTE",
+      "arguments": [
+        {
+          "kind": "EXPRESSION",
+          "id": "ops_end"
+        },
+        {
+          "kind": "EXPRESSION",
+          "id": "deliver_start"
+        }
+      ],
+      "literal": null,
+      "unit": null,
+      "bound_variable": null
+    },
+    {
+      "id": "dev_complete_at_delivery",
+      "source_refs": [
+        "s14"
+      ],
+      "operator": "TRUE_AT_START",
+      "arguments": [
+        {
+          "kind": "STATE",
+          "id": "dev_complete"
+        },
+        {
+          "kind": "EVENT",
+          "id": "deliver"
+        }
+      ],
+      "literal": null,
+      "unit": null,
+      "bound_variable": null
+    },
+    {
+      "id": "ops_complete_at_delivery",
+      "source_refs": [
+        "s14"
+      ],
+      "operator": "TRUE_AT_START",
+      "arguments": [
+        {
+          "kind": "STATE",
+          "id": "ops_complete"
+        },
+        {
+          "kind": "EVENT",
+          "id": "deliver"
+        }
+      ],
+      "literal": null,
+      "unit": null,
+      "bound_variable": null
+    },
+    {
+      "id": "delivery_gate",
+      "source_refs": [
+        "s14"
+      ],
+      "operator": "AND",
+      "arguments": [
+        {
+          "kind": "EXPRESSION",
+          "id": "dev_end_before_delivery"
+        },
+        {
+          "kind": "EXPRESSION",
+          "id": "ops_end_before_delivery"
+        },
+        {
+          "kind": "EXPRESSION",
+          "id": "dev_complete_at_delivery"
+        },
+        {
+          "kind": "EXPRESSION",
+          "id": "ops_complete_at_delivery"
+        }
+      ],
+      "literal": null,
+      "unit": null,
+      "bound_variable": null
+    },
+    {
+      "id": "total_minimum",
+      "source_refs": [
+        "s15"
+      ],
+      "operator": "GTE",
+      "arguments": [
+        {
+          "kind": "VARIABLE",
+          "id": "total_duration"
+        },
+        {
+          "kind": "EXPRESSION",
+          "id": "n1minute"
+        }
+      ],
+      "literal": null,
+      "unit": null,
+      "bound_variable": null
+    },
+    {
+      "id": "total_strict_maximum",
+      "source_refs": [
+        "s15"
+      ],
+      "operator": "LT",
+      "arguments": [
+        {
+          "kind": "VARIABLE",
+          "id": "total_duration"
+        },
+        {
+          "kind": "EXPRESSION",
+          "id": "n2minute"
+        }
+      ],
+      "literal": null,
+      "unit": null,
+      "bound_variable": null
+    },
+    {
+      "id": "total_duration_bounds",
+      "source_refs": [
+        "s15"
+      ],
+      "operator": "AND",
+      "arguments": [
+        {
+          "kind": "EXPRESSION",
+          "id": "total_minimum"
+        },
+        {
+          "kind": "EXPRESSION",
+          "id": "total_strict_maximum"
+        }
+      ],
+      "literal": null,
+      "unit": null,
+      "bound_variable": null
+    },
+    {
+      "id": "event_operation",
+      "source_refs": [
+        "s16"
+      ],
+      "operator": "OPERATION_OF",
+      "arguments": [
+        {
+          "kind": "VARIABLE",
+          "id": "event"
+        }
+      ],
+      "literal": null,
+      "unit": null,
+      "bound_variable": null
+    },
+    {
+      "id": "modify_symbol",
+      "source_refs": [
+        "s16"
+      ],
+      "operator": "SYMBOL",
+      "arguments": [],
+      "literal": "MODIFY",
+      "unit": null,
+      "bound_variable": null
+    },
+    {
+      "id": "write_symbol",
+      "source_refs": [
+        "s16"
+      ],
+      "operator": "SYMBOL",
+      "arguments": [],
+      "literal": "WRITE",
+      "unit": null,
+      "bound_variable": null
+    },
+    {
+      "id": "access_symbol",
+      "source_refs": [
+        "s16"
+      ],
+      "operator": "SYMBOL",
+      "arguments": [],
+      "literal": "ACCESS",
+      "unit": null,
+      "bound_variable": null
+    },
+    {
+      "id": "is_modify",
+      "source_refs": [
+        "s16"
+      ],
+      "operator": "EQ",
+      "arguments": [
+        {
+          "kind": "EXPRESSION",
+          "id": "event_operation"
+        },
+        {
+          "kind": "EXPRESSION",
+          "id": "modify_symbol"
+        }
+      ],
+      "literal": null,
+      "unit": null,
+      "bound_variable": null
+    },
+    {
+      "id": "is_write",
+      "source_refs": [
+        "s16"
+      ],
+      "operator": "EQ",
+      "arguments": [
+        {
+          "kind": "EXPRESSION",
+          "id": "event_operation"
+        },
+        {
+          "kind": "EXPRESSION",
+          "id": "write_symbol"
+        }
+      ],
+      "literal": null,
+      "unit": null,
+      "bound_variable": null
+    },
+    {
+      "id": "modifying_operation",
+      "source_refs": [
+        "s16"
+      ],
+      "operator": "OR",
+      "arguments": [
+        {
+          "kind": "EXPRESSION",
+          "id": "is_modify"
+        },
+        {
+          "kind": "EXPRESSION",
+          "id": "is_write"
+        }
+      ],
+      "literal": null,
+      "unit": null,
+      "bound_variable": null
+    },
+    {
+      "id": "event_targets",
+      "source_refs": [
+        "s16"
+      ],
+      "operator": "TARGETS_OF",
+      "arguments": [
+        {
+          "kind": "VARIABLE",
+          "id": "event"
+        }
+      ],
+      "literal": null,
+      "unit": null,
+      "bound_variable": null
+    },
+    {
+      "id": "input_targets",
+      "source_refs": [
+        "s16"
+      ],
+      "operator": "INTERSECTION",
+      "arguments": [
+        {
+          "kind": "EXPRESSION",
+          "id": "event_targets"
+        },
+        {
+          "kind": "EXPRESSION",
+          "id": "allowed_inputs"
+        }
+      ],
+      "literal": null,
+      "unit": null,
+      "bound_variable": null
+    },
+    {
+      "id": "input_target_count",
+      "source_refs": [
+        "s16"
+      ],
+      "operator": "CARDINALITY",
+      "arguments": [
+        {
+          "kind": "EXPRESSION",
+          "id": "input_targets"
+        }
+      ],
+      "literal": null,
+      "unit": null,
+      "bound_variable": null
+    },
+    {
+      "id": "zero",
+      "source_refs": [
+        "s16"
+      ],
+      "operator": "NUMBER",
+      "arguments": [],
+      "literal": "0",
+      "unit": null,
+      "bound_variable": null
+    },
+    {
+      "id": "targets_input",
+      "source_refs": [
+        "s16"
+      ],
+      "operator": "GT",
+      "arguments": [
+        {
+          "kind": "EXPRESSION",
+          "id": "input_target_count"
+        },
+        {
+          "kind": "EXPRESSION",
+          "id": "zero"
+        }
+      ],
+      "literal": null,
+      "unit": null,
+      "bound_variable": null
+    },
+    {
+      "id": "event_occurred",
+      "source_refs": [
+        "s16"
+      ],
+      "operator": "EVENT_OCCURRED",
+      "arguments": [
+        {
+          "kind": "VARIABLE",
+          "id": "event"
+        }
+      ],
+      "literal": null,
+      "unit": null,
+      "bound_variable": null
+    },
+    {
+      "id": "forbidden_input_modification",
+      "source_refs": [
+        "s16"
+      ],
+      "operator": "AND",
+      "arguments": [
+        {
+          "kind": "EXPRESSION",
+          "id": "event_occurred"
+        },
+        {
+          "kind": "EXPRESSION",
+          "id": "modifying_operation"
+        },
+        {
+          "kind": "EXPRESSION",
+          "id": "targets_input"
+        }
+      ],
+      "literal": null,
+      "unit": null,
+      "bound_variable": null
+    },
+    {
+      "id": "no_input_modification",
+      "source_refs": [
+        "s16"
+      ],
+      "operator": "NOT",
+      "arguments": [
+        {
+          "kind": "EXPRESSION",
+          "id": "forbidden_input_modification"
+        }
+      ],
+      "literal": null,
+      "unit": null,
+      "bound_variable": null
+    },
+    {
+      "id": "all_no_input_modification",
+      "source_refs": [
+        "s16"
+      ],
+      "operator": "FORALL",
+      "arguments": [
+        {
+          "kind": "EXPRESSION",
+          "id": "task_events"
+        },
+        {
+          "kind": "EXPRESSION",
+          "id": "no_input_modification"
+        }
+      ],
+      "literal": null,
+      "unit": null,
+      "bound_variable": {
+        "kind": "VARIABLE",
+        "id": "event"
+      }
+    },
+    {
+      "id": "is_access",
+      "source_refs": [
+        "s16"
+      ],
+      "operator": "EQ",
+      "arguments": [
+        {
+          "kind": "EXPRESSION",
+          "id": "event_operation"
+        },
+        {
+          "kind": "EXPRESSION",
+          "id": "access_symbol"
+        }
+      ],
+      "literal": null,
+      "unit": null,
+      "bound_variable": null
+    },
+    {
+      "id": "targets_production",
+      "source_refs": [
+        "s16"
+      ],
+      "operator": "MEMBER",
+      "arguments": [
+        {
+          "kind": "ENTITY",
+          "id": "production_environment"
+        },
+        {
+          "kind": "EXPRESSION",
+          "id": "event_targets"
+        }
+      ],
+      "literal": null,
+      "unit": null,
+      "bound_variable": null
+    },
+    {
+      "id": "forbidden_production_access",
+      "source_refs": [
+        "s16"
+      ],
+      "operator": "AND",
+      "arguments": [
+        {
+          "kind": "EXPRESSION",
+          "id": "event_occurred"
+        },
+        {
+          "kind": "EXPRESSION",
+          "id": "is_access"
+        },
+        {
+          "kind": "EXPRESSION",
+          "id": "targets_production"
+        }
+      ],
+      "literal": null,
+      "unit": null,
+      "bound_variable": null
+    },
+    {
+      "id": "no_production_access",
+      "source_refs": [
+        "s16"
+      ],
+      "operator": "NOT",
+      "arguments": [
+        {
+          "kind": "EXPRESSION",
+          "id": "forbidden_production_access"
+        }
+      ],
+      "literal": null,
+      "unit": null,
+      "bound_variable": null
+    },
+    {
+      "id": "all_no_production_access",
+      "source_refs": [
+        "s16"
+      ],
+      "operator": "FORALL",
+      "arguments": [
+        {
+          "kind": "EXPRESSION",
+          "id": "task_events"
+        },
+        {
+          "kind": "EXPRESSION",
+          "id": "no_production_access"
+        }
+      ],
+      "literal": null,
+      "unit": null,
+      "bound_variable": {
+        "kind": "VARIABLE",
+        "id": "event"
+      }
+    },
+    {
+      "id": "received_dev_report",
+      "source_refs": [
+        "s17"
+      ],
+      "operator": "RECEIVED_COMPLETE",
+      "arguments": [
+        {
+          "kind": "ENTITY",
+          "id": "dev_report"
+        },
+        {
+          "kind": "ENTITY",
+          "id": "admin"
+        },
+        {
+          "kind": "EVENT",
+          "id": "deliver"
+        }
+      ],
+      "literal": null,
+      "unit": null,
+      "bound_variable": null
+    },
+    {
+      "id": "received_ops_report",
+      "source_refs": [
+        "s17"
+      ],
+      "operator": "RECEIVED_COMPLETE",
+      "arguments": [
+        {
+          "kind": "ENTITY",
+          "id": "ops_report"
+        },
+        {
+          "kind": "ENTITY",
+          "id": "admin"
+        },
+        {
+          "kind": "EVENT",
+          "id": "deliver"
+        }
+      ],
+      "literal": null,
+      "unit": null,
+      "bound_variable": null
+    },
+    {
+      "id": "completion_condition",
+      "source_refs": [
+        "s17",
+        "s18"
+      ],
+      "operator": "AND",
+      "arguments": [
+        {
+          "kind": "EXPRESSION",
+          "id": "dev_completed"
+        },
+        {
+          "kind": "EXPRESSION",
+          "id": "ops_completed"
+        },
+        {
+          "kind": "EXPRESSION",
+          "id": "received_dev_report"
+        },
+        {
+          "kind": "EXPRESSION",
+          "id": "received_ops_report"
+        }
+      ],
+      "literal": null,
+      "unit": null,
+      "bound_variable": null
+    },
+    {
+      "id": "task_completion_value",
+      "source_refs": [
+        "s17"
+      ],
+      "operator": "STATE_VALUE",
+      "arguments": [
+        {
+          "kind": "STATE",
+          "id": "task_complete"
+        }
+      ],
+      "literal": null,
+      "unit": null,
+      "bound_variable": null
+    },
+    {
+      "id": "completion_iff",
+      "source_refs": [
+        "s17",
+        "s18"
+      ],
+      "operator": "IFF",
+      "arguments": [
+        {
+          "kind": "EXPRESSION",
+          "id": "task_completion_value"
+        },
+        {
+          "kind": "EXPRESSION",
+          "id": "completion_condition"
+        }
+      ],
+      "literal": null,
+      "unit": null,
+      "bound_variable": null
+    },
+    {
+      "id": "dev_report_created",
+      "source_refs": [
+        "s12"
+      ],
+      "operator": "EVENT_COMPLETED",
+      "arguments": [
+        {
+          "kind": "EVENT",
+          "id": "dev_report_create"
+        }
+      ],
+      "literal": null,
+      "unit": null,
+      "bound_variable": null
+    },
+    {
+      "id": "ops_report_created",
+      "source_refs": [
+        "s12"
+      ],
+      "operator": "EVENT_COMPLETED",
+      "arguments": [
+        {
+          "kind": "EVENT",
+          "id": "ops_report_create"
+        }
+      ],
+      "literal": null,
+      "unit": null,
+      "bound_variable": null
+    },
+    {
+      "id": "dev_report_create_end",
+      "source_refs": [
+        "s12"
+      ],
+      "operator": "EVENT_END",
+      "arguments": [
+        {
+          "kind": "EVENT",
+          "id": "dev_report_create"
+        }
+      ],
+      "literal": null,
+      "unit": null,
+      "bound_variable": null
+    },
+    {
+      "id": "ops_report_create_end",
+      "source_refs": [
+        "s12"
+      ],
+      "operator": "EVENT_END",
+      "arguments": [
+        {
+          "kind": "EVENT",
+          "id": "ops_report_create"
+        }
+      ],
+      "literal": null,
+      "unit": null,
+      "bound_variable": null
+    },
+    {
+      "id": "dev_report_generation_time",
+      "source_refs": [
+        "s12"
+      ],
+      "operator": "EQ",
+      "arguments": [
+        {
+          "kind": "EXPRESSION",
+          "id": "dev_report_create_end"
+        },
+        {
+          "kind": "EXPRESSION",
+          "id": "dev_end"
+        }
+      ],
+      "literal": null,
+      "unit": null,
+      "bound_variable": null
+    },
+    {
+      "id": "ops_report_generation_time",
+      "source_refs": [
+        "s12"
+      ],
+      "operator": "EQ",
+      "arguments": [
+        {
+          "kind": "EXPRESSION",
+          "id": "ops_report_create_end"
+        },
+        {
+          "kind": "EXPRESSION",
+          "id": "ops_end"
+        }
+      ],
+      "literal": null,
+      "unit": null,
+      "bound_variable": null
+    }
+  ],
+  "requirements": [
+    {
+      "id": "organize_required",
+      "source_refs": [
+        "s1"
+      ],
+      "kind": "EVENT_NORM",
+      "views": [
+        "A",
+        "R"
+      ],
+      "scope_id": "task",
+      "modality": "REQUIRED",
+      "subject": {
+        "kind": "EVENT",
+        "id": "organize"
+      },
+      "applicability": null,
+      "body": {
+        "kind": "EXPRESSION",
+        "id": "organize_occurred"
+      },
+      "data_use": null,
+      "note": ""
+    },
+    {
+      "id": "inputs_only",
+      "source_refs": [
+        "s2"
+      ],
+      "kind": "CONSTRAINT",
+      "views": [
+        "I",
+        "B"
+      ],
+      "scope_id": "task",
+      "modality": "REQUIRED",
+      "subject": {
+        "kind": "EVENT",
+        "id": "task"
+      },
+      "applicability": null,
+      "body": {
+        "kind": "EXPRESSION",
+        "id": "input_boundary"
+      },
+      "data_use": null,
+      "note": ""
+    },
+    {
+      "id": "environment_only",
+      "source_refs": [
+        "s3"
+      ],
+      "kind": "CONSTRAINT",
+      "views": [
+        "B"
+      ],
+      "scope_id": "task",
+      "modality": "REQUIRED",
+      "subject": {
+        "kind": "EVENT",
+        "id": "task"
+      },
+      "applicability": null,
+      "body": {
+        "kind": "EXPRESSION",
+        "id": "all_test_environment"
+      },
+      "data_use": null,
+      "note": ""
+    },
+    {
+      "id": "dev_required",
+      "source_refs": [
+        "s4"
+      ],
+      "kind": "EVENT_NORM",
+      "views": [
+        "A",
+        "R"
+      ],
+      "scope_id": "task",
+      "modality": "REQUIRED",
+      "subject": {
+        "kind": "EVENT",
+        "id": "dev_diagnosis"
+      },
+      "applicability": null,
+      "body": {
+        "kind": "EXPRESSION",
+        "id": "dev_completed"
+      },
+      "data_use": null,
+      "note": ""
+    },
+    {
+      "id": "ops_required",
+      "source_refs": [
+        "s5"
+      ],
+      "kind": "EVENT_NORM",
+      "views": [
+        "A",
+        "R"
+      ],
+      "scope_id": "task",
+      "modality": "REQUIRED",
+      "subject": {
+        "kind": "EVENT",
+        "id": "ops_diagnosis"
+      },
+      "applicability": null,
+      "body": {
+        "kind": "EXPRESSION",
+        "id": "ops_completed"
+      },
+      "data_use": null,
+      "note": ""
+    },
+    {
+      "id": "dev_time",
+      "source_refs": [
+        "s7"
+      ],
+      "kind": "CONSTRAINT",
+      "views": [
+        "P"
+      ],
+      "scope_id": "task",
+      "modality": "REQUIRED",
+      "subject": {
+        "kind": "EVENT",
+        "id": "dev_diagnosis"
+      },
+      "applicability": null,
+      "body": {
+        "kind": "EXPRESSION",
+        "id": "dev_duration_binding"
+      },
+      "data_use": null,
+      "note": ""
+    },
+    {
+      "id": "ops_time",
+      "source_refs": [
+        "s8"
+      ],
+      "kind": "CONSTRAINT",
+      "views": [
+        "P"
+      ],
+      "scope_id": "task",
+      "modality": "REQUIRED",
+      "subject": {
+        "kind": "EVENT",
+        "id": "ops_diagnosis"
+      },
+      "applicability": null,
+      "body": {
+        "kind": "EXPRESSION",
+        "id": "ops_duration_binding"
+      },
+      "data_use": null,
+      "note": ""
+    },
+    {
+      "id": "execution_sum",
+      "source_refs": [
+        "s9"
+      ],
+      "kind": "CONSTRAINT",
+      "views": [
+        "P"
+      ],
+      "scope_id": "task",
+      "modality": "REQUIRED",
+      "subject": {
+        "kind": "EVENT",
+        "id": "task"
+      },
+      "applicability": null,
+      "body": {
+        "kind": "EXPRESSION",
+        "id": "execution_sum_limit"
+      },
+      "data_use": null,
+      "note": "仅两个诊断执行时长参与求和。"
+    },
+    {
+      "id": "slot_nonoverlap",
+      "source_refs": [
+        "s10",
+        "s11"
+      ],
+      "kind": "CONSTRAINT",
+      "views": [
+        "P",
+        "B"
+      ],
+      "scope_id": "task",
+      "modality": "REQUIRED",
+      "subject": {
+        "kind": "EVENT",
+        "id": "task"
+      },
+      "applicability": null,
+      "body": {
+        "kind": "EXPRESSION",
+        "id": "nonoverlap"
+      },
+      "data_use": null,
+      "note": "两种次序均允许，端点相接允许。"
+    },
+    {
+      "id": "delivery_required",
+      "source_refs": [
+        "s13"
+      ],
+      "kind": "EVENT_NORM",
+      "views": [
+        "O",
+        "A",
+        "R"
+      ],
+      "scope_id": "task",
+      "modality": "REQUIRED",
+      "subject": {
+        "kind": "EVENT",
+        "id": "deliver"
+      },
+      "applicability": null,
+      "body": {
+        "kind": "EXPRESSION",
+        "id": "deliver_occurred"
+      },
+      "data_use": null,
+      "note": ""
+    },
+    {
+      "id": "delivery_necessary_gate",
+      "source_refs": [
+        "s14"
+      ],
+      "kind": "CONSTRAINT",
+      "views": [
+        "P",
+        "B"
+      ],
+      "scope_id": "task",
+      "modality": "REQUIRED",
+      "subject": {
+        "kind": "EVENT",
+        "id": "deliver"
+      },
+      "applicability": null,
+      "body": {
+        "kind": "EXPRESSION",
+        "id": "delivery_gate"
+      },
+      "data_use": null,
+      "note": "必要门独立于无条件交付义务。"
+    },
+    {
+      "id": "task_total_time",
+      "source_refs": [
+        "s15"
+      ],
+      "kind": "TOTAL_DURATION",
+      "views": [
+        "P"
+      ],
+      "scope_id": "task",
+      "modality": "REQUIRED",
+      "subject": {
+        "kind": "VARIABLE",
+        "id": "total_duration"
+      },
+      "applicability": null,
+      "body": {
+        "kind": "EXPRESSION",
+        "id": "total_duration_bounds"
+      },
+      "data_use": null,
+      "note": "整体耗时包括等待和交付。"
+    },
+    {
+      "id": "input_modification_boundary",
+      "source_refs": [
+        "s16"
+      ],
+      "kind": "CONSTRAINT",
+      "views": [
+        "B"
+      ],
+      "scope_id": "task",
+      "modality": "REQUIRED",
+      "subject": {
+        "kind": "EVENT",
+        "id": "task"
+      },
+      "applicability": null,
+      "body": {
+        "kind": "EXPRESSION",
+        "id": "all_no_input_modification"
+      },
+      "data_use": null,
+      "note": "禁止模式无主体、接收者或执行环境例外。"
+    },
+    {
+      "id": "production_access_boundary",
+      "source_refs": [
+        "s16"
+      ],
+      "kind": "CONSTRAINT",
+      "views": [
+        "B"
+      ],
+      "scope_id": "task",
+      "modality": "REQUIRED",
+      "subject": {
+        "kind": "EVENT",
+        "id": "task"
+      },
+      "applicability": null,
+      "body": {
+        "kind": "EXPRESSION",
+        "id": "all_no_production_access"
+      },
+      "data_use": null,
+      "note": "访问目标独立于执行环境。"
+    },
+    {
+      "id": "root_completion",
+      "source_refs": [
+        "s17",
+        "s18"
+      ],
+      "kind": "COMPLETION",
+      "views": [
+        "C"
+      ],
+      "scope_id": "task",
+      "modality": "REQUIRED",
+      "subject": {
+        "kind": "EVENT",
+        "id": "task"
+      },
+      "applicability": null,
+      "body": {
+        "kind": "EXPRESSION",
+        "id": "completion_iff"
+      },
+      "data_use": null,
+      "note": "不加入健康结论或诊断成功条件。"
+    },
+    {
+      "id": "dev_input_use",
+      "source_refs": [
+        "s2",
+        "s4"
+      ],
+      "kind": "DATA_USE",
+      "views": [
+        "I"
+      ],
+      "scope_id": "task",
+      "modality": "REQUIRED",
+      "subject": {
+        "kind": "EVENT",
+        "id": "dev_diagnosis"
+      },
+      "applicability": null,
+      "body": {
+        "kind": "EXPRESSION",
+        "id": "true"
+      },
+      "data_use": {
+        "object": {
+          "kind": "ENTITY",
+          "id": "dev_input"
+        },
+        "consumer": {
+          "kind": "EVENT",
+          "id": "dev_diagnosis"
+        },
+        "producer": null,
+        "origin": "EXTERNAL",
+        "availability": "AT_USE"
+      },
+      "note": ""
+    },
+    {
+      "id": "ops_input_use",
+      "source_refs": [
+        "s2",
+        "s5"
+      ],
+      "kind": "DATA_USE",
+      "views": [
+        "I"
+      ],
+      "scope_id": "task",
+      "modality": "REQUIRED",
+      "subject": {
+        "kind": "EVENT",
+        "id": "ops_diagnosis"
+      },
+      "applicability": null,
+      "body": {
+        "kind": "EXPRESSION",
+        "id": "true"
+      },
+      "data_use": {
+        "object": {
+          "kind": "ENTITY",
+          "id": "ops_input"
+        },
+        "consumer": {
+          "kind": "EVENT",
+          "id": "ops_diagnosis"
+        },
+        "producer": null,
+        "origin": "EXTERNAL",
+        "availability": "AT_USE"
+      },
+      "note": ""
+    },
+    {
+      "id": "dev_report_delivery_use",
+      "source_refs": [
+        "s12",
+        "s13",
+        "s14"
+      ],
+      "kind": "DATA_USE",
+      "views": [
+        "I",
+        "O"
+      ],
+      "scope_id": "task",
+      "modality": "REQUIRED",
+      "subject": {
+        "kind": "EVENT",
+        "id": "deliver"
+      },
+      "applicability": null,
+      "body": {
+        "kind": "EXPRESSION",
+        "id": "true"
+      },
+      "data_use": {
+        "object": {
+          "kind": "ENTITY",
+          "id": "dev_report"
+        },
+        "consumer": {
+          "kind": "EVENT",
+          "id": "deliver"
+        },
+        "producer": {
+          "kind": "EVENT",
+          "id": "dev_diagnosis"
+        },
+        "origin": "INTERNAL",
+        "availability": "COMPLETE_RESULT"
+      },
+      "note": ""
+    },
+    {
+      "id": "ops_report_delivery_use",
+      "source_refs": [
+        "s12",
+        "s13",
+        "s14"
+      ],
+      "kind": "DATA_USE",
+      "views": [
+        "I",
+        "O"
+      ],
+      "scope_id": "task",
+      "modality": "REQUIRED",
+      "subject": {
+        "kind": "EVENT",
+        "id": "deliver"
+      },
+      "applicability": null,
+      "body": {
+        "kind": "EXPRESSION",
+        "id": "true"
+      },
+      "data_use": {
+        "object": {
+          "kind": "ENTITY",
+          "id": "ops_report"
+        },
+        "consumer": {
+          "kind": "EVENT",
+          "id": "deliver"
+        },
+        "producer": {
+          "kind": "EVENT",
+          "id": "ops_diagnosis"
+        },
+        "origin": "INTERNAL",
+        "availability": "COMPLETE_RESULT"
+      },
+      "note": ""
+    },
+    {
+      "id": "dev_report_generation_required",
+      "source_refs": [
+        "s12"
+      ],
+      "kind": "EVENT_NORM",
+      "views": [
+        "O",
+        "A"
+      ],
+      "scope_id": "task",
+      "modality": "REQUIRED",
+      "subject": {
+        "kind": "EVENT",
+        "id": "dev_report_create"
+      },
+      "applicability": null,
+      "body": {
+        "kind": "EXPRESSION",
+        "id": "dev_report_created"
+      },
+      "data_use": null,
+      "note": ""
+    },
+    {
+      "id": "ops_report_generation_required",
+      "source_refs": [
+        "s12"
+      ],
+      "kind": "EVENT_NORM",
+      "views": [
+        "O",
+        "A"
+      ],
+      "scope_id": "task",
+      "modality": "REQUIRED",
+      "subject": {
+        "kind": "EVENT",
+        "id": "ops_report_create"
+      },
+      "applicability": null,
+      "body": {
+        "kind": "EXPRESSION",
+        "id": "ops_report_created"
+      },
+      "data_use": null,
+      "note": ""
+    },
+    {
+      "id": "dev_report_generation_at_diagnosis_end",
+      "source_refs": [
+        "s12"
+      ],
+      "kind": "CONSTRAINT",
+      "views": [
+        "O",
+        "P"
+      ],
+      "scope_id": "task",
+      "modality": "REQUIRED",
+      "subject": {
+        "kind": "EVENT",
+        "id": "dev_report_create"
+      },
+      "applicability": null,
+      "body": {
+        "kind": "EXPRESSION",
+        "id": "dev_report_generation_time"
+      },
+      "data_use": null,
+      "note": "本次报告生成完成时点等于对应诊断结束时点。"
+    },
+    {
+      "id": "ops_report_generation_at_diagnosis_end",
+      "source_refs": [
+        "s12"
+      ],
+      "kind": "CONSTRAINT",
+      "views": [
+        "O",
+        "P"
+      ],
+      "scope_id": "task",
+      "modality": "REQUIRED",
+      "subject": {
+        "kind": "EVENT",
+        "id": "ops_report_create"
+      },
+      "applicability": null,
+      "body": {
+        "kind": "EXPRESSION",
+        "id": "ops_report_generation_time"
+      },
+      "data_use": null,
+      "note": "本次报告生成完成时点等于对应诊断结束时点。"
+    }
+  ],
+  "issues": [
+    {
+      "id": "contract_resource_missing",
+      "source_refs": [
+        "s1"
+      ],
+      "kind": "EXPRESSION_GAP",
+      "targets": [
+        {
+          "kind": "EVENT",
+          "id": "task"
+        }
+      ],
+      "field_path": "resources.contract",
+      "alternatives": [],
+      "reason": "RESOURCE_CONTRACT_MISMATCH：未提供技能指定的同版本CONTRACT.md；已提供的语义说明、注册表及Schema不能替代该合同资源，不能确认合同符合性。"
+    },
+    {
+      "id": "diagnosis_closed_domain_gap",
+      "source_refs": [
+        "s6"
+      ],
+      "kind": "EXPRESSION_GAP",
+      "targets": [
+        {
+          "kind": "EVENT",
+          "id": "dev_diagnosis"
+        },
+        {
+          "kind": "EVENT",
+          "id": "ops_diagnosis"
+        },
+        {
+          "kind": "EXPRESSION",
+          "id": "task_events"
+        }
+      ],
+      "field_path": "requirements",
+      "alternatives": [],
+      "reason": "原文要求全部诊断仅限两个指定事件且不得重试。给定注册表没有诊断类别或模板归属提取算子，OTHER无法区分诊断与其他动作；该开放域边界仍无法精确表达，不以禁止所有OTHER、空序列或查询快照替代。"
+    },
+    {
+      "id": "slot_binding_gap",
+      "source_refs": [
+        "s11"
+      ],
+      "kind": "EXPRESSION_GAP",
+      "targets": [
+        {
+          "kind": "ENTITY",
+          "id": "test_slot"
+        },
+        {
+          "kind": "EVENT",
+          "id": "dev_diagnosis"
+        },
+        {
+          "kind": "EVENT",
+          "id": "ops_diagnosis"
+        },
+        {
+          "kind": "REQUIREMENT",
+          "id": "slot_nonoverlap"
+        }
+      ],
+      "field_path": "events.roles",
+      "alternatives": [],
+      "reason": "两个执行区间不重叠且允许端点相接已表达；给定角色和算子没有资源占用关系，仍无法绑定两个诊断在整个半开执行区间独占同一测试槽位，实体身份或执行环境不能替代该关系。"
+    },
+    {
+      "id": "report_generation_time_gap",
+      "source_refs": [
+        "s12"
+      ],
+      "kind": "UNSPECIFIED",
+      "targets": [
+        {
+          "kind": "EVENT",
+          "id": "dev_report_create"
+        },
+        {
+          "kind": "EVENT",
+          "id": "ops_report_create"
+        }
+      ],
+      "field_path": "events.generation_start_and_duration",
+      "alternatives": [],
+      "reason": "生成动作及其完成时点等于对应诊断结束的约束已补充。原文未另行指定生成动作的开始时点、执行时长或执行者，不补零时长或人员身份。"
+    }
+  ],
+  "coverage": [
+    {
+      "source_refs": [
+        "s1"
+      ],
+      "node_refs": [
+        {
+          "kind": "EVENT",
+          "id": "organize"
+        },
+        {
+          "kind": "REQUIREMENT",
+          "id": "organize_required"
+        }
+      ],
+      "status": "EXPRESSED",
+      "reason": "PM组织动作及义务独立表达。"
+    },
+    {
+      "source_refs": [
+        "s2"
+      ],
+      "node_refs": [
+        {
+          "kind": "REQUIREMENT",
+          "id": "inputs_only"
+        },
+        {
+          "kind": "REQUIREMENT",
+          "id": "dev_input_use"
+        },
+        {
+          "kind": "REQUIREMENT",
+          "id": "ops_input_use"
+        }
+      ],
+      "status": "EXPRESSED",
+      "reason": "任务外部输入集合受SUBSET限制；实际消费者分别绑定。"
+    },
+    {
+      "source_refs": [
+        "s3"
+      ],
+      "node_refs": [
+        {
+          "kind": "REQUIREMENT",
+          "id": "environment_only"
+        },
+        {
+          "kind": "VARIABLE",
+          "id": "event"
+        }
+      ],
+      "status": "EXPRESSED",
+      "reason": "全称域为任务事件，包含后续事件。"
+    },
+    {
+      "source_refs": [
+        "s4"
+      ],
+      "node_refs": [
+        {
+          "kind": "EVENT",
+          "id": "dev_diagnosis"
+        },
+        {
+          "kind": "REQUIREMENT",
+          "id": "dev_required"
+        }
+      ],
+      "status": "EXPRESSED",
+      "reason": "DEV针对固定输入完成一个指定诊断事件。"
+    },
+    {
+      "source_refs": [
+        "s5"
+      ],
+      "node_refs": [
+        {
+          "kind": "EVENT",
+          "id": "ops_diagnosis"
+        },
+        {
+          "kind": "REQUIREMENT",
+          "id": "ops_required"
+        }
+      ],
+      "status": "EXPRESSED",
+      "reason": "OPS针对固定输入完成一个指定诊断事件。"
+    },
+    {
+      "source_refs": [
+        "s6"
+      ],
+      "node_refs": [
+        {
+          "kind": "EVENT",
+          "id": "dev_diagnosis"
+        },
+        {
+          "kind": "EVENT",
+          "id": "ops_diagnosis"
+        },
+        {
+          "kind": "EXPRESSION",
+          "id": "task_events"
+        }
+      ],
+      "status": "GAP",
+      "reason": "两个指定完成义务已保留；缺少诊断类别或模板归属提取算子，开放任务域中仅允许这两次诊断及禁止重试的边界仍有表达缺口。"
+    },
+    {
+      "source_refs": [
+        "s7"
+      ],
+      "node_refs": [
+        {
+          "kind": "VARIABLE",
+          "id": "dev_duration"
+        },
+        {
+          "kind": "REQUIREMENT",
+          "id": "dev_time"
+        }
+      ],
+      "status": "EXPRESSED",
+      "reason": "精确分钟端点、闭区间与结束等于开始加执行时长。"
+    },
+    {
+      "source_refs": [
+        "s8"
+      ],
+      "node_refs": [
+        {
+          "kind": "VARIABLE",
+          "id": "ops_duration"
+        },
+        {
+          "kind": "REQUIREMENT",
+          "id": "ops_time"
+        }
+      ],
+      "status": "EXPRESSED",
+      "reason": "精确秒端点、闭区间与执行时长绑定。"
+    },
+    {
+      "source_refs": [
+        "s9"
+      ],
+      "node_refs": [
+        {
+          "kind": "REQUIREMENT",
+          "id": "execution_sum"
+        }
+      ],
+      "status": "EXPRESSED",
+      "reason": "仅两个实际诊断时长相加，和不超过70秒。"
+    },
+    {
+      "source_refs": [
+        "s10"
+      ],
+      "node_refs": [
+        {
+          "kind": "EXPRESSION",
+          "id": "nonoverlap"
+        }
+      ],
+      "status": "EXPRESSED",
+      "reason": "两种可选次序均保留。"
+    },
+    {
+      "source_refs": [
+        "s11"
+      ],
+      "node_refs": [
+        {
+          "kind": "ENTITY",
+          "id": "test_slot"
+        },
+        {
+          "kind": "REQUIREMENT",
+          "id": "slot_nonoverlap"
+        }
+      ],
+      "status": "GAP",
+      "reason": "半开执行区间不重叠且允许端点相接已表达；整个执行区间独占同一槽位的占用关系仍缺少结构表达能力。"
+    },
+    {
+      "source_refs": [
+        "s12"
+      ],
+      "node_refs": [
+        {
+          "kind": "ENTITY",
+          "id": "dev_report"
+        },
+        {
+          "kind": "ENTITY",
+          "id": "ops_report"
+        },
+        {
+          "kind": "EVENT",
+          "id": "dev_diagnosis"
+        },
+        {
+          "kind": "EVENT",
+          "id": "ops_diagnosis"
+        },
+        {
+          "kind": "EVENT",
+          "id": "dev_report_create"
+        },
+        {
+          "kind": "EVENT",
+          "id": "ops_report_create"
+        },
+        {
+          "kind": "REQUIREMENT",
+          "id": "dev_report_generation_required"
+        },
+        {
+          "kind": "REQUIREMENT",
+          "id": "ops_report_generation_required"
+        },
+        {
+          "kind": "REQUIREMENT",
+          "id": "dev_report_generation_at_diagnosis_end"
+        },
+        {
+          "kind": "REQUIREMENT",
+          "id": "ops_report_generation_at_diagnosis_end"
+        }
+      ],
+      "status": "EXPRESSED",
+      "reason": "分别生成同一身份的两份本次报告；CREATE完成义务及EVENT_END等式明确绑定报告生成完成时点与各自诊断结束时点，不增加生成时长或执行者要求。"
+    },
+    {
+      "source_refs": [
+        "s13"
+      ],
+      "node_refs": [
+        {
+          "kind": "EVENT",
+          "id": "deliver"
+        },
+        {
+          "kind": "REQUIREMENT",
+          "id": "delivery_required"
+        }
+      ],
+      "status": "EXPRESSED",
+      "reason": "PM无条件承担交付两份报告给ADMIN的义务。"
+    },
+    {
+      "source_refs": [
+        "s14"
+      ],
+      "node_refs": [
+        {
+          "kind": "REQUIREMENT",
+          "id": "delivery_necessary_gate"
+        },
+        {
+          "kind": "REQUIREMENT",
+          "id": "dev_report_delivery_use"
+        },
+        {
+          "kind": "REQUIREMENT",
+          "id": "ops_report_delivery_use"
+        }
+      ],
+      "status": "EXPRESSED",
+      "reason": "交付开始检查两项完成，结束时点均不晚于交付开始，允许相等。"
+    },
+    {
+      "source_refs": [
+        "s15"
+      ],
+      "node_refs": [
+        {
+          "kind": "VARIABLE",
+          "id": "total_duration"
+        },
+        {
+          "kind": "REQUIREMENT",
+          "id": "task_total_time"
+        }
+      ],
+      "status": "EXPRESSED",
+      "reason": "根任务总耗时至少1分钟且严格小于2分钟，包括等待和交付。"
+    },
+    {
+      "source_refs": [
+        "s16"
+      ],
+      "node_refs": [
+        {
+          "kind": "REQUIREMENT",
+          "id": "input_modification_boundary"
+        },
+        {
+          "kind": "REQUIREMENT",
+          "id": "production_access_boundary"
+        }
+      ],
+      "status": "EXPRESSED",
+      "reason": "任务全域禁止修改或写入两个输入及访问生产目标，不附加环境例外。"
+    },
+    {
+      "source_refs": [
+        "s17"
+      ],
+      "node_refs": [
+        {
+          "kind": "REQUIREMENT",
+          "id": "root_completion"
+        },
+        {
+          "kind": "EXPRESSION",
+          "id": "received_dev_report"
+        },
+        {
+          "kind": "EXPRESSION",
+          "id": "received_ops_report"
+        }
+      ],
+      "status": "EXPRESSED",
+      "reason": "任务完成与两项完成及ADMIN完整收到两份本次报告双向等价。"
+    },
+    {
+      "source_refs": [
+        "s18"
+      ],
+      "node_refs": [
+        {
+          "kind": "EXPRESSION",
+          "id": "completion_condition"
+        },
+        {
+          "kind": "REQUIREMENT",
+          "id": "root_completion"
+        }
+      ],
+      "status": "EXPRESSED",
+      "reason": "完成条件使用EVENT_COMPLETED，不引入成功或健康结论前提。"
+    }
+  ],
+  "root_task": {
+    "kind": "EVENT",
+    "id": "task"
+  },
+  "sequences": []
+}

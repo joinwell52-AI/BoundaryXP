@@ -1,0 +1,145 @@
+{
+  "checks": [
+    {"candidate_id":"pm","verdict":"SUPPORT","reason":"PM 明确参与组织，并作为通知接收者；参与依据来自谓词绑定而非角色名称。","sources":[{"quote":"请 PM 组织","clause_id":"c1","occurrence":0,"context_anchor":null},{"quote":"通知 PM","clause_id":"c1","occurrence":0,"context_anchor":null}]},
+    {"candidate_id":"organize","verdict":"SUPPORT","reason":"请求明确要求 PM 组织读取；组织对后续定位与产出的管辖范围仍有歧义。","sources":[{"quote":"请 PM 组织读取 app.log 与 error.log","clause_id":"c1","occurrence":0,"context_anchor":null}]},
+    {"candidate_id":"read","verdict":"SUPPORT","reason":"读取是组织的明确补语，处于请求范围内；未明确指定实际读取者。","sources":[{"quote":"请 PM 组织读取 app.log 与 error.log","clause_id":"c1","occurrence":0,"context_anchor":null}]},
+    {"candidate_id":"app_log","verdict":"SUPPORT","reason":"明确为读取输入；READ_ONLY_INPUT 可表示本次读取用途，不能据此推导全局禁止修改。","sources":[{"quote":"读取 app.log 与 error.log","clause_id":"c1","occurrence":0,"context_anchor":null}]},
+    {"candidate_id":"error_log","verdict":"SUPPORT","reason":"明确为并列读取输入；未被表述为输出。","sources":[{"quote":"读取 app.log 与 error.log","clause_id":"c1","occurrence":0,"context_anchor":null}]},
+    {"candidate_id":"locate","verdict":"SUPPORT","reason":"定位重复报错是明确请求内容；MAIN/TASK 与组织补语两种附着尚未消歧。","sources":[{"quote":"请 PM 组织读取 app.log 与 error.log，定位重复报错并形成 incident-notes.md","clause_id":"c1","occurrence":0,"context_anchor":null}]},
+    {"candidate_id":"repeated_errors","verdict":"SUPPORT","reason":"重复报错是定位对象，没有生成该对象的要求。","sources":[{"quote":"定位重复报错","clause_id":"c1","occurrence":0,"context_anchor":null}]},
+    {"candidate_id":"generate_notes","verdict":"SUPPORT","reason":"形成文件明确是要求的产出行为；其是否仍受组织管辖存在附着歧义。","sources":[{"quote":"请 PM 组织读取 app.log 与 error.log，定位重复报错并形成 incident-notes.md","clause_id":"c1","occurrence":0,"context_anchor":null}]},
+    {"candidate_id":"notes","verdict":"SUPPORT","reason":"文件是形成行为的生成输出。","sources":[{"quote":"形成 incident-notes.md","clause_id":"c1","occurrence":0,"context_anchor":null}]},
+    {"candidate_id":"query","verdict":"SUPPORT","reason":"查询是每次重试计数的适用单位；UNSTATED 保留了未独立要求查询这一点。","sources":[{"quote":"单次查询最多重试 3 次","clause_id":"c1","occurrence":0,"context_anchor":null}]},
+    {"candidate_id":"retry","verdict":"SUPPORT","reason":"最多重试表达受上限约束的许可，不要求实际进行重试。","sources":[{"quote":"单次查询最多重试 3 次","clause_id":"c1","occurrence":0,"context_anchor":null}]},
+    {"candidate_id":"retry_cap","verdict":"SUPPORT","reason":"明确规定每次查询的重试上限为三次。","sources":[{"quote":"单次查询最多重试 3 次","clause_id":"c1","occurrence":0,"context_anchor":null}]},
+    {"candidate_id":"duration_cap","verdict":"SUPPORT","reason":"整个任务的时长上限明确为三十分钟。","sources":[{"quote":"整个任务不得超过 30 分钟","clause_id":"c1","occurrence":0,"context_anchor":null}]},
+    {"candidate_id":"leak_found","verdict":"SUPPORT","reason":"发现泄露是条件前件状态，不是独立要求执行的发现行为。","sources":[{"quote":"若发现凭据泄露","clause_id":"c1","occurrence":0,"context_anchor":null}]},
+    {"candidate_id":"credential_leak","verdict":"SUPPORT","reason":"凭据泄露是条件中发现的内容，没有断言其已经发生。","sources":[{"quote":"若发现凭据泄露","clause_id":"c1","occurrence":0,"context_anchor":null}]},
+    {"candidate_id":"stop","verdict":"SUPPORT","reason":"停止明确是泄露发现条件下的必需后件。","sources":[{"quote":"若发现凭据泄露，应立即停止","clause_id":"c1","occurrence":0,"context_anchor":null}]},
+    {"candidate_id":"notify","verdict":"SUPPORT","reason":"通知 PM 与停止并列，受条件及应的要求约束。","sources":[{"quote":"若发现凭据泄露，应立即停止并通知 PM","clause_id":"c1","occurrence":0,"context_anchor":null}]},
+    {"candidate_id":"immediate","verdict":"NO_EVIDENCE","reason":"立即明确修饰停止，并可能共享给通知；没有依据把它归属为整个 TASK 的属性。","sources":[{"quote":"应立即停止并通知 PM","clause_id":"c1","occurrence":0,"context_anchor":null}]},
+    {"candidate_id":"upload","verdict":"SUPPORT","reason":"上传明确被禁止；该禁止是否处于若的后件范围内未被消歧，MAIN/TASK 的独立作用域并非唯一解释。","sources":[{"quote":"若发现凭据泄露，应立即停止并通知 PM，不得向外部服务上传日志","clause_id":"c1","occurrence":0,"context_anchor":null}]},
+    {"candidate_id":"external_services","verdict":"SUPPORT","reason":"外部服务是被禁止上传的目的接收方。","sources":[{"quote":"向外部服务上传日志","clause_id":"c1","occurrence":0,"context_anchor":null}]},
+    {"candidate_id":"logs","verdict":"SUPPORT","reason":"日志是上传对象，并非生成输出；其与前述两个文件的指称范围仍开放。","sources":[{"quote":"读取 app.log 与 error.log","clause_id":"c1","occurrence":0,"context_anchor":null},{"quote":"上传日志","clause_id":"c1","occurrence":0,"context_anchor":null}]},
+    {"candidate_id":"r_organizer","verdict":"SUPPORT","reason":"PM 是组织行为的明确施事，不能由此自动成为全部操作的直接执行者。","sources":[{"quote":"PM 组织","clause_id":"c1","occurrence":0,"context_anchor":null}]},
+    {"candidate_id":"r_read_complement","verdict":"SUPPORT","reason":"组织读取支持读取作为组织行为的补语组成。","sources":[{"quote":"组织读取","clause_id":"c1","occurrence":0,"context_anchor":null}]},
+    {"candidate_id":"r_read_app","verdict":"SUPPORT","reason":"app.log 是读取对象。","sources":[{"quote":"读取 app.log","clause_id":"c1","occurrence":0,"context_anchor":null}]},
+    {"candidate_id":"r_read_error","verdict":"SUPPORT","reason":"error.log 与 app.log 共享读取谓词。","sources":[{"quote":"读取 app.log 与 error.log","clause_id":"c1","occurrence":0,"context_anchor":null}]},
+    {"candidate_id":"r_logs_conjunction","verdict":"SUPPORT","reason":"与明确连接两个输入文件。","sources":[{"quote":"app.log 与 error.log","clause_id":"c1","occurrence":0,"context_anchor":null}]},
+    {"candidate_id":"r_locate_errors","verdict":"SUPPORT","reason":"重复报错明确是定位对象。","sources":[{"quote":"定位重复报错","clause_id":"c1","occurrence":0,"context_anchor":null}]},
+    {"candidate_id":"r_notes_output","verdict":"SUPPORT","reason":"incident-notes.md 是形成行为的结果。","sources":[{"quote":"形成 incident-notes.md","clause_id":"c1","occurrence":0,"context_anchor":null}]},
+    {"candidate_id":"r_locate_generate","verdict":"SUPPORT","reason":"并明确连接定位与形成，不额外表达完成门槛。","sources":[{"quote":"定位重复报错并形成 incident-notes.md","clause_id":"c1","occurrence":0,"context_anchor":null}]},
+    {"candidate_id":"r_retry_query","verdict":"SUPPORT","reason":"单次查询限定重试所属的查询实例，不支持把三次解释为总查询次数。","sources":[{"quote":"单次查询最多重试 3 次","clause_id":"c1","occurrence":0,"context_anchor":null}]},
+    {"candidate_id":"r_retry_limit","verdict":"SUPPORT","reason":"重试受每次查询三次的执行上限约束。","sources":[{"quote":"单次查询最多重试 3 次","clause_id":"c1","occurrence":0,"context_anchor":null}]},
+    {"candidate_id":"r_duration_limit","verdict":"SUPPORT","reason":"整个任务是时长上限的明确对象。","sources":[{"quote":"整个任务不得超过 30 分钟","clause_id":"c1","occurrence":0,"context_anchor":null}]},
+    {"candidate_id":"r_found_leak","verdict":"SUPPORT","reason":"泄露是条件状态中发现的内容。","sources":[{"quote":"发现凭据泄露","clause_id":"c1","occurrence":0,"context_anchor":null}]},
+    {"candidate_id":"r_stop_condition","verdict":"SUPPORT","reason":"若明确将发现泄露绑定为停止的条件。","sources":[{"quote":"若发现凭据泄露，应立即停止","clause_id":"c1","occurrence":0,"context_anchor":null}]},
+    {"candidate_id":"r_notify_condition","verdict":"SUPPORT","reason":"通知与停止共享明确的泄露发现条件。","sources":[{"quote":"若发现凭据泄露，应立即停止并通知 PM","clause_id":"c1","occurrence":0,"context_anchor":null}]},
+    {"candidate_id":"r_stop_task","verdict":"SUPPORT","reason":"当前任务是省略停止对象的语境支持解释；原文未明说停止整个任务还是当前处理活动。","sources":[{"quote":"整个任务不得超过 30 分钟","clause_id":"c1","occurrence":0,"context_anchor":null},{"quote":"若发现凭据泄露，应立即停止","clause_id":"c1","occurrence":0,"context_anchor":null}]},
+    {"candidate_id":"r_notify_pm","verdict":"SUPPORT","reason":"PM 是通知接收者。","sources":[{"quote":"通知 PM","clause_id":"c1","occurrence":0,"context_anchor":null}]},
+    {"candidate_id":"r_stop_notify","verdict":"SUPPORT","reason":"并明确连接停止和通知。","sources":[{"quote":"停止并通知 PM","clause_id":"c1","occurrence":0,"context_anchor":null}]},
+    {"candidate_id":"r_stop_immediate","verdict":"SUPPORT","reason":"立即直接修饰停止。","sources":[{"quote":"立即停止","clause_id":"c1","occurrence":0,"context_anchor":null}]},
+    {"candidate_id":"r_notify_immediate","verdict":"SUPPORT","reason":"前置副词修饰整个并列谓词是可支持解释，但 SHARED_EXPLICIT 把可共享范围说得过于确定；也可能只直接修饰停止。","sources":[{"quote":"立即停止并通知 PM","clause_id":"c1","occurrence":0,"context_anchor":null}]},
+    {"candidate_id":"r_forbid_upload","verdict":"SUPPORT","reason":"不得支持上传禁令；TASK 下无条件禁令与条件后件禁令存在作用域竞争。","sources":[{"quote":"若发现凭据泄露，应立即停止并通知 PM，不得向外部服务上传日志","clause_id":"c1","occurrence":0,"context_anchor":null}]},
+    {"candidate_id":"r_upload_logs","verdict":"SUPPORT","reason":"日志是上传内容。","sources":[{"quote":"上传日志","clause_id":"c1","occurrence":0,"context_anchor":null}]},
+    {"candidate_id":"r_upload_recipient","verdict":"SUPPORT","reason":"向外部服务明确绑定上传接收方，不表示外部服务执行上传。","sources":[{"quote":"向外部服务上传日志","clause_id":"c1","occurrence":0,"context_anchor":null}]},
+    {"candidate_id":"q_retry","verdict":"SUPPORT","reason":"LTE 三次准确表达每次查询的重试执行上限，不是输出或验收数量。","sources":[{"quote":"单次查询最多重试 3 次","clause_id":"c1","occurrence":0,"context_anchor":null}]},
+    {"candidate_id":"q_duration","verdict":"SUPPORT","reason":"不得超过支持整个任务时长小于等于三十分钟，不是要求恰好运行三十分钟。","sources":[{"quote":"整个任务不得超过 30 分钟","clause_id":"c1","occurrence":0,"context_anchor":null}]},
+    {"candidate_id":"cond_stop","verdict":"SUPPORT","reason":"状态引用准确保留停止的条件前件，没有提升为必需发现行为。","sources":[{"quote":"若发现凭据泄露，应立即停止","clause_id":"c1","occurrence":0,"context_anchor":null}]},
+    {"candidate_id":"cond_notify","verdict":"SUPPORT","reason":"状态引用准确保留通知的条件前件。","sources":[{"quote":"若发现凭据泄露，应立即停止并通知 PM","clause_id":"c1","occurrence":0,"context_anchor":null}]}
+  ],
+  "findings": [
+    {
+      "id":"f_organize_scope",
+      "kind":"AMBIGUITY_COLLAPSED",
+      "candidate_ids":["organize","locate","generate_notes","r_read_complement"],
+      "sources":[{"quote":"请 PM 组织读取 app.log 与 error.log，定位重复报错并形成 incident-notes.md","clause_id":"c1","occurrence":0,"context_anchor":null}],
+      "reason":"图只将读取纳入组织补语，固定定位与形成属于 TASK 主层。逗号也允许组织覆盖读取、定位与形成整组操作；另一解释允许后续谓词与组织并列。该竞争影响组织范围及 PM 与后续行为的参与关系，应保留而不能指定实际读取者。"
+    },
+    {
+      "id":"f_immediate_owner",
+      "kind":"WRONG_BINDING",
+      "candidate_ids":["immediate","r_stop_immediate","r_notify_immediate"],
+      "sources":[{"quote":"若发现凭据泄露，应立即停止并通知 PM","clause_id":"c1","occurrence":0,"context_anchor":null}],
+      "reason":"immediate 的 TASK 所有者缺乏依据。立即是条件后件内的局部时间修饰，明确绑定停止，是否共享给通知另需保留范围歧义。"
+    },
+    {
+      "id":"f_immediate_scope",
+      "kind":"AMBIGUITY_COLLAPSED",
+      "candidate_ids":["r_notify_immediate"],
+      "sources":[{"quote":"立即停止并通知 PM","clause_id":"c1","occurrence":0,"context_anchor":null}],
+      "reason":"立即可以覆盖整个并列谓词，也可以只直接修饰停止。SHARED_EXPLICIT 和空 unresolved 未保留这两种解释。通知受应约束这一要求本身是明确的。"
+    },
+    {
+      "id":"f_upload_scope",
+      "kind":"AMBIGUITY_COLLAPSED",
+      "candidate_ids":["upload","r_forbid_upload"],
+      "sources":[{"quote":"若发现凭据泄露，应立即停止并通知 PM，不得向外部服务上传日志","clause_id":"c1","occurrence":0,"context_anchor":null}],
+      "reason":"不得始终表达禁止，但逗号后的禁令可以是独立任务约束，也可以继续处于若的后件范围。图固定 MAIN/TASK 且未保留条件范围竞争；不能靠安全偏好确定原文作用域。"
+    },
+    {
+      "id":"f_stop_target",
+      "kind":"AMBIGUITY_COLLAPSED",
+      "candidate_ids":["r_stop_task"],
+      "sources":[{"quote":"整个任务不得超过 30 分钟","clause_id":"c1","occurrence":0,"context_anchor":null},{"quote":"若发现凭据泄露，应立即停止","clause_id":"c1","occurrence":0,"context_anchor":null}],
+      "reason":"停止对象被省略。整个任务提供 TASK 解读的语境，但当前查询或日志处理活动也可能是省略对象；STRUCTURAL 绑定未保留该指称不确定性。"
+    },
+    {
+      "id":"f_logs_reference",
+      "kind":"MISSED_SEMANTICS",
+      "candidate_ids":["app_log","error_log","logs"],
+      "sources":[{"quote":"读取 app.log 与 error.log","clause_id":"c1","occurrence":0,"context_anchor":null},{"quote":"不得向外部服务上传日志","clause_id":"c1","occurrence":0,"context_anchor":null}],
+      "reason":"日志与前述日志文件存在可能的回指范围：可以指本次处理的两个文件，也可以是更一般的日志类别。图没有强制等同是合理的，但空 unresolved 未记录影响禁令对象范围的指称歧义。"
+    }
+  ],
+  "coverage": [
+    {
+      "region_id":"c1",
+      "disposition":"AMBIGUOUS",
+      "candidate_ids":["pm","organize","read","app_log","error_log","locate","repeated_errors","generate_notes","notes","query","retry","retry_cap","duration_cap","leak_found","credential_leak","stop","notify","immediate","upload","external_services","logs","r_organizer","r_read_complement","r_read_app","r_read_error","r_logs_conjunction","r_locate_errors","r_notes_output","r_locate_generate","r_retry_query","r_retry_limit","r_duration_limit","r_found_leak","r_stop_condition","r_notify_condition","r_stop_task","r_notify_pm","r_stop_notify","r_stop_immediate","r_notify_immediate","r_forbid_upload","r_upload_logs","r_upload_recipient","q_retry","q_duration","cond_stop","cond_notify"],
+      "reason":"已覆盖读取输入、定位对象、生成输出、每查询重试上限、整个任务时长上限、泄露条件、停止与通知及上传禁令。组织范围、立即的共享范围、禁令条件范围、停止对象及日志指称仍存在未保留的竞争解释；立即的 TASK 属性归属也不可靠，不能判为完整边界解析。"
+    }
+  ],
+  "additional_candidates": {
+    "nodes": [],
+    "relations": [],
+    "expressions": [],
+    "unresolved": [
+      {
+        "id":"u_organize_scope",
+        "kind":"UNRESOLVED_SCOPE",
+        "alternatives":["组织管辖读取，定位与形成另属主层谓词","组织管辖读取、定位与形成整组操作"],
+        "sources":[{"quote":"请 PM 组织读取 app.log 与 error.log，定位重复报错并形成 incident-notes.md","clause_id":"c1","occurrence":0,"context_anchor":null}],
+        "reason":"逗号未唯一确定组织补语的结束位置，也未唯一确定后续操作施事。"
+      },
+      {
+        "id":"u_immediate_scope",
+        "kind":"UNRESOLVED_SCOPE",
+        "alternatives":["立即只直接修饰停止","立即共享修饰停止与通知"],
+        "sources":[{"quote":"应立即停止并通知 PM","clause_id":"c1","occurrence":0,"context_anchor":null}],
+        "reason":"并列谓词前的副词存在局部与共享范围竞争。"
+      },
+      {
+        "id":"u_upload_scope",
+        "kind":"UNRESOLVED_SCOPE",
+        "alternatives":["上传禁令为独立任务约束","上传禁令属于发现泄露条件的后件"],
+        "sources":[{"quote":"若发现凭据泄露，应立即停止并通知 PM，不得向外部服务上传日志","clause_id":"c1","occurrence":0,"context_anchor":null}],
+        "reason":"条件后件与后续禁令之间只有逗号，未显式限定若的范围。"
+      },
+      {
+        "id":"u_stop_target",
+        "kind":"UNRESOLVED_COREFERENCE",
+        "alternatives":["停止整个任务","停止当前查询或日志处理活动"],
+        "sources":[{"quote":"单次查询最多重试 3 次，整个任务不得超过 30 分钟","clause_id":"c1","occurrence":0,"context_anchor":null},{"quote":"请 PM 组织读取 app.log 与 error.log，定位重复报错并形成 incident-notes.md","clause_id":"c1","occurrence":0,"context_anchor":null},{"quote":"应立即停止","clause_id":"c1","occurrence":0,"context_anchor":null}],
+        "reason":"停止宾语省略，语境支持多个粒度的活动对象。"
+      },
+      {
+        "id":"u_logs_reference",
+        "kind":"UNRESOLVED_COREFERENCE",
+        "alternatives":["日志回指 app.log 与 error.log","日志指更一般的日志类别"],
+        "sources":[{"quote":"读取 app.log 与 error.log","clause_id":"c1","occurrence":0,"context_anchor":null},{"quote":"不得向外部服务上传日志","clause_id":"c1","occurrence":0,"context_anchor":null}],
+        "reason":"原文没有将日志显式限定为两个已命名文件，也没有明确排除回指。"
+      }
+    ]
+  }
+}

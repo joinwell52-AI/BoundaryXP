@@ -1,0 +1,1 @@
+The whole task must finish within 39 minutes. Jordan must coordinate the task: verify event-5784.csv in test cluster. Compare snapshot-18328.json as well. Deliver audit-796357.md. Send the final report to Rowan.

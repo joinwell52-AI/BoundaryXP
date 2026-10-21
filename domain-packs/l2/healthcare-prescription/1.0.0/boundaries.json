@@ -1,0 +1,47 @@
+{
+  "schema": "boundx-domain-boundaries/v1",
+  "packId": "healthcare-prescription",
+  "version": "1.0.0",
+  "risks": [
+    {
+      "id": "risk.unqualified_prescription",
+      "category": "medical-license-violation",
+      "label": {
+        "zh-CN": "无执业处方权医师越权开立处方",
+        "en": "Prescribing without medical practitioner license"
+      },
+      "frameIds": [
+        "medical.issue_prescription"
+      ],
+      "decision": null,
+      "becomesBOnlyWhen": "explicit_FORBID_or_effective_policy_binding"
+    },
+    {
+      "id": "risk.contraindicated_dispensing",
+      "category": "patient-safety-risk",
+      "label": {
+        "zh-CN": "存在严重禁忌症未经双重复核强行发药",
+        "en": "Dispensing contraindicated drugs without dual confirmation"
+      },
+      "frameIds": [
+        "medical.dispense_medication",
+        "medical.review_prescription"
+      ],
+      "decision": null,
+      "becomesBOnlyWhen": "explicit_FORBID_or_effective_policy_binding"
+    },
+    {
+      "id": "risk.single_sign_narcotics",
+      "category": "regulatory-violation",
+      "label": {
+        "zh-CN": "麻精特殊管制药品单人签字私自核发出库",
+        "en": "Single-signature release of controlled narcotic drugs"
+      },
+      "frameIds": [
+        "medical.verify_narcotics"
+      ],
+      "decision": null,
+      "becomesBOnlyWhen": "explicit_FORBID_or_effective_policy_binding"
+    }
+  ]
+}

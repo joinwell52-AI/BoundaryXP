@@ -1,0 +1,5922 @@
+{
+  "format": "boundx-canonical-7plus1/028-r02.3",
+  "source_sha256": "d23733b8b85a6121a14c5debfd60bf4bb21869855f5902448c8aa378b5ebda54",
+  "slots": {
+    "I": {
+      "status": "ABSENT",
+      "openness": "OPEN",
+      "entries": []
+    },
+    "O": {
+      "status": "RESOLVED",
+      "openness": "CONSTRAINED",
+      "entries": [
+        {
+          "id": "bf:35344b0652a5524be96a",
+          "kind": "ROLE",
+          "status": "ACCEPTED",
+          "claim_ids": [
+            "cl_result",
+            "ent_report",
+            "evt_generate",
+            "cl_time",
+            "cl_count",
+            "cl_scope"
+          ],
+          "claim": {
+            "id": "cl_result",
+            "kind": "ROLE",
+            "event_id": "evt_generate",
+            "entity_id": "ent_report",
+            "role": "RESULT",
+            "expression_id": null,
+            "direction": null,
+            "temporal": null,
+            "quantity": null,
+            "scope_id": "evt_generate",
+            "requires": [],
+            "sources": [
+              {
+                "quote": "生成top.md",
+                "occurrence": 1,
+                "span": [
+                  9,
+                  17
+                ],
+                "source_sha256": "d23733b8b85a6121a14c5debfd60bf4bb21869855f5902448c8aa378b5ebda54"
+              },
+              {
+                "quote": "报告只列3个问题",
+                "occurrence": 1,
+                "span": [
+                  18,
+                  26
+                ],
+                "source_sha256": "d23733b8b85a6121a14c5debfd60bf4bb21869855f5902448c8aa378b5ebda54"
+              }
+            ],
+            "note": "报告指生成的top.md，保持同一产物实体。"
+          },
+          "event": {
+            "id": "evt_generate",
+            "predicate": "生成报告",
+            "kind": "ACTION",
+            "layer": "MAIN",
+            "use": "CURRENT_TASK",
+            "modality": "REQUIRED",
+            "polarity": "POSITIVE",
+            "owner_id": "ROOT",
+            "constraint_ids": [
+              "cl_time",
+              "cl_count"
+            ],
+            "requires": [],
+            "sources": [
+              {
+                "quote": "请PM在10分钟内生成top.md，报告只列3个问题。",
+                "occurrence": 1,
+                "span": [
+                  0,
+                  27
+                ],
+                "source_sha256": "d23733b8b85a6121a14c5debfd60bf4bb21869855f5902448c8aa378b5ebda54"
+              }
+            ]
+          },
+          "entity": {
+            "id": "ent_report",
+            "label": "top.md报告",
+            "type": "FILE",
+            "mentions": [
+              {
+                "quote": "top.md",
+                "occurrence": 1,
+                "span": [
+                  11,
+                  17
+                ],
+                "source_sha256": "d23733b8b85a6121a14c5debfd60bf4bb21869855f5902448c8aa378b5ebda54"
+              },
+              {
+                "quote": "报告",
+                "occurrence": 1,
+                "span": [
+                  18,
+                  20
+                ],
+                "source_sha256": "d23733b8b85a6121a14c5debfd60bf4bb21869855f5902448c8aa378b5ebda54"
+              }
+            ],
+            "alternatives": []
+          },
+          "expression": null,
+          "constraints": [
+            {
+              "id": "cl_time",
+              "kind": "QUANTITY",
+              "event_id": "evt_generate",
+              "entity_id": null,
+              "role": null,
+              "expression_id": null,
+              "direction": null,
+              "temporal": null,
+              "quantity": {
+                "metric": "生成时限",
+                "target_id": "evt_generate",
+                "comparator": "LTE",
+                "value": 10,
+                "unit": "分钟",
+                "use": "EXECUTION_LIMIT",
+                "count_scope": "ROOT"
+              },
+              "scope_id": "evt_generate",
+              "requires": [],
+              "sources": [
+                {
+                  "quote": "在10分钟内生成top.md",
+                  "occurrence": 1,
+                  "span": [
+                    3,
+                    17
+                  ],
+                  "source_sha256": "d23733b8b85a6121a14c5debfd60bf4bb21869855f5902448c8aa378b5ebda54"
+                }
+              ],
+              "note": "执行时限，不作为根任务完成条件。",
+              "expression": null
+            },
+            {
+              "id": "cl_count",
+              "kind": "QUANTITY",
+              "event_id": "evt_generate",
+              "entity_id": null,
+              "role": null,
+              "expression_id": null,
+              "direction": null,
+              "temporal": null,
+              "quantity": {
+                "metric": "报告所列问题数量",
+                "target_id": "ent_report",
+                "comparator": "EQ",
+                "value": 3,
+                "unit": "个问题",
+                "use": "OUTPUT_CONTENT",
+                "count_scope": "ent_report"
+              },
+              "scope_id": "ent_report",
+              "requires": [
+                "cl_result"
+              ],
+              "sources": [
+                {
+                  "quote": "报告只列3个问题",
+                  "occurrence": 1,
+                  "span": [
+                    18,
+                    26
+                  ],
+                  "source_sha256": "d23733b8b85a6121a14c5debfd60bf4bb21869855f5902448c8aa378b5ebda54"
+                }
+              ],
+              "note": "产物内容为3个问题，不是执行次数限制。",
+              "expression": null
+            }
+          ],
+          "content_quantities": [
+            {
+              "id": "cl_count",
+              "kind": "QUANTITY",
+              "event_id": "evt_generate",
+              "entity_id": null,
+              "role": null,
+              "expression_id": null,
+              "direction": null,
+              "temporal": null,
+              "quantity": {
+                "metric": "报告所列问题数量",
+                "target_id": "ent_report",
+                "comparator": "EQ",
+                "value": 3,
+                "unit": "个问题",
+                "use": "OUTPUT_CONTENT",
+                "count_scope": "ent_report"
+              },
+              "scope_id": "ent_report",
+              "requires": [
+                "cl_result"
+              ],
+              "sources": [
+                {
+                  "quote": "报告只列3个问题",
+                  "occurrence": 1,
+                  "span": [
+                    18,
+                    26
+                  ],
+                  "source_sha256": "d23733b8b85a6121a14c5debfd60bf4bb21869855f5902448c8aa378b5ebda54"
+                }
+              ],
+              "note": "产物内容为3个问题，不是执行次数限制。"
+            }
+          ],
+          "content_scopes": [
+            {
+              "id": "cl_scope",
+              "kind": "SCOPE",
+              "event_id": "evt_generate",
+              "entity_id": null,
+              "role": null,
+              "expression_id": "expr_content_scope",
+              "direction": null,
+              "temporal": null,
+              "quantity": null,
+              "scope_id": "ent_report",
+              "requires": [
+                "cl_result"
+              ],
+              "sources": [
+                {
+                  "quote": "报告只列3个问题",
+                  "occurrence": 1,
+                  "span": [
+                    18,
+                    26
+                  ],
+                  "source_sha256": "d23733b8b85a6121a14c5debfd60bf4bb21869855f5902448c8aa378b5ebda54"
+                }
+              ],
+              "note": "报告所列内容仅限问题；不另造独立禁止动作。",
+              "expression": {
+                "id": "expr_content_scope",
+                "op": "STATE",
+                "operands": [],
+                "state": {
+                  "predicate": "所列内容仅限问题",
+                  "event_id": null,
+                  "args": [
+                    "ent_report",
+                    "ent_problems"
+                  ],
+                  "polarity": "POSITIVE"
+                },
+                "sources": [
+                  {
+                    "quote": "报告只列3个问题",
+                    "occurrence": 1,
+                    "span": [
+                      18,
+                      26
+                    ],
+                    "source_sha256": "d23733b8b85a6121a14c5debfd60bf4bb21869855f5902448c8aa378b5ebda54"
+                  }
+                ],
+                "children": []
+              }
+            }
+          ],
+          "sources": [
+            {
+              "quote": "生成top.md",
+              "occurrence": 1,
+              "span": [
+                9,
+                17
+              ],
+              "source_sha256": "d23733b8b85a6121a14c5debfd60bf4bb21869855f5902448c8aa378b5ebda54"
+            },
+            {
+              "quote": "报告只列3个问题",
+              "occurrence": 1,
+              "span": [
+                18,
+                26
+              ],
+              "source_sha256": "d23733b8b85a6121a14c5debfd60bf4bb21869855f5902448c8aa378b5ebda54"
+            },
+            {
+              "quote": "请PM在10分钟内生成top.md，报告只列3个问题。",
+              "occurrence": 1,
+              "span": [
+                0,
+                27
+              ],
+              "source_sha256": "d23733b8b85a6121a14c5debfd60bf4bb21869855f5902448c8aa378b5ebda54"
+            },
+            {
+              "quote": "在10分钟内生成top.md",
+              "occurrence": 1,
+              "span": [
+                3,
+                17
+              ],
+              "source_sha256": "d23733b8b85a6121a14c5debfd60bf4bb21869855f5902448c8aa378b5ebda54"
+            },
+            {
+              "quote": "报告只列3个问题",
+              "occurrence": 1,
+              "span": [
+                18,
+                26
+              ],
+              "source_sha256": "d23733b8b85a6121a14c5debfd60bf4bb21869855f5902448c8aa378b5ebda54"
+            },
+            {
+              "quote": "top.md",
+              "occurrence": 1,
+              "span": [
+                11,
+                17
+              ],
+              "source_sha256": "d23733b8b85a6121a14c5debfd60bf4bb21869855f5902448c8aa378b5ebda54"
+            },
+            {
+              "quote": "报告",
+              "occurrence": 1,
+              "span": [
+                18,
+                20
+              ],
+              "source_sha256": "d23733b8b85a6121a14c5debfd60bf4bb21869855f5902448c8aa378b5ebda54"
+            },
+            {
+              "quote": "报告只列3个问题",
+              "occurrence": 1,
+              "span": [
+                18,
+                26
+              ],
+              "source_sha256": "d23733b8b85a6121a14c5debfd60bf4bb21869855f5902448c8aa378b5ebda54"
+            },
+            {
+              "quote": "报告只列3个问题",
+              "occurrence": 1,
+              "span": [
+                18,
+                26
+              ],
+              "source_sha256": "d23733b8b85a6121a14c5debfd60bf4bb21869855f5902448c8aa378b5ebda54"
+            },
+            {
+              "quote": "问题",
+              "occurrence": 1,
+              "span": [
+                24,
+                26
+              ],
+              "source_sha256": "d23733b8b85a6121a14c5debfd60bf4bb21869855f5902448c8aa378b5ebda54"
+            }
+          ],
+          "slots": [
+            "O"
+          ],
+          "proof": {
+            "source_sha256": "d23733b8b85a6121a14c5debfd60bf4bb21869855f5902448c8aa378b5ebda54",
+            "claim_ids": [
+              "cl_result",
+              "ent_report",
+              "evt_generate",
+              "cl_time",
+              "cl_count",
+              "cl_scope"
+            ],
+            "provenance_refs": [
+              "cl_result",
+              "evt_generate",
+              "cl_time",
+              "cl_count",
+              "ent_report",
+              "cl_scope",
+              "expr_content_scope",
+              "ent_problems"
+            ],
+            "technical_policy": "028-r02-technical-v1",
+            "checks": [
+              {
+                "id": "cl_result",
+                "collection": "claims",
+                "status": "ACCEPTED",
+                "errors": [],
+                "uncertain": [],
+                "sources": [
+                  {
+                    "quote": "生成top.md",
+                    "occurrence": 1,
+                    "span": [
+                      9,
+                      17
+                    ],
+                    "source_sha256": "d23733b8b85a6121a14c5debfd60bf4bb21869855f5902448c8aa378b5ebda54"
+                  },
+                  {
+                    "quote": "报告只列3个问题",
+                    "occurrence": 1,
+                    "span": [
+                      18,
+                      26
+                    ],
+                    "source_sha256": "d23733b8b85a6121a14c5debfd60bf4bb21869855f5902448c8aa378b5ebda54"
+                  }
+                ],
+                "audit_refs": [
+                  {
+                    "subject_id": "cl_result",
+                    "field_path": "",
+                    "verdict": "SUPPORT"
+                  }
+                ],
+                "required_dependencies": [],
+                "structural_refs": [
+                  "evt_generate",
+                  "ent_report"
+                ]
+              },
+              {
+                "id": "evt_generate",
+                "collection": "events",
+                "status": "ACCEPTED",
+                "errors": [],
+                "uncertain": [],
+                "sources": [
+                  {
+                    "quote": "请PM在10分钟内生成top.md，报告只列3个问题。",
+                    "occurrence": 1,
+                    "span": [
+                      0,
+                      27
+                    ],
+                    "source_sha256": "d23733b8b85a6121a14c5debfd60bf4bb21869855f5902448c8aa378b5ebda54"
+                  }
+                ],
+                "audit_refs": [
+                  {
+                    "subject_id": "evt_generate",
+                    "field_path": "",
+                    "verdict": "SUPPORT"
+                  }
+                ],
+                "required_dependencies": [],
+                "structural_refs": [
+                  "ROOT",
+                  "cl_time",
+                  "cl_count"
+                ]
+              },
+              {
+                "id": "cl_time",
+                "collection": "claims",
+                "status": "ACCEPTED",
+                "errors": [],
+                "uncertain": [],
+                "sources": [
+                  {
+                    "quote": "在10分钟内生成top.md",
+                    "occurrence": 1,
+                    "span": [
+                      3,
+                      17
+                    ],
+                    "source_sha256": "d23733b8b85a6121a14c5debfd60bf4bb21869855f5902448c8aa378b5ebda54"
+                  }
+                ],
+                "audit_refs": [
+                  {
+                    "subject_id": "cl_time",
+                    "field_path": "",
+                    "verdict": "SUPPORT"
+                  }
+                ],
+                "required_dependencies": [],
+                "structural_refs": [
+                  "evt_generate"
+                ]
+              },
+              {
+                "id": "cl_count",
+                "collection": "claims",
+                "status": "ACCEPTED",
+                "errors": [],
+                "uncertain": [],
+                "sources": [
+                  {
+                    "quote": "报告只列3个问题",
+                    "occurrence": 1,
+                    "span": [
+                      18,
+                      26
+                    ],
+                    "source_sha256": "d23733b8b85a6121a14c5debfd60bf4bb21869855f5902448c8aa378b5ebda54"
+                  }
+                ],
+                "audit_refs": [
+                  {
+                    "subject_id": "cl_count",
+                    "field_path": "",
+                    "verdict": "SUPPORT"
+                  }
+                ],
+                "required_dependencies": [
+                  "cl_result"
+                ],
+                "structural_refs": [
+                  "evt_generate"
+                ]
+              },
+              {
+                "id": "ent_report",
+                "collection": "entities",
+                "status": "ACCEPTED",
+                "identity_status": "ACCEPTED",
+                "errors": [],
+                "uncertain": [],
+                "sources": [
+                  {
+                    "quote": "top.md",
+                    "occurrence": 1,
+                    "span": [
+                      11,
+                      17
+                    ],
+                    "source_sha256": "d23733b8b85a6121a14c5debfd60bf4bb21869855f5902448c8aa378b5ebda54"
+                  },
+                  {
+                    "quote": "报告",
+                    "occurrence": 1,
+                    "span": [
+                      18,
+                      20
+                    ],
+                    "source_sha256": "d23733b8b85a6121a14c5debfd60bf4bb21869855f5902448c8aa378b5ebda54"
+                  }
+                ],
+                "audit_refs": [
+                  {
+                    "subject_id": "ent_report",
+                    "field_path": "",
+                    "verdict": "SUPPORT"
+                  }
+                ],
+                "required_dependencies": [],
+                "structural_refs": []
+              },
+              {
+                "id": "cl_scope",
+                "collection": "claims",
+                "status": "ACCEPTED",
+                "errors": [],
+                "uncertain": [],
+                "sources": [
+                  {
+                    "quote": "报告只列3个问题",
+                    "occurrence": 1,
+                    "span": [
+                      18,
+                      26
+                    ],
+                    "source_sha256": "d23733b8b85a6121a14c5debfd60bf4bb21869855f5902448c8aa378b5ebda54"
+                  }
+                ],
+                "audit_refs": [
+                  {
+                    "subject_id": "cl_scope",
+                    "field_path": "",
+                    "verdict": "SUPPORT"
+                  }
+                ],
+                "required_dependencies": [
+                  "cl_result"
+                ],
+                "structural_refs": [
+                  "evt_generate",
+                  "expr_content_scope"
+                ]
+              },
+              {
+                "id": "expr_content_scope",
+                "collection": "expressions",
+                "status": "ACCEPTED",
+                "errors": [],
+                "uncertain": [],
+                "sources": [
+                  {
+                    "quote": "报告只列3个问题",
+                    "occurrence": 1,
+                    "span": [
+                      18,
+                      26
+                    ],
+                    "source_sha256": "d23733b8b85a6121a14c5debfd60bf4bb21869855f5902448c8aa378b5ebda54"
+                  }
+                ],
+                "audit_refs": [
+                  {
+                    "subject_id": "expr_content_scope",
+                    "field_path": "",
+                    "verdict": "SUPPORT"
+                  }
+                ],
+                "required_dependencies": [],
+                "structural_refs": []
+              },
+              {
+                "id": "ent_problems",
+                "collection": "entities",
+                "status": "ACCEPTED",
+                "identity_status": "ACCEPTED",
+                "errors": [],
+                "uncertain": [],
+                "sources": [
+                  {
+                    "quote": "问题",
+                    "occurrence": 1,
+                    "span": [
+                      24,
+                      26
+                    ],
+                    "source_sha256": "d23733b8b85a6121a14c5debfd60bf4bb21869855f5902448c8aa378b5ebda54"
+                  }
+                ],
+                "audit_refs": [
+                  {
+                    "subject_id": "ent_problems",
+                    "field_path": "",
+                    "verdict": "SUPPORT"
+                  }
+                ],
+                "required_dependencies": [],
+                "structural_refs": []
+              }
+            ],
+            "audit": [
+              {
+                "subject_id": "cl_result",
+                "field_path": "",
+                "verdict": "SUPPORT",
+                "context_refs": [
+                  "ent_report",
+                  "evt_generate"
+                ],
+                "sources": [
+                  {
+                    "quote": "生成top.md，报告只列3个问题",
+                    "occurrence": 1
+                  }
+                ],
+                "reason": "top.md是生成结果，报告内容要求约束同一文件。"
+              },
+              {
+                "subject_id": "evt_generate",
+                "field_path": "",
+                "verdict": "SUPPORT",
+                "context_refs": [],
+                "sources": [
+                  {
+                    "quote": "请PM在10分钟内生成top.md，报告只列3个问题。",
+                    "occurrence": 1
+                  }
+                ],
+                "reason": "生成报告是当前明确要求的主动作；时限和内容数量约束均已绑定。"
+              },
+              {
+                "subject_id": "cl_time",
+                "field_path": "",
+                "verdict": "SUPPORT",
+                "context_refs": [
+                  "evt_generate"
+                ],
+                "sources": [
+                  {
+                    "quote": "在10分钟内生成top.md",
+                    "occurrence": 1
+                  }
+                ],
+                "reason": "10分钟以内是生成动作的执行时限，LTE、分钟及执行限制用途正确，未升格为根完成条件。"
+              },
+              {
+                "subject_id": "cl_count",
+                "field_path": "",
+                "verdict": "SUPPORT",
+                "context_refs": [
+                  "cl_result",
+                  "evt_generate"
+                ],
+                "sources": [
+                  {
+                    "quote": "报告只列3个问题",
+                    "occurrence": 1
+                  }
+                ],
+                "reason": "报告所列问题恰为3个；目标、单位和计数范围指向报告，OUTPUT_CONTENT用途正确且双向绑定完整。"
+              },
+              {
+                "subject_id": "ent_report",
+                "field_path": "",
+                "verdict": "SUPPORT",
+                "context_refs": [],
+                "sources": [
+                  {
+                    "quote": "生成top.md，报告只列3个问题",
+                    "occurrence": 1
+                  }
+                ],
+                "reason": "top.md是生成的文件，后续报告指同一产物。"
+              },
+              {
+                "subject_id": "cl_scope",
+                "field_path": "",
+                "verdict": "SUPPORT",
+                "context_refs": [
+                  "cl_result",
+                  "expr_content_scope"
+                ],
+                "sources": [
+                  {
+                    "quote": "报告只列3个问题",
+                    "occurrence": 1
+                  }
+                ],
+                "reason": "只列限定报告所列内容为问题，范围绑定到产物合理，无需新增独立禁止动作。"
+              },
+              {
+                "subject_id": "expr_content_scope",
+                "field_path": "",
+                "verdict": "SUPPORT",
+                "context_refs": [
+                  "ent_report",
+                  "ent_problems"
+                ],
+                "sources": [
+                  {
+                    "quote": "报告只列3个问题",
+                    "occurrence": 1
+                  }
+                ],
+                "reason": "表达式保留报告和问题两个参数及内容限定的正向极性，不宣称该状态已经实现。"
+              },
+              {
+                "subject_id": "ent_problems",
+                "field_path": "",
+                "verdict": "SUPPORT",
+                "context_refs": [],
+                "sources": [
+                  {
+                    "quote": "问题",
+                    "occurrence": 1
+                  }
+                ],
+                "reason": "问题是明确的报告内容类别，使用OTHER合理。"
+              }
+            ],
+            "context_references_are_not_required_dependencies": true
+          }
+        },
+        {
+          "id": "bf:f362fb15c35bda890d11",
+          "kind": "SCOPE",
+          "status": "ACCEPTED",
+          "claim_ids": [
+            "cl_scope",
+            "expr_content_scope",
+            "evt_generate",
+            "cl_time",
+            "cl_count",
+            "cl_result"
+          ],
+          "claim": {
+            "id": "cl_scope",
+            "kind": "SCOPE",
+            "event_id": "evt_generate",
+            "entity_id": null,
+            "role": null,
+            "expression_id": "expr_content_scope",
+            "direction": null,
+            "temporal": null,
+            "quantity": null,
+            "scope_id": "ent_report",
+            "requires": [
+              "cl_result"
+            ],
+            "sources": [
+              {
+                "quote": "报告只列3个问题",
+                "occurrence": 1,
+                "span": [
+                  18,
+                  26
+                ],
+                "source_sha256": "d23733b8b85a6121a14c5debfd60bf4bb21869855f5902448c8aa378b5ebda54"
+              }
+            ],
+            "note": "报告所列内容仅限问题；不另造独立禁止动作。"
+          },
+          "event": {
+            "id": "evt_generate",
+            "predicate": "生成报告",
+            "kind": "ACTION",
+            "layer": "MAIN",
+            "use": "CURRENT_TASK",
+            "modality": "REQUIRED",
+            "polarity": "POSITIVE",
+            "owner_id": "ROOT",
+            "constraint_ids": [
+              "cl_time",
+              "cl_count"
+            ],
+            "requires": [],
+            "sources": [
+              {
+                "quote": "请PM在10分钟内生成top.md，报告只列3个问题。",
+                "occurrence": 1,
+                "span": [
+                  0,
+                  27
+                ],
+                "source_sha256": "d23733b8b85a6121a14c5debfd60bf4bb21869855f5902448c8aa378b5ebda54"
+              }
+            ]
+          },
+          "entity": null,
+          "expression": {
+            "id": "expr_content_scope",
+            "op": "STATE",
+            "operands": [],
+            "state": {
+              "predicate": "所列内容仅限问题",
+              "event_id": null,
+              "args": [
+                "ent_report",
+                "ent_problems"
+              ],
+              "polarity": "POSITIVE"
+            },
+            "sources": [
+              {
+                "quote": "报告只列3个问题",
+                "occurrence": 1,
+                "span": [
+                  18,
+                  26
+                ],
+                "source_sha256": "d23733b8b85a6121a14c5debfd60bf4bb21869855f5902448c8aa378b5ebda54"
+              }
+            ],
+            "children": []
+          },
+          "constraints": [
+            {
+              "id": "cl_time",
+              "kind": "QUANTITY",
+              "event_id": "evt_generate",
+              "entity_id": null,
+              "role": null,
+              "expression_id": null,
+              "direction": null,
+              "temporal": null,
+              "quantity": {
+                "metric": "生成时限",
+                "target_id": "evt_generate",
+                "comparator": "LTE",
+                "value": 10,
+                "unit": "分钟",
+                "use": "EXECUTION_LIMIT",
+                "count_scope": "ROOT"
+              },
+              "scope_id": "evt_generate",
+              "requires": [],
+              "sources": [
+                {
+                  "quote": "在10分钟内生成top.md",
+                  "occurrence": 1,
+                  "span": [
+                    3,
+                    17
+                  ],
+                  "source_sha256": "d23733b8b85a6121a14c5debfd60bf4bb21869855f5902448c8aa378b5ebda54"
+                }
+              ],
+              "note": "执行时限，不作为根任务完成条件。",
+              "expression": null
+            },
+            {
+              "id": "cl_count",
+              "kind": "QUANTITY",
+              "event_id": "evt_generate",
+              "entity_id": null,
+              "role": null,
+              "expression_id": null,
+              "direction": null,
+              "temporal": null,
+              "quantity": {
+                "metric": "报告所列问题数量",
+                "target_id": "ent_report",
+                "comparator": "EQ",
+                "value": 3,
+                "unit": "个问题",
+                "use": "OUTPUT_CONTENT",
+                "count_scope": "ent_report"
+              },
+              "scope_id": "ent_report",
+              "requires": [
+                "cl_result"
+              ],
+              "sources": [
+                {
+                  "quote": "报告只列3个问题",
+                  "occurrence": 1,
+                  "span": [
+                    18,
+                    26
+                  ],
+                  "source_sha256": "d23733b8b85a6121a14c5debfd60bf4bb21869855f5902448c8aa378b5ebda54"
+                }
+              ],
+              "note": "产物内容为3个问题，不是执行次数限制。",
+              "expression": null
+            }
+          ],
+          "content_quantities": [],
+          "content_scopes": [],
+          "sources": [
+            {
+              "quote": "报告只列3个问题",
+              "occurrence": 1,
+              "span": [
+                18,
+                26
+              ],
+              "source_sha256": "d23733b8b85a6121a14c5debfd60bf4bb21869855f5902448c8aa378b5ebda54"
+            },
+            {
+              "quote": "请PM在10分钟内生成top.md，报告只列3个问题。",
+              "occurrence": 1,
+              "span": [
+                0,
+                27
+              ],
+              "source_sha256": "d23733b8b85a6121a14c5debfd60bf4bb21869855f5902448c8aa378b5ebda54"
+            },
+            {
+              "quote": "在10分钟内生成top.md",
+              "occurrence": 1,
+              "span": [
+                3,
+                17
+              ],
+              "source_sha256": "d23733b8b85a6121a14c5debfd60bf4bb21869855f5902448c8aa378b5ebda54"
+            },
+            {
+              "quote": "报告只列3个问题",
+              "occurrence": 1,
+              "span": [
+                18,
+                26
+              ],
+              "source_sha256": "d23733b8b85a6121a14c5debfd60bf4bb21869855f5902448c8aa378b5ebda54"
+            },
+            {
+              "quote": "生成top.md",
+              "occurrence": 1,
+              "span": [
+                9,
+                17
+              ],
+              "source_sha256": "d23733b8b85a6121a14c5debfd60bf4bb21869855f5902448c8aa378b5ebda54"
+            },
+            {
+              "quote": "报告只列3个问题",
+              "occurrence": 1,
+              "span": [
+                18,
+                26
+              ],
+              "source_sha256": "d23733b8b85a6121a14c5debfd60bf4bb21869855f5902448c8aa378b5ebda54"
+            },
+            {
+              "quote": "top.md",
+              "occurrence": 1,
+              "span": [
+                11,
+                17
+              ],
+              "source_sha256": "d23733b8b85a6121a14c5debfd60bf4bb21869855f5902448c8aa378b5ebda54"
+            },
+            {
+              "quote": "报告",
+              "occurrence": 1,
+              "span": [
+                18,
+                20
+              ],
+              "source_sha256": "d23733b8b85a6121a14c5debfd60bf4bb21869855f5902448c8aa378b5ebda54"
+            },
+            {
+              "quote": "报告只列3个问题",
+              "occurrence": 1,
+              "span": [
+                18,
+                26
+              ],
+              "source_sha256": "d23733b8b85a6121a14c5debfd60bf4bb21869855f5902448c8aa378b5ebda54"
+            },
+            {
+              "quote": "问题",
+              "occurrence": 1,
+              "span": [
+                24,
+                26
+              ],
+              "source_sha256": "d23733b8b85a6121a14c5debfd60bf4bb21869855f5902448c8aa378b5ebda54"
+            }
+          ],
+          "slots": [
+            "O"
+          ],
+          "proof": {
+            "source_sha256": "d23733b8b85a6121a14c5debfd60bf4bb21869855f5902448c8aa378b5ebda54",
+            "claim_ids": [
+              "cl_scope",
+              "expr_content_scope",
+              "evt_generate",
+              "cl_time",
+              "cl_count",
+              "cl_result"
+            ],
+            "provenance_refs": [
+              "cl_scope",
+              "evt_generate",
+              "cl_time",
+              "cl_count",
+              "cl_result",
+              "ent_report",
+              "expr_content_scope",
+              "ent_problems"
+            ],
+            "technical_policy": "028-r02-technical-v1",
+            "checks": [
+              {
+                "id": "cl_scope",
+                "collection": "claims",
+                "status": "ACCEPTED",
+                "errors": [],
+                "uncertain": [],
+                "sources": [
+                  {
+                    "quote": "报告只列3个问题",
+                    "occurrence": 1,
+                    "span": [
+                      18,
+                      26
+                    ],
+                    "source_sha256": "d23733b8b85a6121a14c5debfd60bf4bb21869855f5902448c8aa378b5ebda54"
+                  }
+                ],
+                "audit_refs": [
+                  {
+                    "subject_id": "cl_scope",
+                    "field_path": "",
+                    "verdict": "SUPPORT"
+                  }
+                ],
+                "required_dependencies": [
+                  "cl_result"
+                ],
+                "structural_refs": [
+                  "evt_generate",
+                  "expr_content_scope"
+                ]
+              },
+              {
+                "id": "evt_generate",
+                "collection": "events",
+                "status": "ACCEPTED",
+                "errors": [],
+                "uncertain": [],
+                "sources": [
+                  {
+                    "quote": "请PM在10分钟内生成top.md，报告只列3个问题。",
+                    "occurrence": 1,
+                    "span": [
+                      0,
+                      27
+                    ],
+                    "source_sha256": "d23733b8b85a6121a14c5debfd60bf4bb21869855f5902448c8aa378b5ebda54"
+                  }
+                ],
+                "audit_refs": [
+                  {
+                    "subject_id": "evt_generate",
+                    "field_path": "",
+                    "verdict": "SUPPORT"
+                  }
+                ],
+                "required_dependencies": [],
+                "structural_refs": [
+                  "ROOT",
+                  "cl_time",
+                  "cl_count"
+                ]
+              },
+              {
+                "id": "cl_time",
+                "collection": "claims",
+                "status": "ACCEPTED",
+                "errors": [],
+                "uncertain": [],
+                "sources": [
+                  {
+                    "quote": "在10分钟内生成top.md",
+                    "occurrence": 1,
+                    "span": [
+                      3,
+                      17
+                    ],
+                    "source_sha256": "d23733b8b85a6121a14c5debfd60bf4bb21869855f5902448c8aa378b5ebda54"
+                  }
+                ],
+                "audit_refs": [
+                  {
+                    "subject_id": "cl_time",
+                    "field_path": "",
+                    "verdict": "SUPPORT"
+                  }
+                ],
+                "required_dependencies": [],
+                "structural_refs": [
+                  "evt_generate"
+                ]
+              },
+              {
+                "id": "cl_count",
+                "collection": "claims",
+                "status": "ACCEPTED",
+                "errors": [],
+                "uncertain": [],
+                "sources": [
+                  {
+                    "quote": "报告只列3个问题",
+                    "occurrence": 1,
+                    "span": [
+                      18,
+                      26
+                    ],
+                    "source_sha256": "d23733b8b85a6121a14c5debfd60bf4bb21869855f5902448c8aa378b5ebda54"
+                  }
+                ],
+                "audit_refs": [
+                  {
+                    "subject_id": "cl_count",
+                    "field_path": "",
+                    "verdict": "SUPPORT"
+                  }
+                ],
+                "required_dependencies": [
+                  "cl_result"
+                ],
+                "structural_refs": [
+                  "evt_generate"
+                ]
+              },
+              {
+                "id": "cl_result",
+                "collection": "claims",
+                "status": "ACCEPTED",
+                "errors": [],
+                "uncertain": [],
+                "sources": [
+                  {
+                    "quote": "生成top.md",
+                    "occurrence": 1,
+                    "span": [
+                      9,
+                      17
+                    ],
+                    "source_sha256": "d23733b8b85a6121a14c5debfd60bf4bb21869855f5902448c8aa378b5ebda54"
+                  },
+                  {
+                    "quote": "报告只列3个问题",
+                    "occurrence": 1,
+                    "span": [
+                      18,
+                      26
+                    ],
+                    "source_sha256": "d23733b8b85a6121a14c5debfd60bf4bb21869855f5902448c8aa378b5ebda54"
+                  }
+                ],
+                "audit_refs": [
+                  {
+                    "subject_id": "cl_result",
+                    "field_path": "",
+                    "verdict": "SUPPORT"
+                  }
+                ],
+                "required_dependencies": [],
+                "structural_refs": [
+                  "evt_generate",
+                  "ent_report"
+                ]
+              },
+              {
+                "id": "ent_report",
+                "collection": "entities",
+                "status": "ACCEPTED",
+                "identity_status": "ACCEPTED",
+                "errors": [],
+                "uncertain": [],
+                "sources": [
+                  {
+                    "quote": "top.md",
+                    "occurrence": 1,
+                    "span": [
+                      11,
+                      17
+                    ],
+                    "source_sha256": "d23733b8b85a6121a14c5debfd60bf4bb21869855f5902448c8aa378b5ebda54"
+                  },
+                  {
+                    "quote": "报告",
+                    "occurrence": 1,
+                    "span": [
+                      18,
+                      20
+                    ],
+                    "source_sha256": "d23733b8b85a6121a14c5debfd60bf4bb21869855f5902448c8aa378b5ebda54"
+                  }
+                ],
+                "audit_refs": [
+                  {
+                    "subject_id": "ent_report",
+                    "field_path": "",
+                    "verdict": "SUPPORT"
+                  }
+                ],
+                "required_dependencies": [],
+                "structural_refs": []
+              },
+              {
+                "id": "expr_content_scope",
+                "collection": "expressions",
+                "status": "ACCEPTED",
+                "errors": [],
+                "uncertain": [],
+                "sources": [
+                  {
+                    "quote": "报告只列3个问题",
+                    "occurrence": 1,
+                    "span": [
+                      18,
+                      26
+                    ],
+                    "source_sha256": "d23733b8b85a6121a14c5debfd60bf4bb21869855f5902448c8aa378b5ebda54"
+                  }
+                ],
+                "audit_refs": [
+                  {
+                    "subject_id": "expr_content_scope",
+                    "field_path": "",
+                    "verdict": "SUPPORT"
+                  }
+                ],
+                "required_dependencies": [],
+                "structural_refs": []
+              },
+              {
+                "id": "ent_problems",
+                "collection": "entities",
+                "status": "ACCEPTED",
+                "identity_status": "ACCEPTED",
+                "errors": [],
+                "uncertain": [],
+                "sources": [
+                  {
+                    "quote": "问题",
+                    "occurrence": 1,
+                    "span": [
+                      24,
+                      26
+                    ],
+                    "source_sha256": "d23733b8b85a6121a14c5debfd60bf4bb21869855f5902448c8aa378b5ebda54"
+                  }
+                ],
+                "audit_refs": [
+                  {
+                    "subject_id": "ent_problems",
+                    "field_path": "",
+                    "verdict": "SUPPORT"
+                  }
+                ],
+                "required_dependencies": [],
+                "structural_refs": []
+              }
+            ],
+            "audit": [
+              {
+                "subject_id": "cl_scope",
+                "field_path": "",
+                "verdict": "SUPPORT",
+                "context_refs": [
+                  "cl_result",
+                  "expr_content_scope"
+                ],
+                "sources": [
+                  {
+                    "quote": "报告只列3个问题",
+                    "occurrence": 1
+                  }
+                ],
+                "reason": "只列限定报告所列内容为问题，范围绑定到产物合理，无需新增独立禁止动作。"
+              },
+              {
+                "subject_id": "evt_generate",
+                "field_path": "",
+                "verdict": "SUPPORT",
+                "context_refs": [],
+                "sources": [
+                  {
+                    "quote": "请PM在10分钟内生成top.md，报告只列3个问题。",
+                    "occurrence": 1
+                  }
+                ],
+                "reason": "生成报告是当前明确要求的主动作；时限和内容数量约束均已绑定。"
+              },
+              {
+                "subject_id": "cl_time",
+                "field_path": "",
+                "verdict": "SUPPORT",
+                "context_refs": [
+                  "evt_generate"
+                ],
+                "sources": [
+                  {
+                    "quote": "在10分钟内生成top.md",
+                    "occurrence": 1
+                  }
+                ],
+                "reason": "10分钟以内是生成动作的执行时限，LTE、分钟及执行限制用途正确，未升格为根完成条件。"
+              },
+              {
+                "subject_id": "cl_count",
+                "field_path": "",
+                "verdict": "SUPPORT",
+                "context_refs": [
+                  "cl_result",
+                  "evt_generate"
+                ],
+                "sources": [
+                  {
+                    "quote": "报告只列3个问题",
+                    "occurrence": 1
+                  }
+                ],
+                "reason": "报告所列问题恰为3个；目标、单位和计数范围指向报告，OUTPUT_CONTENT用途正确且双向绑定完整。"
+              },
+              {
+                "subject_id": "cl_result",
+                "field_path": "",
+                "verdict": "SUPPORT",
+                "context_refs": [
+                  "ent_report",
+                  "evt_generate"
+                ],
+                "sources": [
+                  {
+                    "quote": "生成top.md，报告只列3个问题",
+                    "occurrence": 1
+                  }
+                ],
+                "reason": "top.md是生成结果，报告内容要求约束同一文件。"
+              },
+              {
+                "subject_id": "ent_report",
+                "field_path": "",
+                "verdict": "SUPPORT",
+                "context_refs": [],
+                "sources": [
+                  {
+                    "quote": "生成top.md，报告只列3个问题",
+                    "occurrence": 1
+                  }
+                ],
+                "reason": "top.md是生成的文件，后续报告指同一产物。"
+              },
+              {
+                "subject_id": "expr_content_scope",
+                "field_path": "",
+                "verdict": "SUPPORT",
+                "context_refs": [
+                  "ent_report",
+                  "ent_problems"
+                ],
+                "sources": [
+                  {
+                    "quote": "报告只列3个问题",
+                    "occurrence": 1
+                  }
+                ],
+                "reason": "表达式保留报告和问题两个参数及内容限定的正向极性，不宣称该状态已经实现。"
+              },
+              {
+                "subject_id": "ent_problems",
+                "field_path": "",
+                "verdict": "SUPPORT",
+                "context_refs": [],
+                "sources": [
+                  {
+                    "quote": "问题",
+                    "occurrence": 1
+                  }
+                ],
+                "reason": "问题是明确的报告内容类别，使用OTHER合理。"
+              }
+            ],
+            "context_references_are_not_required_dependencies": true
+          }
+        }
+      ]
+    },
+    "A": {
+      "status": "UNRESOLVED",
+      "openness": "CONSTRAINED",
+      "entries": [
+        {
+          "id": "bf:aa37a93690b06f04097e",
+          "kind": "EVENT",
+          "status": "UNRESOLVED",
+          "claim_ids": [
+            "evt_generate",
+            "cl_performer",
+            "cl_result",
+            "cl_content",
+            "cl_time",
+            "cl_count"
+          ],
+          "event": {
+            "id": "evt_generate",
+            "predicate": "生成报告",
+            "kind": "ACTION",
+            "layer": "MAIN",
+            "use": "CURRENT_TASK",
+            "modality": "REQUIRED",
+            "polarity": "POSITIVE",
+            "owner_id": "ROOT",
+            "constraint_ids": [
+              "cl_time",
+              "cl_count"
+            ],
+            "requires": [],
+            "sources": [
+              {
+                "quote": "请PM在10分钟内生成top.md，报告只列3个问题。",
+                "occurrence": 1,
+                "span": [
+                  0,
+                  27
+                ],
+                "source_sha256": "d23733b8b85a6121a14c5debfd60bf4bb21869855f5902448c8aa378b5ebda54"
+              }
+            ]
+          },
+          "roles": [
+            {
+              "id": "cl_performer",
+              "kind": "ROLE",
+              "event_id": "evt_generate",
+              "entity_id": "ent_pm",
+              "role": "PERFORMER",
+              "expression_id": null,
+              "direction": null,
+              "temporal": null,
+              "quantity": null,
+              "scope_id": "evt_generate",
+              "requires": [],
+              "sources": [
+                {
+                  "quote": "请PM在10分钟内生成top.md",
+                  "occurrence": 1,
+                  "span": [
+                    0,
+                    17
+                  ],
+                  "source_sha256": "d23733b8b85a6121a14c5debfd60bf4bb21869855f5902448c8aa378b5ebda54"
+                }
+              ],
+              "note": "PM是生成报告的执行者；岗位简称不推定身份类别或权限。",
+              "entity": {
+                "id": "ent_pm",
+                "label": "PM",
+                "type": "OTHER",
+                "mentions": [
+                  {
+                    "quote": "PM",
+                    "occurrence": 1,
+                    "span": [
+                      1,
+                      3
+                    ],
+                    "source_sha256": "d23733b8b85a6121a14c5debfd60bf4bb21869855f5902448c8aa378b5ebda54"
+                  }
+                ],
+                "alternatives": []
+              },
+              "status": "UNRESOLVED"
+            },
+            {
+              "id": "cl_result",
+              "kind": "ROLE",
+              "event_id": "evt_generate",
+              "entity_id": "ent_report",
+              "role": "RESULT",
+              "expression_id": null,
+              "direction": null,
+              "temporal": null,
+              "quantity": null,
+              "scope_id": "evt_generate",
+              "requires": [],
+              "sources": [
+                {
+                  "quote": "生成top.md",
+                  "occurrence": 1,
+                  "span": [
+                    9,
+                    17
+                  ],
+                  "source_sha256": "d23733b8b85a6121a14c5debfd60bf4bb21869855f5902448c8aa378b5ebda54"
+                },
+                {
+                  "quote": "报告只列3个问题",
+                  "occurrence": 1,
+                  "span": [
+                    18,
+                    26
+                  ],
+                  "source_sha256": "d23733b8b85a6121a14c5debfd60bf4bb21869855f5902448c8aa378b5ebda54"
+                }
+              ],
+              "note": "报告指生成的top.md，保持同一产物实体。",
+              "entity": {
+                "id": "ent_report",
+                "label": "top.md报告",
+                "type": "FILE",
+                "mentions": [
+                  {
+                    "quote": "top.md",
+                    "occurrence": 1,
+                    "span": [
+                      11,
+                      17
+                    ],
+                    "source_sha256": "d23733b8b85a6121a14c5debfd60bf4bb21869855f5902448c8aa378b5ebda54"
+                  },
+                  {
+                    "quote": "报告",
+                    "occurrence": 1,
+                    "span": [
+                      18,
+                      20
+                    ],
+                    "source_sha256": "d23733b8b85a6121a14c5debfd60bf4bb21869855f5902448c8aa378b5ebda54"
+                  }
+                ],
+                "alternatives": []
+              },
+              "status": "ACCEPTED"
+            },
+            {
+              "id": "cl_content",
+              "kind": "ROLE",
+              "event_id": "evt_generate",
+              "entity_id": "ent_problems",
+              "role": "CONTENT",
+              "expression_id": null,
+              "direction": null,
+              "temporal": null,
+              "quantity": null,
+              "scope_id": "ent_report",
+              "requires": [
+                "cl_result"
+              ],
+              "sources": [
+                {
+                  "quote": "报告只列3个问题",
+                  "occurrence": 1,
+                  "span": [
+                    18,
+                    26
+                  ],
+                  "source_sha256": "d23733b8b85a6121a14c5debfd60bf4bb21869855f5902448c8aa378b5ebda54"
+                }
+              ],
+              "note": "问题是报告内容，不是外部输入。",
+              "entity": {
+                "id": "ent_problems",
+                "label": "问题",
+                "type": "OTHER",
+                "mentions": [
+                  {
+                    "quote": "问题",
+                    "occurrence": 1,
+                    "span": [
+                      24,
+                      26
+                    ],
+                    "source_sha256": "d23733b8b85a6121a14c5debfd60bf4bb21869855f5902448c8aa378b5ebda54"
+                  }
+                ],
+                "alternatives": []
+              },
+              "status": "ACCEPTED"
+            }
+          ],
+          "constraints": [
+            {
+              "id": "cl_time",
+              "kind": "QUANTITY",
+              "event_id": "evt_generate",
+              "entity_id": null,
+              "role": null,
+              "expression_id": null,
+              "direction": null,
+              "temporal": null,
+              "quantity": {
+                "metric": "生成时限",
+                "target_id": "evt_generate",
+                "comparator": "LTE",
+                "value": 10,
+                "unit": "分钟",
+                "use": "EXECUTION_LIMIT",
+                "count_scope": "ROOT"
+              },
+              "scope_id": "evt_generate",
+              "requires": [],
+              "sources": [
+                {
+                  "quote": "在10分钟内生成top.md",
+                  "occurrence": 1,
+                  "span": [
+                    3,
+                    17
+                  ],
+                  "source_sha256": "d23733b8b85a6121a14c5debfd60bf4bb21869855f5902448c8aa378b5ebda54"
+                }
+              ],
+              "note": "执行时限，不作为根任务完成条件。",
+              "expression": null
+            },
+            {
+              "id": "cl_count",
+              "kind": "QUANTITY",
+              "event_id": "evt_generate",
+              "entity_id": null,
+              "role": null,
+              "expression_id": null,
+              "direction": null,
+              "temporal": null,
+              "quantity": {
+                "metric": "报告所列问题数量",
+                "target_id": "ent_report",
+                "comparator": "EQ",
+                "value": 3,
+                "unit": "个问题",
+                "use": "OUTPUT_CONTENT",
+                "count_scope": "ent_report"
+              },
+              "scope_id": "ent_report",
+              "requires": [
+                "cl_result"
+              ],
+              "sources": [
+                {
+                  "quote": "报告只列3个问题",
+                  "occurrence": 1,
+                  "span": [
+                    18,
+                    26
+                  ],
+                  "source_sha256": "d23733b8b85a6121a14c5debfd60bf4bb21869855f5902448c8aa378b5ebda54"
+                }
+              ],
+              "note": "产物内容为3个问题，不是执行次数限制。",
+              "expression": null
+            }
+          ],
+          "sources": [
+            {
+              "quote": "请PM在10分钟内生成top.md，报告只列3个问题。",
+              "occurrence": 1,
+              "span": [
+                0,
+                27
+              ],
+              "source_sha256": "d23733b8b85a6121a14c5debfd60bf4bb21869855f5902448c8aa378b5ebda54"
+            },
+            {
+              "quote": "在10分钟内生成top.md",
+              "occurrence": 1,
+              "span": [
+                3,
+                17
+              ],
+              "source_sha256": "d23733b8b85a6121a14c5debfd60bf4bb21869855f5902448c8aa378b5ebda54"
+            },
+            {
+              "quote": "报告只列3个问题",
+              "occurrence": 1,
+              "span": [
+                18,
+                26
+              ],
+              "source_sha256": "d23733b8b85a6121a14c5debfd60bf4bb21869855f5902448c8aa378b5ebda54"
+            },
+            {
+              "quote": "生成top.md",
+              "occurrence": 1,
+              "span": [
+                9,
+                17
+              ],
+              "source_sha256": "d23733b8b85a6121a14c5debfd60bf4bb21869855f5902448c8aa378b5ebda54"
+            },
+            {
+              "quote": "报告只列3个问题",
+              "occurrence": 1,
+              "span": [
+                18,
+                26
+              ],
+              "source_sha256": "d23733b8b85a6121a14c5debfd60bf4bb21869855f5902448c8aa378b5ebda54"
+            },
+            {
+              "quote": "top.md",
+              "occurrence": 1,
+              "span": [
+                11,
+                17
+              ],
+              "source_sha256": "d23733b8b85a6121a14c5debfd60bf4bb21869855f5902448c8aa378b5ebda54"
+            },
+            {
+              "quote": "报告",
+              "occurrence": 1,
+              "span": [
+                18,
+                20
+              ],
+              "source_sha256": "d23733b8b85a6121a14c5debfd60bf4bb21869855f5902448c8aa378b5ebda54"
+            },
+            {
+              "quote": "请PM在10分钟内生成top.md",
+              "occurrence": 1,
+              "span": [
+                0,
+                17
+              ],
+              "source_sha256": "d23733b8b85a6121a14c5debfd60bf4bb21869855f5902448c8aa378b5ebda54"
+            },
+            {
+              "quote": "PM",
+              "occurrence": 1,
+              "span": [
+                1,
+                3
+              ],
+              "source_sha256": "d23733b8b85a6121a14c5debfd60bf4bb21869855f5902448c8aa378b5ebda54"
+            },
+            {
+              "quote": "报告只列3个问题",
+              "occurrence": 1,
+              "span": [
+                18,
+                26
+              ],
+              "source_sha256": "d23733b8b85a6121a14c5debfd60bf4bb21869855f5902448c8aa378b5ebda54"
+            },
+            {
+              "quote": "问题",
+              "occurrence": 1,
+              "span": [
+                24,
+                26
+              ],
+              "source_sha256": "d23733b8b85a6121a14c5debfd60bf4bb21869855f5902448c8aa378b5ebda54"
+            }
+          ],
+          "slots": [
+            "A"
+          ],
+          "proof": {
+            "source_sha256": "d23733b8b85a6121a14c5debfd60bf4bb21869855f5902448c8aa378b5ebda54",
+            "claim_ids": [
+              "evt_generate",
+              "cl_performer",
+              "cl_result",
+              "cl_content",
+              "cl_time",
+              "cl_count"
+            ],
+            "provenance_refs": [
+              "evt_generate",
+              "cl_time",
+              "cl_count",
+              "cl_result",
+              "ent_report",
+              "cl_performer",
+              "ent_pm",
+              "cl_content",
+              "ent_problems"
+            ],
+            "technical_policy": "028-r02-technical-v1",
+            "checks": [
+              {
+                "id": "evt_generate",
+                "collection": "events",
+                "status": "ACCEPTED",
+                "errors": [],
+                "uncertain": [],
+                "sources": [
+                  {
+                    "quote": "请PM在10分钟内生成top.md，报告只列3个问题。",
+                    "occurrence": 1,
+                    "span": [
+                      0,
+                      27
+                    ],
+                    "source_sha256": "d23733b8b85a6121a14c5debfd60bf4bb21869855f5902448c8aa378b5ebda54"
+                  }
+                ],
+                "audit_refs": [
+                  {
+                    "subject_id": "evt_generate",
+                    "field_path": "",
+                    "verdict": "SUPPORT"
+                  }
+                ],
+                "required_dependencies": [],
+                "structural_refs": [
+                  "ROOT",
+                  "cl_time",
+                  "cl_count"
+                ]
+              },
+              {
+                "id": "cl_time",
+                "collection": "claims",
+                "status": "ACCEPTED",
+                "errors": [],
+                "uncertain": [],
+                "sources": [
+                  {
+                    "quote": "在10分钟内生成top.md",
+                    "occurrence": 1,
+                    "span": [
+                      3,
+                      17
+                    ],
+                    "source_sha256": "d23733b8b85a6121a14c5debfd60bf4bb21869855f5902448c8aa378b5ebda54"
+                  }
+                ],
+                "audit_refs": [
+                  {
+                    "subject_id": "cl_time",
+                    "field_path": "",
+                    "verdict": "SUPPORT"
+                  }
+                ],
+                "required_dependencies": [],
+                "structural_refs": [
+                  "evt_generate"
+                ]
+              },
+              {
+                "id": "cl_count",
+                "collection": "claims",
+                "status": "ACCEPTED",
+                "errors": [],
+                "uncertain": [],
+                "sources": [
+                  {
+                    "quote": "报告只列3个问题",
+                    "occurrence": 1,
+                    "span": [
+                      18,
+                      26
+                    ],
+                    "source_sha256": "d23733b8b85a6121a14c5debfd60bf4bb21869855f5902448c8aa378b5ebda54"
+                  }
+                ],
+                "audit_refs": [
+                  {
+                    "subject_id": "cl_count",
+                    "field_path": "",
+                    "verdict": "SUPPORT"
+                  }
+                ],
+                "required_dependencies": [
+                  "cl_result"
+                ],
+                "structural_refs": [
+                  "evt_generate"
+                ]
+              },
+              {
+                "id": "cl_result",
+                "collection": "claims",
+                "status": "ACCEPTED",
+                "errors": [],
+                "uncertain": [],
+                "sources": [
+                  {
+                    "quote": "生成top.md",
+                    "occurrence": 1,
+                    "span": [
+                      9,
+                      17
+                    ],
+                    "source_sha256": "d23733b8b85a6121a14c5debfd60bf4bb21869855f5902448c8aa378b5ebda54"
+                  },
+                  {
+                    "quote": "报告只列3个问题",
+                    "occurrence": 1,
+                    "span": [
+                      18,
+                      26
+                    ],
+                    "source_sha256": "d23733b8b85a6121a14c5debfd60bf4bb21869855f5902448c8aa378b5ebda54"
+                  }
+                ],
+                "audit_refs": [
+                  {
+                    "subject_id": "cl_result",
+                    "field_path": "",
+                    "verdict": "SUPPORT"
+                  }
+                ],
+                "required_dependencies": [],
+                "structural_refs": [
+                  "evt_generate",
+                  "ent_report"
+                ]
+              },
+              {
+                "id": "ent_report",
+                "collection": "entities",
+                "status": "ACCEPTED",
+                "identity_status": "ACCEPTED",
+                "errors": [],
+                "uncertain": [],
+                "sources": [
+                  {
+                    "quote": "top.md",
+                    "occurrence": 1,
+                    "span": [
+                      11,
+                      17
+                    ],
+                    "source_sha256": "d23733b8b85a6121a14c5debfd60bf4bb21869855f5902448c8aa378b5ebda54"
+                  },
+                  {
+                    "quote": "报告",
+                    "occurrence": 1,
+                    "span": [
+                      18,
+                      20
+                    ],
+                    "source_sha256": "d23733b8b85a6121a14c5debfd60bf4bb21869855f5902448c8aa378b5ebda54"
+                  }
+                ],
+                "audit_refs": [
+                  {
+                    "subject_id": "ent_report",
+                    "field_path": "",
+                    "verdict": "SUPPORT"
+                  }
+                ],
+                "required_dependencies": [],
+                "structural_refs": []
+              },
+              {
+                "id": "cl_performer",
+                "collection": "claims",
+                "status": "UNRESOLVED",
+                "errors": [],
+                "uncertain": [
+                  "REQUIRED_DEPENDENCY:ent_pm"
+                ],
+                "sources": [
+                  {
+                    "quote": "请PM在10分钟内生成top.md",
+                    "occurrence": 1,
+                    "span": [
+                      0,
+                      17
+                    ],
+                    "source_sha256": "d23733b8b85a6121a14c5debfd60bf4bb21869855f5902448c8aa378b5ebda54"
+                  }
+                ],
+                "audit_refs": [
+                  {
+                    "subject_id": "cl_performer",
+                    "field_path": "",
+                    "verdict": "SUPPORT"
+                  }
+                ],
+                "required_dependencies": [],
+                "structural_refs": [
+                  "evt_generate",
+                  "ent_pm"
+                ]
+              },
+              {
+                "id": "ent_pm",
+                "collection": "entities",
+                "status": "UNRESOLVED",
+                "identity_status": "UNRESOLVED",
+                "errors": [],
+                "uncertain": [
+                  "AUDIT_ISSUE:IDENTITY",
+                  "WHOLE_CLAIM_SUPPORT_MISSING",
+                  "AUDIT_NOT_SUPPORTED"
+                ],
+                "sources": [
+                  {
+                    "quote": "PM",
+                    "occurrence": 1,
+                    "span": [
+                      1,
+                      3
+                    ],
+                    "source_sha256": "d23733b8b85a6121a14c5debfd60bf4bb21869855f5902448c8aa378b5ebda54"
+                  }
+                ],
+                "audit_refs": [
+                  {
+                    "subject_id": "ent_pm",
+                    "field_path": "label",
+                    "verdict": "SUPPORT"
+                  },
+                  {
+                    "subject_id": "ent_pm",
+                    "field_path": "type",
+                    "verdict": "UNCERTAIN"
+                  }
+                ],
+                "required_dependencies": [],
+                "structural_refs": []
+              },
+              {
+                "id": "cl_content",
+                "collection": "claims",
+                "status": "ACCEPTED",
+                "errors": [],
+                "uncertain": [],
+                "sources": [
+                  {
+                    "quote": "报告只列3个问题",
+                    "occurrence": 1,
+                    "span": [
+                      18,
+                      26
+                    ],
+                    "source_sha256": "d23733b8b85a6121a14c5debfd60bf4bb21869855f5902448c8aa378b5ebda54"
+                  }
+                ],
+                "audit_refs": [
+                  {
+                    "subject_id": "cl_content",
+                    "field_path": "",
+                    "verdict": "SUPPORT"
+                  }
+                ],
+                "required_dependencies": [
+                  "cl_result"
+                ],
+                "structural_refs": [
+                  "evt_generate",
+                  "ent_problems"
+                ]
+              },
+              {
+                "id": "ent_problems",
+                "collection": "entities",
+                "status": "ACCEPTED",
+                "identity_status": "ACCEPTED",
+                "errors": [],
+                "uncertain": [],
+                "sources": [
+                  {
+                    "quote": "问题",
+                    "occurrence": 1,
+                    "span": [
+                      24,
+                      26
+                    ],
+                    "source_sha256": "d23733b8b85a6121a14c5debfd60bf4bb21869855f5902448c8aa378b5ebda54"
+                  }
+                ],
+                "audit_refs": [
+                  {
+                    "subject_id": "ent_problems",
+                    "field_path": "",
+                    "verdict": "SUPPORT"
+                  }
+                ],
+                "required_dependencies": [],
+                "structural_refs": []
+              }
+            ],
+            "audit": [
+              {
+                "subject_id": "evt_generate",
+                "field_path": "",
+                "verdict": "SUPPORT",
+                "context_refs": [],
+                "sources": [
+                  {
+                    "quote": "请PM在10分钟内生成top.md，报告只列3个问题。",
+                    "occurrence": 1
+                  }
+                ],
+                "reason": "生成报告是当前明确要求的主动作；时限和内容数量约束均已绑定。"
+              },
+              {
+                "subject_id": "cl_time",
+                "field_path": "",
+                "verdict": "SUPPORT",
+                "context_refs": [
+                  "evt_generate"
+                ],
+                "sources": [
+                  {
+                    "quote": "在10分钟内生成top.md",
+                    "occurrence": 1
+                  }
+                ],
+                "reason": "10分钟以内是生成动作的执行时限，LTE、分钟及执行限制用途正确，未升格为根完成条件。"
+              },
+              {
+                "subject_id": "cl_count",
+                "field_path": "",
+                "verdict": "SUPPORT",
+                "context_refs": [
+                  "cl_result",
+                  "evt_generate"
+                ],
+                "sources": [
+                  {
+                    "quote": "报告只列3个问题",
+                    "occurrence": 1
+                  }
+                ],
+                "reason": "报告所列问题恰为3个；目标、单位和计数范围指向报告，OUTPUT_CONTENT用途正确且双向绑定完整。"
+              },
+              {
+                "subject_id": "cl_result",
+                "field_path": "",
+                "verdict": "SUPPORT",
+                "context_refs": [
+                  "ent_report",
+                  "evt_generate"
+                ],
+                "sources": [
+                  {
+                    "quote": "生成top.md，报告只列3个问题",
+                    "occurrence": 1
+                  }
+                ],
+                "reason": "top.md是生成结果，报告内容要求约束同一文件。"
+              },
+              {
+                "subject_id": "ent_report",
+                "field_path": "",
+                "verdict": "SUPPORT",
+                "context_refs": [],
+                "sources": [
+                  {
+                    "quote": "生成top.md，报告只列3个问题",
+                    "occurrence": 1
+                  }
+                ],
+                "reason": "top.md是生成的文件，后续报告指同一产物。"
+              },
+              {
+                "subject_id": "cl_performer",
+                "field_path": "",
+                "verdict": "SUPPORT",
+                "context_refs": [
+                  "ent_pm",
+                  "evt_generate"
+                ],
+                "sources": [
+                  {
+                    "quote": "请PM在10分钟内生成top.md",
+                    "occurrence": 1
+                  }
+                ],
+                "reason": "PM被明确指定为生成动作的执行者，不需推定其身份类别或权限。"
+              },
+              {
+                "subject_id": "ent_pm",
+                "field_path": "label",
+                "verdict": "SUPPORT",
+                "context_refs": [],
+                "sources": [
+                  {
+                    "quote": "PM",
+                    "occurrence": 1
+                  }
+                ],
+                "reason": "原文明示执行者名称为PM，身份指称没有竞争候选。"
+              },
+              {
+                "subject_id": "ent_pm",
+                "field_path": "type",
+                "verdict": "UNCERTAIN",
+                "context_refs": [],
+                "sources": [
+                  {
+                    "quote": "请PM在10分钟内生成top.md",
+                    "occurrence": 1
+                  }
+                ],
+                "reason": "原文未明确PM是个人、团队还是其他实体；类别未定不影响其明确执行职责。"
+              },
+              {
+                "subject_id": "cl_content",
+                "field_path": "",
+                "verdict": "SUPPORT",
+                "context_refs": [
+                  "cl_result",
+                  "ent_problems"
+                ],
+                "sources": [
+                  {
+                    "quote": "报告只列3个问题",
+                    "occurrence": 1
+                  }
+                ],
+                "reason": "问题属于报告内容，关联生成结果合理，不构成外部输入。"
+              },
+              {
+                "subject_id": "ent_problems",
+                "field_path": "",
+                "verdict": "SUPPORT",
+                "context_refs": [],
+                "sources": [
+                  {
+                    "quote": "问题",
+                    "occurrence": 1
+                  }
+                ],
+                "reason": "问题是明确的报告内容类别，使用OTHER合理。"
+              }
+            ],
+            "context_references_are_not_required_dependencies": true
+          }
+        }
+      ]
+    },
+    "P": {
+      "status": "UNRESOLVED",
+      "openness": "CONSTRAINED",
+      "entries": [
+        {
+          "id": "bf:55d7df7b9dbc576b5c47",
+          "kind": "ROLE",
+          "status": "UNRESOLVED",
+          "claim_ids": [
+            "cl_performer",
+            "ent_pm",
+            "evt_generate",
+            "cl_time",
+            "cl_count"
+          ],
+          "claim": {
+            "id": "cl_performer",
+            "kind": "ROLE",
+            "event_id": "evt_generate",
+            "entity_id": "ent_pm",
+            "role": "PERFORMER",
+            "expression_id": null,
+            "direction": null,
+            "temporal": null,
+            "quantity": null,
+            "scope_id": "evt_generate",
+            "requires": [],
+            "sources": [
+              {
+                "quote": "请PM在10分钟内生成top.md",
+                "occurrence": 1,
+                "span": [
+                  0,
+                  17
+                ],
+                "source_sha256": "d23733b8b85a6121a14c5debfd60bf4bb21869855f5902448c8aa378b5ebda54"
+              }
+            ],
+            "note": "PM是生成报告的执行者；岗位简称不推定身份类别或权限。"
+          },
+          "event": {
+            "id": "evt_generate",
+            "predicate": "生成报告",
+            "kind": "ACTION",
+            "layer": "MAIN",
+            "use": "CURRENT_TASK",
+            "modality": "REQUIRED",
+            "polarity": "POSITIVE",
+            "owner_id": "ROOT",
+            "constraint_ids": [
+              "cl_time",
+              "cl_count"
+            ],
+            "requires": [],
+            "sources": [
+              {
+                "quote": "请PM在10分钟内生成top.md，报告只列3个问题。",
+                "occurrence": 1,
+                "span": [
+                  0,
+                  27
+                ],
+                "source_sha256": "d23733b8b85a6121a14c5debfd60bf4bb21869855f5902448c8aa378b5ebda54"
+              }
+            ]
+          },
+          "entity": {
+            "id": "ent_pm",
+            "label": "PM",
+            "type": "OTHER",
+            "mentions": [
+              {
+                "quote": "PM",
+                "occurrence": 1,
+                "span": [
+                  1,
+                  3
+                ],
+                "source_sha256": "d23733b8b85a6121a14c5debfd60bf4bb21869855f5902448c8aa378b5ebda54"
+              }
+            ],
+            "alternatives": []
+          },
+          "expression": null,
+          "constraints": [
+            {
+              "id": "cl_time",
+              "kind": "QUANTITY",
+              "event_id": "evt_generate",
+              "entity_id": null,
+              "role": null,
+              "expression_id": null,
+              "direction": null,
+              "temporal": null,
+              "quantity": {
+                "metric": "生成时限",
+                "target_id": "evt_generate",
+                "comparator": "LTE",
+                "value": 10,
+                "unit": "分钟",
+                "use": "EXECUTION_LIMIT",
+                "count_scope": "ROOT"
+              },
+              "scope_id": "evt_generate",
+              "requires": [],
+              "sources": [
+                {
+                  "quote": "在10分钟内生成top.md",
+                  "occurrence": 1,
+                  "span": [
+                    3,
+                    17
+                  ],
+                  "source_sha256": "d23733b8b85a6121a14c5debfd60bf4bb21869855f5902448c8aa378b5ebda54"
+                }
+              ],
+              "note": "执行时限，不作为根任务完成条件。",
+              "expression": null
+            },
+            {
+              "id": "cl_count",
+              "kind": "QUANTITY",
+              "event_id": "evt_generate",
+              "entity_id": null,
+              "role": null,
+              "expression_id": null,
+              "direction": null,
+              "temporal": null,
+              "quantity": {
+                "metric": "报告所列问题数量",
+                "target_id": "ent_report",
+                "comparator": "EQ",
+                "value": 3,
+                "unit": "个问题",
+                "use": "OUTPUT_CONTENT",
+                "count_scope": "ent_report"
+              },
+              "scope_id": "ent_report",
+              "requires": [
+                "cl_result"
+              ],
+              "sources": [
+                {
+                  "quote": "报告只列3个问题",
+                  "occurrence": 1,
+                  "span": [
+                    18,
+                    26
+                  ],
+                  "source_sha256": "d23733b8b85a6121a14c5debfd60bf4bb21869855f5902448c8aa378b5ebda54"
+                }
+              ],
+              "note": "产物内容为3个问题，不是执行次数限制。",
+              "expression": null
+            }
+          ],
+          "content_quantities": [],
+          "content_scopes": [],
+          "sources": [
+            {
+              "quote": "请PM在10分钟内生成top.md",
+              "occurrence": 1,
+              "span": [
+                0,
+                17
+              ],
+              "source_sha256": "d23733b8b85a6121a14c5debfd60bf4bb21869855f5902448c8aa378b5ebda54"
+            },
+            {
+              "quote": "请PM在10分钟内生成top.md，报告只列3个问题。",
+              "occurrence": 1,
+              "span": [
+                0,
+                27
+              ],
+              "source_sha256": "d23733b8b85a6121a14c5debfd60bf4bb21869855f5902448c8aa378b5ebda54"
+            },
+            {
+              "quote": "在10分钟内生成top.md",
+              "occurrence": 1,
+              "span": [
+                3,
+                17
+              ],
+              "source_sha256": "d23733b8b85a6121a14c5debfd60bf4bb21869855f5902448c8aa378b5ebda54"
+            },
+            {
+              "quote": "报告只列3个问题",
+              "occurrence": 1,
+              "span": [
+                18,
+                26
+              ],
+              "source_sha256": "d23733b8b85a6121a14c5debfd60bf4bb21869855f5902448c8aa378b5ebda54"
+            },
+            {
+              "quote": "生成top.md",
+              "occurrence": 1,
+              "span": [
+                9,
+                17
+              ],
+              "source_sha256": "d23733b8b85a6121a14c5debfd60bf4bb21869855f5902448c8aa378b5ebda54"
+            },
+            {
+              "quote": "报告只列3个问题",
+              "occurrence": 1,
+              "span": [
+                18,
+                26
+              ],
+              "source_sha256": "d23733b8b85a6121a14c5debfd60bf4bb21869855f5902448c8aa378b5ebda54"
+            },
+            {
+              "quote": "top.md",
+              "occurrence": 1,
+              "span": [
+                11,
+                17
+              ],
+              "source_sha256": "d23733b8b85a6121a14c5debfd60bf4bb21869855f5902448c8aa378b5ebda54"
+            },
+            {
+              "quote": "报告",
+              "occurrence": 1,
+              "span": [
+                18,
+                20
+              ],
+              "source_sha256": "d23733b8b85a6121a14c5debfd60bf4bb21869855f5902448c8aa378b5ebda54"
+            },
+            {
+              "quote": "PM",
+              "occurrence": 1,
+              "span": [
+                1,
+                3
+              ],
+              "source_sha256": "d23733b8b85a6121a14c5debfd60bf4bb21869855f5902448c8aa378b5ebda54"
+            }
+          ],
+          "slots": [
+            "P"
+          ],
+          "proof": {
+            "source_sha256": "d23733b8b85a6121a14c5debfd60bf4bb21869855f5902448c8aa378b5ebda54",
+            "claim_ids": [
+              "cl_performer",
+              "ent_pm",
+              "evt_generate",
+              "cl_time",
+              "cl_count"
+            ],
+            "provenance_refs": [
+              "cl_performer",
+              "evt_generate",
+              "cl_time",
+              "cl_count",
+              "cl_result",
+              "ent_report",
+              "ent_pm"
+            ],
+            "technical_policy": "028-r02-technical-v1",
+            "checks": [
+              {
+                "id": "cl_performer",
+                "collection": "claims",
+                "status": "UNRESOLVED",
+                "errors": [],
+                "uncertain": [
+                  "REQUIRED_DEPENDENCY:ent_pm"
+                ],
+                "sources": [
+                  {
+                    "quote": "请PM在10分钟内生成top.md",
+                    "occurrence": 1,
+                    "span": [
+                      0,
+                      17
+                    ],
+                    "source_sha256": "d23733b8b85a6121a14c5debfd60bf4bb21869855f5902448c8aa378b5ebda54"
+                  }
+                ],
+                "audit_refs": [
+                  {
+                    "subject_id": "cl_performer",
+                    "field_path": "",
+                    "verdict": "SUPPORT"
+                  }
+                ],
+                "required_dependencies": [],
+                "structural_refs": [
+                  "evt_generate",
+                  "ent_pm"
+                ]
+              },
+              {
+                "id": "evt_generate",
+                "collection": "events",
+                "status": "ACCEPTED",
+                "errors": [],
+                "uncertain": [],
+                "sources": [
+                  {
+                    "quote": "请PM在10分钟内生成top.md，报告只列3个问题。",
+                    "occurrence": 1,
+                    "span": [
+                      0,
+                      27
+                    ],
+                    "source_sha256": "d23733b8b85a6121a14c5debfd60bf4bb21869855f5902448c8aa378b5ebda54"
+                  }
+                ],
+                "audit_refs": [
+                  {
+                    "subject_id": "evt_generate",
+                    "field_path": "",
+                    "verdict": "SUPPORT"
+                  }
+                ],
+                "required_dependencies": [],
+                "structural_refs": [
+                  "ROOT",
+                  "cl_time",
+                  "cl_count"
+                ]
+              },
+              {
+                "id": "cl_time",
+                "collection": "claims",
+                "status": "ACCEPTED",
+                "errors": [],
+                "uncertain": [],
+                "sources": [
+                  {
+                    "quote": "在10分钟内生成top.md",
+                    "occurrence": 1,
+                    "span": [
+                      3,
+                      17
+                    ],
+                    "source_sha256": "d23733b8b85a6121a14c5debfd60bf4bb21869855f5902448c8aa378b5ebda54"
+                  }
+                ],
+                "audit_refs": [
+                  {
+                    "subject_id": "cl_time",
+                    "field_path": "",
+                    "verdict": "SUPPORT"
+                  }
+                ],
+                "required_dependencies": [],
+                "structural_refs": [
+                  "evt_generate"
+                ]
+              },
+              {
+                "id": "cl_count",
+                "collection": "claims",
+                "status": "ACCEPTED",
+                "errors": [],
+                "uncertain": [],
+                "sources": [
+                  {
+                    "quote": "报告只列3个问题",
+                    "occurrence": 1,
+                    "span": [
+                      18,
+                      26
+                    ],
+                    "source_sha256": "d23733b8b85a6121a14c5debfd60bf4bb21869855f5902448c8aa378b5ebda54"
+                  }
+                ],
+                "audit_refs": [
+                  {
+                    "subject_id": "cl_count",
+                    "field_path": "",
+                    "verdict": "SUPPORT"
+                  }
+                ],
+                "required_dependencies": [
+                  "cl_result"
+                ],
+                "structural_refs": [
+                  "evt_generate"
+                ]
+              },
+              {
+                "id": "cl_result",
+                "collection": "claims",
+                "status": "ACCEPTED",
+                "errors": [],
+                "uncertain": [],
+                "sources": [
+                  {
+                    "quote": "生成top.md",
+                    "occurrence": 1,
+                    "span": [
+                      9,
+                      17
+                    ],
+                    "source_sha256": "d23733b8b85a6121a14c5debfd60bf4bb21869855f5902448c8aa378b5ebda54"
+                  },
+                  {
+                    "quote": "报告只列3个问题",
+                    "occurrence": 1,
+                    "span": [
+                      18,
+                      26
+                    ],
+                    "source_sha256": "d23733b8b85a6121a14c5debfd60bf4bb21869855f5902448c8aa378b5ebda54"
+                  }
+                ],
+                "audit_refs": [
+                  {
+                    "subject_id": "cl_result",
+                    "field_path": "",
+                    "verdict": "SUPPORT"
+                  }
+                ],
+                "required_dependencies": [],
+                "structural_refs": [
+                  "evt_generate",
+                  "ent_report"
+                ]
+              },
+              {
+                "id": "ent_report",
+                "collection": "entities",
+                "status": "ACCEPTED",
+                "identity_status": "ACCEPTED",
+                "errors": [],
+                "uncertain": [],
+                "sources": [
+                  {
+                    "quote": "top.md",
+                    "occurrence": 1,
+                    "span": [
+                      11,
+                      17
+                    ],
+                    "source_sha256": "d23733b8b85a6121a14c5debfd60bf4bb21869855f5902448c8aa378b5ebda54"
+                  },
+                  {
+                    "quote": "报告",
+                    "occurrence": 1,
+                    "span": [
+                      18,
+                      20
+                    ],
+                    "source_sha256": "d23733b8b85a6121a14c5debfd60bf4bb21869855f5902448c8aa378b5ebda54"
+                  }
+                ],
+                "audit_refs": [
+                  {
+                    "subject_id": "ent_report",
+                    "field_path": "",
+                    "verdict": "SUPPORT"
+                  }
+                ],
+                "required_dependencies": [],
+                "structural_refs": []
+              },
+              {
+                "id": "ent_pm",
+                "collection": "entities",
+                "status": "UNRESOLVED",
+                "identity_status": "UNRESOLVED",
+                "errors": [],
+                "uncertain": [
+                  "AUDIT_ISSUE:IDENTITY",
+                  "WHOLE_CLAIM_SUPPORT_MISSING",
+                  "AUDIT_NOT_SUPPORTED"
+                ],
+                "sources": [
+                  {
+                    "quote": "PM",
+                    "occurrence": 1,
+                    "span": [
+                      1,
+                      3
+                    ],
+                    "source_sha256": "d23733b8b85a6121a14c5debfd60bf4bb21869855f5902448c8aa378b5ebda54"
+                  }
+                ],
+                "audit_refs": [
+                  {
+                    "subject_id": "ent_pm",
+                    "field_path": "label",
+                    "verdict": "SUPPORT"
+                  },
+                  {
+                    "subject_id": "ent_pm",
+                    "field_path": "type",
+                    "verdict": "UNCERTAIN"
+                  }
+                ],
+                "required_dependencies": [],
+                "structural_refs": []
+              }
+            ],
+            "audit": [
+              {
+                "subject_id": "cl_performer",
+                "field_path": "",
+                "verdict": "SUPPORT",
+                "context_refs": [
+                  "ent_pm",
+                  "evt_generate"
+                ],
+                "sources": [
+                  {
+                    "quote": "请PM在10分钟内生成top.md",
+                    "occurrence": 1
+                  }
+                ],
+                "reason": "PM被明确指定为生成动作的执行者，不需推定其身份类别或权限。"
+              },
+              {
+                "subject_id": "evt_generate",
+                "field_path": "",
+                "verdict": "SUPPORT",
+                "context_refs": [],
+                "sources": [
+                  {
+                    "quote": "请PM在10分钟内生成top.md，报告只列3个问题。",
+                    "occurrence": 1
+                  }
+                ],
+                "reason": "生成报告是当前明确要求的主动作；时限和内容数量约束均已绑定。"
+              },
+              {
+                "subject_id": "cl_time",
+                "field_path": "",
+                "verdict": "SUPPORT",
+                "context_refs": [
+                  "evt_generate"
+                ],
+                "sources": [
+                  {
+                    "quote": "在10分钟内生成top.md",
+                    "occurrence": 1
+                  }
+                ],
+                "reason": "10分钟以内是生成动作的执行时限，LTE、分钟及执行限制用途正确，未升格为根完成条件。"
+              },
+              {
+                "subject_id": "cl_count",
+                "field_path": "",
+                "verdict": "SUPPORT",
+                "context_refs": [
+                  "cl_result",
+                  "evt_generate"
+                ],
+                "sources": [
+                  {
+                    "quote": "报告只列3个问题",
+                    "occurrence": 1
+                  }
+                ],
+                "reason": "报告所列问题恰为3个；目标、单位和计数范围指向报告，OUTPUT_CONTENT用途正确且双向绑定完整。"
+              },
+              {
+                "subject_id": "cl_result",
+                "field_path": "",
+                "verdict": "SUPPORT",
+                "context_refs": [
+                  "ent_report",
+                  "evt_generate"
+                ],
+                "sources": [
+                  {
+                    "quote": "生成top.md，报告只列3个问题",
+                    "occurrence": 1
+                  }
+                ],
+                "reason": "top.md是生成结果，报告内容要求约束同一文件。"
+              },
+              {
+                "subject_id": "ent_report",
+                "field_path": "",
+                "verdict": "SUPPORT",
+                "context_refs": [],
+                "sources": [
+                  {
+                    "quote": "生成top.md，报告只列3个问题",
+                    "occurrence": 1
+                  }
+                ],
+                "reason": "top.md是生成的文件，后续报告指同一产物。"
+              },
+              {
+                "subject_id": "ent_pm",
+                "field_path": "label",
+                "verdict": "SUPPORT",
+                "context_refs": [],
+                "sources": [
+                  {
+                    "quote": "PM",
+                    "occurrence": 1
+                  }
+                ],
+                "reason": "原文明示执行者名称为PM，身份指称没有竞争候选。"
+              },
+              {
+                "subject_id": "ent_pm",
+                "field_path": "type",
+                "verdict": "UNCERTAIN",
+                "context_refs": [],
+                "sources": [
+                  {
+                    "quote": "请PM在10分钟内生成top.md",
+                    "occurrence": 1
+                  }
+                ],
+                "reason": "原文未明确PM是个人、团队还是其他实体；类别未定不影响其明确执行职责。"
+              }
+            ],
+            "context_references_are_not_required_dependencies": true
+          }
+        }
+      ]
+    },
+    "R": {
+      "status": "RESOLVED",
+      "openness": "CONSTRAINED",
+      "entries": [
+        {
+          "id": "bf:b28e5c30642bb526418c",
+          "kind": "QUANTITY",
+          "status": "ACCEPTED",
+          "claim_ids": [
+            "cl_time",
+            "evt_generate",
+            "cl_count"
+          ],
+          "claim": {
+            "id": "cl_time",
+            "kind": "QUANTITY",
+            "event_id": "evt_generate",
+            "entity_id": null,
+            "role": null,
+            "expression_id": null,
+            "direction": null,
+            "temporal": null,
+            "quantity": {
+              "metric": "生成时限",
+              "target_id": "evt_generate",
+              "comparator": "LTE",
+              "value": 10,
+              "unit": "分钟",
+              "use": "EXECUTION_LIMIT",
+              "count_scope": "ROOT"
+            },
+            "scope_id": "evt_generate",
+            "requires": [],
+            "sources": [
+              {
+                "quote": "在10分钟内生成top.md",
+                "occurrence": 1,
+                "span": [
+                  3,
+                  17
+                ],
+                "source_sha256": "d23733b8b85a6121a14c5debfd60bf4bb21869855f5902448c8aa378b5ebda54"
+              }
+            ],
+            "note": "执行时限，不作为根任务完成条件。"
+          },
+          "event": {
+            "id": "evt_generate",
+            "predicate": "生成报告",
+            "kind": "ACTION",
+            "layer": "MAIN",
+            "use": "CURRENT_TASK",
+            "modality": "REQUIRED",
+            "polarity": "POSITIVE",
+            "owner_id": "ROOT",
+            "constraint_ids": [
+              "cl_time",
+              "cl_count"
+            ],
+            "requires": [],
+            "sources": [
+              {
+                "quote": "请PM在10分钟内生成top.md，报告只列3个问题。",
+                "occurrence": 1,
+                "span": [
+                  0,
+                  27
+                ],
+                "source_sha256": "d23733b8b85a6121a14c5debfd60bf4bb21869855f5902448c8aa378b5ebda54"
+              }
+            ]
+          },
+          "entity": null,
+          "expression": null,
+          "constraints": [
+            {
+              "id": "cl_time",
+              "kind": "QUANTITY",
+              "event_id": "evt_generate",
+              "entity_id": null,
+              "role": null,
+              "expression_id": null,
+              "direction": null,
+              "temporal": null,
+              "quantity": {
+                "metric": "生成时限",
+                "target_id": "evt_generate",
+                "comparator": "LTE",
+                "value": 10,
+                "unit": "分钟",
+                "use": "EXECUTION_LIMIT",
+                "count_scope": "ROOT"
+              },
+              "scope_id": "evt_generate",
+              "requires": [],
+              "sources": [
+                {
+                  "quote": "在10分钟内生成top.md",
+                  "occurrence": 1,
+                  "span": [
+                    3,
+                    17
+                  ],
+                  "source_sha256": "d23733b8b85a6121a14c5debfd60bf4bb21869855f5902448c8aa378b5ebda54"
+                }
+              ],
+              "note": "执行时限，不作为根任务完成条件。",
+              "expression": null
+            },
+            {
+              "id": "cl_count",
+              "kind": "QUANTITY",
+              "event_id": "evt_generate",
+              "entity_id": null,
+              "role": null,
+              "expression_id": null,
+              "direction": null,
+              "temporal": null,
+              "quantity": {
+                "metric": "报告所列问题数量",
+                "target_id": "ent_report",
+                "comparator": "EQ",
+                "value": 3,
+                "unit": "个问题",
+                "use": "OUTPUT_CONTENT",
+                "count_scope": "ent_report"
+              },
+              "scope_id": "ent_report",
+              "requires": [
+                "cl_result"
+              ],
+              "sources": [
+                {
+                  "quote": "报告只列3个问题",
+                  "occurrence": 1,
+                  "span": [
+                    18,
+                    26
+                  ],
+                  "source_sha256": "d23733b8b85a6121a14c5debfd60bf4bb21869855f5902448c8aa378b5ebda54"
+                }
+              ],
+              "note": "产物内容为3个问题，不是执行次数限制。",
+              "expression": null
+            }
+          ],
+          "content_quantities": [],
+          "content_scopes": [],
+          "sources": [
+            {
+              "quote": "在10分钟内生成top.md",
+              "occurrence": 1,
+              "span": [
+                3,
+                17
+              ],
+              "source_sha256": "d23733b8b85a6121a14c5debfd60bf4bb21869855f5902448c8aa378b5ebda54"
+            },
+            {
+              "quote": "请PM在10分钟内生成top.md，报告只列3个问题。",
+              "occurrence": 1,
+              "span": [
+                0,
+                27
+              ],
+              "source_sha256": "d23733b8b85a6121a14c5debfd60bf4bb21869855f5902448c8aa378b5ebda54"
+            },
+            {
+              "quote": "报告只列3个问题",
+              "occurrence": 1,
+              "span": [
+                18,
+                26
+              ],
+              "source_sha256": "d23733b8b85a6121a14c5debfd60bf4bb21869855f5902448c8aa378b5ebda54"
+            },
+            {
+              "quote": "生成top.md",
+              "occurrence": 1,
+              "span": [
+                9,
+                17
+              ],
+              "source_sha256": "d23733b8b85a6121a14c5debfd60bf4bb21869855f5902448c8aa378b5ebda54"
+            },
+            {
+              "quote": "报告只列3个问题",
+              "occurrence": 1,
+              "span": [
+                18,
+                26
+              ],
+              "source_sha256": "d23733b8b85a6121a14c5debfd60bf4bb21869855f5902448c8aa378b5ebda54"
+            },
+            {
+              "quote": "top.md",
+              "occurrence": 1,
+              "span": [
+                11,
+                17
+              ],
+              "source_sha256": "d23733b8b85a6121a14c5debfd60bf4bb21869855f5902448c8aa378b5ebda54"
+            },
+            {
+              "quote": "报告",
+              "occurrence": 1,
+              "span": [
+                18,
+                20
+              ],
+              "source_sha256": "d23733b8b85a6121a14c5debfd60bf4bb21869855f5902448c8aa378b5ebda54"
+            }
+          ],
+          "slots": [
+            "R"
+          ],
+          "proof": {
+            "source_sha256": "d23733b8b85a6121a14c5debfd60bf4bb21869855f5902448c8aa378b5ebda54",
+            "claim_ids": [
+              "cl_time",
+              "evt_generate",
+              "cl_count"
+            ],
+            "provenance_refs": [
+              "cl_time",
+              "evt_generate",
+              "cl_count",
+              "cl_result",
+              "ent_report"
+            ],
+            "technical_policy": "028-r02-technical-v1",
+            "checks": [
+              {
+                "id": "cl_time",
+                "collection": "claims",
+                "status": "ACCEPTED",
+                "errors": [],
+                "uncertain": [],
+                "sources": [
+                  {
+                    "quote": "在10分钟内生成top.md",
+                    "occurrence": 1,
+                    "span": [
+                      3,
+                      17
+                    ],
+                    "source_sha256": "d23733b8b85a6121a14c5debfd60bf4bb21869855f5902448c8aa378b5ebda54"
+                  }
+                ],
+                "audit_refs": [
+                  {
+                    "subject_id": "cl_time",
+                    "field_path": "",
+                    "verdict": "SUPPORT"
+                  }
+                ],
+                "required_dependencies": [],
+                "structural_refs": [
+                  "evt_generate"
+                ]
+              },
+              {
+                "id": "evt_generate",
+                "collection": "events",
+                "status": "ACCEPTED",
+                "errors": [],
+                "uncertain": [],
+                "sources": [
+                  {
+                    "quote": "请PM在10分钟内生成top.md，报告只列3个问题。",
+                    "occurrence": 1,
+                    "span": [
+                      0,
+                      27
+                    ],
+                    "source_sha256": "d23733b8b85a6121a14c5debfd60bf4bb21869855f5902448c8aa378b5ebda54"
+                  }
+                ],
+                "audit_refs": [
+                  {
+                    "subject_id": "evt_generate",
+                    "field_path": "",
+                    "verdict": "SUPPORT"
+                  }
+                ],
+                "required_dependencies": [],
+                "structural_refs": [
+                  "ROOT",
+                  "cl_time",
+                  "cl_count"
+                ]
+              },
+              {
+                "id": "cl_count",
+                "collection": "claims",
+                "status": "ACCEPTED",
+                "errors": [],
+                "uncertain": [],
+                "sources": [
+                  {
+                    "quote": "报告只列3个问题",
+                    "occurrence": 1,
+                    "span": [
+                      18,
+                      26
+                    ],
+                    "source_sha256": "d23733b8b85a6121a14c5debfd60bf4bb21869855f5902448c8aa378b5ebda54"
+                  }
+                ],
+                "audit_refs": [
+                  {
+                    "subject_id": "cl_count",
+                    "field_path": "",
+                    "verdict": "SUPPORT"
+                  }
+                ],
+                "required_dependencies": [
+                  "cl_result"
+                ],
+                "structural_refs": [
+                  "evt_generate"
+                ]
+              },
+              {
+                "id": "cl_result",
+                "collection": "claims",
+                "status": "ACCEPTED",
+                "errors": [],
+                "uncertain": [],
+                "sources": [
+                  {
+                    "quote": "生成top.md",
+                    "occurrence": 1,
+                    "span": [
+                      9,
+                      17
+                    ],
+                    "source_sha256": "d23733b8b85a6121a14c5debfd60bf4bb21869855f5902448c8aa378b5ebda54"
+                  },
+                  {
+                    "quote": "报告只列3个问题",
+                    "occurrence": 1,
+                    "span": [
+                      18,
+                      26
+                    ],
+                    "source_sha256": "d23733b8b85a6121a14c5debfd60bf4bb21869855f5902448c8aa378b5ebda54"
+                  }
+                ],
+                "audit_refs": [
+                  {
+                    "subject_id": "cl_result",
+                    "field_path": "",
+                    "verdict": "SUPPORT"
+                  }
+                ],
+                "required_dependencies": [],
+                "structural_refs": [
+                  "evt_generate",
+                  "ent_report"
+                ]
+              },
+              {
+                "id": "ent_report",
+                "collection": "entities",
+                "status": "ACCEPTED",
+                "identity_status": "ACCEPTED",
+                "errors": [],
+                "uncertain": [],
+                "sources": [
+                  {
+                    "quote": "top.md",
+                    "occurrence": 1,
+                    "span": [
+                      11,
+                      17
+                    ],
+                    "source_sha256": "d23733b8b85a6121a14c5debfd60bf4bb21869855f5902448c8aa378b5ebda54"
+                  },
+                  {
+                    "quote": "报告",
+                    "occurrence": 1,
+                    "span": [
+                      18,
+                      20
+                    ],
+                    "source_sha256": "d23733b8b85a6121a14c5debfd60bf4bb21869855f5902448c8aa378b5ebda54"
+                  }
+                ],
+                "audit_refs": [
+                  {
+                    "subject_id": "ent_report",
+                    "field_path": "",
+                    "verdict": "SUPPORT"
+                  }
+                ],
+                "required_dependencies": [],
+                "structural_refs": []
+              }
+            ],
+            "audit": [
+              {
+                "subject_id": "cl_time",
+                "field_path": "",
+                "verdict": "SUPPORT",
+                "context_refs": [
+                  "evt_generate"
+                ],
+                "sources": [
+                  {
+                    "quote": "在10分钟内生成top.md",
+                    "occurrence": 1
+                  }
+                ],
+                "reason": "10分钟以内是生成动作的执行时限，LTE、分钟及执行限制用途正确，未升格为根完成条件。"
+              },
+              {
+                "subject_id": "evt_generate",
+                "field_path": "",
+                "verdict": "SUPPORT",
+                "context_refs": [],
+                "sources": [
+                  {
+                    "quote": "请PM在10分钟内生成top.md，报告只列3个问题。",
+                    "occurrence": 1
+                  }
+                ],
+                "reason": "生成报告是当前明确要求的主动作；时限和内容数量约束均已绑定。"
+              },
+              {
+                "subject_id": "cl_count",
+                "field_path": "",
+                "verdict": "SUPPORT",
+                "context_refs": [
+                  "cl_result",
+                  "evt_generate"
+                ],
+                "sources": [
+                  {
+                    "quote": "报告只列3个问题",
+                    "occurrence": 1
+                  }
+                ],
+                "reason": "报告所列问题恰为3个；目标、单位和计数范围指向报告，OUTPUT_CONTENT用途正确且双向绑定完整。"
+              },
+              {
+                "subject_id": "cl_result",
+                "field_path": "",
+                "verdict": "SUPPORT",
+                "context_refs": [
+                  "ent_report",
+                  "evt_generate"
+                ],
+                "sources": [
+                  {
+                    "quote": "生成top.md，报告只列3个问题",
+                    "occurrence": 1
+                  }
+                ],
+                "reason": "top.md是生成结果，报告内容要求约束同一文件。"
+              },
+              {
+                "subject_id": "ent_report",
+                "field_path": "",
+                "verdict": "SUPPORT",
+                "context_refs": [],
+                "sources": [
+                  {
+                    "quote": "生成top.md，报告只列3个问题",
+                    "occurrence": 1
+                  }
+                ],
+                "reason": "top.md是生成的文件，后续报告指同一产物。"
+              }
+            ],
+            "context_references_are_not_required_dependencies": true
+          }
+        }
+      ]
+    },
+    "V": {
+      "status": "ABSENT",
+      "openness": "OPEN",
+      "entries": []
+    },
+    "C": {
+      "status": "ABSENT",
+      "openness": "OPEN",
+      "entries": []
+    },
+    "B": {
+      "status": "ABSENT",
+      "openness": "OPEN",
+      "entries": []
+    }
+  },
+  "unresolved": [
+    {
+      "id": "bf:aa37a93690b06f04097e",
+      "kind": "EVENT",
+      "status": "UNRESOLVED",
+      "claim_ids": [
+        "evt_generate",
+        "cl_performer",
+        "cl_result",
+        "cl_content",
+        "cl_time",
+        "cl_count"
+      ],
+      "event": {
+        "id": "evt_generate",
+        "predicate": "生成报告",
+        "kind": "ACTION",
+        "layer": "MAIN",
+        "use": "CURRENT_TASK",
+        "modality": "REQUIRED",
+        "polarity": "POSITIVE",
+        "owner_id": "ROOT",
+        "constraint_ids": [
+          "cl_time",
+          "cl_count"
+        ],
+        "requires": [],
+        "sources": [
+          {
+            "quote": "请PM在10分钟内生成top.md，报告只列3个问题。",
+            "occurrence": 1,
+            "span": [
+              0,
+              27
+            ],
+            "source_sha256": "d23733b8b85a6121a14c5debfd60bf4bb21869855f5902448c8aa378b5ebda54"
+          }
+        ]
+      },
+      "roles": [
+        {
+          "id": "cl_performer",
+          "kind": "ROLE",
+          "event_id": "evt_generate",
+          "entity_id": "ent_pm",
+          "role": "PERFORMER",
+          "expression_id": null,
+          "direction": null,
+          "temporal": null,
+          "quantity": null,
+          "scope_id": "evt_generate",
+          "requires": [],
+          "sources": [
+            {
+              "quote": "请PM在10分钟内生成top.md",
+              "occurrence": 1,
+              "span": [
+                0,
+                17
+              ],
+              "source_sha256": "d23733b8b85a6121a14c5debfd60bf4bb21869855f5902448c8aa378b5ebda54"
+            }
+          ],
+          "note": "PM是生成报告的执行者；岗位简称不推定身份类别或权限。",
+          "entity": {
+            "id": "ent_pm",
+            "label": "PM",
+            "type": "OTHER",
+            "mentions": [
+              {
+                "quote": "PM",
+                "occurrence": 1,
+                "span": [
+                  1,
+                  3
+                ],
+                "source_sha256": "d23733b8b85a6121a14c5debfd60bf4bb21869855f5902448c8aa378b5ebda54"
+              }
+            ],
+            "alternatives": []
+          },
+          "status": "UNRESOLVED"
+        },
+        {
+          "id": "cl_result",
+          "kind": "ROLE",
+          "event_id": "evt_generate",
+          "entity_id": "ent_report",
+          "role": "RESULT",
+          "expression_id": null,
+          "direction": null,
+          "temporal": null,
+          "quantity": null,
+          "scope_id": "evt_generate",
+          "requires": [],
+          "sources": [
+            {
+              "quote": "生成top.md",
+              "occurrence": 1,
+              "span": [
+                9,
+                17
+              ],
+              "source_sha256": "d23733b8b85a6121a14c5debfd60bf4bb21869855f5902448c8aa378b5ebda54"
+            },
+            {
+              "quote": "报告只列3个问题",
+              "occurrence": 1,
+              "span": [
+                18,
+                26
+              ],
+              "source_sha256": "d23733b8b85a6121a14c5debfd60bf4bb21869855f5902448c8aa378b5ebda54"
+            }
+          ],
+          "note": "报告指生成的top.md，保持同一产物实体。",
+          "entity": {
+            "id": "ent_report",
+            "label": "top.md报告",
+            "type": "FILE",
+            "mentions": [
+              {
+                "quote": "top.md",
+                "occurrence": 1,
+                "span": [
+                  11,
+                  17
+                ],
+                "source_sha256": "d23733b8b85a6121a14c5debfd60bf4bb21869855f5902448c8aa378b5ebda54"
+              },
+              {
+                "quote": "报告",
+                "occurrence": 1,
+                "span": [
+                  18,
+                  20
+                ],
+                "source_sha256": "d23733b8b85a6121a14c5debfd60bf4bb21869855f5902448c8aa378b5ebda54"
+              }
+            ],
+            "alternatives": []
+          },
+          "status": "ACCEPTED"
+        },
+        {
+          "id": "cl_content",
+          "kind": "ROLE",
+          "event_id": "evt_generate",
+          "entity_id": "ent_problems",
+          "role": "CONTENT",
+          "expression_id": null,
+          "direction": null,
+          "temporal": null,
+          "quantity": null,
+          "scope_id": "ent_report",
+          "requires": [
+            "cl_result"
+          ],
+          "sources": [
+            {
+              "quote": "报告只列3个问题",
+              "occurrence": 1,
+              "span": [
+                18,
+                26
+              ],
+              "source_sha256": "d23733b8b85a6121a14c5debfd60bf4bb21869855f5902448c8aa378b5ebda54"
+            }
+          ],
+          "note": "问题是报告内容，不是外部输入。",
+          "entity": {
+            "id": "ent_problems",
+            "label": "问题",
+            "type": "OTHER",
+            "mentions": [
+              {
+                "quote": "问题",
+                "occurrence": 1,
+                "span": [
+                  24,
+                  26
+                ],
+                "source_sha256": "d23733b8b85a6121a14c5debfd60bf4bb21869855f5902448c8aa378b5ebda54"
+              }
+            ],
+            "alternatives": []
+          },
+          "status": "ACCEPTED"
+        }
+      ],
+      "constraints": [
+        {
+          "id": "cl_time",
+          "kind": "QUANTITY",
+          "event_id": "evt_generate",
+          "entity_id": null,
+          "role": null,
+          "expression_id": null,
+          "direction": null,
+          "temporal": null,
+          "quantity": {
+            "metric": "生成时限",
+            "target_id": "evt_generate",
+            "comparator": "LTE",
+            "value": 10,
+            "unit": "分钟",
+            "use": "EXECUTION_LIMIT",
+            "count_scope": "ROOT"
+          },
+          "scope_id": "evt_generate",
+          "requires": [],
+          "sources": [
+            {
+              "quote": "在10分钟内生成top.md",
+              "occurrence": 1,
+              "span": [
+                3,
+                17
+              ],
+              "source_sha256": "d23733b8b85a6121a14c5debfd60bf4bb21869855f5902448c8aa378b5ebda54"
+            }
+          ],
+          "note": "执行时限，不作为根任务完成条件。",
+          "expression": null
+        },
+        {
+          "id": "cl_count",
+          "kind": "QUANTITY",
+          "event_id": "evt_generate",
+          "entity_id": null,
+          "role": null,
+          "expression_id": null,
+          "direction": null,
+          "temporal": null,
+          "quantity": {
+            "metric": "报告所列问题数量",
+            "target_id": "ent_report",
+            "comparator": "EQ",
+            "value": 3,
+            "unit": "个问题",
+            "use": "OUTPUT_CONTENT",
+            "count_scope": "ent_report"
+          },
+          "scope_id": "ent_report",
+          "requires": [
+            "cl_result"
+          ],
+          "sources": [
+            {
+              "quote": "报告只列3个问题",
+              "occurrence": 1,
+              "span": [
+                18,
+                26
+              ],
+              "source_sha256": "d23733b8b85a6121a14c5debfd60bf4bb21869855f5902448c8aa378b5ebda54"
+            }
+          ],
+          "note": "产物内容为3个问题，不是执行次数限制。",
+          "expression": null
+        }
+      ],
+      "sources": [
+        {
+          "quote": "请PM在10分钟内生成top.md，报告只列3个问题。",
+          "occurrence": 1,
+          "span": [
+            0,
+            27
+          ],
+          "source_sha256": "d23733b8b85a6121a14c5debfd60bf4bb21869855f5902448c8aa378b5ebda54"
+        },
+        {
+          "quote": "在10分钟内生成top.md",
+          "occurrence": 1,
+          "span": [
+            3,
+            17
+          ],
+          "source_sha256": "d23733b8b85a6121a14c5debfd60bf4bb21869855f5902448c8aa378b5ebda54"
+        },
+        {
+          "quote": "报告只列3个问题",
+          "occurrence": 1,
+          "span": [
+            18,
+            26
+          ],
+          "source_sha256": "d23733b8b85a6121a14c5debfd60bf4bb21869855f5902448c8aa378b5ebda54"
+        },
+        {
+          "quote": "生成top.md",
+          "occurrence": 1,
+          "span": [
+            9,
+            17
+          ],
+          "source_sha256": "d23733b8b85a6121a14c5debfd60bf4bb21869855f5902448c8aa378b5ebda54"
+        },
+        {
+          "quote": "报告只列3个问题",
+          "occurrence": 1,
+          "span": [
+            18,
+            26
+          ],
+          "source_sha256": "d23733b8b85a6121a14c5debfd60bf4bb21869855f5902448c8aa378b5ebda54"
+        },
+        {
+          "quote": "top.md",
+          "occurrence": 1,
+          "span": [
+            11,
+            17
+          ],
+          "source_sha256": "d23733b8b85a6121a14c5debfd60bf4bb21869855f5902448c8aa378b5ebda54"
+        },
+        {
+          "quote": "报告",
+          "occurrence": 1,
+          "span": [
+            18,
+            20
+          ],
+          "source_sha256": "d23733b8b85a6121a14c5debfd60bf4bb21869855f5902448c8aa378b5ebda54"
+        },
+        {
+          "quote": "请PM在10分钟内生成top.md",
+          "occurrence": 1,
+          "span": [
+            0,
+            17
+          ],
+          "source_sha256": "d23733b8b85a6121a14c5debfd60bf4bb21869855f5902448c8aa378b5ebda54"
+        },
+        {
+          "quote": "PM",
+          "occurrence": 1,
+          "span": [
+            1,
+            3
+          ],
+          "source_sha256": "d23733b8b85a6121a14c5debfd60bf4bb21869855f5902448c8aa378b5ebda54"
+        },
+        {
+          "quote": "报告只列3个问题",
+          "occurrence": 1,
+          "span": [
+            18,
+            26
+          ],
+          "source_sha256": "d23733b8b85a6121a14c5debfd60bf4bb21869855f5902448c8aa378b5ebda54"
+        },
+        {
+          "quote": "问题",
+          "occurrence": 1,
+          "span": [
+            24,
+            26
+          ],
+          "source_sha256": "d23733b8b85a6121a14c5debfd60bf4bb21869855f5902448c8aa378b5ebda54"
+        }
+      ],
+      "slots": [
+        "A"
+      ],
+      "proof": {
+        "source_sha256": "d23733b8b85a6121a14c5debfd60bf4bb21869855f5902448c8aa378b5ebda54",
+        "claim_ids": [
+          "evt_generate",
+          "cl_performer",
+          "cl_result",
+          "cl_content",
+          "cl_time",
+          "cl_count"
+        ],
+        "provenance_refs": [
+          "evt_generate",
+          "cl_time",
+          "cl_count",
+          "cl_result",
+          "ent_report",
+          "cl_performer",
+          "ent_pm",
+          "cl_content",
+          "ent_problems"
+        ],
+        "technical_policy": "028-r02-technical-v1",
+        "checks": [
+          {
+            "id": "evt_generate",
+            "collection": "events",
+            "status": "ACCEPTED",
+            "errors": [],
+            "uncertain": [],
+            "sources": [
+              {
+                "quote": "请PM在10分钟内生成top.md，报告只列3个问题。",
+                "occurrence": 1,
+                "span": [
+                  0,
+                  27
+                ],
+                "source_sha256": "d23733b8b85a6121a14c5debfd60bf4bb21869855f5902448c8aa378b5ebda54"
+              }
+            ],
+            "audit_refs": [
+              {
+                "subject_id": "evt_generate",
+                "field_path": "",
+                "verdict": "SUPPORT"
+              }
+            ],
+            "required_dependencies": [],
+            "structural_refs": [
+              "ROOT",
+              "cl_time",
+              "cl_count"
+            ]
+          },
+          {
+            "id": "cl_time",
+            "collection": "claims",
+            "status": "ACCEPTED",
+            "errors": [],
+            "uncertain": [],
+            "sources": [
+              {
+                "quote": "在10分钟内生成top.md",
+                "occurrence": 1,
+                "span": [
+                  3,
+                  17
+                ],
+                "source_sha256": "d23733b8b85a6121a14c5debfd60bf4bb21869855f5902448c8aa378b5ebda54"
+              }
+            ],
+            "audit_refs": [
+              {
+                "subject_id": "cl_time",
+                "field_path": "",
+                "verdict": "SUPPORT"
+              }
+            ],
+            "required_dependencies": [],
+            "structural_refs": [
+              "evt_generate"
+            ]
+          },
+          {
+            "id": "cl_count",
+            "collection": "claims",
+            "status": "ACCEPTED",
+            "errors": [],
+            "uncertain": [],
+            "sources": [
+              {
+                "quote": "报告只列3个问题",
+                "occurrence": 1,
+                "span": [
+                  18,
+                  26
+                ],
+                "source_sha256": "d23733b8b85a6121a14c5debfd60bf4bb21869855f5902448c8aa378b5ebda54"
+              }
+            ],
+            "audit_refs": [
+              {
+                "subject_id": "cl_count",
+                "field_path": "",
+                "verdict": "SUPPORT"
+              }
+            ],
+            "required_dependencies": [
+              "cl_result"
+            ],
+            "structural_refs": [
+              "evt_generate"
+            ]
+          },
+          {
+            "id": "cl_result",
+            "collection": "claims",
+            "status": "ACCEPTED",
+            "errors": [],
+            "uncertain": [],
+            "sources": [
+              {
+                "quote": "生成top.md",
+                "occurrence": 1,
+                "span": [
+                  9,
+                  17
+                ],
+                "source_sha256": "d23733b8b85a6121a14c5debfd60bf4bb21869855f5902448c8aa378b5ebda54"
+              },
+              {
+                "quote": "报告只列3个问题",
+                "occurrence": 1,
+                "span": [
+                  18,
+                  26
+                ],
+                "source_sha256": "d23733b8b85a6121a14c5debfd60bf4bb21869855f5902448c8aa378b5ebda54"
+              }
+            ],
+            "audit_refs": [
+              {
+                "subject_id": "cl_result",
+                "field_path": "",
+                "verdict": "SUPPORT"
+              }
+            ],
+            "required_dependencies": [],
+            "structural_refs": [
+              "evt_generate",
+              "ent_report"
+            ]
+          },
+          {
+            "id": "ent_report",
+            "collection": "entities",
+            "status": "ACCEPTED",
+            "identity_status": "ACCEPTED",
+            "errors": [],
+            "uncertain": [],
+            "sources": [
+              {
+                "quote": "top.md",
+                "occurrence": 1,
+                "span": [
+                  11,
+                  17
+                ],
+                "source_sha256": "d23733b8b85a6121a14c5debfd60bf4bb21869855f5902448c8aa378b5ebda54"
+              },
+              {
+                "quote": "报告",
+                "occurrence": 1,
+                "span": [
+                  18,
+                  20
+                ],
+                "source_sha256": "d23733b8b85a6121a14c5debfd60bf4bb21869855f5902448c8aa378b5ebda54"
+              }
+            ],
+            "audit_refs": [
+              {
+                "subject_id": "ent_report",
+                "field_path": "",
+                "verdict": "SUPPORT"
+              }
+            ],
+            "required_dependencies": [],
+            "structural_refs": []
+          },
+          {
+            "id": "cl_performer",
+            "collection": "claims",
+            "status": "UNRESOLVED",
+            "errors": [],
+            "uncertain": [
+              "REQUIRED_DEPENDENCY:ent_pm"
+            ],
+            "sources": [
+              {
+                "quote": "请PM在10分钟内生成top.md",
+                "occurrence": 1,
+                "span": [
+                  0,
+                  17
+                ],
+                "source_sha256": "d23733b8b85a6121a14c5debfd60bf4bb21869855f5902448c8aa378b5ebda54"
+              }
+            ],
+            "audit_refs": [
+              {
+                "subject_id": "cl_performer",
+                "field_path": "",
+                "verdict": "SUPPORT"
+              }
+            ],
+            "required_dependencies": [],
+            "structural_refs": [
+              "evt_generate",
+              "ent_pm"
+            ]
+          },
+          {
+            "id": "ent_pm",
+            "collection": "entities",
+            "status": "UNRESOLVED",
+            "identity_status": "UNRESOLVED",
+            "errors": [],
+            "uncertain": [
+              "AUDIT_ISSUE:IDENTITY",
+              "WHOLE_CLAIM_SUPPORT_MISSING",
+              "AUDIT_NOT_SUPPORTED"
+            ],
+            "sources": [
+              {
+                "quote": "PM",
+                "occurrence": 1,
+                "span": [
+                  1,
+                  3
+                ],
+                "source_sha256": "d23733b8b85a6121a14c5debfd60bf4bb21869855f5902448c8aa378b5ebda54"
+              }
+            ],
+            "audit_refs": [
+              {
+                "subject_id": "ent_pm",
+                "field_path": "label",
+                "verdict": "SUPPORT"
+              },
+              {
+                "subject_id": "ent_pm",
+                "field_path": "type",
+                "verdict": "UNCERTAIN"
+              }
+            ],
+            "required_dependencies": [],
+            "structural_refs": []
+          },
+          {
+            "id": "cl_content",
+            "collection": "claims",
+            "status": "ACCEPTED",
+            "errors": [],
+            "uncertain": [],
+            "sources": [
+              {
+                "quote": "报告只列3个问题",
+                "occurrence": 1,
+                "span": [
+                  18,
+                  26
+                ],
+                "source_sha256": "d23733b8b85a6121a14c5debfd60bf4bb21869855f5902448c8aa378b5ebda54"
+              }
+            ],
+            "audit_refs": [
+              {
+                "subject_id": "cl_content",
+                "field_path": "",
+                "verdict": "SUPPORT"
+              }
+            ],
+            "required_dependencies": [
+              "cl_result"
+            ],
+            "structural_refs": [
+              "evt_generate",
+              "ent_problems"
+            ]
+          },
+          {
+            "id": "ent_problems",
+            "collection": "entities",
+            "status": "ACCEPTED",
+            "identity_status": "ACCEPTED",
+            "errors": [],
+            "uncertain": [],
+            "sources": [
+              {
+                "quote": "问题",
+                "occurrence": 1,
+                "span": [
+                  24,
+                  26
+                ],
+                "source_sha256": "d23733b8b85a6121a14c5debfd60bf4bb21869855f5902448c8aa378b5ebda54"
+              }
+            ],
+            "audit_refs": [
+              {
+                "subject_id": "ent_problems",
+                "field_path": "",
+                "verdict": "SUPPORT"
+              }
+            ],
+            "required_dependencies": [],
+            "structural_refs": []
+          }
+        ],
+        "audit": [
+          {
+            "subject_id": "evt_generate",
+            "field_path": "",
+            "verdict": "SUPPORT",
+            "context_refs": [],
+            "sources": [
+              {
+                "quote": "请PM在10分钟内生成top.md，报告只列3个问题。",
+                "occurrence": 1
+              }
+            ],
+            "reason": "生成报告是当前明确要求的主动作；时限和内容数量约束均已绑定。"
+          },
+          {
+            "subject_id": "cl_time",
+            "field_path": "",
+            "verdict": "SUPPORT",
+            "context_refs": [
+              "evt_generate"
+            ],
+            "sources": [
+              {
+                "quote": "在10分钟内生成top.md",
+                "occurrence": 1
+              }
+            ],
+            "reason": "10分钟以内是生成动作的执行时限，LTE、分钟及执行限制用途正确，未升格为根完成条件。"
+          },
+          {
+            "subject_id": "cl_count",
+            "field_path": "",
+            "verdict": "SUPPORT",
+            "context_refs": [
+              "cl_result",
+              "evt_generate"
+            ],
+            "sources": [
+              {
+                "quote": "报告只列3个问题",
+                "occurrence": 1
+              }
+            ],
+            "reason": "报告所列问题恰为3个；目标、单位和计数范围指向报告，OUTPUT_CONTENT用途正确且双向绑定完整。"
+          },
+          {
+            "subject_id": "cl_result",
+            "field_path": "",
+            "verdict": "SUPPORT",
+            "context_refs": [
+              "ent_report",
+              "evt_generate"
+            ],
+            "sources": [
+              {
+                "quote": "生成top.md，报告只列3个问题",
+                "occurrence": 1
+              }
+            ],
+            "reason": "top.md是生成结果，报告内容要求约束同一文件。"
+          },
+          {
+            "subject_id": "ent_report",
+            "field_path": "",
+            "verdict": "SUPPORT",
+            "context_refs": [],
+            "sources": [
+              {
+                "quote": "生成top.md，报告只列3个问题",
+                "occurrence": 1
+              }
+            ],
+            "reason": "top.md是生成的文件，后续报告指同一产物。"
+          },
+          {
+            "subject_id": "cl_performer",
+            "field_path": "",
+            "verdict": "SUPPORT",
+            "context_refs": [
+              "ent_pm",
+              "evt_generate"
+            ],
+            "sources": [
+              {
+                "quote": "请PM在10分钟内生成top.md",
+                "occurrence": 1
+              }
+            ],
+            "reason": "PM被明确指定为生成动作的执行者，不需推定其身份类别或权限。"
+          },
+          {
+            "subject_id": "ent_pm",
+            "field_path": "label",
+            "verdict": "SUPPORT",
+            "context_refs": [],
+            "sources": [
+              {
+                "quote": "PM",
+                "occurrence": 1
+              }
+            ],
+            "reason": "原文明示执行者名称为PM，身份指称没有竞争候选。"
+          },
+          {
+            "subject_id": "ent_pm",
+            "field_path": "type",
+            "verdict": "UNCERTAIN",
+            "context_refs": [],
+            "sources": [
+              {
+                "quote": "请PM在10分钟内生成top.md",
+                "occurrence": 1
+              }
+            ],
+            "reason": "原文未明确PM是个人、团队还是其他实体；类别未定不影响其明确执行职责。"
+          },
+          {
+            "subject_id": "cl_content",
+            "field_path": "",
+            "verdict": "SUPPORT",
+            "context_refs": [
+              "cl_result",
+              "ent_problems"
+            ],
+            "sources": [
+              {
+                "quote": "报告只列3个问题",
+                "occurrence": 1
+              }
+            ],
+            "reason": "问题属于报告内容，关联生成结果合理，不构成外部输入。"
+          },
+          {
+            "subject_id": "ent_problems",
+            "field_path": "",
+            "verdict": "SUPPORT",
+            "context_refs": [],
+            "sources": [
+              {
+                "quote": "问题",
+                "occurrence": 1
+              }
+            ],
+            "reason": "问题是明确的报告内容类别，使用OTHER合理。"
+          }
+        ],
+        "context_references_are_not_required_dependencies": true
+      }
+    },
+    {
+      "id": "bf:55d7df7b9dbc576b5c47",
+      "kind": "ROLE",
+      "status": "UNRESOLVED",
+      "claim_ids": [
+        "cl_performer",
+        "ent_pm",
+        "evt_generate",
+        "cl_time",
+        "cl_count"
+      ],
+      "claim": {
+        "id": "cl_performer",
+        "kind": "ROLE",
+        "event_id": "evt_generate",
+        "entity_id": "ent_pm",
+        "role": "PERFORMER",
+        "expression_id": null,
+        "direction": null,
+        "temporal": null,
+        "quantity": null,
+        "scope_id": "evt_generate",
+        "requires": [],
+        "sources": [
+          {
+            "quote": "请PM在10分钟内生成top.md",
+            "occurrence": 1,
+            "span": [
+              0,
+              17
+            ],
+            "source_sha256": "d23733b8b85a6121a14c5debfd60bf4bb21869855f5902448c8aa378b5ebda54"
+          }
+        ],
+        "note": "PM是生成报告的执行者；岗位简称不推定身份类别或权限。"
+      },
+      "event": {
+        "id": "evt_generate",
+        "predicate": "生成报告",
+        "kind": "ACTION",
+        "layer": "MAIN",
+        "use": "CURRENT_TASK",
+        "modality": "REQUIRED",
+        "polarity": "POSITIVE",
+        "owner_id": "ROOT",
+        "constraint_ids": [
+          "cl_time",
+          "cl_count"
+        ],
+        "requires": [],
+        "sources": [
+          {
+            "quote": "请PM在10分钟内生成top.md，报告只列3个问题。",
+            "occurrence": 1,
+            "span": [
+              0,
+              27
+            ],
+            "source_sha256": "d23733b8b85a6121a14c5debfd60bf4bb21869855f5902448c8aa378b5ebda54"
+          }
+        ]
+      },
+      "entity": {
+        "id": "ent_pm",
+        "label": "PM",
+        "type": "OTHER",
+        "mentions": [
+          {
+            "quote": "PM",
+            "occurrence": 1,
+            "span": [
+              1,
+              3
+            ],
+            "source_sha256": "d23733b8b85a6121a14c5debfd60bf4bb21869855f5902448c8aa378b5ebda54"
+          }
+        ],
+        "alternatives": []
+      },
+      "expression": null,
+      "constraints": [
+        {
+          "id": "cl_time",
+          "kind": "QUANTITY",
+          "event_id": "evt_generate",
+          "entity_id": null,
+          "role": null,
+          "expression_id": null,
+          "direction": null,
+          "temporal": null,
+          "quantity": {
+            "metric": "生成时限",
+            "target_id": "evt_generate",
+            "comparator": "LTE",
+            "value": 10,
+            "unit": "分钟",
+            "use": "EXECUTION_LIMIT",
+            "count_scope": "ROOT"
+          },
+          "scope_id": "evt_generate",
+          "requires": [],
+          "sources": [
+            {
+              "quote": "在10分钟内生成top.md",
+              "occurrence": 1,
+              "span": [
+                3,
+                17
+              ],
+              "source_sha256": "d23733b8b85a6121a14c5debfd60bf4bb21869855f5902448c8aa378b5ebda54"
+            }
+          ],
+          "note": "执行时限，不作为根任务完成条件。",
+          "expression": null
+        },
+        {
+          "id": "cl_count",
+          "kind": "QUANTITY",
+          "event_id": "evt_generate",
+          "entity_id": null,
+          "role": null,
+          "expression_id": null,
+          "direction": null,
+          "temporal": null,
+          "quantity": {
+            "metric": "报告所列问题数量",
+            "target_id": "ent_report",
+            "comparator": "EQ",
+            "value": 3,
+            "unit": "个问题",
+            "use": "OUTPUT_CONTENT",
+            "count_scope": "ent_report"
+          },
+          "scope_id": "ent_report",
+          "requires": [
+            "cl_result"
+          ],
+          "sources": [
+            {
+              "quote": "报告只列3个问题",
+              "occurrence": 1,
+              "span": [
+                18,
+                26
+              ],
+              "source_sha256": "d23733b8b85a6121a14c5debfd60bf4bb21869855f5902448c8aa378b5ebda54"
+            }
+          ],
+          "note": "产物内容为3个问题，不是执行次数限制。",
+          "expression": null
+        }
+      ],
+      "content_quantities": [],
+      "content_scopes": [],
+      "sources": [
+        {
+          "quote": "请PM在10分钟内生成top.md",
+          "occurrence": 1,
+          "span": [
+            0,
+            17
+          ],
+          "source_sha256": "d23733b8b85a6121a14c5debfd60bf4bb21869855f5902448c8aa378b5ebda54"
+        },
+        {
+          "quote": "请PM在10分钟内生成top.md，报告只列3个问题。",
+          "occurrence": 1,
+          "span": [
+            0,
+            27
+          ],
+          "source_sha256": "d23733b8b85a6121a14c5debfd60bf4bb21869855f5902448c8aa378b5ebda54"
+        },
+        {
+          "quote": "在10分钟内生成top.md",
+          "occurrence": 1,
+          "span": [
+            3,
+            17
+          ],
+          "source_sha256": "d23733b8b85a6121a14c5debfd60bf4bb21869855f5902448c8aa378b5ebda54"
+        },
+        {
+          "quote": "报告只列3个问题",
+          "occurrence": 1,
+          "span": [
+            18,
+            26
+          ],
+          "source_sha256": "d23733b8b85a6121a14c5debfd60bf4bb21869855f5902448c8aa378b5ebda54"
+        },
+        {
+          "quote": "生成top.md",
+          "occurrence": 1,
+          "span": [
+            9,
+            17
+          ],
+          "source_sha256": "d23733b8b85a6121a14c5debfd60bf4bb21869855f5902448c8aa378b5ebda54"
+        },
+        {
+          "quote": "报告只列3个问题",
+          "occurrence": 1,
+          "span": [
+            18,
+            26
+          ],
+          "source_sha256": "d23733b8b85a6121a14c5debfd60bf4bb21869855f5902448c8aa378b5ebda54"
+        },
+        {
+          "quote": "top.md",
+          "occurrence": 1,
+          "span": [
+            11,
+            17
+          ],
+          "source_sha256": "d23733b8b85a6121a14c5debfd60bf4bb21869855f5902448c8aa378b5ebda54"
+        },
+        {
+          "quote": "报告",
+          "occurrence": 1,
+          "span": [
+            18,
+            20
+          ],
+          "source_sha256": "d23733b8b85a6121a14c5debfd60bf4bb21869855f5902448c8aa378b5ebda54"
+        },
+        {
+          "quote": "PM",
+          "occurrence": 1,
+          "span": [
+            1,
+            3
+          ],
+          "source_sha256": "d23733b8b85a6121a14c5debfd60bf4bb21869855f5902448c8aa378b5ebda54"
+        }
+      ],
+      "slots": [
+        "P"
+      ],
+      "proof": {
+        "source_sha256": "d23733b8b85a6121a14c5debfd60bf4bb21869855f5902448c8aa378b5ebda54",
+        "claim_ids": [
+          "cl_performer",
+          "ent_pm",
+          "evt_generate",
+          "cl_time",
+          "cl_count"
+        ],
+        "provenance_refs": [
+          "cl_performer",
+          "evt_generate",
+          "cl_time",
+          "cl_count",
+          "cl_result",
+          "ent_report",
+          "ent_pm"
+        ],
+        "technical_policy": "028-r02-technical-v1",
+        "checks": [
+          {
+            "id": "cl_performer",
+            "collection": "claims",
+            "status": "UNRESOLVED",
+            "errors": [],
+            "uncertain": [
+              "REQUIRED_DEPENDENCY:ent_pm"
+            ],
+            "sources": [
+              {
+                "quote": "请PM在10分钟内生成top.md",
+                "occurrence": 1,
+                "span": [
+                  0,
+                  17
+                ],
+                "source_sha256": "d23733b8b85a6121a14c5debfd60bf4bb21869855f5902448c8aa378b5ebda54"
+              }
+            ],
+            "audit_refs": [
+              {
+                "subject_id": "cl_performer",
+                "field_path": "",
+                "verdict": "SUPPORT"
+              }
+            ],
+            "required_dependencies": [],
+            "structural_refs": [
+              "evt_generate",
+              "ent_pm"
+            ]
+          },
+          {
+            "id": "evt_generate",
+            "collection": "events",
+            "status": "ACCEPTED",
+            "errors": [],
+            "uncertain": [],
+            "sources": [
+              {
+                "quote": "请PM在10分钟内生成top.md，报告只列3个问题。",
+                "occurrence": 1,
+                "span": [
+                  0,
+                  27
+                ],
+                "source_sha256": "d23733b8b85a6121a14c5debfd60bf4bb21869855f5902448c8aa378b5ebda54"
+              }
+            ],
+            "audit_refs": [
+              {
+                "subject_id": "evt_generate",
+                "field_path": "",
+                "verdict": "SUPPORT"
+              }
+            ],
+            "required_dependencies": [],
+            "structural_refs": [
+              "ROOT",
+              "cl_time",
+              "cl_count"
+            ]
+          },
+          {
+            "id": "cl_time",
+            "collection": "claims",
+            "status": "ACCEPTED",
+            "errors": [],
+            "uncertain": [],
+            "sources": [
+              {
+                "quote": "在10分钟内生成top.md",
+                "occurrence": 1,
+                "span": [
+                  3,
+                  17
+                ],
+                "source_sha256": "d23733b8b85a6121a14c5debfd60bf4bb21869855f5902448c8aa378b5ebda54"
+              }
+            ],
+            "audit_refs": [
+              {
+                "subject_id": "cl_time",
+                "field_path": "",
+                "verdict": "SUPPORT"
+              }
+            ],
+            "required_dependencies": [],
+            "structural_refs": [
+              "evt_generate"
+            ]
+          },
+          {
+            "id": "cl_count",
+            "collection": "claims",
+            "status": "ACCEPTED",
+            "errors": [],
+            "uncertain": [],
+            "sources": [
+              {
+                "quote": "报告只列3个问题",
+                "occurrence": 1,
+                "span": [
+                  18,
+                  26
+                ],
+                "source_sha256": "d23733b8b85a6121a14c5debfd60bf4bb21869855f5902448c8aa378b5ebda54"
+              }
+            ],
+            "audit_refs": [
+              {
+                "subject_id": "cl_count",
+                "field_path": "",
+                "verdict": "SUPPORT"
+              }
+            ],
+            "required_dependencies": [
+              "cl_result"
+            ],
+            "structural_refs": [
+              "evt_generate"
+            ]
+          },
+          {
+            "id": "cl_result",
+            "collection": "claims",
+            "status": "ACCEPTED",
+            "errors": [],
+            "uncertain": [],
+            "sources": [
+              {
+                "quote": "生成top.md",
+                "occurrence": 1,
+                "span": [
+                  9,
+                  17
+                ],
+                "source_sha256": "d23733b8b85a6121a14c5debfd60bf4bb21869855f5902448c8aa378b5ebda54"
+              },
+              {
+                "quote": "报告只列3个问题",
+                "occurrence": 1,
+                "span": [
+                  18,
+                  26
+                ],
+                "source_sha256": "d23733b8b85a6121a14c5debfd60bf4bb21869855f5902448c8aa378b5ebda54"
+              }
+            ],
+            "audit_refs": [
+              {
+                "subject_id": "cl_result",
+                "field_path": "",
+                "verdict": "SUPPORT"
+              }
+            ],
+            "required_dependencies": [],
+            "structural_refs": [
+              "evt_generate",
+              "ent_report"
+            ]
+          },
+          {
+            "id": "ent_report",
+            "collection": "entities",
+            "status": "ACCEPTED",
+            "identity_status": "ACCEPTED",
+            "errors": [],
+            "uncertain": [],
+            "sources": [
+              {
+                "quote": "top.md",
+                "occurrence": 1,
+                "span": [
+                  11,
+                  17
+                ],
+                "source_sha256": "d23733b8b85a6121a14c5debfd60bf4bb21869855f5902448c8aa378b5ebda54"
+              },
+              {
+                "quote": "报告",
+                "occurrence": 1,
+                "span": [
+                  18,
+                  20
+                ],
+                "source_sha256": "d23733b8b85a6121a14c5debfd60bf4bb21869855f5902448c8aa378b5ebda54"
+              }
+            ],
+            "audit_refs": [
+              {
+                "subject_id": "ent_report",
+                "field_path": "",
+                "verdict": "SUPPORT"
+              }
+            ],
+            "required_dependencies": [],
+            "structural_refs": []
+          },
+          {
+            "id": "ent_pm",
+            "collection": "entities",
+            "status": "UNRESOLVED",
+            "identity_status": "UNRESOLVED",
+            "errors": [],
+            "uncertain": [
+              "AUDIT_ISSUE:IDENTITY",
+              "WHOLE_CLAIM_SUPPORT_MISSING",
+              "AUDIT_NOT_SUPPORTED"
+            ],
+            "sources": [
+              {
+                "quote": "PM",
+                "occurrence": 1,
+                "span": [
+                  1,
+                  3
+                ],
+                "source_sha256": "d23733b8b85a6121a14c5debfd60bf4bb21869855f5902448c8aa378b5ebda54"
+              }
+            ],
+            "audit_refs": [
+              {
+                "subject_id": "ent_pm",
+                "field_path": "label",
+                "verdict": "SUPPORT"
+              },
+              {
+                "subject_id": "ent_pm",
+                "field_path": "type",
+                "verdict": "UNCERTAIN"
+              }
+            ],
+            "required_dependencies": [],
+            "structural_refs": []
+          }
+        ],
+        "audit": [
+          {
+            "subject_id": "cl_performer",
+            "field_path": "",
+            "verdict": "SUPPORT",
+            "context_refs": [
+              "ent_pm",
+              "evt_generate"
+            ],
+            "sources": [
+              {
+                "quote": "请PM在10分钟内生成top.md",
+                "occurrence": 1
+              }
+            ],
+            "reason": "PM被明确指定为生成动作的执行者，不需推定其身份类别或权限。"
+          },
+          {
+            "subject_id": "evt_generate",
+            "field_path": "",
+            "verdict": "SUPPORT",
+            "context_refs": [],
+            "sources": [
+              {
+                "quote": "请PM在10分钟内生成top.md，报告只列3个问题。",
+                "occurrence": 1
+              }
+            ],
+            "reason": "生成报告是当前明确要求的主动作；时限和内容数量约束均已绑定。"
+          },
+          {
+            "subject_id": "cl_time",
+            "field_path": "",
+            "verdict": "SUPPORT",
+            "context_refs": [
+              "evt_generate"
+            ],
+            "sources": [
+              {
+                "quote": "在10分钟内生成top.md",
+                "occurrence": 1
+              }
+            ],
+            "reason": "10分钟以内是生成动作的执行时限，LTE、分钟及执行限制用途正确，未升格为根完成条件。"
+          },
+          {
+            "subject_id": "cl_count",
+            "field_path": "",
+            "verdict": "SUPPORT",
+            "context_refs": [
+              "cl_result",
+              "evt_generate"
+            ],
+            "sources": [
+              {
+                "quote": "报告只列3个问题",
+                "occurrence": 1
+              }
+            ],
+            "reason": "报告所列问题恰为3个；目标、单位和计数范围指向报告，OUTPUT_CONTENT用途正确且双向绑定完整。"
+          },
+          {
+            "subject_id": "cl_result",
+            "field_path": "",
+            "verdict": "SUPPORT",
+            "context_refs": [
+              "ent_report",
+              "evt_generate"
+            ],
+            "sources": [
+              {
+                "quote": "生成top.md，报告只列3个问题",
+                "occurrence": 1
+              }
+            ],
+            "reason": "top.md是生成结果，报告内容要求约束同一文件。"
+          },
+          {
+            "subject_id": "ent_report",
+            "field_path": "",
+            "verdict": "SUPPORT",
+            "context_refs": [],
+            "sources": [
+              {
+                "quote": "生成top.md，报告只列3个问题",
+                "occurrence": 1
+              }
+            ],
+            "reason": "top.md是生成的文件，后续报告指同一产物。"
+          },
+          {
+            "subject_id": "ent_pm",
+            "field_path": "label",
+            "verdict": "SUPPORT",
+            "context_refs": [],
+            "sources": [
+              {
+                "quote": "PM",
+                "occurrence": 1
+              }
+            ],
+            "reason": "原文明示执行者名称为PM，身份指称没有竞争候选。"
+          },
+          {
+            "subject_id": "ent_pm",
+            "field_path": "type",
+            "verdict": "UNCERTAIN",
+            "context_refs": [],
+            "sources": [
+              {
+                "quote": "请PM在10分钟内生成top.md",
+                "occurrence": 1
+              }
+            ],
+            "reason": "原文未明确PM是个人、团队还是其他实体；类别未定不影响其明确执行职责。"
+          }
+        ],
+        "context_references_are_not_required_dependencies": true
+      }
+    }
+  ],
+  "retained_nonprojected": [
+    {
+      "id": "bf:d29576e139ef266908ee",
+      "kind": "ROLE",
+      "status": "ACCEPTED",
+      "claim_ids": [
+        "cl_content",
+        "ent_problems",
+        "evt_generate",
+        "cl_time",
+        "cl_count"
+      ],
+      "claim": {
+        "id": "cl_content",
+        "kind": "ROLE",
+        "event_id": "evt_generate",
+        "entity_id": "ent_problems",
+        "role": "CONTENT",
+        "expression_id": null,
+        "direction": null,
+        "temporal": null,
+        "quantity": null,
+        "scope_id": "ent_report",
+        "requires": [
+          "cl_result"
+        ],
+        "sources": [
+          {
+            "quote": "报告只列3个问题",
+            "occurrence": 1,
+            "span": [
+              18,
+              26
+            ],
+            "source_sha256": "d23733b8b85a6121a14c5debfd60bf4bb21869855f5902448c8aa378b5ebda54"
+          }
+        ],
+        "note": "问题是报告内容，不是外部输入。"
+      },
+      "event": {
+        "id": "evt_generate",
+        "predicate": "生成报告",
+        "kind": "ACTION",
+        "layer": "MAIN",
+        "use": "CURRENT_TASK",
+        "modality": "REQUIRED",
+        "polarity": "POSITIVE",
+        "owner_id": "ROOT",
+        "constraint_ids": [
+          "cl_time",
+          "cl_count"
+        ],
+        "requires": [],
+        "sources": [
+          {
+            "quote": "请PM在10分钟内生成top.md，报告只列3个问题。",
+            "occurrence": 1,
+            "span": [
+              0,
+              27
+            ],
+            "source_sha256": "d23733b8b85a6121a14c5debfd60bf4bb21869855f5902448c8aa378b5ebda54"
+          }
+        ]
+      },
+      "entity": {
+        "id": "ent_problems",
+        "label": "问题",
+        "type": "OTHER",
+        "mentions": [
+          {
+            "quote": "问题",
+            "occurrence": 1,
+            "span": [
+              24,
+              26
+            ],
+            "source_sha256": "d23733b8b85a6121a14c5debfd60bf4bb21869855f5902448c8aa378b5ebda54"
+          }
+        ],
+        "alternatives": []
+      },
+      "expression": null,
+      "constraints": [
+        {
+          "id": "cl_time",
+          "kind": "QUANTITY",
+          "event_id": "evt_generate",
+          "entity_id": null,
+          "role": null,
+          "expression_id": null,
+          "direction": null,
+          "temporal": null,
+          "quantity": {
+            "metric": "生成时限",
+            "target_id": "evt_generate",
+            "comparator": "LTE",
+            "value": 10,
+            "unit": "分钟",
+            "use": "EXECUTION_LIMIT",
+            "count_scope": "ROOT"
+          },
+          "scope_id": "evt_generate",
+          "requires": [],
+          "sources": [
+            {
+              "quote": "在10分钟内生成top.md",
+              "occurrence": 1,
+              "span": [
+                3,
+                17
+              ],
+              "source_sha256": "d23733b8b85a6121a14c5debfd60bf4bb21869855f5902448c8aa378b5ebda54"
+            }
+          ],
+          "note": "执行时限，不作为根任务完成条件。",
+          "expression": null
+        },
+        {
+          "id": "cl_count",
+          "kind": "QUANTITY",
+          "event_id": "evt_generate",
+          "entity_id": null,
+          "role": null,
+          "expression_id": null,
+          "direction": null,
+          "temporal": null,
+          "quantity": {
+            "metric": "报告所列问题数量",
+            "target_id": "ent_report",
+            "comparator": "EQ",
+            "value": 3,
+            "unit": "个问题",
+            "use": "OUTPUT_CONTENT",
+            "count_scope": "ent_report"
+          },
+          "scope_id": "ent_report",
+          "requires": [
+            "cl_result"
+          ],
+          "sources": [
+            {
+              "quote": "报告只列3个问题",
+              "occurrence": 1,
+              "span": [
+                18,
+                26
+              ],
+              "source_sha256": "d23733b8b85a6121a14c5debfd60bf4bb21869855f5902448c8aa378b5ebda54"
+            }
+          ],
+          "note": "产物内容为3个问题，不是执行次数限制。",
+          "expression": null
+        }
+      ],
+      "content_quantities": [],
+      "content_scopes": [],
+      "sources": [
+        {
+          "quote": "报告只列3个问题",
+          "occurrence": 1,
+          "span": [
+            18,
+            26
+          ],
+          "source_sha256": "d23733b8b85a6121a14c5debfd60bf4bb21869855f5902448c8aa378b5ebda54"
+        },
+        {
+          "quote": "请PM在10分钟内生成top.md，报告只列3个问题。",
+          "occurrence": 1,
+          "span": [
+            0,
+            27
+          ],
+          "source_sha256": "d23733b8b85a6121a14c5debfd60bf4bb21869855f5902448c8aa378b5ebda54"
+        },
+        {
+          "quote": "在10分钟内生成top.md",
+          "occurrence": 1,
+          "span": [
+            3,
+            17
+          ],
+          "source_sha256": "d23733b8b85a6121a14c5debfd60bf4bb21869855f5902448c8aa378b5ebda54"
+        },
+        {
+          "quote": "报告只列3个问题",
+          "occurrence": 1,
+          "span": [
+            18,
+            26
+          ],
+          "source_sha256": "d23733b8b85a6121a14c5debfd60bf4bb21869855f5902448c8aa378b5ebda54"
+        },
+        {
+          "quote": "生成top.md",
+          "occurrence": 1,
+          "span": [
+            9,
+            17
+          ],
+          "source_sha256": "d23733b8b85a6121a14c5debfd60bf4bb21869855f5902448c8aa378b5ebda54"
+        },
+        {
+          "quote": "报告只列3个问题",
+          "occurrence": 1,
+          "span": [
+            18,
+            26
+          ],
+          "source_sha256": "d23733b8b85a6121a14c5debfd60bf4bb21869855f5902448c8aa378b5ebda54"
+        },
+        {
+          "quote": "top.md",
+          "occurrence": 1,
+          "span": [
+            11,
+            17
+          ],
+          "source_sha256": "d23733b8b85a6121a14c5debfd60bf4bb21869855f5902448c8aa378b5ebda54"
+        },
+        {
+          "quote": "报告",
+          "occurrence": 1,
+          "span": [
+            18,
+            20
+          ],
+          "source_sha256": "d23733b8b85a6121a14c5debfd60bf4bb21869855f5902448c8aa378b5ebda54"
+        },
+        {
+          "quote": "问题",
+          "occurrence": 1,
+          "span": [
+            24,
+            26
+          ],
+          "source_sha256": "d23733b8b85a6121a14c5debfd60bf4bb21869855f5902448c8aa378b5ebda54"
+        }
+      ],
+      "slots": [],
+      "proof": {
+        "source_sha256": "d23733b8b85a6121a14c5debfd60bf4bb21869855f5902448c8aa378b5ebda54",
+        "claim_ids": [
+          "cl_content",
+          "ent_problems",
+          "evt_generate",
+          "cl_time",
+          "cl_count"
+        ],
+        "provenance_refs": [
+          "cl_content",
+          "evt_generate",
+          "cl_time",
+          "cl_count",
+          "cl_result",
+          "ent_report",
+          "ent_problems"
+        ],
+        "technical_policy": "028-r02-technical-v1",
+        "checks": [
+          {
+            "id": "cl_content",
+            "collection": "claims",
+            "status": "ACCEPTED",
+            "errors": [],
+            "uncertain": [],
+            "sources": [
+              {
+                "quote": "报告只列3个问题",
+                "occurrence": 1,
+                "span": [
+                  18,
+                  26
+                ],
+                "source_sha256": "d23733b8b85a6121a14c5debfd60bf4bb21869855f5902448c8aa378b5ebda54"
+              }
+            ],
+            "audit_refs": [
+              {
+                "subject_id": "cl_content",
+                "field_path": "",
+                "verdict": "SUPPORT"
+              }
+            ],
+            "required_dependencies": [
+              "cl_result"
+            ],
+            "structural_refs": [
+              "evt_generate",
+              "ent_problems"
+            ]
+          },
+          {
+            "id": "evt_generate",
+            "collection": "events",
+            "status": "ACCEPTED",
+            "errors": [],
+            "uncertain": [],
+            "sources": [
+              {
+                "quote": "请PM在10分钟内生成top.md，报告只列3个问题。",
+                "occurrence": 1,
+                "span": [
+                  0,
+                  27
+                ],
+                "source_sha256": "d23733b8b85a6121a14c5debfd60bf4bb21869855f5902448c8aa378b5ebda54"
+              }
+            ],
+            "audit_refs": [
+              {
+                "subject_id": "evt_generate",
+                "field_path": "",
+                "verdict": "SUPPORT"
+              }
+            ],
+            "required_dependencies": [],
+            "structural_refs": [
+              "ROOT",
+              "cl_time",
+              "cl_count"
+            ]
+          },
+          {
+            "id": "cl_time",
+            "collection": "claims",
+            "status": "ACCEPTED",
+            "errors": [],
+            "uncertain": [],
+            "sources": [
+              {
+                "quote": "在10分钟内生成top.md",
+                "occurrence": 1,
+                "span": [
+                  3,
+                  17
+                ],
+                "source_sha256": "d23733b8b85a6121a14c5debfd60bf4bb21869855f5902448c8aa378b5ebda54"
+              }
+            ],
+            "audit_refs": [
+              {
+                "subject_id": "cl_time",
+                "field_path": "",
+                "verdict": "SUPPORT"
+              }
+            ],
+            "required_dependencies": [],
+            "structural_refs": [
+              "evt_generate"
+            ]
+          },
+          {
+            "id": "cl_count",
+            "collection": "claims",
+            "status": "ACCEPTED",
+            "errors": [],
+            "uncertain": [],
+            "sources": [
+              {
+                "quote": "报告只列3个问题",
+                "occurrence": 1,
+                "span": [
+                  18,
+                  26
+                ],
+                "source_sha256": "d23733b8b85a6121a14c5debfd60bf4bb21869855f5902448c8aa378b5ebda54"
+              }
+            ],
+            "audit_refs": [
+              {
+                "subject_id": "cl_count",
+                "field_path": "",
+                "verdict": "SUPPORT"
+              }
+            ],
+            "required_dependencies": [
+              "cl_result"
+            ],
+            "structural_refs": [
+              "evt_generate"
+            ]
+          },
+          {
+            "id": "cl_result",
+            "collection": "claims",
+            "status": "ACCEPTED",
+            "errors": [],
+            "uncertain": [],
+            "sources": [
+              {
+                "quote": "生成top.md",
+                "occurrence": 1,
+                "span": [
+                  9,
+                  17
+                ],
+                "source_sha256": "d23733b8b85a6121a14c5debfd60bf4bb21869855f5902448c8aa378b5ebda54"
+              },
+              {
+                "quote": "报告只列3个问题",
+                "occurrence": 1,
+                "span": [
+                  18,
+                  26
+                ],
+                "source_sha256": "d23733b8b85a6121a14c5debfd60bf4bb21869855f5902448c8aa378b5ebda54"
+              }
+            ],
+            "audit_refs": [
+              {
+                "subject_id": "cl_result",
+                "field_path": "",
+                "verdict": "SUPPORT"
+              }
+            ],
+            "required_dependencies": [],
+            "structural_refs": [
+              "evt_generate",
+              "ent_report"
+            ]
+          },
+          {
+            "id": "ent_report",
+            "collection": "entities",
+            "status": "ACCEPTED",
+            "identity_status": "ACCEPTED",
+            "errors": [],
+            "uncertain": [],
+            "sources": [
+              {
+                "quote": "top.md",
+                "occurrence": 1,
+                "span": [
+                  11,
+                  17
+                ],
+                "source_sha256": "d23733b8b85a6121a14c5debfd60bf4bb21869855f5902448c8aa378b5ebda54"
+              },
+              {
+                "quote": "报告",
+                "occurrence": 1,
+                "span": [
+                  18,
+                  20
+                ],
+                "source_sha256": "d23733b8b85a6121a14c5debfd60bf4bb21869855f5902448c8aa378b5ebda54"
+              }
+            ],
+            "audit_refs": [
+              {
+                "subject_id": "ent_report",
+                "field_path": "",
+                "verdict": "SUPPORT"
+              }
+            ],
+            "required_dependencies": [],
+            "structural_refs": []
+          },
+          {
+            "id": "ent_problems",
+            "collection": "entities",
+            "status": "ACCEPTED",
+            "identity_status": "ACCEPTED",
+            "errors": [],
+            "uncertain": [],
+            "sources": [
+              {
+                "quote": "问题",
+                "occurrence": 1,
+                "span": [
+                  24,
+                  26
+                ],
+                "source_sha256": "d23733b8b85a6121a14c5debfd60bf4bb21869855f5902448c8aa378b5ebda54"
+              }
+            ],
+            "audit_refs": [
+              {
+                "subject_id": "ent_problems",
+                "field_path": "",
+                "verdict": "SUPPORT"
+              }
+            ],
+            "required_dependencies": [],
+            "structural_refs": []
+          }
+        ],
+        "audit": [
+          {
+            "subject_id": "cl_content",
+            "field_path": "",
+            "verdict": "SUPPORT",
+            "context_refs": [
+              "cl_result",
+              "ent_problems"
+            ],
+            "sources": [
+              {
+                "quote": "报告只列3个问题",
+                "occurrence": 1
+              }
+            ],
+            "reason": "问题属于报告内容，关联生成结果合理，不构成外部输入。"
+          },
+          {
+            "subject_id": "evt_generate",
+            "field_path": "",
+            "verdict": "SUPPORT",
+            "context_refs": [],
+            "sources": [
+              {
+                "quote": "请PM在10分钟内生成top.md，报告只列3个问题。",
+                "occurrence": 1
+              }
+            ],
+            "reason": "生成报告是当前明确要求的主动作；时限和内容数量约束均已绑定。"
+          },
+          {
+            "subject_id": "cl_time",
+            "field_path": "",
+            "verdict": "SUPPORT",
+            "context_refs": [
+              "evt_generate"
+            ],
+            "sources": [
+              {
+                "quote": "在10分钟内生成top.md",
+                "occurrence": 1
+              }
+            ],
+            "reason": "10分钟以内是生成动作的执行时限，LTE、分钟及执行限制用途正确，未升格为根完成条件。"
+          },
+          {
+            "subject_id": "cl_count",
+            "field_path": "",
+            "verdict": "SUPPORT",
+            "context_refs": [
+              "cl_result",
+              "evt_generate"
+            ],
+            "sources": [
+              {
+                "quote": "报告只列3个问题",
+                "occurrence": 1
+              }
+            ],
+            "reason": "报告所列问题恰为3个；目标、单位和计数范围指向报告，OUTPUT_CONTENT用途正确且双向绑定完整。"
+          },
+          {
+            "subject_id": "cl_result",
+            "field_path": "",
+            "verdict": "SUPPORT",
+            "context_refs": [
+              "ent_report",
+              "evt_generate"
+            ],
+            "sources": [
+              {
+                "quote": "生成top.md，报告只列3个问题",
+                "occurrence": 1
+              }
+            ],
+            "reason": "top.md是生成结果，报告内容要求约束同一文件。"
+          },
+          {
+            "subject_id": "ent_report",
+            "field_path": "",
+            "verdict": "SUPPORT",
+            "context_refs": [],
+            "sources": [
+              {
+                "quote": "生成top.md，报告只列3个问题",
+                "occurrence": 1
+              }
+            ],
+            "reason": "top.md是生成的文件，后续报告指同一产物。"
+          },
+          {
+            "subject_id": "ent_problems",
+            "field_path": "",
+            "verdict": "SUPPORT",
+            "context_refs": [],
+            "sources": [
+              {
+                "quote": "问题",
+                "occurrence": 1
+              }
+            ],
+            "reason": "问题是明确的报告内容类别，使用OTHER合理。"
+          }
+        ],
+        "context_references_are_not_required_dependencies": true
+      }
+    },
+    {
+      "id": "bf:8b1a3fceeff95311fb12",
+      "kind": "QUANTITY",
+      "status": "ACCEPTED",
+      "claim_ids": [
+        "cl_count",
+        "evt_generate",
+        "cl_time"
+      ],
+      "claim": {
+        "id": "cl_count",
+        "kind": "QUANTITY",
+        "event_id": "evt_generate",
+        "entity_id": null,
+        "role": null,
+        "expression_id": null,
+        "direction": null,
+        "temporal": null,
+        "quantity": {
+          "metric": "报告所列问题数量",
+          "target_id": "ent_report",
+          "comparator": "EQ",
+          "value": 3,
+          "unit": "个问题",
+          "use": "OUTPUT_CONTENT",
+          "count_scope": "ent_report"
+        },
+        "scope_id": "ent_report",
+        "requires": [
+          "cl_result"
+        ],
+        "sources": [
+          {
+            "quote": "报告只列3个问题",
+            "occurrence": 1,
+            "span": [
+              18,
+              26
+            ],
+            "source_sha256": "d23733b8b85a6121a14c5debfd60bf4bb21869855f5902448c8aa378b5ebda54"
+          }
+        ],
+        "note": "产物内容为3个问题，不是执行次数限制。"
+      },
+      "event": {
+        "id": "evt_generate",
+        "predicate": "生成报告",
+        "kind": "ACTION",
+        "layer": "MAIN",
+        "use": "CURRENT_TASK",
+        "modality": "REQUIRED",
+        "polarity": "POSITIVE",
+        "owner_id": "ROOT",
+        "constraint_ids": [
+          "cl_time",
+          "cl_count"
+        ],
+        "requires": [],
+        "sources": [
+          {
+            "quote": "请PM在10分钟内生成top.md，报告只列3个问题。",
+            "occurrence": 1,
+            "span": [
+              0,
+              27
+            ],
+            "source_sha256": "d23733b8b85a6121a14c5debfd60bf4bb21869855f5902448c8aa378b5ebda54"
+          }
+        ]
+      },
+      "entity": null,
+      "expression": null,
+      "constraints": [
+        {
+          "id": "cl_time",
+          "kind": "QUANTITY",
+          "event_id": "evt_generate",
+          "entity_id": null,
+          "role": null,
+          "expression_id": null,
+          "direction": null,
+          "temporal": null,
+          "quantity": {
+            "metric": "生成时限",
+            "target_id": "evt_generate",
+            "comparator": "LTE",
+            "value": 10,
+            "unit": "分钟",
+            "use": "EXECUTION_LIMIT",
+            "count_scope": "ROOT"
+          },
+          "scope_id": "evt_generate",
+          "requires": [],
+          "sources": [
+            {
+              "quote": "在10分钟内生成top.md",
+              "occurrence": 1,
+              "span": [
+                3,
+                17
+              ],
+              "source_sha256": "d23733b8b85a6121a14c5debfd60bf4bb21869855f5902448c8aa378b5ebda54"
+            }
+          ],
+          "note": "执行时限，不作为根任务完成条件。",
+          "expression": null
+        },
+        {
+          "id": "cl_count",
+          "kind": "QUANTITY",
+          "event_id": "evt_generate",
+          "entity_id": null,
+          "role": null,
+          "expression_id": null,
+          "direction": null,
+          "temporal": null,
+          "quantity": {
+            "metric": "报告所列问题数量",
+            "target_id": "ent_report",
+            "comparator": "EQ",
+            "value": 3,
+            "unit": "个问题",
+            "use": "OUTPUT_CONTENT",
+            "count_scope": "ent_report"
+          },
+          "scope_id": "ent_report",
+          "requires": [
+            "cl_result"
+          ],
+          "sources": [
+            {
+              "quote": "报告只列3个问题",
+              "occurrence": 1,
+              "span": [
+                18,
+                26
+              ],
+              "source_sha256": "d23733b8b85a6121a14c5debfd60bf4bb21869855f5902448c8aa378b5ebda54"
+            }
+          ],
+          "note": "产物内容为3个问题，不是执行次数限制。",
+          "expression": null
+        }
+      ],
+      "content_quantities": [],
+      "content_scopes": [],
+      "sources": [
+        {
+          "quote": "报告只列3个问题",
+          "occurrence": 1,
+          "span": [
+            18,
+            26
+          ],
+          "source_sha256": "d23733b8b85a6121a14c5debfd60bf4bb21869855f5902448c8aa378b5ebda54"
+        },
+        {
+          "quote": "请PM在10分钟内生成top.md，报告只列3个问题。",
+          "occurrence": 1,
+          "span": [
+            0,
+            27
+          ],
+          "source_sha256": "d23733b8b85a6121a14c5debfd60bf4bb21869855f5902448c8aa378b5ebda54"
+        },
+        {
+          "quote": "在10分钟内生成top.md",
+          "occurrence": 1,
+          "span": [
+            3,
+            17
+          ],
+          "source_sha256": "d23733b8b85a6121a14c5debfd60bf4bb21869855f5902448c8aa378b5ebda54"
+        },
+        {
+          "quote": "生成top.md",
+          "occurrence": 1,
+          "span": [
+            9,
+            17
+          ],
+          "source_sha256": "d23733b8b85a6121a14c5debfd60bf4bb21869855f5902448c8aa378b5ebda54"
+        },
+        {
+          "quote": "报告只列3个问题",
+          "occurrence": 1,
+          "span": [
+            18,
+            26
+          ],
+          "source_sha256": "d23733b8b85a6121a14c5debfd60bf4bb21869855f5902448c8aa378b5ebda54"
+        },
+        {
+          "quote": "top.md",
+          "occurrence": 1,
+          "span": [
+            11,
+            17
+          ],
+          "source_sha256": "d23733b8b85a6121a14c5debfd60bf4bb21869855f5902448c8aa378b5ebda54"
+        },
+        {
+          "quote": "报告",
+          "occurrence": 1,
+          "span": [
+            18,
+            20
+          ],
+          "source_sha256": "d23733b8b85a6121a14c5debfd60bf4bb21869855f5902448c8aa378b5ebda54"
+        }
+      ],
+      "slots": [],
+      "proof": {
+        "source_sha256": "d23733b8b85a6121a14c5debfd60bf4bb21869855f5902448c8aa378b5ebda54",
+        "claim_ids": [
+          "cl_count",
+          "evt_generate",
+          "cl_time"
+        ],
+        "provenance_refs": [
+          "cl_count",
+          "evt_generate",
+          "cl_time",
+          "cl_result",
+          "ent_report"
+        ],
+        "technical_policy": "028-r02-technical-v1",
+        "checks": [
+          {
+            "id": "cl_count",
+            "collection": "claims",
+            "status": "ACCEPTED",
+            "errors": [],
+            "uncertain": [],
+            "sources": [
+              {
+                "quote": "报告只列3个问题",
+                "occurrence": 1,
+                "span": [
+                  18,
+                  26
+                ],
+                "source_sha256": "d23733b8b85a6121a14c5debfd60bf4bb21869855f5902448c8aa378b5ebda54"
+              }
+            ],
+            "audit_refs": [
+              {
+                "subject_id": "cl_count",
+                "field_path": "",
+                "verdict": "SUPPORT"
+              }
+            ],
+            "required_dependencies": [
+              "cl_result"
+            ],
+            "structural_refs": [
+              "evt_generate"
+            ]
+          },
+          {
+            "id": "evt_generate",
+            "collection": "events",
+            "status": "ACCEPTED",
+            "errors": [],
+            "uncertain": [],
+            "sources": [
+              {
+                "quote": "请PM在10分钟内生成top.md，报告只列3个问题。",
+                "occurrence": 1,
+                "span": [
+                  0,
+                  27
+                ],
+                "source_sha256": "d23733b8b85a6121a14c5debfd60bf4bb21869855f5902448c8aa378b5ebda54"
+              }
+            ],
+            "audit_refs": [
+              {
+                "subject_id": "evt_generate",
+                "field_path": "",
+                "verdict": "SUPPORT"
+              }
+            ],
+            "required_dependencies": [],
+            "structural_refs": [
+              "ROOT",
+              "cl_time",
+              "cl_count"
+            ]
+          },
+          {
+            "id": "cl_time",
+            "collection": "claims",
+            "status": "ACCEPTED",
+            "errors": [],
+            "uncertain": [],
+            "sources": [
+              {
+                "quote": "在10分钟内生成top.md",
+                "occurrence": 1,
+                "span": [
+                  3,
+                  17
+                ],
+                "source_sha256": "d23733b8b85a6121a14c5debfd60bf4bb21869855f5902448c8aa378b5ebda54"
+              }
+            ],
+            "audit_refs": [
+              {
+                "subject_id": "cl_time",
+                "field_path": "",
+                "verdict": "SUPPORT"
+              }
+            ],
+            "required_dependencies": [],
+            "structural_refs": [
+              "evt_generate"
+            ]
+          },
+          {
+            "id": "cl_result",
+            "collection": "claims",
+            "status": "ACCEPTED",
+            "errors": [],
+            "uncertain": [],
+            "sources": [
+              {
+                "quote": "生成top.md",
+                "occurrence": 1,
+                "span": [
+                  9,
+                  17
+                ],
+                "source_sha256": "d23733b8b85a6121a14c5debfd60bf4bb21869855f5902448c8aa378b5ebda54"
+              },
+              {
+                "quote": "报告只列3个问题",
+                "occurrence": 1,
+                "span": [
+                  18,
+                  26
+                ],
+                "source_sha256": "d23733b8b85a6121a14c5debfd60bf4bb21869855f5902448c8aa378b5ebda54"
+              }
+            ],
+            "audit_refs": [
+              {
+                "subject_id": "cl_result",
+                "field_path": "",
+                "verdict": "SUPPORT"
+              }
+            ],
+            "required_dependencies": [],
+            "structural_refs": [
+              "evt_generate",
+              "ent_report"
+            ]
+          },
+          {
+            "id": "ent_report",
+            "collection": "entities",
+            "status": "ACCEPTED",
+            "identity_status": "ACCEPTED",
+            "errors": [],
+            "uncertain": [],
+            "sources": [
+              {
+                "quote": "top.md",
+                "occurrence": 1,
+                "span": [
+                  11,
+                  17
+                ],
+                "source_sha256": "d23733b8b85a6121a14c5debfd60bf4bb21869855f5902448c8aa378b5ebda54"
+              },
+              {
+                "quote": "报告",
+                "occurrence": 1,
+                "span": [
+                  18,
+                  20
+                ],
+                "source_sha256": "d23733b8b85a6121a14c5debfd60bf4bb21869855f5902448c8aa378b5ebda54"
+              }
+            ],
+            "audit_refs": [
+              {
+                "subject_id": "ent_report",
+                "field_path": "",
+                "verdict": "SUPPORT"
+              }
+            ],
+            "required_dependencies": [],
+            "structural_refs": []
+          }
+        ],
+        "audit": [
+          {
+            "subject_id": "cl_count",
+            "field_path": "",
+            "verdict": "SUPPORT",
+            "context_refs": [
+              "cl_result",
+              "evt_generate"
+            ],
+            "sources": [
+              {
+                "quote": "报告只列3个问题",
+                "occurrence": 1
+              }
+            ],
+            "reason": "报告所列问题恰为3个；目标、单位和计数范围指向报告，OUTPUT_CONTENT用途正确且双向绑定完整。"
+          },
+          {
+            "subject_id": "evt_generate",
+            "field_path": "",
+            "verdict": "SUPPORT",
+            "context_refs": [],
+            "sources": [
+              {
+                "quote": "请PM在10分钟内生成top.md，报告只列3个问题。",
+                "occurrence": 1
+              }
+            ],
+            "reason": "生成报告是当前明确要求的主动作；时限和内容数量约束均已绑定。"
+          },
+          {
+            "subject_id": "cl_time",
+            "field_path": "",
+            "verdict": "SUPPORT",
+            "context_refs": [
+              "evt_generate"
+            ],
+            "sources": [
+              {
+                "quote": "在10分钟内生成top.md",
+                "occurrence": 1
+              }
+            ],
+            "reason": "10分钟以内是生成动作的执行时限，LTE、分钟及执行限制用途正确，未升格为根完成条件。"
+          },
+          {
+            "subject_id": "cl_result",
+            "field_path": "",
+            "verdict": "SUPPORT",
+            "context_refs": [
+              "ent_report",
+              "evt_generate"
+            ],
+            "sources": [
+              {
+                "quote": "生成top.md，报告只列3个问题",
+                "occurrence": 1
+              }
+            ],
+            "reason": "top.md是生成结果，报告内容要求约束同一文件。"
+          },
+          {
+            "subject_id": "ent_report",
+            "field_path": "",
+            "verdict": "SUPPORT",
+            "context_refs": [],
+            "sources": [
+              {
+                "quote": "生成top.md，报告只列3个问题",
+                "occurrence": 1
+              }
+            ],
+            "reason": "top.md是生成的文件，后续报告指同一产物。"
+          }
+        ],
+        "context_references_are_not_required_dependencies": true
+      }
+    }
+  ],
+  "issues": [],
+  "gaps": [],
+  "business_decision": null,
+  "execution_authorization": null
+}

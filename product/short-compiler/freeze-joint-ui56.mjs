@@ -1,0 +1,6 @@
+import fs from 'node:fs';
+let code=fs.readFileSync(new URL('./freeze-joint-ui53.mjs',import.meta.url),'utf8');
+code=code.replace("parent='0.1.0-candidate.031-r1.2-ui.52'","parent='0.1.0-candidate.031-r1.2-ui.55'").replace("version='0.1.0-candidate.031-r1.2-ui.53'","version='0.1.0-candidate.031-r1.2-ui.56'").replaceAll('031-r1-c26','031-r1-c28').replaceAll('joint-ui53-overlay','joint-ui56-overlay').replaceAll('FREEZE-ui53','FREEZE-ui56').replaceAll('model_resources_changed:true','model_resources_changed:false');
+code=code.replace("'engine.mjs','skills/","'engine.mjs','joint-results.mjs','skills/").replace("names.push('research/","names.push('src/bxp/joint-boundary-solver.mjs');names.push('research/");
+code=code.replace("const extras=['src/bxp/joint-boundary-solver.mjs','research/7plus1-parser/llm-first-028/joint-results.mjs']","const extras=['src/bxp/joint-boundary-solver.mjs','research/7plus1-parser/llm-first-028/joint-results.mjs'].filter(file=>!m.files.some(f=>f.path===file))").replace('changed=m.files.filter(f=>sha','changed=m.files.filter(f=>!["package.json","package-lock.json"].includes(f.path)&&sha');
+await import('data:text/javascript;base64,'+Buffer.from(code.replace("from './resources.mjs'","from '"+new URL('./resources.mjs',import.meta.url).href+"'")).toString('base64'));

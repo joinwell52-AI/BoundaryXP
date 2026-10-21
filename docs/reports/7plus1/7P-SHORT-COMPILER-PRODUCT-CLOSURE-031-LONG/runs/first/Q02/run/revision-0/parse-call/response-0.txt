@@ -1,0 +1,254 @@
+{
+  "contract_version": "031-r01",
+  "entities": [
+    {
+      "id": "n_pm",
+      "label": "PM",
+      "type": "OTHER",
+      "mentions": [{"quote": "PM", "occurrence": 1}],
+      "alternatives": []
+    },
+    {
+      "id": "n_accounts",
+      "label": "accounts.csv",
+      "type": "FILE",
+      "mentions": [{"quote": "accounts.csv", "occurrence": 1}],
+      "alternatives": []
+    },
+    {
+      "id": "n_fields",
+      "label": "accounts.csv的字段名",
+      "type": "OTHER",
+      "mentions": [
+        {"quote": "accounts.csv的字段名", "occurrence": 1},
+        {"quote": "字段名", "occurrence": 2}
+      ],
+      "alternatives": []
+    },
+    {
+      "id": "n_output",
+      "label": "fields.md",
+      "type": "FILE",
+      "mentions": [{"quote": "fields.md", "occurrence": 1}],
+      "alternatives": []
+    },
+    {
+      "id": "n_records",
+      "label": "记录内容",
+      "type": "OTHER",
+      "mentions": [{"quote": "记录内容", "occurrence": 1}],
+      "alternatives": []
+    }
+  ],
+  "events": [
+    {
+      "id": "e_check",
+      "predicate": "核对",
+      "kind": "ACTION",
+      "layer": "MAIN",
+      "use": "CURRENT_TASK",
+      "modality": "REQUIRED",
+      "polarity": "POSITIVE",
+      "owner_id": "ROOT",
+      "constraint_ids": [],
+      "requires": [],
+      "sources": [{"quote": "请PM核对accounts.csv的字段名", "occurrence": 1}]
+    },
+    {
+      "id": "e_generate",
+      "predicate": "生成",
+      "kind": "ACTION",
+      "layer": "MAIN",
+      "use": "CURRENT_TASK",
+      "modality": "REQUIRED",
+      "polarity": "POSITIVE",
+      "owner_id": "ROOT",
+      "constraint_ids": [],
+      "requires": [],
+      "sources": [{"quote": "生成fields.md", "occurrence": 1}]
+    },
+    {
+      "id": "e_read",
+      "predicate": "读取",
+      "kind": "ACTION",
+      "layer": "MAIN",
+      "use": "CURRENT_TASK",
+      "modality": "FORBIDDEN",
+      "polarity": "POSITIVE",
+      "owner_id": "ROOT",
+      "constraint_ids": [],
+      "requires": [],
+      "sources": [{"quote": "不得读取记录内容", "occurrence": 1}]
+    }
+  ],
+  "claims": [
+    {
+      "id": "c_check_performer",
+      "kind": "ROLE",
+      "event_id": "e_check",
+      "entity_id": "n_pm",
+      "role": "PERFORMER",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "scope_id": "e_check",
+      "requires": [],
+      "sources": [{"quote": "请PM核对", "occurrence": 1}],
+      "note": "PM是明确执行主体；岗位简称不推定人员或组织类别。"
+    },
+    {
+      "id": "c_check_input",
+      "kind": "ROLE",
+      "event_id": "e_check",
+      "entity_id": "n_accounts",
+      "role": "INPUT_OBJECT",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "scope_id": "e_check",
+      "requires": [],
+      "sources": [{"quote": "核对accounts.csv的字段名", "occurrence": 1}],
+      "note": "明确受检文件；检查范围由字段名限定，不包含记录内容。"
+    },
+    {
+      "id": "c_check_object",
+      "kind": "ROLE",
+      "event_id": "e_check",
+      "entity_id": "n_fields",
+      "role": "OBJECT",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "scope_id": "e_check",
+      "requires": [],
+      "sources": [{"quote": "核对accounts.csv的字段名", "occurrence": 1}],
+      "note": "实际核对对象是该文件的字段名。"
+    },
+    {
+      "id": "c_check_scope",
+      "kind": "SCOPE",
+      "event_id": "e_check",
+      "entity_id": null,
+      "role": null,
+      "expression_id": "x_fields",
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "scope_id": "e_check",
+      "requires": [],
+      "sources": [
+        {"quote": "accounts.csv的字段名", "occurrence": 1},
+        {"quote": "只检查字段名", "occurrence": 1}
+      ],
+      "note": "检查仅限字段名；此处限制原有核对操作，不新增检查义务。"
+    },
+    {
+      "id": "c_generate_performer",
+      "kind": "ROLE",
+      "event_id": "e_generate",
+      "entity_id": "n_pm",
+      "role": "PERFORMER",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "scope_id": "e_generate",
+      "requires": [],
+      "sources": [
+        {"quote": "请PM核对", "occurrence": 1},
+        {"quote": "生成fields.md", "occurrence": 1}
+      ],
+      "note": "连续同一指令的并列动作无主体切换，生成动作承接PM。"
+    },
+    {
+      "id": "c_generate_result",
+      "kind": "ROLE",
+      "event_id": "e_generate",
+      "entity_id": "n_output",
+      "role": "RESULT",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "scope_id": "e_generate",
+      "requires": [],
+      "sources": [{"quote": "生成fields.md", "occurrence": 1}],
+      "note": "fields.md是要求生成的结果；原文未要求提交或交付。"
+    },
+    {
+      "id": "c_read_performer",
+      "kind": "ROLE",
+      "event_id": "e_read",
+      "entity_id": "n_pm",
+      "role": "PERFORMER",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "scope_id": "e_read",
+      "requires": [],
+      "sources": [
+        {"quote": "请PM核对", "occurrence": 1},
+        {"quote": "不得读取记录内容", "occurrence": 1}
+      ],
+      "note": "追加的操作禁止承接同一任务主体PM。"
+    },
+    {
+      "id": "c_read_object",
+      "kind": "ROLE",
+      "event_id": "e_read",
+      "entity_id": "n_records",
+      "role": "OBJECT",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "scope_id": "e_read",
+      "requires": [],
+      "sources": [{"quote": "不得读取记录内容", "occurrence": 1}],
+      "note": "记录内容是禁止读取的对象，不由禁止用途推定为外部输入。"
+    }
+  ],
+  "expressions": [
+    {
+      "id": "x_fields",
+      "op": "ITEM",
+      "operands": ["n_fields"],
+      "state": null,
+      "sources": [
+        {"quote": "accounts.csv的字段名", "occurrence": 1},
+        {"quote": "只检查字段名", "occurrence": 1}
+      ]
+    }
+  ],
+  "issues": [],
+  "coverage": [
+    {
+      "sources": [{"quote": "请PM核对accounts.csv的字段名", "occurrence": 1}],
+      "claim_ids": ["c_check_performer", "c_check_input", "c_check_object"],
+      "status": "EXPRESSED",
+      "affected_views": ["I", "A", "P"]
+    },
+    {
+      "sources": [{"quote": "生成fields.md", "occurrence": 1}],
+      "claim_ids": ["c_generate_performer", "c_generate_result"],
+      "status": "EXPRESSED",
+      "affected_views": ["O", "A", "P"]
+    },
+    {
+      "sources": [{"quote": "只检查字段名", "occurrence": 1}],
+      "claim_ids": ["c_check_scope"],
+      "status": "EXPRESSED",
+      "affected_views": ["I", "A", "B"]
+    },
+    {
+      "sources": [{"quote": "不得读取记录内容", "occurrence": 1}],
+      "claim_ids": ["c_read_performer", "c_read_object"],
+      "status": "EXPRESSED",
+      "affected_views": ["P", "B"]
+    }
+  ]
+}

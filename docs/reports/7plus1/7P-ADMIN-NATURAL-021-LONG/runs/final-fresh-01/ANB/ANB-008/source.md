@@ -1,0 +1,1 @@
+编辑周岚查看 README.md 与 docs/index.md 中的内部链接，生成 link-check.md。只记录失效链接，不修改任何 Markdown 文件。

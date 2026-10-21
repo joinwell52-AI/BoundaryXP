@@ -1,0 +1,43 @@
+{
+  "case_id": "REAL-GOLD-005",
+  "source_sha256": "059c3a16baf252e08ba7a4e1e2d6c2b6bfb7d581080317168931e1ab990f9c41",
+  "status": "EVIDENCE_VERIFIED",
+  "evidence": [
+    {
+      "evidence_id": "E001",
+      "source_id": "SOURCE_TASK",
+      "origin": "SOURCE",
+      "start": 0,
+      "end": 257,
+      "quote": "---\r\nprotocol: fcop\r\nversion: 1\r\nkind: task\r\ntask_id: TASK-20260427-005\r\nsender: ADMIN\r\nrecipient: ME\r\npriority: P2\r\nrelated: [ISSUE-20260427-006, TASK-20260427-004]\r\nsession_id: sess-20260427-me-071\r\n---\r\n\r\n# 0.7.1 收尾：决定不 yank `fcop-mcp 0.7.0`，校准 4 处文档\r\n\r\n",
+      "purpose": "source metadata, participants, related records, and task title"
+    },
+    {
+      "evidence_id": "E002",
+      "source_id": "SOURCE_TASK",
+      "origin": "SOURCE",
+      "start": 257,
+      "end": 615,
+      "quote": "## 背景\r\n\r\nREPORT-20260427-005 把 \"Phase 23 yank `fcop-mcp 0.7.0`\" 列为\r\n\"待 ADMIN 启\"。ADMIN 复盘后判断：\r\n\r\n- `uvx fcop-mcp` / `pip install fcop-mcp` 不带版本钉都已落到\r\n  0.7.1，新装路径自愈；\r\n- 已经装 0.7.0 的旧用户 yank 救不回，必须 `pip install -U`；\r\n- yank 真正能保护的只有\"未来主动钉 `==0.7.0`\"的人，且这群人\r\n  目前几乎不存在；\r\n- yank 可逆，下载量回升或第二个用户报修再 yank 也来得及。\r\n\r\n结论：**0.7.1 不 yank**，决策与 yank 知识写进 release notes。\r\n\r\n",
+      "purpose": "yank decision rationale and its stated scope"
+    },
+    {
+      "evidence_id": "E003",
+      "source_id": "SOURCE_TASK",
+      "origin": "SOURCE",
+      "start": 615,
+      "end": 1156,
+      "quote": "## 要求\r\n\r\n1. `docs/releases/0.7.1.md` 顶部 metadata 块从 \"Yanked: ...\" 改为\r\n   \"kept on PyPI, not yanked\"，并在 post-mortem 后新增一节\r\n   \"Why we did not yank `fcop-mcp 0.7.0`\"，含 PEP 592 行为表 + 何时\r\n   会反悔。\r\n2. `CHANGELOG.md` `[0.7.1]` 把 \"is being yanked from PyPI\" 删除，\r\n   改成\"kept on PyPI, not yanked\"并指向 release notes。\r\n3. `docs/agents/issues/ISSUE-20260427-006-ME.md` resolution 把\r\n   \"待 ADMIN 走 twine yank 流程下架\"改成\"决定不 yank，理由记入\r\n   release notes\"。\r\n4. `docs/releases/RELEASE-CHECKLIST.md` Phase 6 yank 项从\"必须\"改为\r\n   \"按需，可选；可逆；记录决策\"，列出何时 yank / 何时跳过。\r\n\r\n",
+      "purpose": "four exact documentation edits"
+    },
+    {
+      "evidence_id": "E004",
+      "source_id": "SOURCE_TASK",
+      "origin": "SOURCE",
+      "start": 1156,
+      "end": 1409,
+      "quote": "## 验收\r\n\r\n- 四处文档无 \"being yanked\" / \"待 ADMIN.*yank\" 残留（grep 全空）。\r\n- 新一节 \"Why we did not yank\" 把 PEP 592 行为按命令逐行讲清。\r\n- TASK-005 + REPORT-006 入账并 archive；ISSUE-006 的 resolution 不\r\n  动 closed 状态（已闭），仅修订 resolution 文本。\r\n- followup commit 单独一条，不和 0.7.1 主提交混。\r\n",
+      "purpose": "acceptance checks, archive/issue condition, and isolated followup commit"
+    }
+  ]
+}

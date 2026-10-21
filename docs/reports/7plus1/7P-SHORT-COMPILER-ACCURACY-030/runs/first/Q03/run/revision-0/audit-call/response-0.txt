@@ -1,0 +1,157 @@
+{
+  "contract_version": "028-r02.3",
+  "reviews": [
+    {
+      "subject_id": "ent_pm",
+      "field_path": "label",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [{"quote": "PM", "occurrence": 1}],
+      "reason": "原文明示主体为PM，身份标签明确。"
+    },
+    {
+      "subject_id": "ent_pm",
+      "field_path": "mentions",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [{"quote": "PM", "occurrence": 1}],
+      "reason": "提及与原文一致。"
+    },
+    {
+      "subject_id": "ent_pm",
+      "field_path": "alternatives",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [{"quote": "请PM检查", "occurrence": 1}],
+      "reason": "原文没有竞争指代，无需补充身份备选。"
+    },
+    {
+      "subject_id": "ent_pm",
+      "field_path": "type",
+      "verdict": "UNCERTAIN",
+      "context_refs": [],
+      "sources": [{"quote": "PM", "occurrence": 1}],
+      "reason": "原文未说明PM是个人、团队还是其他类别；此疑点仅影响类型，不影响明确身份与职责。"
+    },
+    {
+      "subject_id": "ent_worker",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [
+        {"quote": "worker服务", "occurrence": 1},
+        {"quote": "worker服务", "occurrence": 2}
+      ],
+      "reason": "两处均指同一worker服务，SYSTEM类型与服务身份相符。"
+    },
+    {
+      "subject_id": "ent_status",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [{"quote": "worker服务的运行状态", "occurrence": 1}],
+      "reason": "受检对象明确为该服务的运行状态。"
+    },
+    {
+      "subject_id": "ent_note",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [{"quote": "service-note.md", "occurrence": 1}],
+      "reason": "文件名称与身份明确，是要求生成的产物。"
+    },
+    {
+      "subject_id": "evt_check",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [{"quote": "请PM检查worker服务的运行状态", "occurrence": 1}],
+      "reason": "检查是当前明确要求的主动作，原文未附条件或数量限制。"
+    },
+    {
+      "subject_id": "evt_generate",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [{"quote": "请PM检查worker服务的运行状态，生成service-note.md", "occurrence": 1}],
+      "reason": "生成文件是并列要求的主动作；未明示必须依赖检查完成的条件或时序。"
+    },
+    {
+      "subject_id": "evt_stop",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [{"quote": "不得停止worker服务", "occurrence": 1}],
+      "reason": "明确禁止停止服务，FORBIDDEN与正向动作谓词搭配正确，不是根任务停止条件。"
+    },
+    {
+      "subject_id": "cl_check_performer",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["ent_pm", "evt_check"],
+      "sources": [{"quote": "请PM检查", "occurrence": 1}],
+      "reason": "PM是检查动作的明确执行者，类型未明不影响该角色。"
+    },
+    {
+      "subject_id": "cl_check_input",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["ent_status", "evt_check"],
+      "sources": [{"quote": "检查worker服务的运行状态", "occurrence": 1}],
+      "reason": "运行状态是明确受检范围，INPUT_OBJECT用途成立。"
+    },
+    {
+      "subject_id": "cl_status_scope",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["expr_status_of", "evt_check"],
+      "sources": [{"quote": "worker服务的运行状态", "occurrence": 1}],
+      "reason": "所属关系准确限定检查对象为worker服务的运行状态。"
+    },
+    {
+      "subject_id": "cl_generate_performer",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["ent_pm", "evt_generate"],
+      "sources": [{"quote": "请PM检查worker服务的运行状态，生成service-note.md", "occurrence": 1}],
+      "reason": "并列生成动作共享主体PM，执行者绑定成立。"
+    },
+    {
+      "subject_id": "cl_generate_result",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["ent_note", "evt_generate"],
+      "sources": [{"quote": "生成service-note.md", "occurrence": 1}],
+      "reason": "该文件是生成结果，未被误作外部输入。"
+    },
+    {
+      "subject_id": "cl_stop_object",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["ent_worker", "evt_stop"],
+      "sources": [{"quote": "不得停止worker服务", "occurrence": 1}],
+      "reason": "禁止动作的对象为worker服务，OBJECT用途正确。"
+    },
+    {
+      "subject_id": "expr_status_of",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["ent_status", "ent_worker"],
+      "sources": [{"quote": "worker服务的运行状态", "occurrence": 1}],
+      "reason": "表达式保留状态与所属服务的参数关系，不宣称运行状态已被观测。"
+    }
+  ],
+  "issues": [
+    {
+      "id": "audit_pm_type",
+      "issue_kind": "IDENTITY",
+      "subject_ids": ["ent_pm"],
+      "field_path": "type",
+      "context_refs": [],
+      "sources": [{"quote": "PM", "occurrence": 1}],
+      "reason": "OTHER类别缺乏明确依据；原文只确定PM身份及其执行职责。保留类型局部未决，不扩散到检查或生成的参与关系。",
+      "suggested_json": null
+    }
+  ],
+  "omissions": []
+}

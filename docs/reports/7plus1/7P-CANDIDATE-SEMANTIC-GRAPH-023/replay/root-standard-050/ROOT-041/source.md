@@ -1,0 +1,1 @@
+请 PM 组织检查 changes.csv。存在差异时必须生成 difference-report.md 并提交；没有差异时无需生成该报告，只需向 PM 说明无差异。不得修改 changes.csv。

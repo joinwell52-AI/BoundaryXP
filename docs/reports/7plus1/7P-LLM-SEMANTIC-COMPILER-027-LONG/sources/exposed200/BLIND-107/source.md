@@ -1,0 +1,1 @@
+The whole task must finish within 25 minutes. Jordan must coordinate the task: inspect connection-7234.csv in isolated environment. Deliver audit-878374.md. Quinn must review the report; Jordan must send it to Reese. Reese is not an approver.

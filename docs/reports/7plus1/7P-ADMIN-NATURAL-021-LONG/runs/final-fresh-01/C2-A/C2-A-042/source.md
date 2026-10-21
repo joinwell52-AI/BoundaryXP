@@ -1,0 +1,1 @@
+TEAM242 inspect lab-c2-a-12, write scope-c2-a-12.txt. This check is limited to lab-c2-a-12, not public-c2-a-12.

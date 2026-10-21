@@ -15,7 +15,8 @@
   "exports": "./src/index.ts",
   "dependencies": {
     "@cursor/sdk": "1.0.30",
-    "ajv": "8.20.0"
+    "ajv": "8.20.0",
+    "z3-solver": "5.2.0"
   },
   "bin": {
     "bx": "./cli.mjs"
@@ -24,14 +25,21 @@
     "undici": "6.28.0"
   },
   "scripts": {
-    "test": "npm run test:core && npm run test:protocol",
-    "test:core": "node --test src/__tests__/*.test.ts",
-    "test:protocol": "node --test protocol/conformance/*.test.mjs && node protocol/conformance/run.mjs",
-    "protocol:build": "node protocol/conformance/build-suite.mjs && node protocol/provenance/build-manifest.mjs",
-    "protocol:manifest": "node protocol/provenance/build-manifest.mjs",
+    "test:workbench": "node --test --test-concurrency=1 tests/boundary-*.test.mjs tests/boolean-boundary-comparison.test.mjs tests/direct-ir-*.test.mjs tests/ui220-*.test.mjs tests/ir-kernel/*.test.mjs",
+    "7plus1:build-candidate": "node product/short-compiler/build-candidate.mjs",
+    "7plus1": "node research/7plus1-parser/llm-first-028/cli.mjs",
+    "7plus1:ui": "node product/short-compiler/launch-installed.mjs",
+    "7plus1:installed": "node product/short-compiler/cli-installed.mjs",
+    "test:real-project": "python fixtures/real-project/BoundX-REAL-GOLD-P001-v0.1/validate_cases.py && node --test tests/real-project-cases.test.mjs",
+    "research:real-project:prepare": "node scripts/prepare-real-project-benchmark.mjs",
+    "research:real-project:probe": "node scripts/run-real-project-probes.mjs",
+    "research:compare": "node scripts/score-producer-comparison.mjs",
+    "test:research:local": "node scripts/test-research-local.mjs",
+    "verify:semantic-resources": "node scripts/verify-semantic-resources.mjs",
+    "test": "python fixtures/real-project/BoundX-REAL-GOLD-P001-v0.1/validate_cases.py && npm run test:gold:data",
+    "test:gold:data": "node --test --test-concurrency=1 tests/*.test.mjs",
+    "test:gold:integrity": "npm run test:real-project",
     "mcp": "node mcp.mjs",
-    "ui": "node ui-server.mjs --open",
-    "test:ui": "node --test ui/*.test.mjs",
-    "test:docs": "python -X utf8 -m unittest discover -s scripts -p test_*.py && python -X utf8 scripts/check-doc-links.py"
+    "ui": "node ui-server.mjs --open"
   }
 }

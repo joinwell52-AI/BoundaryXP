@@ -1,0 +1,465 @@
+{
+  "contract_version": "031-r1.1",
+  "entities": [
+    {
+      "id": "ent_qa",
+      "label": "QA",
+      "type": "OTHER",
+      "mentions": [
+        {
+          "quote": "QA",
+          "occurrence": 1
+        }
+      ],
+      "alternatives": []
+    },
+    {
+      "id": "ent_guide",
+      "label": "guide.md",
+      "type": "FILE",
+      "mentions": [
+        {
+          "quote": "guide.md",
+          "occurrence": 1
+        },
+        {
+          "quote": "正文",
+          "occurrence": 1
+        },
+        {
+          "quote": "guide.md",
+          "occurrence": 2
+        }
+      ],
+      "alternatives": []
+    },
+    {
+      "id": "ent_store",
+      "label": "store.db",
+      "type": "FILE",
+      "mentions": [
+        {
+          "quote": "store.db",
+          "occurrence": 1
+        },
+        {
+          "quote": "store.db",
+          "occurrence": 2
+        }
+      ],
+      "alternatives": []
+    },
+    {
+      "id": "ent_quote",
+      "label": "可以删除store.db",
+      "type": "DOCUMENT",
+      "mentions": [
+        {
+          "quote": "可以删除store.db",
+          "occurrence": 1
+        }
+      ],
+      "alternatives": []
+    }
+  ],
+  "events": [
+    {
+      "id": "ev_generate",
+      "predicate": "生成",
+      "kind": "ACTION",
+      "layer": "MAIN",
+      "use": "CURRENT_TASK",
+      "modality": "REQUIRED",
+      "polarity": "POSITIVE",
+      "owner_id": "ROOT",
+      "constraint_ids": [],
+      "requires": [],
+      "sources": [
+        {
+          "quote": "QA必须生成guide.md",
+          "occurrence": 1
+        }
+      ]
+    },
+    {
+      "id": "ev_cite",
+      "predicate": "正文引用",
+      "kind": "ACTION",
+      "layer": "MAIN",
+      "use": "CURRENT_TASK",
+      "modality": "REQUIRED",
+      "polarity": "POSITIVE",
+      "owner_id": "ROOT",
+      "constraint_ids": [],
+      "requires": [],
+      "sources": [
+        {
+          "quote": "QA必须生成guide.md",
+          "occurrence": 1
+        },
+        {
+          "quote": "正文引用“可以删除store.db”",
+          "occurrence": 1
+        }
+      ]
+    },
+    {
+      "id": "ev_quoted_delete",
+      "predicate": "删除",
+      "kind": "ACTION",
+      "layer": "QUOTED",
+      "use": "MENTION_ONLY",
+      "modality": "PERMITTED",
+      "polarity": "POSITIVE",
+      "owner_id": "ev_cite",
+      "constraint_ids": [],
+      "requires": [],
+      "sources": [
+        {
+          "quote": "可以删除store.db",
+          "occurrence": 1
+        }
+      ]
+    },
+    {
+      "id": "ev_delete",
+      "predicate": "删除",
+      "kind": "ACTION",
+      "layer": "MAIN",
+      "use": "CURRENT_TASK",
+      "modality": "FORBIDDEN",
+      "polarity": "POSITIVE",
+      "owner_id": "ROOT",
+      "constraint_ids": [],
+      "requires": [],
+      "sources": [
+        {
+          "quote": "本任务禁止删除store.db",
+          "occurrence": 1
+        }
+      ]
+    },
+    {
+      "id": "ev_deliver",
+      "predicate": "交付",
+      "kind": "ACTION",
+      "layer": "MAIN",
+      "use": "CURRENT_TASK",
+      "modality": "NOT_REQUIRED",
+      "polarity": "POSITIVE",
+      "owner_id": "ROOT",
+      "constraint_ids": [],
+      "requires": [],
+      "sources": [
+        {
+          "quote": "无需交付guide.md",
+          "occurrence": 1
+        }
+      ]
+    }
+  ],
+  "claims": [
+    {
+      "id": "cl_generate_performer",
+      "kind": "ROLE",
+      "event_id": "ev_generate",
+      "entity_id": "ent_qa",
+      "role": "PERFORMER",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "artifact_use": null,
+      "scope_id": "ev_generate",
+      "requires": [],
+      "sources": [
+        {
+          "quote": "QA必须生成guide.md",
+          "occurrence": 1
+        }
+      ],
+      "note": "QA为明确生成主体；原文未指定其为个人或组。"
+    },
+    {
+      "id": "cl_generate_result",
+      "kind": "ROLE",
+      "event_id": "ev_generate",
+      "entity_id": "ent_guide",
+      "role": "RESULT",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "artifact_use": null,
+      "scope_id": "ev_generate",
+      "requires": [],
+      "sources": [
+        {
+          "quote": "QA必须生成guide.md",
+          "occurrence": 1
+        }
+      ],
+      "note": "必须产生guide.md。"
+    },
+    {
+      "id": "cl_cite_performer",
+      "kind": "ROLE",
+      "event_id": "ev_cite",
+      "entity_id": "ent_qa",
+      "role": "PERFORMER",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "artifact_use": null,
+      "scope_id": "ev_cite",
+      "requires": [],
+      "sources": [
+        {
+          "quote": "QA必须生成guide.md",
+          "occurrence": 1
+        },
+        {
+          "quote": "正文引用“可以删除store.db”",
+          "occurrence": 1
+        }
+      ],
+      "note": "正文引用承接同一指令的QA主体与必须模态，未出现主体切换。"
+    },
+    {
+      "id": "cl_cite_object",
+      "kind": "ROLE",
+      "event_id": "ev_cite",
+      "entity_id": "ent_guide",
+      "role": "OBJECT",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "artifact_use": null,
+      "scope_id": "ev_cite",
+      "requires": [],
+      "sources": [
+        {
+          "quote": "生成guide.md",
+          "occurrence": 1
+        },
+        {
+          "quote": "正文引用“可以删除store.db”",
+          "occurrence": 1
+        }
+      ],
+      "note": "正文属于本次生成的guide.md；引用位置限定为正文，不构成外部输入。"
+    },
+    {
+      "id": "cl_cite_content",
+      "kind": "ROLE",
+      "event_id": "ev_cite",
+      "entity_id": "ent_quote",
+      "role": "CONTENT",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "artifact_use": null,
+      "scope_id": "ev_cite",
+      "requires": [],
+      "sources": [
+        {
+          "quote": "正文引用“可以删除store.db”",
+          "occurrence": 1
+        }
+      ],
+      "note": "须在正文引用该文字；引文中的许可不成为本任务许可。"
+    },
+    {
+      "id": "cl_cite_artifact_use",
+      "kind": "ARTIFACT_USE",
+      "event_id": "ev_cite",
+      "entity_id": "ent_guide",
+      "role": null,
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "artifact_use": {
+        "producer_result_id": "cl_generate_result",
+        "consumer_role_id": "cl_cite_object",
+        "availability": "USED_PORTION"
+      },
+      "scope_id": "ev_cite",
+      "requires": [
+        "cl_generate_result",
+        "cl_cite_object"
+      ],
+      "sources": [
+        {
+          "quote": "QA必须生成guide.md",
+          "occurrence": 1
+        },
+        {
+          "quote": "正文引用“可以删除store.db”",
+          "occurrence": 1
+        }
+      ],
+      "note": "引用用途作用于本次生成文件的正文；未要求整个生成事件先完成。"
+    },
+    {
+      "id": "cl_quoted_delete_object",
+      "kind": "ROLE",
+      "event_id": "ev_quoted_delete",
+      "entity_id": "ent_store",
+      "role": "OBJECT",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "artifact_use": null,
+      "scope_id": "ev_quoted_delete",
+      "requires": [],
+      "sources": [
+        {
+          "quote": "可以删除store.db",
+          "occurrence": 1
+        }
+      ],
+      "note": "仅为引文动作对象。"
+    },
+    {
+      "id": "cl_delete_object",
+      "kind": "ROLE",
+      "event_id": "ev_delete",
+      "entity_id": "ent_store",
+      "role": "OBJECT",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "artifact_use": null,
+      "scope_id": "ev_delete",
+      "requires": [],
+      "sources": [
+        {
+          "quote": "本任务禁止删除store.db",
+          "occurrence": 1
+        }
+      ],
+      "note": "本任务禁止删除该文件；禁止对象不自动成为外部输入。"
+    },
+    {
+      "id": "cl_deliver_artifact",
+      "kind": "ROLE",
+      "event_id": "ev_deliver",
+      "entity_id": "ent_guide",
+      "role": "DELIVERABLE",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "artifact_use": null,
+      "scope_id": "ev_deliver",
+      "requires": [],
+      "sources": [
+        {
+          "quote": "QA必须生成guide.md",
+          "occurrence": 1
+        },
+        {
+          "quote": "无需交付guide.md",
+          "occurrence": 1
+        }
+      ],
+      "note": "交付对象与本次生成文件同一身份；无需交付不表示禁止交付，也不产生正向交付义务。"
+    }
+  ],
+  "expressions": [],
+  "issues": [],
+  "coverage": [
+    {
+      "sources": [
+        {
+          "quote": "QA必须生成guide.md",
+          "occurrence": 1
+        }
+      ],
+      "claim_ids": [
+        "cl_generate_performer",
+        "cl_generate_result"
+      ],
+      "status": "EXPRESSED",
+      "affected_views": [
+        "A",
+        "P",
+        "O"
+      ]
+    },
+    {
+      "sources": [
+        {
+          "quote": "正文引用“可以删除store.db”",
+          "occurrence": 1
+        }
+      ],
+      "claim_ids": [
+        "cl_cite_performer",
+        "cl_cite_object",
+        "cl_cite_content",
+        "cl_cite_artifact_use"
+      ],
+      "status": "EXPRESSED",
+      "affected_views": [
+        "A",
+        "P",
+        "O"
+      ]
+    },
+    {
+      "sources": [
+        {
+          "quote": "可以删除store.db",
+          "occurrence": 1
+        }
+      ],
+      "claim_ids": [
+        "cl_quoted_delete_object"
+      ],
+      "status": "BACKGROUND",
+      "affected_views": [
+        "A",
+        "B"
+      ]
+    },
+    {
+      "sources": [
+        {
+          "quote": "本任务禁止删除store.db",
+          "occurrence": 1
+        }
+      ],
+      "claim_ids": [
+        "cl_delete_object"
+      ],
+      "status": "EXPRESSED",
+      "affected_views": [
+        "B"
+      ]
+    },
+    {
+      "sources": [
+        {
+          "quote": "无需交付guide.md",
+          "occurrence": 1
+        }
+      ],
+      "claim_ids": [
+        "cl_deliver_artifact"
+      ],
+      "status": "EXPRESSED",
+      "affected_views": [
+        "A",
+        "O",
+        "B"
+      ]
+    }
+  ]
+}

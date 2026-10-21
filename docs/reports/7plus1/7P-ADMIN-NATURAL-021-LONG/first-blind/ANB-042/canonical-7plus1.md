@@ -1,0 +1,36 @@
+# ANB-042 Actual Canonical 7+1
+
+## I ABSENT
+
+
+
+## O ABSENT
+
+
+
+## A UNRESOLVED
+
+- REQUIRED 接收 报告 [RESOLVED]
+
+## P UNRESOLVED
+
+- 平台主管陈洁 [RECIPIENT] [RESOLVED]
+- 平台主管 [RECIPIENT] [RESOLVED]
+- 外部邮箱 [RECIPIENT] [RESOLVED]
+- 陈洁只是 [RECIPIENT] [RESOLVED]
+
+## R ABSENT
+
+
+
+## V ABSENT
+
+
+
+## C ABSENT
+
+
+
+## B RESOLVED
+
+- FORBIDDEN 发送 外部邮箱 [RESOLVED]

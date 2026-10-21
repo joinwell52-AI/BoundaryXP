@@ -1,0 +1,1 @@
+DEV 检查 src 目录中的配置引用，但排除 src/legacy。结果写入 config-ref-review.md。不得删除 legacy 文件。

@@ -1,0 +1,34 @@
+# Actual Canonical 7+1
+
+## I RESOLVED
+
+- RESOLVED audit.log [p1:680646bf5240424b8fd771ae]
+
+## O RESOLVED
+
+- RESOLVED checklist.md [p1:88f2b35f4c2ecf14efcd3d8f]
+
+## A RESOLVED
+
+- RESOLVED REQUIRED 检查 audit.log [p1:ce621aecb4aaa1eca22982c2]
+- RESOLVED REQUIRED 生成 checklist.md [p1:5ae5f2625d360746f7a614f4]
+- RESOLVED REQUIRED 提交 checklist.md [p1:df2744f91706c12226a18c6b]
+
+## P RESOLVED
+
+- RESOLVED 复核人孙禾 [RECIPIENT,REVIEWER] [p1:7aab040891bf6c35e692a554,p1:6b0a3b90a15a57845f4bd232,p1:93daee0bfd68161325565819]
+- RESOLVED 赵一 [PERFORMER] [p1:5210484edcad2d1d7c8c5e26,p1:c2061fdf26e2dbfaea99c27c,p1:9ea4f71da936168c04e58570]
+
+## R ABSENT
+
+
+## V ABSENT
+
+
+## C RESOLVED
+
+- RESOLVED 完成 [p1:830f56c28b76a2c680c1d20d]
+
+## B RESOLVED
+
+- RESOLVED FORBIDDEN 修改 audit.log [p1:c8abbcb8f190051c206640b7]

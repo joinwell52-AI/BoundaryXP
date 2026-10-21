@@ -1,0 +1,1 @@
+QA 读取两个文件：one.ini 和 two.ini。必须保持 one.ini 不变。

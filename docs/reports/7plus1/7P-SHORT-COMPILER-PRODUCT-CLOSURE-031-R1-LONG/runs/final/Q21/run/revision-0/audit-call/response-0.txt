@@ -1,0 +1,250 @@
+{
+  "contract_version": "031-r1.1",
+  "reviews": [
+    {
+      "subject_id": "n_pm",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [{"quote": "PM", "occurrence": 1}],
+      "reason": "身份明确；OTHER可占位，原文未指定其为个人或组织。"
+    },
+    {
+      "subject_id": "n_qa",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [{"quote": "QA", "occurrence": 1}],
+      "reason": "批准主体身份明确，OTHER不添加个人或组织类别假设。"
+    },
+    {
+      "subject_id": "n_ops",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [{"quote": "OPS-01", "occurrence": 1}],
+      "reason": "明确标识一个批准主体，01不是数量要求。"
+    },
+    {
+      "subject_id": "n_report",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [{"quote": "本次report.md", "occurrence": 1}],
+      "reason": "明确的本次文件身份；许可与禁止发布均承接此文件。"
+    },
+    {
+      "subject_id": "e_publish_allowed",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["c_allow_condition"],
+      "sources": [{"quote": "允许PM发布本次report.md，但必须等QA和OPS-01都批准后", "occurrence": 1}],
+      "reason": "当前发布动作是附必要批准前提的许可，不是发布义务；约束已双向绑定。"
+    },
+    {
+      "subject_id": "e_publish_forbidden",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["c_forbid_condition"],
+      "sources": [{"quote": "任何一项批准尚未取得时，不得发布", "occurrence": 1}],
+      "reason": "保留条件禁止，FORBIDDEN与正极性动作表达正确。"
+    },
+    {
+      "subject_id": "e_qa_approval",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [{"quote": "QA和OPS-01都批准后", "occurrence": 1}],
+      "reason": "QA批准仅作为条件状态，不增加批准义务，也不断言已批准。"
+    },
+    {
+      "subject_id": "e_ops_approval",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [{"quote": "QA和OPS-01都批准后", "occurrence": 1}],
+      "reason": "OPS-01批准仅作为条件状态，不增加批准义务，也不断言已批准。"
+    },
+    {
+      "subject_id": "c_allow_performer",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [{"quote": "允许PM发布本次report.md", "occurrence": 1}],
+      "reason": "PM是许可发布动作的明确执行主体。"
+    },
+    {
+      "subject_id": "c_allow_deliverable",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [{"quote": "允许PM发布本次report.md", "occurrence": 1}],
+      "reason": "发布文件具有DELIVERABLE用途；未新增生成动作或外部输入。"
+    },
+    {
+      "subject_id": "c_forbid_performer",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["c_allow_performer"],
+      "sources": [
+        {"quote": "允许PM发布本次report.md", "occurrence": 1},
+        {"quote": "任何一项批准尚未取得时，不得发布", "occurrence": 1}
+      ],
+      "reason": "连续同一指令的禁止发布承接PM，原文没有主体切换。"
+    },
+    {
+      "subject_id": "c_forbid_deliverable",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["c_allow_deliverable"],
+      "sources": [
+        {"quote": "发布本次report.md", "occurrence": 1},
+        {"quote": "不得发布", "occurrence": 1}
+      ],
+      "reason": "禁止发布承接同一本次文件；禁止的DELIVERABLE用途不产生正向O。"
+    },
+    {
+      "subject_id": "c_qa_approver",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [{"quote": "QA和OPS-01都批准后", "occurrence": 1}],
+      "reason": "QA是条件中的批准主体，角色不传播为当前批准义务。"
+    },
+    {
+      "subject_id": "c_ops_approver",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [{"quote": "QA和OPS-01都批准后", "occurrence": 1}],
+      "reason": "OPS-01是条件中的另一批准主体。"
+    },
+    {
+      "subject_id": "c_qa_object",
+      "field_path": "",
+      "verdict": "UNCERTAIN",
+      "context_refs": ["n_report", "e_publish_allowed", "c_qa_approver"],
+      "sources": [
+        {"quote": "发布本次report.md", "occurrence": 1},
+        {"quote": "必须等QA和OPS-01都批准后", "occurrence": 1}
+      ],
+      "reason": "原文明确批准约束发布，但未明确批准对象就是文件；也可能批准的是发布事项，不能凭唯一文件确定OBJECT绑定。"
+    },
+    {
+      "subject_id": "c_ops_object",
+      "field_path": "",
+      "verdict": "UNCERTAIN",
+      "context_refs": ["n_report", "e_publish_allowed", "c_ops_approver"],
+      "sources": [
+        {"quote": "发布本次report.md", "occurrence": 1},
+        {"quote": "必须等QA和OPS-01都批准后", "occurrence": 1}
+      ],
+      "reason": "原文未明确OPS-01批准的是文件本身还是发布事项，文件OBJECT绑定需要保留未决。"
+    },
+    {
+      "subject_id": "c_allow_condition",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["x_both_approved"],
+      "sources": [{"quote": "允许PM发布本次report.md，但必须等QA和OPS-01都批准后", "occurrence": 1}],
+      "reason": "双方批准是许可发布的必要前提，发布在批准后；目标、方向、时序及回指正确。批准对象参数另作局部审阅。"
+    },
+    {
+      "subject_id": "c_forbid_condition",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["x_any_unapproved"],
+      "sources": [
+        {"quote": "QA和OPS-01都批准后", "occurrence": 1},
+        {"quote": "任何一项批准尚未取得时，不得发布", "occurrence": 1}
+      ],
+      "reason": "任一批准未取得足以触发禁止，SUFFICIENT正确；未用未来批准已发生作为禁止前提。批准对象参数另作局部审阅。"
+    },
+    {
+      "subject_id": "x_qa_approved",
+      "field_path": "",
+      "verdict": "UNCERTAIN",
+      "context_refs": ["e_qa_approval", "c_qa_object"],
+      "sources": [
+        {"quote": "本次report.md", "occurrence": 1},
+        {"quote": "QA和OPS-01都批准后", "occurrence": 1}
+      ],
+      "reason": "QA批准已取得的正状态及引用事件正确，但把文件列为批准对象尚无明确来源。"
+    },
+    {
+      "subject_id": "x_ops_approved",
+      "field_path": "",
+      "verdict": "UNCERTAIN",
+      "context_refs": ["e_ops_approval", "c_ops_object"],
+      "sources": [
+        {"quote": "本次report.md", "occurrence": 1},
+        {"quote": "QA和OPS-01都批准后", "occurrence": 1}
+      ],
+      "reason": "OPS-01批准已取得的正状态及引用事件正确，但文件对象参数未被原文明确确定。"
+    },
+    {
+      "subject_id": "x_both_approved",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["x_qa_approved", "x_ops_approved"],
+      "sources": [{"quote": "QA和OPS-01都批准后", "occurrence": 1}],
+      "reason": "“都”要求两个批准状态合取，AND及两项引用正确；子状态对象参数的疑点保留在子节点。"
+    },
+    {
+      "subject_id": "x_qa_unapproved",
+      "field_path": "",
+      "verdict": "UNCERTAIN",
+      "context_refs": ["e_qa_approval", "x_qa_approved", "c_qa_object"],
+      "sources": [
+        {"quote": "QA和OPS-01都批准后", "occurrence": 1},
+        {"quote": "任何一项批准尚未取得时", "occurrence": 1}
+      ],
+      "reason": "QA批准未取得的负极性及与正状态互补的参数结构正确，但共同使用的文件对象参数仍未确定。"
+    },
+    {
+      "subject_id": "x_ops_unapproved",
+      "field_path": "",
+      "verdict": "UNCERTAIN",
+      "context_refs": ["e_ops_approval", "x_ops_approved", "c_ops_object"],
+      "sources": [
+        {"quote": "QA和OPS-01都批准后", "occurrence": 1},
+        {"quote": "任何一项批准尚未取得时", "occurrence": 1}
+      ],
+      "reason": "OPS-01批准未取得的负极性及互补结构正确，但共同使用的文件对象参数仍未确定。"
+    },
+    {
+      "subject_id": "x_any_unapproved",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["x_qa_unapproved", "x_ops_unapproved"],
+      "sources": [{"quote": "任何一项批准尚未取得时", "occurrence": 1}],
+      "reason": "任一项未取得应为两个负状态的OR；未错误要求两项均未取得。"
+    }
+  ],
+  "issues": [
+    {
+      "id": "audit_approval_object_binding",
+      "issue_kind": "BINDING",
+      "subject_ids": ["c_qa_object", "c_ops_object"],
+      "field_path": "entity_id",
+      "context_refs": ["n_report", "e_publish_allowed", "e_qa_approval", "e_ops_approval"],
+      "sources": [{"quote": "允许PM发布本次report.md，但必须等QA和OPS-01都批准后", "occurrence": 1}],
+      "reason": "批准对象没有明示为文件本身；候选note称批准针对发布事项，结构却绑定文件OBJECT，两者不能自动等同。保留批准主体及发布前提，不凭唯一文件强定批准对象。",
+      "suggested_json": null
+    },
+    {
+      "id": "audit_approval_state_arguments",
+      "issue_kind": "BINDING",
+      "subject_ids": ["x_qa_approved", "x_ops_approved", "x_qa_unapproved", "x_ops_unapproved"],
+      "field_path": "state.args",
+      "context_refs": ["c_qa_object", "c_ops_object", "n_report"],
+      "sources": [
+        {"quote": "允许PM发布本次report.md，但必须等QA和OPS-01都批准后", "occurrence": 1},
+        {"quote": "任何一项批准尚未取得时，不得发布", "occurrence": 1}
+      ],
+      "reason": "四个状态一致使用n_report作为批准对象，但一致性不能证明该对象绑定有来源。疑点仅涉及对象参数，不否定双方批准、互补极性、合取许可前提或析取禁止触发。",
+      "suggested_json": null
+    }
+  ],
+  "omissions": []
+}

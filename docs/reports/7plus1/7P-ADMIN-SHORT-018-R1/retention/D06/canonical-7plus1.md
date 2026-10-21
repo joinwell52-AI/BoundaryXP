@@ -1,0 +1,34 @@
+# Actual Canonical 7+1
+
+## I RESOLVED
+
+- RESOLVED changes.csv [p1:26a0adec553fe47d1b227e9d]
+
+## O RESOLVED
+
+- RESOLVED diff.csv [p1:b0108caeff3012d77cbae85a]
+- RESOLVED review.md [p1:a97c49193dbf5b9a288b9e62]
+
+## A RESOLVED
+
+- RESOLVED REQUIRED 读取 changes.csv [p1:356ed54ed747f024f32d1bcb]
+- RESOLVED REQUIRED 生成 review.md [p1:5411247224ac0e2bf446dd45]
+- RESOLVED REQUIRED 生成 diff.csv [p1:13e11cde6f1438d9972d631e]
+
+## P RESOLVED
+
+- RESOLVED 林秋 [PERFORMER] [p1:585350dbd57f5c3836bff3f9,p1:7fa5692cdba7f190ee9c66d1,p1:806f45c4693d733e79fddb15,p1:22c81452f5258e558022258c,p1:3a448e7a3dcd399a47a01ec8]
+
+## R ABSENT
+
+
+## V ABSENT
+
+
+## C RESOLVED
+
+- RESOLVED 完成 [p1:4ae11022393afcdd94996557]
+
+## B RESOLVED
+
+- RESOLVED FORBIDDEN 修改 changes.csv [p1:ccad426bd1c2a19d53c9c696]

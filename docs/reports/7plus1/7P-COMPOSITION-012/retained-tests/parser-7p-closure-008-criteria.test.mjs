@@ -1,0 +1,3 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {criterionSyntax} from '../../../../../research/7plus1-parser/v0.3-7p-composition-012/criterion-syntax.mjs';
+test('008 explicit acceptance state predicates preserve full criterion',()=>{for(const source of ['- 四份新测试通过','- 现有 231 passed 不退','- checker clean','- 两个手工文件不被误伤']){const state=criterionSyntax(source);assert(state);assert(state.source_predicates.length);assert.equal(state.execution,false);assert(state.source.length>0);}});
+test('008 vague/evaluative headings are not state syntax',()=>{for(const source of ['以质量为准','精益求精','验收标准','choose a clean design'])assert.equal(criterionSyntax(source),null);});

@@ -1,0 +1,434 @@
+{
+  "structure_status": "SINGLE_ROOT",
+  "nodes": [
+    {
+      "id": "pm",
+      "type": "ENTITY",
+      "sources": [
+        {"quote": "PM", "clause_id": "c1", "occurrence": 0, "context_anchor": "请 PM 组织生成"},
+        {"quote": "PM", "clause_id": "c1", "occurrence": 1, "context_anchor": "notify PM"}
+      ],
+      "semantic_identity": "PM",
+      "entity_kind": "ROLE",
+      "layer": "MAIN",
+      "owner": "TASK",
+      "modality": "UNSTATED",
+      "polarity": "AFFIRMATIVE",
+      "artifact_use": "NONE",
+      "predicate_class": "NONE",
+      "alternative_group_id": null
+    },
+    {
+      "id": "document",
+      "type": "ENTITY",
+      "sources": [
+        {"quote": "incident-playbook.md", "clause_id": "c1", "occurrence": 0, "context_anchor": null},
+        {"quote": "文档", "clause_id": "c1", "occurrence": 0, "context_anchor": "文档中必须写明"},
+        {"quote": "文档", "clause_id": "c1", "occurrence": 1, "context_anchor": "本任务只编写文档"}
+      ],
+      "semantic_identity": "incident-playbook.md",
+      "entity_kind": "FILE",
+      "layer": "MAIN",
+      "owner": "TASK",
+      "modality": "UNSTATED",
+      "polarity": "AFFIRMATIVE",
+      "artifact_use": "GENERATED_OUTPUT",
+      "predicate_class": "NONE",
+      "alternative_group_id": null
+    },
+    {
+      "id": "organize",
+      "type": "EVENT",
+      "sources": [
+        {"quote": "请 PM 组织生成", "clause_id": "c1", "occurrence": 0, "context_anchor": null}
+      ],
+      "semantic_identity": "organize",
+      "entity_kind": "NONE",
+      "layer": "MAIN",
+      "owner": "TASK",
+      "modality": "REQUIRED",
+      "polarity": "AFFIRMATIVE",
+      "artifact_use": "NONE",
+      "predicate_class": "ORGANIZE",
+      "alternative_group_id": null
+    },
+    {
+      "id": "generate",
+      "type": "EVENT",
+      "sources": [
+        {"quote": "生成 incident-playbook.md", "clause_id": "c1", "occurrence": 0, "context_anchor": null}
+      ],
+      "semantic_identity": "generate",
+      "entity_kind": "NONE",
+      "layer": "COMPLEMENT",
+      "owner": "organize",
+      "modality": "REQUIRED",
+      "polarity": "AFFIRMATIVE",
+      "artifact_use": "NONE",
+      "predicate_class": "PRODUCE",
+      "alternative_group_id": null
+    },
+    {
+      "id": "write_content",
+      "type": "EVENT",
+      "sources": [
+        {"quote": "文档中必须写明", "clause_id": "c1", "occurrence": 0, "context_anchor": null}
+      ],
+      "semantic_identity": "write_explicit_content",
+      "entity_kind": "NONE",
+      "layer": "MAIN",
+      "owner": "TASK",
+      "modality": "REQUIRED",
+      "polarity": "AFFIRMATIVE",
+      "artifact_use": "NONE",
+      "predicate_class": "PRODUCE",
+      "alternative_group_id": null
+    },
+    {
+      "id": "quoted_content",
+      "type": "ENTITY",
+      "sources": [
+        {"quote": "stop processing and notify PM when credentials leak", "clause_id": "c1", "occurrence": 0, "context_anchor": null}
+      ],
+      "semantic_identity": "stop processing and notify PM when credentials leak",
+      "entity_kind": "DATA",
+      "layer": "OUTPUT_CONTENT",
+      "owner": "write_content",
+      "modality": "UNSTATED",
+      "polarity": "AFFIRMATIVE",
+      "artifact_use": "GENERATED_OUTPUT",
+      "predicate_class": "NONE",
+      "alternative_group_id": null
+    },
+    {
+      "id": "quoted_stop",
+      "type": "EVENT",
+      "sources": [
+        {"quote": "stop processing", "clause_id": "c1", "occurrence": 0, "context_anchor": null}
+      ],
+      "semantic_identity": "stop_processing",
+      "entity_kind": "NONE",
+      "layer": "QUOTE",
+      "owner": "quoted_content",
+      "modality": "REQUIRED",
+      "polarity": "AFFIRMATIVE",
+      "artifact_use": "NONE",
+      "predicate_class": "STOP",
+      "alternative_group_id": null
+    },
+    {
+      "id": "quoted_notify",
+      "type": "EVENT",
+      "sources": [
+        {"quote": "notify PM", "clause_id": "c1", "occurrence": 0, "context_anchor": null}
+      ],
+      "semantic_identity": "notify",
+      "entity_kind": "NONE",
+      "layer": "QUOTE",
+      "owner": "quoted_content",
+      "modality": "REQUIRED",
+      "polarity": "AFFIRMATIVE",
+      "artifact_use": "NONE",
+      "predicate_class": "COMMUNICATE",
+      "alternative_group_id": null
+    },
+    {
+      "id": "credentials",
+      "type": "ENTITY",
+      "sources": [
+        {"quote": "credentials", "clause_id": "c1", "occurrence": 0, "context_anchor": null}
+      ],
+      "semantic_identity": "credentials",
+      "entity_kind": "DATA",
+      "layer": "QUOTE",
+      "owner": "quoted_content",
+      "modality": "UNSTATED",
+      "polarity": "AFFIRMATIVE",
+      "artifact_use": "NONE",
+      "predicate_class": "NONE",
+      "alternative_group_id": null
+    },
+    {
+      "id": "credentials_leak",
+      "type": "STATE",
+      "sources": [
+        {"quote": "credentials leak", "clause_id": "c1", "occurrence": 0, "context_anchor": "when credentials leak"}
+      ],
+      "semantic_identity": "credentials_leak",
+      "entity_kind": "NONE",
+      "layer": "CONDITION_ANTECEDENT",
+      "owner": "quoted_content",
+      "modality": "UNSTATED",
+      "polarity": "AFFIRMATIVE",
+      "artifact_use": "NONE",
+      "predicate_class": "STATE",
+      "alternative_group_id": null
+    },
+    {
+      "id": "write_document",
+      "type": "EVENT",
+      "sources": [
+        {"quote": "本任务只编写文档", "clause_id": "c1", "occurrence": 0, "context_anchor": null}
+      ],
+      "semantic_identity": "write_document",
+      "entity_kind": "NONE",
+      "layer": "MAIN",
+      "owner": "TASK",
+      "modality": "REQUIRED",
+      "polarity": "AFFIRMATIVE",
+      "artifact_use": "NONE",
+      "predicate_class": "PRODUCE",
+      "alternative_group_id": null
+    },
+    {
+      "id": "document_authoring_scope",
+      "type": "ENTITY",
+      "sources": [
+        {"quote": "编写文档", "clause_id": "c1", "occurrence": 0, "context_anchor": "本任务只编写文档"}
+      ],
+      "semantic_identity": "document_authoring",
+      "entity_kind": "OTHER",
+      "layer": "META_DECLARATION",
+      "owner": "TASK",
+      "modality": "UNSTATED",
+      "polarity": "AFFIRMATIVE",
+      "artifact_use": "NONE",
+      "predicate_class": "NONE",
+      "alternative_group_id": null
+    }
+  ],
+  "relations": [
+    {
+      "id": "r_organizer",
+      "type": "AGENT",
+      "head": "organize",
+      "tail": "pm",
+      "sources": [
+        {"quote": "PM 组织", "clause_id": "c1", "occurrence": 0, "context_anchor": null}
+      ],
+      "ownership": "LOCAL",
+      "role": "PERFORMER",
+      "alternative_group_id": null
+    },
+    {
+      "id": "r_generation_complement",
+      "type": "PART_OF",
+      "head": "generate",
+      "tail": "organize",
+      "sources": [
+        {"quote": "组织生成", "clause_id": "c1", "occurrence": 0, "context_anchor": null}
+      ],
+      "ownership": "STRUCTURAL",
+      "role": "NONE",
+      "alternative_group_id": null
+    },
+    {
+      "id": "r_generate_result",
+      "type": "RESULT",
+      "head": "generate",
+      "tail": "document",
+      "sources": [
+        {"quote": "生成 incident-playbook.md", "clause_id": "c1", "occurrence": 0, "context_anchor": null}
+      ],
+      "ownership": "LOCAL",
+      "role": "NONE",
+      "alternative_group_id": null
+    },
+    {
+      "id": "r_content_location",
+      "type": "LOCATION",
+      "head": "write_content",
+      "tail": "document",
+      "sources": [
+        {"quote": "文档中", "clause_id": "c1", "occurrence": 0, "context_anchor": null}
+      ],
+      "ownership": "COREFERENCE",
+      "role": "NONE",
+      "alternative_group_id": null
+    },
+    {
+      "id": "r_content_result",
+      "type": "RESULT",
+      "head": "write_content",
+      "tail": "quoted_content",
+      "sources": [
+        {"quote": "必须写明“stop processing and notify PM when credentials leak”", "clause_id": "c1", "occurrence": 0, "context_anchor": null}
+      ],
+      "ownership": "LOCAL",
+      "role": "NONE",
+      "alternative_group_id": null
+    },
+    {
+      "id": "r_quote_stop_part",
+      "type": "PART_OF",
+      "head": "quoted_stop",
+      "tail": "quoted_content",
+      "sources": [
+        {"quote": "stop processing", "clause_id": "c1", "occurrence": 0, "context_anchor": "stop processing and notify PM when credentials leak"}
+      ],
+      "ownership": "STRUCTURAL",
+      "role": "NONE",
+      "alternative_group_id": null
+    },
+    {
+      "id": "r_quote_notify_part",
+      "type": "PART_OF",
+      "head": "quoted_notify",
+      "tail": "quoted_content",
+      "sources": [
+        {"quote": "notify PM", "clause_id": "c1", "occurrence": 0, "context_anchor": "stop processing and notify PM when credentials leak"}
+      ],
+      "ownership": "STRUCTURAL",
+      "role": "NONE",
+      "alternative_group_id": null
+    },
+    {
+      "id": "r_quote_conjunction",
+      "type": "CONJUNCTION",
+      "head": "quoted_stop",
+      "tail": "quoted_notify",
+      "sources": [
+        {"quote": "stop processing and notify PM", "clause_id": "c1", "occurrence": 0, "context_anchor": null}
+      ],
+      "ownership": "STRUCTURAL",
+      "role": "NONE",
+      "alternative_group_id": null
+    },
+    {
+      "id": "r_notify_recipient",
+      "type": "RECIPIENT",
+      "head": "quoted_notify",
+      "tail": "pm",
+      "sources": [
+        {"quote": "notify PM", "clause_id": "c1", "occurrence": 0, "context_anchor": null}
+      ],
+      "ownership": "LOCAL",
+      "role": "RECIPIENT",
+      "alternative_group_id": null
+    },
+    {
+      "id": "r_leak_theme",
+      "type": "THEME",
+      "head": "credentials_leak",
+      "tail": "credentials",
+      "sources": [
+        {"quote": "credentials leak", "clause_id": "c1", "occurrence": 0, "context_anchor": null}
+      ],
+      "ownership": "LOCAL",
+      "role": "NONE",
+      "alternative_group_id": null
+    },
+    {
+      "id": "r_stop_condition",
+      "type": "CONDITION_OF",
+      "head": "condition_stop",
+      "tail": "quoted_stop",
+      "sources": [
+        {"quote": "stop processing and notify PM when credentials leak", "clause_id": "c1", "occurrence": 0, "context_anchor": null}
+      ],
+      "ownership": "SHARED_EXPLICIT",
+      "role": "NONE",
+      "alternative_group_id": null
+    },
+    {
+      "id": "r_notify_condition",
+      "type": "CONDITION_OF",
+      "head": "condition_notify",
+      "tail": "quoted_notify",
+      "sources": [
+        {"quote": "notify PM when credentials leak", "clause_id": "c1", "occurrence": 0, "context_anchor": null}
+      ],
+      "ownership": "LOCAL",
+      "role": "NONE",
+      "alternative_group_id": null
+    },
+    {
+      "id": "r_write_result",
+      "type": "RESULT",
+      "head": "write_document",
+      "tail": "document",
+      "sources": [
+        {"quote": "编写文档", "clause_id": "c1", "occurrence": 0, "context_anchor": null}
+      ],
+      "ownership": "COREFERENCE",
+      "role": "NONE",
+      "alternative_group_id": null
+    },
+    {
+      "id": "r_task_restriction",
+      "type": "RESTRICTS",
+      "head": "TASK",
+      "tail": "document_authoring_scope",
+      "sources": [
+        {"quote": "本任务只编写文档", "clause_id": "c1", "occurrence": 0, "context_anchor": null}
+      ],
+      "ownership": "LOCAL",
+      "role": "NONE",
+      "alternative_group_id": null
+    }
+  ],
+  "expressions": [
+    {
+      "id": "condition_stop",
+      "kind": "CONDITION",
+      "operator": "STATE_REF",
+      "operands": ["credentials_leak"],
+      "owner": "quoted_stop",
+      "sources": [
+        {"quote": "when credentials leak", "clause_id": "c1", "occurrence": 0, "context_anchor": "stop processing and notify PM when credentials leak"}
+      ],
+      "quantity": null,
+      "alternative_group_id": null
+    },
+    {
+      "id": "condition_notify",
+      "kind": "CONDITION",
+      "operator": "STATE_REF",
+      "operands": ["credentials_leak"],
+      "owner": "quoted_notify",
+      "sources": [
+        {"quote": "when credentials leak", "clause_id": "c1", "occurrence": 0, "context_anchor": "notify PM when credentials leak"}
+      ],
+      "quantity": null,
+      "alternative_group_id": null
+    }
+  ],
+  "unresolved": [],
+  "coverage": [
+    {
+      "region_id": "c1",
+      "disposition": "BOUNDARY_SEMANTIC",
+      "candidate_ids": [
+        "pm",
+        "document",
+        "organize",
+        "generate",
+        "write_content",
+        "quoted_content",
+        "quoted_stop",
+        "quoted_notify",
+        "credentials",
+        "credentials_leak",
+        "write_document",
+        "document_authoring_scope",
+        "r_organizer",
+        "r_generation_complement",
+        "r_generate_result",
+        "r_content_location",
+        "r_content_result",
+        "r_quote_stop_part",
+        "r_quote_notify_part",
+        "r_quote_conjunction",
+        "r_notify_recipient",
+        "r_leak_theme",
+        "r_stop_condition",
+        "r_notify_condition",
+        "r_write_result",
+        "r_task_restriction",
+        "condition_stop",
+        "condition_notify"
+      ],
+      "reason": "该段要求 PM 组织生成文档、写明指定引文，并将本任务限制为文档编写；引文中的停止处理、通知 PM 和凭据泄露条件属于文档内容。"
+    }
+  ]
+}

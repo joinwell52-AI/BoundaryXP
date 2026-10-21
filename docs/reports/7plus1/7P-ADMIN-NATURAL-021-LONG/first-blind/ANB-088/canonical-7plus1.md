@@ -1,0 +1,35 @@
+# ANB-088 Actual Canonical 7+1
+
+## I PARSER_COVERAGE_FAILURE
+
+- test-cluster.yaml only [RESOLVED]
+- test-cluster.yaml [RESOLVED]
+
+## O PARSER_COVERAGE_FAILURE
+
+- cluster-review.md [RESOLVED]
+
+## A PARSER_COVERAGE_FAILURE
+
+- REQUIRED Review test-cluster.yaml only [RESOLVED]
+- REQUIRED Create cluster-review.md [RESOLVED]
+
+## P PARSER_COVERAGE_FAILURE
+
+
+
+## R PARSER_COVERAGE_FAILURE
+
+
+
+## V PARSER_COVERAGE_FAILURE
+
+
+
+## C PARSER_COVERAGE_FAILURE
+
+
+
+## B PARSER_COVERAGE_FAILURE
+
+

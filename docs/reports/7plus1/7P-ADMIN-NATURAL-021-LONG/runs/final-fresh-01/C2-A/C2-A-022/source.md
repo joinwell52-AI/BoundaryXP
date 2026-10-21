@@ -1,0 +1,1 @@
+TEAM222 依据 POLICY-2022 v5.22 查看 dataset-c2-a-22.csv，编写 decision-c2-a-22.md，随后发送报告给 LEAD222。

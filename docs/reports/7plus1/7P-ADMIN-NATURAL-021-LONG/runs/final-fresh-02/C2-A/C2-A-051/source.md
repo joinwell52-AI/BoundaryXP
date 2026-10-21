@@ -1,0 +1,1 @@
+TEAM251 检查 endpoint-c2-a-1，至少重试 5 次，生成 quantity-c2-a-1.txt。

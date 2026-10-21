@@ -1,0 +1,1 @@
+本次任务要求检查 src 目录中的配置引用并形成 config-ref-review.md，但明确排除 src/legacy。不得删除 legacy 文件。

@@ -1,0 +1,1 @@
+DEV 查看 model-files.json，核对模型名称、文件路径和 SHA-256，生成 model-file-audit.md。不得加载权重，也不得启动推理。

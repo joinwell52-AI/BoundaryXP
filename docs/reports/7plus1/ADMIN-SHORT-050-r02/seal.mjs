@@ -1,0 +1,10 @@
+import fs from 'node:fs';import crypto from 'node:crypto';import assert from 'node:assert/strict';
+const out='docs/reports/7plus1/ADMIN-SHORT-050-r02/',root='fixtures/7plus1/admin-short-050-r02/';
+if(fs.existsSync(out+'SEAL.json'))throw Error('Already sealed');
+const read=p=>JSON.parse(fs.readFileSync(p,'utf8')),hash=p=>crypto.createHash('sha256').update(fs.readFileSync(p)).digest('hex'),walk=p=>fs.readdirSync(p,{withFileTypes:true}).flatMap(e=>e.isDirectory()?walk(p+e.name+'/'):[p+e.name]);
+const frozen=read(out+'INPUT-FREEZE.json');assert.equal(hash(frozen.manifest),frozen.manifest_sha256);for(const r of frozen.sources)assert.equal(hash(r.path),r.sha256);
+assert.equal(read(out+'PROTECTED-ASSETS.json').status,'PASS');assert.equal(read(out+'first/INDEX.json').length,50);assert.equal(read(out+'SEMANTIC-REVIEW.json').length,50);
+const files=[...walk(root),...walk(out).filter(p=>!['MANIFEST.json','SHA256SUMS.txt','SEAL.json'].some(n=>p===out+n)),'docs/reports/7plus1/ADMIN-SHORT-050/author-rich-cases.mjs'].sort().map(path=>({path,sha256:hash(path),bytes:fs.statSync(path).size}));
+fs.writeFileSync(out+'MANIFEST.json',JSON.stringify({suite:'ADMIN-SHORT-050-r02',files},null,2)+'\n');fs.writeFileSync(out+'SHA256SUMS.txt',files.map(f=>f.sha256+'  '+f.path).join('\n')+'\n');
+const seal={status:'INTEGRITY_SEALED',created_at:new Date().toISOString(),manifest_sha256:hash(out+'MANIFEST.json'),sha256sums_sha256:hash(out+'SHA256SUMS.txt'),payload_files:files.length,first_runs:50,semantic_review:'50 CASES CONFIRMED_NOT_CLOSED; at least 14 cases with wrong/incomplete RESOLVED',human_gold:false,parser_modified:false,admin_review:'PENDING',publication:'LOCAL_ONLY'};
+for(const f of files)assert.equal(hash(f.path),f.sha256);fs.writeFileSync(out+'SEAL.json',JSON.stringify(seal,null,2)+'\n');console.log(JSON.stringify(seal));

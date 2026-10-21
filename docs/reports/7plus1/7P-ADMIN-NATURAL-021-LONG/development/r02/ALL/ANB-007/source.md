@@ -1,0 +1,1 @@
+QA 读取 build-summary.json，确认主模块和两个插件的构建结果，生成 build-review.md。发现失败项时只记录原因，不得重新触发构建。

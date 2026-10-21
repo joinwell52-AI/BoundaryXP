@@ -1,0 +1,88 @@
+{
+  "case_id": "REAL-GOLD-004",
+  "source_sha256": "47dfb331551b6366774d73ebc9bb464416d9a815cf11f6b2c333b4920b6b727f",
+  "status": "EVIDENCE_VERIFIED",
+  "evidence": [
+    {
+      "evidence_id": "E001",
+      "source_id": "SOURCE_TASK",
+      "origin": "SOURCE",
+      "start": 0,
+      "end": 273,
+      "quote": "---\r\nprotocol: fcop\r\nversion: 1\r\nkind: task\r\ntask_id: TASK-20260427-004\r\nsender: ADMIN\r\nrecipient: ME\r\npriority: P0\r\nrelated: [ISSUE-20260427-001, ISSUE-20260427-004, ISSUE-20260427-005, ISSUE-20260427-006]\r\nsession_id: sess-20260427-me-071\r\n---\r\n\r\n# 0.7.1 一条龙发版本（不留残余）\r\n\r\n",
+      "purpose": "source metadata, assigned participants, release subject, and related issues"
+    },
+    {
+      "evidence_id": "E002",
+      "source_id": "SOURCE_TASK",
+      "origin": "SOURCE",
+      "start": 273,
+      "end": 583,
+      "quote": "## 背景\r\n\r\n0.7.0 刚发就发现 `fcop-mcp 0.7.0` 在 PyPI 上钉死 `fcop<0.7`（ISSUE-006），\r\n等于 release 失败需要立刻补救。同时 dogfood 曝出两个新协议 gap：\r\nISSUE-004（子 agent 冒充角色）与 ISSUE-005（AMEND-/v2 文件名悬空）；\r\n更早的 ISSUE-001（Rule 0.a.1 tripwire 盲区）也并入一起处理。\r\n\r\nADMIN 指令：\"**什么乱七八糟的，0.7.1 一起搞完！！！！不要残留，最后又\r\n不对！！！**\"——所以本次 0.7.1 是**全包发版**，不准再延后任何条目。\r\n\r\n",
+      "purpose": "release failure background and all-in-one remediation scope"
+    },
+    {
+      "evidence_id": "E003",
+      "source_id": "SOURCE_TASK",
+      "origin": "SOURCE",
+      "start": 583,
+      "end": 947,
+      "quote": "## 要求\r\n\r\n### A. 协议文档（rules + protocol + 信件）\r\n\r\n1. `fcop-rules.mdc` 1.7.0 → **1.8.0**：\r\n   - Rule 1 加\"子 agent 继承呼叫者身份\"条款。\r\n   - Rule 5 移除 `AMEND-*` / `*-v2.md` 例子。\r\n   - Rule 0.a.1 澄清\"适用所有写入路径，tripwire 仅事后审计\"。\r\n2. `fcop-protocol.mdc` 1.5.0 → **1.6.0**：与 1.8.0 同步，附 v1.6 changelog。\r\n3. `letter-to-admin.{zh,en}.md`：在 \"一个角色只能给一个 agent\" 后补一节\r\n   \"子 agent ≠ 多一个角色\"。\r\n\r\n",
+      "purpose": "protocol-document version and wording changes"
+    },
+    {
+      "evidence_id": "E004",
+      "source_id": "SOURCE_TASK",
+      "origin": "SOURCE",
+      "start": 947,
+      "end": 1114,
+      "quote": "### B. 库代码（fcop）\r\n\r\n4. `Project.audit_drift()` 新方法：扫 `git status --porcelain` 与 FCoP\r\n   账本对照，列出在 ledger 之外的未归账修改。\r\n5. 版本：`src/fcop/_version.py` 0.7.0 → **0.7.1**。\r\n\r\n",
+      "purpose": "library audit capability and fcop version target"
+    },
+    {
+      "evidence_id": "E005",
+      "source_id": "SOURCE_TASK",
+      "origin": "SOURCE",
+      "start": 1114,
+      "end": 1605,
+      "quote": "### C. MCP 代码（fcop-mcp）\r\n\r\n6. **CRITICAL**: `mcp/pyproject.toml` 把 `fcop>=0.6,<0.7` 改为\r\n   `fcop>=0.7,<0.8`（ISSUE-006）。\r\n7. `mcp/src/fcop_mcp/_version.py` 0.7.0 → **0.7.1**。\r\n8. 新增 MCP 工具 `fcop_check`：调 `audit_drift` + `session_id↔role`\r\n   一致性审计，返回 ADMIN 可读报告。\r\n9. `fcop_report` 在 occupancy 段后追加 `audit_drift` 摘要 + 跨角色冲突\r\n   计数。\r\n10. `write_task` / `write_report` / `write_issue` 加 first-write-wins\r\n    角色锁定：同一 `session_id` 第一次写谁就锁定那个 sender 角色，再用\r\n    别的 sender 调用 → 工具直接拒绝并指向 Rule 1。\r\n\r\n",
+      "purpose": "MCP dependency pin, version, tools, reports, and role lock changes"
+    },
+    {
+      "evidence_id": "E006",
+      "source_id": "SOURCE_TASK",
+      "origin": "SOURCE",
+      "start": 1605,
+      "end": 1902,
+      "quote": "### D. 测试\r\n\r\n11. `tests/test_pyproject_pins.py`：自动核对 `fcop-mcp` 版本与其\r\n    `fcop` 依赖 pin 的 minor 一致。\r\n12. `tests/test_audit_drift.py`：审计未在 ledger 中的 git 改动。\r\n13. `tests/test_role_lock.py`：first-write-wins + 拒绝跨角色二写。\r\n14. `tests/test_rule5_text.py`：rules 1.8.0 文案不再包含 `AMEND-*` /\r\n    `*-v2.md`。\r\n\r\n",
+      "purpose": "four required test additions"
+    },
+    {
+      "evidence_id": "E007",
+      "source_id": "SOURCE_TASK",
+      "origin": "SOURCE",
+      "start": 1902,
+      "end": 2155,
+      "quote": "### E. 发版基建\r\n\r\n15. 更新 `adr/ADR-0002-package-split-and-migration.md`：示例段动态化 +\r\n    新增 lockstep 检查表。\r\n16. 新增 `docs/releases/RELEASE-CHECKLIST.md`：一条龙发版必勾项。\r\n17. `CHANGELOG.md` 新增 `[0.7.1]` 段。\r\n18. `docs/releases/0.7.1.md` 含 post-mortem（pin bug 怎么发生的）。\r\n\r\n",
+      "purpose": "release infrastructure documentation deliverables"
+    },
+    {
+      "evidence_id": "E008",
+      "source_id": "SOURCE_TASK",
+      "origin": "SOURCE",
+      "start": 2155,
+      "end": 2525,
+      "quote": "### F. 验证 & 发版\r\n\r\n19. `pytest -x` 全绿；`ruff check` 全绿。\r\n20. `redeploy_rules` 把 1.8.0 / 1.6.0 同步到 `.cursor/rules/` +\r\n    `AGENTS.md` + `CLAUDE.md`。\r\n21. 写 done report、archive task、把 ISSUE-001/004/005/006 标 `closed`。\r\n22. `uv build` × 2、`twine check` × 2、`twine upload` × 2。\r\n23. `pip install fcop-mcp 0.7.0` yank 掉。\r\n24. `git tag v0.7.1` + push + `gh release create`。\r\n\r\n",
+      "purpose": "verification, synchronization, closeout, publishing, yank, tag, push, and release actions"
+    },
+    {
+      "evidence_id": "E009",
+      "source_id": "SOURCE_TASK",
+      "origin": "SOURCE",
+      "start": 2525,
+      "end": 2768,
+      "quote": "## 验收\r\n\r\n- `uvx --refresh fcop-mcp` 能正常启动 `fcop_report()` 与 `fcop_check()`。\r\n- `pip show fcop fcop-mcp` 显示 0.7.1 / 0.7.1。\r\n- 任何旧脚本调用 `unbound_report()` 仍按 0.7.0 报错（不要回插 alias）。\r\n- ISSUE-001 / 004 / 005 / 006 全部 `status: closed`，对应 REPORT 落盘。\r\n",
+      "purpose": "explicit acceptance checks and prohibition on restoring an alias"
+    }
+  ]
+}

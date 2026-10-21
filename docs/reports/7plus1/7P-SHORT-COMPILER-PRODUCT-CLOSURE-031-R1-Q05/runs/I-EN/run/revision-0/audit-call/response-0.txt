@@ -1,0 +1,109 @@
+{
+  "contract_version": "031-r1-q05.1",
+  "reviews": [
+    {
+      "subject_id": "ent_qa",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [{"quote": "QA", "occurrence": 1}],
+      "reason": "QA身份明确；OTHER可作未指定类别的占位，不推定其为个人或群组。"
+    },
+    {
+      "subject_id": "ent_plan",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [
+        {"quote": "plan.md", "occurrence": 1},
+        {"quote": "plan.md", "occurrence": 2}
+      ],
+      "reason": "两句指向同一文件，无版本差异或竞争对象；同一实体保留两处指称。"
+    },
+    {
+      "subject_id": "evt_read",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [{"quote": "QA must read plan.md.", "occurrence": 1}],
+      "reason": "明确要求当前任务读取文件，REQUIRED及主动作层级准确。"
+    },
+    {
+      "subject_id": "evt_modify",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [{"quote": "Do not modify plan.md.", "occurrence": 1}],
+      "reason": "明确禁止修改；FORBIDDEN约束正向修改动作，未误写为无需修改。"
+    },
+    {
+      "subject_id": "cl_read_performer",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["ent_qa", "evt_read"],
+      "sources": [{"quote": "QA must read plan.md.", "occurrence": 1}],
+      "reason": "QA是明确的读取执行者，角色绑定正确。"
+    },
+    {
+      "subject_id": "cl_read_input",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["ent_plan", "evt_read"],
+      "sources": [{"quote": "read plan.md", "occurrence": 1}],
+      "reason": "plan.md是明确受读的输入文件，未混同为内部产物。"
+    },
+    {
+      "subject_id": "cl_read_scope",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["cl_read_input", "expr_read_file"],
+      "sources": [{"quote": "read plan.md", "occurrence": 1}],
+      "reason": "范围绑定同一读取事件及其文件对象，ITEM表达具体文件准确。"
+    },
+    {
+      "subject_id": "cl_modify_performer",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["ent_qa", "evt_modify", "cl_read_performer"],
+      "sources": [
+        {"quote": "QA must read plan.md.", "occurrence": 1},
+        {"quote": "Do not modify plan.md.", "occurrence": 1}
+      ],
+      "reason": "连续指令无主体切换或竞争执行者，禁止修改可承接QA；来源覆盖两端。"
+    },
+    {
+      "subject_id": "cl_modify_object",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["ent_plan", "evt_modify"],
+      "sources": [{"quote": "Do not modify plan.md.", "occurrence": 1}],
+      "reason": "禁止修改的对象是同一plan.md，OBJECT用途未新增外部输入。"
+    },
+    {
+      "subject_id": "cl_modify_scope",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["cl_modify_object", "expr_modify_file"],
+      "sources": [{"quote": "Do not modify plan.md.", "occurrence": 1}],
+      "reason": "禁止范围绑定同一修改事件及其文件对象，没有扩大为文件类别。"
+    },
+    {
+      "subject_id": "expr_read_file",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["ent_plan"],
+      "sources": [{"quote": "plan.md", "occurrence": 1}],
+      "reason": "ITEM单参数引用具体文件，符合原文特定对象范围。"
+    },
+    {
+      "subject_id": "expr_modify_file",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["ent_plan"],
+      "sources": [{"quote": "plan.md", "occurrence": 2}],
+      "reason": "ITEM引用禁止修改的同一具体文件，未引入全称或例外。"
+    }
+  ],
+  "issues": [],
+  "omissions": []
+}

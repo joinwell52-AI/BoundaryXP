@@ -1,0 +1,14 @@
+import fs from 'node:fs';import assert from 'node:assert/strict';
+import {OUT,ROOT,read,write,digest,sha,walk} from './common.mjs';
+assert.ok(!fs.existsSync(OUT+'SEAL.md'));
+const archive=read(OUT+'ARCHIVE-INDEX.json'),members=new Set(archive.archives.flatMap(a=>a.files.map(f=>f.path)));
+const excluded=new Set(['MANIFEST.json','SHA256SUMS.txt','SEAL.md','SEAL-VERIFICATION.json','GIT-PUBLICATION.json'].map(p=>OUT+p));
+const paths=[...walk(ROOT),'tests/parser-admin-short-020.test.mjs',...walk(OUT).filter(p=>!members.has(p)&&!excluded.has(p))].sort();
+assert.ok(paths.every(p=>!p.includes('.boundx/')&&!p.endsWith('.pyc')));
+const files=paths.map(path=>({path,sha256:digest(path),bytes:fs.statSync(path).size}));
+assert.ok(files.every(f=>f.bytes<50e6),'No oversized raw upload');
+const manifest={task:'7P-ADMIN-SHORT-020-LONG',base_commit:read(OUT+'BASELINE.json').commit,candidate_hash:read(OUT+'candidate-freezes/2.json').candidate_hash,files,archived_evidence_members:members.size,archive_index_path:OUT+'ARCHIVE-INDEX.json',publication_paths:[...paths,...excluded].sort(),post_seal_exclusions:['SEAL-VERIFICATION.json','GIT-PUBLICATION.json'],digest_graph:'Manifest -> direct files including archive index and archives; SHA256SUMS -> direct files + manifest; SEAL -> manifest + sums. Verification/receipt are post-seal, not self-hashed.',no_weights_cache_credentials_uploaded:true};
+write(OUT+'MANIFEST.json',manifest);
+write(OUT+'SHA256SUMS.txt',[...files,{path:OUT+'MANIFEST.json',sha256:digest(OUT+'MANIFEST.json')}].map(r=>r.sha256+'  '+r.path).join('\n')+'\n');
+write(OUT+'SEAL.md','# 7P-ADMIN-SHORT-020-LONG Seal\n\nSTATUS=WAITING_ADMIN_REVIEW\n\nTERMINAL_OUTCOME=ADMIN_SHORT_GENERALIZATION_VALIDATED\n\nPRODUCTION_READY=false\n\nCandidate SHA-256: `'+manifest.candidate_hash+'`\n\nMANIFEST SHA-256: `'+digest(OUT+'MANIFEST.json')+'`\n\nSHA256SUMS SHA-256: `'+digest(OUT+'SHA256SUMS.txt')+'`\n\nAll original failed runs are retained. Raw evidence is represented losslessly through ARCHIVE-INDEX and 63 archives; models are digest-only external dependencies. Old seals and production entry remain unchanged. No merge/release/tag. Verification and Git receipt are separate post-seal evidence, excluded from circular hashing.\n');
+console.log(JSON.stringify({status:'SEALED',direct_files:files.length,archive_count:archive.archives.length,archived_members:members.size,bytes:files.reduce((a,f)=>a+f.bytes,0),manifest_sha256:digest(OUT+'MANIFEST.json')}));

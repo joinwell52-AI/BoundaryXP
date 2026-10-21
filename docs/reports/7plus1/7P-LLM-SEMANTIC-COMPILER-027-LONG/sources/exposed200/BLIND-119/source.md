@@ -1,0 +1,1 @@
+Rowan must coordinate the task: inspect snapshot-2471.csv in staging environment. Deliver audit-938874.md. Neither modification of snapshot-2471.csv nor recovery of any event inventory is allowed. The whole task must finish within 23 minutes. Send the final report to Quinn.

@@ -1,0 +1,1 @@
+依据 PLAN-91 v2.7，QA 读取 seed.toml，生成 check.txt。

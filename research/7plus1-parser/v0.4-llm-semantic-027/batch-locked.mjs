@@ -1,0 +1,22 @@
+import fs from 'node:fs';
+import {REPORT,read,save,sha} from './util.mjs';
+import {parseBoundary as parseV1} from './engine.mjs';
+import {parseBoundary as parseV2} from './engine-policy-v2.mjs';
+import {SemanticParserPort} from './semantic-parser-port.mjs';
+import {FrozenCodexProvider} from './providers/frozen-codex.mjs';
+const freeze=read(REPORT+'/METHOD-FREEZE.json');
+for(const f of [...freeze.files,...freeze.evaluation_files])if(sha(fs.readFileSync(f.path))!==f.sha256)throw Error('FROZEN_METHOD_MODIFIED '+f.path);
+const environment=read(REPORT+'/METHOD-ENVIRONMENT-FREEZE.json');
+if(environment.node_version!==process.version)throw Error('FROZEN_NODE_VERSION_MODIFIED');
+for(const f of environment.files)if(sha(fs.readFileSync(f.path))!==f.sha256)throw Error('FROZEN_ENVIRONMENT_MODIFIED '+f.path);
+const rows=read(REPORT+'/SPLIT-FREEZE.json').rows.filter(r=>r.split==='locked'),prefix=REPORT+'/runs/locked-first';
+if(fs.existsSync(prefix))throw Error('LOCKED_FIRST_RUN_ALREADY_STARTED');
+const concurrency=12,parse=freeze.selected_policy==='policy-v2'?parseV2:parseV1;
+save(prefix+'/PLAN.json',{split:'locked',total:105,concurrency,selected_policy:freeze.selected_policy,method_freeze_sha256:sha(fs.readFileSync(REPORT+'/METHOD-FREEZE.json')),first_run:true,expected_not_in_provider_input:true,created_at:new Date().toISOString()});
+let index=0;const results=[];
+async function worker(){while(index<rows.length){const row=rows[index++],base=`${prefix}/${row.corpus}/${row.id}`,start=Date.now();try{const t=await parse(fs.readFileSync(row.source_path,'utf8'),{receipt_dir:base+'/provider',nlp:read(row.nlp_path),port:new SemanticParserPort(new FrozenCodexProvider(freeze.provider_configuration))});save(base+'/trace.json',t);save(base+'/canonical.json',t.canonical_7plus1);results.push({...row,status:'OUTPUT_SAVED',elapsed_ms:Date.now()-start,trace:base+'/trace.json',canonical:base+'/canonical.json'});}catch(e){save(base+'/ERROR.json',{error:String(e),details:e.details??null,receipt:e.receipt??null});results.push({...row,status:'ERROR',elapsed_ms:Date.now()-start,error:String(e)});}console.log(JSON.stringify({done:results.length,total:105,last:row.id,status:results.at(-1).status}));}}
+await Promise.all(Array.from({length:concurrency},worker));
+save(prefix+'/RESULTS.json',{split:'locked',revision:'first',rows:results.sort((a,b)=>a.corpus.localeCompare(b.corpus)||a.id.localeCompare(b.id)),total:105,errors:results.filter(r=>r.status==='ERROR').length});
+const walk=p=>fs.readdirSync(p,{withFileTypes:true}).flatMap(e=>e.isDirectory()?walk(p+'/'+e.name):[p+'/'+e.name]);
+const files=walk(prefix).sort().map(p=>({path:p,sha256:sha(fs.readFileSync(p)),bytes:fs.statSync(p).size}));
+save(REPORT+'/LOCKED-FIRST-OUTPUT-SEAL.json',{created_at:new Date().toISOString(),sealed_before_evaluation:true,files,digest:sha(JSON.stringify(files)),no_repair_or_replacement:true});

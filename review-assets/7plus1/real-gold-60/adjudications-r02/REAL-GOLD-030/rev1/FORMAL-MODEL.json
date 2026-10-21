@@ -1,0 +1,49 @@
+{
+  "case_id": "REAL-GOLD-030",
+  "source_sha256": "25b8743f90170dc204413d0a7364bb3d69cdc9f0fb535490714555bfd6a443c0",
+  "E": [
+    "E={checks,build,smoke,P_E,tag,push,Actions,PyPI,REPORT009}"
+  ],
+  "Sigma": [
+    "Sigma.steps=13",
+    "Sigma.packages=2",
+    "Sigma.untracked_noise=11"
+  ],
+  "Q": [
+    "Q.check_A_to_D",
+    "Q.build_smoke",
+    "Q.redeploy",
+    "Q.tag_push",
+    "Q.Actions",
+    "Q.PyPI_smoke"
+  ],
+  "F": [
+    "F.ME_self_tag_push_publish",
+    "F.continue_after_failure",
+    "F.hide_drift",
+    "F.include_noise"
+  ],
+  "K": [
+    "K=DoD",
+    "K.PyPI_versions=1.6.0"
+  ],
+  "Relations": [
+    "checks_pass -> permits -> next_step",
+    "ADMIN -> triggers -> irreversible_steps",
+    "Actions -> publishes -> packages",
+    "ME -> verifies -> PyPI"
+  ],
+  "D": [
+    "D.status=IN_PROGRESS_step2",
+    "D.rollback={yank,bump_1.6.1}"
+  ],
+  "Phi": [
+    "Phi.snapshot_nature=to_be_measured",
+    "Phi.actual_checks=not_observed",
+    "Phi.actual_approval_binding=not_available"
+  ],
+  "losslessness_zh": "13 步、不可逆风险、角色触发、三类风险和停止规则均保留。",
+  "losslessness_en": "13 steps, irreversible risk, trigger roles, three risks, and stop rules retained.",
+  "formal_coverage_gap": [],
+  "invented_constraints": []
+}

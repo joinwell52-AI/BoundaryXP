@@ -1,0 +1,1 @@
+QA 读取 asset.ini，检查其中所有记录，生成 summary.txt。

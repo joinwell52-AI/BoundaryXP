@@ -1,0 +1,1 @@
+QA 检查 failure.json 并生成 failure-review.md；DEV 只解释失败原因，不修改实现。PM 汇总 QA 报告和 DEV 说明后提交给 ADMIN。

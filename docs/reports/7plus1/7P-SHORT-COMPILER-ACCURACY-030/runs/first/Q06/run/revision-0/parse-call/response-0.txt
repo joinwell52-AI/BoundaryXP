@@ -1,0 +1,231 @@
+{
+  "contract_version": "028-r02.3",
+  "entities": [
+    {
+      "id": "ent_dev",
+      "label": "DEV-01",
+      "type": "OTHER",
+      "mentions": [{"quote": "DEV-01", "occurrence": 1}],
+      "alternatives": []
+    },
+    {
+      "id": "ent_input",
+      "label": "queue.csv",
+      "type": "FILE",
+      "mentions": [{"quote": "queue.csv", "occurrence": 1}],
+      "alternatives": []
+    },
+    {
+      "id": "ent_report",
+      "label": "queue-note.md",
+      "type": "FILE",
+      "mentions": [
+        {"quote": "queue-note.md", "occurrence": 1},
+        {"quote": "该报告", "occurrence": 1}
+      ],
+      "alternatives": []
+    },
+    {
+      "id": "ent_ops",
+      "label": "OPS-01",
+      "type": "OTHER",
+      "mentions": [{"quote": "OPS-01", "occurrence": 1}],
+      "alternatives": []
+    },
+    {
+      "id": "ent_count",
+      "label": "报告中的队列数量",
+      "type": "OTHER",
+      "mentions": [{"quote": "该报告中的队列数量", "occurrence": 1}],
+      "alternatives": []
+    }
+  ],
+  "events": [
+    {
+      "id": "ev_read",
+      "predicate": "读取",
+      "kind": "ACTION",
+      "layer": "MAIN",
+      "use": "CURRENT_TASK",
+      "modality": "REQUIRED",
+      "polarity": "POSITIVE",
+      "owner_id": "ROOT",
+      "constraint_ids": [],
+      "requires": [],
+      "sources": [{"quote": "请DEV-01读取queue.csv", "occurrence": 1}]
+    },
+    {
+      "id": "ev_generate",
+      "predicate": "生成",
+      "kind": "ACTION",
+      "layer": "MAIN",
+      "use": "CURRENT_TASK",
+      "modality": "REQUIRED",
+      "polarity": "POSITIVE",
+      "owner_id": "ROOT",
+      "constraint_ids": [],
+      "requires": [],
+      "sources": [
+        {"quote": "请DEV-01", "occurrence": 1},
+        {"quote": "并生成queue-note.md", "occurrence": 1}
+      ]
+    },
+    {
+      "id": "ev_check",
+      "predicate": "核对队列数量",
+      "kind": "ACTION",
+      "layer": "MAIN",
+      "use": "CURRENT_TASK",
+      "modality": "REQUIRED",
+      "polarity": "POSITIVE",
+      "owner_id": "ROOT",
+      "constraint_ids": [],
+      "requires": [],
+      "sources": [{"quote": "OPS-01核对该报告中的队列数量", "occurrence": 1}]
+    }
+  ],
+  "claims": [
+    {
+      "id": "cl_read_performer",
+      "kind": "ROLE",
+      "event_id": "ev_read",
+      "entity_id": "ent_dev",
+      "role": "PERFORMER",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "scope_id": "ev_read",
+      "requires": [],
+      "sources": [{"quote": "请DEV-01读取queue.csv", "occurrence": 1}],
+      "note": ""
+    },
+    {
+      "id": "cl_read_input",
+      "kind": "ROLE",
+      "event_id": "ev_read",
+      "entity_id": "ent_input",
+      "role": "INPUT_OBJECT",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "scope_id": "ev_read",
+      "requires": [],
+      "sources": [{"quote": "读取queue.csv", "occurrence": 1}],
+      "note": "明确读取的外部文件。"
+    },
+    {
+      "id": "cl_generate_performer",
+      "kind": "ROLE",
+      "event_id": "ev_generate",
+      "entity_id": "ent_dev",
+      "role": "PERFORMER",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "scope_id": "ev_generate",
+      "requires": [],
+      "sources": [
+        {"quote": "请DEV-01", "occurrence": 1},
+        {"quote": "并生成queue-note.md", "occurrence": 1}
+      ],
+      "note": "并列动作沿用DEV-01作为执行者。"
+    },
+    {
+      "id": "cl_generate_result",
+      "kind": "ROLE",
+      "event_id": "ev_generate",
+      "entity_id": "ent_report",
+      "role": "RESULT",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "scope_id": "ev_generate",
+      "requires": [],
+      "sources": [{"quote": "生成queue-note.md", "occurrence": 1}],
+      "note": ""
+    },
+    {
+      "id": "cl_check_performer",
+      "kind": "ROLE",
+      "event_id": "ev_check",
+      "entity_id": "ent_ops",
+      "role": "PERFORMER",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "scope_id": "ev_check",
+      "requires": [],
+      "sources": [{"quote": "OPS-01核对该报告中的队列数量", "occurrence": 1}],
+      "note": ""
+    },
+    {
+      "id": "cl_check_report",
+      "kind": "ROLE",
+      "event_id": "ev_check",
+      "entity_id": "ent_report",
+      "role": "OBJECT",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "scope_id": "ev_check",
+      "requires": [],
+      "sources": [
+        {"quote": "生成queue-note.md", "occurrence": 1},
+        {"quote": "核对该报告中的队列数量", "occurrence": 1}
+      ],
+      "note": "该报告指生成的queue-note.md；核对范围为其中的队列数量，属于内部产物用途。"
+    },
+    {
+      "id": "cl_check_count",
+      "kind": "ROLE",
+      "event_id": "ev_check",
+      "entity_id": "ent_count",
+      "role": "OBJECT",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "scope_id": "ev_check",
+      "requires": [],
+      "sources": [
+        {"quote": "queue-note.md", "occurrence": 1},
+        {"quote": "核对该报告中的队列数量", "occurrence": 1}
+      ],
+      "note": "队列数量是待核对的报告内容，原文未指定数值或执行量化限制。"
+    }
+  ],
+  "expressions": [],
+  "issues": [],
+  "coverage": [
+    {
+      "sources": [{"quote": "请DEV-01读取queue.csv", "occurrence": 1}],
+      "claim_ids": ["cl_read_performer", "cl_read_input"],
+      "status": "EXPRESSED",
+      "affected_views": ["I", "A", "P"]
+    },
+    {
+      "sources": [
+        {"quote": "请DEV-01", "occurrence": 1},
+        {"quote": "并生成queue-note.md", "occurrence": 1}
+      ],
+      "claim_ids": ["cl_generate_performer", "cl_generate_result"],
+      "status": "EXPRESSED",
+      "affected_views": ["O", "A", "P"]
+    },
+    {
+      "sources": [
+        {"quote": "queue-note.md", "occurrence": 1},
+        {"quote": "OPS-01核对该报告中的队列数量", "occurrence": 1}
+      ],
+      "claim_ids": ["cl_check_performer", "cl_check_report", "cl_check_count"],
+      "status": "EXPRESSED",
+      "affected_views": ["A", "P"]
+    }
+  ]
+}

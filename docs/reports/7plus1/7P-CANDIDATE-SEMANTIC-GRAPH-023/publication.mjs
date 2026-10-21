@@ -1,0 +1,24 @@
+import fs from 'node:fs';import path from 'node:path';import assert from 'node:assert/strict';
+import {OUT,RUNTIME,read,sha,git} from './audit-tools.mjs';
+const branch='review/7plus1-parser',manifest=read(OUT+'/MANIFEST.json'),base=manifest.base_commit;
+assert.equal(git(['branch','--show-current']).trim(),branch);assert.equal(git(['rev-parse','HEAD']).trim(),base);
+assert.equal(read(OUT+'/SEAL-VERIFICATION.json').status,'PASS');
+assert.equal(git(['ls-remote','origin','refs/heads/'+branch]).trim().split(/\s/u)[0],base,'Remote changed; refuse overwrite');
+const seal=read(OUT+'/SEAL.json');assert.equal(seal.manifest_sha256,sha(fs.readFileSync(OUT+'/MANIFEST.json')));assert.equal(seal.sha256sums_sha256,sha(fs.readFileSync(OUT+'/SHA256SUMS.txt')));
+for(const r of manifest.files)assert.equal(sha(fs.readFileSync(r.path)),r.sha256,r.path);
+const selected=manifest.publication_paths,expected=new Map(selected.map(p=>[p,sha(fs.readFileSync(p))]));
+assert.ok(selected.every(p=>p.startsWith(OUT+'/')||p.startsWith(RUNTIME+'/')||p==='tests/parser-candidate-semantic-023.test.mjs'));
+const index=path.resolve('.boundx/7p-candidate-semantic-023-tools/publication.index');assert.ok(!fs.existsSync(index));fs.mkdirSync(path.dirname(index),{recursive:true});const env={...process.env,GIT_INDEX_FILE:index};
+git(['read-tree',base],{env});
+const oids=git(['hash-object','-w','--no-filters','--stdin-paths'],{input:selected.join('\n')+'\n'}).trim().split('\n');assert.equal(oids.length,selected.length);
+const input=selected.map((p,i)=>'100644 '+oids[i]+'\t'+p+'\n').join('');git(['update-index','--index-info'],{env,input});
+const tree=git(['write-tree'],{env}).trim(),changed=git(['diff-tree','--no-commit-id','--name-only','-r',base,tree]).trim().split('\n');
+assert.equal(changed.length,selected.length);assert.ok(changed.every(p=>expected.has(p)));
+const commit=git(['commit-tree',tree,'-p',base,'-m','Seal 7P-CANDIDATE-SEMANTIC-GRAPH-023 diagnostic: Gc-Gamma gates pass; regression and semantic closure not accepted']).trim();
+git(['update-ref','refs/heads/'+branch,commit,base]);git(['update-index','--index-info'],{input});
+for(let offset=0;offset<selected.length;offset+=100){const group=selected.slice(offset,offset+100),bytes=git(['cat-file','--batch'],{input:group.map(p=>commit+':'+p).join('\n')+'\n',encoding:null,maxBuffer:100e6});let cursor=0;for(const p of group){const end=bytes.indexOf(10,cursor),m=/^[0-9a-f]+ blob (\d+)$/u.exec(bytes.subarray(cursor,end).toString('ascii'));assert.ok(m,p);const start=end+1,length=Number(m[1]);assert.equal(sha(bytes.subarray(start,start+length)),expected.get(p),p);assert.equal(bytes[start+length],10);cursor=start+length+1;}assert.equal(cursor,bytes.length);}
+assert.equal(git(['status','--porcelain=v1','-uno']),read(OUT+'/BASELINE.json').dirty);
+console.log(JSON.stringify({status:'COMMIT_BLOBS_VERIFIED',commit,files:selected.length,unrelated_dirty_assets_preserved:true}));
+git(['push','origin','refs/heads/'+branch+':refs/heads/'+branch],{maxBuffer:100e6});
+const remote=git(['ls-remote','origin','refs/heads/'+branch]).trim().split(/\s/u)[0];assert.equal(remote,commit);
+console.log(JSON.stringify({status:'PUSH_CONFIRMED',commit,remote_commit:remote,branch,STATUS:'WAITING_ADMIN_REVIEW',task_acceptance:'NOT_PASSED'}));

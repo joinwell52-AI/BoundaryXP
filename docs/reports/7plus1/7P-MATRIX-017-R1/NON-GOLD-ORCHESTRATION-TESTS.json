@@ -1,0 +1,57 @@
+{
+  "frozen_at": "2026-10-03T10:25:47.114Z",
+  "before_implementation": true,
+  "scope": "Syntax/source evidence at orchestration layer; full row NLP evaluated separately",
+  "cases": [
+    {
+      "id": "N01",
+      "text": "第一阶段读取 alpha.dat，生成 beta.dat。第二阶段读取 gamma.dat，生成 delta.dat。两个阶段可并行。",
+      "expected": {
+        "parallel": true,
+        "sequence": false
+      }
+    },
+    {
+      "id": "N02",
+      "text": "第一阶段读取 alpha.dat，生成 beta.dat。第二阶段读取 gamma.dat，生成 delta.dat。两个阶段同时进行。",
+      "expected": {
+        "parallel": true,
+        "sequence": false
+      }
+    },
+    {
+      "id": "N03",
+      "text": "第一阶段读取 alpha.dat，生成 beta.dat。第二阶段读取 gamma.dat，生成 delta.dat。两个阶段都完成后，汇总阶段开始。",
+      "expected": {
+        "parallel": false,
+        "sequence": false,
+        "join": true
+      }
+    },
+    {
+      "id": "N04",
+      "text": "第一阶段读取 raw.dat，生成 checked.dat。第二阶段必须在第一阶段完成后开始。第二阶段读取 checked.dat，生成 delivery.dat。",
+      "expected": {
+        "parallel": false,
+        "sequence": true
+      }
+    },
+    {
+      "id": "N05",
+      "text": "校对阶段读取 red.dat，生成 orange.dat。审查阶段读取 blue.dat，生成 green.dat。这两个阶段可以并行。",
+      "expected": {
+        "parallel": true,
+        "sequence": false
+      }
+    },
+    {
+      "id": "N06",
+      "text": "校对阶段读取 shared.dat，生成 left.dat。审查阶段读取 shared.dat，生成 right.dat。两个阶段都完成后，汇总阶段开始。",
+      "expected": {
+        "parallel": false,
+        "sequence": false,
+        "join": true
+      }
+    }
+  ]
+}

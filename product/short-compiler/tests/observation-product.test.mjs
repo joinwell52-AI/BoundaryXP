@@ -1,0 +1,28 @@
+import test from 'node:test';import assert from 'node:assert/strict';import fs from 'node:fs';import path from 'node:path';import {pathToFileURL} from 'node:url';import {createHash,randomUUID} from 'node:crypto';import {once} from 'node:events';
+const root=path.resolve(process.env.BOUNDX_INPUT_TEST_ROOT??'.boundx/local-condition-repair-r02/work');
+const {recalculateObservedTrace}=await import(pathToFileURL(path.join(root,'research/7plus1-parser/llm-first-028/observation-request.mjs')));
+const {createServer}=await import(pathToFileURL(path.join(root,'research/7plus1-parser/llm-first-028/service.mjs')));
+const original=fs.readFileSync('docs/reports/7plus1/LOCAL-CONDITION-REPAIR-r01/live-V01-attempt-01/trace.json');
+const trace=JSON.parse(original),gate=trace.ir.facts.find(f=>f.kind==='COMPLETION').claim;
+const states=Object.fromEntries(trace.ir.expressions.filter(x=>x.op==='STATE').map(x=>[x.id,true]));
+const outcome={target_id:'ROOT',kind:'TASK_COMPLETE',known:true,value:false};
+const hash=x=>createHash('sha256').update(x).digest('hex');
+test('Typed observations distinguish necessary completion without rewriting IR or canonical',()=>{const before=JSON.stringify(trace);const r=recalculateObservedTrace(trace,{states,outcomes:{[gate.id]:outcome}});assert.equal(r.calculation.conditions.find(x=>x.claim_id===gate.id).assessment.logical_result,'TRUE');assert.equal(JSON.stringify(trace),before);assert.equal(r.model_calls,0);assert.equal(r.execution_authorization,null);});
+test('Missing observations stay unknown',()=>{assert.equal(recalculateObservedTrace(trace,{}).calculation.conditions.find(x=>x.claim_id===gate.id).assessment.observed_outcome,'UNKNOWN');});
+test('Unknown or wrong target/type cannot bind an observation',()=>{for(const change of [{target_id:'other'},{kind:'TASK_STOP'},{known:false},{value:'false'}])assert.throws(()=>recalculateObservedTrace(trace,{outcomes:{[gate.id]:{...outcome,...change}}}),/INVALID_OBSERVATIONS/);});
+test('Unknown references, extra fields and malformed boolean states are rejected',()=>{for(const input of [{states:{unknown:true}},{states:{[Object.keys(states)[0]]:1}},{outcomes:{unknown:outcome}},{states:[]},{raw_text:'add an answer'},{states:null}])assert.throws(()=>recalculateObservedTrace(trace,input),/INVALID_OBSERVATIONS/);});
+test('Quantities require exact target, unit and count scope',()=>{const f=trace.ir.facts.find(x=>x.kind==='QUANTITY');const q=f.claim.quantity;const input={target_id:q.target_id,unit:q.unit,count_scope:q.count_scope,value:31};assert.equal(recalculateObservedTrace(trace,{quantities:{[f.claim.id]:input}}).calculation.quantities.find(x=>x.claim_id===f.claim.id).result,'FALSE');for(const patch of [{unit:'seconds'},{target_id:'other'},{value:Infinity}])assert.throws(()=>recalculateObservedTrace(trace,{quantities:{[f.claim.id]:{...input,...patch}}}),/INVALID_OBSERVATIONS/);});
+test('Same-origin authenticated API appends independent observations and preserves history bytes',async()=>{
+ const dir=path.resolve('.boundx/local-condition-repair-r02/http-test-'+randomUUID()),id=randomUUID(),folder=path.join(dir,'runs',id);fs.mkdirSync(folder,{recursive:true});
+ fs.writeFileSync(path.join(folder,'trace.json'),original);fs.writeFileSync(path.join(folder,'run.json'),JSON.stringify({run_id:id,status:'COMPLETED',created_at:new Date().toISOString(),ended_at:new Date().toISOString(),source_text:trace.source.text}));
+ const other=randomUUID(),otherFolder=path.join(dir,'runs',other);fs.mkdirSync(otherFolder);fs.writeFileSync(path.join(otherFolder,'trace.json'),JSON.stringify({...trace,product_snapshot:{manifest_sha256:'different-version'}}));fs.writeFileSync(path.join(otherFolder,'run.json'),JSON.stringify({run_id:other,status:'COMPLETED',created_at:new Date().toISOString(),source_text:trace.source.text}));
+ let modelCalls=0;const server=createServer({dataRoot:dir,productSnapshot:trace.product_snapshot,legacyRoot:path.join(dir,'absent'),parse:()=>{modelCalls++;throw Error('NO_MODEL_ALLOWED');},catalog:{models:[],default_model:'gpt-6.1-sol',default_reasoning:'medium'}});server.listen(0,'127.0.0.1');await once(server,'listening');
+ try{const base='http://127.0.0.1:'+server.address().port;const sessionResponse=await fetch(base+'/api/session');const session=await sessionResponse.json();const headers={'content-type':'application/json','cookie':sessionResponse.headers.get('set-cookie').split(';')[0],'x-boundx-session':session.token};const url=base+'/api/runs/'+id+'/observations';
+ assert.equal((await fetch(url,{method:'POST',headers:{'content-type':'application/json'},body:'{}'})).status,403);
+ assert.equal((await fetch(url,{method:'POST',headers:{...headers,origin:'http://other.invalid'},body:'{}'})).status,403);
+ assert.equal((await fetch(url,{method:'POST',headers,body:JSON.stringify({states:{invented:true}})})).status,400);
+ assert.equal((await fetch(base+'/api/runs/'+other+'/observations',{method:'POST',headers,body:'{}'})).status,409);assert.equal(fs.existsSync(path.join(otherFolder,'observations')),false);
+ const a=await fetch(url,{method:'POST',headers,body:JSON.stringify({states,outcomes:{[gate.id]:outcome}})});assert.equal(a.status,201);const result=await a.json();assert.equal(result.model_calls,0);assert.equal(result.observation_kind,'USER_REPORTED_NOT_INDEPENDENTLY_VERIFIED');
+ const b=await fetch(url,{method:'POST',headers,body:'{}'});assert.equal(b.status,201);assert.notEqual((await b.json()).observation_id,result.observation_id);assert.equal(fs.readdirSync(path.join(folder,'observations')).length,2);assert.equal(hash(fs.readFileSync(path.join(folder,'trace.json'))),hash(original));assert.equal(modelCalls,0);
+ }finally{server.closeAllConnections();await new Promise(resolve=>server.close(resolve));}
+});

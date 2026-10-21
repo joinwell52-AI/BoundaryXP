@@ -1,0 +1,141 @@
+{
+  "case_id": "REAL-GOLD-003",
+  "source_sha256": "c753ba96dea69aa9d92a9f53d84724b77391b5f8f3ca948f045b3c6c490e2869",
+  "protocol_version": "BXP-0001 0.4.0-draft.1",
+  "slots": {
+    "I": {
+      "status": "resolved",
+      "value_zh": "ISSUE-003、src/fcop/project.py 中 write_task/write_report/write_issue 的 active 与 log/ 归档目录、三个对应测试文件，以及被手工 rename 的任务和报告文件。",
+      "value_en": "ISSUE-003, the active and log/archive directories used by write_task, write_report, and write_issue in src/fcop/project.py, the three corresponding test files, and the manually renamed task and report files.",
+      "evidence": [
+        "E001",
+        "E002",
+        "E003",
+        "E005",
+        "E006",
+        "E008"
+      ],
+      "origin": [
+        "SOURCE"
+      ],
+      "normalization": "source_stated_sequence_generation_inputs_and_protected_files",
+      "ontology_binding": null,
+      "notes_zh": "不读取 ISSUE 或项目目录的外部内容，也不补造 archive_issue 行为。",
+      "notes_en": "No external ISSUE or project-directory content is read, and no archive_issue behavior is fabricated."
+    },
+    "O": {
+      "status": "resolved",
+      "value_zh": "跨 active 与 log/ 目录扫描文件名的私有辅助函数、三个更新的生成器调用点、三项归档序号测试，以及满足列明验收条件的修复结果。",
+      "value_en": "A private helper that scans filenames across active and log/ directories, three updated generator call sites, three archived-sequence tests, and the repair result satisfying the stated acceptance conditions.",
+      "evidence": [
+        "E004",
+        "E005",
+        "E006"
+      ],
+      "origin": [
+        "SOURCE"
+      ],
+      "normalization": "union_scan_repair_outputs_and_tests",
+      "ontology_binding": null,
+      "notes_zh": "不把 tombstone 文件或 next_sequence() 的变更列为输出。",
+      "notes_en": "No tombstone file or next_sequence() modification is included as an output."
+    },
+    "A": {
+      "status": "resolved",
+      "value_zh": "新增跨目录文件名枚举辅助函数；让三个写入方法同时扫描 active 和 log/；在三个测试文件中新增跳过已归档 basename 的测试。",
+      "value_en": "Add a cross-directory filename enumeration helper; make all three write methods scan active and log/ paths; add archived-basename-skipping tests in the three test files.",
+      "evidence": [
+        "E002",
+        "E004",
+        "E005"
+      ],
+      "origin": [
+        "SOURCE"
+      ],
+      "normalization": "explicit_union_scan_code_and_test_changes",
+      "ontology_binding": null,
+      "notes_zh": "O_EXCL 预占和 retry 限保持不变；不把测试示例扩展成额外写盘动作。",
+      "notes_en": "O_EXCL reservation and retry limits remain unchanged; test examples are not expanded into additional write actions."
+    },
+    "P": {
+      "status": "resolved",
+      "value_zh": "ADMIN 为发起主体；ME 为本修复任务的接收与执行主体。",
+      "value_en": "ADMIN is the initiating participant; ME is the recipient and executor of this repair task.",
+      "evidence": [
+        "E001"
+      ],
+      "origin": [
+        "SOURCE"
+      ],
+      "normalization": "symbolic_source_participants_only",
+      "ontology_binding": null,
+      "notes_zh": "不从角色符号推导真实身份、岗位、职级或任何权限。",
+      "notes_en": "No real identity, job title, grade, or authority is inferred from role symbols."
+    },
+    "R": {
+      "status": "absent",
+      "value_zh": "原文未给出时间、预算、容量或数量配额；587 passed 是质量基线，不是资源限制。",
+      "value_en": "The source gives no time, budget, capacity, or quota constraint; 587 passed is a quality baseline, not a resource limit.",
+      "evidence": [],
+      "origin": [],
+      "normalization": "absent",
+      "ontology_binding": null,
+      "notes_zh": "不把 retry 限或序号值误归为资源约束。",
+      "notes_en": "Retry limits and sequence values are not misclassified as resource constraints."
+    },
+    "V": {
+      "status": "resolved",
+      "value_zh": "ISSUE-20260427-003-ME、上游 TASK-002、src/fcop/project.py 的列明行、以及保持不变的 next_sequence() 与 O_EXCL 预占语义。",
+      "value_en": "ISSUE-20260427-003-ME, upstream TASK-002, the named lines in src/fcop/project.py, and the next_sequence() and O_EXCL reservation semantics that must remain unchanged.",
+      "evidence": [
+        "E001",
+        "E003",
+        "E004",
+        "E007",
+        "E008"
+      ],
+      "origin": [
+        "SOURCE"
+      ],
+      "normalization": "source_stated_issue_code_and_invariant_references",
+      "ontology_binding": null,
+      "notes_zh": "只保存原文引用，未验证外部 ISSUE、代码或版本状态。",
+      "notes_en": "Only source-stated references are preserved; external ISSUE, code, and version state are not verified."
+    },
+    "C": {
+      "status": "resolved",
+      "value_zh": "三项新增测试通过、既有 587 passed 基线不退、ruff clean，且两件手工 rename 文件在运行中不被误伤。",
+      "value_en": "The three new tests pass, the existing 587-passed baseline does not regress, ruff is clean, and the two manually renamed files are not harmed during execution.",
+      "evidence": [
+        "E005",
+        "E006"
+      ],
+      "origin": [
+        "SOURCE"
+      ],
+      "normalization": "conjunction_of_explicit_regression_and_protection_checks",
+      "ontology_binding": null,
+      "notes_zh": "完成条件只引用当前修复与保护检查，不添加发布或审批条件。",
+      "notes_en": "Completion includes only the current repair and protection checks; no release or approval condition is added."
+    },
+    "B": {
+      "status": "resolved",
+      "value_zh": "不得引入 .archived/<id>.tombstone 隐藏占位文件；不得改变 next_sequence() 本身语义；O_EXCL 预占和 retry 限必须不变。",
+      "value_en": "Do not introduce .archived/<id>.tombstone hidden placeholders or change next_sequence() semantics; O_EXCL reservation and retry limits must remain unchanged.",
+      "evidence": [
+        "E004",
+        "E007"
+      ],
+      "origin": [
+        "SOURCE"
+      ],
+      "normalization": "explicit_non_changes_and_rejected_design",
+      "ontology_binding": null,
+      "notes_zh": "这些都是 Task Boundary；不把任何未提供的主机策略混入其中。",
+      "notes_en": "These are Task Boundary constraints; no unprovided host policy is mixed into them."
+    }
+  },
+  "boundary_state": "determined",
+  "policy_evaluation": "NOT_EVALUATED_NO_OPERATOR_PROFILE",
+  "admission": "NOT_EVALUATED_PROFILE_MISSING"
+}

@@ -1,0 +1,146 @@
+{
+  "case_id": "REAL-GOLD-043",
+  "source_sha256": "2f30fd29d2265e3cc797b181dadba5df339ac906751c14bd4ca2530954d60641",
+  "protocol_version": "BXP-0001 0.4.0-draft.1",
+  "slots": {
+    "I": {
+      "status": "resolved",
+      "value_zh": "SOP、release checklist、12类文件清单、现有硬编码位置、origin/backup remote 与 TASK/REPORT。",
+      "value_en": "SOP, release checklist, twelve-class file inventory, existing hardcoded locations, origin/backup remotes and TASK/REPORT.",
+      "evidence": [
+        "E001",
+        "E002",
+        "E003"
+      ],
+      "origin": [
+        "SOURCE"
+      ],
+      "normalization": "release_inventory_backup_inputs",
+      "ontology_binding": null,
+      "notes_zh": "远端实际状态未验证。",
+      "notes_en": "Actual remote state is not verified."
+    },
+    "O": {
+      "status": "unresolved",
+      "value_zh": "12 类发版文件清单的字段形状未定：原文两次要求每类 6 字段，字段表却逐行列出 7 项；其余升级的 checklist/SOP、TASK/REPORT 双发归档及三方 SHA 记录明确。",
+      "value_en": "The field schema of the twelve-class inventory is unresolved: the source twice requires six fields per class, while the field table lists seven distinct rows; the upgraded checklist/SOP, dual-push TASK/REPORT archive and three-party SHA record are otherwise specified.",
+      "evidence": [
+        "E002",
+        "E003",
+        "E004"
+      ],
+      "origin": [
+        "SOURCE"
+      ],
+      "normalization": "release_governance_and_backup_outputs",
+      "ontology_binding": null,
+      "notes_zh": "不得自行合并类别代号和类别名，或忽略第七字段。",
+      "notes_en": "Do not silently merge category code and name or drop the seventh field."
+    },
+    "A": {
+      "status": "resolved",
+      "value_zh": "新建 inventory、升级 checklist 和 SOP，运行扫描/readlint，commit 后 push origin/main、backup main 与 backup tags，归档双发。",
+      "value_en": "Create inventory, upgrade checklist and SOP, run scan/readlint, then after commit push origin/main, backup main and backup tags, and dual-push archive.",
+      "evidence": [
+        "E002",
+        "E003",
+        "E004"
+      ],
+      "origin": [
+        "SOURCE"
+      ],
+      "normalization": "one_shot_release_backup_workflow",
+      "ontology_binding": null,
+      "notes_zh": "审定不编辑或推送。",
+      "notes_en": "Adjudication does not edit or push."
+    },
+    "P": {
+      "status": "resolved",
+      "value_zh": "ADMIN 给出三条红线；ME 执行。",
+      "value_en": "ADMIN supplies three redlines; ME executes.",
+      "evidence": [
+        "E001",
+        "E003"
+      ],
+      "origin": [
+        "SOURCE"
+      ],
+      "normalization": "roles_without_authority",
+      "ontology_binding": null,
+      "notes_zh": "不从角色推导双远端权限。",
+      "notes_en": "No dual-remote authority inferred from role."
+    },
+    "R": {
+      "status": "absent",
+      "value_zh": "原文未给执行时限或资源预算；P0/中风险是元数据，类别、字段、扫描和 SHA 是产物与验收要求。",
+      "value_en": "No execution deadline or resource budget is stated; P0/medium risk is metadata, and classes, fields, scans and SHA equality are output and acceptance requirements.",
+      "evidence": [
+        "E001",
+        "E002",
+        "E003",
+        "E004"
+      ],
+      "origin": [
+        "SOURCE"
+      ],
+      "normalization": "no_binding_resource_limit",
+      "ontology_binding": null,
+      "notes_zh": "不以交付数量代替资源上界。",
+      "notes_en": "Output counts are not resource ceilings."
+    },
+    "V": {
+      "status": "resolved",
+      "value_zh": "Rule 0.c、SOP §C/§G/阶段4.5、TASK-012/REPORT-012、FCoP frontmatter 规则。",
+      "value_en": "Rule 0.c, SOP §§C/G/stage4.5, TASK-012/REPORT-012 and FCoP front-matter rule.",
+      "evidence": [
+        "E001",
+        "E002",
+        "E003"
+      ],
+      "origin": [
+        "SOURCE"
+      ],
+      "normalization": "source_cited_basis",
+      "ontology_binding": null,
+      "notes_zh": "引用正文未验证。",
+      "notes_en": "References not verified."
+    },
+    "C": {
+      "status": "unresolved",
+      "value_zh": "清单应有 12 类，但“6 字段全部填实”与字段表 7 项冲突，完整验收须先明确字段取舍；其余四硬约束、SOP 行号、ReadLints/六扫描、双发 SHA 和归档条件明确。",
+      "value_en": "The inventory needs twelve classes, but the six-field completion criterion conflicts with seven listed field rows; the field mapping must be clarified before full acceptance. Four hard constraints, SOP lines, ReadLints/six scans, dual-push SHA and archive criteria are otherwise specified.",
+      "evidence": [
+        "E002",
+        "E003",
+        "E004"
+      ],
+      "origin": [
+        "SOURCE"
+      ],
+      "normalization": "explicit_release_backup_acceptance",
+      "ontology_binding": null,
+      "notes_zh": "字段形状未定，不能声称已具备完整可判定验收。",
+      "notes_en": "The field schema is unresolved, so complete acceptance is not yet decidable."
+    },
+    "B": {
+      "status": "resolved",
+      "value_zh": "不得用 `git push backup --mirror` 或 force 覆盖；文件枚举不得用通配符替代精确路径，引用不得用“差不多在那一段”替代精确出处；不得省略 backup 同步。",
+      "value_en": "Do not use `git push backup --mirror` or force overwrite; neither replace precise inventory paths with wildcards nor replace precise citations with approximate locations; do not omit backup synchronization.",
+      "evidence": [
+        "E002",
+        "E003",
+        "E004"
+      ],
+      "origin": [
+        "SOURCE"
+      ],
+      "normalization": "append_only_backup_prohibitions",
+      "ontology_binding": null,
+      "notes_zh": "backup 是发版完成条件的一部分。",
+      "notes_en": "Backup is part of release completion."
+    }
+  },
+  "boundary_state": "underdetermined",
+  "policy_evaluation": "NOT_EVALUATED_NO_OPERATOR_PROFILE",
+  "admission": "BLOCKED_BOUNDARY_UNDERDETERMINED"
+}

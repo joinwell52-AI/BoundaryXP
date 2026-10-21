@@ -1,7 +1,11 @@
 import { createHash } from 'node:crypto';
 
 import { boundedJson, validateTaskSchema, validateResultSchema, taskSchema } from './validation.mjs';
-import { compareDecimal, normalizeBound } from './decimal.mjs';
+import { intersectValidatedIntervals } from './interval-solver.mjs';
+import { solveValidatedPrerequisites } from './dependency-solver.mjs';
+import { evaluateValidatedTargetSet } from './target-set-solver.mjs';
+import { evaluateValidatedHandoff } from './handoff-solver.mjs';
+import { solveBooleanConstraints } from './boolean-solver.mjs';
 
 export const PROTOCOL_VERSION = taskSchema.properties.protocol_version.const;
 export const CORE_ELEMENTS = Object.freeze([...taskSchema.properties.elements.required]);
@@ -84,43 +88,11 @@ function validateExpression(expr, variables, depth, path, findings) {
   child.forEach((item, index) => validateExpression(item, variables, depth + 1, `${path}.${keys[0]}.${index}`, findings));
 }
 
-function evaluateExpression(expr, values) {
-  if (typeof expr === 'boolean') return expr;
-  if ('var' in expr) return values[expr.var];
-  if ('not' in expr) return !evaluateExpression(expr.not, values);
-  if ('all' in expr) return expr.all.every(item => evaluateExpression(item, values));
-  if ('any' in expr) return expr.any.some(item => evaluateExpression(item, values));
-  if ('implies' in expr) return !evaluateExpression(expr.implies[0], values) || evaluateExpression(expr.implies[1], values);
-  throw new Error('Expression must be validated before evaluation.');
-}
-
 function intervalCalculations(items, findings) {
-  const groups = new Map();
-  for (const item of items) {
-    const key = JSON.stringify([item.scope_id, item.subject, item.dimension, item.unit, item.domain ?? 'real']);
-    if (!groups.has(key)) groups.set(key, []);
-    groups.get(key).push(item);
-  }
-  const calculations = [];
-  for (const [key, group] of groups) {
-    const [scope_id, subject, dimension, unit, domain] = JSON.parse(key);
-    let lower = null;
-    let upper = null;
-    for (const item of group) {
-      const nextLower = normalizeBound(item.lower, domain, true);
-      const nextUpper = normalizeBound(item.upper, domain, false);
-      if (nextLower && (!lower || compareDecimal(nextLower.value, lower.value) > 0
-          || (compareDecimal(nextLower.value, lower.value) === 0 && !nextLower.inclusive))) lower = nextLower;
-      if (nextUpper && (!upper || compareDecimal(nextUpper.value, upper.value) < 0
-          || (compareDecimal(nextUpper.value, upper.value) === 0 && !nextUpper.inclusive))) upper = nextUpper;
-    }
-    const comparison = lower && upper ? compareDecimal(lower.value, upper.value) : null;
-    const empty = comparison !== null && (comparison > 0
-      || (comparison === 0 && (!lower.inclusive || !upper.inclusive)));
-    calculations.push({ scope_id, subject, dimension, unit, domain, lower, upper, empty,
-      constraint_ids: group.map(item => item.id).sort() });
-    if (empty) findings.push(finding('BXP.INTERVAL.EMPTY', 'interval', 'conflict', 'constraints.intervals',
-      'Interval intersection is empty.', group.flatMap(item => item.evidence),
+  const calculations = intersectValidatedIntervals(items);
+  for (const calculation of calculations) {
+    if (calculation.empty) findings.push(finding('BXP.INTERVAL.EMPTY', 'interval', 'conflict', 'constraints.intervals',
+      'Interval intersection is empty.', items.filter(item => calculation.constraint_ids.includes(item.id)).flatMap(item => item.evidence),
       ['Only identical scope, subject, dimension, unit and domain keys were intersected.']));
   }
   return calculations;
@@ -129,16 +101,14 @@ function intervalCalculations(items, findings) {
 function targetSetCalculations(items, findings) {
   const calculations = [];
   for (const [index, item] of items.entries()) {
+    const calculation = evaluateValidatedTargetSet(item);
+    calculations.push(calculation);
     if (item.identity_status === 'unresolved') {
-      calculations.push({ id: item.id, scope_id: item.scope_id, result: 'undetermined', overlap: [] });
       findings.push(finding('BXP.TARGET.IDENTITY_UNRESOLVED', 'target_set', 'unresolved', `constraints.target_sets.${index}`,
         'Target universe or effect identity is unresolved.', item.evidence));
       continue;
     }
-    const blocked = new Set(item.forbidden);
-    const overlap = item.requested.filter(value => blocked.has(value)).sort();
-    calculations.push({ id: item.id, scope_id: item.scope_id, result: overlap.length ? 'overlap' : 'disjoint', overlap });
-    if (overlap.length) findings.push(finding('BXP.TARGET.FORBIDDEN_OVERLAP', 'target_set', 'conflict',
+    if (calculation.overlap.length) findings.push(finding('BXP.TARGET.FORBIDDEN_OVERLAP', 'target_set', 'conflict',
       `constraints.target_sets.${index}`, 'Requested targets overlap forbidden targets.', item.evidence,
       [`universe=${item.universe}`, `effect=${item.effect}`, `actor_scope=${item.actor_scope}`, `guard_context=${item.guard_context}`]));
   }
@@ -148,17 +118,14 @@ function targetSetCalculations(items, findings) {
 function handoffCalculations(items, findings) {
   const calculations = [];
   for (const [index, item] of items.entries()) {
+    const calculation = evaluateValidatedHandoff(item);
+    calculations.push(calculation);
     if (item.identity_status === 'unresolved') {
-      calculations.push({ id: item.id, scope_id: item.scope_id, result: 'undetermined', available: [], missing: [] });
       findings.push(finding('BXP.HANDOFF.IDENTITY_UNRESOLVED', 'handoff', 'unresolved',
         `constraints.handoffs.${index}`, 'Artifact identity is unresolved across the declared handoff.', item.evidence));
       continue;
     }
-    const available = [...new Set([...item.declared_outputs, ...item.external_inputs])].sort();
-    const supplied = new Set(available);
-    const missing = item.required_inputs.filter(value => !supplied.has(value)).sort();
-    calculations.push({ id: item.id, scope_id: item.scope_id, result: missing.length ? 'deficit' : 'satisfied', available, missing });
-    if (missing.length) findings.push(finding('BXP.HANDOFF.INPUT_DEFICIT', 'handoff', 'conflict',
+    if (calculation.missing.length) findings.push(finding('BXP.HANDOFF.INPUT_DEFICIT', 'handoff', 'conflict',
       `constraints.handoffs.${index}`, 'Required inputs have no declared upstream or external supply.',
       item.evidence, [`producer_stage=${item.producer_stage}`, `consumer_stage=${item.consumer_stage}`,
         `artifact_type=${item.artifact_type}`]));
@@ -167,40 +134,12 @@ function handoffCalculations(items, findings) {
 }
 
 function dependencyCalculations(edges, findings) {
-  const graph = new Map();
-  for (const edge of edges.filter(item => item.kind === 'prerequisite')) {
-    if (!graph.has(edge.from)) graph.set(edge.from, []);
-    if (!graph.has(edge.to)) graph.set(edge.to, []);
-    graph.get(edge.from).push(edge.to);
-  }
-  const visiting = new Set();
-  const done = new Set();
-  const cycles = [];
-  function visit(node, path) {
-    if (visiting.has(node)) {
-      cycles.push([...path.slice(path.indexOf(node)), node]);
-      return;
-    }
-    if (done.has(node)) return;
-    visiting.add(node);
-    for (const next of [...new Set(graph.get(node) || [])].sort()) visit(next, [...path, node]);
-    visiting.delete(node);
-    done.add(node);
-  }
-  for (const node of [...graph.keys()].sort()) visit(node, []);
-  const representatives = new Map();
-  for (const edge of edges.filter(item => item.kind === 'prerequisite')) {
-    const key = JSON.stringify([edge.from, edge.to]);
-    if (!representatives.has(key) || edge.id < representatives.get(key)) representatives.set(key, edge.id);
-  }
-  const unique = [...new Map(cycles.map(cycle => [JSON.stringify(cycle), cycle])).values()].map(nodes => ({
-    nodes, edge_ids: nodes.slice(0, -1).map((node, index) => representatives.get(JSON.stringify([node, nodes[index + 1]]))),
-  }));
-  if (unique.length) findings.push(finding('BXP.DEPENDENCY.PREREQUISITE_CYCLE', 'dependency', 'conflict',
+  const calculation = solveValidatedPrerequisites(edges);
+  if (calculation.cycles.length) findings.push(finding('BXP.DEPENDENCY.PREREQUISITE_CYCLE', 'dependency', 'conflict',
     'constraints.dependencies', 'Mandatory prerequisite graph contains a directed cycle.',
     edges.filter(item => item.kind === 'prerequisite').flatMap(item => item.evidence),
     ['Only edges explicitly typed prerequisite participate in this calculation.']));
-  return [{ prerequisite_edges: edges.filter(item => item.kind === 'prerequisite').length, cycles: unique }];
+  return [calculation];
 }
 
 function grouped(items) {
@@ -216,13 +155,8 @@ function logicCalculations(items, findings) {
   const calculations = [];
   for (const [scope_id, group] of grouped(items)) {
     const variables = [...new Set(group.flatMap(item => item.variables))].sort();
-    let witness = null;
-    for (let mask = 0; mask < 2 ** variables.length && witness === null; mask += 1) {
-      const values = Object.fromEntries(variables.map((name, bit) =>
-        [name, Boolean(mask & (1 << (variables.length - bit - 1)))]));
-      if (group.every(item => evaluateExpression(item.formula, values)
-          && (item.assumptions === undefined || evaluateExpression(item.assumptions, values)))) witness = values;
-    }
+    const { witness } = solveBooleanConstraints(variables,
+      group.flatMap(item => item.assumptions === undefined ? [item.formula] : [item.formula, item.assumptions]));
     calculations.push({ id: scope_id, scope_id, constraint_ids: group.map(item => item.id).sort(),
       result: witness === null ? 'unsatisfiable' : 'satisfiable', witness });
     if (witness === null) findings.push(finding('BXP.LOGIC.UNSAT', 'logic', 'conflict', 'constraints.logic',

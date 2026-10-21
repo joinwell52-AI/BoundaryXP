@@ -1,0 +1,210 @@
+{
+  "checks": [
+    {
+      "candidate_id": "n1",
+      "verdict": "SUPPORT",
+      "reason": "明确提及 audit.db 的只读快照，作为离线审计使用的现有只读数据输入。",
+      "sources": [
+        {
+          "quote": "基于 audit.db 的只读快照进行离线审计",
+          "clause_id": "c1",
+          "occurrence": 0,
+          "context_anchor": null
+        }
+      ]
+    },
+    {
+      "candidate_id": "n2",
+      "verdict": "SUPPORT",
+      "reason": "“本次任务要求”明确约束“进行离线审计”，支持 MAIN 层 REQUIRED 的审计事件。",
+      "sources": [
+        {
+          "quote": "本次任务要求基于 audit.db 的只读快照进行离线审计",
+          "clause_id": "c1",
+          "occurrence": 0,
+          "context_anchor": null
+        }
+      ]
+    },
+    {
+      "candidate_id": "n3",
+      "verdict": "SUPPORT",
+      "reason": "“形成”与审计并列，处于任务要求的作用域内，支持 REQUIRED 的产出事件。",
+      "sources": [
+        {
+          "quote": "本次任务要求基于 audit.db 的只读快照进行离线审计并形成 audit-snapshot.md",
+          "clause_id": "c1",
+          "occurrence": 0,
+          "context_anchor": null
+        }
+      ]
+    },
+    {
+      "candidate_id": "n4",
+      "verdict": "SUPPORT",
+      "reason": "audit-snapshot.md 是“形成”的结果，支持文件类型和 GENERATED_OUTPUT 用途。",
+      "sources": [
+        {
+          "quote": "形成 audit-snapshot.md",
+          "clause_id": "c1",
+          "occurrence": 0,
+          "context_anchor": null
+        }
+      ]
+    },
+    {
+      "candidate_id": "n5",
+      "verdict": "SUPPORT",
+      "reason": "“不得连接”明确禁止连接操作，支持 FORBIDDEN 模态及否定表述。",
+      "sources": [
+        {
+          "quote": "不得连接在线数据库",
+          "clause_id": "c1",
+          "occurrence": 0,
+          "context_anchor": null
+        }
+      ]
+    },
+    {
+      "candidate_id": "n6",
+      "verdict": "SUPPORT",
+      "reason": "在线数据库是被禁止的连接操作所指向的系统；原文未将其设为审计输入或生成输出。",
+      "sources": [
+        {
+          "quote": "不得连接在线数据库",
+          "clause_id": "c1",
+          "occurrence": 0,
+          "context_anchor": null
+        }
+      ]
+    },
+    {
+      "candidate_id": "r1",
+      "verdict": "CONTRADICT",
+      "reason": "“基于”明确标记审计依据，支持 BASIS 关系；THEME 将依据绑定为审计主题，未保留这一显式关系。",
+      "sources": [
+        {
+          "quote": "基于 audit.db 的只读快照进行离线审计",
+          "clause_id": "c1",
+          "occurrence": 0,
+          "context_anchor": null
+        }
+      ]
+    },
+    {
+      "candidate_id": "r2",
+      "verdict": "SUPPORT",
+      "reason": "“形成 audit-snapshot.md”明确将文件绑定为形成事件的结果。",
+      "sources": [
+        {
+          "quote": "形成 audit-snapshot.md",
+          "clause_id": "c1",
+          "occurrence": 0,
+          "context_anchor": null
+        }
+      ]
+    },
+    {
+      "candidate_id": "r3",
+      "verdict": "SUPPORT",
+      "reason": "“并”直接连接离线审计与形成文件两个事件，支持并列关系；没有明确规定完成条件或先后顺序。",
+      "sources": [
+        {
+          "quote": "进行离线审计并形成 audit-snapshot.md",
+          "clause_id": "c1",
+          "occurrence": 0,
+          "context_anchor": null
+        }
+      ]
+    },
+    {
+      "candidate_id": "r4",
+      "verdict": "SUPPORT",
+      "reason": "在线数据库是连接操作的目标，支持 THEME 绑定。",
+      "sources": [
+        {
+          "quote": "连接在线数据库",
+          "clause_id": "c1",
+          "occurrence": 0,
+          "context_anchor": null
+        }
+      ]
+    },
+    {
+      "candidate_id": "r5",
+      "verdict": "SUPPORT",
+      "reason": "在本次任务的上下文中，“不得连接在线数据库”明确禁止该连接事件，支持任务层 FORBIDS 约束，无需推断任何角色权限。",
+      "sources": [
+        {
+          "quote": "本次任务要求基于 audit.db 的只读快照进行离线审计并形成 audit-snapshot.md。不得连接在线数据库。",
+          "clause_id": "c1",
+          "occurrence": 0,
+          "context_anchor": null
+        }
+      ]
+    }
+  ],
+  "findings": [
+    {
+      "id": "f1",
+      "kind": "WRONG_BINDING",
+      "candidate_ids": [
+        "r1"
+      ],
+      "sources": [
+        {
+          "quote": "基于 audit.db 的只读快照进行离线审计",
+          "clause_id": "c1",
+          "occurrence": 0,
+          "context_anchor": null
+        }
+      ],
+      "reason": "r1 使用 THEME 表示快照与审计的关系，但“基于”明确表达 BASIS。快照的 READ_ONLY_INPUT 属性不能替代这一依据关系；补充候选 r6 保留该显式含义，原候选仍保留供审查。"
+    }
+  ],
+  "coverage": [
+    {
+      "region_id": "c1",
+      "disposition": "UNPARSED",
+      "candidate_ids": [
+        "n1",
+        "n2",
+        "n3",
+        "n4",
+        "n5",
+        "n6",
+        "r1",
+        "r2",
+        "r3",
+        "r4",
+        "r5",
+        "r6"
+      ],
+      "reason": "要求离线审计、形成文件及禁止连接在线数据库均有对应候选，但原图将明确的审计依据关系误绑为 THEME，因此该区域仍存在未可靠解析的边界含义。补充 BASIS 候选不消除原图冲突。"
+    }
+  ],
+  "additional_candidates": {
+    "nodes": [],
+    "relations": [
+      {
+        "id": "r6",
+        "type": "BASIS",
+        "head": "n2",
+        "tail": "n1",
+        "sources": [
+          {
+            "quote": "基于 audit.db 的只读快照进行离线审计",
+            "clause_id": "c1",
+            "occurrence": 0,
+            "context_anchor": null
+          }
+        ],
+        "ownership": "LOCAL",
+        "role": "NONE",
+        "alternative_group_id": null
+      }
+    ],
+    "expressions": [],
+    "unresolved": []
+  }
+}

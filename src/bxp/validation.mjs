@@ -1,16 +1,11 @@
-import { readFileSync } from 'node:fs';
-import Ajv2020 from 'ajv/dist/2020.js';
+import { registeredSchema, registeredValidator } from './schema-registry.mjs';
 
-const readSchema = name => JSON.parse(readFileSync(new URL(`../../protocol/schemas/${name}`, import.meta.url), 'utf8'));
-export const taskSchema = readSchema('boundx-task-v1.schema.json');
-export const resultSchema = readSchema('boundx-result-v1.schema.json');
-export const suiteSchema = readSchema('boundx-calc-conformance-suite-v1.schema.json');
-const validator = new Ajv2020({ strict: true, allErrors: false, coerceTypes: false, useDefaults: false, removeAdditional: false });
-validator.addSchema(taskSchema);
-validator.addSchema(resultSchema);
-export const validateTaskSchema = validator.getSchema(taskSchema.$id);
-export const validateResultSchema = validator.getSchema(resultSchema.$id);
-export const validateSuiteSchema = validator.compile(suiteSchema);
+export const taskSchema = registeredSchema('task');
+export const resultSchema = registeredSchema('result');
+export const suiteSchema = registeredSchema('suite');
+export const validateTaskSchema = registeredValidator('task');
+export const validateResultSchema = registeredValidator('result');
+export const validateSuiteSchema = registeredValidator('suite');
 
 export function boundedJson(value) {
   const pending = [{ value, depth: 0 }];

@@ -1,0 +1,43 @@
+{
+  "case_id": "REAL-GOLD-042",
+  "source_sha256": "edd631e8739942abb1b40d6618ae392c65bd383a2a083b8dd762c428fe59a34c",
+  "status": "EVIDENCE_VERIFIED",
+  "evidence": [
+    {
+      "evidence_id": "E001",
+      "source_id": "SOURCE_TASK",
+      "origin": "SOURCE",
+      "start": 0,
+      "end": 1079,
+      "quote": "---\r\nprotocol: fcop\r\nversion: 1\r\nkind: task\r\ntask_id: TASK-20260513-012\r\nsender: ADMIN\r\nrecipient: ME\r\npriority: P0\r\nrisk_level: medium\r\nparent: TASK-20260513-011\r\nrelated: [TASK-20260513-010, TASK-20260513-011, REPORT-20260513-011]\r\nthread_key: release-sync-discipline\r\nsession_id: sess-20260513-me-04\r\n---\r\n\r\n# 把\"发版前文档全同步\"升级为永久规则(SOP §C 扩展 + 本仓纪律书)\r\n\r\n## 背景 / ADMIN 原话\r\n\r\n> FCoP 在短期内,会有很多的发版,所以各处的文档,一定要同步;\r\n> 发版前不要遗漏,因为 PYPI 不能补发;\r\n> ——ADMIN, 2026-05-13 21:55 +08:00\r\n\r\n这是把 REPORT-20260513-011 末尾的\"反思\"段(本是我对自己 0.c 反面教材的\r\n内部检讨)**升格为面向所有未来发版的程序性约束**。\r\n\r\n## 现状盘点\r\n\r\n`docs/release-process.md` 已是 v1.6.0 起的 SOP,§Pre-Release Checklist\r\nA–F 段已覆盖代码 / 测试 / 文档 / Git / P=E / Rule 0.a.1 闭环。但 §C\r\n文档层(L84–L106)对照过去 2 次发版实际踩雷的位置,**漏列 5 处**:\r\n\r\n| 缺漏项 | PyPI 不可补发? | 触发它的踩雷次 |\r\n|---|---|---|\r\n| `README.zh.md` | 否 | TASK-010(发现时停在 `1.2.1` × 4 个版本) |\r\n| **`mcp/README.md`** | **是** = PyPI `long_description`,版本号一旦发即永久定格 | 险些漏(被 TASK-010 抓住) |\r\n| `docs/index.html` | 否(GitHub Pages,流量大) | TASK-011(\"半成品做完\") |\r\n| `essays/README.md` | 否 | 加新 essay 后停滞 |\r\n| `CITATION.cff` | 否 | 一般不动但 v2 须扫 |\r\n\r\n",
+      "purpose": "ADMIN directive and gaps inventory"
+    },
+    {
+      "evidence_id": "E002",
+      "source_id": "SOURCE_TASK",
+      "origin": "SOURCE",
+      "start": 1079,
+      "end": 2869,
+      "quote": "## 改动计划\r\n\r\n### A · `docs/release-process.md` 主修(单文件,SOP 权威源)\r\n\r\nA1. **§C 文档层 标题升级 + 警告段**:\r\n    标题改为 `C. 文档层 / Docs — 全部同步,PyPI 不可补发`。\r\n    第一段加突出框:**`mcp/README.md` = PyPI long_description,发版即永久\r\n    定格**(PyPI 规则 unique-per-version,等同 Rule 7 不可回滚)。\r\n\r\nA2. **§C 拆 3 个子段**,把当前 7 项 + 新增 5 项分组:\r\n    - **C.1 · Visible-on-the-web 类**(读者最多,bump 漏=对外撒谎):\r\n      `README.md` / `README.zh.md` / **`mcp/README.md`**(PyPI 锁版,标红) /\r\n      `docs/index.html`(GitHub Pages)/ `essays/README.md`(若加 essay)/\r\n      `CITATION.cff`(若需要)\r\n    - **C.2 · Agent-touch 类**(agent 部署后会读到):\r\n      `letter-to-admin.zh.md` / `letter-to-admin.en.md` /\r\n      `fcop-rules.mdc` 协议版 / `fcop-protocol.mdc` 协议解释版 /\r\n      `CHANGELOG.md` 新版块\r\n    - **C.3 · Hardcoded 断言类**(测试和 server 里写死的字符串):\r\n      原 SOP \"3 处 hardcoded 字符串\" + ADR `Status: Accepted`\r\n      检查 / `docs/MIGRATION-*.md`(若本版改了迁移路径)\r\n\r\nA3. **§G 新增 · 发版前文档同步扫描 / Pre-Release Documentation Sync\r\n    Audit**:\r\n    在 §F Rule 0.a.1 Carrier 之后、§Release Steps 之前插入一个 30 秒\r\n    \"扫一眼\"命令清单。一条 `rg` 把所有面向公众的位置扫一遍,任何\r\n    残留的\"旧版本号\"立即可见,这是 ADMIN 这条规则的**自动化检查\r\n    入口**:\r\n\r\n    ```powershell\r\n    # 扫所有面向公众文档里是否还含上一版号(应为 0 hit)\r\n    rg --hidden -g '!.git' -g '!fcop/log' -g '!*.lock' '\\b1\\.6\\.0\\b'\r\n    # 扫 fcop/fcop-mcp 包元数据里是否对齐\r\n    py -3.10 -c \"import importlib.metadata as m; print(m.version('fcop'), m.version('fcop-mcp'))\"\r\n    # 扫 PyPI 上一版本号有没有意外残留在 README × 3\r\n    rg -e 'Current release: `v1\\.6\\.0`' -e 'v1\\.6\\.0' README.md README.zh.md mcp/README.md\r\n    ```\r\n\r\n    grep 命中 = 漏了,立即修;0 命中 = 通过。\r\n\r\n### B · `fcop/shared/RULES-release-sync-checklist.md`(新建,本仓纪律书)\r\n\r\n把 ADMIN 这句话作为**协议级红线引文**钉在文件顶部,然后**只放指针**指向\r\n`docs/release-process.md §C / §G`(避免两处冗余、避免漂移)。\r\n\r\n这份文件的存在价值是:**下一次发版的 agent 在 `fcop/shared/` 巡检时\r\n能一眼看见这条纪律**,而不是要先翻 `docs/` 目录才找得到。\r\n\"文件即协议,文件夹即组织\"。\r\n\r\n",
+      "purpose": "SOP and checklist change plan"
+    },
+    {
+      "evidence_id": "E003",
+      "source_id": "SOURCE_TASK",
+      "origin": "SOURCE",
+      "start": 2869,
+      "end": 3209,
+      "quote": "### C · 不在本任务范围\r\n\r\n- 把 §C \"3 处 hardcoded 字符串\"做成 `scripts/check_release_docs.py`\r\n  自动化 lint(SOP §Automation Roadmap TODO 4 项)。这是更大工作,\r\n  另立 TASK。本次先**把 checklist 落到位**;自动化是下一阶段。\r\n- 改 FCoP 协议本身(`fcop-rules.mdc` / `fcop-protocol.mdc`)。这是\r\n  本仓的发版纪律,不是协议层问题。Rule 7 已经覆盖\"破坏性 / 不可\r\n  回滚操作 = 必走 ADMIN 二次确认\",PyPI 锁版本身就属于 Rule 7\r\n  适用范围,不需要新规则。\r\n\r\n",
+      "purpose": "out-of-scope boundaries"
+    },
+    {
+      "evidence_id": "E004",
+      "source_id": "SOURCE_TASK",
+      "origin": "SOURCE",
+      "start": 3209,
+      "end": 3697,
+      "quote": "## 验收标准\r\n\r\n- [ ] `docs/release-process.md` §C 三段拆完,12 项 checkbox 齐 + PyPI\r\n  不可补发警告框就位\r\n- [ ] `docs/release-process.md` §G 新增,30 秒文档同步扫描命令清单到位\r\n- [ ] `fcop/shared/RULES-release-sync-checklist.md` 新建,引文 + 指针\r\n- [ ] 改动只在上述 2 个文件 + 本 TASK + 配套 REPORT 内\r\n- [ ] commit + push origin/main\r\n- [ ] 写 REPORT-20260513-012 + archive\r\n\r\n## Rule 0.c 自审承诺\r\n\r\nREPORT-20260513-012 末尾必须按 Rule 0.c **直话**记一笔:本任务的来源\r\n就是 REPORT-011 的反思被 ADMIN 升格成永久规则——既是 0.c \"落真话\"的\r\n成功兑现(反思真的进入了改动),也是 0.c \"下次怎么不再翻车\"的具体落地。\r\n",
+      "purpose": "acceptance and self-audit"
+    }
+  ]
+}

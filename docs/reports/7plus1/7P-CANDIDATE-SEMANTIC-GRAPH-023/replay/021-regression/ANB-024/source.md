@@ -1,0 +1,1 @@
+Using OPS-GUIDE-7 version v2.0, inspect host-state.json and create host-state-review.md. Do not change host settings or restart the host.

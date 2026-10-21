@@ -1,0 +1,218 @@
+{
+  "contract_version": "028-r02.2",
+  "entities": [
+    {
+      "id": "ent_pm",
+      "label": "PM",
+      "type": "PERSON",
+      "mentions": [{"quote": "PM", "occurrence": 1}],
+      "alternatives": []
+    },
+    {
+      "id": "ent_a",
+      "label": "a.csv",
+      "type": "FILE",
+      "mentions": [{"quote": "a.csv", "occurrence": 1}],
+      "alternatives": []
+    },
+    {
+      "id": "ent_b",
+      "label": "b.csv",
+      "type": "FILE",
+      "mentions": [{"quote": "b.csv", "occurrence": 1}],
+      "alternatives": []
+    },
+    {
+      "id": "ent_c",
+      "label": "c.csv",
+      "type": "FILE",
+      "mentions": [{"quote": "c.csv", "occurrence": 1}],
+      "alternatives": []
+    },
+    {
+      "id": "ent_ref",
+      "label": "该文件",
+      "type": "REFERENT",
+      "mentions": [
+        {"quote": "该文件", "occurrence": 1},
+        {"quote": "a.csv", "occurrence": 1},
+        {"quote": "b.csv", "occurrence": 1}
+      ],
+      "alternatives": ["ent_a", "ent_b"]
+    }
+  ],
+  "events": [
+    {
+      "id": "ev_read",
+      "predicate": "读取",
+      "kind": "ACTION",
+      "layer": "MAIN",
+      "use": "CURRENT_TASK",
+      "modality": "REQUIRED",
+      "polarity": "POSITIVE",
+      "owner_id": "ROOT",
+      "constraint_ids": [],
+      "requires": [],
+      "sources": [{"quote": "请PM读取a.csv和b.csv。", "occurrence": 1}]
+    },
+    {
+      "id": "ev_compare",
+      "predicate": "比较",
+      "kind": "ACTION",
+      "layer": "MAIN",
+      "use": "CURRENT_TASK",
+      "modality": "REQUIRED",
+      "polarity": "POSITIVE",
+      "owner_id": "ROOT",
+      "constraint_ids": [],
+      "requires": [],
+      "sources": [{"quote": "将该文件与c.csv比较。", "occurrence": 1}]
+    }
+  ],
+  "claims": [
+    {
+      "id": "cl_read_pm",
+      "kind": "ROLE",
+      "event_id": "ev_read",
+      "entity_id": "ent_pm",
+      "role": "PERFORMER",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "scope_id": "ev_read",
+      "requires": [],
+      "sources": [{"quote": "请PM读取a.csv和b.csv。", "occurrence": 1}],
+      "note": ""
+    },
+    {
+      "id": "cl_read_a",
+      "kind": "ROLE",
+      "event_id": "ev_read",
+      "entity_id": "ent_a",
+      "role": "INPUT_OBJECT",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "scope_id": "ev_read",
+      "requires": [],
+      "sources": [{"quote": "读取a.csv和b.csv", "occurrence": 1}],
+      "note": ""
+    },
+    {
+      "id": "cl_read_b",
+      "kind": "ROLE",
+      "event_id": "ev_read",
+      "entity_id": "ent_b",
+      "role": "INPUT_OBJECT",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "scope_id": "ev_read",
+      "requires": [],
+      "sources": [{"quote": "读取a.csv和b.csv", "occurrence": 1}],
+      "note": ""
+    },
+    {
+      "id": "cl_compare_pm",
+      "kind": "ROLE",
+      "event_id": "ev_compare",
+      "entity_id": "ent_pm",
+      "role": "PERFORMER",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "scope_id": "ev_compare",
+      "requires": [],
+      "sources": [
+        {"quote": "请PM读取a.csv和b.csv。", "occurrence": 1},
+        {"quote": "将该文件与c.csv比较。", "occurrence": 1}
+      ],
+      "note": "比较命令承接前句主体PM。"
+    },
+    {
+      "id": "cl_compare_ref",
+      "kind": "ROLE",
+      "event_id": "ev_compare",
+      "entity_id": "ent_ref",
+      "role": "INPUT_OBJECT",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "scope_id": "ev_compare",
+      "requires": ["ent_ref"],
+      "sources": [
+        {"quote": "a.csv和b.csv", "occurrence": 1},
+        {"quote": "将该文件与c.csv比较。", "occurrence": 1}
+      ],
+      "note": "比较对象的指代身份未确定。"
+    },
+    {
+      "id": "cl_compare_c",
+      "kind": "ROLE",
+      "event_id": "ev_compare",
+      "entity_id": "ent_c",
+      "role": "INPUT_OBJECT",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "scope_id": "ev_compare",
+      "requires": [],
+      "sources": [{"quote": "将该文件与c.csv比较。", "occurrence": 1}],
+      "note": "c.csv是明确的比较对象，不依赖另一对象的指代消解。"
+    }
+  ],
+  "expressions": [],
+  "issues": [
+    {
+      "id": "issue_ref",
+      "kind": "AMBIGUITY",
+      "subject_ids": ["ent_ref", "cl_compare_ref"],
+      "field_path": "entities.ent_ref.alternatives",
+      "alternatives": ["ent_a", "ent_b"],
+      "affected_views": ["I", "A"],
+      "sources": [
+        {"quote": "a.csv和b.csv", "occurrence": 1},
+        {"quote": "该文件", "occurrence": 1}
+      ],
+      "note": "该文件可能指a.csv或b.csv，不能仅按距离选择b.csv；不影响两个明确读取对象或c.csv的比较用途。"
+    }
+  ],
+  "coverage": [
+    {
+      "sources": [{"quote": "请PM读取a.csv和b.csv。", "occurrence": 1}],
+      "claim_ids": ["cl_read_pm", "cl_read_a", "cl_read_b"],
+      "status": "EXPRESSED",
+      "affected_views": ["A", "P", "I"]
+    },
+    {
+      "sources": [
+        {"quote": "请PM", "occurrence": 1},
+        {"quote": "将该文件与c.csv比较。", "occurrence": 1}
+      ],
+      "claim_ids": ["cl_compare_pm"],
+      "status": "EXPRESSED",
+      "affected_views": ["A", "P"]
+    },
+    {
+      "sources": [
+        {"quote": "a.csv和b.csv", "occurrence": 1},
+        {"quote": "该文件", "occurrence": 1}
+      ],
+      "claim_ids": ["cl_compare_ref"],
+      "status": "EXPRESSED",
+      "affected_views": ["I", "A"]
+    },
+    {
+      "sources": [{"quote": "将该文件与c.csv比较。", "occurrence": 1}],
+      "claim_ids": ["cl_compare_c"],
+      "status": "EXPRESSED",
+      "affected_views": ["I", "A"]
+    }
+  ]
+}

@@ -1,0 +1,1 @@
+TEAM238 核查 lab-c2-a-8，生成 scope-c2-a-8.txt。范围排除 public-c2-a-8。

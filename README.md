@@ -16,7 +16,7 @@
 
 [Quick start](QUICKSTART.en.md) · [Product manual — Chinese](docs/BOUNDX-PRODUCT-MANUAL.md) · [7+1 method — Chinese](docs/BoundX-7plus1-定义原理语义编译与边界计算说明-v0.4.md) · [Current status — Chinese](docs/SHORT-COMPILER-STATUS.md) · [Documentation](docs/README.md)
 
-> **Status as of 2026-10-08: a runnable short-text compiler candidate exists; full product semantic acceptance has not passed.** This update brings the aligned documentation into `main`. Candidate code remains on [`review/7plus1-parser`](https://github.com/joinwell52-AI/BoundX/tree/review/7plus1-parser) and is not part of this merge. `main` does not currently provide the `7plus1` or `7plus1:ui` scripts. Release tags and local installations are unchanged.
+> **2026-10-21: this merge includes the ui220 candidate running locally on port 58618.** It includes the 7+1 generation and mathematical parsing resources, deterministic calculators, formula display and enterprise A dictionary. Build the same 404-file package with `npm run 7plus1:build-candidate`; see [ui220 source and validation](docs/workbench/UI220-SYNC.md). The root product version remains `1.3.0-preview.0`. Earlier candidate descriptions and scores below are historical; they do not establish ui220 semantic acceptance.
 
 ## What is BoundX?
 

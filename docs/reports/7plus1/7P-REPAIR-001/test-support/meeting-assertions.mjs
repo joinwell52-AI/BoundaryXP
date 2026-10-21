@@ -1,0 +1,41 @@
+// Evaluation-only source expectations, never imported by the Parser runtime.
+export function meetingAssertions(r){
+ const c=r.compiler_v03,ir=c.boundary_ir,nm=new Map(c.semantic_nodes.map(n=>[n.node_id,n])),rows=[];
+ const check=(name,pass)=>rows.push({name,pass:!!pass}),slot=k=>c.canonical_7plus1[k].entries;
+ const action=(slotName,word)=>slot(slotName).find(e=>e.display_value.includes(word)&&e.state==='RESOLVED');
+ check('exact_source_digest',c.source.sha256==='cdd3d4e4a369dcff805ef4d9a4c33cde5daeacf9adeec0cb0305bdf1b55170da');
+ check('two_source_files',slot('I').length===2&&['meeting-notes.md','attendees.csv'].every(w=>slot('I').some(e=>e.display_value===w&&e.state==='RESOLVED')));
+ check('standard_never_input_service',!slot('I').some(e=>e.display_value.includes('MEETING-STYLE-4'))&&c.semantic_nodes.filter(n=>n.surface==='MEETING-STYLE-4').every(n=>n.node_type==='REFERENCE'));
+ check('normative_conformance_target',slot('V').some(e=>e.display_value==='MEETING-STYLE-4'&&e.state==='RESOLVED')&&c.relations.some(rel=>rel.relation_type==='CONFORMS_TO'&&rel.state==='RESOLVED'&&nm.get(rel.tail_node_id).surface==='MEETING-STYLE-4'&&nm.get(rel.head_node_id).metadata.conformance_target_node_ids.some(i=>nm.get(i).surface==='最终纪要的格式')));
+ check('main_output',slot('O').some(e=>e.display_value==='minutes-final.docx'&&e.state==='RESOLVED'));
+ const list=slot('O').find(e=>e.display_value==='pending-owners.csv');const cond=ir.condition_expr_nodes.find(q=>q.expr_id===list?.condition_expr_id);
+ check('conditional_output_retains_existence',list?.state==='RESOLVED'&&cond?.op==='STATE_REF'&&nm.get(cond.state_node_id).surface==='只要存在负责人待确认的事项');
+ check('NOT_REQUIRED_never_forbid_or_require',c.semantic_nodes.some(n=>n.metadata.modality==='NOT_REQUIRED')&&ir.facts.filter(f=>['ACTION','FORBID','DELIVERABLE'].includes(f.fact_type)).every(f=>nm.get(f.predicate_node_id)?.metadata.modality!=='NOT_REQUIRED'));
+ for(const w of ['核对','整理 讨论事项','存为','保留','标注','生成','记录','提交'])check('explicit_action_'+w,action('A',w));
+ check('no_header_as_action',!slot('A').some(e=>e.display_value.includes('工作：')));
+ check('preservation_universal_scope',slot('A').some(e=>e.display_value.includes('保留')&&ir.set_expr_nodes.find(s=>s.expr_id===e.scope_expr_id)?.kind==='ALL'));
+ check('annotation_qualified_set_and_quote',c.semantic_nodes.some(n=>n.surface==='标注'&&n.metadata.qualifier_node_ids?.some(i=>nm.get(i).surface==='原始记录没有写明负责人的事项'))&&c.semantic_nodes.some(n=>n.surface==='负责人待确认'&&n.metadata.quoted));
+ check('record_each_condition_set',c.semantic_nodes.some(n=>n.surface==='记录'&&n.metadata.distribution==='EACH')&&slot('A').some(e=>e.display_value.includes('记录 负责人待确认的事项')&&e.condition_expr_id===list.condition_expr_id));
+ check('performer_identity_one',slot('P').filter(e=>e.display_value.includes('沈悦')).length===1&&slot('P').some(e=>e.display_value==='编辑沈悦 [PERFORMER]'));
+ check('reviewer_recipient_identity',slot('P').some(e=>e.display_value.includes('唐宁')&&e.display_value.includes('RECIPIENT')&&e.display_value.includes('REVIEWER')));
+ check('submit_after_completion',slot('A').some(e=>e.display_value.includes('提交')&&ir.condition_expr_nodes.find(q=>q.expr_id===e.condition_expr_id)?.op==='STATE_REF'));
+ check('explicit_order_chain',c.relations.some(r=>r.relation_type==='SEQUENCE'&&r.state==='RESOLVED'&&nm.get(r.head_node_id).surface==='核对'&&nm.get(r.tail_node_id).surface==='整理')&&c.relations.some(r=>r.relation_type==='SEQUENCE'&&r.state==='RESOLVED'&&nm.get(r.head_node_id).surface==='整理'&&nm.get(r.tail_node_id).surface==='存为'));
+ check('actual_list_only_local_qualifier',c.semantic_nodes.some(n=>n.surface==='提交'&&n.metadata.local_argument_qualifiers?.length===1&&n.metadata.local_argument_qualifiers[0].restriction==='ACTUALLY_PRODUCED_ONLY'&&nm.get(n.metadata.local_argument_qualifiers[0].argument_node_id).surface==='pending-owners.csv'&&r.source_spans.find(s=>s.span_id===n.metadata.local_argument_qualifiers[0].source_span_id).text==='实际生成的待确认清单'));
+ check('time_limit_correct_target',slot('R').some(e=>{const q=ir.quantity_expr_nodes.find(q=>q.expr_id===e.quantity_expr_id);return e.state==='RESOLVED'&&q?.metric==='TIME'&&q.unit==='分钟'&&q.upper_bound.value===40&&q.upper_bound.inclusive&&q.target_node_ids.every(i=>nm.get(i).node_type==='DISCOURSE'&&nm.get(i).surface==='本次整理的总用时'&&nm.get(i).metadata.measure_of_task);}));
+ check('no_operator_predicate',!c.semantic_nodes.some(n=>n.node_type==='EVENT'&&n.surface==='得'));
+ const completion=slot('C')[0],cx=ir.condition_expr_nodes.find(q=>q.expr_id===completion?.condition_expr_id);
+ check('completion_AND',slot('C').length===1&&completion.state==='RESOLVED'&&cx?.op==='AND'&&cx.operand_expr_ids.length===2);
+ check('necessary_not_sufficient',c.semantic_nodes.some(n=>n.metadata.condition_strength==='NECESSARY_ONLY')&&c.semantic_nodes.some(n=>n.metadata.universal_scope&&n.surface.includes('所有未明确负责人')));
+ for(const w of ['作','修改','删除','指定','改写'])check('explicit_forbid_'+w,action('B',w));
+ check('source_file_forbid_exact',action('B','修改')?.display_value==='FORBIDDEN 修改 meeting-notes.md、attendees.csv');
+ check('quoted_approval_not_event',!c.semantic_nodes.some(n=>n.node_type==='EVENT'&&n.surface==='批准')&&!slot('B').some(e=>e.display_value==='FORBIDDEN 批准'));
+ check('rewrite_source_target_values',c.semantic_nodes.some(n=>n.surface==='待确认'&&n.metadata.quoted)&&c.semantic_nodes.some(n=>n.surface==='已批准'&&n.metadata.quoted)&&action('B','改写')?.display_value==='FORBIDDEN 改写 待确认、已批准');
+ check('upload_destination_retained',c.relations.some(rel=>rel.relation_type==='LOCATION'&&rel.state==='RESOLVED'&&nm.get(rel.head_node_id).surface==='上传'&&nm.get(rel.tail_node_id).surface==='公开网站'));
+ check('ambiguous_material_not_false_RESOLVED',slot('B').some(e=>e.display_value==='FORBIDDEN 上传 上述材料'&&e.state==='UNRESOLVED')&&c.semantic_nodes.some(n=>n.surface==='上述材料'&&n.metadata.retain_ambiguity&&n.state==='UNRESOLVED'));
+ check('only_material_unresolved',c.unresolved.length===1&&c.unresolved[0].kind==='UNRESOLVED_COREFERENCE');
+ check('content_soundness',c.nlp_signals.semantic_decoding?.soundness?.status==='PASS');
+ check('all_exact_source_spans',r.source_spans.every(s=>[...c.source.raw_text].slice(s.start,s.end).join('')===s.text));
+ check('contract_gates_supplement_only',r.contract_gate_results.status==='PASS');
+ check('all_relation_types_valid',r.relation_type_audit.status==='PASS');
+ return rows;
+}

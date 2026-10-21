@@ -4,7 +4,7 @@
 
 Documentation date: 2026-10-08. The available short-text compiler is a **runnable candidate, not a fully accepted product release**. Distinguish the installed user application, the development checkout, and the older BXP application before choosing a command.
 
-> **This main-branch update contains documentation only, not the candidate compiler.** Short-text commands below require the corresponding development checkout with an existing installation, or the complete candidate package in section 3. A fresh clone of main cannot run `npm run 7plus1:ui`. Section 6 covers the existing main-branch BXP entry.
+> **2026-10-21: main includes ui220 candidate sources and the reproducible build entry.** See [ui220 build and validation](docs/workbench/UI220-SYNC.md). Existing port-58618 installations use `npm run 7plus1:ui`. The 2026-10-08 package references, branch differences and scores below are historical; build ui220 for a new installation.
 
 ## 1. Existing local installation: fixed port 58618
 

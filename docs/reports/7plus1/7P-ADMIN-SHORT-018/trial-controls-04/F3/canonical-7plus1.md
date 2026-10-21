@@ -1,0 +1,32 @@
+# Actual Canonical Root 7+1
+
+## I RESOLVED
+
+- RESOLVED model-index.tsv [p1:580d237d4286d287417de0a2]
+
+## O RESOLVED
+
+- RESOLVED check.txt [p1:4bd119a9c25c0dc9299d6f90]
+
+## A RESOLVED
+
+- RESOLVED REQUIRED 读取 model-index.tsv [p1:ca5c74034ca330f22e140933]
+- RESOLVED REQUIRED 生成 check.txt [p1:3bf746c33b8eb46f4ca2f38f]
+
+## P RESOLVED
+
+- RESOLVED ENG [PERFORMER] [p1:7d85cc55ea76f4e0b93d6ef4,p1:cf596a1aa3c69b8aa6f9c8f4]
+
+## R ABSENT
+
+
+## V ABSENT
+
+
+## C ABSENT
+
+
+## B RESOLVED
+
+- RESOLVED FORBIDDEN 加载 模型 [p1:fbc480723779b2d187699462]
+- RESOLVED FORBIDDEN 发起 推理 [p1:b659f64963b565d76ab9677f]

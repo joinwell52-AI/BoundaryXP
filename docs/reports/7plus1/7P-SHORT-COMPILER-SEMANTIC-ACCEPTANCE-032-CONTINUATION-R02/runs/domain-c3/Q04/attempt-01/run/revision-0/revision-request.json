@@ -1,0 +1,101 @@
+{
+  "reviews": [
+    {
+      "subject_id": "list_container",
+      "field_path": "",
+      "verdict": "CONTRADICT",
+      "context_refs": [
+        "tool_list",
+        "tool_file",
+        "file_item",
+        "check_scope"
+      ],
+      "sources": [
+        {
+          "quote": "tool-list.json中的MCP工具清单",
+          "occurrence": 1
+        }
+      ],
+      "reason": "ITEM(tool_file)表示文件本身，不能表达tool_list位于该文件中的关系；该SCOPE目标是清单，表达式实际叶对象却是文件，note不能补成容器绑定。"
+    }
+  ],
+  "issues": [
+    {
+      "id": "audit_container_binding",
+      "issue_kind": "BINDING",
+      "subject_ids": [
+        "list_container"
+      ],
+      "field_path": "expression_id",
+      "context_refs": [
+        "file_item",
+        "tool_list",
+        "tool_file",
+        "check_scope"
+      ],
+      "sources": [
+        {
+          "quote": "tool-list.json中的MCP工具清单",
+          "occurrence": 1
+        }
+      ],
+      "reason": "以文件ITEM作清单的SCOPE不能表达容器关系。相关coverage不能凭该主张认定容器限定已结构化闭合；需由宿主经有界修订核对可表达方式或保留合同覆盖缺口。",
+      "suggested_json": null
+    }
+  ],
+  "omissions": [
+    {
+      "id": "omitted_container_relation",
+      "sources": [
+        {
+          "quote": "tool-list.json中的MCP工具清单",
+          "occurrence": 1
+        }
+      ],
+      "affected_views": [
+        "I"
+      ],
+      "reason": "原文明示受检清单位于tool-list.json中。候选保留了名称和两个对象，但没有有效的可消费容器关系；list_container中的文件ITEM及note不能替代该关系。"
+    }
+  ],
+  "technical_errors": [
+    {
+      "code": "SCOPE_RANGE_BINDING",
+      "subject_id": "list_container",
+      "field_path": "claims[list_container].scope_id",
+      "actual": {
+        "event_id": null,
+        "entity_id": null,
+        "scope_id": "tool_list",
+        "quantity": null,
+        "constraint_ids": null,
+        "detail": null
+      },
+      "requirement": "Bind a range to a source-supported role of the same event and actual object/category. Never substitute another object."
+    },
+    {
+      "code": "RANGE_REQUIREMENT_UNREPRESENTED",
+      "subject_id": "coverage:0",
+      "field_path": "range_requirement",
+      "actual": {
+        "kind": "SPECIFIC",
+        "scope_claim_ids": [
+          "check_scope",
+          "list_container"
+        ]
+      },
+      "sources": [
+        {
+          "quote": "请PM检查tool-list.json中的MCP工具清单",
+          "occurrence": 1
+        }
+      ],
+      "requirement": "Preserve the source-interpreted range_requirement with matching typed SCOPE references. A universal restriction requires FORALL over its domain, including exceptions. If not representable retain GAP; never delete the requirement or infer from notes."
+    }
+  ],
+  "binding_errors": [],
+  "budget": {
+    "semantic_revisions_remaining": 1,
+    "shared_with_audit": true
+  }
+}

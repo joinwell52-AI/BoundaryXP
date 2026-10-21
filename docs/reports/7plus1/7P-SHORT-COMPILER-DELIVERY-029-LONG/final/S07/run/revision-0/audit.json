@@ -1,0 +1,250 @@
+{
+  "contract_version": "028-r02.3",
+  "reviews": [
+    {
+      "subject_id": "ent_pm",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [
+        {
+          "quote": "PM",
+          "occurrence": 1
+        }
+      ],
+      "reason": "原文明示PM；OTHER保留角色称谓，不擅定为个人或组织。"
+    },
+    {
+      "subject_id": "ent_qa",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [
+        {
+          "quote": "QA",
+          "occurrence": 1
+        }
+      ],
+      "reason": "原文明示QA；OTHER保留角色称谓，不擅定为个人或组织。"
+    },
+    {
+      "subject_id": "ent_file",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [
+        {
+          "quote": "r.md",
+          "occurrence": 1
+        }
+      ],
+      "reason": "原文明示提交文件r.md。"
+    },
+    {
+      "subject_id": "ev_submit_allowed",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [
+        "cl_after_approval"
+      ],
+      "sources": [
+        {
+          "quote": "允许PM在QA批准后提交r.md",
+          "occurrence": 1
+        }
+      ],
+      "reason": "提交是当前有条件许可，未升格为必须执行；批准条件已回指绑定。"
+    },
+    {
+      "subject_id": "ev_approval",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [
+        {
+          "quote": "QA批准",
+          "occurrence": 1
+        }
+      ],
+      "reason": "批准仅作为条件参照，未据此新增批准义务或断言批准已发生。"
+    },
+    {
+      "subject_id": "ev_submit_forbidden",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [
+        "cl_before_approval"
+      ],
+      "sources": [
+        {
+          "quote": "批准前不得提交",
+          "occurrence": 1
+        }
+      ],
+      "reason": "原文明示批准前禁止提交；禁止范围已绑定，不是无条件禁止。"
+    },
+    {
+      "subject_id": "cl_allowed_performer",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [
+        "ev_submit_allowed",
+        "ent_pm"
+      ],
+      "sources": [
+        {
+          "quote": "允许PM在QA批准后提交r.md",
+          "occurrence": 1
+        }
+      ],
+      "reason": "PM明确是获准提交的执行者。"
+    },
+    {
+      "subject_id": "cl_allowed_object",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [
+        "ev_submit_allowed",
+        "ent_file"
+      ],
+      "sources": [
+        {
+          "quote": "提交r.md",
+          "occurrence": 1
+        }
+      ],
+      "reason": "r.md是提交对象；原文未将其指定为外部输入或本任务生成结果。"
+    },
+    {
+      "subject_id": "cl_approver",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [
+        "ev_approval",
+        "ent_qa"
+      ],
+      "sources": [
+        {
+          "quote": "QA批准",
+          "occurrence": 1
+        }
+      ],
+      "reason": "QA是条件批准事件的批准者，该关系不增加批准义务。"
+    },
+    {
+      "subject_id": "cl_after_approval",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [
+        "ev_submit_allowed",
+        "expr_approved"
+      ],
+      "sources": [
+        {
+          "quote": "允许PM在QA批准后提交r.md",
+          "occurrence": 1
+        }
+      ],
+      "reason": "批准是提交许可的必要前提，AFTER保留批准后的时序；与事件约束双向绑定。"
+    },
+    {
+      "subject_id": "cl_forbidden_performer",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [
+        "ev_submit_forbidden",
+        "ent_pm"
+      ],
+      "sources": [
+        {
+          "quote": "允许PM在QA批准后提交r.md",
+          "occurrence": 1
+        },
+        {
+          "quote": "批准前不得提交",
+          "occurrence": 1
+        }
+      ],
+      "reason": "后分句承接前分句的PM，未出现竞争主体。"
+    },
+    {
+      "subject_id": "cl_forbidden_object",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [
+        "ev_submit_forbidden",
+        "ent_file"
+      ],
+      "sources": [
+        {
+          "quote": "提交r.md",
+          "occurrence": 1
+        },
+        {
+          "quote": "批准前不得提交",
+          "occurrence": 1
+        }
+      ],
+      "reason": "后分句承接同一提交对象r.md，未出现竞争对象。"
+    },
+    {
+      "subject_id": "cl_before_approval",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [
+        "ev_submit_forbidden",
+        "expr_not_approved"
+      ],
+      "sources": [
+        {
+          "quote": "QA批准",
+          "occurrence": 1
+        },
+        {
+          "quote": "批准前不得提交",
+          "occurrence": 1
+        }
+      ],
+      "reason": "批准尚未发生的范围足以触发禁止，SUFFICIENT方向正确；不要求未来批准实际发生，约束双向绑定。"
+    },
+    {
+      "subject_id": "expr_approved",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [
+        "ev_approval",
+        "ent_qa"
+      ],
+      "sources": [
+        {
+          "quote": "QA批准后",
+          "occurrence": 1
+        }
+      ],
+      "reason": "表达同一QA批准事件已发生的条件状态，不断言其实际为真。"
+    },
+    {
+      "subject_id": "expr_not_approved",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [
+        "ev_approval",
+        "ent_qa",
+        "expr_approved"
+      ],
+      "sources": [
+        {
+          "quote": "QA批准",
+          "occurrence": 1
+        },
+        {
+          "quote": "批准前",
+          "occurrence": 1
+        }
+      ],
+      "reason": "以同事件、同参数的负极性表达批准尚未发生，与批准后条件互补，保留禁止的适用范围。"
+    }
+  ],
+  "issues": [],
+  "omissions": []
+}

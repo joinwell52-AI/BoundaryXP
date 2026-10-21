@@ -1,0 +1,1 @@
+UNITC2B2252 检查 endpoint-c2-b2-2，最多重试 6 次，生成 quantity-c2-b2-2.txt。

@@ -1,0 +1,716 @@
+{
+  "format": "boundx-boundary-rules/1",
+  "sources": [
+    {
+      "id": "s1",
+      "quote": "依据《抽检规程》v2.0，PM组织任务，全部操作限测试环境。",
+      "occurrence": 1
+    },
+    {
+      "id": "s2",
+      "quote": "外部输入仅a.csv、b.csv、c.csv；禁止读取c.csv。",
+      "occurrence": 1
+    },
+    {
+      "id": "s3",
+      "quote": "DEV必须从可读输入中恰选一个读取，选定后不得更换；",
+      "occurrence": 1
+    },
+    {
+      "id": "s4",
+      "quote": "仅在上次读取失败后可重试，最多2次，不含首次。",
+      "occurrence": 1
+    },
+    {
+      "id": "s5",
+      "quote": "DEV依据所选输入生成check.md并提交QA；",
+      "occurrence": 1
+    },
+    {
+      "id": "s6",
+      "quote": "QA收到该报告后必须复核。",
+      "occurrence": 1
+    },
+    {
+      "id": "s7",
+      "quote": "只有QA复核通过，PM才能交付本次check.md给ADMIN，且PM必须交付。",
+      "occurrence": 1
+    },
+    {
+      "id": "s8",
+      "quote": "DEV可生成extra.md，无需交付；",
+      "occurrence": 1
+    },
+    {
+      "id": "s9",
+      "quote": "禁止任何人向ADMIN交付extra.md。",
+      "occurrence": 1
+    },
+    {
+      "id": "s10",
+      "quote": "总耗时大于0且至多20分钟。",
+      "occurrence": 1
+    },
+    {
+      "id": "s11",
+      "quote": "当且仅当QA复核通过且本次check.md交付ADMIN，任务完成。",
+      "occurrence": 1
+    },
+    {
+      "id": "s12",
+      "quote": "禁止修改三个输入文件或访问生产环境。",
+      "occurrence": 1
+    }
+  ],
+  "tasks": [
+    {
+      "id": "t",
+      "source_refs": [
+        "s1"
+      ],
+      "label": "抽检任务",
+      "parent": null,
+      "roles": [
+        {
+          "role": "ORGANIZER",
+          "value": "pm"
+        },
+        {
+          "role": "BASIS",
+          "value": "reg"
+        }
+      ]
+    }
+  ],
+  "objects": [
+    {
+      "id": "pm",
+      "source_refs": [
+        "s1"
+      ],
+      "label": "PM",
+      "kind": "PERSON",
+      "scope": "t",
+      "members": []
+    },
+    {
+      "id": "dev",
+      "source_refs": [
+        "s3"
+      ],
+      "label": "DEV",
+      "kind": "PERSON",
+      "scope": "t",
+      "members": []
+    },
+    {
+      "id": "qa",
+      "source_refs": [
+        "s5",
+        "s6"
+      ],
+      "label": "QA",
+      "kind": "PERSON",
+      "scope": "t",
+      "members": []
+    },
+    {
+      "id": "admin",
+      "source_refs": [
+        "s7"
+      ],
+      "label": "ADMIN",
+      "kind": "PERSON",
+      "scope": "t",
+      "members": []
+    },
+    {
+      "id": "reg",
+      "source_refs": [
+        "s1"
+      ],
+      "label": "《抽检规程》v2.0",
+      "kind": "DOCUMENT",
+      "scope": "t",
+      "members": []
+    },
+    {
+      "id": "test",
+      "source_refs": [
+        "s1"
+      ],
+      "label": "测试环境",
+      "kind": "ENVIRONMENT",
+      "scope": "t",
+      "members": []
+    },
+    {
+      "id": "prod",
+      "source_refs": [
+        "s12"
+      ],
+      "label": "生产环境",
+      "kind": "ENVIRONMENT",
+      "scope": "t",
+      "members": []
+    },
+    {
+      "id": "a",
+      "source_refs": [
+        "s2"
+      ],
+      "label": "a.csv",
+      "kind": "FILE",
+      "scope": "t",
+      "members": []
+    },
+    {
+      "id": "b",
+      "source_refs": [
+        "s2"
+      ],
+      "label": "b.csv",
+      "kind": "FILE",
+      "scope": "t",
+      "members": []
+    },
+    {
+      "id": "c",
+      "source_refs": [
+        "s2"
+      ],
+      "label": "c.csv",
+      "kind": "FILE",
+      "scope": "t",
+      "members": []
+    },
+    {
+      "id": "check",
+      "source_refs": [
+        "s5",
+        "s7"
+      ],
+      "label": "本次check.md",
+      "kind": "FILE",
+      "scope": "t",
+      "members": []
+    },
+    {
+      "id": "extra",
+      "source_refs": [
+        "s8",
+        "s9"
+      ],
+      "label": "extra.md",
+      "kind": "FILE",
+      "scope": "t",
+      "members": []
+    }
+  ],
+  "actions": [
+    {
+      "id": "read",
+      "source_refs": [
+        "s3",
+        "s4"
+      ],
+      "label": "读取选定输入",
+      "scope": "t",
+      "operation": "READ",
+      "roles": [
+        {
+          "role": "PERFORMER",
+          "value": "dev"
+        },
+        {
+          "role": "OBJECT",
+          "value": "choice"
+        }
+      ]
+    },
+    {
+      "id": "gen",
+      "source_refs": [
+        "s5"
+      ],
+      "label": "生成check.md",
+      "scope": "t",
+      "operation": "CREATE",
+      "roles": [
+        {
+          "role": "PERFORMER",
+          "value": "dev"
+        },
+        {
+          "role": "BASIS",
+          "value": "choice"
+        },
+        {
+          "role": "RESULT",
+          "value": "check"
+        }
+      ]
+    },
+    {
+      "id": "submit",
+      "source_refs": [
+        "s5"
+      ],
+      "label": "提交check.md给QA",
+      "scope": "t",
+      "operation": "DELIVER",
+      "roles": [
+        {
+          "role": "PERFORMER",
+          "value": "dev"
+        },
+        {
+          "role": "DELIVERABLE",
+          "value": "check"
+        },
+        {
+          "role": "RECIPIENT",
+          "value": "qa"
+        }
+      ]
+    },
+    {
+      "id": "review",
+      "source_refs": [
+        "s6"
+      ],
+      "label": "QA复核check.md",
+      "scope": "t",
+      "operation": "REVIEW",
+      "roles": [
+        {
+          "role": "REVIEWER",
+          "value": "qa"
+        },
+        {
+          "role": "OBJECT",
+          "value": "check"
+        }
+      ]
+    },
+    {
+      "id": "deliver",
+      "source_refs": [
+        "s7"
+      ],
+      "label": "PM交付本次check.md给ADMIN",
+      "scope": "t",
+      "operation": "DELIVER",
+      "roles": [
+        {
+          "role": "PERFORMER",
+          "value": "pm"
+        },
+        {
+          "role": "DELIVERABLE",
+          "value": "check"
+        },
+        {
+          "role": "RECIPIENT",
+          "value": "admin"
+        }
+      ]
+    },
+    {
+      "id": "genex",
+      "source_refs": [
+        "s8"
+      ],
+      "label": "生成extra.md",
+      "scope": "t",
+      "operation": "CREATE",
+      "roles": [
+        {
+          "role": "PERFORMER",
+          "value": "dev"
+        },
+        {
+          "role": "RESULT",
+          "value": "extra"
+        }
+      ]
+    },
+    {
+      "id": "delex",
+      "source_refs": [
+        "s8"
+      ],
+      "label": "交付extra.md",
+      "scope": "t",
+      "operation": "DELIVER",
+      "roles": [
+        {
+          "role": "DELIVERABLE",
+          "value": "extra"
+        }
+      ]
+    }
+  ],
+  "states": [
+    {
+      "id": "received",
+      "source_refs": [
+        "s6"
+      ],
+      "label": "QA收到本次check.md",
+      "kind": "RECEIPT",
+      "subject": "submit",
+      "arguments": [
+        "qa",
+        "check"
+      ]
+    },
+    {
+      "id": "passed",
+      "source_refs": [
+        "s7",
+        "s11"
+      ],
+      "label": "QA复核通过",
+      "kind": "SUCCESS",
+      "subject": "review",
+      "arguments": []
+    }
+  ],
+  "rules": [
+    {
+      "id": "inputs",
+      "source_refs": [
+        "s2"
+      ],
+      "scope": "t",
+      "type": "INPUT_SCOPE",
+      "members": [
+        "a",
+        "b",
+        "c"
+      ]
+    },
+    {
+      "id": "env",
+      "source_refs": [
+        "s1"
+      ],
+      "scope": "t",
+      "type": "ENVIRONMENT",
+      "environment": "test"
+    },
+    {
+      "id": "noreadc",
+      "source_refs": [
+        "s2"
+      ],
+      "scope": "t",
+      "type": "FORBID",
+      "match": {
+        "operation": "READ",
+        "actors": [],
+        "objects": [
+          "c"
+        ],
+        "recipients": []
+      },
+      "during_state": null
+    },
+    {
+      "id": "choice",
+      "source_refs": [
+        "s2",
+        "s3"
+      ],
+      "scope": "t",
+      "type": "CHOICE",
+      "action": "read",
+      "actor": "dev",
+      "options": [
+        "a",
+        "b",
+        "c"
+      ],
+      "excluded": [
+        "c"
+      ],
+      "locked": true,
+      "first_required": true
+    },
+    {
+      "id": "retry",
+      "source_refs": [
+        "s4"
+      ],
+      "scope": "t",
+      "type": "RETRY",
+      "action": "read",
+      "max_extra": 2,
+      "previous_failure_required": true,
+      "match": {
+        "operation": "READ",
+        "actors": [
+          "dev"
+        ],
+        "objects": [
+          "choice"
+        ],
+        "recipients": []
+      }
+    },
+    {
+      "id": "ngen",
+      "source_refs": [
+        "s5"
+      ],
+      "scope": "t",
+      "type": "NORM",
+      "action": "gen",
+      "modality": "REQUIRED",
+      "when": null
+    },
+    {
+      "id": "nsubmit",
+      "source_refs": [
+        "s5"
+      ],
+      "scope": "t",
+      "type": "NORM",
+      "action": "submit",
+      "modality": "REQUIRED",
+      "when": null
+    },
+    {
+      "id": "nreview",
+      "source_refs": [
+        "s6"
+      ],
+      "scope": "t",
+      "type": "NORM",
+      "action": "review",
+      "modality": "REQUIRED",
+      "when": {
+        "state": "received"
+      }
+    },
+    {
+      "id": "greview",
+      "source_refs": [
+        "s6"
+      ],
+      "scope": "t",
+      "type": "GATE",
+      "match": {
+        "operation": "REVIEW",
+        "actors": [
+          "qa"
+        ],
+        "objects": [
+          "check"
+        ],
+        "recipients": []
+      },
+      "condition": {
+        "state": "received"
+      }
+    },
+    {
+      "id": "gdeliver",
+      "source_refs": [
+        "s7"
+      ],
+      "scope": "t",
+      "type": "GATE",
+      "match": {
+        "operation": "DELIVER",
+        "actors": [
+          "pm"
+        ],
+        "objects": [
+          "check"
+        ],
+        "recipients": [
+          "admin"
+        ]
+      },
+      "condition": {
+        "state": "passed"
+      }
+    },
+    {
+      "id": "ndeliver",
+      "source_refs": [
+        "s7"
+      ],
+      "scope": "t",
+      "type": "NORM",
+      "action": "deliver",
+      "modality": "REQUIRED",
+      "when": null
+    },
+    {
+      "id": "nextra",
+      "source_refs": [
+        "s8"
+      ],
+      "scope": "t",
+      "type": "NORM",
+      "action": "genex",
+      "modality": "PERMITTED",
+      "when": null
+    },
+    {
+      "id": "nextraout",
+      "source_refs": [
+        "s8"
+      ],
+      "scope": "t",
+      "type": "NORM",
+      "action": "delex",
+      "modality": "NOT_REQUIRED",
+      "when": null
+    },
+    {
+      "id": "noextra",
+      "source_refs": [
+        "s9"
+      ],
+      "scope": "t",
+      "type": "FORBID",
+      "match": {
+        "operation": "DELIVER",
+        "actors": [],
+        "objects": [
+          "extra"
+        ],
+        "recipients": [
+          "admin"
+        ]
+      },
+      "during_state": null
+    },
+    {
+      "id": "useinput",
+      "source_refs": [
+        "s5"
+      ],
+      "scope": "t",
+      "type": "DATA_USE",
+      "object": "choice",
+      "consumer": "gen",
+      "producer": null,
+      "availability": "AT_USE",
+      "origin": "EXTERNAL"
+    },
+    {
+      "id": "usesubmit",
+      "source_refs": [
+        "s5"
+      ],
+      "scope": "t",
+      "type": "DATA_USE",
+      "object": "check",
+      "consumer": "submit",
+      "producer": "gen",
+      "availability": "AT_USE",
+      "origin": "INTERNAL"
+    },
+    {
+      "id": "usereview",
+      "source_refs": [
+        "s5",
+        "s6"
+      ],
+      "scope": "t",
+      "type": "DATA_USE",
+      "object": "check",
+      "consumer": "review",
+      "producer": "gen",
+      "availability": "AT_USE",
+      "origin": "INTERNAL"
+    },
+    {
+      "id": "usedeliver",
+      "source_refs": [
+        "s5",
+        "s7"
+      ],
+      "scope": "t",
+      "type": "DATA_USE",
+      "object": "check",
+      "consumer": "deliver",
+      "producer": "gen",
+      "availability": "AT_USE",
+      "origin": "INTERNAL"
+    },
+    {
+      "id": "duration",
+      "source_refs": [
+        "s10"
+      ],
+      "scope": "t",
+      "type": "DURATION",
+      "lower": "0",
+      "upper": "20",
+      "lower_inclusive": false,
+      "upper_inclusive": true,
+      "unit": "minute"
+    },
+    {
+      "id": "complete",
+      "source_refs": [
+        "s11"
+      ],
+      "scope": "t",
+      "type": "COMPLETION",
+      "condition": {
+        "all": [
+          {
+            "state": "passed"
+          },
+          {
+            "completed": "deliver"
+          }
+        ]
+      }
+    },
+    {
+      "id": "nomodify",
+      "source_refs": [
+        "s12"
+      ],
+      "scope": "t",
+      "type": "FORBID",
+      "match": {
+        "operation": "MODIFY",
+        "actors": [],
+        "objects": [
+          "a",
+          "b",
+          "c"
+        ],
+        "recipients": []
+      },
+      "during_state": null
+    },
+    {
+      "id": "noprod",
+      "source_refs": [
+        "s12"
+      ],
+      "scope": "t",
+      "type": "FORBID",
+      "match": {
+        "operation": "ACCESS",
+        "actors": [],
+        "objects": [
+          "prod"
+        ],
+        "recipients": []
+      },
+      "during_state": null
+    }
+  ],
+  "gaps": []
+}

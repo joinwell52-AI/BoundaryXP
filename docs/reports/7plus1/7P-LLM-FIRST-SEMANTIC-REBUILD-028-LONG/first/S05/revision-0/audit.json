@@ -1,0 +1,157 @@
+{
+  "contract_version": "028-r02.1",
+  "reviews": [
+    {
+      "subject_id": "ent_pm",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [
+        {
+          "quote": "请PM检查a.csv",
+          "occurrence": 1
+        }
+      ],
+      "reason": "PM是原文明示的检查执行者；未由岗位推导额外权限。"
+    },
+    {
+      "subject_id": "ent_file",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [
+        {
+          "quote": "a.csv",
+          "occurrence": 1
+        },
+        {
+          "quote": "a.csv",
+          "occurrence": 2
+        }
+      ],
+      "reason": "两处同名文件分别用于受检范围和禁止删除对象，原文支持同一实体。"
+    },
+    {
+      "subject_id": "ent_service",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [
+        {
+          "quote": "服务",
+          "occurrence": 1
+        }
+      ],
+      "reason": "服务是原文明示的重启对象，SYSTEM类型合理。"
+    },
+    {
+      "subject_id": "evt_check",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [
+        {
+          "quote": "请PM检查a.csv",
+          "occurrence": 1
+        }
+      ],
+      "reason": "原文要求检查，是当前任务的主动作，未附条件或数量限制。"
+    },
+    {
+      "subject_id": "evt_restart",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [
+        {
+          "quote": "无需重启服务",
+          "occurrence": 1
+        }
+      ],
+      "reason": "无需表示撤回重启义务，NOT_REQUIRED准确；正向动作配合该模态没有误写为禁止。"
+    },
+    {
+      "subject_id": "evt_delete",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [
+        {
+          "quote": "不得删除a.csv",
+          "occurrence": 1
+        }
+      ],
+      "reason": "不得明确禁止删除，FORBIDDEN准确，且未附例外条件。"
+    },
+    {
+      "subject_id": "cl_check_performer",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [
+        "evt_check",
+        "ent_pm"
+      ],
+      "sources": [
+        {
+          "quote": "请PM检查a.csv",
+          "occurrence": 1
+        }
+      ],
+      "reason": "PM明确承担检查的执行角色，PERFORMER绑定正确。"
+    },
+    {
+      "subject_id": "cl_check_input",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [
+        "evt_check",
+        "ent_file"
+      ],
+      "sources": [
+        {
+          "quote": "检查a.csv",
+          "occurrence": 1
+        }
+      ],
+      "reason": "a.csv是明确受检范围，INPUT_OBJECT用途有直接依据。"
+    },
+    {
+      "subject_id": "cl_restart_object",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [
+        "evt_restart",
+        "ent_service"
+      ],
+      "sources": [
+        {
+          "quote": "无需重启服务",
+          "occurrence": 1
+        }
+      ],
+      "reason": "服务绑定为重启对象正确；对象关系不额外产生重启义务或外部输入用途。"
+    },
+    {
+      "subject_id": "cl_delete_object",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [
+        "evt_delete",
+        "ent_file"
+      ],
+      "sources": [
+        {
+          "quote": "检查a.csv",
+          "occurrence": 1
+        },
+        {
+          "quote": "不得删除a.csv",
+          "occurrence": 1
+        }
+      ],
+      "reason": "禁止删除的对象是同一a.csv，OBJECT绑定正确；其受检输入用途另有独立依据。"
+    }
+  ],
+  "issues": [],
+  "omissions": []
+}

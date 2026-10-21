@@ -1,0 +1,1 @@
+请 PM 组织核对 model-files.json 中模型名称、文件路径与 SHA-256，并形成 model-file-review.md。不得加载权重或启动推理。

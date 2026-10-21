@@ -1,0 +1,1 @@
+UNITC2B2235 核查 lab-c2-b2-5，生成 scope-c2-b2-5.txt。范围排除 public-c2-b2-5。

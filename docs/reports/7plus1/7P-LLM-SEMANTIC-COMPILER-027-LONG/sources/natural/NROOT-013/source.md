@@ -1,0 +1,1 @@
+请 PM 组织核验 backup-list.csv 中全部备份的校验状态与生成时间，并形成 backup-state-review.md。失败项单独列出；不得恢复或删除备份。

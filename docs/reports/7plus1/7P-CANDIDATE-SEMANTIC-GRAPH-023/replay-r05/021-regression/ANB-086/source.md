@@ -1,0 +1,1 @@
+Create incident-guide.md containing two sections: “Detection” and “Recovery”. Do not perform any recovery action.

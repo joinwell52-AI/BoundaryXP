@@ -1,0 +1,493 @@
+{
+  "contract_version": "032.1",
+  "entities": [
+    {
+      "id": "n_pm",
+      "label": "PM",
+      "type": "OTHER",
+      "mentions": [
+        {
+          "quote": "PM",
+          "occurrence": 1
+        }
+      ],
+      "alternatives": []
+    },
+    {
+      "id": "n_settings",
+      "label": "settings.json",
+      "type": "FILE",
+      "mentions": [
+        {
+          "quote": "settings.json",
+          "occurrence": 1
+        },
+        {
+          "quote": "settings.json",
+          "occurrence": 2
+        }
+      ],
+      "alternatives": []
+    },
+    {
+      "id": "n_config",
+      "label": "配置项",
+      "type": "CLASS",
+      "mentions": [
+        {
+          "quote": "settings.json中的配置项",
+          "occurrence": 1
+        },
+        {
+          "quote": "任何配置项",
+          "occurrence": 1
+        },
+        {
+          "quote": "settings.json内的配置项",
+          "occurrence": 1
+        }
+      ],
+      "alternatives": []
+    },
+    {
+      "id": "n_report",
+      "label": "settings-list.md",
+      "type": "FILE",
+      "mentions": [
+        {
+          "quote": "settings-list.md",
+          "occurrence": 1
+        }
+      ],
+      "alternatives": []
+    }
+  ],
+  "events": [
+    {
+      "id": "e_list",
+      "predicate": "列出配置项",
+      "kind": "ACTION",
+      "layer": "MAIN",
+      "use": "CURRENT_TASK",
+      "modality": "REQUIRED",
+      "polarity": "POSITIVE",
+      "owner_id": "ROOT",
+      "constraint_ids": [],
+      "requires": [],
+      "sources": [
+        {
+          "quote": "请PM列出settings.json中的配置项",
+          "occurrence": 1
+        }
+      ]
+    },
+    {
+      "id": "e_generate",
+      "predicate": "生成文件",
+      "kind": "ACTION",
+      "layer": "MAIN",
+      "use": "CURRENT_TASK",
+      "modality": "REQUIRED",
+      "polarity": "POSITIVE",
+      "owner_id": "ROOT",
+      "constraint_ids": [],
+      "requires": [],
+      "sources": [
+        {
+          "quote": "并生成settings-list.md",
+          "occurrence": 1
+        }
+      ]
+    },
+    {
+      "id": "e_change",
+      "predicate": "更改配置项",
+      "kind": "ACTION",
+      "layer": "MAIN",
+      "use": "CURRENT_TASK",
+      "modality": "FORBIDDEN",
+      "polarity": "POSITIVE",
+      "owner_id": "ROOT",
+      "constraint_ids": [],
+      "requires": [],
+      "sources": [
+        {
+          "quote": "不得更改任何配置项",
+          "occurrence": 1
+        },
+        {
+          "quote": "这条更改禁令仅针对settings.json内的配置项",
+          "occurrence": 1
+        }
+      ]
+    }
+  ],
+  "claims": [
+    {
+      "id": "c_list_performer",
+      "kind": "ROLE",
+      "event_id": "e_list",
+      "entity_id": "n_pm",
+      "role": "PERFORMER",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "artifact_use": null,
+      "scope_id": "e_list",
+      "requires": [],
+      "sources": [
+        {
+          "quote": "请PM列出settings.json中的配置项",
+          "occurrence": 1
+        }
+      ],
+      "note": "PM为明确列出执行者；岗位简称不推定个人或群组类型。"
+    },
+    {
+      "id": "c_list_input",
+      "kind": "ROLE",
+      "event_id": "e_list",
+      "entity_id": "n_config",
+      "role": "INPUT_OBJECT",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "artifact_use": null,
+      "scope_id": "e_list",
+      "requires": [],
+      "sources": [
+        {
+          "quote": "列出settings.json中的配置项",
+          "occurrence": 1
+        }
+      ],
+      "note": "明确输入范围为settings.json中的配置项。"
+    },
+    {
+      "id": "c_list_scope",
+      "kind": "SCOPE",
+      "event_id": "e_list",
+      "entity_id": null,
+      "role": null,
+      "expression_id": "x_local",
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "artifact_use": null,
+      "scope_id": "n_config",
+      "requires": [],
+      "sources": [
+        {
+          "quote": "settings.json中的配置项",
+          "occurrence": 1
+        }
+      ],
+      "note": "列出对象的类别域具有明确文件容器。"
+    },
+    {
+      "id": "c_generate_performer",
+      "kind": "ROLE",
+      "event_id": "e_generate",
+      "entity_id": "n_pm",
+      "role": "PERFORMER",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "artifact_use": null,
+      "scope_id": "e_generate",
+      "requires": [],
+      "sources": [
+        {
+          "quote": "请PM列出settings.json中的配置项",
+          "occurrence": 1
+        },
+        {
+          "quote": "并生成settings-list.md",
+          "occurrence": 1
+        }
+      ],
+      "note": "连续同一指令的并列动作承接明确主体PM。"
+    },
+    {
+      "id": "c_generate_result",
+      "kind": "ROLE",
+      "event_id": "e_generate",
+      "entity_id": "n_report",
+      "role": "RESULT",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "artifact_use": null,
+      "scope_id": "e_generate",
+      "requires": [],
+      "sources": [
+        {
+          "quote": "生成settings-list.md",
+          "occurrence": 1
+        }
+      ],
+      "note": "明确要求生成的产物；未要求提交或交付。"
+    },
+    {
+      "id": "c_generate_scope",
+      "kind": "SCOPE",
+      "event_id": "e_generate",
+      "entity_id": null,
+      "role": null,
+      "expression_id": "x_report",
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "artifact_use": null,
+      "scope_id": "n_report",
+      "requires": [],
+      "sources": [
+        {
+          "quote": "生成settings-list.md",
+          "occurrence": 1
+        }
+      ],
+      "note": "生成对象为指定文件。"
+    },
+    {
+      "id": "c_change_performer",
+      "kind": "ROLE",
+      "event_id": "e_change",
+      "entity_id": "n_pm",
+      "role": "PERFORMER",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "artifact_use": null,
+      "scope_id": "e_change",
+      "requires": [],
+      "sources": [
+        {
+          "quote": "请PM列出settings.json中的配置项",
+          "occurrence": 1
+        },
+        {
+          "quote": "不得更改任何配置项",
+          "occurrence": 1
+        }
+      ],
+      "note": "同一指令的追加禁令承接PM作为被禁止动作的主体；ADMIN补充为范围澄清，不是执行主体切换。"
+    },
+    {
+      "id": "c_change_object",
+      "kind": "ROLE",
+      "event_id": "e_change",
+      "entity_id": "n_config",
+      "role": "OBJECT",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "artifact_use": null,
+      "scope_id": "e_change",
+      "requires": [],
+      "sources": [
+        {
+          "quote": "不得更改任何配置项",
+          "occurrence": 1
+        },
+        {
+          "quote": "这条更改禁令仅针对settings.json内的配置项",
+          "occurrence": 1
+        }
+      ],
+      "note": "禁令对象为配置项类别，不由禁止用途新增外部输入。"
+    },
+    {
+      "id": "c_change_scope",
+      "kind": "SCOPE",
+      "event_id": "e_change",
+      "entity_id": null,
+      "role": null,
+      "expression_id": "x_all_local",
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "artifact_use": null,
+      "scope_id": "n_config",
+      "requires": [],
+      "sources": [
+        {
+          "quote": "不得更改任何配置项",
+          "occurrence": 1
+        },
+        {
+          "quote": "这条更改禁令仅针对settings.json内的配置项",
+          "occurrence": 1
+        },
+        {
+          "quote": "不据此授予对其他对象的任何操作权限",
+          "occurrence": 1
+        }
+      ],
+      "note": "ADMIN明确将全称禁令限定到settings.json内，排除未限定容器的读法。范围外仅不属于本条禁令，不构成对其他对象任何操作的许可或授权。"
+    }
+  ],
+  "expressions": [
+    {
+      "id": "x_local",
+      "op": "CATEGORY",
+      "operands": [
+        "n_config",
+        "n_settings"
+      ],
+      "state": null,
+      "sources": [
+        {
+          "quote": "settings.json中的配置项",
+          "occurrence": 1
+        },
+        {
+          "quote": "这条更改禁令仅针对settings.json内的配置项",
+          "occurrence": 1
+        }
+      ]
+    },
+    {
+      "id": "x_report",
+      "op": "ITEM",
+      "operands": [
+        "n_report"
+      ],
+      "state": null,
+      "sources": [
+        {
+          "quote": "settings-list.md",
+          "occurrence": 1
+        }
+      ]
+    },
+    {
+      "id": "x_all_local",
+      "op": "FORALL",
+      "operands": [
+        "x_local"
+      ],
+      "state": null,
+      "sources": [
+        {
+          "quote": "不得更改任何配置项",
+          "occurrence": 1
+        },
+        {
+          "quote": "这条更改禁令仅针对settings.json内的配置项",
+          "occurrence": 1
+        }
+      ]
+    }
+  ],
+  "issues": [],
+  "coverage": [
+    {
+      "sources": [
+        {
+          "quote": "请PM列出settings.json中的配置项",
+          "occurrence": 1
+        }
+      ],
+      "claim_ids": [
+        "c_list_performer",
+        "c_list_input",
+        "c_list_scope"
+      ],
+      "status": "EXPRESSED",
+      "affected_views": [
+        "I",
+        "A",
+        "P"
+      ],
+      "range_requirement": {
+        "kind": "CATEGORY",
+        "scope_claim_ids": [
+          "c_list_scope"
+        ]
+      }
+    },
+    {
+      "sources": [
+        {
+          "quote": "请PM列出settings.json中的配置项",
+          "occurrence": 1
+        },
+        {
+          "quote": "并生成settings-list.md",
+          "occurrence": 1
+        }
+      ],
+      "claim_ids": [
+        "c_generate_performer",
+        "c_generate_result",
+        "c_generate_scope"
+      ],
+      "status": "EXPRESSED",
+      "affected_views": [
+        "O",
+        "A",
+        "P"
+      ],
+      "range_requirement": {
+        "kind": "SPECIFIC",
+        "scope_claim_ids": [
+          "c_generate_scope"
+        ]
+      }
+    },
+    {
+      "sources": [
+        {
+          "quote": "不得更改任何配置项",
+          "occurrence": 1
+        },
+        {
+          "quote": "ADMIN补充：这条更改禁令仅针对settings.json内的配置项",
+          "occurrence": 1
+        }
+      ],
+      "claim_ids": [
+        "c_change_performer",
+        "c_change_object",
+        "c_change_scope"
+      ],
+      "status": "EXPRESSED",
+      "affected_views": [
+        "B",
+        "P"
+      ],
+      "range_requirement": {
+        "kind": "UNIVERSAL",
+        "scope_claim_ids": [
+          "c_change_scope"
+        ]
+      }
+    },
+    {
+      "sources": [
+        {
+          "quote": "不据此授予对其他对象的任何操作权限",
+          "occurrence": 1
+        }
+      ],
+      "claim_ids": [
+        "c_change_scope"
+      ],
+      "status": "EXPRESSED",
+      "affected_views": [
+        "B"
+      ],
+      "range_requirement": {
+        "kind": "NONE",
+        "scope_claim_ids": []
+      }
+    }
+  ]
+}

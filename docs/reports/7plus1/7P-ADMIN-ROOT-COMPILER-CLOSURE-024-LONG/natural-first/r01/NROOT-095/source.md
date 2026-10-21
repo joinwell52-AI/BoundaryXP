@@ -1,0 +1,1 @@
+请 PM 组织 Inspect only 测试环境，exclude 生产环境，并形成 env-scope-review.md。不得修改任何环境配置。

@@ -1,0 +1,546 @@
+{
+  "contract_version": "032.1",
+  "entities": [
+    {
+      "id": "pm",
+      "label": "PM",
+      "type": "OTHER",
+      "mentions": [
+        {
+          "quote": "PM",
+          "occurrence": 1
+        }
+      ],
+      "alternatives": []
+    },
+    {
+      "id": "audit",
+      "label": "audit.log",
+      "type": "FILE",
+      "mentions": [
+        {
+          "quote": "audit.log",
+          "occurrence": 1
+        },
+        {
+          "quote": "audit.log",
+          "occurrence": 2
+        }
+      ],
+      "alternatives": []
+    },
+    {
+      "id": "errors",
+      "label": "错误",
+      "type": "CLASS",
+      "mentions": [
+        {
+          "quote": "audit.log中的错误",
+          "occurrence": 1
+        }
+      ],
+      "alternatives": []
+    },
+    {
+      "id": "total",
+      "label": "错误总数",
+      "type": "OTHER",
+      "mentions": [
+        {
+          "quote": "错误总数",
+          "occurrence": 1
+        }
+      ],
+      "alternatives": []
+    },
+    {
+      "id": "count",
+      "label": "count.md",
+      "type": "FILE",
+      "mentions": [
+        {
+          "quote": "count.md",
+          "occurrence": 1
+        }
+      ],
+      "alternatives": []
+    }
+  ],
+  "events": [
+    {
+      "id": "stat",
+      "predicate": "统计错误总数",
+      "kind": "ACTION",
+      "layer": "MAIN",
+      "use": "CURRENT_TASK",
+      "modality": "REQUIRED",
+      "polarity": "POSITIVE",
+      "owner_id": "ROOT",
+      "constraint_ids": [],
+      "requires": [],
+      "sources": [
+        {
+          "quote": "请PM统计audit.log中的错误总数",
+          "occurrence": 1
+        }
+      ]
+    },
+    {
+      "id": "generate",
+      "predicate": "生成文件",
+      "kind": "ACTION",
+      "layer": "MAIN",
+      "use": "CURRENT_TASK",
+      "modality": "REQUIRED",
+      "polarity": "POSITIVE",
+      "owner_id": "ROOT",
+      "constraint_ids": [],
+      "requires": [],
+      "sources": [
+        {
+          "quote": "并生成count.md",
+          "occurrence": 1
+        }
+      ]
+    },
+    {
+      "id": "clear",
+      "predicate": "清空文件",
+      "kind": "ACTION",
+      "layer": "MAIN",
+      "use": "CURRENT_TASK",
+      "modality": "FORBIDDEN",
+      "polarity": "POSITIVE",
+      "owner_id": "ROOT",
+      "constraint_ids": [],
+      "requires": [],
+      "sources": [
+        {
+          "quote": "不得清空audit.log",
+          "occurrence": 1
+        }
+      ]
+    }
+  ],
+  "claims": [
+    {
+      "id": "stat_pm",
+      "kind": "ROLE",
+      "event_id": "stat",
+      "entity_id": "pm",
+      "role": "PERFORMER",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "artifact_use": null,
+      "scope_id": "stat",
+      "requires": [],
+      "sources": [
+        {
+          "quote": "请PM统计",
+          "occurrence": 1
+        }
+      ],
+      "note": "PM为明确统计执行者；岗位简称的身份类别未指定。"
+    },
+    {
+      "id": "stat_input",
+      "kind": "ROLE",
+      "event_id": "stat",
+      "entity_id": "audit",
+      "role": "INPUT_OBJECT",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "artifact_use": null,
+      "scope_id": "stat",
+      "requires": [],
+      "sources": [
+        {
+          "quote": "统计audit.log中的错误总数",
+          "occurrence": 1
+        }
+      ],
+      "note": "统计输入明确限定为audit.log。"
+    },
+    {
+      "id": "stat_content",
+      "kind": "ROLE",
+      "event_id": "stat",
+      "entity_id": "errors",
+      "role": "CONTENT",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "artifact_use": null,
+      "scope_id": "stat",
+      "requires": [],
+      "sources": [
+        {
+          "quote": "audit.log中的错误总数",
+          "occurrence": 1
+        }
+      ],
+      "note": "被计数内容是该日志中的错误；未指定数值阈值。"
+    },
+    {
+      "id": "stat_result",
+      "kind": "ROLE",
+      "event_id": "stat",
+      "entity_id": "total",
+      "role": "RESULT",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "artifact_use": null,
+      "scope_id": "stat",
+      "requires": [],
+      "sources": [
+        {
+          "quote": "统计audit.log中的错误总数",
+          "occurrence": 1
+        }
+      ],
+      "note": "统计产生错误总数，不据此断言统计已完成。"
+    },
+    {
+      "id": "stat_input_scope",
+      "kind": "SCOPE",
+      "event_id": "stat",
+      "entity_id": null,
+      "role": null,
+      "expression_id": "audit_item",
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "artifact_use": null,
+      "scope_id": "audit",
+      "requires": [],
+      "sources": [
+        {
+          "quote": "统计audit.log中的错误总数",
+          "occurrence": 1
+        }
+      ],
+      "note": "具体输入文件范围。"
+    },
+    {
+      "id": "stat_content_scope",
+      "kind": "SCOPE",
+      "event_id": "stat",
+      "entity_id": null,
+      "role": null,
+      "expression_id": "audit_errors",
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "artifact_use": null,
+      "scope_id": "errors",
+      "requires": [],
+      "sources": [
+        {
+          "quote": "audit.log中的错误总数",
+          "occurrence": 1
+        }
+      ],
+      "note": "计数类别域明确限定在audit.log内。"
+    },
+    {
+      "id": "generate_pm",
+      "kind": "ROLE",
+      "event_id": "generate",
+      "entity_id": "pm",
+      "role": "PERFORMER",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "artifact_use": null,
+      "scope_id": "generate",
+      "requires": [],
+      "sources": [
+        {
+          "quote": "请PM统计",
+          "occurrence": 1
+        },
+        {
+          "quote": "并生成count.md",
+          "occurrence": 1
+        }
+      ],
+      "note": "连续指令的并列生成动作承接明确主语PM。"
+    },
+    {
+      "id": "generate_result",
+      "kind": "ROLE",
+      "event_id": "generate",
+      "entity_id": "count",
+      "role": "RESULT",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "artifact_use": null,
+      "scope_id": "generate",
+      "requires": [],
+      "sources": [
+        {
+          "quote": "生成count.md",
+          "occurrence": 1
+        }
+      ],
+      "note": "明确要求生成该文件；未明示交付、文件内容或消费统计结果的用途。"
+    },
+    {
+      "id": "generate_scope",
+      "kind": "SCOPE",
+      "event_id": "generate",
+      "entity_id": null,
+      "role": null,
+      "expression_id": "count_item",
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "artifact_use": null,
+      "scope_id": "count",
+      "requires": [],
+      "sources": [
+        {
+          "quote": "生成count.md",
+          "occurrence": 1
+        }
+      ],
+      "note": "生成产物为具体文件。"
+    },
+    {
+      "id": "clear_pm",
+      "kind": "ROLE",
+      "event_id": "clear",
+      "entity_id": "pm",
+      "role": "PERFORMER",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "artifact_use": null,
+      "scope_id": "clear",
+      "requires": [],
+      "sources": [
+        {
+          "quote": "请PM统计",
+          "occurrence": 1
+        },
+        {
+          "quote": "不得清空audit.log",
+          "occurrence": 1
+        }
+      ],
+      "note": "同一指令追加的禁止动作承接主语PM，不表示要求执行清空。"
+    },
+    {
+      "id": "clear_object",
+      "kind": "ROLE",
+      "event_id": "clear",
+      "entity_id": "audit",
+      "role": "OBJECT",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "artifact_use": null,
+      "scope_id": "clear",
+      "requires": [],
+      "sources": [
+        {
+          "quote": "不得清空audit.log",
+          "occurrence": 1
+        }
+      ],
+      "note": "禁止清空的对象与统计输入为同一文件；此禁止用途不新增外部输入。"
+    },
+    {
+      "id": "clear_scope",
+      "kind": "SCOPE",
+      "event_id": "clear",
+      "entity_id": null,
+      "role": null,
+      "expression_id": "audit_item",
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "artifact_use": null,
+      "scope_id": "audit",
+      "requires": [],
+      "sources": [
+        {
+          "quote": "不得清空audit.log",
+          "occurrence": 1
+        }
+      ],
+      "note": "禁令明确针对audit.log，无类别域竞争。"
+    }
+  ],
+  "expressions": [
+    {
+      "id": "audit_item",
+      "op": "ITEM",
+      "operands": [
+        "audit"
+      ],
+      "state": null,
+      "sources": [
+        {
+          "quote": "audit.log",
+          "occurrence": 1
+        },
+        {
+          "quote": "audit.log",
+          "occurrence": 2
+        }
+      ]
+    },
+    {
+      "id": "audit_errors",
+      "op": "CATEGORY",
+      "operands": [
+        "errors",
+        "audit"
+      ],
+      "state": null,
+      "sources": [
+        {
+          "quote": "audit.log中的错误总数",
+          "occurrence": 1
+        }
+      ]
+    },
+    {
+      "id": "count_item",
+      "op": "ITEM",
+      "operands": [
+        "count"
+      ],
+      "state": null,
+      "sources": [
+        {
+          "quote": "count.md",
+          "occurrence": 1
+        }
+      ]
+    }
+  ],
+  "issues": [],
+  "coverage": [
+    {
+      "sources": [
+        {
+          "quote": "请PM统计audit.log中的错误总数",
+          "occurrence": 1
+        }
+      ],
+      "claim_ids": [
+        "stat_pm",
+        "stat_input",
+        "stat_input_scope"
+      ],
+      "status": "EXPRESSED",
+      "affected_views": [
+        "A",
+        "P",
+        "I"
+      ],
+      "range_requirement": {
+        "kind": "SPECIFIC",
+        "scope_claim_ids": [
+          "stat_input_scope"
+        ]
+      }
+    },
+    {
+      "sources": [
+        {
+          "quote": "统计audit.log中的错误总数",
+          "occurrence": 1
+        }
+      ],
+      "claim_ids": [
+        "stat_content",
+        "stat_content_scope",
+        "stat_result"
+      ],
+      "status": "EXPRESSED",
+      "affected_views": [
+        "A",
+        "I",
+        "O"
+      ],
+      "range_requirement": {
+        "kind": "CATEGORY",
+        "scope_claim_ids": [
+          "stat_content_scope"
+        ]
+      }
+    },
+    {
+      "sources": [
+        {
+          "quote": "请PM统计",
+          "occurrence": 1
+        },
+        {
+          "quote": "并生成count.md",
+          "occurrence": 1
+        }
+      ],
+      "claim_ids": [
+        "generate_pm",
+        "generate_result",
+        "generate_scope"
+      ],
+      "status": "EXPRESSED",
+      "affected_views": [
+        "A",
+        "P",
+        "O"
+      ],
+      "range_requirement": {
+        "kind": "SPECIFIC",
+        "scope_claim_ids": [
+          "generate_scope"
+        ]
+      }
+    },
+    {
+      "sources": [
+        {
+          "quote": "请PM统计",
+          "occurrence": 1
+        },
+        {
+          "quote": "不得清空audit.log",
+          "occurrence": 1
+        }
+      ],
+      "claim_ids": [
+        "clear_pm",
+        "clear_object",
+        "clear_scope"
+      ],
+      "status": "EXPRESSED",
+      "affected_views": [
+        "B",
+        "P"
+      ],
+      "range_requirement": {
+        "kind": "SPECIFIC",
+        "scope_claim_ids": [
+          "clear_scope"
+        ]
+      }
+    }
+  ]
+}

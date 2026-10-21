@@ -1,0 +1,159 @@
+{
+  "contract_version": "028-r02.3",
+  "reviews": [
+    {
+      "subject_id": "ent_pm",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [{"quote": "PM", "occurrence": 1}],
+      "reason": "身份明确；原文未说明人或组，OTHER未擅自细分类别。"
+    },
+    {
+      "subject_id": "ent_east",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [{"quote": "east.csv和west.csv", "occurrence": 1}, {"quote": "前一个文件", "occurrence": 1}],
+      "reason": "east.csv是明确文件；前一个文件指两项列举中的前项east.csv。"
+    },
+    {
+      "subject_id": "ent_west",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [{"quote": "west.csv", "occurrence": 1}],
+      "reason": "明确的文件实体，与east.csv分别保留。"
+    },
+    {
+      "subject_id": "ent_qa",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [{"quote": "QA", "occurrence": 1}],
+      "reason": "接收方身份明确，原文未说明人或组，OTHER合理。"
+    },
+    {
+      "subject_id": "ent_ops",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [{"quote": "OPS-01", "occurrence": 1}],
+      "reason": "完整标识符身份明确，类别未细分；01不是数量限制。"
+    },
+    {
+      "subject_id": "ent_port",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [{"quote": "生成port.md", "occurrence": 1}],
+      "reason": "port.md是明确待生成文件。"
+    },
+    {
+      "subject_id": "evt_read",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [{"quote": "请PM读取east.csv和west.csv", "occurrence": 1}],
+      "reason": "当前明确要求读取，主动作、义务与正向极性均正确。"
+    },
+    {
+      "subject_id": "evt_handoff",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["cl_order"],
+      "sources": [{"quote": "请PM读取east.csv和west.csv，再把前一个文件交给QA", "occurrence": 1}],
+      "reason": "交给是当前要求的独立动作，并正确回指读取之后的时序约束。"
+    },
+    {
+      "subject_id": "evt_generate",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [{"quote": "另请OPS-01生成port.md", "occurrence": 1}],
+      "reason": "另行明确要求生成文件，没有附加条件或读取依赖。"
+    },
+    {
+      "subject_id": "cl_read_pm",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["evt_read", "ent_pm"],
+      "sources": [{"quote": "请PM读取east.csv和west.csv", "occurrence": 1}],
+      "reason": "PM是读取动作的明确执行者。"
+    },
+    {
+      "subject_id": "cl_read_east",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["evt_read", "ent_east"],
+      "sources": [{"quote": "读取east.csv和west.csv", "occurrence": 1}],
+      "reason": "east.csv是明确要求读取的外部输入文件。"
+    },
+    {
+      "subject_id": "cl_read_west",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["evt_read", "ent_west"],
+      "sources": [{"quote": "读取east.csv和west.csv", "occurrence": 1}],
+      "reason": "west.csv同样属于明确读取范围。"
+    },
+    {
+      "subject_id": "cl_handoff_pm",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["evt_handoff", "ent_pm"],
+      "sources": [{"quote": "请PM读取east.csv和west.csv，再把前一个文件交给QA", "occurrence": 1}],
+      "reason": "连续动作共享明确主体PM，交给动作未另换执行者。"
+    },
+    {
+      "subject_id": "cl_handoff_east",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["evt_handoff", "ent_east"],
+      "sources": [{"quote": "east.csv和west.csv", "occurrence": 1}, {"quote": "把前一个文件交给QA", "occurrence": 1}],
+      "reason": "交给对象是列举中的前项east.csv；OBJECT用途与读取输入用途分开正确。"
+    },
+    {
+      "subject_id": "cl_handoff_qa",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["evt_handoff", "ent_qa"],
+      "sources": [{"quote": "把前一个文件交给QA", "occurrence": 1}],
+      "reason": "QA是交给动作的接收方，没有被添加复核义务。"
+    },
+    {
+      "subject_id": "cl_order",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["evt_handoff", "expr_read_done"],
+      "sources": [{"quote": "读取east.csv和west.csv，再把前一个文件交给QA", "occurrence": 1}],
+      "reason": "再表达读取后交给，ORDER与AFTER正确，且约束双向绑定完整。"
+    },
+    {
+      "subject_id": "cl_generate_ops",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["evt_generate", "ent_ops"],
+      "sources": [{"quote": "另请OPS-01生成port.md", "occurrence": 1}],
+      "reason": "OPS-01是生成动作的明确执行者，标识符数字未误作执行次数。"
+    },
+    {
+      "subject_id": "cl_generate_port",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["evt_generate", "ent_port"],
+      "sources": [{"quote": "生成port.md", "occurrence": 1}],
+      "reason": "port.md是生成结果，未被误列为外部输入。"
+    },
+    {
+      "subject_id": "expr_read_done",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["evt_read", "ent_east", "ent_west"],
+      "sources": [{"quote": "读取east.csv和west.csv，再", "occurrence": 1}],
+      "reason": "状态对应两份文件的读取完成，用于先后表达；未宣称状态已发生或根任务完成。"
+    }
+  ],
+  "issues": [],
+  "omissions": []
+}

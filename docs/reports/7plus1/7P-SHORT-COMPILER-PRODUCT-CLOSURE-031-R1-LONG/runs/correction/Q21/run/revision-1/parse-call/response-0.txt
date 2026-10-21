@@ -1,0 +1,334 @@
+{
+  "contract_version": "031-r1.1",
+  "entities": [
+    {
+      "id": "n_pm",
+      "label": "PM",
+      "type": "OTHER",
+      "mentions": [{"quote": "PM", "occurrence": 1}],
+      "alternatives": []
+    },
+    {
+      "id": "n_qa",
+      "label": "QA",
+      "type": "OTHER",
+      "mentions": [{"quote": "QA", "occurrence": 1}],
+      "alternatives": []
+    },
+    {
+      "id": "n_ops",
+      "label": "OPS-01",
+      "type": "OTHER",
+      "mentions": [{"quote": "OPS-01", "occurrence": 1}],
+      "alternatives": []
+    },
+    {
+      "id": "n_report",
+      "label": "本次report.md",
+      "type": "FILE",
+      "mentions": [{"quote": "本次report.md", "occurrence": 1}],
+      "alternatives": []
+    }
+  ],
+  "events": [
+    {
+      "id": "e_publish_allowed",
+      "predicate": "发布",
+      "kind": "ACTION",
+      "layer": "MAIN",
+      "use": "CURRENT_TASK",
+      "modality": "PERMITTED",
+      "polarity": "POSITIVE",
+      "owner_id": "ROOT",
+      "constraint_ids": ["c_allow_condition"],
+      "requires": [],
+      "sources": [{"quote": "允许PM发布本次report.md，但必须等QA和OPS-01都批准后", "occurrence": 1}]
+    },
+    {
+      "id": "e_publish_forbidden",
+      "predicate": "发布",
+      "kind": "ACTION",
+      "layer": "MAIN",
+      "use": "CURRENT_TASK",
+      "modality": "FORBIDDEN",
+      "polarity": "POSITIVE",
+      "owner_id": "ROOT",
+      "constraint_ids": ["c_forbid_condition"],
+      "requires": [],
+      "sources": [{"quote": "任何一项批准尚未取得时，不得发布", "occurrence": 1}]
+    },
+    {
+      "id": "e_qa_approval",
+      "predicate": "批准",
+      "kind": "STATE",
+      "layer": "CONDITION",
+      "use": "MENTION_ONLY",
+      "modality": "UNSTATED",
+      "polarity": "POSITIVE",
+      "owner_id": "ROOT",
+      "constraint_ids": [],
+      "requires": [],
+      "sources": [{"quote": "QA和OPS-01都批准后", "occurrence": 1}]
+    },
+    {
+      "id": "e_ops_approval",
+      "predicate": "批准",
+      "kind": "STATE",
+      "layer": "CONDITION",
+      "use": "MENTION_ONLY",
+      "modality": "UNSTATED",
+      "polarity": "POSITIVE",
+      "owner_id": "ROOT",
+      "constraint_ids": [],
+      "requires": [],
+      "sources": [{"quote": "QA和OPS-01都批准后", "occurrence": 1}]
+    }
+  ],
+  "claims": [
+    {
+      "id": "c_allow_performer",
+      "kind": "ROLE",
+      "event_id": "e_publish_allowed",
+      "entity_id": "n_pm",
+      "role": "PERFORMER",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "artifact_use": null,
+      "scope_id": "e_publish_allowed",
+      "requires": [],
+      "sources": [{"quote": "允许PM发布本次report.md", "occurrence": 1}],
+      "note": "PM是被允许发布的执行主体。"
+    },
+    {
+      "id": "c_allow_deliverable",
+      "kind": "ROLE",
+      "event_id": "e_publish_allowed",
+      "entity_id": "n_report",
+      "role": "DELIVERABLE",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "artifact_use": null,
+      "scope_id": "e_publish_allowed",
+      "requires": [],
+      "sources": [{"quote": "允许PM发布本次report.md", "occurrence": 1}],
+      "note": "发布产物为本次report.md；不新增生成义务。"
+    },
+    {
+      "id": "c_forbid_performer",
+      "kind": "ROLE",
+      "event_id": "e_publish_forbidden",
+      "entity_id": "n_pm",
+      "role": "PERFORMER",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "artifact_use": null,
+      "scope_id": "e_publish_forbidden",
+      "requires": [],
+      "sources": [
+        {"quote": "允许PM发布本次report.md", "occurrence": 1},
+        {"quote": "任何一项批准尚未取得时，不得发布", "occurrence": 1}
+      ],
+      "note": "后半句承接同一指令中PM的发布行为，没有主体切换。"
+    },
+    {
+      "id": "c_forbid_deliverable",
+      "kind": "ROLE",
+      "event_id": "e_publish_forbidden",
+      "entity_id": "n_report",
+      "role": "DELIVERABLE",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "artifact_use": null,
+      "scope_id": "e_publish_forbidden",
+      "requires": [],
+      "sources": [
+        {"quote": "发布本次report.md", "occurrence": 1},
+        {"quote": "不得发布", "occurrence": 1}
+      ],
+      "note": "禁止用途承接同一本次report.md，不产生正向交付要求。"
+    },
+    {
+      "id": "c_qa_approver",
+      "kind": "ROLE",
+      "event_id": "e_qa_approval",
+      "entity_id": "n_qa",
+      "role": "APPROVER",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "artifact_use": null,
+      "scope_id": "e_qa_approval",
+      "requires": [],
+      "sources": [{"quote": "QA和OPS-01都批准后", "occurrence": 1}],
+      "note": "条件中的批准主体，不增加批准义务，不绑定未明示的批准对象。"
+    },
+    {
+      "id": "c_ops_approver",
+      "kind": "ROLE",
+      "event_id": "e_ops_approval",
+      "entity_id": "n_ops",
+      "role": "APPROVER",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "artifact_use": null,
+      "scope_id": "e_ops_approval",
+      "requires": [],
+      "sources": [{"quote": "QA和OPS-01都批准后", "occurrence": 1}],
+      "note": "条件中的批准主体，不绑定未明示的批准对象；OPS-01是标识符，不是数量限制。"
+    },
+    {
+      "id": "c_allow_condition",
+      "kind": "CONDITION",
+      "event_id": "e_publish_allowed",
+      "entity_id": null,
+      "role": null,
+      "expression_id": "x_both_approved",
+      "direction": "NECESSARY",
+      "temporal": "AFTER",
+      "quantity": null,
+      "artifact_use": null,
+      "scope_id": "e_publish_allowed",
+      "requires": [],
+      "sources": [{"quote": "允许PM发布本次report.md，但必须等QA和OPS-01都批准后", "occurrence": 1}],
+      "note": "双方批准均已取得是发布许可的必要前提，发布须在其后；不断言批准已发生，也不推定批准对象为文件。"
+    },
+    {
+      "id": "c_forbid_condition",
+      "kind": "CONDITION",
+      "event_id": "e_publish_forbidden",
+      "entity_id": null,
+      "role": null,
+      "expression_id": "x_any_unapproved",
+      "direction": "SUFFICIENT",
+      "temporal": null,
+      "quantity": null,
+      "artifact_use": null,
+      "scope_id": "e_publish_forbidden",
+      "requires": [],
+      "sources": [
+        {"quote": "QA和OPS-01都批准后", "occurrence": 1},
+        {"quote": "任何一项批准尚未取得时，不得发布", "occurrence": 1}
+      ],
+      "note": "任一批准尚未取得即触发禁止发布；与许可前提引用相同批准实例及主体，保持互补极性。"
+    }
+  ],
+  "expressions": [
+    {
+      "id": "x_qa_approved",
+      "op": "STATE",
+      "operands": [],
+      "state": {
+        "predicate": "批准已取得",
+        "event_id": "e_qa_approval",
+        "args": ["n_qa"],
+        "polarity": "POSITIVE"
+      },
+      "sources": [{"quote": "QA和OPS-01都批准后", "occurrence": 1}]
+    },
+    {
+      "id": "x_ops_approved",
+      "op": "STATE",
+      "operands": [],
+      "state": {
+        "predicate": "批准已取得",
+        "event_id": "e_ops_approval",
+        "args": ["n_ops"],
+        "polarity": "POSITIVE"
+      },
+      "sources": [{"quote": "QA和OPS-01都批准后", "occurrence": 1}]
+    },
+    {
+      "id": "x_both_approved",
+      "op": "AND",
+      "operands": ["x_qa_approved", "x_ops_approved"],
+      "state": null,
+      "sources": [{"quote": "QA和OPS-01都批准后", "occurrence": 1}]
+    },
+    {
+      "id": "x_qa_unapproved",
+      "op": "STATE",
+      "operands": [],
+      "state": {
+        "predicate": "批准已取得",
+        "event_id": "e_qa_approval",
+        "args": ["n_qa"],
+        "polarity": "NEGATIVE"
+      },
+      "sources": [
+        {"quote": "QA和OPS-01都批准后", "occurrence": 1},
+        {"quote": "任何一项批准尚未取得时", "occurrence": 1}
+      ]
+    },
+    {
+      "id": "x_ops_unapproved",
+      "op": "STATE",
+      "operands": [],
+      "state": {
+        "predicate": "批准已取得",
+        "event_id": "e_ops_approval",
+        "args": ["n_ops"],
+        "polarity": "NEGATIVE"
+      },
+      "sources": [
+        {"quote": "QA和OPS-01都批准后", "occurrence": 1},
+        {"quote": "任何一项批准尚未取得时", "occurrence": 1}
+      ]
+    },
+    {
+      "id": "x_any_unapproved",
+      "op": "OR",
+      "operands": ["x_qa_unapproved", "x_ops_unapproved"],
+      "state": null,
+      "sources": [{"quote": "任何一项批准尚未取得时", "occurrence": 1}]
+    }
+  ],
+  "issues": [
+    {
+      "id": "i_approval_object_unspecified",
+      "kind": "UNSPECIFIED",
+      "subject_ids": ["e_qa_approval", "e_ops_approval"],
+      "field_path": "claims",
+      "alternatives": [],
+      "affected_views": ["P"],
+      "sources": [{"quote": "允许PM发布本次report.md，但必须等QA和OPS-01都批准后", "occurrence": 1}],
+      "note": "批准对象未明示，撤回将文件绑定为批准OBJECT的两项主张，并移除四个状态中的文件参数；不另造替代对象。双方批准实例、主体、许可必要前提和禁止充分触发均保留，正负状态仍使用相同事件及参数。"
+    }
+  ],
+  "coverage": [
+    {
+      "sources": [{"quote": "允许PM发布本次report.md", "occurrence": 1}],
+      "claim_ids": ["c_allow_performer", "c_allow_deliverable"],
+      "status": "EXPRESSED",
+      "affected_views": ["A", "P", "O"]
+    },
+    {
+      "sources": [{"quote": "但必须等QA和OPS-01都批准后", "occurrence": 1}],
+      "claim_ids": ["c_allow_condition", "c_qa_approver", "c_ops_approver"],
+      "status": "EXPRESSED",
+      "affected_views": ["A", "P", "O"]
+    },
+    {
+      "sources": [{"quote": "任何一项批准尚未取得时，不得发布", "occurrence": 1}],
+      "claim_ids": ["c_forbid_condition", "c_forbid_performer", "c_forbid_deliverable"],
+      "status": "EXPRESSED",
+      "affected_views": ["B", "P"]
+    },
+    {
+      "sources": [{"quote": "QA和OPS-01都批准后", "occurrence": 1}],
+      "claim_ids": [],
+      "status": "UNSPECIFIED",
+      "affected_views": ["P"]
+    }
+  ]
+}

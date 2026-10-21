@@ -1,0 +1,468 @@
+{
+  "contract_version": "032.1",
+  "entities": [
+    {
+      "id": "n_pm",
+      "label": "PM",
+      "type": "OTHER",
+      "mentions": [
+        {
+          "quote": "PM",
+          "occurrence": 1
+        }
+      ],
+      "alternatives": []
+    },
+    {
+      "id": "n_baseline",
+      "label": "commit 7ac921e",
+      "type": "OTHER",
+      "mentions": [
+        {
+          "quote": "commit 7ac921e",
+          "occurrence": 1
+        }
+      ],
+      "alternatives": []
+    },
+    {
+      "id": "n_config",
+      "label": "当前配置",
+      "type": "OTHER",
+      "mentions": [
+        {
+          "quote": "当前配置",
+          "occurrence": 1
+        }
+      ],
+      "alternatives": []
+    },
+    {
+      "id": "n_diff",
+      "label": "diff.md",
+      "type": "FILE",
+      "mentions": [
+        {
+          "quote": "diff.md",
+          "occurrence": 1
+        }
+      ],
+      "alternatives": []
+    },
+    {
+      "id": "n_current_commit",
+      "label": "当前工作区的commit",
+      "type": "OTHER",
+      "mentions": [
+        {
+          "quote": "当前工作区的commit",
+          "occurrence": 1
+        }
+      ],
+      "alternatives": []
+    }
+  ],
+  "events": [
+    {
+      "id": "e_compare",
+      "predicate": "比较",
+      "kind": "ACTION",
+      "layer": "MAIN",
+      "use": "CURRENT_TASK",
+      "modality": "REQUIRED",
+      "polarity": "POSITIVE",
+      "owner_id": "ROOT",
+      "constraint_ids": [],
+      "requires": [],
+      "sources": [
+        {
+          "quote": "请PM以commit 7ac921e作为基线比较当前配置",
+          "occurrence": 1
+        }
+      ]
+    },
+    {
+      "id": "e_generate",
+      "predicate": "生成",
+      "kind": "ACTION",
+      "layer": "MAIN",
+      "use": "CURRENT_TASK",
+      "modality": "REQUIRED",
+      "polarity": "POSITIVE",
+      "owner_id": "ROOT",
+      "constraint_ids": [],
+      "requires": [],
+      "sources": [
+        {
+          "quote": "生成diff.md",
+          "occurrence": 1
+        }
+      ]
+    },
+    {
+      "id": "e_switch",
+      "predicate": "切换",
+      "kind": "ACTION",
+      "layer": "MAIN",
+      "use": "CURRENT_TASK",
+      "modality": "FORBIDDEN",
+      "polarity": "POSITIVE",
+      "owner_id": "ROOT",
+      "constraint_ids": [],
+      "requires": [],
+      "sources": [
+        {
+          "quote": "不得切换当前工作区的commit",
+          "occurrence": 1
+        }
+      ]
+    }
+  ],
+  "claims": [
+    {
+      "id": "c_compare_performer",
+      "kind": "ROLE",
+      "event_id": "e_compare",
+      "entity_id": "n_pm",
+      "role": "PERFORMER",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "artifact_use": null,
+      "scope_id": "e_compare",
+      "requires": [],
+      "sources": [
+        {
+          "quote": "请PM以commit 7ac921e作为基线比较当前配置",
+          "occurrence": 1
+        }
+      ],
+      "note": "PM是明确执行主体，不推定其岗位类别或权限。"
+    },
+    {
+      "id": "c_compare_input",
+      "kind": "ROLE",
+      "event_id": "e_compare",
+      "entity_id": "n_config",
+      "role": "INPUT_OBJECT",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "artifact_use": null,
+      "scope_id": "e_compare",
+      "requires": [],
+      "sources": [
+        {
+          "quote": "比较当前配置",
+          "occurrence": 1
+        }
+      ],
+      "note": "当前配置是明确比较对象。"
+    },
+    {
+      "id": "c_compare_basis",
+      "kind": "ROLE",
+      "event_id": "e_compare",
+      "entity_id": "n_baseline",
+      "role": "BASIS",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "artifact_use": null,
+      "scope_id": "e_compare",
+      "requires": [],
+      "sources": [
+        {
+          "quote": "以commit 7ac921e作为基线比较当前配置",
+          "occurrence": 1
+        }
+      ],
+      "note": "提交标识指定比较基线，其中数字不是数量限制。"
+    },
+    {
+      "id": "c_compare_scope",
+      "kind": "SCOPE",
+      "event_id": "e_compare",
+      "entity_id": "n_config",
+      "role": null,
+      "expression_id": "x_config",
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "artifact_use": null,
+      "scope_id": "n_config",
+      "requires": [],
+      "sources": [
+        {
+          "quote": "比较当前配置",
+          "occurrence": 1
+        }
+      ],
+      "note": "比较范围为指定的当前配置。"
+    },
+    {
+      "id": "c_generate_performer",
+      "kind": "ROLE",
+      "event_id": "e_generate",
+      "entity_id": "n_pm",
+      "role": "PERFORMER",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "artifact_use": null,
+      "scope_id": "e_generate",
+      "requires": [],
+      "sources": [
+        {
+          "quote": "请PM",
+          "occurrence": 1
+        },
+        {
+          "quote": "生成diff.md",
+          "occurrence": 1
+        }
+      ],
+      "note": "连续同一指令的追加动作承接明确主体PM。"
+    },
+    {
+      "id": "c_generate_result",
+      "kind": "ROLE",
+      "event_id": "e_generate",
+      "entity_id": "n_diff",
+      "role": "RESULT",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "artifact_use": null,
+      "scope_id": "e_generate",
+      "requires": [],
+      "sources": [
+        {
+          "quote": "生成diff.md",
+          "occurrence": 1
+        }
+      ],
+      "note": "明确要求生成该文件，未要求提交或交付。"
+    },
+    {
+      "id": "c_generate_scope",
+      "kind": "SCOPE",
+      "event_id": "e_generate",
+      "entity_id": "n_diff",
+      "role": null,
+      "expression_id": "x_diff",
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "artifact_use": null,
+      "scope_id": "n_diff",
+      "requires": [],
+      "sources": [
+        {
+          "quote": "生成diff.md",
+          "occurrence": 1
+        }
+      ],
+      "note": "指定生成产物为diff.md。"
+    },
+    {
+      "id": "c_switch_performer",
+      "kind": "ROLE",
+      "event_id": "e_switch",
+      "entity_id": "n_pm",
+      "role": "PERFORMER",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "artifact_use": null,
+      "scope_id": "e_switch",
+      "requires": [],
+      "sources": [
+        {
+          "quote": "请PM",
+          "occurrence": 1
+        },
+        {
+          "quote": "不得切换当前工作区的commit",
+          "occurrence": 1
+        }
+      ],
+      "note": "同一任务的追加禁令承接主体PM，无主体切换。"
+    },
+    {
+      "id": "c_switch_object",
+      "kind": "ROLE",
+      "event_id": "e_switch",
+      "entity_id": "n_current_commit",
+      "role": "OBJECT",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "artifact_use": null,
+      "scope_id": "e_switch",
+      "requires": [],
+      "sources": [
+        {
+          "quote": "不得切换当前工作区的commit",
+          "occurrence": 1
+        }
+      ],
+      "note": "保留禁止操作对象，不由禁令新增外部输入，也不认定其等于基线提交。"
+    },
+    {
+      "id": "c_switch_scope",
+      "kind": "SCOPE",
+      "event_id": "e_switch",
+      "entity_id": "n_current_commit",
+      "role": null,
+      "expression_id": "x_current_commit",
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "artifact_use": null,
+      "scope_id": "n_current_commit",
+      "requires": [],
+      "sources": [
+        {
+          "quote": "不得切换当前工作区的commit",
+          "occurrence": 1
+        }
+      ],
+      "note": "禁令明确限定当前工作区的commit。"
+    }
+  ],
+  "expressions": [
+    {
+      "id": "x_config",
+      "op": "ITEM",
+      "operands": [
+        "n_config"
+      ],
+      "state": null,
+      "sources": [
+        {
+          "quote": "当前配置",
+          "occurrence": 1
+        }
+      ]
+    },
+    {
+      "id": "x_diff",
+      "op": "ITEM",
+      "operands": [
+        "n_diff"
+      ],
+      "state": null,
+      "sources": [
+        {
+          "quote": "diff.md",
+          "occurrence": 1
+        }
+      ]
+    },
+    {
+      "id": "x_current_commit",
+      "op": "ITEM",
+      "operands": [
+        "n_current_commit"
+      ],
+      "state": null,
+      "sources": [
+        {
+          "quote": "当前工作区的commit",
+          "occurrence": 1
+        }
+      ]
+    }
+  ],
+  "issues": [],
+  "coverage": [
+    {
+      "sources": [
+        {
+          "quote": "请PM以commit 7ac921e作为基线比较当前配置",
+          "occurrence": 1
+        }
+      ],
+      "claim_ids": [
+        "c_compare_performer",
+        "c_compare_input",
+        "c_compare_basis",
+        "c_compare_scope"
+      ],
+      "status": "EXPRESSED",
+      "affected_views": [
+        "A",
+        "P",
+        "I",
+        "V"
+      ],
+      "range_requirement": {
+        "kind": "SPECIFIC",
+        "scope_claim_ids": [
+          "c_compare_scope"
+        ]
+      }
+    },
+    {
+      "sources": [
+        {
+          "quote": "请PM",
+          "occurrence": 1
+        },
+        {
+          "quote": "生成diff.md",
+          "occurrence": 1
+        }
+      ],
+      "claim_ids": [
+        "c_generate_performer",
+        "c_generate_result",
+        "c_generate_scope"
+      ],
+      "status": "EXPRESSED",
+      "affected_views": [
+        "A",
+        "P",
+        "O"
+      ],
+      "range_requirement": {
+        "kind": "SPECIFIC",
+        "scope_claim_ids": [
+          "c_generate_scope"
+        ]
+      }
+    },
+    {
+      "sources": [
+        {
+          "quote": "不得切换当前工作区的commit",
+          "occurrence": 1
+        }
+      ],
+      "claim_ids": [
+        "c_switch_performer",
+        "c_switch_object",
+        "c_switch_scope"
+      ],
+      "status": "EXPRESSED",
+      "affected_views": [
+        "B",
+        "P"
+      ],
+      "range_requirement": {
+        "kind": "SPECIFIC",
+        "scope_claim_ids": [
+          "c_switch_scope"
+        ]
+      }
+    }
+  ]
+}

@@ -1,0 +1,1 @@
+请 PM 组织读取 staging.yaml 与 template.yaml，检查测试环境配置与模板的一致性并形成 config-diff.md。存在差异时逐项列出，不存在差异时明确写明无差异；不得同步或覆盖配置文件。

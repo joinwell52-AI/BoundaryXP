@@ -1,0 +1,298 @@
+{
+  "contract_version": "031-r01",
+  "entities": [
+    {
+      "id": "ent_pm",
+      "label": "PM",
+      "type": "OTHER",
+      "mentions": [
+        {
+          "quote": "PM",
+          "occurrence": 1
+        }
+      ],
+      "alternatives": []
+    },
+    {
+      "id": "ent_a",
+      "label": "a.ini",
+      "type": "FILE",
+      "mentions": [
+        {
+          "quote": "a.ini",
+          "occurrence": 1
+        }
+      ],
+      "alternatives": []
+    },
+    {
+      "id": "ent_b",
+      "label": "b.ini",
+      "type": "FILE",
+      "mentions": [
+        {
+          "quote": "b.ini",
+          "occurrence": 1
+        },
+        {
+          "quote": "b.ini",
+          "occurrence": 2
+        }
+      ],
+      "alternatives": []
+    }
+  ],
+  "events": [
+    {
+      "id": "ev_check",
+      "predicate": "逐一核对",
+      "kind": "ACTION",
+      "layer": "MAIN",
+      "use": "CURRENT_TASK",
+      "modality": "REQUIRED",
+      "polarity": "POSITIVE",
+      "owner_id": "ROOT",
+      "constraint_ids": [],
+      "requires": [],
+      "sources": [
+        {
+          "quote": "请PM对a.ini与b.ini逐一核对",
+          "occurrence": 1
+        }
+      ]
+    },
+    {
+      "id": "ev_modify",
+      "predicate": "修改",
+      "kind": "ACTION",
+      "layer": "MAIN",
+      "use": "CURRENT_TASK",
+      "modality": "FORBIDDEN",
+      "polarity": "POSITIVE",
+      "owner_id": "ROOT",
+      "constraint_ids": [],
+      "requires": [],
+      "sources": [
+        {
+          "quote": "不得修改b.ini",
+          "occurrence": 1
+        }
+      ]
+    }
+  ],
+  "claims": [
+    {
+      "id": "cl_check_performer",
+      "kind": "ROLE",
+      "event_id": "ev_check",
+      "entity_id": "ent_pm",
+      "role": "PERFORMER",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "scope_id": "ev_check",
+      "requires": [],
+      "sources": [
+        {
+          "quote": "请PM对a.ini与b.ini逐一核对",
+          "occurrence": 1
+        }
+      ],
+      "note": "PM是核对动作的明确执行者；简称未明确人或组类别。"
+    },
+    {
+      "id": "cl_check_a",
+      "kind": "ROLE",
+      "event_id": "ev_check",
+      "entity_id": "ent_a",
+      "role": "INPUT_OBJECT",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "scope_id": "ev_check",
+      "requires": [],
+      "sources": [
+        {
+          "quote": "对a.ini与b.ini逐一核对",
+          "occurrence": 1
+        }
+      ],
+      "note": "a.ini是明确受检文件。"
+    },
+    {
+      "id": "cl_check_b",
+      "kind": "ROLE",
+      "event_id": "ev_check",
+      "entity_id": "ent_b",
+      "role": "INPUT_OBJECT",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "scope_id": "ev_check",
+      "requires": [],
+      "sources": [
+        {
+          "quote": "对a.ini与b.ini逐一核对",
+          "occurrence": 1
+        }
+      ],
+      "note": "b.ini是明确受检文件，与禁止修改中的同名文件保持同一身份。"
+    },
+    {
+      "id": "cl_check_scope",
+      "kind": "SCOPE",
+      "event_id": "ev_check",
+      "entity_id": null,
+      "role": null,
+      "expression_id": "ex_all_files",
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "scope_id": "ev_check",
+      "requires": [],
+      "sources": [
+        {
+          "quote": "对a.ini与b.ini逐一核对",
+          "occurrence": 1
+        }
+      ],
+      "note": "核对范围包括两个文件，要求逐一核对，不规定二者之间的先后。"
+    },
+    {
+      "id": "cl_modify_performer",
+      "kind": "ROLE",
+      "event_id": "ev_modify",
+      "entity_id": "ent_pm",
+      "role": "PERFORMER",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "scope_id": "ev_modify",
+      "requires": [],
+      "sources": [
+        {
+          "quote": "请PM对a.ini与b.ini逐一核对",
+          "occurrence": 1
+        },
+        {
+          "quote": "不得修改b.ini",
+          "occurrence": 1
+        }
+      ],
+      "note": "连续同一指令未切换主体，禁止修改的主体承接PM。"
+    },
+    {
+      "id": "cl_modify_b",
+      "kind": "ROLE",
+      "event_id": "ev_modify",
+      "entity_id": "ent_b",
+      "role": "OBJECT",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "scope_id": "ev_modify",
+      "requires": [],
+      "sources": [
+        {
+          "quote": "b.ini",
+          "occurrence": 1
+        },
+        {
+          "quote": "不得修改b.ini",
+          "occurrence": 1
+        }
+      ],
+      "note": "禁止修改的对象是同一b.ini；不将禁止扩大到a.ini。"
+    }
+  ],
+  "expressions": [
+    {
+      "id": "ex_a",
+      "op": "ITEM",
+      "operands": [
+        "ent_a"
+      ],
+      "state": null,
+      "sources": [
+        {
+          "quote": "a.ini",
+          "occurrence": 1
+        }
+      ]
+    },
+    {
+      "id": "ex_b",
+      "op": "ITEM",
+      "operands": [
+        "ent_b"
+      ],
+      "state": null,
+      "sources": [
+        {
+          "quote": "b.ini",
+          "occurrence": 1
+        }
+      ]
+    },
+    {
+      "id": "ex_all_files",
+      "op": "ALL",
+      "operands": [
+        "ex_a",
+        "ex_b"
+      ],
+      "state": null,
+      "sources": [
+        {
+          "quote": "a.ini与b.ini逐一核对",
+          "occurrence": 1
+        }
+      ]
+    }
+  ],
+  "issues": [],
+  "coverage": [
+    {
+      "sources": [
+        {
+          "quote": "请PM对a.ini与b.ini逐一核对",
+          "occurrence": 1
+        }
+      ],
+      "claim_ids": [
+        "cl_check_performer",
+        "cl_check_a",
+        "cl_check_b",
+        "cl_check_scope"
+      ],
+      "status": "EXPRESSED",
+      "affected_views": [
+        "I",
+        "A",
+        "P"
+      ]
+    },
+    {
+      "sources": [
+        {
+          "quote": "不得修改b.ini",
+          "occurrence": 1
+        }
+      ],
+      "claim_ids": [
+        "cl_modify_performer",
+        "cl_modify_b"
+      ],
+      "status": "EXPRESSED",
+      "affected_views": [
+        "P",
+        "B"
+      ]
+    }
+  ]
+}

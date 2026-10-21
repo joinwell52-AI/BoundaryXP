@@ -1,0 +1,276 @@
+{
+  "contract_version": "028-r02.3",
+  "reviews": [
+    {
+      "subject_id": "ent_pm",
+      "field_path": "label",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [
+        {
+          "quote": "PM必须生成issue.md",
+          "occurrence": 1
+        }
+      ],
+      "reason": "原文明示PM身份及其生成职责，无竞争指代。"
+    },
+    {
+      "subject_id": "ent_pm",
+      "field_path": "type",
+      "verdict": "UNCERTAIN",
+      "context_refs": [],
+      "sources": [
+        {
+          "quote": "PM",
+          "occurrence": 1
+        }
+      ],
+      "reason": "原文未明确PM是个人、群体还是其他类别；类别不确定不影响其明确身份与职责。"
+    },
+    {
+      "subject_id": "ent_issue",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [
+        {
+          "quote": "PM必须生成issue.md",
+          "occurrence": 1
+        },
+        {
+          "quote": "未发现异常时无需生成",
+          "occurrence": 1
+        }
+      ],
+      "reason": "issue.md是生成结果，后句省略的结果承接同一文件。"
+    },
+    {
+      "subject_id": "ent_input",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [
+        {
+          "quote": "input.csv",
+          "occurrence": 1
+        }
+      ],
+      "reason": "原文明示该文件身份。"
+    },
+    {
+      "subject_id": "ev_generate_required",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [
+        "cl_found"
+      ],
+      "sources": [
+        {
+          "quote": "若发现异常，PM必须生成issue.md",
+          "occurrence": 1
+        }
+      ],
+      "reason": "发现异常时触发生成义务，条件已双向绑定。"
+    },
+    {
+      "subject_id": "ev_generate_not_required",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [
+        "cl_not_found"
+      ],
+      "sources": [
+        {
+          "quote": "PM必须生成issue.md",
+          "occurrence": 1
+        },
+        {
+          "quote": "未发现异常时无需生成",
+          "occurrence": 1
+        }
+      ],
+      "reason": "未发现异常时撤回生成义务，NOT_REQUIRED正确保留，未误写为禁止或许可。"
+    },
+    {
+      "subject_id": "ev_delete",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [
+        {
+          "quote": "无论是否异常，均不得删除input.csv",
+          "occurrence": 1
+        }
+      ],
+      "reason": "删除禁令覆盖异常与非异常状态，表达为无条件禁止正确。"
+    },
+    {
+      "subject_id": "cl_generate_performer",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [
+        "ent_pm",
+        "ev_generate_required"
+      ],
+      "sources": [
+        {
+          "quote": "PM必须生成issue.md",
+          "occurrence": 1
+        }
+      ],
+      "reason": "PM是该生成事件明确指定的执行者。"
+    },
+    {
+      "subject_id": "cl_generate_result",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [
+        "ent_issue",
+        "ev_generate_required"
+      ],
+      "sources": [
+        {
+          "quote": "生成issue.md",
+          "occurrence": 1
+        }
+      ],
+      "reason": "issue.md是生成结果，不是外部输入。"
+    },
+    {
+      "subject_id": "cl_found",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [
+        "expr_found",
+        "ev_generate_required"
+      ],
+      "sources": [
+        {
+          "quote": "若发现异常，PM必须生成issue.md",
+          "occurrence": 1
+        }
+      ],
+      "reason": "发现异常足以触发生成义务，SUFFICIENT方向及目标正确；未新增检查义务。"
+    },
+    {
+      "subject_id": "cl_not_required_performer",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [
+        "ent_pm",
+        "ev_generate_not_required"
+      ],
+      "sources": [
+        {
+          "quote": "PM必须生成issue.md",
+          "occurrence": 1
+        },
+        {
+          "quote": "未发现异常时无需生成",
+          "occurrence": 1
+        }
+      ],
+      "reason": "后句省略主体承接PM，参与关系不另增执行义务。"
+    },
+    {
+      "subject_id": "cl_not_required_result",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [
+        "ent_issue",
+        "ev_generate_not_required"
+      ],
+      "sources": [
+        {
+          "quote": "生成issue.md",
+          "occurrence": 1
+        },
+        {
+          "quote": "未发现异常时无需生成",
+          "occurrence": 1
+        }
+      ],
+      "reason": "无需生成的结果承接issue.md，角色不表示该文件已生成。"
+    },
+    {
+      "subject_id": "cl_not_found",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [
+        "expr_not_found",
+        "ev_generate_not_required"
+      ],
+      "sources": [
+        {
+          "quote": "未发现异常时无需生成",
+          "occurrence": 1
+        }
+      ],
+      "reason": "未发现异常足以触发无需生成，方向正确且不等于不存在异常。"
+    },
+    {
+      "subject_id": "cl_delete_object",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [
+        "ent_input",
+        "ev_delete"
+      ],
+      "sources": [
+        {
+          "quote": "不得删除input.csv",
+          "occurrence": 1
+        }
+      ],
+      "reason": "input.csv是删除禁令对象，OBJECT正确，不能据此推为外部输入。"
+    },
+    {
+      "subject_id": "expr_found",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [
+        {
+          "quote": "若发现异常",
+          "occurrence": 1
+        }
+      ],
+      "reason": "正向发现异常状态表达条件，不宣称状态已发生。"
+    },
+    {
+      "subject_id": "expr_not_found",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [
+        "expr_found"
+      ],
+      "sources": [
+        {
+          "quote": "未发现异常",
+          "occurrence": 1
+        }
+      ],
+      "reason": "同参数发现状态的负极性正确表达未发现，而非异常不存在。"
+    }
+  ],
+  "issues": [
+    {
+      "id": "audit_pm_type",
+      "issue_kind": "IDENTITY",
+      "subject_ids": [
+        "ent_pm"
+      ],
+      "field_path": "type",
+      "context_refs": [],
+      "sources": [
+        {
+          "quote": "PM",
+          "occurrence": 1
+        }
+      ],
+      "reason": "OTHER类别缺乏明确原文依据，类别应保持局部未决；PM身份及明确生成职责不受此类别疑点影响。",
+      "suggested_json": null
+    }
+  ],
+  "omissions": []
+}

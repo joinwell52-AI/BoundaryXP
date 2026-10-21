@@ -1,0 +1,345 @@
+{
+  "contract_version": "032.1",
+  "entities": [
+    {
+      "id": "entity_pm",
+      "label": "PM",
+      "type": "OTHER",
+      "mentions": [
+        {"quote": "PM", "occurrence": 1}
+      ],
+      "alternatives": []
+    },
+    {
+      "id": "entity_settings",
+      "label": "settings.json",
+      "type": "FILE",
+      "mentions": [
+        {"quote": "settings.json", "occurrence": 1},
+        {"quote": "settings.json", "occurrence": 2}
+      ],
+      "alternatives": []
+    },
+    {
+      "id": "entity_config",
+      "label": "文件中的配置项",
+      "type": "CLASS",
+      "mentions": [
+        {"quote": "settings.json中的配置项", "occurrence": 1},
+        {"quote": "任何文件中的任何配置项", "occurrence": 1},
+        {"quote": "settings.json以外文件中的配置项", "occurrence": 1}
+      ],
+      "alternatives": []
+    },
+    {
+      "id": "entity_output",
+      "label": "settings-list.md",
+      "type": "FILE",
+      "mentions": [
+        {"quote": "settings-list.md", "occurrence": 1}
+      ],
+      "alternatives": []
+    }
+  ],
+  "events": [
+    {
+      "id": "event_list",
+      "predicate": "列出配置项",
+      "kind": "ACTION",
+      "layer": "MAIN",
+      "use": "CURRENT_TASK",
+      "modality": "REQUIRED",
+      "polarity": "POSITIVE",
+      "owner_id": "ROOT",
+      "constraint_ids": [],
+      "requires": [],
+      "sources": [
+        {"quote": "请PM列出settings.json中的配置项", "occurrence": 1}
+      ]
+    },
+    {
+      "id": "event_generate",
+      "predicate": "生成文件",
+      "kind": "ACTION",
+      "layer": "MAIN",
+      "use": "CURRENT_TASK",
+      "modality": "REQUIRED",
+      "polarity": "POSITIVE",
+      "owner_id": "ROOT",
+      "constraint_ids": [],
+      "requires": [],
+      "sources": [
+        {"quote": "生成settings-list.md", "occurrence": 1}
+      ]
+    },
+    {
+      "id": "event_change",
+      "predicate": "更改配置项",
+      "kind": "ACTION",
+      "layer": "MAIN",
+      "use": "CURRENT_TASK",
+      "modality": "FORBIDDEN",
+      "polarity": "POSITIVE",
+      "owner_id": "ROOT",
+      "constraint_ids": [],
+      "requires": [],
+      "sources": [
+        {"quote": "本任务不得更改任何文件中的任何配置项，包括settings.json以外文件中的配置项", "occurrence": 1}
+      ]
+    }
+  ],
+  "claims": [
+    {
+      "id": "claim_list_performer",
+      "kind": "ROLE",
+      "event_id": "event_list",
+      "entity_id": "entity_pm",
+      "role": "PERFORMER",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "artifact_use": null,
+      "scope_id": "event_list",
+      "requires": [],
+      "sources": [
+        {"quote": "请PM列出settings.json中的配置项", "occurrence": 1}
+      ],
+      "note": "PM是明确指定的列出动作执行者。"
+    },
+    {
+      "id": "claim_list_input",
+      "kind": "ROLE",
+      "event_id": "event_list",
+      "entity_id": "entity_config",
+      "role": "INPUT_OBJECT",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "artifact_use": null,
+      "scope_id": "event_list",
+      "requires": [],
+      "sources": [
+        {"quote": "列出settings.json中的配置项", "occurrence": 1}
+      ],
+      "note": "正向输入限定为settings.json中的配置项。"
+    },
+    {
+      "id": "claim_list_scope",
+      "kind": "SCOPE",
+      "event_id": "event_list",
+      "entity_id": null,
+      "role": null,
+      "expression_id": "expr_settings_config",
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "artifact_use": null,
+      "scope_id": "entity_config",
+      "requires": [],
+      "sources": [
+        {"quote": "settings.json中的配置项", "occurrence": 1}
+      ],
+      "note": "类别域保留明确文件容器；未另加全称量词。"
+    },
+    {
+      "id": "claim_generate_performer",
+      "kind": "ROLE",
+      "event_id": "event_generate",
+      "entity_id": "entity_pm",
+      "role": "PERFORMER",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "artifact_use": null,
+      "scope_id": "event_generate",
+      "requires": [],
+      "sources": [
+        {"quote": "请PM列出settings.json中的配置项", "occurrence": 1},
+        {"quote": "生成settings-list.md", "occurrence": 1}
+      ],
+      "note": "同一指令中并列动作无主体切换，生成动作承接PM。"
+    },
+    {
+      "id": "claim_generate_result",
+      "kind": "ROLE",
+      "event_id": "event_generate",
+      "entity_id": "entity_output",
+      "role": "RESULT",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "artifact_use": null,
+      "scope_id": "event_generate",
+      "requires": [],
+      "sources": [
+        {"quote": "生成settings-list.md", "occurrence": 1}
+      ],
+      "note": "明确生成结果文件，未明示提交或交付。"
+    },
+    {
+      "id": "claim_generate_scope",
+      "kind": "SCOPE",
+      "event_id": "event_generate",
+      "entity_id": null,
+      "role": null,
+      "expression_id": "expr_output",
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "artifact_use": null,
+      "scope_id": "entity_output",
+      "requires": [],
+      "sources": [
+        {"quote": "生成settings-list.md", "occurrence": 1}
+      ],
+      "note": "生成对象为明确命名的单个文件。"
+    },
+    {
+      "id": "claim_change_object",
+      "kind": "ROLE",
+      "event_id": "event_change",
+      "entity_id": "entity_config",
+      "role": "OBJECT",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "artifact_use": null,
+      "scope_id": "event_change",
+      "requires": [],
+      "sources": [
+        {"quote": "本任务不得更改任何文件中的任何配置项", "occurrence": 1}
+      ],
+      "note": "禁止对象是配置项类别，不据此新增外部输入。"
+    },
+    {
+      "id": "claim_change_scope",
+      "kind": "SCOPE",
+      "event_id": "event_change",
+      "entity_id": null,
+      "role": null,
+      "expression_id": "expr_all_config",
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "artifact_use": null,
+      "scope_id": "entity_config",
+      "requires": [],
+      "sources": [
+        {"quote": "任何文件中的任何配置项", "occurrence": 1},
+        {"quote": "包括settings.json以外文件中的配置项", "occurrence": 1}
+      ],
+      "note": "禁令全称适用于所有文件中的配置项，明确跨越settings.json；没有例外。"
+    }
+  ],
+  "expressions": [
+    {
+      "id": "expr_settings_config",
+      "op": "CATEGORY",
+      "operands": ["entity_config", "entity_settings"],
+      "state": null,
+      "sources": [
+        {"quote": "settings.json中的配置项", "occurrence": 1}
+      ]
+    },
+    {
+      "id": "expr_output",
+      "op": "ITEM",
+      "operands": ["entity_output"],
+      "state": null,
+      "sources": [
+        {"quote": "settings-list.md", "occurrence": 1}
+      ]
+    },
+    {
+      "id": "expr_config_domain",
+      "op": "CATEGORY",
+      "operands": ["entity_config"],
+      "state": null,
+      "sources": [
+        {"quote": "任何文件中的任何配置项", "occurrence": 1},
+        {"quote": "包括settings.json以外文件中的配置项", "occurrence": 1}
+      ]
+    },
+    {
+      "id": "expr_all_config",
+      "op": "FORALL",
+      "operands": ["expr_config_domain"],
+      "state": null,
+      "sources": [
+        {"quote": "任何文件中的任何配置项", "occurrence": 1},
+        {"quote": "包括settings.json以外文件中的配置项", "occurrence": 1}
+      ]
+    }
+  ],
+  "issues": [],
+  "coverage": [
+    {
+      "sources": [
+        {"quote": "请PM列出settings.json中的配置项", "occurrence": 1}
+      ],
+      "claim_ids": [
+        "claim_list_performer",
+        "claim_list_input",
+        "claim_list_scope"
+      ],
+      "status": "EXPRESSED",
+      "affected_views": ["I", "A", "P"],
+      "range_requirement": {
+        "kind": "CATEGORY",
+        "scope_claim_ids": ["claim_list_scope"]
+      }
+    },
+    {
+      "sources": [
+        {"quote": "请PM列出settings.json中的配置项", "occurrence": 1},
+        {"quote": "生成settings-list.md", "occurrence": 1}
+      ],
+      "claim_ids": [
+        "claim_generate_performer",
+        "claim_generate_result",
+        "claim_generate_scope"
+      ],
+      "status": "EXPRESSED",
+      "affected_views": ["O", "A", "P"],
+      "range_requirement": {
+        "kind": "SPECIFIC",
+        "scope_claim_ids": ["claim_generate_scope"]
+      }
+    },
+    {
+      "sources": [
+        {"quote": "本任务不得更改任何文件中的任何配置项", "occurrence": 1}
+      ],
+      "claim_ids": [
+        "claim_change_object",
+        "claim_change_scope"
+      ],
+      "status": "EXPRESSED",
+      "affected_views": ["B"],
+      "range_requirement": {
+        "kind": "UNIVERSAL",
+        "scope_claim_ids": ["claim_change_scope"]
+      }
+    },
+    {
+      "sources": [
+        {"quote": "包括settings.json以外文件中的配置项", "occurrence": 1}
+      ],
+      "claim_ids": [
+        "claim_change_object",
+        "claim_change_scope"
+      ],
+      "status": "EXPRESSED",
+      "affected_views": ["B"],
+      "range_requirement": {
+        "kind": "UNIVERSAL",
+        "scope_claim_ids": ["claim_change_scope"]
+      }
+    }
+  ]
+}

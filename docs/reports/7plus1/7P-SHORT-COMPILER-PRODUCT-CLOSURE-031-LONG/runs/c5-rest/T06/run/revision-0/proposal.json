@@ -1,0 +1,308 @@
+{
+  "contract_version": "031-r01",
+  "entities": [
+    {
+      "id": "n1",
+      "label": "PM",
+      "type": "OTHER",
+      "mentions": [
+        {
+          "quote": "PM",
+          "occurrence": 1
+        }
+      ],
+      "alternatives": []
+    },
+    {
+      "id": "n2",
+      "label": "report.md",
+      "type": "FILE",
+      "mentions": [
+        {
+          "quote": "report.md",
+          "occurrence": 1
+        },
+        {
+          "quote": "报告",
+          "occurrence": 1
+        }
+      ],
+      "alternatives": []
+    },
+    {
+      "id": "n3",
+      "label": "风险",
+      "type": "OTHER",
+      "mentions": [
+        {
+          "quote": "风险",
+          "occurrence": 1
+        }
+      ],
+      "alternatives": []
+    }
+  ],
+  "events": [
+    {
+      "id": "e1",
+      "predicate": "生成报告",
+      "kind": "ACTION",
+      "layer": "MAIN",
+      "use": "CURRENT_TASK",
+      "modality": "REQUIRED",
+      "polarity": "POSITIVE",
+      "owner_id": "ROOT",
+      "constraint_ids": [
+        "c4",
+        "c5"
+      ],
+      "requires": [],
+      "sources": [
+        {
+          "quote": "PM必须生成report.md",
+          "occurrence": 1
+        }
+      ]
+    }
+  ],
+  "claims": [
+    {
+      "id": "c1",
+      "kind": "ROLE",
+      "event_id": "e1",
+      "entity_id": "n1",
+      "role": "PERFORMER",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "scope_id": "e1",
+      "requires": [],
+      "sources": [
+        {
+          "quote": "PM必须生成report.md",
+          "occurrence": 1
+        }
+      ],
+      "note": "PM是明确的生成执行者；岗位简称不推定实体类别或权限。"
+    },
+    {
+      "id": "c2",
+      "kind": "ROLE",
+      "event_id": "e1",
+      "entity_id": "n2",
+      "role": "RESULT",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "scope_id": "e1",
+      "requires": [],
+      "sources": [
+        {
+          "quote": "PM必须生成report.md",
+          "occurrence": 1
+        },
+        {
+          "quote": "报告恰好列出2项风险",
+          "occurrence": 1
+        }
+      ],
+      "note": "报告指唯一当前生成产物report.md；原文未要求交付。"
+    },
+    {
+      "id": "c3",
+      "kind": "ROLE",
+      "event_id": "e1",
+      "entity_id": "n3",
+      "role": "CONTENT",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "scope_id": "n2",
+      "requires": [
+        "c2"
+      ],
+      "sources": [
+        {
+          "quote": "报告恰好列出2项风险",
+          "occurrence": 1
+        }
+      ],
+      "note": "风险是生成报告要求列出的内容。"
+    },
+    {
+      "id": "c4",
+      "kind": "QUANTITY",
+      "event_id": "e1",
+      "entity_id": null,
+      "role": null,
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": {
+        "metric": "生成耗时",
+        "target_id": "e1",
+        "comparator": "LTE",
+        "value": 8,
+        "unit": "分钟",
+        "use": "EXECUTION_LIMIT",
+        "count_scope": "e1"
+      },
+      "scope_id": "e1",
+      "requires": [],
+      "sources": [
+        {
+          "quote": "生成耗时不得超过8分钟",
+          "occurrence": 1
+        }
+      ],
+      "note": "约束生成操作的耗时，不新增独立禁止动作，也不是根完成条件。"
+    },
+    {
+      "id": "c5",
+      "kind": "QUANTITY",
+      "event_id": "e1",
+      "entity_id": null,
+      "role": null,
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": {
+        "metric": "列出的风险项数",
+        "target_id": "n2",
+        "comparator": "EQ",
+        "value": 2,
+        "unit": "项",
+        "use": "OUTPUT_CONTENT",
+        "count_scope": "n2"
+      },
+      "scope_id": "n2",
+      "requires": [
+        "c2"
+      ],
+      "sources": [
+        {
+          "quote": "报告恰好列出2项风险",
+          "occurrence": 1
+        }
+      ],
+      "note": "数量目标是生成结果report.md，计数内容为风险，不是执行次数。"
+    },
+    {
+      "id": "c6",
+      "kind": "STOP",
+      "event_id": null,
+      "entity_id": null,
+      "role": null,
+      "expression_id": "x1",
+      "direction": "SUFFICIENT",
+      "temporal": null,
+      "quantity": null,
+      "scope_id": "ROOT",
+      "requires": [],
+      "sources": [
+        {
+          "quote": "生成失败时停止本任务",
+          "occurrence": 1
+        }
+      ],
+      "note": "生成失败足以触发根任务停止；不表示失败已经发生，也不将停止改为完成。"
+    }
+  ],
+  "expressions": [
+    {
+      "id": "x1",
+      "op": "STATE",
+      "operands": [],
+      "state": {
+        "predicate": "生成失败",
+        "event_id": "e1",
+        "args": [
+          "n2"
+        ],
+        "polarity": "POSITIVE"
+      },
+      "sources": [
+        {
+          "quote": "生成report.md",
+          "occurrence": 1
+        },
+        {
+          "quote": "生成失败时停止本任务",
+          "occurrence": 1
+        }
+      ]
+    }
+  ],
+  "issues": [],
+  "coverage": [
+    {
+      "sources": [
+        {
+          "quote": "PM必须生成report.md",
+          "occurrence": 1
+        }
+      ],
+      "claim_ids": [
+        "c1",
+        "c2"
+      ],
+      "status": "EXPRESSED",
+      "affected_views": [
+        "A",
+        "P",
+        "O"
+      ]
+    },
+    {
+      "sources": [
+        {
+          "quote": "生成耗时不得超过8分钟",
+          "occurrence": 1
+        }
+      ],
+      "claim_ids": [
+        "c4"
+      ],
+      "status": "EXPRESSED",
+      "affected_views": [
+        "R",
+        "B"
+      ]
+    },
+    {
+      "sources": [
+        {
+          "quote": "报告恰好列出2项风险",
+          "occurrence": 1
+        }
+      ],
+      "claim_ids": [
+        "c2",
+        "c3",
+        "c5"
+      ],
+      "status": "EXPRESSED",
+      "affected_views": [
+        "O"
+      ]
+    },
+    {
+      "sources": [
+        {
+          "quote": "生成失败时停止本任务",
+          "occurrence": 1
+        }
+      ],
+      "claim_ids": [
+        "c6"
+      ],
+      "status": "EXPRESSED",
+      "affected_views": [
+        "C"
+      ]
+    }
+  ]
+}

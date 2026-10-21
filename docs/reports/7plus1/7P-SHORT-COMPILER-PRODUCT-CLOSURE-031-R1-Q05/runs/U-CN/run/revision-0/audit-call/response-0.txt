@@ -1,0 +1,142 @@
+{
+  "contract_version": "031-r1-q05.1",
+  "reviews": [
+    {
+      "subject_id": "ent_ops",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [{"quote": "OPS", "occurrence": 1}],
+      "reason": "OPS身份明确；OTHER可占位原文未指定的人或组类别。"
+    },
+    {
+      "subject_id": "ent_file",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [
+        {"quote": "inventory.csv", "occurrence": 1},
+        {"quote": "该文件", "occurrence": 1}
+      ],
+      "reason": "全文只有一个文件，后句“该文件”明确承接inventory.csv，同一身份已表达。"
+    },
+    {
+      "subject_id": "ent_asset_records",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [
+        {"quote": "所有资产记录", "occurrence": 1},
+        {"quote": "任何资产记录", "occurrence": 1}
+      ],
+      "reason": "资产记录是两项动作共同约束的对象类别，CLASS表达正确。"
+    },
+    {
+      "subject_id": "evt_check",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [{"quote": "请OPS核对inventory.csv中的所有资产记录", "occurrence": 1}],
+      "reason": "原文明示当前必须执行核对，无附加条件或先后要求。"
+    },
+    {
+      "subject_id": "evt_delete",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [{"quote": "不得删除该文件中的任何资产记录", "occurrence": 1}],
+      "reason": "删除是当前禁止动作，FORBIDDEN与正向动作谓词组合正确。"
+    },
+    {
+      "subject_id": "cl_check_performer",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["evt_check", "ent_ops"],
+      "sources": [{"quote": "请OPS核对", "occurrence": 1}],
+      "reason": "OPS是原文明示的核对执行者。"
+    },
+    {
+      "subject_id": "cl_check_input",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["cl_check_scope"],
+      "sources": [{"quote": "核对inventory.csv中的所有资产记录", "occurrence": 1}],
+      "reason": "资产记录类别是明确受检范围，文件容器及全称适用由同事件SCOPE绑定。"
+    },
+    {
+      "subject_id": "cl_check_scope",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["cl_check_input", "expr_check_all"],
+      "sources": [{"quote": "inventory.csv中的所有资产记录", "occurrence": 1}],
+      "reason": "范围绑定同一核对事件及其受检类别，完整表达文件内所有资产记录。"
+    },
+    {
+      "subject_id": "cl_delete_performer",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["cl_check_performer", "evt_delete"],
+      "sources": [
+        {"quote": "请OPS核对", "occurrence": 1},
+        {"quote": "不得删除该文件中的任何资产记录", "occurrence": 1}
+      ],
+      "reason": "连续同一指令没有主体切换，禁令可承接OPS；来源覆盖承接两端。"
+    },
+    {
+      "subject_id": "cl_delete_object",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["cl_delete_scope"],
+      "sources": [{"quote": "不得删除该文件中的任何资产记录", "occurrence": 1}],
+      "reason": "禁止对象为资产记录类别，OBJECT与同事件范围配合，未凭禁令新增外部输入。"
+    },
+    {
+      "subject_id": "cl_delete_scope",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["cl_delete_object", "ent_file", "expr_delete_all"],
+      "sources": [
+        {"quote": "inventory.csv", "occurrence": 1},
+        {"quote": "该文件中的任何资产记录", "occurrence": 1}
+      ],
+      "reason": "禁令范围限定同一文件内每条资产记录，目标与对象角色一致，无例外。"
+    },
+    {
+      "subject_id": "expr_check_domain",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["ent_asset_records", "ent_file"],
+      "sources": [{"quote": "inventory.csv中的所有资产记录", "occurrence": 1}],
+      "reason": "CATEGORY正确绑定资产记录类别及inventory.csv容器。"
+    },
+    {
+      "subject_id": "expr_check_all",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["expr_check_domain"],
+      "sources": [{"quote": "所有资产记录", "occurrence": 1}],
+      "reason": "“所有”要求对限定类别域的每个成员适用，FORALL结构正确。"
+    },
+    {
+      "subject_id": "expr_delete_domain",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["ent_asset_records", "ent_file"],
+      "sources": [
+        {"quote": "inventory.csv", "occurrence": 1},
+        {"quote": "该文件中的任何资产记录", "occurrence": 1}
+      ],
+      "reason": "类别域保留文件容器，并使用已统一的文件身份，未扩大到其他文件。"
+    },
+    {
+      "subject_id": "expr_delete_all",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["expr_delete_domain", "evt_delete"],
+      "sources": [{"quote": "不得删除该文件中的任何资产记录", "occurrence": 1}],
+      "reason": "禁止语境的“任何”表示每条记录均受禁令约束，FORALL未被有限枚举或布尔合取替代。"
+    }
+  ],
+  "issues": [],
+  "omissions": []
+}

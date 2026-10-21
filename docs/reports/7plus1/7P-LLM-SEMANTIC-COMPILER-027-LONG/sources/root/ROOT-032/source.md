@@ -1,0 +1,1 @@
+请 PM 组织依据 SEARCH-SPEC-5 v1.2 读取 retrieval.yaml，复核索引和过滤配置并形成 retrieval-review.md。不得调整召回阈值或重建索引；QA 复核通过后由 PM 向 ADMIN 汇报。

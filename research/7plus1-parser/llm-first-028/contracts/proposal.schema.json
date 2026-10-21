@@ -1,0 +1,1042 @@
+{
+  "type": "object",
+  "properties": {
+    "contract_version": {
+      "const": "031-r1.1",
+      "type": "string"
+    },
+    "entities": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "label": {
+            "type": "string",
+            "minLength": 1
+          },
+          "type": {
+            "type": "string",
+            "enum": [
+              "PERSON",
+              "FILE",
+              "SYSTEM",
+              "DOCUMENT",
+              "GROUP",
+              "REFERENT",
+              "OTHER"
+            ]
+          },
+          "mentions": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "quote": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "occurrence": {
+                  "type": "integer",
+                  "minimum": 1
+                }
+              },
+              "required": [
+                "quote",
+                "occurrence"
+              ],
+              "additionalProperties": false
+            },
+            "minItems": 1
+          },
+          "alternatives": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "members": {
+            "anyOf": [
+              {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "required": [
+          "id",
+          "label",
+          "type",
+          "mentions",
+          "alternatives"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "events": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "predicate": {
+            "type": "string",
+            "minLength": 1
+          },
+          "kind": {
+            "type": "string",
+            "enum": [
+              "ACTION",
+              "STATE"
+            ]
+          },
+          "layer": {
+            "type": "string",
+            "enum": [
+              "MAIN",
+              "CONDITION",
+              "QUOTED",
+              "MODIFIER",
+              "PURPOSE",
+              "CONTENT",
+              "BACKGROUND"
+            ]
+          },
+          "use": {
+            "type": "string",
+            "enum": [
+              "CURRENT_TASK",
+              "MENTION_ONLY"
+            ]
+          },
+          "modality": {
+            "type": "string",
+            "enum": [
+              "REQUIRED",
+              "PERMITTED",
+              "NOT_REQUIRED",
+              "FORBIDDEN",
+              "UNSTATED"
+            ]
+          },
+          "polarity": {
+            "type": "string",
+            "enum": [
+              "POSITIVE",
+              "NEGATIVE"
+            ]
+          },
+          "owner_id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "constraint_ids": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "requires": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "sources": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "quote": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "occurrence": {
+                  "type": "integer",
+                  "minimum": 1
+                }
+              },
+              "required": [
+                "quote",
+                "occurrence"
+              ],
+              "additionalProperties": false
+            },
+            "minItems": 1
+          },
+          "specifies_result_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "minLength": 1
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "semantic_signature": {
+            "anyOf": [
+              {
+                "type": "object",
+                "properties": {
+                  "effects": {
+                    "type": "array",
+                    "items": {
+                      "type": "string",
+                      "enum": [
+                        "READ",
+                        "WRITE",
+                        "CREATE",
+                        "DELIVER",
+                        "REVIEW",
+                        "ORGANIZE",
+                        "STOP",
+                        "CONTINUE",
+                        "ACCESS",
+                        "REPORT",
+                        "OTHER"
+                      ]
+                    }
+                  },
+                  "extent": {
+                    "type": "string",
+                    "enum": [
+                      "EXACT",
+                      "OPEN"
+                    ]
+                  },
+                  "actor_domain": {
+                    "type": "string",
+                    "enum": [
+                      "EXPLICIT",
+                      "TASK_SCOPE",
+                      "UNKNOWN"
+                    ]
+                  },
+                  "continuation_targets": {
+                    "type": "array",
+                    "items": {
+                      "type": "string",
+                      "minLength": 1
+                    }
+                  },
+                  "state_links": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "expression_id": {
+                          "type": "string",
+                          "minLength": 1
+                        },
+                        "aspect": {
+                          "type": "string",
+                          "enum": [
+                            "COMPLETION",
+                            "SUCCESS",
+                            "CONTROL_EFFECT"
+                          ]
+                        },
+                        "relation": {
+                          "type": "string",
+                          "enum": [
+                            "IFF",
+                            "STATE_IMPLIES_EVENT",
+                            "EVENT_IMPLIES_STATE"
+                          ]
+                        }
+                      },
+                      "required": [
+                        "expression_id",
+                        "aspect",
+                        "relation"
+                      ],
+                      "additionalProperties": false
+                    }
+                  },
+                  "external_input_ids": {
+                    "type": "array",
+                    "items": {
+                      "type": "string",
+                      "minLength": 1
+                    }
+                  }
+                },
+                "required": [
+                  "effects",
+                  "extent",
+                  "actor_domain",
+                  "continuation_targets",
+                  "state_links"
+                ],
+                "additionalProperties": false
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "required": [
+          "id",
+          "predicate",
+          "kind",
+          "layer",
+          "use",
+          "modality",
+          "polarity",
+          "owner_id",
+          "constraint_ids",
+          "requires",
+          "sources"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "claims": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "kind": {
+            "type": "string",
+            "enum": [
+              "ROLE",
+              "CONDITION",
+              "TEMPORAL",
+              "QUANTITY",
+              "COMPLETION",
+              "STOP",
+              "SCOPE",
+              "ARTIFACT_USE"
+            ]
+          },
+          "event_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "minLength": 1
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "entity_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "minLength": 1
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "role": {
+            "anyOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "PERFORMER",
+                  "ORGANIZER",
+                  "REVIEWER",
+                  "APPROVER",
+                  "RECIPIENT",
+                  "COLLABORATOR",
+                  "INPUT_OBJECT",
+                  "OBJECT",
+                  "RESULT",
+                  "DELIVERABLE",
+                  "BASIS",
+                  "CONTENT"
+                ]
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "expression_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "minLength": 1
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "direction": {
+            "anyOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "NECESSARY",
+                  "SUFFICIENT",
+                  "IFF",
+                  "ORDER"
+                ]
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "temporal": {
+            "anyOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "AFTER",
+                  "BEFORE"
+                ]
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "quantity": {
+            "anyOf": [
+              {
+                "type": "object",
+                "properties": {
+                  "metric": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "target_id": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "comparator": {
+                    "type": "string",
+                    "enum": [
+                      "EQ",
+                      "LT",
+                      "LTE",
+                      "GT",
+                      "GTE"
+                    ]
+                  },
+                  "value": {
+                    "type": "number"
+                  },
+                  "unit": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "use": {
+                    "type": "string",
+                    "enum": [
+                      "EXECUTION_LIMIT",
+                      "OUTPUT_CONTENT",
+                      "COMPLETION_THRESHOLD",
+                      "CLASSIFICATION_THRESHOLD",
+                      "WORK_PLAN"
+                    ]
+                  },
+                  "count_scope": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "distribution": {
+                    "anyOf": [
+                      {
+                        "type": "object",
+                        "properties": {
+                          "mode": {
+                            "type": "string",
+                            "enum": [
+                              "AGGREGATE",
+                              "EACH"
+                            ]
+                          },
+                          "domain_id": {
+                            "anyOf": [
+                              {
+                                "type": "string",
+                                "minLength": 1
+                              },
+                              {
+                                "type": "null"
+                              }
+                            ]
+                          }
+                        },
+                        "required": [
+                          "mode",
+                          "domain_id"
+                        ],
+                        "additionalProperties": false
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  }
+                },
+                "required": [
+                  "metric",
+                  "target_id",
+                  "comparator",
+                  "value",
+                  "unit",
+                  "use",
+                  "count_scope"
+                ],
+                "additionalProperties": false
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "artifact_use": {
+            "anyOf": [
+              {
+                "type": "object",
+                "properties": {
+                  "producer_result_id": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "consumer_role_id": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "availability": {
+                    "type": "string",
+                    "enum": [
+                      "USED_PORTION",
+                      "COMPLETE_RESULT"
+                    ]
+                  }
+                },
+                "required": [
+                  "producer_result_id",
+                  "consumer_role_id",
+                  "availability"
+                ],
+                "additionalProperties": false
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "scope_id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "requires": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "sources": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "quote": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "occurrence": {
+                  "type": "integer",
+                  "minimum": 1
+                }
+              },
+              "required": [
+                "quote",
+                "occurrence"
+              ],
+              "additionalProperties": false
+            },
+            "minItems": 1
+          },
+          "note": {
+            "type": "string"
+          },
+          "scope_binding": {
+            "anyOf": [
+              {
+                "type": "object",
+                "properties": {
+                  "domain_kind": {
+                    "type": "string",
+                    "enum": [
+                      "EXTERNAL_INPUT",
+                      "EXECUTION_ENVIRONMENT"
+                    ]
+                  },
+                  "relation": {
+                    "type": "string",
+                    "enum": [
+                      "ONLY_ALLOWED"
+                    ]
+                  },
+                  "subject_mode": {
+                    "type": "string",
+                    "enum": [
+                      "TASK_OPERATIONS",
+                      "EVENTS"
+                    ]
+                  },
+                  "subject_event_ids": {
+                    "type": "array",
+                    "items": {
+                      "type": "string",
+                      "minLength": 1
+                    }
+                  }
+                },
+                "required": [
+                  "domain_kind",
+                  "relation",
+                  "subject_mode",
+                  "subject_event_ids"
+                ],
+                "additionalProperties": false
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "required": [
+          "id",
+          "kind",
+          "event_id",
+          "entity_id",
+          "role",
+          "expression_id",
+          "direction",
+          "temporal",
+          "quantity",
+          "artifact_use",
+          "scope_id",
+          "requires",
+          "sources",
+          "note"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "expressions": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "op": {
+            "type": "string",
+            "enum": [
+              "STATE",
+              "TEST",
+              "ITEM",
+              "MEMBERS",
+              "ALL",
+              "ANY",
+              "UNION",
+              "INTERSECTION",
+              "EXCEPT",
+              "AND",
+              "OR",
+              "NOT"
+            ]
+          },
+          "operands": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "state": {
+            "anyOf": [
+              {
+                "type": "object",
+                "properties": {
+                  "predicate": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "event_id": {
+                    "anyOf": [
+                      {
+                        "type": "string",
+                        "minLength": 1
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "args": {
+                    "type": "array",
+                    "items": {
+                      "type": "string",
+                      "minLength": 1
+                    }
+                  },
+                  "polarity": {
+                    "type": "string",
+                    "enum": [
+                      "POSITIVE",
+                      "NEGATIVE"
+                    ]
+                  }
+                },
+                "required": [
+                  "predicate",
+                  "event_id",
+                  "args",
+                  "polarity"
+                ],
+                "additionalProperties": false
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "sources": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "quote": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "occurrence": {
+                  "type": "integer",
+                  "minimum": 1
+                }
+              },
+              "required": [
+                "quote",
+                "occurrence"
+              ],
+              "additionalProperties": false
+            },
+            "minItems": 1
+          },
+          "test": {
+            "anyOf": [
+              {
+                "type": "object",
+                "properties": {
+                  "target_id": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "event_id": {
+                    "anyOf": [
+                      {
+                        "type": "string",
+                        "minLength": 1
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "property_path": {
+                    "type": "array",
+                    "items": {
+                      "type": "string",
+                      "minLength": 1
+                    }
+                  },
+                  "operator": {
+                    "type": "string",
+                    "enum": [
+                      "EQ",
+                      "NEQ",
+                      "IN",
+                      "NOT_IN",
+                      "LT",
+                      "LTE",
+                      "GT",
+                      "GTE",
+                      "EMPTY",
+                      "NONEMPTY",
+                      "EXISTS",
+                      "NOT_EXISTS",
+                      "UNCHANGED",
+                      "IMMEDIATE"
+                    ]
+                  },
+                  "value": {
+                    "anyOf": [
+                      {
+                        "type": "string"
+                      },
+                      {
+                        "type": "number"
+                      },
+                      {
+                        "type": "boolean"
+                      },
+                      {
+                        "type": "null"
+                      },
+                      {
+                        "type": "array",
+                        "items": {
+                          "anyOf": [
+                            {
+                              "type": "string"
+                            },
+                            {
+                              "type": "number"
+                            },
+                            {
+                              "type": "boolean"
+                            }
+                          ]
+                        }
+                      }
+                    ]
+                  }
+                },
+                "required": [
+                  "target_id",
+                  "event_id",
+                  "property_path",
+                  "operator",
+                  "value"
+                ],
+                "additionalProperties": false
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "required": [
+          "id",
+          "op",
+          "operands",
+          "state",
+          "sources"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "issues": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "kind": {
+            "type": "string",
+            "enum": [
+              "AMBIGUITY",
+              "UNSPECIFIED",
+              "COVERAGE_GAP"
+            ]
+          },
+          "subject_ids": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "field_path": {
+            "type": "string"
+          },
+          "alternatives": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "affected_views": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "enum": [
+                "I",
+                "O",
+                "A",
+                "P",
+                "R",
+                "V",
+                "C",
+                "B"
+              ]
+            }
+          },
+          "sources": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "quote": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "occurrence": {
+                  "type": "integer",
+                  "minimum": 1
+                }
+              },
+              "required": [
+                "quote",
+                "occurrence"
+              ],
+              "additionalProperties": false
+            },
+            "minItems": 1
+          },
+          "note": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "kind",
+          "subject_ids",
+          "field_path",
+          "alternatives",
+          "affected_views",
+          "sources",
+          "note"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "coverage": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "sources": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "quote": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "occurrence": {
+                  "type": "integer",
+                  "minimum": 1
+                }
+              },
+              "required": [
+                "quote",
+                "occurrence"
+              ],
+              "additionalProperties": false
+            },
+            "minItems": 1
+          },
+          "claim_ids": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "EXPRESSED",
+              "BACKGROUND",
+              "UNSPECIFIED",
+              "GAP"
+            ]
+          },
+          "affected_views": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "enum": [
+                "I",
+                "O",
+                "A",
+                "P",
+                "R",
+                "V",
+                "C",
+                "B"
+              ]
+            }
+          },
+          "requirement_kind": {
+            "type": "string",
+            "enum": [
+              "GENERAL",
+              "RESTRICTION",
+              "QUANTITY_TOTAL",
+              "QUANTITY_EACH",
+              "WORK_PLAN",
+              "NON_BOUNDARY",
+              "PROPERTY_CONSTRAINT",
+              "OUTPUT_BEHAVIOR"
+            ]
+          }
+        },
+        "required": [
+          "sources",
+          "claim_ids",
+          "status",
+          "affected_views"
+        ],
+        "additionalProperties": false
+      }
+    }
+  },
+  "required": [
+    "contract_version",
+    "entities",
+    "events",
+    "claims",
+    "expressions",
+    "issues",
+    "coverage"
+  ],
+  "additionalProperties": false
+}

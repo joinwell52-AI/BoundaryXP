@@ -1,0 +1,300 @@
+# ADM-022 — actual Canonical 7+1
+
+## I
+
+```json
+{
+  "slot": "I",
+  "status": "RESOLVED",
+  "entries": [
+    {
+      "canonical_entry_id": "p1:44e6f28ec953656806db4bc4",
+      "slot": "I",
+      "boundary_fact_ids": [
+        "p1:06dbb445765d78eaee886165"
+      ],
+      "state": "RESOLVED",
+      "display_value": "masked-sample.csv",
+      "source_span_ids": [
+        "p1:d1d2a98b21a4aa22fa97ff63",
+        "p1:065575c8f8f461c23c5fc76d",
+        "p1:94a3170af461e888adcf89d6",
+        "p1:e2334c048e2d8aaf7258dc84",
+        "p1:8a176420156f79b9d76daba3"
+      ],
+      "scope_expr_id": "p1:ad87555b9e22cea55eedf7ca"
+    },
+    {
+      "canonical_entry_id": "p1:f86b561207904088ed81bb0a",
+      "slot": "I",
+      "boundary_fact_ids": [
+        "p1:525ee7bf7e3e1c98e418355d"
+      ],
+      "state": "RESOLVED",
+      "display_value": "姓名和手机号的脱敏结果",
+      "source_span_ids": [
+        "p1:3ff7e63f4b4537080d7c961e",
+        "p1:e2334c048e2d8aaf7258dc84",
+        "p1:94a3170af461e888adcf89d6",
+        "p1:8a176420156f79b9d76daba3"
+      ],
+      "scope_expr_id": "p1:615556fe79fb9d8f6d5a10d5"
+    }
+  ]
+}
+```
+
+## O
+
+```json
+{
+  "slot": "O",
+  "status": "RESOLVED",
+  "entries": [
+    {
+      "canonical_entry_id": "p1:2f06b312117464ed31b66da6",
+      "slot": "O",
+      "boundary_fact_ids": [
+        "p1:669f5ad45eddfef468cb1685"
+      ],
+      "state": "RESOLVED",
+      "display_value": "masking-review.md",
+      "source_span_ids": [
+        "p1:e7a2cd1111a2f0d44022ff87",
+        "p1:056551644219ce84ea01e946",
+        "p1:0f447587962a6e37aad7cfa2",
+        "p1:b180b9d5f6f0110744d22014",
+        "p1:065575c8f8f461c23c5fc76d"
+      ],
+      "scope_expr_id": "p1:934e4f2e3d3db45869372a14"
+    }
+  ]
+}
+```
+
+## A
+
+```json
+{
+  "slot": "A",
+  "status": "RESOLVED",
+  "entries": [
+    {
+      "canonical_entry_id": "p1:f69e1674ef38d85d43f84808",
+      "slot": "A",
+      "boundary_fact_ids": [
+        "p1:4bf2adeee8070b808b717c46"
+      ],
+      "state": "RESOLVED",
+      "display_value": "REQUIRED 读取 masked-sample.csv",
+      "source_span_ids": [
+        "p1:5af08cda1a26127f5332a571",
+        "p1:065575c8f8f461c23c5fc76d",
+        "p1:d1d2a98b21a4aa22fa97ff63",
+        "p1:b180b9d5f6f0110744d22014"
+      ],
+      "scope_expr_id": "p1:70ef61f13dd64611db5d0992"
+    },
+    {
+      "canonical_entry_id": "p1:533fcee96dcba1a9e3f66613",
+      "slot": "A",
+      "boundary_fact_ids": [
+        "p1:67d62d2b766dd27c194cbe12"
+      ],
+      "state": "RESOLVED",
+      "display_value": "REQUIRED 检查 姓名和手机号的脱敏结果",
+      "source_span_ids": [
+        "p1:25d628bab492f1a70eb8e11e",
+        "p1:e2334c048e2d8aaf7258dc84",
+        "p1:3ff7e63f4b4537080d7c961e",
+        "p1:b180b9d5f6f0110744d22014",
+        "p1:065575c8f8f461c23c5fc76d",
+        "p1:8a176420156f79b9d76daba3"
+      ],
+      "scope_expr_id": "p1:af3a0a717b10996543879266"
+    },
+    {
+      "canonical_entry_id": "p1:6acdf230ad05e85d6a392fc2",
+      "slot": "A",
+      "boundary_fact_ids": [
+        "p1:2d9e29d3d9c7bbbf5b3eedb3"
+      ],
+      "state": "RESOLVED",
+      "display_value": "REQUIRED 生成 masking-review.md",
+      "source_span_ids": [
+        "p1:e7a2cd1111a2f0d44022ff87",
+        "p1:056551644219ce84ea01e946",
+        "p1:0f447587962a6e37aad7cfa2",
+        "p1:b180b9d5f6f0110744d22014",
+        "p1:065575c8f8f461c23c5fc76d"
+      ],
+      "scope_expr_id": "p1:80acd6c0f009ff8028395d15"
+    },
+    {
+      "canonical_entry_id": "p1:6ec7c899cf73ee821b98daa1",
+      "slot": "A",
+      "boundary_fact_ids": [
+        "p1:bb1bf4bff09e5600644cf1d9"
+      ],
+      "state": "RESOLVED",
+      "display_value": "REQUIRED 接收 复核结果",
+      "source_span_ids": [
+        "p1:160946a1627b5d09889a1a86",
+        "p1:0170dd6e74c043bf78d946fe",
+        "p1:d42ff68e9e1348dd407390d1",
+        "p1:e18eed1df639e40316ca98e8"
+      ],
+      "scope_expr_id": "p1:ff6605e28302039f2f8f8832"
+    }
+  ]
+}
+```
+
+## P
+
+```json
+{
+  "slot": "P",
+  "status": "RESOLVED",
+  "entries": [
+    {
+      "canonical_entry_id": "p1:f4d812fcb51ea9c54be06cdf",
+      "slot": "P",
+      "boundary_fact_ids": [
+        "p1:4d25f324aa329d9f6bbbf498",
+        "p1:3f86745b35ff78ded98ff832",
+        "p1:ba6b0bdcdc2e88c267afe185"
+      ],
+      "state": "RESOLVED",
+      "display_value": "QA [PERFORMER]",
+      "source_span_ids": [
+        "p1:b180b9d5f6f0110744d22014",
+        "p1:065575c8f8f461c23c5fc76d",
+        "p1:5af08cda1a26127f5332a571",
+        "p1:e2334c048e2d8aaf7258dc84",
+        "p1:8a176420156f79b9d76daba3",
+        "p1:25d628bab492f1a70eb8e11e",
+        "p1:e7a2cd1111a2f0d44022ff87",
+        "p1:056551644219ce84ea01e946"
+      ]
+    },
+    {
+      "canonical_entry_id": "p1:3dcfa31300dcd21ceb698127",
+      "slot": "P",
+      "boundary_fact_ids": [
+        "p1:d26c4b180924f46a863566f2"
+      ],
+      "state": "RESOLVED",
+      "display_value": "PM [RECIPIENT]",
+      "source_span_ids": [
+        "p1:e18eed1df639e40316ca98e8",
+        "p1:0170dd6e74c043bf78d946fe",
+        "p1:160946a1627b5d09889a1a86",
+        "p1:e2334c048e2d8aaf7258dc84",
+        "p1:8a176420156f79b9d76daba3"
+      ]
+    }
+  ]
+}
+```
+
+## R
+
+```json
+{
+  "slot": "R",
+  "status": "ABSENT",
+  "entries": []
+}
+```
+
+## V
+
+```json
+{
+  "slot": "V",
+  "status": "RESOLVED",
+  "entries": [
+    {
+      "canonical_entry_id": "p1:d103ed299f63d294b3a1abaf",
+      "slot": "V",
+      "boundary_fact_ids": [
+        "p1:a6538446a96a5e6bf33f38d0"
+      ],
+      "state": "RESOLVED",
+      "display_value": "MASK-RULE-7",
+      "source_span_ids": [
+        "p1:8a176420156f79b9d76daba3",
+        "p1:e2334c048e2d8aaf7258dc84",
+        "p1:94a3170af461e888adcf89d6"
+      ]
+    },
+    {
+      "canonical_entry_id": "p1:b3bc99163a6a56d0e9610413",
+      "slot": "V",
+      "boundary_fact_ids": [
+        "p1:bf1d6a595c3574c86c96d0be"
+      ],
+      "state": "RESOLVED",
+      "display_value": "MASK-RULE-7",
+      "source_span_ids": [
+        "p1:8a176420156f79b9d76daba3",
+        "p1:e2334c048e2d8aaf7258dc84",
+        "p1:25d628bab492f1a70eb8e11e"
+      ]
+    }
+  ]
+}
+```
+
+## C
+
+```json
+{
+  "slot": "C",
+  "status": "ABSENT",
+  "entries": []
+}
+```
+
+## B
+
+```json
+{
+  "slot": "B",
+  "status": "RESOLVED",
+  "entries": [
+    {
+      "canonical_entry_id": "p1:2ed4aaa68b309fd320ac667a",
+      "slot": "B",
+      "boundary_fact_ids": [
+        "p1:132124378572bbc7322cd121"
+      ],
+      "state": "RESOLVED",
+      "display_value": "FORBIDDEN 读取 未脱敏原表",
+      "source_span_ids": [
+        "p1:2063d575db7c7b71a0f25f7e",
+        "p1:ffb13fc8ffce581366ce2488",
+        "p1:b6b46bb7a2b1f244d181140b"
+      ],
+      "scope_expr_id": "p1:524c36d1de8b687aa6695b11"
+    },
+    {
+      "canonical_entry_id": "p1:dd3ddfdc87f98f114f7804e7",
+      "slot": "B",
+      "boundary_fact_ids": [
+        "p1:5f9171e9ff82d2cacd8a00ad"
+      ],
+      "state": "RESOLVED",
+      "display_value": "FORBIDDEN 发送 样本",
+      "source_span_ids": [
+        "p1:db79e18174f5eaaa62ffc560",
+        "p1:b6c2cdaf638689e2365db8f5",
+        "p1:c350b46551d45cc12bbe11b9",
+        "p1:815c98d6300c195ebffb3c2f"
+      ],
+      "scope_expr_id": "p1:7f1d3dcf168d0591e8e5773e"
+    }
+  ]
+}
+```

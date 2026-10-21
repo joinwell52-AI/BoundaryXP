@@ -1,0 +1,35 @@
+# ANB-055 Actual Canonical 7+1
+
+## I RESOLVED
+
+- 测试环境连通性检查 [RESOLVED]
+
+## O ABSENT
+
+
+
+## A UNRESOLVED
+
+- REQUIRED 执行 测试环境连通性检查 [RESOLVED]
+- REQUIRED 通知 PM [UNRESOLVED]
+
+## P RESOLVED
+
+- QA [PERFORMER] [RESOLVED]
+- PM [RECIPIENT] [RESOLVED]
+
+## R ABSENT
+
+
+
+## V ABSENT
+
+
+
+## C UNRESOLVED
+
+- 结束 [UNRESOLVED]
+
+## B RESOLVED
+
+- FORBIDDEN 调整 路由 [RESOLVED]

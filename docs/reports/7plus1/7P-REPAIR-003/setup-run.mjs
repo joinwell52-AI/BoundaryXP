@@ -1,0 +1,7 @@
+import fs from 'node:fs';
+const dir='docs/reports/7plus1/7P-REPAIR-003',old='docs/reports/7plus1/7P-REPAIR-002';
+let freeze=fs.readFileSync(old+'/freeze-implementation-r03.mjs','utf8').replaceAll('v0.3-7p-repair-002-r03','v0.3-7p-repair-003').replaceAll("dir='docs/reports/7plus1/7P-REPAIR-002/final-candidate'",`dir='${dir}'`).replaceAll("task:'7P-REPAIR-002'","task:'7P-REPAIR-003'").replaceAll('13bd28fb25b02ee9358f20f2e1f2baa58df802f4','5372051bc4e3fc07f6283289ec1d5ea31f972805');
+freeze=freeze.replace(/\[\.\.\.files,'package\.json'.*?\]\.map\(p=>/u,"[...files,'package.json','tests/parser-7p-repair-003.test.mjs','tests/parser-7p-repair-003-prior.test.mjs','tests/parser-7p-repair-003-query-coverage.test.mjs','docs/reports/7plus1/7P-REPAIR-003/non-gold-inputs.mjs'].map(p=>");
+fs.writeFileSync(dir+'/freeze.mjs',freeze,{flag:'wx'});
+let replay=fs.readFileSync(old+'/replay-r03.mjs','utf8').replaceAll('v0.3-7p-repair-002-r03','v0.3-7p-repair-003').replaceAll('docs/reports/7plus1/7P-REPAIR-002/final-candidate',dir);fs.writeFileSync(dir+'/replay.mjs',replay,{flag:'wx'});
+let tests=fs.readFileSync(old+'/run-tests-r03.mjs','utf8').replaceAll('docs/reports/7plus1/7P-REPAIR-002/final-candidate',dir).replaceAll("task:'7P-REPAIR-002'","task:'7P-REPAIR-003'").replace(/'tests\/parser-7p-repair-002-r03.test.mjs'.*?'tests\/parser-7p-repair-002-r03-reference.test.mjs'/u,"'tests/parser-7p-repair-003.test.mjs','tests/parser-7p-repair-003-prior.test.mjs','tests/parser-7p-repair-003-query-coverage.test.mjs'");fs.writeFileSync(dir+'/run-tests.mjs',tests,{flag:'wx'});

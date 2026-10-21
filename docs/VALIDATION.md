@@ -2,6 +2,8 @@
 
 文档日期：2026-10-08。[当前版本与成绩](SHORT-COMPILER-STATUS.md) · [功能](FUNCTIONS.md) · [方法](BoundX-7plus1-定义原理语义编译与边界计算说明-v0.4.md)
 
+2026-10-21更新：本次ui220合并采用本地Gate，具体命令与结果见[同步说明](workbench/UI220-SYNC.md)。下文脚本表是2026-10-08分支快照；当前脚本以根`package.json`为准。全部Gate本地执行，不触发GitHub Actions。
+
 ## 1. 验证的第一目标
 
 **核对ADMIN原文是否被完整、正确地表达为7+1。** 合法JSON、来源引文匹配、审阅SUPPORT、程序无异常、Proof可达或SEAL通过，都不是自然语言准确率。

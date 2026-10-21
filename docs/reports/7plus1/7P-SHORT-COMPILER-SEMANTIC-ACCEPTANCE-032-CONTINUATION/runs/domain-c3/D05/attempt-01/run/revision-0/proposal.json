@@ -1,0 +1,439 @@
+{
+  "contract_version": "032.1",
+  "entities": [
+    {
+      "id": "pm",
+      "label": "PM",
+      "type": "OTHER",
+      "mentions": [
+        {
+          "quote": "PM",
+          "occurrence": 1
+        }
+      ],
+      "alternatives": []
+    },
+    {
+      "id": "app",
+      "label": "app.json",
+      "type": "FILE",
+      "mentions": [
+        {
+          "quote": "app.json",
+          "occurrence": 1
+        },
+        {
+          "quote": "app.json",
+          "occurrence": 2
+        }
+      ],
+      "alternatives": []
+    },
+    {
+      "id": "config",
+      "label": "配置项",
+      "type": "CLASS",
+      "mentions": [
+        {
+          "quote": "app.json中的任何配置项",
+          "occurrence": 1
+        }
+      ],
+      "alternatives": []
+    },
+    {
+      "id": "debug",
+      "label": "app.json中的debug项",
+      "type": "OTHER",
+      "mentions": [
+        {
+          "quote": "app.json中的任何配置项，debug项除外",
+          "occurrence": 1
+        },
+        {
+          "quote": "debug项",
+          "occurrence": 2
+        }
+      ],
+      "alternatives": []
+    }
+  ],
+  "events": [
+    {
+      "id": "read",
+      "predicate": "读取",
+      "kind": "ACTION",
+      "layer": "MAIN",
+      "use": "CURRENT_TASK",
+      "modality": "REQUIRED",
+      "polarity": "POSITIVE",
+      "owner_id": "ROOT",
+      "constraint_ids": [],
+      "requires": [],
+      "sources": [
+        {
+          "quote": "请PM读取app.json",
+          "occurrence": 1
+        }
+      ]
+    },
+    {
+      "id": "change_config",
+      "predicate": "更改",
+      "kind": "ACTION",
+      "layer": "MAIN",
+      "use": "CURRENT_TASK",
+      "modality": "FORBIDDEN",
+      "polarity": "POSITIVE",
+      "owner_id": "ROOT",
+      "constraint_ids": [],
+      "requires": [],
+      "sources": [
+        {
+          "quote": "本任务不得更改app.json中的任何配置项，debug项除外",
+          "occurrence": 1
+        }
+      ]
+    },
+    {
+      "id": "change_debug",
+      "predicate": "更改",
+      "kind": "ACTION",
+      "layer": "CONTENT",
+      "use": "MENTION_ONLY",
+      "modality": "UNSTATED",
+      "polarity": "POSITIVE",
+      "owner_id": "ROOT",
+      "constraint_ids": [],
+      "requires": [],
+      "sources": [
+        {
+          "quote": "本句不授予更改debug项的许可",
+          "occurrence": 1
+        }
+      ]
+    }
+  ],
+  "claims": [
+    {
+      "id": "read_performer",
+      "kind": "ROLE",
+      "event_id": "read",
+      "entity_id": "pm",
+      "role": "PERFORMER",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "artifact_use": null,
+      "scope_id": "read",
+      "requires": [],
+      "sources": [
+        {
+          "quote": "请PM读取app.json",
+          "occurrence": 1
+        }
+      ],
+      "note": "PM是明确指定的读取执行者。"
+    },
+    {
+      "id": "read_input",
+      "kind": "ROLE",
+      "event_id": "read",
+      "entity_id": "app",
+      "role": "INPUT_OBJECT",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "artifact_use": null,
+      "scope_id": "read",
+      "requires": [],
+      "sources": [
+        {
+          "quote": "读取app.json",
+          "occurrence": 1
+        }
+      ],
+      "note": ""
+    },
+    {
+      "id": "read_scope",
+      "kind": "SCOPE",
+      "event_id": "read",
+      "entity_id": null,
+      "role": null,
+      "expression_id": "app_item",
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "artifact_use": null,
+      "scope_id": "app",
+      "requires": [],
+      "sources": [
+        {
+          "quote": "读取app.json",
+          "occurrence": 1
+        }
+      ],
+      "note": ""
+    },
+    {
+      "id": "change_object",
+      "kind": "ROLE",
+      "event_id": "change_config",
+      "entity_id": "config",
+      "role": "OBJECT",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "artifact_use": null,
+      "scope_id": "change_config",
+      "requires": [],
+      "sources": [
+        {
+          "quote": "不得更改app.json中的任何配置项，debug项除外",
+          "occurrence": 1
+        }
+      ],
+      "note": "禁止对象不新增外部输入；禁令适用于本任务。"
+    },
+    {
+      "id": "change_scope",
+      "kind": "SCOPE",
+      "event_id": "change_config",
+      "entity_id": null,
+      "role": null,
+      "expression_id": "all_except_debug",
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "artifact_use": null,
+      "scope_id": "config",
+      "requires": [],
+      "sources": [
+        {
+          "quote": "本任务不得更改app.json中的任何配置项，debug项除外",
+          "occurrence": 1
+        }
+      ],
+      "note": "明确限定在app.json内；debug项仅被排除于本条禁令，未获得更改许可。"
+    },
+    {
+      "id": "debug_object",
+      "kind": "ROLE",
+      "event_id": "change_debug",
+      "entity_id": "debug",
+      "role": "OBJECT",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "artifact_use": null,
+      "scope_id": "change_debug",
+      "requires": [],
+      "sources": [
+        {
+          "quote": "debug项除外",
+          "occurrence": 1
+        },
+        {
+          "quote": "本句不授予更改debug项的许可",
+          "occurrence": 1
+        }
+      ],
+      "note": "仅保存不授予许可所指的动作对象，不解释为允许、要求或禁止更改debug项。"
+    },
+    {
+      "id": "debug_scope",
+      "kind": "SCOPE",
+      "event_id": "change_debug",
+      "entity_id": null,
+      "role": null,
+      "expression_id": "debug_item",
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "artifact_use": null,
+      "scope_id": "debug",
+      "requires": [],
+      "sources": [
+        {
+          "quote": "app.json中的任何配置项，debug项除外",
+          "occurrence": 1
+        },
+        {
+          "quote": "本句不授予更改debug项的许可",
+          "occurrence": 1
+        }
+      ],
+      "note": ""
+    }
+  ],
+  "expressions": [
+    {
+      "id": "app_item",
+      "op": "ITEM",
+      "operands": [
+        "app"
+      ],
+      "state": null,
+      "sources": [
+        {
+          "quote": "读取app.json",
+          "occurrence": 1
+        }
+      ]
+    },
+    {
+      "id": "config_domain",
+      "op": "CATEGORY",
+      "operands": [
+        "config",
+        "app"
+      ],
+      "state": null,
+      "sources": [
+        {
+          "quote": "app.json中的任何配置项",
+          "occurrence": 1
+        }
+      ]
+    },
+    {
+      "id": "debug_exception",
+      "op": "ENUM",
+      "operands": [
+        "debug"
+      ],
+      "state": null,
+      "sources": [
+        {
+          "quote": "app.json中的任何配置项，debug项除外",
+          "occurrence": 1
+        }
+      ]
+    },
+    {
+      "id": "config_except_debug",
+      "op": "EXCEPT",
+      "operands": [
+        "config_domain",
+        "debug_exception"
+      ],
+      "state": null,
+      "sources": [
+        {
+          "quote": "app.json中的任何配置项，debug项除外",
+          "occurrence": 1
+        }
+      ]
+    },
+    {
+      "id": "all_except_debug",
+      "op": "FORALL",
+      "operands": [
+        "config_except_debug"
+      ],
+      "state": null,
+      "sources": [
+        {
+          "quote": "不得更改app.json中的任何配置项，debug项除外",
+          "occurrence": 1
+        }
+      ]
+    },
+    {
+      "id": "debug_item",
+      "op": "ITEM",
+      "operands": [
+        "debug"
+      ],
+      "state": null,
+      "sources": [
+        {
+          "quote": "app.json中的任何配置项，debug项除外",
+          "occurrence": 1
+        },
+        {
+          "quote": "本句不授予更改debug项的许可",
+          "occurrence": 1
+        }
+      ]
+    }
+  ],
+  "issues": [],
+  "coverage": [
+    {
+      "sources": [
+        {
+          "quote": "请PM读取app.json",
+          "occurrence": 1
+        }
+      ],
+      "claim_ids": [
+        "read_performer",
+        "read_input",
+        "read_scope"
+      ],
+      "status": "EXPRESSED",
+      "affected_views": [
+        "I",
+        "A",
+        "P"
+      ],
+      "range_requirement": {
+        "kind": "SPECIFIC",
+        "scope_claim_ids": [
+          "read_scope"
+        ]
+      }
+    },
+    {
+      "sources": [
+        {
+          "quote": "本任务不得更改app.json中的任何配置项，debug项除外",
+          "occurrence": 1
+        }
+      ],
+      "claim_ids": [
+        "change_object",
+        "change_scope"
+      ],
+      "status": "EXPRESSED",
+      "affected_views": [
+        "B"
+      ],
+      "range_requirement": {
+        "kind": "UNIVERSAL_EXCEPT",
+        "scope_claim_ids": [
+          "change_scope"
+        ]
+      }
+    },
+    {
+      "sources": [
+        {
+          "quote": "本句不授予更改debug项的许可",
+          "occurrence": 1
+        }
+      ],
+      "claim_ids": [
+        "debug_object",
+        "debug_scope"
+      ],
+      "status": "EXPRESSED",
+      "affected_views": [
+        "A",
+        "B"
+      ],
+      "range_requirement": {
+        "kind": "SPECIFIC",
+        "scope_claim_ids": [
+          "debug_scope"
+        ]
+      }
+    }
+  ]
+}

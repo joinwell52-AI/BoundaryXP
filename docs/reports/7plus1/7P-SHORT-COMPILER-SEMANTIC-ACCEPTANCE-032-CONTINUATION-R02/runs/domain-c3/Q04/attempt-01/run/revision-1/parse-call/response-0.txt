@@ -1,0 +1,342 @@
+{
+  "contract_version": "032.1",
+  "entities": [
+    {
+      "id": "pm",
+      "label": "PM",
+      "type": "OTHER",
+      "mentions": [{"quote": "PM", "occurrence": 1}],
+      "alternatives": []
+    },
+    {
+      "id": "qa",
+      "label": "QA",
+      "type": "OTHER",
+      "mentions": [{"quote": "QA", "occurrence": 1}],
+      "alternatives": []
+    },
+    {
+      "id": "tool_file",
+      "label": "tool-list.json",
+      "type": "FILE",
+      "mentions": [{"quote": "tool-list.json", "occurrence": 1}],
+      "alternatives": []
+    },
+    {
+      "id": "tool_list",
+      "label": "tool-list.json中的MCP工具清单",
+      "type": "DOCUMENT",
+      "mentions": [{"quote": "tool-list.json中的MCP工具清单", "occurrence": 1}],
+      "alternatives": []
+    },
+    {
+      "id": "report",
+      "label": "mcp-check.md",
+      "type": "FILE",
+      "mentions": [
+        {"quote": "mcp-check.md", "occurrence": 1},
+        {"quote": "mcp-check.md", "occurrence": 2}
+      ],
+      "alternatives": []
+    }
+  ],
+  "events": [
+    {
+      "id": "check",
+      "predicate": "检查",
+      "kind": "ACTION",
+      "layer": "MAIN",
+      "use": "CURRENT_TASK",
+      "modality": "REQUIRED",
+      "polarity": "POSITIVE",
+      "owner_id": "ROOT",
+      "constraint_ids": [],
+      "requires": [],
+      "sources": [{"quote": "请PM检查tool-list.json中的MCP工具清单", "occurrence": 1}]
+    },
+    {
+      "id": "generate",
+      "predicate": "生成",
+      "kind": "ACTION",
+      "layer": "MAIN",
+      "use": "CURRENT_TASK",
+      "modality": "REQUIRED",
+      "polarity": "POSITIVE",
+      "owner_id": "ROOT",
+      "constraint_ids": [],
+      "requires": [],
+      "sources": [{"quote": "并生成mcp-check.md", "occurrence": 1}]
+    },
+    {
+      "id": "review",
+      "predicate": "复核",
+      "kind": "ACTION",
+      "layer": "MAIN",
+      "use": "CURRENT_TASK",
+      "modality": "REQUIRED",
+      "polarity": "POSITIVE",
+      "owner_id": "ROOT",
+      "constraint_ids": [],
+      "requires": [],
+      "sources": [{"quote": "QA负责复核mcp-check.md", "occurrence": 1}]
+    }
+  ],
+  "claims": [
+    {
+      "id": "check_performer",
+      "kind": "ROLE",
+      "event_id": "check",
+      "entity_id": "pm",
+      "role": "PERFORMER",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "artifact_use": null,
+      "scope_id": "check",
+      "requires": [],
+      "sources": [{"quote": "请PM检查tool-list.json中的MCP工具清单", "occurrence": 1}],
+      "note": "PM明确承担检查动作；岗位简称不推定为个人或群组。"
+    },
+    {
+      "id": "check_input",
+      "kind": "ROLE",
+      "event_id": "check",
+      "entity_id": "tool_list",
+      "role": "INPUT_OBJECT",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "artifact_use": null,
+      "scope_id": "check",
+      "requires": [],
+      "sources": [{"quote": "检查tool-list.json中的MCP工具清单", "occurrence": 1}],
+      "note": "受检对象是具体清单；其所在文件的容器关系另列覆盖缺口，未将整个文件扩大为受检内容。"
+    },
+    {
+      "id": "check_scope",
+      "kind": "SCOPE",
+      "event_id": "check",
+      "entity_id": null,
+      "role": null,
+      "expression_id": "list_item",
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "artifact_use": null,
+      "scope_id": "tool_list",
+      "requires": [],
+      "sources": [{"quote": "tool-list.json中的MCP工具清单", "occurrence": 1}],
+      "note": "ITEM仅保留具体清单身份，不表达该清单位于文件中的关系；容器限定尚未结构化闭合。"
+    },
+    {
+      "id": "generate_performer",
+      "kind": "ROLE",
+      "event_id": "generate",
+      "entity_id": "pm",
+      "role": "PERFORMER",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "artifact_use": null,
+      "scope_id": "generate",
+      "requires": [],
+      "sources": [
+        {"quote": "请PM检查tool-list.json中的MCP工具清单", "occurrence": 1},
+        {"quote": "并生成mcp-check.md", "occurrence": 1}
+      ],
+      "note": "并列生成动作承接同一指令的主语PM；QA在后续复核句才切换主体。"
+    },
+    {
+      "id": "generate_result",
+      "kind": "ROLE",
+      "event_id": "generate",
+      "entity_id": "report",
+      "role": "RESULT",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "artifact_use": null,
+      "scope_id": "generate",
+      "requires": [],
+      "sources": [{"quote": "生成mcp-check.md", "occurrence": 1}],
+      "note": "明确要求产生该文件，没有另行交付要求。"
+    },
+    {
+      "id": "generate_scope",
+      "kind": "SCOPE",
+      "event_id": "generate",
+      "entity_id": null,
+      "role": null,
+      "expression_id": "generated_report_item",
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "artifact_use": null,
+      "scope_id": "report",
+      "requires": [],
+      "sources": [{"quote": "生成mcp-check.md", "occurrence": 1}],
+      "note": ""
+    },
+    {
+      "id": "review_reviewer",
+      "kind": "ROLE",
+      "event_id": "review",
+      "entity_id": "qa",
+      "role": "REVIEWER",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "artifact_use": null,
+      "scope_id": "review",
+      "requires": [],
+      "sources": [{"quote": "QA负责复核mcp-check.md", "occurrence": 1}],
+      "note": "QA明确承担复核职责。"
+    },
+    {
+      "id": "review_object",
+      "kind": "ROLE",
+      "event_id": "review",
+      "entity_id": "report",
+      "role": "OBJECT",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "artifact_use": null,
+      "scope_id": "review",
+      "requires": [],
+      "sources": [
+        {"quote": "生成mcp-check.md", "occurrence": 1},
+        {"quote": "QA负责复核mcp-check.md", "occurrence": 1}
+      ],
+      "note": "生成与复核指向同一当前产物；内部复核用途不新增外部输入。"
+    },
+    {
+      "id": "review_scope",
+      "kind": "SCOPE",
+      "event_id": "review",
+      "entity_id": null,
+      "role": null,
+      "expression_id": "reviewed_report_item",
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "artifact_use": null,
+      "scope_id": "report",
+      "requires": [],
+      "sources": [{"quote": "复核mcp-check.md", "occurrence": 1}],
+      "note": ""
+    },
+    {
+      "id": "report_use",
+      "kind": "ARTIFACT_USE",
+      "event_id": "review",
+      "entity_id": "report",
+      "role": null,
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "artifact_use": {
+        "producer_result_id": "generate_result",
+        "consumer_role_id": "review_object",
+        "availability": "USED_PORTION"
+      },
+      "scope_id": "review",
+      "requires": [],
+      "sources": [
+        {"quote": "生成mcp-check.md", "occurrence": 1},
+        {"quote": "QA负责复核mcp-check.md", "occurrence": 1}
+      ],
+      "note": "复核消费本次生成的产物；未明示完整产物可用或生成完成后的事件顺序。"
+    }
+  ],
+  "expressions": [
+    {
+      "id": "list_item",
+      "op": "ITEM",
+      "operands": ["tool_list"],
+      "state": null,
+      "sources": [{"quote": "tool-list.json中的MCP工具清单", "occurrence": 1}]
+    },
+    {
+      "id": "generated_report_item",
+      "op": "ITEM",
+      "operands": ["report"],
+      "state": null,
+      "sources": [{"quote": "生成mcp-check.md", "occurrence": 1}]
+    },
+    {
+      "id": "reviewed_report_item",
+      "op": "ITEM",
+      "operands": ["report"],
+      "state": null,
+      "sources": [{"quote": "复核mcp-check.md", "occurrence": 1}]
+    }
+  ],
+  "issues": [
+    {
+      "id": "container_relation_gap",
+      "kind": "COVERAGE_GAP",
+      "subject_ids": ["check_input", "check_scope", "list_item", "tool_list", "tool_file"],
+      "field_path": "claims[check_scope].expression_id",
+      "alternatives": [],
+      "affected_views": ["I"],
+      "sources": [{"quote": "tool-list.json中的MCP工具清单", "occurrence": 1}],
+      "note": "原文明示具体清单位于tool-list.json中。删除以文件ITEM替代清单范围的无效主张；现有ITEM不能编码具体对象的容器关系，CATEGORY则会将具体清单改为类别域。保留明确容器语义的覆盖缺口，不以名称或note宣称结构化闭合，也不将来源明确的限定记为歧义。"
+    }
+  ],
+  "coverage": [
+    {
+      "sources": [{"quote": "请PM检查tool-list.json中的MCP工具清单", "occurrence": 1}],
+      "claim_ids": ["check_performer", "check_input", "check_scope"],
+      "status": "GAP",
+      "affected_views": ["I", "A", "P"],
+      "range_requirement": {
+        "kind": "SPECIFIC",
+        "scope_claim_ids": ["check_scope"]
+      }
+    },
+    {
+      "sources": [
+        {"quote": "请PM检查tool-list.json中的MCP工具清单", "occurrence": 1},
+        {"quote": "并生成mcp-check.md", "occurrence": 1}
+      ],
+      "claim_ids": ["generate_performer", "generate_result", "generate_scope"],
+      "status": "EXPRESSED",
+      "affected_views": ["O", "A", "P"],
+      "range_requirement": {
+        "kind": "SPECIFIC",
+        "scope_claim_ids": ["generate_scope"]
+      }
+    },
+    {
+      "sources": [{"quote": "QA负责复核mcp-check.md", "occurrence": 1}],
+      "claim_ids": ["review_reviewer", "review_object", "review_scope"],
+      "status": "EXPRESSED",
+      "affected_views": ["A", "P"],
+      "range_requirement": {
+        "kind": "SPECIFIC",
+        "scope_claim_ids": ["review_scope"]
+      }
+    },
+    {
+      "sources": [
+        {"quote": "生成mcp-check.md", "occurrence": 1},
+        {"quote": "QA负责复核mcp-check.md", "occurrence": 1}
+      ],
+      "claim_ids": ["generate_result", "review_object", "report_use"],
+      "status": "EXPRESSED",
+      "affected_views": ["O", "A"],
+      "range_requirement": {
+        "kind": "NONE",
+        "scope_claim_ids": []
+      }
+    }
+  ]
+}

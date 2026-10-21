@@ -1,0 +1,1 @@
+OPS inspect rehearsal, write echo.txt. This check is limited to rehearsal, not customer-live.

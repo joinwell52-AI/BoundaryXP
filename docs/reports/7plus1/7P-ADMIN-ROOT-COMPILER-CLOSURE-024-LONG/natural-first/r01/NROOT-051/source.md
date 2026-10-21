@@ -1,0 +1,1 @@
+请 PM 组织检查 service.log。若发现 critical 错误，任务必须立即停止并通知 PM；否则应形成 service-summary.md。不得重启服务。

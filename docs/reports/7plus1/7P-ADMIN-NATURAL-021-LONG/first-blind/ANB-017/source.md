@@ -1,0 +1,1 @@
+分析员许宁读取 sample.csv，检查 id、timestamp、status 三列是否存在且非空，生成 sample-audit.md。不得修复或重写样本数据。

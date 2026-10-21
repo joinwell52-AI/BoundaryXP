@@ -1,0 +1,429 @@
+{
+  "contract_version": "032.1",
+  "entities": [
+    {
+      "id": "ent_pm",
+      "label": "PM",
+      "type": "OTHER",
+      "mentions": [
+        {
+          "quote": "PM",
+          "occurrence": 1
+        }
+      ],
+      "alternatives": []
+    },
+    {
+      "id": "ent_a",
+      "label": "a.csv",
+      "type": "FILE",
+      "mentions": [
+        {
+          "quote": "a.csv",
+          "occurrence": 1
+        }
+      ],
+      "alternatives": []
+    },
+    {
+      "id": "ent_service",
+      "label": "服务",
+      "type": "CLASS",
+      "mentions": [
+        {
+          "quote": "服务",
+          "occurrence": 1
+        }
+      ],
+      "alternatives": []
+    },
+    {
+      "id": "ent_b",
+      "label": "b.csv",
+      "type": "FILE",
+      "mentions": [
+        {
+          "quote": "b.csv",
+          "occurrence": 1
+        }
+      ],
+      "alternatives": []
+    }
+  ],
+  "events": [
+    {
+      "id": "ev_check",
+      "predicate": "检查",
+      "kind": "ACTION",
+      "layer": "MAIN",
+      "use": "CURRENT_TASK",
+      "modality": "REQUIRED",
+      "polarity": "POSITIVE",
+      "owner_id": "ROOT",
+      "constraint_ids": [],
+      "requires": [],
+      "sources": [
+        {
+          "quote": "请PM检查a.csv",
+          "occurrence": 1
+        }
+      ]
+    },
+    {
+      "id": "ev_restart",
+      "predicate": "重启",
+      "kind": "ACTION",
+      "layer": "MAIN",
+      "use": "CURRENT_TASK",
+      "modality": "FORBIDDEN",
+      "polarity": "POSITIVE",
+      "owner_id": "ROOT",
+      "constraint_ids": [],
+      "requires": [],
+      "sources": [
+        {
+          "quote": "不得重启服务",
+          "occurrence": 1
+        }
+      ]
+    },
+    {
+      "id": "ev_read",
+      "predicate": "读取",
+      "kind": "ACTION",
+      "layer": "MAIN",
+      "use": "CURRENT_TASK",
+      "modality": "PERMITTED",
+      "polarity": "POSITIVE",
+      "owner_id": "ROOT",
+      "constraint_ids": [],
+      "requires": [],
+      "sources": [
+        {
+          "quote": "可以读取b.csv",
+          "occurrence": 1
+        }
+      ]
+    }
+  ],
+  "claims": [
+    {
+      "id": "cl_check_performer",
+      "kind": "ROLE",
+      "event_id": "ev_check",
+      "entity_id": "ent_pm",
+      "role": "PERFORMER",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "artifact_use": null,
+      "scope_id": "ev_check",
+      "requires": [],
+      "sources": [
+        {
+          "quote": "请PM检查a.csv",
+          "occurrence": 1
+        }
+      ],
+      "note": "PM为明确检查执行者；岗位简称的身份类别未指定。"
+    },
+    {
+      "id": "cl_check_input",
+      "kind": "ROLE",
+      "event_id": "ev_check",
+      "entity_id": "ent_a",
+      "role": "INPUT_OBJECT",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "artifact_use": null,
+      "scope_id": "ev_check",
+      "requires": [],
+      "sources": [
+        {
+          "quote": "检查a.csv",
+          "occurrence": 1
+        }
+      ],
+      "note": "a.csv是明确受检文件。"
+    },
+    {
+      "id": "cl_check_scope",
+      "kind": "SCOPE",
+      "event_id": "ev_check",
+      "entity_id": null,
+      "role": null,
+      "expression_id": "ex_a",
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "artifact_use": null,
+      "scope_id": "ent_a",
+      "requires": [],
+      "sources": [
+        {
+          "quote": "检查a.csv",
+          "occurrence": 1
+        }
+      ],
+      "note": "检查范围为具体文件a.csv。"
+    },
+    {
+      "id": "cl_restart_performer",
+      "kind": "ROLE",
+      "event_id": "ev_restart",
+      "entity_id": "ent_pm",
+      "role": "PERFORMER",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "artifact_use": null,
+      "scope_id": "ev_restart",
+      "requires": [],
+      "sources": [
+        {
+          "quote": "请PM检查a.csv",
+          "occurrence": 1
+        },
+        {
+          "quote": "不得重启服务",
+          "occurrence": 1
+        }
+      ],
+      "note": "连续同一指令未切换主体，重启禁令承接PM。"
+    },
+    {
+      "id": "cl_restart_object",
+      "kind": "ROLE",
+      "event_id": "ev_restart",
+      "entity_id": "ent_service",
+      "role": "OBJECT",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "artifact_use": null,
+      "scope_id": "ev_restart",
+      "requires": [],
+      "sources": [
+        {
+          "quote": "不得重启服务",
+          "occurrence": 1
+        }
+      ],
+      "note": "禁止对象为服务类别，不据此新增外部输入。"
+    },
+    {
+      "id": "cl_restart_scope",
+      "kind": "SCOPE",
+      "event_id": "ev_restart",
+      "entity_id": null,
+      "role": null,
+      "expression_id": "ex_services",
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "artifact_use": null,
+      "scope_id": "ent_service",
+      "requires": [],
+      "sources": [
+        {
+          "quote": "不得重启服务",
+          "occurrence": 1
+        }
+      ],
+      "note": "服务类别未限定容器；没有与前述CSV文件形成局部服务域的来源。"
+    },
+    {
+      "id": "cl_read_performer",
+      "kind": "ROLE",
+      "event_id": "ev_read",
+      "entity_id": "ent_pm",
+      "role": "PERFORMER",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "artifact_use": null,
+      "scope_id": "ev_read",
+      "requires": [],
+      "sources": [
+        {
+          "quote": "请PM检查a.csv",
+          "occurrence": 1
+        },
+        {
+          "quote": "可以读取b.csv",
+          "occurrence": 1
+        }
+      ],
+      "note": "连续同一指令未切换主体，读取许可承接PM。"
+    },
+    {
+      "id": "cl_read_input",
+      "kind": "ROLE",
+      "event_id": "ev_read",
+      "entity_id": "ent_b",
+      "role": "INPUT_OBJECT",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "artifact_use": null,
+      "scope_id": "ev_read",
+      "requires": [],
+      "sources": [
+        {
+          "quote": "可以读取b.csv",
+          "occurrence": 1
+        }
+      ],
+      "note": "b.csv是允许读取的明确输入文件。"
+    },
+    {
+      "id": "cl_read_scope",
+      "kind": "SCOPE",
+      "event_id": "ev_read",
+      "entity_id": null,
+      "role": null,
+      "expression_id": "ex_b",
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "artifact_use": null,
+      "scope_id": "ent_b",
+      "requires": [],
+      "sources": [
+        {
+          "quote": "可以读取b.csv",
+          "occurrence": 1
+        }
+      ],
+      "note": "读取许可的对象范围为具体文件b.csv。"
+    }
+  ],
+  "expressions": [
+    {
+      "id": "ex_a",
+      "op": "ITEM",
+      "operands": [
+        "ent_a"
+      ],
+      "state": null,
+      "sources": [
+        {
+          "quote": "a.csv",
+          "occurrence": 1
+        }
+      ]
+    },
+    {
+      "id": "ex_services",
+      "op": "CATEGORY",
+      "operands": [
+        "ent_service"
+      ],
+      "state": null,
+      "sources": [
+        {
+          "quote": "不得重启服务",
+          "occurrence": 1
+        }
+      ]
+    },
+    {
+      "id": "ex_b",
+      "op": "ITEM",
+      "operands": [
+        "ent_b"
+      ],
+      "state": null,
+      "sources": [
+        {
+          "quote": "b.csv",
+          "occurrence": 1
+        }
+      ]
+    }
+  ],
+  "issues": [],
+  "coverage": [
+    {
+      "sources": [
+        {
+          "quote": "请PM检查a.csv",
+          "occurrence": 1
+        }
+      ],
+      "claim_ids": [
+        "cl_check_performer",
+        "cl_check_input",
+        "cl_check_scope"
+      ],
+      "status": "EXPRESSED",
+      "affected_views": [
+        "I",
+        "A",
+        "P"
+      ],
+      "range_requirement": {
+        "kind": "SPECIFIC",
+        "scope_claim_ids": [
+          "cl_check_scope"
+        ]
+      }
+    },
+    {
+      "sources": [
+        {
+          "quote": "不得重启服务",
+          "occurrence": 1
+        }
+      ],
+      "claim_ids": [
+        "cl_restart_performer",
+        "cl_restart_object",
+        "cl_restart_scope"
+      ],
+      "status": "EXPRESSED",
+      "affected_views": [
+        "P",
+        "B"
+      ],
+      "range_requirement": {
+        "kind": "CATEGORY",
+        "scope_claim_ids": [
+          "cl_restart_scope"
+        ]
+      }
+    },
+    {
+      "sources": [
+        {
+          "quote": "可以读取b.csv",
+          "occurrence": 1
+        }
+      ],
+      "claim_ids": [
+        "cl_read_performer",
+        "cl_read_input",
+        "cl_read_scope"
+      ],
+      "status": "EXPRESSED",
+      "affected_views": [
+        "I",
+        "A",
+        "P"
+      ],
+      "range_requirement": {
+        "kind": "SPECIFIC",
+        "scope_claim_ids": [
+          "cl_read_scope"
+        ]
+      }
+    }
+  ]
+}

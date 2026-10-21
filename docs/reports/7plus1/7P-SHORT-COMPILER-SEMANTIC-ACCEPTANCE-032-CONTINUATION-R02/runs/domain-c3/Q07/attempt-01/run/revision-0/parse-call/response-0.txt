@@ -1,0 +1,364 @@
+{
+  "contract_version": "032.1",
+  "entities": [
+    {
+      "id": "E_PM",
+      "label": "PM",
+      "type": "OTHER",
+      "mentions": [{"quote": "PM", "occurrence": 1}],
+      "alternatives": []
+    },
+    {
+      "id": "E_QA",
+      "label": "QA",
+      "type": "OTHER",
+      "mentions": [{"quote": "QA", "occurrence": 1}],
+      "alternatives": []
+    },
+    {
+      "id": "E_SPACE",
+      "label": "磁盘空间",
+      "type": "OTHER",
+      "mentions": [{"quote": "磁盘空间", "occurrence": 1}],
+      "alternatives": []
+    },
+    {
+      "id": "E_RESULTS",
+      "label": "本次磁盘空间检查结果",
+      "type": "OTHER",
+      "mentions": [
+        {"quote": "磁盘空间检查", "occurrence": 1},
+        {"quote": "检查结果", "occurrence": 1}
+      ],
+      "alternatives": []
+    },
+    {
+      "id": "E_REPORT",
+      "label": "capacity.md",
+      "type": "FILE",
+      "mentions": [{"quote": "capacity.md", "occurrence": 1}],
+      "alternatives": []
+    }
+  ],
+  "events": [
+    {
+      "id": "EV_ORGANIZE",
+      "predicate": "组织检查",
+      "kind": "ACTION",
+      "layer": "MAIN",
+      "use": "CURRENT_TASK",
+      "modality": "REQUIRED",
+      "polarity": "POSITIVE",
+      "owner_id": "ROOT",
+      "constraint_ids": [],
+      "requires": [],
+      "sources": [{"quote": "请PM仅负责组织磁盘空间检查", "occurrence": 1}]
+    },
+    {
+      "id": "EV_CHECK",
+      "predicate": "检查磁盘空间",
+      "kind": "ACTION",
+      "layer": "CONTENT",
+      "use": "MENTION_ONLY",
+      "modality": "UNSTATED",
+      "polarity": "POSITIVE",
+      "owner_id": "EV_ORGANIZE",
+      "constraint_ids": [],
+      "requires": [],
+      "sources": [
+        {"quote": "组织磁盘空间检查", "occurrence": 1},
+        {"quote": "具体检查执行者由后续计划确定", "occurrence": 1}
+      ]
+    },
+    {
+      "id": "EV_SUMMARIZE",
+      "predicate": "汇总检查结果",
+      "kind": "ACTION",
+      "layer": "MAIN",
+      "use": "CURRENT_TASK",
+      "modality": "REQUIRED",
+      "polarity": "POSITIVE",
+      "owner_id": "ROOT",
+      "constraint_ids": [],
+      "requires": [],
+      "sources": [{"quote": "请QA汇总检查结果", "occurrence": 1}]
+    },
+    {
+      "id": "EV_GENERATE",
+      "predicate": "生成报告",
+      "kind": "ACTION",
+      "layer": "MAIN",
+      "use": "CURRENT_TASK",
+      "modality": "REQUIRED",
+      "polarity": "POSITIVE",
+      "owner_id": "ROOT",
+      "constraint_ids": [],
+      "requires": [],
+      "sources": [{"quote": "请QA汇总检查结果并生成capacity.md", "occurrence": 1}]
+    }
+  ],
+  "claims": [
+    {
+      "id": "C_ORGANIZER",
+      "kind": "ROLE",
+      "event_id": "EV_ORGANIZE",
+      "entity_id": "E_PM",
+      "role": "ORGANIZER",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "artifact_use": null,
+      "scope_id": "EV_ORGANIZE",
+      "requires": [],
+      "sources": [{"quote": "请PM仅负责组织磁盘空间检查", "occurrence": 1}],
+      "note": "PM的职责限定为组织；不将PM绑定为具体检查执行者。"
+    },
+    {
+      "id": "C_ORGANIZE_INPUT",
+      "kind": "ROLE",
+      "event_id": "EV_ORGANIZE",
+      "entity_id": "E_SPACE",
+      "role": "INPUT_OBJECT",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "artifact_use": null,
+      "scope_id": "EV_ORGANIZE",
+      "requires": [],
+      "sources": [{"quote": "组织磁盘空间检查", "occurrence": 1}],
+      "note": "组织职责的明确受检范围为磁盘空间。"
+    },
+    {
+      "id": "C_ORGANIZE_SCOPE",
+      "kind": "SCOPE",
+      "event_id": "EV_ORGANIZE",
+      "entity_id": null,
+      "role": null,
+      "expression_id": "X_SPACE",
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "artifact_use": null,
+      "scope_id": "E_SPACE",
+      "requires": [],
+      "sources": [{"quote": "组织磁盘空间检查", "occurrence": 1}],
+      "note": ""
+    },
+    {
+      "id": "C_CHECK_OBJECT",
+      "kind": "ROLE",
+      "event_id": "EV_CHECK",
+      "entity_id": "E_SPACE",
+      "role": "OBJECT",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "artifact_use": null,
+      "scope_id": "EV_CHECK",
+      "requires": [],
+      "sources": [{"quote": "磁盘空间检查", "occurrence": 1}],
+      "note": "保存被组织工作的内容，不新增当前检查执行义务。"
+    },
+    {
+      "id": "C_CHECK_SCOPE",
+      "kind": "SCOPE",
+      "event_id": "EV_CHECK",
+      "entity_id": null,
+      "role": null,
+      "expression_id": "X_SPACE",
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "artifact_use": null,
+      "scope_id": "E_SPACE",
+      "requires": [],
+      "sources": [{"quote": "磁盘空间检查", "occurrence": 1}],
+      "note": ""
+    },
+    {
+      "id": "C_SUMMARIZE_PERFORMER",
+      "kind": "ROLE",
+      "event_id": "EV_SUMMARIZE",
+      "entity_id": "E_QA",
+      "role": "PERFORMER",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "artifact_use": null,
+      "scope_id": "EV_SUMMARIZE",
+      "requires": [],
+      "sources": [{"quote": "请QA汇总检查结果", "occurrence": 1}],
+      "note": ""
+    },
+    {
+      "id": "C_SUMMARIZE_OBJECT",
+      "kind": "ROLE",
+      "event_id": "EV_SUMMARIZE",
+      "entity_id": "E_RESULTS",
+      "role": "OBJECT",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "artifact_use": null,
+      "scope_id": "EV_SUMMARIZE",
+      "requires": [],
+      "sources": [
+        {"quote": "组织磁盘空间检查", "occurrence": 1},
+        {"quote": "汇总检查结果", "occurrence": 1}
+      ],
+      "note": "检查结果承接同一任务中的磁盘空间检查，是内部工作结果，不推定为外部输入。"
+    },
+    {
+      "id": "C_SUMMARIZE_SCOPE",
+      "kind": "SCOPE",
+      "event_id": "EV_SUMMARIZE",
+      "entity_id": null,
+      "role": null,
+      "expression_id": "X_RESULTS",
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "artifact_use": null,
+      "scope_id": "E_RESULTS",
+      "requires": [],
+      "sources": [
+        {"quote": "磁盘空间检查", "occurrence": 1},
+        {"quote": "汇总检查结果", "occurrence": 1}
+      ],
+      "note": ""
+    },
+    {
+      "id": "C_GENERATE_PERFORMER",
+      "kind": "ROLE",
+      "event_id": "EV_GENERATE",
+      "entity_id": "E_QA",
+      "role": "PERFORMER",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "artifact_use": null,
+      "scope_id": "EV_GENERATE",
+      "requires": [],
+      "sources": [
+        {"quote": "请QA汇总检查结果", "occurrence": 1},
+        {"quote": "并生成capacity.md", "occurrence": 1}
+      ],
+      "note": "连续并列指令无主体切换，生成动作承接QA为执行者；并列不另增先后约束。"
+    },
+    {
+      "id": "C_GENERATE_RESULT",
+      "kind": "ROLE",
+      "event_id": "EV_GENERATE",
+      "entity_id": "E_REPORT",
+      "role": "RESULT",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "artifact_use": null,
+      "scope_id": "EV_GENERATE",
+      "requires": [],
+      "sources": [{"quote": "生成capacity.md", "occurrence": 1}],
+      "note": "明确要求生成文件，未指定交付用途。"
+    },
+    {
+      "id": "C_GENERATE_SCOPE",
+      "kind": "SCOPE",
+      "event_id": "EV_GENERATE",
+      "entity_id": null,
+      "role": null,
+      "expression_id": "X_REPORT",
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "artifact_use": null,
+      "scope_id": "E_REPORT",
+      "requires": [],
+      "sources": [{"quote": "生成capacity.md", "occurrence": 1}],
+      "note": ""
+    }
+  ],
+  "expressions": [
+    {
+      "id": "X_SPACE",
+      "op": "ITEM",
+      "operands": ["E_SPACE"],
+      "state": null,
+      "sources": [{"quote": "磁盘空间", "occurrence": 1}]
+    },
+    {
+      "id": "X_RESULTS",
+      "op": "ITEM",
+      "operands": ["E_RESULTS"],
+      "state": null,
+      "sources": [
+        {"quote": "磁盘空间检查", "occurrence": 1},
+        {"quote": "检查结果", "occurrence": 1}
+      ]
+    },
+    {
+      "id": "X_REPORT",
+      "op": "ITEM",
+      "operands": ["E_REPORT"],
+      "state": null,
+      "sources": [{"quote": "capacity.md", "occurrence": 1}]
+    }
+  ],
+  "issues": [
+    {
+      "id": "ISS_CHECK_PERFORMER",
+      "kind": "UNSPECIFIED",
+      "subject_ids": ["EV_CHECK"],
+      "field_path": "performer",
+      "alternatives": [],
+      "affected_views": ["P"],
+      "sources": [{"quote": "具体检查执行者由后续计划确定", "occurrence": 1}],
+      "note": "具体检查执行者明确留待后续计划确定；不默认由PM或QA执行，也不新增编制计划义务。"
+    }
+  ],
+  "coverage": [
+    {
+      "sources": [{"quote": "请PM仅负责组织磁盘空间检查", "occurrence": 1}],
+      "claim_ids": ["C_ORGANIZER", "C_ORGANIZE_INPUT", "C_ORGANIZE_SCOPE", "C_CHECK_OBJECT", "C_CHECK_SCOPE"],
+      "status": "EXPRESSED",
+      "affected_views": ["A", "P", "I", "B"],
+      "range_requirement": {
+        "kind": "SPECIFIC",
+        "scope_claim_ids": ["C_ORGANIZE_SCOPE", "C_CHECK_SCOPE"]
+      }
+    },
+    {
+      "sources": [{"quote": "具体检查执行者由后续计划确定", "occurrence": 1}],
+      "claim_ids": [],
+      "status": "UNSPECIFIED",
+      "affected_views": ["P"],
+      "range_requirement": {"kind": "NONE", "scope_claim_ids": []}
+    },
+    {
+      "sources": [{"quote": "请QA汇总检查结果", "occurrence": 1}],
+      "claim_ids": ["C_SUMMARIZE_PERFORMER", "C_SUMMARIZE_OBJECT", "C_SUMMARIZE_SCOPE"],
+      "status": "EXPRESSED",
+      "affected_views": ["A", "P"],
+      "range_requirement": {
+        "kind": "SPECIFIC",
+        "scope_claim_ids": ["C_SUMMARIZE_SCOPE"]
+      }
+    },
+    {
+      "sources": [{"quote": "请QA汇总检查结果并生成capacity.md", "occurrence": 1}],
+      "claim_ids": ["C_GENERATE_PERFORMER", "C_GENERATE_RESULT", "C_GENERATE_SCOPE"],
+      "status": "EXPRESSED",
+      "affected_views": ["A", "P", "O"],
+      "range_requirement": {
+        "kind": "SPECIFIC",
+        "scope_claim_ids": ["C_GENERATE_SCOPE"]
+      }
+    }
+  ]
+}

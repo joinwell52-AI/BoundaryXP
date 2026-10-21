@@ -1,0 +1,195 @@
+{
+  "contract_version": "028-r02.3",
+  "reviews": [
+    {
+      "subject_id": "ent_pm",
+      "field_path": "label",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [{"quote": "PM", "occurrence": 1}],
+      "reason": "原文明示受令者为PM，身份标签有据。"
+    },
+    {
+      "subject_id": "ent_pm",
+      "field_path": "mentions",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [{"quote": "PM", "occurrence": 1}],
+      "reason": "引文及出现次数准确。"
+    },
+    {
+      "subject_id": "ent_pm",
+      "field_path": "alternatives",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [{"quote": "请PM检查", "occurrence": 1}],
+      "reason": "没有竞争指代；类别未明不构成身份竞争。"
+    },
+    {
+      "subject_id": "ent_pm",
+      "field_path": "type",
+      "verdict": "UNCERTAIN",
+      "context_refs": [],
+      "sources": [{"quote": "请PM检查", "occurrence": 1}],
+      "reason": "原文未确定PM是个人还是群体，OTHER仅可作为暂存类别；疑点限于type。"
+    },
+    {
+      "subject_id": "ent_dev",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [{"quote": "dev、stage和prod三个环境", "occurrence": 1}],
+      "reason": "dev是明确列举的环境，身份与来源准确。"
+    },
+    {
+      "subject_id": "ent_stage",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [{"quote": "dev、stage和prod三个环境", "occurrence": 1}],
+      "reason": "stage是明确列举的环境，身份与来源准确。"
+    },
+    {
+      "subject_id": "ent_prod",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [
+        {"quote": "prod", "occurrence": 1},
+        {"quote": "prod", "occurrence": 2}
+      ],
+      "reason": "列举与排除中的prod指同一环境。"
+    },
+    {
+      "subject_id": "ent_any_environment",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [{"quote": "任何环境", "occurrence": 1}],
+      "reason": "保留禁止对象的全称范围，没有缩小为检查对象。"
+    },
+    {
+      "subject_id": "ev_check",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["cl_check_scope"],
+      "sources": [{"quote": "请PM检查dev、stage和prod三个环境，但本次排除prod。", "occurrence": 1}],
+      "reason": "检查是当前明确要求的主动作，具体对象范围由关联SCOPE保留。"
+    },
+    {
+      "subject_id": "ev_modify",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [{"quote": "不得修改任何环境。", "occurrence": 1}],
+      "reason": "修改是当前禁止动作，FORBIDDEN与正向动作谓词组合准确。"
+    },
+    {
+      "subject_id": "cl_check_performer",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["ent_pm", "ev_check"],
+      "sources": [{"quote": "请PM检查", "occurrence": 1}],
+      "reason": "PM明确承担检查执行角色，该角色不依赖其人或组类别。"
+    },
+    {
+      "subject_id": "cl_check_dev",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["cl_check_scope"],
+      "sources": [{"quote": "检查dev、stage和prod三个环境，但本次排除prod", "occurrence": 1}],
+      "reason": "dev仍在排除后的明确受检范围内，INPUT_OBJECT正确。"
+    },
+    {
+      "subject_id": "cl_check_stage",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["cl_check_scope"],
+      "sources": [{"quote": "检查dev、stage和prod三个环境，但本次排除prod", "occurrence": 1}],
+      "reason": "stage仍在排除后的明确受检范围内，INPUT_OBJECT正确。"
+    },
+    {
+      "subject_id": "cl_check_scope",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["expr_check_scope"],
+      "sources": [{"quote": "dev、stage和prod三个环境，但本次排除prod", "occurrence": 1}],
+      "reason": "范围为原始三项集合减去prod；三项是原始集合基数，不是执行次数限制。"
+    },
+    {
+      "subject_id": "cl_modify_performer",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["ent_pm", "ev_modify"],
+      "sources": [
+        {"quote": "请PM检查", "occurrence": 1},
+        {"quote": "不得修改任何环境。", "occurrence": 1}
+      ],
+      "reason": "连续任务指令中的禁止承接受令者PM，未引入新的执行者。"
+    },
+    {
+      "subject_id": "cl_modify_object",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["ev_modify", "ent_any_environment"],
+      "sources": [{"quote": "不得修改任何环境。", "occurrence": 1}],
+      "reason": "禁止涵盖任何环境，包括排除检查的prod；OBJECT用途不新增外部输入。"
+    },
+    {
+      "subject_id": "expr_dev",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["ent_dev"],
+      "sources": [{"quote": "dev", "occurrence": 1}],
+      "reason": "ITEM准确引用dev环境。"
+    },
+    {
+      "subject_id": "expr_stage",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["ent_stage"],
+      "sources": [{"quote": "stage", "occurrence": 1}],
+      "reason": "ITEM准确引用stage环境。"
+    },
+    {
+      "subject_id": "expr_prod",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["ent_prod"],
+      "sources": [
+        {"quote": "prod", "occurrence": 1},
+        {"quote": "prod", "occurrence": 2}
+      ],
+      "reason": "ITEM保留列举与排除对象的同一身份。"
+    },
+    {
+      "subject_id": "expr_original_scope",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["expr_dev", "expr_stage", "expr_prod"],
+      "sources": [{"quote": "dev、stage和prod三个环境", "occurrence": 1}],
+      "reason": "UNION准确表达原始列举的三个环境。"
+    },
+    {
+      "subject_id": "expr_check_scope",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["expr_original_scope", "expr_prod"],
+      "sources": [{"quote": "dev、stage和prod三个环境，但本次排除prod", "occurrence": 1}],
+      "reason": "EXCEPT的顺序正确，表达原始集合扣除prod。"
+    }
+  ],
+  "issues": [
+    {
+      "id": "audit_pm_type",
+      "issue_kind": "IDENTITY",
+      "subject_ids": ["ent_pm"],
+      "field_path": "type",
+      "context_refs": [],
+      "sources": [{"quote": "请PM检查", "occurrence": 1}],
+      "reason": "PM的人或组类别未明确，OTHER无法获得确定类别支持；仅保留type未决，不否定明确身份及职责。",
+      "suggested_json": null
+    }
+  ],
+  "omissions": []
+}

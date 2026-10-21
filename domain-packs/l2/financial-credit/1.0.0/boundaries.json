@@ -1,0 +1,34 @@
+{
+  "schema": "boundx-domain-boundaries/v1",
+  "packId": "financial-credit",
+  "version": "1.0.0",
+  "risks": [
+    {
+      "id": "risk.exceed_credit_limit",
+      "category": "financial-risk",
+      "label": {
+        "zh-CN": "超权限额度未经有权人批复划款",
+        "en": "Disbursement exceeding authorized credit limit"
+      },
+      "frameIds": [
+        "credit.disburse_loan",
+        "credit.approve_limit"
+      ],
+      "decision": null,
+      "becomesBOnlyWhen": "explicit_FORBID_or_effective_policy_binding"
+    },
+    {
+      "id": "risk.blacklist_disbursement",
+      "category": "compliance-violation",
+      "label": {
+        "zh-CN": "向征信黑名单或失信主体划付信贷资金",
+        "en": "Disbursement to blacklisted debtor"
+      },
+      "frameIds": [
+        "credit.disburse_loan"
+      ],
+      "decision": null,
+      "becomesBOnlyWhen": "explicit_FORBID_or_effective_policy_binding"
+    }
+  ]
+}

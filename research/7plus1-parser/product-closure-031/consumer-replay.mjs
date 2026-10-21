@@ -1,0 +1,16 @@
+// Pure consumer correction with captured model responses. Never calls a provider.
+import fs from 'node:fs';import path from 'node:path';import assert from 'node:assert/strict';
+import {technicalValidate} from '../llm-first-028/validate.mjs';import {compileBoundary} from '../llm-first-028/compile.mjs';import {sha256} from '../llm-first-028/source.mjs';import {compilerRevision} from '../llm-first-028/engine.mjs';
+const report=path.resolve('docs/reports/7plus1/7P-SHORT-COMPILER-PRODUCT-CLOSURE-031-LONG'),read=p=>JSON.parse(fs.readFileSync(p,'utf8'));
+const selected=[...Array.from({length:22},(_,i)=>['c3-first','Q'+String(i+1).padStart(2,'0')]),...Array.from({length:8},(_,i)=>['c4-rest','Q'+String(i+23).padStart(2,'0')]),...Array.from({length:12},(_,i)=>['c4-rest','S'+String(i).padStart(2,'0')]),['c3-ui','N01']];
+const changes=[];
+for(const [group,id] of selected){const old=path.join(report,'runs',group,id,'run/trace.json');if(!fs.existsSync(old))continue;const prior=read(old),out=path.join(report,'consumer-c5',group,id);assert(!fs.existsSync(out),'no overwrite');fs.mkdirSync(out,{recursive:true});
+ const technical=technicalValidate(prior.source,prior.proposal,prior.audit),result=compileBoundary(prior.source,prior.proposal,prior.audit,technical);
+ for(const slot of ['I','O','A','R','V','C','B'])assert.deepEqual(result.canonical.slots[slot],prior.canonical.slots[slot],group+'/'+id+' changed '+slot);
+ const before=prior.canonical.slots.P.entries.map(x=>x.claim.id),after=result.canonical.slots.P.entries.map(x=>x.claim.id),added=after.filter(x=>!before.includes(x));assert(before.every(x=>after.includes(x)));
+ for(const f of result.canonical.slots.P.entries.filter(x=>added.includes(x.claim.id)))assert(f.proof.provenance_refs.some(k=>prior.proposal.claims.some(c=>c.id===k&&['COMPLETION','STOP','TEMPORAL','CONDITION'].includes(c.kind))));
+ const trace={...prior,...result,technical,compiler_revision:compilerRevision,execution_mode:'CAPTURED_RESPONSE_CONSUMER_RECOMPILE',model_calls:0,original_trace:path.relative(report,old).replaceAll('\\','/'),original_trace_sha256:sha256(fs.readFileSync(old)),candidate_sha256:sha256(JSON.stringify(prior.proposal)),audit_sha256:sha256(JSON.stringify(prior.audit))};
+ for(const [name,data] of [['trace.json',trace],['7plus1.json',result.canonical],['boundary-ir.json',result.ir]])fs.writeFileSync(path.join(out,name),JSON.stringify(data,null,2)+'\n',{flag:'wx'});fs.writeFileSync(path.join(out,'7plus1.zh.md'),result.chinese,{flag:'wx'});
+ changes.push({group,id,source_sha256:prior.source.sha256,original_trace:trace.original_trace,original_trace_sha256:trace.original_trace_sha256,candidate_unchanged:true,audit_unchanged:true,non_P_slots_unchanged:true,added_P_claims:added,removed_P_claims:[],before:prior.canonical.slots.P.entries.filter(x=>added.includes(x.claim.id)),after:result.canonical.slots.P.entries.filter(x=>added.includes(x.claim.id)),model_calls:0});
+}
+fs.writeFileSync(path.join(report,'CONSUMER-C5-COMPARISON.json'),JSON.stringify({compiler_revision:compilerRevision,runs:changes.length,model_calls:0,changes},null,2)+'\n',{flag:'wx'});console.log(JSON.stringify(changes.filter(x=>x.added_P_claims.length).map(({group,id,added_P_claims})=>({group,id,added_P_claims}))));

@@ -1,0 +1,9 @@
+import fs from 'node:fs';import crypto from 'node:crypto';import {spawnSync} from 'node:child_process';
+const git=(...args)=>{const r=spawnSync('git',args,{encoding:null,maxBuffer:200e6});if(r.status!==0)throw Error(String(r.stderr));return r.stdout;};
+const hash=b=>crypto.createHash('sha256').update(b).digest('hex');
+const old=git('rev-parse','HEAD').toString().trim(),next=git('rev-parse','origin/review/7plus1-parser').toString().trim();
+if(git('branch','--show-current').toString().trim()!=='review/7plus1-parser'||git('diff','--cached','--name-only').toString().trim())throw Error('BRANCH_INDEX');
+const changes=git('diff','--name-only',old,next).toString().trim().split('\n'),allow=['docs/tasks/7plus1/CURRENT-TASK.md','docs/tasks/7plus1/7P-HYBRID-015.md'];if(changes.some(p=>!allow.includes(p)))throw Error('DISPATCH_SCOPE');
+const status=git('status','--porcelain=v1','--untracked-files=no');for(const p of changes){if(git('diff','HEAD','--',p).length)throw Error('DIRTY_DISPATCH '+p);fs.mkdirSync(p.slice(0,p.lastIndexOf('/')),{recursive:true});fs.writeFileSync(p,git('show',next+':'+p));}git('read-tree',next);git('update-ref','refs/heads/review/7plus1-parser',next,old);if(!status.equals(git('status','--porcelain=v1','--untracked-files=no')))throw Error('STATUS_CHANGED');
+const files=git('ls-files','-z').toString().split('\0').filter(Boolean).map(p=>({path:p,sha256:fs.existsSync(p)?hash(fs.readFileSync(p)):null,missing_at_start:!fs.existsSync(p)}));
+const out='docs/reports/7plus1/7P-HYBRID-015/';fs.writeFileSync(out+'BASELINE.json',JSON.stringify({task:'7P-HYBRID-015',sealed_control_commit:old,dispatch_commit:next,branch:'review/7plus1-parser',protected_files:files,preexisting_tracked_status_sha256:hash(status),control_final:JSON.parse(fs.readFileSync('docs/reports/7plus1/7P-COMPOSITION-014/FINAL-OUTCOME.json'))},null,2)+'\n','utf8');console.log(JSON.stringify({old,next,changes,protected_files:files.length}));

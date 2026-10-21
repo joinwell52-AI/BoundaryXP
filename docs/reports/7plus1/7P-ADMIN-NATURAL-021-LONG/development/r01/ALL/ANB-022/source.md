@@ -1,0 +1,1 @@
+QA 按 RELEASE-CHECK-4 v1.7 检查 artifact.json 和 checksum.txt，生成 artifact-review.md。不得执行发布，也不得重新生成校验文件。

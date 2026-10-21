@@ -1,0 +1,6317 @@
+{
+  "source": {
+    "text": "PM必须提交handover.md；只有ADMIN确认已收到该文件，本任务才可标记为完成。",
+    "sha256": "e27b99a11c9396859ce1c1e25f5fe4dfbcd3aa047ed7920eb64bbd5344abb706",
+    "encoding": "UTF-8",
+    "codepoints": 45,
+    "lines": [
+      {
+        "id": "L1",
+        "text": "PM必须提交handover.md；只有ADMIN确认已收到该文件，本任务才可标记为完成。",
+        "span": [
+          0,
+          45
+        ]
+      }
+    ],
+    "literals": [
+      {
+        "text": "handover.md",
+        "span": [
+          6,
+          17
+        ]
+      }
+    ]
+  },
+  "proposal": {
+    "contract_version": "031-r01",
+    "entities": [
+      {
+        "id": "ent_pm",
+        "label": "PM",
+        "type": "OTHER",
+        "mentions": [
+          {
+            "quote": "PM",
+            "occurrence": 1
+          }
+        ],
+        "alternatives": []
+      },
+      {
+        "id": "ent_admin",
+        "label": "ADMIN",
+        "type": "OTHER",
+        "mentions": [
+          {
+            "quote": "ADMIN",
+            "occurrence": 1
+          }
+        ],
+        "alternatives": []
+      },
+      {
+        "id": "ent_file",
+        "label": "handover.md",
+        "type": "FILE",
+        "mentions": [
+          {
+            "quote": "handover.md",
+            "occurrence": 1
+          },
+          {
+            "quote": "该文件",
+            "occurrence": 1
+          }
+        ],
+        "alternatives": []
+      }
+    ],
+    "events": [
+      {
+        "id": "ev_submit",
+        "predicate": "提交",
+        "kind": "ACTION",
+        "layer": "MAIN",
+        "use": "CURRENT_TASK",
+        "modality": "REQUIRED",
+        "polarity": "POSITIVE",
+        "owner_id": "ROOT",
+        "constraint_ids": [],
+        "requires": [],
+        "sources": [
+          {
+            "quote": "PM必须提交handover.md",
+            "occurrence": 1
+          }
+        ]
+      },
+      {
+        "id": "ev_confirm",
+        "predicate": "确认已收到",
+        "kind": "ACTION",
+        "layer": "CONDITION",
+        "use": "MENTION_ONLY",
+        "modality": "UNSTATED",
+        "polarity": "POSITIVE",
+        "owner_id": "ROOT",
+        "constraint_ids": [],
+        "requires": [],
+        "sources": [
+          {
+            "quote": "ADMIN确认已收到该文件",
+            "occurrence": 1
+          }
+        ]
+      }
+    ],
+    "claims": [
+      {
+        "id": "cl_submit_performer",
+        "kind": "ROLE",
+        "event_id": "ev_submit",
+        "entity_id": "ent_pm",
+        "role": "PERFORMER",
+        "expression_id": null,
+        "direction": null,
+        "temporal": null,
+        "quantity": null,
+        "scope_id": "ev_submit",
+        "requires": [],
+        "sources": [
+          {
+            "quote": "PM必须提交handover.md",
+            "occurrence": 1
+          }
+        ],
+        "note": "PM是提交动作的明确执行者。"
+      },
+      {
+        "id": "cl_deliverable",
+        "kind": "ROLE",
+        "event_id": "ev_submit",
+        "entity_id": "ent_file",
+        "role": "DELIVERABLE",
+        "expression_id": null,
+        "direction": null,
+        "temporal": null,
+        "quantity": null,
+        "scope_id": "ev_submit",
+        "requires": [],
+        "sources": [
+          {
+            "quote": "PM必须提交handover.md",
+            "occurrence": 1
+          }
+        ],
+        "note": "明确交付文件，不推定生成或修改文件。"
+      },
+      {
+        "id": "cl_confirm_performer",
+        "kind": "ROLE",
+        "event_id": "ev_confirm",
+        "entity_id": "ent_admin",
+        "role": "PERFORMER",
+        "expression_id": null,
+        "direction": null,
+        "temporal": null,
+        "quantity": null,
+        "scope_id": "ev_confirm",
+        "requires": [],
+        "sources": [
+          {
+            "quote": "ADMIN确认已收到该文件",
+            "occurrence": 1
+          }
+        ],
+        "note": "ADMIN是条件中确认动作的主体，不新增确认义务。"
+      },
+      {
+        "id": "cl_confirm_object",
+        "kind": "ROLE",
+        "event_id": "ev_confirm",
+        "entity_id": "ent_file",
+        "role": "OBJECT",
+        "expression_id": null,
+        "direction": null,
+        "temporal": null,
+        "quantity": null,
+        "scope_id": "ev_confirm",
+        "requires": [],
+        "sources": [
+          {
+            "quote": "handover.md",
+            "occurrence": 1
+          },
+          {
+            "quote": "ADMIN确认已收到该文件",
+            "occurrence": 1
+          }
+        ],
+        "note": "该文件指前述唯一交付文件handover.md。"
+      },
+      {
+        "id": "cl_completion",
+        "kind": "COMPLETION",
+        "event_id": null,
+        "entity_id": null,
+        "role": null,
+        "expression_id": "expr_confirmed",
+        "direction": "NECESSARY",
+        "temporal": null,
+        "quantity": null,
+        "scope_id": "ROOT",
+        "requires": [],
+        "sources": [
+          {
+            "quote": "只有ADMIN确认已收到该文件，本任务才可标记为完成",
+            "occurrence": 1
+          }
+        ],
+        "note": "ADMIN确认已收到文件是根任务可标记完成的必要前提，不表示该前提已成立，也不表示它足以完成任务。"
+      }
+    ],
+    "expressions": [
+      {
+        "id": "expr_confirmed",
+        "op": "STATE",
+        "operands": [],
+        "state": {
+          "predicate": "已确认收到",
+          "event_id": "ev_confirm",
+          "args": [
+            "ent_admin",
+            "ent_file"
+          ],
+          "polarity": "POSITIVE"
+        },
+        "sources": [
+          {
+            "quote": "handover.md",
+            "occurrence": 1
+          },
+          {
+            "quote": "ADMIN确认已收到该文件",
+            "occurrence": 1
+          }
+        ]
+      }
+    ],
+    "issues": [],
+    "coverage": [
+      {
+        "sources": [
+          {
+            "quote": "PM必须提交handover.md",
+            "occurrence": 1
+          }
+        ],
+        "claim_ids": [
+          "cl_submit_performer",
+          "cl_deliverable"
+        ],
+        "status": "EXPRESSED",
+        "affected_views": [
+          "A",
+          "P",
+          "O"
+        ]
+      },
+      {
+        "sources": [
+          {
+            "quote": "ADMIN确认已收到该文件",
+            "occurrence": 1
+          }
+        ],
+        "claim_ids": [
+          "cl_confirm_performer",
+          "cl_confirm_object",
+          "cl_completion"
+        ],
+        "status": "EXPRESSED",
+        "affected_views": [
+          "C"
+        ]
+      },
+      {
+        "sources": [
+          {
+            "quote": "只有ADMIN确认已收到该文件，本任务才可标记为完成",
+            "occurrence": 1
+          }
+        ],
+        "claim_ids": [
+          "cl_completion"
+        ],
+        "status": "EXPRESSED",
+        "affected_views": [
+          "C"
+        ]
+      }
+    ]
+  },
+  "audit": {
+    "contract_version": "031-r01",
+    "reviews": [
+      {
+        "subject_id": "ent_pm",
+        "field_path": "",
+        "verdict": "SUPPORT",
+        "context_refs": [],
+        "sources": [
+          {
+            "quote": "PM",
+            "occurrence": 1
+          }
+        ],
+        "reason": "PM身份明确；原文未指定人或组类别，OTHER可作占位。"
+      },
+      {
+        "subject_id": "ent_admin",
+        "field_path": "",
+        "verdict": "SUPPORT",
+        "context_refs": [],
+        "sources": [
+          {
+            "quote": "ADMIN",
+            "occurrence": 1
+          }
+        ],
+        "reason": "ADMIN身份明确；OTHER保留未指定的类别，不推定权限。"
+      },
+      {
+        "subject_id": "ent_file",
+        "field_path": "",
+        "verdict": "SUPPORT",
+        "context_refs": [],
+        "sources": [
+          {
+            "quote": "handover.md",
+            "occurrence": 1
+          },
+          {
+            "quote": "该文件",
+            "occurrence": 1
+          }
+        ],
+        "reason": "全文只有一个文件对象，该文件指handover.md；两处指称已绑定同一实体。"
+      },
+      {
+        "subject_id": "ev_submit",
+        "field_path": "",
+        "verdict": "SUPPORT",
+        "context_refs": [],
+        "sources": [
+          {
+            "quote": "PM必须提交handover.md",
+            "occurrence": 1
+          }
+        ],
+        "reason": "提交是当前明确要求的主动作，REQUIRED及正向极性正确。"
+      },
+      {
+        "subject_id": "ev_confirm",
+        "field_path": "",
+        "verdict": "SUPPORT",
+        "context_refs": [],
+        "sources": [
+          {
+            "quote": "只有ADMIN确认已收到该文件，本任务才可标记为完成",
+            "occurrence": 1
+          }
+        ],
+        "reason": "确认收到仅出现在完成前提中，CONDITION、MENTION_ONLY和UNSTATED未新增确认义务。"
+      },
+      {
+        "subject_id": "cl_submit_performer",
+        "field_path": "",
+        "verdict": "SUPPORT",
+        "context_refs": [
+          "ev_submit",
+          "ent_pm"
+        ],
+        "sources": [
+          {
+            "quote": "PM必须提交handover.md",
+            "occurrence": 1
+          }
+        ],
+        "reason": "原文明示PM为提交执行者，角色及事件绑定正确。"
+      },
+      {
+        "subject_id": "cl_deliverable",
+        "field_path": "",
+        "verdict": "SUPPORT",
+        "context_refs": [
+          "ev_submit",
+          "ent_file"
+        ],
+        "sources": [
+          {
+            "quote": "PM必须提交handover.md",
+            "occurrence": 1
+          }
+        ],
+        "reason": "handover.md是提交事件的DELIVERABLE，未推定生成、修改或外部输入。"
+      },
+      {
+        "subject_id": "cl_confirm_performer",
+        "field_path": "",
+        "verdict": "SUPPORT",
+        "context_refs": [
+          "ev_confirm",
+          "ent_admin"
+        ],
+        "sources": [
+          {
+            "quote": "ADMIN确认已收到该文件",
+            "occurrence": 1
+          }
+        ],
+        "reason": "ADMIN是条件内确认动作的明确主体，未传播为主任务义务。"
+      },
+      {
+        "subject_id": "cl_confirm_object",
+        "field_path": "",
+        "verdict": "SUPPORT",
+        "context_refs": [
+          "ev_confirm",
+          "ent_file"
+        ],
+        "sources": [
+          {
+            "quote": "handover.md",
+            "occurrence": 1
+          },
+          {
+            "quote": "ADMIN确认已收到该文件",
+            "occurrence": 1
+          }
+        ],
+        "reason": "确认涉及前述同一文件，OBJECT绑定正确，未将其转成外部输入。"
+      },
+      {
+        "subject_id": "cl_completion",
+        "field_path": "",
+        "verdict": "SUPPORT",
+        "context_refs": [
+          "expr_confirmed"
+        ],
+        "sources": [
+          {
+            "quote": "只有ADMIN确认已收到该文件，本任务才可标记为完成",
+            "occurrence": 1
+          }
+        ],
+        "reason": "只有……才表达根任务标记完成的必要前提，NECESSARY正确；未误作充分触发或已发生事实。"
+      },
+      {
+        "subject_id": "expr_confirmed",
+        "field_path": "",
+        "verdict": "SUPPORT",
+        "context_refs": [
+          "ev_confirm",
+          "ent_admin",
+          "ent_file"
+        ],
+        "sources": [
+          {
+            "quote": "handover.md",
+            "occurrence": 1
+          },
+          {
+            "quote": "ADMIN确认已收到该文件",
+            "occurrence": 1
+          }
+        ],
+        "reason": "STATE引用对应确认事件，参数为ADMIN与同一交付文件，正向状态准确表达完成前提而不断言其成立。"
+      }
+    ],
+    "issues": [],
+    "omissions": []
+  },
+  "technical": {
+    "policy": "028-r02-technical-v2",
+    "schemas": {
+      "proposal": {
+        "ok": true,
+        "errors": []
+      },
+      "audit": {
+        "ok": true,
+        "errors": []
+      }
+    },
+    "rows": [
+      {
+        "id": "ent_pm",
+        "collection": "entities",
+        "status": "ACCEPTED",
+        "identity_status": "ACCEPTED",
+        "errors": [],
+        "uncertain": [],
+        "sources": [
+          {
+            "quote": "PM",
+            "occurrence": 1,
+            "span": [
+              0,
+              2
+            ],
+            "source_sha256": "e27b99a11c9396859ce1c1e25f5fe4dfbcd3aa047ed7920eb64bbd5344abb706"
+          }
+        ],
+        "audit_refs": [
+          {
+            "subject_id": "ent_pm",
+            "field_path": "",
+            "verdict": "SUPPORT"
+          }
+        ],
+        "required_dependencies": [],
+        "structural_refs": []
+      },
+      {
+        "id": "ent_admin",
+        "collection": "entities",
+        "status": "ACCEPTED",
+        "identity_status": "ACCEPTED",
+        "errors": [],
+        "uncertain": [],
+        "sources": [
+          {
+            "quote": "ADMIN",
+            "occurrence": 1,
+            "span": [
+              20,
+              25
+            ],
+            "source_sha256": "e27b99a11c9396859ce1c1e25f5fe4dfbcd3aa047ed7920eb64bbd5344abb706"
+          }
+        ],
+        "audit_refs": [
+          {
+            "subject_id": "ent_admin",
+            "field_path": "",
+            "verdict": "SUPPORT"
+          }
+        ],
+        "required_dependencies": [],
+        "structural_refs": []
+      },
+      {
+        "id": "ent_file",
+        "collection": "entities",
+        "status": "ACCEPTED",
+        "identity_status": "ACCEPTED",
+        "errors": [],
+        "uncertain": [],
+        "sources": [
+          {
+            "quote": "handover.md",
+            "occurrence": 1,
+            "span": [
+              6,
+              17
+            ],
+            "source_sha256": "e27b99a11c9396859ce1c1e25f5fe4dfbcd3aa047ed7920eb64bbd5344abb706"
+          },
+          {
+            "quote": "该文件",
+            "occurrence": 1,
+            "span": [
+              30,
+              33
+            ],
+            "source_sha256": "e27b99a11c9396859ce1c1e25f5fe4dfbcd3aa047ed7920eb64bbd5344abb706"
+          }
+        ],
+        "audit_refs": [
+          {
+            "subject_id": "ent_file",
+            "field_path": "",
+            "verdict": "SUPPORT"
+          }
+        ],
+        "required_dependencies": [],
+        "structural_refs": []
+      },
+      {
+        "id": "ev_submit",
+        "collection": "events",
+        "status": "ACCEPTED",
+        "errors": [],
+        "uncertain": [],
+        "sources": [
+          {
+            "quote": "PM必须提交handover.md",
+            "occurrence": 1,
+            "span": [
+              0,
+              17
+            ],
+            "source_sha256": "e27b99a11c9396859ce1c1e25f5fe4dfbcd3aa047ed7920eb64bbd5344abb706"
+          }
+        ],
+        "audit_refs": [
+          {
+            "subject_id": "ev_submit",
+            "field_path": "",
+            "verdict": "SUPPORT"
+          }
+        ],
+        "required_dependencies": [],
+        "structural_refs": [
+          "ROOT"
+        ]
+      },
+      {
+        "id": "ev_confirm",
+        "collection": "events",
+        "status": "ACCEPTED",
+        "errors": [],
+        "uncertain": [],
+        "sources": [
+          {
+            "quote": "ADMIN确认已收到该文件",
+            "occurrence": 1,
+            "span": [
+              20,
+              33
+            ],
+            "source_sha256": "e27b99a11c9396859ce1c1e25f5fe4dfbcd3aa047ed7920eb64bbd5344abb706"
+          }
+        ],
+        "audit_refs": [
+          {
+            "subject_id": "ev_confirm",
+            "field_path": "",
+            "verdict": "SUPPORT"
+          }
+        ],
+        "required_dependencies": [],
+        "structural_refs": [
+          "ROOT"
+        ]
+      },
+      {
+        "id": "cl_submit_performer",
+        "collection": "claims",
+        "status": "ACCEPTED",
+        "errors": [],
+        "uncertain": [],
+        "sources": [
+          {
+            "quote": "PM必须提交handover.md",
+            "occurrence": 1,
+            "span": [
+              0,
+              17
+            ],
+            "source_sha256": "e27b99a11c9396859ce1c1e25f5fe4dfbcd3aa047ed7920eb64bbd5344abb706"
+          }
+        ],
+        "audit_refs": [
+          {
+            "subject_id": "cl_submit_performer",
+            "field_path": "",
+            "verdict": "SUPPORT"
+          }
+        ],
+        "required_dependencies": [],
+        "structural_refs": [
+          "ev_submit",
+          "ev_submit",
+          "ent_pm"
+        ]
+      },
+      {
+        "id": "cl_deliverable",
+        "collection": "claims",
+        "status": "ACCEPTED",
+        "errors": [],
+        "uncertain": [],
+        "sources": [
+          {
+            "quote": "PM必须提交handover.md",
+            "occurrence": 1,
+            "span": [
+              0,
+              17
+            ],
+            "source_sha256": "e27b99a11c9396859ce1c1e25f5fe4dfbcd3aa047ed7920eb64bbd5344abb706"
+          }
+        ],
+        "audit_refs": [
+          {
+            "subject_id": "cl_deliverable",
+            "field_path": "",
+            "verdict": "SUPPORT"
+          }
+        ],
+        "required_dependencies": [],
+        "structural_refs": [
+          "ev_submit",
+          "ev_submit",
+          "ent_file"
+        ]
+      },
+      {
+        "id": "cl_confirm_performer",
+        "collection": "claims",
+        "status": "ACCEPTED",
+        "errors": [],
+        "uncertain": [],
+        "sources": [
+          {
+            "quote": "ADMIN确认已收到该文件",
+            "occurrence": 1,
+            "span": [
+              20,
+              33
+            ],
+            "source_sha256": "e27b99a11c9396859ce1c1e25f5fe4dfbcd3aa047ed7920eb64bbd5344abb706"
+          }
+        ],
+        "audit_refs": [
+          {
+            "subject_id": "cl_confirm_performer",
+            "field_path": "",
+            "verdict": "SUPPORT"
+          }
+        ],
+        "required_dependencies": [],
+        "structural_refs": [
+          "ev_confirm",
+          "ev_confirm",
+          "ent_admin"
+        ]
+      },
+      {
+        "id": "cl_confirm_object",
+        "collection": "claims",
+        "status": "ACCEPTED",
+        "errors": [],
+        "uncertain": [],
+        "sources": [
+          {
+            "quote": "handover.md",
+            "occurrence": 1,
+            "span": [
+              6,
+              17
+            ],
+            "source_sha256": "e27b99a11c9396859ce1c1e25f5fe4dfbcd3aa047ed7920eb64bbd5344abb706"
+          },
+          {
+            "quote": "ADMIN确认已收到该文件",
+            "occurrence": 1,
+            "span": [
+              20,
+              33
+            ],
+            "source_sha256": "e27b99a11c9396859ce1c1e25f5fe4dfbcd3aa047ed7920eb64bbd5344abb706"
+          }
+        ],
+        "audit_refs": [
+          {
+            "subject_id": "cl_confirm_object",
+            "field_path": "",
+            "verdict": "SUPPORT"
+          }
+        ],
+        "required_dependencies": [],
+        "structural_refs": [
+          "ev_confirm",
+          "ev_confirm",
+          "ent_file"
+        ]
+      },
+      {
+        "id": "cl_completion",
+        "collection": "claims",
+        "status": "ACCEPTED",
+        "errors": [],
+        "uncertain": [],
+        "sources": [
+          {
+            "quote": "只有ADMIN确认已收到该文件，本任务才可标记为完成",
+            "occurrence": 1,
+            "span": [
+              18,
+              44
+            ],
+            "source_sha256": "e27b99a11c9396859ce1c1e25f5fe4dfbcd3aa047ed7920eb64bbd5344abb706"
+          }
+        ],
+        "audit_refs": [
+          {
+            "subject_id": "cl_completion",
+            "field_path": "",
+            "verdict": "SUPPORT"
+          }
+        ],
+        "required_dependencies": [],
+        "structural_refs": [
+          "ROOT",
+          "expr_confirmed"
+        ]
+      },
+      {
+        "id": "expr_confirmed",
+        "collection": "expressions",
+        "status": "ACCEPTED",
+        "errors": [],
+        "uncertain": [],
+        "sources": [
+          {
+            "quote": "handover.md",
+            "occurrence": 1,
+            "span": [
+              6,
+              17
+            ],
+            "source_sha256": "e27b99a11c9396859ce1c1e25f5fe4dfbcd3aa047ed7920eb64bbd5344abb706"
+          },
+          {
+            "quote": "ADMIN确认已收到该文件",
+            "occurrence": 1,
+            "span": [
+              20,
+              33
+            ],
+            "source_sha256": "e27b99a11c9396859ce1c1e25f5fe4dfbcd3aa047ed7920eb64bbd5344abb706"
+          }
+        ],
+        "audit_refs": [
+          {
+            "subject_id": "expr_confirmed",
+            "field_path": "",
+            "verdict": "SUPPORT"
+          }
+        ],
+        "required_dependencies": [],
+        "structural_refs": [
+          "ev_confirm"
+        ]
+      }
+    ],
+    "diagnostics": [],
+    "coverage": [
+      {
+        "sources": [
+          {
+            "quote": "PM必须提交handover.md",
+            "occurrence": 1,
+            "span": [
+              0,
+              17
+            ],
+            "source_sha256": "e27b99a11c9396859ce1c1e25f5fe4dfbcd3aa047ed7920eb64bbd5344abb706"
+          }
+        ],
+        "claim_ids": [
+          "cl_submit_performer",
+          "cl_deliverable"
+        ],
+        "status": "EXPRESSED",
+        "affected_views": [
+          "A",
+          "P",
+          "O"
+        ],
+        "id": "coverage:0"
+      },
+      {
+        "sources": [
+          {
+            "quote": "ADMIN确认已收到该文件",
+            "occurrence": 1,
+            "span": [
+              20,
+              33
+            ],
+            "source_sha256": "e27b99a11c9396859ce1c1e25f5fe4dfbcd3aa047ed7920eb64bbd5344abb706"
+          }
+        ],
+        "claim_ids": [
+          "cl_confirm_performer",
+          "cl_confirm_object",
+          "cl_completion"
+        ],
+        "status": "EXPRESSED",
+        "affected_views": [
+          "C"
+        ],
+        "id": "coverage:1"
+      },
+      {
+        "sources": [
+          {
+            "quote": "只有ADMIN确认已收到该文件，本任务才可标记为完成",
+            "occurrence": 1,
+            "span": [
+              18,
+              44
+            ],
+            "source_sha256": "e27b99a11c9396859ce1c1e25f5fe4dfbcd3aa047ed7920eb64bbd5344abb706"
+          }
+        ],
+        "claim_ids": [
+          "cl_completion"
+        ],
+        "status": "EXPRESSED",
+        "affected_views": [
+          "C"
+        ],
+        "id": "coverage:2"
+      }
+    ],
+    "audit_sources": [
+      {
+        "subject_id": "ent_pm",
+        "sources": [
+          {
+            "quote": "PM",
+            "occurrence": 1,
+            "span": [
+              0,
+              2
+            ],
+            "source_sha256": "e27b99a11c9396859ce1c1e25f5fe4dfbcd3aa047ed7920eb64bbd5344abb706"
+          }
+        ]
+      },
+      {
+        "subject_id": "ent_admin",
+        "sources": [
+          {
+            "quote": "ADMIN",
+            "occurrence": 1,
+            "span": [
+              20,
+              25
+            ],
+            "source_sha256": "e27b99a11c9396859ce1c1e25f5fe4dfbcd3aa047ed7920eb64bbd5344abb706"
+          }
+        ]
+      },
+      {
+        "subject_id": "ent_file",
+        "sources": [
+          {
+            "quote": "handover.md",
+            "occurrence": 1,
+            "span": [
+              6,
+              17
+            ],
+            "source_sha256": "e27b99a11c9396859ce1c1e25f5fe4dfbcd3aa047ed7920eb64bbd5344abb706"
+          },
+          {
+            "quote": "该文件",
+            "occurrence": 1,
+            "span": [
+              30,
+              33
+            ],
+            "source_sha256": "e27b99a11c9396859ce1c1e25f5fe4dfbcd3aa047ed7920eb64bbd5344abb706"
+          }
+        ]
+      },
+      {
+        "subject_id": "ev_submit",
+        "sources": [
+          {
+            "quote": "PM必须提交handover.md",
+            "occurrence": 1,
+            "span": [
+              0,
+              17
+            ],
+            "source_sha256": "e27b99a11c9396859ce1c1e25f5fe4dfbcd3aa047ed7920eb64bbd5344abb706"
+          }
+        ]
+      },
+      {
+        "subject_id": "ev_confirm",
+        "sources": [
+          {
+            "quote": "只有ADMIN确认已收到该文件，本任务才可标记为完成",
+            "occurrence": 1,
+            "span": [
+              18,
+              44
+            ],
+            "source_sha256": "e27b99a11c9396859ce1c1e25f5fe4dfbcd3aa047ed7920eb64bbd5344abb706"
+          }
+        ]
+      },
+      {
+        "subject_id": "cl_submit_performer",
+        "sources": [
+          {
+            "quote": "PM必须提交handover.md",
+            "occurrence": 1,
+            "span": [
+              0,
+              17
+            ],
+            "source_sha256": "e27b99a11c9396859ce1c1e25f5fe4dfbcd3aa047ed7920eb64bbd5344abb706"
+          }
+        ]
+      },
+      {
+        "subject_id": "cl_deliverable",
+        "sources": [
+          {
+            "quote": "PM必须提交handover.md",
+            "occurrence": 1,
+            "span": [
+              0,
+              17
+            ],
+            "source_sha256": "e27b99a11c9396859ce1c1e25f5fe4dfbcd3aa047ed7920eb64bbd5344abb706"
+          }
+        ]
+      },
+      {
+        "subject_id": "cl_confirm_performer",
+        "sources": [
+          {
+            "quote": "ADMIN确认已收到该文件",
+            "occurrence": 1,
+            "span": [
+              20,
+              33
+            ],
+            "source_sha256": "e27b99a11c9396859ce1c1e25f5fe4dfbcd3aa047ed7920eb64bbd5344abb706"
+          }
+        ]
+      },
+      {
+        "subject_id": "cl_confirm_object",
+        "sources": [
+          {
+            "quote": "handover.md",
+            "occurrence": 1,
+            "span": [
+              6,
+              17
+            ],
+            "source_sha256": "e27b99a11c9396859ce1c1e25f5fe4dfbcd3aa047ed7920eb64bbd5344abb706"
+          },
+          {
+            "quote": "ADMIN确认已收到该文件",
+            "occurrence": 1,
+            "span": [
+              20,
+              33
+            ],
+            "source_sha256": "e27b99a11c9396859ce1c1e25f5fe4dfbcd3aa047ed7920eb64bbd5344abb706"
+          }
+        ]
+      },
+      {
+        "subject_id": "cl_completion",
+        "sources": [
+          {
+            "quote": "只有ADMIN确认已收到该文件，本任务才可标记为完成",
+            "occurrence": 1,
+            "span": [
+              18,
+              44
+            ],
+            "source_sha256": "e27b99a11c9396859ce1c1e25f5fe4dfbcd3aa047ed7920eb64bbd5344abb706"
+          }
+        ]
+      },
+      {
+        "subject_id": "expr_confirmed",
+        "sources": [
+          {
+            "quote": "handover.md",
+            "occurrence": 1,
+            "span": [
+              6,
+              17
+            ],
+            "source_sha256": "e27b99a11c9396859ce1c1e25f5fe4dfbcd3aa047ed7920eb64bbd5344abb706"
+          },
+          {
+            "quote": "ADMIN确认已收到该文件",
+            "occurrence": 1,
+            "span": [
+              20,
+              33
+            ],
+            "source_sha256": "e27b99a11c9396859ce1c1e25f5fe4dfbcd3aa047ed7920eb64bbd5344abb706"
+          }
+        ]
+      }
+    ],
+    "issue_sources": []
+  },
+  "ir": {
+    "format": "boundx-boundary-ir/031-r01",
+    "source_sha256": "e27b99a11c9396859ce1c1e25f5fe4dfbcd3aa047ed7920eb64bbd5344abb706",
+    "facts": [
+      {
+        "id": "bf:59115c5a5908bee0cbf5",
+        "kind": "EVENT",
+        "status": "ACCEPTED",
+        "claim_ids": [
+          "ev_submit",
+          "cl_submit_performer",
+          "cl_deliverable"
+        ],
+        "event": {
+          "id": "ev_submit",
+          "predicate": "提交",
+          "kind": "ACTION",
+          "layer": "MAIN",
+          "use": "CURRENT_TASK",
+          "modality": "REQUIRED",
+          "polarity": "POSITIVE",
+          "owner_id": "ROOT",
+          "constraint_ids": [],
+          "requires": [],
+          "sources": [
+            {
+              "quote": "PM必须提交handover.md",
+              "occurrence": 1,
+              "span": [
+                0,
+                17
+              ],
+              "source_sha256": "e27b99a11c9396859ce1c1e25f5fe4dfbcd3aa047ed7920eb64bbd5344abb706"
+            }
+          ]
+        },
+        "roles": [
+          {
+            "id": "cl_submit_performer",
+            "kind": "ROLE",
+            "event_id": "ev_submit",
+            "entity_id": "ent_pm",
+            "role": "PERFORMER",
+            "expression_id": null,
+            "direction": null,
+            "temporal": null,
+            "quantity": null,
+            "scope_id": "ev_submit",
+            "requires": [],
+            "sources": [
+              {
+                "quote": "PM必须提交handover.md",
+                "occurrence": 1,
+                "span": [
+                  0,
+                  17
+                ],
+                "source_sha256": "e27b99a11c9396859ce1c1e25f5fe4dfbcd3aa047ed7920eb64bbd5344abb706"
+              }
+            ],
+            "note": "PM是提交动作的明确执行者。",
+            "entity": {
+              "id": "ent_pm",
+              "label": "PM",
+              "type": "OTHER",
+              "mentions": [
+                {
+                  "quote": "PM",
+                  "occurrence": 1,
+                  "span": [
+                    0,
+                    2
+                  ],
+                  "source_sha256": "e27b99a11c9396859ce1c1e25f5fe4dfbcd3aa047ed7920eb64bbd5344abb706"
+                }
+              ],
+              "alternatives": []
+            },
+            "status": "ACCEPTED"
+          },
+          {
+            "id": "cl_deliverable",
+            "kind": "ROLE",
+            "event_id": "ev_submit",
+            "entity_id": "ent_file",
+            "role": "DELIVERABLE",
+            "expression_id": null,
+            "direction": null,
+            "temporal": null,
+            "quantity": null,
+            "scope_id": "ev_submit",
+            "requires": [],
+            "sources": [
+              {
+                "quote": "PM必须提交handover.md",
+                "occurrence": 1,
+                "span": [
+                  0,
+                  17
+                ],
+                "source_sha256": "e27b99a11c9396859ce1c1e25f5fe4dfbcd3aa047ed7920eb64bbd5344abb706"
+              }
+            ],
+            "note": "明确交付文件，不推定生成或修改文件。",
+            "entity": {
+              "id": "ent_file",
+              "label": "handover.md",
+              "type": "FILE",
+              "mentions": [
+                {
+                  "quote": "handover.md",
+                  "occurrence": 1,
+                  "span": [
+                    6,
+                    17
+                  ],
+                  "source_sha256": "e27b99a11c9396859ce1c1e25f5fe4dfbcd3aa047ed7920eb64bbd5344abb706"
+                },
+                {
+                  "quote": "该文件",
+                  "occurrence": 1,
+                  "span": [
+                    30,
+                    33
+                  ],
+                  "source_sha256": "e27b99a11c9396859ce1c1e25f5fe4dfbcd3aa047ed7920eb64bbd5344abb706"
+                }
+              ],
+              "alternatives": []
+            },
+            "status": "ACCEPTED"
+          }
+        ],
+        "constraints": [],
+        "sources": [
+          {
+            "quote": "PM必须提交handover.md",
+            "occurrence": 1,
+            "span": [
+              0,
+              17
+            ],
+            "source_sha256": "e27b99a11c9396859ce1c1e25f5fe4dfbcd3aa047ed7920eb64bbd5344abb706"
+          },
+          {
+            "quote": "PM必须提交handover.md",
+            "occurrence": 1,
+            "span": [
+              0,
+              17
+            ],
+            "source_sha256": "e27b99a11c9396859ce1c1e25f5fe4dfbcd3aa047ed7920eb64bbd5344abb706"
+          },
+          {
+            "quote": "PM",
+            "occurrence": 1,
+            "span": [
+              0,
+              2
+            ],
+            "source_sha256": "e27b99a11c9396859ce1c1e25f5fe4dfbcd3aa047ed7920eb64bbd5344abb706"
+          },
+          {
+            "quote": "PM必须提交handover.md",
+            "occurrence": 1,
+            "span": [
+              0,
+              17
+            ],
+            "source_sha256": "e27b99a11c9396859ce1c1e25f5fe4dfbcd3aa047ed7920eb64bbd5344abb706"
+          },
+          {
+            "quote": "handover.md",
+            "occurrence": 1,
+            "span": [
+              6,
+              17
+            ],
+            "source_sha256": "e27b99a11c9396859ce1c1e25f5fe4dfbcd3aa047ed7920eb64bbd5344abb706"
+          },
+          {
+            "quote": "该文件",
+            "occurrence": 1,
+            "span": [
+              30,
+              33
+            ],
+            "source_sha256": "e27b99a11c9396859ce1c1e25f5fe4dfbcd3aa047ed7920eb64bbd5344abb706"
+          }
+        ],
+        "slots": [
+          "A"
+        ],
+        "proof": {
+          "source_sha256": "e27b99a11c9396859ce1c1e25f5fe4dfbcd3aa047ed7920eb64bbd5344abb706",
+          "claim_ids": [
+            "ev_submit",
+            "cl_submit_performer",
+            "cl_deliverable"
+          ],
+          "provenance_refs": [
+            "ev_submit",
+            "cl_submit_performer",
+            "ent_pm",
+            "cl_deliverable",
+            "ent_file"
+          ],
+          "technical_policy": "028-r02-technical-v2",
+          "checks": [
+            {
+              "id": "ev_submit",
+              "collection": "events",
+              "status": "ACCEPTED",
+              "errors": [],
+              "uncertain": [],
+              "sources": [
+                {
+                  "quote": "PM必须提交handover.md",
+                  "occurrence": 1,
+                  "span": [
+                    0,
+                    17
+                  ],
+                  "source_sha256": "e27b99a11c9396859ce1c1e25f5fe4dfbcd3aa047ed7920eb64bbd5344abb706"
+                }
+              ],
+              "audit_refs": [
+                {
+                  "subject_id": "ev_submit",
+                  "field_path": "",
+                  "verdict": "SUPPORT"
+                }
+              ],
+              "required_dependencies": [],
+              "structural_refs": [
+                "ROOT"
+              ]
+            },
+            {
+              "id": "cl_submit_performer",
+              "collection": "claims",
+              "status": "ACCEPTED",
+              "errors": [],
+              "uncertain": [],
+              "sources": [
+                {
+                  "quote": "PM必须提交handover.md",
+                  "occurrence": 1,
+                  "span": [
+                    0,
+                    17
+                  ],
+                  "source_sha256": "e27b99a11c9396859ce1c1e25f5fe4dfbcd3aa047ed7920eb64bbd5344abb706"
+                }
+              ],
+              "audit_refs": [
+                {
+                  "subject_id": "cl_submit_performer",
+                  "field_path": "",
+                  "verdict": "SUPPORT"
+                }
+              ],
+              "required_dependencies": [],
+              "structural_refs": [
+                "ev_submit",
+                "ev_submit",
+                "ent_pm"
+              ]
+            },
+            {
+              "id": "ent_pm",
+              "collection": "entities",
+              "status": "ACCEPTED",
+              "identity_status": "ACCEPTED",
+              "errors": [],
+              "uncertain": [],
+              "sources": [
+                {
+                  "quote": "PM",
+                  "occurrence": 1,
+                  "span": [
+                    0,
+                    2
+                  ],
+                  "source_sha256": "e27b99a11c9396859ce1c1e25f5fe4dfbcd3aa047ed7920eb64bbd5344abb706"
+                }
+              ],
+              "audit_refs": [
+                {
+                  "subject_id": "ent_pm",
+                  "field_path": "",
+                  "verdict": "SUPPORT"
+                }
+              ],
+              "required_dependencies": [],
+              "structural_refs": []
+            },
+            {
+              "id": "cl_deliverable",
+              "collection": "claims",
+              "status": "ACCEPTED",
+              "errors": [],
+              "uncertain": [],
+              "sources": [
+                {
+                  "quote": "PM必须提交handover.md",
+                  "occurrence": 1,
+                  "span": [
+                    0,
+                    17
+                  ],
+                  "source_sha256": "e27b99a11c9396859ce1c1e25f5fe4dfbcd3aa047ed7920eb64bbd5344abb706"
+                }
+              ],
+              "audit_refs": [
+                {
+                  "subject_id": "cl_deliverable",
+                  "field_path": "",
+                  "verdict": "SUPPORT"
+                }
+              ],
+              "required_dependencies": [],
+              "structural_refs": [
+                "ev_submit",
+                "ev_submit",
+                "ent_file"
+              ]
+            },
+            {
+              "id": "ent_file",
+              "collection": "entities",
+              "status": "ACCEPTED",
+              "identity_status": "ACCEPTED",
+              "errors": [],
+              "uncertain": [],
+              "sources": [
+                {
+                  "quote": "handover.md",
+                  "occurrence": 1,
+                  "span": [
+                    6,
+                    17
+                  ],
+                  "source_sha256": "e27b99a11c9396859ce1c1e25f5fe4dfbcd3aa047ed7920eb64bbd5344abb706"
+                },
+                {
+                  "quote": "该文件",
+                  "occurrence": 1,
+                  "span": [
+                    30,
+                    33
+                  ],
+                  "source_sha256": "e27b99a11c9396859ce1c1e25f5fe4dfbcd3aa047ed7920eb64bbd5344abb706"
+                }
+              ],
+              "audit_refs": [
+                {
+                  "subject_id": "ent_file",
+                  "field_path": "",
+                  "verdict": "SUPPORT"
+                }
+              ],
+              "required_dependencies": [],
+              "structural_refs": []
+            }
+          ],
+          "audit": [
+            {
+              "subject_id": "ev_submit",
+              "field_path": "",
+              "verdict": "SUPPORT",
+              "context_refs": [],
+              "sources": [
+                {
+                  "quote": "PM必须提交handover.md",
+                  "occurrence": 1
+                }
+              ],
+              "reason": "提交是当前明确要求的主动作，REQUIRED及正向极性正确。"
+            },
+            {
+              "subject_id": "cl_submit_performer",
+              "field_path": "",
+              "verdict": "SUPPORT",
+              "context_refs": [
+                "ev_submit",
+                "ent_pm"
+              ],
+              "sources": [
+                {
+                  "quote": "PM必须提交handover.md",
+                  "occurrence": 1
+                }
+              ],
+              "reason": "原文明示PM为提交执行者，角色及事件绑定正确。"
+            },
+            {
+              "subject_id": "ent_pm",
+              "field_path": "",
+              "verdict": "SUPPORT",
+              "context_refs": [],
+              "sources": [
+                {
+                  "quote": "PM",
+                  "occurrence": 1
+                }
+              ],
+              "reason": "PM身份明确；原文未指定人或组类别，OTHER可作占位。"
+            },
+            {
+              "subject_id": "cl_deliverable",
+              "field_path": "",
+              "verdict": "SUPPORT",
+              "context_refs": [
+                "ev_submit",
+                "ent_file"
+              ],
+              "sources": [
+                {
+                  "quote": "PM必须提交handover.md",
+                  "occurrence": 1
+                }
+              ],
+              "reason": "handover.md是提交事件的DELIVERABLE，未推定生成、修改或外部输入。"
+            },
+            {
+              "subject_id": "ent_file",
+              "field_path": "",
+              "verdict": "SUPPORT",
+              "context_refs": [],
+              "sources": [
+                {
+                  "quote": "handover.md",
+                  "occurrence": 1
+                },
+                {
+                  "quote": "该文件",
+                  "occurrence": 1
+                }
+              ],
+              "reason": "全文只有一个文件对象，该文件指handover.md；两处指称已绑定同一实体。"
+            }
+          ],
+          "context_references_are_not_required_dependencies": true
+        }
+      },
+      {
+        "id": "bf:6fc6dce8b42c36818e85",
+        "kind": "EVENT",
+        "status": "ACCEPTED",
+        "claim_ids": [
+          "ev_confirm",
+          "cl_confirm_performer",
+          "cl_confirm_object"
+        ],
+        "event": {
+          "id": "ev_confirm",
+          "predicate": "确认已收到",
+          "kind": "ACTION",
+          "layer": "CONDITION",
+          "use": "MENTION_ONLY",
+          "modality": "UNSTATED",
+          "polarity": "POSITIVE",
+          "owner_id": "ROOT",
+          "constraint_ids": [],
+          "requires": [],
+          "sources": [
+            {
+              "quote": "ADMIN确认已收到该文件",
+              "occurrence": 1,
+              "span": [
+                20,
+                33
+              ],
+              "source_sha256": "e27b99a11c9396859ce1c1e25f5fe4dfbcd3aa047ed7920eb64bbd5344abb706"
+            }
+          ]
+        },
+        "roles": [
+          {
+            "id": "cl_confirm_performer",
+            "kind": "ROLE",
+            "event_id": "ev_confirm",
+            "entity_id": "ent_admin",
+            "role": "PERFORMER",
+            "expression_id": null,
+            "direction": null,
+            "temporal": null,
+            "quantity": null,
+            "scope_id": "ev_confirm",
+            "requires": [],
+            "sources": [
+              {
+                "quote": "ADMIN确认已收到该文件",
+                "occurrence": 1,
+                "span": [
+                  20,
+                  33
+                ],
+                "source_sha256": "e27b99a11c9396859ce1c1e25f5fe4dfbcd3aa047ed7920eb64bbd5344abb706"
+              }
+            ],
+            "note": "ADMIN是条件中确认动作的主体，不新增确认义务。",
+            "entity": {
+              "id": "ent_admin",
+              "label": "ADMIN",
+              "type": "OTHER",
+              "mentions": [
+                {
+                  "quote": "ADMIN",
+                  "occurrence": 1,
+                  "span": [
+                    20,
+                    25
+                  ],
+                  "source_sha256": "e27b99a11c9396859ce1c1e25f5fe4dfbcd3aa047ed7920eb64bbd5344abb706"
+                }
+              ],
+              "alternatives": []
+            },
+            "status": "ACCEPTED"
+          },
+          {
+            "id": "cl_confirm_object",
+            "kind": "ROLE",
+            "event_id": "ev_confirm",
+            "entity_id": "ent_file",
+            "role": "OBJECT",
+            "expression_id": null,
+            "direction": null,
+            "temporal": null,
+            "quantity": null,
+            "scope_id": "ev_confirm",
+            "requires": [],
+            "sources": [
+              {
+                "quote": "handover.md",
+                "occurrence": 1,
+                "span": [
+                  6,
+                  17
+                ],
+                "source_sha256": "e27b99a11c9396859ce1c1e25f5fe4dfbcd3aa047ed7920eb64bbd5344abb706"
+              },
+              {
+                "quote": "ADMIN确认已收到该文件",
+                "occurrence": 1,
+                "span": [
+                  20,
+                  33
+                ],
+                "source_sha256": "e27b99a11c9396859ce1c1e25f5fe4dfbcd3aa047ed7920eb64bbd5344abb706"
+              }
+            ],
+            "note": "该文件指前述唯一交付文件handover.md。",
+            "entity": {
+              "id": "ent_file",
+              "label": "handover.md",
+              "type": "FILE",
+              "mentions": [
+                {
+                  "quote": "handover.md",
+                  "occurrence": 1,
+                  "span": [
+                    6,
+                    17
+                  ],
+                  "source_sha256": "e27b99a11c9396859ce1c1e25f5fe4dfbcd3aa047ed7920eb64bbd5344abb706"
+                },
+                {
+                  "quote": "该文件",
+                  "occurrence": 1,
+                  "span": [
+                    30,
+                    33
+                  ],
+                  "source_sha256": "e27b99a11c9396859ce1c1e25f5fe4dfbcd3aa047ed7920eb64bbd5344abb706"
+                }
+              ],
+              "alternatives": []
+            },
+            "status": "ACCEPTED"
+          }
+        ],
+        "constraints": [],
+        "sources": [
+          {
+            "quote": "ADMIN确认已收到该文件",
+            "occurrence": 1,
+            "span": [
+              20,
+              33
+            ],
+            "source_sha256": "e27b99a11c9396859ce1c1e25f5fe4dfbcd3aa047ed7920eb64bbd5344abb706"
+          },
+          {
+            "quote": "ADMIN确认已收到该文件",
+            "occurrence": 1,
+            "span": [
+              20,
+              33
+            ],
+            "source_sha256": "e27b99a11c9396859ce1c1e25f5fe4dfbcd3aa047ed7920eb64bbd5344abb706"
+          },
+          {
+            "quote": "ADMIN",
+            "occurrence": 1,
+            "span": [
+              20,
+              25
+            ],
+            "source_sha256": "e27b99a11c9396859ce1c1e25f5fe4dfbcd3aa047ed7920eb64bbd5344abb706"
+          },
+          {
+            "quote": "handover.md",
+            "occurrence": 1,
+            "span": [
+              6,
+              17
+            ],
+            "source_sha256": "e27b99a11c9396859ce1c1e25f5fe4dfbcd3aa047ed7920eb64bbd5344abb706"
+          },
+          {
+            "quote": "ADMIN确认已收到该文件",
+            "occurrence": 1,
+            "span": [
+              20,
+              33
+            ],
+            "source_sha256": "e27b99a11c9396859ce1c1e25f5fe4dfbcd3aa047ed7920eb64bbd5344abb706"
+          },
+          {
+            "quote": "handover.md",
+            "occurrence": 1,
+            "span": [
+              6,
+              17
+            ],
+            "source_sha256": "e27b99a11c9396859ce1c1e25f5fe4dfbcd3aa047ed7920eb64bbd5344abb706"
+          },
+          {
+            "quote": "该文件",
+            "occurrence": 1,
+            "span": [
+              30,
+              33
+            ],
+            "source_sha256": "e27b99a11c9396859ce1c1e25f5fe4dfbcd3aa047ed7920eb64bbd5344abb706"
+          }
+        ],
+        "slots": [],
+        "proof": {
+          "source_sha256": "e27b99a11c9396859ce1c1e25f5fe4dfbcd3aa047ed7920eb64bbd5344abb706",
+          "claim_ids": [
+            "ev_confirm",
+            "cl_confirm_performer",
+            "cl_confirm_object"
+          ],
+          "provenance_refs": [
+            "ev_confirm",
+            "cl_confirm_performer",
+            "ent_admin",
+            "cl_confirm_object",
+            "ent_file"
+          ],
+          "technical_policy": "028-r02-technical-v2",
+          "checks": [
+            {
+              "id": "ev_confirm",
+              "collection": "events",
+              "status": "ACCEPTED",
+              "errors": [],
+              "uncertain": [],
+              "sources": [
+                {
+                  "quote": "ADMIN确认已收到该文件",
+                  "occurrence": 1,
+                  "span": [
+                    20,
+                    33
+                  ],
+                  "source_sha256": "e27b99a11c9396859ce1c1e25f5fe4dfbcd3aa047ed7920eb64bbd5344abb706"
+                }
+              ],
+              "audit_refs": [
+                {
+                  "subject_id": "ev_confirm",
+                  "field_path": "",
+                  "verdict": "SUPPORT"
+                }
+              ],
+              "required_dependencies": [],
+              "structural_refs": [
+                "ROOT"
+              ]
+            },
+            {
+              "id": "cl_confirm_performer",
+              "collection": "claims",
+              "status": "ACCEPTED",
+              "errors": [],
+              "uncertain": [],
+              "sources": [
+                {
+                  "quote": "ADMIN确认已收到该文件",
+                  "occurrence": 1,
+                  "span": [
+                    20,
+                    33
+                  ],
+                  "source_sha256": "e27b99a11c9396859ce1c1e25f5fe4dfbcd3aa047ed7920eb64bbd5344abb706"
+                }
+              ],
+              "audit_refs": [
+                {
+                  "subject_id": "cl_confirm_performer",
+                  "field_path": "",
+                  "verdict": "SUPPORT"
+                }
+              ],
+              "required_dependencies": [],
+              "structural_refs": [
+                "ev_confirm",
+                "ev_confirm",
+                "ent_admin"
+              ]
+            },
+            {
+              "id": "ent_admin",
+              "collection": "entities",
+              "status": "ACCEPTED",
+              "identity_status": "ACCEPTED",
+              "errors": [],
+              "uncertain": [],
+              "sources": [
+                {
+                  "quote": "ADMIN",
+                  "occurrence": 1,
+                  "span": [
+                    20,
+                    25
+                  ],
+                  "source_sha256": "e27b99a11c9396859ce1c1e25f5fe4dfbcd3aa047ed7920eb64bbd5344abb706"
+                }
+              ],
+              "audit_refs": [
+                {
+                  "subject_id": "ent_admin",
+                  "field_path": "",
+                  "verdict": "SUPPORT"
+                }
+              ],
+              "required_dependencies": [],
+              "structural_refs": []
+            },
+            {
+              "id": "cl_confirm_object",
+              "collection": "claims",
+              "status": "ACCEPTED",
+              "errors": [],
+              "uncertain": [],
+              "sources": [
+                {
+                  "quote": "handover.md",
+                  "occurrence": 1,
+                  "span": [
+                    6,
+                    17
+                  ],
+                  "source_sha256": "e27b99a11c9396859ce1c1e25f5fe4dfbcd3aa047ed7920eb64bbd5344abb706"
+                },
+                {
+                  "quote": "ADMIN确认已收到该文件",
+                  "occurrence": 1,
+                  "span": [
+                    20,
+                    33
+                  ],
+                  "source_sha256": "e27b99a11c9396859ce1c1e25f5fe4dfbcd3aa047ed7920eb64bbd5344abb706"
+                }
+              ],
+              "audit_refs": [
+                {
+                  "subject_id": "cl_confirm_object",
+                  "field_path": "",
+                  "verdict": "SUPPORT"
+                }
+              ],
+              "required_dependencies": [],
+              "structural_refs": [
+                "ev_confirm",
+                "ev_confirm",
+                "ent_file"
+              ]
+            },
+            {
+              "id": "ent_file",
+              "collection": "entities",
+              "status": "ACCEPTED",
+              "identity_status": "ACCEPTED",
+              "errors": [],
+              "uncertain": [],
+              "sources": [
+                {
+                  "quote": "handover.md",
+                  "occurrence": 1,
+                  "span": [
+                    6,
+                    17
+                  ],
+                  "source_sha256": "e27b99a11c9396859ce1c1e25f5fe4dfbcd3aa047ed7920eb64bbd5344abb706"
+                },
+                {
+                  "quote": "该文件",
+                  "occurrence": 1,
+                  "span": [
+                    30,
+                    33
+                  ],
+                  "source_sha256": "e27b99a11c9396859ce1c1e25f5fe4dfbcd3aa047ed7920eb64bbd5344abb706"
+                }
+              ],
+              "audit_refs": [
+                {
+                  "subject_id": "ent_file",
+                  "field_path": "",
+                  "verdict": "SUPPORT"
+                }
+              ],
+              "required_dependencies": [],
+              "structural_refs": []
+            }
+          ],
+          "audit": [
+            {
+              "subject_id": "ev_confirm",
+              "field_path": "",
+              "verdict": "SUPPORT",
+              "context_refs": [],
+              "sources": [
+                {
+                  "quote": "只有ADMIN确认已收到该文件，本任务才可标记为完成",
+                  "occurrence": 1
+                }
+              ],
+              "reason": "确认收到仅出现在完成前提中，CONDITION、MENTION_ONLY和UNSTATED未新增确认义务。"
+            },
+            {
+              "subject_id": "cl_confirm_performer",
+              "field_path": "",
+              "verdict": "SUPPORT",
+              "context_refs": [
+                "ev_confirm",
+                "ent_admin"
+              ],
+              "sources": [
+                {
+                  "quote": "ADMIN确认已收到该文件",
+                  "occurrence": 1
+                }
+              ],
+              "reason": "ADMIN是条件内确认动作的明确主体，未传播为主任务义务。"
+            },
+            {
+              "subject_id": "ent_admin",
+              "field_path": "",
+              "verdict": "SUPPORT",
+              "context_refs": [],
+              "sources": [
+                {
+                  "quote": "ADMIN",
+                  "occurrence": 1
+                }
+              ],
+              "reason": "ADMIN身份明确；OTHER保留未指定的类别，不推定权限。"
+            },
+            {
+              "subject_id": "cl_confirm_object",
+              "field_path": "",
+              "verdict": "SUPPORT",
+              "context_refs": [
+                "ev_confirm",
+                "ent_file"
+              ],
+              "sources": [
+                {
+                  "quote": "handover.md",
+                  "occurrence": 1
+                },
+                {
+                  "quote": "ADMIN确认已收到该文件",
+                  "occurrence": 1
+                }
+              ],
+              "reason": "确认涉及前述同一文件，OBJECT绑定正确，未将其转成外部输入。"
+            },
+            {
+              "subject_id": "ent_file",
+              "field_path": "",
+              "verdict": "SUPPORT",
+              "context_refs": [],
+              "sources": [
+                {
+                  "quote": "handover.md",
+                  "occurrence": 1
+                },
+                {
+                  "quote": "该文件",
+                  "occurrence": 1
+                }
+              ],
+              "reason": "全文只有一个文件对象，该文件指handover.md；两处指称已绑定同一实体。"
+            }
+          ],
+          "context_references_are_not_required_dependencies": true
+        }
+      },
+      {
+        "id": "bf:4a63593bb1f440abc88a",
+        "kind": "ROLE",
+        "status": "ACCEPTED",
+        "claim_ids": [
+          "cl_submit_performer",
+          "ent_pm",
+          "ev_submit"
+        ],
+        "claim": {
+          "id": "cl_submit_performer",
+          "kind": "ROLE",
+          "event_id": "ev_submit",
+          "entity_id": "ent_pm",
+          "role": "PERFORMER",
+          "expression_id": null,
+          "direction": null,
+          "temporal": null,
+          "quantity": null,
+          "scope_id": "ev_submit",
+          "requires": [],
+          "sources": [
+            {
+              "quote": "PM必须提交handover.md",
+              "occurrence": 1,
+              "span": [
+                0,
+                17
+              ],
+              "source_sha256": "e27b99a11c9396859ce1c1e25f5fe4dfbcd3aa047ed7920eb64bbd5344abb706"
+            }
+          ],
+          "note": "PM是提交动作的明确执行者。"
+        },
+        "event": {
+          "id": "ev_submit",
+          "predicate": "提交",
+          "kind": "ACTION",
+          "layer": "MAIN",
+          "use": "CURRENT_TASK",
+          "modality": "REQUIRED",
+          "polarity": "POSITIVE",
+          "owner_id": "ROOT",
+          "constraint_ids": [],
+          "requires": [],
+          "sources": [
+            {
+              "quote": "PM必须提交handover.md",
+              "occurrence": 1,
+              "span": [
+                0,
+                17
+              ],
+              "source_sha256": "e27b99a11c9396859ce1c1e25f5fe4dfbcd3aa047ed7920eb64bbd5344abb706"
+            }
+          ]
+        },
+        "entity": {
+          "id": "ent_pm",
+          "label": "PM",
+          "type": "OTHER",
+          "mentions": [
+            {
+              "quote": "PM",
+              "occurrence": 1,
+              "span": [
+                0,
+                2
+              ],
+              "source_sha256": "e27b99a11c9396859ce1c1e25f5fe4dfbcd3aa047ed7920eb64bbd5344abb706"
+            }
+          ],
+          "alternatives": []
+        },
+        "expression": null,
+        "constraints": [],
+        "content_quantities": [],
+        "content_scopes": [],
+        "sources": [
+          {
+            "quote": "PM必须提交handover.md",
+            "occurrence": 1,
+            "span": [
+              0,
+              17
+            ],
+            "source_sha256": "e27b99a11c9396859ce1c1e25f5fe4dfbcd3aa047ed7920eb64bbd5344abb706"
+          },
+          {
+            "quote": "PM必须提交handover.md",
+            "occurrence": 1,
+            "span": [
+              0,
+              17
+            ],
+            "source_sha256": "e27b99a11c9396859ce1c1e25f5fe4dfbcd3aa047ed7920eb64bbd5344abb706"
+          },
+          {
+            "quote": "PM",
+            "occurrence": 1,
+            "span": [
+              0,
+              2
+            ],
+            "source_sha256": "e27b99a11c9396859ce1c1e25f5fe4dfbcd3aa047ed7920eb64bbd5344abb706"
+          }
+        ],
+        "slots": [
+          "P"
+        ],
+        "proof": {
+          "source_sha256": "e27b99a11c9396859ce1c1e25f5fe4dfbcd3aa047ed7920eb64bbd5344abb706",
+          "claim_ids": [
+            "cl_submit_performer",
+            "ent_pm",
+            "ev_submit"
+          ],
+          "provenance_refs": [
+            "cl_submit_performer",
+            "ev_submit",
+            "ent_pm"
+          ],
+          "technical_policy": "028-r02-technical-v2",
+          "checks": [
+            {
+              "id": "cl_submit_performer",
+              "collection": "claims",
+              "status": "ACCEPTED",
+              "errors": [],
+              "uncertain": [],
+              "sources": [
+                {
+                  "quote": "PM必须提交handover.md",
+                  "occurrence": 1,
+                  "span": [
+                    0,
+                    17
+                  ],
+                  "source_sha256": "e27b99a11c9396859ce1c1e25f5fe4dfbcd3aa047ed7920eb64bbd5344abb706"
+                }
+              ],
+              "audit_refs": [
+                {
+                  "subject_id": "cl_submit_performer",
+                  "field_path": "",
+                  "verdict": "SUPPORT"
+                }
+              ],
+              "required_dependencies": [],
+              "structural_refs": [
+                "ev_submit",
+                "ev_submit",
+                "ent_pm"
+              ]
+            },
+            {
+              "id": "ev_submit",
+              "collection": "events",
+              "status": "ACCEPTED",
+              "errors": [],
+              "uncertain": [],
+              "sources": [
+                {
+                  "quote": "PM必须提交handover.md",
+                  "occurrence": 1,
+                  "span": [
+                    0,
+                    17
+                  ],
+                  "source_sha256": "e27b99a11c9396859ce1c1e25f5fe4dfbcd3aa047ed7920eb64bbd5344abb706"
+                }
+              ],
+              "audit_refs": [
+                {
+                  "subject_id": "ev_submit",
+                  "field_path": "",
+                  "verdict": "SUPPORT"
+                }
+              ],
+              "required_dependencies": [],
+              "structural_refs": [
+                "ROOT"
+              ]
+            },
+            {
+              "id": "ent_pm",
+              "collection": "entities",
+              "status": "ACCEPTED",
+              "identity_status": "ACCEPTED",
+              "errors": [],
+              "uncertain": [],
+              "sources": [
+                {
+                  "quote": "PM",
+                  "occurrence": 1,
+                  "span": [
+                    0,
+                    2
+                  ],
+                  "source_sha256": "e27b99a11c9396859ce1c1e25f5fe4dfbcd3aa047ed7920eb64bbd5344abb706"
+                }
+              ],
+              "audit_refs": [
+                {
+                  "subject_id": "ent_pm",
+                  "field_path": "",
+                  "verdict": "SUPPORT"
+                }
+              ],
+              "required_dependencies": [],
+              "structural_refs": []
+            }
+          ],
+          "audit": [
+            {
+              "subject_id": "cl_submit_performer",
+              "field_path": "",
+              "verdict": "SUPPORT",
+              "context_refs": [
+                "ev_submit",
+                "ent_pm"
+              ],
+              "sources": [
+                {
+                  "quote": "PM必须提交handover.md",
+                  "occurrence": 1
+                }
+              ],
+              "reason": "原文明示PM为提交执行者，角色及事件绑定正确。"
+            },
+            {
+              "subject_id": "ev_submit",
+              "field_path": "",
+              "verdict": "SUPPORT",
+              "context_refs": [],
+              "sources": [
+                {
+                  "quote": "PM必须提交handover.md",
+                  "occurrence": 1
+                }
+              ],
+              "reason": "提交是当前明确要求的主动作，REQUIRED及正向极性正确。"
+            },
+            {
+              "subject_id": "ent_pm",
+              "field_path": "",
+              "verdict": "SUPPORT",
+              "context_refs": [],
+              "sources": [
+                {
+                  "quote": "PM",
+                  "occurrence": 1
+                }
+              ],
+              "reason": "PM身份明确；原文未指定人或组类别，OTHER可作占位。"
+            }
+          ],
+          "context_references_are_not_required_dependencies": true
+        }
+      },
+      {
+        "id": "bf:6e292d83a9a0cf9c7356",
+        "kind": "ROLE",
+        "status": "ACCEPTED",
+        "claim_ids": [
+          "cl_deliverable",
+          "ent_file",
+          "ev_submit"
+        ],
+        "claim": {
+          "id": "cl_deliverable",
+          "kind": "ROLE",
+          "event_id": "ev_submit",
+          "entity_id": "ent_file",
+          "role": "DELIVERABLE",
+          "expression_id": null,
+          "direction": null,
+          "temporal": null,
+          "quantity": null,
+          "scope_id": "ev_submit",
+          "requires": [],
+          "sources": [
+            {
+              "quote": "PM必须提交handover.md",
+              "occurrence": 1,
+              "span": [
+                0,
+                17
+              ],
+              "source_sha256": "e27b99a11c9396859ce1c1e25f5fe4dfbcd3aa047ed7920eb64bbd5344abb706"
+            }
+          ],
+          "note": "明确交付文件，不推定生成或修改文件。"
+        },
+        "event": {
+          "id": "ev_submit",
+          "predicate": "提交",
+          "kind": "ACTION",
+          "layer": "MAIN",
+          "use": "CURRENT_TASK",
+          "modality": "REQUIRED",
+          "polarity": "POSITIVE",
+          "owner_id": "ROOT",
+          "constraint_ids": [],
+          "requires": [],
+          "sources": [
+            {
+              "quote": "PM必须提交handover.md",
+              "occurrence": 1,
+              "span": [
+                0,
+                17
+              ],
+              "source_sha256": "e27b99a11c9396859ce1c1e25f5fe4dfbcd3aa047ed7920eb64bbd5344abb706"
+            }
+          ]
+        },
+        "entity": {
+          "id": "ent_file",
+          "label": "handover.md",
+          "type": "FILE",
+          "mentions": [
+            {
+              "quote": "handover.md",
+              "occurrence": 1,
+              "span": [
+                6,
+                17
+              ],
+              "source_sha256": "e27b99a11c9396859ce1c1e25f5fe4dfbcd3aa047ed7920eb64bbd5344abb706"
+            },
+            {
+              "quote": "该文件",
+              "occurrence": 1,
+              "span": [
+                30,
+                33
+              ],
+              "source_sha256": "e27b99a11c9396859ce1c1e25f5fe4dfbcd3aa047ed7920eb64bbd5344abb706"
+            }
+          ],
+          "alternatives": []
+        },
+        "expression": null,
+        "constraints": [],
+        "content_quantities": [],
+        "content_scopes": [],
+        "sources": [
+          {
+            "quote": "PM必须提交handover.md",
+            "occurrence": 1,
+            "span": [
+              0,
+              17
+            ],
+            "source_sha256": "e27b99a11c9396859ce1c1e25f5fe4dfbcd3aa047ed7920eb64bbd5344abb706"
+          },
+          {
+            "quote": "PM必须提交handover.md",
+            "occurrence": 1,
+            "span": [
+              0,
+              17
+            ],
+            "source_sha256": "e27b99a11c9396859ce1c1e25f5fe4dfbcd3aa047ed7920eb64bbd5344abb706"
+          },
+          {
+            "quote": "handover.md",
+            "occurrence": 1,
+            "span": [
+              6,
+              17
+            ],
+            "source_sha256": "e27b99a11c9396859ce1c1e25f5fe4dfbcd3aa047ed7920eb64bbd5344abb706"
+          },
+          {
+            "quote": "该文件",
+            "occurrence": 1,
+            "span": [
+              30,
+              33
+            ],
+            "source_sha256": "e27b99a11c9396859ce1c1e25f5fe4dfbcd3aa047ed7920eb64bbd5344abb706"
+          }
+        ],
+        "slots": [
+          "O"
+        ],
+        "proof": {
+          "source_sha256": "e27b99a11c9396859ce1c1e25f5fe4dfbcd3aa047ed7920eb64bbd5344abb706",
+          "claim_ids": [
+            "cl_deliverable",
+            "ent_file",
+            "ev_submit"
+          ],
+          "provenance_refs": [
+            "cl_deliverable",
+            "ev_submit",
+            "ent_file"
+          ],
+          "technical_policy": "028-r02-technical-v2",
+          "checks": [
+            {
+              "id": "cl_deliverable",
+              "collection": "claims",
+              "status": "ACCEPTED",
+              "errors": [],
+              "uncertain": [],
+              "sources": [
+                {
+                  "quote": "PM必须提交handover.md",
+                  "occurrence": 1,
+                  "span": [
+                    0,
+                    17
+                  ],
+                  "source_sha256": "e27b99a11c9396859ce1c1e25f5fe4dfbcd3aa047ed7920eb64bbd5344abb706"
+                }
+              ],
+              "audit_refs": [
+                {
+                  "subject_id": "cl_deliverable",
+                  "field_path": "",
+                  "verdict": "SUPPORT"
+                }
+              ],
+              "required_dependencies": [],
+              "structural_refs": [
+                "ev_submit",
+                "ev_submit",
+                "ent_file"
+              ]
+            },
+            {
+              "id": "ev_submit",
+              "collection": "events",
+              "status": "ACCEPTED",
+              "errors": [],
+              "uncertain": [],
+              "sources": [
+                {
+                  "quote": "PM必须提交handover.md",
+                  "occurrence": 1,
+                  "span": [
+                    0,
+                    17
+                  ],
+                  "source_sha256": "e27b99a11c9396859ce1c1e25f5fe4dfbcd3aa047ed7920eb64bbd5344abb706"
+                }
+              ],
+              "audit_refs": [
+                {
+                  "subject_id": "ev_submit",
+                  "field_path": "",
+                  "verdict": "SUPPORT"
+                }
+              ],
+              "required_dependencies": [],
+              "structural_refs": [
+                "ROOT"
+              ]
+            },
+            {
+              "id": "ent_file",
+              "collection": "entities",
+              "status": "ACCEPTED",
+              "identity_status": "ACCEPTED",
+              "errors": [],
+              "uncertain": [],
+              "sources": [
+                {
+                  "quote": "handover.md",
+                  "occurrence": 1,
+                  "span": [
+                    6,
+                    17
+                  ],
+                  "source_sha256": "e27b99a11c9396859ce1c1e25f5fe4dfbcd3aa047ed7920eb64bbd5344abb706"
+                },
+                {
+                  "quote": "该文件",
+                  "occurrence": 1,
+                  "span": [
+                    30,
+                    33
+                  ],
+                  "source_sha256": "e27b99a11c9396859ce1c1e25f5fe4dfbcd3aa047ed7920eb64bbd5344abb706"
+                }
+              ],
+              "audit_refs": [
+                {
+                  "subject_id": "ent_file",
+                  "field_path": "",
+                  "verdict": "SUPPORT"
+                }
+              ],
+              "required_dependencies": [],
+              "structural_refs": []
+            }
+          ],
+          "audit": [
+            {
+              "subject_id": "cl_deliverable",
+              "field_path": "",
+              "verdict": "SUPPORT",
+              "context_refs": [
+                "ev_submit",
+                "ent_file"
+              ],
+              "sources": [
+                {
+                  "quote": "PM必须提交handover.md",
+                  "occurrence": 1
+                }
+              ],
+              "reason": "handover.md是提交事件的DELIVERABLE，未推定生成、修改或外部输入。"
+            },
+            {
+              "subject_id": "ev_submit",
+              "field_path": "",
+              "verdict": "SUPPORT",
+              "context_refs": [],
+              "sources": [
+                {
+                  "quote": "PM必须提交handover.md",
+                  "occurrence": 1
+                }
+              ],
+              "reason": "提交是当前明确要求的主动作，REQUIRED及正向极性正确。"
+            },
+            {
+              "subject_id": "ent_file",
+              "field_path": "",
+              "verdict": "SUPPORT",
+              "context_refs": [],
+              "sources": [
+                {
+                  "quote": "handover.md",
+                  "occurrence": 1
+                },
+                {
+                  "quote": "该文件",
+                  "occurrence": 1
+                }
+              ],
+              "reason": "全文只有一个文件对象，该文件指handover.md；两处指称已绑定同一实体。"
+            }
+          ],
+          "context_references_are_not_required_dependencies": true
+        }
+      },
+      {
+        "id": "bf:1287c3e7e948e019f94c",
+        "kind": "ROLE",
+        "status": "ACCEPTED",
+        "claim_ids": [
+          "cl_confirm_performer",
+          "ent_admin",
+          "ev_confirm"
+        ],
+        "claim": {
+          "id": "cl_confirm_performer",
+          "kind": "ROLE",
+          "event_id": "ev_confirm",
+          "entity_id": "ent_admin",
+          "role": "PERFORMER",
+          "expression_id": null,
+          "direction": null,
+          "temporal": null,
+          "quantity": null,
+          "scope_id": "ev_confirm",
+          "requires": [],
+          "sources": [
+            {
+              "quote": "ADMIN确认已收到该文件",
+              "occurrence": 1,
+              "span": [
+                20,
+                33
+              ],
+              "source_sha256": "e27b99a11c9396859ce1c1e25f5fe4dfbcd3aa047ed7920eb64bbd5344abb706"
+            }
+          ],
+          "note": "ADMIN是条件中确认动作的主体，不新增确认义务。"
+        },
+        "event": {
+          "id": "ev_confirm",
+          "predicate": "确认已收到",
+          "kind": "ACTION",
+          "layer": "CONDITION",
+          "use": "MENTION_ONLY",
+          "modality": "UNSTATED",
+          "polarity": "POSITIVE",
+          "owner_id": "ROOT",
+          "constraint_ids": [],
+          "requires": [],
+          "sources": [
+            {
+              "quote": "ADMIN确认已收到该文件",
+              "occurrence": 1,
+              "span": [
+                20,
+                33
+              ],
+              "source_sha256": "e27b99a11c9396859ce1c1e25f5fe4dfbcd3aa047ed7920eb64bbd5344abb706"
+            }
+          ]
+        },
+        "entity": {
+          "id": "ent_admin",
+          "label": "ADMIN",
+          "type": "OTHER",
+          "mentions": [
+            {
+              "quote": "ADMIN",
+              "occurrence": 1,
+              "span": [
+                20,
+                25
+              ],
+              "source_sha256": "e27b99a11c9396859ce1c1e25f5fe4dfbcd3aa047ed7920eb64bbd5344abb706"
+            }
+          ],
+          "alternatives": []
+        },
+        "expression": null,
+        "constraints": [],
+        "content_quantities": [],
+        "content_scopes": [],
+        "sources": [
+          {
+            "quote": "ADMIN确认已收到该文件",
+            "occurrence": 1,
+            "span": [
+              20,
+              33
+            ],
+            "source_sha256": "e27b99a11c9396859ce1c1e25f5fe4dfbcd3aa047ed7920eb64bbd5344abb706"
+          },
+          {
+            "quote": "ADMIN确认已收到该文件",
+            "occurrence": 1,
+            "span": [
+              20,
+              33
+            ],
+            "source_sha256": "e27b99a11c9396859ce1c1e25f5fe4dfbcd3aa047ed7920eb64bbd5344abb706"
+          },
+          {
+            "quote": "ADMIN",
+            "occurrence": 1,
+            "span": [
+              20,
+              25
+            ],
+            "source_sha256": "e27b99a11c9396859ce1c1e25f5fe4dfbcd3aa047ed7920eb64bbd5344abb706"
+          }
+        ],
+        "slots": [],
+        "proof": {
+          "source_sha256": "e27b99a11c9396859ce1c1e25f5fe4dfbcd3aa047ed7920eb64bbd5344abb706",
+          "claim_ids": [
+            "cl_confirm_performer",
+            "ent_admin",
+            "ev_confirm"
+          ],
+          "provenance_refs": [
+            "cl_confirm_performer",
+            "ev_confirm",
+            "ent_admin"
+          ],
+          "technical_policy": "028-r02-technical-v2",
+          "checks": [
+            {
+              "id": "cl_confirm_performer",
+              "collection": "claims",
+              "status": "ACCEPTED",
+              "errors": [],
+              "uncertain": [],
+              "sources": [
+                {
+                  "quote": "ADMIN确认已收到该文件",
+                  "occurrence": 1,
+                  "span": [
+                    20,
+                    33
+                  ],
+                  "source_sha256": "e27b99a11c9396859ce1c1e25f5fe4dfbcd3aa047ed7920eb64bbd5344abb706"
+                }
+              ],
+              "audit_refs": [
+                {
+                  "subject_id": "cl_confirm_performer",
+                  "field_path": "",
+                  "verdict": "SUPPORT"
+                }
+              ],
+              "required_dependencies": [],
+              "structural_refs": [
+                "ev_confirm",
+                "ev_confirm",
+                "ent_admin"
+              ]
+            },
+            {
+              "id": "ev_confirm",
+              "collection": "events",
+              "status": "ACCEPTED",
+              "errors": [],
+              "uncertain": [],
+              "sources": [
+                {
+                  "quote": "ADMIN确认已收到该文件",
+                  "occurrence": 1,
+                  "span": [
+                    20,
+                    33
+                  ],
+                  "source_sha256": "e27b99a11c9396859ce1c1e25f5fe4dfbcd3aa047ed7920eb64bbd5344abb706"
+                }
+              ],
+              "audit_refs": [
+                {
+                  "subject_id": "ev_confirm",
+                  "field_path": "",
+                  "verdict": "SUPPORT"
+                }
+              ],
+              "required_dependencies": [],
+              "structural_refs": [
+                "ROOT"
+              ]
+            },
+            {
+              "id": "ent_admin",
+              "collection": "entities",
+              "status": "ACCEPTED",
+              "identity_status": "ACCEPTED",
+              "errors": [],
+              "uncertain": [],
+              "sources": [
+                {
+                  "quote": "ADMIN",
+                  "occurrence": 1,
+                  "span": [
+                    20,
+                    25
+                  ],
+                  "source_sha256": "e27b99a11c9396859ce1c1e25f5fe4dfbcd3aa047ed7920eb64bbd5344abb706"
+                }
+              ],
+              "audit_refs": [
+                {
+                  "subject_id": "ent_admin",
+                  "field_path": "",
+                  "verdict": "SUPPORT"
+                }
+              ],
+              "required_dependencies": [],
+              "structural_refs": []
+            }
+          ],
+          "audit": [
+            {
+              "subject_id": "cl_confirm_performer",
+              "field_path": "",
+              "verdict": "SUPPORT",
+              "context_refs": [
+                "ev_confirm",
+                "ent_admin"
+              ],
+              "sources": [
+                {
+                  "quote": "ADMIN确认已收到该文件",
+                  "occurrence": 1
+                }
+              ],
+              "reason": "ADMIN是条件内确认动作的明确主体，未传播为主任务义务。"
+            },
+            {
+              "subject_id": "ev_confirm",
+              "field_path": "",
+              "verdict": "SUPPORT",
+              "context_refs": [],
+              "sources": [
+                {
+                  "quote": "只有ADMIN确认已收到该文件，本任务才可标记为完成",
+                  "occurrence": 1
+                }
+              ],
+              "reason": "确认收到仅出现在完成前提中，CONDITION、MENTION_ONLY和UNSTATED未新增确认义务。"
+            },
+            {
+              "subject_id": "ent_admin",
+              "field_path": "",
+              "verdict": "SUPPORT",
+              "context_refs": [],
+              "sources": [
+                {
+                  "quote": "ADMIN",
+                  "occurrence": 1
+                }
+              ],
+              "reason": "ADMIN身份明确；OTHER保留未指定的类别，不推定权限。"
+            }
+          ],
+          "context_references_are_not_required_dependencies": true
+        }
+      },
+      {
+        "id": "bf:5a9b2ceaf13c009ff9aa",
+        "kind": "ROLE",
+        "status": "ACCEPTED",
+        "claim_ids": [
+          "cl_confirm_object",
+          "ent_file",
+          "ev_confirm"
+        ],
+        "claim": {
+          "id": "cl_confirm_object",
+          "kind": "ROLE",
+          "event_id": "ev_confirm",
+          "entity_id": "ent_file",
+          "role": "OBJECT",
+          "expression_id": null,
+          "direction": null,
+          "temporal": null,
+          "quantity": null,
+          "scope_id": "ev_confirm",
+          "requires": [],
+          "sources": [
+            {
+              "quote": "handover.md",
+              "occurrence": 1,
+              "span": [
+                6,
+                17
+              ],
+              "source_sha256": "e27b99a11c9396859ce1c1e25f5fe4dfbcd3aa047ed7920eb64bbd5344abb706"
+            },
+            {
+              "quote": "ADMIN确认已收到该文件",
+              "occurrence": 1,
+              "span": [
+                20,
+                33
+              ],
+              "source_sha256": "e27b99a11c9396859ce1c1e25f5fe4dfbcd3aa047ed7920eb64bbd5344abb706"
+            }
+          ],
+          "note": "该文件指前述唯一交付文件handover.md。"
+        },
+        "event": {
+          "id": "ev_confirm",
+          "predicate": "确认已收到",
+          "kind": "ACTION",
+          "layer": "CONDITION",
+          "use": "MENTION_ONLY",
+          "modality": "UNSTATED",
+          "polarity": "POSITIVE",
+          "owner_id": "ROOT",
+          "constraint_ids": [],
+          "requires": [],
+          "sources": [
+            {
+              "quote": "ADMIN确认已收到该文件",
+              "occurrence": 1,
+              "span": [
+                20,
+                33
+              ],
+              "source_sha256": "e27b99a11c9396859ce1c1e25f5fe4dfbcd3aa047ed7920eb64bbd5344abb706"
+            }
+          ]
+        },
+        "entity": {
+          "id": "ent_file",
+          "label": "handover.md",
+          "type": "FILE",
+          "mentions": [
+            {
+              "quote": "handover.md",
+              "occurrence": 1,
+              "span": [
+                6,
+                17
+              ],
+              "source_sha256": "e27b99a11c9396859ce1c1e25f5fe4dfbcd3aa047ed7920eb64bbd5344abb706"
+            },
+            {
+              "quote": "该文件",
+              "occurrence": 1,
+              "span": [
+                30,
+                33
+              ],
+              "source_sha256": "e27b99a11c9396859ce1c1e25f5fe4dfbcd3aa047ed7920eb64bbd5344abb706"
+            }
+          ],
+          "alternatives": []
+        },
+        "expression": null,
+        "constraints": [],
+        "content_quantities": [],
+        "content_scopes": [],
+        "sources": [
+          {
+            "quote": "handover.md",
+            "occurrence": 1,
+            "span": [
+              6,
+              17
+            ],
+            "source_sha256": "e27b99a11c9396859ce1c1e25f5fe4dfbcd3aa047ed7920eb64bbd5344abb706"
+          },
+          {
+            "quote": "ADMIN确认已收到该文件",
+            "occurrence": 1,
+            "span": [
+              20,
+              33
+            ],
+            "source_sha256": "e27b99a11c9396859ce1c1e25f5fe4dfbcd3aa047ed7920eb64bbd5344abb706"
+          },
+          {
+            "quote": "ADMIN确认已收到该文件",
+            "occurrence": 1,
+            "span": [
+              20,
+              33
+            ],
+            "source_sha256": "e27b99a11c9396859ce1c1e25f5fe4dfbcd3aa047ed7920eb64bbd5344abb706"
+          },
+          {
+            "quote": "handover.md",
+            "occurrence": 1,
+            "span": [
+              6,
+              17
+            ],
+            "source_sha256": "e27b99a11c9396859ce1c1e25f5fe4dfbcd3aa047ed7920eb64bbd5344abb706"
+          },
+          {
+            "quote": "该文件",
+            "occurrence": 1,
+            "span": [
+              30,
+              33
+            ],
+            "source_sha256": "e27b99a11c9396859ce1c1e25f5fe4dfbcd3aa047ed7920eb64bbd5344abb706"
+          }
+        ],
+        "slots": [],
+        "proof": {
+          "source_sha256": "e27b99a11c9396859ce1c1e25f5fe4dfbcd3aa047ed7920eb64bbd5344abb706",
+          "claim_ids": [
+            "cl_confirm_object",
+            "ent_file",
+            "ev_confirm"
+          ],
+          "provenance_refs": [
+            "cl_confirm_object",
+            "ev_confirm",
+            "ent_file"
+          ],
+          "technical_policy": "028-r02-technical-v2",
+          "checks": [
+            {
+              "id": "cl_confirm_object",
+              "collection": "claims",
+              "status": "ACCEPTED",
+              "errors": [],
+              "uncertain": [],
+              "sources": [
+                {
+                  "quote": "handover.md",
+                  "occurrence": 1,
+                  "span": [
+                    6,
+                    17
+                  ],
+                  "source_sha256": "e27b99a11c9396859ce1c1e25f5fe4dfbcd3aa047ed7920eb64bbd5344abb706"
+                },
+                {
+                  "quote": "ADMIN确认已收到该文件",
+                  "occurrence": 1,
+                  "span": [
+                    20,
+                    33
+                  ],
+                  "source_sha256": "e27b99a11c9396859ce1c1e25f5fe4dfbcd3aa047ed7920eb64bbd5344abb706"
+                }
+              ],
+              "audit_refs": [
+                {
+                  "subject_id": "cl_confirm_object",
+                  "field_path": "",
+                  "verdict": "SUPPORT"
+                }
+              ],
+              "required_dependencies": [],
+              "structural_refs": [
+                "ev_confirm",
+                "ev_confirm",
+                "ent_file"
+              ]
+            },
+            {
+              "id": "ev_confirm",
+              "collection": "events",
+              "status": "ACCEPTED",
+              "errors": [],
+              "uncertain": [],
+              "sources": [
+                {
+                  "quote": "ADMIN确认已收到该文件",
+                  "occurrence": 1,
+                  "span": [
+                    20,
+                    33
+                  ],
+                  "source_sha256": "e27b99a11c9396859ce1c1e25f5fe4dfbcd3aa047ed7920eb64bbd5344abb706"
+                }
+              ],
+              "audit_refs": [
+                {
+                  "subject_id": "ev_confirm",
+                  "field_path": "",
+                  "verdict": "SUPPORT"
+                }
+              ],
+              "required_dependencies": [],
+              "structural_refs": [
+                "ROOT"
+              ]
+            },
+            {
+              "id": "ent_file",
+              "collection": "entities",
+              "status": "ACCEPTED",
+              "identity_status": "ACCEPTED",
+              "errors": [],
+              "uncertain": [],
+              "sources": [
+                {
+                  "quote": "handover.md",
+                  "occurrence": 1,
+                  "span": [
+                    6,
+                    17
+                  ],
+                  "source_sha256": "e27b99a11c9396859ce1c1e25f5fe4dfbcd3aa047ed7920eb64bbd5344abb706"
+                },
+                {
+                  "quote": "该文件",
+                  "occurrence": 1,
+                  "span": [
+                    30,
+                    33
+                  ],
+                  "source_sha256": "e27b99a11c9396859ce1c1e25f5fe4dfbcd3aa047ed7920eb64bbd5344abb706"
+                }
+              ],
+              "audit_refs": [
+                {
+                  "subject_id": "ent_file",
+                  "field_path": "",
+                  "verdict": "SUPPORT"
+                }
+              ],
+              "required_dependencies": [],
+              "structural_refs": []
+            }
+          ],
+          "audit": [
+            {
+              "subject_id": "cl_confirm_object",
+              "field_path": "",
+              "verdict": "SUPPORT",
+              "context_refs": [
+                "ev_confirm",
+                "ent_file"
+              ],
+              "sources": [
+                {
+                  "quote": "handover.md",
+                  "occurrence": 1
+                },
+                {
+                  "quote": "ADMIN确认已收到该文件",
+                  "occurrence": 1
+                }
+              ],
+              "reason": "确认涉及前述同一文件，OBJECT绑定正确，未将其转成外部输入。"
+            },
+            {
+              "subject_id": "ev_confirm",
+              "field_path": "",
+              "verdict": "SUPPORT",
+              "context_refs": [],
+              "sources": [
+                {
+                  "quote": "只有ADMIN确认已收到该文件，本任务才可标记为完成",
+                  "occurrence": 1
+                }
+              ],
+              "reason": "确认收到仅出现在完成前提中，CONDITION、MENTION_ONLY和UNSTATED未新增确认义务。"
+            },
+            {
+              "subject_id": "ent_file",
+              "field_path": "",
+              "verdict": "SUPPORT",
+              "context_refs": [],
+              "sources": [
+                {
+                  "quote": "handover.md",
+                  "occurrence": 1
+                },
+                {
+                  "quote": "该文件",
+                  "occurrence": 1
+                }
+              ],
+              "reason": "全文只有一个文件对象，该文件指handover.md；两处指称已绑定同一实体。"
+            }
+          ],
+          "context_references_are_not_required_dependencies": true
+        }
+      },
+      {
+        "id": "bf:097b13524f6b75c97057",
+        "kind": "COMPLETION",
+        "status": "ACCEPTED",
+        "claim_ids": [
+          "cl_completion",
+          "expr_confirmed"
+        ],
+        "claim": {
+          "id": "cl_completion",
+          "kind": "COMPLETION",
+          "event_id": null,
+          "entity_id": null,
+          "role": null,
+          "expression_id": "expr_confirmed",
+          "direction": "NECESSARY",
+          "temporal": null,
+          "quantity": null,
+          "scope_id": "ROOT",
+          "requires": [],
+          "sources": [
+            {
+              "quote": "只有ADMIN确认已收到该文件，本任务才可标记为完成",
+              "occurrence": 1,
+              "span": [
+                18,
+                44
+              ],
+              "source_sha256": "e27b99a11c9396859ce1c1e25f5fe4dfbcd3aa047ed7920eb64bbd5344abb706"
+            }
+          ],
+          "note": "ADMIN确认已收到文件是根任务可标记完成的必要前提，不表示该前提已成立，也不表示它足以完成任务。"
+        },
+        "event": null,
+        "entity": null,
+        "expression": {
+          "id": "expr_confirmed",
+          "op": "STATE",
+          "operands": [],
+          "state": {
+            "predicate": "已确认收到",
+            "event_id": "ev_confirm",
+            "args": [
+              "ent_admin",
+              "ent_file"
+            ],
+            "polarity": "POSITIVE"
+          },
+          "sources": [
+            {
+              "quote": "handover.md",
+              "occurrence": 1,
+              "span": [
+                6,
+                17
+              ],
+              "source_sha256": "e27b99a11c9396859ce1c1e25f5fe4dfbcd3aa047ed7920eb64bbd5344abb706"
+            },
+            {
+              "quote": "ADMIN确认已收到该文件",
+              "occurrence": 1,
+              "span": [
+                20,
+                33
+              ],
+              "source_sha256": "e27b99a11c9396859ce1c1e25f5fe4dfbcd3aa047ed7920eb64bbd5344abb706"
+            }
+          ],
+          "children": []
+        },
+        "constraints": [],
+        "content_quantities": [],
+        "content_scopes": [],
+        "sources": [
+          {
+            "quote": "只有ADMIN确认已收到该文件，本任务才可标记为完成",
+            "occurrence": 1,
+            "span": [
+              18,
+              44
+            ],
+            "source_sha256": "e27b99a11c9396859ce1c1e25f5fe4dfbcd3aa047ed7920eb64bbd5344abb706"
+          },
+          {
+            "quote": "handover.md",
+            "occurrence": 1,
+            "span": [
+              6,
+              17
+            ],
+            "source_sha256": "e27b99a11c9396859ce1c1e25f5fe4dfbcd3aa047ed7920eb64bbd5344abb706"
+          },
+          {
+            "quote": "ADMIN确认已收到该文件",
+            "occurrence": 1,
+            "span": [
+              20,
+              33
+            ],
+            "source_sha256": "e27b99a11c9396859ce1c1e25f5fe4dfbcd3aa047ed7920eb64bbd5344abb706"
+          },
+          {
+            "quote": "ADMIN确认已收到该文件",
+            "occurrence": 1,
+            "span": [
+              20,
+              33
+            ],
+            "source_sha256": "e27b99a11c9396859ce1c1e25f5fe4dfbcd3aa047ed7920eb64bbd5344abb706"
+          },
+          {
+            "quote": "ADMIN",
+            "occurrence": 1,
+            "span": [
+              20,
+              25
+            ],
+            "source_sha256": "e27b99a11c9396859ce1c1e25f5fe4dfbcd3aa047ed7920eb64bbd5344abb706"
+          },
+          {
+            "quote": "handover.md",
+            "occurrence": 1,
+            "span": [
+              6,
+              17
+            ],
+            "source_sha256": "e27b99a11c9396859ce1c1e25f5fe4dfbcd3aa047ed7920eb64bbd5344abb706"
+          },
+          {
+            "quote": "该文件",
+            "occurrence": 1,
+            "span": [
+              30,
+              33
+            ],
+            "source_sha256": "e27b99a11c9396859ce1c1e25f5fe4dfbcd3aa047ed7920eb64bbd5344abb706"
+          }
+        ],
+        "slots": [
+          "C"
+        ],
+        "proof": {
+          "source_sha256": "e27b99a11c9396859ce1c1e25f5fe4dfbcd3aa047ed7920eb64bbd5344abb706",
+          "claim_ids": [
+            "cl_completion",
+            "expr_confirmed"
+          ],
+          "provenance_refs": [
+            "cl_completion",
+            "expr_confirmed",
+            "ev_confirm",
+            "ent_admin",
+            "ent_file"
+          ],
+          "technical_policy": "028-r02-technical-v2",
+          "checks": [
+            {
+              "id": "cl_completion",
+              "collection": "claims",
+              "status": "ACCEPTED",
+              "errors": [],
+              "uncertain": [],
+              "sources": [
+                {
+                  "quote": "只有ADMIN确认已收到该文件，本任务才可标记为完成",
+                  "occurrence": 1,
+                  "span": [
+                    18,
+                    44
+                  ],
+                  "source_sha256": "e27b99a11c9396859ce1c1e25f5fe4dfbcd3aa047ed7920eb64bbd5344abb706"
+                }
+              ],
+              "audit_refs": [
+                {
+                  "subject_id": "cl_completion",
+                  "field_path": "",
+                  "verdict": "SUPPORT"
+                }
+              ],
+              "required_dependencies": [],
+              "structural_refs": [
+                "ROOT",
+                "expr_confirmed"
+              ]
+            },
+            {
+              "id": "expr_confirmed",
+              "collection": "expressions",
+              "status": "ACCEPTED",
+              "errors": [],
+              "uncertain": [],
+              "sources": [
+                {
+                  "quote": "handover.md",
+                  "occurrence": 1,
+                  "span": [
+                    6,
+                    17
+                  ],
+                  "source_sha256": "e27b99a11c9396859ce1c1e25f5fe4dfbcd3aa047ed7920eb64bbd5344abb706"
+                },
+                {
+                  "quote": "ADMIN确认已收到该文件",
+                  "occurrence": 1,
+                  "span": [
+                    20,
+                    33
+                  ],
+                  "source_sha256": "e27b99a11c9396859ce1c1e25f5fe4dfbcd3aa047ed7920eb64bbd5344abb706"
+                }
+              ],
+              "audit_refs": [
+                {
+                  "subject_id": "expr_confirmed",
+                  "field_path": "",
+                  "verdict": "SUPPORT"
+                }
+              ],
+              "required_dependencies": [],
+              "structural_refs": [
+                "ev_confirm"
+              ]
+            },
+            {
+              "id": "ev_confirm",
+              "collection": "events",
+              "status": "ACCEPTED",
+              "errors": [],
+              "uncertain": [],
+              "sources": [
+                {
+                  "quote": "ADMIN确认已收到该文件",
+                  "occurrence": 1,
+                  "span": [
+                    20,
+                    33
+                  ],
+                  "source_sha256": "e27b99a11c9396859ce1c1e25f5fe4dfbcd3aa047ed7920eb64bbd5344abb706"
+                }
+              ],
+              "audit_refs": [
+                {
+                  "subject_id": "ev_confirm",
+                  "field_path": "",
+                  "verdict": "SUPPORT"
+                }
+              ],
+              "required_dependencies": [],
+              "structural_refs": [
+                "ROOT"
+              ]
+            },
+            {
+              "id": "ent_admin",
+              "collection": "entities",
+              "status": "ACCEPTED",
+              "identity_status": "ACCEPTED",
+              "errors": [],
+              "uncertain": [],
+              "sources": [
+                {
+                  "quote": "ADMIN",
+                  "occurrence": 1,
+                  "span": [
+                    20,
+                    25
+                  ],
+                  "source_sha256": "e27b99a11c9396859ce1c1e25f5fe4dfbcd3aa047ed7920eb64bbd5344abb706"
+                }
+              ],
+              "audit_refs": [
+                {
+                  "subject_id": "ent_admin",
+                  "field_path": "",
+                  "verdict": "SUPPORT"
+                }
+              ],
+              "required_dependencies": [],
+              "structural_refs": []
+            },
+            {
+              "id": "ent_file",
+              "collection": "entities",
+              "status": "ACCEPTED",
+              "identity_status": "ACCEPTED",
+              "errors": [],
+              "uncertain": [],
+              "sources": [
+                {
+                  "quote": "handover.md",
+                  "occurrence": 1,
+                  "span": [
+                    6,
+                    17
+                  ],
+                  "source_sha256": "e27b99a11c9396859ce1c1e25f5fe4dfbcd3aa047ed7920eb64bbd5344abb706"
+                },
+                {
+                  "quote": "该文件",
+                  "occurrence": 1,
+                  "span": [
+                    30,
+                    33
+                  ],
+                  "source_sha256": "e27b99a11c9396859ce1c1e25f5fe4dfbcd3aa047ed7920eb64bbd5344abb706"
+                }
+              ],
+              "audit_refs": [
+                {
+                  "subject_id": "ent_file",
+                  "field_path": "",
+                  "verdict": "SUPPORT"
+                }
+              ],
+              "required_dependencies": [],
+              "structural_refs": []
+            }
+          ],
+          "audit": [
+            {
+              "subject_id": "cl_completion",
+              "field_path": "",
+              "verdict": "SUPPORT",
+              "context_refs": [
+                "expr_confirmed"
+              ],
+              "sources": [
+                {
+                  "quote": "只有ADMIN确认已收到该文件，本任务才可标记为完成",
+                  "occurrence": 1
+                }
+              ],
+              "reason": "只有……才表达根任务标记完成的必要前提，NECESSARY正确；未误作充分触发或已发生事实。"
+            },
+            {
+              "subject_id": "expr_confirmed",
+              "field_path": "",
+              "verdict": "SUPPORT",
+              "context_refs": [
+                "ev_confirm",
+                "ent_admin",
+                "ent_file"
+              ],
+              "sources": [
+                {
+                  "quote": "handover.md",
+                  "occurrence": 1
+                },
+                {
+                  "quote": "ADMIN确认已收到该文件",
+                  "occurrence": 1
+                }
+              ],
+              "reason": "STATE引用对应确认事件，参数为ADMIN与同一交付文件，正向状态准确表达完成前提而不断言其成立。"
+            },
+            {
+              "subject_id": "ev_confirm",
+              "field_path": "",
+              "verdict": "SUPPORT",
+              "context_refs": [],
+              "sources": [
+                {
+                  "quote": "只有ADMIN确认已收到该文件，本任务才可标记为完成",
+                  "occurrence": 1
+                }
+              ],
+              "reason": "确认收到仅出现在完成前提中，CONDITION、MENTION_ONLY和UNSTATED未新增确认义务。"
+            },
+            {
+              "subject_id": "ent_admin",
+              "field_path": "",
+              "verdict": "SUPPORT",
+              "context_refs": [],
+              "sources": [
+                {
+                  "quote": "ADMIN",
+                  "occurrence": 1
+                }
+              ],
+              "reason": "ADMIN身份明确；OTHER保留未指定的类别，不推定权限。"
+            },
+            {
+              "subject_id": "ent_file",
+              "field_path": "",
+              "verdict": "SUPPORT",
+              "context_refs": [],
+              "sources": [
+                {
+                  "quote": "handover.md",
+                  "occurrence": 1
+                },
+                {
+                  "quote": "该文件",
+                  "occurrence": 1
+                }
+              ],
+              "reason": "全文只有一个文件对象，该文件指handover.md；两处指称已绑定同一实体。"
+            }
+          ],
+          "context_references_are_not_required_dependencies": true
+        }
+      }
+    ],
+    "entities": [
+      {
+        "id": "ent_pm",
+        "label": "PM",
+        "type": "OTHER",
+        "mentions": [
+          {
+            "quote": "PM",
+            "occurrence": 1,
+            "span": [
+              0,
+              2
+            ],
+            "source_sha256": "e27b99a11c9396859ce1c1e25f5fe4dfbcd3aa047ed7920eb64bbd5344abb706"
+          }
+        ],
+        "alternatives": []
+      },
+      {
+        "id": "ent_admin",
+        "label": "ADMIN",
+        "type": "OTHER",
+        "mentions": [
+          {
+            "quote": "ADMIN",
+            "occurrence": 1,
+            "span": [
+              20,
+              25
+            ],
+            "source_sha256": "e27b99a11c9396859ce1c1e25f5fe4dfbcd3aa047ed7920eb64bbd5344abb706"
+          }
+        ],
+        "alternatives": []
+      },
+      {
+        "id": "ent_file",
+        "label": "handover.md",
+        "type": "FILE",
+        "mentions": [
+          {
+            "quote": "handover.md",
+            "occurrence": 1,
+            "span": [
+              6,
+              17
+            ],
+            "source_sha256": "e27b99a11c9396859ce1c1e25f5fe4dfbcd3aa047ed7920eb64bbd5344abb706"
+          },
+          {
+            "quote": "该文件",
+            "occurrence": 1,
+            "span": [
+              30,
+              33
+            ],
+            "source_sha256": "e27b99a11c9396859ce1c1e25f5fe4dfbcd3aa047ed7920eb64bbd5344abb706"
+          }
+        ],
+        "alternatives": []
+      }
+    ],
+    "expressions": [
+      {
+        "id": "expr_confirmed",
+        "op": "STATE",
+        "operands": [],
+        "state": {
+          "predicate": "已确认收到",
+          "event_id": "ev_confirm",
+          "args": [
+            "ent_admin",
+            "ent_file"
+          ],
+          "polarity": "POSITIVE"
+        },
+        "sources": [
+          {
+            "quote": "handover.md",
+            "occurrence": 1,
+            "span": [
+              6,
+              17
+            ],
+            "source_sha256": "e27b99a11c9396859ce1c1e25f5fe4dfbcd3aa047ed7920eb64bbd5344abb706"
+          },
+          {
+            "quote": "ADMIN确认已收到该文件",
+            "occurrence": 1,
+            "span": [
+              20,
+              33
+            ],
+            "source_sha256": "e27b99a11c9396859ce1c1e25f5fe4dfbcd3aa047ed7920eb64bbd5344abb706"
+          }
+        ]
+      }
+    ],
+    "issues": [],
+    "audit_issues": [],
+    "gaps": [],
+    "technical_diagnostics": [],
+    "business_decision": null,
+    "execution_authorization": null
+  },
+  "canonical": {
+    "format": "boundx-canonical-7plus1/031-r01",
+    "source_sha256": "e27b99a11c9396859ce1c1e25f5fe4dfbcd3aa047ed7920eb64bbd5344abb706",
+    "entities": [
+      {
+        "id": "ent_pm",
+        "label": "PM",
+        "type": "OTHER",
+        "mentions": [
+          {
+            "quote": "PM",
+            "occurrence": 1,
+            "span": [
+              0,
+              2
+            ],
+            "source_sha256": "e27b99a11c9396859ce1c1e25f5fe4dfbcd3aa047ed7920eb64bbd5344abb706"
+          }
+        ],
+        "alternatives": []
+      },
+      {
+        "id": "ent_admin",
+        "label": "ADMIN",
+        "type": "OTHER",
+        "mentions": [
+          {
+            "quote": "ADMIN",
+            "occurrence": 1,
+            "span": [
+              20,
+              25
+            ],
+            "source_sha256": "e27b99a11c9396859ce1c1e25f5fe4dfbcd3aa047ed7920eb64bbd5344abb706"
+          }
+        ],
+        "alternatives": []
+      },
+      {
+        "id": "ent_file",
+        "label": "handover.md",
+        "type": "FILE",
+        "mentions": [
+          {
+            "quote": "handover.md",
+            "occurrence": 1,
+            "span": [
+              6,
+              17
+            ],
+            "source_sha256": "e27b99a11c9396859ce1c1e25f5fe4dfbcd3aa047ed7920eb64bbd5344abb706"
+          },
+          {
+            "quote": "该文件",
+            "occurrence": 1,
+            "span": [
+              30,
+              33
+            ],
+            "source_sha256": "e27b99a11c9396859ce1c1e25f5fe4dfbcd3aa047ed7920eb64bbd5344abb706"
+          }
+        ],
+        "alternatives": []
+      }
+    ],
+    "expressions": [
+      {
+        "id": "expr_confirmed",
+        "op": "STATE",
+        "operands": [],
+        "state": {
+          "predicate": "已确认收到",
+          "event_id": "ev_confirm",
+          "args": [
+            "ent_admin",
+            "ent_file"
+          ],
+          "polarity": "POSITIVE"
+        },
+        "sources": [
+          {
+            "quote": "handover.md",
+            "occurrence": 1,
+            "span": [
+              6,
+              17
+            ],
+            "source_sha256": "e27b99a11c9396859ce1c1e25f5fe4dfbcd3aa047ed7920eb64bbd5344abb706"
+          },
+          {
+            "quote": "ADMIN确认已收到该文件",
+            "occurrence": 1,
+            "span": [
+              20,
+              33
+            ],
+            "source_sha256": "e27b99a11c9396859ce1c1e25f5fe4dfbcd3aa047ed7920eb64bbd5344abb706"
+          }
+        ]
+      }
+    ],
+    "slots": {
+      "I": {
+        "status": "ABSENT",
+        "openness": "OPEN",
+        "entries": []
+      },
+      "O": {
+        "status": "RESOLVED",
+        "openness": "CONSTRAINED",
+        "entries": [
+          {
+            "id": "bf:6e292d83a9a0cf9c7356",
+            "kind": "ROLE",
+            "status": "ACCEPTED",
+            "claim_ids": [
+              "cl_deliverable",
+              "ent_file",
+              "ev_submit"
+            ],
+            "claim": {
+              "id": "cl_deliverable",
+              "kind": "ROLE",
+              "event_id": "ev_submit",
+              "entity_id": "ent_file",
+              "role": "DELIVERABLE",
+              "expression_id": null,
+              "direction": null,
+              "temporal": null,
+              "quantity": null,
+              "scope_id": "ev_submit",
+              "requires": [],
+              "sources": [
+                {
+                  "quote": "PM必须提交handover.md",
+                  "occurrence": 1,
+                  "span": [
+                    0,
+                    17
+                  ],
+                  "source_sha256": "e27b99a11c9396859ce1c1e25f5fe4dfbcd3aa047ed7920eb64bbd5344abb706"
+                }
+              ],
+              "note": "明确交付文件，不推定生成或修改文件。"
+            },
+            "event": {
+              "id": "ev_submit",
+              "predicate": "提交",
+              "kind": "ACTION",
+              "layer": "MAIN",
+              "use": "CURRENT_TASK",
+              "modality": "REQUIRED",
+              "polarity": "POSITIVE",
+              "owner_id": "ROOT",
+              "constraint_ids": [],
+              "requires": [],
+              "sources": [
+                {
+                  "quote": "PM必须提交handover.md",
+                  "occurrence": 1,
+                  "span": [
+                    0,
+                    17
+                  ],
+                  "source_sha256": "e27b99a11c9396859ce1c1e25f5fe4dfbcd3aa047ed7920eb64bbd5344abb706"
+                }
+              ]
+            },
+            "entity": {
+              "id": "ent_file",
+              "label": "handover.md",
+              "type": "FILE",
+              "mentions": [
+                {
+                  "quote": "handover.md",
+                  "occurrence": 1,
+                  "span": [
+                    6,
+                    17
+                  ],
+                  "source_sha256": "e27b99a11c9396859ce1c1e25f5fe4dfbcd3aa047ed7920eb64bbd5344abb706"
+                },
+                {
+                  "quote": "该文件",
+                  "occurrence": 1,
+                  "span": [
+                    30,
+                    33
+                  ],
+                  "source_sha256": "e27b99a11c9396859ce1c1e25f5fe4dfbcd3aa047ed7920eb64bbd5344abb706"
+                }
+              ],
+              "alternatives": []
+            },
+            "expression": null,
+            "constraints": [],
+            "content_quantities": [],
+            "content_scopes": [],
+            "sources": [
+              {
+                "quote": "PM必须提交handover.md",
+                "occurrence": 1,
+                "span": [
+                  0,
+                  17
+                ],
+                "source_sha256": "e27b99a11c9396859ce1c1e25f5fe4dfbcd3aa047ed7920eb64bbd5344abb706"
+              },
+              {
+                "quote": "PM必须提交handover.md",
+                "occurrence": 1,
+                "span": [
+                  0,
+                  17
+                ],
+                "source_sha256": "e27b99a11c9396859ce1c1e25f5fe4dfbcd3aa047ed7920eb64bbd5344abb706"
+              },
+              {
+                "quote": "handover.md",
+                "occurrence": 1,
+                "span": [
+                  6,
+                  17
+                ],
+                "source_sha256": "e27b99a11c9396859ce1c1e25f5fe4dfbcd3aa047ed7920eb64bbd5344abb706"
+              },
+              {
+                "quote": "该文件",
+                "occurrence": 1,
+                "span": [
+                  30,
+                  33
+                ],
+                "source_sha256": "e27b99a11c9396859ce1c1e25f5fe4dfbcd3aa047ed7920eb64bbd5344abb706"
+              }
+            ],
+            "slots": [
+              "O"
+            ],
+            "proof": {
+              "source_sha256": "e27b99a11c9396859ce1c1e25f5fe4dfbcd3aa047ed7920eb64bbd5344abb706",
+              "claim_ids": [
+                "cl_deliverable",
+                "ent_file",
+                "ev_submit"
+              ],
+              "provenance_refs": [
+                "cl_deliverable",
+                "ev_submit",
+                "ent_file"
+              ],
+              "technical_policy": "028-r02-technical-v2",
+              "checks": [
+                {
+                  "id": "cl_deliverable",
+                  "collection": "claims",
+                  "status": "ACCEPTED",
+                  "errors": [],
+                  "uncertain": [],
+                  "sources": [
+                    {
+                      "quote": "PM必须提交handover.md",
+                      "occurrence": 1,
+                      "span": [
+                        0,
+                        17
+                      ],
+                      "source_sha256": "e27b99a11c9396859ce1c1e25f5fe4dfbcd3aa047ed7920eb64bbd5344abb706"
+                    }
+                  ],
+                  "audit_refs": [
+                    {
+                      "subject_id": "cl_deliverable",
+                      "field_path": "",
+                      "verdict": "SUPPORT"
+                    }
+                  ],
+                  "required_dependencies": [],
+                  "structural_refs": [
+                    "ev_submit",
+                    "ev_submit",
+                    "ent_file"
+                  ]
+                },
+                {
+                  "id": "ev_submit",
+                  "collection": "events",
+                  "status": "ACCEPTED",
+                  "errors": [],
+                  "uncertain": [],
+                  "sources": [
+                    {
+                      "quote": "PM必须提交handover.md",
+                      "occurrence": 1,
+                      "span": [
+                        0,
+                        17
+                      ],
+                      "source_sha256": "e27b99a11c9396859ce1c1e25f5fe4dfbcd3aa047ed7920eb64bbd5344abb706"
+                    }
+                  ],
+                  "audit_refs": [
+                    {
+                      "subject_id": "ev_submit",
+                      "field_path": "",
+                      "verdict": "SUPPORT"
+                    }
+                  ],
+                  "required_dependencies": [],
+                  "structural_refs": [
+                    "ROOT"
+                  ]
+                },
+                {
+                  "id": "ent_file",
+                  "collection": "entities",
+                  "status": "ACCEPTED",
+                  "identity_status": "ACCEPTED",
+                  "errors": [],
+                  "uncertain": [],
+                  "sources": [
+                    {
+                      "quote": "handover.md",
+                      "occurrence": 1,
+                      "span": [
+                        6,
+                        17
+                      ],
+                      "source_sha256": "e27b99a11c9396859ce1c1e25f5fe4dfbcd3aa047ed7920eb64bbd5344abb706"
+                    },
+                    {
+                      "quote": "该文件",
+                      "occurrence": 1,
+                      "span": [
+                        30,
+                        33
+                      ],
+                      "source_sha256": "e27b99a11c9396859ce1c1e25f5fe4dfbcd3aa047ed7920eb64bbd5344abb706"
+                    }
+                  ],
+                  "audit_refs": [
+                    {
+                      "subject_id": "ent_file",
+                      "field_path": "",
+                      "verdict": "SUPPORT"
+                    }
+                  ],
+                  "required_dependencies": [],
+                  "structural_refs": []
+                }
+              ],
+              "audit": [
+                {
+                  "subject_id": "cl_deliverable",
+                  "field_path": "",
+                  "verdict": "SUPPORT",
+                  "context_refs": [
+                    "ev_submit",
+                    "ent_file"
+                  ],
+                  "sources": [
+                    {
+                      "quote": "PM必须提交handover.md",
+                      "occurrence": 1
+                    }
+                  ],
+                  "reason": "handover.md是提交事件的DELIVERABLE，未推定生成、修改或外部输入。"
+                },
+                {
+                  "subject_id": "ev_submit",
+                  "field_path": "",
+                  "verdict": "SUPPORT",
+                  "context_refs": [],
+                  "sources": [
+                    {
+                      "quote": "PM必须提交handover.md",
+                      "occurrence": 1
+                    }
+                  ],
+                  "reason": "提交是当前明确要求的主动作，REQUIRED及正向极性正确。"
+                },
+                {
+                  "subject_id": "ent_file",
+                  "field_path": "",
+                  "verdict": "SUPPORT",
+                  "context_refs": [],
+                  "sources": [
+                    {
+                      "quote": "handover.md",
+                      "occurrence": 1
+                    },
+                    {
+                      "quote": "该文件",
+                      "occurrence": 1
+                    }
+                  ],
+                  "reason": "全文只有一个文件对象，该文件指handover.md；两处指称已绑定同一实体。"
+                }
+              ],
+              "context_references_are_not_required_dependencies": true
+            }
+          }
+        ]
+      },
+      "A": {
+        "status": "RESOLVED",
+        "openness": "CONSTRAINED",
+        "entries": [
+          {
+            "id": "bf:59115c5a5908bee0cbf5",
+            "kind": "EVENT",
+            "status": "ACCEPTED",
+            "claim_ids": [
+              "ev_submit",
+              "cl_submit_performer",
+              "cl_deliverable"
+            ],
+            "event": {
+              "id": "ev_submit",
+              "predicate": "提交",
+              "kind": "ACTION",
+              "layer": "MAIN",
+              "use": "CURRENT_TASK",
+              "modality": "REQUIRED",
+              "polarity": "POSITIVE",
+              "owner_id": "ROOT",
+              "constraint_ids": [],
+              "requires": [],
+              "sources": [
+                {
+                  "quote": "PM必须提交handover.md",
+                  "occurrence": 1,
+                  "span": [
+                    0,
+                    17
+                  ],
+                  "source_sha256": "e27b99a11c9396859ce1c1e25f5fe4dfbcd3aa047ed7920eb64bbd5344abb706"
+                }
+              ]
+            },
+            "roles": [
+              {
+                "id": "cl_submit_performer",
+                "kind": "ROLE",
+                "event_id": "ev_submit",
+                "entity_id": "ent_pm",
+                "role": "PERFORMER",
+                "expression_id": null,
+                "direction": null,
+                "temporal": null,
+                "quantity": null,
+                "scope_id": "ev_submit",
+                "requires": [],
+                "sources": [
+                  {
+                    "quote": "PM必须提交handover.md",
+                    "occurrence": 1,
+                    "span": [
+                      0,
+                      17
+                    ],
+                    "source_sha256": "e27b99a11c9396859ce1c1e25f5fe4dfbcd3aa047ed7920eb64bbd5344abb706"
+                  }
+                ],
+                "note": "PM是提交动作的明确执行者。",
+                "entity": {
+                  "id": "ent_pm",
+                  "label": "PM",
+                  "type": "OTHER",
+                  "mentions": [
+                    {
+                      "quote": "PM",
+                      "occurrence": 1,
+                      "span": [
+                        0,
+                        2
+                      ],
+                      "source_sha256": "e27b99a11c9396859ce1c1e25f5fe4dfbcd3aa047ed7920eb64bbd5344abb706"
+                    }
+                  ],
+                  "alternatives": []
+                },
+                "status": "ACCEPTED"
+              },
+              {
+                "id": "cl_deliverable",
+                "kind": "ROLE",
+                "event_id": "ev_submit",
+                "entity_id": "ent_file",
+                "role": "DELIVERABLE",
+                "expression_id": null,
+                "direction": null,
+                "temporal": null,
+                "quantity": null,
+                "scope_id": "ev_submit",
+                "requires": [],
+                "sources": [
+                  {
+                    "quote": "PM必须提交handover.md",
+                    "occurrence": 1,
+                    "span": [
+                      0,
+                      17
+                    ],
+                    "source_sha256": "e27b99a11c9396859ce1c1e25f5fe4dfbcd3aa047ed7920eb64bbd5344abb706"
+                  }
+                ],
+                "note": "明确交付文件，不推定生成或修改文件。",
+                "entity": {
+                  "id": "ent_file",
+                  "label": "handover.md",
+                  "type": "FILE",
+                  "mentions": [
+                    {
+                      "quote": "handover.md",
+                      "occurrence": 1,
+                      "span": [
+                        6,
+                        17
+                      ],
+                      "source_sha256": "e27b99a11c9396859ce1c1e25f5fe4dfbcd3aa047ed7920eb64bbd5344abb706"
+                    },
+                    {
+                      "quote": "该文件",
+                      "occurrence": 1,
+                      "span": [
+                        30,
+                        33
+                      ],
+                      "source_sha256": "e27b99a11c9396859ce1c1e25f5fe4dfbcd3aa047ed7920eb64bbd5344abb706"
+                    }
+                  ],
+                  "alternatives": []
+                },
+                "status": "ACCEPTED"
+              }
+            ],
+            "constraints": [],
+            "sources": [
+              {
+                "quote": "PM必须提交handover.md",
+                "occurrence": 1,
+                "span": [
+                  0,
+                  17
+                ],
+                "source_sha256": "e27b99a11c9396859ce1c1e25f5fe4dfbcd3aa047ed7920eb64bbd5344abb706"
+              },
+              {
+                "quote": "PM必须提交handover.md",
+                "occurrence": 1,
+                "span": [
+                  0,
+                  17
+                ],
+                "source_sha256": "e27b99a11c9396859ce1c1e25f5fe4dfbcd3aa047ed7920eb64bbd5344abb706"
+              },
+              {
+                "quote": "PM",
+                "occurrence": 1,
+                "span": [
+                  0,
+                  2
+                ],
+                "source_sha256": "e27b99a11c9396859ce1c1e25f5fe4dfbcd3aa047ed7920eb64bbd5344abb706"
+              },
+              {
+                "quote": "PM必须提交handover.md",
+                "occurrence": 1,
+                "span": [
+                  0,
+                  17
+                ],
+                "source_sha256": "e27b99a11c9396859ce1c1e25f5fe4dfbcd3aa047ed7920eb64bbd5344abb706"
+              },
+              {
+                "quote": "handover.md",
+                "occurrence": 1,
+                "span": [
+                  6,
+                  17
+                ],
+                "source_sha256": "e27b99a11c9396859ce1c1e25f5fe4dfbcd3aa047ed7920eb64bbd5344abb706"
+              },
+              {
+                "quote": "该文件",
+                "occurrence": 1,
+                "span": [
+                  30,
+                  33
+                ],
+                "source_sha256": "e27b99a11c9396859ce1c1e25f5fe4dfbcd3aa047ed7920eb64bbd5344abb706"
+              }
+            ],
+            "slots": [
+              "A"
+            ],
+            "proof": {
+              "source_sha256": "e27b99a11c9396859ce1c1e25f5fe4dfbcd3aa047ed7920eb64bbd5344abb706",
+              "claim_ids": [
+                "ev_submit",
+                "cl_submit_performer",
+                "cl_deliverable"
+              ],
+              "provenance_refs": [
+                "ev_submit",
+                "cl_submit_performer",
+                "ent_pm",
+                "cl_deliverable",
+                "ent_file"
+              ],
+              "technical_policy": "028-r02-technical-v2",
+              "checks": [
+                {
+                  "id": "ev_submit",
+                  "collection": "events",
+                  "status": "ACCEPTED",
+                  "errors": [],
+                  "uncertain": [],
+                  "sources": [
+                    {
+                      "quote": "PM必须提交handover.md",
+                      "occurrence": 1,
+                      "span": [
+                        0,
+                        17
+                      ],
+                      "source_sha256": "e27b99a11c9396859ce1c1e25f5fe4dfbcd3aa047ed7920eb64bbd5344abb706"
+                    }
+                  ],
+                  "audit_refs": [
+                    {
+                      "subject_id": "ev_submit",
+                      "field_path": "",
+                      "verdict": "SUPPORT"
+                    }
+                  ],
+                  "required_dependencies": [],
+                  "structural_refs": [
+                    "ROOT"
+                  ]
+                },
+                {
+                  "id": "cl_submit_performer",
+                  "collection": "claims",
+                  "status": "ACCEPTED",
+                  "errors": [],
+                  "uncertain": [],
+                  "sources": [
+                    {
+                      "quote": "PM必须提交handover.md",
+                      "occurrence": 1,
+                      "span": [
+                        0,
+                        17
+                      ],
+                      "source_sha256": "e27b99a11c9396859ce1c1e25f5fe4dfbcd3aa047ed7920eb64bbd5344abb706"
+                    }
+                  ],
+                  "audit_refs": [
+                    {
+                      "subject_id": "cl_submit_performer",
+                      "field_path": "",
+                      "verdict": "SUPPORT"
+                    }
+                  ],
+                  "required_dependencies": [],
+                  "structural_refs": [
+                    "ev_submit",
+                    "ev_submit",
+                    "ent_pm"
+                  ]
+                },
+                {
+                  "id": "ent_pm",
+                  "collection": "entities",
+                  "status": "ACCEPTED",
+                  "identity_status": "ACCEPTED",
+                  "errors": [],
+                  "uncertain": [],
+                  "sources": [
+                    {
+                      "quote": "PM",
+                      "occurrence": 1,
+                      "span": [
+                        0,
+                        2
+                      ],
+                      "source_sha256": "e27b99a11c9396859ce1c1e25f5fe4dfbcd3aa047ed7920eb64bbd5344abb706"
+                    }
+                  ],
+                  "audit_refs": [
+                    {
+                      "subject_id": "ent_pm",
+                      "field_path": "",
+                      "verdict": "SUPPORT"
+                    }
+                  ],
+                  "required_dependencies": [],
+                  "structural_refs": []
+                },
+                {
+                  "id": "cl_deliverable",
+                  "collection": "claims",
+                  "status": "ACCEPTED",
+                  "errors": [],
+                  "uncertain": [],
+                  "sources": [
+                    {
+                      "quote": "PM必须提交handover.md",
+                      "occurrence": 1,
+                      "span": [
+                        0,
+                        17
+                      ],
+                      "source_sha256": "e27b99a11c9396859ce1c1e25f5fe4dfbcd3aa047ed7920eb64bbd5344abb706"
+                    }
+                  ],
+                  "audit_refs": [
+                    {
+                      "subject_id": "cl_deliverable",
+                      "field_path": "",
+                      "verdict": "SUPPORT"
+                    }
+                  ],
+                  "required_dependencies": [],
+                  "structural_refs": [
+                    "ev_submit",
+                    "ev_submit",
+                    "ent_file"
+                  ]
+                },
+                {
+                  "id": "ent_file",
+                  "collection": "entities",
+                  "status": "ACCEPTED",
+                  "identity_status": "ACCEPTED",
+                  "errors": [],
+                  "uncertain": [],
+                  "sources": [
+                    {
+                      "quote": "handover.md",
+                      "occurrence": 1,
+                      "span": [
+                        6,
+                        17
+                      ],
+                      "source_sha256": "e27b99a11c9396859ce1c1e25f5fe4dfbcd3aa047ed7920eb64bbd5344abb706"
+                    },
+                    {
+                      "quote": "该文件",
+                      "occurrence": 1,
+                      "span": [
+                        30,
+                        33
+                      ],
+                      "source_sha256": "e27b99a11c9396859ce1c1e25f5fe4dfbcd3aa047ed7920eb64bbd5344abb706"
+                    }
+                  ],
+                  "audit_refs": [
+                    {
+                      "subject_id": "ent_file",
+                      "field_path": "",
+                      "verdict": "SUPPORT"
+                    }
+                  ],
+                  "required_dependencies": [],
+                  "structural_refs": []
+                }
+              ],
+              "audit": [
+                {
+                  "subject_id": "ev_submit",
+                  "field_path": "",
+                  "verdict": "SUPPORT",
+                  "context_refs": [],
+                  "sources": [
+                    {
+                      "quote": "PM必须提交handover.md",
+                      "occurrence": 1
+                    }
+                  ],
+                  "reason": "提交是当前明确要求的主动作，REQUIRED及正向极性正确。"
+                },
+                {
+                  "subject_id": "cl_submit_performer",
+                  "field_path": "",
+                  "verdict": "SUPPORT",
+                  "context_refs": [
+                    "ev_submit",
+                    "ent_pm"
+                  ],
+                  "sources": [
+                    {
+                      "quote": "PM必须提交handover.md",
+                      "occurrence": 1
+                    }
+                  ],
+                  "reason": "原文明示PM为提交执行者，角色及事件绑定正确。"
+                },
+                {
+                  "subject_id": "ent_pm",
+                  "field_path": "",
+                  "verdict": "SUPPORT",
+                  "context_refs": [],
+                  "sources": [
+                    {
+                      "quote": "PM",
+                      "occurrence": 1
+                    }
+                  ],
+                  "reason": "PM身份明确；原文未指定人或组类别，OTHER可作占位。"
+                },
+                {
+                  "subject_id": "cl_deliverable",
+                  "field_path": "",
+                  "verdict": "SUPPORT",
+                  "context_refs": [
+                    "ev_submit",
+                    "ent_file"
+                  ],
+                  "sources": [
+                    {
+                      "quote": "PM必须提交handover.md",
+                      "occurrence": 1
+                    }
+                  ],
+                  "reason": "handover.md是提交事件的DELIVERABLE，未推定生成、修改或外部输入。"
+                },
+                {
+                  "subject_id": "ent_file",
+                  "field_path": "",
+                  "verdict": "SUPPORT",
+                  "context_refs": [],
+                  "sources": [
+                    {
+                      "quote": "handover.md",
+                      "occurrence": 1
+                    },
+                    {
+                      "quote": "该文件",
+                      "occurrence": 1
+                    }
+                  ],
+                  "reason": "全文只有一个文件对象，该文件指handover.md；两处指称已绑定同一实体。"
+                }
+              ],
+              "context_references_are_not_required_dependencies": true
+            }
+          }
+        ]
+      },
+      "P": {
+        "status": "RESOLVED",
+        "openness": "CONSTRAINED",
+        "entries": [
+          {
+            "id": "bf:4a63593bb1f440abc88a",
+            "kind": "ROLE",
+            "status": "ACCEPTED",
+            "claim_ids": [
+              "cl_submit_performer",
+              "ent_pm",
+              "ev_submit"
+            ],
+            "claim": {
+              "id": "cl_submit_performer",
+              "kind": "ROLE",
+              "event_id": "ev_submit",
+              "entity_id": "ent_pm",
+              "role": "PERFORMER",
+              "expression_id": null,
+              "direction": null,
+              "temporal": null,
+              "quantity": null,
+              "scope_id": "ev_submit",
+              "requires": [],
+              "sources": [
+                {
+                  "quote": "PM必须提交handover.md",
+                  "occurrence": 1,
+                  "span": [
+                    0,
+                    17
+                  ],
+                  "source_sha256": "e27b99a11c9396859ce1c1e25f5fe4dfbcd3aa047ed7920eb64bbd5344abb706"
+                }
+              ],
+              "note": "PM是提交动作的明确执行者。"
+            },
+            "event": {
+              "id": "ev_submit",
+              "predicate": "提交",
+              "kind": "ACTION",
+              "layer": "MAIN",
+              "use": "CURRENT_TASK",
+              "modality": "REQUIRED",
+              "polarity": "POSITIVE",
+              "owner_id": "ROOT",
+              "constraint_ids": [],
+              "requires": [],
+              "sources": [
+                {
+                  "quote": "PM必须提交handover.md",
+                  "occurrence": 1,
+                  "span": [
+                    0,
+                    17
+                  ],
+                  "source_sha256": "e27b99a11c9396859ce1c1e25f5fe4dfbcd3aa047ed7920eb64bbd5344abb706"
+                }
+              ]
+            },
+            "entity": {
+              "id": "ent_pm",
+              "label": "PM",
+              "type": "OTHER",
+              "mentions": [
+                {
+                  "quote": "PM",
+                  "occurrence": 1,
+                  "span": [
+                    0,
+                    2
+                  ],
+                  "source_sha256": "e27b99a11c9396859ce1c1e25f5fe4dfbcd3aa047ed7920eb64bbd5344abb706"
+                }
+              ],
+              "alternatives": []
+            },
+            "expression": null,
+            "constraints": [],
+            "content_quantities": [],
+            "content_scopes": [],
+            "sources": [
+              {
+                "quote": "PM必须提交handover.md",
+                "occurrence": 1,
+                "span": [
+                  0,
+                  17
+                ],
+                "source_sha256": "e27b99a11c9396859ce1c1e25f5fe4dfbcd3aa047ed7920eb64bbd5344abb706"
+              },
+              {
+                "quote": "PM必须提交handover.md",
+                "occurrence": 1,
+                "span": [
+                  0,
+                  17
+                ],
+                "source_sha256": "e27b99a11c9396859ce1c1e25f5fe4dfbcd3aa047ed7920eb64bbd5344abb706"
+              },
+              {
+                "quote": "PM",
+                "occurrence": 1,
+                "span": [
+                  0,
+                  2
+                ],
+                "source_sha256": "e27b99a11c9396859ce1c1e25f5fe4dfbcd3aa047ed7920eb64bbd5344abb706"
+              }
+            ],
+            "slots": [
+              "P"
+            ],
+            "proof": {
+              "source_sha256": "e27b99a11c9396859ce1c1e25f5fe4dfbcd3aa047ed7920eb64bbd5344abb706",
+              "claim_ids": [
+                "cl_submit_performer",
+                "ent_pm",
+                "ev_submit"
+              ],
+              "provenance_refs": [
+                "cl_submit_performer",
+                "ev_submit",
+                "ent_pm"
+              ],
+              "technical_policy": "028-r02-technical-v2",
+              "checks": [
+                {
+                  "id": "cl_submit_performer",
+                  "collection": "claims",
+                  "status": "ACCEPTED",
+                  "errors": [],
+                  "uncertain": [],
+                  "sources": [
+                    {
+                      "quote": "PM必须提交handover.md",
+                      "occurrence": 1,
+                      "span": [
+                        0,
+                        17
+                      ],
+                      "source_sha256": "e27b99a11c9396859ce1c1e25f5fe4dfbcd3aa047ed7920eb64bbd5344abb706"
+                    }
+                  ],
+                  "audit_refs": [
+                    {
+                      "subject_id": "cl_submit_performer",
+                      "field_path": "",
+                      "verdict": "SUPPORT"
+                    }
+                  ],
+                  "required_dependencies": [],
+                  "structural_refs": [
+                    "ev_submit",
+                    "ev_submit",
+                    "ent_pm"
+                  ]
+                },
+                {
+                  "id": "ev_submit",
+                  "collection": "events",
+                  "status": "ACCEPTED",
+                  "errors": [],
+                  "uncertain": [],
+                  "sources": [
+                    {
+                      "quote": "PM必须提交handover.md",
+                      "occurrence": 1,
+                      "span": [
+                        0,
+                        17
+                      ],
+                      "source_sha256": "e27b99a11c9396859ce1c1e25f5fe4dfbcd3aa047ed7920eb64bbd5344abb706"
+                    }
+                  ],
+                  "audit_refs": [
+                    {
+                      "subject_id": "ev_submit",
+                      "field_path": "",
+                      "verdict": "SUPPORT"
+                    }
+                  ],
+                  "required_dependencies": [],
+                  "structural_refs": [
+                    "ROOT"
+                  ]
+                },
+                {
+                  "id": "ent_pm",
+                  "collection": "entities",
+                  "status": "ACCEPTED",
+                  "identity_status": "ACCEPTED",
+                  "errors": [],
+                  "uncertain": [],
+                  "sources": [
+                    {
+                      "quote": "PM",
+                      "occurrence": 1,
+                      "span": [
+                        0,
+                        2
+                      ],
+                      "source_sha256": "e27b99a11c9396859ce1c1e25f5fe4dfbcd3aa047ed7920eb64bbd5344abb706"
+                    }
+                  ],
+                  "audit_refs": [
+                    {
+                      "subject_id": "ent_pm",
+                      "field_path": "",
+                      "verdict": "SUPPORT"
+                    }
+                  ],
+                  "required_dependencies": [],
+                  "structural_refs": []
+                }
+              ],
+              "audit": [
+                {
+                  "subject_id": "cl_submit_performer",
+                  "field_path": "",
+                  "verdict": "SUPPORT",
+                  "context_refs": [
+                    "ev_submit",
+                    "ent_pm"
+                  ],
+                  "sources": [
+                    {
+                      "quote": "PM必须提交handover.md",
+                      "occurrence": 1
+                    }
+                  ],
+                  "reason": "原文明示PM为提交执行者，角色及事件绑定正确。"
+                },
+                {
+                  "subject_id": "ev_submit",
+                  "field_path": "",
+                  "verdict": "SUPPORT",
+                  "context_refs": [],
+                  "sources": [
+                    {
+                      "quote": "PM必须提交handover.md",
+                      "occurrence": 1
+                    }
+                  ],
+                  "reason": "提交是当前明确要求的主动作，REQUIRED及正向极性正确。"
+                },
+                {
+                  "subject_id": "ent_pm",
+                  "field_path": "",
+                  "verdict": "SUPPORT",
+                  "context_refs": [],
+                  "sources": [
+                    {
+                      "quote": "PM",
+                      "occurrence": 1
+                    }
+                  ],
+                  "reason": "PM身份明确；原文未指定人或组类别，OTHER可作占位。"
+                }
+              ],
+              "context_references_are_not_required_dependencies": true
+            }
+          }
+        ]
+      },
+      "R": {
+        "status": "ABSENT",
+        "openness": "OPEN",
+        "entries": []
+      },
+      "V": {
+        "status": "ABSENT",
+        "openness": "OPEN",
+        "entries": []
+      },
+      "C": {
+        "status": "RESOLVED",
+        "openness": "CONSTRAINED",
+        "entries": [
+          {
+            "id": "bf:097b13524f6b75c97057",
+            "kind": "COMPLETION",
+            "status": "ACCEPTED",
+            "claim_ids": [
+              "cl_completion",
+              "expr_confirmed"
+            ],
+            "claim": {
+              "id": "cl_completion",
+              "kind": "COMPLETION",
+              "event_id": null,
+              "entity_id": null,
+              "role": null,
+              "expression_id": "expr_confirmed",
+              "direction": "NECESSARY",
+              "temporal": null,
+              "quantity": null,
+              "scope_id": "ROOT",
+              "requires": [],
+              "sources": [
+                {
+                  "quote": "只有ADMIN确认已收到该文件，本任务才可标记为完成",
+                  "occurrence": 1,
+                  "span": [
+                    18,
+                    44
+                  ],
+                  "source_sha256": "e27b99a11c9396859ce1c1e25f5fe4dfbcd3aa047ed7920eb64bbd5344abb706"
+                }
+              ],
+              "note": "ADMIN确认已收到文件是根任务可标记完成的必要前提，不表示该前提已成立，也不表示它足以完成任务。"
+            },
+            "event": null,
+            "entity": null,
+            "expression": {
+              "id": "expr_confirmed",
+              "op": "STATE",
+              "operands": [],
+              "state": {
+                "predicate": "已确认收到",
+                "event_id": "ev_confirm",
+                "args": [
+                  "ent_admin",
+                  "ent_file"
+                ],
+                "polarity": "POSITIVE"
+              },
+              "sources": [
+                {
+                  "quote": "handover.md",
+                  "occurrence": 1,
+                  "span": [
+                    6,
+                    17
+                  ],
+                  "source_sha256": "e27b99a11c9396859ce1c1e25f5fe4dfbcd3aa047ed7920eb64bbd5344abb706"
+                },
+                {
+                  "quote": "ADMIN确认已收到该文件",
+                  "occurrence": 1,
+                  "span": [
+                    20,
+                    33
+                  ],
+                  "source_sha256": "e27b99a11c9396859ce1c1e25f5fe4dfbcd3aa047ed7920eb64bbd5344abb706"
+                }
+              ],
+              "children": []
+            },
+            "constraints": [],
+            "content_quantities": [],
+            "content_scopes": [],
+            "sources": [
+              {
+                "quote": "只有ADMIN确认已收到该文件，本任务才可标记为完成",
+                "occurrence": 1,
+                "span": [
+                  18,
+                  44
+                ],
+                "source_sha256": "e27b99a11c9396859ce1c1e25f5fe4dfbcd3aa047ed7920eb64bbd5344abb706"
+              },
+              {
+                "quote": "handover.md",
+                "occurrence": 1,
+                "span": [
+                  6,
+                  17
+                ],
+                "source_sha256": "e27b99a11c9396859ce1c1e25f5fe4dfbcd3aa047ed7920eb64bbd5344abb706"
+              },
+              {
+                "quote": "ADMIN确认已收到该文件",
+                "occurrence": 1,
+                "span": [
+                  20,
+                  33
+                ],
+                "source_sha256": "e27b99a11c9396859ce1c1e25f5fe4dfbcd3aa047ed7920eb64bbd5344abb706"
+              },
+              {
+                "quote": "ADMIN确认已收到该文件",
+                "occurrence": 1,
+                "span": [
+                  20,
+                  33
+                ],
+                "source_sha256": "e27b99a11c9396859ce1c1e25f5fe4dfbcd3aa047ed7920eb64bbd5344abb706"
+              },
+              {
+                "quote": "ADMIN",
+                "occurrence": 1,
+                "span": [
+                  20,
+                  25
+                ],
+                "source_sha256": "e27b99a11c9396859ce1c1e25f5fe4dfbcd3aa047ed7920eb64bbd5344abb706"
+              },
+              {
+                "quote": "handover.md",
+                "occurrence": 1,
+                "span": [
+                  6,
+                  17
+                ],
+                "source_sha256": "e27b99a11c9396859ce1c1e25f5fe4dfbcd3aa047ed7920eb64bbd5344abb706"
+              },
+              {
+                "quote": "该文件",
+                "occurrence": 1,
+                "span": [
+                  30,
+                  33
+                ],
+                "source_sha256": "e27b99a11c9396859ce1c1e25f5fe4dfbcd3aa047ed7920eb64bbd5344abb706"
+              }
+            ],
+            "slots": [
+              "C"
+            ],
+            "proof": {
+              "source_sha256": "e27b99a11c9396859ce1c1e25f5fe4dfbcd3aa047ed7920eb64bbd5344abb706",
+              "claim_ids": [
+                "cl_completion",
+                "expr_confirmed"
+              ],
+              "provenance_refs": [
+                "cl_completion",
+                "expr_confirmed",
+                "ev_confirm",
+                "ent_admin",
+                "ent_file"
+              ],
+              "technical_policy": "028-r02-technical-v2",
+              "checks": [
+                {
+                  "id": "cl_completion",
+                  "collection": "claims",
+                  "status": "ACCEPTED",
+                  "errors": [],
+                  "uncertain": [],
+                  "sources": [
+                    {
+                      "quote": "只有ADMIN确认已收到该文件，本任务才可标记为完成",
+                      "occurrence": 1,
+                      "span": [
+                        18,
+                        44
+                      ],
+                      "source_sha256": "e27b99a11c9396859ce1c1e25f5fe4dfbcd3aa047ed7920eb64bbd5344abb706"
+                    }
+                  ],
+                  "audit_refs": [
+                    {
+                      "subject_id": "cl_completion",
+                      "field_path": "",
+                      "verdict": "SUPPORT"
+                    }
+                  ],
+                  "required_dependencies": [],
+                  "structural_refs": [
+                    "ROOT",
+                    "expr_confirmed"
+                  ]
+                },
+                {
+                  "id": "expr_confirmed",
+                  "collection": "expressions",
+                  "status": "ACCEPTED",
+                  "errors": [],
+                  "uncertain": [],
+                  "sources": [
+                    {
+                      "quote": "handover.md",
+                      "occurrence": 1,
+                      "span": [
+                        6,
+                        17
+                      ],
+                      "source_sha256": "e27b99a11c9396859ce1c1e25f5fe4dfbcd3aa047ed7920eb64bbd5344abb706"
+                    },
+                    {
+                      "quote": "ADMIN确认已收到该文件",
+                      "occurrence": 1,
+                      "span": [
+                        20,
+                        33
+                      ],
+                      "source_sha256": "e27b99a11c9396859ce1c1e25f5fe4dfbcd3aa047ed7920eb64bbd5344abb706"
+                    }
+                  ],
+                  "audit_refs": [
+                    {
+                      "subject_id": "expr_confirmed",
+                      "field_path": "",
+                      "verdict": "SUPPORT"
+                    }
+                  ],
+                  "required_dependencies": [],
+                  "structural_refs": [
+                    "ev_confirm"
+                  ]
+                },
+                {
+                  "id": "ev_confirm",
+                  "collection": "events",
+                  "status": "ACCEPTED",
+                  "errors": [],
+                  "uncertain": [],
+                  "sources": [
+                    {
+                      "quote": "ADMIN确认已收到该文件",
+                      "occurrence": 1,
+                      "span": [
+                        20,
+                        33
+                      ],
+                      "source_sha256": "e27b99a11c9396859ce1c1e25f5fe4dfbcd3aa047ed7920eb64bbd5344abb706"
+                    }
+                  ],
+                  "audit_refs": [
+                    {
+                      "subject_id": "ev_confirm",
+                      "field_path": "",
+                      "verdict": "SUPPORT"
+                    }
+                  ],
+                  "required_dependencies": [],
+                  "structural_refs": [
+                    "ROOT"
+                  ]
+                },
+                {
+                  "id": "ent_admin",
+                  "collection": "entities",
+                  "status": "ACCEPTED",
+                  "identity_status": "ACCEPTED",
+                  "errors": [],
+                  "uncertain": [],
+                  "sources": [
+                    {
+                      "quote": "ADMIN",
+                      "occurrence": 1,
+                      "span": [
+                        20,
+                        25
+                      ],
+                      "source_sha256": "e27b99a11c9396859ce1c1e25f5fe4dfbcd3aa047ed7920eb64bbd5344abb706"
+                    }
+                  ],
+                  "audit_refs": [
+                    {
+                      "subject_id": "ent_admin",
+                      "field_path": "",
+                      "verdict": "SUPPORT"
+                    }
+                  ],
+                  "required_dependencies": [],
+                  "structural_refs": []
+                },
+                {
+                  "id": "ent_file",
+                  "collection": "entities",
+                  "status": "ACCEPTED",
+                  "identity_status": "ACCEPTED",
+                  "errors": [],
+                  "uncertain": [],
+                  "sources": [
+                    {
+                      "quote": "handover.md",
+                      "occurrence": 1,
+                      "span": [
+                        6,
+                        17
+                      ],
+                      "source_sha256": "e27b99a11c9396859ce1c1e25f5fe4dfbcd3aa047ed7920eb64bbd5344abb706"
+                    },
+                    {
+                      "quote": "该文件",
+                      "occurrence": 1,
+                      "span": [
+                        30,
+                        33
+                      ],
+                      "source_sha256": "e27b99a11c9396859ce1c1e25f5fe4dfbcd3aa047ed7920eb64bbd5344abb706"
+                    }
+                  ],
+                  "audit_refs": [
+                    {
+                      "subject_id": "ent_file",
+                      "field_path": "",
+                      "verdict": "SUPPORT"
+                    }
+                  ],
+                  "required_dependencies": [],
+                  "structural_refs": []
+                }
+              ],
+              "audit": [
+                {
+                  "subject_id": "cl_completion",
+                  "field_path": "",
+                  "verdict": "SUPPORT",
+                  "context_refs": [
+                    "expr_confirmed"
+                  ],
+                  "sources": [
+                    {
+                      "quote": "只有ADMIN确认已收到该文件，本任务才可标记为完成",
+                      "occurrence": 1
+                    }
+                  ],
+                  "reason": "只有……才表达根任务标记完成的必要前提，NECESSARY正确；未误作充分触发或已发生事实。"
+                },
+                {
+                  "subject_id": "expr_confirmed",
+                  "field_path": "",
+                  "verdict": "SUPPORT",
+                  "context_refs": [
+                    "ev_confirm",
+                    "ent_admin",
+                    "ent_file"
+                  ],
+                  "sources": [
+                    {
+                      "quote": "handover.md",
+                      "occurrence": 1
+                    },
+                    {
+                      "quote": "ADMIN确认已收到该文件",
+                      "occurrence": 1
+                    }
+                  ],
+                  "reason": "STATE引用对应确认事件，参数为ADMIN与同一交付文件，正向状态准确表达完成前提而不断言其成立。"
+                },
+                {
+                  "subject_id": "ev_confirm",
+                  "field_path": "",
+                  "verdict": "SUPPORT",
+                  "context_refs": [],
+                  "sources": [
+                    {
+                      "quote": "只有ADMIN确认已收到该文件，本任务才可标记为完成",
+                      "occurrence": 1
+                    }
+                  ],
+                  "reason": "确认收到仅出现在完成前提中，CONDITION、MENTION_ONLY和UNSTATED未新增确认义务。"
+                },
+                {
+                  "subject_id": "ent_admin",
+                  "field_path": "",
+                  "verdict": "SUPPORT",
+                  "context_refs": [],
+                  "sources": [
+                    {
+                      "quote": "ADMIN",
+                      "occurrence": 1
+                    }
+                  ],
+                  "reason": "ADMIN身份明确；OTHER保留未指定的类别，不推定权限。"
+                },
+                {
+                  "subject_id": "ent_file",
+                  "field_path": "",
+                  "verdict": "SUPPORT",
+                  "context_refs": [],
+                  "sources": [
+                    {
+                      "quote": "handover.md",
+                      "occurrence": 1
+                    },
+                    {
+                      "quote": "该文件",
+                      "occurrence": 1
+                    }
+                  ],
+                  "reason": "全文只有一个文件对象，该文件指handover.md；两处指称已绑定同一实体。"
+                }
+              ],
+              "context_references_are_not_required_dependencies": true
+            }
+          }
+        ]
+      },
+      "B": {
+        "status": "ABSENT",
+        "openness": "OPEN",
+        "entries": []
+      }
+    },
+    "unresolved": [],
+    "retained_nonprojected": [
+      {
+        "id": "bf:6fc6dce8b42c36818e85",
+        "kind": "EVENT",
+        "status": "ACCEPTED",
+        "claim_ids": [
+          "ev_confirm",
+          "cl_confirm_performer",
+          "cl_confirm_object"
+        ],
+        "event": {
+          "id": "ev_confirm",
+          "predicate": "确认已收到",
+          "kind": "ACTION",
+          "layer": "CONDITION",
+          "use": "MENTION_ONLY",
+          "modality": "UNSTATED",
+          "polarity": "POSITIVE",
+          "owner_id": "ROOT",
+          "constraint_ids": [],
+          "requires": [],
+          "sources": [
+            {
+              "quote": "ADMIN确认已收到该文件",
+              "occurrence": 1,
+              "span": [
+                20,
+                33
+              ],
+              "source_sha256": "e27b99a11c9396859ce1c1e25f5fe4dfbcd3aa047ed7920eb64bbd5344abb706"
+            }
+          ]
+        },
+        "roles": [
+          {
+            "id": "cl_confirm_performer",
+            "kind": "ROLE",
+            "event_id": "ev_confirm",
+            "entity_id": "ent_admin",
+            "role": "PERFORMER",
+            "expression_id": null,
+            "direction": null,
+            "temporal": null,
+            "quantity": null,
+            "scope_id": "ev_confirm",
+            "requires": [],
+            "sources": [
+              {
+                "quote": "ADMIN确认已收到该文件",
+                "occurrence": 1,
+                "span": [
+                  20,
+                  33
+                ],
+                "source_sha256": "e27b99a11c9396859ce1c1e25f5fe4dfbcd3aa047ed7920eb64bbd5344abb706"
+              }
+            ],
+            "note": "ADMIN是条件中确认动作的主体，不新增确认义务。",
+            "entity": {
+              "id": "ent_admin",
+              "label": "ADMIN",
+              "type": "OTHER",
+              "mentions": [
+                {
+                  "quote": "ADMIN",
+                  "occurrence": 1,
+                  "span": [
+                    20,
+                    25
+                  ],
+                  "source_sha256": "e27b99a11c9396859ce1c1e25f5fe4dfbcd3aa047ed7920eb64bbd5344abb706"
+                }
+              ],
+              "alternatives": []
+            },
+            "status": "ACCEPTED"
+          },
+          {
+            "id": "cl_confirm_object",
+            "kind": "ROLE",
+            "event_id": "ev_confirm",
+            "entity_id": "ent_file",
+            "role": "OBJECT",
+            "expression_id": null,
+            "direction": null,
+            "temporal": null,
+            "quantity": null,
+            "scope_id": "ev_confirm",
+            "requires": [],
+            "sources": [
+              {
+                "quote": "handover.md",
+                "occurrence": 1,
+                "span": [
+                  6,
+                  17
+                ],
+                "source_sha256": "e27b99a11c9396859ce1c1e25f5fe4dfbcd3aa047ed7920eb64bbd5344abb706"
+              },
+              {
+                "quote": "ADMIN确认已收到该文件",
+                "occurrence": 1,
+                "span": [
+                  20,
+                  33
+                ],
+                "source_sha256": "e27b99a11c9396859ce1c1e25f5fe4dfbcd3aa047ed7920eb64bbd5344abb706"
+              }
+            ],
+            "note": "该文件指前述唯一交付文件handover.md。",
+            "entity": {
+              "id": "ent_file",
+              "label": "handover.md",
+              "type": "FILE",
+              "mentions": [
+                {
+                  "quote": "handover.md",
+                  "occurrence": 1,
+                  "span": [
+                    6,
+                    17
+                  ],
+                  "source_sha256": "e27b99a11c9396859ce1c1e25f5fe4dfbcd3aa047ed7920eb64bbd5344abb706"
+                },
+                {
+                  "quote": "该文件",
+                  "occurrence": 1,
+                  "span": [
+                    30,
+                    33
+                  ],
+                  "source_sha256": "e27b99a11c9396859ce1c1e25f5fe4dfbcd3aa047ed7920eb64bbd5344abb706"
+                }
+              ],
+              "alternatives": []
+            },
+            "status": "ACCEPTED"
+          }
+        ],
+        "constraints": [],
+        "sources": [
+          {
+            "quote": "ADMIN确认已收到该文件",
+            "occurrence": 1,
+            "span": [
+              20,
+              33
+            ],
+            "source_sha256": "e27b99a11c9396859ce1c1e25f5fe4dfbcd3aa047ed7920eb64bbd5344abb706"
+          },
+          {
+            "quote": "ADMIN确认已收到该文件",
+            "occurrence": 1,
+            "span": [
+              20,
+              33
+            ],
+            "source_sha256": "e27b99a11c9396859ce1c1e25f5fe4dfbcd3aa047ed7920eb64bbd5344abb706"
+          },
+          {
+            "quote": "ADMIN",
+            "occurrence": 1,
+            "span": [
+              20,
+              25
+            ],
+            "source_sha256": "e27b99a11c9396859ce1c1e25f5fe4dfbcd3aa047ed7920eb64bbd5344abb706"
+          },
+          {
+            "quote": "handover.md",
+            "occurrence": 1,
+            "span": [
+              6,
+              17
+            ],
+            "source_sha256": "e27b99a11c9396859ce1c1e25f5fe4dfbcd3aa047ed7920eb64bbd5344abb706"
+          },
+          {
+            "quote": "ADMIN确认已收到该文件",
+            "occurrence": 1,
+            "span": [
+              20,
+              33
+            ],
+            "source_sha256": "e27b99a11c9396859ce1c1e25f5fe4dfbcd3aa047ed7920eb64bbd5344abb706"
+          },
+          {
+            "quote": "handover.md",
+            "occurrence": 1,
+            "span": [
+              6,
+              17
+            ],
+            "source_sha256": "e27b99a11c9396859ce1c1e25f5fe4dfbcd3aa047ed7920eb64bbd5344abb706"
+          },
+          {
+            "quote": "该文件",
+            "occurrence": 1,
+            "span": [
+              30,
+              33
+            ],
+            "source_sha256": "e27b99a11c9396859ce1c1e25f5fe4dfbcd3aa047ed7920eb64bbd5344abb706"
+          }
+        ],
+        "slots": [],
+        "proof": {
+          "source_sha256": "e27b99a11c9396859ce1c1e25f5fe4dfbcd3aa047ed7920eb64bbd5344abb706",
+          "claim_ids": [
+            "ev_confirm",
+            "cl_confirm_performer",
+            "cl_confirm_object"
+          ],
+          "provenance_refs": [
+            "ev_confirm",
+            "cl_confirm_performer",
+            "ent_admin",
+            "cl_confirm_object",
+            "ent_file"
+          ],
+          "technical_policy": "028-r02-technical-v2",
+          "checks": [
+            {
+              "id": "ev_confirm",
+              "collection": "events",
+              "status": "ACCEPTED",
+              "errors": [],
+              "uncertain": [],
+              "sources": [
+                {
+                  "quote": "ADMIN确认已收到该文件",
+                  "occurrence": 1,
+                  "span": [
+                    20,
+                    33
+                  ],
+                  "source_sha256": "e27b99a11c9396859ce1c1e25f5fe4dfbcd3aa047ed7920eb64bbd5344abb706"
+                }
+              ],
+              "audit_refs": [
+                {
+                  "subject_id": "ev_confirm",
+                  "field_path": "",
+                  "verdict": "SUPPORT"
+                }
+              ],
+              "required_dependencies": [],
+              "structural_refs": [
+                "ROOT"
+              ]
+            },
+            {
+              "id": "cl_confirm_performer",
+              "collection": "claims",
+              "status": "ACCEPTED",
+              "errors": [],
+              "uncertain": [],
+              "sources": [
+                {
+                  "quote": "ADMIN确认已收到该文件",
+                  "occurrence": 1,
+                  "span": [
+                    20,
+                    33
+                  ],
+                  "source_sha256": "e27b99a11c9396859ce1c1e25f5fe4dfbcd3aa047ed7920eb64bbd5344abb706"
+                }
+              ],
+              "audit_refs": [
+                {
+                  "subject_id": "cl_confirm_performer",
+                  "field_path": "",
+                  "verdict": "SUPPORT"
+                }
+              ],
+              "required_dependencies": [],
+              "structural_refs": [
+                "ev_confirm",
+                "ev_confirm",
+                "ent_admin"
+              ]
+            },
+            {
+              "id": "ent_admin",
+              "collection": "entities",
+              "status": "ACCEPTED",
+              "identity_status": "ACCEPTED",
+              "errors": [],
+              "uncertain": [],
+              "sources": [
+                {
+                  "quote": "ADMIN",
+                  "occurrence": 1,
+                  "span": [
+                    20,
+                    25
+                  ],
+                  "source_sha256": "e27b99a11c9396859ce1c1e25f5fe4dfbcd3aa047ed7920eb64bbd5344abb706"
+                }
+              ],
+              "audit_refs": [
+                {
+                  "subject_id": "ent_admin",
+                  "field_path": "",
+                  "verdict": "SUPPORT"
+                }
+              ],
+              "required_dependencies": [],
+              "structural_refs": []
+            },
+            {
+              "id": "cl_confirm_object",
+              "collection": "claims",
+              "status": "ACCEPTED",
+              "errors": [],
+              "uncertain": [],
+              "sources": [
+                {
+                  "quote": "handover.md",
+                  "occurrence": 1,
+                  "span": [
+                    6,
+                    17
+                  ],
+                  "source_sha256": "e27b99a11c9396859ce1c1e25f5fe4dfbcd3aa047ed7920eb64bbd5344abb706"
+                },
+                {
+                  "quote": "ADMIN确认已收到该文件",
+                  "occurrence": 1,
+                  "span": [
+                    20,
+                    33
+                  ],
+                  "source_sha256": "e27b99a11c9396859ce1c1e25f5fe4dfbcd3aa047ed7920eb64bbd5344abb706"
+                }
+              ],
+              "audit_refs": [
+                {
+                  "subject_id": "cl_confirm_object",
+                  "field_path": "",
+                  "verdict": "SUPPORT"
+                }
+              ],
+              "required_dependencies": [],
+              "structural_refs": [
+                "ev_confirm",
+                "ev_confirm",
+                "ent_file"
+              ]
+            },
+            {
+              "id": "ent_file",
+              "collection": "entities",
+              "status": "ACCEPTED",
+              "identity_status": "ACCEPTED",
+              "errors": [],
+              "uncertain": [],
+              "sources": [
+                {
+                  "quote": "handover.md",
+                  "occurrence": 1,
+                  "span": [
+                    6,
+                    17
+                  ],
+                  "source_sha256": "e27b99a11c9396859ce1c1e25f5fe4dfbcd3aa047ed7920eb64bbd5344abb706"
+                },
+                {
+                  "quote": "该文件",
+                  "occurrence": 1,
+                  "span": [
+                    30,
+                    33
+                  ],
+                  "source_sha256": "e27b99a11c9396859ce1c1e25f5fe4dfbcd3aa047ed7920eb64bbd5344abb706"
+                }
+              ],
+              "audit_refs": [
+                {
+                  "subject_id": "ent_file",
+                  "field_path": "",
+                  "verdict": "SUPPORT"
+                }
+              ],
+              "required_dependencies": [],
+              "structural_refs": []
+            }
+          ],
+          "audit": [
+            {
+              "subject_id": "ev_confirm",
+              "field_path": "",
+              "verdict": "SUPPORT",
+              "context_refs": [],
+              "sources": [
+                {
+                  "quote": "只有ADMIN确认已收到该文件，本任务才可标记为完成",
+                  "occurrence": 1
+                }
+              ],
+              "reason": "确认收到仅出现在完成前提中，CONDITION、MENTION_ONLY和UNSTATED未新增确认义务。"
+            },
+            {
+              "subject_id": "cl_confirm_performer",
+              "field_path": "",
+              "verdict": "SUPPORT",
+              "context_refs": [
+                "ev_confirm",
+                "ent_admin"
+              ],
+              "sources": [
+                {
+                  "quote": "ADMIN确认已收到该文件",
+                  "occurrence": 1
+                }
+              ],
+              "reason": "ADMIN是条件内确认动作的明确主体，未传播为主任务义务。"
+            },
+            {
+              "subject_id": "ent_admin",
+              "field_path": "",
+              "verdict": "SUPPORT",
+              "context_refs": [],
+              "sources": [
+                {
+                  "quote": "ADMIN",
+                  "occurrence": 1
+                }
+              ],
+              "reason": "ADMIN身份明确；OTHER保留未指定的类别，不推定权限。"
+            },
+            {
+              "subject_id": "cl_confirm_object",
+              "field_path": "",
+              "verdict": "SUPPORT",
+              "context_refs": [
+                "ev_confirm",
+                "ent_file"
+              ],
+              "sources": [
+                {
+                  "quote": "handover.md",
+                  "occurrence": 1
+                },
+                {
+                  "quote": "ADMIN确认已收到该文件",
+                  "occurrence": 1
+                }
+              ],
+              "reason": "确认涉及前述同一文件，OBJECT绑定正确，未将其转成外部输入。"
+            },
+            {
+              "subject_id": "ent_file",
+              "field_path": "",
+              "verdict": "SUPPORT",
+              "context_refs": [],
+              "sources": [
+                {
+                  "quote": "handover.md",
+                  "occurrence": 1
+                },
+                {
+                  "quote": "该文件",
+                  "occurrence": 1
+                }
+              ],
+              "reason": "全文只有一个文件对象，该文件指handover.md；两处指称已绑定同一实体。"
+            }
+          ],
+          "context_references_are_not_required_dependencies": true
+        }
+      },
+      {
+        "id": "bf:1287c3e7e948e019f94c",
+        "kind": "ROLE",
+        "status": "ACCEPTED",
+        "claim_ids": [
+          "cl_confirm_performer",
+          "ent_admin",
+          "ev_confirm"
+        ],
+        "claim": {
+          "id": "cl_confirm_performer",
+          "kind": "ROLE",
+          "event_id": "ev_confirm",
+          "entity_id": "ent_admin",
+          "role": "PERFORMER",
+          "expression_id": null,
+          "direction": null,
+          "temporal": null,
+          "quantity": null,
+          "scope_id": "ev_confirm",
+          "requires": [],
+          "sources": [
+            {
+              "quote": "ADMIN确认已收到该文件",
+              "occurrence": 1,
+              "span": [
+                20,
+                33
+              ],
+              "source_sha256": "e27b99a11c9396859ce1c1e25f5fe4dfbcd3aa047ed7920eb64bbd5344abb706"
+            }
+          ],
+          "note": "ADMIN是条件中确认动作的主体，不新增确认义务。"
+        },
+        "event": {
+          "id": "ev_confirm",
+          "predicate": "确认已收到",
+          "kind": "ACTION",
+          "layer": "CONDITION",
+          "use": "MENTION_ONLY",
+          "modality": "UNSTATED",
+          "polarity": "POSITIVE",
+          "owner_id": "ROOT",
+          "constraint_ids": [],
+          "requires": [],
+          "sources": [
+            {
+              "quote": "ADMIN确认已收到该文件",
+              "occurrence": 1,
+              "span": [
+                20,
+                33
+              ],
+              "source_sha256": "e27b99a11c9396859ce1c1e25f5fe4dfbcd3aa047ed7920eb64bbd5344abb706"
+            }
+          ]
+        },
+        "entity": {
+          "id": "ent_admin",
+          "label": "ADMIN",
+          "type": "OTHER",
+          "mentions": [
+            {
+              "quote": "ADMIN",
+              "occurrence": 1,
+              "span": [
+                20,
+                25
+              ],
+              "source_sha256": "e27b99a11c9396859ce1c1e25f5fe4dfbcd3aa047ed7920eb64bbd5344abb706"
+            }
+          ],
+          "alternatives": []
+        },
+        "expression": null,
+        "constraints": [],
+        "content_quantities": [],
+        "content_scopes": [],
+        "sources": [
+          {
+            "quote": "ADMIN确认已收到该文件",
+            "occurrence": 1,
+            "span": [
+              20,
+              33
+            ],
+            "source_sha256": "e27b99a11c9396859ce1c1e25f5fe4dfbcd3aa047ed7920eb64bbd5344abb706"
+          },
+          {
+            "quote": "ADMIN确认已收到该文件",
+            "occurrence": 1,
+            "span": [
+              20,
+              33
+            ],
+            "source_sha256": "e27b99a11c9396859ce1c1e25f5fe4dfbcd3aa047ed7920eb64bbd5344abb706"
+          },
+          {
+            "quote": "ADMIN",
+            "occurrence": 1,
+            "span": [
+              20,
+              25
+            ],
+            "source_sha256": "e27b99a11c9396859ce1c1e25f5fe4dfbcd3aa047ed7920eb64bbd5344abb706"
+          }
+        ],
+        "slots": [],
+        "proof": {
+          "source_sha256": "e27b99a11c9396859ce1c1e25f5fe4dfbcd3aa047ed7920eb64bbd5344abb706",
+          "claim_ids": [
+            "cl_confirm_performer",
+            "ent_admin",
+            "ev_confirm"
+          ],
+          "provenance_refs": [
+            "cl_confirm_performer",
+            "ev_confirm",
+            "ent_admin"
+          ],
+          "technical_policy": "028-r02-technical-v2",
+          "checks": [
+            {
+              "id": "cl_confirm_performer",
+              "collection": "claims",
+              "status": "ACCEPTED",
+              "errors": [],
+              "uncertain": [],
+              "sources": [
+                {
+                  "quote": "ADMIN确认已收到该文件",
+                  "occurrence": 1,
+                  "span": [
+                    20,
+                    33
+                  ],
+                  "source_sha256": "e27b99a11c9396859ce1c1e25f5fe4dfbcd3aa047ed7920eb64bbd5344abb706"
+                }
+              ],
+              "audit_refs": [
+                {
+                  "subject_id": "cl_confirm_performer",
+                  "field_path": "",
+                  "verdict": "SUPPORT"
+                }
+              ],
+              "required_dependencies": [],
+              "structural_refs": [
+                "ev_confirm",
+                "ev_confirm",
+                "ent_admin"
+              ]
+            },
+            {
+              "id": "ev_confirm",
+              "collection": "events",
+              "status": "ACCEPTED",
+              "errors": [],
+              "uncertain": [],
+              "sources": [
+                {
+                  "quote": "ADMIN确认已收到该文件",
+                  "occurrence": 1,
+                  "span": [
+                    20,
+                    33
+                  ],
+                  "source_sha256": "e27b99a11c9396859ce1c1e25f5fe4dfbcd3aa047ed7920eb64bbd5344abb706"
+                }
+              ],
+              "audit_refs": [
+                {
+                  "subject_id": "ev_confirm",
+                  "field_path": "",
+                  "verdict": "SUPPORT"
+                }
+              ],
+              "required_dependencies": [],
+              "structural_refs": [
+                "ROOT"
+              ]
+            },
+            {
+              "id": "ent_admin",
+              "collection": "entities",
+              "status": "ACCEPTED",
+              "identity_status": "ACCEPTED",
+              "errors": [],
+              "uncertain": [],
+              "sources": [
+                {
+                  "quote": "ADMIN",
+                  "occurrence": 1,
+                  "span": [
+                    20,
+                    25
+                  ],
+                  "source_sha256": "e27b99a11c9396859ce1c1e25f5fe4dfbcd3aa047ed7920eb64bbd5344abb706"
+                }
+              ],
+              "audit_refs": [
+                {
+                  "subject_id": "ent_admin",
+                  "field_path": "",
+                  "verdict": "SUPPORT"
+                }
+              ],
+              "required_dependencies": [],
+              "structural_refs": []
+            }
+          ],
+          "audit": [
+            {
+              "subject_id": "cl_confirm_performer",
+              "field_path": "",
+              "verdict": "SUPPORT",
+              "context_refs": [
+                "ev_confirm",
+                "ent_admin"
+              ],
+              "sources": [
+                {
+                  "quote": "ADMIN确认已收到该文件",
+                  "occurrence": 1
+                }
+              ],
+              "reason": "ADMIN是条件内确认动作的明确主体，未传播为主任务义务。"
+            },
+            {
+              "subject_id": "ev_confirm",
+              "field_path": "",
+              "verdict": "SUPPORT",
+              "context_refs": [],
+              "sources": [
+                {
+                  "quote": "只有ADMIN确认已收到该文件，本任务才可标记为完成",
+                  "occurrence": 1
+                }
+              ],
+              "reason": "确认收到仅出现在完成前提中，CONDITION、MENTION_ONLY和UNSTATED未新增确认义务。"
+            },
+            {
+              "subject_id": "ent_admin",
+              "field_path": "",
+              "verdict": "SUPPORT",
+              "context_refs": [],
+              "sources": [
+                {
+                  "quote": "ADMIN",
+                  "occurrence": 1
+                }
+              ],
+              "reason": "ADMIN身份明确；OTHER保留未指定的类别，不推定权限。"
+            }
+          ],
+          "context_references_are_not_required_dependencies": true
+        }
+      },
+      {
+        "id": "bf:5a9b2ceaf13c009ff9aa",
+        "kind": "ROLE",
+        "status": "ACCEPTED",
+        "claim_ids": [
+          "cl_confirm_object",
+          "ent_file",
+          "ev_confirm"
+        ],
+        "claim": {
+          "id": "cl_confirm_object",
+          "kind": "ROLE",
+          "event_id": "ev_confirm",
+          "entity_id": "ent_file",
+          "role": "OBJECT",
+          "expression_id": null,
+          "direction": null,
+          "temporal": null,
+          "quantity": null,
+          "scope_id": "ev_confirm",
+          "requires": [],
+          "sources": [
+            {
+              "quote": "handover.md",
+              "occurrence": 1,
+              "span": [
+                6,
+                17
+              ],
+              "source_sha256": "e27b99a11c9396859ce1c1e25f5fe4dfbcd3aa047ed7920eb64bbd5344abb706"
+            },
+            {
+              "quote": "ADMIN确认已收到该文件",
+              "occurrence": 1,
+              "span": [
+                20,
+                33
+              ],
+              "source_sha256": "e27b99a11c9396859ce1c1e25f5fe4dfbcd3aa047ed7920eb64bbd5344abb706"
+            }
+          ],
+          "note": "该文件指前述唯一交付文件handover.md。"
+        },
+        "event": {
+          "id": "ev_confirm",
+          "predicate": "确认已收到",
+          "kind": "ACTION",
+          "layer": "CONDITION",
+          "use": "MENTION_ONLY",
+          "modality": "UNSTATED",
+          "polarity": "POSITIVE",
+          "owner_id": "ROOT",
+          "constraint_ids": [],
+          "requires": [],
+          "sources": [
+            {
+              "quote": "ADMIN确认已收到该文件",
+              "occurrence": 1,
+              "span": [
+                20,
+                33
+              ],
+              "source_sha256": "e27b99a11c9396859ce1c1e25f5fe4dfbcd3aa047ed7920eb64bbd5344abb706"
+            }
+          ]
+        },
+        "entity": {
+          "id": "ent_file",
+          "label": "handover.md",
+          "type": "FILE",
+          "mentions": [
+            {
+              "quote": "handover.md",
+              "occurrence": 1,
+              "span": [
+                6,
+                17
+              ],
+              "source_sha256": "e27b99a11c9396859ce1c1e25f5fe4dfbcd3aa047ed7920eb64bbd5344abb706"
+            },
+            {
+              "quote": "该文件",
+              "occurrence": 1,
+              "span": [
+                30,
+                33
+              ],
+              "source_sha256": "e27b99a11c9396859ce1c1e25f5fe4dfbcd3aa047ed7920eb64bbd5344abb706"
+            }
+          ],
+          "alternatives": []
+        },
+        "expression": null,
+        "constraints": [],
+        "content_quantities": [],
+        "content_scopes": [],
+        "sources": [
+          {
+            "quote": "handover.md",
+            "occurrence": 1,
+            "span": [
+              6,
+              17
+            ],
+            "source_sha256": "e27b99a11c9396859ce1c1e25f5fe4dfbcd3aa047ed7920eb64bbd5344abb706"
+          },
+          {
+            "quote": "ADMIN确认已收到该文件",
+            "occurrence": 1,
+            "span": [
+              20,
+              33
+            ],
+            "source_sha256": "e27b99a11c9396859ce1c1e25f5fe4dfbcd3aa047ed7920eb64bbd5344abb706"
+          },
+          {
+            "quote": "ADMIN确认已收到该文件",
+            "occurrence": 1,
+            "span": [
+              20,
+              33
+            ],
+            "source_sha256": "e27b99a11c9396859ce1c1e25f5fe4dfbcd3aa047ed7920eb64bbd5344abb706"
+          },
+          {
+            "quote": "handover.md",
+            "occurrence": 1,
+            "span": [
+              6,
+              17
+            ],
+            "source_sha256": "e27b99a11c9396859ce1c1e25f5fe4dfbcd3aa047ed7920eb64bbd5344abb706"
+          },
+          {
+            "quote": "该文件",
+            "occurrence": 1,
+            "span": [
+              30,
+              33
+            ],
+            "source_sha256": "e27b99a11c9396859ce1c1e25f5fe4dfbcd3aa047ed7920eb64bbd5344abb706"
+          }
+        ],
+        "slots": [],
+        "proof": {
+          "source_sha256": "e27b99a11c9396859ce1c1e25f5fe4dfbcd3aa047ed7920eb64bbd5344abb706",
+          "claim_ids": [
+            "cl_confirm_object",
+            "ent_file",
+            "ev_confirm"
+          ],
+          "provenance_refs": [
+            "cl_confirm_object",
+            "ev_confirm",
+            "ent_file"
+          ],
+          "technical_policy": "028-r02-technical-v2",
+          "checks": [
+            {
+              "id": "cl_confirm_object",
+              "collection": "claims",
+              "status": "ACCEPTED",
+              "errors": [],
+              "uncertain": [],
+              "sources": [
+                {
+                  "quote": "handover.md",
+                  "occurrence": 1,
+                  "span": [
+                    6,
+                    17
+                  ],
+                  "source_sha256": "e27b99a11c9396859ce1c1e25f5fe4dfbcd3aa047ed7920eb64bbd5344abb706"
+                },
+                {
+                  "quote": "ADMIN确认已收到该文件",
+                  "occurrence": 1,
+                  "span": [
+                    20,
+                    33
+                  ],
+                  "source_sha256": "e27b99a11c9396859ce1c1e25f5fe4dfbcd3aa047ed7920eb64bbd5344abb706"
+                }
+              ],
+              "audit_refs": [
+                {
+                  "subject_id": "cl_confirm_object",
+                  "field_path": "",
+                  "verdict": "SUPPORT"
+                }
+              ],
+              "required_dependencies": [],
+              "structural_refs": [
+                "ev_confirm",
+                "ev_confirm",
+                "ent_file"
+              ]
+            },
+            {
+              "id": "ev_confirm",
+              "collection": "events",
+              "status": "ACCEPTED",
+              "errors": [],
+              "uncertain": [],
+              "sources": [
+                {
+                  "quote": "ADMIN确认已收到该文件",
+                  "occurrence": 1,
+                  "span": [
+                    20,
+                    33
+                  ],
+                  "source_sha256": "e27b99a11c9396859ce1c1e25f5fe4dfbcd3aa047ed7920eb64bbd5344abb706"
+                }
+              ],
+              "audit_refs": [
+                {
+                  "subject_id": "ev_confirm",
+                  "field_path": "",
+                  "verdict": "SUPPORT"
+                }
+              ],
+              "required_dependencies": [],
+              "structural_refs": [
+                "ROOT"
+              ]
+            },
+            {
+              "id": "ent_file",
+              "collection": "entities",
+              "status": "ACCEPTED",
+              "identity_status": "ACCEPTED",
+              "errors": [],
+              "uncertain": [],
+              "sources": [
+                {
+                  "quote": "handover.md",
+                  "occurrence": 1,
+                  "span": [
+                    6,
+                    17
+                  ],
+                  "source_sha256": "e27b99a11c9396859ce1c1e25f5fe4dfbcd3aa047ed7920eb64bbd5344abb706"
+                },
+                {
+                  "quote": "该文件",
+                  "occurrence": 1,
+                  "span": [
+                    30,
+                    33
+                  ],
+                  "source_sha256": "e27b99a11c9396859ce1c1e25f5fe4dfbcd3aa047ed7920eb64bbd5344abb706"
+                }
+              ],
+              "audit_refs": [
+                {
+                  "subject_id": "ent_file",
+                  "field_path": "",
+                  "verdict": "SUPPORT"
+                }
+              ],
+              "required_dependencies": [],
+              "structural_refs": []
+            }
+          ],
+          "audit": [
+            {
+              "subject_id": "cl_confirm_object",
+              "field_path": "",
+              "verdict": "SUPPORT",
+              "context_refs": [
+                "ev_confirm",
+                "ent_file"
+              ],
+              "sources": [
+                {
+                  "quote": "handover.md",
+                  "occurrence": 1
+                },
+                {
+                  "quote": "ADMIN确认已收到该文件",
+                  "occurrence": 1
+                }
+              ],
+              "reason": "确认涉及前述同一文件，OBJECT绑定正确，未将其转成外部输入。"
+            },
+            {
+              "subject_id": "ev_confirm",
+              "field_path": "",
+              "verdict": "SUPPORT",
+              "context_refs": [],
+              "sources": [
+                {
+                  "quote": "只有ADMIN确认已收到该文件，本任务才可标记为完成",
+                  "occurrence": 1
+                }
+              ],
+              "reason": "确认收到仅出现在完成前提中，CONDITION、MENTION_ONLY和UNSTATED未新增确认义务。"
+            },
+            {
+              "subject_id": "ent_file",
+              "field_path": "",
+              "verdict": "SUPPORT",
+              "context_refs": [],
+              "sources": [
+                {
+                  "quote": "handover.md",
+                  "occurrence": 1
+                },
+                {
+                  "quote": "该文件",
+                  "occurrence": 1
+                }
+              ],
+              "reason": "全文只有一个文件对象，该文件指handover.md；两处指称已绑定同一实体。"
+            }
+          ],
+          "context_references_are_not_required_dependencies": true
+        }
+      }
+    ],
+    "issues": [],
+    "gaps": [],
+    "business_decision": null,
+    "execution_authorization": null
+  },
+  "chinese": "# BoundX 7+1（有限技术接受，不是业务授权）\n\n## I 输入与作用域 — ABSENT\n\n## O 交付与结果 — RESOLVED\n- [ACCEPTED] 提交：交付产物=handover.md；必须（bf:6e292d83a9a0cf9c7356）\n\n## A 正向动作 — RESOLVED\n- [ACCEPTED] 必须 提交；执行者=PM；交付产物=handover.md（bf:59115c5a5908bee0cbf5）\n\n## P 参与关系 — RESOLVED\n- [ACCEPTED] 提交：执行者=PM；必须（bf:4a63593bb1f440abc88a）\n\n## R 执行量化限制 — ABSENT\n\n## V 版本与依据 — ABSENT\n\n## C 完成与停止 — RESOLVED\n- [ACCEPTED] 任务完成 必要前提 已确认收到(ADMIN,handover.md)；所指事件=确认已收到 [ev_confirm]；执行者=ADMIN；对象=handover.md [POSITIVE;运行值UNKNOWN]；目标=根任务（bf:097b13524f6b75c97057）\n\n## B 禁止与限制 — ABSENT\n\n## 未指定 / 歧义 / 未投影语义\n- [ACCEPTED] 未陈述模态 确认已收到 [ev_confirm]；执行者=ADMIN；对象=handover.md；层级=CONDITION；用途=MENTION_ONLY（bf:6fc6dce8b42c36818e85）\n- [ACCEPTED] ROLE；事件=确认已收到 [ev_confirm]；执行者=ADMIN；对象=handover.md；执行者=ADMIN（bf:1287c3e7e948e019f94c）\n- [ACCEPTED] ROLE；事件=确认已收到 [ev_confirm]；执行者=ADMIN；对象=handover.md；对象=handover.md（bf:5a9b2ceaf13c009ff9aa）\n",
+  "model_calls": {
+    "parse": [
+      {
+        "exit_code": 0,
+        "error": null,
+        "exit_confirmed": true,
+        "cancelled": false,
+        "pid": 34716,
+        "kill_receipt": null,
+        "elapsed_ms": 267946,
+        "timed_out": false,
+        "thread_id": "01a116f0-22ad-7713-9b64-b710e9f678fe",
+        "usage": {
+          "input_tokens": 18693,
+          "cached_input_tokens": 8576,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 1626,
+          "reasoning_output_tokens": 201
+        },
+        "tool_events": [],
+        "schema_check": {
+          "ok": true,
+          "errors": []
+        },
+        "response_sha256": "25dce1ce3509c17aa710f87e3cefc5d6b10701bbd901a5e128c0abf38b03d7a5",
+        "attempt": 0,
+        "skill_content_delivered": true,
+        "skill_mode": "INLINE_BUNDLE",
+        "actual_model": null
+      }
+    ],
+    "audit": [
+      {
+        "exit_code": 0,
+        "error": null,
+        "exit_confirmed": true,
+        "cancelled": false,
+        "pid": 25100,
+        "kill_receipt": null,
+        "elapsed_ms": 116895,
+        "timed_out": false,
+        "thread_id": "01a116f4-39e7-73d2-9d9b-959e2e2efced",
+        "usage": {
+          "input_tokens": 20061,
+          "cached_input_tokens": 0,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 1168,
+          "reasoning_output_tokens": 59
+        },
+        "tool_events": [],
+        "schema_check": {
+          "ok": true,
+          "errors": []
+        },
+        "response_sha256": "d754bb204c8d9da363ffcbb0083f63aab81005cc9dd9e1915455f7497c6196ee",
+        "attempt": 0,
+        "skill_content_delivered": true,
+        "skill_mode": "INLINE_BUNDLE",
+        "actual_model": null
+      }
+    ]
+  },
+  "revision": 0,
+  "revision_of": null
+}

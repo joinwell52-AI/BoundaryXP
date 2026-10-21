@@ -1,0 +1,2 @@
+import fs from'node:fs';import{spawnSync}from'node:child_process';
+const d='docs/reports/7plus1/7P-REPAIR-007',n=process.argv[2]??'development-identity',fd=fs.openSync(d+'/'+n+'.log','wx'),r=spawnSync(process.execPath,['--test','--test-reporter=tap','tests/parser-7p-repair-007.test.mjs'],{stdio:['ignore',fd,fd]});fs.closeSync(fd);const s=fs.readFileSync(d+'/'+n+'.log','utf8');console.log(s.split(/\r?\n/u).filter(l=>/^not ok|^# (tests|pass|fail)/u.test(l)).join('\n'));console.log([...s.matchAll(/error: (.*)/gu)].map(m=>m[1].slice(0,200)).join('\n'));process.exitCode=r.status;

@@ -1,0 +1,115 @@
+{
+  "contract_version": "031-r01",
+  "reviews": [
+    {
+      "subject_id": "person_pm",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [{"quote": "PM", "occurrence": 1}],
+      "reason": "PM身份明确；原文未指定人或组类别，OTHER可作类别占位。"
+    },
+    {
+      "subject_id": "file_users",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [{"quote": "users.csv", "occurrence": 1}],
+      "reason": "明确命名的受检文件，身份与类型有来源支持。"
+    },
+    {
+      "subject_id": "file_optional",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [
+        {"quote": "optional.md", "occurrence": 1},
+        {"quote": "optional.md", "occurrence": 2}
+      ],
+      "reason": "生成与无需交付两处提及同一文件，无竞争身份。"
+    },
+    {
+      "subject_id": "event_check",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [{"quote": "请PM核对users.csv", "occurrence": 1}],
+      "reason": "核对是当前任务明确要求的动作，无附加条件。"
+    },
+    {
+      "subject_id": "event_generate",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [{"quote": "可以另外生成optional.md", "occurrence": 1}],
+      "reason": "生成是当前任务允许的独立追加动作，PERMITTED准确。"
+    },
+    {
+      "subject_id": "event_deliver",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [{"quote": "本任务不要求交付optional.md", "occurrence": 1}],
+      "reason": "原文撤回交付义务，NOT_REQUIRED准确，未误作禁止或必须交付。"
+    },
+    {
+      "subject_id": "role_check_performer",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["person_pm", "event_check"],
+      "sources": [{"quote": "请PM核对users.csv", "occurrence": 1}],
+      "reason": "PM是核对动作的明确执行者。"
+    },
+    {
+      "subject_id": "role_check_input",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["file_users", "event_check"],
+      "sources": [{"quote": "核对users.csv", "occurrence": 1}],
+      "reason": "users.csv是明确受检范围，INPUT_OBJECT绑定正确。"
+    },
+    {
+      "subject_id": "role_generate_performer",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["person_pm", "event_generate"],
+      "sources": [
+        {"quote": "请PM核对users.csv", "occurrence": 1},
+        {"quote": "可以另外生成optional.md", "occurrence": 1}
+      ],
+      "reason": "连续同一指令追加生成动作，无主体切换，承接PM有两端来源支持。"
+    },
+    {
+      "subject_id": "role_generate_result",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["file_optional", "event_generate"],
+      "sources": [{"quote": "可以另外生成optional.md", "occurrence": 1}],
+      "reason": "optional.md是允许生成的RESULT，未增加交付义务或外部输入。"
+    },
+    {
+      "subject_id": "role_deliver_performer",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["person_pm", "event_deliver"],
+      "sources": [
+        {"quote": "请PM核对users.csv", "occurrence": 1},
+        {"quote": "本任务不要求交付optional.md", "occurrence": 1}
+      ],
+      "reason": "同一指令的交付义务撤回承接PM；本任务限定义务范围，未另定执行者。"
+    },
+    {
+      "subject_id": "role_deliver_artifact",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["file_optional", "event_deliver", "event_generate"],
+      "sources": [
+        {"quote": "可以另外生成optional.md", "occurrence": 1},
+        {"quote": "本任务不要求交付optional.md", "occurrence": 1}
+      ],
+      "reason": "DELIVERABLE绑定同一文件及无需交付事件；该用途不产生正向交付O，允许生成的RESULT用途仍保留。"
+    }
+  ],
+  "issues": [],
+  "omissions": []
+}

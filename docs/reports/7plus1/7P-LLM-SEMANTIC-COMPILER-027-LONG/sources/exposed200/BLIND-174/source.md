@@ -1,0 +1,1 @@
+本任务由 Avery 负责组织：check 隔离环境 中的 connection-1707.csv。若 connection-1707.csv 存在差异，必须生成 audit-471657.md；否则无需生成 audit-471657.md。

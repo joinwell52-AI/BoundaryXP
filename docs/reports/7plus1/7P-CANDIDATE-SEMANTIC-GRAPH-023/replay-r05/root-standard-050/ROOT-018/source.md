@@ -1,0 +1,1 @@
+请 PM 组织检查 install.md 的安装步骤是否符合 QUICKSTART-2，并形成 doc-review.md。只记录不一致项，不修改 install.md；PM 收到报告且 QA 复核通过后任务完成。

@@ -1,0 +1,1 @@
+请 PM 组织依据 CFG-RULE-8 v2.3 对 service.yaml 的参数命名和默认值进行核验，并形成 cfg-rule-review.md。只允许读取，不得修改 service.yaml。

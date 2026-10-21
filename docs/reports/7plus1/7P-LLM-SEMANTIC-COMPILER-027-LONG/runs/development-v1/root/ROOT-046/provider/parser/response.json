@@ -1,0 +1,334 @@
+{
+  "structure_status": "SINGLE_ROOT",
+  "nodes": [
+    {
+      "id": "pm",
+      "type": "ENTITY",
+      "sources": [{"quote": "PM", "clause_id": "c1", "occurrence": 0, "context_anchor": null}],
+      "semantic_identity": "PM",
+      "entity_kind": "ROLE",
+      "layer": "MAIN",
+      "owner": "organize",
+      "modality": "UNSTATED",
+      "polarity": "AFFIRMATIVE",
+      "artifact_use": "NONE",
+      "predicate_class": "NONE",
+      "alternative_group_id": null
+    },
+    {
+      "id": "organize",
+      "type": "EVENT",
+      "sources": [{"quote": "请 PM 组织执行备份读取检查", "clause_id": "c1", "occurrence": 0, "context_anchor": null}],
+      "semantic_identity": "organize_execution",
+      "entity_kind": "NONE",
+      "layer": "MAIN",
+      "owner": "TASK",
+      "modality": "REQUIRED",
+      "polarity": "AFFIRMATIVE",
+      "artifact_use": "NONE",
+      "predicate_class": "ORGANIZE",
+      "alternative_group_id": null
+    },
+    {
+      "id": "read_check",
+      "type": "EVENT",
+      "sources": [{"quote": "执行备份读取检查", "clause_id": "c1", "occurrence": 0, "context_anchor": null}],
+      "semantic_identity": "backup_read_check",
+      "entity_kind": "NONE",
+      "layer": "COMPLEMENT",
+      "owner": "organize",
+      "modality": "REQUIRED",
+      "polarity": "AFFIRMATIVE",
+      "artifact_use": "NONE",
+      "predicate_class": "OPERATION",
+      "alternative_group_id": null
+    },
+    {
+      "id": "backup",
+      "type": "ENTITY",
+      "sources": [
+        {"quote": "备份", "clause_id": "c1", "occurrence": 0, "context_anchor": "执行备份读取检查"},
+        {"quote": "备份", "clause_id": "c1", "occurrence": 1, "context_anchor": "不得写入备份"}
+      ],
+      "semantic_identity": "备份",
+      "entity_kind": "DATA",
+      "layer": "MAIN",
+      "owner": "TASK",
+      "modality": "UNSTATED",
+      "polarity": "AFFIRMATIVE",
+      "artifact_use": "READ_ONLY_INPUT",
+      "predicate_class": "NONE",
+      "alternative_group_id": null
+    },
+    {
+      "id": "read_success",
+      "type": "STATE",
+      "sources": [{"quote": "读取成功", "clause_id": "c1", "occurrence": 0, "context_anchor": "至少 2 次读取成功"}],
+      "semantic_identity": "successful_backup_read",
+      "entity_kind": "NONE",
+      "layer": "ACCEPTANCE",
+      "owner": "TASK",
+      "modality": "UNSTATED",
+      "polarity": "AFFIRMATIVE",
+      "artifact_use": "NONE",
+      "predicate_class": "STATE",
+      "alternative_group_id": null
+    },
+    {
+      "id": "check_log",
+      "type": "ENTITY",
+      "sources": [{"quote": "check-log.md", "clause_id": "c1", "occurrence": 0, "context_anchor": null}],
+      "semantic_identity": "check-log.md",
+      "entity_kind": "FILE",
+      "layer": "ACCEPTANCE",
+      "owner": "log_generated",
+      "modality": "UNSTATED",
+      "polarity": "AFFIRMATIVE",
+      "artifact_use": "GENERATED_OUTPUT",
+      "predicate_class": "NONE",
+      "alternative_group_id": null
+    },
+    {
+      "id": "log_generated",
+      "type": "STATE",
+      "sources": [{"quote": "check-log.md 已生成", "clause_id": "c1", "occurrence": 0, "context_anchor": null}],
+      "semantic_identity": "check_log_generated",
+      "entity_kind": "NONE",
+      "layer": "ACCEPTANCE",
+      "owner": "TASK",
+      "modality": "UNSTATED",
+      "polarity": "AFFIRMATIVE",
+      "artifact_use": "NONE",
+      "predicate_class": "STATE",
+      "alternative_group_id": null
+    },
+    {
+      "id": "completion",
+      "type": "STATE",
+      "sources": [{"quote": "任务才完成", "clause_id": "c1", "occurrence": 0, "context_anchor": "至少 2 次读取成功且 check-log.md 已生成时任务才完成"}],
+      "semantic_identity": "task_complete_only_when_acceptance_conditions_hold",
+      "entity_kind": "NONE",
+      "layer": "ACCEPTANCE",
+      "owner": "TASK",
+      "modality": "UNSTATED",
+      "polarity": "AFFIRMATIVE",
+      "artifact_use": "NONE",
+      "predicate_class": "COMPLETE",
+      "alternative_group_id": null
+    },
+    {
+      "id": "write_backup",
+      "type": "EVENT",
+      "sources": [{"quote": "不得写入备份", "clause_id": "c1", "occurrence": 0, "context_anchor": null}],
+      "semantic_identity": "write",
+      "entity_kind": "NONE",
+      "layer": "MAIN",
+      "owner": "TASK",
+      "modality": "FORBIDDEN",
+      "polarity": "NEGATED",
+      "artifact_use": "NONE",
+      "predicate_class": "OPERATION",
+      "alternative_group_id": null
+    }
+  ],
+  "relations": [
+    {
+      "id": "r_pm_organize",
+      "type": "AGENT",
+      "head": "organize",
+      "tail": "pm",
+      "sources": [{"quote": "请 PM 组织", "clause_id": "c1", "occurrence": 0, "context_anchor": null}],
+      "ownership": "LOCAL",
+      "role": "PERFORMER",
+      "alternative_group_id": null
+    },
+    {
+      "id": "r_organize_execution",
+      "type": "THEME",
+      "head": "organize",
+      "tail": "read_check",
+      "sources": [{"quote": "组织执行备份读取检查", "clause_id": "c1", "occurrence": 0, "context_anchor": null}],
+      "ownership": "LOCAL",
+      "role": "NONE",
+      "alternative_group_id": null
+    },
+    {
+      "id": "r_read_backup",
+      "type": "PATIENT",
+      "head": "read_check",
+      "tail": "backup",
+      "sources": [{"quote": "备份读取检查", "clause_id": "c1", "occurrence": 0, "context_anchor": null}],
+      "ownership": "LOCAL",
+      "role": "NONE",
+      "alternative_group_id": null
+    },
+    {
+      "id": "r_attempt_cap",
+      "type": "LIMIT",
+      "head": "read_check",
+      "tail": "attempt_cap",
+      "sources": [{"quote": "执行备份读取检查，最多尝试 5 次", "clause_id": "c1", "occurrence": 0, "context_anchor": null}],
+      "ownership": "LOCAL",
+      "role": "NONE",
+      "alternative_group_id": null
+    },
+    {
+      "id": "r_success_read",
+      "type": "PART_OF",
+      "head": "read_success",
+      "tail": "read_check",
+      "sources": [{"quote": "备份读取检查，最多尝试 5 次。至少 2 次读取成功", "clause_id": "c1", "occurrence": 0, "context_anchor": null}],
+      "ownership": "COREFERENCE",
+      "role": "NONE",
+      "alternative_group_id": null
+    },
+    {
+      "id": "r_generated_log",
+      "type": "THEME",
+      "head": "log_generated",
+      "tail": "check_log",
+      "sources": [{"quote": "check-log.md 已生成", "clause_id": "c1", "occurrence": 0, "context_anchor": null}],
+      "ownership": "LOCAL",
+      "role": "NONE",
+      "alternative_group_id": null
+    },
+    {
+      "id": "r_completion_state",
+      "type": "COMPLETION_OF",
+      "head": "completion",
+      "tail": "TASK",
+      "sources": [{"quote": "任务才完成", "clause_id": "c1", "occurrence": 0, "context_anchor": null}],
+      "ownership": "LOCAL",
+      "role": "NONE",
+      "alternative_group_id": null
+    },
+    {
+      "id": "r_completion_conditions",
+      "type": "COMPLETION_OF",
+      "head": "completion_guard",
+      "tail": "TASK",
+      "sources": [{"quote": "至少 2 次读取成功且 check-log.md 已生成时任务才完成", "clause_id": "c1", "occurrence": 0, "context_anchor": null}],
+      "ownership": "LOCAL",
+      "role": "NONE",
+      "alternative_group_id": null
+    },
+    {
+      "id": "r_only_when",
+      "type": "CONDITION_OF",
+      "head": "completion_guard",
+      "tail": "TASK",
+      "sources": [{"quote": "至少 2 次读取成功且 check-log.md 已生成时任务才完成", "clause_id": "c1", "occurrence": 0, "context_anchor": null}],
+      "ownership": "LOCAL",
+      "role": "NONE",
+      "alternative_group_id": null
+    },
+    {
+      "id": "r_write_backup",
+      "type": "PATIENT",
+      "head": "write_backup",
+      "tail": "backup",
+      "sources": [{"quote": "写入备份", "clause_id": "c1", "occurrence": 0, "context_anchor": null}],
+      "ownership": "LOCAL",
+      "role": "NONE",
+      "alternative_group_id": null
+    },
+    {
+      "id": "r_forbid_write",
+      "type": "FORBIDS",
+      "head": "TASK",
+      "tail": "write_backup",
+      "sources": [{"quote": "不得写入备份", "clause_id": "c1", "occurrence": 0, "context_anchor": null}],
+      "ownership": "LOCAL",
+      "role": "NONE",
+      "alternative_group_id": null
+    }
+  ],
+  "expressions": [
+    {
+      "id": "attempt_cap",
+      "kind": "QUANTITY",
+      "operator": "LTE",
+      "operands": ["read_check"],
+      "owner": "read_check",
+      "sources": [{"quote": "最多尝试 5 次", "clause_id": "c1", "occurrence": 0, "context_anchor": null}],
+      "quantity": {
+        "metric": "attempt_count",
+        "target": "read_check",
+        "value": 5,
+        "unit": "次",
+        "use": "EXECUTION_LIMIT"
+      },
+      "alternative_group_id": null
+    },
+    {
+      "id": "success_threshold",
+      "kind": "QUANTITY",
+      "operator": "GTE",
+      "operands": ["read_success"],
+      "owner": "TASK",
+      "sources": [{"quote": "至少 2 次读取成功", "clause_id": "c1", "occurrence": 0, "context_anchor": null}],
+      "quantity": {
+        "metric": "successful_read_count",
+        "target": "read_success",
+        "value": 2,
+        "unit": "次",
+        "use": "ACCEPTANCE_THRESHOLD"
+      },
+      "alternative_group_id": null
+    },
+    {
+      "id": "generated_condition",
+      "kind": "CONDITION",
+      "operator": "STATE_REF",
+      "operands": ["log_generated"],
+      "owner": "TASK",
+      "sources": [{"quote": "check-log.md 已生成", "clause_id": "c1", "occurrence": 0, "context_anchor": null}],
+      "quantity": null,
+      "alternative_group_id": null
+    },
+    {
+      "id": "completion_guard",
+      "kind": "CONDITION",
+      "operator": "AND",
+      "operands": ["success_threshold", "generated_condition"],
+      "owner": "TASK",
+      "sources": [{"quote": "至少 2 次读取成功且 check-log.md 已生成时任务才完成", "clause_id": "c1", "occurrence": 0, "context_anchor": null}],
+      "quantity": null,
+      "alternative_group_id": null
+    }
+  ],
+  "unresolved": [],
+  "coverage": [
+    {
+      "region_id": "c1",
+      "disposition": "BOUNDARY_SEMANTIC",
+      "candidate_ids": [
+        "pm",
+        "organize",
+        "read_check",
+        "backup",
+        "read_success",
+        "check_log",
+        "log_generated",
+        "completion",
+        "write_backup",
+        "r_pm_organize",
+        "r_organize_execution",
+        "r_read_backup",
+        "r_attempt_cap",
+        "r_success_read",
+        "r_generated_log",
+        "r_completion_state",
+        "r_completion_conditions",
+        "r_only_when",
+        "r_write_backup",
+        "r_forbid_write",
+        "attempt_cap",
+        "success_threshold",
+        "generated_condition",
+        "completion_guard"
+      ],
+      "reason": "包含 PM 组织执行读取检查、尝试次数上限、以成功读取次数及日志已生成为合取条件的必要完成门槛，以及写入备份禁令。PM 的明确职责是组织；实际读取检查执行者未指定。日志已生成是完成条件，未另行明确要求执行生成操作。没有显式 WP 标题。"
+    }
+  ]
+}

@@ -1,0 +1,140 @@
+{
+  "contract_version": "031-r01",
+  "reviews": [
+    {
+      "subject_id": "entity_pm",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [
+        {
+          "quote": "PM",
+          "occurrence": 1
+        }
+      ],
+      "reason": "PM身份明确；OTHER可作未指定具体类别的占位，不推定岗位权限。"
+    },
+    {
+      "subject_id": "entity_users",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [
+        {
+          "quote": "users.csv",
+          "occurrence": 1
+        }
+      ],
+      "reason": "原文明示受核对文件，名称与身份一致。"
+    },
+    {
+      "subject_id": "entity_optional",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [
+        {
+          "quote": "optional.md",
+          "occurrence": 1
+        }
+      ],
+      "reason": "原文明示禁止生成的文件对象；实体表示不断言文件存在。"
+    },
+    {
+      "subject_id": "event_check",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [
+        {
+          "quote": "请PM核对users.csv",
+          "occurrence": 1
+        }
+      ],
+      "reason": "明确要求当前执行核对，无条件或数量限制。"
+    },
+    {
+      "subject_id": "event_generate",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [
+        {
+          "quote": "不得生成optional.md",
+          "occurrence": 1
+        }
+      ],
+      "reason": "明确禁止当前生成动作；FORBIDDEN与正向动作谓词搭配正确。"
+    },
+    {
+      "subject_id": "claim_check_performer",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [
+        "event_check",
+        "entity_pm"
+      ],
+      "sources": [
+        {
+          "quote": "请PM核对users.csv",
+          "occurrence": 1
+        }
+      ],
+      "reason": "PM是核对动作的明确执行者。"
+    },
+    {
+      "subject_id": "claim_check_input",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [
+        "event_check",
+        "entity_users"
+      ],
+      "sources": [
+        {
+          "quote": "核对users.csv",
+          "occurrence": 1
+        }
+      ],
+      "reason": "users.csv是明确受检范围，INPUT_OBJECT绑定正确。"
+    },
+    {
+      "subject_id": "claim_generate_performer",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [
+        "event_generate",
+        "entity_pm"
+      ],
+      "sources": [
+        {
+          "quote": "请PM核对users.csv",
+          "occurrence": 1
+        },
+        {
+          "quote": "不得生成optional.md",
+          "occurrence": 1
+        }
+      ],
+      "reason": "连续同一指令没有主体切换或竞争主体，禁止动作可承接PM；来源包含两端。"
+    },
+    {
+      "subject_id": "claim_generate_result",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [
+        "event_generate",
+        "entity_optional"
+      ],
+      "sources": [
+        {
+          "quote": "不得生成optional.md",
+          "occurrence": 1
+        }
+      ],
+      "reason": "optional.md绑定为被禁止生成动作的RESULT正确，不产生正向O或存在断言。"
+    }
+  ],
+  "issues": [],
+  "omissions": []
+}

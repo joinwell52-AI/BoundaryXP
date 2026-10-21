@@ -1,0 +1,1 @@
+请 PM 组织读取 backup-index.csv 并核验其中全部备份的校验结果，形成 backup-audit.md。QA 应确认报告覆盖清单中的每一项后再由 PM 提交给 ADMIN。不得恢复或删除备份。

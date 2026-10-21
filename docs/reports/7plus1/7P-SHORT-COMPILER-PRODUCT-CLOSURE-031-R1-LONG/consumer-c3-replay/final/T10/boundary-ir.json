@@ -1,0 +1,5892 @@
+{
+  "format": "boundx-boundary-ir/031-r1.1",
+  "source_sha256": "04c3930ec42d7934eff83f9d2dce6110b95360f1416d3ecd20ce4c3d3c24eaf6",
+  "facts": [
+    {
+      "id": "bf:35162704393c8094e063",
+      "kind": "EVENT",
+      "status": "ACCEPTED",
+      "claim_ids": [
+        "EV_READ",
+        "C_READ_PM",
+        "C_READ_LOG",
+        "C_RETRY"
+      ],
+      "event": {
+        "id": "EV_READ",
+        "predicate": "读取",
+        "kind": "ACTION",
+        "layer": "MAIN",
+        "use": "CURRENT_TASK",
+        "modality": "REQUIRED",
+        "polarity": "POSITIVE",
+        "owner_id": "ROOT",
+        "constraint_ids": [
+          "C_RETRY"
+        ],
+        "requires": [],
+        "sources": [
+          {
+            "quote": "请PM读取worker.log",
+            "occurrence": 1,
+            "span": [
+              0,
+              15
+            ],
+            "source_sha256": "04c3930ec42d7934eff83f9d2dce6110b95360f1416d3ecd20ce4c3d3c24eaf6"
+          }
+        ]
+      },
+      "roles": [
+        {
+          "id": "C_READ_PM",
+          "kind": "ROLE",
+          "event_id": "EV_READ",
+          "entity_id": "E_PM",
+          "role": "PERFORMER",
+          "expression_id": null,
+          "direction": null,
+          "temporal": null,
+          "quantity": null,
+          "artifact_use": null,
+          "scope_id": "EV_READ",
+          "requires": [],
+          "sources": [
+            {
+              "quote": "请PM读取worker.log",
+              "occurrence": 1,
+              "span": [
+                0,
+                15
+              ],
+              "source_sha256": "04c3930ec42d7934eff83f9d2dce6110b95360f1416d3ecd20ce4c3d3c24eaf6"
+            }
+          ],
+          "note": "PM是读取执行者；岗位简称不推定个人或组类别。",
+          "entity": {
+            "id": "E_PM",
+            "label": "PM",
+            "type": "OTHER",
+            "mentions": [
+              {
+                "quote": "PM",
+                "occurrence": 1,
+                "span": [
+                  1,
+                  3
+                ],
+                "source_sha256": "04c3930ec42d7934eff83f9d2dce6110b95360f1416d3ecd20ce4c3d3c24eaf6"
+              }
+            ],
+            "alternatives": []
+          },
+          "status": "ACCEPTED"
+        },
+        {
+          "id": "C_READ_LOG",
+          "kind": "ROLE",
+          "event_id": "EV_READ",
+          "entity_id": "E_LOG",
+          "role": "INPUT_OBJECT",
+          "expression_id": null,
+          "direction": null,
+          "temporal": null,
+          "quantity": null,
+          "artifact_use": null,
+          "scope_id": "EV_READ",
+          "requires": [],
+          "sources": [
+            {
+              "quote": "读取worker.log",
+              "occurrence": 1,
+              "span": [
+                3,
+                15
+              ],
+              "source_sha256": "04c3930ec42d7934eff83f9d2dce6110b95360f1416d3ecd20ce4c3d3c24eaf6"
+            }
+          ],
+          "note": "日志文件是明确读取输入。",
+          "entity": {
+            "id": "E_LOG",
+            "label": "worker.log",
+            "type": "FILE",
+            "mentions": [
+              {
+                "quote": "worker.log",
+                "occurrence": 1,
+                "span": [
+                  5,
+                  15
+                ],
+                "source_sha256": "04c3930ec42d7934eff83f9d2dce6110b95360f1416d3ecd20ce4c3d3c24eaf6"
+              }
+            ],
+            "alternatives": []
+          },
+          "status": "ACCEPTED"
+        }
+      ],
+      "constraints": [
+        {
+          "id": "C_RETRY",
+          "kind": "QUANTITY",
+          "event_id": "EV_READ",
+          "entity_id": null,
+          "role": null,
+          "expression_id": null,
+          "direction": null,
+          "temporal": null,
+          "quantity": {
+            "metric": "重试次数",
+            "target_id": "EV_READ",
+            "comparator": "LTE",
+            "value": 2,
+            "unit": "次",
+            "use": "EXECUTION_LIMIT",
+            "count_scope": "EV_READ"
+          },
+          "artifact_use": null,
+          "scope_id": "EV_READ",
+          "requires": [],
+          "sources": [
+            {
+              "quote": "读取worker.log",
+              "occurrence": 1,
+              "span": [
+                3,
+                15
+              ],
+              "source_sha256": "04c3930ec42d7934eff83f9d2dce6110b95360f1416d3ecd20ce4c3d3c24eaf6"
+            },
+            {
+              "quote": "该读取操作最多重试2次",
+              "occurrence": 1,
+              "span": [
+                26,
+                37
+              ],
+              "source_sha256": "04c3930ec42d7934eff83f9d2dce6110b95360f1416d3ecd20ce4c3d3c24eaf6"
+            }
+          ],
+          "note": "限制读取操作的重试次数，不要求实际重试，也不是总读取次数上限。",
+          "expression": null
+        }
+      ],
+      "artifact_dependencies": [],
+      "sources": [
+        {
+          "quote": "请PM读取worker.log",
+          "occurrence": 1,
+          "span": [
+            0,
+            15
+          ],
+          "source_sha256": "04c3930ec42d7934eff83f9d2dce6110b95360f1416d3ecd20ce4c3d3c24eaf6"
+        },
+        {
+          "quote": "读取worker.log",
+          "occurrence": 1,
+          "span": [
+            3,
+            15
+          ],
+          "source_sha256": "04c3930ec42d7934eff83f9d2dce6110b95360f1416d3ecd20ce4c3d3c24eaf6"
+        },
+        {
+          "quote": "该读取操作最多重试2次",
+          "occurrence": 1,
+          "span": [
+            26,
+            37
+          ],
+          "source_sha256": "04c3930ec42d7934eff83f9d2dce6110b95360f1416d3ecd20ce4c3d3c24eaf6"
+        },
+        {
+          "quote": "请PM读取worker.log",
+          "occurrence": 1,
+          "span": [
+            0,
+            15
+          ],
+          "source_sha256": "04c3930ec42d7934eff83f9d2dce6110b95360f1416d3ecd20ce4c3d3c24eaf6"
+        },
+        {
+          "quote": "PM",
+          "occurrence": 1,
+          "span": [
+            1,
+            3
+          ],
+          "source_sha256": "04c3930ec42d7934eff83f9d2dce6110b95360f1416d3ecd20ce4c3d3c24eaf6"
+        },
+        {
+          "quote": "读取worker.log",
+          "occurrence": 1,
+          "span": [
+            3,
+            15
+          ],
+          "source_sha256": "04c3930ec42d7934eff83f9d2dce6110b95360f1416d3ecd20ce4c3d3c24eaf6"
+        },
+        {
+          "quote": "worker.log",
+          "occurrence": 1,
+          "span": [
+            5,
+            15
+          ],
+          "source_sha256": "04c3930ec42d7934eff83f9d2dce6110b95360f1416d3ecd20ce4c3d3c24eaf6"
+        }
+      ],
+      "slots": [
+        "A"
+      ],
+      "proof": {
+        "source_sha256": "04c3930ec42d7934eff83f9d2dce6110b95360f1416d3ecd20ce4c3d3c24eaf6",
+        "claim_ids": [
+          "EV_READ",
+          "C_READ_PM",
+          "C_READ_LOG",
+          "C_RETRY"
+        ],
+        "provenance_refs": [
+          "EV_READ",
+          "C_RETRY",
+          "C_READ_PM",
+          "E_PM",
+          "C_READ_LOG",
+          "E_LOG"
+        ],
+        "technical_policy": "028-r02-technical-v2",
+        "checks": [
+          {
+            "id": "EV_READ",
+            "collection": "events",
+            "status": "ACCEPTED",
+            "errors": [],
+            "uncertain": [],
+            "sources": [
+              {
+                "quote": "请PM读取worker.log",
+                "occurrence": 1,
+                "span": [
+                  0,
+                  15
+                ],
+                "source_sha256": "04c3930ec42d7934eff83f9d2dce6110b95360f1416d3ecd20ce4c3d3c24eaf6"
+              }
+            ],
+            "audit_refs": [
+              {
+                "subject_id": "EV_READ",
+                "field_path": "",
+                "verdict": "SUPPORT"
+              }
+            ],
+            "required_dependencies": [],
+            "structural_refs": [
+              "ROOT",
+              "C_RETRY"
+            ]
+          },
+          {
+            "id": "C_RETRY",
+            "collection": "claims",
+            "status": "ACCEPTED",
+            "errors": [],
+            "uncertain": [],
+            "sources": [
+              {
+                "quote": "读取worker.log",
+                "occurrence": 1,
+                "span": [
+                  3,
+                  15
+                ],
+                "source_sha256": "04c3930ec42d7934eff83f9d2dce6110b95360f1416d3ecd20ce4c3d3c24eaf6"
+              },
+              {
+                "quote": "该读取操作最多重试2次",
+                "occurrence": 1,
+                "span": [
+                  26,
+                  37
+                ],
+                "source_sha256": "04c3930ec42d7934eff83f9d2dce6110b95360f1416d3ecd20ce4c3d3c24eaf6"
+              }
+            ],
+            "audit_refs": [
+              {
+                "subject_id": "C_RETRY",
+                "field_path": "",
+                "verdict": "SUPPORT"
+              }
+            ],
+            "required_dependencies": [],
+            "structural_refs": [
+              "EV_READ",
+              "EV_READ",
+              "EV_READ",
+              "EV_READ"
+            ]
+          },
+          {
+            "id": "C_READ_PM",
+            "collection": "claims",
+            "status": "ACCEPTED",
+            "errors": [],
+            "uncertain": [],
+            "sources": [
+              {
+                "quote": "请PM读取worker.log",
+                "occurrence": 1,
+                "span": [
+                  0,
+                  15
+                ],
+                "source_sha256": "04c3930ec42d7934eff83f9d2dce6110b95360f1416d3ecd20ce4c3d3c24eaf6"
+              }
+            ],
+            "audit_refs": [
+              {
+                "subject_id": "C_READ_PM",
+                "field_path": "",
+                "verdict": "SUPPORT"
+              }
+            ],
+            "required_dependencies": [],
+            "structural_refs": [
+              "EV_READ",
+              "EV_READ",
+              "E_PM"
+            ]
+          },
+          {
+            "id": "E_PM",
+            "collection": "entities",
+            "status": "ACCEPTED",
+            "identity_status": "ACCEPTED",
+            "errors": [],
+            "uncertain": [],
+            "sources": [
+              {
+                "quote": "PM",
+                "occurrence": 1,
+                "span": [
+                  1,
+                  3
+                ],
+                "source_sha256": "04c3930ec42d7934eff83f9d2dce6110b95360f1416d3ecd20ce4c3d3c24eaf6"
+              }
+            ],
+            "audit_refs": [
+              {
+                "subject_id": "E_PM",
+                "field_path": "",
+                "verdict": "SUPPORT"
+              }
+            ],
+            "required_dependencies": [],
+            "structural_refs": []
+          },
+          {
+            "id": "C_READ_LOG",
+            "collection": "claims",
+            "status": "ACCEPTED",
+            "errors": [],
+            "uncertain": [],
+            "sources": [
+              {
+                "quote": "读取worker.log",
+                "occurrence": 1,
+                "span": [
+                  3,
+                  15
+                ],
+                "source_sha256": "04c3930ec42d7934eff83f9d2dce6110b95360f1416d3ecd20ce4c3d3c24eaf6"
+              }
+            ],
+            "audit_refs": [
+              {
+                "subject_id": "C_READ_LOG",
+                "field_path": "",
+                "verdict": "SUPPORT"
+              }
+            ],
+            "required_dependencies": [],
+            "structural_refs": [
+              "EV_READ",
+              "EV_READ",
+              "E_LOG"
+            ]
+          },
+          {
+            "id": "E_LOG",
+            "collection": "entities",
+            "status": "ACCEPTED",
+            "identity_status": "ACCEPTED",
+            "errors": [],
+            "uncertain": [],
+            "sources": [
+              {
+                "quote": "worker.log",
+                "occurrence": 1,
+                "span": [
+                  5,
+                  15
+                ],
+                "source_sha256": "04c3930ec42d7934eff83f9d2dce6110b95360f1416d3ecd20ce4c3d3c24eaf6"
+              }
+            ],
+            "audit_refs": [
+              {
+                "subject_id": "E_LOG",
+                "field_path": "",
+                "verdict": "SUPPORT"
+              }
+            ],
+            "required_dependencies": [],
+            "structural_refs": []
+          }
+        ],
+        "audit": [
+          {
+            "subject_id": "EV_READ",
+            "field_path": "",
+            "verdict": "SUPPORT",
+            "context_refs": [
+              "C_RETRY"
+            ],
+            "sources": [
+              {
+                "quote": "请PM读取worker.log",
+                "occurrence": 1
+              },
+              {
+                "quote": "该读取操作最多重试2次",
+                "occurrence": 1
+              }
+            ],
+            "reason": "读取是当前必需动作，重试数量约束已双向绑定。"
+          },
+          {
+            "subject_id": "C_RETRY",
+            "field_path": "",
+            "verdict": "SUPPORT",
+            "context_refs": [
+              "EV_READ"
+            ],
+            "sources": [
+              {
+                "quote": "读取worker.log",
+                "occurrence": 1
+              },
+              {
+                "quote": "该读取操作最多重试2次",
+                "occurrence": 1
+              }
+            ],
+            "reason": "计数项为重试次数，目标和范围均为读取事件；LTE、2、次及EXECUTION_LIMIT正确，未限制总读取次数。"
+          },
+          {
+            "subject_id": "C_READ_PM",
+            "field_path": "",
+            "verdict": "SUPPORT",
+            "context_refs": [
+              "EV_READ",
+              "E_PM"
+            ],
+            "sources": [
+              {
+                "quote": "请PM读取worker.log",
+                "occurrence": 1
+              }
+            ],
+            "reason": "PM明确承担读取执行职责。"
+          },
+          {
+            "subject_id": "E_PM",
+            "field_path": "",
+            "verdict": "SUPPORT",
+            "context_refs": [],
+            "sources": [
+              {
+                "quote": "请PM读取worker.log",
+                "occurrence": 1
+              }
+            ],
+            "reason": "PM身份明确；OTHER可保留未指定的人或组类别。"
+          },
+          {
+            "subject_id": "C_READ_LOG",
+            "field_path": "",
+            "verdict": "SUPPORT",
+            "context_refs": [
+              "EV_READ",
+              "E_LOG"
+            ],
+            "sources": [
+              {
+                "quote": "读取worker.log",
+                "occurrence": 1
+              }
+            ],
+            "reason": "worker.log是明确读取输入。"
+          },
+          {
+            "subject_id": "E_LOG",
+            "field_path": "",
+            "verdict": "SUPPORT",
+            "context_refs": [],
+            "sources": [
+              {
+                "quote": "读取worker.log",
+                "occurrence": 1
+              }
+            ],
+            "reason": "明确命名的日志文件，身份及FILE类型有支持。"
+          }
+        ],
+        "context_references_are_not_required_dependencies": true
+      }
+    },
+    {
+      "id": "bf:bdc947d88e625165208f",
+      "kind": "EVENT",
+      "status": "ACCEPTED",
+      "claim_ids": [
+        "EV_CHECK",
+        "C_CHECK_PM",
+        "C_CHECK_ERRORS",
+        "C_CHECK_RESULT"
+      ],
+      "event": {
+        "id": "EV_CHECK",
+        "predicate": "检查错误记录",
+        "kind": "ACTION",
+        "layer": "MAIN",
+        "use": "CURRENT_TASK",
+        "modality": "REQUIRED",
+        "polarity": "POSITIVE",
+        "owner_id": "ROOT",
+        "constraint_ids": [],
+        "requires": [],
+        "sources": [
+          {
+            "quote": "请PM读取worker.log并检查其中的错误记录",
+            "occurrence": 1,
+            "span": [
+              0,
+              25
+            ],
+            "source_sha256": "04c3930ec42d7934eff83f9d2dce6110b95360f1416d3ecd20ce4c3d3c24eaf6"
+          }
+        ]
+      },
+      "roles": [
+        {
+          "id": "C_CHECK_PM",
+          "kind": "ROLE",
+          "event_id": "EV_CHECK",
+          "entity_id": "E_PM",
+          "role": "PERFORMER",
+          "expression_id": null,
+          "direction": null,
+          "temporal": null,
+          "quantity": null,
+          "artifact_use": null,
+          "scope_id": "EV_CHECK",
+          "requires": [],
+          "sources": [
+            {
+              "quote": "请PM读取worker.log",
+              "occurrence": 1,
+              "span": [
+                0,
+                15
+              ],
+              "source_sha256": "04c3930ec42d7934eff83f9d2dce6110b95360f1416d3ecd20ce4c3d3c24eaf6"
+            },
+            {
+              "quote": "并检查其中的错误记录",
+              "occurrence": 1,
+              "span": [
+                15,
+                25
+              ],
+              "source_sha256": "04c3930ec42d7934eff83f9d2dce6110b95360f1416d3ecd20ce4c3d3c24eaf6"
+            }
+          ],
+          "note": "同一指令的并列检查动作承接明确主语PM。",
+          "entity": {
+            "id": "E_PM",
+            "label": "PM",
+            "type": "OTHER",
+            "mentions": [
+              {
+                "quote": "PM",
+                "occurrence": 1,
+                "span": [
+                  1,
+                  3
+                ],
+                "source_sha256": "04c3930ec42d7934eff83f9d2dce6110b95360f1416d3ecd20ce4c3d3c24eaf6"
+              }
+            ],
+            "alternatives": []
+          },
+          "status": "ACCEPTED"
+        },
+        {
+          "id": "C_CHECK_ERRORS",
+          "kind": "ROLE",
+          "event_id": "EV_CHECK",
+          "entity_id": "E_ERRORS",
+          "role": "INPUT_OBJECT",
+          "expression_id": null,
+          "direction": null,
+          "temporal": null,
+          "quantity": null,
+          "artifact_use": null,
+          "scope_id": "EV_CHECK",
+          "requires": [],
+          "sources": [
+            {
+              "quote": "worker.log",
+              "occurrence": 1,
+              "span": [
+                5,
+                15
+              ],
+              "source_sha256": "04c3930ec42d7934eff83f9d2dce6110b95360f1416d3ecd20ce4c3d3c24eaf6"
+            },
+            {
+              "quote": "检查其中的错误记录",
+              "occurrence": 1,
+              "span": [
+                16,
+                25
+              ],
+              "source_sha256": "04c3930ec42d7934eff83f9d2dce6110b95360f1416d3ecd20ce4c3d3c24eaf6"
+            }
+          ],
+          "note": "“其中”指worker.log；受检范围是该日志中的错误记录。",
+          "entity": {
+            "id": "E_ERRORS",
+            "label": "worker.log中的错误记录",
+            "type": "OTHER",
+            "mentions": [
+              {
+                "quote": "worker.log",
+                "occurrence": 1,
+                "span": [
+                  5,
+                  15
+                ],
+                "source_sha256": "04c3930ec42d7934eff83f9d2dce6110b95360f1416d3ecd20ce4c3d3c24eaf6"
+              },
+              {
+                "quote": "其中的错误记录",
+                "occurrence": 1,
+                "span": [
+                  18,
+                  25
+                ],
+                "source_sha256": "04c3930ec42d7934eff83f9d2dce6110b95360f1416d3ecd20ce4c3d3c24eaf6"
+              }
+            ],
+            "alternatives": []
+          },
+          "status": "ACCEPTED"
+        },
+        {
+          "id": "C_CHECK_RESULT",
+          "kind": "ROLE",
+          "event_id": "EV_CHECK",
+          "entity_id": "E_RESULT",
+          "role": "RESULT",
+          "expression_id": null,
+          "direction": null,
+          "temporal": null,
+          "quantity": null,
+          "artifact_use": null,
+          "scope_id": "EV_CHECK",
+          "requires": [],
+          "sources": [
+            {
+              "quote": "检查其中的错误记录",
+              "occurrence": 1,
+              "span": [
+                16,
+                25
+              ],
+              "source_sha256": "04c3930ec42d7934eff83f9d2dce6110b95360f1416d3ecd20ce4c3d3c24eaf6"
+            },
+            {
+              "quote": "复核检查结果",
+              "occurrence": 1,
+              "span": [
+                41,
+                47
+              ],
+              "source_sha256": "04c3930ec42d7934eff83f9d2dce6110b95360f1416d3ecd20ce4c3d3c24eaf6"
+            }
+          ],
+          "note": "后文检查结果指本次检查产生的结果，不推定文件形式或交付义务。",
+          "entity": {
+            "id": "E_RESULT",
+            "label": "检查结果",
+            "type": "OTHER",
+            "mentions": [
+              {
+                "quote": "检查其中的错误记录",
+                "occurrence": 1,
+                "span": [
+                  16,
+                  25
+                ],
+                "source_sha256": "04c3930ec42d7934eff83f9d2dce6110b95360f1416d3ecd20ce4c3d3c24eaf6"
+              },
+              {
+                "quote": "检查结果",
+                "occurrence": 1,
+                "span": [
+                  43,
+                  47
+                ],
+                "source_sha256": "04c3930ec42d7934eff83f9d2dce6110b95360f1416d3ecd20ce4c3d3c24eaf6"
+              }
+            ],
+            "alternatives": []
+          },
+          "status": "ACCEPTED"
+        }
+      ],
+      "constraints": [],
+      "artifact_dependencies": [],
+      "sources": [
+        {
+          "quote": "请PM读取worker.log并检查其中的错误记录",
+          "occurrence": 1,
+          "span": [
+            0,
+            25
+          ],
+          "source_sha256": "04c3930ec42d7934eff83f9d2dce6110b95360f1416d3ecd20ce4c3d3c24eaf6"
+        },
+        {
+          "quote": "请PM读取worker.log",
+          "occurrence": 1,
+          "span": [
+            0,
+            15
+          ],
+          "source_sha256": "04c3930ec42d7934eff83f9d2dce6110b95360f1416d3ecd20ce4c3d3c24eaf6"
+        },
+        {
+          "quote": "并检查其中的错误记录",
+          "occurrence": 1,
+          "span": [
+            15,
+            25
+          ],
+          "source_sha256": "04c3930ec42d7934eff83f9d2dce6110b95360f1416d3ecd20ce4c3d3c24eaf6"
+        },
+        {
+          "quote": "PM",
+          "occurrence": 1,
+          "span": [
+            1,
+            3
+          ],
+          "source_sha256": "04c3930ec42d7934eff83f9d2dce6110b95360f1416d3ecd20ce4c3d3c24eaf6"
+        },
+        {
+          "quote": "worker.log",
+          "occurrence": 1,
+          "span": [
+            5,
+            15
+          ],
+          "source_sha256": "04c3930ec42d7934eff83f9d2dce6110b95360f1416d3ecd20ce4c3d3c24eaf6"
+        },
+        {
+          "quote": "检查其中的错误记录",
+          "occurrence": 1,
+          "span": [
+            16,
+            25
+          ],
+          "source_sha256": "04c3930ec42d7934eff83f9d2dce6110b95360f1416d3ecd20ce4c3d3c24eaf6"
+        },
+        {
+          "quote": "worker.log",
+          "occurrence": 1,
+          "span": [
+            5,
+            15
+          ],
+          "source_sha256": "04c3930ec42d7934eff83f9d2dce6110b95360f1416d3ecd20ce4c3d3c24eaf6"
+        },
+        {
+          "quote": "其中的错误记录",
+          "occurrence": 1,
+          "span": [
+            18,
+            25
+          ],
+          "source_sha256": "04c3930ec42d7934eff83f9d2dce6110b95360f1416d3ecd20ce4c3d3c24eaf6"
+        },
+        {
+          "quote": "检查其中的错误记录",
+          "occurrence": 1,
+          "span": [
+            16,
+            25
+          ],
+          "source_sha256": "04c3930ec42d7934eff83f9d2dce6110b95360f1416d3ecd20ce4c3d3c24eaf6"
+        },
+        {
+          "quote": "复核检查结果",
+          "occurrence": 1,
+          "span": [
+            41,
+            47
+          ],
+          "source_sha256": "04c3930ec42d7934eff83f9d2dce6110b95360f1416d3ecd20ce4c3d3c24eaf6"
+        },
+        {
+          "quote": "检查其中的错误记录",
+          "occurrence": 1,
+          "span": [
+            16,
+            25
+          ],
+          "source_sha256": "04c3930ec42d7934eff83f9d2dce6110b95360f1416d3ecd20ce4c3d3c24eaf6"
+        },
+        {
+          "quote": "检查结果",
+          "occurrence": 1,
+          "span": [
+            43,
+            47
+          ],
+          "source_sha256": "04c3930ec42d7934eff83f9d2dce6110b95360f1416d3ecd20ce4c3d3c24eaf6"
+        }
+      ],
+      "slots": [
+        "A"
+      ],
+      "proof": {
+        "source_sha256": "04c3930ec42d7934eff83f9d2dce6110b95360f1416d3ecd20ce4c3d3c24eaf6",
+        "claim_ids": [
+          "EV_CHECK",
+          "C_CHECK_PM",
+          "C_CHECK_ERRORS",
+          "C_CHECK_RESULT"
+        ],
+        "provenance_refs": [
+          "EV_CHECK",
+          "C_CHECK_PM",
+          "E_PM",
+          "C_CHECK_ERRORS",
+          "E_ERRORS",
+          "C_CHECK_RESULT",
+          "E_RESULT"
+        ],
+        "technical_policy": "028-r02-technical-v2",
+        "checks": [
+          {
+            "id": "EV_CHECK",
+            "collection": "events",
+            "status": "ACCEPTED",
+            "errors": [],
+            "uncertain": [],
+            "sources": [
+              {
+                "quote": "请PM读取worker.log并检查其中的错误记录",
+                "occurrence": 1,
+                "span": [
+                  0,
+                  25
+                ],
+                "source_sha256": "04c3930ec42d7934eff83f9d2dce6110b95360f1416d3ecd20ce4c3d3c24eaf6"
+              }
+            ],
+            "audit_refs": [
+              {
+                "subject_id": "EV_CHECK",
+                "field_path": "",
+                "verdict": "SUPPORT"
+              }
+            ],
+            "required_dependencies": [],
+            "structural_refs": [
+              "ROOT"
+            ]
+          },
+          {
+            "id": "C_CHECK_PM",
+            "collection": "claims",
+            "status": "ACCEPTED",
+            "errors": [],
+            "uncertain": [],
+            "sources": [
+              {
+                "quote": "请PM读取worker.log",
+                "occurrence": 1,
+                "span": [
+                  0,
+                  15
+                ],
+                "source_sha256": "04c3930ec42d7934eff83f9d2dce6110b95360f1416d3ecd20ce4c3d3c24eaf6"
+              },
+              {
+                "quote": "并检查其中的错误记录",
+                "occurrence": 1,
+                "span": [
+                  15,
+                  25
+                ],
+                "source_sha256": "04c3930ec42d7934eff83f9d2dce6110b95360f1416d3ecd20ce4c3d3c24eaf6"
+              }
+            ],
+            "audit_refs": [
+              {
+                "subject_id": "C_CHECK_PM",
+                "field_path": "",
+                "verdict": "SUPPORT"
+              }
+            ],
+            "required_dependencies": [],
+            "structural_refs": [
+              "EV_CHECK",
+              "EV_CHECK",
+              "E_PM"
+            ]
+          },
+          {
+            "id": "E_PM",
+            "collection": "entities",
+            "status": "ACCEPTED",
+            "identity_status": "ACCEPTED",
+            "errors": [],
+            "uncertain": [],
+            "sources": [
+              {
+                "quote": "PM",
+                "occurrence": 1,
+                "span": [
+                  1,
+                  3
+                ],
+                "source_sha256": "04c3930ec42d7934eff83f9d2dce6110b95360f1416d3ecd20ce4c3d3c24eaf6"
+              }
+            ],
+            "audit_refs": [
+              {
+                "subject_id": "E_PM",
+                "field_path": "",
+                "verdict": "SUPPORT"
+              }
+            ],
+            "required_dependencies": [],
+            "structural_refs": []
+          },
+          {
+            "id": "C_CHECK_ERRORS",
+            "collection": "claims",
+            "status": "ACCEPTED",
+            "errors": [],
+            "uncertain": [],
+            "sources": [
+              {
+                "quote": "worker.log",
+                "occurrence": 1,
+                "span": [
+                  5,
+                  15
+                ],
+                "source_sha256": "04c3930ec42d7934eff83f9d2dce6110b95360f1416d3ecd20ce4c3d3c24eaf6"
+              },
+              {
+                "quote": "检查其中的错误记录",
+                "occurrence": 1,
+                "span": [
+                  16,
+                  25
+                ],
+                "source_sha256": "04c3930ec42d7934eff83f9d2dce6110b95360f1416d3ecd20ce4c3d3c24eaf6"
+              }
+            ],
+            "audit_refs": [
+              {
+                "subject_id": "C_CHECK_ERRORS",
+                "field_path": "",
+                "verdict": "SUPPORT"
+              }
+            ],
+            "required_dependencies": [],
+            "structural_refs": [
+              "EV_CHECK",
+              "EV_CHECK",
+              "E_ERRORS"
+            ]
+          },
+          {
+            "id": "E_ERRORS",
+            "collection": "entities",
+            "status": "ACCEPTED",
+            "identity_status": "ACCEPTED",
+            "errors": [],
+            "uncertain": [],
+            "sources": [
+              {
+                "quote": "worker.log",
+                "occurrence": 1,
+                "span": [
+                  5,
+                  15
+                ],
+                "source_sha256": "04c3930ec42d7934eff83f9d2dce6110b95360f1416d3ecd20ce4c3d3c24eaf6"
+              },
+              {
+                "quote": "其中的错误记录",
+                "occurrence": 1,
+                "span": [
+                  18,
+                  25
+                ],
+                "source_sha256": "04c3930ec42d7934eff83f9d2dce6110b95360f1416d3ecd20ce4c3d3c24eaf6"
+              }
+            ],
+            "audit_refs": [
+              {
+                "subject_id": "E_ERRORS",
+                "field_path": "",
+                "verdict": "SUPPORT"
+              }
+            ],
+            "required_dependencies": [],
+            "structural_refs": []
+          },
+          {
+            "id": "C_CHECK_RESULT",
+            "collection": "claims",
+            "status": "ACCEPTED",
+            "errors": [],
+            "uncertain": [],
+            "sources": [
+              {
+                "quote": "检查其中的错误记录",
+                "occurrence": 1,
+                "span": [
+                  16,
+                  25
+                ],
+                "source_sha256": "04c3930ec42d7934eff83f9d2dce6110b95360f1416d3ecd20ce4c3d3c24eaf6"
+              },
+              {
+                "quote": "复核检查结果",
+                "occurrence": 1,
+                "span": [
+                  41,
+                  47
+                ],
+                "source_sha256": "04c3930ec42d7934eff83f9d2dce6110b95360f1416d3ecd20ce4c3d3c24eaf6"
+              }
+            ],
+            "audit_refs": [
+              {
+                "subject_id": "C_CHECK_RESULT",
+                "field_path": "",
+                "verdict": "SUPPORT"
+              }
+            ],
+            "required_dependencies": [],
+            "structural_refs": [
+              "EV_CHECK",
+              "EV_CHECK",
+              "E_RESULT"
+            ]
+          },
+          {
+            "id": "E_RESULT",
+            "collection": "entities",
+            "status": "ACCEPTED",
+            "identity_status": "ACCEPTED",
+            "errors": [],
+            "uncertain": [],
+            "sources": [
+              {
+                "quote": "检查其中的错误记录",
+                "occurrence": 1,
+                "span": [
+                  16,
+                  25
+                ],
+                "source_sha256": "04c3930ec42d7934eff83f9d2dce6110b95360f1416d3ecd20ce4c3d3c24eaf6"
+              },
+              {
+                "quote": "检查结果",
+                "occurrence": 1,
+                "span": [
+                  43,
+                  47
+                ],
+                "source_sha256": "04c3930ec42d7934eff83f9d2dce6110b95360f1416d3ecd20ce4c3d3c24eaf6"
+              }
+            ],
+            "audit_refs": [
+              {
+                "subject_id": "E_RESULT",
+                "field_path": "",
+                "verdict": "SUPPORT"
+              }
+            ],
+            "required_dependencies": [],
+            "structural_refs": []
+          }
+        ],
+        "audit": [
+          {
+            "subject_id": "EV_CHECK",
+            "field_path": "",
+            "verdict": "SUPPORT",
+            "context_refs": [],
+            "sources": [
+              {
+                "quote": "请PM读取worker.log并检查其中的错误记录",
+                "occurrence": 1
+              }
+            ],
+            "reason": "检查是同一指令中的并列必需动作；原文未明确另加事件先后约束。"
+          },
+          {
+            "subject_id": "C_CHECK_PM",
+            "field_path": "",
+            "verdict": "SUPPORT",
+            "context_refs": [
+              "EV_CHECK",
+              "E_PM"
+            ],
+            "sources": [
+              {
+                "quote": "请PM读取worker.log",
+                "occurrence": 1
+              },
+              {
+                "quote": "并检查其中的错误记录",
+                "occurrence": 1
+              }
+            ],
+            "reason": "同一指令的并列动作承接PM主语，两端来源齐全；QA仅在后续复核职责处出现。"
+          },
+          {
+            "subject_id": "E_PM",
+            "field_path": "",
+            "verdict": "SUPPORT",
+            "context_refs": [],
+            "sources": [
+              {
+                "quote": "请PM读取worker.log",
+                "occurrence": 1
+              }
+            ],
+            "reason": "PM身份明确；OTHER可保留未指定的人或组类别。"
+          },
+          {
+            "subject_id": "C_CHECK_ERRORS",
+            "field_path": "",
+            "verdict": "SUPPORT",
+            "context_refs": [
+              "EV_CHECK",
+              "E_ERRORS",
+              "E_LOG"
+            ],
+            "sources": [
+              {
+                "quote": "worker.log",
+                "occurrence": 1
+              },
+              {
+                "quote": "检查其中的错误记录",
+                "occurrence": 1
+              }
+            ],
+            "reason": "受检范围明确限定为worker.log中的错误记录，INPUT_OBJECT绑定正确。"
+          },
+          {
+            "subject_id": "E_ERRORS",
+            "field_path": "",
+            "verdict": "SUPPORT",
+            "context_refs": [
+              "E_LOG"
+            ],
+            "sources": [
+              {
+                "quote": "读取worker.log并检查其中的错误记录",
+                "occurrence": 1
+              }
+            ],
+            "reason": "其中指向worker.log，受检对象是该文件中的错误记录。"
+          },
+          {
+            "subject_id": "C_CHECK_RESULT",
+            "field_path": "",
+            "verdict": "SUPPORT",
+            "context_refs": [
+              "EV_CHECK",
+              "E_RESULT"
+            ],
+            "sources": [
+              {
+                "quote": "检查其中的错误记录",
+                "occurrence": 1
+              },
+              {
+                "quote": "复核检查结果",
+                "occurrence": 1
+              }
+            ],
+            "reason": "后文明确引用本次检查结果，支持检查的RESULT用途，不增加文件生成或交付要求。"
+          },
+          {
+            "subject_id": "E_RESULT",
+            "field_path": "",
+            "verdict": "SUPPORT",
+            "context_refs": [
+              "EV_CHECK",
+              "EV_REVIEW"
+            ],
+            "sources": [
+              {
+                "quote": "检查其中的错误记录",
+                "occurrence": 1
+              },
+              {
+                "quote": "由QA复核检查结果",
+                "occurrence": 1
+              }
+            ],
+            "reason": "全篇只有本次检查及其结果；两端mentions支持同一结果身份，未推定文件形式。"
+          }
+        ],
+        "context_references_are_not_required_dependencies": true
+      }
+    },
+    {
+      "id": "bf:5dc44fbba615d239fb93",
+      "kind": "EVENT",
+      "status": "ACCEPTED",
+      "claim_ids": [
+        "EV_REVIEW",
+        "C_REVIEW_QA",
+        "C_REVIEW_OBJECT"
+      ],
+      "event": {
+        "id": "EV_REVIEW",
+        "predicate": "复核检查结果",
+        "kind": "ACTION",
+        "layer": "MAIN",
+        "use": "CURRENT_TASK",
+        "modality": "REQUIRED",
+        "polarity": "POSITIVE",
+        "owner_id": "ROOT",
+        "constraint_ids": [],
+        "requires": [],
+        "sources": [
+          {
+            "quote": "由QA复核检查结果",
+            "occurrence": 1,
+            "span": [
+              38,
+              47
+            ],
+            "source_sha256": "04c3930ec42d7934eff83f9d2dce6110b95360f1416d3ecd20ce4c3d3c24eaf6"
+          }
+        ]
+      },
+      "roles": [
+        {
+          "id": "C_REVIEW_QA",
+          "kind": "ROLE",
+          "event_id": "EV_REVIEW",
+          "entity_id": "E_QA",
+          "role": "REVIEWER",
+          "expression_id": null,
+          "direction": null,
+          "temporal": null,
+          "quantity": null,
+          "artifact_use": null,
+          "scope_id": "EV_REVIEW",
+          "requires": [],
+          "sources": [
+            {
+              "quote": "由QA复核检查结果",
+              "occurrence": 1,
+              "span": [
+                38,
+                47
+              ],
+              "source_sha256": "04c3930ec42d7934eff83f9d2dce6110b95360f1416d3ecd20ce4c3d3c24eaf6"
+            }
+          ],
+          "note": "QA承担复核职责，不承接PM的读取或检查职责。",
+          "entity": {
+            "id": "E_QA",
+            "label": "QA",
+            "type": "OTHER",
+            "mentions": [
+              {
+                "quote": "QA",
+                "occurrence": 1,
+                "span": [
+                  39,
+                  41
+                ],
+                "source_sha256": "04c3930ec42d7934eff83f9d2dce6110b95360f1416d3ecd20ce4c3d3c24eaf6"
+              }
+            ],
+            "alternatives": []
+          },
+          "status": "ACCEPTED"
+        },
+        {
+          "id": "C_REVIEW_OBJECT",
+          "kind": "ROLE",
+          "event_id": "EV_REVIEW",
+          "entity_id": "E_RESULT",
+          "role": "OBJECT",
+          "expression_id": null,
+          "direction": null,
+          "temporal": null,
+          "quantity": null,
+          "artifact_use": null,
+          "scope_id": "EV_REVIEW",
+          "requires": [],
+          "sources": [
+            {
+              "quote": "检查其中的错误记录",
+              "occurrence": 1,
+              "span": [
+                16,
+                25
+              ],
+              "source_sha256": "04c3930ec42d7934eff83f9d2dce6110b95360f1416d3ecd20ce4c3d3c24eaf6"
+            },
+            {
+              "quote": "复核检查结果",
+              "occurrence": 1,
+              "span": [
+                41,
+                47
+              ],
+              "source_sha256": "04c3930ec42d7934eff83f9d2dce6110b95360f1416d3ecd20ce4c3d3c24eaf6"
+            }
+          ],
+          "note": "复核对象是本次检查的同一结果，属于内部产物用途。",
+          "entity": {
+            "id": "E_RESULT",
+            "label": "检查结果",
+            "type": "OTHER",
+            "mentions": [
+              {
+                "quote": "检查其中的错误记录",
+                "occurrence": 1,
+                "span": [
+                  16,
+                  25
+                ],
+                "source_sha256": "04c3930ec42d7934eff83f9d2dce6110b95360f1416d3ecd20ce4c3d3c24eaf6"
+              },
+              {
+                "quote": "检查结果",
+                "occurrence": 1,
+                "span": [
+                  43,
+                  47
+                ],
+                "source_sha256": "04c3930ec42d7934eff83f9d2dce6110b95360f1416d3ecd20ce4c3d3c24eaf6"
+              }
+            ],
+            "alternatives": []
+          },
+          "status": "ACCEPTED"
+        }
+      ],
+      "constraints": [],
+      "artifact_dependencies": [
+        {
+          "id": "ad:f0806fec335a6c6329e9",
+          "kind": "ARTIFACT_AVAILABILITY",
+          "origin": "DERIVED",
+          "rule_version": "031-r1-artifact-flow-v1",
+          "artifact_id": "E_RESULT",
+          "producer_event_id": "EV_CHECK",
+          "consumer_event_id": "EV_REVIEW",
+          "producer_result_id": "C_CHECK_RESULT",
+          "consumer_role_id": "C_REVIEW_OBJECT",
+          "binding_claim_id": "C_RESULT_USE",
+          "availability": "USED_PORTION",
+          "status": "ACCEPTED",
+          "eligible": true,
+          "input_claim_ids": [
+            "C_RESULT_USE",
+            "C_CHECK_RESULT",
+            "C_REVIEW_OBJECT"
+          ],
+          "provenance_refs": [
+            "C_RESULT_USE",
+            "C_CHECK_RESULT",
+            "C_REVIEW_OBJECT",
+            "E_RESULT",
+            "EV_CHECK",
+            "EV_REVIEW"
+          ],
+          "sources": [
+            {
+              "quote": "检查其中的错误记录",
+              "occurrence": 1,
+              "span": [
+                16,
+                25
+              ],
+              "source_sha256": "04c3930ec42d7934eff83f9d2dce6110b95360f1416d3ecd20ce4c3d3c24eaf6"
+            },
+            {
+              "quote": "由QA复核检查结果",
+              "occurrence": 1,
+              "span": [
+                38,
+                47
+              ],
+              "source_sha256": "04c3930ec42d7934eff83f9d2dce6110b95360f1416d3ecd20ce4c3d3c24eaf6"
+            },
+            {
+              "quote": "检查其中的错误记录",
+              "occurrence": 1,
+              "span": [
+                16,
+                25
+              ],
+              "source_sha256": "04c3930ec42d7934eff83f9d2dce6110b95360f1416d3ecd20ce4c3d3c24eaf6"
+            },
+            {
+              "quote": "复核检查结果",
+              "occurrence": 1,
+              "span": [
+                41,
+                47
+              ],
+              "source_sha256": "04c3930ec42d7934eff83f9d2dce6110b95360f1416d3ecd20ce4c3d3c24eaf6"
+            },
+            {
+              "quote": "检查其中的错误记录",
+              "occurrence": 1,
+              "span": [
+                16,
+                25
+              ],
+              "source_sha256": "04c3930ec42d7934eff83f9d2dce6110b95360f1416d3ecd20ce4c3d3c24eaf6"
+            },
+            {
+              "quote": "复核检查结果",
+              "occurrence": 1,
+              "span": [
+                41,
+                47
+              ],
+              "source_sha256": "04c3930ec42d7934eff83f9d2dce6110b95360f1416d3ecd20ce4c3d3c24eaf6"
+            },
+            {
+              "quote": "检查其中的错误记录",
+              "occurrence": 1,
+              "span": [
+                16,
+                25
+              ],
+              "source_sha256": "04c3930ec42d7934eff83f9d2dce6110b95360f1416d3ecd20ce4c3d3c24eaf6"
+            },
+            {
+              "quote": "检查结果",
+              "occurrence": 1,
+              "span": [
+                43,
+                47
+              ],
+              "source_sha256": "04c3930ec42d7934eff83f9d2dce6110b95360f1416d3ecd20ce4c3d3c24eaf6"
+            },
+            {
+              "quote": "请PM读取worker.log并检查其中的错误记录",
+              "occurrence": 1,
+              "span": [
+                0,
+                25
+              ],
+              "source_sha256": "04c3930ec42d7934eff83f9d2dce6110b95360f1416d3ecd20ce4c3d3c24eaf6"
+            },
+            {
+              "quote": "由QA复核检查结果",
+              "occurrence": 1,
+              "span": [
+                38,
+                47
+              ],
+              "source_sha256": "04c3930ec42d7934eff83f9d2dce6110b95360f1416d3ecd20ce4c3d3c24eaf6"
+            }
+          ],
+          "producer_modality": "REQUIRED",
+          "consumer_modality": "REQUIRED",
+          "producer_constraints": [],
+          "consumer_constraints": [],
+          "implies_whole_producer_completed": false,
+          "implies_event_order": false,
+          "observed_available": "UNKNOWN"
+        }
+      ],
+      "sources": [
+        {
+          "quote": "由QA复核检查结果",
+          "occurrence": 1,
+          "span": [
+            38,
+            47
+          ],
+          "source_sha256": "04c3930ec42d7934eff83f9d2dce6110b95360f1416d3ecd20ce4c3d3c24eaf6"
+        },
+        {
+          "quote": "由QA复核检查结果",
+          "occurrence": 1,
+          "span": [
+            38,
+            47
+          ],
+          "source_sha256": "04c3930ec42d7934eff83f9d2dce6110b95360f1416d3ecd20ce4c3d3c24eaf6"
+        },
+        {
+          "quote": "QA",
+          "occurrence": 1,
+          "span": [
+            39,
+            41
+          ],
+          "source_sha256": "04c3930ec42d7934eff83f9d2dce6110b95360f1416d3ecd20ce4c3d3c24eaf6"
+        },
+        {
+          "quote": "检查其中的错误记录",
+          "occurrence": 1,
+          "span": [
+            16,
+            25
+          ],
+          "source_sha256": "04c3930ec42d7934eff83f9d2dce6110b95360f1416d3ecd20ce4c3d3c24eaf6"
+        },
+        {
+          "quote": "复核检查结果",
+          "occurrence": 1,
+          "span": [
+            41,
+            47
+          ],
+          "source_sha256": "04c3930ec42d7934eff83f9d2dce6110b95360f1416d3ecd20ce4c3d3c24eaf6"
+        },
+        {
+          "quote": "检查其中的错误记录",
+          "occurrence": 1,
+          "span": [
+            16,
+            25
+          ],
+          "source_sha256": "04c3930ec42d7934eff83f9d2dce6110b95360f1416d3ecd20ce4c3d3c24eaf6"
+        },
+        {
+          "quote": "检查结果",
+          "occurrence": 1,
+          "span": [
+            43,
+            47
+          ],
+          "source_sha256": "04c3930ec42d7934eff83f9d2dce6110b95360f1416d3ecd20ce4c3d3c24eaf6"
+        }
+      ],
+      "slots": [
+        "A"
+      ],
+      "proof": {
+        "source_sha256": "04c3930ec42d7934eff83f9d2dce6110b95360f1416d3ecd20ce4c3d3c24eaf6",
+        "claim_ids": [
+          "EV_REVIEW",
+          "C_REVIEW_QA",
+          "C_REVIEW_OBJECT"
+        ],
+        "provenance_refs": [
+          "EV_REVIEW",
+          "C_REVIEW_QA",
+          "E_QA",
+          "C_REVIEW_OBJECT",
+          "E_RESULT"
+        ],
+        "technical_policy": "028-r02-technical-v2",
+        "checks": [
+          {
+            "id": "EV_REVIEW",
+            "collection": "events",
+            "status": "ACCEPTED",
+            "errors": [],
+            "uncertain": [],
+            "sources": [
+              {
+                "quote": "由QA复核检查结果",
+                "occurrence": 1,
+                "span": [
+                  38,
+                  47
+                ],
+                "source_sha256": "04c3930ec42d7934eff83f9d2dce6110b95360f1416d3ecd20ce4c3d3c24eaf6"
+              }
+            ],
+            "audit_refs": [
+              {
+                "subject_id": "EV_REVIEW",
+                "field_path": "",
+                "verdict": "SUPPORT"
+              }
+            ],
+            "required_dependencies": [],
+            "structural_refs": [
+              "ROOT"
+            ]
+          },
+          {
+            "id": "C_REVIEW_QA",
+            "collection": "claims",
+            "status": "ACCEPTED",
+            "errors": [],
+            "uncertain": [],
+            "sources": [
+              {
+                "quote": "由QA复核检查结果",
+                "occurrence": 1,
+                "span": [
+                  38,
+                  47
+                ],
+                "source_sha256": "04c3930ec42d7934eff83f9d2dce6110b95360f1416d3ecd20ce4c3d3c24eaf6"
+              }
+            ],
+            "audit_refs": [
+              {
+                "subject_id": "C_REVIEW_QA",
+                "field_path": "",
+                "verdict": "SUPPORT"
+              }
+            ],
+            "required_dependencies": [],
+            "structural_refs": [
+              "EV_REVIEW",
+              "EV_REVIEW",
+              "E_QA"
+            ]
+          },
+          {
+            "id": "E_QA",
+            "collection": "entities",
+            "status": "ACCEPTED",
+            "identity_status": "ACCEPTED",
+            "errors": [],
+            "uncertain": [],
+            "sources": [
+              {
+                "quote": "QA",
+                "occurrence": 1,
+                "span": [
+                  39,
+                  41
+                ],
+                "source_sha256": "04c3930ec42d7934eff83f9d2dce6110b95360f1416d3ecd20ce4c3d3c24eaf6"
+              }
+            ],
+            "audit_refs": [
+              {
+                "subject_id": "E_QA",
+                "field_path": "",
+                "verdict": "SUPPORT"
+              }
+            ],
+            "required_dependencies": [],
+            "structural_refs": []
+          },
+          {
+            "id": "C_REVIEW_OBJECT",
+            "collection": "claims",
+            "status": "ACCEPTED",
+            "errors": [],
+            "uncertain": [],
+            "sources": [
+              {
+                "quote": "检查其中的错误记录",
+                "occurrence": 1,
+                "span": [
+                  16,
+                  25
+                ],
+                "source_sha256": "04c3930ec42d7934eff83f9d2dce6110b95360f1416d3ecd20ce4c3d3c24eaf6"
+              },
+              {
+                "quote": "复核检查结果",
+                "occurrence": 1,
+                "span": [
+                  41,
+                  47
+                ],
+                "source_sha256": "04c3930ec42d7934eff83f9d2dce6110b95360f1416d3ecd20ce4c3d3c24eaf6"
+              }
+            ],
+            "audit_refs": [
+              {
+                "subject_id": "C_REVIEW_OBJECT",
+                "field_path": "",
+                "verdict": "SUPPORT"
+              }
+            ],
+            "required_dependencies": [],
+            "structural_refs": [
+              "EV_REVIEW",
+              "EV_REVIEW",
+              "E_RESULT"
+            ]
+          },
+          {
+            "id": "E_RESULT",
+            "collection": "entities",
+            "status": "ACCEPTED",
+            "identity_status": "ACCEPTED",
+            "errors": [],
+            "uncertain": [],
+            "sources": [
+              {
+                "quote": "检查其中的错误记录",
+                "occurrence": 1,
+                "span": [
+                  16,
+                  25
+                ],
+                "source_sha256": "04c3930ec42d7934eff83f9d2dce6110b95360f1416d3ecd20ce4c3d3c24eaf6"
+              },
+              {
+                "quote": "检查结果",
+                "occurrence": 1,
+                "span": [
+                  43,
+                  47
+                ],
+                "source_sha256": "04c3930ec42d7934eff83f9d2dce6110b95360f1416d3ecd20ce4c3d3c24eaf6"
+              }
+            ],
+            "audit_refs": [
+              {
+                "subject_id": "E_RESULT",
+                "field_path": "",
+                "verdict": "SUPPORT"
+              }
+            ],
+            "required_dependencies": [],
+            "structural_refs": []
+          }
+        ],
+        "audit": [
+          {
+            "subject_id": "EV_REVIEW",
+            "field_path": "",
+            "verdict": "SUPPORT",
+            "context_refs": [],
+            "sources": [
+              {
+                "quote": "由QA复核检查结果",
+                "occurrence": 1
+              }
+            ],
+            "reason": "复核是当前明确要求的动作，不是条件或背景内容。"
+          },
+          {
+            "subject_id": "C_REVIEW_QA",
+            "field_path": "",
+            "verdict": "SUPPORT",
+            "context_refs": [
+              "EV_REVIEW",
+              "E_QA"
+            ],
+            "sources": [
+              {
+                "quote": "由QA复核检查结果",
+                "occurrence": 1
+              }
+            ],
+            "reason": "QA明确承担REVIEWER职责，不传播为读取或检查执行者。"
+          },
+          {
+            "subject_id": "E_QA",
+            "field_path": "",
+            "verdict": "SUPPORT",
+            "context_refs": [],
+            "sources": [
+              {
+                "quote": "由QA复核检查结果",
+                "occurrence": 1
+              }
+            ],
+            "reason": "QA身份明确；OTHER不推定其为个人或组。"
+          },
+          {
+            "subject_id": "C_REVIEW_OBJECT",
+            "field_path": "",
+            "verdict": "SUPPORT",
+            "context_refs": [
+              "EV_REVIEW",
+              "E_RESULT",
+              "C_CHECK_RESULT"
+            ],
+            "sources": [
+              {
+                "quote": "检查其中的错误记录",
+                "occurrence": 1
+              },
+              {
+                "quote": "复核检查结果",
+                "occurrence": 1
+              }
+            ],
+            "reason": "复核对象是本次检查产生的同一结果，OBJECT保留内部消费用途，不误增外部输入。"
+          },
+          {
+            "subject_id": "E_RESULT",
+            "field_path": "",
+            "verdict": "SUPPORT",
+            "context_refs": [
+              "EV_CHECK",
+              "EV_REVIEW"
+            ],
+            "sources": [
+              {
+                "quote": "检查其中的错误记录",
+                "occurrence": 1
+              },
+              {
+                "quote": "由QA复核检查结果",
+                "occurrence": 1
+              }
+            ],
+            "reason": "全篇只有本次检查及其结果；两端mentions支持同一结果身份，未推定文件形式。"
+          }
+        ],
+        "context_references_are_not_required_dependencies": true
+      }
+    },
+    {
+      "id": "bf:0b5e7419d6fd00f64541",
+      "kind": "ROLE",
+      "status": "ACCEPTED",
+      "claim_ids": [
+        "C_READ_PM",
+        "E_PM",
+        "EV_READ",
+        "C_RETRY"
+      ],
+      "claim": {
+        "id": "C_READ_PM",
+        "kind": "ROLE",
+        "event_id": "EV_READ",
+        "entity_id": "E_PM",
+        "role": "PERFORMER",
+        "expression_id": null,
+        "direction": null,
+        "temporal": null,
+        "quantity": null,
+        "artifact_use": null,
+        "scope_id": "EV_READ",
+        "requires": [],
+        "sources": [
+          {
+            "quote": "请PM读取worker.log",
+            "occurrence": 1,
+            "span": [
+              0,
+              15
+            ],
+            "source_sha256": "04c3930ec42d7934eff83f9d2dce6110b95360f1416d3ecd20ce4c3d3c24eaf6"
+          }
+        ],
+        "note": "PM是读取执行者；岗位简称不推定个人或组类别。"
+      },
+      "event": {
+        "id": "EV_READ",
+        "predicate": "读取",
+        "kind": "ACTION",
+        "layer": "MAIN",
+        "use": "CURRENT_TASK",
+        "modality": "REQUIRED",
+        "polarity": "POSITIVE",
+        "owner_id": "ROOT",
+        "constraint_ids": [
+          "C_RETRY"
+        ],
+        "requires": [],
+        "sources": [
+          {
+            "quote": "请PM读取worker.log",
+            "occurrence": 1,
+            "span": [
+              0,
+              15
+            ],
+            "source_sha256": "04c3930ec42d7934eff83f9d2dce6110b95360f1416d3ecd20ce4c3d3c24eaf6"
+          }
+        ]
+      },
+      "entity": {
+        "id": "E_PM",
+        "label": "PM",
+        "type": "OTHER",
+        "mentions": [
+          {
+            "quote": "PM",
+            "occurrence": 1,
+            "span": [
+              1,
+              3
+            ],
+            "source_sha256": "04c3930ec42d7934eff83f9d2dce6110b95360f1416d3ecd20ce4c3d3c24eaf6"
+          }
+        ],
+        "alternatives": []
+      },
+      "expression": null,
+      "constraints": [
+        {
+          "id": "C_RETRY",
+          "kind": "QUANTITY",
+          "event_id": "EV_READ",
+          "entity_id": null,
+          "role": null,
+          "expression_id": null,
+          "direction": null,
+          "temporal": null,
+          "quantity": {
+            "metric": "重试次数",
+            "target_id": "EV_READ",
+            "comparator": "LTE",
+            "value": 2,
+            "unit": "次",
+            "use": "EXECUTION_LIMIT",
+            "count_scope": "EV_READ"
+          },
+          "artifact_use": null,
+          "scope_id": "EV_READ",
+          "requires": [],
+          "sources": [
+            {
+              "quote": "读取worker.log",
+              "occurrence": 1,
+              "span": [
+                3,
+                15
+              ],
+              "source_sha256": "04c3930ec42d7934eff83f9d2dce6110b95360f1416d3ecd20ce4c3d3c24eaf6"
+            },
+            {
+              "quote": "该读取操作最多重试2次",
+              "occurrence": 1,
+              "span": [
+                26,
+                37
+              ],
+              "source_sha256": "04c3930ec42d7934eff83f9d2dce6110b95360f1416d3ecd20ce4c3d3c24eaf6"
+            }
+          ],
+          "note": "限制读取操作的重试次数，不要求实际重试，也不是总读取次数上限。",
+          "expression": null
+        }
+      ],
+      "content_quantities": [],
+      "content_scopes": [],
+      "sources": [
+        {
+          "quote": "请PM读取worker.log",
+          "occurrence": 1,
+          "span": [
+            0,
+            15
+          ],
+          "source_sha256": "04c3930ec42d7934eff83f9d2dce6110b95360f1416d3ecd20ce4c3d3c24eaf6"
+        },
+        {
+          "quote": "请PM读取worker.log",
+          "occurrence": 1,
+          "span": [
+            0,
+            15
+          ],
+          "source_sha256": "04c3930ec42d7934eff83f9d2dce6110b95360f1416d3ecd20ce4c3d3c24eaf6"
+        },
+        {
+          "quote": "读取worker.log",
+          "occurrence": 1,
+          "span": [
+            3,
+            15
+          ],
+          "source_sha256": "04c3930ec42d7934eff83f9d2dce6110b95360f1416d3ecd20ce4c3d3c24eaf6"
+        },
+        {
+          "quote": "该读取操作最多重试2次",
+          "occurrence": 1,
+          "span": [
+            26,
+            37
+          ],
+          "source_sha256": "04c3930ec42d7934eff83f9d2dce6110b95360f1416d3ecd20ce4c3d3c24eaf6"
+        },
+        {
+          "quote": "PM",
+          "occurrence": 1,
+          "span": [
+            1,
+            3
+          ],
+          "source_sha256": "04c3930ec42d7934eff83f9d2dce6110b95360f1416d3ecd20ce4c3d3c24eaf6"
+        }
+      ],
+      "slots": [
+        "P"
+      ],
+      "proof": {
+        "source_sha256": "04c3930ec42d7934eff83f9d2dce6110b95360f1416d3ecd20ce4c3d3c24eaf6",
+        "claim_ids": [
+          "C_READ_PM",
+          "E_PM",
+          "EV_READ",
+          "C_RETRY"
+        ],
+        "provenance_refs": [
+          "C_READ_PM",
+          "EV_READ",
+          "C_RETRY",
+          "E_PM"
+        ],
+        "technical_policy": "028-r02-technical-v2",
+        "checks": [
+          {
+            "id": "C_READ_PM",
+            "collection": "claims",
+            "status": "ACCEPTED",
+            "errors": [],
+            "uncertain": [],
+            "sources": [
+              {
+                "quote": "请PM读取worker.log",
+                "occurrence": 1,
+                "span": [
+                  0,
+                  15
+                ],
+                "source_sha256": "04c3930ec42d7934eff83f9d2dce6110b95360f1416d3ecd20ce4c3d3c24eaf6"
+              }
+            ],
+            "audit_refs": [
+              {
+                "subject_id": "C_READ_PM",
+                "field_path": "",
+                "verdict": "SUPPORT"
+              }
+            ],
+            "required_dependencies": [],
+            "structural_refs": [
+              "EV_READ",
+              "EV_READ",
+              "E_PM"
+            ]
+          },
+          {
+            "id": "EV_READ",
+            "collection": "events",
+            "status": "ACCEPTED",
+            "errors": [],
+            "uncertain": [],
+            "sources": [
+              {
+                "quote": "请PM读取worker.log",
+                "occurrence": 1,
+                "span": [
+                  0,
+                  15
+                ],
+                "source_sha256": "04c3930ec42d7934eff83f9d2dce6110b95360f1416d3ecd20ce4c3d3c24eaf6"
+              }
+            ],
+            "audit_refs": [
+              {
+                "subject_id": "EV_READ",
+                "field_path": "",
+                "verdict": "SUPPORT"
+              }
+            ],
+            "required_dependencies": [],
+            "structural_refs": [
+              "ROOT",
+              "C_RETRY"
+            ]
+          },
+          {
+            "id": "C_RETRY",
+            "collection": "claims",
+            "status": "ACCEPTED",
+            "errors": [],
+            "uncertain": [],
+            "sources": [
+              {
+                "quote": "读取worker.log",
+                "occurrence": 1,
+                "span": [
+                  3,
+                  15
+                ],
+                "source_sha256": "04c3930ec42d7934eff83f9d2dce6110b95360f1416d3ecd20ce4c3d3c24eaf6"
+              },
+              {
+                "quote": "该读取操作最多重试2次",
+                "occurrence": 1,
+                "span": [
+                  26,
+                  37
+                ],
+                "source_sha256": "04c3930ec42d7934eff83f9d2dce6110b95360f1416d3ecd20ce4c3d3c24eaf6"
+              }
+            ],
+            "audit_refs": [
+              {
+                "subject_id": "C_RETRY",
+                "field_path": "",
+                "verdict": "SUPPORT"
+              }
+            ],
+            "required_dependencies": [],
+            "structural_refs": [
+              "EV_READ",
+              "EV_READ",
+              "EV_READ",
+              "EV_READ"
+            ]
+          },
+          {
+            "id": "E_PM",
+            "collection": "entities",
+            "status": "ACCEPTED",
+            "identity_status": "ACCEPTED",
+            "errors": [],
+            "uncertain": [],
+            "sources": [
+              {
+                "quote": "PM",
+                "occurrence": 1,
+                "span": [
+                  1,
+                  3
+                ],
+                "source_sha256": "04c3930ec42d7934eff83f9d2dce6110b95360f1416d3ecd20ce4c3d3c24eaf6"
+              }
+            ],
+            "audit_refs": [
+              {
+                "subject_id": "E_PM",
+                "field_path": "",
+                "verdict": "SUPPORT"
+              }
+            ],
+            "required_dependencies": [],
+            "structural_refs": []
+          }
+        ],
+        "audit": [
+          {
+            "subject_id": "C_READ_PM",
+            "field_path": "",
+            "verdict": "SUPPORT",
+            "context_refs": [
+              "EV_READ",
+              "E_PM"
+            ],
+            "sources": [
+              {
+                "quote": "请PM读取worker.log",
+                "occurrence": 1
+              }
+            ],
+            "reason": "PM明确承担读取执行职责。"
+          },
+          {
+            "subject_id": "EV_READ",
+            "field_path": "",
+            "verdict": "SUPPORT",
+            "context_refs": [
+              "C_RETRY"
+            ],
+            "sources": [
+              {
+                "quote": "请PM读取worker.log",
+                "occurrence": 1
+              },
+              {
+                "quote": "该读取操作最多重试2次",
+                "occurrence": 1
+              }
+            ],
+            "reason": "读取是当前必需动作，重试数量约束已双向绑定。"
+          },
+          {
+            "subject_id": "C_RETRY",
+            "field_path": "",
+            "verdict": "SUPPORT",
+            "context_refs": [
+              "EV_READ"
+            ],
+            "sources": [
+              {
+                "quote": "读取worker.log",
+                "occurrence": 1
+              },
+              {
+                "quote": "该读取操作最多重试2次",
+                "occurrence": 1
+              }
+            ],
+            "reason": "计数项为重试次数，目标和范围均为读取事件；LTE、2、次及EXECUTION_LIMIT正确，未限制总读取次数。"
+          },
+          {
+            "subject_id": "E_PM",
+            "field_path": "",
+            "verdict": "SUPPORT",
+            "context_refs": [],
+            "sources": [
+              {
+                "quote": "请PM读取worker.log",
+                "occurrence": 1
+              }
+            ],
+            "reason": "PM身份明确；OTHER可保留未指定的人或组类别。"
+          }
+        ],
+        "context_references_are_not_required_dependencies": true
+      }
+    },
+    {
+      "id": "bf:33d8a6dfb061b564fe0e",
+      "kind": "ROLE",
+      "status": "ACCEPTED",
+      "claim_ids": [
+        "C_READ_LOG",
+        "E_LOG",
+        "EV_READ",
+        "C_RETRY"
+      ],
+      "claim": {
+        "id": "C_READ_LOG",
+        "kind": "ROLE",
+        "event_id": "EV_READ",
+        "entity_id": "E_LOG",
+        "role": "INPUT_OBJECT",
+        "expression_id": null,
+        "direction": null,
+        "temporal": null,
+        "quantity": null,
+        "artifact_use": null,
+        "scope_id": "EV_READ",
+        "requires": [],
+        "sources": [
+          {
+            "quote": "读取worker.log",
+            "occurrence": 1,
+            "span": [
+              3,
+              15
+            ],
+            "source_sha256": "04c3930ec42d7934eff83f9d2dce6110b95360f1416d3ecd20ce4c3d3c24eaf6"
+          }
+        ],
+        "note": "日志文件是明确读取输入。"
+      },
+      "event": {
+        "id": "EV_READ",
+        "predicate": "读取",
+        "kind": "ACTION",
+        "layer": "MAIN",
+        "use": "CURRENT_TASK",
+        "modality": "REQUIRED",
+        "polarity": "POSITIVE",
+        "owner_id": "ROOT",
+        "constraint_ids": [
+          "C_RETRY"
+        ],
+        "requires": [],
+        "sources": [
+          {
+            "quote": "请PM读取worker.log",
+            "occurrence": 1,
+            "span": [
+              0,
+              15
+            ],
+            "source_sha256": "04c3930ec42d7934eff83f9d2dce6110b95360f1416d3ecd20ce4c3d3c24eaf6"
+          }
+        ]
+      },
+      "entity": {
+        "id": "E_LOG",
+        "label": "worker.log",
+        "type": "FILE",
+        "mentions": [
+          {
+            "quote": "worker.log",
+            "occurrence": 1,
+            "span": [
+              5,
+              15
+            ],
+            "source_sha256": "04c3930ec42d7934eff83f9d2dce6110b95360f1416d3ecd20ce4c3d3c24eaf6"
+          }
+        ],
+        "alternatives": []
+      },
+      "expression": null,
+      "constraints": [
+        {
+          "id": "C_RETRY",
+          "kind": "QUANTITY",
+          "event_id": "EV_READ",
+          "entity_id": null,
+          "role": null,
+          "expression_id": null,
+          "direction": null,
+          "temporal": null,
+          "quantity": {
+            "metric": "重试次数",
+            "target_id": "EV_READ",
+            "comparator": "LTE",
+            "value": 2,
+            "unit": "次",
+            "use": "EXECUTION_LIMIT",
+            "count_scope": "EV_READ"
+          },
+          "artifact_use": null,
+          "scope_id": "EV_READ",
+          "requires": [],
+          "sources": [
+            {
+              "quote": "读取worker.log",
+              "occurrence": 1,
+              "span": [
+                3,
+                15
+              ],
+              "source_sha256": "04c3930ec42d7934eff83f9d2dce6110b95360f1416d3ecd20ce4c3d3c24eaf6"
+            },
+            {
+              "quote": "该读取操作最多重试2次",
+              "occurrence": 1,
+              "span": [
+                26,
+                37
+              ],
+              "source_sha256": "04c3930ec42d7934eff83f9d2dce6110b95360f1416d3ecd20ce4c3d3c24eaf6"
+            }
+          ],
+          "note": "限制读取操作的重试次数，不要求实际重试，也不是总读取次数上限。",
+          "expression": null
+        }
+      ],
+      "content_quantities": [],
+      "content_scopes": [],
+      "sources": [
+        {
+          "quote": "读取worker.log",
+          "occurrence": 1,
+          "span": [
+            3,
+            15
+          ],
+          "source_sha256": "04c3930ec42d7934eff83f9d2dce6110b95360f1416d3ecd20ce4c3d3c24eaf6"
+        },
+        {
+          "quote": "请PM读取worker.log",
+          "occurrence": 1,
+          "span": [
+            0,
+            15
+          ],
+          "source_sha256": "04c3930ec42d7934eff83f9d2dce6110b95360f1416d3ecd20ce4c3d3c24eaf6"
+        },
+        {
+          "quote": "读取worker.log",
+          "occurrence": 1,
+          "span": [
+            3,
+            15
+          ],
+          "source_sha256": "04c3930ec42d7934eff83f9d2dce6110b95360f1416d3ecd20ce4c3d3c24eaf6"
+        },
+        {
+          "quote": "该读取操作最多重试2次",
+          "occurrence": 1,
+          "span": [
+            26,
+            37
+          ],
+          "source_sha256": "04c3930ec42d7934eff83f9d2dce6110b95360f1416d3ecd20ce4c3d3c24eaf6"
+        },
+        {
+          "quote": "worker.log",
+          "occurrence": 1,
+          "span": [
+            5,
+            15
+          ],
+          "source_sha256": "04c3930ec42d7934eff83f9d2dce6110b95360f1416d3ecd20ce4c3d3c24eaf6"
+        }
+      ],
+      "slots": [
+        "I"
+      ],
+      "proof": {
+        "source_sha256": "04c3930ec42d7934eff83f9d2dce6110b95360f1416d3ecd20ce4c3d3c24eaf6",
+        "claim_ids": [
+          "C_READ_LOG",
+          "E_LOG",
+          "EV_READ",
+          "C_RETRY"
+        ],
+        "provenance_refs": [
+          "C_READ_LOG",
+          "EV_READ",
+          "C_RETRY",
+          "E_LOG"
+        ],
+        "technical_policy": "028-r02-technical-v2",
+        "checks": [
+          {
+            "id": "C_READ_LOG",
+            "collection": "claims",
+            "status": "ACCEPTED",
+            "errors": [],
+            "uncertain": [],
+            "sources": [
+              {
+                "quote": "读取worker.log",
+                "occurrence": 1,
+                "span": [
+                  3,
+                  15
+                ],
+                "source_sha256": "04c3930ec42d7934eff83f9d2dce6110b95360f1416d3ecd20ce4c3d3c24eaf6"
+              }
+            ],
+            "audit_refs": [
+              {
+                "subject_id": "C_READ_LOG",
+                "field_path": "",
+                "verdict": "SUPPORT"
+              }
+            ],
+            "required_dependencies": [],
+            "structural_refs": [
+              "EV_READ",
+              "EV_READ",
+              "E_LOG"
+            ]
+          },
+          {
+            "id": "EV_READ",
+            "collection": "events",
+            "status": "ACCEPTED",
+            "errors": [],
+            "uncertain": [],
+            "sources": [
+              {
+                "quote": "请PM读取worker.log",
+                "occurrence": 1,
+                "span": [
+                  0,
+                  15
+                ],
+                "source_sha256": "04c3930ec42d7934eff83f9d2dce6110b95360f1416d3ecd20ce4c3d3c24eaf6"
+              }
+            ],
+            "audit_refs": [
+              {
+                "subject_id": "EV_READ",
+                "field_path": "",
+                "verdict": "SUPPORT"
+              }
+            ],
+            "required_dependencies": [],
+            "structural_refs": [
+              "ROOT",
+              "C_RETRY"
+            ]
+          },
+          {
+            "id": "C_RETRY",
+            "collection": "claims",
+            "status": "ACCEPTED",
+            "errors": [],
+            "uncertain": [],
+            "sources": [
+              {
+                "quote": "读取worker.log",
+                "occurrence": 1,
+                "span": [
+                  3,
+                  15
+                ],
+                "source_sha256": "04c3930ec42d7934eff83f9d2dce6110b95360f1416d3ecd20ce4c3d3c24eaf6"
+              },
+              {
+                "quote": "该读取操作最多重试2次",
+                "occurrence": 1,
+                "span": [
+                  26,
+                  37
+                ],
+                "source_sha256": "04c3930ec42d7934eff83f9d2dce6110b95360f1416d3ecd20ce4c3d3c24eaf6"
+              }
+            ],
+            "audit_refs": [
+              {
+                "subject_id": "C_RETRY",
+                "field_path": "",
+                "verdict": "SUPPORT"
+              }
+            ],
+            "required_dependencies": [],
+            "structural_refs": [
+              "EV_READ",
+              "EV_READ",
+              "EV_READ",
+              "EV_READ"
+            ]
+          },
+          {
+            "id": "E_LOG",
+            "collection": "entities",
+            "status": "ACCEPTED",
+            "identity_status": "ACCEPTED",
+            "errors": [],
+            "uncertain": [],
+            "sources": [
+              {
+                "quote": "worker.log",
+                "occurrence": 1,
+                "span": [
+                  5,
+                  15
+                ],
+                "source_sha256": "04c3930ec42d7934eff83f9d2dce6110b95360f1416d3ecd20ce4c3d3c24eaf6"
+              }
+            ],
+            "audit_refs": [
+              {
+                "subject_id": "E_LOG",
+                "field_path": "",
+                "verdict": "SUPPORT"
+              }
+            ],
+            "required_dependencies": [],
+            "structural_refs": []
+          }
+        ],
+        "audit": [
+          {
+            "subject_id": "C_READ_LOG",
+            "field_path": "",
+            "verdict": "SUPPORT",
+            "context_refs": [
+              "EV_READ",
+              "E_LOG"
+            ],
+            "sources": [
+              {
+                "quote": "读取worker.log",
+                "occurrence": 1
+              }
+            ],
+            "reason": "worker.log是明确读取输入。"
+          },
+          {
+            "subject_id": "EV_READ",
+            "field_path": "",
+            "verdict": "SUPPORT",
+            "context_refs": [
+              "C_RETRY"
+            ],
+            "sources": [
+              {
+                "quote": "请PM读取worker.log",
+                "occurrence": 1
+              },
+              {
+                "quote": "该读取操作最多重试2次",
+                "occurrence": 1
+              }
+            ],
+            "reason": "读取是当前必需动作，重试数量约束已双向绑定。"
+          },
+          {
+            "subject_id": "C_RETRY",
+            "field_path": "",
+            "verdict": "SUPPORT",
+            "context_refs": [
+              "EV_READ"
+            ],
+            "sources": [
+              {
+                "quote": "读取worker.log",
+                "occurrence": 1
+              },
+              {
+                "quote": "该读取操作最多重试2次",
+                "occurrence": 1
+              }
+            ],
+            "reason": "计数项为重试次数，目标和范围均为读取事件；LTE、2、次及EXECUTION_LIMIT正确，未限制总读取次数。"
+          },
+          {
+            "subject_id": "E_LOG",
+            "field_path": "",
+            "verdict": "SUPPORT",
+            "context_refs": [],
+            "sources": [
+              {
+                "quote": "读取worker.log",
+                "occurrence": 1
+              }
+            ],
+            "reason": "明确命名的日志文件，身份及FILE类型有支持。"
+          }
+        ],
+        "context_references_are_not_required_dependencies": true
+      }
+    },
+    {
+      "id": "bf:b4fe02b3dd7c6fec95fb",
+      "kind": "ROLE",
+      "status": "ACCEPTED",
+      "claim_ids": [
+        "C_CHECK_PM",
+        "E_PM",
+        "EV_CHECK"
+      ],
+      "claim": {
+        "id": "C_CHECK_PM",
+        "kind": "ROLE",
+        "event_id": "EV_CHECK",
+        "entity_id": "E_PM",
+        "role": "PERFORMER",
+        "expression_id": null,
+        "direction": null,
+        "temporal": null,
+        "quantity": null,
+        "artifact_use": null,
+        "scope_id": "EV_CHECK",
+        "requires": [],
+        "sources": [
+          {
+            "quote": "请PM读取worker.log",
+            "occurrence": 1,
+            "span": [
+              0,
+              15
+            ],
+            "source_sha256": "04c3930ec42d7934eff83f9d2dce6110b95360f1416d3ecd20ce4c3d3c24eaf6"
+          },
+          {
+            "quote": "并检查其中的错误记录",
+            "occurrence": 1,
+            "span": [
+              15,
+              25
+            ],
+            "source_sha256": "04c3930ec42d7934eff83f9d2dce6110b95360f1416d3ecd20ce4c3d3c24eaf6"
+          }
+        ],
+        "note": "同一指令的并列检查动作承接明确主语PM。"
+      },
+      "event": {
+        "id": "EV_CHECK",
+        "predicate": "检查错误记录",
+        "kind": "ACTION",
+        "layer": "MAIN",
+        "use": "CURRENT_TASK",
+        "modality": "REQUIRED",
+        "polarity": "POSITIVE",
+        "owner_id": "ROOT",
+        "constraint_ids": [],
+        "requires": [],
+        "sources": [
+          {
+            "quote": "请PM读取worker.log并检查其中的错误记录",
+            "occurrence": 1,
+            "span": [
+              0,
+              25
+            ],
+            "source_sha256": "04c3930ec42d7934eff83f9d2dce6110b95360f1416d3ecd20ce4c3d3c24eaf6"
+          }
+        ]
+      },
+      "entity": {
+        "id": "E_PM",
+        "label": "PM",
+        "type": "OTHER",
+        "mentions": [
+          {
+            "quote": "PM",
+            "occurrence": 1,
+            "span": [
+              1,
+              3
+            ],
+            "source_sha256": "04c3930ec42d7934eff83f9d2dce6110b95360f1416d3ecd20ce4c3d3c24eaf6"
+          }
+        ],
+        "alternatives": []
+      },
+      "expression": null,
+      "constraints": [],
+      "content_quantities": [],
+      "content_scopes": [],
+      "sources": [
+        {
+          "quote": "请PM读取worker.log",
+          "occurrence": 1,
+          "span": [
+            0,
+            15
+          ],
+          "source_sha256": "04c3930ec42d7934eff83f9d2dce6110b95360f1416d3ecd20ce4c3d3c24eaf6"
+        },
+        {
+          "quote": "并检查其中的错误记录",
+          "occurrence": 1,
+          "span": [
+            15,
+            25
+          ],
+          "source_sha256": "04c3930ec42d7934eff83f9d2dce6110b95360f1416d3ecd20ce4c3d3c24eaf6"
+        },
+        {
+          "quote": "请PM读取worker.log并检查其中的错误记录",
+          "occurrence": 1,
+          "span": [
+            0,
+            25
+          ],
+          "source_sha256": "04c3930ec42d7934eff83f9d2dce6110b95360f1416d3ecd20ce4c3d3c24eaf6"
+        },
+        {
+          "quote": "PM",
+          "occurrence": 1,
+          "span": [
+            1,
+            3
+          ],
+          "source_sha256": "04c3930ec42d7934eff83f9d2dce6110b95360f1416d3ecd20ce4c3d3c24eaf6"
+        }
+      ],
+      "slots": [
+        "P"
+      ],
+      "proof": {
+        "source_sha256": "04c3930ec42d7934eff83f9d2dce6110b95360f1416d3ecd20ce4c3d3c24eaf6",
+        "claim_ids": [
+          "C_CHECK_PM",
+          "E_PM",
+          "EV_CHECK"
+        ],
+        "provenance_refs": [
+          "C_CHECK_PM",
+          "EV_CHECK",
+          "E_PM"
+        ],
+        "technical_policy": "028-r02-technical-v2",
+        "checks": [
+          {
+            "id": "C_CHECK_PM",
+            "collection": "claims",
+            "status": "ACCEPTED",
+            "errors": [],
+            "uncertain": [],
+            "sources": [
+              {
+                "quote": "请PM读取worker.log",
+                "occurrence": 1,
+                "span": [
+                  0,
+                  15
+                ],
+                "source_sha256": "04c3930ec42d7934eff83f9d2dce6110b95360f1416d3ecd20ce4c3d3c24eaf6"
+              },
+              {
+                "quote": "并检查其中的错误记录",
+                "occurrence": 1,
+                "span": [
+                  15,
+                  25
+                ],
+                "source_sha256": "04c3930ec42d7934eff83f9d2dce6110b95360f1416d3ecd20ce4c3d3c24eaf6"
+              }
+            ],
+            "audit_refs": [
+              {
+                "subject_id": "C_CHECK_PM",
+                "field_path": "",
+                "verdict": "SUPPORT"
+              }
+            ],
+            "required_dependencies": [],
+            "structural_refs": [
+              "EV_CHECK",
+              "EV_CHECK",
+              "E_PM"
+            ]
+          },
+          {
+            "id": "EV_CHECK",
+            "collection": "events",
+            "status": "ACCEPTED",
+            "errors": [],
+            "uncertain": [],
+            "sources": [
+              {
+                "quote": "请PM读取worker.log并检查其中的错误记录",
+                "occurrence": 1,
+                "span": [
+                  0,
+                  25
+                ],
+                "source_sha256": "04c3930ec42d7934eff83f9d2dce6110b95360f1416d3ecd20ce4c3d3c24eaf6"
+              }
+            ],
+            "audit_refs": [
+              {
+                "subject_id": "EV_CHECK",
+                "field_path": "",
+                "verdict": "SUPPORT"
+              }
+            ],
+            "required_dependencies": [],
+            "structural_refs": [
+              "ROOT"
+            ]
+          },
+          {
+            "id": "E_PM",
+            "collection": "entities",
+            "status": "ACCEPTED",
+            "identity_status": "ACCEPTED",
+            "errors": [],
+            "uncertain": [],
+            "sources": [
+              {
+                "quote": "PM",
+                "occurrence": 1,
+                "span": [
+                  1,
+                  3
+                ],
+                "source_sha256": "04c3930ec42d7934eff83f9d2dce6110b95360f1416d3ecd20ce4c3d3c24eaf6"
+              }
+            ],
+            "audit_refs": [
+              {
+                "subject_id": "E_PM",
+                "field_path": "",
+                "verdict": "SUPPORT"
+              }
+            ],
+            "required_dependencies": [],
+            "structural_refs": []
+          }
+        ],
+        "audit": [
+          {
+            "subject_id": "C_CHECK_PM",
+            "field_path": "",
+            "verdict": "SUPPORT",
+            "context_refs": [
+              "EV_CHECK",
+              "E_PM"
+            ],
+            "sources": [
+              {
+                "quote": "请PM读取worker.log",
+                "occurrence": 1
+              },
+              {
+                "quote": "并检查其中的错误记录",
+                "occurrence": 1
+              }
+            ],
+            "reason": "同一指令的并列动作承接PM主语，两端来源齐全；QA仅在后续复核职责处出现。"
+          },
+          {
+            "subject_id": "EV_CHECK",
+            "field_path": "",
+            "verdict": "SUPPORT",
+            "context_refs": [],
+            "sources": [
+              {
+                "quote": "请PM读取worker.log并检查其中的错误记录",
+                "occurrence": 1
+              }
+            ],
+            "reason": "检查是同一指令中的并列必需动作；原文未明确另加事件先后约束。"
+          },
+          {
+            "subject_id": "E_PM",
+            "field_path": "",
+            "verdict": "SUPPORT",
+            "context_refs": [],
+            "sources": [
+              {
+                "quote": "请PM读取worker.log",
+                "occurrence": 1
+              }
+            ],
+            "reason": "PM身份明确；OTHER可保留未指定的人或组类别。"
+          }
+        ],
+        "context_references_are_not_required_dependencies": true
+      }
+    },
+    {
+      "id": "bf:1c587ca2779072a10485",
+      "kind": "ROLE",
+      "status": "ACCEPTED",
+      "claim_ids": [
+        "C_CHECK_ERRORS",
+        "E_ERRORS",
+        "EV_CHECK"
+      ],
+      "claim": {
+        "id": "C_CHECK_ERRORS",
+        "kind": "ROLE",
+        "event_id": "EV_CHECK",
+        "entity_id": "E_ERRORS",
+        "role": "INPUT_OBJECT",
+        "expression_id": null,
+        "direction": null,
+        "temporal": null,
+        "quantity": null,
+        "artifact_use": null,
+        "scope_id": "EV_CHECK",
+        "requires": [],
+        "sources": [
+          {
+            "quote": "worker.log",
+            "occurrence": 1,
+            "span": [
+              5,
+              15
+            ],
+            "source_sha256": "04c3930ec42d7934eff83f9d2dce6110b95360f1416d3ecd20ce4c3d3c24eaf6"
+          },
+          {
+            "quote": "检查其中的错误记录",
+            "occurrence": 1,
+            "span": [
+              16,
+              25
+            ],
+            "source_sha256": "04c3930ec42d7934eff83f9d2dce6110b95360f1416d3ecd20ce4c3d3c24eaf6"
+          }
+        ],
+        "note": "“其中”指worker.log；受检范围是该日志中的错误记录。"
+      },
+      "event": {
+        "id": "EV_CHECK",
+        "predicate": "检查错误记录",
+        "kind": "ACTION",
+        "layer": "MAIN",
+        "use": "CURRENT_TASK",
+        "modality": "REQUIRED",
+        "polarity": "POSITIVE",
+        "owner_id": "ROOT",
+        "constraint_ids": [],
+        "requires": [],
+        "sources": [
+          {
+            "quote": "请PM读取worker.log并检查其中的错误记录",
+            "occurrence": 1,
+            "span": [
+              0,
+              25
+            ],
+            "source_sha256": "04c3930ec42d7934eff83f9d2dce6110b95360f1416d3ecd20ce4c3d3c24eaf6"
+          }
+        ]
+      },
+      "entity": {
+        "id": "E_ERRORS",
+        "label": "worker.log中的错误记录",
+        "type": "OTHER",
+        "mentions": [
+          {
+            "quote": "worker.log",
+            "occurrence": 1,
+            "span": [
+              5,
+              15
+            ],
+            "source_sha256": "04c3930ec42d7934eff83f9d2dce6110b95360f1416d3ecd20ce4c3d3c24eaf6"
+          },
+          {
+            "quote": "其中的错误记录",
+            "occurrence": 1,
+            "span": [
+              18,
+              25
+            ],
+            "source_sha256": "04c3930ec42d7934eff83f9d2dce6110b95360f1416d3ecd20ce4c3d3c24eaf6"
+          }
+        ],
+        "alternatives": []
+      },
+      "expression": null,
+      "constraints": [],
+      "content_quantities": [],
+      "content_scopes": [],
+      "sources": [
+        {
+          "quote": "worker.log",
+          "occurrence": 1,
+          "span": [
+            5,
+            15
+          ],
+          "source_sha256": "04c3930ec42d7934eff83f9d2dce6110b95360f1416d3ecd20ce4c3d3c24eaf6"
+        },
+        {
+          "quote": "检查其中的错误记录",
+          "occurrence": 1,
+          "span": [
+            16,
+            25
+          ],
+          "source_sha256": "04c3930ec42d7934eff83f9d2dce6110b95360f1416d3ecd20ce4c3d3c24eaf6"
+        },
+        {
+          "quote": "请PM读取worker.log并检查其中的错误记录",
+          "occurrence": 1,
+          "span": [
+            0,
+            25
+          ],
+          "source_sha256": "04c3930ec42d7934eff83f9d2dce6110b95360f1416d3ecd20ce4c3d3c24eaf6"
+        },
+        {
+          "quote": "worker.log",
+          "occurrence": 1,
+          "span": [
+            5,
+            15
+          ],
+          "source_sha256": "04c3930ec42d7934eff83f9d2dce6110b95360f1416d3ecd20ce4c3d3c24eaf6"
+        },
+        {
+          "quote": "其中的错误记录",
+          "occurrence": 1,
+          "span": [
+            18,
+            25
+          ],
+          "source_sha256": "04c3930ec42d7934eff83f9d2dce6110b95360f1416d3ecd20ce4c3d3c24eaf6"
+        }
+      ],
+      "slots": [
+        "I"
+      ],
+      "proof": {
+        "source_sha256": "04c3930ec42d7934eff83f9d2dce6110b95360f1416d3ecd20ce4c3d3c24eaf6",
+        "claim_ids": [
+          "C_CHECK_ERRORS",
+          "E_ERRORS",
+          "EV_CHECK"
+        ],
+        "provenance_refs": [
+          "C_CHECK_ERRORS",
+          "EV_CHECK",
+          "E_ERRORS"
+        ],
+        "technical_policy": "028-r02-technical-v2",
+        "checks": [
+          {
+            "id": "C_CHECK_ERRORS",
+            "collection": "claims",
+            "status": "ACCEPTED",
+            "errors": [],
+            "uncertain": [],
+            "sources": [
+              {
+                "quote": "worker.log",
+                "occurrence": 1,
+                "span": [
+                  5,
+                  15
+                ],
+                "source_sha256": "04c3930ec42d7934eff83f9d2dce6110b95360f1416d3ecd20ce4c3d3c24eaf6"
+              },
+              {
+                "quote": "检查其中的错误记录",
+                "occurrence": 1,
+                "span": [
+                  16,
+                  25
+                ],
+                "source_sha256": "04c3930ec42d7934eff83f9d2dce6110b95360f1416d3ecd20ce4c3d3c24eaf6"
+              }
+            ],
+            "audit_refs": [
+              {
+                "subject_id": "C_CHECK_ERRORS",
+                "field_path": "",
+                "verdict": "SUPPORT"
+              }
+            ],
+            "required_dependencies": [],
+            "structural_refs": [
+              "EV_CHECK",
+              "EV_CHECK",
+              "E_ERRORS"
+            ]
+          },
+          {
+            "id": "EV_CHECK",
+            "collection": "events",
+            "status": "ACCEPTED",
+            "errors": [],
+            "uncertain": [],
+            "sources": [
+              {
+                "quote": "请PM读取worker.log并检查其中的错误记录",
+                "occurrence": 1,
+                "span": [
+                  0,
+                  25
+                ],
+                "source_sha256": "04c3930ec42d7934eff83f9d2dce6110b95360f1416d3ecd20ce4c3d3c24eaf6"
+              }
+            ],
+            "audit_refs": [
+              {
+                "subject_id": "EV_CHECK",
+                "field_path": "",
+                "verdict": "SUPPORT"
+              }
+            ],
+            "required_dependencies": [],
+            "structural_refs": [
+              "ROOT"
+            ]
+          },
+          {
+            "id": "E_ERRORS",
+            "collection": "entities",
+            "status": "ACCEPTED",
+            "identity_status": "ACCEPTED",
+            "errors": [],
+            "uncertain": [],
+            "sources": [
+              {
+                "quote": "worker.log",
+                "occurrence": 1,
+                "span": [
+                  5,
+                  15
+                ],
+                "source_sha256": "04c3930ec42d7934eff83f9d2dce6110b95360f1416d3ecd20ce4c3d3c24eaf6"
+              },
+              {
+                "quote": "其中的错误记录",
+                "occurrence": 1,
+                "span": [
+                  18,
+                  25
+                ],
+                "source_sha256": "04c3930ec42d7934eff83f9d2dce6110b95360f1416d3ecd20ce4c3d3c24eaf6"
+              }
+            ],
+            "audit_refs": [
+              {
+                "subject_id": "E_ERRORS",
+                "field_path": "",
+                "verdict": "SUPPORT"
+              }
+            ],
+            "required_dependencies": [],
+            "structural_refs": []
+          }
+        ],
+        "audit": [
+          {
+            "subject_id": "C_CHECK_ERRORS",
+            "field_path": "",
+            "verdict": "SUPPORT",
+            "context_refs": [
+              "EV_CHECK",
+              "E_ERRORS",
+              "E_LOG"
+            ],
+            "sources": [
+              {
+                "quote": "worker.log",
+                "occurrence": 1
+              },
+              {
+                "quote": "检查其中的错误记录",
+                "occurrence": 1
+              }
+            ],
+            "reason": "受检范围明确限定为worker.log中的错误记录，INPUT_OBJECT绑定正确。"
+          },
+          {
+            "subject_id": "EV_CHECK",
+            "field_path": "",
+            "verdict": "SUPPORT",
+            "context_refs": [],
+            "sources": [
+              {
+                "quote": "请PM读取worker.log并检查其中的错误记录",
+                "occurrence": 1
+              }
+            ],
+            "reason": "检查是同一指令中的并列必需动作；原文未明确另加事件先后约束。"
+          },
+          {
+            "subject_id": "E_ERRORS",
+            "field_path": "",
+            "verdict": "SUPPORT",
+            "context_refs": [
+              "E_LOG"
+            ],
+            "sources": [
+              {
+                "quote": "读取worker.log并检查其中的错误记录",
+                "occurrence": 1
+              }
+            ],
+            "reason": "其中指向worker.log，受检对象是该文件中的错误记录。"
+          }
+        ],
+        "context_references_are_not_required_dependencies": true
+      }
+    },
+    {
+      "id": "bf:b7846960b833f5b80b7c",
+      "kind": "ROLE",
+      "status": "ACCEPTED",
+      "claim_ids": [
+        "C_CHECK_RESULT",
+        "E_RESULT",
+        "EV_CHECK"
+      ],
+      "claim": {
+        "id": "C_CHECK_RESULT",
+        "kind": "ROLE",
+        "event_id": "EV_CHECK",
+        "entity_id": "E_RESULT",
+        "role": "RESULT",
+        "expression_id": null,
+        "direction": null,
+        "temporal": null,
+        "quantity": null,
+        "artifact_use": null,
+        "scope_id": "EV_CHECK",
+        "requires": [],
+        "sources": [
+          {
+            "quote": "检查其中的错误记录",
+            "occurrence": 1,
+            "span": [
+              16,
+              25
+            ],
+            "source_sha256": "04c3930ec42d7934eff83f9d2dce6110b95360f1416d3ecd20ce4c3d3c24eaf6"
+          },
+          {
+            "quote": "复核检查结果",
+            "occurrence": 1,
+            "span": [
+              41,
+              47
+            ],
+            "source_sha256": "04c3930ec42d7934eff83f9d2dce6110b95360f1416d3ecd20ce4c3d3c24eaf6"
+          }
+        ],
+        "note": "后文检查结果指本次检查产生的结果，不推定文件形式或交付义务。"
+      },
+      "event": {
+        "id": "EV_CHECK",
+        "predicate": "检查错误记录",
+        "kind": "ACTION",
+        "layer": "MAIN",
+        "use": "CURRENT_TASK",
+        "modality": "REQUIRED",
+        "polarity": "POSITIVE",
+        "owner_id": "ROOT",
+        "constraint_ids": [],
+        "requires": [],
+        "sources": [
+          {
+            "quote": "请PM读取worker.log并检查其中的错误记录",
+            "occurrence": 1,
+            "span": [
+              0,
+              25
+            ],
+            "source_sha256": "04c3930ec42d7934eff83f9d2dce6110b95360f1416d3ecd20ce4c3d3c24eaf6"
+          }
+        ]
+      },
+      "entity": {
+        "id": "E_RESULT",
+        "label": "检查结果",
+        "type": "OTHER",
+        "mentions": [
+          {
+            "quote": "检查其中的错误记录",
+            "occurrence": 1,
+            "span": [
+              16,
+              25
+            ],
+            "source_sha256": "04c3930ec42d7934eff83f9d2dce6110b95360f1416d3ecd20ce4c3d3c24eaf6"
+          },
+          {
+            "quote": "检查结果",
+            "occurrence": 1,
+            "span": [
+              43,
+              47
+            ],
+            "source_sha256": "04c3930ec42d7934eff83f9d2dce6110b95360f1416d3ecd20ce4c3d3c24eaf6"
+          }
+        ],
+        "alternatives": []
+      },
+      "expression": null,
+      "constraints": [],
+      "content_quantities": [],
+      "content_scopes": [],
+      "sources": [
+        {
+          "quote": "检查其中的错误记录",
+          "occurrence": 1,
+          "span": [
+            16,
+            25
+          ],
+          "source_sha256": "04c3930ec42d7934eff83f9d2dce6110b95360f1416d3ecd20ce4c3d3c24eaf6"
+        },
+        {
+          "quote": "复核检查结果",
+          "occurrence": 1,
+          "span": [
+            41,
+            47
+          ],
+          "source_sha256": "04c3930ec42d7934eff83f9d2dce6110b95360f1416d3ecd20ce4c3d3c24eaf6"
+        },
+        {
+          "quote": "请PM读取worker.log并检查其中的错误记录",
+          "occurrence": 1,
+          "span": [
+            0,
+            25
+          ],
+          "source_sha256": "04c3930ec42d7934eff83f9d2dce6110b95360f1416d3ecd20ce4c3d3c24eaf6"
+        },
+        {
+          "quote": "检查其中的错误记录",
+          "occurrence": 1,
+          "span": [
+            16,
+            25
+          ],
+          "source_sha256": "04c3930ec42d7934eff83f9d2dce6110b95360f1416d3ecd20ce4c3d3c24eaf6"
+        },
+        {
+          "quote": "检查结果",
+          "occurrence": 1,
+          "span": [
+            43,
+            47
+          ],
+          "source_sha256": "04c3930ec42d7934eff83f9d2dce6110b95360f1416d3ecd20ce4c3d3c24eaf6"
+        }
+      ],
+      "slots": [
+        "O"
+      ],
+      "proof": {
+        "source_sha256": "04c3930ec42d7934eff83f9d2dce6110b95360f1416d3ecd20ce4c3d3c24eaf6",
+        "claim_ids": [
+          "C_CHECK_RESULT",
+          "E_RESULT",
+          "EV_CHECK"
+        ],
+        "provenance_refs": [
+          "C_CHECK_RESULT",
+          "EV_CHECK",
+          "E_RESULT"
+        ],
+        "technical_policy": "028-r02-technical-v2",
+        "checks": [
+          {
+            "id": "C_CHECK_RESULT",
+            "collection": "claims",
+            "status": "ACCEPTED",
+            "errors": [],
+            "uncertain": [],
+            "sources": [
+              {
+                "quote": "检查其中的错误记录",
+                "occurrence": 1,
+                "span": [
+                  16,
+                  25
+                ],
+                "source_sha256": "04c3930ec42d7934eff83f9d2dce6110b95360f1416d3ecd20ce4c3d3c24eaf6"
+              },
+              {
+                "quote": "复核检查结果",
+                "occurrence": 1,
+                "span": [
+                  41,
+                  47
+                ],
+                "source_sha256": "04c3930ec42d7934eff83f9d2dce6110b95360f1416d3ecd20ce4c3d3c24eaf6"
+              }
+            ],
+            "audit_refs": [
+              {
+                "subject_id": "C_CHECK_RESULT",
+                "field_path": "",
+                "verdict": "SUPPORT"
+              }
+            ],
+            "required_dependencies": [],
+            "structural_refs": [
+              "EV_CHECK",
+              "EV_CHECK",
+              "E_RESULT"
+            ]
+          },
+          {
+            "id": "EV_CHECK",
+            "collection": "events",
+            "status": "ACCEPTED",
+            "errors": [],
+            "uncertain": [],
+            "sources": [
+              {
+                "quote": "请PM读取worker.log并检查其中的错误记录",
+                "occurrence": 1,
+                "span": [
+                  0,
+                  25
+                ],
+                "source_sha256": "04c3930ec42d7934eff83f9d2dce6110b95360f1416d3ecd20ce4c3d3c24eaf6"
+              }
+            ],
+            "audit_refs": [
+              {
+                "subject_id": "EV_CHECK",
+                "field_path": "",
+                "verdict": "SUPPORT"
+              }
+            ],
+            "required_dependencies": [],
+            "structural_refs": [
+              "ROOT"
+            ]
+          },
+          {
+            "id": "E_RESULT",
+            "collection": "entities",
+            "status": "ACCEPTED",
+            "identity_status": "ACCEPTED",
+            "errors": [],
+            "uncertain": [],
+            "sources": [
+              {
+                "quote": "检查其中的错误记录",
+                "occurrence": 1,
+                "span": [
+                  16,
+                  25
+                ],
+                "source_sha256": "04c3930ec42d7934eff83f9d2dce6110b95360f1416d3ecd20ce4c3d3c24eaf6"
+              },
+              {
+                "quote": "检查结果",
+                "occurrence": 1,
+                "span": [
+                  43,
+                  47
+                ],
+                "source_sha256": "04c3930ec42d7934eff83f9d2dce6110b95360f1416d3ecd20ce4c3d3c24eaf6"
+              }
+            ],
+            "audit_refs": [
+              {
+                "subject_id": "E_RESULT",
+                "field_path": "",
+                "verdict": "SUPPORT"
+              }
+            ],
+            "required_dependencies": [],
+            "structural_refs": []
+          }
+        ],
+        "audit": [
+          {
+            "subject_id": "C_CHECK_RESULT",
+            "field_path": "",
+            "verdict": "SUPPORT",
+            "context_refs": [
+              "EV_CHECK",
+              "E_RESULT"
+            ],
+            "sources": [
+              {
+                "quote": "检查其中的错误记录",
+                "occurrence": 1
+              },
+              {
+                "quote": "复核检查结果",
+                "occurrence": 1
+              }
+            ],
+            "reason": "后文明确引用本次检查结果，支持检查的RESULT用途，不增加文件生成或交付要求。"
+          },
+          {
+            "subject_id": "EV_CHECK",
+            "field_path": "",
+            "verdict": "SUPPORT",
+            "context_refs": [],
+            "sources": [
+              {
+                "quote": "请PM读取worker.log并检查其中的错误记录",
+                "occurrence": 1
+              }
+            ],
+            "reason": "检查是同一指令中的并列必需动作；原文未明确另加事件先后约束。"
+          },
+          {
+            "subject_id": "E_RESULT",
+            "field_path": "",
+            "verdict": "SUPPORT",
+            "context_refs": [
+              "EV_CHECK",
+              "EV_REVIEW"
+            ],
+            "sources": [
+              {
+                "quote": "检查其中的错误记录",
+                "occurrence": 1
+              },
+              {
+                "quote": "由QA复核检查结果",
+                "occurrence": 1
+              }
+            ],
+            "reason": "全篇只有本次检查及其结果；两端mentions支持同一结果身份，未推定文件形式。"
+          }
+        ],
+        "context_references_are_not_required_dependencies": true
+      }
+    },
+    {
+      "id": "bf:da90f53f1b497963ea7f",
+      "kind": "QUANTITY",
+      "status": "ACCEPTED",
+      "claim_ids": [
+        "C_RETRY",
+        "EV_READ"
+      ],
+      "claim": {
+        "id": "C_RETRY",
+        "kind": "QUANTITY",
+        "event_id": "EV_READ",
+        "entity_id": null,
+        "role": null,
+        "expression_id": null,
+        "direction": null,
+        "temporal": null,
+        "quantity": {
+          "metric": "重试次数",
+          "target_id": "EV_READ",
+          "comparator": "LTE",
+          "value": 2,
+          "unit": "次",
+          "use": "EXECUTION_LIMIT",
+          "count_scope": "EV_READ"
+        },
+        "artifact_use": null,
+        "scope_id": "EV_READ",
+        "requires": [],
+        "sources": [
+          {
+            "quote": "读取worker.log",
+            "occurrence": 1,
+            "span": [
+              3,
+              15
+            ],
+            "source_sha256": "04c3930ec42d7934eff83f9d2dce6110b95360f1416d3ecd20ce4c3d3c24eaf6"
+          },
+          {
+            "quote": "该读取操作最多重试2次",
+            "occurrence": 1,
+            "span": [
+              26,
+              37
+            ],
+            "source_sha256": "04c3930ec42d7934eff83f9d2dce6110b95360f1416d3ecd20ce4c3d3c24eaf6"
+          }
+        ],
+        "note": "限制读取操作的重试次数，不要求实际重试，也不是总读取次数上限。"
+      },
+      "event": {
+        "id": "EV_READ",
+        "predicate": "读取",
+        "kind": "ACTION",
+        "layer": "MAIN",
+        "use": "CURRENT_TASK",
+        "modality": "REQUIRED",
+        "polarity": "POSITIVE",
+        "owner_id": "ROOT",
+        "constraint_ids": [
+          "C_RETRY"
+        ],
+        "requires": [],
+        "sources": [
+          {
+            "quote": "请PM读取worker.log",
+            "occurrence": 1,
+            "span": [
+              0,
+              15
+            ],
+            "source_sha256": "04c3930ec42d7934eff83f9d2dce6110b95360f1416d3ecd20ce4c3d3c24eaf6"
+          }
+        ]
+      },
+      "entity": null,
+      "expression": null,
+      "constraints": [
+        {
+          "id": "C_RETRY",
+          "kind": "QUANTITY",
+          "event_id": "EV_READ",
+          "entity_id": null,
+          "role": null,
+          "expression_id": null,
+          "direction": null,
+          "temporal": null,
+          "quantity": {
+            "metric": "重试次数",
+            "target_id": "EV_READ",
+            "comparator": "LTE",
+            "value": 2,
+            "unit": "次",
+            "use": "EXECUTION_LIMIT",
+            "count_scope": "EV_READ"
+          },
+          "artifact_use": null,
+          "scope_id": "EV_READ",
+          "requires": [],
+          "sources": [
+            {
+              "quote": "读取worker.log",
+              "occurrence": 1,
+              "span": [
+                3,
+                15
+              ],
+              "source_sha256": "04c3930ec42d7934eff83f9d2dce6110b95360f1416d3ecd20ce4c3d3c24eaf6"
+            },
+            {
+              "quote": "该读取操作最多重试2次",
+              "occurrence": 1,
+              "span": [
+                26,
+                37
+              ],
+              "source_sha256": "04c3930ec42d7934eff83f9d2dce6110b95360f1416d3ecd20ce4c3d3c24eaf6"
+            }
+          ],
+          "note": "限制读取操作的重试次数，不要求实际重试，也不是总读取次数上限。",
+          "expression": null
+        }
+      ],
+      "content_quantities": [],
+      "content_scopes": [],
+      "sources": [
+        {
+          "quote": "读取worker.log",
+          "occurrence": 1,
+          "span": [
+            3,
+            15
+          ],
+          "source_sha256": "04c3930ec42d7934eff83f9d2dce6110b95360f1416d3ecd20ce4c3d3c24eaf6"
+        },
+        {
+          "quote": "该读取操作最多重试2次",
+          "occurrence": 1,
+          "span": [
+            26,
+            37
+          ],
+          "source_sha256": "04c3930ec42d7934eff83f9d2dce6110b95360f1416d3ecd20ce4c3d3c24eaf6"
+        },
+        {
+          "quote": "请PM读取worker.log",
+          "occurrence": 1,
+          "span": [
+            0,
+            15
+          ],
+          "source_sha256": "04c3930ec42d7934eff83f9d2dce6110b95360f1416d3ecd20ce4c3d3c24eaf6"
+        }
+      ],
+      "slots": [
+        "R"
+      ],
+      "proof": {
+        "source_sha256": "04c3930ec42d7934eff83f9d2dce6110b95360f1416d3ecd20ce4c3d3c24eaf6",
+        "claim_ids": [
+          "C_RETRY",
+          "EV_READ"
+        ],
+        "provenance_refs": [
+          "C_RETRY",
+          "EV_READ"
+        ],
+        "technical_policy": "028-r02-technical-v2",
+        "checks": [
+          {
+            "id": "C_RETRY",
+            "collection": "claims",
+            "status": "ACCEPTED",
+            "errors": [],
+            "uncertain": [],
+            "sources": [
+              {
+                "quote": "读取worker.log",
+                "occurrence": 1,
+                "span": [
+                  3,
+                  15
+                ],
+                "source_sha256": "04c3930ec42d7934eff83f9d2dce6110b95360f1416d3ecd20ce4c3d3c24eaf6"
+              },
+              {
+                "quote": "该读取操作最多重试2次",
+                "occurrence": 1,
+                "span": [
+                  26,
+                  37
+                ],
+                "source_sha256": "04c3930ec42d7934eff83f9d2dce6110b95360f1416d3ecd20ce4c3d3c24eaf6"
+              }
+            ],
+            "audit_refs": [
+              {
+                "subject_id": "C_RETRY",
+                "field_path": "",
+                "verdict": "SUPPORT"
+              }
+            ],
+            "required_dependencies": [],
+            "structural_refs": [
+              "EV_READ",
+              "EV_READ",
+              "EV_READ",
+              "EV_READ"
+            ]
+          },
+          {
+            "id": "EV_READ",
+            "collection": "events",
+            "status": "ACCEPTED",
+            "errors": [],
+            "uncertain": [],
+            "sources": [
+              {
+                "quote": "请PM读取worker.log",
+                "occurrence": 1,
+                "span": [
+                  0,
+                  15
+                ],
+                "source_sha256": "04c3930ec42d7934eff83f9d2dce6110b95360f1416d3ecd20ce4c3d3c24eaf6"
+              }
+            ],
+            "audit_refs": [
+              {
+                "subject_id": "EV_READ",
+                "field_path": "",
+                "verdict": "SUPPORT"
+              }
+            ],
+            "required_dependencies": [],
+            "structural_refs": [
+              "ROOT",
+              "C_RETRY"
+            ]
+          }
+        ],
+        "audit": [
+          {
+            "subject_id": "C_RETRY",
+            "field_path": "",
+            "verdict": "SUPPORT",
+            "context_refs": [
+              "EV_READ"
+            ],
+            "sources": [
+              {
+                "quote": "读取worker.log",
+                "occurrence": 1
+              },
+              {
+                "quote": "该读取操作最多重试2次",
+                "occurrence": 1
+              }
+            ],
+            "reason": "计数项为重试次数，目标和范围均为读取事件；LTE、2、次及EXECUTION_LIMIT正确，未限制总读取次数。"
+          },
+          {
+            "subject_id": "EV_READ",
+            "field_path": "",
+            "verdict": "SUPPORT",
+            "context_refs": [
+              "C_RETRY"
+            ],
+            "sources": [
+              {
+                "quote": "请PM读取worker.log",
+                "occurrence": 1
+              },
+              {
+                "quote": "该读取操作最多重试2次",
+                "occurrence": 1
+              }
+            ],
+            "reason": "读取是当前必需动作，重试数量约束已双向绑定。"
+          }
+        ],
+        "context_references_are_not_required_dependencies": true
+      }
+    },
+    {
+      "id": "bf:ba361023ed962cb25b0f",
+      "kind": "ROLE",
+      "status": "ACCEPTED",
+      "claim_ids": [
+        "C_REVIEW_QA",
+        "E_QA",
+        "EV_REVIEW"
+      ],
+      "claim": {
+        "id": "C_REVIEW_QA",
+        "kind": "ROLE",
+        "event_id": "EV_REVIEW",
+        "entity_id": "E_QA",
+        "role": "REVIEWER",
+        "expression_id": null,
+        "direction": null,
+        "temporal": null,
+        "quantity": null,
+        "artifact_use": null,
+        "scope_id": "EV_REVIEW",
+        "requires": [],
+        "sources": [
+          {
+            "quote": "由QA复核检查结果",
+            "occurrence": 1,
+            "span": [
+              38,
+              47
+            ],
+            "source_sha256": "04c3930ec42d7934eff83f9d2dce6110b95360f1416d3ecd20ce4c3d3c24eaf6"
+          }
+        ],
+        "note": "QA承担复核职责，不承接PM的读取或检查职责。"
+      },
+      "event": {
+        "id": "EV_REVIEW",
+        "predicate": "复核检查结果",
+        "kind": "ACTION",
+        "layer": "MAIN",
+        "use": "CURRENT_TASK",
+        "modality": "REQUIRED",
+        "polarity": "POSITIVE",
+        "owner_id": "ROOT",
+        "constraint_ids": [],
+        "requires": [],
+        "sources": [
+          {
+            "quote": "由QA复核检查结果",
+            "occurrence": 1,
+            "span": [
+              38,
+              47
+            ],
+            "source_sha256": "04c3930ec42d7934eff83f9d2dce6110b95360f1416d3ecd20ce4c3d3c24eaf6"
+          }
+        ]
+      },
+      "entity": {
+        "id": "E_QA",
+        "label": "QA",
+        "type": "OTHER",
+        "mentions": [
+          {
+            "quote": "QA",
+            "occurrence": 1,
+            "span": [
+              39,
+              41
+            ],
+            "source_sha256": "04c3930ec42d7934eff83f9d2dce6110b95360f1416d3ecd20ce4c3d3c24eaf6"
+          }
+        ],
+        "alternatives": []
+      },
+      "expression": null,
+      "constraints": [],
+      "content_quantities": [],
+      "content_scopes": [],
+      "sources": [
+        {
+          "quote": "由QA复核检查结果",
+          "occurrence": 1,
+          "span": [
+            38,
+            47
+          ],
+          "source_sha256": "04c3930ec42d7934eff83f9d2dce6110b95360f1416d3ecd20ce4c3d3c24eaf6"
+        },
+        {
+          "quote": "由QA复核检查结果",
+          "occurrence": 1,
+          "span": [
+            38,
+            47
+          ],
+          "source_sha256": "04c3930ec42d7934eff83f9d2dce6110b95360f1416d3ecd20ce4c3d3c24eaf6"
+        },
+        {
+          "quote": "QA",
+          "occurrence": 1,
+          "span": [
+            39,
+            41
+          ],
+          "source_sha256": "04c3930ec42d7934eff83f9d2dce6110b95360f1416d3ecd20ce4c3d3c24eaf6"
+        }
+      ],
+      "slots": [
+        "P"
+      ],
+      "proof": {
+        "source_sha256": "04c3930ec42d7934eff83f9d2dce6110b95360f1416d3ecd20ce4c3d3c24eaf6",
+        "claim_ids": [
+          "C_REVIEW_QA",
+          "E_QA",
+          "EV_REVIEW"
+        ],
+        "provenance_refs": [
+          "C_REVIEW_QA",
+          "EV_REVIEW",
+          "E_QA"
+        ],
+        "technical_policy": "028-r02-technical-v2",
+        "checks": [
+          {
+            "id": "C_REVIEW_QA",
+            "collection": "claims",
+            "status": "ACCEPTED",
+            "errors": [],
+            "uncertain": [],
+            "sources": [
+              {
+                "quote": "由QA复核检查结果",
+                "occurrence": 1,
+                "span": [
+                  38,
+                  47
+                ],
+                "source_sha256": "04c3930ec42d7934eff83f9d2dce6110b95360f1416d3ecd20ce4c3d3c24eaf6"
+              }
+            ],
+            "audit_refs": [
+              {
+                "subject_id": "C_REVIEW_QA",
+                "field_path": "",
+                "verdict": "SUPPORT"
+              }
+            ],
+            "required_dependencies": [],
+            "structural_refs": [
+              "EV_REVIEW",
+              "EV_REVIEW",
+              "E_QA"
+            ]
+          },
+          {
+            "id": "EV_REVIEW",
+            "collection": "events",
+            "status": "ACCEPTED",
+            "errors": [],
+            "uncertain": [],
+            "sources": [
+              {
+                "quote": "由QA复核检查结果",
+                "occurrence": 1,
+                "span": [
+                  38,
+                  47
+                ],
+                "source_sha256": "04c3930ec42d7934eff83f9d2dce6110b95360f1416d3ecd20ce4c3d3c24eaf6"
+              }
+            ],
+            "audit_refs": [
+              {
+                "subject_id": "EV_REVIEW",
+                "field_path": "",
+                "verdict": "SUPPORT"
+              }
+            ],
+            "required_dependencies": [],
+            "structural_refs": [
+              "ROOT"
+            ]
+          },
+          {
+            "id": "E_QA",
+            "collection": "entities",
+            "status": "ACCEPTED",
+            "identity_status": "ACCEPTED",
+            "errors": [],
+            "uncertain": [],
+            "sources": [
+              {
+                "quote": "QA",
+                "occurrence": 1,
+                "span": [
+                  39,
+                  41
+                ],
+                "source_sha256": "04c3930ec42d7934eff83f9d2dce6110b95360f1416d3ecd20ce4c3d3c24eaf6"
+              }
+            ],
+            "audit_refs": [
+              {
+                "subject_id": "E_QA",
+                "field_path": "",
+                "verdict": "SUPPORT"
+              }
+            ],
+            "required_dependencies": [],
+            "structural_refs": []
+          }
+        ],
+        "audit": [
+          {
+            "subject_id": "C_REVIEW_QA",
+            "field_path": "",
+            "verdict": "SUPPORT",
+            "context_refs": [
+              "EV_REVIEW",
+              "E_QA"
+            ],
+            "sources": [
+              {
+                "quote": "由QA复核检查结果",
+                "occurrence": 1
+              }
+            ],
+            "reason": "QA明确承担REVIEWER职责，不传播为读取或检查执行者。"
+          },
+          {
+            "subject_id": "EV_REVIEW",
+            "field_path": "",
+            "verdict": "SUPPORT",
+            "context_refs": [],
+            "sources": [
+              {
+                "quote": "由QA复核检查结果",
+                "occurrence": 1
+              }
+            ],
+            "reason": "复核是当前明确要求的动作，不是条件或背景内容。"
+          },
+          {
+            "subject_id": "E_QA",
+            "field_path": "",
+            "verdict": "SUPPORT",
+            "context_refs": [],
+            "sources": [
+              {
+                "quote": "由QA复核检查结果",
+                "occurrence": 1
+              }
+            ],
+            "reason": "QA身份明确；OTHER不推定其为个人或组。"
+          }
+        ],
+        "context_references_are_not_required_dependencies": true
+      }
+    },
+    {
+      "id": "bf:bbcee22b824b313ab67d",
+      "kind": "ROLE",
+      "status": "ACCEPTED",
+      "claim_ids": [
+        "C_REVIEW_OBJECT",
+        "E_RESULT",
+        "EV_REVIEW"
+      ],
+      "claim": {
+        "id": "C_REVIEW_OBJECT",
+        "kind": "ROLE",
+        "event_id": "EV_REVIEW",
+        "entity_id": "E_RESULT",
+        "role": "OBJECT",
+        "expression_id": null,
+        "direction": null,
+        "temporal": null,
+        "quantity": null,
+        "artifact_use": null,
+        "scope_id": "EV_REVIEW",
+        "requires": [],
+        "sources": [
+          {
+            "quote": "检查其中的错误记录",
+            "occurrence": 1,
+            "span": [
+              16,
+              25
+            ],
+            "source_sha256": "04c3930ec42d7934eff83f9d2dce6110b95360f1416d3ecd20ce4c3d3c24eaf6"
+          },
+          {
+            "quote": "复核检查结果",
+            "occurrence": 1,
+            "span": [
+              41,
+              47
+            ],
+            "source_sha256": "04c3930ec42d7934eff83f9d2dce6110b95360f1416d3ecd20ce4c3d3c24eaf6"
+          }
+        ],
+        "note": "复核对象是本次检查的同一结果，属于内部产物用途。"
+      },
+      "event": {
+        "id": "EV_REVIEW",
+        "predicate": "复核检查结果",
+        "kind": "ACTION",
+        "layer": "MAIN",
+        "use": "CURRENT_TASK",
+        "modality": "REQUIRED",
+        "polarity": "POSITIVE",
+        "owner_id": "ROOT",
+        "constraint_ids": [],
+        "requires": [],
+        "sources": [
+          {
+            "quote": "由QA复核检查结果",
+            "occurrence": 1,
+            "span": [
+              38,
+              47
+            ],
+            "source_sha256": "04c3930ec42d7934eff83f9d2dce6110b95360f1416d3ecd20ce4c3d3c24eaf6"
+          }
+        ]
+      },
+      "entity": {
+        "id": "E_RESULT",
+        "label": "检查结果",
+        "type": "OTHER",
+        "mentions": [
+          {
+            "quote": "检查其中的错误记录",
+            "occurrence": 1,
+            "span": [
+              16,
+              25
+            ],
+            "source_sha256": "04c3930ec42d7934eff83f9d2dce6110b95360f1416d3ecd20ce4c3d3c24eaf6"
+          },
+          {
+            "quote": "检查结果",
+            "occurrence": 1,
+            "span": [
+              43,
+              47
+            ],
+            "source_sha256": "04c3930ec42d7934eff83f9d2dce6110b95360f1416d3ecd20ce4c3d3c24eaf6"
+          }
+        ],
+        "alternatives": []
+      },
+      "expression": null,
+      "constraints": [],
+      "content_quantities": [],
+      "content_scopes": [],
+      "sources": [
+        {
+          "quote": "检查其中的错误记录",
+          "occurrence": 1,
+          "span": [
+            16,
+            25
+          ],
+          "source_sha256": "04c3930ec42d7934eff83f9d2dce6110b95360f1416d3ecd20ce4c3d3c24eaf6"
+        },
+        {
+          "quote": "复核检查结果",
+          "occurrence": 1,
+          "span": [
+            41,
+            47
+          ],
+          "source_sha256": "04c3930ec42d7934eff83f9d2dce6110b95360f1416d3ecd20ce4c3d3c24eaf6"
+        },
+        {
+          "quote": "由QA复核检查结果",
+          "occurrence": 1,
+          "span": [
+            38,
+            47
+          ],
+          "source_sha256": "04c3930ec42d7934eff83f9d2dce6110b95360f1416d3ecd20ce4c3d3c24eaf6"
+        },
+        {
+          "quote": "检查其中的错误记录",
+          "occurrence": 1,
+          "span": [
+            16,
+            25
+          ],
+          "source_sha256": "04c3930ec42d7934eff83f9d2dce6110b95360f1416d3ecd20ce4c3d3c24eaf6"
+        },
+        {
+          "quote": "检查结果",
+          "occurrence": 1,
+          "span": [
+            43,
+            47
+          ],
+          "source_sha256": "04c3930ec42d7934eff83f9d2dce6110b95360f1416d3ecd20ce4c3d3c24eaf6"
+        }
+      ],
+      "slots": [],
+      "proof": {
+        "source_sha256": "04c3930ec42d7934eff83f9d2dce6110b95360f1416d3ecd20ce4c3d3c24eaf6",
+        "claim_ids": [
+          "C_REVIEW_OBJECT",
+          "E_RESULT",
+          "EV_REVIEW"
+        ],
+        "provenance_refs": [
+          "C_REVIEW_OBJECT",
+          "EV_REVIEW",
+          "E_RESULT"
+        ],
+        "technical_policy": "028-r02-technical-v2",
+        "checks": [
+          {
+            "id": "C_REVIEW_OBJECT",
+            "collection": "claims",
+            "status": "ACCEPTED",
+            "errors": [],
+            "uncertain": [],
+            "sources": [
+              {
+                "quote": "检查其中的错误记录",
+                "occurrence": 1,
+                "span": [
+                  16,
+                  25
+                ],
+                "source_sha256": "04c3930ec42d7934eff83f9d2dce6110b95360f1416d3ecd20ce4c3d3c24eaf6"
+              },
+              {
+                "quote": "复核检查结果",
+                "occurrence": 1,
+                "span": [
+                  41,
+                  47
+                ],
+                "source_sha256": "04c3930ec42d7934eff83f9d2dce6110b95360f1416d3ecd20ce4c3d3c24eaf6"
+              }
+            ],
+            "audit_refs": [
+              {
+                "subject_id": "C_REVIEW_OBJECT",
+                "field_path": "",
+                "verdict": "SUPPORT"
+              }
+            ],
+            "required_dependencies": [],
+            "structural_refs": [
+              "EV_REVIEW",
+              "EV_REVIEW",
+              "E_RESULT"
+            ]
+          },
+          {
+            "id": "EV_REVIEW",
+            "collection": "events",
+            "status": "ACCEPTED",
+            "errors": [],
+            "uncertain": [],
+            "sources": [
+              {
+                "quote": "由QA复核检查结果",
+                "occurrence": 1,
+                "span": [
+                  38,
+                  47
+                ],
+                "source_sha256": "04c3930ec42d7934eff83f9d2dce6110b95360f1416d3ecd20ce4c3d3c24eaf6"
+              }
+            ],
+            "audit_refs": [
+              {
+                "subject_id": "EV_REVIEW",
+                "field_path": "",
+                "verdict": "SUPPORT"
+              }
+            ],
+            "required_dependencies": [],
+            "structural_refs": [
+              "ROOT"
+            ]
+          },
+          {
+            "id": "E_RESULT",
+            "collection": "entities",
+            "status": "ACCEPTED",
+            "identity_status": "ACCEPTED",
+            "errors": [],
+            "uncertain": [],
+            "sources": [
+              {
+                "quote": "检查其中的错误记录",
+                "occurrence": 1,
+                "span": [
+                  16,
+                  25
+                ],
+                "source_sha256": "04c3930ec42d7934eff83f9d2dce6110b95360f1416d3ecd20ce4c3d3c24eaf6"
+              },
+              {
+                "quote": "检查结果",
+                "occurrence": 1,
+                "span": [
+                  43,
+                  47
+                ],
+                "source_sha256": "04c3930ec42d7934eff83f9d2dce6110b95360f1416d3ecd20ce4c3d3c24eaf6"
+              }
+            ],
+            "audit_refs": [
+              {
+                "subject_id": "E_RESULT",
+                "field_path": "",
+                "verdict": "SUPPORT"
+              }
+            ],
+            "required_dependencies": [],
+            "structural_refs": []
+          }
+        ],
+        "audit": [
+          {
+            "subject_id": "C_REVIEW_OBJECT",
+            "field_path": "",
+            "verdict": "SUPPORT",
+            "context_refs": [
+              "EV_REVIEW",
+              "E_RESULT",
+              "C_CHECK_RESULT"
+            ],
+            "sources": [
+              {
+                "quote": "检查其中的错误记录",
+                "occurrence": 1
+              },
+              {
+                "quote": "复核检查结果",
+                "occurrence": 1
+              }
+            ],
+            "reason": "复核对象是本次检查产生的同一结果，OBJECT保留内部消费用途，不误增外部输入。"
+          },
+          {
+            "subject_id": "EV_REVIEW",
+            "field_path": "",
+            "verdict": "SUPPORT",
+            "context_refs": [],
+            "sources": [
+              {
+                "quote": "由QA复核检查结果",
+                "occurrence": 1
+              }
+            ],
+            "reason": "复核是当前明确要求的动作，不是条件或背景内容。"
+          },
+          {
+            "subject_id": "E_RESULT",
+            "field_path": "",
+            "verdict": "SUPPORT",
+            "context_refs": [
+              "EV_CHECK",
+              "EV_REVIEW"
+            ],
+            "sources": [
+              {
+                "quote": "检查其中的错误记录",
+                "occurrence": 1
+              },
+              {
+                "quote": "由QA复核检查结果",
+                "occurrence": 1
+              }
+            ],
+            "reason": "全篇只有本次检查及其结果；两端mentions支持同一结果身份，未推定文件形式。"
+          }
+        ],
+        "context_references_are_not_required_dependencies": true
+      }
+    },
+    {
+      "id": "bf:d5e69b7e3b4fc368fecb",
+      "kind": "ARTIFACT_USE",
+      "status": "ACCEPTED",
+      "claim_ids": [
+        "C_RESULT_USE",
+        "E_RESULT",
+        "EV_REVIEW"
+      ],
+      "claim": {
+        "id": "C_RESULT_USE",
+        "kind": "ARTIFACT_USE",
+        "event_id": "EV_REVIEW",
+        "entity_id": "E_RESULT",
+        "role": null,
+        "expression_id": null,
+        "direction": null,
+        "temporal": null,
+        "quantity": null,
+        "artifact_use": {
+          "producer_result_id": "C_CHECK_RESULT",
+          "consumer_role_id": "C_REVIEW_OBJECT",
+          "availability": "USED_PORTION"
+        },
+        "scope_id": "EV_REVIEW",
+        "requires": [
+          "C_CHECK_RESULT",
+          "C_REVIEW_OBJECT"
+        ],
+        "sources": [
+          {
+            "quote": "检查其中的错误记录",
+            "occurrence": 1,
+            "span": [
+              16,
+              25
+            ],
+            "source_sha256": "04c3930ec42d7934eff83f9d2dce6110b95360f1416d3ecd20ce4c3d3c24eaf6"
+          },
+          {
+            "quote": "由QA复核检查结果",
+            "occurrence": 1,
+            "span": [
+              38,
+              47
+            ],
+            "source_sha256": "04c3930ec42d7934eff83f9d2dce6110b95360f1416d3ecd20ce4c3d3c24eaf6"
+          }
+        ],
+        "note": "复核使用本次检查结果；未明确要求整个检查动作完成后才复核。"
+      },
+      "event": {
+        "id": "EV_REVIEW",
+        "predicate": "复核检查结果",
+        "kind": "ACTION",
+        "layer": "MAIN",
+        "use": "CURRENT_TASK",
+        "modality": "REQUIRED",
+        "polarity": "POSITIVE",
+        "owner_id": "ROOT",
+        "constraint_ids": [],
+        "requires": [],
+        "sources": [
+          {
+            "quote": "由QA复核检查结果",
+            "occurrence": 1,
+            "span": [
+              38,
+              47
+            ],
+            "source_sha256": "04c3930ec42d7934eff83f9d2dce6110b95360f1416d3ecd20ce4c3d3c24eaf6"
+          }
+        ]
+      },
+      "entity": {
+        "id": "E_RESULT",
+        "label": "检查结果",
+        "type": "OTHER",
+        "mentions": [
+          {
+            "quote": "检查其中的错误记录",
+            "occurrence": 1,
+            "span": [
+              16,
+              25
+            ],
+            "source_sha256": "04c3930ec42d7934eff83f9d2dce6110b95360f1416d3ecd20ce4c3d3c24eaf6"
+          },
+          {
+            "quote": "检查结果",
+            "occurrence": 1,
+            "span": [
+              43,
+              47
+            ],
+            "source_sha256": "04c3930ec42d7934eff83f9d2dce6110b95360f1416d3ecd20ce4c3d3c24eaf6"
+          }
+        ],
+        "alternatives": []
+      },
+      "expression": null,
+      "constraints": [],
+      "content_quantities": [],
+      "content_scopes": [],
+      "sources": [
+        {
+          "quote": "检查其中的错误记录",
+          "occurrence": 1,
+          "span": [
+            16,
+            25
+          ],
+          "source_sha256": "04c3930ec42d7934eff83f9d2dce6110b95360f1416d3ecd20ce4c3d3c24eaf6"
+        },
+        {
+          "quote": "由QA复核检查结果",
+          "occurrence": 1,
+          "span": [
+            38,
+            47
+          ],
+          "source_sha256": "04c3930ec42d7934eff83f9d2dce6110b95360f1416d3ecd20ce4c3d3c24eaf6"
+        },
+        {
+          "quote": "由QA复核检查结果",
+          "occurrence": 1,
+          "span": [
+            38,
+            47
+          ],
+          "source_sha256": "04c3930ec42d7934eff83f9d2dce6110b95360f1416d3ecd20ce4c3d3c24eaf6"
+        },
+        {
+          "quote": "检查其中的错误记录",
+          "occurrence": 1,
+          "span": [
+            16,
+            25
+          ],
+          "source_sha256": "04c3930ec42d7934eff83f9d2dce6110b95360f1416d3ecd20ce4c3d3c24eaf6"
+        },
+        {
+          "quote": "检查结果",
+          "occurrence": 1,
+          "span": [
+            43,
+            47
+          ],
+          "source_sha256": "04c3930ec42d7934eff83f9d2dce6110b95360f1416d3ecd20ce4c3d3c24eaf6"
+        },
+        {
+          "quote": "检查其中的错误记录",
+          "occurrence": 1,
+          "span": [
+            16,
+            25
+          ],
+          "source_sha256": "04c3930ec42d7934eff83f9d2dce6110b95360f1416d3ecd20ce4c3d3c24eaf6"
+        },
+        {
+          "quote": "复核检查结果",
+          "occurrence": 1,
+          "span": [
+            41,
+            47
+          ],
+          "source_sha256": "04c3930ec42d7934eff83f9d2dce6110b95360f1416d3ecd20ce4c3d3c24eaf6"
+        },
+        {
+          "quote": "请PM读取worker.log并检查其中的错误记录",
+          "occurrence": 1,
+          "span": [
+            0,
+            25
+          ],
+          "source_sha256": "04c3930ec42d7934eff83f9d2dce6110b95360f1416d3ecd20ce4c3d3c24eaf6"
+        },
+        {
+          "quote": "检查其中的错误记录",
+          "occurrence": 1,
+          "span": [
+            16,
+            25
+          ],
+          "source_sha256": "04c3930ec42d7934eff83f9d2dce6110b95360f1416d3ecd20ce4c3d3c24eaf6"
+        },
+        {
+          "quote": "复核检查结果",
+          "occurrence": 1,
+          "span": [
+            41,
+            47
+          ],
+          "source_sha256": "04c3930ec42d7934eff83f9d2dce6110b95360f1416d3ecd20ce4c3d3c24eaf6"
+        }
+      ],
+      "slots": [],
+      "proof": {
+        "source_sha256": "04c3930ec42d7934eff83f9d2dce6110b95360f1416d3ecd20ce4c3d3c24eaf6",
+        "claim_ids": [
+          "C_RESULT_USE",
+          "E_RESULT",
+          "EV_REVIEW"
+        ],
+        "provenance_refs": [
+          "C_RESULT_USE",
+          "EV_REVIEW",
+          "E_RESULT",
+          "C_CHECK_RESULT",
+          "EV_CHECK",
+          "C_REVIEW_OBJECT"
+        ],
+        "technical_policy": "028-r02-technical-v2",
+        "checks": [
+          {
+            "id": "C_RESULT_USE",
+            "collection": "claims",
+            "status": "ACCEPTED",
+            "errors": [],
+            "uncertain": [],
+            "sources": [
+              {
+                "quote": "检查其中的错误记录",
+                "occurrence": 1,
+                "span": [
+                  16,
+                  25
+                ],
+                "source_sha256": "04c3930ec42d7934eff83f9d2dce6110b95360f1416d3ecd20ce4c3d3c24eaf6"
+              },
+              {
+                "quote": "由QA复核检查结果",
+                "occurrence": 1,
+                "span": [
+                  38,
+                  47
+                ],
+                "source_sha256": "04c3930ec42d7934eff83f9d2dce6110b95360f1416d3ecd20ce4c3d3c24eaf6"
+              }
+            ],
+            "audit_refs": [
+              {
+                "subject_id": "C_RESULT_USE",
+                "field_path": "",
+                "verdict": "SUPPORT"
+              }
+            ],
+            "required_dependencies": [
+              "C_CHECK_RESULT",
+              "C_REVIEW_OBJECT"
+            ],
+            "structural_refs": [
+              "EV_REVIEW",
+              "EV_REVIEW",
+              "E_RESULT",
+              "C_CHECK_RESULT",
+              "C_REVIEW_OBJECT"
+            ]
+          },
+          {
+            "id": "EV_REVIEW",
+            "collection": "events",
+            "status": "ACCEPTED",
+            "errors": [],
+            "uncertain": [],
+            "sources": [
+              {
+                "quote": "由QA复核检查结果",
+                "occurrence": 1,
+                "span": [
+                  38,
+                  47
+                ],
+                "source_sha256": "04c3930ec42d7934eff83f9d2dce6110b95360f1416d3ecd20ce4c3d3c24eaf6"
+              }
+            ],
+            "audit_refs": [
+              {
+                "subject_id": "EV_REVIEW",
+                "field_path": "",
+                "verdict": "SUPPORT"
+              }
+            ],
+            "required_dependencies": [],
+            "structural_refs": [
+              "ROOT"
+            ]
+          },
+          {
+            "id": "E_RESULT",
+            "collection": "entities",
+            "status": "ACCEPTED",
+            "identity_status": "ACCEPTED",
+            "errors": [],
+            "uncertain": [],
+            "sources": [
+              {
+                "quote": "检查其中的错误记录",
+                "occurrence": 1,
+                "span": [
+                  16,
+                  25
+                ],
+                "source_sha256": "04c3930ec42d7934eff83f9d2dce6110b95360f1416d3ecd20ce4c3d3c24eaf6"
+              },
+              {
+                "quote": "检查结果",
+                "occurrence": 1,
+                "span": [
+                  43,
+                  47
+                ],
+                "source_sha256": "04c3930ec42d7934eff83f9d2dce6110b95360f1416d3ecd20ce4c3d3c24eaf6"
+              }
+            ],
+            "audit_refs": [
+              {
+                "subject_id": "E_RESULT",
+                "field_path": "",
+                "verdict": "SUPPORT"
+              }
+            ],
+            "required_dependencies": [],
+            "structural_refs": []
+          },
+          {
+            "id": "C_CHECK_RESULT",
+            "collection": "claims",
+            "status": "ACCEPTED",
+            "errors": [],
+            "uncertain": [],
+            "sources": [
+              {
+                "quote": "检查其中的错误记录",
+                "occurrence": 1,
+                "span": [
+                  16,
+                  25
+                ],
+                "source_sha256": "04c3930ec42d7934eff83f9d2dce6110b95360f1416d3ecd20ce4c3d3c24eaf6"
+              },
+              {
+                "quote": "复核检查结果",
+                "occurrence": 1,
+                "span": [
+                  41,
+                  47
+                ],
+                "source_sha256": "04c3930ec42d7934eff83f9d2dce6110b95360f1416d3ecd20ce4c3d3c24eaf6"
+              }
+            ],
+            "audit_refs": [
+              {
+                "subject_id": "C_CHECK_RESULT",
+                "field_path": "",
+                "verdict": "SUPPORT"
+              }
+            ],
+            "required_dependencies": [],
+            "structural_refs": [
+              "EV_CHECK",
+              "EV_CHECK",
+              "E_RESULT"
+            ]
+          },
+          {
+            "id": "EV_CHECK",
+            "collection": "events",
+            "status": "ACCEPTED",
+            "errors": [],
+            "uncertain": [],
+            "sources": [
+              {
+                "quote": "请PM读取worker.log并检查其中的错误记录",
+                "occurrence": 1,
+                "span": [
+                  0,
+                  25
+                ],
+                "source_sha256": "04c3930ec42d7934eff83f9d2dce6110b95360f1416d3ecd20ce4c3d3c24eaf6"
+              }
+            ],
+            "audit_refs": [
+              {
+                "subject_id": "EV_CHECK",
+                "field_path": "",
+                "verdict": "SUPPORT"
+              }
+            ],
+            "required_dependencies": [],
+            "structural_refs": [
+              "ROOT"
+            ]
+          },
+          {
+            "id": "C_REVIEW_OBJECT",
+            "collection": "claims",
+            "status": "ACCEPTED",
+            "errors": [],
+            "uncertain": [],
+            "sources": [
+              {
+                "quote": "检查其中的错误记录",
+                "occurrence": 1,
+                "span": [
+                  16,
+                  25
+                ],
+                "source_sha256": "04c3930ec42d7934eff83f9d2dce6110b95360f1416d3ecd20ce4c3d3c24eaf6"
+              },
+              {
+                "quote": "复核检查结果",
+                "occurrence": 1,
+                "span": [
+                  41,
+                  47
+                ],
+                "source_sha256": "04c3930ec42d7934eff83f9d2dce6110b95360f1416d3ecd20ce4c3d3c24eaf6"
+              }
+            ],
+            "audit_refs": [
+              {
+                "subject_id": "C_REVIEW_OBJECT",
+                "field_path": "",
+                "verdict": "SUPPORT"
+              }
+            ],
+            "required_dependencies": [],
+            "structural_refs": [
+              "EV_REVIEW",
+              "EV_REVIEW",
+              "E_RESULT"
+            ]
+          }
+        ],
+        "audit": [
+          {
+            "subject_id": "C_RESULT_USE",
+            "field_path": "",
+            "verdict": "SUPPORT",
+            "context_refs": [
+              "C_CHECK_RESULT",
+              "C_REVIEW_OBJECT",
+              "E_RESULT"
+            ],
+            "sources": [
+              {
+                "quote": "检查其中的错误记录",
+                "occurrence": 1
+              },
+              {
+                "quote": "由QA复核检查结果",
+                "occurrence": 1
+              }
+            ],
+            "reason": "生产RESULT与消费OBJECT引用同一当前结果，关联两端来源完整；USED_PORTION不额外要求整个检查动作先完成。"
+          },
+          {
+            "subject_id": "EV_REVIEW",
+            "field_path": "",
+            "verdict": "SUPPORT",
+            "context_refs": [],
+            "sources": [
+              {
+                "quote": "由QA复核检查结果",
+                "occurrence": 1
+              }
+            ],
+            "reason": "复核是当前明确要求的动作，不是条件或背景内容。"
+          },
+          {
+            "subject_id": "E_RESULT",
+            "field_path": "",
+            "verdict": "SUPPORT",
+            "context_refs": [
+              "EV_CHECK",
+              "EV_REVIEW"
+            ],
+            "sources": [
+              {
+                "quote": "检查其中的错误记录",
+                "occurrence": 1
+              },
+              {
+                "quote": "由QA复核检查结果",
+                "occurrence": 1
+              }
+            ],
+            "reason": "全篇只有本次检查及其结果；两端mentions支持同一结果身份，未推定文件形式。"
+          },
+          {
+            "subject_id": "C_CHECK_RESULT",
+            "field_path": "",
+            "verdict": "SUPPORT",
+            "context_refs": [
+              "EV_CHECK",
+              "E_RESULT"
+            ],
+            "sources": [
+              {
+                "quote": "检查其中的错误记录",
+                "occurrence": 1
+              },
+              {
+                "quote": "复核检查结果",
+                "occurrence": 1
+              }
+            ],
+            "reason": "后文明确引用本次检查结果，支持检查的RESULT用途，不增加文件生成或交付要求。"
+          },
+          {
+            "subject_id": "EV_CHECK",
+            "field_path": "",
+            "verdict": "SUPPORT",
+            "context_refs": [],
+            "sources": [
+              {
+                "quote": "请PM读取worker.log并检查其中的错误记录",
+                "occurrence": 1
+              }
+            ],
+            "reason": "检查是同一指令中的并列必需动作；原文未明确另加事件先后约束。"
+          },
+          {
+            "subject_id": "C_REVIEW_OBJECT",
+            "field_path": "",
+            "verdict": "SUPPORT",
+            "context_refs": [
+              "EV_REVIEW",
+              "E_RESULT",
+              "C_CHECK_RESULT"
+            ],
+            "sources": [
+              {
+                "quote": "检查其中的错误记录",
+                "occurrence": 1
+              },
+              {
+                "quote": "复核检查结果",
+                "occurrence": 1
+              }
+            ],
+            "reason": "复核对象是本次检查产生的同一结果，OBJECT保留内部消费用途，不误增外部输入。"
+          }
+        ],
+        "context_references_are_not_required_dependencies": true
+      }
+    },
+    {
+      "id": "bf:63c31ee5f30e828dcfc4",
+      "kind": "ARTIFACT_AVAILABILITY",
+      "status": "ACCEPTED",
+      "claim_ids": [
+        "C_RESULT_USE",
+        "C_CHECK_RESULT",
+        "C_REVIEW_OBJECT",
+        "E_RESULT",
+        "EV_CHECK",
+        "EV_REVIEW"
+      ],
+      "origin": "DERIVED",
+      "rule_version": "031-r1-artifact-flow-v1",
+      "artifact_id": "E_RESULT",
+      "producer_event_id": "EV_CHECK",
+      "consumer_event_id": "EV_REVIEW",
+      "producer_result_id": "C_CHECK_RESULT",
+      "consumer_role_id": "C_REVIEW_OBJECT",
+      "binding_claim_id": "C_RESULT_USE",
+      "availability": "USED_PORTION",
+      "eligible": true,
+      "input_claim_ids": [
+        "C_RESULT_USE",
+        "C_CHECK_RESULT",
+        "C_REVIEW_OBJECT"
+      ],
+      "provenance_refs": [
+        "C_RESULT_USE",
+        "C_CHECK_RESULT",
+        "C_REVIEW_OBJECT",
+        "E_RESULT",
+        "EV_CHECK",
+        "EV_REVIEW"
+      ],
+      "sources": [
+        {
+          "quote": "检查其中的错误记录",
+          "occurrence": 1,
+          "span": [
+            16,
+            25
+          ],
+          "source_sha256": "04c3930ec42d7934eff83f9d2dce6110b95360f1416d3ecd20ce4c3d3c24eaf6"
+        },
+        {
+          "quote": "由QA复核检查结果",
+          "occurrence": 1,
+          "span": [
+            38,
+            47
+          ],
+          "source_sha256": "04c3930ec42d7934eff83f9d2dce6110b95360f1416d3ecd20ce4c3d3c24eaf6"
+        },
+        {
+          "quote": "由QA复核检查结果",
+          "occurrence": 1,
+          "span": [
+            38,
+            47
+          ],
+          "source_sha256": "04c3930ec42d7934eff83f9d2dce6110b95360f1416d3ecd20ce4c3d3c24eaf6"
+        },
+        {
+          "quote": "检查其中的错误记录",
+          "occurrence": 1,
+          "span": [
+            16,
+            25
+          ],
+          "source_sha256": "04c3930ec42d7934eff83f9d2dce6110b95360f1416d3ecd20ce4c3d3c24eaf6"
+        },
+        {
+          "quote": "检查结果",
+          "occurrence": 1,
+          "span": [
+            43,
+            47
+          ],
+          "source_sha256": "04c3930ec42d7934eff83f9d2dce6110b95360f1416d3ecd20ce4c3d3c24eaf6"
+        },
+        {
+          "quote": "检查其中的错误记录",
+          "occurrence": 1,
+          "span": [
+            16,
+            25
+          ],
+          "source_sha256": "04c3930ec42d7934eff83f9d2dce6110b95360f1416d3ecd20ce4c3d3c24eaf6"
+        },
+        {
+          "quote": "复核检查结果",
+          "occurrence": 1,
+          "span": [
+            41,
+            47
+          ],
+          "source_sha256": "04c3930ec42d7934eff83f9d2dce6110b95360f1416d3ecd20ce4c3d3c24eaf6"
+        },
+        {
+          "quote": "请PM读取worker.log并检查其中的错误记录",
+          "occurrence": 1,
+          "span": [
+            0,
+            25
+          ],
+          "source_sha256": "04c3930ec42d7934eff83f9d2dce6110b95360f1416d3ecd20ce4c3d3c24eaf6"
+        },
+        {
+          "quote": "检查其中的错误记录",
+          "occurrence": 1,
+          "span": [
+            16,
+            25
+          ],
+          "source_sha256": "04c3930ec42d7934eff83f9d2dce6110b95360f1416d3ecd20ce4c3d3c24eaf6"
+        },
+        {
+          "quote": "复核检查结果",
+          "occurrence": 1,
+          "span": [
+            41,
+            47
+          ],
+          "source_sha256": "04c3930ec42d7934eff83f9d2dce6110b95360f1416d3ecd20ce4c3d3c24eaf6"
+        }
+      ],
+      "producer_modality": "REQUIRED",
+      "consumer_modality": "REQUIRED",
+      "producer_constraints": [],
+      "consumer_constraints": [],
+      "implies_whole_producer_completed": false,
+      "implies_event_order": false,
+      "observed_available": "UNKNOWN",
+      "relation_id": "ad:f0806fec335a6c6329e9",
+      "event": null,
+      "claim": null,
+      "constraints": [],
+      "slots": [],
+      "proof": {
+        "source_sha256": "04c3930ec42d7934eff83f9d2dce6110b95360f1416d3ecd20ce4c3d3c24eaf6",
+        "claim_ids": [
+          "C_RESULT_USE",
+          "C_CHECK_RESULT",
+          "C_REVIEW_OBJECT",
+          "E_RESULT",
+          "EV_CHECK",
+          "EV_REVIEW"
+        ],
+        "provenance_refs": [
+          "C_RESULT_USE",
+          "EV_REVIEW",
+          "E_RESULT",
+          "C_CHECK_RESULT",
+          "EV_CHECK",
+          "C_REVIEW_OBJECT"
+        ],
+        "technical_policy": "028-r02-technical-v2",
+        "checks": [
+          {
+            "id": "C_RESULT_USE",
+            "collection": "claims",
+            "status": "ACCEPTED",
+            "errors": [],
+            "uncertain": [],
+            "sources": [
+              {
+                "quote": "检查其中的错误记录",
+                "occurrence": 1,
+                "span": [
+                  16,
+                  25
+                ],
+                "source_sha256": "04c3930ec42d7934eff83f9d2dce6110b95360f1416d3ecd20ce4c3d3c24eaf6"
+              },
+              {
+                "quote": "由QA复核检查结果",
+                "occurrence": 1,
+                "span": [
+                  38,
+                  47
+                ],
+                "source_sha256": "04c3930ec42d7934eff83f9d2dce6110b95360f1416d3ecd20ce4c3d3c24eaf6"
+              }
+            ],
+            "audit_refs": [
+              {
+                "subject_id": "C_RESULT_USE",
+                "field_path": "",
+                "verdict": "SUPPORT"
+              }
+            ],
+            "required_dependencies": [
+              "C_CHECK_RESULT",
+              "C_REVIEW_OBJECT"
+            ],
+            "structural_refs": [
+              "EV_REVIEW",
+              "EV_REVIEW",
+              "E_RESULT",
+              "C_CHECK_RESULT",
+              "C_REVIEW_OBJECT"
+            ]
+          },
+          {
+            "id": "EV_REVIEW",
+            "collection": "events",
+            "status": "ACCEPTED",
+            "errors": [],
+            "uncertain": [],
+            "sources": [
+              {
+                "quote": "由QA复核检查结果",
+                "occurrence": 1,
+                "span": [
+                  38,
+                  47
+                ],
+                "source_sha256": "04c3930ec42d7934eff83f9d2dce6110b95360f1416d3ecd20ce4c3d3c24eaf6"
+              }
+            ],
+            "audit_refs": [
+              {
+                "subject_id": "EV_REVIEW",
+                "field_path": "",
+                "verdict": "SUPPORT"
+              }
+            ],
+            "required_dependencies": [],
+            "structural_refs": [
+              "ROOT"
+            ]
+          },
+          {
+            "id": "E_RESULT",
+            "collection": "entities",
+            "status": "ACCEPTED",
+            "identity_status": "ACCEPTED",
+            "errors": [],
+            "uncertain": [],
+            "sources": [
+              {
+                "quote": "检查其中的错误记录",
+                "occurrence": 1,
+                "span": [
+                  16,
+                  25
+                ],
+                "source_sha256": "04c3930ec42d7934eff83f9d2dce6110b95360f1416d3ecd20ce4c3d3c24eaf6"
+              },
+              {
+                "quote": "检查结果",
+                "occurrence": 1,
+                "span": [
+                  43,
+                  47
+                ],
+                "source_sha256": "04c3930ec42d7934eff83f9d2dce6110b95360f1416d3ecd20ce4c3d3c24eaf6"
+              }
+            ],
+            "audit_refs": [
+              {
+                "subject_id": "E_RESULT",
+                "field_path": "",
+                "verdict": "SUPPORT"
+              }
+            ],
+            "required_dependencies": [],
+            "structural_refs": []
+          },
+          {
+            "id": "C_CHECK_RESULT",
+            "collection": "claims",
+            "status": "ACCEPTED",
+            "errors": [],
+            "uncertain": [],
+            "sources": [
+              {
+                "quote": "检查其中的错误记录",
+                "occurrence": 1,
+                "span": [
+                  16,
+                  25
+                ],
+                "source_sha256": "04c3930ec42d7934eff83f9d2dce6110b95360f1416d3ecd20ce4c3d3c24eaf6"
+              },
+              {
+                "quote": "复核检查结果",
+                "occurrence": 1,
+                "span": [
+                  41,
+                  47
+                ],
+                "source_sha256": "04c3930ec42d7934eff83f9d2dce6110b95360f1416d3ecd20ce4c3d3c24eaf6"
+              }
+            ],
+            "audit_refs": [
+              {
+                "subject_id": "C_CHECK_RESULT",
+                "field_path": "",
+                "verdict": "SUPPORT"
+              }
+            ],
+            "required_dependencies": [],
+            "structural_refs": [
+              "EV_CHECK",
+              "EV_CHECK",
+              "E_RESULT"
+            ]
+          },
+          {
+            "id": "EV_CHECK",
+            "collection": "events",
+            "status": "ACCEPTED",
+            "errors": [],
+            "uncertain": [],
+            "sources": [
+              {
+                "quote": "请PM读取worker.log并检查其中的错误记录",
+                "occurrence": 1,
+                "span": [
+                  0,
+                  25
+                ],
+                "source_sha256": "04c3930ec42d7934eff83f9d2dce6110b95360f1416d3ecd20ce4c3d3c24eaf6"
+              }
+            ],
+            "audit_refs": [
+              {
+                "subject_id": "EV_CHECK",
+                "field_path": "",
+                "verdict": "SUPPORT"
+              }
+            ],
+            "required_dependencies": [],
+            "structural_refs": [
+              "ROOT"
+            ]
+          },
+          {
+            "id": "C_REVIEW_OBJECT",
+            "collection": "claims",
+            "status": "ACCEPTED",
+            "errors": [],
+            "uncertain": [],
+            "sources": [
+              {
+                "quote": "检查其中的错误记录",
+                "occurrence": 1,
+                "span": [
+                  16,
+                  25
+                ],
+                "source_sha256": "04c3930ec42d7934eff83f9d2dce6110b95360f1416d3ecd20ce4c3d3c24eaf6"
+              },
+              {
+                "quote": "复核检查结果",
+                "occurrence": 1,
+                "span": [
+                  41,
+                  47
+                ],
+                "source_sha256": "04c3930ec42d7934eff83f9d2dce6110b95360f1416d3ecd20ce4c3d3c24eaf6"
+              }
+            ],
+            "audit_refs": [
+              {
+                "subject_id": "C_REVIEW_OBJECT",
+                "field_path": "",
+                "verdict": "SUPPORT"
+              }
+            ],
+            "required_dependencies": [],
+            "structural_refs": [
+              "EV_REVIEW",
+              "EV_REVIEW",
+              "E_RESULT"
+            ]
+          }
+        ],
+        "audit": [
+          {
+            "subject_id": "C_RESULT_USE",
+            "field_path": "",
+            "verdict": "SUPPORT",
+            "context_refs": [
+              "C_CHECK_RESULT",
+              "C_REVIEW_OBJECT",
+              "E_RESULT"
+            ],
+            "sources": [
+              {
+                "quote": "检查其中的错误记录",
+                "occurrence": 1
+              },
+              {
+                "quote": "由QA复核检查结果",
+                "occurrence": 1
+              }
+            ],
+            "reason": "生产RESULT与消费OBJECT引用同一当前结果，关联两端来源完整；USED_PORTION不额外要求整个检查动作先完成。"
+          },
+          {
+            "subject_id": "EV_REVIEW",
+            "field_path": "",
+            "verdict": "SUPPORT",
+            "context_refs": [],
+            "sources": [
+              {
+                "quote": "由QA复核检查结果",
+                "occurrence": 1
+              }
+            ],
+            "reason": "复核是当前明确要求的动作，不是条件或背景内容。"
+          },
+          {
+            "subject_id": "E_RESULT",
+            "field_path": "",
+            "verdict": "SUPPORT",
+            "context_refs": [
+              "EV_CHECK",
+              "EV_REVIEW"
+            ],
+            "sources": [
+              {
+                "quote": "检查其中的错误记录",
+                "occurrence": 1
+              },
+              {
+                "quote": "由QA复核检查结果",
+                "occurrence": 1
+              }
+            ],
+            "reason": "全篇只有本次检查及其结果；两端mentions支持同一结果身份，未推定文件形式。"
+          },
+          {
+            "subject_id": "C_CHECK_RESULT",
+            "field_path": "",
+            "verdict": "SUPPORT",
+            "context_refs": [
+              "EV_CHECK",
+              "E_RESULT"
+            ],
+            "sources": [
+              {
+                "quote": "检查其中的错误记录",
+                "occurrence": 1
+              },
+              {
+                "quote": "复核检查结果",
+                "occurrence": 1
+              }
+            ],
+            "reason": "后文明确引用本次检查结果，支持检查的RESULT用途，不增加文件生成或交付要求。"
+          },
+          {
+            "subject_id": "EV_CHECK",
+            "field_path": "",
+            "verdict": "SUPPORT",
+            "context_refs": [],
+            "sources": [
+              {
+                "quote": "请PM读取worker.log并检查其中的错误记录",
+                "occurrence": 1
+              }
+            ],
+            "reason": "检查是同一指令中的并列必需动作；原文未明确另加事件先后约束。"
+          },
+          {
+            "subject_id": "C_REVIEW_OBJECT",
+            "field_path": "",
+            "verdict": "SUPPORT",
+            "context_refs": [
+              "EV_REVIEW",
+              "E_RESULT",
+              "C_CHECK_RESULT"
+            ],
+            "sources": [
+              {
+                "quote": "检查其中的错误记录",
+                "occurrence": 1
+              },
+              {
+                "quote": "复核检查结果",
+                "occurrence": 1
+              }
+            ],
+            "reason": "复核对象是本次检查产生的同一结果，OBJECT保留内部消费用途，不误增外部输入。"
+          }
+        ],
+        "context_references_are_not_required_dependencies": true
+      }
+    }
+  ],
+  "artifact_associations": [
+    {
+      "id": "ai:5516d556be1be2133391",
+      "kind": "IDENTITY_ASSOCIATION",
+      "origin": "DERIVED",
+      "rule_version": "031-r1-artifact-flow-v1",
+      "artifact_id": "E_RESULT",
+      "producer_event_id": "EV_CHECK",
+      "consumer_event_id": "EV_REVIEW",
+      "producer_result_id": "C_CHECK_RESULT",
+      "consumer_role_id": "C_REVIEW_OBJECT",
+      "status": "ACCEPTED",
+      "input_claim_ids": [
+        "C_CHECK_RESULT",
+        "C_REVIEW_OBJECT"
+      ],
+      "sources": [
+        {
+          "quote": "检查其中的错误记录",
+          "occurrence": 1,
+          "span": [
+            16,
+            25
+          ],
+          "source_sha256": "04c3930ec42d7934eff83f9d2dce6110b95360f1416d3ecd20ce4c3d3c24eaf6"
+        },
+        {
+          "quote": "复核检查结果",
+          "occurrence": 1,
+          "span": [
+            41,
+            47
+          ],
+          "source_sha256": "04c3930ec42d7934eff83f9d2dce6110b95360f1416d3ecd20ce4c3d3c24eaf6"
+        },
+        {
+          "quote": "检查其中的错误记录",
+          "occurrence": 1,
+          "span": [
+            16,
+            25
+          ],
+          "source_sha256": "04c3930ec42d7934eff83f9d2dce6110b95360f1416d3ecd20ce4c3d3c24eaf6"
+        },
+        {
+          "quote": "复核检查结果",
+          "occurrence": 1,
+          "span": [
+            41,
+            47
+          ],
+          "source_sha256": "04c3930ec42d7934eff83f9d2dce6110b95360f1416d3ecd20ce4c3d3c24eaf6"
+        },
+        {
+          "quote": "检查其中的错误记录",
+          "occurrence": 1,
+          "span": [
+            16,
+            25
+          ],
+          "source_sha256": "04c3930ec42d7934eff83f9d2dce6110b95360f1416d3ecd20ce4c3d3c24eaf6"
+        },
+        {
+          "quote": "检查结果",
+          "occurrence": 1,
+          "span": [
+            43,
+            47
+          ],
+          "source_sha256": "04c3930ec42d7934eff83f9d2dce6110b95360f1416d3ecd20ce4c3d3c24eaf6"
+        },
+        {
+          "quote": "请PM读取worker.log并检查其中的错误记录",
+          "occurrence": 1,
+          "span": [
+            0,
+            25
+          ],
+          "source_sha256": "04c3930ec42d7934eff83f9d2dce6110b95360f1416d3ecd20ce4c3d3c24eaf6"
+        },
+        {
+          "quote": "由QA复核检查结果",
+          "occurrence": 1,
+          "span": [
+            38,
+            47
+          ],
+          "source_sha256": "04c3930ec42d7934eff83f9d2dce6110b95360f1416d3ecd20ce4c3d3c24eaf6"
+        }
+      ],
+      "implies_availability": false,
+      "implies_event_order": false
+    }
+  ],
+  "artifact_dependencies": [
+    {
+      "id": "ad:f0806fec335a6c6329e9",
+      "kind": "ARTIFACT_AVAILABILITY",
+      "origin": "DERIVED",
+      "rule_version": "031-r1-artifact-flow-v1",
+      "artifact_id": "E_RESULT",
+      "producer_event_id": "EV_CHECK",
+      "consumer_event_id": "EV_REVIEW",
+      "producer_result_id": "C_CHECK_RESULT",
+      "consumer_role_id": "C_REVIEW_OBJECT",
+      "binding_claim_id": "C_RESULT_USE",
+      "availability": "USED_PORTION",
+      "status": "ACCEPTED",
+      "eligible": true,
+      "input_claim_ids": [
+        "C_RESULT_USE",
+        "C_CHECK_RESULT",
+        "C_REVIEW_OBJECT"
+      ],
+      "provenance_refs": [
+        "C_RESULT_USE",
+        "C_CHECK_RESULT",
+        "C_REVIEW_OBJECT",
+        "E_RESULT",
+        "EV_CHECK",
+        "EV_REVIEW"
+      ],
+      "sources": [
+        {
+          "quote": "检查其中的错误记录",
+          "occurrence": 1,
+          "span": [
+            16,
+            25
+          ],
+          "source_sha256": "04c3930ec42d7934eff83f9d2dce6110b95360f1416d3ecd20ce4c3d3c24eaf6"
+        },
+        {
+          "quote": "由QA复核检查结果",
+          "occurrence": 1,
+          "span": [
+            38,
+            47
+          ],
+          "source_sha256": "04c3930ec42d7934eff83f9d2dce6110b95360f1416d3ecd20ce4c3d3c24eaf6"
+        },
+        {
+          "quote": "检查其中的错误记录",
+          "occurrence": 1,
+          "span": [
+            16,
+            25
+          ],
+          "source_sha256": "04c3930ec42d7934eff83f9d2dce6110b95360f1416d3ecd20ce4c3d3c24eaf6"
+        },
+        {
+          "quote": "复核检查结果",
+          "occurrence": 1,
+          "span": [
+            41,
+            47
+          ],
+          "source_sha256": "04c3930ec42d7934eff83f9d2dce6110b95360f1416d3ecd20ce4c3d3c24eaf6"
+        },
+        {
+          "quote": "检查其中的错误记录",
+          "occurrence": 1,
+          "span": [
+            16,
+            25
+          ],
+          "source_sha256": "04c3930ec42d7934eff83f9d2dce6110b95360f1416d3ecd20ce4c3d3c24eaf6"
+        },
+        {
+          "quote": "复核检查结果",
+          "occurrence": 1,
+          "span": [
+            41,
+            47
+          ],
+          "source_sha256": "04c3930ec42d7934eff83f9d2dce6110b95360f1416d3ecd20ce4c3d3c24eaf6"
+        },
+        {
+          "quote": "检查其中的错误记录",
+          "occurrence": 1,
+          "span": [
+            16,
+            25
+          ],
+          "source_sha256": "04c3930ec42d7934eff83f9d2dce6110b95360f1416d3ecd20ce4c3d3c24eaf6"
+        },
+        {
+          "quote": "检查结果",
+          "occurrence": 1,
+          "span": [
+            43,
+            47
+          ],
+          "source_sha256": "04c3930ec42d7934eff83f9d2dce6110b95360f1416d3ecd20ce4c3d3c24eaf6"
+        },
+        {
+          "quote": "请PM读取worker.log并检查其中的错误记录",
+          "occurrence": 1,
+          "span": [
+            0,
+            25
+          ],
+          "source_sha256": "04c3930ec42d7934eff83f9d2dce6110b95360f1416d3ecd20ce4c3d3c24eaf6"
+        },
+        {
+          "quote": "由QA复核检查结果",
+          "occurrence": 1,
+          "span": [
+            38,
+            47
+          ],
+          "source_sha256": "04c3930ec42d7934eff83f9d2dce6110b95360f1416d3ecd20ce4c3d3c24eaf6"
+        }
+      ],
+      "producer_modality": "REQUIRED",
+      "consumer_modality": "REQUIRED",
+      "producer_constraints": [],
+      "consumer_constraints": [],
+      "implies_whole_producer_completed": false,
+      "implies_event_order": false,
+      "observed_available": "UNKNOWN"
+    }
+  ],
+  "entities": [
+    {
+      "id": "E_PM",
+      "label": "PM",
+      "type": "OTHER",
+      "mentions": [
+        {
+          "quote": "PM",
+          "occurrence": 1,
+          "span": [
+            1,
+            3
+          ],
+          "source_sha256": "04c3930ec42d7934eff83f9d2dce6110b95360f1416d3ecd20ce4c3d3c24eaf6"
+        }
+      ],
+      "alternatives": []
+    },
+    {
+      "id": "E_QA",
+      "label": "QA",
+      "type": "OTHER",
+      "mentions": [
+        {
+          "quote": "QA",
+          "occurrence": 1,
+          "span": [
+            39,
+            41
+          ],
+          "source_sha256": "04c3930ec42d7934eff83f9d2dce6110b95360f1416d3ecd20ce4c3d3c24eaf6"
+        }
+      ],
+      "alternatives": []
+    },
+    {
+      "id": "E_LOG",
+      "label": "worker.log",
+      "type": "FILE",
+      "mentions": [
+        {
+          "quote": "worker.log",
+          "occurrence": 1,
+          "span": [
+            5,
+            15
+          ],
+          "source_sha256": "04c3930ec42d7934eff83f9d2dce6110b95360f1416d3ecd20ce4c3d3c24eaf6"
+        }
+      ],
+      "alternatives": []
+    },
+    {
+      "id": "E_ERRORS",
+      "label": "worker.log中的错误记录",
+      "type": "OTHER",
+      "mentions": [
+        {
+          "quote": "worker.log",
+          "occurrence": 1,
+          "span": [
+            5,
+            15
+          ],
+          "source_sha256": "04c3930ec42d7934eff83f9d2dce6110b95360f1416d3ecd20ce4c3d3c24eaf6"
+        },
+        {
+          "quote": "其中的错误记录",
+          "occurrence": 1,
+          "span": [
+            18,
+            25
+          ],
+          "source_sha256": "04c3930ec42d7934eff83f9d2dce6110b95360f1416d3ecd20ce4c3d3c24eaf6"
+        }
+      ],
+      "alternatives": []
+    },
+    {
+      "id": "E_RESULT",
+      "label": "检查结果",
+      "type": "OTHER",
+      "mentions": [
+        {
+          "quote": "检查其中的错误记录",
+          "occurrence": 1,
+          "span": [
+            16,
+            25
+          ],
+          "source_sha256": "04c3930ec42d7934eff83f9d2dce6110b95360f1416d3ecd20ce4c3d3c24eaf6"
+        },
+        {
+          "quote": "检查结果",
+          "occurrence": 1,
+          "span": [
+            43,
+            47
+          ],
+          "source_sha256": "04c3930ec42d7934eff83f9d2dce6110b95360f1416d3ecd20ce4c3d3c24eaf6"
+        }
+      ],
+      "alternatives": []
+    }
+  ],
+  "expressions": [],
+  "issues": [
+    {
+      "id": "ISS_CHECK_TOOL",
+      "kind": "UNSPECIFIED",
+      "subject_ids": [
+        "EV_CHECK"
+      ],
+      "field_path": "",
+      "alternatives": [],
+      "affected_views": [
+        "A"
+      ],
+      "sources": [
+        {
+          "quote": "具体检查工具未指定",
+          "occurrence": 1,
+          "span": [
+            48,
+            57
+          ],
+          "source_sha256": "04c3930ec42d7934eff83f9d2dce6110b95360f1416d3ecd20ce4c3d3c24eaf6"
+        }
+      ],
+      "note": "检查所用工具未指定；不补工具实体或工具选择义务，不影响明确检查动作及执行者。"
+    }
+  ],
+  "audit_issues": [],
+  "gaps": [],
+  "technical_diagnostics": [],
+  "business_decision": null,
+  "execution_authorization": null
+}

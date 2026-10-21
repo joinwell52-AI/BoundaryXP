@@ -1,0 +1,359 @@
+{
+  "contract_version": "031-r1.1",
+  "reviews": [
+    {
+      "subject_id": "ent_pm",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [
+        {
+          "quote": "PM",
+          "occurrence": 1
+        }
+      ],
+      "reason": "明确指称PM；OTHER可保留未指定的人或组类别，不影响身份与职责。"
+    },
+    {
+      "subject_id": "ent_a",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [
+        {
+          "quote": "A、B、C、D四台测试机",
+          "occurrence": 1
+        }
+      ],
+      "reason": "A明确为列举测试机之一，身份无竞争；OTHER可作类别占位。"
+    },
+    {
+      "subject_id": "ent_b",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [
+        {
+          "quote": "A、B、C、D四台测试机",
+          "occurrence": 1
+        },
+        {
+          "quote": "本次检查范围不含B和D",
+          "occurrence": 1
+        }
+      ],
+      "reason": "列举与排除中的B指向同一测试机，mentions完整。"
+    },
+    {
+      "subject_id": "ent_c",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [
+        {
+          "quote": "A、B、C、D四台测试机",
+          "occurrence": 1
+        }
+      ],
+      "reason": "C明确为列举测试机之一，身份无竞争；OTHER可作类别占位。"
+    },
+    {
+      "subject_id": "ent_d",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [
+        {
+          "quote": "A、B、C、D四台测试机",
+          "occurrence": 1
+        },
+        {
+          "quote": "本次检查范围不含B和D",
+          "occurrence": 1
+        }
+      ],
+      "reason": "列举与排除中的D指向同一测试机，mentions完整。"
+    },
+    {
+      "subject_id": "ent_any_machine",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [
+        {
+          "quote": "任何测试机",
+          "occurrence": 1
+        }
+      ],
+      "reason": "保留禁令的全称对象范围，没有缩成当前受检机器。"
+    },
+    {
+      "subject_id": "evt_check",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [
+        "cl_check_scope"
+      ],
+      "sources": [
+        {
+          "quote": "请PM检查A、B、C、D四台测试机",
+          "occurrence": 1
+        },
+        {
+          "quote": "本次检查范围不含B和D",
+          "occurrence": 1
+        }
+      ],
+      "reason": "明确要求当前检查动作；排除范围由关联SCOPE表达，无额外条件或先后。"
+    },
+    {
+      "subject_id": "evt_restart",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [
+        {
+          "quote": "不得重启任何测试机",
+          "occurrence": 1
+        }
+      ],
+      "reason": "当前任务的重启禁令正确表达为FORBIDDEN，动作极性保持正向。"
+    },
+    {
+      "subject_id": "cl_check_performer",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [
+        "ent_pm",
+        "evt_check"
+      ],
+      "sources": [
+        {
+          "quote": "请PM检查",
+          "occurrence": 1
+        }
+      ],
+      "reason": "PM被明确指定为检查执行者。"
+    },
+    {
+      "subject_id": "cl_check_a",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [
+        "cl_check_scope",
+        "ent_a"
+      ],
+      "sources": [
+        {
+          "quote": "检查A、B、C、D四台测试机",
+          "occurrence": 1
+        },
+        {
+          "quote": "本次检查范围不含B和D",
+          "occurrence": 1
+        }
+      ],
+      "reason": "列举集合排除B和D后保留A，受检范围用途为INPUT_OBJECT。"
+    },
+    {
+      "subject_id": "cl_check_c",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [
+        "cl_check_scope",
+        "ent_c"
+      ],
+      "sources": [
+        {
+          "quote": "检查A、B、C、D四台测试机",
+          "occurrence": 1
+        },
+        {
+          "quote": "本次检查范围不含B和D",
+          "occurrence": 1
+        }
+      ],
+      "reason": "列举集合排除B和D后保留C，受检范围用途为INPUT_OBJECT。"
+    },
+    {
+      "subject_id": "cl_check_scope",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [
+        "expr_check_scope",
+        "evt_check"
+      ],
+      "sources": [
+        {
+          "quote": "A、B、C、D四台测试机",
+          "occurrence": 1
+        },
+        {
+          "quote": "本次检查范围不含B和D",
+          "occurrence": 1
+        }
+      ],
+      "reason": "范围绑定检查事件，正确表达四台列举集合减去B、D；四台并非执行量限制。"
+    },
+    {
+      "subject_id": "cl_restart_performer",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [
+        "cl_check_performer",
+        "evt_restart"
+      ],
+      "sources": [
+        {
+          "quote": "请PM检查",
+          "occurrence": 1
+        },
+        {
+          "quote": "不得重启任何测试机",
+          "occurrence": 1
+        }
+      ],
+      "reason": "同一连续指令无主体切换或执行者另定，禁令可承接PM；来源覆盖两端。"
+    },
+    {
+      "subject_id": "cl_restart_object",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [
+        "ent_any_machine",
+        "evt_restart"
+      ],
+      "sources": [
+        {
+          "quote": "不得重启任何测试机",
+          "occurrence": 1
+        }
+      ],
+      "reason": "任何测试机均为禁令对象，检查范围排除不缩小禁令；OBJECT不新增外部输入。"
+    },
+    {
+      "subject_id": "expr_a",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [
+        "ent_a"
+      ],
+      "sources": [
+        {
+          "quote": "A、B、C、D四台测试机",
+          "occurrence": 1
+        }
+      ],
+      "reason": "ITEM准确引用列举中的测试机A。"
+    },
+    {
+      "subject_id": "expr_b",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [
+        "ent_b"
+      ],
+      "sources": [
+        {
+          "quote": "A、B、C、D四台测试机",
+          "occurrence": 1
+        },
+        {
+          "quote": "不含B和D",
+          "occurrence": 1
+        }
+      ],
+      "reason": "ITEM引用同一测试机B，可用于列举集合及排除集合。"
+    },
+    {
+      "subject_id": "expr_c",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [
+        "ent_c"
+      ],
+      "sources": [
+        {
+          "quote": "A、B、C、D四台测试机",
+          "occurrence": 1
+        }
+      ],
+      "reason": "ITEM准确引用列举中的测试机C。"
+    },
+    {
+      "subject_id": "expr_d",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [
+        "ent_d"
+      ],
+      "sources": [
+        {
+          "quote": "A、B、C、D四台测试机",
+          "occurrence": 1
+        },
+        {
+          "quote": "不含B和D",
+          "occurrence": 1
+        }
+      ],
+      "reason": "ITEM引用同一测试机D，可用于列举集合及排除集合。"
+    },
+    {
+      "subject_id": "expr_listed",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [
+        "expr_a",
+        "expr_b",
+        "expr_c",
+        "expr_d"
+      ],
+      "sources": [
+        {
+          "quote": "A、B、C、D四台测试机",
+          "occurrence": 1
+        }
+      ],
+      "reason": "UNION完整表达四台明确列举的测试机集合。"
+    },
+    {
+      "subject_id": "expr_excluded",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [
+        "expr_b",
+        "expr_d"
+      ],
+      "sources": [
+        {
+          "quote": "本次检查范围不含B和D",
+          "occurrence": 1
+        }
+      ],
+      "reason": "排除集合准确包含B和D。"
+    },
+    {
+      "subject_id": "expr_check_scope",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [
+        "expr_listed",
+        "expr_excluded"
+      ],
+      "sources": [
+        {
+          "quote": "A、B、C、D四台测试机",
+          "occurrence": 1
+        },
+        {
+          "quote": "本次检查范围不含B和D",
+          "occurrence": 1
+        }
+      ],
+      "reason": "EXCEPT操作数顺序正确，最终受检范围为A、C，不将排除解释为独立检查禁令。"
+    }
+  ],
+  "issues": [],
+  "omissions": []
+}

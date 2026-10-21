@@ -1,0 +1,302 @@
+{
+  "contract_version": "028-r02.2",
+  "entities": [
+    {
+      "id": "n_pm",
+      "label": "PM",
+      "type": "PERSON",
+      "mentions": [{"quote": "PM", "occurrence": 1}],
+      "alternatives": []
+    },
+    {
+      "id": "n_log",
+      "label": "worker.log",
+      "type": "FILE",
+      "mentions": [{"quote": "worker.log", "occurrence": 1}],
+      "alternatives": []
+    },
+    {
+      "id": "n_errors",
+      "label": "worker.log中的错误记录",
+      "type": "OTHER",
+      "mentions": [
+        {"quote": "worker.log", "occurrence": 1},
+        {"quote": "其中的错误记录", "occurrence": 1}
+      ],
+      "alternatives": []
+    },
+    {
+      "id": "n_result",
+      "label": "检查结果",
+      "type": "OTHER",
+      "mentions": [{"quote": "检查结果", "occurrence": 1}],
+      "alternatives": []
+    },
+    {
+      "id": "n_qa",
+      "label": "QA",
+      "type": "PERSON",
+      "mentions": [{"quote": "QA", "occurrence": 1}],
+      "alternatives": []
+    }
+  ],
+  "events": [
+    {
+      "id": "e_read",
+      "predicate": "读取",
+      "kind": "ACTION",
+      "layer": "MAIN",
+      "use": "CURRENT_TASK",
+      "modality": "REQUIRED",
+      "polarity": "POSITIVE",
+      "owner_id": "ROOT",
+      "constraint_ids": ["c_retry_limit"],
+      "requires": [],
+      "sources": [{"quote": "请PM读取worker.log", "occurrence": 1}]
+    },
+    {
+      "id": "e_check",
+      "predicate": "检查",
+      "kind": "ACTION",
+      "layer": "MAIN",
+      "use": "CURRENT_TASK",
+      "modality": "REQUIRED",
+      "polarity": "POSITIVE",
+      "owner_id": "ROOT",
+      "constraint_ids": [],
+      "requires": [],
+      "sources": [{"quote": "请PM读取worker.log并检查其中的错误记录", "occurrence": 1}]
+    },
+    {
+      "id": "e_review",
+      "predicate": "复核",
+      "kind": "ACTION",
+      "layer": "MAIN",
+      "use": "CURRENT_TASK",
+      "modality": "REQUIRED",
+      "polarity": "POSITIVE",
+      "owner_id": "ROOT",
+      "constraint_ids": [],
+      "requires": ["c_check_result"],
+      "sources": [{"quote": "由QA复核检查结果", "occurrence": 1}]
+    }
+  ],
+  "claims": [
+    {
+      "id": "c_read_pm",
+      "kind": "ROLE",
+      "event_id": "e_read",
+      "entity_id": "n_pm",
+      "role": "PERFORMER",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "scope_id": "e_read",
+      "requires": [],
+      "sources": [{"quote": "请PM读取worker.log", "occurrence": 1}],
+      "note": ""
+    },
+    {
+      "id": "c_read_log",
+      "kind": "ROLE",
+      "event_id": "e_read",
+      "entity_id": "n_log",
+      "role": "INPUT_OBJECT",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "scope_id": "e_read",
+      "requires": [],
+      "sources": [{"quote": "读取worker.log", "occurrence": 1}],
+      "note": ""
+    },
+    {
+      "id": "c_check_pm",
+      "kind": "ROLE",
+      "event_id": "e_check",
+      "entity_id": "n_pm",
+      "role": "PERFORMER",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "scope_id": "e_check",
+      "requires": [],
+      "sources": [{"quote": "请PM读取worker.log并检查其中的错误记录", "occurrence": 1}],
+      "note": "PM是并列动作的共享执行者。"
+    },
+    {
+      "id": "c_check_errors",
+      "kind": "ROLE",
+      "event_id": "e_check",
+      "entity_id": "n_errors",
+      "role": "INPUT_OBJECT",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "scope_id": "e_check",
+      "requires": ["c_error_scope"],
+      "sources": [
+        {"quote": "worker.log", "occurrence": 1},
+        {"quote": "检查其中的错误记录", "occurrence": 1}
+      ],
+      "note": "受检范围是该日志中的错误记录。"
+    },
+    {
+      "id": "c_error_scope",
+      "kind": "SCOPE",
+      "event_id": "e_check",
+      "entity_id": null,
+      "role": null,
+      "expression_id": "x_errors_in_log",
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "scope_id": "e_check",
+      "requires": [],
+      "sources": [
+        {"quote": "worker.log", "occurrence": 1},
+        {"quote": "其中的错误记录", "occurrence": 1}
+      ],
+      "note": "其中指向worker.log。"
+    },
+    {
+      "id": "c_check_result",
+      "kind": "ROLE",
+      "event_id": "e_check",
+      "entity_id": "n_result",
+      "role": "RESULT",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "scope_id": "e_check",
+      "requires": [],
+      "sources": [
+        {"quote": "检查其中的错误记录", "occurrence": 1},
+        {"quote": "检查结果", "occurrence": 1}
+      ],
+      "note": "复核对象是本次检查的结果；未规定结果载体。"
+    },
+    {
+      "id": "c_review_qa",
+      "kind": "ROLE",
+      "event_id": "e_review",
+      "entity_id": "n_qa",
+      "role": "REVIEWER",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "scope_id": "e_review",
+      "requires": [],
+      "sources": [{"quote": "由QA复核检查结果", "occurrence": 1}],
+      "note": ""
+    },
+    {
+      "id": "c_review_result",
+      "kind": "ROLE",
+      "event_id": "e_review",
+      "entity_id": "n_result",
+      "role": "OBJECT",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "scope_id": "e_review",
+      "requires": ["c_check_result"],
+      "sources": [{"quote": "复核检查结果", "occurrence": 1}],
+      "note": "同一检查结果作为内部复核对象，不增加外部输入。"
+    },
+    {
+      "id": "c_retry_limit",
+      "kind": "QUANTITY",
+      "event_id": "e_read",
+      "entity_id": null,
+      "role": null,
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": {
+        "metric": "重试次数",
+        "target_id": "e_read",
+        "comparator": "LTE",
+        "value": 2,
+        "unit": "次",
+        "use": "EXECUTION_LIMIT",
+        "count_scope": "e_read"
+      },
+      "scope_id": "e_read",
+      "requires": [],
+      "sources": [
+        {"quote": "请PM读取worker.log", "occurrence": 1},
+        {"quote": "该读取操作最多重试2次", "occurrence": 1}
+      ],
+      "note": "限制读取操作的重试次数，不是要求重试，也不是把首次读取计入两次上限。"
+    }
+  ],
+  "expressions": [
+    {
+      "id": "x_errors_in_log",
+      "op": "STATE",
+      "operands": [],
+      "state": {
+        "predicate": "记录位于文件中",
+        "event_id": null,
+        "args": ["n_errors", "n_log"],
+        "polarity": "POSITIVE"
+      },
+      "sources": [
+        {"quote": "worker.log", "occurrence": 1},
+        {"quote": "其中的错误记录", "occurrence": 1}
+      ]
+    }
+  ],
+  "issues": [
+    {
+      "id": "i_check_tool",
+      "kind": "UNSPECIFIED",
+      "subject_ids": ["e_check"],
+      "field_path": "events[e_check]",
+      "alternatives": [],
+      "affected_views": ["A"],
+      "sources": [{"quote": "具体检查工具未指定", "occurrence": 1}],
+      "note": "检查工具明确未指定；不补充工具实体或工具使用义务。"
+    }
+  ],
+  "coverage": [
+    {
+      "sources": [{"quote": "请PM读取worker.log", "occurrence": 1}],
+      "claim_ids": ["c_read_pm", "c_read_log"],
+      "status": "EXPRESSED",
+      "affected_views": ["I", "A", "P"]
+    },
+    {
+      "sources": [{"quote": "请PM读取worker.log并检查其中的错误记录", "occurrence": 1}],
+      "claim_ids": ["c_check_pm", "c_check_errors", "c_error_scope"],
+      "status": "EXPRESSED",
+      "affected_views": ["I", "A", "P"]
+    },
+    {
+      "sources": [{"quote": "该读取操作最多重试2次", "occurrence": 1}],
+      "claim_ids": ["c_retry_limit"],
+      "status": "EXPRESSED",
+      "affected_views": ["R"]
+    },
+    {
+      "sources": [{"quote": "由QA复核检查结果", "occurrence": 1}],
+      "claim_ids": ["c_check_result", "c_review_qa", "c_review_result"],
+      "status": "EXPRESSED",
+      "affected_views": ["O", "A", "P"]
+    },
+    {
+      "sources": [{"quote": "具体检查工具未指定", "occurrence": 1}],
+      "claim_ids": [],
+      "status": "UNSPECIFIED",
+      "affected_views": ["A"]
+    }
+  ]
+}

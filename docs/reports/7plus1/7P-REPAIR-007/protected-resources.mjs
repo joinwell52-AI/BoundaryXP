@@ -1,0 +1,2 @@
+import fs from'node:fs';import assert from'node:assert/strict';import{fingerprint}from'../../../../research/7plus1-parser/v0.3-p3-frozen-evaluation/attempt-20261001-r01/support.mjs';
+const r=await fingerprint();assert.equal(r.status,'PASS');fs.writeFileSync('docs/reports/7plus1/7P-REPAIR-007/PROTECTED-RESOURCE-DIGESTS.json',JSON.stringify(r,null,2)+'\n',{flag:'wx'});console.log({status:r.status,files:r.checked_files,model_pack_dependency_sha256:true});

@@ -1,0 +1,244 @@
+{
+  "contract_version": "032.1",
+  "entities": [
+    {
+      "id": "qa",
+      "label": "QA",
+      "type": "OTHER",
+      "mentions": [{"quote": "QA", "occurrence": 1}],
+      "alternatives": []
+    },
+    {
+      "id": "rule_content",
+      "label": "RULE-17的内容",
+      "type": "OTHER",
+      "mentions": [{"quote": "RULE-17的内容", "occurrence": 1}],
+      "alternatives": []
+    },
+    {
+      "id": "schema_file",
+      "label": "schema.yaml",
+      "type": "FILE",
+      "mentions": [{"quote": "schema.yaml", "occurrence": 1}],
+      "alternatives": []
+    },
+    {
+      "id": "conformance_file",
+      "label": "conformance.md",
+      "type": "FILE",
+      "mentions": [{"quote": "conformance.md", "occurrence": 1}],
+      "alternatives": []
+    }
+  ],
+  "events": [
+    {
+      "id": "check",
+      "predicate": "检查",
+      "kind": "ACTION",
+      "layer": "MAIN",
+      "use": "CURRENT_TASK",
+      "modality": "REQUIRED",
+      "polarity": "POSITIVE",
+      "owner_id": "ROOT",
+      "constraint_ids": [],
+      "requires": [],
+      "sources": [{"quote": "请QA检查RULE-17的内容和schema.yaml", "occurrence": 1}]
+    },
+    {
+      "id": "generate",
+      "predicate": "生成",
+      "kind": "ACTION",
+      "layer": "MAIN",
+      "use": "CURRENT_TASK",
+      "modality": "REQUIRED",
+      "polarity": "POSITIVE",
+      "owner_id": "ROOT",
+      "constraint_ids": [],
+      "requires": [],
+      "sources": [{"quote": "生成conformance.md", "occurrence": 1}]
+    }
+  ],
+  "claims": [
+    {
+      "id": "check_performer",
+      "kind": "ROLE",
+      "event_id": "check",
+      "entity_id": "qa",
+      "role": "PERFORMER",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "artifact_use": null,
+      "scope_id": "check",
+      "requires": [],
+      "sources": [{"quote": "请QA检查", "occurrence": 1}],
+      "note": "QA是明确的检查执行者；岗位类别未指定。"
+    },
+    {
+      "id": "check_rule",
+      "kind": "ROLE",
+      "event_id": "check",
+      "entity_id": "rule_content",
+      "role": "INPUT_OBJECT",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "artifact_use": null,
+      "scope_id": "check",
+      "requires": [],
+      "sources": [{"quote": "检查RULE-17的内容", "occurrence": 1}],
+      "note": "RULE-17的内容是受检对象，原文未将其指定为规范依据。"
+    },
+    {
+      "id": "check_schema",
+      "kind": "ROLE",
+      "event_id": "check",
+      "entity_id": "schema_file",
+      "role": "INPUT_OBJECT",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "artifact_use": null,
+      "scope_id": "check",
+      "requires": [],
+      "sources": [{"quote": "检查RULE-17的内容和schema.yaml", "occurrence": 1}],
+      "note": "schema.yaml是并列的受检对象。"
+    },
+    {
+      "id": "generate_performer",
+      "kind": "ROLE",
+      "event_id": "generate",
+      "entity_id": "qa",
+      "role": "PERFORMER",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "artifact_use": null,
+      "scope_id": "generate",
+      "requires": [],
+      "sources": [
+        {"quote": "请QA检查", "occurrence": 1},
+        {"quote": "生成conformance.md", "occurrence": 1}
+      ],
+      "note": "同一连续指令未切换主体，生成动作承接QA。"
+    },
+    {
+      "id": "generate_result",
+      "kind": "ROLE",
+      "event_id": "generate",
+      "entity_id": "conformance_file",
+      "role": "RESULT",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "artifact_use": null,
+      "scope_id": "generate",
+      "requires": [],
+      "sources": [{"quote": "生成conformance.md", "occurrence": 1}],
+      "note": "明确要求产生该文件，未明确交付用途。"
+    },
+    {
+      "id": "rule_scope",
+      "kind": "SCOPE",
+      "event_id": "check",
+      "entity_id": null,
+      "role": null,
+      "expression_id": "rule_item",
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "artifact_use": null,
+      "scope_id": "rule_content",
+      "requires": [],
+      "sources": [{"quote": "检查RULE-17的内容", "occurrence": 1}],
+      "note": "具体受检内容范围。"
+    },
+    {
+      "id": "schema_scope",
+      "kind": "SCOPE",
+      "event_id": "check",
+      "entity_id": null,
+      "role": null,
+      "expression_id": "schema_item",
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "artifact_use": null,
+      "scope_id": "schema_file",
+      "requires": [],
+      "sources": [{"quote": "检查RULE-17的内容和schema.yaml", "occurrence": 1}],
+      "note": "具体受检文件范围。"
+    },
+    {
+      "id": "result_scope",
+      "kind": "SCOPE",
+      "event_id": "generate",
+      "entity_id": null,
+      "role": null,
+      "expression_id": "result_item",
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "artifact_use": null,
+      "scope_id": "conformance_file",
+      "requires": [],
+      "sources": [{"quote": "生成conformance.md", "occurrence": 1}],
+      "note": "具体结果文件范围。"
+    }
+  ],
+  "expressions": [
+    {
+      "id": "rule_item",
+      "op": "ITEM",
+      "operands": ["rule_content"],
+      "state": null,
+      "sources": [{"quote": "RULE-17的内容", "occurrence": 1}]
+    },
+    {
+      "id": "schema_item",
+      "op": "ITEM",
+      "operands": ["schema_file"],
+      "state": null,
+      "sources": [{"quote": "schema.yaml", "occurrence": 1}]
+    },
+    {
+      "id": "result_item",
+      "op": "ITEM",
+      "operands": ["conformance_file"],
+      "state": null,
+      "sources": [{"quote": "conformance.md", "occurrence": 1}]
+    }
+  ],
+  "issues": [],
+  "coverage": [
+    {
+      "sources": [{"quote": "请QA检查RULE-17的内容", "occurrence": 1}],
+      "claim_ids": ["check_performer", "check_rule", "rule_scope"],
+      "status": "EXPRESSED",
+      "affected_views": ["A", "P", "I"],
+      "range_requirement": {"kind": "SPECIFIC", "scope_claim_ids": ["rule_scope"]}
+    },
+    {
+      "sources": [{"quote": "检查RULE-17的内容和schema.yaml", "occurrence": 1}],
+      "claim_ids": ["check_performer", "check_schema", "schema_scope"],
+      "status": "EXPRESSED",
+      "affected_views": ["A", "P", "I"],
+      "range_requirement": {"kind": "SPECIFIC", "scope_claim_ids": ["schema_scope"]}
+    },
+    {
+      "sources": [
+        {"quote": "请QA检查", "occurrence": 1},
+        {"quote": "生成conformance.md", "occurrence": 1}
+      ],
+      "claim_ids": ["generate_performer", "generate_result", "result_scope"],
+      "status": "EXPRESSED",
+      "affected_views": ["A", "P", "O"],
+      "range_requirement": {"kind": "SPECIFIC", "scope_claim_ids": ["result_scope"]}
+    }
+  ]
+}

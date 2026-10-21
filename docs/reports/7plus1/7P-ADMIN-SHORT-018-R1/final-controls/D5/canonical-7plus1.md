@@ -1,0 +1,31 @@
+# Actual Canonical 7+1
+
+## I RESOLVED
+
+- RESOLVED raw.tsv [p1:2ef4d55d71339dc54a1608c8]
+
+## O RESOLVED
+
+- RESOLVED derived.txt [p1:9ea4c5271c0f0dd6a2d5bbf0]
+
+## A RESOLVED
+
+- RESOLVED REQUIRED 读取 raw.tsv [p1:d823c12300c62c56e374a466]
+- RESOLVED REQUIRED 生成 derived.txt [p1:f58fd567136502372f188272]
+
+## P RESOLVED
+
+- RESOLVED ENG [PERFORMER] [p1:c67223b507045fb1a37f0748,p1:255adb3f5ac59e47b700c6ff]
+
+## R ABSENT
+
+
+## V ABSENT
+
+
+## C ABSENT
+
+
+## B RESOLVED
+
+- RESOLVED FORBIDDEN 删除 raw.tsv [p1:7a93fdd244136721e19cb18e]

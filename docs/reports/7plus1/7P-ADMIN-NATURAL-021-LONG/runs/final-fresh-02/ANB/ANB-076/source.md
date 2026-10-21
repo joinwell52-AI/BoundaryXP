@@ -1,0 +1,1 @@
+OPS 只检查测试环境的 service.yaml，生产环境不在本次范围内。生成 scope-review.md，不得修改任何配置。

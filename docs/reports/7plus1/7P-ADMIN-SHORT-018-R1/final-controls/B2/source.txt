@@ -1,0 +1,1 @@
+ENG 读取 records.tsv，检查其中全部记录的状态，生成 status.txt。AUD 确认报告覆盖清单中的每一项后，COORD 向 DIRECTOR 提交报告。

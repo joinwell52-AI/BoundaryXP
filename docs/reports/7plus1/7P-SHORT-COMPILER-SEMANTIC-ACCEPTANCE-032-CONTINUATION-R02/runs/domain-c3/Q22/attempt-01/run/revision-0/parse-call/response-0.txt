@@ -1,0 +1,245 @@
+{
+  "contract_version": "032.1",
+  "entities": [
+    {
+      "id": "e_pm",
+      "label": "PM",
+      "type": "OTHER",
+      "mentions": [{"quote": "PM", "occurrence": 1}],
+      "alternatives": []
+    },
+    {
+      "id": "e_admin",
+      "label": "ADMIN",
+      "type": "OTHER",
+      "mentions": [{"quote": "ADMIN", "occurrence": 1}],
+      "alternatives": []
+    },
+    {
+      "id": "e_file",
+      "label": "handover.md",
+      "type": "FILE",
+      "mentions": [
+        {"quote": "handover.md", "occurrence": 1},
+        {"quote": "该文件", "occurrence": 1}
+      ],
+      "alternatives": []
+    }
+  ],
+  "events": [
+    {
+      "id": "ev_submit",
+      "predicate": "提交",
+      "kind": "ACTION",
+      "layer": "MAIN",
+      "use": "CURRENT_TASK",
+      "modality": "REQUIRED",
+      "polarity": "POSITIVE",
+      "owner_id": "ROOT",
+      "constraint_ids": [],
+      "requires": [],
+      "sources": [{"quote": "PM必须提交handover.md", "occurrence": 1}]
+    },
+    {
+      "id": "ev_confirm",
+      "predicate": "确认已收到",
+      "kind": "STATE",
+      "layer": "CONDITION",
+      "use": "MENTION_ONLY",
+      "modality": "UNSTATED",
+      "polarity": "POSITIVE",
+      "owner_id": "ROOT",
+      "constraint_ids": [],
+      "requires": [],
+      "sources": [{"quote": "ADMIN确认已收到该文件", "occurrence": 1}]
+    }
+  ],
+  "claims": [
+    {
+      "id": "c_submit_performer",
+      "kind": "ROLE",
+      "event_id": "ev_submit",
+      "entity_id": "e_pm",
+      "role": "PERFORMER",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "artifact_use": null,
+      "scope_id": "ev_submit",
+      "requires": [],
+      "sources": [{"quote": "PM必须提交handover.md", "occurrence": 1}],
+      "note": "PM是提交动作的明确执行者。"
+    },
+    {
+      "id": "c_deliverable",
+      "kind": "ROLE",
+      "event_id": "ev_submit",
+      "entity_id": "e_file",
+      "role": "DELIVERABLE",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "artifact_use": null,
+      "scope_id": "ev_submit",
+      "requires": [],
+      "sources": [{"quote": "提交handover.md", "occurrence": 1}],
+      "note": "明确要求交付该文件，不推定生成、修改或外部输入。"
+    },
+    {
+      "id": "c_submit_scope",
+      "kind": "SCOPE",
+      "event_id": "ev_submit",
+      "entity_id": "e_file",
+      "role": null,
+      "expression_id": "x_submit_file",
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "artifact_use": null,
+      "scope_id": "e_file",
+      "requires": [],
+      "sources": [{"quote": "提交handover.md", "occurrence": 1}],
+      "note": "提交对象是具体文件。"
+    },
+    {
+      "id": "c_confirm_performer",
+      "kind": "ROLE",
+      "event_id": "ev_confirm",
+      "entity_id": "e_admin",
+      "role": "PERFORMER",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "artifact_use": null,
+      "scope_id": "ev_confirm",
+      "requires": [],
+      "sources": [{"quote": "ADMIN确认已收到该文件", "occurrence": 1}],
+      "note": "ADMIN是条件状态中的确认主体，不新增确认义务。"
+    },
+    {
+      "id": "c_confirm_object",
+      "kind": "ROLE",
+      "event_id": "ev_confirm",
+      "entity_id": "e_file",
+      "role": "OBJECT",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "artifact_use": null,
+      "scope_id": "ev_confirm",
+      "requires": [],
+      "sources": [
+        {"quote": "提交handover.md", "occurrence": 1},
+        {"quote": "ADMIN确认已收到该文件", "occurrence": 1}
+      ],
+      "note": "该文件回指唯一明确的handover.md；确认内容为ADMIN已收到它，不断言该状态已经成立。"
+    },
+    {
+      "id": "c_confirm_scope",
+      "kind": "SCOPE",
+      "event_id": "ev_confirm",
+      "entity_id": "e_file",
+      "role": null,
+      "expression_id": "x_confirm_file",
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "artifact_use": null,
+      "scope_id": "e_file",
+      "requires": [],
+      "sources": [
+        {"quote": "handover.md", "occurrence": 1},
+        {"quote": "该文件", "occurrence": 1}
+      ],
+      "note": "条件中的文件与提交产物保持同一身份。"
+    },
+    {
+      "id": "c_completion",
+      "kind": "COMPLETION",
+      "event_id": null,
+      "entity_id": null,
+      "role": null,
+      "expression_id": "x_confirmed_received",
+      "direction": "NECESSARY",
+      "temporal": null,
+      "quantity": null,
+      "artifact_use": null,
+      "scope_id": "ROOT",
+      "requires": [],
+      "sources": [
+        {"quote": "handover.md", "occurrence": 1},
+        {"quote": "只有ADMIN确认已收到该文件，本任务才可标记为完成", "occurrence": 1}
+      ],
+      "note": "ADMIN确认已收到handover.md是根任务可标记完成的必要条件，不解释为充分条件，也不推定已确认或已收到。"
+    }
+  ],
+  "expressions": [
+    {
+      "id": "x_submit_file",
+      "op": "ITEM",
+      "operands": ["e_file"],
+      "state": null,
+      "sources": [{"quote": "提交handover.md", "occurrence": 1}]
+    },
+    {
+      "id": "x_confirm_file",
+      "op": "ITEM",
+      "operands": ["e_file"],
+      "state": null,
+      "sources": [
+        {"quote": "handover.md", "occurrence": 1},
+        {"quote": "该文件", "occurrence": 1}
+      ]
+    },
+    {
+      "id": "x_confirmed_received",
+      "op": "STATE",
+      "operands": [],
+      "state": {
+        "predicate": "确认已收到",
+        "event_id": "ev_confirm",
+        "args": ["e_admin", "e_file"],
+        "polarity": "POSITIVE"
+      },
+      "sources": [
+        {"quote": "handover.md", "occurrence": 1},
+        {"quote": "ADMIN确认已收到该文件", "occurrence": 1}
+      ]
+    }
+  ],
+  "issues": [],
+  "coverage": [
+    {
+      "sources": [{"quote": "PM必须提交handover.md", "occurrence": 1}],
+      "claim_ids": ["c_submit_performer", "c_deliverable", "c_submit_scope"],
+      "status": "EXPRESSED",
+      "affected_views": ["A", "P", "O"],
+      "range_requirement": {
+        "kind": "SPECIFIC",
+        "scope_claim_ids": ["c_submit_scope"]
+      }
+    },
+    {
+      "sources": [
+        {"quote": "handover.md", "occurrence": 1},
+        {"quote": "只有ADMIN确认已收到该文件，本任务才可标记为完成", "occurrence": 1}
+      ],
+      "claim_ids": [
+        "c_confirm_performer",
+        "c_confirm_object",
+        "c_confirm_scope",
+        "c_completion"
+      ],
+      "status": "EXPRESSED",
+      "affected_views": ["C"],
+      "range_requirement": {
+        "kind": "SPECIFIC",
+        "scope_claim_ids": ["c_confirm_scope"]
+      }
+    }
+  ]
+}

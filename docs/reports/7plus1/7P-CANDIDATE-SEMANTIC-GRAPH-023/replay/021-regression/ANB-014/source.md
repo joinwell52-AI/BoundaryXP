@@ -1,0 +1,1 @@
+QA 读取 unit-test.json 与 integration-test.json，统计失败用例并生成 test-review.md。不得重新运行测试，DEV 只负责对失败原因作文字说明。

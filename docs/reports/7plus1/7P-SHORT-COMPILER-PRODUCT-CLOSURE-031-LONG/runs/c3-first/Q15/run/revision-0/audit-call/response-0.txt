@@ -1,0 +1,115 @@
+{
+  "contract_version": "031-r01",
+  "reviews": [
+    {
+      "subject_id": "ent_pm",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [{"quote": "PM", "occurrence": 1}],
+      "reason": "PM身份明确；OTHER可占位表示未指定类别，无须推定为个人或团队。"
+    },
+    {
+      "subject_id": "ent_users",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [{"quote": "users.csv", "occurrence": 1}],
+      "reason": "明确命名的受核对文件，身份及FILE类别有支持。"
+    },
+    {
+      "subject_id": "ent_optional",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [
+        {"quote": "optional.md", "occurrence": 1},
+        {"quote": "optional.md", "occurrence": 2}
+      ],
+      "reason": "生成和无需交付两处名称指向同一文件，无其他产物或轮次竞争，mentions完整关联两端。"
+    },
+    {
+      "subject_id": "evt_check",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [{"quote": "请PM核对users.csv", "occurrence": 1}],
+      "reason": "核对是当前任务明确要求的主动作，无额外条件或数量限制。"
+    },
+    {
+      "subject_id": "evt_generate",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [{"quote": "可以另外生成optional.md", "occurrence": 1}],
+      "reason": "生成是当前任务允许的追加动作；PERMITTED准确，原文未指定先后条件。"
+    },
+    {
+      "subject_id": "evt_deliver",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [{"quote": "本任务不要求交付optional.md", "occurrence": 1}],
+      "reason": "NOT_REQUIRED准确表达无交付义务，不等于禁止交付，也不新增交付许可。"
+    },
+    {
+      "subject_id": "cl_check_performer",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["ent_pm", "evt_check"],
+      "sources": [{"quote": "请PM核对users.csv", "occurrence": 1}],
+      "reason": "PM是原文明示的核对执行者，角色与事件绑定正确。"
+    },
+    {
+      "subject_id": "cl_check_input",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["ent_users", "evt_check"],
+      "sources": [{"quote": "核对users.csv", "occurrence": 1}],
+      "reason": "users.csv是明确受检范围，INPUT_OBJECT用途正确。"
+    },
+    {
+      "subject_id": "cl_generate_performer",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["ent_pm", "evt_generate"],
+      "sources": [
+        {"quote": "请PM核对users.csv", "occurrence": 1},
+        {"quote": "可以另外生成optional.md", "occurrence": 1}
+      ],
+      "reason": "连续同一指令的追加动作无主体切换，可承接PM；来源包含主语和追加动作两端。"
+    },
+    {
+      "subject_id": "cl_generate_result",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["ent_optional", "evt_generate"],
+      "sources": [{"quote": "可以另外生成optional.md", "occurrence": 1}],
+      "reason": "optional.md是允许生成的RESULT，进入允许结果用途，不推导必须生成或交付。"
+    },
+    {
+      "subject_id": "cl_deliver_performer",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["ent_pm", "evt_deliver"],
+      "sources": [
+        {"quote": "请PM核对users.csv", "occurrence": 1},
+        {"quote": "本任务不要求交付optional.md", "occurrence": 1}
+      ],
+      "reason": "同一指令未切换主体，无需交付用途可承接PM；该角色绑定不产生交付义务。"
+    },
+    {
+      "subject_id": "cl_deliver_output",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["ent_optional", "evt_deliver", "cl_generate_result"],
+      "sources": [
+        {"quote": "可以另外生成optional.md", "occurrence": 1},
+        {"quote": "本任务不要求交付optional.md", "occurrence": 1}
+      ],
+      "reason": "DELIVERABLE与生成结果引用同一文件，保留无需交付用途且不产生正向交付O，符合原文。"
+    }
+  ],
+  "issues": [],
+  "omissions": []
+}

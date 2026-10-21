@@ -1,0 +1,198 @@
+{
+  "contract_version": "031-r1.1",
+  "reviews": [
+    {
+      "subject_id": "E_PM",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [
+        {
+          "quote": "PM",
+          "occurrence": 1
+        }
+      ],
+      "reason": "PM身份明确；OTHER可作为未指定具体类别的占位。"
+    },
+    {
+      "subject_id": "E_USERS",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [
+        {
+          "quote": "users.csv",
+          "occurrence": 1
+        }
+      ],
+      "reason": "明确的受检文件，名称与身份有来源支持。"
+    },
+    {
+      "subject_id": "E_OPTIONAL",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [
+        {
+          "quote": "optional.md",
+          "occurrence": 1
+        },
+        {
+          "quote": "optional.md",
+          "occurrence": 2
+        }
+      ],
+      "reason": "两处名称指向同一可选产物，无版本或对象竞争。"
+    },
+    {
+      "subject_id": "EV_CHECK",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [
+        {
+          "quote": "请PM核对users.csv",
+          "occurrence": 1
+        }
+      ],
+      "reason": "核对是当前任务明确要求的动作。"
+    },
+    {
+      "subject_id": "EV_GENERATE",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [
+        {
+          "quote": "可以另外生成optional.md",
+          "occurrence": 1
+        }
+      ],
+      "reason": "生成是独立许可，未转为必须执行，也未添加先后条件。"
+    },
+    {
+      "subject_id": "EV_DELIVER",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [
+        {
+          "quote": "本任务不要求交付optional.md",
+          "occurrence": 1
+        }
+      ],
+      "reason": "NOT_REQUIRED准确表达无需交付，未误作禁止或许可。"
+    },
+    {
+      "subject_id": "C_CHECK_PM",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [
+        "EV_CHECK",
+        "E_PM"
+      ],
+      "sources": [
+        {
+          "quote": "请PM核对users.csv",
+          "occurrence": 1
+        }
+      ],
+      "reason": "原文明示PM执行核对。"
+    },
+    {
+      "subject_id": "C_CHECK_INPUT",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [
+        "EV_CHECK",
+        "E_USERS"
+      ],
+      "sources": [
+        {
+          "quote": "核对users.csv",
+          "occurrence": 1
+        }
+      ],
+      "reason": "users.csv是核对动作的明确受检范围，INPUT_OBJECT绑定正确。"
+    },
+    {
+      "subject_id": "C_GENERATE_PM",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [
+        "EV_GENERATE",
+        "E_PM"
+      ],
+      "sources": [
+        {
+          "quote": "请PM核对users.csv",
+          "occurrence": 1
+        },
+        {
+          "quote": "可以另外生成optional.md",
+          "occurrence": 1
+        }
+      ],
+      "reason": "连续指令中的追加许可承接PM，无主体切换；来源覆盖两端。"
+    },
+    {
+      "subject_id": "C_GENERATE_RESULT",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [
+        "EV_GENERATE",
+        "E_OPTIONAL"
+      ],
+      "sources": [
+        {
+          "quote": "可以另外生成optional.md",
+          "occurrence": 1
+        }
+      ],
+      "reason": "optional.md是允许生成的RESULT，进入许可产出用途。"
+    },
+    {
+      "subject_id": "C_DELIVER_PM",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [
+        "EV_DELIVER",
+        "E_PM"
+      ],
+      "sources": [
+        {
+          "quote": "请PM核对users.csv",
+          "occurrence": 1
+        },
+        {
+          "quote": "本任务不要求交付optional.md",
+          "occurrence": 1
+        }
+      ],
+      "reason": "同一指令的交付用途可承接PM，关联事件仍保持无需执行的模态。"
+    },
+    {
+      "subject_id": "C_DELIVER_ARTIFACT",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [
+        "EV_DELIVER",
+        "E_OPTIONAL",
+        "C_GENERATE_RESULT"
+      ],
+      "sources": [
+        {
+          "quote": "可以另外生成optional.md",
+          "occurrence": 1
+        },
+        {
+          "quote": "本任务不要求交付optional.md",
+          "occurrence": 1
+        }
+      ],
+      "reason": "同一产物的DELIVERABLE用途得到保留；无需交付不产生正向交付O，也不要求正向ARTIFACT_USE关联。"
+    }
+  ],
+  "issues": [],
+  "omissions": []
+}

@@ -1,0 +1,17 @@
+import fs from 'node:fs';import path from 'node:path';import crypto from 'node:crypto';
+import {OUT,RUNTIME,read,write,walk,sha,git} from './audit-tools.mjs';
+const results=read(OUT+'/root-model/r04/RESULTS.json'),audit=read(OUT+'/source-audits/root-model-r04.json');
+if(results.errors||results.implementation_drift.length||audit.closed!==50)throw Error('ROOT_050_NOT_CLOSED_NO_HOLDOUT_FREEZE');
+const seen=new Set(),visit=p=>{p=path.normalize(p).replaceAll('\\','/');if(seen.has(p)||!fs.existsSync(p))return;seen.add(p);if(!/\.(mjs|js)$/u.test(p))return;const code=fs.readFileSync(p,'utf8');for(const m of code.matchAll(/(?:from\s*|import\s*\(|import\s*)['"]([^'"]+)['"]/gu))if(m[1].startsWith('.'))visit(path.resolve(path.dirname(p),m[1]));};
+for(const p of walk(RUNTIME))visit(p);for(const p of ['tests/parser-admin-root-024.test.mjs','research/7plus1-parser/v0.3-admin-natural-021/lexical.mjs','research/7plus1-parser/v0.3-admin-natural-021/root-frames.mjs','research/7plus1-parser/v0.3-admin-natural-021/roles.mjs'])visit(p);
+for(const p of walk('research/7plus1-parser/p0-semantic-repair-v0.1').filter(p=>/\.py$/u.test(p)))visit(p);
+for(const p of walk('domain-packs/l1/core-ontology').concat(walk('domain-packs/l2/software-ai/0.2.0')))visit(p);
+for(const p of ['package.json','package-lock.json','docs/BoundX-7plus1-定义原理语义编译与边界计算说明-v0.3.1.md','docs/BoundX-7plus1-ADMIN-ROOT-BENCHMARK-CONTRACT-v1.md','docs/tasks/7plus1/7P-ADMIN-ROOT-COMPILER-CLOSURE-024-LONG.md'])visit(p);
+const files=[...seen].map(p=>({path:path.relative(process.cwd(),p).replaceAll('\\','/'),sha256:sha(fs.readFileSync(p))})).sort((a,b)=>a.path.localeCompare(b.path));
+async function fileHash(p){const h=crypto.createHash('sha256');for await(const b of fs.createReadStream(p))h.update(b);return h.digest('hex');}
+const baseline=read('docs/reports/7plus1/7P-CANDIDATE-SEMANTIC-GRAPH-023/BASELINE.json'),models=[];
+for(const item of baseline.models){const digest=await fileHash(item.path);if(digest!==item.sha256)throw Error('NLP_MODEL_CHANGED '+item.path);models.push({...item,verified_sha256:digest});}
+const trace=read(OUT+'/root-model/r04/ROOT-001/trace.json').compiler_v03;
+for(const model of trace.nlp_signals.semantic_model_signals.models){const manifest=read(path.join(model.path,'MANIFEST.json'));for(const item of manifest.files){const p=path.join(model.path,item.path),digest=await fileHash(p);if(digest!==item.sha256)throw Error('SEMANTIC_MODEL_CHANGED '+p);models.push({path:path.relative(process.cwd(),p).replaceAll('\\','/'),sha256:digest,resource:model.resource,revision:manifest.revision});}models.push({path:path.relative(process.cwd(),path.join(model.path,'MANIFEST.json')).replaceAll('\\','/'),sha256:await fileHash(path.join(model.path,'MANIFEST.json')),resource:model.resource});}
+const freeze={status:'FROZEN_BEFORE_NATURAL_100_FIRST_OBSERVATION',created_at:new Date().toISOString(),root50_source_semantically_closed:50,root50_audit_sha256:sha(fs.readFileSync(OUT+'/source-audits/root-model-r04.json')),code_rules_schema_packs_protocol_files:files,models,policy:trace.nlp_signals.semantic_model_signals.policy,packs:trace.nlp_signals.semantic_model_signals.packs,LLM:'NOT_USED',L3:'NOT_SELECTED',mdeberta_v3_base_main_path:false,base_commit:git(['rev-parse','HEAD']).trim(),production_scripts:read('package.json').scripts};
+freeze.candidate_sha256=sha(JSON.stringify(freeze));write('IMPLEMENTATION-FREEZE.json',freeze);console.log(JSON.stringify({frozen:true,files:files.length,model_files:models.length,candidate_sha256:freeze.candidate_sha256}));

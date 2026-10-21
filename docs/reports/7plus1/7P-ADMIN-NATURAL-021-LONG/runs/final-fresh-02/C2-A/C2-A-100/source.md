@@ -1,0 +1,1 @@
+TEAM300 生成 handoff-c2-a-10.md 和 alternative-c2-a-10.md，LEAD300 发送该报告给 COORD。

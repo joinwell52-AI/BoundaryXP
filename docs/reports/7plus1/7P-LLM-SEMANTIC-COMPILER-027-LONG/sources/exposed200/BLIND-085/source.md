@@ -1,0 +1,1 @@
+Taylor must coordinate the task: verify storage-2809.csv in test cluster. Attempt the check at most 6 times. Completion requires at least 5 successful checks and existence of the report. Deliver audit-689914.md. The whole task must finish within 26 minutes. Send the final report to Avery.

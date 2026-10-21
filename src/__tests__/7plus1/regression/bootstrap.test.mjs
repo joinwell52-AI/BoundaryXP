@@ -1,0 +1,10 @@
+import test from'node:test';import assert from'node:assert/strict';import fs from'node:fs';import{createHash}from'node:crypto';
+import{compileNative}from'../../../../research/7plus1-parser/v0.3-p2.2-scope-consistency-repair/engine.mjs';
+import{sourceDocument}from'../../../../research/7plus1-parser/p0-semantic-repair-r02/source.mjs';
+import{scopeEvidence}from'../../../../research/7plus1-parser/v0.3-p2.2-scope-consistency-repair/scope-consistency.mjs';
+const golden=new URL('../../../../fixtures/7plus1/golden/REF-001/',import.meta.url),read=u=>JSON.parse(fs.readFileSync(u)),hash=b=>createHash('sha256').update(b).digest('hex');
+test('ADMIN-confirmed reference immutable bytes and manifest remain coherent',()=>{const m=read(new URL('manifest.json',golden));assert.equal(m.status,'GOLDEN_CONFIRMED');for(const[n,h]of Object.entries(m.files))assert.equal(hash(fs.readFileSync(new URL(n,golden))),h);assert.equal(hash(fs.readFileSync(new URL('source.txt',golden))),m.source_sha256);});
+test('reference evidence is exact Unicode codepoint spans',()=>{const p=[...fs.readFileSync(new URL('source.txt',golden),'utf8')],e=read(new URL('evidence.json',golden));for(const s of e.source_spans)assert.equal(p.slice(s.start,s.end).join(''),s.text);});
+test('confirmed boundary object/relation/scope content passes frozen contract',()=>{const s=read(new URL('expected-semantic.json',golden)),ir=read(new URL('expected-boundary-ir.json',golden));assert.deepEqual(scopeEvidence(ir,s.semantic_nodes,s.relations).filter(x=>!x.pass),[]);});
+const bundle=read(new URL('../../../../fixtures/7plus1/regression/P22-SAVED-SIGNALS.json',import.meta.url));
+for(const c of bundle.cases)test('unchanged native replay with saved NLP signals: '+c.id,()=>{const r=compileNative(sourceDocument(c.text),structuredClone(c.signals)),v=r.compiler_v03;assert.equal(r.contract_gate_results.status,'PASS');assert.deepEqual(scopeEvidence(v.boundary_ir,v.semantic_nodes,v.relations).filter(x=>!x.pass),[]);for(const[name,key]of[['canonical_7plus1','canonical_sha256'],['boundary_ir','boundary_ir_sha256'],['unresolved','unresolved_sha256']])assert.equal(hash(JSON.stringify(v[name])),c.expected[key]);});

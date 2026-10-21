@@ -1,0 +1,35 @@
+# Actual Canonical Root 7+1
+
+## I RESOLVED
+
+- RESOLVED orders.csv [p1:03d3ac3660d48bf3b659e175]
+- RESOLVED 订单号缺失和重复情况 [p1:698b01c50a9a2195ab8bda7c]
+
+## O RESOLVED
+
+- RESOLVED data-quality.md [p1:0c7043b96fd4c3b02a4b7222]
+
+## A RESOLVED
+
+- RESOLVED REQUIRED 读取 orders.csv [p1:d7e05955907397c63d2511fe]
+- RESOLVED REQUIRED 检查 订单号缺失和重复情况 [p1:3571ea2b2e252fbf53aab460]
+- RESOLVED REQUIRED 生成 data-quality.md [p1:fdb2396b61c40134916c79ee]
+
+## P RESOLVED
+
+- RESOLVED 分析员赵宁 [PERFORMER] [p1:c563ae7a403dc4bb7ce549a5,p1:3f8e9145638748ed09accc21,p1:490c3d33fcf4684f8a283fa5]
+
+## R RESOLVED
+
+- RESOLVED 45 [p1:89b508c9c46d884e0c4700c9]
+
+## V ABSENT
+
+
+## C RESOLVED
+
+- RESOLVED 完成 [p1:bba35278e9bd1996a6fc1b52]
+
+## B RESOLVED
+
+- RESOLVED FORBIDDEN 更改 原始数据 [p1:fb848084367a842807f5475b]

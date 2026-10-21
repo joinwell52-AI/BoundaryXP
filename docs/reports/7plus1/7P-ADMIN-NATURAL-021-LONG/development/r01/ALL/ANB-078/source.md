@@ -1,0 +1,1 @@
+QA 核对 active.csv 中的在用设备，已报废设备不包含在此次核对范围。生成 active-device-review.md。

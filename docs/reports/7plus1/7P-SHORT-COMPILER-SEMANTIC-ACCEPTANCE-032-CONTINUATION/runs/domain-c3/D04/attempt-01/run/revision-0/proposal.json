@@ -1,0 +1,453 @@
+{
+  "contract_version": "032.1",
+  "entities": [
+    {
+      "id": "E_PM",
+      "label": "PM",
+      "type": "OTHER",
+      "mentions": [
+        {
+          "quote": "PM",
+          "occurrence": 1
+        }
+      ],
+      "alternatives": []
+    },
+    {
+      "id": "E_ALPHA",
+      "label": "alpha.json",
+      "type": "FILE",
+      "mentions": [
+        {
+          "quote": "alpha.json",
+          "occurrence": 1
+        },
+        {
+          "quote": "上述两个文件",
+          "occurrence": 1
+        }
+      ],
+      "alternatives": []
+    },
+    {
+      "id": "E_BETA",
+      "label": "beta.json",
+      "type": "FILE",
+      "mentions": [
+        {
+          "quote": "beta.json",
+          "occurrence": 1
+        },
+        {
+          "quote": "上述两个文件",
+          "occurrence": 1
+        }
+      ],
+      "alternatives": []
+    },
+    {
+      "id": "E_CONFIG",
+      "label": "配置项",
+      "type": "CLASS",
+      "mentions": [
+        {
+          "quote": "配置项",
+          "occurrence": 1
+        },
+        {
+          "quote": "配置项",
+          "occurrence": 2
+        }
+      ],
+      "alternatives": []
+    }
+  ],
+  "events": [
+    {
+      "id": "EV_CHECK",
+      "predicate": "核对",
+      "kind": "ACTION",
+      "layer": "MAIN",
+      "use": "CURRENT_TASK",
+      "modality": "REQUIRED",
+      "polarity": "POSITIVE",
+      "owner_id": "ROOT",
+      "constraint_ids": [],
+      "requires": [],
+      "sources": [
+        {
+          "quote": "请PM核对alpha.json和beta.json的配置项。",
+          "occurrence": 1
+        }
+      ]
+    },
+    {
+      "id": "EV_CHANGE",
+      "predicate": "更改",
+      "kind": "ACTION",
+      "layer": "MAIN",
+      "use": "CURRENT_TASK",
+      "modality": "FORBIDDEN",
+      "polarity": "POSITIVE",
+      "owner_id": "ROOT",
+      "constraint_ids": [],
+      "requires": [],
+      "sources": [
+        {
+          "quote": "本任务不得更改上述两个文件中的任何配置项。",
+          "occurrence": 1
+        }
+      ]
+    }
+  ],
+  "claims": [
+    {
+      "id": "C_CHECK_PM",
+      "kind": "ROLE",
+      "event_id": "EV_CHECK",
+      "entity_id": "E_PM",
+      "role": "PERFORMER",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "artifact_use": null,
+      "scope_id": "EV_CHECK",
+      "requires": [],
+      "sources": [
+        {
+          "quote": "请PM核对",
+          "occurrence": 1
+        }
+      ],
+      "note": "PM是明确的核对执行者，岗位简称未指定人或组类别。"
+    },
+    {
+      "id": "C_CHECK_INPUT",
+      "kind": "ROLE",
+      "event_id": "EV_CHECK",
+      "entity_id": "E_CONFIG",
+      "role": "INPUT_OBJECT",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "artifact_use": null,
+      "scope_id": "EV_CHECK",
+      "requires": [],
+      "sources": [
+        {
+          "quote": "核对alpha.json和beta.json的配置项",
+          "occurrence": 1
+        }
+      ],
+      "note": "受检范围为两个明确文件内的配置项。"
+    },
+    {
+      "id": "C_CHECK_SCOPE",
+      "kind": "SCOPE",
+      "event_id": "EV_CHECK",
+      "entity_id": "E_CONFIG",
+      "role": null,
+      "expression_id": "X_CHECK_DOMAIN",
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "artifact_use": null,
+      "scope_id": "E_CONFIG",
+      "requires": [],
+      "sources": [
+        {
+          "quote": "alpha.json和beta.json的配置项",
+          "occurrence": 1
+        }
+      ],
+      "note": "两个文件的配置项类别域同时构成核对范围，原文未另加全称量词。"
+    },
+    {
+      "id": "C_CHANGE_PM",
+      "kind": "ROLE",
+      "event_id": "EV_CHANGE",
+      "entity_id": "E_PM",
+      "role": "PERFORMER",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "artifact_use": null,
+      "scope_id": "EV_CHANGE",
+      "requires": [],
+      "sources": [
+        {
+          "quote": "请PM核对",
+          "occurrence": 1
+        },
+        {
+          "quote": "本任务不得更改",
+          "occurrence": 1
+        }
+      ],
+      "note": "连续同一任务未切换主体，禁止更改承接PM；禁止仍限定于本任务。"
+    },
+    {
+      "id": "C_CHANGE_OBJECT",
+      "kind": "ROLE",
+      "event_id": "EV_CHANGE",
+      "entity_id": "E_CONFIG",
+      "role": "OBJECT",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "artifact_use": null,
+      "scope_id": "EV_CHANGE",
+      "requires": [],
+      "sources": [
+        {
+          "quote": "不得更改上述两个文件中的任何配置项",
+          "occurrence": 1
+        }
+      ],
+      "note": "禁止对象为配置项，不由禁令新增外部输入。"
+    },
+    {
+      "id": "C_CHANGE_SCOPE",
+      "kind": "SCOPE",
+      "event_id": "EV_CHANGE",
+      "entity_id": "E_CONFIG",
+      "role": null,
+      "expression_id": "X_CHANGE_ALL",
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "artifact_use": null,
+      "scope_id": "E_CONFIG",
+      "requires": [],
+      "sources": [
+        {
+          "quote": "alpha.json和beta.json",
+          "occurrence": 1
+        },
+        {
+          "quote": "本任务不得更改上述两个文件中的任何配置项",
+          "occurrence": 1
+        }
+      ],
+      "note": "上述两个文件明确回指alpha.json与beta.json；任何配置项保留为两文件域并集上的全称禁止，无例外。"
+    }
+  ],
+  "expressions": [
+    {
+      "id": "X_CHECK_ALPHA",
+      "op": "CATEGORY",
+      "operands": [
+        "E_CONFIG",
+        "E_ALPHA"
+      ],
+      "state": null,
+      "sources": [
+        {
+          "quote": "alpha.json和beta.json的配置项",
+          "occurrence": 1
+        }
+      ]
+    },
+    {
+      "id": "X_CHECK_BETA",
+      "op": "CATEGORY",
+      "operands": [
+        "E_CONFIG",
+        "E_BETA"
+      ],
+      "state": null,
+      "sources": [
+        {
+          "quote": "alpha.json和beta.json的配置项",
+          "occurrence": 1
+        }
+      ]
+    },
+    {
+      "id": "X_CHECK_DOMAIN",
+      "op": "UNION",
+      "operands": [
+        "X_CHECK_ALPHA",
+        "X_CHECK_BETA"
+      ],
+      "state": null,
+      "sources": [
+        {
+          "quote": "alpha.json和beta.json的配置项",
+          "occurrence": 1
+        }
+      ]
+    },
+    {
+      "id": "X_CHANGE_ALPHA",
+      "op": "CATEGORY",
+      "operands": [
+        "E_CONFIG",
+        "E_ALPHA"
+      ],
+      "state": null,
+      "sources": [
+        {
+          "quote": "alpha.json和beta.json",
+          "occurrence": 1
+        },
+        {
+          "quote": "上述两个文件中的任何配置项",
+          "occurrence": 1
+        }
+      ]
+    },
+    {
+      "id": "X_CHANGE_BETA",
+      "op": "CATEGORY",
+      "operands": [
+        "E_CONFIG",
+        "E_BETA"
+      ],
+      "state": null,
+      "sources": [
+        {
+          "quote": "alpha.json和beta.json",
+          "occurrence": 1
+        },
+        {
+          "quote": "上述两个文件中的任何配置项",
+          "occurrence": 1
+        }
+      ]
+    },
+    {
+      "id": "X_CHANGE_DOMAIN",
+      "op": "UNION",
+      "operands": [
+        "X_CHANGE_ALPHA",
+        "X_CHANGE_BETA"
+      ],
+      "state": null,
+      "sources": [
+        {
+          "quote": "alpha.json和beta.json",
+          "occurrence": 1
+        },
+        {
+          "quote": "上述两个文件中的任何配置项",
+          "occurrence": 1
+        }
+      ]
+    },
+    {
+      "id": "X_CHANGE_ALL",
+      "op": "FORALL",
+      "operands": [
+        "X_CHANGE_DOMAIN"
+      ],
+      "state": null,
+      "sources": [
+        {
+          "quote": "上述两个文件中的任何配置项",
+          "occurrence": 1
+        }
+      ]
+    }
+  ],
+  "issues": [],
+  "coverage": [
+    {
+      "sources": [
+        {
+          "quote": "请PM核对",
+          "occurrence": 1
+        }
+      ],
+      "claim_ids": [
+        "C_CHECK_PM"
+      ],
+      "status": "EXPRESSED",
+      "affected_views": [
+        "A",
+        "P"
+      ],
+      "range_requirement": {
+        "kind": "NONE",
+        "scope_claim_ids": []
+      }
+    },
+    {
+      "sources": [
+        {
+          "quote": "核对alpha.json和beta.json的配置项",
+          "occurrence": 1
+        }
+      ],
+      "claim_ids": [
+        "C_CHECK_INPUT",
+        "C_CHECK_SCOPE"
+      ],
+      "status": "EXPRESSED",
+      "affected_views": [
+        "I",
+        "A"
+      ],
+      "range_requirement": {
+        "kind": "CATEGORY",
+        "scope_claim_ids": [
+          "C_CHECK_SCOPE"
+        ]
+      }
+    },
+    {
+      "sources": [
+        {
+          "quote": "请PM核对",
+          "occurrence": 1
+        },
+        {
+          "quote": "本任务不得更改",
+          "occurrence": 1
+        }
+      ],
+      "claim_ids": [
+        "C_CHANGE_PM"
+      ],
+      "status": "EXPRESSED",
+      "affected_views": [
+        "P",
+        "B"
+      ],
+      "range_requirement": {
+        "kind": "NONE",
+        "scope_claim_ids": []
+      }
+    },
+    {
+      "sources": [
+        {
+          "quote": "alpha.json和beta.json",
+          "occurrence": 1
+        },
+        {
+          "quote": "本任务不得更改上述两个文件中的任何配置项。",
+          "occurrence": 1
+        }
+      ],
+      "claim_ids": [
+        "C_CHANGE_OBJECT",
+        "C_CHANGE_SCOPE"
+      ],
+      "status": "EXPRESSED",
+      "affected_views": [
+        "B"
+      ],
+      "range_requirement": {
+        "kind": "UNIVERSAL",
+        "scope_claim_ids": [
+          "C_CHANGE_SCOPE"
+        ]
+      }
+    }
+  ]
+}

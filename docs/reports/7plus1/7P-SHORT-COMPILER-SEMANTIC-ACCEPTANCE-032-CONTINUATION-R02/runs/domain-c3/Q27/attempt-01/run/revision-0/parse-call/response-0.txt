@@ -1,0 +1,320 @@
+{
+  "contract_version": "032.1",
+  "entities": [
+    {
+      "id": "ent_pm",
+      "label": "PM",
+      "type": "OTHER",
+      "mentions": [{"quote": "PM", "occurrence": 1}],
+      "alternatives": []
+    },
+    {
+      "id": "ent_file",
+      "label": "howto.md",
+      "type": "FILE",
+      "mentions": [
+        {"quote": "howto.md", "occurrence": 1},
+        {"quote": "文中", "occurrence": 1}
+      ],
+      "alternatives": []
+    },
+    {
+      "id": "ent_content",
+      "label": "可以停用worker服务",
+      "type": "DOCUMENT",
+      "mentions": [{"quote": "可以停用worker服务", "occurrence": 1}],
+      "alternatives": []
+    },
+    {
+      "id": "ent_service",
+      "label": "worker服务",
+      "type": "SYSTEM",
+      "mentions": [
+        {"quote": "worker服务", "occurrence": 1},
+        {"quote": "worker服务", "occurrence": 2}
+      ],
+      "alternatives": []
+    }
+  ],
+  "events": [
+    {
+      "id": "ev_generate",
+      "predicate": "生成限定内容的文档",
+      "kind": "ACTION",
+      "layer": "MAIN",
+      "use": "CURRENT_TASK",
+      "modality": "REQUIRED",
+      "polarity": "POSITIVE",
+      "owner_id": "ROOT",
+      "constraint_ids": [],
+      "requires": [],
+      "sources": [
+        {"quote": "请PM生成howto.md", "occurrence": 1},
+        {"quote": "只在文中写入“可以停用worker服务”", "occurrence": 1}
+      ]
+    },
+    {
+      "id": "ev_quoted_stop",
+      "predicate": "停用服务",
+      "kind": "ACTION",
+      "layer": "QUOTED",
+      "use": "MENTION_ONLY",
+      "modality": "PERMITTED",
+      "polarity": "POSITIVE",
+      "owner_id": "ev_generate",
+      "constraint_ids": [],
+      "requires": [],
+      "sources": [{"quote": "可以停用worker服务", "occurrence": 1}]
+    },
+    {
+      "id": "ev_forbidden_stop",
+      "predicate": "停用服务",
+      "kind": "ACTION",
+      "layer": "MAIN",
+      "use": "CURRENT_TASK",
+      "modality": "FORBIDDEN",
+      "polarity": "POSITIVE",
+      "owner_id": "ROOT",
+      "constraint_ids": [],
+      "requires": [],
+      "sources": [{"quote": "本次不得停用worker服务", "occurrence": 1}]
+    }
+  ],
+  "claims": [
+    {
+      "id": "cl_generate_performer",
+      "kind": "ROLE",
+      "event_id": "ev_generate",
+      "entity_id": "ent_pm",
+      "role": "PERFORMER",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "artifact_use": null,
+      "scope_id": "ev_generate",
+      "requires": [],
+      "sources": [{"quote": "请PM生成howto.md", "occurrence": 1}],
+      "note": "PM是文档生成及其限定内容写入的执行者。"
+    },
+    {
+      "id": "cl_result",
+      "kind": "ROLE",
+      "event_id": "ev_generate",
+      "entity_id": "ent_file",
+      "role": "RESULT",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "artifact_use": null,
+      "scope_id": "ev_generate",
+      "requires": [],
+      "sources": [{"quote": "生成howto.md", "occurrence": 1}],
+      "note": "明确要求生成该文件，未要求交付。"
+    },
+    {
+      "id": "cl_result_scope",
+      "kind": "SCOPE",
+      "event_id": "ev_generate",
+      "entity_id": null,
+      "role": null,
+      "expression_id": "ex_file",
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "artifact_use": null,
+      "scope_id": "ent_file",
+      "requires": ["cl_result"],
+      "sources": [{"quote": "生成howto.md", "occurrence": 1}],
+      "note": "生成对象为指定文件。"
+    },
+    {
+      "id": "cl_content",
+      "kind": "ROLE",
+      "event_id": "ev_generate",
+      "entity_id": "ent_content",
+      "role": "CONTENT",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "artifact_use": null,
+      "scope_id": "ev_generate",
+      "requires": [],
+      "sources": [
+        {"quote": "请PM生成howto.md", "occurrence": 1},
+        {"quote": "只在文中写入“可以停用worker服务”", "occurrence": 1}
+      ],
+      "note": "文中回指howto.md；引号内文字是要求写入的内容，不是当前操作许可。"
+    },
+    {
+      "id": "cl_content_scope",
+      "kind": "SCOPE",
+      "event_id": "ev_generate",
+      "entity_id": null,
+      "role": null,
+      "expression_id": "ex_content",
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "artifact_use": null,
+      "scope_id": "ent_content",
+      "requires": ["cl_content"],
+      "sources": [{"quote": "只在文中写入“可以停用worker服务”", "occurrence": 1}],
+      "note": "写入内容仅限指定引文，操作限于文档内容层。"
+    },
+    {
+      "id": "cl_quoted_object",
+      "kind": "ROLE",
+      "event_id": "ev_quoted_stop",
+      "entity_id": "ent_service",
+      "role": "OBJECT",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "artifact_use": null,
+      "scope_id": "ev_quoted_stop",
+      "requires": [],
+      "sources": [{"quote": "可以停用worker服务", "occurrence": 1}],
+      "note": "仅记录引文中的服务对象。"
+    },
+    {
+      "id": "cl_quoted_scope",
+      "kind": "SCOPE",
+      "event_id": "ev_quoted_stop",
+      "entity_id": null,
+      "role": null,
+      "expression_id": "ex_service",
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "artifact_use": null,
+      "scope_id": "ent_service",
+      "requires": ["cl_quoted_object"],
+      "sources": [{"quote": "可以停用worker服务", "occurrence": 1}],
+      "note": "引文提及具体服务，不形成当前任务许可。"
+    },
+    {
+      "id": "cl_forbidden_performer",
+      "kind": "ROLE",
+      "event_id": "ev_forbidden_stop",
+      "entity_id": "ent_pm",
+      "role": "PERFORMER",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "artifact_use": null,
+      "scope_id": "ev_forbidden_stop",
+      "requires": [],
+      "sources": [
+        {"quote": "请PM生成howto.md", "occurrence": 1},
+        {"quote": "本次不得停用worker服务", "occurrence": 1}
+      ],
+      "note": "连续同一指令未切换主体，禁令承接PM；不从引文继承主体。"
+    },
+    {
+      "id": "cl_forbidden_object",
+      "kind": "ROLE",
+      "event_id": "ev_forbidden_stop",
+      "entity_id": "ent_service",
+      "role": "OBJECT",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "artifact_use": null,
+      "scope_id": "ev_forbidden_stop",
+      "requires": [],
+      "sources": [{"quote": "本次不得停用worker服务", "occurrence": 1}],
+      "note": "本次任务禁止停用该服务；禁止对象不增加外部输入。"
+    },
+    {
+      "id": "cl_forbidden_scope",
+      "kind": "SCOPE",
+      "event_id": "ev_forbidden_stop",
+      "entity_id": null,
+      "role": null,
+      "expression_id": "ex_service",
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "artifact_use": null,
+      "scope_id": "ent_service",
+      "requires": ["cl_forbidden_object"],
+      "sources": [{"quote": "本次不得停用worker服务", "occurrence": 1}],
+      "note": "禁令作用于本次任务中的指定服务，无附加状态前提。"
+    }
+  ],
+  "expressions": [
+    {
+      "id": "ex_file",
+      "op": "ITEM",
+      "operands": ["ent_file"],
+      "state": null,
+      "sources": [{"quote": "howto.md", "occurrence": 1}]
+    },
+    {
+      "id": "ex_content",
+      "op": "ITEM",
+      "operands": ["ent_content"],
+      "state": null,
+      "sources": [{"quote": "只在文中写入“可以停用worker服务”", "occurrence": 1}]
+    },
+    {
+      "id": "ex_service",
+      "op": "ITEM",
+      "operands": ["ent_service"],
+      "state": null,
+      "sources": [
+        {"quote": "worker服务", "occurrence": 1},
+        {"quote": "worker服务", "occurrence": 2}
+      ]
+    }
+  ],
+  "issues": [],
+  "coverage": [
+    {
+      "sources": [{"quote": "请PM生成howto.md", "occurrence": 1}],
+      "claim_ids": ["cl_generate_performer", "cl_result", "cl_result_scope"],
+      "status": "EXPRESSED",
+      "affected_views": ["A", "O", "P"],
+      "range_requirement": {
+        "kind": "SPECIFIC",
+        "scope_claim_ids": ["cl_result_scope"]
+      }
+    },
+    {
+      "sources": [{"quote": "只在文中写入“可以停用worker服务”", "occurrence": 1}],
+      "claim_ids": ["cl_content", "cl_content_scope"],
+      "status": "EXPRESSED",
+      "affected_views": ["A", "O", "B"],
+      "range_requirement": {
+        "kind": "SPECIFIC",
+        "scope_claim_ids": ["cl_content_scope"]
+      }
+    },
+    {
+      "sources": [{"quote": "可以停用worker服务", "occurrence": 1}],
+      "claim_ids": ["cl_quoted_object", "cl_quoted_scope"],
+      "status": "BACKGROUND",
+      "affected_views": ["O"],
+      "range_requirement": {
+        "kind": "SPECIFIC",
+        "scope_claim_ids": ["cl_quoted_scope"]
+      }
+    },
+    {
+      "sources": [{"quote": "本次不得停用worker服务", "occurrence": 1}],
+      "claim_ids": ["cl_forbidden_performer", "cl_forbidden_object", "cl_forbidden_scope"],
+      "status": "EXPRESSED",
+      "affected_views": ["B", "P"],
+      "range_requirement": {
+        "kind": "SPECIFIC",
+        "scope_claim_ids": ["cl_forbidden_scope"]
+      }
+    }
+  ]
+}

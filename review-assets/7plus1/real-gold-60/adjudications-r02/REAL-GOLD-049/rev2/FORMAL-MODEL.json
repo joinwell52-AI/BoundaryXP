@@ -1,0 +1,48 @@
+{
+  "case_id": "REAL-GOLD-049",
+  "source_sha256": "bd7171221e72883dc45f52cb5f090f96bac8bc6ada30178c5f4d68f532430d62",
+  "E": [
+    "E={prompts,resources,README,audits}"
+  ],
+  "Sigma": [
+    "Sigma.sections=5",
+    "Sigma.languages=2",
+    "Sigma.antipatterns>=4",
+    "Sigma.lifecycle_buckets={intent,plan,execution,verification,archive}"
+  ],
+  "Q": [
+    "Q.write",
+    "Q.register_or_document_deferral",
+    "Q.index",
+    "Q.audit"
+  ],
+  "F": [
+    "F.change(existing_prompt|LETTER|rules)",
+    "F.release",
+    "F.choose_init",
+    "F.tool_guardrail"
+  ],
+  "K": [
+    "K.MCP_Python_boundary",
+    "K.lifecycle",
+    "K.resource={resolve_now|document_deferral_to_next_release}",
+    "K.environment_check=Python>=3.10",
+    "K.release_audit_and_inventory_drift_checked"
+  ],
+  "Relations": [
+    "ADMIN_choice -> gates -> init",
+    "failure -> absorbed_as -> prompt"
+  ],
+  "D": [
+    "D.priority=P1",
+    "D.risk=low"
+  ],
+  "Phi": [
+    "Phi.resource_choice=permitted_execution_alternative",
+    "Phi.OperatorProfile=absent"
+  ],
+  "losslessness_zh": "保留双语、防猜测、初始化由 ADMIN 选择、五桶与版本检查、资源注册或明示延后这两个合法交付路径和禁止边界；不把路径选择误作边界不确定。",
+  "losslessness_en": "Retains bilingual guardrails, no guessing, ADMIN's init choice, five buckets and version check, the two permitted resource-delivery paths and prohibitions; path choice does not make the boundary uncertain.",
+  "formal_coverage_gap": [],
+  "invented_constraints": []
+}

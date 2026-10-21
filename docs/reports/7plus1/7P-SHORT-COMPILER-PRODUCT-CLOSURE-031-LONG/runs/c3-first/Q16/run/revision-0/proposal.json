@@ -1,0 +1,204 @@
+{
+  "contract_version": "031-r01",
+  "entities": [
+    {
+      "id": "entity_pm",
+      "label": "PM",
+      "type": "OTHER",
+      "mentions": [
+        {
+          "quote": "PM",
+          "occurrence": 1
+        }
+      ],
+      "alternatives": []
+    },
+    {
+      "id": "entity_users",
+      "label": "users.csv",
+      "type": "FILE",
+      "mentions": [
+        {
+          "quote": "users.csv",
+          "occurrence": 1
+        }
+      ],
+      "alternatives": []
+    },
+    {
+      "id": "entity_optional",
+      "label": "optional.md",
+      "type": "FILE",
+      "mentions": [
+        {
+          "quote": "optional.md",
+          "occurrence": 1
+        }
+      ],
+      "alternatives": []
+    }
+  ],
+  "events": [
+    {
+      "id": "event_check",
+      "predicate": "核对",
+      "kind": "ACTION",
+      "layer": "MAIN",
+      "use": "CURRENT_TASK",
+      "modality": "REQUIRED",
+      "polarity": "POSITIVE",
+      "owner_id": "ROOT",
+      "constraint_ids": [],
+      "requires": [],
+      "sources": [
+        {
+          "quote": "请PM核对users.csv",
+          "occurrence": 1
+        }
+      ]
+    },
+    {
+      "id": "event_generate",
+      "predicate": "生成",
+      "kind": "ACTION",
+      "layer": "MAIN",
+      "use": "CURRENT_TASK",
+      "modality": "FORBIDDEN",
+      "polarity": "POSITIVE",
+      "owner_id": "ROOT",
+      "constraint_ids": [],
+      "requires": [],
+      "sources": [
+        {
+          "quote": "不得生成optional.md",
+          "occurrence": 1
+        }
+      ]
+    }
+  ],
+  "claims": [
+    {
+      "id": "claim_check_performer",
+      "kind": "ROLE",
+      "event_id": "event_check",
+      "entity_id": "entity_pm",
+      "role": "PERFORMER",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "scope_id": "event_check",
+      "requires": [],
+      "sources": [
+        {
+          "quote": "请PM核对users.csv",
+          "occurrence": 1
+        }
+      ],
+      "note": "PM是核对动作的明确执行者；岗位简称不推定身份类别或权限。"
+    },
+    {
+      "id": "claim_check_input",
+      "kind": "ROLE",
+      "event_id": "event_check",
+      "entity_id": "entity_users",
+      "role": "INPUT_OBJECT",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "scope_id": "event_check",
+      "requires": [],
+      "sources": [
+        {
+          "quote": "核对users.csv",
+          "occurrence": 1
+        }
+      ],
+      "note": "users.csv是明确受核对的输入范围。"
+    },
+    {
+      "id": "claim_generate_performer",
+      "kind": "ROLE",
+      "event_id": "event_generate",
+      "entity_id": "entity_pm",
+      "role": "PERFORMER",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "scope_id": "event_generate",
+      "requires": [],
+      "sources": [
+        {
+          "quote": "请PM核对users.csv",
+          "occurrence": 1
+        },
+        {
+          "quote": "不得生成optional.md",
+          "occurrence": 1
+        }
+      ],
+      "note": "同一连续指令未切换主体，禁止生成动作承接PM为执行主体。"
+    },
+    {
+      "id": "claim_generate_result",
+      "kind": "ROLE",
+      "event_id": "event_generate",
+      "entity_id": "entity_optional",
+      "role": "RESULT",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "scope_id": "event_generate",
+      "requires": [],
+      "sources": [
+        {
+          "quote": "不得生成optional.md",
+          "occurrence": 1
+        }
+      ],
+      "note": "optional.md是被禁止生成的结果对象，不构成正向产出要求或存在断言。"
+    }
+  ],
+  "expressions": [],
+  "issues": [],
+  "coverage": [
+    {
+      "sources": [
+        {
+          "quote": "请PM核对users.csv",
+          "occurrence": 1
+        }
+      ],
+      "claim_ids": [
+        "claim_check_performer",
+        "claim_check_input"
+      ],
+      "status": "EXPRESSED",
+      "affected_views": [
+        "I",
+        "A",
+        "P"
+      ]
+    },
+    {
+      "sources": [
+        {
+          "quote": "不得生成optional.md",
+          "occurrence": 1
+        }
+      ],
+      "claim_ids": [
+        "claim_generate_performer",
+        "claim_generate_result"
+      ],
+      "status": "EXPRESSED",
+      "affected_views": [
+        "B",
+        "P"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,55 @@
+{
+  "case_id": "REAL-GOLD-017",
+  "source_sha256": "a3a205c6a074878be56715c8099781fcaabd215c416c2daee89f386034be187f",
+  "E": [
+    "E={Failure,Recovery,SessionRecoveryCall,Project,Receipt,RetryPlan,ResumePayload,RollbackPlan}"
+  ],
+  "Sigma": [
+    "Sigma.failure_types=4",
+    "Sigma.recovery_actions=5",
+    "Sigma.session_actions={resume,rollback,abort}",
+    "Sigma.acceptance=12",
+    "Sigma.commits=4"
+  ],
+  "Q": [
+    "Q.report_failure",
+    "Q.apply_recovery",
+    "Q.recover_session",
+    "Q.emit_event_stub"
+  ],
+  "F": [
+    "F.persist_failure_or_recovery",
+    "F.execute_git_revert",
+    "F.session_retry_or_escalate",
+    "F.real_event_push",
+    "F.DRIFT_auto_detect",
+    "F.full_LLM_session_schema",
+    "F.red_pytest_commit"
+  ],
+  "K": [
+    "K=A1..A12",
+    "K.rollback.executed=false",
+    "K.failure_schema_validation"
+  ],
+  "Relations": [
+    "report_failure -> emits_stub -> FAILURE_DETECTED",
+    "apply_recovery -> returns -> RecoveryOutcome",
+    "ROLLBACK -> returns -> RollbackPlan",
+    "caller -> decides -> rollback execution",
+    "identity_or_authority_binding=unresolved_not_inferred"
+  ],
+  "D": [
+    "D.session_id_forms=2",
+    "D.public_project_methods=3",
+    "D.recovery_functions=5"
+  ],
+  "Phi": [
+    "Phi.real_events_deferred_to_TASK-007",
+    "Phi.git_revert_deferred_to_phase_2",
+    "Phi.migration_deferred_to_TASK-008"
+  ],
+  "losslessness_zh": "四 failure、五 recovery、三 session action、内存/写盘边界、双 session_id 兼容、所有延后项及验收均保留。",
+  "losslessness_en": "Four failures, five recoveries, three session actions, in-memory/persistence boundaries, two session-ID compatibility forms, all deferrals, and acceptance are retained.",
+  "formal_coverage_gap": [],
+  "invented_constraints": []
+}

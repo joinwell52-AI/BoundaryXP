@@ -1,0 +1,345 @@
+{
+  "contract_version": "028-r02.2",
+  "entities": [
+    {
+      "id": "ent_pm",
+      "label": "PM",
+      "type": "PERSON",
+      "mentions": [
+        {
+          "quote": "PM",
+          "occurrence": 1
+        }
+      ],
+      "alternatives": []
+    },
+    {
+      "id": "ent_report",
+      "label": "report.md报告",
+      "type": "FILE",
+      "mentions": [
+        {
+          "quote": "report.md",
+          "occurrence": 1
+        },
+        {
+          "quote": "报告",
+          "occurrence": 1
+        }
+      ],
+      "alternatives": []
+    },
+    {
+      "id": "ent_risks",
+      "label": "风险",
+      "type": "OTHER",
+      "mentions": [
+        {
+          "quote": "风险",
+          "occurrence": 1
+        }
+      ],
+      "alternatives": []
+    }
+  ],
+  "events": [
+    {
+      "id": "evt_generate",
+      "predicate": "生成报告",
+      "kind": "ACTION",
+      "layer": "MAIN",
+      "use": "CURRENT_TASK",
+      "modality": "REQUIRED",
+      "polarity": "POSITIVE",
+      "owner_id": "ROOT",
+      "constraint_ids": [
+        "cl_duration",
+        "cl_risk_count"
+      ],
+      "requires": [],
+      "sources": [
+        {
+          "quote": "PM必须生成report.md",
+          "occurrence": 1
+        }
+      ]
+    },
+    {
+      "id": "evt_list",
+      "predicate": "列出风险",
+      "kind": "ACTION",
+      "layer": "CONTENT",
+      "use": "MENTION_ONLY",
+      "modality": "UNSTATED",
+      "polarity": "POSITIVE",
+      "owner_id": "evt_generate",
+      "constraint_ids": [],
+      "requires": [],
+      "sources": [
+        {
+          "quote": "报告恰好列出2项风险",
+          "occurrence": 1
+        }
+      ]
+    }
+  ],
+  "claims": [
+    {
+      "id": "cl_performer",
+      "kind": "ROLE",
+      "event_id": "evt_generate",
+      "entity_id": "ent_pm",
+      "role": "PERFORMER",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "scope_id": "evt_generate",
+      "requires": [],
+      "sources": [
+        {
+          "quote": "PM必须生成report.md",
+          "occurrence": 1
+        }
+      ],
+      "note": ""
+    },
+    {
+      "id": "cl_result",
+      "kind": "ROLE",
+      "event_id": "evt_generate",
+      "entity_id": "ent_report",
+      "role": "RESULT",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "scope_id": "evt_generate",
+      "requires": [],
+      "sources": [
+        {
+          "quote": "生成report.md",
+          "occurrence": 1
+        }
+      ],
+      "note": ""
+    },
+    {
+      "id": "cl_report_content_object",
+      "kind": "ROLE",
+      "event_id": "evt_list",
+      "entity_id": "ent_report",
+      "role": "OBJECT",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "scope_id": "evt_list",
+      "requires": [],
+      "sources": [
+        {
+          "quote": "report.md",
+          "occurrence": 1
+        },
+        {
+          "quote": "报告恰好列出2项风险",
+          "occurrence": 1
+        }
+      ],
+      "note": "报告指生成的report.md，属于产物内容要求。"
+    },
+    {
+      "id": "cl_risk_content",
+      "kind": "ROLE",
+      "event_id": "evt_list",
+      "entity_id": "ent_risks",
+      "role": "CONTENT",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "scope_id": "evt_list",
+      "requires": [],
+      "sources": [
+        {
+          "quote": "报告恰好列出2项风险",
+          "occurrence": 1
+        }
+      ],
+      "note": ""
+    },
+    {
+      "id": "cl_duration",
+      "kind": "QUANTITY",
+      "event_id": "evt_generate",
+      "entity_id": null,
+      "role": null,
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": {
+        "metric": "生成耗时",
+        "target_id": "evt_generate",
+        "comparator": "LTE",
+        "value": 8,
+        "unit": "分钟",
+        "use": "EXECUTION_LIMIT",
+        "count_scope": "evt_generate"
+      },
+      "scope_id": "evt_generate",
+      "requires": [],
+      "sources": [
+        {
+          "quote": "生成耗时不得超过8分钟",
+          "occurrence": 1
+        }
+      ],
+      "note": "生成执行耗时上限，不是根任务完成条件。"
+    },
+    {
+      "id": "cl_risk_count",
+      "kind": "QUANTITY",
+      "event_id": "evt_generate",
+      "entity_id": null,
+      "role": null,
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": {
+        "metric": "报告列出的风险项数",
+        "target_id": "ent_report",
+        "comparator": "EQ",
+        "value": 2,
+        "unit": "项",
+        "use": "OUTPUT_CONTENT",
+        "count_scope": "ent_report"
+      },
+      "scope_id": "evt_generate",
+      "requires": [],
+      "sources": [
+        {
+          "quote": "生成report.md",
+          "occurrence": 1
+        },
+        {
+          "quote": "报告恰好列出2项风险",
+          "occurrence": 1
+        }
+      ],
+      "note": "产物内容数量，不是生成次数限制。"
+    },
+    {
+      "id": "cl_stop",
+      "kind": "STOP",
+      "event_id": null,
+      "entity_id": null,
+      "role": null,
+      "expression_id": "expr_failure",
+      "direction": "SUFFICIENT",
+      "temporal": null,
+      "quantity": null,
+      "scope_id": "ROOT",
+      "requires": [],
+      "sources": [
+        {
+          "quote": "生成失败时停止本任务",
+          "occurrence": 1
+        }
+      ],
+      "note": "生成失败足以触发停止根任务，不表示正常完成。"
+    }
+  ],
+  "expressions": [
+    {
+      "id": "expr_failure",
+      "op": "STATE",
+      "operands": [],
+      "state": {
+        "predicate": "生成失败",
+        "event_id": "evt_generate",
+        "args": [
+          "ent_report"
+        ],
+        "polarity": "POSITIVE"
+      },
+      "sources": [
+        {
+          "quote": "生成report.md",
+          "occurrence": 1
+        },
+        {
+          "quote": "生成失败",
+          "occurrence": 1
+        }
+      ]
+    }
+  ],
+  "issues": [],
+  "coverage": [
+    {
+      "sources": [
+        {
+          "quote": "PM必须生成report.md",
+          "occurrence": 1
+        }
+      ],
+      "claim_ids": [
+        "cl_performer",
+        "cl_result"
+      ],
+      "status": "EXPRESSED",
+      "affected_views": [
+        "A",
+        "P",
+        "O"
+      ]
+    },
+    {
+      "sources": [
+        {
+          "quote": "生成耗时不得超过8分钟",
+          "occurrence": 1
+        }
+      ],
+      "claim_ids": [
+        "cl_duration"
+      ],
+      "status": "EXPRESSED",
+      "affected_views": [
+        "R"
+      ]
+    },
+    {
+      "sources": [
+        {
+          "quote": "报告恰好列出2项风险",
+          "occurrence": 1
+        }
+      ],
+      "claim_ids": [
+        "cl_report_content_object",
+        "cl_risk_content",
+        "cl_risk_count"
+      ],
+      "status": "EXPRESSED",
+      "affected_views": [
+        "O"
+      ]
+    },
+    {
+      "sources": [
+        {
+          "quote": "生成失败时停止本任务",
+          "occurrence": 1
+        }
+      ],
+      "claim_ids": [
+        "cl_stop"
+      ],
+      "status": "EXPRESSED",
+      "affected_views": [
+        "C"
+      ]
+    }
+  ]
+}

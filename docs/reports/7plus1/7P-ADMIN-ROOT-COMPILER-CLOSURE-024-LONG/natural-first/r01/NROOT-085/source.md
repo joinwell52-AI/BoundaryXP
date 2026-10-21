@@ -1,0 +1,1 @@
+PM must organize the task so that config.json is read, README.md may be inspected, and config-note.md is produced. Neither file may be modified.

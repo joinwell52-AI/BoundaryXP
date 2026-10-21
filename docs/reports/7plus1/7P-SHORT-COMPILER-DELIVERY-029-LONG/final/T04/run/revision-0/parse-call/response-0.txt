@@ -1,0 +1,250 @@
+{
+  "contract_version": "028-r02.3",
+  "entities": [
+    {
+      "id": "ent_pm",
+      "label": "PM",
+      "type": "OTHER",
+      "mentions": [{"quote": "PM", "occurrence": 1}],
+      "alternatives": []
+    },
+    {
+      "id": "ent_issue",
+      "label": "issue.md",
+      "type": "FILE",
+      "mentions": [
+        {"quote": "issue.md", "occurrence": 1},
+        {"quote": "未发现异常时无需生成", "occurrence": 1}
+      ],
+      "alternatives": []
+    },
+    {
+      "id": "ent_input",
+      "label": "input.csv",
+      "type": "FILE",
+      "mentions": [{"quote": "input.csv", "occurrence": 1}],
+      "alternatives": []
+    }
+  ],
+  "events": [
+    {
+      "id": "ev_generate_required",
+      "predicate": "生成",
+      "kind": "ACTION",
+      "layer": "MAIN",
+      "use": "CURRENT_TASK",
+      "modality": "REQUIRED",
+      "polarity": "POSITIVE",
+      "owner_id": "ROOT",
+      "constraint_ids": ["cl_found"],
+      "requires": [],
+      "sources": [{"quote": "若发现异常，PM必须生成issue.md", "occurrence": 1}]
+    },
+    {
+      "id": "ev_generate_not_required",
+      "predicate": "生成",
+      "kind": "ACTION",
+      "layer": "MAIN",
+      "use": "CURRENT_TASK",
+      "modality": "NOT_REQUIRED",
+      "polarity": "POSITIVE",
+      "owner_id": "ROOT",
+      "constraint_ids": ["cl_not_found"],
+      "requires": [],
+      "sources": [
+        {"quote": "PM必须生成issue.md", "occurrence": 1},
+        {"quote": "未发现异常时无需生成", "occurrence": 1}
+      ]
+    },
+    {
+      "id": "ev_delete",
+      "predicate": "删除",
+      "kind": "ACTION",
+      "layer": "MAIN",
+      "use": "CURRENT_TASK",
+      "modality": "FORBIDDEN",
+      "polarity": "POSITIVE",
+      "owner_id": "ROOT",
+      "constraint_ids": [],
+      "requires": [],
+      "sources": [{"quote": "无论是否异常，均不得删除input.csv", "occurrence": 1}]
+    }
+  ],
+  "claims": [
+    {
+      "id": "cl_generate_performer",
+      "kind": "ROLE",
+      "event_id": "ev_generate_required",
+      "entity_id": "ent_pm",
+      "role": "PERFORMER",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "scope_id": "ev_generate_required",
+      "requires": [],
+      "sources": [{"quote": "PM必须生成issue.md", "occurrence": 1}],
+      "note": ""
+    },
+    {
+      "id": "cl_generate_result",
+      "kind": "ROLE",
+      "event_id": "ev_generate_required",
+      "entity_id": "ent_issue",
+      "role": "RESULT",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "scope_id": "ev_generate_required",
+      "requires": [],
+      "sources": [{"quote": "生成issue.md", "occurrence": 1}],
+      "note": ""
+    },
+    {
+      "id": "cl_found",
+      "kind": "CONDITION",
+      "event_id": "ev_generate_required",
+      "entity_id": null,
+      "role": null,
+      "expression_id": "expr_found",
+      "direction": "SUFFICIENT",
+      "temporal": null,
+      "quantity": null,
+      "scope_id": "ev_generate_required",
+      "requires": [],
+      "sources": [{"quote": "若发现异常，PM必须生成issue.md", "occurrence": 1}],
+      "note": "发现异常触发生成义务；不增加发现或检查异常的独立命令。"
+    },
+    {
+      "id": "cl_not_required_performer",
+      "kind": "ROLE",
+      "event_id": "ev_generate_not_required",
+      "entity_id": "ent_pm",
+      "role": "PERFORMER",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "scope_id": "ev_generate_not_required",
+      "requires": [],
+      "sources": [
+        {"quote": "PM必须生成issue.md", "occurrence": 1},
+        {"quote": "未发现异常时无需生成", "occurrence": 1}
+      ],
+      "note": "省略的主体承接PM。"
+    },
+    {
+      "id": "cl_not_required_result",
+      "kind": "ROLE",
+      "event_id": "ev_generate_not_required",
+      "entity_id": "ent_issue",
+      "role": "RESULT",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "scope_id": "ev_generate_not_required",
+      "requires": [],
+      "sources": [
+        {"quote": "生成issue.md", "occurrence": 1},
+        {"quote": "未发现异常时无需生成", "occurrence": 1}
+      ],
+      "note": "省略的生成结果承接issue.md；无需生成不表示禁止生成。"
+    },
+    {
+      "id": "cl_not_found",
+      "kind": "CONDITION",
+      "event_id": "ev_generate_not_required",
+      "entity_id": null,
+      "role": null,
+      "expression_id": "expr_not_found",
+      "direction": "SUFFICIENT",
+      "temporal": null,
+      "quantity": null,
+      "scope_id": "ev_generate_not_required",
+      "requires": [],
+      "sources": [{"quote": "未发现异常时无需生成", "occurrence": 1}],
+      "note": "未发现异常触发无需生成；不等同于确认不存在异常。"
+    },
+    {
+      "id": "cl_delete_object",
+      "kind": "ROLE",
+      "event_id": "ev_delete",
+      "entity_id": "ent_input",
+      "role": "OBJECT",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "scope_id": "ev_delete",
+      "requires": [],
+      "sources": [{"quote": "不得删除input.csv", "occurrence": 1}],
+      "note": "禁止删除的对象；不由文件名或禁止用途推定外部输入。"
+    }
+  ],
+  "expressions": [
+    {
+      "id": "expr_found",
+      "op": "STATE",
+      "operands": [],
+      "state": {
+        "predicate": "发现异常",
+        "event_id": null,
+        "args": ["ROOT"],
+        "polarity": "POSITIVE"
+      },
+      "sources": [{"quote": "若发现异常", "occurrence": 1}]
+    },
+    {
+      "id": "expr_not_found",
+      "op": "STATE",
+      "operands": [],
+      "state": {
+        "predicate": "发现异常",
+        "event_id": null,
+        "args": ["ROOT"],
+        "polarity": "NEGATIVE"
+      },
+      "sources": [{"quote": "未发现异常", "occurrence": 1}]
+    }
+  ],
+  "issues": [
+    {
+      "id": "issue_delete_performer",
+      "kind": "UNSPECIFIED",
+      "subject_ids": ["ev_delete"],
+      "field_path": "events[ev_delete]",
+      "alternatives": [],
+      "affected_views": ["P"],
+      "sources": [{"quote": "无论是否异常，均不得删除input.csv", "occurrence": 1}],
+      "note": "删除禁令未显式指定执行者，保留禁令，不补默认执行者。"
+    }
+  ],
+  "coverage": [
+    {
+      "sources": [{"quote": "若发现异常，PM必须生成issue.md", "occurrence": 1}],
+      "claim_ids": ["cl_generate_performer", "cl_generate_result", "cl_found"],
+      "status": "EXPRESSED",
+      "affected_views": ["A", "P", "O"]
+    },
+    {
+      "sources": [{"quote": "未发现异常时无需生成", "occurrence": 1}],
+      "claim_ids": ["cl_not_required_performer", "cl_not_required_result", "cl_not_found"],
+      "status": "EXPRESSED",
+      "affected_views": ["A", "P", "O"]
+    },
+    {
+      "sources": [{"quote": "无论是否异常，均不得删除input.csv", "occurrence": 1}],
+      "claim_ids": ["cl_delete_object"],
+      "status": "EXPRESSED",
+      "affected_views": ["B"]
+    },
+    {
+      "sources": [{"quote": "均不得删除input.csv", "occurrence": 1}],
+      "claim_ids": [],
+      "status": "UNSPECIFIED",
+      "affected_views": ["P"]
+    }
+  ]
+}

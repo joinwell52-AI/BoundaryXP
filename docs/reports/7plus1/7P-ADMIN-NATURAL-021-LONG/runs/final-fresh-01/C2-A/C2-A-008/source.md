@@ -1,0 +1,1 @@
+TEAM208 依据 POLICY-2008 v5.8 查看 dataset-c2-a-8.csv，编写 decision-c2-a-8.md，随后发送报告给 LEAD208。

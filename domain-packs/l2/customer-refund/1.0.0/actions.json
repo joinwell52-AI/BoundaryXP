@@ -1,0 +1,120 @@
+{
+  "schema": "boundx-domain-actions/v1",
+  "packId": "customer-refund",
+  "version": "1.0.0",
+  "invariants": [
+    "source_evidence_required",
+    "effect_not_inferred",
+    "completion_not_inferred",
+    "authorization_not_inferred"
+  ],
+  "roleContracts": {
+    "create/v1": {
+      "operation": "CREATE",
+      "primaryRole": "artifact",
+      "optionalRoles": ["executor"]
+    },
+    "change/v1": {
+      "operation": "CHANGE",
+      "primaryRole": "target",
+      "optionalRoles": ["executor"]
+    },
+    "process/v1": {
+      "operation": "PROCESS",
+      "primaryRole": "target",
+      "optionalRoles": ["executor"]
+    }
+  },
+  "projectionContracts": {
+    "create/v1": {
+      "operation": "CREATE",
+      "candidates": [
+        { "field": "A", "basis": "action_source" },
+        { "field": "P", "basis": "explicit_executor_only" },
+        { "field": "O", "basis": "bound_primary_role" }
+      ]
+    },
+    "change/v1": {
+      "operation": "CHANGE",
+      "candidates": [
+        { "field": "A", "basis": "action_source" },
+        { "field": "P", "basis": "explicit_executor_only" }
+      ]
+    },
+    "process/v1": {
+      "operation": "PROCESS",
+      "candidates": [
+        { "field": "A", "basis": "action_source" },
+        { "field": "P", "basis": "explicit_executor_only" },
+        { "field": "I", "basis": "bound_primary_role" }
+      ]
+    }
+  },
+  "frames": [
+    {
+      "id": "refund.apply_refund",
+      "category": "refund-ops",
+      "label": { "zh-CN": "提交退款申请", "en": "Apply for refund" },
+      "operation": "CREATE",
+      "roleContract": "create/v1",
+      "projectionContract": "create/v1",
+      "entityTypes": ["refund-amount", "order"],
+      "triggers": {
+        "zh": ["申请退款", "提交退款"],
+        "en": ["apply refund", "submit refund"]
+      }
+    },
+    {
+      "id": "refund.deduct_refund",
+      "category": "refund-ops",
+      "label": { "zh-CN": "执行退款扣款", "en": "Deduct and process refund" },
+      "operation": "CHANGE",
+      "roleContract": "change/v1",
+      "projectionContract": "change/v1",
+      "entityTypes": ["refund-amount", "customer-account"],
+      "triggers": {
+        "zh": ["扣减退款", "原路退款", "执行退款"],
+        "en": ["deduct refund", "process refund"]
+      }
+    },
+    {
+      "id": "refund.inspect_return",
+      "category": "refund-ops",
+      "label": { "zh-CN": "验收退货商品", "en": "Inspect returned goods" },
+      "operation": "PROCESS",
+      "roleContract": "process/v1",
+      "projectionContract": "process/v1",
+      "entityTypes": ["return-parcel"],
+      "triggers": {
+        "zh": ["验收退货", "检查退件", "验货退款"],
+        "en": ["inspect return", "inspect parcel"]
+      }
+    },
+    {
+      "id": "refund.approve_compensation",
+      "category": "compensation-audit",
+      "label": { "zh-CN": "审核售后赔付", "en": "Approve compensation" },
+      "operation": "PROCESS",
+      "roleContract": "process/v1",
+      "projectionContract": "process/v1",
+      "entityTypes": ["compensation-voucher", "order"],
+      "triggers": {
+        "zh": ["审核赔付", "审批赔偿"],
+        "en": ["approve compensation", "audit compensation"]
+      }
+    },
+    {
+      "id": "refund.unblock_account",
+      "category": "account-ops",
+      "label": { "zh-CN": "解封买家账号", "en": "Unblock customer account" },
+      "operation": "CHANGE",
+      "roleContract": "change/v1",
+      "projectionContract": "change/v1",
+      "entityTypes": ["customer-account"],
+      "triggers": {
+        "zh": ["解封账号", "恢复账号权限"],
+        "en": ["unblock account", "restore account"]
+      }
+    }
+  ]
+}

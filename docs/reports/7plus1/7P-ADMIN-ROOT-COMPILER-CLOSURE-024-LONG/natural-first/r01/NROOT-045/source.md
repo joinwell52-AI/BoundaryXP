@@ -1,0 +1,1 @@
+本次任务由 PM 组织检查 failure.json 并形成 failure-review.md，同时收集失败原因说明。PM 汇总后提交给 ADMIN；不得修改实现。

@@ -1,0 +1,20 @@
+import test from 'node:test';import assert from 'node:assert/strict';import fs from 'node:fs';import{compileNative}from '../research/7plus1-parser/v0.3-7p-repair-003/engine.mjs';import{sourceDocument}from '../research/7plus1-parser/p0-semantic-repair-r02/source.mjs';import{projectCanonical}from '../research/7plus1-parser/v0.3-7p-repair-003/projection.mjs';import{cases}from '../docs/reports/7plus1/7P-REPAIR-003/non-gold-inputs.mjs';
+for(const x of cases)test('repair003 '+x.id,()=>{const data=JSON.parse(fs.readFileSync('docs/reports/7plus1/7P-REPAIR-003/non-gold/'+x.id+'.json'));assert.equal(data.text,x.text);const r=compileNative(sourceDocument(x.text),data.signals),c=r.compiler_v03,g=c.nlp_signals.semantic_decoding.graph_closure,s=c.canonical_7plus1;
+assert.equal(r.contract_gate_results.status,'PASS',JSON.stringify(r.contract_gate_results));for(const span of r.source_spans)assert.equal([...x.text].slice(span.start,span.end).join(''),span.text);
+const has=(k,v)=>s[k].entries.some(e=>e.state==='RESOLVED'&&e.display_value.includes(v));
+if(['FILE_METHODS','MODULE_FUNCTIONS','DIRECTORY'].includes(x.kind))assert.ok(g.composition_edges.length>=({FILE_METHODS:3,MODULE_FUNCTIONS:4,DIRECTORY:2}[x.kind]));
+if(['MODIFY','FILE_METHODS'].includes(x.kind))for(const v of x.values){assert.ok(has('I',v),JSON.stringify(s.I));assert.ok(has('O',v),JSON.stringify(s.O));}
+if(['COMMAND','COLLECTION','COMPARE','READ_LOOK'].includes(x.kind))for(const v of x.values)assert.ok(has('I',v),JSON.stringify(s.I));
+if(['COLLECTION','COMPARE'].includes(x.kind))assert.ok(g.object_bundles.some(b=>c.boundary_ir.set_expr_nodes.find(e=>e.expr_id===b.scope_expr_id)?.kind==='UNION'));
+if(['ABSTRACT','PRODUCE','WRITE'].includes(x.kind))assert.ok(has('O',x.values[0]));
+if(x.kind==='COMPOSITE_COMPARE')assert.ok(g.object_bundles.some(b=>b.mode==='READ'&&b.object_node_ids.length===2),JSON.stringify(g));
+if(x.kind==='CONTENT_MODAL'){assert.ok(g.content_graphs.some(g=>g.relation_ids.some(id=>c.relations.find(r=>r.relation_id===id)?.relation_type==='FORBIDS'))||c.unresolved.some(u=>u.reason==='Content predicate has no unique dependency-supported object'));assert.ok(g.content_graphs.some(g=>g.relation_ids.length),'Positive content relation must still be recovered');}
+if(x.kind==='CONDITIONAL')assert.ok(s.O.entries.some(e=>e.condition_expr_id&&e.state==='RESOLVED'));
+if(['NO_CHANGE','NO_CHANGE_SUFFIX','FORBID','CONDITIONAL_B'].includes(x.kind)){assert.ok(has('B',x.values[0]),JSON.stringify(s.B));assert.equal(s.A.entries.length,0);assert.equal(s.I.entries.length,0);}
+if(x.kind==='CONDITIONAL_B')assert.ok(s.B.entries.some(e=>e.condition_expr_id));
+if(x.kind==='LIST')assert.ok(g.object_bundles.some(b=>b.object_node_ids.length===2));
+if(x.kind==='NESTED')assert.ok(g.composition_edges.filter(e=>e.evidence_kind==='NESTED_LIST_ARGUMENT').length>=2,JSON.stringify(g));
+if(x.kind==='CONTENT'||x.kind==='CONTENT_SET'){assert.ok(g.content_graphs.some(g=>g.relation_ids.length));assert.ok(g.content_graphs.every(g=>g.owner_output_ids.length));for(const fact of c.boundary_ir.facts.filter(f=>['ACTION','FORBID','PARTICIPANT'].includes(f.fact_type)))for(const n of fact.node_ids)assert.notEqual(c.semantic_nodes.find(z=>z.node_id===n).metadata.scope,'OUTPUT_CONTENT');}
+if(x.kind==='ACCEPTANCE_UNKNOWN'){const failing=c.coverage.filter(co=>['COVERAGE_FAILURE','UNRESOLVED'].includes(co.disposition));assert.ok(failing.length);for(const co of failing)assert.deepEqual(co.affected_slots,['C']);assert.notEqual(s.C.status,'ABSENT');}
+assert.deepEqual(projectCanonical(c.boundary_ir,c.semantic_nodes,c.coverage,c.unresolved),projectCanonical(structuredClone(c.boundary_ir),structuredClone(c.semantic_nodes),structuredClone(c.coverage),structuredClone(c.unresolved)));
+});

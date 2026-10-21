@@ -1,0 +1,1 @@
+TEAM270 check endpoint-c2-a-20 and queue-c2-a-20, retry at least 24 times.

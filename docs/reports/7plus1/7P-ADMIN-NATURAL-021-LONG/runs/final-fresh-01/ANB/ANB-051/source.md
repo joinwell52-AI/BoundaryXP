@@ -1,0 +1,1 @@
+OPS 检查 service.log；若发现 critical 错误，立即停止检查并通知 PM，否则生成 service-summary.md。不得重启服务。

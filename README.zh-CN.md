@@ -16,7 +16,7 @@
 
 [快速开始](QUICKSTART.md) · [产品手册](docs/BOUNDX-PRODUCT-MANUAL.md) · [7+1方法](docs/BoundX-7plus1-定义原理语义编译与边界计算说明-v0.4.md) · [当前状态](docs/SHORT-COMPILER-STATUS.md) · [文档导航](docs/README.md)
 
-> **2026-10-08状态：短文本编译器候选可运行，完整产品语义验收尚未通过。** 本次将整理后的文档同步到`main`；候选实现仍位于[`review/7plus1-parser`](https://github.com/joinwell52-AI/BoundX/tree/review/7plus1-parser)，未随文档合并。`main`当前没有`7plus1`或`7plus1:ui`脚本，旧发布标签与本机安装版本也未因文档合并而改变。
+> **2026-10-21更新：本次合并纳入本机58618运行的ui220候选源码。** 包括7+1生成和数学解析资源、确定性计算器、公式展示及新版企业A语义库。运行`npm run 7plus1:build-candidate`可重建同一404文件运行包，详见[ui220同步与验证](docs/workbench/UI220-SYNC.md)。主产品版本仍为`1.3.0-preview.0`。下文旧候选说明和成绩保留为历史资料，不代表ui220语义验收。
 
 ## BoundX是什么？
 

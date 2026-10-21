@@ -1,0 +1,229 @@
+{
+  "contract_version": "031-r1.1",
+  "reviews": [
+    {
+      "subject_id": "ent_pm",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [
+        {
+          "quote": "PM",
+          "occurrence": 1
+        }
+      ],
+      "reason": "身份明确；OTHER可作为未指定人或组类别的占位。"
+    },
+    {
+      "subject_id": "ent_feed",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [
+        {
+          "quote": "feed.json",
+          "occurrence": 1
+        }
+      ],
+      "reason": "明确命名的读取文件。"
+    },
+    {
+      "subject_id": "ent_report",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [
+        {
+          "quote": "生成feed-note.md",
+          "occurrence": 1
+        },
+        {
+          "quote": "报告恰好列出2条异常记录",
+          "occurrence": 1
+        }
+      ],
+      "reason": "报告指唯一当前生成的feed-note.md，两端指称已绑定同一身份。"
+    },
+    {
+      "subject_id": "ent_records",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [
+        {
+          "quote": "异常记录",
+          "occurrence": 1
+        }
+      ],
+      "reason": "明确的报告内容类别，OTHER占位合理。"
+    },
+    {
+      "subject_id": "evt_read",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [
+        "claim_retry_limit"
+      ],
+      "sources": [
+        {
+          "quote": "请PM读取feed.json",
+          "occurrence": 1
+        },
+        {
+          "quote": "该读取最多重试4次",
+          "occurrence": 1
+        }
+      ],
+      "reason": "当前必须执行的读取动作，重试限制已回指绑定。"
+    },
+    {
+      "subject_id": "evt_generate",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [
+        "claim_record_count"
+      ],
+      "sources": [
+        {
+          "quote": "生成feed-note.md",
+          "occurrence": 1
+        },
+        {
+          "quote": "报告恰好列出2条异常记录",
+          "occurrence": 1
+        }
+      ],
+      "reason": "明确要求生成报告；内容数量约束已绑定，未凭并列增添先后。"
+    },
+    {
+      "subject_id": "claim_read_performer",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [
+        "ent_pm",
+        "evt_read"
+      ],
+      "sources": [
+        {
+          "quote": "请PM读取feed.json",
+          "occurrence": 1
+        }
+      ],
+      "reason": "PM是明确的读取执行者。"
+    },
+    {
+      "subject_id": "claim_read_input",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [
+        "ent_feed",
+        "evt_read"
+      ],
+      "sources": [
+        {
+          "quote": "读取feed.json",
+          "occurrence": 1
+        }
+      ],
+      "reason": "feed.json是明确的读取输入对象。"
+    },
+    {
+      "subject_id": "claim_retry_limit",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [
+        "evt_read"
+      ],
+      "sources": [
+        {
+          "quote": "读取feed.json",
+          "occurrence": 1
+        },
+        {
+          "quote": "该读取最多重试4次",
+          "occurrence": 1
+        }
+      ],
+      "reason": "重试次数上限为4次；目标和计数范围均为该读取事件，用途为执行限制，双向绑定完整。"
+    },
+    {
+      "subject_id": "claim_generate_performer",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [
+        "ent_pm",
+        "evt_generate"
+      ],
+      "sources": [
+        {
+          "quote": "请PM读取feed.json",
+          "occurrence": 1
+        },
+        {
+          "quote": "生成feed-note.md",
+          "occurrence": 1
+        }
+      ],
+      "reason": "同一连续指令无主体切换，生成动作可承接PM，两端来源齐备。"
+    },
+    {
+      "subject_id": "claim_generate_result",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [
+        "ent_report",
+        "evt_generate"
+      ],
+      "sources": [
+        {
+          "quote": "生成feed-note.md",
+          "occurrence": 1
+        },
+        {
+          "quote": "报告恰好列出2条异常记录",
+          "occurrence": 1
+        }
+      ],
+      "reason": "feed-note.md是生成结果，后文报告为同一产物；原文未要求交付。"
+    },
+    {
+      "subject_id": "claim_report_content",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [
+        "ent_records",
+        "evt_generate"
+      ],
+      "sources": [
+        {
+          "quote": "报告恰好列出2条异常记录",
+          "occurrence": 1
+        }
+      ],
+      "reason": "异常记录是报告应列出的内容，未升格为独立结果或外部输入。"
+    },
+    {
+      "subject_id": "claim_record_count",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [
+        "ent_report",
+        "evt_generate",
+        "claim_generate_result"
+      ],
+      "sources": [
+        {
+          "quote": "生成feed-note.md",
+          "occurrence": 1
+        },
+        {
+          "quote": "报告恰好列出2条异常记录",
+          "occurrence": 1
+        }
+      ],
+      "reason": "计数项为列出的异常记录，恰好2条；目标是同一生成事件的RESULT报告，范围为该报告，OUTPUT_CONTENT用途及双向绑定正确。"
+    }
+  ],
+  "issues": [],
+  "omissions": []
+}

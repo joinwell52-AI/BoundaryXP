@@ -1,0 +1,1 @@
+QA 检查 local 环境，生成 comet.txt。external 不在本次范围内。

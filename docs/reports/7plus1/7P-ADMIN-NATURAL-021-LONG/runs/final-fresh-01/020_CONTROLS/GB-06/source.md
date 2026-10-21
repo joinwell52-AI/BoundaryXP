@@ -1,0 +1,1 @@
+DEV read cycle.csv, create digest.txt and send the report to QA.

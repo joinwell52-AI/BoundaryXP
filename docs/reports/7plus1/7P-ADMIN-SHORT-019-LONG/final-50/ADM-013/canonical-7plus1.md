@@ -1,0 +1,283 @@
+# ADM-013 — actual Canonical 7+1
+
+## I
+
+```json
+{
+  "slot": "I",
+  "status": "RESOLVED",
+  "entries": [
+    {
+      "canonical_entry_id": "p1:73611b3b5511e5c314ec5e56",
+      "slot": "I",
+      "boundary_fact_ids": [
+        "p1:7f07984633ede559b90c78f1"
+      ],
+      "state": "RESOLVED",
+      "display_value": "dependencies.lock",
+      "source_span_ids": [
+        "p1:7a88b2eb2402b7ea31884874",
+        "p1:d7e5dd37dd39b19413a710ec",
+        "p1:a47674f79249d116fb04a1df",
+        "p1:3e2704d3dfc6ca181d2ce8bc",
+        "p1:ed9d75452f8dbbb6f4047b81",
+        "p1:606205d1c3dc29873a357523",
+        "p1:7427c94185d4d0ba96be0e62"
+      ],
+      "scope_expr_id": "p1:680f3bcbc06d3db6b52879b0"
+    },
+    {
+      "canonical_entry_id": "p1:85887c2f78819b3dc66b133c",
+      "slot": "I",
+      "boundary_fact_ids": [
+        "p1:24eb3842906d9d61968ed0ff"
+      ],
+      "state": "RESOLVED",
+      "display_value": "直接依赖的许可证",
+      "source_span_ids": [
+        "p1:00b770ec5ab078c68dc87aa1",
+        "p1:3e2704d3dfc6ca181d2ce8bc",
+        "p1:a47674f79249d116fb04a1df",
+        "p1:ed9d75452f8dbbb6f4047b81",
+        "p1:606205d1c3dc29873a357523",
+        "p1:7427c94185d4d0ba96be0e62"
+      ],
+      "scope_expr_id": "p1:c3176acbe22674df87342959"
+    }
+  ]
+}
+```
+
+## O
+
+```json
+{
+  "slot": "O",
+  "status": "RESOLVED",
+  "entries": [
+    {
+      "canonical_entry_id": "p1:694f8379f82f760fb66cb8b4",
+      "slot": "O",
+      "boundary_fact_ids": [
+        "p1:ddb3f0429999b3a396d5ab1c"
+      ],
+      "state": "RESOLVED",
+      "display_value": "license-review.csv",
+      "source_span_ids": [
+        "p1:c9e42a8111d79cfa7f534877",
+        "p1:94cb90ffdef4018d03ea1959",
+        "p1:4643b22d9a935675e98cf241",
+        "p1:6c8de24e1d3e7e618d4d985f",
+        "p1:d7e5dd37dd39b19413a710ec",
+        "p1:54beddfe1996bce9375bf2b9",
+        "p1:606205d1c3dc29873a357523",
+        "p1:5107625fdbf99284037b3fa1"
+      ],
+      "scope_expr_id": "p1:f14674c68529f29eaea97d99"
+    }
+  ]
+}
+```
+
+## A
+
+```json
+{
+  "slot": "A",
+  "status": "RESOLVED",
+  "entries": [
+    {
+      "canonical_entry_id": "p1:367c8db21f6f00dbc150c9ce",
+      "slot": "A",
+      "boundary_fact_ids": [
+        "p1:648430b9c8988316356e7b98"
+      ],
+      "state": "RESOLVED",
+      "display_value": "REQUIRED 读取 dependencies.lock",
+      "source_span_ids": [
+        "p1:c85c163e86d3420bfc1f02ff",
+        "p1:d7e5dd37dd39b19413a710ec",
+        "p1:7a88b2eb2402b7ea31884874",
+        "p1:6c8de24e1d3e7e618d4d985f"
+      ],
+      "scope_expr_id": "p1:ad0d6110f3cc7b5a5e006b25"
+    },
+    {
+      "canonical_entry_id": "p1:40d72000944a44dfb84443dd",
+      "slot": "A",
+      "boundary_fact_ids": [
+        "p1:c763951877f64681fc26e554"
+      ],
+      "state": "RESOLVED",
+      "display_value": "REQUIRED 核查 直接依赖的许可证",
+      "source_span_ids": [
+        "p1:dec1243e3493b5ae7a93c421",
+        "p1:3e2704d3dfc6ca181d2ce8bc",
+        "p1:00b770ec5ab078c68dc87aa1",
+        "p1:6c8de24e1d3e7e618d4d985f",
+        "p1:d7e5dd37dd39b19413a710ec",
+        "p1:ed9d75452f8dbbb6f4047b81"
+      ],
+      "scope_expr_id": "p1:fb0703816bd9e2f284ed46dc"
+    },
+    {
+      "canonical_entry_id": "p1:d5e0a8d5028ab3611471590f",
+      "slot": "A",
+      "boundary_fact_ids": [
+        "p1:619ced7b69ba5450ddc03d1c"
+      ],
+      "state": "RESOLVED",
+      "display_value": "REQUIRED 生成 license-review.csv",
+      "source_span_ids": [
+        "p1:c9e42a8111d79cfa7f534877",
+        "p1:94cb90ffdef4018d03ea1959",
+        "p1:4643b22d9a935675e98cf241",
+        "p1:6c8de24e1d3e7e618d4d985f",
+        "p1:d7e5dd37dd39b19413a710ec"
+      ],
+      "scope_expr_id": "p1:0689d9c68099e62d6ec103c4"
+    }
+  ]
+}
+```
+
+## P
+
+```json
+{
+  "slot": "P",
+  "status": "RESOLVED",
+  "entries": [
+    {
+      "canonical_entry_id": "p1:2bd494414dc46ea959411c3a",
+      "slot": "P",
+      "boundary_fact_ids": [
+        "p1:b840b9090cd3f27a880a0f62",
+        "p1:7072a614cce030ff7c66ba12",
+        "p1:a5c40851bca318e502f46da7"
+      ],
+      "state": "RESOLVED",
+      "display_value": "DEV [PERFORMER]",
+      "source_span_ids": [
+        "p1:6c8de24e1d3e7e618d4d985f",
+        "p1:d7e5dd37dd39b19413a710ec",
+        "p1:c85c163e86d3420bfc1f02ff",
+        "p1:3e2704d3dfc6ca181d2ce8bc",
+        "p1:ed9d75452f8dbbb6f4047b81",
+        "p1:606205d1c3dc29873a357523",
+        "p1:7427c94185d4d0ba96be0e62",
+        "p1:dec1243e3493b5ae7a93c421",
+        "p1:c9e42a8111d79cfa7f534877",
+        "p1:94cb90ffdef4018d03ea1959"
+      ]
+    }
+  ]
+}
+```
+
+## R
+
+```json
+{
+  "slot": "R",
+  "status": "ABSENT",
+  "entries": []
+}
+```
+
+## V
+
+```json
+{
+  "slot": "V",
+  "status": "RESOLVED",
+  "entries": [
+    {
+      "canonical_entry_id": "p1:7b0c8700245dd8daaf80a0bf",
+      "slot": "V",
+      "boundary_fact_ids": [
+        "p1:0c30e4482c90f65e0b5c0b0a"
+      ],
+      "state": "RESOLVED",
+      "display_value": "LICENSE-POLICY-4",
+      "source_span_ids": [
+        "p1:ed9d75452f8dbbb6f4047b81",
+        "p1:3e2704d3dfc6ca181d2ce8bc",
+        "p1:a47674f79249d116fb04a1df",
+        "p1:606205d1c3dc29873a357523",
+        "p1:7427c94185d4d0ba96be0e62"
+      ]
+    },
+    {
+      "canonical_entry_id": "p1:015cf476ef286d149e09a2a1",
+      "slot": "V",
+      "boundary_fact_ids": [
+        "p1:e62a1bbfc5ea07815bf856d0"
+      ],
+      "state": "RESOLVED",
+      "display_value": "LICENSE-POLICY-4",
+      "source_span_ids": [
+        "p1:ed9d75452f8dbbb6f4047b81",
+        "p1:3e2704d3dfc6ca181d2ce8bc",
+        "p1:dec1243e3493b5ae7a93c421",
+        "p1:606205d1c3dc29873a357523",
+        "p1:7427c94185d4d0ba96be0e62"
+      ]
+    }
+  ]
+}
+```
+
+## C
+
+```json
+{
+  "slot": "C",
+  "status": "ABSENT",
+  "entries": []
+}
+```
+
+## B
+
+```json
+{
+  "slot": "B",
+  "status": "RESOLVED",
+  "entries": [
+    {
+      "canonical_entry_id": "p1:ef11de6d05dd87c3da64abe8",
+      "slot": "B",
+      "boundary_fact_ids": [
+        "p1:c34e3172ebc151fb7e41c097"
+      ],
+      "state": "RESOLVED",
+      "display_value": "REQUIRED 不含 间接依赖",
+      "source_span_ids": [
+        "p1:57554efefb32d2319f657335",
+        "p1:38a504f9334be6330d623e75",
+        "p1:b7d34265d47087a24ff01504"
+      ],
+      "scope_expr_id": "p1:a243f5901b2309236624ed61"
+    },
+    {
+      "canonical_entry_id": "p1:6b2f8733c25cfed006f438fc",
+      "slot": "B",
+      "boundary_fact_ids": [
+        "p1:f67e46f3c4935c653dd5d5b1"
+      ],
+      "state": "RESOLVED",
+      "display_value": "FORBIDDEN 判为 允许商用",
+      "source_span_ids": [
+        "p1:be9b530855e514126a76272b",
+        "p1:2e1f742d4d8c30133732566f",
+        "p1:3b0cd70fc153617b78eba182",
+        "p1:606205d1c3dc29873a357523",
+        "p1:7427c94185d4d0ba96be0e62"
+      ],
+      "scope_expr_id": "p1:fbc33394258e95689eb04a27",
+      "condition_expr_id": "p1:b487d4efebee4cce0d08855f"
+    }
+  ]
+}
+```

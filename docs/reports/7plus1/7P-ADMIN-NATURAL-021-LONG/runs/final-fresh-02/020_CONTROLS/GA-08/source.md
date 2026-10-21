@@ -1,0 +1,1 @@
+OPS 检查 staging 和 live，生成 zones.md。

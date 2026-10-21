@@ -1,0 +1,1 @@
+请 PM 组织依据 MASK-RULE-7 检查 masked-sample.csv 中姓名和手机号的脱敏结果，并形成 masking-review.md。不得读取未脱敏原表，也不得将样本发送给外部人员。

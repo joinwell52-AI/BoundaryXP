@@ -1,0 +1,6 @@
+import fs from 'node:fs';import crypto from 'node:crypto';
+export const OUT='docs/reports/7plus1/7P-ADMIN-NATURAL-021-LONG/',OLD='docs/reports/7plus1/7P-ADMIN-SHORT-020-LONG/',ROOT='research/7plus1-parser/v0.3-admin-natural-021/',ASSET='fixtures/7plus1/admin-natural-blind-100/';
+export const sha=b=>crypto.createHash('sha256').update(b).digest('hex'),digest=p=>sha(fs.readFileSync(p)),read=p=>JSON.parse(fs.readFileSync(p,'utf8'));
+export function write(p,v){if(!p.startsWith(OUT))throw Error('OUT_OF_SCOPE');if(fs.existsSync(p))throw Error('EXISTING_EVIDENCE: '+p);fs.mkdirSync(p.slice(0,p.lastIndexOf('/')),{recursive:true});fs.writeFileSync(p,typeof v==='string'?v:JSON.stringify(v,null,2)+'\n');}
+export function sourceCases(){const raw=fs.readFileSync(ASSET+'CASES.md','utf8'),heads=[...raw.matchAll(/^## (ANB-\d{3}) ([^\r\n]+)\r?\n/gmu)];return heads.map((h,i)=>{const a=h.index+h[0].length,b=heads[i+1]?.index??raw.length,block=raw.slice(a,b),leading=block.match(/^\r?\n/u)?.[0]??'',trailing=block.match(/(?:\r?\n)+$/u)?.[0]??'',start=a+leading.length,end=b-trailing.length,source=raw.slice(start,end);return {id:h[1],title:h[2],source,source_sha256:sha(source),source_document_span:{start:[...raw.slice(0,start)].length,end:[...raw.slice(0,end)].length},source_document_sha256:sha(raw)};});}
+export {signature} from '../7P-ADMIN-SHORT-020-LONG/common.mjs';

@@ -1,0 +1,202 @@
+{
+  "contract_version": "032.1",
+  "reviews": [
+    {
+      "subject_id": "E_PM",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [
+        {
+          "quote": "PM",
+          "occurrence": 1
+        }
+      ],
+      "reason": "PM身份明确；原文未区分个人或群体，OTHER可作为类别占位。"
+    },
+    {
+      "subject_id": "E_USERS",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [
+        {
+          "quote": "users.csv",
+          "occurrence": 1
+        }
+      ],
+      "reason": "明确命名的受核对文件，身份与FILE类型有来源支持。"
+    },
+    {
+      "subject_id": "E_OPTIONAL",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [
+        {
+          "quote": "optional.md",
+          "occurrence": 1
+        }
+      ],
+      "reason": "明确命名的禁止生成文件；实体表示未断言文件已存在。"
+    },
+    {
+      "subject_id": "EV_CHECK",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [
+        {
+          "quote": "请PM核对users.csv",
+          "occurrence": 1
+        }
+      ],
+      "reason": "明确要求当前任务执行核对，无条件或次数限制。"
+    },
+    {
+      "subject_id": "EV_GENERATE",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [
+        {
+          "quote": "不得生成optional.md",
+          "occurrence": 1
+        }
+      ],
+      "reason": "明确禁止生成；FORBIDDEN配合正向动作谓词准确表达禁令。"
+    },
+    {
+      "subject_id": "C_CHECK_PM",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [
+        "E_PM",
+        "EV_CHECK"
+      ],
+      "sources": [
+        {
+          "quote": "请PM核对users.csv",
+          "occurrence": 1
+        }
+      ],
+      "reason": "PM是原文明示的核对执行者。"
+    },
+    {
+      "subject_id": "C_CHECK_INPUT",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [
+        "E_USERS",
+        "EV_CHECK"
+      ],
+      "sources": [
+        {
+          "quote": "核对users.csv",
+          "occurrence": 1
+        }
+      ],
+      "reason": "users.csv是明确受检文件，INPUT_OBJECT用途正确。"
+    },
+    {
+      "subject_id": "C_CHECK_SCOPE",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [
+        "C_CHECK_INPUT",
+        "X_USERS"
+      ],
+      "sources": [
+        {
+          "quote": "核对users.csv",
+          "occurrence": 1
+        }
+      ],
+      "reason": "范围绑定同一核对事件及其具体文件对象，ITEM范围准确。"
+    },
+    {
+      "subject_id": "C_GENERATE_PM",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [
+        "E_PM",
+        "EV_GENERATE"
+      ],
+      "sources": [
+        {
+          "quote": "请PM核对users.csv",
+          "occurrence": 1
+        },
+        {
+          "quote": "不得生成optional.md",
+          "occurrence": 1
+        }
+      ],
+      "reason": "连续同一指令没有主体切换，禁令可承接PM；来源覆盖主体及追加动作两端。"
+    },
+    {
+      "subject_id": "C_GENERATE_RESULT",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [
+        "E_OPTIONAL",
+        "EV_GENERATE"
+      ],
+      "sources": [
+        {
+          "quote": "不得生成optional.md",
+          "occurrence": 1
+        }
+      ],
+      "reason": "optional.md是禁止生成动作的结果用途；关联事件为FORBIDDEN，不产生正向O。"
+    },
+    {
+      "subject_id": "C_GENERATE_SCOPE",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [
+        "C_GENERATE_RESULT",
+        "X_OPTIONAL"
+      ],
+      "sources": [
+        {
+          "quote": "不得生成optional.md",
+          "occurrence": 1
+        }
+      ],
+      "reason": "禁令范围绑定同一生成事件及其具体结果文件，没有扩大为类别禁令。"
+    },
+    {
+      "subject_id": "X_USERS",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [
+        "E_USERS"
+      ],
+      "sources": [
+        {
+          "quote": "users.csv",
+          "occurrence": 1
+        }
+      ],
+      "reason": "原文指定单个文件，ITEM及其唯一实体操作数正确。"
+    },
+    {
+      "subject_id": "X_OPTIONAL",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [
+        "E_OPTIONAL"
+      ],
+      "sources": [
+        {
+          "quote": "optional.md",
+          "occurrence": 1
+        }
+      ],
+      "reason": "原文指定单个文件，ITEM准确保留禁令对象范围。"
+    }
+  ],
+  "issues": [],
+  "omissions": []
+}

@@ -1,0 +1,1 @@
+PM must organize an inspection of delta.csv. If differences exist, delta-report.md must be created; otherwise PM must record that there are no differences. delta.csv must not be edited.

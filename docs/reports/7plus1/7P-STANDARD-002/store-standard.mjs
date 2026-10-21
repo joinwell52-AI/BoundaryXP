@@ -1,0 +1,24 @@
+import fs from'node:fs';import path from'node:path';import{createHash}from'node:crypto';import{spawnSync}from'node:child_process';
+const root='D:/boundx',base=path.join(root,'docs/reports/7plus1/7P-STANDARD-002'),task='C:/Users/wei/.codex/attachments/126476ec-5772-446e-a1aa-9a3873dbb164/已粘贴的文本.txt',commit='f567109cebacc4e93a60087969b132c142bdbf85',bytes=fs.readFileSync(task),text=bytes.toString('utf8'),hash=b=>createHash('sha256').update(b).digest('hex'),put=(p,x)=>{fs.mkdirSync(path.dirname(p),{recursive:true});fs.writeFileSync(p,typeof x==='string'||Buffer.isBuffer(x)?x:JSON.stringify(x,null,2)+'\n',{flag:'wx'});};
+const git=(args)=>{const r=spawnSync('git',args,{cwd:root,maxBuffer:12*1024*1024});if(r.status!==0)throw Error('GIT '+args[0]);return r.stdout;};if(git(['rev-parse','review/7plus1-parser']).toString().trim()!==commit)throw Error('BASE_CHANGED');
+put(path.join(root,'docs/tasks/7plus1/7P-STANDARD-002.md'),bytes);
+const section=text.slice(text.indexOf('五、ADMIN/ChatGPT 人工审定答案'),text.indexOf('六、特别语义规则')),heads=[...section.matchAll(/^SWAI-(\d{3}) \/ REAL-GOLD-(\d{3})\r?$/gmu)],baseline={base_commit:commit,taskbook_sha256:hash(bytes),unchanged_files:{},standards:[]};if(heads.length!==10)throw Error('ANSWER_COUNT');
+for(const[i,h]of heads.entries()){
+ const id='SWAI-'+h[1],goldId='REAL-GOLD-'+h[2],block=section.slice(h.index,(heads[i+1]?.index??section.length)),candidate='fixtures/7plus1/standard-candidates/'+id,source=fs.readFileSync(path.join(root,candidate,'source.md'));if(!source.equals(git(['show',commit+':'+candidate+'/source.md'])))throw Error('SOURCE_CHANGED');
+ const slots={},rawLines={};let slot=null,parent=null,and=false;
+ for(const line of block.split(/\r?\n/u)){const m=/^([IOAPRVCB]) — (RESOLVED|UNRESOLVED|ABSENT)(?: \/ (REQUIRED))?$/u.exec(line);if(m){slot=m[1];slots[slot]={status:m[2],entries:[]};rawLines[slot]={header:line,lines:[],modality:m[3]??null};parent=null;and=false;continue;}if(!slot)continue;if(line==='AND:'){and=true;rawLines[slot].lines.push(line);continue;}const bullet=/^(\s*)- (.+)$/u.exec(line);if(!bullet)continue;rawLines[slot].lines.push(line);if(bullet[1].length){if(!parent)throw Error('CHILD_WITHOUT_PARENT');(parent.scope??={items:[]}).items.push(bullet[2]);continue;}
+ const value=bullet[2],entry={value};if(slot==='A'&&rawLines[slot].modality)entry.modality=rawLines[slot].modality;if(slot==='P'){const role=/^(.*?) \[([^\]]+)\]$/u.exec(value);if(role){entry.target=role[1];entry.role=role[2].split(/\s*\/\s*/u);}}
+ if(slot==='B'){if(/保持不变/u.test(value))entry.modality='PRESERVE';else if(value.includes('FORBIDDEN'))entry.modality='FORBIDDEN';}
+ if(slot==='R'){const q=/>=\s*(\d+)\s*天无回应/u.exec(value);if(q)entry.quantity={operator:'>=',value:Number(q[1]),unit:'天',target:'无回应',purpose:'哑火判定阈值'};}
+ if(/superseded|不再有效/u.test(value))entry.notes={temporal_status:'SUPERSEDED',current_requirement:false,authority:'Explicit wording of the ADMIN answer; no compiler inference.'};
+ if(and)entry.condition={operator:'AND',group:'C',operand_index:slots[slot].entries.length};slots[slot].entries.push(entry);parent=entry;
+ }
+ if(Object.keys(slots).length!==8)throw Error('SLOT_COUNT '+id);for(const[k,s]of Object.entries(slots))if(s.status==='ABSENT'&&s.entries.length)throw Error('ABSENT_WITH_ENTRIES');
+ const expected={sample_id:id,status:'GOLD_7PLUS1_CONFIRMED',slots},dir=path.join(root,'fixtures/7plus1/standard',id);put(path.join(dir,'source.md'),source);put(path.join(dir,'expected-7plus1.json'),expected);
+ let md='# '+id+' / '+goldId+'\n\nGOLD_7PLUS1_CONFIRMED\n\n';for(const k of 'IOAPRVCB'){const r=rawLines[k];md+=r.header+'\n'+(r.lines.length?r.lines.join('\n')+'\n':'')+'\n';}put(path.join(dir,'expected-7plus1.md'),md);
+ const manifest={sample_id:id,status:'GOLD_7PLUS1_CONFIRMED',STANDARD_PARSED_SAMPLE:false,comparison_status:'PENDING_OFFLINE_COMPARISON',source_sha256:hash(source),original_real_gold_id:goldId,base_commit:commit,authoritative_taskbook:'docs/tasks/7plus1/7P-STANDARD-002.md',authoritative_taskbook_sha256:hash(bytes),authority:'ADMIN/ChatGPT supplied expected; copied without re-adjudication or feedback from actual',files:Object.fromEntries(['source.md','expected-7plus1.json','expected-7plus1.md'].map(n=>[n,hash(fs.readFileSync(path.join(dir,n)))]))};put(path.join(dir,'manifest.json'),manifest);
+ for(const n of fs.readdirSync(path.join(root,candidate))){const file=candidate+'/'+n;baseline.unchanged_files[file]=hash(fs.readFileSync(path.join(root,file)));}
+ baseline.standards.push({id,goldId,rawLines,expected_entries:Object.fromEntries(Object.entries(slots).map(([k,v])=>[k,v.entries.length]))});
+}
+for(const d of ['fixtures/7plus1/golden/REF-001'])for(const n of fs.readdirSync(path.join(root,d)))baseline.unchanged_files[d+'/'+n]=hash(fs.readFileSync(path.join(root,d,n)));
+put(path.join(base,'ANSWER-IMPORT-AUDIT.json'),baseline);console.log('AUTHORITATIVE_EXPECTED_STORED',baseline.standards.length);

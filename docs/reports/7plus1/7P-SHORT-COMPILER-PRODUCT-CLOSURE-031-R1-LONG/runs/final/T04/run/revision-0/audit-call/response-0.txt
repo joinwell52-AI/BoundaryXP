@@ -1,0 +1,159 @@
+{
+  "contract_version": "031-r1.1",
+  "reviews": [
+    {
+      "subject_id": "E_PM",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [{"quote": "PM", "occurrence": 1}],
+      "reason": "PM身份明确；原文未指定人或组类别，OTHER可作占位。"
+    },
+    {
+      "subject_id": "E_ISSUE",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [{"quote": "issue.md", "occurrence": 1}],
+      "reason": "明确的文件名；后续无需生成承接同一文件，没有其他产物竞争。"
+    },
+    {
+      "subject_id": "E_INPUT",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [{"quote": "input.csv", "occurrence": 1}],
+      "reason": "明确的禁止删除对象及文件身份。"
+    },
+    {
+      "subject_id": "E_ABNORMAL",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [
+        {"quote": "异常", "occurrence": 1},
+        {"quote": "异常", "occurrence": 2},
+        {"quote": "异常", "occurrence": 3}
+      ],
+      "reason": "三处异常指称属于同一任务条件；OTHER占位合理。"
+    },
+    {
+      "subject_id": "EV_GENERATE_REQUIRED",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["C_FOUND"],
+      "sources": [{"quote": "若发现异常，PM必须生成issue.md", "occurrence": 1}],
+      "reason": "生成是当前任务的条件性义务，条件已双向绑定。"
+    },
+    {
+      "subject_id": "EV_GENERATE_NOT_REQUIRED",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["C_NOT_FOUND"],
+      "sources": [
+        {"quote": "PM必须生成issue.md", "occurrence": 1},
+        {"quote": "未发现异常时无需生成", "occurrence": 1}
+      ],
+      "reason": "未发现异常时撤回生成义务，NOT_REQUIRED准确，不表示禁止或许可。"
+    },
+    {
+      "subject_id": "EV_DELETE",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": [],
+      "sources": [{"quote": "无论是否异常，均不得删除input.csv", "occurrence": 1}],
+      "reason": "删除禁令覆盖异常与非异常状态，可表达为无条件FORBIDDEN。"
+    },
+    {
+      "subject_id": "C_GENERATE_PERFORMER",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["E_PM", "EV_GENERATE_REQUIRED"],
+      "sources": [{"quote": "PM必须生成issue.md", "occurrence": 1}],
+      "reason": "PM是明确的生成执行者。"
+    },
+    {
+      "subject_id": "C_GENERATE_RESULT",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["E_ISSUE", "EV_GENERATE_REQUIRED"],
+      "sources": [{"quote": "生成issue.md", "occurrence": 1}],
+      "reason": "issue.md是生成结果；原文没有交付要求。"
+    },
+    {
+      "subject_id": "C_FOUND",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["EV_GENERATE_REQUIRED", "X_FOUND"],
+      "sources": [{"quote": "若发现异常，PM必须生成issue.md", "occurrence": 1}],
+      "reason": "发现异常充分触发生成义务，方向和目标正确，不断言状态已发生。"
+    },
+    {
+      "subject_id": "C_NOT_REQUIRED_PERFORMER",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["E_PM", "EV_GENERATE_NOT_REQUIRED"],
+      "sources": [
+        {"quote": "PM必须生成issue.md", "occurrence": 1},
+        {"quote": "未发现异常时无需生成", "occurrence": 1}
+      ],
+      "reason": "连续指令中省略的主体承接PM，两端来源完整。"
+    },
+    {
+      "subject_id": "C_NOT_REQUIRED_RESULT",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["E_ISSUE", "EV_GENERATE_NOT_REQUIRED"],
+      "sources": [
+        {"quote": "生成issue.md", "occurrence": 1},
+        {"quote": "未发现异常时无需生成", "occurrence": 1}
+      ],
+      "reason": "省略对象承接同一issue.md；RESULT用途保留NOT_REQUIRED，不产生正向输出义务。"
+    },
+    {
+      "subject_id": "C_NOT_FOUND",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["EV_GENERATE_NOT_REQUIRED", "X_NOT_FOUND"],
+      "sources": [{"quote": "未发现异常时无需生成", "occurrence": 1}],
+      "reason": "未发现异常充分触发无需生成，条件方向、极性和绑定正确。"
+    },
+    {
+      "subject_id": "C_DELETE_PERFORMER",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["E_PM", "EV_DELETE"],
+      "sources": [
+        {"quote": "PM必须生成issue.md", "occurrence": 1},
+        {"quote": "无论是否异常，均不得删除input.csv", "occurrence": 1}
+      ],
+      "reason": "追加禁令未切换主体或另定执行者，可承接PM；来源覆盖两端。"
+    },
+    {
+      "subject_id": "C_DELETE_OBJECT",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["E_INPUT", "EV_DELETE"],
+      "sources": [{"quote": "无论是否异常，均不得删除input.csv", "occurrence": 1}],
+      "reason": "input.csv是禁止删除对象，OBJECT绑定准确，不据此推定外部输入。"
+    },
+    {
+      "subject_id": "X_FOUND",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["E_ABNORMAL"],
+      "sources": [{"quote": "若发现异常", "occurrence": 1}],
+      "reason": "表达当前任务发现异常的正向条件状态，未虚构发现者或已发生事实。"
+    },
+    {
+      "subject_id": "X_NOT_FOUND",
+      "field_path": "",
+      "verdict": "SUPPORT",
+      "context_refs": ["E_ABNORMAL", "X_FOUND"],
+      "sources": [{"quote": "未发现异常", "occurrence": 1}],
+      "reason": "与发现异常状态使用相同参数和相反极性，准确表达未发现而非不存在异常。"
+    }
+  ],
+  "issues": [],
+  "omissions": []
+}

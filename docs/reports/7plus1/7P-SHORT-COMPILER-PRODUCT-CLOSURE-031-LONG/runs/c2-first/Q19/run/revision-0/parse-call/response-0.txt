@@ -1,0 +1,197 @@
+{
+  "contract_version": "031-r01",
+  "entities": [
+    {
+      "id": "e_report",
+      "label": "本次报告（check.md）",
+      "type": "FILE",
+      "mentions": [
+        {"quote": "本次报告", "occurrence": 1},
+        {"quote": "check.md", "occurrence": 1}
+      ],
+      "alternatives": []
+    },
+    {
+      "id": "e_qa",
+      "label": "QA",
+      "type": "OTHER",
+      "mentions": [{"quote": "QA", "occurrence": 1}],
+      "alternatives": []
+    },
+    {
+      "id": "e_pm",
+      "label": "PM",
+      "type": "OTHER",
+      "mentions": [{"quote": "PM", "occurrence": 1}],
+      "alternatives": []
+    },
+    {
+      "id": "e_admin",
+      "label": "ADMIN",
+      "type": "OTHER",
+      "mentions": [{"quote": "ADMIN", "occurrence": 1}],
+      "alternatives": []
+    }
+  ],
+  "events": [
+    {
+      "id": "ev_review",
+      "predicate": "复核通过",
+      "kind": "STATE",
+      "layer": "CONDITION",
+      "use": "MENTION_ONLY",
+      "modality": "UNSTATED",
+      "polarity": "POSITIVE",
+      "owner_id": "ROOT",
+      "constraint_ids": [],
+      "requires": [],
+      "sources": [{"quote": "本次报告通过QA复核", "occurrence": 1}]
+    },
+    {
+      "id": "ev_submit",
+      "predicate": "提交",
+      "kind": "ACTION",
+      "layer": "MAIN",
+      "use": "CURRENT_TASK",
+      "modality": "PERMITTED",
+      "polarity": "POSITIVE",
+      "owner_id": "ROOT",
+      "constraint_ids": ["c_condition"],
+      "requires": [],
+      "sources": [{"quote": "允许PM向ADMIN提交check.md", "occurrence": 1}]
+    }
+  ],
+  "claims": [
+    {
+      "id": "c_reviewer",
+      "kind": "ROLE",
+      "event_id": "ev_review",
+      "entity_id": "e_qa",
+      "role": "REVIEWER",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "scope_id": "ev_review",
+      "requires": [],
+      "sources": [{"quote": "本次报告通过QA复核", "occurrence": 1}],
+      "note": "条件中的复核者，不新增复核义务。"
+    },
+    {
+      "id": "c_review_object",
+      "kind": "ROLE",
+      "event_id": "ev_review",
+      "entity_id": "e_report",
+      "role": "OBJECT",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "scope_id": "ev_review",
+      "requires": [],
+      "sources": [
+        {"quote": "本次报告通过QA复核", "occurrence": 1},
+        {"quote": "提交check.md", "occurrence": 1}
+      ],
+      "note": "全篇唯一当前报告与check.md为同一实体；不推定复核已经通过。"
+    },
+    {
+      "id": "c_performer",
+      "kind": "ROLE",
+      "event_id": "ev_submit",
+      "entity_id": "e_pm",
+      "role": "PERFORMER",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "scope_id": "ev_submit",
+      "requires": [],
+      "sources": [{"quote": "允许PM向ADMIN提交check.md", "occurrence": 1}],
+      "note": "PM是获条件许可的提交执行者。"
+    },
+    {
+      "id": "c_recipient",
+      "kind": "ROLE",
+      "event_id": "ev_submit",
+      "entity_id": "e_admin",
+      "role": "RECIPIENT",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "scope_id": "ev_submit",
+      "requires": [],
+      "sources": [{"quote": "向ADMIN提交check.md", "occurrence": 1}],
+      "note": ""
+    },
+    {
+      "id": "c_deliverable",
+      "kind": "ROLE",
+      "event_id": "ev_submit",
+      "entity_id": "e_report",
+      "role": "DELIVERABLE",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "scope_id": "ev_submit",
+      "requires": [],
+      "sources": [
+        {"quote": "本次报告", "occurrence": 1},
+        {"quote": "提交check.md", "occurrence": 1}
+      ],
+      "note": "交付对象与条件中的本次报告保持同一身份；不新增生成义务或外部输入。"
+    },
+    {
+      "id": "c_condition",
+      "kind": "CONDITION",
+      "event_id": "ev_submit",
+      "entity_id": null,
+      "role": null,
+      "expression_id": "x_review_passed",
+      "direction": "NECESSARY",
+      "temporal": null,
+      "quantity": null,
+      "scope_id": "ev_submit",
+      "requires": [],
+      "sources": [
+        {"quote": "仅当本次报告通过QA复核时", "occurrence": 1},
+        {"quote": "允许PM向ADMIN提交check.md", "occurrence": 1}
+      ],
+      "note": "QA复核通过是提交许可的必要前提，不是提交义务或根任务完成条件。"
+    }
+  ],
+  "expressions": [
+    {
+      "id": "x_review_passed",
+      "op": "STATE",
+      "operands": [],
+      "state": {
+        "predicate": "复核通过",
+        "event_id": "ev_review",
+        "args": ["e_report", "e_qa"],
+        "polarity": "POSITIVE"
+      },
+      "sources": [
+        {"quote": "本次报告通过QA复核", "occurrence": 1},
+        {"quote": "check.md", "occurrence": 1}
+      ]
+    }
+  ],
+  "issues": [],
+  "coverage": [
+    {
+      "sources": [{"quote": "仅当本次报告通过QA复核时", "occurrence": 1}],
+      "claim_ids": ["c_condition", "c_reviewer", "c_review_object"],
+      "status": "EXPRESSED",
+      "affected_views": ["A", "O", "P"]
+    },
+    {
+      "sources": [{"quote": "允许PM向ADMIN提交check.md", "occurrence": 1}],
+      "claim_ids": ["c_performer", "c_recipient", "c_deliverable", "c_condition"],
+      "status": "EXPRESSED",
+      "affected_views": ["A", "O", "P"]
+    }
+  ]
+}

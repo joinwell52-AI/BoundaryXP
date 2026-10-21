@@ -1,0 +1,350 @@
+{
+  "contract_version": "032.1",
+  "entities": [
+    {
+      "id": "dev",
+      "label": "DEV-01",
+      "type": "OTHER",
+      "mentions": [{"quote": "DEV-01", "occurrence": 1}],
+      "alternatives": []
+    },
+    {
+      "id": "ops",
+      "label": "OPS-01",
+      "type": "OTHER",
+      "mentions": [{"quote": "OPS-01", "occurrence": 1}],
+      "alternatives": []
+    },
+    {
+      "id": "input_file",
+      "label": "queue.csv",
+      "type": "FILE",
+      "mentions": [{"quote": "queue.csv", "occurrence": 1}],
+      "alternatives": []
+    },
+    {
+      "id": "report",
+      "label": "queue-note.md",
+      "type": "FILE",
+      "mentions": [
+        {"quote": "queue-note.md", "occurrence": 1},
+        {"quote": "该报告", "occurrence": 1}
+      ],
+      "alternatives": []
+    },
+    {
+      "id": "queue_count",
+      "label": "报告中的队列数量",
+      "type": "OTHER",
+      "mentions": [{"quote": "该报告中的队列数量", "occurrence": 1}],
+      "alternatives": []
+    }
+  ],
+  "events": [
+    {
+      "id": "read",
+      "predicate": "读取",
+      "kind": "ACTION",
+      "layer": "MAIN",
+      "use": "CURRENT_TASK",
+      "modality": "REQUIRED",
+      "polarity": "POSITIVE",
+      "owner_id": "ROOT",
+      "constraint_ids": [],
+      "requires": [],
+      "sources": [{"quote": "请DEV-01读取queue.csv", "occurrence": 1}]
+    },
+    {
+      "id": "generate",
+      "predicate": "生成",
+      "kind": "ACTION",
+      "layer": "MAIN",
+      "use": "CURRENT_TASK",
+      "modality": "REQUIRED",
+      "polarity": "POSITIVE",
+      "owner_id": "ROOT",
+      "constraint_ids": [],
+      "requires": [],
+      "sources": [{"quote": "请DEV-01读取queue.csv并生成queue-note.md", "occurrence": 1}]
+    },
+    {
+      "id": "check",
+      "predicate": "核对",
+      "kind": "ACTION",
+      "layer": "MAIN",
+      "use": "CURRENT_TASK",
+      "modality": "REQUIRED",
+      "polarity": "POSITIVE",
+      "owner_id": "ROOT",
+      "constraint_ids": [],
+      "requires": [],
+      "sources": [{"quote": "OPS-01核对该报告中的队列数量", "occurrence": 1}]
+    }
+  ],
+  "claims": [
+    {
+      "id": "read_performer",
+      "kind": "ROLE",
+      "event_id": "read",
+      "entity_id": "dev",
+      "role": "PERFORMER",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "artifact_use": null,
+      "scope_id": "read",
+      "requires": [],
+      "sources": [{"quote": "请DEV-01读取queue.csv", "occurrence": 1}],
+      "note": "DEV-01是读取动作的明确执行者。"
+    },
+    {
+      "id": "read_input",
+      "kind": "ROLE",
+      "event_id": "read",
+      "entity_id": "input_file",
+      "role": "INPUT_OBJECT",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "artifact_use": null,
+      "scope_id": "read",
+      "requires": [],
+      "sources": [{"quote": "读取queue.csv", "occurrence": 1}],
+      "note": "queue.csv是明确读取输入。"
+    },
+    {
+      "id": "read_scope",
+      "kind": "SCOPE",
+      "event_id": "read",
+      "entity_id": null,
+      "role": null,
+      "expression_id": "input_item",
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "artifact_use": null,
+      "scope_id": "input_file",
+      "requires": [],
+      "sources": [{"quote": "读取queue.csv", "occurrence": 1}],
+      "note": "读取范围是指定文件。"
+    },
+    {
+      "id": "generate_performer",
+      "kind": "ROLE",
+      "event_id": "generate",
+      "entity_id": "dev",
+      "role": "PERFORMER",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "artifact_use": null,
+      "scope_id": "generate",
+      "requires": [],
+      "sources": [
+        {"quote": "请DEV-01读取queue.csv", "occurrence": 1},
+        {"quote": "并生成queue-note.md", "occurrence": 1}
+      ],
+      "note": "生成是同一指令中的并列动作，承接DEV-01为执行者。"
+    },
+    {
+      "id": "generate_result",
+      "kind": "ROLE",
+      "event_id": "generate",
+      "entity_id": "report",
+      "role": "RESULT",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "artifact_use": null,
+      "scope_id": "generate",
+      "requires": [],
+      "sources": [{"quote": "生成queue-note.md", "occurrence": 1}],
+      "note": "明确要求产生该报告，未另行要求交付。"
+    },
+    {
+      "id": "generate_scope",
+      "kind": "SCOPE",
+      "event_id": "generate",
+      "entity_id": null,
+      "role": null,
+      "expression_id": "generated_report_item",
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "artifact_use": null,
+      "scope_id": "report",
+      "requires": [],
+      "sources": [{"quote": "生成queue-note.md", "occurrence": 1}],
+      "note": "生成对象是指定报告文件。"
+    },
+    {
+      "id": "check_performer",
+      "kind": "ROLE",
+      "event_id": "check",
+      "entity_id": "ops",
+      "role": "PERFORMER",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "artifact_use": null,
+      "scope_id": "check",
+      "requires": [],
+      "sources": [{"quote": "OPS-01核对该报告中的队列数量", "occurrence": 1}],
+      "note": "核对动作明确切换为OPS-01执行。"
+    },
+    {
+      "id": "check_object",
+      "kind": "ROLE",
+      "event_id": "check",
+      "entity_id": "report",
+      "role": "OBJECT",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "artifact_use": null,
+      "scope_id": "check",
+      "requires": [],
+      "sources": [
+        {"quote": "生成queue-note.md", "occurrence": 1},
+        {"quote": "核对该报告中的队列数量", "occurrence": 1}
+      ],
+      "note": "该报告回指唯一当前产物queue-note.md，属于内部产物使用。"
+    },
+    {
+      "id": "check_content",
+      "kind": "ROLE",
+      "event_id": "check",
+      "entity_id": "queue_count",
+      "role": "CONTENT",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "artifact_use": null,
+      "scope_id": "check",
+      "requires": [],
+      "sources": [{"quote": "核对该报告中的队列数量", "occurrence": 1}],
+      "note": "核对内容限定为报告中的队列数量；没有指定数值或执行次数。"
+    },
+    {
+      "id": "check_scope",
+      "kind": "SCOPE",
+      "event_id": "check",
+      "entity_id": null,
+      "role": null,
+      "expression_id": "checked_report_item",
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "artifact_use": null,
+      "scope_id": "report",
+      "requires": [],
+      "sources": [
+        {"quote": "生成queue-note.md", "occurrence": 1},
+        {"quote": "核对该报告中的队列数量", "occurrence": 1}
+      ],
+      "note": "核对所用报告确定为本次生成的queue-note.md。"
+    },
+    {
+      "id": "report_use",
+      "kind": "ARTIFACT_USE",
+      "event_id": "check",
+      "entity_id": "report",
+      "role": null,
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "artifact_use": {
+        "producer_result_id": "generate_result",
+        "consumer_role_id": "check_object",
+        "availability": "USED_PORTION"
+      },
+      "scope_id": "check",
+      "requires": [],
+      "sources": [
+        {"quote": "生成queue-note.md", "occurrence": 1},
+        {"quote": "OPS-01核对该报告中的队列数量", "occurrence": 1}
+      ],
+      "note": "核对使用本次生成报告中的相关内容；原文未要求完整生成结束后才核对。"
+    }
+  ],
+  "expressions": [
+    {
+      "id": "input_item",
+      "op": "ITEM",
+      "operands": ["input_file"],
+      "state": null,
+      "sources": [{"quote": "读取queue.csv", "occurrence": 1}]
+    },
+    {
+      "id": "generated_report_item",
+      "op": "ITEM",
+      "operands": ["report"],
+      "state": null,
+      "sources": [{"quote": "生成queue-note.md", "occurrence": 1}]
+    },
+    {
+      "id": "checked_report_item",
+      "op": "ITEM",
+      "operands": ["report"],
+      "state": null,
+      "sources": [
+        {"quote": "生成queue-note.md", "occurrence": 1},
+        {"quote": "该报告", "occurrence": 1}
+      ]
+    }
+  ],
+  "issues": [],
+  "coverage": [
+    {
+      "sources": [{"quote": "请DEV-01读取queue.csv", "occurrence": 1}],
+      "claim_ids": ["read_performer", "read_input", "read_scope"],
+      "status": "EXPRESSED",
+      "affected_views": ["A", "P", "I"],
+      "range_requirement": {
+        "kind": "SPECIFIC",
+        "scope_claim_ids": ["read_scope"]
+      }
+    },
+    {
+      "sources": [{"quote": "请DEV-01读取queue.csv并生成queue-note.md", "occurrence": 1}],
+      "claim_ids": ["generate_performer", "generate_result", "generate_scope"],
+      "status": "EXPRESSED",
+      "affected_views": ["A", "P", "O"],
+      "range_requirement": {
+        "kind": "SPECIFIC",
+        "scope_claim_ids": ["generate_scope"]
+      }
+    },
+    {
+      "sources": [{"quote": "OPS-01核对该报告中的队列数量", "occurrence": 1}],
+      "claim_ids": ["check_performer", "check_object", "check_content", "check_scope"],
+      "status": "EXPRESSED",
+      "affected_views": ["A", "P"],
+      "range_requirement": {
+        "kind": "SPECIFIC",
+        "scope_claim_ids": ["check_scope"]
+      }
+    },
+    {
+      "sources": [
+        {"quote": "生成queue-note.md", "occurrence": 1},
+        {"quote": "核对该报告中的队列数量", "occurrence": 1}
+      ],
+      "claim_ids": ["generate_result", "check_object", "report_use", "check_scope"],
+      "status": "EXPRESSED",
+      "affected_views": ["O", "A"],
+      "range_requirement": {
+        "kind": "SPECIFIC",
+        "scope_claim_ids": ["check_scope"]
+      }
+    }
+  ]
+}

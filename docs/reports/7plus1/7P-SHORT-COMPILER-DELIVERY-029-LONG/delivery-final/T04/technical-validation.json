@@ -1,0 +1,893 @@
+{
+  "policy": "028-r02-technical-v2",
+  "schemas": {
+    "proposal": {
+      "ok": true,
+      "errors": []
+    },
+    "audit": {
+      "ok": true,
+      "errors": []
+    }
+  },
+  "rows": [
+    {
+      "id": "ent_pm",
+      "collection": "entities",
+      "status": "UNRESOLVED",
+      "identity_status": "ACCEPTED",
+      "errors": [],
+      "uncertain": [
+        "AUDIT_ISSUE:IDENTITY",
+        "WHOLE_CLAIM_SUPPORT_MISSING",
+        "AUDIT_NOT_SUPPORTED"
+      ],
+      "sources": [
+        {
+          "quote": "PM",
+          "occurrence": 1,
+          "span": [
+            6,
+            8
+          ],
+          "source_sha256": "f4d2b979507c7b1f3fc7e01ec95dcd68a99d505336ee0f7fc98da7d0cc06c197"
+        }
+      ],
+      "audit_refs": [
+        {
+          "subject_id": "ent_pm",
+          "field_path": "label",
+          "verdict": "SUPPORT"
+        },
+        {
+          "subject_id": "ent_pm",
+          "field_path": "type",
+          "verdict": "UNCERTAIN"
+        }
+      ],
+      "required_dependencies": [],
+      "structural_refs": [],
+      "unresolved_properties": [
+        "type"
+      ],
+      "identity_policy": "SOURCE_AND_IDENTITY_SUPPORTED_TYPE_METADATA_ONLY"
+    },
+    {
+      "id": "ent_issue",
+      "collection": "entities",
+      "status": "ACCEPTED",
+      "identity_status": "ACCEPTED",
+      "errors": [],
+      "uncertain": [],
+      "sources": [
+        {
+          "quote": "issue.md",
+          "occurrence": 1,
+          "span": [
+            12,
+            20
+          ],
+          "source_sha256": "f4d2b979507c7b1f3fc7e01ec95dcd68a99d505336ee0f7fc98da7d0cc06c197"
+        },
+        {
+          "quote": "未发现异常时无需生成",
+          "occurrence": 1,
+          "span": [
+            21,
+            31
+          ],
+          "source_sha256": "f4d2b979507c7b1f3fc7e01ec95dcd68a99d505336ee0f7fc98da7d0cc06c197"
+        }
+      ],
+      "audit_refs": [
+        {
+          "subject_id": "ent_issue",
+          "field_path": "",
+          "verdict": "SUPPORT"
+        }
+      ],
+      "required_dependencies": [],
+      "structural_refs": []
+    },
+    {
+      "id": "ent_input",
+      "collection": "entities",
+      "status": "ACCEPTED",
+      "identity_status": "ACCEPTED",
+      "errors": [],
+      "uncertain": [],
+      "sources": [
+        {
+          "quote": "input.csv",
+          "occurrence": 1,
+          "span": [
+            44,
+            53
+          ],
+          "source_sha256": "f4d2b979507c7b1f3fc7e01ec95dcd68a99d505336ee0f7fc98da7d0cc06c197"
+        }
+      ],
+      "audit_refs": [
+        {
+          "subject_id": "ent_input",
+          "field_path": "",
+          "verdict": "SUPPORT"
+        }
+      ],
+      "required_dependencies": [],
+      "structural_refs": []
+    },
+    {
+      "id": "ev_generate_required",
+      "collection": "events",
+      "status": "ACCEPTED",
+      "errors": [],
+      "uncertain": [],
+      "sources": [
+        {
+          "quote": "若发现异常，PM必须生成issue.md",
+          "occurrence": 1,
+          "span": [
+            0,
+            20
+          ],
+          "source_sha256": "f4d2b979507c7b1f3fc7e01ec95dcd68a99d505336ee0f7fc98da7d0cc06c197"
+        }
+      ],
+      "audit_refs": [
+        {
+          "subject_id": "ev_generate_required",
+          "field_path": "",
+          "verdict": "SUPPORT"
+        }
+      ],
+      "required_dependencies": [],
+      "structural_refs": [
+        "ROOT",
+        "cl_found"
+      ]
+    },
+    {
+      "id": "ev_generate_not_required",
+      "collection": "events",
+      "status": "ACCEPTED",
+      "errors": [],
+      "uncertain": [],
+      "sources": [
+        {
+          "quote": "PM必须生成issue.md",
+          "occurrence": 1,
+          "span": [
+            6,
+            20
+          ],
+          "source_sha256": "f4d2b979507c7b1f3fc7e01ec95dcd68a99d505336ee0f7fc98da7d0cc06c197"
+        },
+        {
+          "quote": "未发现异常时无需生成",
+          "occurrence": 1,
+          "span": [
+            21,
+            31
+          ],
+          "source_sha256": "f4d2b979507c7b1f3fc7e01ec95dcd68a99d505336ee0f7fc98da7d0cc06c197"
+        }
+      ],
+      "audit_refs": [
+        {
+          "subject_id": "ev_generate_not_required",
+          "field_path": "",
+          "verdict": "SUPPORT"
+        }
+      ],
+      "required_dependencies": [],
+      "structural_refs": [
+        "ROOT",
+        "cl_not_found"
+      ]
+    },
+    {
+      "id": "ev_delete",
+      "collection": "events",
+      "status": "ACCEPTED",
+      "errors": [],
+      "uncertain": [],
+      "sources": [
+        {
+          "quote": "无论是否异常，均不得删除input.csv",
+          "occurrence": 1,
+          "span": [
+            32,
+            53
+          ],
+          "source_sha256": "f4d2b979507c7b1f3fc7e01ec95dcd68a99d505336ee0f7fc98da7d0cc06c197"
+        }
+      ],
+      "audit_refs": [
+        {
+          "subject_id": "ev_delete",
+          "field_path": "",
+          "verdict": "SUPPORT"
+        }
+      ],
+      "required_dependencies": [],
+      "structural_refs": [
+        "ROOT"
+      ]
+    },
+    {
+      "id": "cl_generate_performer",
+      "collection": "claims",
+      "status": "ACCEPTED",
+      "errors": [],
+      "uncertain": [],
+      "sources": [
+        {
+          "quote": "PM必须生成issue.md",
+          "occurrence": 1,
+          "span": [
+            6,
+            20
+          ],
+          "source_sha256": "f4d2b979507c7b1f3fc7e01ec95dcd68a99d505336ee0f7fc98da7d0cc06c197"
+        }
+      ],
+      "audit_refs": [
+        {
+          "subject_id": "cl_generate_performer",
+          "field_path": "",
+          "verdict": "SUPPORT"
+        }
+      ],
+      "required_dependencies": [],
+      "structural_refs": [
+        "ev_generate_required",
+        "ev_generate_required",
+        "ent_pm"
+      ]
+    },
+    {
+      "id": "cl_generate_result",
+      "collection": "claims",
+      "status": "ACCEPTED",
+      "errors": [],
+      "uncertain": [],
+      "sources": [
+        {
+          "quote": "生成issue.md",
+          "occurrence": 1,
+          "span": [
+            10,
+            20
+          ],
+          "source_sha256": "f4d2b979507c7b1f3fc7e01ec95dcd68a99d505336ee0f7fc98da7d0cc06c197"
+        }
+      ],
+      "audit_refs": [
+        {
+          "subject_id": "cl_generate_result",
+          "field_path": "",
+          "verdict": "SUPPORT"
+        }
+      ],
+      "required_dependencies": [],
+      "structural_refs": [
+        "ev_generate_required",
+        "ev_generate_required",
+        "ent_issue"
+      ]
+    },
+    {
+      "id": "cl_found",
+      "collection": "claims",
+      "status": "ACCEPTED",
+      "errors": [],
+      "uncertain": [],
+      "sources": [
+        {
+          "quote": "若发现异常，PM必须生成issue.md",
+          "occurrence": 1,
+          "span": [
+            0,
+            20
+          ],
+          "source_sha256": "f4d2b979507c7b1f3fc7e01ec95dcd68a99d505336ee0f7fc98da7d0cc06c197"
+        }
+      ],
+      "audit_refs": [
+        {
+          "subject_id": "cl_found",
+          "field_path": "",
+          "verdict": "SUPPORT"
+        }
+      ],
+      "required_dependencies": [],
+      "structural_refs": [
+        "ev_generate_required",
+        "ev_generate_required",
+        "expr_found"
+      ]
+    },
+    {
+      "id": "cl_not_required_performer",
+      "collection": "claims",
+      "status": "ACCEPTED",
+      "errors": [],
+      "uncertain": [],
+      "sources": [
+        {
+          "quote": "PM必须生成issue.md",
+          "occurrence": 1,
+          "span": [
+            6,
+            20
+          ],
+          "source_sha256": "f4d2b979507c7b1f3fc7e01ec95dcd68a99d505336ee0f7fc98da7d0cc06c197"
+        },
+        {
+          "quote": "未发现异常时无需生成",
+          "occurrence": 1,
+          "span": [
+            21,
+            31
+          ],
+          "source_sha256": "f4d2b979507c7b1f3fc7e01ec95dcd68a99d505336ee0f7fc98da7d0cc06c197"
+        }
+      ],
+      "audit_refs": [
+        {
+          "subject_id": "cl_not_required_performer",
+          "field_path": "",
+          "verdict": "SUPPORT"
+        }
+      ],
+      "required_dependencies": [],
+      "structural_refs": [
+        "ev_generate_not_required",
+        "ev_generate_not_required",
+        "ent_pm"
+      ]
+    },
+    {
+      "id": "cl_not_required_result",
+      "collection": "claims",
+      "status": "ACCEPTED",
+      "errors": [],
+      "uncertain": [],
+      "sources": [
+        {
+          "quote": "生成issue.md",
+          "occurrence": 1,
+          "span": [
+            10,
+            20
+          ],
+          "source_sha256": "f4d2b979507c7b1f3fc7e01ec95dcd68a99d505336ee0f7fc98da7d0cc06c197"
+        },
+        {
+          "quote": "未发现异常时无需生成",
+          "occurrence": 1,
+          "span": [
+            21,
+            31
+          ],
+          "source_sha256": "f4d2b979507c7b1f3fc7e01ec95dcd68a99d505336ee0f7fc98da7d0cc06c197"
+        }
+      ],
+      "audit_refs": [
+        {
+          "subject_id": "cl_not_required_result",
+          "field_path": "",
+          "verdict": "SUPPORT"
+        }
+      ],
+      "required_dependencies": [],
+      "structural_refs": [
+        "ev_generate_not_required",
+        "ev_generate_not_required",
+        "ent_issue"
+      ]
+    },
+    {
+      "id": "cl_not_found",
+      "collection": "claims",
+      "status": "ACCEPTED",
+      "errors": [],
+      "uncertain": [],
+      "sources": [
+        {
+          "quote": "未发现异常时无需生成",
+          "occurrence": 1,
+          "span": [
+            21,
+            31
+          ],
+          "source_sha256": "f4d2b979507c7b1f3fc7e01ec95dcd68a99d505336ee0f7fc98da7d0cc06c197"
+        }
+      ],
+      "audit_refs": [
+        {
+          "subject_id": "cl_not_found",
+          "field_path": "",
+          "verdict": "SUPPORT"
+        }
+      ],
+      "required_dependencies": [],
+      "structural_refs": [
+        "ev_generate_not_required",
+        "ev_generate_not_required",
+        "expr_not_found"
+      ]
+    },
+    {
+      "id": "cl_delete_object",
+      "collection": "claims",
+      "status": "ACCEPTED",
+      "errors": [],
+      "uncertain": [],
+      "sources": [
+        {
+          "quote": "不得删除input.csv",
+          "occurrence": 1,
+          "span": [
+            40,
+            53
+          ],
+          "source_sha256": "f4d2b979507c7b1f3fc7e01ec95dcd68a99d505336ee0f7fc98da7d0cc06c197"
+        }
+      ],
+      "audit_refs": [
+        {
+          "subject_id": "cl_delete_object",
+          "field_path": "",
+          "verdict": "SUPPORT"
+        }
+      ],
+      "required_dependencies": [],
+      "structural_refs": [
+        "ev_delete",
+        "ev_delete",
+        "ent_input"
+      ]
+    },
+    {
+      "id": "expr_found",
+      "collection": "expressions",
+      "status": "ACCEPTED",
+      "errors": [],
+      "uncertain": [],
+      "sources": [
+        {
+          "quote": "若发现异常",
+          "occurrence": 1,
+          "span": [
+            0,
+            5
+          ],
+          "source_sha256": "f4d2b979507c7b1f3fc7e01ec95dcd68a99d505336ee0f7fc98da7d0cc06c197"
+        }
+      ],
+      "audit_refs": [
+        {
+          "subject_id": "expr_found",
+          "field_path": "",
+          "verdict": "SUPPORT"
+        }
+      ],
+      "required_dependencies": [],
+      "structural_refs": []
+    },
+    {
+      "id": "expr_not_found",
+      "collection": "expressions",
+      "status": "ACCEPTED",
+      "errors": [],
+      "uncertain": [],
+      "sources": [
+        {
+          "quote": "未发现异常",
+          "occurrence": 1,
+          "span": [
+            21,
+            26
+          ],
+          "source_sha256": "f4d2b979507c7b1f3fc7e01ec95dcd68a99d505336ee0f7fc98da7d0cc06c197"
+        }
+      ],
+      "audit_refs": [
+        {
+          "subject_id": "expr_not_found",
+          "field_path": "",
+          "verdict": "SUPPORT"
+        }
+      ],
+      "required_dependencies": [],
+      "structural_refs": []
+    }
+  ],
+  "diagnostics": [],
+  "coverage": [
+    {
+      "sources": [
+        {
+          "quote": "若发现异常，PM必须生成issue.md",
+          "occurrence": 1,
+          "span": [
+            0,
+            20
+          ],
+          "source_sha256": "f4d2b979507c7b1f3fc7e01ec95dcd68a99d505336ee0f7fc98da7d0cc06c197"
+        }
+      ],
+      "claim_ids": [
+        "cl_generate_performer",
+        "cl_generate_result",
+        "cl_found"
+      ],
+      "status": "EXPRESSED",
+      "affected_views": [
+        "A",
+        "P",
+        "O"
+      ],
+      "id": "coverage:0"
+    },
+    {
+      "sources": [
+        {
+          "quote": "未发现异常时无需生成",
+          "occurrence": 1,
+          "span": [
+            21,
+            31
+          ],
+          "source_sha256": "f4d2b979507c7b1f3fc7e01ec95dcd68a99d505336ee0f7fc98da7d0cc06c197"
+        }
+      ],
+      "claim_ids": [
+        "cl_not_required_performer",
+        "cl_not_required_result",
+        "cl_not_found"
+      ],
+      "status": "EXPRESSED",
+      "affected_views": [
+        "A",
+        "P",
+        "O"
+      ],
+      "id": "coverage:1"
+    },
+    {
+      "sources": [
+        {
+          "quote": "无论是否异常，均不得删除input.csv",
+          "occurrence": 1,
+          "span": [
+            32,
+            53
+          ],
+          "source_sha256": "f4d2b979507c7b1f3fc7e01ec95dcd68a99d505336ee0f7fc98da7d0cc06c197"
+        }
+      ],
+      "claim_ids": [
+        "cl_delete_object"
+      ],
+      "status": "EXPRESSED",
+      "affected_views": [
+        "B"
+      ],
+      "id": "coverage:2"
+    },
+    {
+      "sources": [
+        {
+          "quote": "均不得删除input.csv",
+          "occurrence": 1,
+          "span": [
+            39,
+            53
+          ],
+          "source_sha256": "f4d2b979507c7b1f3fc7e01ec95dcd68a99d505336ee0f7fc98da7d0cc06c197"
+        }
+      ],
+      "claim_ids": [],
+      "status": "UNSPECIFIED",
+      "affected_views": [
+        "P"
+      ],
+      "id": "coverage:3"
+    }
+  ],
+  "audit_sources": [
+    {
+      "subject_id": "ent_pm",
+      "sources": [
+        {
+          "quote": "PM必须生成issue.md",
+          "occurrence": 1,
+          "span": [
+            6,
+            20
+          ],
+          "source_sha256": "f4d2b979507c7b1f3fc7e01ec95dcd68a99d505336ee0f7fc98da7d0cc06c197"
+        }
+      ]
+    },
+    {
+      "subject_id": "ent_pm",
+      "sources": [
+        {
+          "quote": "PM",
+          "occurrence": 1,
+          "span": [
+            6,
+            8
+          ],
+          "source_sha256": "f4d2b979507c7b1f3fc7e01ec95dcd68a99d505336ee0f7fc98da7d0cc06c197"
+        }
+      ]
+    },
+    {
+      "subject_id": "ent_issue",
+      "sources": [
+        {
+          "quote": "PM必须生成issue.md",
+          "occurrence": 1,
+          "span": [
+            6,
+            20
+          ],
+          "source_sha256": "f4d2b979507c7b1f3fc7e01ec95dcd68a99d505336ee0f7fc98da7d0cc06c197"
+        },
+        {
+          "quote": "未发现异常时无需生成",
+          "occurrence": 1,
+          "span": [
+            21,
+            31
+          ],
+          "source_sha256": "f4d2b979507c7b1f3fc7e01ec95dcd68a99d505336ee0f7fc98da7d0cc06c197"
+        }
+      ]
+    },
+    {
+      "subject_id": "ent_input",
+      "sources": [
+        {
+          "quote": "input.csv",
+          "occurrence": 1,
+          "span": [
+            44,
+            53
+          ],
+          "source_sha256": "f4d2b979507c7b1f3fc7e01ec95dcd68a99d505336ee0f7fc98da7d0cc06c197"
+        }
+      ]
+    },
+    {
+      "subject_id": "ev_generate_required",
+      "sources": [
+        {
+          "quote": "若发现异常，PM必须生成issue.md",
+          "occurrence": 1,
+          "span": [
+            0,
+            20
+          ],
+          "source_sha256": "f4d2b979507c7b1f3fc7e01ec95dcd68a99d505336ee0f7fc98da7d0cc06c197"
+        }
+      ]
+    },
+    {
+      "subject_id": "ev_generate_not_required",
+      "sources": [
+        {
+          "quote": "PM必须生成issue.md",
+          "occurrence": 1,
+          "span": [
+            6,
+            20
+          ],
+          "source_sha256": "f4d2b979507c7b1f3fc7e01ec95dcd68a99d505336ee0f7fc98da7d0cc06c197"
+        },
+        {
+          "quote": "未发现异常时无需生成",
+          "occurrence": 1,
+          "span": [
+            21,
+            31
+          ],
+          "source_sha256": "f4d2b979507c7b1f3fc7e01ec95dcd68a99d505336ee0f7fc98da7d0cc06c197"
+        }
+      ]
+    },
+    {
+      "subject_id": "ev_delete",
+      "sources": [
+        {
+          "quote": "无论是否异常，均不得删除input.csv",
+          "occurrence": 1,
+          "span": [
+            32,
+            53
+          ],
+          "source_sha256": "f4d2b979507c7b1f3fc7e01ec95dcd68a99d505336ee0f7fc98da7d0cc06c197"
+        }
+      ]
+    },
+    {
+      "subject_id": "cl_generate_performer",
+      "sources": [
+        {
+          "quote": "PM必须生成issue.md",
+          "occurrence": 1,
+          "span": [
+            6,
+            20
+          ],
+          "source_sha256": "f4d2b979507c7b1f3fc7e01ec95dcd68a99d505336ee0f7fc98da7d0cc06c197"
+        }
+      ]
+    },
+    {
+      "subject_id": "cl_generate_result",
+      "sources": [
+        {
+          "quote": "生成issue.md",
+          "occurrence": 1,
+          "span": [
+            10,
+            20
+          ],
+          "source_sha256": "f4d2b979507c7b1f3fc7e01ec95dcd68a99d505336ee0f7fc98da7d0cc06c197"
+        }
+      ]
+    },
+    {
+      "subject_id": "cl_found",
+      "sources": [
+        {
+          "quote": "若发现异常，PM必须生成issue.md",
+          "occurrence": 1,
+          "span": [
+            0,
+            20
+          ],
+          "source_sha256": "f4d2b979507c7b1f3fc7e01ec95dcd68a99d505336ee0f7fc98da7d0cc06c197"
+        }
+      ]
+    },
+    {
+      "subject_id": "cl_not_required_performer",
+      "sources": [
+        {
+          "quote": "PM必须生成issue.md",
+          "occurrence": 1,
+          "span": [
+            6,
+            20
+          ],
+          "source_sha256": "f4d2b979507c7b1f3fc7e01ec95dcd68a99d505336ee0f7fc98da7d0cc06c197"
+        },
+        {
+          "quote": "未发现异常时无需生成",
+          "occurrence": 1,
+          "span": [
+            21,
+            31
+          ],
+          "source_sha256": "f4d2b979507c7b1f3fc7e01ec95dcd68a99d505336ee0f7fc98da7d0cc06c197"
+        }
+      ]
+    },
+    {
+      "subject_id": "cl_not_required_result",
+      "sources": [
+        {
+          "quote": "生成issue.md",
+          "occurrence": 1,
+          "span": [
+            10,
+            20
+          ],
+          "source_sha256": "f4d2b979507c7b1f3fc7e01ec95dcd68a99d505336ee0f7fc98da7d0cc06c197"
+        },
+        {
+          "quote": "未发现异常时无需生成",
+          "occurrence": 1,
+          "span": [
+            21,
+            31
+          ],
+          "source_sha256": "f4d2b979507c7b1f3fc7e01ec95dcd68a99d505336ee0f7fc98da7d0cc06c197"
+        }
+      ]
+    },
+    {
+      "subject_id": "cl_not_found",
+      "sources": [
+        {
+          "quote": "未发现异常时无需生成",
+          "occurrence": 1,
+          "span": [
+            21,
+            31
+          ],
+          "source_sha256": "f4d2b979507c7b1f3fc7e01ec95dcd68a99d505336ee0f7fc98da7d0cc06c197"
+        }
+      ]
+    },
+    {
+      "subject_id": "cl_delete_object",
+      "sources": [
+        {
+          "quote": "不得删除input.csv",
+          "occurrence": 1,
+          "span": [
+            40,
+            53
+          ],
+          "source_sha256": "f4d2b979507c7b1f3fc7e01ec95dcd68a99d505336ee0f7fc98da7d0cc06c197"
+        }
+      ]
+    },
+    {
+      "subject_id": "expr_found",
+      "sources": [
+        {
+          "quote": "若发现异常",
+          "occurrence": 1,
+          "span": [
+            0,
+            5
+          ],
+          "source_sha256": "f4d2b979507c7b1f3fc7e01ec95dcd68a99d505336ee0f7fc98da7d0cc06c197"
+        }
+      ]
+    },
+    {
+      "subject_id": "expr_not_found",
+      "sources": [
+        {
+          "quote": "未发现异常",
+          "occurrence": 1,
+          "span": [
+            21,
+            26
+          ],
+          "source_sha256": "f4d2b979507c7b1f3fc7e01ec95dcd68a99d505336ee0f7fc98da7d0cc06c197"
+        }
+      ]
+    },
+    {
+      "subject_id": "audit_pm_type",
+      "sources": [
+        {
+          "quote": "PM",
+          "occurrence": 1,
+          "span": [
+            6,
+            8
+          ],
+          "source_sha256": "f4d2b979507c7b1f3fc7e01ec95dcd68a99d505336ee0f7fc98da7d0cc06c197"
+        }
+      ]
+    }
+  ],
+  "issue_sources": [
+    {
+      "id": "issue_delete_performer",
+      "sources": [
+        {
+          "quote": "无论是否异常，均不得删除input.csv",
+          "occurrence": 1,
+          "span": [
+            32,
+            53
+          ],
+          "source_sha256": "f4d2b979507c7b1f3fc7e01ec95dcd68a99d505336ee0f7fc98da7d0cc06c197"
+        }
+      ]
+    }
+  ]
+}

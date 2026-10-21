@@ -1,0 +1,1 @@
+PM 查看角色名单，其中 QA 是历史审批人。PM 生成 roster.txt。

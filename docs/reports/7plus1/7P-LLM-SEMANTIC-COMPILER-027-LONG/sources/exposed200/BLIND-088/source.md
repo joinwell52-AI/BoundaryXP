@@ -1,0 +1,1 @@
+The whole task must finish within 42 minutes. Taylor must coordinate the task: verify build-2267.csv in isolated environment. Deliver audit-915111.md. The scope is limited to the stated environment; production resources are excluded. Send the final report to Rowan.

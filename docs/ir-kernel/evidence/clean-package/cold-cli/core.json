@@ -1,0 +1,428 @@
+{
+  "format": "boundx-ir-core/1",
+  "semantic_version": "kernel/1.0",
+  "input_contract": "candidate-ir/2.0",
+  "root_task": "task",
+  "nodes": {
+    "actor-boundary": {
+      "id": "actor-boundary",
+      "kind": "CONSTRAINT",
+      "views": [
+        "B"
+      ],
+      "scope_id": "task",
+      "modality": "REQUIRED",
+      "subject": null,
+      "applicability": null,
+      "body": {
+        "kind": "EXPRESSION",
+        "id": "allActors"
+      },
+      "data_use": null,
+      "category": "REQUIREMENT",
+      "value_type": "BOOLEAN"
+    },
+    "actorRule": {
+      "id": "actorRule",
+      "operator": "IMPLIES",
+      "arguments": [
+        {
+          "kind": "EXPRESSION",
+          "id": "occurs"
+        },
+        {
+          "kind": "EXPRESSION",
+          "id": "whitelist"
+        }
+      ],
+      "literal": null,
+      "unit": null,
+      "bound_variable": null,
+      "category": "EXPRESSION",
+      "value_type": "BOOLEAN"
+    },
+    "actors": {
+      "id": "actors",
+      "operator": "ACTORS_OF",
+      "arguments": [
+        {
+          "kind": "VARIABLE",
+          "id": "e"
+        }
+      ],
+      "literal": null,
+      "unit": null,
+      "bound_variable": null,
+      "category": "EXPRESSION",
+      "value_type": "SET"
+    },
+    "allActors": {
+      "id": "allActors",
+      "operator": "FORALL",
+      "arguments": [
+        {
+          "kind": "EXPRESSION",
+          "id": "calls"
+        },
+        {
+          "kind": "EXPRESSION",
+          "id": "actorRule"
+        }
+      ],
+      "literal": null,
+      "unit": null,
+      "bound_variable": {
+        "kind": "VARIABLE",
+        "id": "e"
+      },
+      "category": "EXPRESSION",
+      "value_type": "BOOLEAN"
+    },
+    "allowed": {
+      "id": "allowed",
+      "kind": "GROUP",
+      "instance_scope": "task",
+      "members": [
+        {
+          "kind": "ENTITY",
+          "id": "worker1"
+        },
+        {
+          "kind": "ENTITY",
+          "id": "worker2"
+        }
+      ],
+      "category": "ENTITY",
+      "value_type": "OBJECT"
+    },
+    "budget": {
+      "id": "budget",
+      "operator": "LTE",
+      "arguments": [
+        {
+          "kind": "EXPRESSION",
+          "id": "count"
+        },
+        {
+          "kind": "EXPRESSION",
+          "id": "three"
+        }
+      ],
+      "literal": null,
+      "unit": null,
+      "bound_variable": null,
+      "category": "EXPRESSION",
+      "value_type": "BOOLEAN"
+    },
+    "calls": {
+      "id": "calls",
+      "operator": "SELECT_EVENTS",
+      "arguments": [
+        {
+          "kind": "EXPRESSION",
+          "id": "events"
+        },
+        {
+          "kind": "EXPRESSION",
+          "id": "match"
+        }
+      ],
+      "literal": null,
+      "unit": null,
+      "bound_variable": {
+        "kind": "VARIABLE",
+        "id": "e"
+      },
+      "category": "EXPRESSION",
+      "value_type": "EVENT_DOMAIN"
+    },
+    "count": {
+      "id": "count",
+      "operator": "COUNT_STARTED",
+      "arguments": [
+        {
+          "kind": "EXPRESSION",
+          "id": "calls"
+        }
+      ],
+      "literal": null,
+      "unit": null,
+      "bound_variable": null,
+      "category": "EXPRESSION",
+      "value_type": "INTEGER"
+    },
+    "e": {
+      "id": "e",
+      "type": "EVENT",
+      "domain": {
+        "kind": "EXPRESSION",
+        "id": "events"
+      },
+      "binding_mode": "INSTANCE_LOCAL",
+      "scope_id": "task",
+      "owner": null,
+      "category": "VARIABLE",
+      "value_type": "EVENT"
+    },
+    "events": {
+      "id": "events",
+      "operator": "TASK_EVENTS",
+      "arguments": [
+        {
+          "kind": "EVENT",
+          "id": "task"
+        }
+      ],
+      "literal": null,
+      "unit": null,
+      "bound_variable": null,
+      "category": "EXPRESSION",
+      "value_type": "EVENT_DOMAIN"
+    },
+    "invoke": {
+      "id": "invoke",
+      "operator": "SYMBOL",
+      "arguments": [],
+      "literal": "INVOKE",
+      "unit": null,
+      "bound_variable": null,
+      "category": "EXPRESSION",
+      "value_type": "SYMBOL"
+    },
+    "isInvoke": {
+      "id": "isInvoke",
+      "operator": "EQ",
+      "arguments": [
+        {
+          "kind": "EXPRESSION",
+          "id": "op"
+        },
+        {
+          "kind": "EXPRESSION",
+          "id": "invoke"
+        }
+      ],
+      "literal": null,
+      "unit": null,
+      "bound_variable": null,
+      "category": "EXPRESSION",
+      "value_type": "BOOLEAN"
+    },
+    "isTool": {
+      "id": "isTool",
+      "operator": "MEMBER",
+      "arguments": [
+        {
+          "kind": "ENTITY",
+          "id": "tool"
+        },
+        {
+          "kind": "EXPRESSION",
+          "id": "targets"
+        }
+      ],
+      "literal": null,
+      "unit": null,
+      "bound_variable": null,
+      "category": "EXPRESSION",
+      "value_type": "BOOLEAN"
+    },
+    "match": {
+      "id": "match",
+      "operator": "AND",
+      "arguments": [
+        {
+          "kind": "EXPRESSION",
+          "id": "isInvoke"
+        },
+        {
+          "kind": "EXPRESSION",
+          "id": "isTool"
+        }
+      ],
+      "literal": null,
+      "unit": null,
+      "bound_variable": null,
+      "category": "EXPRESSION",
+      "value_type": "BOOLEAN"
+    },
+    "occurs": {
+      "id": "occurs",
+      "operator": "EVENT_OCCURRED",
+      "arguments": [
+        {
+          "kind": "VARIABLE",
+          "id": "e"
+        }
+      ],
+      "literal": null,
+      "unit": null,
+      "bound_variable": null,
+      "category": "EXPRESSION",
+      "value_type": "BOOLEAN"
+    },
+    "op": {
+      "id": "op",
+      "operator": "OPERATION_OF",
+      "arguments": [
+        {
+          "kind": "VARIABLE",
+          "id": "e"
+        }
+      ],
+      "literal": null,
+      "unit": null,
+      "bound_variable": null,
+      "category": "EXPRESSION",
+      "value_type": "SYMBOL"
+    },
+    "P": {
+      "id": "P",
+      "kind": "CONSTRAINT",
+      "views": [
+        "B"
+      ],
+      "scope_id": "task",
+      "modality": "REQUIRED",
+      "subject": null,
+      "applicability": null,
+      "body": {
+        "kind": "EXPRESSION",
+        "id": "yes"
+      },
+      "data_use": null,
+      "category": "REQUIREMENT",
+      "value_type": "BOOLEAN"
+    },
+    "shared-budget": {
+      "id": "shared-budget",
+      "kind": "CONSTRAINT",
+      "views": [
+        "B"
+      ],
+      "scope_id": "task",
+      "modality": "REQUIRED",
+      "subject": null,
+      "applicability": null,
+      "body": {
+        "kind": "EXPRESSION",
+        "id": "budget"
+      },
+      "data_use": null,
+      "category": "REQUIREMENT",
+      "value_type": "BOOLEAN"
+    },
+    "targets": {
+      "id": "targets",
+      "operator": "TARGETS_OF",
+      "arguments": [
+        {
+          "kind": "VARIABLE",
+          "id": "e"
+        }
+      ],
+      "literal": null,
+      "unit": null,
+      "bound_variable": null,
+      "category": "EXPRESSION",
+      "value_type": "SET"
+    },
+    "task": {
+      "id": "task",
+      "kind": "TASK",
+      "layer": "MAIN",
+      "use": "CURRENT_TASK",
+      "owner_id": "task",
+      "operation": "ORGANIZE",
+      "operation_extent": "EXACT",
+      "actor_domain": "EXPLICIT",
+      "roles": [],
+      "category": "EVENT",
+      "value_type": "EVENT"
+    },
+    "three": {
+      "id": "three",
+      "operator": "NUMBER",
+      "arguments": [],
+      "literal": "3",
+      "unit": null,
+      "bound_variable": null,
+      "category": "EXPRESSION",
+      "value_type": "NUMBER"
+    },
+    "tool": {
+      "id": "tool",
+      "kind": "OBJECT",
+      "instance_scope": "task",
+      "members": [],
+      "category": "ENTITY",
+      "value_type": "OBJECT"
+    },
+    "whitelist": {
+      "id": "whitelist",
+      "operator": "SUBSET",
+      "arguments": [
+        {
+          "kind": "EXPRESSION",
+          "id": "actors"
+        },
+        {
+          "kind": "EXPRESSION",
+          "id": "workers"
+        }
+      ],
+      "literal": null,
+      "unit": null,
+      "bound_variable": null,
+      "category": "EXPRESSION",
+      "value_type": "BOOLEAN"
+    },
+    "worker1": {
+      "id": "worker1",
+      "kind": "PERSON",
+      "instance_scope": "task",
+      "members": [],
+      "category": "ENTITY",
+      "value_type": "OBJECT"
+    },
+    "worker2": {
+      "id": "worker2",
+      "kind": "PERSON",
+      "instance_scope": "task",
+      "members": [],
+      "category": "ENTITY",
+      "value_type": "OBJECT"
+    },
+    "workers": {
+      "id": "workers",
+      "operator": "GROUP_MEMBERS",
+      "arguments": [
+        {
+          "kind": "ENTITY",
+          "id": "allowed"
+        }
+      ],
+      "literal": null,
+      "unit": null,
+      "bound_variable": null,
+      "category": "EXPRESSION",
+      "value_type": "SET"
+    },
+    "yes": {
+      "id": "yes",
+      "operator": "BOOLEAN",
+      "arguments": [],
+      "literal": true,
+      "unit": null,
+      "bound_variable": null,
+      "category": "EXPRESSION",
+      "value_type": "BOOLEAN"
+    }
+  },
+  "requirements": [
+    "P",
+    "actor-boundary",
+    "shared-budget"
+  ],
+  "sequences": []
+}

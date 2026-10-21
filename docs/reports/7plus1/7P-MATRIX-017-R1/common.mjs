@@ -1,0 +1,5 @@
+import fs from 'node:fs';import crypto from 'node:crypto';
+export const out='docs/reports/7plus1/7P-MATRIX-017-R1/';export const read=p=>JSON.parse(fs.readFileSync(p,'utf8'));export const hash=b=>crypto.createHash('sha256').update(b).digest('hex');export const digest=p=>hash(fs.readFileSync(p));
+export const walk=p=>fs.readdirSync(p,{withFileTypes:true}).flatMap(e=>e.isDirectory()?walk(p+e.name+'/'):[p+e.name]).sort();
+export function write(p,x){if(!p.startsWith(out)||fs.existsSync(out+'SEAL.md'))throw Error('SEALED_OR_SCOPE');fs.mkdirSync(p.slice(0,p.lastIndexOf('/')),{recursive:true});fs.writeFileSync(p,typeof x==='string'?x:JSON.stringify(x,null,2)+'\n','utf8');}
+export function cases(){const t=fs.readFileSync('docs/tasks/7plus1/7P-MATRIX-017-FROZEN-CASES.md','utf8');return [...t.matchAll(/^# (M0[1-4]) — ([^\n]+)\n([\s\S]*?)(?=^# M0[1-4] |^# Final 017 acceptance|$(?![\s\S]))/gm)].map(m=>({id:m[1],title:m[2],source:m[3].match(/## Source\n\n```text\n([\s\S]*?)\n```/)[1],frozen_contract:m[3]}));}

@@ -1,0 +1,1 @@
+本次任务要求核对 public-api.json 中公开接口的名称与版本标识，并形成 api-list-review.md。由 PM 组织完成，QA 复核后提交；不得修改接口定义。

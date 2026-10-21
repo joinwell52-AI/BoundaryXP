@@ -1,0 +1,1 @@
+UNITC2B2256 check endpoint-c2-b2-6, retry exactly 10 times, write quantity-c2-b2-6.txt.

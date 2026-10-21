@@ -1,0 +1,546 @@
+{
+  "policy": "032-domain-technical-v1",
+  "schemas": {
+    "proposal": {
+      "ok": true,
+      "errors": []
+    },
+    "audit": {
+      "ok": true,
+      "errors": []
+    }
+  },
+  "rows": [
+    {
+      "id": "ent_qa",
+      "collection": "entities",
+      "status": "ACCEPTED",
+      "identity_status": "ACCEPTED",
+      "errors": [],
+      "uncertain": [],
+      "sources": [
+        {
+          "quote": "QA",
+          "occurrence": 1,
+          "span": [
+            1,
+            3
+          ],
+          "source_sha256": "a179c7b8fbc3e79da76791506b578c499ad591d4244230c0e6bf0e1b0b79489d"
+        }
+      ],
+      "audit_refs": [
+        {
+          "subject_id": "ent_qa",
+          "field_path": "",
+          "verdict": "SUPPORT"
+        }
+      ],
+      "required_dependencies": [],
+      "structural_refs": []
+    },
+    {
+      "id": "ent_config",
+      "collection": "entities",
+      "status": "ACCEPTED",
+      "identity_status": "ACCEPTED",
+      "errors": [],
+      "uncertain": [],
+      "sources": [
+        {
+          "quote": "配置",
+          "occurrence": 1,
+          "span": [
+            5,
+            7
+          ],
+          "source_sha256": "a179c7b8fbc3e79da76791506b578c499ad591d4244230c0e6bf0e1b0b79489d"
+        }
+      ],
+      "audit_refs": [
+        {
+          "subject_id": "ent_config",
+          "field_path": "",
+          "verdict": "SUPPORT"
+        }
+      ],
+      "required_dependencies": [],
+      "structural_refs": []
+    },
+    {
+      "id": "evt_check",
+      "collection": "events",
+      "status": "ACCEPTED",
+      "errors": [],
+      "uncertain": [],
+      "sources": [
+        {
+          "quote": "请QA完成配置核验",
+          "occurrence": 1,
+          "span": [
+            0,
+            9
+          ],
+          "source_sha256": "a179c7b8fbc3e79da76791506b578c499ad591d4244230c0e6bf0e1b0b79489d"
+        }
+      ],
+      "audit_refs": [
+        {
+          "subject_id": "evt_check",
+          "field_path": "",
+          "verdict": "SUPPORT"
+        }
+      ],
+      "required_dependencies": [],
+      "structural_refs": [
+        "ROOT",
+        "cl_time"
+      ]
+    },
+    {
+      "id": "cl_performer",
+      "collection": "claims",
+      "status": "ACCEPTED",
+      "errors": [],
+      "uncertain": [],
+      "sources": [
+        {
+          "quote": "请QA完成配置核验",
+          "occurrence": 1,
+          "span": [
+            0,
+            9
+          ],
+          "source_sha256": "a179c7b8fbc3e79da76791506b578c499ad591d4244230c0e6bf0e1b0b79489d"
+        }
+      ],
+      "audit_refs": [
+        {
+          "subject_id": "cl_performer",
+          "field_path": "",
+          "verdict": "SUPPORT"
+        }
+      ],
+      "required_dependencies": [],
+      "structural_refs": [
+        "evt_check",
+        "evt_check",
+        "ent_qa"
+      ]
+    },
+    {
+      "id": "cl_input",
+      "collection": "claims",
+      "status": "ACCEPTED",
+      "errors": [],
+      "uncertain": [],
+      "sources": [
+        {
+          "quote": "完成配置核验",
+          "occurrence": 1,
+          "span": [
+            3,
+            9
+          ],
+          "source_sha256": "a179c7b8fbc3e79da76791506b578c499ad591d4244230c0e6bf0e1b0b79489d"
+        }
+      ],
+      "audit_refs": [
+        {
+          "subject_id": "cl_input",
+          "field_path": "",
+          "verdict": "SUPPORT"
+        }
+      ],
+      "required_dependencies": [],
+      "structural_refs": [
+        "evt_check",
+        "evt_check",
+        "ent_config"
+      ]
+    },
+    {
+      "id": "cl_scope",
+      "collection": "claims",
+      "status": "ACCEPTED",
+      "errors": [],
+      "uncertain": [],
+      "sources": [
+        {
+          "quote": "配置核验",
+          "occurrence": 1,
+          "span": [
+            5,
+            9
+          ],
+          "source_sha256": "a179c7b8fbc3e79da76791506b578c499ad591d4244230c0e6bf0e1b0b79489d"
+        }
+      ],
+      "audit_refs": [
+        {
+          "subject_id": "cl_scope",
+          "field_path": "",
+          "verdict": "SUPPORT"
+        }
+      ],
+      "required_dependencies": [],
+      "structural_refs": [
+        "ent_config",
+        "evt_check",
+        "expr_config"
+      ]
+    },
+    {
+      "id": "cl_time",
+      "collection": "claims",
+      "status": "ACCEPTED",
+      "errors": [],
+      "uncertain": [],
+      "sources": [
+        {
+          "quote": "核验用时不得超过6分钟",
+          "occurrence": 1,
+          "span": [
+            10,
+            21
+          ],
+          "source_sha256": "a179c7b8fbc3e79da76791506b578c499ad591d4244230c0e6bf0e1b0b79489d"
+        }
+      ],
+      "audit_refs": [
+        {
+          "subject_id": "cl_time",
+          "field_path": "",
+          "verdict": "SUPPORT"
+        }
+      ],
+      "required_dependencies": [],
+      "structural_refs": [
+        "evt_check",
+        "evt_check",
+        "evt_check",
+        "evt_check"
+      ]
+    },
+    {
+      "id": "cl_stop",
+      "collection": "claims",
+      "status": "ACCEPTED",
+      "errors": [],
+      "uncertain": [],
+      "sources": [
+        {
+          "quote": "若出现权限错误，停止本任务",
+          "occurrence": 1,
+          "span": [
+            22,
+            35
+          ],
+          "source_sha256": "a179c7b8fbc3e79da76791506b578c499ad591d4244230c0e6bf0e1b0b79489d"
+        }
+      ],
+      "audit_refs": [
+        {
+          "subject_id": "cl_stop",
+          "field_path": "",
+          "verdict": "SUPPORT"
+        }
+      ],
+      "required_dependencies": [],
+      "structural_refs": [
+        "ROOT",
+        "expr_permission_error"
+      ]
+    },
+    {
+      "id": "expr_config",
+      "collection": "expressions",
+      "status": "ACCEPTED",
+      "errors": [],
+      "uncertain": [],
+      "sources": [
+        {
+          "quote": "配置核验",
+          "occurrence": 1,
+          "span": [
+            5,
+            9
+          ],
+          "source_sha256": "a179c7b8fbc3e79da76791506b578c499ad591d4244230c0e6bf0e1b0b79489d"
+        }
+      ],
+      "audit_refs": [
+        {
+          "subject_id": "expr_config",
+          "field_path": "",
+          "verdict": "SUPPORT"
+        }
+      ],
+      "required_dependencies": [],
+      "structural_refs": []
+    },
+    {
+      "id": "expr_permission_error",
+      "collection": "expressions",
+      "status": "ACCEPTED",
+      "errors": [],
+      "uncertain": [],
+      "sources": [
+        {
+          "quote": "若出现权限错误，停止本任务",
+          "occurrence": 1,
+          "span": [
+            22,
+            35
+          ],
+          "source_sha256": "a179c7b8fbc3e79da76791506b578c499ad591d4244230c0e6bf0e1b0b79489d"
+        }
+      ],
+      "audit_refs": [
+        {
+          "subject_id": "expr_permission_error",
+          "field_path": "",
+          "verdict": "SUPPORT"
+        }
+      ],
+      "required_dependencies": [],
+      "structural_refs": []
+    }
+  ],
+  "diagnostics": [],
+  "coverage": [
+    {
+      "sources": [
+        {
+          "quote": "请QA完成配置核验",
+          "occurrence": 1,
+          "span": [
+            0,
+            9
+          ],
+          "source_sha256": "a179c7b8fbc3e79da76791506b578c499ad591d4244230c0e6bf0e1b0b79489d"
+        }
+      ],
+      "claim_ids": [
+        "cl_performer",
+        "cl_input",
+        "cl_scope"
+      ],
+      "status": "EXPRESSED",
+      "affected_views": [
+        "I",
+        "A",
+        "P"
+      ],
+      "range_requirement": {
+        "kind": "CATEGORY",
+        "scope_claim_ids": [
+          "cl_scope"
+        ]
+      },
+      "id": "coverage:0"
+    },
+    {
+      "sources": [
+        {
+          "quote": "核验用时不得超过6分钟",
+          "occurrence": 1,
+          "span": [
+            10,
+            21
+          ],
+          "source_sha256": "a179c7b8fbc3e79da76791506b578c499ad591d4244230c0e6bf0e1b0b79489d"
+        }
+      ],
+      "claim_ids": [
+        "cl_time"
+      ],
+      "status": "EXPRESSED",
+      "affected_views": [
+        "R"
+      ],
+      "range_requirement": {
+        "kind": "NONE",
+        "scope_claim_ids": []
+      },
+      "id": "coverage:1"
+    },
+    {
+      "sources": [
+        {
+          "quote": "若出现权限错误，停止本任务",
+          "occurrence": 1,
+          "span": [
+            22,
+            35
+          ],
+          "source_sha256": "a179c7b8fbc3e79da76791506b578c499ad591d4244230c0e6bf0e1b0b79489d"
+        }
+      ],
+      "claim_ids": [
+        "cl_stop"
+      ],
+      "status": "EXPRESSED",
+      "affected_views": [
+        "C"
+      ],
+      "range_requirement": {
+        "kind": "NONE",
+        "scope_claim_ids": []
+      },
+      "id": "coverage:2"
+    }
+  ],
+  "audit_sources": [
+    {
+      "subject_id": "ent_qa",
+      "sources": [
+        {
+          "quote": "请QA完成配置核验",
+          "occurrence": 1,
+          "span": [
+            0,
+            9
+          ],
+          "source_sha256": "a179c7b8fbc3e79da76791506b578c499ad591d4244230c0e6bf0e1b0b79489d"
+        }
+      ]
+    },
+    {
+      "subject_id": "ent_config",
+      "sources": [
+        {
+          "quote": "配置核验",
+          "occurrence": 1,
+          "span": [
+            5,
+            9
+          ],
+          "source_sha256": "a179c7b8fbc3e79da76791506b578c499ad591d4244230c0e6bf0e1b0b79489d"
+        }
+      ]
+    },
+    {
+      "subject_id": "evt_check",
+      "sources": [
+        {
+          "quote": "请QA完成配置核验",
+          "occurrence": 1,
+          "span": [
+            0,
+            9
+          ],
+          "source_sha256": "a179c7b8fbc3e79da76791506b578c499ad591d4244230c0e6bf0e1b0b79489d"
+        },
+        {
+          "quote": "核验用时不得超过6分钟",
+          "occurrence": 1,
+          "span": [
+            10,
+            21
+          ],
+          "source_sha256": "a179c7b8fbc3e79da76791506b578c499ad591d4244230c0e6bf0e1b0b79489d"
+        }
+      ]
+    },
+    {
+      "subject_id": "cl_performer",
+      "sources": [
+        {
+          "quote": "请QA完成配置核验",
+          "occurrence": 1,
+          "span": [
+            0,
+            9
+          ],
+          "source_sha256": "a179c7b8fbc3e79da76791506b578c499ad591d4244230c0e6bf0e1b0b79489d"
+        }
+      ]
+    },
+    {
+      "subject_id": "cl_input",
+      "sources": [
+        {
+          "quote": "完成配置核验",
+          "occurrence": 1,
+          "span": [
+            3,
+            9
+          ],
+          "source_sha256": "a179c7b8fbc3e79da76791506b578c499ad591d4244230c0e6bf0e1b0b79489d"
+        }
+      ]
+    },
+    {
+      "subject_id": "cl_scope",
+      "sources": [
+        {
+          "quote": "配置核验",
+          "occurrence": 1,
+          "span": [
+            5,
+            9
+          ],
+          "source_sha256": "a179c7b8fbc3e79da76791506b578c499ad591d4244230c0e6bf0e1b0b79489d"
+        }
+      ]
+    },
+    {
+      "subject_id": "cl_time",
+      "sources": [
+        {
+          "quote": "核验用时不得超过6分钟",
+          "occurrence": 1,
+          "span": [
+            10,
+            21
+          ],
+          "source_sha256": "a179c7b8fbc3e79da76791506b578c499ad591d4244230c0e6bf0e1b0b79489d"
+        }
+      ]
+    },
+    {
+      "subject_id": "cl_stop",
+      "sources": [
+        {
+          "quote": "若出现权限错误，停止本任务",
+          "occurrence": 1,
+          "span": [
+            22,
+            35
+          ],
+          "source_sha256": "a179c7b8fbc3e79da76791506b578c499ad591d4244230c0e6bf0e1b0b79489d"
+        }
+      ]
+    },
+    {
+      "subject_id": "expr_config",
+      "sources": [
+        {
+          "quote": "配置核验",
+          "occurrence": 1,
+          "span": [
+            5,
+            9
+          ],
+          "source_sha256": "a179c7b8fbc3e79da76791506b578c499ad591d4244230c0e6bf0e1b0b79489d"
+        }
+      ]
+    },
+    {
+      "subject_id": "expr_permission_error",
+      "sources": [
+        {
+          "quote": "若出现权限错误，停止本任务",
+          "occurrence": 1,
+          "span": [
+            22,
+            35
+          ],
+          "source_sha256": "a179c7b8fbc3e79da76791506b578c499ad591d4244230c0e6bf0e1b0b79489d"
+        }
+      ]
+    }
+  ],
+  "issue_sources": []
+}

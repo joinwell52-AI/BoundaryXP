@@ -1,0 +1,1 @@
+Emma Lee is responsible for this task. Read orders.csv and generate summary.md. Do not modify orders.csv. The task is complete when summary.md has been generated.

@@ -1,0 +1,32 @@
+# Actual Canonical 7+1
+
+## I RESOLVED
+
+- RESOLVED orders.csv [p1:d41452858ddf4bfdd84b57f3]
+
+## O RESOLVED
+
+- RESOLVED summary.md [p1:221ec04f3633cbb66c9b0f30]
+
+## A RESOLVED
+
+- RESOLVED REQUIRED Read orders.csv [p1:5f49f851a79240a7ab925201]
+- RESOLVED REQUIRED generate summary.md [p1:16c832cbb4240f1059104087]
+
+## P RESOLVED
+
+- RESOLVED Emma Lee [PERFORMER] [p1:8b4d4b8920edb6b9118714d8,p1:fb0b4e0800423bd07837b24c,p1:9838d623b8c77921d8355d71]
+
+## R ABSENT
+
+
+## V ABSENT
+
+
+## C RESOLVED
+
+- RESOLVED complete [p1:317048a4f9427d4a3882315b]
+
+## B RESOLVED
+
+- RESOLVED FORBIDDEN modify orders.csv [p1:89bf21036932b3cc85224698]

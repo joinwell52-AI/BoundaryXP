@@ -1,0 +1,1 @@
+Taylor must arrange that event-1782.csv is read and event-13014.json may be inspected in staging environment. Deliver audit-200800.md. The whole task must finish within 36 minutes. Send the final report to Avery.

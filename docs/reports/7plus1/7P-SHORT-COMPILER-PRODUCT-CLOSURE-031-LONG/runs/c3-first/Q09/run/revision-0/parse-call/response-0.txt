@@ -1,0 +1,305 @@
+{
+  "contract_version": "031-r01",
+  "entities": [
+    {
+      "id": "ent_dev",
+      "label": "DEV-01",
+      "type": "OTHER",
+      "mentions": [{"quote": "DEV-01", "occurrence": 1}],
+      "alternatives": []
+    },
+    {
+      "id": "ent_format",
+      "label": "FORMAT-9",
+      "type": "DOCUMENT",
+      "mentions": [{"quote": "FORMAT-9", "occurrence": 1}],
+      "alternatives": []
+    },
+    {
+      "id": "ent_index",
+      "label": "index.csv",
+      "type": "FILE",
+      "mentions": [{"quote": "index.csv", "occurrence": 1}],
+      "alternatives": []
+    },
+    {
+      "id": "ent_report",
+      "label": "format-check.md",
+      "type": "FILE",
+      "mentions": [
+        {"quote": "format-check.md", "occurrence": 1},
+        {"quote": "该报告", "occurrence": 1}
+      ],
+      "alternatives": []
+    },
+    {
+      "id": "ent_qa",
+      "label": "QA",
+      "type": "OTHER",
+      "mentions": [{"quote": "QA", "occurrence": 1}],
+      "alternatives": []
+    }
+  ],
+  "events": [
+    {
+      "id": "ev_check",
+      "predicate": "核对",
+      "kind": "ACTION",
+      "layer": "MAIN",
+      "use": "CURRENT_TASK",
+      "modality": "REQUIRED",
+      "polarity": "POSITIVE",
+      "owner_id": "ROOT",
+      "constraint_ids": [],
+      "requires": [],
+      "sources": [{"quote": "请DEV-01依据FORMAT-9核对index.csv", "occurrence": 1}]
+    },
+    {
+      "id": "ev_generate",
+      "predicate": "生成报告",
+      "kind": "ACTION",
+      "layer": "MAIN",
+      "use": "CURRENT_TASK",
+      "modality": "REQUIRED",
+      "polarity": "POSITIVE",
+      "owner_id": "ROOT",
+      "constraint_ids": [],
+      "requires": [],
+      "sources": [{"quote": "并生成format-check.md", "occurrence": 1}]
+    },
+    {
+      "id": "ev_receive",
+      "predicate": "接收报告",
+      "kind": "ACTION",
+      "layer": "MAIN",
+      "use": "CURRENT_TASK",
+      "modality": "REQUIRED",
+      "polarity": "POSITIVE",
+      "owner_id": "ROOT",
+      "constraint_ids": [],
+      "requires": [],
+      "sources": [{"quote": "QA仅负责接收该报告", "occurrence": 1}]
+    },
+    {
+      "id": "ev_qa_check",
+      "predicate": "执行核对",
+      "kind": "ACTION",
+      "layer": "MAIN",
+      "use": "CURRENT_TASK",
+      "modality": "NOT_REQUIRED",
+      "polarity": "POSITIVE",
+      "owner_id": "ROOT",
+      "constraint_ids": [],
+      "requires": [],
+      "sources": [
+        {"quote": "QA仅负责接收该报告", "occurrence": 1},
+        {"quote": "不负责执行核对", "occurrence": 1}
+      ]
+    }
+  ],
+  "claims": [
+    {
+      "id": "cl_check_performer",
+      "kind": "ROLE",
+      "event_id": "ev_check",
+      "entity_id": "ent_dev",
+      "role": "PERFORMER",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "scope_id": "ev_check",
+      "requires": [],
+      "sources": [{"quote": "请DEV-01依据FORMAT-9核对index.csv", "occurrence": 1}],
+      "note": "DEV-01为明确核对执行者。"
+    },
+    {
+      "id": "cl_check_input",
+      "kind": "ROLE",
+      "event_id": "ev_check",
+      "entity_id": "ent_index",
+      "role": "INPUT_OBJECT",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "scope_id": "ev_check",
+      "requires": [],
+      "sources": [{"quote": "核对index.csv", "occurrence": 1}],
+      "note": "明确受核对文件。"
+    },
+    {
+      "id": "cl_check_basis",
+      "kind": "ROLE",
+      "event_id": "ev_check",
+      "entity_id": "ent_format",
+      "role": "BASIS",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "scope_id": "ev_check",
+      "requires": [],
+      "sources": [{"quote": "依据FORMAT-9核对index.csv", "occurrence": 1}],
+      "note": "FORMAT-9约束核对用途。"
+    },
+    {
+      "id": "cl_generate_performer",
+      "kind": "ROLE",
+      "event_id": "ev_generate",
+      "entity_id": "ent_dev",
+      "role": "PERFORMER",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "scope_id": "ev_generate",
+      "requires": [],
+      "sources": [
+        {"quote": "请DEV-01依据FORMAT-9核对index.csv", "occurrence": 1},
+        {"quote": "并生成format-check.md", "occurrence": 1}
+      ],
+      "note": "同一指令并列动作承接DEV-01主语；QA的主体切换位于其后。"
+    },
+    {
+      "id": "cl_generate_result",
+      "kind": "ROLE",
+      "event_id": "ev_generate",
+      "entity_id": "ent_report",
+      "role": "RESULT",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "scope_id": "ev_generate",
+      "requires": [],
+      "sources": [{"quote": "生成format-check.md", "occurrence": 1}],
+      "note": "明确要求产生的报告。"
+    },
+    {
+      "id": "cl_receive_performer",
+      "kind": "ROLE",
+      "event_id": "ev_receive",
+      "entity_id": "ent_qa",
+      "role": "PERFORMER",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "scope_id": "ev_receive",
+      "requires": [],
+      "sources": [{"quote": "QA仅负责接收该报告", "occurrence": 1}],
+      "note": "QA执行接收动作；不据此增加发送或提交义务。"
+    },
+    {
+      "id": "cl_receive_object",
+      "kind": "ROLE",
+      "event_id": "ev_receive",
+      "entity_id": "ent_report",
+      "role": "OBJECT",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "scope_id": "ev_receive",
+      "requires": [],
+      "sources": [
+        {"quote": "生成format-check.md", "occurrence": 1},
+        {"quote": "接收该报告", "occurrence": 1}
+      ],
+      "note": "该报告指唯一当前产物format-check.md；接收用途不构成外部输入或新结果。"
+    },
+    {
+      "id": "cl_qa_check_performer",
+      "kind": "ROLE",
+      "event_id": "ev_qa_check",
+      "entity_id": "ent_qa",
+      "role": "PERFORMER",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "scope_id": "ev_qa_check",
+      "requires": [],
+      "sources": [
+        {"quote": "QA仅负责接收该报告", "occurrence": 1},
+        {"quote": "不负责执行核对", "occurrence": 1}
+      ],
+      "note": "后续否定职责承接QA主语；不承担核对义务不等于禁止核对。"
+    },
+    {
+      "id": "cl_qa_check_object",
+      "kind": "ROLE",
+      "event_id": "ev_qa_check",
+      "entity_id": "ent_index",
+      "role": "OBJECT",
+      "expression_id": null,
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "scope_id": "ev_qa_check",
+      "requires": [],
+      "sources": [
+        {"quote": "核对index.csv", "occurrence": 1},
+        {"quote": "不负责执行核对", "occurrence": 1}
+      ],
+      "note": "否定职责中的核对指前述index.csv核对，不新增QA输入义务。"
+    },
+    {
+      "id": "cl_qa_scope",
+      "kind": "SCOPE",
+      "event_id": "ev_receive",
+      "entity_id": null,
+      "role": null,
+      "expression_id": "expr_qa_responsibility",
+      "direction": null,
+      "temporal": null,
+      "quantity": null,
+      "scope_id": "ev_receive",
+      "requires": [],
+      "sources": [{"quote": "QA仅负责接收该报告，不负责执行核对", "occurrence": 1}],
+      "note": "本任务中QA职责限定为接收报告；不将职责限定升级为行动禁止。"
+    }
+  ],
+  "expressions": [
+    {
+      "id": "expr_qa_responsibility",
+      "op": "STATE",
+      "operands": [],
+      "state": {
+        "predicate": "职责仅限接收报告",
+        "event_id": "ev_receive",
+        "args": ["ent_qa", "ent_report"],
+        "polarity": "POSITIVE"
+      },
+      "sources": [{"quote": "QA仅负责接收该报告，不负责执行核对", "occurrence": 1}]
+    }
+  ],
+  "issues": [],
+  "coverage": [
+    {
+      "sources": [{"quote": "请DEV-01依据FORMAT-9核对index.csv", "occurrence": 1}],
+      "claim_ids": ["cl_check_performer", "cl_check_input", "cl_check_basis"],
+      "status": "EXPRESSED",
+      "affected_views": ["A", "P", "I", "V"]
+    },
+    {
+      "sources": [{"quote": "并生成format-check.md", "occurrence": 1}],
+      "claim_ids": ["cl_generate_performer", "cl_generate_result"],
+      "status": "EXPRESSED",
+      "affected_views": ["A", "P", "O"]
+    },
+    {
+      "sources": [{"quote": "QA仅负责接收该报告", "occurrence": 1}],
+      "claim_ids": ["cl_receive_performer", "cl_receive_object", "cl_qa_scope"],
+      "status": "EXPRESSED",
+      "affected_views": ["A", "P"]
+    },
+    {
+      "sources": [{"quote": "不负责执行核对", "occurrence": 1}],
+      "claim_ids": ["cl_qa_check_performer", "cl_qa_check_object", "cl_qa_scope"],
+      "status": "EXPRESSED",
+      "affected_views": ["A", "P"]
+    }
+  ]
+}
