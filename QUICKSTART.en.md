@@ -4,9 +4,11 @@
 
 Documentation date: 2026-10-08. The available short-text compiler is a **runnable candidate, not a fully accepted product release**. Distinguish the installed user application, the development checkout, and the older BXP application before choosing a command.
 
+> **2026-10-21: main includes ui220 candidate sources and the reproducible build entry.** See [ui220 build and validation](docs/workbench/UI220-SYNC.md). Existing port-58618 installations use `npm run 7plus1:ui`. The 2026-10-08 package references, branch differences and scores below are historical; build ui220 for a new installation.
+
 ## 1. Existing local installation: fixed port 58618
 
-In Windows Command Prompt:
+In the Windows development checkout whose installation and entry restoration are already complete:
 
 ```bat
 cd /d D:\boundx
@@ -17,7 +19,7 @@ Open `http://127.0.0.1:58618/`. When the same installed version is already runni
 
 The launcher currently pins candidate `0.1.0-candidate.031-r1.2`, compiler `031-r1-c3`, and contract `031-r1.1`. Configuration and history are under `.boundx/short-compiler-031-r1/`; complete runtime versions are under its `versions/` directory. The application does not mix installed resources with changing development Skills or schemas.
 
-**This is not a fresh-clone installer.** Missing installation files, an unexpected version, an occupied or unverified port, or mismatched resource hashes cause an explicit error. The launcher neither chooses another port nor stops an unknown process. See the [launcher](product/short-compiler/launch-installed.mjs) and the [restoration receipt](docs/reports/7plus1/031-R1-RESTORE-58618/REPORT.md).
+**This is not a fresh-clone installer.** Missing installation files, an unexpected version, an occupied or unverified port, or mismatched resource hashes cause an explicit error. The launcher neither chooses another port nor stops an unknown process. See the [development launcher](https://github.com/joinwell52-AI/BoundX/blob/a55363226b465cb120ce8f2624d5d900d5a39d9d/product/short-compiler/launch-installed.mjs) and the [restoration receipt](https://github.com/joinwell52-AI/BoundX/blob/a55363226b465cb120ce8f2624d5d900d5a39d9d/docs/reports/7plus1/031-R1-RESTORE-58618/REPORT.md).
 
 ## 2. Requirements and normal use
 
@@ -31,7 +33,7 @@ Parsing and the separate audit take actual model time; follow the stage display.
 
 ## 3. Fresh installation from a complete candidate package
 
-Use the [031-R1 delivery page](docs/reports/7plus1/7P-SHORT-COMPILER-PRODUCT-CLOSURE-031-R1-LONG/REPORT.md) and its [versioned package](docs/reports/7plus1/7P-SHORT-COMPILER-PRODUCT-CLOSURE-031-R1-LONG/delivery/BoundX-short-compiler-0.1.0-candidate.031-r1.2.zip). This candidate still has the documented Q05 universal-scope limitation. A downloadable package does not establish semantic acceptance.
+Use the [031-R1 delivery page](https://github.com/joinwell52-AI/BoundX/blob/a55363226b465cb120ce8f2624d5d900d5a39d9d/docs/reports/7plus1/7P-SHORT-COMPILER-PRODUCT-CLOSURE-031-R1-LONG/REPORT.md) and its [versioned package](https://github.com/joinwell52-AI/BoundX/blob/a55363226b465cb120ce8f2624d5d900d5a39d9d/docs/reports/7plus1/7P-SHORT-COMPILER-PRODUCT-CLOSURE-031-R1-LONG/delivery/BoundX-short-compiler-0.1.0-candidate.031-r1.2.zip). These resources are linked to the development snapshot, not copied into main. The candidate still has the documented Q05 universal-scope limitation. A downloadable package does not establish semantic acceptance.
 
 Only on a fresh installation where port 58618 is available, run from the extracted package root:
 
@@ -40,7 +42,7 @@ node product/short-compiler/deploy.mjs install --home D:\boundx-short --port 586
 node product/short-compiler/deploy.mjs start --home D:\boundx-short
 ```
 
-Do not install over an existing instance, delete its history, or take over an occupied port. An independently chosen installation home differs from the checkout's default home; the checkout launcher does not automatically discover arbitrary locations.
+Do not install over an existing instance, delete its history, or take over an occupied port. An independently chosen installation home differs from the development checkout's default home; that checkout launcher does not automatically discover arbitrary locations.
 
 The newer `0.1.0-candidate.031-r1.q05.1` development package adds explicit universal-scope structures but has unresolved domain interpretation and incomplete full validation. It is not an automatic upgrade target. See the [status page](docs/SHORT-COMPILER-STATUS.md).
 
@@ -54,7 +56,7 @@ npm run 7plus1 -- --input D:\boundx\task.txt --output D:\boundx\new-run-director
 
 Use a new output directory; do not overwrite an earlier run. This command invokes models. History and explicit frozen-response replay are different operations and do not count as fresh model validation.
 
-In the development repository, `npm run 7plus1` points directly to the working-tree core, which may already use the newer Q05 contract. In contrast, `npm run 7plus1:ui` pins the installed candidate. They share the implementation lineage, but are not necessarily the same version today. A working-tree CLI run and an older installed UI run are not a valid same-version comparison.
+In the development branch checkout, `npm run 7plus1` points directly to the working-tree core, which may already use the newer Q05 contract. In contrast, `npm run 7plus1:ui` pins the installed candidate. They share the implementation lineage, but are not necessarily the same version today. A working-tree CLI run and an older installed UI run are not a valid same-version comparison. Neither script is provided by main in this documentation-only update.
 
 ## 5. Maintenance, upgrade, and rollback
 
@@ -74,13 +76,22 @@ node product/short-compiler/deploy.mjs rollback --home D:\boundx-short --confirm
 node product/short-compiler/deploy.mjs start --home D:\boundx-short
 ```
 
-These describe maintenance operations; editing documentation does not authorize an upgrade. The checkout launcher also pins a specific approved version and must be updated as part of an authorized version change. Do not disable validation to force a different version to run. Keep historical results under their generating version without automatic reparsing.
+These describe maintenance operations; merging documentation does not authorize an upgrade. The checkout launcher also pins a specific approved version and must be updated as part of an authorized version change. Do not disable validation to force a different version to run. Keep historical results under their generating version without automatic reparsing.
 
-## 6. Older BXP entry and branch differences
+## 6. Existing main-branch BXP entry and branch differences
 
-`npm run ui` starts the existing BXP application, not the short-text 58618 application. Structured-IR examples and `node cli.mjs protocol-info` do not themselves parse raw natural-language tasks. See [protocol implementation](protocol/IMPLEMENTATION.md) and [examples](examples/README.md).
+For the code already present on main, prepare Node.js 22.18 or newer and run from the repository root:
 
-`main` and `review/7plus1-parser` are different code snapshots. The candidate launcher is in the development branch; a clone of `main` is not guaranteed to contain it. Do not reset a dirty checkout or merge candidate code merely to read the updated documentation.
+```bat
+npm ci
+node cli.mjs protocol-info
+node cli.mjs evaluate examples/bxp/zh-CN-complete.json
+npm run ui
+```
+
+This evaluates structured IR and starts the existing BXP application, not the short-text 58618 application. It does not itself parse raw natural-language tasks. See [protocol implementation](protocol/IMPLEMENTATION.md) and [examples](examples/README.md).
+
+`main` and `review/7plus1-parser` remain different code snapshots. Inspect candidate code on the [development branch](https://github.com/joinwell52-AI/BoundX/tree/review/7plus1-parser). This merge updates documentation without resetting a dirty checkout, merging candidate code, or moving existing tags.
 
 ## 7. Troubleshooting and evidence
 

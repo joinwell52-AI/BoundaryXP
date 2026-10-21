@@ -4,6 +4,8 @@
 
 [中文首页](../README.zh-CN.md) · [快速开始](../QUICKSTART.md) · [当前能力与版本](SHORT-COMPILER-STATUS.md) · [7+1方法手册](BoundX-7plus1-定义原理语义编译与边界计算说明-v0.4.md)
 
+> 2026-10-21：本次合并纳入58618的ui220候选代码，当前构建与验证见[ui220同步说明](workbench/UI220-SYNC.md)。本手册下文的2026-10-08交付描述、分支差异和成绩保留为历史记录。
+
 ## 1. 产品定义与终点
 
 **BoundX把ADMIN自然语言任务中的边界意图，转换为有来源、可计算、可验证的边界对象。** BXP是边界分析协议，BoundX是其产品实现。产品既不是另一套Agent框架，也不是让模型给任务打一个安全分数。
@@ -89,7 +91,7 @@ LLM承担主要语义理解；程序执行技术检查和保真转换，不回�
 
 目标Boundary Result区分`determined`、`underdetermined`、`inconsistent`和`invalid`，具体字段和判定条件以所选BXP版本为准。语义已读懂但约束冲突，不能误记成模型不理解；已保存证据摘要，也不能误记成语义已被证明。
 
-仓库[既有BXP入口](../src/bxp/index.mjs)提供形式化、类型化边界、ScopeGauge及相关核查能力。代码存在或旧结构化样例通过，不等于新LLM链已经与全部模块端到端对接。本阶段须用新原文贯通验证，不重新从零复制一套计算核心。
+开发分支[对应BXP入口快照](https://github.com/joinwell52-AI/BoundX/blob/a55363226b465cb120ce8f2624d5d900d5a39d9d/src/bxp/index.mjs)提供形式化、类型化边界、ScopeGauge及相关核查能力；它不等于main当前的导出清单。代码存在或旧结构化样例通过，不等于新LLM链已经与全部模块端到端对接。本阶段须用新原文贯通验证，不重新从零复制一套计算核心。
 
 ## 7. 父边界与下游任务
 
@@ -115,7 +117,7 @@ L0指确定性Core与协议不变量；L1可提供通用语义；L2承载明确�
 
 当前候选支持非空、最多300个Unicode码点的单一ADMIN短任务，中文正文可含技术标识符。支持粘贴、UTF-8文本上传、进度、取消、来源、局部未决、历史和导出。300码点是声明支持范围，不是LLM能力的理论上限；超限不得截断后伪报成功。
 
-用户入口固定58618，运行完整安装版本；开发工作区允许演进，但不能让旧进程混读新Skill或Schema。根仓库CLI与固定UI可能指向不同版本，进行同版比较须从相同安装包运行。操作见[快速开始](../QUICKSTART.md)。
+用户入口固定58618，运行完整安装版本；开发工作区允许演进，但不能让旧进程混读新Skill或Schema。开发分支根仓库CLI与固定UI可能指向不同版本，进行同版比较须从相同安装包运行。main没有候选启动脚本，操作见[快速开始](../QUICKSTART.md)。
 
 本地界面不等于离线推理：任务文本发送到配置的模型服务。登录、网络和可用额度是外部运行前提。历史与凭据不进入公开包，展示端不执行输入脚本，不将模型输出变成业务工具权限。取消只确认本机受控进程状态，不承诺云端计算或计费已经停止。
 
@@ -133,6 +135,6 @@ L0指确定性Core与协议不变量；L1可提供通用语义；L2承载明确�
 
 ## 11. 文档与历史
 
-稳定方法看[7+1方法手册](BoundX-7plus1-定义原理语义编译与边界计算说明-v0.4.md)；当前状态看[状态页](SHORT-COMPILER-STATUS.md)；实际执行权限看[当前任务](tasks/7plus1/CURRENT-TASK.md)。旧任务编号、测试计划和成绩不再作为产品手册的永久指令。
+稳定方法看[7+1方法手册](BoundX-7plus1-定义原理语义编译与边界计算说明-v0.4.md)；当前状态看[状态页](SHORT-COMPILER-STATUS.md)；实际执行权限看[开发分支当前任务](https://github.com/joinwell52-AI/BoundX/blob/review/7plus1-parser/docs/tasks/7plus1/CURRENT-TASK.md)。旧任务编号、测试计划和成绩不再作为产品手册的永久指令。
 
 整编前的本文件保存在[2026-10-08整理基线](https://github.com/joinwell52-AI/BoundX/blob/9b437d7f3066774711892856a1bcdf4006508143/docs/BOUNDX-PRODUCT-MANUAL.md)；完整目标亦参考[主分支原产品定义](https://github.com/joinwell52-AI/BoundX/blob/f7aae6421681be22eb2035504b824f4d169bf90c/docs/BOUNDX-PRODUCT-MANUAL.md)。其中的旧主路线、试验限制、商业设想和发布状态不自动成为当前合同。

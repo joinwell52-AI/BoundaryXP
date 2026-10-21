@@ -28,7 +28,7 @@ test('lexical scan preserves Unicode evidence, ambiguity, repeated hits and sele
  const hints=dictionaryScanInstructions(scan);assert.ok(hints.includes('db.customer-mirror'));assert.ok(!hints.includes('online_read_replica'));assert.ok(!hints.includes('production'));
  assert.equal((hints.match(/"term":"客户镜像"/g)??[]).length,1);
  assert.equal(scan.semantic_resolution,'NOT_PERFORMED');
- const people=scanDictionaries(selectDictionaries({l3:'tenant-a@0.2.0'}),'小王核对');assert.equal(people.matches[0].entry_refs.length,2);
+ const people=scanDictionaries(selectDictionaries({l3:'tenant-a@0.2.0'}),'白鹭核对');assert.equal(people.matches[0].entry_refs.length,2);
  const l2=scanDictionaries(selectDictionaries({l2:'software-ai@0.2.0'}),'inspect repo；审查仓库');assert.ok(l2.matches.some(m=>m.text==='inspect repo'));assert.ok(l2.matches.some(m=>m.text==='审查仓库'));
 });
 test('overlapping explicit aliases remain separate candidates without scanning definition prose',()=>{
@@ -50,7 +50,9 @@ test('browser marker preserves literal source and exposes every overlapping cand
 test('only selected packages; shared aliases preserved; missing names never assigned',()=>{
  assert.equal(dictionaryCatalog().length,17);
  const a=selectDictionaries(selection),b=selectDictionaries({l3:'tenant-b@0.1.0'});
- assert.equal(lookupDictionary(a,{query:'小王'}).total,2);
+ assert.deepEqual(lookupDictionary(a,{query:'白鹭'}).entries.map(r=>r.value.employee_id),['A009','A010']);
+ assert.equal(lookupDictionary(a,{query:'小王'}).total,0);
+ assert.equal(lookupDictionary(b,{query:'白鹭'}).total,0);
  assert.deepEqual(lookupDictionary(b,{query:'小王'}).entries.map(r=>r.value.employee_id),['b101']);
  assert.equal(lookupDictionary(a,{query:'不存在的客户库'}).total,0);
  assert.equal(lookupDictionary(selectDictionaries(),{query:'小王'}).total,0);
@@ -60,7 +62,7 @@ test('only selected packages; shared aliases preserved; missing names never assi
  for(const entry of entries){assert.match(entry.file_sha256,/^[a-f0-9]{64}$/);assert.ok(entry.pointer.startsWith('/'));}
  const alias=lookupDictionary(selectDictionaries({l3:'example-software-team@0.1.0'}),{query:'上灰度'});assert.equal(alias.entries[0].value.mapsTo,'release.deploy');
  const broad=lookupDictionary(a,{query:'e'});assert.ok(broad.total>6);assert.equal(broad.next_offset,6);assert.notDeepEqual(broad.entries,lookupDictionary(a,{query:'e',offset:6}).entries);
- assert.ok(!dictionaryInstructions(a).includes('王明'));assert.ok(dictionaryInstructions(a).length<1800);
+ assert.ok(!dictionaryInstructions(a).includes('林溪'));assert.ok(dictionaryInstructions(a).length<1800);
 });
 test('every registered industry is packaged, searchable and isolated from unselected industries',()=>{
  const industries=dictionaryCatalog().filter(p=>p.layer==='L2'&&!p.test_only);
@@ -92,24 +94,24 @@ test('actual stdio server handshake and lookup without listening port or model',
  const root=temp(t),snapshot=path.join(root,'snapshot.json'),log=path.join(root,'lookup.jsonl');fs.writeFileSync(snapshot,JSON.stringify(selectDictionaries(selection)));
  const child=spawn(process.execPath,['research/7plus1-parser/llm-first-028/dictionary-mcp.mjs',snapshot,log],{stdio:['pipe','pipe','pipe'],windowsHide:true});
  t.after(()=>child.kill());let out='',err='';child.stdout.on('data',b=>out+=b);child.stderr.on('data',b=>err+=b);
- child.stdin.end([{id:1,method:'initialize',params:{protocolVersion:'2024-11-05'}},{method:'notifications/initialized'},{id:2,method:'tools/list'},{id:3,method:'tools/call',params:{name:'lookup',arguments:{query:'小王'}}}].map(m=>JSON.stringify({jsonrpc:'2.0',...m})).join('\n')+'\n');
+ child.stdin.end([{id:1,method:'initialize',params:{protocolVersion:'2024-11-05'}},{method:'notifications/initialized'},{id:2,method:'tools/list'},{id:3,method:'tools/call',params:{name:'lookup',arguments:{query:'白鹭'}}}].map(m=>JSON.stringify({jsonrpc:'2.0',...m})).join('\n')+'\n');
  const exit=await new Promise((resolve,reject)=>{child.on('error',reject);child.on('exit',resolve);});assert.equal(exit,0,err);
  const replies=out.trim().split('\n').map(JSON.parse);assert.equal(replies.length,3);assert.equal(JSON.parse(replies[2].result.content[0].text).total,2);assert.equal(JSON.parse(fs.readFileSync(log,'utf8')).result.total,2);
 });
 test('generation and independent review use same snapshot; content stays out of prompts; calls preserved',async t=>{
  const root=temp(t),seen=[];
  const call=args=>callCodex({...args,execute:async(_binary,argv,options)=>{
-  assert.ok(options.input.includes('SELECTED_DICTIONARIES'));assert.ok(options.input.includes('DICTIONARY_LEXICAL_HINTS'));assert.ok(options.input.includes('"term":"小王"'));assert.ok(!options.input.includes('王明'));assert.ok(argv.includes('features.shell_tool=false'));assert.ok(argv.some(a=>a.startsWith('mcp_servers.boundx_dictionary.command=')));
+  assert.ok(options.input.includes('SELECTED_DICTIONARIES'));assert.ok(options.input.includes('DICTIONARY_LEXICAL_HINTS'));assert.ok(options.input.includes('"term":"白鹭"'));assert.ok(!options.input.includes('林溪'));assert.ok(argv.includes('features.shell_tool=false'));assert.ok(argv.some(a=>a.startsWith('mcp_servers.boundx_dictionary.command=')));
   assert.ok(argv.includes('features.code_mode_host=true'));assert.ok(!argv.includes('features.code_mode_host=false'));
   const payload=JSON.parse(argv.find(a=>a.startsWith('mcp_servers.boundx_dictionary.args=')).split('=').slice(1).join('='));
   const snapshot=JSON.parse(fs.readFileSync(payload[1]));seen.push(snapshot.sha256);
-  const result=lookupDictionary(snapshot,{query:'小王'});fs.appendFileSync(payload[2],JSON.stringify({arguments:{query:'小王'},result})+'\n');
-  fs.writeFileSync(argv[argv.indexOf('--output-last-message')+1],args.bundle.phase==='parse'?'I：输入未明确。P：“小王”有两个候选，待明确。':'已查字典，保留同名疑点。');
+  const result=lookupDictionary(snapshot,{query:'白鹭'});fs.appendFileSync(payload[2],JSON.stringify({arguments:{query:'白鹭'},result})+'\n');
+  fs.writeFileSync(argv[argv.indexOf('--output-last-message')+1],args.bundle.phase==='parse'?'I：输入未明确。P：“白鹭”有两个候选，待明确。':'已查字典，保留同名疑点。');
   return {exit_code:0,elapsed_ms:5,timed_out:false,stderr:'',stdout:[{type:'thread.started',thread_id:args.bundle.phase},{type:'item.completed',item:{type:'mcp_tool_call',server:'boundx_dictionary',tool:'lookup'}},{type:'turn.completed'}].map(JSON.stringify).join('\n')};
  }});
- const r=await parse7Plus1(Buffer.from('小王核对报告。'),{output:root,probe,call,dictionaries:{...selection,l2:'auto-rental@1.0.0'},maxModelRequests:2,productSnapshot:{contract:'candidate-ir/2.0'}});
+ const r=await parse7Plus1(Buffer.from('白鹭核对报告。'),{output:root,probe,call,dictionaries:{...selection,l2:'auto-rental@1.0.0'},maxModelRequests:2,productSnapshot:{contract:'candidate-ir/2.0'}});
  assert.equal(r.dictionaries.packs.find(p=>p.layer==='L2').id,'auto-rental@1.0.0');
- assert.equal(r.dictionary_scan.matches[0].text,'小王');assert.deepEqual(JSON.parse(fs.readFileSync(path.join(root,'dictionary-scan.json'))),r.dictionary_scan);
+ assert.equal(r.dictionary_scan.matches[0].text,'白鹭');assert.deepEqual(JSON.parse(fs.readFileSync(path.join(root,'dictionary-scan.json'))),r.dictionary_scan);
  assert.equal(seen.length,2);assert.equal(seen[0],seen[1]);assert.equal(r.dictionary_lookups.parse.length,1);assert.equal(r.dictionary_lookups.audit.length,1);assert.equal(r.dictionaries.sha256,seen[0]);assert.match(r.chinese,/生成实际查询 1 次/);assert.equal(r.technical.semantic_completeness,'NOT_PROGRAM_VERIFIED');
 });
 // Exercise the real HTTP handler in memory: no additional port, credentials or model.
@@ -124,7 +126,7 @@ test('HTTP selection reaches engine, rejects invalid IDs, and binds idempotency'
  const session=await request(server,'/api/session');assert.equal(session.data.dictionary_catalog.length,17);
  const headers={cookie:'boundx_session='+session.data.token,'x-boundx-session':session.data.token};
  assert.equal((await request(server,'/api/dictionaries/scan',{body:{text:'小王',dictionaries:selection}})).status,403);
- const scan=await request(server,'/api/dictionaries/scan',{body:{text:'小王',dictionaries:selection},headers});assert.equal(scan.status,200);assert.equal(scan.data.matches[0].entry_refs.length,2);assert.equal(received,undefined);assert.equal(server.records.size,0);
+ const scan=await request(server,'/api/dictionaries/scan',{body:{text:'白鹭',dictionaries:selection},headers});assert.equal(scan.status,200);assert.equal(scan.data.matches[0].entry_refs.length,2);assert.equal(received,undefined);assert.equal(server.records.size,0);
  assert.equal((await request(server,'/api/dictionaries/scan',{body:{text:'x',dictionaries:{l3:'bad'}},headers})).status,400);
  assert.equal((await request(server,'/api/dictionaries/scan',{body:{text:'a'.repeat(1024*1024+1)},headers})).status,413);
  const body={text:'任务',request_id:'10000000-0000-4000-8000-000000000102',model:'test',reasoning:'medium',parse_method:'SKILL',dictionaries:selection};

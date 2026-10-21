@@ -40,29 +40,6 @@ NLP不是当前主解析器或强制前置证据。历史研究不等于所有NL
 
 “可以生成，但不要求交付”保留生成许可、可选结果和无交付义务，不产生必交清单。仅引用交付要求、禁止交付或无需交付不产生当前正向O。
 
-### 1.1 条款关联图例：测试任务009 · c4
-
-图例补充日期：2026-10-16。此图仅展示中央雷达，是方法文档插图，不是整页 UI 或 58618 的运行截图；不改变本手册的语义定义。
-
-![测试任务009 · c4条款聚焦图：青色表示A、P、R、C四个关联维度](assets/radar/BoundX-009-c4-radar.png)
-
-[查看 PNG 原图](assets/radar/BoundX-009-c4-radar.png) · [查看 SVG 矢量图](assets/radar/BoundX-009-c4-radar.svg)
-
-青色表示 **c4 关联的 A／P／R／C 四个维度**，对应报告中的条件性暂停要求：若 OPS 在其 env.json 核查完成前确认高危，PM 必须从该确认时点起 0 至 10 秒内完成暂停，含两个端点；暂停生效前，DEV 和 OPS 的两项核查仍可执行。
-
-| 关联维度 | 本条款中的含义 |
-|---|---|
-| A 动作关系 | 满足触发条件时，PM 必须完成暂停 |
-| P 参与责任 | OPS 确认高危，PM 承担暂停动作；DEV、OPS 的核查受该条件约束 |
-| R 额度时间 | 从确认时点起 0 至 10 秒，包含两个端点 |
-| C 完成与停止 | 暂停完成与生效的条件；生效前两项核查仍可执行 |
-
-八轴位置和顶点半径固定，点、线、面表达条款的维度关联。**青色面积、轮廓和四维关联数量均不是评分、完成率、授权大小或父子比较结果。** 淡色部分提供其他条款的背景关联，不表示这些维度被 c4 取消或判定为不重要。轴旁文字是节选，应结合完整条件阅读。
-
-本图聚焦单任务的一条条款，不据此认定任务已经暂停或已经执行。图中保留独立的 **+1 B 禁止边界**；c4 未将 B 标为青色，不代表任务没有其他禁止条款。
-
-溯源：任务记录 `8e10ebae-581c-4a26-8ce9-d7744b4fa7b7`，报告引用 `8e10ebae-581c-4a26-8ce9-d7744b4fa7b7-v3-REPORT.zh-CN.md`，原文引用 `task-009-source-v1`，焦点 `c4`。SVG 内保留报告与原文摘要及视图元数据；这些引用用于识别本图来源，不表示该报告原件已随图上传。PNG、SVG 按用户提供的原始字节保存。
-
 ## 2. 输入、权威与层级
 
 输入是ADMIN根任务及明确允许的上下文，不是PM后续规划。多个动作、角色、文件或句子不自动成为多个工作包。只有ADMIN明确提供的工作包结构可以读取；不得用聚类替ADMIN拆包。
@@ -147,11 +124,11 @@ LLM知道7+1的含义和目标，但只提交语义候选。技术状态、派�
 
 ## 8. Skill、共享合同与调用隔离
 
-正式资源为`boundx-semantic-parse`、`boundx-semantic-audit`、共享语义合同及生成Schema。字段定义以[共享合同](../research/7plus1-parser/llm-first-028/contracts/semantic-contract.md)和[Schema唯一生成源](../research/7plus1-parser/llm-first-028/contracts/schema.mjs)为准，必须按所选安装版本同时读取。
+正式资源为`boundx-semantic-parse`、`boundx-semantic-audit`、共享语义合同及生成Schema。字段定义以[开发候选共享合同快照](https://github.com/joinwell52-AI/BoundX/blob/a55363226b465cb120ce8f2624d5d900d5a39d9d/research/7plus1-parser/llm-first-028/contracts/semantic-contract.md)和[Schema唯一生成源快照](https://github.com/joinwell52-AI/BoundX/blob/a55363226b465cb120ce8f2624d5d900d5a39d9d/research/7plus1-parser/llm-first-028/contracts/schema.mjs)为准，必须按所选安装版本同时读取。这些运行资源未随本文合并到main。
 
 解析规程依次通读、识别事件、绑定身份与用途、解释模态与层级、解释条件/范围/数量、核查指代及来源、逐事实检查遗漏。审阅先从原文形成检查，再核对候选，不仅检查图自洽。只要求结构、来源和简短判据，不要求隐藏推理过程。
 
-当前`INLINE_BUNDLE`由实际Skill文件与同源合同构建，不是原生加载证明。资源缺失、版本混用或未进入上下文时明确报错，不静默退回其他提示词。核对实现见[bundle.mjs](../research/7plus1-parser/llm-first-028/bundle.mjs)。
+当前`INLINE_BUNDLE`由实际Skill文件与同源合同构建，不是原生加载证明。资源缺失、版本混用或未进入上下文时明确报错，不静默退回其他提示词。核对实现见[bundle.mjs快照](https://github.com/joinwell52-AI/BoundX/blob/a55363226b465cb120ce8f2624d5d900d5a39d9d/research/7plus1-parser/llm-first-028/bundle.mjs)。
 
 解析与审阅使用新会话。有效请求不得包含评测答案、其他案例、根因报告、无关用户文件或业务工具权限。登录、二进制能力和模型配置依实际环境核对，不申请新API key或自动换收费通道；实际服务模型身份未披露时记未知。
 
@@ -209,7 +186,7 @@ Skill/有效提示/Schema/模型可见合同或配置改变后，旧响应回放
 
 产品顺序为：可靠短文本7+1 → 同一结果的形式化与边界计算 → 父边界和下游符合性 → 完整真实任务扩展。Gold-60是完整TASK来源及审定资料，不能裁短后仍称原案通过；展示答案与生产输入隔离。
 
-具体状态、剩余Q05问题、安装版本和58618入口见[状态页](SHORT-COMPILER-STATUS.md)及[快速开始](../QUICKSTART.md)。当前授权仍由[任务指针](tasks/7plus1/CURRENT-TASK.md)决定，本文不启动补测、追加预算或发布代码。
+具体状态、剩余Q05问题、安装版本和58618入口见[状态页](SHORT-COMPILER-STATUS.md)及[快速开始](../QUICKSTART.md)。当前授权仍由[开发分支任务指针](https://github.com/joinwell52-AI/BoundX/blob/review/7plus1-parser/docs/tasks/7plus1/CURRENT-TASK.md)决定，本文不启动补测、追加预算或发布代码。
 
 ## 15. 修订与历史
 

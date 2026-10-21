@@ -15,6 +15,7 @@ import {sessionActivity} from './model-activity.mjs';
 import {recalculateObservedTrace} from './observation-request.mjs';
 import {dictionaryCatalog,selectDictionaries,dictionaryIdentity,scanDictionaries} from './dictionaries.mjs';
 import {createWorkbench} from './workbench-store.mjs';
+import {previewDictionaries} from './dictionary-preview.mjs';
 const loadedRuntime=JSON.stringify(runtimeInventory());
 const resourceProfile=buildBundle('parse').resource_profile;
 const resourceFingerprint=(method='SKILL')=>sha256(JSON.stringify([buildBundle('parse',{parseMethod:method}).sha256,buildBundle('audit',{parseMethod:method}).sha256,compilerRevision,sha256(loadedRuntime)]));
@@ -60,6 +61,7 @@ export function createServer({dataRoot=DATA,parse=parse7Plus1,legacyRoot=process
    if(req.method==='GET'&&route==='/input-limits.js'){
     res.writeHead(200,{'content-type':'text/javascript; charset=utf-8','cache-control':'no-store'});return res.end(fs.readFileSync(path.join(ROOT,'input-limits.mjs')));
    }
+   if(req.method==='GET'&&['/dictionary-preview.js','/dictionary-preview.css','/comparison-math-view.js','/workbench-progress.js','/single-radar-center.js','/single-radar-project.js','/single-radar-adapter.js','/single-radar-center.css'].includes(route)){const name=route.slice(1);res.writeHead(200,{'content-type':name.endsWith('.css')?'text/css; charset=utf-8':'text/javascript; charset=utf-8','cache-control':'no-store','x-content-type-options':'nosniff'});return res.end(fs.readFileSync(path.join(WEB,name)));}
    if(req.method==='GET'&&['/','/history','/workbench.js','/workbench.css','/app.js','/process-view.js','/direct-ir-process.js','/calculation-view.js','/style.css'].includes(route)){
     const name=route==='/'?'workbench.html':route==='/history'?'index.html':route==='/workbench.js'?'workbench.js':route==='/workbench.css'?'workbench.css':route==='/app.js'?'native-app.js':route==='/process-view.js'?'process-view.js':route==='/direct-ir-process.js'?'direct-ir-process.js':route==='/calculation-view.js'?'calculation-view.js':'style.css';
     res.writeHead(200,{'content-type':name.endsWith('.html')?'text/html; charset=utf-8':name.endsWith('.js')?'text/javascript; charset=utf-8':'text/css; charset=utf-8','cache-control':'no-store','content-security-policy':"default-src 'self'; script-src 'self'; style-src 'self'; object-src 'none'; frame-ancestors 'none'; base-uri 'none'"});return res.end(fs.readFileSync(path.join(WEB,name)));
@@ -112,10 +114,16 @@ export function createServer({dataRoot=DATA,parse=parse7Plus1,legacyRoot=process
     const validatedSettings=s=>{const parsed=requestSettings(s??{},catalog);const method=parseMethod(s?.parse_method);if(!['SKILL','SKILL1'].includes(method))throw Error('INVALID_PARSE_METHOD');selectDictionaries(s?.dictionaries??{});return {model:parsed.model,reasoning:parsed.reasoning,parse_method:method,dictionaries:s?.dictionaries??{}};};
     try{
      if(route==='/api/workbench/projects')return send(201,workbench.create(String(input.label??'新任务').slice(0,100),validatedSettings(input.settings)));
-     if(wb&&!wb[2]){if(input.command?.type==='recalculate')return send(200,workbench.recalculate(wb[1],input.revision));if(['add','edit'].includes(input.command?.type)&&input.command.text!==undefined)prepareSource(Buffer.from(input.command.text,'utf8'));if(input.command?.type==='settings')input.command.settings=validatedSettings(input.command.settings);return send(200,workbench.update(wb[1],input.revision,input.command));}
+     if(wb&&!wb[2]){if(input.command?.type==='recalculate')return send(200,workbench.recalculate(wb[1],input.revision,{reuse_saved:input.command.reuse_saved===true,require_saved_parse:input.command.require_saved_parse===true}));if(['add','edit'].includes(input.command?.type)&&input.command.text!==undefined)prepareSource(Buffer.from(input.command.text,'utf8'));if(input.command?.type==='settings')input.command.settings=validatedSettings(input.command.settings);return send(200,workbench.update(wb[1],input.revision,input.command));}
      if(wb?.[2]==='jobs')return send(202,workbench.start(wb[1],input));
      const cancel=/^\/api\/workbench\/jobs\/([a-f0-9-]{36})\/cancel$/.exec(route);if(cancel)return send(200,workbench.cancel(cancel[1]));
     }catch(e){return send(e.message==='COMPILER_BUSY'||e.message==='PLAN_VERSION_CONFLICT'?409:400,{error:e.message});}
+   }
+   if(req.method==='POST'&&route==='/api/dictionaries/preview'){
+    if(typeof input?.text!=='string')return send(400,{error:'INVALID_DICTIONARY_PREVIEW'});
+    if(Buffer.byteLength(input.text,'utf8')>INPUT_LIMITS.max_source_bytes)return send(413,{error:'SOURCE_BYTE_LIMIT'});
+    resourceGuard();
+    try{return send(200,previewDictionaries(input));}catch(e){return send(400,{error:e.message});}
    }
    if(req.method==='POST'&&route==='/api/dictionaries/scan'){
     if(!input||typeof input.text!=='string'||Object.keys(input).some(k=>!['text','dictionaries'].includes(k)))return send(400,{error:'INVALID_SCAN_TEXT'});

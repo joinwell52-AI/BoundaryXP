@@ -1,3 +1,5 @@
+import {parsingIdentity} from './workbench-parse.mjs';
+import {singleResources,executeSingleWorkbench} from './workbench-single.mjs';
 import fs from 'node:fs';import path from 'node:path';
 import {parseBoundaryReport,boundaryReportBundle} from './boundary-report.mjs';
 import {sha256} from './source.mjs';
@@ -7,12 +9,12 @@ import {prepareSource} from './source.mjs';
 import {selectDictionaries,dictionaryIdentity,dictionaryInstructions,verifyDictionarySnapshot} from './dictionaries.mjs';
 const skillFile=phase=>new URL(`workbench-skills/${phase}/SKILL.md`,import.meta.url);
 const files=['generate','review','compare','compare-review'];
-export function workbenchResources(){return {format:'workbench-clause-index/1',resources:files.map(p=>({path:p,sha256:sha256(fs.readFileSync(skillFile(p)))})),profiles:['SKILL','SKILL1'].flatMap(parseMethod=>['parse','audit'].map(phase=>boundaryReportBundle(phase,{parseMethod}).sha256)),method:sha256(fs.readFileSync(new URL('boundary-report-method.md',import.meta.url))),adapter:sha256(fs.readFileSync(new URL('workbench-runner.mjs',import.meta.url))),core:sha256(fs.readFileSync(new URL('../../../src/bxp/workbench-comparison.mjs',import.meta.url))),index:sha256(fs.readFileSync(new URL('../../../src/bxp/workbench-model.mjs',import.meta.url)))};}
+export function workbenchResources(){const single=singleResources();return {...single,resources:[...single.resources,...['compare','compare-review'].map(p=>({path:p,sha256:sha256(fs.readFileSync(skillFile(p)))}))],adapter:sha256(fs.readFileSync(new URL('workbench-runner.mjs',import.meta.url))),parsing:parsingIdentity(),core:sha256(['workbench-member-binding.mjs','workbench-program.mjs','workbench-formal.mjs','workbench-calculators.mjs','workbench-binding.mjs','workbench-program-binding.mjs','workbench-symbol-binding.mjs'].map(f=>fs.readFileSync(new URL('../../../src/bxp/'+f,import.meta.url),'utf8')).join('\n')),index:sha256(fs.readFileSync(new URL('../../../src/bxp/workbench-model.mjs',import.meta.url)))};}
 // Only resources used to interpret/review a node affect its semantic cache.
 // Comparison, rendering and package manifest changes must not regenerate the tree.
 export function nodeResourceIdentity(resources,settings={}){
  const offset=settings.parse_method==='SKILL1'?2:0;
- return {format:resources.format,resources:resources.resources.filter(r=>['generate','review'].includes(r.path)),profiles:resources.profiles.slice(offset,offset+2),method:resources.method,index:resources.index,dictionaries:resources.dictionaries};
+ return {format:resources.format,expression_adapter:resources.expression_adapter,resources:resources.resources.filter(r=>['generate','review'].includes(r.path)),profiles:resources.profiles.slice(offset,offset+2),method:resources.method,index:resources.index,dictionaries:resources.dictionaries};
 }
 export function readModelJSON(text){
  const value=JSON.parse(text.trim().replace(/^```(?:json)?\s*/,'').replace(/\s*```$/,''));
@@ -25,7 +27,9 @@ const bundleFactory=(kind,context)=>(phase,options)=>{
  return {...base,name:'boundx-workbench-'+name,resources,text,sha256:sha256(text),resource_profile:'WORKBENCH_'+name};
 };
 export async function executeWorkbench({kind,input,output,settings,signal,onProgress,resourceGuard,productSnapshot,call}){
- const text=kind==='node'?input.text:JSON.stringify(input);
+ if(kind==='node')return executeSingleWorkbench({kind,input,output,settings,signal,onProgress,resourceGuard,productSnapshot,call});
+ throw Error('MODEL_COMPARISON_DISABLED_USE_PROGRAM_CORE');
+ const text=JSON.stringify(input);
  const trace=await parseBoundaryReport(Buffer.from(text,'utf8'),{output,model:settings.model,reasoning:settings.reasoning,parseMethod:settings.parse_method??'SKILL',dictionaries:settings.dictionaries??{},signal,onProgress,resourceGuard,productSnapshot,call,bundleFactory:bundleFactory(kind,input.context)});
  let proposal,review,interface_error=null;
  try{proposal=readModelJSON(trace.report);review=readModelJSON(trace.review);}catch(e){interface_error=e.message;}
@@ -34,6 +38,7 @@ export async function executeWorkbench({kind,input,output,settings,signal,onProg
  return {kind,proposal,review,interface_error,boundary:kind==='node'?indexBoundary(proposal,text):null,trace_path:path.join(output,'trace.json'),report:trace.report,review_text:trace.review,model_calls:trace.model_calls,dictionary_lookups:trace.dictionary_lookups,dictionaries:trace.dictionaries,dictionary_scan:trace.dictionary_scan,created_at:new Date().toISOString()};
 }
 export async function reviewWorkbenchComparison({input,previous,output,settings,signal,resourceGuard=()=>{},onProgress=()=>{},call=callCodex}){
+ throw Error('MODEL_COMPARISON_DISABLED_USE_PROGRAM_CORE');
  if(!previous?.proposal||!previous.report)throw Error('SAVED_COMPARISON_REQUIRED');
  if(fs.existsSync(output))throw Error('OUTPUT_ALREADY_EXISTS');fs.mkdirSync(output,{recursive:true});
  const source=prepareSource(Buffer.from(JSON.stringify(input))),snapshot=selectDictionaries(settings.dictionaries??{}),base=bundleFactory('compare',null)('audit',{parseMethod:settings.parse_method??'SKILL'}),text=base.text+dictionaryInstructions(snapshot),bundle={...base,text,sha256:sha256(text),dictionary_snapshot:snapshot};

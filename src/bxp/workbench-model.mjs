@@ -38,7 +38,8 @@ export function ancestors(plan,id){
 export function semanticInput(plan,node,resources){
  const parent=plan.nodes.find(n=>n.id===node.parent_id);
  const context=node.context_mode==='PARENT'&&parent?{text:parent.text,source_version:parent.version,node_id:parent.id,ancestor_context:parent.context_mode==='PARENT'?semanticInput(plan,parent,resources).context:null}:null;
- return {text:node.text,context,settings:plan.settings,resources};
+ const tree_context=plan.mode==='TREE'?plan.nodes.map(n=>({node_id:n.id,parent_id:n.parent_id,text:n.text,source_version:n.version})):undefined;
+ return {text:node.text,context:tree_context?{...context,tree_context}:context,settings:plan.settings,resources};
 }
 // Stable, canonical input is hashed by the host. Display labels/visibility are absent.
 export const nodeInputKey=(plan,node,resources)=>stable(semanticInput(plan,node,resources));
@@ -87,7 +88,7 @@ export function indexBoundary(raw,source){
  }
  const unstated_axes=Array.isArray(raw.unstated_axes)?raw.unstated_axes.filter(a=>AXES.includes(a)&&!clauses.some(c=>c.axes.includes(a))):[];
  for(const a of AXES)if(!clauses.some(c=>c.axes.includes(a))&&!unstated_axes.includes(a))issues.push({code:'AXIS_NOT_ACCOUNTED',axis:a});
- return {clauses,issues,unstated_axes,uncertainties:Array.isArray(raw.uncertainties)?raw.uncertainties:[],context_used:raw.context_used===true};
+ return {clauses,issues,unstated_axes,uncertainties:Array.isArray(raw.uncertainties)?raw.uncertainties:[],dictionary_sources:Array.isArray(raw.dictionary_sources)?clone(raw.dictionary_sources):[],context_used:raw.context_used===true,formal:raw.formal?clone(raw.formal):null};
 }
 export function singleAxisStates(boundary,review){
  return Object.fromEntries(AXES.map(a=>[a,!boundary?'NOT_RUN':boundary.issues.some(i=>i.axis===a||boundary.clauses.some(c=>c.id===i.clause_id&&c.axes.includes(a)))?'UNRESOLVED':review?.issues?.some(i=>!i.clause_ids?.length||i.clause_ids.some(id=>boundary.clauses.some(c=>c.id===id&&c.axes.includes(a))))?'UNRESOLVED':boundary.clauses.some(c=>c.axes.includes(a))?'RECORDED':boundary.unstated_axes.includes(a)?'UNSTATED':'UNRESOLVED']));

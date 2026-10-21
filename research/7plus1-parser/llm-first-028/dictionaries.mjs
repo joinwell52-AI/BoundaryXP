@@ -21,7 +21,7 @@ const definitions=[
   ['property-safety','物业安全'],
   ['warehouse-inventory','仓储库存']
  ].map(([name,label])=>({id:name+'@1.0.0',layer:'L2',label:label+' · 1.0.0',version:'1.0.0',test_only:false,files:['actions','entities','roles','resources','boundaries','completions','references'].map(n=>`domain-packs/l2/${name}/1.0.0/${n}.json`)})),
- {id:'tenant-a@0.2.0',layer:'L3',label:'企业A名册 · 0.2.0（虚构测试）',version:'0.2.0',test_only:true,files:['examples/semantic-packs/tenant-a/0.2.0/employees.json']},
+ {"id":"tenant-a@0.2.0","layer":"L3","label":"企业 A 名册 · 0.2.0（企业语义设计 r01，虚构测试）","version":"0.2.0","test_only":true,"design_revision":"enterprise-semantics-r01","files":["research/7plus1-parser/parent-child-boundary-tests/enterprise-a-semantics-10-20261020/dictionary/tenant-a/0.2.0/enterprise-semantics.json"]},
  {id:'tenant-b@0.1.0',layer:'L3',label:'企业B名册 · 0.1.0（虚构测试）',version:'0.1.0',test_only:true,files:['examples/semantic-packs/tenant-b/0.1.0/employees.json']},
  {id:'example-software-team@0.1.0',layer:'L3',label:'企业术语别名 · 0.1.0（虚构测试）',version:'0.1.0',test_only:true,files:['domain-packs/l3/example-software-team.json']}
 ];

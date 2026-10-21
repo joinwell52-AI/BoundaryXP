@@ -4,9 +4,11 @@
 
 文档日期：2026-10-08。当前为可运行的**候选版**，不是已经通过全部产品质量门的正式版。请先区分已安装用户入口、开发工作区和旧BXP应用，不要混用命令或成绩。
 
+> **2026-10-21：main合并ui220候选源码及构建入口。** 当前构建、核验和启动方式见[ui220同步说明](docs/workbench/UI220-SYNC.md)。已有58618安装继续使用`npm run 7plus1:ui`。下文2026-10-08的候选包、分支差异和成绩是历史记录，新安装应先构建ui220。
+
 ## 1. 已经完成本机安装：固定打开58618
 
-在Windows命令提示符中运行：
+在已检出开发分支、已完成安装与入口恢复的Windows工作区中运行：
 
 ```bat
 cd /d D:\boundx
@@ -17,7 +19,7 @@ npm run 7plus1:ui
 
 这个入口当前锁定完整安装候选`0.1.0-candidate.031-r1.2`、核心`031-r1-c3`和合同`031-r1.1`。配置与历史在`.boundx/short-compiler-031-r1/`，运行资源在其`versions/`目录，不混读开发工作区的Skill/Schema。
 
-**这不是全新克隆后的自动安装命令。** 安装目录缺失、指针换版、端口被未知进程占用或资源摘要不一致会明确拒绝，不自动选择另一个端口，也不停止未知进程。实现见[固定启动器](product/short-compiler/launch-installed.mjs)，维护依据见[恢复回执](docs/reports/7plus1/031-R1-RESTORE-58618/REPORT.md)。
+**这不是全新克隆后的自动安装命令。** 安装目录缺失、指针换版、端口被未知进程占用或资源摘要不一致会明确拒绝，不自动选择另一个端口，也不停止未知进程。实现见[开发分支固定启动器](https://github.com/joinwell52-AI/BoundX/blob/a55363226b465cb120ce8f2624d5d900d5a39d9d/product/short-compiler/launch-installed.mjs)，维护依据见[恢复回执](https://github.com/joinwell52-AI/BoundX/blob/a55363226b465cb120ce8f2624d5d900d5a39d9d/docs/reports/7plus1/031-R1-RESTORE-58618/REPORT.md)。
 
 ## 2. 使用前提和操作
 
@@ -35,7 +37,7 @@ npm run 7plus1:ui
 
 ## 3. 新目录安装：使用完整候选包，不用开发目录拼资源
 
-已核验的旧候选包见[031-R1交付页](docs/reports/7plus1/7P-SHORT-COMPILER-PRODUCT-CLOSURE-031-R1-LONG/REPORT.md)及其[运行包](docs/reports/7plus1/7P-SHORT-COMPILER-PRODUCT-CLOSURE-031-R1-LONG/delivery/BoundX-short-compiler-0.1.0-candidate.031-r1.2.zip)。它仍有已知Q05范围限制；下载包不代表语义验收通过。
+已核验的旧候选包见[031-R1交付页](https://github.com/joinwell52-AI/BoundX/blob/a55363226b465cb120ce8f2624d5d900d5a39d9d/docs/reports/7plus1/7P-SHORT-COMPILER-PRODUCT-CLOSURE-031-R1-LONG/REPORT.md)及其[运行包](https://github.com/joinwell52-AI/BoundX/blob/a55363226b465cb120ce8f2624d5d900d5a39d9d/docs/reports/7plus1/7P-SHORT-COMPILER-PRODUCT-CLOSURE-031-R1-LONG/delivery/BoundX-short-compiler-0.1.0-candidate.031-r1.2.zip)。这些文件在开发分支固定快照中，未复制到main。该包仍有已知Q05范围限制；下载包不代表语义验收通过。
 
 以下仅适用于**新安装且58618没有被使用**的机器或环境。在解压后的包根目录执行：
 
@@ -44,7 +46,7 @@ node product/short-compiler/deploy.mjs install --home D:\boundx-short --port 586
 node product/short-compiler/deploy.mjs start --home D:\boundx-short
 ```
 
-已有用户实例不要再次install，不要删目录重装或强抢端口。使用原安装home的启动方式。新安装home与`D:\boundx`工作区默认home不同，不能假定根仓库`npm run 7plus1:ui`会自动发现自选目录。
+已有用户实例不要再次install，不要删目录重装或强抢端口。使用原安装home的启动方式。新安装home与`D:\boundx`开发工作区默认home不同，不能假定开发分支根仓库`npm run 7plus1:ui`会自动发现自选目录。
 
 Q05新候选`0.1.0-candidate.031-r1.q05.1`已包含全称结构，但适用域和完整补测尚未闭合，不作为本指南的自动升级目标。区别见[状态页](docs/SHORT-COMPILER-STATUS.md)。
 
@@ -58,7 +60,7 @@ npm run 7plus1 -- --input D:\boundx\task.txt --output D:\boundx\new-run-director
 
 输出目录必须是新目录，不能覆盖旧结果。命令会实际调用模型；查历史或纯程序回放应使用相应显式入口，不把它们计成新的模型能力验证。
 
-特别注意：根开发仓库的`npm run 7plus1`当前直接调用工作区核心，可能已经是较新的Q05合同；根仓库`npm run 7plus1:ui`却锁定已安装候选。两者使用同一核心的实现谱系，**不保证此时同一版本**。不能拿一次工作区CLI与旧安装UI的结果宣称同版一致。
+特别注意：开发分支根仓库的`npm run 7plus1`当前直接调用工作区核心，可能已经是较新的Q05合同；该分支的`npm run 7plus1:ui`却锁定已安装候选。两者使用同一核心的实现谱系，**不保证此时同一版本**。不能拿一次工作区CLI与旧安装UI的结果宣称同版一致。main没有这两个脚本。
 
 ## 5. 停止、升级与回滚
 
@@ -78,13 +80,22 @@ node product/short-compiler/deploy.mjs rollback --home D:\boundx-short --confirm
 node product/short-compiler/deploy.mjs start --home D:\boundx-short
 ```
 
-这些是维护操作说明，不是本次文档更新自动启动升级的授权。已有固定工作区启动器还锁定具体版本，升级后必须同步其获准版本绑定，否则会拒绝；不能取消校验来强行启动。历史按原生成版本保留，不重新解析覆盖。
+这些是维护操作说明，不是本次文档合并自动启动升级的授权。已有固定工作区启动器还锁定具体版本，升级后必须同步其获准版本绑定，否则会拒绝；不能取消校验来强行启动。历史按原生成版本保留，不重新解析覆盖。
 
 ## 6. 既有BXP入口和main分支
 
-`npm run ui`启动既有BXP应用，不是现在的短文本58618入口。结构化IR计算示例和`node cli.mjs protocol-info`也不等于直接解析自然语言。使用这些能力时参见[协议实现](protocol/IMPLEMENTATION.md)及[示例](examples/README.md)。
+只使用main中已有代码时，先准备Node.js 22.18或以上，在仓库根目录运行：
 
-`main`和`review/7plus1-parser`是不同代码快照。当前固定短文本启动脚本在开发分支，不能告诉只克隆main的用户该命令一定存在。不自动切换用户已有脏工作区、不为了阅读文档合并候选代码。
+```bat
+npm ci
+node cli.mjs protocol-info
+node cli.mjs evaluate examples/bxp/zh-CN-complete.json
+npm run ui
+```
+
+这是现有结构化IR计算与BXP应用，不是新短文本58618入口，也不是直接解析自然语言。参见[协议实现](protocol/IMPLEMENTATION.md)及[示例](examples/README.md)。
+
+`main`和`review/7plus1-parser`仍是不同代码快照。候选实现可从[开发分支](https://github.com/joinwell52-AI/BoundX/tree/review/7plus1-parser)核查；本次只同步文档，不自动切换用户已有脏工作区、不合并候选代码、不移动旧标签。
 
 ## 7. 检查与故障提示
 

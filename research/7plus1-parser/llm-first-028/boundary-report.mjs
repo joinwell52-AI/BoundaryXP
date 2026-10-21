@@ -14,7 +14,7 @@ export function boundaryReportBundle(phase,{parseMethod='SKILL'}={}){
  return {phase,name:'boundx-semantic-'+phase,contract_version:'candidate-ir/2.0',parse_method:parseMethod,mode:'INLINE_BUNDLE',schema:null,resources,text,sha256:sha256(text),transport_version:reportProfile,request_profile:reportProfile,resource_profile:parseMethod+'_OPEN_BOUNDARY_R01',schema_delivery:{mode:'NONE_SKILL_GUIDED_REPORT'},real_model_acceptance:'NOT_RUN'};
 }
 const write=(dir,name,value)=>fs.writeFileSync(path.join(dir,name),JSON.stringify(value,null,2)+'\n');
-export async function parseBoundaryReport(bytes,{output,probe,model='gpt-6.1-sol',reasoning='medium',parseMethod='SKILL',dictionaries={},signal,onProgress=()=>{},timeoutMs=null,call=callCodex,maxModelRequests=null,resourceGuard=()=>{},productSnapshot=null,bundleFactory=boundaryReportBundle}={}){
+export async function parseBoundaryReport(bytes,{output,probe,model='gpt-6.1-sol',reasoning='medium',parseMethod='SKILL',dictionaries={},signal,onProgress=()=>{},timeoutMs=null,call=callCodex,maxModelRequests=null,resourceGuard=()=>{},productSnapshot=null,bundleFactory=boundaryReportBundle,transformProposal=null}={}){
  parseMethod??='SKILL';
  if(!output)throw Error('OUTPUT_DIRECTORY_REQUIRED');
  if(maxModelRequests!==null&&(!Number.isSafeInteger(maxModelRequests)||maxModelRequests<2))throw Error('INVALID_MODEL_REQUEST_LIMIT');
@@ -40,7 +40,9 @@ export async function parseBoundaryReport(bytes,{output,probe,model='gpt-6.1-sol
   if(typeof response.value!=='string'||!response.value.trim())throw Error('MODEL_REPORT_EMPTY');
   return response;
  };
- const parsed=await invoke('parse',parse,null),proposal={text:parsed.value,sha256:sha256(parsed.value)};
+ let parsed=await invoke('parse',parse,null);
+ if(transformProposal){write(dir,'raw-patch-response.json',{text:parsed.value});parsed={...parsed,value:await transformProposal(parsed.value)};}
+ const proposal={text:parsed.value,sha256:sha256(parsed.value)};
  write(dir,'proposal.json',proposal);fs.writeFileSync(path.join(dir,'boundary-report.md'),parsed.value);
  onProgress({stage:'PARSING',revision:0,signal:'PARSE_READY'});
  const reviewed=await invoke('audit',audit,{text:parsed.value,sha256:proposal.sha256}),review={text:reviewed.value,sha256:sha256(reviewed.value),reviewed_report_sha256:proposal.sha256};

@@ -12,8 +12,9 @@ export const exact=x=>{const q=rational(x);return q.d===1n?String(q.n):q.n+'/'+q
 export const add=(a,b)=>{const x=rational(a),y=rational(b);return exact((x.n*y.d+y.n*x.d)+'/'+(x.d*y.d));};
 export const multiply=(a,b)=>{const x=rational(a),y=rational(b);return exact(x.n*y.n+'/'+(x.d*y.d));};
 export const compare=(a,b)=>{const x=rational(a),y=rational(b),d=x.n*y.d-y.n*x.d;return d<0n?-1:d>0n?1:0;};
-export const units={second:'1',seconds:'1',s:'1',minute:'60',minutes:'60',min:'60',hour:'3600',hours:'3600',ms:'1/1000',millisecond:'1/1000',milliseconds:'1/1000',day:'86400',days:'86400','秒':'1','分钟':'60','小时':'3600','毫秒':'1/1000',count:'1','次':'1'};
-export const dimension=u=>u==null||['count','次'].includes(u)?'SCALAR':Object.hasOwn(units,u)?'TIME':fail('UNKNOWN_UNIT',null,null,'TYPE',{unit:u});
+const powerUnits={W:'1',watt:'1',watts:'1','瓦':'1','瓦特':'1',kW:'1000',kilowatt:'1000',kilowatts:'1000','千瓦':'1000',mW:'1/1000',milliwatt:'1/1000',milliwatts:'1/1000','毫瓦':'1/1000'};
+export const units={...powerUnits,second:'1',seconds:'1',s:'1',minute:'60',minutes:'60',min:'60',hour:'3600',hours:'3600',ms:'1/1000',millisecond:'1/1000',milliseconds:'1/1000',day:'86400',days:'86400','秒':'1','分钟':'60','小时':'3600','毫秒':'1/1000',count:'1','次':'1'};
+export const dimension=u=>u==null||['count','次'].includes(u)?'SCALAR':Object.hasOwn(powerUnits,u)?'POWER':Object.hasOwn(units,u)?'TIME':fail('UNKNOWN_UNIT',null,null,'TYPE',{unit:u});
 export const toBase=(v,u)=>multiply(v,u==null?'1':units[u]??fail('UNKNOWN_UNIT'));
 export const UNKNOWN=Object.freeze({unknown:true});
 export const unknown=x=>x?.unknown===true;
