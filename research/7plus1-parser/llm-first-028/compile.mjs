@@ -111,7 +111,7 @@ export function renderChinese(c){
  const eventText=id=>{const f=events.get(id);return f?`${f.event.predicate} [${id}]；${f.roles.map(r=>`${roleNames[r.role]??r.role}=${r.entity?.label??r.entity_id}`).join('；')}`:`未提供事件名称 [${id}]`;};
  const expressionText=x=>exprText(x,name,eventText);
  const quantityText=q=>`${q.distribution?.mode==='EACH'?'逐成员：':q.distribution?.mode==='AGGREGATE'?'合计：':''}${q.metric} ${opNames[q.comparator]} ${q.value} ${q.unit}；目标=${name(q.target_id)}；计数范围=${name(q.count_scope)}${q.distribution?.domain_id?'；成员域='+q.distribution.domain_id:''}${q.use==='WORK_PLAN'?'；执行计划数量（不是资源配额）':''}`;
- const lines=['# BoundX 7+1（有限技术接受，不是业务授权）'];
+ const lines=['# BoundaryXP 7+1（有限技术接受，不是业务授权）'];
  for(const [slot,v] of Object.entries(c.slots)){
   lines.push(`\n## ${slot} ${names[slot]} — ${v.status}`);
   for(const f of v.entries){

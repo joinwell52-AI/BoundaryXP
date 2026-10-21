@@ -1,12 +1,12 @@
-# BoundX BXP 产品统一交付 / Alignment delivery
+# BoundaryXP BXP 产品统一交付 / Alignment delivery
 
 状态：COMPLETE，待 ADMIN 审核。 / Implementation complete; awaiting ADMIN review.
 
-[Draft PR #2](https://github.com/joinwell52-AI/BoundX/pull/2) · [实现提交实际 CI](https://github.com/joinwell52-AI/BoundX/actions/runs/34816141070)。三组全部通过，尚未合并或发布。
+[Draft PR #2](https://github.com/joinwell52-AI/BoundaryXP/pull/2) · [实现提交实际 CI](https://github.com/joinwell52-AI/BoundaryXP/actions/runs/34816141070)。三组全部通过，尚未合并或发布。
 
 ## 基线与授权
 
-- 仓库：joinwell52-AI/BoundX，PRIVATE。
+- 仓库：joinwell52-AI/BoundaryXP，PRIVATE。
 - 基线：ae0bab1ac8a99e806327fc30b2b83c295826e5f0，分支 impl/bxp-product-alignment-v1。
 - 授权任务书：PR #1，提交 a2fb068565605c0ac83ad6d6d4a973941ee270c6。
 - 产品 1.3.0-preview.0；固定协议 0.3.0-draft.2；套件 1.0.0-draft.3。
@@ -79,8 +79,8 @@ M	docs/ADMIN-MODEL-CHALLENGE-009.md
 M	docs/ADMIN-PYTHON-011.md
 M	docs/ADMIN-RESULTS-015.md
 A	docs/AGENT-BXP-PRODUCER.md
-M	docs/BOUNDX-LIGHTWEIGHT-PRODUCT-PLAN.md
-M	docs/BOUNDX-PRODUCT-MANUAL.md
+M	docs/BOUNDARYXP-LIGHTWEIGHT-PRODUCT-PLAN.md
+M	docs/BOUNDARYXP-PRODUCT-MANUAL.md
 M	docs/DECOMPOSITION.md
 M	docs/DOUBAO-PM-TEST.md
 M	docs/FUNCTIONS.md

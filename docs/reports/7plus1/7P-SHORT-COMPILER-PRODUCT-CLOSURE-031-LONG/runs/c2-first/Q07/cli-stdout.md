@@ -1,4 +1,4 @@
-# BoundX 7+1（有限技术接受，不是业务授权）
+# BoundaryXP 7+1（有限技术接受，不是业务授权）
 
 ## I 输入与作用域 — RESOLVED
 - [ACCEPTED] 作用域  执行者由后续计划确定(检查磁盘空间,后续计划) [POSITIVE;运行值UNKNOWN]；目标=检查磁盘空间（bf:6fc3f601a11ed822f206）

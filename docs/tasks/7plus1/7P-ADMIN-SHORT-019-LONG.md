@@ -3,14 +3,14 @@
 ## 0. Identity
 
 - TASK: `7P-ADMIN-SHORT-019-LONG`
-- Repository: `joinwell52-AI/BoundX`
+- Repository: `joinwell52-AI/BoundaryXP`
 - Branch: `review/7plus1-parser`
 - Start from current branch HEAD after ADMIN authorization
 - ADMIN authorization: `docs/tasks/7plus1/7P-ADMIN-SHORT-019-LONG-ADMIN-AUTHORIZATION.md`
 - Baseline success: `7P-ADMIN-SHORT-018-R1`, commit `64a1d3b9aecffb3314a796cff0ab7c30e939fb63`
 - Corpus: `fixtures/7plus1/admin-short-050-r02/CASES.md`
 - Diagnostic baseline: `docs/reports/7plus1/ADMIN-SHORT-050-r02/`
-- Normative method: `docs/BoundX-7plus1-定义原理语义编译与边界计算说明-v0.3.md`
+- Normative method: `docs/BoundaryXP-7plus1-定义原理语义编译与边界计算说明-v0.3.md`
 - PRODUCTION_READY=false
 
 ## 1. Mission

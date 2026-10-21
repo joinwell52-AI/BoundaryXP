@@ -1,7 +1,7 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import {
-  LEGACY_BOUNDARY_PARAMETERS, boundaryDigest, reviewBoundX, reviewPlanBoundary,
+  LEGACY_BOUNDARY_PARAMETERS, boundaryDigest, reviewBoundaryXP, reviewPlanBoundary,
   boundaryResponseStatus, validateBoundaryReply, type BoundaryText,
   compareBoundaryConditions,
 } from "../legacy/index.ts";
@@ -13,16 +13,16 @@ const base = (): BoundaryText => ({ text,
   completion: [{ id: "report", quote: "向 ADMIN 提交报告" }],
 });
 test("ADMIN missing projection receives actionable suggestions, never invented authorization", () => {
-  const result = reviewBoundX({ text, parameters: {}, actions: [], completion: [] });
+  const result = reviewBoundaryXP({ text, parameters: {}, actions: [], completion: [] });
   assert.equal(result.findings.filter(f => f.kind === "parameter_unmapped").length, 7);
   assert.ok(result.findings.every(f => f.suggestion && f.basis && f.consequence && f.decision_owner === "TASK_AUTHORIZER"));
   assert.equal(result.business_decision, null);
   assert.equal(result.semantic_status, "requires_human_review");
 });
 test("quoted fields must be grounded and well-shaped", () => {
-  assert.throws(() => reviewBoundX({ ...base(), parameters: { I: "伪造引用" } }), /quote/);
-  assert.throws(() => reviewBoundX({ ...base(), actions: [{ actor: "PM", verb: "修复", target: "产品", quote: "不存在" }] }), /quote/);
-  assert.throws(() => reviewBoundX({ ...base(), completion: [{ id: "x", quote: "不存在" }] }), /quote/);
+  assert.throws(() => reviewBoundaryXP({ ...base(), parameters: { I: "伪造引用" } }), /quote/);
+  assert.throws(() => reviewBoundaryXP({ ...base(), actions: [{ actor: "PM", verb: "修复", target: "产品", quote: "不存在" }] }), /quote/);
+  assert.throws(() => reviewBoundaryXP({ ...base(), completion: [{ id: "x", quote: "不存在" }] }), /quote/);
 });
 test("inspection-to-repair identifies specific action and completion deltas", () => {
   const doc = base(); doc.text += "必须修复并复测通过才能汇报。";
@@ -110,6 +110,6 @@ test("English and Chinese rendering preserve finding IDs, evidence and Boolean w
   assert.deepEqual(en.findings.map(f => f.symbolic_counterexample?.values), zh.findings.map(f => f.symbolic_counterexample?.values));
   assert.ok(en.findings.every(f => !/[\u4e00-\u9fff]/.test(f.suggestion)));
   assert.ok(zh.findings.some(f => /[\u4e00-\u9fff]/.test(f.suggestion)));
-  assert.equal(reviewBoundX(baseline, { locale: "en" }).findings[0]!.decision_owner, "TASK_AUTHORIZER");
-  assert.throws(() => reviewBoundX(baseline, { locale: "xx" as never }), /Unsupported locale/);
+  assert.equal(reviewBoundaryXP(baseline, { locale: "en" }).findings[0]!.decision_owner, "TASK_AUTHORIZER");
+  assert.throws(() => reviewBoundaryXP(baseline, { locale: "xx" as never }), /Unsupported locale/);
 });

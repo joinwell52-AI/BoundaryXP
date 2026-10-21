@@ -3,9 +3,9 @@ import {buildCandidate} from '../product/short-compiler/build-candidate.mjs';
 import {calculateWorkbenchMath} from '../src/bxp/workbench-math.mjs';
 const root=process.cwd(),web=fs.readFileSync('research/7plus1-parser/v0.3-p2.1-generalization/web/workbench.js','utf8'),ctx=vm.createContext({});
 vm.runInContext(web.slice(web.indexOf('function mathAnalysisRows('),web.indexOf('function renderMath(')),ctx);
-test('ui220 package reproduces all frozen source hashes without installation or models',()=>{
+test('ui222 package reproduces all frozen source hashes without installation or models',()=>{
  const output=path.join(root,'.boundx','ui220-sync-test-'+Date.now());const result=buildCandidate(output),m=JSON.parse(fs.readFileSync(path.join(output,'PRODUCT-MANIFEST.json')));
- assert.equal(result.files,404);assert.equal(result.manifest_sha256,'00661d15f2b0d6cdb94564124dcd97f2a0507d6da5eba61f68f0c1f8c744ad81');for(const f of m.files)assert.equal(createHash('sha256').update(fs.readFileSync(path.join(output,f.path))).digest('hex'),f.sha256,f.path);
+ assert.equal(result.files,408);assert.equal(result.manifest_sha256,'f7da69acf5bfdf048e1f14e6d3892dd52e8e3a7275effcdd141ca45b87bfc739');for(const f of m.files)assert.equal(createHash('sha256').update(fs.readFileSync(path.join(output,f.path))).digest('hex'),f.sha256,f.path);
  assert.throws(()=>buildCandidate(output),/IMMUTABLE/);
 });
 test('LLM analysis remains model-owned; unsupported PASS and unbound references do not become verification',()=>{

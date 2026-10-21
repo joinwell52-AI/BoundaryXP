@@ -22,7 +22,7 @@ Two identically wrong or incomplete outputs do not pass. Matching expression gap
 
 BI01-BI24 each contain one Chinese and one English source; MX01-MX06 are mixed sources: 54 source texts in total. They are public development materials, not holdout tests. The old 20 r01 cases remain unchanged. Send only one selected source, not expected data, pair metadata, or the counterpart translation.
 
-This revision creates materials and runs offline package checks only. No live model, Codex execution, BoundX run, or local deployment was performed. Dataset size is not a call budget. Report source fidelity, over/under-constraint, over-clarification, genuine ambiguity, contract gaps, consumer gaps, cross-language agreement, transport failures, latency, and requests separately.
+This revision creates materials and runs offline package checks only. No live model, Codex execution, BoundaryXP run, or local deployment was performed. Dataset size is not a call budget. Report source fidelity, over/under-constraint, over-clarification, genuine ambiguity, contract gaps, consumer gaps, cross-language agreement, transport failures, latency, and requests separately.
 
 Eight populated views, equal counts, or valid JSON do not establish semantic fidelity. Historical r01 or 001 results are not r02 English results.
 

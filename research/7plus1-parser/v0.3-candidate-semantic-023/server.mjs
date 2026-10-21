@@ -16,4 +16,4 @@ export function createServer({storeRoot='.boundx/candidate-023-history',parse=pa
  return send(404,{error:'NOT_FOUND'});
  }catch(e){send(400,{error:e.message});}});
 }
-if(process.argv[1]&&import.meta.url===pathToFileURL(process.argv[1]).href)createServer().listen(Number(process.env.BOUNDX_PARSER_PORT??58618),'127.0.0.1');
+if(process.argv[1]&&import.meta.url===pathToFileURL(process.argv[1]).href)createServer().listen(Number(process.env.BOUNDARYXP_PARSER_PORT??58618),'127.0.0.1');

@@ -1,4 +1,4 @@
-# BoundX 7+1（有限技术接受，不是业务授权）
+# BoundaryXP 7+1（有限技术接受，不是业务授权）
 
 ## I 输入与作用域 — PARSER_COVERAGE_FAILURE
 - [UNRESOLVED] 组织本次核查：输入/受检对象=本次核查与汇总；必须（bf:f9f0238ca6a675690ecc）

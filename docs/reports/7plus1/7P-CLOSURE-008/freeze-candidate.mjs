@@ -3,5 +3,5 @@ const dir='docs/reports/7plus1/7P-CLOSURE-008',runtime='research/7plus1-parser/v
 for(const p of Object.keys(JSON.parse(fs.readFileSync('docs/reports/7plus1/7P-REPAIR-007/IMPLEMENTATION-FROZEN.json')).files)){const q=p.replace('v0.3-7p-repair-007','v0.3-7p-closure-008');paths.add(fs.existsSync(q)?q:p);}walk(runtime);
 for(const n of fs.readdirSync('tests'))if(/^parser-7p-closure-008.*\.test\.mjs$/u.test(n))paths.add('tests/'+n);
 for(const n of fs.readdirSync(dir+'/phase-b'))if(/^non-gold.*\.mjs$/u.test(n))paths.add(dir+'/phase-b/'+n);
-paths.add('docs/BoundX-7plus1-定义原理语义编译与边界计算说明-v0.3.md');
+paths.add('docs/BoundaryXP-7plus1-定义原理语义编译与边界计算说明-v0.3.md');
 const files=Object.fromEntries([...paths].sort().map(p=>[p,sha(p)]));fs.writeFileSync(dir+'/IMPLEMENTATION-FROZEN.json',JSON.stringify({task:'7P-CLOSURE-008',purpose:'DIAGNOSTIC_CANDIDATE_FREEZE_NOT_CERTIFICATION',base_commit:execFileSync('git',['rev-parse','HEAD'],{encoding:'utf8'}).trim(),created_at:new Date().toISOString(),engine:runtime+'/engine.mjs',files,production_runtime_changed:false,semantic_thresholds_changed:false,models_packs_fingerprint:'BASELINE.json:model_pack_fingerprint',LLM:'NOT_USED',code_execution:'STATIC_AST_ONLY_NO_TARGET_EXECUTION',method_changed:false},null,2)+'\n',{flag:'wx'});console.log('Frozen '+paths.size+' files');

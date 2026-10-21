@@ -6,7 +6,7 @@ import os from 'node:os';
 import {pathToFileURL} from 'node:url';
 import {spawnSync} from 'node:child_process';
 import {randomUUID} from 'node:crypto';
-const root=path.resolve(process.env.BOUNDX_COMPACT_TEST_ROOT??'.boundx/transport-repair-ui22-work');
+const root=path.resolve(process.env.BOUNDARYXP_COMPACT_TEST_ROOT??'.boundx/transport-repair-ui22-work');
 const load=p=>import(pathToFileURL(path.join(root,'research/7plus1-parser/llm-first-028',p)));
 const {runChild}=await load('process.mjs'),{prepareSource}=await load('source.mjs');
 const {buildPrompt}=await load('provider.mjs'),{buildBundle}=await load('bundle.mjs'),{parse7Plus1}=await load('engine.mjs'),{createServer}=await load('service.mjs');

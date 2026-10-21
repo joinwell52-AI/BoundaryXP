@@ -1,6 +1,6 @@
 # ADMIN TASK — 7P-STANDARD-001
 
-Repository: joinwell52-AI/BoundX
+Repository: joinwell52-AI/BoundaryXP
 Branch: review/7plus1-parser
 Base: f062dd5b7ef9e6beeca0f4460f51ffc4225f6338
 

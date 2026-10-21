@@ -1,4 +1,4 @@
-# BoundX 7+1（有限技术接受，不是业务授权）
+# BoundaryXP 7+1（有限技术接受，不是业务授权）
 
 ## I 输入与作用域 — RESOLVED
 - [ACCEPTED] 检查可读性：输入/受检对象=备份目录；必须（bf:e1f0a79bfefe7f2b00dc）

@@ -22,7 +22,7 @@ export class HistoryStore {
 const names={I:'Input',O:'Output',A:'Actions',P:'Participants',R:'Resources',V:'Version / Basis',C:'Completion / Stop',B:'Forbidden / Restriction'};
 const safe=s=>String(s??'').replace(/[\r\n]+/gu,' ').replace(/([\\`*_<>\[\]])/gu,'\\$1');
 export function markdown(run){const p=run.snapshot,r=run.result,raw=p.source_text,max=Math.max(2,...Array.from(raw.matchAll(/`+/gu),m=>m[0].length)),fence='`'.repeat(max+1);
- const lines=['# BoundX 7+1 Parser Test Result','',`- Run ID: ${safe(p.run_id)}`,`- Time: ${safe(p.created_at)}`,`- Parser Version: ${safe(p.parser_version)}`,`- Parser Status: ${safe(p.parser_status)}`,`- Source SHA-256: ${safe(p.source_sha256)}`,'','## 原始任务','',fence+'text'];
+ const lines=['# BoundaryXP 7+1 Parser Test Result','',`- Run ID: ${safe(p.run_id)}`,`- Time: ${safe(p.created_at)}`,`- Parser Version: ${safe(p.parser_version)}`,`- Parser Status: ${safe(p.parser_status)}`,`- Source SHA-256: ${safe(p.source_sha256)}`,'','## 原始任务','',fence+'text'];
  // Raw source is inserted verbatim (including CRLF/BOM); fence length cannot collide with source.
  let out=lines.join('\n')+'\n'+raw+'\n'+fence+'\n\n## Canonical 7+1\n';
  for(const [slot,name] of Object.entries(names)){const value=p.canonical_7plus1[slot];out+=`\n### ${slot} — ${name}\nStatus: ${safe(value.status)}\n`;for(const e of value.entries){out+=`- ${safe(e.display??e.evidence?.[0]?.source_span?.quote??e.id)} [${safe(e.state)}]\n`;if(e.condition?.length)out+=`  - Condition: ${safe(e.condition.flatMap(c=>c.members?.map(m=>m.text)??[]).join(' AND '))}\n`;}if(!value.entries.length)out+='- （无条目）\n';}

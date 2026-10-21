@@ -1,4 +1,4 @@
-# BoundX Real Gold 生成与审定标准
+# BoundaryXP Real Gold 生成与审定标准
 
 - 文档状态：`DRAFT_FOR_REVIEW`
 - 适用目标：`BXP-0001 0.4.0-draft.1`
@@ -422,7 +422,7 @@ BoundaryState = underdetermined
 
 禁止把“存在多条合法执行路径”误判为 Boundary 不唯一，也禁止因为 Boundary 已确定就宣称“只有一条执行路径”。
 
-这对应 BoundX 的核心原则：
+这对应 BoundaryXP 的核心原则：
 
 ```text
 目标由合同确定

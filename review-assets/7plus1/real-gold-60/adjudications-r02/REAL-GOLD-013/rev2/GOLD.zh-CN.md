@@ -340,7 +340,7 @@ $$
 PolicyEvaluation=\text{NOT\_EVALUATED\_NO\_OPERATOR\_PROFILE}
 $$
 
-没有 OperatorProfile；任务叙述中的 ADMIN 决议和仓库归属不等于 BoundX 已核实的权限绑定。
+没有 OperatorProfile；任务叙述中的 ADMIN 决议和仓库归属不等于 BoundaryXP 已核实的权限绑定。
 
 ### 9. 准入
 

@@ -10,7 +10,7 @@ manifest_bytes = (root / 'PRODUCT-MANIFEST.json').read_bytes()
 manifest = json.loads(manifest_bytes)
 hash_bytes = lambda b: hashlib.sha256(b).hexdigest()
 assert hash_bytes(manifest_bytes) == '619884b961d9da62882d07c402042c92ec385ce8e5f692774a0c73fd4f29f39f'
-output = delivery / ('BoundX-short-compiler-' + manifest['version'] + '.zip')
+output = delivery / ('BoundaryXP-short-compiler-' + manifest['version'] + '.zip')
 assert not output.exists()
 paths = [x['path'] for x in manifest['files']] + ['PRODUCT-MANIFEST.json']
 with zipfile.ZipFile(output, 'x', compression=zipfile.ZIP_DEFLATED) as archive:

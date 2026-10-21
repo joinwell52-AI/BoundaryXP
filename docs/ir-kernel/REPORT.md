@@ -8,7 +8,7 @@ WP0—WP5已实施并完成声明范围内的无模型检查，交付 `kernel/1.
 
 运行包目录：`D:\boundx\.boundx\ir-kernel-implementation-v1\packages\kernel-candidate-r03`。该目录在干净状态执行 `npm ci --offline --ignore-scripts --no-audit --no-fund` 成功，包含固定依赖、核心、合同、原Skill资源及内核检查。manifest摘要：`45cd0021f8270d9382e122196274ff722eb89e9787b1b8da677599cdac482c89`。
 
-离线完整运行包ZIP：`D:\boundx\.boundx\ir-kernel-implementation-v1\packages\BoundX-IR-Kernel-1.0-candidate.1-win32.zip`，20,789,632字节，SHA-256 `2c9bc0ea9690c4d1b8b794f288312c6e6a9f71ece340ecb465aa95e05a16ffa7`，归档CRC检查通过。它包含已安装依赖；解压后可直接执行上述CLI，无需模型或监听服务。运行包中的说明、接口及程序检查已冻结；完整验收报告与历史证据由本源码目录单独交付。
+离线完整运行包ZIP：`D:\boundx\.boundx\ir-kernel-implementation-v1\packages\BoundaryXP-IR-Kernel-1.0-candidate.1-win32.zip`，20,789,632字节，SHA-256 `2c9bc0ea9690c4d1b8b794f288312c6e6a9f71ece340ecb465aa95e05a16ffa7`，归档CRC检查通过。它包含已安装依赖；解压后可直接执行上述CLI，无需模型或监听服务。运行包中的说明、接口及程序检查已冻结；完整验收报告与历史证据由本源码目录单独交付。
 
 源码候选：`D:\boundx\.boundx\ir-kernel-implementation-v1\candidate`，本地分支 `work/ir-kernel-closure-001`。本任务不合并或发布，提交号以Git提交回执为准。
 

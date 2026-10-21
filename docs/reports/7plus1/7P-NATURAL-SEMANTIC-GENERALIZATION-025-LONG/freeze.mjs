@@ -6,7 +6,7 @@ walk(RUNTIME).forEach(visit);
 // Worker and schema/pack assets are runtime data, not necessarily static JS imports.
 walk('research/7plus1-parser/p0-semantic-repair-v0.1').filter(p=>/\.(mjs|py)$/u.test(p)).forEach(visit);
 for(const dir of ['schemas','domain-packs/l1/core-ontology','domain-packs/l2/software-ai/0.2.0'])if(fs.existsSync(dir))walk(dir).filter(p=>!/__pycache__|\.pyc$|node_modules/u.test(p)).forEach(visit);
-for(const p of ['scripts/semantic-nli.py','scripts/semantic-retrieval.py','scripts/nlp_model_specs.py','scripts/nlp-model-specs.json','package.json','package-lock.json','docs/BoundX-7plus1-定义原理语义编译与边界计算说明-v0.3.1.md','docs/BoundX-7plus1-ADMIN-ROOT-BENCHMARK-CONTRACT-v1.md','docs/tasks/7plus1/7P-NATURAL-SEMANTIC-GENERALIZATION-025-LONG.md','tests/parser-natural-generalization-025.test.mjs'])visit(p);
+for(const p of ['scripts/semantic-nli.py','scripts/semantic-retrieval.py','scripts/nlp_model_specs.py','scripts/nlp-model-specs.json','package.json','package-lock.json','docs/BoundaryXP-7plus1-定义原理语义编译与边界计算说明-v0.3.1.md','docs/BoundaryXP-7plus1-ADMIN-ROOT-BENCHMARK-CONTRACT-v1.md','docs/tasks/7plus1/7P-NATURAL-SEMANTIC-GENERALIZATION-025-LONG.md','tests/parser-natural-generalization-025.test.mjs'])visit(p);
 for(const p of ['scripts/local_semantic_resource.py','scripts/semantic-model-registry.json'])visit(p);
 const snapshot=[...files].sort().map(p=>({path:p.slice(base.length+1),bytes:fs.statSync(p).size,sha256:sha(fs.readFileSync(p))}));
 const trace=read(OUT+'/development/r035/natural/NROOT-001/trace.json'),signals=trace.compiler_v03.nlp_signals;

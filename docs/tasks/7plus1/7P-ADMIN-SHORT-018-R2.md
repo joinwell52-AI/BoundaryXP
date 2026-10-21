@@ -3,7 +3,7 @@
 ## 0. Identity
 
 - TASK: `7P-ADMIN-SHORT-018-R2`
-- Repository: `joinwell52-AI/BoundX`
+- Repository: `joinwell52-AI/BoundaryXP`
 - Branch: `review/7plus1-parser`
 - Parent result: `ADMIN_SHORT_G0_METHOD_CLOSED`
 - Parent commit: `64a1d3b9aecffb3314a796cff0ab7c30e939fb63`

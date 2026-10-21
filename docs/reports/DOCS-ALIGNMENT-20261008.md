@@ -1,4 +1,4 @@
-# BoundX文档整编回执 · 2026-10-08
+# BoundaryXP文档整编回执 · 2026-10-08
 
 ## 结果与范围
 
@@ -15,8 +15,8 @@
 | `README.zh-CN.md` | 在开发分支补齐独立中文首页；与英文版保持状态和限制一致 |
 | `QUICKSTART.md` | 改为中文当前使用说明，区分已有安装、新目录、工作区CLI和旧BXP入口 |
 | `QUICKSTART.en.md` | 新增独立英文使用说明，不暗示已交付通用英文任务验收或英文结果渲染 |
-| `docs/BOUNDX-PRODUCT-MANUAL.md` | 统一完整产品目标、当前LLM主解析、阶段交付和实际执行边界；旧稿以固定Git链接保留 |
-| `docs/BoundX-7plus1-定义原理语义编译与边界计算说明-v0.4.md` | 编辑性整编为r05，合并已存在的O、产物依赖和范围说明，移出028/13条等过时任务指令 |
+| `docs/BOUNDARYXP-PRODUCT-MANUAL.md` | 统一完整产品目标、当前LLM主解析、阶段交付和实际执行边界；旧稿以固定Git链接保留 |
+| `docs/BoundaryXP-7plus1-定义原理语义编译与边界计算说明-v0.4.md` | 编辑性整编为r05，合并已存在的O、产物依赖和范围说明，移出028/13条等过时任务指令 |
 | `docs/FUNCTIONS.md` | 区分已安装候选、Q05开发新包、既有Core与后续产品能力 |
 | `docs/VALIDATION.md` | 核对语义层次、同版回放、真实调用、来源审定和现有测试命令，删除不存在的脚本用法 |
 | `docs/SHORT-COMPILER-STATUS.md` | 新增集中版本与验收状态，准确保留Q05未决、预算和安装区别 |

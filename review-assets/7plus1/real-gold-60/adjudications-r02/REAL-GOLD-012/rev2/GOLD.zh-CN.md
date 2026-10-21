@@ -61,7 +61,7 @@ All Evidence spans are Unicode code-point half-open intervals and replay against
 - Origin: SOURCE
 - Normalization: explicit_roadmap_actions
 - Ontology binding: null
-- 说明: 动作仅为原文任务内容，非 BoundX 执行授权。
+- 说明: 动作仅为原文任务内容，非 BoundaryXP 执行授权。
 
 ### [P] 参与主体
 
@@ -343,7 +343,7 @@ $$
 PolicyEvaluation=\text{NOT\_EVALUATED\_NO\_OPERATOR\_PROFILE}
 $$
 
-未提供 OperatorProfile；“ADMIN 已拍板”和“无需 PR”是原任务叙述，不能代替 BoundX 的实际授权绑定。
+未提供 OperatorProfile；“ADMIN 已拍板”和“无需 PR”是原任务叙述，不能代替 BoundaryXP 的实际授权绑定。
 
 ### 9. 准入
 

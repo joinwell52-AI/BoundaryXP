@@ -6,7 +6,7 @@ const seen=new Set(),visit=p=>{p=path.normalize(p).replaceAll('\\','/');if(seen.
 for(const p of walk(RUNTIME))visit(p);for(const p of ['tests/parser-admin-root-024.test.mjs','research/7plus1-parser/v0.3-admin-natural-021/lexical.mjs','research/7plus1-parser/v0.3-admin-natural-021/root-frames.mjs','research/7plus1-parser/v0.3-admin-natural-021/roles.mjs'])visit(p);
 for(const p of walk('research/7plus1-parser/p0-semantic-repair-v0.1').filter(p=>/\.py$/u.test(p)))visit(p);
 for(const p of walk('domain-packs/l1/core-ontology').concat(walk('domain-packs/l2/software-ai/0.2.0')))visit(p);
-for(const p of ['package.json','package-lock.json','docs/BoundX-7plus1-定义原理语义编译与边界计算说明-v0.3.1.md','docs/BoundX-7plus1-ADMIN-ROOT-BENCHMARK-CONTRACT-v1.md','docs/tasks/7plus1/7P-ADMIN-ROOT-COMPILER-CLOSURE-024-LONG.md'])visit(p);
+for(const p of ['package.json','package-lock.json','docs/BoundaryXP-7plus1-定义原理语义编译与边界计算说明-v0.3.1.md','docs/BoundaryXP-7plus1-ADMIN-ROOT-BENCHMARK-CONTRACT-v1.md','docs/tasks/7plus1/7P-ADMIN-ROOT-COMPILER-CLOSURE-024-LONG.md'])visit(p);
 const files=[...seen].map(p=>({path:path.relative(process.cwd(),p).replaceAll('\\','/'),sha256:sha(fs.readFileSync(p))})).sort((a,b)=>a.path.localeCompare(b.path));
 async function fileHash(p){const h=crypto.createHash('sha256');for await(const b of fs.createReadStream(p))h.update(b);return h.digest('hex');}
 const baseline=read('docs/reports/7plus1/7P-CANDIDATE-SEMANTIC-GRAPH-023/BASELINE.json'),models=[];

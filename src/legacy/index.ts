@@ -123,7 +123,7 @@ export function compareBoundaryConditions(before: string[], after: string[]) {
   };
   return { added, removed, tightening_witness: witness(added[0]), relaxation_witness: witness(removed[0]) };
 }
-export function reviewBoundX(document: BoundaryText, options: BoundaryReviewOptions = {}): BoundaryReview {
+export function reviewBoundaryXP(document: BoundaryText, options: BoundaryReviewOptions = {}): BoundaryReview {
   validateBoundaryText(document);
   const result = review(document, null, false); gaps(result, document, "document", "TASK_AUTHORIZER");
   return localizeBoundaryReview(result, options);

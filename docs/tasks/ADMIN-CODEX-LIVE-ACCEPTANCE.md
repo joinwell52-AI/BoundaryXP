@@ -118,6 +118,6 @@ git diff --check
 git diff e4156a4 --name-only -- protocol LICENSE
 ```
 
-最后一条输出为空。已提交实现`abf7632`的[CI运行34928443587](https://github.com/joinwell52-AI/BoundX/actions/runs/34928443587)通过；本回执的文档提交CI另查，不冒用之前CI。完整[文件清单](ADMIN-CODEX-LIVE-FILES.md)来自Draft PR #6；未提交并行行业/Case Explorer资产。
+最后一条输出为空。已提交实现`abf7632`的[CI运行34928443587](https://github.com/joinwell52-AI/BoundaryXP/actions/runs/34928443587)通过；本回执的文档提交CI另查，不冒用之前CI。完整[文件清单](ADMIN-CODEX-LIVE-FILES.md)来自Draft PR #6；未提交并行行业/Case Explorer资产。
 
 WP0、WP2–WP8工程实现已有代码和回归证据；WP1审阅金标/最终匹配器及WP9正式语义验收仍为部分完成。允许向ADMIN提交当前可审查工程成果，不得标记整体IMPLEMENTATION_COMPLETE。下一步是独立金标审阅、处理剩余候选错误并按已审答案评测；禁止自行将本轮作者草稿认证为金标。

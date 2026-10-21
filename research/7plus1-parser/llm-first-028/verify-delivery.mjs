@@ -37,7 +37,7 @@ const files=fileInventory(ROOT).filter(f=>f.endsWith('.mjs'));
 check('no_legacy_runtime_imports',files.every(f=>!fs.readFileSync(f,'utf8').split('\n').filter(l=>l.startsWith('import ')).some(l=>/v0\.3|v0\.4-llm-semantic-027|candidate-parsing|hanlp|spacy/i.test(l))));
 const oldSeal='docs/reports/7plus1/7P-LLM-SEMANTIC-COMPILER-027-LONG/SEAL.json';
 if(fs.existsSync(oldSeal))check('027_seal_unchanged',sha256(fs.readFileSync(oldSeal))==='b99c89aaea944c4b4055484439e4310067394e01f64863c45dba7b35494c9a26');
-const taskBlob=execFileSync('git',['hash-object','docs/tasks/7plus1/7P-LLM-FIRST-SEMANTIC-REBUILD-028-LONG.md'],{encoding:'utf8'}).trim(),manualBlob=execFileSync('git',['hash-object','docs/BoundX-7plus1-定义原理语义编译与边界计算说明-v0.4.md'],{encoding:'utf8'}).trim();
+const taskBlob=execFileSync('git',['hash-object','docs/tasks/7plus1/7P-LLM-FIRST-SEMANTIC-REBUILD-028-LONG.md'],{encoding:'utf8'}).trim(),manualBlob=execFileSync('git',['hash-object','docs/BoundaryXP-7plus1-定义原理语义编译与边界计算说明-v0.4.md'],{encoding:'utf8'}).trim();
 check('task_manual_r02_blobs',taskBlob==='be8acf6af83b54e0e95b471b2ced3ecb93eeaffd'&&manualBlob==='58db3ddab5327173fd15cfe5d8bd1e6c3f2825ff',{taskBlob,manualBlob});
 const summary={pass:checks.every(c=>c.pass),unit_exit_code:units.status,unit_tests:13,unit_fail:units.status===0?0:null,checks,scope:'program selfchecks + same 13 short texts; no legacy full regression'};
 fs.writeFileSync(path.join(output,'TESTS.json'),JSON.stringify(summary,null,2)+'\n');

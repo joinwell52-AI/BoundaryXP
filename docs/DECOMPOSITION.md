@@ -1,4 +1,4 @@
-# 界痕 · BoundX：任务分解计算使用手册
+# 界痕 · BoundaryXP：任务分解计算使用手册
 
 > 历史／非规范研究或产品规划（legacy / non-normative）。本文中的旧接口、原始结果和未来能力不代表当前产品合同或本轮验证；当前入口以根 README 和产品手册为准。No BXP extraction certification or execution authority is implied.
 

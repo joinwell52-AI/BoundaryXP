@@ -1,7 +1,7 @@
 # 7P-REPAIR-003 — Semantic Graph Closure
 
 **Status:** READY_FOR_CODEX  
-**Repository:** `joinwell52-AI/BoundX`  
+**Repository:** `joinwell52-AI/BoundaryXP`  
 **Branch:** `review/7plus1-parser`  
 **Semantic baseline:** `7ccdcc349aba616e8952fab7755d8ab23c73819e`  
 **Required method ancestor:** `f266f67df770ad5cd65947f29c7dbdc7a7f29bc2`
@@ -12,7 +12,7 @@
 
 1. 当前 HEAD 是 `f266f67df770ad5cd65947f29c7dbdc7a7f29bc2` 的后代；
 2. 当前 HEAD 包含：
-   - `docs/BoundX-7plus1-定义原理语义编译与边界计算说明-v0.3.md`
+   - `docs/BoundaryXP-7plus1-定义原理语义编译与边界计算说明-v0.3.md`
    - 本任务书；
 3. 本任务的语义指标基线来自 `7ccdcc349aba616e8952fab7755d8ab23c73819e`；
 4. 控制文档提交不视为 Parser 语义修改。
@@ -23,7 +23,7 @@
 
 必须先完整阅读：
 
-`docs/BoundX-7plus1-定义原理语义编译与边界计算说明-v0.3.md`
+`docs/BoundaryXP-7plus1-定义原理语义编译与边界计算说明-v0.3.md`
 
 该文档是本任务的规范性方法依据。
 
@@ -40,7 +40,7 @@ Natural Language
 → Correct Canonical 7+1
 ```
 
-本任务不是实现完整 BoundX Solver，不做 Admission、Boundary Formula、Host Enforcement。
+本任务不是实现完整 BoundaryXP Solver，不做 Admission、Boundary Formula、Host Enforcement。
 
 ## 2. 当前正式标准与基线
 

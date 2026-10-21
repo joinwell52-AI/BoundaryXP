@@ -61,7 +61,7 @@ test('ZIP bounded inflation rejects compressed data larger than declared', () =>
 test('ZIP CLI builds without overwrite, imports without activation and validates offline', () => {
   const root = mkdtempSync(join(tmpdir(), 'boundx-zip-cli-'));
   try {
-    const env = { ...process.env, BOUNDX_DATA_DIR: join(root, 'registry'), BOUNDX_TENANT: 'tenant-a' };
+    const env = { ...process.env, BOUNDARYXP_DATA_DIR: join(root, 'registry'), BOUNDARYXP_TENANT: 'tenant-a' };
     const run = args => spawnSync(process.execPath, [join(repository, 'cli.mjs'), 'pack', ...args], { env, encoding: 'utf8' });
     const archive = join(root, 'l1.zip');
     const built = run(['build', join(repository, 'domain-packs/l1/core-ontology'), '--output', archive]);

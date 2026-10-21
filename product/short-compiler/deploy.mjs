@@ -20,12 +20,12 @@ if(operation==='install'||operation==='upgrade'){
  fs.mkdirSync(target,{recursive:true});for(const x of manifest.files){const p=path.join(target,x.path);fs.mkdirSync(path.dirname(p),{recursive:true});fs.copyFileSync(path.join(source,x.path),p,fs.constants.COPYFILE_EXCL);}
  fs.copyFileSync(path.join(source,'PRODUCT-MANIFEST.json'),path.join(target,'PRODUCT-MANIFEST.json'));verify(target);
  const installed=spawnSync(process.platform==='win32'?'npm.cmd':'npm',['ci','--omit=dev','--ignore-scripts',...(args.includes('--offline')?['--offline','--no-audit','--no-fund']:[])],{cwd:target,stdio:'inherit',shell:process.platform==='win32',windowsHide:true});if(installed.status!==0)throw Error('DEPENDENCY_INSTALL_FAILED');
- if(!fs.existsSync(configFile))atomic(configFile,{port:Number(get('--port','58619')),data_dir:path.join(home,'data'),codex_binary:process.env.BOUNDX_CODEX_EXE??null,legacy_dir:null});
+ if(!fs.existsSync(configFile))atomic(configFile,{port:Number(get('--port','58619')),data_dir:path.join(home,'data'),codex_binary:process.env.BOUNDARYXP_CODEX_EXE??null,legacy_dir:null});
  atomic(currentFile,{version:manifest.version,previous:fs.existsSync(currentFile)?read(currentFile).version:null});console.log('INSTALLED '+manifest.version+' at '+home);
 }else if(operation==='rollback'){
  if(!args.includes('--confirmed-idle'))throw Error('ROLLBACK_REQUIRES_CONFIRMED_IDLE');const current=read(currentFile);if(!current.previous)throw Error('NO_PREVIOUS_VERSION');verify(path.join(home,'versions',current.previous));atomic(currentFile,{version:current.previous,previous:current.version});console.log('ROLLED_BACK '+current.previous+'; history preserved without reparse');
 }else if(operation==='start'){
  const current=read(currentFile),root=path.join(home,'versions',current.version),config=read(configFile);verify(root);
- const child=spawn(process.execPath,['product/short-compiler/ui.mjs'],{cwd:root,stdio:'inherit',windowsHide:true,env:{...process.env,BOUNDX_PARSER_PORT:String(config.port),BOUNDX_DATA_DIR:config.data_dir,BOUNDX_CODEX_EXE:config.codex_binary??process.env.BOUNDX_CODEX_EXE,BOUNDX_LEGACY_DIR:config.legacy_dir??process.env.BOUNDX_LEGACY_DIR}});
+ const child=spawn(process.execPath,['product/short-compiler/ui.mjs'],{cwd:root,stdio:'inherit',windowsHide:true,env:{...process.env,BOUNDARYXP_PARSER_PORT:String(config.port),BOUNDARYXP_DATA_DIR:config.data_dir,BOUNDARYXP_CODEX_EXE:config.codex_binary??process.env.BOUNDARYXP_CODEX_EXE,BOUNDARYXP_LEGACY_DIR:config.legacy_dir??process.env.BOUNDARYXP_LEGACY_DIR}});
  console.log('TARGET_PID '+child.pid);process.on('SIGINT',()=>child.kill());child.on('exit',code=>{process.exitCode=code??1;});
 }else throw Error('Usage: node product/short-compiler/deploy.mjs install|upgrade|start|rollback --home ABSOLUTE_PATH [--port 58619] [--confirmed-idle]');

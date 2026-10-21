@@ -1,4 +1,4 @@
-# BoundX 7+1（有限技术接受，不是业务授权）
+# BoundaryXP 7+1（有限技术接受，不是业务授权）
 
 ## I 输入与作用域 — RESOLVED
 - [ACCEPTED] 作用域  组织内容为检查(检查磁盘空间) [POSITIVE;运行值UNKNOWN]；目标=组织检查（bf:f67af450d69e0ed42103）

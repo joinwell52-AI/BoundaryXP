@@ -13,7 +13,7 @@ ADMIN要求下一步继续推进产品。本任务接续031，不另起032解析
 
 ## 1. 基线与边界
 
-仓库：`joinwell52-AI/BoundX`；工作及推送分支：`review/7plus1-parser`。
+仓库：`joinwell52-AI/BoundaryXP`；工作及推送分支：`review/7plus1-parser`。
 唯一核心：`research/7plus1-parser/llm-first-028/`。
 现有产品封装：`product/short-compiler/`；复用原UI和CLI，不另建网站。
 前序产品：`0.1.0-candidate.031.5`；报告所列核心`031-c5`、合同`031-r01`、手册`v0.4/r03`，执行前核对实际清单与字节。

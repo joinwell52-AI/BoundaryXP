@@ -1,4 +1,4 @@
-# BoundX 7+1（有限技术接受，不是业务授权）
+# BoundaryXP 7+1（有限技术接受，不是业务授权）
 
 ## I 输入与作用域 — RESOLVED
 - [ACCEPTED] 检查运行状态：输入/受检对象=worker服务；必须（bf:02a39e14e8684e559839）

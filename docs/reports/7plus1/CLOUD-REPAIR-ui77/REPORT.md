@@ -49,7 +49,7 @@
 
 ## 完整候选与本地命令
 
-[完整候选ZIP](../../../../review-assets/7plus1/cloud-ui77/BoundX-0.1.0-candidate.031-r1.2-ui.77.zip) 共541586字节；SHA-256 `d4e84b44c3f04ab9ee7009f4fd1ad5b1f6b47df3500f01b426e40d904585ddb5`。候选不含node_modules、凭据、个人历史、模型权重或Gold答案；依赖由锁文件安装。清单及摘要见同目录 `DELIVERY-MANIFEST.json` / `SHA256SUMS`。
+[完整候选ZIP](../../../../review-assets/7plus1/cloud-ui77/BoundaryXP-0.1.0-candidate.031-r1.2-ui.77.zip) 共541586字节；SHA-256 `d4e84b44c3f04ab9ee7009f4fd1ad5b1f6b47df3500f01b426e40d904585ddb5`。候选不含node_modules、凭据、个人历史、模型权重或Gold答案；依赖由锁文件安装。清单及摘要见同目录 `DELIVERY-MANIFEST.json` / `SHA256SUMS`。
 
 完整干净签出、构建、安装检查、升级及回滚命令见 [CLOUD-CANDIDATE.md](../../../../product/short-compiler/CLOUD-CANDIDATE.md)。先保护脏的D:\boundx，独立克隆唯一分支并核对ADMIN审阅提交；不要在旧目录pull/reset/clean。完成包验证并在本地核对58618版本、空闲与备份后，才在候选根目录执行：
 

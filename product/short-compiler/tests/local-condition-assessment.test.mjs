@@ -2,7 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import path from 'node:path';
 import {pathToFileURL} from 'node:url';
-const root=path.resolve(process.env.BOUNDX_INPUT_TEST_ROOT??'.boundx/local-condition-repair-r01/work');
+const root=path.resolve(process.env.BOUNDARYXP_INPUT_TEST_ROOT??'.boundx/local-condition-repair-r01/work');
 const {calculateBoundary}=await import(pathToFileURL(path.join(root,'research/7plus1-parser/llm-first-028/calculus.mjs')));
 const sha='b'.repeat(64),sources=[{quote:'Explicit conditional test evidence',span:[0,34],occurrence:1,source_sha256:sha}];
 const fixture=(direction='SUFFICIENT',modality='REQUIRED',kind='CONDITION',op='STATE')=>{

@@ -1,9 +1,9 @@
 ---
 name: boundx-semantic-parse
-description: 将中文、英文或中英混合任务原文编译为带来源的BoundX候选IR：识别义项、身份、模态、作用域、数据使用和条件，供程序生成7+1并计算边界。只解释宿主提供的文本，不执行任务、不替PM规划、不签发符合性结论。
+description: 将中文、英文或中英混合任务原文编译为带来源的BoundaryXP候选IR：识别义项、身份、模态、作用域、数据使用和条件，供程序生成7+1并计算边界。只解释宿主提供的文本，不执行任务、不替PM规划、不签发符合性结论。
 ---
 
-# BoundX：先理解原文，再编码候选IR
+# BoundaryXP：先理解原文，再编码候选IR
 
 接口版本：candidate-ir/1.2。
 规程修订：semantics-first-r02。

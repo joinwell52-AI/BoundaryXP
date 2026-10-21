@@ -5,7 +5,7 @@
 基线：50b9882c7b3e5118e85fb6993ba365d8f054fe0b  
 代码检查点：c91e7ae
 
-授权：[v2任务书](BoundX-ADMIN-task-text-semantic-packs-taskbook-v2.md)、[入口](ADMIN-TEXT-SEMANTIC-PACKS-START-HERE.md)、[120原文](BoundX-ADMIN-task-text-cases-v2.json)、[L2补充要求](ADMIN-TEXT-L2-WP3-ADDENDUM.md)。v1仅保留历史。
+授权：[v2任务书](BoundaryXP-ADMIN-task-text-semantic-packs-taskbook-v2.md)、[入口](ADMIN-TEXT-SEMANTIC-PACKS-START-HERE.md)、[120原文](BoundaryXP-ADMIN-task-text-cases-v2.json)、[L2补充要求](ADMIN-TEXT-L2-WP3-ADDENDUM.md)。v1仅保留历史。
 
 ## 本轮交付 / Delivered Components
 
@@ -38,9 +38,9 @@ docs/tasks/ADMIN-TEXT-L2-LOCAL-DRAFT-ARCHIVE.md
 docs/tasks/ADMIN-TEXT-L2-WP3-ADDENDUM.md
 docs/tasks/ADMIN-TEXT-SEMANTIC-PACKS-START-HERE.md
 docs/tasks/BASELINE-AND-ADOPTION.md
-docs/tasks/BoundX-ADMIN-task-text-cases-v2.json
-docs/tasks/BoundX-ADMIN-task-text-semantic-packs-taskbook-v1.md
-docs/tasks/BoundX-ADMIN-task-text-semantic-packs-taskbook-v2.md
+docs/tasks/BoundaryXP-ADMIN-task-text-cases-v2.json
+docs/tasks/BoundaryXP-ADMIN-task-text-semantic-packs-taskbook-v1.md
+docs/tasks/BoundaryXP-ADMIN-task-text-semantic-packs-taskbook-v2.md
 docs/tasks/L2-MIGRATION.md
 domain-packs/l1/core-ontology/datapackage.json
 domain-packs/l1/core-ontology/ontology.json

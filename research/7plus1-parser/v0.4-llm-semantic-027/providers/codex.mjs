@@ -5,7 +5,7 @@ import {spawn,spawnSync,execFileSync} from 'node:child_process';
 import {save,sha} from '../util.mjs';
 export function executable(){
  let detected=[];try{detected=execFileSync('where.exe',['codex'],{encoding:'utf8'}).split(/\r?\n/u).filter(p=>p.endsWith('.exe'));}catch{}
- const candidates=[process.env.BOUNDX_CODEX_EXECUTABLE,...detected,path.join(process.env.APPDATA??'', 'npm/node_modules/@openai/codex/node_modules/@openai/codex-win32-x64/vendor/x86_64-pc-windows-msvc/bin/codex.exe')].filter(Boolean);
+ const candidates=[process.env.BOUNDARYXP_CODEX_EXECUTABLE,...detected,path.join(process.env.APPDATA??'', 'npm/node_modules/@openai/codex/node_modules/@openai/codex-win32-x64/vendor/x86_64-pc-windows-msvc/bin/codex.exe')].filter(Boolean);
  const found=candidates.find(p=>path.isAbsolute(p)&&p.endsWith('.exe')&&fs.existsSync(p));
  if(!found)throw Error('CODEX_EXECUTABLE_UNAVAILABLE');return found;
 }

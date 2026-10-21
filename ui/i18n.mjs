@@ -24,7 +24,7 @@ const pairs=[
  ['发送一条短连接请求，可能少量计费，不发送任务正文。绿色仅表示本次配置可用，修改配置后需重新测试。','Send a short probe, which may incur a small charge, without the task text. Green confirms this connection attempt only. Retest after changing settings.'],
  ['不连接模型也能使用手动整理和固定示例。订阅聊天服务不等于具备 API 凭据。','Manual mapping and the fixed example work offline. A chat subscription does not provide API credentials.'],
  ['把任务说清楚，把变化看明白。','Clarify the task. Understand what changed.'],
- ['先确认任务边界，再检查 PM 的规划。界痕提供依据和建议，决定仍由你和负责人作出。','Confirm the task boundary, then review the PM plan. BoundX provides evidence and recommendations; you and the accountable owner decide.'],
+ ['先确认任务边界，再检查 PM 的规划。界痕提供依据和建议，决定仍由你和负责人作出。','Confirm the task boundary, then review the PM plan. BoundaryXP provides evidence and recommendations; you and the accountable owner decide.'],
  ['使用步骤','Workflow'],['处理中，请稍候…','Working, please wait…'],['取消请求','Cancel request'],['载入巡检示例','Load inspection example'],['任务原文','Original task'],
  ['把你准备交给 PM 或团队的任务粘贴在这里…','Paste the task you want to give PM or the team…'],
  ['这是任务正文。补充要求请写入正文；模型提取只是候选解释，需你核对。','Add requirements to the task text. Model extraction is a candidate interpretation for you to review.'],
@@ -60,7 +60,7 @@ export function registerPair(zh,en){paired.set(zh+' / '+en,[zh,en]);if(!catalog.
 registerPair('复制完整任务文本','Copy complete task');
 export function selectCopy(zh,en,lang){return lang==='en'?en:zh;}
 const patterns=[
- [/^界痕 · BoundX (.+) · ADMIN 本地计算 · PM 模型试测 · 建议不构成裁决$/,'BoundX $1 · Local ADMIN checks · PM model tests · Advice is not adjudication'],
+ [/^界痕 · BoundaryXP (.+) · ADMIN 本地计算 · PM 模型试测 · 建议不构成裁决$/,'BoundaryXP $1 · Local ADMIN checks · PM model tests · Advice is not adjudication'],
  [/^(.+) 选择了多段原句（(.+)）；当前引用展示从第一段到最后一段的连续原文，也包含中间未选择的文字，请核对。$/,'$1 selected multiple excerpts ($2). The displayed continuous range includes intervening text; review it.'],
  [/^模型服务返回 HTTP (\d+).*$/,'Model service returned HTTP $1. No automatic retry. Check the endpoint, credentials and model ID.'],
  [/^(.+) · ([IOAPRVC])$/,(s,title,key)=>`${translate(title,'en')} · ${key}`],
@@ -73,7 +73,7 @@ const patterns=[
  [/^基线已保存；(\d+) 项映射缺口或提示，未自动补全。可以进入第 2 步。$/,'Baseline saved with $1 observations. Nothing was automatically filled in. Continue to step 2.'],
  [/^相较上一版规划另有 (\d+) 项观察（非新问题计数）$/,'$1 observations against the previous plan (not a count of new issues)'],
  [/^实际返回模型：(.+)；耗时 (\d+) ms。(已补全或规范化接口地址。)?仅表示本次连接可用，不代表任务理解正确。$/,'Returned model: $1; $2 ms. Endpoint checked. This confirms connectivity, not correct task understanding.'],
- [/^界痕 · BoundX (.+) · 本地界面 · 提取由模型辅助，计算不替代业务裁决$/,'BoundX $1 · Local UI · Model-assisted extraction; advisory calculations'],
+ [/^界痕 · BoundaryXP (.+) · 本地界面 · 提取由模型辅助，计算不替代业务裁决$/,'BoundaryXP $1 · Local UI · Model-assisted extraction; advisory calculations'],
 ];
 export function createLocale(initial='zh-CN'){
  let language=initial==='en'?'en':'zh-CN';const bindings=new Map();

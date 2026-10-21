@@ -18,7 +18,7 @@ for(const item of plan){
  if(fs.existsSync(path.join(dir,'run','source.txt'))){results.push({...item,status:'INTERRUPTED',reason:'INCOMPLETE_FIRST_OUTPUT_PRESERVED'});stop=true;continue;}
  fs.mkdirSync(dir,{recursive:true});const start=new Date().toISOString(),args=['research/7plus1-parser/llm-first-028/cli.mjs','--input',path.join(report,'inputs',item.id+'.txt'),'--output',path.join(dir,'run')];
  const launch={...item,status:'RUNNING',started_at:start,args,source_sha256:manifest.cases.find(x=>x.id===item.id).sha256};save(path.join(dir,'launch.json'),launch);console.log('START '+item.group+'/'+item.id+' requests='+countRequests());
- const child=spawn(process.execPath,args,{cwd:root,windowsHide:true,stdio:['ignore','pipe','pipe'],env:{...process.env,BOUNDX_CODEX_EXE:manifest.binary}});
+ const child=spawn(process.execPath,args,{cwd:root,windowsHide:true,stdio:['ignore','pipe','pipe'],env:{...process.env,BOUNDARYXP_CODEX_EXE:manifest.binary}});
  const out=fs.createWriteStream(path.join(dir,'cli-stdout.txt'),{flags:'wx'}),err=fs.createWriteStream(path.join(dir,'cli-stderr.txt'),{flags:'wx'});child.stdout.pipe(out);child.stderr.pipe(err);
  const timer=setInterval(()=>{const req=walk(path.join(dir,'run')).filter(p=>/request-\d+\.json$/.test(p)).at(-1);console.log('RUNNING '+item.group+'/'+item.id+' elapsed_s='+Math.round((Date.now()-Date.parse(start))/1000)+' requests='+countRequests()+' latest='+(req?path.relative(dir,req).replaceAll('\\','/'):'preparation'));},30000);
  const ended=await new Promise(resolve=>{child.on('error',e=>resolve({exit_code:null,error:e.message}));child.on('close',code=>resolve({exit_code:code,error:null}));});clearInterval(timer);await Promise.all([new Promise(r=>out.close(r)),new Promise(r=>err.close(r))]);

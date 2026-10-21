@@ -41,7 +41,7 @@ test('product CLI, MCP and guarded HTTP preserve identical tasks, results and th
     const preparePath = join(root, 'prepare.json'), candidatePath = join(root, 'candidate.json');
     writeFileSync(preparePath, JSON.stringify(prepared));
     writeFileSync(candidatePath, JSON.stringify(candidate));
-    const env = { ...process.env, BOUNDX_DATA_DIR: root, BOUNDX_TENANT: 'tenant-a', BOUNDX_ALLOW_L3_DISCLOSURE: '0' };
+    const env = { ...process.env, BOUNDARYXP_DATA_DIR: root, BOUNDARYXP_TENANT: 'tenant-a', BOUNDARYXP_ALLOW_L3_DISCLOSURE: '0' };
     const cli = spawnSync(process.execPath, [join(repository, 'cli.mjs'), 'evaluate-candidate', preparePath, candidatePath], { env, encoding: 'utf8' });
     assert.equal(cli.status, 0, cli.stderr);
     assert.deepEqual(JSON.parse(cli.stdout), expected);

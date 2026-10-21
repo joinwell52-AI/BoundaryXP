@@ -7,10 +7,10 @@ import { assert, parseProductJson, packReference, prepareSchema } from './contra
 import { initializeDefaultL1 } from './defaults.mjs';
 
 export function createProductHost(options = {}) {
-  const registry = new PackRegistry(options.root ?? process.env.BOUNDX_DATA_DIR ?? fileURLToPath(new URL('../../.boundx', import.meta.url)),
-    options.tenant ?? process.env.BOUNDX_TENANT ?? 'local');
+  const registry = new PackRegistry(options.root ?? process.env.BOUNDARYXP_DATA_DIR ?? fileURLToPath(new URL('../../.boundx', import.meta.url)),
+    options.tenant ?? process.env.BOUNDARYXP_TENANT ?? 'local');
   if (options.initializeDefaults !== false) initializeDefaultL1(registry);
-  const service = new ProducerService(registry, { allowDirectoryDisclosure: options.allowDirectoryDisclosure ?? process.env.BOUNDX_ALLOW_L3_DISCLOSURE === '1' });
+  const service = new ProducerService(registry, { allowDirectoryDisclosure: options.allowDirectoryDisclosure ?? process.env.BOUNDARYXP_ALLOW_L3_DISCLOSURE === '1' });
   return { registry, service,
     invoke(name, input = {}) {
       input = parseProductJson(JSON.stringify(input));

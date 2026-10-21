@@ -1,4 +1,4 @@
-# BoundX Real Gold 生成执行方法（SOP）
+# BoundaryXP Real Gold 生成执行方法（SOP）
 
 - 文档名：`GOLD-GENERATION-SOP.md`
 - 版本：`v0.1.1`
@@ -13,7 +13,7 @@
 
 # 1. 目的
 
-本 SOP 规定如何把一份真实 TASK 文件，按统一、可追溯、可重放的方法生成一个 BoundX Real Gold Case。
+本 SOP 规定如何把一份真实 TASK 文件，按统一、可追溯、可重放的方法生成一个 BoundaryXP Real Gold Case。
 
 本 SOP 不定义 Gold 的语义标准本身；语义正确性、7+1 含义、Boundary State、Admission 等判定规则，以：
 

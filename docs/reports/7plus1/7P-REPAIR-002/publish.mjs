@@ -18,7 +18,7 @@ const oldNames=new Set(git(['ls-tree','-r','--name-only',base]).split('\n'));if(
 const index='.git/index',originalIndex=sha(index),workingHead=git(['rev-parse','HEAD']),env={...process.env,GIT_INDEX_FILE:path.join(root,'.git/7P-REPAIR-002.index')};if(fs.existsSync(env.GIT_INDEX_FILE))throw Error('INDEX_EXISTS');
 git(['read-tree',base],{env});const oids=git(['hash-object','-w','--no-filters','--stdin-paths'],{input:files.map(p=>JSON.stringify(p)).join('\n')+'\n'}).split('\n');git(['update-index','-z','--index-info'],{env,input:files.map((p,i)=>'100644 '+oids[i]+'\t'+p+'\0').join('')});
 const staged=git(['diff','--cached','--name-only',base],{env}).split('\n');if(staged.length!==files.length||staged.some(p=>!files.includes(p)))throw Error('UNAUTHORIZED_DIFF');if(git(['diff','--cached','--diff-filter=MDR','--name-only',base],{env}))throw Error('OLD_FILE_CHANGED');
-const privacy=spawnSync('gh',['repo','view','joinwell52-AI/BoundX','--json','isPrivate'],{encoding:'utf8'});if(privacy.status!==0||!JSON.parse(privacy.stdout).isPrivate)throw Error('REPO_NOT_PRIVATE');
+const privacy=spawnSync('gh',['repo','view','joinwell52-AI/BoundaryXP','--json','isPrivate'],{encoding:'utf8'});if(privacy.status!==0||!JSON.parse(privacy.stdout).isPrivate)throw Error('REPO_NOT_PRIVATE');
 const tree=git(['write-tree'],{env}),commit=git(['commit-tree',tree,'-p',base],{input:'7P-REPAIR-002: recover artifact roles, references, table propositions, completion and output ownership\n'});
 for(let i=0;i<files.length;i++)if(git(['rev-parse',commit+':'+files[i]])!==oids[i])throw Error('COMMIT_BLOB_MISMATCH');
 if(git(['rev-parse','HEAD'])!==workingHead||sha(index)!==originalIndex)throw Error('WORKTREE_INDEX_CHANGED');git(['update-ref',ref,commit,base]);

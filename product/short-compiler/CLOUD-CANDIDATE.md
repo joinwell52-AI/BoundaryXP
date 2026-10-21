@@ -57,7 +57,7 @@ UI 可填写实际状态、身份、角色、时点和材料使用；通过已�
 先保护 `D:\boundx` 的 202 项历史未提交改动，不在该目录 pull/reset/clean。用独立干净目录取得 ADMIN 审阅的提交：
 
 ```bat
-git clone --single-branch --branch review/7plus1-parser https://github.com/joinwell52-AI/BoundX.git D:\boundx-cloud-ui77
+git clone --single-branch --branch review/7plus1-parser https://github.com/joinwell52-AI/BoundaryXP.git D:\boundx-cloud-ui77
 cd /d D:\boundx-cloud-ui77
 git branch --show-current
 git rev-parse HEAD

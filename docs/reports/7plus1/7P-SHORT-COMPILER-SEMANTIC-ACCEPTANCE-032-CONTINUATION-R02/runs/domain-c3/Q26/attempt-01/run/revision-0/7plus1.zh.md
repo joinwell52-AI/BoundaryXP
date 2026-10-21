@@ -1,4 +1,4 @@
-# BoundX 7+1（有限技术接受，不是业务授权）
+# BoundaryXP 7+1（有限技术接受，不是业务授权）
 
 ## I 输入与作用域 — PARSER_COVERAGE_FAILURE
 - [REJECTED] 检查：输入/受检对象=测试机；必须；对象范围=有限枚举{测试机A,测试机C}（bf:bc915c308d591a5fdc4a）

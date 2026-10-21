@@ -1,4 +1,4 @@
-# BoundX：统一IR计算内核代码实施计划
+# BoundaryXP：统一IR计算内核代码实施计划
 
 版本：v1.0  
 日期：2026-10-13  
@@ -38,7 +38,7 @@
 - `research/7plus1-parser/llm-first-028/direct-ir-engine.mjs`：已有补丁不改变IR时保留旧审阅的分支，以及修改后重审流程。
 - `src/bxp/joint-boundary-solver.mjs`：已有有限布尔/区间/次序联合求解及见证核验。
 
-001、002、004历史Trace是冻结回放材料；其中ui78/ui80/ui81的失败不能直接当作上述提交或当前本地仍未修好的事实。当前本地HEAD、未提交改动、58618安装和监听状态必须由开发Codex在WP0核对。本轮没有访问用户的Windows本地环境，没有执行完整BoundX测试，没有修改仓库。
+001、002、004历史Trace是冻结回放材料；其中ui78/ui80/ui81的失败不能直接当作上述提交或当前本地仍未修好的事实。当前本地HEAD、未提交改动、58618安装和监听状态必须由开发Codex在WP0核对。本轮没有访问用户的Windows本地环境，没有执行完整BoundaryXP测试，没有修改仓库。
 
 ## 1. 第一版承诺范围
 
@@ -59,7 +59,7 @@
 
 Z3引入在隔离候选中完成。现有求解器保留为旧接口兼容及它实际支持片段内的差分对照，不继续用不断扩大手写全赋值枚举来承接新组合。小范围枚举仍适合作为测试参考，不作为完整生产算法承诺。
 
-Z3只解决编译给它的公式；它不会替BoundX识别调用域、恢复漏掉的禁止或判断自然语言。若其Node包在本地不兼容，应报告具体环境失败；不得擅自改用云端、绕过隔离或回退成静默不完整算法。
+Z3只解决编译给它的公式；它不会替BoundaryXP识别调用域、恢复漏掉的禁止或判断自然语言。若其Node包在本地不兼容，应报告具体环境失败；不得擅自改用云端、绕过隔离或回退成静默不完整算法。
 
 ### 1.3 计算能力按查询划分
 
@@ -421,9 +421,9 @@ REPORT.md / SHA256SUMS.txt
 
 固定源码参考：
 
-- https://github.com/joinwell52-AI/BoundX/tree/e30a6611990077edd5d8c950ca0516d0cb6c4d3c
+- https://github.com/joinwell52-AI/BoundaryXP/tree/e30a6611990077edd5d8c950ca0516d0cb6c4d3c
 - 该提交下 `package.json`、`src/bxp/joint-boundary-solver.mjs`、`research/7plus1-parser/llm-first-028/` 内上述模块。
-- 会话交付 `BoundX-004-Skill-Comparison/COMPARISON.zh-CN.md`；两份004 Trace为236200aa…与78f9e4b0…。001/002记录只作对应历史版本回放。
+- 会话交付 `BoundaryXP-004-Skill-Comparison/COMPARISON.zh-CN.md`；两份004 Trace为236200aa…与78f9e4b0…。001/002记录只作对应历史版本回放。
 
 外部实现参考（2026-10-13查阅，实际集成须锁定版本）：
 

@@ -42,7 +42,7 @@ NATURAL_GENERALIZATION_025_LONG=ADMIN_BLOCKED
 ## 0. Repository / Branch / Baseline
 
 Repository:
-joinwell52-AI/BoundX
+joinwell52-AI/BoundaryXP
 
 Branch:
 review/7plus1-parser
@@ -66,9 +66,9 @@ Create a new immutable 025 implementation/research root following repository con
 
 Read in full before coding:
 
-docs/BoundX-7plus1-定义原理语义编译与边界计算说明-v0.3.1.md
+docs/BoundaryXP-7plus1-定义原理语义编译与边界计算说明-v0.3.1.md
 
-docs/BoundX-7plus1-ADMIN-ROOT-BENCHMARK-CONTRACT-v1.md
+docs/BoundaryXP-7plus1-ADMIN-ROOT-BENCHMARK-CONTRACT-v1.md
 
 docs/tasks/7plus1/7P-ADMIN-ROOT-COMPILER-CLOSURE-024-LONG.md
 
@@ -146,7 +146,7 @@ It is a semantic-generalization task.
 
 ## 3. Final objective
 
-Make BoundX robustly compile natural ADMIN Root task language into the correct candidate semantic graph and conservative 7+1 boundary result across paraphrase, clause variation, role variation, modality, condition, quantity, reference, coreference, English and mixed-language input.
+Make BoundaryXP robustly compile natural ADMIN Root task language into the correct candidate semantic graph and conservative 7+1 boundary result across paraphrase, clause variation, role variation, modality, condition, quantity, reference, coreference, English and mixed-language input.
 
 025 must first close the already exposed Natural-100 development corpus, then prove that the resulting mechanisms survive a new post-freeze generated holdout without post-observation tuning.
 
@@ -652,7 +652,7 @@ After all development gates pass:
 
 ~~~
 SHA256(
-  "BOUNDX-025-BLIND-200"
+  "BOUNDARYXP-025-BLIND-200"
   + implementation_freeze_sha256
   + generator_sha256
 )
@@ -954,7 +954,7 @@ L. no parser modification after Blind-200 observation
 M. no merge / release / tag / production switch
 ~~~
 
-PASS means BoundX has strong evidence of semantic generalization across the tested ADMIN Root language families.
+PASS means BoundaryXP has strong evidence of semantic generalization across the tested ADMIN Root language families.
 
 PASS does not mean all human natural language solved, production ready, or all domains solved.
 
@@ -999,7 +999,7 @@ Do not change npm production scripts to 025.
 Do not merge to main.
 Do not tag.
 Do not release.
-Do not claim BOUNDX_PRODUCTION_READY=true.
+Do not claim BOUNDARYXP_PRODUCTION_READY=true.
 
 025 is semantic generalization validation.
 

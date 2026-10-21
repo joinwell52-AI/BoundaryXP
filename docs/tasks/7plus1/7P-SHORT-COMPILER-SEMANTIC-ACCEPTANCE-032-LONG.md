@@ -11,7 +11,7 @@
 
 ## 1. 基线、保护和明确不做的事
 
-- 仓库：joinwell52-AI/BoundX；开发及推送分支：review/7plus1-parser；本地根以实际仓库核实，历史为D:\boundx。
+- 仓库：joinwell52-AI/BoundaryXP；开发及推送分支：review/7plus1-parser；本地根以实际仓库核实，历史为D:\boundx。
 - 唯一编译核心：research/7plus1-parser/llm-first-028/。现有产品封装：product/short-compiler/。继续完善，不复制032解析器、第二UI或新工作流。
 - 已安装用户候选：0.1.0-candidate.031-r1.2 / 031-r1-c3 / 合同031-r1.1；固定入口127.0.0.1:58618。恢复报告提交9b437d7f3066774711892856a1bcdf4006508143，维护5 PASS、0模型调用。恢复已完成，不重新执行历史恢复方案；PID和在线状态必须本机重新核实。
 - 语义开发基线：Q05结构修复提交3c878d6132ac3beb6bcd15d28c0d5a4287544c61，源码冻结445e6c44256a9aaa6be13cb7439ce4ce6a716d32；合同031-r1-q05.1。该包未安装，不与58618混为同版。

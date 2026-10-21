@@ -4,9 +4,9 @@
 
 - TASK: `7P-REPAIR-007`
 - START_HEAD: `d2de84a97c415d02b9f2087afedbff4276a69287`
-- Repository: `joinwell52-AI/BoundX`
+- Repository: `joinwell52-AI/BoundaryXP`
 - Branch: `review/7plus1-parser`
-- Normative method: `docs/BoundX-7plus1-定义原理语义编译与边界计算说明-v0.3.md`
+- Normative method: `docs/BoundaryXP-7plus1-定义原理语义编译与边界计算说明-v0.3.md`
 - Previous task: `7P-REPAIR-006` — Frame Certification landed; component semantic MATCH increased, while `STANDARD_PARSED=0/9`
 - `PRODUCTION_READY=false`
 
@@ -14,7 +14,7 @@ Read in full before coding:
 
 1. `docs/tasks/7plus1/CURRENT-TASK.md`
 2. this taskbook
-3. `docs/BoundX-7plus1-定义原理语义编译与边界计算说明-v0.3.md`
+3. `docs/BoundaryXP-7plus1-定义原理语义编译与边界计算说明-v0.3.md`
 4. `docs/reports/7plus1/7P-REPAIR-006/REPORT.md`
 5. `docs/reports/7plus1/7P-REPAIR-006/FIRST-DIVERGENCE.json`
 6. `docs/reports/7plus1/7P-REPAIR-006/BEFORE-AFTER.json`

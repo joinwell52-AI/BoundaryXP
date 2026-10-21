@@ -3,7 +3,7 @@ import {existsSync} from 'node:fs';
 import {fileURLToPath} from 'node:url';
 import {checkAdminText} from './ui/admin-check.mjs';
 const local=fileURLToPath(new URL(process.platform==='win32'?'./.venv/Scripts/python.exe':'./.venv/bin/python',import.meta.url));
-export function calculateWithLibraries(text,{signal,python=process.env.BOUNDX_PYTHON||(existsSync(local)?local:'python'),timeoutMs=10000}={}){
+export function calculateWithLibraries(text,{signal,python=process.env.BOUNDARYXP_PYTHON||(existsSync(local)?local:'python'),timeoutMs=10000}={}){
  if(typeof text!=='string'||!text.trim()||text.length>100000)return Promise.reject(Error('请提供 1 至 100000 字符的任务。 / Provide 1–100000 characters.'));
  if(signal?.aborted)return Promise.reject(new DOMException('Cancelled','AbortError'));
  const statements=checkAdminText(text).structure.statements;

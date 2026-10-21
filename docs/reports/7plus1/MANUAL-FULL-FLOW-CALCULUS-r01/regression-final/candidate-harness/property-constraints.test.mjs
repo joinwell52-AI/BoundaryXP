@@ -1,6 +1,6 @@
 import test from 'node:test';import assert from 'node:assert/strict';import path from 'node:path';import {pathToFileURL} from 'node:url';
 import fs from 'node:fs';import os from 'node:os';import {randomUUID} from 'node:crypto';
-const root=path.resolve(process.env.BOUNDX_SEMANTIC_TEST_ROOT??'.boundx/semantic-closure-r02-work'),load=p=>import(pathToFileURL(path.join(root,'research/7plus1-parser/llm-first-028',p)));
+const root=path.resolve(process.env.BOUNDARYXP_SEMANTIC_TEST_ROOT??'.boundx/semantic-closure-r02-work'),load=p=>import(pathToFileURL(path.join(root,'research/7plus1-parser/llm-first-028',p)));
 const {evaluatePropertyTest,propertyTestErrors}=await load('property-tests.mjs'),{technicalValidate}=await load('validate.mjs'),{prepareSource}=await load('source.mjs'),{compileBoundary,evaluateExpression}=await load('compile.mjs'),{calculateBoundary}=await load('calculus.mjs'),{encodeProposal,decodeProposal,encodeAudit,decodeAudit}=await load('compact-wire.mjs'),{normalizeIdentity}=await load('identity.mjs');
 const text='Build a checker in output.js. Its mode must equal manual. If required items are empty it must reject the request. This describes the checker, not a command to reject the current task.';
 const sources=[{quote:text,occurrence:1}],source=prepareSource(Buffer.from(text));

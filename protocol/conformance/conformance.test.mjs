@@ -91,7 +91,7 @@ test('every frozen result is exact, deterministic and non-adjudicative', () => {
 });
 
 test('source digest is SHA-256 over the exact UTF-8 source text', () => {
-  const text = '界痕 BoundX 🧭';
+  const text = '界痕 BoundaryXP 🧭';
   const expected = createHash('sha256').update(text, 'utf8').digest('hex');
   assert.equal(sourceDigest(text), expected);
   const result = evaluateTask(suite.cases[0].task);
@@ -178,8 +178,8 @@ test('checked-in protocol assets are strict UTF-8 without replacement or NUL cha
     '../IPR.md',
     '../TRADEMARKS.md',
     '../PROVENANCE.md',
-    '../../docs/BOUNDX-LIGHTWEIGHT-PRODUCT-PLAN.md',
-    '../../docs/BOUNDX-PRODUCT-MANUAL.md',
+    '../../docs/BOUNDARYXP-LIGHTWEIGHT-PRODUCT-PLAN.md',
+    '../../docs/BOUNDARYXP-PRODUCT-MANUAL.md',
     '../schemas/boundx-task-v1.schema.json',
     '../schemas/boundx-result-v1.schema.json',
     '../schemas/boundx-calc-conformance-suite-v1.schema.json',
@@ -219,7 +219,7 @@ test('provenance manifest reproduces every asset and the ordered case-ID digest'
 });
 
 test('lightweight product plan remains complete and non-operative', () => {
-  const decision = readFileSync(new URL('../../docs/BOUNDX-LIGHTWEIGHT-PRODUCT-PLAN.md', here), 'utf8');
+  const decision = readFileSync(new URL('../../docs/BOUNDARYXP-LIGHTWEIGHT-PRODUCT-PLAN.md', here), 'utf8');
   assert.match(decision, /文档编号：`BX-PRODUCT-PLAN-001`/);
   assert.match(decision, /状态：`DRAFT_FOR_REVIEW`/);
   assert.match(decision, /公开授权：`false`/);
@@ -238,7 +238,7 @@ test('lightweight product plan remains complete and non-operative', () => {
 });
 
 test('product manual separates current capability from deployment-neutral targets', () => {
-  const manual = readFileSync(new URL('../../docs/BOUNDX-PRODUCT-MANUAL.md', here), 'utf8');
+  const manual = readFileSync(new URL('../../docs/BOUNDARYXP-PRODUCT-MANUAL.md', here), 'utf8');
   assert.match(manual, /文档编号：`BX-PRODUCT-MANUAL-001`/);
   assert.match(manual, /可嵌入、可服务化的任务边界预检引擎/);
   assert.match(manual, /Python \/ PyPI/);
@@ -250,13 +250,13 @@ test('product manual separates current capability from deployment-neutral target
   assert.match(manual, /当前只允许 localhost/);
   assert.match(manual, /独立开源仓库/);
   assert.match(manual, /`AGPL-3\.0-only`/);
-  assert.match(manual, /私有仓库 `joinwell52-AI\/BoundX`/);
+  assert.match(manual, /私有仓库 `joinwell52-AI\/BoundaryXP`/);
   assert.match(manual, /208 条/);
   assert.match(manual, /\[验证说明\]\(VALIDATION\.md\)/);
   assert.doesNotMatch(manual, /codeflowmu|PR #35|待拆仓|迁移经过/i);
-  assert.match(manual, /BoundX Core/);
-  assert.match(manual, /BoundX Packs/);
-  assert.match(manual, /BoundX FDE/);
+  assert.match(manual, /BoundaryXP Core/);
+  assert.match(manual, /BoundaryXP Packs/);
+  assert.match(manual, /BoundaryXP FDE/);
   assert.match(manual, /business_decision/);
   assert.match(manual, /execution_authorization/);
   assert.match(manual, /publication_authorized: false/);

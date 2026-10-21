@@ -1,15 +1,15 @@
 # 7P-HYBRID-015 — Controlled Upstream Semantic Proposal Experiment
 
 ## Identity
-- Repository: `joinwell52-AI/BoundX`
+- Repository: `joinwell52-AI/BoundaryXP`
 - Branch: `review/7plus1-parser`
 - Start from sealed `7P-COMPOSITION-014` at `f03d09a099f06a4da2786a3c8e9dcd9fdb50dd37`
 - Previous verdict: `SYSTEMIC_REPAIR_INSUFFICIENT`
-- Normative method: `docs/BoundX-7plus1-定义原理语义编译与边界计算说明-v0.3.md`
+- Normative method: `docs/BoundaryXP-7plus1-定义原理语义编译与边界计算说明-v0.3.md`
 - Comparison contract: `fixtures/7plus1/standard-contract/v0.3-admin-20261002/`
 - PRODUCTION_READY=false
 
-This is a shadow experiment **inside the BoundX 7+1 Parser**. The product under test remains the parser whose output is Canonical 7+1. The deterministic R1–R4 parser remains the control. Do not add more phrase/rule repair.
+This is a shadow experiment **inside the BoundaryXP 7+1 Parser**. The product under test remains the parser whose output is Canonical 7+1. The deterministic R1–R4 parser remains the control. Do not add more phrase/rule repair.
 
 ## ADMIN stage correction — short single-WP first
 
@@ -68,7 +68,7 @@ If the frozen short-task benchmark shows no material end-to-end improvement afte
 If the proposed upstream model lane cannot improve complete short-task 7+1 closure while safety remains intact, report the appropriate insufficient outcome instead of expanding scope.
 
 ## Model boundary
-Use only model resources already installed and already used by BoundX:
+Use only model resources already installed and already used by BoundaryXP:
 - bge-m3
 - multilingual-e5-large
 - current mDeBERTa NLI resource

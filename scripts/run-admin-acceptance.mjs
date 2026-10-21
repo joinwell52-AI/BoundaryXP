@@ -14,7 +14,7 @@ import { summarizeRepeats } from '../src/product/repeat-audit.mjs';
 
 const repository = fileURLToPath(new URL('../', import.meta.url));
 export function loadAcceptancePlan() {
-  const corpus = parseProductJson(readFileSync(join(repository, 'docs/tasks/BoundX-ADMIN-task-text-cases-v2.json')));
+  const corpus = parseProductJson(readFileSync(join(repository, 'docs/tasks/BoundaryXP-ADMIN-task-text-cases-v2.json')));
   const index = parseProductJson(readFileSync(join(repository, 'fixtures/admin-text/review-index.json')));
   return acceptancePlan(corpus, index);
 }
@@ -30,15 +30,15 @@ export function acceptanceOptions(args, env) {
   if (!values['--execute'] || !values['--authorize-synthetic-data'] || !/^(?:[1-9]|[1-9][0-9]|1[0-4][0-9]|150)$/.test(values['--max-runs'] ?? '')) throw Error('Execution requires explicit synthetic-data authorization and --max-runs 1..150.');
   const startAt = values['--start-at'] ?? '1';
   if (!/^(?:[1-9]|[1-9][0-9]|1[0-4][0-9]|150)$/.test(startAt) || Number(startAt) + Number(values['--max-runs']) > 151) throw Error('Requested segment exceeds the fixed schedule.');
-  const provider = env.BOUNDX_MODEL_PROVIDER;
-  const model = env.BOUNDX_MODEL_ID ?? (provider === 'cursor' ? env.CURSOR_DEFAULT_MODEL : undefined);
-  const key = provider === 'codex' ? '' : provider === 'cursor' ? env.CURSOR_API_KEY : env.BOUNDX_MODEL_API_KEY;
+  const provider = env.BOUNDARYXP_MODEL_PROVIDER;
+  const model = env.BOUNDARYXP_MODEL_ID ?? (provider === 'cursor' ? env.CURSOR_DEFAULT_MODEL : undefined);
+  const key = provider === 'codex' ? '' : provider === 'cursor' ? env.CURSOR_API_KEY : env.BOUNDARYXP_MODEL_API_KEY;
   if (!['api', 'cursor', 'codex'].includes(provider) || typeof model !== 'string' || !model.trim() || model.length > 256
     || (provider !== 'codex' && (typeof key !== 'string' || key.trim().length < 16 || key.length > 16384))) throw Error('Configure provider, model and valid local authentication before execution.');
   const config = { provider, model, key };
   if (provider === 'api') {
-    config.protocol = env.BOUNDX_MODEL_PROTOCOL;
-    config.url = resolveEndpoint(env.BOUNDX_MODEL_URL, config.protocol).url;
+    config.protocol = env.BOUNDARYXP_MODEL_PROTOCOL;
+    config.url = resolveEndpoint(env.BOUNDARYXP_MODEL_URL, config.protocol).url;
   }
   return { execute: true, authorizedSyntheticData: true, maxRuns: Number(values['--max-runs']), startAt: Number(startAt), config };
 }

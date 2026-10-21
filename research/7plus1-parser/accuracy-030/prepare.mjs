@@ -6,7 +6,7 @@ const hash=b=>createHash('sha256').update(b).digest('hex'),read=p=>JSON.parse(fs
 if(fs.existsSync(path.join(report,'RUN-MANIFEST.json')))throw Error('PREDECLARATION_ALREADY_FROZEN');
 const baseline='ca86e87ea5b07ca770948e5e1231ae9972542ff5',old=path.join(root,'docs/reports/7plus1/7P-SHORT-COMPILER-DELIVERY-029-LONG/METHOD-FROZEN-FULL.json'),inventory=runtimeInventory();
 assert.deepEqual(inventory,read(old).resources);
-const paths=[...inventory.map(x=>'research/7plus1-parser/llm-first-028/'+x.path),'package.json','research/7plus1-parser/v0.3-p2.1-generalization/server.mjs',...['index.html','native-app.js','style.css'].map(x=>'research/7plus1-parser/v0.3-p2.1-generalization/web/'+x),'docs/BoundX-7plus1-定义原理语义编译与边界计算说明-v0.4.md'];
+const paths=[...inventory.map(x=>'research/7plus1-parser/llm-first-028/'+x.path),'package.json','research/7plus1-parser/v0.3-p2.1-generalization/server.mjs',...['index.html','native-app.js','style.css'].map(x=>'research/7plus1-parser/v0.3-p2.1-generalization/web/'+x),'docs/BoundaryXP-7plus1-定义原理语义编译与边界计算说明-v0.4.md'];
 const resources=paths.map(p=>{const b=fs.readFileSync(path.join(root,p)),git=execFileSync('git',['show',baseline+':'+p],{cwd:root,maxBuffer:10000000});assert.equal(hash(b),hash(git),p);return {path:p,sha256:hash(b)};});
 const binary=read(path.join(root,'docs/reports/7plus1/7P-SHORT-COMPILER-DELIVERY-029-LONG/browser/S00/run/environment.json')).binary,probe=probeCodex(binary);assert.equal(probe.binary_sha256,'3b8f6e33caa75f232558a3cf76ff9b87bb5ef6dbcf4996372f24e55c78b1b916');
 const taskPath='docs/tasks/7plus1/7P-SHORT-COMPILER-ACCURACY-030.md',task=fs.readFileSync(path.join(root,taskPath),'utf8');

@@ -1,4 +1,4 @@
-# BoundX 7+1（有限技术接受，不是业务授权）
+# BoundaryXP 7+1（有限技术接受，不是业务授权）
 
 ## I 输入与作用域 — RESOLVED
 - [ACCEPTED] 提交：输入/受检对象=r.md；允许；必要前提 之后 AND(已批准(QA) [POSITIVE;运行值UNKNOWN],检查通过() [POSITIVE;运行值UNKNOWN])（bf:318850dec2d1fd0a3ad2）

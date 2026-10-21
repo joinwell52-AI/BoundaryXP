@@ -1,5 +1,5 @@
 import test from 'node:test';import assert from 'node:assert/strict';import fs from 'node:fs';import path from 'node:path';import {pathToFileURL} from 'node:url';
-const root=path.resolve(process.env.BOUNDX_INPUT_TEST_ROOT??'.boundx/local-condition-repair-r02/work');
+const root=path.resolve(process.env.BOUNDARYXP_INPUT_TEST_ROOT??'.boundx/local-condition-repair-r02/work');
 const trace=JSON.parse(fs.readFileSync('docs/reports/7plus1/LOCAL-CONDITION-REPAIR-r01/live-V01-attempt-01/trace.json'));
 class Element{constructor(tag){this.tag=tag;this.children=[];this.dataset={};this.value='';}append(...xs){this.children.push(...xs);}replaceChildren(...xs){this.children=xs;}set textContent(x){this.text=x;}get textContent(){return this.text??'';}}
 const walk=e=>[e,...(e.children??[]).filter(x=>typeof x==='object').flatMap(walk)];

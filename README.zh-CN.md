@@ -2,29 +2,31 @@
 
 <p align="center">
   <picture>
-    <source media="(prefers-color-scheme: dark)" srcset="assets/branding/v1/BoundX_Logo_CN_JieHen_white.png">
-    <source media="(prefers-color-scheme: light)" srcset="assets/branding/v1/BoundX_Logo_CN_JieHen_transparent.png">
-    <img src="assets/branding/v1/BoundX_Logo_CN_JieHen_transparent.png" alt="界痕" width="420">
+    <source media="(prefers-color-scheme: dark)" srcset="assets/branding/v2/BoundaryXP-logo-dark.png">
+    <source media="(prefers-color-scheme: light)" srcset="assets/branding/v2/BoundaryXP-logo-light.png">
+    <img src="assets/branding/v2/BoundaryXP-logo-light.png" alt="BoundaryXP" width="620">
   </picture>
 </p>
 
-<p align="center"><a href="https://github.com/joinwell52-AI/BoundX/tree/main">仓库文件列表</a> · <a href="#文档列表">文档列表</a> · <a href="#仓库文件与目录">目录索引</a> · <a href="#品牌资产">Logo与品牌资产</a></p>
+<p align="center"><a href="https://github.com/joinwell52-AI/BoundaryXP/tree/main">仓库文件列表</a> · <a href="#文档列表">文档列表</a> · <a href="#仓库文件与目录">目录索引</a> · <a href="#品牌资产">Logo与品牌资产</a></p>
 
-# 界痕 · BoundX
+# 界痕 · BoundaryXP
+
+> **2026-10-21：BoundaryXP 品牌已更新到 58618，当前为 ui222。** 仓库名称、文档、归档文件、包名和 Logo 已统一更新。运行 `npm run 7plus1:build-candidate` 可重建 408 文件安装包。见[改名与验证记录](docs/workbench/BOUNDARYXP-REBRAND.md)。
 
 **把ADMIN的任务边界变成可计算对象。执行之前，先把任务边界算清楚。**
 
-[快速开始](QUICKSTART.md) · [产品手册](docs/BOUNDX-PRODUCT-MANUAL.md) · [7+1方法](docs/BoundX-7plus1-定义原理语义编译与边界计算说明-v0.4.md) · [当前状态](docs/SHORT-COMPILER-STATUS.md) · [文档导航](docs/README.md)
+[快速开始](QUICKSTART.md) · [产品手册](docs/BOUNDARYXP-PRODUCT-MANUAL.md) · [7+1方法](docs/BoundaryXP-7plus1-定义原理语义编译与边界计算说明-v0.4.md) · [当前状态](docs/SHORT-COMPILER-STATUS.md) · [文档导航](docs/README.md)
 
 > **2026-10-21更新：本次合并纳入本机58618运行的ui220候选源码。** 包括7+1生成和数学解析资源、确定性计算器、公式展示及新版企业A语义库。运行`npm run 7plus1:build-candidate`可重建同一404文件运行包，详见[ui220同步与验证](docs/workbench/UI220-SYNC.md)。主产品版本仍为`1.3.0-preview.0`。下文旧候选说明和成绩保留为历史资料，不代表ui220语义验收。
 
-## BoundX是什么？
+## BoundaryXP是什么？
 
-BoundX是BXP（边界分析协议）的产品实现，将自然语言任务中的对象、动作、角色、条件、数量与禁止关系转换为可追溯的7+1，再用于形式化边界计算和下游符合性核查。
+BoundaryXP是BXP（边界分析协议）的产品实现，将自然语言任务中的对象、动作、角色、条件、数量与禁止关系转换为可追溯的7+1，再用于形式化边界计算和下游符合性核查。
 
 **当前第一优先级是把7+1解析正确。** 安装包、绿色页面、合法JSON、模型自审和工程测试通过都不能替代语义准确性。完整产品终点也不止八组文字：正确的7+1必须成为程序可计算的边界结构。
 
-BoundX不替ADMIN决定授权范围，不替PM规划，不执行任务中提及的业务操作。边界使用准入不等于业务裁决或执行授权。
+BoundaryXP不替ADMIN决定授权范围，不替PM规划，不执行任务中提及的业务操作。边界使用准入不等于业务裁决或执行授权。
 
 ## 当前候选主链：LLM理解，程序保真编译
 
@@ -39,7 +41,7 @@ ADMIN短任务原文
 
 两个Skill实际以同源`INLINE_BUNDLE`进入请求；原生Skill加载尚未验证。HanLP、spaCy和NLI的既有研究记录保留，但不是当前候选的主解析路线或强制前置依赖。程序不再用旧NLP规则重新猜LLM已经表达的语义。
 
-具体合同与限制见[方法手册](docs/BoundX-7plus1-定义原理语义编译与边界计算说明-v0.4.md)。
+具体合同与限制见[方法手册](docs/BoundaryXP-7plus1-定义原理语义编译与边界计算说明-v0.4.md)。
 
 ## 7+1必须保留完整关系
 
@@ -93,7 +95,7 @@ npm run 7plus1:ui
 → 扩展完整真实任务
 ```
 
-7+1是语义基础，Boundary Result是后续计算产物。ADMIN确定边界，PM在边界内规划；BoundX既检查越界，也检查必需内容遗漏，不新增业务执行器。
+7+1是语义基础，Boundary Result是后续计算产物。ADMIN确定边界，PM在边界内规划；BoundaryXP既检查越界，也检查必需内容遗漏，不新增业务执行器。
 
 300码点是当前支持范围，不是永久产品上限。Gold-60用于完整真实TASK的后续验证时，必须保留原文，不能裁短或把Gold答案送入模型。
 
@@ -101,7 +103,7 @@ npm run 7plus1:ui
 
 BXP协议版本、方法手册修订、根仓库包版本与短文本安装包版本不同。不要为了名称一致把它们都改成“0.4”，也不要将旧Wire Contract重新贴标签当作新版符合性。
 
-仓库保留[主分支既有BXP Core入口](src/bxp/index.mjs)、[协议说明](protocol/README.md)和[结构化示例](examples/README.md)。开发分支的计算扩展须按[对应源码快照](https://github.com/joinwell52-AI/BoundX/blob/a55363226b465cb120ce8f2624d5d900d5a39d9d/src/bxp/index.mjs)核对；局部能力不等于新原文链已经全面贯通。本次仅合并文档，不合并候选代码，不发布新包、不移动标签、不部署服务。
+仓库保留[主分支既有BXP Core入口](src/bxp/index.mjs)、[协议说明](protocol/README.md)和[结构化示例](examples/README.md)。开发分支的计算扩展须按[对应源码快照](https://github.com/joinwell52-AI/BoundaryXP/blob/a55363226b465cb120ce8f2624d5d900d5a39d9d/src/bxp/index.mjs)核对；局部能力不等于新原文链已经全面贯通。本次仅合并文档，不合并候选代码，不发布新包、不移动标签、不部署服务。
 
 ## 数据、许可与品牌
 
@@ -109,7 +111,7 @@ BXP协议版本、方法手册修订、根仓库包版本与短文本安装包�
 
 许可以[LICENSE](LICENSE)及第三方实际条款为准；本轮不变更许可或包发布状态。[品牌资产](assets/branding/README.md)保留，不因方法更新重做Logo。
 
-进一步阅读：[功能矩阵](docs/FUNCTIONS.md) · [验证规程](docs/VALIDATION.md) · [开发分支当前任务](https://github.com/joinwell52-AI/BoundX/blob/review/7plus1-parser/docs/tasks/7plus1/CURRENT-TASK.md)。历史研究方法和成绩与当前候选能力分开，不把测试报告当产品本身。
+进一步阅读：[功能矩阵](docs/FUNCTIONS.md) · [验证规程](docs/VALIDATION.md) · [开发分支当前任务](https://github.com/joinwell52-AI/BoundaryXP/blob/review/7plus1-parser/docs/tasks/7plus1/CURRENT-TASK.md)。历史研究方法和成绩与当前候选能力分开，不把测试报告当产品本身。
 
 ## 文档列表
 
@@ -118,8 +120,8 @@ BXP协议版本、方法手册修订、根仓库包版本与短文本安装包�
 | 文档 | 入口 |
 |---|---|
 | 完整文档导航 | [文档目录](docs/README.md) |
-| 完整产品手册 | [BoundX产品手册](docs/BOUNDX-PRODUCT-MANUAL.md) |
-| 7+1编译方法 | [定义、原理、语义编译与边界计算说明 v0.4](docs/BoundX-7plus1-定义原理语义编译与边界计算说明-v0.4.md) |
+| 完整产品手册 | [BoundaryXP产品手册](docs/BOUNDARYXP-PRODUCT-MANUAL.md) |
+| 7+1编译方法 | [定义、原理、语义编译与边界计算说明 v0.4](docs/BoundaryXP-7plus1-定义原理语义编译与边界计算说明-v0.4.md) |
 | 7+1雷达图形展示方法 | [单文本条款—维度关联投影与展示规范](docs/7PLUS1-RADAR-VISUALIZATION-METHOD.md) |
 | 边界计算方法与产品作用 | [边界计算说明](docs/BOUNDARY-CALCULATION-METHOD.md) |
 | 快速开始 | [中文](QUICKSTART.md) · [英文](QUICKSTART.en.md) |
@@ -133,12 +135,12 @@ BXP协议版本、方法手册修订、根仓库包版本与短文本安装包�
 | 语义资源与企业L3 | [语义包目录](domain-packs/) · [Enterprise L3说明](docs/L3-EMPLOYEE-DIRECTORY-GUIDE.md) |
 | 本地验证与研究指标 | [验证说明](docs/VALIDATION.md) |
 | 历史BXP 0.4本地开发任务 | [v1.2任务书，历史记录](docs/tasks/BXP-PRODUCER-BENCHMARK-DEVELOPMENT-TASKBOOK-v1.2-LOCAL.md) |
-| 当前开发任务 | [review分支当前指针](https://github.com/joinwell52-AI/BoundX/blob/review/7plus1-parser/docs/tasks/7plus1/CURRENT-TASK.md) |
+| 当前开发任务 | [review分支当前指针](https://github.com/joinwell52-AI/BoundaryXP/blob/review/7plus1-parser/docs/tasks/7plus1/CURRENT-TASK.md) |
 | 版本与许可 | [变更历史](CHANGELOG.md) · [LICENSE](LICENSE) |
 
 ## 仓库文件与目录
 
-[打开main的完整文件列表](https://github.com/joinwell52-AI/BoundX/tree/main)。当前这个`README.zh-CN.md`地址是单个文件的阅读页；文件浏览入口与README中的文档列表是两回事。
+[打开main的完整文件列表](https://github.com/joinwell52-AI/BoundaryXP/tree/main)。当前这个`README.zh-CN.md`地址是单个文件的阅读页；文件浏览入口与README中的文档列表是两回事。
 
 | 目录或文件 | 内容 |
 |---|---|
@@ -153,15 +155,15 @@ BXP协议版本、方法手册修订、根仓库包版本与短文本安装包�
 | [package.json](package.json) · [package-lock.json](package-lock.json) | 本分支实际命令与依赖锁 |
 | [assets/](assets/) | Logo与品牌素材 |
 
-短文本候选源码与运行包在[开发分支](https://github.com/joinwell52-AI/BoundX/tree/review/7plus1-parser)，不与main现有文件混为同一版本。
+短文本候选源码与运行包在[开发分支](https://github.com/joinwell52-AI/BoundaryXP/tree/review/7plus1-parser)，不与main现有文件混为同一版本。
 
 ## 品牌资产
 
-原有Logo文件继续使用，不重新设计、不改色、不改名。全部素材见[品牌目录](assets/branding/README.md)及[原Logo素材包](assets/branding/BoundX-logo-pack-v1.zip)。
+原有Logo文件继续使用，不重新设计、不改色、不改名。全部素材见[品牌目录](assets/branding/README.md)及[原Logo素材包](assets/branding/BoundaryXP-logo-pack-v1.zip)。
 
 | 素材 | 原文件 |
 |---|---|
-| 中文Logo：图标＋界痕 | [透明版](assets/branding/v1/BoundX_Logo_CN_JieHen_transparent.png) · [白底版](assets/branding/v1/BoundX_Logo_CN_JieHen_white.png) |
-| 英文Logo：图标＋BoundX | [透明版](assets/branding/v1/BoundX_Logo_EN_transparent.png) · [白底版](assets/branding/v1/BoundX_Logo_EN_white.png) |
-| 独立图标 | [透明版](assets/branding/v1/BoundX_Icon_transparent.png) · [白底版](assets/branding/v1/BoundX_Icon_white.png) |
-| GitHub／App图标 | [512像素透明版](assets/branding/v1/BoundX_Icon_512_transparent.png) |
+| 中文Logo：图标＋界痕 | [透明版](assets/branding/v2/BoundaryXP-logo-light.png) · [白底版](assets/branding/v2/BoundaryXP-logo-dark.png) |
+| 英文Logo：图标＋BoundaryXP | [透明版](assets/branding/v2/BoundaryXP-logo-light.png) · [白底版](assets/branding/v2/BoundaryXP-logo-dark.png) |
+| 独立图标 | [透明版](assets/branding/v1/BoundaryXP_Icon_transparent.png) · [白底版](assets/branding/v1/BoundaryXP_Icon_white.png) |
+| GitHub／App图标 | [512像素透明版](assets/branding/v1/BoundaryXP_Icon_512_transparent.png) |

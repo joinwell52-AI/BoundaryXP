@@ -4,7 +4,7 @@
 
 ## 文件与版本
 
-原始附件：`BoundX-Skills-semantics-first-r02-bilingual.zip`，SHA-256 `f0f7cdd20558ed791a2fd076b33a86e78897eb01e0a92a29f124796b8f3fdcdf`。
+原始附件：`BoundaryXP-Skills-semantics-first-r02-bilingual.zip`，SHA-256 `f0f7cdd20558ed791a2fd076b33a86e78897eb01e0a92a29f124796b8f3fdcdf`。
 
 原ZIP及79个原包文件完整保留于 `review-assets/7plus1/skills/semantics-first-r02/`；其中76个受原manifest约束的文件逐项核对摘要通过。开发者可阅读完整说明、英文译版、语言用例和工具；这些资源不加入运行请求。
 

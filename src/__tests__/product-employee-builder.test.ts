@@ -51,7 +51,7 @@ test('CLI creates a new employee package from CSV without requiring typed digest
     writeFileSync(input, employeeTemplate() + 'staff-01,Example,[],human,Custom,active,\r\n');
     const child = spawnSync(process.execPath, [join(repository, 'cli.mjs'), 'pack', 'create-employees', input, '--name', 'my-team',
       '--version', '0.1.0', '--l1', 'boundx/core-ontology@1.1.0', '--output', join(root, 'team')],
-    { encoding: 'utf8', env: { ...process.env, BOUNDX_DATA_DIR: registry.root, BOUNDX_TENANT: 'tenant-a' } });
+    { encoding: 'utf8', env: { ...process.env, BOUNDARYXP_DATA_DIR: registry.root, BOUNDARYXP_TENANT: 'tenant-a' } });
     assert.equal(child.status, 0, child.stderr);
     assert.equal(JSON.parse(child.stdout).employees, 1);
     assert.deepEqual(registry.active(), []);

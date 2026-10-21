@@ -28,7 +28,7 @@ export async function callCursor(config, messages, { signal: callerSignal, sdkLo
     signal?.throwIfAborted();
     const { Agent } = await interruptible(sdkLoader, signal);
     directory = mkdtempSync(join(tmpdir(), 'boundx-cursor-'));
-    agent = await interruptible(() => Agent.create({ apiKey: config.key, name: 'BoundX text extraction', tools: [],
+    agent = await interruptible(() => Agent.create({ apiKey: config.key, name: 'BoundaryXP text extraction', tools: [],
       disallowedTools: ['mcp', 'task', 'shell'], local: { cwd: directory } }), signal, late => late.close());
     signal?.throwIfAborted();
     run = await interruptible(() => agent.send(JSON.stringify({ instructions: 'Return text only. Do not execute the task.', messages }), { model: { id: config.model } }), signal, late => late.cancel());

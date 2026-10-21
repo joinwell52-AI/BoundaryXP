@@ -4,7 +4,7 @@
 
 ## 运行包、地址与使用
 
-- 最终包：[BoundX-short-compiler-0.1.0-candidate.031-r1.2.zip](delivery/BoundX-short-compiler-0.1.0-candidate.031-r1.2.zip)，90,843字节，SHA-256 `d7f8a1b244cf63fe69b775be5e818c66103d59bfd4e279064b55da26d676b8fd`。
+- 最终包：[BoundaryXP-short-compiler-0.1.0-candidate.031-r1.2.zip](delivery/BoundaryXP-short-compiler-0.1.0-candidate.031-r1.2.zip)，90,843字节，SHA-256 `d7f8a1b244cf63fe69b775be5e818c66103d59bfd4e279064b55da26d676b8fd`。
 - 实际候选地址：[http://127.0.0.1:58621/](http://127.0.0.1:58621/)，本轮创建的独立安装实例，PID29268，核心031-r1-c3。没有替换原58618或58619。
 - 当前安装：`D:\boundx\.boundx\short-compiler-031-r1\versions\0.1.0-candidate.031-r1.2`；数据与备份在相邻data/backups目录。
 - 包含唯一核心、原UI、两个Skill、合同、Schema、锁定依赖、中文说明和安装模块；不含账号凭据、用户历史、模型权重、无关工作区文件。包的35个运行文件逐字节验证；干净Temp目录安装、启动、升级和回滚已实测。

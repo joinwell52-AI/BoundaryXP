@@ -10,7 +10,7 @@ for(const phase of ['parse','audit']){
 save('MODEL-RESOURCE-PROOF.json',{same_model_visible_resources:true,model:'gpt-6.1-sol',reasoning:'medium',settings_changed:false,resourceProof,new_real_calls:0,original_run_calls:4,actual_served_model:'NOT_DISCLOSED',original_run_id:'2d564b91-2496-4fd2-9314-f71eb794408b'});
 const results=[];
 for(const [name,file]of [['generic-mechanism','owned-event-calculus'],['installed-entry','installed-entry']]){
- const r=spawnSync(process.execPath,['--test','--test-reporter=tap','product/short-compiler/tests/'+file+'.test.mjs'],{env:{...process.env,BOUNDX_INPUT_TEST_ROOT:root},windowsHide:true,encoding:'utf8',timeout:30000});
+ const r=spawnSync(process.execPath,['--test','--test-reporter=tap','product/short-compiler/tests/'+file+'.test.mjs'],{env:{...process.env,BOUNDARYXP_INPUT_TEST_ROOT:root},windowsHide:true,encoding:'utf8',timeout:30000});
  fs.writeFileSync(path.join(report,name+'.tap'),r.stdout??'',{flag:'wx'});fs.writeFileSync(path.join(report,name+'-stderr.txt'),r.stderr??'',{flag:'wx'});
  const counts=Object.fromEntries(['tests','pass','fail'].map(k=>[k,Number((r.stdout??'').match(new RegExp('^# '+k+' (\\d+)','m'))?.[1]??0)]));assert.equal(r.status,0);results.push({name,...counts});
 }

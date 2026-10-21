@@ -5,7 +5,7 @@ import path from 'node:path';
 import {pathToFileURL} from 'node:url';
 import {randomUUID} from 'node:crypto';
 import os from 'node:os';
-const root=path.resolve(process.env.BOUNDX_COMPACT_TEST_ROOT??'.boundx/identity-repair-ui21-work');
+const root=path.resolve(process.env.BOUNDARYXP_COMPACT_TEST_ROOT??'.boundx/identity-repair-ui21-work');
 const load=p=>import(pathToFileURL(path.join(root,'research/7plus1-parser/llm-first-028',p)).href);
 const {normalizeIdentity,identityInventory}=await load('identity.mjs');
 const {decodeProposal,encodeProposal}=await load('compact-wire.mjs');

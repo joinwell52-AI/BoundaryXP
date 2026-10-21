@@ -1,4 +1,4 @@
-# 给LLM的BoundX语义说明：协议、7+1定义与解析原理
+# 给LLM的BoundaryXP语义说明：协议、7+1定义与解析原理
 
 文档修订：r02，2026-10-10。用途：让LLM理解任务原文，并直接形成符合指定合同与Schema、带来源的语义候选JSON。
 
@@ -157,7 +157,7 @@ BXP（Boundary Xplain Protocol，边界分析协议）用于统一表达、形�
 
 ## 依据
 
-- [现行7+1方法手册v0.4/r05](BoundX-7plus1-定义原理语义编译与边界计算说明-v0.4.md)：八维定义、LLM主语义链、身份/用途、范围及技术接受边界。
+- [现行7+1方法手册v0.4/r05](BoundaryXP-7plus1-定义原理语义编译与边界计算说明-v0.4.md)：八维定义、LLM主语义链、身份/用途、范围及技术接受边界。
 - [BXP-0001 0.4.0-draft.1](../protocol/versions/0.4.0-draft.1/companion-r02/BXP-0001.md)：协议目的、7+1语义载体、形式边界结果与职责分离。
 - [Core Profile状态裁定](../protocol/versions/0.4.0-draft.1/companion-r02/authority/ADMIN-DECISION-BXP-0.4-CORE-PROFILE-STATUS-FREEZE.md)：八槽结构存在不等于八槽全部已确定。
 

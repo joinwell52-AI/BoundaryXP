@@ -61,7 +61,7 @@ All Evidence spans are Unicode code-point half-open intervals and replay against
 - Origin: SOURCE
 - Normalization: explicit_roadmap_actions
 - Ontology binding: null
-- Note: Actions are source task content only, not BoundX execution authorization.
+- Note: Actions are source task content only, not BoundaryXP execution authorization.
 
 ### [P] Participants
 

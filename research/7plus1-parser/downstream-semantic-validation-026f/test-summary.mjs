@@ -1,7 +1,7 @@
 import fs from 'node:fs';
 import {spawnSync} from 'node:child_process';
 import {OUT,read,save,sha} from './util.mjs';
-const file='fixtures/real-project/BoundX-REAL-GOLD-P001-v0.1/validate_cases.py';
+const file='fixtures/real-project/BoundaryXP-REAL-GOLD-P001-v0.1/validate_cases.py';
 const r=spawnSync('python',[file],{encoding:'utf8',windowsHide:true});
 save(`${OUT}/regression/source-validator/stdout.log`,r.stdout??'');
 save(`${OUT}/regression/source-validator/stderr.log`,r.stderr??'');

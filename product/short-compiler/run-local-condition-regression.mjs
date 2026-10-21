@@ -2,7 +2,7 @@ import fs from 'node:fs';import path from 'node:path';import {spawnSync} from 'n
 const out=path.resolve('docs/reports/7plus1/LOCAL-CONDITION-REPAIR-r01/regression');if(fs.existsSync(out))throw Error('FIRST_REGRESSION_EXISTS');fs.mkdirSync(out,{recursive:true});
 const sha=b=>createHash('sha256').update(b).digest('hex');
 const tests=fs.readdirSync('product/short-compiler/tests').filter(x=>x.endsWith('.test.mjs')&&!['event-property-immediacy.test.mjs','owned-event-calculus.test.mjs','local-condition-assessment.test.mjs'].includes(x)).sort();
-const envFor=root=>({...process.env,...Object.fromEntries(['BOUNDX_COMPACT_TEST_ROOT','BOUNDX_INPUT_TEST_ROOT','BOUNDX_TIMING_TEST_ROOT','BOUNDX_COMPARISON_ROOT','BOUNDX_EFFICIENCY_TEST_ROOT','BOUNDX_SEMANTIC_TEST_ROOT','BOUNDX_IDENTITY_TEST_ROOT'].map(k=>[k,root]))});
+const envFor=root=>({...process.env,...Object.fromEntries(['BOUNDARYXP_COMPACT_TEST_ROOT','BOUNDARYXP_INPUT_TEST_ROOT','BOUNDARYXP_TIMING_TEST_ROOT','BOUNDARYXP_COMPARISON_ROOT','BOUNDARYXP_EFFICIENCY_TEST_ROOT','BOUNDARYXP_SEMANTIC_TEST_ROOT','BOUNDARYXP_IDENTITY_TEST_ROOT'].map(k=>[k,root]))});
 const results={};
 for(const [label,root]of [['parent',path.resolve('.boundx/short-compiler-031-r1/versions/0.1.0-candidate.031-r1.2-ui.38')],['candidate',path.resolve('.boundx/products/0.1.0-candidate.031-r1.2-ui.39')]]){
  const folder=path.join(out,label);fs.mkdirSync(folder);const harness=path.join(folder,'harness');fs.mkdirSync(harness);const ledger=[];

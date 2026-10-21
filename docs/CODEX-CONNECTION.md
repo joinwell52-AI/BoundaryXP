@@ -2,16 +2,16 @@
 
 在原页面`/legacy`模型设置选择“Codex订阅登录”，读取可用模型、选择模型、测试连接，再使用标准BXP抽取按钮。不是把ChatGPT订阅变成API Key；不填写密钥、不读取或复制auth.json令牌。
 
-Select Codex subscription in the existing model settings, load the catalog, choose a model, and test before using the standard BXP button. Managed ChatGPT sign-in is not an API key. BoundX never reads or copies authentication tokens.
+Select Codex subscription in the existing model settings, load the catalog, choose a model, and test before using the standard BXP button. Managed ChatGPT sign-in is not an API key. BoundaryXP never reads or copies authentication tokens.
 
 ## 本机要求 / Local requirements
 
 - 本机Codex CLI已通过`codex login`登录ChatGPT；用`codex login status`检查。CLI订阅可用额度仍适用。
-- Windows可发现npm安装的原生codex.exe；其他安装位置或系统设置BOUNDX_CODEX_EXECUTABLE为原生可执行文件的绝对路径，不接受cmd/bat/ps1启动脚本。
+- Windows可发现npm安装的原生codex.exe；其他安装位置或系统设置BOUNDARYXP_CODEX_EXECUTABLE为原生可执行文件的绝对路径，不接受cmd/bat/ps1启动脚本。
 - 已实际验证CLI 0.147.0和gpt-5.6-sol。实验性App Server版本变化可能导致明确拒绝，不静默改用API或另一个模型。
 - 使用`node --env-file-if-exists=.env ui-server.mjs`加载本仓库可选.env；服务器已有环境变量优先。页面不会收到服务器密钥。
 
-Sign in with the local Codex CLI. Windows npm installations can be discovered; otherwise configure an absolute native executable path using BOUNDX_CODEX_EXECUTABLE. CLI 0.147.0 and gpt-5.6-sol were exercised locally. Experimental API incompatibility fails closed. The UI launcher loads the repository's optional .env without returning credentials to the browser.
+Sign in with the local Codex CLI. Windows npm installations can be discovered; otherwise configure an absolute native executable path using BOUNDARYXP_CODEX_EXECUTABLE. CLI 0.147.0 and gpt-5.6-sol were exercised locally. Experimental API incompatibility fails closed. The UI launcher loads the repository's optional .env without returning credentials to the browser.
 
 ## 处理流程 / Processing
 
@@ -29,7 +29,7 @@ An ephemeral thread in an empty directory has no execution environments, dynamic
 
 Codex may still load its global AGENTS.md policy. Only that known instruction source is allowed; project instruction files are rejected. This is not a claim of an empty system context or proof about provider-internal capabilities. Unexpected tool events, server requests, threads/turns or incomplete outputs fail closed.
 
-目录读取20秒、生成180秒上限；取消关闭本次子进程，不自动重试、不静默模型回退。BoundX不写订阅令牌；ephemeral不构成供应商零留存承诺。旧版PM多轮功能不通过此入口启用。
+目录读取20秒、生成180秒上限；取消关闭本次子进程，不自动重试、不静默模型回退。BoundaryXP不写订阅令牌；ephemeral不构成供应商零留存承诺。旧版PM多轮功能不通过此入口启用。
 
 Catalog reads have a 20-second limit and generation 180 seconds. Cancellation closes the owned process. No automatic retry or model fallback occurs. Ephemeral does not promise provider-side zero retention. Legacy multi-turn PM features are not enabled through this transport.
 

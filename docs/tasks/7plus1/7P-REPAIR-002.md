@@ -3,7 +3,7 @@ Task ID: 7P-REPAIR-002
 
 目标：
 在 7P-REPAIR-001 已完成的 discourse / participant / quantity 机制基础上，
-继续修复 BoundX 7+1 Parser 的第二层通用语义机制：
+继续修复 BoundaryXP 7+1 Parser 的第二层通用语义机制：
 
 1. Input / Output Role Resolution
 2. Version / Basis / Reference Resolution
@@ -14,7 +14,7 @@ Task ID: 7P-REPAIR-002
 本轮继续做“机制级修复”，不是逐句修补。
 
 Repository:
-joinwell52-AI/BoundX
+joinwell52-AI/BoundaryXP
 
 Branch:
 review/7plus1-parser

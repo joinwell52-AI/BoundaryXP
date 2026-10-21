@@ -1,6 +1,6 @@
 # 023 Architecture evidence
 
-Normative authority: `docs/BoundX-7plus1-定义原理语义编译与边界计算说明-v0.3.1.md`.
+Normative authority: `docs/BoundaryXP-7plus1-定义原理语义编译与边界计算说明-v0.3.1.md`.
 
 Before: `v0.3-7p-composition-014/frontend.mjs::relation()` creates `state=RESOLVED` under `NATIVE_*`. Subsequent 016/018/021 preparation modules may create or rewrite resolved edges, then Eligibility consumes them. Optional model diagnostics run after boundary production in historical versions. There is no independent first-class Gc → Γ receipt for every edge.
 

@@ -1,4 +1,4 @@
-# BoundX 7+1（有限技术接受，不是业务授权）
+# BoundaryXP 7+1（有限技术接受，不是业务授权）
 
 ## I 输入与作用域 — RESOLVED
 - [ACCEPTED] 核对：输入/受检对象=users.csv；必须；对象范围=具体对象(users.csv)（bf:ebda4968bbd44391b5d0）

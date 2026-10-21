@@ -257,7 +257,7 @@
 --- a/research/7plus1-parser/llm-first-028/contracts/semantic-contract.md
 +++ b/research/7plus1-parser/llm-first-028/contracts/semantic-contract.md
 @@ -1,4 +1,19 @@
- # BoundX 语义合同 031-r1.1
+ # BoundaryXP 语义合同 031-r1.1
 +
 +## 可计算属性与产物行为（031-r1.3-additive；优先于下文旧字段列表）
 +
@@ -363,7 +363,7 @@
 +const resourceFingerprint=()=>sha256(JSON.stringify([buildBundle('parse').sha256,buildBundle('audit').sha256,compilerRevision,sha256(loadedRuntime)]));
 +const resourceEvidence=()=>({parse_method:'SKILL',resource_profile:resourceProfile,request_profile:requestProfile,effective_resource_sha256:resourceFingerprint(),selected_resources:{parse:bundleEvidence(buildBundle('parse')),audit:bundleEvidence(buildBundle('audit'))}});
  export const WEB=path.resolve(ROOT,'../v0.3-p2.1-generalization/web');
- export const DATA=process.env.BOUNDX_DATA_DIR?path.resolve(process.env.BOUNDX_DATA_DIR):path.resolve(ROOT,'../../../.boundx/7plus1-short');
+ export const DATA=process.env.BOUNDARYXP_DATA_DIR?path.resolve(process.env.BOUNDARYXP_DATA_DIR):path.resolve(ROOT,'../../../.boundx/7plus1-short');
  const ID=/^[a-f0-9]{8}(?:-[a-f0-9]{4}){3}-[a-f0-9]{12}$/;
 @@ -99,7 +100,7 @@
      if(JSON.stringify(runtimeInventory())!==loadedRuntime)return send(409,{error:'STALE_CODE_RESTART_REQUIRED'});
@@ -373,7 +373,7 @@
 +    if(prior)return prior.source_sha256===source.sha256&&prior.requested_model===settings.model&&(prior.requested_reasoning??'medium')===settings.reasoning&&(prior.parse_method??'SKILL')===method&&prior.resource_profile===resourceProfile&&prior.request_profile===requestProfile&&prior.effective_resource_sha256===resourceFingerprint()?send(200,summary(prior)):send(409,{error:'REQUEST_ID_SOURCE_MISMATCH'});
      if(active.size)return send(409,{error:'COMPILER_BUSY'});
      const id=randomUUID(),controller=new AbortController(),created_at=new Date().toISOString();fs.mkdirSync(folder(id));
-     record={run_id:id,request_id:input.request_id,created_at,status:'QUEUED',stage:'QUEUED',source_text:source.text,source_sha256:source.sha256,codepoints:source.codepoints,filename:typeof input.filename==='string'?path.basename(input.filename).slice(0,100):'pasted-task.txt',engine:'BoundX 7+1 compiler',contract:buildBundle('parse').schema.properties.contract_version.const,skill_mode:'INLINE_BUNDLE',native_skill_loading:'NOT_VERIFIED',requested_model:'gpt-6.1-sol',actual_model:null,execution_mode:'LIVE_CODEX',stages:[{stage:'QUEUED',at:created_at}]};
+     record={run_id:id,request_id:input.request_id,created_at,status:'QUEUED',stage:'QUEUED',source_text:source.text,source_sha256:source.sha256,codepoints:source.codepoints,filename:typeof input.filename==='string'?path.basename(input.filename).slice(0,100):'pasted-task.txt',engine:'BoundaryXP 7+1 compiler',contract:buildBundle('parse').schema.properties.contract_version.const,skill_mode:'INLINE_BUNDLE',native_skill_loading:'NOT_VERIFIED',requested_model:'gpt-6.1-sol',actual_model:null,execution_mode:'LIVE_CODEX',stages:[{stage:'QUEUED',at:created_at}]};
 --- a/research/7plus1-parser/llm-first-028/skills/boundx-semantic-audit/SKILL.md
 +++ b/research/7plus1-parser/llm-first-028/skills/boundx-semantic-audit/SKILL.md
 @@ -4,6 +4,8 @@

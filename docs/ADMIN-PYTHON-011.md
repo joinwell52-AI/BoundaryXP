@@ -14,7 +14,7 @@ python -m venv .venv
 node ui-server.mjs --open
 ```
 
-Linux/macOS 将 Python 路径换成 `.venv/bin/python`。自定义解释器可设环境变量 `BOUNDX_PYTHON`。第一次安装需访问包仓库；运行 ADMIN 检查不访问模型服务，不需要 API 密钥。
+Linux/macOS 将 Python 路径换成 `.venv/bin/python`。自定义解释器可设环境变量 `BOUNDARYXP_PYTHON`。第一次安装需访问包仓库；运行 ADMIN 检查不访问模型服务，不需要 API 密钥。
 
 进入“给 ADMIN 的任务建议”，粘贴原文并点击“本地检查”。修改原文后必须重新计算；旧结果不继续套用。Python 缺失、超时或引擎失败均明确显示，不降级为“通过”。本机请求最多等待 12 秒，后端子进程预算 10 秒。
 

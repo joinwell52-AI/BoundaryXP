@@ -15,7 +15,7 @@ npm run 7plus1:ui
 npm run 7plus1:installed -- --input task.txt --output new-run-directory
 ```
 
-032.3包沿用：[BoundX-short-compiler-0.1.0-candidate.032.3.zip](../7P-SHORT-COMPILER-SEMANTIC-ACCEPTANCE-032-LONG/delivery/BoundX-short-compiler-0.1.0-candidate.032.3.zip)。摘要：`1e65b9598d85788e0e9cc96cd07db3a9a09c17a207e009e3fb701d4ab05e5dd3`。包内有实际核心、两Skill、合同/Schema、原UI和依赖锁；无权重、凭据、缓存、私人历史或160项脏工作区。没有重新打包。
+032.3包沿用：[BoundaryXP-short-compiler-0.1.0-candidate.032.3.zip](../7P-SHORT-COMPILER-SEMANTIC-ACCEPTANCE-032-LONG/delivery/BoundaryXP-short-compiler-0.1.0-candidate.032.3.zip)。摘要：`1e65b9598d85788e0e9cc96cd07db3a9a09c17a207e009e3fb701d4ab05e5dd3`。包内有实际核心、两Skill、合同/Schema、原UI和依赖锁；无权重、凭据、缓存、私人历史或160项脏工作区。没有重新打包。
 
 可在干净目录解压作无模型核验，不能作为质量通过或升级授权：
 

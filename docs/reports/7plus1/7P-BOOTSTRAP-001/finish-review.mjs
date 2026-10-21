@@ -57,7 +57,7 @@ REAL_GOLD_60_PATH = review-assets/7plus1/real-gold-60/adjudications-r02/
 
 ## 9. 审阅镜像与可复现范围
 
-仓库joinwell52-AI/BoundX已核实为private；固定分支review/7plus1-parser；BASE_COMMIT=${read(path.join(base,'BASELINE.json')).base_commit}。仅推送该分支，不开PR、不merge、不tag、不release、不触发Actions（现有workflow仅main push/PR）。发布SHA及远端核验在PUSH-RECEIPT.json；commit不能把自己的SHA写回自身报告。
+仓库joinwell52-AI/BoundaryXP已核实为private；固定分支review/7plus1-parser；BASE_COMMIT=${read(path.join(base,'BASELINE.json')).base_commit}。仅推送该分支，不开PR、不merge、不tag、不release、不触发Actions（现有workflow仅main push/PR）。发布SHA及远端核验在PUSH-RECEIPT.json；commit不能把自己的SHA写回自身报告。
 
 Git镜像纳入实际源码/合同/受依赖Schema、模型调用脚本、冻结L1/L2定义、专属测试与41条紧凑NLP回归fixture、一个Golden及历史60资产。旧测试源码仍在原tests/位置，因引用本地大量旧研究Trace，其全部旧资产不在此次重复提交；可移植44项回归使用新fixture。完整2659项回归是当前D:/boundx本地执行，不冒称新clone无需历史资产即可执行。模型本地venv和权重必须独立准备；没有把下载等同实际调用。
 

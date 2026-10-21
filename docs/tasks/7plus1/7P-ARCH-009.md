@@ -1,12 +1,12 @@
-# 7P-ARCH-009 — BoundX 7+1 Parser Architecture Review & Recovery Decision
+# 7P-ARCH-009 — BoundaryXP 7+1 Parser Architecture Review & Recovery Decision
 
 ## 0. Task identity
 
 - TASK: `7P-ARCH-009`
 - START_HEAD: `68d28da5c2f5db614867d1fa4ad8d0d3fb3ec53b`
-- Repository: `joinwell52-AI/BoundX`
+- Repository: `joinwell52-AI/BoundaryXP`
 - Branch: `review/7plus1-parser`
-- Normative method: `docs/BoundX-7plus1-定义原理语义编译与边界计算说明-v0.3.md`
+- Normative method: `docs/BoundaryXP-7plus1-定义原理语义编译与边界计算说明-v0.3.md`
 - Previous task: `7P-CLOSURE-008`
 - Previous outcome: `IMPLEMENTATION_GAP_REMAINS`
 - `PRODUCTION_READY=false`
@@ -28,7 +28,7 @@ Read in full before analysis:
 1. `docs/tasks/7plus1/CURRENT-TASK.md`
 2. this taskbook
 3. `docs/tasks/7plus1/7P-v0.3-COMPLETION-PLAN.md`
-4. `docs/BoundX-7plus1-定义原理语义编译与边界计算说明-v0.3.md`
+4. `docs/BoundaryXP-7plus1-定义原理语义编译与边界计算说明-v0.3.md`
 5. all taskbooks 001–008
 6. all final reports 001–008
 7. `docs/reports/7plus1/7P-CLOSURE-008/FINAL-OUTCOME.json`
@@ -249,7 +249,7 @@ Constraints:
 - ambiguity remains typed unresolved;
 - no direct LLM → final 7+1 bypass.
 
-Assess whether this would reduce C02–C12 without weakening BoundX's deterministic boundary-certification principle.
+Assess whether this would reduce C02–C12 without weakening BoundaryXP's deterministic boundary-certification principle.
 
 ### Option C — v0.4 method revision with explicit hierarchical semantic ownership
 

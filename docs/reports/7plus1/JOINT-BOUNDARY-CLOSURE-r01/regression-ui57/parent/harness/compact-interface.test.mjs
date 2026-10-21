@@ -5,7 +5,7 @@ import path from 'node:path';
 import os from 'node:os';
 import {pathToFileURL} from 'node:url';
 import {createHash} from 'node:crypto';
-const root=path.resolve(process.env.BOUNDX_COMPACT_TEST_ROOT??'.boundx/compact-interface-ui16-work');
+const root=path.resolve(process.env.BOUNDARYXP_COMPACT_TEST_ROOT??'.boundx/compact-interface-ui16-work');
 const core='research/7plus1-parser/llm-first-028/';
 const load=p=>import(pathToFileURL(path.join(root,core+p)).href);
 const {encodeProposal,decodeProposal,encodeAudit,decodeAudit,validateWire}=await load('compact-wire.mjs');

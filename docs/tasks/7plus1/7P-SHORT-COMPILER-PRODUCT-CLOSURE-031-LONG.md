@@ -11,11 +11,11 @@
 
 ## 1. 基线、范围和先决事实
 
-仓库：joinwell52-AI/BoundX。工作及推送分支：review/7plus1-parser。
+仓库：joinwell52-AI/BoundaryXP。工作及推送分支：review/7plus1-parser。
 运行基线：029提交ca86e87ea5b07ca770948e5e1231ae9972542ff5。
 030结果提交：a32414ebdf4c54727072205513b6dda65de6921f。
 唯一核心：research/7plus1-parser/llm-first-028/。继续完善同一核心，不复制031全套实现。
-规范：docs/BoundX-7plus1-定义原理语义编译与边界计算说明-v0.4.md，现为r02。
+规范：docs/BoundaryXP-7plus1-定义原理语义编译与边界计算说明-v0.4.md，现为r02。
 产品总要求：docs/tasks/7plus1/SHORT-COMPILER-PRODUCT-DELIVERY-CONTRACT.md。
 本轮报告：docs/reports/7plus1/7P-SHORT-COMPILER-PRODUCT-CLOSURE-031-LONG/。
 

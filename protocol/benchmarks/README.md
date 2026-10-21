@@ -1,4 +1,4 @@
-# BoundX Natural-Language Extraction Benchmark Candidate
+# BoundaryXP Natural-Language Extraction Benchmark Candidate
 
 本目录管理“自然语言 → 7+1 候选 IR”的信息性评测，不属于 BXP-CALC 规范一致性测试。
 

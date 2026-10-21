@@ -1,6 +1,6 @@
 # 031-R1本地产品候选验收说明
 
-本包是同一BoundX短文本编译器的版本化候选，不是生产发布；BUSINESS_EXECUTION_ENABLED=false，PRODUCTION_READY=false。最终语义/重复运行/工程门与剩余缺陷以docs/reports/7plus1/7P-SHORT-COMPILER-PRODUCT-CLOSURE-031-R1-LONG/REPORT.md及实际Trace为准。封装或安装成功不代替语义验收。
+本包是同一BoundaryXP短文本编译器的版本化候选，不是生产发布；BUSINESS_EXECUTION_ENABLED=false，PRODUCTION_READY=false。最终语义/重复运行/工程门与剩余缺陷以docs/reports/7plus1/7P-SHORT-COMPILER-PRODUCT-CLOSURE-031-R1-LONG/REPORT.md及实际Trace为准。封装或安装成功不代替语义验收。
 
 固定模型主语义链、两个INLINE_BUNDLE Skill、来源与Schema技术校验、产物用途/身份/时序分开消费、Boundary IR与确定性JSON/中文。模型版本身份未披露；原生Skill加载不宣称已验证。
 

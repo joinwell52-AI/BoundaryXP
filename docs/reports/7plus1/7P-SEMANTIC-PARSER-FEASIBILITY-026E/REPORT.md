@@ -7,7 +7,7 @@
 ## 决策与可比口径
 
 - H1_FRAGMENTATION=FALSIFIED：这是当前固定实现/60 条开发诊断样本上的充分改进假设被否证，不是说逗号切分永远无影响。
-- SEMANTIC_PARSER=NOT_FEASIBLE：仅针对本次模型作为足以支撑 BoundX 当前需求的替代路线；不推论所有语义解析模型不可行。
+- SEMANTIC_PARSER=NOT_FEASIBLE：仅针对本次模型作为足以支撑 BoundaryXP 当前需求的替代路线；不推论所有语义解析模型不可行。
 - ORACLE_DOWNSTREAM_10=7/10：仅为手工来源审阅图的语义下游诊断检查；未修改 Γ。完整原入口 0/10，被 G8 拒绝。
 - WAITING_ADMIN_REVIEW=true。
 
@@ -40,7 +40,7 @@ MRP2020_AMR_ZHO_MENGZI_BASE，CPU，153,644,745 参数，HanLP 2.1.3 + perin-par
 
 有局部真实恢复，例如 ROOT-016 的“结束→任务”、NROOT-018 的“删除/改名→接口”、NROOT-007 的“触发→构建”、NROOT-011 的“发布→版本”，以及 NROOT-001 的报告条件边。全部增量边/原始证据在 SEMANTIC-PARSER-COMPARISON.json，未据此增加规则。整体完整论元、跨句引用、输出所有权、模态和嵌入层级仍不足。模型没有直接输出 Boundary IR/7+1，没有把 AMR top 当业务动作。
 
-原图 input 为分词后加空格串；对齐只利用真实 token span 的逐码点映射。抽象节点没有源 anchor 时明确保留无 anchor 状态。检查采用实际 ARG/operator 路径，不从原文额外填入 REQUIRED/FORBIDDEN。AMR 原始图与 BoundX 类型图表达能力不同，因此表中 C 是保守结构恢复下界，不是通用 AMR F1。没有已证明的通用 C→Gc 适配器，不能声明现成模型即可完成主链。可选 D 未运行：C 已能运行并提供可对齐关系，不满足备用模型的触发条件。
+原图 input 为分词后加空格串；对齐只利用真实 token span 的逐码点映射。抽象节点没有源 anchor 时明确保留无 anchor 状态。检查采用实际 ARG/operator 路径，不从原文额外填入 REQUIRED/FORBIDDEN。AMR 原始图与 BoundaryXP 类型图表达能力不同，因此表中 C 是保守结构恢复下界，不是通用 AMR F1。没有已证明的通用 C→Gc 适配器，不能声明现成模型即可完成主链。可选 D 未运行：C 已能运行并提供可对齐关系，不满足备用模型的触发条件。
 
 ## Oracle：Γ 也有独立问题
 

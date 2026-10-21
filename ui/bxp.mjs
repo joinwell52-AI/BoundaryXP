@@ -23,7 +23,7 @@ button.addEventListener('click',async()=>{
   message.textContent='本地计算中 / Calculating locally';
   const raw=input.value;
   try {
-    const response=await fetch('/api/bxp/evaluate',{method:'POST',headers:{'Content-Type':'application/json','X-BoundX-Token':token},body:raw});
+    const response=await fetch('/api/bxp/evaluate',{method:'POST',headers:{'Content-Type':'application/json','X-BoundaryXP-Token':token},body:raw});
     const result=await response.json();
     if(!response.ok)throw Error(result.error);
     renderBxpResult(host,result.evaluation.validation==='valid'?JSON.parse(raw):null,result,info);

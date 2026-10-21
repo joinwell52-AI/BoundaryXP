@@ -9,7 +9,7 @@ Task ID: 7P-STANDARD-002
 不得修改 Parser，不得修改 BXP，不得重新解释或重写人工标准答案。
 
 Repository:
-joinwell52-AI/BoundX
+joinwell52-AI/BoundaryXP
 
 Branch:
 review/7plus1-parser

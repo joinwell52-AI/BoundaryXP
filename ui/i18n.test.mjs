@@ -38,7 +38,7 @@ test('complete task preserves source and uses only the selected language for add
 test('static interface Chinese copy has an English catalog entry, apart from branding and selector autonyms',()=>{
  const html=readFileSync(new URL('./index.html',import.meta.url),'utf8');
  const text=[...html.matchAll(/>([^<>]+)</g)].map(m=>m[1].trim()).filter(s=>/[\u4e00-\u9fff]/u.test(s));
- const untranslated=text.filter(s=>!['界','界痕','中文','界痕 · BoundX'].includes(s)&&translate(s,'en')===s);
+ const untranslated=text.filter(s=>!['界','界痕','中文','界痕 · BoundaryXP'].includes(s)&&translate(s,'en')===s);
  assert.deepEqual(untranslated,[]);
  for(const [zh,en] of catalog){assert(en.trim());assert(!/[\u4e00-\u9fff]/u.test(en),zh);}
 });

@@ -30,7 +30,7 @@ for name in list(files):
         local=posixpath.normpath(posixpath.join(posixpath.dirname(name),path))
         if local in files: return match.group(0)
         repo=posixpath.normpath(posixpath.join(prefix,local))
-        return '](https://github.com/joinwell52-AI/BoundX/blob/'+sha+'/'+quote(repo)+ ('#'+fragment if sep else '')+')'
+        return '](https://github.com/joinwell52-AI/BoundaryXP/blob/'+sha+'/'+quote(repo)+ ('#'+fragment if sep else '')+')'
     files[name]=re.sub(r'\]\(([^)]+)\)',link,files[name].decode('utf-8')).encode('utf-8')
 files['bx.cmd']=b'@echo off\r\n"%~dp0runtime\\node.exe" "%~dp0cli.mjs" %*\r\nexit /b %errorlevel%\r\n'
 files['demo.cmd']=b'@echo off\r\ncall "%~dp0bx.cmd" decomposition "%~dp0examples\\decomposition-d044.json"\r\nset "boundx_result=%errorlevel%"\r\npause\r\nexit /b %boundx_result%\r\n'
@@ -38,10 +38,10 @@ files['self-test.cmd']=b'@echo off\r\n"%~dp0runtime\\node.exe" --test "%~dp0src\
 files['BUILD.json']=(json.dumps(dict(version=version,git_sha=sha,runtime=runtime,node_sha256=hashlib.sha256(files['runtime/node.exe']).hexdigest(),node_license_source='https://raw.githubusercontent.com/nodejs/node/v24.16.0/LICENSE'),indent=2)+'\n').encode()
 files['FILES.sha256']=''.join(hashlib.sha256(data).hexdigest()+'  '+name+'\n' for name,data in sorted(files.items())).encode()
 out.mkdir(parents=True)
-archive=out/f'BoundX-{version}-win-x64.zip'
+archive=out/f'BoundaryXP-{version}-win-x64.zip'
 with zipfile.ZipFile(archive,'w',zipfile.ZIP_DEFLATED,compresslevel=6) as z:
     for name,data in sorted(files.items()):
-        entry=zipfile.ZipInfo('BoundX/'+name,date_time=(2026,9,10,0,0,0));entry.compress_type=zipfile.ZIP_DEFLATED
+        entry=zipfile.ZipInfo('BoundaryXP/'+name,date_time=(2026,9,10,0,0,0));entry.compress_type=zipfile.ZIP_DEFLATED
         z.writestr(entry,data)
 digest=hashlib.sha256(archive.read_bytes()).hexdigest()
 (out/'SHA256SUMS.txt').write_bytes((digest+'  '+archive.name+'\n').encode())

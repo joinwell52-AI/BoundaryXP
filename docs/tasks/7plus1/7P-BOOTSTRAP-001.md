@@ -10,7 +10,7 @@ BXP 协议继续作为上位定义，但**这阶段不做 Formal Boundary Model�
 
 ---
 
-# BoundX 7+1 Parser 开发与 GitHub 交付基线任务
+# BoundaryXP 7+1 Parser 开发与 GitHub 交付基线任务
 
 **Task ID：`7P-BOOTSTRAP-001`**
 
@@ -219,7 +219,7 @@ review/7plus1-parser
 仓库：
 
 ```text
-joinwell52-AI/BoundX
+joinwell52-AI/BoundaryXP
 ```
 
 这个分支以后是：
@@ -389,7 +389,7 @@ TASK:
 7P-xxxxxxxx-xxx
 
 REPOSITORY:
-joinwell52-AI/BoundX
+joinwell52-AI/BoundaryXP
 
 BRANCH:
 review/7plus1-parser
@@ -475,7 +475,7 @@ review/7plus1-parser
 
 ## 一条最重要的边界
 
-**我们现在不再同时开发“整个 BoundX”。**
+**我们现在不再同时开发“整个 BoundaryXP”。**
 
 当前工程只有：
 

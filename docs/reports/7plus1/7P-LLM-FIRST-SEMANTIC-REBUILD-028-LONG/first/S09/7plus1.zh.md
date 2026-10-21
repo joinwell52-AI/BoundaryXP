@@ -1,4 +1,4 @@
-# BoundX 7+1（有限技术接受，不是业务授权）
+# BoundaryXP 7+1（有限技术接受，不是业务授权）
 
 ## I 输入与作用域 — RESOLVED
 - [ACCEPTED] SCOPE null 报告内容仅列问题(ent_report,ent_problems) [POSITIVE;运行值UNKNOWN]；scope=ent_report（bf:13073a732f73a8762222）

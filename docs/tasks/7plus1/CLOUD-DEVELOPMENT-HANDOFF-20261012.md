@@ -4,7 +4,7 @@
 
 2026-10-12，ADMIN明确要求“把开发任务交给Codex云端；58618我本地同步代码就可以测试了”“云端开发，本地机器可以关机，然后继续开发”。本文件将现有开发任务交给云端执行，不另建解析器或产品原型。
 
-仓库为私有`joinwell52-AI/BoundX`，唯一交付分支`review/7plus1-parser`。开发基线提交`19e239c349ad2bb32d753e4b553e5eae66793085`，后续交接提交仅增加本文件、实际运行证据与便携回放脚本。开始前核对HEAD和分支；本文件是本次云端续作入口，CURRENT-TASK及AGENTS中的历史短文本/NLP/Trace专项停止记录不替代本次最新授权。
+仓库为私有`joinwell52-AI/BoundaryXP`，唯一交付分支`review/7plus1-parser`。开发基线提交`19e239c349ad2bb32d753e4b553e5eae66793085`，后续交接提交仅增加本文件、实际运行证据与便携回放脚本。开始前核对HEAD和分支；本文件是本次云端续作入口，CURRENT-TASK及AGENTS中的历史短文本/NLP/Trace专项停止记录不替代本次最新授权。
 
 云端使用它实际签出的仓库根目录；`D:\boundx`是用户本地的安装和验收位置，不要求在云端伪造D盘。任务文本中的业务动作仅作为Parser输入，不执行。旧封存、Gold、源文及人工标准不覆盖。
 
@@ -24,7 +24,7 @@ LLM解释语义；程序不得扫描原文、label或note补答案，不用旧NL
 完整阅读：
 
 1. `docs/testing/7plus1/MANUAL-TEST-001.md`及同目录TXT。
-2. `docs/BoundX-7plus1-定义原理语义编译与边界计算说明-v0.4.md`。
+2. `docs/BoundaryXP-7plus1-定义原理语义编译与边界计算说明-v0.4.md`。
 3. 核心中`contracts/candidate-ir-v1/CONTRACT.md`、Schema和两个Skill。
 4. `docs/reports/7plus1/DIRECT-IR-REPAIR-ui76/REPORT.md`，其旧封存不改。
 5. `docs/reports/7plus1/MANUAL-TEST-001-ui76-FIRST-RUN/REPORT.md`及全部对应证据。

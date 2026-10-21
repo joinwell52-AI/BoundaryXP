@@ -1,8 +1,8 @@
 # BXP — Boundary Xplain Protocol（边界分析协议）
 
-本目录承载 BXP（边界分析协议）的协议草案、机器可读合同和一致性测试。界痕（BoundX）是产品实现，不是协议名称。
+本目录承载 BXP（边界分析协议）的协议草案、机器可读合同和一致性测试。界痕（BoundaryXP）是产品实现，不是协议名称。
 
-This directory contains the BXP protocol drafts, machine-readable contracts and conformance evidence. BoundX is the product implementation; BXP is the protocol.
+This directory contains the BXP protocol drafts, machine-readable contracts and conformance evidence. BoundaryXP is the product implementation; BXP is the protocol.
 
 ## 当前版本 / Version status
 

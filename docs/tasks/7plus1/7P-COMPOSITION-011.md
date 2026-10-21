@@ -4,11 +4,11 @@
 
 - TASK: `7P-COMPOSITION-011`
 - START_HEAD: `185474e4433fdccc462c84627d672ba267cebe65`
-- Repository: `joinwell52-AI/BoundX`
+- Repository: `joinwell52-AI/BoundaryXP`
 - Branch: `review/7plus1-parser`
 - Previous task: `7P-CONTRACT-010`
 - Previous recovery decision: `AUTHORIZE_V0_3_SYSTEMIC_COMPOSITION_REPAIR`
-- Normative method: `docs/BoundX-7plus1-定义原理语义编译与边界计算说明-v0.3.md`
+- Normative method: `docs/BoundaryXP-7plus1-定义原理语义编译与边界计算说明-v0.3.md`
 - Active comparison contract: `fixtures/7plus1/standard-contract/v0.3-admin-20261002/`
 - `PRODUCTION_READY=false`
 
@@ -33,7 +33,7 @@ Read in full before implementation:
 
 1. `docs/tasks/7plus1/CURRENT-TASK.md`
 2. this taskbook
-3. `docs/BoundX-7plus1-定义原理语义编译与边界计算说明-v0.3.md`
+3. `docs/BoundaryXP-7plus1-定义原理语义编译与边界计算说明-v0.3.md`
 4. `docs/reports/7plus1/7P-ARCH-009/REPORT.md`
 5. `docs/reports/7plus1/7P-ARCH-009/CLUSTER-DEPENDENCY-DAG.json`
 6. `docs/reports/7plus1/7P-ARCH-009/GOLD-CONTRACT-AUDIT.json`

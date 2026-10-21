@@ -2,7 +2,7 @@
 
 更新：2026-09-16  
 状态：**READY_FOR_ADMIN_AUTHORIZATION / 开发任务书，非验收完成报告**  
-仓库：`joinwell52-AI/BoundX`  
+仓库：`joinwell52-AI/BoundaryXP`  
 唯一实施目录：`D:\boundx`  
 记录的上游基线：`db6298990717c613ae5dc4cfb384c5ace3cc2090`；实际执行以本地 `D:\boundx` 当前任务分支与其本地 Git 提交记录为准  
 产品基线：`1.3.0-preview.0`  

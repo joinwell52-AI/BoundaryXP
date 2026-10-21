@@ -1,4 +1,4 @@
-# BoundX 7+1（有限技术接受，不是业务授权）
+# BoundaryXP 7+1（有限技术接受，不是业务授权）
 
 ## I 输入与作用域 — UNRESOLVED
 - [ACCEPTED] 读取：INPUT_OBJECT=a.csv；必须（bf:8ea116df9d657a33c0f5）

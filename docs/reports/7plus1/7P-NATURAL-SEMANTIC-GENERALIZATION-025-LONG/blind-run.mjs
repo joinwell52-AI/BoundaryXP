@@ -6,7 +6,7 @@ import {closeNlp} from '../../../../research/7plus1-parser/v0.3-7p-composition-0
 const frozen=read(OUT+'/IMPLEMENTATION-FREEZE.json');
 function verifyRuntime(){for(const f of frozen.files)if(sha(fs.readFileSync(f.path))!==f.sha256)throw Error('FROZEN_RUNTIME_CHANGED '+f.path);if(sha(fs.readFileSync(OUT+'/blind-generator.mjs'))!==frozen.generator_sha256)throw Error('FROZEN_GENERATOR_CHANGED');}
 verifyRuntime();const batch=materialize(frozen.implementation_freeze_sha256,frozen.generator_sha256);
-write('BLIND-200-SEED.json',{seed:batch.seed,formula:'SHA256("BOUNDX-025-BLIND-200" + implementation_freeze_sha256 + generator_sha256)',implementation_freeze_sha256:frozen.implementation_freeze_sha256,generator_sha256:frozen.generator_sha256,materialized_at:new Date().toISOString()});
+write('BLIND-200-SEED.json',{seed:batch.seed,formula:'SHA256("BOUNDARYXP-025-BLIND-200" + implementation_freeze_sha256 + generator_sha256)',implementation_freeze_sha256:frozen.implementation_freeze_sha256,generator_sha256:frozen.generator_sha256,materialized_at:new Date().toISOString()});
 write('BLIND-200-SOURCE.json',{cases:batch.cases.map(c=>({id:c.id,source:c.source,sha256:sha(c.source),language:c.frame.language}))});
 write('BLIND-200-FRAMES.json',{cases:batch.cases.map(c=>({id:c.id,frame:c.frame,expected:c.expected}))});
 const inputSeal={sealed_at:new Date().toISOString(),files:['BLIND-200-SEED.json','BLIND-200-SOURCE.json','BLIND-200-FRAMES.json'].map(p=>({path:p,sha256:sha(fs.readFileSync(OUT+'/'+p))})),cases:200};write('BLIND-200-INPUT-SEAL.json',inputSeal);

@@ -1,4 +1,4 @@
-# BoundX 7+1（有限技术接受，不是业务授权）
+# BoundaryXP 7+1（有限技术接受，不是业务授权）
 
 ## I 输入与作用域 — RESOLVED
 - [ACCEPTED] 作用域  职责仅限组织检查(PM,检查磁盘空间)；所指事件=组织检查 [e_organize]；组织者=PM [POSITIVE;运行值UNKNOWN]；目标=组织检查（bf:7e07b85834d6f39e24f5）

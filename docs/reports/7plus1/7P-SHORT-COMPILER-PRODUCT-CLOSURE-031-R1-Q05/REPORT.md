@@ -6,7 +6,7 @@
 
 - 源码冻结提交：445e6c44256a9aaa6be13cb7439ce4ce6a716d32。
 - 产品：0.1.0-candidate.031-r1.q05.1；编译器：031-r1-q05-c1；合同：031-r1-q05.1。
-- 候选完整运行包：delivery/BoundX-short-compiler-0.1.0-candidate.031-r1.q05.1.zip。ZIP SHA-256：c592a70be7cc1cffb9d096ab84019e3153cf46377a8247992622403ec31e7af6。
+- 候选完整运行包：delivery/BoundaryXP-short-compiler-0.1.0-candidate.031-r1.q05.1.zip。ZIP SHA-256：c592a70be7cc1cffb9d096ab84019e3153cf46377a8247992622403ec31e7af6。
 - 36个运行资源逐字节对应冻结提交；干净临时目录解压、依赖安装、verify和CLI零预算拒绝检查通过，未调用模型。见delivery/PACKAGE.json。运行包仍含同一核心、原UI、两个Skill、安装/升级/回滚模块及使用说明，不另建页面或服务。
 - 未安装此新包。58621原候选资源保持0.1.0-candidate.031-r1.2/c3，其实际资源清单为35项，摘要未变；最终只读HTTP检查ECONNREFUSED。因此当前不能提供实际在线的新候选地址。没有新端口、未重启或升级58621、未进行被策略拒绝的58618恢复。
 

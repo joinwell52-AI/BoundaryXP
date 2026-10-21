@@ -1,6 +1,6 @@
 # BXP-IR-KERNEL-CLOSURE-001 基线与改动
 
-任务包：`BoundX-IR-Kernel-Implementation-v1.0.zip`，SHA-256 `bd05bb768f1a79b8bb9747140a17a1cb16f5329fcd449064cc37198f63dc8f4a`。原始任务书、计划及验收矩阵逐字节保存在 `docs/tasks/7plus1/BXP-IR-KERNEL-CLOSURE-001/`。
+任务包：`BoundaryXP-IR-Kernel-Implementation-v1.0.zip`，SHA-256 `bd05bb768f1a79b8bb9747140a17a1cb16f5329fcd449064cc37198f63dc8f4a`。原始任务书、计划及验收矩阵逐字节保存在 `docs/tasks/7plus1/BXP-IR-KERNEL-CLOSURE-001/`。
 
 主工作区为 `D:\boundx`，HEAD `e25ad6a139f7649e3c8067627d1a83a06223fff4`，已有大量未提交改动。开发采用其下隔离 worktree，分支 `work/ir-kernel-closure-001`，起点为 `ec5706c693752fffc8ba5beab76a69d1c57c3708`。没有 reset、clean、stash 或覆盖主工作区。任务包中的远端参考提交没有用作覆盖来源。
 

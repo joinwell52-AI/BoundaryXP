@@ -1,4 +1,4 @@
-# BoundX 7+1（有限技术接受，不是业务授权）
+# BoundaryXP 7+1（有限技术接受，不是业务授权）
 
 ## I 输入与作用域 — RESOLVED
 - [ACCEPTED] 检查：输入/受检对象=RULE-17的内容；必须；对象范围=具体对象(RULE-17的内容)（bf:feeb79a06dc25d37ca70）

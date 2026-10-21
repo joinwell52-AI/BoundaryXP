@@ -3,13 +3,13 @@
 ## 0. Identity
 
 - TASK: `7P-SHORT-016-R2`
-- Repository: `joinwell52-AI/BoundX`
+- Repository: `joinwell52-AI/BoundaryXP`
 - Branch: `review/7plus1-parser`
 - Base: latest branch HEAD carrying sealed `7P-SHORT-016-R1`
 - Parent result: `G4_REF001_REGRESSION`
 - ADMIN adjudication: `docs/tasks/7plus1/7P-SHORT-016-R2-REF001-ADMIN-ADJUDICATION.md`
 - Frozen direct cases: `docs/tasks/7plus1/7P-SHORT-016-FROZEN-CASES.md`
-- Normative method: `docs/BoundX-7plus1-定义原理语义编译与边界计算说明-v0.3.md`
+- Normative method: `docs/BoundaryXP-7plus1-定义原理语义编译与边界计算说明-v0.3.md`
 - PRODUCTION_READY=false
 
 ## 1. Purpose

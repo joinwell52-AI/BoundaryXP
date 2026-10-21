@@ -63,7 +63,7 @@ All Evidence spans are Unicode code-point half-open intervals and replay against
 - Origin: SOURCE
 - Normalization: explicit_end_to_end_release_actions
 - Ontology binding: null
-- Note: The action list does not constitute BoundX execution authorization.
+- Note: The action list does not constitute BoundaryXP execution authorization.
 
 ### [P] Participants
 

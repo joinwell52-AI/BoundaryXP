@@ -155,7 +155,7 @@ function loadReviewedCase(entry, baseline) {
   };
 }
 
-export function loadRealGoldReviewCases(root = process.env.BOUNDX_REAL_GOLD_REVIEW_ROOT ?? defaultRoot) {
+export function loadRealGoldReviewCases(root = process.env.BOUNDARYXP_REAL_GOLD_REVIEW_ROOT ?? defaultRoot) {
   const cases = [], excluded = [], quarantinedSources = [];
   const baseline = loadFrozenRealGoldSources(root, { required: requiresFrozenRealGoldSources(root) });
   const selection = selectRealGoldReviewRevisions(resolve(root));
@@ -186,7 +186,7 @@ export function loadRealGoldReviewCases(root = process.env.BOUNDX_REAL_GOLD_REVI
     .some(gaps => gaps.length)).map(entry => entry.case_id);
   const inventory = realGoldReviewInventory(cases);
   return {
-    dataset: 'BoundX Real Gold 60 review',
+    dataset: 'BoundaryXP Real Gold 60 review',
     dataset_version: 'r01',
     status: 'GOLD_REVIEW_IN_PROGRESS',
     admin_gold_frozen: false,

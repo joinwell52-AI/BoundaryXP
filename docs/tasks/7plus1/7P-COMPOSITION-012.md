@@ -4,11 +4,11 @@
 
 - TASK: `7P-COMPOSITION-012`
 - START_HEAD: `e1e0fdeac934cc24aa2fb69dafb68d70aa5b2cf2`
-- Repository: `joinwell52-AI/BoundX`
+- Repository: `joinwell52-AI/BoundaryXP`
 - Branch: `review/7plus1-parser`
 - Previous task: `7P-COMPOSITION-011`
 - Previous outcome: `IMPLEMENTATION_GATE_FAILED`
-- Normative method: `docs/BoundX-7plus1-定义原理语义编译与边界计算说明-v0.3.md`
+- Normative method: `docs/BoundaryXP-7plus1-定义原理语义编译与边界计算说明-v0.3.md`
 - Active comparison contract: `fixtures/7plus1/standard-contract/v0.3-admin-20261002/`
 - `PRODUCTION_READY=false`
 

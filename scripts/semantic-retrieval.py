@@ -159,7 +159,7 @@ def load_semantic_library(path, candidates):
         raise SystemExit(f'Unable to read effective semantic library: {error}')
     if not isinstance(library, dict) or library.get('format') != 'boundx-effective-semantic-library/experimental-v1' \
             or library.get('status') != 'assembled' or not isinstance(library.get('entries'), list):
-        raise SystemExit('Effective semantic library must be an assembled BoundX snapshot')
+        raise SystemExit('Effective semantic library must be an assembled BoundaryXP snapshot')
     def reference_key(reference):
         return json.dumps(reference, ensure_ascii=False, sort_keys=True)
 
@@ -329,7 +329,7 @@ def load_batch_requests(path):
 
 
 def main():
-    parser = argparse.ArgumentParser(description='Generate offline-only semantic retrieval candidates for BoundX review.')
+    parser = argparse.ArgumentParser(description='Generate offline-only semantic retrieval candidates for BoundaryXP review.')
     parser.add_argument('--resource', choices=('bge-m3', 'multilingual-e5-large'), required=True)
     parser.add_argument('--revision')
     parser.add_argument('--home', type=Path, default=DEFAULT_HOME)

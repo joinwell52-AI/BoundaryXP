@@ -1,5 +1,5 @@
 import test from 'node:test';import assert from 'node:assert/strict';import fs from 'node:fs';import path from 'node:path';import os from 'node:os';import {pathToFileURL} from 'node:url';
-const root=path.resolve(process.env.BOUNDX_COMPACT_TEST_ROOT??'.boundx/local-revision-ui18-work'),core='research/7plus1-parser/llm-first-028/';
+const root=path.resolve(process.env.BOUNDARYXP_COMPACT_TEST_ROOT??'.boundx/local-revision-ui18-work'),core='research/7plus1-parser/llm-first-028/';
 const load=p=>import(pathToFileURL(path.join(root,core+p)).href),read=p=>JSON.parse(fs.readFileSync(p,'utf8'));
 const {revisionBaseDigest,applyRevisionPatch,validateRevisionWire}=await load('revision-wire.mjs'),{encodeProposal}=await load('compact-wire.mjs');
 const {technicalValidate}=await load('validate.mjs'),{compileBoundary}=await load('compile.mjs'),{parse7Plus1}=await load('engine.mjs'),{buildBundle}=await load('bundle.mjs'),{buildPrompt}=await load('provider.mjs');

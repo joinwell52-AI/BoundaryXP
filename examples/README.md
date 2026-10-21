@@ -1,4 +1,4 @@
-# BoundX 示例 / Examples
+# BoundaryXP 示例 / Examples
 
 当前标准输入位于 [bxp/](bxp/)，均为固定协议的 boundx-task/v1。Current canonical inputs are evidence-linked producer examples, not extraction benchmarks.
 

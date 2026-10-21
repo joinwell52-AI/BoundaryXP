@@ -22,15 +22,15 @@ ADMIN原文 → 解析Skill＋LLM → 候选语义结构
 
 | 对象 | 核对到的版本或状态 | 含义 |
 |---|---|---|
-| 根仓库包 | `@boundx/core` / `1.3.0-preview.0` | 仓库包版本，不是短文本候选安装包版本 |
+| 根仓库包 | `@boundaryxp/core` / `1.3.0-preview.0` | 仓库包版本，不是短文本候选安装包版本 |
 | BXP规范 | 参见[协议入口](../protocol/README.md)及所选版本文件 | 协议版本不等于方法手册修订号，不宣称完整BXP 0.4端到端符合性已经通过 |
-| 7+1方法手册 | [v0.4整编手册](BoundX-7plus1-定义原理语义编译与边界计算说明-v0.4.md) | 方法文档；文档整理不自动更新已安装运行资源 |
+| 7+1方法手册 | [v0.4整编手册](BoundaryXP-7plus1-定义原理语义编译与边界计算说明-v0.4.md) | 方法文档；文档整理不自动更新已安装运行资源 |
 | 固定用户入口候选 | `0.1.0-candidate.031-r1.2`；核心`031-r1-c3`；合同`031-r1.1` | 维护回执记录已恢复到58618；仍为`PARTIAL / REVIEW_REQUIRED` |
 | Q05开发候选 | `0.1.0-candidate.031-r1.q05.1`；核心`031-r1-q05-c1`；合同`031-r1-q05.1` | 增加可计算全称范围，尚未安装到固定入口，完整新版验证未完成 |
 
 已安装候选没有Q05新包的显式全称范围能力。不能把开发新包的功能或测试结果写成58618当前运行能力。新包也不能继承旧合同的52项结果，冒充自己的模型验证成绩。
 
-依据：[58618恢复回执](https://github.com/joinwell52-AI/BoundX/blob/a55363226b465cb120ce8f2624d5d900d5a39d9d/docs/reports/7plus1/031-R1-RESTORE-58618/REPORT.md)、[031-R1交付报告](https://github.com/joinwell52-AI/BoundX/blob/a55363226b465cb120ce8f2624d5d900d5a39d9d/docs/reports/7plus1/7P-SHORT-COMPILER-PRODUCT-CLOSURE-031-R1-LONG/REPORT.md)、[Q05续作报告](https://github.com/joinwell52-AI/BoundX/blob/a55363226b465cb120ce8f2624d5d900d5a39d9d/docs/reports/7plus1/7P-SHORT-COMPILER-PRODUCT-CLOSURE-031-R1-Q05/REPORT.md)。
+依据：[58618恢复回执](https://github.com/joinwell52-AI/BoundaryXP/blob/a55363226b465cb120ce8f2624d5d900d5a39d9d/docs/reports/7plus1/031-R1-RESTORE-58618/REPORT.md)、[031-R1交付报告](https://github.com/joinwell52-AI/BoundaryXP/blob/a55363226b465cb120ce8f2624d5d900d5a39d9d/docs/reports/7plus1/7P-SHORT-COMPILER-PRODUCT-CLOSURE-031-R1-LONG/REPORT.md)、[Q05续作报告](https://github.com/joinwell52-AI/BoundaryXP/blob/a55363226b465cb120ce8f2624d5d900d5a39d9d/docs/reports/7plus1/7P-SHORT-COMPILER-PRODUCT-CLOSURE-031-R1-Q05/REPORT.md)。
 
 ## 3. 当前使用入口
 
@@ -57,7 +57,7 @@ npm run 7plus1:ui
 | Q05报告所列工程回归 | 6689通过、0失败、17跳过 | 工程回归，不是语义准确率或本次main文档测试成绩；跳过不计通过 |
 | 58618恢复维护 | 专项5通过，真实模型调用0 | 入口、资源、历史及导出等维护验证，不增加语义验收成绩 |
 
-来源：[030报告](https://github.com/joinwell52-AI/BoundX/blob/a55363226b465cb120ce8f2624d5d900d5a39d9d/docs/reports/7plus1/7P-SHORT-COMPILER-ACCURACY-030/REPORT.md)、[031-R1逐案表](https://github.com/joinwell52-AI/BoundX/blob/a55363226b465cb120ce8f2624d5d900d5a39d9d/docs/reports/7plus1/7P-SHORT-COMPILER-PRODUCT-CLOSURE-031-R1-LONG/SEMANTIC-REVIEW.md)、[Q05重复记录](https://github.com/joinwell52-AI/BoundX/blob/a55363226b465cb120ce8f2624d5d900d5a39d9d/docs/reports/7plus1/7P-SHORT-COMPILER-PRODUCT-CLOSURE-031-R1-Q05/REPEAT-RESULTS.json)。评分来自报告中注明的执行者来源复核，不是ADMIN签字的独立人工Gold。
+来源：[030报告](https://github.com/joinwell52-AI/BoundaryXP/blob/a55363226b465cb120ce8f2624d5d900d5a39d9d/docs/reports/7plus1/7P-SHORT-COMPILER-ACCURACY-030/REPORT.md)、[031-R1逐案表](https://github.com/joinwell52-AI/BoundaryXP/blob/a55363226b465cb120ce8f2624d5d900d5a39d9d/docs/reports/7plus1/7P-SHORT-COMPILER-PRODUCT-CLOSURE-031-R1-LONG/SEMANTIC-REVIEW.md)、[Q05重复记录](https://github.com/joinwell52-AI/BoundaryXP/blob/a55363226b465cb120ce8f2624d5d900d5a39d9d/docs/reports/7plus1/7P-SHORT-COMPILER-PRODUCT-CLOSURE-031-R1-Q05/REPEAT-RESULTS.json)。评分来自报告中注明的执行者来源复核，不是ADMIN签字的独立人工Gold。
 
 ## 5. 尚未关闭的问题
 
@@ -80,4 +80,4 @@ Q05新合同的完整固定样本、指定重复及原N组验证尚未完成。�
 
 整理后的文档已同步到main；候选代码与运行证据仍位于`review/7plus1-parser`。main、开发分支和已有发布标签是不同代码快照；本次不合并候选代码、不移动标签、不发布npm/PyPI包、不升级本机安装版本。
 
-查看[产品手册](BOUNDX-PRODUCT-MANUAL.md)、[功能矩阵](FUNCTIONS.md)、[验证规程](VALIDATION.md)和[开发分支当前任务](https://github.com/joinwell52-AI/BoundX/blob/review/7plus1-parser/docs/tasks/7plus1/CURRENT-TASK.md)。历史执行报告是具体版本的事实记录，不是永续运行指令。
+查看[产品手册](BOUNDARYXP-PRODUCT-MANUAL.md)、[功能矩阵](FUNCTIONS.md)、[验证规程](VALIDATION.md)和[开发分支当前任务](https://github.com/joinwell52-AI/BoundaryXP/blob/review/7plus1-parser/docs/tasks/7plus1/CURRENT-TASK.md)。历史执行报告是具体版本的事实记录，不是永续运行指令。

@@ -3,7 +3,7 @@
 ## 0. Identity
 
 - TASK: `7P-ADMIN-SHORT-018`
-- Repository: `joinwell52-AI/BoundX`
+- Repository: `joinwell52-AI/BoundaryXP`
 - Branch: `review/7plus1-parser`
 - Start from current branch HEAD `5219eb5f28cb1e3bdb2b47f29784cc0428bfe8ce`
 - Baseline parser: sealed short-direct R2 implementation
@@ -13,7 +13,7 @@
 
 ## 1. ADMIN correction of scope
 
-This task returns to the actual BoundX core problem:
+This task returns to the actual BoundaryXP core problem:
 
 ```text
 ADMIN natural-language task

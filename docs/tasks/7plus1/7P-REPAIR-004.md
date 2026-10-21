@@ -5,9 +5,9 @@
 - TASK: `7P-REPAIR-004`
 - START_HEAD: `7fca920f0253347342bc70dd199db670c38596d9`
 - SEMANTIC_BASE: `1594ab9a4de1b66a19678c7d2b66eca63afaf66a`
-- Repository: `joinwell52-AI/BoundX`
+- Repository: `joinwell52-AI/BoundaryXP`
 - Branch: `review/7plus1-parser`
-- Normative method: `docs/BoundX-7plus1-定义原理语义编译与边界计算说明-v0.3.md`
+- Normative method: `docs/BoundaryXP-7plus1-定义原理语义编译与边界计算说明-v0.3.md`
 - Previous accepted task: `7P-REPAIR-003`
 - `PRODUCTION_READY=false`
 
@@ -15,7 +15,7 @@ Read in full before implementation:
 
 1. `docs/tasks/7plus1/CURRENT-TASK.md`
 2. this taskbook
-3. `docs/BoundX-7plus1-定义原理语义编译与边界计算说明-v0.3.md`
+3. `docs/BoundaryXP-7plus1-定义原理语义编译与边界计算说明-v0.3.md`
 4. `docs/reports/7plus1/7P-REPAIR-003/REPORT.md`
 5. `docs/reports/7plus1/7P-REPAIR-003/FIRST-DIVERGENCE.json`
 6. `docs/reports/7plus1/7P-REPAIR-003/ROOT-CAUSES.md`

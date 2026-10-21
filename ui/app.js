@@ -48,7 +48,7 @@ async function api(route,data){
   const update=()=>{const seconds=Math.floor((Date.now()-started)/1000);setText($('busy-label'),pick(stage.zh,stage.en)+pick(` · 已等待 ${seconds} 秒；本步骤最多等待 ${limitMs/1000} 秒。`,` · ${seconds}s elapsed; this step times out after ${limitMs/1000}s.`));};update();const ticker=setInterval(update,1000);
   const frozen=[...document.querySelectorAll('button,input,textarea,select')].filter(n=>n.id!=='cancel').map(n=>[n,n.disabled]);frozen.forEach(([n])=>n.disabled=true);
   const endpoint={'bxp-admin':'/api/admin-model','product-packs':'/api/admin-product','industry-selection':'/api/industry-selection'}[route]??'/api/legacy/'+route;
-  try{return await withDeadline(async signal=>{const r=await fetch(endpoint,{method:'POST',headers:{'Content-Type':'application/json','X-BoundX-Token':token},body:JSON.stringify(data),signal});const result=await r.json();if(!r.ok)throw Error(result.error||'请求失败');return result;},{signal:abort.signal,timeoutMs:limitMs});}
+  try{return await withDeadline(async signal=>{const r=await fetch(endpoint,{method:'POST',headers:{'Content-Type':'application/json','X-BoundaryXP-Token':token},body:JSON.stringify(data),signal});const result=await r.json();if(!r.ok)throw Error(result.error||'请求失败');return result;},{signal:abort.signal,timeoutMs:limitMs});}
   finally{clearInterval(ticker);if(controller===abort)controller=null;$('busy').hidden=true;frozen.forEach(([n,disabled])=>n.disabled=disabled);}
 }
 $('cancel').onclick=()=>{controller?.abort();notice(activeLocal?'已取消本机计算，未调用模型。 / Local calculation cancelled; no model call.':'已请求取消。本地不会自动重试；已发送的模型请求是否计费由服务商决定。');};
@@ -206,7 +206,7 @@ const historyDetails=$('history').closest('details');
 legacyWorkspace.append(legacyResearch,main.querySelector('nav'),$('page-plan'),$('page-results'),main.querySelector('.storage'),historyDetails);
 legacyWorkspace.hidden=true;legacyWorkspace.inert=true;main.append(legacyWorkspace);
 document.querySelector('body > aside')?.remove();
-setText(document.querySelector('footer'),'BoundX · 建议不构成业务裁决或执行授权 / BoundX · Advice grants neither business decisions nor execution authority');
+setText(document.querySelector('footer'),'BoundaryXP · 建议不构成业务裁决或执行授权 / BoundaryXP · Advice grants neither business decisions nor execution authority');
 setText($('clear-key').nextElementSibling,'模型只负责抽取候选，系统在本地复核与计算。 / Models extract candidates; validation and calculation run locally.');
 async function initializeModelPreferences(){
  await refreshPacks.onclick();
@@ -265,7 +265,7 @@ function renderOriginalBoundary(host,text){
   for(const f of e.findings){card.append(localized(element('p'),f.suggestion['zh-CN'],f.suggestion.en));for(const s of f.sources)card.append(element('blockquote',s.quote));}host.append(card);}
  }else host.append(localized(element('p'),state.adminEngineError?'三类库计算未完成；请核对本机依赖安装或重试。':'尚未取得三类库计算结果。',state.adminEngineError?'Library checks did not complete; check local installation or retry.':'Library results are not available yet.'));
  const detail=element('details');detail.append(localized(element('summary'),'查看原始计算与库版本','Inspect original calculation and library versions'),element('pre',JSON.stringify({boundary:result,engines},null,2)));host.append(detail);
- host.append(button('下载原始边界计算 JSON / Download original boundary JSON',()=>download('BoundX-admin-original.json',JSON.stringify({boundary:result,engines},null,2),'application/json')));
+ host.append(button('下载原始边界计算 JSON / Download original boundary JSON',()=>download('BoundaryXP-admin-original.json',JSON.stringify({boundary:result,engines},null,2),'application/json')));
 }
 function renderAdmin(){
  const host=$('admin-advice');host.replaceChildren();
@@ -403,9 +403,9 @@ $('recheck-pm').onclick=action(async()=>{
 });
 function download(name,text,type){const url=URL.createObjectURL(new Blob([text],{type}));const a=element('a');a.href=url;a.download=name;a.click();setTimeout(()=>URL.revokeObjectURL(url),2000);}
 function snapshot(){return {...clone(state),draftTexts:{task:$('task-source').value,plan:$('plan-source').value,pmTask:$('pm-task-source').value,suggestion:$('suggested-task')?.value??null,reminder:$('reminder').value}};}
-$('save').onclick=action(async()=>{download('BoundX-record-'+Date.now()+'.json',JSON.stringify(snapshot(),null,2),'application/json');notice('记录已下载，包含任务文本与模型答复，不含配置和密钥。');});
+$('save').onclick=action(async()=>{download('BoundaryXP-record-'+Date.now()+'.json',JSON.stringify(snapshot(),null,2),'application/json');notice('记录已下载，包含任务文本与模型答复，不含配置和密钥。');});
 $('report').onclick=action(async()=>{
- let text='# '+pick('界痕任务边界报告','BoundX report')+'\n\n'+pick('建议不构成授权；原始证据保持原语言。','Recommendations do not grant authority; source evidence retains its original language.')+'\n\n';
+ let text='# '+pick('界痕任务边界报告','BoundaryXP report')+'\n\n'+pick('建议不构成授权；原始证据保持原语言。','Recommendations do not grant authority; source evidence retains its original language.')+'\n\n';
  text+='## '+pick('测试任务原文','Test task source')+'\n\n'+(state.baseline?.document.text??$('task-source').value)+'\n\n';
  if(state.task)text+='## '+pick('建议的完整任务文本','Suggested complete task')+'\n\n'+($('suggested-task')?.value??completeTask(state.task,locale.language))+'\n\n';
  for(const entry of state.reviews){
@@ -413,7 +413,7 @@ $('report').onclick=action(async()=>{
   for(const f of (locale.language==='en'?entry.english??entry.review:entry.review).findings)text+=`### ${t(titles[f.kind]??f.kind)}\n\n${t('基线原句')}: ${f.baseline_quote??'—'}\n\n${t('当前文本')}: ${f.source_quote??'—'}\n\n${f.basis}\n\n${f.suggestion}\n\n`;
   for(const r of entry.replies)text+=`${t('记录回应')} ${r.finding_id}: ${r.disposition}; ${r.reason}; ${r.references.join('; ')}\n\n`;
  }
- download('BoundX-report.md',text,'text/markdown');
+ download('BoundaryXP-report.md',text,'text/markdown');
 });
 $('import').onchange=action(async()=>{
   const file=$('import').files[0];if(!file)return;if(file.size>5_000_000)throw Error('记录超过 5 MB。');const value=JSON.parse(await file.text());

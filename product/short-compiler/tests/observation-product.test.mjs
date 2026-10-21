@@ -1,5 +1,5 @@
 import test from 'node:test';import assert from 'node:assert/strict';import fs from 'node:fs';import path from 'node:path';import {pathToFileURL} from 'node:url';import {createHash,randomUUID} from 'node:crypto';import {once} from 'node:events';
-const root=path.resolve(process.env.BOUNDX_INPUT_TEST_ROOT??'.boundx/local-condition-repair-r02/work');
+const root=path.resolve(process.env.BOUNDARYXP_INPUT_TEST_ROOT??'.boundx/local-condition-repair-r02/work');
 const {recalculateObservedTrace}=await import(pathToFileURL(path.join(root,'research/7plus1-parser/llm-first-028/observation-request.mjs')));
 const {createServer}=await import(pathToFileURL(path.join(root,'research/7plus1-parser/llm-first-028/service.mjs')));
 const original=fs.readFileSync('docs/reports/7plus1/LOCAL-CONDITION-REPAIR-r01/live-V01-attempt-01/trace.json');

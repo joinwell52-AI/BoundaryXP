@@ -1,4 +1,4 @@
-# BoundX 7+1（有限技术接受，不是业务授权）
+# BoundaryXP 7+1（有限技术接受，不是业务授权）
 
 ## I 输入与作用域 — RESOLVED
 - [ACCEPTED] 作用域  ITEM(howto.md)；目标=写入文档内容（bf:b05c8ca3bfd6898dfe70）

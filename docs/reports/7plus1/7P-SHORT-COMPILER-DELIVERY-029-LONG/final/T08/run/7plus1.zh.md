@@ -1,4 +1,4 @@
-# BoundX 7+1（有限技术接受，不是业务授权）
+# BoundaryXP 7+1（有限技术接受，不是业务授权）
 
 ## I 输入与作用域 — RESOLVED
 - [ACCEPTED] 作用域  本次工作禁止范围(根任务,删除,重启) [POSITIVE;运行值UNKNOWN]；目标=根任务（bf:953d49e536ef71381660）

@@ -61,7 +61,7 @@ if(command==='init'){
  const resources=verifyFrozen(),directory=path.join(continuationReport,'runs/domain-c3',id,'attempt-01');assert.equal(fs.existsSync(directory),false,'FIRST_RESULT_EXISTS');
  const launch={id,attempt:1,source_id:sourceId,source_sha256:expected.sha256,started_at:new Date().toISOString(),...resources,max_conservative_requests:state.next.allocation,prior_charge:state.charged,reserve_after_next:state.next.reserveAfterNext,source_case_id_not_sent_to_model:true,expected_not_sent_to_model:true};
  write(path.join(directory,'launch.json'),launch);
- const started=Date.now(),child=spawn(process.execPath,[path.join(productRoot,'product/short-compiler/cli.mjs'),'--input',input,'--output',path.join(directory,'run'),'--request-budget',String(launch.max_conservative_requests)],{cwd:productRoot,windowsHide:true,env:{...process.env,BOUNDX_CODEX_EXE:environment.binary},stdio:['ignore','pipe','pipe']});
+ const started=Date.now(),child=spawn(process.execPath,[path.join(productRoot,'product/short-compiler/cli.mjs'),'--input',input,'--output',path.join(directory,'run'),'--request-budget',String(launch.max_conservative_requests)],{cwd:productRoot,windowsHide:true,env:{...process.env,BOUNDARYXP_CODEX_EXE:environment.binary},stdio:['ignore','pipe','pipe']});
  let stdout='',stderr='';child.stdout.on('data',b=>stdout+=b);child.stderr.on('data',b=>stderr+=b);
  console.log(JSON.stringify({started:id,pid:child.pid,version:resources.product_version,allocation:launch.max_conservative_requests,prior_charge:state.charged}));
  const exit=await new Promise(resolve=>{child.on('error',e=>resolve({exit_code:null,error:e.message}));child.on('close',code=>resolve({exit_code:code}));});

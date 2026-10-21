@@ -1,4 +1,4 @@
-# BoundX 7+1（有限技术接受，不是业务授权）
+# BoundaryXP 7+1（有限技术接受，不是业务授权）
 
 ## I 输入与作用域 — PARSER_COVERAGE_FAILURE
 - [REJECTED] 逐一核对：输入/受检对象=a.ini与b.ini组成的核对对象集合；必须；对象范围=有限枚举{a.ini,b.ini}（bf:cc7261b4f59508ec9ea0）

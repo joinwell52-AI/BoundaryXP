@@ -7,7 +7,7 @@ import zipfile
 root = Path(__file__).resolve().parents[3]
 package = root / '.boundx/experiments/031/packages/delivery-031-c5-committed'
 manifest = json.loads((package / 'PRODUCT-MANIFEST.json').read_text(encoding='utf-8'))
-out = root / '.boundx/deliverables/BoundX-Short-Compiler-0.1.0-candidate.031.5.zip'
+out = root / '.boundx/deliverables/BoundaryXP-Short-Compiler-0.1.0-candidate.031.5.zip'
 out.parent.mkdir(parents=True, exist_ok=True)
 with zipfile.ZipFile(out, mode='x', compression=zipfile.ZIP_DEFLATED) as archive:
     for row in manifest['files']:

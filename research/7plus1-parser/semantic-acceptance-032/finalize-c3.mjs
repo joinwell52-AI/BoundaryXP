@@ -34,7 +34,7 @@ replace('REPORT.md',`# 032最终回执：产品未通过，新版待真实验收
 
 最新完整候选是\`${manifest.version}\` / 核心\`${manifest.compiler_revision}\` / 结构合同\`${manifest.contract}\` / 域解释规程\`032-domain-interpretation-v2\`。真实模型验证为**0/79**，不继承C1/C2成绩。原用户安装指针仍为\`0.1.0-candidate.031-r1.2\` / \`031-r1-c3\` / \`031-r1.1\`，最终核查58618无监听；本轮未恢复、停止或升级该入口，也没有声称发生新的策略拒绝。
 
-完整运行包：[BoundX-short-compiler-${manifest.version}.zip](delivery/BoundX-short-compiler-${manifest.version}.zip)，SHA-256 \`${currentPackage.sha256}\`。包包含唯一实际核心、两个Skill、合同/Schema、原UI和依赖锁定文件，不含凭据、历史、权重、缓存或160项旧工作区改动。使用与回滚见[INSTALL-AND-ROLLBACK.md](INSTALL-AND-ROLLBACK.md)。电脑重启后的原入口命令仍是：
+完整运行包：[BoundaryXP-short-compiler-${manifest.version}.zip](delivery/BoundaryXP-short-compiler-${manifest.version}.zip)，SHA-256 \`${currentPackage.sha256}\`。包包含唯一实际核心、两个Skill、合同/Schema、原UI和依赖锁定文件，不含凭据、历史、权重、缓存或160项旧工作区改动。使用与回滚见[INSTALL-AND-ROLLBACK.md](INSTALL-AND-ROLLBACK.md)。电脑重启后的原入口命令仍是：
 
 \`\`\`bat
 cd /d D:\\boundx

@@ -4,7 +4,7 @@ const report=path.resolve('docs/reports/7plus1/MANUAL-FULL-FLOW-CALCULUS-r01/reg
 if(fs.existsSync(report))throw Error('FIRST_REGRESSION_RESULTS_EXIST');fs.mkdirSync(report,{recursive:true});
 const sha=b=>createHash('sha256').update(b).digest('hex');
 const tests=fs.readdirSync('product/short-compiler/tests').filter(x=>x.endsWith('.test.mjs')&&!['event-property-immediacy.test.mjs','owned-event-calculus.test.mjs'].includes(x)).sort();
-const envFor=root=>({...process.env,...Object.fromEntries(['BOUNDX_COMPACT_TEST_ROOT','BOUNDX_INPUT_TEST_ROOT','BOUNDX_TIMING_TEST_ROOT','BOUNDX_COMPARISON_ROOT','BOUNDX_EFFICIENCY_TEST_ROOT','BOUNDX_SEMANTIC_TEST_ROOT','BOUNDX_IDENTITY_TEST_ROOT'].map(k=>[k,root]))});
+const envFor=root=>({...process.env,...Object.fromEntries(['BOUNDARYXP_COMPACT_TEST_ROOT','BOUNDARYXP_INPUT_TEST_ROOT','BOUNDARYXP_TIMING_TEST_ROOT','BOUNDARYXP_COMPARISON_ROOT','BOUNDARYXP_EFFICIENCY_TEST_ROOT','BOUNDARYXP_SEMANTIC_TEST_ROOT','BOUNDARYXP_IDENTITY_TEST_ROOT'].map(k=>[k,root]))});
 function run(dir,files,env){fs.mkdirSync(dir,{recursive:true});const r=spawnSync(process.execPath,['--test','--test-concurrency=1','--test-reporter=tap',...files],{env,encoding:'utf8',windowsHide:true,timeout:180000,maxBuffer:20*1024*1024});
  fs.writeFileSync(path.join(dir,'tests.tap'),r.stdout??'',{flag:'wx'});fs.writeFileSync(path.join(dir,'stderr.txt'),r.stderr??'',{flag:'wx'});
  return {exit_code:r.status,error:r.error?.message??null,counts:Object.fromEntries(['tests','pass','fail','skipped'].map(k=>[k,Number(r.stdout?.match(new RegExp('^# '+k+' (\\d+)','m'))?.[1]??0)])),failures:[...(r.stdout??'').matchAll(/^not ok \d+ - (.+)$/gm)].map(x=>x[1].includes('.test.mjs')?path.basename(x[1]):x[1])};}

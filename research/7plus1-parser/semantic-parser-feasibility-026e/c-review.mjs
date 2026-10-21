@@ -4,7 +4,7 @@ const corpus=read(`${OUT}/CORPUS-SELECTION.json`),ledger=read(`${OUT}/review/r00
 const overlap=(a,b)=>a&&b&&a.start<b.end&&b.start<a.end;
 const base=s=>String(s).replace(/-\d+$/u,'').toLowerCase();
 const nominal=/^(?:mod|domain|poss|name|op\d+|location|quant|unit|value)$/u;
-// A read-only, conservative graph audit. Never builds/certifies BoundX facts.
+// A read-only, conservative graph audit. Never builds/certifies BoundaryXP facts.
 // A source mention is not a role edge. No default REQUIRED/FORBIDDEN is added.
 export function alignedSentence(sentence,source){
  if(sentence.status!=='GRAPH_SAVED')return {status:sentence.status,nodes:[],edges:[],tops:[],request:sentence.request??null};
@@ -81,7 +81,7 @@ export function auditCase(row,annotation){
    check('modality_negation_scope',String(frame.p)+' '+frame.modal,signals.length>0,signals);
   }
   if(frame.condition){required.scope_modality.total++;const relations=typed.flatMap(({n,g})=>g.edges.filter(e=>e.source===n.id&&e.label==='condition').filter(e=>{const cond=g.nodes.find(x=>x.id===e.target);return cond?.fragments.some(s=>anchors(row.source,frame.condition).some(a=>overlap(s,a)));}).map(e=>({graph:g.clause_id,edge:e})));if(relations.length)required.scope_modality.present++;check('condition_ownership',String(frame.p)+' under '+frame.condition,relations.length>0,relations);}
-  if(frame.layer!=='MAIN')for(const {n,g}of ps){const rawMain=g.tops.includes(n.id)||g.edges.some(e=>g.tops.includes(e.source)&&/^op\d+$/u.test(e.label)&&e.target===n.id);if(rawMain)layerPollution.push({predicate:frame.p,expected_layer:frame.layer,node:n,graph:g.clause_id,reason:'Embedded reviewed predicate appears as top/coordinate root in raw graph; not a certified BoundX business action'});}
+  if(frame.layer!=='MAIN')for(const {n,g}of ps){const rawMain=g.tops.includes(n.id)||g.edges.some(e=>g.tops.includes(e.source)&&/^op\d+$/u.test(e.label)&&e.target===n.id);if(rawMain)layerPollution.push({predicate:frame.p,expected_layer:frame.layer,node:n,graph:g.clause_id,reason:'Embedded reviewed predicate appears as top/coordinate root in raw graph; not a certified BoundaryXP business action'});}
  }
  if(annotation.actor){const rs=sentences.flatMap(g=>g.edges.filter(e=>e.label==='arg0').filter(e=>g.nodes.find(n=>n.id===e.target)?.fragments.some(s=>anchors(row.source,annotation.actor).some(a=>overlap(s,a)))).map(e=>({graph:g.clause_id,edge:e})));check('actor_agent',annotation.actor,rs.length>0,rs);}
  const nodes=sentences.flatMap(g=>g.nodes),unanchored=nodes.filter(n=>n.alignment!=='EXACT');

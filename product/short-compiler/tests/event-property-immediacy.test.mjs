@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import path from 'node:path';
 import {pathToFileURL} from 'node:url';
-const root=path.resolve(process.env.BOUNDX_SEMANTIC_TEST_ROOT??'.boundx/manual-contract-repair-r01/work');
+const root=path.resolve(process.env.BOUNDARYXP_SEMANTIC_TEST_ROOT??'.boundx/manual-contract-repair-r01/work');
 const load=f=>import(pathToFileURL(path.join(root,'research/7plus1-parser/llm-first-028',f)));
 const {prepareSource}=await load('source.mjs'),{technicalValidate,validateSchema}=await load('validate.mjs');
 const {compileBoundary,evaluateExpression}=await load('compile.mjs'),{calculateBoundary}=await load('calculus.mjs');

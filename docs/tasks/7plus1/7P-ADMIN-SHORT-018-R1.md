@@ -3,14 +3,14 @@
 ## 0. Identity
 
 - TASK: `7P-ADMIN-SHORT-018-R1`
-- Repository: `joinwell52-AI/BoundX`
+- Repository: `joinwell52-AI/BoundaryXP`
 - Branch: `review/7plus1-parser`
 - Parent task: `7P-ADMIN-SHORT-018`
 - Parent outcome: `ADMIN_SHORT_CORE_METHOD_GAP`
 - Parent commit: `03b6dd6a85d5155226fe507e44e99ff5002c9166`
 - ADMIN adjudication: `docs/tasks/7plus1/7P-ADMIN-SHORT-018-R1-ADMIN-ADJUDICATION.md`
 - Diagnostic corpus: `fixtures/7plus1/admin-short-050-r02/CASES.md`
-- Normative method: `docs/BoundX-7plus1-定义原理语义编译与边界计算说明-v0.3.md`
+- Normative method: `docs/BoundaryXP-7plus1-定义原理语义编译与边界计算说明-v0.3.md`
 - PRODUCTION_READY=false
 
 ## 1. Purpose

@@ -4,7 +4,7 @@ import { decompositionToolSchema } from './src/legacy/decomposition-schema.ts';
 import { createProductHost, productTools } from './src/product/host.mjs';
 let productHost;
 const packageVersion = PRODUCT_VERSION;
-import { reviewBoundX, reviewPlanBoundary, boundaryResponseStatus, boundaryDocumentSchema, boundaryPlanSchema, reviewDecomposition } from './src/legacy/index.ts';
+import { reviewBoundaryXP, reviewPlanBoundary, boundaryResponseStatus, boundaryDocumentSchema, boundaryPlanSchema, reviewDecomposition } from './src/legacy/index.ts';
 
 const definitions = [
   { name: 'bx_evaluate_task', description: 'BXP 7+1 task object. Local validation and calculation; no extraction certification or execution authority.', inputSchema: taskSchema },
@@ -26,7 +26,7 @@ function invoke(name, args) {
     return parseAndEvaluateBxpTask(args.raw_json);
   }
   if (name === 'bx_legacy_review_decomposition') return reviewDecomposition(args.input);
-  if (name === 'bx_legacy_review_task') return reviewBoundX(args.document, { locale: args.locale });
+  if (name === 'bx_legacy_review_task') return reviewBoundaryXP(args.document, { locale: args.locale });
   if (name === 'bx_legacy_review_plan') return reviewPlanBoundary(args.baseline, args.plan, { locale: args.locale });
   if (name === 'bx_legacy_check_responses') return boundaryResponseStatus(args.review, args.replies);
   throw new Error('Unknown tool');
@@ -42,7 +42,7 @@ function handle(line) {
   if (!request || typeof request !== 'object' || Array.isArray(request)) { write({ jsonrpc: '2.0', id: null, error: { code: -32600, message: 'Invalid request' } }); return; }
   if (request.id === undefined) return;
   let result;
-  if (request.method === 'initialize') result = { protocolVersion: '2024-11-05', capabilities: { tools: {}, resources: {} }, serverInfo: { name: 'boundx', version: packageVersion, title: '界痕 · BoundX' }, instructions: 'BXP 7+1: producers submit boundx-task/v1, BoundX validates and calculates locally, hosts decide clarification and authority. Read protocol-info and exact schema resources. BXP-EXTRACT is reserved. Legacy tools are explicitly deprecated, not BXP. Canonical BXP evaluation is stateless. Product tools persist local package selections and prepared source snapshots in BOUNDX_DATA_DIR. L3 context disclosure requires explicit Host configuration. No execution, approval, model or network calls.' };
+  if (request.method === 'initialize') result = { protocolVersion: '2024-11-05', capabilities: { tools: {}, resources: {} }, serverInfo: { name: 'boundx', version: packageVersion, title: '界痕 · BoundaryXP' }, instructions: 'BXP 7+1: producers submit boundx-task/v1, BoundaryXP validates and calculates locally, hosts decide clarification and authority. Read protocol-info and exact schema resources. BXP-EXTRACT is reserved. Legacy tools are explicitly deprecated, not BXP. Canonical BXP evaluation is stateless. Product tools persist local package selections and prepared source snapshots in BOUNDARYXP_DATA_DIR. L3 context disclosure requires explicit Host configuration. No execution, approval, model or network calls.' };
   else if (request.method === 'tools/list') result = { tools: definitions };
   else if (request.method === 'resources/list') result = { resources: resources.map(item => ({ uri: item.uri, name: item.name, mimeType: 'application/json' })) };
   else if (request.method === 'resources/read') {

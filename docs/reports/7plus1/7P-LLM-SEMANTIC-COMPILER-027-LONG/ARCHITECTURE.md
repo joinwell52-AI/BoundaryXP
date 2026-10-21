@@ -1,7 +1,7 @@
 # 027 v0.4 implementation architecture
 
 Current authorization: `7P-LLM-SEMANTIC-COMPILER-027-LONG`. Method authority:
-`docs/BoundX-7plus1-定义原理语义编译与边界计算说明-v0.4.md`.
+`docs/BoundaryXP-7plus1-定义原理语义编译与边界计算说明-v0.4.md`.
 
 The new runtime lives entirely in
 `research/7plus1-parser/v0.4-llm-semantic-027/`. It does not import old 026

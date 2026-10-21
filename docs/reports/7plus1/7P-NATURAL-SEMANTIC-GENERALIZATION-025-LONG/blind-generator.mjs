@@ -67,6 +67,6 @@ export function realize(frame,seed){
 export function expectedSemantics(frame){return {events:frame.events,relations:frame.relations,expressions:frame.expressions,ambiguity:frame.ambiguity,authority_inference:false};}
 export function materialize(implementationSha,generatorSha){
  if(!/^[a-f0-9]{64}$/.test(implementationSha)||!/^[a-f0-9]{64}$/.test(generatorSha))throw Error('REQUIRES_IMPLEMENTATION_AND_GENERATOR_FREEZE');
- const seed=sha256('BOUNDX-025-BLIND-200'+implementationSha+generatorSha);
+ const seed=sha256('BOUNDARYXP-025-BLIND-200'+implementationSha+generatorSha);
  return {seed,cases:Array.from({length:200},(_,i)=>{const frame=constructFrame(i,seed);return {id:'BLIND-'+String(i+1).padStart(3,'0'),frame,source:realize(frame,seed),expected:expectedSemantics(frame)};})};
 }

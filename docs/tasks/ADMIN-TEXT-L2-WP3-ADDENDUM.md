@@ -1,6 +1,6 @@
 # v2 WP3：软件/AI词帧增补
 
-本增补来自ADMIN在当前对话的追加授权，与[v2任务书](BoundX-ADMIN-task-text-semantic-packs-taskbook-v2.md)共同执行；不恢复v1的.bxpack、岗位推定或L3政策功能。
+本增补来自ADMIN在当前对话的追加授权，与[v2任务书](BoundaryXP-ADMIN-task-text-semantic-packs-taskbook-v2.md)共同执行；不恢复v1的.bxpack、岗位推定或L3政策功能。
 
 ## 实施范围 / Scope
 
@@ -9,7 +9,7 @@
 - agent.invoke_tool、ops.exec_shell、agent.retrieve_context、agent.interrupt、agent.resume。
 - model.align、model.rlhf、prompt.optimize、vector_index.search、data.chunk。
 
-新增词帧必须复用现有L1 operation/角色合同；若与既有Frame同义，用别名或明确多候选并记录理由，不复制同义Frame凑数。DPO不当作RLHF同义词。中断/恢复、命令调用只描述任务，BoundX不执行这些动作。
+新增词帧必须复用现有L1 operation/角色合同；若与既有Frame同义，用别名或明确多候选并记录理由，不复制同义Frame凑数。DPO不当作RLHF同义词。中断/恢复、命令调用只描述任务，BoundaryXP不执行这些动作。
 
 配套实体包括tool、session、context、document、lora-adapter、tokenizer、guardrail、ast、sbom。依赖文件区分锁文件、校验记录、依赖声明，不能无条件把Cargo.lock、go.sum、requirements.txt归为同一类。
 

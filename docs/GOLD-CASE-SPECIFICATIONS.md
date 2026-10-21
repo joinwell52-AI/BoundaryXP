@@ -1,6 +1,6 @@
-# BoundX Real Gold 用例规范入口
+# BoundaryXP Real Gold 用例规范入口
 
-本页是 BoundX Real Gold 用例规范的统一入口。一个正式 Real Gold Case 必须同时遵守以下三份规范：
+本页是 BoundaryXP Real Gold 用例规范的统一入口。一个正式 Real Gold Case 必须同时遵守以下三份规范：
 
 1. [Real Gold 生成与审定标准](GOLD-GENERATION-AND-ADJUDICATION-STANDARD.md)  
    定义：什么是正确 Gold，包括 Evidence、7+1、Formal Boundary Model、确定性计算、Boundary State、Policy / Admission、G1-G10 与冻结条件。

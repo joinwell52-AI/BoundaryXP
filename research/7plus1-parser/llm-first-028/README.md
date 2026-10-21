@@ -6,7 +6,7 @@
 
 新研究入口，未切换产品入口。原文→真实解析 Skill→Codex→候选→真实审阅 Skill→新会话 Codex→有限技术 Γ→Boundary IR→固定7+1。两个 Skill、合同和 Schema 均从源文件构建，使用 INLINE_BUNDLE；原生加载 NOT_VERIFIED，不伪报。
 
-依赖：Node >=22.18、本仓库既有 ajv@8.20.0、已登录且支持本机帮助所示参数的 Codex CLI。Provider 自动查找桌面 Codex，可通过 BOUNDX_CODEX_EXE 指定绝对路径。不申请 API key，不修改用户配置。请求模型默认 gpt-6.1-sol、medium；真实服务模型版本未返回时记录 null。
+依赖：Node >=22.18、本仓库既有 ajv@8.20.0、已登录且支持本机帮助所示参数的 Codex CLI。Provider 自动查找桌面 Codex，可通过 BOUNDARYXP_CODEX_EXE 指定绝对路径。不申请 API key，不修改用户配置。请求模型默认 gpt-6.1-sol、medium；真实服务模型版本未返回时记录 null。
 
 ```text
 node research/7plus1-parser/llm-first-028/contracts/schema.mjs

@@ -2,7 +2,7 @@ ADMIN TASK
 Task ID: 7P-REPAIR-001
 
 目标：
-修复 BoundX 7+1 Parser 的第一层通用语义机制：
+修复 BoundaryXP 7+1 Parser 的第一层通用语义机制：
 
 1. Document / Discourse Scope
 2. Participant Eligibility
@@ -12,7 +12,7 @@ Task ID: 7P-REPAIR-001
 禁止针对 SWAI 编号、具体句子、具体文件名做 hardcode。
 
 Repository:
-joinwell52-AI/BoundX
+joinwell52-AI/BoundaryXP
 
 Branch:
 review/7plus1-parser

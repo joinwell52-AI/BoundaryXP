@@ -67,7 +67,7 @@ text('INSTALL-AND-ROLLBACK.md',`# 032候选运行包与固定入口
 
 当前运行包：\`${manifest.version}\`，核心\`${manifest.compiler_revision}\`，合同\`${manifest.contract}\`。声明范围为非空、≤300码点的单一ADMIN短任务。**本轮语义质量门未通过，候选未安装到58618；不得把以下维护说明当作当前升级已经获准实施的回执。**
 
-包文件：[BoundX-short-compiler-${manifest.version}.zip](delivery/BoundX-short-compiler-${manifest.version}.zip)。SHA-256：\`${currentPackage.sha256}\`。包不含模型权重、依赖缓存、凭据、私人历史或开发工作区的160项原有改动。包内包含实际唯一核心、两Skill、合同/Schema、原UI、锁定依赖清单及中文使用说明。
+包文件：[BoundaryXP-short-compiler-${manifest.version}.zip](delivery/BoundaryXP-short-compiler-${manifest.version}.zip)。SHA-256：\`${currentPackage.sha256}\`。包不含模型权重、依赖缓存、凭据、私人历史或开发工作区的160项原有改动。包内包含实际唯一核心、两Skill、合同/Schema、原UI、锁定依赖清单及中文使用说明。
 
 ## 当前用户入口
 
@@ -97,7 +97,7 @@ npm ci --omit=dev --ignore-scripts
 npm run verify
 \`\`\`
 
-Windows、Node≥22.18、现有Codex CLI登录为运行前提。可设置进程级\`BOUNDX_CODEX_EXE\`指向既有二进制；不改全局账号配置。离线核验和干净安装已实测；真实服务路由/TLS故障尚未恢复。不得通过安装包自动补足额度或放宽校验。
+Windows、Node≥22.18、现有Codex CLI登录为运行前提。可设置进程级\`BOUNDARYXP_CODEX_EXE\`指向既有二进制；不改全局账号配置。离线核验和干净安装已实测；真实服务路由/TLS故障尚未恢复。不得通过安装包自动补足额度或放宽校验。
 
 ## 后续受控升级与回滚步骤（本轮未执行）
 

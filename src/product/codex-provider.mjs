@@ -42,7 +42,7 @@ export async function codexModels({ signal: callerSignal, rpcFactory = openCodex
 }
 
 export function codexExecutable(env = process.env) {
-  const configured = env.BOUNDX_CODEX_EXECUTABLE;
+  const configured = env.BOUNDARYXP_CODEX_EXECUTABLE;
   if (configured) {
     if (!isAbsolute(configured) || !existsSync(configured) || /\.(?:cmd|bat|ps1)$/i.test(configured)) throw new ModelTransportError('MODEL_UNAVAILABLE');
     return configured;

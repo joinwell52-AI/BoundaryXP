@@ -83,5 +83,5 @@ export function renderAdminResult(host,result,ui){
  const technical=element('details');technical.append(localized(element('summary'),'查看技术详情：分类、原句、公式与求解记录','Technical details: classification, source clauses, formulas and solver records'),element('pre',JSON.stringify(result,null,2)));host.append(technical);
  const draft=element('textarea');draft.id='suggested-task';draft.rows=7;attribute(draft,'aria-label','建议的完整任务文本');editable(draft,l=>sourceDraft(result,result.text,l));
  const draftBox=element('details');draftBox.append(localized(element('summary'),'查看原任务与具体补充建议','Original task and specific clarification advice'),draft,button('复制完整任务文本 / Copy complete task',action(async()=>{await navigator.clipboard.writeText(draft.value);noticePair('已复制原文与具体待确认事项。','Copied original task and specific clarification items.');})));host.append(draftBox);
- host.append(button('下载原始边界计算 JSON / Download original boundary JSON',()=>download('BoundX-admin-original.json',JSON.stringify(result,null,2),'application/json')));
+ host.append(button('下载原始边界计算 JSON / Download original boundary JSON',()=>download('BoundaryXP-admin-original.json',JSON.stringify(result,null,2),'application/json')));
 }

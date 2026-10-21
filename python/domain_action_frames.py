@@ -1,4 +1,4 @@
-"""Validated domain action frames for BoundX.
+"""Validated domain action frames for BoundaryXP.
 
 Layers extend lexical recognition only.  They reuse the existing action/role/fact
 contract and cannot override evidence, unknown, authorization or 7+1 semantics.

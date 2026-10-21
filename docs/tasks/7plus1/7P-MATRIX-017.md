@@ -3,13 +3,13 @@
 ## 0. Identity
 
 - TASK: `7P-MATRIX-017`
-- Repository: `joinwell52-AI/BoundX`
+- Repository: `joinwell52-AI/BoundaryXP`
 - Branch: `review/7plus1-parser`
 - Start from latest HEAD carrying sealed `7P-SHORT-016-R2`
 - Parent result: `SHORT_DIRECT_PARSER_VALIDATED`
 - Short-parser baseline: `5deb62b198d36f7ed0ae9b5a745c28b2b9aaf73e`
 - Frozen medium cases: `docs/tasks/7plus1/7P-MATRIX-017-FROZEN-CASES.md`
-- Normative method: `docs/BoundX-7plus1-定义原理语义编译与边界计算说明-v0.3.md`
+- Normative method: `docs/BoundaryXP-7plus1-定义原理语义编译与边界计算说明-v0.3.md`
 - PRODUCTION_READY=false
 
 ## 1. Purpose
@@ -48,7 +48,7 @@ Read in full:
 1. `docs/tasks/7plus1/CURRENT-TASK.md`
 2. this taskbook
 3. `docs/tasks/7plus1/7P-MATRIX-017-FROZEN-CASES.md`
-4. `docs/BoundX-7plus1-定义原理语义编译与边界计算说明-v0.3.md`
+4. `docs/BoundaryXP-7plus1-定义原理语义编译与边界计算说明-v0.3.md`
 5. sealed `7P-SHORT-016-R2` REPORT / FINAL-OUTCOME
 6. D01–D08 frozen short cases
 7. REF-001 source + current R2 adjudication

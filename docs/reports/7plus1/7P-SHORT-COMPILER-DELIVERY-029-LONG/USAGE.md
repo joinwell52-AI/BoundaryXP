@@ -9,7 +9,7 @@ npm run 7plus1:ui
 
 PowerShell 的切换目录命令是 `cd D:\boundx`。页面地址：`http://127.0.0.1:58618/`。服务只绑定本机回环；保持终端运行。端口被其他服务占用时明确报错，不会自动停止未知服务。
 
-依赖 Node ≥22.18、本仓库安装的 ajv，以及用户已登录的本机 Codex。使用当前桌面 Codex 二进制；可通过 BOUNDX_CODEX_EXE 指定绝对路径。不要新增 API key 或修改全局 Skill。请求默认 gpt-6.1-sol / medium，服务实际模型身份未披露。两个 Skill 使用同源 INLINE_BUNDLE，原生加载未验证。
+依赖 Node ≥22.18、本仓库安装的 ajv，以及用户已登录的本机 Codex。使用当前桌面 Codex 二进制；可通过 BOUNDARYXP_CODEX_EXE 指定绝对路径。不要新增 API key 或修改全局 Skill。请求默认 gpt-6.1-sol / medium，服务实际模型身份未披露。两个 Skill 使用同源 INLINE_BUNDLE，原生加载未验证。
 
 1. 粘贴单一 ADMIN 短任务，或上传 UTF-8 的 .txt/.md。非空且最多300 Unicode码点，保持原文/BOM/换行；超限不截断。
 2. 点击“开始编译”，等待真实解析、独立会话审阅和编译。可刷新恢复同一次进行中的运行；不要把刷新当重新运行。

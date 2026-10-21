@@ -1,9 +1,9 @@
 ---
 name: boundx-semantic-parse
-description: Compile Chinese, English, or mixed Chinese-English task text into evidence-linked BoundX candidate IR. Identify semantic units, identities, modalities, scopes, data uses, and conditions for programmatic 7+1 projection and boundary calculation. Interpret only host-supplied text; do not execute tasks, plan for PM, or certify conformance.
+description: Compile Chinese, English, or mixed Chinese-English task text into evidence-linked BoundaryXP candidate IR. Identify semantic units, identities, modalities, scopes, data uses, and conditions for programmatic 7+1 projection and boundary calculation. Interpret only host-supplied text; do not execute tasks, plan for PM, or certify conformance.
 ---
 
-# BoundX: understand the source, then encode candidate IR
+# BoundaryXP: understand the source, then encode candidate IR
 
 Interface version: candidate-ir/1.2.
 Procedure revision: semantics-first-r02.

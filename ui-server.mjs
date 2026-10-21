@@ -5,7 +5,7 @@ import { randomBytes } from 'node:crypto';
 import { readFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { spawn } from 'node:child_process';
-import { reviewBoundX, reviewPlanBoundary, boundaryResponseStatus, validateBoundaryText } from './src/legacy/index.ts';
+import { reviewBoundaryXP, reviewPlanBoundary, boundaryResponseStatus, validateBoundaryText } from './src/legacy/index.ts';
 import { sourceCatalog, materializeSelection, selectionInstruction } from './ui/grounding.mjs';
 import { resolveEndpoint } from './ui/connection.mjs';
 import {parseAndEvaluateBxpTask, evaluateBxpTask, protocolInfo, PRODUCT_VERSION, RAW_JSON_BYTE_LIMIT} from './src/bxp/index.mjs';
@@ -99,8 +99,8 @@ export function createApp({fetchImpl=fetch,productOptions={}}={}){
         return send(200,{connected:true,model:output.model,usage:output.usage,elapsed_ms:Date.now()-started,checked_at:new Date().toISOString(),endpoint:data.config.provider==='cursor'?'cursor-sdk':data.config.provider==='codex'?'codex-subscription':resolveEndpoint(data.config.url,data.config.protocol).url});
       }
       if(req.url==='/api/review'){
-        const result=data.kind==='task'?reviewBoundX(data.document):reviewPlanBoundary(data.baseline,data.plan);
-        return send(200,{result,english:data.kind==='task'?reviewBoundX(data.document,{locale:'en'}):reviewPlanBoundary(data.baseline,data.plan,{locale:'en'})});
+        const result=data.kind==='task'?reviewBoundaryXP(data.document):reviewPlanBoundary(data.baseline,data.plan);
+        return send(200,{result,english:data.kind==='task'?reviewBoundaryXP(data.document,{locale:'en'}):reviewPlanBoundary(data.baseline,data.plan,{locale:'en'})});
       }
       if(req.url==='/api/replies')return send(200,{result:boundaryResponseStatus(data.review,data.replies)});
       if(!['/api/extract','/api/pm'].includes(req.url))return send(404,{error:'Not found'});
@@ -135,10 +135,10 @@ export function createApp({fetchImpl=fetch,productOptions={}}={}){
   return server;
 }
 if(process.argv[1]&&fileURLToPath(import.meta.url)===process.argv[1]){
-  const app=createApp();const port=Number(process.env.BOUNDX_PORT??0);
+  const app=createApp();const port=Number(process.env.BOUNDARYXP_PORT??0);
   app.listen(port,'127.0.0.1',()=>{
     const url='http://127.0.0.1:'+app.address().port;
-    console.log('BoundX '+version+' — '+url+' (Ctrl+C to stop)');
+    console.log('BoundaryXP '+version+' — '+url+' (Ctrl+C to stop)');
     if(process.argv.includes('--open')&&process.platform==='win32')spawn('rundll32.exe',['url.dll,FileProtocolHandler',url],{windowsHide:true,stdio:'ignore'}).on('error',()=>{});
   });
 }

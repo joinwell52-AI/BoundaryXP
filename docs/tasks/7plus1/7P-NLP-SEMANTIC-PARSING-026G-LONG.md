@@ -6,7 +6,7 @@
 
 这是一次授权、连续执行的长任务。不是再交一份建议，也不是修完一个阶段就等待新任务。Codex 须在下述范围内自行完成资料核验、方法实现、对照实验、归因、有限迭代、整批验证和可运行交付。
 
-BoundX 的最终产品目标仍为自然语言生成正确 7+1。本次直接解决其入口：**原文 → 自动语义解析 → 候选语义图**。不能用 Γ 调参、人工图输入、八槽非空或回归测试数量代替这个目标。
+BoundaryXP 的最终产品目标仍为自然语言生成正确 7+1。本次直接解决其入口：**原文 → 自动语义解析 → 候选语义图**。不能用 Γ 调参、人工图输入、八槽非空或回归测试数量代替这个目标。
 
 **本任务不预设 HanLP 一定够用，也不预设手册一定正确。必须让结果区分模型能力、组合算法、表示能力和评测问题。**
 
@@ -14,7 +14,7 @@ BoundX 的最终产品目标仍为自然语言生成正确 7+1。本次直接解
 
 ## 1. 唯一执行范围和基线保护
 
-仓库：`joinwell52-AI/BoundX`。
+仓库：`joinwell52-AI/BoundaryXP`。
 唯一工作及推送分支：`review/7plus1-parser`。
 新实验代码目录：`research/7plus1-parser/nlp-semantic-parsing-026g/`。
 新报告目录：`docs/reports/7plus1/7P-NLP-SEMANTIC-PARSING-026G-LONG/`。
@@ -23,7 +23,7 @@ BoundX 的最终产品目标仍为自然语言生成正确 7+1。本次直接解
 
 - 026E 提交：`4dea24229f4189bb699bd1eef621bf928a0882b7`，报告目录 `docs/reports/7plus1/7P-SEMANTIC-PARSER-FEASIBILITY-026E/`。
 - 026F 提交：`b2cd4d0c220eaf0c896f005bcf91f3c70f2b47ce`，报告目录 `docs/reports/7plus1/7P-DOWNSTREAM-SEMANTIC-VALIDATION-026F/`。
-- 手册：`docs/BoundX-7plus1-定义原理语义编译与边界计算说明-v0.3.1.md`。
+- 手册：`docs/BoundaryXP-7plus1-定义原理语义编译与边界计算说明-v0.3.1.md`。
 
 先读取上述 REPORT、语料选择、来源断言、模型清单、真实运行快照清单，再按清单读取需要的原始证据。不存在的文件先查清单，不猜文件路径。已有报告明确指出运行引擎包含当时本地未跟踪文件，Git 提交号不能冒充全部实际引擎字节；复现须使用对应快照及其依赖摘要。
 
@@ -294,7 +294,7 @@ python research/7plus1-parser/nlp-semantic-parsing-026g/cli.py parse --input tas
 - **ENV_BLOCKED**：实际模型、许可、资源或依赖使关键实验不能执行；未运行不计失败成绩。
 - **REVIEW_REQUIRED**：来源预期存在影响可行性结论的真实争议，给出最小复核事项，不假装ADMIN已经确认。
 
-所有状态均不得声称 `BOUNDX_PRODUCTION_READY=true`、不得声称下游已修好，不把文件完整性检查当语义证明。
+所有状态均不得声称 `BOUNDARYXP_PRODUCTION_READY=true`、不得声称下游已修好，不把文件完整性检查当语义证明。
 
 ---
 
@@ -304,7 +304,7 @@ python research/7plus1-parser/nlp-semantic-parsing-026g/cli.py parse --input tas
 
 1. 可运行解析入口、模型适配器、语义组合算法、候选图导出器、独立评测器及依赖锁定；正常解析只读原文与固定模型/方法配置。
 2. `METHOD.md`：方法原理、真实模型输出如何变成每类语义、规则的适用条件/反例/不可表达部分、复杂度与搜索上限；不能只画流程箭头。
-3. `REPORT.md`：中文结论、60条与350条数据、能力来源、最早失败位置、下一步是否值得接入BoundX；报告方法证据，不用大段成功措辞。
+3. `REPORT.md`：中文结论、60条与350条数据、能力来源、最早失败位置、下一步是否值得接入BoundaryXP；报告方法证据，不用大段成功措辞。
 4. `MODEL-MANIFEST.json`、`INPUT-AND-EXPECTATION-FREEZE.json`、`COMPARISON.json`、`PER-CASE.json`、`ABLATION.json`、`ITERATIONS.json`、`REPRODUCTION.json`。
 5. 原始模型响应、每条输出及来源推导、比较器错误/标注更正历史。正文给至少6个真实代表例：模型直接成功、组合补全成功、作用域成功、未决正确保留、模型缺口、算法失败；不存在某类成功就如实注明，不编案例成绩。
 6. Manifest和校验和、原活动文件未改证明、封存验证。
@@ -319,7 +319,7 @@ python research/7plus1-parser/nlp-semantic-parsing-026g/cli.py parse --input tas
 
 ## 14. 官方资料入口及使用限制
 
-以下只是方法与API依据，不是BoundX准确率保证。Codex先核对实际安装版本再使用：
+以下只是方法与API依据，不是BoundaryXP准确率保证。Codex先核对实际安装版本再使用：
 
 - HanLP SRL任务与真实谓词—论元输出：`https://hanlp.hankcs.com/docs/api/hanlp/pretrained/srl.html`
 - HanLP语义依存预训练资源：`https://hanlp.hankcs.com/docs/api/hanlp/pretrained/sdp.html`

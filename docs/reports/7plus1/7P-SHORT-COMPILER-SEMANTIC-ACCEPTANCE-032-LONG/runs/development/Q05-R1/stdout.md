@@ -1,4 +1,4 @@
-# BoundX 7+1（有限技术接受，不是业务授权）
+# BoundaryXP 7+1（有限技术接受，不是业务授权）
 
 ## I 输入与作用域 — RESOLVED
 - [ACCEPTED] 列出：输入/受检对象=配置项；必须；对象范围=类别范围(配置项；适用范围=settings.json)（bf:9fb0a77ef13e17dfdfc7）

@@ -36,7 +36,7 @@ CANDIDATE_PARSING_ARCHITECTURE_026_LONG=ADMIN_BLOCKED
 
 Repository:
 
-joinwell52-AI/BoundX
+joinwell52-AI/BoundaryXP
 
 Branch:
 
@@ -68,7 +68,7 @@ Create a new immutable 026 implementation root.
 
 Read in full before coding:
 
-docs/BoundX-7plus1-定义原理语义编译与边界计算说明-v0.3.1.md
+docs/BoundaryXP-7plus1-定义原理语义编译与边界计算说明-v0.3.1.md
 
 Especially:
 

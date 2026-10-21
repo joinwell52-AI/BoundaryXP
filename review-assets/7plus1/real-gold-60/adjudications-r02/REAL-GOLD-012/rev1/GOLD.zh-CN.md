@@ -61,7 +61,7 @@ All Evidence spans are Unicode code-point half-open intervals and replay against
 - Origin: SOURCE
 - Normalization: explicit_roadmap_actions
 - Ontology binding: null
-- 说明: 动作仅为原文任务内容，非 BoundX 执行授权。
+- 说明: 动作仅为原文任务内容，非 BoundaryXP 执行授权。
 
 ### [P] 参与主体
 

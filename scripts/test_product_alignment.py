@@ -7,10 +7,10 @@ import unittest
 
 
 ROOT = Path(__file__).resolve().parents[1]
-TASKBOOK = ROOT / 'docs/tasks/BoundX-BXP-product-alignment-taskbook-v1.md'
+TASKBOOK = ROOT / 'docs/tasks/BoundaryXP-BXP-product-alignment-taskbook-v1.md'
 TASKBOOK_SHA256 = 'a510c045277a1612c43c71b3cbe459ccbac904e88a3f14a5dc68e23046870d1c'
 CURRENT = ['README.md', 'AGENTS.md', 'QUICKSTART.md', 'protocol/IMPLEMENTATION.md',
-           'docs/BOUNDX-PRODUCT-MANUAL.md', 'docs/FUNCTIONS.md', 'docs/UI-GUIDE.md',
+           'docs/BOUNDARYXP-PRODUCT-MANUAL.md', 'docs/FUNCTIONS.md', 'docs/UI-GUIDE.md',
            'docs/UI-ADVICE.md', 'docs/VALIDATION.md', 'docs/AGENT-BXP-PRODUCER.md',
            'domain-packs/README.md', 'domain-packs/l3/README.md']
 
@@ -36,10 +36,10 @@ class ProductAlignmentTests(unittest.TestCase):
         self.assertEqual(hashlib.sha256(TASKBOOK.read_bytes()).hexdigest(), TASKBOOK_SHA256)
 
     def test_current_release_status_distinguishes_private_source_from_packages(self):
-        for name in ['README.md', 'QUICKSTART.md', 'CHANGELOG.md', 'docs/BOUNDX-PRODUCT-MANUAL.md']:
+        for name in ['README.md', 'QUICKSTART.md', 'CHANGELOG.md', 'docs/BOUNDARYXP-PRODUCT-MANUAL.md']:
             text = (ROOT / name).read_text(encoding='utf-8')
             current = text.split('## 1.2.4-preview.1')[0]
-            self.assertIn('https://github.com/joinwell52-AI/BoundX/releases/tag/v1.3.0-preview.0', current)
+            self.assertIn('https://github.com/joinwell52-AI/BoundaryXP/releases/tag/v1.3.0-preview.0', current)
             self.assertIn('private', current.lower())
             self.assertIn('source prerelease', current.lower())
             self.assertIn('npm/PyPI', current)
@@ -47,7 +47,7 @@ class ProductAlignmentTests(unittest.TestCase):
             self.assertNotRegex(current, r'未发布 npm/PyPI 或 Release|No release, publication|无公开 Release')
 
     def test_manual_separates_delivered_capabilities_from_future_plans(self):
-        text = (ROOT / 'docs/BOUNDX-PRODUCT-MANUAL.md').read_text(encoding='utf-8')
+        text = (ROOT / 'docs/BOUNDARYXP-PRODUCT-MANUAL.md').read_text(encoding='utf-8')
         delivered = text.split('## 14. 当前已交付能力 / Current Delivered Capabilities\n')[1].split('## 15.')[0]
         planned = text.split('## 15. 未来规划能力 / Future Planned Capabilities\n')[1].split('## 16.')[0]
         for entry in ['Node CLI', 'Node MCP', '本机 Web UI', '唯一 BXP Core']:
@@ -95,7 +95,7 @@ class ProductAlignmentTests(unittest.TestCase):
         self.assertEqual(lock['version'], package['version'])
         self.assertEqual(lock['packages']['']['version'], package['version'])
         self.assertTrue(package['private'])
-        for name in ['README.md', 'AGENTS.md', 'QUICKSTART.md', 'protocol/IMPLEMENTATION.md', 'docs/BOUNDX-PRODUCT-MANUAL.md']:
+        for name in ['README.md', 'AGENTS.md', 'QUICKSTART.md', 'protocol/IMPLEMENTATION.md', 'docs/BOUNDARYXP-PRODUCT-MANUAL.md']:
             self.assertIn(package['version'], (ROOT / name).read_text(encoding='utf-8'), name)
 
     def test_readme_first_runnable_example_is_canonical(self):

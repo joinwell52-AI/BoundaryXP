@@ -31,7 +31,7 @@ Codex 必须在本任务授权范围内持续执行：
 
 ## 0. Repository / Branch / Baseline
 
-Repository: joinwell52-AI/BoundX
+Repository: joinwell52-AI/BoundaryXP
 
 Branch: review/7plus1-parser
 
@@ -67,9 +67,9 @@ Create a new implementation/research root for 024 using the repository's existin
 
 Mandatory:
 
-docs/BoundX-7plus1-定义原理语义编译与边界计算说明-v0.3.1.md
+docs/BoundaryXP-7plus1-定义原理语义编译与边界计算说明-v0.3.1.md
 
-docs/BoundX-7plus1-ADMIN-ROOT-BENCHMARK-CONTRACT-v1.md
+docs/BoundaryXP-7plus1-ADMIN-ROOT-BENCHMARK-CONTRACT-v1.md
 
 docs/tasks/7plus1/7P-CANDIDATE-SEMANTIC-GRAPH-023.md
 
@@ -115,7 +115,7 @@ The objective is not “improve tests”.
 
 The objective is:
 
-Make the current BoundX compiler materially capable of reading valid ADMIN Root natural-language tasks and compiling their explicit authority boundary into correct, traceable Root Canonical 7+1 under v0.3.1.
+Make the current BoundaryXP compiler materially capable of reading valid ADMIN Root natural-language tasks and compiling their explicit authority boundary into correct, traceable Root Canonical 7+1 under v0.3.1.
 
 The primary development corpus is:
 
@@ -1014,7 +1014,7 @@ Natural-100 is a holdout diagnostic in this task and does not authorize post-obs
 Do not claim:
 
 ~~~
-BOUNDX_PRODUCTION_READY=true
+BOUNDARYXP_PRODUCTION_READY=true
 GENERAL_NATURAL_LANGUAGE_SOLVED=true
 ~~~
 

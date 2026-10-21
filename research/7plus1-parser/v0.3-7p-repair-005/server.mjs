@@ -26,4 +26,4 @@ export function createServer({store=new HistoryStore(path.join(BASE,'../local-la
  }catch(e){send(e.code==='ENOENT'?404:400,{error:e.message});}
  });
 }
-if(process.argv[1]&&import.meta.url===pathToFileURL(process.argv[1]).href){console.log('Warming frozen linguistic and retrieval models for native P2.2…');await warmup();createServer().listen(Number(process.env.BOUNDX_PARSER_PORT??58618),'127.0.0.1',()=>console.log('BoundX P2.2 Semantic Decoding Lab: http://127.0.0.1:'+(process.env.BOUNDX_PARSER_PORT??58618)));}
+if(process.argv[1]&&import.meta.url===pathToFileURL(process.argv[1]).href){console.log('Warming frozen linguistic and retrieval models for native P2.2…');await warmup();createServer().listen(Number(process.env.BOUNDARYXP_PARSER_PORT??58618),'127.0.0.1',()=>console.log('BoundaryXP P2.2 Semantic Decoding Lab: http://127.0.0.1:'+(process.env.BOUNDARYXP_PARSER_PORT??58618)));}

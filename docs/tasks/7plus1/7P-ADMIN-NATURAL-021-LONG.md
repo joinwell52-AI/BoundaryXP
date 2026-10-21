@@ -3,7 +3,7 @@
 ## 0. Identity
 
 - TASK: `7P-ADMIN-NATURAL-021-LONG`
-- Repository: `joinwell52-AI/BoundX`
+- Repository: `joinwell52-AI/BoundaryXP`
 - Branch: `review/7plus1-parser`
 - Parent validated task: `7P-ADMIN-SHORT-020-LONG`
 - Parent delivery commit: `65f72aad`

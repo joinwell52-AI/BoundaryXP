@@ -1,4 +1,4 @@
-# BoundX功能与交付状态
+# BoundaryXP功能与交付状态
 
 核对日期：2026-10-08。[状态页](SHORT-COMPILER-STATUS.md)是版本与验收数字的集中入口；本文区分当前可用功能、开发候选和完整产品目标。
 
@@ -35,11 +35,11 @@
 | `node cli.mjs protocol-info` | 所选Core的实际协议/实现信息 | 不代表短文本新链通过整个BXP目标协议验收 |
 | 既有CLI/MCP/Node API | 结构化输入及Core适配能力 | 不默认为新短文本模型入口或新的权限门 |
 
-命令与版本依据：[main的package.json](../package.json)、[开发分支脚本快照](https://github.com/joinwell52-AI/BoundX/blob/a55363226b465cb120ce8f2624d5d900d5a39d9d/package.json)、[开发分支固定启动器](https://github.com/joinwell52-AI/BoundX/blob/a55363226b465cb120ce8f2624d5d900d5a39d9d/product/short-compiler/launch-installed.mjs)。操作见[快速开始](../QUICKSTART.md)。
+命令与版本依据：[main的package.json](../package.json)、[开发分支脚本快照](https://github.com/joinwell52-AI/BoundaryXP/blob/a55363226b465cb120ce8f2624d5d900d5a39d9d/package.json)、[开发分支固定启动器](https://github.com/joinwell52-AI/BoundaryXP/blob/a55363226b465cb120ce8f2624d5d900d5a39d9d/product/short-compiler/launch-installed.mjs)。操作见[快速开始](../QUICKSTART.md)。
 
 ## 3. 既有边界计算模块
 
-[开发分支Core入口快照](https://github.com/joinwell52-AI/BoundX/blob/a55363226b465cb120ce8f2624d5d900d5a39d9d/src/bxp/index.mjs)包含结构化BXP评价、语义IR校验与形式化编译、类型化边界、ScopeGauge、边界比较、准入绑定及下游符合性等导出。main的实际导出以[main入口](../src/bxp/index.mjs)为准，不能用开发分支清单代替。已有区间、集合、依赖和布尔计算能力不等于新LLM语义链已经完整接入。
+[开发分支Core入口快照](https://github.com/joinwell52-AI/BoundaryXP/blob/a55363226b465cb120ce8f2624d5d900d5a39d9d/src/bxp/index.mjs)包含结构化BXP评价、语义IR校验与形式化编译、类型化边界、ScopeGauge、边界比较、准入绑定及下游符合性等导出。main的实际导出以[main入口](../src/bxp/index.mjs)为准，不能用开发分支清单代替。已有区间、集合、依赖和布尔计算能力不等于新LLM语义链已经完整接入。
 
 后续必须从同一原文编译结果建立等价映射，验证未映射语义、条件与范围、冲突和来源，再确认Boundary Result。不能手工补正式模型后宣称原文全自动贯通；不能把结构合法与Proof路径当语义正确。
 
@@ -55,6 +55,6 @@
 
 ## 5. 保持不变的产品边界
 
-ADMIN定义范围与授权，PM负责规划，BoundX编译与核查。未知事实不猜；明确要求不漏；真实歧义不强选。业务决定与执行授权字段保持null。模型服务依赖、公开资源许可、版本升级和实际任务执行均按各自边界处理。
+ADMIN定义范围与授权，PM负责规划，BoundaryXP编译与核查。未知事实不猜；明确要求不漏；真实歧义不强选。业务决定与执行授权字段保持null。模型服务依赖、公开资源许可、版本升级和实际任务执行均按各自边界处理。
 
-[产品手册](BOUNDX-PRODUCT-MANUAL.md) · [方法手册](BoundX-7plus1-定义原理语义编译与边界计算说明-v0.4.md) · [验证规程](VALIDATION.md) · [文档导航](README.md)
+[产品手册](BOUNDARYXP-PRODUCT-MANUAL.md) · [方法手册](BoundaryXP-7plus1-定义原理语义编译与边界计算说明-v0.4.md) · [验证规程](VALIDATION.md) · [文档导航](README.md)

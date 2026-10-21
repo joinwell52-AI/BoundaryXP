@@ -4,14 +4,14 @@
 
 ## 当前任务
 
-- [开发任务书 v2](BoundX-ADMIN-task-text-semantic-packs-taskbook-v2.md)
-- [120条任务文本附件](BoundX-ADMIN-task-text-cases-v2.json)
-- [v1历史快照](BoundX-ADMIN-task-text-semantic-packs-taskbook-v1.md)
+- [开发任务书 v2](BoundaryXP-ADMIN-task-text-semantic-packs-taskbook-v2.md)
+- [120条任务文本附件](BoundaryXP-ADMIN-task-text-cases-v2.json)
+- [v1历史快照](BoundaryXP-ADMIN-task-text-semantic-packs-taskbook-v1.md)
 
 ## 本次关键修订
 
 1. 复用已有L1/L2，独立打包、版本、摘要、依赖和引用；不重做7+1。
-2. 采用Data Package 2.0描述符及BoundX受限扩展，交付普通目录/ZIP；撤销v1专用.bxpack要求。
+2. 采用Data Package 2.0描述符及BoundaryXP受限扩展，交付普通目录/ZIP；撤销v1专用.bxpack要求。
 3. L1语义数据与Python/Lark分离；L2修正UTF-16遗留，并清除仓库相对路径依赖。
 4. L3仅职员表，自定义岗位允许无行业映射；PM-01不自动等于产品经理；inactive可识别但不表示可执行。
 5. 名册关闭不抹掉原文中的姓名，只禁止使用未启用名册的映射；岗位不自动产生本次责任。
@@ -23,7 +23,7 @@
 
 ## 给Codex
 
-请执行本目录v2任务书及120条文本附件，替代v1冲突要求。先做WP0核对最新main和任何已有实施成果；在独立实施分支按WP0–WP9开发。只修改BoundX，不改BXP协议/Schema/208冻结期望，不训练自有模型，不复制Core，不执行任务，不发布。
+请执行本目录v2任务书及120条文本附件，替代v1冲突要求。先做WP0核对最新main和任何已有实施成果；在独立实施分支按WP0–WP9开发。只修改BoundaryXP，不改BXP协议/Schema/208冻结期望，不训练自有模型，不复制Core，不执行任务，不发布。
 
 如已有实施代码，先逐项映射v2并保留可复用部分；不要reset工作树、覆盖其他开发者改动或重写历史。完整任务书中的精确合同和门槛优先于本摘要。
 

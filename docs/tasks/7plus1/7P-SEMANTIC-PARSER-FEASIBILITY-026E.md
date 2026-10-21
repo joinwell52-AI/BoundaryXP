@@ -12,7 +12,7 @@ This experiment does **not** replace 026 and does not authorize production chang
 
 Its only question is:
 
-> Can an existing non-LLM semantic parsing route recover the predicate–argument–scope structure that the current BoundX candidate generator is failing to recover?
+> Can an existing non-LLM semantic parsing route recover the predicate–argument–scope structure that the current BoundaryXP candidate generator is failing to recover?
 
 Do not repair the active parser during this experiment.
 Do not tune rules to cases.
@@ -50,7 +50,7 @@ A pretrained semantic graph parser can recover useful predicate–argument / emb
 
 H3 — Downstream sufficiency hypothesis
 
-If a correct semantic graph is supplied, existing BoundX Γ → Boundary IR → 7+1 can consume it with only a deterministic adapter, without requiring case-specific rules.
+If a correct semantic graph is supplied, existing BoundaryXP Γ → Boundary IR → 7+1 can consume it with only a deterministic adapter, without requiring case-specific rules.
 
 These hypotheses must be tested independently.
 
@@ -118,7 +118,7 @@ Compare Arm B against Arm A before any downstream parser changes.
 
 # 6. Arm C — Pretrained semantic graph parser
 
-Run an existing pretrained Chinese semantic graph parser independently from the active BoundX parser.
+Run an existing pretrained Chinese semantic graph parser independently from the active BoundaryXP parser.
 
 Primary candidate to test:
 
@@ -134,7 +134,7 @@ Before use, record:
 - runtime dependencies
 - whether the model is used only for this research experiment
 
-Model licensing does not imply production approval. Do not add this model to BoundX's approved production model list.
+Model licensing does not imply production approval. Do not add this model to BoundaryXP's approved production model list.
 
 Run it on full sentences, not comma fragments.
 
@@ -230,11 +230,11 @@ Use only if all are true:
 - improves correct predicate/argument/layer recovery across multiple root-cause families;
 - does not collapse modifier/content/condition predicates into main-task actions at an unacceptable rate;
 - source provenance can be reconstructed or safely retained;
-- recovered structure can be mapped to BoundX candidate node/relation/expression types without case-specific phrase rules.
+- recovered structure can be mapped to BoundaryXP candidate node/relation/expression types without case-specific phrase rules.
 
 SEMANTIC_PARSER_PROMISING_BUT_INSUFFICIENT
 
-Use if it clearly improves predicate–argument structure but lacks one or more critical BoundX needs such as:
+Use if it clearly improves predicate–argument structure but lacks one or more critical BoundaryXP needs such as:
 - precise source alignment
 - modality/negation scope
 - condition ownership
@@ -242,7 +242,7 @@ Use if it clearly improves predicate–argument structure but lacks one or more 
 
 SEMANTIC_PARSER_NOT_FEASIBLE
 
-Use if it does not materially improve the missing semantic structures, produces excessive semantic pollution, or cannot be source-grounded enough for BoundX proof/accountability.
+Use if it does not materially improve the missing semantic structures, produces excessive semantic pollution, or cannot be source-grounded enough for BoundaryXP proof/accountability.
 
 Do not force a PASS.
 
@@ -252,7 +252,7 @@ Do not force a PASS.
 
 Select 10 cases from the 60 before reviewing experiment results.
 
-For these 10 only, manually construct a reviewed semantic intermediate using existing BoundX node/relation/expression contracts.
+For these 10 only, manually construct a reviewed semantic intermediate using existing BoundaryXP node/relation/expression contracts.
 
 This is a diagnostic oracle, not parser output and not benchmark score.
 

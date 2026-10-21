@@ -3,12 +3,12 @@
 ## 0. Identity
 
 - TASK: `7P-ADMIN-SHORT-020-LONG`
-- Repository: `joinwell52-AI/BoundX`
+- Repository: `joinwell52-AI/BoundaryXP`
 - Branch: `review/7plus1-parser`
 - Parent: `7P-ADMIN-SHORT-019-LONG`
 - Parent commit: `4d358fa5de5f224865fe7592459b06b9c6216204`
 - ADMIN authorization: `docs/tasks/7plus1/7P-ADMIN-SHORT-020-LONG-ADMIN-AUTHORIZATION.md`
-- Normative method: `docs/BoundX-7plus1-定义原理语义编译与边界计算说明-v0.3.md`
+- Normative method: `docs/BoundaryXP-7plus1-定义原理语义编译与边界计算说明-v0.3.md`
 - PRODUCTION_READY=false
 
 ## 1. Mission

@@ -3,12 +3,12 @@
 ## 0. Task identity
 
 - TASK: `7P-COMPOSITION-014`
-- Repository: `joinwell52-AI/BoundX`
+- Repository: `joinwell52-AI/BoundaryXP`
 - Branch: `review/7plus1-parser`
 - Start base: latest `review/7plus1-parser` HEAD containing the sealed `7P-COMPOSITION-013` report
 - Previous task: `7P-COMPOSITION-013`
 - Previous outcome: `R4_IMPLEMENTATION_GATE_FAILED`
-- Normative method: `docs/BoundX-7plus1-定义原理语义编译与边界计算说明-v0.3.md`
+- Normative method: `docs/BoundaryXP-7plus1-定义原理语义编译与边界计算说明-v0.3.md`
 - Active comparison contract: `fixtures/7plus1/standard-contract/v0.3-admin-20261002/`
 - `PRODUCTION_READY=false`
 

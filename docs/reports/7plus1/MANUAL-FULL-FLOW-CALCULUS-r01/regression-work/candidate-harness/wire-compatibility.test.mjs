@@ -2,7 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import path from 'node:path';
 import {pathToFileURL} from 'node:url';
-const root=path.resolve(process.env.BOUNDX_COMPACT_TEST_ROOT??'.boundx/compact-interface-ui17-work');
+const root=path.resolve(process.env.BOUNDARYXP_COMPACT_TEST_ROOT??'.boundx/compact-interface-ui17-work');
 const wire=await import(pathToFileURL(path.join(root,'research/7plus1-parser/llm-first-028/compact-wire.mjs')).href);
 for(const [kind,schema] of [['proposal',wire.wireProposalSchema],['audit',wire.wireAuditSchema]])test(kind+' outbound compatibility changes only unsupported uniqueItems',()=>{
  const before=JSON.stringify(schema),delivery=wire.codexWireOutputSchema(schema),expected=structuredClone(schema);

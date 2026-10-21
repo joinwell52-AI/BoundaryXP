@@ -11,6 +11,6 @@ put(report+'/BASELINE.json',JSON.stringify({base_commit:base,semantic_base:'7ccd
 // Change only Git branch/index metadata: no checkout, reset, merge or working-file overwrite.
 git('update-ref','refs/heads/review/7plus1-parser',base,'7ccdcc349aba616e8952fab7755d8ab23c73819e');
 git('symbolic-ref','HEAD','refs/heads/review/7plus1-parser');git('read-tree',base);
-for(const p of paths.filter(p=>p=== 'docs/tasks/7plus1/CURRENT-TASK.md'||p==='docs/tasks/7plus1/7P-REPAIR-003.md'||p==='docs/BoundX-7plus1-定义原理语义编译与边界计算说明-v0.3.md'))put(p,execFileSync('git',['show',base+':'+p]));
+for(const p of paths.filter(p=>p=== 'docs/tasks/7plus1/CURRENT-TASK.md'||p==='docs/tasks/7plus1/7P-REPAIR-003.md'||p==='docs/BoundaryXP-7plus1-定义原理语义编译与边界计算说明-v0.3.md'))put(p,execFileSync('git',['show',base+':'+p]));
 for(const p of paths.filter(p=>p.startsWith(old+'/')))put(p.replace(old,next),fs.readFileSync(p));
 console.log({base,branch:git('branch','--show-current').trim(),files:paths.length,next});

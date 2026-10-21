@@ -1,8 +1,8 @@
 # Agent / Producer → BXP
 
-Agent、规则或其他生产者负责形成候选 `boundx-task/v1`；BoundX 本地验证和计算，宿主负责澄清、审批及执行。本指南是产品方法说明，不是新增协议。BXP-EXTRACT 仍为 RESERVED，候选不等于事实，Schema 通过不证明抽取准确率。
+Agent、规则或其他生产者负责形成候选 `boundx-task/v1`；BoundaryXP 本地验证和计算，宿主负责澄清、审批及执行。本指南是产品方法说明，不是新增协议。BXP-EXTRACT 仍为 RESERVED，候选不等于事实，Schema 通过不证明抽取准确率。
 
-Agents, rules or other producers construct candidate IR. BoundX validates and calculates locally; the host owns clarification, approval and execution. This guide does not certify extraction or introduce another protocol.
+Agents, rules or other producers construct candidate IR. BoundaryXP validates and calculates locally; the host owns clarification, approval and execution. This guide does not certify extraction or introduce another protocol.
 
 ## 机器合同 / Machine Contract
 

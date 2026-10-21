@@ -4,7 +4,7 @@
 
 最新完整候选是`0.1.0-candidate.032.3` / 核心`032-c3` / 结构合同`032.1` / 域解释规程`032-domain-interpretation-v2`。真实模型验证为**0/79**，不继承C1/C2成绩。原用户安装指针仍为`0.1.0-candidate.031-r1.2` / `031-r1-c3` / `031-r1.1`，最终核查58618无监听；本轮未恢复、停止或升级该入口，也没有声称发生新的策略拒绝。
 
-完整运行包：[BoundX-short-compiler-0.1.0-candidate.032.3.zip](delivery/BoundX-short-compiler-0.1.0-candidate.032.3.zip)，SHA-256 `1e65b9598d85788e0e9cc96cd07db3a9a09c17a207e009e3fb701d4ab05e5dd3`。包包含唯一实际核心、两个Skill、合同/Schema、原UI和依赖锁定文件，不含凭据、历史、权重、缓存或160项旧工作区改动。使用与回滚见[INSTALL-AND-ROLLBACK.md](INSTALL-AND-ROLLBACK.md)。电脑重启后的原入口命令仍是：
+完整运行包：[BoundaryXP-short-compiler-0.1.0-candidate.032.3.zip](delivery/BoundaryXP-short-compiler-0.1.0-candidate.032.3.zip)，SHA-256 `1e65b9598d85788e0e9cc96cd07db3a9a09c17a207e009e3fb701d4ab05e5dd3`。包包含唯一实际核心、两个Skill、合同/Schema、原UI和依赖锁定文件，不含凭据、历史、权重、缓存或160项旧工作区改动。使用与回滚见[INSTALL-AND-ROLLBACK.md](INSTALL-AND-ROLLBACK.md)。电脑重启后的原入口命令仍是：
 
 ```bat
 cd /d D:\boundx

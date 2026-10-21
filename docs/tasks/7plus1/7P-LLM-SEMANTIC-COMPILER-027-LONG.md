@@ -10,11 +10,11 @@
 
 当前规范：
 
-`docs/BoundX-7plus1-定义原理语义编译与边界计算说明-v0.4.md`
+`docs/BoundaryXP-7plus1-定义原理语义编译与边界计算说明-v0.4.md`
 
 仓库：
 
-`joinwell52-AI/BoundX`
+`joinwell52-AI/BoundaryXP`
 
 唯一工作及推送分支：
 
@@ -72,7 +72,7 @@ Proof / Coverage
 
 # 2. 先建立模型无关 SemanticParserPort
 
-实现稳定接口，不把 BoundX 绑定死在 Codex：
+实现稳定接口，不把 BoundaryXP 绑定死在 Codex：
 
 ```text
 SemanticParserPort.parse(source, typed_spans, structure) -> CandidateGraphProposal

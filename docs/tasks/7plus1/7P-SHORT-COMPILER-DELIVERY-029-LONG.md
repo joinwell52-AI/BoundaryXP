@@ -13,10 +13,10 @@
 
 ## 1. 范围、权威与现有成果
 
-- 仓库：`joinwell52-AI/BoundX`。
+- 仓库：`joinwell52-AI/BoundaryXP`。
 - 工作及推送分支：`review/7plus1-parser`。
 - 已知本地工作根线索：`D:\boundx`；以实际仓库路径核实，不另建替代工作区覆盖用户工作。
-- 规范：`docs/BoundX-7plus1-定义原理语义编译与边界计算说明-v0.4.md`，修订r02，已核对blob `58db3ddab5327173fd15cfe5d8bd1e6c3f2825ff`。
+- 规范：`docs/BoundaryXP-7plus1-定义原理语义编译与边界计算说明-v0.4.md`，修订r02，已核对blob `58db3ddab5327173fd15cfe5d8bd1e6c3f2825ff`。
 - 028核心：`research/7plus1-parser/llm-first-028/`，包括两个Skill、共享合同/Schema、engine.mjs、provider.mjs、validate/compile、CLI及自检。
 - 028报告：`docs/reports/7plus1/7P-LLM-FIRST-SEMANTIC-REBUILD-028-LONG/REPORT.md`。
 - 本轮报告目录：`docs/reports/7plus1/7P-SHORT-COMPILER-DELIVERY-029-LONG/`。

@@ -20,7 +20,7 @@ export function dictionaryMcpFlags(snapshotPath,logPath){
 }
 export const allowedDictionaryEvent=e=>e.item?.type==='mcp_tool_call'&&e.item.server==='boundx_dictionary'&&e.item.tool==='lookup';
 const toolFeatures=['shell_tool','multi_agent','multi_agent_v2','apps','plugins','remote_plugin','hooks','memories','skill_search','tool_suggest','browser_use','browser_use_external','computer_use','image_generation','view_image','code_mode_host','code_mode_only','sleep_tool','workspace_dependencies','in_app_browser','in_app_chat','in_app_local_automation','artifact'];
-export function discoverCodex(explicit=process.env.BOUNDX_CODEX_EXE){
+export function discoverCodex(explicit=process.env.BOUNDARYXP_CODEX_EXE){
  if(explicit)return path.resolve(explicit);
  const root=path.join(process.env.LOCALAPPDATA??'', 'OpenAI','Codex','bin');
  const entries=fs.existsSync(root)?fs.readdirSync(root).map(d=>path.join(root,d,'codex.exe')).filter(f=>fs.existsSync(f)).sort((a,b)=>fs.statSync(b).mtimeMs-fs.statSync(a).mtimeMs):[];

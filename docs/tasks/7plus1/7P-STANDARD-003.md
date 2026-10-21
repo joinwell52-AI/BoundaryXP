@@ -9,7 +9,7 @@ Task ID: 7P-STANDARD-003
 不得开始 Parser repair。
 
 Repository:
-joinwell52-AI/BoundX
+joinwell52-AI/BoundaryXP
 
 Branch:
 review/7plus1-parser

@@ -28,8 +28,8 @@ BXP defines 7+1; L1 supplies general semantic primitives only. L3 must not overr
 | 字段 | 所属对象与含义 | 边界 |
 |---|---|---|
 | `policyBindings[].decision: null` | L3 语义包的采用/绑定决定尚未作出；绑定 `status` 仍为 `candidate` | 不是现实业务审批，也不是 BXP 结果字段 |
-| `business_decision: null` | `boundx-result/v1` 的业务裁决权力边界 | BoundX 不作业务裁决 |
-| `execution_authorization: null` | `boundx-result/v1` 的执行授权权力边界 | BoundX 不授予执行权 |
+| `business_decision: null` | `boundx-result/v1` 的业务裁决权力边界 | BoundaryXP 不作业务裁决 |
+| `execution_authorization: null` | `boundx-result/v1` 的执行授权权力边界 | BoundaryXP 不授予执行权 |
 
 这三个字段不能互相替代、复制或推导。L3 当前 Schema 将绑定 `decision` 固定为 `null`，不允许据此新增非空状态；候选绑定不构成业务授权。BXP 两个字段始终保持 `null`，由宿主在协议结果之外处理实际审批和执行。
 

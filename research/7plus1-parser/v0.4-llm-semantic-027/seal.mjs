@@ -18,7 +18,7 @@ const files=paths.map(path=>({path,bytes:fs.statSync(path).size,sha256:sha(fs.re
 const large=files.filter(f=>f.bytes>=100*1024*1024);if(large.length)throw Error('GIT_INAPPROPRIATE_LARGE_ASSET '+large.map(f=>f.path).join(','));
 const credentialHits=files.filter(f=>/\bsk-[a-zA-Z0-9_-]{20,}|Bearer\s+[a-zA-Z0-9._-]{20,}|gh[pousr]_[a-zA-Z0-9]{30,}/u.test(fs.readFileSync(f.path,'utf8')));
 if(credentialHits.length)throw Error('POTENTIAL_CREDENTIAL_IN_DELIVERY '+credentialHits.map(f=>f.path).join(','));
-const methods=['docs/tasks/7plus1/CURRENT-TASK.md','docs/tasks/7plus1/7P-LLM-SEMANTIC-COMPILER-027-LONG.md','docs/BoundX-7plus1-定义原理语义编译与边界计算说明-v0.4.md'].map(path=>({path,sha256:sha(fs.readFileSync(path))}));
+const methods=['docs/tasks/7plus1/CURRENT-TASK.md','docs/tasks/7plus1/7P-LLM-SEMANTIC-COMPILER-027-LONG.md','docs/BoundaryXP-7plus1-定义原理语义编译与边界计算说明-v0.4.md'].map(path=>({path,sha256:sha(fs.readFileSync(path))}));
 const manifest={task:'7P-LLM-SEMANTIC-COMPILER-027-LONG',terminal:result.LLM_SEMANTIC_COMPILER_027,base_commit:execFileSync('git',['rev-parse','HEAD'],{encoding:'utf8'}).trim(),branch:execFileSync('git',['branch','--show-current'],{encoding:'utf8'}).trim(),files,total_files:files.length,total_bytes:files.reduce((s,f)=>s+f.bytes,0),method_references:methods,excluded_seal_files:[...excluded],credential_scan_hits:0,large_assets_omitted:[],production_entry_changed:false};
 if(manifest.branch!=='review/7plus1-parser')throw Error('WRONG_REVIEW_BRANCH');
 save(REPORT+'/MANIFEST.json',manifest);

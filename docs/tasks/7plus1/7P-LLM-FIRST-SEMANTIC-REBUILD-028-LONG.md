@@ -12,11 +12,11 @@ LLM承担原来程序缺失的主要语义分析，不是给旧NLP/构式规则�
 
 ## 1. 范围、文件与禁止偏离事项
 
-仓库：joinwell52-AI/BoundX。
+仓库：joinwell52-AI/BoundaryXP。
 工作及推送分支：review/7plus1-parser。
 实现根：research/7plus1-parser/llm-first-028/。
 报告根：docs/reports/7plus1/7P-LLM-FIRST-SEMANTIC-REBUILD-028-LONG/。
-规范：docs/BoundX-7plus1-定义原理语义编译与边界计算说明-v0.4.md，必须读取修订r02全文并核对摘要。
+规范：docs/BoundaryXP-7plus1-定义原理语义编译与边界计算说明-v0.4.md，必须读取修订r02全文并核对摘要。
 
 从新实现出发；已在028新目录写出的合规代码可以继续完善，不为“重头”再创建一串平行版本。旧026/027实现、旧图、旧评分器和旧响应不是运行或兼容基线。无需复盘历史失败、迁移旧图、盘点旧资产、重建封存目录或恢复旧通过率。已知的实体全局角色、审阅整组污染等概念错误不可重复引入。
 

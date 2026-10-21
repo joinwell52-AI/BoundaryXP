@@ -20,7 +20,7 @@ export function comparisonBundle(phase,method){
  parseMethod(method);if(!['parse','audit'].includes(phase))throw Error('INVALID_SKILL_PHASE');
  if(contractVersion!=='031-r1.1')throw Error('COMPARISON_CONTRACT_VERSION_MISMATCH');
  const name=phase==='audit'?'boundx-semantic-audit':method==='SKILL'?'boundx-semantic-parse':'boundx-r02-md';
- const items=phase==='audit'?[['skills/boundx-semantic-audit/SKILL.md','skills/boundx-semantic-audit/SKILL.md']]:method==='SKILL'?[['skills/boundx-semantic-parse/SKILL.md','skills/boundx-semantic-parse/SKILL.md']]:[['BOUNDX-LLM-SEMANTIC-ESSENTIALS.zh-CN.md','contracts/comparison/essentials.md']];
+ const items=phase==='audit'?[['skills/boundx-semantic-audit/SKILL.md','skills/boundx-semantic-audit/SKILL.md']]:method==='SKILL'?[['skills/boundx-semantic-parse/SKILL.md','skills/boundx-semantic-parse/SKILL.md']]:[['BOUNDARYXP-LLM-SEMANTIC-ESSENTIALS.zh-CN.md','contracts/comparison/essentials.md']];
  items.push(['contracts/semantic-contract.md','contracts/comparison/semantic-contract.md'],['contracts/proposal.schema.json','contracts/comparison/proposal.schema.json']);
  if(phase==='audit')items.push(['contracts/audit.schema.json','contracts/comparison/audit.schema.json']);
  const resources=items.map(([logical,source_path])=>{

@@ -19,7 +19,7 @@ if(process.argv.includes('--verify')){
 }else{
  const selected=new Set();const add=p=>{if(fs.statSync(p).isFile())selected.add(p);};const tree=p=>walk(p).forEach(add);
  tree(path.join(repo,'research/7plus1-parser/llm-first-028'));
- for(const p of ['package.json','docs/tasks/7plus1/CURRENT-TASK.md','docs/tasks/7plus1/7P-SHORT-COMPILER-DELIVERY-029-LONG.md','docs/BoundX-7plus1-定义原理语义编译与边界计算说明-v0.4.md','research/7plus1-parser/v0.3-p2.1-generalization/server.mjs','research/7plus1-parser/v0.3-p2.1-generalization/web/index.html','research/7plus1-parser/v0.3-p2.1-generalization/web/native-app.js','research/7plus1-parser/v0.3-p2.1-generalization/web/style.css'])add(path.join(repo,p));
+ for(const p of ['package.json','docs/tasks/7plus1/CURRENT-TASK.md','docs/tasks/7plus1/7P-SHORT-COMPILER-DELIVERY-029-LONG.md','docs/BoundaryXP-7plus1-定义原理语义编译与边界计算说明-v0.4.md','research/7plus1-parser/v0.3-p2.1-generalization/server.mjs','research/7plus1-parser/v0.3-p2.1-generalization/web/index.html','research/7plus1-parser/v0.3-p2.1-generalization/web/native-app.js','research/7plus1-parser/v0.3-p2.1-generalization/web/style.css'])add(path.join(repo,p));
  const seals=new Set(['MANIFEST.json','SHA256SUMS','SEAL.json']);
  for(const e of fs.readdirSync(report,{withFileTypes:true}))if(e.isFile()&&!seals.has(e.name))add(path.join(report,e.name));
  tree(path.join(report,'inputs'));tree(path.join(report,'delivery-final'));

@@ -1,4 +1,4 @@
-# 当前 BoundX 7+1 产品开发任务
+# 当前 BoundaryXP 7+1 产品开发任务
 
 ## 2026-10-15 ui101：Gold60同版60例完成，WAITING_ADMIN_REVIEW
 
@@ -121,7 +121,7 @@ ADMIN在WP0—WP5隔离交付后授权“启动新的58618”“同步最新的�
 
 ## 2026-10-13 当前隔离任务
 
-ADMIN 在当前会话下发 `BoundX-IR-Kernel-Implementation-v1.0.zip` 并授权连续实施 WP0—WP5。当前任务为 **BXP-IR-KERNEL-CLOSURE-001**，任务依据保存在 [原始任务包](BXP-IR-KERNEL-CLOSURE-001/CODEX-TASK.zh-CN.md) 及同目录 PLAN；状态及实际证据见 [内核报告](../../ir-kernel/REPORT.md)。以下云端及032指针保留为历史，不覆盖本次授权。
+ADMIN 在当前会话下发 `BoundaryXP-IR-Kernel-Implementation-v1.0.zip` 并授权连续实施 WP0—WP5。当前任务为 **BXP-IR-KERNEL-CLOSURE-001**，任务依据保存在 [原始任务包](BXP-IR-KERNEL-CLOSURE-001/CODEX-TASK.zh-CN.md) 及同目录 PLAN；状态及实际证据见 [内核报告](../../ir-kernel/REPORT.md)。以下云端及032指针保留为历史，不覆盖本次授权。
 
 范围：统一 IR 内核的隔离候选、无模型验收与证据；不新增被测解析／审阅／修订调用，不升级或停启58618，不新增监听端口，不merge、release、tag或发布。原Skill、skill1及原始失败保留；必要2.0接口适配仅准备，不自动启用。主工作区不覆盖，修改限于 `work/ir-kernel-closure-001` 隔离候选。
 

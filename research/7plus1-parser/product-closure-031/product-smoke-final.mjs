@@ -11,7 +11,7 @@ assert(runIds.length,'requires preserved real UI history fixture');
 function command(cwd,args){const r=spawnSync(process.execPath,args,{cwd,encoding:'utf8',windowsHide:true});rows.push({kind:'command',cwd,args,exit_code:r.status,stdout:r.stdout,stderr:r.stderr});return r;}
 async function probe(version){
  const root=path.join(home,'versions',read(path.join(home,'current.json')).version);assert.equal(read(path.join(root,'PRODUCT-MANIFEST.json')).version,version);
- const child=spawn(process.execPath,['product/short-compiler/ui.mjs'],{cwd:root,windowsHide:true,stdio:['ignore','pipe','pipe'],env:{...process.env,BOUNDX_PARSER_PORT:'58620',BOUNDX_DATA_DIR:data}});let log='';child.stdout.on('data',b=>log+=b);child.stderr.on('data',b=>log+=b);
+ const child=spawn(process.execPath,['product/short-compiler/ui.mjs'],{cwd:root,windowsHide:true,stdio:['ignore','pipe','pipe'],env:{...process.env,BOUNDARYXP_PARSER_PORT:'58620',BOUNDARYXP_DATA_DIR:data}});let log='';child.stdout.on('data',b=>log+=b);child.stderr.on('data',b=>log+=b);
  const ended=new Promise(r=>child.once('close',r));
  try{let s;for(let i=0;i<100;i++){try{const r=await fetch('http://127.0.0.1:58620/api/session');if(r.ok){s={body:await r.json(),cookie:r.headers.get('set-cookie').split(';')[0]};break;}}catch{}await new Promise(r=>setTimeout(r,50));}assert(s,'service must start');
   const list=await(await fetch('http://127.0.0.1:58620/api/runs')).json();assert(runIds.every(id=>list.some(x=>x.run_id===id)),'history persisted');

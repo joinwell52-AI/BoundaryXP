@@ -10,13 +10,13 @@ No parser implementation is authorized by this file.
 
 Read:
 
-`docs/BoundX-7plus1-定义原理语义编译与边界计算说明-v0.3.1.md`
+`docs/BoundaryXP-7plus1-定义原理语义编译与边界计算说明-v0.3.1.md`
 
 ## Corrected benchmark contract
 
 Read:
 
-`docs/BoundX-7plus1-ADMIN-ROOT-BENCHMARK-CONTRACT-v1.md`
+`docs/BoundaryXP-7plus1-ADMIN-ROOT-BENCHMARK-CONTRACT-v1.md`
 
 ## Corrected source sets
 

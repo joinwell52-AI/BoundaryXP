@@ -1,4 +1,4 @@
-# BoundX v0.4 — 027 isolated semantic compiler
+# BoundaryXP v0.4 — 027 isolated semantic compiler
 
 The authorized method is the repository v0.4 manual and 027 taskbook. This code
 does not import the legacy semantic runtime. Existing production CLI/UI entries

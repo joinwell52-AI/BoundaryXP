@@ -6,7 +6,7 @@
 
 | 优先级 | 文件及证据 | 滞后或缺口 | 应当澄清的当前口径 |
 |---|---|---|---|
-| P0 | main README.zh-CN.md:213–219；docs/BOUNDX-PRODUCT-MANUAL.md:644–670 | LLM为参考路线，spaCy为本地NLP商用候选主路线 | 当前短文本主链是解析Skill/Codex→候选语义→审阅Skill/独立会话→技术校验→Boundary IR→确定性7+1；旧NLP研究应标历史或独立研究 |
+| P0 | main README.zh-CN.md:213–219；docs/BOUNDARYXP-PRODUCT-MANUAL.md:644–670 | LLM为参考路线，spaCy为本地NLP商用候选主路线 | 当前短文本主链是解析Skill/Codex→候选语义→审阅Skill/独立会话→技术校验→Boundary IR→确定性7+1；旧NLP研究应标历史或独立研究 |
 | P0 | main QUICKSTART.md:11–18；README.zh-CN.md:276 | npm run ui，不固定端口，配置Producer/NLP模型 | 本机维护入口为cd D:\boundx后npm run 7plus1:ui；固定58618；完整已安装候选资源不混读开发区 |
 | P0 | main docs/PRODUCER-ADAPTER-CONTRACT.md:3–5 | Producer直接给候选7+1，与当前语义候选合同不一致 | 两个Skill共享合同和Schema；LLM负责语义，程序不再用旧NLP猜语义或按词补槽；JSON合法和模型审阅不等于正确 |
 | P1 | main README.zh-CN.md:353–372；docs/FUNCTIONS.md:5–12 | 状态表只有根产品1.3/BXP0.3/目标0.4，缺少当前可安装短文本候选 | 分开标根包版本、协议版本、语义合同、安装候选0.1.0-candidate.031-r1.2/031-r1-c3；候选仍PARTIAL/REVIEW_REQUIRED，Q05新包未安装；安装包存在不等于公开发布 |

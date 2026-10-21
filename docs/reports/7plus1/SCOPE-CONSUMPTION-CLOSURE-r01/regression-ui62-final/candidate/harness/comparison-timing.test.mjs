@@ -1,5 +1,5 @@
 import test from 'node:test';import assert from 'node:assert/strict';import fs from 'node:fs';import path from 'node:path';import os from 'node:os';import {pathToFileURL} from 'node:url';
-const stage=path.resolve(process.env.BOUNDX_TIMING_TEST_ROOT??'.boundx/comparison-timing-ui14-work');
+const stage=path.resolve(process.env.BOUNDARYXP_TIMING_TEST_ROOT??'.boundx/comparison-timing-ui14-work');
 const core=path.join(stage,'research/7plus1-parser/llm-first-028'),web=path.join(stage,'research/7plus1-parser/v0.3-p2.1-generalization/web');
 const {savedCallHistory}=await import(pathToFileURL(path.join(core,'observability.mjs'))),{timingView,modelView}=await import(pathToFileURL(path.join(web,'process-view.js')));
 const root=path.resolve('.boundx/exports/SKILL-MD-COMPACT-COMPARISON-r01/SKILL');

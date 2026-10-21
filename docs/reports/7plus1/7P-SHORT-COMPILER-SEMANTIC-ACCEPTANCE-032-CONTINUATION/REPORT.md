@@ -58,7 +58,7 @@ G1/G2有同版既有证据及新关键组支持；G3/G4未完成，G5尚缺完�
 
 032.3完整候选运行包仍是原封存包：
 
-`docs/reports/7plus1/7P-SHORT-COMPILER-SEMANTIC-ACCEPTANCE-032-LONG/delivery/BoundX-short-compiler-0.1.0-candidate.032.3.zip`
+`docs/reports/7plus1/7P-SHORT-COMPILER-SEMANTIC-ACCEPTANCE-032-LONG/delivery/BoundaryXP-short-compiler-0.1.0-candidate.032.3.zip`
 
 SHA-256：`1e65b9598d85788e0e9cc96cd07db3a9a09c17a207e009e3fb701d4ab05e5dd3`。本轮没有重新打包冒充产品交付。
 

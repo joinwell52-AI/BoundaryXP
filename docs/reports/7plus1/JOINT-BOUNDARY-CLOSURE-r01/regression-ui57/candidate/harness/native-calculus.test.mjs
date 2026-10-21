@@ -1,5 +1,5 @@
 import test from 'node:test';import assert from 'node:assert/strict';import fs from 'node:fs';import path from 'node:path';import {pathToFileURL} from 'node:url';
-const root=path.resolve(process.env.BOUNDX_INPUT_TEST_ROOT??'.boundx/unrestricted-input-ui19-work');
+const root=path.resolve(process.env.BOUNDARYXP_INPUT_TEST_ROOT??'.boundx/unrestricted-input-ui19-work');
 const {calculateBoundary,renderCalculations}=await import(pathToFileURL(path.join(root,'research/7plus1-parser/llm-first-028/calculus.mjs')));
 const {technicalValidate}=await import(pathToFileURL(path.join(root,'research/7plus1-parser/llm-first-028/validate.mjs')));
 const {compileBoundary}=await import(pathToFileURL(path.join(root,'research/7plus1-parser/llm-first-028/compile.mjs')));

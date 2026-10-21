@@ -1,23 +1,23 @@
-# BoundX 边界计算方法与产品作用说明
+# BoundaryXP 边界计算方法与产品作用说明
 
 文档状态：`DRAFT_FOR_REVIEW`  
 日期：2026-09-16  
-产品：**界痕 · BoundX**  
+产品：**界痕 · BoundaryXP**  
 协议：**BXP — Boundary Xplain Protocol（边界分析协议）**
 
 ---
 
-# 1. BoundX 为什么存在
+# 1. BoundaryXP 为什么存在
 
-BoundX 的目标不是限制 Agent 的智能，也不是把 Agent 重新做成固定流程、轨道机或状态机。
+BoundaryXP 的目标不是限制 Agent 的智能，也不是把 Agent 重新做成固定流程、轨道机或状态机。
 
 Agent 是智能体，应当保留理解、规划、拆分、选择工具和形成执行路径的能力。
 
-BoundX 真正要解决的问题是：
+BoundaryXP 真正要解决的问题是：
 
 > **主任务一旦被理解，就应当能够计算出一个确定、可引用、可冻结、可验证的任务边界；此后无论 Agent 或 PM 如何规划、拆分和分配任务，都不得跨越这个边界。**
 
-因此，BoundX 服务的是：
+因此，BoundaryXP 服务的是：
 
 ```text
 任务边界的确定
@@ -37,7 +37,7 @@ BoundX 真正要解决的问题是：
 
 > **Agent 的路径可以涌现，任务边界必须确定。**
 
-BoundX 把任务边界表示为满足父任务全部约束的合法解空间。
+BoundaryXP 把任务边界表示为满足父任务全部约束的合法解空间。
 
 设 `X_Σ` 为父任务作用域内的候选方案空间，`χ_B(x)` 为边界判定函数，则：
 
@@ -57,7 +57,7 @@ x \in \Omega_B
 x \notin \Omega_B
 ```
 
-BoundX 因此限制的是边界，而不是智能体的能力。
+BoundaryXP 因此限制的是边界，而不是智能体的能力。
 
 ---
 
@@ -194,9 +194,9 @@ M=(\Sigma,Q,F,K,R,D,\Phi)
 P=\{T_1,T_2,\ldots,T_n\}
 ```
 
-BoundX 不判断 PM 是否采用了“最佳方案”，也不规定 PM 必须如何拆分。
+BoundaryXP 不判断 PM 是否采用了“最佳方案”，也不规定 PM 必须如何拆分。
 
-BoundX 只计算这些计划和子任务是否仍然符合父任务 Boundary。
+BoundaryXP 只计算这些计划和子任务是否仍然符合父任务 Boundary。
 
 ---
 
@@ -310,7 +310,7 @@ q\notin\bigcup_{i=1}^{n}G(T_i)
 MISSING_REQUIRED_OUTCOME
 ```
 
-这使 BoundX 能同时发现“越界”和“漏项”。
+这使 BoundaryXP 能同时发现“越界”和“漏项”。
 
 ---
 
@@ -340,13 +340,13 @@ V_p(P,B_p)=N_p\land G_p\land C_p\land R_p\land D_p
 
 其中每一项都由确定性检查计算，不由模型主观裁决。
 
-这就是 BoundX 对 PM 规划、拆分和任务分配进行数学验证的核心计算。
+这就是 BoundaryXP 对 PM 规划、拆分和任务分配进行数学验证的核心计算。
 
 ---
 
 # 11. 自由度与边界必须区分
 
-父任务没有约束的维度，不应被 BoundX 自动视为禁止。
+父任务没有约束的维度，不应被 BoundaryXP 自动视为禁止。
 
 任务空间可以表示为：
 
@@ -359,11 +359,11 @@ X=X_c\times X_f
 - `X_c`：被父任务边界约束的维度；
 - `X_f`：父任务没有约束的自由维度。
 
-BoundX 约束 `X_c`，但保留 `X_f`。
+BoundaryXP 约束 `X_c`，但保留 `X_f`。
 
 因此 Agent 仍然可以在自由维度上选择实现语言、工具、算法和执行路径。
 
-> **BoundX 限制的是边界，而不是 Agent 的能力。**
+> **BoundaryXP 限制的是边界，而不是 Agent 的能力。**
 
 ---
 
@@ -398,24 +398,24 @@ dependency_violation
 
 ---
 
-# 13. BoundX 的真正作用
+# 13. BoundaryXP 的真正作用
 
-BoundX 不是 Agent 工作流、状态机、轨道机或 RPA，也不是让另一个 AI 去评价 Agent 做得好不好。
+BoundaryXP 不是 Agent 工作流、状态机、轨道机或 RPA，也不是让另一个 AI 去评价 Agent 做得好不好。
 
-BoundX 是：
+BoundaryXP 是：
 
 > **一个把任务边界变成可计算数学对象，并用该边界验证 Agent 后续规划是否仍然合法的边界分析系统。**
 
 其产品闭环是：
 
 ```text
-第一次 BoundX
+第一次 BoundaryXP
 主任务 → 计算并冻结 Boundary
 
 PM / Agent
 自由规划、拆分、分配
 
-第二次 BoundX
+第二次 BoundaryXP
 计划 / 子任务 → 计算是否符合父 Boundary
 ```
 
@@ -423,7 +423,7 @@ PM / Agent
 
 # 14. 一句话产品定义
 
-> **BoundX 先把主任务计算成一个确定边界，再把 Agent 的每一次规划、拆分和任务分配投影回这个边界进行数学验证。**
+> **BoundaryXP 先把主任务计算成一个确定边界，再把 Agent 的每一次规划、拆分和任务分配投影回这个边界进行数学验证。**
 
 ---
 
@@ -455,4 +455,4 @@ P\notin\Omega_{B_p}
 
 则计划越界。
 
-> **BoundX 不限制智能体的能力，只确定并守住智能体不可跨越的任务边界。**
+> **BoundaryXP 不限制智能体的能力，只确定并守住智能体不可跨越的任务边界。**

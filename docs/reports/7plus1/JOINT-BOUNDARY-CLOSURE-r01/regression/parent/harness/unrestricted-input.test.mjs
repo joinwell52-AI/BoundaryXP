@@ -6,7 +6,7 @@ import path from 'node:path';
 import {randomUUID} from 'node:crypto';
 import {pathToFileURL} from 'node:url';
 
-const root=path.resolve(process.env.BOUNDX_INPUT_TEST_ROOT??'.boundx/unrestricted-input-ui19-work');
+const root=path.resolve(process.env.BOUNDARYXP_INPUT_TEST_ROOT??'.boundx/unrestricted-input-ui19-work');
 const core=path.join(root,'research/7plus1-parser/llm-first-028');
 const load=name=>import(pathToFileURL(path.join(core,name)));
 const {prepareSource,sha256,linkQuote}=await load('source.mjs');

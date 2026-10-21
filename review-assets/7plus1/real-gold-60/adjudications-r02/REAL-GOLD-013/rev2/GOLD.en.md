@@ -340,7 +340,7 @@ $$
 PolicyEvaluation=\text{NOT\_EVALUATED\_NO\_OPERATOR\_PROFILE}
 $$
 
-No OperatorProfile is supplied. ADMIN decisions and repository ownership described in the TASK are not verified BoundX authority bindings.
+No OperatorProfile is supplied. ADMIN decisions and repository ownership described in the TASK are not verified BoundaryXP authority bindings.
 
 ### 9. Admission
 

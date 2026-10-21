@@ -6,6 +6,6 @@ There are 200 positions: 80 Chinese, 60 English, 60 mixed. Ten construction fami
 
 Ambiguity families alternate unresolved artifact reference, competing basis version and explicitly unspecified ANY versus ALL approval. Alternatives and reasons are frame properties. Clear facts surrounding an ambiguity remain required.
 
-The exact 200 frames are not generated now. After all development gates pass, the seed is SHA256("BOUNDX-025-BLIND-200" + implementation tree SHA256 + generator SHA256). Source, frames and expected relations are sealed before the one Parser run. No generator/runtime changes are permitted after holdout observation. This is a generative holdout, not independent human Gold.
+The exact 200 frames are not generated now. After all development gates pass, the seed is SHA256("BOUNDARYXP-025-BLIND-200" + implementation tree SHA256 + generator SHA256). Source, frames and expected relations are sealed before the one Parser run. No generator/runtime changes are permitted after holdout observation. This is a generative holdout, not independent human Gold.
 
 Validation of the generator uses small unmaterialized frame/realizer units and static distribution checks. No final seeded 200 is accessible to development.

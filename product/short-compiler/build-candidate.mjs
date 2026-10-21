@@ -1,8 +1,8 @@
-// Rebuild the installed ui220 candidate byte-for-byte from repository sources.
+// Rebuild the installed ui222 candidate byte-for-byte from repository sources.
 // No prior installation, account state, model calls or listening socket is used.
 import fs from 'node:fs';import path from 'node:path';import {fileURLToPath,pathToFileURL} from 'node:url';import {createHash} from 'node:crypto';
-export const candidateVersion='0.1.0-candidate.031-r1.2-ui.220';
-const root=path.resolve(path.dirname(fileURLToPath(import.meta.url)),'../..'),recipe=path.join(root,'product/short-compiler/ui220-package'),hash=b=>createHash('sha256').update(b).digest('hex');
+export const candidateVersion='0.1.0-candidate.031-r1.2-ui.222';
+const root=path.resolve(path.dirname(fileURLToPath(import.meta.url)),'../..'),recipe=path.join(root,'product/short-compiler/ui222-package'),hash=b=>createHash('sha256').update(b).digest('hex');
 export function buildCandidate(output=path.join(root,'.boundx/products',candidateVersion)){
  const target=path.resolve(output);if(fs.existsSync(target))throw Error('IMMUTABLE_CANDIDATE_EXISTS');
  const manifestBytes=fs.readFileSync(path.join(recipe,'PRODUCT-MANIFEST.json')),m=JSON.parse(manifestBytes);
@@ -17,6 +17,6 @@ export function buildCandidate(output=path.join(root,'.boundx/products',candidat
  fs.mkdirSync(target,{recursive:true});
  for(const f of entries){const dest=path.join(target,f.path);fs.mkdirSync(path.dirname(dest),{recursive:true});fs.writeFileSync(dest,f.bytes,{flag:'wx'});}
  fs.writeFileSync(path.join(target,'PRODUCT-MANIFEST.json'),manifestBytes,{flag:'wx'});
- return {version:candidateVersion,target,files:entries.length,integrity:'PASS',manifest_sha256:hash(manifestBytes),real_model_calls:0,identity:'EXACT_INSTALLED_UI220'};
+ return {version:candidateVersion,target,files:entries.length,integrity:'PASS',manifest_sha256:hash(manifestBytes),real_model_calls:0,identity:'EXACT_INSTALLED_UI222'};
 }
 if(process.argv[1]&&import.meta.url===pathToFileURL(process.argv[1]).href)console.log(JSON.stringify(buildCandidate(process.argv[2])));

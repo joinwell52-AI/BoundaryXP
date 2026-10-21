@@ -1,6 +1,6 @@
 import test from 'node:test';import assert from 'node:assert/strict';
 import fs from 'node:fs';import path from 'node:path';import os from 'node:os';import {pathToFileURL} from 'node:url';import {randomUUID,createHash} from 'node:crypto';
-const root=path.resolve(process.env.BOUNDX_COMPARISON_ROOT??'.boundx/method-comparison-ui13-work');
+const root=path.resolve(process.env.BOUNDARYXP_COMPARISON_ROOT??'.boundx/method-comparison-ui13-work');
 const base=path.resolve('.boundx/short-compiler-031-r1/versions/0.1.0-candidate.031-r1.2-ui.10');
 const core='research/7plus1-parser/llm-first-028/';
 const load=rel=>import(pathToFileURL(path.join(root,rel)).href);
@@ -18,7 +18,7 @@ test('Only the parser document differs; compact contract and Schemas are identic
  const skill=buildBundle('parse',{parseMethod:'SKILL'}),md=buildBundle('parse',{parseMethod:'MD'});
  assert.equal(skill.resources.length,3);assert.equal(md.resources.length,3);
  assert.deepEqual(skill.resources.slice(1),md.resources.slice(1));assert.deepEqual(skill.schema,md.schema);
- assert(!md.text.includes('skills/boundx-semantic-parse/SKILL.md'));assert(!skill.text.includes('BOUNDX-LLM-SEMANTIC-ESSENTIALS'));
+ assert(!md.text.includes('skills/boundx-semantic-parse/SKILL.md'));assert(!skill.text.includes('BOUNDARYXP-LLM-SEMANTIC-ESSENTIALS'));
  assert.notEqual(skill.resources[0].sha256,md.resources[0].sha256);
  assert.equal(skill.resources[1].characters,5550);assert.equal(skill.resources[2].characters,6694);
 });

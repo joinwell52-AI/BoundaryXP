@@ -1,6 +1,6 @@
 # BXP 产品统一实施回执
 
-- 授权任务书：[Draft PR #1](https://github.com/joinwell52-AI/BoundX/pull/1)，固定提交 `a2fb068565605c0ac83ad6d6d4a973941ee270c6`。
+- 授权任务书：[Draft PR #1](https://github.com/joinwell52-AI/BoundaryXP/pull/1)，固定提交 `a2fb068565605c0ac83ad6d6d4a973941ee270c6`。
 - 基线：`ae0bab1ac8a99e806327fc30b2b83c295826e5f0`。
 - 实施分支：`impl/bxp-product-alignment-v1`。
 - 前一轮废弃的生产者协议草案已按 ADMIN 明确指示删除其本地暂存备份，不纳入本轮交付；当前工作包改动保留。
@@ -60,15 +60,15 @@ Python 证据及 JS 规则、引用和展示统一为码点坐标；原业务判
 
 ## 最终执行回执 / Final receipt
 
-Draft PR：[BoundX #2](https://github.com/joinwell52-AI/BoundX/pull/2)。实现提交 b1cda5a 的 [实际 CI 34816141070](https://github.com/joinwell52-AI/BoundX/actions/runs/34816141070) 三组全通过：Ubuntu Node22、Ubuntu Node24、Windows Node24；每组包含所有测试命令。继承的固定版本 Actions 有 Node20 弃用提示，runner 已强制 Node24 执行，未造成测试失败。最终文档追加提交后的检查状态以 PR checks 为准。
+Draft PR：[BoundaryXP #2](https://github.com/joinwell52-AI/BoundaryXP/pull/2)。实现提交 b1cda5a 的 [实际 CI 34816141070](https://github.com/joinwell52-AI/BoundaryXP/actions/runs/34816141070) 三组全通过：Ubuntu Node22、Ubuntu Node24、Windows Node24；每组包含所有测试命令。继承的固定版本 Actions 有 Node20 弃用提示，runner 已强制 Node24 执行，未造成测试失败。最终文档追加提交后的检查状态以 PR checks 为准。
 
 最终文档检查14/14，63份 Markdown、255个本地链接与锚点通过。完整141项文件变更清单、工作包提交与回滚点见 docs/tasks/BXP-ALIGNMENT-DELIVERY.md；逐项与 Git diff 核对，无遗漏。测试日志中的依赖安装／平台分支 skip 是非本平台步骤，不是跳过测试用例。
 
 ```text
-BOUNDX_BXP_ALIGNMENT_STATUS: COMPLETE
+BOUNDARYXP_BXP_ALIGNMENT_STATUS: COMPLETE
 BASELINE_COMMIT: ae0bab1ac8a99e806327fc30b2b83c295826e5f0
 IMPLEMENTATION_BRANCH: impl/bxp-product-alignment-v1
-PULL_REQUEST: https://github.com/joinwell52-AI/BoundX/pull/2
+PULL_REQUEST: https://github.com/joinwell52-AI/BoundaryXP/pull/2
 PROTOCOL_CHANGED: false
 PRODUCT_VERSION: 1.3.0-preview.0
 PROTOCOL_VERSION: 0.3.0-draft.2

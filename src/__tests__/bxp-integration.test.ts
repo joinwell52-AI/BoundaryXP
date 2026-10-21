@@ -12,7 +12,7 @@ import {createApp} from '../../ui-server.mjs';
 const root=fileURLToPath(new URL('../../',import.meta.url));
 test('package main exports the single production implementation, not legacy semantics',()=>{
   for(const name of ['evaluateBxpTask','parseAndEvaluateBxpTask','validateBxpTask','validateBxpResult','protocolInfo'])assert.equal(publicApi[name],core[name]);
-  assert.ok(!('reviewBoundX' in publicApi));assert.ok(!('BOUNDARY_PARAMETERS' in publicApi));
+  assert.ok(!('reviewBoundaryXP' in publicApi));assert.ok(!('BOUNDARY_PARAMETERS' in publicApi));
   assert.equal(publicApi.taskSchema,core.taskSchema);
 });
 
@@ -40,7 +40,7 @@ for(const locale of ['zh-CN','en'])test(`all six ${locale} cases plus non-BMP: C
     assert.equal(cli.status,0,cli.stderr);assert.deepEqual(JSON.parse(cli.stdout),expected,variant);
     const mcp=spawnSync(process.execPath,[root+'mcp.mjs'],{encoding:'utf8',input:JSON.stringify({id:1,method:'tools/call',params:{name:'bx_evaluate_task_json',arguments:{raw_json:raw}}})+'\n'});
     assert.equal(mcp.status,0,mcp.stderr);assert.deepEqual(JSON.parse(JSON.parse(mcp.stdout).result.content[0].text),expected,variant);
-    const response=await fetch(origin+'/api/bxp/evaluate',{method:'POST',headers:{Origin:origin,Connection:'close','Content-Type':'application/json','X-BoundX-Token':token},body:raw});
+    const response=await fetch(origin+'/api/bxp/evaluate',{method:'POST',headers:{Origin:origin,Connection:'close','Content-Type':'application/json','X-BoundaryXP-Token':token},body:raw});
     assert.equal(response.status,200);assert.deepEqual(await response.json(),expected,variant);
   }
 });

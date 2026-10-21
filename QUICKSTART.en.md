@@ -1,4 +1,4 @@
-# BoundX short-text compiler: quick start
+# BoundaryXP short-text compiler: quick start
 
 [简体中文](QUICKSTART.md) · [Home](README.md) · [Version and acceptance status — Chinese](docs/SHORT-COMPILER-STATUS.md)
 
@@ -19,7 +19,7 @@ Open `http://127.0.0.1:58618/`. When the same installed version is already runni
 
 The launcher currently pins candidate `0.1.0-candidate.031-r1.2`, compiler `031-r1-c3`, and contract `031-r1.1`. Configuration and history are under `.boundx/short-compiler-031-r1/`; complete runtime versions are under its `versions/` directory. The application does not mix installed resources with changing development Skills or schemas.
 
-**This is not a fresh-clone installer.** Missing installation files, an unexpected version, an occupied or unverified port, or mismatched resource hashes cause an explicit error. The launcher neither chooses another port nor stops an unknown process. See the [development launcher](https://github.com/joinwell52-AI/BoundX/blob/a55363226b465cb120ce8f2624d5d900d5a39d9d/product/short-compiler/launch-installed.mjs) and the [restoration receipt](https://github.com/joinwell52-AI/BoundX/blob/a55363226b465cb120ce8f2624d5d900d5a39d9d/docs/reports/7plus1/031-R1-RESTORE-58618/REPORT.md).
+**This is not a fresh-clone installer.** Missing installation files, an unexpected version, an occupied or unverified port, or mismatched resource hashes cause an explicit error. The launcher neither chooses another port nor stops an unknown process. See the [development launcher](https://github.com/joinwell52-AI/BoundaryXP/blob/a55363226b465cb120ce8f2624d5d900d5a39d9d/product/short-compiler/launch-installed.mjs) and the [restoration receipt](https://github.com/joinwell52-AI/BoundaryXP/blob/a55363226b465cb120ce8f2624d5d900d5a39d9d/docs/reports/7plus1/031-R1-RESTORE-58618/REPORT.md).
 
 ## 2. Requirements and normal use
 
@@ -33,7 +33,7 @@ Parsing and the separate audit take actual model time; follow the stage display.
 
 ## 3. Fresh installation from a complete candidate package
 
-Use the [031-R1 delivery page](https://github.com/joinwell52-AI/BoundX/blob/a55363226b465cb120ce8f2624d5d900d5a39d9d/docs/reports/7plus1/7P-SHORT-COMPILER-PRODUCT-CLOSURE-031-R1-LONG/REPORT.md) and its [versioned package](https://github.com/joinwell52-AI/BoundX/blob/a55363226b465cb120ce8f2624d5d900d5a39d9d/docs/reports/7plus1/7P-SHORT-COMPILER-PRODUCT-CLOSURE-031-R1-LONG/delivery/BoundX-short-compiler-0.1.0-candidate.031-r1.2.zip). These resources are linked to the development snapshot, not copied into main. The candidate still has the documented Q05 universal-scope limitation. A downloadable package does not establish semantic acceptance.
+Use the [031-R1 delivery page](https://github.com/joinwell52-AI/BoundaryXP/blob/a55363226b465cb120ce8f2624d5d900d5a39d9d/docs/reports/7plus1/7P-SHORT-COMPILER-PRODUCT-CLOSURE-031-R1-LONG/REPORT.md) and its [versioned package](https://github.com/joinwell52-AI/BoundaryXP/blob/a55363226b465cb120ce8f2624d5d900d5a39d9d/docs/reports/7plus1/7P-SHORT-COMPILER-PRODUCT-CLOSURE-031-R1-LONG/delivery/BoundaryXP-short-compiler-0.1.0-candidate.031-r1.2.zip). These resources are linked to the development snapshot, not copied into main. The candidate still has the documented Q05 universal-scope limitation. A downloadable package does not establish semantic acceptance.
 
 Only on a fresh installation where port 58618 is available, run from the extracted package root:
 
@@ -91,7 +91,7 @@ npm run ui
 
 This evaluates structured IR and starts the existing BXP application, not the short-text 58618 application. It does not itself parse raw natural-language tasks. See [protocol implementation](protocol/IMPLEMENTATION.md) and [examples](examples/README.md).
 
-`main` and `review/7plus1-parser` remain different code snapshots. Inspect candidate code on the [development branch](https://github.com/joinwell52-AI/BoundX/tree/review/7plus1-parser). This merge updates documentation without resetting a dirty checkout, merging candidate code, or moving existing tags.
+`main` and `review/7plus1-parser` remain different code snapshots. Inspect candidate code on the [development branch](https://github.com/joinwell52-AI/BoundaryXP/tree/review/7plus1-parser). This merge updates documentation without resetting a dirty checkout, merging candidate code, or moving existing tags.
 
 ## 7. Troubleshooting and evidence
 

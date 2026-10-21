@@ -16,7 +16,7 @@ Do not redesign 7+1. Do not redesign BXP. Do not tune individual ADMIN cases.
 
 Read in full before changing code:
 
-`docs/BoundX-7plus1-定义原理语义编译与边界计算说明-v0.3.1.md`
+`docs/BoundaryXP-7plus1-定义原理语义编译与边界计算说明-v0.3.1.md`
 
 The authoritative method is fixed:
 
@@ -730,7 +730,7 @@ CANDIDATE_SEMANTIC_GRAPH_MAIN_PATH=PASS
 Do not claim:
 
 ```text
-BOUNDX_PRODUCTION_READY=true
+BOUNDARYXP_PRODUCTION_READY=true
 ADMIN_ROOT_GENERALIZATION_COMPLETE=true
 ```
 

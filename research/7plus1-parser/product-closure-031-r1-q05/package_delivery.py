@@ -12,7 +12,7 @@ for x in m['files']:
     git_path='product/short-compiler/'+x['path'] if x['path'] in ['package.json','package-lock.json'] else x['path']
     committed=subprocess.check_output(['git','show',m['source_commit']+':'+git_path])
     assert h(committed)==x['sha256'],git_path
-out=delivery/('BoundX-short-compiler-'+m['version']+'.zip');assert not out.exists()
+out=delivery/('BoundaryXP-short-compiler-'+m['version']+'.zip');assert not out.exists()
 paths=[x['path'] for x in m['files']]+['PRODUCT-MANIFEST.json']
 with zipfile.ZipFile(out,'x',compression=zipfile.ZIP_DEFLATED) as z:
     for rel in sorted(paths):

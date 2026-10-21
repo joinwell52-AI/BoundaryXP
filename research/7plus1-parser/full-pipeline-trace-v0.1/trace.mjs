@@ -43,5 +43,5 @@ export function buildTrace(result,metadata){
 }
 export function traceMarkdown(t){const fence=value=>{const text=typeof value==='string'?value:JSON.stringify(value,null,2);const longest=Math.max(2,...[...text.matchAll(/`+/gu)].map(m=>m[0].length));const f='`'.repeat(longest+1);return f+'\n'+text+'\n'+f;};
  const sections=[['Metadata',t.metadata],['Source',t.source.raw_text],['Step 1 — Structure',t.step1_structure],['Step 2 — NLP Signals',t.step2_nlp],['Step 3 — Semantic Nodes',t.step3_semantic_nodes],['Step 3↔4 — Semantic Assembly Iterations',{status:t.semantic_assembly_status,iterations:t.semantic_assembly_iterations}],['Step 4 — Semantic Relations',t.step4_semantic_relations],['Step 5 — Boundary Eligibility',t.step5_boundary_eligibility],['Step 5↔6 — Boundary Compilation Iterations',{status:t.boundary_compilation_status,iterations:t.boundary_compilation_iterations}],['Step 6 — Boundary IR',t.step6_boundary_ir],['Step 7 — Canonical 7+1',t.step7_canonical_7plus1],['Lineage',t.lineage],['Diagnostics',t.diagnostics],['Performance',t.performance]];
- return '# BoundX 7+1 Parser Full Trace\n\n'+sections.map(([title,data])=>'## '+title+'\n\n'+fence(data)).join('\n\n')+'\n';
+ return '# BoundaryXP 7+1 Parser Full Trace\n\n'+sections.map(([title,data])=>'## '+title+'\n\n'+fence(data)).join('\n\n')+'\n';
 }

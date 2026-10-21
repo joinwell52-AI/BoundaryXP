@@ -4,7 +4,7 @@ import path from 'node:path';
 import fs from 'node:fs';
 import os from 'node:os';
 import {pathToFileURL} from 'node:url';
-const root=path.resolve(process.env.BOUNDX_SEMANTIC_TEST_ROOT??'.boundx/semantic-closure-ui23-work');
+const root=path.resolve(process.env.BOUNDARYXP_SEMANTIC_TEST_ROOT??'.boundx/semantic-closure-ui23-work');
 const load=p=>import(pathToFileURL(path.join(root,'research/7plus1-parser/llm-first-028',p)).href);
 const {technicalValidate}=await load('validate.mjs');
 const {prepareSource}=await load('source.mjs');

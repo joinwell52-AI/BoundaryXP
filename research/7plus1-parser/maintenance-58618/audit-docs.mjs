@@ -7,11 +7,11 @@ const targets=[
  ['origin/main','QUICKSTART.md',/npm run ui|不固定端口|NLP|LLM|配置Producer/],
  ['origin/main','docs/PRODUCER-ADAPTER-CONTRACT.md',/目标链路|可替换|LLM接口|本地NLP/],
  ['origin/main','docs/FUNCTIONS.md',/Producer|Formalizer|Gold|本地交付/],
- ['origin/main','docs/BOUNDX-PRODUCT-MANUAL.md',/主路线|spaCy|HanLP|参考路线|Core Gold|L3 Gold|200|600|1800|npm run ui/],
+ ['origin/main','docs/BOUNDARYXP-PRODUCT-MANUAL.md',/主路线|spaCy|HanLP|参考路线|Core Gold|L3 Gold|200|600|1800|npm run ui/],
  ['origin/main','docs/VALIDATION.md',/Core 100|L3 100|600|1800|v1.2/],
  ['HEAD','README.md',/固定协议|无 npm|7plus1|npm run ui|产品架构|boundx-task/],
  ['HEAD','AGENTS.md',/v0.2|FULL_COMPILER|LLM|当前唯一Gold|当前以用户修订|当前专项授权/],
- ['HEAD','docs/BoundX-7plus1-定义原理语义编译与边界计算说明-v0.4.md',/规范版本|O \||当前实现任务|主链|两个|量化|强制补充/],
+ ['HEAD','docs/BoundaryXP-7plus1-定义原理语义编译与边界计算说明-v0.4.md',/规范版本|O \||当前实现任务|主链|两个|量化|强制补充/],
  ['HEAD','product/short-compiler/使用说明.md',/候选|300|Codex CLI|58619|端口|58618|结果|PARTIAL/],
  ['HEAD','product/short-compiler/ACCEPTANCE.md',/POLICY|PARTIAL|最终|53|10次/],
  ['HEAD','docs/tasks/7plus1/CURRENT-TASK.md',/当前优先|58618|candidate|PARTIAL|175|主链/]

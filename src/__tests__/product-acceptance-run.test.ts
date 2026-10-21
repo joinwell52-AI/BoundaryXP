@@ -67,7 +67,7 @@ test('v2 plan has 120 originals and the exact 30 repeat IDs without manufacturin
     .map(index => `T${String(index).padStart(3, '0')}-2`);
   assert.deepEqual(plan.runs.slice(120).map(run => run.run_id), expected);
   assert.equal(plan.independent_review_verified, false);
-  const corpus = JSON.parse(readFileSync(new URL('../../docs/tasks/BoundX-ADMIN-task-text-cases-v2.json', import.meta.url), 'utf8'));
+  const corpus = JSON.parse(readFileSync(new URL('../../docs/tasks/BoundaryXP-ADMIN-task-text-cases-v2.json', import.meta.url), 'utf8'));
   const review = JSON.parse(readFileSync(new URL('../../fixtures/admin-text/review-index.json', import.meta.url), 'utf8'));
   corpus.cases[0].task_text += ' ';
   assert.throws(() => acceptancePlan(corpus, review), { code: 'ACCEPTANCE_CORPUS' });
@@ -161,7 +161,7 @@ test('recording failure stops before provider dispatch; credential echoes are di
 test('CLI defaults offline and requires explicit data authorization and a bounded count', () => {
   assert.deepEqual(acceptanceOptions([], {}), { execute: false });
   for (const args of [['--execute'], ['--execute', '--max-runs', '150'], ['--execute', '--authorize-synthetic-data', '--max-runs', '151'], ['--plan', '--plan']]) assert.throws(() => acceptanceOptions(args, {}));
-  const options = acceptanceOptions(['--execute', '--authorize-synthetic-data', '--max-runs', '1'], { BOUNDX_MODEL_PROVIDER: 'cursor', BOUNDX_MODEL_ID: 'fixture', CURSOR_API_KEY: config.key });
+  const options = acceptanceOptions(['--execute', '--authorize-synthetic-data', '--max-runs', '1'], { BOUNDARYXP_MODEL_PROVIDER: 'cursor', BOUNDARYXP_MODEL_ID: 'fixture', CURSOR_API_KEY: config.key });
   assert.equal(options.maxRuns, 1);
   assert.equal(options.authorizedSyntheticData, true);
 });
@@ -170,7 +170,7 @@ test('explicit segment keeps original run identity and never fills skipped slots
   const root = mkdtempSync(join(tmpdir(), 'boundx-segment-'));
   try {
     const options = acceptanceOptions(['--execute', '--authorize-synthetic-data', '--max-runs', '1', '--start-at', '42'],
-      { BOUNDX_MODEL_PROVIDER: 'codex', BOUNDX_MODEL_ID: 'subscription-fixture' });
+      { BOUNDARYXP_MODEL_PROVIDER: 'codex', BOUNDARYXP_MODEL_ID: 'subscription-fixture' });
     const summary = await executeAcceptanceBatch(plan, options, { base: root, sendModel: respond });
     assert.equal(summary.requested_start_at, 42);
     assert.equal(summary.requested_initial_runs, 1);
@@ -188,17 +188,17 @@ test('explicit segment keeps original run identity and never fills skipped slots
 
 test('Cursor default model applies only when an explicit model is absent', () => {
   const args = ['--execute', '--authorize-synthetic-data', '--max-runs', '1'];
-  const env = { BOUNDX_MODEL_PROVIDER: 'cursor', CURSOR_DEFAULT_MODEL: 'auto-smart', CURSOR_API_KEY: config.key };
+  const env = { BOUNDARYXP_MODEL_PROVIDER: 'cursor', CURSOR_DEFAULT_MODEL: 'auto-smart', CURSOR_API_KEY: config.key };
   assert.equal(acceptanceOptions(args, env).config.model, 'auto-smart');
-  assert.equal(acceptanceOptions(args, { ...env, BOUNDX_MODEL_ID: 'explicit-model' }).config.model, 'explicit-model');
-  assert.throws(() => acceptanceOptions(args, { ...env, BOUNDX_MODEL_ID: '' }));
+  assert.equal(acceptanceOptions(args, { ...env, BOUNDARYXP_MODEL_ID: 'explicit-model' }).config.model, 'explicit-model');
+  assert.throws(() => acceptanceOptions(args, { ...env, BOUNDARYXP_MODEL_ID: '' }));
   assert.throws(() => acceptanceOptions(args, { ...env, CURSOR_DEFAULT_MODEL: ' ' }));
-  assert.throws(() => acceptanceOptions(args, { ...env, BOUNDX_MODEL_PROVIDER: 'api', BOUNDX_MODEL_API_KEY: config.key }));
+  assert.throws(() => acceptanceOptions(args, { ...env, BOUNDARYXP_MODEL_PROVIDER: 'api', BOUNDARYXP_MODEL_API_KEY: config.key }));
 });
 
 test('subscription runner uses an explicit model without reading API credentials', () => {
   const options = acceptanceOptions(['--execute', '--authorize-synthetic-data', '--max-runs', '1'],
-    { BOUNDX_MODEL_PROVIDER: 'codex', BOUNDX_MODEL_ID: 'subscription-fixture', BOUNDX_MODEL_API_KEY: 'not-used', CURSOR_API_KEY: 'not-used' });
+    { BOUNDARYXP_MODEL_PROVIDER: 'codex', BOUNDARYXP_MODEL_ID: 'subscription-fixture', BOUNDARYXP_MODEL_API_KEY: 'not-used', CURSOR_API_KEY: 'not-used' });
   assert.deepEqual(options.config, { provider: 'codex', model: 'subscription-fixture', key: '' });
 });
 

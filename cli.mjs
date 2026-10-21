@@ -2,7 +2,7 @@
 import { readFile } from 'node:fs/promises';
 import { createReadStream } from 'node:fs';
 import { parseAndEvaluateBxpTask, evaluateBxpTask, protocolInfo, RAW_JSON_BYTE_LIMIT } from './src/bxp/index.mjs';
-import { reviewBoundX, reviewPlanBoundary, boundaryResponseStatus, reviewDecomposition } from './src/legacy/index.ts';
+import { reviewBoundaryXP, reviewPlanBoundary, boundaryResponseStatus, reviewDecomposition } from './src/legacy/index.ts';
 import { productCommand } from './src/product/cli.mjs';
 
 const argv = process.argv.slice(2);
@@ -26,7 +26,7 @@ try {
     const inputText = await readFile(args[2], 'utf8');
     if (Buffer.byteLength(inputText) > RAW_JSON_BYTE_LIMIT) throw new Error('Legacy input exceeds 2 MB');
     const input = JSON.parse(inputText);
-    if (args[1] === 'task') result = reviewBoundX(input, { locale });
+    if (args[1] === 'task') result = reviewBoundaryXP(input, { locale });
     else if (args[1] === 'plan') result = reviewPlanBoundary(input.baseline, input.plan, { locale });
     else if (args[1] === 'decomposition') result = reviewDecomposition(input);
     else if (args[1] === 'responses') result = boundaryResponseStatus(input.review, input.replies);

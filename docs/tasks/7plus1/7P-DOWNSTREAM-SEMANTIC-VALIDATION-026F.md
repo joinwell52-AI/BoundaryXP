@@ -11,10 +11,10 @@
 
 ## 1. 仓库、证据与真实运行基线
 
-- 仓库：`joinwell52-AI/BoundX`。
+- 仓库：`joinwell52-AI/BoundaryXP`。
 - 唯一允许推送分支：`review/7plus1-parser`。
 - 026E 证据提交：`4dea24229f4189bb699bd1eef621bf928a0882b7`。
-- 规范：`docs/BoundX-7plus1-定义原理语义编译与边界计算说明-v0.3.1.md`，重点核对第 4—9、13、16—19、26—29、41—45 节。
+- 规范：`docs/BoundaryXP-7plus1-定义原理语义编译与边界计算说明-v0.3.1.md`，重点核对第 4—9、13、16—19、26—29、41—45 节。
 - 026E 报告目录：`docs/reports/7plus1/7P-SEMANTIC-PARSER-FEASIBILITY-026E/`。
 
 先完整读取 REPORT.md、ORACLE-DOWNSTREAM-10.json、ORACLE-FAILURE-ANALYSIS.json、CORPUS-SELECTION.json、RUNTIME-SNAPSHOT-MANIFEST.json，以及 EVIDENCE.zip 中关联的 oracle/r001—r006 与 reproduction-snapshot。以目录实际文件和清单为准；路径缺失先查清单，不编造文件。

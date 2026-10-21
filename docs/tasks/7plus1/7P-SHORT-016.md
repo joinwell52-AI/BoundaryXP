@@ -3,11 +3,11 @@
 ## 0. Task identity
 
 - TASK: `7P-SHORT-016`
-- Repository: `joinwell52-AI/BoundX`
+- Repository: `joinwell52-AI/BoundaryXP`
 - Branch: `review/7plus1-parser`
 - Start from current branch HEAD carrying sealed `7P-HYBRID-015`
 - Deterministic implementation baseline: sealed `7P-COMPOSITION-014` at `f03d09a099f06a4da2786a3c8e9dcd9fdb50dd37`
-- Normative method: `docs/BoundX-7plus1-定义原理语义编译与边界计算说明-v0.3.md`
+- Normative method: `docs/BoundaryXP-7plus1-定义原理语义编译与边界计算说明-v0.3.md`
 - Benchmark authority: `docs/tasks/7plus1/7P-SHORT-016-FROZEN-CASES.md`
 - PRODUCTION_READY=false
 
@@ -37,7 +37,7 @@ Read in full:
 1. `docs/tasks/7plus1/CURRENT-TASK.md`
 2. this taskbook
 3. `docs/tasks/7plus1/7P-SHORT-016-FROZEN-CASES.md`
-4. `docs/BoundX-7plus1-定义原理语义编译与边界计算说明-v0.3.md`
+4. `docs/BoundaryXP-7plus1-定义原理语义编译与边界计算说明-v0.3.md`
 5. `docs/reports/7plus1/7P-HYBRID-015-SHORT-r02/REPORT.md`
 6. `docs/reports/7plus1/7P-HYBRID-015-SHORT-r02/FIRST-DIVERGENCE.json`
 7. `docs/reports/7plus1/7P-HYBRID-015-SHORT-r02/FALSE-WRONG-STATUS-BEFORE-AFTER.json`

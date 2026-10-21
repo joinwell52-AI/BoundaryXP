@@ -1,6 +1,6 @@
-# BoundX开发规则
+# BoundaryXP开发规则
 
-- 独立仓库joinwell52-AI/BoundX，实施根目录D:\boundx。保持私有，不读写其他项目。
+- 独立仓库joinwell52-AI/BoundaryXP，实施根目录D:\boundx。保持私有，不读写其他项目。
 - 当前目标BXP-0001 0.4.0-draft.1；产品版本1.3.0-preview.0。协议文本、目标设计、运行实现状态分别记录，不把设计写成已交付。
 - 按docs/tasks/BXP-PRODUCER-BENCHMARK-DEVELOPMENT-TASKBOOK-v1.2-LOCAL.md执行；本地完成测试和验收，不依赖或触发GitHub Actions/Artifacts/Codespaces。
 - 中文文本使用apply_patch、UTF-8，不用PowerShell写中文。

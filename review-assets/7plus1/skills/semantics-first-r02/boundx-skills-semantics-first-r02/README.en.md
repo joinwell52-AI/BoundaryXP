@@ -1,4 +1,4 @@
-# BoundX semantic Skills for Chinese, English, and mixed-language tasks
+# BoundaryXP semantic Skills for Chinese, English, and mixed-language tasks
 
 Procedure revision: `semantics-first-r02`; predecessor: `semantics-first-r01`; interface: `candidate-ir/1.2`.
 

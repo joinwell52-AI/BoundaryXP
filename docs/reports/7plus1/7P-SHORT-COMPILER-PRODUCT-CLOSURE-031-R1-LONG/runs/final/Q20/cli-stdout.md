@@ -1,4 +1,4 @@
-# BoundX 7+1（有限技术接受，不是业务授权）
+# BoundaryXP 7+1（有限技术接受，不是业务授权）
 
 ## I 输入与作用域 — RESOLVED
 - [ACCEPTED] 作用域  OR(发现服务异常(服务异常)；所指事件=发现服务异常 [evt_discovery]；对象=服务异常 [POSITIVE;运行值UNKNOWN],发现服务异常(服务异常)；所指事件=发现服务异常 [evt_discovery]；对象=服务异常 [NEGATIVE;运行值UNKNOWN])；目标=生成（bf:9de94eb9afca1343c6ef）

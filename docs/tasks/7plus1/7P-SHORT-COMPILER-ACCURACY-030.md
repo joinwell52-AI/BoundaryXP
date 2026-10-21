@@ -10,9 +10,9 @@
 
 ## 1. 固定当前可用版本，不干扰本地UI
 
-仓库：`joinwell52-AI/BoundX`；工作及推送分支：`review/7plus1-parser`。
+仓库：`joinwell52-AI/BoundaryXP`；工作及推送分支：`review/7plus1-parser`。
 受测029提交：`ca86e87ea5b07ca770948e5e1231ae9972542ff5`。
-规范：`docs/BoundX-7plus1-定义原理语义编译与边界计算说明-v0.4.md`，v0.4/r02。
+规范：`docs/BoundaryXP-7plus1-定义原理语义编译与边界计算说明-v0.4.md`，v0.4/r02。
 核心：`research/7plus1-parser/llm-first-028/`。
 029报告：`docs/reports/7plus1/7P-SHORT-COMPILER-DELIVERY-029-LONG/REPORT.md`。
 029完整运行资源：同目录 `METHOD-FROZEN-FULL.json`，按真实清单读取。

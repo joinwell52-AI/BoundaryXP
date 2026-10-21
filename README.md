@@ -2,29 +2,31 @@
 
 <p align="center">
   <picture>
-    <source media="(prefers-color-scheme: dark)" srcset="assets/branding/v1/BoundX_Logo_EN_white.png">
-    <source media="(prefers-color-scheme: light)" srcset="assets/branding/v1/BoundX_Logo_EN_transparent.png">
-    <img src="assets/branding/v1/BoundX_Logo_EN_transparent.png" alt="BoundX" width="420">
+    <source media="(prefers-color-scheme: dark)" srcset="assets/branding/v2/BoundaryXP-logo-dark.png">
+    <source media="(prefers-color-scheme: light)" srcset="assets/branding/v2/BoundaryXP-logo-light.png">
+    <img src="assets/branding/v2/BoundaryXP-logo-light.png" alt="BoundaryXP" width="620">
   </picture>
 </p>
 
-<p align="center"><a href="https://github.com/joinwell52-AI/BoundX/tree/main">Repository files</a> · <a href="#document-list">Document list</a> · <a href="#repository-files-and-directories">Directory index</a> · <a href="#brand-assets">Logo and brand assets</a></p>
+<p align="center"><a href="https://github.com/joinwell52-AI/BoundaryXP/tree/main">Repository files</a> · <a href="#document-list">Document list</a> · <a href="#repository-files-and-directories">Directory index</a> · <a href="#brand-assets">Logo and brand assets</a></p>
 
-# BoundX
+# BoundaryXP
+
+> **2026-10-21: BoundaryXP branding is deployed on port 58618 as ui222.** The repository name, documentation, archived files, packages and logos use the new brand. Rebuild the 408-file candidate with `npm run 7plus1:build-candidate`. See [rebrand validation](docs/workbench/BOUNDARYXP-REBRAND.md).
 
 **Turn ADMIN task boundaries into computable objects. Clarify task boundaries before execution.**
 
-[Quick start](QUICKSTART.en.md) · [Product manual — Chinese](docs/BOUNDX-PRODUCT-MANUAL.md) · [7+1 method — Chinese](docs/BoundX-7plus1-定义原理语义编译与边界计算说明-v0.4.md) · [Current status — Chinese](docs/SHORT-COMPILER-STATUS.md) · [Documentation](docs/README.md)
+[Quick start](QUICKSTART.en.md) · [Product manual — Chinese](docs/BOUNDARYXP-PRODUCT-MANUAL.md) · [7+1 method — Chinese](docs/BoundaryXP-7plus1-定义原理语义编译与边界计算说明-v0.4.md) · [Current status — Chinese](docs/SHORT-COMPILER-STATUS.md) · [Documentation](docs/README.md)
 
 > **2026-10-21: this merge includes the ui220 candidate running locally on port 58618.** It includes the 7+1 generation and mathematical parsing resources, deterministic calculators, formula display and enterprise A dictionary. Build the same 404-file package with `npm run 7plus1:build-candidate`; see [ui220 source and validation](docs/workbench/UI220-SYNC.md). The root product version remains `1.3.0-preview.0`. Earlier candidate descriptions and scores below are historical; they do not establish ui220 semantic acceptance.
 
-## What is BoundX?
+## What is BoundaryXP?
 
-BoundX is the product implementation of BXP, the Boundary Xplain Protocol. It converts the objects, actions, participants, conditions, quantities, and prohibitions in a natural-language task into evidence-linked 7+1, for subsequent formal boundary calculation and downstream conformance checks.
+BoundaryXP is the product implementation of BXP, the Boundary Xplain Protocol. It converts the objects, actions, participants, conditions, quantities, and prohibitions in a natural-language task into evidence-linked 7+1, for subsequent formal boundary calculation and downstream conformance checks.
 
 **The immediate priority is correct 7+1 extraction and compilation.** An installer, a green UI, valid JSON, model self-review, and passing engineering tests do not replace semantic accuracy. The complete product also does not end at eight text buckets: correct 7+1 must support computable boundary structures.
 
-BoundX does not choose ADMIN's authorization scope, plan on behalf of PM, or execute business actions mentioned in source text. Admission of a boundary for downstream use is not a business decision or execution authorization.
+BoundaryXP does not choose ADMIN's authorization scope, plan on behalf of PM, or execute business actions mentioned in source text. Admission of a boundary for downstream use is not a business decision or execution authorization.
 
 ## Current candidate method: the LLM understands; code preserves and compiles
 
@@ -39,7 +41,7 @@ ADMIN short-task source
 
 Both Skills actually enter requests through a same-source `INLINE_BUNDLE`; native Skill discovery/loading has not been verified. Earlier HanLP, spaCy, and NLI work remains research history, not the default parser or a mandatory prerequisite for this candidate. Code does not reinterpret the source through old NLP rules after the LLM has supplied the semantics.
 
-See the [method manual](docs/BoundX-7plus1-定义原理语义编译与边界计算说明-v0.4.md) for contracts and limitations.
+See the [method manual](docs/BoundaryXP-7plus1-定义原理语义编译与边界计算说明-v0.4.md) for contracts and limitations.
 
 ## 7+1 preserves relationships
 
@@ -93,7 +95,7 @@ Finish reliable short-text 7+1 compilation
 → Extend to complete real tasks
 ```
 
-7+1 is the semantic foundation; Boundary Result is the subsequent computational output. ADMIN defines the boundary and PM plans inside it. Conformance must detect both boundary violations and omitted required work, without turning BoundX into a business executor.
+7+1 is the semantic foundation; Boundary Result is the subsequent computational output. ADMIN defines the boundary and PM plans inside it. Conformance must detect both boundary violations and omitted required work, without turning BoundaryXP into a business executor.
 
 The 300-code-point limit is the current supported profile, not a permanent product limit. Future Gold-60 validation must use complete original TASK files, not shortened fragments or Gold answers supplied to the parser.
 
@@ -101,7 +103,7 @@ The 300-code-point limit is the current supported profile, not a permanent produ
 
 BXP protocol versions, method-document revisions, the root repository package, and short-text installation packages are distinct. Do not rename them all to “0.4” or relabel an older wire contract as newer conformance.
 
-The repository retains the [existing main-branch BXP Core entry](src/bxp/index.mjs), [protocol documentation](protocol/README.md), and [structured examples](examples/README.md). Development-branch calculation extensions must be checked against their [corresponding source snapshot](https://github.com/joinwell52-AI/BoundX/blob/a55363226b465cb120ce8f2624d5d900d5a39d9d/src/bxp/index.mjs). Those capabilities do not prove that the new source-text pipeline is integrated end to end. This merge changes documentation only, not candidate code, package releases, tags, or local deployments.
+The repository retains the [existing main-branch BXP Core entry](src/bxp/index.mjs), [protocol documentation](protocol/README.md), and [structured examples](examples/README.md). Development-branch calculation extensions must be checked against their [corresponding source snapshot](https://github.com/joinwell52-AI/BoundaryXP/blob/a55363226b465cb120ce8f2624d5d900d5a39d9d/src/bxp/index.mjs). Those capabilities do not prove that the new source-text pipeline is integrated end to end. This merge changes documentation only, not candidate code, package releases, tags, or local deployments.
 
 ## Data, license, and branding
 
@@ -109,7 +111,7 @@ User history, credentials, real enterprise identity/policy data, and model weigh
 
 The [LICENSE](LICENSE) and actual third-party terms govern redistribution; this documentation update changes neither license nor package release status. Existing [brand assets](assets/branding/README.md) are retained.
 
-Further reading: [capability matrix — Chinese](docs/FUNCTIONS.md), [validation — Chinese](docs/VALIDATION.md), and [development branch current task — Chinese](https://github.com/joinwell52-AI/BoundX/blob/review/7plus1-parser/docs/tasks/7plus1/CURRENT-TASK.md). Historical experiments and results remain separate from current candidate claims. Test reports support the product; they are not the product itself.
+Further reading: [capability matrix — Chinese](docs/FUNCTIONS.md), [validation — Chinese](docs/VALIDATION.md), and [development branch current task — Chinese](https://github.com/joinwell52-AI/BoundaryXP/blob/review/7plus1-parser/docs/tasks/7plus1/CURRENT-TASK.md). Historical experiments and results remain separate from current candidate claims. Test reports support the product; they are not the product itself.
 
 ## Document list
 
@@ -118,8 +120,8 @@ The original documentation entries remain accessible alongside the updated 7+1 m
 | Document | Entry |
 |---|---|
 | Complete documentation index | [Documentation](docs/README.md) |
-| Product manual | [BoundX product manual — Chinese](docs/BOUNDX-PRODUCT-MANUAL.md) |
-| 7+1 compilation method | [Definitions, semantic compilation and boundary calculation v0.4 — Chinese](docs/BoundX-7plus1-定义原理语义编译与边界计算说明-v0.4.md) |
+| Product manual | [BoundaryXP product manual — Chinese](docs/BOUNDARYXP-PRODUCT-MANUAL.md) |
+| 7+1 compilation method | [Definitions, semantic compilation and boundary calculation v0.4 — Chinese](docs/BoundaryXP-7plus1-定义原理语义编译与边界计算说明-v0.4.md) |
 | Boundary calculation method and product role | [Calculation guide — Chinese](docs/BOUNDARY-CALCULATION-METHOD.md) |
 | Quick start | [English](QUICKSTART.en.md) · [Chinese](QUICKSTART.md) |
 | Capabilities, versions and delivery status | [Capability matrix — Chinese](docs/FUNCTIONS.md) · [Short-text compiler status — Chinese](docs/SHORT-COMPILER-STATUS.md) |
@@ -132,12 +134,12 @@ The original documentation entries remain accessible alongside the updated 7+1 m
 | Semantic resources and Enterprise L3 | [Semantic packages](domain-packs/) · [Enterprise L3 guide — Chinese](docs/L3-EMPLOYEE-DIRECTORY-GUIDE.md) |
 | Local validation and research metrics | [Validation guide — Chinese](docs/VALIDATION.md) |
 | Historical BXP 0.4 local development task | [v1.2 task book — historical, Chinese](docs/tasks/BXP-PRODUCER-BENCHMARK-DEVELOPMENT-TASKBOOK-v1.2-LOCAL.md) |
-| Current development task | [Review-branch task pointer — Chinese](https://github.com/joinwell52-AI/BoundX/blob/review/7plus1-parser/docs/tasks/7plus1/CURRENT-TASK.md) |
+| Current development task | [Review-branch task pointer — Chinese](https://github.com/joinwell52-AI/BoundaryXP/blob/review/7plus1-parser/docs/tasks/7plus1/CURRENT-TASK.md) |
 | Versions and license | [Changelog](CHANGELOG.md) · [LICENSE](LICENSE) |
 
 ## Repository files and directories
 
-[Open the complete main-branch file list](https://github.com/joinwell52-AI/BoundX/tree/main). A README file-reading page and the repository's file browser are different views; the documentation links below do not replace the file browser.
+[Open the complete main-branch file list](https://github.com/joinwell52-AI/BoundaryXP/tree/main). A README file-reading page and the repository's file browser are different views; the documentation links below do not replace the file browser.
 
 | Directory or file | Contents |
 |---|---|
@@ -152,15 +154,15 @@ The original documentation entries remain accessible alongside the updated 7+1 m
 | [package.json](package.json) · [package-lock.json](package-lock.json) | Actual branch commands and dependency lock |
 | [assets/](assets/) | Logo and brand assets |
 
-Short-text candidate source and packages are on the [development branch](https://github.com/joinwell52-AI/BoundX/tree/review/7plus1-parser); they are not the same snapshot as the existing main-branch files.
+Short-text candidate source and packages are on the [development branch](https://github.com/joinwell52-AI/BoundaryXP/tree/review/7plus1-parser); they are not the same snapshot as the existing main-branch files.
 
 ## Brand assets
 
-The original logo files are reused without redesign, recoloring or renaming. See the [brand directory](assets/branding/README.md) and the [original logo asset package](assets/branding/BoundX-logo-pack-v1.zip).
+The original logo files are reused without redesign, recoloring or renaming. See the [brand directory](assets/branding/README.md) and the [original logo asset package](assets/branding/BoundaryXP-logo-pack-v1.zip).
 
 | Asset | Original files |
 |---|---|
-| Chinese logo: icon and Chinese wordmark | [Transparent](assets/branding/v1/BoundX_Logo_CN_JieHen_transparent.png) · [White background](assets/branding/v1/BoundX_Logo_CN_JieHen_white.png) |
-| English logo: icon and BoundX wordmark | [Transparent](assets/branding/v1/BoundX_Logo_EN_transparent.png) · [White background](assets/branding/v1/BoundX_Logo_EN_white.png) |
-| Standalone icon | [Transparent](assets/branding/v1/BoundX_Icon_transparent.png) · [White background](assets/branding/v1/BoundX_Icon_white.png) |
-| GitHub / App icon | [512-pixel transparent icon](assets/branding/v1/BoundX_Icon_512_transparent.png) |
+| Chinese logo: icon and Chinese wordmark | [Transparent](assets/branding/v2/BoundaryXP-logo-light.png) · [White background](assets/branding/v2/BoundaryXP-logo-dark.png) |
+| English logo: icon and BoundaryXP wordmark | [Transparent](assets/branding/v2/BoundaryXP-logo-light.png) · [White background](assets/branding/v2/BoundaryXP-logo-dark.png) |
+| Standalone icon | [Transparent](assets/branding/v1/BoundaryXP_Icon_transparent.png) · [White background](assets/branding/v1/BoundaryXP_Icon_white.png) |
+| GitHub / App icon | [512-pixel transparent icon](assets/branding/v1/BoundaryXP_Icon_512_transparent.png) |

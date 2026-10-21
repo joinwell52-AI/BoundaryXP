@@ -5,7 +5,7 @@ import path from 'node:path';
 import os from 'node:os';
 import {pathToFileURL} from 'node:url';
 import {randomUUID,createHash} from 'node:crypto';
-const stage=path.resolve(process.env.BOUNDX_EFFICIENCY_TEST_ROOT??'.boundx/skill-efficiency-ui15-work');
+const stage=path.resolve(process.env.BOUNDARYXP_EFFICIENCY_TEST_ROOT??'.boundx/skill-efficiency-ui15-work');
 const base=path.resolve('.boundx/short-compiler-031-r1/versions/0.1.0-candidate.031-r1.2-ui.13');
 const core='research/7plus1-parser/llm-first-028/';
 const load=rel=>import(pathToFileURL(path.join(stage,rel)).href);

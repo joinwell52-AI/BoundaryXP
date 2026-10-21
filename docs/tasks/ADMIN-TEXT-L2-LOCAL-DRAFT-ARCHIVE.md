@@ -3,7 +3,7 @@
 > 历史／非规范（legacy / non-normative）。保留此前本地未提交的v1增补，不覆盖已有成果。以下旧状态和要求仅供追溯；v2入口及L2增补执行记录优先，不以本草稿授权开发。
 
 状态：`AUTHORIZED_FOR_IMPLEMENTATION`  
-适用仓库：`joinwell52-AI/BoundX`  
+适用仓库：`joinwell52-AI/BoundaryXP`  
 实施目录：`D:\boundx`  
 基线分支：`main`  
 基线提交：`50b9882c7b3e5118e85fb6993ba365d8f054fe0b`  
@@ -13,9 +13,9 @@
 
 ## 1. 项目定义
 
-这是BoundX协议产品化之后的一个新开发项目。首个用户是ADMIN，首个输入是ADMIN提交的完整任务文本，首个行业范围是软件开发与AI任务。
+这是BoundaryXP协议产品化之后的一个新开发项目。首个用户是ADMIN，首个输入是ADMIN提交的完整任务文本，首个行业范围是软件开发与AI任务。
 
-本阶段不训练、不微调、不内置BoundX自己的小模型。BoundX把固定7+1规则及已启用语义包提供给接入AI，由AI先生成候选7+1；随后由本地程序复核证据、组装标准BXP任务并执行确定性计算。
+本阶段不训练、不微调、不内置BoundaryXP自己的小模型。BoundaryXP把固定7+1规则及已启用语义包提供给接入AI，由AI先生成候选7+1；随后由本地程序复核证据、组装标准BXP任务并执行确定性计算。
 
 固定链路：
 
@@ -28,7 +28,7 @@ ADMIN任务文本
         ↓
 接入AI生成7+1候选
         ↓
-BoundX程序复核原文证据、语义引用和三态
+BoundaryXP程序复核原文证据、语义引用和三态
         ↓
 组装boundx-task/v1
         ↓
@@ -126,7 +126,7 @@ These additions belong to WP3, together with bilingual positive, negation, ambig
 | 数据库演进 | `database.migrate_schema`、`database.rollback_migration` | 区分结构迁移、回滚和一般`code.migrate`；不得推断已备份、可逆或已授权 |
 | 工具与宿主命令 | `agent.invoke_tool`、`ops.exec_shell` | 工具调用映射既有L1 `CALL`及其角色合同；shell命令与一般工具调用分开，不执行命令 |
 | 上下文检索 | `agent.retrieve_context`、`vector_index.search` | 复用既有L1读取语义；区分上下文检索、向量检索与索引写入，不推断来源可信 |
-| 人机协作 | `agent.interrupt`、`agent.resume` | 只表示原文要求的中断/恢复动作，明确目标会话或任务，不赋予BoundX运行时控制权 |
+| 人机协作 | `agent.interrupt`、`agent.resume` | 只表示原文要求的中断/恢复动作，明确目标会话或任务，不赋予BoundaryXP运行时控制权 |
 | 模型对齐 | `model.align`、`model.rlhf` | 区分通用对齐与明确RLHF过程；DPO不能当作RLHF同义词，不由方法名推断奖励、数据或训练成功 |
 | 提示词与数据 | `prompt.optimize`、`data.chunk` | 优化不等于评测通过；分块不等于生成向量或写入索引 |
 
@@ -373,11 +373,11 @@ bx pack deactivate <id>@<version>
 - 模型候选输出Schema；
 - 禁止补造、禁止授权推断和未知保留要求。
 
-L3完整职员表默认不离开本地。只向接入AI提供任务原文命中的最小职员记录。原文和L3数据是否可以发送给外部模型，由宿主和ADMIN承担独立数据授权；BoundX不得暗中上传。
+L3完整职员表默认不离开本地。只向接入AI提供任务原文命中的最小职员记录。原文和L3数据是否可以发送给外部模型，由宿主和ADMIN承担独立数据授权；BoundaryXP不得暗中上传。
 
 ## 10. AI生成候选
 
-BoundX不内置模型，也不保存模型API密钥。第一种正式模式是接入AI作为Host，通过MCP与BoundX协作。
+BoundaryXP不内置模型，也不保存模型API密钥。第一种正式模式是接入AI作为Host，通过MCP与BoundaryXP协作。
 
 Host内部流程：
 
@@ -597,7 +597,7 @@ DEV-01修改登录接口，QA-01运行测试。测试通过后交给PM-01复核�
 2. 建立独立实施分支，不直接写main。
 3. 按WP0至WP9顺序执行，逐包提交。
 4. 不得改变协议、刷新冻结期望或建立第二套BXP计算器。
-5. 不得开发、训练或内置BoundX自己的模型。
+5. 不得开发、训练或内置BoundaryXP自己的模型。
 6. fixtures只使用虚构职员和Agent代号。
 7. 完成后创建Draft PR，附文件清单、测试命令、精确结果、已知限制和协议未变证明。
 8. 停止在ADMIN审核门前，不合并、不发布、不创建Release。

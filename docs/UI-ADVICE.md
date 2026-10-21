@@ -1,4 +1,4 @@
-# BoundX 结果与建议 / Results and advice
+# BoundaryXP 结果与建议 / Results and advice
 
 当前主流程：生产者生成 BXP IR → 本地验证与确定性计算 → 宿主或责任人处理。This is not automatic approval or execution.
 

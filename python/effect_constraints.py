@@ -44,7 +44,7 @@ def analyze(text, source):
                 'scenario':{'zh-CN':event+'成立且未获'+approval+'授权时，同一 Root 权限状态既必须成立又必须不成立。',
                             'en':'When the event holds and '+approval+' has not approved, the same Root-privilege state is required both true and false.'},
                 'suggestion':{'zh-CN':'请明确紧急状态下应等待授权、转人工，或引用一条已正式批准的紧急例外；界痕不自动新增豁免。',
-                              'en':'Specify whether to wait for approval, escalate, or cite an approved emergency exception. BoundX does not create an exemption.'},
+                              'en':'Specify whether to wait for approval, escalate, or cite an approved emergency exception. BoundaryXP does not create an exemption.'},
                 'assumption':{'zh-CN':'“授予 Root 权限”和“获取 Root 权限”按同一主体最终持有 Root 权限的状态归一。',
                               'en':'Granting and obtaining Root privilege are normalized to the same final possession state.'},
                 'proof':calc,'decision':None})

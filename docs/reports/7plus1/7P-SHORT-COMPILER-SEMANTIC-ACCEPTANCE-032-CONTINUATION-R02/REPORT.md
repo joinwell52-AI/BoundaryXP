@@ -61,7 +61,7 @@ Q15、Q21在后续只读复核后有评价更正：[更正记录](SOURCE-REVIEW-
 
 ## 使用、剩余工作与停止
 
-候选包沿用 [原032.3运行包](../7P-SHORT-COMPILER-SEMANTIC-ACCEPTANCE-032-LONG/delivery/BoundX-short-compiler-0.1.0-candidate.032.3.zip)，SHA-256 `1e65b9598d85788e0e9cc96cd07db3a9a09c17a207e009e3fb701d4ab05e5dd3`；未重打包，未升级旧安装。完整启动/核验/维护说明见 [本次安装状态](INSTALL-STATUS.md)。
+候选包沿用 [原032.3运行包](../7P-SHORT-COMPILER-SEMANTIC-ACCEPTANCE-032-LONG/delivery/BoundaryXP-short-compiler-0.1.0-candidate.032.3.zip)，SHA-256 `1e65b9598d85788e0e9cc96cd07db3a9a09c17a207e009e3fb701d4ab05e5dd3`；未重打包，未升级旧安装。完整启动/核验/维护说明见 [本次安装状态](INSTALL-STATUS.md)。
 
 现有安装的电脑重启后命令仍为：
 

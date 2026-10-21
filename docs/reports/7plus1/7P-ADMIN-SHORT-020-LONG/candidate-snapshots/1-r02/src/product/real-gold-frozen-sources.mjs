@@ -3,7 +3,7 @@ import { existsSync, lstatSync, readFileSync } from 'node:fs';
 import { basename, isAbsolute, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
-const corpusDirectory = 'BoundX-REAL-GOLD-60-BILINGUAL-v0.1';
+const corpusDirectory = 'BoundaryXP-REAL-GOLD-60-BILINGUAL-v0.1';
 const hexDigest = /^[a-f0-9]{64}$/u;
 const defaultReviewRoot = fileURLToPath(new URL('../../.boundx/real-gold-60-review/REAL-GOLD-60-REVIEW-20260918-r01/adjudications-r02/', import.meta.url));
 

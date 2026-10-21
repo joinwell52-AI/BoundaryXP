@@ -3,7 +3,7 @@
 ## 0. Identity
 
 - TASK: `7P-MATRIX-017-R2`
-- Repository: `joinwell52-AI/BoundX`
+- Repository: `joinwell52-AI/BoundaryXP`
 - Branch: `review/7plus1-parser`
 - Parent result: `G0_SEGMENTATION_MATRIX_FAILED`
 - Parent commit: `2514ca34a7a21c277a0899bdc87bb74e68e30abe`
@@ -11,7 +11,7 @@
 - M04 orchestration adjudication: `docs/tasks/7plus1/7P-MATRIX-017-M04-ADMIN-ADJUDICATION.md`
 - Frozen M01–M04: `docs/tasks/7plus1/7P-MATRIX-017-FROZEN-CASES.md`
 - Short parser validated baseline: `5deb62b198d36f7ed0ae9b5a745c28b2b9aaf73e`
-- Normative method: `docs/BoundX-7plus1-定义原理语义编译与边界计算说明-v0.3.md`
+- Normative method: `docs/BoundaryXP-7plus1-定义原理语义编译与边界计算说明-v0.3.md`
 - PRODUCTION_READY=false
 
 ## 1. Purpose

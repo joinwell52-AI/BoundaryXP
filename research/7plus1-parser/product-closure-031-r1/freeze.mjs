@@ -3,7 +3,7 @@ import fs from 'node:fs';import path from 'node:path';import {execFileSync} from
 const snap=JSON.parse(fs.readFileSync('.boundx/experiments/031-r1/pre-sync/snapshot.json'));
 for(const x of snap.dirty){const exists=fs.existsSync(x.file);if(exists!==x.exists||exists&&sha256(fs.readFileSync(x.file))!==x.sha256)throw Error('PREEXISTING_TRACKED_CHANGED:'+x.file);}
 const diff=execFileSync('git',['diff','--name-only','-z'],{encoding:'utf8'}).split('\0').filter(Boolean),original=new Set(snap.dirty.map(x=>x.file));
-const allowed=p=>p==='.gitattributes'||p==='docs/BoundX-7plus1-定义原理语义编译与边界计算说明-v0.4.md'||p.startsWith('product/short-compiler/')||p.startsWith('research/7plus1-parser/llm-first-028/')||p==='research/7plus1-parser/v0.3-p2.1-generalization/web/native-app.js';
+const allowed=p=>p==='.gitattributes'||p==='docs/BoundaryXP-7plus1-定义原理语义编译与边界计算说明-v0.4.md'||p.startsWith('product/short-compiler/')||p.startsWith('research/7plus1-parser/llm-first-028/')||p==='research/7plus1-parser/v0.3-p2.1-generalization/web/native-app.js';
 const owned=diff.filter(p=>!original.has(p));if(owned.some(p=>!allowed(p)))throw Error('UNEXPECTED_TASK_DIFF:'+JSON.stringify(owned.filter(p=>!allowed(p))));
 const added=['product/short-compiler/resources.mjs','research/7plus1-parser/llm-first-028/artifacts.mjs','research/7plus1-parser/llm-first-028/tests/artifact-flow.test.mjs','research/7plus1-parser/llm-first-028/tests/resource-snapshot.test.mjs','tests/parser-v03-p21-service.test.mjs',...fs.readdirSync('research/7plus1-parser/product-closure-031-r1').filter(p=>p.endsWith('.mjs')).map(p=>'research/7plus1-parser/product-closure-031-r1/'+p)];
 if(execFileSync('git',['diff','--cached','--name-only'],{encoding:'utf8'}).trim())throw Error('INDEX_NOT_EMPTY');

@@ -21,7 +21,7 @@ const resourceProfile=buildBundle('parse').resource_profile;
 const resourceFingerprint=(method='SKILL')=>sha256(JSON.stringify([buildBundle('parse',{parseMethod:method}).sha256,buildBundle('audit',{parseMethod:method}).sha256,compilerRevision,sha256(loadedRuntime)]));
 const resourceEvidence=(method='SKILL')=>({parse_method:method,resource_profile:buildBundle('parse',{parseMethod:method}).resource_profile,request_profile:requestProfile,effective_resource_sha256:resourceFingerprint(method),selected_resources:{parse:bundleEvidence(buildBundle('parse',{parseMethod:method})),audit:bundleEvidence(buildBundle('audit',{parseMethod:method}))}});
 export const WEB=path.resolve(ROOT,'../v0.3-p2.1-generalization/web');
-export const DATA=process.env.BOUNDX_DATA_DIR?path.resolve(process.env.BOUNDX_DATA_DIR):path.resolve(ROOT,'../../../.boundx/7plus1-short');
+export const DATA=process.env.BOUNDARYXP_DATA_DIR?path.resolve(process.env.BOUNDARYXP_DATA_DIR):path.resolve(ROOT,'../../../.boundx/7plus1-short');
 const ID=/^[a-f0-9]{8}(?:-[a-f0-9]{4}){3}-[a-f0-9]{12}$/;
 const terminal=new Set(['COMPLETED','COMPLETED_WITH_UNRESOLVED','FAILED','CANCELLED','INTERRUPTED']);
 const save=(file,value)=>{const temp=file+'.'+randomUUID()+'.tmp';writeJSON(temp,value);fs.renameSync(temp,file);};
@@ -33,7 +33,7 @@ export function publicError(e){
  return {code,message:code,...(safeDetails.includes(e.detail)?{detail_code:e.detail}:{}),details_available_locally:true};
 }
 const safeTrace=trace=>{const {model_calls,...rest}=trace;return {...rest,model_calls:Object.fromEntries(Object.entries(model_calls??{}).map(([phase,calls])=>[phase,calls.map(({thread_id,elapsed_ms,exit_code,usage,skill_mode,actual_model,schema_check})=>({thread_id,elapsed_ms,exit_code,usage,skill_mode,actual_model,schema_check}))]))};};
-export function createServer({dataRoot=DATA,parse=parse7Plus1,legacyRoot=process.env.BOUNDX_LEGACY_DIR?path.resolve(process.env.BOUNDX_LEGACY_DIR):path.resolve(ROOT,'../local-lab/history'),timeoutMs=null,resourceGuard=()=>{},productSnapshot=null,maxModelRequests=6,catalog=modelCatalog()}={}){
+export function createServer({dataRoot=DATA,parse=parse7Plus1,legacyRoot=process.env.BOUNDARYXP_LEGACY_DIR?path.resolve(process.env.BOUNDARYXP_LEGACY_DIR):path.resolve(ROOT,'../local-lab/history'),timeoutMs=null,resourceGuard=()=>{},productSnapshot=null,maxModelRequests=6,catalog=modelCatalog()}={}){
  const selectedBundle=(phase,method='SKILL')=>buildBundle(phase,{parseMethod:method,contractVersion:productSnapshot?.contract??'candidate-ir/1.4'});
  const requestProfile=selectedBundle('parse').request_profile;
  const resourceProfile=selectedBundle('parse').resource_profile;
@@ -55,6 +55,13 @@ export function createServer({dataRoot=DATA,parse=parse7Plus1,legacyRoot=process
    if(!allowed.includes(host))return send(403,{error:'LOCALHOST_ONLY'});
    if(req.headers.origin&&req.headers.origin!=='http://'+host)return send(403,{error:'SAME_ORIGIN_REQUIRED'});
    const url=new URL(req.url,'http://'+host),route=url.pathname;
+   const brandAssets={'/branding/logo-light.png':'BoundaryXP-logo-light.png','/branding/logo-dark.png':'BoundaryXP-logo-dark.png','/branding/icon.png':'BoundaryXP-icon.png'};
+   if(req.method==='GET'&&Object.hasOwn(brandAssets,route)){
+    resourceGuard();res.writeHead(200,{'content-type':'image/png','cache-control':'no-store','x-content-type-options':'nosniff'});return res.end(fs.readFileSync(path.resolve(ROOT,'../../../assets/branding/v2',brandAssets[route])));
+   }
+   if(req.method==='GET'&&route==='/brand.css'){
+    res.writeHead(200,{'content-type':'text/css; charset=utf-8','cache-control':'no-store','x-content-type-options':'nosniff'});return res.end(fs.readFileSync(path.join(WEB,'brand.css')));
+   }
    if(req.method==='GET'&&route==='/api/examples'){resourceGuard();return send(200,{count:sourceExamples().length,cases:sourceExamples(),answers_included:false,automatic_model_calls:false});}
    const example=/^\/api\/examples\/(REAL-GOLD-\d{3})$/.exec(route);
    if(req.method==='GET'&&example){resourceGuard();try{return send(200,loadSourceExample(example[1]));}catch(e){if(e.message==='SOURCE_EXAMPLE_NOT_FOUND')return send(404,{error:e.message});throw e;}}
@@ -69,7 +76,7 @@ export function createServer({dataRoot=DATA,parse=parse7Plus1,legacyRoot=process
    if(req.method==='GET'&&route==='/api/session'){
     resourceGuard();
     const session=randomBytes(32).toString('hex');sessions.set(session,true);res.setHeader('set-cookie',`boundx_session=${session}; HttpOnly; SameSite=Strict; Path=/`);
-    return send(200,{token:session,dictionary_catalog:dictionaryCatalog(),product_snapshot:productSnapshot,engine:'BoundX 7+1 compiler',compiler_revision:compilerRevision,runtime_sha256:sha256(loadedRuntime),contract:selectedBundle('parse').contract_version??selectedBundle('parse').schema.properties.contract_version.const,skill_mode:'INLINE_BUNDLE',parse_method:'SKILL',parse_methods:['SKILL','SKILL1'],resource_profile:resourceProfile,request_profile:requestProfile,comparison_resources:{SKILL:resourceEvidence(),SKILL1:resourceEvidence('SKILL1')},native_skill_loading:'NOT_VERIFIED',actual_model:null,requested_model:catalog.default_model,requested_reasoning:catalog.default_reasoning,model_catalog:catalog,source_lineage_supported:false,limit_codepoints:null,input_limits:INPUT_LIMITS,model_wait_policy:{automatic_timeout_ms:timeoutMs>0?timeoutMs:null,manual_cancel:true},business_execution_enabled:false});
+    return send(200,{token:session,dictionary_catalog:dictionaryCatalog(),product_snapshot:productSnapshot,engine:'BoundaryXP 7+1 compiler',compiler_revision:compilerRevision,runtime_sha256:sha256(loadedRuntime),contract:selectedBundle('parse').contract_version??selectedBundle('parse').schema.properties.contract_version.const,skill_mode:'INLINE_BUNDLE',parse_method:'SKILL',parse_methods:['SKILL','SKILL1'],resource_profile:resourceProfile,request_profile:requestProfile,comparison_resources:{SKILL:resourceEvidence(),SKILL1:resourceEvidence('SKILL1')},native_skill_loading:'NOT_VERIFIED',actual_model:null,requested_model:catalog.default_model,requested_reasoning:catalog.default_reasoning,model_catalog:catalog,source_lineage_supported:false,limit_codepoints:null,input_limits:INPUT_LIMITS,model_wait_policy:{automatic_timeout_ms:timeoutMs>0?timeoutMs:null,manual_cancel:true},business_execution_enabled:false});
    }
    if(req.method==='GET'&&route==='/api/runs')return send(200,[...[...records.values()].map(summary),...legacyList()].sort((a,b)=>String(b.created_at).localeCompare(String(a.created_at))));
    if(req.method==='GET'&&route==='/api/workbench/projects')return send(200,workbench.list());
@@ -99,7 +106,7 @@ export function createServer({dataRoot=DATA,parse=parse7Plus1,legacyRoot=process
     if(match[2]==='trace.json')return download(JSON.stringify({run:summary(record),...trace},null,2)+'\n','application/json',record.run_id+'-trace.json');
     const md=trace.chinese+'\n## 原文及完整过程（候选不是最终边界）\n\n```json\n'+JSON.stringify(trace,null,2)+'\n```\n';
     if(match[2]==='trace.md')return download(md,'text/markdown',record.run_id+'-trace.md');
-    if(match[2]==='trace.html'){const escaped=md.replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;');return download('<!doctype html><meta charset="utf-8"><title>BoundX local trace</title><pre>'+escaped+'</pre>','text/html',record.run_id+'-trace.html');}
+    if(match[2]==='trace.html'){const escaped=md.replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;');return download('<!doctype html><meta charset="utf-8"><title>BoundaryXP local trace</title><pre>'+escaped+'</pre>','text/html',record.run_id+'-trace.html');}
     return send(404,{error:'NOT_FOUND'});
    }
    if(!['POST','DELETE'].includes(req.method))return send(404,{error:'NOT_FOUND'});
@@ -163,7 +170,7 @@ export function createServer({dataRoot=DATA,parse=parse7Plus1,legacyRoot=process
     if(prior)return (prior.dictionaries?.sha256??dictionaryIdentity(selectDictionaries()).sha256)===dictionarySelection.sha256&&prior.source_sha256===source.sha256&&prior.requested_model===settings.model&&(prior.requested_reasoning??'medium')===settings.reasoning&&(prior.parse_method??'SKILL')===method&&prior.resource_profile===selectedBundle('parse',method).resource_profile&&prior.request_profile===requestProfile&&prior.effective_resource_sha256===resourceFingerprint(method)?send(200,summary(prior)):send(409,{error:'REQUEST_ID_SOURCE_MISMATCH'});
     if(active.size)return send(409,{error:'COMPILER_BUSY'});
     const id=randomUUID(),controller=new AbortController(),created_at=new Date().toISOString();fs.mkdirSync(folder(id));
-    record={run_id:id,request_id:input.request_id,created_at,status:'QUEUED',stage:'QUEUED',source_text:source.text,source_sha256:source.sha256,codepoints:source.codepoints,filename:typeof input.filename==='string'?path.basename(input.filename).slice(0,100):'pasted-task.txt',engine:'BoundX 7+1 compiler',contract:selectedBundle('parse',method).contract_version??selectedBundle('parse',method).schema.properties.contract_version.const,skill_mode:'INLINE_BUNDLE',native_skill_loading:'NOT_VERIFIED',requested_model:'gpt-6.1-sol',actual_model:null,execution_mode:'LIVE_CODEX',stages:[{stage:'QUEUED',at:created_at}]};
+    record={run_id:id,request_id:input.request_id,created_at,status:'QUEUED',stage:'QUEUED',source_text:source.text,source_sha256:source.sha256,codepoints:source.codepoints,filename:typeof input.filename==='string'?path.basename(input.filename).slice(0,100):'pasted-task.txt',engine:'BoundaryXP 7+1 compiler',contract:selectedBundle('parse',method).contract_version??selectedBundle('parse',method).schema.properties.contract_version.const,skill_mode:'INLINE_BUNDLE',native_skill_loading:'NOT_VERIFIED',requested_model:'gpt-6.1-sol',actual_model:null,execution_mode:'LIVE_CODEX',stages:[{stage:'QUEUED',at:created_at}]};
     record.requested_model=settings.model;record.requested_reasoning=settings.reasoning;record.model_catalog_sha256=catalog.sha256;record.model_config_acceptance=settings.model===catalog.default_model&&settings.reasoning===catalog.default_reasoning?'BASELINE_PARTIAL':'USER_SELECTED_NOT_SEMANTICALLY_ACCEPTED';
     Object.assign(record,resourceEvidence(method));record.dictionaries=dictionarySelection;record.parse_resource_acceptance='SEMANTIC_REPAIR_CANDIDATE_NOT_ADMIN_ACCEPTED';
     record.product_snapshot=productSnapshot;record.compiler_revision=compilerRevision;record.runtime_sha256=sha256(loadedRuntime);records.set(id,record);persist(record);active.set(id,controller);send(202,summary(record));
@@ -196,9 +203,9 @@ export function createServer({dataRoot=DATA,parse=parse7Plus1,legacyRoot=process
  server.activeJobs=active;server.records=records;server.dataRoot=dataRoot;return server;
 }
 export function startServer(){
- const server=createServer();const port=Number(process.env.BOUNDX_PARSER_PORT??58618);
+ const server=createServer();const port=Number(process.env.BOUNDARYXP_PARSER_PORT??58618);
  server.on('error',e=>{console.error(e.code==='EADDRINUSE'?'PORT_IN_USE: do not stop unknown services':e.message);process.exitCode=1;});
- server.listen(port,'127.0.0.1',()=>console.log(`BoundX short compiler 031 / INLINE_BUNDLE: http://127.0.0.1:${port}/`));return server;
+ server.listen(port,'127.0.0.1',()=>console.log(`BoundaryXP short compiler 031 / INLINE_BUNDLE: http://127.0.0.1:${port}/`));return server;
 }
 
 

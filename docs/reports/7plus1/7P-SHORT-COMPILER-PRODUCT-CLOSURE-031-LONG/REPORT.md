@@ -11,7 +11,7 @@ FINAL_STATE=WAITING_ADMIN_REVIEW
 
 版本0.1.0-candidate.031.5；唯一核心031-c5、合同031-r01、手册v0.4/r03。源代码提交1a91974d75ebdb126a8c6727f2b7833a792dc055。
 
-- 压缩包：D:\boundx\.boundx\deliverables\BoundX-Short-Compiler-0.1.0-candidate.031.5.zip。
+- 压缩包：D:\boundx\.boundx\deliverables\BoundaryXP-Short-Compiler-0.1.0-candidate.031.5.zip。
 - 包构建目录：D:\boundx\.boundx\experiments\031\packages\delivery-031-c5-committed。
 - 干净安装目录：D:\boundx\.boundx\short-compiler-031。
 - 已实际启动的独立候选页面：http://127.0.0.1:58619/。

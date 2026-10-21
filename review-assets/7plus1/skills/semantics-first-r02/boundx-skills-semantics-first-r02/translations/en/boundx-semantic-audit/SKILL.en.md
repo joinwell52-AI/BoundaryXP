@@ -1,9 +1,9 @@
 ---
 name: boundx-semantic-audit
-description: Independently review BoundX candidate IR for Chinese, English, or mixed Chinese-English tasks. Check source-to-IR omissions and IR-to-source inventions, including identities, modalities, scopes, conditions, and data uses. Return evidence-linked semantic judgments only; do not execute tasks, edit IR, or replace programmatic calculation or authorization.
+description: Independently review BoundaryXP candidate IR for Chinese, English, or mixed Chinese-English tasks. Check source-to-IR omissions and IR-to-source inventions, including identities, modalities, scopes, conditions, and data uses. Return evidence-linked semantic judgments only; do not execute tasks, edit IR, or replace programmatic calculation or authorization.
 ---
 
-# BoundX: independent source-to-structure and structure-to-source review
+# BoundaryXP: independent source-to-structure and structure-to-source review
 
 Interface version: candidate-ir/1.2.
 Procedure revision: semantics-first-r02.
@@ -72,7 +72,7 @@ For key restrictions check whether the candidate distinguishes a new external in
 
 Retaining a universal rule, satisfying a hypothetical witness, and proving all child plans conform to a parent are different claims. Typed nodes, an acyclic graph, or a calculated number do not establish semantic completeness.
 
-For background statements such as “the report has been submitted,” check faithful representation only. Do not inspect business systems or treat the statement as verified evidence that allows a parent prerequisite to be deleted. BoundX checks task text and plans; it does not require work to finish before its boundary can be described.
+For background statements such as “the report has been submitted,” check faithful representation only. Do not inspect business systems or treat the statement as verified evidence that allows a parent prerequisite to be deleted. BoundaryXP checks task text and plans; it does not require work to finish before its boundary can be described.
 
 ## Four: issue review records matching actual support
 

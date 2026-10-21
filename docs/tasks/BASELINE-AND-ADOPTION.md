@@ -2,7 +2,7 @@
 
 ## WP0 基线 / Baseline
 
-- 仓库：joinwell52-AI/BoundX；目录：`D:\boundx`。
+- 仓库：joinwell52-AI/BoundaryXP；目录：`D:\boundx`。
 - main：`50b9882c7b3e5118e85fb6993ba365d8f054fe0b`。
 - 授权入口、v2任务书和120条种子：`b432f9ed734850191d170022f01d7589251fdbd8`；本地文件按原字节保留。
 - 分支：`feat/admin-text-semantic-packs-v2`；不合并、不发布。
@@ -37,7 +37,7 @@ L1旧JSON混合语义词表和解析器正则；Lark保持适配器层，不作�
 
 Data Package官方2.0 Profile原文包含Data Resource约束，固定于vendor/datapackage-2.0/datapackage.json。来源：https://datapackage.org/profiles/2.0/datapackage.json；下载日期2026-09-14；SHA-256 `34cf87616814215bc57b66d3cbabc4fc4f453de90710a0236d4924992f69623b`。未删改上游Schema字段；产品限制另定义。
 
-上游[许可原文](https://raw.githubusercontent.com/frictionlessdata/datapackage/main/LICENSE.md)为Unlicense，随副本保留；SHA-256 `88d9b4eb60579c191ec391ca04c16130572d7eedc4a86daa58bf28c6e14c9bcd`。这是第三方资源许可记录，不更改BoundX根LICENSE。其他参考未复制内容，不声称已经完成额外资源的许可批准。
+上游[许可原文](https://raw.githubusercontent.com/frictionlessdata/datapackage/main/LICENSE.md)为Unlicense，随副本保留；SHA-256 `88d9b4eb60579c191ec391ca04c16130572d7eedc4a86daa58bf28c6e14c9bcd`。这是第三方资源许可记录，不更改BoundaryXP根LICENSE。其他参考未复制内容，不声称已经完成额外资源的许可批准。
 
 ## 验收门禁 / Acceptance gates
 

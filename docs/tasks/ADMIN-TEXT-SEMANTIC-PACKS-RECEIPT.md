@@ -88,10 +88,10 @@ This is a partial engineering delivery. Deterministic replays, package tests and
 
 本轮重跑：已跟踪Core255/255，UI152/152，协议测试103/103，冻结向量208/208，Python135/135，文档20/20。另读测并行维护的五个新行业包，10/10个结构/词法测试通过；该10项及行业资产未被本实施擅自提交。磁盘文档87、本地链接275、问题0，其中包含并行文件，不冒充PR专属文档计数。
 
-先前检查点5617ecc的[CI运行34839953430](https://github.com/joinwell52-AI/BoundX/actions/runs/34839953430)在Ubuntu Node22、Ubuntu Node24、Windows Node24三组均通过。该结果不自动覆盖9c50eab及后续提交；最新CI以Draft PR #6对应head的实际结果为准。本地预览在http://127.0.0.1:64285/admin更新，仍不是完整Host实测验收。
+先前检查点5617ecc的[CI运行34839953430](https://github.com/joinwell52-AI/BoundaryXP/actions/runs/34839953430)在Ubuntu Node22、Ubuntu Node24、Windows Node24三组均通过。该结果不自动覆盖9c50eab及后续提交；最新CI以Draft PR #6对应head的实际结果为准。本地预览在http://127.0.0.1:64285/admin更新，仍不是完整Host实测验收。
 
 ## 上下文检索增量 / Context Retrieval Increment
 
 395750c增加七类L2上下文、共享词边界匹配、跨类别同名ID消歧，检索规则更新为literal-ascii-v2。新prepare锁定新规则/Schema摘要，不重写历史快照。风险关联只提供候选，不产生B或执行授权；超过64KiB显式拒绝，不截断后冒称完整。
 
-本轮重跑已跟踪Core260/260、UI152/152、协议测试103/103、208冻结向量全部通过、Python135/135、文档20/20。新增5项检索/边界/快照/引用测试。协议目录与LICENSE仍与基线无差异。616951c的[CI运行34840651652](https://github.com/joinwell52-AI/BoundX/actions/runs/34840651652)三环境已通过；不将其冒称395750c的新CI证据。整体仍为PARTIAL_IMPLEMENTATION，真实Host与独立金标门槛不变。
+本轮重跑已跟踪Core260/260、UI152/152、协议测试103/103、208冻结向量全部通过、Python135/135、文档20/20。新增5项检索/边界/快照/引用测试。协议目录与LICENSE仍与基线无差异。616951c的[CI运行34840651652](https://github.com/joinwell52-AI/BoundaryXP/actions/runs/34840651652)三环境已通过；不将其冒称395750c的新CI证据。整体仍为PARTIAL_IMPLEMENTATION，真实Host与独立金标门槛不变。

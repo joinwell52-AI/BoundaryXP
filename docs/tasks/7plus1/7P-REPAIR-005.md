@@ -4,9 +4,9 @@
 
 - TASK: `7P-REPAIR-005`
 - START_HEAD: `6db6b53a2c5049bc694fd16a150596fb10a8567e`
-- Repository: `joinwell52-AI/BoundX`
+- Repository: `joinwell52-AI/BoundaryXP`
 - Branch: `review/7plus1-parser`
-- Normative method: `docs/BoundX-7plus1-定义原理语义编译与边界计算说明-v0.3.md`
+- Normative method: `docs/BoundaryXP-7plus1-定义原理语义编译与边界计算说明-v0.3.md`
 - Previous task: `7P-REPAIR-004` — semantic acceptance FAIL, diagnostic implementation retained
 - `PRODUCTION_READY=false`
 
@@ -14,7 +14,7 @@ Read in full before implementation:
 
 1. `docs/tasks/7plus1/CURRENT-TASK.md`
 2. this taskbook
-3. `docs/BoundX-7plus1-定义原理语义编译与边界计算说明-v0.3.md`
+3. `docs/BoundaryXP-7plus1-定义原理语义编译与边界计算说明-v0.3.md`
 4. `docs/reports/7plus1/7P-REPAIR-004/REPORT.md`
 5. `docs/reports/7plus1/7P-REPAIR-004/FIRST-DIVERGENCE.json`
 6. `docs/reports/7plus1/7P-REPAIR-004/ROOT-CAUSES.md`

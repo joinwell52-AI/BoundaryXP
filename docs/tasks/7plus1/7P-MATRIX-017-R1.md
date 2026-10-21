@@ -3,7 +3,7 @@
 ## 0. Identity
 
 - TASK: `7P-MATRIX-017-R1`
-- Repository: `joinwell52-AI/BoundX`
+- Repository: `joinwell52-AI/BoundaryXP`
 - Branch: `review/7plus1-parser`
 - Parent task: `7P-MATRIX-017`
 - Parent outcome: `ADMIN_MATRIX_CASE_REVIEW_REQUIRED`
@@ -11,7 +11,7 @@
 - ADMIN adjudication: `docs/tasks/7plus1/7P-MATRIX-017-M04-ADMIN-ADJUDICATION.md`
 - Frozen cases: `docs/tasks/7plus1/7P-MATRIX-017-FROZEN-CASES.md`
 - Short parser baseline: `5deb62b198d36f7ed0ae9b5a745c28b2b9aaf73e`
-- Normative method: `docs/BoundX-7plus1-定义原理语义编译与边界计算说明-v0.3.md`
+- Normative method: `docs/BoundaryXP-7plus1-定义原理语义编译与边界计算说明-v0.3.md`
 - PRODUCTION_READY=false
 
 ## 1. Resume rule

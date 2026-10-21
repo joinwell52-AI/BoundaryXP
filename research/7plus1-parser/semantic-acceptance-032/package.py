@@ -6,7 +6,7 @@ report=Path('docs/reports/7plus1/7P-SHORT-COMPILER-SEMANTIC-ACCEPTANCE-032-LONG'
 manifest=json.loads((root/'PRODUCT-MANIFEST.json').read_text(encoding='utf-8'))
 destination=report/'delivery'
 destination.mkdir(exist_ok=True)
-archive=destination/('BoundX-short-compiler-'+manifest['version']+'.zip')
+archive=destination/('BoundaryXP-short-compiler-'+manifest['version']+'.zip')
 with zipfile.ZipFile(archive,'x',compression=zipfile.ZIP_DEFLATED) as z:
     for item in manifest['files']+[{'path':'PRODUCT-MANIFEST.json'}]:
         p=(root/item['path']).resolve()

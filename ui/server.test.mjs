@@ -8,13 +8,13 @@ import { resolveEndpoint, createConnectionState } from './connection.mjs';
 import { adminAdvice, planAdvice, conclusion } from './advice.mjs';
 const doc={text:'检查并报告',parameters:{A:'检查',C:'报告'},actions:[{actor:'PM',verb:'检查',target:'系统',quote:'检查'}],completion:[{id:'report',quote:'报告'}]};
 const config={url:'https://example.com/responses',key:'test-key-not-real',model:'test',protocol:'responses'};
-async function setup(t,fetchImpl){const app=createApp({fetchImpl});await new Promise(resolve=>app.listen(0,'127.0.0.1',resolve));t.after(()=>new Promise(resolve=>{app.close(resolve);app.closeAllConnections();}));const origin='http://127.0.0.1:'+app.address().port;const html=await(await fetch(origin)).text();const token=html.match(/name="session-token" content="([a-f0-9]+)"/)[1];return {origin,post:(route,value,headers={})=>fetch(origin+'/api/legacy/'+route,{method:'POST',headers:{Origin:origin,'Content-Type':'application/json','X-BoundX-Token':token,...headers},body:JSON.stringify(value)})};}
+async function setup(t,fetchImpl){const app=createApp({fetchImpl});await new Promise(resolve=>app.listen(0,'127.0.0.1',resolve));t.after(()=>new Promise(resolve=>{app.close(resolve);app.closeAllConnections();}));const origin='http://127.0.0.1:'+app.address().port;const html=await(await fetch(origin)).text();const token=html.match(/name="session-token" content="([a-f0-9]+)"/)[1];return {origin,post:(route,value,headers={})=>fetch(origin+'/api/legacy/'+route,{method:'POST',headers:{Origin:origin,'Content-Type':'application/json','X-BoundaryXP-Token':token,...headers},body:JSON.stringify(value)})};}
 function response(text,rest={}){return new Response(JSON.stringify({model:'test',status:'completed',usage:{input_tokens:1,output_tokens:2},output:[{type:'message',content:[{type:'output_text',text}]}],...rest}));}
 test('UI assets, token and origin isolation; task review is actual kernel output',async t=>{
   const {origin,post}=await setup(t);assert.equal((await fetch(origin+'/app.js')).status,200);
   for(const asset of ['/admin-check.mjs','/admin-rules.mjs']){const response=await fetch(origin+asset);assert.equal(response.status,200);assert.match(response.headers.get('content-type'),/javascript/);}
   assert.equal((await post('review',{kind:'task',document:doc},{Origin:'https://evil.invalid'})).status,403);
-  assert.equal((await post('review',{kind:'task',document:doc},{'X-BoundX-Token':'bad'})).status,403);
+  assert.equal((await post('review',{kind:'task',document:doc},{'X-BoundaryXP-Token':'bad'})).status,403);
   const badHost=await new Promise((resolve,reject)=>{http.get(origin,{headers:{Host:'attacker.invalid'}},r=>{r.resume();resolve(r.statusCode);}).on('error',reject);});
   assert.equal(badHost,403);
   const result=await(await post('review',{kind:'task',document:doc})).json();assert.equal(result.result.business_decision,null);assert(result.result.findings.some(x=>x.kind==='parameter_unmapped'));

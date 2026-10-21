@@ -1,12 +1,12 @@
-# 7P-CLOSURE-008 — BoundX 7+1 Parser v0.3 Semantic Closure & Certification
+# 7P-CLOSURE-008 — BoundaryXP 7+1 Parser v0.3 Semantic Closure & Certification
 
 ## 0. Task identity
 
 - TASK: `7P-CLOSURE-008`
 - START_HEAD: `e8d06c113ac8472bafefccab7d4349ff9b711e2a`
-- Repository: `joinwell52-AI/BoundX`
+- Repository: `joinwell52-AI/BoundaryXP`
 - Branch: `review/7plus1-parser`
-- Normative method: `docs/BoundX-7plus1-定义原理语义编译与边界计算说明-v0.3.md`
+- Normative method: `docs/BoundaryXP-7plus1-定义原理语义编译与边界计算说明-v0.3.md`
 - Completion plan: `docs/tasks/7plus1/7P-v0.3-COMPLETION-PLAN.md`
 - Previous task: `7P-REPAIR-007`
 - Previous result: `SEMANTIC_GATE_NOT_MET`, diagnostic implementation retained
@@ -29,7 +29,7 @@ Read in full before implementation:
 1. `docs/tasks/7plus1/CURRENT-TASK.md`
 2. this taskbook
 3. `docs/tasks/7plus1/7P-v0.3-COMPLETION-PLAN.md`
-4. `docs/BoundX-7plus1-定义原理语义编译与边界计算说明-v0.3.md`
+4. `docs/BoundaryXP-7plus1-定义原理语义编译与边界计算说明-v0.3.md`
 5. `docs/reports/7plus1/7P-REPAIR-007/REPORT.md`
 6. `docs/reports/7plus1/7P-REPAIR-007/FIRST-DIVERGENCE.json`
 7. `docs/reports/7plus1/7P-REPAIR-007/CASE-IOA-JOINT-BASELINE.json`

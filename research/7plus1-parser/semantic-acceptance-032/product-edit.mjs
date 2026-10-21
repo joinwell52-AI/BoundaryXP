@@ -3,7 +3,7 @@ function edit(p,changes){let t=fs.readFileSync(p,'utf8');for(const [a,b]of chang
 edit('package.json',[[ '"7plus1:ui": "node product/short-compiler/launch-installed.mjs",','"7plus1:ui": "node product/short-compiler/launch-installed.mjs",\n    "7plus1:installed": "node product/short-compiler/cli-installed.mjs",' ]]);
 edit('product/short-compiler/cli-installed.mjs',[["'--replay'","'--replay-from'"]]);
 edit('product/short-compiler/使用说明.md',[
- ['# BoundX短文本7+1编译器：031-R1候选','# BoundX短文本7+1编译器：032候选'],
+ ['# BoundaryXP短文本7+1编译器：031-R1候选','# BoundaryXP短文本7+1编译器：032候选'],
  ['--port 58619','--port 58618'],
  ['端口被占用不会停止其他服务。选择空闲端口；原58618恢复有独立策略阻塞，本包不是绕过该阻塞的工具。','用户入口固定58618。端口被占用不会停止其他服务或另选长期端口；未通过本版质量门不得升级现有安装。策略拒绝须单列阻塞，不换工具绕过。'],
  ['最终质量状态见031-R1封存REPORT','最终质量状态见032封存REPORT'],

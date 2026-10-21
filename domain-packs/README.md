@@ -1,4 +1,4 @@
-# BoundX语义包
+# BoundaryXP语义包
 
 当前产品研究行业为软件开发与AI。
 

@@ -29,9 +29,9 @@ docs/tasks/ADMIN-TEXT-SEMANTIC-PACKS-DELIVERY.md
 docs/tasks/ADMIN-TEXT-SEMANTIC-PACKS-RECEIPT.md
 docs/tasks/ADMIN-TEXT-SEMANTIC-PACKS-START-HERE.md
 docs/tasks/BASELINE-AND-ADOPTION.md
-docs/tasks/BoundX-ADMIN-task-text-cases-v2.json
-docs/tasks/BoundX-ADMIN-task-text-semantic-packs-taskbook-v1.md
-docs/tasks/BoundX-ADMIN-task-text-semantic-packs-taskbook-v2.md
+docs/tasks/BoundaryXP-ADMIN-task-text-cases-v2.json
+docs/tasks/BoundaryXP-ADMIN-task-text-semantic-packs-taskbook-v1.md
+docs/tasks/BoundaryXP-ADMIN-task-text-semantic-packs-taskbook-v2.md
 docs/tasks/INDUSTRY-SIX-PACKS-INTEGRATION.md
 docs/tasks/L2-MIGRATION.md
 docs/tasks/PRODUCT-HARDENING-INCREMENT.md

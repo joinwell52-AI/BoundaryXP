@@ -28,10 +28,10 @@ export function createBxpResultState(){
     },
     export(kind){
       if(!current)throw Error('请先重新计算 / Recalculate first');
-      if(kind==='report')return {name:'BoundX-BXP-report.md',type:'text/markdown;charset=utf-8',text:current.report};
+      if(kind==='report')return {name:'BoundaryXP-BXP-report.md',type:'text/markdown;charset=utf-8',text:current.report};
       if(!['task','result'].includes(kind))throw Error('未知导出类型 / Unknown export type');
       if(!current.computed||!current[kind])throw Error('尚未计算 / Not computed');
-      return {name:`BoundX-BXP-${kind}.json`,type:'application/json',text:JSON.stringify(current[kind],null,2)};
+      return {name:`BoundaryXP-BXP-${kind}.json`,type:'application/json',text:JSON.stringify(current[kind],null,2)};
     }
   };
 }

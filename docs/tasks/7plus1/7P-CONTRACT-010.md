@@ -4,11 +4,11 @@
 
 - TASK: `7P-CONTRACT-010`
 - START_HEAD: `64d33f06eabdd3223670011a03e95df307f27f12`
-- Repository: `joinwell52-AI/BoundX`
+- Repository: `joinwell52-AI/BoundaryXP`
 - Branch: `review/7plus1-parser`
 - Previous task: `7P-ARCH-009`
 - Previous decision: `GOLD_CONTRACT_REVIEW_REQUIRED`
-- Normative method: `docs/BoundX-7plus1-定义原理语义编译与边界计算说明-v0.3.md`
+- Normative method: `docs/BoundaryXP-7plus1-定义原理语义编译与边界计算说明-v0.3.md`
 - `PRODUCTION_READY=false`
 
 This task records ADMIN adjudication of the six contract questions identified by 009 and freezes a scope-aware comparison contract.

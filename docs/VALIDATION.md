@@ -1,6 +1,6 @@
-# BoundX验证与结果口径
+# BoundaryXP验证与结果口径
 
-文档日期：2026-10-08。[当前版本与成绩](SHORT-COMPILER-STATUS.md) · [功能](FUNCTIONS.md) · [方法](BoundX-7plus1-定义原理语义编译与边界计算说明-v0.4.md)
+文档日期：2026-10-08。[当前版本与成绩](SHORT-COMPILER-STATUS.md) · [功能](FUNCTIONS.md) · [方法](BoundaryXP-7plus1-定义原理语义编译与边界计算说明-v0.4.md)
 
 2026-10-21更新：本次ui220合并采用本地Gate，具体命令与结果见[同步说明](workbench/UI220-SYNC.md)。下文脚本表是2026-10-08分支快照；当前脚本以根`package.json`为准。全部Gate本地执行，不触发GitHub Actions。
 
@@ -61,7 +61,7 @@ npm run test:docs
 
 ### review/7plus1-parser开发分支脚本
 
-开发分支[固定脚本快照](https://github.com/joinwell52-AI/BoundX/blob/a55363226b465cb120ce8f2624d5d900d5a39d9d/package.json)提供：
+开发分支[固定脚本快照](https://github.com/joinwell52-AI/BoundaryXP/blob/a55363226b465cb120ce8f2624d5d900d5a39d9d/package.json)提供：
 
 ```text
 npm test
@@ -80,7 +80,7 @@ npm run test:real-project
 node product/short-compiler/verify.mjs
 ```
 
-它核验安装包资源，不是7+1语义验证。该文件不在本次main代码中，依据见[开发分支包核验器快照](https://github.com/joinwell52-AI/BoundX/blob/a55363226b465cb120ce8f2624d5d900d5a39d9d/product/short-compiler/verify.mjs)。
+它核验安装包资源，不是7+1语义验证。该文件不在本次main代码中，依据见[开发分支包核验器快照](https://github.com/joinwell52-AI/BoundaryXP/blob/a55363226b465cb120ce8f2624d5d900d5a39d9d/product/short-compiler/verify.mjs)。
 
 本轮文档整编与main同步没有在用户电脑运行全量测试或模型。已有回归数字必须引用对应报告，不归功于文档修改。
 

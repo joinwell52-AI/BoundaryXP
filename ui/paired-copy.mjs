@@ -1,6 +1,6 @@
 export const pairedCopy = [
   ['在这里输入需要检查边界的任务原文…','Enter the task text to check…'],
-  ['BoundX · 建议不构成业务裁决或执行授权','BoundX · Advice grants neither business decisions nor execution authority'],
+  ['BoundaryXP · 建议不构成业务裁决或执行授权','BoundaryXP · Advice grants neither business decisions nor execution authority'],
   ['模型只负责抽取候选，系统在本地复核与计算。','Models extract candidates; validation and calculation run locally.'],
   ['查看行业案例','View industry cases'],
   ["📋 复制原文","Copy source"],

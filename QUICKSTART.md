@@ -1,4 +1,4 @@
-# BoundX短文本编译器：快速开始
+# BoundaryXP短文本编译器：快速开始
 
 [English](QUICKSTART.en.md) · [中文首页](README.zh-CN.md) · [版本与已知限制](docs/SHORT-COMPILER-STATUS.md)
 
@@ -19,7 +19,7 @@ npm run 7plus1:ui
 
 这个入口当前锁定完整安装候选`0.1.0-candidate.031-r1.2`、核心`031-r1-c3`和合同`031-r1.1`。配置与历史在`.boundx/short-compiler-031-r1/`，运行资源在其`versions/`目录，不混读开发工作区的Skill/Schema。
 
-**这不是全新克隆后的自动安装命令。** 安装目录缺失、指针换版、端口被未知进程占用或资源摘要不一致会明确拒绝，不自动选择另一个端口，也不停止未知进程。实现见[开发分支固定启动器](https://github.com/joinwell52-AI/BoundX/blob/a55363226b465cb120ce8f2624d5d900d5a39d9d/product/short-compiler/launch-installed.mjs)，维护依据见[恢复回执](https://github.com/joinwell52-AI/BoundX/blob/a55363226b465cb120ce8f2624d5d900d5a39d9d/docs/reports/7plus1/031-R1-RESTORE-58618/REPORT.md)。
+**这不是全新克隆后的自动安装命令。** 安装目录缺失、指针换版、端口被未知进程占用或资源摘要不一致会明确拒绝，不自动选择另一个端口，也不停止未知进程。实现见[开发分支固定启动器](https://github.com/joinwell52-AI/BoundaryXP/blob/a55363226b465cb120ce8f2624d5d900d5a39d9d/product/short-compiler/launch-installed.mjs)，维护依据见[恢复回执](https://github.com/joinwell52-AI/BoundaryXP/blob/a55363226b465cb120ce8f2624d5d900d5a39d9d/docs/reports/7plus1/031-R1-RESTORE-58618/REPORT.md)。
 
 ## 2. 使用前提和操作
 
@@ -37,7 +37,7 @@ npm run 7plus1:ui
 
 ## 3. 新目录安装：使用完整候选包，不用开发目录拼资源
 
-已核验的旧候选包见[031-R1交付页](https://github.com/joinwell52-AI/BoundX/blob/a55363226b465cb120ce8f2624d5d900d5a39d9d/docs/reports/7plus1/7P-SHORT-COMPILER-PRODUCT-CLOSURE-031-R1-LONG/REPORT.md)及其[运行包](https://github.com/joinwell52-AI/BoundX/blob/a55363226b465cb120ce8f2624d5d900d5a39d9d/docs/reports/7plus1/7P-SHORT-COMPILER-PRODUCT-CLOSURE-031-R1-LONG/delivery/BoundX-short-compiler-0.1.0-candidate.031-r1.2.zip)。这些文件在开发分支固定快照中，未复制到main。该包仍有已知Q05范围限制；下载包不代表语义验收通过。
+已核验的旧候选包见[031-R1交付页](https://github.com/joinwell52-AI/BoundaryXP/blob/a55363226b465cb120ce8f2624d5d900d5a39d9d/docs/reports/7plus1/7P-SHORT-COMPILER-PRODUCT-CLOSURE-031-R1-LONG/REPORT.md)及其[运行包](https://github.com/joinwell52-AI/BoundaryXP/blob/a55363226b465cb120ce8f2624d5d900d5a39d9d/docs/reports/7plus1/7P-SHORT-COMPILER-PRODUCT-CLOSURE-031-R1-LONG/delivery/BoundaryXP-short-compiler-0.1.0-candidate.031-r1.2.zip)。这些文件在开发分支固定快照中，未复制到main。该包仍有已知Q05范围限制；下载包不代表语义验收通过。
 
 以下仅适用于**新安装且58618没有被使用**的机器或环境。在解压后的包根目录执行：
 
@@ -95,7 +95,7 @@ npm run ui
 
 这是现有结构化IR计算与BXP应用，不是新短文本58618入口，也不是直接解析自然语言。参见[协议实现](protocol/IMPLEMENTATION.md)及[示例](examples/README.md)。
 
-`main`和`review/7plus1-parser`仍是不同代码快照。候选实现可从[开发分支](https://github.com/joinwell52-AI/BoundX/tree/review/7plus1-parser)核查；本次只同步文档，不自动切换用户已有脏工作区、不合并候选代码、不移动旧标签。
+`main`和`review/7plus1-parser`仍是不同代码快照。候选实现可从[开发分支](https://github.com/joinwell52-AI/BoundaryXP/tree/review/7plus1-parser)核查；本次只同步文档，不自动切换用户已有脏工作区、不合并候选代码、不移动旧标签。
 
 ## 7. 检查与故障提示
 

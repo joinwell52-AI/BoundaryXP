@@ -1,11 +1,11 @@
-# BoundX Naming and Trademark Use Draft
+# BoundaryXP Naming and Trademark Use Draft
 
 状态：`DRAFT_FOR_REVIEW`。名称仍须完成专业检索；本文不声称任何地区已经注册商标或认证商标。
 
 ## 1. 统一命名
 
 - 中文正式名称：界痕
-- 英文产品品牌：BoundX
+- 英文产品品牌：BoundaryXP
 - 短命令：`bx`
 - 模块前缀：`@boundx`
 - 协议：Boundary Xplain Protocol（BXP，边界分析协议）
@@ -23,7 +23,7 @@ Implements BXP-IR and BXP-CALC for BXP-0001 0.3.0-draft.2,
 with BXP-CALC suite 1.0.0-draft.3.
 ```
 
-不得使用 `BoundX Certified`、`Official BoundX`、`BoundX Approved` 或容易使用户误认为由 BoundX 维护者生产、担保或审核的表述。
+不得使用 `BoundaryXP Certified`、`Official BoundaryXP`、`BoundaryXP Approved` 或容易使用户误认为由 BoundaryXP 维护者生产、担保或审核的表述。
 
 ## 3. 认证标识保留
 
@@ -31,4 +31,4 @@ with BXP-CALC suite 1.0.0-draft.3.
 
 ## 4. Fork 与衍生实现
 
-衍生实现可以说明其兼容的协议版本，但应使用自己的产品名称。对协议的兼容性不等于对 BoundX 产品名称、Logo、域名或企业服务的使用许可。
+衍生实现可以说明其兼容的协议版本，但应使用自己的产品名称。对协议的兼容性不等于对 BoundaryXP 产品名称、Logo、域名或企业服务的使用许可。

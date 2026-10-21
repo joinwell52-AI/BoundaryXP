@@ -63,7 +63,7 @@ All Evidence spans are Unicode code-point half-open intervals and replay against
 - Origin: SOURCE
 - Normalization: explicit_end_to_end_release_actions
 - Ontology binding: null
-- 说明: 动作列表不构成 BoundX 的执行授权。
+- 说明: 动作列表不构成 BoundaryXP 的执行授权。
 
 ### [P] 参与主体
 

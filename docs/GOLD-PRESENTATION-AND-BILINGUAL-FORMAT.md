@@ -1,4 +1,4 @@
-# BoundX Real Gold 文件版式与双语展示规范
+# BoundaryXP Real Gold 文件版式与双语展示规范
 
 - 文档名：`GOLD-PRESENTATION-AND-BILINGUAL-FORMAT.md`
 - 版本：`v0.1`
@@ -6,7 +6,7 @@
 - 配套文件：
   - `GOLD-GENERATION-AND-ADJUDICATION-STANDARD.md`
   - `GOLD-GENERATION-SOP.md`
-- 适用对象：所有 BoundX Real Gold Case 的人读文档与双语展示
+- 适用对象：所有 BoundaryXP Real Gold Case 的人读文档与双语展示
 - 核心原则：**机器事实源只有一套，人类展示可以多语言；公式必须可读，解释必须紧跟结果。**
 
 ---
@@ -1144,4 +1144,4 @@ $$
 
 最终目标不是“文档看起来技术化”，而是：
 
-> **让人类审阅者能够轻松理解 BoundX 为什么得出这个边界结论，同时机器仍能独立重放全部事实与计算。**
+> **让人类审阅者能够轻松理解 BoundaryXP 为什么得出这个边界结论，同时机器仍能独立重放全部事实与计算。**

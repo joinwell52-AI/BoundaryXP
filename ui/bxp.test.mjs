@@ -13,7 +13,7 @@ async function setup(context){
   const origin='http://127.0.0.1:'+app.address().port;
   const html=await(await fetch(origin)).text();
   const token=html.match(/name="session-token" content="([a-f0-9]+)"/)[1];
-  return {origin,html,post:(raw,route='/api/bxp/evaluate',extra={})=>fetch(origin+route,{method:'POST',headers:{Origin:origin,'Content-Type':'application/json','X-BoundX-Token':token,...extra},body:raw})};
+  return {origin,html,post:(raw,route='/api/bxp/evaluate',extra={})=>fetch(origin+route,{method:'POST',headers:{Origin:origin,'Content-Type':'application/json','X-BoundaryXP-Token':token,...extra},body:raw})};
 }
 const example=(locale,variant)=>JSON.parse(readFileSync(new URL(`../examples/bxp/${locale}-${variant}.json`,import.meta.url),'utf8'));
 for(const locale of ['zh-CN','en'])for(const variant of ['complete','b-absent','unresolved','multi-source','unresolved-scope','conflict'])test(`UI HTTP/core parity ${locale}/${variant}`,async context=>{
