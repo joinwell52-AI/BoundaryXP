@@ -1,0 +1,43 @@
+{
+  "kind": "PAPER_DECLARED_SEMANTICS_NOT_WIRE_SCHEMA",
+  "interpretation_scope": "Manually declared ADM-001 reading; source coverage is reviewable, not certified",
+  "entities": [
+    ["pm", "PERSON_ROLE", "PM"], ["ops", "PERSON_ROLE", "OPS"],
+    ["qa", "PERSON_ROLE", "QA"], ["admin", "PERSON_ROLE", "ADMIN"],
+    ["machine", "SYSTEM", "测试机"], ["os", "INPUT_PROPERTY", "操作系统"],
+    ["disk", "INPUT_PROPERTY", "磁盘余量"], ["process", "INPUT_PROPERTY", "服务进程"],
+    ["report", "ARTIFACT", "environment-check.md"], ["config", "SYSTEM_CONFIGURATION", "系统配置"]
+  ],
+  "claims": [
+    {"id":"c01","predicate":"coordinate","modality":"REQUIRED","layer":"MAIN","roles":{"ORGANIZER":"pm"},"views":["A","P"],"quote":"PM 负责本次系统环境核查"},
+    {"id":"c02","predicate":"assign_checks","modality":"REQUIRED","layer":"MAIN","roles":{"PERFORMER":"pm","ASSIGNEE":"ops"},"views":["A","P"],"quote":"安排 OPS 检查测试机的操作系统、磁盘余量和服务进程"},
+    {"id":"c03","predicate":"check","modality":"REQUIRED","layer":"MAIN","roles":{"PERFORMER":"ops","INPUT_OBJECT":"os"},"views":["I","A","P"],"quote":"OPS 检查测试机的操作系统、磁盘余量和服务进程"},
+    {"id":"c04","predicate":"check","modality":"REQUIRED","layer":"MAIN","roles":{"PERFORMER":"ops","INPUT_OBJECT":"disk"},"views":["I","A","P"],"quote":"OPS 检查测试机的操作系统、磁盘余量和服务进程"},
+    {"id":"c05","predicate":"check","modality":"REQUIRED","layer":"MAIN","roles":{"PERFORMER":"ops","INPUT_OBJECT":"process"},"views":["I","A","P"],"quote":"OPS 检查测试机的操作系统、磁盘余量和服务进程"},
+    {"id":"c06","predicate":"generate","modality":"REQUIRED","layer":"MAIN","roles":{"PERFORMER":"ops","RESULT":"report"},"views":["O","A","P"],"quote":"OPS 必须生成 environment-check.md"},
+    {"id":"c07","predicate":"review","modality":"REQUIRED","layer":"MAIN","roles":{"REVIEWER":"qa","OBJECT":"report"},"views":["A","P"],"quote":"QA 复核报告"},
+    {"id":"c08","predicate":"submit","modality":"REQUIRED","layer":"MAIN","roles":{"PERFORMER":"pm","DELIVERABLE":"report","RECIPIENT":"admin"},"views":["O","A","P"],"quote":"QA 复核报告后由 PM 提交给 ADMIN"},
+    {"id":"c09","predicate":"before","modality":"REQUIRED","layer":"MAIN","ordered_claims":["c07","c08"],"views":[],"disposition":"SHARED_RELATION","quote":"QA 复核报告后由 PM 提交给 ADMIN"},
+    {"id":"c10","predicate":"elapsed_limit","modality":"REQUIRED","layer":"MAIN","expression":"x01","views":["R"],"quote":"整个任务须在 40 分钟内完成"},
+    {"id":"c11","predicate":"modify","modality":"FORBIDDEN","layer":"MAIN","roles":{"OBJECT":"config"},"subject_status":"UNSTATED_TASK_SCOPE","views":["B"],"quote":"不得修改系统配置"}
+  ],
+  "expressions": [{"id":"x01","op":"LE","ordered_args":[{"metric":"elapsed_minutes","scope":"whole_task"},{"literal":40,"unit":"minute"}],"result_type":"Bool"}],
+  "relations": [
+    {"id":"r01","kind":"SAME_ARTIFACT_USE","ordered_claims":["c06","c07","c08"],"entity":"report","views":[],"disposition":"SHARED_RELATION","basis":"Single named report and the declared anaphora resolution; not an approval or completion claim"},
+    {"id":"r02","kind":"INPUT_PROPERTIES_OF","ordered_entities":["os","disk","process","machine"],"views":[],"disposition":"SHARED_RELATION","source_claims":["c03","c04","c05"]}
+  ],
+  "source_partition": [
+    {"quote":"PM 负责本次系统环境核查，安排 OPS 检查测试机的操作系统、磁盘余量和服务进程。","claims":["c01","c02","c03","c04","c05"]},
+    {"quote":"OPS 必须生成 environment-check.md，QA 复核报告后由 PM 提交给 ADMIN。","claims":["c06","c07","c08","c09"]},
+    {"quote":"整个任务须在 40 分钟内完成，不得修改系统配置。","claims":["c10","c11"]}
+  ],
+  "absent_views": {"V":"No named version or basis in the complete source","C":"No independent completion equivalence or stop trigger; 40 minutes is a resource deadline"},
+  "declared_domain_assumptions": [
+    "The report identity denotes one particular artifact version selected by this interpretation, not every file sharing the path environment-check.md. No approval is inferred from review.",
+    "Review and submission use that available artifact version. Availability after its generation is a well-formedness condition; review-before-submission is separately required by c09.",
+    "No parent requirement is added that all checks finish before report generation, or that all parent activities be serial. Serial stages are the candidates' own choice.",
+    "An event flag denotes the complete typed predicate and role binding in its cited claim, not merely occurrence of its verb.",
+    "Deadline is evaluated at the whole-task due checkpoint; candidates choose a serial schedule with no uncounted overhead.",
+    "The prohibition has task-wide scope; no actor authority is derived from role rank."
+  ]
+}

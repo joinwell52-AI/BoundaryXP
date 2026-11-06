@@ -1,0 +1,78 @@
+{
+  "format": "boundx-workbench/1",
+  "project_id": "8b7e39d3-e690-4f88-b855-83bd371a46c2",
+  "label": "R389-071 · B02原工具 · H40-008 · 执行链的排队区间",
+  "revision": 12,
+  "mode": "TREE",
+  "planning": "COMPLETE",
+  "nodes": [
+    {
+      "id": "ADMIN-PM",
+      "project_id": "8b7e39d3-e690-4f88-b855-83bd371a46c2",
+      "label": "ADMIN → PM",
+      "text": "执行链总时长不能超过40分钟，链为排队后连续处理；处理固定32分钟，没有其他阶段。",
+      "version": 1,
+      "parent_id": null,
+      "parent_basis": "",
+      "context_mode": "NONE",
+      "result_key": null
+    },
+    {
+      "id": "PM-DEV",
+      "project_id": "8b7e39d3-e690-4f88-b855-83bd371a46c2",
+      "label": "PM → DEV",
+      "text": "处理时长32分钟不变。",
+      "version": 1,
+      "parent_id": "ADMIN-PM",
+      "parent_basis": "本轮子任务继承适用的父任务限制。",
+      "context_mode": "PARENT",
+      "result_key": null
+    },
+    {
+      "id": "PM-OPS",
+      "project_id": "8b7e39d3-e690-4f88-b855-83bd371a46c2",
+      "label": "PM → OPS",
+      "text": "本次排队时间只知在3到12分钟之间，实际值待确定，未放宽40分钟上限。",
+      "version": 1,
+      "parent_id": "ADMIN-PM",
+      "parent_basis": "本轮子任务继承适用的父任务限制。",
+      "context_mode": "PARENT",
+      "result_key": null
+    },
+    {
+      "id": "PM-QA",
+      "project_id": "8b7e39d3-e690-4f88-b855-83bd371a46c2",
+      "label": "PM → QA",
+      "text": "当前证据无法进一步缩小排队区间；不是要求允许所有排队时长都直接执行。",
+      "version": 1,
+      "parent_id": "ADMIN-PM",
+      "parent_basis": "本轮子任务继承适用的父任务限制。",
+      "context_mode": "PARENT",
+      "result_key": null
+    }
+  ],
+  "dependencies": [],
+  "retained": [],
+  "settings": {
+    "provider": "codex-api",
+    "transport_identity": "09ba0ba965e0a00dda14128296d1f4431f00bc8aafeef07c38f9d32e04dfca00",
+    "model": "gpt-6.1-sol",
+    "reasoning": "medium",
+    "parse_method": "SKILL",
+    "analysis_tool": "JOINT_SEVEN_STEP_V1",
+    "dictionaries": {
+      "l2": "software-ai@0.2.0",
+      "l3": "tenant-a@0.2.0"
+    }
+  },
+  "comparison": "ad8fc0c5cec7509f38bb5d9ec06c97d583b576da8026f6379451c2ecc50d0346",
+  "saved_at": "2026-11-03T01:43:24.875Z",
+  "change_label": "程序重新核验 · 原LLM保留 · 0次模型请求",
+  "import_source": {
+    "format": "role-heading/1",
+    "text": "#ADMIN-PM\n执行链总时长不能超过40分钟，链为排队后连续处理；处理固定32分钟，没有其他阶段。\n\n#PM-DEV\n处理时长32分钟不变。\n\n#PM-OPS\n本次排队时间只知在3到12分钟之间，实际值待确定，未放宽40分钟上限。\n\n#PM-QA\n当前证据无法进一步缩小排队区间；不是要求允许所有排队时长都直接执行。"
+  },
+  "tool_results": {
+    "JOINT_SEVEN_STEP_V1": "ad8fc0c5cec7509f38bb5d9ec06c97d583b576da8026f6379451c2ecc50d0346"
+  }
+}

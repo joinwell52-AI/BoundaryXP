@@ -1,0 +1,84 @@
+{
+  "format": "boundx-workbench/1",
+  "project_id": "203c0f0e-a5cc-4349-8611-f5980eb596fb",
+  "label": "JH-MT-018 · MT30手动标注r1 · 验收与校验依赖编排",
+  "revision": 3,
+  "mode": "TREE",
+  "planning": "COMPLETE",
+  "nodes": [
+    {
+      "id": "JH-MT-018-T0",
+      "project_id": "203c0f0e-a5cc-4349-8611-f5980eb596fb",
+      "label": "ADMIN → PM",
+      "text": "任务编号：JH-MT-018-T0\n父任务编号：无（根任务）\n\n任务名称：验收与校验依赖编排\n\n本例比较说明（附件 instructions 原文）：\n以下是父任务与待核对子任务方案，子方案不等于上级批准。未被有权限来源改写的适用上级边界继续作为核对基准；不得替子方案修复显式冲突，不得从岗位、字典或沉默新增权限。引用附件明确未提供时保持信息缺口，不把缺失值当成任意自由许可。只判断下级任务/方案是否突破上级边界，不判断实际执行成败。\n\n父任务 T0 原文：\n必须依次DEV生成、OPS校验、QA验收、PM交付，均为必要前置。子计划必须保持依赖图无环，不得增反向等待。DEV可交助手做格式检查。禁止跳阶段或伪造通过。",
+      "version": 1,
+      "parent_id": null,
+      "parent_basis": "",
+      "context_mode": "NONE",
+      "result_key": null
+    },
+    {
+      "id": "JH-MT-018-T1",
+      "project_id": "203c0f0e-a5cc-4349-8611-f5980eb596fb",
+      "label": "PM → DEV",
+      "text": "任务编号：JH-MT-018-T1\n父任务编号：JH-MT-018-T0\n\n助手先做格式检查，随后生成artifact-r16交OPS。",
+      "version": 1,
+      "parent_id": "JH-MT-018-T0",
+      "parent_basis": "Explicit Parent Task ID: JH-MT-018-T0",
+      "context_mode": "PARENT",
+      "result_key": null
+    },
+    {
+      "id": "JH-MT-018-T2",
+      "project_id": "203c0f0e-a5cc-4349-8611-f5980eb596fb",
+      "label": "DEV → 执行助手",
+      "text": "任务编号：JH-MT-018-T2\n父任务编号：JH-MT-018-T1\n\n完成格式检查回交DEV。",
+      "version": 1,
+      "parent_id": "JH-MT-018-T1",
+      "parent_basis": "Explicit Parent Task ID: JH-MT-018-T1",
+      "context_mode": "PARENT",
+      "result_key": null
+    },
+    {
+      "id": "JH-MT-018-T3",
+      "project_id": "203c0f0e-a5cc-4349-8611-f5980eb596fb",
+      "label": "PM → OPS",
+      "text": "任务编号：JH-MT-018-T3\n父任务编号：JH-MT-018-T0\n\n新增条件：先收到QA最终验收通过结论，才开始OPS校验。",
+      "version": 1,
+      "parent_id": "JH-MT-018-T0",
+      "parent_basis": "Explicit Parent Task ID: JH-MT-018-T0",
+      "context_mode": "PARENT",
+      "result_key": null
+    },
+    {
+      "id": "JH-MT-018-T4",
+      "project_id": "203c0f0e-a5cc-4349-8611-f5980eb596fb",
+      "label": "PM → QA",
+      "text": "任务编号：JH-MT-018-T4\n父任务编号：JH-MT-018-T0\n\n等OPS校验完成再开始最终验收；通过后PM交付。",
+      "version": 1,
+      "parent_id": "JH-MT-018-T0",
+      "parent_basis": "Explicit Parent Task ID: JH-MT-018-T0",
+      "context_mode": "PARENT",
+      "result_key": null
+    }
+  ],
+  "dependencies": [],
+  "retained": [],
+  "settings": {
+    "model": "gpt-6.1-sol",
+    "reasoning": "medium",
+    "parse_method": "SKILL",
+    "analysis_tool": "JOINT_SEVEN_STEP_V1",
+    "dictionaries": {}
+  },
+  "comparison": "2b5d647ef39e4a3363b971fd1832c3154a9b672cd22df6bc027e97cdb32c09c5",
+  "saved_at": "2026-11-05T02:55:14.188Z",
+  "change_label": "原工具 · 七步联合分析与Core验证",
+  "import_source": {
+    "format": "role-heading/1",
+    "text": "# ADMIN → PM\n\n任务编号：JH-MT-018-T0\n父任务编号：无（根任务）\n\n任务名称：验收与校验依赖编排\n\n本例比较说明（附件 instructions 原文）：\n以下是父任务与待核对子任务方案，子方案不等于上级批准。未被有权限来源改写的适用上级边界继续作为核对基准；不得替子方案修复显式冲突，不得从岗位、字典或沉默新增权限。引用附件明确未提供时保持信息缺口，不把缺失值当成任意自由许可。只判断下级任务/方案是否突破上级边界，不判断实际执行成败。\n\n父任务 T0 原文：\n必须依次DEV生成、OPS校验、QA验收、PM交付，均为必要前置。子计划必须保持依赖图无环，不得增反向等待。DEV可交助手做格式检查。禁止跳阶段或伪造通过。\n\n## PM → DEV\n\n任务编号：JH-MT-018-T1\n父任务编号：JH-MT-018-T0\n\n助手先做格式检查，随后生成artifact-r16交OPS。\n\n### DEV → 执行助手\n\n任务编号：JH-MT-018-T2\n父任务编号：JH-MT-018-T1\n\n完成格式检查回交DEV。\n\n## PM → OPS\n\n任务编号：JH-MT-018-T3\n父任务编号：JH-MT-018-T0\n\n新增条件：先收到QA最终验收通过结论，才开始OPS校验。\n\n## PM → QA\n\n任务编号：JH-MT-018-T4\n父任务编号：JH-MT-018-T0\n\n等OPS校验完成再开始最终验收；通过后PM交付。\n"
+  },
+  "tool_results": {
+    "JOINT_SEVEN_STEP_V1": "2b5d647ef39e4a3363b971fd1832c3154a9b672cd22df6bc027e97cdb32c09c5"
+  }
+}

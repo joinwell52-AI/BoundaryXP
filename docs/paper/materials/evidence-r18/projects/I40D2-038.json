@@ -1,0 +1,77 @@
+{
+  "format": "boundx-workbench/1",
+  "project_id": "af966141-41bf-4cd5-93f6-8b9af58bb7a4",
+  "label": "I40D2-038 · 接口回归条件整理",
+  "revision": 15,
+  "mode": "TREE",
+  "planning": "COMPLETE",
+  "nodes": [
+    {
+      "id": "ADMIN-PM",
+      "project_id": "af966141-41bf-4cd5-93f6-8b9af58bb7a4",
+      "label": "ADMIN → PM",
+      "text": "仅在沙箱测试查询接口，遇到返回429必须停止该批次。其余错误按预案记录；不访问生产或创建真实订单。\n文件交接位置：workspace/oct27/i40d2-038；原始输入在input下只读保留，角色产物各自建目录。\nPM需核对本轮产物、报告与未解决项，再向ADMIN提交验收材料。",
+      "version": 1,
+      "parent_id": null,
+      "parent_basis": "",
+      "context_mode": "NONE",
+      "result_key": null
+    },
+    {
+      "id": "PM-DEV",
+      "project_id": "af966141-41bf-4cd5-93f6-8b9af58bb7a4",
+      "label": "PM → DEV",
+      "text": "接口回归条件整理｜DEV\n提供查询样例和运行器；把“必须停止则本次响应为429”写为条件，计划仅在其他退出原因同时满足时才因429停止。每次响应保存原文。\n运行器有停止标记和响应分类两个字段，交付条件表达为stop_request→status_429；未把反向关系列为单独约束。\n先把实现与样例交OPS复现，代码及输入按SHA256登记；受限步骤在开发报告列明。",
+      "version": 1,
+      "parent_id": "ADMIN-PM",
+      "parent_basis": "本次PM分解的ADMIN根任务。",
+      "context_mode": "PARENT",
+      "result_key": null
+    },
+    {
+      "id": "PM-OPS",
+      "project_id": "af966141-41bf-4cd5-93f6-8b9af58bb7a4",
+      "label": "PM → OPS",
+      "text": "接口回归条件整理｜OPS\n固定沙箱base_url和测试账户，失败不回退生产；预案允许对503有限重试，429进入运行器交付的条件分支。\n沙箱配置没有生产端点，所有响应以request_id保存；503最多重试一次，试次均进入本轮日志。\n准备环境记录与重放步骤，执行输出按尝试编号保存，等待DEV版本交接后运行。",
+      "version": 1,
+      "parent_id": "ADMIN-PM",
+      "parent_basis": "本次PM分解的ADMIN根任务。",
+      "context_mode": "PARENT",
+      "result_key": null
+    },
+    {
+      "id": "PM-QA",
+      "project_id": "af966141-41bf-4cd5-93f6-8b9af58bb7a4",
+      "label": "PM → QA",
+      "text": "接口回归条件整理｜QA\n独立构造429、503和正常响应夹具，记录运行器后续请求数、退出状态与分支日志，交条件覆盖表。\n夹具固定响应序列并记录每步stop_request取值、后继请求和退出结果，覆盖429及非429两种响应。\n阅读本轮交付说明后复核，记录检查范围、原始输出及尚待取得的材料。",
+      "version": 1,
+      "parent_id": "ADMIN-PM",
+      "parent_basis": "本次PM分解的ADMIN根任务。",
+      "context_mode": "PARENT",
+      "result_key": null
+    }
+  ],
+  "dependencies": [],
+  "retained": [],
+  "settings": {
+    "model": "gpt-6.1-sol",
+    "reasoning": "medium",
+    "parse_method": "SKILL",
+    "analysis_tool": "BOUNDARYXP_ANALYZE_021",
+    "dictionaries": {
+      "l2": "software-ai@0.2.0",
+      "l3": "tenant-a@0.2.0"
+    }
+  },
+  "comparison": "2f3256b619e4cd69864b65a4d3fc879a2a31d577be5cdc42fecff6c9c1f88e76",
+  "saved_at": "2026-11-03T01:46:18.869Z",
+  "change_label": "程序重新核验 · 原LLM保留 · 0次模型请求",
+  "import_source": {
+    "format": "role-heading/1",
+    "text": "#ADMIN-PM\n仅在沙箱测试查询接口，遇到返回429必须停止该批次。其余错误按预案记录；不访问生产或创建真实订单。\n文件交接位置：workspace/oct27/i40d2-038；原始输入在input下只读保留，角色产物各自建目录。\nPM需核对本轮产物、报告与未解决项，再向ADMIN提交验收材料。\n\n#PM-DEV\n接口回归条件整理｜DEV\n提供查询样例和运行器；把“必须停止则本次响应为429”写为条件，计划仅在其他退出原因同时满足时才因429停止。每次响应保存原文。\n运行器有停止标记和响应分类两个字段，交付条件表达为stop_request→status_429；未把反向关系列为单独约束。\n先把实现与样例交OPS复现，代码及输入按SHA256登记；受限步骤在开发报告列明。\n\n#PM-OPS\n接口回归条件整理｜OPS\n固定沙箱base_url和测试账户，失败不回退生产；预案允许对503有限重试，429进入运行器交付的条件分支。\n沙箱配置没有生产端点，所有响应以request_id保存；503最多重试一次，试次均进入本轮日志。\n准备环境记录与重放步骤，执行输出按尝试编号保存，等待DEV版本交接后运行。\n\n#PM-QA\n接口回归条件整理｜QA\n独立构造429、503和正常响应夹具，记录运行器后续请求数、退出状态与分支日志，交条件覆盖表。\n夹具固定响应序列并记录每步stop_request取值、后继请求和退出结果，覆盖429及非429两种响应。\n阅读本轮交付说明后复核，记录检查范围、原始输出及尚待取得的材料。"
+  },
+  "tool_results": {
+    "JOINT_SEVEN_STEP_V1": "2f3256b619e4cd69864b65a4d3fc879a2a31d577be5cdc42fecff6c9c1f88e76",
+    "BOUNDARYXP_ANALYZE_021": "344bb970f1240f354db7f6de2c5a191ce522cb24bc530e932a5836f8b64b1da9"
+  }
+}

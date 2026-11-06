@@ -1,0 +1,55 @@
+{
+  "operator_contract":"PAPER-FINITE-08.1",
+  "kind":"EXPLICIT_FINITE_MODELS_NOT_PRODUCT_CORE",
+  "domains": {
+    "org":[false,true],"assign":[false,true],"os":[false,true],"disk":[false,true],"process":[false,true],
+    "generate":[false,true],"review":[false,true],"submit":[false,true],"modify_config":[false,true],
+    "suggest_in_content":[false,true],"ops_minutes":[20],"qa_minutes":[10,20],"pm_minutes":[5],
+    "order":["review_then_submit","submit_then_review"]
+  },
+  "rho": {
+    "org":"org","assign":"assign","os":"os","disk":"disk","process":"process",
+    "generate":"generate","review":"review","submit":"submit","modify_config":"modify_config",
+    "elapsed":["add","ops_minutes","qa_minutes","pm_minutes"],
+    "ordered":["eq","order",["literal","review_then_submit"]]
+  },
+  "observable_effects":[{"event":"candidate_modify","object":"config","target":"modify_config","cannot_hide":true}],
+  "parent_conjuncts": [
+    {"id":"f01","claim":"c01","expr":"org"},
+    {"id":"f02","claim":"c02","expr":"assign"},
+    {"id":"f03","claim":"c03","expr":"os"},
+    {"id":"f04","claim":"c04","expr":"disk"},
+    {"id":"f05","claim":"c05","expr":"process"},
+    {"id":"f06","claim":"c06","expr":"generate"},
+    {"id":"f07","claim":"c07","expr":"review"},
+    {"id":"f08","claim":"c08","expr":"submit"},
+    {"id":"f09","claim":"c09","expr":"ordered"},
+    {"id":"f10","claim":"c10","expr":["le","elapsed",40]},
+    {"id":"f11","claim":"c11","expr":["not","modify_config"]}
+  ],
+  "candidate_common":["and","org","assign","os","disk","process","generate","review","submit",["eq","qa_minutes",10],["eq","order",["literal","review_then_submit"]]],
+  "candidate_delta": {
+    "good":["and",["not","modify_config"],"suggest_in_content"],
+    "bad":["and","modify_config","suggest_in_content"],
+    "ambiguous_report":["and",["not","modify_config"],["not","suggest_in_content"]],
+    "ambiguous_config":["and","modify_config",["not","suggest_in_content"]],
+    "inconsistent":["and","modify_config",["not","modify_config"]]
+  },
+  "claim_meaning": "True flags require the actor-object bindings recorded in ir.json. The finite domains test the stated model only, not all real-world executions.",
+  "fixed_background": "Generation precedes both review and submission in this finite candidate domain. The order variable distinguishes the two possible orders of review and submission. This is a chosen candidate schedule, not an inferred universal schedule from the parent source.",
+  "source_correspondence": "Parent: source-ledger.json. Candidate operands and deltas: candidate-source-ledger.json. All formalizations are manually declared research inputs, not extraction outputs.",
+  "ownership": {
+    "org":"PM","assign":"PM","os":"OPS","disk":"OPS","process":"OPS","generate":"OPS",
+    "review":"QA","submit":"PM","modify_config":"OPS","suggest_in_content":"OPS",
+    "ops_minutes":"OPS","qa_minutes":"QA","pm_minutes":"PM","order":"COMPOSITE"
+  },
+  "supporting_relations":["r01","r02"],
+  "supplementary_inputs": {
+    "environment":{"external":[false,true],"execution":[false,true],"parent":"g implies q","evasive_candidate":"not g"},
+    "branches":{"external":[false,true],"meaning":"a1 = e, a2 = not e; inactive branch-owned deliveries false and resource contribution zero","costs":[20,30],"budget":30},
+    "stop":{"horizon":4,"event_vocabulary":["inspect","risk","stop","report","deliver"],"slot_semantics":"Each slot is a set of events; reporting and delivery are not mutually exclusive.","rules":"Inspect at step 1; risk is observed at step 2 in the high-risk scenario. On high risk require stop at 3, no inspect at 3/4, and report at 4. Normal delivery at 4 is required only without high risk; it remains optional with high risk."},
+    "scope":{"environment_type":[false,true],"admissible":[false],"candidate":"true","parent":"not e"},
+    "central_queries":{"variables":["p","q"],"task":"p","equivalent":["and","p",["or","p","q"]],"weaker":["or","p","q"],"membership":{"p":true,"q":false}},
+    "canonicalization":{"variables":["p","q"],"left":"p","right":["and","p",["or","p","q"]],"normalizer":"syntax-only structural JSON sorting, no absorption law"}
+  }
+}

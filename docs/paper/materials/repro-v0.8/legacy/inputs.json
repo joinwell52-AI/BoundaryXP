@@ -1,0 +1,317 @@
+[
+  {
+    "id": "PV01",
+    "inputs": {
+      "parent_actions": [
+        0,
+        1,
+        2
+      ],
+      "candidate_actions": [
+        3
+      ]
+    },
+    "expected": [
+      3
+    ]
+  },
+  {
+    "id": "PV02",
+    "inputs": {
+      "parent_actions": [
+        "read"
+      ],
+      "candidate_actions": [
+        "read",
+        "truncate"
+      ]
+    },
+    "expected": [
+      "truncate"
+    ]
+  },
+  {
+    "id": "PV03",
+    "inputs": {
+      "forbidden": [
+        "modify",
+        "save"
+      ],
+      "candidate": [
+        "read",
+        "modify",
+        "save"
+      ]
+    },
+    "expected": [
+      "modify",
+      "save"
+    ]
+  },
+  {
+    "id": "PV04",
+    "inputs": {
+      "required": [
+        "id",
+        "status"
+      ],
+      "guaranteed": [
+        "id"
+      ]
+    },
+    "expected": [
+      "status"
+    ]
+  },
+  {
+    "id": "PV05",
+    "inputs": {
+      "pairs": [
+        [
+          "DEV",
+          "a"
+        ],
+        [
+          "QA",
+          "b"
+        ]
+      ],
+      "projection": "cartesian product of individual projections"
+    },
+    "expected": [
+      [
+        "DEV",
+        "b"
+      ],
+      [
+        "QA",
+        "a"
+      ]
+    ]
+  },
+  {
+    "id": "PV06",
+    "inputs": {
+      "costs": [
+        60,
+        60
+      ],
+      "limit": 100
+    },
+    "expected": {
+      "local_within_limit": true,
+      "total": 120,
+      "excess": 20
+    }
+  },
+  {
+    "id": "PV07",
+    "inputs": {
+      "independent_intervals": [
+        [
+          40,
+          60
+        ],
+        [
+          30,
+          50
+        ]
+      ],
+      "limit": 100
+    },
+    "expected": {
+      "minimum": 70,
+      "maximum": 110,
+      "witness": [
+        60,
+        50
+      ],
+      "excess": 10
+    }
+  },
+  {
+    "id": "PV08",
+    "inputs": {
+      "parallel": [
+        35,
+        45
+      ],
+      "serial_after": 20
+    },
+    "expected": 65
+  },
+  {
+    "id": "PV09",
+    "inputs": {
+      "parallel_chains": [
+        [
+          20,
+          25
+        ],
+        [
+          30,
+          40
+        ]
+      ]
+    },
+    "expected": 70
+  },
+  {
+    "id": "PV10",
+    "inputs": {
+      "variables": [
+        "a",
+        "b",
+        "c"
+      ],
+      "candidate": "any",
+      "parent": "at_least_two"
+    },
+    "expected": [
+      {
+        "a": false,
+        "b": false,
+        "c": true
+      },
+      {
+        "a": false,
+        "b": true,
+        "c": false
+      },
+      {
+        "a": true,
+        "b": false,
+        "c": false
+      }
+    ]
+  },
+  {
+    "id": "PV11",
+    "inputs": {
+      "variables": [
+        "a",
+        "b",
+        "c",
+        "h"
+      ],
+      "counterexample": "a and b and c and not h"
+    },
+    "expected": [
+      {
+        "a": true,
+        "b": true,
+        "c": true,
+        "h": false
+      }
+    ]
+  },
+  {
+    "id": "PV12",
+    "inputs": {
+      "variables": [
+        "r",
+        "f",
+        "d"
+      ],
+      "condition_difference": "r and not(r and f)",
+      "sufficient_counterexample": "(d iff (r and f)) and r and not d"
+    },
+    "expected": {
+      "condition_difference": [
+        {
+          "r": true,
+          "f": false
+        }
+      ],
+      "sufficient_condition_violation": [
+        {
+          "r": true,
+          "f": false,
+          "d": false
+        }
+      ]
+    }
+  },
+  {
+    "id": "PV13",
+    "inputs": {
+      "variables": [
+        "report",
+        "logs"
+      ],
+      "candidate": "report",
+      "required": "report and logs"
+    },
+    "expected": [
+      {
+        "report": true,
+        "logs": false
+      }
+    ]
+  },
+  {
+    "id": "PV14",
+    "inputs": {
+      "known": 70,
+      "limit": 60,
+      "sample_extensions": [
+        0,
+        5,
+        20,
+        100
+      ],
+      "aggregates": [
+        "sum",
+        "max"
+      ]
+    },
+    "expected": {
+      "known_excess": 10,
+      "all_sample_extensions_violate": true
+    }
+  },
+  {
+    "id": "PV15",
+    "inputs": {
+      "variables": [
+        "a"
+      ],
+      "candidate": "a and not a"
+    },
+    "expected": {
+      "feasible_assignments": 0,
+      "counterexamples": 0,
+      "status": "INCONSISTENT"
+    }
+  },
+  {
+    "id": "PV16",
+    "inputs": {
+      "forward_edges": [
+        [
+          "u",
+          "w"
+        ],
+        [
+          "w",
+          "v"
+        ]
+      ],
+      "reverse_edges": [
+        [
+          "D",
+          "C"
+        ],
+        [
+          "C",
+          "A"
+        ]
+      ]
+    },
+    "expected": {
+      "indirect_preservation": true,
+      "reverse_path": true,
+      "reverse_order_violates_parent": true
+    }
+  }
+]

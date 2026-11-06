@@ -1,0 +1,78 @@
+{
+  "format": "boundx-workbench/1",
+  "project_id": "f16174f8-2c85-48a6-b847-b30ff6e5ef7f",
+  "label": "R389-080 · B02原工具 · H40-017 · 批处理令牌的共享配额",
+  "revision": 12,
+  "mode": "TREE",
+  "planning": "COMPLETE",
+  "nodes": [
+    {
+      "id": "ADMIN-PM",
+      "project_id": "f16174f8-2c85-48a6-b847-b30ff6e5ef7f",
+      "label": "ADMIN → PM",
+      "text": "浅湾同一夜间批次的三个独立任务共享32000个输入令牌额度，所有任务的输入令牌累计计费；输出令牌另计，不属于本限额。",
+      "version": 1,
+      "parent_id": null,
+      "parent_basis": "",
+      "context_mode": "NONE",
+      "result_key": null
+    },
+    {
+      "id": "PM-DEV",
+      "project_id": "f16174f8-2c85-48a6-b847-b30ff6e5ef7f",
+      "label": "PM → DEV",
+      "text": "任务甲固定使用14000个输入令牌，输出最多4000个。",
+      "version": 1,
+      "parent_id": "ADMIN-PM",
+      "parent_basis": "本轮子任务继承适用的父任务限制。",
+      "context_mode": "PARENT",
+      "result_key": null
+    },
+    {
+      "id": "PM-OPS",
+      "project_id": "f16174f8-2c85-48a6-b847-b30ff6e5ef7f",
+      "label": "PM → OPS",
+      "text": "任务乙使用9000个输入令牌；任务丙使用7000个。三任务输入互不共享。",
+      "version": 1,
+      "parent_id": "ADMIN-PM",
+      "parent_basis": "本轮子任务继承适用的父任务限制。",
+      "context_mode": "PARENT",
+      "result_key": null
+    },
+    {
+      "id": "PM-QA",
+      "project_id": "f16174f8-2c85-48a6-b847-b30ff6e5ef7f",
+      "label": "PM → QA",
+      "text": "确认输入数量为精确值，输出额度另有保障，未提出扩大输入配额。",
+      "version": 1,
+      "parent_id": "ADMIN-PM",
+      "parent_basis": "本轮子任务继承适用的父任务限制。",
+      "context_mode": "PARENT",
+      "result_key": null
+    }
+  ],
+  "dependencies": [],
+  "retained": [],
+  "settings": {
+    "provider": "codex-api",
+    "transport_identity": "09ba0ba965e0a00dda14128296d1f4431f00bc8aafeef07c38f9d32e04dfca00",
+    "model": "gpt-6.1-sol",
+    "reasoning": "medium",
+    "parse_method": "SKILL",
+    "analysis_tool": "JOINT_SEVEN_STEP_V1",
+    "dictionaries": {
+      "l2": "software-ai@0.2.0",
+      "l3": "tenant-a@0.2.0"
+    }
+  },
+  "comparison": "464d02b7a52af6e765b10ad20f1e6d7dbeaadc373124fc14e01579400f7698be",
+  "saved_at": "2026-11-03T01:43:28.078Z",
+  "change_label": "程序重新核验 · 原LLM保留 · 0次模型请求",
+  "import_source": {
+    "format": "role-heading/1",
+    "text": "#ADMIN-PM\n浅湾同一夜间批次的三个独立任务共享32000个输入令牌额度，所有任务的输入令牌累计计费；输出令牌另计，不属于本限额。\n\n#PM-DEV\n任务甲固定使用14000个输入令牌，输出最多4000个。\n\n#PM-OPS\n任务乙使用9000个输入令牌；任务丙使用7000个。三任务输入互不共享。\n\n#PM-QA\n确认输入数量为精确值，输出额度另有保障，未提出扩大输入配额。"
+  },
+  "tool_results": {
+    "JOINT_SEVEN_STEP_V1": "464d02b7a52af6e765b10ad20f1e6d7dbeaadc373124fc14e01579400f7698be"
+  }
+}

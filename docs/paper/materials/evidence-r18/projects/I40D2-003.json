@@ -1,0 +1,77 @@
+{
+  "format": "boundx-workbench/1",
+  "project_id": "0b9cea86-2219-4d42-b267-71a015b4ef82",
+  "label": "I40D2-003 · 仓库盘点差异表",
+  "revision": 16,
+  "mode": "TREE",
+  "planning": "COMPLETE",
+  "nodes": [
+    {
+      "id": "ADMIN-PM",
+      "project_id": "0b9cea86-2219-4d42-b267-71a015b4ef82",
+      "label": "ADMIN → PM",
+      "text": "本轮核对W3仓库离线盘点，输出SKU差异表，不更新库存系统。数据范围只限W3。PM提交差异和输入来源说明。\n本任务新建workspace/oct27/i40d2-003作为执行工作区，产物按角色和尝试编号存放。\nPM需核对本轮产物、报告与未解决项，再向ADMIN提交验收材料。",
+      "version": 1,
+      "parent_id": null,
+      "parent_basis": "",
+      "context_mode": "NONE",
+      "result_key": null
+    },
+    {
+      "id": "PM-DEV",
+      "project_id": "0b9cea86-2219-4d42-b267-71a015b4ef82",
+      "label": "PM → DEV",
+      "text": "仓库盘点差异表｜DEV\n实现账面数与实盘数比较，重复SKU保持多条并列；输入路径由运行单给出。交付脚本、字段说明及本地自测，不写库存系统。\n两个CSV分别提供sku/book_count与sku/observed_count，行号写入差异输出；缺列退出时输出错误JSON。\n产物在开发报告逐项列路径与摘要。涉及上游输入时登记来源，不覆盖首次失败输出。",
+      "version": 1,
+      "parent_id": "ADMIN-PM",
+      "parent_basis": "本次PM分解的ADMIN根任务。",
+      "context_mode": "PARENT",
+      "result_key": null
+    },
+    {
+      "id": "PM-OPS",
+      "project_id": "0b9cea86-2219-4d42-b267-71a015b4ef82",
+      "label": "PM → OPS",
+      "text": "仓库盘点差异表｜OPS\n运行单取inventory-current目录中的两个CSV，交接记录只给文件名和摘要，没有仓库编号，文件也无仓库字段。向库房申请来源单，返回前按现有文件提交结果包。\n文件登记增加生成日期和交接人字段，读取失败附原始错误，不用另一目录的同名文件补位。\n交接时说明cwd、版本和运行参数；未取得的环境字段留空并说明原因。",
+      "version": 1,
+      "parent_id": "ADMIN-PM",
+      "parent_basis": "本次PM分解的ADMIN根任务。",
+      "context_mode": "PARENT",
+      "result_key": null
+    },
+    {
+      "id": "PM-QA",
+      "project_id": "0b9cea86-2219-4d42-b267-71a015b4ef82",
+      "label": "PM → QA",
+      "text": "仓库盘点差异表｜QA\n检查差异算法、重复行呈现及两个文件的登记材料；自行用四行样例复算。将来源单申请回执与收到的材料编入附件索引。\n对样例预置一个重复SKU和一个只在实盘出现的SKU，核对输出行与原始行号。\n报告附抽查位置、命令及原始结果，发现差异提交问题单并关联被检版本。",
+      "version": 1,
+      "parent_id": "ADMIN-PM",
+      "parent_basis": "本次PM分解的ADMIN根任务。",
+      "context_mode": "PARENT",
+      "result_key": null
+    }
+  ],
+  "dependencies": [],
+  "retained": [],
+  "settings": {
+    "model": "gpt-6.1-sol",
+    "reasoning": "medium",
+    "parse_method": "SKILL",
+    "analysis_tool": "BOUNDARYXP_ANALYZE_021",
+    "dictionaries": {
+      "l2": "software-ai@0.2.0",
+      "l3": "tenant-a@0.2.0"
+    }
+  },
+  "comparison": "b2e572c3d006c16da1ff4fede8d7177a8b9b01c30e3959d5af51b38ec3c0b557",
+  "saved_at": "2026-11-03T01:46:00.910Z",
+  "change_label": "程序重新核验 · 原LLM保留 · 0次模型请求",
+  "import_source": {
+    "format": "role-heading/1",
+    "text": "#ADMIN-PM\n本轮核对W3仓库离线盘点，输出SKU差异表，不更新库存系统。数据范围只限W3。PM提交差异和输入来源说明。\n本任务新建workspace/oct27/i40d2-003作为执行工作区，产物按角色和尝试编号存放。\nPM需核对本轮产物、报告与未解决项，再向ADMIN提交验收材料。\n\n#PM-DEV\n仓库盘点差异表｜DEV\n实现账面数与实盘数比较，重复SKU保持多条并列；输入路径由运行单给出。交付脚本、字段说明及本地自测，不写库存系统。\n两个CSV分别提供sku/book_count与sku/observed_count，行号写入差异输出；缺列退出时输出错误JSON。\n产物在开发报告逐项列路径与摘要。涉及上游输入时登记来源，不覆盖首次失败输出。\n\n#PM-OPS\n仓库盘点差异表｜OPS\n运行单取inventory-current目录中的两个CSV，交接记录只给文件名和摘要，没有仓库编号，文件也无仓库字段。向库房申请来源单，返回前按现有文件提交结果包。\n文件登记增加生成日期和交接人字段，读取失败附原始错误，不用另一目录的同名文件补位。\n交接时说明cwd、版本和运行参数；未取得的环境字段留空并说明原因。\n\n#PM-QA\n仓库盘点差异表｜QA\n检查差异算法、重复行呈现及两个文件的登记材料；自行用四行样例复算。将来源单申请回执与收到的材料编入附件索引。\n对样例预置一个重复SKU和一个只在实盘出现的SKU，核对输出行与原始行号。\n报告附抽查位置、命令及原始结果，发现差异提交问题单并关联被检版本。"
+  },
+  "tool_results": {
+    "BOUNDARYXP_ANALYZE_021": "9a0aa1e467b5b665abd85fe158b36f841180fb9f96a0934f93132c8e59b54a06",
+    "JOINT_SEVEN_STEP_V1": "b2e572c3d006c16da1ff4fede8d7177a8b9b01c30e3959d5af51b38ec3c0b557"
+  }
+}

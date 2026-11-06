@@ -1,0 +1,78 @@
+{
+  "format": "boundx-workbench/1",
+  "project_id": "5288299a-1d85-45aa-ac1e-614cbd179621",
+  "label": "R389-074 · B02原工具 · H40-011 · 流水线扫描环节安排",
+  "revision": 12,
+  "mode": "TREE",
+  "planning": "COMPLETE",
+  "nodes": [
+    {
+      "id": "ADMIN-PM",
+      "project_id": "5288299a-1d85-45aa-ac1e-614cbd179621",
+      "label": "ADMIN → PM",
+      "text": "流水线必须满足代码审阅完成后才能开始签包，签包完成后才能开始推送。只规定先后，不设时长上限。",
+      "version": 1,
+      "parent_id": null,
+      "parent_basis": "",
+      "context_mode": "NONE",
+      "result_key": null
+    },
+    {
+      "id": "PM-DEV",
+      "project_id": "5288299a-1d85-45aa-ac1e-614cbd179621",
+      "label": "PM → DEV",
+      "text": "代码审阅完成后先做静态扫描，扫描结束再签包。",
+      "version": 1,
+      "parent_id": "ADMIN-PM",
+      "parent_basis": "本轮子任务继承适用的父任务限制。",
+      "context_mode": "PARENT",
+      "result_key": null
+    },
+    {
+      "id": "PM-OPS",
+      "project_id": "5288299a-1d85-45aa-ac1e-614cbd179621",
+      "label": "PM → OPS",
+      "text": "等签包完成再推送，不另设可绕过签包的路径。",
+      "version": 1,
+      "parent_id": "ADMIN-PM",
+      "parent_basis": "本轮子任务继承适用的父任务限制。",
+      "context_mode": "PARENT",
+      "result_key": null
+    },
+    {
+      "id": "PM-QA",
+      "project_id": "5288299a-1d85-45aa-ac1e-614cbd179621",
+      "label": "PM → QA",
+      "text": "新增扫描环节不取消既有先后，确认无并行绕行。",
+      "version": 1,
+      "parent_id": "ADMIN-PM",
+      "parent_basis": "本轮子任务继承适用的父任务限制。",
+      "context_mode": "PARENT",
+      "result_key": null
+    }
+  ],
+  "dependencies": [],
+  "retained": [],
+  "settings": {
+    "provider": "codex-api",
+    "transport_identity": "09ba0ba965e0a00dda14128296d1f4431f00bc8aafeef07c38f9d32e04dfca00",
+    "model": "gpt-6.1-sol",
+    "reasoning": "medium",
+    "parse_method": "SKILL",
+    "analysis_tool": "JOINT_SEVEN_STEP_V1",
+    "dictionaries": {
+      "l2": "software-ai@0.2.0",
+      "l3": "tenant-a@0.2.0"
+    }
+  },
+  "comparison": "083fcea62bd4917f8fb4b171eee03b8186b9816b11c4b1f280045abc47f15746",
+  "saved_at": "2026-11-03T01:43:25.746Z",
+  "change_label": "程序重新核验 · 原LLM保留 · 0次模型请求",
+  "import_source": {
+    "format": "role-heading/1",
+    "text": "#ADMIN-PM\n流水线必须满足代码审阅完成后才能开始签包，签包完成后才能开始推送。只规定先后，不设时长上限。\n\n#PM-DEV\n代码审阅完成后先做静态扫描，扫描结束再签包。\n\n#PM-OPS\n等签包完成再推送，不另设可绕过签包的路径。\n\n#PM-QA\n新增扫描环节不取消既有先后，确认无并行绕行。"
+  },
+  "tool_results": {
+    "JOINT_SEVEN_STEP_V1": "083fcea62bd4917f8fb4b171eee03b8186b9816b11c4b1f280045abc47f15746"
+  }
+}

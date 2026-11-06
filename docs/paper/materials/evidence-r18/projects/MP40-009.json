@@ -1,0 +1,76 @@
+{
+  "format": "boundx-workbench/1",
+  "project_id": "e1ede68b-e362-439e-a7a0-e939d7f58734",
+  "label": "MP40-009 · 批量记录处理",
+  "revision": 13,
+  "mode": "TREE",
+  "planning": "COMPLETE",
+  "nodes": [
+    {
+      "id": "ADMIN-PM",
+      "project_id": "e1ede68b-e362-439e-a7a0-e939d7f58734",
+      "label": "ADMIN → PM",
+      "text": "处理队列中的记录，已处理500条或累计运行20分钟，任一先到即停止；未处理记录留待下轮，不得覆盖失败记录。\nPM负责规划、派发、审阅与汇总，安排DEV、OPS、QA各自交付；本轮先审查完整子任务方案，尚未执行。未被子任务明确提出变更的父任务限制继续适用。最终报告由ADMIN验收，PM不能代替ADMIN审批。",
+      "version": 1,
+      "parent_id": null,
+      "parent_basis": "",
+      "context_mode": "NONE",
+      "result_key": null
+    },
+    {
+      "id": "PM-DEV",
+      "project_id": "e1ede68b-e362-439e-a7a0-e939d7f58734",
+      "label": "PM → DEV",
+      "text": "批量记录处理：DEV工作单\n本轮具体方案：实现处理程序：每批10条，每条处理前检查已处理数，达到500条即停止。\n交付：向PM提交本角色报告，列明输入、产物、检查范围与遗留问题；失败与未知分别记录，不伪造结果。",
+      "version": 1,
+      "parent_id": "ADMIN-PM",
+      "parent_basis": "由PM按本轮父任务派发。",
+      "context_mode": "PARENT",
+      "result_key": null
+    },
+    {
+      "id": "PM-OPS",
+      "project_id": "e1ede68b-e362-439e-a7a0-e939d7f58734",
+      "label": "PM → OPS",
+      "text": "批量记录处理：OPS工作单\n本轮具体方案：按DEV程序运行一次，失败记录写入failed/目录，不覆盖已有文件；停止后输出未处理清单。\n交付：向PM提交本角色报告，列明输入、产物、检查范围与遗留问题；失败与未知分别记录，不伪造结果。",
+      "version": 1,
+      "parent_id": "ADMIN-PM",
+      "parent_basis": "由PM按本轮父任务派发。",
+      "context_mode": "PARENT",
+      "result_key": null
+    },
+    {
+      "id": "PM-QA",
+      "project_id": "e1ede68b-e362-439e-a7a0-e939d7f58734",
+      "label": "PM → QA",
+      "text": "批量记录处理：QA工作单\n本轮具体方案：核对停止时的已处理数、累计时长与failed/目录内容。\n交付：向PM提交本角色报告，列明输入、产物、检查范围与遗留问题；失败与未知分别记录，不伪造结果。",
+      "version": 1,
+      "parent_id": "ADMIN-PM",
+      "parent_basis": "由PM按本轮父任务派发。",
+      "context_mode": "PARENT",
+      "result_key": null
+    }
+  ],
+  "dependencies": [],
+  "retained": [],
+  "settings": {
+    "model": "gpt-6.1-sol",
+    "reasoning": "medium",
+    "parse_method": "SKILL",
+    "dictionaries": {
+      "l2": "software-ai@0.2.0",
+      "l3": "tenant-a@0.2.0"
+    }
+  },
+  "comparison": "539e4028f846c7e78c67e1b91ef9ab4e8000e82e2c8066fb818042670b596c07",
+  "saved_at": "2026-11-03T01:46:23.608Z",
+  "change_label": "程序重新核验 · 原LLM保留 · 0次模型请求",
+  "import_source": {
+    "format": "role-heading/1",
+    "text": "#ADMIN-PM\n处理队列中的记录，已处理500条或累计运行20分钟，任一先到即停止；未处理记录留待下轮，不得覆盖失败记录。\nPM负责规划、派发、审阅与汇总，安排DEV、OPS、QA各自交付；本轮先审查完整子任务方案，尚未执行。未被子任务明确提出变更的父任务限制继续适用。最终报告由ADMIN验收，PM不能代替ADMIN审批。\n\n#PM-DEV\n批量记录处理：DEV工作单\n本轮具体方案：实现处理程序：每批10条，每条处理前检查已处理数，达到500条即停止。\n交付：向PM提交本角色报告，列明输入、产物、检查范围与遗留问题；失败与未知分别记录，不伪造结果。\n\n#PM-OPS\n批量记录处理：OPS工作单\n本轮具体方案：按DEV程序运行一次，失败记录写入failed/目录，不覆盖已有文件；停止后输出未处理清单。\n交付：向PM提交本角色报告，列明输入、产物、检查范围与遗留问题；失败与未知分别记录，不伪造结果。\n\n#PM-QA\n批量记录处理：QA工作单\n本轮具体方案：核对停止时的已处理数、累计时长与failed/目录内容。\n交付：向PM提交本角色报告，列明输入、产物、检查范围与遗留问题；失败与未知分别记录，不伪造结果。"
+  },
+  "tool_results": {
+    "JOINT_SEVEN_STEP_V1": "539e4028f846c7e78c67e1b91ef9ab4e8000e82e2c8066fb818042670b596c07",
+    "BOUNDARYXP_ANALYZE_021": "1ef474f2b677dd329815a28a8561c8ff92c4b38da0f7a08888a22ad8e576b21e"
+  }
+}

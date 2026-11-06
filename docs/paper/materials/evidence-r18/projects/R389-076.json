@@ -1,0 +1,78 @@
+{
+  "format": "boundx-workbench/1",
+  "project_id": "05d4d602-18f1-47cb-8170-ac7b0f42e4cf",
+  "label": "R389-076 · B02原工具 · H40-013 · 限额为严格小于",
+  "revision": 12,
+  "mode": "TREE",
+  "planning": "COMPLETE",
+  "nodes": [
+    {
+      "id": "ADMIN-PM",
+      "project_id": "05d4d602-18f1-47cb-8170-ac7b0f42e4cf",
+      "label": "ADMIN → PM",
+      "text": "单个压缩包必须严格小于8MiB，恰好8MiB不接受；不能拆包或改变单位口径。",
+      "version": 1,
+      "parent_id": null,
+      "parent_basis": "",
+      "context_mode": "NONE",
+      "result_key": null
+    },
+    {
+      "id": "PM-DEV",
+      "project_id": "05d4d602-18f1-47cb-8170-ac7b0f42e4cf",
+      "label": "PM → DEV",
+      "text": "构建唯一压缩包，大小精确为8388608字节。",
+      "version": 1,
+      "parent_id": "ADMIN-PM",
+      "parent_basis": "本轮子任务继承适用的父任务限制。",
+      "context_mode": "PARENT",
+      "result_key": null
+    },
+    {
+      "id": "PM-OPS",
+      "project_id": "05d4d602-18f1-47cb-8170-ac7b0f42e4cf",
+      "label": "PM → OPS",
+      "text": "仍按这个文件提交验收。",
+      "version": 1,
+      "parent_id": "ADMIN-PM",
+      "parent_basis": "本轮子任务继承适用的父任务限制。",
+      "context_mode": "PARENT",
+      "result_key": null
+    },
+    {
+      "id": "PM-QA",
+      "project_id": "05d4d602-18f1-47cb-8170-ac7b0f42e4cf",
+      "label": "PM → QA",
+      "text": "本案1MiB=1048576字节，大小不是四舍五入值。",
+      "version": 1,
+      "parent_id": "ADMIN-PM",
+      "parent_basis": "本轮子任务继承适用的父任务限制。",
+      "context_mode": "PARENT",
+      "result_key": null
+    }
+  ],
+  "dependencies": [],
+  "retained": [],
+  "settings": {
+    "provider": "codex-api",
+    "transport_identity": "09ba0ba965e0a00dda14128296d1f4431f00bc8aafeef07c38f9d32e04dfca00",
+    "model": "gpt-6.1-sol",
+    "reasoning": "medium",
+    "parse_method": "SKILL",
+    "analysis_tool": "JOINT_SEVEN_STEP_V1",
+    "dictionaries": {
+      "l2": "software-ai@0.2.0",
+      "l3": "tenant-a@0.2.0"
+    }
+  },
+  "comparison": "dab80c8d020860a517fa8c2c0b86d4203e293b6663ffd4987c9166e7e12ab1a0",
+  "saved_at": "2026-11-03T01:43:26.612Z",
+  "change_label": "程序重新核验 · 原LLM保留 · 0次模型请求",
+  "import_source": {
+    "format": "role-heading/1",
+    "text": "#ADMIN-PM\n单个压缩包必须严格小于8MiB，恰好8MiB不接受；不能拆包或改变单位口径。\n\n#PM-DEV\n构建唯一压缩包，大小精确为8388608字节。\n\n#PM-OPS\n仍按这个文件提交验收。\n\n#PM-QA\n本案1MiB=1048576字节，大小不是四舍五入值。"
+  },
+  "tool_results": {
+    "JOINT_SEVEN_STEP_V1": "dab80c8d020860a517fa8c2c0b86d4203e293b6663ffd4987c9166e7e12ab1a0"
+  }
+}

@@ -1,0 +1,77 @@
+{
+  "format": "boundx-workbench/1",
+  "project_id": "65da40e0-25d7-4387-ac89-9eaf81e71cea",
+  "label": "I40D2-011 · 双地区演练时间表",
+  "revision": 17,
+  "mode": "TREE",
+  "planning": "COMPLETE",
+  "nodes": [
+    {
+      "id": "ADMIN-PM",
+      "project_id": "65da40e0-25d7-4387-ac89-9eaf81e71cea",
+      "label": "ADMIN → PM",
+      "text": "两条演练链都需DEV处理20分钟，再由同一名OPS各处理15分钟；OPS不能并行。从准入起60分钟内完成QA汇总。\n文件交接位置：workspace/oct27/i40d2-011；原始输入在input下只读保留，角色产物各自建目录。\nPM组织DEV、OPS、QA分工，汇总本轮交付及待办，交ADMIN评审。",
+      "version": 1,
+      "parent_id": null,
+      "parent_basis": "",
+      "context_mode": "NONE",
+      "result_key": null
+    },
+    {
+      "id": "PM-DEV",
+      "project_id": "65da40e0-25d7-4387-ac89-9eaf81e71cea",
+      "label": "PM → DEV",
+      "text": "双地区演练时间表｜DEV\n甲乙两条DEV链从第0分钟并行开始，均在第20分钟结束；分别给出交接版本和完成事件，失败时停止该链。\n每条链交付各自bundle.json和摘要，不共用可变输出文件；将DEV完成时刻写进排程，而非实际运行回执。\n产物在开发报告逐项列路径与摘要。涉及上游输入时登记来源，不覆盖首次失败输出。",
+      "version": 1,
+      "parent_id": "ADMIN-PM",
+      "parent_basis": "本次PM分解的ADMIN根任务。",
+      "context_mode": "PARENT",
+      "result_key": null
+    },
+    {
+      "id": "PM-OPS",
+      "project_id": "65da40e0-25d7-4387-ac89-9eaf81e71cea",
+      "label": "PM → OPS",
+      "text": "双地区演练时间表｜OPS\n甲安排20—35分钟，乙安排35—50分钟，使用同一OPS席位。每项开始时核对对应DEV完成事件，预留日志导出到第52分钟。\nOPS占用表以同一人员ID登记，甲乙交接分别核对版本；运行中断记录实际时段，不移动准入零点。\n交接时说明cwd、版本和运行参数；未取得的环境字段留空并说明原因。",
+      "version": 1,
+      "parent_id": "ADMIN-PM",
+      "parent_basis": "本次PM分解的ADMIN根任务。",
+      "context_mode": "PARENT",
+      "result_key": null
+    },
+    {
+      "id": "PM-QA",
+      "project_id": "65da40e0-25d7-4387-ac89-9eaf81e71cea",
+      "label": "PM → QA",
+      "text": "双地区演练时间表｜QA\n计划52—58分钟汇总两条链及日志，核对产物摘要与回执索引；实际运行后按原时间轴填写开始结束和中断情况。\nQA汇总内容为两份运行单、日志索引和差异清单，计划阶段不填写真实PASS或虚构时间。\n报告附抽查位置、命令及原始结果，发现差异提交问题单并关联被检版本。",
+      "version": 1,
+      "parent_id": "ADMIN-PM",
+      "parent_basis": "本次PM分解的ADMIN根任务。",
+      "context_mode": "PARENT",
+      "result_key": null
+    }
+  ],
+  "dependencies": [],
+  "retained": [],
+  "settings": {
+    "model": "gpt-6.1-sol",
+    "reasoning": "medium",
+    "parse_method": "SKILL",
+    "analysis_tool": "BOUNDARYXP_ANALYZE_021",
+    "dictionaries": {
+      "l2": "software-ai@0.2.0",
+      "l3": "tenant-a@0.2.0"
+    }
+  },
+  "comparison": "141864e894758c7b9556c5877cc78d526e3786663aa9a47116fe630bbac4f0b5",
+  "saved_at": "2026-11-03T01:46:04.664Z",
+  "change_label": "程序重新核验 · 原LLM保留 · 0次模型请求",
+  "import_source": {
+    "format": "role-heading/1",
+    "text": "#ADMIN-PM\n两条演练链都需DEV处理20分钟，再由同一名OPS各处理15分钟；OPS不能并行。从准入起60分钟内完成QA汇总。\n文件交接位置：workspace/oct27/i40d2-011；原始输入在input下只读保留，角色产物各自建目录。\nPM组织DEV、OPS、QA分工，汇总本轮交付及待办，交ADMIN评审。\n\n#PM-DEV\n双地区演练时间表｜DEV\n甲乙两条DEV链从第0分钟并行开始，均在第20分钟结束；分别给出交接版本和完成事件，失败时停止该链。\n每条链交付各自bundle.json和摘要，不共用可变输出文件；将DEV完成时刻写进排程，而非实际运行回执。\n产物在开发报告逐项列路径与摘要。涉及上游输入时登记来源，不覆盖首次失败输出。\n\n#PM-OPS\n双地区演练时间表｜OPS\n甲安排20—35分钟，乙安排35—50分钟，使用同一OPS席位。每项开始时核对对应DEV完成事件，预留日志导出到第52分钟。\nOPS占用表以同一人员ID登记，甲乙交接分别核对版本；运行中断记录实际时段，不移动准入零点。\n交接时说明cwd、版本和运行参数；未取得的环境字段留空并说明原因。\n\n#PM-QA\n双地区演练时间表｜QA\n计划52—58分钟汇总两条链及日志，核对产物摘要与回执索引；实际运行后按原时间轴填写开始结束和中断情况。\nQA汇总内容为两份运行单、日志索引和差异清单，计划阶段不填写真实PASS或虚构时间。\n报告附抽查位置、命令及原始结果，发现差异提交问题单并关联被检版本。"
+  },
+  "tool_results": {
+    "JOINT_SEVEN_STEP_V1": "141864e894758c7b9556c5877cc78d526e3786663aa9a47116fe630bbac4f0b5",
+    "BOUNDARYXP_ANALYZE_021": "e199dc65033ca09358a39854fa60d6c2f6b77e58c1fd25e2662ebcd0fb18b890"
+  }
+}

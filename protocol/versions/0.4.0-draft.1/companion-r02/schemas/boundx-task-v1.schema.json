@@ -1,0 +1,279 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:boundx:schema:task:v1:0.4.0-draft.1",
+  "title": "BXP 0.4 task semantic carrier — canonical projection companion r02",
+  "description": "Carrier validation only. Does not validate BoundaryResult or authorize execution. Evidence is structurally representable, not semantically proven.",
+  "type": "object",
+  "required": [
+    "schema",
+    "protocol_version",
+    "profile",
+    "elements"
+  ],
+  "properties": {
+    "schema": {
+      "const": "boundx-task/v1"
+    },
+    "protocol_version": {
+      "const": "0.4.0-draft.1"
+    },
+    "profile": {
+      "type": "object",
+      "required": [
+        "id",
+        "required_elements"
+      ],
+      "properties": {
+        "id": {
+          "enum": [
+            "org.boundx.core-7plus1",
+            "org.boundx.core-formal-conformance",
+            "org.boundx.boundary-result-conformance",
+            "org.boundx.admission-conformance",
+            "org.boundx.downstream-conformance"
+          ]
+        },
+        "required_elements": {
+          "type": "array",
+          "items": {
+            "enum": [
+              "I",
+              "O",
+              "A",
+              "P",
+              "R",
+              "V",
+              "C",
+              "B"
+            ]
+          },
+          "uniqueItems": true
+        }
+      },
+      "additionalProperties": true
+    },
+    "elements": {
+      "type": "object",
+      "required": [
+        "I",
+        "O",
+        "A",
+        "P",
+        "R",
+        "V",
+        "C",
+        "B"
+      ],
+      "properties": {
+        "I": {
+          "$ref": "#/$defs/bucket"
+        },
+        "O": {
+          "$ref": "#/$defs/bucket"
+        },
+        "A": {
+          "$ref": "#/$defs/bucket"
+        },
+        "P": {
+          "$ref": "#/$defs/bucket"
+        },
+        "R": {
+          "$ref": "#/$defs/bucket"
+        },
+        "V": {
+          "$ref": "#/$defs/bucket"
+        },
+        "C": {
+          "$ref": "#/$defs/bucket"
+        },
+        "B": {
+          "$ref": "#/$defs/bucket"
+        }
+      },
+      "additionalProperties": false
+    },
+    "business_decision": {
+      "type": "null"
+    },
+    "execution_authorization": {
+      "type": "null"
+    }
+  },
+  "$defs": {
+    "entry": {
+      "type": "object",
+      "required": [
+        "state",
+        "normalized",
+        "evidence"
+      ],
+      "properties": {
+        "state": {
+          "enum": [
+            "RESOLVED_ENTRY",
+            "UNRESOLVED_ENTRY",
+            "DEFERRED_ENTRY",
+            "UNSUPPORTED_ENTRY",
+            "PROJECTION_SLOT_AMBIGUOUS"
+          ]
+        },
+        "normalized": {},
+        "evidence": {
+          "oneOf": [
+            {
+              "type": "string",
+              "minLength": 1
+            },
+            {
+              "type": "object",
+              "minProperties": 1
+            },
+            {
+              "type": "array",
+              "minItems": 1
+            }
+          ]
+        },
+        "candidate_slots": {
+          "type": "array",
+          "items": {
+            "enum": [
+              "I",
+              "O",
+              "A",
+              "P",
+              "R",
+              "V",
+              "C",
+              "B"
+            ]
+          },
+          "uniqueItems": true,
+          "minItems": 1
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "state": {
+                "const": "PROJECTION_SLOT_AMBIGUOUS"
+              }
+            }
+          },
+          "then": {
+            "required": [
+              "candidate_slots"
+            ]
+          }
+        }
+      ],
+      "additionalProperties": true
+    },
+    "bucket": {
+      "type": "object",
+      "required": [
+        "status",
+        "entries"
+      ],
+      "properties": {
+        "status": {
+          "enum": [
+            "resolved",
+            "unresolved",
+            "absent"
+          ]
+        },
+        "entries": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/entry"
+          }
+        },
+        "accountability_complete": {
+          "type": "boolean"
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "status": {
+                "const": "resolved"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "entries": {
+                "minItems": 1,
+                "items": {
+                  "properties": {
+                    "state": {
+                      "const": "RESOLVED_ENTRY"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "status": {
+                "const": "unresolved"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "entries": {
+                "minItems": 1,
+                "contains": {
+                  "properties": {
+                    "state": {
+                      "enum": [
+                        "UNRESOLVED_ENTRY",
+                        "DEFERRED_ENTRY",
+                        "UNSUPPORTED_ENTRY",
+                        "PROJECTION_SLOT_AMBIGUOUS"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "state"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "status": {
+                "const": "absent"
+              }
+            }
+          },
+          "then": {
+            "required": [
+              "accountability_complete"
+            ],
+            "properties": {
+              "entries": {
+                "maxItems": 0
+              },
+              "accountability_complete": {
+                "const": true
+              }
+            }
+          }
+        }
+      ],
+      "additionalProperties": true
+    }
+  },
+  "additionalProperties": true
+}

@@ -1,0 +1,77 @@
+{
+  "format": "boundx-workbench/1",
+  "project_id": "3353ff5d-57f8-4b62-85b7-1ec05134bde4",
+  "label": "I40D2-022 · 解析器质量样本复核",
+  "revision": 15,
+  "mode": "TREE",
+  "planning": "COMPLETE",
+  "nodes": [
+    {
+      "id": "ADMIN-PM",
+      "project_id": "3353ff5d-57f8-4b62-85b7-1ec05134bde4",
+      "label": "ADMIN → PM",
+      "text": "交付CSV解析器及测试。QA须独立设计并执行核验，可阅读DEV脚本，但不得将DEV执行记录作为自身唯一测试。\n本轮绑定目录为workspace/oct27/i40d2-022，三个角色分别使用dev、ops、qa子目录。\n先提交这份工作安排供预检，执行记录将在实际操作后填写；PM负责交接和收口。",
+      "version": 1,
+      "parent_id": null,
+      "parent_basis": "",
+      "context_mode": "NONE",
+      "result_key": null
+    },
+    {
+      "id": "PM-DEV",
+      "project_id": "3353ff5d-57f8-4b62-85b7-1ec05134bde4",
+      "label": "PM → DEV",
+      "text": "解析器质量样本复核｜DEV\n实现BOM处理、空行诊断和字段计数；交开发样例、测试脚本及本地输出，登记代码与样例摘要。\nCSV样例包含带BOM中文表头、连续空行和多字段行；错误返回JSON并带源行号，所有样例自包含。\n先把实现与样例交OPS复现，代码及输入按SHA256登记；受限步骤在开发报告列明。",
+      "version": 1,
+      "parent_id": "ADMIN-PM",
+      "parent_basis": "本次PM分解的ADMIN根任务。",
+      "context_mode": "PARENT",
+      "result_key": null
+    },
+    {
+      "id": "PM-OPS",
+      "project_id": "3353ff5d-57f8-4b62-85b7-1ec05134bde4",
+      "label": "PM → OPS",
+      "text": "解析器质量样本复核｜OPS\n使用固定解释器运行DEV样例，记录成功和失败退出码、cwd及环境；不修改QA工作目录，交可复现命令。\n在运行表列解释器绝对路径、版本及系统编码；DEV脚本运行日志保留原始退出结果，不改写为QA记录。\n准备环境记录与重放步骤，执行输出按尝试编号保存，等待DEV版本交接后运行。",
+      "version": 1,
+      "parent_id": "ADMIN-PM",
+      "parent_basis": "本次PM分解的ADMIN根任务。",
+      "context_mode": "PARENT",
+      "result_key": null
+    },
+    {
+      "id": "PM-QA",
+      "project_id": "3353ff5d-57f8-4b62-85b7-1ec05134bde4",
+      "label": "PM → QA",
+      "text": "解析器质量样本复核｜QA\n为减少重复运行，直接以DEV报告的命令输出作为全部QA测试证据，另核对报告排版和文件摘要，不自行运行样例。\nQA报告列所引用DEV输出的报告ID、节号及原摘要，并列出完成的文档检查项目。\n阅读本轮交付说明后复核，记录检查范围、原始输出及尚待取得的材料。",
+      "version": 1,
+      "parent_id": "ADMIN-PM",
+      "parent_basis": "本次PM分解的ADMIN根任务。",
+      "context_mode": "PARENT",
+      "result_key": null
+    }
+  ],
+  "dependencies": [],
+  "retained": [],
+  "settings": {
+    "model": "gpt-6.1-sol",
+    "reasoning": "medium",
+    "parse_method": "SKILL",
+    "analysis_tool": "BOUNDARYXP_ANALYZE_021",
+    "dictionaries": {
+      "l2": "software-ai@0.2.0",
+      "l3": "tenant-a@0.2.0"
+    }
+  },
+  "comparison": "a8bb5e0ddda9329a4ddae429b4408a38e9637b4555f073947eb2cd3431d038f2",
+  "saved_at": "2026-11-03T01:46:10.635Z",
+  "change_label": "程序重新核验 · 原LLM保留 · 0次模型请求",
+  "import_source": {
+    "format": "role-heading/1",
+    "text": "#ADMIN-PM\n交付CSV解析器及测试。QA须独立设计并执行核验，可阅读DEV脚本，但不得将DEV执行记录作为自身唯一测试。\n本轮绑定目录为workspace/oct27/i40d2-022，三个角色分别使用dev、ops、qa子目录。\n先提交这份工作安排供预检，执行记录将在实际操作后填写；PM负责交接和收口。\n\n#PM-DEV\n解析器质量样本复核｜DEV\n实现BOM处理、空行诊断和字段计数；交开发样例、测试脚本及本地输出，登记代码与样例摘要。\nCSV样例包含带BOM中文表头、连续空行和多字段行；错误返回JSON并带源行号，所有样例自包含。\n先把实现与样例交OPS复现，代码及输入按SHA256登记；受限步骤在开发报告列明。\n\n#PM-OPS\n解析器质量样本复核｜OPS\n使用固定解释器运行DEV样例，记录成功和失败退出码、cwd及环境；不修改QA工作目录，交可复现命令。\n在运行表列解释器绝对路径、版本及系统编码；DEV脚本运行日志保留原始退出结果，不改写为QA记录。\n准备环境记录与重放步骤，执行输出按尝试编号保存，等待DEV版本交接后运行。\n\n#PM-QA\n解析器质量样本复核｜QA\n为减少重复运行，直接以DEV报告的命令输出作为全部QA测试证据，另核对报告排版和文件摘要，不自行运行样例。\nQA报告列所引用DEV输出的报告ID、节号及原摘要，并列出完成的文档检查项目。\n阅读本轮交付说明后复核，记录检查范围、原始输出及尚待取得的材料。"
+  },
+  "tool_results": {
+    "JOINT_SEVEN_STEP_V1": "a8bb5e0ddda9329a4ddae429b4408a38e9637b4555f073947eb2cd3431d038f2",
+    "BOUNDARYXP_ANALYZE_021": "dbf5dcb331dbfadf0af114ddfd0680c8d0960c10572339381474145cc9617a66"
+  }
+}

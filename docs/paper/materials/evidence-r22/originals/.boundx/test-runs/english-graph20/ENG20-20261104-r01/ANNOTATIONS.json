@@ -1,0 +1,251 @@
+{
+  "at": "2026-11-04T14:48:17.944Z",
+  "authority": "ASSISTANT_AUTHORED_PREANNOTATION_NOT_INDEPENDENT_HUMAN_GOLD",
+  "cases": [
+    {
+      "id": "ENG20-001",
+      "title": "Two prerequisite branches and one join",
+      "family": "Graph diamond and transitive reachability",
+      "source_sha256": "2726660cb9447390a3df957a56dbdd39656708a3beddb54bfdb290e5ed49d26c",
+      "verdict": "VERIFIED",
+      "reason": "Both branches and their AND join are retained; no cycle or replacement is introduced.",
+      "expected_math": "Edges P→S, P→G, S→U, G→U. P reaches U by two paths; P,S,G,U is one topological order.",
+      "target_operations": [
+        "dependency"
+      ]
+    },
+    {
+      "id": "ENG20-002",
+      "title": "A join explicitly replaced by a single branch",
+      "family": "Graph missing mandatory incoming edge",
+      "source_sha256": "e4b81b1eb6fb00dfbf320722e3fcb4b2728537371de74ed200323efd5cecc0a7",
+      "verdict": "VIOLATED",
+      "reason": "OPS explicitly removes G as a prerequisite of U, rather than merely omitting a repeated statement.",
+      "expected_math": "Parent requires S→U and G→U. Proposed replacement permits S,U,G, which violates G→U.",
+      "target_operations": [
+        "dependency"
+      ]
+    },
+    {
+      "id": "ENG20-003",
+      "title": "A four-step cycle across role boundaries",
+      "family": "Graph cycle and topological infeasibility",
+      "source_sha256": "9ca9354cdab22beae891dafc3d66bd7bf0a7a6cebd2432cb2fe3a1a8a9098759",
+      "verdict": "VIOLATED",
+      "reason": "The combined graph contains a directed cycle although some individual role graphs are acyclic.",
+      "expected_math": "A→B→C→D→A; no topological order exists.",
+      "target_operations": [
+        "dependency"
+      ]
+    },
+    {
+      "id": "ENG20-004",
+      "title": "An action required to precede itself",
+      "family": "Graph self-loop",
+      "source_sha256": "dbd4ca63ee0821c71fd3c0bb5a1a2a16b6d0a4e23e605d272724628502a42e46",
+      "verdict": "VIOLATED",
+      "reason": "A self-loop is impossible under strict finish-before-start semantics; DEV2 creates it and OPS retains it.",
+      "expected_math": "X→X is a directed cycle of length one.",
+      "target_operations": [
+        "dependency"
+      ]
+    },
+    {
+      "id": "ENG20-005",
+      "title": "Cyclic document links with acyclic actions",
+      "family": "Typed graph edges",
+      "source_sha256": "3d94d7937586c5c3be30b87de558ec636ae5bcbfa22884a945eb02ceb8bc7501",
+      "verdict": "VERIFIED",
+      "reason": "Only the execution graph is constrained to be acyclic; a reference cycle does not create an execution cycle.",
+      "expected_math": "Execution B→V→D is acyclic. Alpha↔Beta contains reference edges only.",
+      "target_operations": [
+        "dependency"
+      ]
+    },
+    {
+      "id": "ENG20-006",
+      "title": "Repeated names in separate release scopes",
+      "family": "Graph identity and scope",
+      "source_sha256": "98aa9499c1b61bc4fe8bff74eb3c1ccd22fa63bbad9231f66ce752835fa81edc",
+      "verdict": "VERIFIED",
+      "reason": "Opposite-looking edges use distinct nodes and create no common directed cycle.",
+      "expected_math": "East-Pack→East-Check and West-Check→West-Pack are two disjoint edges.",
+      "target_operations": [
+        "dependency"
+      ]
+    },
+    {
+      "id": "ENG20-007",
+      "title": "One prerequisite direction explicitly unresolved",
+      "family": "Graph unknown edge direction",
+      "source_sha256": "a7489aa23db2df87f76e4bf14b57adb754ec186868e19297115394e29b4ef5b2",
+      "verdict": "UNRESOLVED",
+      "reason": "One permitted completion is acyclic, and the other creates a cycle. The proposed handling preserves the parent constraint.",
+      "expected_math": "Add A→C: DAG. Add C→A: A→B→C→A cycle. Overall unresolved.",
+      "target_operations": [
+        "dependency"
+      ]
+    },
+    {
+      "id": "ENG20-008",
+      "title": "Uncertain timestamps on a required handoff",
+      "family": "Graph order and possible-value intervals",
+      "source_sha256": "d9b23e487a1c49f6cf1fa67bedf5762e1746333e4e56521e99c0d8cb2c182324",
+      "verdict": "UNRESOLVED",
+      "reason": "The rule is retained, but the reported event order can satisfy or violate it.",
+      "expected_math": "U at 7 is before V finishes at 8; U at 9 is after. Reported-event conformity is unresolved.",
+      "target_operations": [
+        "dependency",
+        "interval_composition"
+      ]
+    },
+    {
+      "id": "ENG20-009",
+      "title": "A redundant transitive edge preserves the graph",
+      "family": "Graph redundant edge and reachability",
+      "source_sha256": "50557c5cfd902789a3c4c20d59b54ea5ea0dcbecaa5ce168a151444bf79c95ff",
+      "verdict": "VERIFIED",
+      "reason": "The extra edge agrees with existing reachability and introduces no cycle.",
+      "expected_math": "A→B→C→D plus A→D remains a DAG; A reaches C and D.",
+      "target_operations": [
+        "dependency"
+      ]
+    },
+    {
+      "id": "ENG20-010",
+      "title": "Responsibility handoff is not a prerequisite cycle",
+      "family": "Typed responsibility and action graphs",
+      "source_sha256": "2cecd7a2f592305dc6268649cfd3bb7e5700a213467b65124d8d17ba767067cc",
+      "verdict": "VERIFIED",
+      "reason": "The reporting graph may have return edges while the action graph remains acyclic.",
+      "expected_math": "Execution graph V→D is acyclic. PM↔DEV reporting edges are not strict prerequisite edges.",
+      "target_operations": [
+        "dependency"
+      ]
+    },
+    {
+      "id": "ENG20-011",
+      "title": "Two valid topological orders for parallel branches",
+      "family": "Graph partial order",
+      "source_sha256": "f13088605e950caea5defcc8d4604e6a81d85b20607c1270eeff917a1fb600f8",
+      "verdict": "VERIFIED",
+      "reason": "Both sequences are linear extensions of the same diamond partial order.",
+      "expected_math": "A,C,B,D and A,B,C,D satisfy A→B,A→C,B→D,C→D.",
+      "target_operations": [
+        "dependency"
+      ]
+    },
+    {
+      "id": "ENG20-012",
+      "title": "An explicit replacement breaks transitive authorization",
+      "family": "Graph missing transitive path",
+      "source_sha256": "52ffc1220095903308bdc7e22eccd15db58e8fbd78ff84807b21f943c19c8866",
+      "verdict": "VIOLATED",
+      "reason": "DEV2 reverses the parent edge and OPS permits publication before approval, removing mandatory reachability.",
+      "expected_math": "Replacement edges S→A,S→P do not give A→P; S,P,A is a violating ordering.",
+      "target_operations": [
+        "dependency"
+      ]
+    },
+    {
+      "id": "ENG20-013",
+      "title": "A fork-join critical path at the time limit",
+      "family": "Graph longest path and parallel duration",
+      "source_sha256": "368c42dd237c0ee2e0395a402eaa60806fa52df44c129f1b8b4afb1fbae13797",
+      "verdict": "VERIFIED",
+      "reason": "The longer branch is B; the complete duration exactly meets the cap.",
+      "expected_math": "3+max(4+5,11)+4=18 minutes. Longest path Setup→B→Join.",
+      "target_operations": [
+        "dependency",
+        "interval_composition"
+      ]
+    },
+    {
+      "id": "ENG20-014",
+      "title": "A mandatory transfer delay extends the critical path",
+      "family": "Graph weighted path with transfer delay",
+      "source_sha256": "36dce01c307b7db07c3c9102ae133a253b9597557b807c0261981f7f4126f683",
+      "verdict": "VIOLATED",
+      "reason": "The B/transfer branch controls the finish and exceeds the parent cap by one minute.",
+      "expected_math": "2+max(6,8+3)+5=18>17 minutes; excess 1 minute.",
+      "target_operations": [
+        "dependency",
+        "interval_composition"
+      ]
+    },
+    {
+      "id": "ENG20-015",
+      "title": "A bounded unknown branch controls deadline uncertainty",
+      "family": "Graph critical path with uncertain duration",
+      "source_sha256": "ed085574052bab292ed563325f501ae92ff244ad7f1fe11612b76c83081b9582",
+      "verdict": "UNRESOLVED",
+      "reason": "A shorter B meets the deadline while a longer B misses it; the original text supplies no unique duration.",
+      "expected_math": "2+max(7,B)+5 yields [14,17]; B=6 gives14, B=10 gives17. Cap16 is unresolved.",
+      "target_operations": [
+        "dependency",
+        "interval_composition"
+      ]
+    },
+    {
+      "id": "ENG20-016",
+      "title": "Nonnegative transport cannot rescue an over-cap purchase",
+      "family": "Budget lower bound",
+      "source_sha256": "15ee33434c974203e991bfd89b9f7a5b4f6884309ec92d177e34131976d6bfa8",
+      "verdict": "VIOLATED",
+      "reason": "The fixed component alone exceeds the cap; unknown nonnegative transport cannot reverse the violation.",
+      "expected_math": "8500+transport≥8500>8200; excess at least USD300.",
+      "target_operations": [
+        "interval_composition"
+      ]
+    },
+    {
+      "id": "ENG20-017",
+      "title": "Mixed time units with a shared stopping rule",
+      "family": "Unit conversion and inherited stopping condition",
+      "source_sha256": "c8679cccd0f728abe65ce4244bbf137458f8cf613e4acdfff7d1c2cd3a8232b6",
+      "verdict": "VERIFIED",
+      "reason": "The planned duration is exactly 900 seconds and both stopping conditions remain effective.",
+      "expected_math": "4×60+300+360=900 seconds=15 minutes; record_count≤240 AND elapsed_seconds≤900.",
+      "target_operations": [
+        "interval_composition",
+        "boolean_implication"
+      ]
+    },
+    {
+      "id": "ENG20-018",
+      "title": "A forbidden region introduced through a union",
+      "family": "Set union and subset",
+      "source_sha256": "6ee92847b83ee6d949aae93191f116f2d37090cc204ee8a522a6317a142923f5",
+      "verdict": "VIOLATED",
+      "reason": "OPS explicitly exports ES outside the allowed set; DEV2 preparation alone is not treated as an export event.",
+      "expected_math": "{DE,FR}∪{IE,ES}={DE,FR,IE,ES}; difference from allowed set is {ES}.",
+      "target_operations": [
+        "set_subset"
+      ]
+    },
+    {
+      "id": "ENG20-019",
+      "title": "An unreadable version identity blocks package verification",
+      "family": "Version equality with explicit unknown",
+      "source_sha256": "979b102e54f184c40e48e756060de9e92914df84e0d93e75de600f67a1c3659f",
+      "verdict": "UNRESOLVED",
+      "reason": "The plans preserve the boundary, but one supplied artifact can match or fail the required version.",
+      "expected_math": "Guide=rc34 satisfies equality; guide=rc35 does not. Existing identity evidence is unresolved.",
+      "target_operations": [
+        "equal"
+      ]
+    },
+    {
+      "id": "ENG20-020",
+      "title": "Contradictory simultaneous gate requirements",
+      "family": "Boolean plan satisfiability",
+      "source_sha256": "f8e00dad98ed272a54052e8e4de06220ac146a2786afa330e93235873d867c9e",
+      "verdict": "VIOLATED",
+      "reason": "The conjunction is unsatisfiable; DEV2 introduces the contradiction and OPS explicitly retains it.",
+      "expected_math": "release_ready∧¬release_ready has zero satisfying assignments.",
+      "target_operations": [
+        "boolean_implication"
+      ]
+    }
+  ]
+}

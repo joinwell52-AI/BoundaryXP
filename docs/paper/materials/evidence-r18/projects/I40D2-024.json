@@ -1,0 +1,76 @@
+{
+  "format": "boundx-workbench/1",
+  "project_id": "246fa641-b45f-467e-b3e7-946955df226e",
+  "label": "I40D2-024 · 数据库删列影响评估",
+  "revision": 15,
+  "mode": "TREE",
+  "planning": "COMPLETE",
+  "nodes": [
+    {
+      "id": "ADMIN-PM",
+      "project_id": "246fa641-b45f-467e-b3e7-946955df226e",
+      "label": "ADMIN → PM",
+      "text": "只读评估legacy_note删列影响，不执行DDL或修改生产数据；交付候选方案供审批。\n本任务新建workspace/oct27/i40d2-024作为执行工作区，产物按角色和尝试编号存放。\n本轮为执行前任务分解，不附已经运行的结果。分工如下，由PM协调依赖与返工。",
+      "version": 1,
+      "parent_id": null,
+      "parent_basis": "",
+      "context_mode": "NONE",
+      "result_key": null
+    },
+    {
+      "id": "PM-DEV",
+      "project_id": "246fa641-b45f-467e-b3e7-946955df226e",
+      "label": "PM → DEV",
+      "text": "数据库删列影响评估｜DEV\n读取离线schema和调用清单，形成影响表；在候选SQL附件写出ALTER TABLE DROP COLUMN命令，标记为评审文本，本轮无执行节点。\n影响表逐项列调用文件、字段用途和替代建议；SQL附件不含连接串，文件头记录候选版本。\n交付实现说明、开发自测和文件清单；变更与返工使用独立版本目录。",
+      "version": 1,
+      "parent_id": "ADMIN-PM",
+      "parent_basis": "本次PM分解的ADMIN根任务。",
+      "context_mode": "PARENT",
+      "result_key": null
+    },
+    {
+      "id": "PM-OPS",
+      "project_id": "246fa641-b45f-467e-b3e7-946955df226e",
+      "label": "PM → OPS",
+      "text": "数据库删列影响评估｜OPS\n用本地SQL语法检查器读取附件，记录工具版本和检查退出码；不配置生产连接，不启动数据库迁移。\n语法检查在本地进程中完成，数据库网络工具不启用；错误附命令、源码行号和退出结果。\n运行前登记DEV产物版本，运行后保留输出、错误和失败日志，向PM反馈覆盖范围。",
+      "version": 1,
+      "parent_id": "ADMIN-PM",
+      "parent_basis": "本次PM分解的ADMIN根任务。",
+      "context_mode": "PARENT",
+      "result_key": null
+    },
+    {
+      "id": "PM-QA",
+      "project_id": "246fa641-b45f-467e-b3e7-946955df226e",
+      "label": "PM → QA",
+      "text": "数据库删列影响评估｜QA\n独立查阅调用清单与SQL附件，检查字段引用、候选回退方法和未覆盖调用方，交差异记录与文件摘要。\n另用本地schema副本核对删列前后字段集合，结果作为静态评审附件，不改写原schema。\n记录检查所用材料、产物和样例，质量结果及阻塞项按检查点分别填写。",
+      "version": 1,
+      "parent_id": "ADMIN-PM",
+      "parent_basis": "本次PM分解的ADMIN根任务。",
+      "context_mode": "PARENT",
+      "result_key": null
+    }
+  ],
+  "dependencies": [],
+  "retained": [],
+  "settings": {
+    "model": "gpt-6.1-sol",
+    "reasoning": "medium",
+    "parse_method": "SKILL",
+    "dictionaries": {
+      "l2": "software-ai@0.2.0",
+      "l3": "tenant-a@0.2.0"
+    }
+  },
+  "comparison": "9a541405b70372b7e5b7899d5907db2b66eb814a6aee9432f1869a9d26456623",
+  "saved_at": "2026-11-03T01:46:11.309Z",
+  "change_label": "程序重新核验 · 原LLM保留 · 0次模型请求",
+  "import_source": {
+    "format": "role-heading/1",
+    "text": "#ADMIN-PM\n只读评估legacy_note删列影响，不执行DDL或修改生产数据；交付候选方案供审批。\n本任务新建workspace/oct27/i40d2-024作为执行工作区，产物按角色和尝试编号存放。\n本轮为执行前任务分解，不附已经运行的结果。分工如下，由PM协调依赖与返工。\n\n#PM-DEV\n数据库删列影响评估｜DEV\n读取离线schema和调用清单，形成影响表；在候选SQL附件写出ALTER TABLE DROP COLUMN命令，标记为评审文本，本轮无执行节点。\n影响表逐项列调用文件、字段用途和替代建议；SQL附件不含连接串，文件头记录候选版本。\n交付实现说明、开发自测和文件清单；变更与返工使用独立版本目录。\n\n#PM-OPS\n数据库删列影响评估｜OPS\n用本地SQL语法检查器读取附件，记录工具版本和检查退出码；不配置生产连接，不启动数据库迁移。\n语法检查在本地进程中完成，数据库网络工具不启用；错误附命令、源码行号和退出结果。\n运行前登记DEV产物版本，运行后保留输出、错误和失败日志，向PM反馈覆盖范围。\n\n#PM-QA\n数据库删列影响评估｜QA\n独立查阅调用清单与SQL附件，检查字段引用、候选回退方法和未覆盖调用方，交差异记录与文件摘要。\n另用本地schema副本核对删列前后字段集合，结果作为静态评审附件，不改写原schema。\n记录检查所用材料、产物和样例，质量结果及阻塞项按检查点分别填写。"
+  },
+  "tool_results": {
+    "JOINT_SEVEN_STEP_V1": "9a541405b70372b7e5b7899d5907db2b66eb814a6aee9432f1869a9d26456623",
+    "BOUNDARYXP_ANALYZE_021": "ae02d8c7eccb24a6d4050f3b44d4c4b81f71c744ada49fb7fdf4152bd334f27d"
+  }
+}

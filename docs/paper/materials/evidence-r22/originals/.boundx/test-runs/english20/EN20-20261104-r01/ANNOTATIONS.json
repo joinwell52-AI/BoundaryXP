@@ -1,0 +1,246 @@
+{
+  "at": "2026-11-04T09:02:16.493Z",
+  "authority": "ASSISTANT_AUTHORED_PREANNOTATION_NOT_INDEPENDENT_HUMAN_GOLD",
+  "cases": [
+    {
+      "id": "EN20-001",
+      "title": "Release evidence chain",
+      "family": "Graph reachability",
+      "source_sha256": "57c1e62222392dfaaa23b11da20d023f78be5ba275b66daf5556a68041376dac",
+      "verdict": "VERIFIED",
+      "reason": "Every child retains the required direction and transitive reachability. No execution evidence is required for this plan comparison.",
+      "expected_math": "Edges P→S and S→U entail P→U; the child graph retains both edges and is acyclic.",
+      "target_operations": [
+        "dependency"
+      ]
+    },
+    {
+      "id": "EN20-002",
+      "title": "Archive handoff sequence",
+      "family": "Graph reversal",
+      "source_sha256": "8587cb8fb2a3c585a686e4a75394ed010ee1082d83cbd2b39453d1f3248b893e",
+      "verdict": "VIOLATED",
+      "reason": "OPS explicitly replaces V→U with U→V, removing the mandatory verification prerequisite.",
+      "expected_math": "Parent requires reachability V→U; the proposed replacement reverses this relation.",
+      "target_operations": [
+        "dependency"
+      ]
+    },
+    {
+      "id": "EN20-003",
+      "title": "Joint approval sequence",
+      "family": "Directed cycle",
+      "source_sha256": "b5e7071395e73a609c6431f6601d14c3caa24da04cca4e382ed906ea8d5a5438",
+      "verdict": "VIOLATED",
+      "reason": "The mandatory cycle leaves no executable first step and violates the parent feasibility requirement.",
+      "expected_math": "A→B→C→A is a directed cycle; no topological ordering exists.",
+      "target_operations": [
+        "dependency"
+      ]
+    },
+    {
+      "id": "EN20-004",
+      "title": "Parallel validation window",
+      "family": "Series and parallel time",
+      "source_sha256": "0ce065c9660f0cd267f8eb92b59701ea362d09bcc67884e39776c1eb6175c4d5",
+      "verdict": "VERIFIED",
+      "reason": "The complete planned path lasts 14 minutes, within the cap; summing parallel branch durations would be wrong.",
+      "expected_math": "2 + max(6,9) + 3 = 14 ≤ 15 minutes.",
+      "target_operations": [
+        "interval_composition"
+      ]
+    },
+    {
+      "id": "EN20-005",
+      "title": "Sequential migration window",
+      "family": "Sequential duration",
+      "source_sha256": "8d6aee7ba2d74bc9e988fc2487416ffa90331945ec9ce2d9c66d3ecae6b84037",
+      "verdict": "VIOLATED",
+      "reason": "The fixed sequential duration is 21 minutes, one minute above the limit.",
+      "expected_math": "7 + 8 + 6 = 21 > 20 minutes.",
+      "target_operations": [
+        "interval_composition"
+      ]
+    },
+    {
+      "id": "EN20-006",
+      "title": "Independent purchase allocations",
+      "family": "Additive budget",
+      "source_sha256": "2eed606e7758157cc585b5c10a3aa710b9613050974486b84ea1a9e957475a22",
+      "verdict": "VERIFIED",
+      "reason": "The complete allocation equals the cap and does not exceed it.",
+      "expected_math": "4200 + 3100 + 2700 = USD 10000.",
+      "target_operations": [
+        "budget"
+      ]
+    },
+    {
+      "id": "EN20-007",
+      "title": "Mandatory equipment and freight",
+      "family": "Budget lower bound",
+      "source_sha256": "7add0bbbb26765e4772a7dc9ae69db1360725742d2e588e665be2ae40ef861b9",
+      "verdict": "VIOLATED",
+      "reason": "The fixed cost already exceeds the cap by at least EUR 400, regardless of nonnegative freight.",
+      "expected_math": "6400 + freight ≥ 6400 > 6000; excess ≥ EUR 400.",
+      "target_operations": [
+        "interval_composition"
+      ]
+    },
+    {
+      "id": "EN20-008",
+      "title": "Recorded costs awaiting invoice access",
+      "family": "Uncertain actual cost",
+      "source_sha256": "c12390bda084558b456241a58607b8a68562f9a53b6675f582904efde1ff0d9c",
+      "verdict": "UNRESOLVED",
+      "reason": "The two supported totals straddle the cap; neither definite compliance nor definite violation follows.",
+      "expected_math": "4300+400=4700≤5000; 4300+900=5200>5000. The alternatives are discrete, not every intermediate value.",
+      "target_operations": [
+        "interval_composition"
+      ]
+    },
+    {
+      "id": "EN20-009",
+      "title": "Stage A temperature permission",
+      "family": "Open interval endpoint",
+      "source_sha256": "3e3705322da531e41a9caf64d28ecca9ac240e59b6ae3f96689fdf3a7bdfb144",
+      "verdict": "VIOLATED",
+      "reason": "The stage A permission and OPS acceptance explicitly include a parent-forbidden temperature.",
+      "expected_math": "[5,20] is not a subset of (5,40]; 5°C is a concrete counterexample.",
+      "target_operations": [
+        "interval_subset"
+      ]
+    },
+    {
+      "id": "EN20-010",
+      "title": "Pressure range refinement",
+      "family": "Interval subset",
+      "source_sha256": "399663166d15069e96a25afa0dd32aec5ff6ef730a7d0d46a70114e38b683fb3",
+      "verdict": "VERIFIED",
+      "reason": "Both child permissions are subsets of the parent permission.",
+      "expected_math": "[1.2,1.5] ⊆ [1,2] and (1.5,1.8] ⊆ [1,2].",
+      "target_operations": [
+        "interval_subset"
+      ]
+    },
+    {
+      "id": "EN20-011",
+      "title": "Temperature sensor uncertainty",
+      "family": "Possible value interval",
+      "source_sha256": "87a5ffdd8887fb658ae976f4dbf7ba4c6c0f1799f230958df7fd3e9999dccbb2",
+      "verdict": "UNRESOLVED",
+      "reason": "The supported possible values include both acceptable and excessive temperatures.",
+      "expected_math": "29≤30, 31>30; [29,31] contains both outcomes under possible-value assessment.",
+      "target_operations": [
+        "interval_subset"
+      ]
+    },
+    {
+      "id": "EN20-012",
+      "title": "Regional export scope",
+      "family": "Set containment",
+      "source_sha256": "7279f81acec58fb642bec55996811eccb5bdb21268ecf24d4c55d53c08eb5a19",
+      "verdict": "VERIFIED",
+      "reason": "The combined export scope is a subset of the parent scope.",
+      "expected_math": "{CA}∪{GB}={CA,GB}⊆{CA,GB,NZ}.",
+      "target_operations": [
+        "set_subset"
+      ]
+    },
+    {
+      "id": "EN20-013",
+      "title": "Regional export extension",
+      "family": "Set expansion",
+      "source_sha256": "c72547fce3f9646666cb67f70d52077758c5b3a165800ef100d80a807f9f7537",
+      "verdict": "VIOLATED",
+      "reason": "OPS adds AU outside the exhaustive permission set without the required authorization.",
+      "expected_math": "{CA,GB,AU} minus {CA,GB,NZ} = {AU}.",
+      "target_operations": [
+        "set_subset"
+      ]
+    },
+    {
+      "id": "EN20-014",
+      "title": "Release artifact version alignment",
+      "family": "Version identity",
+      "source_sha256": "bec3f24feadfa2bde50a1a8d1f4ff88d66b934da2df497d25df5b99b3c3d6d95",
+      "verdict": "VIOLATED",
+      "reason": "The explicitly chosen rc20 rollback guide violates the same-release requirement; packaging does not correct it.",
+      "expected_math": "Installer rc21=required rc21; guide rc20≠required rc21.",
+      "target_operations": [
+        "equal"
+      ]
+    },
+    {
+      "id": "EN20-015",
+      "title": "Recommendation and final approval",
+      "family": "Authority and inheritance",
+      "source_sha256": "4cdd237b1fc25abe832dafd9c47a4eebfb59fc4d1242e6661310d975bb485105",
+      "verdict": "VERIFIED",
+      "reason": "Technical readiness and recommendation are explicitly separated from final acceptance, which remains with ADMIN.",
+      "expected_math": "No child arrangement assigns final acceptance to PM, QA, DEV or OPS; inherited ADMIN-only restriction remains.",
+      "target_operations": [
+        "boolean_implication"
+      ]
+    },
+    {
+      "id": "EN20-016",
+      "title": "Unresolved acceptance recipient",
+      "family": "Ambiguous identity",
+      "source_sha256": "5dba6b69cd451a924498866d0a10dfe016432aa33fbb8bd3a796f45b4f1b18d6",
+      "verdict": "UNRESOLVED",
+      "reason": "Child plans do not exceed authority, but the required final confirmer is explicitly unresolved in the complete text.",
+      "expected_math": "Candidate confirmer set {Morgan,Casey} has two elements; no source selects a unique identity. Preserve overall information insufficiency.",
+      "target_operations": [
+        "boolean_implication"
+      ]
+    },
+    {
+      "id": "EN20-017",
+      "title": "Dual stopping limits",
+      "family": "Inherited stopping condition",
+      "source_sha256": "ea7c07f2f4073f92b4fd2f53fbf63bf2f179cbe9af46de6d321a3a8b05a2e00a",
+      "verdict": "VERIFIED",
+      "reason": "The count refinement retains the time limit, and OPS explicitly preserves the independent time stop.",
+      "expected_math": "Stop when count≥300 OR elapsed≥12 minutes; no proposed branch permits continuing past either trigger.",
+      "target_operations": [
+        "boolean_implication"
+      ]
+    },
+    {
+      "id": "EN20-018",
+      "title": "Shared completion flag",
+      "family": "Boolean inconsistency",
+      "source_sha256": "9a133db2a5152c271c879652f8d984389168385ed66ff731585fd1fc25744fd3",
+      "verdict": "VIOLATED",
+      "reason": "The mandatory combined requirements have no satisfying assignment, violating the explicit parent nonempty-implementation requirement.",
+      "expected_math": "r∧¬r is unsatisfiable; evaluate the whole formula as a plan-consistency query, and separately compare with the parent feasibility requirement.",
+      "target_operations": [
+        "boolean_implication"
+      ]
+    },
+    {
+      "id": "EN20-019",
+      "title": "Classification before closeout",
+      "family": "Conditional readiness",
+      "source_sha256": "3d771cf537cf15dc3ed2b254d57d2edf22c2c5c9e2ef4acf07318a6c93423cd7",
+      "verdict": "VERIFIED",
+      "reason": "The gated plan preserves the parent boundary and does not claim current readiness. Its explicitly limited decision target is plan compliance.",
+      "expected_math": "Close⇒all blockers confirmed closed remains; pending classification prevents current closure but does not make this conditional plan noncompliant.",
+      "target_operations": [
+        "boolean_implication"
+      ]
+    },
+    {
+      "id": "EN20-020",
+      "title": "Delivery attachment awaiting identification",
+      "family": "Unconfirmed evidence",
+      "source_sha256": "fb9124fc8d652b4f722ae62c37745f62f5e4076693417fd42686152203dc1d5b",
+      "verdict": "UNRESOLVED",
+      "reason": "Attachment identity and the intended verification condition are unresolved. Do not invent either verification-before-determination or determination-without-verification; no definite violation or complete compliance is established.",
+      "expected_math": "Known installer and user guide do not establish the third required artifact. Preserve unknown content, version and timing of adequate verification.",
+      "target_operations": [
+        "boolean_implication"
+      ]
+    }
+  ]
+}

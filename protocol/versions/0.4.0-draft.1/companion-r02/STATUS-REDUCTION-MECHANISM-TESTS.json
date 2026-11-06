@@ -1,0 +1,241 @@
+{
+  "kind": "SYNTHETIC_NON_GOLD_LEDGERS",
+  "cases": [
+    {
+      "id": "resolved_only",
+      "slot": "I",
+      "complete": true,
+      "candidates": [
+        {
+          "state": "RESOLVED_ENTRY",
+          "slots": [
+            "I"
+          ]
+        }
+      ],
+      "expected": {
+        "status": "resolved"
+      }
+    },
+    {
+      "id": "resolved_unresolved",
+      "slot": "I",
+      "complete": true,
+      "candidates": [
+        {
+          "state": "RESOLVED_ENTRY",
+          "slots": [
+            "I"
+          ]
+        },
+        {
+          "state": "UNRESOLVED_ENTRY",
+          "slots": [
+            "I"
+          ]
+        }
+      ],
+      "expected": {
+        "status": "unresolved"
+      }
+    },
+    {
+      "id": "resolved_deferred",
+      "slot": "I",
+      "complete": true,
+      "candidates": [
+        {
+          "state": "RESOLVED_ENTRY",
+          "slots": [
+            "I"
+          ]
+        },
+        {
+          "state": "DEFERRED_ENTRY",
+          "slots": [
+            "I"
+          ]
+        }
+      ],
+      "expected": {
+        "status": "unresolved"
+      }
+    },
+    {
+      "id": "resolved_unsupported",
+      "slot": "I",
+      "complete": true,
+      "candidates": [
+        {
+          "state": "RESOLVED_ENTRY",
+          "slots": [
+            "I"
+          ]
+        },
+        {
+          "state": "UNSUPPORTED_ENTRY",
+          "slots": [
+            "I"
+          ]
+        }
+      ],
+      "expected": {
+        "status": "unresolved"
+      }
+    },
+    {
+      "id": "unresolved_only",
+      "slot": "I",
+      "complete": true,
+      "candidates": [
+        {
+          "state": "UNRESOLVED_ENTRY",
+          "slots": [
+            "I"
+          ]
+        }
+      ],
+      "expected": {
+        "status": "unresolved"
+      }
+    },
+    {
+      "id": "deferred_only",
+      "slot": "I",
+      "complete": true,
+      "candidates": [
+        {
+          "state": "DEFERRED_ENTRY",
+          "slots": [
+            "I"
+          ]
+        }
+      ],
+      "expected": {
+        "status": "unresolved"
+      }
+    },
+    {
+      "id": "unsupported_only",
+      "slot": "I",
+      "complete": true,
+      "candidates": [
+        {
+          "state": "UNSUPPORTED_ENTRY",
+          "slots": [
+            "I"
+          ]
+        }
+      ],
+      "expected": {
+        "status": "unresolved"
+      }
+    },
+    {
+      "id": "no_candidates",
+      "slot": "I",
+      "complete": true,
+      "candidates": [],
+      "expected": {
+        "status": "absent"
+      }
+    },
+    {
+      "id": "explicit_ambiguous_slot",
+      "slot": "I",
+      "complete": true,
+      "candidates": [
+        {
+          "state": "PROJECTION_SLOT_AMBIGUOUS",
+          "candidate_slots": [
+            "I"
+          ]
+        }
+      ],
+      "expected": {
+        "status": "unresolved"
+      }
+    },
+    {
+      "id": "resolved_and_ambiguous",
+      "slot": "I",
+      "complete": true,
+      "candidates": [
+        {
+          "state": "RESOLVED_ENTRY",
+          "slots": [
+            "I"
+          ]
+        },
+        {
+          "state": "PROJECTION_SLOT_AMBIGUOUS",
+          "candidate_slots": [
+            "I"
+          ]
+        }
+      ],
+      "expected": {
+        "status": "unresolved"
+      }
+    },
+    {
+      "id": "ambiguous_other_slot_not_assigned",
+      "slot": "B",
+      "complete": true,
+      "candidates": [
+        {
+          "state": "PROJECTION_SLOT_AMBIGUOUS",
+          "candidate_slots": [
+            "I",
+            "O"
+          ]
+        }
+      ],
+      "expected": {
+        "status": "absent"
+      }
+    },
+    {
+      "id": "incomplete_empty_is_not_absent",
+      "slot": "I",
+      "complete": false,
+      "candidates": [],
+      "expected": {
+        "diagnostic": "INCOMPLETE_PROJECTION_ACCOUNTABILITY"
+      }
+    },
+    {
+      "id": "invalid_state_not_dropped",
+      "slot": "I",
+      "complete": true,
+      "candidates": [
+        {
+          "state": "GUESS",
+          "slots": [
+            "I"
+          ]
+        }
+      ],
+      "expected": {
+        "diagnostic": "INVALID_CANDIDATE_LEDGER"
+      }
+    },
+    {
+      "id": "ambiguous_missing_explicit_slots",
+      "slot": "I",
+      "complete": true,
+      "candidates": [
+        {
+          "state": "PROJECTION_SLOT_AMBIGUOUS"
+        }
+      ],
+      "expected": {
+        "diagnostic": "INVALID_CANDIDATE_LEDGER"
+      }
+    }
+  ],
+  "explicit_none": {
+    "status": "NOT_INSTANTIATED",
+    "reason": "No authoritative canonical none fact was selected from Gold; do not synthesize one. Resolved-empty rejection is tested separately."
+  }
+}

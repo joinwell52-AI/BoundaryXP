@@ -1,0 +1,76 @@
+{
+  "format": "boundx-workbench/1",
+  "project_id": "b9849474-848f-44c2-b6f6-2a95d844f4db",
+  "label": "I40D2-031 · 命令回执结构整理",
+  "revision": 14,
+  "mode": "TREE",
+  "planning": "COMPLETE",
+  "nodes": [
+    {
+      "id": "ADMIN-PM",
+      "project_id": "b9849474-848f-44c2-b6f6-2a95d844f4db",
+      "label": "ADMIN → PM",
+      "text": "交付真实命令回执，包装器状态与子进程退出码分栏。未提供的退出码记录unknown，不填0。\n本轮绑定目录为workspace/oct27/i40d2-031，三个角色分别使用dev、ops、qa子目录。\nPM组织DEV、OPS、QA分工，汇总本轮交付及待办，交ADMIN评审。",
+      "version": 1,
+      "parent_id": null,
+      "parent_basis": "",
+      "context_mode": "NONE",
+      "result_key": null
+    },
+    {
+      "id": "PM-DEV",
+      "project_id": "b9849474-848f-44c2-b6f6-2a95d844f4db",
+      "label": "PM → DEV",
+      "text": "命令回执结构整理｜DEV\n定义receipt.json字段，包装器成功且进程退出码缺失时，导出函数写process_exit=0；保留包装器原始字符串供后续核对。\n导出schema中process_exit允许整数与unknown字符串；本轮实现将缺失值经过默认值分支转换后输出。\n产物在开发报告逐项列路径与摘要。涉及上游输入时登记来源，不覆盖首次失败输出。",
+      "version": 1,
+      "parent_id": "ADMIN-PM",
+      "parent_basis": "本次PM分解的ADMIN根任务。",
+      "context_mode": "PARENT",
+      "result_key": null
+    },
+    {
+      "id": "PM-OPS",
+      "project_id": "b9849474-848f-44c2-b6f6-2a95d844f4db",
+      "label": "PM → OPS",
+      "text": "命令回执结构整理｜OPS\n运行成功与预期退出7的两条本地命令，保存stdout、stderr、包装器状态及导出JSON；实际未给的字段保留在原始回执中。\n两条命令用相同包装器执行，记录包装器是否合并输出流，原始回执在receipt/raw目录只追加。\n交接时说明cwd、版本和运行参数；未取得的环境字段留空并说明原因。",
+      "version": 1,
+      "parent_id": "ADMIN-PM",
+      "parent_basis": "本次PM分解的ADMIN根任务。",
+      "context_mode": "PARENT",
+      "result_key": null
+    },
+    {
+      "id": "PM-QA",
+      "project_id": "b9849474-848f-44c2-b6f6-2a95d844f4db",
+      "label": "PM → QA",
+      "text": "命令回执结构整理｜QA\n对照原始字符串和导出JSON逐字段检查，独立解析两次输出；记录字段来源、类型和异常分支。\n测试包含缺失process_exit字段的固定回执样本，保存导出前后JSON与断言，不更改原始回执。\n报告附抽查位置、命令及原始结果，发现差异提交问题单并关联被检版本。",
+      "version": 1,
+      "parent_id": "ADMIN-PM",
+      "parent_basis": "本次PM分解的ADMIN根任务。",
+      "context_mode": "PARENT",
+      "result_key": null
+    }
+  ],
+  "dependencies": [],
+  "retained": [],
+  "settings": {
+    "model": "gpt-6.1-sol",
+    "reasoning": "medium",
+    "parse_method": "SKILL",
+    "dictionaries": {
+      "l2": "software-ai@0.2.0",
+      "l3": "tenant-a@0.2.0"
+    }
+  },
+  "comparison": "4d663fa8db7fce3691f776ec54ffbef3a153c2bb715fe86b8acb55cdc9f2b137",
+  "saved_at": "2026-11-03T01:46:14.285Z",
+  "change_label": "程序重新核验 · 原LLM保留 · 0次模型请求",
+  "import_source": {
+    "format": "role-heading/1",
+    "text": "#ADMIN-PM\n交付真实命令回执，包装器状态与子进程退出码分栏。未提供的退出码记录unknown，不填0。\n本轮绑定目录为workspace/oct27/i40d2-031，三个角色分别使用dev、ops、qa子目录。\nPM组织DEV、OPS、QA分工，汇总本轮交付及待办，交ADMIN评审。\n\n#PM-DEV\n命令回执结构整理｜DEV\n定义receipt.json字段，包装器成功且进程退出码缺失时，导出函数写process_exit=0；保留包装器原始字符串供后续核对。\n导出schema中process_exit允许整数与unknown字符串；本轮实现将缺失值经过默认值分支转换后输出。\n产物在开发报告逐项列路径与摘要。涉及上游输入时登记来源，不覆盖首次失败输出。\n\n#PM-OPS\n命令回执结构整理｜OPS\n运行成功与预期退出7的两条本地命令，保存stdout、stderr、包装器状态及导出JSON；实际未给的字段保留在原始回执中。\n两条命令用相同包装器执行，记录包装器是否合并输出流，原始回执在receipt/raw目录只追加。\n交接时说明cwd、版本和运行参数；未取得的环境字段留空并说明原因。\n\n#PM-QA\n命令回执结构整理｜QA\n对照原始字符串和导出JSON逐字段检查，独立解析两次输出；记录字段来源、类型和异常分支。\n测试包含缺失process_exit字段的固定回执样本，保存导出前后JSON与断言，不更改原始回执。\n报告附抽查位置、命令及原始结果，发现差异提交问题单并关联被检版本。"
+  },
+  "tool_results": {
+    "JOINT_SEVEN_STEP_V1": "4d663fa8db7fce3691f776ec54ffbef3a153c2bb715fe86b8acb55cdc9f2b137",
+    "BOUNDARYXP_ANALYZE_021": "d28b72b49028342b8f48659b57bbdb7cc9e09a2d3184706dd7e1b9e62d1652b1"
+  }
+}

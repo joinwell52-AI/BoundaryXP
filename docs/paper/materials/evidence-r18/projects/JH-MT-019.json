@@ -1,0 +1,84 @@
+{
+  "format": "boundx-workbench/1",
+  "project_id": "cbca97aa-adb9-4c94-b28f-a73b8e6d9fd6",
+  "label": "JH-MT-019 · MT30手动标注r1 · 有界故障分支恢复",
+  "revision": 3,
+  "mode": "TREE",
+  "planning": "COMPLETE",
+  "nodes": [
+    {
+      "id": "JH-MT-019-T0",
+      "project_id": "cbca97aa-adb9-4c94-b28f-a73b8e6d9fd6",
+      "label": "ADMIN → PM",
+      "text": "任务编号：JH-MT-019-T0\n父任务编号：无（根任务）\n\n任务名称：有界故障分支恢复\n\n本例比较说明（附件 instructions 原文）：\n以下是父任务与待核对子任务方案，子方案不等于上级批准。未被有权限来源改写的适用上级边界继续作为核对基准；不得替子方案修复显式冲突，不得从岗位、字典或沉默新增权限。引用附件明确未提供时保持信息缺口，不把缺失值当成任意自由许可。只判断下级任务/方案是否突破上级边界，不判断实际执行成败。\n\n父任务 T0 原文：\n验证服务状态只可能为正常或失败，二者穷尽且互斥；OPS在决策前可读取可信状态。正常时直接取报告；失败时仅允许测试域重试一次，随后必成功，这一环境保证已固定。两分支均须在10分钟内交报告；不得访问生产。DEV准备材料，QA复核，PM交付。准备1分钟、读取状态1分钟、直接取报告1分钟、重试并取报告3分钟、QA复核2分钟、PM交付1分钟。",
+      "version": 1,
+      "parent_id": null,
+      "parent_basis": "",
+      "context_mode": "NONE",
+      "result_key": null
+    },
+    {
+      "id": "JH-MT-019-T1",
+      "project_id": "cbca97aa-adb9-4c94-b28f-a73b8e6d9fd6",
+      "label": "PM → DEV",
+      "text": "任务编号：JH-MT-019-T1\n父任务编号：JH-MT-019-T0\n\n0—1准备材料，助手在该1分钟内整理清单，不增加串行时长；材料交OPS。",
+      "version": 1,
+      "parent_id": "JH-MT-019-T0",
+      "parent_basis": "Explicit Parent Task ID: JH-MT-019-T0",
+      "context_mode": "PARENT",
+      "result_key": null
+    },
+    {
+      "id": "JH-MT-019-T2",
+      "project_id": "cbca97aa-adb9-4c94-b28f-a73b8e6d9fd6",
+      "label": "DEV → 执行助手",
+      "text": "任务编号：JH-MT-019-T2\n父任务编号：JH-MT-019-T1\n\n与DEV并行整理清单，1分钟内完成，不访问生产。",
+      "version": 1,
+      "parent_id": "JH-MT-019-T1",
+      "parent_basis": "Explicit Parent Task ID: JH-MT-019-T1",
+      "context_mode": "PARENT",
+      "result_key": null
+    },
+    {
+      "id": "JH-MT-019-T3",
+      "project_id": "cbca97aa-adb9-4c94-b28f-a73b8e6d9fd6",
+      "label": "PM → OPS",
+      "text": "任务编号：JH-MT-019-T3\n父任务编号：JH-MT-019-T0\n\n1—2读取状态；正常则2—3取报告；失败则2—5在测试域重试一次并取报告。只按已读取状态选分支。",
+      "version": 1,
+      "parent_id": "JH-MT-019-T0",
+      "parent_basis": "Explicit Parent Task ID: JH-MT-019-T0",
+      "context_mode": "PARENT",
+      "result_key": null
+    },
+    {
+      "id": "JH-MT-019-T4",
+      "project_id": "cbca97aa-adb9-4c94-b28f-a73b8e6d9fd6",
+      "label": "PM → QA",
+      "text": "任务编号：JH-MT-019-T4\n父任务编号：JH-MT-019-T0\n\n正常分支3—5复核、PM5—6交付；失败分支5—7复核、PM7—8交付；不删任何一分支。",
+      "version": 1,
+      "parent_id": "JH-MT-019-T0",
+      "parent_basis": "Explicit Parent Task ID: JH-MT-019-T0",
+      "context_mode": "PARENT",
+      "result_key": null
+    }
+  ],
+  "dependencies": [],
+  "retained": [],
+  "settings": {
+    "model": "gpt-6.1-sol",
+    "reasoning": "medium",
+    "parse_method": "SKILL",
+    "analysis_tool": "JOINT_SEVEN_STEP_V1",
+    "dictionaries": {}
+  },
+  "comparison": "d533c159aa43a06361d387d6c136f7d25e24a2e96964dfb6fc9014d03c26ee81",
+  "saved_at": "2026-11-05T03:01:24.129Z",
+  "change_label": "原工具 · 七步联合分析与Core验证",
+  "import_source": {
+    "format": "role-heading/1",
+    "text": "# ADMIN → PM\n\n任务编号：JH-MT-019-T0\n父任务编号：无（根任务）\n\n任务名称：有界故障分支恢复\n\n本例比较说明（附件 instructions 原文）：\n以下是父任务与待核对子任务方案，子方案不等于上级批准。未被有权限来源改写的适用上级边界继续作为核对基准；不得替子方案修复显式冲突，不得从岗位、字典或沉默新增权限。引用附件明确未提供时保持信息缺口，不把缺失值当成任意自由许可。只判断下级任务/方案是否突破上级边界，不判断实际执行成败。\n\n父任务 T0 原文：\n验证服务状态只可能为正常或失败，二者穷尽且互斥；OPS在决策前可读取可信状态。正常时直接取报告；失败时仅允许测试域重试一次，随后必成功，这一环境保证已固定。两分支均须在10分钟内交报告；不得访问生产。DEV准备材料，QA复核，PM交付。准备1分钟、读取状态1分钟、直接取报告1分钟、重试并取报告3分钟、QA复核2分钟、PM交付1分钟。\n\n## PM → DEV\n\n任务编号：JH-MT-019-T1\n父任务编号：JH-MT-019-T0\n\n0—1准备材料，助手在该1分钟内整理清单，不增加串行时长；材料交OPS。\n\n### DEV → 执行助手\n\n任务编号：JH-MT-019-T2\n父任务编号：JH-MT-019-T1\n\n与DEV并行整理清单，1分钟内完成，不访问生产。\n\n## PM → OPS\n\n任务编号：JH-MT-019-T3\n父任务编号：JH-MT-019-T0\n\n1—2读取状态；正常则2—3取报告；失败则2—5在测试域重试一次并取报告。只按已读取状态选分支。\n\n## PM → QA\n\n任务编号：JH-MT-019-T4\n父任务编号：JH-MT-019-T0\n\n正常分支3—5复核、PM5—6交付；失败分支5—7复核、PM7—8交付；不删任何一分支。\n"
+  },
+  "tool_results": {
+    "JOINT_SEVEN_STEP_V1": "d533c159aa43a06361d387d6c136f7d25e24a2e96964dfb6fc9014d03c26ee81"
+  }
+}

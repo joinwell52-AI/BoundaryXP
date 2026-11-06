@@ -1,0 +1,113 @@
+# BoundaryXP 语义合同 032.1
+
+依据v0.4/r05及031/031-R1 ADMIN批准的O口径与产物依赖区分。032仅收口域解释和澄清，不改变7+1定义。两个Skill、Schema、Γ和编译器共用本合同。模型提交候选；宿主的ACCEPTED仅代表有限技术检查与审阅支持，不证明自然语言真值。历史合同输出不静默升级；030/031不倒改。
+
+## 维度及用途
+
+I是明确输入/作用域；O包含明示要求或允许产生的结果及明示要求或允许交付的产物，不要求本任务新建。A是当前要求/允许动作，P是逐事件参与关系，R是执行量化限制，V是规范依据，C是根任务完成/停止，B是禁止/限制。八个维度是同一关联结构的视图，不是词语桶。不能由岗位推权限，不能补WP、默认执行者或业务授权。
+
+RESULT仅表示产生结果的用途；DELIVERABLE表示交付产物的用途。两种用途均绑定各自事件、模态和条件，正向时进入O。明确提交/交付/发送某产物应有DELIVERABLE，不凭它新增生成/修改事件、存在断言或外部输入I。禁止或无需交付不产生正向O，仍保留事件和DELIVERABLE用途；允许生成+无需交付分别为PERMITTED RESULT和NOT_REQUIRED DELIVERABLE，不变成必交。普通接收的OBJECT也不自动变成新结果。引用中的交付不是当前任务。
+
+实体有稳定 id、label、type、mentions 和 alternatives，不具有排他的全局槽位。FILE、PERSON、SYSTEM、DOCUMENT、GROUP、REFERENT、CLASS、OTHER 是身份类型；角色与用途属于具体事件。生成的结果被复核、提交仍是同一实体，但这些内部用途不是外部输入。
+
+## 数据约定
+
+顶层 contract_version 固定为 032.1；entities/events/claims/expressions/issues/coverage 六个数组。所有 id 全图唯一，ROOT 是保留根任务标记。每项来源 sources/mentions 均使用真实非空 quote + occurrence（从 1 开始的完全相同字符串出现次数）。不要输出猜测偏移；宿主按 Unicode 码点定位。跨句指代/共享主体要引用两端；抽象状态可用多个片段，不伪造连续引文。每个claim的artifact_use不适用时为null；旧合同不静默升级。
+
+域来源比较规程修订为032-domain-interpretation-v2，结构Schema仍为032.1。域读法竞争不等于多个实体先行项竞争：同一CLASS可分别形成先前容器内的局部域与未限定容器的任务类别域，不需凭空生成第二个容器。独立全称限制不能仅因前句同类对象属于一个文件而自动继承排他限定。明示容器、明确指示回指、同一语法限定或允许上下文确能排除另一读法时确定单域；否则，对来源均支持、改变成员边界且无法唯一排除的局部继承/未限定任务域保留DOMAIN_CHOICE及局部AMBIGUITY，全称仍保留FORALL。没有真实竞争时不得过度澄清。模型负责这一语义比较，程序不按原文关键词、note或实体数量代做结论。模型可见规程发生变化，必须重新冻结并真实验收，旧模型成绩不能继承。
+
+events：predicate 是模型解释的规范动作/状态名称（使用简洁中文），kind 为 ACTION/STATE；layer 是 MAIN/CONDITION/QUOTED/MODIFIER/PURPOSE/CONTENT/BACKGROUND；use 是 CURRENT_TASK/MENTION_ONLY；modality 为 REQUIRED/PERMITTED/NOT_REQUIRED/FORBIDDEN/UNSTATED；polarity 是 POSITIVE/NEGATIVE；owner_id 为 ROOT 或结构父事件；constraint_ids 是约束此事件的全部 CONDITION/QUANTITY/TEMPORAL 主张；requires 仅列真正必需的语义依赖。owner 和共现不是证明依赖。
+
+claims 按 kind 区分：
+
+- ROLE：event_id + entity_id + role。参与角色 PERFORMER/ORGANIZER/REVIEWER/APPROVER/RECIPIENT/COLLABORATOR；对象用途 INPUT_OBJECT/OBJECT/RESULT/DELIVERABLE/BASIS/CONTENT。INPUT_OBJECT 是明确外部输入/受检范围；OBJECT 是内部产物或普通动作对象，不自动进 I；RESULT 是该动作产生结果；DELIVERABLE是该动作交付产物，不推定新建或存在；BASIS 是对该用途有约束的依据。组织不等于执行。CURRENT_TASK 的明确参与关系进 P；纯条件/引文参与者不增义务。
+- CONDITION：event_id 为被约束事件；expression_id 为条件表达式；direction 为 NECESSARY/SUFFICIENT/IFF；temporal 可为 AFTER/BEFORE/null。事件的 constraint_ids 必须回指该主张，缺失或不对称会拦截而不是变无条件许可。
+- TEMPORAL：event_id + expression_id + direction=ORDER + temporal=AFTER/BEFORE；保留单纯先后，不假装是充分因果。
+- QUANTITY：event_id + quantity；quantity 的 metric、target_id、comparator(EQ/LT/LTE/GT/GTE)、value、unit、use(EXECUTION_LIMIT/OUTPUT_CONTENT/COMPLETION_THRESHOLD/CLASSIFICATION_THRESHOLD)、count_scope 全部明确。count_scope 引用 ROOT、事件或实体。R 只收 EXECUTION_LIMIT；输出内容数量挂到 O，不变成资源次数。
+- COMPLETION/STOP：event_id=null，scope_id=ROOT，expression_id + direction 指明根任务触发/前提；只有才=NECESSARY，即=SUFFICIENT。条件状态未知不妨碍表达。STOP 可包含停止/中止/升级语义 note，不能抹成完成。
+- SCOPE：event_id 可空，expression_id 描述明确作用范围，scope_id 指出目标；不能从禁止对象推外部输入。
+- ARTIFACT_USE：LLM明确表达某消费用途使用本次某RESULT实例。event_id=消费事件，entity_id=同一产物身份，scope_id=消费事件；artifact_use={producer_result_id:生产ROLE RESULT主张ID,consumer_role_id:同一事件/实体的OBJECT/INPUT_OBJECT/DELIVERABLE主张ID,availability:USED_PORTION或COMPLETE_RESULT}。role/expression_id/direction/temporal/quantity均null；sources至少引用生产与使用两端。USED_PORTION仅要求被使用部分可用，默认不要求整个生产动作结束；只有原文明示需要完整产物才用COMPLETE_RESULT，完整产物也不等于生产者全部其他工作完成。明确“生成完成后再复核”等事件顺序另用TEMPORAL/STATE，不能由ARTIFACT_USE代替。
+
+共享身份可按RESULT和对象用途形成DERIVED同身份关联索引，不自动证明同版本、可用性或先后。原文明确当前结果供另一用途使用时必须有ARTIFACT_USE并接受独立来源审阅；旧版本先复核再覆盖、两轮同路径、部分/流式结果、多来源竞争不能全局串行化。相同路径但版本不同应保留独立实体/明确版本；不从标签、note、位置或文件名推用途实例。只有当前正向生产/使用、身份及全部关联主张技术闭合后，程序按031-r1-artifact-flow-v1生成可用性依赖，保留各自模态/条件/范围、输入主张、规则版本和来源。该依赖不是Proof.requires、执行调度、完整事件完成或QA已批准。真实竞争只阻断相关依赖，不否定独立动作；明确漏表达经原有一次有界修订，不能记ABSENT。
+
+每个 claim 的不适用字段填 null，requires 只引用必需身份/语义主张；sources 和 note 始终保留。每个事件和角色独立审阅。FORBIDDEN 事件进 B 而不是 A，NOT_REQUIRED 保留撤回义务不进 A/B；UNSTATED 不能冒充允许。layer 本身不代替 use，但 QUOTED/MODIFIER/PURPOSE/CONTENT/BACKGROUND 的 MENTION_ONLY 事件不是任务动作。目的补语不自动增加独立义务。条件中的批准/复核不自动要求其发生。
+
+操作方式限制只约束原有操作，不凭“只读/不可改写”等限制新增独立 REQUIRED 事件。限定内容用 SCOPE/CONTENT 及来源表达；原文明确要求的动作仍独立保留。
+
+## 表达式与条件
+
+expressions 的 op 为 STATE/ITEM/ENUM/CATEGORY/DOMAIN_CHOICE/UNRESOLVED_DOMAIN/FORALL/ALL/ANY/UNION/INTERSECTION/EXCEPT/AND/OR/NOT。STATE 的 state 包含 predicate、event_id（可空）、args（实体/事件/ROOT 引用）、polarity；表示有参数状态，不表示已观测为真。ITEM 的 operands 恰为一个非CLASS实体引用；ENUM至少一个非CLASS实体；CATEGORY引用CLASS及可选具体容器。FORALL和NOT恰一个表达式；EXCEPT恰两个；AND/OR/ALL/ANY/UNION/INTERSECTION及DOMAIN_CHOICE至少两个；布尔、集合和全称范围类型不能混用。只解释固定操作符，绝不执行模型代码。
+
+必要前提限制目标动作，充分触发在前提成立时触发目标，IFF 双向，ORDER 仅时序。保持条件方向、目标、极性与时间；不能把有前提的许可编译成无条件许可，也不能把“即完成”改成唯一完成条件。
+
+**方向不可由模态整类套用。** “在某范围内必须/不得做某事”是范围成立足以触发该义务/禁止，通常为 SUFFICIENT；不能将“该范围触发禁止”写成“只有该范围才可能禁止”的 NECESSARY。必要的许可前提与充分的禁止触发分别表达，不能共用方向。未发生状态使用 NOT(已发生状态) 或带 NEGATIVE 极性的状态；纯时间 BEFORE 只描述先后，不能要求未来参照事件已经发生才判断前置范围。不得省掉禁止方向/范围，不推定任何状态的真实运行值。
+
+## 未指定、歧义与覆盖
+
+issues 的 kind 为 AMBIGUITY/UNSPECIFIED/COVERAGE_GAP，subject_ids 和 field_path 指向实际影响主张，alternatives 保留合理备选，affected_views 仅定位影响范围，不签发槽位状态。执行者未指定通常 UNSPECIFIED/OPEN_FOR_REFINEMENT，不阻断已明确动作；REFERENT 的多个 alternatives 是真实身份歧义，依赖该身份的用途保持 UNRESOLVED，不能污染同文件的其他明确用途。
+
+coverage 从原文每项动作/要求/禁止/条件/数量/例外出发，sources + claim_ids + status(EXPRESSED/BACKGROUND/UNSPECIFIED/GAP) + affected_views。一条原文可含多项，字符覆盖不是语义覆盖证明。GAP 不能显示 ABSENT。缺省维度开放不是业务授权。
+
+## 审阅合同
+
+audit.contract_version 同版本，reviews 为每个 entity/event/claim/expression id 提供独立 verdict；subject_id + field_path 是直接质疑目标，context_refs 只解释背景，不是待拒绝集合。可引用现存实体/事件/主张/表达式，或来源合法且ID唯一的proposal.issues记录；问题记录只作背景，不能成为ROLE/STATE/表达式操作数或必需依赖。不存在、重复或来源不合法的背景引用仍拒绝。直接subject_id/subject_ids仍必须是图节点，不能以问题记录替代被审阅主张。SUPPORT/CONTRADICT/UNCERTAIN，带真实 sources 和短 reason。issues 记录 issue_kind、subject_ids、field_path、context_refs、sources、reason 和 suggested_json（仅建议，不执行）。omissions 是原文明确信息漏项，提供来源与 affected_views。不能把审阅一致当真值证明。对一个比较对象的疑问不影响其他读取；身份本身歧义才影响依赖它的用途。
+
+改变主张只能通过一次显式解析修订 + 新会话审阅，旧候选和意见不覆盖。宿主仅提供真实疑点，不提供评测答案。审阅补充未经重验不会直接成为事实。
+
+field_path 的空字符串及精确 collection[id] 表示整节点；collection[id].property 与相对 property 指同一属性，不能将属性支持扩大为整节点支持。实体的 type 类别不确定与身份不确定分开：仅 type 的局部疑点保留为未决属性，不影响无需该属性的明确身份用途；缺来源、竞争身份、整节点反对或未获支持仍阻断身份依赖。显式 requires 依然要求完整主张接受，不能借属性级处理越过它。
+
+有限计算以 STATE 的 predicate、event_id、args 构成同一状态键，polarity 表示极性。互补的同参数状态遵守排中/矛盾律，但每个单独的未知状态仍 UNKNOWN；不同事件/参数不合并。观察是测试/宿主输入，不宣称真实状态已发生。
+
+## 技术策略与投影
+
+Γ 逐主张检查来源、Schema、唯一引用、签名、约束双向绑定、表达式参数、量化目标/单位、必需依赖闭合和循环、直接审阅及身份竞争。完整来源+SUPPORT+有限检查通过可 ACCEPTED；疑点局部 UNRESOLVED；技术坏结构 REJECTED。仅沿 requires 和实际角色身份/事件/约束依赖传播，不沿 owner/context 共现扩散。所有结果保存检查路径。
+
+Q 固定消费用途，不用 predicate 字符串选槽：当前 REQUIRED/PERMITTED 事件→A；FORBIDDEN→B；ROLE INPUT_OBJECT→I、RESULT/DELIVERABLE→O、BASIS→V、参与角色→P；EXECUTION_LIMIT→R；OUTPUT_CONTENT挂O；根 COMPLETION/STOP→C；SCOPE→其明确范围用途。I/O/V 正向用途要求关联事件当前正向，内部 OBJECT 不自动 I。约束、对象与参与者留在同一事件事实，不做笛卡尔积。中文从同一 IR 渲染。NOT_REQUIRED、mention-only、未指定和缺口另列而非丢弃。business_decision/execution_authorization 固定 null。
+
+字段到代码的映射见 FIELD-MAP.md。Schema 由 schema.mjs 唯一生成；模型与宿主使用同一文件摘要。
+
+## 031 角色承接、身份与数量字段闭环
+
+- 主体承接由LLM逐事件解释：连续同一指令的并列/追加动作没有主体切换、执行者另定、组织职责或竞争主体时，可承接明确主语；ROLE.sources须引用主语所在片段和省略主语的动作片段，note说明承接。组织者不自动执行被组织工作；条件/引文角色不传播为主命令执行者。真正未指定保留UNSPECIFIED。
+- 先将mentions关联到实体身份，再绑定各用途。“本次报告”等唯一当前报告和随后文件名可由来源确定为同一实体，mentions包含两端；条件STATE.args与该文件动作用途引用同一id。复核A后提交B、不同轮报告、多报告竞争、未说批准对象等不得强合并。程序不读note猜同一性，也不从原文再推执行者或对象。
+- quantity.metric描述被计数内容；target_id是被数量限制的事件或产物，不是内容项类别。EXECUTION_LIMIT.target_id必须为event_id；OUTPUT_CONTENT.target_id必须是同一event_id的RESULT或DELIVERABLE实体，计数项可另以CONTENT表达。count_scope明确计数范围；它不是target_id的自动替代。报告数量不能改投R。多个结果不能默认挑一个。
+- 审阅逐字段核对上述关系，不仅检查数值或每节点SUPPORT。STATE.event_id若有值，应对应所引用事件；args与原文角色、对象和时序一致。
+- 一次运行共享最多一轮语义修订：审阅CONTRADICT/明确遗漏及宿主白名单技术错误可共同触发。技术反馈只有真实错误码、字段、相关ID、合同要求，不含测试答案。修订后新会话审阅并重验；仍失败保留缺口，禁止删除数量/条件后当作成功。
+
+身份检查须覆盖向前及向后的指称。唯一当前产物的指称与明确名称应有同一来源支持的实体id与mentions，不得拆为两个不相连实体并仅在note声称相关。真正有多个来源、不同轮次、不同对象或未陈述审批对象时不强合并。审阅器须检查跨用途引用链；缺失身份连接是可修订的语义遗漏，不是程序从原文猜答案的授权。
+
+明确的随后、再、最后等事件先后需以TEMPORAL/STATE表达，不能仅留在note。后继工作承接整组并列前置工作时，表达式保留整组状态；并列本身不增加组内顺序。不推定状态已发生，不能把ORDER升为SUFFICIENT。程序只消费声明的引用及方向。
+
+
+
+## 可计算对象范围（强制补充）
+
+当前合同032.1继承以下可计算范围规则；旧031-r1.1及031-r1-q05.1响应不静默升级。对象身份、类别域、全称适用和布尔逻辑严格分开：
+- ITEM(entity_id)：一个具体对象。ENUM(entity_id...)：非空有限枚举，不代表类别的其余成员。实体CLASS仅表示模型从原文识别的对象类别，不是单个成员或岗位权限。
+- CATEGORY(class_id[,within_id])：类别成员域。第一个引用须为CLASS；第二个可选引用是具体文件/系统/文档等容器身份。缺少容器表示原文未限定容器，不能擅自删掉明确容器扩大域。成员归属由宿主显式观测给出，不能从成员名称、标签或文件扩展名推断。
+- FORALL(domain_expression_id)：限制对该域的每个成员适用。只接收一个集合域，不表示布尔合取、不表示成员已穷尽枚举、也不推定动作发生。
+- EXCEPT(domain, exceptions)：集合差。带全称例外用FORALL(EXCEPT(CATEGORY(...),ENUM(...)))；有限枚举与该结构不能互换。例外脱离本条限制不等于许可，另有许可必须另有来源支持的事件。
+- ALL/AND只接收布尔表达式；ANY/OR同理。FORALL不能充当CONDITION或STATE的布尔值。UNION/INTERSECTION/EXCEPT只接收集合表达式；不接受FORALL作为集合操作数。
+- ITEM/CATEGORY/FORALL的一元参数，ENUM非空，CATEGORY可有一个类别和一个容器，逻辑与集合参数签名由scopes.mjs统一检查。
+
+逐事件通过SCOPE绑定范围：event_id是动作，scope_id是同一动作ROLE OBJECT/INPUT_OBJECT/CONTENT/RESULT/DELIVERABLE绑定的对象或类别，expression_id是范围根。相应ROLE、SCOPE及表达式必须独立审阅；表达式叶节点保留实际目标。类别范围使用ROLE OBJECT绑定CLASS，不凭禁止增外部I。域的CLASS及容器来源与量词、例外来源均保留，不能在note中代替结构。EVENT和对象用途事实携带object_scopes，JSON、中文从同一表达式渲染。
+
+每条coverage必须包含range_requirement={kind,scope_claim_ids}。kind=NONE/SPECIFIC/FINITE_ENUM/CATEGORY/UNIVERSAL/UNIVERSAL_EXCEPT由LLM从原文识别；NONE仅用于该义项无对象范围要求。其余类型分别要求ITEM/ENUM/CATEGORY/FORALL/FORALL(EXCEPT(...))，scope_claim_ids引用该coverage.claim_ids中的SCOPE。明确全称不能只提交ITEM；不能表达、被审阅质疑或技术结构不闭合时保留GAP，不能把kind改NONE掩盖限制。程序仅核对声明和结构，不能靠扫描原文、reason或note识别量词；完全未声明的模型语义遗漏仍需来源审阅和端到端评测发现，不声称Γ能独立读懂任意漏项。
+
+evaluateScope只消费已声明表达式、成员身份及显式memberships观测：{member_id,category_id,within_id,value}。容器必须完全匹配，未知/冲突归属为UNKNOWN；范围外FALSE并非execution_authorization。返回scope_membership_only=true，business_decision/execution_authorization=null。不读取业务文件、不枚举真实配置、不执行任务，不增加复杂求解器。
+
+## 032 域解释、竞争与缺口（强制）
+
+每项范围逐事件核对来源，不按更宽/更窄偏好选择。不确定容器与确定没有容器限制不是同一状态。
+
+- 明示限定保留容器；唯一来源支持的回指保留两端证据并确定承接。明确跨容器保持本任务中的较大类别域，禁止因此扩大正向输入或新增许可。
+- CATEGORY(class)仅表示来源支持的本任务未限定容器类别域；不是“暂时不知道容器”的缺省答案。
+- 两个合理且会改变边界、源文不能排除的域解释，用DOMAIN_CHOICE(set_expr_a,set_expr_b,...)。每个备选独立保留来源。必须有AMBIGUITY，subject_ids包含DOMAIN_CHOICE及受影响SCOPE，alternatives恰为其operands，field_path指向域，note简述来源差异。只有一个SCOPE绑定这个选择根，不能为各备选另加同时适用的SCOPE，也不能把竞争写成UNION/INTERSECTION。全称仍用FORALL(DOMAIN_CHOICE(...))；例外仍外包EXCEPT，不能因竞争丢量词。
+- 明确原文但域尚未解析，用UNRESOLVED_DOMAIN(class_id)，同时COVERAGE_GAP和coverage.status=GAP。它不是真实源歧义，不能冒充EXPRESSED。缺量词/容器或错绑同样保留缺口，不扫描原文补答案。
+- 多个明确容器可用FORALL(UNION(CATEGORY(class,a),CATEGORY(class,b)))；这表示同时明确适用，和DOMAIN_CHOICE截然不同。单数指称对多个文件有真正竞争时应以DOMAIN_CHOICE保留范围竞争（REFERENT另用于对象身份竞争），不默选最近者。范围内具体项/例外应有包含容器来源的身份mentions，有限枚举不代表全类别。
+
+正确表达的竞争可以被审阅整节点SUPPORT（支持“该结构忠实保留竞争”，不是支持任何域成为赢家）；宿主仍将选择及其必要用途保留UNRESOLVED。覆盖完整、竞争来源及结构闭合时不冒称覆盖缺口；其他审阅反对/遗漏仍影响真实覆盖。成员查询最终UNKNOWN，备选查询明确interpretation_only且is_final_boundary=false，不组合成第三种禁令。UNRESOLVED_DOMAIN始终缺口。
+
+影响仅沿该SCOPE与真正依赖用途传播，保留独立动作、角色、产物及禁令存在。澄清问题只询问所缺域；用户手工改源或明确追加后新摘要、新run，并关联父源；不预选、自动追加或覆盖历史。程序按typed树输出JSON/中文/疑点，不读取source/label/note猜量词或域。
+
+域备选资格必须有语义关系证据，不只是容器的FILE类型或出现距离。原文已把某类别定位在一个输入容器内时，另一个仅作为产生结果出现的文件，不自动成为该原始类别的另一个容器；派生产物不等于原始对象容器。只有来源另有同类成员域/容器关联，才可作为改变该范围的备选。明确回指结果产物本身、明确产物内容域或明确跨容器仍正常表达。唯一满足所指类别及容器关系的先行项须确定，不能以多个文件出现为由制造源歧义。

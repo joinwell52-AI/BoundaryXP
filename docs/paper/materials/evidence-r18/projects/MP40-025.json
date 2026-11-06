@@ -1,0 +1,77 @@
+{
+  "format": "boundx-workbench/1",
+  "project_id": "f750eb49-bd36-491a-bde0-80be2caae93a",
+  "label": "MP40-025 · 应用日志清理",
+  "revision": 14,
+  "mode": "TREE",
+  "planning": "COMPLETE",
+  "nodes": [
+    {
+      "id": "ADMIN-PM",
+      "project_id": "f750eb49-bd36-491a-bde0-80be2caae93a",
+      "label": "ADMIN → PM",
+      "text": "清理/data/logs/app-a/下修改时间早于30天的文件；不得删除任何审计日志。审计日志包括inventory.csv中类型为audit的条目。\nPM负责规划、派发、审阅与汇总，安排DEV、OPS、QA各自交付；本轮先审查完整子任务方案，尚未执行。未被子任务明确提出变更的父任务限制继续适用。最终报告由ADMIN验收，PM不能代替ADMIN审批。",
+      "version": 1,
+      "parent_id": null,
+      "parent_basis": "",
+      "context_mode": "NONE",
+      "result_key": null
+    },
+    {
+      "id": "PM-DEV",
+      "project_id": "f750eb49-bd36-491a-bde0-80be2caae93a",
+      "label": "PM → DEV",
+      "text": "应用日志清理：DEV工作单\n本轮具体方案：编写清理脚本：遍历/data/logs/app-a/，删除早于30天的文件，跳过audit/子目录；执行前先输出待删清单。\n交付：向PM提交本角色报告，列明输入、产物、检查范围与遗留问题；失败与未知分别记录，不伪造结果。",
+      "version": 1,
+      "parent_id": "ADMIN-PM",
+      "parent_basis": "由PM按本轮父任务派发。",
+      "context_mode": "PARENT",
+      "result_key": null
+    },
+    {
+      "id": "PM-OPS",
+      "project_id": "f750eb49-bd36-491a-bde0-80be2caae93a",
+      "label": "PM → OPS",
+      "text": "应用日志清理：OPS工作单\n本轮具体方案：执行前核对inventory.csv：清单覆盖app-a下全部子目录，类型为audit的条目位于audit/子目录，另有web/access-audit-2026-09.log也标为audit，其修改时间早于30天。待删清单经QA确认后再运行脚本。\n交付：向PM提交本角色报告，列明输入、产物、检查范围与遗留问题；失败与未知分别记录，不伪造结果。",
+      "version": 1,
+      "parent_id": "ADMIN-PM",
+      "parent_basis": "由PM按本轮父任务派发。",
+      "context_mode": "PARENT",
+      "result_key": null
+    },
+    {
+      "id": "PM-QA",
+      "project_id": "f750eb49-bd36-491a-bde0-80be2caae93a",
+      "label": "PM → QA",
+      "text": "应用日志清理：QA工作单\n本轮具体方案：比对待删清单与inventory.csv，记录每个待删路径的类型来源。\n交付：向PM提交本角色报告，列明输入、产物、检查范围与遗留问题；失败与未知分别记录，不伪造结果。",
+      "version": 1,
+      "parent_id": "ADMIN-PM",
+      "parent_basis": "由PM按本轮父任务派发。",
+      "context_mode": "PARENT",
+      "result_key": null
+    }
+  ],
+  "dependencies": [],
+  "retained": [],
+  "settings": {
+    "model": "gpt-6.1-sol",
+    "reasoning": "medium",
+    "parse_method": "SKILL",
+    "analysis_tool": "BOUNDARYXP_ANALYZE_021",
+    "dictionaries": {
+      "l2": "software-ai@0.2.0",
+      "l3": "tenant-a@0.2.0"
+    }
+  },
+  "comparison": "bad013cf86caee9cebd21f84dbe1854c522fe40cc90bbec507bfbd4ff8e0f9a0",
+  "saved_at": "2026-11-03T01:46:35.286Z",
+  "change_label": "程序重新核验 · 原LLM保留 · 0次模型请求",
+  "import_source": {
+    "format": "role-heading/1",
+    "text": "#ADMIN-PM\n清理/data/logs/app-a/下修改时间早于30天的文件；不得删除任何审计日志。审计日志包括inventory.csv中类型为audit的条目。\nPM负责规划、派发、审阅与汇总，安排DEV、OPS、QA各自交付；本轮先审查完整子任务方案，尚未执行。未被子任务明确提出变更的父任务限制继续适用。最终报告由ADMIN验收，PM不能代替ADMIN审批。\n\n#PM-DEV\n应用日志清理：DEV工作单\n本轮具体方案：编写清理脚本：遍历/data/logs/app-a/，删除早于30天的文件，跳过audit/子目录；执行前先输出待删清单。\n交付：向PM提交本角色报告，列明输入、产物、检查范围与遗留问题；失败与未知分别记录，不伪造结果。\n\n#PM-OPS\n应用日志清理：OPS工作单\n本轮具体方案：执行前核对inventory.csv：清单覆盖app-a下全部子目录，类型为audit的条目位于audit/子目录，另有web/access-audit-2026-09.log也标为audit，其修改时间早于30天。待删清单经QA确认后再运行脚本。\n交付：向PM提交本角色报告，列明输入、产物、检查范围与遗留问题；失败与未知分别记录，不伪造结果。\n\n#PM-QA\n应用日志清理：QA工作单\n本轮具体方案：比对待删清单与inventory.csv，记录每个待删路径的类型来源。\n交付：向PM提交本角色报告，列明输入、产物、检查范围与遗留问题；失败与未知分别记录，不伪造结果。"
+  },
+  "tool_results": {
+    "JOINT_SEVEN_STEP_V1": "bad013cf86caee9cebd21f84dbe1854c522fe40cc90bbec507bfbd4ff8e0f9a0",
+    "BOUNDARYXP_ANALYZE_021": "089abc8c5abd0d15367c6db369ea5449f198ffc721af248f65555739c7285e87"
+  }
+}

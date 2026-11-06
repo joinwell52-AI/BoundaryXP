@@ -1,0 +1,78 @@
+{
+  "format": "boundx-workbench/1",
+  "project_id": "9e4f97e4-7fe7-4df1-8c5c-ae9fbbbf2f24",
+  "label": "R389-103 · B03原工具 · H40-040 · 容器镜像的标签改名",
+  "revision": 12,
+  "mode": "TREE",
+  "planning": "COMPLETE",
+  "nodes": [
+    {
+      "id": "ADMIN-PM",
+      "project_id": "9e4f97e4-7fe7-4df1-8c5c-ae9fbbbf2f24",
+      "label": "ADMIN → PM",
+      "text": "隔离测试仅允许运行镜像摘要sha256:77aa的内容；显示标签可以改名，但镜像内容不可更换。",
+      "version": 1,
+      "parent_id": null,
+      "parent_basis": "",
+      "context_mode": "NONE",
+      "result_key": null
+    },
+    {
+      "id": "PM-DEV",
+      "project_id": "9e4f97e4-7fe7-4df1-8c5c-ae9fbbbf2f24",
+      "label": "PM → DEV",
+      "text": "把同一镜像的显示标签由candidate改为review-ready。",
+      "version": 1,
+      "parent_id": "ADMIN-PM",
+      "parent_basis": "本轮子任务继承适用的父任务限制。",
+      "context_mode": "PARENT",
+      "result_key": null
+    },
+    {
+      "id": "PM-OPS",
+      "project_id": "9e4f97e4-7fe7-4df1-8c5c-ae9fbbbf2f24",
+      "label": "PM → OPS",
+      "text": "部署前按摘要拉取sha256:77aa，不按可变标签解析。",
+      "version": 1,
+      "parent_id": "ADMIN-PM",
+      "parent_basis": "本轮子任务继承适用的父任务限制。",
+      "context_mode": "PARENT",
+      "result_key": null
+    },
+    {
+      "id": "PM-QA",
+      "project_id": "9e4f97e4-7fe7-4df1-8c5c-ae9fbbbf2f24",
+      "label": "PM → QA",
+      "text": "核验改名前后内容摘要均为sha256:77aa，未加入其他层。",
+      "version": 1,
+      "parent_id": "ADMIN-PM",
+      "parent_basis": "本轮子任务继承适用的父任务限制。",
+      "context_mode": "PARENT",
+      "result_key": null
+    }
+  ],
+  "dependencies": [],
+  "retained": [],
+  "settings": {
+    "provider": "codex-api",
+    "transport_identity": "09ba0ba965e0a00dda14128296d1f4431f00bc8aafeef07c38f9d32e04dfca00",
+    "model": "gpt-6.1-sol",
+    "reasoning": "medium",
+    "parse_method": "SKILL",
+    "analysis_tool": "JOINT_SEVEN_STEP_V1",
+    "dictionaries": {
+      "l2": "software-ai@0.2.0",
+      "l3": "tenant-a@0.2.0"
+    }
+  },
+  "comparison": "3b70e2f6da03469195809f8671840e46a01ddca61157c466e7db2635edcfd6f6",
+  "saved_at": "2026-11-03T01:43:40.635Z",
+  "change_label": "程序重新核验 · 原LLM保留 · 0次模型请求",
+  "import_source": {
+    "format": "role-heading/1",
+    "text": "#ADMIN-PM\n隔离测试仅允许运行镜像摘要sha256:77aa的内容；显示标签可以改名，但镜像内容不可更换。\n\n#PM-DEV\n把同一镜像的显示标签由candidate改为review-ready。\n\n#PM-OPS\n部署前按摘要拉取sha256:77aa，不按可变标签解析。\n\n#PM-QA\n核验改名前后内容摘要均为sha256:77aa，未加入其他层。"
+  },
+  "tool_results": {
+    "JOINT_SEVEN_STEP_V1": "3b70e2f6da03469195809f8671840e46a01ddca61157c466e7db2635edcfd6f6"
+  }
+}

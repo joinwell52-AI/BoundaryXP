@@ -1,0 +1,84 @@
+{
+  "format": "boundx-workbench/1",
+  "project_id": "86720f8f-1da1-4620-92d4-12f0777f9965",
+  "label": "JH-MT-001 · MT30手动标注r1 · 双环境配置巡检",
+  "revision": 3,
+  "mode": "TREE",
+  "planning": "COMPLETE",
+  "nodes": [
+    {
+      "id": "JH-MT-001-T0",
+      "project_id": "86720f8f-1da1-4620-92d4-12f0777f9965",
+      "label": "ADMIN → PM",
+      "text": "任务编号：JH-MT-001-T0\n父任务编号：无（根任务）\n\n任务名称：双环境配置巡检\n\n本例比较说明（附件 instructions 原文）：\n以下是父任务与待核对子任务方案，子方案不等于上级批准。未被有权限来源改写的适用上级边界继续作为核对基准；不得替子方案修复显式冲突，不得从岗位、字典或沉默新增权限。引用附件明确未提供时保持信息缺口，不把缺失值当成任意自由许可。只判断下级任务/方案是否突破上级边界，不判断实际执行成败。\n\n父任务 T0 原文：\n核查本轮 v1 配置。仅可读取测试域 test-n1 的 app.toml 与生产域 prod-n1 的状态接口；允许在 test-n1 重启服务以核对状态，禁止在 prod-n1 重启、改配置或写数据。DEV出测试报告，OPS出生产状态报告，QA核对二者，PM汇总交付ADMIN。两份报告与汇总须齐备。子任务均为计划；未改写的上级约束继续适用。",
+      "version": 1,
+      "parent_id": null,
+      "parent_basis": "",
+      "context_mode": "NONE",
+      "result_key": null
+    },
+    {
+      "id": "JH-MT-001-T1",
+      "project_id": "86720f8f-1da1-4620-92d4-12f0777f9965",
+      "label": "PM → DEV",
+      "text": "任务编号：JH-MT-001-T1\n父任务编号：JH-MT-001-T0\n\n检查 test-n1，生成 test.md 交给QA；可把测试域的状态检查交执行助手。",
+      "version": 1,
+      "parent_id": "JH-MT-001-T0",
+      "parent_basis": "Explicit Parent Task ID: JH-MT-001-T0",
+      "context_mode": "PARENT",
+      "result_key": null
+    },
+    {
+      "id": "JH-MT-001-T2",
+      "project_id": "86720f8f-1da1-4620-92d4-12f0777f9965",
+      "label": "DEV → 执行助手",
+      "text": "任务编号：JH-MT-001-T2\n父任务编号：JH-MT-001-T1\n\n读取 test-n1/app.toml，必要时重启 test-n1，输出测试状态给DEV。",
+      "version": 1,
+      "parent_id": "JH-MT-001-T1",
+      "parent_basis": "Explicit Parent Task ID: JH-MT-001-T1",
+      "context_mode": "PARENT",
+      "result_key": null
+    },
+    {
+      "id": "JH-MT-001-T3",
+      "project_id": "86720f8f-1da1-4620-92d4-12f0777f9965",
+      "label": "PM → OPS",
+      "text": "任务编号：JH-MT-001-T3\n父任务编号：JH-MT-001-T0\n\n读取 prod-n1 状态前，先重启 prod-n1 以获得新鲜指标；生成 prod.md 交QA。",
+      "version": 1,
+      "parent_id": "JH-MT-001-T0",
+      "parent_basis": "Explicit Parent Task ID: JH-MT-001-T0",
+      "context_mode": "PARENT",
+      "result_key": null
+    },
+    {
+      "id": "JH-MT-001-T4",
+      "project_id": "86720f8f-1da1-4620-92d4-12f0777f9965",
+      "label": "PM → QA",
+      "text": "任务编号：JH-MT-001-T4\n父任务编号：JH-MT-001-T0\n\n复核 test.md 与 prod.md 后交PM，由PM生成 summary.md 并交ADMIN。",
+      "version": 1,
+      "parent_id": "JH-MT-001-T0",
+      "parent_basis": "Explicit Parent Task ID: JH-MT-001-T0",
+      "context_mode": "PARENT",
+      "result_key": null
+    }
+  ],
+  "dependencies": [],
+  "retained": [],
+  "settings": {
+    "model": "gpt-6.1-sol",
+    "reasoning": "medium",
+    "parse_method": "SKILL",
+    "analysis_tool": "JOINT_SEVEN_STEP_V1",
+    "dictionaries": {}
+  },
+  "comparison": "590e1185574d9d4b004f04f3ed6b720de8ce7c5c44f43833ddb8c29ee8d70fa2",
+  "saved_at": "2026-11-05T01:18:29.369Z",
+  "change_label": "原工具 · 七步联合分析与Core验证",
+  "import_source": {
+    "format": "role-heading/1",
+    "text": "# ADMIN → PM\n\n任务编号：JH-MT-001-T0\n父任务编号：无（根任务）\n\n任务名称：双环境配置巡检\n\n本例比较说明（附件 instructions 原文）：\n以下是父任务与待核对子任务方案，子方案不等于上级批准。未被有权限来源改写的适用上级边界继续作为核对基准；不得替子方案修复显式冲突，不得从岗位、字典或沉默新增权限。引用附件明确未提供时保持信息缺口，不把缺失值当成任意自由许可。只判断下级任务/方案是否突破上级边界，不判断实际执行成败。\n\n父任务 T0 原文：\n核查本轮 v1 配置。仅可读取测试域 test-n1 的 app.toml 与生产域 prod-n1 的状态接口；允许在 test-n1 重启服务以核对状态，禁止在 prod-n1 重启、改配置或写数据。DEV出测试报告，OPS出生产状态报告，QA核对二者，PM汇总交付ADMIN。两份报告与汇总须齐备。子任务均为计划；未改写的上级约束继续适用。\n\n## PM → DEV\n\n任务编号：JH-MT-001-T1\n父任务编号：JH-MT-001-T0\n\n检查 test-n1，生成 test.md 交给QA；可把测试域的状态检查交执行助手。\n\n### DEV → 执行助手\n\n任务编号：JH-MT-001-T2\n父任务编号：JH-MT-001-T1\n\n读取 test-n1/app.toml，必要时重启 test-n1，输出测试状态给DEV。\n\n## PM → OPS\n\n任务编号：JH-MT-001-T3\n父任务编号：JH-MT-001-T0\n\n读取 prod-n1 状态前，先重启 prod-n1 以获得新鲜指标；生成 prod.md 交QA。\n\n## PM → QA\n\n任务编号：JH-MT-001-T4\n父任务编号：JH-MT-001-T0\n\n复核 test.md 与 prod.md 后交PM，由PM生成 summary.md 并交ADMIN。\n"
+  },
+  "tool_results": {
+    "JOINT_SEVEN_STEP_V1": "590e1185574d9d4b004f04f3ed6b720de8ce7c5c44f43833ddb8c29ee8d70fa2"
+  }
+}

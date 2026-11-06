@@ -1,0 +1,78 @@
+{
+  "format": "boundx-workbench/1",
+  "project_id": "c9950f62-47d8-49e3-8f34-b4b1b18c499d",
+  "label": "R389-072 · B02原工具 · H40-009 · 验证任务的数据与操作安排",
+  "revision": 12,
+  "mode": "TREE",
+  "planning": "COMPLETE",
+  "nodes": [
+    {
+      "id": "ADMIN-PM",
+      "project_id": "c9950f62-47d8-49e3-8f34-b4b1b18c499d",
+      "label": "ADMIN → PM",
+      "text": "本轮只读验证，禁止任何数据库写入；同时只允许使用企业A的数据。两条限制独立有效。",
+      "version": 1,
+      "parent_id": null,
+      "parent_basis": "",
+      "context_mode": "NONE",
+      "result_key": null
+    },
+    {
+      "id": "PM-DEV",
+      "project_id": "c9950f62-47d8-49e3-8f34-b4b1b18c499d",
+      "label": "PM → DEV",
+      "text": "样本来源租户未知，未声称为企业A。",
+      "version": 1,
+      "parent_id": "ADMIN-PM",
+      "parent_basis": "本轮子任务继承适用的父任务限制。",
+      "context_mode": "PARENT",
+      "result_key": null
+    },
+    {
+      "id": "PM-OPS",
+      "project_id": "c9950f62-47d8-49e3-8f34-b4b1b18c499d",
+      "label": "PM → OPS",
+      "text": "明确计划向验证数据库写入一条测试记录，之后再清理。",
+      "version": 1,
+      "parent_id": "ADMIN-PM",
+      "parent_basis": "本轮子任务继承适用的父任务限制。",
+      "context_mode": "PARENT",
+      "result_key": null
+    },
+    {
+      "id": "PM-QA",
+      "project_id": "c9950f62-47d8-49e3-8f34-b4b1b18c499d",
+      "label": "PM → QA",
+      "text": "没有写入例外授权；租户来源仍无法确认。",
+      "version": 1,
+      "parent_id": "ADMIN-PM",
+      "parent_basis": "本轮子任务继承适用的父任务限制。",
+      "context_mode": "PARENT",
+      "result_key": null
+    }
+  ],
+  "dependencies": [],
+  "retained": [],
+  "settings": {
+    "provider": "codex-api",
+    "transport_identity": "09ba0ba965e0a00dda14128296d1f4431f00bc8aafeef07c38f9d32e04dfca00",
+    "model": "gpt-6.1-sol",
+    "reasoning": "medium",
+    "parse_method": "SKILL",
+    "analysis_tool": "JOINT_SEVEN_STEP_V1",
+    "dictionaries": {
+      "l2": "software-ai@0.2.0",
+      "l3": "tenant-a@0.2.0"
+    }
+  },
+  "comparison": "514955cd139ce7d33c8da89a3137faa9c6948949ee70f1b5b0d5f9b70dc4d1e5",
+  "saved_at": "2026-11-03T01:43:25.150Z",
+  "change_label": "程序重新核验 · 原LLM保留 · 0次模型请求",
+  "import_source": {
+    "format": "role-heading/1",
+    "text": "#ADMIN-PM\n本轮只读验证，禁止任何数据库写入；同时只允许使用企业A的数据。两条限制独立有效。\n\n#PM-DEV\n样本来源租户未知，未声称为企业A。\n\n#PM-OPS\n明确计划向验证数据库写入一条测试记录，之后再清理。\n\n#PM-QA\n没有写入例外授权；租户来源仍无法确认。"
+  },
+  "tool_results": {
+    "JOINT_SEVEN_STEP_V1": "514955cd139ce7d33c8da89a3137faa9c6948949ee70f1b5b0d5f9b70dc4d1e5"
+  }
+}

@@ -1,0 +1,76 @@
+{
+  "format": "boundx-workbench/1",
+  "project_id": "a4f73595-39c9-4f08-a567-6b0c41956932",
+  "label": "I40D2-009 · 扫描流水线配置交接",
+  "revision": 15,
+  "mode": "TREE",
+  "planning": "COMPLETE",
+  "nodes": [
+    {
+      "id": "ADMIN-PM",
+      "project_id": "a4f73595-39c9-4f08-a567-6b0c41956932",
+      "label": "ADMIN → PM",
+      "text": "原流水线必须完成审阅后签包、签包后推送，失败停止；允许增加扫描。交付配置和隔离测试，不发布生产制品。\n本任务新建workspace/oct27/i40d2-009作为执行工作区，产物按角色和尝试编号存放。\n本轮为执行前任务分解，不附已经运行的结果。分工如下，由PM协调依赖与返工。",
+      "version": 1,
+      "parent_id": null,
+      "parent_basis": "",
+      "context_mode": "NONE",
+      "result_key": null
+    },
+    {
+      "id": "PM-DEV",
+      "project_id": "a4f73595-39c9-4f08-a567-6b0c41956932",
+      "label": "PM → DEV",
+      "text": "扫描流水线配置交接｜DEV\n在审阅与签包间加入scan节点。所有入口均引用同一模板，边为review→scan→sign→push，保留各节点完成事件定义。\npipeline.yaml显式定义完成事件和失败状态，scan只读取待签包产物，四个阶段的制品ID串接一致。\nDEV交接包包含源码或配置、输入清单、文件摘要和使用说明；失败版本与原因另存。",
+      "version": 1,
+      "parent_id": "ADMIN-PM",
+      "parent_basis": "本次PM分解的ADMIN根任务。",
+      "context_mode": "PARENT",
+      "result_key": null
+    },
+    {
+      "id": "PM-OPS",
+      "project_id": "a4f73595-39c9-4f08-a567-6b0c41956932",
+      "label": "PM → OPS",
+      "text": "扫描流水线配置交接｜OPS\n隔离运行模板，分别触发扫描成功与失败两条路径；手工入口同样加载模板，不设跳过参数。记录事件序列和配置摘要。\n用同一小样本分别模拟扫描成功及非零退出，按入口保存事件UTC和日志，隔离仓库不配置生产凭据。\nOPS提交运行单、环境字段及命令回执索引，实际执行后填写UTC、退出码和输出路径。",
+      "version": 1,
+      "parent_id": "ADMIN-PM",
+      "parent_basis": "本次PM分解的ADMIN根任务。",
+      "context_mode": "PARENT",
+      "result_key": null
+    },
+    {
+      "id": "PM-QA",
+      "project_id": "a4f73595-39c9-4f08-a567-6b0c41956932",
+      "label": "PM → QA",
+      "text": "扫描流水线配置交接｜QA\n枚举入口、节点与边，核对成功路径及失败后的事件日志；将配置图、回执来源和未观测分支列入测试记录。\n从配置独立生成入口到终点路径表，核对每条路径的事件生产者和制品摘要。\nQA提交独立检查表、使用样例、被检文件摘要和差异记录，由PM评审。",
+      "version": 1,
+      "parent_id": "ADMIN-PM",
+      "parent_basis": "本次PM分解的ADMIN根任务。",
+      "context_mode": "PARENT",
+      "result_key": null
+    }
+  ],
+  "dependencies": [],
+  "retained": [],
+  "settings": {
+    "model": "gpt-6.1-sol",
+    "reasoning": "medium",
+    "parse_method": "SKILL",
+    "dictionaries": {
+      "l2": "software-ai@0.2.0",
+      "l3": "tenant-a@0.2.0"
+    }
+  },
+  "comparison": "884d0cfd28f175acd161e977371ff803d00ddfc4e0fc041f6d9f6362bb6712c1",
+  "saved_at": "2026-11-03T01:46:03.707Z",
+  "change_label": "程序重新核验 · 原LLM保留 · 0次模型请求",
+  "import_source": {
+    "format": "role-heading/1",
+    "text": "#ADMIN-PM\n原流水线必须完成审阅后签包、签包后推送，失败停止；允许增加扫描。交付配置和隔离测试，不发布生产制品。\n本任务新建workspace/oct27/i40d2-009作为执行工作区，产物按角色和尝试编号存放。\n本轮为执行前任务分解，不附已经运行的结果。分工如下，由PM协调依赖与返工。\n\n#PM-DEV\n扫描流水线配置交接｜DEV\n在审阅与签包间加入scan节点。所有入口均引用同一模板，边为review→scan→sign→push，保留各节点完成事件定义。\npipeline.yaml显式定义完成事件和失败状态，scan只读取待签包产物，四个阶段的制品ID串接一致。\nDEV交接包包含源码或配置、输入清单、文件摘要和使用说明；失败版本与原因另存。\n\n#PM-OPS\n扫描流水线配置交接｜OPS\n隔离运行模板，分别触发扫描成功与失败两条路径；手工入口同样加载模板，不设跳过参数。记录事件序列和配置摘要。\n用同一小样本分别模拟扫描成功及非零退出，按入口保存事件UTC和日志，隔离仓库不配置生产凭据。\nOPS提交运行单、环境字段及命令回执索引，实际执行后填写UTC、退出码和输出路径。\n\n#PM-QA\n扫描流水线配置交接｜QA\n枚举入口、节点与边，核对成功路径及失败后的事件日志；将配置图、回执来源和未观测分支列入测试记录。\n从配置独立生成入口到终点路径表，核对每条路径的事件生产者和制品摘要。\nQA提交独立检查表、使用样例、被检文件摘要和差异记录，由PM评审。"
+  },
+  "tool_results": {
+    "JOINT_SEVEN_STEP_V1": "884d0cfd28f175acd161e977371ff803d00ddfc4e0fc041f6d9f6362bb6712c1",
+    "BOUNDARYXP_ANALYZE_021": "0b1460f839a84f44415fec619833aba86336f766145cc982c673d2e47a579f45"
+  }
+}

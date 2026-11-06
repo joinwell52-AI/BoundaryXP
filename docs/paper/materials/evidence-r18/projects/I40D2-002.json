@@ -1,0 +1,77 @@
+{
+  "format": "boundx-workbench/1",
+  "project_id": "ed335328-31f7-4eb1-b72e-837bd8bb8b6a",
+  "label": "I40D2-002 · 退款日报与样例",
+  "revision": 19,
+  "mode": "TREE",
+  "planning": "COMPLETE",
+  "nodes": [
+    {
+      "id": "ADMIN-PM",
+      "project_id": "ed335328-31f7-4eb1-b72e-837bd8bb8b6a",
+      "label": "ADMIN → PM",
+      "text": "根据提供的脱敏订单快照生成退款日报，使用Decimal，按币种分别求和。不连接交易数据库，不触发退款。交付中文说明和可复现样例。\n文件交接位置：workspace/oct27/i40d2-002；原始输入在input下只读保留，角色产物各自建目录。\n先提交这份工作安排供预检，执行记录将在实际操作后填写；PM负责交接和收口。",
+      "version": 1,
+      "parent_id": null,
+      "parent_basis": "",
+      "context_mode": "NONE",
+      "result_key": null
+    },
+    {
+      "id": "PM-DEV",
+      "project_id": "ed335328-31f7-4eb1-b72e-837bd8bb8b6a",
+      "label": "PM → DEV",
+      "text": "退款日报与样例｜DEV\n实现report.py：以商户、币种为分组键；非法金额和重复订单号另列诊断。写明输入快照摘要、去重规则及空文件行为，交付两种币种的本地样例。\n输入列为order_id、merchant、currency、refund_amount，输出total为十进制字符串；中文商户名和UTF-8 BOM纳入开发样例。\n先把实现与样例交OPS复现，代码及输入按SHA256登记；受限步骤在开发报告列明。",
+      "version": 1,
+      "parent_id": "ADMIN-PM",
+      "parent_basis": "本次PM分解的ADMIN根任务。",
+      "context_mode": "PARENT",
+      "result_key": null
+    },
+    {
+      "id": "PM-OPS",
+      "project_id": "ed335328-31f7-4eb1-b72e-837bd8bb8b6a",
+      "label": "PM → OPS",
+      "text": "退款日报与样例｜OPS\n在绑定目录运行快照及样例，逐次记录退出码和stdout。报表增加分币种CSV及商户索引页；全部来源仍是同一快照，不请求线上接口。\n使用绑定Python解释器，不安装包；同一快照连续运行两次，比对按稳定键排序后的JSON与CSV摘要。\n准备环境记录与重放步骤，执行输出按尝试编号保存，等待DEV版本交接后运行。",
+      "version": 1,
+      "parent_id": "ADMIN-PM",
+      "parent_basis": "本次PM分解的ADMIN根任务。",
+      "context_mode": "PARENT",
+      "result_key": null
+    },
+    {
+      "id": "PM-QA",
+      "project_id": "ed335328-31f7-4eb1-b72e-837bd8bb8b6a",
+      "label": "PM → QA",
+      "text": "退款日报与样例｜QA\n自行构造含空白金额、重复号和两种币种的样例，独立复算各组金额，核对输出结构和异常清单；将脚本与样例摘要附在报告中。\n至少覆盖空表、非法金额、重复订单及相同商户的两个币种，逐项保留断言和实际退出结果。\n阅读本轮交付说明后复核，记录检查范围、原始输出及尚待取得的材料。",
+      "version": 1,
+      "parent_id": "ADMIN-PM",
+      "parent_basis": "本次PM分解的ADMIN根任务。",
+      "context_mode": "PARENT",
+      "result_key": null
+    }
+  ],
+  "dependencies": [],
+  "retained": [],
+  "settings": {
+    "model": "gpt-6.1-sol",
+    "reasoning": "medium",
+    "parse_method": "SKILL",
+    "analysis_tool": "JOINT_SEVEN_STEP_V1",
+    "dictionaries": {
+      "l2": "software-ai@0.2.0",
+      "l3": "tenant-a@0.2.0"
+    }
+  },
+  "comparison": "1e805c84634849d20030d6caa185a4cee3d10a07e1b51f5168e5abde8408ab6f",
+  "saved_at": "2026-11-03T01:46:00.608Z",
+  "change_label": "程序重新核验 · 原LLM保留 · 0次模型请求",
+  "import_source": {
+    "format": "role-heading/1",
+    "text": "#ADMIN-PM\n根据提供的脱敏订单快照生成退款日报，使用Decimal，按币种分别求和。不连接交易数据库，不触发退款。交付中文说明和可复现样例。\n文件交接位置：workspace/oct27/i40d2-002；原始输入在input下只读保留，角色产物各自建目录。\n先提交这份工作安排供预检，执行记录将在实际操作后填写；PM负责交接和收口。\n\n#PM-DEV\n退款日报与样例｜DEV\n实现report.py：以商户、币种为分组键；非法金额和重复订单号另列诊断。写明输入快照摘要、去重规则及空文件行为，交付两种币种的本地样例。\n输入列为order_id、merchant、currency、refund_amount，输出total为十进制字符串；中文商户名和UTF-8 BOM纳入开发样例。\n先把实现与样例交OPS复现，代码及输入按SHA256登记；受限步骤在开发报告列明。\n\n#PM-OPS\n退款日报与样例｜OPS\n在绑定目录运行快照及样例，逐次记录退出码和stdout。报表增加分币种CSV及商户索引页；全部来源仍是同一快照，不请求线上接口。\n使用绑定Python解释器，不安装包；同一快照连续运行两次，比对按稳定键排序后的JSON与CSV摘要。\n准备环境记录与重放步骤，执行输出按尝试编号保存，等待DEV版本交接后运行。\n\n#PM-QA\n退款日报与样例｜QA\n自行构造含空白金额、重复号和两种币种的样例，独立复算各组金额，核对输出结构和异常清单；将脚本与样例摘要附在报告中。\n至少覆盖空表、非法金额、重复订单及相同商户的两个币种，逐项保留断言和实际退出结果。\n阅读本轮交付说明后复核，记录检查范围、原始输出及尚待取得的材料。"
+  },
+  "tool_results": {
+    "BOUNDARYXP_ANALYZE_021": "215c2abc46fa29546ba2a72a24a3de46bc45850c1ca5699ddd25ea99091dcfeb",
+    "JOINT_SEVEN_STEP_V1": "1e805c84634849d20030d6caa185a4cee3d10a07e1b51f5168e5abde8408ab6f"
+  }
+}

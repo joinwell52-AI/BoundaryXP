@@ -1,0 +1,78 @@
+{
+  "format": "boundx-workbench/1",
+  "project_id": "b05fc7cb-edda-4f3e-8167-05ee86e458e3",
+  "label": "R389-075 · B02原工具 · H40-012 · 共享主机的内存时段",
+  "revision": 12,
+  "mode": "TREE",
+  "planning": "COMPLETE",
+  "nodes": [
+    {
+      "id": "ADMIN-PM",
+      "project_id": "b05fc7cb-edda-4f3e-8167-05ee86e458e3",
+      "label": "ADMIN → PM",
+      "text": "批次在共享主机上的任务内存峰值不得超过10GiB，区间按左闭右开计。",
+      "version": 1,
+      "parent_id": null,
+      "parent_basis": "",
+      "context_mode": "NONE",
+      "result_key": null
+    },
+    {
+      "id": "PM-DEV",
+      "project_id": "b05fc7cb-edda-4f3e-8167-05ee86e458e3",
+      "label": "PM → DEV",
+      "text": "构建占用6GiB，区间[0,14)分钟。",
+      "version": 1,
+      "parent_id": "ADMIN-PM",
+      "parent_basis": "本轮子任务继承适用的父任务限制。",
+      "context_mode": "PARENT",
+      "result_key": null
+    },
+    {
+      "id": "PM-OPS",
+      "project_id": "b05fc7cb-edda-4f3e-8167-05ee86e458e3",
+      "label": "PM → OPS",
+      "text": "索引占用7GiB，区间[10,20)分钟，两段均按该时间表执行。",
+      "version": 1,
+      "parent_id": "ADMIN-PM",
+      "parent_basis": "本轮子任务继承适用的父任务限制。",
+      "context_mode": "PARENT",
+      "result_key": null
+    },
+    {
+      "id": "PM-QA",
+      "project_id": "b05fc7cb-edda-4f3e-8167-05ee86e458e3",
+      "label": "PM → QA",
+      "text": "无其他内存项，不允许顺延索引启动。",
+      "version": 1,
+      "parent_id": "ADMIN-PM",
+      "parent_basis": "本轮子任务继承适用的父任务限制。",
+      "context_mode": "PARENT",
+      "result_key": null
+    }
+  ],
+  "dependencies": [],
+  "retained": [],
+  "settings": {
+    "provider": "codex-api",
+    "transport_identity": "09ba0ba965e0a00dda14128296d1f4431f00bc8aafeef07c38f9d32e04dfca00",
+    "model": "gpt-6.1-sol",
+    "reasoning": "medium",
+    "parse_method": "SKILL",
+    "analysis_tool": "JOINT_SEVEN_STEP_V1",
+    "dictionaries": {
+      "l2": "software-ai@0.2.0",
+      "l3": "tenant-a@0.2.0"
+    }
+  },
+  "comparison": "5ba58396f6bc8810de1054b19e92e5944e43feea418bb58b0b7d4448349690b6",
+  "saved_at": "2026-11-03T01:43:26.062Z",
+  "change_label": "程序重新核验 · 原LLM保留 · 0次模型请求",
+  "import_source": {
+    "format": "role-heading/1",
+    "text": "#ADMIN-PM\n批次在共享主机上的任务内存峰值不得超过10GiB，区间按左闭右开计。\n\n#PM-DEV\n构建占用6GiB，区间[0,14)分钟。\n\n#PM-OPS\n索引占用7GiB，区间[10,20)分钟，两段均按该时间表执行。\n\n#PM-QA\n无其他内存项，不允许顺延索引启动。"
+  },
+  "tool_results": {
+    "JOINT_SEVEN_STEP_V1": "5ba58396f6bc8810de1054b19e92e5944e43feea418bb58b0b7d4448349690b6"
+  }
+}

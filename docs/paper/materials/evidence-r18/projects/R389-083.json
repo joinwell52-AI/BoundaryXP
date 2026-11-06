@@ -1,0 +1,78 @@
+{
+  "format": "boundx-workbench/1",
+  "project_id": "d3b1a113-5c17-4345-8bb7-55394ee0e3e1",
+  "label": "R389-083 · B02原工具 · H40-020 · 诊断工具的端点选择",
+  "revision": 12,
+  "mode": "TREE",
+  "planning": "COMPLETE",
+  "nodes": [
+    {
+      "id": "ADMIN-PM",
+      "project_id": "d3b1a113-5c17-4345-8bb7-55394ee0e3e1",
+      "label": "ADMIN → PM",
+      "text": "诊断工具可以只读访问/api/health、/api/metrics、/api/version；禁止任何写入端点，不要求必须访问全部允许端点。",
+      "version": 1,
+      "parent_id": null,
+      "parent_basis": "",
+      "context_mode": "NONE",
+      "result_key": null
+    },
+    {
+      "id": "PM-DEV",
+      "project_id": "d3b1a113-5c17-4345-8bb7-55394ee0e3e1",
+      "label": "PM → DEV",
+      "text": "只访问/api/health。",
+      "version": 1,
+      "parent_id": "ADMIN-PM",
+      "parent_basis": "本轮子任务继承适用的父任务限制。",
+      "context_mode": "PARENT",
+      "result_key": null
+    },
+    {
+      "id": "PM-OPS",
+      "project_id": "d3b1a113-5c17-4345-8bb7-55394ee0e3e1",
+      "label": "PM → OPS",
+      "text": "只访问/api/version，不调用其他端点。",
+      "version": 1,
+      "parent_id": "ADMIN-PM",
+      "parent_basis": "本轮子任务继承适用的父任务限制。",
+      "context_mode": "PARENT",
+      "result_key": null
+    },
+    {
+      "id": "PM-QA",
+      "project_id": "d3b1a113-5c17-4345-8bb7-55394ee0e3e1",
+      "label": "PM → QA",
+      "text": "两者均为只读请求，拟选集合完整且没有隐藏调用。",
+      "version": 1,
+      "parent_id": "ADMIN-PM",
+      "parent_basis": "本轮子任务继承适用的父任务限制。",
+      "context_mode": "PARENT",
+      "result_key": null
+    }
+  ],
+  "dependencies": [],
+  "retained": [],
+  "settings": {
+    "provider": "codex-api",
+    "transport_identity": "09ba0ba965e0a00dda14128296d1f4431f00bc8aafeef07c38f9d32e04dfca00",
+    "model": "gpt-6.1-sol",
+    "reasoning": "medium",
+    "parse_method": "SKILL",
+    "analysis_tool": "JOINT_SEVEN_STEP_V1",
+    "dictionaries": {
+      "l2": "software-ai@0.2.0",
+      "l3": "tenant-a@0.2.0"
+    }
+  },
+  "comparison": "ad51ca62a5e487e1b22ce3dfa3376bbd24407015bf2b4201cdd0d902d0784d82",
+  "saved_at": "2026-11-03T01:43:29.751Z",
+  "change_label": "程序重新核验 · 原LLM保留 · 0次模型请求",
+  "import_source": {
+    "format": "role-heading/1",
+    "text": "#ADMIN-PM\n诊断工具可以只读访问/api/health、/api/metrics、/api/version；禁止任何写入端点，不要求必须访问全部允许端点。\n\n#PM-DEV\n只访问/api/health。\n\n#PM-OPS\n只访问/api/version，不调用其他端点。\n\n#PM-QA\n两者均为只读请求，拟选集合完整且没有隐藏调用。"
+  },
+  "tool_results": {
+    "JOINT_SEVEN_STEP_V1": "ad51ca62a5e487e1b22ce3dfa3376bbd24407015bf2b4201cdd0d902d0784d82"
+  }
+}

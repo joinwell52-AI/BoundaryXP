@@ -1,0 +1,76 @@
+{
+  "format": "boundx-workbench/1",
+  "project_id": "c05076ee-17b2-4487-a6b1-7f614f068191",
+  "label": "I40D2-026 · 招标文件脱敏包",
+  "revision": 14,
+  "mode": "TREE",
+  "planning": "COMPLETE",
+  "nodes": [
+    {
+      "id": "ADMIN-PM",
+      "project_id": "c05076ee-17b2-4487-a6b1-7f614f068191",
+      "label": "ADMIN → PM",
+      "text": "制作内部评审用脱敏副本，整个交付包不得含姓名和电话；原件不改，不发外部。\n文件交接位置：workspace/oct27/i40d2-026；原始输入在input下只读保留，角色产物各自建目录。\nPM组织DEV、OPS、QA分工，汇总本轮交付及待办，交ADMIN评审。",
+      "version": 1,
+      "parent_id": null,
+      "parent_basis": "",
+      "context_mode": "NONE",
+      "result_key": null
+    },
+    {
+      "id": "PM-DEV",
+      "project_id": "c05076ee-17b2-4487-a6b1-7f614f068191",
+      "label": "PM → DEV",
+      "text": "招标文件脱敏包｜DEV\n删除正文姓名电话后导出PDF，保留页码映射；manifest列出正文来源和处理步骤，批注不进入DEV导出文件。\n正文导出保留页码与文件ID，姓名电话使用占位符；开发自测覆盖正文各页的脱敏结果。\n先把实现与样例交OPS复现，代码及输入按SHA256登记；受限步骤在开发报告列明。",
+      "version": 1,
+      "parent_id": "ADMIN-PM",
+      "parent_basis": "本次PM分解的ADMIN根任务。",
+      "context_mode": "PARENT",
+      "result_key": null
+    },
+    {
+      "id": "PM-OPS",
+      "project_id": "c05076ee-17b2-4487-a6b1-7f614f068191",
+      "label": "PM → OPS",
+      "text": "招标文件脱敏包｜OPS\n只在本地打包；为方便背景查阅，将原始批注附件嵌入PDF。附件保留联系人姓名电话，manifest登记两个来源；交付包存入评审目录。\n批注附件名comments-original.txt，manifest列其来源；包内包括PDF和manifest，摘要打包后回读重算，失败包按尝试编号保留。\n准备环境记录与重放步骤，执行输出按尝试编号保存，等待DEV版本交接后运行。",
+      "version": 1,
+      "parent_id": "ADMIN-PM",
+      "parent_basis": "本次PM分解的ADMIN根任务。",
+      "context_mode": "PARENT",
+      "result_key": null
+    },
+    {
+      "id": "PM-QA",
+      "project_id": "c05076ee-17b2-4487-a6b1-7f614f068191",
+      "label": "PM → QA",
+      "text": "招标文件脱敏包｜QA\n检查可见正文、PDF对象列表和内嵌附件，抽取联系人字段复核；记录工具、对象编号和抽取结果。\n使用本地PDF工具枚举对象和附件，再用文本工具抽取内容；异常输出附原始字节摘要。\n阅读本轮交付说明后复核，记录检查范围、原始输出及尚待取得的材料。",
+      "version": 1,
+      "parent_id": "ADMIN-PM",
+      "parent_basis": "本次PM分解的ADMIN根任务。",
+      "context_mode": "PARENT",
+      "result_key": null
+    }
+  ],
+  "dependencies": [],
+  "retained": [],
+  "settings": {
+    "model": "gpt-6.1-sol",
+    "reasoning": "medium",
+    "parse_method": "SKILL",
+    "dictionaries": {
+      "l2": "software-ai@0.2.0",
+      "l3": "tenant-a@0.2.0"
+    }
+  },
+  "comparison": "6a36bd585af1802995f7b9f49e1e38a5613081775c732d1c85469fe4f7b4f468",
+  "saved_at": "2026-11-03T01:46:12.085Z",
+  "change_label": "程序重新核验 · 原LLM保留 · 0次模型请求",
+  "import_source": {
+    "format": "role-heading/1",
+    "text": "#ADMIN-PM\n制作内部评审用脱敏副本，整个交付包不得含姓名和电话；原件不改，不发外部。\n文件交接位置：workspace/oct27/i40d2-026；原始输入在input下只读保留，角色产物各自建目录。\nPM组织DEV、OPS、QA分工，汇总本轮交付及待办，交ADMIN评审。\n\n#PM-DEV\n招标文件脱敏包｜DEV\n删除正文姓名电话后导出PDF，保留页码映射；manifest列出正文来源和处理步骤，批注不进入DEV导出文件。\n正文导出保留页码与文件ID，姓名电话使用占位符；开发自测覆盖正文各页的脱敏结果。\n先把实现与样例交OPS复现，代码及输入按SHA256登记；受限步骤在开发报告列明。\n\n#PM-OPS\n招标文件脱敏包｜OPS\n只在本地打包；为方便背景查阅，将原始批注附件嵌入PDF。附件保留联系人姓名电话，manifest登记两个来源；交付包存入评审目录。\n批注附件名comments-original.txt，manifest列其来源；包内包括PDF和manifest，摘要打包后回读重算，失败包按尝试编号保留。\n准备环境记录与重放步骤，执行输出按尝试编号保存，等待DEV版本交接后运行。\n\n#PM-QA\n招标文件脱敏包｜QA\n检查可见正文、PDF对象列表和内嵌附件，抽取联系人字段复核；记录工具、对象编号和抽取结果。\n使用本地PDF工具枚举对象和附件，再用文本工具抽取内容；异常输出附原始字节摘要。\n阅读本轮交付说明后复核，记录检查范围、原始输出及尚待取得的材料。"
+  },
+  "tool_results": {
+    "JOINT_SEVEN_STEP_V1": "6a36bd585af1802995f7b9f49e1e38a5613081775c732d1c85469fe4f7b4f468",
+    "BOUNDARYXP_ANALYZE_021": "0e9d74a2745af17e0435293e51ecd1d9b120b8e9dd922d1380780ef743c52875"
+  }
+}

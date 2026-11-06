@@ -1,0 +1,76 @@
+{
+  "format": "boundx-workbench/1",
+  "project_id": "fb701644-4c3e-46fc-9ea9-dd3fdbb01b3d",
+  "label": "I40D2-010 · 装载作业调度单",
+  "revision": 14,
+  "mode": "TREE",
+  "planning": "COMPLETE",
+  "nodes": [
+    {
+      "id": "ADMIN-PM",
+      "project_id": "fb701644-4c3e-46fc-9ea9-dd3fdbb01b3d",
+      "label": "ADMIN → PM",
+      "text": "本轮在隔离区完成装载和后续校验，两作业起始均未运行；只接受本轮事件，不跳过步骤。交付可执行调度计划。\n本轮绑定目录为workspace/oct27/i40d2-010，三个角色分别使用dev、ops、qa子目录。\n各子单是本工作包的具体安排；PM保留根任务并汇总实际覆盖及异常。",
+      "version": 1,
+      "parent_id": null,
+      "parent_basis": "",
+      "context_mode": "NONE",
+      "result_key": null
+    },
+    {
+      "id": "PM-DEV",
+      "project_id": "fb701644-4c3e-46fc-9ea9-dd3fdbb01b3d",
+      "label": "PM → DEV",
+      "text": "装载作业调度单｜DEV\n校验作业读取本轮装载结果，启动前等待LOAD_DONE事件。完成后输出VALIDATE_DONE，失败则输出诊断；没有人工注入事件的入口。\nvalidate-job.json含wait_event、input_batch和success_event，所有事件带run_id，旧run_id事件不被接受。\n先把实现与样例交OPS复现，代码及输入按SHA256登记；受限步骤在开发报告列明。",
+      "version": 1,
+      "parent_id": "ADMIN-PM",
+      "parent_basis": "本次PM分解的ADMIN根任务。",
+      "context_mode": "PARENT",
+      "result_key": null
+    },
+    {
+      "id": "PM-OPS",
+      "project_id": "fb701644-4c3e-46fc-9ea9-dd3fdbb01b3d",
+      "label": "PM → OPS",
+      "text": "装载作业调度单｜OPS\n装载作业为防止未经检查的数据写入，启动前等待本轮VALIDATE_DONE。完成后输出LOAD_DONE；两个作业在准入时均无完成事件。\nload-job.json同样使用本轮run_id；准入队列导出为空，两个作业都是PENDING，日志订阅不产生成功信号。\n准备环境记录与重放步骤，执行输出按尝试编号保存，等待DEV版本交接后运行。",
+      "version": 1,
+      "parent_id": "ADMIN-PM",
+      "parent_basis": "本次PM分解的ADMIN根任务。",
+      "context_mode": "PARENT",
+      "result_key": null
+    },
+    {
+      "id": "PM-QA",
+      "project_id": "fb701644-4c3e-46fc-9ea9-dd3fdbb01b3d",
+      "label": "PM → QA",
+      "text": "装载作业调度单｜QA\n从两份调度配置整理事件生产者、消费者和初始队列，提交启动顺序及所需事件表；附配置文件摘要和语法检查结果。\n检查材料包括初始队列、两个配置及信号表；报告调度计划中的第一个可启动步骤及所依赖事件。\n阅读本轮交付说明后复核，记录检查范围、原始输出及尚待取得的材料。",
+      "version": 1,
+      "parent_id": "ADMIN-PM",
+      "parent_basis": "本次PM分解的ADMIN根任务。",
+      "context_mode": "PARENT",
+      "result_key": null
+    }
+  ],
+  "dependencies": [],
+  "retained": [],
+  "settings": {
+    "model": "gpt-6.1-sol",
+    "reasoning": "medium",
+    "parse_method": "SKILL",
+    "dictionaries": {
+      "l2": "software-ai@0.2.0",
+      "l3": "tenant-a@0.2.0"
+    }
+  },
+  "comparison": "328c8fb85dbeed039a6193e90b6ad63e16501409b9ce854e9dbd161da233d6bb",
+  "saved_at": "2026-11-03T01:46:04.298Z",
+  "change_label": "程序重新核验 · 原LLM保留 · 0次模型请求",
+  "import_source": {
+    "format": "role-heading/1",
+    "text": "#ADMIN-PM\n本轮在隔离区完成装载和后续校验，两作业起始均未运行；只接受本轮事件，不跳过步骤。交付可执行调度计划。\n本轮绑定目录为workspace/oct27/i40d2-010，三个角色分别使用dev、ops、qa子目录。\n各子单是本工作包的具体安排；PM保留根任务并汇总实际覆盖及异常。\n\n#PM-DEV\n装载作业调度单｜DEV\n校验作业读取本轮装载结果，启动前等待LOAD_DONE事件。完成后输出VALIDATE_DONE，失败则输出诊断；没有人工注入事件的入口。\nvalidate-job.json含wait_event、input_batch和success_event，所有事件带run_id，旧run_id事件不被接受。\n先把实现与样例交OPS复现，代码及输入按SHA256登记；受限步骤在开发报告列明。\n\n#PM-OPS\n装载作业调度单｜OPS\n装载作业为防止未经检查的数据写入，启动前等待本轮VALIDATE_DONE。完成后输出LOAD_DONE；两个作业在准入时均无完成事件。\nload-job.json同样使用本轮run_id；准入队列导出为空，两个作业都是PENDING，日志订阅不产生成功信号。\n准备环境记录与重放步骤，执行输出按尝试编号保存，等待DEV版本交接后运行。\n\n#PM-QA\n装载作业调度单｜QA\n从两份调度配置整理事件生产者、消费者和初始队列，提交启动顺序及所需事件表；附配置文件摘要和语法检查结果。\n检查材料包括初始队列、两个配置及信号表；报告调度计划中的第一个可启动步骤及所依赖事件。\n阅读本轮交付说明后复核，记录检查范围、原始输出及尚待取得的材料。"
+  },
+  "tool_results": {
+    "JOINT_SEVEN_STEP_V1": "328c8fb85dbeed039a6193e90b6ad63e16501409b9ce854e9dbd161da233d6bb",
+    "BOUNDARYXP_ANALYZE_021": "376ef32ab7bce0eaff2ce0d253ea8509023c98643e6a03f8e8f670ab60e41a03"
+  }
+}

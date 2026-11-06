@@ -1,0 +1,78 @@
+{
+  "format": "boundx-workbench/1",
+  "project_id": "913ff783-50c4-445a-9969-e27c6eb08fb0",
+  "label": "R389-095 · B02原工具 · H40-032 · 装载与校验的启动安排",
+  "revision": 12,
+  "mode": "TREE",
+  "planning": "COMPLETE",
+  "nodes": [
+    {
+      "id": "ADMIN-PM",
+      "project_id": "913ff783-50c4-445a-9969-e27c6eb08fb0",
+      "label": "ADMIN → PM",
+      "text": "数据装载必须等校验结束后才能开始；装载和校验都必须完成，初始时两者均未启动，不允许跳过等待。",
+      "version": 1,
+      "parent_id": null,
+      "parent_basis": "",
+      "context_mode": "NONE",
+      "result_key": null
+    },
+    {
+      "id": "PM-DEV",
+      "project_id": "913ff783-50c4-445a-9969-e27c6eb08fb0",
+      "label": "PM → DEV",
+      "text": "保留校验完成后才能装载。",
+      "version": 1,
+      "parent_id": "ADMIN-PM",
+      "parent_basis": "本轮子任务继承适用的父任务限制。",
+      "context_mode": "PARENT",
+      "result_key": null
+    },
+    {
+      "id": "PM-OPS",
+      "project_id": "913ff783-50c4-445a-9969-e27c6eb08fb0",
+      "label": "PM → OPS",
+      "text": "增加要求：校验也必须等装载完成后才能开始，并据此安排本次完整执行。",
+      "version": 1,
+      "parent_id": "ADMIN-PM",
+      "parent_basis": "本轮子任务继承适用的父任务限制。",
+      "context_mode": "PARENT",
+      "result_key": null
+    },
+    {
+      "id": "PM-QA",
+      "project_id": "913ff783-50c4-445a-9969-e27c6eb08fb0",
+      "label": "PM → QA",
+      "text": "两项均不是可免除或已完成的步骤，没有外部完成信号。",
+      "version": 1,
+      "parent_id": "ADMIN-PM",
+      "parent_basis": "本轮子任务继承适用的父任务限制。",
+      "context_mode": "PARENT",
+      "result_key": null
+    }
+  ],
+  "dependencies": [],
+  "retained": [],
+  "settings": {
+    "provider": "codex-api",
+    "transport_identity": "09ba0ba965e0a00dda14128296d1f4431f00bc8aafeef07c38f9d32e04dfca00",
+    "model": "gpt-6.1-sol",
+    "reasoning": "medium",
+    "parse_method": "SKILL",
+    "analysis_tool": "JOINT_SEVEN_STEP_V1",
+    "dictionaries": {
+      "l2": "software-ai@0.2.0",
+      "l3": "tenant-a@0.2.0"
+    }
+  },
+  "comparison": "5089d8b054bf99279954fe8cbe562e9a7733799a22ad0585db98c78116c324fa",
+  "saved_at": "2026-11-03T01:43:33.759Z",
+  "change_label": "程序重新核验 · 原LLM保留 · 0次模型请求",
+  "import_source": {
+    "format": "role-heading/1",
+    "text": "#ADMIN-PM\n数据装载必须等校验结束后才能开始；装载和校验都必须完成，初始时两者均未启动，不允许跳过等待。\n\n#PM-DEV\n保留校验完成后才能装载。\n\n#PM-OPS\n增加要求：校验也必须等装载完成后才能开始，并据此安排本次完整执行。\n\n#PM-QA\n两项均不是可免除或已完成的步骤，没有外部完成信号。"
+  },
+  "tool_results": {
+    "JOINT_SEVEN_STEP_V1": "5089d8b054bf99279954fe8cbe562e9a7733799a22ad0585db98c78116c324fa"
+  }
+}

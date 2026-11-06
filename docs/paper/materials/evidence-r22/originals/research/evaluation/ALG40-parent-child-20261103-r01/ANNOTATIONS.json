@@ -1,0 +1,512 @@
+{
+  "at": "2026-11-03T14:50:58.755Z",
+  "authority": "ASSISTANT_AUTHORED_PREANNOTATION_NOT_HUMAN_GOLD",
+  "notes_sha256": "1421a150486c51279a5dd828bbed9cdb1eb955879373f86df3c1dd3ecff36f09",
+  "cases": [
+    {
+      "id": "ALG40-001",
+      "title": "发布链的传递前置",
+      "family": "有向图与可达性",
+      "source_sha256": "244920cf7ebf771704d502337ab9e3388eae676685c6be23c88fa208f76dd62a",
+      "verdict": "VERIFIED",
+      "reason": "明确边A→B、B→C、C→D构成DAG；A到D路径A-B-C-D，B到D和C到D均可达。增加传递路径不丢失前置。",
+      "expected_math": "A→D、B→D、C→D全部可达，无环。",
+      "target_operations": [
+        "dependency"
+      ]
+    },
+    {
+      "id": "ALG40-002",
+      "title": "跳过核验的投放依赖",
+      "family": "有向图与可达性",
+      "source_sha256": "8ea789edde3f4c4a40bd11671cd3b52836ff619a7dc7f64745d755b3ed6305d0",
+      "verdict": "VIOLATED",
+      "reason": "子图为A→B→C和B→D；明确并行安排取消C→D，存在D开始而C未完成的执行，违反父要求。",
+      "expected_math": "缺少C→D；B→D不能替代C→D。",
+      "target_operations": [
+        "dependency"
+      ]
+    },
+    {
+      "id": "ALG40-003",
+      "title": "双分支汇合闸门",
+      "family": "有向图与可达性",
+      "source_sha256": "52d0b9edcb0e56dab8058cb241b32a14bc0036d8c3adc0097445ee63c250595f",
+      "verdict": "VERIFIED",
+      "reason": "A→B、A→C、B→D、C→D无环，B和C到D均可达。B/C间无边是允许并行而非缺失必需顺序。",
+      "expected_math": "菱形DAG两支均汇入D。",
+      "target_operations": [
+        "dependency"
+      ]
+    },
+    {
+      "id": "ALG40-004",
+      "title": "交接边含义尚未确定",
+      "family": "有向图与可达性",
+      "source_sha256": "9417901a9bb421783835a46818d7fc7c3227a7625fbc39b9436b8806261aef07",
+      "verdict": "UNRESOLVED",
+      "reason": "B已满足；C→D的边类型和时序未确定。C先完成与C后完成均符合现有记录，分别满足和违反父边界。",
+      "expected_math": "不得把related边当prerequisite；顺序两种补全。",
+      "target_operations": [
+        "dependency",
+        "boolean_implication"
+      ]
+    },
+    {
+      "id": "ALG40-005",
+      "title": "同轮严格前置闭环",
+      "family": "图环与关系类型",
+      "source_sha256": "c94a1f431560de5a6d6bc7dc287ee0a6e37988b5535ef14f565314e686186b25",
+      "verdict": "VIOLATED",
+      "reason": "C→A→B→C是同轮严格前置环，三项无法开始。不能利用不可执行候选的空真蕴含判保持。",
+      "expected_math": "环A-B-C-A。",
+      "target_operations": [
+        "dependency"
+      ]
+    },
+    {
+      "id": "ALG40-006",
+      "title": "引用关系形成环但执行无环",
+      "family": "图环与关系类型",
+      "source_sha256": "3279f0fdb6743b55c8de3aa06eb81a43007516140e244ff21b22542733226862",
+      "verdict": "VERIFIED",
+      "reason": "严格前置仅A→B→C，无环；文档引用A→C→A的环不是严格依赖，不能混入执行图。",
+      "expected_math": "按边类型过滤后A→B→C。",
+      "target_operations": [
+        "dependency"
+      ]
+    },
+    {
+      "id": "ALG40-007",
+      "title": "同名节点不是同一交付",
+      "family": "图环与关系类型",
+      "source_sha256": "5787150c5050c6a480cd690347a08ff8dcd1c1bc70b825d2d9080eb51a0af3d0",
+      "verdict": "VIOLATED",
+      "reason": "Y-check→X投放不能提供X-check→X投放。同名不建立同一对象身份，生产包的必需核验被跳过。",
+      "expected_math": "带身份路径X-build→X-check→X-deploy缺失。",
+      "target_operations": [
+        "dependency",
+        "equal"
+      ]
+    },
+    {
+      "id": "ALG40-008",
+      "title": "交接完成时间缺一端",
+      "family": "图环与关系类型",
+      "source_sha256": "0e61278e61ba3db99121c489d4e2790fb5032328c5a286226f4f4bb18e7d9a06",
+      "verdict": "UNRESOLVED",
+      "reason": "10:10≤10:15满足，10:20>10:15违反，当前无法确定真实先后；同一R8身份不能补时间。",
+      "expected_math": "合法时序补全一真一假。",
+      "target_operations": [
+        "dependency",
+        "interval_subset"
+      ]
+    },
+    {
+      "id": "ALG40-009",
+      "title": "菱形任务的关键路径压线",
+      "family": "工期与图组合",
+      "source_sha256": "6b5062621641122f446ea5fb8fc672b7d0e96100d479c2e96766fb2e78147c9b",
+      "verdict": "VERIFIED",
+      "reason": "两条路径A-B-D=12，A-C-D=15；关键路径2+max(6,9)+4=15，含等号上限满足。不能把并行支相加成21。",
+      "expected_math": "关键路径15分钟。",
+      "target_operations": [
+        "duration",
+        "interval_composition",
+        "dependency"
+      ]
+    },
+    {
+      "id": "ALG40-010",
+      "title": "关键分支延长一分",
+      "family": "工期与图组合",
+      "source_sha256": "f06ace5c358b2f8013d276f038a1e5fc692b82e07da891950b05aa2fbab1ae86",
+      "verdict": "VIOLATED",
+      "reason": "关键路径2+max(6,10)+4=16>15，至少超1分钟。短分支12分钟不代表整体满足。",
+      "expected_math": "16分钟，超1分钟。",
+      "target_operations": [
+        "duration",
+        "interval_composition",
+        "dependency"
+      ]
+    },
+    {
+      "id": "ALG40-011",
+      "title": "交接等待也占总工期",
+      "family": "工期与图组合",
+      "source_sha256": "71bd28223b5f7ad4c624a4abd57785bc4a7af2dc992ddce873e0e47b1550ed7a",
+      "verdict": "VIOLATED",
+      "reason": "2+max(6,9)+2+4=17>16。漏掉边上的2分钟强制等待会误算15。",
+      "expected_math": "含交接等待关键路径17分钟。",
+      "target_operations": [
+        "duration",
+        "interval_composition",
+        "dependency"
+      ]
+    },
+    {
+      "id": "ALG40-012",
+      "title": "关键分支实测时长未定",
+      "family": "工期与图组合",
+      "source_sha256": "412e1a3063174c28a84fc20a05687be95860eed842593a991c9092f18cd5d376",
+      "verdict": "UNRESOLVED",
+      "reason": "实际总时长范围2+max(6,[8,10])+4=[14,16]；C=8满足，C=10超限。不是把未知实测时长当作允许的计划选择。",
+      "expected_math": "总时长[14,16]跨越15。",
+      "target_operations": [
+        "interval_composition"
+      ]
+    },
+    {
+      "id": "ALG40-013",
+      "title": "多人共享同一轮预算",
+      "family": "预算与资源组合",
+      "source_sha256": "256de3bc412decfa80afc00396444545542dd595d8c6bdedaab48fcc9cbb271b",
+      "verdict": "VERIFIED",
+      "reason": "同币种同窗口同范围总额4200+2800+1800+1200=10000，恰好满足上限。",
+      "expected_math": "总额10000元。",
+      "target_operations": [
+        "budget"
+      ]
+    },
+    {
+      "id": "ALG40-014",
+      "title": "局部都不超但总额超限",
+      "family": "预算与资源组合",
+      "source_sha256": "80b30d8e5b1f9e9ce33b8f4e19631f7011bf5dd6e60f86f9c7a7b4f54fc07928",
+      "verdict": "VIOLATED",
+      "reason": "4200+2800+2000+1200=10200>10000，超200；不能只逐角色比上限。",
+      "expected_math": "总额10200元，超200元。",
+      "target_operations": [
+        "budget"
+      ]
+    },
+    {
+      "id": "ALG40-015",
+      "title": "互斥部署方案共享额度",
+      "family": "预算与资源组合",
+      "source_sha256": "980bbea7acdfbda6209d5a944103239f176cc228b66c697b5cc19c4de437eca2",
+      "verdict": "VERIFIED",
+      "reason": "两种情境费用分别6000+1000=7000和7000+1000=8000；max(A,B)+QA=8000。不能把互斥方案同时累计为14000。",
+      "expected_math": "分支7000/8000均≤8000。",
+      "target_operations": [
+        "budget",
+        "interval_composition"
+      ]
+    },
+    {
+      "id": "ALG40-016",
+      "title": "待核实费用跨预算阈值",
+      "family": "预算与资源组合",
+      "source_sha256": "a164b161c535a35d18da1644400398ba3e14b9551497c897f07ae49566e87315",
+      "verdict": "UNRESOLVED",
+      "reason": "6000+1000=7000满足；6000+2000=8000超限。物流是当前未知事实，不是明确允许任意超额支出的计划。",
+      "expected_math": "两补全7000/8000。",
+      "target_operations": [
+        "budget",
+        "interval_composition"
+      ]
+    },
+    {
+      "id": "ALG40-017",
+      "title": "开闭区间的合法细化",
+      "family": "区间与单位",
+      "source_sha256": "0afaabb9010346697df0ddd1ab69373a1f4db77a54cac7f8f75ec3defc3d2057",
+      "verdict": "VERIFIED",
+      "reason": "[1,20]⊆(0,50]且(20,50]⊆(0,50]；边界开闭正确，父没有要求覆盖所有允许温度。",
+      "expected_math": "两个子区间都被父区间包含。",
+      "target_operations": [
+        "interval_subset"
+      ]
+    },
+    {
+      "id": "ALG40-018",
+      "title": "开端点被错误包含",
+      "family": "区间与单位",
+      "source_sha256": "ee58f17c9a3dedeb2669bff30538fcc745a0404a0fc7e1a8f959eee2b9b80c56",
+      "verdict": "VIOLATED",
+      "reason": "0∈[0,20]而0∉(0,50]，明确反例即0℃。只比数值端点不比inclusive会误判。",
+      "expected_math": "反例0℃。",
+      "target_operations": [
+        "interval_subset"
+      ]
+    },
+    {
+      "id": "ALG40-019",
+      "title": "单位换算与有理数精度",
+      "family": "区间与单位",
+      "source_sha256": "d2a6bea988d58915ec572af125d2d46936b7978c652fb3682d470cdd2f1f6cb3",
+      "verdict": "VERIFIED",
+      "reason": "0.5×1024+256+256=1024 MiB=1GiB，精确等于上限；资源和作用域相同。",
+      "expected_math": "1024 MiB，无浮点近似误差。",
+      "target_operations": [
+        "budget",
+        "interval_composition"
+      ]
+    },
+    {
+      "id": "ALG40-020",
+      "title": "同名单位含义未决",
+      "family": "区间与单位",
+      "source_sha256": "32035febf914d84b5bd510bb3348fb7abc2d0d15cc2ef8fce5bb04f32e5ed221",
+      "verdict": "UNRESOLVED",
+      "reason": "980MB=980000000字节满足；980MiB=1027604480字节超1000000000上限。单位解释影响结论，当前不能猜测。",
+      "expected_math": "两解释分别980000000与1027604480字节。",
+      "target_operations": [
+        "interval_subset"
+      ]
+    },
+    {
+      "id": "ALG40-021",
+      "title": "封闭配置集合内分工",
+      "family": "类型化集合",
+      "source_sha256": "b09b68a0cedf2557150bac601028d4e86c989223aeafb8f2ea2387b70943e6e1",
+      "verdict": "VERIFIED",
+      "reason": "子请求集合{秦L2026A,宋L2026B}是父允许集合真子集；父未要求全覆盖，缺少允许对象不是义务缺失。",
+      "expected_math": "outside为空。",
+      "target_operations": [
+        "set_subset"
+      ]
+    },
+    {
+      "id": "ALG40-022",
+      "title": "配置名相同而年款不同",
+      "family": "类型化集合",
+      "source_sha256": "3c345a223d37f3dc5b6db0de881434d27b5d82db0c1d882fd72e9db885be3e48",
+      "verdict": "VIOLATED",
+      "reason": "2027宋L-B不属于父闭集；名称同为宋L-B不产生年款等价，明确越对象边界。",
+      "expected_math": "outside={2027宋L-B}。",
+      "target_operations": [
+        "set_subset",
+        "equal"
+      ]
+    },
+    {
+      "id": "ALG40-023",
+      "title": "品牌车系联合身份",
+      "family": "类型化集合",
+      "source_sha256": "9bf37be0cb37354b900e21b32ce7910acf56b37a6c258b1e2170accff02a1b4c",
+      "verdict": "VERIFIED",
+      "reason": "请求对集等于允许对集；保持关联关系，不能只验证品牌∈{甲乙}与车系∈{ST}。",
+      "expected_math": "联合身份闭集合包含。",
+      "target_operations": [
+        "set_subset"
+      ]
+    },
+    {
+      "id": "ALG40-024",
+      "title": "对象别名映射未确认",
+      "family": "类型化集合",
+      "source_sha256": "82869edd4d1ad31cd6380df30df8b099622af5182a67c28cb33d1a79bb2c7b9b",
+      "verdict": "UNRESOLVED",
+      "reason": "blue-02=SN-B符合，blue-02=SN-C违反；实体身份未定不能直接建立封闭集合成员关系。",
+      "expected_math": "身份两种补全。",
+      "target_operations": [
+        "set_subset",
+        "boolean_implication"
+      ]
+    },
+    {
+      "id": "ALG40-025",
+      "title": "恰选两项资源容量",
+      "family": "基数选择与去重",
+      "source_sha256": "3ad8e284952bb3f5d09689b10c90602bb235e5763447ef9a215e6d8b4d9b3d46",
+      "verdict": "VERIFIED",
+      "reason": "AB=8、AC=9、BC=11 GiB，所有恰二组合都不超11；未选私有资源为零。",
+      "expected_math": "3种组合，最大11。",
+      "target_operations": [
+        "cardinality_composition"
+      ]
+    },
+    {
+      "id": "ALG40-026",
+      "title": "恰选两项存在超额组合",
+      "family": "基数选择与去重",
+      "source_sha256": "8bd7880eac175921f23d4d0950e0fcd0902ba928a15e4c193e9eeac2e0ed24b0",
+      "verdict": "VIOLATED",
+      "reason": "BC=11>10是明确允许的超额实现；AB=8和AC=9通过不能保证整体。对应规格不保持，而不是声称每次执行都超额。",
+      "expected_math": "反例{B,C}=11。",
+      "target_operations": [
+        "cardinality_composition"
+      ]
+    },
+    {
+      "id": "ALG40-027",
+      "title": "共享文件按真实身份计数",
+      "family": "基数选择与去重",
+      "source_sha256": "8f6122353bcec8b07e73947bcfc8e54369e1b6b9e15bcbd7a6bf6baead172de9",
+      "verdict": "VERIFIED",
+      "reason": "物理唯一集合{H1,H2}合计6+4=10；两次引用H1不等于两份6MiB分配。",
+      "expected_math": "唯一实例H1/H2，共10MiB。",
+      "target_operations": [
+        "budget",
+        "set_subset"
+      ]
+    },
+    {
+      "id": "ALG40-028",
+      "title": "同显示名的独立副本",
+      "family": "基数选择与去重",
+      "source_sha256": "c5c37af4b11b55a613976159d1d4ff91510ab3220e011e773eddbe2dd1a27a8f",
+      "verdict": "VIOLATED",
+      "reason": "X/Y不同物理实例，6+6=12>10，超2MiB。同名去重会漏计。",
+      "expected_math": "两实例12MiB。",
+      "target_operations": [
+        "budget"
+      ]
+    },
+    {
+      "id": "ALG40-029",
+      "title": "条件分支与共同审查",
+      "family": "布尔条件与规格比较",
+      "source_sha256": "c32b532ccc1011d0ea60f7415c65335ecb92e26ed130de41c4156e601bcc0ff2",
+      "verdict": "VERIFIED",
+      "reason": "两情境均有可执行实现，并保留共同QA→归档；未激活分支私有动作不影响共同闸门。",
+      "expected_math": "正常/故障两情境均覆盖共同QA。",
+      "target_operations": [
+        "boolean_implication",
+        "dependency"
+      ]
+    },
+    {
+      "id": "ALG40-030",
+      "title": "缩小承诺环境逃避义务",
+      "family": "布尔条件与规格比较",
+      "source_sha256": "c23f12749325a27bfe9979495321217a9cbcd266949b812141c5a17297ae1a62",
+      "verdict": "VIOLATED",
+      "reason": "父环境{联网,断网}不被子承诺环境{联网}覆盖；不能仅在缩小后的环境证明实现可满足就宣告保持。",
+      "expected_math": "缺失必需环境断网。",
+      "target_operations": [
+        "set_subset",
+        "boolean_implication"
+      ]
+    },
+    {
+      "id": "ALG40-031",
+      "title": "候选矛盾不得空真通过",
+      "family": "布尔条件与规格比较",
+      "source_sha256": "3e2e7e603269441abbb667d6897ded6fd49ea02799550fd078093765c78fa610",
+      "verdict": "VIOLATED",
+      "reason": "ready∧¬ready无解，候选不可执行；不得利用空解集的蕴含真值判未越界。",
+      "expected_math": "候选SAT=false，非空前提失败。",
+      "target_operations": [
+        "boolean_implication"
+      ]
+    },
+    {
+      "id": "ALG40-032",
+      "title": "验收指代保留未知",
+      "family": "布尔条件与规格比较",
+      "source_sha256": "8709746d3151cbf4722d8ba9431ec39d5958d65b26f35d47c77cea85fe906506",
+      "verdict": "UNRESOLVED",
+      "reason": "方案等待澄清本身不越界；父最终验收主体两候选未唯一，整体保留信息不足，不从岗位推权限。",
+      "expected_math": "主体二候选，不强行绑定。",
+      "target_operations": [
+        "boolean_implication",
+        "equal"
+      ]
+    },
+    {
+      "id": "ALG40-033",
+      "title": "生产消费同一版本交接",
+      "family": "交接身份与版本",
+      "source_sha256": "625a7a9d4170f8fdf5195de3c1ce7ff0b4ad2b6d9b760c1c0049d34e19c1ecee",
+      "verdict": "VERIFIED",
+      "reason": "生产、核验、消费均绑定P/r4/H4及M4，顺序QA→部署保留，身份版本一致。",
+      "expected_math": "producer=verified=consumer=P/r4/H4。",
+      "target_operations": [
+        "equal",
+        "dependency"
+      ]
+    },
+    {
+      "id": "ALG40-034",
+      "title": "核验后换版本",
+      "family": "交接身份与版本",
+      "source_sha256": "80a137888ed5a3f9865e7425c70e5b03805c1ac1e3c347074c1cb853e5e8941b",
+      "verdict": "VIOLATED",
+      "reason": "QA对象r4/H4≠部署对象r5/H5；角色顺序看似正确仍缺同一制品身份约束。",
+      "expected_math": "版本/哈希不相等。",
+      "target_operations": [
+        "equal",
+        "dependency"
+      ]
+    },
+    {
+      "id": "ALG40-035",
+      "title": "验收人不可由角色名替代",
+      "family": "交接身份与版本",
+      "source_sha256": "83d90c055282c516af4540266c69fb873c51e1acc1611be158867a996dbf7233",
+      "verdict": "VIOLATED",
+      "reason": "OPS将QA专业意见替作ADMIN批准，替换了主体与动作关系；岗位名和建议不产生权限。",
+      "expected_math": "QA建议≠ADMIN最终批准。",
+      "target_operations": [
+        "equal",
+        "boolean_implication"
+      ]
+    },
+    {
+      "id": "ALG40-036",
+      "title": "第三附件身份未核实",
+      "family": "交接身份与版本",
+      "source_sha256": "03c891e931c2adc9d3ad4af53521c6c6abefe16b361224817602f113b4ca3db8",
+      "verdict": "UNRESOLVED",
+      "reason": "不能补成确认后认定，也不能推成未确认照样认定；X类型版本和认定时核验条件未定，不能据此认定三件套齐全。",
+      "expected_math": "附件身份和认定条件保持未知。",
+      "target_operations": [
+        "equal",
+        "boolean_implication"
+      ]
+    },
+    {
+      "id": "ALG40-037",
+      "title": "任一先到停止的继承",
+      "family": "停止禁止与明确变更",
+      "source_sha256": "d3b12fe0981dea622d60e0db92518b7df060ff2afd5b8379c14d87e23e222dac",
+      "verdict": "VERIFIED",
+      "reason": "停止谓词(count≥500)∨(time≥20)继承；新增数量检查没有否定时间限制。",
+      "expected_math": "OR停止条件保留。",
+      "target_operations": [
+        "boolean_implication"
+      ]
+    },
+    {
+      "id": "ALG40-038",
+      "title": "任一停止被改成同时停止",
+      "family": "停止禁止与明确变更",
+      "source_sha256": "220c1f7c35baae9e686df3191a33826b1bf79a84bcfdf73e41f7b581b36fdb4f",
+      "verdict": "VIOLATED",
+      "reason": "父OR被子AND替换；count=300,time=21时父要求停止，子继续，明确反例。",
+      "expected_math": "300条/21分钟反例。",
+      "target_operations": [
+        "boolean_implication"
+      ]
+    },
+    {
+      "id": "ALG40-039",
+      "title": "上级明确变更仅一项",
+      "family": "停止禁止与明确变更",
+      "source_sha256": "0212c3340d04f4482d71629490e6f8c6e1a5b07515d91fcb650dc7882a419c50",
+      "verdict": "VERIFIED",
+      "reason": "3500+2000=5500≤明确新上限6000，另外两项未变并保持。明确局部变更不能被忽略，也不能扩张到其他限制。",
+      "expected_math": "R2预算5500≤6000；2026款保持。",
+      "target_operations": [
+        "budget",
+        "set_subset",
+        "boolean_implication"
+      ]
+    },
+    {
+      "id": "ALG40-040",
+      "title": "有变更权限不等于已变更",
+      "family": "停止禁止与明确变更",
+      "source_sha256": "9d9e2116cb65fa16cfcff41354317b08eb4180dc9b05e1a201d6614d0a8ee8f5",
+      "verdict": "VIOLATED",
+      "reason": "2027/2028不在父2026闭集；ADMIN权限不构成已经变更，实测范围不消除方案越界。",
+      "expected_math": "子允许集{2026,2027,2028}不包含于{2026}。",
+      "target_operations": [
+        "set_subset",
+        "boolean_implication"
+      ]
+    }
+  ]
+}

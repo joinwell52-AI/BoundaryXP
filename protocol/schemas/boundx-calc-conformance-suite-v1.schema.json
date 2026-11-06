@@ -1,0 +1,204 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:boundx:schema:calc-conformance-suite:v1:1.0.0-draft.3",
+  "title": "BoundaryXP BXP-CALC Conformance Suite v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "suite",
+    "suite_version",
+    "protocol_version",
+    "status",
+    "normative",
+    "publication_authorized",
+    "certification_authorized",
+    "case_count",
+    "historical_source_count",
+    "foundational_case_count",
+    "cases"
+  ],
+  "properties": {
+    "suite": {
+      "const": "boundx-calc-conformance/v1"
+    },
+    "suite_version": {
+      "const": "1.0.0-draft.3"
+    },
+    "protocol_version": {
+      "const": "0.3.0-draft.2"
+    },
+    "status": {
+      "const": "DRAFT_FOR_REVIEW"
+    },
+    "normative": {
+      "const": true
+    },
+    "publication_authorized": {
+      "const": false
+    },
+    "certification_authorized": {
+      "const": false
+    },
+    "case_count": {
+      "type": "integer",
+      "minimum": 140,
+      "maximum": 5000
+    },
+    "historical_source_count": {
+      "type": "integer",
+      "minimum": 140,
+      "maximum": 5000
+    },
+    "foundational_case_count": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 1000
+    },
+    "cases": {
+      "type": "array",
+      "minItems": 140,
+      "maxItems": 5000,
+      "items": {
+        "$ref": "#/$defs/case"
+      }
+    }
+  },
+  "$defs": {
+    "case": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "class",
+        "description",
+        "tags",
+        "origin",
+        "schema_expectation",
+        "task",
+        "expected_result"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^BXP-C[0-9]{4}$"
+        },
+        "class": {
+          "const": "BXP-CALC"
+        },
+        "description": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 1000
+        },
+        "tags": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 32,
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "pattern": "^[a-z0-9]+(?:[._-][a-z0-9]+)*$"
+          }
+        },
+        "origin": {
+          "$ref": "#/$defs/origin"
+        },
+        "schema_expectation": {
+          "enum": [
+            "valid",
+            "invalid"
+          ]
+        },
+        "task": {
+          "type": "object"
+        },
+        "expected_result": {
+          "$ref": "urn:boundx:schema:result:v1:0.3.0-draft.2"
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "schema_expectation": {
+                "const": "valid"
+              }
+            },
+            "required": [
+              "schema_expectation"
+            ]
+          },
+          "then": {
+            "properties": {
+              "task": {
+                "$ref": "urn:boundx:schema:task:v1:0.3.0-draft.2"
+              }
+            }
+          }
+        }
+      ]
+    },
+    "origin": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "kind",
+        "source_index_id",
+        "derivation"
+      ],
+      "properties": {
+        "kind": {
+          "enum": [
+            "foundational",
+            "historical-scenario-derivative"
+          ]
+        },
+        "source_index_id": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "pattern": "^BX-HIST-(?:V)?[0-9]{3}$"
+        },
+        "derivation": {
+          "enum": [
+            "calculation-pattern-only",
+            null
+          ]
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "kind": {
+                "const": "historical-scenario-derivative"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "source_index_id": {
+                "type": "string",
+                "pattern": "^BX-HIST-(?:V)?[0-9]{3}$"
+              },
+              "derivation": {
+                "const": "calculation-pattern-only"
+              }
+            }
+          },
+          "else": {
+            "properties": {
+              "source_index_id": {
+                "const": null
+              },
+              "derivation": {
+                "const": null
+              }
+            }
+          }
+        }
+      ]
+    }
+  }
+}

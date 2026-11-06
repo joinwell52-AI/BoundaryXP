@@ -1,0 +1,78 @@
+{
+  "format": "boundx-workbench/1",
+  "project_id": "dd3c5d1d-2d26-4586-8a91-1f8571a3cdcd",
+  "label": "R389-068 · B02原工具 · H40-005 · 失败后停止与成功结束的区分",
+  "revision": 12,
+  "mode": "TREE",
+  "planning": "COMPLETE",
+  "nodes": [
+    {
+      "id": "ADMIN-PM",
+      "project_id": "dd3c5d1d-2d26-4586-8a91-1f8571a3cdcd",
+      "label": "ADMIN → PM",
+      "text": "迁移失败立即停止写入并记录失败；只有校验成功才能登记成功完成。停止不要求伪造成功状态。",
+      "version": 1,
+      "parent_id": null,
+      "parent_basis": "",
+      "context_mode": "NONE",
+      "result_key": null
+    },
+    {
+      "id": "PM-DEV",
+      "project_id": "dd3c5d1d-2d26-4586-8a91-1f8571a3cdcd",
+      "label": "PM → DEV",
+      "text": "发生迁移失败，立即停止写入。",
+      "version": 1,
+      "parent_id": "ADMIN-PM",
+      "parent_basis": "本轮子任务继承适用的父任务限制。",
+      "context_mode": "PARENT",
+      "result_key": null
+    },
+    {
+      "id": "PM-OPS",
+      "project_id": "dd3c5d1d-2d26-4586-8a91-1f8571a3cdcd",
+      "label": "PM → OPS",
+      "text": "记录状态为失败停止，保留现场只读证据，不登记成功。",
+      "version": 1,
+      "parent_id": "ADMIN-PM",
+      "parent_basis": "本轮子任务继承适用的父任务限制。",
+      "context_mode": "PARENT",
+      "result_key": null
+    },
+    {
+      "id": "PM-QA",
+      "project_id": "dd3c5d1d-2d26-4586-8a91-1f8571a3cdcd",
+      "label": "PM → QA",
+      "text": "确认后续没有写入，也没有成功完成申报。",
+      "version": 1,
+      "parent_id": "ADMIN-PM",
+      "parent_basis": "本轮子任务继承适用的父任务限制。",
+      "context_mode": "PARENT",
+      "result_key": null
+    }
+  ],
+  "dependencies": [],
+  "retained": [],
+  "settings": {
+    "provider": "codex-api",
+    "transport_identity": "09ba0ba965e0a00dda14128296d1f4431f00bc8aafeef07c38f9d32e04dfca00",
+    "model": "gpt-6.1-sol",
+    "reasoning": "medium",
+    "parse_method": "SKILL",
+    "analysis_tool": "JOINT_SEVEN_STEP_V1",
+    "dictionaries": {
+      "l2": "software-ai@0.2.0",
+      "l3": "tenant-a@0.2.0"
+    }
+  },
+  "comparison": "a945358f233d6e382570ccca95ed75d7fc58ce45a3fcb6bb1a1780a1dbc7f336",
+  "saved_at": "2026-11-03T01:43:24.011Z",
+  "change_label": "程序重新核验 · 原LLM保留 · 0次模型请求",
+  "import_source": {
+    "format": "role-heading/1",
+    "text": "#ADMIN-PM\n迁移失败立即停止写入并记录失败；只有校验成功才能登记成功完成。停止不要求伪造成功状态。\n\n#PM-DEV\n发生迁移失败，立即停止写入。\n\n#PM-OPS\n记录状态为失败停止，保留现场只读证据，不登记成功。\n\n#PM-QA\n确认后续没有写入，也没有成功完成申报。"
+  },
+  "tool_results": {
+    "JOINT_SEVEN_STEP_V1": "a945358f233d6e382570ccca95ed75d7fc58ce45a3fcb6bb1a1780a1dbc7f336"
+  }
+}

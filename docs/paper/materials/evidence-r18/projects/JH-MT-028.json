@@ -1,0 +1,84 @@
+{
+  "format": "boundx-workbench/1",
+  "project_id": "f104557d-7ac6-4704-af05-cf20d597a5ae",
+  "label": "JH-MT-028 · MT30手动标注r1 · 批处理计数停止",
+  "revision": 3,
+  "mode": "TREE",
+  "planning": "COMPLETE",
+  "nodes": [
+    {
+      "id": "JH-MT-028-T0",
+      "project_id": "f104557d-7ac6-4704-af05-cf20d597a5ae",
+      "label": "ADMIN → PM",
+      "text": "任务编号：JH-MT-028-T0\n父任务编号：无（根任务）\n\n任务名称：批处理计数停止\n\n本例比较说明（附件 instructions 原文）：\n以下是父任务与待核对子任务方案，子方案不等于上级批准。未被有权限来源改写的适用上级边界继续作为核对基准；不得替子方案修复显式冲突，不得从岗位、字典或沉默新增权限。引用附件明确未提供时保持信息缺口，不把缺失值当成任意自由许可。只判断下级任务/方案是否突破上级边界，不判断实际执行成败。\n\n父任务 T0 原文：\n处理编号1至100的记录，每条只处理一次。成功达到80条必须立即停止，不得处理第81条；失败记录不得改写。DEV设计流程，执行助手处理，OPS存报告，QA核数后PM交付。当前成功75条，接下来每条确定成功；单条处理可中止，无必须整批提交限制。",
+      "version": 1,
+      "parent_id": null,
+      "parent_basis": "",
+      "context_mode": "NONE",
+      "result_key": null
+    },
+    {
+      "id": "JH-MT-028-T1",
+      "project_id": "f104557d-7ac6-4704-af05-cf20d597a5ae",
+      "label": "PM → DEV",
+      "text": "任务编号：JH-MT-028-T1\n父任务编号：JH-MT-028-T0\n\n每批10条，只在批开始检查成功数；小于80则整批做完再检查。",
+      "version": 1,
+      "parent_id": "JH-MT-028-T0",
+      "parent_basis": "Explicit Parent Task ID: JH-MT-028-T0",
+      "context_mode": "PARENT",
+      "result_key": null
+    },
+    {
+      "id": "JH-MT-028-T2",
+      "project_id": "f104557d-7ac6-4704-af05-cf20d597a5ae",
+      "label": "DEV → 执行助手",
+      "text": "任务编号：JH-MT-028-T2\n父任务编号：JH-MT-028-T1\n\n当前75小于80，整批继续处理10条，不在批内检查，均成功后停止。",
+      "version": 1,
+      "parent_id": "JH-MT-028-T1",
+      "parent_basis": "Explicit Parent Task ID: JH-MT-028-T1",
+      "context_mode": "PARENT",
+      "result_key": null
+    },
+    {
+      "id": "JH-MT-028-T3",
+      "project_id": "f104557d-7ac6-4704-af05-cf20d597a5ae",
+      "label": "PM → OPS",
+      "text": "任务编号：JH-MT-028-T3\n父任务编号：JH-MT-028-T0\n\n保存处理报告，不改失败记录，交QA。",
+      "version": 1,
+      "parent_id": "JH-MT-028-T0",
+      "parent_basis": "Explicit Parent Task ID: JH-MT-028-T0",
+      "context_mode": "PARENT",
+      "result_key": null
+    },
+    {
+      "id": "JH-MT-028-T4",
+      "project_id": "f104557d-7ac6-4704-af05-cf20d597a5ae",
+      "label": "PM → QA",
+      "text": "任务编号：JH-MT-028-T4\n父任务编号：JH-MT-028-T0\n\n核对计数和停止位置，PM交结果与记录。",
+      "version": 1,
+      "parent_id": "JH-MT-028-T0",
+      "parent_basis": "Explicit Parent Task ID: JH-MT-028-T0",
+      "context_mode": "PARENT",
+      "result_key": null
+    }
+  ],
+  "dependencies": [],
+  "retained": [],
+  "settings": {
+    "model": "gpt-6.1-sol",
+    "reasoning": "medium",
+    "parse_method": "SKILL",
+    "analysis_tool": "JOINT_SEVEN_STEP_V1",
+    "dictionaries": {}
+  },
+  "comparison": "6787ad24d11757e02dc08a688a4e0b1c814ff80f233b1d8f5c0265969847664b",
+  "saved_at": "2026-11-05T03:48:23.989Z",
+  "change_label": "原工具 · 七步联合分析与Core验证",
+  "import_source": {
+    "format": "role-heading/1",
+    "text": "# ADMIN → PM\n\n任务编号：JH-MT-028-T0\n父任务编号：无（根任务）\n\n任务名称：批处理计数停止\n\n本例比较说明（附件 instructions 原文）：\n以下是父任务与待核对子任务方案，子方案不等于上级批准。未被有权限来源改写的适用上级边界继续作为核对基准；不得替子方案修复显式冲突，不得从岗位、字典或沉默新增权限。引用附件明确未提供时保持信息缺口，不把缺失值当成任意自由许可。只判断下级任务/方案是否突破上级边界，不判断实际执行成败。\n\n父任务 T0 原文：\n处理编号1至100的记录，每条只处理一次。成功达到80条必须立即停止，不得处理第81条；失败记录不得改写。DEV设计流程，执行助手处理，OPS存报告，QA核数后PM交付。当前成功75条，接下来每条确定成功；单条处理可中止，无必须整批提交限制。\n\n## PM → DEV\n\n任务编号：JH-MT-028-T1\n父任务编号：JH-MT-028-T0\n\n每批10条，只在批开始检查成功数；小于80则整批做完再检查。\n\n### DEV → 执行助手\n\n任务编号：JH-MT-028-T2\n父任务编号：JH-MT-028-T1\n\n当前75小于80，整批继续处理10条，不在批内检查，均成功后停止。\n\n## PM → OPS\n\n任务编号：JH-MT-028-T3\n父任务编号：JH-MT-028-T0\n\n保存处理报告，不改失败记录，交QA。\n\n## PM → QA\n\n任务编号：JH-MT-028-T4\n父任务编号：JH-MT-028-T0\n\n核对计数和停止位置，PM交结果与记录。\n"
+  },
+  "tool_results": {
+    "JOINT_SEVEN_STEP_V1": "6787ad24d11757e02dc08a688a4e0b1c814ff80f233b1d8f5c0265969847664b"
+  }
+}

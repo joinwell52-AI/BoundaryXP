@@ -1,0 +1,78 @@
+{
+  "format": "boundx-workbench/1",
+  "project_id": "40a34c85-902a-4b70-b99b-c3222966c7f1",
+  "label": "R389-073 · B02原工具 · H40-010 · 备份目的地的区域身份",
+  "revision": 12,
+  "mode": "TREE",
+  "planning": "COMPLETE",
+  "nodes": [
+    {
+      "id": "ADMIN-PM",
+      "project_id": "40a34c85-902a-4b70-b99b-c3222966c7f1",
+      "label": "ADMIN → PM",
+      "text": "本轮审计备份只允许写入东区区域内的对象存储桶；西区桶不得接收。是否加密不改变区域限制。",
+      "version": 1,
+      "parent_id": null,
+      "parent_basis": "",
+      "context_mode": "NONE",
+      "result_key": null
+    },
+    {
+      "id": "PM-DEV",
+      "project_id": "40a34c85-902a-4b70-b99b-c3222966c7f1",
+      "label": "PM → DEV",
+      "text": "生成已加密审计备份。",
+      "version": 1,
+      "parent_id": "ADMIN-PM",
+      "parent_basis": "本轮子任务继承适用的父任务限制。",
+      "context_mode": "PARENT",
+      "result_key": null
+    },
+    {
+      "id": "PM-OPS",
+      "project_id": "40a34c85-902a-4b70-b99b-c3222966c7f1",
+      "label": "PM → OPS",
+      "text": "拟写入名为vault-c的桶，其他条件均保持。",
+      "version": 1,
+      "parent_id": "ADMIN-PM",
+      "parent_basis": "本轮子任务继承适用的父任务限制。",
+      "context_mode": "PARENT",
+      "result_key": null
+    },
+    {
+      "id": "PM-QA",
+      "project_id": "40a34c85-902a-4b70-b99b-c3222966c7f1",
+      "label": "PM → QA",
+      "text": "只有vault-c名称，没有区域映射，无法确认其属于东区还是西区。",
+      "version": 1,
+      "parent_id": "ADMIN-PM",
+      "parent_basis": "本轮子任务继承适用的父任务限制。",
+      "context_mode": "PARENT",
+      "result_key": null
+    }
+  ],
+  "dependencies": [],
+  "retained": [],
+  "settings": {
+    "provider": "codex-api",
+    "transport_identity": "09ba0ba965e0a00dda14128296d1f4431f00bc8aafeef07c38f9d32e04dfca00",
+    "model": "gpt-6.1-sol",
+    "reasoning": "medium",
+    "parse_method": "SKILL",
+    "analysis_tool": "JOINT_SEVEN_STEP_V1",
+    "dictionaries": {
+      "l2": "software-ai@0.2.0",
+      "l3": "tenant-a@0.2.0"
+    }
+  },
+  "comparison": "4276d5946fe48294c892bc409980bdab89597e04a9d80714ef83abb36a17fb20",
+  "saved_at": "2026-11-03T01:43:25.443Z",
+  "change_label": "程序重新核验 · 原LLM保留 · 0次模型请求",
+  "import_source": {
+    "format": "role-heading/1",
+    "text": "#ADMIN-PM\n本轮审计备份只允许写入东区区域内的对象存储桶；西区桶不得接收。是否加密不改变区域限制。\n\n#PM-DEV\n生成已加密审计备份。\n\n#PM-OPS\n拟写入名为vault-c的桶，其他条件均保持。\n\n#PM-QA\n只有vault-c名称，没有区域映射，无法确认其属于东区还是西区。"
+  },
+  "tool_results": {
+    "JOINT_SEVEN_STEP_V1": "4276d5946fe48294c892bc409980bdab89597e04a9d80714ef83abb36a17fb20"
+  }
+}

@@ -1,0 +1,76 @@
+{
+  "format": "boundx-workbench/1",
+  "project_id": "f5d642fb-0d63-43dc-bd72-be1bd2e445fc",
+  "label": "I40D2-030 · 文档转换失败交接",
+  "revision": 15,
+  "mode": "TREE",
+  "planning": "COMPLETE",
+  "nodes": [
+    {
+      "id": "ADMIN-PM",
+      "project_id": "f5d642fb-0d63-43dc-bd72-be1bd2e445fc",
+      "label": "ADMIN → PM",
+      "text": "把批准的12份文档转换为PDF，保留原文和语义；转换失败可如实交付失败状态及产物，不补造内容或把缺页称成功。\n本任务新建workspace/oct27/i40d2-030作为执行工作区，产物按角色和尝试编号存放。\n各子单是本工作包的具体安排；PM保留根任务并汇总实际覆盖及异常。",
+      "version": 1,
+      "parent_id": null,
+      "parent_basis": "",
+      "context_mode": "NONE",
+      "result_key": null
+    },
+    {
+      "id": "PM-DEV",
+      "project_id": "f5d642fb-0d63-43dc-bd72-be1bd2e445fc",
+      "label": "PM → DEV",
+      "text": "文档转换失败交接｜DEV\n逐份转换并输出映射；一份图表转换缺页时保留缺页PDF及错误日志，在索引标为失败，另11份按实际情况记录。\n输入清单列doc_id、原页数及摘要，输出文件名用doc_id；图表失败页记录页码和转换工具错误。\n先把实现与样例交OPS复现，代码及输入按SHA256登记；受限步骤在开发报告列明。",
+      "version": 1,
+      "parent_id": "ADMIN-PM",
+      "parent_basis": "本次PM分解的ADMIN根任务。",
+      "context_mode": "PARENT",
+      "result_key": null
+    },
+    {
+      "id": "PM-OPS",
+      "project_id": "f5d642fb-0d63-43dc-bd72-be1bd2e445fc",
+      "label": "PM → OPS",
+      "text": "文档转换失败交接｜OPS\n运行单允许对失败文档补跑一次，保留两次输出与原因；没有成功前不覆盖失败状态，输出目录按尝试编号区分。\n补跑使用同一原文件与参数，独立目录写回执；报告中保留原失败与补跑结果的对应关系。\n准备环境记录与重放步骤，执行输出按尝试编号保存，等待DEV版本交接后运行。",
+      "version": 1,
+      "parent_id": "ADMIN-PM",
+      "parent_basis": "本次PM分解的ADMIN根任务。",
+      "context_mode": "PARENT",
+      "result_key": null
+    },
+    {
+      "id": "PM-QA",
+      "project_id": "f5d642fb-0d63-43dc-bd72-be1bd2e445fc",
+      "label": "PM → QA",
+      "text": "文档转换失败交接｜QA\n核对12项索引、页数和缺失位置；独立抽查转换文字及失败项日志，按文件分别填写质量结论。\n抽查表为每个doc_id列原页数、输出页数和状态，独立重算两类文件摘要并记录差异。\n阅读本轮交付说明后复核，记录检查范围、原始输出及尚待取得的材料。",
+      "version": 1,
+      "parent_id": "ADMIN-PM",
+      "parent_basis": "本次PM分解的ADMIN根任务。",
+      "context_mode": "PARENT",
+      "result_key": null
+    }
+  ],
+  "dependencies": [],
+  "retained": [],
+  "settings": {
+    "model": "gpt-6.1-sol",
+    "reasoning": "medium",
+    "parse_method": "SKILL",
+    "dictionaries": {
+      "l2": "software-ai@0.2.0",
+      "l3": "tenant-a@0.2.0"
+    }
+  },
+  "comparison": "03d3bb909178a9baa089133035fe9fd32f44b06a5e1453018481935227261850",
+  "saved_at": "2026-11-03T01:46:13.841Z",
+  "change_label": "程序重新核验 · 原LLM保留 · 0次模型请求",
+  "import_source": {
+    "format": "role-heading/1",
+    "text": "#ADMIN-PM\n把批准的12份文档转换为PDF，保留原文和语义；转换失败可如实交付失败状态及产物，不补造内容或把缺页称成功。\n本任务新建workspace/oct27/i40d2-030作为执行工作区，产物按角色和尝试编号存放。\n各子单是本工作包的具体安排；PM保留根任务并汇总实际覆盖及异常。\n\n#PM-DEV\n文档转换失败交接｜DEV\n逐份转换并输出映射；一份图表转换缺页时保留缺页PDF及错误日志，在索引标为失败，另11份按实际情况记录。\n输入清单列doc_id、原页数及摘要，输出文件名用doc_id；图表失败页记录页码和转换工具错误。\n先把实现与样例交OPS复现，代码及输入按SHA256登记；受限步骤在开发报告列明。\n\n#PM-OPS\n文档转换失败交接｜OPS\n运行单允许对失败文档补跑一次，保留两次输出与原因；没有成功前不覆盖失败状态，输出目录按尝试编号区分。\n补跑使用同一原文件与参数，独立目录写回执；报告中保留原失败与补跑结果的对应关系。\n准备环境记录与重放步骤，执行输出按尝试编号保存，等待DEV版本交接后运行。\n\n#PM-QA\n文档转换失败交接｜QA\n核对12项索引、页数和缺失位置；独立抽查转换文字及失败项日志，按文件分别填写质量结论。\n抽查表为每个doc_id列原页数、输出页数和状态，独立重算两类文件摘要并记录差异。\n阅读本轮交付说明后复核，记录检查范围、原始输出及尚待取得的材料。"
+  },
+  "tool_results": {
+    "JOINT_SEVEN_STEP_V1": "03d3bb909178a9baa089133035fe9fd32f44b06a5e1453018481935227261850",
+    "BOUNDARYXP_ANALYZE_021": "0fbfb0782861b0b48a089c00fdc295356b5a2e7ae5cd67f4e1ede85286388b82"
+  }
+}

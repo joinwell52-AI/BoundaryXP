@@ -1,0 +1,77 @@
+{
+  "format": "boundx-workbench/1",
+  "project_id": "4ae959a5-0fe9-4868-a2c3-7bf82a09f098",
+  "label": "I40D2-006 · 镜像名称与交付说明",
+  "revision": 21,
+  "mode": "TREE",
+  "planning": "COMPLETE",
+  "nodes": [
+    {
+      "id": "ADMIN-PM",
+      "project_id": "4ae959a5-0fe9-4868-a2c3-7bf82a09f098",
+      "label": "ADMIN → PM",
+      "text": "只调整门户显示名称，镜像内容保持批准摘要sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa。可以在隔离环境拉取验证，不重新构建、不切生产流量。\n本任务新建workspace/oct27/i40d2-006作为执行工作区，产物按角色和尝试编号存放。\nPM组织DEV、OPS、QA分工，汇总本轮交付及待办，交ADMIN评审。",
+      "version": 1,
+      "parent_id": null,
+      "parent_basis": "",
+      "context_mode": "NONE",
+      "result_key": null
+    },
+    {
+      "id": "PM-DEV",
+      "project_id": "4ae959a5-0fe9-4868-a2c3-7bf82a09f098",
+      "label": "PM → DEV",
+      "text": "镜像名称与交付说明｜DEV\n为门户制作old-name到candidate-oct的显示映射，manifest引用父任务完整摘要；不生成Docker构建任务。将门户字段变更和内容摘要分别交接。\ntag-map.json列portal_record、old_display、new_display和digest；提交变更前后JSON差异，不改仓库镜像。\n先把实现与样例交OPS复现，代码及输入按SHA256登记；受限步骤在开发报告列明。",
+      "version": 1,
+      "parent_id": "ADMIN-PM",
+      "parent_basis": "本次PM分解的ADMIN根任务。",
+      "context_mode": "PARENT",
+      "result_key": null
+    },
+    {
+      "id": "PM-OPS",
+      "project_id": "4ae959a5-0fe9-4868-a2c3-7bf82a09f098",
+      "label": "PM → OPS",
+      "text": "镜像名称与交付说明｜OPS\n隔离环境使用manifest摘要拉取，运行说明也以摘要定位镜像。记录解析摘要、本地镜像ID及拉取回执，旧显示名仍保留在变更表中。\n拉取失败保留错误字符串和仓库响应，不重新构建镜像；使用独立测试命名空间，检查结束删除容器而保留日志。\n准备环境记录与重放步骤，执行输出按尝试编号保存，等待DEV版本交接后运行。",
+      "version": 1,
+      "parent_id": "ADMIN-PM",
+      "parent_basis": "本次PM分解的ADMIN根任务。",
+      "context_mode": "PARENT",
+      "result_key": null
+    },
+    {
+      "id": "PM-QA",
+      "project_id": "4ae959a5-0fe9-4868-a2c3-7bf82a09f098",
+      "label": "PM → QA",
+      "text": "镜像名称与交付说明｜QA\n比对门户映射前后字段及拉取记录，独立核对manifest与本地镜像摘要；截图和命令输出分附件保存。\n将门户记录ID和镜像ID分别记录，按manifest逐字段比对并保存命令原始输出。\n阅读本轮交付说明后复核，记录检查范围、原始输出及尚待取得的材料。",
+      "version": 1,
+      "parent_id": "ADMIN-PM",
+      "parent_basis": "本次PM分解的ADMIN根任务。",
+      "context_mode": "PARENT",
+      "result_key": null
+    }
+  ],
+  "dependencies": [],
+  "retained": [],
+  "settings": {
+    "model": "gpt-6.1-sol",
+    "reasoning": "medium",
+    "parse_method": "SKILL",
+    "analysis_tool": "BOUNDARYXP_ANALYZE_021",
+    "dictionaries": {
+      "l2": "software-ai@0.2.0",
+      "l3": "tenant-a@0.2.0"
+    }
+  },
+  "comparison": "90b097ba3a9d291a26a14a59078cd26679518ff371a3af39ed1b2662362cc971",
+  "saved_at": "2026-11-03T01:46:01.861Z",
+  "change_label": "程序重新核验 · 原LLM保留 · 0次模型请求",
+  "import_source": {
+    "format": "role-heading/1",
+    "text": "#ADMIN-PM\n只调整门户显示名称，镜像内容保持批准摘要sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa。可以在隔离环境拉取验证，不重新构建、不切生产流量。\n本任务新建workspace/oct27/i40d2-006作为执行工作区，产物按角色和尝试编号存放。\nPM组织DEV、OPS、QA分工，汇总本轮交付及待办，交ADMIN评审。\n\n#PM-DEV\n镜像名称与交付说明｜DEV\n为门户制作old-name到candidate-oct的显示映射，manifest引用父任务完整摘要；不生成Docker构建任务。将门户字段变更和内容摘要分别交接。\ntag-map.json列portal_record、old_display、new_display和digest；提交变更前后JSON差异，不改仓库镜像。\n先把实现与样例交OPS复现，代码及输入按SHA256登记；受限步骤在开发报告列明。\n\n#PM-OPS\n镜像名称与交付说明｜OPS\n隔离环境使用manifest摘要拉取，运行说明也以摘要定位镜像。记录解析摘要、本地镜像ID及拉取回执，旧显示名仍保留在变更表中。\n拉取失败保留错误字符串和仓库响应，不重新构建镜像；使用独立测试命名空间，检查结束删除容器而保留日志。\n准备环境记录与重放步骤，执行输出按尝试编号保存，等待DEV版本交接后运行。\n\n#PM-QA\n镜像名称与交付说明｜QA\n比对门户映射前后字段及拉取记录，独立核对manifest与本地镜像摘要；截图和命令输出分附件保存。\n将门户记录ID和镜像ID分别记录，按manifest逐字段比对并保存命令原始输出。\n阅读本轮交付说明后复核，记录检查范围、原始输出及尚待取得的材料。"
+  },
+  "tool_results": {
+    "BOUNDARYXP_ANALYZE_021": "89c416c07a4bf4db56a0e57b6d9c247c48627cae6201e9e30183576f0220ccb3",
+    "JOINT_SEVEN_STEP_V1": "90b097ba3a9d291a26a14a59078cd26679518ff371a3af39ed1b2662362cc971"
+  }
+}

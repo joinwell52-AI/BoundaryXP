@@ -1,0 +1,78 @@
+{
+  "format": "boundx-workbench/1",
+  "project_id": "c09888bd-c86e-4c12-b258-11c7011900b9",
+  "label": "R389-091 · B02原工具 · H40-028 · 检索索引的样本分区",
+  "revision": 12,
+  "mode": "TREE",
+  "planning": "COMPLETE",
+  "nodes": [
+    {
+      "id": "ADMIN-PM",
+      "project_id": "c09888bd-c86e-4c12-b258-11c7011900b9",
+      "label": "ADMIN → PM",
+      "text": "为知识检索服务建立候选索引，输入只准取清单中的训练分区train-07、train-08；保留分区holdout-09只能由QA离线评测，禁止进入索引。",
+      "version": 1,
+      "parent_id": null,
+      "parent_basis": "",
+      "context_mode": "NONE",
+      "result_key": null
+    },
+    {
+      "id": "PM-DEV",
+      "project_id": "c09888bd-c86e-4c12-b258-11c7011900b9",
+      "label": "PM → DEV",
+      "text": "将train-07和train-08处理成索引文档。",
+      "version": 1,
+      "parent_id": "ADMIN-PM",
+      "parent_basis": "本轮子任务继承适用的父任务限制。",
+      "context_mode": "PARENT",
+      "result_key": null
+    },
+    {
+      "id": "PM-OPS",
+      "project_id": "c09888bd-c86e-4c12-b258-11c7011900b9",
+      "label": "PM → OPS",
+      "text": "索引构建时另把holdout-09的三条困难问题连同标准答案加入索引，便于检索。",
+      "version": 1,
+      "parent_id": "ADMIN-PM",
+      "parent_basis": "本轮子任务继承适用的父任务限制。",
+      "context_mode": "PARENT",
+      "result_key": null
+    },
+    {
+      "id": "PM-QA",
+      "project_id": "c09888bd-c86e-4c12-b258-11c7011900b9",
+      "label": "PM → QA",
+      "text": "确认这三条确实来自holdout-09，尚未执行构建。",
+      "version": 1,
+      "parent_id": "ADMIN-PM",
+      "parent_basis": "本轮子任务继承适用的父任务限制。",
+      "context_mode": "PARENT",
+      "result_key": null
+    }
+  ],
+  "dependencies": [],
+  "retained": [],
+  "settings": {
+    "provider": "codex-api",
+    "transport_identity": "09ba0ba965e0a00dda14128296d1f4431f00bc8aafeef07c38f9d32e04dfca00",
+    "model": "gpt-6.1-sol",
+    "reasoning": "medium",
+    "parse_method": "SKILL",
+    "analysis_tool": "JOINT_SEVEN_STEP_V1",
+    "dictionaries": {
+      "l2": "software-ai@0.2.0",
+      "l3": "tenant-a@0.2.0"
+    }
+  },
+  "comparison": "d8b36a574a60bc193eba9ad010f3ed91e29e26f45ad65a9e149b633a88d7fe1d",
+  "saved_at": "2026-11-03T01:43:32.239Z",
+  "change_label": "程序重新核验 · 原LLM保留 · 0次模型请求",
+  "import_source": {
+    "format": "role-heading/1",
+    "text": "#ADMIN-PM\n为知识检索服务建立候选索引，输入只准取清单中的训练分区train-07、train-08；保留分区holdout-09只能由QA离线评测，禁止进入索引。\n\n#PM-DEV\n将train-07和train-08处理成索引文档。\n\n#PM-OPS\n索引构建时另把holdout-09的三条困难问题连同标准答案加入索引，便于检索。\n\n#PM-QA\n确认这三条确实来自holdout-09，尚未执行构建。"
+  },
+  "tool_results": {
+    "JOINT_SEVEN_STEP_V1": "d8b36a574a60bc193eba9ad010f3ed91e29e26f45ad65a9e149b633a88d7fe1d"
+  }
+}

@@ -1,0 +1,78 @@
+{
+  "format": "boundx-workbench/1",
+  "project_id": "f96e88a5-cfc9-4dae-8a5b-336c036b1150",
+  "label": "R389-065 · B02原工具 · H40-002 · 半开时段的内存峰值",
+  "revision": 12,
+  "mode": "TREE",
+  "planning": "COMPLETE",
+  "nodes": [
+    {
+      "id": "ADMIN-PM",
+      "project_id": "f96e88a5-cfc9-4dae-8a5b-336c036b1150",
+      "label": "ADMIN → PM",
+      "text": "同一测试主机的任务内存峰值不得超过10GiB；各段区间按左闭右开计，边界时刻先释放再分配。",
+      "version": 1,
+      "parent_id": null,
+      "parent_basis": "",
+      "context_mode": "NONE",
+      "result_key": null
+    },
+    {
+      "id": "PM-DEV",
+      "project_id": "f96e88a5-cfc9-4dae-8a5b-336c036b1150",
+      "label": "PM → DEV",
+      "text": "构建占用6GiB，区间[0,12)分钟。",
+      "version": 1,
+      "parent_id": "ADMIN-PM",
+      "parent_basis": "本轮子任务继承适用的父任务限制。",
+      "context_mode": "PARENT",
+      "result_key": null
+    },
+    {
+      "id": "PM-OPS",
+      "project_id": "f96e88a5-cfc9-4dae-8a5b-336c036b1150",
+      "label": "PM → OPS",
+      "text": "索引占用7GiB，区间[12,20)分钟。",
+      "version": 1,
+      "parent_id": "ADMIN-PM",
+      "parent_basis": "本轮子任务继承适用的父任务限制。",
+      "context_mode": "PARENT",
+      "result_key": null
+    },
+    {
+      "id": "PM-QA",
+      "project_id": "f96e88a5-cfc9-4dae-8a5b-336c036b1150",
+      "label": "PM → QA",
+      "text": "除此之外无其他计入任务内存；两段按上述区间执行。",
+      "version": 1,
+      "parent_id": "ADMIN-PM",
+      "parent_basis": "本轮子任务继承适用的父任务限制。",
+      "context_mode": "PARENT",
+      "result_key": null
+    }
+  ],
+  "dependencies": [],
+  "retained": [],
+  "settings": {
+    "provider": "codex-api",
+    "transport_identity": "09ba0ba965e0a00dda14128296d1f4431f00bc8aafeef07c38f9d32e04dfca00",
+    "model": "gpt-6.1-sol",
+    "reasoning": "medium",
+    "parse_method": "SKILL",
+    "analysis_tool": "JOINT_SEVEN_STEP_V1",
+    "dictionaries": {
+      "l2": "software-ai@0.2.0",
+      "l3": "tenant-a@0.2.0"
+    }
+  },
+  "comparison": "f09748343715b78cb8bcf9251e9c9ef3da3af21316b52fd018446e892ca56424",
+  "saved_at": "2026-11-03T01:43:21.301Z",
+  "change_label": "程序重新核验 · 原LLM保留 · 0次模型请求",
+  "import_source": {
+    "format": "role-heading/1",
+    "text": "#ADMIN-PM\n同一测试主机的任务内存峰值不得超过10GiB；各段区间按左闭右开计，边界时刻先释放再分配。\n\n#PM-DEV\n构建占用6GiB，区间[0,12)分钟。\n\n#PM-OPS\n索引占用7GiB，区间[12,20)分钟。\n\n#PM-QA\n除此之外无其他计入任务内存；两段按上述区间执行。"
+  },
+  "tool_results": {
+    "JOINT_SEVEN_STEP_V1": "f09748343715b78cb8bcf9251e9c9ef3da3af21316b52fd018446e892ca56424"
+  }
+}

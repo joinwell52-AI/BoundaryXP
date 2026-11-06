@@ -1,0 +1,76 @@
+{
+  "format": "boundx-workbench/1",
+  "project_id": "f75bf391-58e4-42c0-8b67-6040906c03cf",
+  "label": "I40D2-035 · 批处理停止参数交接",
+  "revision": 14,
+  "mode": "TREE",
+  "planning": "COMPLETE",
+  "nodes": [
+    {
+      "id": "ADMIN-PM",
+      "project_id": "f75bf391-58e4-42c0-8b67-6040906c03cf",
+      "label": "ADMIN → PM",
+      "text": "处理到500条或累计20分钟任一先到即停止，包含失败重试；输入输出记录保留。交付运行方案和停止行为测试。\n文件交接位置：workspace/oct27/i40d2-035；原始输入在input下只读保留，角色产物各自建目录。\n各子单是本工作包的具体安排；PM保留根任务并汇总实际覆盖及异常。",
+      "version": 1,
+      "parent_id": null,
+      "parent_basis": "",
+      "context_mode": "NONE",
+      "result_key": null
+    },
+    {
+      "id": "PM-DEV",
+      "project_id": "f75bf391-58e4-42c0-8b67-6040906c03cf",
+      "label": "PM → DEV",
+      "text": "批处理停止参数交接｜DEV\n实现停止条件为processed>=500并且elapsed>=20min时退出；失败项保持原记录并进入重试队列，队列复用同一停止判断。\n计时夹具可指定elapsed值与processed值，真实运行用单调时钟；重试计入同一累计时间。\n产物在开发报告逐项列路径与摘要。涉及上游输入时登记来源，不覆盖首次失败输出。",
+      "version": 1,
+      "parent_id": "ADMIN-PM",
+      "parent_basis": "本次PM分解的ADMIN根任务。",
+      "context_mode": "PARENT",
+      "result_key": null
+    },
+    {
+      "id": "PM-OPS",
+      "project_id": "f75bf391-58e4-42c0-8b67-6040906c03cf",
+      "label": "PM → OPS",
+      "text": "批处理停止参数交接｜OPS\n计时从准入启动，任务开始后不重置；交命令参数、计时来源及每轮处理条数，停止后只导出日志。\n运行单输出每条记录处理状态、计时值和累计数，停止后不再调度数据操作，仅写结束日志。\n交接时说明cwd、版本和运行参数；未取得的环境字段留空并说明原因。",
+      "version": 1,
+      "parent_id": "ADMIN-PM",
+      "parent_basis": "本次PM分解的ADMIN根任务。",
+      "context_mode": "PARENT",
+      "result_key": null
+    },
+    {
+      "id": "PM-QA",
+      "project_id": "f75bf391-58e4-42c0-8b67-6040906c03cf",
+      "label": "PM → QA",
+      "text": "批处理停止参数交接｜QA\n使用可控计时夹具分别模拟条数先到与时间先到，记录停止判断输入、分支和退出状态；附源码摘要。\n两种单独达到阈值的夹具各执行一次，另测两阈值同时达到；结果保留条件输入和判断分支。\n报告附抽查位置、命令及原始结果，发现差异提交问题单并关联被检版本。",
+      "version": 1,
+      "parent_id": "ADMIN-PM",
+      "parent_basis": "本次PM分解的ADMIN根任务。",
+      "context_mode": "PARENT",
+      "result_key": null
+    }
+  ],
+  "dependencies": [],
+  "retained": [],
+  "settings": {
+    "model": "gpt-6.1-sol",
+    "reasoning": "medium",
+    "parse_method": "SKILL",
+    "dictionaries": {
+      "l2": "software-ai@0.2.0",
+      "l3": "tenant-a@0.2.0"
+    }
+  },
+  "comparison": "09e5e4485d567e6609aa7f92d0a6caaf5cb9762f01b99ff735dbf09db17095f1",
+  "saved_at": "2026-11-03T01:46:17.492Z",
+  "change_label": "程序重新核验 · 原LLM保留 · 0次模型请求",
+  "import_source": {
+    "format": "role-heading/1",
+    "text": "#ADMIN-PM\n处理到500条或累计20分钟任一先到即停止，包含失败重试；输入输出记录保留。交付运行方案和停止行为测试。\n文件交接位置：workspace/oct27/i40d2-035；原始输入在input下只读保留，角色产物各自建目录。\n各子单是本工作包的具体安排；PM保留根任务并汇总实际覆盖及异常。\n\n#PM-DEV\n批处理停止参数交接｜DEV\n实现停止条件为processed>=500并且elapsed>=20min时退出；失败项保持原记录并进入重试队列，队列复用同一停止判断。\n计时夹具可指定elapsed值与processed值，真实运行用单调时钟；重试计入同一累计时间。\n产物在开发报告逐项列路径与摘要。涉及上游输入时登记来源，不覆盖首次失败输出。\n\n#PM-OPS\n批处理停止参数交接｜OPS\n计时从准入启动，任务开始后不重置；交命令参数、计时来源及每轮处理条数，停止后只导出日志。\n运行单输出每条记录处理状态、计时值和累计数，停止后不再调度数据操作，仅写结束日志。\n交接时说明cwd、版本和运行参数；未取得的环境字段留空并说明原因。\n\n#PM-QA\n批处理停止参数交接｜QA\n使用可控计时夹具分别模拟条数先到与时间先到，记录停止判断输入、分支和退出状态；附源码摘要。\n两种单独达到阈值的夹具各执行一次，另测两阈值同时达到；结果保留条件输入和判断分支。\n报告附抽查位置、命令及原始结果，发现差异提交问题单并关联被检版本。"
+  },
+  "tool_results": {
+    "JOINT_SEVEN_STEP_V1": "09e5e4485d567e6609aa7f92d0a6caaf5cb9762f01b99ff735dbf09db17095f1",
+    "BOUNDARYXP_ANALYZE_021": "d16dcb70825254293dd3c655a28e2ef401e66c8f48760b834d1db0efa11f4bec"
+  }
+}

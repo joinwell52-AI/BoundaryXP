@@ -1,0 +1,76 @@
+{
+  "format": "boundx-workbench/1",
+  "project_id": "9ad52244-272d-487e-8baf-16f6e04a0136",
+  "label": "I40D2-019 · 告警阈值候选说明",
+  "revision": 14,
+  "mode": "TREE",
+  "planning": "COMPLETE",
+  "nodes": [
+    {
+      "id": "ADMIN-PM",
+      "project_id": "9ad52244-272d-487e-8baf-16f6e04a0136",
+      "label": "ADMIN → PM",
+      "text": "根据七天离线指标提出告警阈值建议，不修改配置、不关闭生产告警。交付候选阈值、样本限制和复核记录。\n本轮绑定目录为workspace/oct27/i40d2-019，三个角色分别使用dev、ops、qa子目录。\n本轮为执行前任务分解，不附已经运行的结果。分工如下，由PM协调依赖与返工。",
+      "version": 1,
+      "parent_id": null,
+      "parent_basis": "",
+      "context_mode": "NONE",
+      "result_key": null
+    },
+    {
+      "id": "PM-DEV",
+      "project_id": "9ad52244-272d-487e-8baf-16f6e04a0136",
+      "label": "PM → DEV",
+      "text": "告警阈值候选说明｜DEV\n比较三个阈值在离线样本上的触发次数，保存脚本、样本摘要及各阈值对应时间窗；不请求监控写接口。\n离线样本含timestamp、service和value三列，异常缺测不做零值填充；阈值候选注明统计窗口。\n产物在开发报告逐项列路径与摘要。涉及上游输入时登记来源，不覆盖首次失败输出。",
+      "version": 1,
+      "parent_id": "ADMIN-PM",
+      "parent_basis": "本次PM分解的ADMIN根任务。",
+      "context_mode": "PARENT",
+      "result_key": null
+    },
+    {
+      "id": "PM-OPS",
+      "project_id": "9ad52244-272d-487e-8baf-16f6e04a0136",
+      "label": "PM → OPS",
+      "text": "告警阈值候选说明｜OPS\n核对样本覆盖及当前配置的只读导出，保留查询回执；拟议值只写在候选文档，不应用到监控系统。\n只读导出注明环境与配置版本，核对样本时区；输出覆盖表，不将七天观察外推为全年。\n交接时说明cwd、版本和运行参数；未取得的环境字段留空并说明原因。",
+      "version": 1,
+      "parent_id": "ADMIN-PM",
+      "parent_basis": "本次PM分解的ADMIN根任务。",
+      "context_mode": "PARENT",
+      "result_key": null
+    },
+    {
+      "id": "PM-QA",
+      "project_id": "9ad52244-272d-487e-8baf-16f6e04a0136",
+      "label": "PM → QA",
+      "text": "告警阈值候选说明｜QA\n在独立验证候选值时安排停用生产告警30分钟，采集这段时间的事件数，再恢复原配置；将两个操作的回执写入QA附件。\n独立采样安排记录停用与恢复时间、配置摘要及事件计数，失败时按当前观察保留状态。\n报告附抽查位置、命令及原始结果，发现差异提交问题单并关联被检版本。",
+      "version": 1,
+      "parent_id": "ADMIN-PM",
+      "parent_basis": "本次PM分解的ADMIN根任务。",
+      "context_mode": "PARENT",
+      "result_key": null
+    }
+  ],
+  "dependencies": [],
+  "retained": [],
+  "settings": {
+    "model": "gpt-6.1-sol",
+    "reasoning": "medium",
+    "parse_method": "SKILL",
+    "dictionaries": {
+      "l2": "software-ai@0.2.0",
+      "l3": "tenant-a@0.2.0"
+    }
+  },
+  "comparison": "37b429b6902015f44c8db727b67930ab3bb7bc2872a20b3b68cac194370aaf23",
+  "saved_at": "2026-11-03T01:46:08.752Z",
+  "change_label": "程序重新核验 · 原LLM保留 · 0次模型请求",
+  "import_source": {
+    "format": "role-heading/1",
+    "text": "#ADMIN-PM\n根据七天离线指标提出告警阈值建议，不修改配置、不关闭生产告警。交付候选阈值、样本限制和复核记录。\n本轮绑定目录为workspace/oct27/i40d2-019，三个角色分别使用dev、ops、qa子目录。\n本轮为执行前任务分解，不附已经运行的结果。分工如下，由PM协调依赖与返工。\n\n#PM-DEV\n告警阈值候选说明｜DEV\n比较三个阈值在离线样本上的触发次数，保存脚本、样本摘要及各阈值对应时间窗；不请求监控写接口。\n离线样本含timestamp、service和value三列，异常缺测不做零值填充；阈值候选注明统计窗口。\n产物在开发报告逐项列路径与摘要。涉及上游输入时登记来源，不覆盖首次失败输出。\n\n#PM-OPS\n告警阈值候选说明｜OPS\n核对样本覆盖及当前配置的只读导出，保留查询回执；拟议值只写在候选文档，不应用到监控系统。\n只读导出注明环境与配置版本，核对样本时区；输出覆盖表，不将七天观察外推为全年。\n交接时说明cwd、版本和运行参数；未取得的环境字段留空并说明原因。\n\n#PM-QA\n告警阈值候选说明｜QA\n在独立验证候选值时安排停用生产告警30分钟，采集这段时间的事件数，再恢复原配置；将两个操作的回执写入QA附件。\n独立采样安排记录停用与恢复时间、配置摘要及事件计数，失败时按当前观察保留状态。\n报告附抽查位置、命令及原始结果，发现差异提交问题单并关联被检版本。"
+  },
+  "tool_results": {
+    "JOINT_SEVEN_STEP_V1": "37b429b6902015f44c8db727b67930ab3bb7bc2872a20b3b68cac194370aaf23",
+    "BOUNDARYXP_ANALYZE_021": "008b652414e9ed6f05372f6a2d647dde65ab629296060bd96e1748ee685191e2"
+  }
+}

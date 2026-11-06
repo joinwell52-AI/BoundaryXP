@@ -1,0 +1,78 @@
+{
+  "format": "boundx-workbench/1",
+  "project_id": "0cdc2bf6-26a1-4203-b2a2-77b5a4345e44",
+  "label": "R389-087 · B02原工具 · H40-024 · 调用计费与不计费探针",
+  "revision": 12,
+  "mode": "TREE",
+  "planning": "COMPLETE",
+  "nodes": [
+    {
+      "id": "ADMIN-PM",
+      "project_id": "0cdc2bf6-26a1-4203-b2a2-77b5a4345e44",
+      "label": "ADMIN → PM",
+      "text": "同一工作包最多300次计费调用。计费定义明确排除只读健康探针，其余业务请求每次计1次；失败业务请求也计费。",
+      "version": 1,
+      "parent_id": null,
+      "parent_basis": "",
+      "context_mode": "NONE",
+      "result_key": null
+    },
+    {
+      "id": "PM-DEV",
+      "project_id": "0cdc2bf6-26a1-4203-b2a2-77b5a4345e44",
+      "label": "PM → DEV",
+      "text": "安排230次成功业务请求。",
+      "version": 1,
+      "parent_id": "ADMIN-PM",
+      "parent_basis": "本轮子任务继承适用的父任务限制。",
+      "context_mode": "PARENT",
+      "result_key": null
+    },
+    {
+      "id": "PM-OPS",
+      "project_id": "0cdc2bf6-26a1-4203-b2a2-77b5a4345e44",
+      "label": "PM → OPS",
+      "text": "安排40次预期失败业务请求和80次只读健康探针。",
+      "version": 1,
+      "parent_id": "ADMIN-PM",
+      "parent_basis": "本轮子任务继承适用的父任务限制。",
+      "context_mode": "PARENT",
+      "result_key": null
+    },
+    {
+      "id": "PM-QA",
+      "project_id": "0cdc2bf6-26a1-4203-b2a2-77b5a4345e44",
+      "label": "PM → QA",
+      "text": "确认80次全部是定义中排除的健康探针，没有业务负载。",
+      "version": 1,
+      "parent_id": "ADMIN-PM",
+      "parent_basis": "本轮子任务继承适用的父任务限制。",
+      "context_mode": "PARENT",
+      "result_key": null
+    }
+  ],
+  "dependencies": [],
+  "retained": [],
+  "settings": {
+    "provider": "codex-api",
+    "transport_identity": "09ba0ba965e0a00dda14128296d1f4431f00bc8aafeef07c38f9d32e04dfca00",
+    "model": "gpt-6.1-sol",
+    "reasoning": "medium",
+    "parse_method": "SKILL",
+    "analysis_tool": "JOINT_SEVEN_STEP_V1",
+    "dictionaries": {
+      "l2": "software-ai@0.2.0",
+      "l3": "tenant-a@0.2.0"
+    }
+  },
+  "comparison": "ad854ffcea5a6b7e652238932c0de02d844da01c9876b78a77193c01233015e2",
+  "saved_at": "2026-11-03T01:43:31.003Z",
+  "change_label": "程序重新核验 · 原LLM保留 · 0次模型请求",
+  "import_source": {
+    "format": "role-heading/1",
+    "text": "#ADMIN-PM\n同一工作包最多300次计费调用。计费定义明确排除只读健康探针，其余业务请求每次计1次；失败业务请求也计费。\n\n#PM-DEV\n安排230次成功业务请求。\n\n#PM-OPS\n安排40次预期失败业务请求和80次只读健康探针。\n\n#PM-QA\n确认80次全部是定义中排除的健康探针，没有业务负载。"
+  },
+  "tool_results": {
+    "JOINT_SEVEN_STEP_V1": "ad854ffcea5a6b7e652238932c0de02d844da01c9876b78a77193c01233015e2"
+  }
+}

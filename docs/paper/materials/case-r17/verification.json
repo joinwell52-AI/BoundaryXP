@@ -1,0 +1,510 @@
+{
+  "passed": true,
+  "case_id": "EN20-007",
+  "runtime": "0.1.0-candidate.031-r1.2-ui.333",
+  "capture_runtime": "0.1.0-candidate.031-r1.2-ui.334",
+  "manifest_files": 549,
+  "source_quote_matches": 39,
+  "task_nodes": 5,
+  "calculations": 9,
+  "scope": "FROZEN_B333_SAVED_OPERANDS_REPLAY",
+  "exact_saved_results": true,
+  "repeat_consistent": true,
+  "annotation": "VIOLATED",
+  "llm_final": "越界",
+  "calculator": "VIOLATED",
+  "minimum_excess": "400 EUR",
+  "retained_unknowns": [
+    {
+      "id": "U1",
+      "evaluation_scope": "TASK_DOCUMENT_BOUNDARY",
+      "item": "运费尚未报价，精确金额及可登记的完整计划分配额未知；只知金额至少EUR 0。",
+      "evidence_ids": [
+        "E28",
+        "E29",
+        "E36"
+      ],
+      "source_record_ids": [
+        "S28",
+        "S29",
+        "S36"
+      ],
+      "impact": "REPORTED_STATE",
+      "calculation_ids": [
+        "K1",
+        "K2",
+        "K4",
+        "K9"
+      ],
+      "affects_current_verdict": false,
+      "reason": "影响精确总额和完整预算分配输入，但所有非负补全均使6400设备加运费超过6000；K9的非负证据支持也不依赖精确值。未知真实保留，不能填为0。"
+    }
+  ],
+  "checks": [
+    {
+      "id": "K1",
+      "kind": "budget",
+      "result": {
+        "status": "VIOLATED",
+        "basis": "PROGRAM",
+        "method": "PARTIAL_FIXED_ALLOCATION_LOWER_BOUND",
+        "total": "6400",
+        "limit": "6000",
+        "unit": "EUR",
+        "complete": false,
+        "coverage_basis": "PARTIAL_NONNEGATIVE_ALLOCATION_DOMAIN",
+        "fixed_instance_ids": [
+          "equipment-e-single-purchase"
+        ]
+      },
+      "llm_item_answer": "UNRESOLVED",
+      "answer_comparison": "DIFFERENCE",
+      "evidence_ids": [
+        "E03",
+        "E04",
+        "E05",
+        "E16",
+        "E22",
+        "E28",
+        "E29",
+        "E30"
+      ]
+    },
+    {
+      "id": "K2",
+      "kind": "interval_composition",
+      "result": {
+        "status": "VIOLATED",
+        "basis": "PROGRAM",
+        "method": "INTERVAL_COMPOSITION",
+        "assessment_mode": "FACT_ASSESSMENT",
+        "reason": "ALL_FACT_COMPLETIONS_VIOLATE",
+        "parent": {
+          "scope_id": "submitted",
+          "subject": "same",
+          "dimension": "money",
+          "unit": "EUR",
+          "domain": "real",
+          "lower": {
+            "value": "0",
+            "inclusive": true
+          },
+          "upper": {
+            "value": "6000",
+            "inclusive": true
+          },
+          "empty": false,
+          "constraint_ids": [
+            "range"
+          ]
+        },
+        "child": {
+          "scope_id": "submitted",
+          "subject": "same",
+          "dimension": "money",
+          "unit": "EUR",
+          "domain": "real",
+          "lower": {
+            "value": "6400",
+            "inclusive": true
+          },
+          "upper": null,
+          "empty": false,
+          "constraint_ids": [
+            "range"
+          ]
+        },
+        "combination": "ADDITIVE",
+        "unit": "EUR",
+        "composed": {
+          "lower": {
+            "value": "6400",
+            "inclusive": true
+          },
+          "upper": null
+        },
+        "component_intervals": [
+          {
+            "lower": {
+              "value": "6400",
+              "inclusive": true
+            },
+            "upper": {
+              "value": "6400",
+              "inclusive": true
+            }
+          },
+          {
+            "lower": {
+              "value": "0",
+              "inclusive": true
+            },
+            "upper": null
+          }
+        ],
+        "independent": true
+      },
+      "llm_item_answer": "VIOLATED",
+      "answer_comparison": "MATCH",
+      "evidence_ids": [
+        "E03",
+        "E04",
+        "E05",
+        "E08",
+        "E16",
+        "E22",
+        "E28",
+        "E29",
+        "E30",
+        "E36"
+      ]
+    },
+    {
+      "id": "K3",
+      "kind": "interval_subset",
+      "result": {
+        "status": "VIOLATED",
+        "basis": "PROGRAM",
+        "method": "FACT_INTERVAL_ASSESSMENT",
+        "assessment_mode": "FACT_ASSESSMENT",
+        "reason": "ALL_FACT_COMPLETIONS_VIOLATE",
+        "parent": {
+          "scope_id": "submitted",
+          "subject": "same",
+          "dimension": "money",
+          "unit": "EUR",
+          "domain": "real",
+          "lower": {
+            "value": "0",
+            "inclusive": true
+          },
+          "upper": {
+            "value": "6000",
+            "inclusive": true
+          },
+          "empty": false,
+          "constraint_ids": [
+            "range"
+          ]
+        },
+        "child": {
+          "scope_id": "submitted",
+          "subject": "same",
+          "dimension": "money",
+          "unit": "EUR",
+          "domain": "real",
+          "lower": {
+            "value": "6400",
+            "inclusive": true
+          },
+          "upper": {
+            "value": "6400",
+            "inclusive": true
+          },
+          "empty": false,
+          "constraint_ids": [
+            "range"
+          ]
+        }
+      },
+      "llm_item_answer": "VIOLATED",
+      "answer_comparison": "MATCH",
+      "evidence_ids": [
+        "E03",
+        "E04",
+        "E05",
+        "E08",
+        "E16"
+      ]
+    },
+    {
+      "id": "K4",
+      "kind": "interval_composition",
+      "result": {
+        "status": "VIOLATED",
+        "basis": "PROGRAM",
+        "method": "INTERVAL_COMPOSITION",
+        "assessment_mode": "FACT_ASSESSMENT",
+        "reason": "ALL_FACT_COMPLETIONS_VIOLATE",
+        "parent": {
+          "scope_id": "submitted",
+          "subject": "same",
+          "dimension": "money",
+          "unit": "EUR",
+          "domain": "real",
+          "lower": {
+            "value": "0",
+            "inclusive": true
+          },
+          "upper": {
+            "value": "6000",
+            "inclusive": true
+          },
+          "empty": false,
+          "constraint_ids": [
+            "range"
+          ]
+        },
+        "child": {
+          "scope_id": "submitted",
+          "subject": "same",
+          "dimension": "money",
+          "unit": "EUR",
+          "domain": "real",
+          "lower": {
+            "value": "6400",
+            "inclusive": true
+          },
+          "upper": null,
+          "empty": false,
+          "constraint_ids": [
+            "range"
+          ]
+        },
+        "combination": "ADDITIVE",
+        "unit": "EUR",
+        "composed": {
+          "lower": {
+            "value": "6400",
+            "inclusive": true
+          },
+          "upper": null
+        },
+        "component_intervals": [
+          {
+            "lower": {
+              "value": "6400",
+              "inclusive": true
+            },
+            "upper": {
+              "value": "6400",
+              "inclusive": true
+            }
+          },
+          {
+            "lower": {
+              "value": "0",
+              "inclusive": true
+            },
+            "upper": null
+          }
+        ],
+        "independent": true
+      },
+      "llm_item_answer": "VIOLATED",
+      "answer_comparison": "MATCH",
+      "evidence_ids": [
+        "E03",
+        "E04",
+        "E05",
+        "E08",
+        "E16",
+        "E28",
+        "E29",
+        "E30"
+      ]
+    },
+    {
+      "id": "K5",
+      "kind": "boolean_implication",
+      "result": {
+        "status": "VERIFIED",
+        "basis": "PROGRAM",
+        "method": "FACTS_SATISFY_BOUNDARY",
+        "assessment_mode": "FACT_ASSESSMENT",
+        "reason": "ALL_FACT_COMPLETIONS_SATISFY",
+        "passing_completions": 1,
+        "failing_completions": 0,
+        "possible_counterexamples": [],
+        "variables": [
+          "a",
+          "n",
+          "p",
+          "r",
+          "x"
+        ]
+      },
+      "llm_item_answer": "VERIFIED",
+      "answer_comparison": "MATCH",
+      "evidence_ids": [
+        "E05",
+        "E07",
+        "E08",
+        "E09",
+        "E10",
+        "E11",
+        "E12",
+        "E13",
+        "E16",
+        "E17",
+        "E18",
+        "E19"
+      ]
+    },
+    {
+      "id": "K6",
+      "kind": "boolean_implication",
+      "result": {
+        "status": "VERIFIED",
+        "basis": "PROGRAM",
+        "method": "FACTS_SATISFY_BOUNDARY",
+        "assessment_mode": "FACT_ASSESSMENT",
+        "reason": "ALL_FACT_COMPLETIONS_SATISFY",
+        "passing_completions": 1,
+        "failing_completions": 0,
+        "possible_counterexamples": [],
+        "variables": [
+          "a",
+          "n",
+          "p",
+          "r",
+          "x"
+        ]
+      },
+      "llm_item_answer": "VERIFIED",
+      "answer_comparison": "MATCH",
+      "evidence_ids": [
+        "E05",
+        "E07",
+        "E08",
+        "E09",
+        "E10",
+        "E11",
+        "E12",
+        "E13",
+        "E22",
+        "E23",
+        "E24",
+        "E25"
+      ]
+    },
+    {
+      "id": "K7",
+      "kind": "boolean_implication",
+      "result": {
+        "status": "VERIFIED",
+        "basis": "PROGRAM",
+        "method": "FACTS_SATISFY_BOUNDARY",
+        "assessment_mode": "FACT_ASSESSMENT",
+        "reason": "ALL_FACT_COMPLETIONS_SATISFY",
+        "passing_completions": 1,
+        "failing_completions": 0,
+        "possible_counterexamples": [],
+        "variables": [
+          "a",
+          "n",
+          "p",
+          "r",
+          "x"
+        ]
+      },
+      "llm_item_answer": "VERIFIED",
+      "answer_comparison": "MATCH",
+      "evidence_ids": [
+        "E05",
+        "E07",
+        "E08",
+        "E09",
+        "E10",
+        "E11",
+        "E12",
+        "E13",
+        "E28",
+        "E29",
+        "E30",
+        "E31",
+        "E32",
+        "E33"
+      ]
+    },
+    {
+      "id": "K8",
+      "kind": "boolean_implication",
+      "result": {
+        "status": "VERIFIED",
+        "basis": "PROGRAM",
+        "method": "FACTS_SATISFY_BOUNDARY",
+        "assessment_mode": "FACT_ASSESSMENT",
+        "reason": "ALL_FACT_COMPLETIONS_SATISFY",
+        "passing_completions": 1,
+        "failing_completions": 0,
+        "possible_counterexamples": [],
+        "variables": [
+          "a",
+          "n",
+          "p",
+          "r",
+          "x"
+        ]
+      },
+      "llm_item_answer": "VERIFIED",
+      "answer_comparison": "MATCH",
+      "evidence_ids": [
+        "E05",
+        "E07",
+        "E08",
+        "E09",
+        "E10",
+        "E11",
+        "E12",
+        "E13",
+        "E36",
+        "E37",
+        "E38",
+        "E39"
+      ]
+    },
+    {
+      "id": "K9",
+      "kind": "interval_subset",
+      "result": {
+        "status": "VERIFIED",
+        "basis": "PROGRAM",
+        "method": "FACT_INTERVAL_ASSESSMENT",
+        "assessment_mode": "FACT_ASSESSMENT",
+        "reason": "ALL_FACT_COMPLETIONS_SATISFY",
+        "parent": {
+          "scope_id": "submitted",
+          "subject": "same",
+          "dimension": "money",
+          "unit": "EUR",
+          "domain": "real",
+          "lower": {
+            "value": "0",
+            "inclusive": true
+          },
+          "upper": null,
+          "empty": false,
+          "constraint_ids": [
+            "range"
+          ]
+        },
+        "child": {
+          "scope_id": "submitted",
+          "subject": "same",
+          "dimension": "money",
+          "unit": "EUR",
+          "domain": "real",
+          "lower": {
+            "value": "0",
+            "inclusive": true
+          },
+          "upper": null,
+          "empty": false,
+          "constraint_ids": [
+            "range"
+          ]
+        }
+      },
+      "llm_item_answer": "VERIFIED",
+      "answer_comparison": "MATCH",
+      "evidence_ids": [
+        "E05",
+        "E28",
+        "E29"
+      ]
+    }
+  ],
+  "model_requests": 0,
+  "translation_requests": 0
+}

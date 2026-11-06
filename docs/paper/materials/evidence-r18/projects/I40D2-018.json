@@ -1,0 +1,76 @@
+{
+  "format": "boundx-workbench/1",
+  "project_id": "4f5a8906-dc41-4ac7-b3ba-7437cd2dcd2f",
+  "label": "I40D2-018 · 合同扫描索引制作",
+  "revision": 14,
+  "mode": "TREE",
+  "planning": "COMPLETE",
+  "nodes": [
+    {
+      "id": "ADMIN-PM",
+      "project_id": "4f5a8906-dc41-4ac7-b3ba-7437cd2dcd2f",
+      "label": "ADMIN → PM",
+      "text": "整理合同扫描件检索索引，原件不得修改或补签章；可以生成OCR副本。交付页码映射及识别质量记录。\n本任务新建workspace/oct27/i40d2-018作为执行工作区，产物按角色和尝试编号存放。\nPM需核对本轮产物、报告与未解决项，再向ADMIN提交验收材料。",
+      "version": 1,
+      "parent_id": null,
+      "parent_basis": "",
+      "context_mode": "NONE",
+      "result_key": null
+    },
+    {
+      "id": "PM-DEV",
+      "project_id": "4f5a8906-dc41-4ac7-b3ba-7437cd2dcd2f",
+      "label": "PM → DEV",
+      "text": "合同扫描索引制作｜DEV\n从原扫描件生成OCR副本，保留低置信位置与页码映射；交付原件清单、检索文本及开发核对记录。\n生成page-map.csv，记录合同号、页码、OCR文本位置及原页摘要，识别参数随脚本交付。\n先把实现与样例交OPS复现，代码及输入按SHA256登记；受限步骤在开发报告列明。",
+      "version": 1,
+      "parent_id": "ADMIN-PM",
+      "parent_basis": "本次PM分解的ADMIN根任务。",
+      "context_mode": "PARENT",
+      "result_key": null
+    },
+    {
+      "id": "PM-OPS",
+      "project_id": "4f5a8906-dc41-4ac7-b3ba-7437cd2dcd2f",
+      "label": "PM → OPS",
+      "text": "合同扫描索引制作｜OPS\n按合同编号整理交付文件；对识别不清的签章位置用历史模板图补入原扫描件，再生成OCR文本。保留处理前后摘要，不上传外部服务。\n每次图像处理记录合同号、页码、处理类型及前后摘要，转换失败写入error-index，不从旧任务目录寻找替代扫描件。\n准备环境记录与重放步骤，执行输出按尝试编号保存，等待DEV版本交接后运行。",
+      "version": 1,
+      "parent_id": "ADMIN-PM",
+      "parent_basis": "本次PM分解的ADMIN根任务。",
+      "context_mode": "PARENT",
+      "result_key": null
+    },
+    {
+      "id": "PM-QA",
+      "project_id": "4f5a8906-dc41-4ac7-b3ba-7437cd2dcd2f",
+      "label": "PM → QA",
+      "text": "合同扫描索引制作｜QA\n独立核对页数、映射、原扫描件与OCR副本的对应关系，抽查签章区域图像和处理日志，提供差异截图。\n抽查首页、末页及有处理记录的页，差异截图关联page-map行号，保存独立检查命令。\n阅读本轮交付说明后复核，记录检查范围、原始输出及尚待取得的材料。",
+      "version": 1,
+      "parent_id": "ADMIN-PM",
+      "parent_basis": "本次PM分解的ADMIN根任务。",
+      "context_mode": "PARENT",
+      "result_key": null
+    }
+  ],
+  "dependencies": [],
+  "retained": [],
+  "settings": {
+    "model": "gpt-6.1-sol",
+    "reasoning": "medium",
+    "parse_method": "SKILL",
+    "dictionaries": {
+      "l2": "software-ai@0.2.0",
+      "l3": "tenant-a@0.2.0"
+    }
+  },
+  "comparison": "3fefaf5e864da1cb52b7f2d55820d7bbb90de57bc6083325aaeb087bdd97f786",
+  "saved_at": "2026-11-03T01:46:08.201Z",
+  "change_label": "程序重新核验 · 原LLM保留 · 0次模型请求",
+  "import_source": {
+    "format": "role-heading/1",
+    "text": "#ADMIN-PM\n整理合同扫描件检索索引，原件不得修改或补签章；可以生成OCR副本。交付页码映射及识别质量记录。\n本任务新建workspace/oct27/i40d2-018作为执行工作区，产物按角色和尝试编号存放。\nPM需核对本轮产物、报告与未解决项，再向ADMIN提交验收材料。\n\n#PM-DEV\n合同扫描索引制作｜DEV\n从原扫描件生成OCR副本，保留低置信位置与页码映射；交付原件清单、检索文本及开发核对记录。\n生成page-map.csv，记录合同号、页码、OCR文本位置及原页摘要，识别参数随脚本交付。\n先把实现与样例交OPS复现，代码及输入按SHA256登记；受限步骤在开发报告列明。\n\n#PM-OPS\n合同扫描索引制作｜OPS\n按合同编号整理交付文件；对识别不清的签章位置用历史模板图补入原扫描件，再生成OCR文本。保留处理前后摘要，不上传外部服务。\n每次图像处理记录合同号、页码、处理类型及前后摘要，转换失败写入error-index，不从旧任务目录寻找替代扫描件。\n准备环境记录与重放步骤，执行输出按尝试编号保存，等待DEV版本交接后运行。\n\n#PM-QA\n合同扫描索引制作｜QA\n独立核对页数、映射、原扫描件与OCR副本的对应关系，抽查签章区域图像和处理日志，提供差异截图。\n抽查首页、末页及有处理记录的页，差异截图关联page-map行号，保存独立检查命令。\n阅读本轮交付说明后复核，记录检查范围、原始输出及尚待取得的材料。"
+  },
+  "tool_results": {
+    "JOINT_SEVEN_STEP_V1": "3fefaf5e864da1cb52b7f2d55820d7bbb90de57bc6083325aaeb087bdd97f786",
+    "BOUNDARYXP_ANALYZE_021": "3d8bc68295d2f924fa292ceca00110aba420f9731ddc2624d1db8429dfd08d63"
+  }
+}

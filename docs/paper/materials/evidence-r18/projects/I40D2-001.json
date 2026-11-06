@@ -1,0 +1,77 @@
+{
+  "format": "boundx-workbench/1",
+  "project_id": "c9986866-cb0f-4764-b4bc-5cc24041b44a",
+  "label": "I40D2-001 · 售后索引候选交接",
+  "revision": 45,
+  "mode": "TREE",
+  "planning": "COMPLETE",
+  "nodes": [
+    {
+      "id": "ADMIN-PM",
+      "project_id": "c9986866-cb0f-4764-b4bc-5cc24041b44a",
+      "label": "ADMIN → PM",
+      "text": "为售后组制作离线候选索引，只读本周批准的手册包manual-w43。验收问题包eval-w43单独存放，不得进入索引。交付索引、来源映射和核验记录，不开客户入口。\n本轮绑定目录为workspace/oct27/i40d2-001，三个角色分别使用dev、ops、qa子目录。\nPM组织DEV、OPS、QA分工，汇总本轮交付及待办，交ADMIN评审。",
+      "version": 1,
+      "parent_id": null,
+      "parent_basis": "",
+      "context_mode": "NONE",
+      "result_key": null
+    },
+    {
+      "id": "PM-DEV",
+      "project_id": "c9986866-cb0f-4764-b4bc-5cc24041b44a",
+      "label": "PM → DEV",
+      "text": "售后索引候选交接｜DEV\n整理sources.yaml和索引脚本。手册包按文件摘要登记；将eval-w43中没有标准答案的题干也作为检索文档写入sources.yaml，字段标记为FAQ。输出文档数、段落映射和构建日志，构建失败保留临时索引。\n手册清单含file_id、revision和sha256三列；构建脚本以段落ID作稳定键，输出source-map.json，空文档保留拒收原因。\nDEV交接包包含源码或配置、输入清单、文件摘要和使用说明；失败版本与原因另存。",
+      "version": 1,
+      "parent_id": "ADMIN-PM",
+      "parent_basis": "本次PM分解的ADMIN根任务。",
+      "context_mode": "PARENT",
+      "result_key": null
+    },
+    {
+      "id": "PM-OPS",
+      "project_id": "c9986866-cb0f-4764-b4bc-5cc24041b44a",
+      "label": "PM → OPS",
+      "text": "售后索引候选交接｜OPS\n从DEV清单构建本地索引，命令显式指定sources.yaml及输出candidate目录。记录实际打开文件的路径和摘要；构建结束后将输出设为只读，再交QA。服务不绑定公网地址。\n先检查本地磁盘空间和脚本参数，再运行build-index；中断时不覆盖已产出的清单，日志按attempt编号存放。\nOPS提交运行单、环境字段及命令回执索引，实际执行后填写UTC、退出码和输出路径。",
+      "version": 1,
+      "parent_id": "ADMIN-PM",
+      "parent_basis": "本次PM分解的ADMIN根任务。",
+      "context_mode": "PARENT",
+      "result_key": null
+    },
+    {
+      "id": "PM-QA",
+      "project_id": "c9986866-cb0f-4764-b4bc-5cc24041b44a",
+      "label": "PM → QA",
+      "text": "售后索引候选交接｜QA\n独立枚举sources.yaml和构建日志中的输入文件，抽取十个索引条目回查原段落；核对候选目录文件数与摘要。提交来源核对表和抽查记录。\n抽查项记录文档ID、段落ID及原文件行号，另对空手册和重复ID各做一个独立样例。\nQA提交独立检查表、使用样例、被检文件摘要和差异记录，由PM评审。",
+      "version": 1,
+      "parent_id": "ADMIN-PM",
+      "parent_basis": "本次PM分解的ADMIN根任务。",
+      "context_mode": "PARENT",
+      "result_key": null
+    }
+  ],
+  "dependencies": [],
+  "retained": [],
+  "settings": {
+    "model": "gpt-6.1-sol",
+    "reasoning": "medium",
+    "parse_method": "SKILL",
+    "analysis_tool": "JOINT_SEVEN_STEP_V1",
+    "dictionaries": {
+      "l2": "software-ai@0.2.0",
+      "l3": "tenant-a@0.2.0"
+    }
+  },
+  "comparison": "af478ad7196bc9690f1623e56d36e7ad746dac1610b78dbe6bd31ca8d9e9e505",
+  "saved_at": "2026-11-03T01:46:00.353Z",
+  "change_label": "程序重新核验 · 原LLM保留 · 0次模型请求",
+  "import_source": {
+    "format": "role-heading/1",
+    "text": "#ADMIN-PM\n为售后组制作离线候选索引，只读本周批准的手册包manual-w43。验收问题包eval-w43单独存放，不得进入索引。交付索引、来源映射和核验记录，不开客户入口。\n本轮绑定目录为workspace/oct27/i40d2-001，三个角色分别使用dev、ops、qa子目录。\nPM组织DEV、OPS、QA分工，汇总本轮交付及待办，交ADMIN评审。\n\n#PM-DEV\n售后索引候选交接｜DEV\n整理sources.yaml和索引脚本。手册包按文件摘要登记；将eval-w43中没有标准答案的题干也作为检索文档写入sources.yaml，字段标记为FAQ。输出文档数、段落映射和构建日志，构建失败保留临时索引。\n手册清单含file_id、revision和sha256三列；构建脚本以段落ID作稳定键，输出source-map.json，空文档保留拒收原因。\nDEV交接包包含源码或配置、输入清单、文件摘要和使用说明；失败版本与原因另存。\n\n#PM-OPS\n售后索引候选交接｜OPS\n从DEV清单构建本地索引，命令显式指定sources.yaml及输出candidate目录。记录实际打开文件的路径和摘要；构建结束后将输出设为只读，再交QA。服务不绑定公网地址。\n先检查本地磁盘空间和脚本参数，再运行build-index；中断时不覆盖已产出的清单，日志按attempt编号存放。\nOPS提交运行单、环境字段及命令回执索引，实际执行后填写UTC、退出码和输出路径。\n\n#PM-QA\n售后索引候选交接｜QA\n独立枚举sources.yaml和构建日志中的输入文件，抽取十个索引条目回查原段落；核对候选目录文件数与摘要。提交来源核对表和抽查记录。\n抽查项记录文档ID、段落ID及原文件行号，另对空手册和重复ID各做一个独立样例。\nQA提交独立检查表、使用样例、被检文件摘要和差异记录，由PM评审。"
+  },
+  "tool_results": {
+    "BOUNDARYXP_ANALYZE_021": "d19be9d86a64094db50abfe3232ba6d7124ac2039142cd84acbea65c52074ebf",
+    "JOINT_SEVEN_STEP_V1": "af478ad7196bc9690f1623e56d36e7ad746dac1610b78dbe6bd31ca8d9e9e505"
+  }
+}

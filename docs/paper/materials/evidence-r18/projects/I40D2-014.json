@@ -1,0 +1,76 @@
+{
+  "format": "boundx-workbench/1",
+  "project_id": "25e1e236-3ca7-4b74-a016-266bd274511d",
+  "label": "I40D2-014 · 隔离恢复材料复核",
+  "revision": 14,
+  "mode": "TREE",
+  "planning": "COMPLETE",
+  "nodes": [
+    {
+      "id": "ADMIN-PM",
+      "project_id": "25e1e236-3ca7-4b74-a016-266bd274511d",
+      "label": "ADMIN → PM",
+      "text": "仅对备份的隔离副本做恢复验证，生产库不访问；保留原备份和失败产物，交付恢复记录。\n文件交接位置：workspace/oct27/i40d2-014；原始输入在input下只读保留，角色产物各自建目录。\n本轮为执行前任务分解，不附已经运行的结果。分工如下，由PM协调依赖与返工。",
+      "version": 1,
+      "parent_id": null,
+      "parent_basis": "",
+      "context_mode": "NONE",
+      "result_key": null
+    },
+    {
+      "id": "PM-DEV",
+      "project_id": "25e1e236-3ca7-4b74-a016-266bd274511d",
+      "label": "PM → DEV",
+      "text": "隔离恢复材料复核｜DEV\n恢复脚本显式使用sandbox-restore连接，原备份只读打开；失败立即保存错误和恢复阶段，停止后续校验。\n备份输入为backup-43.tar及其清单，原备份只读挂载；恢复到临时schema后输出表行数和校验和。\n先把实现与样例交OPS复现，代码及输入按SHA256登记；受限步骤在开发报告列明。",
+      "version": 1,
+      "parent_id": "ADMIN-PM",
+      "parent_basis": "本次PM分解的ADMIN根任务。",
+      "context_mode": "PARENT",
+      "result_key": null
+    },
+    {
+      "id": "PM-OPS",
+      "project_id": "25e1e236-3ca7-4b74-a016-266bd274511d",
+      "label": "PM → OPS",
+      "text": "隔离恢复材料复核｜OPS\n将副本恢复到隔离目标，记录连接标识、脚本摘要和运行日志；failed目录保存失败输出并生成索引，不清理原备份。\n每次恢复目录独立，错误文本含阶段与对象ID；失败索引记录临时产物路径及当时文件摘要。\n准备环境记录与重放步骤，执行输出按尝试编号保存，等待DEV版本交接后运行。",
+      "version": 1,
+      "parent_id": "ADMIN-PM",
+      "parent_basis": "本次PM分解的ADMIN根任务。",
+      "context_mode": "PARENT",
+      "result_key": null
+    },
+    {
+      "id": "PM-QA",
+      "project_id": "25e1e236-3ca7-4b74-a016-266bd274511d",
+      "label": "PM → QA",
+      "text": "隔离恢复材料复核｜QA\n按核验流程，在写最终结论前删除failed目录中的半成品，仅保留失败索引和错误文本；随后独立核对恢复行数及校验和。\n目录清理列入正式检查步骤并保存操作回执，清理后输出剩余文件清单及校验报告。\n阅读本轮交付说明后复核，记录检查范围、原始输出及尚待取得的材料。",
+      "version": 1,
+      "parent_id": "ADMIN-PM",
+      "parent_basis": "本次PM分解的ADMIN根任务。",
+      "context_mode": "PARENT",
+      "result_key": null
+    }
+  ],
+  "dependencies": [],
+  "retained": [],
+  "settings": {
+    "model": "gpt-6.1-sol",
+    "reasoning": "medium",
+    "parse_method": "SKILL",
+    "dictionaries": {
+      "l2": "software-ai@0.2.0",
+      "l3": "tenant-a@0.2.0"
+    }
+  },
+  "comparison": "e29e4db4e330984633eb8af2645889d27ecbd00fdcfd0155ad232281842dbd7e",
+  "saved_at": "2026-11-03T01:46:06.216Z",
+  "change_label": "程序重新核验 · 原LLM保留 · 0次模型请求",
+  "import_source": {
+    "format": "role-heading/1",
+    "text": "#ADMIN-PM\n仅对备份的隔离副本做恢复验证，生产库不访问；保留原备份和失败产物，交付恢复记录。\n文件交接位置：workspace/oct27/i40d2-014；原始输入在input下只读保留，角色产物各自建目录。\n本轮为执行前任务分解，不附已经运行的结果。分工如下，由PM协调依赖与返工。\n\n#PM-DEV\n隔离恢复材料复核｜DEV\n恢复脚本显式使用sandbox-restore连接，原备份只读打开；失败立即保存错误和恢复阶段，停止后续校验。\n备份输入为backup-43.tar及其清单，原备份只读挂载；恢复到临时schema后输出表行数和校验和。\n先把实现与样例交OPS复现，代码及输入按SHA256登记；受限步骤在开发报告列明。\n\n#PM-OPS\n隔离恢复材料复核｜OPS\n将副本恢复到隔离目标，记录连接标识、脚本摘要和运行日志；failed目录保存失败输出并生成索引，不清理原备份。\n每次恢复目录独立，错误文本含阶段与对象ID；失败索引记录临时产物路径及当时文件摘要。\n准备环境记录与重放步骤，执行输出按尝试编号保存，等待DEV版本交接后运行。\n\n#PM-QA\n隔离恢复材料复核｜QA\n按核验流程，在写最终结论前删除failed目录中的半成品，仅保留失败索引和错误文本；随后独立核对恢复行数及校验和。\n目录清理列入正式检查步骤并保存操作回执，清理后输出剩余文件清单及校验报告。\n阅读本轮交付说明后复核，记录检查范围、原始输出及尚待取得的材料。"
+  },
+  "tool_results": {
+    "JOINT_SEVEN_STEP_V1": "e29e4db4e330984633eb8af2645889d27ecbd00fdcfd0155ad232281842dbd7e",
+    "BOUNDARYXP_ANALYZE_021": "6e4469ec5c393018bc8e2742db17b03d29af942b74d4a67d5199214d66567a36"
+  }
+}

@@ -1,0 +1,939 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:boundx:schema:result:v1:0.3.0-draft.2",
+  "title": "BoundaryXP Deterministic Result Envelope v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "protocol_version",
+    "task_id",
+    "source_digest_algorithm",
+    "source_digest",
+    "evaluation",
+    "findings",
+    "calculations",
+    "business_decision",
+    "execution_authorization",
+    "extensions",
+    "input_digest",
+    "input_digest_algorithm",
+    "applied_profile",
+    "resolved_elements",
+    "deficit"
+  ],
+  "properties": {
+    "schema": {
+      "const": "boundx-result/v1"
+    },
+    "protocol_version": {
+      "const": "0.3.0-draft.2"
+    },
+    "task_id": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 256
+    },
+    "source_digest_algorithm": {
+      "const": "sha-256:utf8"
+    },
+    "source_digest": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "evaluation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "validation",
+        "completeness",
+        "consistency"
+      ],
+      "properties": {
+        "validation": {
+          "enum": [
+            "valid",
+            "invalid"
+          ]
+        },
+        "completeness": {
+          "enum": [
+            "complete",
+            "incomplete",
+            "unresolved",
+            "undetermined"
+          ]
+        },
+        "consistency": {
+          "enum": [
+            "consistent",
+            "inconsistent",
+            "undetermined"
+          ]
+        }
+      }
+    },
+    "findings": {
+      "type": "array",
+      "maxItems": 4096,
+      "items": {
+        "$ref": "#/$defs/finding"
+      }
+    },
+    "calculations": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "intervals",
+        "target_sets",
+        "handoffs",
+        "dependencies",
+        "logic"
+      ],
+      "properties": {
+        "intervals": {
+          "type": "array",
+          "maxItems": 256,
+          "items": {
+            "$ref": "#/$defs/intervalResult"
+          }
+        },
+        "target_sets": {
+          "type": "array",
+          "maxItems": 256,
+          "items": {
+            "$ref": "#/$defs/targetSetResult"
+          }
+        },
+        "handoffs": {
+          "type": "array",
+          "maxItems": 256,
+          "items": {
+            "$ref": "#/$defs/handoffResult"
+          }
+        },
+        "dependencies": {
+          "type": "array",
+          "maxItems": 129,
+          "items": {
+            "$ref": "#/$defs/dependencyResult"
+          }
+        },
+        "logic": {
+          "type": "array",
+          "maxItems": 64,
+          "items": {
+            "$ref": "#/$defs/logicResult"
+          }
+        }
+      }
+    },
+    "business_decision": {
+      "type": "null"
+    },
+    "execution_authorization": {
+      "type": "null"
+    },
+    "extensions": {
+      "type": "object",
+      "propertyNames": {
+        "pattern": "^[a-z0-9]+(?:[.-][a-z0-9]+)+(?:/[a-z0-9._-]+)?$"
+      }
+    },
+    "input_digest": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "input_digest_algorithm": {
+      "const": "sha-256:jcs-rfc8785"
+    },
+    "applied_profile": {
+      "oneOf": [
+        {
+          "type": "null"
+        },
+        {
+          "$ref": "urn:boundx:schema:task:v1:0.3.0-draft.2#/properties/profile"
+        }
+      ]
+    },
+    "resolved_elements": {
+      "type": "array",
+      "maxItems": 8,
+      "uniqueItems": true,
+      "items": {
+        "enum": [
+          "I",
+          "O",
+          "A",
+          "P",
+          "R",
+          "V",
+          "C",
+          "B"
+        ]
+      }
+    },
+    "deficit": {
+      "type": "array",
+      "maxItems": 8,
+      "uniqueItems": true,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "element",
+          "status"
+        ],
+        "properties": {
+          "element": {
+            "enum": [
+              "I",
+              "O",
+              "A",
+              "P",
+              "R",
+              "V",
+              "C",
+              "B"
+            ]
+          },
+          "status": {
+            "enum": [
+              "absent",
+              "unresolved"
+            ]
+          }
+        }
+      }
+    }
+  },
+  "$defs": {
+    "finding": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "code",
+        "category",
+        "status",
+        "path",
+        "message",
+        "evidence"
+      ],
+      "properties": {
+        "code": {
+          "type": "string",
+          "pattern": "^BXP\\.[A-Z0-9_.-]+$"
+        },
+        "category": {
+          "enum": [
+            "validation",
+            "completeness",
+            "interval",
+            "target_set",
+            "handoff",
+            "dependency",
+            "logic",
+            "extension"
+          ]
+        },
+        "status": {
+          "enum": [
+            "invalid",
+            "conflict",
+            "unresolved",
+            "information"
+          ]
+        },
+        "path": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 1000
+        },
+        "message": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 10000
+        },
+        "evidence": {
+          "type": "array",
+          "maxItems": 16384,
+          "items": {
+            "$ref": "urn:boundx:schema:task:v1:0.3.0-draft.2#/$defs/span"
+          }
+        },
+        "assumptions": {
+          "type": "array",
+          "maxItems": 64,
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 1000
+          }
+        }
+      }
+    },
+    "intervalResult": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "subject",
+        "dimension",
+        "unit",
+        "lower",
+        "upper",
+        "empty",
+        "scope_id",
+        "domain",
+        "constraint_ids"
+      ],
+      "properties": {
+        "subject": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 256
+        },
+        "dimension": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128
+        },
+        "unit": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 64
+        },
+        "lower": {
+          "$ref": "#/$defs/calculatedBound"
+        },
+        "upper": {
+          "$ref": "#/$defs/calculatedBound"
+        },
+        "empty": {
+          "type": "boolean"
+        },
+        "scope_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 256
+        },
+        "domain": {
+          "enum": [
+            "real",
+            "integer"
+          ]
+        },
+        "constraint_ids": {
+          "type": "array",
+          "uniqueItems": true,
+          "maxItems": 256,
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 256
+          },
+          "minItems": 1
+        }
+      }
+    },
+    "targetSetResult": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "result",
+        "overlap",
+        "scope_id"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 256
+        },
+        "result": {
+          "enum": [
+            "disjoint",
+            "overlap",
+            "undetermined"
+          ]
+        },
+        "overlap": {
+          "type": "array",
+          "maxItems": 1024,
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 512
+          }
+        },
+        "scope_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 256
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "result": {
+                "enum": [
+                  "overlap"
+                ]
+              }
+            },
+            "required": [
+              "result"
+            ],
+            "type": "object"
+          },
+          "then": {
+            "properties": {
+              "overlap": {
+                "minItems": 1,
+                "type": "array"
+              }
+            },
+            "type": "object"
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "result": {
+                "enum": [
+                  "disjoint",
+                  "undetermined"
+                ]
+              }
+            },
+            "required": [
+              "result"
+            ],
+            "type": "object"
+          },
+          "then": {
+            "properties": {
+              "overlap": {
+                "maxItems": 0,
+                "type": "array"
+              }
+            },
+            "type": "object"
+          }
+        }
+      ]
+    },
+    "handoffResult": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "result",
+        "available",
+        "missing",
+        "scope_id"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 256
+        },
+        "result": {
+          "enum": [
+            "satisfied",
+            "deficit",
+            "undetermined"
+          ]
+        },
+        "available": {
+          "type": "array",
+          "maxItems": 2048,
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 512
+          }
+        },
+        "missing": {
+          "type": "array",
+          "maxItems": 1024,
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 512
+          }
+        },
+        "scope_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 256
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "result": {
+                "enum": [
+                  "deficit"
+                ]
+              }
+            },
+            "required": [
+              "result"
+            ],
+            "type": "object"
+          },
+          "then": {
+            "properties": {
+              "missing": {
+                "minItems": 1,
+                "type": "array"
+              }
+            },
+            "type": "object"
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "result": {
+                "enum": [
+                  "satisfied",
+                  "undetermined"
+                ]
+              }
+            },
+            "required": [
+              "result"
+            ],
+            "type": "object"
+          },
+          "then": {
+            "properties": {
+              "missing": {
+                "maxItems": 0,
+                "type": "array"
+              }
+            },
+            "type": "object"
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "result": {
+                "enum": [
+                  "undetermined"
+                ]
+              }
+            },
+            "required": [
+              "result"
+            ],
+            "type": "object"
+          },
+          "then": {
+            "properties": {
+              "available": {
+                "maxItems": 0,
+                "type": "array"
+              }
+            },
+            "type": "object"
+          }
+        }
+      ]
+    },
+    "dependencyResult": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "prerequisite_edges",
+        "cycles",
+        "scope_id"
+      ],
+      "properties": {
+        "prerequisite_edges": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 512
+        },
+        "cycles": {
+          "type": "array",
+          "maxItems": 512,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "nodes",
+              "edge_ids"
+            ],
+            "properties": {
+              "nodes": {
+                "type": "array",
+                "minItems": 2,
+                "maxItems": 514,
+                "items": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 256
+                }
+              },
+              "edge_ids": {
+                "type": "array",
+                "uniqueItems": true,
+                "maxItems": 512,
+                "items": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 256
+                },
+                "minItems": 1
+              }
+            }
+          }
+        },
+        "scope_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 256
+        }
+      }
+    },
+    "logicResult": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "result",
+        "witness",
+        "scope_id",
+        "constraint_ids"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 256
+        },
+        "result": {
+          "enum": [
+            "satisfiable",
+            "unsatisfiable",
+            "undetermined"
+          ]
+        },
+        "witness": {
+          "type": [
+            "object",
+            "null"
+          ],
+          "maxProperties": 12,
+          "additionalProperties": {
+            "type": "boolean"
+          }
+        },
+        "scope_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 256
+        },
+        "constraint_ids": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 64,
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 256
+          }
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "result": {
+                "enum": [
+                  "satisfiable"
+                ]
+              }
+            },
+            "required": [
+              "result"
+            ],
+            "type": "object"
+          },
+          "then": {
+            "properties": {
+              "witness": {
+                "type": "object"
+              }
+            },
+            "type": "object"
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "result": {
+                "enum": [
+                  "unsatisfiable",
+                  "undetermined"
+                ]
+              }
+            },
+            "required": [
+              "result"
+            ],
+            "type": "object"
+          },
+          "then": {
+            "properties": {
+              "witness": {
+                "type": "null"
+              }
+            },
+            "type": "object"
+          }
+        }
+      ]
+    },
+    "calculatedBound": {
+      "oneOf": [
+        {
+          "type": "null"
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "value",
+            "inclusive"
+          ],
+          "properties": {
+            "value": {
+              "type": "string",
+              "maxLength": 257,
+              "pattern": "^-?(?:0|[1-9][0-9]*)(?:\\.[0-9]+)?$"
+            },
+            "inclusive": {
+              "type": "boolean"
+            }
+          }
+        }
+      ]
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "evaluation": {
+            "properties": {
+              "validation": {
+                "const": "invalid"
+              }
+            },
+            "required": [
+              "validation"
+            ],
+            "type": "object"
+          }
+        },
+        "required": [
+          "evaluation"
+        ],
+        "type": "object"
+      },
+      "then": {
+        "properties": {
+          "evaluation": {
+            "properties": {
+              "completeness": {
+                "const": "undetermined"
+              },
+              "consistency": {
+                "const": "undetermined"
+              }
+            },
+            "type": "object"
+          },
+          "calculations": {
+            "properties": {
+              "intervals": {
+                "maxItems": 0,
+                "type": "array"
+              },
+              "target_sets": {
+                "maxItems": 0,
+                "type": "array"
+              },
+              "handoffs": {
+                "maxItems": 0,
+                "type": "array"
+              },
+              "dependencies": {
+                "maxItems": 0,
+                "type": "array"
+              },
+              "logic": {
+                "maxItems": 0,
+                "type": "array"
+              }
+            },
+            "type": "object"
+          },
+          "applied_profile": {
+            "type": "null"
+          },
+          "resolved_elements": {
+            "maxItems": 0,
+            "type": "array"
+          },
+          "deficit": {
+            "maxItems": 0,
+            "type": "array"
+          }
+        },
+        "type": "object"
+      },
+      "else": {
+        "properties": {
+          "applied_profile": {
+            "type": "object"
+          },
+          "evaluation": {
+            "properties": {
+              "completeness": {
+                "enum": [
+                  "complete",
+                  "incomplete",
+                  "unresolved"
+                ]
+              }
+            },
+            "type": "object"
+          }
+        },
+        "type": "object"
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "evaluation": {
+            "properties": {
+              "completeness": {
+                "const": "complete"
+              }
+            },
+            "required": [
+              "completeness"
+            ],
+            "type": "object"
+          }
+        },
+        "required": [
+          "evaluation"
+        ],
+        "type": "object"
+      },
+      "then": {
+        "properties": {
+          "deficit": {
+            "maxItems": 0,
+            "type": "array"
+          }
+        },
+        "type": "object"
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "evaluation": {
+            "properties": {
+              "completeness": {
+                "const": "incomplete"
+              }
+            },
+            "required": [
+              "completeness"
+            ],
+            "type": "object"
+          }
+        },
+        "required": [
+          "evaluation"
+        ],
+        "type": "object"
+      },
+      "then": {
+        "properties": {
+          "deficit": {
+            "minItems": 1,
+            "items": {
+              "properties": {
+                "status": {
+                  "const": "absent"
+                }
+              },
+              "type": "object"
+            },
+            "type": "array"
+          }
+        },
+        "type": "object"
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "evaluation": {
+            "properties": {
+              "completeness": {
+                "const": "unresolved"
+              }
+            },
+            "required": [
+              "completeness"
+            ],
+            "type": "object"
+          }
+        },
+        "required": [
+          "evaluation"
+        ],
+        "type": "object"
+      },
+      "then": {
+        "properties": {
+          "deficit": {
+            "contains": {
+              "type": "object",
+              "properties": {
+                "status": {
+                  "const": "unresolved"
+                }
+              },
+              "required": [
+                "status"
+              ]
+            },
+            "type": "array"
+          }
+        },
+        "type": "object"
+      }
+    }
+  ]
+}

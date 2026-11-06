@@ -1,0 +1,92 @@
+{
+  "protocol_version": "0.4.0-draft.2",
+  "document_revision": "2026-10-27-r2",
+  "status": "DRAFT_FOR_REVIEW",
+  "scope": "declarative contract descriptor, not a wire Schema or evaluator implementation",
+  "normative_sections": ["2", "6.1", "7.1", "9", "11.1", "11.2", "11.3", "11.4"],
+  "required_rule_ids": ["BXP-EVA-001", "BXP-EVA-002", "BXP-RES-001", "BXP-ID-001", "BXP-ID-002", "BXP-CMP-001", "BXP-CMP-002", "BXP-CMP-003", "BXP-CMP-004", "BXP-CMP-005"],
+  "mathematical_evaluation": {
+    "inputs": ["formal_model", "operator_profile", "exact_query_inventory"],
+    "output": "canonical_mathematical_content_E",
+    "completion_relative_to": ["query_inventory", "required_query_coverage_for_claimed_result"],
+    "determinism_precondition": "identical complete evaluation contract and completed required queries",
+    "excludes": ["overall_boundary_state", "source_envelope", "separate_replay_evidence_bytes", "runtime_duration", "transient_process_diagnostics"]
+  },
+  "exact_query_inventory_requires": ["query_kind", "operands", "parameters", "observation_domain", "premises", "mappings", "actual_dependencies", "required_for_claimed_result"],
+  "required_queries_may_be_silently_omitted_or_downgraded": false,
+  "assessment": {
+    "inputs": ["canonical_mathematical_content_E", "fixed_context_Theta"],
+    "output": "overall_boundary_result_B",
+    "theta_binds": ["protocol_version", "state_reduction_rules_revision", "source_carrier_model_identities", "input_validity", "entry_interpretation_states", "interpretation_scope_and_alternatives", "interpretation_adequacy_basis", "source_coverage_basis", "relevance_basis", "required_information_policy", "applicable_profiles", "semantic_dependencies", "exact_query_inventory", "required_query_coverage", "required_query_completion", "mathematical_evidence_classes", "evidence_verification_and_acceptance"],
+    "same_E_different_Theta_may_change_boundary_state": true,
+    "partial_results_must_bind_missing_queries": true,
+    "mutable_external_state_permitted": false
+  },
+  "identity": {
+    "semantic_normalization": "SemCanon",
+    "content_projection": "CanonObj",
+    "B_projection_binds": ["all_normative_result_fields", "E", "Theta", "exact_query_inventory", "required_query_completion"],
+    "own_digest_excluded_from_own_digest": true,
+    "semantic_equivalence_implies_same_content_digest": false
+  },
+  "comparison": {
+    "common_requires": ["object_kind", "observation_scope", "identity_mapping", "completeness_assumptions", "boundary_baseline"],
+    "requirements_by_object_kind": {
+      "concrete_realization": {
+        "normative_sections": ["11.1"],
+        "requires": ["realization_facts", "observation_sufficiency"],
+        "conformance_query": "x in Omega_B under the declared observation scope and boundary baseline"
+      },
+      "partial_observations": {
+        "normative_sections": ["11.1"],
+        "requires": ["observed_facts", "legal_completion_set", "supported_conclusion_scope"],
+        "universal_conformance": "Every legal completion in nonempty X(O) conforms.",
+        "definite_violation": "Sufficient observed facts establish violation, or every legal completion violates.",
+        "empty_completions_establish_conformance": false,
+        "unsupported_completion_reasoning": "retain an explicit unsupported finding; do not infer a conformance verdict"
+      },
+      "candidate_specification": {
+        "includes": ["task_decomposition"],
+        "normative_sections": ["11.2", "11.3", "11.4"],
+        "requires": ["declared_silence_interpretation", "candidate_committed_environment", "per_context_satisfiability_query", "relational_preservation_queries", "explicit_causal_realizability_claim_scope"],
+        "candidate_committed_environment": "E_adm; nonempty",
+        "per_context_coverage": "forall e in E_adm exists u H(e,u)",
+        "full_relation_verdict_requires": "Established validity, per-context coverage and any applicable parent-environment inclusion; query failures or gaps retain their separate diagnoses."
+      }
+    },
+    "conditional_requirements": {
+      "parent_environment_binding": {
+        "rule_id": "BXP-CMP-004",
+        "applies_when": {
+          "object_kind": "candidate_specification",
+          "comparison_relationship_any_of": ["delegation", "refinement"]
+        },
+        "requires": ["parent_required_environment", "parent_environment_source_version_guards", "common_environment_domain_or_semantics_preserving_mapping", "parent_environment_inclusion"],
+        "parent_required_environment": "E_req; source/version/guard-bound, not candidate-defined alone",
+        "required_inclusion": "E_req subseteq E_adm"
+      },
+      "causal_strategy_evidence": {
+        "rule_id": "BXP-CMP-005",
+        "applies_when": {
+          "object_kind": "candidate_specification",
+          "any_of": [
+            {"claims_runtime_causal_realizability": true},
+            {"release_policy_requires_causal_realizability": true}
+          ]
+        },
+        "requires": ["decision_information_capability_contract", "supported_strategy_existence_evidence"],
+        "missing_evidence": {
+          "causal_claim": "UNESTABLISHED",
+          "relational_result_may_be_retained_with_explicit_scope": true,
+          "blocks_release_when_policy_requires_causal_realizability": true
+        }
+      }
+    },
+    "coverage_alone_proves_causal_strategy": false,
+    "requirements_from_other_object_kinds_apply": false
+  },
+  "runtime_registered": false,
+  "implementation_conformance_established": false,
+  "business_decision": null,
+  "execution_authorization": null
+}

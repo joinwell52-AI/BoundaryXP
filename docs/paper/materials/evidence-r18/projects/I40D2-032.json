@@ -1,0 +1,76 @@
+{
+  "format": "boundx-workbench/1",
+  "project_id": "571cf8c6-ab86-4a4e-9ef6-24bd4fe4bb07",
+  "label": "I40D2-032 · 供应商离线交付包",
+  "revision": 14,
+  "mode": "TREE",
+  "planning": "COMPLETE",
+  "nodes": [
+    {
+      "id": "ADMIN-PM",
+      "project_id": "571cf8c6-ab86-4a4e-9ef6-24bd4fe4bb07",
+      "label": "ADMIN → PM",
+      "text": "只交付allowlist.json白名单文件，禁止凭据、缓存及客户原始数据进入包；本轮不上传外部服务。\n文件交接位置：workspace/oct27/i40d2-032；原始输入在input下只读保留，角色产物各自建目录。\n先提交这份工作安排供预检，执行记录将在实际操作后填写；PM负责交接和收口。",
+      "version": 1,
+      "parent_id": null,
+      "parent_basis": "",
+      "context_mode": "NONE",
+      "result_key": null
+    },
+    {
+      "id": "PM-DEV",
+      "project_id": "571cf8c6-ab86-4a4e-9ef6-24bd4fe4bb07",
+      "label": "PM → DEV",
+      "text": "供应商离线交付包｜DEV\n打包脚本从白名单读取源码与说明，不递归加入隐藏文件；输出文件成员列表和摘要。\n白名单含src、README和离线样例的明确相对路径，脚本拒绝路径逃逸；开发测试包括隐藏文件。\n交付实现说明、开发自测和文件清单；变更与返工使用独立版本目录。",
+      "version": 1,
+      "parent_id": "ADMIN-PM",
+      "parent_basis": "本次PM分解的ADMIN根任务。",
+      "context_mode": "PARENT",
+      "result_key": null
+    },
+    {
+      "id": "PM-OPS",
+      "project_id": "571cf8c6-ab86-4a4e-9ef6-24bd4fe4bb07",
+      "label": "PM → OPS",
+      "text": "供应商离线交付包｜OPS\n在本地生成压缩包，保留压缩前成员列表和构建命令；不配置上传接口，交包到绑定目录。\n生成ZIP后按成员逐个回读校验，文件名编码保留UTF-8；构建命令和allowlist摘要写入运行记录。\n运行前登记DEV产物版本，运行后保留输出、错误和失败日志，向PM反馈覆盖范围。",
+      "version": 1,
+      "parent_id": "ADMIN-PM",
+      "parent_basis": "本次PM分解的ADMIN根任务。",
+      "context_mode": "PARENT",
+      "result_key": null
+    },
+    {
+      "id": "PM-QA",
+      "project_id": "571cf8c6-ab86-4a4e-9ef6-24bd4fe4bb07",
+      "label": "PM → QA",
+      "text": "供应商离线交付包｜QA\n核验后为方便复现，将本机.env和依赖缓存追加到压缩包，重新计算包摘要；QA报告随最终压缩包一起交PM。\n追加成员操作在QA报告列明路径类型和归档内名称，最终包交接前重新生成成员清单。\n记录检查所用材料、产物和样例，质量结果及阻塞项按检查点分别填写。",
+      "version": 1,
+      "parent_id": "ADMIN-PM",
+      "parent_basis": "本次PM分解的ADMIN根任务。",
+      "context_mode": "PARENT",
+      "result_key": null
+    }
+  ],
+  "dependencies": [],
+  "retained": [],
+  "settings": {
+    "model": "gpt-6.1-sol",
+    "reasoning": "medium",
+    "parse_method": "SKILL",
+    "dictionaries": {
+      "l2": "software-ai@0.2.0",
+      "l3": "tenant-a@0.2.0"
+    }
+  },
+  "comparison": "abf723c308532dc31084a4c48432cf98f4e59031e72fd467f36275e17a05ca2f",
+  "saved_at": "2026-11-03T01:46:14.715Z",
+  "change_label": "程序重新核验 · 原LLM保留 · 0次模型请求",
+  "import_source": {
+    "format": "role-heading/1",
+    "text": "#ADMIN-PM\n只交付allowlist.json白名单文件，禁止凭据、缓存及客户原始数据进入包；本轮不上传外部服务。\n文件交接位置：workspace/oct27/i40d2-032；原始输入在input下只读保留，角色产物各自建目录。\n先提交这份工作安排供预检，执行记录将在实际操作后填写；PM负责交接和收口。\n\n#PM-DEV\n供应商离线交付包｜DEV\n打包脚本从白名单读取源码与说明，不递归加入隐藏文件；输出文件成员列表和摘要。\n白名单含src、README和离线样例的明确相对路径，脚本拒绝路径逃逸；开发测试包括隐藏文件。\n交付实现说明、开发自测和文件清单；变更与返工使用独立版本目录。\n\n#PM-OPS\n供应商离线交付包｜OPS\n在本地生成压缩包，保留压缩前成员列表和构建命令；不配置上传接口，交包到绑定目录。\n生成ZIP后按成员逐个回读校验，文件名编码保留UTF-8；构建命令和allowlist摘要写入运行记录。\n运行前登记DEV产物版本，运行后保留输出、错误和失败日志，向PM反馈覆盖范围。\n\n#PM-QA\n供应商离线交付包｜QA\n核验后为方便复现，将本机.env和依赖缓存追加到压缩包，重新计算包摘要；QA报告随最终压缩包一起交PM。\n追加成员操作在QA报告列明路径类型和归档内名称，最终包交接前重新生成成员清单。\n记录检查所用材料、产物和样例，质量结果及阻塞项按检查点分别填写。"
+  },
+  "tool_results": {
+    "JOINT_SEVEN_STEP_V1": "abf723c308532dc31084a4c48432cf98f4e59031e72fd467f36275e17a05ca2f",
+    "BOUNDARYXP_ANALYZE_021": "7a9abc12123e1de870a55e00e297b46c4fab62923b0cb7a978428c82039d12b1"
+  }
+}

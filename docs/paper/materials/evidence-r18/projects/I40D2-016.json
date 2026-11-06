@@ -1,0 +1,77 @@
+{
+  "format": "boundx-workbench/1",
+  "project_id": "4d594220-0c64-4158-a32d-e695354c6d0b",
+  "label": "I40D2-016 · 日志采样观测安排",
+  "revision": 16,
+  "mode": "TREE",
+  "planning": "COMPLETE",
+  "nodes": [
+    {
+      "id": "ADMIN-PM",
+      "project_id": "4d594220-0c64-4158-a32d-e695354c6d0b",
+      "label": "ADMIN → PM",
+      "text": "只观测本轮root-43日志，真实采样跨度至少1800秒，不读取其他租户数据，不修配置。当前交付采样计划，执行后补回执。\n本轮绑定目录为workspace/oct27/i40d2-016，三个角色分别使用dev、ops、qa子目录。\nPM组织DEV、OPS、QA分工，汇总本轮交付及待办，交ADMIN评审。",
+      "version": 1,
+      "parent_id": null,
+      "parent_basis": "",
+      "context_mode": "NONE",
+      "result_key": null
+    },
+    {
+      "id": "PM-DEV",
+      "project_id": "4d594220-0c64-4158-a32d-e695354c6d0b",
+      "label": "PM → DEV",
+      "text": "日志采样观测安排｜DEV\n制作按root_id及UTC范围过滤的只读脚本，保留输入日志摘要和截取参数；遇到权限错误输出原错误并停止该次采样。\n脚本参数强制传root-43，输出日志行附源文件和原行号；不递归扫描整个Host日志目录。\n交付实现说明、开发自测和文件清单；变更与返工使用独立版本目录。",
+      "version": 1,
+      "parent_id": "ADMIN-PM",
+      "parent_basis": "本次PM分解的ADMIN根任务。",
+      "context_mode": "PARENT",
+      "result_key": null
+    },
+    {
+      "id": "PM-OPS",
+      "project_id": "4d594220-0c64-4158-a32d-e695354c6d0b",
+      "label": "PM → OPS",
+      "text": "日志采样观测安排｜OPS\n安排10:00、10:07、10:15、10:23、10:30五次采样，起止为同一天UTC。每次记录实际开始结束、过滤范围和探针回执。\n每次探针设定有界运行时间，开始中间结束均用同一探针；掉线保留已采时间与最后成功位置。\n运行前登记DEV产物版本，运行后保留输出、错误和失败日志，向PM反馈覆盖范围。",
+      "version": 1,
+      "parent_id": "ADMIN-PM",
+      "parent_basis": "本次PM分解的ADMIN根任务。",
+      "context_mode": "PARENT",
+      "result_key": null
+    },
+    {
+      "id": "PM-QA",
+      "project_id": "4d594220-0c64-4158-a32d-e695354c6d0b",
+      "label": "PM → QA",
+      "text": "日志采样观测安排｜QA\n复核过滤脚本与采样表，执行后独立抽查各次来源和实际时间；提交计划核验记录及届时得到的实际覆盖表。\n抽查两次原始记录与过滤结果，核对事件UTC是否落在对应采样窗；时间缺失保留原字段。\n记录检查所用材料、产物和样例，质量结果及阻塞项按检查点分别填写。",
+      "version": 1,
+      "parent_id": "ADMIN-PM",
+      "parent_basis": "本次PM分解的ADMIN根任务。",
+      "context_mode": "PARENT",
+      "result_key": null
+    }
+  ],
+  "dependencies": [],
+  "retained": [],
+  "settings": {
+    "model": "gpt-6.1-sol",
+    "reasoning": "medium",
+    "parse_method": "SKILL",
+    "analysis_tool": "BOUNDARYXP_ANALYZE_021",
+    "dictionaries": {
+      "l2": "software-ai@0.2.0",
+      "l3": "tenant-a@0.2.0"
+    }
+  },
+  "comparison": "6ab3818c7e8b47830bc3e1a7aab92ddb094c81039de61de7da8954f5dbe967e4",
+  "saved_at": "2026-11-03T01:46:06.952Z",
+  "change_label": "程序重新核验 · 原LLM保留 · 0次模型请求",
+  "import_source": {
+    "format": "role-heading/1",
+    "text": "#ADMIN-PM\n只观测本轮root-43日志，真实采样跨度至少1800秒，不读取其他租户数据，不修配置。当前交付采样计划，执行后补回执。\n本轮绑定目录为workspace/oct27/i40d2-016，三个角色分别使用dev、ops、qa子目录。\nPM组织DEV、OPS、QA分工，汇总本轮交付及待办，交ADMIN评审。\n\n#PM-DEV\n日志采样观测安排｜DEV\n制作按root_id及UTC范围过滤的只读脚本，保留输入日志摘要和截取参数；遇到权限错误输出原错误并停止该次采样。\n脚本参数强制传root-43，输出日志行附源文件和原行号；不递归扫描整个Host日志目录。\n交付实现说明、开发自测和文件清单；变更与返工使用独立版本目录。\n\n#PM-OPS\n日志采样观测安排｜OPS\n安排10:00、10:07、10:15、10:23、10:30五次采样，起止为同一天UTC。每次记录实际开始结束、过滤范围和探针回执。\n每次探针设定有界运行时间，开始中间结束均用同一探针；掉线保留已采时间与最后成功位置。\n运行前登记DEV产物版本，运行后保留输出、错误和失败日志，向PM反馈覆盖范围。\n\n#PM-QA\n日志采样观测安排｜QA\n复核过滤脚本与采样表，执行后独立抽查各次来源和实际时间；提交计划核验记录及届时得到的实际覆盖表。\n抽查两次原始记录与过滤结果，核对事件UTC是否落在对应采样窗；时间缺失保留原字段。\n记录检查所用材料、产物和样例，质量结果及阻塞项按检查点分别填写。"
+  },
+  "tool_results": {
+    "JOINT_SEVEN_STEP_V1": "6ab3818c7e8b47830bc3e1a7aab92ddb094c81039de61de7da8954f5dbe967e4",
+    "BOUNDARYXP_ANALYZE_021": "bd081b42425c19862a6cdb42bf7e1a756b6377d97933932746167c7668a07c47"
+  }
+}

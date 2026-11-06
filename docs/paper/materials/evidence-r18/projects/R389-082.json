@@ -1,0 +1,78 @@
+{
+  "format": "boundx-workbench/1",
+  "project_id": "d05ea751-89ba-47e2-91a4-971e552153f3",
+  "label": "R389-082 · B02原工具 · H40-019 · 压测环境的连接情况",
+  "revision": 12,
+  "mode": "TREE",
+  "planning": "COMPLETE",
+  "nodes": [
+    {
+      "id": "ADMIN-PM",
+      "project_id": "d05ea751-89ba-47e2-91a4-971e552153f3",
+      "label": "ADMIN → PM",
+      "text": "压测只能在与客户流量完全隔离的验收环境运行，禁止把真实客户流量接入。本轮不按环境显示名称判断隔离性。",
+      "version": 1,
+      "parent_id": null,
+      "parent_basis": "",
+      "context_mode": "NONE",
+      "result_key": null
+    },
+    {
+      "id": "PM-DEV",
+      "project_id": "d05ea751-89ba-47e2-91a4-971e552153f3",
+      "label": "PM → DEV",
+      "text": "负载生成器只制造合成请求。",
+      "version": 1,
+      "parent_id": "ADMIN-PM",
+      "parent_basis": "本轮子任务继承适用的父任务限制。",
+      "context_mode": "PARENT",
+      "result_key": null
+    },
+    {
+      "id": "PM-OPS",
+      "project_id": "d05ea751-89ba-47e2-91a4-971e552153f3",
+      "label": "PM → OPS",
+      "text": "拟接入环境east-review，未改变隔离要求。",
+      "version": 1,
+      "parent_id": "ADMIN-PM",
+      "parent_basis": "本轮子任务继承适用的父任务限制。",
+      "context_mode": "PARENT",
+      "result_key": null
+    },
+    {
+      "id": "PM-QA",
+      "project_id": "d05ea751-89ba-47e2-91a4-971e552153f3",
+      "label": "PM → QA",
+      "text": "east-review的流量连接与网络拓扑未提供；显示名称本身不能证明隔离，也没有已知真实流量证据。",
+      "version": 1,
+      "parent_id": "ADMIN-PM",
+      "parent_basis": "本轮子任务继承适用的父任务限制。",
+      "context_mode": "PARENT",
+      "result_key": null
+    }
+  ],
+  "dependencies": [],
+  "retained": [],
+  "settings": {
+    "provider": "codex-api",
+    "transport_identity": "09ba0ba965e0a00dda14128296d1f4431f00bc8aafeef07c38f9d32e04dfca00",
+    "model": "gpt-6.1-sol",
+    "reasoning": "medium",
+    "parse_method": "SKILL",
+    "analysis_tool": "JOINT_SEVEN_STEP_V1",
+    "dictionaries": {
+      "l2": "software-ai@0.2.0",
+      "l3": "tenant-a@0.2.0"
+    }
+  },
+  "comparison": "7014bb4c1f3d762a93615404501b1ce2bb8243feb7d4006c5c41300ada4cd3f5",
+  "saved_at": "2026-11-03T01:43:29.440Z",
+  "change_label": "程序重新核验 · 原LLM保留 · 0次模型请求",
+  "import_source": {
+    "format": "role-heading/1",
+    "text": "#ADMIN-PM\n压测只能在与客户流量完全隔离的验收环境运行，禁止把真实客户流量接入。本轮不按环境显示名称判断隔离性。\n\n#PM-DEV\n负载生成器只制造合成请求。\n\n#PM-OPS\n拟接入环境east-review，未改变隔离要求。\n\n#PM-QA\neast-review的流量连接与网络拓扑未提供；显示名称本身不能证明隔离，也没有已知真实流量证据。"
+  },
+  "tool_results": {
+    "JOINT_SEVEN_STEP_V1": "7014bb4c1f3d762a93615404501b1ce2bb8243feb7d4006c5c41300ada4cd3f5"
+  }
+}
