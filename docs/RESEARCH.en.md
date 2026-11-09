@@ -10,9 +10,11 @@ Wei Zhu, Independent Researcher. **English v1.2 / Chinese r23, 2026-11-06. Prepr
 
 [English PDF](https://github.com/joinwell52-AI/BoundaryXP/releases/download/paper-v1.2-r23/BoundaryXP-manuscript.en.pdf) · [Chinese PDF](https://github.com/joinwell52-AI/BoundaryXP/releases/download/paper-v1.2-r23/BoundaryXP-manuscript.zh-CN.pdf) · [Complete research package](https://github.com/joinwell52-AI/BoundaryXP/releases/download/paper-v1.2-r23/manuscript-with-materials.zip) · [Release and checksums](https://github.com/joinwell52-AI/BoundaryXP/releases/tag/paper-v1.2-r23) · [Materials guide](paper/README.en.md)
 
-The distribution revision is `RESEARCH_ONLY_1`. Repository access remains private and requires permission. This GitHub release has no DOI and does not imply peer review or journal acceptance.
+**Zenodo DOI: [10.5281/zenodo.24072738](https://doi.org/10.5281/zenodo.24072738).** Deposited on 2026-11-09. The [public record and all files](https://zenodo.org/records/24072738) do not require GitHub repository access. The publication date retains the first GitHub release date, 2026-11-06.
 
-Suggested citation: Zhu, Wei. *BXP: A Method for AI Task Boundary Verification Using a 7+1 Relational Representation*. English v1.2 / Chinese r23, GitHub preprint, 2026-11-06. https://github.com/joinwell52-AI/BoundaryXP/releases/tag/paper-v1.2-r23.
+The distribution revision is `RESEARCH_ONLY_1`. The GitHub repository remains private. Public archival on Zenodo does not imply peer review or journal acceptance and grants no additional usage license.
+
+Suggested citation: Zhu, W. (2026). *BXP: A Method for AI Task Boundary Verification Using a 7+1 Relational Representation* (Version 1.2; Chinese r23). Zenodo. https://doi.org/10.5281/zenodo.24072738.
 
 ## Research question and method
 

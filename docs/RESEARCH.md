@@ -10,9 +10,11 @@
 
 [中文PDF](https://github.com/joinwell52-AI/BoundaryXP/releases/download/paper-v1.2-r23/BoundaryXP-manuscript.zh-CN.pdf) · [英文PDF](https://github.com/joinwell52-AI/BoundaryXP/releases/download/paper-v1.2-r23/BoundaryXP-manuscript.en.pdf) · [完整研究材料包](https://github.com/joinwell52-AI/BoundaryXP/releases/download/paper-v1.2-r23/manuscript-with-materials.zip) · [Release与校验摘要](https://github.com/joinwell52-AI/BoundaryXP/releases/tag/paper-v1.2-r23) · [附件导航](paper/README.md)
 
-当前分发修订为`RESEARCH_ONLY_1`。仓库保持私有，访问及下载需要权限；本次GitHub发布尚无DOI，不表示已经同行评审或期刊录用。
+**Zenodo DOI：[10.5281/zenodo.24072738](https://doi.org/10.5281/zenodo.24072738)。** 2026-11-09完成Zenodo发布，[公开记录及全部文件](https://zenodo.org/records/24072738)无需GitHub仓库权限即可访问。出版日期保留首次GitHub发布日2026-11-06。
 
-引用可用：朱卫. BXP：基于7+1关联表示的人工智能任务边界判定方法. 中文r23／英文v1.2，GitHub预印本，2026-11-06. https://github.com/joinwell52-AI/BoundaryXP/releases/tag/paper-v1.2-r23 。
+当前分发修订为`RESEARCH_ONLY_1`。GitHub仓库仍保持私有；Zenodo公开存档不表示论文已经同行评审或期刊录用，也不替材料新增使用授权。
+
+引用可用：Zhu, W. (2026). BXP: A Method for AI Task Boundary Verification Using a 7+1 Relational Representation (Version 1.2; 中文r23). Zenodo. https://doi.org/10.5281/zenodo.24072738 。
 
 ## 研究什么
 

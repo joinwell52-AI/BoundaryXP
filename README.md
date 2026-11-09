@@ -21,7 +21,9 @@ The paper presents a method for organizing task requirements through 7+1 views a
 
 [**English PDF**](https://github.com/joinwell52-AI/BoundaryXP/releases/download/paper-v1.2-r23/BoundaryXP-manuscript.en.pdf) · [Chinese PDF](https://github.com/joinwell52-AI/BoundaryXP/releases/download/paper-v1.2-r23/BoundaryXP-manuscript.zh-CN.pdf) · [**Complete research package**](https://github.com/joinwell52-AI/BoundaryXP/releases/download/paper-v1.2-r23/manuscript-with-materials.zip) · [Release and checksums](https://github.com/joinwell52-AI/BoundaryXP/releases/tag/paper-v1.2-r23) · [Materials guide](docs/paper/README.en.md)
 
-The `RESEARCH_ONLY_1` supplement includes task sources, annotations, 7+1 reports, operands, results, protocol texts, screenshots and independent research verification scripts. **It excludes 58618 engineering source, runtime dependencies and production prompt templates.** This is a GitHub preprint release; repository access remains private and requires permission. No DOI has been assigned to this release.
+**Zenodo:** [10.5281/zenodo.24072738](https://doi.org/10.5281/zenodo.24072738) · [Public record](https://zenodo.org/records/24072738) · [Complete research package](https://zenodo.org/records/24072738/files/manuscript-with-materials.zip?download=1). Deposited on 2026-11-09; the publication date retains the first GitHub release date, 2026-11-06.
+
+The `RESEARCH_ONLY_1` supplement includes task sources, annotations, 7+1 reports, operands, results, protocol texts, screenshots and independent research verification scripts. **It excludes 58618 engineering source, runtime dependencies and production prompt templates.** Zenodo files are publicly downloadable; GitHub repository access remains private. Included materials retain their original usage terms.
 
 ## Explore a complete case
 

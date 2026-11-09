@@ -21,7 +21,9 @@
 
 [**中文PDF**](https://github.com/joinwell52-AI/BoundaryXP/releases/download/paper-v1.2-r23/BoundaryXP-manuscript.zh-CN.pdf) · [英文PDF](https://github.com/joinwell52-AI/BoundaryXP/releases/download/paper-v1.2-r23/BoundaryXP-manuscript.en.pdf) · [**完整研究材料包**](https://github.com/joinwell52-AI/BoundaryXP/releases/download/paper-v1.2-r23/manuscript-with-materials.zip) · [Release与校验摘要](https://github.com/joinwell52-AI/BoundaryXP/releases/tag/paper-v1.2-r23) · [材料导航](docs/paper/README.md)
 
-`RESEARCH_ONLY_1`附件包含任务原文、标注、7+1报告、操作数、结果、协议正文、截图及独立研究核验脚本，**不含58618工程源码、运行依赖或生产提示模板**。本次为GitHub预印本发布，仓库仍为私有，下载需要访问权限；本次发布尚无DOI。
+**Zenodo：** [10.5281/zenodo.24072738](https://doi.org/10.5281/zenodo.24072738) · [公开记录](https://zenodo.org/records/24072738) · [完整研究材料包](https://zenodo.org/records/24072738/files/manuscript-with-materials.zip?download=1)。2026-11-09完成Zenodo发布；出版日期保留首次GitHub发布日2026-11-06。
+
+`RESEARCH_ONLY_1`附件包含任务原文、标注、7+1报告、操作数、结果、协议正文、截图及独立研究核验脚本，**不含58618工程源码、运行依赖或生产提示模板**。Zenodo文件可公开下载，GitHub仓库仍为私有；各材料保留原有使用条款。
 
 ## 先点开一个用例
 
