@@ -1,6 +1,6 @@
-# BoundaryXP Natural-Language Extraction Benchmark Candidate
+# 历史抽取评测来源索引 / Historical extraction-source index
 
-本目录管理“自然语言 → 7+1 候选 IR”的信息性评测，不属于 BXP-CALC 规范一致性测试。
+本目录保留历史“自然语言 → 7+1候选IR”研究的来源索引，不提供编译器或可运行的评测服务，不属于BXP-CALC规范一致性测试。160条历史来源与当前论文的625组用例分别记录，不拼接、不重复计数，也不自动成为当前Gold。
 
 ## 为什么必须分开
 
@@ -8,11 +8,11 @@
 
 因此：
 
-- `protocol/conformance/` 检查结构化 IR 的确定性行为；
+- `protocol/conformance/` 保留结构化IR的历史向量与冻结预期；
 - 本目录评测自然语言编译器是否正确抽取、保留证据并在不能证明时挂起；
 - 私有对抗集不进入公开仓库，防止按答案调规则。
 
-## 当前 160 条来源记录
+## 历史160条来源记录
 
 [corpus-manifest.json](corpus-manifest.json) 登记 140 个主编号案例（1—140）和 20 个早期 1—20 变体，共 160 条来源记录；[source-index.json](source-index.json) 以 Git Blob SHA 固定其来源。它们目前不是规范性抽取 Gold Corpus，`gold_cases` 仍为 0。
 

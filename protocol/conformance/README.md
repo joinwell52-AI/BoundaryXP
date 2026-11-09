@@ -1,38 +1,26 @@
-# BXP-CALC Conformance Suite 1.0
+# 历史BXP-CALC向量 / Historical BXP-CALC vectors
 
-`bxp-calc-v1.0.json` 是 BXP-0001 `0.3.0-draft.2` 的结构化计算一致性套件 `1.0.0-draft.3`。任何实现只有在 208 条向量的完整 `boundx-result/v1` 信封逐项一致时，才能声明通过该草案版本。
+本目录保留BXP-0001 `0.3.0-draft.2` 的结构化计算套件 `1.0.0-draft.3`，共208条冻结向量。它是历史协议数据，不是BXP draft.2完整符合性声明，也不是当前B335工作台的新验收。
 
-## 构成
+This directory retains 208 frozen vectors for BXP-0001 `0.3.0-draft.2`, suite `1.0.0-draft.3`. These historical protocol data do not establish full draft.2 conformance or a new B335 acceptance result.
 
-| 类型 | 数量 | 含义 |
+## 构成 / Contents
+
+| 类型 / Group | 数量 / Count | 范围 / Scope |
 |---|---:|---|
-| 原基础向量 | 16 | 区间、集合、交接、DAG、布尔逻辑、证据和扩展边界 |
-| 新加固基础向量 | 32 | 严格校验、数值精度、来源、作用域、未知与冲突聚合 |
-| 历史场景派生 | 160 | 与 140 个主案例及 20 个早期变体一一对应的计算模式向量 |
-| 合计 | 208 | 全部属于 `BXP-CALC`；基础共 48 条 |
+| 原基础向量 / Original foundations | 16 | 区间、集合、交接、图、布尔逻辑及来源等计算模式 |
+| 加固基础向量 / Additional foundations | 32 | 校验、精度、来源、作用域与未知／冲突归约 |
+| 历史模式派生 / Historical pattern-derived cases | 160 | 独立规范化结构输入；不是自然语言抽取Gold |
+| 合计 / Total | 208 | 全部为BXP-CALC历史向量 |
 
-历史场景派生使用独立、规范化的结构输入，只继承计算模式，`origin.derivation` 固定为 `calculation-pattern-only`。它们不是自然语言原文的 7+1 翻译，不构成 BXP-EXTRACT 金标。
+[向量JSON / Vector data](bxp-calc-v1.0.json) · [套件Schema / Suite schema](../schemas/boundx-calc-conformance-suite-v1.schema.json) · [历史来源索引 / Source index](../benchmarks/README.md)
 
-## 运行
+## 读取与验证边界 / Inspection and verification
 
-```text
-npm ci
-node protocol/conformance/run.mjs
-node --test protocol/conformance/*.test.mjs
-```
+各条目保留原任务对象、`schema_expectation`和完整预期结果信封。对象键顺序不参与比较；数组顺序与全部字段值参与比较。两个授权字段保持null。历史预期由当时参考实现生成，不宣称第二独立实现互操作或独立人工Gold。
 
-`run.mjs` 比较完整结果信封，包括摘要算法、三个结果轴、发现、类型化计算、空业务决定、空执行授权和扩展对象。
+这里不再提供依赖私有Core的工程生成器、运行器或产品测试脚本，也没有可用的工作台安装命令。阅读这些JSON不需要安装工作台；如另行实现验证器，应明确对应旧协议／套件身份、实际执行范围和差异，不能通过改写冻结预期制造通过。
 
-每条向量通过 `schema_expectation` 声明内嵌任务应当通过还是拒绝任务 Schema。这样，一致性套件自身保持结构合法，同时可以承载故意构造的非法输入反例。
+The JSON retains task objects, schema expectations and complete expected envelopes. The former engineering generators, runners and tests depended on a private Core and are not distributed here. Reading the data does not require a workbench installation. Any independent verification must name its exact protocol and suite versions, report its actual scope and differences, and preserve frozen expectations.
 
-## 维护
-
-`build-suite.mjs` 默认只比较，不改写冻结预期；有差异会失败。只有显式 `--candidate` 才写入独立的 `bxp-calc-v1.0.candidate.json`。候选输出不自动成为规范，必须结合修订说明、人工推导的关键断言和完整 JSON Diff 评审，之后显式纳入版本管理。验证必须针对当前源码与对应版本套件重新运行。
-
-新增 `hardening-cases.mjs` 的结论与关键值是手写断言，不取自 `evaluateTask`；生成器会先核对这些断言再输出候选。`hardening.test.mjs` 还覆盖双语投影、Unicode、签名外的内容摘要、整数取整、极值进位、AST 限额、顺序与维护工具只读行为。旧 176 条和新完整结果仍由参考实现生成，**不是第二个独立实现的互操作证明**；未做双人语义标注，不是抽取金标。
-
-套件对象键顺序不参与比较，数组顺序及全部字段值参与比较。完整套件、每条输入的 `schema_expectation` 和每条实际结果均执行 Schema 校验。参考线上诊断消息固定英文；中文和英文展示可使用稳定错误码翻译，但必须保留原文证据，不能改写冻结结果。
-
-`revision.test.mjs` 另行验证矛盾结果反例、Profile 回显、依赖边追踪、JCS、版本化注册表和双语规范断言。它们是回归测试，不额外增加 208 条计算向量或抽取金标数量。规范化变更后的 208 条旧字段投影已逐条比对，原计算、发现及三轴结果保持不变。
-
-套件保持 `DRAFT_FOR_REVIEW`，未授权公开发布或认证。旧产品 API 不自动变为 BXP 0.3。
+[协议实现范围 / Implementation scope](../IMPLEMENTATION.md) · [仓库公开范围 / Repository scope](../../docs/PUBLICATION-SCOPE.md)

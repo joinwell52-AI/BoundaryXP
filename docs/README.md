@@ -12,6 +12,7 @@
 - [脱敏历史验证摘要 / Redacted historical verification summary](releases/WORKBENCH-HISTORY-VERIFICATION.json)
 - [MCP计划 / MCP plans](MCP.md)
 - [公开范围 / Publication scope](PUBLICATION-SCOPE.md)
+- [公开前核查与剩余阻塞 / Pre-publication check and remaining blocker](PREPUBLICATION-CHECK.md)
 - [资料维护指南 / Documentation maintenance](DEVELOPMENT.md)
 
 工作台实现不随本仓库发布；这里没有工作台源码的构建、安装或运行入口。
