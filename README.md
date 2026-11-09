@@ -9,7 +9,7 @@ BoundaryXP turns task requirements into an evidence-linked **7+1 representation*
 
 **Research and protocol repository · Bilingual preprint available · Workbench source remains private · MCP integration planned**
 
-[7+1 research](docs/RESEARCH.en.md) · [Protocol](protocol/README.md) · [MCP plans](docs/MCP.md) · [Documentation](docs/README.md)
+[7+1 research](docs/RESEARCH.en.md) · [Protocol](protocol/README.md) · [Changelog](CHANGELOG.md) · [MCP plans](docs/MCP.md) · [Documentation](docs/README.md)
 
 ## Research preprint
 
@@ -29,7 +29,7 @@ The `RESEARCH_ONLY_1` supplement includes task sources, annotations, 7+1 reports
 
 [**Open the interactive demo →**](https://boundaryxp-workbench-demo.joinwell52.chatgpt.site/?lang=en#case=ENG20-003&axis=A&view=radar&lang=en) · [**Read the 7+1 report →**](https://boundaryxp-workbench-demo.joinwell52.chatgpt.site/?lang=en#case=ENG20-003&axis=A&view=report&lang=en)
 
-Explore five existing cases saved in the 58618 workbench, including two originally written in English. Their task trees, exact sources, verdicts, 7+1 relations and seven-step reports are retained. Select a case and click the radar to inspect its evidence. The radar, evidence and Markdown renderer reuse the original B-332 components.
+Explore five existing cases saved in the 58618 workbench, including two originally written in English. Their task trees, exact sources, verdicts, 7+1 relations and seven-step reports are retained. Select a case and click the radar to inspect its evidence. The radar, evidence and Markdown renderer reuse the original workbench components. The demo replays fixed saved records; local workbench upgrades do not regenerate them.
 
 [![English-source ENG20-003 case: task list, clickable 7+1 radar and original evidence](assets/demos/workbench-en.jpg)](https://boundaryxp-workbench-demo.joinwell52.chatgpt.site/?lang=en#case=ENG20-003&axis=A&view=radar&lang=en)
 
@@ -91,14 +91,18 @@ flowchart LR
   F --> G[Human / host review]
 ```
 
-The B-332 workbench uses **one semantic request**, followed by program checks. It has no separate audit request or automatic retry. Core validates submitted structures, source references, bindings and supported finite operands; it does not call models, access the network or execute task instructions.
+The B335 workbench uses **one semantic request**, followed by program checks. It has no separate audit request or automatic retry. Core validates submitted structures, source references, bindings and supported finite operands; it does not call models, access the network or execute task instructions.
 
-## Recorded workbench capabilities (B-332)
+## Current workbench capabilities (B335)
+
+As of 2026-11-09, the current private workbench is **B335** (`0.1.0-candidate.031-r1.2-ui.335`). The [changelog](CHANGELOG.md) records the latest three upgrades and their historical verification scope.
 
 - **Complete task trees:** whole-document UTF-8 `.txt` / `.md` import, role headings, explicit task and parent IDs, forward references, multiple levels and relationship preview.
 - **Inspectable results:** task tree and 7+1 radar, model and calculator conclusions, quotations, unresolved items, saved history and exports. Failed attempts remain distinct from saved results.
 - **L2 / L3 resources:** industry and enterprise dictionaries with versioned references. The workbench has no active L1 layer.
-- **Chinese and English:** language switching preserves original evidence and verdicts. Bilingual Markdown retains the complete Chinese source and original report; first-time report translation calls a model and is cached by snapshot.
+- **Chinese and English:** the interface, report translation and Markdown exports preserve original task text and saved verdicts. First-time report translation calls a model and is cached by snapshot.
+- **Mathematical input and unknowns:** allowed values, uncertain facts and parent/child plan consistency have distinct meanings. Set identities support strings and safe integers without conflating their types; unresolved interpretations remain unresolved.
+- **Startup and recovery:** historical jobs load with bounded concurrency under the existing recovery rules. Readiness is reported only after HTTP identity verification.
 
 Individual sources and serialized joint input are each limited to **1 MiB**; HTTP request bodies are limited to **8 MiB**. Oversized input is rejected without truncation. There is no 300-code-point ceiling.
 

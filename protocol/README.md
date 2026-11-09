@@ -1,6 +1,6 @@
 # BXP — Boundary Xplain Protocol（边界分析协议）
 
-当前本地工作台为 **B-332**。联合分析与Core核验已按实现提供，但运行指令仍加载已记录的draft.1附件；不得把协议文档评审或历史复算当作完整draft.2迁移/符合性。当前用户操作见[B-332快速开始](../QUICKSTART.md)，已有审计见[验证索引](../docs/VALIDATION.md)。
+当前私有工作台为 **B335**（截至2026-11-09），升级记录见[中文日志](../CHANGELOG.zh-CN.md) / [English changelog](../CHANGELOG.md)。联合分析与Core核验按实际实现提供，运行指令仍加载已记录的draft.1附件；协议文档评审和历史复算不等于完整draft.2迁移或符合性。本仓库提供研究与协议资料，不提供私有工作台的源码或安装入口。
 
 当前协议文档评审通过基线：**BXP-0001 0.4.0-draft.2 / 2026-10-27-r2**。中英文正文、配套描述符与核验材料保持已审定字节，评审通过记录单独保存。
 
@@ -34,7 +34,7 @@ The accepted document baseline is distinct from runtime conformance and product 
 
 - [当前版本入口及变更说明](versions/0.4.0-draft.2/README.md)
 - [配套描述符](versions/0.4.0-draft.2/contracts/README.md)：基础载体、阶段索引、状态归约、求值与评估责任；尚未注册为运行合同。
-- [实现与迁移范围](IMPLEMENTATION.md) · [全仓文档核对记录](../docs/BXP-DOCUMENTATION-AUDIT-20261027.md)
+- [实现与迁移范围](IMPLEMENTATION.md) · [研究证据](../docs/RESEARCH.md)
 - [旧 task Schema](schemas/boundx-task-v1.schema.json) · [旧 result Schema](schemas/boundx-result-v1.schema.json)：仅按各自精确版本使用。
 
 从本仓库核验固定包内材料：
