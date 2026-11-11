@@ -1,5 +1,13 @@
 # 仓库范围 / Repository scope
 
+## 2026-11-11补充：MCP内部测试交付 / Internal MCP delivery
+
+按用户新要求，本仓库增加[MCP双语使用说明](mcp/README.md)，并在私有Release草稿中准备0.4.0-rc.2编译安装包、摘要、依赖清单和脱敏验收记录。Core原实现源码不进入安装包；适配器、界面、必要资源及提示模板随运行包交付并可读取。Git树仍不承载私有工程源码。仓库保持私有，npm与对外发布均未执行；草稿仅供有权限维护者使用。外部分发许可尚须确认，见[说明](mcp/NOTICES.md)。
+
+MCP internal test assets are an explicit addition to the earlier research-only scope. The private draft Release distributes the compiled Core with readable adapter/UI/runtime resources; it does not distribute the original Core source. Repository visibility and existing paper assets are unchanged. The historical review below retains its original scope and does not certify the new MCP package; see its separate [release evidence](mcp/RELEASE.md).
+
+## 2026-11-09研究资料范围 / Historical research scope
+
 本仓库保留论文、BXP协议、研究案例与已保存报告、截图，以及独立数学或统计核验脚本。**工作台实现保持私有**：不分发工作台前后端、Core实现、内部提示词、运行依赖、构建安装脚本或旧工程源码快照。
 
 This repository distributes research and protocol material, saved examples and reports, screenshots, and independent verification scripts. **The workbench implementation remains private.** Workbench frontend/backend source, Core, production prompts, runtime dependencies and engineering build/install assets are excluded.

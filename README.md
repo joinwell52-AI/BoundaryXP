@@ -7,9 +7,17 @@
 
 BoundaryXP turns task requirements into an evidence-linked **7+1 representation**, then checks submitted structures and supported mathematical constraints with a shared deterministic Core. It helps people inspect whether a proposed plan or task decomposition preserves required outputs, responsibilities, limits and prohibitions before execution.
 
-**Research and protocol repository · Bilingual preprint available · Workbench source remains private · MCP integration planned**
+**Research and protocol material · Bilingual preprint available · Private MCP test candidate · Core source remains private**
 
-[7+1 research](docs/RESEARCH.en.md) · [Protocol](protocol/README.md) · [Changelog](CHANGELOG.md) · [MCP plans](docs/MCP.md) · [Documentation](docs/README.md)
+[7+1 research](docs/RESEARCH.en.md) · [Protocol](protocol/README.md) · [Changelog](CHANGELOG.md) · [MCP installation](docs/mcp/INSTALL.en.md) · [Documentation](docs/README.md)
+
+## MCP internal testing — 0.4.0-rc.2 / B-335
+
+BoundaryXP MCP connects through standard stdio to Cursor, Codex and compatible hosts, with 18 tools and a local browser workbench. The Windows x64 test package includes the compiled native Core; no separate 58618 installation or hosted BoundaryXP server is required. New analysis requires your own configured model API. The adapter, UI and resources remain readable; the package does not contain the original Core implementation source.
+
+[**Install and connect**](docs/mcp/INSTALL.en.md) · [中文安装](docs/mcp/INSTALL.zh-CN.md) · [18 tools](docs/mcp/TOOLS.md) · [Updates and troubleshooting](docs/mcp/OPERATIONS.md) · [Release evidence](docs/mcp/RELEASE.md)
+
+This repository remains private. The `mcp-v0.4.0-rc.2` draft prerelease holds internal test assets for authorized maintainers; download its **Assets**, not the generated Source code archives. No npm version has been published. Private GitHub downloads currently use the manual package upgrade procedure. See [distribution scope and notices](docs/mcp/NOTICES.md) before any external release. The existing paper release is unchanged.
 
 ## Research preprint
 

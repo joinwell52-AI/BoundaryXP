@@ -7,9 +7,17 @@
 
 界痕将任务要求组织成带原文证据的 **7+1表示**，再由共享的确定性Core核验已提交结构及受支持的数学约束。它帮助人们在执行前检查：方案或子任务分解是否保留了原任务的交付义务、职责、限制与禁止事项。
 
-**论文与协议资料仓库 · 双语预印本已发布 · 工作台源码保持私有 · MCP接入计划中**
+**论文与协议资料 · 双语预印本已发布 · MCP内部测试候选 · Core源码保持私有**
 
-[7+1研究](docs/RESEARCH.md) · [协议](protocol/README.md) · [升级日志](CHANGELOG.zh-CN.md) · [MCP计划](docs/MCP.md) · [文档导航](docs/README.md)
+[7+1研究](docs/RESEARCH.md) · [协议](protocol/README.md) · [升级日志](CHANGELOG.zh-CN.md) · [MCP安装](docs/mcp/INSTALL.zh-CN.md) · [文档导航](docs/README.md)
+
+## MCP内部测试 — 0.4.0-rc.2 / B-335
+
+BoundaryXP MCP通过标准stdio接入Cursor、Codex等兼容宿主，提供18个工具和本地浏览器工作台。Windows x64测试包自带原生编译Core，无需另外安装58618或自建BoundaryXP服务器；提交新分析需要自行配置模型API。适配器、界面和资源仍可读取，包内不含原Core实现源码。
+
+[**安装与接入**](docs/mcp/INSTALL.zh-CN.md) · [English](docs/mcp/INSTALL.en.md) · [18个工具](docs/mcp/TOOLS.md) · [升级与排障](docs/mcp/OPERATIONS.md) · [版本与验收](docs/mcp/RELEASE.md)
+
+本仓库仍为私有。`mcp-v0.4.0-rc.2`预发行草稿存放内部测试附件，供有权限的维护者下载；安装应下载 **Assets**，不是自动生成的Source code压缩包。目前未发布npm版本，私有GitHub附件按手动下载升级流程使用。对外发行前仍须核对[分发范围和许可说明](docs/mcp/NOTICES.md)。原论文Release保持不变。
 
 ## 研究预印本
 

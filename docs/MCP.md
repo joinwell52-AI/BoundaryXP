@@ -1,7 +1,15 @@
-# MCP计划 / MCP plans
+# BoundaryXP MCP · BXP
 
-BoundaryXP plans to expose task-boundary capabilities through MCP. The private workbench and its existing adapters are not distributed in this research repository. No installable public workbench MCP implementation or public assessment endpoint is claimed here.
+**0.4.0-rc.2 / B-335 — 内部测试 / Internal testing**
 
-Future integration documentation should specify tools, input contracts and limits, model/provider data flow, error behavior and validation evidence. Protocol review is separate from implementation conformance; an assessment does not grant business or execution authority.
+通用stdio MCP，18个工具、本地浏览器工作台、L2/L3资源、完整父子任务与多个同角色子任务。安装包包含原生编译Core，不需另装58618；适配器、UI及资源仍可读取。LLM独立分析，Core程序复验；两者的结论与证据分别保留，不授予业务或执行权限。
 
-界痕计划通过MCP提供任务边界相关能力。私有工作台及其既有适配器不随本研究仓库发布，这里不声称已有可安装的公开工作台MCP实现或公开评估服务。正式接入时另行说明工具、输入合同与限制、模型数据流、错误处理和验收证据；不把协议评审、文件存在或适配器存在当作完整工作流验收。
+A standard stdio MCP with 18 tools, a local browser workbench, L2/L3 resources and explicit parent/child task IDs, including multiple DEV tasks. The package includes the native Core. New analysis requires a configured model API; host subscriptions are not automatically inherited. No separate 58618 installation or hosted BoundaryXP service is needed.
+
+- [中文安装与接入](mcp/INSTALL.zh-CN.md) · [English installation](mcp/INSTALL.en.md)
+- [18个工具 / Tool reference](mcp/TOOLS.md)
+- [升级、回滚与排障 / Operations](mcp/OPERATIONS.md)
+- [版本、支持范围和验收 / Release evidence](mcp/RELEASE.md)
+- [许可与分发范围 / Distribution notices](mcp/NOTICES.md)
+
+包位于[仓库Releases](https://github.com/joinwell52-AI/BoundaryXP/releases)的`mcp-v0.4.0-rc.2`私有草稿，草稿仅供有权限维护者访问；选择安装包Assets，不使用自动生成的Source code压缩包。尚未公开或发布到npm。Private draft assets are for authorized maintainers; no public npm package is currently available.

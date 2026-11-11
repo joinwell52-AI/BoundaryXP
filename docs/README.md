@@ -3,6 +3,7 @@
 | 内容 / Content | 中文 | English |
 |---|---|---|
 | 首页 / Overview | [界痕](../README.zh-CN.md) | [BoundaryXP](../README.md) |
+| MCP内部测试安装 / MCP internal installation | [安装与接入](mcp/INSTALL.zh-CN.md) | [Install and connect](mcp/INSTALL.en.md) |
 | 工作台升级日志 / Workbench changelog | [B335及历史版本](../CHANGELOG.zh-CN.md) | [B335 and previous versions](../CHANGELOG.md) |
 | 研究预印本 / Research preprint | [研究概览](RESEARCH.md) | [Research overview](RESEARCH.en.md) |
 | 原论文材料 / Paper materials | [材料说明](paper/README.md) | [Materials guide](paper/README.en.md) |
@@ -10,9 +11,9 @@
 
 - [演示与已保存中英报告 / Demo and saved bilingual reports](demo/README.md)
 - [脱敏历史验证摘要 / Redacted historical verification summary](releases/WORKBENCH-HISTORY-VERIFICATION.json)
-- [MCP计划 / MCP plans](MCP.md)
+- [MCP工具、使用、升级与排障 / MCP tools, usage, updates and troubleshooting](mcp/README.md)
 - [公开范围 / Publication scope](PUBLICATION-SCOPE.md)
 - [公开前核查与剩余阻塞 / Pre-publication check and remaining blocker](PREPUBLICATION-CHECK.md)
 - [资料维护指南 / Documentation maintenance](DEVELOPMENT.md)
 
-工作台实现不随本仓库发布；这里没有工作台源码的构建、安装或运行入口。
+Git树不包含私有工作台实现或其源码构建入口。独立MCP编译安装包放在私有Release草稿附件，使用说明见上方入口；原论文附件与其许可范围不变。
