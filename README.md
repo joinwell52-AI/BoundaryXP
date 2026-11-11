@@ -1,143 +1,122 @@
 <p align="center"><strong>English</strong> · <a href="README.zh-CN.md">简体中文</a></p>
-<p align="center"><img src="assets/branding/v2/BoundaryXP-logo-light.png" alt="BoundaryXP" width="480"></p>
+<p align="center"><img src="assets/branding/v2/BoundaryXP-logo-light.png" alt="BoundaryXP · 界痕" width="320"></p>
 
-# BoundaryXP · 界痕
+<h1 align="center">See the task boundaries before an AI plan runs</h1>
 
-**Check whether an AI plan preserves the boundaries of its task.**
+<p align="center">Turn complete task requirements into an evidence-linked <strong>7+1 relational representation</strong>, then check it with a deterministic Core.<br>Inspect plans and task decompositions, and trace the evidence for <strong>Violation, Within bounds or Incomplete information</strong>.</p>
 
-BoundaryXP turns task requirements into an evidence-linked **7+1 representation**, then checks submitted structures and supported mathematical constraints with a shared deterministic Core. It helps people inspect whether a proposed plan or task decomposition preserves required outputs, responsibilities, limits and prohibitions before execution.
+<p align="center"><a href="https://boundaryxp-workbench-demo.joinwell52.chatgpt.site/?lang=en#case=ENG20-003&axis=A&view=radar&lang=en"><strong>▶ Try the demo</strong></a>　·　<a href="docs/mcp/INSTALL.en.md"><strong>MCP setup</strong></a>　·　<a href="https://doi.org/10.5281/zenodo.24072738"><strong>Paper</strong></a></p>
 
-**Research and protocol material · Bilingual preprint available · Private MCP test candidate · Core source remains private**
+<p align="center">Chinese & English · MCP 0.4.0-rc.2 / B-335 internal testing · Research & protocol material · Original Core source private</p>
 
-[7+1 research](docs/RESEARCH.en.md) · [Protocol](protocol/README.md) · [Changelog](CHANGELOG.md) · [MCP installation](docs/mcp/INSTALL.en.md) · [Documentation](docs/README.md)
+## Start with a real case
 
-## MCP internal testing — 0.4.0-rc.2 / B-335
+In **ENG20-003**, five tasks span several roles. Their combined dependencies form a strict **A → B → C → D → A** cycle. BoundaryXP brings those dependencies into one graph and preserves the original English sources and calculation records for inspection.
 
-BoundaryXP MCP connects through standard stdio to Cursor, Codex and compatible hosts, with 18 tools and a local browser workbench. The Windows x64 test package includes the compiled native Core; no separate 58618 installation or hosted BoundaryXP server is required. New analysis requires your own configured model API. The adapter, UI and resources remain readable; the package does not contain the original Core implementation source.
+[![Open the demo: ENG20-003 task tree, clickable 7+1 radar and original evidence](assets/demos/workbench-en.jpg)](https://boundaryxp-workbench-demo.joinwell52.chatgpt.site/?lang=en#case=ENG20-003&axis=A&view=radar&lang=en)
 
-[**Install and connect**](docs/mcp/INSTALL.en.md) · [中文安装](docs/mcp/INSTALL.zh-CN.md) · [18 tools](docs/mcp/TOOLS.md) · [Updates and troubleshooting](docs/mcp/OPERATIONS.md) · [Release evidence](docs/mcp/RELEASE.md)
+<p align="center"><a href="https://boundaryxp-workbench-demo.joinwell52.chatgpt.site/?lang=en#case=ENG20-003&axis=A&view=radar&lang=en"><strong>Click the radar to inspect evidence →</strong></a>　·　<a href="https://boundaryxp-workbench-demo.joinwell52.chatgpt.site/?lang=en#case=ENG20-003&axis=A&view=report&lang=en">Read and export the 7+1 report →</a></p>
 
-This repository remains private. The `mcp-v0.4.0-rc.2` draft prerelease holds internal test assets for authorized maintainers; download its **Assets**, not the generated Source code archives. No npm version has been published. Private GitHub downloads currently use the manual package upgrade procedure. See [distribution scope and notices](docs/mcp/NOTICES.md) before any external release. The existing paper release is unchanged.
+### Different cases, different results
 
-## Research preprint
+| Result / case | What to inspect |
+|---|---|
+| **Violation** · [RT044](https://boundaryxp-workbench-demo.joinwell52.chatgpt.site/?lang=en#case=R389-383&axis=A&view=radar&lang=en) | Local orders combine into a strict dependency cycle |
+| **Within bounds** · [RT042](https://boundaryxp-workbench-demo.joinwell52.chatgpt.site/?lang=en#case=R389-381&axis=R&view=radar&lang=en) | Adjacent half-open 10–11 and 11–12 bookings release the endpoint |
+| **Incomplete information** · [L23-050](https://boundaryxp-workbench-demo.joinwell52.chatgpt.site/?lang=en#case=R389-153&axis=P&view=radar&lang=en) | “Confirmed by him” has no unique owner binding; U1 remains unknown |
 
-**BXP: A Method for AI Task Boundary Verification Using a 7+1 Relational Representation**
+Two cases have **original English sources**: [ENG20-001 · Branches and a join](https://boundaryxp-workbench-demo.joinwell52.chatgpt.site/?lang=en#case=ENG20-001&axis=A&view=radar&lang=en) (Within bounds) and [ENG20-003 · Four-step dependency cycle](https://boundaryxp-workbench-demo.joinwell52.chatgpt.site/?lang=en#case=ENG20-003&axis=A&view=radar&lang=en) (Violation).
 
-Wei Zhu · English v1.2 / Chinese r23 · 2026-11-06.
-
-The paper presents a method for organizing task requirements through 7+1 views and shared relations, establishing a common mathematical boundary through BXP conventions, and calculating whether subtasks and their combination exceed the parent task's boundary. Formal arguments establish the conditions for the method; 625 test cases with 3,219 task nodes and 3,469 calculation items provide implementation and application evidence. Case-level agreement is reported separately from item-level differences and incomplete calculations.
-
-[**English PDF**](https://github.com/joinwell52-AI/BoundaryXP/releases/download/paper-v1.2-r23/BoundaryXP-manuscript.en.pdf) · [Chinese PDF](https://github.com/joinwell52-AI/BoundaryXP/releases/download/paper-v1.2-r23/BoundaryXP-manuscript.zh-CN.pdf) · [**Complete research package**](https://github.com/joinwell52-AI/BoundaryXP/releases/download/paper-v1.2-r23/manuscript-with-materials.zip) · [Release and checksums](https://github.com/joinwell52-AI/BoundaryXP/releases/tag/paper-v1.2-r23) · [Materials guide](docs/paper/README.en.md)
-
-**Zenodo:** [10.5281/zenodo.24072738](https://doi.org/10.5281/zenodo.24072738) · [Public record](https://zenodo.org/records/24072738) · [Complete research package](https://zenodo.org/records/24072738/files/manuscript-with-materials.zip?download=1). Deposited on 2026-11-09; the publication date retains the first GitHub release date, 2026-11-06.
-
-The `RESEARCH_ONLY_1` supplement includes task sources, annotations, 7+1 reports, operands, results, protocol texts, screenshots and independent research verification scripts. **It excludes 58618 engineering source, runtime dependencies and production prompt templates.** Zenodo files are publicly downloadable; GitHub repository access remains private. Included materials retain their original usage terms.
-
-## Explore a complete case
-
-[**Open the interactive demo →**](https://boundaryxp-workbench-demo.joinwell52.chatgpt.site/?lang=en#case=ENG20-003&axis=A&view=radar&lang=en) · [**Read the 7+1 report →**](https://boundaryxp-workbench-demo.joinwell52.chatgpt.site/?lang=en#case=ENG20-003&axis=A&view=report&lang=en)
-
-Explore five existing cases saved in the 58618 workbench, including two originally written in English. Their task trees, exact sources, verdicts, 7+1 relations and seven-step reports are retained. Select a case and click the radar to inspect its evidence. The radar, evidence and Markdown renderer reuse the original workbench components. The demo replays fixed saved records; local workbench upgrades do not regenerate them.
-
-[![English-source ENG20-003 case: task list, clickable 7+1 radar and original evidence](assets/demos/workbench-en.jpg)](https://boundaryxp-workbench-demo.joinwell52.chatgpt.site/?lang=en#case=ENG20-003&axis=A&view=radar&lang=en)
-
-| Case | Requirements and plan | Displayed result |
-|---|---|---|
-| [R389-383 / RT044](https://boundaryxp-workbench-demo.joinwell52.chatgpt.site/?lang=en#case=R389-383&axis=A&view=radar&lang=en) · Cross-team execution chain | Individually satisfiable orders combine into a strict A→D→B→C→A cycle; 7 tasks, 10 checks | Violation |
-| [R389-381 / RT042](https://boundaryxp-workbench-demo.joinwell52.chatgpt.site/?lang=en#case=R389-381&axis=R&view=radar&lang=en) · Shared instrument handoff | Half-open 10:00–11:00 and 11:00–12:00 bookings release the instrument at the shared endpoint; 4 tasks, 7 checks | Within bounds |
-| [R389-153 / L23-050](https://boundaryxp-workbench-demo.joinwell52.chatgpt.site/?lang=en#case=R389-153&axis=P&view=radar&lang=en) · Ambiguous accountable owner | “Confirmed by him” does not uniquely identify the final owner; unknown U1 remains; 6 tasks, 6 checks | Incomplete information |
-| [ENG20-001](https://boundaryxp-workbench-demo.joinwell52.chatgpt.site/?lang=en#case=ENG20-001&axis=A&view=radar&lang=en) · Two prerequisite branches and one join (English source) | P precedes S and G; both S and G precede U. Neither branch substitutes for the other; 5 tasks, 2 checks | Within bounds |
-| [ENG20-003](https://boundaryxp-workbench-demo.joinwell52.chatgpt.site/?lang=en#case=ENG20-003&axis=A&view=radar&lang=en) · A four-step cycle across role boundaries (English source) | Role-specific orders combine into the strict A→B→C→D→A cycle; 5 tasks, 5 checks | Violation |
-
-The report follows the top-right language switch: Chinese interface, Chinese report and export; English interface, English report and export. Download case JSON from the source view. The ENG20 cases retain their original English task text and existing saved reports and translations from 58618. Language switching never rewrites source evidence. The public page replays selected development records without connecting to the local service or reassessing them. Accounts, credentials, customer data and personal runtime logs are excluded.
+All five come from saved 58618 records, retaining task trees, exact sources, verdicts and seven-step reports. **Reports and Markdown exports follow the top-right language switch; source evidence keeps its original language.** The demo replays B-332 records without connecting to a local service or running new analysis. B335 upgrades do not regenerate those records. [Demo and saved reports](docs/demo/README.md)
 
 <details>
-<summary>See the report view</summary>
+<summary>See the English report and original task text</summary>
 
-[![ENG20-003 English report follows the interface language, with Markdown export](assets/demos/report-en.jpg)](https://boundaryxp-workbench-demo.joinwell52.chatgpt.site/?lang=en#case=ENG20-003&axis=A&view=report&lang=en)
+[![English 7+1 report with Markdown export](assets/demos/report-en.jpg)](https://boundaryxp-workbench-demo.joinwell52.chatgpt.site/?lang=en#case=ENG20-003&axis=A&view=report&lang=en)
 
-[![Original English task sources for ENG20-003, retained from 58618](assets/demos/english-source.jpg)](https://boundaryxp-workbench-demo.joinwell52.chatgpt.site/?lang=en#case=ENG20-003&axis=A&view=source&lang=en)
-
-[![L23-050 retains the unresolved accountable-owner identity](assets/demos/information-incomplete.jpg)](https://boundaryxp-workbench-demo.joinwell52.chatgpt.site/?lang=en#case=R389-153&axis=P&view=radar&lang=en)
+[![ENG20-003 original English task sources](assets/demos/english-source.jpg)](https://boundaryxp-workbench-demo.joinwell52.chatgpt.site/?lang=en#case=ENG20-003&axis=A&view=source&lang=en)
 
 </details>
 
-[Demo and saved reports](docs/demo/README.md)
+## Connect to your AI workflow
 
-## Why task boundaries?
+**BoundaryXP MCP** connects through standard stdio to Cursor, Codex and compatible hosts, with **18 tools, 10 resources and a local browser workbench**. The Windows x64 test package includes the compiled native Core; no separate 58618 installation or hosted BoundaryXP server is required.
 
-A plan can sound reasonable while adding an unauthorized action, dropping a required deliverable or overlooking a constraint shared by several subtasks. BoundaryXP makes these requirements and their relationships inspectable, preserving source evidence and unresolved questions alongside the calculation results.
+1. **Download and verify:** get the test package from the private draft release's **Assets** and check SHA-256.
+2. **Install and connect:** follow the guide to configure the host's stdio MCP server.
+3. **Configure a model API:** new analysis uses your own provider/API access. Cursor or Codex subscription allowances are not inherited.
+4. **Open the workbench:** import complete task text, preview and confirm the task tree, then analyze and inspect evidence and reports.
 
-It is useful for reviewing an AI-generated plan, checking a parent–child task tree, or connecting a host application to local task validation. People and host systems retain business decisions and execution authority.
+[**English installation guide →**](docs/mcp/INSTALL.en.md) · [中文安装](docs/mcp/INSTALL.zh-CN.md) · [Tools and resources](docs/mcp/TOOLS.md) · [Updates, rollback and troubleshooting](docs/mcp/OPERATIONS.md)
 
-## What is 7+1?
+> **Distribution status:** 0.4.0-rc.2 / B-335, Windows x64 internal testing. This repository remains private and the prerelease remains a draft; no npm version is published. Authorized maintainers download Assets, not generated Source code archives. External distribution scope and licensing still need confirmation. See [release evidence](docs/mcp/RELEASE.md) and [notices](docs/mcp/NOTICES.md).
 
-| View | What it records |
-|---|---|
-| **I — Inputs** | Input scope and source material |
-| **O — Outputs** | Required deliverables |
-| **A — Actions** | Task actions and their stated modality |
-| **P — Participants** | Responsible parties, roles and division of work |
-| **R — Resources** | Resources and stated quantitative limits |
-| **V — Version / basis** | Applicable versions, references and provenance |
-| **C — Completion / stopping** | Conditions for finishing or stopping |
-| **B — Prohibitions** | Explicitly forbidden behavior, kept independent |
+## Method and research evidence
 
-Relationships preserve shared objects, conditions, dependencies and handoffs across views. Missing information stays missing; a role title does not grant authority.
+**BXP: A Method for AI Task Boundary Verification Using a 7+1 Relational Representation**  
+Wei Zhu · English v1.2 / Chinese r23 · First published 2026-11-06
 
-The demo above preserves source quotations and calculation records for these eight views. Actual findings depend on the submitted representation, evidence and supported checks.
+| Research cases | Task nodes | Calculation items |
+|:---:|:---:|:---:|
+| **625** | **3,219** | **3,469** |
 
-## How it works
+The paper organizes requirements through 7+1 views and shared relations, uses BXP conventions to establish a common mathematical boundary, and checks whether subtasks and their combination exceed the parent task's boundary. Formal arguments state the conditions for the method. These figures describe research coverage, **not accuracy**. Case-level agreement, item-level differences and incomplete calculations are reported separately.
+
+[**English PDF**](https://github.com/joinwell52-AI/BoundaryXP/releases/download/paper-v1.2-r23/BoundaryXP-manuscript.en.pdf) · [中文 PDF](https://github.com/joinwell52-AI/BoundaryXP/releases/download/paper-v1.2-r23/BoundaryXP-manuscript.zh-CN.pdf) · [**Public research package**](https://zenodo.org/records/24072738/files/manuscript-with-materials.zip?download=1) · [Materials guide](docs/paper/README.en.md)
+
+**DOI: [10.5281/zenodo.24072738](https://doi.org/10.5281/zenodo.24072738)**. Deposited on Zenodo on 2026-11-09, retaining the first GitHub publication date. [GitHub paper release and checksums](https://github.com/joinwell52-AI/BoundaryXP/releases/tag/paper-v1.2-r23)
+
+The `RESEARCH_ONLY_1` supplement contains task sources, annotations, 7+1 reports, operands, results, protocol texts, screenshots and independent research verification scripts. It excludes workbench engineering source, runtime dependencies and production prompt templates. It is maintained separately from the MCP test package.
+
+## How 7+1 connects the requirements
+
+**I Inputs · O Outputs · A Actions · P Responsibilities and division of work · R Resources · V Version / basis · C Completion / stopping, plus independent B Prohibitions.**
+
+Shared relations connect objects, conditions, dependencies and handoffs across task boundaries. Missing information stays missing; a role title does not grant authority.
 
 ```mermaid
 flowchart LR
-  A[Complete task text] --> B[Confirm task tree]
-  B --> C[LLM joint analysis]
-  D[Selected L2 / L3 dictionaries] --> C
-  C --> E[Shared deterministic Core]
-  E --> F[Evidence, findings and unresolved items]
-  F --> G[Human / host review]
+  A["Complete task text"] --> B["Confirm parent–child task tree"]
+  B --> C["LLM joint analysis"]
+  D["Selected L2 / L3 dictionaries"] --> C
+  C --> E["Shared deterministic Core"]
+  E --> F["Evidence, findings and unresolved items"]
+  F --> G["Human / host review"]
 ```
 
-The B335 workbench uses **one semantic request**, followed by program checks. It has no separate audit request or automatic retry. Core validates submitted structures, source references, bindings and supported finite operands; it does not call models, access the network or execute task instructions.
+The B335 workbench makes **one semantic request**, followed by Core checks, with no separate audit request or automatic retry. LLMs interpret source meaning; Core validates submitted structures, source references, bindings and supported finite operands. Core does not call models, access the network or execute task instructions.
 
-## Current workbench capabilities (B335)
-
-As of 2026-11-09, the current private workbench is **B335** (`0.1.0-candidate.031-r1.2-ui.335`). The [changelog](CHANGELOG.md) records the latest three upgrades and their historical verification scope.
+<details>
+<summary>B335 capabilities, input limits and evidence boundaries</summary>
 
 - **Complete task trees:** whole-document UTF-8 `.txt` / `.md` import, role headings, explicit task and parent IDs, forward references, multiple levels and relationship preview.
-- **Inspectable results:** task tree and 7+1 radar, model and calculator conclusions, quotations, unresolved items, saved history and exports. Failed attempts remain distinct from saved results.
-- **L2 / L3 resources:** industry and enterprise dictionaries with versioned references. The workbench has no active L1 layer.
-- **Chinese and English:** the interface, report translation and Markdown exports preserve original task text and saved verdicts. First-time report translation calls a model and is cached by snapshot.
-- **Mathematical input and unknowns:** allowed values, uncertain facts and parent/child plan consistency have distinct meanings. Set identities support strings and safe integers without conflating their types; unresolved interpretations remain unresolved.
-- **Startup and recovery:** historical jobs load with bounded concurrency under the existing recovery rules. Readiness is reported only after HTTP identity verification.
+- **Inspectable results:** task tree, 7+1 radar, model/calculator conclusions, quotations, unresolved items, saved history and exports. Failed attempts remain distinct from saved results.
+- **L2 / L3:** versioned industry and enterprise dictionaries; no active L1 layer. Loading resources does not grant business authority.
+- **Chinese and English:** interface, reports and Markdown exports preserve original sources and saved verdicts. First-time translation calls a model and is cached by snapshot.
+- **Mathematical input and unknowns:** allowed values, uncertain facts and parent/child plan consistency have distinct meanings. Set identities support strings and safe integers without conflating their types or filling in unknown conclusions.
+- **Startup and recovery:** historical jobs load with bounded concurrency under existing recovery rules. Readiness follows HTTP identity verification.
 
-Individual sources and serialized joint input are each limited to **1 MiB**; HTTP request bodies are limited to **8 MiB**. Oversized input is rejected without truncation. There is no 300-code-point ceiling.
+Individual sources and serialized joint input are each limited to **1 MiB**; HTTP request bodies to **8 MiB**. Oversized input is rejected without truncation; there is no 300-code-point ceiling. See the [changelog](CHANGELOG.md) for features and historical validation scope.
 
-These capabilities describe the recorded private workbench. This repository distributes research material rather than an installable workbench.
+Exact quotations do not prove semantic entailment. A completed job does not mean every proof passed. People and host systems retain business decisions and execution authority; `business_decision` and `execution_authorization` remain null.
 
-## Repository scope
+The reviewed baseline is BXP-0001 `0.4.0-draft.2`; the workbench still uses a recorded draft.1 attachment. Full migration and protocol conformance are not claimed. [Implementation notes](protocol/IMPLEMENTATION.md) · [Research evidence](docs/RESEARCH.en.md)
 
-**Workbench source is not distributed here.** The repository contains the paper, BXP specifications, saved research cases and reports, screenshots, and independent mathematical or statistical verification scripts. It does not provide workbench frontend/backend source, Core implementation, internal prompts, runtime dependencies, or build and installation packages.
+Host analysis and first-time translation may send selected source and dictionary content to the configured model provider. Review this data flow before supplying private material.
 
-The research scripts verify the declared research material; they are not the workbench implementation. See the [publication scope](docs/PUBLICATION-SCOPE.md).
+</details>
 
-## Research and MCP
+## Explore further
 
-The method preprint is available as **English v1.2 / Chinese r23**. See the [research overview](docs/RESEARCH.en.md) for the current title, citation, evidence scope and downloads. The paper develops the method and its conditional mathematical basis; the tool implements the method and supplies experimental evidence.
+| Looking for | Start here |
+|---|---|
+| MCP installation and usage | [Setup guide](docs/mcp/README.md) · [Release evidence](docs/mcp/RELEASE.md) |
+| Method and citation | [Research overview](docs/RESEARCH.en.md) · [Paper materials](docs/paper/README.en.md) |
+| Protocol and implementation differences | [BXP protocol](protocol/README.md) · [Implementation notes](protocol/IMPLEMENTATION.md) |
+| Version history and contribution | [Changelog](CHANGELOG.md) · [Contributing](CONTRIBUTING.md) · [Documentation](docs/README.md) |
 
-MCP integration is planned. The private workbench and its adapters are not shipped in this repository, and no installable public workbench MCP implementation is claimed here. See the [MCP scope](docs/MCP.md).
+**Distribution scope:** the Git tree contains paper, protocol, cases, reports, screenshots, independent research verification scripts and MCP documentation. It excludes private workbench implementation source and source-build entry points. MCP compiled packages are separate private draft release assets. Original Core implementation source is excluded from those packages; adapter, UI and required resources remain readable. [Full scope](docs/PUBLICATION-SCOPE.md)
 
-## Evidence and limitations
+**Publication readiness:** this repository remains private. Legacy PR references and historical cache cleanup still await GitHub handling; this homepage update does not complete the publication audit. [Audit record](docs/PREPUBLICATION-CHECK.md)
 
-LLMs interpret source meaning; deterministic calculation checks the representation that was submitted. Exact quotations do not prove semantic entailment, and a completed job does not mean every proof passed. Displayed conclusions are Violation, Within bounds or Incomplete information; technical verification details are retained separately. `business_decision` and `execution_authorization` remain null.
-
-The reviewed protocol baseline is BXP-0001 `0.4.0-draft.2`; the workbench still uses a recorded draft.1 attachment and has not completed migration to every reviewed requirement. No full protocol-conformance claim is made. Historical model results, engineering regressions and protocol tests have distinct scopes: [implementation](protocol/IMPLEMENTATION.md) · [research evidence](docs/RESEARCH.en.md).
-
-Host analysis and first-time translation may send selected source and dictionary content to the configured model provider. Review that data flow before supplying private material.
-
-## Contribute and explore
-
-[Contribution guide](CONTRIBUTING.md) · [Protocol](protocol/README.md) · [Research](docs/RESEARCH.en.md) · [Documentation](docs/README.md) · [Publication scope](docs/PUBLICATION-SCOPE.md)
-
-The existing [MIT license](LICENSE) is retained. Paper, case-data and third-party usage terms are described separately in the [material-access statement](docs/paper/materials/MATERIAL-ACCESS.md). Research publication does not release the private workbench implementation.
+The existing [MIT license](LICENSE) is retained. Paper, case data and third-party materials have their own [usage terms](docs/paper/materials/MATERIAL-ACCESS.md); the MCP test package has separate [license and third-party notices](docs/mcp/NOTICES.md).

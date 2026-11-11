@@ -1,141 +1,122 @@
 <p align="center"><a href="README.md">English</a> · <strong>简体中文</strong></p>
-<p align="center"><img src="assets/branding/v2/BoundaryXP-logo-zh.png" alt="界痕" width="480"></p>
+<p align="center"><img src="assets/branding/v2/BoundaryXP-logo-zh.png" alt="界痕 · BoundaryXP" width="320"></p>
 
-# 界痕 · BoundaryXP
+<h1 align="center">在执行前，看清 AI 方案的任务边界</h1>
 
-**检查AI方案是否保持了原任务的边界。**
+<p align="center">从完整任务到带原文证据的 <strong>7+1 关联表示</strong>，再由确定性 Core 核验。<br>检查方案与子任务分解，追溯为什么<strong>越界、未越界，或信息不全</strong>。</p>
 
-界痕将任务要求组织成带原文证据的 **7+1表示**，再由共享的确定性Core核验已提交结构及受支持的数学约束。它帮助人们在执行前检查：方案或子任务分解是否保留了原任务的交付义务、职责、限制与禁止事项。
+<p align="center"><a href="https://boundaryxp-workbench-demo.joinwell52.chatgpt.site/"><strong>▶ 在线演示</strong></a>　·　<a href="docs/mcp/INSTALL.zh-CN.md"><strong>MCP 接入</strong></a>　·　<a href="https://doi.org/10.5281/zenodo.24072738"><strong>论文</strong></a></p>
 
-**论文与协议资料 · 双语预印本已发布 · MCP内部测试候选 · Core源码保持私有**
+<p align="center">中英双语 · MCP 0.4.0-rc.2 / B-335 内部测试 · 论文与协议资料 · Core 原实现源码私有</p>
 
-[7+1研究](docs/RESEARCH.md) · [协议](protocol/README.md) · [升级日志](CHANGELOG.zh-CN.md) · [MCP安装](docs/mcp/INSTALL.zh-CN.md) · [文档导航](docs/README.md)
+## 先看一个真实用例
 
-## MCP内部测试 — 0.4.0-rc.2 / B-335
+七个任务各自看起来可以执行，合起来却有一条 **A → D → B → C → A** 的严格前置闭环。界痕把跨小组依赖放回同一张图，保留原文与计算依据，让冲突可以逐项核对。
 
-BoundaryXP MCP通过标准stdio接入Cursor、Codex等兼容宿主，提供18个工具和本地浏览器工作台。Windows x64测试包自带原生编译Core，无需另外安装58618或自建BoundaryXP服务器；提交新分析需要自行配置模型API。适配器、界面和资源仍可读取，包内不含原Core实现源码。
+[![点击进入：RT044 的任务树、7+1 边界雷达和原文依据](assets/demos/workbench-zh.jpg)](https://boundaryxp-workbench-demo.joinwell52.chatgpt.site/#case=R389-383&axis=A&view=radar&lang=zh)
 
-[**安装与接入**](docs/mcp/INSTALL.zh-CN.md) · [English](docs/mcp/INSTALL.en.md) · [18个工具](docs/mcp/TOOLS.md) · [升级与排障](docs/mcp/OPERATIONS.md) · [版本与验收](docs/mcp/RELEASE.md)
+<p align="center"><a href="https://boundaryxp-workbench-demo.joinwell52.chatgpt.site/#case=R389-383&axis=A&view=radar&lang=zh"><strong>点击雷达，查看依据 →</strong></a>　·　<a href="https://boundaryxp-workbench-demo.joinwell52.chatgpt.site/#case=R389-383&axis=A&view=report&lang=zh">阅读与导出 7+1 报告 →</a></p>
 
-本仓库仍为私有。`mcp-v0.4.0-rc.2`预发行草稿存放内部测试附件，供有权限的维护者下载；安装应下载 **Assets**，不是自动生成的Source code压缩包。目前未发布npm版本，私有GitHub附件按手动下载升级流程使用。对外发行前仍须核对[分发范围和许可说明](docs/mcp/NOTICES.md)。原论文Release保持不变。
+### 不同用例，不同结果
 
-## 研究预印本
+| 结果与用例 | 关键问题 |
+|---|---|
+| **越界** · [RT044](https://boundaryxp-workbench-demo.joinwell52.chatgpt.site/#case=R389-383&axis=A&view=radar&lang=zh) | 局部顺序合并后形成严格闭环 |
+| **未越界** · [RT042](https://boundaryxp-workbench-demo.joinwell52.chatgpt.site/#case=R389-381&axis=R&view=radar&lang=zh) | 10–11 点与 11–12 点的半开区间相邻，端点释放 |
+| **信息不全** · [L23-050](https://boundaryxp-workbench-demo.joinwell52.chatgpt.site/#case=R389-153&axis=P&view=radar&lang=zh) | “由他确认”没有唯一绑定责任人，保留未知 U1 |
 
-**《BXP：基于7+1关联表示的人工智能任务边界判定方法》**
+还有两个**英文原文**用例：[ENG20-001 · 分支与汇合](https://boundaryxp-workbench-demo.joinwell52.chatgpt.site/?lang=en#case=ENG20-001&axis=A&view=radar&lang=en)（未越界）、[ENG20-003 · 四步依赖闭环](https://boundaryxp-workbench-demo.joinwell52.chatgpt.site/?lang=en#case=ENG20-003&axis=A&view=radar&lang=en)（越界）。
 
-朱卫（Wei Zhu）· 中文r23／英文v1.2 · 2026-11-06。
-
-论文提出以7+1及共享关联组织任务要求、以BXP约定建立共同数学边界，并计算判定子任务及其组合是否突破主任务边界的方法。形式论证说明方法成立的条件；625组用例、3219个任务节点和3469项计算提供实现与应用证据。整组答案的一致性与逐项差异、未完成计算分别报告。
-
-[**中文PDF**](https://github.com/joinwell52-AI/BoundaryXP/releases/download/paper-v1.2-r23/BoundaryXP-manuscript.zh-CN.pdf) · [英文PDF](https://github.com/joinwell52-AI/BoundaryXP/releases/download/paper-v1.2-r23/BoundaryXP-manuscript.en.pdf) · [**完整研究材料包**](https://github.com/joinwell52-AI/BoundaryXP/releases/download/paper-v1.2-r23/manuscript-with-materials.zip) · [Release与校验摘要](https://github.com/joinwell52-AI/BoundaryXP/releases/tag/paper-v1.2-r23) · [材料导航](docs/paper/README.md)
-
-**Zenodo：** [10.5281/zenodo.24072738](https://doi.org/10.5281/zenodo.24072738) · [公开记录](https://zenodo.org/records/24072738) · [完整研究材料包](https://zenodo.org/records/24072738/files/manuscript-with-materials.zip?download=1)。2026-11-09完成Zenodo发布；出版日期保留首次GitHub发布日2026-11-06。
-
-`RESEARCH_ONLY_1`附件包含任务原文、标注、7+1报告、操作数、结果、协议正文、截图及独立研究核验脚本，**不含58618工程源码、运行依赖或生产提示模板**。Zenodo文件可公开下载，GitHub仓库仍为私有；各材料保留原有使用条款。
-
-## 先点开一个用例
-
-[**打开在线演示 →**](https://boundaryxp-workbench-demo.joinwell52.chatgpt.site/) · [**查看7+1报告 →**](https://boundaryxp-workbench-demo.joinwell52.chatgpt.site/#case=R389-383&axis=A&view=report&lang=zh) · [**查看英文原文案例 →**](https://boundaryxp-workbench-demo.joinwell52.chatgpt.site/?lang=en#case=ENG20-003&axis=A&view=source&lang=en)
-
-从58618已保存的案例中选取五例，包括两个英文原文案例，保留各自任务树、原文、判定、7+1关联和原七步报告。选择案例并点击雷达，即可从右侧条款追溯原文与计算依据；雷达、依据和报告渲染复用工作台原组件。演示回放固定的保存记录，不随本机工作台升级自动重新生成。
-
-[![点击进入界痕工作台交互演示：任务列表、7+1雷达与原文依据](assets/demos/workbench-zh.jpg)](https://boundaryxp-workbench-demo.joinwell52.chatgpt.site/)
-
-| 用例 | 任务要求与方案 | 展示结果 |
-|---|---|---|
-| [R389-383 / RT044](https://boundaryxp-workbench-demo.joinwell52.chatgpt.site/#case=R389-383&axis=A&view=radar&lang=zh) · 跨小组调试与送检 | 各组局部顺序可满足，合并后形成A→D→B→C→A严格闭环；7项任务、10项计算 | 越界 |
-| [R389-381 / RT042](https://boundaryxp-workbench-demo.joinwell52.chatgpt.site/#case=R389-381&axis=R&view=radar&lang=zh) · 共享检测仪交接 | 同一仪器按半开区间10:00–11:00、11:00–12:00相邻占用，端点释放；4项任务、7项计算 | 未越界 |
-| [R389-153 / L23-050](https://boundaryxp-workbench-demo.joinwell52.chatgpt.site/#case=R389-153&axis=P&view=radar&lang=zh) · 最终责任人指代 | “由他确认”没有唯一绑定最终责任人；保留未知U1，不擅自补齐身份；6项任务、6项计算 | 信息不全 |
-| [ENG20-001](https://boundaryxp-workbench-demo.joinwell52.chatgpt.site/?lang=en#case=ENG20-001&axis=A&view=radar&lang=en) · 两条前置分支与汇合（英文原文） | P先于S、G，S和G均先于U；两条分支都不可省略，联合图无环；5项任务、2项计算 | 未越界 |
-| [ENG20-003](https://boundaryxp-workbench-demo.joinwell52.chatgpt.site/?lang=en#case=ENG20-003&axis=A&view=radar&lang=en) · 跨角色依赖闭环（英文原文） | 跨角色合并A→B→C→D→A，严格前置关系成环；5项任务、5项计算 | 越界 |
-
-“7+1完整报告”跟随右上角语言：中文界面显示并导出中文报告，英文界面显示并导出英文报告；“任务原文”页可下载案例JSON。ENG20两例直接保留58618里的英文任务原文及保存报告、翻译；切换界面语言不会改写证据。五例均为已有开发用例，线上只回放所选记录，不连接本地58618、不重新分析，不包含账号、凭据、客户资料或个人运行日志。
+这些用例来自 58618 已保存记录，保留各自任务树、原文、判定和原七步报告。**报告与 Markdown 导出跟随右上角语言；原文保留来源语言。** 演示回放 B-332 保存记录，不连接本地服务、不重新分析，也不会随 B335 自动重算。[演示说明与已保存报告](docs/demo/README.md)
 
 <details>
-<summary>查看报告界面</summary>
+<summary>展开查看中文报告和英文原文</summary>
 
-[![RT044中文原七步报告，语言跟随右上角切换，支持Markdown导出](assets/demos/report-zh.jpg)](https://boundaryxp-workbench-demo.joinwell52.chatgpt.site/#case=R389-383&axis=A&view=report&lang=zh)
+[![中文 7+1 完整报告，支持 Markdown 导出](assets/demos/report-zh.jpg)](https://boundaryxp-workbench-demo.joinwell52.chatgpt.site/#case=R389-383&axis=A&view=report&lang=zh)
 
-[![L23-050信息不全：保留最终责任人身份未知](assets/demos/information-incomplete.jpg)](https://boundaryxp-workbench-demo.joinwell52.chatgpt.site/#case=R389-153&axis=P&view=radar&lang=zh)
-
-[![ENG20-003保留58618里的英文任务原文](assets/demos/english-source.jpg)](https://boundaryxp-workbench-demo.joinwell52.chatgpt.site/?lang=en#case=ENG20-003&axis=A&view=source&lang=en)
+[![ENG20-003 的英文任务原文](assets/demos/english-source.jpg)](https://boundaryxp-workbench-demo.joinwell52.chatgpt.site/?lang=en#case=ENG20-003&axis=A&view=source&lang=en)
 
 </details>
 
-[演示说明与已保存报告](docs/demo/README.md)
+## 接入你的 AI 工作流
 
-## 为什么检查任务边界
+**BoundaryXP MCP** 通过标准 stdio 接入 Cursor、Codex 等兼容宿主，提供 **18 个工具、10 个资源和本地浏览器工作台**。Windows x64 测试包包含原生编译 Core，无需另装 58618 或自建 BoundaryXP 服务器。
 
-一份看似合理的方案，可能增加未经允许的操作、遗漏必须交付的成果，或忽略多个子任务共用的总量约束。界痕把这些要求及关联呈现出来，将原文证据、计算结果与未决问题放在一起，供人核对。
+1. **获取并校验安装包：** 从私有 Release 草稿的 **Assets** 下载测试包，核对 SHA-256。
+2. **安装并连接宿主：** 按对应指南配置 stdio MCP 服务。
+3. **配置模型 API：** 新分析使用你自行配置的服务商与 API，不继承 Cursor／Codex 的订阅额度。
+4. **打开工作台：** 导入完整任务，预览并确认任务树，再提交分析、查看证据与报告。
 
-适用于审阅AI生成的执行方案、检查父子任务分解，以及为宿主应用提供本地任务验证。业务裁决和执行授权仍由人及宿主系统掌握。
+[**中文安装指南 →**](docs/mcp/INSTALL.zh-CN.md) · [English setup](docs/mcp/INSTALL.en.md) · [工具与资源](docs/mcp/TOOLS.md) · [升级、回滚与排障](docs/mcp/OPERATIONS.md)
 
-## 什么是7+1
+> **当前分发状态：** 0.4.0-rc.2 / B-335，Windows x64 内部测试；仓库仍为私有，Release 为预发行草稿，尚未发布 npm 版本。授权维护者下载 Assets，而非自动生成的 Source code 压缩包。对外分发范围及许可仍需确认，见[版本与验收](docs/mcp/RELEASE.md)和[分发说明](docs/mcp/NOTICES.md)。
 
-| 视图 | 记录内容 |
-|---|---|
-| **I — 输入范围** | 输入对象与来源材料 |
-| **O — 交付** | 必须交付的成果 |
-| **A — 动作** | 任务动作及其明示情态 |
-| **P — 责任主体与角色分工** | 由谁承担、如何分工 |
-| **R — 资源** | 资源及明示的量化限制 |
-| **V — 版本依据** | 适用版本、引用与来源 |
-| **C — 完成停止** | 何时完成、何时停止 |
-| **B — 禁止边界** | 独立保留明确禁止的行为 |
+## 方法与研究证据
 
-共享关联保存跨视图的同一对象、条件、依赖和交接。未明确项保持未明确，岗位名称不产生权限。
+**《BXP：基于 7+1 关联表示的人工智能任务边界判定方法》**  
+朱卫（Wei Zhu）· 中文 r23／英文 v1.2 · 首次发布 2026-11-06
 
-上方演示保留各视图的原文、引用和计算依据，便于对照这8类要求。实际结论取决于已提交表示、证据及受支持的检查。
+| 研究用例 | 任务节点 | 计算项 |
+|:---:|:---:|:---:|
+| **625** | **3,219** | **3,469** |
 
-## 如何工作
+论文提出以 7+1 及共享关联组织任务要求，通过 BXP 约定建立共同数学边界，检查子任务及其组合是否突破主任务边界。形式论证说明成立条件；上述数字描述研究覆盖范围，**不是准确率**。整组答案一致性、逐项差异与未完成计算分别报告。
+
+[**中文 PDF**](https://github.com/joinwell52-AI/BoundaryXP/releases/download/paper-v1.2-r23/BoundaryXP-manuscript.zh-CN.pdf) · [English PDF](https://github.com/joinwell52-AI/BoundaryXP/releases/download/paper-v1.2-r23/BoundaryXP-manuscript.en.pdf) · [**公开研究材料包**](https://zenodo.org/records/24072738/files/manuscript-with-materials.zip?download=1) · [材料导航](docs/paper/README.md)
+
+**DOI：[10.5281/zenodo.24072738](https://doi.org/10.5281/zenodo.24072738)**。Zenodo 于 2026-11-09 发布，保留首次 GitHub 发布日期。[GitHub 论文 Release 与摘要](https://github.com/joinwell52-AI/BoundaryXP/releases/tag/paper-v1.2-r23)
+
+研究附件 `RESEARCH_ONLY_1` 包含任务原文、标注、7+1 报告、操作数、结果、协议正文、截图和独立研究核验脚本；不含工作台工程源码、运行依赖或生产提示模板。它与 MCP 测试安装包分别维护。
+
+## 7+1 如何把要求连起来
+
+**I 输入 · O 交付 · A 动作 · P 责任与分工 · R 资源 · V 版本依据 · C 完成停止，加独立 B 禁止边界。**
+
+共享关联把同一对象、条件、依赖和交接连在一起，检查跨任务的约束。缺失信息保持未明确，岗位名称不产生权限。
 
 ```mermaid
 flowchart LR
-  A[完整任务原文] --> B[确认任务树]
-  B --> C[LLM联合分析]
-  D[所选L2 / L3字典] --> C
-  C --> E[共享确定性Core]
-  E --> F[证据、发现与未决]
-  F --> G[人及宿主复核]
+  A["完整任务原文"] --> B["确认父子任务树"]
+  B --> C["LLM 联合分析"]
+  D["所选 L2 / L3 字典"] --> C
+  C --> E["共享确定性 Core"]
+  E --> F["证据、发现与未决"]
+  F --> G["人及宿主复核"]
 ```
 
-B335工作台使用 **一次语义请求**，随后进行程序检查，无独立审阅请求、不自动重试。Core核验已提交的结构、来源、绑定及受支持的有限操作数，不调用模型、不访问网络、不执行任务中的业务指令。
+B335 工作台采用**一次语义请求**，随后由 Core 作程序核验，没有独立审阅请求或自动重试。LLM 解释原文，Core 核验提交的结构、来源、绑定与受支持的有限操作数；Core 不调用模型、不访问网络、不执行任务中的业务指令。
 
-## 当前工作台能力（B335）
+<details>
+<summary>展开查看 B335 功能、输入限制与证据边界</summary>
 
-截至2026-11-09，私有工作台当前版本为 **B335**（`0.1.0-candidate.031-r1.2-ui.335`）。最近三次升级及历史验证范围见[升级日志](CHANGELOG.zh-CN.md)。
+- **完整任务树：** 整篇 UTF-8 `.txt` / `.md` 导入，支持角色标题、显式任务及父任务编号、前向引用、多层关系和保存前预览。
+- **可核对结果：** 任务树、7+1 雷达、LLM 与计算器结论、引用、未决、历史及导出；失败尝试与保存结果分开呈现。
+- **L2 / L3：** 行业及企业字典保留版本化引用；没有活动 L1 层，加载资源不产生业务权限。
+- **中英文：** 界面、报告及 Markdown 导出保留原始任务文本与保存判定；首次报告翻译调用模型，按快照缓存。
+- **数学输入与未知项：** 区分允许取值、未定事实及父／子方案一致性；集合身份支持字符串和安全整数，不混同两者，不代填未知结论。
+- **启动与恢复：** 有界并发读取历史作业，保留原恢复规则；HTTP 身份核对完成后才提示就绪。
 
-- **完整任务树：** 整篇UTF-8 `.txt` / `.md`导入、角色标题、显式任务及父任务编号、前向引用、多层关系与保存前预览。
-- **可核对的结果：** 任务树、7+1雷达、LLM与计算器结论、引用、未决、历史及导出；失败尝试与保存结果分开呈现。
-- **L2 / L3资源：** 行业和企业字典，保留版本化引用；工作台没有活动L1层。
-- **中英文：** 界面、报告翻译与Markdown导出保留原始任务文本及已保存判定；首次报告翻译调用模型，按快照缓存。
-- **数学输入与未知项：** 区分允许取值、未定事实及父／子方案一致性；集合身份支持字符串和安全整数，数字与字符串不混同，未知解释不代填结论。
-- **启动与恢复：** 有界并发读取历史作业，保留原恢复规则；HTTP身份核对完成后才提示就绪。
+单份来源和序列化联合输入各最多 **1 MiB**，HTTP 请求体最多 **8 MiB**；超限拒绝、不截断，没有 300 码点上限。功能及历史验证范围见[升级日志](CHANGELOG.zh-CN.md)。
 
-单份来源和序列化联合输入各最多 **1 MiB**，HTTP请求体最多 **8 MiB**；超限拒绝、不截断，没有300码点上限。这些能力描述既有的私有工作台；本仓库提供研究材料，不提供可安装的工作台实现。
+引文对齐不证明语义蕴含，作业完成不表示全部证明通过。业务裁决与执行权由人及宿主掌握；`business_decision` 与 `execution_authorization` 保持 null。
 
-## 仓库范围
+已评审协议基线为 BXP-0001 `0.4.0-draft.2`；工作台仍使用已记录的 draft.1 附件，不声明已完整迁移或全面符合协议。[实现说明](protocol/IMPLEMENTATION.md) · [研究证据](docs/RESEARCH.md)
 
-**工作台源码不在此仓库发布。** 本仓库保留论文、BXP协议、已保存研究案例与报告、截图，以及独立数学或统计核验脚本；不提供工作台前后端源码、Core实现、内部提示词、运行依赖、构建脚本或安装包。
+宿主分析及首次翻译可能将所选原文与字典发送到配置的模型服务商。使用私有材料前应核对该数据流。
 
-研究脚本用于核对声明范围内的研究材料，不是工作台实现。详见[公开范围说明](docs/PUBLICATION-SCOPE.md)。
+</details>
 
-## 论文与MCP
+## 从这里继续
 
-方法预印本已发布为 **中文r23／英文v1.2**，当前题目、引用方式、证据范围及下载入口见[研究介绍](docs/RESEARCH.md)。论文建立方法与有前提的数学依据；工具用于实现方法并提供实验材料。
+| 想了解什么 | 入口 |
+|---|---|
+| 安装与使用 MCP | [接入指南](docs/mcp/README.md) · [版本与验收](docs/mcp/RELEASE.md) |
+| 理解方法、引用论文 | [研究介绍](docs/RESEARCH.md) · [论文材料](docs/paper/README.md) |
+| 阅读协议与实现差异 | [BXP 协议](protocol/README.md) · [实现说明](protocol/IMPLEMENTATION.md) |
+| 查看版本变化、参与维护 | [升级日志](CHANGELOG.zh-CN.md) · [贡献指南](CONTRIBUTING.md) · [文档导航](docs/README.md) |
 
-MCP接入处于计划阶段。私有工作台及其适配器不随本仓库发布，也不声称这里已有可安装的公开工作台MCP实现。参见[MCP适用范围](docs/MCP.md)。
+**分发范围：** Git 树维护论文、协议、案例、报告、截图、独立研究核验脚本和 MCP 使用说明，不包含私有工作台实现源码或源码构建入口。MCP 编译安装包另放私有 Release 草稿；Core 原实现源码不随包提供，适配器、UI 和必要资源仍可读取。[完整范围说明](docs/PUBLICATION-SCOPE.md)
 
-## 证据与适用范围
+**公开准备：** 本仓库仍为私有；旧 PR 引用及历史缓存清理尚待 GitHub 处理，不能将当前首页整理视为已完成公开核查。[核查记录](docs/PREPUBLICATION-CHECK.md)
 
-LLM解释原文含义，确定性计算核验已提交的表示。引文对齐不证明语义蕴含，作业完成不表示全部证明通过。结论展示为越界、未越界或信息不全，技术核验细节单独保留。`business_decision`与`execution_authorization`保持null。
-
-已评审协议基线为BXP-0001 `0.4.0-draft.2`，工作台仍使用已记录的draft.1附件，尚未完成全部要求迁移，不声明完整协议符合性。历史模型结果、工程回归与协议检查各有范围：[实现说明](protocol/IMPLEMENTATION.md) · [研究证据](docs/RESEARCH.md)。
-
-宿主分析及首次翻译可能将所选原文和字典内容发送给配置的模型Provider；使用私有材料前，应确认该数据流。
-
-## 参与与了解更多
-
-[贡献指南](CONTRIBUTING.md) · [协议](protocol/README.md) · [研究概览](docs/RESEARCH.md) · [文档导航](docs/README.md) · [公开范围说明](docs/PUBLICATION-SCOPE.md)
-
-保留原[MIT许可证](LICENSE)。论文、案例数据与第三方材料的使用条件见[资料访问说明](docs/paper/materials/MATERIAL-ACCESS.md)，不以研究资料发布代替私有工作台实现的授权。
+保留既有 [MIT 许可证](LICENSE)。论文、案例与第三方材料按各自[使用条件](docs/paper/materials/MATERIAL-ACCESS.md)；MCP 测试包另见[许可与第三方说明](docs/mcp/NOTICES.md)。
