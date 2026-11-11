@@ -1,7 +1,7 @@
 <p align="center"><a href="README.md">English</a> · <strong>简体中文</strong></p>
 <p align="center"><img src="assets/branding/v2/BoundaryXP-logo-zh.png" alt="界痕 · BoundaryXP" width="320"></p>
 
-<h1 align="center">在执行前，看清 AI 方案的任务边界</h1>
+<h1 align="center">从原文到边界，每一步都看得见。</h1>
 
 <p align="center">从完整任务到带原文证据的 <strong>7+1 关联表示</strong>，再由确定性 Core 核验。<br>检查方案与子任务分解，追溯为什么<strong>越界、未越界，或信息不全</strong>。</p>
 
