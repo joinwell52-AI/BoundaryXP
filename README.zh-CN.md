@@ -6,7 +6,7 @@
 <p align="center">
   <a href="https://boundaryxp-workbench-demo.joinwell52.chatgpt.site/"><img src="https://img.shields.io/badge/Demo-Interactive-0891b2?style=flat-square" alt="演示 / Interactive demo"></a>
   <a href="docs/mcp/RELEASE.md"><img src="https://img.shields.io/badge/MCP-0.4.0--rc.2-2563eb?style=flat-square" alt="MCP 0.4.0-rc.2 · internal testing"></a>
-  <a href="docs/mcp/TOOLS.md"><img src="https://img.shields.io/badge/Semantics-L2%20%2B%20L3-7c3aed?style=flat-square" alt="L2 industry / L3 enterprise semantics"></a>
+  <a href="#l2--l3行业与企业语义库"><img src="https://img.shields.io/badge/Semantics-L2%20%2B%20L3-7c3aed?style=flat-square" alt="L2 industry / L3 enterprise semantics"></a>
   <a href="docs/mcp/NOTICES.md"><img src="https://img.shields.io/badge/Status-Internal%20testing-d97706?style=flat-square" alt="Internal testing"></a>
   <a href="https://doi.org/10.5281/zenodo.24072738"><img src="https://img.shields.io/badge/DOI-10.5281%2Fzenodo.24072738-1e3a8a?style=flat-square" alt="DOI: 10.5281/zenodo.24072738"></a>
 </p>
@@ -58,6 +58,29 @@
 [**中文安装指南 →**](docs/mcp/INSTALL.zh-CN.md) · [English setup](docs/mcp/INSTALL.en.md) · [工具与资源](docs/mcp/TOOLS.md) · [升级、回滚与排障](docs/mcp/OPERATIONS.md)
 
 > **当前分发状态：** 0.4.0-rc.2 / B-335，Windows x64 内部测试；仓库仍为私有，Release 为预发行草稿，尚未发布 npm 版本。授权维护者下载 Assets，而非自动生成的 Source code 压缩包。对外分发范围及许可仍需确认，见[版本与验收](docs/mcp/RELEASE.md)和[分发说明](docs/mcp/NOTICES.md)。
+
+## L2 / L3：行业与企业语义库
+
+同一个词在不同行业、企业中可能有不同含义。L2 / L3 为任务解释提供所选领域的语义上下文，与原文证据一起使用。
+
+| 语义库 | 作用 |
+|---|---|
+| **L2 · 行业语义库** | 描述行业中的动作、实体、角色、资源及相关术语，帮助把任务要求放回具体业务领域理解。 |
+| **L3 · 企业语义库** | 补充企业自己的术语、组织与角色称谓、受控别名等上下文，帮助区分企业内的具体对象和表述。 |
+
+**当前没有活动 L1 层。** L0 是 BXP 协议与确定性 Core，不是语义库。L2 / L3 不替代任务原文，也不改变 7+1 的共同核验规则；加载词库、岗位或经理关系均不自动产生业务权限。
+
+### 在 MCP 中使用
+
+1. 用 `bx_dictionaries_list` 列出当前安装可用的 L2 / L3 资源，核对词库标识与版本。
+2. 用 `bx_dictionaries_bind` 校验所选资源并取得版本与摘要引用，避免混用不同词库快照。
+3. 用 `bx_dictionary_lookup` 查询已绑定资源中的词条；查询本身不作语义裁决，也不提交分析。
+
+可以对宿主说：**“列出 BXP 可用的 L2、L3 语义库，展示标识、版本和摘要，等我选择后再绑定；暂不提交分析。”**
+
+[**安装并连接 MCP →**](docs/mcp/INSTALL.zh-CN.md) · [词库工具说明](docs/mcp/TOOLS.md) · [资源与分发范围](docs/mcp/NOTICES.md)
+
+可用资源以当前安装实际返回的清单为准。企业私有语义资料按自己的使用范围管理；本页提供能力和使用入口，不表示独立词库已在 GitHub 公开发布。
 
 ## 方法与研究证据
 
@@ -118,6 +141,7 @@ B335 工作台采用**一次语义请求**，随后由 Core 作程序核验，�
 
 | 想了解什么 | 入口 |
 |---|---|
+| 行业与企业语义库 | [L2 / L3 介绍](#l2--l3行业与企业语义库) · [词库工具](docs/mcp/TOOLS.md) |
 | 安装与使用 MCP | [接入指南](docs/mcp/README.md) · [版本与验收](docs/mcp/RELEASE.md) |
 | 理解方法、引用论文 | [研究介绍](docs/RESEARCH.md) · [论文材料](docs/paper/README.md) |
 | 阅读协议与实现差异 | [BXP 协议](protocol/README.md) · [实现说明](protocol/IMPLEMENTATION.md) |

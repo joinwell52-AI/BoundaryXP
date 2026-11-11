@@ -6,7 +6,7 @@
 <p align="center">
   <a href="https://boundaryxp-workbench-demo.joinwell52.chatgpt.site/"><img src="https://img.shields.io/badge/Demo-Interactive-0891b2?style=flat-square" alt="演示 / Interactive demo"></a>
   <a href="docs/mcp/RELEASE.md"><img src="https://img.shields.io/badge/MCP-0.4.0--rc.2-2563eb?style=flat-square" alt="MCP 0.4.0-rc.2 · internal testing"></a>
-  <a href="docs/mcp/TOOLS.md"><img src="https://img.shields.io/badge/Semantics-L2%20%2B%20L3-7c3aed?style=flat-square" alt="L2 industry / L3 enterprise semantics"></a>
+  <a href="#l2--l3-industry-and-enterprise-semantics"><img src="https://img.shields.io/badge/Semantics-L2%20%2B%20L3-7c3aed?style=flat-square" alt="L2 industry / L3 enterprise semantics"></a>
   <a href="docs/mcp/NOTICES.md"><img src="https://img.shields.io/badge/Status-Internal%20testing-d97706?style=flat-square" alt="Internal testing"></a>
   <a href="https://doi.org/10.5281/zenodo.24072738"><img src="https://img.shields.io/badge/DOI-10.5281%2Fzenodo.24072738-1e3a8a?style=flat-square" alt="DOI: 10.5281/zenodo.24072738"></a>
 </p>
@@ -58,6 +58,29 @@ All five come from saved 58618 records, retaining task trees, exact sources, ver
 [**English installation guide →**](docs/mcp/INSTALL.en.md) · [中文安装](docs/mcp/INSTALL.zh-CN.md) · [Tools and resources](docs/mcp/TOOLS.md) · [Updates, rollback and troubleshooting](docs/mcp/OPERATIONS.md)
 
 > **Distribution status:** 0.4.0-rc.2 / B-335, Windows x64 internal testing. This repository remains private and the prerelease remains a draft; no npm version is published. Authorized maintainers download Assets, not generated Source code archives. External distribution scope and licensing still need confirmation. See [release evidence](docs/mcp/RELEASE.md) and [notices](docs/mcp/NOTICES.md).
+
+## L2 / L3: industry and enterprise semantics
+
+The same term can mean different things across industries and organizations. L2 / L3 provide selected domain context for interpreting tasks alongside the original evidence.
+
+| Semantic library | Purpose |
+|---|---|
+| **L2 · Industry** | Describes domain actions, entities, roles, resources and related terminology to help interpret requirements in their industry context. |
+| **L3 · Enterprise** | Adds organization-specific terminology, organizational and role names, controlled aliases and other context to distinguish local objects and expressions. |
+
+**There is no active L1 layer.** L0 is the BXP protocol and deterministic Core, not a semantic library. L2 / L3 do not replace source text or change the shared 7+1 verification rules. Loading a library, a job title or a reporting relationship does not grant business authority.
+
+### Use through MCP
+
+1. Call `bx_dictionaries_list` to inspect the L2 / L3 resources available in the current installation and their identifiers and versions.
+2. Call `bx_dictionaries_bind` to validate the selected resources and obtain version-and-digest references, keeping library snapshots distinct.
+3. Call `bx_dictionary_lookup` to look up entries in bound resources. Lookup does not make a semantic ruling or submit analysis.
+
+Ask your host: **“List the available BXP L2 and L3 semantic libraries with their identifiers, versions and digests. Wait for my selection before binding; do not submit analysis.”**
+
+[**Install and connect MCP →**](docs/mcp/INSTALL.en.md) · [Dictionary tool reference](docs/mcp/TOOLS.md) · [Resource and distribution notices](docs/mcp/NOTICES.md)
+
+Available resources are determined by the installed inventory. Manage private enterprise semantic material within its own usage scope. This section documents capabilities and entry points; it does not claim a separate public GitHub library release.
 
 ## Method and research evidence
 
@@ -118,6 +141,7 @@ Host analysis and first-time translation may send selected source and dictionary
 
 | Looking for | Start here |
 |---|---|
+| Industry and enterprise semantics | [L2 / L3 overview](#l2--l3-industry-and-enterprise-semantics) · [Dictionary tools](docs/mcp/TOOLS.md) |
 | MCP installation and usage | [Setup guide](docs/mcp/README.md) · [Release evidence](docs/mcp/RELEASE.md) |
 | Method and citation | [Research overview](docs/RESEARCH.en.md) · [Paper materials](docs/paper/README.en.md) |
 | Protocol and implementation differences | [BXP protocol](protocol/README.md) · [Implementation notes](protocol/IMPLEMENTATION.md) |
