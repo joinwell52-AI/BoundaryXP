@@ -1,6 +1,6 @@
 # npm发行流程 / npm release procedure
 
-当前发行候选为`boundaryxp-mcp@0.4.0-rc.5`，预发行渠道`next`。rc.3为首次npm发行，rc.4补齐产品介绍及检索元数据。2026-11-14用户明确授权发布，并决定保留MIT、仅交付编译核心，不交付核心源码。源码仓库保持私有；npm发布不会改变GitHub仓库可见性。
+当前发行候选为`boundaryxp-mcp@0.4.0-rc.6`，预发行渠道`next`。rc.3为首次npm发行，rc.4补齐产品介绍及检索元数据。2026-11-14用户明确授权发布，并决定保留MIT、仅交付编译核心，不交付核心源码。源码仓库保持私有；npm发布不会改变GitHub仓库可见性。
 
 1. 从固定B-335原生运行包构建，保留runtime manifest和Core摘要。拒绝原始JavaScript Core、C++源码、调试符号、客户任务和凭据。
 2. 生成准确的package.json、锁文件、DELIVERY-MANIFEST和双语安装说明；版本或文件有变化必须形成新候选，不能替换旧rc.2档案。

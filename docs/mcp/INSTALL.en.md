@@ -1,9 +1,9 @@
-# Install BoundaryXP MCP from npm
+[简体中文](INSTALL.zh-CN.md) | **English**
 
-The current npm version is **boundaryxp-mcp@0.4.0-rc.5**, on the `next` prerelease channel. Windows x64; Node >=22.18.0, tested on 24.19.0. The first npm release rc.3 is retained.
+# Install BoundaryXP MCP
 
-Follow the [complete bilingual installation guide](npm/INSTALL.md) for installation, Cursor/Codex registration, API profiles, multi-DEV examples, updates and recovery. Neither private source access nor a separate 58618 installation is needed.
+**0.4.0-rc.6 · B-335 · Windows x64 · Node.js ≥22.18 · Prerelease**
 
-Existing local rc.2 test installations use the new bootstrap once, preserving their data/configuration. rc.2 was an internal test package, not a previous npm release.
+[Read the complete English installation guide](npm/INSTALL.md), including Cursor/Codex setup, model APIs, multi-DEV tasks, manual and automatic upgrades, rollback and troubleshooting.
 
-[Tools](npm/guides/TOOLS.md) · [Automatic updates](npm/AUTO-UPDATE.md) · [npm package](https://www.npmjs.com/package/boundaryxp-mcp)
+[English product introduction](npm/README.md) · [npm package](https://www.npmjs.com/package/boundaryxp-mcp)

@@ -1,9 +1,9 @@
-# 从npm安装BoundaryXP MCP
+**简体中文** | [English](INSTALL.en.md)
 
-当前版本为 **boundaryxp-mcp@0.4.0-rc.5**，使用 `next` 预发行渠道；Windows x64，Node >=22.18.0（实测24.19.0）。首次npm发行rc.3保留。
+# 安装 BoundaryXP MCP
 
-请按[完整安装说明](npm/INSTALL.md)操作，包含首次安装、Cursor/Codex接入、API配置、多个DEV子任务、升级回滚和排障。无需下载私有源码或另装58618。
+**0.4.0-rc.6 · B-335 · Windows x64 · Node.js ≥22.18 · 预发行版**
 
-已经使用本机rc.2测试安装的用户，按说明使用新版bootstrap连接原安装目录，不要删除任务或覆盖配置。rc.2是发布前内部测试版本，不是此前npm发行。
+[阅读完整中文安装指南](npm/INSTALL.zh-CN.md)，包含 Cursor/Codex 接入、模型 API、多 DEV 任务、手动与自动升级、回滚和排障。
 
-[工具说明](npm/guides/TOOLS.md) · [自动更新](npm/AUTO-UPDATE.md) · [npm主页](https://www.npmjs.com/package/boundaryxp-mcp)
+[中文产品介绍](npm/README.zh-CN.md) · [npm 安装包](https://www.npmjs.com/package/boundaryxp-mcp)

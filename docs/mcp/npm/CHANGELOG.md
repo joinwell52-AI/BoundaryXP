@@ -1,3 +1,9 @@
+# 0.4.0-rc.6 (separate language guides)
+
+- Provide separate English and Simplified Chinese product pages and complete installation, API, upgrade and troubleshooting guides.
+- Add direct language navigation for npm and the public product repository.
+- Preserve the B-335 Core, runtime, adapter execution logic, dependency identities and existing task/configuration paths.
+
 # 0.4.0-rc.5 (public documentation and installation links)
 
 - Repair public guide links and document the now-public product repository, while keeping implementation source private.

@@ -5,7 +5,7 @@
 
 <p align="center">
   <a href="https://boundaryxp-workbench-demo.joinwell52.chatgpt.site/"><img src="https://img.shields.io/badge/Demo-Interactive-0891b2?style=flat-square" alt="演示 / Interactive demo"></a>
-  <a href="docs/mcp/RELEASE.md"><img src="https://img.shields.io/badge/MCP-0.4.0--rc.5-2563eb?style=flat-square" alt="MCP 0.4.0-rc.5 · npm prerelease"></a>
+  <a href="docs/mcp/RELEASE.md"><img src="https://img.shields.io/badge/MCP-0.4.0--rc.6-2563eb?style=flat-square" alt="MCP 0.4.0-rc.6 · npm prerelease"></a>
   <a href="#l2--l3行业与企业语义库"><img src="https://img.shields.io/badge/Semantics-L2%20%2B%20L3-7c3aed?style=flat-square" alt="L2 industry / L3 enterprise semantics"></a>
   <a href="docs/mcp/NOTICES.md"><img src="https://img.shields.io/badge/Status-npm%20prerelease-d97706?style=flat-square" alt="npm prerelease"></a>
   <a href="https://doi.org/10.5281/zenodo.24072738"><img src="https://img.shields.io/badge/DOI-10.5281%2Fzenodo.24072738-1e3a8a?style=flat-square" alt="DOI: 10.5281/zenodo.24072738"></a>
@@ -15,7 +15,7 @@
 
 <p align="center"><a href="https://boundaryxp-workbench-demo.joinwell52.chatgpt.site/"><strong>▶ 在线演示</strong></a>　·　<a href="docs/mcp/INSTALL.zh-CN.md"><strong>MCP 接入</strong></a>　·　<a href="https://doi.org/10.5281/zenodo.24072738"><strong>论文</strong></a></p>
 
-<p align="center">中英双语 · MCP 0.4.0-rc.5 / B-335 · npm 预发行 · 论文与协议资料 · Core 原实现源码私有</p>
+<p align="center">中英双语 · MCP 0.4.0-rc.6 / B-335 · npm 预发行 · 论文与协议资料 · Core 原实现源码私有</p>
 
 ## 先看一个真实用例
 
@@ -50,14 +50,14 @@
 
 **BoundaryXP MCP** 通过标准 stdio 接入 Cursor、Codex 等兼容宿主，提供 **18 个工具、10 个资源和本地浏览器工作台**。Windows x64 安装包包含原生编译 Core，无需另装 58618 或自建 BoundaryXP 服务器。
 
-1. **从 npm 安装：** 使用 `boundaryxp-mcp@0.4.0-rc.5`；预发行渠道为 `next`。GitHub Release 同步保存安装包和 SHA-256。
+1. **从 npm 安装：** 使用 `boundaryxp-mcp@0.4.0-rc.6`；预发行渠道为 `next`。GitHub Release 同步保存安装包和 SHA-256。
 2. **安装并连接宿主：** 按对应指南配置 stdio MCP 服务。
 3. **配置模型 API：** 新分析使用你自行配置的服务商与 API，不继承 Cursor／Codex 的订阅额度。
 4. **打开工作台：** 导入完整任务，预览并确认任务树，再提交分析、查看证据与报告。
 
-[**中文安装指南 →**](docs/mcp/INSTALL.zh-CN.md) · [English setup](docs/mcp/INSTALL.en.md) · [工具与资源](docs/mcp/TOOLS.md) · [升级、回滚与排障](docs/mcp/OPERATIONS.md)
+[**中文安装指南 →**](docs/mcp/INSTALL.zh-CN.md) · [English setup](docs/mcp/INSTALL.en.md) · [工具与资源](docs/mcp/TOOLS.md) · [升级、回滚与排障](docs/mcp/npm/INSTALL.zh-CN.md#升级)
 
-> **当前 npm 版本：** [boundaryxp-mcp 0.4.0-rc.5](https://www.npmjs.com/package/boundaryxp-mcp)，B-335 / Windows x64，MIT许可。入口：[中文安装指南](docs/mcp/INSTALL.zh-CN.md)、[7+1产品介绍](docs/mcp/npm/README.md)、[18个工具](docs/mcp/npm/guides/TOOLS.md)、[MCP目录状态](docs/mcp/DISCOVERY.md)。本产品仓库已经公开；核心实现源码在独立私有源码仓库维护。客户无需另装58618。
+> **当前 npm 版本：** [boundaryxp-mcp 0.4.0-rc.6](https://www.npmjs.com/package/boundaryxp-mcp)，B-335 / Windows x64，MIT许可。入口：[中文安装指南](docs/mcp/INSTALL.zh-CN.md)、[7+1产品介绍](docs/mcp/npm/README.zh-CN.md)、[MCP目录状态](docs/mcp/DISCOVERY.md)。本产品仓库已经公开；核心实现源码在独立私有源码仓库维护。客户无需另装58618。
 
 ## L2 / L3：行业与企业语义库
 
