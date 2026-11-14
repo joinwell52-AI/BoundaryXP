@@ -1,5 +1,11 @@
 # 0.4.0-rc.6 (separate language guides)
 
+## 0.4.0-rc.7 · 2026-11-14
+
+- npm 首页改为完整中文、英文独立章节，语言导航和完整安装说明均在同页阅读，无需跳转仓库切换语言。
+- npm now contains complete Chinese and English sections with in-page language and installation navigation. Core, runtime, adapter execution logic and dependencies are unchanged.
+- 文档更新不修改既有安装、任务、配置或 58618。
+
 - Provide separate English and Simplified Chinese product pages and complete installation, API, upgrade and troubleshooting guides.
 - Add direct language navigation for npm and the public product repository.
 - Preserve the B-335 Core, runtime, adapter execution logic, dependency identities and existing task/configuration paths.

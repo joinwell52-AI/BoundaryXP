@@ -1,12 +1,12 @@
-[简体中文产品介绍](npm/README.zh-CN.md) | [English product introduction](npm/README.md)
+[简体中文产品介绍](npm/README.zh-CN.md) | [English product introduction](npm/README.en.md)
 
 # BoundaryXP MCP · BXP
 
-**boundaryxp-mcp 0.4.0-rc.6 · B-335 · Windows x64**
+**boundaryxp-mcp 0.4.0-rc.7 · B-335 · Windows x64**
 
 | 简体中文 | English |
 |---|---|
-| [7+1 产品介绍](npm/README.zh-CN.md) | [7+1 product introduction](npm/README.md) |
+| [7+1 产品介绍](npm/README.zh-CN.md) | [7+1 product introduction](npm/README.en.md) |
 | [完整安装与升级](npm/INSTALL.zh-CN.md) | [Installation and upgrades](npm/INSTALL.md) |
 | [中文仓库首页](../../README.zh-CN.md) | [Repository homepage](../../README.md) |
 

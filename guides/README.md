@@ -2,7 +2,7 @@
 
 | 简体中文 | English |
 |---|---|
-| [7+1 产品介绍](../docs/mcp/npm/README.zh-CN.md) | [7+1 product introduction](../docs/mcp/npm/README.md) |
+| [7+1 产品介绍](../docs/mcp/npm/README.zh-CN.md) | [7+1 product introduction](../docs/mcp/npm/README.en.md) |
 | [完整安装、模型配置与排障](../docs/mcp/npm/INSTALL.zh-CN.md) | [Installation, model setup and troubleshooting](../docs/mcp/npm/INSTALL.md) |
 | [升级与回滚](../docs/mcp/npm/INSTALL.zh-CN.md#升级) | [Updates and rollback](../docs/mcp/npm/INSTALL.md#updates) |
 | [多 DEV 示例](../docs/mcp/npm/examples/multi-dev-2.md) | [Multi-DEV example](../docs/mcp/npm/examples/multi-dev-2.en.md) |

@@ -1,4 +1,17 @@
-# 当前版本 / Current release: 0.4.0-rc.6
+# 当前版本 / Current release: 0.4.0-rc.7
+
+2026-11-14：npm 首页改为同页的完整中文与英文独立章节。顶部“简体中文 / English”和两种安装入口均跳转本页对应章节；客户阅读中文和完整安装说明不必离开 npm。
+
+[npm 默认入口](https://www.npmjs.com/package/boundaryxp-mcp) · [中文](https://www.npmjs.com/package/boundaryxp-mcp#简体中文) · [English](https://www.npmjs.com/package/boundaryxp-mcp#english) · [rc.7 Release](https://github.com/joinwell52-AI/BoundaryXP/releases/tag/mcp-v0.4.0-rc.7)
+
+- 包 SHA-256：`da10e331c3bac74db2e88e5c0fd74a83c84d92a75801cf6be743fd4a1edc22e8`，3,940,651 bytes，277个归档成员。
+- 本地归档和 npm 新装通过：18 工具、10 资源、中英多 DEV 导入和工作台 HTTP 200，零模型调用；匿名下载与验收包完全一致。
+- 已实际点击 rc.7 页面四个导航入口，地址均保留在 npm 同页；完整安装命令一致，39 个页内标题锚点通过静态核对。默认公开页的缓存同步与指定版本页面分开核对。
+- 官方 MCP Registry rc.7 已登记并读回。Core、运行资源、适配器执行代码和依赖与 rc.6 一致；未改动 58618、既有任务或配置。
+
+The rc.7 documentation release includes full Chinese and English introductions and installation guides on the same npm page. All four in-page navigation links were exercised. Public registry installation and exact archive verification passed. Core and runtime behavior are unchanged.
+
+## 历史：0.4.0-rc.6
 
 2026-11-14：npm首页使用英文正文，顶部提供“简体中文 / English”独立入口；中文产品介绍及两份完整安装指南分别维护，不逐段混排。仓库首页、MCP导航和旧guides入口同步。
 

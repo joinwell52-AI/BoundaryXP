@@ -4,7 +4,7 @@
 
 [Product introduction](https://github.com/joinwell52-AI/BoundaryXP/blob/main/docs/mcp/npm/README.md)
 
-**boundaryxp-mcp 0.4.0-rc.6 · B-335 · Windows x64 · Node.js ≥22.18 (tested: 24.19.0)**
+**boundaryxp-mcp 0.4.0-rc.7 · B-335 · Windows x64 · Node.js ≥22.18 (tested: 24.19.0)**
 
 This guide describes a managed installation with a stable launcher and optional automatic updates. The [quick start](https://github.com/joinwell52-AI/BoundaryXP/blob/main/docs/mcp/npm/README.md#quick-start-in-cursor) uses a pinned npx command instead. Both provide the same MCP tools. macOS/Linux native packages are not available in this release.
 
@@ -18,7 +18,7 @@ $BxpHome = Join-Path $BxpRoot 'install'
 $BxpData = Join-Path $BxpRoot 'data'
 $BxpSettings = Join-Path $BxpRoot 'settings'
 if (Test-Path (Join-Path $BxpHome 'active.json')) { throw 'Already installed: use update' }
-npx.cmd --yes --package boundaryxp-mcp@0.4.0-rc.6 bxp install --home $BxpHome --version 0.4.0-rc.6
+npx.cmd --yes --package boundaryxp-mcp@0.4.0-rc.7 bxp install --home $BxpHome --version 0.4.0-rc.7
 if ($LASTEXITCODE -ne 0) { throw 'Installation failed' }
 $BxpLauncher = Join-Path $BxpHome 'launcher.mjs'
 New-Item -ItemType Directory -Path $BxpSettings -Force | Out-Null
@@ -30,7 +30,7 @@ if (!(Test-Path $BxpEnv)) { [IO.File]::WriteAllText($BxpEnv, "# Model API config
 node $BxpLauncher --manage status
 ```
 
-Expect `READY`, `probe.passed:true` and version `0.4.0-rc.6` in the installation receipt. The installer downloads the exact npm version, checks integrity and probes the native MCP. Internet access is required for package dependencies. No compiler, executable installer, separate BoundaryXP workbench or hosted BoundaryXP server is needed. Empty profiles support read-only use without starting analysis.
+Expect `READY`, `probe.passed:true` and version `0.4.0-rc.7` in the installation receipt. The installer downloads the exact npm version, checks integrity and probes the native MCP. Internet access is required for package dependencies. No compiler, executable installer, separate BoundaryXP workbench or hosted BoundaryXP server is needed. Empty profiles support read-only use without starting analysis.
 
 ## Cursor
 
@@ -110,7 +110,7 @@ For help in the host, ask **“Read BoundaryXP tool help, multi-DEV examples and
 Keep your existing installation, data and settings paths. Back up complete data and settings, finish jobs and disconnect related MCP clients before a manual update. Restore `$BxpHome` to the original installation path if using a new shell.
 
 ```powershell
-npx.cmd --yes --package boundaryxp-mcp@0.4.0-rc.6 bxp update --home $BxpHome --version 0.4.0-rc.6
+npx.cmd --yes --package boundaryxp-mcp@0.4.0-rc.7 bxp update --home $BxpHome --version 0.4.0-rc.7
 ```
 
 Do not delete the old release first. Updates preserve task data, failed records and host/provider settings. A changed runtime digest requires explicit `--migrate-data <original-data-directory>`; the installer copies and verifies data while retaining the original directory. This documentation release retains the preceding runtime digest.

@@ -4,7 +4,7 @@
 
 [产品介绍](https://github.com/joinwell52-AI/BoundaryXP/blob/main/docs/mcp/npm/README.zh-CN.md)
 
-**boundaryxp-mcp 0.4.0-rc.6 · B-335 · Windows x64 · Node.js ≥22.18（实测 24.19.0）**
+**boundaryxp-mcp 0.4.0-rc.7 · B-335 · Windows x64 · Node.js ≥22.18（实测 24.19.0）**
 
 本指南采用固定启动器的管理安装，支持可选自动升级。[快速接入](https://github.com/joinwell52-AI/BoundaryXP/blob/main/docs/mcp/npm/README.zh-CN.md#快速接入-cursor)则直接使用固定版本 npx 命令，两者提供相同 MCP 工具。当前不提供 macOS、Linux 原生包。
 
@@ -18,7 +18,7 @@ $BxpHome = Join-Path $BxpRoot 'install'
 $BxpData = Join-Path $BxpRoot 'data'
 $BxpSettings = Join-Path $BxpRoot 'settings'
 if (Test-Path (Join-Path $BxpHome 'active.json')) { throw 'Already installed: use update' }
-npx.cmd --yes --package boundaryxp-mcp@0.4.0-rc.6 bxp install --home $BxpHome --version 0.4.0-rc.6
+npx.cmd --yes --package boundaryxp-mcp@0.4.0-rc.7 bxp install --home $BxpHome --version 0.4.0-rc.7
 if ($LASTEXITCODE -ne 0) { throw 'Installation failed' }
 $BxpLauncher = Join-Path $BxpHome 'launcher.mjs'
 New-Item -ItemType Directory -Path $BxpSettings -Force | Out-Null
@@ -30,7 +30,7 @@ if (!(Test-Path $BxpEnv)) { [IO.File]::WriteAllText($BxpEnv, "# Model API config
 node $BxpLauncher --manage status
 ```
 
-安装回执应显示 `READY`、`probe.passed:true` 和版本 `0.4.0-rc.6`。安装器下载指定 npm 版本、校验完整性并探测原生 MCP。安装依赖需要联网，无需编译器、exe 安装器、另外安装 BoundaryXP 工作台或自建服务器。空 profile 可以使用只读功能，不会启动分析。
+安装回执应显示 `READY`、`probe.passed:true` 和版本 `0.4.0-rc.7`。安装器下载指定 npm 版本、校验完整性并探测原生 MCP。安装依赖需要联网，无需编译器、exe 安装器、另外安装 BoundaryXP 工作台或自建服务器。空 profile 可以使用只读功能，不会启动分析。
 
 ## Cursor 接入
 
@@ -110,7 +110,7 @@ BOUNDARYXP_API_KEY=REPLACE_WITH_YOUR_KEY
 沿用原安装、数据和配置路径。先完整备份数据与配置，完成作业并断开相关 MCP 客户端，再手动升级。若新开 PowerShell 窗口，请先将 `$BxpHome` 设为原安装路径。
 
 ```powershell
-npx.cmd --yes --package boundaryxp-mcp@0.4.0-rc.6 bxp update --home $BxpHome --version 0.4.0-rc.6
+npx.cmd --yes --package boundaryxp-mcp@0.4.0-rc.7 bxp update --home $BxpHome --version 0.4.0-rc.7
 ```
 
 不要先删除旧版。升级保留任务、失败记录及宿主、模型配置。核心运行包摘要变化时，需显式指定 `--migrate-data <原数据目录>`，复制并校验后保留原目录。本次文档更新的核心运行包摘要与上一版相同。
