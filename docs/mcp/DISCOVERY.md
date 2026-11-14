@@ -9,8 +9,8 @@
 | MCPServers | **免费提交成功，待审核**；表单提示最长两周审核后邮件通知，尚无获批条目链接 |
 | MCPRush | 已核对发布者账号；新建流程要求自建HTTPS网关或平台托管，当前本地stdio产品不满足这条发布路径，未提交虚假托管信息 |
 | Awesome MCP Servers | **PR已提交，待审核**：[#19484](https://github.com/punkpeye/awesome-mcp-servers/pull/19484)。机器人要求Glama收录和启动检查；当前Windows原生包与其Docker检查的兼容性尚未确认，不伪造徽章 |
-| Glama | 已准备公开仓库维护者声明；网页新增流程需要发布者登录，尚未完成提交与检测 |
-| Cursor Marketplace | 插件清单、变量和实际npx启动已验证；提交页需要发布者登录，**尚未上架，不能承诺在Cursor内搜到** |
+| Glama | 已登录并核对新增表单：Runs from source 要求公开仓库含服务器实现，不能只有文档；通过 Docker 检查后才进入搜索。当前公开资料/编译包仓库不符合该入口，未提交；已在 Awesome PR 询问 Windows 编译包的替代核验方式 |
+| Cursor Marketplace | 插件清单、变量和实际npx启动已验证；已登录并填好发布者申请，待确认 Publisher Terms 后提交。**尚未上架，不能承诺在Cursor内搜到** |
 | Cursor社区目录 | [cursor.directory](https://cursor.directory)为另一个目录入口，不等于Cursor官方市场审核 |
 
 Official Registry registration describes the publicly installable npm package. It does not host the Core or require publishing its source. Third-party directory submission is not the same as approval. MCPServers is pending review; MCPRush's currently offered hosting flow does not match this local stdio product.
