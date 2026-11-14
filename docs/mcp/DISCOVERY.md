@@ -2,15 +2,25 @@
 
 核对日期：2026-11-14。安装包分发、目录登记和人工审核分别记录。
 
+## 当前安装入口 / Current installation
+
+当前发行版为 **0.4.0-rc.7（预发行版）/ B-335**。客户可直接使用 [npm 默认首页](https://www.npmjs.com/package/boundaryxp-mcp)：[简体中文](https://www.npmjs.com/package/boundaryxp-mcp#简体中文) / [English](https://www.npmjs.com/package/boundaryxp-mcp#english)，以及 [中文安装与升级](https://www.npmjs.com/package/boundaryxp-mcp#中文安装与升级) / [Installation and upgrades](https://www.npmjs.com/package/boundaryxp-mcp#installation-and-upgrades)。四个入口均在 npm 同页，不以 GitHub 跳转作为语言或安装入口。
+
+官方目录可[搜索 BoundaryXP](https://registry.modelcontextprotocol.io/?q=boundaryxp)。本轮实际页面显示 rc.7；[最新版 API](https://registry.modelcontextprotocol.io/v0.1/servers/io.github.joinwell52-AI%2Fboundaryxp/versions/latest)返回服务器版本和 npm 包版本均为 rc.7，状态 active、isLatest=true。历史版本保留，不删除旧登记。
+
+English and Chinese product descriptions and complete setup guides are available on the same npm page. The official Registry search and latest API were checked against rc.7. Pending directory applications below are not live installation listings.
+
+## 目录状态 / Directory status
+
 | 入口 | 状态与链接 |
 |---|---|
 | npm | **已发布rc.7**：[7+1产品介绍与安装](https://www.npmjs.com/package/boundaryxp-mcp) |
 | 官方MCP Registry | **已登记并读回**：[io.github.joinwell52-AI/boundaryxp](https://registry.modelcontextprotocol.io/v0.1/servers/io.github.joinwell52-AI%2Fboundaryxp/versions/0.4.0-rc.7) |
-| MCPServers | **免费提交成功，待审核**；表单提示最长两周审核后邮件通知，尚无获批条目链接 |
+| MCPServers | **免费提交成功，待审核**；本轮在站内搜索 BoundaryXP，未找到对应公开条目，尚无可编辑的公开版本或安装链接；未重复提交 |
 | MCP Market | **免费提交成功，待审核**：[提交入口](https://mcpmarket.com/submit)。页面返回 Success / Submitted，进入 Free Queue，提示约4–6周；未付费，尚无获批条目链接 |
-| TensorBlock MCP Index | **PR已提交，待审核**：[#5989](https://github.com/TensorBlock/awesome-mcp-servers/pull/5989)。条目包含npm安装、stdio、Windows x64、模型配置及原Core源码私有说明；尚未合并，不能标为已进入索引 |
+| TensorBlock MCP Index | **PR已更新至 rc.7，待审核**：[#5989](https://github.com/TensorBlock/awesome-mcp-servers/pull/5989)。条目命令为 `npx.cmd --yes boundaryxp-mcp@0.4.0-rc.7 --data-root C:/BXP/data`，中英安装均链接到 npm 页内；说明和发行证据也已更新并读回。尚未合并，不能标为已进入索引 |
 | MCPRush | 已核对发布者账号；新建流程要求自建HTTPS网关或平台托管，当前本地stdio产品不满足这条发布路径，未提交虚假托管信息 |
-| Awesome MCP Servers | **PR已提交，待审核**：[#19484](https://github.com/punkpeye/awesome-mcp-servers/pull/19484)。机器人要求Glama收录和启动检查；当前Windows原生包与其Docker检查的兼容性尚未确认，不伪造徽章 |
+| Awesome MCP Servers | **PR已更新至 rc.7，待审核**：[#19484](https://github.com/punkpeye/awesome-mcp-servers/pull/19484)。条目、安装入口和 PR 说明均已读回 rc.7，使用 npm 同页指南。Glama 替代核验问题尚无维护者回复；不伪造检测徽章，历史评论中的 rc.5 证据链接保留其当时身份 |
 | Glama | 已登录并核对新增表单：Runs from source 要求公开仓库含服务器实现，不能只有文档；通过 Docker 检查后才进入搜索。当前公开资料/编译包仓库不符合该入口，未提交；已在 Awesome PR 询问 Windows 编译包的替代核验方式 |
 | Cursor Marketplace | **按所有者要求暂缓提交**。插件清单与实际npx启动已验证，网页申请未提交；个人发布归属尚未解决。**尚未上架，不能承诺在Cursor内搜到** |
 | Cursor社区目录 | [cursor.directory](https://cursor.directory)为另一个入口；本轮不提交Cursor相关入口，不等于官方市场审核 |
@@ -21,5 +31,9 @@
 Official Registry registration describes the publicly installable npm package. It does not host the Core or require publishing its source. Third-party directory submission is not the same as approval. MCPServers is pending review; MCPRush's currently offered hosting flow does not match this local stdio product.
 
 MCP Market accepted the free-queue submission (estimated 4–6 weeks). TensorBlock PR #5989 is open, not merged or indexed. Cursor submission is paused at the owner's request. Core source remains private; no payment, hosted deployment or existing local installation change was made for these submissions.
+
+2026-11-14 续查：MCP Market 站内 BoundaryXP 搜索未出现对应公开条目，继续记为待审核，不能称为已同步上线。MCPServers / MCP Market 的待审申请没有本轮可编辑的公开版本字段；其产品仓库入口保持原地址，仓库当前说明和发行包已是 rc.7。未重复提交、未支付加速费用。未提交或不适用的目录没有可更新的 BoundaryXP 安装条目；Cursor 市场仍按所有者要求暂缓。
+
+PR #5989 and #19484 now reference rc.7 and npm's in-page setup guides; both remain open. MCPServers and MCP Market still have no verified public BoundaryXP listing. These are publication-metadata checks, not new model or runtime acceptance tests. Existing tasks, credentials, host configurations and the separate local workbench were not modified.
 
 BoundaryXP（界痕）用于AI Agent和多角色任务的7+1边界分析与原生计算复核；支持完整父子任务、多个DEV子任务、L2/L3字典、证据报告和本地工作台。Windows x64，中英双语。新分析需要用户自己的模型API/profile。
