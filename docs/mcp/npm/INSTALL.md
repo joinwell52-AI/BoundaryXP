@@ -1,6 +1,6 @@
 # 安装、接入和升级 / Installation and upgrades
 
-**boundaryxp-mcp 0.4.0-rc.4 · B-335 · Windows x64 · Node >=22.18.0（实测24.19.0）**
+**boundaryxp-mcp 0.4.0-rc.5 · B-335 · Windows x64 · Node >=22.18.0（实测24.19.0）**
 
 ## 首次安装 / First installation
 
@@ -12,7 +12,7 @@ $BxpHome = Join-Path $BxpRoot 'install'
 $BxpData = Join-Path $BxpRoot 'data'
 $BxpSettings = Join-Path $BxpRoot 'settings'
 if (Test-Path (Join-Path $BxpHome 'active.json')) { throw 'Already installed: use update' }
-npx.cmd --yes --package boundaryxp-mcp@0.4.0-rc.4 bxp install --home $BxpHome --version 0.4.0-rc.4
+npx.cmd --yes --package boundaryxp-mcp@0.4.0-rc.5 bxp install --home $BxpHome --version 0.4.0-rc.5
 if ($LASTEXITCODE -ne 0) { throw 'Installation failed' }
 $BxpLauncher = Join-Path $BxpHome 'launcher.mjs'
 New-Item -ItemType Directory -Path $BxpSettings -Force | Out-Null
@@ -24,7 +24,7 @@ if (!(Test-Path $BxpEnv)) { [IO.File]::WriteAllText($BxpEnv, "# Model API config
 node $BxpLauncher --manage status
 ```
 
-Wait for `READY`, `probe.passed:true`, and version `0.4.0-rc.4`. Download and integrity checks use the exact package version on npm. Empty profiles allow read-only inspection; no analysis is started. Installation needs internet access for dependencies. No compiler, separate 58618 installation or hosted BoundaryXP server is required.
+Wait for `READY`, `probe.passed:true`, and version `0.4.0-rc.5`. Download and integrity checks use the exact package version on npm. Empty profiles allow read-only inspection; no analysis is started. Installation needs internet access for dependencies. No compiler, separate 58618 installation or hosted BoundaryXP server is required.
 
 ## Cursor
 
@@ -88,13 +88,15 @@ Confirm the preview, save it as a new project, submit one analysis for the exact
 
 失败回执和原响应保留；`job_id`不是完成标志。LLM与计算器分别形成结论，不能把未完成的模型草稿当正式结果。对已保存操作数使用`bx_result_recheck`可零模型复验并保留原结果。[工具和口令](guides/TOOLS.md)。
 
-## 从旧rc.2升级 / Upgrade from private rc.2
+## 升级现有管理安装 / Upgrade a managed installation
 
-旧包名为`@boundaryxp/mcp`。旧更新器不会自行切换到新包名；首次使用新版bootstrap，保持原安装目录及数据配置：
+已经安装过的用户保持原安装目录、数据与配置，使用新版 bootstrap 升级：
 
 ```powershell
-npx.cmd --yes --package boundaryxp-mcp@0.4.0-rc.4 bxp update --home $BxpHome --version 0.4.0-rc.4
+npx.cmd --yes --package boundaryxp-mcp@0.4.0-rc.5 bxp update --home $BxpHome --version 0.4.0-rc.5
 ```
+
+仅限发布前本机 rc.2 测试安装：其候选包名为 `@boundaryxp/mcp`，从未发布到 npm；切换产品包名需先运行上面的新版 bootstrap。
 
 先备份数据和配置并等待作业结束，再断开所有相关MCP客户端，升级后重连。不要先删除旧版。rc.2到rc.3运行核心摘要相同，不需要迁移数据；将来不同摘要需显式`--migrate-data <原数据目录>`，复制验证后保留旧目录。只对这套独立MCP操作，不操作58618。
 

@@ -1,14 +1,18 @@
 # BoundaryXP · 界痕
 
-**7+1 任务边界分析与计算复核，供 AI Agent 和多角色协作使用。**
+**从原文到边界，每一步都看得见。**
+
+从完整任务到带原文证据的 **7+1 关联表示**，再由确定性 Core 核验。检查方案与子任务分解，追溯为什么**越界、未越界，或信息不全**。
 
 **7+1 task boundary analysis and computational verification for AI agents and teams.**
 
-当一个任务被拆给多个 DEV、OPS、QA，如何确认子任务仍在父任务限定的范围内？BoundaryXP（简称 BXP）把任务文本整理为可追溯的 7+1 边界，让 LLM 进行语义判断，再由原生计算器独立复核提交的形式化输入。在同一份报告里查看任务要求、冲突依据、计算回执和未明确项。
+BoundaryXP（简称 BXP，中文名“界痕”）把任务原文、父子关系和共享约束放在一起核对。LLM 解释原文并形成判断，原生计算器复核提交的形式化输入；同一份报告分别保留 LLM 判断、计算回执、原文依据和未明确项。
 
-When work is delegated across agents or roles, BoundaryXP helps inspect whether child tasks stay within their parent's stated constraints. An LLM interprets the text; a native calculator independently verifies the submitted formal inputs. Both judgments, source evidence and computation receipts remain visible.
+From complete task text to evidence-backed 7+1 relationships and deterministic Core verification. Inspect plans, child tasks and their combined constraints to understand why a result is out of bounds, within bounds or incomplete. LLM judgments, calculation receipts and source evidence remain distinct and traceable.
 
-**`boundaryxp-mcp@0.4.0-rc.4` · B-335 · Windows x64 · Node.js ≥22.18 · MIT · Prerelease**
+**`boundaryxp-mcp@0.4.0-rc.5` · B-335 · Windows x64 · Node.js ≥22.18 · MIT · Prerelease**
+
+[中文安装](https://github.com/joinwell52-AI/BoundaryXP/blob/main/docs/mcp/INSTALL.zh-CN.md) · [English installation](https://github.com/joinwell52-AI/BoundaryXP/blob/main/docs/mcp/INSTALL.en.md) · [18个工具](https://github.com/joinwell52-AI/BoundaryXP/blob/main/docs/mcp/npm/guides/TOOLS.md) · [完整使用指南](https://github.com/joinwell52-AI/BoundaryXP/blob/main/docs/mcp/npm/guides/README.md)
 
 通过标准 **stdio MCP** 接入 Cursor、Codex 等宿主，包含 **18 个工具、10 项资源、中英帮助和本地浏览器工作台**。一个 npm 包即可使用，无需另装 BoundaryXP 工作台、exe 安装器或自建 BoundaryXP 服务器。当前原生包只支持 Windows x64。
 
@@ -34,6 +38,10 @@ Standard stdio MCP for Cursor, Codex and compatible hosts. One package includes 
 Missing conditions remain unspecified. Versioned L2 industry and L3 enterprise dictionaries support interpretation; roles and dictionary entries do not grant permission.
 
 ## 一个父子任务案例 / A parent–child example
+
+先看仓库提供的[交互演示](https://boundaryxp-workbench-demo.joinwell52.chatgpt.site/)与[原报告说明](https://github.com/joinwell52-AI/BoundaryXP/blob/main/docs/demo/README.md)：RT044 的跨任务严格前置闭环判为越界，RT042 的半开区间相邻判为未越界，L23-050 的责任人指代未绑定保留信息不全。演示回放 B-332 保存记录，不连接本机服务，不代表本次 MCP 的新分析或测试。
+
+The repository's interactive demo replays saved B-332 cases and their original reports. It is not a live MCP session or a newly computed B-335 result. The short example below only illustrates the task format.
 
 > **父任务 / Parent:** 仅处理测试目录；交付检查报告；禁止部署生产环境。
 >
@@ -72,40 +80,26 @@ Complete Markdown/TXT imports support explicit task/parent IDs and multiple chil
 
 雷达表达条款的维度关联，不表示评分、进度或授权大小。The radar shows clause relationships, not scores, progress or authority.
 
-## 安装 / Install
+## 快速接入 Cursor / Quick start
 
-需要 Windows x64、Node.js ≥22.18 和 npm（实测 Node 24.19.0）。首次安装在 PowerShell 执行；已有安装保留自己的 home、data-root 和配置，使用升级入口。
+需要 Windows x64、Node.js ≥22.18 和 npm（实测 Node 24.19.0）。首次启动联网下载 npm 包和依赖。将下面条目合并到 Cursor 的 MCP 配置，保留其他服务；将 `C:/BXP/data` 改为自己的固定绝对路径。
 
-```powershell
-$BxpRoot = Join-Path $env:LOCALAPPDATA 'BoundaryXP'
-$BxpHome = Join-Path $BxpRoot 'install'
-$BxpData = Join-Path $BxpRoot 'data'
-npx.cmd --yes --package boundaryxp-mcp@0.4.0-rc.4 bxp install --home $BxpHome --version 0.4.0-rc.4
-if ($LASTEXITCODE -ne 0) { throw 'Installation failed' }
-$BxpLauncher = Join-Path $BxpHome 'launcher.mjs'
-```
-
-**Cursor：** 生成独立工作区配置，打开 `$BxpRoot/workspace`，启用 BoundaryXP。
-
-```powershell
-$BxpConfig = Join-Path $BxpRoot 'workspace\.cursor\mcp.json'
-node $BxpLauncher --manage configure --config $BxpConfig --data-root $BxpData
-```
-
-**Codex 或其他 MCP 宿主 / Other hosts：** 使用标准 stdio 命令和参数；不同宿主的配置文件位置与格式可能不同。替换下面的绝对路径，保留其他 MCP 配置。
+Merge this entry into Cursor's MCP configuration and choose a persistent absolute data path. Other stdio hosts use the same command and arguments, with their own configuration syntax.
 
 ```json
 {
   "mcpServers": {
     "BoundaryXP": {
-      "command": "node",
-      "args": ["C:/absolute/path/install/launcher.mjs", "--data-root", "C:/absolute/path/data"]
+      "command": "npx.cmd",
+      "args": ["--yes", "boundaryxp-mcp@0.4.0-rc.5", "--data-root", "C:/BXP/data"]
     }
   }
 }
 ```
 
-首次连接后，在宿主聊天发送 / After connection, ask:
+上面的入口固定版本，不自动升级。**Codex 接入、模型配置、管理安装和自动升级**见[完整安装说明](https://github.com/joinwell52-AI/BoundaryXP/blob/main/docs/mcp/npm/INSTALL.md)。已有安装沿用自己的数据与配置，不用新路径替换旧数据。The quick-start entry pins a version; use the installation guide for Codex, model setup and managed updates.
+
+连接成功后应显示 **18 个工具**，在宿主聊天发送 / After connection, ask:
 
 > 调用 BoundaryXP 的 bx_capabilities 和 bx_workbench_open，返回版本及工作台地址，不提交分析。
 >
@@ -117,11 +111,11 @@ The workbench uses a dynamic local port. Closing its browser tab leaves MCP runn
 
 ## 模型配置与首次分析 / Model access and first analysis
 
-**只读帮助、读取已有结果和打开页面无需模型 API。新分析需要自己的模型 API/profile；不会自动继承 Cursor 或 Codex 聊天订阅。** 提供商配置见随包交付的 `INSTALL.md`，工具说明也可通过 MCP 直接读取。
+**只读帮助、读取已有结果和打开页面无需模型 API。新分析需要自己的模型 API/profile；不会自动继承 Cursor 或 Codex 聊天订阅。** 按[模型配置说明](https://github.com/joinwell52-AI/BoundaryXP/blob/main/docs/mcp/npm/INSTALL.md#配置模型--configure-the-model-api)设置 Cursor API 或 Chat Completions 兼容 API；工具说明也可通过 MCP 直接读取。
 
 Read-only tools need no model key. Analysis uses your configured API/profile and may incur provider charges. Keep credentials in environment variables or an explicit local env file, never in task text. Requested analysis sends selected task/dictionary content to your model provider; Core computation is local.
 
-配置好模型后，将完整任务文本交给宿主 / After configuring your model:
+配置好模型后，将完整任务文本交给宿主。可先使用[中文多 DEV 完整案例](https://github.com/joinwell52-AI/BoundaryXP/blob/main/docs/mcp/npm/examples/multi-dev-2.md)或[English example](https://github.com/joinwell52-AI/BoundaryXP/blob/main/docs/mcp/npm/examples/multi-dev-2.en.md)。After configuring your model, give the host a complete task and ask:
 
 > 用 BoundaryXP 导入下面的完整父子任务，保留每个 DEV 的任务编号，先展示关系预览；确认后保存，使用我配置的 profile 分析一次。返回 LLM 判断、计算器复核、原文依据和工作台地址。失败不自动重试。
 
@@ -143,21 +137,21 @@ Tools cover discovery, profiles, dictionaries, imports, projects, analysis jobs,
 
 ## 升级与数据 / Updates and data
 
-已安装用户沿用自己的 `$BxpHome`，不要替换原任务数据目录：
+使用管理安装的用户沿用原安装目录 `$BxpHome`，不要替换原任务数据目录：
 
 ```powershell
-npx.cmd --yes --package boundaryxp-mcp@0.4.0-rc.4 bxp update --home $BxpHome --version 0.4.0-rc.4
+npx.cmd --yes --package boundaryxp-mcp@0.4.0-rc.5 bxp update --home $BxpHome --version 0.4.0-rc.5
 ```
 
-自动检查和升级默认关闭，可显式启用；新版准备好后，在相关客户端全部退出后的下次启动切换，不在分析中强制更新。保留原安装、数据和 profile，支持回滚。详见随包交付的 `AUTO-UPDATE.md` 和 `INSTALL.md`。
+自动检查和升级默认关闭，可显式启用；新版准备好后，在相关客户端全部退出后的下次启动切换，不在分析中强制更新。保留原安装、数据和 profile，支持回滚。详见[自动更新](https://github.com/joinwell52-AI/BoundaryXP/blob/main/docs/mcp/npm/AUTO-UPDATE.md)和[安装升级指南](https://github.com/joinwell52-AI/BoundaryXP/blob/main/docs/mcp/npm/INSTALL.md)。
 
 Automatic updates are opt-in, with safe next-start activation and rollback. Existing data and configuration are retained. The independent 58618 installation is outside this package's update scope.
 
 ## 文档与交付 / Documentation and distribution
 
 - [npm 安装入口 / Package](https://www.npmjs.com/package/boundaryxp-mcp)
-- [产品资料与 Release / Product repository](https://github.com/joinwell52-AI/BoundaryXP)：当前仍私有，访问需权限；npm 安装不依赖该仓库权限。Currently private; npm installation is independent.
-- 完整指南随 npm 包交付：`INSTALL.md`、`AUTO-UPDATE.md`、`guides/TOOLS.md`、`examples/multi-dev-2.md`、`examples/multi-dev-2.en.md`。MCP 内置帮助无需读取私有仓库。
+- [公开产品仓库 / Public product repository](https://github.com/joinwell52-AI/BoundaryXP)：提供产品介绍、公开指南及编译安装包；核心实现源码在独立私有源码仓库维护。
+- [使用指南 / User guide](https://github.com/joinwell52-AI/BoundaryXP/blob/main/docs/mcp/npm/guides/README.md) · [发行下载 / Releases](https://github.com/joinwell52-AI/BoundaryXP/releases) · [MCP 收录状态 / Directory status](https://github.com/joinwell52-AI/BoundaryXP/blob/main/docs/mcp/DISCOVERY.md)。完整指南也随 npm 包交付；MCP 内置帮助无需读取本地文档。
 
 MIT 及第三方 notices 随包保留。Core 以编译后的 Node-API 模块交付，不含原始 C++ 或 JavaScript Core 源码；适配器、UI、提示词及必要资源仍可读。当前预发行不宣称完整协议符合性或所有模型的语义准确率。
 

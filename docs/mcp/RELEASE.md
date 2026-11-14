@@ -1,4 +1,18 @@
-# 当前版本 / Current release: 0.4.0-rc.4
+# 当前版本 / Current release: 0.4.0-rc.5
+
+2026-11-14：按公开仓库的产品定义修正npm说明；恢复旧 `guides/README.md` 入口，使用完整公开链接，分清固定版本npx接入与管理安装自动更新。产品仓库现已公开，核心实现源码仍在独立私有源码仓库维护。
+
+[npm产品页](https://www.npmjs.com/package/boundaryxp-mcp) · [rc.5 Release](https://github.com/joinwell52-AI/BoundaryXP/releases/tag/mcp-v0.4.0-rc.5) · [目录状态](DISCOVERY.md)
+
+- 包 SHA-256：`dc03511dc1e91d024e2ba17ba24f420b345224acc039541959fb45940e133c41`，274个归档成员。
+- 本地归档新装、npm匿名下载字节核对、npm新装和stdio调用通过：18工具、10资源、两个中英多DEV示例、工作台HTTP 200、零模型调用。
+- npm README 中10个不同的公开指南链接全部返回200；旧入口在浏览器中实际打开正常。
+- Cursor插件清单变量替换后的真实 `npx.cmd` 入口启动通过，发现18工具、10资源并打开页面。此项是标准输入输出验收，不冒称Cursor市场已经上架或本轮做过新的IDE界面分析。
+- 只有文档、package版本和锁文件根版本改变；Core、完整runtime、可执行适配器和依赖身份与rc.4相同。未修改既有任务、宿主配置或58618。
+
+The documentation-only release aligns the npm introduction with the public product repository and repairs guide links. Public-registry installation, actual stdio entry points and the workbench passed isolated checks. Marketplace approval remains separate. Existing installations are not forcibly upgraded.
+
+## 历史：0.4.0-rc.4
 
 2026-11-14：重写npm中英文产品介绍，补齐7+1八个维度、父子任务与多个DEV案例、LLM判断和计算复核的关系、报告内容和使用流程；增加官方Registry身份与检索关键词。未改变B-335 Core、适配器运行逻辑、页面或依赖版本。
 

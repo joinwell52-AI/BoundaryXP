@@ -6,4 +6,4 @@ The owner retained MIT for the first npm distribution. Source delivery and licen
 
 [第三方依赖与许可说明](npm/THIRD-PARTY-NOTICES.md)。依赖保留各自许可证，Cursor API需自己的账号、密钥及服务权限。产品不提供模型权重或额度。
 
-npm发布不会公开私有源码仓库，也不会改变BoundaryXP仓库可见性。历史PR引用清理仍须在未来将GitHub仓库改为公开前完成。[原内部测试说明](rc2/NOTICES.md)保留其历史阶段。
+BoundaryXP产品仓库已由所有者公开，提供指南与编译Release。独立源码仓库boundaryxp-code仍保持私有。此前历史引用核查保留原记录，不以当前公开状态替代清理验证。[原内部测试说明](rc2/NOTICES.md)保留其历史阶段。

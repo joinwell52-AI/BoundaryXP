@@ -1,3 +1,9 @@
+# 0.4.0-rc.5 (public documentation and installation links)
+
+- Repair public guide links and document the now-public product repository, while keeping implementation source private.
+- Add an exact-version npx quick start and separate it from managed automatic updates. Link model setup, multi-DEV examples and tool help directly.
+- Preserve the B-335 Core, adapter logic, runtime and dependency versions. No task data or existing host configuration is changed.
+
 # 0.4.0-rc.4 (product introduction and discovery)
 
 - Rewrote the bilingual npm introduction around 7+1 task boundaries, parent/child examples, independent LLM judgment and native calculation receipts.

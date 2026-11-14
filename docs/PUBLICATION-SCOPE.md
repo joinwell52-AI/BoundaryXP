@@ -1,5 +1,11 @@
 # 仓库范围 / Repository scope
 
+## 2026-11-14：当前公开状态 / Current public status
+
+BoundaryXP产品仓库已由所有者设为公开。公开内容为产品介绍、指南、研究材料和编译Release资产；核心实现源码仍在独立私有boundaryxp-code维护。以下私有状态和公开前核查均为历史阶段记录，保留当时证据，不表示当前可见性，也不据此宣称旧引用或缓存清理已完成。
+
+The product repository is now public. Original Core implementation source remains in a separate private source repository. Older visibility and audit statements below retain their historical scope.
+
 ## 2026-11-14：首次npm发行 / First npm release
 
 用户授权以MIT许可首次发行boundaryxp-mcp 0.4.0-rc.3，并同步本仓库的产品说明和编译Release资产。Core原实现源码不交付；完整包包括适配器、UI及必要资源。npm的公开包可独立安装，不需访问私有源码仓库或另装58618。GitHub仓库仍为私有，其历史PR引用清理与未来公开切换独立处理。

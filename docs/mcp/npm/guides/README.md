@@ -1,6 +1,6 @@
 # 使用指南 / User guide
 
-BoundaryXP MCP 0.4.0-rc.3 / B-335，Windows x64。核心随包原生编译，无需客户另外安装58618。
+BoundaryXP MCP 0.4.0-rc.5 / B-335，Windows x64。核心随包原生编译，无需客户另外安装58618。
 
 - [安装、Cursor/Codex接入、API配置、用例、升级回滚及排障 / Installation and operations](../INSTALL.md)
 - [18工具中文与英文说明 / Bilingual tool reference](TOOLS.md)
