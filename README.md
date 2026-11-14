@@ -5,9 +5,9 @@
 
 <p align="center">
   <a href="https://boundaryxp-workbench-demo.joinwell52.chatgpt.site/"><img src="https://img.shields.io/badge/Demo-Interactive-0891b2?style=flat-square" alt="演示 / Interactive demo"></a>
-  <a href="docs/mcp/RELEASE.md"><img src="https://img.shields.io/badge/MCP-0.4.0--rc.2-2563eb?style=flat-square" alt="MCP 0.4.0-rc.2 · internal testing"></a>
+  <a href="docs/mcp/RELEASE.md"><img src="https://img.shields.io/badge/MCP-0.4.0--rc.3-2563eb?style=flat-square" alt="MCP 0.4.0-rc.3 · npm prerelease"></a>
   <a href="#l2--l3-industry-and-enterprise-semantics"><img src="https://img.shields.io/badge/Semantics-L2%20%2B%20L3-7c3aed?style=flat-square" alt="L2 industry / L3 enterprise semantics"></a>
-  <a href="docs/mcp/NOTICES.md"><img src="https://img.shields.io/badge/Status-Internal%20testing-d97706?style=flat-square" alt="Internal testing"></a>
+  <a href="docs/mcp/NOTICES.md"><img src="https://img.shields.io/badge/Status-npm%20prerelease-d97706?style=flat-square" alt="npm prerelease"></a>
   <a href="https://doi.org/10.5281/zenodo.24072738"><img src="https://img.shields.io/badge/DOI-10.5281%2Fzenodo.24072738-1e3a8a?style=flat-square" alt="DOI: 10.5281/zenodo.24072738"></a>
 </p>
 
@@ -15,7 +15,7 @@
 
 <p align="center"><a href="https://boundaryxp-workbench-demo.joinwell52.chatgpt.site/?lang=en#case=ENG20-003&axis=A&view=radar&lang=en"><strong>▶ Try the demo</strong></a>　·　<a href="docs/mcp/INSTALL.en.md"><strong>MCP setup</strong></a>　·　<a href="https://doi.org/10.5281/zenodo.24072738"><strong>Paper</strong></a></p>
 
-<p align="center">Chinese & English · MCP 0.4.0-rc.2 / B-335 internal testing · Research & protocol material · Original Core source private</p>
+<p align="center">Chinese & English · MCP 0.4.0-rc.3 / B-335 first npm prerelease · Research & protocol material · Original Core source private</p>
 
 ## Start with a real case
 
@@ -48,16 +48,16 @@ All five come from saved 58618 records, retaining task trees, exact sources, ver
 
 ## Connect to your AI workflow
 
-**BoundaryXP MCP** connects through standard stdio to Cursor, Codex and compatible hosts, with **18 tools, 10 resources and a local browser workbench**. The Windows x64 test package includes the compiled native Core; no separate 58618 installation or hosted BoundaryXP server is required.
+**BoundaryXP MCP** connects through standard stdio to Cursor, Codex and compatible hosts, with **18 tools, 10 resources and a local browser workbench**. The Windows x64 package includes the compiled native Core; no separate 58618 installation or hosted BoundaryXP server is required.
 
-1. **Download and verify:** get the test package from the private draft release's **Assets** and check SHA-256.
+1. **Install from npm:** use `boundaryxp-mcp@0.4.0-rc.3`, available through the `next` prerelease channel. GitHub Releases retain the matching archive and SHA-256.
 2. **Install and connect:** follow the guide to configure the host's stdio MCP server.
 3. **Configure a model API:** new analysis uses your own provider/API access. Cursor or Codex subscription allowances are not inherited.
 4. **Open the workbench:** import complete task text, preview and confirm the task tree, then analyze and inspect evidence and reports.
 
 [**English installation guide →**](docs/mcp/INSTALL.en.md) · [中文安装](docs/mcp/INSTALL.zh-CN.md) · [Tools and resources](docs/mcp/TOOLS.md) · [Updates, rollback and troubleshooting](docs/mcp/OPERATIONS.md)
 
-> **Distribution status:** 0.4.0-rc.2 / B-335, Windows x64 internal testing. This repository remains private and the prerelease remains a draft; no npm version is published. Authorized maintainers download Assets, not generated Source code archives. External distribution scope and licensing still need confirmation. See [release evidence](docs/mcp/RELEASE.md) and [notices](docs/mcp/NOTICES.md).
+> **First npm release:** [boundaryxp-mcp 0.4.0-rc.3](https://www.npmjs.com/package/boundaryxp-mcp), B-335 / Windows x64, MIT. The complete package includes the native Core, MCP interface and workbench, without original Core source or a separate 58618 installation. This GitHub repository remains private; npm installation is independent. See [release evidence](docs/mcp/RELEASE.md) and [notices](docs/mcp/NOTICES.md).
 
 ## L2 / L3: industry and enterprise semantics
 
@@ -147,8 +147,8 @@ Host analysis and first-time translation may send selected source and dictionary
 | Protocol and implementation differences | [BXP protocol](protocol/README.md) · [Implementation notes](protocol/IMPLEMENTATION.md) |
 | Version history and contribution | [Changelog](CHANGELOG.md) · [Contributing](CONTRIBUTING.md) · [Documentation](docs/README.md) |
 
-**Distribution scope:** the Git tree contains paper, protocol, cases, reports, screenshots, independent research verification scripts and MCP documentation. It excludes private workbench implementation source and source-build entry points. MCP compiled packages are separate private draft release assets. Original Core implementation source is excluded from those packages; adapter, UI and required resources remain readable. [Full scope](docs/PUBLICATION-SCOPE.md)
+**Distribution scope:** the Git tree contains paper, protocol, cases, reports, screenshots, independent research verification scripts and MCP documentation. It excludes private workbench implementation source and source-build entry points. Compiled MCP packages are published to npm and mirrored in this repository's Releases. Original Core implementation source is excluded from those packages; adapter, UI and required resources remain readable. [Full scope](docs/PUBLICATION-SCOPE.md)
 
 **Publication readiness:** this repository remains private. Legacy PR references and historical cache cleanup still await GitHub handling; this homepage update does not complete the publication audit. [Audit record](docs/PREPUBLICATION-CHECK.md)
 
-The existing [MIT license](LICENSE) is retained. Paper, case data and third-party materials have their own [usage terms](docs/paper/materials/MATERIAL-ACCESS.md); the MCP test package has separate [license and third-party notices](docs/mcp/NOTICES.md).
+The existing [MIT license](LICENSE) is retained. Paper, case data and third-party materials have their own [usage terms](docs/paper/materials/MATERIAL-ACCESS.md); the MCP package has separate [license and third-party notices](docs/mcp/NOTICES.md).

@@ -1,31 +1,14 @@
-# BoundaryXP MCP · 内部测试交付 / Internal test delivery
+# BoundaryXP MCP · BXP
 
-**0.4.0-rc.2 / B-335 / Windows x64 / 2026-11-11**
+**首次npm发行 / First npm release: boundaryxp-mcp 0.4.0-rc.3 · B-335 · Windows x64**
 
-产品仓库 `joinwell52-AI/BoundaryXP` 当前保持私有；这里提供内部测试说明和编译安装包。私有源码另存 `boundaryxp-code`。当前不发布 npm，不公开仓库，不升级独立的 58618。
+[安装包主页 / npm](https://www.npmjs.com/package/boundaryxp-mcp) · [GitHub Release](https://github.com/joinwell52-AI/BoundaryXP/releases/tag/mcp-v0.4.0-rc.3)
 
-The product repository remains private. This delivery is for internal testing; no public npm release or visibility change is performed. The separate 58618 installation is not required or modified.
+- [中文安装入口](INSTALL.zh-CN.md) · [English setup](INSTALL.en.md)
+- [安装、Cursor/Codex、API配置与完整用例 / Complete setup](npm/INSTALL.md)
+- [18个工具和双语使用口令 / Tools](npm/guides/TOOLS.md)
+- [自动升级 / Automatic updates](npm/AUTO-UPDATE.md)
+- [发行与验收 / Release](RELEASE.md) · [许可 / Notices](NOTICES.md)
+- [此前rc.2内部测试说明 / Historical internal test](rc2/README.md)
 
-| 入口 / Guide | 内容 / Contents |
-|---|---|
-| [中文安装与使用](INSTALL.zh-CN.md) | 下载、首次安装、Cursor/Codex、API 配置、任务示例 |
-| [English installation](INSTALL.en.md) | Download, installation, hosts, API profiles and first task |
-| [升级、回滚与排障 / Recovery](OPERATIONS.md) | 保留任务、版本切换、自动更新边界、错误处理 |
-| [18 个工具 / Tool reference](TOOLS.md) | 工具用途、常用聊天口令与读写范围 |
-| [版本与验收 / Release acceptance](RELEASE.md) | 固定包摘要、支持范围、验收与待公开事项 |
-| [资料与第三方说明 / Notices](NOTICES.md) | 分发内容、依赖许可及内部测试范围 |
-| [多 DEV 示例 / Multi-DEV example](examples/multi-dev.md) | 一个父任务、两个独立 DEV；不是已计算结果 |
-
-## 附件 / Assets
-
-- `boundaryxp-mcp-0.4.0-rc.2.tgz`：完整运行包 / complete runtime package。
-- `BoundaryXP-MCP-0.4.0-rc.2-guides.zip`：本套中英文指南和示例 / these guides and examples。
-- `SHA256SUMS.txt`：附件校验摘要 / asset checksums。
-- `DEPENDENCIES.json`、`THIRD-PARTY-NOTICES.md`：依赖及第三方说明 / dependency inventory and notices。
-- `ACCEPTANCE.json`：不含任务原文和机器路径的验收摘要 / sanitized acceptance summary。
-
-请下载 Release 的 **Assets** 附件；GitHub 自动生成的 **Source code (zip/tar.gz)** 是资料仓库快照，不是 MCP 安装包。Release 若标记 Draft，仅有相应权限的内部维护者可访问；附件尚未可见时向维护者索取，不尝试 npm 包名下载。
-
-Download **Assets**, not GitHub's automatic **Source code** archives. A draft release is visible only to authorized maintainers. This guide does not imply that a draft has been published or that an npm package exists.
-
-安装包内原有简要说明保留原字节。本次补充指南作为独立附件维护，安装命令及测试范围以本目录与对应 Release 为准；没有因文档更新重新编译核心或改写已验收 tgz。
+下载的是完整MCP包：编译Core、接口、UI和必要资源。不交付核心源码，不需要客户再安装58618。MIT许可保持不变。GitHub仓库仍为私有，npm可独立下载；自动Source code附件不是安装包。

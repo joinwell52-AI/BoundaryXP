@@ -1,5 +1,13 @@
 # 升级、恢复与排障 / Upgrades, recovery and troubleshooting
+# 更新与恢复 / Updates and recovery
 
+当前npm包为`boundaryxp-mcp`，首次发行0.4.0-rc.3。按[安装说明的升级、回滚及排障章节](npm/INSTALL.md)操作；自动更新见[专门说明](npm/AUTO-UPDATE.md)。
+
+Automatic updates default to off. Choose `next` with `--allow-prerelease` to receive prerelease updates from the official npm registry. Updates preserve active tasks and activate at the next safe start.
+
+旧本机测试包首次切换需要新bootstrap；不要删除原安装、任务或配置。仓库可见性与npm更新源互相独立。若刚发行时遇到ETARGET，先确认npm版本已可见并刷新元数据；不要强制清空全部缓存或重提交分析。
+
+[此前rc.2操作记录](rc2/OPERATIONS.md)保留为历史说明。
 [中文安装](INSTALL.zh-CN.md) · [English installation](INSTALL.en.md) · [工具](TOOLS.md)
 
 ## 当前的内部更新方式 / Current internal updates

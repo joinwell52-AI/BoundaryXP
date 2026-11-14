@@ -1,5 +1,11 @@
 # 仓库范围 / Repository scope
 
+## 2026-11-14：首次npm发行 / First npm release
+
+用户授权以MIT许可首次发行boundaryxp-mcp 0.4.0-rc.3，并同步本仓库的产品说明和编译Release资产。Core原实现源码不交付；完整包包括适配器、UI及必要资源。npm的公开包可独立安装，不需访问私有源码仓库或另装58618。GitHub仓库仍为私有，其历史PR引用清理与未来公开切换独立处理。
+
+The first npm package is distributed under the owner's retained MIT choice, with compiled Core and readable adapter/UI/resources. This product distribution adds to the earlier internal-test scope; it does not change research-material licenses, repository visibility or historical source-reference cleanup status.
+
 ## 2026-11-11补充：MCP内部测试交付 / Internal MCP delivery
 
 按用户新要求，本仓库增加[MCP双语使用说明](mcp/README.md)，并在私有Release草稿中准备0.4.0-rc.2编译安装包、摘要、依赖清单和脱敏验收记录。Core原实现源码不进入安装包；适配器、界面、必要资源及提示模板随运行包交付并可读取。Git树仍不承载私有工程源码。仓库保持私有，npm与对外发布均未执行；草稿仅供有权限维护者使用。外部分发许可尚须确认，见[说明](mcp/NOTICES.md)。

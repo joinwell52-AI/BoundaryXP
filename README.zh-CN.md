@@ -5,9 +5,9 @@
 
 <p align="center">
   <a href="https://boundaryxp-workbench-demo.joinwell52.chatgpt.site/"><img src="https://img.shields.io/badge/Demo-Interactive-0891b2?style=flat-square" alt="演示 / Interactive demo"></a>
-  <a href="docs/mcp/RELEASE.md"><img src="https://img.shields.io/badge/MCP-0.4.0--rc.2-2563eb?style=flat-square" alt="MCP 0.4.0-rc.2 · internal testing"></a>
+  <a href="docs/mcp/RELEASE.md"><img src="https://img.shields.io/badge/MCP-0.4.0--rc.3-2563eb?style=flat-square" alt="MCP 0.4.0-rc.3 · npm prerelease"></a>
   <a href="#l2--l3行业与企业语义库"><img src="https://img.shields.io/badge/Semantics-L2%20%2B%20L3-7c3aed?style=flat-square" alt="L2 industry / L3 enterprise semantics"></a>
-  <a href="docs/mcp/NOTICES.md"><img src="https://img.shields.io/badge/Status-Internal%20testing-d97706?style=flat-square" alt="Internal testing"></a>
+  <a href="docs/mcp/NOTICES.md"><img src="https://img.shields.io/badge/Status-npm%20prerelease-d97706?style=flat-square" alt="npm prerelease"></a>
   <a href="https://doi.org/10.5281/zenodo.24072738"><img src="https://img.shields.io/badge/DOI-10.5281%2Fzenodo.24072738-1e3a8a?style=flat-square" alt="DOI: 10.5281/zenodo.24072738"></a>
 </p>
 
@@ -15,7 +15,7 @@
 
 <p align="center"><a href="https://boundaryxp-workbench-demo.joinwell52.chatgpt.site/"><strong>▶ 在线演示</strong></a>　·　<a href="docs/mcp/INSTALL.zh-CN.md"><strong>MCP 接入</strong></a>　·　<a href="https://doi.org/10.5281/zenodo.24072738"><strong>论文</strong></a></p>
 
-<p align="center">中英双语 · MCP 0.4.0-rc.2 / B-335 内部测试 · 论文与协议资料 · Core 原实现源码私有</p>
+<p align="center">中英双语 · MCP 0.4.0-rc.3 / B-335 · npm 首次预发行 · 论文与协议资料 · Core 原实现源码私有</p>
 
 ## 先看一个真实用例
 
@@ -48,16 +48,16 @@
 
 ## 接入你的 AI 工作流
 
-**BoundaryXP MCP** 通过标准 stdio 接入 Cursor、Codex 等兼容宿主，提供 **18 个工具、10 个资源和本地浏览器工作台**。Windows x64 测试包包含原生编译 Core，无需另装 58618 或自建 BoundaryXP 服务器。
+**BoundaryXP MCP** 通过标准 stdio 接入 Cursor、Codex 等兼容宿主，提供 **18 个工具、10 个资源和本地浏览器工作台**。Windows x64 安装包包含原生编译 Core，无需另装 58618 或自建 BoundaryXP 服务器。
 
-1. **获取并校验安装包：** 从私有 Release 草稿的 **Assets** 下载测试包，核对 SHA-256。
+1. **从 npm 安装：** 使用 `boundaryxp-mcp@0.4.0-rc.3`；预发行渠道为 `next`。GitHub Release 同步保存安装包和 SHA-256。
 2. **安装并连接宿主：** 按对应指南配置 stdio MCP 服务。
 3. **配置模型 API：** 新分析使用你自行配置的服务商与 API，不继承 Cursor／Codex 的订阅额度。
 4. **打开工作台：** 导入完整任务，预览并确认任务树，再提交分析、查看证据与报告。
 
 [**中文安装指南 →**](docs/mcp/INSTALL.zh-CN.md) · [English setup](docs/mcp/INSTALL.en.md) · [工具与资源](docs/mcp/TOOLS.md) · [升级、回滚与排障](docs/mcp/OPERATIONS.md)
 
-> **当前分发状态：** 0.4.0-rc.2 / B-335，Windows x64 内部测试；仓库仍为私有，Release 为预发行草稿，尚未发布 npm 版本。授权维护者下载 Assets，而非自动生成的 Source code 压缩包。对外分发范围及许可仍需确认，见[版本与验收](docs/mcp/RELEASE.md)和[分发说明](docs/mcp/NOTICES.md)。
+> **首次 npm 发行：** [boundaryxp-mcp 0.4.0-rc.3](https://www.npmjs.com/package/boundaryxp-mcp)，B-335 / Windows x64，MIT许可。下载的是包含原生Core、MCP接口和页面的完整安装包，不交付核心源码，也不需要另外安装58618。GitHub仓库目前仍为私有；npm包可独立安装。见[版本与验收](docs/mcp/RELEASE.md)和[许可说明](docs/mcp/NOTICES.md)。
 
 ## L2 / L3：行业与企业语义库
 
@@ -147,8 +147,8 @@ B335 工作台采用**一次语义请求**，随后由 Core 作程序核验，�
 | 阅读协议与实现差异 | [BXP 协议](protocol/README.md) · [实现说明](protocol/IMPLEMENTATION.md) |
 | 查看版本变化、参与维护 | [升级日志](CHANGELOG.zh-CN.md) · [贡献指南](CONTRIBUTING.md) · [文档导航](docs/README.md) |
 
-**分发范围：** Git 树维护论文、协议、案例、报告、截图、独立研究核验脚本和 MCP 使用说明，不包含私有工作台实现源码或源码构建入口。MCP 编译安装包另放私有 Release 草稿；Core 原实现源码不随包提供，适配器、UI 和必要资源仍可读取。[完整范围说明](docs/PUBLICATION-SCOPE.md)
+**分发范围：** Git 树维护论文、协议、案例、报告、截图、独立研究核验脚本和 MCP 使用说明，不包含私有工作台实现源码或源码构建入口。MCP 编译安装包发布到 npm，并同步到本仓库 Release；Core 原实现源码不随包提供，适配器、UI 和必要资源仍可读取。[完整范围说明](docs/PUBLICATION-SCOPE.md)
 
 **公开准备：** 本仓库仍为私有；旧 PR 引用及历史缓存清理尚待 GitHub 处理，不能将当前首页整理视为已完成公开核查。[核查记录](docs/PREPUBLICATION-CHECK.md)
 
-保留既有 [MIT 许可证](LICENSE)。论文、案例与第三方材料按各自[使用条件](docs/paper/materials/MATERIAL-ACCESS.md)；MCP 测试包另见[许可与第三方说明](docs/mcp/NOTICES.md)。
+保留既有 [MIT 许可证](LICENSE)。论文、案例与第三方材料按各自[使用条件](docs/paper/materials/MATERIAL-ACCESS.md)；MCP 安装包另见[许可与第三方说明](docs/mcp/NOTICES.md)。
