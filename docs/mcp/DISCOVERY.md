@@ -4,8 +4,8 @@
 
 | 入口 | 状态与链接 |
 |---|---|
-| npm | **已发布rc.5**：[7+1产品介绍与安装](https://www.npmjs.com/package/boundaryxp-mcp) |
-| 官方MCP Registry | **已登记并读回**：[io.github.joinwell52-AI/boundaryxp](https://registry.modelcontextprotocol.io/v0.1/servers/io.github.joinwell52-AI%2Fboundaryxp/versions/0.4.0-rc.5) |
+| npm | **已发布rc.6**：[7+1产品介绍与安装](https://www.npmjs.com/package/boundaryxp-mcp) |
+| 官方MCP Registry | **已登记并读回**：[io.github.joinwell52-AI/boundaryxp](https://registry.modelcontextprotocol.io/v0.1/servers/io.github.joinwell52-AI%2Fboundaryxp/versions/0.4.0-rc.6) |
 | MCPServers | **免费提交成功，待审核**；表单提示最长两周审核后邮件通知，尚无获批条目链接 |
 | MCP Market | **免费提交成功，待审核**：[提交入口](https://mcpmarket.com/submit)。页面返回 Success / Submitted，进入 Free Queue，提示约4–6周；未付费，尚无获批条目链接 |
 | TensorBlock MCP Index | **PR已提交，待审核**：[#5989](https://github.com/TensorBlock/awesome-mcp-servers/pull/5989)。条目包含npm安装、stdio、Windows x64、模型配置及原Core源码私有说明；尚未合并，不能标为已进入索引 |

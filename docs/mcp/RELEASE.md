@@ -1,4 +1,18 @@
-# 当前版本 / Current release: 0.4.0-rc.5
+# 当前版本 / Current release: 0.4.0-rc.6
+
+2026-11-14：npm首页使用英文正文，顶部提供“简体中文 / English”独立入口；中文产品介绍及两份完整安装指南分别维护，不逐段混排。仓库首页、MCP导航和旧guides入口同步。
+
+[中文介绍](npm/README.zh-CN.md) · [English introduction](npm/README.md) · [中文安装](npm/INSTALL.zh-CN.md) · [English installation](npm/INSTALL.md) · [rc.6 Release](https://github.com/joinwell52-AI/BoundaryXP/releases/tag/mcp-v0.4.0-rc.6)
+
+- 包 SHA-256：`d243eeab864a99770dbf7258bc3b64df2d674ff31cdaa97871747e606fe3c1b2`，3,928,786 bytes，276个归档成员。
+- 本地归档和npm新装均通过：18工具、10资源、两份中英多DEV导入、工作台HTTP 200，零模型调用。npm匿名下载与本地最终包逐字节一致。
+- 四份语言文档与包内源文件一致，英文正文不混入中文段落；两份安装指南的命令块完全相同，9个公开文档目标均HTTP 200。
+- 已实际打开npm rc.6，点击中文介绍、中文安装、English安装切换，并核对仓库双语首页。
+- 仅文档和版本元数据改变，Core、运行资源、适配器执行逻辑及依赖身份与rc.5一致。未访问或更改58618、既有任务和配置。
+
+The rc.6 documentation release provides separate English and Simplified Chinese product and installation pages. Exact-archive and public npm installation checks passed. The npm language link and both installation pages were opened in the browser. Runtime behavior is unchanged.
+
+## 历史：0.4.0-rc.5
 
 2026-11-14：按公开仓库的产品定义修正npm说明；恢复旧 `guides/README.md` 入口，使用完整公开链接，分清固定版本npx接入与管理安装自动更新。产品仓库现已公开，核心实现源码仍在独立私有源码仓库维护。
 
