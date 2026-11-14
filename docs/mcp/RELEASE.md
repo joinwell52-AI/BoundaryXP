@@ -1,4 +1,18 @@
-# 首次npm发行 / First npm release
+# 当前版本 / Current release: 0.4.0-rc.4
+
+2026-11-14：重写npm中英文产品介绍，补齐7+1八个维度、父子任务与多个DEV案例、LLM判断和计算复核的关系、报告内容和使用流程；增加官方Registry身份与检索关键词。未改变B-335 Core、适配器运行逻辑、页面或依赖版本。
+
+[npm产品页](https://www.npmjs.com/package/boundaryxp-mcp) · [rc.4 Release](https://github.com/joinwell52-AI/BoundaryXP/releases/tag/mcp-v0.4.0-rc.4) · [目录收录](DISCOVERY.md)
+
+- SHA-256：`d1be10f19090431352f5b92a55f093aad69b49dc74acb8528caa0ad417509643`。
+- 从npm匿名下载与本地最终包完全一致；从npm重新安装及真实stdio验收通过，18工具、10资源、2份中英多DEV示例、页面HTTP 200、零模型调用。
+- 浏览器已确认npm页面实际显示rc.4及新版7+1介绍。官方MCP Registry发布成功并已读回记录。
+- 只改变README、安装/发布说明、CHANGELOG和包身份元数据；rc.3的升级回滚及模型/IDE证据按未变组件复用，不声称本次新增模型或Cursor界面验收。
+- 既有任务、配置、失败记录和58618不变；六项附件包含编译包、指南、摘要、依赖、notices与脱敏验收。
+
+The rc.4 release changes documentation and discovery metadata only. Core, executable adapter logic, runtime resources and dependency versions are unchanged. Public-registry installation and actual stdio calls passed; no new model analysis is claimed.
+
+## 历史：首次npm发行 / First npm release
 
 **boundaryxp-mcp 0.4.0-rc.3 · B-335 · 2026-11-14 · Windows x64 · MIT**
 

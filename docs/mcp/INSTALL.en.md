@@ -1,6 +1,6 @@
 # Install BoundaryXP MCP from npm
 
-The first public npm version is **boundaryxp-mcp@0.4.0-rc.3**, available on the `next` prerelease channel. Windows x64; Node >=22.18.0, tested on 24.19.0.
+The current npm version is **boundaryxp-mcp@0.4.0-rc.4**, on the `next` prerelease channel. Windows x64; Node >=22.18.0, tested on 24.19.0. The first npm release rc.3 is retained.
 
 Follow the [complete bilingual installation guide](npm/INSTALL.md) for installation, Cursor/Codex registration, API profiles, multi-DEV examples, updates and recovery. Neither private source access nor a separate 58618 installation is needed.
 

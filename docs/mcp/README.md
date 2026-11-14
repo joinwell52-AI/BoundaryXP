@@ -1,8 +1,8 @@
 # BoundaryXP MCP · BXP
 
-**首次npm发行 / First npm release: boundaryxp-mcp 0.4.0-rc.3 · B-335 · Windows x64**
+**当前版本 / Current release: boundaryxp-mcp 0.4.0-rc.4 · B-335 · Windows x64**
 
-[安装包主页 / npm](https://www.npmjs.com/package/boundaryxp-mcp) · [GitHub Release](https://github.com/joinwell52-AI/BoundaryXP/releases/tag/mcp-v0.4.0-rc.3)
+[7+1产品介绍](npm/README.md) · [MCP目录状态](DISCOVERY.md) · [安装包主页 / npm](https://www.npmjs.com/package/boundaryxp-mcp) · [GitHub Release](https://github.com/joinwell52-AI/BoundaryXP/releases/tag/mcp-v0.4.0-rc.4)
 
 - [中文安装入口](INSTALL.zh-CN.md) · [English setup](INSTALL.en.md)
 - [安装、Cursor/Codex、API配置与完整用例 / Complete setup](npm/INSTALL.md)

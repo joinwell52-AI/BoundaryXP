@@ -1,4 +1,10 @@
-# 0.4.0-rc.3 (npm prerelease candidate)
+# 0.4.0-rc.4 (product introduction and discovery)
+
+- Rewrote the bilingual npm introduction around 7+1 task boundaries, parent/child examples, independent LLM judgment and native calculation receipts.
+- Added MCP Registry ownership metadata and search keywords. Metadata preparation does not mean a directory has accepted the listing.
+- Updated installation examples; no Core, adapter logic, runtime resources, task data or dependency changes from rc.3.
+
+# 0.4.0-rc.3 (first npm prerelease)
 
 - Use the public package identity boundaryxp-mcp and the next prerelease channel. Retain MIT and ship the unchanged compiled B-335 Core without original Core source.
 - Update registry lookup and keep the old private package identities accepted for explicit local migration and rollback. Old rc.2 installations need the new bootstrap once to change package identity.

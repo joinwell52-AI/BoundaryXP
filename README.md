@@ -5,7 +5,7 @@
 
 <p align="center">
   <a href="https://boundaryxp-workbench-demo.joinwell52.chatgpt.site/"><img src="https://img.shields.io/badge/Demo-Interactive-0891b2?style=flat-square" alt="演示 / Interactive demo"></a>
-  <a href="docs/mcp/RELEASE.md"><img src="https://img.shields.io/badge/MCP-0.4.0--rc.3-2563eb?style=flat-square" alt="MCP 0.4.0-rc.3 · npm prerelease"></a>
+  <a href="docs/mcp/RELEASE.md"><img src="https://img.shields.io/badge/MCP-0.4.0--rc.4-2563eb?style=flat-square" alt="MCP 0.4.0-rc.4 · npm prerelease"></a>
   <a href="#l2--l3-industry-and-enterprise-semantics"><img src="https://img.shields.io/badge/Semantics-L2%20%2B%20L3-7c3aed?style=flat-square" alt="L2 industry / L3 enterprise semantics"></a>
   <a href="docs/mcp/NOTICES.md"><img src="https://img.shields.io/badge/Status-npm%20prerelease-d97706?style=flat-square" alt="npm prerelease"></a>
   <a href="https://doi.org/10.5281/zenodo.24072738"><img src="https://img.shields.io/badge/DOI-10.5281%2Fzenodo.24072738-1e3a8a?style=flat-square" alt="DOI: 10.5281/zenodo.24072738"></a>
@@ -15,7 +15,7 @@
 
 <p align="center"><a href="https://boundaryxp-workbench-demo.joinwell52.chatgpt.site/?lang=en#case=ENG20-003&axis=A&view=radar&lang=en"><strong>▶ Try the demo</strong></a>　·　<a href="docs/mcp/INSTALL.en.md"><strong>MCP setup</strong></a>　·　<a href="https://doi.org/10.5281/zenodo.24072738"><strong>Paper</strong></a></p>
 
-<p align="center">Chinese & English · MCP 0.4.0-rc.3 / B-335 first npm prerelease · Research & protocol material · Original Core source private</p>
+<p align="center">Chinese & English · MCP 0.4.0-rc.4 / B-335 · Research & protocol material · Original Core source private</p>
 
 ## Start with a real case
 
@@ -50,14 +50,14 @@ All five come from saved 58618 records, retaining task trees, exact sources, ver
 
 **BoundaryXP MCP** connects through standard stdio to Cursor, Codex and compatible hosts, with **18 tools, 10 resources and a local browser workbench**. The Windows x64 package includes the compiled native Core; no separate 58618 installation or hosted BoundaryXP server is required.
 
-1. **Install from npm:** use `boundaryxp-mcp@0.4.0-rc.3`, available through the `next` prerelease channel. GitHub Releases retain the matching archive and SHA-256.
+1. **Install from npm:** use `boundaryxp-mcp@0.4.0-rc.4`, available through the `next` prerelease channel. GitHub Releases retain the matching archive and SHA-256.
 2. **Install and connect:** follow the guide to configure the host's stdio MCP server.
 3. **Configure a model API:** new analysis uses your own provider/API access. Cursor or Codex subscription allowances are not inherited.
 4. **Open the workbench:** import complete task text, preview and confirm the task tree, then analyze and inspect evidence and reports.
 
 [**English installation guide →**](docs/mcp/INSTALL.en.md) · [中文安装](docs/mcp/INSTALL.zh-CN.md) · [Tools and resources](docs/mcp/TOOLS.md) · [Updates, rollback and troubleshooting](docs/mcp/OPERATIONS.md)
 
-> **First npm release:** [boundaryxp-mcp 0.4.0-rc.3](https://www.npmjs.com/package/boundaryxp-mcp), B-335 / Windows x64, MIT. The complete package includes the native Core, MCP interface and workbench, without original Core source or a separate 58618 installation. This GitHub repository remains private; npm installation is independent. See [release evidence](docs/mcp/RELEASE.md) and [notices](docs/mcp/NOTICES.md).
+> **Current npm release:** [boundaryxp-mcp 0.4.0-rc.4](https://www.npmjs.com/package/boundaryxp-mcp), B-335 / Windows x64, MIT. rc.3 was the first npm release; rc.4 improves the product introduction and discovery metadata without changing Core or execution logic. See the [7+1 product guide](docs/mcp/npm/README.md), [MCP directory status](docs/mcp/DISCOVERY.md), [release evidence](docs/mcp/RELEASE.md) and [notices](docs/mcp/NOTICES.md). This GitHub repository remains private; npm installation is independent.
 
 ## L2 / L3: industry and enterprise semantics
 
