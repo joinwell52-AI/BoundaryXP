@@ -57,7 +57,7 @@ All five come from saved 58618 records, retaining task trees, exact sources, ver
 
 [**English installation guide →**](docs/mcp/INSTALL.en.md) · [中文安装](docs/mcp/INSTALL.zh-CN.md) · [Tools and resources](docs/mcp/TOOLS.md) · [Updates, rollback and troubleshooting](docs/mcp/OPERATIONS.md)
 
-> **Current npm release:** [boundaryxp-mcp 0.4.0-rc.4](https://www.npmjs.com/package/boundaryxp-mcp), B-335 / Windows x64, MIT. rc.3 was the first npm release; rc.4 improves the product introduction and discovery metadata without changing Core or execution logic. See the [7+1 product guide](docs/mcp/npm/README.md), [MCP directory status](docs/mcp/DISCOVERY.md), [release evidence](docs/mcp/RELEASE.md) and [notices](docs/mcp/NOTICES.md). This GitHub repository remains private; npm installation is independent.
+> **Current npm release:** [boundaryxp-mcp 0.4.0-rc.4](https://www.npmjs.com/package/boundaryxp-mcp), B-335 / Windows x64, MIT. Start with the [installation guide](docs/mcp/INSTALL.en.md), [7+1 introduction](docs/mcp/npm/README.md), [18 tools](docs/mcp/npm/guides/TOOLS.md) and [directory status](docs/mcp/DISCOVERY.md). This product repository is public. Core implementation source remains in a separate private repository.
 
 ## L2 / L3: industry and enterprise semantics
 
@@ -149,6 +149,6 @@ Host analysis and first-time translation may send selected source and dictionary
 
 **Distribution scope:** the Git tree contains paper, protocol, cases, reports, screenshots, independent research verification scripts and MCP documentation. It excludes private workbench implementation source and source-build entry points. Compiled MCP packages are published to npm and mirrored in this repository's Releases. Original Core implementation source is excluded from those packages; adapter, UI and required resources remain readable. [Full scope](docs/PUBLICATION-SCOPE.md)
 
-**Publication readiness:** this repository remains private. Legacy PR references and historical cache cleanup still await GitHub handling; this homepage update does not complete the publication audit. [Audit record](docs/PREPUBLICATION-CHECK.md)
+**Public status:** the owner has made this product repository public. Historical audit notes describe their recorded state; public visibility alone does not confirm that old GitHub references or caches have been cleared. [Audit record](docs/PREPUBLICATION-CHECK.md)
 
 The existing [MIT license](LICENSE) is retained. Paper, case data and third-party materials have their own [usage terms](docs/paper/materials/MATERIAL-ACCESS.md); the MCP package has separate [license and third-party notices](docs/mcp/NOTICES.md).

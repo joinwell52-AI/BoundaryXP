@@ -57,7 +57,7 @@
 
 [**中文安装指南 →**](docs/mcp/INSTALL.zh-CN.md) · [English setup](docs/mcp/INSTALL.en.md) · [工具与资源](docs/mcp/TOOLS.md) · [升级、回滚与排障](docs/mcp/OPERATIONS.md)
 
-> **当前 npm 版本：** [boundaryxp-mcp 0.4.0-rc.4](https://www.npmjs.com/package/boundaryxp-mcp)，B-335 / Windows x64，MIT许可。rc.3为首次发行，rc.4完善产品介绍和检索信息，不改变Core与运行逻辑。见[7+1产品介绍](docs/mcp/npm/README.md)、[MCP目录收录状态](docs/mcp/DISCOVERY.md)、[版本验收](docs/mcp/RELEASE.md)和[许可说明](docs/mcp/NOTICES.md)。GitHub仓库仍私有；npm可独立安装，不需要另装58618。
+> **当前 npm 版本：** [boundaryxp-mcp 0.4.0-rc.4](https://www.npmjs.com/package/boundaryxp-mcp)，B-335 / Windows x64，MIT许可。入口：[中文安装指南](docs/mcp/INSTALL.zh-CN.md)、[7+1产品介绍](docs/mcp/npm/README.md)、[18个工具](docs/mcp/npm/guides/TOOLS.md)、[MCP目录状态](docs/mcp/DISCOVERY.md)。本产品仓库已经公开；核心实现源码在独立私有源码仓库维护。客户无需另装58618。
 
 ## L2 / L3：行业与企业语义库
 
@@ -149,6 +149,6 @@ B335 工作台采用**一次语义请求**，随后由 Core 作程序核验，�
 
 **分发范围：** Git 树维护论文、协议、案例、报告、截图、独立研究核验脚本和 MCP 使用说明，不包含私有工作台实现源码或源码构建入口。MCP 编译安装包发布到 npm，并同步到本仓库 Release；Core 原实现源码不随包提供，适配器、UI 和必要资源仍可读取。[完整范围说明](docs/PUBLICATION-SCOPE.md)
 
-**公开准备：** 本仓库仍为私有；旧 PR 引用及历史缓存清理尚待 GitHub 处理，不能将当前首页整理视为已完成公开核查。[核查记录](docs/PREPUBLICATION-CHECK.md)
+**公开状态：** 所有者已将本产品仓库设为公开。历史核查文档保留当时记录；公开状态本身不证明旧 GitHub 引用或缓存已经清除。[核查记录](docs/PREPUBLICATION-CHECK.md)
 
 保留既有 [MIT 许可证](LICENSE)。论文、案例与第三方材料按各自[使用条件](docs/paper/materials/MATERIAL-ACCESS.md)；MCP 安装包另见[许可与第三方说明](docs/mcp/NOTICES.md)。
