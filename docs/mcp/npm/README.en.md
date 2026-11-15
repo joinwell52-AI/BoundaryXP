@@ -6,7 +6,7 @@
 
 Turn complete task requirements into evidence-backed **7+1 relationships**. Inspect parent–child tasks and their combined constraints, then trace why a result is **out of bounds, within bounds or incomplete**. LLM judgments and native calculator results are recorded separately, alongside original evidence and unspecified conditions.
 
-**boundaryxp-mcp 0.4.0-rc.7 · B-335 · Windows x64 · Node.js ≥22.18 · MIT · Prerelease**
+**boundaryxp-mcp 0.4.0-rc.8 · B-335 · Windows x64 · Node.js ≥22.18 · MIT · Prerelease**
 
 [Installation and upgrades](https://github.com/joinwell52-AI/BoundaryXP/blob/main/docs/mcp/npm/INSTALL.md) · [Public repository](https://github.com/joinwell52-AI/BoundaryXP) · [Releases](https://github.com/joinwell52-AI/BoundaryXP/releases)
 
@@ -62,7 +62,7 @@ The calculator does not call an LLM. A successful calculation does not prove tha
 
 The radar shows clause relationships, not scores, progress or authority.
 
-## Quick start in Cursor
+## Quick start with an MCP host
 
 Requires Windows x64, Node.js ≥22.18 and npm; tested with Node 24.19.0. Initial startup downloads the package and dependencies. Merge this entry into your host configuration, retain other servers and replace the example data path with your persistent absolute path.
 
@@ -71,7 +71,7 @@ Requires Windows x64, Node.js ≥22.18 and npm; tested with Node 24.19.0. Initia
   "mcpServers": {
     "BoundaryXP": {
       "command": "npx.cmd",
-      "args": ["--yes", "boundaryxp-mcp@0.4.0-rc.7", "--data-root", "C:/BXP/data"]
+      "args": ["--yes", "boundaryxp-mcp@0.4.0-rc.8", "--data-root", "C:/BXP/data"]
     }
   }
 }
@@ -87,11 +87,11 @@ Open the returned local URL. Its port changes after reconnection; request a new 
 
 ## Model access and first analysis
 
-Read-only help, saved results and the workbench need no model key. **New analysis uses your configured model API/profile; it does not inherit your Cursor or Codex chat subscription.** See [model configuration](https://github.com/joinwell52-AI/BoundaryXP/blob/main/docs/mcp/npm/INSTALL.md#model-configuration). Analysis sends selected task/dictionary content to your provider and may incur charges. Core calculation runs locally. Keep keys in a local env file, never in task text or chat.
+**The default host profile uses the current LLM in your MCP host. No separate BoundaryXP model API key is required.** The host reads the prepared specification, analyzes the complete task, submits structured analysis through MCP, and retrieves native calculation receipts and reports. The server does not select a host model or access your subscription credentials. Independent API profiles remain optional; see [model configuration](https://github.com/joinwell52-AI/BoundaryXP/blob/main/docs/mcp/npm/INSTALL.md#model-configuration).
 
 Use the [complete multi-DEV example](https://github.com/joinwell52-AI/BoundaryXP/blob/main/docs/mcp/npm/examples/multi-dev-2.en.md), then ask:
 
-> Import this parent–child task into BoundaryXP, keeping every DEV task ID. Preview relationships first. After confirmation, save and analyze once with my configured profile. Return LLM judgment, calculator verification, source evidence and the workbench URL. Do not automatically retry failures.
+> Import this parent–child task into BoundaryXP, keeping every DEV task ID. Preview relationships first. After confirmation, save and analyze once using the current host LLM and the host profile. Return LLM judgment, calculator verification, source evidence and the workbench URL. Do not automatically retry failures.
 
 ## Tool help through MCP
 

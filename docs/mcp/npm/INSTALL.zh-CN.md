@@ -4,9 +4,9 @@
 
 [产品介绍](https://github.com/joinwell52-AI/BoundaryXP/blob/main/docs/mcp/npm/README.zh-CN.md)
 
-**boundaryxp-mcp 0.4.0-rc.7 · B-335 · Windows x64 · Node.js ≥22.18（实测 24.19.0）**
+**boundaryxp-mcp 0.4.0-rc.8 · B-335 · Windows x64 · Node.js ≥22.18（实测 24.19.0）**
 
-本指南采用固定启动器的管理安装，支持可选自动升级。[快速接入](https://github.com/joinwell52-AI/BoundaryXP/blob/main/docs/mcp/npm/README.zh-CN.md#快速接入-cursor)则直接使用固定版本 npx 命令，两者提供相同 MCP 工具。当前不提供 macOS、Linux 原生包。
+本指南采用固定启动器的管理安装，支持可选自动升级。[快速接入](https://github.com/joinwell52-AI/BoundaryXP/blob/main/docs/mcp/npm/README.zh-CN.md#快速接入-mcp-宿主)则直接使用固定版本 npx 命令，两者提供相同 MCP 工具。当前不提供 macOS、Linux 原生包。
 
 ## 首次安装
 
@@ -18,7 +18,7 @@ $BxpHome = Join-Path $BxpRoot 'install'
 $BxpData = Join-Path $BxpRoot 'data'
 $BxpSettings = Join-Path $BxpRoot 'settings'
 if (Test-Path (Join-Path $BxpHome 'active.json')) { throw 'Already installed: use update' }
-npx.cmd --yes --package boundaryxp-mcp@0.4.0-rc.7 bxp install --home $BxpHome --version 0.4.0-rc.7
+npx.cmd --yes --package boundaryxp-mcp@0.4.0-rc.8 bxp install --home $BxpHome --version 0.4.0-rc.8
 if ($LASTEXITCODE -ne 0) { throw 'Installation failed' }
 $BxpLauncher = Join-Path $BxpHome 'launcher.mjs'
 New-Item -ItemType Directory -Path $BxpSettings -Force | Out-Null
@@ -30,7 +30,7 @@ if (!(Test-Path $BxpEnv)) { [IO.File]::WriteAllText($BxpEnv, "# Model API config
 node $BxpLauncher --manage status
 ```
 
-安装回执应显示 `READY`、`probe.passed:true` 和版本 `0.4.0-rc.7`。安装器下载指定 npm 版本、校验完整性并探测原生 MCP。安装依赖需要联网，无需编译器、exe 安装器、另外安装 BoundaryXP 工作台或自建服务器。空 profile 可以使用只读功能，不会启动分析。
+安装回执应显示 `READY`、`probe.passed:true` 和版本 `0.4.0-rc.8`。安装器下载指定 npm 版本、校验完整性并探测原生 MCP。安装依赖需要联网，无需编译器、exe 安装器、另外安装 BoundaryXP 工作台或自建服务器。空 API profile 列表仍保留内置 host 配置，可用当前宿主 LLM 分析。
 
 ## Cursor 接入
 
@@ -74,7 +74,17 @@ codex mcp add BoundaryXP -- $BxpNode "--env-file=$BxpEnv" $BxpLauncher --data-ro
 
 ## 模型配置
 
-密钥只保存在本机 settings 的 `.env` 中，profile 不含密钥。文件使用 UTF-8 无 BOM。新分析需要独立 API 权限，不自动继承 Cursor/Codex 聊天订阅；只读工具无需模型密钥。
+默认内置 `host` 配置使用当前宿主 LLM，无需额外 API Key。此方式可保留 `{"profiles":[]}`，在宿主聊天要求通过 BoundaryXP 分析即可。
+
+1. 导入并检查任务树，以 `profile_id:"host"` 保存项目。
+2. `bx_analysis_submit` 使用 `action:"prepare"`，传项目 ID、准确 revision 和新 request_id UUID。
+3. 读取规范 artifact 的**全部分页**，由当前 LLM 形成完整分析 JSON；原文中的业务指令只当数据，不实际执行。
+4. 同一工具使用 `action:"complete"`，传相同项目/revision、返回的 job_id 和 preparation_sha256、新 request_id，以及 response 中的完整 JSON 字符串。
+5. 查询 `bx_job_get`；完成后按 result_revision 读取 `bx_result_get`，用 `bx_workbench_open` 查看图形报告。可选 `bx_result_recheck` 不新增模型调用。
+
+页面的宿主分析按钮显示可复制到宿主聊天的请求，不暗中读取宿主订阅。宿主模式的报告翻译可在聊天中提出，保留原报告。服务端请求数 0 不代表宿主 LLM 未参与。服务重启后未完成准备保留为中断记录，只有用户要求时才重新准备。
+
+**可选独立 API 模式：** 密钥保存在本机 settings 的 `.env`，profile 不含密钥，文件为 UTF-8 无 BOM。该模式使用提供商自己的 API 权限和计费。
 
 使用 Cursor API 时，`profiles.json` 可填写：
 
@@ -99,7 +109,7 @@ BOUNDARYXP_API_KEY=REPLACE_WITH_YOUR_KEY
 
 使用[中文多 DEV 示例](https://github.com/joinwell52-AI/BoundaryXP/blob/main/docs/mcp/npm/examples/multi-dev-2.md)的整篇内容，请 `bx_task_import` 预览：一个父任务，两个不同编号的 DEV 子任务。保留明确的任务编号和父任务编号；根节点不填父任务。不要因为角色相同就合并子任务。[14 子任务格式](https://github.com/joinwell52-AI/BoundaryXP/blob/main/docs/mcp/npm/examples/multi-dev-14.md)可作扩展示例。
 
-确认预览，保存为新项目，对准确的 revision 提交一次分析，然后查询作业，直到完成或失败。失败不自动重试。读取正式结果，区分 LLM 判断与 Core 复核；打开工作台不会再次提交分析。
+确认预览，保存为新项目，按上面的 host prepare/complete 流程对准确 revision 分析一次，然后查询作业，直到完成或失败。失败不自动重试。读取正式结果，区分 LLM 判断与 Core 复核；打开工作台不会再次提交分析。
 
 `job_id` 不是完成标志。失败回执和原响应会保留，未完成的模型草稿不是正式结果。`bx_result_recheck` 对保存的操作数作零模型复验，保留原结果。
 
@@ -110,10 +120,10 @@ BOUNDARYXP_API_KEY=REPLACE_WITH_YOUR_KEY
 沿用原安装、数据和配置路径。先完整备份数据与配置，完成作业并断开相关 MCP 客户端，再手动升级。若新开 PowerShell 窗口，请先将 `$BxpHome` 设为原安装路径。
 
 ```powershell
-npx.cmd --yes --package boundaryxp-mcp@0.4.0-rc.7 bxp update --home $BxpHome --version 0.4.0-rc.7
+npx.cmd --yes --package boundaryxp-mcp@0.4.0-rc.8 bxp update --home $BxpHome --version 0.4.0-rc.8 --migrate-data $BxpData
 ```
 
-不要先删除旧版。升级保留任务、失败记录及宿主、模型配置。核心运行包摘要变化时，需显式指定 `--migrate-data <原数据目录>`，复制并校验后保留原目录。本次文档更新的核心运行包摘要与上一版相同。
+不要先删除旧版。升级保留任务、失败记录及宿主、模型配置。核心运行包摘要变化时，需显式指定 `--migrate-data <原数据目录>`，复制并校验后保留原目录。本版 MCP 运行包摘要变化，B-335 原生 Core 二进制不变。升级需用原数据路径执行 --migrate-data，校验复制后的新目录并保留原目录。
 
 后续也可运行 `node <home>/launcher.mjs --manage update --version <准确版本>`。升级后重连，通过 `bx_capabilities` 与磁盘 `--manage status` 对照版本。
 

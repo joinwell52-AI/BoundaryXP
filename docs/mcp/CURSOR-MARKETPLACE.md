@@ -8,7 +8,7 @@ This plugin wraps the existing npm-distributed MCP. Marketplace approval is sepa
 
 1. Windows x64、Node.js ≥22.18（含 npm）；当前不支持 macOS/Linux 原生包。
 2. 选择固定的本地任务目录，例如 `C:/BXP/data`。已有用户保持原目录，不覆盖任务或配置。
-3. 准备 UTF-8 `profiles.json`，例如 `C:/BXP/settings/profiles.json`。只读使用可以填写 `{"profiles":[]}`；新分析按[模型配置指南](npm/INSTALL.md#配置模型--configure-the-model-api)选择 provider 和 model。
+3. 默认由当前宿主 LLM 分析，再通过 MCP 提交给原生计算器复核。不需要额外模型 API Key 或 profiles 文件。可选的服务端 API 模式见[安装指南](npm/INSTALL.zh-CN.md)。
 
 ## 安装与配置 / Install and configure
 
@@ -17,14 +17,10 @@ This plugin wraps the existing npm-distributed MCP. Marketplace approval is sepa
 | 字段 | 填写内容 |
 |---|---|
 | `BXP_DATA_ROOT` | 固定的任务数据目录绝对路径 |
-| `BXP_PROFILES_FILE` | 已创建的 profiles.json 绝对路径 |
-| `CURSOR_API_KEY` | 使用 Cursor API 时填写；不自动继承聊天订阅 |
-| `BOUNDARYXP_API_BASE_URL` | 使用兼容 API 时填写提供商基础地址 |
-| `BOUNDARYXP_API_KEY` | 使用兼容 API 时填写密钥 |
 
-只读连接不需填写密钥。不要将真实密钥提交到仓库或粘贴进任务文本。首次启动由 npx 下载固定版本的公开 npm 包；插件缓存目录不用于保存任务。
+当前宿主模式不需填写密钥。首次启动由 npx 下载固定版本的公开 npm 包；插件缓存目录不用于保存任务。使用可选 API 模式时，按安装指南另行配置，勿将密钥提交到仓库或任务文本。
 
-Set a persistent absolute data directory and an existing profiles file in the plugin configuration. Add credentials only for the chosen provider. No key is needed to read help, list saved projects or open the workbench.
+Set a persistent absolute data directory. The current host LLM performs analysis through MCP prepare/complete; no additional API key or profiles file is needed. A separately configured model API remains optional.
 
 连接后发送：“只通过 BoundaryXP MCP 调用 bx_capabilities 和 bx_workbench_open，返回版本与工作台地址，不提交分析。”应发现 18 个工具。插件服务名称可能带 Cursor 的 `plugin-` 前缀。
 

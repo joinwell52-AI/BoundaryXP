@@ -39,7 +39,9 @@ Use `bx_capabilities` with `language: "en"`, `help_topic: "tools"` and optional 
 
 ## 输入输出要点 / Contract essentials
 
-`project_id` 标识项目，`revision` 标识不可混用的保存快照，`job_id` 标识一次作业。写操作需要的新 `request_id` 由宿主生成 UUID；相同 ID 和相同参数只取原操作结果，不靠换 ID 静默重试。模型分析需要 `confirm_model_call:true`，该字段不授予任务业务执行权限。
+`project_id` 标识项目，`revision` 标识不可混用的保存快照，`job_id` 标识一次作业。写操作需要的新 `request_id` 由宿主生成 UUID；相同 ID 和相同参数只取原操作结果，不靠换 ID 静默重试。默认 host 模式使用 prepare/complete 两阶段，由当前宿主 LLM 分析，无需另配 API Key；只有可选 API 模式需要 `confirm_model_call:true`。两者均不授予业务执行权限。
+
+Default host mode uses `bx_analysis_submit(action:"prepare")`, complete instruction artifact reads, current host LLM analysis and `action:"complete"` with the bound job, revision, digest and JSON response. No separate API key is needed. Only optional API mode uses `confirm_model_call:true`. Poll the job and read its exact result revision; submission is not completion.
 
 单份来源和序列化联合输入各最多 1 MiB，HTTP 请求体最多 8 MiB；超限拒绝，不截断。完整原文通过制品分页读取，不能只截取聊天摘要当输入。根任务不填写父任务编号；各子任务填写明确编号。同角色不会合并，序号不是执行顺序。L2/L3 绑定版本与摘要，不自动补造字典或权限。
 

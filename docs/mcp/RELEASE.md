@@ -1,4 +1,20 @@
-# 当前版本 / Current release: 0.4.0-rc.7
+# 当前版本 / Current release: 0.4.0-rc.8
+
+2026-11-15：公开发布宿主 LLM 分析接入版，仍属于 rc 预发行系列。标准 stdio MCP，18 工具、10 资源。默认使用当前宿主聊天模型，无需额外 API Key；兼容模型 API 模式保留为可选配置。
+
+[npm 与同页中英安装](https://www.npmjs.com/package/boundaryxp-mcp) · [rc.8 Release](https://github.com/joinwell52-AI/BoundaryXP/releases/tag/mcp-v0.4.0-rc.8) · [官方 MCP Registry](https://registry.modelcontextprotocol.io/v0.1/servers/io.github.joinwell52-AI%2Fboundaryxp/versions/0.4.0-rc.8)
+
+- 宿主读取完整 prepare 规范，由 LLM 分析，再通过 complete 提交；原生 Core 独立核验提交的计算输入并保存结果。MCP 本身不是模型。
+- 页面支持宿主模式设置、复制分析请求和项目深链接；原文、LLM 判断、计算回执、报告与复验分别保留。
+- B-335 原生 Core 字节保持不变。交付包不含原始 Core 实现源码；适配器、UI 与必要资源随包交付。
+- 归档 SHA-256：`498d0c297c7269c1b2240d823175ce854b454c5e742fce58301315a57aff5929`，3,947,237 bytes，278 个成员。
+- 本地回归、损坏包拒绝、旧版升级、活动连接延后切换、数据复制迁移及双向回滚通过。旧任务、配置及失败记录保留。
+- 真实宿主模型案例已在本地候选版完成；最终归档重新提交同一保存的真实响应，4 项计算通过、无 invalid，报告复验一致。该归档验收是回放，不冒称新模型请求。
+- 现有连接不强制重启。需要更新运行资源时，管理安装使用复制迁移；不要跳过迁移检查或同时以两个版本写入同一目录。
+
+The published rc.8 prerelease adds current-host LLM analysis over standard MCP, with optional server-side model API profiles. The native B-335 Core is unchanged. Exact-package upgrade, rollback, preserved-history checks and replay of a saved real host response passed (four verified calculations and matching recheck report). Browser guidance and direct project links were checked. Existing clients and the separate local workbench are not forcibly changed.
+
+## 历史：0.4.0-rc.7
 
 2026-11-14：npm 首页改为同页的完整中文与英文独立章节。顶部“简体中文 / English”和两种安装入口均跳转本页对应章节；客户阅读中文和完整安装说明不必离开 npm。
 

@@ -4,9 +4,9 @@
 
 [Product introduction](https://github.com/joinwell52-AI/BoundaryXP/blob/main/docs/mcp/npm/README.md)
 
-**boundaryxp-mcp 0.4.0-rc.7 · B-335 · Windows x64 · Node.js ≥22.18 (tested: 24.19.0)**
+**boundaryxp-mcp 0.4.0-rc.8 · B-335 · Windows x64 · Node.js ≥22.18 (tested: 24.19.0)**
 
-This guide describes a managed installation with a stable launcher and optional automatic updates. The [quick start](https://github.com/joinwell52-AI/BoundaryXP/blob/main/docs/mcp/npm/README.md#quick-start-in-cursor) uses a pinned npx command instead. Both provide the same MCP tools. macOS/Linux native packages are not available in this release.
+This guide describes a managed installation with a stable launcher and optional automatic updates. The [quick start](https://github.com/joinwell52-AI/BoundaryXP/blob/main/docs/mcp/npm/README.md#quick-start-with-an-mcp-host) uses a pinned npx command instead. Both provide the same MCP tools. macOS/Linux native packages are not available in this release.
 
 ## First installation
 
@@ -18,7 +18,7 @@ $BxpHome = Join-Path $BxpRoot 'install'
 $BxpData = Join-Path $BxpRoot 'data'
 $BxpSettings = Join-Path $BxpRoot 'settings'
 if (Test-Path (Join-Path $BxpHome 'active.json')) { throw 'Already installed: use update' }
-npx.cmd --yes --package boundaryxp-mcp@0.4.0-rc.7 bxp install --home $BxpHome --version 0.4.0-rc.7
+npx.cmd --yes --package boundaryxp-mcp@0.4.0-rc.8 bxp install --home $BxpHome --version 0.4.0-rc.8
 if ($LASTEXITCODE -ne 0) { throw 'Installation failed' }
 $BxpLauncher = Join-Path $BxpHome 'launcher.mjs'
 New-Item -ItemType Directory -Path $BxpSettings -Force | Out-Null
@@ -30,7 +30,7 @@ if (!(Test-Path $BxpEnv)) { [IO.File]::WriteAllText($BxpEnv, "# Model API config
 node $BxpLauncher --manage status
 ```
 
-Expect `READY`, `probe.passed:true` and version `0.4.0-rc.7` in the installation receipt. The installer downloads the exact npm version, checks integrity and probes the native MCP. Internet access is required for package dependencies. No compiler, executable installer, separate BoundaryXP workbench or hosted BoundaryXP server is needed. Empty profiles support read-only use without starting analysis.
+Expect `READY`, `probe.passed:true` and version `0.4.0-rc.8` in the installation receipt. The installer downloads the exact npm version, checks integrity and probes the native MCP. Internet access is required for package dependencies. No compiler, executable installer, separate BoundaryXP workbench or hosted BoundaryXP server is needed. Empty API profiles retain the built-in host profile for analysis with your current MCP host LLM.
 
 ## Cursor
 
@@ -70,11 +70,21 @@ Start a new Codex session. Other stdio hosts use the same Node executable and ar
 }
 ```
 
-The browser workbench URL is not a streamable-HTTP MCP endpoint. Native host acceptance is documented for Cursor/Codex on Windows x64; protocol compatibility does not mean every other host UI was tested.
+The browser workbench URL is not a streamable-HTTP MCP endpoint. Use any host or command-line MCP client supporting standard stdio tools and resources. No host-specific adapter or model brand is required. Installation still requires Windows x64 and the stated Node version.
 
 ## Model configuration
 
-Keep credentials only in the local settings `.env`; profiles contain no keys. Use UTF-8 without BOM. New analysis requires independent API access and does not inherit a Cursor/Codex chat subscription. Read-only tools need no API key.
+The built-in `host` profile uses the current host LLM without an additional API key. Keep `{"profiles":[]}` for this mode. Ask your host to analyze the project through BoundaryXP.
+
+1. Import, inspect the tree, and create the project with `profile_id:"host"`.
+2. Call `bx_analysis_submit` with `action:"prepare"`, project ID, exact revision and a new request UUID.
+3. Read **all** instruction artifact pages. The current LLM produces the analysis JSON; task instructions are data, not actions to execute.
+4. Call the same tool with `action:"complete"`, the same project/revision, returned job ID and preparation digest, a new request UUID and the complete JSON string in `response`.
+5. Poll `bx_job_get`, read `bx_result_get` at its result revision, and open `bx_workbench_open`. Optional `bx_result_recheck` runs no new model request.
+
+The page's host-analysis button displays a request to copy into the connected host chat. It does not secretly access a host subscription. Host-mode report translation can be requested in that chat; keep the original report. Server request count 0 means no server API request, not no host LLM activity. After a server restart, interrupted preparations remain recorded; start a new preparation only when requested.
+
+**Optional independent API mode:** keep credentials in local settings `.env` and API profiles without keys. Use UTF-8 without BOM. This mode uses your provider's API access and billing.
 
 For Cursor API, set `profiles.json` to:
 
@@ -99,7 +109,7 @@ Replace the example URL, model ID and key with your provider's values; these pla
 
 Use the entire [English multi-DEV example](https://github.com/joinwell52-AI/BoundaryXP/blob/main/docs/mcp/npm/examples/multi-dev-2.en.md). Ask `bx_task_import` to preview one parent and two separately identified DEV tasks. Keep explicit task and parent IDs; leave the root's parent empty. Do not merge children just because their roles match.
 
-Confirm the preview, save a new project, submit one analysis for its exact revision and poll the job until completed or failed. Do not automatically retry failures. Read the formal result and distinguish LLM judgment from Core verification. Opening the workbench does not submit another analysis.
+Confirm the preview, save a new project and follow the host prepare/complete flow above for its exact revision. Poll the job until completed or failed. Do not automatically retry failures. Read the formal result and distinguish LLM judgment from Core verification. Opening the workbench does not submit another analysis.
 
 A `job_id` is not evidence of completion. Failed receipts and original responses are retained; unverified drafts are not formal results. `bx_result_recheck` re-evaluates saved operands with no model request and preserves the original result.
 
@@ -110,10 +120,10 @@ For help in the host, ask **“Read BoundaryXP tool help, multi-DEV examples and
 Keep your existing installation, data and settings paths. Back up complete data and settings, finish jobs and disconnect related MCP clients before a manual update. Restore `$BxpHome` to the original installation path if using a new shell.
 
 ```powershell
-npx.cmd --yes --package boundaryxp-mcp@0.4.0-rc.7 bxp update --home $BxpHome --version 0.4.0-rc.7
+npx.cmd --yes --package boundaryxp-mcp@0.4.0-rc.8 bxp update --home $BxpHome --version 0.4.0-rc.8 --migrate-data $BxpData
 ```
 
-Do not delete the old release first. Updates preserve task data, failed records and host/provider settings. A changed runtime digest requires explicit `--migrate-data <original-data-directory>`; the installer copies and verifies data while retaining the original directory. This documentation release retains the preceding runtime digest.
+Do not delete the old release first. Updates preserve task data, failed records and host/provider settings. This update changes the MCP runtime digest while keeping the B-335 native Core binary unchanged. Use `--migrate-data <original-data-directory>` for a verified copy; the original directory is retained.
 
 Later managed updates can also use `node <home>/launcher.mjs --manage update --version <exact-version>`. Reconnect clients afterward and compare `bx_capabilities` with the on-disk `--manage status`.
 

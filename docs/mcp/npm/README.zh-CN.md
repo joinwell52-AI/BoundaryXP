@@ -6,7 +6,7 @@
 
 从完整任务要求形成带原文证据的 **7+1 关联表示**，检查父子任务及其组合约束，追溯为什么**越界、未越界，或信息不全**。报告分别保留 LLM 判断、原生计算器复核、原文依据和未明确项。
 
-**boundaryxp-mcp 0.4.0-rc.7 · B-335 · Windows x64 · Node.js ≥22.18 · MIT · 预发行版**
+**boundaryxp-mcp 0.4.0-rc.8 · B-335 · Windows x64 · Node.js ≥22.18 · MIT · 预发行版**
 
 [安装与升级](https://github.com/joinwell52-AI/BoundaryXP/blob/main/docs/mcp/npm/INSTALL.zh-CN.md) · [中文产品仓库](https://github.com/joinwell52-AI/BoundaryXP/blob/main/README.zh-CN.md) · [发行下载](https://github.com/joinwell52-AI/BoundaryXP/releases)
 
@@ -62,7 +62,7 @@
 
 雷达表达条款的维度关联，不表示评分、进度或授权大小。
 
-## 快速接入 Cursor
+## 快速接入 MCP 宿主
 
 需要 Windows x64、Node.js ≥22.18 和 npm，已实测 Node 24.19.0。首次启动联网下载包及依赖。将以下条目合并到宿主 MCP 配置，保留其他服务；将示例数据路径改为自己的固定绝对路径。
 
@@ -71,7 +71,7 @@
   "mcpServers": {
     "BoundaryXP": {
       "command": "npx.cmd",
-      "args": ["--yes", "boundaryxp-mcp@0.4.0-rc.7", "--data-root", "C:/BXP/data"]
+      "args": ["--yes", "boundaryxp-mcp@0.4.0-rc.8", "--data-root", "C:/BXP/data"]
     }
   }
 }
@@ -87,11 +87,11 @@
 
 ## 模型配置与首次分析
 
-只读帮助、已有结果和打开工作台不需要模型密钥。**新分析使用单独配置的模型 API/profile，不自动继承 Cursor 或 Codex 聊天订阅。** 按[模型配置](https://github.com/joinwell52-AI/BoundaryXP/blob/main/docs/mcp/npm/INSTALL.zh-CN.md#模型配置)设置。分析会把选定的任务和字典内容发送给模型提供商，并可能产生费用；Core 计算在本地执行。密钥只放本机环境文件，不放任务正文或聊天。
+**默认 host 配置直接使用当前 MCP 宿主中的 LLM，无需为 BoundaryXP 另配模型 API Key。** 宿主读取分析规范、分析完整任务，通过 MCP 提交结构化分析，再读取原生计算回执和报告。MCP 不自行选择宿主模型或读取订阅凭据。独立 API/profile 是可选方式，见[模型配置](https://github.com/joinwell52-AI/BoundaryXP/blob/main/docs/mcp/npm/INSTALL.zh-CN.md#模型配置)。
 
 可以先用[完整多 DEV 案例](https://github.com/joinwell52-AI/BoundaryXP/blob/main/docs/mcp/npm/examples/multi-dev-2.md)，然后说：
 
-> 用 BoundaryXP 导入完整父子任务，保留每个 DEV 的任务编号，先展示关系预览；确认后保存，用已配置的 profile 分析一次。返回 LLM 判断、计算器复核、原文依据和工作台地址。失败不自动重试。
+> 用 BoundaryXP 导入完整父子任务，保留每个 DEV 的任务编号，先展示关系预览；确认后保存，使用 host 配置和当前宿主 LLM 分析一次。返回 LLM 判断、计算器复核、原文依据和工作台地址。失败不自动重试。
 
 ## 通过 MCP 查看工具说明
 

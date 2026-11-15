@@ -1,21 +1,23 @@
 # 在哪里查找 BoundaryXP？ / Discover BoundaryXP
 
-核对日期：2026-11-14。安装包分发、目录登记和人工审核分别记录。
+核对日期：2026-11-15。安装包分发、目录登记和人工审核分别记录。
 
 ## 当前安装入口 / Current installation
 
-当前发行版为 **0.4.0-rc.7（预发行版）/ B-335**。客户可直接使用 [npm 默认首页](https://www.npmjs.com/package/boundaryxp-mcp)：[简体中文](https://www.npmjs.com/package/boundaryxp-mcp#简体中文) / [English](https://www.npmjs.com/package/boundaryxp-mcp#english)，以及 [中文安装与升级](https://www.npmjs.com/package/boundaryxp-mcp#中文安装与升级) / [Installation and upgrades](https://www.npmjs.com/package/boundaryxp-mcp#installation-and-upgrades)。四个入口均在 npm 同页，不以 GitHub 跳转作为语言或安装入口。
+当前发行版为 **0.4.0-rc.8（预发行版）/ B-335**。客户可直接使用 [npm 默认首页](https://www.npmjs.com/package/boundaryxp-mcp)：[简体中文](https://www.npmjs.com/package/boundaryxp-mcp#简体中文) / [English](https://www.npmjs.com/package/boundaryxp-mcp#english)，以及 [中文安装与升级](https://www.npmjs.com/package/boundaryxp-mcp#中文安装与升级) / [Installation and upgrades](https://www.npmjs.com/package/boundaryxp-mcp#installation-and-upgrades)。四个入口均在 npm 同页，不以 GitHub 跳转作为语言或安装入口。
 
-官方目录可[搜索 BoundaryXP](https://registry.modelcontextprotocol.io/?q=boundaryxp)。本轮实际页面显示 rc.7；[最新版 API](https://registry.modelcontextprotocol.io/v0.1/servers/io.github.joinwell52-AI%2Fboundaryxp/versions/latest)返回服务器版本和 npm 包版本均为 rc.7，状态 active、isLatest=true。历史版本保留，不删除旧登记。
+官方目录可[搜索 BoundaryXP](https://registry.modelcontextprotocol.io/?q=boundaryxp)。[最新版 API](https://registry.modelcontextprotocol.io/v0.1/servers/io.github.joinwell52-AI%2Fboundaryxp/versions/latest)返回服务器版本和 npm 包版本均为 rc.8，状态 active、isLatest=true。历史版本保留，不删除旧登记。
 
-English and Chinese product descriptions and complete setup guides are available on the same npm page. The official Registry search and latest API were checked against rc.7. Pending directory applications below are not live installation listings.
+English and Chinese product descriptions and complete setup guides are available on the same npm page. The official Registry search and latest API were checked against rc.8. Pending directory applications below are not live installation listings.
 
 ## 目录状态 / Directory status
 
+除 npm 与官方 Registry 外，下列第三方申请和 PR 为 2026-11-14 的核对记录；不因 rc.8 发布而宣称重新审核或上架。Cursor 仍暂缓提交。
+
 | 入口 | 状态与链接 |
 |---|---|
-| npm | **已发布rc.7**：[7+1产品介绍与安装](https://www.npmjs.com/package/boundaryxp-mcp) |
-| 官方MCP Registry | **已登记并读回**：[io.github.joinwell52-AI/boundaryxp](https://registry.modelcontextprotocol.io/v0.1/servers/io.github.joinwell52-AI%2Fboundaryxp/versions/0.4.0-rc.7) |
+| npm | **已发布rc.8**：[7+1产品介绍与安装](https://www.npmjs.com/package/boundaryxp-mcp) |
+| 官方MCP Registry | **已登记并读回**：[io.github.joinwell52-AI/boundaryxp](https://registry.modelcontextprotocol.io/v0.1/servers/io.github.joinwell52-AI%2Fboundaryxp/versions/0.4.0-rc.8) |
 | MCPServers | **免费提交成功，待审核**；本轮在站内搜索 BoundaryXP，未找到对应公开条目，尚无可编辑的公开版本或安装链接；未重复提交 |
 | MCP Market | **免费提交成功，待审核**：[提交入口](https://mcpmarket.com/submit)。页面返回 Success / Submitted，进入 Free Queue，提示约4–6周；未付费，尚无获批条目链接 |
 | TensorBlock MCP Index | **PR已更新至 rc.7，待审核**：[#5989](https://github.com/TensorBlock/awesome-mcp-servers/pull/5989)。条目命令为 `npx.cmd --yes boundaryxp-mcp@0.4.0-rc.7 --data-root C:/BXP/data`，中英安装均链接到 npm 页内；说明和发行证据也已更新并读回。尚未合并，不能标为已进入索引 |
@@ -36,4 +38,4 @@ MCP Market accepted the free-queue submission (estimated 4–6 weeks). TensorBlo
 
 PR #5989 and #19484 now reference rc.7 and npm's in-page setup guides; both remain open. MCPServers and MCP Market still have no verified public BoundaryXP listing. These are publication-metadata checks, not new model or runtime acceptance tests. Existing tasks, credentials, host configurations and the separate local workbench were not modified.
 
-BoundaryXP（界痕）用于AI Agent和多角色任务的7+1边界分析与原生计算复核；支持完整父子任务、多个DEV子任务、L2/L3字典、证据报告和本地工作台。Windows x64，中英双语。新分析需要用户自己的模型API/profile。
+BoundaryXP（界痕）用于AI Agent和多角色任务的7+1边界分析与原生计算复核；支持完整父子任务、多个DEV子任务、L2/L3字典、证据报告和本地工作台。Windows x64，中英双语。默认由当前宿主 LLM 分析，经 MCP 提交给原生 Core 复核；用户自己的模型 API/profile 为可选模式。

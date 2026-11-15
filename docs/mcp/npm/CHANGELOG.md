@@ -1,3 +1,10 @@
+# 0.4.0-rc.8 · 2026-11-15
+
+- Standard MCP host prepare/complete analysis, without a separate model API key. API profiles remain optional.
+- Host-mode page settings and chat handoff; explicit interrupted preparation behavior and preserved histories.
+- Same B-335 native Core binary; new MCP runtime requires verified copy migration for existing data.
+- 18 tools / 10 resources retained. Chinese and English help, same-page npm installation guides updated.
+
 # 0.4.0-rc.6 (separate language guides)
 
 ## 0.4.0-rc.7 · 2026-11-14
