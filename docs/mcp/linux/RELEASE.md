@@ -29,4 +29,11 @@ def7859641e6ff7ebf436ea542e822a8fa890faf9e28bd9ce19f2e4e20b0fc3e
 
 候选中的字典交付回执改为 `INLINE_FROZEN_SNAPSHOT`，与实际冻结字典及校验器一致；Docker 使用显式 foreground 后台生命周期，正常停止后可重连；更新检查拒绝不兼容 OS/CPU。未改变 B-335 的 Core 计算算法。
 
-Local validation does not certify Glama deployment. Glama's public listing, repository refresh, image build and tool discovery are separate statuses. See [directory status](../DISCOVERY.md). Existing Windows installations and task data are not changed by publishing this Linux package.
+## 发布后核对 / Post-publication checks
+
+- npm 公开 tgz 已匿名下载，SHA-256 / SHA-512 与正式归档一致；GitHub 五项发行附件逐项下载比对通过。
+- Linux 全新目录按公开说明通过 npx 安装：21 工具、17 资源，字典格式及能力可读，工作台 HTTP 200。
+- 公开 Dockerfile 实际构建和默认 stdio 启动通过，非 root、无主机端口映射，21 工具 / 17 资源；最终镜像全部 8 层、286 个应用文件审计未发现原始 Core 源码。
+- Glama 实际构建 `01a1e3ab-bf33-7cd8-9dbc-a536b14fffb7` 成功，发现 21 工具和 17 资源；2026-11-16 17:26（UTC+8）Linux 版本显示 Published。[公开页](https://glama.ai/mcp/servers/joinwell52-AI/BoundaryXP) 已有工具目录、Deploy 与 Try in Browser 入口。未购买或启动付费托管实例。
+
+Glama's platform build and MCP tool/resource discovery passed, and the Linux release is published. This does not certify algorithmic or business conclusions. See [directory status](../DISCOVERY.md). Existing Windows installations and task data are not changed by publishing this Linux package.

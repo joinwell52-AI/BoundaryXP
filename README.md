@@ -40,7 +40,7 @@
 | **[TensorBlock MCP Index — merged contribution](https://github.com/TensorBlock/awesome-mcp-servers/pull/5989)** | rc.7 listing is merged; [rc.9 update PR #6087](https://github.com/TensorBlock/awesome-mcp-servers/pull/6087) is pending |
 | **[MCPServers](https://mcpservers.org/servers/www-npmjs-com-package-boundaryxp-mcp)** | Live listing and npm link; rc.8 remains displayed, documentation refresh requested November 16 |
 | **[Serverdex](https://serverdex.io/server/io-github-joinwell52-ai-boundaryxp)** | Live listing with repository and npm links; cached rc.8 snippet omits required data path—use our setup guide |
-| **[Glama](https://glama.ai/mcp/servers/joinwell52-AI/BoundaryXP)** | Live information page; cached rc.5 instructions, no Glama-hosted deployable release |
+| **[Glama](https://glama.ai/mcp/servers/joinwell52-AI/BoundaryXP)** | Linux `0.4.0-rc.9-linux.1` published; platform build passed and discovered 21 tools / 17 resources. Public tool catalog is available. |
 
 Checked 2026-11-16. Search **BoundaryXP** or **boundaryxp-mcp**. Use npm for the current package; directory caches can lag. “Listed” means discoverable, not a certification. [Full directory status and submission options](docs/mcp/DISCOVERY.md).
 

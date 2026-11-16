@@ -40,7 +40,7 @@
 | **[TensorBlock MCP Index：已合并收录](https://github.com/TensorBlock/awesome-mcp-servers/pull/5989)** | rc.7 条目已合并；[rc.9 更新 PR #6087](https://github.com/TensorBlock/awesome-mcp-servers/pull/6087)待审核 |
 | **[MCPServers 中文页](https://mcpservers.org/zh-CN/servers/www-npmjs-com-package-boundaryxp-mcp)** | 已公开收录，有 npm 链接；仍显示 rc.8，11 月 16 日已请求刷新文档 |
 | **[Serverdex](https://serverdex.io/server/io-github-joinwell52-ai-boundaryxp)** | 已有公开条目；rc.8 配置示例缺少必填数据路径，请按本项目指南安装 |
-| **[Glama](https://glama.ai/mcp/servers/joinwell52-AI/BoundaryXP)** | 已有公开介绍页；安装说明仍缓存 rc.5，不提供 Glama 托管部署 |
+| **[Glama](https://glama.ai/mcp/servers/joinwell52-AI/BoundaryXP)** | Linux `0.4.0-rc.9-linux.1` 已发布；平台构建通过，发现 21 工具 / 17 资源，公开工具目录可查。 |
 
 核对日期：2026-11-16。搜索 **BoundaryXP** 或 **boundaryxp-mcp**。安装新版以 npm 为准，第三方目录可能延迟同步。“已收录”表示能查到，不代表功能认证。[完整目录状态及可登记入口](docs/mcp/DISCOVERY.md)。
 
