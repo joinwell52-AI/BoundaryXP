@@ -38,7 +38,7 @@
 |---|---|
 | **[npm — install the package](https://www.npmjs.com/package/boundaryxp-mcp)** | rc.9 package, Chinese/English descriptions and installation on the same page |
 | **[Official MCP Registry](https://registry.modelcontextprotocol.io/?q=boundaryxp)** | Published rc.9 metadata and npm installation reference |
-| **[TensorBlock MCP Index — merged contribution](https://github.com/TensorBlock/awesome-mcp-servers/pull/5989)** | rc.7 listing is merged; [rc.9 update PR #6087](https://github.com/TensorBlock/awesome-mcp-servers/pull/6087) is pending |
+| **[TensorBlock MCP Index — rc.9 merged](https://github.com/TensorBlock/awesome-mcp-servers/pull/6087)** | rc.9 update merged November 16; [Linux / Glama follow-up PR #6099](https://github.com/TensorBlock/awesome-mcp-servers/pull/6099) awaits review |
 | **[MCPServers](https://mcpservers.org/servers/www-npmjs-com-package-boundaryxp-mcp)** | Live listing and npm link; rc.8 remains displayed, documentation refresh requested November 16 |
 | **[Serverdex](https://serverdex.io/server/io-github-joinwell52-ai-boundaryxp)** | Live listing with repository and npm links; cached rc.8 snippet omits required data path—use our setup guide |
 | **[Glama](https://glama.ai/mcp/servers/joinwell52-AI/BoundaryXP)** | Linux `0.4.0-rc.9-linux.1` published; platform build passed and discovered 21 tools / 17 resources. Public tool catalog is available. |
@@ -50,6 +50,8 @@ MCPwell and ToolCenter also contain directory entries, but no BXP-specific detai
 **Codex desktop:** Plugins → Add → **Add MCP server**. Follow the [stdio setup guide](docs/mcp/npm/INSTALL.md#codex-and-other-hosts). **Add plugin marketplace** expects a separate plugin-marketplace source; the npm URL, Registry URL and this product repository are not such a source. BXP is not currently listed in the Codex plugin catalog or Cursor Marketplace.
 
 **Plugin contribution:** [OpenAI Community Plugins PR #57](https://github.com/openai/community-plugins/pull/57) is ready for maintainer review, with the tested Windows x64 wrapper for compiled rc.9 and a controlled comparison of unrelated Grafana failures. [punkpeye PR #19484](https://github.com/punkpeye/awesome-mcp-servers/pull/19484) now includes Linux support, the live Glama badge and [successful build/discovery evidence](https://github.com/punkpeye/awesome-mcp-servers/pull/19484#issuecomment-6912851096). Both await maintainer approval; a successful Glama build does not mean the PR is merged. [Test scope and current submission status](docs/mcp/DISCOVERY.md#rc9-contributions).
+
+The [OpenAI PR follow-up](https://github.com/openai/community-plugins/pull/57#issuecomment-6913163502) also includes the standalone Linux release and Glama verification. Its plugin wrapper still targets Windows x64 / rc.9; Linux users should use the separate [stdio installation guide](docs/mcp/linux/INSTALL.en.md). The latest documentation commit passed marketplace validation, 3/3 package checks and CLA; these do not establish Linux plugin-wrapper acceptance.
 
 To try the contributor fork through **Add plugin marketplace**, use the [candidate plugin installation guide](docs/mcp/PLUGIN-MARKETPLACE.en.md). Its GitHub-to-Codex installation and installed MCP were verified in isolation; official marketplace approval is still pending.
 

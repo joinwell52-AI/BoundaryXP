@@ -38,7 +38,7 @@
 |---|---|
 | **[npm：下载安装](https://www.npmjs.com/package/boundaryxp-mcp)** | rc.9 安装包，同页中英文介绍与安装说明 |
 | **[官方 MCP Registry](https://registry.modelcontextprotocol.io/?q=boundaryxp)** | 已登记 rc.9 及 npm 安装来源 |
-| **[TensorBlock MCP Index：已合并收录](https://github.com/TensorBlock/awesome-mcp-servers/pull/5989)** | rc.7 条目已合并；[rc.9 更新 PR #6087](https://github.com/TensorBlock/awesome-mcp-servers/pull/6087)待审核 |
+| **[TensorBlock MCP Index：rc.9 已合并](https://github.com/TensorBlock/awesome-mcp-servers/pull/6087)** | rc.9 更新于 11 月 16 日合并；[Linux / Glama 后续 PR #6099](https://github.com/TensorBlock/awesome-mcp-servers/pull/6099)待审核 |
 | **[MCPServers 中文页](https://mcpservers.org/zh-CN/servers/www-npmjs-com-package-boundaryxp-mcp)** | 已公开收录，有 npm 链接；仍显示 rc.8，11 月 16 日已请求刷新文档 |
 | **[Serverdex](https://serverdex.io/server/io-github-joinwell52-ai-boundaryxp)** | 已有公开条目；rc.8 配置示例缺少必填数据路径，请按本项目指南安装 |
 | **[Glama](https://glama.ai/mcp/servers/joinwell52-AI/BoundaryXP)** | Linux `0.4.0-rc.9-linux.1` 已发布；平台构建通过，发现 21 工具 / 17 资源，公开工具目录可查。 |
@@ -50,6 +50,8 @@ MCPwell、ToolCenter 的总目录中也有条目，但尚未核实 BXP 专属详
 **Codex 桌面版：**「插件」→「添加」→ **「添加 MCP 服务器」**，按[stdio 接入指南](docs/mcp/npm/INSTALL.zh-CN.md#codex-与其他宿主)配置。「添加插件市场」需要独立的插件市场源，不能填 npm、Registry 地址或本产品仓库；目前 BXP 未上架 Codex 插件目录或 Cursor Marketplace。
 
 **插件贡献进展：**[OpenAI Community Plugins PR #57](https://github.com/openai/community-plugins/pull/57)已转为正式待审核，内含经过测试的 Windows x64 / rc.9 封装及无关 Grafana 失败的基线对照证据；[punkpeye PR #19484](https://github.com/punkpeye/awesome-mcp-servers/pull/19484)已补充 Linux 支持、真实 Glama 徽章及[构建与发现通过的跟进证据](https://github.com/punkpeye/awesome-mcp-servers/pull/19484#issuecomment-6912851096)。两者仍待维护者审核，Glama 通过不等于 PR 已合并。[测试范围与提交状态](docs/mcp/DISCOVERY.md#rc9-contributions)。
+
+[OpenAI PR 跟进说明](https://github.com/openai/community-plugins/pull/57#issuecomment-6913163502)也已补充独立 Linux 发行与 Glama 验证。该插件封装仍面向 Windows x64 / rc.9；Linux 用户请使用独立的 [stdio 安装指南](docs/mcp/linux/INSTALL.zh-CN.md)。最新文档提交通过市场清单校验、3/3 包检查及 CLA；这些不代表 Linux 插件封装已验收。
 
 如需从「添加插件市场」试用发布者 fork，见[候选插件安装指南](docs/mcp/PLUGIN-MARKETPLACE.zh-CN.md)。已隔离验证从 GitHub 添加市场、安装插件及调用安装后的 MCP；官方市场审核仍未完成。
 
