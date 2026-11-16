@@ -4,6 +4,12 @@
 
 ## 当前安装入口 / Current installation
 
+Linux 独立发行入口：[`0.4.0-rc.9-linux.1`](https://www.npmjs.com/package/boundaryxp-mcp/v/0.4.0-rc.9-linux.1)，npm `linux` 渠道；[中文安装](linux/INSTALL.zh-CN.md)、[English](linux/INSTALL.en.md)、[Dockerfile](../../Dockerfile)、[验收范围](linux/RELEASE.md)。Windows `latest/next` 继续为 rc.9，官方 Registry 现有 rc.9 登记不因这个 Linux 分支而覆盖。公开 Dockerfile 只下载编译包并验证摘要，不要求公开 Core 源码。
+
+Glama 本轮核对仍显示 rc.5 缓存说明、“This server cannot be deployed”，尚无可用部署发行。Linux 包发布、公开仓库提供 Dockerfile、Glama 刷新/构建、工具发现与平台审核分别记录。本地通过不能替代 Glama 验证。
+
+Linux is distributed separately through the `linux` tag; Windows `latest/next` and the existing official Registry rc.9 entry remain intact. Glama still needs a repository refresh and successful platform build/inspection. The Dockerfile consumes compiled distribution files only; publication does not imply Glama approval.
+
 当前发行版为 **0.4.0-rc.9（预发行版）/ B-335**。客户可直接使用 [npm 默认首页](https://www.npmjs.com/package/boundaryxp-mcp)：[简体中文](https://www.npmjs.com/package/boundaryxp-mcp#简体中文) / [English](https://www.npmjs.com/package/boundaryxp-mcp#english)，以及 [中文安装与升级](https://www.npmjs.com/package/boundaryxp-mcp#中文安装与升级) / [Installation and upgrades](https://www.npmjs.com/package/boundaryxp-mcp#installation-and-upgrades)。四个入口均在 npm 同页，不以 GitHub 跳转作为语言或安装入口。
 
 官方目录可[搜索 BoundaryXP](https://registry.modelcontextprotocol.io/?q=boundaryxp)。[最新版 API](https://registry.modelcontextprotocol.io/v0.1/servers/io.github.joinwell52-AI%2Fboundaryxp/versions/latest)返回服务器版本和 npm 包版本均为 rc.9，状态 active、isLatest=true。历史版本保留，不删除旧登记。

@@ -27,6 +27,8 @@
 
 ## Install BXP · Find BXP
 
+**Linux x64 / Docker is available separately:** [npm Linux package](https://www.npmjs.com/package/boundaryxp-mcp/v/0.4.0-rc.9-linux.1) · [Linux installation](docs/mcp/linux/INSTALL.en.md) · [中文安装](docs/mcp/linux/INSTALL.zh-CN.md) · [Dockerfile](Dockerfile) · [Linux release](https://github.com/joinwell52-AI/BoundaryXP/releases/tag/mcp-v0.4.0-rc.9-linux.1). Version `0.4.0-rc.9-linux.1` uses the `linux` channel, glibc ≥2.36 and compiled B-335 Core. Windows `latest/next` remain rc.9. Glama verification is tracked separately; this release does not claim platform approval.
+
 **[Install from npm →](https://www.npmjs.com/package/boundaryxp-mcp#installation-and-upgrades)** · **[Codex / Cursor setup →](docs/mcp/INSTALL.en.md)** · **[中文安装 →](docs/mcp/INSTALL.zh-CN.md)**
 
 **21 tools · 17 resources · Windows x64 · Node.js ≥22.18 · rc.9 prerelease.** Default analysis uses your current host LLM; no separate model API key is required.

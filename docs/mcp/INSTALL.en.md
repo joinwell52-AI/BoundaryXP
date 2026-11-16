@@ -2,6 +2,8 @@
 
 # Install BoundaryXP MCP
 
+**Linux x64 / Docker:** use the [separate Linux installation guide](linux/INSTALL.en.md) for `0.4.0-rc.9-linux.1` (`linux` channel, glibc ≥2.36). The instructions below are for Windows rc.9.
+
 **0.4.0-rc.9 · B-335 · Windows x64 · Node.js ≥22.18 · Prerelease**
 
 [Read the complete English installation guide](npm/INSTALL.md), including Cursor/Codex setup, host LLM analysis, optional model APIs, multi-DEV tasks, manual and automatic upgrades, rollback and troubleshooting.

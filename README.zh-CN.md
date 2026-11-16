@@ -27,6 +27,8 @@
 
 ## 安装 BXP · 在哪里找到 BXP
 
+**新增 Linux x64 / Docker 独立入口：** [npm Linux 编译包](https://www.npmjs.com/package/boundaryxp-mcp/v/0.4.0-rc.9-linux.1) · [中文安装](docs/mcp/linux/INSTALL.zh-CN.md) · [English](docs/mcp/linux/INSTALL.en.md) · [Dockerfile](Dockerfile) · [Linux 发行附件](https://github.com/joinwell52-AI/BoundaryXP/releases/tag/mcp-v0.4.0-rc.9-linux.1)。版本 `0.4.0-rc.9-linux.1` 使用 `linux` 渠道，需要 glibc ≥2.36，随包交付编译后的 B-335 Core。Windows 的 `latest/next` 保持 rc.9；Glama 验证单独记录，不把发行成功当成平台审核通过。
+
 **[从 npm 安装 →](https://www.npmjs.com/package/boundaryxp-mcp#中文安装与升级)** · **[Codex / Cursor 接入指南 →](docs/mcp/INSTALL.zh-CN.md)** · **[English setup →](docs/mcp/INSTALL.en.md)**
 
 **21 个工具 · 17 项资源 · Windows x64 · Node.js ≥22.18 · rc.9 预发行版。** 默认使用当前宿主 LLM 分析，无需另外配置模型 API Key。

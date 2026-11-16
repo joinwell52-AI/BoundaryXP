@@ -2,6 +2,8 @@
 
 # 安装 BoundaryXP MCP
 
+**Linux x64 / Docker：** 请用[独立 Linux 安装指南](linux/INSTALL.zh-CN.md)，版本 `0.4.0-rc.9-linux.1`（`linux` 渠道，glibc ≥2.36）。下文为 Windows rc.9。
+
 **0.4.0-rc.9 · B-335 · Windows x64 · Node.js ≥22.18 · 预发行版**
 
 [阅读完整中文安装指南](npm/INSTALL.zh-CN.md)，包含 Cursor/Codex 接入、宿主 LLM 分析、可选模型 API、多 DEV 任务、手动与自动升级、回滚和排障。
