@@ -21,6 +21,10 @@
 
 <p align="center">中英双语 · MCP 0.4.0-rc.9 / B-335 · npm 预发行 · 论文与协议资料 · Core 原实现源码私有</p>
 
+> **欢迎提问、反例与贡献。** 7+1 方法有适用条件，研究用例不能证明它对所有任务都正确；MCP 实现、模型解释和 L2/L3 语义库也可能出错。确定性计算不等于语义解释必然正确。欢迎用问题、反例和复现证据共同检验与改进。
+>
+> [提问与建议](https://github.com/joinwell52-AI/BoundaryXP/issues/new?template=04-question.yml) · [7+1 方法反例](https://github.com/joinwell52-AI/BoundaryXP/issues/new?template=01-method-counterexample.yml) · [MCP 问题](https://github.com/joinwell52-AI/BoundaryXP/issues/new?template=02-mcp-problem.yml) · [L2/L3 语义问题](https://github.com/joinwell52-AI/BoundaryXP/issues/new?template=03-semantic-resource.yml) · [参与贡献与 PR](CONTRIBUTING.md)
+
 ## 安装 BXP · 在哪里找到 BXP
 
 **[从 npm 安装 →](https://www.npmjs.com/package/boundaryxp-mcp#中文安装与升级)** · **[Codex / Cursor 接入指南 →](docs/mcp/INSTALL.zh-CN.md)** · **[English setup →](docs/mcp/INSTALL.en.md)**
