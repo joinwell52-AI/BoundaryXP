@@ -1,4 +1,20 @@
-# 当前版本 / Current release: 0.4.0-rc.8
+# 当前版本 / Current release: 0.4.0-rc.9
+
+2026-11-16：L2 行业与 L3 企业自定义字典版，**21 个工具、17 个资源**，仍为 Windows x64 / B-335 的 rc 预发行版。新增 `bx_dictionary_format`、`bx_dictionary_validate`、`bx_dictionary_import`；工作台支持上传或粘贴 JSON、校验、导入和显式绑定。
+
+[npm 同页中英安装](https://www.npmjs.com/package/boundaryxp-mcp) · [rc.9 Release 与编译包](https://github.com/joinwell52-AI/BoundaryXP/releases/tag/mcp-v0.4.0-rc.9) · [中文字典规范与示例](npm/guides/DICTIONARIES.zh-CN.md) · [English dictionary specification and examples](npm/guides/DICTIONARIES.md)
+
+- UTF-8 JSON、JSON Schema、中英文 L2/L3 示例均随包提供，并可通过 MCP 资源直接读取。
+- 字典按 ID、层级、版本保存；重复导入幂等，同版本不同内容拒绝覆盖。导入不会修改任务或自动绑定，旧版本与历史报告保留。
+- 最终 tgz 安装后完成标准 stdio 功能检查：四份示例、格式错误、版本冲突、查询绑定、重启保留、两项原生计算及报告复验。计算输入为明确标注的集成测试 fixture，不冒称新增真实模型分析。
+- rc.8 升级与双向回滚的任务、绑定、配置和自定义字典保留已核对。一次依赖安装超过测试框架 10 分钟时限；保留该超时记录，安装完成后另行运行独立核验并通过。最后一次文档调整后的 266 个非 Markdown 清单项与升级测试包相同，最终 tgz 另行完成新装功能验收。
+- 归档 SHA-256：`3d85d42050fadf94228d88545bb7bd5c21cbd81bdb91a34889c28d06a7cb7750`。Core 二进制不变；不交付原始 Core 源码。未改动已有用户安装或 58618。
+
+**rc.8 可以直接升级，无需卸载。** 旧更新器固定检查 18 个工具，需要一次性使用 rc.9 bootstrap 安装器。管理安装与直接 npx 用户分别按[中文升级指南](npm/INSTALL.zh-CN.md#升级)或[English upgrade guide](npm/INSTALL.md#updates)操作，保留原路径和数据副本。
+
+rc.9 adds custom L2/L3 dictionary format, validation and import through MCP and the workbench, with bilingual examples and 21 tools / 17 resources. Exact-package stdio checks passed, including immutable versions, preserved tasks/bindings, restart and native calculation/report rechecks using an explicit integration fixture. An installation run exceeded its test-runner timeout; independent post-installation and rollback verification passed afterward. The unchanged executable content was checked by manifest, and the final archive was installed and tested separately. Existing installations are not forcibly upgraded. See the attached ACCEPTANCE.json for scope and limitations.
+
+## 历史：0.4.0-rc.8
 
 2026-11-15：公开发布宿主 LLM 分析接入版，仍属于 rc 预发行系列。标准 stdio MCP，18 工具、10 资源。默认使用当前宿主聊天模型，无需额外 API Key；兼容模型 API 模式保留为可选配置。
 

@@ -1,4 +1,4 @@
-# 18 个 MCP 工具 / MCP tool reference
+# 21 个 MCP 工具 / MCP tool reference
 
 [导航 / Index](README.md)
 
@@ -26,11 +26,14 @@ Use `bx_capabilities` with `language: "en"`, `help_topic: "tools"` and optional 
 | `bx_result_recheck` | 按原保存操作数零模型复算 / Recompute saved operands without the LLM | 新快照，保留旧结果 / New revision, original retained |
 | `bx_artifact_get` | 按摘要分页读取完整内容 / Read an artifact by digest | 只读；分页单位为 Unicode 码点 / Unicode code-point offsets |
 | `bx_workbench_open` | 返回当前独立页面地址 / Return the current workbench URL | 不提交分析 / No analysis |
+| `bx_dictionary_format` | 自定义字典规范、Schema和中英文示例 / Custom dictionary specification, Schema and bilingual examples | 只读 / Read-only |
+| `bx_dictionary_validate` | 完整JSON校验、字段错误与歧义警告 / Validate full JSON, field errors and ambiguity warnings | 不保存、不调用模型 / No save or model call |
+| `bx_dictionary_import` | 按校验摘要导入不可覆盖版本 / Import an immutable validated version | 写入新字典，不修改任务 / Adds a dictionary without changing tasks |
 
 ## 常用口令 / Requests
 
 - **打开页面：**“用 BXP 打开工作台，不提交分析。” / “Open the BXP workbench without analyzing.”
-- **看帮助：**“用 BXP 列出 18 个工具的中文说明和案例。” / “Read the English tool help and examples.”
+- **看帮助：**“用 BXP 列出 21 个工具的中文说明和案例。” / “Read the English tool help and examples.”
 - **看历史：**“列出 BXP 已保存项目，打开我选择的项目，不重新分析。” / “List saved projects and open the selected one without rerunning.”
 - **导入预览：**“按原文预览父子任务，多个 DEV 分开，缺失父任务编号时先说明，暂不保存。” / “Preview the full task; retain each DEV separately and report missing parents before saving.”
 - **一次分析：**“保存已确认任务，对指定 revision 分析一次，失败不自动重试；完成后读取正式结果。” / “Analyze the confirmed saved revision once, without automatic retries.”
@@ -39,10 +42,17 @@ Use `bx_capabilities` with `language: "en"`, `help_topic: "tools"` and optional 
 
 ## 输入输出要点 / Contract essentials
 
-`project_id` 标识项目，`revision` 标识不可混用的保存快照，`job_id` 标识一次作业。写操作需要的新 `request_id` 由宿主生成 UUID；相同 ID 和相同参数只取原操作结果，不靠换 ID 静默重试。模型分析需要 `confirm_model_call:true`，该字段不授予任务业务执行权限。
+`project_id` 标识项目，`revision` 标识不可混用的保存快照，`job_id` 标识一次作业。写操作需要的新 `request_id` 由宿主生成 UUID；相同 ID 和相同参数只取原操作结果，不靠换 ID 静默重试。默认 host 模式使用 prepare/complete 两阶段，由当前宿主 LLM 分析，无需另配 API Key；只有可选 API 模式需要 `confirm_model_call:true`。两者均不授予业务执行权限。
+
+Default host mode uses `bx_analysis_submit(action:"prepare")`, complete instruction artifact reads, current host LLM analysis and `action:"complete"` with the bound job, revision, digest and JSON response. No separate API key is needed. Only optional API mode uses `confirm_model_call:true`. Poll the job and read its exact result revision; submission is not completion.
 
 单份来源和序列化联合输入各最多 1 MiB，HTTP 请求体最多 8 MiB；超限拒绝，不截断。完整原文通过制品分页读取，不能只截取聊天摘要当输入。根任务不填写父任务编号；各子任务填写明确编号。同角色不会合并，序号不是执行顺序。L2/L3 绑定版本与摘要，不自动补造字典或权限。
 
 Read exact revisions and all artifact pages. Per-source and serialized joint input limits are each 1 MiB; HTTP request bodies are limited to 8 MiB. Oversize input is rejected, not truncated. Explicit parent IDs establish the tree; repeated roles are distinct. Binding dictionaries does not grant business authority.
 
 LLM 判断和计算器复验分别保留，比较时必须对齐任务对象、检查问题和作用范围。Core 只证明输入操作数上的计算结果，不自动证明语义抽取正确。`business_decision` 和 `execution_authorization` 始终为 `null`。报告翻译是工作台中另行明确触发的模型操作，不是 `bx_result_get` 的自动行为。
+
+
+自定义L2/L3：[中文格式、示例与流程](npm/guides/DICTIONARIES.zh-CN.md)。这三个工具从rc.9提供。
+
+Custom L2/L3: [Format, examples and workflow](npm/guides/DICTIONARIES.md). These three tools are available from rc.9.

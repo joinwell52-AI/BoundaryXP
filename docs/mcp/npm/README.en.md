@@ -6,11 +6,11 @@
 
 Turn complete task requirements into evidence-backed **7+1 relationships**. Inspect parent–child tasks and their combined constraints, then trace why a result is **out of bounds, within bounds or incomplete**. LLM judgments and native calculator results are recorded separately, alongside original evidence and unspecified conditions.
 
-**boundaryxp-mcp 0.4.0-rc.8 · B-335 · Windows x64 · Node.js ≥22.18 · MIT · Prerelease**
+**boundaryxp-mcp 0.4.0-rc.9 · B-335 · Windows x64 · Node.js ≥22.18 · MIT · Prerelease**
 
 [Installation and upgrades](https://github.com/joinwell52-AI/BoundaryXP/blob/main/docs/mcp/npm/INSTALL.md) · [Public repository](https://github.com/joinwell52-AI/BoundaryXP) · [Releases](https://github.com/joinwell52-AI/BoundaryXP/releases)
 
-Connect through standard **stdio MCP** in Cursor, Codex or compatible hosts. The package includes **18 tools, 10 resources, English and Chinese built-in help, a compiled Core and a local browser workbench**. No separate BoundaryXP installation or hosted BoundaryXP server is required. This release does not include macOS or Linux native packages.
+Connect through standard **stdio MCP** in Cursor, Codex or compatible hosts. The package includes **21 tools, 17 resources, English and Chinese built-in help, a compiled Core and a local browser workbench**. No separate BoundaryXP installation or hosted BoundaryXP server is required. This release does not include macOS or Linux native packages.
 
 ## What does 7+1 mean?
 
@@ -71,7 +71,7 @@ Requires Windows x64, Node.js ≥22.18 and npm; tested with Node 24.19.0. Initia
   "mcpServers": {
     "BoundaryXP": {
       "command": "npx.cmd",
-      "args": ["--yes", "boundaryxp-mcp@0.4.0-rc.8", "--data-root", "C:/BXP/data"]
+      "args": ["--yes", "boundaryxp-mcp@0.4.0-rc.9", "--data-root", "C:/BXP/data"]
     }
   }
 }
@@ -79,7 +79,7 @@ Requires Windows x64, Node.js ≥22.18 and npm; tested with Node 24.19.0. Initia
 
 This entry pins a version and does not auto-update. For Codex, API setup and managed updates, follow the [English installation guide](https://github.com/joinwell52-AI/BoundaryXP/blob/main/docs/mcp/npm/INSTALL.md). Existing users must retain their original data and settings paths.
 
-After connection, expect **18 tools**. Ask:
+After connection, expect **21 tools**. Ask:
 
 > Call BoundaryXP bx_capabilities and bx_workbench_open; return the version and workbench URL without submitting analysis.
 
@@ -108,3 +108,6 @@ Tools cover capabilities, profiles, L2/L3 dictionaries, task import and validati
 The public repository provides product documentation and compiled releases. The native Core ships without its original C++ or JavaScript implementation source. Adapter, UI, prompt files and required resources remain readable. MIT and third-party notices are included. This prerelease makes no blanket protocol-conformance or model-accuracy claim.
 
 [Directory status](https://github.com/joinwell52-AI/BoundaryXP/blob/main/docs/mcp/DISCOVERY.md) distinguishes live listings from pending reviews.
+
+
+Custom L2/L3: bx_dictionary_format, bx_dictionary_validate and bx_dictionary_import, with workbench upload, validation, import and explicit version binding. [Format, four bilingual examples and workflow](https://github.com/joinwell52-AI/BoundaryXP/blob/main/docs/mcp/npm/guides/DICTIONARIES.md). Changed content at the same version is rejected; old tasks and dictionaries are retained. rc.8 users must use the rc.9 installer described in the upgrade guide because the old automatic probe expects exactly 18 tools.

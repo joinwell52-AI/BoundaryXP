@@ -4,7 +4,7 @@
 
 [产品介绍](https://github.com/joinwell52-AI/BoundaryXP/blob/main/docs/mcp/npm/README.zh-CN.md)
 
-**boundaryxp-mcp 0.4.0-rc.8 · B-335 · Windows x64 · Node.js ≥22.18（实测 24.19.0）**
+**boundaryxp-mcp 0.4.0-rc.9 · B-335 · Windows x64 · Node.js ≥22.18（实测 24.19.0）**
 
 本指南采用固定启动器的管理安装，支持可选自动升级。[快速接入](https://github.com/joinwell52-AI/BoundaryXP/blob/main/docs/mcp/npm/README.zh-CN.md#快速接入-mcp-宿主)则直接使用固定版本 npx 命令，两者提供相同 MCP 工具。当前不提供 macOS、Linux 原生包。
 
@@ -18,7 +18,7 @@ $BxpHome = Join-Path $BxpRoot 'install'
 $BxpData = Join-Path $BxpRoot 'data'
 $BxpSettings = Join-Path $BxpRoot 'settings'
 if (Test-Path (Join-Path $BxpHome 'active.json')) { throw 'Already installed: use update' }
-npx.cmd --yes --package boundaryxp-mcp@0.4.0-rc.8 bxp install --home $BxpHome --version 0.4.0-rc.8
+npx.cmd --yes --package boundaryxp-mcp@0.4.0-rc.9 bxp install --home $BxpHome --version 0.4.0-rc.9
 if ($LASTEXITCODE -ne 0) { throw 'Installation failed' }
 $BxpLauncher = Join-Path $BxpHome 'launcher.mjs'
 New-Item -ItemType Directory -Path $BxpSettings -Force | Out-Null
@@ -30,7 +30,7 @@ if (!(Test-Path $BxpEnv)) { [IO.File]::WriteAllText($BxpEnv, "# Model API config
 node $BxpLauncher --manage status
 ```
 
-安装回执应显示 `READY`、`probe.passed:true` 和版本 `0.4.0-rc.8`。安装器下载指定 npm 版本、校验完整性并探测原生 MCP。安装依赖需要联网，无需编译器、exe 安装器、另外安装 BoundaryXP 工作台或自建服务器。空 API profile 列表仍保留内置 host 配置，可用当前宿主 LLM 分析。
+安装回执应显示 `READY`、`probe.passed:true` 和版本 `0.4.0-rc.9`。安装器下载指定 npm 版本、校验完整性并探测原生 MCP。安装依赖需要联网，无需编译器、exe 安装器、另外安装 BoundaryXP 工作台或自建服务器。空 API profile 列表仍保留内置 host 配置，可用当前宿主 LLM 分析。
 
 ## Cursor 接入
 
@@ -40,7 +40,7 @@ $BxpConfig = Join-Path $BxpWorkspace '.cursor\mcp.json'
 node $BxpLauncher --manage configure --config $BxpConfig --data-root $BxpData --profiles $BxpProfiles --env-file $BxpEnv
 ```
 
-在 Cursor 打开这个工作区，在 MCP 设置启用 BoundaryXP。看到 **18 个工具** 后，在聊天里说：
+在 Cursor 打开这个工作区，在 MCP 设置启用 BoundaryXP。看到 **21 个工具** 后，在聊天里说：
 
 > 只通过 BoundaryXP MCP 调用 bx_capabilities、bx_profiles_list 和 bx_workbench_open，返回实际版本和工作台地址；不用终端替代，不提交分析。
 
@@ -117,10 +117,12 @@ BOUNDARYXP_API_KEY=REPLACE_WITH_YOUR_KEY
 
 ## 升级
 
-沿用原安装、数据和配置路径。先完整备份数据与配置，完成作业并断开相关 MCP 客户端，再手动升级。若新开 PowerShell 窗口，请先将 `$BxpHome` 设为原安装路径。
+沿用原安装、数据和配置路径。先完整备份数据与配置，完成作业并断开相关 MCP 客户端，再手动升级。若新开 PowerShell 窗口，请先将 `$BxpHome`、`$BxpData` 分别设为原安装目录和原数据目录；不要照抄新安装示例覆盖自己的路径。
+
+**rc.8可以直接升级到rc.9，无需卸载。** 旧版自动升级自检固定检查18工具，无法通过rc.9的21工具检查；这次请执行下面的命令，由npm临时取得rc.9新版安装器完成升级，不用旧版`launcher --manage update`。新版根据目标包声明核对工具清单，后续工具数量变化不会因此被拒绝。
 
 ```powershell
-npx.cmd --yes --package boundaryxp-mcp@0.4.0-rc.8 bxp update --home $BxpHome --version 0.4.0-rc.8 --migrate-data $BxpData
+npx.cmd --yes --package boundaryxp-mcp@0.4.0-rc.9 bxp update --home $BxpHome --version 0.4.0-rc.9 --migrate-data $BxpData
 ```
 
 不要先删除旧版。升级保留任务、失败记录及宿主、模型配置。核心运行包摘要变化时，需显式指定 `--migrate-data <原数据目录>`，复制并校验后保留原目录。本版 MCP 运行包摘要变化，B-335 原生 Core 二进制不变。升级需用原数据路径执行 --migrate-data，校验复制后的新目录并保留原目录。
@@ -128,6 +130,19 @@ npx.cmd --yes --package boundaryxp-mcp@0.4.0-rc.8 bxp update --home $BxpHome --v
 后续也可运行 `node <home>/launcher.mjs --manage update --version <准确版本>`。升级后重连，通过 `bx_capabilities` 与磁盘 `--manage status` 对照版本。
 
 未发布的本机 rc.2 测试安装曾使用不同包名，需要先用上述新版 bootstrap 命令切换一次；它不是此前 npm 发行版。
+
+### 原来直接使用 npx 的用户
+
+如果宿主命令直接是 `npx.cmd --yes boundaryxp-mcp@0.4.0-rc.8 ...`，没有管理安装目录，不要直接改成 rc.9 后指向旧数据。先完成作业并断开相关客户端，将 `$BxpData` 设为原数据目录，`$BxpHome` 设为一个新的空安装目录，再执行：
+
+```powershell
+npx.cmd --yes --package boundaryxp-mcp@0.4.0-rc.9 bxp install --home $BxpHome --version 0.4.0-rc.8
+if ($LASTEXITCODE -ne 0) { throw 'Bootstrap installation failed' }
+npx.cmd --yes --package boundaryxp-mcp@0.4.0-rc.9 bxp update --home $BxpHome --version 0.4.0-rc.9 --migrate-data $BxpData
+if ($LASTEXITCODE -ne 0) { throw 'Migration failed' }
+```
+
+然后按宿主接入章节，将原 BoundaryXP 条目改为新安装目录的 `launcher.mjs`，保留原数据路径、profiles、环境变量及其他 MCP 条目。启动器会使用已校验的迁移副本；原目录保留。不要同时保留两个指向同一数据的 BoundaryXP 连接。
 
 ### 可选自动检查与升级
 
@@ -159,7 +174,7 @@ node $BxpLauncher --manage auto-update --mode off
 | 现象 | 检查方式 |
 |---|---|
 | Connecting 或零工具 | 检查 Node 绝对路径、MCP 输出、JSON 编码和 `--manage status`。用 `--manage doctor` 做隔离 MCP/HTTP 自检。 |
-| 显示 18 工具但聊天找不到 | 连接后新开 Agent 聊天。 |
+| 显示 21 工具但聊天找不到 | 连接后新开 Agent 聊天。 |
 | COMPILER_BUSY | 等待已有作业或明确取消，不重复提交。 |
 | JOINT_RESPONSE_NOT_JSON | 保留错误及原响应，格式失败不能当作有效边界判断。 |
 | PROFILE_NOT_FOUND 或 API 401/403/429 | 检查 profile、密钥、提供商权限与额度，不自动重试付费分析。 |
@@ -169,3 +184,6 @@ node $BxpLauncher --manage auto-update --mode off
 关闭浏览器不会关闭 MCP。最后一个 MCP 客户端断开后工作台服务退出，未完成作业会取消，请先完成作业。重连后调用 `bx_workbench_open` 获取新地址。
 
 停用时只移除对应宿主条目，保留数据与配置。报告问题时提供版本、错误码和脱敏最小案例，不提供凭据或个人任务库。
+
+
+自定义 L2/L3：新增 bx_dictionary_format、bx_dictionary_validate、bx_dictionary_import；页面支持上传与校验。[格式、完整示例与使用流程](https://github.com/joinwell52-AI/BoundaryXP/blob/main/docs/mcp/npm/guides/DICTIONARIES.zh-CN.md)。这些能力从rc.9提供；升级后重新发现21工具、17资源。

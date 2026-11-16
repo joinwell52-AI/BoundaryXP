@@ -22,13 +22,13 @@ This plugin wraps the existing npm-distributed MCP. Marketplace approval is sepa
 
 Set a persistent absolute data directory. The current host LLM performs analysis through MCP prepare/complete; no additional API key or profiles file is needed. A separately configured model API remains optional.
 
-连接后发送：“只通过 BoundaryXP MCP 调用 bx_capabilities 和 bx_workbench_open，返回版本与工作台地址，不提交分析。”应发现 18 个工具。插件服务名称可能带 Cursor 的 `plugin-` 前缀。
+连接后发送：“只通过 BoundaryXP MCP 调用 bx_capabilities 和 bx_workbench_open，返回版本与工作台地址，不提交分析。”应发现 21 个工具。插件服务名称可能带 Cursor 的 `plugin-` 前缀。
 
 市场批准前可按[普通 MCP 安装指南](INSTALL.zh-CN.md)使用产品；不要为了测试重复连接同一数据目录的不同版本。
 
 ## 更新 / Updates
 
-此插件清单固定 npm 版本。升级插件后，在作业完成并断开旧连接后重新连接；任务保留在原数据目录。需要 BoundaryXP 自己的自动检查、安全切换和回滚时，使用[管理安装方式](npm/INSTALL.md)及[自动升级指南](npm/AUTO-UPDATE.md)，不要同时添加重复入口。
+此插件清单固定 npm 版本。已有 rc.8 数据升级至 rc.9 时，先按[升级指南](npm/INSTALL.zh-CN.md#升级)使用 rc.9 安装器完成数据复制迁移，不要只改版本号后让新运行时直接使用旧数据目录。作业完成并断开旧连接后再迁移和重新连接；原任务与数据副本保留。需要 BoundaryXP 自己的自动检查、安全切换和回滚时，使用[管理安装方式](npm/INSTALL.md)及[自动升级指南](npm/AUTO-UPDATE.md)，不要同时添加重复入口。
 
 The manifest pins the npm version. Plugin updates and BoundaryXP managed automatic updates are different mechanisms. Preserve existing profiles and data, finish jobs before reconnecting, and avoid duplicate server entries.
 

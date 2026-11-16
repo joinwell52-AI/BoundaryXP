@@ -1,5 +1,13 @@
 # BXP MCP 输入输出合同
 
+## rc.9 本地候选：自定义字典
+
+新增 `bx_dictionary_format`、`bx_dictionary_validate`、`bx_dictionary_import`，共21工具/17资源。原18工具和原内置字典身份保持兼容。规范为 `boundaryxp-custom-dictionary/1`，JSON Schema与四份中英文L2/L3示例随包交付，亦能通过MCP资源和工作台下载。
+
+导入接受完整UTF-8 JSON字符串及校验返回的SHA-256，不接受服务器任意文件路径。每包最多256 KiB、512词条；L3必填tenant。同层级、ID、版本的内容不可覆盖；完全相同的重试不重复写入。自定义字典独立存于数据根目录，版本和摘要冻结后才可绑定到项目。导入、校验不调用模型，不修改已有项目或运行包。字典只提供词义资料，不产生业务裁决或执行权。
+
+详细字段、示例、工作流与错误码见[中文规范](guides/DICTIONARIES.zh-CN.md)和[English specification](guides/DICTIONARIES.md)。以下preview.3记录描述历史扩展，不代表当前工具总数。
+
 对外连接名为 `BoundaryXP`，聊天简称为 `bxp`。名称调整不改变下面的协议版本、`bx_*`工具名、参数、项目ID或结果版本。
 
 preview.3在保持18工具与原有参数兼容的前提下扩展bx_capabilities：可选language为zh-CN/en，help_topic为overview/tools/examples/troubleshooting，tools主题可选tool_name。不传参数仍返回能力并附默认中文入门帮助。data.help为{language,topic,tool_name,uri,mime_type,text,model_requests:0}；data.help_catalog列出8份中英资源。resources/list另保留2份原Schema，共10项。resources/read仅接受明确登记URI，不映射任意文件路径。

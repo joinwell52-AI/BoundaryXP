@@ -2,7 +2,7 @@
 
 # BoundaryXP MCP · BXP
 
-**boundaryxp-mcp 0.4.0-rc.7 · B-335 · Windows x64**
+**boundaryxp-mcp 0.4.0-rc.9 · B-335 · Windows x64**
 
 | 简体中文 | English |
 |---|---|
@@ -15,3 +15,7 @@
 MCP 内置帮助：`bx_capabilities({"language":"zh-CN","help_topic":"tools"})`。
 
 Built-in help: `bx_capabilities({"language":"en","help_topic":"tools"})`.
+
+rc.9：21 个工具、17 个资源；新增自定义字典格式、校验和导入。
+
+[中文 L2/L3 字典指南与示例](npm/guides/DICTIONARIES.zh-CN.md) · [English L2/L3 dictionary guide and examples](npm/guides/DICTIONARIES.md)

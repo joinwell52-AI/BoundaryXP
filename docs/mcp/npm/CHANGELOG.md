@@ -1,3 +1,10 @@
+# 0.4.0-rc.9 · prerelease / 预发行版 · 2026-11-16
+
+- Add versioned custom L2/L3 dictionary format, validation and import tools: 21 tools / 17 resources, keeping the original 18 tools compatible.
+- Add a bilingual workbench upload/paste dialog, JSON Schema download, four Chinese/English examples and explicit binding through existing settings.
+- Preserve built-in identities, prior custom versions, task snapshots and reports; changed content at the same version is rejected. Runtime upgrades use verified copy migration.
+- Core binary and B-335 calculation behavior are unchanged. Publication does not replace existing clients. Upgrade from rc.8 with the rc.9 installer once; the old fixed-18-tool probe cannot accept 21 tools. The new probe validates declared tool names and supports rollback.
+
 # 0.4.0-rc.8 · 2026-11-15
 
 - Standard MCP host prepare/complete analysis, without a separate model API key. API profiles remain optional.

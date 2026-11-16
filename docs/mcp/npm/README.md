@@ -12,11 +12,11 @@
 
 从完整任务要求形成带原文证据的 **7+1 关联表示**，检查父子任务及其组合约束，追溯为什么**越界、未越界，或信息不全**。报告分别保留 LLM 判断、原生计算器复核、原文依据和未明确项。
 
-**boundaryxp-mcp 0.4.0-rc.8 · B-335 · Windows x64 · Node.js ≥22.18 · MIT · 预发行版**
+**boundaryxp-mcp 0.4.0-rc.9 · B-335 · Windows x64 · Node.js ≥22.18 · MIT · 预发行版**
 
 [安装与升级](#中文安装与升级) · [中文产品仓库](https://github.com/joinwell52-AI/BoundaryXP/blob/main/README.zh-CN.md) · [发行下载](https://github.com/joinwell52-AI/BoundaryXP/releases)
 
-通过标准 **stdio MCP** 接入 Cursor、Codex 等宿主。一个包包含 **18 个工具、10 项资源、中英文内置帮助、编译后的 Core 和本地浏览器工作台**。无需另装 BoundaryXP 工作台或自建 BoundaryXP 服务器。当前原生包仅支持 Windows x64，不含 macOS、Linux 原生包。
+通过标准 **stdio MCP** 接入 Cursor、Codex 等宿主。一个包包含 **21 个工具、17 项资源、中英文内置帮助、编译后的 Core 和本地浏览器工作台**。无需另装 BoundaryXP 工作台或自建 BoundaryXP 服务器。当前原生包仅支持 Windows x64，不含 macOS、Linux 原生包。
 
 ### 7+1 核对什么？
 
@@ -77,7 +77,7 @@
   "mcpServers": {
     "BoundaryXP": {
       "command": "npx.cmd",
-      "args": ["--yes", "boundaryxp-mcp@0.4.0-rc.8", "--data-root", "C:/BXP/data"]
+      "args": ["--yes", "boundaryxp-mcp@0.4.0-rc.9", "--data-root", "C:/BXP/data"]
     }
   }
 }
@@ -85,7 +85,7 @@
 
 这个入口固定版本，不自动升级。Codex、API 配置和管理安装升级见[中文安装指南](#中文安装与升级)。已有用户沿用自己的数据与配置路径。
 
-连接后应显示 **18 个工具**，在聊天里说：
+连接后应显示 **21 个工具**，在聊天里说：
 
 > 调用 BoundaryXP 的 bx_capabilities 和 bx_workbench_open，返回版本及工作台地址，不提交分析。
 
@@ -115,11 +115,14 @@
 
 [目录收录状态](https://github.com/joinwell52-AI/BoundaryXP/blob/main/docs/mcp/DISCOVERY.md)区分已上线入口和待审核申请。
 
+
+自定义 L2/L3：新增 bx_dictionary_format、bx_dictionary_validate、bx_dictionary_import；页面支持上传、校验、导入及版本绑定。[格式、四份中英文示例与使用流程](https://github.com/joinwell52-AI/BoundaryXP/blob/main/docs/mcp/npm/guides/DICTIONARIES.zh-CN.md)。同版本不同内容拒绝覆盖，旧任务和字典保留。rc.8用户请按升级指南调用rc.9新版安装器，不能依赖旧版固定18工具的自动检查。
+
 ### 中文安装与升级
 
 [产品介绍](#简体中文)
 
-**boundaryxp-mcp 0.4.0-rc.8 · B-335 · Windows x64 · Node.js ≥22.18（实测 24.19.0）**
+**boundaryxp-mcp 0.4.0-rc.9 · B-335 · Windows x64 · Node.js ≥22.18（实测 24.19.0）**
 
 本指南采用固定启动器的管理安装，支持可选自动升级。[快速接入](#快速接入-mcp-宿主)则直接使用固定版本 npx 命令，两者提供相同 MCP 工具。当前不提供 macOS、Linux 原生包。
 
@@ -133,7 +136,7 @@ $BxpHome = Join-Path $BxpRoot 'install'
 $BxpData = Join-Path $BxpRoot 'data'
 $BxpSettings = Join-Path $BxpRoot 'settings'
 if (Test-Path (Join-Path $BxpHome 'active.json')) { throw 'Already installed: use update' }
-npx.cmd --yes --package boundaryxp-mcp@0.4.0-rc.8 bxp install --home $BxpHome --version 0.4.0-rc.8
+npx.cmd --yes --package boundaryxp-mcp@0.4.0-rc.9 bxp install --home $BxpHome --version 0.4.0-rc.9
 if ($LASTEXITCODE -ne 0) { throw 'Installation failed' }
 $BxpLauncher = Join-Path $BxpHome 'launcher.mjs'
 New-Item -ItemType Directory -Path $BxpSettings -Force | Out-Null
@@ -145,7 +148,7 @@ if (!(Test-Path $BxpEnv)) { [IO.File]::WriteAllText($BxpEnv, "# Model API config
 node $BxpLauncher --manage status
 ```
 
-安装回执应显示 `READY`、`probe.passed:true` 和版本 `0.4.0-rc.8`。安装器下载指定 npm 版本、校验完整性并探测原生 MCP。安装依赖需要联网，无需编译器、exe 安装器、另外安装 BoundaryXP 工作台或自建服务器。空 API profile 列表仍保留内置 host 配置，可用当前宿主 LLM 分析。
+安装回执应显示 `READY`、`probe.passed:true` 和版本 `0.4.0-rc.9`。安装器下载指定 npm 版本、校验完整性并探测原生 MCP。安装依赖需要联网，无需编译器、exe 安装器、另外安装 BoundaryXP 工作台或自建服务器。空 API profile 列表仍保留内置 host 配置，可用当前宿主 LLM 分析。
 
 #### Cursor 接入
 
@@ -155,7 +158,7 @@ $BxpConfig = Join-Path $BxpWorkspace '.cursor\mcp.json'
 node $BxpLauncher --manage configure --config $BxpConfig --data-root $BxpData --profiles $BxpProfiles --env-file $BxpEnv
 ```
 
-在 Cursor 打开这个工作区，在 MCP 设置启用 BoundaryXP。看到 **18 个工具** 后，在聊天里说：
+在 Cursor 打开这个工作区，在 MCP 设置启用 BoundaryXP。看到 **21 个工具** 后，在聊天里说：
 
 > 只通过 BoundaryXP MCP 调用 bx_capabilities、bx_profiles_list 和 bx_workbench_open，返回实际版本和工作台地址；不用终端替代，不提交分析。
 
@@ -232,10 +235,12 @@ BOUNDARYXP_API_KEY=REPLACE_WITH_YOUR_KEY
 
 #### 升级
 
-沿用原安装、数据和配置路径。先完整备份数据与配置，完成作业并断开相关 MCP 客户端，再手动升级。若新开 PowerShell 窗口，请先将 `$BxpHome` 设为原安装路径。
+沿用原安装、数据和配置路径。先完整备份数据与配置，完成作业并断开相关 MCP 客户端，再手动升级。若新开 PowerShell 窗口，请先将 `$BxpHome`、`$BxpData` 分别设为原安装目录和原数据目录；不要照抄新安装示例覆盖自己的路径。
+
+**rc.8可以直接升级到rc.9，无需卸载。** 旧版自动升级自检固定检查18工具，无法通过rc.9的21工具检查；这次请执行下面的命令，由npm临时取得rc.9新版安装器完成升级，不用旧版`launcher --manage update`。新版根据目标包声明核对工具清单，后续工具数量变化不会因此被拒绝。
 
 ```powershell
-npx.cmd --yes --package boundaryxp-mcp@0.4.0-rc.8 bxp update --home $BxpHome --version 0.4.0-rc.8 --migrate-data $BxpData
+npx.cmd --yes --package boundaryxp-mcp@0.4.0-rc.9 bxp update --home $BxpHome --version 0.4.0-rc.9 --migrate-data $BxpData
 ```
 
 不要先删除旧版。升级保留任务、失败记录及宿主、模型配置。核心运行包摘要变化时，需显式指定 `--migrate-data <原数据目录>`，复制并校验后保留原目录。本版 MCP 运行包摘要变化，B-335 原生 Core 二进制不变。升级需用原数据路径执行 --migrate-data，校验复制后的新目录并保留原目录。
@@ -243,6 +248,19 @@ npx.cmd --yes --package boundaryxp-mcp@0.4.0-rc.8 bxp update --home $BxpHome --v
 后续也可运行 `node <home>/launcher.mjs --manage update --version <准确版本>`。升级后重连，通过 `bx_capabilities` 与磁盘 `--manage status` 对照版本。
 
 未发布的本机 rc.2 测试安装曾使用不同包名，需要先用上述新版 bootstrap 命令切换一次；它不是此前 npm 发行版。
+
+##### 原来直接使用 npx 的用户
+
+如果宿主命令直接是 `npx.cmd --yes boundaryxp-mcp@0.4.0-rc.8 ...`，没有管理安装目录，不要直接改成 rc.9 后指向旧数据。先完成作业并断开相关客户端，将 `$BxpData` 设为原数据目录，`$BxpHome` 设为一个新的空安装目录，再执行：
+
+```powershell
+npx.cmd --yes --package boundaryxp-mcp@0.4.0-rc.9 bxp install --home $BxpHome --version 0.4.0-rc.8
+if ($LASTEXITCODE -ne 0) { throw 'Bootstrap installation failed' }
+npx.cmd --yes --package boundaryxp-mcp@0.4.0-rc.9 bxp update --home $BxpHome --version 0.4.0-rc.9 --migrate-data $BxpData
+if ($LASTEXITCODE -ne 0) { throw 'Migration failed' }
+```
+
+然后按宿主接入章节，将原 BoundaryXP 条目改为新安装目录的 `launcher.mjs`，保留原数据路径、profiles、环境变量及其他 MCP 条目。启动器会使用已校验的迁移副本；原目录保留。不要同时保留两个指向同一数据的 BoundaryXP 连接。
 
 ##### 可选自动检查与升级
 
@@ -274,7 +292,7 @@ node $BxpLauncher --manage auto-update --mode off
 | 现象 | 检查方式 |
 |---|---|
 | Connecting 或零工具 | 检查 Node 绝对路径、MCP 输出、JSON 编码和 `--manage status`。用 `--manage doctor` 做隔离 MCP/HTTP 自检。 |
-| 显示 18 工具但聊天找不到 | 连接后新开 Agent 聊天。 |
+| 显示 21 工具但聊天找不到 | 连接后新开 Agent 聊天。 |
 | COMPILER_BUSY | 等待已有作业或明确取消，不重复提交。 |
 | JOINT_RESPONSE_NOT_JSON | 保留错误及原响应，格式失败不能当作有效边界判断。 |
 | PROFILE_NOT_FOUND 或 API 401/403/429 | 检查 profile、密钥、提供商权限与额度，不自动重试付费分析。 |
@@ -284,6 +302,9 @@ node $BxpLauncher --manage auto-update --mode off
 关闭浏览器不会关闭 MCP。最后一个 MCP 客户端断开后工作台服务退出，未完成作业会取消，请先完成作业。重连后调用 `bx_workbench_open` 获取新地址。
 
 停用时只移除对应宿主条目，保留数据与配置。报告问题时提供版本、错误码和脱敏最小案例，不提供凭据或个人任务库。
+
+
+自定义 L2/L3：新增 bx_dictionary_format、bx_dictionary_validate、bx_dictionary_import；页面支持上传与校验。[格式、完整示例与使用流程](https://github.com/joinwell52-AI/BoundaryXP/blob/main/docs/mcp/npm/guides/DICTIONARIES.zh-CN.md)。这些能力从rc.9提供；升级后重新发现21工具、17资源。
 
 [English](#english) · [回到语言选择](#boundaryxp--bxp)
 
@@ -295,11 +316,11 @@ node $BxpLauncher --manage auto-update --mode off
 
 Turn complete task requirements into evidence-backed **7+1 relationships**. Inspect parent–child tasks and their combined constraints, then trace why a result is **out of bounds, within bounds or incomplete**. LLM judgments and native calculator results are recorded separately, alongside original evidence and unspecified conditions.
 
-**boundaryxp-mcp 0.4.0-rc.8 · B-335 · Windows x64 · Node.js ≥22.18 · MIT · Prerelease**
+**boundaryxp-mcp 0.4.0-rc.9 · B-335 · Windows x64 · Node.js ≥22.18 · MIT · Prerelease**
 
 [Installation and upgrades](#installation-and-upgrades) · [Public repository](https://github.com/joinwell52-AI/BoundaryXP) · [Releases](https://github.com/joinwell52-AI/BoundaryXP/releases)
 
-Connect through standard **stdio MCP** in Cursor, Codex or compatible hosts. The package includes **18 tools, 10 resources, English and Chinese built-in help, a compiled Core and a local browser workbench**. No separate BoundaryXP installation or hosted BoundaryXP server is required. This release does not include macOS or Linux native packages.
+Connect through standard **stdio MCP** in Cursor, Codex or compatible hosts. The package includes **21 tools, 17 resources, English and Chinese built-in help, a compiled Core and a local browser workbench**. No separate BoundaryXP installation or hosted BoundaryXP server is required. This release does not include macOS or Linux native packages.
 
 ### What does 7+1 mean?
 
@@ -360,7 +381,7 @@ Requires Windows x64, Node.js ≥22.18 and npm; tested with Node 24.19.0. Initia
   "mcpServers": {
     "BoundaryXP": {
       "command": "npx.cmd",
-      "args": ["--yes", "boundaryxp-mcp@0.4.0-rc.8", "--data-root", "C:/BXP/data"]
+      "args": ["--yes", "boundaryxp-mcp@0.4.0-rc.9", "--data-root", "C:/BXP/data"]
     }
   }
 }
@@ -368,7 +389,7 @@ Requires Windows x64, Node.js ≥22.18 and npm; tested with Node 24.19.0. Initia
 
 This entry pins a version and does not auto-update. For Codex, API setup and managed updates, follow the [English installation guide](#installation-and-upgrades). Existing users must retain their original data and settings paths.
 
-After connection, expect **18 tools**. Ask:
+After connection, expect **21 tools**. Ask:
 
 > Call BoundaryXP bx_capabilities and bx_workbench_open; return the version and workbench URL without submitting analysis.
 
@@ -398,11 +419,14 @@ The public repository provides product documentation and compiled releases. The 
 
 [Directory status](https://github.com/joinwell52-AI/BoundaryXP/blob/main/docs/mcp/DISCOVERY.md) distinguishes live listings from pending reviews.
 
+
+Custom L2/L3: bx_dictionary_format, bx_dictionary_validate and bx_dictionary_import, with workbench upload, validation, import and explicit version binding. [Format, four bilingual examples and workflow](https://github.com/joinwell52-AI/BoundaryXP/blob/main/docs/mcp/npm/guides/DICTIONARIES.md). Changed content at the same version is rejected; old tasks and dictionaries are retained. rc.8 users must use the rc.9 installer described in the upgrade guide because the old automatic probe expects exactly 18 tools.
+
 ### Installation and upgrades
 
 [Product introduction](#english)
 
-**boundaryxp-mcp 0.4.0-rc.8 · B-335 · Windows x64 · Node.js ≥22.18 (tested: 24.19.0)**
+**boundaryxp-mcp 0.4.0-rc.9 · B-335 · Windows x64 · Node.js ≥22.18 (tested: 24.19.0)**
 
 This guide describes a managed installation with a stable launcher and optional automatic updates. The [quick start](#quick-start-with-an-mcp-host) uses a pinned npx command instead. Both provide the same MCP tools. macOS/Linux native packages are not available in this release.
 
@@ -416,7 +440,7 @@ $BxpHome = Join-Path $BxpRoot 'install'
 $BxpData = Join-Path $BxpRoot 'data'
 $BxpSettings = Join-Path $BxpRoot 'settings'
 if (Test-Path (Join-Path $BxpHome 'active.json')) { throw 'Already installed: use update' }
-npx.cmd --yes --package boundaryxp-mcp@0.4.0-rc.8 bxp install --home $BxpHome --version 0.4.0-rc.8
+npx.cmd --yes --package boundaryxp-mcp@0.4.0-rc.9 bxp install --home $BxpHome --version 0.4.0-rc.9
 if ($LASTEXITCODE -ne 0) { throw 'Installation failed' }
 $BxpLauncher = Join-Path $BxpHome 'launcher.mjs'
 New-Item -ItemType Directory -Path $BxpSettings -Force | Out-Null
@@ -428,7 +452,7 @@ if (!(Test-Path $BxpEnv)) { [IO.File]::WriteAllText($BxpEnv, "# Model API config
 node $BxpLauncher --manage status
 ```
 
-Expect `READY`, `probe.passed:true` and version `0.4.0-rc.8` in the installation receipt. The installer downloads the exact npm version, checks integrity and probes the native MCP. Internet access is required for package dependencies. No compiler, executable installer, separate BoundaryXP workbench or hosted BoundaryXP server is needed. Empty API profiles retain the built-in host profile for analysis with your current MCP host LLM.
+Expect `READY`, `probe.passed:true` and version `0.4.0-rc.9` in the installation receipt. The installer downloads the exact npm version, checks integrity and probes the native MCP. Internet access is required for package dependencies. No compiler, executable installer, separate BoundaryXP workbench or hosted BoundaryXP server is needed. Empty API profiles retain the built-in host profile for analysis with your current MCP host LLM.
 
 #### Cursor
 
@@ -438,7 +462,7 @@ $BxpConfig = Join-Path $BxpWorkspace '.cursor\mcp.json'
 node $BxpLauncher --manage configure --config $BxpConfig --data-root $BxpData --profiles $BxpProfiles --env-file $BxpEnv
 ```
 
-Open that workspace in Cursor and enable BoundaryXP in MCP settings. After **18 tools** appear, ask:
+Open that workspace in Cursor and enable BoundaryXP in MCP settings. After **21 tools** appear, ask:
 
 > Only use BoundaryXP MCP to call bx_capabilities, bx_profiles_list and bx_workbench_open. Return the actual version and workbench URL. Do not use a terminal substitute or submit analysis.
 
@@ -515,10 +539,12 @@ For help in the host, ask **“Read BoundaryXP tool help, multi-DEV examples and
 
 #### Updates
 
-Keep your existing installation, data and settings paths. Back up complete data and settings, finish jobs and disconnect related MCP clients before a manual update. Restore `$BxpHome` to the original installation path if using a new shell.
+Keep your existing installation, data and settings paths. Back up complete data and settings, finish jobs and disconnect related MCP clients before a manual update. In a new shell, set `$BxpHome` and `$BxpData` to your existing installation and data directories; do not substitute the new-install example paths for your own.
+
+**rc.8 can upgrade directly to rc.9 without uninstalling.** Its old automatic updater expects exactly 18 tools and rejects rc.9's 21 tools. For this transition use the command below, which obtains the rc.9 installer through npm; do not use the old `launcher --manage update`. The new probe checks the target package's declared tools, so future changes in tool count do not cause this rejection.
 
 ```powershell
-npx.cmd --yes --package boundaryxp-mcp@0.4.0-rc.8 bxp update --home $BxpHome --version 0.4.0-rc.8 --migrate-data $BxpData
+npx.cmd --yes --package boundaryxp-mcp@0.4.0-rc.9 bxp update --home $BxpHome --version 0.4.0-rc.9 --migrate-data $BxpData
 ```
 
 Do not delete the old release first. Updates preserve task data, failed records and host/provider settings. This update changes the MCP runtime digest while keeping the B-335 native Core binary unchanged. Use `--migrate-data <original-data-directory>` for a verified copy; the original directory is retained.
@@ -526,6 +552,19 @@ Do not delete the old release first. Updates preserve task data, failed records 
 Later managed updates can also use `node <home>/launcher.mjs --manage update --version <exact-version>`. Reconnect clients afterward and compare `bx_capabilities` with the on-disk `--manage status`.
 
 The unpublished rc.2 local test package used a different package name; use the new bootstrap command above once to switch. It was not an earlier npm release.
+
+##### Existing direct-npx users
+
+If your host directly runs `npx.cmd --yes boundaryxp-mcp@0.4.0-rc.8 ...` without a managed installation, do not just change the package version against the old data directory. Finish jobs and disconnect matching clients. Set `$BxpData` to the existing data directory and `$BxpHome` to a new empty installation directory, then run:
+
+```powershell
+npx.cmd --yes --package boundaryxp-mcp@0.4.0-rc.9 bxp install --home $BxpHome --version 0.4.0-rc.8
+if ($LASTEXITCODE -ne 0) { throw 'Bootstrap installation failed' }
+npx.cmd --yes --package boundaryxp-mcp@0.4.0-rc.9 bxp update --home $BxpHome --version 0.4.0-rc.9 --migrate-data $BxpData
+if ($LASTEXITCODE -ne 0) { throw 'Migration failed' }
+```
+
+Follow the host setup section to replace only the existing BoundaryXP launch command with the new managed `launcher.mjs`. Retain the original data argument, profiles, environment and other MCP entries. The launcher resolves the verified data copy while retaining the original. Avoid duplicate BoundaryXP connections to the same data.
 
 ##### Optional automatic updates
 
@@ -557,7 +596,7 @@ After disconnecting clients, use `node $BxpLauncher --manage rollback` to restor
 | Symptom | What to check |
 |---|---|
 | Connecting or zero tools | Node absolute path, MCP output, JSON encoding and `--manage status`. Run `--manage doctor` for an isolated MCP/HTTP probe. |
-| 18 tools but chat cannot find them | Start a new Agent chat after connection. |
+| 21 tools but chat cannot find them | Start a new Agent chat after connection. |
 | COMPILER_BUSY | Wait for the existing job or explicitly cancel it; do not submit duplicates. |
 | JOINT_RESPONSE_NOT_JSON | Preserve the error and original response. A malformed response is not a valid boundary judgment. |
 | PROFILE_NOT_FOUND or API 401/403/429 | Profile, key, provider access and quota. Do not automatically retry paid analysis. |
@@ -567,5 +606,8 @@ After disconnecting clients, use `node $BxpLauncher --manage rollback` to restor
 Closing the browser does not stop MCP. Disconnecting the last MCP client stops the workbench and cancels unfinished jobs; finish work first. Reconnect and call `bx_workbench_open` for a fresh address.
 
 To stop using MCP, remove only its host entry and retain data/settings. Report the version, error code and a redacted minimal example; never share credentials or personal task stores.
+
+
+Custom L2/L3: bx_dictionary_format, bx_dictionary_validate and bx_dictionary_import; workbench upload and validation. [Format, examples and workflow](https://github.com/joinwell52-AI/BoundaryXP/blob/main/docs/mcp/npm/guides/DICTIONARIES.md). Available from rc.9; rediscover 21 tools and 17 resources after upgrading.
 
 [简体中文](#简体中文) · [Back to language selection](#boundaryxp--bxp)

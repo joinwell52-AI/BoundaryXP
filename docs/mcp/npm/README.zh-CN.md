@@ -6,11 +6,11 @@
 
 从完整任务要求形成带原文证据的 **7+1 关联表示**，检查父子任务及其组合约束，追溯为什么**越界、未越界，或信息不全**。报告分别保留 LLM 判断、原生计算器复核、原文依据和未明确项。
 
-**boundaryxp-mcp 0.4.0-rc.8 · B-335 · Windows x64 · Node.js ≥22.18 · MIT · 预发行版**
+**boundaryxp-mcp 0.4.0-rc.9 · B-335 · Windows x64 · Node.js ≥22.18 · MIT · 预发行版**
 
 [安装与升级](https://github.com/joinwell52-AI/BoundaryXP/blob/main/docs/mcp/npm/INSTALL.zh-CN.md) · [中文产品仓库](https://github.com/joinwell52-AI/BoundaryXP/blob/main/README.zh-CN.md) · [发行下载](https://github.com/joinwell52-AI/BoundaryXP/releases)
 
-通过标准 **stdio MCP** 接入 Cursor、Codex 等宿主。一个包包含 **18 个工具、10 项资源、中英文内置帮助、编译后的 Core 和本地浏览器工作台**。无需另装 BoundaryXP 工作台或自建 BoundaryXP 服务器。当前原生包仅支持 Windows x64，不含 macOS、Linux 原生包。
+通过标准 **stdio MCP** 接入 Cursor、Codex 等宿主。一个包包含 **21 个工具、17 项资源、中英文内置帮助、编译后的 Core 和本地浏览器工作台**。无需另装 BoundaryXP 工作台或自建 BoundaryXP 服务器。当前原生包仅支持 Windows x64，不含 macOS、Linux 原生包。
 
 ## 7+1 核对什么？
 
@@ -71,7 +71,7 @@
   "mcpServers": {
     "BoundaryXP": {
       "command": "npx.cmd",
-      "args": ["--yes", "boundaryxp-mcp@0.4.0-rc.8", "--data-root", "C:/BXP/data"]
+      "args": ["--yes", "boundaryxp-mcp@0.4.0-rc.9", "--data-root", "C:/BXP/data"]
     }
   }
 }
@@ -79,7 +79,7 @@
 
 这个入口固定版本，不自动升级。Codex、API 配置和管理安装升级见[中文安装指南](https://github.com/joinwell52-AI/BoundaryXP/blob/main/docs/mcp/npm/INSTALL.zh-CN.md)。已有用户沿用自己的数据与配置路径。
 
-连接后应显示 **18 个工具**，在聊天里说：
+连接后应显示 **21 个工具**，在聊天里说：
 
 > 调用 BoundaryXP 的 bx_capabilities 和 bx_workbench_open，返回版本及工作台地址，不提交分析。
 
@@ -108,3 +108,6 @@
 公开仓库提供产品文档与编译发行包。Core 不包含原始 C++ 或 JavaScript 实现源码；适配器、UI、提示词及必要资源仍可读。MIT 和第三方许可说明随包保留。预发行版不宣称完整协议符合性或所有模型的语义准确率。
 
 [目录收录状态](https://github.com/joinwell52-AI/BoundaryXP/blob/main/docs/mcp/DISCOVERY.md)区分已上线入口和待审核申请。
+
+
+自定义 L2/L3：新增 bx_dictionary_format、bx_dictionary_validate、bx_dictionary_import；页面支持上传、校验、导入及版本绑定。[格式、四份中英文示例与使用流程](https://github.com/joinwell52-AI/BoundaryXP/blob/main/docs/mcp/npm/guides/DICTIONARIES.zh-CN.md)。同版本不同内容拒绝覆盖，旧任务和字典保留。rc.8用户请按升级指南调用rc.9新版安装器，不能依赖旧版固定18工具的自动检查。

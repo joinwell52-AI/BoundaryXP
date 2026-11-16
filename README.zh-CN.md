@@ -5,7 +5,7 @@
 
 <p align="center">
   <a href="https://boundaryxp-workbench-demo.joinwell52.chatgpt.site/"><img src="https://img.shields.io/badge/Demo-Interactive-0891b2?style=flat-square" alt="演示 / Interactive demo"></a>
-  <a href="docs/mcp/RELEASE.md"><img src="https://img.shields.io/badge/MCP-0.4.0--rc.8-2563eb?style=flat-square" alt="MCP 0.4.0-rc.8 · npm prerelease"></a>
+  <a href="docs/mcp/RELEASE.md"><img src="https://img.shields.io/badge/MCP-0.4.0--rc.9-2563eb?style=flat-square" alt="MCP 0.4.0-rc.9 · npm prerelease"></a>
   <a href="#l2--l3行业与企业语义库"><img src="https://img.shields.io/badge/Semantics-L2%20%2B%20L3-7c3aed?style=flat-square" alt="L2 industry / L3 enterprise semantics"></a>
   <a href="docs/mcp/NOTICES.md"><img src="https://img.shields.io/badge/Status-npm%20prerelease-d97706?style=flat-square" alt="npm prerelease"></a>
   <a href="https://doi.org/10.5281/zenodo.24072738"><img src="https://img.shields.io/badge/DOI-10.5281%2Fzenodo.24072738-1e3a8a?style=flat-square" alt="DOI: 10.5281/zenodo.24072738"></a>
@@ -15,7 +15,7 @@
 
 <p align="center"><a href="https://boundaryxp-workbench-demo.joinwell52.chatgpt.site/"><strong>▶ 在线演示</strong></a>　·　<a href="docs/mcp/INSTALL.zh-CN.md"><strong>MCP 接入</strong></a>　·　<a href="https://doi.org/10.5281/zenodo.24072738"><strong>论文</strong></a></p>
 
-<p align="center">中英双语 · MCP 0.4.0-rc.8 / B-335 · npm 预发行 · 论文与协议资料 · Core 原实现源码私有</p>
+<p align="center">中英双语 · MCP 0.4.0-rc.9 / B-335 · npm 预发行 · 论文与协议资料 · Core 原实现源码私有</p>
 
 ## 先看一个真实用例
 
@@ -48,16 +48,18 @@
 
 ## 接入你的 AI 工作流
 
-**BoundaryXP MCP** 通过标准 stdio 接入 Cursor、Codex 等兼容宿主，提供 **18 个工具、10 个资源和本地浏览器工作台**。Windows x64 安装包包含原生编译 Core，无需另装 58618 或自建 BoundaryXP 服务器。
+**rc.9 新增：** MCP 与工作台均可导入、校验自定义 L2 行业字典和 L3 企业字典，提供[格式规范与中文示例](docs/mcp/npm/guides/DICTIONARIES.zh-CN.md)。rc.8 可以直接升级，需**一次性使用 rc.9 新版安装器**：旧更新器固定检查 18 个工具，不能接受新版 21 个工具。请按[升级指南](docs/mcp/npm/INSTALL.zh-CN.md#升级)保留原安装和数据路径操作。
 
-1. **从 npm 安装：** 使用 `boundaryxp-mcp@0.4.0-rc.8`；预发行渠道为 `next`。GitHub Release 同步保存安装包和 SHA-256。
+**BoundaryXP MCP** 通过标准 stdio 接入 Cursor、Codex 等兼容宿主，提供 **21 个工具、17 个资源和本地浏览器工作台**。Windows x64 安装包包含原生编译 Core，无需另装 58618 或自建 BoundaryXP 服务器。
+
+1. **从 npm 安装：** 使用 `boundaryxp-mcp@0.4.0-rc.9`；预发行渠道为 `next`。GitHub Release 同步保存安装包和 SHA-256。
 2. **安装并连接宿主：** 按对应指南配置 stdio MCP 服务。
 3. **使用当前宿主 LLM：** 默认 host 配置通过标准 MCP 工具提供规范、接收宿主分析并运行原生复核，无需额外模型 API Key；也保留可选的独立 API 模式。
 4. **打开工作台：** 导入完整任务，预览并确认任务树，再提交分析、查看证据与报告。
 
 [**中文安装指南 →**](docs/mcp/INSTALL.zh-CN.md) · [English setup](docs/mcp/INSTALL.en.md) · [工具与资源](docs/mcp/TOOLS.md) · [升级、回滚与排障](docs/mcp/npm/INSTALL.zh-CN.md#升级)
 
-> **当前 npm 版本：** [boundaryxp-mcp 0.4.0-rc.8](https://www.npmjs.com/package/boundaryxp-mcp)，B-335 / Windows x64，MIT许可。入口：[中文安装指南](docs/mcp/INSTALL.zh-CN.md)、[7+1产品介绍](docs/mcp/npm/README.zh-CN.md)、[MCP目录状态](docs/mcp/DISCOVERY.md)。本产品仓库已经公开；核心实现源码在独立私有源码仓库维护。客户无需另装58618。
+> **当前 npm 版本：** [boundaryxp-mcp 0.4.0-rc.9](https://www.npmjs.com/package/boundaryxp-mcp)，B-335 / Windows x64，MIT许可。入口：[中文安装指南](docs/mcp/INSTALL.zh-CN.md)、[7+1产品介绍](docs/mcp/npm/README.zh-CN.md)、[MCP目录状态](docs/mcp/DISCOVERY.md)。本产品仓库已经公开；核心实现源码在独立私有源码仓库维护。客户无需另装58618。
 
 ## L2 / L3：行业与企业语义库
 

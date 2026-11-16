@@ -1,5 +1,9 @@
 # 自动检查与自动升级 / Automatic updates
 
+**rc.8 → rc.9过渡：可以直接升级，不需卸载，但须使用[安装指南](INSTALL.zh-CN.md#升级)中的rc.9新版安装器命令。** 旧自动检查固定期待18工具，会拒绝rc.9的21工具。新版改为按目标包声明核对工具；这次发布本身不会升级正在运行的客户端或删除数据。
+
+**rc.8 → rc.9 transition: upgrade directly without uninstalling, using the rc.9 installer command in the [installation guide](INSTALL.md#updates).** The old automatic probe requires exactly 18 tools and rejects rc.9's 21. The new probe checks the target package's declared tools. Publication alone does not replace running clients or delete data.
+
 从 `0.4.0-rc.2` 开始，managed launcher 支持自动更新。首次配置可信发行源后，运行中的 MCP 会定期自动检查并在后台下载、校验和自检新版；全部相关客户端退出后的下一次启动自动切换。不强制重启宿主、不取消分析、不自行提交模型请求。客户端一直不退出时，新版保持待生效。
 
 Starting with `0.4.0-rc.2`, managed installations can check and prepare updates in the background. Activation is automatic at the next start after every client using the installation has exited. Long-running clients keep their current release. No forced restart, task cancellation or model request is performed.
