@@ -41,6 +41,6 @@ codex plugin add boundaryxp@community-plugins
 
 2026-11-16 在独立 Codex 配置和数据目录中，实际从上述 GitHub 来源添加市场、安装插件、读回启用状态，并调用安装后副本的 MCP 成功，返回 rc.9 / 21 工具。另有 7 项专项测试通过，覆盖中英文帮助、四份 L2/L3 格式示例、校验与导入、多 DEV 保存、工作台 HTTP 和重连数据保留。没有重新调用付费模型或伪造 LLM 响应；不称为本轮图形界面点击验收或语义准确率测试。
 
-社区全市场测试在 Grafana 套件失败；已在不含 BXP 的上游版本复现相同 Windows 失败，Grafana 不是 BXP 依赖，客户无需安装。BXP 在 Node 22.19 和 24.19 均为 7/7 通过。PR 仍需维护者审核、处理适用平台 Gate 和贡献者本人 CLA；可选工作流仅供手动运行，本次未执行。macOS/Linux 不属于该原生包支持范围。
+社区全市场测试在 Grafana 套件失败；已在不含 BXP 的上游版本复现相同 Windows 失败，Grafana 不是 BXP 依赖，客户无需安装。BXP 在 Node 22.19 和 24.19 均为 7/7 通过。贡献者已本人签署 CLA，[CLA 检查](https://github.com/openai/community-plugins/actions/runs/43818468947/job/133139843169)于 2026-11-16 通过；PR 仍需维护者审核、处理适用平台 Gate；可选工作流仅供手动运行，本次未执行。macOS/Linux 不属于该原生包支持范围。
 
 [候选插件完整中文说明](https://github.com/joinwell52-AI/community-plugins/blob/codex/boundaryxp-plugin-20261116/plugins/boundaryxp/README.zh-CN.md) · [目录状态](DISCOVERY.md#rc9-contributions)
