@@ -4,10 +4,14 @@
 <h1 align="center">从原文到边界，每一步都看得见。</h1>
 
 <p align="center">
+  <a href="https://www.npmjs.com/package/boundaryxp-mcp"><img src="https://img.shields.io/badge/npm-Install%20rc.9-CB3837?style=for-the-badge&amp;logo=npm" alt="npm · 安装 BoundaryXP rc.9"></a>
+  <a href="https://registry.modelcontextprotocol.io/?q=boundaryxp"><img src="https://img.shields.io/badge/Official%20MCP%20Registry-Listed-15803d?style=for-the-badge" alt="官方 MCP Registry · 已收录"></a>
+  <a href="https://github.com/joinwell52-AI/BoundaryXP/releases/tag/mcp-v0.4.0-rc.9"><img src="https://img.shields.io/badge/Download-rc.9%20package-2563eb?style=for-the-badge" alt="下载 rc.9 编译安装包"></a>
+</p>
+
+<p align="center">
   <a href="https://boundaryxp-workbench-demo.joinwell52.chatgpt.site/"><img src="https://img.shields.io/badge/Demo-Interactive-0891b2?style=flat-square" alt="演示 / Interactive demo"></a>
-  <a href="docs/mcp/RELEASE.md"><img src="https://img.shields.io/badge/MCP-0.4.0--rc.9-2563eb?style=flat-square" alt="MCP 0.4.0-rc.9 · npm prerelease"></a>
   <a href="#l2--l3行业与企业语义库"><img src="https://img.shields.io/badge/Semantics-L2%20%2B%20L3-7c3aed?style=flat-square" alt="L2 industry / L3 enterprise semantics"></a>
-  <a href="docs/mcp/NOTICES.md"><img src="https://img.shields.io/badge/Status-npm%20prerelease-d97706?style=flat-square" alt="npm prerelease"></a>
   <a href="https://doi.org/10.5281/zenodo.24072738"><img src="https://img.shields.io/badge/DOI-10.5281%2Fzenodo.24072738-1e3a8a?style=flat-square" alt="DOI: 10.5281/zenodo.24072738"></a>
 </p>
 
@@ -16,6 +20,27 @@
 <p align="center"><a href="https://boundaryxp-workbench-demo.joinwell52.chatgpt.site/"><strong>▶ 在线演示</strong></a>　·　<a href="docs/mcp/INSTALL.zh-CN.md"><strong>MCP 接入</strong></a>　·　<a href="https://doi.org/10.5281/zenodo.24072738"><strong>论文</strong></a></p>
 
 <p align="center">中英双语 · MCP 0.4.0-rc.9 / B-335 · npm 预发行 · 论文与协议资料 · Core 原实现源码私有</p>
+
+## 安装 BXP · 在哪里找到 BXP
+
+**[从 npm 安装 →](https://www.npmjs.com/package/boundaryxp-mcp#中文安装与升级)** · **[Codex / Cursor 接入指南 →](docs/mcp/INSTALL.zh-CN.md)** · **[English setup →](docs/mcp/INSTALL.en.md)**
+
+**21 个工具 · 17 项资源 · Windows x64 · Node.js ≥22.18 · rc.9 预发行版。** 默认使用当前宿主 LLM 分析，无需另外配置模型 API Key。
+
+| 公开入口 | 现在能查到什么 |
+|---|---|
+| **[npm：下载安装](https://www.npmjs.com/package/boundaryxp-mcp)** | rc.9 安装包，同页中英文介绍与安装说明 |
+| **[官方 MCP Registry](https://registry.modelcontextprotocol.io/?q=boundaryxp)** | 已登记 rc.9 及 npm 安装来源 |
+| **[TensorBlock MCP Index：已合并收录](https://github.com/TensorBlock/awesome-mcp-servers/pull/5989)** | 11 月 15 日已合并到主分支；条目版本仍为 rc.7 |
+| **[MCPServers 中文页](https://mcpservers.org/zh-CN/servers/www-npmjs-com-package-boundaryxp-mcp)** | 已公开收录，有 npm 链接；简介仍显示 rc.8 |
+| **[Serverdex](https://serverdex.io/server/io-github-joinwell52-ai-boundaryxp)** | 已有公开条目；rc.8 配置示例缺少必填数据路径，请按本项目指南安装 |
+| **[Glama](https://glama.ai/mcp/servers/joinwell52-AI/BoundaryXP)** | 已有公开介绍页；安装说明仍缓存 rc.5，不提供 Glama 托管部署 |
+| **[MCPwell](https://mcpwell.com/categories/productivity/)** | Productivity 分类已列出 BoundaryXP，可进入本仓库 |
+| **[ToolCenter](https://www.toolcenter.ai/en/mcp)** | 已同步目录条目并提供 npm 链接；版本仍显示 rc.8 |
+
+核对日期：2026-11-16。搜索 **BoundaryXP** 或 **boundaryxp-mcp**。安装新版以 npm 为准，第三方目录可能延迟同步。“已收录”表示能查到，不代表功能认证。[完整目录状态及可登记入口](docs/mcp/DISCOVERY.md)。
+
+**Codex 桌面版：**「插件」→「添加」→ **「添加 MCP 服务器」**，按[stdio 接入指南](docs/mcp/npm/INSTALL.zh-CN.md#codex-与其他宿主)配置。「添加插件市场」需要独立的插件市场源，不能填 npm、Registry 地址或本产品仓库；目前 BXP 未上架 Codex 插件目录或 Cursor Marketplace。
 
 ## 先看一个真实用例
 

@@ -1,6 +1,6 @@
 # 在哪里查找 BoundaryXP？ / Discover BoundaryXP
 
-发行入口核对日期：2026-11-16；第三方人工审核记录保留各自日期。安装包分发、目录登记和人工审核分别记录。
+发行入口与下述公开目录页面核对日期：2026-11-16；人工审核与旧 PR 记录保留各自日期。安装包分发、目录登记和人工审核分别记录。
 
 ## 当前安装入口 / Current installation
 
@@ -14,9 +14,62 @@ rc.9 新增自定义 L2/L3 字典格式、校验、导入与页面入口，现�
 
 rc.9 provides 21 tools and 17 resources, including custom L2/L3 format, validation and import. rc.8 requires the rc.9 bootstrap once; retain existing tasks and dictionaries. See npm's in-page upgrade guide. Directory approval does not imply a new third-party audit of rc.9.
 
-## 目录状态 / Directory status
+## 已公开可查 / Public listings checked
 
-MCPServers 的批准通知及公开条目已于 2026-11-15 核实；其他第三方申请和 PR 仍为 2026-11-14 的核对记录。不因 rc.9 发布而宣称平台已重新审核该版本。Cursor 仍暂缓提交。
+| 入口 / Entry | 2026-11-16 页面事实 / Observed state |
+|---|---|
+| [TensorBlock PR #5989](https://github.com/TensorBlock/awesome-mcp-servers/pull/5989) | 2026-11-15 已合并到 main；收录内容仍为 rc.7，后续需要更新条目。Merged into main; this is confirmed repository inclusion, not a claim that its separate hosted profile was tested. |
+| [MCPServers 中文](https://mcpservers.org/zh-CN/servers/www-npmjs-com-package-boundaryxp-mcp) / [English entry](https://mcpservers.org/servers/www-npmjs-com-package-boundaryxp-mcp) | 已有 npm 按钮、仓库链接和文档；简介已补充宿主 LLM、18 工具 / 10 资源，仍为 rc.8。Live listing with documentation and host LLM description; still rc.8. |
+| [Serverdex](https://serverdex.io/server/io-github-joinwell52-ai-boundaryxp) | active，提供 npm 和仓库链接；缓存版本 rc.8，自动配置片段省略必填 `--data-root`，不能作为完整安装示例。Live, with a stale rc.8 snippet missing the required data path; use our installation guide. |
+| [Glama](https://glama.ai/mcp/servers/joinwell52-AI/BoundaryXP) | 现在已有公开介绍页，旧“尚无可查条目”判断不再适用。仍缓存 rc.5 / 18 工具 / 10 资源及过时的独立 API 说明；页面明确没有 Glama 可部署发行版。Information page is live; cached rc.5 instructions do not describe rc.9 or its default host mode. No Glama-hosted deployable release. |
+| [MCPwell](https://mcpwell.com/categories/productivity/) | Productivity 分类有 BoundaryXP 条目和本仓库链接。Public category entry with a repository link. |
+| [ToolCenter](https://www.toolcenter.ai/en/mcp) | 已有官方 Registry 同步条目及 npm 链接，显示 rc.8。Registry-synced entry is live; displayed version remains rc.8. |
+
+这些页面可发现 BXP，不表示每个平台都完成 rc.9 安装验收；统一从 npm 和本仓库指南安装。第三方旧版描述按核对日期记录，不沿用其中已过时的模型配置要求。目录徽章仅表示条目存在，不表示安全评级、官方推荐或功能认证。
+
+These are discovery entries, not claims of rc.9 deployment approval or certification. Install using the current npm package and our setup instructions. No Core source was published to obtain a listing.
+
+## 可登记或认领的市场 / Submission and claiming options
+
+### 宿主插件市场 / Host plugin marketplaces
+
+用户截图中的「添加插件市场」接受带市场清单的 GitHub 仓库、Git URL 或本地目录，而不是普通 MCP 目录网址。下面是可准备的分发路线，**尚未完成 BXP 插件封装或平台上架**：
+
+| 路线 / Route | 对 BXP 的意义 / What it would provide |
+|---|---|
+| **[OpenAI Community Plugins](https://github.com/openai/community-plugins)** | 公开的 Codex Git 插件市场，明确接受外部 fork PR；要求插件清单、市场条目、说明、测试及维护者审核，贡献者需自行签署 CLA。应先验证以 npm 编译包为依赖的插件封装；尚未提交，也不等于获准进入 OpenAI 公共 Plugins Directory。见 [贡献要求](https://github.com/openai/community-plugins/blob/main/CONTRIBUTING.md)。Accepts external PRs; compiled-dependency eligibility remains subject to review. |
+| **自建 Codex 插件市场源 / Own Codex marketplace** | 在 GitHub 提供市场目录与插件清单，由本地插件启动 npm 编译包；客户通过「添加插件市场」加入后安装。无需自建托管服务器，不等于进入官方公共目录。见 [OpenAI 打包与市场文档](https://developers.openai.com/plugins/build/plugins)。 |
+| **OpenAI 公共插件目录 / Public Plugins Directory** | 文档提供 ZIP 上传、检查、审核和发布流程；须先补插件资料并核对当前 Windows 本地 stdio 形态的提交要求，不能承诺直接收录或网页端可运行。见 [官方提交指南](https://developers.openai.com/plugins/deploy/submission)。 |
+| **Claude Code 插件市场 / Claude Code marketplace** | 可自建含 `.claude-plugin/marketplace.json` 的 GitHub 市场源，封装本地 MCP；官方目录有另行发布流程。见 [市场创建](https://code.claude.com/docs/en/plugin-marketplaces)及[插件发布](https://code.claude.com/docs/en/plugins/publish)。 |
+| **Cursor Marketplace** | 支持将 MCP 放入插件并提交审核；本项目保持此前“暂缓提交”的决定，尚未上架。见 [Cursor 插件文档](https://cursor.com/docs/plugins)。 |
+
+推荐先制作并验收自建 Codex 市场源，让用户能在截图入口添加和安装；官方公共目录申请另行处理。市场源只需公开分发清单与必要插件文件，Core 继续从编译包交付。当前仓库尚未提供该市场源，不应把普通仓库 URL 宣传成已可添加。
+
+Recommended next implementation: a tested Git-backed Codex marketplace wrapping the compiled npm package. A custom source and an approved public-directory listing are separate deliverables. These are planned routes, not live BXP marketplace listings; Core source need not be added to the public repository.
+
+大型仓库路线复核（2026-11-16）：[punkpeye #19484](https://github.com/punkpeye/awesome-mcp-servers/pull/19484)仍为 Open；[TensorBlock #5989](https://github.com/TensorBlock/awesome-mcp-servers/pull/5989)已于 11 月 15 日合并，覆盖下方历史待审记录。两者是 MCP 发现目录，不是截图中的插件市场源。[Anthropic 官方插件仓库](https://github.com/anthropics/claude-plugins-official)现明确不监看第三方 PR，改走 [Claude 目录管理入口](https://claude.ai/directory/manage)；[modelcontextprotocol/servers](https://github.com/modelcontextprotocol/servers)主要维护参考服务器，产品收录应走 MCP Registry。
+
+Repository review: punkpeye #19484 remains open; TensorBlock #5989 was merged on November 15, superseding the historical pending status below. Anthropic now directs third-party plugin submissions to its directory portal rather than repository PRs. The MCP reference-server repository directs discovery to the MCP Registry.
+
+### 第三方 MCP 目录 / Third-party MCP directories
+
+| 平台 / Platform | 当前可做什么 / Available route |
+|---|---|
+| [Serverdex 现有条目](https://serverdex.io/server/io-github-joinwell52-ai-boundaryxp) | 页面提供免费 GitHub 认领，可维护名称、描述和链接；适合先认领现有页，避免重复提交。Free GitHub claim of the existing page is offered; ownership is not claimed in this check. |
+| [MCPServers](https://mcpservers.org/servers/www-npmjs-com-package-boundaryxp-mcp) | 已收录，可走页面“请求更新”；不应重复申请新条目。Existing listing has a request-update entry. |
+| [MCP Market](https://mcpmarket.com/submit) | 提交页接受 GitHub 仓库；免费队列提示约 4–6 周。本项目已提交，继续待审核，不重复投递。Our free-queue application is already pending. |
+| [MCP.so](https://mcp.so/submit) | 当前展示一次性 $39 提交入口，支持仓库 URL；本次未购买或提交。Paid repository-listing option, not purchased. |
+| [MCP.Market](https://mcp.market/get-listed) | 说明先同步官方 Registry，再收取一次性 $25 审核；主页又声称自动出现，规则存在不同表述，需要提交前确认。本次不付费、不宣称已收录。Published fee and ingestion descriptions differ; confirm before any purchase. This is a different site from mcpmarket.com. |
+| [PulseMCP](https://www.pulsemcp.com/) | 当前仍暂停新增及修改。New submissions and listing changes remain paused. |
+| [Smithery](https://www.smithery.ai/future) | 官方公告说明 2026-10-31 已关闭连接管理、CLI/SDK 等服务，保留公共目录；不能沿用旧部署教程作为可用登记流程。Public directory remains; old proxy/CLI publishing instructions are no longer a valid route. |
+
+Codex 的「添加 MCP 服务器」用于配置本地 stdio；「添加插件市场」用于加载另一类插件市场源。当前 BoundaryXP 公共仓库是产品资料与安装包入口，并非 Codex 插件市场源。npm / 官方 Registry 收录也不自动等于 Codex 插件目录或 Cursor Marketplace 上架。Cursor 仍按所有者要求暂缓提交。
+
+Codex's **Add MCP server** and **Add plugin marketplace** are different routes. Our current product repository is not a Codex plugin marketplace. Directory registration does not automatically list the product in a host's plugin catalog. Cursor Marketplace submission remains paused.
+
+## 申请与历史状态 / Applications and earlier checks
+
+MCPServers 的批准通知已于 2026-11-15 核实；下表保留当时页面缺项与申请记录，MCPServers / Glama 当前公开状态以上方 2026-11-16 核对为准。其他第三方申请和 PR 保留 2026-11-14 记录。不因 rc.9 发布而宣称平台已重新审核该版本。
 
 | 入口 | 状态与链接 |
 |---|---|

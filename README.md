@@ -4,10 +4,14 @@
 <h1 align="center">From source to boundaries, every step is visible.</h1>
 
 <p align="center">
+  <a href="https://www.npmjs.com/package/boundaryxp-mcp"><img src="https://img.shields.io/badge/npm-Install%20rc.9-CB3837?style=for-the-badge&amp;logo=npm" alt="npm · Install BoundaryXP rc.9"></a>
+  <a href="https://registry.modelcontextprotocol.io/?q=boundaryxp"><img src="https://img.shields.io/badge/Official%20MCP%20Registry-Listed-15803d?style=for-the-badge" alt="Official MCP Registry · Listed"></a>
+  <a href="https://github.com/joinwell52-AI/BoundaryXP/releases/tag/mcp-v0.4.0-rc.9"><img src="https://img.shields.io/badge/Download-rc.9%20package-2563eb?style=for-the-badge" alt="Download compiled rc.9 package"></a>
+</p>
+
+<p align="center">
   <a href="https://boundaryxp-workbench-demo.joinwell52.chatgpt.site/"><img src="https://img.shields.io/badge/Demo-Interactive-0891b2?style=flat-square" alt="演示 / Interactive demo"></a>
-  <a href="docs/mcp/RELEASE.md"><img src="https://img.shields.io/badge/MCP-0.4.0--rc.9-2563eb?style=flat-square" alt="MCP 0.4.0-rc.9 · npm prerelease"></a>
   <a href="#l2--l3-industry-and-enterprise-semantics"><img src="https://img.shields.io/badge/Semantics-L2%20%2B%20L3-7c3aed?style=flat-square" alt="L2 industry / L3 enterprise semantics"></a>
-  <a href="docs/mcp/NOTICES.md"><img src="https://img.shields.io/badge/Status-npm%20prerelease-d97706?style=flat-square" alt="npm prerelease"></a>
   <a href="https://doi.org/10.5281/zenodo.24072738"><img src="https://img.shields.io/badge/DOI-10.5281%2Fzenodo.24072738-1e3a8a?style=flat-square" alt="DOI: 10.5281/zenodo.24072738"></a>
 </p>
 
@@ -16,6 +20,27 @@
 <p align="center"><a href="https://boundaryxp-workbench-demo.joinwell52.chatgpt.site/?lang=en#case=ENG20-003&axis=A&view=radar&lang=en"><strong>▶ Try the demo</strong></a>　·　<a href="docs/mcp/INSTALL.en.md"><strong>MCP setup</strong></a>　·　<a href="https://doi.org/10.5281/zenodo.24072738"><strong>Paper</strong></a></p>
 
 <p align="center">Chinese & English · MCP 0.4.0-rc.9 / B-335 · Research & protocol material · Original Core source private</p>
+
+## Install BXP · Find BXP
+
+**[Install from npm →](https://www.npmjs.com/package/boundaryxp-mcp#installation-and-upgrades)** · **[Codex / Cursor setup →](docs/mcp/INSTALL.en.md)** · **[中文安装 →](docs/mcp/INSTALL.zh-CN.md)**
+
+**21 tools · 17 resources · Windows x64 · Node.js ≥22.18 · rc.9 prerelease.** Default analysis uses your current host LLM; no separate model API key is required.
+
+| Public entry | What you can find there |
+|---|---|
+| **[npm — install the package](https://www.npmjs.com/package/boundaryxp-mcp)** | rc.9 package, Chinese/English descriptions and installation on the same page |
+| **[Official MCP Registry](https://registry.modelcontextprotocol.io/?q=boundaryxp)** | Published rc.9 metadata and npm installation reference |
+| **[TensorBlock MCP Index — merged contribution](https://github.com/TensorBlock/awesome-mcp-servers/pull/5989)** | Accepted into main on November 15; listing still references rc.7 |
+| **[MCPServers](https://mcpservers.org/servers/www-npmjs-com-package-boundaryxp-mcp)** | Live listing and npm link; displayed description still references rc.8 |
+| **[Serverdex](https://serverdex.io/server/io-github-joinwell52-ai-boundaryxp)** | Live listing with repository and npm links; cached rc.8 snippet omits required data path—use our setup guide |
+| **[Glama](https://glama.ai/mcp/servers/joinwell52-AI/BoundaryXP)** | Live information page; cached rc.5 instructions, no Glama-hosted deployable release |
+| **[MCPwell](https://mcpwell.com/categories/productivity/)** | BoundaryXP in the Productivity directory, linking to this repository |
+| **[ToolCenter](https://www.toolcenter.ai/en/mcp)** | Registry-synced listing and npm link; displayed version still rc.8 |
+
+Checked 2026-11-16. Search **BoundaryXP** or **boundaryxp-mcp**. Use npm for the current package; directory caches can lag. “Listed” means discoverable, not a certification. [Full directory status and submission options](docs/mcp/DISCOVERY.md).
+
+**Codex desktop:** Plugins → Add → **Add MCP server**. Follow the [stdio setup guide](docs/mcp/npm/INSTALL.md#codex-and-other-hosts). **Add plugin marketplace** expects a separate plugin-marketplace source; the npm URL, Registry URL and this product repository are not such a source. BXP is not currently listed in the Codex plugin catalog or Cursor Marketplace.
 
 ## Start with a real case
 
