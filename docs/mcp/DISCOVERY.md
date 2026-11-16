@@ -18,34 +18,49 @@ rc.9 provides 21 tools and 17 resources, including custom L2/L3 format, validati
 
 | 入口 / Entry | 2026-11-16 页面事实 / Observed state |
 |---|---|
-| [TensorBlock PR #5989](https://github.com/TensorBlock/awesome-mcp-servers/pull/5989) | 2026-11-15 已合并到 main；收录内容仍为 rc.7，后续需要更新条目。Merged into main; this is confirmed repository inclusion, not a claim that its separate hosted profile was tested. |
-| [MCPServers 中文](https://mcpservers.org/zh-CN/servers/www-npmjs-com-package-boundaryxp-mcp) / [English entry](https://mcpservers.org/servers/www-npmjs-com-package-boundaryxp-mcp) | 已有 npm 按钮、仓库链接和文档；简介已补充宿主 LLM、18 工具 / 10 资源，仍为 rc.8。Live listing with documentation and host LLM description; still rc.8. |
+| [TensorBlock PR #5989](https://github.com/TensorBlock/awesome-mcp-servers/pull/5989) | 2026-11-15 已合并到 main；收录内容仍为 rc.7。[rc.9 更新 PR #6087](https://github.com/TensorBlock/awesome-mcp-servers/pull/6087)已提交，尚未合并。rc.7 is merged; the rc.9 update is pending review. |
+| [MCPServers 中文](https://mcpservers.org/zh-CN/servers/www-npmjs-com-package-boundaryxp-mcp) / [English entry](https://mcpservers.org/servers/www-npmjs-com-package-boundaryxp-mcp) | 已有 npm 按钮、仓库链接和文档；仍为 rc.8 / 18 工具 / 10 资源。11 月 16 日点击“请求更新”，页面返回“已请求”，尚未核实刷新为 rc.9。Documentation refresh requested; current displayed metadata remains rc.8. |
 | [Serverdex](https://serverdex.io/server/io-github-joinwell52-ai-boundaryxp) | active，提供 npm 和仓库链接；缓存版本 rc.8，自动配置片段省略必填 `--data-root`，不能作为完整安装示例。Live, with a stale rc.8 snippet missing the required data path; use our installation guide. |
 | [Glama](https://glama.ai/mcp/servers/joinwell52-AI/BoundaryXP) | 现在已有公开介绍页，旧“尚无可查条目”判断不再适用。仍缓存 rc.5 / 18 工具 / 10 资源及过时的独立 API 说明；页面明确没有 Glama 可部署发行版。Information page is live; cached rc.5 instructions do not describe rc.9 or its default host mode. No Glama-hosted deployable release. |
-| [MCPwell](https://mcpwell.com/categories/productivity/) | Productivity 分类有 BoundaryXP 条目和本仓库链接。Public category entry with a repository link. |
-| [ToolCenter](https://www.toolcenter.ai/en/mcp) | 已有官方 Registry 同步条目及 npm 链接，显示 rc.8。Registry-synced entry is live; displayed version remains rc.8. |
+| [MCPwell 分类页](https://mcpwell.com/categories/productivity/) | Productivity 分类中曾核实 BoundaryXP 条目和仓库链接；此链接不是 BXP 专属详情页，需在目录内查找，不作为直达安装入口。Category page only, not a verified BXP-specific detail URL. |
+| [ToolCenter 总目录](https://www.toolcenter.ai/en/mcp) | 总目录中曾核实官方 Registry 同步条目及 npm 链接，显示 rc.8；此链接不是 BXP 专属详情页，不作为直达安装入口。General directory only; rc.9 ingestion and a BXP-specific detail URL have not been verified. |
 
 这些页面可发现 BXP，不表示每个平台都完成 rc.9 安装验收；统一从 npm 和本仓库指南安装。第三方旧版描述按核对日期记录，不沿用其中已过时的模型配置要求。目录徽章仅表示条目存在，不表示安全评级、官方推荐或功能认证。
 
 These are discovery entries, not claims of rc.9 deployment approval or certification. Install using the current npm package and our setup instructions. No Core source was published to obtain a listing.
 
+<a id="rc9-contributions"></a>
+
+## rc.9 本轮提交与测试 / Current contributions and tests
+
+- **TensorBlock：**[更新 PR #6087](https://github.com/TensorBlock/awesome-mcp-servers/pull/6087)修改已有条目，使用 rc.9、21 工具 / 17 资源、宿主 LLM 默认模式及自定义 L2/L3 字典说明，保留 npm 同页安装入口。待维护者合并。
+- **punkpeye：**[原 PR #19484](https://github.com/punkpeye/awesome-mcp-servers/pull/19484)已更新至 rc.9，并[跟进 Windows 编译包的替代核验方式](https://github.com/punkpeye/awesome-mcp-servers/pull/19484#issuecomment-6908600106)。未重复申请，未伪造 Docker / Glama 合格徽章。
+- **OpenAI Community Plugins：**[草稿 PR #57](https://github.com/openai/community-plugins/pull/57)包含市场清单、启动器、锁定 rc.9 的 npm 依赖、中英文指南、多 DEV 示例和测试。只提交封装源码；原始 Core 实现不在 PR 中。尚未合并，也不等于进入 OpenAI 公共插件目录。
+- **本地验证：**Windows x64 / Node 24.19，BXP 专项 7/7；真实 npm 冷安装、21 工具 / 17 资源、四份中英 L2/L3 示例、字典导入、多 DEV 项目保存、HTTP 工作台及重连保留数据通过。Codex 使用独立配置目录成功添加本地市场、安装插件，并通过安装后的副本返回 rc.9 / 21 工具。此处不冒称新一轮宿主 LLM 语义测试。
+- **仓库范围：**市场静态校验、全仓静态校验和市场调度器 11/11 通过；全市场测试在已有 Grafana 套件失败，后续套件未执行。锁定依赖生产审计 0 漏洞。没有新增或主动运行 GitHub Actions；插件工作流例外、编译依赖资格、全市场 Gate 和贡献者本人签署 CLA 需维护者处理，不能宣称可合并。
+- **其他目录：**MCPServers 已接受文档刷新请求；Glama 仍缓存 rc.5，当前浏览器会话显示未登录，未完成管理更新。Serverdex、ToolCenter 的 rc.9 同步未完成；这些第三方状态不能直接改写为 rc.9。
+
+TensorBlock's rc.9 update and the updated punkpeye contribution await review. OpenAI Community Plugins draft PR #57 contains the inspected wrapper and locked compiled dependency, not original Core source. BXP's seven Windows tests and the isolated Codex local-marketplace installation passed. All static validators and eleven marketplace-runner tests passed; the complete marketplace suite stopped in existing Grafana tests, so it is not reported as green. No new LLM semantic test or public-directory approval is claimed. MCPServers accepted a refresh request; the other stale directory versions remain explicitly unconfirmed.
+
+补充：已从 GitHub fork 的实际分支完成 Codex 市场添加、插件安装/启用和安装后 MCP 调用，返回 rc.9 / 21 工具；仍使用全新隔离配置与数据目录。候选安装入口：[简体中文](PLUGIN-MARKETPLACE.zh-CN.md) / [English](PLUGIN-MARKETPLACE.en.md)。Git-backed installation and the installed plugin's actual MCP were also verified. These guides describe the contributor candidate, not an approved official listing.
+
 ## 可登记或认领的市场 / Submission and claiming options
 
 ### 宿主插件市场 / Host plugin marketplaces
 
-用户截图中的「添加插件市场」接受带市场清单的 GitHub 仓库、Git URL 或本地目录，而不是普通 MCP 目录网址。下面是可准备的分发路线，**尚未完成 BXP 插件封装或平台上架**：
+用户截图中的「添加插件市场」接受带市场清单的 GitHub 仓库、Git URL 或本地目录，而不是普通 MCP 目录网址。BXP 插件封装已完成上述本地测试并提交草稿 PR；**尚未获批上架**：
 
 | 路线 / Route | 对 BXP 的意义 / What it would provide |
 |---|---|
-| **[OpenAI Community Plugins](https://github.com/openai/community-plugins)** | 公开的 Codex Git 插件市场，明确接受外部 fork PR；要求插件清单、市场条目、说明、测试及维护者审核，贡献者需自行签署 CLA。应先验证以 npm 编译包为依赖的插件封装；尚未提交，也不等于获准进入 OpenAI 公共 Plugins Directory。见 [贡献要求](https://github.com/openai/community-plugins/blob/main/CONTRIBUTING.md)。Accepts external PRs; compiled-dependency eligibility remains subject to review. |
+| **[OpenAI Community Plugins](https://github.com/openai/community-plugins)** | 已提交[草稿 PR #57](https://github.com/openai/community-plugins/pull/57)，本地封装测试通过；需维护者审核、处理剩余 Gate，贡献者本人签署 CLA。未合并，不等于获准进入 OpenAI 公共 Plugins Directory。见[贡献要求](https://github.com/openai/community-plugins/blob/main/CONTRIBUTING.md)。Draft submitted; compiled-dependency eligibility and remaining gates await review. |
 | **自建 Codex 插件市场源 / Own Codex marketplace** | 在 GitHub 提供市场目录与插件清单，由本地插件启动 npm 编译包；客户通过「添加插件市场」加入后安装。无需自建托管服务器，不等于进入官方公共目录。见 [OpenAI 打包与市场文档](https://developers.openai.com/plugins/build/plugins)。 |
 | **OpenAI 公共插件目录 / Public Plugins Directory** | 文档提供 ZIP 上传、检查、审核和发布流程；须先补插件资料并核对当前 Windows 本地 stdio 形态的提交要求，不能承诺直接收录或网页端可运行。见 [官方提交指南](https://developers.openai.com/plugins/deploy/submission)。 |
 | **Claude Code 插件市场 / Claude Code marketplace** | 可自建含 `.claude-plugin/marketplace.json` 的 GitHub 市场源，封装本地 MCP；官方目录有另行发布流程。见 [市场创建](https://code.claude.com/docs/en/plugin-marketplaces)及[插件发布](https://code.claude.com/docs/en/plugins/publish)。 |
 | **Cursor Marketplace** | 支持将 MCP 放入插件并提交审核；本项目保持此前“暂缓提交”的决定，尚未上架。见 [Cursor 插件文档](https://cursor.com/docs/plugins)。 |
 
-推荐先制作并验收自建 Codex 市场源，让用户能在截图入口添加和安装；官方公共目录申请另行处理。市场源只需公开分发清单与必要插件文件，Core 继续从编译包交付。当前仓库尚未提供该市场源，不应把普通仓库 URL 宣传成已可添加。
+候选市场源位于[社区插件 fork 分支](https://github.com/joinwell52-AI/community-plugins/tree/codex/boundaryxp-plugin-20261116)，不是本产品资料仓库。正式官方目录申请另行处理。市场源只公开分发清单、封装与测试，Core 继续从编译包交付。审核状态以上方 PR 为准，不把 fork 试用称为官方已收录。
 
-Recommended next implementation: a tested Git-backed Codex marketplace wrapping the compiled npm package. A custom source and an approved public-directory listing are separate deliverables. These are planned routes, not live BXP marketplace listings; Core source need not be added to the public repository.
+A candidate marketplace is now in the linked contributor fork branch, with a locally tested wrapper for the compiled npm package. The product documentation repository is still not a marketplace source. A contributor fork and an approved public-directory listing are separate deliverables; no approval or Core source publication is implied.
 
 大型仓库路线复核（2026-11-16）：[punkpeye #19484](https://github.com/punkpeye/awesome-mcp-servers/pull/19484)仍为 Open；[TensorBlock #5989](https://github.com/TensorBlock/awesome-mcp-servers/pull/5989)已于 11 月 15 日合并，覆盖下方历史待审记录。两者是 MCP 发现目录，不是截图中的插件市场源。[Anthropic 官方插件仓库](https://github.com/anthropics/claude-plugins-official)现明确不监看第三方 PR，改走 [Claude 目录管理入口](https://claude.ai/directory/manage)；[modelcontextprotocol/servers](https://github.com/modelcontextprotocol/servers)主要维护参考服务器，产品收录应走 MCP Registry。
 

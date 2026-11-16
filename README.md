@@ -31,16 +31,20 @@
 |---|---|
 | **[npm — install the package](https://www.npmjs.com/package/boundaryxp-mcp)** | rc.9 package, Chinese/English descriptions and installation on the same page |
 | **[Official MCP Registry](https://registry.modelcontextprotocol.io/?q=boundaryxp)** | Published rc.9 metadata and npm installation reference |
-| **[TensorBlock MCP Index — merged contribution](https://github.com/TensorBlock/awesome-mcp-servers/pull/5989)** | Accepted into main on November 15; listing still references rc.7 |
-| **[MCPServers](https://mcpservers.org/servers/www-npmjs-com-package-boundaryxp-mcp)** | Live listing and npm link; displayed description still references rc.8 |
+| **[TensorBlock MCP Index — merged contribution](https://github.com/TensorBlock/awesome-mcp-servers/pull/5989)** | rc.7 listing is merged; [rc.9 update PR #6087](https://github.com/TensorBlock/awesome-mcp-servers/pull/6087) is pending |
+| **[MCPServers](https://mcpservers.org/servers/www-npmjs-com-package-boundaryxp-mcp)** | Live listing and npm link; rc.8 remains displayed, documentation refresh requested November 16 |
 | **[Serverdex](https://serverdex.io/server/io-github-joinwell52-ai-boundaryxp)** | Live listing with repository and npm links; cached rc.8 snippet omits required data path—use our setup guide |
 | **[Glama](https://glama.ai/mcp/servers/joinwell52-AI/BoundaryXP)** | Live information page; cached rc.5 instructions, no Glama-hosted deployable release |
-| **[MCPwell](https://mcpwell.com/categories/productivity/)** | BoundaryXP in the Productivity directory, linking to this repository |
-| **[ToolCenter](https://www.toolcenter.ai/en/mcp)** | Registry-synced listing and npm link; displayed version still rc.8 |
 
 Checked 2026-11-16. Search **BoundaryXP** or **boundaryxp-mcp**. Use npm for the current package; directory caches can lag. “Listed” means discoverable, not a certification. [Full directory status and submission options](docs/mcp/DISCOVERY.md).
 
+MCPwell and ToolCenter also contain directory entries, but no BXP-specific detail URL was verified. Their category/index pages are listed only in the full directory notes, not as direct BXP installation entries here.
+
 **Codex desktop:** Plugins → Add → **Add MCP server**. Follow the [stdio setup guide](docs/mcp/npm/INSTALL.md#codex-and-other-hosts). **Add plugin marketplace** expects a separate plugin-marketplace source; the npm URL, Registry URL and this product repository are not such a source. BXP is not currently listed in the Codex plugin catalog or Cursor Marketplace.
+
+**Plugin contribution:** [OpenAI Community Plugins draft PR #57](https://github.com/openai/community-plugins/pull/57) contains a tested Windows x64 wrapper for the compiled rc.9 package. [punkpeye PR #19484](https://github.com/punkpeye/awesome-mcp-servers/pull/19484) has also been updated to rc.9. Both await review; neither is counted as an approved listing. [Test scope and current submission status](docs/mcp/DISCOVERY.md#rc9-contributions).
+
+To try the contributor fork through **Add plugin marketplace**, use the [candidate plugin installation guide](docs/mcp/PLUGIN-MARKETPLACE.en.md). Its GitHub-to-Codex installation and installed MCP were verified in isolation; official marketplace approval is still pending.
 
 ## Start with a real case
 

@@ -31,16 +31,20 @@
 |---|---|
 | **[npm：下载安装](https://www.npmjs.com/package/boundaryxp-mcp)** | rc.9 安装包，同页中英文介绍与安装说明 |
 | **[官方 MCP Registry](https://registry.modelcontextprotocol.io/?q=boundaryxp)** | 已登记 rc.9 及 npm 安装来源 |
-| **[TensorBlock MCP Index：已合并收录](https://github.com/TensorBlock/awesome-mcp-servers/pull/5989)** | 11 月 15 日已合并到主分支；条目版本仍为 rc.7 |
-| **[MCPServers 中文页](https://mcpservers.org/zh-CN/servers/www-npmjs-com-package-boundaryxp-mcp)** | 已公开收录，有 npm 链接；简介仍显示 rc.8 |
+| **[TensorBlock MCP Index：已合并收录](https://github.com/TensorBlock/awesome-mcp-servers/pull/5989)** | rc.7 条目已合并；[rc.9 更新 PR #6087](https://github.com/TensorBlock/awesome-mcp-servers/pull/6087)待审核 |
+| **[MCPServers 中文页](https://mcpservers.org/zh-CN/servers/www-npmjs-com-package-boundaryxp-mcp)** | 已公开收录，有 npm 链接；仍显示 rc.8，11 月 16 日已请求刷新文档 |
 | **[Serverdex](https://serverdex.io/server/io-github-joinwell52-ai-boundaryxp)** | 已有公开条目；rc.8 配置示例缺少必填数据路径，请按本项目指南安装 |
 | **[Glama](https://glama.ai/mcp/servers/joinwell52-AI/BoundaryXP)** | 已有公开介绍页；安装说明仍缓存 rc.5，不提供 Glama 托管部署 |
-| **[MCPwell](https://mcpwell.com/categories/productivity/)** | Productivity 分类已列出 BoundaryXP，可进入本仓库 |
-| **[ToolCenter](https://www.toolcenter.ai/en/mcp)** | 已同步目录条目并提供 npm 链接；版本仍显示 rc.8 |
 
 核对日期：2026-11-16。搜索 **BoundaryXP** 或 **boundaryxp-mcp**。安装新版以 npm 为准，第三方目录可能延迟同步。“已收录”表示能查到，不代表功能认证。[完整目录状态及可登记入口](docs/mcp/DISCOVERY.md)。
 
+MCPwell、ToolCenter 的总目录中也有条目，但尚未核实 BXP 专属详情链接。分类/总目录只在完整说明中记录，不作为这里的 BXP 直达安装入口。
+
 **Codex 桌面版：**「插件」→「添加」→ **「添加 MCP 服务器」**，按[stdio 接入指南](docs/mcp/npm/INSTALL.zh-CN.md#codex-与其他宿主)配置。「添加插件市场」需要独立的插件市场源，不能填 npm、Registry 地址或本产品仓库；目前 BXP 未上架 Codex 插件目录或 Cursor Marketplace。
+
+**插件贡献进展：**[OpenAI Community Plugins 草稿 PR #57](https://github.com/openai/community-plugins/pull/57)已提交，内含经过测试的 Windows x64 插件封装，使用 rc.9 编译包；[punkpeye PR #19484](https://github.com/punkpeye/awesome-mcp-servers/pull/19484)也已更新到 rc.9。两者均待审核，不计作已获批收录。[测试范围与提交状态](docs/mcp/DISCOVERY.md#rc9-contributions)。
+
+如需从「添加插件市场」试用发布者 fork，见[候选插件安装指南](docs/mcp/PLUGIN-MARKETPLACE.zh-CN.md)。已隔离验证从 GitHub 添加市场、安装插件及调用安装后的 MCP；官方市场审核仍未完成。
 
 ## 先看一个真实用例
 
