@@ -7,6 +7,7 @@
   <a href="https://www.npmjs.com/package/boundaryxp-mcp"><img src="https://img.shields.io/badge/npm-Install%20rc.9-CB3837?style=for-the-badge&amp;logo=npm" alt="npm · Install BoundaryXP rc.9"></a>
   <a href="https://registry.modelcontextprotocol.io/?q=boundaryxp"><img src="https://img.shields.io/badge/Official%20MCP%20Registry-Listed-15803d?style=for-the-badge" alt="Official MCP Registry · Listed"></a>
   <a href="https://github.com/joinwell52-AI/BoundaryXP/releases/tag/mcp-v0.4.0-rc.9"><img src="https://img.shields.io/badge/Download-rc.9%20package-2563eb?style=for-the-badge" alt="Download compiled rc.9 package"></a>
+  <a href="https://glama.ai/mcp/servers/joinwell52-AI/BoundaryXP"><img src="https://glama.ai/mcp/servers/joinwell52-AI/BoundaryXP/badges/score.svg" alt="BoundaryXP on Glama · live score"></a>
 </p>
 
 <p align="center">
@@ -27,7 +28,7 @@
 
 ## Install BXP · Find BXP
 
-**Linux x64 / Docker is available separately:** [npm Linux package](https://www.npmjs.com/package/boundaryxp-mcp/v/0.4.0-rc.9-linux.1) · [Linux installation](docs/mcp/linux/INSTALL.en.md) · [中文安装](docs/mcp/linux/INSTALL.zh-CN.md) · [Dockerfile](Dockerfile) · [Linux release](https://github.com/joinwell52-AI/BoundaryXP/releases/tag/mcp-v0.4.0-rc.9-linux.1). Version `0.4.0-rc.9-linux.1` uses the `linux` channel, glibc ≥2.36 and compiled B-335 Core. Windows `latest/next` remain rc.9. Glama verification is tracked separately; this release does not claim platform approval.
+**Linux x64 / Docker is available separately:** [npm Linux package](https://www.npmjs.com/package/boundaryxp-mcp/v/0.4.0-rc.9-linux.1) · [Linux installation](docs/mcp/linux/INSTALL.en.md) · [中文安装](docs/mcp/linux/INSTALL.zh-CN.md) · [Dockerfile](Dockerfile) · [Linux release](https://github.com/joinwell52-AI/BoundaryXP/releases/tag/mcp-v0.4.0-rc.9-linux.1). Version `0.4.0-rc.9-linux.1` uses the `linux` channel, glibc ≥2.36 and compiled B-335 Core. Windows `latest/next` remain rc.9. **[Glama build and tool/resource discovery passed; Linux release published](docs/mcp/linux/RELEASE.md#发布后核对--post-publication-checks).** The live score badge links to the public tool catalog; it is not an algorithm or semantic-accuracy certification.
 
 **[Install from npm →](https://www.npmjs.com/package/boundaryxp-mcp#installation-and-upgrades)** · **[Codex / Cursor setup →](docs/mcp/INSTALL.en.md)** · **[中文安装 →](docs/mcp/INSTALL.zh-CN.md)**
 
@@ -48,7 +49,7 @@ MCPwell and ToolCenter also contain directory entries, but no BXP-specific detai
 
 **Codex desktop:** Plugins → Add → **Add MCP server**. Follow the [stdio setup guide](docs/mcp/npm/INSTALL.md#codex-and-other-hosts). **Add plugin marketplace** expects a separate plugin-marketplace source; the npm URL, Registry URL and this product repository are not such a source. BXP is not currently listed in the Codex plugin catalog or Cursor Marketplace.
 
-**Plugin contribution:** [OpenAI Community Plugins PR #57](https://github.com/openai/community-plugins/pull/57) is ready for maintainer review, with the tested Windows x64 wrapper for compiled rc.9 and a controlled comparison of unrelated Grafana failures. [punkpeye PR #19484](https://github.com/punkpeye/awesome-mcp-servers/pull/19484) has also been updated to rc.9. Both await approval. [Test scope and current submission status](docs/mcp/DISCOVERY.md#rc9-contributions).
+**Plugin contribution:** [OpenAI Community Plugins PR #57](https://github.com/openai/community-plugins/pull/57) is ready for maintainer review, with the tested Windows x64 wrapper for compiled rc.9 and a controlled comparison of unrelated Grafana failures. [punkpeye PR #19484](https://github.com/punkpeye/awesome-mcp-servers/pull/19484) now includes Linux support, the live Glama badge and [successful build/discovery evidence](https://github.com/punkpeye/awesome-mcp-servers/pull/19484#issuecomment-6912851096). Both await maintainer approval; a successful Glama build does not mean the PR is merged. [Test scope and current submission status](docs/mcp/DISCOVERY.md#rc9-contributions).
 
 To try the contributor fork through **Add plugin marketplace**, use the [candidate plugin installation guide](docs/mcp/PLUGIN-MARKETPLACE.en.md). Its GitHub-to-Codex installation and installed MCP were verified in isolation; official marketplace approval is still pending.
 

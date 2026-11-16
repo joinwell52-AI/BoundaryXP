@@ -7,6 +7,7 @@
   <a href="https://www.npmjs.com/package/boundaryxp-mcp"><img src="https://img.shields.io/badge/npm-Install%20rc.9-CB3837?style=for-the-badge&amp;logo=npm" alt="npm · 安装 BoundaryXP rc.9"></a>
   <a href="https://registry.modelcontextprotocol.io/?q=boundaryxp"><img src="https://img.shields.io/badge/Official%20MCP%20Registry-Listed-15803d?style=for-the-badge" alt="官方 MCP Registry · 已收录"></a>
   <a href="https://github.com/joinwell52-AI/BoundaryXP/releases/tag/mcp-v0.4.0-rc.9"><img src="https://img.shields.io/badge/Download-rc.9%20package-2563eb?style=for-the-badge" alt="下载 rc.9 编译安装包"></a>
+  <a href="https://glama.ai/mcp/servers/joinwell52-AI/BoundaryXP"><img src="https://glama.ai/mcp/servers/joinwell52-AI/BoundaryXP/badges/score.svg" alt="BoundaryXP Glama 公开入口与实时评分"></a>
 </p>
 
 <p align="center">
@@ -27,7 +28,7 @@
 
 ## 安装 BXP · 在哪里找到 BXP
 
-**新增 Linux x64 / Docker 独立入口：** [npm Linux 编译包](https://www.npmjs.com/package/boundaryxp-mcp/v/0.4.0-rc.9-linux.1) · [中文安装](docs/mcp/linux/INSTALL.zh-CN.md) · [English](docs/mcp/linux/INSTALL.en.md) · [Dockerfile](Dockerfile) · [Linux 发行附件](https://github.com/joinwell52-AI/BoundaryXP/releases/tag/mcp-v0.4.0-rc.9-linux.1)。版本 `0.4.0-rc.9-linux.1` 使用 `linux` 渠道，需要 glibc ≥2.36，随包交付编译后的 B-335 Core。Windows 的 `latest/next` 保持 rc.9；Glama 验证单独记录，不把发行成功当成平台审核通过。
+**新增 Linux x64 / Docker 独立入口：** [npm Linux 编译包](https://www.npmjs.com/package/boundaryxp-mcp/v/0.4.0-rc.9-linux.1) · [中文安装](docs/mcp/linux/INSTALL.zh-CN.md) · [English](docs/mcp/linux/INSTALL.en.md) · [Dockerfile](Dockerfile) · [Linux 发行附件](https://github.com/joinwell52-AI/BoundaryXP/releases/tag/mcp-v0.4.0-rc.9-linux.1)。版本 `0.4.0-rc.9-linux.1` 使用 `linux` 渠道，需要 glibc ≥2.36，随包交付编译后的 B-335 Core。Windows 的 `latest/next` 保持 rc.9。**[Glama 实际构建、工具及资源发现通过，Linux 发行已完成](docs/mcp/linux/RELEASE.md)**；顶部实时徽章直达公开工具目录，评分不等于算法或语义正确性认证。
 
 **[从 npm 安装 →](https://www.npmjs.com/package/boundaryxp-mcp#中文安装与升级)** · **[Codex / Cursor 接入指南 →](docs/mcp/INSTALL.zh-CN.md)** · **[English setup →](docs/mcp/INSTALL.en.md)**
 
@@ -48,7 +49,7 @@ MCPwell、ToolCenter 的总目录中也有条目，但尚未核实 BXP 专属详
 
 **Codex 桌面版：**「插件」→「添加」→ **「添加 MCP 服务器」**，按[stdio 接入指南](docs/mcp/npm/INSTALL.zh-CN.md#codex-与其他宿主)配置。「添加插件市场」需要独立的插件市场源，不能填 npm、Registry 地址或本产品仓库；目前 BXP 未上架 Codex 插件目录或 Cursor Marketplace。
 
-**插件贡献进展：**[OpenAI Community Plugins PR #57](https://github.com/openai/community-plugins/pull/57)已转为正式待审核，内含经过测试的 Windows x64 / rc.9 封装及无关 Grafana 失败的基线对照证据；[punkpeye PR #19484](https://github.com/punkpeye/awesome-mcp-servers/pull/19484)也已更新到 rc.9。两者均未获批收录。[测试范围与提交状态](docs/mcp/DISCOVERY.md#rc9-contributions)。
+**插件贡献进展：**[OpenAI Community Plugins PR #57](https://github.com/openai/community-plugins/pull/57)已转为正式待审核，内含经过测试的 Windows x64 / rc.9 封装及无关 Grafana 失败的基线对照证据；[punkpeye PR #19484](https://github.com/punkpeye/awesome-mcp-servers/pull/19484)已补充 Linux 支持、真实 Glama 徽章及[构建与发现通过的跟进证据](https://github.com/punkpeye/awesome-mcp-servers/pull/19484#issuecomment-6912851096)。两者仍待维护者审核，Glama 通过不等于 PR 已合并。[测试范围与提交状态](docs/mcp/DISCOVERY.md#rc9-contributions)。
 
 如需从「添加插件市场」试用发布者 fork，见[候选插件安装指南](docs/mcp/PLUGIN-MARKETPLACE.zh-CN.md)。已隔离验证从 GitHub 添加市场、安装插件及调用安装后的 MCP；官方市场审核仍未完成。
 
