@@ -35,12 +35,12 @@ These are discovery entries, not claims of rc.9 deployment approval or certifica
 
 - **TensorBlock：**[更新 PR #6087](https://github.com/TensorBlock/awesome-mcp-servers/pull/6087)修改已有条目，使用 rc.9、21 工具 / 17 资源、宿主 LLM 默认模式及自定义 L2/L3 字典说明，保留 npm 同页安装入口。待维护者合并。
 - **punkpeye：**[原 PR #19484](https://github.com/punkpeye/awesome-mcp-servers/pull/19484)已更新至 rc.9，并[跟进 Windows 编译包的替代核验方式](https://github.com/punkpeye/awesome-mcp-servers/pull/19484#issuecomment-6908600106)。未重复申请，未伪造 Docker / Glama 合格徽章。
-- **OpenAI Community Plugins：**[草稿 PR #57](https://github.com/openai/community-plugins/pull/57)包含市场清单、启动器、锁定 rc.9 的 npm 依赖、中英文指南、多 DEV 示例和测试。只提交封装源码；原始 Core 实现不在 PR 中。尚未合并，也不等于进入 OpenAI 公共插件目录。
+- **OpenAI Community Plugins：**[PR #57](https://github.com/openai/community-plugins/pull/57)已转为 Ready for review，包含市场清单、启动器、锁定 rc.9 的 npm 依赖、中英文指南、多 DEV 示例和测试。只提交封装源码；原始 Core 实现不在 PR 中。尚未合并，也不等于进入 OpenAI 公共插件目录。
 - **本地验证：**Windows x64 / Node 24.19，BXP 专项 7/7；真实 npm 冷安装、21 工具 / 17 资源、四份中英 L2/L3 示例、字典导入、多 DEV 项目保存、HTTP 工作台及重连保留数据通过。Codex 使用独立配置目录成功添加本地市场、安装插件，并通过安装后的副本返回 rc.9 / 21 工具。此处不冒称新一轮宿主 LLM 语义测试。
-- **仓库范围：**市场静态校验、全仓静态校验和市场调度器 11/11 通过；全市场测试在已有 Grafana 套件失败，后续套件未执行。锁定依赖生产审计 0 漏洞。没有新增或主动运行 GitHub Actions；插件工作流例外、编译依赖资格、全市场 Gate 和贡献者本人签署 CLA 需维护者处理，不能宣称可合并。
+- **仓库范围：**市场静态校验、全仓静态校验和市场调度器 11/11 通过。BXP 在 Windows x64 的 Node 22.19、24.19 顺序补测均为 7/7；生产依赖审计 0 漏洞。全市场 Windows 测试仍非全通过：不含 BXP 的上游与 BXP 分支均为 Grafana 16 通过 / 10 失败 / 6 跳过，124 个相关文件逐字节相同、失败名称完全一致，原因是 Windows 路径、POSIX 权限假设和 Git 换行转换。[完整复现证据](https://github.com/joinwell52-AI/community-plugins/blob/codex/boundaryxp-plugin-20261116/tests/boundaryxp/GRAFANA-WINDOWS-BASELINE.md)。Grafana 不是 BXP 依赖，客户无需安装。新增单作业工作流仅供手动运行，无 push/PR 触发，未执行；所有成绩来自本地。维护者仍需审核编译依赖资格和适用 Gate，贡献者须本人签署 CLA，不能宣称已获准合并。
 - **其他目录：**MCPServers 已接受文档刷新请求；Glama 仍缓存 rc.5，当前浏览器会话显示未登录，未完成管理更新。Serverdex、ToolCenter 的 rc.9 同步未完成；这些第三方状态不能直接改写为 rc.9。
 
-TensorBlock's rc.9 update and the updated punkpeye contribution await review. OpenAI Community Plugins draft PR #57 contains the inspected wrapper and locked compiled dependency, not original Core source. BXP's seven Windows tests and the isolated Codex local-marketplace installation passed. All static validators and eleven marketplace-runner tests passed; the complete marketplace suite stopped in existing Grafana tests, so it is not reported as green. No new LLM semantic test or public-directory approval is claimed. MCPServers accepted a refresh request; the other stale directory versions remain explicitly unconfirmed.
+TensorBlock's rc.9 update and the updated punkpeye contribution await review. OpenAI Community Plugins PR #57 is now ready for review. BXP passed 7/7 tests on Windows with both Node 22.19 and 24.19; the isolated Codex installation, static validators and eleven dispatcher tests passed. Baseline and candidate Grafana runs have identical failures and 124 byte-identical files: these are Windows portability/checkout issues, not a BXP regression. Grafana is not a BXP dependency. The full marketplace suite is not green; the manual-only workflow was not run. Maintainer review, applicable gates and the contributor's own CLA remain outstanding. No original Core source, new semantic-accuracy claim or directory approval is implied.
 
 补充：已从 GitHub fork 的实际分支完成 Codex 市场添加、插件安装/启用和安装后 MCP 调用，返回 rc.9 / 21 工具；仍使用全新隔离配置与数据目录。候选安装入口：[简体中文](PLUGIN-MARKETPLACE.zh-CN.md) / [English](PLUGIN-MARKETPLACE.en.md)。Git-backed installation and the installed plugin's actual MCP were also verified. These guides describe the contributor candidate, not an approved official listing.
 
@@ -48,11 +48,11 @@ TensorBlock's rc.9 update and the updated punkpeye contribution await review. Op
 
 ### 宿主插件市场 / Host plugin marketplaces
 
-用户截图中的「添加插件市场」接受带市场清单的 GitHub 仓库、Git URL 或本地目录，而不是普通 MCP 目录网址。BXP 插件封装已完成上述本地测试并提交草稿 PR；**尚未获批上架**：
+用户截图中的「添加插件市场」接受带市场清单的 GitHub 仓库、Git URL 或本地目录，而不是普通 MCP 目录网址。BXP 插件封装已完成上述本地测试，PR 正式待审核；**尚未获批上架**：
 
 | 路线 / Route | 对 BXP 的意义 / What it would provide |
 |---|---|
-| **[OpenAI Community Plugins](https://github.com/openai/community-plugins)** | 已提交[草稿 PR #57](https://github.com/openai/community-plugins/pull/57)，本地封装测试通过；需维护者审核、处理剩余 Gate，贡献者本人签署 CLA。未合并，不等于获准进入 OpenAI 公共 Plugins Directory。见[贡献要求](https://github.com/openai/community-plugins/blob/main/CONTRIBUTING.md)。Draft submitted; compiled-dependency eligibility and remaining gates await review. |
+| **[OpenAI Community Plugins](https://github.com/openai/community-plugins)** | [PR #57](https://github.com/openai/community-plugins/pull/57)正式待审核，本地封装测试通过并补齐 Grafana 基线对照；需维护者审核和贡献者本人 CLA。未合并，不等于进入 OpenAI 公共 Plugins Directory。见[贡献要求](https://github.com/openai/community-plugins/blob/main/CONTRIBUTING.md)。Ready for review, not merged or approved. |
 | **自建 Codex 插件市场源 / Own Codex marketplace** | 在 GitHub 提供市场目录与插件清单，由本地插件启动 npm 编译包；客户通过「添加插件市场」加入后安装。无需自建托管服务器，不等于进入官方公共目录。见 [OpenAI 打包与市场文档](https://developers.openai.com/plugins/build/plugins)。 |
 | **OpenAI 公共插件目录 / Public Plugins Directory** | 文档提供 ZIP 上传、检查、审核和发布流程；须先补插件资料并核对当前 Windows 本地 stdio 形态的提交要求，不能承诺直接收录或网页端可运行。见 [官方提交指南](https://developers.openai.com/plugins/deploy/submission)。 |
 | **Claude Code 插件市场 / Claude Code marketplace** | 可自建含 `.claude-plugin/marketplace.json` 的 GitHub 市场源，封装本地 MCP；官方目录有另行发布流程。见 [市场创建](https://code.claude.com/docs/en/plugin-marketplaces)及[插件发布](https://code.claude.com/docs/en/plugins/publish)。 |

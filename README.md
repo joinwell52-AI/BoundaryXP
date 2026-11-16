@@ -42,7 +42,7 @@ MCPwell and ToolCenter also contain directory entries, but no BXP-specific detai
 
 **Codex desktop:** Plugins → Add → **Add MCP server**. Follow the [stdio setup guide](docs/mcp/npm/INSTALL.md#codex-and-other-hosts). **Add plugin marketplace** expects a separate plugin-marketplace source; the npm URL, Registry URL and this product repository are not such a source. BXP is not currently listed in the Codex plugin catalog or Cursor Marketplace.
 
-**Plugin contribution:** [OpenAI Community Plugins draft PR #57](https://github.com/openai/community-plugins/pull/57) contains a tested Windows x64 wrapper for the compiled rc.9 package. [punkpeye PR #19484](https://github.com/punkpeye/awesome-mcp-servers/pull/19484) has also been updated to rc.9. Both await review; neither is counted as an approved listing. [Test scope and current submission status](docs/mcp/DISCOVERY.md#rc9-contributions).
+**Plugin contribution:** [OpenAI Community Plugins PR #57](https://github.com/openai/community-plugins/pull/57) is ready for maintainer review, with the tested Windows x64 wrapper for compiled rc.9 and a controlled comparison of unrelated Grafana failures. [punkpeye PR #19484](https://github.com/punkpeye/awesome-mcp-servers/pull/19484) has also been updated to rc.9. Both await approval. [Test scope and current submission status](docs/mcp/DISCOVERY.md#rc9-contributions).
 
 To try the contributor fork through **Add plugin marketplace**, use the [candidate plugin installation guide](docs/mcp/PLUGIN-MARKETPLACE.en.md). Its GitHub-to-Codex installation and installed MCP were verified in isolation; official marketplace approval is still pending.
 

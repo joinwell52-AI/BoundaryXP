@@ -4,7 +4,7 @@
 
 **候选插件 0.1.0 · MCP 0.4.0-rc.9 · Windows x64 · Node.js ≥22.19（含 npm）**
 
-[OpenAI Community Plugins 草稿 PR #57](https://github.com/openai/community-plugins/pull/57)尚未合并，也未获批进入 OpenAI 公共插件目录。下面安装的是发布者 fork 中可检查的候选插件，不是官方已审核插件。普通 MCP 安装仍可直接走 [npm](https://www.npmjs.com/package/boundaryxp-mcp#中文安装与升级)。
+[OpenAI Community Plugins PR #57](https://github.com/openai/community-plugins/pull/57)已正式待审核，尚未合并，也未获批进入 OpenAI 公共插件目录。下面安装的是发布者 fork 中可检查的候选插件，不是官方已审核插件。普通 MCP 安装仍可直接走 [npm](https://www.npmjs.com/package/boundaryxp-mcp#中文安装与升级)。
 
 ## 添加市场并安装
 
@@ -41,6 +41,6 @@ codex plugin add boundaryxp@community-plugins
 
 2026-11-16 在独立 Codex 配置和数据目录中，实际从上述 GitHub 来源添加市场、安装插件、读回启用状态，并调用安装后副本的 MCP 成功，返回 rc.9 / 21 工具。另有 7 项专项测试通过，覆盖中英文帮助、四份 L2/L3 格式示例、校验与导入、多 DEV 保存、工作台 HTTP 和重连数据保留。没有重新调用付费模型或伪造 LLM 响应；不称为本轮图形界面点击验收或语义准确率测试。
 
-社区全市场测试在已有 Grafana 套件失败。PR 仍需维护者处理审核、工作流例外、完整 Gate 和贡献者本人 CLA。macOS/Linux 不属于该原生包支持范围。
+社区全市场测试在 Grafana 套件失败；已在不含 BXP 的上游版本复现相同 Windows 失败，Grafana 不是 BXP 依赖，客户无需安装。BXP 在 Node 22.19 和 24.19 均为 7/7 通过。PR 仍需维护者审核、处理适用平台 Gate 和贡献者本人 CLA；可选工作流仅供手动运行，本次未执行。macOS/Linux 不属于该原生包支持范围。
 
 [候选插件完整中文说明](https://github.com/joinwell52-AI/community-plugins/blob/codex/boundaryxp-plugin-20261116/plugins/boundaryxp/README.zh-CN.md) · [目录状态](DISCOVERY.md#rc9-contributions)

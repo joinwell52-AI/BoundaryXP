@@ -1,5 +1,7 @@
 # 当前任务：rc.9 目录更新和社区插件贡献（2026-11-16）
 
+续核：Grafana 的上游无 BXP 基线与初始 PR 在两份全新 LF 工作树中均为 16/10/6，124 文件摘要一致、10 失败名一致；Windows URL 入口、POSIX 权限与 Git 换行原因已确认并保存脱敏 TAP/JSON。BXP 不依赖 Grafana。BXP 在 Node 22.19 与 24.19 顺序真实冷安装测试均 7/7，审计 0 漏洞、静态验证通过。补齐仅手动触发的单作业工作流，未运行；PR #57 已由草稿转为 Ready for review，仍待维护者审核、适用 Gate 与本人 CLA。以下原草稿阶段描述保留为历史，不代表当前 PR 状态。未改既有安装、任务、字典或 58618，未公开 Core。
+
 按用户授权完成 TensorBlock rc.9 更新 PR #6087，更新并跟进 punkpeye 原 PR #19484；OpenAI Community Plugins 封装、独立 Windows 原生工具测试与 Codex 本地市场安装验证完成，提交草稿 PR #57。BXP 7/7、调度器 11/11、全部静态验证通过；全市场测试在已有 Grafana 套件失败，需维护者处理剩余 Gate、插件工作流例外、编译依赖资格与贡献者 CLA，不称已上架或可合并。MCPServers 文档刷新已请求；其他旧缓存不虚报更新。移除首页 MCPwell / ToolCenter 总目录“直达 BXP”入口，详细状态保留。当前 MCP 发行基线仍为 rc.9 / B-335；本机独立工作台 B-336 不自动改变发行包。未发布新 npm 版本，未修改既有安装、任务、字典或 58618；未提交原始 Core 源码。见[完整目录状态](../../mcp/DISCOVERY.md#rc9-contributions)。
 
 ## 上一任务记录

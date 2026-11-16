@@ -42,7 +42,7 @@ MCPwell、ToolCenter 的总目录中也有条目，但尚未核实 BXP 专属详
 
 **Codex 桌面版：**「插件」→「添加」→ **「添加 MCP 服务器」**，按[stdio 接入指南](docs/mcp/npm/INSTALL.zh-CN.md#codex-与其他宿主)配置。「添加插件市场」需要独立的插件市场源，不能填 npm、Registry 地址或本产品仓库；目前 BXP 未上架 Codex 插件目录或 Cursor Marketplace。
 
-**插件贡献进展：**[OpenAI Community Plugins 草稿 PR #57](https://github.com/openai/community-plugins/pull/57)已提交，内含经过测试的 Windows x64 插件封装，使用 rc.9 编译包；[punkpeye PR #19484](https://github.com/punkpeye/awesome-mcp-servers/pull/19484)也已更新到 rc.9。两者均待审核，不计作已获批收录。[测试范围与提交状态](docs/mcp/DISCOVERY.md#rc9-contributions)。
+**插件贡献进展：**[OpenAI Community Plugins PR #57](https://github.com/openai/community-plugins/pull/57)已转为正式待审核，内含经过测试的 Windows x64 / rc.9 封装及无关 Grafana 失败的基线对照证据；[punkpeye PR #19484](https://github.com/punkpeye/awesome-mcp-servers/pull/19484)也已更新到 rc.9。两者均未获批收录。[测试范围与提交状态](docs/mcp/DISCOVERY.md#rc9-contributions)。
 
 如需从「添加插件市场」试用发布者 fork，见[候选插件安装指南](docs/mcp/PLUGIN-MARKETPLACE.zh-CN.md)。已隔离验证从 GitHub 添加市场、安装插件及调用安装后的 MCP；官方市场审核仍未完成。
 
