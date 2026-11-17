@@ -4,101 +4,285 @@
 <h1 align="center">From source to boundaries, every step is visible.</h1>
 
 <p align="center">
-  <img src="https://img.shields.io/badge/MCP-21%20tools-2563eb?style=flat-square" alt="MCP · 21 tools">
-  <img src="https://img.shields.io/badge/Semantics-L2%20%2B%20L3-7c3aed?style=flat-square" alt="L2 industry and L3 enterprise semantics">
-  <img src="https://img.shields.io/badge/Language-ZH%20%2F%20EN-0891b2?style=flat-square" alt="Chinese and English">
+  <a href="https://www.npmjs.com/package/boundaryxp-mcp"><img src="https://img.shields.io/badge/npm-Install%20rc.9-CB3837?style=for-the-badge&amp;logo=npm" alt="npm · Install BoundaryXP rc.9"></a>
+  <a href="https://registry.modelcontextprotocol.io/?q=boundaryxp"><img src="https://img.shields.io/badge/Official%20MCP%20Registry-Listed-15803d?style=for-the-badge" alt="Official MCP Registry · Listed"></a>
+  <a href="https://github.com/joinwell52-AI/BoundaryXP/releases/tag/mcp-v0.4.0-rc.9"><img src="https://img.shields.io/badge/Download-rc.9%20package-2563eb?style=for-the-badge" alt="Download compiled rc.9 package"></a>
+  <a href="https://glama.ai/mcp/servers/joinwell52-AI/BoundaryXP"><img src="https://glama.ai/mcp/servers/joinwell52-AI/BoundaryXP/badges/score.svg" alt="BoundaryXP on Glama · live score"></a>
 </p>
 
-BoundaryXP organizes complete tasks into an evidence-linked **7+1 relational representation**. It helps inspect whether AI plans and parent–child task decompositions preserve required outputs, responsibilities, resource limits and prohibitions. LLMs interpret source text; a deterministic Core checks submitted structures and supported calculations.
+<p align="center">
+  <a href="https://boundaryxp-workbench-demo.joinwell52.chatgpt.site/"><img src="https://img.shields.io/badge/Demo-Interactive-0891b2?style=flat-square" alt="演示 / Interactive demo"></a>
+  <a href="#l2--l3-industry-and-enterprise-semantics"><img src="https://img.shields.io/badge/Semantics-L2%20%2B%20L3-7c3aed?style=flat-square" alt="L2 industry / L3 enterprise semantics"></a>
+  <a href="https://doi.org/10.5281/zenodo.24072738"><img src="https://img.shields.io/badge/DOI-10.5281%2Fzenodo.24072738-1e3a8a?style=flat-square" alt="DOI: 10.5281/zenodo.24072738"></a>
+</p>
 
-Connect through MCP or use the local browser workbench. Findings are **Violation, Within bounds or Incomplete information**, with source quotations and calculation records for inspection.
+<p align="center">Turn complete task requirements into an evidence-linked <strong>7+1 relational representation</strong>, then check it with a deterministic Core.<br>Inspect plans and task decompositions, and trace the evidence for <strong>Violation, Within bounds or Incomplete information</strong>.</p>
+
+<p align="center"><a href="https://boundaryxp-workbench-demo.joinwell52.chatgpt.site/?lang=en#case=ENG20-003&axis=A&view=radar&lang=en"><strong>▶ Try the demo</strong></a>　·　<a href="docs/mcp/INSTALL.en.md"><strong>MCP setup</strong></a>　·　<a href="https://doi.org/10.5281/zenodo.24072738"><strong>Paper</strong></a></p>
+
+<p align="center">Chinese & English · MCP 0.4.0-rc.9 / B-335 · Research & protocol material · Original Core source private</p>
+
+> **Questions, counterexamples and contributions are welcome.** The 7+1 method has assumptions and limits; the research cases do not establish correctness for every task. The MCP implementation, model interpretations and L2/L3 resources can also be wrong. Deterministic calculation does not guarantee correct semantic interpretation. Help test and improve the approach with questions, counterexamples and reproducible evidence.
+>
+
+| Related entry | Link |
+|---|---|
+| Questions and ideas | [Open](https://github.com/joinwell52-AI/BoundaryXP/issues/new?template=04-question.yml) |
+| 7+1 counterexamples | [Open](https://github.com/joinwell52-AI/BoundaryXP/issues/new?template=01-method-counterexample.yml) |
+| MCP problems | [Open](https://github.com/joinwell52-AI/BoundaryXP/issues/new?template=02-mcp-problem.yml) |
+| L2/L3 semantic issues | [Open](https://github.com/joinwell52-AI/BoundaryXP/issues/new?template=03-semantic-resource.yml) |
+| Contribute and submit a PR | [Open](CONTRIBUTING.md) |
+
+
+## Install BXP · Find BXP
+
+**Linux x64 / Docker is available separately:** npm Linux package · Linux installation · 中文安装 · Dockerfile · Linux release. Version `0.4.0-rc.9-linux.1` uses the `linux` channel, glibc ≥2.36 and compiled B-335 Core. Windows `latest/next` remain rc.9. **Glama build and tool/resource discovery passed; Linux release published.** The live score badge links to the public tool catalog; it is not an algorithm or semantic-accuracy certification.
+
+
+| Related entry | Link |
+|---|---|
+| Install from npm → | [Open](https://www.npmjs.com/package/boundaryxp-mcp#installation-and-upgrades) |
+| Codex / Cursor setup → | [Open](docs/mcp/INSTALL.en.md) |
+| 中文安装 → | [Open](docs/mcp/INSTALL.zh-CN.md) |
+
+
+**21 tools · 17 resources · Windows x64 · Node.js ≥22.18 · rc.9 prerelease.** Default analysis uses your current host LLM; no separate model API key is required.
+
+| Public entry | What you can find there |
+|---|---|
+| **[npm — install the package](https://www.npmjs.com/package/boundaryxp-mcp)** | rc.9 package, Chinese/English descriptions and installation on the same page |
+| **[Official MCP Registry](https://registry.modelcontextprotocol.io/?q=boundaryxp)** | Published rc.9 metadata and npm installation reference |
+| **[TensorBlock MCP Index — rc.9 merged](https://github.com/TensorBlock/awesome-mcp-servers/pull/6087)** | rc.9 update merged November 16; [Linux / Glama follow-up PR #6099](https://github.com/TensorBlock/awesome-mcp-servers/pull/6099) awaits review |
+| **[MCPServers](https://mcpservers.org/servers/www-npmjs-com-package-boundaryxp-mcp)** | Live listing and npm link; rc.8 remains displayed, documentation refresh requested November 16 |
+| **[Serverdex](https://serverdex.io/server/io-github-joinwell52-ai-boundaryxp)** | Live listing with repository and npm links; cached rc.8 snippet omits required data path—use our setup guide |
+| **[Glama](https://glama.ai/mcp/servers/joinwell52-AI/BoundaryXP)** | Linux `0.4.0-rc.9-linux.1` published; platform build passed and discovered 21 tools / 17 resources. Public tool catalog is available. |
+
+Checked 2026-11-16. Search **BoundaryXP** or **boundaryxp-mcp**. Use npm for the current package; directory caches can lag. “Listed” means discoverable, not a certification. Full directory status and submission options.
+
+MCPwell and ToolCenter also contain directory entries, but no BXP-specific detail URL was verified. Their category/index pages are listed only in the full directory notes, not as direct BXP installation entries here.
+
+**Codex desktop:** Plugins → Add → **Add MCP server**. Follow the stdio setup guide. **Add plugin marketplace** expects a separate plugin-marketplace source; the npm URL, Registry URL and this product repository are not such a source. BXP is not currently listed in the Codex plugin catalog or Cursor Marketplace.
+
+**Plugin contribution:** OpenAI Community Plugins PR #57 is ready for maintainer review, with plugin 0.2.0 tested on Windows and Linux x64 and a controlled comparison of unrelated Grafana failures. punkpeye PR #19484 now includes Linux support, the live Glama badge and successful build/discovery evidence. Both await maintainer approval; a successful Glama build does not mean the PR is merged. Test scope and current submission status.
+
+The OpenAI PR follow-up now implements **Linux plugin support**: platform-specific compiled locks, glibc checks and XDG storage. Windows/Linux × Node 22.19/24.19 each passed 9/9 checks; Linux Codex Git-marketplace installation and the installed plugin's full analysis/report/recheck flow passed. Candidate installation. Upstream approval remains pending; original Core source stays private.
+
+To try the contributor fork through **Add plugin marketplace**, use the candidate plugin installation guide. Its GitHub-to-Codex installation and installed MCP were verified in isolation; official marketplace approval is still pending.
+
+
+| Related entry | Link |
+|---|---|
+| npm Linux package | [Open](https://www.npmjs.com/package/boundaryxp-mcp/v/0.4.0-rc.9-linux.1) |
+| Linux installation | [Open](docs/mcp/linux/INSTALL.en.md) |
+| 中文安装 | [Open](docs/mcp/linux/INSTALL.zh-CN.md) |
+| Dockerfile | [Open](Dockerfile) |
+| Linux release | [Open](https://github.com/joinwell52-AI/BoundaryXP/releases/tag/mcp-v0.4.0-rc.9-linux.1) |
+| Glama build and tool/resource discovery passed; Linux release published | [Open](docs/mcp/linux/RELEASE.md#发布后核对--post-publication-checks) |
+| Full directory status and submission options | [Open](docs/mcp/DISCOVERY.md) |
+| stdio setup guide | [Open](docs/mcp/npm/INSTALL.md#codex-and-other-hosts) |
+| OpenAI Community Plugins PR #57 | [Open](https://github.com/openai/community-plugins/pull/57) |
+| punkpeye PR #19484 | [Open](https://github.com/punkpeye/awesome-mcp-servers/pull/19484) |
+| successful build/discovery evidence | [Open](https://github.com/punkpeye/awesome-mcp-servers/pull/19484#issuecomment-6912851096) |
+| Test scope and current submission status | [Open](docs/mcp/DISCOVERY.md#rc9-contributions) |
+| OpenAI PR follow-up | [Open](https://github.com/openai/community-plugins/pull/57#issuecomment-6935083522) |
+| Candidate installation | [Open](docs/mcp/PLUGIN-MARKETPLACE.en.md) |
+| candidate plugin installation guide | [Open](docs/mcp/PLUGIN-MARKETPLACE.en.md) |
 
 ## Start with a real case
 
-In **ENG20-003**, five tasks span several roles. Their combined dependencies form the strict **A → B → C → D → A** cycle. The demo preserves the original English sources and calculation records.
+In **ENG20-003**, five tasks span several roles. Their combined dependencies form a strict **A → B → C → D → A** cycle. BoundaryXP brings those dependencies into one graph and preserves the original English sources and calculation records for inspection.
 
-<a href="https://boundaryxp-workbench-demo.joinwell52.chatgpt.site/?lang=en#case=ENG20-003&amp;axis=A&amp;view=radar&amp;lang=en">
-  <picture>
-    <source media="(max-width: 600px)" srcset="assets/demos/workbench-mobile-en.jpg">
-    <img src="assets/demos/workbench-en.jpg" alt="Open the interactive demo: task tree, 7+1 radar and original English evidence">
-  </picture>
-</a>
+[![Open the demo: ENG20-003 task tree, clickable 7+1 radar and original evidence](assets/demos/workbench-en.jpg)](https://boundaryxp-workbench-demo.joinwell52.chatgpt.site/?lang=en#case=ENG20-003&axis=A&view=radar&lang=en)
 
-**Click the screenshot to try the demo.** Select a case, click a radar view and inspect sources or the full report. Reports and Markdown exports follow the interface language; task evidence retains its source language.
+<p align="center"><a href="https://boundaryxp-workbench-demo.joinwell52.chatgpt.site/?lang=en#case=ENG20-003&axis=A&view=radar&lang=en"><strong>Click the radar to inspect evidence →</strong></a>　·　<a href="https://boundaryxp-workbench-demo.joinwell52.chatgpt.site/?lang=en#case=ENG20-003&axis=A&view=report&lang=en">Read and export the 7+1 report →</a></p>
 
-| Case | Displayed result |
+### Different cases, different results
+
+| Result / case | What to inspect |
 |---|---|
-| RT044 · Dependency cycle | **Violation** |
-| RT042 · Adjacent bookings | **Within bounds** |
-| L23-050 · Unresolved owner | **Incomplete information** |
+| **Violation** · [RT044](https://boundaryxp-workbench-demo.joinwell52.chatgpt.site/?lang=en#case=R389-383&axis=A&view=radar&lang=en) | Local orders combine into a strict dependency cycle |
+| **Within bounds** · [RT042](https://boundaryxp-workbench-demo.joinwell52.chatgpt.site/?lang=en#case=R389-381&axis=R&view=radar&lang=en) | Adjacent half-open 10–11 and 11–12 bookings release the endpoint |
+| **Incomplete information** · [L23-050](https://boundaryxp-workbench-demo.joinwell52.chatgpt.site/?lang=en#case=R389-153&axis=P&view=radar&lang=en) | “Confirmed by him” has no unique owner binding; U1 remains unknown |
 
-The demo replays five saved 58618 development cases, including two originally written in English. It retains their B-332 task trees, verdicts and seven-step reports without connecting to a local service or rerunning analysis. It is not a new acceptance test of the current release.
+Two cases have **original English sources**: ENG20-001 · Branches and a join (Within bounds) and ENG20-003 · Four-step dependency cycle (Violation).
 
-## Install and connect
+All five come from saved 58618 records, retaining task trees, exact sources, verdicts and seven-step reports. **Reports and Markdown exports follow the top-right language switch; source evidence keeps its original language.** The demo replays B-332 records without connecting to a local service or running new analysis. B335 upgrades do not regenerate those records. Demo and saved reports
 
-**21 tools · 17 resources · Node.js ≥22.18 · Compiled B-335 Core.**
+<details>
+<summary>See the English report and original task text</summary>
 
-Default analysis uses the current host LLM without a separate model API key; an explicit independent API mode is also available. The package includes Core, with no separate 58618 installation or hosted BoundaryXP server required.
+[![English 7+1 report with Markdown export](assets/demos/report-en.jpg)](https://boundaryxp-workbench-demo.joinwell52.chatgpt.site/?lang=en#case=ENG20-003&axis=A&view=report&lang=en)
 
-| Platform | Installation |
+[![ENG20-003 original English task sources](assets/demos/english-source.jpg)](https://boundaryxp-workbench-demo.joinwell52.chatgpt.site/?lang=en#case=ENG20-003&axis=A&view=source&lang=en)
+
+</details>
+
+
+| Related entry | Link |
 |---|---|
-| Windows x64 | [Windows installation and upgrades](docs/mcp/INSTALL.en.md) |
-| Linux x64 / Docker | [Linux and Docker installation](docs/mcp/linux/INSTALL.en.md) |
+| ENG20-001 · Branches and a join | [Open](https://boundaryxp-workbench-demo.joinwell52.chatgpt.site/?lang=en#case=ENG20-001&axis=A&view=radar&lang=en) |
+| ENG20-003 · Four-step dependency cycle | [Open](https://boundaryxp-workbench-demo.joinwell52.chatgpt.site/?lang=en#case=ENG20-003&axis=A&view=radar&lang=en) |
+| Demo and saved reports | [Open](docs/demo/README.md) |
 
-Windows uses **0.4.0-rc.9** on latest/next; Linux uses **0.4.0-rc.9-linux.1** on the linux channel and requires glibc ≥2.36. Both are prereleases. Existing rc.8 installations need the newer installer and the original data path preserved, as described in the guide.
+## Connect to your AI workflow
 
-Configure a stdio MCP server in your host, open the workbench, import complete task text, preview and confirm parent links, then analyze and inspect reports.
+**New in rc.9:** import and validate custom L2 industry and L3 enterprise dictionaries through MCP or the workbench. Format and English examples. Existing rc.8 installations can upgrade directly using the **rc.9 bootstrap installer once**; the old updater's fixed 18-tool probe cannot accept the new 21-tool catalog. Follow the upgrade guide and preserve your existing installation/data paths.
 
-## How 7+1 works
+**BoundaryXP MCP** connects through standard stdio to Cursor, Codex and compatible hosts, with **21 tools, 17 resources and a local browser workbench**. The Windows x64 package includes the compiled native Core; no separate 58618 installation or hosted BoundaryXP server is required.
 
-**I Inputs · O Outputs · A Actions · P Responsibilities and division of work · R Resources · V Version / basis · C Completion / stopping, plus independent B Prohibitions.**
+1. **Install from npm:** use `boundaryxp-mcp@0.4.0-rc.9`, available through the `next` prerelease channel. GitHub Releases retain the matching archive and SHA-256.
+2. **Install and connect:** follow the guide to configure the host's stdio MCP server.
+3. **Use your current host LLM:** the built-in host profile prepares instructions and accepts the host analysis through standard MCP tools. No separate model API key is required; an independent API profile remains optional.
+4. **Open the workbench:** import complete task text, preview and confirm the task tree, then analyze and inspect evidence and reports.
 
-Shared relations preserve objects, conditions, dependencies and handoffs across task boundaries. Missing information stays missing; a role title does not grant authority.
+
+| Related entry | Link |
+|---|---|
+| **English installation guide →** | [Open](docs/mcp/INSTALL.en.md) |
+| 中文安装 | [Open](docs/mcp/INSTALL.zh-CN.md) |
+| Tools and resources | [Open](docs/mcp/TOOLS.md) |
+| Updates, rollback and troubleshooting | [Open](docs/mcp/npm/INSTALL.md#updates) |
+
+
+> **Current npm release:** boundaryxp-mcp 0.4.0-rc.9, B-335 / Windows x64, MIT. Start with the installation guide, 7+1 introduction, 21 tools and directory status. This product repository is public. Core implementation source remains in a separate private repository.
+
+
+| Related entry | Link |
+|---|---|
+| Format and English examples | [Open](docs/mcp/npm/guides/DICTIONARIES.md) |
+| upgrade guide | [Open](docs/mcp/npm/INSTALL.md#updates) |
+| boundaryxp-mcp 0.4.0-rc.9 | [Open](https://www.npmjs.com/package/boundaryxp-mcp) |
+| installation guide | [Open](docs/mcp/INSTALL.en.md) |
+| 7+1 introduction | [Open](docs/mcp/npm/README.en.md) |
+| 21 tools | [Open](docs/mcp/npm/guides/TOOLS.md) |
+| directory status | [Open](docs/mcp/DISCOVERY.md) |
 
 ## L2 / L3: industry and enterprise semantics
 
-| Layer | Purpose |
+The same term can mean different things across industries and organizations. L2 / L3 provide selected domain context for interpreting tasks alongside the original evidence.
+
+| Semantic library | Purpose |
 |---|---|
-| **L2** | **Industry semantics:** Domain actions, entities, roles, resources and terminology provide industry context for interpreting tasks. |
-| **L3** | **Enterprise semantics:** Organization-specific terminology, organizational and role names, controlled aliases and related context distinguish local objects and expressions. |
+| **L2 · Industry** | Describes domain actions, entities, roles, resources and related terminology to help interpret requirements in their industry context. |
+| **L3 · Enterprise** | Adds organization-specific terminology, organizational and role names, controlled aliases and other context to distinguish local objects and expressions. |
 
-rc.9 supports custom-dictionary formats, validation and import. Validate first and import with the returned digest, then explicitly select version-and-digest-bound resources. Import does not bind resources or edit existing tasks automatically, and does not establish semantic correctness.
+**There is no active L1 layer.** L0 is the BXP protocol and deterministic Core, not a semantic library. L2 / L3 do not replace source text or change the shared 7+1 verification rules. Loading a library, a job title or a reporting relationship does not grant business authority.
 
-There is no active L1 layer. L0 is the BXP protocol and deterministic Core, not a semantic library. Loading resources, job titles, grades or reporting relationships does not establish business authority.
+### Use through MCP
+
+1. Call `bx_dictionaries_list` to inspect the L2 / L3 resources available in the current installation and their identifiers and versions.
+2. Call `bx_dictionaries_bind` to validate the selected resources and obtain version-and-digest references, keeping library snapshots distinct.
+3. Call `bx_dictionary_lookup` to look up entries in bound resources. Lookup does not make a semantic ruling or submit analysis.
+
+Ask your host: **“List the available BXP L2 and L3 semantic libraries with their identifiers, versions and digests. Wait for my selection before binding; do not submit analysis.”**
+
+
+| Related entry | Link |
+|---|---|
+| **Install and connect MCP →** | [Open](docs/mcp/INSTALL.en.md) |
+| Dictionary tool reference | [Open](docs/mcp/TOOLS.md) |
+| Resource and distribution notices | [Open](docs/mcp/NOTICES.md) |
+
+
+Available resources are determined by the installed inventory. Manage private enterprise semantic material within its own usage scope. This section documents capabilities and entry points; it does not claim a separate public GitHub library release.
 
 ## Method and research evidence
 
 **BXP: A Method for AI Task Boundary Verification Using a 7+1 Relational Representation**  
-Wei Zhu · English v1.2 / Chinese r23 · First published 2026-11-06.
+Wei Zhu · English v1.2 / Chinese r23 · First published 2026-11-06
 
-The research material covers **625 cases, 3,219 task nodes and 3,469 calculation items**. These figures describe coverage, **not accuracy**. Case-level agreement, item-level differences and incomplete calculations are reported separately.
+| Research cases | Task nodes | Calculation items |
+|:---:|:---:|:---:|
+| **625** | **3,219** | **3,469** |
 
-The 7+1 method has assumptions and limits. Formal arguments and existing cases do not establish correctness for every natural-language task. The MCP implementation, model interpretations and resources can be wrong; deterministic calculation does not by itself validate its representation or interpretation.
+The paper organizes requirements through 7+1 views and shared relations, uses BXP conventions to establish a common mathematical boundary, and checks whether subtasks and their combination exceed the parent task's boundary. Formal arguments state the conditions for the method. These figures describe research coverage, **not accuracy**. Case-level agreement, item-level differences and incomplete calculations are reported separately.
 
-## Capabilities and boundaries
 
-- **Complete tasks:** whole-document UTF-8 .txt / .md import, explicit task and parent IDs, repeated roles, multiple levels and relationship preview.
-- **Inspectable results:** task tree, 7+1 radar, LLM/calculator findings, quotations, unresolved items, history and bilingual report exports. Failed attempts remain distinct from saved results.
-- **Input limits:** individual sources and serialized joint input are each limited to 1 MiB; HTTP request bodies to 8 MiB. Oversized input is rejected without truncation.
-- **Responsibility:** Core does not call models, access the network or execute task instructions. Analysis and first-time translation data flows depend on the selected host or model provider. Program checks do not grant execution authority; people and host systems retain business decisions.
+| Related entry | Link |
+|---|---|
+| **English PDF** | [Open](https://github.com/joinwell52-AI/BoundaryXP/releases/download/paper-v1.2-r23/BoundaryXP-manuscript.en.pdf) |
+| 中文 PDF | [Open](https://github.com/joinwell52-AI/BoundaryXP/releases/download/paper-v1.2-r23/BoundaryXP-manuscript.zh-CN.pdf) |
+| **Public research package** | [Open](https://zenodo.org/records/24072738/files/manuscript-with-materials.zip?download=1) |
+| Materials guide | [Open](docs/paper/README.en.md) |
 
-The reviewed baseline is BXP-0001 draft.2; B-335 still uses a recorded draft.1 attachment. Full migration and protocol conformance are not claimed. Directory listings, successful builds and platform scores do not certify algorithmic or semantic correctness.
 
-## Help improve BoundaryXP
+**DOI: 10.5281/zenodo.24072738**. Deposited on Zenodo on 2026-11-09, retaining the first GitHub publication date. GitHub paper release and checksums
 
-Questions, criticism, counterexamples, independent reproductions and PRs are welcome in Chinese or English. You do not need to endorse the approach or prove a defect before participating. Contribute documentation, protocol discussion, cases, dictionary examples and independent checks using minimal material you are allowed to publish.
+The `RESEARCH_ONLY_1` supplement contains task sources, annotations, 7+1 reports, operands, results, protocol texts, screenshots and independent research verification scripts. It excludes workbench engineering source, runtime dependencies and production prompt templates. It is maintained separately from the MCP test package.
 
-This public repository contains paper, protocol, guides, research material and compiled releases. Original Core implementation source remains private. Paper, case-data and third-party usage terms remain distinct. Public visibility alone does not confirm that historical GitHub references or caches have been cleared.
+
+| Related entry | Link |
+|---|---|
+| 10.5281/zenodo.24072738 | [Open](https://doi.org/10.5281/zenodo.24072738) |
+| GitHub paper release and checksums | [Open](https://github.com/joinwell52-AI/BoundaryXP/releases/tag/paper-v1.2-r23) |
+
+## How 7+1 connects the requirements
+
+**I Inputs · O Outputs · A Actions · P Responsibilities and division of work · R Resources · V Version / basis · C Completion / stopping, plus independent B Prohibitions.**
+
+Shared relations connect objects, conditions, dependencies and handoffs across task boundaries. Missing information stays missing; a role title does not grant authority.
+
+```mermaid
+flowchart LR
+  A["Complete task text"] --> B["Confirm parent–child task tree"]
+  B --> C["LLM joint analysis"]
+  D["Selected L2 / L3 dictionaries"] --> C
+  C --> E["Shared deterministic Core"]
+  E --> F["Evidence, findings and unresolved items"]
+  F --> G["Human / host review"]
+```
+
+The B335 workbench makes **one semantic request**, followed by Core checks, with no separate audit request or automatic retry. LLMs interpret source meaning; Core validates submitted structures, source references, bindings and supported finite operands. Core does not call models, access the network or execute task instructions.
+
+<details>
+<summary>B335 capabilities, input limits and evidence boundaries</summary>
+
+- **Complete task trees:** whole-document UTF-8 `.txt` / `.md` import, role headings, explicit task and parent IDs, forward references, multiple levels and relationship preview.
+- **Inspectable results:** task tree, 7+1 radar, model/calculator conclusions, quotations, unresolved items, saved history and exports. Failed attempts remain distinct from saved results.
+- **L2 / L3:** versioned industry and enterprise dictionaries; no active L1 layer. Loading resources does not grant business authority.
+- **Chinese and English:** interface, reports and Markdown exports preserve original sources and saved verdicts. First-time translation calls a model and is cached by snapshot.
+- **Mathematical input and unknowns:** allowed values, uncertain facts and parent/child plan consistency have distinct meanings. Set identities support strings and safe integers without conflating their types or filling in unknown conclusions.
+- **Startup and recovery:** historical jobs load with bounded concurrency under existing recovery rules. Readiness follows HTTP identity verification.
+
+Individual sources and serialized joint input are each limited to **1 MiB**; HTTP request bodies to **8 MiB**. Oversized input is rejected without truncation; there is no 300-code-point ceiling. See the changelog for features and historical validation scope.
+
+Exact quotations do not prove semantic entailment. A completed job does not mean every proof passed. People and host systems retain business decisions and execution authority; `business_decision` and `execution_authorization` remain null.
+
+The reviewed baseline is BXP-0001 `0.4.0-draft.2`; the workbench still uses a recorded draft.1 attachment. Full migration and protocol conformance are not claimed. Implementation notes · Research evidence
+
+Host analysis and first-time translation may send selected source and dictionary content to the configured model provider. Review this data flow before supplying private material.
+
+</details>
+
+
+| Related entry | Link |
+|---|---|
+| changelog | [Open](CHANGELOG.md) |
+| Implementation notes | [Open](protocol/IMPLEMENTATION.md) |
+| Research evidence | [Open](docs/RESEARCH.en.md) |
 
 ## Explore further
 
 | Looking for | Start here |
 |---|---|
-| MCP tools and custom semantics | [21-tool reference](docs/mcp/TOOLS.md) · [L2/L3 dictionary guide](docs/mcp/npm/guides/DICTIONARIES.md) |
-| Paper and research material | [Paper and materials](docs/paper/README.en.md) · [Zenodo DOI](https://doi.org/10.5281/zenodo.24072738) |
-| Protocol and implementation scope | [BXP protocol](protocol/README.md) · [Implementation notes](protocol/IMPLEMENTATION.md) |
-| npm, directories and plugins | [npm package](https://www.npmjs.com/package/boundaryxp-mcp) · [Listings and review status](docs/mcp/DISCOVERY.md) |
-| Version history and full documentation | [Changelog](CHANGELOG.md) · [Documentation](docs/README.md) |
-| Questions and contributions | [Open an issue](https://github.com/joinwell52-AI/BoundaryXP/issues/new/choose) · [Contributing](CONTRIBUTING.md) |
-| License and publication audit | [MIT license](LICENSE) · [Scope and material terms](docs/PUBLICATION-SCOPE.md) · [Historical audit](docs/PREPUBLICATION-CHECK.md) |
+| Industry and enterprise semantics | [L2 / L3 overview](#l2--l3-industry-and-enterprise-semantics) · [Dictionary tools](docs/mcp/TOOLS.md) |
+| MCP installation and usage | [Setup guide](docs/mcp/README.md) · [Release evidence](docs/mcp/RELEASE.md) |
+| Method and citation | [Research overview](docs/RESEARCH.en.md) · [Paper materials](docs/paper/README.en.md) |
+| Protocol and implementation differences | [BXP protocol](protocol/README.md) · [Implementation notes](protocol/IMPLEMENTATION.md) |
+| Version history and contribution | [Changelog](CHANGELOG.md) · [Contributing](CONTRIBUTING.md) · [Documentation](docs/README.md) |
+
+**Distribution scope:** the Git tree contains paper, protocol, cases, reports, screenshots, independent research verification scripts and MCP documentation. It excludes private workbench implementation source and source-build entry points. Compiled MCP packages are published to npm and mirrored in this repository's Releases. Original Core implementation source is excluded from those packages; adapter, UI and required resources remain readable. Full scope
+
+**Public status:** the owner has made this product repository public. Historical audit notes describe their recorded state; public visibility alone does not confirm that old GitHub references or caches have been cleared. Audit record
+
+The existing MIT license is retained. Paper, case data and third-party materials have their own usage terms; the MCP package has separate license and third-party notices.
+
+
+| Related entry | Link |
+|---|---|
+| Full scope | [Open](docs/PUBLICATION-SCOPE.md) |
+| Audit record | [Open](docs/PREPUBLICATION-CHECK.md) |
+| MIT license | [Open](LICENSE) |
+| usage terms | [Open](docs/paper/materials/MATERIAL-ACCESS.md) |
+| license and third-party notices | [Open](docs/mcp/NOTICES.md) |
 
