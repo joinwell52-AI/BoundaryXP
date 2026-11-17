@@ -41,7 +41,7 @@ Each child is assessed separately. DEV-02 introduces a deployment clause that co
 
 Import complete UTF-8 Markdown/TXT, explicit task and parent IDs, multiple hierarchy levels and multiple children with the same role. DEV-01 and DEV-02 remain separate nodes. Preview relationships before analysis.
 
-[Try the interactive demo](https://boundaryxp-workbench-demo.joinwell52.chatgpt.site/?lang=en) for saved B-332 cases: RT044 has a strict dependency cycle, RT042 has adjacent half-open intervals, and L23-050 has an unresolved owner reference. These are historical replays, not new MCP analyses or B-335 test results.
+[Try the interactive demo](https://boundaryxp-demo.vercel.app/?lang=en) for saved B-332 cases: RT044 has a strict dependency cycle, RT042 has adjacent half-open intervals, and L23-050 has an unresolved owner reference. These are historical replays, not new MCP analyses or B-335 test results.
 
 ## How verification works
 

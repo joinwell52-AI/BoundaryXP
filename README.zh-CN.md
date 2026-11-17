@@ -11,14 +11,14 @@
 </p>
 
 <p align="center">
-  <a href="https://boundaryxp-workbench-demo.joinwell52.chatgpt.site/"><img src="https://img.shields.io/badge/Demo-Interactive-0891b2?style=flat-square" alt="演示 / Interactive demo"></a>
+  <a href="https://boundaryxp-demo.vercel.app/"><img src="https://img.shields.io/badge/Demo-Interactive-0891b2?style=flat-square" alt="演示 / Interactive demo"></a>
   <a href="#l2--l3行业与企业语义库"><img src="https://img.shields.io/badge/Semantics-L2%20%2B%20L3-7c3aed?style=flat-square" alt="L2 industry / L3 enterprise semantics"></a>
   <a href="https://doi.org/10.5281/zenodo.24072738"><img src="https://img.shields.io/badge/DOI-10.5281%2Fzenodo.24072738-1e3a8a?style=flat-square" alt="DOI: 10.5281/zenodo.24072738"></a>
 </p>
 
 <p align="center">从完整任务到带原文证据的 <strong>7+1 关联表示</strong>，再由确定性 Core 核验。<br>检查方案与子任务分解，追溯为什么<strong>越界、未越界，或信息不全</strong>。</p>
 
-<p align="center"><a href="https://boundaryxp-workbench-demo.joinwell52.chatgpt.site/"><strong>▶ 在线演示</strong></a>　·　<a href="docs/mcp/INSTALL.zh-CN.md"><strong>MCP 接入</strong></a>　·　<a href="https://doi.org/10.5281/zenodo.24072738"><strong>论文</strong></a></p>
+<p align="center"><a href="https://boundaryxp-demo.vercel.app/"><strong>▶ 在线演示</strong></a>　·　<a href="docs/mcp/INSTALL.zh-CN.md"><strong>MCP 接入</strong></a>　·　<a href="https://doi.org/10.5281/zenodo.24072738"><strong>论文</strong></a></p>
 
 <p align="center">中英双语 · MCP 0.4.0-rc.9 / B-335 · npm 预发行 · 论文与协议资料 · Core 原实现源码私有</p>
 
@@ -59,28 +59,28 @@ MCPwell、ToolCenter 的总目录中也有条目，但尚未核实 BXP 专属详
 
 七个任务各自看起来可以执行，合起来却有一条 **A → D → B → C → A** 的严格前置闭环。界痕把跨小组依赖放回同一张图，保留原文与计算依据，让冲突可以逐项核对。
 
-[![点击进入：RT044 的任务树、7+1 边界雷达和原文依据](assets/demos/workbench-zh.jpg)](https://boundaryxp-workbench-demo.joinwell52.chatgpt.site/#case=R389-383&axis=A&view=radar&lang=zh)
+[![点击进入：RT044 的任务树、7+1 边界雷达和原文依据](assets/demos/workbench-zh.jpg)](https://boundaryxp-demo.vercel.app/#case=R389-383&axis=A&view=radar&lang=zh)
 
-<p align="center"><a href="https://boundaryxp-workbench-demo.joinwell52.chatgpt.site/#case=R389-383&axis=A&view=radar&lang=zh"><strong>点击雷达，查看依据 →</strong></a>　·　<a href="https://boundaryxp-workbench-demo.joinwell52.chatgpt.site/#case=R389-383&axis=A&view=report&lang=zh">阅读与导出 7+1 报告 →</a></p>
+<p align="center"><a href="https://boundaryxp-demo.vercel.app/#case=R389-383&axis=A&view=radar&lang=zh"><strong>点击雷达，查看依据 →</strong></a>　·　<a href="https://boundaryxp-demo.vercel.app/#case=R389-383&axis=A&view=report&lang=zh">阅读与导出 7+1 报告 →</a></p>
 
 ### 不同用例，不同结果
 
 | 结果与用例 | 关键问题 |
 |---|---|
-| **越界** · [RT044](https://boundaryxp-workbench-demo.joinwell52.chatgpt.site/#case=R389-383&axis=A&view=radar&lang=zh) | 局部顺序合并后形成严格闭环 |
-| **未越界** · [RT042](https://boundaryxp-workbench-demo.joinwell52.chatgpt.site/#case=R389-381&axis=R&view=radar&lang=zh) | 10–11 点与 11–12 点的半开区间相邻，端点释放 |
-| **信息不全** · [L23-050](https://boundaryxp-workbench-demo.joinwell52.chatgpt.site/#case=R389-153&axis=P&view=radar&lang=zh) | “由他确认”没有唯一绑定责任人，保留未知 U1 |
+| **越界** · [RT044](https://boundaryxp-demo.vercel.app/#case=R389-383&axis=A&view=radar&lang=zh) | 局部顺序合并后形成严格闭环 |
+| **未越界** · [RT042](https://boundaryxp-demo.vercel.app/#case=R389-381&axis=R&view=radar&lang=zh) | 10–11 点与 11–12 点的半开区间相邻，端点释放 |
+| **信息不全** · [L23-050](https://boundaryxp-demo.vercel.app/#case=R389-153&axis=P&view=radar&lang=zh) | “由他确认”没有唯一绑定责任人，保留未知 U1 |
 
-还有两个**英文原文**用例：[ENG20-001 · 分支与汇合](https://boundaryxp-workbench-demo.joinwell52.chatgpt.site/?lang=en#case=ENG20-001&axis=A&view=radar&lang=en)（未越界）、[ENG20-003 · 四步依赖闭环](https://boundaryxp-workbench-demo.joinwell52.chatgpt.site/?lang=en#case=ENG20-003&axis=A&view=radar&lang=en)（越界）。
+还有两个**英文原文**用例：[ENG20-001 · 分支与汇合](https://boundaryxp-demo.vercel.app/?lang=en#case=ENG20-001&axis=A&view=radar&lang=en)（未越界）、[ENG20-003 · 四步依赖闭环](https://boundaryxp-demo.vercel.app/?lang=en#case=ENG20-003&axis=A&view=radar&lang=en)（越界）。
 
 这些用例来自 58618 已保存记录，保留各自任务树、原文、判定和原七步报告。**报告与 Markdown 导出跟随右上角语言；原文保留来源语言。** 演示回放 B-332 保存记录，不连接本地服务、不重新分析，也不会随 B335 自动重算。[演示说明与已保存报告](docs/demo/README.md)
 
 <details>
 <summary>展开查看中文报告和英文原文</summary>
 
-[![中文 7+1 完整报告，支持 Markdown 导出](assets/demos/report-zh.jpg)](https://boundaryxp-workbench-demo.joinwell52.chatgpt.site/#case=R389-383&axis=A&view=report&lang=zh)
+[![中文 7+1 完整报告，支持 Markdown 导出](assets/demos/report-zh.jpg)](https://boundaryxp-demo.vercel.app/#case=R389-383&axis=A&view=report&lang=zh)
 
-[![ENG20-003 的英文任务原文](assets/demos/english-source.jpg)](https://boundaryxp-workbench-demo.joinwell52.chatgpt.site/?lang=en#case=ENG20-003&axis=A&view=source&lang=en)
+[![ENG20-003 的英文任务原文](assets/demos/english-source.jpg)](https://boundaryxp-demo.vercel.app/?lang=en#case=ENG20-003&axis=A&view=source&lang=en)
 
 </details>
 

@@ -47,7 +47,7 @@
 
 支持完整 UTF-8 Markdown/TXT、多级父子关系、显式任务编号和父任务编号，以及多个相同角色的子任务。DEV-01、DEV-02 是不同节点；支持 `PM → DEV（1/14）` 等标题。先预览并确认关系，再分析。
 
-[交互演示](https://boundaryxp-workbench-demo.joinwell52.chatgpt.site/)提供 B-332 保存记录：RT044 存在严格前置闭环，RT042 是半开区间相邻，L23-050 的责任人指代未绑定。这是历史回放，不代表本轮 MCP 新分析或 B-335 测试结果。
+[交互演示](https://boundaryxp-demo.vercel.app/)提供 B-332 保存记录：RT044 存在严格前置闭环，RT042 是半开区间相邻，L23-050 的责任人指代未绑定。这是历史回放，不代表本轮 MCP 新分析或 B-335 测试结果。
 
 ### 边界怎样计算？
 
@@ -351,7 +351,7 @@ Each child is assessed separately. DEV-02 introduces a deployment clause that co
 
 Import complete UTF-8 Markdown/TXT, explicit task and parent IDs, multiple hierarchy levels and multiple children with the same role. DEV-01 and DEV-02 remain separate nodes. Preview relationships before analysis.
 
-[Try the interactive demo](https://boundaryxp-workbench-demo.joinwell52.chatgpt.site/?lang=en) for saved B-332 cases: RT044 has a strict dependency cycle, RT042 has adjacent half-open intervals, and L23-050 has an unresolved owner reference. These are historical replays, not new MCP analyses or B-335 test results.
+[Try the interactive demo](https://boundaryxp-demo.vercel.app/?lang=en) for saved B-332 cases: RT044 has a strict dependency cycle, RT042 has adjacent half-open intervals, and L23-050 has an unresolved owner reference. These are historical replays, not new MCP analyses or B-335 test results.
 
 ### How verification works
 
