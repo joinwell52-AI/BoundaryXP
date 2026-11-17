@@ -25,13 +25,13 @@
 > **欢迎提问、反例与贡献。** 7+1 方法有适用条件，研究用例不能证明它对所有任务都正确；MCP 实现、模型解释和 L2/L3 语义库也可能出错。确定性计算不等于语义解释必然正确。欢迎用问题、反例和复现证据共同检验与改进。
 >
 
-| 相关入口 | 链接 |
+| 用途 | 文档与入口 |
 |---|---|
-| 提问与建议 | [打开](https://github.com/joinwell52-AI/BoundaryXP/issues/new?template=04-question.yml) |
-| 7+1 方法反例 | [打开](https://github.com/joinwell52-AI/BoundaryXP/issues/new?template=01-method-counterexample.yml) |
-| MCP 问题 | [打开](https://github.com/joinwell52-AI/BoundaryXP/issues/new?template=02-mcp-problem.yml) |
-| L2/L3 语义问题 | [打开](https://github.com/joinwell52-AI/BoundaryXP/issues/new?template=03-semantic-resource.yml) |
-| 参与贡献与 PR | [打开](CONTRIBUTING.md) |
+| 一般提问 | [提问与建议表单](https://github.com/joinwell52-AI/BoundaryXP/issues/new?template=04-question.yml) |
+| 方法反例 | [7+1 方法反例表单](https://github.com/joinwell52-AI/BoundaryXP/issues/new?template=01-method-counterexample.yml) |
+| MCP 反馈 | [MCP 安装与使用问题表单](https://github.com/joinwell52-AI/BoundaryXP/issues/new?template=02-mcp-problem.yml) |
+| 语义库反馈 | [L2/L3 语义问题表单](https://github.com/joinwell52-AI/BoundaryXP/issues/new?template=03-semantic-resource.yml) |
+| 提交贡献 | [贡献指南与 PR 流程](CONTRIBUTING.md) |
 
 
 ## 安装 BXP · 在哪里找到 BXP
@@ -39,11 +39,11 @@
 **新增 Linux x64 / Docker 独立入口：** npm Linux 编译包 · 中文安装 · English · Dockerfile · Linux 发行附件。版本 `0.4.0-rc.9-linux.1` 使用 `linux` 渠道，需要 glibc ≥2.36，随包交付编译后的 B-335 Core。Windows 的 `latest/next` 保持 rc.9。**Glama 实际构建、工具及资源发现通过，Linux 发行已完成**；顶部实时徽章直达公开工具目录，评分不等于算法或语义正确性认证。
 
 
-| 相关入口 | 链接 |
+| 用途 | 文档与入口 |
 |---|---|
-| 从 npm 安装 → | [打开](https://www.npmjs.com/package/boundaryxp-mcp#中文安装与升级) |
-| Codex / Cursor 接入指南 → | [打开](docs/mcp/INSTALL.zh-CN.md) |
-| English setup → | [打开](docs/mcp/INSTALL.en.md) |
+| npm 安装 | [npm 安装与升级](https://www.npmjs.com/package/boundaryxp-mcp#中文安装与升级) |
+| Windows 接入 | [Windows 中文安装指南](docs/mcp/INSTALL.zh-CN.md) |
+| Windows 接入 | [Windows 英文安装指南](docs/mcp/INSTALL.en.md) |
 
 
 **21 个工具 · 17 项资源 · Windows x64 · Node.js ≥22.18 · rc.9 预发行版。** 默认使用当前宿主 LLM 分析，无需另外配置模型 API Key。
@@ -70,23 +70,23 @@ OpenAI PR 跟进说明现已补齐 **Linux 插件支持**：独立编译依赖�
 如需从「添加插件市场」试用发布者 fork，见候选插件安装指南。已隔离验证从 GitHub 添加市场、安装插件及调用安装后的 MCP；官方市场审核仍未完成。
 
 
-| 相关入口 | 链接 |
+| 用途 | 文档与入口 |
 |---|---|
-| npm Linux 编译包 | [打开](https://www.npmjs.com/package/boundaryxp-mcp/v/0.4.0-rc.9-linux.1) |
-| 中文安装 | [打开](docs/mcp/linux/INSTALL.zh-CN.md) |
-| English | [打开](docs/mcp/linux/INSTALL.en.md) |
-| Dockerfile | [打开](Dockerfile) |
-| Linux 发行附件 | [打开](https://github.com/joinwell52-AI/BoundaryXP/releases/tag/mcp-v0.4.0-rc.9-linux.1) |
-| Glama 实际构建、工具及资源发现通过，Linux 发行已完成 | [打开](docs/mcp/linux/RELEASE.md) |
-| 完整目录状态及可登记入口 | [打开](docs/mcp/DISCOVERY.md) |
-| stdio 接入指南 | [打开](docs/mcp/npm/INSTALL.zh-CN.md#codex-与其他宿主) |
-| OpenAI Community Plugins PR #57 | [打开](https://github.com/openai/community-plugins/pull/57) |
-| punkpeye PR #19484 | [打开](https://github.com/punkpeye/awesome-mcp-servers/pull/19484) |
-| 构建与发现通过的跟进证据 | [打开](https://github.com/punkpeye/awesome-mcp-servers/pull/19484#issuecomment-6912851096) |
-| 测试范围与提交状态 | [打开](docs/mcp/DISCOVERY.md#rc9-contributions) |
-| OpenAI PR 跟进说明 | [打开](https://github.com/openai/community-plugins/pull/57#issuecomment-6935083522) |
-| 候选插件安装 | [打开](docs/mcp/PLUGIN-MARKETPLACE.zh-CN.md) |
-| 候选插件安装指南 | [打开](docs/mcp/PLUGIN-MARKETPLACE.zh-CN.md) |
+| Linux 安装包 | [npm Linux 编译包 0.4.0-rc.9-linux.1](https://www.npmjs.com/package/boundaryxp-mcp/v/0.4.0-rc.9-linux.1) |
+| Linux / Docker | [Linux / Docker 中文安装指南](docs/mcp/linux/INSTALL.zh-CN.md) |
+| Linux / Docker | [Linux / Docker 英文安装指南](docs/mcp/linux/INSTALL.en.md) |
+| 容器构建 | [Dockerfile](Dockerfile) |
+| Linux 发行 | [Linux 发行附件与摘要](https://github.com/joinwell52-AI/BoundaryXP/releases/tag/mcp-v0.4.0-rc.9-linux.1) |
+| 构建与发现验证 | [Linux 发行验证报告](docs/mcp/linux/RELEASE.md) |
+| 目录收录 | [MCP 目录与审核状态](docs/mcp/DISCOVERY.md) |
+| 宿主配置 | [Codex / Cursor stdio 接入指南](docs/mcp/npm/INSTALL.zh-CN.md#codex-与其他宿主) |
+| 插件贡献 | [OpenAI Community Plugins PR #57](https://github.com/openai/community-plugins/pull/57) |
+| punkpeye 目录贡献 | [Awesome MCP Servers PR #19484](https://github.com/punkpeye/awesome-mcp-servers/pull/19484) |
+| 平台验证 | [Glama 构建与发现证据](https://github.com/punkpeye/awesome-mcp-servers/pull/19484#issuecomment-6912851096) |
+| 贡献验证 | [插件测试与提交记录](docs/mcp/DISCOVERY.md#rc9-contributions) |
+| Linux 插件支持 | [OpenAI PR #57 Linux 跟进](https://github.com/openai/community-plugins/pull/57#issuecomment-6935083522) |
+| 插件试用 | [候选插件中文安装指南](docs/mcp/PLUGIN-MARKETPLACE.zh-CN.md) |
+| 插件试用 | [候选插件中文安装指南](docs/mcp/PLUGIN-MARKETPLACE.zh-CN.md) |
 
 ## 先看一个真实用例
 
@@ -118,11 +118,11 @@ OpenAI PR 跟进说明现已补齐 **Linux 插件支持**：独立编译依赖�
 </details>
 
 
-| 相关入口 | 链接 |
+| 用途 | 文档与入口 |
 |---|---|
-| ENG20-001 · 分支与汇合 | [打开](https://boundaryxp-workbench-demo.joinwell52.chatgpt.site/?lang=en#case=ENG20-001&axis=A&view=radar&lang=en) |
-| ENG20-003 · 四步依赖闭环 | [打开](https://boundaryxp-workbench-demo.joinwell52.chatgpt.site/?lang=en#case=ENG20-003&axis=A&view=radar&lang=en) |
-| 演示说明与已保存报告 | [打开](docs/demo/README.md) |
+| 英文用例 · 未越界 | [ENG20-001 · 分支与汇合](https://boundaryxp-workbench-demo.joinwell52.chatgpt.site/?lang=en#case=ENG20-001&axis=A&view=radar&lang=en) |
+| 英文用例 · 越界 | [ENG20-003 · 四步依赖闭环](https://boundaryxp-workbench-demo.joinwell52.chatgpt.site/?lang=en#case=ENG20-003&axis=A&view=radar&lang=en) |
+| 演示与报告 | [演示说明与已保存报告](docs/demo/README.md) |
 
 ## 接入你的 AI 工作流
 
@@ -136,25 +136,25 @@ OpenAI PR 跟进说明现已补齐 **Linux 插件支持**：独立编译依赖�
 4. **打开工作台：** 导入完整任务，预览并确认任务树，再提交分析、查看证据与报告。
 
 
-| 相关入口 | 链接 |
+| 用途 | 文档与入口 |
 |---|---|
-| **中文安装指南 →** | [打开](docs/mcp/INSTALL.zh-CN.md) |
-| English setup | [打开](docs/mcp/INSTALL.en.md) |
-| 工具与资源 | [打开](docs/mcp/TOOLS.md) |
-| 升级、回滚与排障 | [打开](docs/mcp/npm/INSTALL.zh-CN.md#升级) |
+| Windows 接入 | [Windows 中文安装指南](docs/mcp/INSTALL.zh-CN.md) |
+| Windows 接入 | [Windows 英文安装指南](docs/mcp/INSTALL.en.md) |
+| 工具参考 | [21 个 MCP 工具与资源](docs/mcp/TOOLS.md) |
+| 升级与维护 | [升级、回滚与排障指南](docs/mcp/npm/INSTALL.zh-CN.md#升级) |
 
 
 > **当前 npm 版本：** boundaryxp-mcp 0.4.0-rc.9，B-335 / Windows x64，MIT许可。入口：中文安装指南、7+1产品介绍、MCP目录状态。本产品仓库已经公开；核心实现源码在独立私有源码仓库维护。客户无需另装58618。
 
 
-| 相关入口 | 链接 |
+| 用途 | 文档与入口 |
 |---|---|
-| 格式规范与中文示例 | [打开](docs/mcp/npm/guides/DICTIONARIES.zh-CN.md) |
-| 升级指南 | [打开](docs/mcp/npm/INSTALL.zh-CN.md#升级) |
-| boundaryxp-mcp 0.4.0-rc.9 | [打开](https://www.npmjs.com/package/boundaryxp-mcp) |
-| 中文安装指南 | [打开](docs/mcp/INSTALL.zh-CN.md) |
-| 7+1产品介绍 | [打开](docs/mcp/npm/README.zh-CN.md) |
-| MCP目录状态 | [打开](docs/mcp/DISCOVERY.md) |
+| 自定义语义库 | [L2/L3 字典格式与中文示例](docs/mcp/npm/guides/DICTIONARIES.zh-CN.md) |
+| 升级与维护 | [升级、回滚与排障指南](docs/mcp/npm/INSTALL.zh-CN.md#升级) |
+| npm 发行 | [boundaryxp-mcp 0.4.0-rc.9](https://www.npmjs.com/package/boundaryxp-mcp) |
+| Windows 接入 | [Windows 中文安装指南](docs/mcp/INSTALL.zh-CN.md) |
+| 产品介绍 | [MCP 7+1 中文产品介绍](docs/mcp/npm/README.zh-CN.md) |
+| 目录收录 | [MCP 目录与审核状态](docs/mcp/DISCOVERY.md) |
 
 ## L2 / L3：行业与企业语义库
 
@@ -176,11 +176,11 @@ OpenAI PR 跟进说明现已补齐 **Linux 插件支持**：独立编译依赖�
 可以对宿主说：**“列出 BXP 可用的 L2、L3 语义库，展示标识、版本和摘要，等我选择后再绑定；暂不提交分析。”**
 
 
-| 相关入口 | 链接 |
+| 用途 | 文档与入口 |
 |---|---|
-| **安装并连接 MCP →** | [打开](docs/mcp/INSTALL.zh-CN.md) |
-| 词库工具说明 | [打开](docs/mcp/TOOLS.md) |
-| 资源与分发范围 | [打开](docs/mcp/NOTICES.md) |
+| Windows 接入 | [Windows 中文安装指南](docs/mcp/INSTALL.zh-CN.md) |
+| 工具参考 | [21 个 MCP 工具与资源](docs/mcp/TOOLS.md) |
+| 许可与分发 | [MCP 许可、资源与第三方说明](docs/mcp/NOTICES.md) |
 
 
 可用资源以当前安装实际返回的清单为准。企业私有语义资料按自己的使用范围管理；本页提供能力和使用入口，不表示独立词库已在 GitHub 公开发布。
@@ -197,12 +197,12 @@ OpenAI PR 跟进说明现已补齐 **Linux 插件支持**：独立编译依赖�
 论文提出以 7+1 及共享关联组织任务要求，通过 BXP 约定建立共同数学边界，检查子任务及其组合是否突破主任务边界。形式论证说明成立条件；上述数字描述研究覆盖范围，**不是准确率**。整组答案一致性、逐项差异与未完成计算分别报告。
 
 
-| 相关入口 | 链接 |
+| 用途 | 文档与入口 |
 |---|---|
-| **中文 PDF** | [打开](https://github.com/joinwell52-AI/BoundaryXP/releases/download/paper-v1.2-r23/BoundaryXP-manuscript.zh-CN.pdf) |
-| English PDF | [打开](https://github.com/joinwell52-AI/BoundaryXP/releases/download/paper-v1.2-r23/BoundaryXP-manuscript.en.pdf) |
-| **公开研究材料包** | [打开](https://zenodo.org/records/24072738/files/manuscript-with-materials.zip?download=1) |
-| 材料导航 | [打开](docs/paper/README.md) |
+| 中文论文 | [中文论文 PDF · r23](https://github.com/joinwell52-AI/BoundaryXP/releases/download/paper-v1.2-r23/BoundaryXP-manuscript.zh-CN.pdf) |
+| 英文论文 | [English paper PDF · v1.2](https://github.com/joinwell52-AI/BoundaryXP/releases/download/paper-v1.2-r23/BoundaryXP-manuscript.en.pdf) |
+| 研究附件 | [公开研究材料包 · ZIP](https://zenodo.org/records/24072738/files/manuscript-with-materials.zip?download=1) |
+| 研究材料 | [论文与材料导航 · 中文](docs/paper/README.md) |
 
 
 **DOI：10.5281/zenodo.24072738**。Zenodo 于 2026-11-09 发布，保留首次 GitHub 发布日期。GitHub 论文 Release 与摘要
@@ -210,10 +210,10 @@ OpenAI PR 跟进说明现已补齐 **Linux 插件支持**：独立编译依赖�
 研究附件 `RESEARCH_ONLY_1` 包含任务原文、标注、7+1 报告、操作数、结果、协议正文、截图和独立研究核验脚本；不含工作台工程源码、运行依赖或生产提示模板。它与 MCP 测试安装包分别维护。
 
 
-| 相关入口 | 链接 |
+| 用途 | 文档与入口 |
 |---|---|
-| 10.5281/zenodo.24072738 | [打开](https://doi.org/10.5281/zenodo.24072738) |
-| GitHub 论文 Release 与摘要 | [打开](https://github.com/joinwell52-AI/BoundaryXP/releases/tag/paper-v1.2-r23) |
+| 论文引用 | [Zenodo DOI · 论文记录](https://doi.org/10.5281/zenodo.24072738) |
+| 论文发行 | [GitHub 论文 Release 与校验摘要](https://github.com/joinwell52-AI/BoundaryXP/releases/tag/paper-v1.2-r23) |
 
 ## 7+1 如何把要求连起来
 
@@ -254,11 +254,11 @@ B335 工作台采用**一次语义请求**，随后由 Core 作程序核验，�
 </details>
 
 
-| 相关入口 | 链接 |
+| 用途 | 文档与入口 |
 |---|---|
-| 升级日志 | [打开](CHANGELOG.zh-CN.md) |
-| 实现说明 | [打开](protocol/IMPLEMENTATION.md) |
-| 研究证据 | [打开](docs/RESEARCH.md) |
+| 版本变化 | [工作台升级日志](CHANGELOG.zh-CN.md) |
+| 协议实现 | [BXP 实现与迁移说明](protocol/IMPLEMENTATION.md) |
+| 研究证据 | [7+1 研究与验证范围](docs/RESEARCH.md) |
 
 ## 从这里继续
 
@@ -277,11 +277,12 @@ B335 工作台采用**一次语义请求**，随后由 Core 作程序核验，�
 保留既有 MIT 许可证。论文、案例与第三方材料按各自使用条件；MCP 安装包另见许可与第三方说明。
 
 
-| 相关入口 | 链接 |
+| 用途 | 文档与入口 |
 |---|---|
-| 完整范围说明 | [打开](docs/PUBLICATION-SCOPE.md) |
-| 核查记录 | [打开](docs/PREPUBLICATION-CHECK.md) |
-| MIT 许可证 | [打开](LICENSE) |
-| 使用条件 | [打开](docs/paper/materials/MATERIAL-ACCESS.md) |
-| 许可与第三方说明 | [打开](docs/mcp/NOTICES.md) |
+| 分发范围 | [仓库公开范围说明](docs/PUBLICATION-SCOPE.md) |
+| 历史核查 | [公开前核查记录](docs/PREPUBLICATION-CHECK.md) |
+| 仓库许可 | [MIT 许可证](LICENSE) |
+| 材料条件 | [论文与案例使用条件](docs/paper/materials/MATERIAL-ACCESS.md) |
+| 许可与分发 | [MCP 许可、资源与第三方说明](docs/mcp/NOTICES.md) |
+
 
