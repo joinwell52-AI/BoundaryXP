@@ -36,11 +36,11 @@ These examples have separate example identities and fictional data. Dependency r
 
 | Implementation | Import support |
 |---|---|
-| Port-58618 workbench B344 | Standard version-directory selection or selecting all package files together; validation, import, display names and task selection save separately. Check the installed version |
+| Port-58618 workbench B345 | Dictionary settings has Installed dictionaries and Import semantic library tabs. New imports follow type, complete folder, validation, name and save. Check the installed version |
 | Published MCP 0.4.0-rc.9 | The single-JSON custom dictionary contract below. **This documentation update does not modify or release MCP code and does not add directory import to rc.9** |
 | Older workbench rosters, employee-directory and single-JSON custom files | Historical / migration compatibility, not the primary new active L3 profile. Old versions and task bindings remain preserved |
 
-In B344 Dictionary settings, download and extract the standard example ZIP, then select the version directory directly containing datapackage.json, or all its files together. A system resources.json is a valid resource but not a whole package. Validate, import and save the display name; then select the package in the L2/L3 dropdown and save dictionary settings. Importing alone does not rebind a task or rerun an existing result.
+In B345 Dictionary settings, open Import semantic library: (1) select L2 or L3; (2) select the complete version folder directly containing datapackage.json; (3) check requirements; (4) enter a name after validation passes; (5) save. The preview lists files without an editable JSON field. Download and extract the selected type's standard ZIP example if needed. A system resources.json is a valid resource but not a whole package. Then switch to Installed dictionaries, select the package and save the L2/L3 settings. Importing alone does not rebind the current task or rerun an existing result. Single JSON remains a released MCP interface and workbench storage compatibility format, not the new B345 page import format.
 
 ## MCP rc.9 single-JSON compatibility contract
 
