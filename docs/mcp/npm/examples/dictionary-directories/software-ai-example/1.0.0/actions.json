@@ -1,0 +1,3116 @@
+{
+  "schema": "boundx-domain-actions/v1",
+  "packId": "software-ai-example",
+  "version": "1.0.0",
+  "invariants": [
+    "source_evidence_required",
+    "effect_not_inferred",
+    "completion_not_inferred",
+    "authorization_not_inferred"
+  ],
+  "roleContracts": {
+    "process/v1": {
+      "operation": "PROCESS",
+      "primaryRole": "target",
+      "optionalRoles": [
+        "executor"
+      ]
+    },
+    "read/v1": {
+      "operation": "READ",
+      "primaryRole": "input",
+      "optionalRoles": [
+        "executor"
+      ]
+    },
+    "change/v1": {
+      "operation": "CHANGE",
+      "primaryRole": "target",
+      "optionalRoles": [
+        "executor"
+      ]
+    },
+    "call/v1": {
+      "operation": "CALL",
+      "primaryRole": "interface",
+      "optionalRoles": [
+        "executor"
+      ]
+    },
+    "create/v1": {
+      "operation": "CREATE",
+      "primaryRole": "artifact",
+      "optionalRoles": [
+        "executor"
+      ]
+    },
+    "send/v1": {
+      "operation": "SEND",
+      "primaryRole": "payload",
+      "optionalRoles": [
+        "executor",
+        "recipient"
+      ]
+    }
+  },
+  "projectionContracts": {
+    "process/v1": {
+      "operation": "PROCESS",
+      "candidates": [
+        {
+          "field": "A",
+          "basis": "action_source"
+        },
+        {
+          "field": "P",
+          "basis": "explicit_executor_only"
+        },
+        {
+          "field": "I",
+          "basis": "bound_primary_role"
+        }
+      ]
+    },
+    "read/v1": {
+      "operation": "READ",
+      "candidates": [
+        {
+          "field": "A",
+          "basis": "action_source"
+        },
+        {
+          "field": "P",
+          "basis": "explicit_executor_only"
+        },
+        {
+          "field": "I",
+          "basis": "bound_primary_role"
+        }
+      ]
+    },
+    "change/v1": {
+      "operation": "CHANGE",
+      "candidates": [
+        {
+          "field": "A",
+          "basis": "action_source"
+        },
+        {
+          "field": "P",
+          "basis": "explicit_executor_only"
+        }
+      ]
+    },
+    "call/v1": {
+      "operation": "CALL",
+      "candidates": [
+        {
+          "field": "A",
+          "basis": "action_source"
+        },
+        {
+          "field": "P",
+          "basis": "explicit_executor_only"
+        }
+      ]
+    },
+    "create/v1": {
+      "operation": "CREATE",
+      "candidates": [
+        {
+          "field": "A",
+          "basis": "action_source"
+        },
+        {
+          "field": "P",
+          "basis": "explicit_executor_only"
+        },
+        {
+          "field": "O",
+          "basis": "bound_primary_role"
+        }
+      ]
+    },
+    "send/v1": {
+      "operation": "SEND",
+      "candidates": [
+        {
+          "field": "A",
+          "basis": "action_source"
+        },
+        {
+          "field": "P",
+          "basis": "explicit_executor_only"
+        },
+        {
+          "field": "O",
+          "basis": "bound_primary_role"
+        }
+      ]
+    }
+  },
+  "frames": [
+    {
+      "id": "source.inspect_repository",
+      "category": "source-control",
+      "label": {
+        "zh-CN": "检查仓库",
+        "en": "Inspect repository"
+      },
+      "operation": "PROCESS",
+      "roleContract": "process/v1",
+      "projectionContract": "process/v1",
+      "entityTypes": [
+        "repository"
+      ],
+      "triggers": {
+        "zh": [
+          "检查仓库",
+          "审查仓库"
+        ],
+        "en": [
+          "inspect repository",
+          "inspect repo"
+        ]
+      }
+    },
+    {
+      "id": "source.clone_repository",
+      "category": "source-control",
+      "label": {
+        "zh-CN": "克隆仓库",
+        "en": "Clone repository"
+      },
+      "operation": "READ",
+      "roleContract": "read/v1",
+      "projectionContract": "read/v1",
+      "entityTypes": [
+        "repository"
+      ],
+      "triggers": {
+        "zh": [
+          "克隆"
+        ],
+        "en": [
+          "clone",
+          "clones"
+        ]
+      }
+    },
+    {
+      "id": "source.commit_change",
+      "category": "source-control",
+      "label": {
+        "zh-CN": "提交变更",
+        "en": "Commit change"
+      },
+      "operation": "CHANGE",
+      "roleContract": "change/v1",
+      "projectionContract": "change/v1",
+      "entityTypes": [
+        "change-set",
+        "source-file"
+      ],
+      "triggers": {
+        "zh": [
+          "提交变更",
+          "提交代码"
+        ],
+        "en": [
+          "commit changes",
+          "commit code",
+          "commit"
+        ]
+      }
+    },
+    {
+      "id": "source.merge_branch",
+      "category": "source-control",
+      "label": {
+        "zh-CN": "合并分支",
+        "en": "Merge branch"
+      },
+      "operation": "CHANGE",
+      "roleContract": "change/v1",
+      "projectionContract": "change/v1",
+      "entityTypes": [
+        "branch"
+      ],
+      "triggers": {
+        "zh": [
+          "合并分支"
+        ],
+        "en": [
+          "merge branch",
+          "merge"
+        ]
+      }
+    },
+    {
+      "id": "analysis.analyze",
+      "category": "analysis-planning",
+      "label": {
+        "zh-CN": "分析对象",
+        "en": "Analyze subject"
+      },
+      "operation": "PROCESS",
+      "roleContract": "process/v1",
+      "projectionContract": "process/v1",
+      "entityTypes": [
+        "requirement",
+        "issue",
+        "repository",
+        "dataset",
+        "model",
+        "report"
+      ],
+      "triggers": {
+        "zh": [
+          "分析"
+        ],
+        "en": [
+          "analyze",
+          "analyzes",
+          "analyse",
+          "analyses"
+        ]
+      }
+    },
+    {
+      "id": "analysis.decompose_task",
+      "category": "analysis-planning",
+      "label": {
+        "zh-CN": "分解任务",
+        "en": "Decompose task"
+      },
+      "operation": "PROCESS",
+      "roleContract": "process/v1",
+      "projectionContract": "process/v1",
+      "entityTypes": [
+        "task",
+        "requirement"
+      ],
+      "triggers": {
+        "zh": [
+          "拆解",
+          "分解"
+        ],
+        "en": [
+          "decompose",
+          "decomposes",
+          "break down"
+        ]
+      }
+    },
+    {
+      "id": "analysis.plan_work",
+      "category": "analysis-planning",
+      "label": {
+        "zh-CN": "规划工作",
+        "en": "Plan work"
+      },
+      "operation": "PROCESS",
+      "roleContract": "process/v1",
+      "projectionContract": "process/v1",
+      "entityTypes": [
+        "task",
+        "requirement",
+        "release"
+      ],
+      "triggers": {
+        "zh": [
+          "规划"
+        ],
+        "en": [
+          "plan",
+          "plans"
+        ]
+      }
+    },
+    {
+      "id": "analysis.review_design",
+      "category": "analysis-planning",
+      "label": {
+        "zh-CN": "评审设计",
+        "en": "Review design"
+      },
+      "operation": "PROCESS",
+      "roleContract": "process/v1",
+      "projectionContract": "process/v1",
+      "entityTypes": [
+        "design",
+        "plan",
+        "requirement"
+      ],
+      "triggers": {
+        "zh": [
+          "评审设计",
+          "评审"
+        ],
+        "en": [
+          "review design",
+          "review"
+        ]
+      }
+    },
+    {
+      "id": "code.implement",
+      "category": "code-change",
+      "label": {
+        "zh-CN": "实现变更",
+        "en": "Implement change"
+      },
+      "operation": "CHANGE",
+      "roleContract": "change/v1",
+      "projectionContract": "change/v1",
+      "entityTypes": [
+        "feature",
+        "requirement",
+        "source-file",
+        "component"
+      ],
+      "triggers": {
+        "zh": [
+          "实现"
+        ],
+        "en": [
+          "implement",
+          "implements"
+        ]
+      }
+    },
+    {
+      "id": "code.modify",
+      "category": "code-change",
+      "label": {
+        "zh-CN": "修改代码",
+        "en": "Modify code"
+      },
+      "operation": "CHANGE",
+      "roleContract": "change/v1",
+      "projectionContract": "change/v1",
+      "entityTypes": [
+        "source-file",
+        "component"
+      ],
+      "triggers": {
+        "zh": [
+          "修改代码",
+          "改动代码"
+        ],
+        "en": [
+          "modify code",
+          "change code",
+          "edit code"
+        ]
+      }
+    },
+    {
+      "id": "code.refactor",
+      "category": "code-change",
+      "label": {
+        "zh-CN": "重构代码",
+        "en": "Refactor code"
+      },
+      "operation": "CHANGE",
+      "roleContract": "change/v1",
+      "projectionContract": "change/v1",
+      "entityTypes": [
+        "source-file",
+        "component"
+      ],
+      "triggers": {
+        "zh": [
+          "重构"
+        ],
+        "en": [
+          "refactor",
+          "refactors"
+        ]
+      }
+    },
+    {
+      "id": "code.fix_defect",
+      "category": "code-change",
+      "label": {
+        "zh-CN": "修复缺陷",
+        "en": "Fix defect"
+      },
+      "operation": "CHANGE",
+      "roleContract": "change/v1",
+      "projectionContract": "change/v1",
+      "entityTypes": [
+        "issue",
+        "source-file",
+        "component"
+      ],
+      "triggers": {
+        "zh": [
+          "修复"
+        ],
+        "en": [
+          "fix",
+          "fixes"
+        ]
+      }
+    },
+    {
+      "id": "build.install_dependency",
+      "category": "build-test",
+      "label": {
+        "zh-CN": "安装依赖",
+        "en": "Install dependency"
+      },
+      "operation": "CHANGE",
+      "roleContract": "change/v1",
+      "projectionContract": "change/v1",
+      "entityTypes": [
+        "dependency",
+        "environment"
+      ],
+      "triggers": {
+        "zh": [
+          "安装依赖"
+        ],
+        "en": [
+          "install dependency",
+          "install dependencies"
+        ]
+      }
+    },
+    {
+      "id": "build.compile",
+      "category": "build-test",
+      "label": {
+        "zh-CN": "编译源码",
+        "en": "Compile source"
+      },
+      "operation": "PROCESS",
+      "roleContract": "process/v1",
+      "projectionContract": "process/v1",
+      "entityTypes": [
+        "source-file",
+        "component"
+      ],
+      "triggers": {
+        "zh": [
+          "编译"
+        ],
+        "en": [
+          "compile",
+          "compiles"
+        ]
+      }
+    },
+    {
+      "id": "build.run_test",
+      "category": "build-test",
+      "label": {
+        "zh-CN": "运行测试",
+        "en": "Run test"
+      },
+      "operation": "CALL",
+      "roleContract": "call/v1",
+      "projectionContract": "call/v1",
+      "entityTypes": [
+        "test-case",
+        "test-suite"
+      ],
+      "triggers": {
+        "zh": [
+          "运行测试",
+          "执行测试"
+        ],
+        "en": [
+          "run test",
+          "run tests",
+          "execute tests"
+        ]
+      }
+    },
+    {
+      "id": "build.benchmark",
+      "category": "build-test",
+      "label": {
+        "zh-CN": "运行基准测试",
+        "en": "Run benchmark"
+      },
+      "operation": "PROCESS",
+      "roleContract": "process/v1",
+      "projectionContract": "process/v1",
+      "entityTypes": [
+        "service",
+        "model",
+        "component"
+      ],
+      "triggers": {
+        "zh": [
+          "基准测试",
+          "性能测试"
+        ],
+        "en": [
+          "benchmark",
+          "benchmarks",
+          "performance test"
+        ]
+      }
+    },
+    {
+      "id": "release.package",
+      "category": "release-deploy",
+      "label": {
+        "zh-CN": "打包产物",
+        "en": "Package artifact"
+      },
+      "operation": "CREATE",
+      "roleContract": "create/v1",
+      "projectionContract": "create/v1",
+      "entityTypes": [
+        "build-artifact",
+        "release"
+      ],
+      "triggers": {
+        "zh": [
+          "打包"
+        ],
+        "en": [
+          "package",
+          "packages"
+        ]
+      }
+    },
+    {
+      "id": "release.publish",
+      "category": "release-deploy",
+      "label": {
+        "zh-CN": "发布版本",
+        "en": "Publish release"
+      },
+      "operation": "SEND",
+      "roleContract": "send/v1",
+      "projectionContract": "send/v1",
+      "entityTypes": [
+        "release",
+        "build-artifact"
+      ],
+      "triggers": {
+        "zh": [
+          "发布版本",
+          "发布制品"
+        ],
+        "en": [
+          "publish release",
+          "publish artifact"
+        ]
+      }
+    },
+    {
+      "id": "release.deploy",
+      "category": "release-deploy",
+      "label": {
+        "zh-CN": "部署服务",
+        "en": "Deploy service"
+      },
+      "operation": "CHANGE",
+      "roleContract": "change/v1",
+      "projectionContract": "change/v1",
+      "entityTypes": [
+        "service",
+        "environment",
+        "release"
+      ],
+      "triggers": {
+        "zh": [
+          "部署"
+        ],
+        "en": [
+          "deploy",
+          "deploys"
+        ]
+      }
+    },
+    {
+      "id": "release.rollback",
+      "category": "release-deploy",
+      "label": {
+        "zh-CN": "回滚版本",
+        "en": "Rollback release"
+      },
+      "operation": "CHANGE",
+      "roleContract": "change/v1",
+      "projectionContract": "change/v1",
+      "entityTypes": [
+        "release",
+        "deployment",
+        "service"
+      ],
+      "triggers": {
+        "zh": [
+          "回滚"
+        ],
+        "en": [
+          "rollback",
+          "roll back"
+        ]
+      }
+    },
+    {
+      "id": "data.collect",
+      "category": "data-model",
+      "label": {
+        "zh-CN": "收集数据",
+        "en": "Collect data"
+      },
+      "operation": "PROCESS",
+      "roleContract": "process/v1",
+      "projectionContract": "process/v1",
+      "entityTypes": [
+        "dataset",
+        "data-source"
+      ],
+      "triggers": {
+        "zh": [
+          "收集数据",
+          "采集数据"
+        ],
+        "en": [
+          "collect data",
+          "collect dataset"
+        ]
+      }
+    },
+    {
+      "id": "data.preprocess",
+      "category": "data-model",
+      "label": {
+        "zh-CN": "预处理数据",
+        "en": "Preprocess data"
+      },
+      "operation": "PROCESS",
+      "roleContract": "process/v1",
+      "projectionContract": "process/v1",
+      "entityTypes": [
+        "dataset"
+      ],
+      "triggers": {
+        "zh": [
+          "清洗数据",
+          "预处理数据"
+        ],
+        "en": [
+          "preprocess",
+          "preprocess data"
+        ]
+      }
+    },
+    {
+      "id": "data.label",
+      "category": "data-model",
+      "label": {
+        "zh-CN": "标注数据",
+        "en": "Label data"
+      },
+      "operation": "CHANGE",
+      "roleContract": "change/v1",
+      "projectionContract": "change/v1",
+      "entityTypes": [
+        "dataset"
+      ],
+      "triggers": {
+        "zh": [
+          "标注"
+        ],
+        "en": [
+          "label",
+          "labels",
+          "annotate",
+          "annotates"
+        ]
+      }
+    },
+    {
+      "id": "model.train",
+      "category": "data-model",
+      "label": {
+        "zh-CN": "训练模型",
+        "en": "Train model"
+      },
+      "operation": "PROCESS",
+      "roleContract": "process/v1",
+      "projectionContract": "process/v1",
+      "entityTypes": [
+        "model",
+        "dataset"
+      ],
+      "triggers": {
+        "zh": [
+          "训练"
+        ],
+        "en": [
+          "train",
+          "trains"
+        ]
+      }
+    },
+    {
+      "id": "model.evaluate",
+      "category": "data-model",
+      "label": {
+        "zh-CN": "评估模型",
+        "en": "Evaluate model"
+      },
+      "operation": "PROCESS",
+      "roleContract": "process/v1",
+      "projectionContract": "process/v1",
+      "entityTypes": [
+        "model",
+        "dataset",
+        "metric"
+      ],
+      "triggers": {
+        "zh": [
+          "评估模型",
+          "评测模型"
+        ],
+        "en": [
+          "evaluate model",
+          "evaluate"
+        ]
+      }
+    },
+    {
+      "id": "model.infer",
+      "category": "data-model",
+      "label": {
+        "zh-CN": "执行推理",
+        "en": "Run inference"
+      },
+      "operation": "CALL",
+      "roleContract": "call/v1",
+      "projectionContract": "call/v1",
+      "entityTypes": [
+        "model",
+        "api"
+      ],
+      "triggers": {
+        "zh": [
+          "推理"
+        ],
+        "en": [
+          "infer",
+          "run inference"
+        ]
+      }
+    },
+    {
+      "id": "agent.delegate",
+      "category": "agent-collaboration",
+      "label": {
+        "zh-CN": "委派任务",
+        "en": "Delegate task"
+      },
+      "operation": "SEND",
+      "roleContract": "send/v1",
+      "projectionContract": "send/v1",
+      "entityTypes": [
+        "task"
+      ],
+      "triggers": {
+        "zh": [
+          "委派"
+        ],
+        "en": [
+          "delegate",
+          "delegates"
+        ]
+      }
+    },
+    {
+      "id": "agent.handoff",
+      "category": "agent-collaboration",
+      "label": {
+        "zh-CN": "移交任务",
+        "en": "Handoff task"
+      },
+      "operation": "SEND",
+      "roleContract": "send/v1",
+      "projectionContract": "send/v1",
+      "entityTypes": [
+        "task",
+        "report"
+      ],
+      "triggers": {
+        "zh": [
+          "移交"
+        ],
+        "en": [
+          "handoff",
+          "hand off"
+        ]
+      }
+    },
+    {
+      "id": "agent.request_review",
+      "category": "agent-collaboration",
+      "label": {
+        "zh-CN": "请求评审",
+        "en": "Request review"
+      },
+      "operation": "SEND",
+      "roleContract": "send/v1",
+      "projectionContract": "send/v1",
+      "entityTypes": [
+        "change-set",
+        "report",
+        "plan"
+      ],
+      "triggers": {
+        "zh": [
+          "请求评审"
+        ],
+        "en": [
+          "request review"
+        ]
+      }
+    },
+    {
+      "id": "agent.review_delivery",
+      "category": "agent-collaboration",
+      "label": {
+        "zh-CN": "评审交付",
+        "en": "Review delivery"
+      },
+      "operation": "PROCESS",
+      "roleContract": "process/v1",
+      "projectionContract": "process/v1",
+      "entityTypes": [
+        "report",
+        "build-artifact",
+        "change-set"
+      ],
+      "triggers": {
+        "zh": [
+          "验收交付",
+          "评审"
+        ],
+        "en": [
+          "review delivery",
+          "review"
+        ]
+      }
+    },
+    {
+      "id": "security.scan_vulnerability",
+      "category": "security-access",
+      "label": {
+        "zh-CN": "扫描漏洞",
+        "en": "Scan vulnerability"
+      },
+      "operation": "PROCESS",
+      "roleContract": "process/v1",
+      "projectionContract": "process/v1",
+      "entityTypes": [
+        "repository",
+        "component",
+        "service",
+        "image"
+      ],
+      "triggers": {
+        "zh": [
+          "漏洞扫描",
+          "扫描漏洞"
+        ],
+        "en": [
+          "scan vulnerabilities",
+          "vulnerability scan"
+        ]
+      }
+    },
+    {
+      "id": "security.grant_permission",
+      "category": "security-access",
+      "label": {
+        "zh-CN": "授予权限",
+        "en": "Grant permission"
+      },
+      "operation": "CHANGE",
+      "roleContract": "change/v1",
+      "projectionContract": "change/v1",
+      "entityTypes": [
+        "permission",
+        "actor"
+      ],
+      "triggers": {
+        "zh": [
+          "授予权限",
+          "赋予权限"
+        ],
+        "en": [
+          "grant permission",
+          "grant access"
+        ]
+      }
+    },
+    {
+      "id": "security.revoke_permission",
+      "category": "security-access",
+      "label": {
+        "zh-CN": "撤销权限",
+        "en": "Revoke permission"
+      },
+      "operation": "CHANGE",
+      "roleContract": "change/v1",
+      "projectionContract": "change/v1",
+      "entityTypes": [
+        "permission",
+        "actor"
+      ],
+      "triggers": {
+        "zh": [
+          "撤销权限",
+          "收回权限"
+        ],
+        "en": [
+          "revoke permission",
+          "revoke access"
+        ]
+      }
+    },
+    {
+      "id": "security.rotate_credential",
+      "category": "security-access",
+      "label": {
+        "zh-CN": "轮换凭据",
+        "en": "Rotate credential"
+      },
+      "operation": "CHANGE",
+      "roleContract": "change/v1",
+      "projectionContract": "change/v1",
+      "entityTypes": [
+        "credential"
+      ],
+      "triggers": {
+        "zh": [
+          "轮换凭据",
+          "轮换密钥"
+        ],
+        "en": [
+          "rotate credential",
+          "rotate credentials",
+          "rotate key"
+        ]
+      }
+    },
+    {
+      "id": "source.pull_changes",
+      "category": "source-control",
+      "label": {
+        "zh-CN": "拉取变更",
+        "en": "Pull changes"
+      },
+      "operation": "READ",
+      "roleContract": "read/v1",
+      "projectionContract": "read/v1",
+      "entityTypes": [
+        "repository",
+        "branch",
+        "change-set"
+      ],
+      "triggers": {
+        "zh": [
+          "拉取变更",
+          "同步代码"
+        ],
+        "en": [
+          "pull changes",
+          "fetch changes"
+        ]
+      }
+    },
+    {
+      "id": "source.push_changes",
+      "category": "source-control",
+      "label": {
+        "zh-CN": "推送变更",
+        "en": "Push changes"
+      },
+      "operation": "SEND",
+      "roleContract": "send/v1",
+      "projectionContract": "send/v1",
+      "entityTypes": [
+        "change-set",
+        "branch"
+      ],
+      "triggers": {
+        "zh": [
+          "推送代码",
+          "推送变更"
+        ],
+        "en": [
+          "push changes",
+          "push commits"
+        ]
+      }
+    },
+    {
+      "id": "source.create_branch",
+      "category": "source-control",
+      "label": {
+        "zh-CN": "创建分支",
+        "en": "Create branch"
+      },
+      "operation": "CREATE",
+      "roleContract": "create/v1",
+      "projectionContract": "create/v1",
+      "entityTypes": [
+        "branch"
+      ],
+      "triggers": {
+        "zh": [
+          "创建分支",
+          "新建分支"
+        ],
+        "en": [
+          "create branch"
+        ]
+      }
+    },
+    {
+      "id": "source.checkout_revision",
+      "category": "source-control",
+      "label": {
+        "zh-CN": "检出版本",
+        "en": "Checkout revision"
+      },
+      "operation": "READ",
+      "roleContract": "read/v1",
+      "projectionContract": "read/v1",
+      "entityTypes": [
+        "branch",
+        "tag",
+        "change-set"
+      ],
+      "triggers": {
+        "zh": [
+          "检出版本",
+          "切换版本"
+        ],
+        "en": [
+          "checkout revision",
+          "check out revision"
+        ]
+      }
+    },
+    {
+      "id": "source.rebase_branch",
+      "category": "source-control",
+      "label": {
+        "zh-CN": "变基分支",
+        "en": "Rebase branch"
+      },
+      "operation": "CHANGE",
+      "roleContract": "change/v1",
+      "projectionContract": "change/v1",
+      "entityTypes": [
+        "branch"
+      ],
+      "triggers": {
+        "zh": [
+          "变基"
+        ],
+        "en": [
+          "rebase",
+          "rebases"
+        ]
+      }
+    },
+    {
+      "id": "source.cherry_pick",
+      "category": "source-control",
+      "label": {
+        "zh-CN": "拣选提交",
+        "en": "Cherry-pick commit"
+      },
+      "operation": "CHANGE",
+      "roleContract": "change/v1",
+      "projectionContract": "change/v1",
+      "entityTypes": [
+        "change-set"
+      ],
+      "triggers": {
+        "zh": [
+          "拣选提交"
+        ],
+        "en": [
+          "cherry-pick",
+          "cherry pick"
+        ]
+      }
+    },
+    {
+      "id": "source.tag_release",
+      "category": "source-control",
+      "label": {
+        "zh-CN": "创建标签",
+        "en": "Tag release"
+      },
+      "operation": "CREATE",
+      "roleContract": "create/v1",
+      "projectionContract": "create/v1",
+      "entityTypes": [
+        "tag",
+        "release"
+      ],
+      "triggers": {
+        "zh": [
+          "创建标签",
+          "打版本标签"
+        ],
+        "en": [
+          "create tag",
+          "tag release"
+        ]
+      }
+    },
+    {
+      "id": "source.force_push",
+      "category": "source-control",
+      "label": {
+        "zh-CN": "强制推送",
+        "en": "Force push"
+      },
+      "operation": "CHANGE",
+      "roleContract": "change/v1",
+      "projectionContract": "change/v1",
+      "entityTypes": [
+        "branch",
+        "repository"
+      ],
+      "triggers": {
+        "zh": [
+          "强制推送"
+        ],
+        "en": [
+          "force push"
+        ]
+      }
+    },
+    {
+      "id": "source.delete_branch",
+      "category": "source-control",
+      "label": {
+        "zh-CN": "删除分支",
+        "en": "Delete branch"
+      },
+      "operation": "CHANGE",
+      "roleContract": "change/v1",
+      "projectionContract": "change/v1",
+      "entityTypes": [
+        "branch"
+      ],
+      "triggers": {
+        "zh": [
+          "删除分支"
+        ],
+        "en": [
+          "delete branch"
+        ]
+      }
+    },
+    {
+      "id": "source.open_pull_request",
+      "category": "source-control",
+      "label": {
+        "zh-CN": "创建拉取请求",
+        "en": "Open pull request"
+      },
+      "operation": "CREATE",
+      "roleContract": "create/v1",
+      "projectionContract": "create/v1",
+      "entityTypes": [
+        "pull-request"
+      ],
+      "triggers": {
+        "zh": [
+          "创建拉取请求",
+          "创建合并请求"
+        ],
+        "en": [
+          "open pull request",
+          "create pull request"
+        ]
+      }
+    },
+    {
+      "id": "source.review_pull_request",
+      "category": "source-control",
+      "label": {
+        "zh-CN": "评审拉取请求",
+        "en": "Review pull request"
+      },
+      "operation": "PROCESS",
+      "roleContract": "process/v1",
+      "projectionContract": "process/v1",
+      "entityTypes": [
+        "pull-request",
+        "change-set"
+      ],
+      "triggers": {
+        "zh": [
+          "评审拉取请求",
+          "评审合并请求"
+        ],
+        "en": [
+          "review pull request",
+          "review merge request"
+        ]
+      }
+    },
+    {
+      "id": "analysis.clarify_requirement",
+      "category": "analysis-planning",
+      "label": {
+        "zh-CN": "澄清需求",
+        "en": "Clarify requirement"
+      },
+      "operation": "PROCESS",
+      "roleContract": "process/v1",
+      "projectionContract": "process/v1",
+      "entityTypes": [
+        "requirement"
+      ],
+      "triggers": {
+        "zh": [
+          "澄清需求"
+        ],
+        "en": [
+          "clarify requirement",
+          "clarify requirements"
+        ]
+      }
+    },
+    {
+      "id": "analysis.estimate_work",
+      "category": "analysis-planning",
+      "label": {
+        "zh-CN": "估算工作量",
+        "en": "Estimate work"
+      },
+      "operation": "PROCESS",
+      "roleContract": "process/v1",
+      "projectionContract": "process/v1",
+      "entityTypes": [
+        "task",
+        "requirement"
+      ],
+      "triggers": {
+        "zh": [
+          "估算工作量",
+          "评估工作量"
+        ],
+        "en": [
+          "estimate work",
+          "estimate effort"
+        ]
+      }
+    },
+    {
+      "id": "analysis.design_architecture",
+      "category": "analysis-planning",
+      "label": {
+        "zh-CN": "设计架构",
+        "en": "Design architecture"
+      },
+      "operation": "CREATE",
+      "roleContract": "create/v1",
+      "projectionContract": "create/v1",
+      "entityTypes": [
+        "design"
+      ],
+      "triggers": {
+        "zh": [
+          "设计架构",
+          "编写设计方案"
+        ],
+        "en": [
+          "design architecture",
+          "create design"
+        ]
+      }
+    },
+    {
+      "id": "analysis.reproduce_issue",
+      "category": "analysis-planning",
+      "label": {
+        "zh-CN": "复现问题",
+        "en": "Reproduce issue"
+      },
+      "operation": "PROCESS",
+      "roleContract": "process/v1",
+      "projectionContract": "process/v1",
+      "entityTypes": [
+        "issue"
+      ],
+      "triggers": {
+        "zh": [
+          "复现问题",
+          "复现缺陷"
+        ],
+        "en": [
+          "reproduce issue",
+          "reproduce bug"
+        ]
+      }
+    },
+    {
+      "id": "analysis.investigate_root_cause",
+      "category": "analysis-planning",
+      "label": {
+        "zh-CN": "调查根因",
+        "en": "Investigate root cause"
+      },
+      "operation": "PROCESS",
+      "roleContract": "process/v1",
+      "projectionContract": "process/v1",
+      "entityTypes": [
+        "issue",
+        "service",
+        "audit-log"
+      ],
+      "triggers": {
+        "zh": [
+          "调查根因",
+          "定位根因"
+        ],
+        "en": [
+          "investigate root cause",
+          "find root cause"
+        ]
+      }
+    },
+    {
+      "id": "analysis.prioritize_backlog",
+      "category": "analysis-planning",
+      "label": {
+        "zh-CN": "调整优先级",
+        "en": "Prioritize backlog"
+      },
+      "operation": "CHANGE",
+      "roleContract": "change/v1",
+      "projectionContract": "change/v1",
+      "entityTypes": [
+        "task",
+        "issue"
+      ],
+      "triggers": {
+        "zh": [
+          "调整优先级",
+          "排列优先级"
+        ],
+        "en": [
+          "prioritize backlog",
+          "set priority"
+        ]
+      }
+    },
+    {
+      "id": "code.add_feature",
+      "category": "code-change",
+      "label": {
+        "zh-CN": "新增功能",
+        "en": "Add feature"
+      },
+      "operation": "CHANGE",
+      "roleContract": "change/v1",
+      "projectionContract": "change/v1",
+      "entityTypes": [
+        "feature",
+        "source-file",
+        "component"
+      ],
+      "triggers": {
+        "zh": [
+          "新增功能",
+          "增加功能"
+        ],
+        "en": [
+          "add feature"
+        ]
+      }
+    },
+    {
+      "id": "code.remove",
+      "category": "code-change",
+      "label": {
+        "zh-CN": "移除代码",
+        "en": "Remove code"
+      },
+      "operation": "CHANGE",
+      "roleContract": "change/v1",
+      "projectionContract": "change/v1",
+      "entityTypes": [
+        "source-file",
+        "component",
+        "feature"
+      ],
+      "triggers": {
+        "zh": [
+          "移除代码",
+          "删除代码"
+        ],
+        "en": [
+          "remove code"
+        ]
+      }
+    },
+    {
+      "id": "code.migrate",
+      "category": "code-change",
+      "label": {
+        "zh-CN": "迁移代码或数据",
+        "en": "Migrate code or data"
+      },
+      "operation": "CHANGE",
+      "roleContract": "change/v1",
+      "projectionContract": "change/v1",
+      "entityTypes": [
+        "component",
+        "database",
+        "migration"
+      ],
+      "triggers": {
+        "zh": [
+          "迁移代码",
+          "执行迁移"
+        ],
+        "en": [
+          "migrate code",
+          "run migration"
+        ]
+      }
+    },
+    {
+      "id": "code.generate",
+      "category": "code-change",
+      "label": {
+        "zh-CN": "生成代码",
+        "en": "Generate code"
+      },
+      "operation": "CREATE",
+      "roleContract": "create/v1",
+      "projectionContract": "create/v1",
+      "entityTypes": [
+        "source-file"
+      ],
+      "triggers": {
+        "zh": [
+          "生成代码"
+        ],
+        "en": [
+          "generate code"
+        ]
+      }
+    },
+    {
+      "id": "code.review",
+      "category": "code-change",
+      "label": {
+        "zh-CN": "审查代码",
+        "en": "Review code"
+      },
+      "operation": "PROCESS",
+      "roleContract": "process/v1",
+      "projectionContract": "process/v1",
+      "entityTypes": [
+        "source-file",
+        "change-set",
+        "pull-request"
+      ],
+      "triggers": {
+        "zh": [
+          "代码审查",
+          "审查代码"
+        ],
+        "en": [
+          "review code"
+        ]
+      }
+    },
+    {
+      "id": "code.format",
+      "category": "code-change",
+      "label": {
+        "zh-CN": "格式化代码",
+        "en": "Format code"
+      },
+      "operation": "CHANGE",
+      "roleContract": "change/v1",
+      "projectionContract": "change/v1",
+      "entityTypes": [
+        "source-file"
+      ],
+      "triggers": {
+        "zh": [
+          "格式化代码"
+        ],
+        "en": [
+          "format code"
+        ]
+      }
+    },
+    {
+      "id": "environment.configure",
+      "category": "build-test",
+      "label": {
+        "zh-CN": "配置环境",
+        "en": "Configure environment"
+      },
+      "operation": "CHANGE",
+      "roleContract": "change/v1",
+      "projectionContract": "change/v1",
+      "entityTypes": [
+        "environment",
+        "config-file"
+      ],
+      "triggers": {
+        "zh": [
+          "配置环境"
+        ],
+        "en": [
+          "configure environment"
+        ]
+      }
+    },
+    {
+      "id": "dependency.update",
+      "category": "build-test",
+      "label": {
+        "zh-CN": "更新依赖",
+        "en": "Update dependency"
+      },
+      "operation": "CHANGE",
+      "roleContract": "change/v1",
+      "projectionContract": "change/v1",
+      "entityTypes": [
+        "dependency",
+        "lockfile"
+      ],
+      "triggers": {
+        "zh": [
+          "更新依赖",
+          "升级依赖"
+        ],
+        "en": [
+          "update dependency",
+          "upgrade dependency"
+        ]
+      }
+    },
+    {
+      "id": "dependency.lock",
+      "category": "build-test",
+      "label": {
+        "zh-CN": "锁定依赖",
+        "en": "Lock dependency"
+      },
+      "operation": "CREATE",
+      "roleContract": "create/v1",
+      "projectionContract": "create/v1",
+      "entityTypes": [
+        "lockfile"
+      ],
+      "triggers": {
+        "zh": [
+          "锁定依赖",
+          "生成锁文件"
+        ],
+        "en": [
+          "lock dependencies",
+          "generate lockfile"
+        ]
+      }
+    },
+    {
+      "id": "environment.provision",
+      "category": "build-test",
+      "label": {
+        "zh-CN": "准备环境",
+        "en": "Provision environment"
+      },
+      "operation": "CHANGE",
+      "roleContract": "change/v1",
+      "projectionContract": "change/v1",
+      "entityTypes": [
+        "environment",
+        "deployment-config"
+      ],
+      "triggers": {
+        "zh": [
+          "准备环境",
+          "配置运行环境"
+        ],
+        "en": [
+          "provision environment",
+          "prepare environment"
+        ]
+      }
+    },
+    {
+      "id": "build.project",
+      "category": "build-test",
+      "label": {
+        "zh-CN": "构建项目",
+        "en": "Build project"
+      },
+      "operation": "PROCESS",
+      "roleContract": "process/v1",
+      "projectionContract": "process/v1",
+      "entityTypes": [
+        "repository",
+        "component"
+      ],
+      "triggers": {
+        "zh": [
+          "构建项目",
+          "构建源码"
+        ],
+        "en": [
+          "build project",
+          "build source"
+        ]
+      }
+    },
+    {
+      "id": "quality.lint",
+      "category": "build-test",
+      "label": {
+        "zh-CN": "代码静态检查",
+        "en": "Lint code"
+      },
+      "operation": "PROCESS",
+      "roleContract": "process/v1",
+      "projectionContract": "process/v1",
+      "entityTypes": [
+        "source-file",
+        "repository"
+      ],
+      "triggers": {
+        "zh": [
+          "静态检查",
+          "代码检查"
+        ],
+        "en": [
+          "lint",
+          "lint code"
+        ]
+      }
+    },
+    {
+      "id": "quality.type_check",
+      "category": "build-test",
+      "label": {
+        "zh-CN": "类型检查",
+        "en": "Type check"
+      },
+      "operation": "PROCESS",
+      "roleContract": "process/v1",
+      "projectionContract": "process/v1",
+      "entityTypes": [
+        "source-file",
+        "repository"
+      ],
+      "triggers": {
+        "zh": [
+          "类型检查"
+        ],
+        "en": [
+          "type check"
+        ]
+      }
+    },
+    {
+      "id": "test.unit",
+      "category": "build-test",
+      "label": {
+        "zh-CN": "运行单元测试",
+        "en": "Run unit tests"
+      },
+      "operation": "PROCESS",
+      "roleContract": "process/v1",
+      "projectionContract": "process/v1",
+      "entityTypes": [
+        "test-case",
+        "test-suite",
+        "component"
+      ],
+      "triggers": {
+        "zh": [
+          "运行单元测试"
+        ],
+        "en": [
+          "run unit tests"
+        ]
+      }
+    },
+    {
+      "id": "test.integration",
+      "category": "build-test",
+      "label": {
+        "zh-CN": "运行集成测试",
+        "en": "Run integration tests"
+      },
+      "operation": "PROCESS",
+      "roleContract": "process/v1",
+      "projectionContract": "process/v1",
+      "entityTypes": [
+        "test-case",
+        "test-suite",
+        "service"
+      ],
+      "triggers": {
+        "zh": [
+          "运行集成测试"
+        ],
+        "en": [
+          "run integration tests"
+        ]
+      }
+    },
+    {
+      "id": "test.e2e",
+      "category": "build-test",
+      "label": {
+        "zh-CN": "运行端到端测试",
+        "en": "Run end-to-end tests"
+      },
+      "operation": "PROCESS",
+      "roleContract": "process/v1",
+      "projectionContract": "process/v1",
+      "entityTypes": [
+        "test-case",
+        "test-suite",
+        "service"
+      ],
+      "triggers": {
+        "zh": [
+          "运行端到端测试"
+        ],
+        "en": [
+          "run end-to-end tests",
+          "run e2e tests",
+          "runs end-to-end tests",
+          "runs e2e tests"
+        ]
+      }
+    },
+    {
+      "id": "test.fuzz",
+      "category": "build-test",
+      "label": {
+        "zh-CN": "运行模糊测试",
+        "en": "Run fuzz tests"
+      },
+      "operation": "PROCESS",
+      "roleContract": "process/v1",
+      "projectionContract": "process/v1",
+      "entityTypes": [
+        "test-suite",
+        "component"
+      ],
+      "triggers": {
+        "zh": [
+          "运行模糊测试"
+        ],
+        "en": [
+          "run fuzz tests",
+          "fuzz test"
+        ]
+      }
+    },
+    {
+      "id": "quality.validate_schema",
+      "category": "build-test",
+      "label": {
+        "zh-CN": "校验 Schema",
+        "en": "Validate schema"
+      },
+      "operation": "PROCESS",
+      "roleContract": "process/v1",
+      "projectionContract": "process/v1",
+      "entityTypes": [
+        "schema",
+        "api"
+      ],
+      "triggers": {
+        "zh": [
+          "校验 Schema",
+          "验证 Schema"
+        ],
+        "en": [
+          "validate schema"
+        ]
+      }
+    },
+    {
+      "id": "release.promote",
+      "category": "release-deploy",
+      "label": {
+        "zh-CN": "提升发布版本",
+        "en": "Promote release"
+      },
+      "operation": "CHANGE",
+      "roleContract": "change/v1",
+      "projectionContract": "change/v1",
+      "entityTypes": [
+        "release",
+        "environment"
+      ],
+      "triggers": {
+        "zh": [
+          "提升发布版本"
+        ],
+        "en": [
+          "promote release"
+        ]
+      }
+    },
+    {
+      "id": "ops.start_service",
+      "category": "release-deploy",
+      "label": {
+        "zh-CN": "启动服务",
+        "en": "Start service"
+      },
+      "operation": "CALL",
+      "roleContract": "call/v1",
+      "projectionContract": "call/v1",
+      "entityTypes": [
+        "service"
+      ],
+      "triggers": {
+        "zh": [
+          "启动服务"
+        ],
+        "en": [
+          "start service"
+        ]
+      }
+    },
+    {
+      "id": "ops.stop_service",
+      "category": "release-deploy",
+      "label": {
+        "zh-CN": "停止服务",
+        "en": "Stop service"
+      },
+      "operation": "CALL",
+      "roleContract": "call/v1",
+      "projectionContract": "call/v1",
+      "entityTypes": [
+        "service"
+      ],
+      "triggers": {
+        "zh": [
+          "停止服务"
+        ],
+        "en": [
+          "stop service"
+        ]
+      }
+    },
+    {
+      "id": "ops.restart_service",
+      "category": "release-deploy",
+      "label": {
+        "zh-CN": "重启服务",
+        "en": "Restart service"
+      },
+      "operation": "CALL",
+      "roleContract": "call/v1",
+      "projectionContract": "call/v1",
+      "entityTypes": [
+        "service"
+      ],
+      "triggers": {
+        "zh": [
+          "重启服务"
+        ],
+        "en": [
+          "restart service"
+        ]
+      }
+    },
+    {
+      "id": "ops.scale_service",
+      "category": "release-deploy",
+      "label": {
+        "zh-CN": "扩缩容服务",
+        "en": "Scale service"
+      },
+      "operation": "CHANGE",
+      "roleContract": "change/v1",
+      "projectionContract": "change/v1",
+      "entityTypes": [
+        "service",
+        "environment"
+      ],
+      "triggers": {
+        "zh": [
+          "扩容服务",
+          "缩容服务",
+          "扩缩容"
+        ],
+        "en": [
+          "scale service",
+          "scale deployment"
+        ]
+      }
+    },
+    {
+      "id": "ops.monitor_service",
+      "category": "release-deploy",
+      "label": {
+        "zh-CN": "监控服务",
+        "en": "Monitor service"
+      },
+      "operation": "PROCESS",
+      "roleContract": "process/v1",
+      "projectionContract": "process/v1",
+      "entityTypes": [
+        "service",
+        "deployment"
+      ],
+      "triggers": {
+        "zh": [
+          "监控服务",
+          "观察服务"
+        ],
+        "en": [
+          "monitor service"
+        ]
+      }
+    },
+    {
+      "id": "ops.inspect_logs",
+      "category": "release-deploy",
+      "label": {
+        "zh-CN": "查看日志",
+        "en": "Inspect logs"
+      },
+      "operation": "READ",
+      "roleContract": "read/v1",
+      "projectionContract": "read/v1",
+      "entityTypes": [
+        "audit-log",
+        "report"
+      ],
+      "triggers": {
+        "zh": [
+          "查看日志",
+          "读取日志"
+        ],
+        "en": [
+          "inspect logs",
+          "read logs",
+          "inspects logs"
+        ]
+      }
+    },
+    {
+      "id": "data.split",
+      "category": "data-model",
+      "label": {
+        "zh-CN": "拆分数据集",
+        "en": "Split dataset"
+      },
+      "operation": "CREATE",
+      "roleContract": "create/v1",
+      "projectionContract": "create/v1",
+      "entityTypes": [
+        "dataset",
+        "evaluation-set"
+      ],
+      "triggers": {
+        "zh": [
+          "拆分数据集"
+        ],
+        "en": [
+          "split dataset"
+        ]
+      }
+    },
+    {
+      "id": "data.transform",
+      "category": "data-model",
+      "label": {
+        "zh-CN": "转换数据",
+        "en": "Transform data"
+      },
+      "operation": "PROCESS",
+      "roleContract": "process/v1",
+      "projectionContract": "process/v1",
+      "entityTypes": [
+        "dataset",
+        "database"
+      ],
+      "triggers": {
+        "zh": [
+          "转换数据",
+          "转换数据集"
+        ],
+        "en": [
+          "transform data",
+          "transform dataset"
+        ]
+      }
+    },
+    {
+      "id": "data.validate",
+      "category": "data-model",
+      "label": {
+        "zh-CN": "校验数据集",
+        "en": "Validate dataset"
+      },
+      "operation": "PROCESS",
+      "roleContract": "process/v1",
+      "projectionContract": "process/v1",
+      "entityTypes": [
+        "dataset",
+        "evaluation-set"
+      ],
+      "triggers": {
+        "zh": [
+          "校验数据集",
+          "验证数据集"
+        ],
+        "en": [
+          "validate dataset",
+          "validates dataset"
+        ]
+      }
+    },
+    {
+      "id": "data.delete",
+      "category": "data-model",
+      "label": {
+        "zh-CN": "删除数据",
+        "en": "Delete data"
+      },
+      "operation": "CHANGE",
+      "roleContract": "change/v1",
+      "projectionContract": "change/v1",
+      "entityTypes": [
+        "dataset",
+        "database",
+        "sensitive-data"
+      ],
+      "triggers": {
+        "zh": [
+          "删除数据",
+          "清除数据"
+        ],
+        "en": [
+          "delete data"
+        ]
+      }
+    },
+    {
+      "id": "data.overwrite",
+      "category": "data-model",
+      "label": {
+        "zh-CN": "覆盖数据",
+        "en": "Overwrite data"
+      },
+      "operation": "CHANGE",
+      "roleContract": "change/v1",
+      "projectionContract": "change/v1",
+      "entityTypes": [
+        "dataset",
+        "database"
+      ],
+      "triggers": {
+        "zh": [
+          "覆盖数据"
+        ],
+        "en": [
+          "overwrite data"
+        ]
+      }
+    },
+    {
+      "id": "data.export_sensitive",
+      "category": "data-model",
+      "label": {
+        "zh-CN": "导出敏感数据",
+        "en": "Export sensitive data"
+      },
+      "operation": "SEND",
+      "roleContract": "send/v1",
+      "projectionContract": "send/v1",
+      "entityTypes": [
+        "sensitive-data",
+        "dataset"
+      ],
+      "triggers": {
+        "zh": [
+          "导出敏感数据"
+        ],
+        "en": [
+          "export sensitive data"
+        ]
+      }
+    },
+    {
+      "id": "data.backup",
+      "category": "data-model",
+      "label": {
+        "zh-CN": "备份数据",
+        "en": "Back up data"
+      },
+      "operation": "CREATE",
+      "roleContract": "create/v1",
+      "projectionContract": "create/v1",
+      "entityTypes": [
+        "backup",
+        "database",
+        "dataset"
+      ],
+      "triggers": {
+        "zh": [
+          "备份数据",
+          "创建备份"
+        ],
+        "en": [
+          "back up data",
+          "create backup",
+          "creates backup"
+        ]
+      }
+    },
+    {
+      "id": "data.restore",
+      "category": "data-model",
+      "label": {
+        "zh-CN": "恢复数据",
+        "en": "Restore data"
+      },
+      "operation": "CHANGE",
+      "roleContract": "change/v1",
+      "projectionContract": "change/v1",
+      "entityTypes": [
+        "backup",
+        "database",
+        "dataset"
+      ],
+      "triggers": {
+        "zh": [
+          "恢复数据",
+          "恢复备份"
+        ],
+        "en": [
+          "restore data",
+          "restore backup"
+        ]
+      }
+    },
+    {
+      "id": "model.fine_tune",
+      "category": "data-model",
+      "label": {
+        "zh-CN": "微调模型",
+        "en": "Fine-tune model"
+      },
+      "operation": "PROCESS",
+      "roleContract": "process/v1",
+      "projectionContract": "process/v1",
+      "entityTypes": [
+        "model",
+        "dataset"
+      ],
+      "triggers": {
+        "zh": [
+          "微调模型",
+          "微调"
+        ],
+        "en": [
+          "fine-tune model",
+          "fine tune model"
+        ]
+      }
+    },
+    {
+      "id": "model.distill",
+      "category": "data-model",
+      "label": {
+        "zh-CN": "蒸馏模型",
+        "en": "Distill model"
+      },
+      "operation": "PROCESS",
+      "roleContract": "process/v1",
+      "projectionContract": "process/v1",
+      "entityTypes": [
+        "model",
+        "dataset"
+      ],
+      "triggers": {
+        "zh": [
+          "蒸馏模型",
+          "知识蒸馏"
+        ],
+        "en": [
+          "distill model",
+          "knowledge distillation"
+        ]
+      }
+    },
+    {
+      "id": "model.quantize",
+      "category": "data-model",
+      "label": {
+        "zh-CN": "量化模型",
+        "en": "Quantize model"
+      },
+      "operation": "PROCESS",
+      "roleContract": "process/v1",
+      "projectionContract": "process/v1",
+      "entityTypes": [
+        "model"
+      ],
+      "triggers": {
+        "zh": [
+          "量化模型",
+          "模型量化"
+        ],
+        "en": [
+          "quantize model"
+        ]
+      }
+    },
+    {
+      "id": "model.register",
+      "category": "data-model",
+      "label": {
+        "zh-CN": "注册模型",
+        "en": "Register model"
+      },
+      "operation": "CHANGE",
+      "roleContract": "change/v1",
+      "projectionContract": "change/v1",
+      "entityTypes": [
+        "model",
+        "model-registry"
+      ],
+      "triggers": {
+        "zh": [
+          "注册模型"
+        ],
+        "en": [
+          "register model"
+        ]
+      }
+    },
+    {
+      "id": "model.publish",
+      "category": "data-model",
+      "label": {
+        "zh-CN": "发布模型",
+        "en": "Publish model"
+      },
+      "operation": "SEND",
+      "roleContract": "send/v1",
+      "projectionContract": "send/v1",
+      "entityTypes": [
+        "model"
+      ],
+      "triggers": {
+        "zh": [
+          "发布模型"
+        ],
+        "en": [
+          "publish model"
+        ]
+      }
+    },
+    {
+      "id": "model.deploy",
+      "category": "data-model",
+      "label": {
+        "zh-CN": "部署模型",
+        "en": "Deploy model"
+      },
+      "operation": "CHANGE",
+      "roleContract": "change/v1",
+      "projectionContract": "change/v1",
+      "entityTypes": [
+        "model",
+        "environment",
+        "service"
+      ],
+      "triggers": {
+        "zh": [
+          "部署模型"
+        ],
+        "en": [
+          "deploy model",
+          "deploys model"
+        ]
+      }
+    },
+    {
+      "id": "model.promote",
+      "category": "data-model",
+      "label": {
+        "zh-CN": "提升模型版本",
+        "en": "Promote model"
+      },
+      "operation": "CHANGE",
+      "roleContract": "change/v1",
+      "projectionContract": "change/v1",
+      "entityTypes": [
+        "model",
+        "environment"
+      ],
+      "triggers": {
+        "zh": [
+          "提升模型版本"
+        ],
+        "en": [
+          "promote model"
+        ]
+      }
+    },
+    {
+      "id": "model.compare",
+      "category": "data-model",
+      "label": {
+        "zh-CN": "比较模型",
+        "en": "Compare models"
+      },
+      "operation": "PROCESS",
+      "roleContract": "process/v1",
+      "projectionContract": "process/v1",
+      "entityTypes": [
+        "model",
+        "evaluation-set"
+      ],
+      "triggers": {
+        "zh": [
+          "比较模型",
+          "对比模型"
+        ],
+        "en": [
+          "compare models",
+          "compare model"
+        ]
+      }
+    },
+    {
+      "id": "prompt.evaluate",
+      "category": "data-model",
+      "label": {
+        "zh-CN": "评估 Prompt",
+        "en": "Evaluate prompt"
+      },
+      "operation": "PROCESS",
+      "roleContract": "process/v1",
+      "projectionContract": "process/v1",
+      "entityTypes": [
+        "prompt",
+        "evaluation-set",
+        "metric"
+      ],
+      "triggers": {
+        "zh": [
+          "评估提示词",
+          "评估 Prompt"
+        ],
+        "en": [
+          "evaluate prompt"
+        ]
+      }
+    },
+    {
+      "id": "embedding.generate",
+      "category": "data-model",
+      "label": {
+        "zh-CN": "生成嵌入",
+        "en": "Generate embedding"
+      },
+      "operation": "CREATE",
+      "roleContract": "create/v1",
+      "projectionContract": "create/v1",
+      "entityTypes": [
+        "embedding",
+        "dataset"
+      ],
+      "triggers": {
+        "zh": [
+          "生成嵌入",
+          "生成向量"
+        ],
+        "en": [
+          "generate embedding",
+          "create embeddings"
+        ]
+      }
+    },
+    {
+      "id": "embedding.index",
+      "category": "data-model",
+      "label": {
+        "zh-CN": "建立向量索引",
+        "en": "Index embeddings"
+      },
+      "operation": "CREATE",
+      "roleContract": "create/v1",
+      "projectionContract": "create/v1",
+      "entityTypes": [
+        "vector-index",
+        "embedding"
+      ],
+      "triggers": {
+        "zh": [
+          "建立向量索引",
+          "创建向量索引"
+        ],
+        "en": [
+          "index embeddings",
+          "create vector index"
+        ]
+      }
+    },
+    {
+      "id": "agent.assign_task",
+      "category": "agent-collaboration",
+      "label": {
+        "zh-CN": "分配任务",
+        "en": "Assign task"
+      },
+      "operation": "SEND",
+      "roleContract": "send/v1",
+      "projectionContract": "send/v1",
+      "entityTypes": [
+        "task"
+      ],
+      "triggers": {
+        "zh": [
+          "分配任务",
+          "指派任务"
+        ],
+        "en": [
+          "assign task"
+        ]
+      }
+    },
+    {
+      "id": "agent.report_progress",
+      "category": "agent-collaboration",
+      "label": {
+        "zh-CN": "报告进度",
+        "en": "Report progress"
+      },
+      "operation": "SEND",
+      "roleContract": "send/v1",
+      "projectionContract": "send/v1",
+      "entityTypes": [
+        "report",
+        "task"
+      ],
+      "triggers": {
+        "zh": [
+          "报告进度",
+          "汇报进度"
+        ],
+        "en": [
+          "report progress"
+        ]
+      }
+    },
+    {
+      "id": "agent.submit_result",
+      "category": "agent-collaboration",
+      "label": {
+        "zh-CN": "提交结果",
+        "en": "Submit result"
+      },
+      "operation": "SEND",
+      "roleContract": "send/v1",
+      "projectionContract": "send/v1",
+      "entityTypes": [
+        "report",
+        "build-artifact",
+        "change-set"
+      ],
+      "triggers": {
+        "zh": [
+          "提交结果",
+          "提交交付物"
+        ],
+        "en": [
+          "submit result",
+          "submit deliverable",
+          "submits result",
+          "submits deliverable"
+        ]
+      }
+    },
+    {
+      "id": "agent.request_approval",
+      "category": "agent-collaboration",
+      "label": {
+        "zh-CN": "请求批准",
+        "en": "Request approval"
+      },
+      "operation": "SEND",
+      "roleContract": "send/v1",
+      "projectionContract": "send/v1",
+      "entityTypes": [
+        "change-set",
+        "deployment",
+        "release"
+      ],
+      "triggers": {
+        "zh": [
+          "请求批准",
+          "申请审批"
+        ],
+        "en": [
+          "request approval",
+          "request authorization"
+        ]
+      }
+    },
+    {
+      "id": "agent.approve_change",
+      "category": "agent-collaboration",
+      "label": {
+        "zh-CN": "批准变更",
+        "en": "Approve change"
+      },
+      "operation": "PROCESS",
+      "roleContract": "process/v1",
+      "projectionContract": "process/v1",
+      "entityTypes": [
+        "change-set",
+        "deployment",
+        "release"
+      ],
+      "triggers": {
+        "zh": [
+          "批准变更",
+          "审批变更"
+        ],
+        "en": [
+          "approve change"
+        ]
+      }
+    },
+    {
+      "id": "agent.escalate_issue",
+      "category": "agent-collaboration",
+      "label": {
+        "zh-CN": "升级问题",
+        "en": "Escalate issue"
+      },
+      "operation": "SEND",
+      "roleContract": "send/v1",
+      "projectionContract": "send/v1",
+      "entityTypes": [
+        "issue",
+        "ticket"
+      ],
+      "triggers": {
+        "zh": [
+          "升级问题",
+          "上报问题"
+        ],
+        "en": [
+          "escalate issue",
+          "escalate incident"
+        ]
+      }
+    },
+    {
+      "id": "security.authenticate",
+      "category": "security-access",
+      "label": {
+        "zh-CN": "验证身份",
+        "en": "Authenticate identity"
+      },
+      "operation": "PROCESS",
+      "roleContract": "process/v1",
+      "projectionContract": "process/v1",
+      "entityTypes": [
+        "actor",
+        "credential"
+      ],
+      "triggers": {
+        "zh": [
+          "验证身份",
+          "身份认证"
+        ],
+        "en": [
+          "authenticate identity",
+          "verify identity"
+        ]
+      }
+    },
+    {
+      "id": "security.scan_secret",
+      "category": "security-access",
+      "label": {
+        "zh-CN": "扫描机密",
+        "en": "Scan secrets"
+      },
+      "operation": "PROCESS",
+      "roleContract": "process/v1",
+      "projectionContract": "process/v1",
+      "entityTypes": [
+        "repository",
+        "source-file",
+        "secret"
+      ],
+      "triggers": {
+        "zh": [
+          "扫描密钥",
+          "机密扫描"
+        ],
+        "en": [
+          "scan secrets",
+          "secret scan"
+        ]
+      }
+    },
+    {
+      "id": "security.scan_dependency",
+      "category": "security-access",
+      "label": {
+        "zh-CN": "扫描依赖",
+        "en": "Scan dependencies"
+      },
+      "operation": "PROCESS",
+      "roleContract": "process/v1",
+      "projectionContract": "process/v1",
+      "entityTypes": [
+        "repository",
+        "dependency",
+        "lockfile"
+      ],
+      "triggers": {
+        "zh": [
+          "扫描依赖",
+          "依赖扫描"
+        ],
+        "en": [
+          "scan dependencies",
+          "dependency scan"
+        ]
+      }
+    },
+    {
+      "id": "security.sign_artifact",
+      "category": "security-access",
+      "label": {
+        "zh-CN": "签名制品",
+        "en": "Sign artifact"
+      },
+      "operation": "CHANGE",
+      "roleContract": "change/v1",
+      "projectionContract": "change/v1",
+      "entityTypes": [
+        "build-artifact",
+        "release"
+      ],
+      "triggers": {
+        "zh": [
+          "签名制品",
+          "签署制品"
+        ],
+        "en": [
+          "sign artifact",
+          "sign release"
+        ]
+      }
+    },
+    {
+      "id": "security.verify_signature",
+      "category": "security-access",
+      "label": {
+        "zh-CN": "验证签名",
+        "en": "Verify signature"
+      },
+      "operation": "PROCESS",
+      "roleContract": "process/v1",
+      "projectionContract": "process/v1",
+      "entityTypes": [
+        "build-artifact",
+        "release"
+      ],
+      "triggers": {
+        "zh": [
+          "验证签名",
+          "校验签名"
+        ],
+        "en": [
+          "verify signature",
+          "verifies signature"
+        ]
+      }
+    },
+    {
+      "id": "security.export_secret",
+      "category": "security-access",
+      "label": {
+        "zh-CN": "导出机密",
+        "en": "Export secret"
+      },
+      "operation": "SEND",
+      "roleContract": "send/v1",
+      "projectionContract": "send/v1",
+      "entityTypes": [
+        "secret",
+        "credential"
+      ],
+      "triggers": {
+        "zh": [
+          "导出密钥",
+          "导出机密"
+        ],
+        "en": [
+          "export secret",
+          "export credential"
+        ]
+      }
+    },
+    {
+      "id": "code.autofix",
+      "category": "code-change",
+      "label": {
+        "zh-CN": "自动修复代码",
+        "en": "autofix code"
+      },
+      "operation": "CHANGE",
+      "roleContract": "change/v1",
+      "projectionContract": "change/v1",
+      "entityTypes": [
+        "source-file"
+      ],
+      "triggers": {
+        "zh": [
+          "自动修复代码"
+        ],
+        "en": [
+          "autofix code"
+        ]
+      }
+    },
+    {
+      "id": "code.transpile",
+      "category": "code-change",
+      "label": {
+        "zh-CN": "转译代码",
+        "en": "transpile code"
+      },
+      "operation": "CREATE",
+      "roleContract": "create/v1",
+      "projectionContract": "create/v1",
+      "entityTypes": [
+        "source-file"
+      ],
+      "triggers": {
+        "zh": [
+          "转译代码"
+        ],
+        "en": [
+          "transpile code"
+        ]
+      }
+    },
+    {
+      "id": "dependency.audit",
+      "category": "security-access",
+      "label": {
+        "zh-CN": "审计依赖",
+        "en": "audit dependencies"
+      },
+      "operation": "PROCESS",
+      "roleContract": "process/v1",
+      "projectionContract": "process/v1",
+      "entityTypes": [
+        "dependency"
+      ],
+      "triggers": {
+        "zh": [
+          "审计依赖"
+        ],
+        "en": [
+          "audit dependencies"
+        ]
+      }
+    },
+    {
+      "id": "database.migrate_schema",
+      "category": "code-change",
+      "label": {
+        "zh-CN": "迁移数据库结构",
+        "en": "migrate database schema"
+      },
+      "operation": "CHANGE",
+      "roleContract": "change/v1",
+      "projectionContract": "change/v1",
+      "entityTypes": [
+        "database"
+      ],
+      "triggers": {
+        "zh": [
+          "迁移数据库结构"
+        ],
+        "en": [
+          "migrate database schema"
+        ]
+      }
+    },
+    {
+      "id": "database.rollback_migration",
+      "category": "code-change",
+      "label": {
+        "zh-CN": "回滚数据库迁移",
+        "en": "rollback database migration"
+      },
+      "operation": "CHANGE",
+      "roleContract": "change/v1",
+      "projectionContract": "change/v1",
+      "entityTypes": [
+        "migration"
+      ],
+      "triggers": {
+        "zh": [
+          "回滚数据库迁移"
+        ],
+        "en": [
+          "rollback database migration"
+        ]
+      }
+    },
+    {
+      "id": "agent.invoke_tool",
+      "category": "agent-collaboration",
+      "label": {
+        "zh-CN": "调用工具",
+        "en": "invoke tool"
+      },
+      "operation": "CALL",
+      "roleContract": "call/v1",
+      "projectionContract": "call/v1",
+      "entityTypes": [
+        "tool"
+      ],
+      "triggers": {
+        "zh": [
+          "调用工具"
+        ],
+        "en": [
+          "invoke tool"
+        ]
+      }
+    },
+    {
+      "id": "ops.exec_shell",
+      "category": "release-deploy",
+      "label": {
+        "zh-CN": "执行终端命令",
+        "en": "execute shell command"
+      },
+      "operation": "CALL",
+      "roleContract": "call/v1",
+      "projectionContract": "call/v1",
+      "entityTypes": [
+        "tool"
+      ],
+      "triggers": {
+        "zh": [
+          "执行终端命令"
+        ],
+        "en": [
+          "execute shell command"
+        ]
+      }
+    },
+    {
+      "id": "agent.retrieve_context",
+      "category": "agent-collaboration",
+      "label": {
+        "zh-CN": "检索上下文",
+        "en": "retrieve context"
+      },
+      "operation": "READ",
+      "roleContract": "read/v1",
+      "projectionContract": "read/v1",
+      "entityTypes": [
+        "context"
+      ],
+      "triggers": {
+        "zh": [
+          "检索上下文"
+        ],
+        "en": [
+          "retrieve context"
+        ]
+      }
+    },
+    {
+      "id": "agent.interrupt",
+      "category": "agent-collaboration",
+      "label": {
+        "zh-CN": "中断会话",
+        "en": "interrupt session"
+      },
+      "operation": "CHANGE",
+      "roleContract": "change/v1",
+      "projectionContract": "change/v1",
+      "entityTypes": [
+        "session"
+      ],
+      "triggers": {
+        "zh": [
+          "中断会话"
+        ],
+        "en": [
+          "interrupt session"
+        ]
+      }
+    },
+    {
+      "id": "agent.resume",
+      "category": "agent-collaboration",
+      "label": {
+        "zh-CN": "恢复会话",
+        "en": "resume session"
+      },
+      "operation": "CHANGE",
+      "roleContract": "change/v1",
+      "projectionContract": "change/v1",
+      "entityTypes": [
+        "session"
+      ],
+      "triggers": {
+        "zh": [
+          "恢复会话"
+        ],
+        "en": [
+          "resume session"
+        ]
+      }
+    },
+    {
+      "id": "model.align",
+      "category": "data-model",
+      "label": {
+        "zh-CN": "对齐模型",
+        "en": "align model"
+      },
+      "operation": "CHANGE",
+      "roleContract": "change/v1",
+      "projectionContract": "change/v1",
+      "entityTypes": [
+        "model"
+      ],
+      "triggers": {
+        "zh": [
+          "对齐模型"
+        ],
+        "en": [
+          "align model"
+        ]
+      }
+    },
+    {
+      "id": "model.rlhf",
+      "category": "data-model",
+      "label": {
+        "zh-CN": "执行RLHF训练",
+        "en": "perform RLHF training"
+      },
+      "operation": "CHANGE",
+      "roleContract": "change/v1",
+      "projectionContract": "change/v1",
+      "entityTypes": [
+        "model"
+      ],
+      "triggers": {
+        "zh": [
+          "执行RLHF训练"
+        ],
+        "en": [
+          "perform RLHF training"
+        ]
+      }
+    },
+    {
+      "id": "prompt.optimize",
+      "category": "data-model",
+      "label": {
+        "zh-CN": "优化提示词",
+        "en": "optimize prompt"
+      },
+      "operation": "CHANGE",
+      "roleContract": "change/v1",
+      "projectionContract": "change/v1",
+      "entityTypes": [
+        "prompt"
+      ],
+      "triggers": {
+        "zh": [
+          "优化提示词"
+        ],
+        "en": [
+          "optimize prompt"
+        ]
+      }
+    },
+    {
+      "id": "vector-index.search",
+      "category": "data-model",
+      "label": {
+        "zh-CN": "检索向量索引",
+        "en": "search vector index"
+      },
+      "operation": "READ",
+      "roleContract": "read/v1",
+      "projectionContract": "read/v1",
+      "entityTypes": [
+        "vector-index"
+      ],
+      "triggers": {
+        "zh": [
+          "检索向量索引"
+        ],
+        "en": [
+          "search vector index"
+        ]
+      }
+    },
+    {
+      "id": "data.chunk",
+      "category": "data-model",
+      "label": {
+        "zh-CN": "切分文本块",
+        "en": "chunk text"
+      },
+      "operation": "PROCESS",
+      "roleContract": "process/v1",
+      "projectionContract": "process/v1",
+      "entityTypes": [
+        "document"
+      ],
+      "triggers": {
+        "zh": [
+          "切分文本块"
+        ],
+        "en": [
+          "chunk text"
+        ]
+      }
+    }
+  ]
+}

@@ -1,4 +1,60 @@
-# 自定义 L2/L3 字典
+# L2/L3 字典：统一目录规范与版本兼容
+
+**新字典统一制作成目录包：名称目录／版本目录／描述文件与内容文件。即使只有一个内容文件，也必须有`datapackage.json`。** L2表示行业语义，L3表示企业语义，不以文件数量决定层级。工作台的新建资源规范不重新定义BXP Core协议。
+
+## 固定目录和文件名
+
+```text
+l2/行业ID/版本号/
+├─ datapackage.json
+├─ actions.json
+├─ entities.json
+├─ roles.json
+├─ resources.json
+├─ references.json
+├─ completions.json
+├─ boundaries.json
+└─ README.md
+
+l3/企业ID/版本号/
+├─ datapackage.json
+├─ enterprise-ontology.json
+├─ enterprise-facts.json
+└─ README.md
+```
+
+L2固定为8个JSON加README；L3固定为3个JSON加README。L3内容较少时仍保留本体和事实两个文件，相应数组可为空，不把两个文件的职责混在一个任意命名的JSON里。
+
+| 文件 | 职责 |
+|---|---|
+| `datapackage.json` | 整包名称、层级、版本、L3企业命名空间及资源清单；登记每个文件的相对路径、类型、UTF-8编码、字节数和SHA-256 |
+| L2的7类内容JSON | 行业动作、实体、角色、资源、版本依据、完成条件和禁止边界词义；不同行业使用相同文件名，内容各自维护 |
+| `enterprise-ontology.json` | 有来源的企业概念和术语定义 |
+| `enterprise-facts.json` | 主体、事实来源、引用及显式关系；人员、岗位和组织位置不自动建立权限 |
+| `README.md` | 字典范围、维护者、版本及使用说明，也登记到资源清单 |
+
+整包描述采用项目的`urn:boundx:product:semantic-data-package:v1`资源合同。资源内部的名称、版本和类型须与描述文件对应；修改字节、换行或内容后须更新相应摘要。同身份同版本不同内容不覆盖，应使用新版本。目录内不放凭据、可执行代码或未登记文件；不自动读取来源URL或推断业务授权。
+
+## 可直接检查的标准目录示例
+
+- [L2：software-ai-example／1.0.0](../examples/dictionary-directories/software-ai-example/1.0.0/) · [整包描述](../examples/dictionary-directories/software-ai-example/1.0.0/datapackage.json)
+- [L3：example-enterprise／1.0.0](../examples/dictionary-directories/example-enterprise/1.0.0/) · [整包描述](../examples/dictionary-directories/example-enterprise/1.0.0/datapackage.json)
+
+示例使用独立示例ID和虚构数据。保留的依赖引用用于绑定资源身份，不表示工作台自动激活历史L1或赋予执行权。格式、摘要和结构检查不等于语义质量或完整协议符合性保证。
+
+## 先核对所用产品版本
+
+| 实现 | 导入范围 |
+|---|---|
+| 58618 B344 | 标准目录选择或同时选择整包文件；L2/L3校验、导入、自定义名称与任务选择分别保存。以实际安装版本为准 |
+| 已发布MCP 0.4.0-rc.9 | 下述单JSON自定义字典合同。**本次文档更新没有修改或发布MCP代码，不能据此声称rc.9已支持标准目录导入** |
+| 旧工作台单文件名册、employee-directory及旧版自定义JSON | 历史／迁移兼容范围，不作为新版活动L3的主格式；旧版本和旧任务绑定保留 |
+
+58618中打开“字典设置”，展开导入区，下载相应标准目录示例ZIP并解压，选择**直接含`datapackage.json`的版本目录**。也可同时选择其中全部文件。不要只选择`resources.json`：它是合法资源，但不是完整字典包。先校验，再导入并保存名称；随后在L2/L3列表选择该包并保存字典配置。导入本身不改变任务绑定、不重新分析已有结果。
+
+## MCP rc.9单JSON兼容合同与操作
+
+以下保留已发布版本的真实接口说明，不要将标准目录里的某个资源文件直接提交给这些单JSON工具。目录导入需要客户端明确实现该能力；不通过改后缀、拼接内容或忽略错误冒充兼容。
 
 适用：MCP 0.4.0-rc.9。rc.8 只支持内置字典，不支持本页导入工具。
 

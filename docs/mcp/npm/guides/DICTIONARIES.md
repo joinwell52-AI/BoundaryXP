@@ -1,4 +1,50 @@
-# Custom L2/L3 dictionaries
+# L2/L3 dictionaries: directory profile and version compatibility
+
+**Create new dictionaries as directory packages: package ID / version / descriptor and content files. Even one content file requires datapackage.json.** L2 identifies industry semantics; L3 identifies enterprise semantics. This workbench resource profile does not redefine the BXP Core protocol.
+
+```text
+l2/industry-id/version/
+  datapackage.json
+  actions.json
+  entities.json
+  roles.json
+  resources.json
+  references.json
+  completions.json
+  boundaries.json
+  README.md
+
+l3/enterprise-id/version/
+  datapackage.json
+  enterprise-ontology.json
+  enterprise-facts.json
+  README.md
+```
+
+L2 uses eight JSON files plus README. L3 uses three JSON files plus README. Keep both L3 ontology and facts files for a small dictionary; unused arrays may be empty. The ontology defines source-backed enterprise concepts and terminology. Facts retain subjects, source records, quotations and explicit relationships. Names, roles and organization positions do not grant authority.
+
+The descriptor uses the project's `urn:boundx:product:semantic-data-package:v1` resource contract and binds name, layer, version, L3 tenant namespace, relative resource paths, types, UTF-8 encoding, exact byte lengths and SHA-256 hashes. Register README.md too. Keep payload identities and versions consistent. Changed bytes require updated hashes and a new version if that identity/version is already imported. Never put credentials, executable code or undeclared files in a dictionary package.
+
+## Standard directory examples
+
+- [L2: software-ai-example / 1.0.0](../examples/dictionary-directories/software-ai-example/1.0.0/) · [Descriptor](../examples/dictionary-directories/software-ai-example/1.0.0/datapackage.json)
+- [L3: example-enterprise / 1.0.0](../examples/dictionary-directories/example-enterprise/1.0.0/) · [Descriptor](../examples/dictionary-directories/example-enterprise/1.0.0/datapackage.json)
+
+These examples have separate example identities and fictional data. Dependency references bind resource identities; they do not activate a historical L1 layer or authorize execution. Format and digest checks do not certify semantic quality or full protocol conformance.
+
+## Check implementation support
+
+| Implementation | Import support |
+|---|---|
+| Port-58618 workbench B344 | Standard version-directory selection or selecting all package files together; validation, import, display names and task selection save separately. Check the installed version |
+| Published MCP 0.4.0-rc.9 | The single-JSON custom dictionary contract below. **This documentation update does not modify or release MCP code and does not add directory import to rc.9** |
+| Older workbench rosters, employee-directory and single-JSON custom files | Historical / migration compatibility, not the primary new active L3 profile. Old versions and task bindings remain preserved |
+
+In B344 Dictionary settings, download and extract the standard example ZIP, then select the version directory directly containing datapackage.json, or all its files together. A system resources.json is a valid resource but not a whole package. Validate, import and save the display name; then select the package in the L2/L3 dropdown and save dictionary settings. Importing alone does not rebind a task or rerun an existing result.
+
+## MCP rc.9 single-JSON compatibility contract
+
+The following documents the released interface. Do not submit an individual standard-directory resource to these single-JSON tools. Directory support must be explicitly implemented by the client; changing extensions, concatenating content or ignoring validation errors does not create compatibility.
 
 Applies to MCP 0.4.0-rc.9. rc.8 has built-in dictionaries only and does not expose these import tools.
 
