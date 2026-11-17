@@ -1,3 +1,10 @@
+# 0.4.0-rc.10 · prerelease / 预发行版 · 2026-11-17
+
+- Adopt the B-345 workbench, instructions, API streaming/receipt handling, request counting and report math-escape decoding. Native Core algorithms and binary remain unchanged; this is not a new semantic-accuracy claim.
+- Add complete directory imports over MCP and UI: L2 8 JSON + README; L3 3 JSON + README. Provide separate Chinese/English directories, ZIPs, built-in format help and digest validation. Keep rc.9 single-JSON dictionaries and IDs compatible.
+- Separate model and dictionary saves; persist aliases, bindings and private API settings. Blank keys retain existing credentials and only masked keys reach the page. Default analysis remains the current host LLM.
+- Keep 21 tools and 17 resources. Runtime changes require copy migration; existing tasks, failures, reports, configuration and old dictionaries remain preserved. Updates do not interrupt active clients or touch a separate workbench installation.
+
 # 0.4.0-rc.9 · prerelease / 预发行版 · 2026-11-16
 
 - Add versioned custom L2/L3 dictionary format, validation and import tools: 21 tools / 17 resources, keeping the original 18 tools compatible.

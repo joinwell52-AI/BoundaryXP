@@ -4,23 +4,23 @@
 <h1 align="center">From source to boundaries, every step is visible.</h1>
 
 <p align="center">
-  <a href="https://www.npmjs.com/package/boundaryxp-mcp"><img src="https://img.shields.io/badge/npm-Install%20rc.9-CB3837?style=for-the-badge&amp;logo=npm" alt="npm · Install BoundaryXP rc.9"></a>
+  <a href="https://www.npmjs.com/package/boundaryxp-mcp"><img src="https://img.shields.io/badge/npm-Install%20rc.10-CB3837?style=for-the-badge&amp;logo=npm" alt="npm · Install BoundaryXP rc.10"></a>
   <a href="https://registry.modelcontextprotocol.io/?q=boundaryxp"><img src="https://img.shields.io/badge/Official%20MCP%20Registry-Listed-15803d?style=for-the-badge" alt="Official MCP Registry · Listed"></a>
-  <a href="https://github.com/joinwell52-AI/BoundaryXP/releases/tag/mcp-v0.4.0-rc.9"><img src="https://img.shields.io/badge/Download-rc.9%20package-2563eb?style=for-the-badge" alt="Download compiled rc.9 package"></a>
+  <a href="https://github.com/joinwell52-AI/BoundaryXP/releases/tag/mcp-v0.4.0-rc.10"><img src="https://img.shields.io/badge/Download-rc.10%20package-2563eb?style=for-the-badge" alt="Download compiled rc.10 package"></a>
   <a href="https://glama.ai/mcp/servers/joinwell52-AI/BoundaryXP"><img src="https://glama.ai/mcp/servers/joinwell52-AI/BoundaryXP/badges/score.svg" alt="BoundaryXP on Glama · live score"></a>
 </p>
 
 <p align="center">
-  <a href="https://boundaryxp-workbench-demo.joinwell52.chatgpt.site/"><img src="https://img.shields.io/badge/Demo-Interactive-0891b2?style=flat-square" alt="演示 / Interactive demo"></a>
+  <a href="https://boundaryxp-demo.vercel.app/"><img src="https://img.shields.io/badge/Demo-Interactive-0891b2?style=flat-square" alt="演示 / Interactive demo"></a>
   <a href="#l2--l3-industry-and-enterprise-semantics"><img src="https://img.shields.io/badge/Semantics-L2%20%2B%20L3-7c3aed?style=flat-square" alt="L2 industry / L3 enterprise semantics"></a>
   <a href="https://doi.org/10.5281/zenodo.24072738"><img src="https://img.shields.io/badge/DOI-10.5281%2Fzenodo.24072738-1e3a8a?style=flat-square" alt="DOI: 10.5281/zenodo.24072738"></a>
 </p>
 
 <p align="center">Turn complete task requirements into an evidence-linked <strong>7+1 relational representation</strong>, then check it with a deterministic Core.<br>Inspect plans and task decompositions, and trace the evidence for <strong>Violation, Within bounds or Incomplete information</strong>.</p>
 
-<p align="center"><a href="https://boundaryxp-workbench-demo.joinwell52.chatgpt.site/?lang=en#case=ENG20-003&axis=A&view=radar&lang=en"><strong>▶ Try the demo</strong></a>　·　<a href="docs/mcp/INSTALL.en.md"><strong>MCP setup</strong></a>　·　<a href="https://doi.org/10.5281/zenodo.24072738"><strong>Paper</strong></a></p>
+<p align="center"><a href="https://boundaryxp-demo.vercel.app/?lang=en#case=ENG20-003&axis=A&view=radar&lang=en"><strong>▶ Try the demo</strong></a>　·　<a href="docs/mcp/INSTALL.en.md"><strong>MCP setup</strong></a>　·　<a href="https://doi.org/10.5281/zenodo.24072738"><strong>Paper</strong></a></p>
 
-<p align="center">Chinese & English · MCP 0.4.0-rc.9 / B-335 · Research & protocol material · Original Core source private</p>
+<p align="center">Chinese & English · MCP 0.4.0-rc.10 / B-345 · Research & protocol material · Original Core source private</p>
 
 > **Questions, counterexamples and contributions are welcome.** The 7+1 method has assumptions and limits; the research cases do not establish correctness for every task. The MCP implementation, model interpretations and L2/L3 resources can also be wrong. Deterministic calculation does not guarantee correct semantic interpretation. Help test and improve the approach with questions, counterexamples and reproducible evidence.
 >
@@ -36,7 +36,7 @@
 
 ## Install BXP · Find BXP
 
-**Linux x64 / Docker is available separately:** npm Linux package · Linux installation · 中文安装 · Dockerfile · Linux release. Version `0.4.0-rc.9-linux.1` uses the `linux` channel, glibc ≥2.36 and compiled B-335 Core. Windows `latest/next` remain rc.9. **Glama build and tool/resource discovery passed; Linux release published.** The live score badge links to the public tool catalog; it is not an algorithm or semantic-accuracy certification.
+**Linux x64 / Docker:** `0.4.0-rc.10-linux.1` uses the `linux` channel (glibc ≥2.36, Node ≥22.19). Windows `latest/next` use rc.10. Both include B345 functionality and the unchanged native Core. Previous Glama build/discovery verification applies to rc.9-linux.1; rc.10 verification is recorded separately.
 
 
 | Purpose | Document or page |
@@ -46,12 +46,12 @@
 | Windows setup | [Windows installation guide · 中文](docs/mcp/INSTALL.zh-CN.md) |
 
 
-**21 tools · 17 resources · Windows x64 · Node.js ≥22.18 · rc.9 prerelease.** Default analysis uses your current host LLM; no separate model API key is required.
+**21 tools · 17 resources · Windows x64 · Node.js ≥22.18 · rc.10 prerelease.** Default analysis uses your current host LLM; no separate model API key is required.
 
 | Public entry | What you can find there |
 |---|---|
-| **[npm — install the package](https://www.npmjs.com/package/boundaryxp-mcp)** | rc.9 package, Chinese/English descriptions and installation on the same page |
-| **[Official MCP Registry](https://registry.modelcontextprotocol.io/?q=boundaryxp)** | Published rc.9 metadata and npm installation reference |
+| **[npm — install the package](https://www.npmjs.com/package/boundaryxp-mcp)** | rc.10 package, Chinese/English descriptions and installation on the same page |
+| **[Official MCP Registry](https://registry.modelcontextprotocol.io/?q=boundaryxp)** | Published rc.10 metadata and npm installation reference |
 | **[TensorBlock MCP Index — rc.9 merged](https://github.com/TensorBlock/awesome-mcp-servers/pull/6087)** | rc.9 update merged November 16; [Linux / Glama follow-up PR #6099](https://github.com/TensorBlock/awesome-mcp-servers/pull/6099) awaits review |
 | **[MCPServers](https://mcpservers.org/servers/www-npmjs-com-package-boundaryxp-mcp)** | Live listing and npm link; rc.8 remains displayed, documentation refresh requested November 16 |
 | **[Serverdex](https://serverdex.io/server/io-github-joinwell52-ai-boundaryxp)** | Live listing with repository and npm links; cached rc.8 snippet omits required data path—use our setup guide |
@@ -72,11 +72,11 @@ To try the contributor fork through **Add plugin marketplace**, use the candidat
 
 | Purpose | Document or page |
 |---|---|
-| Linux package | [npm Linux package 0.4.0-rc.9-linux.1](https://www.npmjs.com/package/boundaryxp-mcp/v/0.4.0-rc.9-linux.1) |
+| Linux package | [npm Linux package 0.4.0-rc.10-linux.1](https://www.npmjs.com/package/boundaryxp-mcp/v/0.4.0-rc.10-linux.1) |
 | Linux / Docker | [Linux / Docker installation · English](docs/mcp/linux/INSTALL.en.md) |
 | Linux / Docker | [Linux / Docker installation · 中文](docs/mcp/linux/INSTALL.zh-CN.md) |
 | Container build | [Dockerfile](Dockerfile) |
-| Linux release | [Linux release assets and checksums](https://github.com/joinwell52-AI/BoundaryXP/releases/tag/mcp-v0.4.0-rc.9-linux.1) |
+| Linux release | [Linux release assets and checksums](https://github.com/joinwell52-AI/BoundaryXP/releases/tag/mcp-v0.4.0-rc.10-linux.1) |
 | Build and discovery | [Linux release verification report](docs/mcp/linux/RELEASE.md#发布后核对--post-publication-checks) |
 | Directory listings | [MCP listings and review status](docs/mcp/DISCOVERY.md) |
 | Host configuration | [Codex / Cursor stdio setup guide](docs/mcp/npm/INSTALL.md#codex-and-other-hosts) |
@@ -92,17 +92,17 @@ To try the contributor fork through **Add plugin marketplace**, use the candidat
 
 In **ENG20-003**, five tasks span several roles. Their combined dependencies form a strict **A → B → C → D → A** cycle. BoundaryXP brings those dependencies into one graph and preserves the original English sources and calculation records for inspection.
 
-[![Open the demo: ENG20-003 task tree, clickable 7+1 radar and original evidence](assets/demos/workbench-en.jpg)](https://boundaryxp-workbench-demo.joinwell52.chatgpt.site/?lang=en#case=ENG20-003&axis=A&view=radar&lang=en)
+[![Open the demo: ENG20-003 task tree, clickable 7+1 radar and original evidence](assets/demos/workbench-en.jpg)](https://boundaryxp-demo.vercel.app/?lang=en#case=ENG20-003&axis=A&view=radar&lang=en)
 
-<p align="center"><a href="https://boundaryxp-workbench-demo.joinwell52.chatgpt.site/?lang=en#case=ENG20-003&axis=A&view=radar&lang=en"><strong>Click the radar to inspect evidence →</strong></a>　·　<a href="https://boundaryxp-workbench-demo.joinwell52.chatgpt.site/?lang=en#case=ENG20-003&axis=A&view=report&lang=en">Read and export the 7+1 report →</a></p>
+<p align="center"><a href="https://boundaryxp-demo.vercel.app/?lang=en#case=ENG20-003&axis=A&view=radar&lang=en"><strong>Click the radar to inspect evidence →</strong></a>　·　<a href="https://boundaryxp-demo.vercel.app/?lang=en#case=ENG20-003&axis=A&view=report&lang=en">Read and export the 7+1 report →</a></p>
 
 ### Different cases, different results
 
 | Result / case | What to inspect |
 |---|---|
-| **Violation** · [RT044](https://boundaryxp-workbench-demo.joinwell52.chatgpt.site/?lang=en#case=R389-383&axis=A&view=radar&lang=en) | Local orders combine into a strict dependency cycle |
-| **Within bounds** · [RT042](https://boundaryxp-workbench-demo.joinwell52.chatgpt.site/?lang=en#case=R389-381&axis=R&view=radar&lang=en) | Adjacent half-open 10–11 and 11–12 bookings release the endpoint |
-| **Incomplete information** · [L23-050](https://boundaryxp-workbench-demo.joinwell52.chatgpt.site/?lang=en#case=R389-153&axis=P&view=radar&lang=en) | “Confirmed by him” has no unique owner binding; U1 remains unknown |
+| **Violation** · [RT044](https://boundaryxp-demo.vercel.app/?lang=en#case=R389-383&axis=A&view=radar&lang=en) | Local orders combine into a strict dependency cycle |
+| **Within bounds** · [RT042](https://boundaryxp-demo.vercel.app/?lang=en#case=R389-381&axis=R&view=radar&lang=en) | Adjacent half-open 10–11 and 11–12 bookings release the endpoint |
+| **Incomplete information** · [L23-050](https://boundaryxp-demo.vercel.app/?lang=en#case=R389-153&axis=P&view=radar&lang=en) | “Confirmed by him” has no unique owner binding; U1 remains unknown |
 
 Two cases have **original English sources**: ENG20-001 · Branches and a join (Within bounds) and ENG20-003 · Four-step dependency cycle (Violation).
 
@@ -111,26 +111,26 @@ All five come from saved 58618 records, retaining task trees, exact sources, ver
 <details>
 <summary>See the English report and original task text</summary>
 
-[![English 7+1 report with Markdown export](assets/demos/report-en.jpg)](https://boundaryxp-workbench-demo.joinwell52.chatgpt.site/?lang=en#case=ENG20-003&axis=A&view=report&lang=en)
+[![English 7+1 report with Markdown export](assets/demos/report-en.jpg)](https://boundaryxp-demo.vercel.app/?lang=en#case=ENG20-003&axis=A&view=report&lang=en)
 
-[![ENG20-003 original English task sources](assets/demos/english-source.jpg)](https://boundaryxp-workbench-demo.joinwell52.chatgpt.site/?lang=en#case=ENG20-003&axis=A&view=source&lang=en)
+[![ENG20-003 original English task sources](assets/demos/english-source.jpg)](https://boundaryxp-demo.vercel.app/?lang=en#case=ENG20-003&axis=A&view=source&lang=en)
 
 </details>
 
 
 | Purpose | Document or page |
 |---|---|
-| English case · Within bounds | [ENG20-001 · Branches and a join](https://boundaryxp-workbench-demo.joinwell52.chatgpt.site/?lang=en#case=ENG20-001&axis=A&view=radar&lang=en) |
-| English case · Violation | [ENG20-003 · Four-step dependency cycle](https://boundaryxp-workbench-demo.joinwell52.chatgpt.site/?lang=en#case=ENG20-003&axis=A&view=radar&lang=en) |
+| English case · Within bounds | [ENG20-001 · Branches and a join](https://boundaryxp-demo.vercel.app/?lang=en#case=ENG20-001&axis=A&view=radar&lang=en) |
+| English case · Violation | [ENG20-003 · Four-step dependency cycle](https://boundaryxp-demo.vercel.app/?lang=en#case=ENG20-003&axis=A&view=radar&lang=en) |
 | Demo and reports | [Demo guide and saved reports](docs/demo/README.md) |
 
 ## Connect to your AI workflow
 
-**New in rc.9:** import and validate custom L2 industry and L3 enterprise dictionaries through MCP or the workbench. Format and English examples. Existing rc.8 installations can upgrade directly using the **rc.9 bootstrap installer once**; the old updater's fixed 18-tool probe cannot accept the new 21-tool catalog. Follow the upgrade guide and preserve your existing installation/data paths.
+**New in rc.10 / B345:** import complete L2/L3 directories through the five-step workbench UI or MCP. Read the [format specification and complete English examples](docs/mcp/npm/guides/DICTIONARIES.md). Model settings save separately from dictionaries. Existing tasks, failed jobs and rc.9 dictionaries are retained; the calculator algorithm is unchanged.
 
 **BoundaryXP MCP** connects through standard stdio to Cursor, Codex and compatible hosts, with **21 tools, 17 resources and a local browser workbench**. The Windows x64 package includes the compiled native Core; no separate 58618 installation or hosted BoundaryXP server is required.
 
-1. **Install from npm:** use `boundaryxp-mcp@0.4.0-rc.9`, available through the `next` prerelease channel. GitHub Releases retain the matching archive and SHA-256.
+1. **Install from npm:** use `boundaryxp-mcp@0.4.0-rc.10`, available through the `next` prerelease channel. GitHub Releases retain the matching archive and SHA-256.
 2. **Install and connect:** follow the guide to configure the host's stdio MCP server.
 3. **Use your current host LLM:** the built-in host profile prepares instructions and accepts the host analysis through standard MCP tools. No separate model API key is required; an independent API profile remains optional.
 4. **Open the workbench:** import complete task text, preview and confirm the task tree, then analyze and inspect evidence and reports.
@@ -144,14 +144,14 @@ All five come from saved 58618 records, retaining task trees, exact sources, ver
 | Updates and maintenance | [Upgrade, rollback and troubleshooting guide](docs/mcp/npm/INSTALL.md#updates) |
 
 
-> **Current npm release:** boundaryxp-mcp 0.4.0-rc.9, B-335 / Windows x64, MIT. Start with the installation guide, 7+1 introduction, 21 tools and directory status. This product repository is public. Core implementation source remains in a separate private repository.
+> **Current npm release:** boundaryxp-mcp 0.4.0-rc.10, B-345 / Windows x64, MIT. Start with the installation guide, 7+1 introduction, 21 tools and directory status. This product repository is public. Core implementation source remains in a separate private repository.
 
 
 | Purpose | Document or page |
 |---|---|
 | Custom semantics | [L2/L3 dictionary format and English examples](docs/mcp/npm/guides/DICTIONARIES.md) |
 | Updates and maintenance | [Upgrade, rollback and troubleshooting guide](docs/mcp/npm/INSTALL.md#updates) |
-| npm release | [boundaryxp-mcp 0.4.0-rc.9](https://www.npmjs.com/package/boundaryxp-mcp) |
+| npm release | [boundaryxp-mcp 0.4.0-rc.10](https://www.npmjs.com/package/boundaryxp-mcp) |
 | Windows setup | [Windows installation guide · English](docs/mcp/INSTALL.en.md) |
 | Product overview | [MCP 7+1 product introduction · English](docs/mcp/npm/README.en.md) |
 | Tool reference | [21 MCP tools and input reference](docs/mcp/npm/guides/TOOLS.md) |
@@ -169,6 +169,12 @@ The same term can mean different things across industries and organizations. L2 
 **There is no active L1 layer.** L0 is the BXP protocol and deterministic Core, not a semantic library. L2 / L3 do not replace source text or change the shared 7+1 verification rules. Loading a library, a job title or a reporting relationship does not grant business authority.
 
 ### Use through MCP
+
+**rc.10 / B345 folder standard:** L2 contains **8 JSON files + README**; L3 contains **3 JSON files + README**. The workbench has **Installed dictionaries** and **Import semantic library** tabs. Import in five steps: select L2/L3 → choose the full folder → validate → name → save. Validation must pass before saving; names and selections persist after refresh. Model settings save separately. Older rc.9 dictionaries and their bindings remain readable.
+
+For MCP import, call `bx_dictionary_format` (language `en` or `zh-CN`) for the full directory envelope and example; call `bx_dictionary_validate`, then `bx_dictionary_import` with the returned digest. Follow the returned schema; a folder is not a single dictionary JSON file. Legacy JSON tool imports remain compatible.
+
+**[Format and file requirements](docs/mcp/npm/guides/DICTIONARIES.md)** · **[L2 English folder ZIP](docs/mcp/npm/examples/dictionary-directory-L2-en.zip)** · **[L3 English folder ZIP](docs/mcp/npm/examples/dictionary-directory-L3-en.zip)**
 
 1. Call `bx_dictionaries_list` to inspect the L2 / L3 resources available in the current installation and their identifiers and versions.
 2. Call `bx_dictionaries_bind` to validate the selected resources and obtain version-and-digest references, keeping library snapshots distinct.

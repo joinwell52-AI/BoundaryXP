@@ -4,23 +4,23 @@
 <h1 align="center">从原文到边界，每一步都看得见。</h1>
 
 <p align="center">
-  <a href="https://www.npmjs.com/package/boundaryxp-mcp"><img src="https://img.shields.io/badge/npm-Install%20rc.9-CB3837?style=for-the-badge&amp;logo=npm" alt="npm · 安装 BoundaryXP rc.9"></a>
+  <a href="https://www.npmjs.com/package/boundaryxp-mcp"><img src="https://img.shields.io/badge/npm-Install%20rc.10-CB3837?style=for-the-badge&amp;logo=npm" alt="npm · 安装 BoundaryXP rc.10"></a>
   <a href="https://registry.modelcontextprotocol.io/?q=boundaryxp"><img src="https://img.shields.io/badge/Official%20MCP%20Registry-Listed-15803d?style=for-the-badge" alt="官方 MCP Registry · 已收录"></a>
-  <a href="https://github.com/joinwell52-AI/BoundaryXP/releases/tag/mcp-v0.4.0-rc.9"><img src="https://img.shields.io/badge/Download-rc.9%20package-2563eb?style=for-the-badge" alt="下载 rc.9 编译安装包"></a>
+  <a href="https://github.com/joinwell52-AI/BoundaryXP/releases/tag/mcp-v0.4.0-rc.10"><img src="https://img.shields.io/badge/Download-rc.10%20package-2563eb?style=for-the-badge" alt="下载 rc.10 编译安装包"></a>
   <a href="https://glama.ai/mcp/servers/joinwell52-AI/BoundaryXP"><img src="https://glama.ai/mcp/servers/joinwell52-AI/BoundaryXP/badges/score.svg" alt="BoundaryXP Glama 公开入口与实时评分"></a>
 </p>
 
 <p align="center">
-  <a href="https://boundaryxp-workbench-demo.joinwell52.chatgpt.site/"><img src="https://img.shields.io/badge/Demo-Interactive-0891b2?style=flat-square" alt="演示 / Interactive demo"></a>
+  <a href="https://boundaryxp-demo.vercel.app/"><img src="https://img.shields.io/badge/Demo-Interactive-0891b2?style=flat-square" alt="演示 / Interactive demo"></a>
   <a href="#l2--l3行业与企业语义库"><img src="https://img.shields.io/badge/Semantics-L2%20%2B%20L3-7c3aed?style=flat-square" alt="L2 industry / L3 enterprise semantics"></a>
   <a href="https://doi.org/10.5281/zenodo.24072738"><img src="https://img.shields.io/badge/DOI-10.5281%2Fzenodo.24072738-1e3a8a?style=flat-square" alt="DOI: 10.5281/zenodo.24072738"></a>
 </p>
 
 <p align="center">从完整任务到带原文证据的 <strong>7+1 关联表示</strong>，再由确定性 Core 核验。<br>检查方案与子任务分解，追溯为什么<strong>越界、未越界，或信息不全</strong>。</p>
 
-<p align="center"><a href="https://boundaryxp-workbench-demo.joinwell52.chatgpt.site/"><strong>▶ 在线演示</strong></a>　·　<a href="docs/mcp/INSTALL.zh-CN.md"><strong>MCP 接入</strong></a>　·　<a href="https://doi.org/10.5281/zenodo.24072738"><strong>论文</strong></a></p>
+<p align="center"><a href="https://boundaryxp-demo.vercel.app/"><strong>▶ 在线演示</strong></a>　·　<a href="docs/mcp/INSTALL.zh-CN.md"><strong>MCP 接入</strong></a>　·　<a href="https://doi.org/10.5281/zenodo.24072738"><strong>论文</strong></a></p>
 
-<p align="center">中英双语 · MCP 0.4.0-rc.9 / B-335 · npm 预发行 · 论文与协议资料 · Core 原实现源码私有</p>
+<p align="center">中英双语 · MCP 0.4.0-rc.10 / B-345 · npm 预发行 · 论文与协议资料 · Core 原实现源码私有</p>
 
 > **欢迎提问、反例与贡献。** 7+1 方法有适用条件，研究用例不能证明它对所有任务都正确；MCP 实现、模型解释和 L2/L3 语义库也可能出错。确定性计算不等于语义解释必然正确。欢迎用问题、反例和复现证据共同检验与改进。
 >
@@ -36,7 +36,7 @@
 
 ## 安装 BXP · 在哪里找到 BXP
 
-**新增 Linux x64 / Docker 独立入口：** npm Linux 编译包 · 中文安装 · English · Dockerfile · Linux 发行附件。版本 `0.4.0-rc.9-linux.1` 使用 `linux` 渠道，需要 glibc ≥2.36，随包交付编译后的 B-335 Core。Windows 的 `latest/next` 保持 rc.9。**Glama 实际构建、工具及资源发现通过，Linux 发行已完成**；顶部实时徽章直达公开工具目录，评分不等于算法或语义正确性认证。
+**Linux x64 / Docker：** `0.4.0-rc.10-linux.1` 使用 `linux` 渠道（glibc ≥2.36、Node ≥22.19）；Windows 的 `latest/next` 使用 rc.10。两者包含 B345 功能与未改动的原生 Core。此前 Glama 验证对应 rc.9-linux.1，不能冒称 rc.10 已通过平台复审。
 
 
 | 用途 | 文档与入口 |
@@ -46,12 +46,12 @@
 | Windows 接入 | [Windows 英文安装指南](docs/mcp/INSTALL.en.md) |
 
 
-**21 个工具 · 17 项资源 · Windows x64 · Node.js ≥22.18 · rc.9 预发行版。** 默认使用当前宿主 LLM 分析，无需另外配置模型 API Key。
+**21 个工具 · 17 项资源 · Windows x64 · Node.js ≥22.18 · rc.10 预发行版。** 默认使用当前宿主 LLM 分析，无需另外配置模型 API Key。
 
 | 公开入口 | 现在能查到什么 |
 |---|---|
-| **[npm：下载安装](https://www.npmjs.com/package/boundaryxp-mcp)** | rc.9 安装包，同页中英文介绍与安装说明 |
-| **[官方 MCP Registry](https://registry.modelcontextprotocol.io/?q=boundaryxp)** | 已登记 rc.9 及 npm 安装来源 |
+| **[npm：下载安装](https://www.npmjs.com/package/boundaryxp-mcp)** | rc.10 安装包，同页中英文介绍与安装说明 |
+| **[官方 MCP Registry](https://registry.modelcontextprotocol.io/?q=boundaryxp)** | 已登记 rc.10 及 npm 安装来源 |
 | **[TensorBlock MCP Index：rc.9 已合并](https://github.com/TensorBlock/awesome-mcp-servers/pull/6087)** | rc.9 更新于 11 月 16 日合并；[Linux / Glama 后续 PR #6099](https://github.com/TensorBlock/awesome-mcp-servers/pull/6099)待审核 |
 | **[MCPServers 中文页](https://mcpservers.org/zh-CN/servers/www-npmjs-com-package-boundaryxp-mcp)** | 已公开收录，有 npm 链接；仍显示 rc.8，11 月 16 日已请求刷新文档 |
 | **[Serverdex](https://serverdex.io/server/io-github-joinwell52-ai-boundaryxp)** | 已有公开条目；rc.8 配置示例缺少必填数据路径，请按本项目指南安装 |
@@ -72,11 +72,11 @@ OpenAI PR 跟进说明现已补齐 **Linux 插件支持**：独立编译依赖�
 
 | 用途 | 文档与入口 |
 |---|---|
-| Linux 安装包 | [npm Linux 编译包 0.4.0-rc.9-linux.1](https://www.npmjs.com/package/boundaryxp-mcp/v/0.4.0-rc.9-linux.1) |
+| Linux 安装包 | [npm Linux 编译包 0.4.0-rc.10-linux.1](https://www.npmjs.com/package/boundaryxp-mcp/v/0.4.0-rc.10-linux.1) |
 | Linux / Docker | [Linux / Docker 中文安装指南](docs/mcp/linux/INSTALL.zh-CN.md) |
 | Linux / Docker | [Linux / Docker 英文安装指南](docs/mcp/linux/INSTALL.en.md) |
 | 容器构建 | [Dockerfile](Dockerfile) |
-| Linux 发行 | [Linux 发行附件与摘要](https://github.com/joinwell52-AI/BoundaryXP/releases/tag/mcp-v0.4.0-rc.9-linux.1) |
+| Linux 发行 | [Linux 发行附件与摘要](https://github.com/joinwell52-AI/BoundaryXP/releases/tag/mcp-v0.4.0-rc.10-linux.1) |
 | 构建与发现验证 | [Linux 发行验证报告](docs/mcp/linux/RELEASE.md) |
 | 目录收录 | [MCP 目录与审核状态](docs/mcp/DISCOVERY.md) |
 | 宿主配置 | [Codex / Cursor stdio 接入指南](docs/mcp/npm/INSTALL.zh-CN.md#codex-与其他宿主) |
@@ -92,17 +92,17 @@ OpenAI PR 跟进说明现已补齐 **Linux 插件支持**：独立编译依赖�
 
 七个任务各自看起来可以执行，合起来却有一条 **A → D → B → C → A** 的严格前置闭环。界痕把跨小组依赖放回同一张图，保留原文与计算依据，让冲突可以逐项核对。
 
-[![点击进入：RT044 的任务树、7+1 边界雷达和原文依据](assets/demos/workbench-zh.jpg)](https://boundaryxp-workbench-demo.joinwell52.chatgpt.site/#case=R389-383&axis=A&view=radar&lang=zh)
+[![点击进入：RT044 的任务树、7+1 边界雷达和原文依据](assets/demos/workbench-zh.jpg)](https://boundaryxp-demo.vercel.app/#case=R389-383&axis=A&view=radar&lang=zh)
 
-<p align="center"><a href="https://boundaryxp-workbench-demo.joinwell52.chatgpt.site/#case=R389-383&axis=A&view=radar&lang=zh"><strong>点击雷达，查看依据 →</strong></a>　·　<a href="https://boundaryxp-workbench-demo.joinwell52.chatgpt.site/#case=R389-383&axis=A&view=report&lang=zh">阅读与导出 7+1 报告 →</a></p>
+<p align="center"><a href="https://boundaryxp-demo.vercel.app/#case=R389-383&axis=A&view=radar&lang=zh"><strong>点击雷达，查看依据 →</strong></a>　·　<a href="https://boundaryxp-demo.vercel.app/#case=R389-383&axis=A&view=report&lang=zh">阅读与导出 7+1 报告 →</a></p>
 
 ### 不同用例，不同结果
 
 | 结果与用例 | 关键问题 |
 |---|---|
-| **越界** · [RT044](https://boundaryxp-workbench-demo.joinwell52.chatgpt.site/#case=R389-383&axis=A&view=radar&lang=zh) | 局部顺序合并后形成严格闭环 |
-| **未越界** · [RT042](https://boundaryxp-workbench-demo.joinwell52.chatgpt.site/#case=R389-381&axis=R&view=radar&lang=zh) | 10–11 点与 11–12 点的半开区间相邻，端点释放 |
-| **信息不全** · [L23-050](https://boundaryxp-workbench-demo.joinwell52.chatgpt.site/#case=R389-153&axis=P&view=radar&lang=zh) | “由他确认”没有唯一绑定责任人，保留未知 U1 |
+| **越界** · [RT044](https://boundaryxp-demo.vercel.app/#case=R389-383&axis=A&view=radar&lang=zh) | 局部顺序合并后形成严格闭环 |
+| **未越界** · [RT042](https://boundaryxp-demo.vercel.app/#case=R389-381&axis=R&view=radar&lang=zh) | 10–11 点与 11–12 点的半开区间相邻，端点释放 |
+| **信息不全** · [L23-050](https://boundaryxp-demo.vercel.app/#case=R389-153&axis=P&view=radar&lang=zh) | “由他确认”没有唯一绑定责任人，保留未知 U1 |
 
 还有两个**英文原文**用例：ENG20-001 · 分支与汇合（未越界）、ENG20-003 · 四步依赖闭环（越界）。
 
@@ -111,26 +111,26 @@ OpenAI PR 跟进说明现已补齐 **Linux 插件支持**：独立编译依赖�
 <details>
 <summary>展开查看中文报告和英文原文</summary>
 
-[![中文 7+1 完整报告，支持 Markdown 导出](assets/demos/report-zh.jpg)](https://boundaryxp-workbench-demo.joinwell52.chatgpt.site/#case=R389-383&axis=A&view=report&lang=zh)
+[![中文 7+1 完整报告，支持 Markdown 导出](assets/demos/report-zh.jpg)](https://boundaryxp-demo.vercel.app/#case=R389-383&axis=A&view=report&lang=zh)
 
-[![ENG20-003 的英文任务原文](assets/demos/english-source.jpg)](https://boundaryxp-workbench-demo.joinwell52.chatgpt.site/?lang=en#case=ENG20-003&axis=A&view=source&lang=en)
+[![ENG20-003 的英文任务原文](assets/demos/english-source.jpg)](https://boundaryxp-demo.vercel.app/?lang=en#case=ENG20-003&axis=A&view=source&lang=en)
 
 </details>
 
 
 | 用途 | 文档与入口 |
 |---|---|
-| 英文用例 · 未越界 | [ENG20-001 · 分支与汇合](https://boundaryxp-workbench-demo.joinwell52.chatgpt.site/?lang=en#case=ENG20-001&axis=A&view=radar&lang=en) |
-| 英文用例 · 越界 | [ENG20-003 · 四步依赖闭环](https://boundaryxp-workbench-demo.joinwell52.chatgpt.site/?lang=en#case=ENG20-003&axis=A&view=radar&lang=en) |
+| 英文用例 · 未越界 | [ENG20-001 · 分支与汇合](https://boundaryxp-demo.vercel.app/?lang=en#case=ENG20-001&axis=A&view=radar&lang=en) |
+| 英文用例 · 越界 | [ENG20-003 · 四步依赖闭环](https://boundaryxp-demo.vercel.app/?lang=en#case=ENG20-003&axis=A&view=radar&lang=en) |
 | 演示与报告 | [演示说明与已保存报告](docs/demo/README.md) |
 
 ## 接入你的 AI 工作流
 
-**rc.9 新增：** MCP 与工作台均可导入、校验自定义 L2 行业字典和 L3 企业字典，提供格式规范与中文示例。rc.8 可以直接升级，需**一次性使用 rc.9 新版安装器**：旧更新器固定检查 18 个工具，不能接受新版 21 个工具。请按升级指南保留原安装和数据路径操作。
+**rc.10 / B345 更新：** L2/L3 完整目录五步导入，模型与字典分别保存，完整中英文目录示例。旧任务、失败记录和 rc.9 字典保留，计算器算法未改。见 [中文格式规范](docs/mcp/npm/guides/DICTIONARIES.zh-CN.md)。
 
 **BoundaryXP MCP** 通过标准 stdio 接入 Cursor、Codex 等兼容宿主，提供 **21 个工具、17 个资源和本地浏览器工作台**。Windows x64 安装包包含原生编译 Core，无需另装 58618 或自建 BoundaryXP 服务器。
 
-1. **从 npm 安装：** 使用 `boundaryxp-mcp@0.4.0-rc.9`；预发行渠道为 `next`。GitHub Release 同步保存安装包和 SHA-256。
+1. **从 npm 安装：** 使用 `boundaryxp-mcp@0.4.0-rc.10`；预发行渠道为 `next`。GitHub Release 同步保存安装包和 SHA-256。
 2. **安装并连接宿主：** 按对应指南配置 stdio MCP 服务。
 3. **使用当前宿主 LLM：** 默认 host 配置通过标准 MCP 工具提供规范、接收宿主分析并运行原生复核，无需额外模型 API Key；也保留可选的独立 API 模式。
 4. **打开工作台：** 导入完整任务，预览并确认任务树，再提交分析、查看证据与报告。
@@ -144,14 +144,14 @@ OpenAI PR 跟进说明现已补齐 **Linux 插件支持**：独立编译依赖�
 | 升级与维护 | [升级、回滚与排障指南](docs/mcp/npm/INSTALL.zh-CN.md#升级) |
 
 
-> **当前 npm 版本：** boundaryxp-mcp 0.4.0-rc.9，B-335 / Windows x64，MIT许可。入口：中文安装指南、7+1产品介绍、MCP目录状态。本产品仓库已经公开；核心实现源码在独立私有源码仓库维护。客户无需另装58618。
+> **当前 npm 版本：** boundaryxp-mcp 0.4.0-rc.10，B-345 / Windows x64，MIT许可。入口：中文安装指南、7+1产品介绍、MCP目录状态。本产品仓库已经公开；核心实现源码在独立私有源码仓库维护。客户无需另装58618。
 
 
 | 用途 | 文档与入口 |
 |---|---|
 | 自定义语义库 | [L2/L3 字典格式与中文示例](docs/mcp/npm/guides/DICTIONARIES.zh-CN.md) |
 | 升级与维护 | [升级、回滚与排障指南](docs/mcp/npm/INSTALL.zh-CN.md#升级) |
-| npm 发行 | [boundaryxp-mcp 0.4.0-rc.9](https://www.npmjs.com/package/boundaryxp-mcp) |
+| npm 发行 | [boundaryxp-mcp 0.4.0-rc.10](https://www.npmjs.com/package/boundaryxp-mcp) |
 | Windows 接入 | [Windows 中文安装指南](docs/mcp/INSTALL.zh-CN.md) |
 | 产品介绍 | [MCP 7+1 中文产品介绍](docs/mcp/npm/README.zh-CN.md) |
 | 目录收录 | [MCP 目录与审核状态](docs/mcp/DISCOVERY.md) |
@@ -168,6 +168,12 @@ OpenAI PR 跟进说明现已补齐 **Linux 插件支持**：独立编译依赖�
 **当前没有活动 L1 层。** L0 是 BXP 协议与确定性 Core，不是语义库。L2 / L3 不替代任务原文，也不改变 7+1 的共同核验规则；加载词库、岗位或经理关系均不自动产生业务权限。
 
 ### 在 MCP 中使用
+
+**rc.10 / B345 统一目录：L2 为 8 个 JSON＋README；L3 为 3 个 JSON＋README。** 页面分为“已安装字典”和“导入语义库”，按 **选择 L2/L3 → 选择完整文件夹 → 校验 → 输入名称 → 保存** 五步操作。校验通过才可保存；名称和选择在刷新后保留。模型设置与字典分别保存，旧 rc.9 字典及其绑定继续可读。
+
+MCP 导入先调用 `bx_dictionary_format` 获取完整目录规范和中英文示例，再调用 `bx_dictionary_validate`，最后带校验摘要调用 `bx_dictionary_import`。完整目录不等于单个字典 JSON；旧 JSON 工具导入仍兼容。
+
+**[格式与文件清单](docs/mcp/npm/guides/DICTIONARIES.zh-CN.md)** · **[L2 中文完整目录 ZIP](docs/mcp/npm/examples/dictionary-directory-L2-zh-CN.zip)** · **[L3 中文完整目录 ZIP](docs/mcp/npm/examples/dictionary-directory-L3-zh-CN.zip)**
 
 1. 用 `bx_dictionaries_list` 列出当前安装可用的 L2 / L3 资源，核对词库标识与版本。
 2. 用 `bx_dictionaries_bind` 校验所选资源并取得版本与摘要引用，避免混用不同词库快照。

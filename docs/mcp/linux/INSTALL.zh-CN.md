@@ -4,11 +4,13 @@
 
 BoundaryXP（BXP，界痕）把任务原文和父子关系整理为带原文证据的 7+1 边界表示。当前宿主 LLM 独立分析，原生 Core 计算复核提交的形式输入；报告分别保留判断、计算回执、引用和未知项。程序核验不自动证明语义抽取正确，也不授予执行权限。
 
-Linux 版本为 `0.4.0-rc.9-linux.1`，计算基线 B-335，21 个工具、17 项资源，支持自定义 L2 行业与 L3 企业字典。MIT 许可；原始 Core 源码不随产品交付。适配器、页面和资源仍含可读文件。
+Linux 版本为 `0.4.0-rc.10-linux.1`，运行基线 B345，计算器合同沿用未改变的 B-335 Core；21 个工具、17 项资源。MIT 许可；原始 Core 源码不随产品交付，适配器、页面和资源仍含可读文件。
+
+rc.10 页面提供“已安装字典”和“导入语义库”。选择 L2/L3 → 选择完整文件夹 → 校验 → 名称 → 保存。L2 是 8 个 JSON＋README，L3 是 3 个 JSON＋README。格式工具提供完整中英文目录示例；旧 rc.9 字典继续可读，旧 JSON 工具导入仍兼容。模型设置与字典分别保存，保存不发起分析。
 
 ## 环境与接入
 
-需要 Linux x64、glibc ≥2.36（例如 Debian 12）、Node.js ≥22.18.0 和 npm。尚不支持 ARM64、Alpine/musl 或 macOS。Windows 客户继续使用 `0.4.0-rc.9`；npm `latest/next` 保持 Windows 版本，Linux 使用 `linux` 渠道或下列固定版本。
+需要 Linux x64、glibc ≥2.36（例如 Debian 12）、Node.js ≥22.19.0 和 npm。尚不支持 ARM64、Alpine/musl 或 macOS。Windows 客户继续使用 `0.4.0-rc.10`；npm `latest/next` 保持 Windows 版本，Linux 使用 `linux` 渠道或下列固定版本。
 
 在支持本地 stdio 的 MCP 宿主中添加以下配置，把数据路径改成你自己的绝对路径：
 
@@ -17,7 +19,7 @@ Linux 版本为 `0.4.0-rc.9-linux.1`，计算基线 B-335，21 个工具、17 �
   "mcpServers": {
     "BoundaryXP": {
       "command": "npx",
-      "args": ["--yes", "--package=boundaryxp-mcp@0.4.0-rc.9-linux.1", "bxp", "serve", "--data-root", "/home/you/.local/share/boundaryxp"]
+      "args": ["--yes", "--package=boundaryxp-mcp@0.4.0-rc.10-linux.1", "bxp", "serve", "--data-root", "/home/you/.local/share/boundaryxp"]
     }
   }
 }
@@ -26,7 +28,7 @@ Linux 版本为 `0.4.0-rc.9-linux.1`，计算基线 B-335，21 个工具、17 �
 各宿主配置文件结构可能不同；共同的启动命令为：
 
 ```sh
-npx --yes --package=boundaryxp-mcp@0.4.0-rc.9-linux.1 bxp serve --data-root /absolute/path/to/bxp-data
+npx --yes --package=boundaryxp-mcp@0.4.0-rc.10-linux.1 bxp serve --data-root /absolute/path/to/bxp-data
 ```
 
 该命令由宿主保持 stdin 打开，以 stdio 交换 MCP 消息。首次安装需联网下载 npm 包。无需额外安装工作台或提供业务服务器。默认使用当前宿主 LLM，无需另外配置模型 API Key；MCP 本身不是模型。

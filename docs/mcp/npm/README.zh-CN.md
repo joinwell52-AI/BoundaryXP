@@ -6,11 +6,11 @@
 
 从完整任务要求形成带原文证据的 **7+1 关联表示**，检查父子任务及其组合约束，追溯为什么**越界、未越界，或信息不全**。报告分别保留 LLM 判断、原生计算器复核、原文依据和未明确项。
 
-**boundaryxp-mcp 0.4.0-rc.9 · B-335 · Windows x64 · Node.js ≥22.18 · MIT · 预发行版**
+**boundaryxp-mcp 0.4.0-rc.10 · B-345 · Windows x64 · Node.js ≥22.18 · MIT · 预发行版**
 
 [安装与升级](https://github.com/joinwell52-AI/BoundaryXP/blob/main/docs/mcp/npm/INSTALL.zh-CN.md) · [中文产品仓库](https://github.com/joinwell52-AI/BoundaryXP/blob/main/README.zh-CN.md) · [发行下载](https://github.com/joinwell52-AI/BoundaryXP/releases)
 
-通过标准 **stdio MCP** 接入 Cursor、Codex 等宿主。一个包包含 **21 个工具、17 项资源、中英文内置帮助、编译后的 Core 和本地浏览器工作台**。无需另装 BoundaryXP 工作台或自建 BoundaryXP 服务器。当前原生包仅支持 Windows x64，不含 macOS、Linux 原生包。
+通过标准 **stdio MCP** 接入 Cursor、Codex 等宿主。一个包包含 **21 个工具、17 项资源、中英文内置帮助、编译后的 Core 和本地浏览器工作台**。无需另装 BoundaryXP 工作台或自建 BoundaryXP 服务器。本页 Windows x64 包使用 latest/next 渠道；Linux x64 使用独立 linux 渠道，要求 glibc ≥2.36。尚无 macOS 原生包。
 
 ## 7+1 核对什么？
 
@@ -41,7 +41,7 @@
 
 支持完整 UTF-8 Markdown/TXT、多级父子关系、显式任务编号和父任务编号，以及多个相同角色的子任务。DEV-01、DEV-02 是不同节点；支持 `PM → DEV（1/14）` 等标题。先预览并确认关系，再分析。
 
-[交互演示](https://boundaryxp-demo.vercel.app/)提供 B-332 保存记录：RT044 存在严格前置闭环，RT042 是半开区间相邻，L23-050 的责任人指代未绑定。这是历史回放，不代表本轮 MCP 新分析或 B-335 测试结果。
+[交互演示](https://boundaryxp-workbench-demo.joinwell52.chatgpt.site/)提供 B-332 保存记录：RT044 存在严格前置闭环，RT042 是半开区间相邻，L23-050 的责任人指代未绑定。这是历史回放，不代表本轮 MCP 新分析或 B-345 测试结果。
 
 ## 边界怎样计算？
 
@@ -71,7 +71,7 @@
   "mcpServers": {
     "BoundaryXP": {
       "command": "npx.cmd",
-      "args": ["--yes", "boundaryxp-mcp@0.4.0-rc.9", "--data-root", "C:/BXP/data"]
+      "args": ["--yes", "boundaryxp-mcp@0.4.0-rc.10", "--data-root", "C:/BXP/data"]
     }
   }
 }
@@ -111,3 +111,7 @@
 
 
 自定义 L2/L3：新增 bx_dictionary_format、bx_dictionary_validate、bx_dictionary_import；页面支持上传、校验、导入及版本绑定。[格式、四份中英文示例与使用流程](https://github.com/joinwell52-AI/BoundaryXP/blob/main/docs/mcp/npm/guides/DICTIONARIES.zh-CN.md)。同版本不同内容拒绝覆盖，旧任务和字典保留。rc.8用户请按升级指南调用rc.9新版安装器，不能依赖旧版固定18工具的自动检查。
+
+## rc.10 字典更新
+
+新页面支持完整目录五步导入；L2 为 8 个 JSON＋README，L3 为 3 个 JSON＋README。模型与字典分别保存，旧单 JSON 保持兼容。[格式、示例与排障](guides/DICTIONARIES.zh-CN.md)。

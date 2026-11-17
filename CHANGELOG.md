@@ -2,7 +2,7 @@
 
 # Workbench changelog
 
-The current private workbench is **B335**, build `0.1.0-candidate.031-r1.2-ui.335`. Compiled on 2026-11-09 from existing upgrade reports and verification receipts; entry dates identify the original maintenance or upgrade.
+The current workbench baseline is **B345**. MCP rc.10 incorporates B345 functionality; its calculator algorithm remains unchanged. See [MCP release evidence](docs/mcp/RC10.md) and [L2/L3 directory specification](docs/mcp/npm/guides/DICTIONARIES.md). The B335 entries below remain historical records compiled on 2026-11-09 from their original receipts.
 
 This repository distributes research and protocol materials. These notes describe the private workbench without distributing source, installation packages, raw runtime logs or private task data. The [redacted verification summary](docs/releases/WORKBENCH-HISTORY-VERIFICATION.json) retains build identities, check scopes, counts and source-receipt digests. Papers and saved cases retain their actual historical versions.
 

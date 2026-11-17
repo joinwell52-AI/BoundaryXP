@@ -1,4 +1,18 @@
-# 当前版本 / Current release: 0.4.0-rc.9
+# 当前版本 / Current release: 0.4.0-rc.10
+
+2026-11-17：基于 **B345** 的 MCP 更新，Windows `0.4.0-rc.10`，Linux `0.4.0-rc.10-linux.1`。仍为 rc 预发行，21 个工具、17 项资源。
+
+- L2 为 8 个 JSON＋README，L3 为 3 个 JSON＋README；MCP 与页面使用同一校验和保存流程。
+- 字典页面双标签、五步导入、名称和绑定刷新保留；旧 rc.9 字典与 JSON 工具合同继续兼容。
+- 模型设置独立保存，密钥掩码展示、留空保留；默认宿主 LLM 模式无需额外 API Key。
+- 同步 B345 生成指令、流式接收记录与数学 JSON 转义处理；原生计算器算法未改。
+- rc.9 → rc.10 复制迁移、双向回滚通过，原任务、失败记录、字典绑定和客户端配置保留。
+
+**[rc.10 验收与摘要 / Acceptance and hashes](RC10.md)** · [npm 同页中英安装](https://www.npmjs.com/package/boundaryxp-mcp) · [中文规范](npm/guides/DICTIONARIES.zh-CN.md) · [English specification](npm/guides/DICTIONARIES.md)
+
+rc.10 updates B345 dictionary folders, settings, instructions and response handling without changing the native calculator algorithm. Both platforms retain old data and dictionaries. Exact-package checks, host analysis and replay scopes are documented separately in the linked acceptance record. Original Core source remains private. Publication does not forcibly restart existing clients.
+
+## 历史：0.4.0-rc.9
 
 2026-11-16：L2 行业与 L3 企业自定义字典版，**21 个工具、17 个资源**，仍为 Windows x64 / B-335 的 rc 预发行版。新增 `bx_dictionary_format`、`bx_dictionary_validate`、`bx_dictionary_import`；工作台支持上传或粘贴 JSON、校验、导入和显式绑定。
 

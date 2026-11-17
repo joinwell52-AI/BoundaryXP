@@ -4,9 +4,9 @@
 
 [Product introduction](https://github.com/joinwell52-AI/BoundaryXP/blob/main/docs/mcp/npm/README.md)
 
-**boundaryxp-mcp 0.4.0-rc.9 · B-335 · Windows x64 · Node.js ≥22.18 (tested: 24.19.0)**
+**boundaryxp-mcp 0.4.0-rc.10 · B-345 · Windows x64 · Node.js ≥22.18 (tested: 24.19.0)**
 
-This guide describes a managed installation with a stable launcher and optional automatic updates. The [quick start](https://github.com/joinwell52-AI/BoundaryXP/blob/main/docs/mcp/npm/README.md#quick-start-with-an-mcp-host) uses a pinned npx command instead. Both provide the same MCP tools. macOS/Linux native packages are not available in this release.
+This guide describes a managed installation with a stable launcher and optional automatic updates. The [quick start](https://github.com/joinwell52-AI/BoundaryXP/blob/main/docs/mcp/npm/README.md#quick-start-with-an-mcp-host) uses a pinned npx command instead. Both provide the same MCP tools. Linux x64 is distributed separately through the linux channel (glibc ≥2.36). No macOS native package is available.
 
 ## First installation
 
@@ -18,7 +18,7 @@ $BxpHome = Join-Path $BxpRoot 'install'
 $BxpData = Join-Path $BxpRoot 'data'
 $BxpSettings = Join-Path $BxpRoot 'settings'
 if (Test-Path (Join-Path $BxpHome 'active.json')) { throw 'Already installed: use update' }
-npx.cmd --yes --package boundaryxp-mcp@0.4.0-rc.9 bxp install --home $BxpHome --version 0.4.0-rc.9
+npx.cmd --yes --package boundaryxp-mcp@0.4.0-rc.10 bxp install --home $BxpHome --version 0.4.0-rc.10
 if ($LASTEXITCODE -ne 0) { throw 'Installation failed' }
 $BxpLauncher = Join-Path $BxpHome 'launcher.mjs'
 New-Item -ItemType Directory -Path $BxpSettings -Force | Out-Null
@@ -30,7 +30,7 @@ if (!(Test-Path $BxpEnv)) { [IO.File]::WriteAllText($BxpEnv, "# Model API config
 node $BxpLauncher --manage status
 ```
 
-Expect `READY`, `probe.passed:true` and version `0.4.0-rc.9` in the installation receipt. The installer downloads the exact npm version, checks integrity and probes the native MCP. Internet access is required for package dependencies. No compiler, executable installer, separate BoundaryXP workbench or hosted BoundaryXP server is needed. Empty API profiles retain the built-in host profile for analysis with your current MCP host LLM.
+Expect `READY`, `probe.passed:true` and version `0.4.0-rc.10` in the installation receipt. The installer downloads the exact npm version, checks integrity and probes the native MCP. Internet access is required for package dependencies. No compiler, executable installer, separate BoundaryXP workbench or hosted BoundaryXP server is needed. Empty API profiles retain the built-in host profile for analysis with your current MCP host LLM.
 
 ## Cursor
 
@@ -122,10 +122,10 @@ Keep your existing installation, data and settings paths. Back up complete data 
 **rc.8 can upgrade directly to rc.9 without uninstalling.** Its old automatic updater expects exactly 18 tools and rejects rc.9's 21 tools. For this transition use the command below, which obtains the rc.9 installer through npm; do not use the old `launcher --manage update`. The new probe checks the target package's declared tools, so future changes in tool count do not cause this rejection.
 
 ```powershell
-npx.cmd --yes --package boundaryxp-mcp@0.4.0-rc.9 bxp update --home $BxpHome --version 0.4.0-rc.9 --migrate-data $BxpData
+npx.cmd --yes --package boundaryxp-mcp@0.4.0-rc.10 bxp update --home $BxpHome --version 0.4.0-rc.10 --migrate-data $BxpData
 ```
 
-Do not delete the old release first. Updates preserve task data, failed records and host/provider settings. This update changes the MCP runtime digest while keeping the B-335 native Core binary unchanged. Use `--migrate-data <original-data-directory>` for a verified copy; the original directory is retained.
+Do not delete the old release first. Updates preserve task data, failed records and host/provider settings. This update changes the MCP runtime digest while keeping the B-345 native Core binary unchanged. Use `--migrate-data <original-data-directory>` for a verified copy; the original directory is retained.
 
 Later managed updates can also use `node <home>/launcher.mjs --manage update --version <exact-version>`. Reconnect clients afterward and compare `bx_capabilities` with the on-disk `--manage status`.
 
@@ -136,9 +136,9 @@ The unpublished rc.2 local test package used a different package name; use the n
 If your host directly runs `npx.cmd --yes boundaryxp-mcp@0.4.0-rc.8 ...` without a managed installation, do not just change the package version against the old data directory. Finish jobs and disconnect matching clients. Set `$BxpData` to the existing data directory and `$BxpHome` to a new empty installation directory, then run:
 
 ```powershell
-npx.cmd --yes --package boundaryxp-mcp@0.4.0-rc.9 bxp install --home $BxpHome --version 0.4.0-rc.8
+npx.cmd --yes --package boundaryxp-mcp@0.4.0-rc.10 bxp install --home $BxpHome --version 0.4.0-rc.8
 if ($LASTEXITCODE -ne 0) { throw 'Bootstrap installation failed' }
-npx.cmd --yes --package boundaryxp-mcp@0.4.0-rc.9 bxp update --home $BxpHome --version 0.4.0-rc.9 --migrate-data $BxpData
+npx.cmd --yes --package boundaryxp-mcp@0.4.0-rc.10 bxp update --home $BxpHome --version 0.4.0-rc.10 --migrate-data $BxpData
 if ($LASTEXITCODE -ne 0) { throw 'Migration failed' }
 ```
 

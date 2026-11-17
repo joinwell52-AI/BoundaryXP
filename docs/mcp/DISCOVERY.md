@@ -4,7 +4,7 @@
 
 ## 当前安装入口 / Current installation
 
-Linux 独立发行入口：[`0.4.0-rc.9-linux.1`](https://www.npmjs.com/package/boundaryxp-mcp/v/0.4.0-rc.9-linux.1)，npm `linux` 渠道；[中文安装](linux/INSTALL.zh-CN.md)、[English](linux/INSTALL.en.md)、[Dockerfile](../../Dockerfile)、[验收范围](linux/RELEASE.md)。Windows `latest/next` 继续为 rc.9，官方 Registry 现有 rc.9 登记不因这个 Linux 分支而覆盖。公开 Dockerfile 只下载编译包并验证摘要，不要求公开 Core 源码。
+本轮发行入口：Windows `0.4.0-rc.10`（`latest/next`）；Linux [`0.4.0-rc.10-linux.1`](https://www.npmjs.com/package/boundaryxp-mcp/v/0.4.0-rc.10-linux.1)（`linux` 渠道）。[中文安装](linux/INSTALL.zh-CN.md)、[English](linux/INSTALL.en.md)、[Dockerfile](../../Dockerfile)、[rc.10 验收](RC10.md)。公开 Dockerfile 只下载编译包并验证摘要，不要求公开 Core 源码。下文第三方目录和 PR 的日期、版本是此前实查结果，不冒称本轮已全部刷新。
 
 Glama 已于 2026-11-16 17:26（UTC+8）发布 `0.4.0-rc.9-linux.1`。平台构建测试 `01a1e3ab-bf33-7cd8-9dbc-a536b14fffb7` 为 `success`，耗时 1m 6.4s，固定公开提交 `8c1397d`；实际启动并发现 21 工具、17 资源，公开页已显示工具目录。仅使用 npm 编译包及固定 SHA-256，没有提交原始 Core 源码。此结果是构建和协议发现通过，不扩大为算法正确性认证或付费实例已开通。
 

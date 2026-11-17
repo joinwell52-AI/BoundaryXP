@@ -12,11 +12,17 @@
 
 从完整任务要求形成带原文证据的 **7+1 关联表示**，检查父子任务及其组合约束，追溯为什么**越界、未越界，或信息不全**。报告分别保留 LLM 判断、原生计算器复核、原文依据和未明确项。
 
-**boundaryxp-mcp 0.4.0-rc.9 · B-335 · Windows x64 · Node.js ≥22.18 · MIT · 预发行版**
+**boundaryxp-mcp 0.4.0-rc.10 · B-345 · Windows x64 · Node.js ≥22.18 · MIT · 预发行版**
 
 [安装与升级](#中文安装与升级) · [中文产品仓库](https://github.com/joinwell52-AI/BoundaryXP/blob/main/README.zh-CN.md) · [发行下载](https://github.com/joinwell52-AI/BoundaryXP/releases)
 
-通过标准 **stdio MCP** 接入 Cursor、Codex 等宿主。一个包包含 **21 个工具、17 项资源、中英文内置帮助、编译后的 Core 和本地浏览器工作台**。无需另装 BoundaryXP 工作台或自建 BoundaryXP 服务器。当前原生包仅支持 Windows x64，不含 macOS、Linux 原生包。
+通过标准 **stdio MCP** 接入 Cursor、Codex 等宿主。一个包包含 **21 个工具、17 项资源、中英文内置帮助、编译后的 Core 和本地浏览器工作台**。无需另装 BoundaryXP 工作台或自建 BoundaryXP 服务器。本页 Windows x64 包使用 latest/next 渠道；Linux x64 使用独立 linux 渠道，要求 glibc ≥2.36。尚无 macOS 原生包。
+
+### rc.10：字典与模型设置
+
+**字典设置 → 已安装字典 / 导入语义库**。新导入采用完整目录：L2 为 8 个 JSON＋README，L3 为 3 个 JSON＋README。按选择类型、选择文件夹、校验、命名、保存五步操作；校验通过才可保存。MCP 的 format / validate / import 同样支持完整目录传输，保留 rc.9 单 JSON 兼容。名称和选择刷新后保留，模型设置与字典分别保存。
+
+[中文规范与完整示例](https://github.com/joinwell52-AI/BoundaryXP/blob/main/docs/mcp/npm/guides/DICTIONARIES.zh-CN.md)。模型 API 设置支持本地保存、密钥掩码、流式/非流式；默认宿主 LLM 模式仍无需另配密钥。升级复制迁移历史数据，不重写原任务和旧字典。
 
 ### 7+1 核对什么？
 
@@ -47,7 +53,7 @@
 
 支持完整 UTF-8 Markdown/TXT、多级父子关系、显式任务编号和父任务编号，以及多个相同角色的子任务。DEV-01、DEV-02 是不同节点；支持 `PM → DEV（1/14）` 等标题。先预览并确认关系，再分析。
 
-[交互演示](https://boundaryxp-demo.vercel.app/)提供 B-332 保存记录：RT044 存在严格前置闭环，RT042 是半开区间相邻，L23-050 的责任人指代未绑定。这是历史回放，不代表本轮 MCP 新分析或 B-335 测试结果。
+[交互演示](https://boundaryxp-workbench-demo.joinwell52.chatgpt.site/)提供 B-332 保存记录：RT044 存在严格前置闭环，RT042 是半开区间相邻，L23-050 的责任人指代未绑定。这是历史回放，不代表本轮 MCP 新分析或 B-345 测试结果。
 
 ### 边界怎样计算？
 
@@ -77,7 +83,7 @@
   "mcpServers": {
     "BoundaryXP": {
       "command": "npx.cmd",
-      "args": ["--yes", "boundaryxp-mcp@0.4.0-rc.9", "--data-root", "C:/BXP/data"]
+      "args": ["--yes", "boundaryxp-mcp@0.4.0-rc.10", "--data-root", "C:/BXP/data"]
     }
   }
 }
@@ -122,7 +128,7 @@
 
 [产品介绍](#简体中文)
 
-**boundaryxp-mcp 0.4.0-rc.9 · B-335 · Windows x64 · Node.js ≥22.18（实测 24.19.0）**
+**boundaryxp-mcp 0.4.0-rc.10 · B-345 · Windows x64 · Node.js ≥22.18（实测 24.19.0）**
 
 本指南采用固定启动器的管理安装，支持可选自动升级。[快速接入](#快速接入-mcp-宿主)则直接使用固定版本 npx 命令，两者提供相同 MCP 工具。当前不提供 macOS、Linux 原生包。
 
@@ -136,7 +142,7 @@ $BxpHome = Join-Path $BxpRoot 'install'
 $BxpData = Join-Path $BxpRoot 'data'
 $BxpSettings = Join-Path $BxpRoot 'settings'
 if (Test-Path (Join-Path $BxpHome 'active.json')) { throw 'Already installed: use update' }
-npx.cmd --yes --package boundaryxp-mcp@0.4.0-rc.9 bxp install --home $BxpHome --version 0.4.0-rc.9
+npx.cmd --yes --package boundaryxp-mcp@0.4.0-rc.10 bxp install --home $BxpHome --version 0.4.0-rc.10
 if ($LASTEXITCODE -ne 0) { throw 'Installation failed' }
 $BxpLauncher = Join-Path $BxpHome 'launcher.mjs'
 New-Item -ItemType Directory -Path $BxpSettings -Force | Out-Null
@@ -148,7 +154,7 @@ if (!(Test-Path $BxpEnv)) { [IO.File]::WriteAllText($BxpEnv, "# Model API config
 node $BxpLauncher --manage status
 ```
 
-安装回执应显示 `READY`、`probe.passed:true` 和版本 `0.4.0-rc.9`。安装器下载指定 npm 版本、校验完整性并探测原生 MCP。安装依赖需要联网，无需编译器、exe 安装器、另外安装 BoundaryXP 工作台或自建服务器。空 API profile 列表仍保留内置 host 配置，可用当前宿主 LLM 分析。
+安装回执应显示 `READY`、`probe.passed:true` 和版本 `0.4.0-rc.10`。安装器下载指定 npm 版本、校验完整性并探测原生 MCP。安装依赖需要联网，无需编译器、exe 安装器、另外安装 BoundaryXP 工作台或自建服务器。空 API profile 列表仍保留内置 host 配置，可用当前宿主 LLM 分析。
 
 #### Cursor 接入
 
@@ -240,10 +246,10 @@ BOUNDARYXP_API_KEY=REPLACE_WITH_YOUR_KEY
 **rc.8可以直接升级到rc.9，无需卸载。** 旧版自动升级自检固定检查18工具，无法通过rc.9的21工具检查；这次请执行下面的命令，由npm临时取得rc.9新版安装器完成升级，不用旧版`launcher --manage update`。新版根据目标包声明核对工具清单，后续工具数量变化不会因此被拒绝。
 
 ```powershell
-npx.cmd --yes --package boundaryxp-mcp@0.4.0-rc.9 bxp update --home $BxpHome --version 0.4.0-rc.9 --migrate-data $BxpData
+npx.cmd --yes --package boundaryxp-mcp@0.4.0-rc.10 bxp update --home $BxpHome --version 0.4.0-rc.10 --migrate-data $BxpData
 ```
 
-不要先删除旧版。升级保留任务、失败记录及宿主、模型配置。核心运行包摘要变化时，需显式指定 `--migrate-data <原数据目录>`，复制并校验后保留原目录。本版 MCP 运行包摘要变化，B-335 原生 Core 二进制不变。升级需用原数据路径执行 --migrate-data，校验复制后的新目录并保留原目录。
+不要先删除旧版。升级保留任务、失败记录及宿主、模型配置。核心运行包摘要变化时，需显式指定 `--migrate-data <原数据目录>`，复制并校验后保留原目录。本版 MCP 运行包摘要变化，B-345 原生 Core 二进制不变。升级需用原数据路径执行 --migrate-data，校验复制后的新目录并保留原目录。
 
 后续也可运行 `node <home>/launcher.mjs --manage update --version <准确版本>`。升级后重连，通过 `bx_capabilities` 与磁盘 `--manage status` 对照版本。
 
@@ -254,9 +260,9 @@ npx.cmd --yes --package boundaryxp-mcp@0.4.0-rc.9 bxp update --home $BxpHome --v
 如果宿主命令直接是 `npx.cmd --yes boundaryxp-mcp@0.4.0-rc.8 ...`，没有管理安装目录，不要直接改成 rc.9 后指向旧数据。先完成作业并断开相关客户端，将 `$BxpData` 设为原数据目录，`$BxpHome` 设为一个新的空安装目录，再执行：
 
 ```powershell
-npx.cmd --yes --package boundaryxp-mcp@0.4.0-rc.9 bxp install --home $BxpHome --version 0.4.0-rc.8
+npx.cmd --yes --package boundaryxp-mcp@0.4.0-rc.10 bxp install --home $BxpHome --version 0.4.0-rc.8
 if ($LASTEXITCODE -ne 0) { throw 'Bootstrap installation failed' }
-npx.cmd --yes --package boundaryxp-mcp@0.4.0-rc.9 bxp update --home $BxpHome --version 0.4.0-rc.9 --migrate-data $BxpData
+npx.cmd --yes --package boundaryxp-mcp@0.4.0-rc.10 bxp update --home $BxpHome --version 0.4.0-rc.10 --migrate-data $BxpData
 if ($LASTEXITCODE -ne 0) { throw 'Migration failed' }
 ```
 
@@ -312,15 +318,22 @@ node $BxpLauncher --manage auto-update --mode off
 
 ## English
 
+### rc.10: dictionaries and model settings
+
+The workbench provides **Installed dictionaries / Import semantic library** tabs and a five-step folder workflow: select layer, choose folder, validate, name, save. L2 uses 8 JSON files plus README; L3 uses 3 JSON files plus README. MCP format/validate/import use the same directory contract, with rc.9 single-JSON compatibility. Names and bindings survive refresh; model settings save separately. [English specification and complete examples](https://github.com/joinwell52-AI/BoundaryXP/blob/main/docs/mcp/npm/guides/DICTIONARIES.md).
+
+API settings support local masked-key storage and streaming/non-streaming responses; default host-LLM mode still needs no separate key. Upgrades copy historical data without rewriting original tasks or dictionaries.
+
+
 **7+1 task boundary analysis and computational verification for AI agents and teams.**
 
 Turn complete task requirements into evidence-backed **7+1 relationships**. Inspect parent–child tasks and their combined constraints, then trace why a result is **out of bounds, within bounds or incomplete**. LLM judgments and native calculator results are recorded separately, alongside original evidence and unspecified conditions.
 
-**boundaryxp-mcp 0.4.0-rc.9 · B-335 · Windows x64 · Node.js ≥22.18 · MIT · Prerelease**
+**boundaryxp-mcp 0.4.0-rc.10 · B-345 · Windows x64 · Node.js ≥22.18 · MIT · Prerelease**
 
 [Installation and upgrades](#installation-and-upgrades) · [Public repository](https://github.com/joinwell52-AI/BoundaryXP) · [Releases](https://github.com/joinwell52-AI/BoundaryXP/releases)
 
-Connect through standard **stdio MCP** in Cursor, Codex or compatible hosts. The package includes **21 tools, 17 resources, English and Chinese built-in help, a compiled Core and a local browser workbench**. No separate BoundaryXP installation or hosted BoundaryXP server is required. This release does not include macOS or Linux native packages.
+Connect through standard **stdio MCP** in Cursor, Codex or compatible hosts. The package includes **21 tools, 17 resources, English and Chinese built-in help, a compiled Core and a local browser workbench**. No separate BoundaryXP installation or hosted BoundaryXP server is required. Linux x64 is distributed separately through the linux channel (glibc >=2.36); no macOS native package is available.
 
 ### What does 7+1 mean?
 
@@ -351,7 +364,7 @@ Each child is assessed separately. DEV-02 introduces a deployment clause that co
 
 Import complete UTF-8 Markdown/TXT, explicit task and parent IDs, multiple hierarchy levels and multiple children with the same role. DEV-01 and DEV-02 remain separate nodes. Preview relationships before analysis.
 
-[Try the interactive demo](https://boundaryxp-demo.vercel.app/?lang=en) for saved B-332 cases: RT044 has a strict dependency cycle, RT042 has adjacent half-open intervals, and L23-050 has an unresolved owner reference. These are historical replays, not new MCP analyses or B-335 test results.
+[Try the interactive demo](https://boundaryxp-workbench-demo.joinwell52.chatgpt.site/?lang=en) for saved B-332 cases: RT044 has a strict dependency cycle, RT042 has adjacent half-open intervals, and L23-050 has an unresolved owner reference. These are historical replays, not new MCP analyses or B-345 test results.
 
 ### How verification works
 
@@ -381,7 +394,7 @@ Requires Windows x64, Node.js ≥22.18 and npm; tested with Node 24.19.0. Initia
   "mcpServers": {
     "BoundaryXP": {
       "command": "npx.cmd",
-      "args": ["--yes", "boundaryxp-mcp@0.4.0-rc.9", "--data-root", "C:/BXP/data"]
+      "args": ["--yes", "boundaryxp-mcp@0.4.0-rc.10", "--data-root", "C:/BXP/data"]
     }
   }
 }
@@ -426,9 +439,9 @@ Custom L2/L3: bx_dictionary_format, bx_dictionary_validate and bx_dictionary_imp
 
 [Product introduction](#english)
 
-**boundaryxp-mcp 0.4.0-rc.9 · B-335 · Windows x64 · Node.js ≥22.18 (tested: 24.19.0)**
+**boundaryxp-mcp 0.4.0-rc.10 · B-345 · Windows x64 · Node.js ≥22.18 (tested: 24.19.0)**
 
-This guide describes a managed installation with a stable launcher and optional automatic updates. The [quick start](#quick-start-with-an-mcp-host) uses a pinned npx command instead. Both provide the same MCP tools. macOS/Linux native packages are not available in this release.
+This guide describes a managed installation with a stable launcher and optional automatic updates. The [quick start](#quick-start-with-an-mcp-host) uses a pinned npx command instead. Both provide the same MCP tools. Linux x64 is distributed separately through the linux channel (glibc ≥2.36). No macOS native package is available.
 
 #### First installation
 
@@ -440,7 +453,7 @@ $BxpHome = Join-Path $BxpRoot 'install'
 $BxpData = Join-Path $BxpRoot 'data'
 $BxpSettings = Join-Path $BxpRoot 'settings'
 if (Test-Path (Join-Path $BxpHome 'active.json')) { throw 'Already installed: use update' }
-npx.cmd --yes --package boundaryxp-mcp@0.4.0-rc.9 bxp install --home $BxpHome --version 0.4.0-rc.9
+npx.cmd --yes --package boundaryxp-mcp@0.4.0-rc.10 bxp install --home $BxpHome --version 0.4.0-rc.10
 if ($LASTEXITCODE -ne 0) { throw 'Installation failed' }
 $BxpLauncher = Join-Path $BxpHome 'launcher.mjs'
 New-Item -ItemType Directory -Path $BxpSettings -Force | Out-Null
@@ -452,7 +465,7 @@ if (!(Test-Path $BxpEnv)) { [IO.File]::WriteAllText($BxpEnv, "# Model API config
 node $BxpLauncher --manage status
 ```
 
-Expect `READY`, `probe.passed:true` and version `0.4.0-rc.9` in the installation receipt. The installer downloads the exact npm version, checks integrity and probes the native MCP. Internet access is required for package dependencies. No compiler, executable installer, separate BoundaryXP workbench or hosted BoundaryXP server is needed. Empty API profiles retain the built-in host profile for analysis with your current MCP host LLM.
+Expect `READY`, `probe.passed:true` and version `0.4.0-rc.10` in the installation receipt. The installer downloads the exact npm version, checks integrity and probes the native MCP. Internet access is required for package dependencies. No compiler, executable installer, separate BoundaryXP workbench or hosted BoundaryXP server is needed. Empty API profiles retain the built-in host profile for analysis with your current MCP host LLM.
 
 #### Cursor
 
@@ -544,10 +557,10 @@ Keep your existing installation, data and settings paths. Back up complete data 
 **rc.8 can upgrade directly to rc.9 without uninstalling.** Its old automatic updater expects exactly 18 tools and rejects rc.9's 21 tools. For this transition use the command below, which obtains the rc.9 installer through npm; do not use the old `launcher --manage update`. The new probe checks the target package's declared tools, so future changes in tool count do not cause this rejection.
 
 ```powershell
-npx.cmd --yes --package boundaryxp-mcp@0.4.0-rc.9 bxp update --home $BxpHome --version 0.4.0-rc.9 --migrate-data $BxpData
+npx.cmd --yes --package boundaryxp-mcp@0.4.0-rc.10 bxp update --home $BxpHome --version 0.4.0-rc.10 --migrate-data $BxpData
 ```
 
-Do not delete the old release first. Updates preserve task data, failed records and host/provider settings. This update changes the MCP runtime digest while keeping the B-335 native Core binary unchanged. Use `--migrate-data <original-data-directory>` for a verified copy; the original directory is retained.
+Do not delete the old release first. Updates preserve task data, failed records and host/provider settings. This update changes the MCP runtime digest while keeping the B-345 native Core binary unchanged. Use `--migrate-data <original-data-directory>` for a verified copy; the original directory is retained.
 
 Later managed updates can also use `node <home>/launcher.mjs --manage update --version <exact-version>`. Reconnect clients afterward and compare `bx_capabilities` with the on-disk `--manage status`.
 
@@ -558,9 +571,9 @@ The unpublished rc.2 local test package used a different package name; use the n
 If your host directly runs `npx.cmd --yes boundaryxp-mcp@0.4.0-rc.8 ...` without a managed installation, do not just change the package version against the old data directory. Finish jobs and disconnect matching clients. Set `$BxpData` to the existing data directory and `$BxpHome` to a new empty installation directory, then run:
 
 ```powershell
-npx.cmd --yes --package boundaryxp-mcp@0.4.0-rc.9 bxp install --home $BxpHome --version 0.4.0-rc.8
+npx.cmd --yes --package boundaryxp-mcp@0.4.0-rc.10 bxp install --home $BxpHome --version 0.4.0-rc.8
 if ($LASTEXITCODE -ne 0) { throw 'Bootstrap installation failed' }
-npx.cmd --yes --package boundaryxp-mcp@0.4.0-rc.9 bxp update --home $BxpHome --version 0.4.0-rc.9 --migrate-data $BxpData
+npx.cmd --yes --package boundaryxp-mcp@0.4.0-rc.10 bxp update --home $BxpHome --version 0.4.0-rc.10 --migrate-data $BxpData
 if ($LASTEXITCODE -ne 0) { throw 'Migration failed' }
 ```
 

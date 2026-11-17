@@ -1,8 +1,8 @@
 # 21 个 MCP 工具 / MCP tool reference
 
-**适用 / Applies to：`boundaryxp-mcp 0.4.0-rc.9` · B-335。** 2026-11-17 对照运行中的 `bx_capabilities` 工具清单、输入 Schema 和双语帮助核对：**21 项，无重复、无遗漏**。rc.9 新增自定义字典的格式、校验、导入三项工具；旧版本的工具数按其历史记录解释。
+**适用 / Applies to：`boundaryxp-mcp 0.4.0-rc.10` · B-345。** 2026-11-17 对照运行中的 `bx_capabilities` 工具清单、输入 Schema 和双语帮助核对：**21 项，无重复、无遗漏**。rc.10 新增自定义字典的格式、校验、导入三项工具；旧版本的工具数按其历史记录解释。
 
-Checked on 2026-11-17 against the running rc.9 capability inventory, input schemas and bilingual help: **21 distinct tools**. The three custom-dictionary tools were added in rc.9. This documentation check does not claim execution acceptance of every tool.
+Checked on 2026-11-17 against the running rc.10 capability inventory, input schemas and bilingual help: **21 distinct tools**. The three custom-dictionary tools were added in rc.10. This documentation check does not claim execution acceptance of every tool.
 
 [导航 / Index](README.md) · [L2/L3 中文规范与示例](npm/guides/DICTIONARIES.zh-CN.md) · [Dictionary format and examples](npm/guides/DICTIONARIES.md)
 
@@ -102,7 +102,7 @@ No separate model API key or extra server-side analysis-model request is require
 
 Use an explicitly configured API profile and supply `confirm_model_call:true` with the project, revision and request ID. This mode sends an analysis request to the selected provider, without automatic retries. Confirmation does not authorize business execution.
 
-## rc.9 新增：自定义 L2/L3 字典 / New custom-dictionary tools
+## rc.10 新增：自定义 L2/L3 字典 / New custom-dictionary tools
 
 | 工具 / Tool | 参数与结果 / Inputs and result | 影响 / Effects |
 |---|---|---|
