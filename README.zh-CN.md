@@ -49,9 +49,9 @@ MCPwell、ToolCenter 的总目录中也有条目，但尚未核实 BXP 专属详
 
 **Codex 桌面版：**「插件」→「添加」→ **「添加 MCP 服务器」**，按[stdio 接入指南](docs/mcp/npm/INSTALL.zh-CN.md#codex-与其他宿主)配置。「添加插件市场」需要独立的插件市场源，不能填 npm、Registry 地址或本产品仓库；目前 BXP 未上架 Codex 插件目录或 Cursor Marketplace。
 
-**插件贡献进展：**[OpenAI Community Plugins PR #57](https://github.com/openai/community-plugins/pull/57)已转为正式待审核，内含经过测试的 Windows x64 / rc.9 封装及无关 Grafana 失败的基线对照证据；[punkpeye PR #19484](https://github.com/punkpeye/awesome-mcp-servers/pull/19484)已补充 Linux 支持、真实 Glama 徽章及[构建与发现通过的跟进证据](https://github.com/punkpeye/awesome-mcp-servers/pull/19484#issuecomment-6912851096)。两者仍待维护者审核，Glama 通过不等于 PR 已合并。[测试范围与提交状态](docs/mcp/DISCOVERY.md#rc9-contributions)。
+**插件贡献进展：**[OpenAI Community Plugins PR #57](https://github.com/openai/community-plugins/pull/57)已转为正式待审核，内含经过 Windows、Linux x64 测试的 0.2.0 封装及无关 Grafana 失败的基线对照证据；[punkpeye PR #19484](https://github.com/punkpeye/awesome-mcp-servers/pull/19484)已补充 Linux 支持、真实 Glama 徽章及[构建与发现通过的跟进证据](https://github.com/punkpeye/awesome-mcp-servers/pull/19484#issuecomment-6912851096)。两者仍待维护者审核，Glama 通过不等于 PR 已合并。[测试范围与提交状态](docs/mcp/DISCOVERY.md#rc9-contributions)。
 
-[OpenAI PR 跟进说明](https://github.com/openai/community-plugins/pull/57#issuecomment-6913163502)也已补充独立 Linux 发行与 Glama 验证。该插件封装仍面向 Windows x64 / rc.9；Linux 用户请使用独立的 [stdio 安装指南](docs/mcp/linux/INSTALL.zh-CN.md)。最新文档提交通过市场清单校验、3/3 包检查及 CLA；这些不代表 Linux 插件封装已验收。
+[OpenAI PR 跟进说明](https://github.com/openai/community-plugins/pull/57#issuecomment-6935083522)现已补齐 **Linux 插件支持**：独立编译依赖锁、glibc 检查与 XDG 数据目录。Windows/Linux × Node 22.19/24.19 四种组合均为 9/9 通过；Linux Codex 从 GitHub 市场安装、安装后副本的完整分析/报告/复验流程均通过。[候选插件安装](docs/mcp/PLUGIN-MARKETPLACE.zh-CN.md)。上游仍待审核，原始 Core 源码保持私有。
 
 如需从「添加插件市场」试用发布者 fork，见[候选插件安装指南](docs/mcp/PLUGIN-MARKETPLACE.zh-CN.md)。已隔离验证从 GitHub 添加市场、安装插件及调用安装后的 MCP；官方市场审核仍未完成。
 
