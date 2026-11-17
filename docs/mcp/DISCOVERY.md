@@ -39,6 +39,18 @@ These are discovery entries, not claims of rc.9 deployment approval or certifica
 
 ## rc.9 本轮提交与测试 / Current contributions and tests
 
+### 2026-11-17 审核状态复核 / Review status recheck
+
+| PR | 当前审核与检查 / Review and checks |
+|---|---|
+| [TensorBlock #6087](https://github.com/TensorBlock/awesome-mcp-servers/pull/6087) / [Linux 后续 #6099](https://github.com/TensorBlock/awesome-mcp-servers/pull/6099) | rc.9 更新 #6087 已合并；Linux / Glama 更新 #6099 仍 open，无审核评论、无已报告自动检查。rc.9 merged; Linux follow-up pending, with no review comments or reported checks. |
+| [punkpeye #19484](https://github.com/punkpeye/awesome-mcp-servers/pull/19484) | 仍 open；head `fa41a80a` 的 [check-submission](https://github.com/punkpeye/awesome-mcp-servers/actions/runs/43841990833/job/133212668882) 已通过。机器人要求的 Glama 徽章与验证已补齐，无新增人工修改意见。Open; submission check passed, Glama evidence supplied, no new human change request. |
+| [OpenAI Community Plugins #57](https://github.com/openai/community-plugins/pull/57) | 仍 open；head `75408c9` 的 [CLA 检查](https://github.com/openai/community-plugins/actions/runs/43996757442/job/133750595228)通过；审核状态 `REVIEW_REQUIRED`，合并门禁 `BLOCKED`，尚无人工 review。Open; CLA passed, maintainer review required. This is not a reported test failure or approval. |
+
+本次仅核对审核时间线、当前提交及检查状态；没有新的修改要求，不重复催审、不重跑模型或工作流，不将待审核标为已收录。核心实现源码保持私有，已有任务、配置和独立工作台未操作。
+
+This recheck did not rerun product/model acceptance or dispatch workflows. No new change request was present, so no duplicate review ping or implementation change was made. Original Core source, existing tasks/configuration and the separate workbench remain untouched.
+
 **2026-11-17：社区插件现支持 Linux。** [PR #57 更新](https://github.com/openai/community-plugins/pull/57#issuecomment-6935083522)将插件升至 0.2.0，Windows 锁定 rc.9，Linux x64/glibc ≥2.36 锁定 rc.9-linux.1。四种 Windows/Linux × Node 22.19/24.19 组合均 9/9 通过，无跳过；Linux Codex 从 GitHub 贡献分支安装并调用副本通过，完整案例实际调用 21 工具，3 项 PROGRAM 计算、七步/技术报告、零模型复验及历史字典保留通过。旧新 Windows 启动器保留 19 文件字节不变。[验收证据](https://github.com/joinwell52-AI/community-plugins/blob/codex/boundaryxp-plugin-20261116/tests/boundaryxp/README.md) · [中文安装](PLUGIN-MARKETPLACE.zh-CN.md) · [English installation](PLUGIN-MARKETPLACE.en.md)。原始 Core 源码私有，未操作已有安装或独立工作台；未宣称 Linux 桌面 GUI 验收或已获市场批准。
 
 **November 17: Linux plugin support implemented.** Plugin 0.2.0 now selects separate pinned compiled packages for Windows and Linux x64/glibc >=2.36. All four platform/Node combinations passed 9/9 without skips. Linux Codex Git-marketplace installation and actual installed-copy MCP calls passed; the current-host full case exercised 21 tools, three PROGRAM calculations, both reports, zero-model recheck and history/dictionary preservation. [PR follow-up](https://github.com/openai/community-plugins/pull/57#issuecomment-6935083522). This supersedes the Windows-only wrapper scope in the November 16 records below. Maintainer review remains pending; no Linux desktop GUI or private-Core source qualification is claimed.
