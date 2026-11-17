@@ -1,6 +1,6 @@
 # 在哪里查找 BoundaryXP？ / Discover BoundaryXP
 
-发行入口与下述公开目录页面核对日期：2026-11-16；人工审核与旧 PR 记录保留各自日期。安装包分发、目录登记和人工审核分别记录。
+发行入口与 PR 最新核对日期：2026-11-17；第三方页面与历史记录保留各自核对日期。安装包分发、目录登记和人工审核分别记录。
 
 ## 当前安装入口 / Current installation
 
@@ -8,13 +8,17 @@
 
 Glama 已于 2026-11-16 17:26（UTC+8）发布 `0.4.0-rc.9-linux.1`。平台构建测试 `01a1e3ab-bf33-7cd8-9dbc-a536b14fffb7` 为 `success`，耗时 1m 6.4s，固定公开提交 `8c1397d`；实际启动并发现 21 工具、17 资源，公开页已显示工具目录。仅使用 npm 编译包及固定 SHA-256，没有提交原始 Core 源码。此结果是构建和协议发现通过，不扩大为算法正确性认证或付费实例已开通。
 
-Linux is distributed separately through the `linux` tag; Windows `latest/next` and the existing official Registry rc.9 entry remain intact. Glama's Linux release is published after a successful platform build and discovery of 21 tools / 17 resources. This is not an algorithm certification or a purchase of a hosted instance. Automatic Glama releases from future GitHub releases are disabled because this build pins a Linux archive and Windows releases use a different channel.
+Linux rc.10-linux.1 is distributed through the `linux` tag; Windows `latest/next` and the official Registry latest entry now point to rc.10. Glama's previous successful platform build and discovery of 21 tools / 17 resources apply to rc.9-linux.1, not rc.10. This is not an algorithm certification or a purchase of a hosted instance. Automatic Glama releases from future GitHub releases are disabled because this build pins a Linux archive and Windows releases use a different channel.
 
-当前发行版为 **0.4.0-rc.9（预发行版）/ B-335**。客户可直接使用 [npm 默认首页](https://www.npmjs.com/package/boundaryxp-mcp)：[简体中文](https://www.npmjs.com/package/boundaryxp-mcp#简体中文) / [English](https://www.npmjs.com/package/boundaryxp-mcp#english)，以及 [中文安装与升级](https://www.npmjs.com/package/boundaryxp-mcp#中文安装与升级) / [Installation and upgrades](https://www.npmjs.com/package/boundaryxp-mcp#installation-and-upgrades)。四个入口均在 npm 同页，不以 GitHub 跳转作为语言或安装入口。
+当前发行版为 **0.4.0-rc.10（预发行版）/ B-345**。客户入口为 [npm 默认首页](https://www.npmjs.com/package/boundaryxp-mcp)：[简体中文](https://www.npmjs.com/package/boundaryxp-mcp#简体中文) / [English](https://www.npmjs.com/package/boundaryxp-mcp#english)，以及 [中文安装与升级](https://www.npmjs.com/package/boundaryxp-mcp#中文安装与升级) / [Installation and upgrades](https://www.npmjs.com/package/boundaryxp-mcp#installation-and-upgrades)。包内提供同页双语内容；本轮已核对 npm 元数据与实际下载，浏览器默认页受 Cloudflare 阻挡，未宣称本轮完成页面视觉验收。
 
-官方目录可[搜索 BoundaryXP](https://registry.modelcontextprotocol.io/?q=boundaryxp)。[最新版 API](https://registry.modelcontextprotocol.io/v0.1/servers/io.github.joinwell52-AI%2Fboundaryxp/versions/latest)返回服务器版本和 npm 包版本均为 rc.9，状态 active、isLatest=true。历史版本保留，不删除旧登记。
+官方目录可[搜索 BoundaryXP](https://registry.modelcontextprotocol.io/?q=boundaryxp)。[最新版 API](https://registry.modelcontextprotocol.io/v0.1/servers/io.github.joinwell52-AI%2Fboundaryxp/versions/latest)返回服务器版本和 npm 包版本均为 rc.10，状态 active、isLatest=true。历史版本保留，不删除旧登记。
 
-English and Chinese product descriptions and complete setup guides are available on the same npm page. The official Registry search and latest API were checked against rc.9. Pending directory applications below are not live installation listings.
+The package README contains English and Chinese descriptions and setup instructions on the same page. npm metadata/downloads and the official Registry latest API were verified against rc.10; Cloudflare blocked visual verification of npm's default page in this check. Pending directory applications below are not live installation listings.
+
+**rc.10 同步缺项（2026-11-17）：**TensorBlock #6099 已合并，但条目仍为 rc.9；punkpeye #19484 与 OpenAI 社区插件 #57 均待审核，仍引用 rc.9。社区插件 0.2.0 的启动器与依赖锁实际固定 rc.9 / rc.9-linux.1，尚未完成 rc.10 升级。Glama 本轮可读取的介绍仍缓存 rc.9，不能把此前平台验证算作 rc.10 验证。MCPServers、Serverdex 本轮未能读取确认，以下保留上次结果。
+
+**Remaining rc.10 synchronization work (November 17):** TensorBlock #6099 is merged but still documents rc.9. punkpeye #19484 and OpenAI Community Plugins #57 remain open and reference rc.9. Plugin 0.2.0's launcher and dependency locks still pin rc.9 / rc.9-linux.1. Glama's readable description remains cached at rc.9; its earlier validation does not validate rc.10. MCPServers and Serverdex could not be read in this check; their earlier observations below are retained.
 
 rc.9 新增自定义 L2/L3 字典格式、校验、导入与页面入口，现为 21 个工具、17 个资源。rc.8 需一次性使用新版 bootstrap 升级；旧任务和字典不删除。见 npm 同页升级指南。目录收录不代表第三方已重新核验 rc.9。
 
@@ -37,13 +41,13 @@ These are discovery entries, not claims of rc.9 deployment approval or certifica
 
 <a id="rc9-contributions"></a>
 
-## rc.9 本轮提交与测试 / Current contributions and tests
+## rc.9 贡献与测试记录 / rc.9 contributions and test records
 
 ### 2026-11-17 审核状态复核 / Review status recheck
 
 | PR | 当前审核与检查 / Review and checks |
 |---|---|
-| [TensorBlock #6087](https://github.com/TensorBlock/awesome-mcp-servers/pull/6087) / [Linux 后续 #6099](https://github.com/TensorBlock/awesome-mcp-servers/pull/6099) | rc.9 更新 #6087 已合并；Linux / Glama 更新 #6099 仍 open，无审核评论、无已报告自动检查。rc.9 merged; Linux follow-up pending, with no review comments or reported checks. |
+| [TensorBlock #6087](https://github.com/TensorBlock/awesome-mcp-servers/pull/6087) / [Linux 后续 #6099](https://github.com/TensorBlock/awesome-mcp-servers/pull/6099) | 两项均已合并；#6099 于 11 月 17 日 17:08:57（UTC+8）合并，维护者确认目录校验通过。条目仍为 rc.9，尚未同步 rc.10。Both merged; #6099 merged November 17 at 09:08:57 UTC following catalog validation. Entry still documents rc.9. |
 | [punkpeye #19484](https://github.com/punkpeye/awesome-mcp-servers/pull/19484) | 仍 open；head `fa41a80a` 的 [check-submission](https://github.com/punkpeye/awesome-mcp-servers/actions/runs/43841990833/job/133212668882) 已通过。机器人要求的 Glama 徽章与验证已补齐，无新增人工修改意见。Open; submission check passed, Glama evidence supplied, no new human change request. |
 | [OpenAI Community Plugins #57](https://github.com/openai/community-plugins/pull/57) | 仍 open；head `75408c9` 的 [CLA 检查](https://github.com/openai/community-plugins/actions/runs/43996757442/job/133750595228)通过；审核状态 `REVIEW_REQUIRED`，合并门禁 `BLOCKED`，尚无人工 review。Open; CLA passed, maintainer review required. This is not a reported test failure or approval. |
 
@@ -55,7 +59,7 @@ This recheck did not rerun product/model acceptance or dispatch workflows. No ne
 
 **November 17: Linux plugin support implemented.** Plugin 0.2.0 now selects separate pinned compiled packages for Windows and Linux x64/glibc >=2.36. All four platform/Node combinations passed 9/9 without skips. Linux Codex Git-marketplace installation and actual installed-copy MCP calls passed; the current-host full case exercised 21 tools, three PROGRAM calculations, both reports, zero-model recheck and history/dictionary preservation. [PR follow-up](https://github.com/openai/community-plugins/pull/57#issuecomment-6935083522). This supersedes the Windows-only wrapper scope in the November 16 records below. Maintainer review remains pending; no Linux desktop GUI or private-Core source qualification is claimed.
 
-- **TensorBlock：**[rc.9 PR #6087](https://github.com/TensorBlock/awesome-mcp-servers/pull/6087)已合并，维护者确认项目、重复条目和目录校验通过。后续 [PR #6099](https://github.com/TensorBlock/awesome-mcp-servers/pull/6099)仅修改既有条目，补充 Linux x64 / glibc ≥2.36、独立 `linux` 渠道、安装命令、中英指南、Glama 构建与 21 工具 / 17 资源发现证据；Windows `latest/next` 保持 rc.9。新 PR 当前 open、未合并，暂无审核意见。
+- **TensorBlock：**[rc.9 PR #6087](https://github.com/TensorBlock/awesome-mcp-servers/pull/6087)及后续 [PR #6099](https://github.com/TensorBlock/awesome-mcp-servers/pull/6099)均已合并，维护者确认目录校验通过。#6099 为既有条目补充 Linux x64 / glibc ≥2.36、独立 `linux` 渠道、安装命令、中英指南、Glama 构建与 21 工具 / 17 资源发现证据。该次贡献对应 rc.9 / rc.9-linux.1；当前 npm 已升级 rc.10，但目录条目尚未同步。
 - **punkpeye：**[原 PR #19484](https://github.com/punkpeye/awesome-mcp-servers/pull/19484)在提交 `fa41a80a` 中为既有条目补充 Linux x64 / Docker 入口和描述末尾的真实 Glama 评分徽章；[跟进评论](https://github.com/punkpeye/awesome-mcp-servers/pull/19484#issuecomment-6912851096)已提供构建成功、21 工具 / 17 资源、Linux 发行、摘要和公开验收证据。PR 主说明已去掉过时的“无 Linux 验证”内容，明确原始 Core 源码私有及编译包分发范围。当前 open、非 draft、未合并；本次核对无新增人工修改意见，已请求维护者复核资格和余项。旧 Windows 替代验证问题由已跑通的 Linux 路线取代，历史评论保留，未重复开 PR。
 - **OpenAI Community Plugins：**[PR #57](https://github.com/openai/community-plugins/pull/57)已转为 Ready for review，包含市场清单、启动器、锁定 rc.9 的 npm 依赖、中英文指南、多 DEV 示例和测试。只提交封装源码；原始 Core 实现不在 PR 中。尚未合并，也不等于进入 OpenAI 公共插件目录。
 - **此前 11 月 16 日 Linux / Glama 文档同步（后续实现已见上方）：**OpenAI PR 的 `ae45349` 仅更新三份中英文文档和测试说明；[跟进评论](https://github.com/openai/community-plugins/pull/57#issuecomment-6913163502)给出 Linux 发行、摘要和 Glama 成功构建 `01a1e3ab-bf33-7cd8-9dbc-a536b14fffb7`。插件启动器、Windows 平台限制和 rc.9 依赖锁保持不变，Linux 用户按独立 MCP 指南接入。本轮市场清单校验、包检查 3/3（无跳过）、diff 检查通过；[新提交的 CLA 检查](https://github.com/openai/community-plugins/actions/runs/43843991940/job/133219443331)通过。无新增人工修改意见，编译依赖资格与平台 Gate 仍待维护者审核。

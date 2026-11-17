@@ -52,7 +52,7 @@
 |---|---|
 | **[npm — install the package](https://www.npmjs.com/package/boundaryxp-mcp)** | rc.10 package, Chinese/English descriptions and installation on the same page |
 | **[Official MCP Registry](https://registry.modelcontextprotocol.io/?q=boundaryxp)** | Published rc.10 metadata and npm installation reference |
-| **[TensorBlock MCP Index — rc.9 merged](https://github.com/TensorBlock/awesome-mcp-servers/pull/6087)** | rc.9 update merged November 16; [Linux / Glama follow-up PR #6099](https://github.com/TensorBlock/awesome-mcp-servers/pull/6099) awaits review |
+| **[TensorBlock MCP Index — Linux update merged](https://github.com/TensorBlock/awesome-mcp-servers/pull/6099)** | Linux / Glama follow-up merged November 17; its entry still documents rc.9, not rc.10 |
 | **[MCPServers](https://mcpservers.org/servers/www-npmjs-com-package-boundaryxp-mcp)** | Live listing and npm link; rc.8 remains displayed, documentation refresh requested November 16 |
 | **[Serverdex](https://serverdex.io/server/io-github-joinwell52-ai-boundaryxp)** | Live listing with repository and npm links; cached rc.8 snippet omits required data path—use our setup guide |
 | **[Glama](https://glama.ai/mcp/servers/joinwell52-AI/BoundaryXP)** | Linux `0.4.0-rc.9-linux.1` published; platform build passed and discovered 21 tools / 17 resources. Public tool catalog is available. |
@@ -63,7 +63,7 @@ MCPwell and ToolCenter also contain directory entries, but no BXP-specific detai
 
 **Codex desktop:** Plugins → Add → **Add MCP server**. Follow the stdio setup guide. **Add plugin marketplace** expects a separate plugin-marketplace source; the npm URL, Registry URL and this product repository are not such a source. BXP is not currently listed in the Codex plugin catalog or Cursor Marketplace.
 
-**Plugin contribution:** OpenAI Community Plugins PR #57 is ready for maintainer review, with plugin 0.2.0 tested on Windows and Linux x64 and a controlled comparison of unrelated Grafana failures. punkpeye PR #19484 now includes Linux support, the live Glama badge and successful build/discovery evidence. Both await maintainer approval; a successful Glama build does not mean the PR is merged. Test scope and current submission status.
+**Plugin contribution (checked November 17):** OpenAI Community Plugins PR #57 remains open, with CLA passed. Plugin 0.2.0 still pins rc.9 on Windows and rc.9-linux.1 on Linux; it has not been upgraded to rc.10. punkpeye PR #19484 also remains open, with its submission check passed and rc.9 Linux / Glama evidence. Publishing rc.10 does not automatically update these contributions. See [directory and review status](docs/mcp/DISCOVERY.md).
 
 The OpenAI PR follow-up now implements **Linux plugin support**: platform-specific compiled locks, glibc checks and XDG storage. Windows/Linux × Node 22.19/24.19 each passed 9/9 checks; Linux Codex Git-marketplace installation and the installed plugin's full analysis/report/recheck flow passed. Candidate installation. Upstream approval remains pending; original Core source stays private.
 
