@@ -52,20 +52,20 @@
 |---|---|
 | **[npm：下载安装](https://www.npmjs.com/package/boundaryxp-mcp)** | rc.10 安装包，同页中英文介绍与安装说明 |
 | **[官方 MCP Registry](https://registry.modelcontextprotocol.io/?q=boundaryxp)** | 已登记 rc.10 及 npm 安装来源 |
-| **[TensorBlock MCP Index：Linux 更新已合并](https://github.com/TensorBlock/awesome-mcp-servers/pull/6099)** | Linux / Glama 后续更新于 11 月 17 日合并；条目仍介绍 rc.9，尚未同步 rc.10 |
-| **[MCPServers 中文页](https://mcpservers.org/zh-CN/servers/www-npmjs-com-package-boundaryxp-mcp)** | 已公开收录，有 npm 链接；仍显示 rc.8，11 月 16 日已请求刷新文档 |
-| **[Serverdex](https://serverdex.io/server/io-github-joinwell52-ai-boundaryxp)** | 已有公开条目；rc.8 配置示例缺少必填数据路径，请按本项目指南安装 |
+| **[TensorBlock MCP Index：rc.10 更新已提交](https://github.com/TensorBlock/awesome-mcp-servers/pull/6225)** | 旧 Linux 更新已合并；rc.10 / B345 后续 PR #6225 待审核 |
+| **[MCPServers 中文页](https://mcpservers.org/zh-CN/servers/www-npmjs-com-package-boundaryxp-mcp)** | 简介 rc.8 / 文档 rc.9；11 月 17 日已再次请求刷新，尚未生效 |
+| **[Serverdex](https://serverdex.io/server/io-github-joinwell52-ai-boundaryxp)** | 11 月 17 日实查为 rc.9，配置示例仍缺必填数据路径；编辑需登录认领，请按本项目指南安装 |
 | **[Glama](https://glama.ai/mcp/servers/joinwell52-AI/BoundaryXP)** | Linux `0.4.0-rc.9-linux.1` 已发布；平台构建通过，发现 21 工具 / 17 资源，公开工具目录可查。 |
 
-核对日期：2026-11-16。搜索 **BoundaryXP** 或 **boundaryxp-mcp**。安装新版以 npm 为准，第三方目录可能延迟同步。“已收录”表示能查到，不代表功能认证。完整目录状态及可登记入口。
+发行与 PR 核对日期：2026-11-17；历史平台验证保留原日期。搜索 **BoundaryXP** 或 **boundaryxp-mcp**。安装新版以 npm 为准，第三方目录可能延迟同步。“已收录”表示能查到，不代表功能认证。[完整目录状态](docs/mcp/DISCOVERY.md)。
 
 MCPwell、ToolCenter 的总目录中也有条目，但尚未核实 BXP 专属详情链接。分类/总目录只在完整说明中记录，不作为这里的 BXP 直达安装入口。
 
 **Codex 桌面版：**「插件」→「添加」→ **「添加 MCP 服务器」**，按stdio 接入指南配置。「添加插件市场」需要独立的插件市场源，不能填 npm、Registry 地址或本产品仓库；目前 BXP 未上架 Codex 插件目录或 Cursor Marketplace。
 
-**插件贡献进展（11 月 17 日核对）：**OpenAI Community Plugins PR #57 仍待审核，CLA 已通过；插件 0.2.0 实际锁定 Windows rc.9 / Linux rc.9-linux.1，尚未升级到 rc.10。punkpeye PR #19484 也仍待审核，提交检查已通过，所附 Linux / Glama 证据仍对应 rc.9。发布 rc.10 不会自动更新这些贡献。见[目录与审核状态](docs/mcp/DISCOVERY.md)。
+**插件贡献进展（11 月 17 日）：**[OpenAI PR #57](https://github.com/openai/community-plugins/pull/57) 已更新为插件 **0.3.0**，实际锁定 rc.10 / rc.10-linux.1，并通过复制迁移保留旧插件数据。Windows/Linux × Node 22/24 各 9/9 通过，迁移后的旧报告、保存响应重放和复验通过。[punkpeye #19484](https://github.com/punkpeye/awesome-mcp-servers/pull/19484) 已同步 rc.10 / B345 说明。两者仍待审核；此前 Glama 验证明确保留为 rc.9 证据。见[目录状态](docs/mcp/DISCOVERY.md)及[候选插件安装](docs/mcp/PLUGIN-MARKETPLACE.zh-CN.md)。
 
-OpenAI PR 跟进说明现已补齐 **Linux 插件支持**：独立编译依赖锁、glibc 检查与 XDG 数据目录。Windows/Linux × Node 22.19/24.19 四种组合均为 9/9 通过；Linux Codex 从 GitHub 市场安装、安装后副本的完整分析/报告/复验流程均通过。候选插件安装。上游仍待审核，原始 Core 源码保持私有。
+插件通过独立编译依赖锁、glibc 检查与 XDG 数据目录支持 Linux。历史模型分析和本轮保存响应重放按日期分别记录在验收证据中。上游仍待审核，原始 Core 源码保持私有。
 
 如需从「添加插件市场」试用发布者 fork，见候选插件安装指南。已隔离验证从 GitHub 添加市场、安装插件及调用安装后的 MCP；官方市场审核仍未完成。
 

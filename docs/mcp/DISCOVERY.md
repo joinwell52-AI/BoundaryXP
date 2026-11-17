@@ -16,9 +16,11 @@ Linux rc.10-linux.1 is distributed through the `linux` tag; Windows `latest/next
 
 The package README contains English and Chinese descriptions and setup instructions on the same page. npm metadata/downloads and the official Registry latest API were verified against rc.10; Cloudflare blocked visual verification of npm's default page in this check. Pending directory applications below are not live installation listings.
 
-**rc.10 同步缺项（2026-11-17）：**TensorBlock #6099 已合并，但条目仍为 rc.9；punkpeye #19484 与 OpenAI 社区插件 #57 均待审核，仍引用 rc.9。社区插件 0.2.0 的启动器与依赖锁实际固定 rc.9 / rc.9-linux.1，尚未完成 rc.10 升级。Glama 本轮可读取的介绍仍缓存 rc.9，不能把此前平台验证算作 rc.10 验证。MCPServers、Serverdex 本轮未能读取确认，以下保留上次结果。
+**rc.10 同步进展（2026-11-17）：**TensorBlock 旧 #6099 已合并，新的 [rc.10 / B345 PR #6225](https://github.com/TensorBlock/awesome-mcp-servers/pull/6225) 已提交、待审核。punkpeye #19484 的主说明和安装链接已同步 rc.10；OpenAI 社区插件 #57 已推送 `d3a372d`，插件 0.3.0 的启动器与依赖锁实际更新到 rc.10 / rc.10-linux.1，双平台测试及旧数据复制迁移通过，仍待审核。Glama 登录失效，rc.10 平台重验尚未完成。MCPServers 已再次请求刷新，页面显示“已请求”，简介仍为 rc.8、文档 rc.9；Serverdex 已读到 rc.9，但缺必填数据目录参数，编辑需登录认领。第三方缓存和审核未完成的部分不标为已生效。
 
-**Remaining rc.10 synchronization work (November 17):** TensorBlock #6099 is merged but still documents rc.9. punkpeye #19484 and OpenAI Community Plugins #57 remain open and reference rc.9. Plugin 0.2.0's launcher and dependency locks still pin rc.9 / rc.9-linux.1. Glama's readable description remains cached at rc.9; its earlier validation does not validate rc.10. MCPServers and Serverdex could not be read in this check; their earlier observations below are retained.
+**rc.10 synchronization (November 17):** TensorBlock #6099 merged; [follow-up #6225](https://github.com/TensorBlock/awesome-mcp-servers/pull/6225) submits rc.10 / B345. punkpeye #19484 now documents rc.10. OpenAI #57 contains commit `d3a372d`, plugin 0.3.0 with actual rc.10 / rc.10-linux.1 locks and tested copy migration; review remains pending. Glama requires renewed admin login and has no new rc.10 platform validation. MCPServers accepted another refresh request but still shows rc.8 summary / rc.9 docs. Serverdex now shows rc.9, with an incomplete data-path configuration; editing requires claim/login. Submission is not approval or cache refresh completion.
+
+Current plugin acceptance: each Windows/Linux × Node 22.19/24.19 combination passed 9/9; 21 tools, 17 resources, four complete directory examples and reconnect persistence. Real rc.9 fixture copies retained original records, profiles and 2/5 custom dictionaries. Linux old reports remained readable; a saved-response replay in a new project produced three valid calculations and the same report after zero-model recheck. This was regression replay, not new LLM analysis. [Evidence](https://github.com/joinwell52-AI/community-plugins/blob/codex/boundaryxp-plugin-20261116/tests/boundaryxp/evidence/rc10-plugin-20261117.json).
 
 rc.9 新增自定义 L2/L3 字典格式、校验、导入与页面入口，现为 21 个工具、17 个资源。rc.8 需一次性使用新版 bootstrap 升级；旧任务和字典不删除。见 npm 同页升级指南。目录收录不代表第三方已重新核验 rc.9。
 
@@ -43,7 +45,7 @@ These are discovery entries, not claims of rc.9 deployment approval or certifica
 
 ## rc.9 贡献与测试记录 / rc.9 contributions and test records
 
-### 2026-11-17 审核状态复核 / Review status recheck
+### 2026-11-17 早前 rc.9 审核记录 / Earlier rc.9 review snapshot
 
 | PR | 当前审核与检查 / Review and checks |
 |---|---|

@@ -52,20 +52,20 @@
 |---|---|
 | **[npm — install the package](https://www.npmjs.com/package/boundaryxp-mcp)** | rc.10 package, Chinese/English descriptions and installation on the same page |
 | **[Official MCP Registry](https://registry.modelcontextprotocol.io/?q=boundaryxp)** | Published rc.10 metadata and npm installation reference |
-| **[TensorBlock MCP Index — Linux update merged](https://github.com/TensorBlock/awesome-mcp-servers/pull/6099)** | Linux / Glama follow-up merged November 17; its entry still documents rc.9, not rc.10 |
-| **[MCPServers](https://mcpservers.org/servers/www-npmjs-com-package-boundaryxp-mcp)** | Live listing and npm link; rc.8 remains displayed, documentation refresh requested November 16 |
-| **[Serverdex](https://serverdex.io/server/io-github-joinwell52-ai-boundaryxp)** | Live listing with repository and npm links; cached rc.8 snippet omits required data path—use our setup guide |
+| **[TensorBlock MCP Index — rc.10 update submitted](https://github.com/TensorBlock/awesome-mcp-servers/pull/6225)** | Previous Linux update merged; rc.10 / B345 follow-up #6225 awaits review |
+| **[MCPServers](https://mcpservers.org/servers/www-npmjs-com-package-boundaryxp-mcp)** | rc.8 summary / rc.9 docs; refresh requested again November 17, not yet applied |
+| **[Serverdex](https://serverdex.io/server/io-github-joinwell52-ai-boundaryxp)** | November 17: cached rc.9 snippet omits required data path; claim/login needed for edits—use our setup guide |
 | **[Glama](https://glama.ai/mcp/servers/joinwell52-AI/BoundaryXP)** | Linux `0.4.0-rc.9-linux.1` published; platform build passed and discovered 21 tools / 17 resources. Public tool catalog is available. |
 
-Checked 2026-11-16. Search **BoundaryXP** or **boundaryxp-mcp**. Use npm for the current package; directory caches can lag. “Listed” means discoverable, not a certification. Full directory status and submission options.
+Release and PR status checked 2026-11-17; historical platform evidence retains its date. Search **BoundaryXP** or **boundaryxp-mcp**. Use npm for the current package; directory caches can lag. “Listed” means discoverable, not a certification. [Full directory status](docs/mcp/DISCOVERY.md).
 
 MCPwell and ToolCenter also contain directory entries, but no BXP-specific detail URL was verified. Their category/index pages are listed only in the full directory notes, not as direct BXP installation entries here.
 
 **Codex desktop:** Plugins → Add → **Add MCP server**. Follow the stdio setup guide. **Add plugin marketplace** expects a separate plugin-marketplace source; the npm URL, Registry URL and this product repository are not such a source. BXP is not currently listed in the Codex plugin catalog or Cursor Marketplace.
 
-**Plugin contribution (checked November 17):** OpenAI Community Plugins PR #57 remains open, with CLA passed. Plugin 0.2.0 still pins rc.9 on Windows and rc.9-linux.1 on Linux; it has not been upgraded to rc.10. punkpeye PR #19484 also remains open, with its submission check passed and rc.9 Linux / Glama evidence. Publishing rc.10 does not automatically update these contributions. See [directory and review status](docs/mcp/DISCOVERY.md).
+**Plugin contribution (November 17):** [OpenAI PR #57](https://github.com/openai/community-plugins/pull/57) now contains plugin **0.3.0**, pinned to rc.10 / rc.10-linux.1, with copy migration retaining old plugin data. Windows/Linux × Node 22/24 each passed 9/9; migrated historical reports and saved-response replay/recheck passed. [punkpeye #19484](https://github.com/punkpeye/awesome-mcp-servers/pull/19484) now documents rc.10 / B345. Both await review; earlier Glama validation remains explicitly rc.9 evidence. See [directory status](docs/mcp/DISCOVERY.md) and [candidate plugin installation](docs/mcp/PLUGIN-MARKETPLACE.en.md).
 
-The OpenAI PR follow-up now implements **Linux plugin support**: platform-specific compiled locks, glibc checks and XDG storage. Windows/Linux × Node 22.19/24.19 each passed 9/9 checks; Linux Codex Git-marketplace installation and the installed plugin's full analysis/report/recheck flow passed. Candidate installation. Upstream approval remains pending; original Core source stays private.
+The plugin supports Linux through separate compiled locks, glibc checks and XDG storage. Dated original-analysis and current replay checks remain distinct in the linked evidence. Upstream approval remains pending; original Core source stays private.
 
 To try the contributor fork through **Add plugin marketplace**, use the candidate plugin installation guide. Its GitHub-to-Codex installation and installed MCP were verified in isolation; official marketplace approval is still pending.
 

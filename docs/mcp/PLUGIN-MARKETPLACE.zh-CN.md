@@ -2,9 +2,9 @@
 
 [English](PLUGIN-MARKETPLACE.en.md) · [返回 MCP 安装指南](INSTALL.zh-CN.md)
 
-**候选插件 0.2.0 · Windows / Linux x64 · Node.js ≥22.19（含 npm）**
+**候选插件 0.3.0 · MCP rc.10 / B345 · Windows / Linux x64 · Node.js ≥22.19（含 npm）**
 
-Windows 锁定 MCP `0.4.0-rc.9`；Linux 锁定 `0.4.0-rc.9-linux.1`，要求 glibc ≥2.36，例如 Debian 12、Ubuntu 24.04。不支持 macOS、ARM64、Alpine/musl。
+Windows 锁定 MCP `0.4.0-rc.10`；Linux 锁定 `0.4.0-rc.10-linux.1`，要求 glibc ≥2.36，例如 Debian 12、Ubuntu 24.04。不支持 macOS、ARM64、Alpine/musl。完整 L2/L3 目录导入见 [B345 格式指南](npm/guides/DICTIONARIES.zh-CN.md)。
 
 [OpenAI Community Plugins PR #57](https://github.com/openai/community-plugins/pull/57)已正式待审核，尚未合并，也未获批进入 OpenAI 公共插件目录。下面安装的是发布者 fork 中可检查的候选插件，不是官方已审核插件。普通 MCP 安装仍可直接走 [npm](https://www.npmjs.com/package/boundaryxp-mcp#中文安装与升级)。
 
@@ -31,15 +31,17 @@ codex plugin add boundaryxp@community-plugins
 
 > 只通过 BoundaryXP MCP，调用 bx_capabilities 查看中文工具帮助，再调用 bx_profiles_list 和 bx_workbench_open。返回实际版本和工作台地址，不提交分析，不修改已有任务。
 
-首次连接会从 npm 安装对应平台的锁定编译包，需联网；日志只写到 stderr，最多为首次启动预留 300 秒。后续复用本机安装。预期返回 Windows rc.9 或 Linux rc.9-linux.1、21 个工具、17 项资源和独立本地工作台地址。模型来自当前宿主，不需要另配模型 API Key。
+首次连接会从 npm 安装对应平台的锁定编译包，需联网；日志只写到 stderr，最多为首次启动预留 300 秒。后续复用本机安装。预期返回 Windows rc.10 或 Linux rc.10-linux.1、21 个工具、17 项资源和独立本地工作台地址。模型来自当前宿主，不需要另配模型 API Key。
 
 ## 数据和版本
 
 Windows 数据路径仍为 `%LOCALAPPDATA%/BoundaryXP/CommunityPlugin`；Linux 使用 `$XDG_DATA_HOME/BoundaryXP/CommunityPlugin`，未设 XDG 时为 `$HOME/.local/share/BoundaryXP/CommunityPlugin`。均与普通 MCP 安装的数据目录分开。可用 `BXP_PLUGIN_HOME` 指向专用空目录；已有的无关非空目录会被拒绝。不会自动迁移其他安装的任务、字典或配置。请保留这个目录，卸载插件缓存不应删除任务数据。
 
-插件按平台锁定版本，不自动切换核心；原 Windows 依赖锁字节不变。未验收跨操作系统搬迁旧任务库。它启动本机原生编译包，不上传原始 Core 源码，不安装独立工作台产品，不接管 58618。已有 MCP 安装不需要为了使用 rc.9 改用这个候选插件。
+插件按平台锁定版本，不跟随 npm 浮动标签。升级前关闭旧插件连接；0.3.0 首次连接将本插件已停止使用的 `data-rc9` 复制到 `data-rc10`，校验文件摘要并保留原目录、配置和迁移回执。旧进程活动或目标目录不完整时拒绝启动，不杀进程、不删除数据。退回旧插件只能读取旧快照，不包含升级后的新增工作。`--install-only` 只下载、不迁移。未验收跨操作系统搬迁，不扫描或接管其他安装、58618；普通 MCP 用户无需改用此候选插件。
 
 ## 验证与限制
+
+当前 **0.3.0 / rc.10**：Windows/Linux x64 × Node 22.19/24.19 各 **9/9 通过、无跳过**，完整字典示例、真实 npm/native 工具、工作台和重连保留通过。真实 rc.9 测试副本升级后原任务、配置、字典字节保留，复制后的审计日志仅追加。Linux 旧报告读取及保存响应重放、复验通过，不称为新一轮模型分析。全新隔离 Linux Codex 从本地市场安装启用 0.3.0，安装后副本实际返回 rc.10-linux.1 / 21 工具 / 17 资源。[当前证据](https://github.com/joinwell52-AI/community-plugins/blob/codex/boundaryxp-plugin-20261116/tests/boundaryxp/evidence/rc10-plugin-20261117.json)。以下保留旧版验收记录。
 
 历史 Windows 0.1.0 验收：2026-11-16 在独立 Codex 配置和数据目录中，实际从上述 GitHub 来源添加市场、安装插件、读回启用状态，并调用安装后副本的 MCP 成功，返回 rc.9 / 21 工具。另有 7 项专项测试通过，覆盖中英文帮助、四份 L2/L3 格式示例、校验与导入、多 DEV 保存、工作台 HTTP 和重连数据保留。没有重新调用付费模型或伪造 LLM 响应；不称为本轮图形界面点击验收或语义准确率测试。
 
