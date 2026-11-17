@@ -17,15 +17,20 @@
 
 七个任务各自看起来可以执行，合起来却出现 **A → D → B → C → A** 的严格前置闭环。RT044 将跨小组依赖放回同一张图，展示冲突来自哪里。
 
-[![点击进入交互演示：任务树、7+1边界雷达与原文依据](assets/demos/workbench-zh.jpg)](https://boundaryxp-demo.vercel.app/#case=R389-383&axis=A&view=radar&lang=zh)
+<a href="https://boundaryxp-workbench-demo.joinwell52.chatgpt.site/#case=R389-383&amp;axis=A&amp;view=radar&amp;lang=zh">
+  <picture>
+    <source media="(max-width: 600px)" srcset="assets/demos/workbench-mobile-zh.jpg">
+    <img src="assets/demos/workbench-zh.jpg" alt="点击进入交互演示：任务树、7+1边界雷达与原文依据">
+  </picture>
+</a>
 
 **点击上图进入演示。** 选择用例、点击雷达，再查看原文或完整报告；报告和 Markdown 导出跟随界面语言，任务原文保留来源语言。
 
 | 用例 | 展示结果 |
 |---|---|
-| RT044 · 跨小组执行链形成严格闭环 | **越界** |
-| RT042 · 共享检测仪相邻时段交接，端点释放 | **未越界** |
-| L23-050 · “由他确认”没有唯一绑定责任人 | **信息不全** |
+| RT044 · 跨组闭环 | **越界** |
+| RT042 · 相邻交接 | **未越界** |
+| L23-050 · 责任未明 | **信息不全** |
 
 演示含五个来自58618保存记录的开发用例，包括两个英文原文案例。它回放原 B-332 任务树、判定与原七步报告，不连接本地服务或重新分析，也不代表当前发行版的新验收。
 
@@ -52,10 +57,10 @@ Windows 版本为 **0.4.0-rc.9**，使用 latest/next 渠道；Linux 版本为 *
 
 ## L2 / L3：行业与企业语义库
 
-| 语义库 | 作用 |
+| 层 | 作用 |
 |---|---|
-| **L2 · 行业语义库** | 行业动作、实体、角色、资源及相关术语，为任务解释提供领域上下文。 |
-| **L3 · 企业语义库** | 企业自己的术语、组织与角色称谓、受控别名等上下文，帮助区分具体对象和表述。 |
+| **L2** | **行业语义库：** 行业动作、实体、角色、资源及相关术语，为任务解释提供领域上下文。 |
+| **L3** | **企业语义库：** 企业自己的术语、组织与角色称谓、受控别名等上下文，帮助区分具体对象和表述。 |
 
 rc.9 支持自定义字典的格式获取、校验与导入。先校验，再按返回摘要导入；选择资源时绑定版本和摘要。导入不自动绑定或修改已有任务，也不代表语义内容已被证明正确。
 
@@ -96,3 +101,4 @@ rc.9 支持自定义字典的格式获取、校验与导入。先校验，再按
 | 版本变化与完整说明 | [升级日志](CHANGELOG.zh-CN.md) · [文档导航](docs/README.md) |
 | 提问或提交贡献 | [问题入口](https://github.com/joinwell52-AI/BoundaryXP/issues/new/choose) · [贡献指南](CONTRIBUTING.md) |
 | 许可与公开核查 | [MIT 许可](LICENSE) · [范围与材料条件](docs/PUBLICATION-SCOPE.md) · [历史核查](docs/PREPUBLICATION-CHECK.md) |
+

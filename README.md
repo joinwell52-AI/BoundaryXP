@@ -17,15 +17,20 @@ Connect through MCP or use the local browser workbench. Findings are **Violation
 
 In **ENG20-003**, five tasks span several roles. Their combined dependencies form the strict **A → B → C → D → A** cycle. The demo preserves the original English sources and calculation records.
 
-[![Open the interactive demo: task tree, 7+1 radar and original English evidence](assets/demos/workbench-en.jpg)](https://boundaryxp-demo.vercel.app/?lang=en#case=ENG20-003&axis=A&view=radar&lang=en)
+<a href="https://boundaryxp-workbench-demo.joinwell52.chatgpt.site/?lang=en#case=ENG20-003&amp;axis=A&amp;view=radar&amp;lang=en">
+  <picture>
+    <source media="(max-width: 600px)" srcset="assets/demos/workbench-mobile-en.jpg">
+    <img src="assets/demos/workbench-en.jpg" alt="Open the interactive demo: task tree, 7+1 radar and original English evidence">
+  </picture>
+</a>
 
 **Click the screenshot to try the demo.** Select a case, click a radar view and inspect sources or the full report. Reports and Markdown exports follow the interface language; task evidence retains its source language.
 
 | Case | Displayed result |
 |---|---|
-| RT044 · Cross-team orders combine into a strict cycle | **Violation** |
-| RT042 · Adjacent instrument bookings release the shared endpoint | **Within bounds** |
-| L23-050 · “Confirmed by him” has no unique accountable-owner binding | **Incomplete information** |
+| RT044 · Dependency cycle | **Violation** |
+| RT042 · Adjacent bookings | **Within bounds** |
+| L23-050 · Unresolved owner | **Incomplete information** |
 
 The demo replays five saved 58618 development cases, including two originally written in English. It retains their B-332 task trees, verdicts and seven-step reports without connecting to a local service or rerunning analysis. It is not a new acceptance test of the current release.
 
@@ -52,10 +57,10 @@ Shared relations preserve objects, conditions, dependencies and handoffs across 
 
 ## L2 / L3: industry and enterprise semantics
 
-| Semantic library | Purpose |
+| Layer | Purpose |
 |---|---|
-| **L2 · Industry** | Domain actions, entities, roles, resources and terminology provide industry context for interpreting tasks. |
-| **L3 · Enterprise** | Organization-specific terminology, organizational and role names, controlled aliases and related context distinguish local objects and expressions. |
+| **L2** | **Industry semantics:** Domain actions, entities, roles, resources and terminology provide industry context for interpreting tasks. |
+| **L3** | **Enterprise semantics:** Organization-specific terminology, organizational and role names, controlled aliases and related context distinguish local objects and expressions. |
 
 rc.9 supports custom-dictionary formats, validation and import. Validate first and import with the returned digest, then explicitly select version-and-digest-bound resources. Import does not bind resources or edit existing tasks automatically, and does not establish semantic correctness.
 
@@ -96,3 +101,4 @@ This public repository contains paper, protocol, guides, research material and c
 | Version history and full documentation | [Changelog](CHANGELOG.md) · [Documentation](docs/README.md) |
 | Questions and contributions | [Open an issue](https://github.com/joinwell52-AI/BoundaryXP/issues/new/choose) · [Contributing](CONTRIBUTING.md) |
 | License and publication audit | [MIT license](LICENSE) · [Scope and material terms](docs/PUBLICATION-SCOPE.md) · [Historical audit](docs/PREPUBLICATION-CHECK.md) |
+
