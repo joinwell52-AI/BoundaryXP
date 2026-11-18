@@ -1,3 +1,9 @@
+# 0.4.0-rc.11 · B348 prerelease / 预发行版
+
+- Save complete Chinese and English seven-step reports from one analysis, sharing evidence and native verification. Read either language and bilingual Markdown through `bx_result_get`; retain old monolingual reports without inventing translations.
+- Synchronize explicit provider connection using draft credentials, streamed connection status, model selection invalidation and the evidence panel disclosure.
+- Preserve existing tasks, dictionaries, configuration and failed jobs. Native Core algorithms are unchanged; release validation is recorded separately in `mcp/RC11-RELEASE.md` in the private source repository.
+
 # 0.4.0-rc.10 · prerelease / 预发行版 · 2026-11-17
 
 - Adopt the B-345 workbench, instructions, API streaming/receipt handling, request counting and report math-escape decoding. Native Core algorithms and binary remain unchanged; this is not a new semantic-accuracy claim.

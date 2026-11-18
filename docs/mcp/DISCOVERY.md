@@ -2,7 +2,15 @@
 
 发行入口与 PR 最新核对日期：2026-11-18；第三方页面与历史记录保留各自核对日期。安装包分发、目录登记和人工审核分别记录。
 
-## 2026-11-18 最新进展 / Latest update
+## 2026-11-18 rc.11 发布同步 / rc.11 synchronization
+
+Windows `0.4.0-rc.11`（latest/next）及 Linux `0.4.0-rc.11-linux.1`（linux）已发布，匿名下载摘要与验收包一致；官方 Registry 已登记并读回 rc.11。产品基线 B348，21 工具 / 17 资源。见 [rc.11 验收](RC11.md)与[发布回执](RC11-PUBLICATION.json)。默认 npm 网页已实际打开为 rc.11，中英文正文和安装说明在同页；首次自动检查已结束。
+
+TensorBlock #6225 已于 11 月 18 日合并；新版本需另提更新 PR。punkpeye #19484 与 OpenAI #57 仍待审核。Glama 最近已完成的平台验证为 rc.10，本轮 rc.11 复验、Serverdex 编辑及目录刷新逐项跟进；不把此前验证改写为新版通过。下方旧版本段落为历史快照，由本节及后续新回执覆盖。
+
+Both rc.11 npm archives and the official Registry entry are verified. TensorBlock's rc.10 update merged; the other existing PRs remain under review. Third-party page versions and Glama builds are tracked separately, not inferred from npm publication. Older dated sections below preserve their original scope.
+
+## 2026-11-18 早前 rc.10 进展 / Earlier rc.10 update
 
 - **Glama：已完成 rc.10。** 构建 `01a1ec2d-28be-7008-922a-73f25393c56d` 成功，实际启动 npm `0.4.0-rc.10-linux.1` / B345，发现 21 工具和 17 资源。09:05（UTC+8）发布 Glama 标记 `0.4.0-rc.linux.10.1`，标为 Latest。平台标记与 npm 版本的区别、摘要及完整证据见 [Glama rc.10 验证](GLAMA-RC10.md)。原 rc.9 记录保留为历史。
 - **Serverdex：已登录并关联认领，但未完成编辑。** 页面确认 GitHub 仓库归属并将条目加入账户；账户仍显示“Waiting for your link”，两处编辑入口都返回“Only the verified owner of this server can edit it.”。免费验证要求 npm 主页上的 followed backlink；未购买付费方案，未为此另发 npm 版本。公开页仍为 rc.9，自动安装配置缺 `--data-root`。新说明保存失败，不能称为已同步 rc.10。
@@ -14,7 +22,7 @@ Glama has now built, started and published the rc.10 Linux package; its separate
 
 ## 当前安装入口 / Current installation
 
-本轮发行入口：Windows `0.4.0-rc.10`（`latest/next`）；Linux [`0.4.0-rc.10-linux.1`](https://www.npmjs.com/package/boundaryxp-mcp/v/0.4.0-rc.10-linux.1)（`linux` 渠道）。[中文安装](linux/INSTALL.zh-CN.md)、[English](linux/INSTALL.en.md)、[Dockerfile](../../Dockerfile)、[rc.10 验收](RC10.md)。公开 Dockerfile 只下载编译包并验证摘要，不要求公开 Core 源码。下文第三方目录和 PR 的日期、版本是此前实查结果，不冒称本轮已全部刷新。
+本轮发行入口：Windows `0.4.0-rc.11`（`latest/next`）；Linux [`0.4.0-rc.11-linux.1`](https://www.npmjs.com/package/boundaryxp-mcp/v/0.4.0-rc.11-linux.1)（`linux` 渠道）。[中文安装](linux/INSTALL.zh-CN.md)、[English](linux/INSTALL.en.md)、[Dockerfile](../../Dockerfile)、[rc.11 验收](RC11.md)。公开 Dockerfile 只下载编译包并验证摘要，不要求公开 Core 源码。下文第三方目录和 PR 的日期、版本是此前实查结果，不冒称本轮已全部刷新。
 
 Glama 已于 2026-11-16 17:26（UTC+8）发布 `0.4.0-rc.9-linux.1`。平台构建测试 `01a1e3ab-bf33-7cd8-9dbc-a536b14fffb7` 为 `success`，耗时 1m 6.4s，固定公开提交 `8c1397d`；实际启动并发现 21 工具、17 资源，公开页已显示工具目录。仅使用 npm 编译包及固定 SHA-256，没有提交原始 Core 源码。此结果是构建和协议发现通过，不扩大为算法正确性认证或付费实例已开通。
 

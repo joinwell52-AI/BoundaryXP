@@ -1,12 +1,16 @@
 **简体中文** | [English](https://www.npmjs.com/package/boundaryxp-mcp#english)
 
+> rc.11 / B348 预发行版。
+
+B348 一次分析保存中英文两份完整报告，共用计算核验。`bx_result_get` 支持 `language: "zh-CN"` 或 `"en"`，返回单语及双语 Markdown；历史报告保留。API 模式先连接验证、获取型号，再选择保存；证据面板支持折叠。
+
 # 界痕 · BoundaryXP（BXP）
 
 **面向 AI Agent 与协作团队的 7+1 任务边界分析和计算复核工具。**
 
 从完整任务要求形成带原文证据的 **7+1 关联表示**，检查父子任务及其组合约束，追溯为什么**越界、未越界，或信息不全**。报告分别保留 LLM 判断、原生计算器复核、原文依据和未明确项。
 
-**boundaryxp-mcp 0.4.0-rc.10 · B-345 · Windows x64 · Node.js ≥22.18 · MIT · 预发行版**
+**boundaryxp-mcp 0.4.0-rc.11 · B-348 · Windows x64 · Node.js ≥22.18 · MIT · 预发行版**
 
 [安装与升级](https://github.com/joinwell52-AI/BoundaryXP/blob/main/docs/mcp/npm/INSTALL.zh-CN.md) · [中文产品仓库](https://github.com/joinwell52-AI/BoundaryXP/blob/main/README.zh-CN.md) · [发行下载](https://github.com/joinwell52-AI/BoundaryXP/releases)
 
@@ -41,7 +45,7 @@
 
 支持完整 UTF-8 Markdown/TXT、多级父子关系、显式任务编号和父任务编号，以及多个相同角色的子任务。DEV-01、DEV-02 是不同节点；支持 `PM → DEV（1/14）` 等标题。先预览并确认关系，再分析。
 
-[交互演示](https://boundaryxp-workbench-demo.joinwell52.chatgpt.site/)提供 B-332 保存记录：RT044 存在严格前置闭环，RT042 是半开区间相邻，L23-050 的责任人指代未绑定。这是历史回放，不代表本轮 MCP 新分析或 B-345 测试结果。
+[交互演示](https://boundaryxp-demo.vercel.app/)提供 B-332 保存记录：RT044 存在严格前置闭环，RT042 是半开区间相邻，L23-050 的责任人指代未绑定。这是历史回放，不代表本轮 MCP 新分析或 B-348 测试结果。
 
 ## 边界怎样计算？
 
@@ -71,7 +75,7 @@
   "mcpServers": {
     "BoundaryXP": {
       "command": "npx.cmd",
-      "args": ["--yes", "boundaryxp-mcp@0.4.0-rc.10", "--data-root", "C:/BXP/data"]
+      "args": ["--yes", "boundaryxp-mcp@0.4.0-rc.11", "--data-root", "C:/BXP/data"]
     }
   }
 }

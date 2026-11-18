@@ -1,4 +1,12 @@
-# 当前版本 / Current release: 0.4.0-rc.10
+# 当前版本 / Current release: 0.4.0-rc.11
+
+2026-11-18：Windows `0.4.0-rc.11` / Linux `0.4.0-rc.11-linux.1` 已发布，基于 B348。一次分析保存完整中英报告，共用 Core 核验；API 模式先连接获取型号再保存；证据面板可折叠。原生计算算法未改，旧任务、失败记录、字典与配置保留。仍为 rc 预发行版。
+
+Both platform archives were anonymously downloaded and matched the audited bytes. The official Registry rc.11 entry was read back successfully. Complete bilingual reports share calculation receipts; optional provider connection/model discovery and evidence disclosure follow B348. Publication does not forcibly upgrade existing installations.
+
+**[rc.11 验收 / Acceptance](RC11.md)** · [发布回执 / Publication receipt](RC11-PUBLICATION.json) · [npm 同页安装 / In-page setup](https://www.npmjs.com/package/boundaryxp-mcp) · [目录状态 / Directory status](DISCOVERY.md)
+
+## 历史：0.4.0-rc.10
 
 2026-11-17：基于 **B345** 的 MCP 更新，Windows `0.4.0-rc.10`，Linux `0.4.0-rc.10-linux.1`。仍为 rc 预发行，21 个工具、17 项资源。
 

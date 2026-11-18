@@ -2,7 +2,7 @@
 
 # Workbench changelog
 
-The current workbench baseline is **B345**. MCP rc.10 incorporates B345 functionality; its calculator algorithm remains unchanged. See [MCP release evidence](docs/mcp/RC10.md) and [L2/L3 directory specification](docs/mcp/npm/guides/DICTIONARIES.md). The B335 entries below remain historical records compiled on 2026-11-09 from their original receipts.
+The current MCP baseline is **B348 / rc.11**. One analysis saves complete Chinese and English reports with shared calculation receipts; API settings connect and fetch models before saving, and the evidence panel can collapse. The calculator algorithm remains unchanged. See [rc.11 release evidence](docs/mcp/RC11.md) and [L2/L3 directory specification](docs/mcp/npm/guides/DICTIONARIES.md). Earlier B345 / rc.10 evidence remains in [RC10.md](docs/mcp/RC10.md). The B335 entries below remain historical records compiled on 2026-11-09 from their original receipts.
 
 This repository distributes research and protocol materials. These notes describe the private workbench without distributing source, installation packages, raw runtime logs or private task data. The [redacted verification summary](docs/releases/WORKBENCH-HISTORY-VERIFICATION.json) retains build identities, check scopes, counts and source-receipt digests. Papers and saved cases retain their actual historical versions.
 
