@@ -36,7 +36,7 @@
 
 ## 安装 BXP · 在哪里找到 BXP
 
-**Linux x64 / Docker：** `0.4.0-rc.11-linux.1` 使用 `linux` 渠道（glibc ≥2.36、Node ≥22.19）；Windows 的 `latest/next` 使用 rc.11。B348 新增完整中英报告、模型连接验证和证据折叠，原生 Core 未改。[rc.11 验收](docs/mcp/RC11.md)。Glama 最近完成的平台验证仍为 [rc.10](docs/mcp/GLAMA-RC10.md)，新版以新的构建回执为准。
+**Linux x64 / Docker：** `0.4.0-rc.11-linux.1` 使用 `linux` 渠道（glibc ≥2.36、Node ≥22.19）；Windows 的 `latest/next` 使用 rc.11。B348 新增完整中英报告、模型连接验证和证据折叠，原生 Core 未改。[rc.11 验收](docs/mcp/RC11.md)。[Glama rc.11](docs/mcp/GLAMA-RC11.md) 已通过真实原生构建及协议发现，并发布为平台 Latest。
 
 
 | 用途 | 文档与入口 |
@@ -52,10 +52,10 @@
 |---|---|
 | **[npm：下载安装](https://www.npmjs.com/package/boundaryxp-mcp)** | rc.11 安装包，同页中英文介绍与安装说明 |
 | **[官方 MCP Registry](https://registry.modelcontextprotocol.io/?q=boundaryxp)** | 已登记 rc.11 及 npm 安装来源 |
-| **[TensorBlock MCP Index](https://tensorblock.co/mcp/servers/github-joinwell52-ai-boundaryxp-16b09093)** | rc.10 / B345 PR #6225 已于 11 月 18 日合并；rc.11 后续更新见[目录状态](docs/mcp/DISCOVERY.md) |
-| **[MCPServers 中文页](https://mcpservers.org/zh-CN/servers/www-npmjs-com-package-boundaryxp-mcp)** | 简介 rc.8 / 文档 rc.9；11 月 17 日已再次请求刷新，尚未生效 |
+| **[TensorBlock MCP Index](https://tensorblock.co/mcp/servers/github-joinwell52-ai-boundaryxp-16b09093)** | rc.10 / B345 PR #6225 已于 11 月 18 日合并；[rc.11 PR #6302](https://github.com/TensorBlock/awesome-mcp-servers/pull/6302) 待审核 |
+| **[MCPServers 中文页](https://mcpservers.org/zh-CN/servers/www-npmjs-com-package-boundaryxp-mcp)** | 简介 rc.8 / 文档 rc.9；11 月 18 日已再次请求刷新，尚未生效 |
 | **[Serverdex](https://serverdex.io/server/io-github-joinwell52-ai-boundaryxp)** | 11 月 18 日已关联认领，验证仍待完成，平台拒绝保存；缓存 rc.9 配置缺必填 `--data-root`，请按本项目指南安装 |
-| **[Glama](https://glama.ai/mcp/servers/joinwell52-AI/BoundaryXP)** | rc.10 Linux 包已于 11 月 18 日验证并发布，发现 21 工具 / 17 资源；[平台标记与证据](docs/mcp/GLAMA-RC10.md) |
+| **[Glama](https://glama.ai/mcp/servers/joinwell52-AI/BoundaryXP)** | rc.11 Linux 包已于 11 月 18 日验证并发布，发现 21 工具 / 17 资源；[平台标记与证据](docs/mcp/GLAMA-RC11.md) |
 
 发行与 PR 核对日期：2026-11-18；历史平台验证保留原日期。搜索 **BoundaryXP** 或 **boundaryxp-mcp**。安装新版以 npm 为准，第三方目录可能延迟同步。“已收录”表示能查到，不代表功能认证。[完整目录状态](docs/mcp/DISCOVERY.md)。
 
@@ -63,7 +63,7 @@ MCPwell、ToolCenter 的总目录中也有条目，但尚未核实 BXP 专属详
 
 **Codex 桌面版：**「插件」→「添加」→ **「添加 MCP 服务器」**，按stdio 接入指南配置。「添加插件市场」需要独立的插件市场源，不能填 npm、Registry 地址或本产品仓库；目前 BXP 未上架 Codex 插件目录或 Cursor Marketplace。
 
-**插件贡献进展（11 月 17 日）：**[OpenAI PR #57](https://github.com/openai/community-plugins/pull/57) 已更新为插件 **0.3.0**，实际锁定 rc.10 / rc.10-linux.1，并通过复制迁移保留旧插件数据。Windows/Linux × Node 22/24 各 9/9 通过，迁移后的旧报告、保存响应重放和复验通过。[punkpeye #19484](https://github.com/punkpeye/awesome-mcp-servers/pull/19484) 已同步 rc.10 / B345 说明。两者仍待审核；此前 Glama 验证明确保留为 rc.9 证据。见[目录状态](docs/mcp/DISCOVERY.md)及[候选插件安装](docs/mcp/PLUGIN-MARKETPLACE.zh-CN.md)。
+**插件贡献进展（11 月 18 日）：**[OpenAI PR #57](https://github.com/openai/community-plugins/pull/57) 为插件 **0.4.0**，实际锁定 rc.11 / rc.11-linux.1。Windows/Linux × Node 22.19/24.19 各 9/9 通过；复制迁移保留原文件，两平台完整双语案例回放及复验通过，新提交 CLA 已通过。[punkpeye #19484](https://github.com/punkpeye/awesome-mcp-servers/pull/19484) 的条目和 Glama 证据已同步 rc.11。两者仍待维护者审核。见[目录状态](docs/mcp/DISCOVERY.md)及[候选插件安装](docs/mcp/PLUGIN-MARKETPLACE.zh-CN.md)。
 
 插件通过独立编译依赖锁、glibc 检查与 XDG 数据目录支持 Linux。历史模型分析和本轮保存响应重放按日期分别记录在验收证据中。上游仍待审核，原始 Core 源码保持私有。
 
@@ -82,7 +82,7 @@ MCPwell、ToolCenter 的总目录中也有条目，但尚未核实 BXP 专属详
 | 宿主配置 | [Codex / Cursor stdio 接入指南](docs/mcp/npm/INSTALL.zh-CN.md#codex-与其他宿主) |
 | 插件贡献 | [OpenAI Community Plugins PR #57](https://github.com/openai/community-plugins/pull/57) |
 | punkpeye 目录贡献 | [Awesome MCP Servers PR #19484](https://github.com/punkpeye/awesome-mcp-servers/pull/19484) |
-| 平台验证 | [Glama rc.10 构建与发现证据](docs/mcp/GLAMA-RC10.md) |
+| 平台验证 | [Glama rc.11 构建与发现证据](docs/mcp/GLAMA-RC11.md) |
 | 贡献验证 | [插件测试与提交记录](docs/mcp/DISCOVERY.md#rc9-contributions) |
 | Linux 插件支持 | [OpenAI PR #57 Linux 跟进](https://github.com/openai/community-plugins/pull/57#issuecomment-6935083522) |
 | 插件试用 | [候选插件中文安装指南](docs/mcp/PLUGIN-MARKETPLACE.zh-CN.md) |
@@ -237,15 +237,15 @@ flowchart LR
   F --> G["人及宿主复核"]
 ```
 
-B335 工作台采用**一次语义请求**，随后由 Core 作程序核验，没有独立审阅请求或自动重试。LLM 解释原文，Core 核验提交的结构、来源、绑定与受支持的有限操作数；Core 不调用模型、不访问网络、不执行任务中的业务指令。
+B348 联合工作流采用**一次语义分析**，随后由 Core 作程序核验，没有独立审阅请求或自动重试。LLM 解释原文，Core 核验提交的结构、来源、绑定与受支持的有限操作数；Core 不调用模型、不访问网络、不执行任务中的业务指令。
 
 <details>
-<summary>展开查看 B335 功能、输入限制与证据边界</summary>
+<summary>展开查看 B348 功能、输入限制与证据边界</summary>
 
 - **完整任务树：** 整篇 UTF-8 `.txt` / `.md` 导入，支持角色标题、显式任务及父任务编号、前向引用、多层关系和保存前预览。
 - **可核对结果：** 任务树、7+1 雷达、LLM 与计算器结论、引用、未决、历史及导出；失败尝试与保存结果分开呈现。
 - **L2 / L3：** 行业及企业字典保留版本化引用；没有活动 L1 层，加载资源不产生业务权限。
-- **中英文：** 界面、报告及 Markdown 导出保留原始任务文本与保存判定；首次报告翻译调用模型，按快照缓存。
+- **中英文：** B348 新分析同时保存两份完整报告，共用判定和计算回执；切换语言读取已保存报告，Markdown 可导出当前语言或双语。历史报告保留原版本。
 - **数学输入与未知项：** 区分允许取值、未定事实及父／子方案一致性；集合身份支持字符串和安全整数，不混同两者，不代填未知结论。
 - **启动与恢复：** 有界并发读取历史作业，保留原恢复规则；HTTP 身份核对完成后才提示就绪。
 
@@ -255,7 +255,7 @@ B335 工作台采用**一次语义请求**，随后由 Core 作程序核验，�
 
 已评审协议基线为 BXP-0001 `0.4.0-draft.2`；工作台仍使用已记录的 draft.1 附件，不声明已完整迁移或全面符合协议。实现说明 · 研究证据
 
-宿主分析及首次翻译可能将所选原文与字典发送到配置的模型服务商。使用私有材料前应核对该数据流。
+宿主分析或显式选用的 API 配置可能将所选原文与字典发送到对应模型服务商。切换已保存的 B348 报告语言不另发翻译请求。使用私有材料前应核对分析数据流。
 
 </details>
 

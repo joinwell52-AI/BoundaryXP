@@ -36,7 +36,7 @@
 
 ## Install BXP · Find BXP
 
-**Linux x64 / Docker:** `0.4.0-rc.11-linux.1` uses the `linux` channel (glibc ≥2.36, Node ≥22.19). Windows `latest/next` use rc.11. B348 adds complete Chinese/English reports, provider connection checks and a collapsible evidence panel; the native Core is unchanged. [rc.11 acceptance](docs/mcp/RC11.md). Glama's last completed platform validation remains [rc.10](docs/mcp/GLAMA-RC10.md) until the new build is published.
+**Linux x64 / Docker:** `0.4.0-rc.11-linux.1` uses the `linux` channel (glibc ≥2.36, Node ≥22.19). Windows `latest/next` use rc.11. B348 adds complete Chinese/English reports, provider connection checks and a collapsible evidence panel; the native Core is unchanged. [rc.11 acceptance](docs/mcp/RC11.md). [Glama rc.11](docs/mcp/GLAMA-RC11.md) built and discovered the real native server, then published platform release `0.4.0-rc.linux.11.1` as Latest.
 
 
 | Purpose | Document or page |
@@ -52,10 +52,10 @@
 |---|---|
 | **[npm — install the package](https://www.npmjs.com/package/boundaryxp-mcp)** | rc.11 package, Chinese/English descriptions and installation on the same page |
 | **[Official MCP Registry](https://registry.modelcontextprotocol.io/?q=boundaryxp)** | Published rc.11 metadata and npm installation reference |
-| **[TensorBlock MCP Index](https://tensorblock.co/mcp/servers/github-joinwell52-ai-boundaryxp-16b09093)** | rc.10 / B345 PR #6225 merged November 18; rc.11 follow-up is tracked in [directory status](docs/mcp/DISCOVERY.md) |
-| **[MCPServers](https://mcpservers.org/servers/www-npmjs-com-package-boundaryxp-mcp)** | rc.8 summary / rc.9 docs; refresh requested again November 17, not yet applied |
+| **[TensorBlock MCP Index](https://tensorblock.co/mcp/servers/github-joinwell52-ai-boundaryxp-16b09093)** | rc.10 / B345 PR #6225 merged November 18; [rc.11 PR #6302](https://github.com/TensorBlock/awesome-mcp-servers/pull/6302) awaits review |
+| **[MCPServers](https://mcpservers.org/servers/www-npmjs-com-package-boundaryxp-mcp)** | rc.8 summary / rc.9 docs; refresh requested again November 18, not yet applied |
 | **[Serverdex](https://serverdex.io/server/io-github-joinwell52-ai-boundaryxp)** | November 18: claim linked to owner, but verification still pending and edits refused. Cached rc.9 config omits required `--data-root`; use our setup guide |
-| **[Glama](https://glama.ai/mcp/servers/joinwell52-AI/BoundaryXP)** | rc.10 Linux package verified and published November 18; 21 tools / 17 resources. [Platform ID and evidence](docs/mcp/GLAMA-RC10.md) |
+| **[Glama](https://glama.ai/mcp/servers/joinwell52-AI/BoundaryXP)** | rc.11 Linux package verified and published November 18; 21 tools / 17 resources. [Platform ID and evidence](docs/mcp/GLAMA-RC11.md) |
 
 Release and PR status checked 2026-11-18; historical platform evidence retains its date. Search **BoundaryXP** or **boundaryxp-mcp**. Use npm for the current package; directory caches can lag. “Listed” means discoverable, not a certification. [Full directory status](docs/mcp/DISCOVERY.md).
 
@@ -63,7 +63,7 @@ MCPwell and ToolCenter also contain directory entries, but no BXP-specific detai
 
 **Codex desktop:** Plugins → Add → **Add MCP server**. Follow the stdio setup guide. **Add plugin marketplace** expects a separate plugin-marketplace source; the npm URL, Registry URL and this product repository are not such a source. BXP is not currently listed in the Codex plugin catalog or Cursor Marketplace.
 
-**Plugin contribution (November 17):** [OpenAI PR #57](https://github.com/openai/community-plugins/pull/57) now contains plugin **0.3.0**, pinned to rc.10 / rc.10-linux.1, with copy migration retaining old plugin data. Windows/Linux × Node 22/24 each passed 9/9; migrated historical reports and saved-response replay/recheck passed. [punkpeye #19484](https://github.com/punkpeye/awesome-mcp-servers/pull/19484) now documents rc.10 / B345. Both await review; earlier Glama validation remains explicitly rc.9 evidence. See [directory status](docs/mcp/DISCOVERY.md) and [candidate plugin installation](docs/mcp/PLUGIN-MARKETPLACE.en.md).
+**Plugin contribution (November 18):** [OpenAI PR #57](https://github.com/openai/community-plugins/pull/57) contains plugin **0.4.0**, pinned to rc.11 / rc.11-linux.1. Windows/Linux × Node 22.19/24.19 each passed 9/9; copy migration retained original files, and complete bilingual case replay/recheck passed on both platforms. The latest-head CLA passed. [punkpeye #19484](https://github.com/punkpeye/awesome-mcp-servers/pull/19484) now contains the rc.11 entry and Glama evidence. Both await maintainer review. See [directory status](docs/mcp/DISCOVERY.md) and [candidate plugin installation](docs/mcp/PLUGIN-MARKETPLACE.en.md).
 
 The plugin supports Linux through separate compiled locks, glibc checks and XDG storage. Dated original-analysis and current replay checks remain distinct in the linked evidence. Upstream approval remains pending; original Core source stays private.
 
@@ -82,7 +82,7 @@ To try the contributor fork through **Add plugin marketplace**, use the candidat
 | Host configuration | [Codex / Cursor stdio setup guide](docs/mcp/npm/INSTALL.md#codex-and-other-hosts) |
 | Plugin contribution | [OpenAI Community Plugins PR #57](https://github.com/openai/community-plugins/pull/57) |
 | punkpeye listing | [Awesome MCP Servers PR #19484](https://github.com/punkpeye/awesome-mcp-servers/pull/19484) |
-| Platform verification | [Glama rc.10 build and discovery evidence](docs/mcp/GLAMA-RC10.md) |
+| Platform verification | [Glama rc.11 build and discovery evidence](docs/mcp/GLAMA-RC11.md) |
 | Contribution checks | [Plugin tests and submission records](docs/mcp/DISCOVERY.md#rc9-contributions) |
 | Linux plugin support | [OpenAI PR #57 Linux follow-up](https://github.com/openai/community-plugins/pull/57#issuecomment-6935083522) |
 | Plugin trial | [Candidate plugin installation · English](docs/mcp/PLUGIN-MARKETPLACE.en.md) |
@@ -238,15 +238,15 @@ flowchart LR
   F --> G["Human / host review"]
 ```
 
-The B335 workbench makes **one semantic request**, followed by Core checks, with no separate audit request or automatic retry. LLMs interpret source meaning; Core validates submitted structures, source references, bindings and supported finite operands. Core does not call models, access the network or execute task instructions.
+The B348 joint workflow uses **one semantic analysis**, followed by Core checks, with no separate audit request or automatic retry. LLMs interpret source meaning; Core validates submitted structures, source references, bindings and supported finite operands. Core does not call models, access the network or execute task instructions.
 
 <details>
-<summary>B335 capabilities, input limits and evidence boundaries</summary>
+<summary>B348 capabilities, input limits and evidence boundaries</summary>
 
 - **Complete task trees:** whole-document UTF-8 `.txt` / `.md` import, role headings, explicit task and parent IDs, forward references, multiple levels and relationship preview.
 - **Inspectable results:** task tree, 7+1 radar, model/calculator conclusions, quotations, unresolved items, saved history and exports. Failed attempts remain distinct from saved results.
 - **L2 / L3:** versioned industry and enterprise dictionaries; no active L1 layer. Loading resources does not grant business authority.
-- **Chinese and English:** interface, reports and Markdown exports preserve original sources and saved verdicts. First-time translation calls a model and is cached by snapshot.
+- **Chinese and English:** new B348 analyses save complete reports in both languages with shared verdicts and calculation receipts. Switching languages reads the saved report; Markdown exports support the current language or both languages. Historical reports retain their original versions.
 - **Mathematical input and unknowns:** allowed values, uncertain facts and parent/child plan consistency have distinct meanings. Set identities support strings and safe integers without conflating their types or filling in unknown conclusions.
 - **Startup and recovery:** historical jobs load with bounded concurrency under existing recovery rules. Readiness follows HTTP identity verification.
 
@@ -256,7 +256,7 @@ Exact quotations do not prove semantic entailment. A completed job does not mean
 
 The reviewed baseline is BXP-0001 `0.4.0-draft.2`; the workbench still uses a recorded draft.1 attachment. Full migration and protocol conformance are not claimed. Implementation notes · Research evidence
 
-Host analysis and first-time translation may send selected source and dictionary content to the configured model provider. Review this data flow before supplying private material.
+Host analysis, or an explicitly selected API profile, may send selected source and dictionary content to its model provider. Switching between saved B348 report languages does not request another translation. Review the analysis data flow before supplying private material.
 
 </details>
 

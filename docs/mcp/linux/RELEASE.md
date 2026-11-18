@@ -1,5 +1,8 @@
 # BoundaryXP Linux 0.4.0-rc.9-linux.1
 
+> 当前 Linux 版本为 **rc.11-linux.1 / B348**，见 [rc.11 验收](../RC11.md)、[发行回执](../RC11-PUBLICATION.json)及 [Glama rc.11](../GLAMA-RC11.md)。本文以下保留首次 rc.9 Linux 发行的历史记录。
+> Current Linux release: **rc.11-linux.1 / B348**. The records below describe the first rc.9 Linux release, not the current package.
+
 [中文安装](INSTALL.zh-CN.md) · [English setup](INSTALL.en.md) · [npm](https://www.npmjs.com/package/boundaryxp-mcp/v/0.4.0-rc.9-linux.1)
 
 Linux x64 / glibc ≥2.36 / Node.js ≥22.18.0，B-335 计算合同，21 工具、17 资源。首次独立 Linux 预发行采用 `linux` npm 渠道，保留 Windows `latest/next` 为 rc.9。Dockerfile 从 npm 下载固定版本并核验 SHA-256，以非 root 用户运行；默认 stdio、不开放主机端口。

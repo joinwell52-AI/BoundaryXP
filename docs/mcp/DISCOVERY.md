@@ -6,9 +6,13 @@
 
 Windows `0.4.0-rc.11`（latest/next）及 Linux `0.4.0-rc.11-linux.1`（linux）已发布，匿名下载摘要与验收包一致；官方 Registry 已登记并读回 rc.11。产品基线 B348，21 工具 / 17 资源。见 [rc.11 验收](RC11.md)与[发布回执](RC11-PUBLICATION.json)。默认 npm 网页已实际打开为 rc.11，中英文正文和安装说明在同页；首次自动检查已结束。
 
-TensorBlock #6225 已于 11 月 18 日合并；新版本需另提更新 PR。punkpeye #19484 与 OpenAI #57 仍待审核。Glama 最近已完成的平台验证为 rc.10，本轮 rc.11 复验、Serverdex 编辑及目录刷新逐项跟进；不把此前验证改写为新版通过。下方旧版本段落为历史快照，由本节及后续新回执覆盖。
+TensorBlock #6225 已合并，本轮另提 [rc.11 #6302](https://github.com/TensorBlock/awesome-mcp-servers/pull/6302)，待审核；目录生成 9950 条、零错误，类型检查和构建通过，Windows 测试 94 通过、1 个既有斜线路径断言失败，未改断言或提交生成的大批目录文件。[punkpeye #19484](https://github.com/punkpeye/awesome-mcp-servers/pull/19484) 的实际条目及正文已更新 rc.11，head `41f05ee3`，待审核。
 
-Both rc.11 npm archives and the official Registry entry are verified. TensorBlock's rc.10 update merged; the other existing PRs remain under review. Third-party page versions and Glama builds are tracked separately, not inferred from npm publication. Older dated sections below preserve their original scope.
+[OpenAI #57](https://github.com/openai/community-plugins/pull/57) 已更新插件 0.4.0 / rc.11，head `ac169c2`；Windows/Linux × Node 22.19/24.19 各 9/9，通过两平台完整双语案例回放及复制迁移，原文件保留；最新 head 的 [CLA](https://github.com/openai/community-plugins/actions/runs/44285593251/job/134737319297) 成功。仍未合并，不代表进入官方插件目录。测试准备中的首次失败保留，详见插件证据。
+
+[Glama rc.11](GLAMA-RC11.md) 构建、真实原生启动及 21 工具/17 资源发现成功，平台 `0.4.0-rc.linux.11.1` 已发布为 Latest。Serverdex 仍拒绝保存，报所有者未验证，公开页仍 rc.9 且自动配置缺 `--data-root`；npm 已有真实反向链接，但不能据此绕过平台验证。MCPServers 本轮再次接受“请求更新”，简介 rc.8、正文 rc.9 尚未刷新。Cursor Marketplace 继续按所有者要求暂不提交。其他目录保留旧核查日期；不冒称全平台同步。下方段落是历史快照。
+
+Both rc.11 npm archives, GitHub release assets and the active/latest official Registry entry are verified. Glama rc.11 build/discovery and publication passed. TensorBlock #6302, punkpeye #19484 and OpenAI #57 now contain rc.11 updates and remain under review; the latest plugin head's CLA passed. Serverdex still rejects owner edits, and MCPServers accepted a refresh request without applying it yet. Older dated sections below preserve their original scope.
 
 ## 2026-11-18 早前 rc.10 进展 / Earlier rc.10 update
 

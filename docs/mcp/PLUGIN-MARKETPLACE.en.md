@@ -2,9 +2,9 @@
 
 [简体中文](PLUGIN-MARKETPLACE.zh-CN.md) · [Standard MCP setup](INSTALL.en.md)
 
-**Plugin 0.3.0 · MCP rc.10 / B345 · Windows / Linux x64 · Node.js ≥22.19 with npm**
+**Plugin 0.4.0 · MCP rc.11 / B348 · Windows / Linux x64 · Node.js ≥22.19 with npm**
 
-Windows locks MCP `0.4.0-rc.10`; Linux locks `0.4.0-rc.10-linux.1` and requires glibc ≥2.36 (for example Debian 12 / Ubuntu 24.04). macOS, ARM64 and Alpine/musl are unsupported. Complete L2/L3 directory imports follow the [B345 format guide](npm/guides/DICTIONARIES.md).
+Windows locks MCP `0.4.0-rc.11`; Linux locks `0.4.0-rc.11-linux.1` and requires glibc ≥2.36 (for example Debian 12 / Ubuntu 24.04). macOS, ARM64 and Alpine/musl are unsupported. Complete L2/L3 directory imports follow the [B348 format guide](npm/guides/DICTIONARIES.md).
 
 [OpenAI Community Plugins PR #57](https://github.com/openai/community-plugins/pull/57) is ready for review, but not merged or approved for the OpenAI public plugin directory. These instructions install the inspectable candidate from the publisher's fork. Standard MCP installation remains available through [npm](https://www.npmjs.com/package/boundaryxp-mcp#installation-and-upgrades).
 
@@ -31,17 +31,20 @@ Start a new chat and ask:
 
 > Only through BoundaryXP MCP, call bx_capabilities for English tool help, bx_profiles_list and bx_workbench_open. Return the actual version and URL. Do not submit analysis or modify existing projects.
 
-First connection installs the platform-specific locked compiled package from npm. Network access is required; installation logs go to stderr and startup allows 300 seconds. Later connections reuse the installation. Expect Windows rc.10 or Linux rc.10-linux.1, 21 tools, 17 resources and a separate loopback workbench URL. Analysis uses the current host LLM without a separate model API key.
+First connection installs the platform-specific locked compiled package from npm. Network access is required; installation logs go to stderr and startup allows 300 seconds. Later connections reuse the installation. Expect Windows rc.11 or Linux rc.11-linux.1, 21 tools, 17 resources and a separate loopback workbench URL. Analysis uses the current host LLM without a separate model API key.
 
 ## Data and updates
 
 Windows storage remains `%LOCALAPPDATA%/BoundaryXP/CommunityPlugin`. Linux uses `$XDG_DATA_HOME/BoundaryXP/CommunityPlugin`, or `$HOME/.local/share/BoundaryXP/CommunityPlugin` when XDG_DATA_HOME is unset. Both are separate from standalone installations. `BXP_PLUGIN_HOME` can select a dedicated empty directory; unrelated nonempty directories are refused. Tasks and dictionaries from other standalone installations are not migrated; host configurations are unchanged. Retain the plugin home when removing or updating the plugin cache.
 
-The plugin pins each platform's package rather than following a moving npm tag. Close older plugin connections before upgrading. On first connection, 0.3.0 copies its inactive plugin-owned `data-rc9` to `data-rc10`, validates file hashes, and retains the original store, profiles and migration receipt. A live old process or incomplete target causes refusal, not process termination or deletion. Reverting to the older plugin reads the old snapshot, excluding later work. `--install-only` downloads without migrating. Cross-OS migration is unqualified. No standalone installation is scanned or changed; existing standalone MCP users do not need this candidate plugin.
+The plugin pins each platform's package rather than following a moving npm tag. Close older plugin connections before upgrading. On first connection, 0.4.0 copies its inactive plugin-owned `data-rc10` (or `data-rc9` only when rc.10 is absent) to `data-rc11`, validates file hashes, and retains the original store, profiles and migration receipt. A live old process or incomplete target causes refusal, not process termination or deletion. Reverting to the older plugin reads the old snapshot, excluding later work. `--install-only` downloads without migrating. Cross-OS migration is unqualified. No standalone installation is scanned or changed; existing standalone MCP users do not need this candidate plugin.
 
 ## Verification and limitations
 
-Current **0.3.0 / rc.10**: Windows/Linux x64 × Node 22.19/24.19 each passed **9/9**, no skips; complete dictionary examples, real npm/native tools, workbench and reconnect retention passed. Real rc.9 fixture copies retained original task/config/dictionary bytes (copied audit logs only append). Linux historical reports and a saved-response replay/recheck passed; no fresh LLM analysis was claimed. Fresh isolated Linux Codex installed/enabled 0.3.0 from a local marketplace and its installed copy returned rc.10-linux.1 / 21 tools / 17 resources. [Current evidence](https://github.com/joinwell52-AI/community-plugins/blob/codex/boundaryxp-plugin-20261116/tests/boundaryxp/evidence/rc10-plugin-20261117.json). The records below describe older releases.
+Current **0.4.0 / rc.11**: all four Windows/Linux × Node 22.19/24.19 suites passed 9/9. Complete case replays on both platforms preserve revision 7, create recheck revision 8, and return matching bilingual reports and calculation receipts with zero server model requests. These reuse the same saved host response, not new model analyses. Isolated copy migration preserved 61 original files. [Current evidence](https://github.com/joinwell52-AI/community-plugins/blob/codex/boundaryxp-plugin-20261116/tests/boundaryxp/evidence/rc11-20261118.json). The plugin PR is not merged; prior versions' scopes remain below.
+
+
+Historical **0.3.0 / rc.10**: Windows/Linux x64 × Node 22.19/24.19 each passed **9/9**, no skips; complete dictionary examples, real npm/native tools, workbench and reconnect retention passed. Real rc.9 fixture copies retained original task/config/dictionary bytes (copied audit logs only append). Linux historical reports and a saved-response replay/recheck passed; no fresh LLM analysis was claimed. Fresh isolated Linux Codex installed/enabled 0.3.0 from a local marketplace and its installed copy returned rc.10-linux.1 / 21 tools / 17 resources. [Current evidence](https://github.com/joinwell52-AI/community-plugins/blob/codex/boundaryxp-plugin-20261116/tests/boundaryxp/evidence/rc10-plugin-20261117.json). The records below describe older releases.
 
 Historical Windows 0.1.0 acceptance on 2026-11-16: an isolated Codex configuration added the GitHub source above, installed/enabled the plugin and called its installed MCP copy successfully: rc.9 / 21 tools. Seven targeted tests also passed, covering bilingual help, four L2/L3 examples, validation/import, multiple DEV persistence, workbench HTTP and preserved data after reconnection. No paid model or fabricated LLM response was used. This is CLI plugin-installation and native-tool evidence, not a new GUI-click or semantic-accuracy qualification.
 
