@@ -1,6 +1,16 @@
 # 在哪里查找 BoundaryXP？ / Discover BoundaryXP
 
-发行入口与 PR 最新核对日期：2026-11-17；第三方页面与历史记录保留各自核对日期。安装包分发、目录登记和人工审核分别记录。
+发行入口与 PR 最新核对日期：2026-11-18；第三方页面与历史记录保留各自核对日期。安装包分发、目录登记和人工审核分别记录。
+
+## 2026-11-18 最新进展 / Latest update
+
+- **Glama：已完成 rc.10。** 构建 `01a1ec2d-28be-7008-922a-73f25393c56d` 成功，实际启动 npm `0.4.0-rc.10-linux.1` / B345，发现 21 工具和 17 资源。09:05（UTC+8）发布 Glama 标记 `0.4.0-rc.linux.10.1`，标为 Latest。平台标记与 npm 版本的区别、摘要及完整证据见 [Glama rc.10 验证](GLAMA-RC10.md)。原 rc.9 记录保留为历史。
+- **Serverdex：已登录并关联认领，但未完成编辑。** 页面确认 GitHub 仓库归属并将条目加入账户；账户仍显示“Waiting for your link”，两处编辑入口都返回“Only the verified owner of this server can edit it.”。免费验证要求 npm 主页上的 followed backlink；未购买付费方案，未为此另发 npm 版本。公开页仍为 rc.9，自动安装配置缺 `--data-root`。新说明保存失败，不能称为已同步 rc.10。
+- **PR：** TensorBlock #6225、punkpeye #19484、OpenAI #57 仍 open，无新增人工修改意见。OpenAI 当前 head `4e0cfb0` 的 [CLA 检查](https://github.com/openai/community-plugins/actions/runs/44105427002/job/134116357407)已通过，仍需维护者审核。新 Glama 证据补充到既有 PR，不重复申请。
+
+Glama has now built, started and published the rc.10 Linux package; its separate platform ID fixes prerelease SemVer ordering without changing the npm archive. Serverdex ownership linking succeeded, but its backlink-verification gate still rejects edits; the stale version and incomplete generated config are not corrected. All three existing PRs remain open with no new human review request; the current plugin head's CLA passed. No Core source, existing data/configuration or local workbench was changed.
+
+下方 11 月 17 日及更早记录保留当时状态；Glama 登录失效及 rc.10 待验的旧描述已由本节覆盖。Older dated records below retain their original scope and are superseded by this update where stated.
 
 ## 当前安装入口 / Current installation
 

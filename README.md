@@ -36,7 +36,7 @@
 
 ## Install BXP · Find BXP
 
-**Linux x64 / Docker:** `0.4.0-rc.10-linux.1` uses the `linux` channel (glibc ≥2.36, Node ≥22.19). Windows `latest/next` use rc.10. Both include B345 functionality and the unchanged native Core. Previous Glama build/discovery verification applies to rc.9-linux.1; rc.10 verification is recorded separately.
+**Linux x64 / Docker:** `0.4.0-rc.10-linux.1` uses the `linux` channel (glibc ≥2.36, Node ≥22.19). Windows `latest/next` use rc.10. Both include B345 functionality and the unchanged native Core. [Glama rc.10 build/discovery passed on November 18](docs/mcp/GLAMA-RC10.md); its platform release ID `0.4.0-rc.linux.10.1` maps to this unchanged npm package.
 
 
 | Purpose | Document or page |
@@ -54,10 +54,10 @@
 | **[Official MCP Registry](https://registry.modelcontextprotocol.io/?q=boundaryxp)** | Published rc.10 metadata and npm installation reference |
 | **[TensorBlock MCP Index — rc.10 update submitted](https://github.com/TensorBlock/awesome-mcp-servers/pull/6225)** | Previous Linux update merged; rc.10 / B345 follow-up #6225 awaits review |
 | **[MCPServers](https://mcpservers.org/servers/www-npmjs-com-package-boundaryxp-mcp)** | rc.8 summary / rc.9 docs; refresh requested again November 17, not yet applied |
-| **[Serverdex](https://serverdex.io/server/io-github-joinwell52-ai-boundaryxp)** | November 17: cached rc.9 snippet omits required data path; claim/login needed for edits—use our setup guide |
-| **[Glama](https://glama.ai/mcp/servers/joinwell52-AI/BoundaryXP)** | Linux `0.4.0-rc.9-linux.1` published; platform build passed and discovered 21 tools / 17 resources. Public tool catalog is available. |
+| **[Serverdex](https://serverdex.io/server/io-github-joinwell52-ai-boundaryxp)** | November 18: claim linked to owner, but verification still pending and edits refused. Cached rc.9 config omits required `--data-root`; use our setup guide |
+| **[Glama](https://glama.ai/mcp/servers/joinwell52-AI/BoundaryXP)** | rc.10 Linux package verified and published November 18; 21 tools / 17 resources. [Platform ID and evidence](docs/mcp/GLAMA-RC10.md) |
 
-Release and PR status checked 2026-11-17; historical platform evidence retains its date. Search **BoundaryXP** or **boundaryxp-mcp**. Use npm for the current package; directory caches can lag. “Listed” means discoverable, not a certification. [Full directory status](docs/mcp/DISCOVERY.md).
+Release and PR status checked 2026-11-18; historical platform evidence retains its date. Search **BoundaryXP** or **boundaryxp-mcp**. Use npm for the current package; directory caches can lag. “Listed” means discoverable, not a certification. [Full directory status](docs/mcp/DISCOVERY.md).
 
 MCPwell and ToolCenter also contain directory entries, but no BXP-specific detail URL was verified. Their category/index pages are listed only in the full directory notes, not as direct BXP installation entries here.
 
@@ -82,7 +82,7 @@ To try the contributor fork through **Add plugin marketplace**, use the candidat
 | Host configuration | [Codex / Cursor stdio setup guide](docs/mcp/npm/INSTALL.md#codex-and-other-hosts) |
 | Plugin contribution | [OpenAI Community Plugins PR #57](https://github.com/openai/community-plugins/pull/57) |
 | punkpeye listing | [Awesome MCP Servers PR #19484](https://github.com/punkpeye/awesome-mcp-servers/pull/19484) |
-| Platform verification | [Glama build and discovery evidence](https://github.com/punkpeye/awesome-mcp-servers/pull/19484#issuecomment-6912851096) |
+| Platform verification | [Glama rc.10 build and discovery evidence](docs/mcp/GLAMA-RC10.md) |
 | Contribution checks | [Plugin tests and submission records](docs/mcp/DISCOVERY.md#rc9-contributions) |
 | Linux plugin support | [OpenAI PR #57 Linux follow-up](https://github.com/openai/community-plugins/pull/57#issuecomment-6935083522) |
 | Plugin trial | [Candidate plugin installation · English](docs/mcp/PLUGIN-MARKETPLACE.en.md) |

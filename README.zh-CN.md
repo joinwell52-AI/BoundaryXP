@@ -36,7 +36,7 @@
 
 ## 安装 BXP · 在哪里找到 BXP
 
-**Linux x64 / Docker：** `0.4.0-rc.10-linux.1` 使用 `linux` 渠道（glibc ≥2.36、Node ≥22.19）；Windows 的 `latest/next` 使用 rc.10。两者包含 B345 功能与未改动的原生 Core。此前 Glama 验证对应 rc.9-linux.1，不能冒称 rc.10 已通过平台复审。
+**Linux x64 / Docker：** `0.4.0-rc.10-linux.1` 使用 `linux` 渠道（glibc ≥2.36、Node ≥22.19）；Windows 的 `latest/next` 使用 rc.10。两者包含 B345 功能与未改动的原生 Core。[Glama 已于 11 月 18 日通过 rc.10 构建与协议发现](docs/mcp/GLAMA-RC10.md)；平台发行标记 `0.4.0-rc.linux.10.1` 对应同一 npm 包。
 
 
 | 用途 | 文档与入口 |
@@ -54,10 +54,10 @@
 | **[官方 MCP Registry](https://registry.modelcontextprotocol.io/?q=boundaryxp)** | 已登记 rc.10 及 npm 安装来源 |
 | **[TensorBlock MCP Index：rc.10 更新已提交](https://github.com/TensorBlock/awesome-mcp-servers/pull/6225)** | 旧 Linux 更新已合并；rc.10 / B345 后续 PR #6225 待审核 |
 | **[MCPServers 中文页](https://mcpservers.org/zh-CN/servers/www-npmjs-com-package-boundaryxp-mcp)** | 简介 rc.8 / 文档 rc.9；11 月 17 日已再次请求刷新，尚未生效 |
-| **[Serverdex](https://serverdex.io/server/io-github-joinwell52-ai-boundaryxp)** | 11 月 17 日实查为 rc.9，配置示例仍缺必填数据路径；编辑需登录认领，请按本项目指南安装 |
-| **[Glama](https://glama.ai/mcp/servers/joinwell52-AI/BoundaryXP)** | Linux `0.4.0-rc.9-linux.1` 已发布；平台构建通过，发现 21 工具 / 17 资源，公开工具目录可查。 |
+| **[Serverdex](https://serverdex.io/server/io-github-joinwell52-ai-boundaryxp)** | 11 月 18 日已关联认领，验证仍待完成，平台拒绝保存；缓存 rc.9 配置缺必填 `--data-root`，请按本项目指南安装 |
+| **[Glama](https://glama.ai/mcp/servers/joinwell52-AI/BoundaryXP)** | rc.10 Linux 包已于 11 月 18 日验证并发布，发现 21 工具 / 17 资源；[平台标记与证据](docs/mcp/GLAMA-RC10.md) |
 
-发行与 PR 核对日期：2026-11-17；历史平台验证保留原日期。搜索 **BoundaryXP** 或 **boundaryxp-mcp**。安装新版以 npm 为准，第三方目录可能延迟同步。“已收录”表示能查到，不代表功能认证。[完整目录状态](docs/mcp/DISCOVERY.md)。
+发行与 PR 核对日期：2026-11-18；历史平台验证保留原日期。搜索 **BoundaryXP** 或 **boundaryxp-mcp**。安装新版以 npm 为准，第三方目录可能延迟同步。“已收录”表示能查到，不代表功能认证。[完整目录状态](docs/mcp/DISCOVERY.md)。
 
 MCPwell、ToolCenter 的总目录中也有条目，但尚未核实 BXP 专属详情链接。分类/总目录只在完整说明中记录，不作为这里的 BXP 直达安装入口。
 
@@ -82,7 +82,7 @@ MCPwell、ToolCenter 的总目录中也有条目，但尚未核实 BXP 专属详
 | 宿主配置 | [Codex / Cursor stdio 接入指南](docs/mcp/npm/INSTALL.zh-CN.md#codex-与其他宿主) |
 | 插件贡献 | [OpenAI Community Plugins PR #57](https://github.com/openai/community-plugins/pull/57) |
 | punkpeye 目录贡献 | [Awesome MCP Servers PR #19484](https://github.com/punkpeye/awesome-mcp-servers/pull/19484) |
-| 平台验证 | [Glama 构建与发现证据](https://github.com/punkpeye/awesome-mcp-servers/pull/19484#issuecomment-6912851096) |
+| 平台验证 | [Glama rc.10 构建与发现证据](docs/mcp/GLAMA-RC10.md) |
 | 贡献验证 | [插件测试与提交记录](docs/mcp/DISCOVERY.md#rc9-contributions) |
 | Linux 插件支持 | [OpenAI PR #57 Linux 跟进](https://github.com/openai/community-plugins/pull/57#issuecomment-6935083522) |
 | 插件试用 | [候选插件中文安装指南](docs/mcp/PLUGIN-MARKETPLACE.zh-CN.md) |
