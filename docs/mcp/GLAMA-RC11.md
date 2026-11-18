@@ -21,3 +21,7 @@ The build downloads the immutable compiled npm archive, checks its SHA-256, inst
 这是启动与工具/资源发现验证，不是算法正确性或语义准确率认证，也没有购买或启动付费托管实例。此前 [rc.10](GLAMA-RC10.md) 验证仍保留。完整产品与案例验证见 [rc.11 验收](RC11.md)。
 
 This is startup/introspection evidence, not semantic or algorithmic certification. No paid hosting instance was purchased. Earlier dated evidence remains intact.
+
+条目简介已保存为 rc.11 / B348。最终公开文档提交 `a729fc6` 的 README 刷新已请求，收尾时仍显示 Sync in Progress；页面正文缓存可能暂时保留上一提交。这不改变上述已发布构建的版本与摘要。
+
+The listing description is saved as rc.11 / B348. README synchronization for public documentation commit `a729fc6` was requested and remained in progress at the final check; the rendered README may still show the prior commit. The published build identity and archive checksum above are unchanged.
