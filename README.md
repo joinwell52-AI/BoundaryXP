@@ -54,10 +54,10 @@
 | **[Official MCP Registry](https://registry.modelcontextprotocol.io/?q=boundaryxp)** | Published rc.11 metadata and npm installation reference |
 | **[TensorBlock MCP Index](https://tensorblock.co/mcp/servers/github-joinwell52-ai-boundaryxp-16b09093)** | rc.10 / B345 PR #6225 merged November 18; [rc.11 PR #6302](https://github.com/TensorBlock/awesome-mcp-servers/pull/6302) awaits review |
 | **[MCPServers](https://mcpservers.org/servers/www-npmjs-com-package-boundaryxp-mcp)** | rc.8 summary / rc.9 docs; refresh requested again November 18, not yet applied |
-| **[Serverdex](https://serverdex.io/server/io-github-joinwell52-ai-boundaryxp)** | November 18: claim linked to owner, but verification still pending and edits refused. Cached rc.9 config omits required `--data-root`; use our setup guide |
+| **[Serverdex](https://serverdex.io/server/io-github-joinwell52-ai-boundaryxp)** | November 19: free listing live, rc.11 and `--data-root` present; owner edits saved and publicly verified. Replace `<data-root>` before use; the lower README excerpt still caches rc.8 |
 | **[Glama](https://glama.ai/mcp/servers/joinwell52-AI/BoundaryXP)** | rc.11 Linux package verified and published November 18; 21 tools / 17 resources. [Platform ID and evidence](docs/mcp/GLAMA-RC11.md) |
 
-Release and PR status checked 2026-11-18; historical platform evidence retains its date. Search **BoundaryXP** or **boundaryxp-mcp**. Use npm for the current package; directory caches can lag. “Listed” means discoverable, not a certification. [Full directory status](docs/mcp/DISCOVERY.md).
+Serverdex and the three contribution PRs checked 2026-11-19; release and other platform evidence retain their recorded dates. Search **BoundaryXP** or **boundaryxp-mcp**. Use npm for the current package; directory caches can lag. “Listed” means discoverable, not a certification. [Full directory status](docs/mcp/DISCOVERY.md).
 
 MCPwell and ToolCenter also contain directory entries, but no BXP-specific detail URL was verified. Their category/index pages are listed only in the full directory notes, not as direct BXP installation entries here.
 
@@ -66,6 +66,8 @@ MCPwell and ToolCenter also contain directory entries, but no BXP-specific detai
 **Plugin contribution (November 18):** [OpenAI PR #57](https://github.com/openai/community-plugins/pull/57) contains plugin **0.4.0**, pinned to rc.11 / rc.11-linux.1. Windows/Linux × Node 22.19/24.19 each passed 9/9; copy migration retained original files, and complete bilingual case replay/recheck passed on both platforms. The latest-head CLA passed. [punkpeye #19484](https://github.com/punkpeye/awesome-mcp-servers/pull/19484) now contains the rc.11 entry and Glama evidence. Both await maintainer review. See [directory status](docs/mcp/DISCOVERY.md) and [candidate plugin installation](docs/mcp/PLUGIN-MARKETPLACE.en.md).
 
 The plugin supports Linux through separate compiled locks, glibc checks and XDG storage. Dated original-analysis and current replay checks remain distinct in the linked evidence. Upstream approval remains pending; original Core source stays private.
+
+**Review check, November 19:** TensorBlock #6302, punkpeye #19484 and OpenAI #57 are all open and unmerged, with no new human review requests. punkpeye's submission check and the plugin CLA pass. Merged TensorBlock #6225 covers rc.10, not rc.11.
 
 To try the contributor fork through **Add plugin marketplace**, use the candidate plugin installation guide. Its GitHub-to-Codex installation and installed MCP were verified in isolation; official marketplace approval is still pending.
 

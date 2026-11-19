@@ -1,6 +1,24 @@
 # 在哪里查找 BoundaryXP？ / Discover BoundaryXP
 
-发行入口与 PR 最新核对日期：2026-11-18；第三方页面与历史记录保留各自核对日期。安装包分发、目录登记和人工审核分别记录。
+Serverdex 与 PR 最新核对日期：2026-11-19；发行、其他第三方页面与历史记录保留各自核对日期。安装包分发、目录登记和人工审核分别记录。
+
+## 2026-11-19 Serverdex 与 PR 复查 / Listing and review check
+
+**[Serverdex](https://serverdex.io/server/io-github-joinwell52-ai-boundaryxp) 免费收录及编辑权限已确认。** 账户显示 FREE Active、1 条在线、0 条待处理；实际保存新版中英文说明返回 Saved，随后公开页面读回 rc.11 / B348、Windows/Linux 包名、21 工具与 17 资源、双语报告、L2/L3 目录导入及宿主 LLM 说明。保留现有 npm/仓库回链，无需付费，也未重复发认领申请或支持邮件。11 月 18 日的权限拒绝记录由本节覆盖，历史原文保留。
+
+公开版本字段为 `0.4.0-rc.11`，配置及 Cursor/VS Code 安装链接已包含 `--data-root`。其值仍是 `<data-root>` 占位符，使用前必须替换为专用绝对目录；Linux 应改用 `0.4.0-rc.11-linux.1`。本轮未点击安装深链、不更改客户配置。页面下方 FROM THE README 仍是 11 月 15 日抓取的 rc.8/B335 摘要，不能称整页缓存已更新。
+
+| PR | 当前 head | 2026-11-19 实际状态 |
+|---|---|---|
+| [TensorBlock #6302](https://github.com/TensorBlock/awesome-mcp-servers/pull/6302) | `817bf85b` | Open、未合并；无评论、无人工 review；当前无检查结果，不能称 Gate 通过。此前 [#6225](https://github.com/TensorBlock/awesome-mcp-servers/pull/6225) 已合并，但对应 rc.10/B345 |
+| [punkpeye #19484](https://github.com/punkpeye/awesome-mcp-servers/pull/19484) | `41f05ee3` | Open、未合并；无新增人工修改意见；[check-submission](https://github.com/punkpeye/awesome-mcp-servers/actions/runs/44284185416/job/134732467497) 成功，welcome 跳过；现有 Glama 徽章与 rc.11 证据保留 |
+| [OpenAI 社区插件 #57](https://github.com/openai/community-plugins/pull/57) | `ac169c2` | Open、未合并；无新增人工修改意见；[CLA](https://github.com/openai/community-plugins/actions/runs/44285593251/job/134737319297) 成功，仍待维护者审核，不等于官方市场上架 |
+
+**English:** Serverdex's free listing is active and owner editing now works: the rc.11/B348 bilingual description was saved and read back publicly. The version field and generated configuration use rc.11 and include `--data-root`; users must replace its placeholder with a dedicated absolute directory and select the separate Linux package when applicable. The lower README excerpt still caches rc.8. Existing backlinks remain; no payment, new claim or duplicate email was sent.
+
+All three PRs above remain open and unmerged with no new human review requests. TensorBlock #6302 has no reported checks; merged #6225 is the earlier rc.10 update. punkpeye's submission check and OpenAI's CLA pass, but neither establishes maintainer approval. This round only checks directory metadata, editing, PR status and documentation; it does not rerun builds or model/runtime tests, dispatch workflows, expose Core source or change existing installations/data or 58618.
+
+The dated records below are historical snapshots; this section supersedes their Serverdex and PR status where applicable.
 
 ## 2026-11-18 rc.11 发布同步 / rc.11 synchronization
 

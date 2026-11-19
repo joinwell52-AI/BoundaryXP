@@ -54,10 +54,10 @@
 | **[官方 MCP Registry](https://registry.modelcontextprotocol.io/?q=boundaryxp)** | 已登记 rc.11 及 npm 安装来源 |
 | **[TensorBlock MCP Index](https://tensorblock.co/mcp/servers/github-joinwell52-ai-boundaryxp-16b09093)** | rc.10 / B345 PR #6225 已于 11 月 18 日合并；[rc.11 PR #6302](https://github.com/TensorBlock/awesome-mcp-servers/pull/6302) 待审核 |
 | **[MCPServers 中文页](https://mcpservers.org/zh-CN/servers/www-npmjs-com-package-boundaryxp-mcp)** | 简介 rc.8 / 文档 rc.9；11 月 18 日已再次请求刷新，尚未生效 |
-| **[Serverdex](https://serverdex.io/server/io-github-joinwell52-ai-boundaryxp)** | 11 月 18 日已关联认领，验证仍待完成，平台拒绝保存；缓存 rc.9 配置缺必填 `--data-root`，请按本项目指南安装 |
+| **[Serverdex](https://serverdex.io/server/io-github-joinwell52-ai-boundaryxp)** | 11 月 19 日核实免费上线，版本 rc.11、配置已含 `--data-root`；编辑保存及公开读回成功。使用前替换 `<data-root>`；下方 README 摘要仍缓存 rc.8 |
 | **[Glama](https://glama.ai/mcp/servers/joinwell52-AI/BoundaryXP)** | rc.11 Linux 包已于 11 月 18 日验证并发布，发现 21 工具 / 17 资源；[平台标记与证据](docs/mcp/GLAMA-RC11.md) |
 
-发行与 PR 核对日期：2026-11-18；历史平台验证保留原日期。搜索 **BoundaryXP** 或 **boundaryxp-mcp**。安装新版以 npm 为准，第三方目录可能延迟同步。“已收录”表示能查到，不代表功能认证。[完整目录状态](docs/mcp/DISCOVERY.md)。
+Serverdex 与三个贡献 PR 核对日期：2026-11-19；发行及其他平台证据保留各自日期。搜索 **BoundaryXP** 或 **boundaryxp-mcp**。安装新版以 npm 为准，第三方目录可能延迟同步。“已收录”表示能查到，不代表功能认证。[完整目录状态](docs/mcp/DISCOVERY.md)。
 
 MCPwell、ToolCenter 的总目录中也有条目，但尚未核实 BXP 专属详情链接。分类/总目录只在完整说明中记录，不作为这里的 BXP 直达安装入口。
 
@@ -66,6 +66,8 @@ MCPwell、ToolCenter 的总目录中也有条目，但尚未核实 BXP 专属详
 **插件贡献进展（11 月 18 日）：**[OpenAI PR #57](https://github.com/openai/community-plugins/pull/57) 为插件 **0.4.0**，实际锁定 rc.11 / rc.11-linux.1。Windows/Linux × Node 22.19/24.19 各 9/9 通过；复制迁移保留原文件，两平台完整双语案例回放及复验通过，新提交 CLA 已通过。[punkpeye #19484](https://github.com/punkpeye/awesome-mcp-servers/pull/19484) 的条目和 Glama 证据已同步 rc.11。两者仍待维护者审核。见[目录状态](docs/mcp/DISCOVERY.md)及[候选插件安装](docs/mcp/PLUGIN-MARKETPLACE.zh-CN.md)。
 
 插件通过独立编译依赖锁、glibc 检查与 XDG 数据目录支持 Linux。历史模型分析和本轮保存响应重放按日期分别记录在验收证据中。上游仍待审核，原始 Core 源码保持私有。
+
+**审核复查（11 月 19 日）：** TensorBlock #6302、punkpeye #19484、OpenAI #57 均仍开放、未合并，无新增人工修改意见。punkpeye 提交检查及插件 CLA 通过。已合并的 TensorBlock #6225 对应 rc.10，不代表 rc.11 已合并。
 
 如需从「添加插件市场」试用发布者 fork，见候选插件安装指南。已隔离验证从 GitHub 添加市场、安装插件及调用安装后的 MCP；官方市场审核仍未完成。
 
