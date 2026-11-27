@@ -4,9 +4,9 @@
 <h1 align="center">从原文到边界，每一步都看得见。</h1>
 
 <p align="center">
-  <a href="https://www.npmjs.com/package/boundaryxp-mcp"><img src="https://img.shields.io/badge/npm-Install%20rc.11-CB3837?style=for-the-badge&amp;logo=npm" alt="npm · 安装 BoundaryXP rc.11"></a>
+  <a href="https://www.npmjs.com/package/boundaryxp-mcp"><img src="https://img.shields.io/badge/npm-Install%20rc.12-CB3837?style=for-the-badge&amp;logo=npm" alt="npm · 安装 BoundaryXP rc.12"></a>
   <a href="https://registry.modelcontextprotocol.io/?q=boundaryxp"><img src="https://img.shields.io/badge/Official%20MCP%20Registry-Listed-15803d?style=for-the-badge" alt="官方 MCP Registry · 已收录"></a>
-  <a href="https://github.com/joinwell52-AI/BoundaryXP/releases/tag/mcp-v0.4.0-rc.11"><img src="https://img.shields.io/badge/Download-rc.11%20package-2563eb?style=for-the-badge" alt="下载 rc.11 编译安装包"></a>
+  <a href="https://github.com/joinwell52-AI/BoundaryXP/releases/tag/mcp-v0.4.0-rc.12"><img src="https://img.shields.io/badge/Download-rc.12%20package-2563eb?style=for-the-badge" alt="下载 rc.12 编译安装包"></a>
   <a href="https://glama.ai/mcp/servers/joinwell52-AI/BoundaryXP"><img src="https://glama.ai/mcp/servers/joinwell52-AI/BoundaryXP/badges/score.svg" alt="BoundaryXP Glama 公开入口与实时评分"></a>
 </p>
 
@@ -20,7 +20,7 @@
 
 <p align="center"><a href="https://boundaryxp-demo.vercel.app/"><strong>▶ 在线演示</strong></a>　·　<a href="docs/mcp/INSTALL.zh-CN.md"><strong>MCP 接入</strong></a>　·　<a href="https://doi.org/10.5281/zenodo.24072738"><strong>论文</strong></a></p>
 
-<p align="center">中英双语 · MCP 0.4.0-rc.11 / B-348 · npm 预发行 · 论文与协议资料 · Core 原实现源码私有</p>
+<p align="center">中英双语 · MCP 0.4.0-rc.12 / B-353 · npm 预发行 · 论文与协议资料 · Core 原实现源码私有</p>
 
 > **欢迎提问、反例与贡献。** 7+1 方法有适用条件，研究用例不能证明它对所有任务都正确；MCP 实现、模型解释和 L2/L3 语义库也可能出错。确定性计算不等于语义解释必然正确。欢迎用问题、反例和复现证据共同检验与改进。
 >
@@ -36,7 +36,9 @@
 
 ## 安装 BXP · 在哪里找到 BXP
 
-**Linux x64 / Docker：** `0.4.0-rc.11-linux.1` 使用 `linux` 渠道（glibc ≥2.36、Node ≥22.19）；Windows 的 `latest/next` 使用 rc.11。B348 新增完整中英报告、模型连接验证和证据折叠，原生 Core 未改。[rc.11 验收](docs/mcp/RC11.md)。[Glama rc.11](docs/mcp/GLAMA-RC11.md) 已通过真实原生构建及协议发现，并发布为平台 Latest。
+**11 月 28 日：** rc.12 / B353 的发行证据见 [RC12](docs/mcp/RC12.md)。TensorBlock #6302 已合并；punkpeye 和 OpenAI PR 仍待审核。下方插件锁及原目录验证记录仍为 rc.11，不冒称已同步新版。
+
+**Linux x64 / Docker：** `0.4.0-rc.12-linux.1` 使用 `linux` 渠道（glibc ≥2.36、Node ≥22.19）。Windows `latest/next` 为 rc.12。B353 按明确结构和原文修复漏交运算类型、路径重复转义及预算明细共同字段；原生 Core 返回完整固定预算的余额。[rc.12 更新和验收](docs/mcp/RC12.md)。目录验证状态按下方日期分别记录。
 
 
 | 用途 | 文档与入口 |
@@ -46,13 +48,13 @@
 | Windows 接入 | [Windows 英文安装指南](docs/mcp/INSTALL.en.md) |
 
 
-**21 个工具 · 17 项资源 · Windows x64 · Node.js ≥22.18 · rc.11 预发行版。** 默认使用当前宿主 LLM 分析，无需另外配置模型 API Key。
+**21 个工具 · 17 项资源 · Windows x64 · Node.js ≥22.18 · rc.12 预发行版。** 默认使用当前宿主 LLM 分析，无需另外配置模型 API Key。
 
 | 公开入口 | 现在能查到什么 |
 |---|---|
-| **[npm：下载安装](https://www.npmjs.com/package/boundaryxp-mcp)** | rc.11 安装包，同页中英文介绍与安装说明 |
-| **[官方 MCP Registry](https://registry.modelcontextprotocol.io/?q=boundaryxp)** | 已登记 rc.11 及 npm 安装来源 |
-| **[TensorBlock MCP Index](https://tensorblock.co/mcp/servers/github-joinwell52-ai-boundaryxp-16b09093)** | rc.10 / B345 PR #6225 已于 11 月 18 日合并；[rc.11 PR #6302](https://github.com/TensorBlock/awesome-mcp-servers/pull/6302) 待审核 |
+| **[npm：下载安装](https://www.npmjs.com/package/boundaryxp-mcp)** | rc.12 安装包，同页中英文介绍与安装说明 |
+| **[官方 MCP Registry](https://registry.modelcontextprotocol.io/?q=boundaryxp)** | 已登记 rc.12 及 npm 安装来源 |
+| **[TensorBlock MCP Index](https://tensorblock.co/mcp/servers/github-joinwell52-ai-boundaryxp-16b09093)** | [rc.11 PR #6302](https://github.com/TensorBlock/awesome-mcp-servers/pull/6302) 已合并（11 月 28 日核对），不是 rc.12 目录更新 |
 | **[MCPServers 中文页](https://mcpservers.org/zh-CN/servers/www-npmjs-com-package-boundaryxp-mcp)** | 简介 rc.8 / 文档 rc.9；11 月 18 日已再次请求刷新，尚未生效 |
 | **[Serverdex](https://serverdex.io/server/io-github-joinwell52-ai-boundaryxp)** | 11 月 19 日核实免费上线，版本 rc.11、配置已含 `--data-root`；编辑保存及公开读回成功。使用前替换 `<data-root>`；下方 README 摘要仍缓存 rc.8 |
 | **[Glama](https://glama.ai/mcp/servers/joinwell52-AI/BoundaryXP)** | rc.11 Linux 包已于 11 月 18 日验证并发布，发现 21 工具 / 17 资源；[平台标记与证据](docs/mcp/GLAMA-RC11.md) |
@@ -74,11 +76,11 @@ MCPwell、ToolCenter 的总目录中也有条目，但尚未核实 BXP 专属详
 
 | 用途 | 文档与入口 |
 |---|---|
-| Linux 安装包 | [npm Linux 编译包 0.4.0-rc.11-linux.1](https://www.npmjs.com/package/boundaryxp-mcp/v/0.4.0-rc.11-linux.1) |
+| Linux 安装包 | [npm Linux 编译包 0.4.0-rc.11-linux.1](https://www.npmjs.com/package/boundaryxp-mcp/v/0.4.0-rc.12-linux.1) |
 | Linux / Docker | [Linux / Docker 中文安装指南](docs/mcp/linux/INSTALL.zh-CN.md) |
 | Linux / Docker | [Linux / Docker 英文安装指南](docs/mcp/linux/INSTALL.en.md) |
 | 容器构建 | [Dockerfile](Dockerfile) |
-| Linux 发行 | [Linux 发行附件与摘要](https://github.com/joinwell52-AI/BoundaryXP/releases/tag/mcp-v0.4.0-rc.11-linux.1) |
+| Linux 发行 | [Linux 发行附件与摘要](https://github.com/joinwell52-AI/BoundaryXP/releases/tag/mcp-v0.4.0-rc.12-linux.1) |
 | 构建与发现验证 | [Linux 发行验证报告](docs/mcp/linux/RELEASE.md) |
 | 目录收录 | [MCP 目录与审核状态](docs/mcp/DISCOVERY.md) |
 | 宿主配置 | [Codex / Cursor stdio 接入指南](docs/mcp/npm/INSTALL.zh-CN.md#codex-与其他宿主) |

@@ -1,3 +1,9 @@
+# 0.4.0-rc.12 · B353 prerelease / 预发行版
+
+rc.12 / B353：修复运算类型漏填、Windows 路径引文重复转义与预算明细共同字段漏填。仅按明确且无冲突的结构和原文补全，原始响应与补全记录保留；原生 Core 输出完整固定预算的剩余金额。
+
+rc.12 / B353: recover omitted operation kinds, an extra Windows-path escaping layer, and missing shared budget-allocation fields only from explicit, unambiguous input and exact source matches. Original responses and adaptation receipts are preserved. The native Core reports remaining complete fixed budget.
+
 # 0.4.0-rc.11 · B348 prerelease / 预发行版
 
 - Save complete Chinese and English seven-step reports from one analysis, sharing evidence and native verification. Read either language and bilingual Markdown through `bx_result_get`; retain old monolingual reports without inventing translations.

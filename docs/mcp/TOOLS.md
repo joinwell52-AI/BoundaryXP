@@ -1,8 +1,8 @@
 # 21 个 MCP 工具 / MCP tool reference
 
-**适用 / Applies to：`boundaryxp-mcp 0.4.0-rc.11` · B-348。** 2026-11-18 对照运行中的 `bx_capabilities` 工具清单、输入 Schema 和双语帮助核对：**21 项，无重复、无遗漏**。rc.9 已新增自定义字典的格式、校验、导入三项工具；旧版本的工具数按其历史记录解释。
+**适用 / Applies to：`boundaryxp-mcp 0.4.0-rc.12` · B-353。** 2026-11-28 的 rc.12 实包案例确认 **21 个工具、17 项资源**。本工具说明在 2026-11-18 对照 rc.11 的清单、输入 Schema 和双语帮助整理，rc.12 未增删工具。rc.9 已新增自定义字典的格式、校验、导入三项工具；旧版本的工具数按其历史记录解释。
 
-Checked on 2026-11-18 against the running rc.11 capability inventory, input schemas and bilingual help: **21 distinct tools**. The three custom-dictionary tools were added in rc.9. This documentation check does not claim execution acceptance of every tool.
+The rc.12 packaged case confirmed **21 tools and 17 resources** on 2026-11-28. This reference was checked against rc.11 schemas and bilingual help on 2026-11-18; rc.12 adds or removes no tools. The three custom-dictionary tools were added in rc.9. Inventory verification does not claim execution acceptance of every tool.
 
 [导航 / Index](README.md) · [L2/L3 中文规范与示例](npm/guides/DICTIONARIES.zh-CN.md) · [Dictionary format and examples](npm/guides/DICTIONARIES.md)
 

@@ -1,5 +1,13 @@
 # 在哪里查找 BoundaryXP？ / Discover BoundaryXP
 
+## 2026-11-28 rc.12 / B353
+
+当前发行版本及匿名下载核对见 [rc.12 发布回执](RC12-PUBLICATION.json)，安装入口仍为 [npm](https://www.npmjs.com/package/boundaryxp-mcp) 与 [官方 Registry](https://registry.modelcontextprotocol.io/?q=boundaryxp)。第三方目录缓存和平台审核不能从 npm 发布自动推断。
+
+本日 GitHub 读回：[TensorBlock #6302](https://github.com/TensorBlock/awesome-mcp-servers/pull/6302) 已合并，内容为 rc.11；[punkpeye #19484](https://github.com/punkpeye/awesome-mcp-servers/pull/19484) 和 [OpenAI #57](https://github.com/openai/community-plugins/pull/57) 仍 open、未合并。插件现有锁仍是 rc.11，不能称其已经使用 rc.12。Glama / Serverdex 以下保留此前实际核对日期；本节不冒称本版验证已通过。
+
+**English:** TensorBlock #6302 is now merged (its content is rc.11). punkpeye #19484 and OpenAI #57 remain open and unmerged; the existing plugin lock still targets rc.11. npm/Registry publication and third-party review are separate. Older dated platform evidence below is retained without relabeling it as rc.12 acceptance.
+
 Serverdex 与 PR 最新核对日期：2026-11-19；发行、其他第三方页面与历史记录保留各自核对日期。安装包分发、目录登记和人工审核分别记录。
 
 ## 2026-11-19 Serverdex 与 PR 复查 / Listing and review check

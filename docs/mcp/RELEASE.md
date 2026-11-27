@@ -1,4 +1,12 @@
-# 当前版本 / Current release: 0.4.0-rc.11
+# 当前版本 / Current release: 0.4.0-rc.12
+
+2026-11-28：Windows `0.4.0-rc.12` / Linux `0.4.0-rc.12-linux.1`，基于 B353。修复运算类型漏交、路径引文重复转义和预算明细共同字段漏填；仅在明确且无冲突的结构及原文条件下补全。原生 Core 已重新编译，返回完整固定加法预算的剩余额度。原始响应和补全记录保留。
+
+rc.12 recompiles the native Core and synchronizes conservative B353 input repairs. Both platform packages retain 21 tools, 17 resources, complete bilingual reports and L2/L3 dictionaries. Release publication does not replace existing client installations or their data.
+
+**[rc.12 更新与验收 / Changes and acceptance](RC12.md)** · [实际发布回执 / Publication receipt](RC12-PUBLICATION.json) · [npm](https://www.npmjs.com/package/boundaryxp-mcp)
+
+## 历史：0.4.0-rc.11
 
 2026-11-18：Windows `0.4.0-rc.11` / Linux `0.4.0-rc.11-linux.1` 已发布，基于 B348。一次分析保存完整中英报告，共用 Core 核验；API 模式先连接获取型号再保存；证据面板可折叠。原生计算算法未改，旧任务、失败记录、字典与配置保留。仍为 rc 预发行版。
 

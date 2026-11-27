@@ -4,13 +4,13 @@
 
 BoundaryXP (BXP) turns task sources and parent/child relationships into an evidence-linked 7+1 boundary representation. Your host LLM analyzes the task independently; the native Core verifies submitted formal inputs. Reports retain judgments, calculation receipts, evidence and unknowns separately. Calculation does not prove semantic extraction correct or grant execution authority.
 
-Linux version: `0.4.0-rc.11-linux.1`, B348 runtime; unchanged B-335 Core calculation contract, 21 tools and 17 resources, including custom L2 industry and L3 enterprise dictionaries. MIT licensed. Original Core source is excluded; adapters, UI and resources remain readable distribution files.
+Linux version: `0.4.0-rc.12-linux.1`, B353 runtime and native budget remainder calculation, 21 tools and 17 resources, including custom L2 industry and L3 enterprise dictionaries. MIT licensed. Original Core source is excluded; adapters, UI and resources remain readable distribution files.
 
 ## Requirements and MCP setup
 
 rc.10 adds Installed/Import dictionary tabs and five steps: L2/L3 → full folder → validate → name → save. L2 requires 8 JSON files plus README; L3 requires 3 JSON files plus README. The format tool provides complete examples in both languages. Existing rc.9 dictionaries and legacy JSON tool imports remain compatible. Model settings and dictionary settings save independently without starting analysis.
 
-Linux x64, glibc ≥2.36 (for example Debian 12), Node.js ≥22.19.0 and npm. ARM64, Alpine/musl and macOS are not supported. Windows users retain `0.4.0-rc.11`; npm `latest/next` remain Windows channels. Linux uses the `linux` tag or this pinned version.
+Linux x64, glibc ≥2.36 (for example Debian 12), Node.js ≥22.19.0 and npm. ARM64, Alpine/musl and macOS are not supported. Windows users retain `0.4.0-rc.12`; npm `latest/next` remain Windows channels. Linux uses the `linux` tag or this pinned version.
 
 Add a local stdio server to your MCP host, replacing the data path with your own absolute path:
 
@@ -19,7 +19,7 @@ Add a local stdio server to your MCP host, replacing the data path with your own
   "mcpServers": {
     "BoundaryXP": {
       "command": "npx",
-      "args": ["--yes", "--package=boundaryxp-mcp@0.4.0-rc.11-linux.1", "bxp", "serve", "--data-root", "/home/you/.local/share/boundaryxp"]
+      "args": ["--yes", "--package=boundaryxp-mcp@0.4.0-rc.12-linux.1", "bxp", "serve", "--data-root", "/home/you/.local/share/boundaryxp"]
     }
   }
 }
@@ -28,7 +28,7 @@ Add a local stdio server to your MCP host, replacing the data path with your own
 Host configuration formats vary; the common stdio launch command is:
 
 ```sh
-npx --yes --package=boundaryxp-mcp@0.4.0-rc.11-linux.1 bxp serve --data-root /absolute/path/to/bxp-data
+npx --yes --package=boundaryxp-mcp@0.4.0-rc.12-linux.1 bxp serve --data-root /absolute/path/to/bxp-data
 ```
 
 The host keeps stdin open for MCP messages. First installation downloads npm packages. No separate workbench installation or hosted business server is required. The default workflow uses the current host LLM without an additional model API key; MCP itself is not a model.

@@ -1,6 +1,6 @@
 [简体中文](https://www.npmjs.com/package/boundaryxp-mcp#简体中文) | **English**
 
-> rc.11 / B348 prerelease.
+> rc.12 / B353: recover omitted operation kinds, an extra Windows-path escaping layer, and missing shared budget-allocation fields only from explicit, unambiguous input and exact source matches. Original responses and adaptation receipts are preserved. The native Core reports remaining complete fixed budget.
 
 B348 saves complete Chinese and English reports from one analysis, sharing native verification. `bx_result_get` supports `language: "zh-CN"` or `"en"` and returns `reports` and `bilingual_report`. Legacy reports remain readable. API mode verifies credentials and fetches models before selection/save; the evidence panel supports collapse.
 
@@ -10,7 +10,7 @@ B348 saves complete Chinese and English reports from one analysis, sharing nativ
 
 Turn complete task requirements into evidence-backed **7+1 relationships**. Inspect parent–child tasks and their combined constraints, then trace why a result is **out of bounds, within bounds or incomplete**. LLM judgments and native calculator results are recorded separately, alongside original evidence and unspecified conditions.
 
-**boundaryxp-mcp 0.4.0-rc.11 · B-348 · Windows x64 · Node.js ≥22.18 · MIT · Prerelease**
+**boundaryxp-mcp 0.4.0-rc.12 · B-353 · Windows x64 · Node.js ≥22.18 · MIT · Prerelease**
 
 [Installation and upgrades](https://github.com/joinwell52-AI/BoundaryXP/blob/main/docs/mcp/npm/INSTALL.md) · [Public repository](https://github.com/joinwell52-AI/BoundaryXP) · [Releases](https://github.com/joinwell52-AI/BoundaryXP/releases)
 
@@ -45,7 +45,7 @@ Each child is assessed separately. DEV-02 introduces a deployment clause that co
 
 Import complete UTF-8 Markdown/TXT, explicit task and parent IDs, multiple hierarchy levels and multiple children with the same role. DEV-01 and DEV-02 remain separate nodes. Preview relationships before analysis.
 
-[Try the interactive demo](https://boundaryxp-demo.vercel.app/?lang=en) for saved B-332 cases: RT044 has a strict dependency cycle, RT042 has adjacent half-open intervals, and L23-050 has an unresolved owner reference. These are historical replays, not new MCP analyses or B-348 test results.
+[Try the interactive demo](https://boundaryxp-demo.vercel.app/?lang=en) for saved B-332 cases: RT044 has a strict dependency cycle, RT042 has adjacent half-open intervals, and L23-050 has an unresolved owner reference. These are historical replays, not new MCP analyses or B-353 test results.
 
 ## How verification works
 
@@ -75,7 +75,7 @@ Requires Windows x64, Node.js ≥22.18 and npm; tested with Node 24.19.0. Initia
   "mcpServers": {
     "BoundaryXP": {
       "command": "npx.cmd",
-      "args": ["--yes", "boundaryxp-mcp@0.4.0-rc.11", "--data-root", "C:/BXP/data"]
+      "args": ["--yes", "boundaryxp-mcp@0.4.0-rc.12", "--data-root", "C:/BXP/data"]
     }
   }
 }

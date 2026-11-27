@@ -4,9 +4,9 @@
 <h1 align="center">From source to boundaries, every step is visible.</h1>
 
 <p align="center">
-  <a href="https://www.npmjs.com/package/boundaryxp-mcp"><img src="https://img.shields.io/badge/npm-Install%20rc.11-CB3837?style=for-the-badge&amp;logo=npm" alt="npm · Install BoundaryXP rc.11"></a>
+  <a href="https://www.npmjs.com/package/boundaryxp-mcp"><img src="https://img.shields.io/badge/npm-Install%20rc.12-CB3837?style=for-the-badge&amp;logo=npm" alt="npm · Install BoundaryXP rc.12"></a>
   <a href="https://registry.modelcontextprotocol.io/?q=boundaryxp"><img src="https://img.shields.io/badge/Official%20MCP%20Registry-Listed-15803d?style=for-the-badge" alt="Official MCP Registry · Listed"></a>
-  <a href="https://github.com/joinwell52-AI/BoundaryXP/releases/tag/mcp-v0.4.0-rc.11"><img src="https://img.shields.io/badge/Download-rc.11%20package-2563eb?style=for-the-badge" alt="Download compiled rc.11 package"></a>
+  <a href="https://github.com/joinwell52-AI/BoundaryXP/releases/tag/mcp-v0.4.0-rc.12"><img src="https://img.shields.io/badge/Download-rc.12%20package-2563eb?style=for-the-badge" alt="Download compiled rc.12 package"></a>
   <a href="https://glama.ai/mcp/servers/joinwell52-AI/BoundaryXP"><img src="https://glama.ai/mcp/servers/joinwell52-AI/BoundaryXP/badges/score.svg" alt="BoundaryXP on Glama · live score"></a>
 </p>
 
@@ -20,7 +20,7 @@
 
 <p align="center"><a href="https://boundaryxp-demo.vercel.app/?lang=en#case=ENG20-003&axis=A&view=radar&lang=en"><strong>▶ Try the demo</strong></a>　·　<a href="docs/mcp/INSTALL.en.md"><strong>MCP setup</strong></a>　·　<a href="https://doi.org/10.5281/zenodo.24072738"><strong>Paper</strong></a></p>
 
-<p align="center">Chinese & English · MCP 0.4.0-rc.11 / B-348 · Research & protocol material · Original Core source private</p>
+<p align="center">Chinese & English · MCP 0.4.0-rc.12 / B-353 · Research & protocol material · Original Core source private</p>
 
 > **Questions, counterexamples and contributions are welcome.** The 7+1 method has assumptions and limits; the research cases do not establish correctness for every task. The MCP implementation, model interpretations and L2/L3 resources can also be wrong. Deterministic calculation does not guarantee correct semantic interpretation. Help test and improve the approach with questions, counterexamples and reproducible evidence.
 >
@@ -36,7 +36,9 @@
 
 ## Install BXP · Find BXP
 
-**Linux x64 / Docker:** `0.4.0-rc.11-linux.1` uses the `linux` channel (glibc ≥2.36, Node ≥22.19). Windows `latest/next` use rc.11. B348 adds complete Chinese/English reports, provider connection checks and a collapsible evidence panel; the native Core is unchanged. [rc.11 acceptance](docs/mcp/RC11.md). [Glama rc.11](docs/mcp/GLAMA-RC11.md) built and discovered the real native server, then published platform release `0.4.0-rc.linux.11.1` as Latest.
+**November 28:** rc.12 / B353 release evidence is recorded separately in [RC12](docs/mcp/RC12.md). TensorBlock #6302 is merged; punkpeye and OpenAI PRs remain open. The plugin lock and older directory evidence below still refer to rc.11.
+
+**Linux x64 / Docker:** `0.4.0-rc.12-linux.1` uses the `linux` channel (glibc ≥2.36, Node ≥22.19). Windows `latest/next` use rc.12. B353 conservatively repairs omitted operation kinds, extra path escaping and missing shared budget fields; native Core reports remaining complete fixed budgets. [rc.12 changes and acceptance](docs/mcp/RC12.md). Directory validation is separately dated below.
 
 
 | Purpose | Document or page |
@@ -46,13 +48,13 @@
 | Windows setup | [Windows installation guide · 中文](docs/mcp/INSTALL.zh-CN.md) |
 
 
-**21 tools · 17 resources · Windows x64 · Node.js ≥22.18 · rc.11 prerelease.** Default analysis uses your current host LLM; no separate model API key is required.
+**21 tools · 17 resources · Windows x64 · Node.js ≥22.18 · rc.12 prerelease.** Default analysis uses your current host LLM; no separate model API key is required.
 
 | Public entry | What you can find there |
 |---|---|
-| **[npm — install the package](https://www.npmjs.com/package/boundaryxp-mcp)** | rc.11 package, Chinese/English descriptions and installation on the same page |
-| **[Official MCP Registry](https://registry.modelcontextprotocol.io/?q=boundaryxp)** | Published rc.11 metadata and npm installation reference |
-| **[TensorBlock MCP Index](https://tensorblock.co/mcp/servers/github-joinwell52-ai-boundaryxp-16b09093)** | rc.10 / B345 PR #6225 merged November 18; [rc.11 PR #6302](https://github.com/TensorBlock/awesome-mcp-servers/pull/6302) awaits review |
+| **[npm — install the package](https://www.npmjs.com/package/boundaryxp-mcp)** | rc.12 package, Chinese/English descriptions and installation on the same page |
+| **[Official MCP Registry](https://registry.modelcontextprotocol.io/?q=boundaryxp)** | Published rc.12 metadata and npm installation reference |
+| **[TensorBlock MCP Index](https://tensorblock.co/mcp/servers/github-joinwell52-ai-boundaryxp-16b09093)** | [rc.11 PR #6302](https://github.com/TensorBlock/awesome-mcp-servers/pull/6302) is merged (checked November 28); this is not yet an rc.12 index update |
 | **[MCPServers](https://mcpservers.org/servers/www-npmjs-com-package-boundaryxp-mcp)** | rc.8 summary / rc.9 docs; refresh requested again November 18, not yet applied |
 | **[Serverdex](https://serverdex.io/server/io-github-joinwell52-ai-boundaryxp)** | November 19: free listing live, rc.11 and `--data-root` present; owner edits saved and publicly verified. Replace `<data-root>` before use; the lower README excerpt still caches rc.8 |
 | **[Glama](https://glama.ai/mcp/servers/joinwell52-AI/BoundaryXP)** | rc.11 Linux package verified and published November 18; 21 tools / 17 resources. [Platform ID and evidence](docs/mcp/GLAMA-RC11.md) |
@@ -74,11 +76,11 @@ To try the contributor fork through **Add plugin marketplace**, use the candidat
 
 | Purpose | Document or page |
 |---|---|
-| Linux package | [npm Linux package 0.4.0-rc.11-linux.1](https://www.npmjs.com/package/boundaryxp-mcp/v/0.4.0-rc.11-linux.1) |
+| Linux package | [npm Linux package 0.4.0-rc.12-linux.1](https://www.npmjs.com/package/boundaryxp-mcp/v/0.4.0-rc.12-linux.1) |
 | Linux / Docker | [Linux / Docker installation · English](docs/mcp/linux/INSTALL.en.md) |
 | Linux / Docker | [Linux / Docker installation · 中文](docs/mcp/linux/INSTALL.zh-CN.md) |
 | Container build | [Dockerfile](Dockerfile) |
-| Linux release | [Linux release assets and checksums](https://github.com/joinwell52-AI/BoundaryXP/releases/tag/mcp-v0.4.0-rc.11-linux.1) |
+| Linux release | [Linux release assets and checksums](https://github.com/joinwell52-AI/BoundaryXP/releases/tag/mcp-v0.4.0-rc.12-linux.1) |
 | Build and discovery | [Linux release verification report](docs/mcp/linux/RELEASE.md#发布后核对--post-publication-checks) |
 | Directory listings | [MCP listings and review status](docs/mcp/DISCOVERY.md) |
 | Host configuration | [Codex / Cursor stdio setup guide](docs/mcp/npm/INSTALL.md#codex-and-other-hosts) |
