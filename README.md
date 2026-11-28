@@ -58,7 +58,7 @@ Checked November 28, 2026. Listed, update submitted and review approved are diff
 | [TensorBlock](https://tensorblock.co/mcp/servers/github-joinwell52-ai-boundaryxp-16b09093) | rc.11 #6302 merged; [rc.12 update #7184](https://github.com/TensorBlock/awesome-mcp-servers/pull/7184) submitted |
 | [punkpeye #19484](https://github.com/punkpeye/awesome-mcp-servers/pull/19484) | Entry and PR updated to rc.12; maintainer review pending |
 | [OpenAI community plugin #57](https://github.com/openai/community-plugins/pull/57) | Candidate wrapper update and separate tests recorded in [directory status](docs/mcp/DISCOVERY.md); not approved for the official plugin catalog |
-| [Glama](https://glama.ai/mcp/servers/joinwell52-AI/BoundaryXP) | Public README points to rc.12; last completed platform validation is [rc.11](docs/mcp/GLAMA-RC11.md). rc.12 rebuild requires renewed owner login |
+| [Glama](https://glama.ai/mcp/servers/joinwell52-AI/BoundaryXP) | [rc.12 Linux build/startup/discovery passed](docs/mcp/GLAMA-RC12.md): 21 tools / 17 resources; published as Latest. Glama-generated ID `0.4.0` maps to npm `0.4.0-rc.12-linux.1` |
 | [Serverdex](https://serverdex.io/server/io-github-joinwell52-ai-boundaryxp) | rc.12 bilingual description saved and publicly verified. Automatically generated version/install commands still cache rc.11; use npm setup above |
 | [MCPServers](https://mcpservers.org/servers/www-npmjs-com-package-boundaryxp-mcp) | Refresh requested November 28; summary rc.8 / 18 tools and README rc.11 are still stale |
 
