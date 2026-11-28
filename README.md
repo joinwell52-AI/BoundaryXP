@@ -36,61 +36,35 @@
 
 ## Install BXP · Find BXP
 
-**November 28:** rc.12 / B353 release evidence is recorded separately in [RC12](docs/mcp/RC12.md). TensorBlock #6302 is merged; punkpeye and OpenAI PRs remain open. The plugin lock and older directory evidence below still refer to rc.11.
+**Current release: rc.12 / B353 · 21 tools · 17 resources.** Use the current host LLM through standard stdio MCP; a separate model API key is optional. Core implementation source stays private.
 
-**Linux x64 / Docker:** `0.4.0-rc.12-linux.1` uses the `linux` channel (glibc ≥2.36, Node ≥22.19). Windows `latest/next` use rc.12. B353 conservatively repairs omitted operation kinds, extra path escaping and missing shared budget fields; native Core reports remaining complete fixed budgets. [rc.12 changes and acceptance](docs/mcp/RC12.md). Directory validation is separately dated below.
-
-
-| Purpose | Document or page |
+| Main entry | Purpose and verified version |
 |---|---|
-| npm installation | [npm installation and upgrades](https://www.npmjs.com/package/boundaryxp-mcp#installation-and-upgrades) |
-| Windows setup | [Windows installation guide · English](docs/mcp/INSTALL.en.md) |
-| Windows setup | [Windows installation guide · 中文](docs/mcp/INSTALL.zh-CN.md) |
+| **[npm — install BXP](https://www.npmjs.com/package/boundaryxp-mcp)** | Windows `0.4.0-rc.12` on latest/next; Linux `0.4.0-rc.12-linux.1` on linux. English/Chinese descriptions and installation on the same page |
+| **[Official MCP Registry](https://registry.modelcontextprotocol.io/?q=boundaryxp)** | Active/latest rc.12 metadata and npm installation reference |
+| **[GitHub releases and guides](https://github.com/joinwell52-AI/BoundaryXP/releases)** | Compiled archives, SHA-256, bilingual installation, upgrade and release evidence |
 
+**Install:** [Windows English](docs/mcp/INSTALL.en.md) · [Windows 中文](docs/mcp/INSTALL.zh-CN.md) · [Linux/Docker English](docs/mcp/linux/INSTALL.en.md) · [Linux/Docker 中文](docs/mcp/linux/INSTALL.zh-CN.md) · [Upgrade and rollback](docs/mcp/npm/INSTALL.md#updates).
+Windows requires x64 / Node ≥22.18; Linux requires x64 / glibc ≥2.36 / Node ≥22.19. These are prerelease packages. Fixed version configurations do not automatically switch versions; preserve old data and follow the copy-migration guide.
 
-**21 tools · 17 resources · Windows x64 · Node.js ≥22.18 · rc.12 prerelease.** Default analysis uses your current host LLM; no separate model API key is required.
+B353 conservatively repairs omitted operation kinds, extra path escaping and missing shared budget fields, preserving raw responses. Native Core reports remaining complete fixed budgets. [Release changes and acceptance](docs/mcp/RC12.md) · [Publication readback](docs/mcp/RC12-PUBLICATION.json).
 
-| Public entry | What you can find there |
+### Other directories and review status
+
+Checked November 28, 2026. Listed, update submitted and review approved are different states.
+
+| Entry | Current state |
 |---|---|
-| **[npm — install the package](https://www.npmjs.com/package/boundaryxp-mcp)** | rc.12 package, Chinese/English descriptions and installation on the same page |
-| **[Official MCP Registry](https://registry.modelcontextprotocol.io/?q=boundaryxp)** | Published rc.12 metadata and npm installation reference |
-| **[TensorBlock MCP Index](https://tensorblock.co/mcp/servers/github-joinwell52-ai-boundaryxp-16b09093)** | [rc.11 PR #6302](https://github.com/TensorBlock/awesome-mcp-servers/pull/6302) is merged (checked November 28); this is not yet an rc.12 index update |
-| **[MCPServers](https://mcpservers.org/servers/www-npmjs-com-package-boundaryxp-mcp)** | rc.8 summary / rc.9 docs; refresh requested again November 18, not yet applied |
-| **[Serverdex](https://serverdex.io/server/io-github-joinwell52-ai-boundaryxp)** | November 19: free listing live, rc.11 and `--data-root` present; owner edits saved and publicly verified. Replace `<data-root>` before use; the lower README excerpt still caches rc.8 |
-| **[Glama](https://glama.ai/mcp/servers/joinwell52-AI/BoundaryXP)** | rc.11 Linux package verified and published November 18; 21 tools / 17 resources. [Platform ID and evidence](docs/mcp/GLAMA-RC11.md) |
+| [TensorBlock](https://tensorblock.co/mcp/servers/github-joinwell52-ai-boundaryxp-16b09093) | rc.11 #6302 merged; [rc.12 update #7184](https://github.com/TensorBlock/awesome-mcp-servers/pull/7184) submitted |
+| [punkpeye #19484](https://github.com/punkpeye/awesome-mcp-servers/pull/19484) | Entry and PR updated to rc.12; maintainer review pending |
+| [OpenAI community plugin #57](https://github.com/openai/community-plugins/pull/57) | Candidate wrapper update and separate tests recorded in [directory status](docs/mcp/DISCOVERY.md); not approved for the official plugin catalog |
+| [Glama](https://glama.ai/mcp/servers/joinwell52-AI/BoundaryXP) | Public README points to rc.12; last completed platform validation is [rc.11](docs/mcp/GLAMA-RC11.md). rc.12 rebuild requires renewed owner login |
+| [Serverdex](https://serverdex.io/server/io-github-joinwell52-ai-boundaryxp) | rc.12 bilingual description saved and publicly verified. Automatically generated version/install commands still cache rc.11; use npm setup above |
+| [MCPServers](https://mcpservers.org/servers/www-npmjs-com-package-boundaryxp-mcp) | Refresh requested November 28; summary rc.8 / 18 tools and README rc.11 are still stale |
 
-Serverdex and the three contribution PRs checked 2026-11-19; release and other platform evidence retain their recorded dates. Search **BoundaryXP** or **boundaryxp-mcp**. Use npm for the current package; directory caches can lag. “Listed” means discoverable, not a certification. [Full directory status](docs/mcp/DISCOVERY.md).
+**Codex desktop:** Plugins → Add → **Add MCP server**, following the stdio setup guide. **Add plugin marketplace** expects a separate marketplace repository; this product repository, npm URL and Registry URL are not marketplace sources. [Candidate plugin setup](docs/mcp/PLUGIN-MARKETPLACE.en.md) is separate from official catalog approval. Cursor Marketplace submission remains paused at the owner's request.
 
-MCPwell and ToolCenter also contain directory entries, but no BXP-specific detail URL was verified. Their category/index pages are listed only in the full directory notes, not as direct BXP installation entries here.
-
-**Codex desktop:** Plugins → Add → **Add MCP server**. Follow the stdio setup guide. **Add plugin marketplace** expects a separate plugin-marketplace source; the npm URL, Registry URL and this product repository are not such a source. BXP is not currently listed in the Codex plugin catalog or Cursor Marketplace.
-
-**Plugin contribution (November 18):** [OpenAI PR #57](https://github.com/openai/community-plugins/pull/57) contains plugin **0.4.0**, pinned to rc.11 / rc.11-linux.1. Windows/Linux × Node 22.19/24.19 each passed 9/9; copy migration retained original files, and complete bilingual case replay/recheck passed on both platforms. The latest-head CLA passed. [punkpeye #19484](https://github.com/punkpeye/awesome-mcp-servers/pull/19484) now contains the rc.11 entry and Glama evidence. Both await maintainer review. See [directory status](docs/mcp/DISCOVERY.md) and [candidate plugin installation](docs/mcp/PLUGIN-MARKETPLACE.en.md).
-
-The plugin supports Linux through separate compiled locks, glibc checks and XDG storage. Dated original-analysis and current replay checks remain distinct in the linked evidence. Upstream approval remains pending; original Core source stays private.
-
-**Review check, November 19:** TensorBlock #6302, punkpeye #19484 and OpenAI #57 are all open and unmerged, with no new human review requests. punkpeye's submission check and the plugin CLA pass. Merged TensorBlock #6225 covers rc.10, not rc.11.
-
-To try the contributor fork through **Add plugin marketplace**, use the candidate plugin installation guide. Its GitHub-to-Codex installation and installed MCP were verified in isolation; official marketplace approval is still pending.
-
-
-| Purpose | Document or page |
-|---|---|
-| Linux package | [npm Linux package 0.4.0-rc.12-linux.1](https://www.npmjs.com/package/boundaryxp-mcp/v/0.4.0-rc.12-linux.1) |
-| Linux / Docker | [Linux / Docker installation · English](docs/mcp/linux/INSTALL.en.md) |
-| Linux / Docker | [Linux / Docker installation · 中文](docs/mcp/linux/INSTALL.zh-CN.md) |
-| Container build | [Dockerfile](Dockerfile) |
-| Linux release | [Linux release assets and checksums](https://github.com/joinwell52-AI/BoundaryXP/releases/tag/mcp-v0.4.0-rc.12-linux.1) |
-| Build and discovery | [Linux release verification report](docs/mcp/linux/RELEASE.md#发布后核对--post-publication-checks) |
-| Directory listings | [MCP listings and review status](docs/mcp/DISCOVERY.md) |
-| Host configuration | [Codex / Cursor stdio setup guide](docs/mcp/npm/INSTALL.md#codex-and-other-hosts) |
-| Plugin contribution | [OpenAI Community Plugins PR #57](https://github.com/openai/community-plugins/pull/57) |
-| punkpeye listing | [Awesome MCP Servers PR #19484](https://github.com/punkpeye/awesome-mcp-servers/pull/19484) |
-| Platform verification | [Glama rc.11 build and discovery evidence](docs/mcp/GLAMA-RC11.md) |
-| Contribution checks | [Plugin tests and submission records](docs/mcp/DISCOVERY.md#rc9-contributions) |
-| Linux plugin support | [OpenAI PR #57 Linux follow-up](https://github.com/openai/community-plugins/pull/57#issuecomment-6935083522) |
-| Plugin trial | [Candidate plugin installation · English](docs/mcp/PLUGIN-MARKETPLACE.en.md) |
-| Plugin trial | [Candidate plugin installation · English](docs/mcp/PLUGIN-MARKETPLACE.en.md) |
+Search **BoundaryXP** or **boundaryxp-mcp**. Third-party caches may lag; use npm for the current package. Directory listing is not certification. MCPwell/ToolCenter category pages are not presented as verified BXP detail links. [Full dated directory and PR history](docs/mcp/DISCOVERY.md).
 
 ## Start with a real case
 
@@ -134,7 +108,7 @@ All five come from saved 58618 records, retaining task trees, exact sources, ver
 
 **BoundaryXP MCP** connects through standard stdio to Cursor, Codex and compatible hosts, with **21 tools, 17 resources and a local browser workbench**. The Windows x64 package includes the compiled native Core; no separate 58618 installation or hosted BoundaryXP server is required.
 
-1. **Install from npm:** use `boundaryxp-mcp@0.4.0-rc.11`, available through the `next` prerelease channel. GitHub Releases retain the matching archive and SHA-256.
+1. **Install from npm:** use `boundaryxp-mcp@0.4.0-rc.12`, available through the `next` prerelease channel. GitHub Releases retain the matching archive and SHA-256.
 2. **Install and connect:** follow the guide to configure the host's stdio MCP server.
 3. **Use your current host LLM:** the built-in host profile prepares instructions and accepts the host analysis through standard MCP tools. No separate model API key is required; an independent API profile remains optional.
 4. **Open the workbench:** import complete task text, preview and confirm the task tree, then analyze and inspect evidence and reports.
@@ -148,14 +122,14 @@ All five come from saved 58618 records, retaining task trees, exact sources, ver
 | Updates and maintenance | [Upgrade, rollback and troubleshooting guide](docs/mcp/npm/INSTALL.md#updates) |
 
 
-> **Current npm release:** boundaryxp-mcp 0.4.0-rc.11, B-348 / Windows x64, MIT. Start with the installation guide, 7+1 introduction, 21 tools and directory status. This product repository is public. Core implementation source remains in a separate private repository.
+> **Current npm release:** boundaryxp-mcp 0.4.0-rc.12, B-353 / Windows x64, MIT. Start with the installation guide, 7+1 introduction, 21 tools and directory status. This product repository is public. Core implementation source remains in a separate private repository.
 
 
 | Purpose | Document or page |
 |---|---|
 | Custom semantics | [L2/L3 dictionary format and English examples](docs/mcp/npm/guides/DICTIONARIES.md) |
 | Updates and maintenance | [Upgrade, rollback and troubleshooting guide](docs/mcp/npm/INSTALL.md#updates) |
-| npm release | [boundaryxp-mcp 0.4.0-rc.11](https://www.npmjs.com/package/boundaryxp-mcp) |
+| npm release | [boundaryxp-mcp 0.4.0-rc.12](https://www.npmjs.com/package/boundaryxp-mcp) |
 | Windows setup | [Windows installation guide · English](docs/mcp/INSTALL.en.md) |
 | Product overview | [MCP 7+1 product introduction · English](docs/mcp/npm/README.en.md) |
 | Tool reference | [21 MCP tools and input reference](docs/mcp/npm/guides/TOOLS.md) |

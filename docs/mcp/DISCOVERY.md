@@ -2,13 +2,13 @@
 
 ## 2026-11-28 rc.12 / B353
 
-当前发行版本及匿名下载核对见 [rc.12 发布回执](RC12-PUBLICATION.json)，安装入口仍为 [npm](https://www.npmjs.com/package/boundaryxp-mcp) 与 [官方 Registry](https://registry.modelcontextprotocol.io/?q=boundaryxp)。第三方目录缓存和平台审核不能从 npm 发布自动推断。
+**主要安装入口已完成：** [npm](https://www.npmjs.com/package/boundaryxp-mcp)、[官方 Registry](https://registry.modelcontextprotocol.io/?q=boundaryxp)、[GitHub 编译发行](https://github.com/joinwell52-AI/BoundaryXP/releases)。Windows rc.12 / Linux rc.12-linux.1，21 工具 / 17 资源。见[发布回执](RC12-PUBLICATION.json)。
 
-本日 GitHub 读回：[TensorBlock #6302](https://github.com/TensorBlock/awesome-mcp-servers/pull/6302) 已合并，内容为 rc.11；[punkpeye #19484](https://github.com/punkpeye/awesome-mcp-servers/pull/19484) 和 [OpenAI #57](https://github.com/openai/community-plugins/pull/57) 仍 open、未合并。插件现有锁仍是 rc.11，不能称其已经使用 rc.12。Glama / Serverdex 以下保留此前实际核对日期；本节不冒称本版验证已通过。
+**本轮已执行同步：** TensorBlock 新 [#7184](https://github.com/TensorBlock/awesome-mcp-servers/pull/7184)、punkpeye [#19484](https://github.com/punkpeye/awesome-mcp-servers/pull/19484)、OpenAI 插件 [#57](https://github.com/openai/community-plugins/pull/57) 均已提交 rc.12，仍待审核。插件 0.5.0 实际锁定新版，两平台四组测试各 9/9；完整案例回放、报告复验和旧数据复制迁移通过。OpenAI 最新 CLA 已通过，punkpeye 提交检查通过。
 
-**English:** TensorBlock #6302 is now merged (its content is rc.11). punkpeye #19484 and OpenAI #57 remain open and unmerged; the existing plugin lock still targets rc.11. npm/Registry publication and third-party review are separate. Older dated platform evidence below is retained without relabeling it as rc.12 acceptance.
+Serverdex 双语简介已保存并公开读回 rc.12，但自动版本字段/安装命令仍 rc.11；MCPServers 已再次请求刷新，仍有旧缓存。Glama 管理页要求重新登录，rc.12 平台重建尚未完成，不能沿用 rc.11 验证结论。[九项完整状态与测试证据](RC12-DIRECTORIES.md)。
 
-Serverdex 与 PR 最新核对日期：2026-11-19；发行、其他第三方页面与历史记录保留各自核对日期。安装包分发、目录登记和人工审核分别记录。
+**English:** npm, Registry and GitHub compiled releases are rc.12. TensorBlock #7184, punkpeye #19484 and OpenAI #57 now contain rc.12 changes but await approval. Plugin 0.5.0 has four passing native cold-install suites plus complete replay/migration checks. Serverdex's description is updated while generated commands remain stale; MCPServers accepted a refresh request; Glama rebuilding requires renewed owner login. See the [dated synchronization record](RC12-DIRECTORIES.md). Older evidence below is historical and is not relabeled as rc.12.
 
 ## 2026-11-19 Serverdex 与 PR 复查 / Listing and review check
 
@@ -50,7 +50,7 @@ Glama has now built, started and published the rc.10 Linux package; its separate
 
 下方 11 月 17 日及更早记录保留当时状态；Glama 登录失效及 rc.10 待验的旧描述已由本节覆盖。Older dated records below retain their original scope and are superseded by this update where stated.
 
-## 当前安装入口 / Current installation
+## 历史安装入口快照（rc.10） / Historical installation snapshot (rc.10)
 
 本轮发行入口：Windows `0.4.0-rc.11`（`latest/next`）；Linux [`0.4.0-rc.11-linux.1`](https://www.npmjs.com/package/boundaryxp-mcp/v/0.4.0-rc.11-linux.1)（`linux` 渠道）。[中文安装](linux/INSTALL.zh-CN.md)、[English](linux/INSTALL.en.md)、[Dockerfile](../../Dockerfile)、[rc.11 验收](RC11.md)。公开 Dockerfile 只下载编译包并验证摘要，不要求公开 Core 源码。下文第三方目录和 PR 的日期、版本是此前实查结果，不冒称本轮已全部刷新。
 

@@ -36,61 +36,35 @@
 
 ## 安装 BXP · 在哪里找到 BXP
 
-**11 月 28 日：** rc.12 / B353 的发行证据见 [RC12](docs/mcp/RC12.md)。TensorBlock #6302 已合并；punkpeye 和 OpenAI PR 仍待审核。下方插件锁及原目录验证记录仍为 rc.11，不冒称已同步新版。
+**当前版本：rc.12 / B353 · 21 个工具 · 17 项资源。** 通过标准 stdio MCP 使用当前宿主 LLM，可选独立模型 API 配置。核心实现源码保持私有。
 
-**Linux x64 / Docker：** `0.4.0-rc.12-linux.1` 使用 `linux` 渠道（glibc ≥2.36、Node ≥22.19）。Windows `latest/next` 为 rc.12。B353 按明确结构和原文修复漏交运算类型、路径重复转义及预算明细共同字段；原生 Core 返回完整固定预算的余额。[rc.12 更新和验收](docs/mcp/RC12.md)。目录验证状态按下方日期分别记录。
-
-
-| 用途 | 文档与入口 |
+| 主要入口 | 用途与已核对版本 |
 |---|---|
-| npm 安装 | [npm 安装与升级](https://www.npmjs.com/package/boundaryxp-mcp#中文安装与升级) |
-| Windows 接入 | [Windows 中文安装指南](docs/mcp/INSTALL.zh-CN.md) |
-| Windows 接入 | [Windows 英文安装指南](docs/mcp/INSTALL.en.md) |
+| **[npm：下载安装 BXP](https://www.npmjs.com/package/boundaryxp-mcp)** | Windows `0.4.0-rc.12`，latest/next 渠道；Linux `0.4.0-rc.12-linux.1`，linux 渠道。同页中英文介绍与安装说明 |
+| **[官方 MCP Registry](https://registry.modelcontextprotocol.io/?q=boundaryxp)** | rc.12 已登记为 active/latest，提供 npm 安装来源 |
+| **[GitHub 发行与指南](https://github.com/joinwell52-AI/BoundaryXP/releases)** | 编译包、SHA-256、中英文安装升级指南及版本验收证据 |
 
+**安装指南：** [Windows 中文](docs/mcp/INSTALL.zh-CN.md) · [Windows English](docs/mcp/INSTALL.en.md) · [Linux/Docker 中文](docs/mcp/linux/INSTALL.zh-CN.md) · [Linux/Docker English](docs/mcp/linux/INSTALL.en.md) · [升级与回滚](docs/mcp/npm/INSTALL.md#updates)。
+Windows 要求 x64 / Node ≥22.18；Linux 要求 x64 / glibc ≥2.36 / Node ≥22.19。当前仍为预发行版本。固定版本配置不会自动跳版；升级请保留原数据并按复制迁移指南操作。
 
-**21 个工具 · 17 项资源 · Windows x64 · Node.js ≥22.18 · rc.12 预发行版。** 默认使用当前宿主 LLM 分析，无需另外配置模型 API Key。
+B353 对漏交运算类型、引文路径多重反斜杠、预算共同字段漏填进行有条件补全，保留原响应；原生 Core 补充完整固定预算的余额回执。[版本变化与验收](docs/mcp/RC12.md) · [公开发布读回](docs/mcp/RC12-PUBLICATION.json)。
 
-| 公开入口 | 现在能查到什么 |
+### 其他目录与审核状态
+
+核对日期：2026-11-28。已收录、已提交更新、审核通过分别记录。
+
+| 入口 | 当前情况 |
 |---|---|
-| **[npm：下载安装](https://www.npmjs.com/package/boundaryxp-mcp)** | rc.12 安装包，同页中英文介绍与安装说明 |
-| **[官方 MCP Registry](https://registry.modelcontextprotocol.io/?q=boundaryxp)** | 已登记 rc.12 及 npm 安装来源 |
-| **[TensorBlock MCP Index](https://tensorblock.co/mcp/servers/github-joinwell52-ai-boundaryxp-16b09093)** | [rc.11 PR #6302](https://github.com/TensorBlock/awesome-mcp-servers/pull/6302) 已合并（11 月 28 日核对），不是 rc.12 目录更新 |
-| **[MCPServers 中文页](https://mcpservers.org/zh-CN/servers/www-npmjs-com-package-boundaryxp-mcp)** | 简介 rc.8 / 文档 rc.9；11 月 18 日已再次请求刷新，尚未生效 |
-| **[Serverdex](https://serverdex.io/server/io-github-joinwell52-ai-boundaryxp)** | 11 月 19 日核实免费上线，版本 rc.11、配置已含 `--data-root`；编辑保存及公开读回成功。使用前替换 `<data-root>`；下方 README 摘要仍缓存 rc.8 |
-| **[Glama](https://glama.ai/mcp/servers/joinwell52-AI/BoundaryXP)** | rc.11 Linux 包已于 11 月 18 日验证并发布，发现 21 工具 / 17 资源；[平台标记与证据](docs/mcp/GLAMA-RC11.md) |
+| [TensorBlock](https://tensorblock.co/mcp/servers/github-joinwell52-ai-boundaryxp-16b09093) | rc.11 #6302 已合并；[rc.12 更新 #7184](https://github.com/TensorBlock/awesome-mcp-servers/pull/7184) 已提交 |
+| [punkpeye #19484](https://github.com/punkpeye/awesome-mcp-servers/pull/19484) | 实际条目和 PR 已更新 rc.12，待维护者审核 |
+| [OpenAI 社区插件 #57](https://github.com/openai/community-plugins/pull/57) | 候选封装升级及独立测试见[目录记录](docs/mcp/DISCOVERY.md)，尚未获官方插件目录批准 |
+| [Glama](https://glama.ai/mcp/servers/joinwell52-AI/BoundaryXP) | 公开 README 已指向 rc.12；最后完成的平台验证仍为 [rc.11](docs/mcp/GLAMA-RC11.md)，rc.12 重建需要所有者重新登录 |
+| [Serverdex](https://serverdex.io/server/io-github-joinwell52-ai-boundaryxp) | rc.12 双语简介已保存并公开读回；自动版本字段及安装命令仍缓存 rc.11，请按上方 npm 指南安装 |
+| [MCPServers](https://mcpservers.org/zh-CN/servers/www-npmjs-com-package-boundaryxp-mcp) | 11 月 28 日已请求刷新，简介 rc.8 / 18 工具、正文 rc.11 尚未更新 |
 
-Serverdex 与三个贡献 PR 核对日期：2026-11-19；发行及其他平台证据保留各自日期。搜索 **BoundaryXP** 或 **boundaryxp-mcp**。安装新版以 npm 为准，第三方目录可能延迟同步。“已收录”表示能查到，不代表功能认证。[完整目录状态](docs/mcp/DISCOVERY.md)。
+**Codex 桌面版：**「插件 → 添加 → 添加 MCP 服务器」，按 stdio 指南配置。「添加插件市场」需要独立市场仓库，本产品仓库、npm 地址及 Registry 地址都不是市场源。[候选插件安装](docs/mcp/PLUGIN-MARKETPLACE.zh-CN.md)与获批进入官方目录是两回事。Cursor Marketplace 按所有者要求暂缓提交。
 
-MCPwell、ToolCenter 的总目录中也有条目，但尚未核实 BXP 专属详情链接。分类/总目录只在完整说明中记录，不作为这里的 BXP 直达安装入口。
-
-**Codex 桌面版：**「插件」→「添加」→ **「添加 MCP 服务器」**，按stdio 接入指南配置。「添加插件市场」需要独立的插件市场源，不能填 npm、Registry 地址或本产品仓库；目前 BXP 未上架 Codex 插件目录或 Cursor Marketplace。
-
-**插件贡献进展（11 月 18 日）：**[OpenAI PR #57](https://github.com/openai/community-plugins/pull/57) 为插件 **0.4.0**，实际锁定 rc.11 / rc.11-linux.1。Windows/Linux × Node 22.19/24.19 各 9/9 通过；复制迁移保留原文件，两平台完整双语案例回放及复验通过，新提交 CLA 已通过。[punkpeye #19484](https://github.com/punkpeye/awesome-mcp-servers/pull/19484) 的条目和 Glama 证据已同步 rc.11。两者仍待维护者审核。见[目录状态](docs/mcp/DISCOVERY.md)及[候选插件安装](docs/mcp/PLUGIN-MARKETPLACE.zh-CN.md)。
-
-插件通过独立编译依赖锁、glibc 检查与 XDG 数据目录支持 Linux。历史模型分析和本轮保存响应重放按日期分别记录在验收证据中。上游仍待审核，原始 Core 源码保持私有。
-
-**审核复查（11 月 19 日）：** TensorBlock #6302、punkpeye #19484、OpenAI #57 均仍开放、未合并，无新增人工修改意见。punkpeye 提交检查及插件 CLA 通过。已合并的 TensorBlock #6225 对应 rc.10，不代表 rc.11 已合并。
-
-如需从「添加插件市场」试用发布者 fork，见候选插件安装指南。已隔离验证从 GitHub 添加市场、安装插件及调用安装后的 MCP；官方市场审核仍未完成。
-
-
-| 用途 | 文档与入口 |
-|---|---|
-| Linux 安装包 | [npm Linux 编译包 0.4.0-rc.11-linux.1](https://www.npmjs.com/package/boundaryxp-mcp/v/0.4.0-rc.12-linux.1) |
-| Linux / Docker | [Linux / Docker 中文安装指南](docs/mcp/linux/INSTALL.zh-CN.md) |
-| Linux / Docker | [Linux / Docker 英文安装指南](docs/mcp/linux/INSTALL.en.md) |
-| 容器构建 | [Dockerfile](Dockerfile) |
-| Linux 发行 | [Linux 发行附件与摘要](https://github.com/joinwell52-AI/BoundaryXP/releases/tag/mcp-v0.4.0-rc.12-linux.1) |
-| 构建与发现验证 | [Linux 发行验证报告](docs/mcp/linux/RELEASE.md) |
-| 目录收录 | [MCP 目录与审核状态](docs/mcp/DISCOVERY.md) |
-| 宿主配置 | [Codex / Cursor stdio 接入指南](docs/mcp/npm/INSTALL.zh-CN.md#codex-与其他宿主) |
-| 插件贡献 | [OpenAI Community Plugins PR #57](https://github.com/openai/community-plugins/pull/57) |
-| punkpeye 目录贡献 | [Awesome MCP Servers PR #19484](https://github.com/punkpeye/awesome-mcp-servers/pull/19484) |
-| 平台验证 | [Glama rc.11 构建与发现证据](docs/mcp/GLAMA-RC11.md) |
-| 贡献验证 | [插件测试与提交记录](docs/mcp/DISCOVERY.md#rc9-contributions) |
-| Linux 插件支持 | [OpenAI PR #57 Linux 跟进](https://github.com/openai/community-plugins/pull/57#issuecomment-6935083522) |
-| 插件试用 | [候选插件中文安装指南](docs/mcp/PLUGIN-MARKETPLACE.zh-CN.md) |
-| 插件试用 | [候选插件中文安装指南](docs/mcp/PLUGIN-MARKETPLACE.zh-CN.md) |
+搜索 **BoundaryXP** 或 **boundaryxp-mcp**。第三方缓存可能延迟，当前安装包以 npm 为准；收录不等于认证。MCPwell、ToolCenter 分类总页不冒充 BXP 专属详情链接。[全部目录、PR 与历史记录](docs/mcp/DISCOVERY.md)。
 
 ## 先看一个真实用例
 
@@ -134,7 +108,7 @@ MCPwell、ToolCenter 的总目录中也有条目，但尚未核实 BXP 专属详
 
 **BoundaryXP MCP** 通过标准 stdio 接入 Cursor、Codex 等兼容宿主，提供 **21 个工具、17 个资源和本地浏览器工作台**。Windows x64 安装包包含原生编译 Core，无需另装 58618 或自建 BoundaryXP 服务器。
 
-1. **从 npm 安装：** 使用 `boundaryxp-mcp@0.4.0-rc.11`；预发行渠道为 `next`。GitHub Release 同步保存安装包和 SHA-256。
+1. **从 npm 安装：** 使用 `boundaryxp-mcp@0.4.0-rc.12`；预发行渠道为 `next`。GitHub Release 同步保存安装包和 SHA-256。
 2. **安装并连接宿主：** 按对应指南配置 stdio MCP 服务。
 3. **使用当前宿主 LLM：** 默认 host 配置通过标准 MCP 工具提供规范、接收宿主分析并运行原生复核，无需额外模型 API Key；也保留可选的独立 API 模式。
 4. **打开工作台：** 导入完整任务，预览并确认任务树，再提交分析、查看证据与报告。
@@ -148,14 +122,14 @@ MCPwell、ToolCenter 的总目录中也有条目，但尚未核实 BXP 专属详
 | 升级与维护 | [升级、回滚与排障指南](docs/mcp/npm/INSTALL.zh-CN.md#升级) |
 
 
-> **当前 npm 版本：** boundaryxp-mcp 0.4.0-rc.11，B-348 / Windows x64，MIT许可。入口：中文安装指南、7+1产品介绍、MCP目录状态。本产品仓库已经公开；核心实现源码在独立私有源码仓库维护。客户无需另装58618。
+> **当前 npm 版本：** boundaryxp-mcp 0.4.0-rc.12，B-353 / Windows x64，MIT许可。入口：中文安装指南、7+1产品介绍、MCP目录状态。本产品仓库已经公开；核心实现源码在独立私有源码仓库维护。客户无需另装58618。
 
 
 | 用途 | 文档与入口 |
 |---|---|
 | 自定义语义库 | [L2/L3 字典格式与中文示例](docs/mcp/npm/guides/DICTIONARIES.zh-CN.md) |
 | 升级与维护 | [升级、回滚与排障指南](docs/mcp/npm/INSTALL.zh-CN.md#升级) |
-| npm 发行 | [boundaryxp-mcp 0.4.0-rc.11](https://www.npmjs.com/package/boundaryxp-mcp) |
+| npm 发行 | [boundaryxp-mcp 0.4.0-rc.12](https://www.npmjs.com/package/boundaryxp-mcp) |
 | Windows 接入 | [Windows 中文安装指南](docs/mcp/INSTALL.zh-CN.md) |
 | 产品介绍 | [MCP 7+1 中文产品介绍](docs/mcp/npm/README.zh-CN.md) |
 | 目录收录 | [MCP 目录与审核状态](docs/mcp/DISCOVERY.md) |
