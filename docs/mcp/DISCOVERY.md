@@ -4,11 +4,11 @@
 
 **主要安装入口已完成：** [npm](https://www.npmjs.com/package/boundaryxp-mcp)、[官方 Registry](https://registry.modelcontextprotocol.io/?q=boundaryxp)、[GitHub 编译发行](https://github.com/joinwell52-AI/BoundaryXP/releases)。Windows rc.12 / Linux rc.12-linux.1，21 工具 / 17 资源。见[发布回执](RC12-PUBLICATION.json)。
 
-**本轮已执行同步：** TensorBlock 新 [#7184](https://github.com/TensorBlock/awesome-mcp-servers/pull/7184)、punkpeye [#19484](https://github.com/punkpeye/awesome-mcp-servers/pull/19484)、OpenAI 插件 [#57](https://github.com/openai/community-plugins/pull/57) 均已提交 rc.12，仍待审核。插件 0.5.0 实际锁定新版，两平台四组测试各 9/9；完整案例回放、报告复验和旧数据复制迁移通过。OpenAI 最新 CLA 已通过，punkpeye 提交检查通过。
+**本轮已执行同步：** TensorBlock 新 [#7184](https://github.com/TensorBlock/awesome-mcp-servers/pull/7184)、punkpeye [#19484](https://github.com/punkpeye/awesome-mcp-servers/pull/19484)、OpenAI 插件 [#57](https://github.com/openai/community-plugins/pull/57) 均已提交 rc.12；其中 #7184 已合并，Glama 证据补充 [#7216](https://github.com/TensorBlock/awesome-mcp-servers/pull/7216) 及其余 PR 待审核。插件 0.5.0 实际锁定新版，两平台四组测试各 9/9；完整案例回放、报告复验和旧数据复制迁移通过。OpenAI 最新 CLA 已通过，punkpeye 提交检查通过。
 
 Serverdex 双语简介已保存并公开读回 rc.12，但自动版本字段/安装命令仍 rc.11；MCPServers 已再次请求刷新，仍有旧缓存。[Glama rc.12](GLAMA-RC12.md) 构建、启动及 21 工具 / 17 资源发现通过，18:15 已发布为 Latest；平台自动编号 `0.4.0` 对应 npm `0.4.0-rc.12-linux.1`，不是 npm 稳定版。[九项完整状态与测试证据](RC12-DIRECTORIES.md)。
 
-**English:** npm, Registry and GitHub compiled releases are rc.12. TensorBlock #7184, punkpeye #19484 and OpenAI #57 contain rc.12 changes but await approval. Plugin 0.5.0 has four passing native cold-install suites plus complete replay/migration checks. Serverdex's description is updated while generated commands remain stale; MCPServers accepted a refresh request. [Glama rc.12 verification](GLAMA-RC12.md) passed and is published as Latest; its generated ID `0.4.0` maps to the npm Linux prerelease. See the [dated synchronization record](RC12-DIRECTORIES.md). Older evidence below is historical and is not relabeled as rc.12.
+**English:** npm, Registry and GitHub compiled releases are rc.12. TensorBlock #7184 is merged; its Glama evidence follow-up #7216, punkpeye #19484 and OpenAI #57 await approval. Plugin 0.5.0 has four passing native cold-install suites plus complete replay/migration checks. Serverdex's description is updated while generated commands remain stale; MCPServers accepted a refresh request. [Glama rc.12 verification](GLAMA-RC12.md) passed and is published as Latest; its generated ID `0.4.0` maps to the npm Linux prerelease. See the [dated synchronization record](RC12-DIRECTORIES.md). Older evidence below is historical and is not relabeled as rc.12.
 
 ## 2026-11-19 Serverdex 与 PR 复查 / Listing and review check
 

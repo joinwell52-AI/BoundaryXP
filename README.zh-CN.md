@@ -55,7 +55,7 @@ B353 对漏交运算类型、引文路径多重反斜杠、预算共同字段漏
 
 | 入口 | 当前情况 |
 |---|---|
-| [TensorBlock](https://tensorblock.co/mcp/servers/github-joinwell52-ai-boundaryxp-16b09093) | rc.11 #6302 已合并；[rc.12 更新 #7184](https://github.com/TensorBlock/awesome-mcp-servers/pull/7184) 已提交 |
+| [TensorBlock](https://tensorblock.co/mcp/servers/github-joinwell52-ai-boundaryxp-16b09093) | rc.12 [#7184](https://github.com/TensorBlock/awesome-mcp-servers/pull/7184) 已合并；Glama 验证补充 [#7216](https://github.com/TensorBlock/awesome-mcp-servers/pull/7216) 已提交 |
 | [punkpeye #19484](https://github.com/punkpeye/awesome-mcp-servers/pull/19484) | 实际条目和 PR 已更新 rc.12，待维护者审核 |
 | [OpenAI 社区插件 #57](https://github.com/openai/community-plugins/pull/57) | 候选封装升级及独立测试见[目录记录](docs/mcp/DISCOVERY.md)，尚未获官方插件目录批准 |
 | [Glama](https://glama.ai/mcp/servers/joinwell52-AI/BoundaryXP) | [rc.12 Linux 构建、启动和发现通过](docs/mcp/GLAMA-RC12.md)：21 工具 / 17 资源，已发布为 Latest；平台自动编号 `0.4.0` 对应 npm `0.4.0-rc.12-linux.1` |

@@ -7,9 +7,9 @@ Verified 2026-11-28. npm publication, directory indexing and maintainer approval
 | [npm](https://www.npmjs.com/package/boundaryxp-mcp) | Published: Windows latest/next 0.4.0-rc.12; Linux linux 0.4.0-rc.12-linux.1. Exact archives and default page previously read back; no package republished in this directory-only round |
 | [Official MCP Registry](https://registry.modelcontextprotocol.io/?q=boundaryxp) | rc.12 active/latest with npm source |
 | [Public product repository](https://github.com/joinwell52-AI/BoundaryXP) | English/Chinese README current installation statements corrected to rc.12 / B353; current vs historical directory evidence separated; compiled release assets retained |
-| [TensorBlock #7184](https://github.com/TensorBlock/awesome-mcp-servers/pull/7184) | New rc.12 update submitted, open/mergeable, head e6dc37a5. Old rc.11 #6302 merged. Catalog generation 10,434 / 0 errors, typecheck/build passed |
+| [TensorBlock #7184](https://github.com/TensorBlock/awesome-mcp-servers/pull/7184) | rc.12 update merged November 28 (52b0c19f). Glama evidence-only follow-up [#7216](https://github.com/TensorBlock/awesome-mcp-servers/pull/7216) submitted, head b76be0d1. Catalog generation 10,434 / 0 errors, typecheck/build passed for #7184 |
 | [punkpeye #19484](https://github.com/punkpeye/awesome-mcp-servers/pull/19484) | Actual entry, title and body updated rc.12; upstream merged into contribution branch, head f6d35fdd. Open/mergeable, check-submission SUCCESS. Requested public Glama backlink is present |
-| [OpenAI community plugin #57](https://github.com/openai/community-plugins/pull/57) | Plugin 0.5.0 pins rc.12 / rc.12-linux.1, head ea5b567. Open/mergeable, latest CLA SUCCESS; not approved for the official plugin catalog |
+| [OpenAI community plugin #57](https://github.com/openai/community-plugins/pull/57) | Plugin 0.5.0 pins rc.12 / rc.12-linux.1, head c78694b. Open/mergeable, latest CLA SUCCESS; not approved for the official plugin catalog |
 | [Serverdex](https://serverdex.io/server/io-github-joinwell52-ai-boundaryxp) | Owner editing works; rc.12 bilingual summary saved and publicly read back. Automatic version/install snippets and lower README still cache rc.11. Editor exposes no version/package fields; summary directs customers to current npm instructions |
 | [MCPServers](https://mcpservers.org/servers/www-npmjs-com-package-boundaryxp-mcp) | Refresh requested on November 28, button changed to Requested. Summary rc.8/18 tools/10 resources and README rc.11 remain stale; not counted as synchronized |
 | [Glama](https://glama.ai/mcp/servers/joinwell52-AI/BoundaryXP) | [rc.12 Linux verification](GLAMA-RC12.md) passed: build 01a221a5-5b6b-758f-99e0-1bde7c002499, 1m 1.9s, 21 tools / 17 resources; published Latest. Glama-generated ID 0.4.0 maps to npm 0.4.0-rc.12-linux.1. Description saved; no paid hosting |
@@ -27,6 +27,6 @@ Verified 2026-11-28. npm publication, directory indexing and maintainer approval
 
 ## 中文结论
 
-npm、官方 Registry、GitHub 发行已经完成 rc.12；三个 PR 的代码/条目及说明已提交新版，仍需维护者审核。Serverdex 简介已更新，自动版本字段等待平台同步；MCPServers 已请求刷新，尚未生效。Glama 本轮 rc.12 构建、启动与发现验证已通过并发布为 Latest；平台自动编号 0.4.0 对应 npm rc.12-linux.1，详见独立回执。
+npm、官方 Registry、GitHub 发行已经完成 rc.12；TensorBlock rc.12 #7184 已合并；Glama 证据补充 #7216、punkpeye 和 OpenAI 插件 PR 仍需维护者审核。Serverdex 简介已更新，自动版本字段等待平台同步；MCPServers 已请求刷新，尚未生效。Glama 本轮 rc.12 构建、启动与发现验证已通过并发布为 Latest；平台自动编号 0.4.0 对应 npm rc.12-linux.1，详见独立回执。
 
 后续等待目录缓存刷新与 PR 审核；不重复登记、不购买托管、不因缓存问题重发 npm 版本。Cursor Marketplace 继续按所有者要求暂停。
